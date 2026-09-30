@@ -15,6 +15,26 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fluids, as a first-class system** (README *System 5*). Fluids carry volume, temperature and
+  pressure rather than being items with a different texture, so steam, superheated steam and
+  supercritical water are distinct resources; heat is conserved, so a cooling line condenses and a
+  turbine fed condensate stalls. Pressure is the throughput limit — gases need pumps, liquids run
+  downhill free, over-pressure vents repairably rather than exploding. Four pipe tiers, the pump
+  and valve set, four tank tiers, and at T3 the **Phase Manifold**, a coverage-area fluid network
+  that costs FU per unit moved and is deliberately not a strict upgrade over pipes
+  (ADR-0015, ADR-0016).
+- **The fabrication rule** (README *Fabrication: the factory builds the factory*). Past T1,
+  machines have no crafting-table recipe at all: T2–T3 come from the Assembler, T4 from the
+  Quantum Assembler, T5–T6 from the Orbital Assembly Bay, each consuming a researched blueprint,
+  fabricated components, power and time. Adds the component economy — casings, motors, pumps,
+  circuit boards, integrated circuits, superconductors, quantum cores — several of which require
+  fluids, which is what puts fluids on the critical path exactly once, early (ADR-0017).
+- **The container contract** (README *Containers: buffers, filters and voiding*). One interface
+  for every crate, tank and machine buffer: persistent per-slot filters, buffer targets, capacity
+  limits, per-face I/O, priorities, signal output, and configurable auto-void that is off by
+  default, explicitly confirmed, visibly marked, trims rather than empties, and refuses to discard
+  blacklisted items (ADR-0018).
+- Four decision records, ADR-0015 to ADR-0018, covering the above.
 - **Working agreement** (`AGENTS.md`). The contract for every session on this project: commit at
   every checkpoint, record decisions in the repository, prefer file edits and batched git over
   shell commands, and reply in Spanish while writing English in the repository. Also documents the
@@ -40,6 +60,13 @@ entries below reference those records by id.
 
 ### Changed
 
+- `README.md`: systems renumbered to fit fluids in at its logical place, after logistics. *Tools
+  and equipment* 5→6, *Resonance, defence and weapons* 6→7, *The futuristic tier* 7→8, *Orbit and
+  the planets* 8→9. Contents, tier table, processing chain and block catalogue updated to match.
+- `README.md`: the *Progression* section now states that research is necessary but not sufficient
+  past T1 — a blueprint grants the right to manufacture, not a crafting recipe (ADR-0017).
+- `README.md`: the processing chain gained *the wet line* — fluid-assisted variants that yield more
+  and recover byproducts the dry chain loses, with the dry chain never removed.
 - `README.md`: the *Current blocker* section became *Environment setup*. It described a broken
   development terminal as the project's blocker and linked a workaround script that was
   deliberately not committed (ADR-0014). The architecture tree and the implementation plan were

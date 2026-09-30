@@ -26,6 +26,10 @@ history — the reasoning that was wrong is itself useful information.
 | [0012](#adr-0012--planets-come-from-installed-space-mods-and-satellites-have-no-upkeep) | Planets come from installed space mods | Accepted |
 | [0013](#adr-0013--the-readme-is-the-design-source-of-truth) | The README is the design source of truth | Accepted |
 | [0014](#adr-0014--consolidate-the-orphaned-session-branches-into-one-history) | Consolidate the orphaned session branches | Accepted |
+| [0015](#adr-0015--fluids-are-modelled-as-state-not-as-items) | Fluids are modelled as state, not as items | Accepted |
+| [0016](#adr-0016--pipes-early-the-phase-network-late) | Pipes early, the Phase Network late | Accepted |
+| [0017](#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted) | Machines above T1 are manufactured, never hand-crafted | Accepted |
+| [0018](#adr-0018--one-container-contract-with-auto-void-off-by-default) | One container contract, auto-void off by default | Accepted |
 
 ---
 
@@ -301,3 +305,137 @@ compile — this was accepted deliberately, because preserving the real work mat
 green build, and the state is documented in the README and the commit message.
 
 This episode is the direct cause of the commit-early rule in [`AGENTS.md`](../AGENTS.md).
+
+---
+
+## ADR-0015 — Fluids are modelled as state, not as items
+
+*2026-09-30 · Accepted*
+
+**Context.** Minecraft tech mods almost universally model a fluid as an item with a different
+texture: an amount in a tank, moved by a pipe at a fixed rate. It is simple to implement, it
+integrates trivially with existing fluid APIs, and it produces no interesting decisions — a fluid
+network is solved once and then copy-pasted forever.
+
+**Decision.** A Grindless fluid stack carries **volume, temperature and pressure**. The same
+substance at different points on that curve is a different resource: steam, superheated steam and
+supercritical water drive the same turbine at very different outputs. Heat is conserved rather
+than ignored, so steam that cools condenses in the pipe and a turbine fed condensate stalls.
+Throughput is a function of pipe tier, pressure differential and viscosity; gases need a pump,
+liquids can run downhill for free.
+
+**Alternatives rejected.** Flat fluid-as-item, for the reasons above. A full thermodynamic
+simulation, which is unplayable and unaffordable at tick rate — the model is deliberately three
+numbers and a phase table, not a solver.
+
+**Consequences.** Plumbing becomes a layout puzzle with the same shape as a belt bus: feed, boil,
+work, condense, return. It also gives the futuristic tier somewhere physical to go — cryogenics,
+supercritical loops, plasma containment — instead of inventing arbitrary new units.
+
+The costs are real. Every fluid-carrying block has to track and display three values rather than
+one, interop with the pack's plain fluid API has to pick a sane temperature and pressure for
+foreign fluids entering the system, and the UI must make state legible or the whole thing reads as
+unexplained failure. Rupture is therefore a loud, visible, repairable vent rather than an
+explosion: the model must be safe to learn by experiment.
+
+---
+
+## ADR-0016 — Pipes early, the Phase Network late
+
+*2026-09-30 · Accepted*
+
+**Context.** The mod's founding idea is coverage areas instead of cable spaghetti (ADR-0001's
+sibling in design terms): a Flux Pylon powers everything inside its area, so nobody runs wire.
+Applying that to fluids immediately would delete the pipe gameplay that ADR-0015 just created.
+Never applying it would leave fluids as the one system that stays tedious forever.
+
+**Decision.** Both, in sequence. Real pipes with real pressure carry the early and middle game. At
+T3 the **Phase Manifold** arrives: inside its coverage area, registered tanks and machines exchange
+any fluid the network holds with no pipes at all.
+
+The phase network is explicitly **not** a strict upgrade. Dematerialising a fluid costs FU per
+unit, proportional to distance from ambient, so cryogenics and plasma are expensive to move and a
+well-built pipe loop stays cheaper forever.
+
+**Consequences.** This is the same trade the mod already offers between belts and drones: pay in
+layout, or pay in power. Players who enjoy plumbing keep plumbing and are rewarded with lower
+running costs; players who are finished with plumbing can buy their way out. The transition is
+never forced, and no content is invalidated at T3.
+
+The risk to watch in balancing is the phase network's FU price. Too cheap and pipes become
+vestigial, taking the ADR-0015 gameplay with them; too expensive and it is a trap option nobody
+builds.
+
+---
+
+## ADR-0017 — Machines above T1 are manufactured, never hand-crafted
+
+*2026-09-30 · Accepted*
+
+**Context.** In Factorio the factory builds the factory: you hand-craft the first burner drill and
+essentially nothing else. Minecraft tech mods usually discard that loop by letting a player with a
+full inventory assemble any machine in a crafting grid, which makes the factory decorative — a
+thing that produces items rather than the thing that produces itself.
+
+Grindless has a specific exposure here. It is designed to be installed into large existing packs,
+where a player may arrive already holding the pack's mid-game materials.
+
+**Decision.** Past the bootstrap, machines have **no crafting-table recipe at all** — not a hidden
+one, not a deliberately expensive one. T2–T3 machines are produced by the **Assembler**, T4 by the
+**Quantum Assembler**, T5–T6 by the **Orbital Assembly Bay**. Each consumes a researched blueprint,
+fabricated components, power and time.
+
+Components form the intermediate economy — casings, motors, pumps, circuit boards, integrated
+circuits, superconductors, quantum cores — and several of them require fluids, so circuits need
+etching acid and machines need circuits.
+
+**Consequences.** The reward for building a production line becomes the ability to build the next
+one, which is the loop the mod exists to deliver. Research gains teeth: a blueprint is a production
+target rather than a note. Fluids become load-bearing exactly once, early, at small scale, rather
+than being a system players can ignore entirely.
+
+The danger is obvious — this rule could easily become the grind the mod exists to delete — so the
+guard rails are part of the decision, not an afterthought: blueprints are permanent, Assemblers are
+cheap and parallelise so the answer to "this is slow" is always "build another one", T0 and T1 stay
+hand-craftable forever so there is no softlock path, and the gate is datapack-driven so a pack
+author can relax it without a mod patch.
+
+---
+
+## ADR-0018 — One container contract, with auto-void off by default
+
+*2026-09-30 · Accepted*
+
+**Context.** Grindless will ship many storage blocks — logistics crates, four tiers of tank, and
+the input and output buffers inside every machine. Tech mods typically give each its own ad-hoc
+interface, so the player learns filtering four times and still cannot predict which blocks support
+it.
+
+Separately, a system that generates recipes from tags at runtime (ADR-0004, ADR-0005) produces
+byproducts for materials the player has never heard of. Unwanted byproducts backing up a line are
+the characteristic failure mode of that design, so a discard mechanism is not optional.
+
+**Decision.** Every container — item or fluid, block or machine buffer — implements one shared
+contract: per-slot filters that survive the slot emptying, a buffer target, a capacity limit below
+physical maximum, configurable auto-void with a threshold and mode, per-face I/O, insertion and
+extraction priority, and a fill-level signal output.
+
+Auto-void is built defensively, because it is simultaneously the feature that keeps a base running
+unattended and the easiest way for a player to silently destroy something they wanted:
+
+- off by default on every container, always;
+- enabling it requires an explicit confirmation;
+- a voiding container is visibly marked with particles and a glow, so it is discoverable months
+  later in a base you no longer remember building;
+- it trims above the threshold and never empties a container;
+- it emits a distinct signal while voiding, so alarms can be built;
+- it refuses to discard anything on the replication blacklist — creative items, quest rewards,
+  pack-unique items.
+
+**Consequences.** One interface to learn and one implementation to maintain, at the cost of a
+richer base container class than most blocks strictly need. The defensive defaults mean a player
+cannot lose materials to a feature they did not know was on, which is the failure this design is
+most exposed to.
+
+The canonical overflow pattern becomes `Overflow Gate` into a voiding `Storage Crate` — the
+standard answer to eleven thousand gravel.

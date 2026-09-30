@@ -39,16 +39,19 @@ where it opens up.
 - [System 2 — Resource Genesis](#system-2--resource-genesis) — chunks that own their materials
 - [System 3 — Matter Replication](#system-3--matter-replication) — everything that isn't an ore
 - [System 4 — Logistics and belts](#system-4--logistics-and-belts) — belts, drones, logic
-- [System 5 — Tools and equipment](#system-5--tools-and-equipment) — blueprints, drills, exosuit
-- [System 6 — Resonance, defence and weapons](#system-6--resonance-defence-and-weapons)
-- [System 7 — The futuristic tier](#system-7--the-futuristic-tier) — fission, fusion, accelerator
-- [System 8 — Orbit and the planets](#system-8--orbit-and-the-planets) — satellites, remote colonies
+- [System 5 — Fluids, pressure and phase](#system-5--fluids-pressure-and-phase) — pipes, tanks, loops
+- [System 6 — Tools and equipment](#system-6--tools-and-equipment) — blueprints, drills, exosuit
+- [System 7 — Resonance, defence and weapons](#system-7--resonance-defence-and-weapons)
+- [System 8 — The futuristic tier](#system-8--the-futuristic-tier) — fission, fusion, accelerator
+- [System 9 — Orbit and the planets](#system-9--orbit-and-the-planets) — satellites, remote colonies
 
 **Mechanics**
 
 - [Energy: Flux Units](#energy-flux-units)
 - [Processing chain](#processing-chain)
 - [Progression: the Research Terminal](#progression-the-research-terminal)
+- [Fabrication: the factory builds the factory](#fabrication-the-factory-builds-the-factory)
+- [Containers: buffers, filters and voiding](#containers-buffers-filters-and-voiding)
 - [Block and item catalogue](#block-and-item-catalogue)
 - [Compatibility strategy](#compatibility-strategy)
 - [Why this is not a cheat mod](#why-this-is-not-a-cheat-mod)
@@ -388,7 +391,129 @@ player to learn a second programming language.
 
 ---
 
-## System 5 — Tools and equipment
+## System 5 — Fluids, pressure and phase
+
+*The other half of logistics, and the system that makes the futuristic tier feel earned.*
+
+Most tech mods treat a fluid as an item with a different texture: it has an amount, it sits in a
+tank, and a pipe moves it at a fixed rate. That is easy to implement and completely uninteresting
+to play.
+
+Grindless treats a fluid as a **state**, not a thing. What a fluid does depends on its temperature
+and its pressure, moving it costs real work, and letting it cool or depressurise changes it into
+something else. That single decision is what makes plumbing a layout puzzle instead of a chore —
+and it is what lets the late game go somewhere genuinely futuristic without stopping being
+physical.
+
+### Fluids are states, not items
+
+Every fluid stack carries **volume, temperature and pressure**. The same substance at different
+points on that curve is a different resource with a different job:
+
+| Fluid | State | Source | Used for |
+| --- | --- | --- | --- |
+| **Water** | ambient | Pump, rain catcher | washing, coolant feed, slurry |
+| **Steam** | 100–250 °C, low pressure | Thermal Generator, Heat Exchanger | Steam Turbine — the T2 power backbone |
+| **Superheated steam** | 250–600 °C, high pressure | reactor heat | the same turbine at far higher output |
+| **Supercritical water** | >374 °C, >22 MPa | reactor primary loop | carries several times the heat per unit volume |
+| **Ore slurry** | ambient, dense | Pulverizer fed with water | the wet processing line |
+| **Leachate** | corrosive | Chemical Washer | strips byproducts; destroys the wrong pipe |
+| **Etching acid** | corrosive | Chemical Washer | circuit boards — see [Fabrication](#fabrication-the-factory-builds-the-factory) |
+| **Ultrapure water** | ambient, filtered | Cryogenic Plant, Vacuum Furnace | integrated circuits, crystal growth |
+| **Coolant** | cryogenic | Cryogenic Plant | reactor loops, superconductors |
+| **Liquid oxygen / nitrogen** | cryogenic | air separation | rocket fuel, cryo lines, life support |
+| **Deuterium / Helium-3** | pressurised gas | Centrifuge; lunar regolith | fusion fuel |
+| **Molten metal** | 1000 °C+ | Arc Furnace tap | direct casting and alloying, skipping the ingot step |
+| **Plasma** | magnetically contained | Fusion Reactor, Particle Accelerator | exotic synthesis, the highest weapon tier |
+
+The rule that turns this into gameplay rather than bookkeeping: **heat is neither free nor
+discarded.** Steam that cools condenses back into water inside the pipe. A turbine fed condensate
+instead of steam stalls. So the correct build is a *loop* — feed, boil, work, condense, return —
+and closing that loop efficiently is the same kind of satisfying layout problem as a belt bus.
+
+Molten metal is the clearest example of the design paying off in both directions at once. It is
+completely realistic — this is how real foundries work — and it is a genuine shortcut: tapping the
+Arc Furnace straight into a casting line skips the ingot stage entirely, at the cost of having to
+keep the metal hot.
+
+### Pressure is the throughput limit
+
+Pipes do not move fluid by magic, and this is where the realism earns its place:
+
+- **Liquids** fall downhill for free. Head pressure is real, so a tank on a tower is a valid,
+  zero-power distribution strategy.
+- **Gases** move only down a pressure differential. No pump, no flow, no exceptions.
+- **Throughput** is a function of pipe tier, pressure differential and viscosity. Long runs lose
+  pressure, which is what booster pumps are for.
+- **Over-pressurise** a pipe past its rating and it ruptures: it vents loudly and visibly and can
+  be repaired in place. It is never a base-deleting explosion — that punishes experimentation.
+  Pressure relief valves exist precisely so a careful player never sees a rupture.
+- **Corrosive fluids** eat the wrong pipe material. Running leachate through a T1 line is a
+  mistake the game lets you make, tells you about, and lets you fix.
+
+| Pipe | Tier | Rated for | Notes |
+| --- | --- | --- | --- |
+| **Clay Conduit** | T1 | ambient, gravity only | Unpowered. Available before any power network, like the first belt. |
+| **Pressure Pipe** | T2 | MV pressures, hot | The workhorse. Corrosion-resistant lining. |
+| **Cryo Line** | T3 | cryogenic, insulated | No boil-off while intact. |
+| **Plasma Conduit** | T4 | magnetic containment | Consumes FU merely to stay intact; containment loss vents the line. |
+
+| Component | Role |
+| --- | --- |
+| **Hand Pump** | T1, unpowered, slow. The bootstrap water source. |
+| **Electric Pump** | Creates pressure. The thing that actually makes a gas network move. |
+| **Booster Pump** | Restores pressure mid-run on long lines. |
+| **Pressure Relief Valve** | Vents above a set point. Cheap insurance against rupture. |
+| **Check Valve** | One-way flow. |
+| **Fluid Manipulator** | The inserter for fluids: moves fluid between pipes, tanks and machines. |
+| **Condenser** | Steam back to water, recovering heat into a loop. |
+| **Boiler** | Water to steam, at a temperature set by its heat source. |
+| **Separator** | Splits a mixed or multi-phase fluid into its components. |
+| **Fluid Reader** | Emits fill level, temperature and pressure as logic signals. |
+
+### The Phase Network — when fluids stop being plumbing
+
+At T3 the mod's central idea arrives for fluids. A **Phase Manifold** is to fluids exactly what a
+Flux Pylon is to power: inside its coverage area, any registered tank or machine can push and pull
+any fluid the network holds, with no pipes at all.
+
+This is deliberately *not* a strict upgrade. Dematerialising a fluid costs FU per unit,
+proportional to how far that fluid sits from ambient — moving cryogenic coolant or plasma through
+the phase network is expensive, and moving supercritical steam is very expensive. A well-built
+pipe loop stays cheaper forever.
+
+So the choice is the same one the belt-versus-drone decision offers: pay in layout, or pay in
+power. Players who enjoy plumbing keep plumbing and are rewarded for it; players who are done with
+plumbing can buy their way out. Neither is wrong, and the mod does not force the transition.
+
+### Tanks
+
+| Tank | Tier | Notes |
+| --- | --- | --- |
+| **Basic Tank** | T1 | Unpressurised, ambient only. Hot fluid will not enter it. |
+| **Industrial Tank** | T2 | Rated pressure and temperature; blocks combine into one larger multiblock tank. |
+| **Cryo Tank** | T3 | Insulated. Boils off slowly if it loses power — a real reason to care about brownouts. |
+| **Containment Sphere** | T4 | Plasma and exotics. Powered containment. |
+
+Every tank obeys the shared container contract — filters, buffer targets, configurable auto-void
+and signal output. See [Containers](#containers-buffers-filters-and-voiding).
+
+### Why fluids are not an optional side system
+
+Two hooks make fluids load-bearing rather than decorative, and both are deliberate:
+
+1. **Wet processing beats dry processing.** Slurry and leachate steps in the ore chain give
+   materially better yields and recover byproducts that the dry line simply loses.
+2. **You cannot build a circuit without acid, and you cannot build a machine without a circuit.**
+   That is the [fabrication](#fabrication-the-factory-builds-the-factory) rule, and it means every
+   player passes through fluids on the way to their second tier of machines.
+
+Neither hook is a wall. The dry chain keeps working forever, so a player who hates plumbing is
+slowed, never stopped.
+
+---
+
+## System 6 — Tools and equipment
 
 New tools should remove chores and create decisions. Each of these exists to delete a specific
 category of busywork.
@@ -434,7 +559,7 @@ mobility — and it scales all the way from "one cell and night vision" to a ful
 
 ---
 
-## System 6 — Resonance, defence and weapons
+## System 7 — Resonance, defence and weapons
 
 ### Resonance — industry has a cost
 
@@ -496,7 +621,7 @@ late-game ammunition, with no compat work.
 
 ---
 
-## System 7 — The futuristic tier
+## System 8 — The futuristic tier
 
 The endgame is where the mod stops being about *getting* materials and starts being about
 *transforming* them. Every machine here is a multiblock, and each one is a project.
@@ -564,7 +689,7 @@ Pylon tier and the Fusion Lance.
 
 ---
 
-## System 8 — Orbit and the planets
+## System 9 — Orbit and the planets
 
 *Factorio launches a rocket and the game ends. Here it is where the game opens up.*
 
@@ -803,13 +928,19 @@ cores from processed ones, exotic cores only from the Particle Accelerator. Rese
 a *production target*, not a timer, and the research tree is something you automate like anything
 else. That is straight out of Factorio, and it is what makes progression feel earned.
 
+Research is necessary but **not sufficient**. Past T1 a blueprint does not become a crafting
+recipe: it becomes something an Assembler can manufacture, given the components and the power. The
+two gates are deliberately different — research says *you may build this*, fabrication says *your
+factory is capable of building this* — and a player has to clear both. See
+[Fabrication](#fabrication-the-factory-builds-the-factory).
+
 | Tier | Time | Theme | Unlocks |
 | --- | --- | --- | --- |
 | **T0 — Bootstrap** | 0–10 min | Escape velocity | Hand Crank Dynamo, Crude Extractor, Multitool. Buildable from cobblestone, wood and two iron. **This is the moment the grind dies.** |
-| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret. |
-| **T2 — Industrial** | 1–3 h | Real automation | Flux Pylon MK2, Chemical Washer, Assembler, Solar and Steam generation, Pattern Scanner, Deconstructor, Flux Belt, Stack/Filter Manipulator, Sorter, Logic Controller, Flux Drill, **Blueprint Tool**, Flux Exosuit, Gauss Rifle, Laser Turret. |
-| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun. |
-| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge. |
+| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret, Clay Conduit, Hand Pump, Basic Tank. |
+| **T2 — Industrial** | 1–3 h | Real automation | Flux Pylon MK2, Chemical Washer, Assembler, Solar and Steam generation, Pattern Scanner, Deconstructor, Flux Belt, Stack/Filter Manipulator, Sorter, Logic Controller, Flux Drill, **Blueprint Tool**, Flux Exosuit, Gauss Rifle, Laser Turret, Pressure Pipe, Electric Pump, Boiler, Condenser, Industrial Tank, Fluid Manipulator. |
+| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank. |
+| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere. |
 | **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
 | **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator. |
 
@@ -863,6 +994,135 @@ Beyond the core chain, the **Centrifuge** handles isotope separation and fuel en
 **Particle Accelerator** short-circuits the whole diagram by transmuting any material directly
 into any other at an energy price.
 
+### The wet line
+
+Every step from the Pulverizer onwards has a fluid-assisted variant that yields more and recovers
+byproducts the dry line throws away. Feeding the Pulverizer water produces **ore slurry**; washing
+slurry with **leachate** separates trace materials that dry pulverizing simply loses; and tapping
+the Arc Furnace as **molten metal** lets a casting line skip the ingot stage entirely, provided the
+metal is kept hot.
+
+The dry chain above keeps working forever and is never removed. The wet line is strictly an
+optimisation the player opts into — which is the right shape for a system that also happens to be
+on the critical path to circuits (see [System 5](#system-5--fluids-pressure-and-phase)).
+
+---
+
+## Fabrication: the factory builds the factory
+
+In Factorio you never hand-craft a factory. You hand-craft the first burner drill, and from then
+on the factory produces everything else, including itself. That loop is the entire reason the game
+is compelling, and almost every Minecraft tech mod throws it away by letting the player assemble a
+fusion reactor in a 3×3 grid from a full inventory.
+
+The single most important structural rule in Grindless:
+
+> **Past the bootstrap, machines are not crafted. They are manufactured.**
+
+| Tier | How you obtain the machine |
+| --- | --- |
+| **T0–T1** | Crafting table. The bootstrap, and only the bootstrap. |
+| **T2–T3** | **Assembler** — consumes a researched blueprint, fabricated components, FU and time. |
+| **T4** | **Quantum Assembler** — long component chains resolved in one machine. |
+| **T5–T6** | **Orbital Assembly Bay** — in orbit, because vacuum and zero gravity are prerequisites, not flavour. |
+
+A machine above T1 has **no crafting-table recipe at all**. Not a hidden one, not a deliberately
+expensive one — none exists. The only way to obtain it is to run the process, which means owning
+and feeding a production line.
+
+### Components — the intermediate economy
+
+Machines are not built from ingots. They are built from parts, and those parts are where the real
+production chain lives:
+
+| Component | Tier | Built from | What it gates |
+| --- | --- | --- | --- |
+| **Machine Casing** | T1 | plates | The first thing any Assembler makes. |
+| **Motor** | T2 | casing stock + copper coil | Anything that moves. |
+| **Pump** | T2 | casing + motor + seals | The entire fluid tier. |
+| **Circuit Board** | T2 | silicon wafer + **etching acid** | The first hard fluid gate. |
+| **Integrated Circuit** | T3 | board + gold + **ultrapure water** | T3 machines and logic. |
+| **Superconductor** | T3 | wire + **cryogenic coolant** | Reactors, rails, containment. |
+| **Quantum Core** | T4 | IC + exotic material + **supercooled coolant** | The exotic tier. |
+| **Containment Ring** | T4 | superconductor + **liquid nitrogen** | Fusion, plasma, singularity. |
+
+Every ingredient above is resolved from tags, so "plates", "gold" and "silicon" mean whatever the
+installed pack provides — the same runtime material registry everything else uses (ADR-0004). A
+pack that already has a circuit will have Grindless use *its* circuit rather than registering a
+rival one.
+
+Note how the fluid dependencies are placed. Circuits need acid, machines need circuits, so every
+player builds a small chemical line on the way to their second tier of machines. Fluids are not a
+side system the player can skip; they are on the critical path, once, early, at a point where the
+scale required is small.
+
+### Why the rule exists
+
+1. **It makes the factory the point.** The reward for building a production line is that it builds
+   the next production line. Without this, machines are just expensive items and the factory is
+   decoration.
+2. **It closes the hand-craft bypass.** A player who arrives with a full inventory of a pack's
+   mid-game materials would otherwise skip straight past everything Grindless is about.
+3. **It gives research teeth.** A blueprint you can immediately hand-craft is a note. A blueprint
+   that has to be fed into an assembly line is a production target — which is exactly what makes
+   research feel earned rather than clicked through.
+
+### The counterweight
+
+This rule must never become the grind it exists to delete. The guard rails are deliberate:
+
+- **Blueprints are permanent.** Research a machine once and you can build it forever.
+- **Assemblers are cheap and parallelise.** Building ten of them is a throughput decision, not a
+  punishment. The answer to "this is slow" is always "build another one", which is the correct
+  answer in a factory game.
+- **The bootstrap is never gated.** T0 and T1 stay hand-craftable permanently, so a player who
+  loses everything can always rebuild the ladder from cobblestone and two iron. There is no
+  softlock, ever.
+- **Pack authors can relax it.** The gate is datapack-driven, so a pack that wants hand-craftable
+  T2 machines can have them without a mod patch.
+
+---
+
+## Containers: buffers, filters and voiding
+
+Every container in Grindless — item crates, fluid tanks, and the input and output buffers built
+into machines — obeys one shared contract. Learn the interface once and it is the same everywhere,
+on a T1 tank and on a T6 colony module alike.
+
+| Control | Behaviour |
+| --- | --- |
+| **Filter** | Lock a slot or tank to an item, a fluid or a tag. A locked slot keeps its identity while empty, so a sorted line never re-sorts itself the moment it runs dry. |
+| **Buffer target** | The amount to keep on hand. Drones and logic read anything below the target as demand and anything above it as surplus. |
+| **Capacity limit** | Cap a slot or tank below its physical maximum — useful to stop one material from eating a shared buffer. |
+| **Auto-void** | Discard anything above a configurable threshold. |
+| **Void mode** | Overflow only, filtered materials only, or everything. |
+| **Side I/O** | Per face: insert, extract, both or nothing. |
+| **Priority** | Independent insertion and extraction priority, so overflow and top-up routes resolve predictably. |
+| **Signal output** | Fill level as a logic signal — and for fluids, temperature and pressure too. |
+
+### Auto-void, handled carefully
+
+Auto-void is the difference between an ore line that jams overnight and one that runs for a month
+unattended. It is also the easiest possible way for a player to silently destroy something they
+wanted. Both things are true, so the feature is built defensively:
+
+- **Off by default.** On every container, always, with no exceptions.
+- **Enabling it is explicit.** A deliberate confirmation, never a stray click in a crowded UI.
+- **A voiding container is visibly marked.** A particle effect and a glow, so you can walk into a
+  base you built three months ago and see at a glance which containers are discarding.
+- **It trims, it never empties.** Voiding applies only above the threshold. A voiding container
+  still holds its buffer.
+- **It announces itself.** A distinct logic signal while actively voiding, so an alarm can be
+  built for it.
+- **It refuses to void the irreplaceable.** Anything on the replication blacklist — creative
+  items, quest rewards, pack-unique items — is never discarded, regardless of settings.
+
+This matters more here than in most mods. A system that generates its recipes from tags at runtime
+produces byproducts for materials the player has never heard of, and unwanted byproducts backing up
+a line are the characteristic failure mode of that design. Auto-void is the release valve, and
+`Overflow Gate` plus a voiding `Storage Crate` is the canonical answer to "what do I do with eleven
+thousand gravel".
+
 ---
 
 ## Block and item catalogue
@@ -911,6 +1171,25 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Cryogenic Plant | T4 | Liquefaction, superconductors. |
 | Quantum Assembler | T4 | Long ingredient chains in one block. |
 | Particle Accelerator (multiblock) | T4 | Transmutation, exotics, research. |
+
+### Fluids
+
+| Block | Tier | Notes |
+| --- | --- | --- |
+| Clay Conduit | T1 | Unpowered, gravity feed, ambient fluids only. |
+| Hand Pump | T1 | Slow and manual. The bootstrap water source. |
+| Basic Tank | T1 | Unpressurised; refuses hot fluids. |
+| Pressure Pipe | T2 | The workhorse. Corrosion-resistant lining. |
+| Electric Pump / Booster Pump | T2 | Creates pressure; restores it on long runs. |
+| Boiler / Condenser | T2 | Water ↔ steam. Closes the loop. |
+| Fluid Manipulator | T2 | The inserter for fluids. |
+| Industrial Tank (multiblock) | T2 | Rated pressure; adjacent blocks merge into one tank. |
+| Pressure Relief Valve / Check Valve | T2 | Rupture insurance; one-way flow. |
+| Separator | T2 | Splits mixed and multi-phase fluids. |
+| Fluid Reader | T2 | Level, temperature and pressure as logic signals. |
+| Cryo Line / Cryo Tank | T3 | Insulated. Boil-off when unpowered. |
+| Phase Manifold | T3 | Coverage-area fluid network. Costs FU per unit moved. |
+| Plasma Conduit / Containment Sphere | T4 | Powered magnetic containment. |
 
 ### Matter
 
@@ -977,6 +1256,9 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | --- | --- |
 | Multitool | T0 |
 | Prospector's Scanner, Flux Conduit | T1 |
+| Machine Casing, Motor, Pump, Circuit Board | T1–T2 |
+| Integrated Circuit, Superconductor | T3 |
+| Quantum Core, Containment Ring | T4 |
 | Flux Drill, Blueprint Tool, Deconstruction Planner | T2 |
 | Flux Exosuit (4 pieces) + equipment modules | T2–T4 |
 | Terraformer, Matter Pattern Slate | T3 |
@@ -1148,6 +1430,10 @@ Summarised here; each one is recorded in full — with the alternatives that wer
 | Replication priced from the recipe graph | Closes the exploit that breaks flat-priced duplication mods. |
 | Hand-written energy bridge | Architectury has no unified energy API. |
 | Mojmap + Parchment mappings | Readable names, permissively licensed, standard on 1.20.1. |
+| Fluids carry temperature and pressure | The same substance in different states is a different resource; closing a heat loop becomes a layout puzzle instead of bookkeeping. |
+| Pipes early, Phase Network late | Same trade as belts versus drones: pay in layout or pay in power, never forced to switch. |
+| Machines above T1 cannot be hand-crafted | The factory builds the factory. Closes the full-inventory bypass that makes tech mods trivial in big packs. |
+| One container contract, auto-void off by default | Learn the interface once; the release valve a tag-driven system needs must never silently delete things. |
 
 ---
 
