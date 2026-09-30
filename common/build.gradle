@@ -1,0 +1,11 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+dependencies {
+    // The loader is only present at compile time here; each platform supplies the
+    // real implementation. Common code must never touch loader-specific classes
+    // outside of @ExpectPlatform stubs.
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "dev.architectury:architectury:${rootProject.architectury_api_version}"
+}
