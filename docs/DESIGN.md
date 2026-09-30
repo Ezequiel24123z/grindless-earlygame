@@ -3,6 +3,11 @@
 > **Grindless** is a Factorio-inspired, futuristic automation mod whose single purpose is to
 > delete the modpack early-game grind without deleting the *game*.
 
+> **Superseded — kept for history.** This was the first design note, written before the design
+> settled. The authoritative design document is the [README](../README.md); the reasoning behind
+> each structural choice is in [`DECISIONS.md`](DECISIONS.md). Where this file and the README
+> disagree, the README is correct. See ADR-0013.
+
 ---
 
 ## 1. The problem we are solving
@@ -136,7 +141,7 @@ Grindless a bug magnet in big packs. Interop correctness beats flavour.
 Foreign FE entering the network is admitted at the network's base tier. Foreign machines see
 a perfectly ordinary `IEnergyStorage` (Forge) / `EnergyStorage` (Fabric, Team Reborn Energy).
 
-See [`ENERGY.md`](ENERGY.md) for the full interop matrix.
+See [Energy: Flux Units](../README.md#energy-flux-units) for the full interop matrix.
 
 ---
 
@@ -197,4 +202,5 @@ the first ten minutes, and it immediately starts producing. That is the moment t
 
 ## 8. Scope of the current milestone
 
-See [`ROADMAP.md`](ROADMAP.md) for what is implemented today versus planned.
+See the [Roadmap](../README.md#roadmap) and [Implementation plan](../README.md#implementation-plan)
+for what is implemented today versus planned.

@@ -1089,6 +1089,8 @@ and the handful of platform-specific bridges.
 
 ```
 grindless/
+├── AGENTS.md                 working agreement: read this before changing anything
+├── CHANGELOG.md              what changed, in order
 ├── build.gradle              root: shared config for all subprojects
 ├── settings.gradle           includes common, fabric, forge
 ├── gradle.properties         all version coordinates, single source of truth
@@ -1121,12 +1123,15 @@ grindless/
 ├── fabric/                   Fabric entrypoint + TeamReborn energy bridge
 ├── forge/                    Forge entrypoint + capability energy bridge
 │                             (this jar also loads on NeoForge 1.20.1)
-├── docs/                     DESIGN.md; the rest is split out of this README over time
+├── docs/                     DECISIONS.md (ADRs), DESIGN.md; grows as this README is split up
 ├── tools/                    asset generation scripts
 └── .github/workflows/        CI
 ```
 
 ### Key technical decisions
+
+Summarised here; each one is recorded in full — with the alternatives that were rejected — in
+[`docs/DECISIONS.md`](docs/DECISIONS.md), which is authoritative where the two disagree.
 
 | Decision | Rationale |
 | --- | --- |
@@ -1398,6 +1403,12 @@ welcome — particularly:
 - **Balance.** Yields are tuned against Thermal and Mekanism; other packs may need adjustment.
 - **Performance.** Belts and networks are the two systems where a bad design decision would show
   up as tick lag at scale.
+
+Before opening a pull request, read [`AGENTS.md`](AGENTS.md). It is the working agreement for this
+repository and it is short: commit at every meaningful checkpoint, record design decisions as ADRs
+in [`docs/DECISIONS.md`](docs/DECISIONS.md), and log every change in [`CHANGELOG.md`](CHANGELOG.md).
+The project is built across many short-lived sessions, so anything that is not written down in the
+repository is lost.
 
 Code, comments, documentation and commit messages are written in English.
 
