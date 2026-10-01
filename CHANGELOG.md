@@ -15,6 +15,32 @@ entries below reference those records by id.
 
 ### Added
 
+- **The machine layer** (`common/.../machine/`) — step 12. `ChassisMark` is MK I–V, whose defining
+  property is that it **widens the condition envelope** (ADR-0027) rather than adding a speed
+  number, so a mark unlocks recipes. `widen()` interpolates between a machine's narrow and full
+  envelopes, which matters at scale: thirty machines at five marks would otherwise be a hundred and
+  fifty envelopes to hand-write and keep consistent. The interpolation fractions are not evenly
+  spaced — they were chosen to reproduce the Arc Furnace ladder in `MACHINES.md` (1800 → 3500 °C),
+  whose steps shorten near the machine's physical ceiling.
+  `MachineUpgrade` is the ten upgrades, each carrying what it **buys** and what it **spends**
+  (ADR-0028), with the three mutually exclusive pairs declared once and mirrored so a pair can
+  never be half-declared. `UpgradeSet` enforces slot counts and exclusions **in the data model
+  rather than the UI**, since a screen is only one of several ways an upgrade gets installed.
+  Rejections explain themselves — "cannot be combined with Speed" rather than a bare `false`.
+- **The tick-subscription model** (`TickSubscriptions`, `TickSubscription`, `TickOffset`) — the
+  substrate that keeps a large base playable, and the answer to "will this drop us to 5 FPS".
+  Machines **do not tick by default** (ADR-0042): work is subscribed when something makes it
+  necessary and unsubscribed the moment it is not, so an idle machine's tick is an emptiness check.
+  Ten thousand machines ticking at thirty microseconds each is six times the entire tick budget
+  spent on machines doing nothing, and that cannot be fixed by making the work faster.
+  `TickOffset` spreads periodic work across ticks using a position-derived hash. The naive
+  `gameTime % 20 == 0` synchronises every machine in the world onto the same tick: average load
+  drops twentyfold and the worst tick does not drop at all, which is what players actually feel.
+  The hash is mixed rather than raw because block coordinates are highly regular and players build
+  in **rows** — the exact case a weak hash would resynchronise.
+
+### Changed
+
 - **The condition system** (`common/.../process/`) — step 11, and the seam the whole machine layer
   rests on. `ProcessConditions` is the `conditions` half of
   `inputs + conditions + time -> outputs` (ADR-0020); `ConditionEnvelope` is what a machine *can*
@@ -35,7 +61,14 @@ entries below reference those records by id.
   condition model is checked against the design rather than assumed to fit it. The Haber synthesis
   at 20 MPa lands inside the Autoclave and outside the Chemical Reactor, which is the
   condition-envelope idea working exactly as specified.
-- Two decision records, ADR-0040 and ADR-0041.
+- Two decision records, ADR-0040 and ADR-0041, and two more, ADR-0042 and ADR-0043, recording the
+  performance model. ADR-0043 decides the recipe lookup strategy **before** step 15 implements it —
+  indexed rather than scanned, with a cached last recipe and a negative result that sticks — so the
+  session that writes recipe generation does not have to rediscover it. Both records cite what
+  GregTech CEu Modern and Mekanism actually do: GTCEu stores recipes in an ingredient trie and
+  checks `lastRecipe` before searching, while Mekanism uses typed input caches. Two mature
+  implementations converging independently is the strongest available evidence that a linear scan
+  does not survive at this scale.
 
 ### Changed
 

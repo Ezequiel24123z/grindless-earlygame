@@ -53,6 +53,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0039](#adr-0039--forge-1201-is-the-only-build-target) | Forge 1.20.1 is the only build target | Accepted |
 | [0040](#adr-0040--running-out-of-band-costs-time-never-yield) | Running out of band costs time, never yield | Accepted |
 | [0041](#adr-0041--a-condition-check-returns-a-named-fault-not-a-boolean) | A condition check returns a named fault, not a boolean | Accepted |
+| [0042](#adr-0042--machines-subscribe-to-ticking-they-do-not-tick-by-default) | Machines subscribe to ticking; they do not tick by default | Accepted |
+| [0043](#adr-0043--recipe-lookup-is-indexed-and-cached-never-a-linear-scan) | Recipe lookup is indexed and cached, never a linear scan | Accepted |
 
 ---
 
@@ -1301,4 +1303,115 @@ changes, not returning to booleans.
 
 Fault messages live on the enum for now. They move behind translation keys when the client layer
 exists; the enum is the single place that has to change.
+
+---
+
+## ADR-0042 — Machines subscribe to ticking; they do not tick by default
+
+*2026-10-01 · Accepted*
+
+**Context.** Grindless is aiming at bases with thousands of machines. The default Minecraft shape —
+a `BlockEntityTicker` that runs every tick on every machine — means each one polls its inventory,
+looks for a recipe and checks its neighbours sixty times a second whether or not anything has
+changed.
+
+The arithmetic is unforgiving. Ten thousand machines at thirty microseconds each is three hundred
+milliseconds, or six times the entire 50 ms tick budget, spent on machines that are *doing nothing*.
+This is the characteristic way a tech mod ruins a server, and it cannot be fixed later by
+optimising the work: the fix has to be not doing it.
+
+**Decision.** A machine holds a list of **tick subscriptions** and runs only those. Work is
+subscribed when something makes it necessary and unsubscribed the moment it is not, so an idle
+machine's tick is a check that the list is empty.
+
+Subscriptions are re-evaluated from **change notifications** — a buffer gaining its first item, a
+side being reconfigured, a neighbour appearing — never by polling, since polling to discover
+whether polling is needed defeats the purpose.
+
+Periodic work additionally uses a **per-machine offset** derived from block position, so throttled
+work is spread across ticks instead of landing on all of them at once.
+
+**Prior art.** This is GregTech CEu Modern's design, adopted deliberately rather than reinvented.
+Their developer documentation states it directly — *"for the sake of performance, our machines are
+no longer always in a tickable state. We introduced `ITickSubscription` for managed tick logic"* —
+and their machines pair it with inventory change listeners that call an `updateSubscription` method.
+Their throttles read `getOffsetTimer() % 5 == 0` rather than using raw game time, which is the
+offset idea above.
+
+**Alternatives rejected.** Ticking everything and optimising the work (moves the constant, not the
+shape — ten thousand fast no-ops is still ten thousand); throttling with raw game time
+(`gameTime % 20 == 0` synchronises *every machine in the world* onto the same tick, so average load
+drops twentyfold and the worst tick does not drop at all, which is exactly what players feel);
+ticking machines only in loaded chunks (already true, and irrelevant — the loaded base is the
+problem).
+
+**Consequences.** An idle base is nearly free, and cost tracks activity rather than machine count,
+which is the property that lets the design keep promising large factories.
+
+The cost is a real correctness burden. **A machine that forgets to resubscribe is silently broken**,
+and broken in the worst way to diagnose: it does nothing, which is also what it does when correct.
+Every input to a subscription decision must notify, so the rule is that a setter which can change
+whether work is needed must re-evaluate the subscription. This is more invasive than it sounds and
+is the main thing a reviewer should check in machine code.
+
+Subscription work frequently cancels itself — that is how a machine goes idle — so the tick loop
+tolerates cancellation and subscription during iteration, deferring list cleanup until the pass
+ends.
+
+---
+
+## ADR-0043 — Recipe lookup is indexed and cached, never a linear scan
+
+*2026-10-01 · Accepted*
+
+**Context.** Recipes are generated at runtime from tags (ADR-0005), across every material in the
+pack, multiplied by the form and anion matrices (ADR-0032) and the twenty composed ore routes
+(ADR-0035). The recipe set will be large — plausibly tens of thousands of entries in a big pack —
+and it is not known until the world loads.
+
+"Which recipe matches these inputs?" asked by scanning that list is O(recipes) per machine per
+attempt. It is also the question a machine asks most often, because an idle machine with inputs it
+cannot use asks it forever.
+
+ADR-0042 removes the cost for machines with *nothing* to do. It does nothing for a machine holding
+items that match no recipe, which is a normal and common state.
+
+**Decision.** Three layers, decided now so that step 15 implements them rather than discovering
+them:
+
+1. **An index, not a list.** Lookup is keyed by input so a search inspects candidates, not the
+   catalogue.
+2. **A cached last recipe.** Before searching, retry the recipe this machine ran last and check
+   whether it still matches. A machine in steady state — which is nearly all of them, nearly all
+   the time — then never searches at all.
+3. **A negative result that sticks.** When a search fails, the machine does not retry every tick.
+   It waits for an input change, or for a throttled retry on its offset timer.
+
+**Prior art.** Both reference implementations do this, by different routes. GregTech CEu stores
+recipes in a trie — `Map<AbstractMapIngredient, Either<GTRecipe, Branch>>`, descended ingredient by
+ingredient — and its `RecipeLogic` checks `lastRecipe` before searching, keeps `lastFailedMatches`,
+and falls back to `getOffsetTimer() % 5 == 0` for the retry when nothing matched. Mekanism reaches
+the same place with typed `InputRecipeCache` classes keyed by item, fluid or chemical, in single,
+double and triple input shapes.
+
+That two mature implementations converged independently is the strongest evidence available that
+the linear scan is not survivable at this scale.
+
+**Alternatives rejected.** Scanning with an early exit (still O(recipes) in the failing case, which
+is the case that repeats); caching only the last recipe without an index (the first search after
+any input change is still a full scan, and that is exactly when a player is watching); precomputing
+every input combination (combinatorial, and the material set is not known until load).
+
+**Consequences.** The index must be rebuilt when recipes reload — world load and `/reload` — and a
+stale index is a wrong-recipe bug rather than a crash, so rebuilding is tied to the recipe manager
+rather than done opportunistically.
+
+Condition matching stays **outside** the index. Conditions select which *machine* can run a recipe
+(ADR-0020), not which recipe matches the inputs, and they are cheap to evaluate once a candidate
+exists. Indexing six dimensions of continuous conditions would be an enormous structure answering a
+question nobody asks.
+
+The cached recipe must be invalidated when the machine's conditions or upgrades change, not only
+when its inputs do — otherwise retuning a machine leaves it running the recipe it found before, which
+would be a genuinely confusing bug.
 

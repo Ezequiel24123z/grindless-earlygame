@@ -1081,6 +1081,25 @@ leaving a player stuck and confused.
 (Over-volting is safe. Nothing explodes. Machines that explode when you connect the wrong cable
 are a tedium generator, not a difficulty mechanic.)
 
+### Performance: idle machines cost nothing
+
+A base with thousands of machines is the design's explicit target, which makes machine ticking the
+one place where a bad decision shows up as unplayable rather than as merely slow.
+
+Grindless machines **do not tick by default** (ADR-0042). A machine subscribes work when something
+makes that work necessary and unsubscribes the moment it is not, driven by change notifications
+rather than polling — so an idle machine's tick is a check that it has nothing to do. Periodic work
+carries a per-machine offset derived from block position, because throttling with raw game time
+synchronises every machine in the world onto the same tick and leaves the worst tick exactly as bad
+as it was.
+
+Recipe lookup is indexed and cached rather than scanned (ADR-0043): a machine in steady state
+re-checks the recipe it is already running and never searches at all.
+
+Both patterns are taken from GregTech CEu Modern and Mekanism rather than invented here. Their
+convergence on the same answers is the best available evidence that the obvious implementations do
+not survive at this scale.
+
 ### Area distribution
 
 Energy moves through the **pylon network**, not block-to-block adjacency. A machine is powered
@@ -1597,6 +1616,7 @@ grindless/
 │       │   └── screen/               GUI screens
 │       ├── energy/                   FU implementation, RF/EU conversion
 │       ├── item/                     items, tools, weapons
+│       ├── machine/                  chassis marks, upgrades, tick subscriptions
 │       ├── material/                 runtime tag-driven material registry
 │       ├── menu/                     containers
 │       ├── network/                  Flux Network: pylons, links, SavedData
@@ -1868,7 +1888,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 9 | Process design — items, fluids, recipe graph, routes, ratios | ✅ done — [`docs/PROCESSES.md`](docs/PROCESSES.md) |
 | 10 | Flux energy API + Forge capability bridge | ✅ done — `FluxStorage`, `FluxTier`, `FluxConversion` |
 | 11 | The condition system: envelopes, bands, efficiency, legible faults | ✅ done — `process/` |
-| 12 | Machine block entity framework: container contract, chassis marks, upgrades | **next** |
+| 12 | Machine layer: chassis marks, upgrades, the tick-subscription model | ✅ done — `machine/` |
+| 12b | Machine block entities + the container contract | **next** |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
 | 14 | Chunk veins + runtime material registry | pending |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
