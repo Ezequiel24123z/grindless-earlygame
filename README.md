@@ -1600,6 +1600,7 @@ grindless/
 │       ├── material/                 runtime tag-driven material registry
 │       ├── menu/                     containers
 │       ├── network/                  Flux Network: pylons, links, SavedData
+│       ├── process/                  conditions, bands, envelopes — the recipe/machine seam
 │       ├── orbital/                  launch, satellites, station, mass driver
 │       │   ├── colony/               abstractly simulated remote colonies
 │       │   ├── planet/               planet registry + space mod detection
@@ -1866,11 +1867,11 @@ Tracked order of work. Each step must build green before the next begins.
 | 8 | Machine layer design — machines, multiblocks, processes | ✅ done — [`docs/MACHINES.md`](docs/MACHINES.md) |
 | 9 | Process design — items, fluids, recipe graph, routes, ratios | ✅ done — [`docs/PROCESSES.md`](docs/PROCESSES.md) |
 | 10 | Flux energy API + Forge capability bridge | ✅ done — `FluxStorage`, `FluxTier`, `FluxConversion` |
-| 11 | The condition system: recipe type, envelopes, efficiency bands | **next** |
-| 12 | Machine block entity framework: container contract, chassis marks, upgrades | pending |
+| 11 | The condition system: envelopes, bands, efficiency, legible faults | ✅ done — `process/` |
+| 12 | Machine block entity framework: container contract, chassis marks, upgrades | **next** |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
 | 14 | Chunk veins + runtime material registry | pending |
-| 15 | Tag-driven runtime recipe generation | pending |
+| 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
 | 16 | T0/T1 machines, menus and screens | pending |
 | 17 | Fluid layer: state, pressure, pipes, tanks | pending |
 | 18 | Process Atlas + JEI/REI/EMI integration | pending |
@@ -1889,6 +1890,12 @@ accumulating as a pile of uncompiled code.
 
 Steps 4, 5 and 7 originally covered Fabric as well. Fabric was dropped at step 10 (ADR-0039), and
 the rows above describe what the project builds now rather than what it once built.
+
+Step 11 originally also carried the `ProcessRecipe` type. That moved to step 15, where recipe
+*generation* already lives: a recipe type cannot be bound to `RecipeType` and `RecipeSerializer`
+before the container contract it matches against (step 12) and the fluid stacks half its
+ingredients are (step 17) exist. Writing it earlier would have meant guessing both. The condition
+system itself — the part the whole machine layer rests on — is complete and standalone.
 
 Steps 8 and 9 were deliberately ordered that way — machines are specified as *capabilities* before
 any recipe exists, because designing recipes first is what produces a mod with four hundred blocks

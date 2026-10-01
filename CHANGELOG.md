@@ -13,7 +13,50 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Added
+
+- **The condition system** (`common/.../process/`) — step 11, and the seam the whole machine layer
+  rests on. `ProcessConditions` is the `conditions` half of
+  `inputs + conditions + time -> outputs` (ADR-0020); `ConditionEnvelope` is what a machine *can*
+  hold and `ConditionState` what it *is* holding, kept apart because the Process Atlas asks the
+  first ("which machines could run this?") and a running machine asks the second ("how well am I
+  doing it?").
+  `ConditionBand` gives a written condition three zones — optimal at full speed, a tolerance zone
+  tapering to a quarter speed, and outright failure beyond it. Bands are relative (±15 %) by
+  default and absolute where a process is unusually sensitive, as in zone refining's `T 1420 ±5`.
+  The relative factory **refuses an optimum of zero** rather than silently producing a zero-width
+  band no machine could ever satisfy.
+  **The omission rule is implemented as actual absence**: a dimension a recipe does not name is not
+  stored at all, so it carries no requirement and a machine is never rejected for being unable to
+  pull a vacuum nobody asked for. Storing it as a full range would match identically but could not
+  answer *how many* conditions a recipe names — which is what keeps a six-dimensional space from
+  showing six dials per recipe. No recipe names more than three.
+- **`MachineEnvelopes`** encodes the envelope table from `docs/MACHINES.md` directly, so the
+  condition model is checked against the design rather than assumed to fit it. The Haber synthesis
+  at 20 MPa lands inside the Autoclave and outside the Chemical Reactor, which is the
+  condition-envelope idea working exactly as specified.
+- Two decision records, ADR-0040 and ADR-0041.
+
 ### Changed
+
+- **Out-of-band processing costs speed, never yield** (ADR-0040). `MACHINES.md` offered three
+  penalties — reduced yield, longer time, extra byproducts — and yield is the one that cannot be
+  chosen: every ratio in `PROCESSES.md` is quoted per unit of primary input (ADR-0034), so a
+  silent yield penalty would make all of them conditional on tuning and leave the Atlas's line
+  solver untrustworthy. It is also the worse failure to notice, since a slow factory shows up in a
+  throughput readout while a quietly lossy one does not. Efficiency is the **minimum** across the
+  named dimensions rather than their product, so two dimensions slightly off do not compound into a
+  crawl and there is always one identifiable cause.
+- **Condition checks return a named fault, not a boolean** (ADR-0041). Faults carry a direction —
+  `TOO_COLD` and `TOO_HOT` are distinct because they have different fixes and different in-world
+  tells — and `OUTSIDE_ENVELOPE` is separate from all of them, because "this machine never can" is
+  a chassis upgrade while "it currently is not" is a dial. A degraded process names the single
+  dimension limiting it, so a machine can say "running at 62 % — limited by Temperature" instead of
+  reporting an unexplained number.
+- Step 11's `ProcessRecipe` type moved to step 15, where recipe generation already lives. A recipe
+  type cannot be bound to `RecipeType` and `RecipeSerializer` before the container it matches
+  against (step 12) and the fluid stacks half its ingredients are (step 17) exist; writing it now
+  would have meant guessing both. The condition system itself is complete and standalone.
 
 - **Forge 1.20.1 is now the only build target** (ADR-0039). The `fabric` subproject, its sources,
   its loader metadata and the TeamReborn Energy dependency are removed.

@@ -51,6 +51,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0037](#adr-0037--flux-amounts-are-long-and-clamp-at-the-fe-boundary) | Flux amounts are `long` and clamp at the FE boundary | Accepted |
 | [0038](#adr-0038--one-flux-ladder-with-voltage-names-as-aliases) | One Flux ladder, with voltage names as aliases | Accepted |
 | [0039](#adr-0039--forge-1201-is-the-only-build-target) | Forge 1.20.1 is the only build target | Accepted |
+| [0040](#adr-0040--running-out-of-band-costs-time-never-yield) | Running out of band costs time, never yield | Accepted |
+| [0041](#adr-0041--a-condition-check-returns-a-named-fault-not-a-boolean) | A condition check returns a named fault, not a boolean | Accepted |
 
 ---
 
@@ -1206,4 +1208,97 @@ because Architectury Loom builds the common project in a Fabric-shaped environme
 which platforms are enabled. Nothing Fabric ships in the jar. It is commented in place, because it
 looks exactly like something a later session would "clean up" and then spend an afternoon
 rediscovering.
+
+---
+
+## ADR-0040 — Running out of band costs time, never yield
+
+*2026-10-01 · Accepted*
+
+**Context.** `MACHINES.md` says a recipe run at the edge of its condition band "still works, with
+reduced yield, longer time or extra byproducts". That is three options, and the implementation has
+to pick one. The obvious pick is reduced yield, because it is what most mods do and it feels like a
+natural penalty.
+
+It is the wrong one here, and the reason is ADR-0034. Every ratio in `PROCESSES.md` is quoted per
+unit of primary input — B3 × R3 yields 3.12 u of metal per unit of raw ore. If running slightly off
+optimum silently produced less metal per ore, then **every one of those numbers becomes conditional
+on tuning**, the Atlas's line solver cannot be trusted, and a player comparing two routes is
+comparing two numbers that do not mean what they say.
+
+It is also the worse failure to debug. A factory running 10 % slow is visible in a throughput
+readout. A factory quietly returning 2.9 u instead of 3.12 u is invisible until someone does the
+arithmetic by hand — which is the exact activity this project exists to remove.
+
+**Decision.** A condition mismatch inside the tolerance zone reduces **speed only**. Outputs are
+unchanged in both kind and quantity. Efficiency is a multiplier in `[0.25, 1]` applied to process
+rate, and `PROCESSES.md`'s ratios hold at every point inside the band.
+
+The remaining two options stay available as *per-recipe* effects rather than as the global rule: a
+specific recipe may name an extra byproduct at the edge of its band when that is chemically
+meaningful, which is a deliberate authored choice rather than a silent tax on every process.
+
+**Alternatives rejected.** Reduced yield as the global rule (breaks every quoted ratio, and fails
+invisibly); outright failure outside the optimal band (turns tuning into a wall, which is the
+tedium ADR-0021 forbids, and wastes the tolerance zone entirely); scaling power draw instead of
+speed (power is not yet implemented in balance terms, and a slow machine is more legible than an
+expensive one).
+
+**Consequences.** Tuning a machine is worth doing and never punishing. The material balance of the
+whole graph is independent of how well anything is tuned, so the Atlas can solve a line from the
+recipe graph alone and be right.
+
+Efficiency is the **minimum** across the dimensions a recipe names, not their product. Two
+dimensions slightly off should not compound into a crawl, and a minimum has a single identifiable
+cause the machine can name — which is what ADR-0041 then reports.
+
+The floor is 0.25, not zero: the edge of tolerance is four times slower, which is a real cost
+without ever being a stall. A stalled machine that reports "running" is the worst outcome of all.
+
+---
+
+## ADR-0041 — A condition check returns a named fault, not a boolean
+
+*2026-10-01 · Accepted*
+
+**Context.** The natural signature for "can this recipe run here?" is a boolean, and the natural
+signature for "how fast?" is a double. Both are easy, and both throw away the only information the
+player actually needs when a factory stops.
+
+`MACHINES.md` already identifies this as the single most common failure in complex packs — "my
+factory stopped and I do not know why" — and commits to distinguishing blocked, starved and
+out-of-band everywhere. A boolean cannot carry that, and neither can an efficiency of `0.0`.
+
+**Decision.** Every condition check returns a `ConditionReport`: a named `ConditionFault`, the
+limiting `ConditionDimension`, and the speed multiplier.
+
+Faults carry a **direction**, not just a dimension. `TOO_COLD` and `TOO_HOT` are different faults
+because they have different fixes and different in-world tells — too cold and the reaction does not
+start, too hot and the product decomposes into something visibly wrong.
+
+`OUTSIDE_ENVELOPE` is deliberately separate from the ordinary faults. The ordinary faults mean the
+machine *could* reach the condition and currently is not, so the fix is a dial. `OUTSIDE_ENVELOPE`
+means it never can, so the fix is a chassis upgrade or a different machine (ADR-0027). Collapsing
+the two would send a player hunting for a setting that does not exist.
+
+When a process runs below full speed, the report names the **one** dimension responsible, which is
+what makes "running at 62 % — limited by Temperature" possible instead of an unexplained number.
+
+**Alternatives rejected.** A boolean plus a separate query for the reason (two calls that can
+disagree, and the second one gets forgotten at exactly the call sites that needed it); throwing on
+mismatch (a mismatch is an ordinary game state, not an error, and this runs every tick); an
+efficiency of zero as the failure signal (indistinguishable from a stalled-but-valid process, and
+carries no cause).
+
+**Consequences.** Machine status output, the logic signal, the Process Atlas's reachability display
+and the multiblock simulator can all be built on one type, so they cannot drift into describing the
+same failure three different ways.
+
+The reports are allocated per check and checks run per machine per tick. The record is small and
+short-lived, and the optimal case is a shared constant, so this is expected to be fine — but if
+machine counts ever make it measurable, the fix is caching the report until an input or a setting
+changes, not returning to booleans.
+
+Fault messages live on the enum for now. They move behind translation keys when the client layer
+exists; the enum is the single place that has to change.
 
