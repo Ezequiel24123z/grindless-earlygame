@@ -376,10 +376,30 @@ payoffs, and no second grid to plan.
 | **Buffer Crate** | Both, with a target stock level — the network keeps it topped up. |
 | **Storage Crate** | Catch-all destination for deconstruction and overflow. |
 | **Logistics Drone** | Carries items between crates within pylon coverage. |
-| **Construction Drone** | Builds from blueprints and performs deconstruction orders. |
+| **Construction Drone** | Builds a blueprint from network materials, and performs deconstruction orders. This is what makes large multiblocks possible at all — see below. |
 
 Drones consume FU from the network while flying, so logistics is a real, visible load on the
 power grid rather than free teleportation.
+
+#### Construction Drones lift the ceiling on multiblock size
+
+Construction Drones look like a convenience and are not. The real limit on multiblock scale in
+every mod is **placement tedium**: nobody ships a two-thousand-block structure because nobody will
+place two thousand blocks by hand, so multiblocks stay small and their design space stays shallow.
+
+Placing two thousand blocks by hand is precisely *repeating an action whose outcome you already
+know* — this mod's own definition of grind. So the fix is not to keep multiblocks small. It is to
+**automate the placing and keep the designing**.
+
+With drones doing the construction, a reactor core can be a genuine engineering problem at a scale
+worth engineering: hundreds of internal positions, fuel clustering against coolant routing, edge
+effects from reflectors, all of it designed by the player and placed by the swarm. A blueprint is
+**simulated before it is built**, reporting output, heat, coolant demand and bill of materials, so
+designing is iterative instead of ruinous. The details are in
+[`docs/MACHINES.md`](docs/MACHINES.md#multiblocks-shape-is-a-parameter).
+
+At T5 the **Assembly Field** replaces the swarm and materialises a whole blueprint at once, for
+structures measured in chunks.
 
 ### Operator Drones — work that is a sequence, not a flow
 
@@ -1114,6 +1134,8 @@ exactly the moment the player has earned it:
 - **T0, the Crude Extractor** — the grind dies here, ten minutes in.
 - **T2, the Blueprint Tool** — arrives right when the player has just worked out a layout worth
   repeating, and makes that insight permanent.
+- **T3, the Construction Drone** — the moment building stops being placement and becomes design,
+  which is what lets multiblocks grow into real engineering problems.
 - **T5, the Survey Satellite** — the moment finding resources stops being an activity and becomes
   a map you read.
 
@@ -1374,6 +1396,8 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Conduit upgrades: Bore, Filter, Routing, Insulation, Phase | T2–T4 |
 | Drone Bay, Provider / Requester / Buffer / Storage Crate | T3 |
 | Operator Bay, Operator Drone | T3 |
+| Construction Drone, Assembly Field (multiblock) | T3 / T5 |
+| Design Terminal — blueprint validation and simulation | T3 |
 | Instruction Cards (11 kinds), Routine Card, Locator | T3 |
 | Drone pods: Cargo, Fluid, Thermal, Tool Arm, Sensor, Range Extender | T3–T4 |
 
@@ -1606,6 +1630,8 @@ Summarised here; each one is recorded in full — with the alternatives that wer
 | Conduits cost power, belts do not | Keeps belts correct for bulk forever, so the universal network never deletes the best part of the mod. |
 | Named conduit networks, not coloured channels | Sixteen colours stop being readable long before a base stops growing. |
 | Chassis marks widen the condition envelope | Upgrading unlocks recipes instead of adding a speed number, so tiering is a goal rather than a tax. |
+| Construction drones, so multiblocks can be massive | Placement tedium, not design, is what caps multiblock size everywhere else. Automate the placing, keep the designing. |
+| Blueprints simulated before they are built | Trial and error at a cost of ten thousand components is punishment, not engineering. |
 | Every machine upgrade trades one resource for another | An upgrade that is strictly better is not a decision, it is a tax you pay once. |
 
 ---

@@ -42,6 +42,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0028](#adr-0028--every-machine-upgrade-is-a-trade) | Every machine upgrade is a trade | Accepted |
 | [0029](#adr-0029--operator-drones-imperative-automation-beside-declarative-logistics) | Operator Drones: imperative automation | Accepted |
 | [0030](#adr-0030--everything-is-a-chassis-plus-modules) | Everything is a chassis plus modules | Accepted |
+| [0031](#adr-0031--construction-drones-exist-so-multiblocks-can-be-massive) | Construction drones exist so multiblocks can be massive | Accepted |
 
 ---
 
@@ -827,3 +828,53 @@ The cost is that modules are items that must be produced, which pushes more load
 fabrication economy (ADR-0017), and that every chassis needs a module UI good enough to make the
 slots legible. The failure mode to avoid is modules that are strictly mandatory — a module everyone
 always installs should simply be part of the chassis.
+
+---
+
+## ADR-0031 — Construction drones exist so multiblocks can be massive
+
+*2026-10-01 · Accepted*
+
+**Context.** Construction Drones were in the design as a convenience — "builds from blueprints" —
+and on review that is not a good enough reason to ship them. The Blueprint Tool already captures
+layouts, and a mod whose whole premise is removing busywork should be suspicious of a feature whose
+only justification is saving clicks.
+
+The useful question is what they *enable*. The answer reframes them entirely.
+
+**The real limit on multiblock scale in every mod is placement tedium, not design.** Nobody ships a
+two-thousand-block structure because nobody will place two thousand blocks by hand. So multiblocks
+stay at 5×5×5, their design space stays shallow, and "build this shape" becomes a schematic copied
+once — which is the exact failure ADR-0022 set out to avoid by making multiblocks parametric.
+
+ADR-0022 is therefore only half-true as written: a parametric multiblock is a real design space
+only if the design space is big enough to have interesting answers, and by hand it cannot be.
+
+**Decision.** Construction Drones are an **enabler, not a convenience**, and multiblocks are scaled
+up to match. From T3 drones build a blueprint using materials drawn from the logistics network,
+which lifts the size ceiling; multiblock scale then grows with the player's ability to build —
+roughly 5³ by hand at T2, ~15³ with drones at T3, ~32³ with swarms at T4, and structures measured
+in chunks at T5 via the **Assembly Field**, which materialises a blueprint at once.
+
+Two things make this sound rather than merely large:
+
+- **Placing blocks by hand at that scale is grind by the project's own definition** — repeating an
+  action whose outcome is already known. Automating the placing while keeping the designing is
+  precisely the rule in ADR-0021.
+- **Blueprints are validated and simulated before construction.** A design reports legality and
+  which part fails, computed output, heat, coolant demand and stability margin, its full bill of
+  materials, and a warning when it will run at the edge of its envelope. Trial and error at a cost
+  of ten thousand components is punishment, not engineering.
+
+**Consequences.** The Fission Reactor becomes the flagship design problem it was supposed to be:
+hundreds of internal positions, fuel clustering traded against coolant routing, moderators and
+reflectors making the core's geometry matter rather than just its volume. The same applies to the
+accelerator ring, the distillation column and the fusion confinement.
+
+The friction that remains is the right friction — materials still have to be produced, and that
+cost is what makes a large multiblock a commitment. What is removed is only the clicking.
+
+Risks: the simulator must agree exactly with the runtime behaviour or it becomes a lie, which makes
+it a real implementation constraint rather than a UI nicety. Chunk-scale structures raise genuine
+performance questions that the multiblock framework has to answer before T5 content is built. And
+early multiblocks must stay hand-placeable, since drones do not exist until T3.

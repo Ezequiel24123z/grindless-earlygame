@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Construction Drones reframed as the enabler for massive multiblocks** (ADR-0031). They were in
+  the design as a convenience, which is not a good enough reason to ship anything in a mod about
+  removing busywork. The useful question is what they enable, and the answer changes the multiblock
+  design: the real cap on multiblock scale in every mod is **placement tedium, not design** — nobody
+  ships a two-thousand-block structure because nobody will place two thousand blocks by hand, so
+  multiblocks stay at 5×5×5 and their design space stays shallow. Placing them by hand is grind by
+  this project's own definition, so the placing is automated and the designing kept.
+  Multiblock scale now grows with the ability to build: ~5³ by hand at T2, ~15³ with drones at T3,
+  ~32³ with swarms at T4, chunk-scale at T5 via the new **Assembly Field**. Blueprints are
+  **validated and simulated before construction**, reporting legality, computed output, heat,
+  coolant demand, stability margin and bill of materials, so iterating on a design is affordable.
+  The Fission Reactor is expanded to match — moderators and reflectors make the core's *geometry*
+  matter, not just its volume.
 - **Operator Drones** (README *System 4*). The imperative half of automation. Every system so far —
   belts, pipes, conduits, logistics drones — is continuous flow and declarative, and none of them
   can express *"wait until the autoclave finishes, take the batch to the press, run it, bring the

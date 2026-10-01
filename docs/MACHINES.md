@@ -413,19 +413,69 @@ Grindless multiblocks are **parametric**. You choose the dimensions and the inte
 and the behaviour follows from what you built. There is no single correct schematic — there is a
 design space with real trade-offs, and understanding beats copying.
 
+### What actually limits multiblock size
+
+The ceiling on multiblock scale in every mod is not design, it is **placement tedium**. Nobody
+ships a two-thousand-block structure because nobody will place two thousand blocks by hand. So
+multiblocks stay small, the design space stays shallow, and "build this 5×5×5" ends up being a
+schematic you copy once.
+
+Placing two thousand blocks by hand is, precisely, repeating an action whose outcome you already
+know — the mod's own definition of grind. So the honest fix is not to keep multiblocks small; it is
+to **automate the placing and keep the designing**.
+
+**Construction Drones exist for this.** From T3 they build a multiblock from a blueprint, drawing
+materials from the logistics network, and that lifts the size ceiling entirely. What the player
+spends effort on is the part worth spending it on: the *design*.
+
+Multiblock scale therefore grows with the player's ability to build:
+
+| Era | Typical scale | Built by |
+| --- | --- | --- |
+| **T2** | 3×3×3 – 5×5×5 | hand placement; small enough to be reasonable |
+| **T3** | up to ~15³ | Construction Drones from a blueprint |
+| **T4** | up to ~32³, hundreds of internal components | drone swarms |
+| **T5–T6** | structures measured in chunks | the Assembly Field, which materialises a whole blueprint at once |
+
+### Simulate before you build
+
+A massive parametric multiblock is only playable if the player can evaluate a design *before*
+paying for it. Trial and error at a cost of ten thousand components is not engineering, it is
+punishment.
+
+So a blueprint of a multiblock is **validated and simulated at design time**. Before a single block
+is placed, the blueprint reports:
+
+- whether the structure is legal, and exactly which part is not;
+- its computed properties — output, heat generation, coolant demand, throughput, stability margin;
+- its full bill of materials, and which of those you cannot currently produce;
+- a warning for designs that are legal but will run at the edge of their envelope.
+
+This is the same stance as the [route viewer](#the-route-viewer): the game does the arithmetic, the
+player does the design and the building. Testing a reactor core layout becomes an afternoon of
+genuine engineering rather than a savegame-backup ritual.
+
 ### Fission Reactor
 
-Build a core of any size within limits. You place fuel rods, control rods and coolant channels
-yourself.
+The flagship design problem. You lay out the core yourself — fuel rods, control rods, coolant
+channels, moderator, reflector — at any size the era supports, which by T4 means a core with
+hundreds of internal positions.
 
 - Fuel rods adjacent to other fuel rods produce a **neighbour bonus**: more output, more heat.
-- Coolant channels remove heat at a rate set by coolant type and flow.
-- Control rods throttle the whole core.
+  Clustering is how you get power, and also how you melt.
+- **Coolant channels** remove heat at a rate set by coolant choice and flow. Channel routing is the
+  real puzzle: heat is generated where the fuel is, and must be carried out.
+- **Moderator** blocks raise the reaction rate of neighbouring rods; **reflector** blocks on the
+  boundary return neutrons that would otherwise be lost, so edges behave differently from the
+  centre and the core's *shape* matters, not just its volume.
+- **Control rods** throttle, globally or by bank.
 - Exceed the heat limit and the core **SCRAMs**: it shuts down and needs a restart cycle. It does
   not detonate. Losing an afternoon of progress to a mistake is not depth.
 
-The design problem — maximise output per unit of coolant while staying inside the thermal
-envelope — is genuinely hard and has many good answers. That is the correct shape for a multiblock.
+The design problem — maximise output per unit of coolant while staying inside the thermal envelope,
+with edge effects that reward thinking about geometry — is genuinely hard, has many good answers,
+and scales up rather than out. That is the correct shape for a multiblock, and it only works at
+this size because drones do the placing.
 
 ### Distillation Tower
 
