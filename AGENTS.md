@@ -90,6 +90,8 @@ AGENTS.md            this file — the working agreement
 README.md            game design + architecture + toolchain; the design source of truth
 CHANGELOG.md         what changed, in order
 docs/DECISIONS.md    why it changed — architecture decision records
+docs/MACHINES.md     the machine layer: conditions, envelopes, chassis marks, multiblocks
+docs/PROCESSES.md    the content layer: items, fluids, recipe graph, routes and ratios
 docs/DESIGN.md       early standalone design note; superseded by README, kept for history
 SETUP.ps1            Windows bootstrap; also commits and pushes via -Commit
 

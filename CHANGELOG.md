@@ -15,6 +15,30 @@ entries below reference those records by id.
 
 ### Added
 
+- **The process layer** (`docs/PROCESSES.md`) — step 9 of the implementation plan, and the last
+  design step before systems code. It specifies what flows through the machine layer: the item and
+  fluid catalogue, the eight-stratum recipe graph, the concrete routes with their conditions, times
+  and ratios, and an audit of which products are reachable more than one way.
+  Four structural ideas carry it. The **item catalogue is a matrix, not a list** — form × material
+  and anion × material, so thirteen formed types and six compound families cover an unknown pack
+  (ADR-0032). **Routes compose** from a beneficiation stage and a reduction stage, so nine authored
+  process families produce twenty ore routes and yield is `grade × factor`, running 1× to ~4×
+  (ADR-0035). An **unwritten condition is not a condition**, which keeps envelope matching cheap and
+  partly answers `MACHINES.md`'s open question about UI load — no recipe names more than three of
+  the six dimensions. And **every byproduct has a named sink**, enforced by a ledger, because a
+  stream you can only void is a chore rather than content (ADR-0036).
+  The chemical core is specified as four closed loops — sulfur, chlor-alkali, air separation,
+  nitrogen fixation — which is what makes a factory a system instead of parallel lines: sulfuric
+  acid is made from the SO₂ a roaster would have vented, spent in leaching, and regenerated from
+  the raffinate at 90 %.
+  Six tensions with earlier documents were found and all resolved as omissions in this layer rather
+  than errors in `MACHINES.md`, so no corrective ADR was needed. Liquid nitrogen coming from the
+  **T2** Atmospheric Intake is what keeps the T3 Superconductor from needing a T4 Cryogenic Plant;
+  etching acid is *formulated* in the Chemical Washer from acids the Reactor *synthesised*, which
+  makes the README's source attribution correct as written.
+- Five decision records, ADR-0032 to ADR-0036, covering the catalogue matrix, the split between
+  tag-resolved materials and Grindless's own reagents, the canonical process unit that makes routes
+  comparable, route composition, and the byproduct-sink rule.
 - **Construction Drones reframed as the enabler for massive multiblocks** (ADR-0031). They were in
   the design as a convenience, which is not a good enough reason to ship anything in a mod about
   removing busywork. The useful question is what they enable, and the answer changes the multiblock

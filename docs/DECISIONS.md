@@ -43,6 +43,11 @@ history — the reasoning that was wrong is itself useful information.
 | [0029](#adr-0029--operator-drones-imperative-automation-beside-declarative-logistics) | Operator Drones: imperative automation | Accepted |
 | [0030](#adr-0030--everything-is-a-chassis-plus-modules) | Everything is a chassis plus modules | Accepted |
 | [0031](#adr-0031--construction-drones-exist-so-multiblocks-can-be-massive) | Construction drones exist so multiblocks can be massive | Accepted |
+| [0032](#adr-0032--the-item-catalogue-is-a-matrix-not-a-list) | The item catalogue is a matrix, not a list | Accepted |
+| [0033](#adr-0033--materials-come-from-tags-reagents-are-grindlesss-own) | Materials come from tags, reagents are Grindless's own | Accepted |
+| [0034](#adr-0034--ratios-are-quoted-against-a-canonical-process-unit) | Ratios are quoted against a canonical process unit | Accepted |
+| [0035](#adr-0035--routes-compose-from-a-beneficiation-stage-and-a-reduction-stage) | Routes compose from a beneficiation and a reduction stage | Accepted |
+| [0036](#adr-0036--every-byproduct-must-have-a-named-sink) | Every byproduct must have a named sink | Accepted |
 
 ---
 
@@ -878,3 +883,190 @@ Risks: the simulator must agree exactly with the runtime behaviour or it becomes
 it a real implementation constraint rather than a UI nicety. Chunk-scale structures raise genuine
 performance questions that the multiblock framework has to answer before T5 content is built. And
 early multiblocks must stay hand-placeable, since drones do not exist until T3.
+
+---
+
+## ADR-0032 — The item catalogue is a matrix, not a list
+
+*2026-10-01 · Accepted*
+
+**Context.** `PROCESSES.md` had to specify the item catalogue, and the obvious way to do that is to
+enumerate items. That is how most tech mods do it, and it is why their catalogues reach four hundred
+entries while still missing the one form a given pack needs.
+
+Enumeration also cannot work here. The material set is not known at build time — it comes from the
+runtime tag scan (ADR-0004) and therefore depends on the installed pack. A list cannot be written
+for a set that does not exist yet.
+
+**Decision.** The catalogue is defined as **axes, and the items are their product**. Grindless
+authors the axes; the materials come from tags; the generator emits the cells.
+
+- **Form × material.** Thirteen formed types (plate, foil, rod, bolt, gear, ring, wire, fine wire,
+  coil, nugget, ingot, block, hot ingot) and eight ore-line types, applied to every material.
+- **Anion × material.** Six compound families — oxide, sulfide, chloride, sulfate, carbonate,
+  hydroxide — which is what gives the chemical layer its breadth.
+
+A cell is emitted only when a process that produces it exists, so a pack never sees salts it has no
+way to make.
+
+**Alternatives rejected.** Enumerating items per material (does not survive an unknown material
+set, and is unmaintainable at pack scale); a single generic "dust" with NBT material data (breaks
+belts, filters, storage mods and every recipe viewer, and NBT-bearing stacks are the usual cause of
+tech-mod performance complaints); deferring to another mod's unification (makes Grindless unusable
+standalone).
+
+**Consequences.** Adding a form is one authored entry that instantly covers every material in the
+pack, which is the same leverage ADR-0005 gets for recipes. Grade becomes a property of the *form*
+rather than of the item, which is what lets one generated recipe set cover the whole pack and is
+the basis of the composition rule in ADR-0035.
+
+The cost is that the catalogue's size is a pack property rather than a project one, so the project
+cannot state how many items it has — only how many axes. Creative-tab organisation and texture
+generation both have to be driven by the same matrix or they will drift from it.
+
+---
+
+## ADR-0033 — Materials come from tags, reagents are Grindless's own
+
+*2026-10-01 · Accepted*
+
+**Context.** ADR-0004 resolves materials from tags so Grindless uses the pack's copper rather than
+registering a rival one. Writing the chemical core exposed the limit of that rule: it works for
+materials and fails for reagents.
+
+`forge:ingots/copper` is a real convention that essentially every mod follows. There is no
+equivalent agreement for sulfuric acid. Mods that ship one disagree on its name, its concentration,
+its colour and whether it is even a fluid, so a tag lookup would resolve to a different substance in
+every pack — or, far worse, resolve to something whose amount means something else, silently
+breaking every ratio in `PROCESSES.md`.
+
+**Decision.** Split the rule by kind.
+
+- **Materials** — anything with a `forge:`/`c:` convention — are resolved from tags at runtime and
+  never registered by Grindless.
+- **Reagents** — acids, bases, industrial gases, leachates, process intermediates — are
+  **registered by Grindless**, with its own units and reference states, and are tagged so other
+  mods can opt in.
+
+The boundary is testable: if a widely-followed tag convention exists, it is a material; if it does
+not, it is a reagent.
+
+**Alternatives rejected.** Tag-resolving reagents too (the ratios in `PROCESSES.md` become
+meaningless when the resolved fluid has a different concentration); a config mapping per pack
+(pushes an unsolvable problem onto pack authors, and gets it wrong silently); avoiding named
+reagents by making chemistry abstract (throws away the entire reason the condition system exists).
+
+**Consequences.** Grindless's acid may coexist with another mod's acid. That is accepted: the
+alternative is a wrong conversion rather than a visible duplicate, and a duplicate is something a
+pack author can unify deliberately while a wrong ratio is a bug nobody can see.
+
+Every registered reagent carries a reference state (ADR-0015), because a gas volume without one is
+not a quantity. Reagents therefore need their own tags published early, so packs can integrate
+rather than merely coexist.
+
+---
+
+## ADR-0034 — Ratios are quoted against a canonical process unit
+
+*2026-10-01 · Accepted*
+
+**Context.** `PROCESSES.md` specifies routes that must be *compared* — that is the whole point of
+having more than one — and the Atlas's solver has to balance lines across them (ADR-0023). Neither
+works if two routes quote their yields on different bases. "Three per operation" and "three per
+input" differ by the whole chain length, and chains that look generous per stage routinely multiply
+out to a loss.
+
+**Decision.** One basis, fixed for the whole project.
+
+- **u (unit)** is the canonical solid amount: 1 u = 1 ingot = 1 dust = 1 plate = 9 nuggets.
+- **1 u as melt = 144 mB**, the established modded convention, so casting needs no conversion table.
+- **B** is 1000 mB; **gases are quoted at 20 °C and 0.1 MPa** unless stated, because a fluid is a
+  state and not a thing (ADR-0015).
+- **Yields are per unit of primary input to the front of the route**, not per stage.
+- **Times are for MK I, no upgrades, at the process's base Flux tier.**
+
+**Alternatives rejected.** Per-stage ratios (hide end-to-end losses, which is exactly the number
+the player needs); quoting at a "typical" overclock (bakes in the Speed upgrade the design wants
+players to reject, ADR-0028); mB-only with no unit concept (every recipe grows a conversion).
+
+**Consequences.** The time baseline is only stable because marks do not change speed (ADR-0027) and
+overclocking is a trade rather than an expectation (ADR-0028). Those two decisions are what make a
+quoted second meaningful three tiers later; if either is ever revisited, every time in
+`PROCESSES.md` has to be requoted.
+
+Throughput therefore has to come from parallel, multiblocks and route choice, which is the intended
+shape. The cost is that `PROCESSES.md` cannot quote power: FU cost is deferred until the Flux API
+exists, because guessing it before the energy layer is written produces numbers nobody can trust.
+
+---
+
+## ADR-0035 — Routes compose from a beneficiation stage and a reduction stage
+
+*2026-10-01 · Accepted*
+
+**Context.** The design requires several meaningfully different routes to every important product
+(ADR-0021, and the route rule in `MACHINES.md`). Written as whole routes, that is quadratic
+authoring: five ways to prepare an ore times four ways to reduce it is twenty chains to specify,
+balance and maintain, and every new preparation step multiplies the existing work.
+
+Twenty authored chains is also how a recipe viewer becomes unreadable.
+
+**Decision.** An ore route is **two independent stages**, chosen separately:
+
+```
+yield (u metal per u raw) = feed grade × reduction factor
+```
+
+Beneficiation (B0–B4) sets a **grade** on the output form. Reduction (R1–R4) applies a **factor**.
+Nine authored process families produce twenty routes, and adding a sixth preparation adds four
+routes for one unit of work.
+
+**Alternatives rejected.** Authoring whole routes (quadratic, and the combinations that nobody
+thought to author become the ones players ask for); a single linear upgrade ladder as in most ore
+mods (only one axis, so there is only ever one correct answer and no decision); additive bonuses
+instead of multiplicative (makes late beneficiation worthless, since a flat bonus on a large number
+is noise).
+
+**Consequences.** Grade must be a property of the *form*, not of the stack — which is exactly what
+ADR-0032 provides — so composition needs no per-item state and belts stay cheap. The generated
+recipe set is per-stage, so the Atlas composes routes at query time rather than enumerating them,
+and a "route" is a path through the graph rather than an object.
+
+The risk is legibility: twenty routes are cheap to build and expensive to *present*. The Atlas has
+to show five options and four options, never a list of twenty, or this decision trades an authoring
+problem for a UI problem. That is recorded as an open question in `PROCESSES.md`.
+
+---
+
+## ADR-0036 — Every byproduct must have a named sink
+
+*2026-10-01 · Accepted*
+
+**Context.** Byproducts are what make routes interact, and that interaction is a stated design goal:
+the messy route is often correct precisely because you want its waste. But byproducts are also the
+most reliable way a complex mod generates busywork. A stream the player can only delete produces
+exactly one behaviour — switch on auto-void and never think about it again — and at that point the
+byproduct was not content, it was a config toggle with extra steps.
+
+Worse, it teaches the player to void *everything*, including the streams that mattered.
+
+**Decision.** A process may only emit a byproduct if that byproduct has **at least one named sink
+elsewhere in the graph**, documented in the byproduct ledger in `PROCESSES.md`. "Deconstruct it into
+Matter" does not count as the named sink: it is the universal backstop and it is always available,
+so accepting it would make the rule vacuous.
+
+If no real sink exists, the process does not emit the byproduct at all.
+
+**Alternatives rejected.** Byproducts with no use, as a realism flourish (realism that generates a
+chore is a bad trade in a mod defined by ADR-0021); pollution or waste-disposal mechanics (a
+maintenance tax, which AGENTS' own stance on chores forbids); making all byproducts universally
+valuable (removes the trade that makes route choice interesting).
+
+**Consequences.** The ledger becomes a real constraint on adding processes: a new process that
+produces a new residue cannot ship until something consumes it. That is a feature — it keeps the
+graph connected, and connectedness is what makes a factory a system rather than a set of lines.
+
+Auto-void stays off by default (ADR-0018) and is now genuinely defensible, because voiding is
+always the player discarding something that had a use. The Atlas can therefore flag a voided stream
+and say what it was worth, which turns a silent loss into a visible decision.
+

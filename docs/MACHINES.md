@@ -2,15 +2,18 @@
 
 The machine layer of Grindless, designed before any recipe exists. This document defines *what
 machines are and how they behave*; the recipe graph, the item and fluid catalogue and the concrete
-processing routes are specified separately in `PROCESSES.md` once this is settled.
+processing routes are specified separately in [`PROCESSES.md`](PROCESSES.md).
 
 That order is deliberate. Designing recipes before machines produces a mod where every recipe needs
 its own machine, which is how content catalogues reach four hundred blocks and still feel shallow.
 Designing machines first — as *capabilities* rather than as recipe holders — means a small number
 of machines can host an enormous recipe space.
 
-> `PROCESSES.md` does not exist yet. It is the next design step, and nothing in it should
-> contradict this document; where it would, this document is wrong and must be changed explicitly.
+> [`PROCESSES.md`](PROCESSES.md) now exists and is the content layer built on this one. Nothing in
+> it may contradict this document; where it would, this document is wrong and must be changed
+> explicitly. Writing it surfaced six tensions, all of which resolved as omissions in that layer
+> rather than errors in this one, so nothing here needed correcting — see its
+> [clarifications](PROCESSES.md#clarifications-to-earlier-documents).
 
 > **Scope.** The target is a mod **deeper than GregTech**, with an endgame well past GregTech's or
 > Mekanism's, that nevertheless contains **no grind**. Those are not in tension once complexity and
@@ -631,7 +634,10 @@ Deliberately unresolved, recorded so a later session does not assume they were o
 - **How many condition dimensions can the UI carry** before setting up a machine becomes work?
   Temperature and pressure are clearly fine. Atmosphere and catalyst are probably fine. Field and
   agitation may be one dimension too many, and may be better as machine properties than as player
-  controls.
+  controls. Partly answered by the
+  [omission rule](PROCESSES.md#how-to-read-a-process): an unwritten condition is not a requirement,
+  and in practice no recipe names more than three. The question remains open for the machine UI,
+  which must still expose the dimensions a machine *can* control.
 - **Does the Atlas's line solver trivialise the game?** The position taken here is that arithmetic
   is not gameplay, but it should be watched: if "press solve, then build exactly that" becomes the
   whole loop, the solver should propose rather than prescribe.

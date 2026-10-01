@@ -1189,6 +1189,10 @@ The dry chain above keeps working forever and is never removed. The wet line is 
 optimisation the player opts into — which is the right shape for a system that also happens to be
 on the critical path to circuits (see [System 5](#system-5--fluids-pressure-and-phase)).
 
+The diagram above is the dry spine. The full specification — every beneficiation and reduction
+stage with its conditions, times and ratios, and the twenty routes they compose into — is in
+[`docs/PROCESSES.md`](docs/PROCESSES.md).
+
 ---
 
 ## Fabrication: the factory builds the factory
@@ -1846,8 +1850,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 6 | Core registry layer (Architectury `DeferredRegister`) | ✅ done — T0 bootstrap set registered |
 | 7 | **First green build on both loaders** | ✅ **done** — `grindless-0.1.0-fabric.jar` and `-forge.jar` |
 | 8 | Machine layer design — machines, multiblocks, processes | ✅ done — [`docs/MACHINES.md`](docs/MACHINES.md) |
-| 9 | Process design — items, fluids, recipe graph, routes, ratios | **next** — `docs/PROCESSES.md` |
-| 10 | Flux energy API + Forge and Fabric bridges | pending |
+| 9 | Process design — items, fluids, recipe graph, routes, ratios | ✅ done — [`docs/PROCESSES.md`](docs/PROCESSES.md) |
+| 10 | Flux energy API + Forge and Fabric bridges | **next** |
 | 11 | The condition system: recipe type, envelopes, efficiency bands | pending |
 | 12 | Machine block entity framework: container contract, chassis marks, upgrades | pending |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
@@ -1869,9 +1873,11 @@ Step 7 was the first real milestone and it is cleared: a minimal multiloader ske
 compiles and packages on both platforms, which means every later step is validated the moment it is
 written rather than accumulating as a pile of uncompiled code.
 
-Steps 8 and 9 are deliberately ordered that way — machines are specified as *capabilities* before
+Steps 8 and 9 were deliberately ordered that way — machines are specified as *capabilities* before
 any recipe exists, because designing recipes first is what produces a mod with four hundred blocks
-that each host one recipe (ADR-0019).
+that each host one recipe (ADR-0019). With both done, the design is complete enough that every
+remaining step implements something already specified rather than inventing it, which is the state
+the project wanted before writing the systems code.
 
 ---
 
