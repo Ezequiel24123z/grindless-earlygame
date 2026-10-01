@@ -1891,7 +1891,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 11 | The condition system: envelopes, bands, efficiency, legible faults | ✅ done — `process/` |
 | 12 | Machine layer: chassis marks, upgrades, the tick-subscription model | ✅ done — `machine/` |
 | 12b | The container contract + change notification | ✅ done — `container/` |
-| 12c | Machine block entities, wired to blocks and menus | **next** |
+| 12c | `MachineBlockEntity` + the Hand Crank Dynamo, wired to its block | ✅ done |
+| 12d | Exposing machine buffers as Forge capabilities | **next** |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
 | 14 | Chunk veins + runtime material registry | pending |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
@@ -1919,6 +1920,16 @@ Step 11 originally also carried the `ProcessRecipe` type. That moved to step 15,
 before the container contract it matches against (step 12) and the fluid stacks half its
 ingredients are (step 17) exist. Writing it earlier would have meant guessing both. The condition
 system itself — the part the whole machine layer rests on — is complete and standalone.
+
+**Step 12d is an open architectural question, not just remaining work.** Forge exposes a block
+entity's energy buffer through `getCapability`, which has to be overridden on the block entity —
+and block entities live in `common/`, which may not import Forge classes. Three ways out, none yet
+chosen: attach the capability from `forge/` with `AttachCapabilitiesEvent<BlockEntity>`, which
+keeps `common/` clean but needs its invalidation behaviour confirmed against ADR-0044; add an
+`@ExpectPlatform` capability hook; or accept that ADR-0039 made the project Forge-only and let
+machine block entities live in `forge/`. Until it is resolved a Grindless machine can push power
+into other mods' machines but cannot receive it, which is consistent rather than broken — no
+Grindless machine consumes power yet.
 
 Steps 8 and 9 were deliberately ordered that way — machines are specified as *capabilities* before
 any recipe exists, because designing recipes first is what produces a mod with four hundred blocks

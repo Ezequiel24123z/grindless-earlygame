@@ -14,12 +14,21 @@
 
     Optional switches:
       -Commit        Stage, commit and push this worktree.
+      -Message       The commit message to use with -Commit.
       -MakePrivate   Switch the GitHub repository to private (needs the gh CLI).
       -SkipWrapper   Skip Gradle wrapper generation.
 
     Tip: -Commit stages, commits and pushes this worktree. Do that before opening a
     new session on this branch — a new session checks the branch out into a fresh
     worktree, so anything left uncommitted here would not appear there.
+
+    It is also the fallback when the in-app terminal stops working, which is the
+    situation AGENTS.md points here for:
+
+        powershell -ExecutionPolicy Bypass -File .\SETUP.ps1 -SkipWrapper `
+            -Commit -Message "Subject line
+
+        Body explaining why."
 
     It never deletes anything except its own listed scratch files, and never rewrites
     git history.
@@ -34,6 +43,11 @@ param(
     # session on this branch: it is checked out into a fresh worktree, so anything
     # left uncommitted here would not appear there.
     [switch]$Commit,
+
+    # The commit message for -Commit. A subject line, a blank line, then a body
+    # explaining why. Required, because a generic message on a specific change is
+    # worse than no message: it actively misleads whoever reads the history later.
+    [string]$Message,
 
     # Also switch the GitHub repository to private (requires the gh CLI, authenticated).
     [switch]$MakePrivate
@@ -301,27 +315,34 @@ if ($Commit) {
             Write-Host "  Staged files:"
             $staged | ForEach-Object { Write-Host "    $_" }
 
+            if (-not $Message) {
+                Write-Bad 'No commit message. Re-run with -Message "Subject line<newline><newline>Why."'
+                Write-Host '  A generic message on a specific change is worse than no message:'
+                Write-Host '  it actively misleads whoever reads the history later.'
+                return
+            }
+
+            # The co-author trailer is appended below, so callers never have to remember it.
             $message = @"
-Add Grindless project foundation: design, build config and bootstrap
-
-Document the complete mod design in README.md as the single source of
-truth: the eight systems (Flux Network, Resource Genesis, Matter
-Replication, belt logistics, tools and exosuit, Resonance and combat,
-the fission/fusion/particle-accelerator tier, and the orbital and
-planetary stage with satellites, telepresence and remotely simulated
-colonies), the FU energy model, the tag-driven compatibility strategy,
-the seven-tier research progression and the full block catalogue.
-
-Add the Architectury Gradle configuration pinned to verified
-1.20.1 coordinates, and SETUP.ps1 to bootstrap the source tree, toolchain
-and Gradle wrapper on Windows.
+$Message
 
 Co-authored-by: ******* App <223556219+Copilot@users.noreply.github.com>
 "@
             & git commit -m $message
             if ($LASTEXITCODE -eq 0) {
                 Write-Ok "Committed."
-                & git push -u origin $branch
+                # git has no stored credentials in this worktree, so a plain push fails. When
+                # GH_TOKEN is in the environment, push with a transient auth header: -c applies
+                # it to this one command, so no token is ever written to .git/config, to a
+                # remote URL, or to any tracked file.
+                if ($env:GH_TOKEN) {
+                    $pair = "x-access-token:$($env:GH_TOKEN)"
+                    $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))
+                    & git -c http.extraheader="AUTHORIZATION: basic $b64" push -u origin $branch
+                } else {
+                    Write-Host "  No GH_TOKEN in the environment; trying an unauthenticated push."
+                    & git push -u origin $branch
+                }
                 if ($LASTEXITCODE -eq 0) {
                     Write-Ok "Pushed to origin/$branch."
                     Write-Ok "A new Copilot session on this branch will now see all the work."

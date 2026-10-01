@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -25,8 +26,9 @@ public final class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Grindless.MOD_ID, Registries.BLOCK);
 
     /** T0 manual generator. The first source of Flux Units, and the end of the grind. */
-    public static final RegistrySupplier<Block> HAND_CRANK_DYNAMO = register("hand_crank_dynamo",
-            () -> new Block(machine().strength(2.0F)));
+    public static final RegistrySupplier<HandCrankDynamoBlock> HAND_CRANK_DYNAMO =
+            register("hand_crank_dynamo",
+                    () -> new HandCrankDynamoBlock(machine().strength(2.0F)));
 
     /** T0 extractor. Slow and cheap, but it never needs a tunnel. */
     public static final RegistrySupplier<Block> CRUDE_EXTRACTOR = register("crude_extractor",

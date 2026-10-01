@@ -15,6 +15,34 @@ entries below reference those records by id.
 
 ### Added
 
+- **`MachineBlockEntity`** — step 12c, and the point where the separate layers become a machine. It
+  carries a Flux buffer, a chassis mark and its upgrades, the condition state the machine is
+  holding, the container contract and the tick subscriptions, and its `serverTick` does nothing but
+  run the subscription list — so an idle machine costs an emptiness check (ADR-0042).
+  Two invariants are documented in place because both are landmines. The energy buffer is **final
+  and never replaced**: Forge hands it out as a capability, so anything holding it would keep
+  pointing at a discarded object if it were ever swapped. And `ratedTier()` **must return a
+  constant**, because it is called from the constructor to size that buffer and therefore runs
+  before the subclass constructor body.
+  Writing this exposed a design error worth recording: `setChassisMark` was rebuilding the energy
+  buffer, but the buffer is sized from the machine's own rating, which a mark does not change — a
+  mark widens the *condition envelope* (ADR-0027). The rebuild was pure churn that would also have
+  produced stale capabilities, so it is gone.
+  Subscriptions are initialised on the **first tick** rather than on load. `onLoad()` is the
+  obvious hook and is a **Forge addition that vanilla does not declare**, so `common` cannot use
+  it — the compiler caught the leak that `@ExpectPlatform` exists to prevent. Deferring is also
+  what GregTech CEu recommends independently, since neighbours are not reliably available while a
+  chunk is still loading.
+- **The Hand Crank Dynamo** — the first machine that does something, and the first power in the
+  game at F0, 8 FU/t. That is enough to run the Crude Extractor and nothing else, which makes the
+  player's first real decision what to power.
+  It is also the smallest honest demonstration of the tick model: cranking stores charge and
+  subscribes the push loop, and the loop **unsubscribes itself the moment the charge runs out**, so
+  a dynamo nobody has cranked costs nothing. Pushing is throttled on the machine's position-derived
+  offset rather than every tick. `HandCrankDynamoBlock` wires it up, including the
+  neighbour-changed path that ADR-0044 requires for a neighbour *appearing*, which capability
+  invalidation cannot signal.
+
 - **The container contract** (`common/.../container/`) — step 12b. `ContainerConfig` implements the
   controls the README promises on *every* buffer in the mod: filters, buffer target, capacity
   limit, auto-void with its mode and threshold, per-face I/O, and independent insert and extract
@@ -75,9 +103,6 @@ entries below reference those records by id.
   drops twentyfold and the worst tick does not drop at all, which is what players actually feel.
   The hash is mixed rather than raw because block coordinates are highly regular and players build
   in **rows** — the exact case a weak hash would resynchronise.
-
-### Changed
-
 - **The condition system** (`common/.../process/`) — step 11, and the seam the whole machine layer
   rests on. `ProcessConditions` is the `conditions` half of
   `inputs + conditions + time -> outputs` (ADR-0020); `ConditionEnvelope` is what a machine *can*
@@ -109,6 +134,14 @@ entries below reference those records by id.
 
 ### Changed
 
+- **`SETUP.ps1 -Commit` is usable again.** It is the documented fallback for when the in-app
+  terminal stops working, and it had two faults that made it worse than useless in exactly that
+  situation. Its commit message was **hard-coded to the day-one foundation commit**, so every later
+  commit made with it would have been labelled with a description of work it did not contain — and
+  a generic message on a specific change actively misleads whoever reads the history later. It now
+  takes `-Message` and refuses to commit without one. Its push also had no credentials and so
+  always failed; it now uses the transient `GH_TOKEN` auth header documented in ADR-0024, applied
+  with `-c` so no token is ever written to `.git/config` or to any tracked file.
 - **Out-of-band processing costs speed, never yield** (ADR-0040). `MACHINES.md` offered three
   penalties — reduced yield, longer time, extra byproducts — and yield is the one that cannot be
   chosen: every ratio in `PROCESSES.md` is quoted per unit of primary input (ADR-0034), so a
