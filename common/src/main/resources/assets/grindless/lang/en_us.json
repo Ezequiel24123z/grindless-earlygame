@@ -1,0 +1,11 @@
+{
+  "itemGroup.grindless.main": "Grindless",
+
+  "item.grindless.multitool": "Multitool",
+  "item.grindless.data_core": "Data Core",
+  "item.grindless.machine_casing": "Machine Casing",
+
+  "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
+  "block.grindless.crude_extractor": "Crude Extractor",
+  "block.grindless.research_terminal": "Research Terminal"
+}
