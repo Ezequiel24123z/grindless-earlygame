@@ -1614,6 +1614,7 @@ grindless/
 │       │   └── entity/               block entities
 │       ├── client/                   rendering
 │       │   └── screen/               GUI screens
+│       ├── container/                the shared container contract + change notification
 │       ├── energy/                   FU implementation, RF/EU conversion
 │       ├── item/                     items, tools, weapons
 │       ├── machine/                  chassis marks, upgrades, tick subscriptions
@@ -1889,7 +1890,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 10 | Flux energy API + Forge capability bridge | ✅ done — `FluxStorage`, `FluxTier`, `FluxConversion` |
 | 11 | The condition system: envelopes, bands, efficiency, legible faults | ✅ done — `process/` |
 | 12 | Machine layer: chassis marks, upgrades, the tick-subscription model | ✅ done — `machine/` |
-| 12b | Machine block entities + the container contract | **next** |
+| 12b | The container contract + change notification | ✅ done — `container/` |
+| 12c | Machine block entities, wired to blocks and menus | **next** |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
 | 14 | Chunk veins + runtime material registry | pending |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |

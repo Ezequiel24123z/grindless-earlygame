@@ -34,4 +34,21 @@ public final class FluxPlatform {
     public static FluxStorage findEnergy(Level level, BlockPos pos, Direction side) {
         throw new AssertionError("@ExpectPlatform stub was not transformed; check the platform impl");
     }
+
+    /**
+     * Registers {@code onInvalidated} to run when the energy buffer at {@code pos} stops being
+     * valid — because the block was broken, replaced, or revoked its capability.
+     *
+     * <p>This is what makes caching a neighbour safe. Without it, a cached reference survives the
+     * neighbour's removal and the machine goes on pushing power into a block that is no longer
+     * there, which presents as "my machine stopped working until I broke and replaced it".
+     *
+     * <p>The listener fires at most once per registration; re-resolving the capability registers
+     * a new one. It must not assume the block entity still exists.
+     */
+    @ExpectPlatform
+    public static void onInvalidated(Level level, BlockPos pos, Direction side,
+                                     Runnable onInvalidated) {
+        throw new AssertionError("@ExpectPlatform stub was not transformed; check the platform impl");
+    }
 }

@@ -55,6 +55,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0041](#adr-0041--a-condition-check-returns-a-named-fault-not-a-boolean) | A condition check returns a named fault, not a boolean | Accepted |
 | [0042](#adr-0042--machines-subscribe-to-ticking-they-do-not-tick-by-default) | Machines subscribe to ticking; they do not tick by default | Accepted |
 | [0043](#adr-0043--recipe-lookup-is-indexed-and-cached-never-a-linear-scan) | Recipe lookup is indexed and cached, never a linear scan | Accepted |
+| [0044](#adr-0044--neighbour-lookups-are-cached-against-capability-invalidation) | Neighbour lookups are cached against capability invalidation | Accepted |
 
 ---
 
@@ -1414,4 +1415,53 @@ question nobody asks.
 The cached recipe must be invalidated when the machine's conditions or upgrades change, not only
 when its inputs do — otherwise retuning a machine leaves it running the recipe it found before, which
 would be a genuinely confusing bug.
+
+---
+
+## ADR-0044 — Neighbour lookups are cached against capability invalidation
+
+*2026-10-01 · Accepted*
+
+**Context.** A machine that pushes power or items to an adjacent block has to find that block.
+`Level.getBlockEntity(BlockPos)` is a chunk lookup plus a map lookup — negligible once, and not
+negligible done six times a tick by thousands of machines to rediscover something that only changes
+when a player breaks a block.
+
+The obvious fix is to cache the neighbour in a field. The obvious fix is also a correctness bug:
+the cached reference survives the neighbour being broken, and the machine goes on pushing into a
+block that no longer exists. This is the well-known cause of *"my machine stopped working until I
+broke and replaced it"*.
+
+**Decision.** Cache the neighbour, and invalidate the cache from the platform's own capability
+invalidation rather than by re-checking.
+
+Forge hands a capability out as a `LazyOptional` and calls `invalidate()` on it when it stops being
+valid; holders register interest with `LazyOptional.addListener`. Grindless resolves a neighbour
+once, registers a listener, and drops the cache when it fires.
+
+Two paths are needed, not one. Invalidation covers a capability being **revoked**. It cannot cover
+a block **appearing** where there was none, because there was nothing there to invalidate — so the
+machine's neighbour-changed event also clears the cache. A cache that only listens to invalidation
+never notices a new neighbour and looks exactly as broken as a stale one.
+
+Absence is cached too: a machine facing a wall must not re-ask the wall every tick.
+
+**Alternatives rejected.** Looking the neighbour up every tick (the cost this exists to remove);
+caching without invalidation (stale references, and the failure is intermittent and
+unreproducible, which is the worst kind of bug report); caching with a time-to-live (picks an
+arbitrary number, and is simultaneously too slow to be correct and too fast to be cheap);
+validating the cache by checking the block entity is still alive each tick (that check *is* the
+lookup, so it saves nothing).
+
+**Consequences.** Neighbour access becomes a field read in the steady state, which is what makes
+per-tick pushing affordable at all.
+
+The cost is that cache lifetime is now a real invariant with two independent triggers, and getting
+either wrong produces a bug that is invisible in code review and intermittent in play. The
+invalidation listener must not assume the block entity still exists when it fires, since the usual
+reason it fires is that the block entity is being removed.
+
+NeoForge 1.20.1 loads the Forge jar unchanged (ADR-0002), so this works there as written. Newer
+NeoForge replaces this mechanism with `BlockCapabilityCache`, which does the same job with the
+invalidation handled for you — a port target rather than a problem.
 

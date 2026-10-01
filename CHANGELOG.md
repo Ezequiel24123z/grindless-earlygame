@@ -15,6 +15,43 @@ entries below reference those records by id.
 
 ### Added
 
+- **The container contract** (`common/.../container/`) — step 12b. `ContainerConfig` implements the
+  controls the README promises on *every* buffer in the mod: filters, buffer target, capacity
+  limit, auto-void with its mode and threshold, per-face I/O, and independent insert and extract
+  priority. It holds configuration only and never contents, which is what lets item and fluid
+  containers share it.
+  **Auto-void is built defensively** (ADR-0018), and the behaviour is now enforced by code rather
+  than promised in prose: off by default, it **trims and never empties** — voiding applies only
+  above the threshold — and it **refuses to discard protected materials** regardless of settings,
+  including in `EVERYTHING` mode. A voiding container reports that it is voiding, so an alarm can
+  be built on it.
+- **`ChangeListeners`** — the other half of the tick-subscription model. Machines can only avoid
+  ticking because something tells them when the world changed underneath them (ADR-0042); without
+  notification a machine would have to poll to discover whether polling was needed. Configuration
+  changes notify too, not just contents: closing a face can make tick work unnecessary, so a
+  machine listening only to contents would silently stop.
+- **`NeighbourCache`** (ADR-0044) — caches the adjacent block's energy buffer so a machine pushing
+  power is not doing a chunk-and-map lookup every tick. The naive version of this is a correctness
+  bug rather than an optimisation: a cached reference survives the neighbour being broken, which is
+  the classic *"my machine stopped working until I broke and replaced it"*. The cache is therefore
+  cleared from Forge's own `LazyOptional.addListener` invalidation, through a new `@ExpectPlatform`
+  hook. **Two triggers are needed, not one** — invalidation covers a capability being revoked, but
+  cannot cover a block *appearing* where there was none, so the neighbour-changed event clears it
+  as well. Absence is cached too, so a machine facing a wall does not re-ask the wall forever.
+- One decision record, ADR-0044.
+- **`tools/checks/` and `tools/run-checks.ps1`** — the behaviour checks written over the last three
+  steps, committed rather than thrown away. They have already caught two real bugs: an `EnumMap`
+  constructor that throws on an empty source map, which is the path taken by installing the very
+  first upgrade, and a band-efficiency expectation that was simply wrong. The runner checks the
+  classes Gradle produced rather than recompiling them, so what is verified is what would ship.
+  Two Windows details are commented in place because both fail in ways that say nothing useful:
+  the classpath needs the whole Gradle module cache, since `Direction.<clinit>` drags in most of
+  Minecraft's bootstrap; and it is far past the command-line length limit, so it goes in an
+  argfile — where a backslash is an escape character, so paths must be written with forward
+  slashes or javac reports every package as missing.
+  This is not a substitute for a real test suite, which is step 26's job. It is the difference
+  between arithmetic that has been run and arithmetic that has only been read.
+
 - **The machine layer** (`common/.../machine/`) — step 12. `ChassisMark` is MK I–V, whose defining
   property is that it **widens the condition envelope** (ADR-0027) rather than adding a speed
   number, so a mark unlocks recipes. `widen()` interpolates between a machine's narrow and full

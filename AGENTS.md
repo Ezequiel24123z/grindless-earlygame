@@ -82,10 +82,11 @@ implementation plan, validate the documentation, then commit and push:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\tools\check-links.ps1 -Root .
+powershell -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .
 ```
 
-That check is worth the one approval it costs — it has caught broken links and a drifted ADR index
-more than once. If the terminal is already broken, say so plainly and
+Both are worth the approval they cost. The first has caught broken links and a drifted ADR index
+more than once; the second has caught two real bugs that compiled cleanly. If the terminal is already broken, say so plainly and
 tell the user to run `SETUP.ps1 -Commit`, which commits and pushes without the app.
 
 ---
@@ -101,7 +102,8 @@ docs/MACHINES.md     the machine layer: conditions, envelopes, chassis marks, mu
 docs/PROCESSES.md    the content layer: items, fluids, recipe graph, routes and ratios
 docs/DESIGN.md       early standalone design note; superseded by README, kept for history
 SETUP.ps1            Windows bootstrap; also commits and pushes via -Commit
-tools/               repository scripts; check-links.ps1 validates the docs before a commit
+tools/               repository scripts; check-links.ps1 validates the docs before a commit,
+                     run-checks.ps1 runs the behaviour checks in tools/checks/
 
 build.gradle         root Gradle config shared by all subprojects
 settings.gradle      includes common, forge
