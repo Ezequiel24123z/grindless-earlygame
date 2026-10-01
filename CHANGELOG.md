@@ -15,6 +15,23 @@ entries below reference those records by id.
 
 ### Added
 
+- **Operator Drones** (README *System 4*). The imperative half of automation. Every system so far —
+  belts, pipes, conduits, logistics drones — is continuous flow and declarative, and none of them
+  can express *"wait until the autoclave finishes, take the batch to the press, run it, bring the
+  byproduct back, swap the catalyst if spent"*. That is a sequence, and without it the player does
+  such work by hand, which is grind by definition.
+  Routines are **built, not typed**: an ordered strip of physical Instruction Cards, closer to a
+  player-piano roll than to code, with a vocabulary of eleven cards of which only two are branches.
+  Capability comes from pods — cargo, fluid tank, thermal, tool arm, sensor, range extender.
+  Debuggability is designed in rather than added later: the drone shows its current instruction in
+  flight, step mode advances one instruction at a time, failures name themselves on the bay and as
+  a logic signal, and editing draws a holographic path preview. Routine Cards make a finished
+  routine one copyable item. Deliberately slow and single-tasking, so belts stay correct for
+  volume; at T6 the same routines run on remote colonies where belts cannot reach (ADR-0029).
+- Two design principles added to the README, both describing patterns the design had already
+  converged on: **everything is a chassis plus modules** (ADR-0030), and **pay in layout or pay in
+  power** — every convenience has a cheaper manual counterpart that stays correct forever.
+- Two decision records, ADR-0029 and ADR-0030.
 - **Flux Conduits** (README *System 4*). One conduit chassis whose carried types are decided by
   **cores** inserted into it — item, fluid, heat, signal and, rarely, Flux — so a single run can
   carry ore, coolant, heat and the logic that controls them. Networks are **named** rather than

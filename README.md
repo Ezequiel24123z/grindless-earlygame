@@ -40,7 +40,7 @@ where it opens up.
 - [System 1 — The Flux Network](#system-1--the-flux-network) — power without cables
 - [System 2 — Resource Genesis](#system-2--resource-genesis) — chunks that own their materials
 - [System 3 — Matter Replication](#system-3--matter-replication) — everything that isn't an ore
-- [System 4 — Logistics and belts](#system-4--logistics-and-belts) — belts, drones, logic, conduits
+- [System 4 — Logistics and belts](#system-4--logistics-and-belts) — belts, drones, conduits, logic
 - [System 5 — Fluids, pressure and phase](#system-5--fluids-pressure-and-phase) — pipes, tanks, loops
 - [System 6 — Tools and equipment](#system-6--tools-and-equipment) — blueprints, drills, exosuit
 - [System 7 — Resonance, defence and weapons](#system-7--resonance-defence-and-weapons)
@@ -145,6 +145,12 @@ These are the rules every feature is measured against.
    hence proportional brownouts instead of one randomly starved machine.
 7. **Never hard-block the player.** Under-powered machines slow down; they do not stop.
 8. **Original assets only.** Every texture and model is made for this project.
+9. **Everything is a chassis plus modules.** Machines take upgrades, conduits take cores, drones
+   take pods, pylons take bay modules. One pattern learned once, applied everywhere, and capability
+   always arrives by slotting something in rather than by crafting a replacement block.
+10. **Pay in layout, or pay in power.** Every convenience has a cheaper manual counterpart that
+    stays correct forever: belts against drones, pipes against the phase network, both against
+    conduits. Convenience is sold, never imposed.
 
 ---
 
@@ -374,6 +380,82 @@ payoffs, and no second grid to plan.
 
 Drones consume FU from the network while flying, so logistics is a real, visible load on the
 power grid rather than free teleportation.
+
+### Operator Drones — work that is a sequence, not a flow
+
+Logistics drones are **declarative**: you state that a crate should hold 64 iron and the network
+works out the deliveries. That is exactly right for steady supply, and completely unable to express
+*"wait until the autoclave finishes, take the batch to the press, run it, bring the byproduct
+back, and swap the catalyst if it is spent."*
+
+That kind of work is a **sequence** — irregular, conditional, multi-step — and belts, conduits and
+logistics drones are all continuous-flow systems that cannot describe it. **Operator Drones** are
+the imperative half of automation.
+
+| Block / item | Role |
+| --- | --- |
+| **Operator Bay** | Houses, charges and programs Operator Drones. A pylon module, like the Drone Bay. |
+| **Operator Drone** | Executes a routine, step by step, visibly. |
+| **Instruction Card** | One step. Placed in an ordered strip to build a routine. |
+| **Routine Card** | A whole finished routine, stamped onto one copyable item. |
+| **Locator** | A handheld that binds a position, a face and a slot to a card. |
+
+#### Routines are built, not typed
+
+The README already refuses to make the player learn a scripting language for the circuit network,
+and the same rule applies here. A routine is an **ordered strip of physical cards**, closer to a
+player-piano roll than to code: you drag cards into a row and the drone performs them in order.
+
+| Card | Does |
+| --- | --- |
+| **Go To** | Fly to a bound location. |
+| **Take** / **Give** | Move items, filtered by item or tag, from or into a target's chosen face. |
+| **Draw** / **Pour** | Move fluid, using the drone's own internal tank. |
+| **Absorb** / **Emit** | Move heat, using a thermal pod — the same trick as the conduit heat core. |
+| **Operate** | Start a machine, or swap a spent catalyst. |
+| **Read** | Read a level, temperature or progress value for a later comparison. |
+| **Wait Until** | Hold until a condition is true — machine idle, tank above a level, signal high. |
+| **If / Else** | Branch on a condition. |
+| **Repeat** | Loop, a fixed number of times or while a condition holds. |
+| **Signal** | Emit a logic signal, so routines and the logic network can drive each other. |
+| **Return** | Go home and start again. |
+
+That is the whole vocabulary. Eleven cards, two of which are branches — expressive enough for real
+batch work, small enough to learn in a minute.
+
+#### Pods decide what a drone can do
+
+An Operator Drone is a chassis; its **pods** decide its capabilities, exactly as cores decide a
+conduit's and upgrades decide a machine's.
+
+| Pod | Grants |
+| --- | --- |
+| **Cargo Pod** | Item capacity. |
+| **Fluid Pod** | An internal tank, so the drone can carry fluid with its state intact. |
+| **Thermal Pod** | Carries heat itself, for charging a process that needs it. |
+| **Tool Arm** | Operating machines and swapping catalysts. |
+| **Sensor** | The `Read` card, and richer conditions. |
+| **Range Extender** | Working beyond pylon coverage, at a power cost. |
+
+#### Debuggable by construction
+
+A programmable system without debugging is misery, so this is designed in rather than added later:
+
+- **The drone shows what it is doing.** The current instruction is visible above it in flight.
+- **Step mode.** Advance one instruction at a time and watch.
+- **Failures name themselves.** "Step 4: target inventory full" appears on the bay and as a logic
+  signal, rather than the drone silently idling.
+- **Holographic preview.** Editing a routine draws its path and targets in the world.
+
+#### Why this does not make everything else pointless
+
+Operator Drones are slow and they handle one task at a time. They are the wrong answer to anything
+high-volume — a belt moves more ore in a second than a drone moves in a minute. They win precisely
+where continuous flow loses: **irregular, conditional, multi-step work**, and locations that do not
+justify permanent infrastructure.
+
+At T6 the same routines run on remote colonies, where belts cannot reach at all, which is what
+turns an off-world base from a resource trickle into a real factory.
 
 ### Control and logic
 
@@ -1291,6 +1373,9 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Conduit cores: Item, Fluid, Heat, Signal, Flux | T2–T4 |
 | Conduit upgrades: Bore, Filter, Routing, Insulation, Phase | T2–T4 |
 | Drone Bay, Provider / Requester / Buffer / Storage Crate | T3 |
+| Operator Bay, Operator Drone | T3 |
+| Instruction Cards (11 kinds), Routine Card, Locator | T3 |
+| Drone pods: Cargo, Fluid, Thermal, Tool Arm, Sensor, Range Extender | T3–T4 |
 
 ### Research and defence
 

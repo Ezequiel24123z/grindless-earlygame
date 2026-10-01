@@ -40,6 +40,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0026](#adr-0026--named-conduit-networks-instead-of-coloured-channels) | Named conduit networks instead of coloured channels | Accepted |
 | [0027](#adr-0027--chassis-marks-widen-the-condition-envelope) | Chassis marks widen the condition envelope | Accepted |
 | [0028](#adr-0028--every-machine-upgrade-is-a-trade) | Every machine upgrade is a trade | Accepted |
+| [0029](#adr-0029--operator-drones-imperative-automation-beside-declarative-logistics) | Operator Drones: imperative automation | Accepted |
+| [0030](#adr-0030--everything-is-a-chassis-plus-modules) | Everything is a chassis plus modules | Accepted |
 
 ---
 
@@ -748,3 +750,80 @@ guessed.
 
 The risk is balance surface area — ten upgrades times five marks times twenty machines is a large
 space, and the exclusivity pairs are what keep it from collapsing into one dominant loadout.
+
+---
+
+## ADR-0029 — Operator Drones: imperative automation beside declarative logistics
+
+*2026-10-01 · Accepted*
+
+**Context.** Every automation system in the mod so far is **continuous flow**: belts, pipes,
+conduits, and logistics drones that fulfil standing requests. All of them are declarative — you
+describe a desired steady state and the system maintains it.
+
+A large class of real factory work cannot be described that way. *"Wait until the autoclave
+finishes, take the batch to the press, run it, bring the byproduct back, and swap the catalyst if
+it is spent"* is a **sequence**: irregular, conditional, multi-step. No flow system expresses it,
+and the player ends up doing it by hand — which is grind by definition.
+
+**Decision.** Add **Operator Drones**: a drone that executes an ordered routine, step by step,
+housed and programmed in an **Operator Bay** that is a pylon module like the Drone Bay.
+
+Routines are **built, not typed**. A routine is an ordered strip of physical Instruction Cards —
+closer to a player-piano roll than to code — because the README already refuses to make the player
+learn a scripting language for the circuit network and the same rule applies here. The vocabulary
+is eleven cards: `Go To`, `Take`, `Give`, `Draw`, `Pour`, `Absorb`, `Emit`, `Operate`, `Read`,
+`Wait Until`, `If/Else`, `Repeat`, `Signal`, `Return` — of which only two are branches.
+
+Capability comes from **pods**: cargo, fluid (the drone's own tank), thermal, tool arm, sensor and
+range extender (ADR-0030).
+
+**Alternatives rejected.** A text or graph scripting language, which is powerful and is exactly the
+thing the mod has already decided not to ask of the player. Extending logistics drones with
+conditions, which would make a simple declarative system complicated without making it imperative.
+
+**Consequences.** Operator Drones are slow and single-tasking, so they are the wrong answer to
+anything high-volume — a belt moves more ore in a second than a drone moves in a minute. They win
+only where flow loses, which keeps every other logistics system intact. At T6 the same routines run
+on remote colonies, where belts cannot reach at all, which is what turns an off-world base from a
+trickle into a factory.
+
+Debuggability is part of the decision rather than a later addition, because a programmable system
+without debugging is misery: the drone displays its current instruction in flight, step mode
+advances one instruction at a time, failures name themselves (`Step 4: target inventory full`) on
+the bay and as a logic signal, and editing draws a holographic preview of the path.
+
+Routine Cards make a finished routine one copyable item, so building the tenth identical setup is a
+copy rather than a repeat — the same anti-repetition device as Process Cards.
+
+The risk to watch is scope creep in the card vocabulary. Eleven cards is learnable; thirty is a
+programming language with extra steps, and the line should be held.
+
+---
+
+## ADR-0030 — Everything is a chassis plus modules
+
+*2026-10-01 · Accepted*
+
+**Context.** Four systems arrived at the same shape independently: machines take upgrades in slots
+(ADR-0028), conduits take cores that decide what they carry (ADR-0025), drones take pods that
+decide what they can do (ADR-0029), and pylons take bay modules. This was convergence, not plan,
+which usually means the pattern is load-bearing and should be stated before someone breaks it.
+
+**Decision.** Adopt it as a design principle: **capability arrives by slotting a module into a
+chassis, never by crafting a different block.** A chassis sets the ceiling — slot count, tier,
+envelope — and modules decide what it actually does within that ceiling.
+
+**Consequences.** The player learns one interaction pattern and it applies everywhere, which is a
+large reduction in what a complex mod asks them to hold in their head. The block catalogue stays
+small, because variation lives in modules rather than in block variants — the alternative is how
+tech mods end up shipping nine near-identical machines per type.
+
+It also means upgrading is non-destructive by construction: you slot something in, and the machine
+keeps its position, contents, configuration and connections. Nothing is ever rebuilt or re-piped,
+which is one of the mod's main anti-grind commitments.
+
+The cost is that modules are items that must be produced, which pushes more load onto the
+fabrication economy (ADR-0017), and that every chassis needs a module UI good enough to make the
+slots legible. The failure mode to avoid is modules that are strictly mandatory — a module everyone
+always installs should simply be part of the chassis.
