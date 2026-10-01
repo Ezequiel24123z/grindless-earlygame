@@ -24,6 +24,7 @@ of machines can host an enormous recipe space.
 - [Process conditions: the central mechanic](#process-conditions-the-central-mechanic)
 - [Machines are condition envelopes](#machines-are-condition-envelopes)
 - [Anatomy of a machine](#anatomy-of-a-machine)
+- [Chassis marks and upgrades](#chassis-marks-and-upgrades)
 - [The Flux tier ladder](#the-flux-tier-ladder)
 - [Scaling: parallel, overclock, multiblock](#scaling-parallel-overclock-multiblock)
 - [Single-block machines](#single-block-machines)
@@ -170,7 +171,7 @@ Learn the interface once.
 | **Catalyst slot** | Not consumed; degrades with use; some recipes require it, some are merely faster with it. |
 | **Condition controls** | Target temperature, pressure, atmosphere. Settable by hand, by logic signal, or by a Process Card. |
 | **Energy buffer** | FU, sized by tier. |
-| **Upgrade slots** | Speed, efficiency, parallel, yield, insulation, containment. |
+| **Upgrade slots** | Count set by chassis mark. See [chassis and upgrades](#chassis-marks-and-upgrades). |
 | **Process Card** | A saved condition set plus a recipe selection. Copyable, so configuring the second machine is never a repeat of configuring the first. |
 | **Status output** | Running, idle, blocked, starved, out-of-band — as a logic signal and as a visible indicator. |
 
@@ -182,6 +183,98 @@ card. Building your tenth reactor is a placement problem, not a configuration pr
 **Blocked versus starved versus out-of-band** are distinguished everywhere, because "my factory
 stopped and I do not know why" is the single most common failure in complex packs, and the fix is
 always better telemetry rather than less complexity.
+
+---
+
+## Chassis marks and upgrades
+
+Two independent dials. The **chassis mark** is the machine's capability ceiling; **upgrades** tune
+behaviour within that ceiling. Separating them is what stops the catalogue from exploding into nine
+copies of every machine.
+
+### The chassis mark
+
+Every machine exists at marks **MK I** through **MK V**. A mark is not a different block — you
+apply a **Chassis Upgrade Kit** to the machine in place, keeping its position, its contents, its
+configuration and its connections. Nothing is ever rebuilt or re-piped.
+
+| Mark | Upgrade slots | Max Flux tier | Envelope width | Research |
+| --- | --- | --- | --- | --- |
+| **MK I** | 1 | F1 | narrow | T1 |
+| **MK II** | 2 | F3 | — | T2 |
+| **MK III** | 3 | F5 | — | T3 |
+| **MK IV** | 4 | F7 | — | T4 |
+| **MK V** | 6 | F9 | full | T5 |
+
+The important column is the last-but-one. **A higher mark widens the condition envelope**, and
+because recipes are selected by conditions (ADR-0020), that means a mark unlocks *recipes* rather
+than merely adding speed:
+
+| Arc Furnace | Reaches | Therefore can |
+| --- | --- | --- |
+| MK I | 1800 °C | smelt common metals |
+| MK II | 2300 °C | reduce refractory oxides |
+| MK III | 2800 °C | melt tungsten-class materials |
+| MK IV | 3200 °C | run carbothermic reduction of the hardest carbides |
+| MK V | 3500 °C | everything the machine type is physically capable of |
+
+This is the answer to GregTech's voltage ladder. There, a tier is the same machine with a bigger
+number; here a mark changes *what is possible*, which makes upgrading a goal rather than a tax.
+
+### Upgrades trade, they never simply improve
+
+The failure mode to avoid is the one most upgrade systems fall into: if an upgrade is strictly
+good, the optimal play is to fill every slot with it, and there is no decision — only a tax you pay
+late. Mekanism's speed upgrades are the canonical example.
+
+> **Rule: every upgrade spends one resource to buy another.** Which one you want depends on which
+> resource is scarce for you right now, and that changes across the game.
+
+| Upgrade | Buys | Spends |
+| --- | --- | --- |
+| **Speed** | shorter cycle time | FU per operation, superlinearly; more waste heat |
+| **Parallel** | N recipes per cycle | FU linearly; buffer space; larger input bursts |
+| **Efficiency** | less FU per operation | cycle time |
+| **Yield** | more output, fewer losses | cycle time; needs a catalyst |
+| **Precision** | tighter condition hold, so the optimal band is actually hit | constant FU upkeep |
+| **Insulation** | far cheaper to *hold* a high temperature | slow thermal response, so recipe switching hurts |
+| **Containment** | pressure and field beyond the chassis norm | constant FU upkeep |
+| **Catalyst Feed** | catalysts replaced automatically from a buffer | an upgrade slot |
+| **Damping** | much less Resonance emitted | cycle time |
+| **Recovery** | captures byproducts that otherwise vent | an upgrade slot; an output buffer |
+
+Three pairs are **mutually exclusive**, because wanting both is wanting the trade not to exist:
+
+- **Speed ↔ Efficiency** — the whole point of each is the other's cost.
+- **Speed ↔ Precision** — you cannot hold a tight condition band while rushing the cycle.
+- **Insulation ↔ Parallel** — thermal mass fights throughput of mixed batches.
+
+### Why this produces decisions
+
+The same machine is configured differently depending on what the player is short of, and the answer
+genuinely changes:
+
+- **Power-limited, early.** Efficiency, every time. You have ore and no generation.
+- **Material-limited, mid-game.** Yield plus Recovery — byproducts you were venting become inputs
+  to a line you have since built.
+- **Throughput-limited, with power to spare.** Parallel, and more machines.
+- **Running a tight chemical process.** Precision, because being 20 °C off is the difference between
+  the product and a mess.
+- **Hiding from what the noise attracts.** Damping, at a real throughput cost. See System 7.
+
+Note that **Speed is almost never the right answer**, which is deliberate and is the same stance
+the mod takes on overclocking. The correct way to produce more is to build wider, not to run one
+machine harder.
+
+### Keeping it from becoming a chore
+
+- **Upgrades are reusable.** Pulling one out returns it intact. Experimenting is free.
+- **Process Cards carry the upgrade loadout** as well as the conditions, so configuring the tenth
+  machine is a copy, not a repeat.
+- **Low marks never stop working.** An MK I Arc Furnace runs every recipe inside its envelope
+  forever. It is slower and narrower, not invalid.
+- **The Atlas accounts for upgrades.** When it solves a line it tells you which loadout meets the
+  target, so the decision is informed rather than guessed.
 
 ---
 
@@ -218,17 +311,17 @@ Grindless offers three axes with genuinely different shapes.
 
 ### 1. Parallel — the default
 
-A parallel upgrade runs N recipes simultaneously. Power scales linearly, throughput scales
+The Parallel upgrade runs N recipes simultaneously. Power scales linearly, throughput scales
 linearly, efficiency is unchanged. This is the boring, correct answer and it is always available.
 
 ### 2. Overclock — deliberately the worst option
 
-Run faster at superlinear power cost: double speed for roughly triple power, and heat output rises.
-Overclocking is for emergencies and for players who have more power than sense. It is **never
-required** to progress.
+Overclocking is not a separate mechanism; it is what the **Speed** upgrade does. Double speed costs
+roughly triple power, and waste heat rises with it. It is for emergencies and for players with more
+power than sense, and it is **never required** to progress.
 
-This inverts GregTech, where overclocking is mandatory and therefore not a decision. Here it is a
-decision precisely because it is usually wrong.
+This inverts GregTech, where overclocking is mandatory and therefore not a decision at all. Here it
+is a decision precisely because it is usually the wrong one.
 
 ### 3. Multiblock — better ratios, not just more throughput
 

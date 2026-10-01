@@ -36,6 +36,10 @@ history — the reasoning that was wrong is itself useful information.
 | [0022](#adr-0022--parametric-multiblocks-instead-of-fixed-schematics) | Parametric multiblocks instead of fixed schematics | Accepted |
 | [0023](#adr-0023--a-native-route-viewer-with-a-ratio-solver) | A native route viewer with a ratio solver | Accepted |
 | [0024](#adr-0024--loomplatform-markers-and-the-windows-path-length-limit) | `loom.platform` markers and the Windows path limit | Accepted |
+| [0025](#adr-0025--universal-conduits-that-do-not-obsolete-belts-or-pipes) | Universal conduits that do not obsolete belts or pipes | Accepted |
+| [0026](#adr-0026--named-conduit-networks-instead-of-coloured-channels) | Named conduit networks instead of coloured channels | Accepted |
+| [0027](#adr-0027--chassis-marks-widen-the-condition-envelope) | Chassis marks widen the condition envelope | Accepted |
+| [0028](#adr-0028--every-machine-upgrade-is-a-trade) | Every machine upgrade is a trade | Accepted |
 
 ---
 
@@ -618,3 +622,129 @@ warning is now known to be a real failure on this machine rather than a theoreti
 
 Note that the JDK and Gradle are *not* protected by this setting. Nothing has broken so far, but a
 build failure that looks like a corrupt file should be treated as a path-length problem first.
+
+---
+
+## ADR-0025 — Universal conduits that do not obsolete belts or pipes
+
+*2026-10-01 · Accepted*
+
+**Context.** By mid-game a base runs four parallel infrastructures that all solve the same problem:
+belts for items, pipes for fluids, signal cable for logic, and a steam loop used only to move heat
+somewhere. Routing them around each other is busywork. EnderIO's conduits are the genre's answer
+and they are the right idea.
+
+The danger is specific and severe: belts are the Factorio soul of this mod, and a universal conduit
+that is strictly better deletes them. That is exactly the trap ADR-0016 avoided for fluids.
+
+**Decision.** Ship **Flux Conduits** from T2: one chassis block whose carried types are decided by
+**cores** inserted into it — item, fluid, heat, signal and (rarely) Flux. Several cores coexist in
+one block, so one run carries ore, coolant, heat and the logic controlling them.
+
+Belts and pipes survive because conduits are deliberately not strictly better:
+
+- **Item cores draw power per item moved; belts move bulk for free.** For the highest-volume line
+  in any base — a mine feeding a smelter — belts remain correct forever.
+- **A belt is also a buffer.** A full belt is thousands of items of storage in transit; a conduit
+  holds almost nothing, so a conduit-fed line stalls the instant production hiccups.
+- **Pipes exploit physics for free.** Gravity, head pressure and a condensate loop cost no power.
+  A fluid core always does.
+
+The division that emerges is the one real factories have: **belts and pipes move bulk, conduits
+move logistics**. At T5 the Singular Conduit genuinely can replace everything, and by then power is
+abundant enough that some players will — a legitimate and expensive way to play.
+
+**Consequences.** This is the third instance of one principle — pay in layout, or pay in power —
+after belts versus drones and pipes versus the Phase Network. The repetition is intentional: it is
+the mod's economic language, and a player who learns it once can predict every later trade.
+
+The heat core is the genuinely new capability. Moving heat *as heat* rather than as hot fluid is
+both more realistic and practically useful, since reactor waste heat can reach a distant process
+without plumbing a loop there and back.
+
+The balancing risk is the item core's power cost. Too cheap and belts die; too expensive and the
+conduit is ornamental.
+
+---
+
+## ADR-0026 — Named conduit networks instead of coloured channels
+
+*2026-10-01 · Accepted*
+
+**Context.** Conduit mods separate logical networks sharing physical space using a fixed palette of
+coloured channels, typically sixteen. This works at small scale and fails at large scale: the
+colours are a fixed budget, and nobody remembers what purple meant three months later.
+
+**Decision.** Networks are **named**. The player names a network — `iron-bus`,
+`reactor-coolant` — and endpoints subscribe by name. Names are unlimited and self-documenting, and
+a conduit reports which networks it belongs to when inspected.
+
+**Alternatives rejected.** Coloured channels, for the reasons above. Automatic network inference
+from connectivity, which is convenient until two networks accidentally touch and silently merge.
+
+**Consequences.** Readability at scale, which is the whole problem, plus no arbitrary cap on
+network count. The costs are a text-entry UI where a colour picker would have done, the need to
+handle renames and typos gracefully, and the fact that names are strings and must therefore be
+persisted, synchronised and shown in the conduit's tooltip.
+
+---
+
+## ADR-0027 — Chassis marks widen the condition envelope
+
+*2026-10-01 · Accepted*
+
+**Context.** Machine tiering is normally numeric: the same machine with a bigger speed number and a
+higher voltage cap. GregTech ships nine of them. The player rebuilds identical infrastructure
+repeatedly and nothing new becomes possible, which is the precise definition of grind this project
+rejects (ADR-0021).
+
+**Decision.** Machines exist at marks **MK I–MK V**, applied **in place** with a Chassis Upgrade
+Kit — the machine keeps its position, contents, configuration and connections, and is never
+rebuilt or re-piped.
+
+A mark sets upgrade slot count and maximum Flux tier, but its defining property is that it
+**widens the condition envelope**. Since recipes are selected by conditions (ADR-0020), a higher
+mark unlocks *recipes*: an MK I Arc Furnace reaches 1800 °C and smelts common metals, an MK V
+reaches 3500 °C and runs everything the machine type is physically capable of.
+
+**Consequences.** Upgrading becomes a goal rather than a tax, because it changes what is possible
+rather than how fast the same thing happens. The catalogue does not explode, since marks are an
+attribute of a machine rather than five separate blocks. And low marks never become invalid — an
+MK I still runs every recipe inside its envelope, forever.
+
+This also gives the research tree something concrete to gate that is not a new block.
+
+---
+
+## ADR-0028 — Every machine upgrade is a trade
+
+*2026-10-01 · Accepted*
+
+**Context.** Most upgrade systems offer strict improvements, so the optimal play is to fill every
+slot with the best one. The upgrade is then not a decision, it is a tax the player pays once and
+forgets. Mekanism's speed upgrades are the canonical case: there is no reason not to max them.
+
+**Decision.** **Every upgrade spends one resource to buy another.** Speed buys cycle time with
+superlinear power and waste heat; Efficiency buys power with time; Yield buys output with time and
+a catalyst; Precision buys condition accuracy with constant upkeep; Insulation buys cheap heat
+retention with slow thermal response; Damping buys Resonance silence with throughput. Three pairs
+are mutually exclusive — Speed↔Efficiency, Speed↔Precision, Insulation↔Parallel — because wanting
+both is wanting the trade not to exist.
+
+Which upgrade is correct therefore depends on which resource is scarce *now*: Efficiency when
+power-limited early, Yield and Recovery when material-limited mid-game, Parallel when throughput-
+limited with power to spare, Precision for tight chemistry, Damping when hiding from what the noise
+attracts.
+
+**Consequences.** The same machine is configured differently in different parts of the same base
+and at different points in the game, which is the definition of a live decision. Notably **Speed is
+almost never right**, consistent with the stance on overclocking: the correct way to produce more
+is to build wider.
+
+Keeping this from becoming its own chore is part of the decision: upgrades are reusable so
+experimenting is free, Process Cards carry the loadout so configuring the tenth machine is a copy,
+and the Atlas accounts for upgrades when solving a line so the choice is informed rather than
+guessed.
+
+The risk is balance surface area — ten upgrades times five marks times twenty machines is a large
+space, and the exclusivity pairs are what keep it from collapsing into one dominant loadout.

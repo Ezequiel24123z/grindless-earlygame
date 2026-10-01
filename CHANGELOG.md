@@ -15,6 +15,29 @@ entries below reference those records by id.
 
 ### Added
 
+- **Flux Conduits** (README *System 4*). One conduit chassis whose carried types are decided by
+  **cores** inserted into it — item, fluid, heat, signal and, rarely, Flux — so a single run can
+  carry ore, coolant, heat and the logic that controls them. Networks are **named** rather than
+  picked from sixteen colours, because colours stop being readable long before a base stops growing
+  (ADR-0026). Flow is visible, every segment reports its own utilisation and backpressure as a
+  signal, and cores upgrade independently: bore, filtering, routing, insulation, and at the top
+  Phase, where distance within a network stops mattering. Four conduit tiers from T2 to T5.
+  Belts and pipes deliberately survive this: item cores draw power per item while belts move bulk
+  for free, a full belt is also thousands of items of buffer, and pipes exploit gravity and head
+  pressure for nothing. The division that results is the one real factories have — belts and pipes
+  move bulk, conduits move logistics (ADR-0025). From T2, Signal Cable is a conduit core rather
+  than a separate block.
+- **Chassis marks and machine upgrades** (`docs/MACHINES.md`). Machines exist at MK I–MK V, applied
+  **in place** with a Chassis Upgrade Kit so nothing is ever rebuilt or re-piped. A mark's defining
+  property is that it **widens the condition envelope**, so because recipes are selected by
+  conditions a higher mark unlocks *recipes* rather than adding a speed number — an MK I Arc
+  Furnace reaches 1800 °C, an MK V reaches 3500 °C (ADR-0027).
+  Ten upgrades, each of which **spends one resource to buy another** rather than being strictly
+  better, with three mutually exclusive pairs (Speed↔Efficiency, Speed↔Precision,
+  Insulation↔Parallel). Which one is right depends on whether you are power-limited,
+  material-limited or throughput-limited, and that changes across the game. Speed is almost never
+  right, consistent with the stance on overclocking (ADR-0028).
+- Four decision records, ADR-0025 to ADR-0028.
 - **The first green build on both loaders** — step 7 of the implementation plan, the project's
   first real milestone. `gradlew :fabric:build :forge:build` produces `grindless-0.1.0-fabric.jar`
   and `grindless-0.1.0-forge.jar`, each bundling the common classes, `pack.mcmeta` and the lang
@@ -43,6 +66,7 @@ entries below reference those records by id.
   shape is a design parameter (ADR-0022), the multiple-routes rule, the endgame tier, and the
   Process Atlas route viewer with its ratio solver (ADR-0023).
 - Six decision records, ADR-0019 to ADR-0024.
+- Implementation plan gained a step for the conduit layer and the upgrade framework.
 - **Fluids, as a first-class system** (README *System 5*). Fluids carry volume, temperature and
   pressure rather than being items with a different texture, so steam, superheated steam and
   supercritical water are distinct resources; heat is conserved, so a cooling line condenses and a

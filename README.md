@@ -40,7 +40,7 @@ where it opens up.
 - [System 1 — The Flux Network](#system-1--the-flux-network) — power without cables
 - [System 2 — Resource Genesis](#system-2--resource-genesis) — chunks that own their materials
 - [System 3 — Matter Replication](#system-3--matter-replication) — everything that isn't an ore
-- [System 4 — Logistics and belts](#system-4--logistics-and-belts) — belts, drones, logic
+- [System 4 — Logistics and belts](#system-4--logistics-and-belts) — belts, drones, logic, conduits
 - [System 5 — Fluids, pressure and phase](#system-5--fluids-pressure-and-phase) — pipes, tanks, loops
 - [System 6 — Tools and equipment](#system-6--tools-and-equipment) — blueprints, drills, exosuit
 - [System 7 — Resonance, defence and weapons](#system-7--resonance-defence-and-weapons)
@@ -390,6 +390,83 @@ Pure belt layouts stop being enough once a base has to react to itself.
 This is a deliberately simplified take on Factorio's circuit network: expressive enough for the
 patterns people actually build (produce-on-demand, alarms, load balancing) without asking the
 player to learn a second programming language.
+
+From T2 onwards, Signal Cable is not a separate block: it is a **signal core** inside a Flux
+Conduit, so logic rides the same infrastructure as everything else.
+
+### Flux Conduits — one network for everything
+
+By mid-game a serious base has belts for items, pipes for fluids, signal cable for logic and a heat
+loop it would rather not run across half the factory. That is four parallel infrastructures solving
+the same problem, and routing them around each other is busywork, not design.
+
+**Flux Conduits** collapse all of it into one block. A conduit is a chassis; what it carries is
+decided by the **cores** you insert into it:
+
+| Core | Carries | Replaces |
+| --- | --- | --- |
+| **Item Core** | items, filtered and routed | belts for low-volume routing |
+| **Fluid Core** | fluid, with its temperature and pressure intact | pipes |
+| **Heat Core** | thermal energy directly, with no working fluid | a steam loop used only to move heat |
+| **Signal Core** | multi-channel logic | Signal Cable |
+| **Flux Core** | FU, for the rare spot a pylon cannot cover | nothing — this is the exception, not the rule |
+
+Several cores coexist in one conduit block, so a single run can carry ore, coolant, heat and the
+logic that controls them. One block, one route, four jobs.
+
+The Heat Core deserves a note: moving heat *as heat* rather than as hot fluid is both more
+realistic and genuinely useful, because it lets reactor waste heat reach a distant process without
+plumbing a loop there and back.
+
+#### Named networks, not coloured channels
+
+EnderIO's channels are the standard solution and they do not survive scale: sixteen colours, and by
+the time a base is large you cannot remember what purple meant.
+
+Grindless conduits use **named networks**. You name a network — `iron-bus`, `reactor-coolant` — and
+each endpoint subscribes by name. Names are unlimited, self-documenting, and a conduit tells you
+what it belongs to when you look at it.
+
+#### Visible, diagnosable, upgradeable
+
+Three failings of existing conduit mods, addressed on purpose:
+
+- **You can see the flow.** A conduit shows direction and load — colour by content, density by
+  utilisation. A saturated line looks saturated.
+- **Every segment reports itself.** Throughput, utilisation and backpressure are readable as logic
+  signals, and the [Process Atlas](docs/MACHINES.md#the-route-viewer) can highlight the limiting
+  segment in a line. "My factory stopped and I do not know why" should never be the answer.
+- **Cores upgrade independently.** Bore (throughput), filtering, routing (priority, round-robin,
+  overflow), insulation for the heat core, and at the top **Phase** — within one named network,
+  distance stops mattering.
+
+| Conduit tier | Throughput per core | Power | Era |
+| --- | --- | --- | --- |
+| **Basic Conduit** | low | none for items, pumps still needed for fluid | T2 |
+| **Flux Conduit** | moderate | small, constant | T3 |
+| **Phase Conduit** | high | proportional to load and to distance from ambient | T4 |
+| **Singular Conduit** | effectively unlimited within a network | high | T5 |
+
+#### Why belts and pipes survive this
+
+A universal conduit that is strictly better than belts would delete the best part of the mod, so it
+is deliberately not strictly better:
+
+- **Belts are free and conduits are not.** Item cores draw power per item moved; a belt moves bulk
+  for nothing. For a mine feeding a smelter — the highest-volume line in any base — belts stay
+  correct forever.
+- **A belt is also a buffer.** A full belt is a few thousand items of storage in transit. A conduit
+  holds almost nothing, so a line fed by conduit stalls the moment production hiccups.
+- **Pipes exploit physics for free.** Gravity, head pressure and a well-built condensate loop cost
+  no power at all. The fluid core always costs power.
+
+So the division that emerges is the one real factories have: **belts and pipes move bulk, conduits
+move logistics.** The ore line is a belt. The forty-seven different components feeding an assembler
+array are conduits, because running forty-seven belts there would be absurd.
+
+At T5 the Singular Conduit genuinely can replace everything, and by then power is abundant enough
+that some players will — which is a legitimate way to play and an expensive one. The trade is the
+same one the mod makes everywhere: **pay in layout, or pay in power.**
 
 ---
 
@@ -1210,6 +1287,9 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Splitter, Merger, Tunnel Belt, Sorter, Overflow Gate, Belt Reader | T1–T2 |
 | Manipulator: Crude / Fast / Stack / Filter | T1–T2 |
 | Signal Cable, Logic Controller, Arithmetic Unit, Redstone Interface | T2 |
+| Basic / Flux / Phase / Singular Conduit | T2 / T3 / T4 / T5 |
+| Conduit cores: Item, Fluid, Heat, Signal, Flux | T2–T4 |
+| Conduit upgrades: Bore, Filter, Routing, Insulation, Phase | T2–T4 |
 | Drone Bay, Provider / Requester / Buffer / Storage Crate | T3 |
 
 ### Research and defence
@@ -1259,6 +1339,8 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Multitool | T0 |
 | Prospector's Scanner, Flux Conduit | T1 |
 | Machine Casing, Motor, Pump, Circuit Board | T1–T2 |
+| Chassis Upgrade Kit MK II–MK V | T2–T5 |
+| Machine upgrades: Speed, Parallel, Efficiency, Yield, Precision, Insulation, Containment, Catalyst Feed, Damping, Recovery | T2–T4 |
 | Integrated Circuit, Superconductor | T3 |
 | Quantum Core, Containment Ring | T4 |
 | Flux Drill, Blueprint Tool, Deconstruction Planner | T2 |
@@ -1436,6 +1518,10 @@ Summarised here; each one is recorded in full — with the alternatives that wer
 | Pipes early, Phase Network late | Same trade as belts versus drones: pay in layout or pay in power, never forced to switch. |
 | Machines above T1 cannot be hand-crafted | The factory builds the factory. Closes the full-inventory bypass that makes tech mods trivial in big packs. |
 | One container contract, auto-void off by default | Learn the interface once; the release valve a tag-driven system needs must never silently delete things. |
+| Conduits cost power, belts do not | Keeps belts correct for bulk forever, so the universal network never deletes the best part of the mod. |
+| Named conduit networks, not coloured channels | Sixteen colours stop being readable long before a base stops growing. |
+| Chassis marks widen the condition envelope | Upgrading unlocks recipes instead of adding a speed number, so tiering is a goal rather than a tax. |
+| Every machine upgrade trades one resource for another | An upgrade that is strictly better is not a decision, it is a tax you pay once. |
 
 ---
 
@@ -1652,7 +1738,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 9 | Process design — items, fluids, recipe graph, routes, ratios | **next** — `docs/PROCESSES.md` |
 | 10 | Flux energy API + Forge and Fabric bridges | pending |
 | 11 | The condition system: recipe type, envelopes, efficiency bands | pending |
-| 12 | Machine block entity framework + the container contract | pending |
+| 12 | Machine block entity framework: container contract, chassis marks, upgrades | pending |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
 | 14 | Chunk veins + runtime material registry | pending |
 | 15 | Tag-driven runtime recipe generation | pending |
@@ -1662,10 +1748,11 @@ Tracked order of work. Each step must build green before the next begins.
 | 19 | Original textures and models via `tools/` scripts | pending |
 | 20 | Research Terminal, fabrication gate and progression | pending |
 | 21 | Belts and the logistics layer | pending |
-| 22 | Multiblock framework + the parametric multiblocks | pending |
-| 23 | Orbital layer: launch, satellites, station | pending |
-| 24 | Planetary layer: colonies, telepresence, planet registry | pending |
-| 25 | CI workflow | pending |
+| 22 | Flux Conduits: cores, named networks, diagnostics | pending |
+| 23 | Multiblock framework + the parametric multiblocks | pending |
+| 24 | Orbital layer: launch, satellites, station | pending |
+| 25 | Planetary layer: colonies, telepresence, planet registry | pending |
+| 26 | CI workflow | pending |
 
 Step 7 was the first real milestone and it is cleared: a minimal multiloader skeleton that actually
 compiles and packages on both platforms, which means every later step is validated the moment it is
