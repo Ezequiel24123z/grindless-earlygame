@@ -179,20 +179,18 @@ $directories += @(
     'common\src\main\resources\data\grindless\dimension_type'
 )
 
-# Fabric platform: entrypoint + TeamReborn energy bridge.
-$directories += @(
-    (Join-Path (Join-Path 'fabric\src\main\java' $modPackage) 'fabric'),
-    (Join-Path (Join-Path 'fabric\src\main\java' $modPackage) 'fabric\energy'),
-    (Join-Path (Join-Path 'fabric\src\main\java' $modPackage) 'fabric\client'),
-    'fabric\src\main\resources'
-)
-
-# Forge platform. The same jar also loads on NeoForge 1.20.1-47.1.x, which is a
-# soft-fork of Forge 47 and keeps the net.minecraftforge package names.
+# Forge platform, the only build target (ADR-0039). The same jar also loads on
+# NeoForge 1.20.1-47.1.x, which is a soft-fork of Forge 47 and keeps the
+# net.minecraftforge package names.
+#
+# Note the layout of the bridge packages: Architectury's @ExpectPlatform resolves
+# `<pkg>.Foo` to `<pkg>.forge.FooImpl`, so a platform implementation lives in a
+# `forge` package *beneath* the package it implements -- energy\forge, not
+# forge\energy. Getting this backwards compiles fine and fails at runtime.
 $directories += @(
     (Join-Path (Join-Path 'forge\src\main\java' $modPackage) 'forge'),
-    (Join-Path (Join-Path 'forge\src\main\java' $modPackage) 'forge\energy'),
-    (Join-Path (Join-Path 'forge\src\main\java' $modPackage) 'forge\client'),
+    (Join-Path (Join-Path 'forge\src\main\java' $modPackage) 'energy\forge'),
+    (Join-Path (Join-Path 'forge\src\main\java' $modPackage) 'client\forge'),
     'forge\src\main\resources\META-INF'
 )
 
@@ -314,7 +312,7 @@ planetary stage with satellites, telepresence and remotely simulated
 colonies), the FU energy model, the tag-driven compatibility strategy,
 the seven-tier research progression and the full block catalogue.
 
-Add the Architectury multiloader Gradle configuration pinned to verified
+Add the Architectury Gradle configuration pinned to verified
 1.20.1 coordinates, and SETUP.ps1 to bootstrap the source tree, toolchain
 and Gradle wrapper on Windows.
 
@@ -370,8 +368,8 @@ Next steps:
      will take several minutes:
 
        `$env:JAVA_HOME = "$javaHome"
-       .\gradlew.bat :fabric:build :forge:build
+       .\gradlew.bat :forge:build
 
-  3. The finished jars land in fabric\build\libs\ and forge\build\libs\.
-     The forge jar also loads on NeoForge 1.20.1-47.1.x unchanged.
+  3. The finished jar lands in forge\build\libs\.
+     It also loads on NeoForge 1.20.1-47.1.x unchanged.
 "@ -ForegroundColor White

@@ -10,6 +10,9 @@ pluginManagement {
 
 rootProject.name = "grindless"
 
+// Forge 1.20.1 is the only build target (ADR-0039). The `common` project is kept
+// because it holds ~95% of the code and keeps loader-specific concerns behind
+// @ExpectPlatform, which is what makes a future port a build change rather than a
+// rewrite. The same forge jar also loads on NeoForge 1.20.1 (ADR-0002).
 include("common")
-include("fabric")
 include("forge")

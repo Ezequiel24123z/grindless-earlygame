@@ -16,12 +16,15 @@ a particle accelerator, to satellites that map your world's ore from orbit and c
 harvest planets you have never set foot on. Factorio ends when you launch a rocket; here that is
 where it opens up.
 
-> **Status: pre-alpha.** The design below is complete and settled. The multiloader skeleton
-> **builds green on both Fabric and Forge**, and registers the T0 bootstrap set — but the machines
-> have no behaviour yet, so nothing here is playable.
+> **Status: pre-alpha.** The design below is complete and settled. The skeleton **builds green on
+> Forge 1.20.1**, registers the T0 bootstrap set and carries a working Flux energy layer — but the
+> machines have no behaviour yet, so nothing here is playable.
 >
-> The machine layer is designed in [`docs/MACHINES.md`](docs/MACHINES.md); the recipe graph that
-> sits on top of it is the next design step.
+> **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
+> unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
+>
+> The machine layer is designed in [`docs/MACHINES.md`](docs/MACHINES.md) and the content layer —
+> items, fluids, the recipe graph and the routes — in [`docs/PROCESSES.md`](docs/PROCESSES.md).
 >
 > This README is deliberately the *single source of truth* for the whole project — design,
 > architecture, verified dependency versions, roadmap and open work. It is split into
@@ -1510,10 +1513,14 @@ near-identical items.
 | Platform | Bridge |
 | --- | --- |
 | Forge / NeoForge | `IEnergyStorage` via `ForgeCapabilities.ENERGY` |
-| Fabric | TeamReborn Energy `EnergyStorage.SIDED` `BlockApiLookup` |
 
 Architectury does **not** provide a unified energy API, so this bridge is written by hand in this
-project — a common interface in `common/` with `@ExpectPlatform` implementations per loader.
+project — `FluxStorage` in `common/` with an `@ExpectPlatform` implementation in `forge/`.
+
+FU and FE are **1:1 and lossless** (ADR-0006). The one asymmetry is width: FU is `long` because the
+Flux ladder reaches 2 097 152 FU/t, while FE is `int`, so a transfer across the boundary saturates
+at `Integer.MAX_VALUE` instead of overflowing and is treated as a request rather than a promise
+(ADR-0037).
 
 ### Space mod integration
 
@@ -1562,16 +1569,20 @@ installed, not less — you will just spend almost none of it in a tunnel.
 
 ## Architecture
 
-Multiloader via **Architectury**. The guiding rule is that platform modules stay as thin as
-possible: shared logic lives in `common/`, and each loader module contains only its entrypoint
-and the handful of platform-specific bridges.
+**Forge 1.20.1 only**, structured with **Architectury**. The guiding rule is that the platform
+module stays as thin as possible: shared logic lives in `common/`, and `forge/` contains only its
+entrypoint and the handful of platform-specific bridges.
+
+Keeping the `common/` + `forge/` split for a single loader is deliberate. It costs nothing now that
+it exists, it keeps loader-specific code visible behind `@ExpectPlatform` instead of spread through
+the codebase, and it means a future port is a build change rather than a rewrite (ADR-0039).
 
 ```
 grindless/
 ├── AGENTS.md                 working agreement: read this before changing anything
 ├── CHANGELOG.md              what changed, in order
 ├── build.gradle              root: shared config for all subprojects
-├── settings.gradle           includes common, fabric, forge
+├── settings.gradle           includes common, forge
 ├── gradle.properties         all version coordinates, single source of truth
 ├── SETUP.ps1                 Windows bootstrap (see "Environment setup")
 │
@@ -1599,10 +1610,9 @@ grindless/
 │       ├── vein/                     deterministic chunk veins
 │       └── util/
 │
-├── fabric/                   Fabric entrypoint + TeamReborn energy bridge
 ├── forge/                    Forge entrypoint + capability energy bridge
 │                             (this jar also loads on NeoForge 1.20.1)
-├── docs/                     MACHINES.md, DECISIONS.md (ADRs), DESIGN.md
+├── docs/                     MACHINES.md, PROCESSES.md, DECISIONS.md (ADRs), DESIGN.md
 ├── tools/                    asset generation scripts
 └── .github/workflows/        CI
 ```
@@ -1642,9 +1652,15 @@ Summarised here; each one is recorded in full — with the alternatives that wer
 
 ## Supported platforms
 
-| Minecraft | Fabric | Forge | NeoForge |
+| Minecraft | Forge | NeoForge | Fabric |
 | --- | --- | --- | --- |
-| **1.20.1** | ✅ | ✅ | ✅ *(loads the Forge jar unchanged)* |
+| **1.20.1** | ✅ | ✅ *(loads the Forge jar unchanged)* | ❌ *(dropped — ADR-0039)* |
+
+**Fabric was dropped deliberately**, not abandoned for lack of time. Supporting it meant writing
+every platform bridge twice against unrelated models — Forge capabilities versus Team Reborn Energy
+with its transaction system — which doubled the implementation, the review and the failure surface
+in exchange for an audience the mod cannot serve yet, since nothing is playable. One loader keeps
+the work focused. The full reasoning, including what restoring Fabric would cost, is in ADR-0039.
 
 On 1.20.1 there is no `net.neoforged:neoforge` artifact at all — that coordinate starts at
 `20.2.x`. NeoForge's 1.20.1 release is `net.neoforged:forge:1.20.1-47.1.x`, a soft-fork of
@@ -1652,8 +1668,8 @@ Forge 47 that keeps the `net.minecraftforge` package names and the `META-INF/mod
 format. One Forge-compiled jar therefore loads on both. A dedicated NeoForge subproject arrives
 with the 1.20.2+ port, where the real artifact and Architectury's `neoforge()` target exist.
 
-The codebase is Architectury-based multiloader: essentially all logic lives in `common/`, and the
-platform modules are thin.
+The codebase keeps the Architectury layout even with one loader: essentially all logic lives in
+`common/`, and `forge/` is thin.
 
 ### Why there is no `neoforge/` directory yet
 
@@ -1690,11 +1706,9 @@ has successfully resolved Minecraft 1.20.1 with this exact set.
 | Architectury API | `9.2.14` | The 9.x line is the 1.20.1 line. |
 | Forge | `1.20.1-47.4.23` | Latest 1.20.1. |
 | NeoForge (1.20.1) | `net.neoforged:forge:1.20.1-47.1.106` | Soft-fork of Forge 47. |
-| Fabric Loader | `0.16.14` | |
-| Fabric API | `0.92.12+1.20.1` | The 0.92.x line is the 1.20.1 LTS line. |
+| Fabric Loader | `0.16.14` | Compile-time only — Loom builds `common` in a Fabric-shaped environment even with Fabric disabled. Nothing Fabric ships in the jar. |
 | Parchment | `2023.09.03` | `org.parchmentmc.data:parchment-1.20.1`. |
-| TeamReborn Energy | `5.0.0` | Hosted on **`maven.fabricmc.net`** — *not* on maven.terraformersmc.com. |
-| Shadow | `8.1.1` | Bundles `common` into the platform jars. |
+| Shadow | `8.1.1` | Bundles `common` into the Forge jar. |
 
 All of these live in [`gradle.properties`](gradle.properties) as the single source of truth.
 
@@ -1731,16 +1745,16 @@ or clone somewhere short, such as `C:\mc\grindless`.
 ### Building
 
 ```bash
-./gradlew :fabric:build :forge:build
+./gradlew :forge:build
 ```
 
-Jars land in `fabric/build/libs/` and `forge/build/libs/`. **The first build downloads and
-decompiles Minecraft and takes several minutes** — that is normal and only happens once.
+The jar lands in `forge/build/libs/grindless-0.1.0-forge.jar`, and also loads on NeoForge 1.20.1.
+**The first build downloads and decompiles Minecraft and takes several minutes** — that is normal
+and only happens once.
 
 ### Development runs
 
 ```bash
-./gradlew :fabric:runClient
 ./gradlew :forge:runClient
 ```
 
@@ -1748,7 +1762,7 @@ decompiles Minecraft and takes several minutes** — that is normal and only hap
 
 | Task | Purpose |
 | --- | --- |
-| `./gradlew build` | Everything, both loaders. |
+| `./gradlew build` | Everything. |
 | `./gradlew :common:build` | Compile shared code only — the fastest feedback loop. |
 | `./gradlew clean` | Wipe outputs (does not re-download Minecraft). |
 | `./gradlew --refresh-dependencies build` | Force dependency re-resolution. |
@@ -1759,10 +1773,10 @@ decompiles Minecraft and takes several minutes** — that is normal and only hap
 
 ### 0.1 — Foundation *(in progress)*
 
-Build green on both loaders. Registry layer, Flux energy API and its two platform bridges, the
-pylon network with supply areas and manual linking, deterministic chunk veins, the runtime
-tag-driven material registry, and a minimal playable T0→T1 loop: Hand Crank Dynamo, Crude
-Extractor, Terrestrial Extractor, Arc Furnace, Pulverizer, Research Terminal.
+Build green on Forge. Registry layer, Flux energy API and its capability bridge, the pylon network
+with supply areas and manual linking, deterministic chunk veins, the runtime tag-driven material
+registry, and a minimal playable T0→T1 loop: Hand Crank Dynamo, Crude Extractor, Terrestrial
+Extractor, Arc Furnace, Pulverizer, Research Terminal.
 
 **Definition of done:** a player can go from an empty world to automated iron in under fifteen
 minutes without mining it by hand.
@@ -1845,14 +1859,14 @@ Tracked order of work. Each step must build green before the next begins.
 | 1 | Design and documentation | ✅ done — this file and [`docs/DESIGN.md`](docs/DESIGN.md) |
 | 2 | Root Gradle build files | ✅ done |
 | 3 | Source directory tree | ✅ done |
-| 4 | Subproject build scripts (`common`, `fabric`, `forge`) | ✅ done |
-| 5 | Loader metadata (`fabric.mod.json`, `mods.toml`, `pack.mcmeta`, lang) | ✅ done |
+| 4 | Subproject build scripts (`common`, `forge`) | ✅ done |
+| 5 | Loader metadata (`mods.toml`, `pack.mcmeta`, lang) | ✅ done |
 | 6 | Core registry layer (Architectury `DeferredRegister`) | ✅ done — T0 bootstrap set registered |
-| 7 | **First green build on both loaders** | ✅ **done** — `grindless-0.1.0-fabric.jar` and `-forge.jar` |
+| 7 | **First green build** | ✅ **done** — `grindless-0.1.0-forge.jar` |
 | 8 | Machine layer design — machines, multiblocks, processes | ✅ done — [`docs/MACHINES.md`](docs/MACHINES.md) |
 | 9 | Process design — items, fluids, recipe graph, routes, ratios | ✅ done — [`docs/PROCESSES.md`](docs/PROCESSES.md) |
-| 10 | Flux energy API + Forge and Fabric bridges | **next** |
-| 11 | The condition system: recipe type, envelopes, efficiency bands | pending |
+| 10 | Flux energy API + Forge capability bridge | ✅ done — `FluxStorage`, `FluxTier`, `FluxConversion` |
+| 11 | The condition system: recipe type, envelopes, efficiency bands | **next** |
 | 12 | Machine block entity framework: container contract, chassis marks, upgrades | pending |
 | 13 | Pylon network, supply areas, `SavedData` | pending |
 | 14 | Chunk veins + runtime material registry | pending |
@@ -1869,9 +1883,12 @@ Tracked order of work. Each step must build green before the next begins.
 | 25 | Planetary layer: colonies, telepresence, planet registry | pending |
 | 26 | CI workflow | pending |
 
-Step 7 was the first real milestone and it is cleared: a minimal multiloader skeleton that actually
-compiles and packages on both platforms, which means every later step is validated the moment it is
-written rather than accumulating as a pile of uncompiled code.
+Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
+packages, which means every later step is validated the moment it is written rather than
+accumulating as a pile of uncompiled code.
+
+Steps 4, 5 and 7 originally covered Fabric as well. Fabric was dropped at step 10 (ADR-0039), and
+the rows above describe what the project builds now rather than what it once built.
 
 Steps 8 and 9 were deliberately ordered that way — machines are specified as *capabilities* before
 any recipe exists, because designing recipes first is what produces a mod with four hundred blocks

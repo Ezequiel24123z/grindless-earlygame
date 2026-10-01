@@ -78,7 +78,14 @@ then `docs/DECISIONS.md` (what is already settled), then the README's *Implement
 is next). That is the full handoff; nothing else is needed.
 
 **Finishing, or when the terminal starts failing.** Update the changelog, add any ADRs, update the
-implementation plan, then commit and push. If the terminal is already broken, say so plainly and
+implementation plan, validate the documentation, then commit and push:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\check-links.ps1 -Root .
+```
+
+That check is worth the one approval it costs — it has caught broken links and a drifted ADR index
+more than once. If the terminal is already broken, say so plainly and
 tell the user to run `SETUP.ps1 -Commit`, which commits and pushes without the app.
 
 ---
@@ -94,12 +101,12 @@ docs/MACHINES.md     the machine layer: conditions, envelopes, chassis marks, mu
 docs/PROCESSES.md    the content layer: items, fluids, recipe graph, routes and ratios
 docs/DESIGN.md       early standalone design note; superseded by README, kept for history
 SETUP.ps1            Windows bootstrap; also commits and pushes via -Commit
+tools/               repository scripts; check-links.ps1 validates the docs before a commit
 
 build.gradle         root Gradle config shared by all subprojects
-settings.gradle      includes common, fabric, forge
+settings.gradle      includes common, forge
 gradle.properties    every version coordinate — the only place versions are written
 common/              loader-agnostic code; ~95% of the codebase belongs here
-fabric/              Fabric entrypoint and bridges only
 forge/               Forge entrypoint and bridges only (this jar also loads on NeoForge 1.20.1)
 ```
 
@@ -110,8 +117,10 @@ forge/               Forge entrypoint and bridges only (this jar also loads on N
 **Versions.** Every version lives in `gradle.properties` and is referenced as
 `rootProject.<name>`. Never hardcode a version in a build script.
 
-**Platform code.** `common/` must not reference loader-specific classes. Anything that differs
-between Fabric and Forge goes through an Architectury `@ExpectPlatform` stub.
+**Platform code.** Forge 1.20.1 is the only build target (ADR-0039), but `common/` must still not
+reference loader-specific classes: anything touching Forge goes through an Architectury
+`@ExpectPlatform` stub, with the implementation in `forge/`. Keeping that discipline for a single
+loader is what makes a future port a build change rather than a rewrite.
 
 **Commit messages.** A short imperative subject, then a body explaining *why*. Reference ADRs by
 id (`ADR-0007`) when a commit implements one. Include the trailer:

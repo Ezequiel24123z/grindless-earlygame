@@ -12,7 +12,7 @@ history — the reasoning that was wrong is itself useful information.
 
 | # | Decision | Status |
 | --- | --- | --- |
-| [0001](#adr-0001--architectury-for-multiloader-support) | Architectury for multiloader support | Accepted |
+| [0001](#adr-0001--architectury-for-multiloader-support) | Architectury for multiloader support | Superseded by ADR-0039 |
 | [0002](#adr-0002--no-neoforge-subproject-on-1201) | No `neoforge` subproject on 1.20.1 | Accepted |
 | [0003](#adr-0003--mojang-mappings-layered-with-parchment) | Mojang mappings layered with Parchment | Accepted |
 | [0004](#adr-0004--the-material-registry-is-built-from-tags-at-runtime) | Material registry built from tags at runtime | Accepted |
@@ -48,12 +48,21 @@ history — the reasoning that was wrong is itself useful information.
 | [0034](#adr-0034--ratios-are-quoted-against-a-canonical-process-unit) | Ratios are quoted against a canonical process unit | Accepted |
 | [0035](#adr-0035--routes-compose-from-a-beneficiation-stage-and-a-reduction-stage) | Routes compose from a beneficiation and a reduction stage | Accepted |
 | [0036](#adr-0036--every-byproduct-must-have-a-named-sink) | Every byproduct must have a named sink | Accepted |
+| [0037](#adr-0037--flux-amounts-are-long-and-clamp-at-the-fe-boundary) | Flux amounts are `long` and clamp at the FE boundary | Accepted |
+| [0038](#adr-0038--one-flux-ladder-with-voltage-names-as-aliases) | One Flux ladder, with voltage names as aliases | Accepted |
+| [0039](#adr-0039--forge-1201-is-the-only-build-target) | Forge 1.20.1 is the only build target | Accepted |
 
 ---
 
 ## ADR-0001 — Architectury for multiloader support
 
-*2026-09-29 · Accepted*
+*2026-09-29 · Superseded by [ADR-0039](#adr-0039--forge-1201-is-the-only-build-target)*
+
+> **Superseded in part.** The multiloader *goal* is withdrawn — Forge 1.20.1 is now the only build
+> target. The *structure* this record chose survives: Architectury, a `common/` module holding
+> essentially all logic, and `@ExpectPlatform` for loader-specific code. See ADR-0039 for why
+> keeping the structure while dropping the second loader is the cheap option rather than a
+> contradiction.
 
 **Context.** Grindless has to reach the largest possible modpack audience, which means Fabric,
 Forge and NeoForge, across several Minecraft versions. Maintaining parallel codebases per loader
@@ -168,6 +177,11 @@ give up Grindless-specific tier semantics.
 **Consequences.** Conversion is provably lossless and needs no rounding policy. Note that
 TeamReborn Energy is hosted on `maven.fabricmc.net`, *not* on `maven.terraformersmc.com` — the
 wrong repository here is a confusing build failure.
+
+> **Narrowed by [ADR-0039](#adr-0039--forge-1201-is-the-only-build-target).** The 1:1 FU↔FE rate
+> and the hand-written bridge stand exactly as decided. Only the Fabric half is withdrawn: with
+> Forge as the sole target there is one bridge, over Forge capabilities, and the TeamReborn
+> dependency and its repository caveat no longer apply.
 
 ---
 
@@ -1069,4 +1083,127 @@ graph connected, and connectedness is what makes a factory a system rather than 
 Auto-void stays off by default (ADR-0018) and is now genuinely defensible, because voiding is
 always the player discarding something that had a use. The Atlas can therefore flag a voided stream
 and say what it was worth, which turns a silent loss into a visible decision.
+
+---
+
+## ADR-0037 — Flux amounts are `long` and clamp at the FE boundary
+
+*2026-10-01 · Accepted*
+
+**Context.** Forge Energy stores and transfers `int` amounts, and the obvious thing is to match it,
+since ADR-0006 makes FU and FE the same size. That works until the Flux ladder is taken seriously.
+
+F9 is 2 097 152 FU/t. A buffer sized at a few seconds of throughput for a top-tier machine is in the
+hundreds of millions, and a Singularity Reactor or a planetary grid buffer is plainly past
+2 147 483 647. An `int` does not overflow politely: it wraps to a negative number, so a full buffer
+reads as a debt and the energy is silently created or destroyed. That is the identical failure mode
+ADR-0006 rejected a non-unit conversion ratio to avoid, arriving from the other direction.
+
+**Decision.** `FluxStorage` is `long` throughout. Conversion to FE **saturates** at
+`Integer.MAX_VALUE` rather than wrapping, and every caller treats a conversion result as a
+*request*, believing the amount the other side reports as moved rather than the amount asked for.
+
+**Alternatives rejected.** `int` amounts with a scaling factor on large buffers (reintroduces
+rounding, which is exactly what ADR-0006 forbids); `BigInteger` (allocation per transfer, twenty
+times a second, on thousands of machines); capping the Flux ladder so `int` suffices (lets a
+storage-type choice dictate game design, and the long ladder is a stated goal).
+
+**Consequences.** A single transfer to or from a foreign FE machine cannot exceed about 2.1 billion
+FU. That is not a real limitation — no vanilla-shaped machine moves that much in one tick — and it
+is correct behaviour rather than a cap: the transfer is simply smaller than requested, and the next
+tick moves the rest.
+
+Internal Grindless transfers never clamp, because both sides are `long`. The clamp exists only at
+the boundary with another mod's energy system, which is the only place the width difference is
+real. Saturation is the specific choice here: it makes an over-large request smaller, never
+negative, so a clamp can never manufacture or destroy energy.
+
+---
+
+## ADR-0038 — One Flux ladder, with voltage names as aliases
+
+*2026-10-01 · Accepted*
+
+**Context.** The design accumulated two power scales. The README describes **voltage tiers** LV, MV,
+HV, EV and IV at 32, 128, 512, 2 048 and 8 192 FU/t, while `MACHINES.md` describes the **Flux tier
+ladder** F0–F9, whose F1–F5 are 32, 128, 512, 2 048 and 8 192 FU/t.
+
+They are the same numbers. Implementing both would create two enums that must agree forever, and
+enums that must agree forever eventually do not — one gains a tier, a tooltip reads from the wrong
+one, and the player sees a machine that needs "HV" next to a cable rated "F3" with no stated
+relationship.
+
+**Decision.** There is **one** ladder, `FluxTier` F0–F9. LV through IV are display aliases on F1
+through F5, carried as a nullable field on the enum. Tiers above F5 have no alias, which is correct:
+the voltage vocabulary was never defined past IV.
+
+**Alternatives rejected.** Two enums with a conversion function (the drift problem, merely delayed);
+deleting the voltage names (they are established in the README and in the genre's vocabulary, and a
+player reading "MV machine" understands it instantly); renaming the Flux tiers to voltages (stops at
+IV and cannot express F6–F9 without inventing names).
+
+**Consequences.** One source of truth for throughput, and the aliases are presentation only. A third
+axis still exists and is deliberately separate: research tiers T0–T6 gate what may be *built*, while
+Flux tiers gate how much power a built thing may *accept*. Keeping those distinct is what lets a T1
+Arc Furnace be fed F5 power without becoming a T5 machine.
+
+Under-volting is implemented here as a smooth curve — half throughput per tier of deficit — rather
+than as a hard gate, matching the README. A machine fed too little power always runs, just slowly,
+so a power shortfall is never a wall.
+
+---
+
+## ADR-0039 — Forge 1.20.1 is the only build target
+
+*2026-10-01 · Accepted*
+
+**Supersedes [ADR-0001](#adr-0001--architectury-for-multiloader-support) in part, and narrows
+[ADR-0006](#adr-0006--flux-units-convert-to-fe-at-11-over-a-hand-written-bridge).**
+
+**Context.** ADR-0001 chose multiloader reach: Fabric and Forge from one `common/` module. The cost
+of that reach was not visible while the project was a registry skeleton. It became visible the
+moment real platform code arrived.
+
+Writing the Flux energy bridge meant writing it twice, against two unrelated models — Forge
+capabilities with `int` amounts, and Team Reborn Energy with `long` amounts and a transaction
+system. The Fabric half needed a `SnapshotParticipant` to be correct under transaction rollback,
+which is a genuinely subtle piece of code with no Forge counterpart and no way to test it from the
+Forge side. And `:fabric:build` was already failing with `Failed to remap 57 mods`, an opaque
+toolchain failure that had nothing to do with the mod's own code.
+
+So the second loader was costing double implementation, double review, double failure surface and a
+broken build, in return for an audience the project does not yet have — nothing is playable, and
+every block registered so far is an inert placeholder.
+
+**Decision.** Target **Forge 1.20.1 only**. Remove the `fabric` subproject, its sources, its loader
+metadata and the TeamReborn Energy dependency. `enabled_platforms=forge`.
+
+**Keep the `common/` + `forge/` split and Architectury.** This is the part that looks like a
+contradiction and is not: the split costs nothing now that it exists, `common/` already holds ~95%
+of the code, and `@ExpectPlatform` is still the mechanism that keeps loader-specific code out of it.
+Collapsing the two modules would mean rewriting every registry class against Forge's own
+`DeferredRegister` — real work, today, to buy nothing, and it would make re-adding a loader a
+rewrite instead of a build-file change.
+
+**Alternatives rejected.** Keeping Fabric and fixing the remap failure (pays the double-implementation
+cost indefinitely, for an audience that cannot play the mod yet); dropping Architectury entirely and
+merging `common` into `forge` (a rewrite with no benefit, and it forecloses a future port); targeting
+Fabric instead (Forge 1.20.1 has the larger modpack ecosystem for this genre, and NeoForge 1.20.1
+loads the Forge jar unchanged, so one jar already serves two loaders).
+
+**Consequences.** One bridge, one build, one failure surface. `:forge:build` goes green in about
+50 seconds where the two-platform build failed outright. NeoForge 1.20.1 users are unaffected, since
+ADR-0002 already established that they load this jar directly — so "Forge only" still means two
+loaders in practice.
+
+The cost is real and worth stating plainly: **Fabric support is gone, and restoring it means
+rewriting the Fabric energy bridge**, including the transaction-rollback handling that was deleted
+with it. That is a deliberate trade of future optionality for present velocity, taken while the
+project is small enough that the rewrite would be cheap.
+
+One oddity is left behind. `common/build.gradle` still depends on `fabric-loader` at compile time,
+because Architectury Loom builds the common project in a Fabric-shaped environment regardless of
+which platforms are enabled. Nothing Fabric ships in the jar. It is commented in place, because it
+looks exactly like something a later session would "clean up" and then spend an afternoon
+rediscovering.
 

@@ -51,7 +51,7 @@ shadowJar {
 
 // This jar is also the NeoForge 1.20.1 artifact: NeoForge 47.1.x is a soft-fork of
 // Forge 47.x that keeps the `net.minecraftforge` packages and `META-INF/mods.toml`
-// format, so a single binary serves both loaders. See docs/PLATFORMS.md.
+// format, so a single binary serves both loaders. See ADR-0002.
 remapJar {
     inputFile.set shadowJar.archiveFile
     archiveClassifier = "forge"

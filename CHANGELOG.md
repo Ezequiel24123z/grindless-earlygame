@@ -13,8 +13,60 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Changed
+
+- **Forge 1.20.1 is now the only build target** (ADR-0039). The `fabric` subproject, its sources,
+  its loader metadata and the TeamReborn Energy dependency are removed.
+  The reason is concrete rather than a change of heart: writing the Flux energy bridge meant writing
+  it twice against unrelated models — Forge capabilities with `int` amounts, and Team Reborn Energy
+  with `long` amounts and a transaction system needing a `SnapshotParticipant` to be correct under
+  rollback — and `:fabric:build` was already failing with an opaque `Failed to remap 57 mods`. That
+  is double the implementation, review and failure surface in exchange for an audience the mod
+  cannot serve yet, since nothing is playable. `:forge:build` now goes green in about 50 seconds
+  where the two-platform build failed outright.
+  **NeoForge 1.20.1 users are unaffected**: ADR-0002 already established that they load this jar
+  unchanged, so "Forge only" still means two loaders in practice.
+  The `common/` + `forge/` split and Architectury are **kept**. The split costs nothing now that it
+  exists, `@ExpectPlatform` still keeps loader-specific code out of `common/`, and collapsing the
+  modules would mean rewriting every registry class today to buy nothing — while making a future
+  port a rewrite instead of a build change.
+- `SETUP.ps1` created the platform bridge directories as `forge\energy`, which is backwards:
+  Architectury resolves `<pkg>.Foo` to `<pkg>.forge.FooImpl`, so an implementation lives in a
+  `forge` package *beneath* the one it implements. The wrong layout compiles and then fails at
+  runtime, so it is now created correctly and the reason is commented in place.
+- ADR-0001 is marked superseded by ADR-0039 — its multiloader *goal* is withdrawn while the
+  structure it chose survives. ADR-0006 is narrowed rather than superseded: the 1:1 FU↔FE rate and
+  the hand-written bridge stand exactly as decided, and only the Fabric half is withdrawn.
+
 ### Added
 
+- **The Flux energy layer** (`common/.../energy/`) — step 10 of the implementation plan, and the
+  project's first real systems code rather than registration.
+  `FluxStorage` is the energy contract, `SimpleFluxStorage` the ordinary implementation with
+  independent insert and extract limits — so one class covers a generator, a machine buffer and a
+  battery with no subclassing — and `FluxConversion` the FE and EU conversions. `FluxPlatform` is an
+  `@ExpectPlatform` stub whose Forge implementation resolves `ForgeCapabilities.ENERGY`, letting
+  Grindless push and pull power from any other mod's machines losslessly.
+  Amounts are **`long`, not `int`** (ADR-0037). F9 is 2 097 152 FU/t and a top-tier buffer holds
+  more than `Integer.MAX_VALUE`, which an `int` does not overflow politely — it wraps, so a full
+  buffer reads as a debt. Conversion to FE saturates instead of wrapping, and callers treat a
+  converted amount as a request rather than a promise, so a clamp can never create or destroy
+  energy.
+  `FluxTier` collapses what had become **two** power scales into one (ADR-0038): the README's
+  voltage names LV–IV and `MACHINES.md`'s F0–F9 ladder were the same numbers written twice, so the
+  voltage names are now aliases on F1–F5 rather than a second enum that would eventually disagree.
+  Under-volting is a smooth curve — half throughput per tier of deficit — so a power shortfall is
+  never a wall.
+  Verified in the built jar rather than assumed: the `@ExpectPlatform` stub really is rewritten to
+  call `FluxPlatformImpl`, which is the failure that would otherwise appear only at runtime.
+- Three decision records, ADR-0037 to ADR-0039.
+- **`tools/check-links.ps1`** — validates every relative link and anchor in the documentation and
+  checks the ADR index against its actual sections. It is committed because it kept being written
+  from scratch each session: it has already caught three broken links in one session and two here.
+  Two details in it are load-bearing and commented as such — files are read as **UTF-8 explicitly**,
+  or the em dashes in headings mangle every slug and produce a flood of phantom failures, and the
+  file list comes from `git ls-files` rather than a tree walk, because recursing the working
+  directory descends into `build/` and `.gradle/loom-cache` and dies on MAX_PATH (ADR-0024).
 - **The process layer** (`docs/PROCESSES.md`) — step 9 of the implementation plan, and the last
   design step before systems code. It specifies what flows through the machine layer: the item and
   fluid catalogue, the eight-stratum recipe graph, the concrete routes with their conditions, times
