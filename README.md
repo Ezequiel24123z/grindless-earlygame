@@ -16,10 +16,12 @@ a particle accelerator, to satellites that map your world's ore from orbit and c
 harvest planets you have never set foot on. Factorio ends when you launch a rocket; here that is
 where it opens up.
 
-> **Status: pre-alpha.** The design below is complete and settled. The build configuration and
-> the multiloader skeleton are in place. The Java implementation has barely started — the common
-> entrypoint references registry classes that are not written yet, so the tree does not compile.
-> Nothing here is playable.
+> **Status: pre-alpha.** The design below is complete and settled. The multiloader skeleton
+> **builds green on both Fabric and Forge**, and registers the T0 bootstrap set — but the machines
+> have no behaviour yet, so nothing here is playable.
+>
+> The machine layer is designed in [`docs/MACHINES.md`](docs/MACHINES.md); the recipe graph that
+> sits on top of it is the next design step.
 >
 > This README is deliberately the *single source of truth* for the whole project — design,
 > architecture, verified dependency versions, roadmap and open work. It is split into
@@ -1405,7 +1407,7 @@ grindless/
 ├── fabric/                   Fabric entrypoint + TeamReborn energy bridge
 ├── forge/                    Forge entrypoint + capability energy bridge
 │                             (this jar also loads on NeoForge 1.20.1)
-├── docs/                     DECISIONS.md (ADRs), DESIGN.md; grows as this README is split up
+├── docs/                     MACHINES.md, DECISIONS.md (ADRs), DESIGN.md
 ├── tools/                    asset generation scripts
 └── .github/workflows/        CI
 ```
@@ -1641,26 +1643,37 @@ Tracked order of work. Each step must build green before the next begins.
 | --- | --- | --- |
 | 1 | Design and documentation | ✅ done — this file and [`docs/DESIGN.md`](docs/DESIGN.md) |
 | 2 | Root Gradle build files | ✅ done |
-| 3 | Source directory tree | ✅ started — `common/` only; run [`SETUP.ps1`](SETUP.ps1) for the rest |
+| 3 | Source directory tree | ✅ done |
 | 4 | Subproject build scripts (`common`, `fabric`, `forge`) | ✅ done |
-| 5 | Loader metadata (`fabric.mod.json`, `mods.toml`, `pack.mcmeta`, lang) | pending |
-| 6 | Core registry layer (Architectury `DeferredRegister`) | in progress — `Grindless.java` written, registries missing |
-| 7 | **First green build on both loaders** | pending |
-| 8 | Flux energy API + Forge and Fabric bridges | pending |
-| 9 | Pylon network, supply areas, `SavedData` | pending |
-| 10 | Chunk veins + runtime material registry | pending |
-| 11 | T0/T1 machines, block entities, menus, screens | pending |
-| 12 | Tag-driven runtime recipe generation | pending |
-| 13 | Original textures and models via `tools/` scripts | pending |
-| 14 | Research Terminal and progression gating | pending |
-| 15 | Belts and the logistics layer | pending |
-| 16 | Orbital layer: launch, satellites, station | pending |
-| 17 | Planetary layer: colonies, telepresence, planet registry | pending |
-| 18 | CI workflow | pending |
+| 5 | Loader metadata (`fabric.mod.json`, `mods.toml`, `pack.mcmeta`, lang) | ✅ done |
+| 6 | Core registry layer (Architectury `DeferredRegister`) | ✅ done — T0 bootstrap set registered |
+| 7 | **First green build on both loaders** | ✅ **done** — `grindless-0.1.0-fabric.jar` and `-forge.jar` |
+| 8 | Machine layer design — machines, multiblocks, processes | ✅ done — [`docs/MACHINES.md`](docs/MACHINES.md) |
+| 9 | Process design — items, fluids, recipe graph, routes, ratios | **next** — `docs/PROCESSES.md` |
+| 10 | Flux energy API + Forge and Fabric bridges | pending |
+| 11 | The condition system: recipe type, envelopes, efficiency bands | pending |
+| 12 | Machine block entity framework + the container contract | pending |
+| 13 | Pylon network, supply areas, `SavedData` | pending |
+| 14 | Chunk veins + runtime material registry | pending |
+| 15 | Tag-driven runtime recipe generation | pending |
+| 16 | T0/T1 machines, menus and screens | pending |
+| 17 | Fluid layer: state, pressure, pipes, tanks | pending |
+| 18 | Process Atlas + JEI/REI/EMI integration | pending |
+| 19 | Original textures and models via `tools/` scripts | pending |
+| 20 | Research Terminal, fabrication gate and progression | pending |
+| 21 | Belts and the logistics layer | pending |
+| 22 | Multiblock framework + the parametric multiblocks | pending |
+| 23 | Orbital layer: launch, satellites, station | pending |
+| 24 | Planetary layer: colonies, telepresence, planet registry | pending |
+| 25 | CI workflow | pending |
 
-Step 7 is the real milestone. Getting a minimal, *compiling* multiloader skeleton building on both
-platforms is worth far more than a large pile of uncompiled code, because every later step is then
-validated the moment it is written.
+Step 7 was the first real milestone and it is cleared: a minimal multiloader skeleton that actually
+compiles and packages on both platforms, which means every later step is validated the moment it is
+written rather than accumulating as a pile of uncompiled code.
+
+Steps 8 and 9 are deliberately ordered that way — machines are specified as *capabilities* before
+any recipe exists, because designing recipes first is what produces a mod with four hundred blocks
+that each host one recipe (ADR-0019).
 
 ---
 

@@ -30,6 +30,12 @@ history — the reasoning that was wrong is itself useful information.
 | [0016](#adr-0016--pipes-early-the-phase-network-late) | Pipes early, the Phase Network late | Accepted |
 | [0017](#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted) | Machines above T1 are manufactured, never hand-crafted | Accepted |
 | [0018](#adr-0018--one-container-contract-with-auto-void-off-by-default) | One container contract, auto-void off by default | Accepted |
+| [0019](#adr-0019--design-machines-before-recipes) | Design machines before recipes | Accepted |
+| [0020](#adr-0020--recipes-are-parameterised-by-process-conditions) | Recipes are parameterised by process conditions | Accepted |
+| [0021](#adr-0021--complexity-beyond-gregtech-with-no-grind) | Complexity beyond GregTech, with no grind | Accepted |
+| [0022](#adr-0022--parametric-multiblocks-instead-of-fixed-schematics) | Parametric multiblocks instead of fixed schematics | Accepted |
+| [0023](#adr-0023--a-native-route-viewer-with-a-ratio-solver) | A native route viewer with a ratio solver | Accepted |
+| [0024](#adr-0024--loomplatform-markers-and-the-windows-path-length-limit) | `loom.platform` markers and the Windows path limit | Accepted |
 
 ---
 
@@ -439,3 +445,176 @@ most exposed to.
 
 The canonical overflow pattern becomes `Overflow Gate` into a voiding `Storage Crate` — the
 standard answer to eleven thousand gravel.
+
+---
+
+## ADR-0019 — Design machines before recipes
+
+*2026-10-01 · Accepted*
+
+**Context.** The natural instinct is to design content item-first: decide what the player makes,
+then add a machine for each process. Large tech mods that work this way accumulate hundreds of
+blocks, most of which host a single recipe type, and the catalogue grows without the gameplay
+getting deeper.
+
+**Decision.** Specify the machine layer completely first — what machines exist, what they can do,
+how they scale, how multiblocks behave — and only then specify the recipe graph, the item and fluid
+catalogue and the concrete routes. The machine design lives in [`MACHINES.md`](MACHINES.md), the
+recipe design in `PROCESSES.md`.
+
+Machines are specified as **capabilities**, not as recipe holders, which is what makes the ordering
+pay off: see ADR-0020.
+
+**Consequences.** A small machine set can host an enormous recipe space, and adding content later
+means adding recipes rather than blocks. The risk is designing a capability nothing ends up needing,
+which is mitigated by every machine in `MACHINES.md` naming the processes that motivate it.
+
+---
+
+## ADR-0020 — Recipes are parameterised by process conditions
+
+*2026-10-01 · Accepted*
+
+**Context.** In essentially every Minecraft tech mod a recipe is `inputs → outputs` bound to a
+machine type. The machine *is* the process. This makes each recipe a lookup with one answer, and it
+forces a new machine for every new kind of transformation.
+
+**Decision.** A Grindless recipe is `inputs + conditions + time → outputs`, where conditions are
+physical parameters: temperature, pressure, atmosphere, catalyst, field, agitation. The same inputs
+under different conditions produce different outputs.
+
+A machine is then defined by the **condition envelope** it can maintain, and any recipe whose
+conditions fall inside an envelope runs in that machine. Efficiency is continuous: inside the
+optimal band is full yield, at the edges yield drops or byproducts appear, outside the band the
+process fails visibly and informatively.
+
+**Alternatives rejected.** Fixed recipes per machine — simple, and the thing that makes the genre
+shallow. A full thermodynamic simulation — unaffordable at tick rate and unplayable.
+
+**Consequences.** This single decision delivers several goals at once: multiple genuine routes to
+the same product, a standing optimisation problem that changes as the factory grows, a reason for
+the fluid system to carry temperature and pressure (ADR-0015), and a recipe space that is the
+*product* of machines and conditions rather than a list.
+
+The costs are real and concentrated in presentation. Recipe lookup is no longer "which machine" but
+"which conditions", which is why the route viewer is a first-class feature rather than an
+integration (ADR-0023). Out-of-band failure must teach rather than merely fail. And the number of
+condition dimensions the UI can carry before configuration becomes work is still an open question —
+recorded as such in `MACHINES.md`.
+
+---
+
+## ADR-0021 — Complexity beyond GregTech, with no grind
+
+*2026-10-01 · Accepted*
+
+**Context.** The brief is a mod deeper than GregTech that nonetheless contains no grind. Those
+sound contradictory, because the genre's depth is habitually sold with repetition attached.
+
+**Decision.** Treat complexity and grind as the orthogonal things they are. **Complexity** is the
+number of meaningful decisions and how they interact. **Grind** is repeating an action whose outcome
+is already known. Grindless maximises the first and refuses the second, under one rule:
+
+> If the player has already solved a problem, never ask them to solve it again by hand. Asking them
+> to solve it at a different scale is fair — that is a new problem.
+
+Concretely, depth comes from the recipe graph, condition tuning, route selection and ratio
+balancing; and the usual sources of repetition are removed outright. Hand-crafting intermediates is
+replaced by fabrication (ADR-0017); per-material ore lines are replaced by the tag-driven registry
+(ADR-0004); re-tiering is an in-place upgrade; machine configuration is copied with Process Cards;
+and there is no maintenance mechanic at all, because chores are not content.
+
+Scaling is given three axes with different shapes — parallel, overclock, multiblock — where
+overclocking is deliberately the *worst* option and never required. In GregTech overclocking is
+mandatory and therefore not a decision; making it usually-wrong turns it back into one.
+
+**Consequences.** The mod can be very deep without being long. The risk to watch is that removing
+repetition also removes pacing: if everything is instant, tiers blur. The counterweight is that
+throughput still has to be built — post-scarcity in materials is never post-scarcity in throughput.
+
+---
+
+## ADR-0022 — Parametric multiblocks instead of fixed schematics
+
+*2026-10-01 · Accepted*
+
+**Context.** The standard multiblock is a fixed schematic: build this exact arrangement and receive
+this exact machine. The player looks it up once and copies it forever, which makes a headline
+feature into a chore with extra steps.
+
+**Decision.** Grindless multiblocks are parametric. The player chooses dimensions and internal
+arrangement; behaviour follows from what was built. Reactor output and heat depend on fuel rod
+adjacency and coolant channel layout; distillation tower height sets how many fractions separate;
+electrolysis electrode area sets current; accelerator ring circumference sets reachable particle
+energy and therefore which transmutations exist at all; fusion coil count and containment strength
+set which fuel cycles can ignite.
+
+The reward for a multiblock is **better ratios and new capabilities**, not merely more throughput —
+a bigger reactor loses proportionally less heat, a taller column makes fractions a short one cannot.
+
+**Consequences.** Understanding beats copying, and there is no single correct schematic to look up.
+Failure modes are deliberately recoverable: an over-hot reactor SCRAMs and needs a restart cycle
+rather than detonating, because losing hours of progress to one mistake is not depth.
+
+The cost is validation and feedback complexity — the game must explain *why* a given core design
+underperforms, or the design space reads as noise.
+
+---
+
+## ADR-0023 — A native route viewer with a ratio solver
+
+*2026-10-01 · Accepted*
+
+**Context.** Parameterised recipes (ADR-0020) and multiple routes per product (`MACHINES.md`) make
+the recipe graph unreadable through a conventional recipe viewer, which answers "what makes this"
+with a flat list and cannot express conditions, routes or ratios.
+
+**Decision.** Ship the **Process Atlas** in the mod itself, working with no other mod installed. It
+shows every route to a product as a graph, with ratios per unit time at a chosen tier, the
+conditions each route needs, a cost overlay in FU and machine count, and reachability marking which
+routes are buildable now and naming what is missing from the others. Given a target rate it solves
+the line: how many of each machine, at which tier, in what ratio.
+
+JEI, REI and EMI all get full integration on top, with the Atlas reachable from a recipe screen.
+
+**Alternatives rejected.** Relying on JEI alone — it cannot express condition ranges or compare
+routes, and a pack that ships no recipe viewer would make the mod unplayable.
+
+**Consequences.** The solver deliberately removes the arithmetic, on the position that arithmetic
+is not gameplay while building, placing and feeding a line is. This is the decision most at risk of
+going too far: if "press solve, build exactly that" becomes the entire loop, the solver should
+propose rather than prescribe. Recorded as an open question in `MACHINES.md`.
+
+---
+
+## ADR-0024 — `loom.platform` markers and the Windows path length limit
+
+*2026-10-01 · Accepted*
+
+**Context.** Two environment problems surfaced on the first real build attempt, and both are the
+kind that look like something else entirely.
+
+**Architectury Loom decides a subproject's platform from a `loom.platform` property in that
+subproject's own `gradle.properties`.** Without it the module defaults to Fabric, so `forge`
+configured as a Fabric project and `dependencies { forge "net.minecraftforge:forge:..." }` failed
+with `Could not find method forge()` — which reads as a broken dependency rather than a missing
+marker. Both platform modules now carry the file.
+
+**The checkout path is 181 characters**, and the deepest source file reaches 268 — past the Windows
+`MAX_PATH` limit of 260. `LongPathsEnabled` is `0` on this machine and setting it needs
+administrator rights plus a reboot. Git failed with `Filename too long` when staging.
+
+**Decision.** Commit a one-line `gradle.properties` in each platform module. For path length, set
+`core.longpaths = true` in the repository's git config, which makes Git for Windows use the Unicode
+path APIs and needs no elevation.
+
+**Alternatives rejected.** Enabling `LongPathsEnabled` system-wide, which needs admin on a machine
+where the user is not one; shortening the package name, which would be contorting the project
+around a tooling limit; relocating the checkout, which fights the tool that created the worktree.
+
+**Consequences.** Both problems are fixed without elevation. `core.longpaths` is local to the
+repository, so a fresh clone must set it again — `SETUP.ps1` should do this, and its `MAX_PATH`
+warning is now known to be a real failure on this machine rather than a theoretical one.
+
+Note that the JDK and Gradle are *not* protected by this setting. Nothing has broken so far, but a
+build failure that looks like a corrupt file should be treated as a path-length problem first.

@@ -15,6 +15,34 @@ entries below reference those records by id.
 
 ### Added
 
+- **The first green build on both loaders** — step 7 of the implementation plan, the project's
+  first real milestone. `gradlew :fabric:build :forge:build` produces `grindless-0.1.0-fabric.jar`
+  and `grindless-0.1.0-forge.jar`, each bundling the common classes, `pack.mcmeta` and the lang
+  file, with loader metadata correctly expanded from `gradle.properties`.
+- **Registry layer** on Architectury `DeferredRegister`: `ModBlocks`, `ModItems`,
+  `ModBlockEntities`, `ModMenus`, `ModCreativeTabs`, plus `GrindlessConfig` and `MaterialRegistry`
+  as the call sites `Grindless.init` already expected. Blocks register their own `BlockItem` so the
+  two registers cannot drift. Registered content is the T0 bootstrap set only — Hand Crank Dynamo,
+  Crude Extractor, Research Terminal, Multitool, Data Core, Machine Casing — as plain blocks and
+  items, with block entities and menus deliberately empty until the machines behind them exist.
+- **Loader entrypoints and metadata**: a Fabric `ModInitializer` with `fabric.mod.json`, and a
+  Forge `@Mod` class that registers the Architectury event bus before common init, with a
+  `mods.toml` whose `[47,)` loader range also admits NeoForge 1.20.1 (ADR-0002).
+- **Committed Gradle wrapper** (`gradlew`, `gradlew.bat`, `gradle/wrapper/`) pinned to Gradle 8.8,
+  so the repository builds without a system-wide Gradle.
+- `.gitattributes` pinning `gradlew` to LF and `gradlew.bat` to CRLF. Git was about to normalise
+  `gradlew` to CRLF on checkout, which breaks it on Linux, macOS and CI with a `bad interpreter`
+  error that says nothing about line endings.
+- **Machine layer design** — [`docs/MACHINES.md`](docs/MACHINES.md). The complete machine,
+  multiblock and process specification, written before any recipe exists (ADR-0019). Its core is
+  that a recipe is `inputs + conditions + time → outputs`, with conditions being temperature,
+  pressure, atmosphere, catalyst, field and agitation, so a machine is a **condition envelope**
+  rather than a recipe holder (ADR-0020). Also covers the complexity-without-grind position against
+  GregTech (ADR-0021), the ten-step Flux tier ladder, three scaling axes with overclocking
+  deliberately the worst of them, the single-block machine catalogue, parametric multiblocks whose
+  shape is a design parameter (ADR-0022), the multiple-routes rule, the endgame tier, and the
+  Process Atlas route viewer with its ratio solver (ADR-0023).
+- Six decision records, ADR-0019 to ADR-0024.
 - **Fluids, as a first-class system** (README *System 5*). Fluids carry volume, temperature and
   pressure rather than being items with a different texture, so steam, superheated steam and
   supercritical water are distinct resources; heat is conserved, so a cooling line condenses and a
@@ -87,13 +115,25 @@ entries below reference those records by id.
   the broken terminal, and the latter was marked a stale scratch file by its own author
   (ADR-0014).
 
+### Fixed
+
+- The build could not configure at all: Architectury Loom reads a subproject's platform from a
+  `loom.platform` property in that subproject's own `gradle.properties`, which neither module had,
+  so `forge` was configured as a Fabric project and `dependencies { forge ... }` failed with
+  `Could not find method forge()`. Both markers added (ADR-0024).
+- `SoundType` was imported from `net.minecraft.sounds`; under Mojang mappings on 1.20.1 it lives in
+  `net.minecraft.world.level.block`.
+- `git add` failed with `Filename too long`: the checkout is 181 characters deep and the deepest
+  source file reaches 268, past the Windows 260-character limit, with `LongPathsEnabled` off and
+  no administrator rights available. `core.longpaths` is now set on the repository, and
+  `SETUP.ps1` sets it on a fresh clone (ADR-0024).
+
 ### Known state
 
-The tree **does not compile**. `Grindless.java` calls into `GrindlessConfig`, `ModBlocks`,
-`ModItems`, `ModBlockEntities`, `ModMenus`, `ModCreativeTabs` and `MaterialRegistry`, none of which
-have been written. There is no Gradle wrapper yet either — `SETUP.ps1` generates it.
+The tree **compiles and packages on both loaders**, but nothing is playable: the registered T0
+blocks are inert placeholders with no block entities, menus or behaviour, the material registry is
+a stub, and no recipe system exists yet.
 
-The next milestone is step 7 of the README's implementation plan: a minimal, *compiling*
-multiloader skeleton that builds green on both Fabric and Forge. That requires the loader metadata
-files (`fabric.mod.json`, `META-INF/mods.toml`, `pack.mcmeta`, lang) and the core registry layer
-built on Architectury's `DeferredRegister`.
+The next step is design, not code — `docs/PROCESSES.md`, specifying the items, fluids, recipe graph,
+concrete routes and ratios on top of the machine layer that
+[`docs/MACHINES.md`](docs/MACHINES.md) now defines.

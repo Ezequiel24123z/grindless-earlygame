@@ -81,13 +81,29 @@ if ($longPathsEnabled) {
     Write-Ok "Under the 260 character limit with headroom."
 } else {
     Write-Warn "This checkout sits $($root.Length) characters deep and long paths are DISABLED."
-    Write-Warn "Java/Gradle builds will fail with mysterious 'file not found' errors."
+    Write-Warn "Java/Gradle builds can fail with mysterious 'file not found' errors."
     Write-Warn "Fix it with ONE of the following:"
     Write-Warn "  (a) Run this in an ADMIN PowerShell, then reboot:"
     Write-Warn "      New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' ``"
     Write-Warn "        -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force"
     Write-Warn "  (b) Or develop from a short path instead, e.g.:"
     Write-Warn "      git clone https://github.com/Ezequiel24123z/grindless-earlygame C:\mc\grindless"
+}
+
+# Git is fixable without elevation: core.longpaths makes Git for Windows use the Unicode
+# path APIs. It is a per-repository setting, so a fresh clone needs it again. See ADR-0024.
+if (-not $longPathsEnabled) {
+    try {
+        $currentLongPaths = (& git -C $root config --get core.longpaths) 2>$null
+        if ($currentLongPaths -ne 'true') {
+            & git -C $root config core.longpaths true
+            Write-Ok "Set git core.longpaths=true so staging deep files works."
+        } else {
+            Write-Ok "git core.longpaths already enabled."
+        }
+    } catch {
+        Write-Warn "Could not set git core.longpaths; 'git add' may fail on deep paths."
+    }
 }
 
 # ---------------------------------------------------------------------------
