@@ -260,11 +260,27 @@ public abstract class MachineBlockEntity extends BlockEntity {
         containerConfig.load(tag.getCompound(KEY_CONFIG));
     }
 
-    private SimpleFluxStorage createEnergyBuffer() {
+    /**
+     * Builds this machine's energy buffer.
+     *
+     * <p>The default is a <em>load</em>: it accepts power at its rated tier and never gives any
+     * back, because a machine is not a battery and should not quietly become one when a pipe is
+     * pointed at it.
+     *
+     * <p>Generators override this to invert it — no external insertion, extraction at the rated
+     * tier — so that the buffer they fill is the same object the rest of the world pulls from.
+     * Keeping generated power in a separate field would mean exposing an energy capability that
+     * silently swallows anything inserted and never hands out what the machine actually made.
+     *
+     * <p>Called from the constructor, so it must not read subclass fields. See {@link #ratedTier}.
+     */
+    protected SimpleFluxStorage createEnergyBuffer() {
         FluxTier tier = ratedTier();
-        long capacity = tier.nominal() * 20L * bufferSeconds();
-        // Machines accept power and do not hand it back: a machine is a load, not a battery.
-        // Generators override this by exposing an extract-capable buffer of their own.
-        return new SimpleFluxStorage(capacity, tier.nominal(), 0L, this::setChanged);
+        return new SimpleFluxStorage(bufferCapacity(), tier.nominal(), 0L, this::setChanged);
+    }
+
+    /** Buffer size in FU, from the rated tier and {@link #bufferSeconds()}. */
+    protected final long bufferCapacity() {
+        return ratedTier().nominal() * 20L * bufferSeconds();
     }
 }

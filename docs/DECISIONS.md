@@ -56,6 +56,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0042](#adr-0042--machines-subscribe-to-ticking-they-do-not-tick-by-default) | Machines subscribe to ticking; they do not tick by default | Accepted |
 | [0043](#adr-0043--recipe-lookup-is-indexed-and-cached-never-a-linear-scan) | Recipe lookup is indexed and cached, never a linear scan | Accepted |
 | [0044](#adr-0044--neighbour-lookups-are-cached-against-capability-invalidation) | Neighbour lookups are cached against capability invalidation | Accepted |
+| [0045](#adr-0045--capabilities-are-attached-by-event-not-overridden-on-the-block-entity) | Capabilities are attached by event, not overridden on the block entity | Accepted |
 
 ---
 
@@ -1464,4 +1465,58 @@ reason it fires is that the block entity is being removed.
 NeoForge 1.20.1 loads the Forge jar unchanged (ADR-0002), so this works there as written. Newer
 NeoForge replaces this mechanism with `BlockCapabilityCache`, which does the same job with the
 invalidation handled for you — a port target rather than a problem.
+
+---
+
+## ADR-0045 — Capabilities are attached by event, not overridden on the block entity
+
+*2026-10-02 · Accepted*
+
+**Context.** Other mods reach a Grindless machine's energy buffer through Forge's
+`ForgeCapabilities.ENERGY`. The textbook way to provide one is to override `getCapability` on the
+block entity.
+
+That is not available here. Machine block entities live in `common/`, which must not import
+loader-specific classes (ADR-0001), and `getCapability` is pure Forge. The constraint is not
+theoretical: writing `MachineBlockEntity` produced exactly this mistake one layer down, where
+`onLoad()` looked like a vanilla hook and turned out to be a Forge addition. The compiler caught
+that one. It would not have caught a design that moved every machine into `forge/`.
+
+**Decision.** Attach the capability from `forge/` with `AttachCapabilitiesEvent<BlockEntity>`.
+Forge fires it as each block entity is constructed, so a listener there can attach an
+`IEnergyStorage` view of any `MachineBlockEntity` without that class knowing Forge exists.
+
+The attached provider **must** also register through `AttachCapabilitiesEvent.addListener`, which
+is the load-bearing half. The chain was read in Forge's source rather than assumed:
+`BlockEntity.setRemoved()` calls `invalidateCaps()`; `CapabilityProvider.invalidateCaps()` marks
+itself invalid and calls `CapabilityDispatcher.invalidate()`; that runs every `Runnable` registered
+by `addListener`; ours invalidates the `LazyOptional`, which fires the listener `NeighbourCache`
+put on it (ADR-0044) and clears the stale reference.
+
+Attaching without that listener compiles, works in testing, and leaks stale references in play.
+
+**Alternatives rejected.** Overriding `getCapability` on the block entity (requires a Forge import
+in `common/`, which is the rule ADR-0001 exists to enforce); an `@ExpectPlatform` capability hook
+(the capability system is shaped around `LazyOptional` and invalidation callbacks, so the stub
+would either leak those types into `common/` or be too lossy to invalidate correctly); moving
+machine block entities into `forge/` on the grounds that ADR-0039 made the project Forge-only
+(ADR-0039 explicitly kept the `common/` + `forge/` split so a future port stays a build change
+rather than a rewrite, and block entities are most of what would have to move).
+
+**Consequences.** `common/` stays loader-clean with no `@ExpectPlatform` stub for this, and the
+whole Forge-facing surface is one class.
+
+This also forced a latent bug into the open, which is the usual value of making something real.
+The Hand Crank Dynamo stored its charge in a field separate from its Flux buffer, so exposing that
+buffer would have published an empty load: insertable, never read, and holding none of the power
+the dynamo had actually generated. Generation now writes to the buffer itself, and generators
+override the buffer's direction — no external insertion, extraction at the rated tier — so the
+object the machine fills is the object the world pulls from.
+
+Two limits worth stating. The capability is offered on every face: the container contract can
+express per-face energy gating, but honouring it needs the capability re-invalidated whenever a
+face is reconfigured, and there is no screen to reconfigure one from yet. And the event fires for
+*every* block entity in the game, so the listener must stay a cheap `instanceof` — Forge's own
+documentation warns about this, and it is the one place where adding work would be felt
+world-wide.
 

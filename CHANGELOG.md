@@ -15,6 +15,38 @@ entries below reference those records by id.
 
 ### Added
 
+- **Machine energy buffers are exposed to other mods** (`MachineEnergyCapability`, ADR-0045) —
+  step 12d, which was an open architectural question rather than just remaining work. Forge
+  provides an energy capability through `getCapability`, which has to be overridden on the block
+  entity, and machine block entities live in `common/`, which may not import Forge. The answer is
+  `AttachCapabilitiesEvent<BlockEntity>`: Forge fires it for every block entity as it is created,
+  so a listener in `forge/` can attach a capability to a `common/` class without that class
+  knowing Forge exists. `common/` stays loader-clean and the Forge-facing surface is one file.
+  **The invalidation listener is the load-bearing half, not the attach call.** The chain was read
+  in Forge's source rather than assumed: `setRemoved()` → `invalidateCaps()` →
+  `CapabilityDispatcher.invalidate()` → the `Runnable`s registered by
+  `AttachCapabilitiesEvent.addListener` → our `LazyOptional.invalidate()` → the listener
+  `NeighbourCache` registered on it (ADR-0044). Attaching without it compiles, works in testing,
+  and leaks stale references in play.
+- **The Hand Crank Dynamo's charge is now its Flux buffer**, not a separate field. Making the
+  capability real exposed the bug immediately: exposing the buffer would have published an *empty
+  load* — insertable, never read, and holding none of the power the dynamo had actually made.
+  Generators now override the buffer's direction (no external insertion, extraction at the rated
+  tier) so the object a machine fills is the object the world pulls from, and the dynamo needs no
+  persistence of its own because the base class already saves that buffer. Only what a neighbour
+  actually accepted is removed, rather than taking the allowance up front and refunding the
+  remainder, which is the version that loses power on a rounding edge.
+  Unifying the two surfaced a second bug, and a quiet one: the push read its allowance through
+  `extract()`, which is **rate-limited to one tick's output**. A push throttled to every fifth tick
+  was therefore capped at a fifth of what it should move, running the dynamo at 1.6 FU/t instead of
+  8 with nothing visibly wrong. A buffer's rate limit governs what an *external* puller may take in
+  one operation; a machine's own output path implements its rating itself.
+- **`tools/checks/VerifyEnergy.java`** — behaviour checks for the energy layer, written because the
+  rate-limit bug above is exactly the kind that compiles, runs, and is wrong by a factor of five
+  without anything looking broken. Covers both buffer shapes (generator and load), the 1:1 FE
+  conversion, saturation at the `int` boundary so a full buffer can never read as a debt
+  (ADR-0037), EU rounding down so a conversion chain cannot create energy, and the smooth
+  under-volting curve (ADR-0038).
 - **`MachineBlockEntity`** — step 12c, and the point where the separate layers become a machine. It
   carries a Flux buffer, a chassis mark and its upgrades, the condition state the machine is
   holding, the container contract and the tick subscriptions, and its `serverTick` does nothing but

@@ -3,11 +3,11 @@ package io.github.ezequiel24123z.grindless.machine;
 import io.github.ezequiel24123z.grindless.container.NeighbourCache;
 import io.github.ezequiel24123z.grindless.energy.FluxStorage;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.EnumMap;
@@ -26,8 +26,6 @@ import java.util.Map;
  */
 public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
 
-    private static final String KEY_CHARGE = "Charge";
-
     /** One crank's worth of Flux: five seconds of output, so cranking is a deliberate action
      * rather than a thing you hold down. */
     public static final long CHARGE_PER_CRANK = FluxTier.F0.nominal() * 20L * 5L;
@@ -38,7 +36,6 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
 
     private final Map<Direction, NeighbourCache> neighbours = new EnumMap<>(Direction.class);
 
-    private long charge;
     private TickSubscription pushing;
 
     public HandCrankDynamoBlockEntity(BlockPos pos, BlockState state) {
@@ -62,20 +59,41 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         return FluxTier.F0;
     }
 
+    /** Two cranks' worth, so topping up before the buffer is empty is never wasted. */
+    @Override
+    protected int bufferSeconds() {
+        return 10;
+    }
+
+    /**
+     * A generator buffer: nothing may be inserted from outside, and the rated output may be
+     * drawn from it.
+     *
+     * <p>This is the same object the energy capability exposes, so a pipe from another mod pulls
+     * the power this dynamo actually made rather than finding an empty load.
+     */
+    @Override
+    protected SimpleFluxStorage createEnergyBuffer() {
+        return new SimpleFluxStorage(bufferCapacity(), 0L, FluxTier.F0.nominal(), this::setChanged);
+    }
+
     /** Charge remaining, in FU. */
     public long charge() {
-        return charge;
+        return energy().getStored();
     }
 
     /**
      * Cranks the dynamo once.
      *
      * <p>Charge accumulates rather than resetting, so cranking twice is worth twice as much and a
-     * player is never punished for topping it up early.
+     * player is never punished for topping it up early. It saturates at the buffer's capacity.
+     *
+     * <p>Written with {@code setStored} rather than {@code receive} deliberately: this is power
+     * being <em>generated inside</em> the machine, not transferred into it, and the buffer refuses
+     * external insertion by design.
      */
     public void crank() {
-        charge += CHARGE_PER_CRANK;
-        setChanged();
+        energy().setStored(energy().getStored() + CHARGE_PER_CRANK);
         // The crank is exactly the kind of state change the subscription model needs told about:
         // it is what makes pushing worth doing, and nothing else would notice it.
         updateSubscriptions();
@@ -83,7 +101,7 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
 
     @Override
     protected void updateSubscriptions() {
-        if (charge > 0L && getLevel() != null) {
+        if (energy().getStored() > 0L && getLevel() != null) {
             pushing = subscriptions().subscribe(pushing, this::push);
         } else if (pushing != null) {
             pushing.unsubscribe();
@@ -95,9 +113,14 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         if (!isDue(PUSH_PERIOD)) {
             return;
         }
-        // Output is rated per tick, so a throttled push moves a whole period's worth at once.
-        // That keeps the dynamo at exactly 8 FU/t however often this actually runs.
-        long allowance = Math.min(charge, FluxTier.F0.nominal() * PUSH_PERIOD);
+        // Output is rated per tick, so a throttled push moves a whole period's worth at once:
+        // the dynamo averages exactly 8 FU/t however often this actually runs.
+        //
+        // Read from the buffer directly rather than through extract(). The buffer's rate limit
+        // governs what an *external* puller may take in one operation, and applying it here would
+        // cap a five-tick push at one tick's worth — quietly running the dynamo at a fifth of its
+        // rating. This is the machine's own output path, and it implements the rating itself.
+        long allowance = Math.min(energy().getStored(), FluxTier.F0.nominal() * PUSH_PERIOD);
         long budget = allowance;
         for (Direction side : Direction.values()) {
             if (budget <= 0L) {
@@ -114,10 +137,11 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
             }
             budget -= target.receive(budget, false);
         }
+        // Only what a neighbour actually accepted is removed. Taking the allowance up front and
+        // refunding the remainder is the version that loses power on a rounding edge.
         long spent = allowance - budget;
         if (spent > 0L) {
-            charge -= spent;
-            setChanged();
+            energy().setStored(energy().getStored() - spent);
         }
         // Re-evaluate every time, so running dry unsubscribes rather than leaving the dynamo
         // ticking forever over neighbours that are already full.
@@ -136,15 +160,6 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         updateSubscriptions();
     }
 
-    @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putLong(KEY_CHARGE, charge);
-    }
-
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        charge = Math.max(0L, tag.getLong(KEY_CHARGE));
-    }
+    // No persistence of its own: the charge *is* the energy buffer, which the base class already
+    // saves and loads. That is the point of unifying the two — one piece of state, saved once.
 }
