@@ -57,6 +57,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0043](#adr-0043--recipe-lookup-is-indexed-and-cached-never-a-linear-scan) | Recipe lookup is indexed and cached, never a linear scan | Accepted |
 | [0044](#adr-0044--neighbour-lookups-are-cached-against-capability-invalidation) | Neighbour lookups are cached against capability invalidation | Accepted |
 | [0045](#adr-0045--capabilities-are-attached-by-event-not-overridden-on-the-block-entity) | Capabilities are attached by event, not overridden on the block entity | Accepted |
+| [0046](#adr-0046--the-pylon-index-is-chunk-bucketed-and-brownouts-resolve-in-two-phases) | The pylon index is chunk-bucketed, and brownouts resolve in two phases | Accepted |
 
 ---
 
@@ -1519,4 +1520,57 @@ face is reconfigured, and there is no screen to reconfigure one from yet. And th
 *every* block entity in the game, so the listener must stay a cheap `instanceof` — Forge's own
 documentation warns about this, and it is the one place where adding work would be felt
 world-wide.
+
+---
+
+## ADR-0046 — The pylon index is chunk-bucketed, and brownouts resolve in two phases
+
+*2026-10-02 · Accepted*
+
+**Context.** ADR-0007 settled *where* network state lives — level-wide `SavedData` with a spatial
+index, so there is no per-tick graph walk and an unloaded chunk cannot fragment a network.
+Implementing it surfaced four questions that record did not answer.
+
+**Decisions.**
+
+**1. The index is a chunk bucket, not a tree.** Each pylon is filed under every chunk its supply
+cube touches; a lookup hashes the query position's chunk once and exact-tests the few pylons filed
+there. Supply cubes are small — an MK3's 64-block cube spans at most five chunks a side — so
+buckets stay short and cost tracks *local density* rather than world size. A balanced tree would
+also satisfy ADR-0007's `O(log n)`, at the price of rebalancing on every placement and far more
+code for a worse constant.
+
+The bucket is coarser than the cube, so a pylon can be filed under a chunk it only clips. The
+exact per-axis test still runs on every candidate; skipping it is a subtle over-coverage bug that
+would mostly work.
+
+**2. Demand is registered before any of it is served.** Machines declare their intended draw, then
+the network resolves one satisfaction fraction, then everyone draws at that fraction. Serving
+machines as they tick instead would mean the ones that happen to tick early run at full speed
+while the rest stop dead — which is exactly the individual starvation the README rejects, where a
+random subset of the base stops with no indication why. Two phases is what makes "everything is
+visibly sluggish" true rather than aspirational.
+
+**3. Energy follows capacity when a network splits.** A fragment holding a third of the pylons
+keeps a third of the charge. Giving it all to one fragment destroys energy; giving each fragment
+the full amount manufactures it, and a player who noticed could break and replace a pylon in a
+loop. Merging moves energy across for the same reason — if merging lost power, the optimal play
+would be to drain a network before linking it, which is absurd.
+
+**4. Where supply areas overlap, the first covering pylon wins.** Splitting a machine's draw
+across overlapping networks would make its behaviour depend on index iteration order, which is
+unpredictable to a player and untestable in practice. Overlap is a layout the player chose; it
+should be stable, not clever.
+
+**Consequences.** Placement and removal are the only expensive operations, and removal is the
+expensive one — it recomputes connectivity by flood fill. That is the right place to pay: it
+happens when a player breaks a block, not every tick.
+
+Capacity is *derived* from the member pylons rather than stored, so it cannot drift out of step
+with them, and a shrinking network clamps its contents rather than holding energy it no longer
+has room for.
+
+The saved form stores membership and rebuilds the index on load, so the two cannot disagree. Tier
+ordinals are bounds-checked on read, because an unchecked enum ordinal from a future version
+throws during world load — which a player experiences as a corrupt save rather than as a mod bug.
 

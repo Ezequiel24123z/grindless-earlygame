@@ -93,6 +93,10 @@ try {
         exit 1
     }
     Write-Output 'ALL CHECK SUITES PASSED'
+    # Explicit, because without it the script exits with whatever $LASTEXITCODE the last native
+    # command happened to leave behind. A check runner that reports failure on success is worse
+    # than no check runner: it trains you to ignore it.
+    exit 0
 } finally {
     Remove-Item -Recurse -Force $out -ErrorAction SilentlyContinue
 }

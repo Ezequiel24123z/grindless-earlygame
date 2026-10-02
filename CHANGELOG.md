@@ -15,6 +15,39 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Flux Network** (`common/.../network/`) — step 13, and the system that makes power
+  wireless. `PylonTier` is the README's MK1–MK3 table; `FluxNetwork` is a set of linked pylons
+  sharing one pooled buffer; `FluxNetworkData` is the per-dimension `SavedData` holding them all
+  (ADR-0007), with the merge and split logic; `PylonIndex` is the spatial index that makes
+  "which network powers this block?" cheap.
+  **The index is a chunk bucket rather than a tree** (ADR-0046). Each pylon is filed under every
+  chunk its supply cube touches, so a lookup hashes one chunk and exact-tests the few pylons
+  filed there — cost tracks local density, not world size. The bucket is deliberately coarser
+  than the cube, so the exact per-axis test still runs on every candidate; skipping it is an
+  over-coverage bug that would mostly work.
+  **Brownouts resolve in two phases**: every machine registers its intended draw, the network
+  computes one satisfaction fraction, then everyone draws at that fraction. Serving machines as
+  they tick would mean whoever ticks first runs at full speed while the rest stop dead — the
+  individual starvation the README rejects, where a random subset of the base stops with no
+  indication why. Two phases is what makes "everything is visibly sluggish" true rather than
+  aspirational.
+  **Energy follows capacity through merges and splits.** A fragment with a third of the pylons
+  keeps a third of the charge; merging carries energy across. Any other rule either destroys power
+  or lets a player manufacture it by breaking and replacing a pylon in a loop.
+- **`tools/checks/VerifyNetwork.java`** — covers the parts that are easy to get subtly wrong:
+  cube coverage at edges and corners, link range governed by the *shorter* of two tiers, a pylon
+  bridging two networks merging them, removing a middle pylon splitting a chain, energy conserved
+  across both, demand accumulating before resolution, and a shrinking network shedding what it can
+  no longer hold.
+- One decision record, ADR-0046.
+
+### Fixed
+
+- `tools/run-checks.ps1` exited non-zero even when every suite passed, because a PowerShell script
+  with no explicit `exit` inherits whatever `$LASTEXITCODE` the last native command left behind.
+  It is used as a pre-commit gate, so a runner that reports failure on success is worse than no
+  runner at all: it trains you to ignore it.
+
 - **Machine energy buffers are exposed to other mods** (`MachineEnergyCapability`, ADR-0045) —
   step 12d, which was an open architectural question rather than just remaining work. Forge
   provides an energy capability through `getCapability`, which has to be overridden on the block
