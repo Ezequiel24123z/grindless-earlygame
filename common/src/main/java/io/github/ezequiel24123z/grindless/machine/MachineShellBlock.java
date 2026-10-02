@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 /**
- * A machine with a front and a status but no behaviour yet: the Crude Extractor and the Research
- * Terminal until their block entities exist.
+ * A machine with a front and a status but no behaviour yet: the Research Terminal until its
+ * block entity exists.
  *
  * <p>It carries the same properties as a working machine so that models, effects and saved worlds
  * are already right when the behaviour arrives; the status stays {@code idle} until something

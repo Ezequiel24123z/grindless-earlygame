@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -25,6 +26,13 @@ public final class ModBlockEntities {
             HAND_CRANK_DYNAMO = BLOCK_ENTITIES.register("hand_crank_dynamo",
                     () -> BlockEntityType.Builder
                             .of(HandCrankDynamoBlockEntity::new, ModBlocks.HAND_CRANK_DYNAMO.get())
+                            .build(null));
+
+    /** T0 extractor: one unit of the chunk vein every twenty seconds at F0. */
+    public static final RegistrySupplier<BlockEntityType<CrudeExtractorBlockEntity>> CRUDE_EXTRACTOR =
+            BLOCK_ENTITIES.register("crude_extractor",
+                    () -> BlockEntityType.Builder
+                            .of(CrudeExtractorBlockEntity::new, ModBlocks.CRUDE_EXTRACTOR.get())
                             .build(null));
 
     /**

@@ -3,10 +3,12 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineShellBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
+import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -35,8 +37,8 @@ public final class ModBlocks {
                     () -> new HandCrankDynamoBlock(machine().strength(2.0F)));
 
     /** T0 extractor. Slow and cheap, but it never needs a tunnel. */
-    public static final RegistrySupplier<Block> CRUDE_EXTRACTOR = register("crude_extractor",
-            () -> new MachineShellBlock(BlockCatalogue.Geometry.EXTRACTOR, machine().strength(2.5F)));
+    public static final RegistrySupplier<CrudeExtractorBlock> CRUDE_EXTRACTOR = register("crude_extractor",
+            () -> new CrudeExtractorBlock(machine().strength(2.5F)));
 
     /** T0 progression gate. Consumes Data Cores and Flux Units to unlock blueprints. */
     public static final RegistrySupplier<Block> RESEARCH_TERMINAL = register("research_terminal",
@@ -52,6 +54,12 @@ public final class ModBlocks {
 
     public static final RegistrySupplier<PylonBlock> FLUX_PYLON_MK3 = register("flux_pylon_mk3",
             () -> new PylonBlock(PylonTier.MK3, machine().strength(4.0F)));
+
+    /**
+     * Occupies the two blocks above a pylon. No item: breaking it breaks the pylon, which drops.
+     */
+    public static final RegistrySupplier<PylonShaftBlock> FLUX_PYLON_SHAFT =
+            BLOCKS.register("flux_pylon_shaft", () -> new PylonShaftBlock(machine().strength(3.0F)));
 
     private ModBlocks() {
     }

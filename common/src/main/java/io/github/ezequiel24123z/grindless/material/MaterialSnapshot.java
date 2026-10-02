@@ -79,6 +79,22 @@ public final class MaterialSnapshot {
         return materials.values();
     }
 
+    /**
+     * Materials a chunk vein may own, in the same name order.
+     *
+     * <p>The order is load-bearing: {@link io.github.ezequiel24123z.grindless.vein.VeinGenerator}
+     * picks from this list, and a different order would reassign every chunk.
+     */
+    public List<Material> mineable() {
+        List<Material> mineable = new ArrayList<>();
+        for (Material material : materials.values()) {
+            if (material.isMineable()) {
+                mineable.add(material);
+            }
+        }
+        return mineable;
+    }
+
     /** Every item filling this slot, most preferred first; empty if nothing provides it. */
     public List<ResourceLocation> providers(String material, MaterialForm form) {
         return items.getOrDefault(new Key(material, form), List.of());
