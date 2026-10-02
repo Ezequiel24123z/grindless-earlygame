@@ -59,6 +59,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0045](#adr-0045--capabilities-are-attached-by-event-not-overridden-on-the-block-entity) | Capabilities are attached by event, not overridden on the block entity | Accepted |
 | [0046](#adr-0046--the-pylon-index-is-chunk-bucketed-and-brownouts-resolve-in-two-phases) | The pylon index is chunk-bucketed, and brownouts resolve in two phases | Accepted |
 | [0047](#adr-0047--veins-are-long-lived-and-deepening-competes-with-relocating) | Veins are long-lived, and deepening competes with relocating | Accepted |
+| [0048](#adr-0048--assets-are-generated-from-the-jdk-with-a-named-list-of-what-cannot-be) | Assets are generated from the JDK, with a named list of what cannot be | Accepted |
 
 ---
 
@@ -1632,4 +1633,72 @@ The risk to watch is pacing. Forty hours is long enough that a player may never 
 short playthrough, which makes the Deep Bore upgrade dead content for them. That is the right way
 round — far better than the alternative — but if testing shows the depletion curve is never
 experienced at all, the reserve comes down rather than the floor.
+
+---
+
+## ADR-0048 — Assets are generated from the JDK, with a named list of what cannot be
+
+*2026-10-02 · Accepted*
+
+**Context.** The README has committed since day one to original, script-generated assets, and gave
+good reasons: consistency across a hundred-plus blocks, a palette change as a one-line edit, and
+unambiguous provenance. What it never did was establish whether that is actually *achievable*, or
+what happens to the parts it cannot cover. Art is the largest unexamined risk in the project — a
+mod is judged on its first screenshot long before anyone reads its recipe graph.
+
+This was investigated rather than assumed. The findings changed the plan twice.
+
+**Finding 1: there is no Python and no Node on the toolchain.** A generator written in either
+would add a dependency the project does not otherwise have, on a machine that cannot currently run
+it.
+
+**Finding 2: the JDK is enough, and that is better anyway.** `javax.imageio` writes PNG and
+`javax.sound.sampled` writes WAV with no third-party library at all. A generator in Java uses the
+toolchain the project already requires, can run as a Gradle task, and is checked by the same
+compiler as the mod.
+
+**Finding 3: audio is generatable, which contradicted the initial assessment.** Sound was written
+off as impossible before being tried. A probe produced a seamless one-second machine hum (summed
+harmonics at exact multiples of the loop frequency, so the ends join without a click) and a pylon
+link chirp (a rising sweep under a decaying envelope). Synthesised industrial sound — hums, clicks,
+relays, charge-ups, alarms — is squarely within reach. It is *tonal* sound that is hard, not sound.
+
+**Decision.** Generate assets from a committed Java tool, run by Gradle, covering:
+
+- **the form × material matrix** — ingots, plates, gears, dusts and the rest of ADR-0032's axis,
+  across every material the pack provides. This is the bulk of the catalogue by count and the part
+  where consistency *is* the quality;
+- **machine faces and casings** — composed from a base plate, a recessed panel, vents, rivets and
+  an emissive overlay, with active and idle variants;
+- **block models and blockstates**, which are declarative JSON;
+- **sound effects** of the industrial kind: hums, charge-ups, relay clicks, alarms.
+
+And name, explicitly, what this approach **will not** produce to a shippable standard:
+
+| Not generated | Why |
+| --- | --- |
+| Hero item sprites — the Multitool, the Research Terminal, the Prospector's Scanner | A script yields something legible, not something with character. These are what a player sees in the first screenshot. |
+| Complex models — drone arms, turbines, the Space Elevator | Blockbench work. A generator produces boxes. |
+| Entity animation | Keyframes are authored, not derived. |
+| Music, and any voiced or recorded sound | Synthesis covers industrial noise, not melody or recording. |
+| Particle effects that look *good* | The code is writable; judging the result needs eyes on it running. |
+
+**Alternatives rejected.** Generating everything and accepting the result (the catalogue would be
+consistent and characterless, and first impressions are the whole marketing budget of a mod);
+hand-authoring everything (hundreds of form × material cells is exactly the repetitive work this
+project refuses to inflict on *players*, and it would not survive a palette change); vendoring
+another mod's assets or anything under an unclear licence (not negotiable — the README's provenance
+claim is a promise, and third-party art would break it).
+
+**Consequences.** The generator is written **early rather than at step 19**. If the approach is
+going to fail it should fail at twenty blocks, not at three hundred, and the texture style
+constrains block model design — discovering that late would mean redoing both.
+
+The list above is the real output of this record. A future session can now see at a glance that
+hero art and complex models are *known gaps with no owner*, rather than assuming assets are
+handled because a generator exists. Those gaps are where a human artist would be worth finding;
+everything else is deliberately not worth an artist's time.
+
+Any third-party asset that ever enters the repository must be CC0 or equivalent, with its source
+recorded. Sound effects sourced rather than synthesised fall under the same rule.
 
