@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullConsumer;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.Optional;
@@ -18,6 +19,8 @@ import java.util.Optional;
  * capability packages unchanged (ADR-0002).
  */
 public final class FluxPlatformImpl {
+
+    private static final Runnable NO_OP = () -> { };
 
     private FluxPlatformImpl() {
     }
@@ -49,17 +52,24 @@ public final class FluxPlatformImpl {
      * <p>Silently does nothing when there is no capability to listen to. That is correct rather
      * than a failure: there is nothing to go stale, and the caller re-resolves on the next
      * neighbour-changed event anyway.
+     *
+     * <p>The returned handle removes the listener. {@code LazyOptional} keeps its listeners in a
+     * set and each registration here is a new lambda, so without removal every re-resolve adds one
+     * more to a capability that lives as long as the neighbour does.
      */
-    public static void onInvalidated(Level level, BlockPos pos, Direction side,
-                                     Runnable onInvalidated) {
+    public static Runnable onInvalidated(Level level, BlockPos pos, Direction side,
+                                         Runnable onInvalidated) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity == null) {
-            return;
+            return NO_OP;
         }
         LazyOptional<IEnergyStorage> capability =
                 blockEntity.getCapability(ForgeCapabilities.ENERGY, side);
-        if (capability.isPresent()) {
-            capability.addListener(ignored -> onInvalidated.run());
+        if (!capability.isPresent()) {
+            return NO_OP;
         }
+        NonNullConsumer<LazyOptional<IEnergyStorage>> listener = ignored -> onInvalidated.run();
+        capability.addListener(listener);
+        return () -> capability.removeListener(listener);
     }
 }

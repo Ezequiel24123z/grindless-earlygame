@@ -43,12 +43,19 @@ public final class FluxPlatform {
      * neighbour's removal and the machine goes on pushing power into a block that is no longer
      * there, which presents as "my machine stopped working until I broke and replaced it".
      *
-     * <p>The listener fires at most once per registration; re-resolving the capability registers
-     * a new one. It must not assume the block entity still exists.
+     * <p>The listener fires at most once per registration. It must not assume the block entity
+     * still exists.
+     *
+     * <p>The returned handle removes the registration, and it matters: a neighbour's capability
+     * outlives any one holder, so a holder that re-resolves without unregistering leaves one more
+     * listener behind each time, each of them keeping the holder reachable. Running the handle
+     * after the listener has fired, or when there was nothing to listen to, is harmless.
+     *
+     * @return a handle that unregisters the listener; never {@code null}
      */
     @ExpectPlatform
-    public static void onInvalidated(Level level, BlockPos pos, Direction side,
-                                     Runnable onInvalidated) {
+    public static Runnable onInvalidated(Level level, BlockPos pos, Direction side,
+                                         Runnable onInvalidated) {
         throw new AssertionError("@ExpectPlatform stub was not transformed; check the platform impl");
     }
 }
