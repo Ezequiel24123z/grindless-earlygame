@@ -4,9 +4,11 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
@@ -15,7 +17,9 @@ import java.util.function.Supplier;
 /**
  * Creative tabs. One tab for now; it splits by system once the catalogue outgrows a single page.
  *
- * <p>Registered last, because the tab enumerates items that must already exist.
+ * <p>Registered last, because the tab enumerates items that must already exist. Material items are
+ * added through a callback that runs on every rebuild of the tab, because which of them are shown
+ * depends on tags that are not loaded until a world is (ADR-0050).
  */
 public final class ModCreativeTabs {
 
@@ -42,6 +46,13 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));
+        CreativeTabRegistry.modify(MAIN, (flags, output, adminTab) -> {
+            for (RegistrySupplier<Item> item : ModItems.SUPPLY) {
+                if (!MaterialRegistry.isRedundantFallback(item.getId())) {
+                    output.accept(item.get());
+                }
+            }
+        });
     }
 
     /**

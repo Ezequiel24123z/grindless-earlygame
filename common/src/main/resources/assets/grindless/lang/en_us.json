@@ -11,5 +11,30 @@
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
-  "block.grindless.flux_pylon_mk3": "Flux Pylon MK3"
+  "block.grindless.flux_pylon_mk3": "Flux Pylon MK3",
+
+  "form.grindless.raw": "Raw %s",
+  "form.grindless.crushed": "Crushed %s",
+  "form.grindless.dust": "%s Dust",
+  "form.grindless.nugget": "%s Nugget",
+  "form.grindless.ingot": "%s Ingot",
+  "form.grindless.plate": "%s Plate",
+  "form.grindless.rod": "%s Rod",
+  "form.grindless.bolt": "%s Bolt",
+  "form.grindless.gear": "%s Gear",
+  "form.grindless.ring": "%s Ring",
+
+  "material.grindless.iron": "Iron",
+  "material.grindless.copper": "Copper",
+  "material.grindless.gold": "Gold",
+  "material.grindless.tin": "Tin",
+  "material.grindless.lead": "Lead",
+  "material.grindless.silver": "Silver",
+  "material.grindless.nickel": "Nickel",
+  "material.grindless.zinc": "Zinc",
+  "material.grindless.aluminium": "Aluminium",
+  "material.grindless.titanium": "Titanium",
+  "material.grindless.tungsten": "Tungsten",
+  "material.grindless.platinum": "Platinum",
+  "material.grindless.steel": "Steel"
 }

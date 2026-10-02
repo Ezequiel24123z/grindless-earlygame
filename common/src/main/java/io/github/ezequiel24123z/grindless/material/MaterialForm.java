@@ -16,33 +16,59 @@ public enum MaterialForm {
     // Ore-line forms. The grade is what each contributes to final metal yield, and it is a
     // property of the form rather than of the material — which is what lets one generated recipe
     // set cover the whole pack (ADR-0035).
-    ORE("ores", 1.00),
-    RAW("raw_materials", 1.00),
-    CRUSHED("crushed_materials", 2.00),
-    PURIFIED("purified_materials", 2.55),
-    DUST("dusts", 2.00),
+    ORE("ores", 1.00, true),
+    RAW("raw_materials", 1.00, true),
+    CRUSHED("crushed_materials", 2.00, false),
+    PURIFIED("purified_materials", 2.55, false),
+    DUST("dusts", 2.00, true),
 
     // Metal and formed stock.
-    NUGGET("nuggets", 0.0),
-    INGOT("ingots", 0.0),
-    GEM("gems", 0.0),
-    STORAGE_BLOCK("storage_blocks", 0.0),
-    PLATE("plates", 0.0),
-    FOIL("foils", 0.0),
-    ROD("rods", 0.0),
-    BOLT("bolts", 0.0),
-    GEAR("gears", 0.0),
-    RING("rings", 0.0),
-    WIRE("wires", 0.0),
-    FINE_WIRE("fine_wires", 0.0),
-    COIL("coils", 0.0);
+    NUGGET("nuggets", 0.0, true),
+    INGOT("ingots", 0.0, true),
+    GEM("gems", 0.0, true),
+    STORAGE_BLOCK("storage_blocks", 0.0, true),
+    PLATE("plates", 0.0, true),
+    FOIL("foils", 0.0, false),
+    ROD("rods", 0.0, true),
+    BOLT("bolts", 0.0, false),
+    GEAR("gears", 0.0, true),
+    RING("rings", 0.0, false),
+    WIRE("wires", 0.0, false),
+    FINE_WIRE("fine_wires", 0.0, false),
+    COIL("coils", 0.0, false);
 
     private final String tagPath;
     private final double grade;
+    private final boolean conventional;
 
-    MaterialForm(String tagPath, double grade) {
+    MaterialForm(String tagPath, double grade, boolean conventional) {
         this.tagPath = tagPath;
         this.grade = grade;
+        this.conventional = conventional;
+    }
+
+    /**
+     * Whether other mods agree on a tag for this form, so that Grindless can share it with them.
+     *
+     * <p>{@code forge:ingots/tin} is followed by essentially every mod; {@code forge:bolts/tin} is
+     * followed by none. Conventional forms are published and consumed under {@code forge:}, which
+     * is what makes a recipe's ingredient interchangeable with another mod's item. Forms without a
+     * convention are Grindless's own intermediates and live under {@code grindless:}, published so
+     * other mods can opt in, because claiming an unagreed {@code forge:} tag would only mean
+     * nothing else ever fills it (ADR-0050, the same boundary ADR-0033 draws for reagents).
+     */
+    public boolean isConventional() {
+        return conventional;
+    }
+
+    /** The tag namespace this form is shared under: {@code forge} or {@code grindless}. */
+    public String tagNamespace() {
+        return conventional ? "forge" : "grindless";
+    }
+
+    /** The tag path for one material of this form, such as {@code ingots/tin}. */
+    public String tagPath(String material) {
+        return tagPath + "/" + material;
     }
 
     /**

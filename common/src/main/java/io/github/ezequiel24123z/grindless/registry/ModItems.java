@@ -3,9 +3,14 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.material.SupplyItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -30,7 +35,25 @@ public final class ModItems {
     public static final RegistrySupplier<Item> MACHINE_CASING = register("machine_casing",
             () -> new Item(new Item.Properties()));
 
+    /**
+     * Every material item Grindless supplies, registered whether or not the pack needs it.
+     *
+     * <p>Registration cannot depend on which other mods are installed: registry IDs are saved into
+     * worlds, so adding or removing a mod must not add or remove ours. Whether an item is actually
+     * wanted is decided later, from tags (ADR-0050).
+     */
+    public static final List<RegistrySupplier<Item>> SUPPLY = registerSupply();
+
     private ModItems() {
+    }
+
+    private static List<RegistrySupplier<Item>> registerSupply() {
+        List<RegistrySupplier<Item>> supply = new ArrayList<>();
+        for (SupplyCatalogue.Entry entry : SupplyCatalogue.entries()) {
+            supply.add(register(entry.itemName(),
+                    () -> new SupplyItem(entry, new Item.Properties())));
+        }
+        return Collections.unmodifiableList(supply);
     }
 
     public static <T extends Item> RegistrySupplier<T> register(String name, Supplier<T> item) {
