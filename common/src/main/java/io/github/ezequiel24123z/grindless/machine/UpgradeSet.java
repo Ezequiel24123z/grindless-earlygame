@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.machine;
 
+import net.minecraft.nbt.CompoundTag;
+
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -127,6 +129,42 @@ public final class UpgradeSet {
             next.put(upgrade, remaining);
         }
         return new UpgradeSet(next);
+    }
+
+    /**
+     * Writes the installed upgrades into {@code tag}, keyed by upgrade <em>name</em>.
+     *
+     * <p>Names rather than ordinals, so reordering or inserting into {@link MachineUpgrade} cannot
+     * silently turn a saved Speed upgrade into a saved Precision one.
+     */
+    public CompoundTag save(CompoundTag tag) {
+        counts.forEach((upgrade, count) -> tag.putInt(upgrade.name(), count));
+        return tag;
+    }
+
+    /**
+     * Reads upgrades written by {@link #save}.
+     *
+     * <p>Lenient on purpose: an upgrade removed in a later version, or a non-positive count, is
+     * skipped rather than thrown on, because a throw during world load reads to the player as a
+     * corrupt save. Slot limits and conflicts are not re-checked here; they govern installing, and
+     * a machine saved under older rules keeps what it had.
+     */
+    public static UpgradeSet load(CompoundTag tag) {
+        Map<MachineUpgrade, Integer> loaded = new EnumMap<>(MachineUpgrade.class);
+        for (String key : tag.getAllKeys()) {
+            int count = tag.getInt(key);
+            if (count <= 0) {
+                continue;
+            }
+            for (MachineUpgrade upgrade : MachineUpgrade.values()) {
+                if (upgrade.name().equals(key)) {
+                    loaded.put(upgrade, count);
+                    break;
+                }
+            }
+        }
+        return loaded.isEmpty() ? EMPTY : new UpgradeSet(loaded);
     }
 
     /**

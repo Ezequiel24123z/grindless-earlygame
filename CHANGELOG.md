@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **A boot smoke test and CI** (ADR-0049). `tools/smoke-boot.sh` starts the headless Forge
+  dedicated server and fails unless it reaches `Done`; `.github/workflows/ci.yml` runs the build,
+  the behaviour checks and the smoke test on Linux. `tools/run-checks.sh` is the Linux port of
+  `tools/run-checks.ps1`. Until now "verified" meant a green build and 309 passing checks, and the
+  mod could not start: neither gate instantiates Forge. The smoke test fails on the previous
+  `ModCreativeTabs` with the original `Registry Object not present` crash and passes on the fix.
 - **The asset generator** (`tools/assetgen`, `tools/generate-assets.ps1`) and **ADR-0048**. Art was
   the project's largest unexamined risk, so it was investigated rather than assumed, and three
   findings changed the plan. There is no Python and no Node on the toolchain. The JDK alone is
@@ -137,6 +143,32 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Capability listeners leaked.** `NeighbourCache` registered a new invalidation listener on every
+  re-lookup and never removed it, so a neighbour that kept invalidating accumulated listeners
+  without bound. The listener is now registered once per cached capability and removed on
+  `invalidate()`; `FluxPlatform.onInvalidated` returns the unsubscribe handle. The Hand-Crank
+  Dynamo also releases its caches in `setRemoved()`.
+- **The Hand-Crank Dynamo polled every pushed tick when nobody was listening.** Fruitless pushes
+  now back off exponentially up to 20 ticks (`PushBackoff`) and reset on crank or neighbour change.
+- **Machine upgrades and process conditions were lost on save.** `UpgradeSet` and `ConditionState`
+  are now written to and read from NBT. Machines saved before this change load with no upgrades and
+  ambient conditions.
+- **Flux Network extraction ignored pylon throughput.** `FluxNetwork.extract` could drain a full
+  buffer in one call; it is now capped per tick at the pylons' combined throughput, restored by
+  `resolveTick()`.
+- **The mod crashed during construction.** `ModCreativeTabs.register()` called `get()` on registry
+  objects before the registry was populated, so Forge refused to create the mod instance with
+  `Registry Object not present: grindless:multitool`. The tab now receives lazy suppliers. The
+  three Flux Pylons were also missing from the creative tab and are added.
+- **A broken pylon stayed in its network after a world reload.** `PylonBlockEntity` mirrored its
+  membership in a transient `registered` flag that only a first-tick hook restored, and pylons have
+  no ticker, so after a reload `deregister()` returned early and the network kept a ghost pylon,
+  with its capacity and topology. Membership now lives only in `FluxNetworkData`. Confirmed in a
+  real server: place, save, restart, break — the pylon stayed in the saved network before the fix
+  and is gone after it. `PylonBlock.onPlace` also ignores a state-only change, since re-adding a
+  member removes it first and re-runs the split flood fill.
+- `gradlew` was committed without its executable bit, so it failed with `Permission denied` on
+  Linux, macOS and CI. Invisible on Windows.
 - `tools/run-checks.ps1` exited non-zero even when every suite passed, because a PowerShell script
   with no explicit `exit` inherits whatever `$LASTEXITCODE` the last native command left behind.
   It is used as a pre-commit gate, so a runner that reports failure on success is worse than no

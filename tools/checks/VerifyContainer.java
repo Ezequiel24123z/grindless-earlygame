@@ -1,8 +1,15 @@
 package io.github.ezequiel24123z.grindless.container;
 
+import io.github.ezequiel24123z.grindless.energy.FluxStorage;
+import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.machine.TickSubscription;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /** Throwaway check of the container contract. Not part of the mod. */
 public final class VerifyContainer {
@@ -14,6 +21,7 @@ public final class VerifyContainer {
         sides();
         autoVoid();
         persistence();
+        neighbourCache();
 
         System.out.println(failures == 0
                 ? "ALL CONTAINER CHECKS PASSED"
@@ -55,6 +63,72 @@ public final class VerifyContainer {
         cleared.add(() -> { });
         cleared.clear();
         yes("clear empties", cleared.isEmpty());
+    }
+
+    /**
+     * A neighbour's capability outlives any one machine, so every listener a cache leaves on it
+     * stays there. This models that capability as a set of listeners and counts what is live.
+     */
+    private static void neighbourCache() {
+        Set<Runnable> live = new HashSet<>();
+        int[] lookups = {0};
+        FluxStorage buffer = new SimpleFluxStorage(100L, 10L, 10L, () -> { });
+        NeighbourCache cache = new NeighbourCache(
+                () -> {
+                    lookups[0]++;
+                    return buffer;
+                },
+                listener -> {
+                    live.add(listener);
+                    return () -> live.remove(listener);
+                });
+
+        yes("resolves the neighbour", cache.get() == buffer);
+        eq("one listener after resolving", 1, live.size());
+        cache.get();
+        cache.get();
+        eq("cached, so no further lookups or listeners", 1, lookups[0]);
+        eq("still one listener", 1, live.size());
+
+        // The leak this guards against: every neighbour-changed event invalidates and the next
+        // tick re-resolves, adding a listener to a capability that is never going away.
+        for (int i = 0; i < 10_000; i++) {
+            cache.invalidate();
+            cache.get();
+        }
+        eq("10,000 neighbour changes leave one listener, not 10,000", 1, live.size());
+
+        cache.invalidate();
+        eq("invalidating releases the listener", 0, live.size());
+
+        // The capability reports itself gone: it fires its listeners and then drops them.
+        cache.get();
+        List<Runnable> firing = new ArrayList<>(live);
+        live.clear();
+        firing.forEach(Runnable::run);
+        int before = lookups[0];
+        cache.get();
+        eq("a revoked capability forces a fresh lookup", before + 1, lookups[0]);
+        eq("and a fresh listener", 1, live.size());
+
+        // A neighbour with no buffer has nothing to listen to and is cached as absent.
+        Set<Runnable> none = new HashSet<>();
+        int[] absentLookups = {0};
+        NeighbourCache wall = new NeighbourCache(
+                () -> {
+                    absentLookups[0]++;
+                    return null;
+                },
+                listener -> {
+                    none.add(listener);
+                    return () -> none.remove(listener);
+                });
+        no("a wall has no buffer", wall.isPresent());
+        wall.get();
+        eq("absence is cached", 1, absentLookups[0]);
+        eq("no listener for a wall", 0, none.size());
+        wall.invalidate();
+        eq("invalidating a wall cache is harmless", 0, none.size());
     }
 
     private static void sides() {

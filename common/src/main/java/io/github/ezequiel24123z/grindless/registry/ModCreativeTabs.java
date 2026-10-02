@@ -8,6 +8,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+
+import java.util.function.Supplier;
 
 /**
  * Creative tabs. One tab for now; it splits by system once the catalogue outgrows a single page.
@@ -30,11 +33,22 @@ public final class ModCreativeTabs {
     public static void register() {
         TABS.register();
         CreativeTabRegistry.append(MAIN,
-                ModItems.MULTITOOL.get(),
-                ModItems.DATA_CORE.get(),
-                ModItems.MACHINE_CASING.get(),
-                ModBlocks.HAND_CRANK_DYNAMO.get(),
-                ModBlocks.CRUDE_EXTRACTOR.get(),
-                ModBlocks.RESEARCH_TERMINAL.get());
+                lazy(ModItems.MULTITOOL),
+                lazy(ModItems.DATA_CORE),
+                lazy(ModItems.MACHINE_CASING),
+                lazy(ModBlocks.HAND_CRANK_DYNAMO),
+                lazy(ModBlocks.CRUDE_EXTRACTOR),
+                lazy(ModBlocks.RESEARCH_TERMINAL),
+                lazy(ModBlocks.FLUX_PYLON_MK1),
+                lazy(ModBlocks.FLUX_PYLON_MK2),
+                lazy(ModBlocks.FLUX_PYLON_MK3));
+    }
+
+    /**
+     * Defers {@code item.get()} until the registry has been populated. Calling {@code get()} here
+     * directly throws "Registry Object not present" while the mod is still being constructed.
+     */
+    private static Supplier<ItemLike> lazy(Supplier<? extends ItemLike> item) {
+        return item::get;
     }
 }

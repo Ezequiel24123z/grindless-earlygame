@@ -60,6 +60,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0046](#adr-0046--the-pylon-index-is-chunk-bucketed-and-brownouts-resolve-in-two-phases) | The pylon index is chunk-bucketed, and brownouts resolve in two phases | Accepted |
 | [0047](#adr-0047--veins-are-long-lived-and-deepening-competes-with-relocating) | Veins are long-lived, and deepening competes with relocating | Accepted |
 | [0048](#adr-0048--assets-are-generated-from-the-jdk-with-a-named-list-of-what-cannot-be) | Assets are generated from the JDK, with a named list of what cannot be | Accepted |
+| [0049](#adr-0049--a-green-build-must-include-a-booted-server) | A green build must include a booted server | Accepted |
 
 ---
 
@@ -1702,3 +1703,49 @@ everything else is deliberately not worth an artist's time.
 Any third-party asset that ever enters the repository must be CC0 or equivalent, with its source
 recorded. Sound effects sourced rather than synthesised fall under the same rule.
 
+
+---
+
+## ADR-0049 — A green build must include a booted server
+
+*2026-10-02 · Accepted*
+
+**Context.** Until now "verified" meant two things: `./gradlew build` succeeds, and the behaviour
+checks in `tools/checks` pass. Both were true — 309 checks, a 25 second build — while the mod could
+not start. `ModCreativeTabs.register()` called `get()` on registry objects during mod construction,
+before the registry was populated, and Forge refused to create the mod instance with
+`Registry Object not present: grindless:multitool`.
+
+Neither existing gate can see that class of bug, by design. The checks run `common` classes in a
+plain JVM, which is why they need no Minecraft; the build only compiles. Nothing instantiates
+Forge, so nothing exercises registration order, capability attachment, `@ExpectPlatform`
+resolution or anything else that only exists once the loader is running.
+
+A second bug of the same family was found by running the game rather than reading it: a pylon's
+network membership was mirrored in a transient `registered` flag, restored by a first-tick hook
+that pylons never reach because they have no ticker. After a world reload the flag read false, so
+breaking the pylon did nothing and the network kept a ghost. It passed every check, because the
+checks never reload a world.
+
+**Decision.** A change is not verified until the dedicated server has booted with the mod loaded.
+`tools/smoke-boot.sh` starts `:forge:runServer` headless, waits for `Done`, sends `stop`, and fails
+on `Mod Loading has failed` or an early exit. CI runs it after the build and the checks, on Linux.
+It writes `eula.txt` only when `GRINDLESS_ACCEPT_EULA=true` or `CI=true`, because that records
+acceptance of the Minecraft EULA on the caller's behalf.
+
+State that must survive a reload lives in saved data and nowhere else. A block entity may cache
+it, but must be correct with an empty cache, because a block entity is rebuilt on every chunk load
+and its first-tick path is not guaranteed to run.
+
+**Alternatives rejected.** Forge GameTests (the better long-term home for reload scenarios, but
+they need infrastructure the project does not have yet, and the smoke test catches the failure
+that matters today for thirty lines of shell); relying on the client to find it (a person has to
+launch a game to learn the mod does not load, which is the situation this record exists to end);
+adding `get()` guards at each call site (treats one symptom — registration order — and leaves the
+class of bug unobserved).
+
+**Consequences.** CI needs a Linux job with JDK 17 and a few minutes for the first remap. The
+script also makes it cheap to run the same check locally on Linux and macOS; on Windows it runs
+under WSL or Git Bash. `tools/run-checks.sh` is the Linux counterpart of `tools/run-checks.ps1`, so
+the checks are no longer Windows-only. Reload scenarios still need a person or a future GameTest;
+the smoke test proves the mod boots, not that every system survives a restart.

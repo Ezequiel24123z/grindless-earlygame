@@ -6,6 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 /**
  * Caches the energy buffer of the block on one face, so a machine pushing power is not doing a
  * block-entity lookup every tick.
@@ -32,21 +35,33 @@ import net.minecraft.world.level.Level;
  */
 public final class NeighbourCache {
 
-    private final Level level;
-    private final BlockPos pos;
-    private final Direction side;
+    private final Supplier<FluxStorage> lookup;
+    private final Function<Runnable, Runnable> subscribe;
 
     private FluxStorage cached;
     private boolean resolved;
+    private Runnable unsubscribe;
 
     /**
      * @param pos  the <em>machine's</em> position, not the neighbour's
      * @param side the face to look through
      */
     public NeighbourCache(Level level, BlockPos pos, Direction side) {
-        this.level = level;
-        this.pos = pos;
-        this.side = side;
+        this(() -> FluxPlatform.findEnergy(level, pos.relative(side), side.getOpposite()),
+                onInvalidated -> FluxPlatform.onInvalidated(
+                        level, pos.relative(side), side.getOpposite(), onInvalidated));
+    }
+
+    /**
+     * The seam that lets the registration behaviour be checked without a loader.
+     *
+     * @param lookup    resolves the neighbour's buffer, or {@code null} if it has none
+     * @param subscribe registers a callback for the neighbour's capability being invalidated and
+     *                  returns a handle that unregisters it
+     */
+    NeighbourCache(Supplier<FluxStorage> lookup, Function<Runnable, Runnable> subscribe) {
+        this.lookup = lookup;
+        this.subscribe = subscribe;
     }
 
     /**
@@ -58,11 +73,10 @@ public final class NeighbourCache {
      */
     public FluxStorage get() {
         if (!resolved) {
-            cached = FluxPlatform.findEnergy(level, pos.relative(side), side.getOpposite());
+            cached = lookup.get();
             resolved = true;
             if (cached != null) {
-                FluxPlatform.onInvalidated(level, pos.relative(side), side.getOpposite(),
-                        this::invalidate);
+                unsubscribe = subscribe.apply(this::onCapabilityInvalidated);
             }
         }
         return cached;
@@ -71,14 +85,34 @@ public final class NeighbourCache {
     /**
      * Drops the cached value so the next {@link #get()} looks it up again.
      *
-     * <p>Called by the platform's invalidation listener, and by the machine on a neighbour-changed
-     * event. Both paths matter: invalidation covers a capability being revoked, and the neighbour
-     * event covers a block appearing where there was none, which invalidation cannot signal
-     * because there was nothing there to invalidate.
+     * <p>Called by the machine on a neighbour-changed event, and when the machine itself is
+     * removed. The neighbour event covers a block appearing where there was none, which the
+     * capability's own invalidation cannot signal because there was nothing there to invalidate.
+     *
+     * <p>It also unregisters the listener from the previous resolve. The neighbour's capability
+     * lives as long as the neighbour, so a listener left behind stays there, keeps this cache
+     * and the machine behind it reachable, and is joined by one more on every re-resolve.
      */
     public void invalidate() {
+        release();
         cached = null;
         resolved = false;
+    }
+
+    /**
+     * The capability told us it is gone, so there is nothing left to unregister from.
+     */
+    private void onCapabilityInvalidated() {
+        unsubscribe = null;
+        cached = null;
+        resolved = false;
+    }
+
+    private void release() {
+        if (unsubscribe != null) {
+            unsubscribe.run();
+            unsubscribe = null;
+        }
     }
 
     /** Whether a neighbour with an energy buffer is currently known to be present. */
