@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "grindless:block/casing_top",
+    "side": "grindless:block/face_aperture"
+  }
+}

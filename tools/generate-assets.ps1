@@ -32,6 +32,7 @@ try {
     $material = Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\material'
     $sources += (Join-Path $material 'SupplyCatalogue.java')
     $sources += (Join-Path $material 'MaterialForm.java')
+    $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\registry\BlockCatalogue.java')
     & javac -nowarn -d $out $sources
     if ($LASTEXITCODE -ne 0) {
         Write-Output 'GENERATOR DID NOT COMPILE'

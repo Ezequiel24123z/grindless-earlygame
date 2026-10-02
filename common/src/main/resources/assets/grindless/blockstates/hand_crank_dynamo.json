@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "grindless:block/hand_crank_dynamo" }
+  }
+}

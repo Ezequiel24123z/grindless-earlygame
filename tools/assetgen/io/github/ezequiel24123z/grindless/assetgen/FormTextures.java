@@ -193,4 +193,38 @@ public final class FormTextures {
         field.bevel(0.3);
         return field.light(palette);
     }
+
+    /**
+     * Placeholder sprite for the Data Core: a chip with a lit centre.
+     *
+     * <p>A stand-in, not art. Hero item sprites are a named gap in ADR-0048; this exists so the
+     * item is recognisable and is not the purple-and-black missing-texture square.
+     */
+    public static BufferedImage dataCore(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 3, 12, 12, 3.2);
+        field.rect(5, 5, 10, 10, 4.2);
+        field.disc(7.5, 7.5, 1.6, 5.2);
+        for (int i = 4; i <= 11; i += 3) {
+            field.rect(i, 1, i, 2, 2.6);
+            field.rect(i, 13, i, 14, 2.6);
+        }
+        field.bevel(0.4);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for the Multitool: a handle with a head. See {@link #dataCore}. */
+    public static BufferedImage multitool(Palette palette) {
+        HeightField field = new HeightField();
+        for (int y = 6; y <= 14; y++) {
+            for (int x = 6; x <= 8; x++) {
+                double across = 1.0 - Math.abs((x - 7.0) / 1.6);
+                field.set(x, y, 2.8 + 2.0 * Math.max(0, across));
+            }
+        }
+        field.rect(3, 2, 11, 5, 3.6);
+        field.disc(7.0, 3.5, 2.2, 5.0);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
 }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "grindless:block/casing_top",
+    "front": "grindless:block/face_gauge",
+    "side": "grindless:block/casing_side"
+  }
+}

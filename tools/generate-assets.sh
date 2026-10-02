@@ -12,5 +12,5 @@ mapfile -t SOURCES < <(find "$ROOT/tools/assetgen" -name '*.java' | sort)
 
 # SupplyCatalogue is shared with the mod so the list of materials is written once. It and
 # MaterialForm have no Minecraft imports, which is what lets the generator compile them alone.
-javac -nowarn -d "$OUT" "${SOURCES[@]}" "$MATERIAL_SRC/SupplyCatalogue.java" "$MATERIAL_SRC/MaterialForm.java"
+javac -nowarn -d "$OUT" "${SOURCES[@]}" "$MATERIAL_SRC/SupplyCatalogue.java" "$MATERIAL_SRC/MaterialForm.java" "$ROOT/common/src/main/java/io/github/ezequiel24123z/grindless/registry/BlockCatalogue.java"
 java -cp "$OUT" io.github.ezequiel24123z.grindless.assetgen.GenerateAssets "$(cd "$ROOT" && pwd)"

@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.assetgen;
 
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -84,6 +85,15 @@ public final class GenerateAssets {
         removeStale(items, ".png", expected);
         removeStale(resourceDir(root, "models/item"), ".json", expected);
         written += writeTags(root);
+
+        // ---- placeholder sprites, blocks, loot and mining tags ----
+        written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
+        written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
+        for (String sprite : BlockCatalogue.placeholderSprites()) {
+            written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
+                    itemModel(sprite));
+        }
+        written += writeBlocks(root);
 
         // ---- machine casings ----
         // Names are kept deliberately short. Minecraft's asset layout is already deep
@@ -237,6 +247,71 @@ public final class GenerateAssets {
             }
         }
         dir.delete();
+    }
+
+    /**
+     * Blockstates, models, loot tables and the pickaxe tag for every block in the catalogue.
+     *
+     * <p>Without these a block renders as the missing-texture cube and, because machines require
+     * the correct tool, breaks into nothing. The loot table is a plain self-drop; the pickaxe tag
+     * is additive and is the one place Grindless writes into {@code minecraft:} (ADR-0051).
+     */
+    private static int writeBlocks(File root) throws IOException {
+        File assets = assetRoot(root);
+        File data = new File(root, "common/src/main/resources/data");
+        int written = 0;
+        List<String> names = new ArrayList<>();
+        for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
+            String n = block.name();
+            names.add("grindless:" + n);
+            written += writeText(new File(assets, "blockstates/" + n + ".json"),
+                    "{\n  \"variants\": {\n    \"\": { \"model\": \"grindless:block/" + n + "\" }\n  }\n}\n");
+            written += writeText(new File(assets, "models/block/" + n + ".json"), blockModel(block));
+            written += writeText(new File(assets, "models/item/" + n + ".json"),
+                    "{\n  \"parent\": \"grindless:block/" + n + "\"\n}\n");
+            written += writeText(new File(data, "grindless/loot_tables/blocks/" + n + ".json"), lootTable(n));
+        }
+        written += writeText(new File(assets, "models/item/" + BlockCatalogue.CASING_ITEM + ".json"),
+                "{\n  \"parent\": \"minecraft:block/cube_bottom_top\",\n  \"textures\": {\n"
+                        + "    \"top\": \"grindless:block/casing_top\",\n"
+                        + "    \"bottom\": \"grindless:block/casing_top\",\n"
+                        + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n");
+        written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
+                tagJson(names.toArray(new String[0])));
+        return written;
+    }
+
+    private static String blockModel(BlockCatalogue.Entry block) {
+        String face = "grindless:block/" + block.face();
+        return switch (block.shape()) {
+            case ORIENTABLE -> "{\n  \"parent\": \"minecraft:block/orientable\",\n  \"textures\": {\n"
+                    + "    \"top\": \"grindless:block/casing_top\",\n"
+                    + "    \"front\": \"" + face + "\",\n"
+                    + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n";
+            case COLUMN -> "{\n  \"parent\": \"minecraft:block/cube_column\",\n  \"textures\": {\n"
+                    + "    \"end\": \"grindless:block/casing_top\",\n"
+                    + "    \"side\": \"" + face + "\"\n  }\n}\n";
+        };
+    }
+
+    private static String lootTable(String block) {
+        return """
+                {
+                  "type": "minecraft:block",
+                  "pools": [
+                    {
+                      "rolls": 1.0,
+                      "bonus_rolls": 0.0,
+                      "entries": [
+                        { "type": "minecraft:item", "name": "grindless:%s" }
+                      ],
+                      "conditions": [
+                        { "condition": "minecraft:survives_explosion" }
+                      ]
+                    }
+                  ]
+                }
+                """.formatted(block);
     }
 
     /**
