@@ -11,6 +11,11 @@
 # bugs — an EnumMap constructor that throws on an empty source map, and a band efficiency
 # expectation that was simply wrong.
 #
+# Expect noise on stderr. The classpath is the whole Gradle module cache, which contains several
+# slf4j versions, so anything touching a class with a logger prints an "Unexpected problem occured
+# during version sanity check" stack trace. slf4j catches it and carries on; the suites still run
+# and still report correctly. The process exit code is the authoritative result, not the output.
+#
 # Two Windows details are load-bearing:
 #   1. The classpath needs the whole Gradle module cache. `Direction.<clinit>` drags in most of
 #      Minecraft's bootstrap - DataFixerUpper, brigadier, joml - so a minimal classpath fails at
