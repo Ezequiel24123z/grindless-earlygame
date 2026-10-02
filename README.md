@@ -1894,7 +1894,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 12c | `MachineBlockEntity` + the Hand Crank Dynamo, wired to its block | ✅ done |
 | 12d | Exposing machine buffers as Forge capabilities | ✅ done — ADR-0045 |
 | 13 | Pylon network, supply areas, `SavedData` | ✅ done — `network/`, ADR-0046 |
-| 13b | The Flux Pylon block, and machines drawing from their network | pending |
+| 13b | The Flux Pylon block, and machines drawing from their network | ✅ done |
 | 14 | Chunk veins + runtime material registry | pending |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
 | 16 | T0/T1 machines, menus and screens | pending |

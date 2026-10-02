@@ -3,10 +3,13 @@ package io.github.ezequiel24123z.grindless.machine;
 import io.github.ezequiel24123z.grindless.container.ContainerConfig;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
+import io.github.ezequiel24123z.grindless.network.FluxNetwork;
+import io.github.ezequiel24123z.grindless.network.FluxNetworkData;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -174,6 +177,53 @@ public abstract class MachineBlockEntity extends BlockEntity {
         return upgrades.timeMultiplier();
     }
 
+    // ---- Power ----------------------------------------------------------------------------
+
+    /**
+     * The Flux Network supplying this machine, or {@code null} if no pylon covers it.
+     *
+     * <p>A machine is powered because it stands inside a supply area, full stop — there are no
+     * wires, no per-face connections and no cable loss. The lookup is an index hit rather than a
+     * graph walk (ADR-0046), but it is still not free, so callers should ask once per tick and
+     * not once per operation.
+     */
+    public FluxNetwork network() {
+        return getLevel() instanceof ServerLevel server
+                ? FluxNetworkData.get(server).networkCovering(getBlockPos())
+                : null;
+    }
+
+    /**
+     * Declares this machine's intended draw for the coming tick.
+     *
+     * <p>Half of the two-phase brownout (ADR-0046): every machine declares first, the network
+     * works out one satisfaction fraction, and only then does anyone draw. Drawing directly
+     * instead would hand full power to whichever machines happen to tick first and starve the
+     * rest, which is the failure mode the design rejects.
+     */
+    protected void requestPower(long amount) {
+        FluxNetwork network = network();
+        if (network != null) {
+            network.registerDemand(amount);
+        }
+    }
+
+    /**
+     * Draws up to {@code amount}, scaled by how much of the network's demand can be met.
+     *
+     * <p>Returns what was actually drawn, which may be less than asked for during a brownout.
+     * Callers scale their progress by the shortfall rather than stalling: a machine on an
+     * overloaded network runs slowly and visibly, never stopping with no explanation.
+     */
+    protected long drawPower(long amount) {
+        FluxNetwork network = network();
+        if (network == null || amount <= 0L) {
+            return 0L;
+        }
+        long share = Math.round(amount * network.satisfaction());
+        return network.extract(share, false);
+    }
+
     // ---- Ticking --------------------------------------------------------------------------
 
     protected TickSubscriptions subscriptions() {
@@ -190,6 +240,17 @@ public abstract class MachineBlockEntity extends BlockEntity {
     protected boolean isDue(int period) {
         Level level = getLevel();
         return level != null && TickOffset.isDue(level.getGameTime(), tickOffset, period);
+    }
+
+    /**
+     * Runs once, on this machine's first server tick, before subscriptions are first evaluated.
+     *
+     * <p>The place for setup that needs a loaded level and loaded neighbours — rejoining a
+     * network, resolving a neighbour, reading the block state — none of which is reliable in the
+     * constructor or during {@code load}. Vanilla offers no load-completed hook that
+     * {@code common} may use, so this is it.
+     */
+    protected void onFirstTick() {
     }
 
     /**
@@ -210,6 +271,7 @@ public abstract class MachineBlockEntity extends BlockEntity {
             // load-completed hook that `common` can use — `onLoad` is a Forge addition — and the
             // decision usually needs neighbours, which are not reliably available while the chunk
             // is still loading. By the first tick both are true.
+            onFirstTick();
             updateSubscriptions();
         }
         subscriptions.tick();

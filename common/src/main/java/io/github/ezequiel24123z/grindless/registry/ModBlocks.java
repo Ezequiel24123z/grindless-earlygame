@@ -4,6 +4,8 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
+import io.github.ezequiel24123z.grindless.network.PylonBlock;
+import io.github.ezequiel24123z.grindless.network.PylonTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -37,6 +39,17 @@ public final class ModBlocks {
     /** T0 progression gate. Consumes Data Cores and Flux Units to unlock blueprints. */
     public static final RegistrySupplier<Block> RESEARCH_TERMINAL = register("research_terminal",
             () -> new Block(machine().strength(3.0F)));
+
+    /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
+     * area — there are no wires between pylons and machines. */
+    public static final RegistrySupplier<PylonBlock> FLUX_PYLON_MK1 = register("flux_pylon_mk1",
+            () -> new PylonBlock(PylonTier.MK1, machine().strength(3.0F)));
+
+    public static final RegistrySupplier<PylonBlock> FLUX_PYLON_MK2 = register("flux_pylon_mk2",
+            () -> new PylonBlock(PylonTier.MK2, machine().strength(3.5F)));
+
+    public static final RegistrySupplier<PylonBlock> FLUX_PYLON_MK3 = register("flux_pylon_mk3",
+            () -> new PylonBlock(PylonTier.MK3, machine().strength(4.0F)));
 
     private ModBlocks() {
     }

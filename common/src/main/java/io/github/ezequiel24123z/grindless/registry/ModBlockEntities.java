@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
+import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -24,6 +25,22 @@ public final class ModBlockEntities {
             HAND_CRANK_DYNAMO = BLOCK_ENTITIES.register("hand_crank_dynamo",
                     () -> BlockEntityType.Builder
                             .of(HandCrankDynamoBlockEntity::new, ModBlocks.HAND_CRANK_DYNAMO.get())
+                            .build(null));
+
+    /**
+     * One type for all three pylon tiers.
+     *
+     * <p>The tier lives on the block rather than the block entity, so a single type can serve
+     * every tier — and the tier cannot drift from what the player sees, because the block
+     * <em>is</em> the tier.
+     */
+    public static final RegistrySupplier<BlockEntityType<PylonBlockEntity>> FLUX_PYLON =
+            BLOCK_ENTITIES.register("flux_pylon",
+                    () -> BlockEntityType.Builder
+                            .of(PylonBlockEntity::new,
+                                    ModBlocks.FLUX_PYLON_MK1.get(),
+                                    ModBlocks.FLUX_PYLON_MK2.get(),
+                                    ModBlocks.FLUX_PYLON_MK3.get())
                             .build(null));
 
     private ModBlockEntities() {

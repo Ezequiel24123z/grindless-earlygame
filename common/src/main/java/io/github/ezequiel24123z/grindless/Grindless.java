@@ -1,6 +1,8 @@
 package io.github.ezequiel24123z.grindless;
 
+import dev.architectury.event.events.common.TickEvent;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.network.FluxNetworkData;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import io.github.ezequiel24123z.grindless.registry.ModCreativeTabs;
@@ -45,7 +47,25 @@ public final class Grindless {
         ModCreativeTabs.register();
 
         MaterialRegistry.bootstrap();
+        registerNetworkTick();
 
         LOG.info("[{}] common init complete", MOD_NAME);
+    }
+
+    /**
+     * Resolves every Flux Network's supply against the demand registered during the tick.
+     *
+     * <p>Runs after block entities have ticked, so the satisfaction a machine sees was computed
+     * from the demand of the tick before. That one-tick lag is deliberate and invisible: it is
+     * what makes the brownout <em>proportional</em>, since every machine has declared its draw
+     * before any of them is served (ADR-0046). Resolving mid-tick instead would favour whichever
+     * machines happen to tick first.
+     *
+     * <p>The loop is over networks, not pylons or machines, so its cost is the number of separate
+     * grids a player has built — a number that stays small even in a large base.
+     */
+    private static void registerNetworkTick() {
+        TickEvent.SERVER_LEVEL_POST.register(level ->
+                FluxNetworkData.get(level).tickNetworks());
     }
 }

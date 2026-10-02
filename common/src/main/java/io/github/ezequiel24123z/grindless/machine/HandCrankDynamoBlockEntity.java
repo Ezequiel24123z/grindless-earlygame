@@ -4,6 +4,7 @@ import io.github.ezequiel24123z.grindless.container.NeighbourCache;
 import io.github.ezequiel24123z.grindless.energy.FluxStorage;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
+import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -122,6 +123,15 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         // rating. This is the machine's own output path, and it implements the rating itself.
         long allowance = Math.min(energy().getStored(), FluxTier.F0.nominal() * PUSH_PERIOD);
         long budget = allowance;
+
+        // The Flux Network first. A dynamo standing inside a pylon's supply area feeds the whole
+        // grid rather than only the block it happens to touch, which is the entire point of
+        // area distribution — no wires, no per-face connections, no cable to forget.
+        FluxNetwork network = network();
+        if (network != null) {
+            budget -= network.receive(budget, false);
+        }
+
         for (Direction side : Direction.values()) {
             if (budget <= 0L) {
                 break;

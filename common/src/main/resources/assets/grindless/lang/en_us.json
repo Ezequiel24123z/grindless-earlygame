@@ -7,5 +7,9 @@
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
-  "block.grindless.research_terminal": "Research Terminal"
+  "block.grindless.research_terminal": "Research Terminal",
+
+  "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
+  "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
+  "block.grindless.flux_pylon_mk3": "Flux Pylon MK3"
 }

@@ -15,6 +15,33 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Flux Pylon, and machines drawing from their network** — step 13b, which turns the network
+  layer into something a player can build. Three pylon blocks (MK1–MK3) share **one block entity
+  type**, because the tier lives on the block rather than on the block entity: a single type
+  serves all three, and the tier cannot drift from what the player sees since the block *is* the
+  tier.
+  Registration is the pylon's entire job, and both halves matter. It joins the network when
+  placed and leaves when broken — deregistering **before** `super.onRemove` destroys the block
+  entity, since a network left holding a pylon that no longer exists keeps its capacity and its
+  topology, so a player breaks a pylon and watches nothing change. Chunk unload deliberately does
+  *not* deregister: an unloaded pylon is still part of its network, and doing otherwise would make
+  topology depend on where a player happens to be standing (ADR-0007).
+- **`MachineBlockEntity.requestPower` / `drawPower`** — the two-phase brownout from the machine's
+  side. A machine declares its intended draw, the network resolves one satisfaction fraction for
+  everyone, and only then does anyone draw. A machine on an overloaded network gets a reduced
+  share and runs slowly rather than stalling, which is the legible failure the design asks for.
+- **`MachineBlockEntity.onFirstTick`** — an explicit hook for setup that needs a loaded level and
+  loaded neighbours. It replaces overloading `updateSubscriptions` for the purpose, and exists
+  because vanilla offers no load-completed hook `common/` may use — `onLoad` is a Forge addition,
+  as the compiler established at step 12c.
+- The Hand Crank Dynamo now **pushes into its Flux Network first**, falling back to adjacent
+  blocks. A dynamo inside a pylon's supply area feeds the whole grid rather than only the block it
+  touches, which is the point of area distribution.
+- The network tick is registered through Architectury's `TickEvent.SERVER_LEVEL_POST`, so it stays
+  in `common/`. Running after block entities means the satisfaction a machine sees was computed
+  from the previous tick's demand — a deliberate one-tick lag, and the thing that makes the
+  brownout proportional rather than first-come-first-served.
+
 - **The Flux Network** (`common/.../network/`) — step 13, and the system that makes power
   wireless. `PylonTier` is the README's MK1–MK3 table; `FluxNetwork` is a set of linked pylons
   sharing one pooled buffer; `FluxNetworkData` is the per-dimension `SavedData` holding them all
