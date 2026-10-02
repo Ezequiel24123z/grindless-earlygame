@@ -34,6 +34,14 @@ jobs:
       - name: Boot the dedicated server
         run: tools/smoke-boot.sh .
 
+      # ADR-0050: the same boot with a datapack standing in for another mod that already provides
+      # tin ingots and raw platinum. Two Grindless supply items must step aside.
+      - name: Boot with foreign material providers
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
+          SMOKE_EXPECT: '32 materials found; Grindless supplies 118 of its 120'
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4
