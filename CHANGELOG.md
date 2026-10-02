@@ -15,6 +15,21 @@ entries below reference those records by id.
 
 ### Added
 
+- **Material compatibility (ADR-0050).** Grindless supplies 120 material items (tin, lead,
+  silver, nickel, zinc, aluminium, titanium, tungsten, platinum, steel, and forms vanilla lacks
+  for iron, copper and gold) and registers them regardless of other mods, but they are active
+  only where no other mod or vanilla fills the slot. After each tag load `MaterialRegistry` scans
+  the pack, hides redundant supply items from the creative tab, and exposes a deterministic
+  output choice (`Unifier`: vanilla, named namespaces, other mods, Grindless). Recipes name
+  materials through `MaterialTags`, never item IDs. Every shipped tag is additive.
+- Platinum, as the first purely exotic material, with raw, crushed, dust, nugget, ingot, plate,
+  rod, bolt, gear and ring forms.
+- Item models, tags and lang keys for the supply items, generated from `SupplyCatalogue`;
+  `tools/generate-assets.sh`.
+- `VerifyMaterial` checks, including a lint that fails any shipped recipe naming a material item
+  instead of a tag. `SMOKE_DATAPACK` and `SMOKE_EXPECT` in `tools/smoke-boot.sh`, with a datapack
+  that stands in for another mod; CI runs it.
+
 - **A boot smoke test and CI** (ADR-0049). `tools/smoke-boot.sh` starts the headless Forge
   dedicated server and fails unless it reaches `Done`; `.github/workflows/ci.yml` runs the build,
   the behaviour checks and the smoke test on Linux. `tools/run-checks.sh` is the Linux port of
@@ -142,6 +157,10 @@ entries below reference those records by id.
 - One decision record, ADR-0046.
 
 ### Fixed
+
+- **The generator produced items vanilla already has.** Textures for iron ingot, gold ingot,
+  gold nugget, iron nugget and copper ingot (and a crushed steel, which has no ore) are removed;
+  nothing registered them.
 
 - **Capability listeners leaked.** `NeighbourCache` registered a new invalidation listener on every
   re-lookup and never removed it, so a neighbour that kept invalidating accumulated listeners

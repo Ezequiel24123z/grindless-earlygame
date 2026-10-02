@@ -61,6 +61,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0047](#adr-0047--veins-are-long-lived-and-deepening-competes-with-relocating) | Veins are long-lived, and deepening competes with relocating | Accepted |
 | [0048](#adr-0048--assets-are-generated-from-the-jdk-with-a-named-list-of-what-cannot-be) | Assets are generated from the JDK, with a named list of what cannot be | Accepted |
 | [0049](#adr-0049--a-green-build-must-include-a-booted-server) | A green build must include a booted server | Accepted |
+| [0050](#adr-0050--grindless-supplies-a-material-only-where-the-pack-has-none) | Grindless supplies a material only where the pack has none | Accepted |
 
 ---
 
@@ -1749,3 +1750,80 @@ script also makes it cheap to run the same check locally on Linux and macOS; on 
 under WSL or Git Bash. `tools/run-checks.sh` is the Linux counterpart of `tools/run-checks.ps1`, so
 the checks are no longer Windows-only. Reload scenarios still need a person or a future GameTest;
 the smoke test proves the mod boots, not that every system survives a restart.
+
+---
+
+## ADR-0050 — Grindless supplies a material only where the pack has none
+
+*2026-10-02 · Accepted*
+
+**Context.** Grindless must work beside vanilla and any other mod, not merely tolerate them. Tin
+should be the tin a pack already has; copper and iron should be vanilla's; platinum should come
+from whichever mod adds it, and from Grindless only when none does. Recipes must be satisfiable by
+another mod's equivalent item, and installing Grindless must not overwrite or duplicate anything.
+
+ADR-0004 and ADR-0033 decided that materials are resolved from tags. They left three things open
+that this record closes: items must be registered before any tag is read, so "register only if
+missing" cannot be literal; the conventions are not equally followed (`forge:ingots/tin` is
+universal, `forge:bolts/tin` does not exist); and nothing said how a recipe's output is chosen when
+several mods provide the item.
+
+An audit found the shipped assets already broke the rule: the generator produced textures for
+vanilla's own iron ingot, gold ingot, gold nugget and copper ingot.
+
+**Decision.** Split by *slot* — one material in one form — and decide each slot at two times.
+
+At registration, a fixed **supply set** (`SupplyCatalogue`) is registered whatever else is
+installed. Registry IDs are written into worlds, so they must not depend on the mod list, or
+removing a mod would turn every Grindless item in a save into a missing mapping. The set never
+includes what vanilla already has: no iron ingot, gold ingot, copper ingot, iron or gold nugget,
+or raw iron, copper and gold. Vanilla gets Grindless items only for what it lacks (iron plates,
+copper nuggets). Alloys get no raw or crushed form. This is the one hardcoded list in the mod and
+it lists *what Grindless can make*, not *what exists*.
+
+At runtime, after every tag load, `MaterialRegistry` scans the tags and records, for each slot,
+which items fill it. A supply item is **active** only if no other namespace fills its slot.
+Inactive supply items stay registered but are hidden from the creative tab, are never chosen as
+output, and (when veins arrive) are never used to make a material mineable.
+
+Four rules follow.
+
+1. **Inputs are tags.** A recipe ingredient that is a material in a form is `forge:ingots/tin`,
+   never `othermod:tin_ingot` (`MaterialTags`). `VerifyMaterial` lints every shipped recipe and
+   fails on a hard-wired item ID, and has a self-test showing the linter can fail.
+2. **Outputs are unified.** One item per slot: vanilla, then namespaces the pack author names,
+   then other mods alphabetically, then Grindless last (`Unifier`). Deterministic, so server and
+   client agree and the choice is stable across reloads.
+3. **Add, never replace.** Every shipped tag is `"replace": false` and lists only Grindless items
+   or sibling tags; nothing is shipped into `minecraft:`. Grindless can add to another mod's tag
+   but cannot remove from it. Checked in `VerifyMaterial`.
+4. **Conventional forms are shared, the rest are ours.** A form is published under `forge:` only if
+   other mods agree on it (ore, raw, dust, nugget, ingot, gem, storage block, plate, rod, gear).
+   Crushed, purified, foil, bolt, ring, wire and coil have no agreement, so they live under
+   `grindless:` — published so others can opt in. This is the boundary ADR-0033 drew for reagents,
+   applied to forms. Promoting one is a single flag in `MaterialForm` plus a regeneration.
+
+The generator reads the same `SupplyCatalogue`, so a texture, model or tag can neither exist for an
+item that is not registered nor be missing for one that is. Item names come from two lang keys per
+item (`form.grindless.ingot` and `material.grindless.tin`), so a new material costs one line of
+translation.
+
+**Alternatives rejected.** Registering conditionally on `ModList` (breaks saves when the mod list
+changes); registering nothing for materials and only tagging (an exotic material would not exist
+with Grindless alone, contradicting the requirement); replacing other mods' recipes or tags with
+unified ones (the kind of override this record exists to forbid); a per-pack config mapping
+(ADR-0033 rejected it for reagents for the same reasons); one `forge:` tag for every form
+(claims tags nobody else fills, so the form is never interchangeable and the claim is a lie).
+
+**Consequences.** With only Grindless installed there are 120 supply items and all are active.
+With another mod providing tin ingots and raw platinum, 118 are active and the other two are
+hidden; this is demonstrated by booting a server with a datapack standing in for that mod
+(`tools/smoke/foreign-providers`, `SMOKE_DATAPACK` in `tools/smoke-boot.sh`).
+
+Known limits. Hiding in recipe viewers needs a JEI/REI integration that does not exist yet.
+`c:` tags (Fabric) are not scanned, consistent with ADR-0039. The unifier's namespace preference
+has a setter but no config file until `GrindlessConfig` is real. A vanilla-backed material is
+listed by hand in `SupplyCatalogue`, so a Minecraft update that adds a vanilla form, such as a
+copper nugget, needs a one-line edit and a regeneration; the check `no registered name equals a
+vanilla item's name` guards the known cases. A player holding a hidden supply item (from `/give`
+or an old chest) still has a working item, since it is tagged, which is intended.

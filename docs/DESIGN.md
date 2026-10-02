@@ -195,8 +195,13 @@ the first ten minutes, and it immediately starts producing. That is the moment t
   adding a mod mid-pack is picked up without touching Grindless.
 * **Graceful degradation.** A material that has an ore but no dust simply skips the
   pulverizing step instead of producing an unobtainable item.
-* **No stepping on toes.** Grindless registers *its own* items only for materials that no
-  other mod provides.
+* **No stepping on toes.** Grindless never registers what vanilla already has, and its own
+  material items are *active* only where no other mod fills the slot — otherwise they stay
+  registered (so saves survive a changed mod list) but hidden and never output
+  ([ADR-0050](DECISIONS.md#adr-0050--grindless-supplies-a-material-only-where-the-pack-has-none)).
+* **Recipes accept tags, produce one item.** Ingredients are `forge:` tags so another mod's tin
+  satisfies them; outputs are unified (vanilla, then named namespaces, then mods, then Grindless).
+* **Add, never replace.** Every tag Grindless ships is `"replace": false`.
 
 ---
 
