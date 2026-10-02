@@ -13,6 +13,13 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Changed
+
+- **Remaining work is playable slices, not system layers (ADR-0058).** First iron (Thermal
+  Generator, Pulverizer, Arc Furnace, `ProcessRecipe` item-first, shared menu, Voltaic gate)
+  before fluids, belts, conduits or the multiblock framework. Gaseous T1 byproducts vent until
+  tanks exist. CI is marked done. The numbered plan from step 15 is rewritten to match.
+
 ### Added
 
 - **T0 bootstrap recipes (ADR-0056).** Crafting-table JSON for the Multitool (cobble and sticks),

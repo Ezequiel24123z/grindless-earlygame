@@ -69,6 +69,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0055](#adr-0055--the-multitool-does-not-mine) | The Multitool does not mine | Accepted |
 | [0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags) | T0 bootstrap recipes are authored JSON using tags | Accepted |
 | [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Accepted |
+| [0058](#adr-0058--build-playable-slices-not-system-layers) | Build playable slices, not system layers | Accepted |
 
 ---
 
@@ -2060,5 +2061,71 @@ waste the core with no unlock).
 **Consequences.** The first playable progression exists: craft a Data Core, power the terminal,
 wait thirty seconds, Voltaic is on. T1 crafting will read `ResearchData.isUnlocked(VOLTAIC)`.
 Existing worlds have an empty set, which is locked, which is correct.
+
+
+## ADR-0058 — Build playable slices, not system layers
+
+*2026-10-02 · Accepted*
+
+**Context.** The implementation plan after T0 listed remaining work as *systems in dependency
+order*: `ProcessRecipe` (15), all T0/T1 machines and menus (16), fluids (17), JEI (18),
+fabrication (20), belts (21), conduits (22), multiblocks (23). Step 11 had already deferred
+`ProcessRecipe` until fluids existed, because "half the ingredients are fluid stacks".
+
+That order builds a complete energy API, a complete recipe type, a complete fluid model and a
+complete multiblock framework — each of which is empty of a factory that uses it. The 0.1
+definition of done is narrower and already written: *a player can go from an empty world to
+automated iron in under fifteen minutes without mining it by hand.* T0 currently stops at raw ore
+in a chest. The missing piece is a **dry processing line**, not a catalogue.
+
+The T1 floor in `PROCESSES.md` is B0×R1 and B1×R1: raw or crushed into an ingot in an Arc Furnace,
+optional Pulverizer doubling, no water, no acid, no hatches. F0 crank power cannot run F1
+machines. Pylons already cover a factory; conduits are the named-network *alternative*, not the
+way power exists. Every T1 machine is a single block; the first parametric multiblock in
+`MACHINES.md` is T3.
+
+**Decision.** Remaining work is scheduled as playable slices. A slice ships when a player can do
+a new thing in-world, not when a layer is "complete".
+
+1. **Slice A — First iron (0.1).** `ProcessRecipe` with item I/O now and fluid I/O as an empty
+   slot (the type is one union, not a rewrite later). Generate only B0×R1 and B1×R1. Thermal
+   Generator (furnace fuel → F1) and a Voltaic-gated Pylon MK1 recipe, so the player can walk
+   away from the crank. Pulverizer and Arc Furnace as real consumers. One shared machine menu
+   (energy, slots, named fault). Voltaic gates those recipes. Hoppers and chests are the
+   logistics. Gaseous byproducts (CO from R1) **vent to atmosphere** until slice C — that is the
+   named T1 sink (ADR-0036), not a missing tank. `VerifyRecipes` dumps the generated graph so
+   generation is testable without JEI.
+2. **Slice B — First factory (0.2).** Belts, splitter, manipulator. Terrestrial Extractor.
+   Prospector's Scanner. Kiln can wait until gas is capturable.
+3. **Slice C — Fluids.** Volume, temperature, pressure, Clay Conduit, Hand Pump, Basic Tank.
+   ProcessRecipe fluid slots go live. Wet pulverizer, gas capture. This is the second line, not
+   the first.
+4. **Slice D — The factory builds the factory.** Press, Machine Casing, Assembler. Fabrication
+   gate for T2+ (ADR-0017). 0.1 does not need an Assembler.
+5. **Slice E — Energy spanning.** Flux Conduits, transformers, capacitor banks. Pylons already
+   did coverage; this layer is named networks and distance, and must not obsolete pylons
+   (ADR-0025).
+6. **Slice F — Multiblock kernel.** A `MachineBlockEntity` plus a formed structure and hatches
+   that are sided containers. Implemented when the first machine *needs* hatches or size (T2/T3),
+   not as a framework waiting for content. Single-block T1 machines stay single blocks. Parametric
+   reactors, distillation height and construction drones stay with that content.
+
+The numbered plan rows 15–26 are rewritten to match these slices. Historical rows 1–14b do not
+move. CI (old row 26) is already green and is marked done.
+
+**Alternatives rejected.** Finishing every T1 machine before any recipe (shells with nothing to
+run — the Research Terminal already taught that lesson); fluids before first iron (the reason
+`ProcessRecipe` sat on the shelf, and B1×R1 does not need water); the conduit layer as the energy
+route (the route is Thermal Generator + pylons; conduits are a later alternative); the parametric
+multiblock framework before a machine that has a size parameter (an unused kernel that T1 machines
+would then be forced to pretend to be); reaching the Assembler as part of 0.1 (the definition of
+done is automated iron, and the Assembler is the last crafting-table recipe, not the first ingot).
+
+**Consequences.** The next session implements slice A, not "T1 machines" as a set and not
+"ProcessRecipe + fluids" as a pair. A successor that starts a multiblock framework or a conduit
+network before first iron is reopening this record. `ProcessRecipe` may ship without a fluid stack
+implementation; adding fluids later fills the slot, it does not fork the type. Vented gas is
+deliberate T1 behaviour and becomes a capture decision in slice C, which is how R2 (roast for
+SO₂) starts.
 
 

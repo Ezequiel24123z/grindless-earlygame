@@ -1927,18 +1927,18 @@ Tracked order of work. Each step must build green before the next begins.
 | 13b | The Flux Pylon block, and machines drawing from their network | ✅ done |
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
-| 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
-| 16 | T0/T1 machines, menus and screens | ⏳ T0 recipes + Research Terminal done (ADR-0056, 0057); T1 machines and menus next |
-| 17 | Fluid layer: state, pressure, pipes, tanks | pending |
-| 18 | Process Atlas + JEI/REI/EMI integration | pending |
-| 19 | Asset generation via `tools/assetgen` | ✅ **brought forward** — see ADR-0048 |
-| 20 | Research Terminal, fabrication gate and progression | ⏳ T0 terminal done (ADR-0057); fabrication gate pending |
-| 21 | Belts and the logistics layer | pending |
-| 22 | Flux Conduits: cores, named networks, diagnostics | pending |
-| 23 | Multiblock framework + the parametric multiblocks | pending |
+| 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | pending — 0.1 definition of done, ADR-0058 |
+| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — pulled forward to ride on 15, not a separate content freeze |
+| 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | pending — 0.2 |
+| 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | pending |
+| 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | pending — ADR-0017 |
+| 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | pending — pylons already cover; this must not obsolete them |
+| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |
 | 24 | Orbital layer: launch, satellites, station | pending |
 | 25 | Planetary layer: colonies, telepresence, planet registry | pending |
-| 26 | CI workflow | pending |
+| 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -1947,11 +1947,16 @@ accumulating as a pile of uncompiled code.
 Steps 4, 5 and 7 originally covered Fabric as well. Fabric was dropped at step 10 (ADR-0039), and
 the rows above describe what the project builds now rather than what it once built.
 
-Step 11 originally also carried the `ProcessRecipe` type. That moved to step 15, where recipe
-*generation* already lives: a recipe type cannot be bound to `RecipeType` and `RecipeSerializer`
-before the container contract it matches against (step 12) and the fluid stacks half its
-ingredients are (step 17) exist. Writing it earlier would have meant guessing both. The condition
-system itself — the part the whole machine layer rests on — is complete and standalone.
+Step 11 originally also carried the `ProcessRecipe` type. That moved to step 15 so generation and
+the type land together. Fluids (now slice C) are **not** a prerequisite for the type: ADR-0058
+ships item I/O first and leaves fluid slots empty. Condition matching is already done and
+standalone.
+
+Rows 15–26 were a *system-layer* backlog (all T1 machines, then fluids, then belts, then
+conduits, then multiblocks). ADR-0058 replaced that with playable slices. Asset generation (the
+old row 19) was already brought forward and is done (ADR-0048). The old row numbers should not be
+revived: a session that starts conduits or a multiblock framework before first iron is ignoring
+the record.
 
 ### Where the project actually is
 
@@ -1961,9 +1966,13 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-The **Terrestrial Extractor** (T1, faster, network-only) is still ahead; T0 is enough to stop
-mining by hand. Next is T1 machines, menus, and the recipe graph (steps 15–16). Voltaic currently
-gates nothing; T1 crafting will read it.
+**Next is slice A — first iron**, not "the rest of T1". Thermal Generator so F1 can run without a
+crank, Pulverizer + Arc Furnace on generated B0×R1 / B1×R1 recipes, one shared menu, Voltaic
+gating those recipes. Hoppers are enough. Fluids, belts, conduits and multiblocks wait. Voltaic
+currently gates nothing; slice A is what reads the flag.
+
+The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
+by hand; T1 extraction is a throughput upgrade, not the missing process.
 
 Two art questions are open and recorded in ADR-0048. Sound synthesis currently produces
 *serviceable* industrial noise rather than good audio, and CC0 libraries are the better answer;

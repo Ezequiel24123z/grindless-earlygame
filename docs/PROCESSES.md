@@ -400,9 +400,11 @@ and it is audited in the [multi-route index](#products-reachable-by-more-than-on
 
 ## Tier 0 and Tier 1: the bootstrap chain
 
-The only part of the graph that is hand-crafted, and the part a later session implements first
-(step 16 of the [implementation plan](../README.md#implementation-plan)). Everything past it is
-manufactured ([ADR-0017](DECISIONS.md#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted)).
+The only part of the graph that is hand-crafted. Slice A of the
+[implementation plan](../README.md#implementation-plan) implements as far as automated iron
+(Pulverizer, Arc Furnace, Thermal Generator); Press and Assembler wait for slice D
+([ADR-0058](DECISIONS.md#adr-0058--build-playable-slices-not-system-layers)). Everything past the
+Assembler is manufactured ([ADR-0017](DECISIONS.md#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted)).
 
 The bootstrap has exactly one job: **get the player to their first Assembler and then get out of
 the way.** It is short on purpose. A long hand-crafted opening is the grind this mod exists to
