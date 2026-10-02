@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **T0 bootstrap recipes (ADR-0056).** Crafting-table JSON for the Multitool (cobble and sticks),
+  Hand Crank Dynamo and Crude Extractor (one iron each), Research Terminal (planks, glass, cobble)
+  and Data Core (cobble and redstone). Iron is `#forge:ingots/iron`; stone is
+  `#minecraft:stone_crafting_materials`. `BootstrapRecipes` and `VerifyBootstrap` check the files
+  against that budget.
+
+- **Research Terminal (ADR-0057).** Real consumer: 8 FU/t, thirty seconds, one Data Core unlocks
+  Voltaic. World-scoped `ResearchData`. Right-click to insert or take the core; hoppers may insert
+  but not extract. Status idle / running / starved / blocked. Voltaic gates nothing yet — T1
+  recipes will read the flag.
+
 - **Crude Extractor (ADR-0053).** T0 consumer: 8 FU/t, twenty seconds per unit of the chunk vein,
   scaled by richness, depletion and brownout. Power from a covering pylon or from an adjacent
   dynamo. Output is the pack's preferred raw (or ore), into a one-slot buffer that hoppers pull

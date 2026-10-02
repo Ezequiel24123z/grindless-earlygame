@@ -67,6 +67,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0053](#adr-0053--the-crude-extractor-is-the-first-consumer) | The Crude Extractor is the first consumer | Accepted |
 | [0054](#adr-0054--pylons-are-three-blocks-tall-and-cover-a-factory) | Pylons are three blocks tall and cover a factory | Accepted |
 | [0055](#adr-0055--the-multitool-does-not-mine) | The Multitool does not mine | Accepted |
+| [0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags) | T0 bootstrap recipes are authored JSON using tags | Accepted |
+| [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Accepted |
 
 ---
 
@@ -1993,4 +1995,70 @@ everything", which is how the early game becomes a single hotbar slot instead of
 
 **Consequences.** Players keep a pickaxe. If a later session wants a mining module on the
 Multitool, it is an upgrade with a cost, not the default.
+
+
+## ADR-0056 — T0 bootstrap recipes are authored JSON using tags
+
+*2026-10-02 · Accepted*
+
+**Context.** ADR-0005 says processing-chain recipes are generated at runtime from the material
+registry, not shipped as JSON. The T0 loop — dynamo, extractor, multitool, terminal, Data Core —
+does not depend on that registry. It is cobblestone, wood and two iron, and it is the only part of
+the graph a player hand-crafts (ADR-0017). Leaving it uncraftable meant the "ten minutes, two iron"
+claim was creative-mode only.
+
+**Decision.**
+
+1. T0 crafting-table recipes are authored JSON under `data/grindless/recipes/`. They are the
+   exception to ADR-0005, not the start of shipping the processing chain as files.
+2. Anything that is a material is a tag (`forge:ingots/iron`), never `minecraft:iron_ingot`.
+   Stone is `minecraft:stone_crafting_materials`, wood is `minecraft:planks`. Vanilla items that
+   are not material forms (stick, glass, redstone) may be named by ID.
+3. The iron budget is two: one in the dynamo, one in the extractor. The Multitool is cobble and
+   sticks — it replaces the stone-tool *phase*, so it is craftable before the first iron.
+4. `BootstrapRecipes` lists the same recipes as data so `VerifyBootstrap` can check the JSON
+   against the decision.
+
+**Alternatives rejected.** Generating even these five at runtime (the injector needs mixin or
+recipe-manager mutation, and the recipes do not change with the pack); hard-wiring
+`minecraft:iron_ingot` (a pack's iron would not craft the bootstrap, contradicting ADR-0050).
+
+**Consequences.** A survival player with a crafting table, cobble, wood and two iron can build the
+loop. T1 recipes stay unwritten until those machines exist; they will be gated on the Voltaic
+blueprint (ADR-0057). Processing-chain recipes remain generated (ADR-0005).
+
+
+## ADR-0057 — The Research Terminal unlocks world-scoped blueprints
+
+*2026-10-02 · Accepted*
+
+**Context.** The Research Terminal was a `MachineShellBlock`: art, no block entity, no behaviour.
+The README has the player insert Data Cores and Flux to unlock blueprints, and has research as a
+*production target* the factory feeds, not a GUI timer. T1 machines do not exist yet, so an unlock
+cannot grant a recipe today — but a terminal that does nothing until step 20 would leave T0
+without its progression gate.
+
+**Decision.**
+
+1. The terminal is a `MachineBlockEntity` at F0. One Data Core and 600 ticks at full power unlock
+   Voltaic, the T1 pack. Brownouts slow it; they do not stall it and they do not consume the core
+   early.
+2. Unlocks are world-scoped `SavedData` on the overworld, not per-player. A hopper can feed cores,
+   which is what "research is a production target" requires. Unlocking twice is a no-op.
+3. There is no menu. Right-click with a core inserts it; empty-handed takes it back. Hoppers may
+   insert and may not extract — the core is spent, not buffered.
+4. Status: idle with no core, starved with no power, running while the cycle advances, blocked
+   once Voltaic is already unlocked. The same debounce as every other machine.
+5. Voltaic currently gates nothing. That is deliberate: the switch flips now, T1 recipes attach
+   later. A flag nobody reads is still a real unlock; a terminal that waits for the recipes is a
+   shell.
+
+**Alternatives rejected.** Per-player research (a hopper has no player); a full tech-tree GUI
+(step 20; the T0 loop does not need it); consuming the core on insert (a brownout would then
+waste the core with no unlock).
+
+**Consequences.** The first playable progression exists: craft a Data Core, power the terminal,
+wait thirty seconds, Voltaic is on. T1 crafting will read `ResearchData.isUnlocked(VOLTAIC)`.
+Existing worlds have an empty set, which is locked, which is correct.
+
 

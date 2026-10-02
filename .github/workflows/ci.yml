@@ -63,6 +63,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/loop.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/loop.expect
 
+      # The Research Terminal has a block entity; T0 recipes are checked offline by VerifyBootstrap.
+      - name: Boot and place the Research Terminal
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/bootstrap.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/bootstrap.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

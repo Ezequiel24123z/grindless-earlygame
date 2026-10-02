@@ -43,5 +43,9 @@
   "subtitles.grindless.machine_hum_heavy": "Heavy machine rumbles",
   "subtitles.grindless.pylon_link": "Pylon carries power",
   "subtitles.grindless.relay_click": "Relay clicks",
-  "subtitles.grindless.brownout_alarm": "Grid alarm sounds"
+  "subtitles.grindless.brownout_alarm": "Grid alarm sounds",
+
+  "blueprint.grindless.voltaic": "Voltaic",
+  "chat.grindless.research.unlocked": "Blueprint unlocked: %s",
+  "chat.grindless.research.already": "Already researched: %s"
 }

@@ -1928,11 +1928,11 @@ Tracked order of work. Each step must build green before the next begins.
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
-| 16 | T0/T1 machines, menus and screens | pending |
+| 16 | T0/T1 machines, menus and screens | ⏳ T0 recipes + Research Terminal done (ADR-0056, 0057); T1 machines and menus next |
 | 17 | Fluid layer: state, pressure, pipes, tanks | pending |
 | 18 | Process Atlas + JEI/REI/EMI integration | pending |
 | 19 | Asset generation via `tools/assetgen` | ✅ **brought forward** — see ADR-0048 |
-| 20 | Research Terminal, fabrication gate and progression | pending |
+| 20 | Research Terminal, fabrication gate and progression | ⏳ T0 terminal done (ADR-0057); fabrication gate pending |
 | 21 | Belts and the logistics layer | pending |
 | 22 | Flux Conduits: cores, named networks, diagnostics | pending |
 | 23 | Multiblock framework + the parametric multiblocks | pending |
@@ -1958,9 +1958,12 @@ system itself — the part the whole machine layer rests on — is complete and 
 Everything through step 14b is written, builds green and is covered by the behaviour checks in
 `tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
 Extractor (or a pylon that covers both), and the extractor pulls the chunk's vein into a chest.
+T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
+and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
 The **Terrestrial Extractor** (T1, faster, network-only) is still ahead; T0 is enough to stop
-mining by hand. Next is menus, the T1 machines, and the recipe graph (steps 15–16).
+mining by hand. Next is T1 machines, menus, and the recipe graph (steps 15–16). Voltaic currently
+gates nothing; T1 crafting will read it.
 
 Two art questions are open and recorded in ADR-0048. Sound synthesis currently produces
 *serviceable* industrial noise rather than good audio, and CC0 libraries are the better answer;

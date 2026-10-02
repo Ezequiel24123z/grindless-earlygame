@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -33,6 +34,13 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("crude_extractor",
                     () -> BlockEntityType.Builder
                             .of(CrudeExtractorBlockEntity::new, ModBlocks.CRUDE_EXTRACTOR.get())
+                            .build(null));
+
+    /** T0 progression: one Data Core and thirty seconds at F0 unlocks Voltaic. */
+    public static final RegistrySupplier<BlockEntityType<ResearchTerminalBlockEntity>> RESEARCH_TERMINAL =
+            BLOCK_ENTITIES.register("research_terminal",
+                    () -> BlockEntityType.Builder
+                            .of(ResearchTerminalBlockEntity::new, ModBlocks.RESEARCH_TERMINAL.get())
                             .build(null));
 
     /**

@@ -5,8 +5,8 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
-import io.github.ezequiel24123z.grindless.machine.MachineShellBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
@@ -24,8 +24,8 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>The T0 bootstrap set only. These are plain blocks for now; they gain their block entities and
- * menus as each machine is implemented.
+ * <p>The T0 bootstrap set. Dynamo, extractor, pylons and the Research Terminal have block
+ * entities; menus arrive with T1.
  */
 public final class ModBlocks {
 
@@ -41,8 +41,9 @@ public final class ModBlocks {
             () -> new CrudeExtractorBlock(machine().strength(2.5F)));
 
     /** T0 progression gate. Consumes Data Cores and Flux Units to unlock blueprints. */
-    public static final RegistrySupplier<Block> RESEARCH_TERMINAL = register("research_terminal",
-            () -> new MachineShellBlock(BlockCatalogue.Geometry.TERMINAL, machine().strength(3.0F)));
+    public static final RegistrySupplier<ResearchTerminalBlock> RESEARCH_TERMINAL =
+            register("research_terminal",
+                    () -> new ResearchTerminalBlock(machine().strength(3.0F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */
