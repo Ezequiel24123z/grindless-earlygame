@@ -17,7 +17,9 @@
 #     SMOKE_TIMEOUT   seconds to wait for the server to finish starting (default 900)
 #     SMOKE_PORT      server port (default 25599)
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
-#     SMOKE_EXPECT    an extended regex that must appear in the log once the server is up
+#     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line
+#     SMOKE_EXPECT    extended regexes, one per line, that must each appear in the log
+#     SMOKE_EXPECT_FILE  the same, read from a file
 set -u
 
 ROOT="$(cd "${1:-.}" && pwd)"
@@ -27,6 +29,8 @@ TIMEOUT="${SMOKE_TIMEOUT:-900}"
 PORT="${SMOKE_PORT:-25599}"
 DATAPACK="${SMOKE_DATAPACK:-}"
 EXPECT="${SMOKE_EXPECT:-}"
+COMMANDS="${SMOKE_COMMANDS:-}"
+if [ -n "${SMOKE_EXPECT_FILE:-}" ]; then EXPECT="$(cat "$SMOKE_EXPECT_FILE")"; fi
 
 if [ "${GRINDLESS_ACCEPT_EULA:-}" != "true" ] && [ "${CI:-}" != "true" ]; then
   echo "Refusing to write eula.txt on your behalf."
@@ -79,14 +83,25 @@ while [ "$SECONDS" -lt "$deadline" ]; do
   fi
   if grep -q 'Done (.*)! For help' "$LOG"; then
     grep -m1 'Done (.*)! For help' "$LOG"
+    if [ -n "$COMMANDS" ]; then
+      while IFS= read -r command; do
+        [ -z "$command" ] && continue
+        echo "$command" >&3
+        sleep 1
+      done < "$COMMANDS"
+      sleep 2
+    fi
     if [ -n "$EXPECT" ]; then
-      if grep -Eq "$EXPECT" "$LOG"; then
-        grep -E -m1 "$EXPECT" "$LOG"
-      else
-        echo "SMOKE BOOT FAILED: the server started but its log never matched: $EXPECT"
-        echo "stop" >&3
-        exit 1
-      fi
+      while IFS= read -r pattern; do
+        [ -z "$pattern" ] && continue
+        if grep -Eq "$pattern" "$LOG"; then
+          grep -E -m1 "$pattern" "$LOG"
+        else
+          echo "SMOKE BOOT FAILED: the server started but its log never matched: $pattern"
+          echo "stop" >&3
+          exit 1
+        fi
+      done <<< "$EXPECT"
     fi
     echo "stop" >&3
     for _ in $(seq 1 60); do

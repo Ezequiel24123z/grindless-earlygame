@@ -200,6 +200,7 @@ public final class VerifyMaterial {
 
         Set<String> supplied = new HashSet<>();
         SupplyCatalogue.entries().forEach(e -> supplied.add(e.itemName()));
+        supplied.addAll(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.placeholderSprites());
         boolean noStray = true;
         try (Stream<Path> files = Files.list(RESOURCES.resolve("assets/grindless/textures/item"))) {
             for (Path file : (Iterable<Path>) files::iterator) {
@@ -209,8 +210,18 @@ public final class VerifyMaterial {
         }
         yes("no texture exists for an item that is not registered (e.g. vanilla's)", noStray);
 
-        no("nothing is shipped into minecraft's own namespace",
-                Files.exists(RESOURCES.resolve("data/minecraft")));
+        boolean onlyMiningTags = true;
+        Path vanilla = RESOURCES.resolve("data/minecraft");
+        if (Files.exists(vanilla)) {
+            try (Stream<Path> files = Files.walk(vanilla)) {
+                for (Path file : (Iterable<Path>) files.filter(Files::isRegularFile)::iterator) {
+                    onlyMiningTags &= vanilla.relativize(file).toString()
+                            .startsWith("tags/blocks/mineable/");
+                }
+            }
+        }
+        yes("the only thing shipped into minecraft's namespace is a mining tag (ADR-0051)",
+                onlyMiningTags);
 
         boolean additive = true;
         boolean foreignFree = true;

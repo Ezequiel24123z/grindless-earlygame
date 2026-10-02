@@ -42,6 +42,13 @@ jobs:
           SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
           SMOKE_EXPECT: '32 materials found; Grindless supplies 118 of its 120'
 
+      # Every block must be mineable with a pickaxe and drop itself, with its real display name.
+      - name: Boot and exercise block loot and mining tags
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/blocks.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/blocks.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4
