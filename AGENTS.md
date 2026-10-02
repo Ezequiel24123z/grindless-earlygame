@@ -85,6 +85,11 @@ powershell -ExecutionPolicy Bypass -File .\tools\check-links.ps1 -Root .
 powershell -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .
 ```
 
+On Linux and macOS use `tools/run-checks.sh .` instead of the second one. Neither runs Forge, so
+also run `GRINDLESS_ACCEPT_EULA=true tools/smoke-boot.sh .` after any change to registration,
+block entities or loader code (ADR-0049): a build and 309 passing checks coexisted with a mod that
+could not start.
+
 Both are worth the approval they cost. The first has caught broken links and a drifted ADR index
 more than once; the second has caught two real bugs that compiled cleanly. If the terminal is already broken, say so plainly and
 tell the user to run `SETUP.ps1 -Commit`, which commits and pushes without the app.
