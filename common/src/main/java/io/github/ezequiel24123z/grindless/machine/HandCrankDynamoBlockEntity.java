@@ -31,9 +31,14 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
      * rather than a thing you hold down. */
     public static final long CHARGE_PER_CRANK = FluxTier.F0.nominal() * 20L * 5L;
 
-    /** Pushing is throttled rather than run every tick. At 8 FU/t the difference is invisible in
-     * play and it is five times less work. */
-    private static final int PUSH_PERIOD = 5;
+    /**
+     * Push every tick while charged. A five-tick burst of 40 FU empties the network for the
+     * ticks in between, and a consumer then observes STARVED often enough that
+     * {@link StatusDebounce} never recovers to running — the machine is working, the face says
+     * it is not. Eight FU per tick fills the pool as fast as one Crude Extractor drains it, so
+     * the face and the work agree.
+     */
+    private static final int PUSH_PERIOD = 1;
 
     private final Map<Direction, NeighbourCache> neighbours = new EnumMap<>(Direction.class);
 
@@ -128,13 +133,14 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         if (!isDue(PushBackoff.period(PUSH_PERIOD, fruitlessPushes))) {
             return;
         }
-        // Output is rated per tick, so a throttled push moves a whole period's worth at once:
-        // the dynamo averages exactly 8 FU/t however often this actually runs.
+        // Output is rated per tick, so a push covering several ticks (PushBackoff stretching the
+        // period when nobody is listening) moves that many ticks' worth at once: the dynamo still
+        // averages 8 FU/t.
         //
         // Read from the buffer directly rather than through extract(). The buffer's rate limit
         // governs what an *external* puller may take in one operation, and applying it here would
-        // cap a five-tick push at one tick's worth — quietly running the dynamo at a fifth of its
-        // rating. This is the machine's own output path, and it implements the rating itself.
+        // cap a multi-tick push at one tick's worth — quietly running the dynamo slow. This is
+        // the machine's own output path, and it implements the rating itself.
         long allowance = Math.min(energy().getStored(), FluxTier.F0.nominal() * PUSH_PERIOD);
         long budget = allowance;
 

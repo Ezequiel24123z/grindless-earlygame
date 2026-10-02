@@ -193,6 +193,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **A cranked dynamo left extractors looking starved while they actually worked.** It pushed 40 FU
+  every five ticks, so the network went empty in between and `StatusDebounce` never saw twenty
+  consecutive running ticks. It now pushes 8 FU every tick, matching F0, so one extractor lights
+  cyan and two share a brownout instead of a lie.
+
 - **Blocks rendered as missing-texture cubes and dropped nothing.** None of the six blocks had a
   model or loot table, and machines require the correct tool, so breaking one yielded no item.
 

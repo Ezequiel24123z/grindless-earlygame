@@ -229,6 +229,20 @@ public final class VerifyMachine {
         eq("a recovery interrupted by the fault returning starts over", MachineStatus.STARVED.ordinal(),
                 broken.shown().ordinal());
 
+        StatusDebounce burst = new StatusDebounce();
+        burst.observe(MachineStatus.STARVED);
+        int shownRunning = 0;
+        for (int tick = 0; tick < 200; tick++) {
+            // Empty-network ticks between a five-tick 40 FU burst feeding two 8 FU/t loads.
+            MachineStatus observed = (tick % 5) < 3
+                    ? MachineStatus.RUNNING : MachineStatus.STARVED;
+            burst.observe(observed);
+            if (burst.shown() == MachineStatus.RUNNING) {
+                shownRunning++;
+            }
+        }
+        eq("starve blips every five ticks never recover to running", 0, shownRunning);
+
         eq("statuses parse from their serialised names", MachineStatus.OUT_OF_BAND.ordinal(),
                 MachineStatus.parse("out_of_band").ordinal());
         eq("an idle machine emits no light", 0, MachineStatus.IDLE.lightLevel());
