@@ -35,8 +35,8 @@ public final class BlockCatalogue {
     /** The grid: it carries power, or is overdrawn. */
     public static final List<String> GRID = List.of("idle", "running", "starved");
 
-    /** A consumer: it can be stuck on output or on input. */
-    public static final List<String> CONSUMER = List.of("idle", "running", "blocked", "starved");
+    /** A consumer: it can be stuck on output, on input, or on conditions. */
+    public static final List<String> CONSUMER = List.of("idle", "running", "blocked", "starved", "out_of_band");
 
     /**
      * @param name     the registry path
@@ -93,5 +93,13 @@ public final class BlockCatalogue {
 
     public static List<String> placeholderSprites() {
         return PLACEHOLDER_SPRITES;
+    }
+
+    /**
+     * Blocks registered in {@code ModBlocks} that are not player-facing: no item, no catalogue
+     * entry, generated separately. The pylon shaft is occupancy for the two blocks above a pylon.
+     */
+    public static List<String> technical() {
+        return List.of("flux_pylon_shaft");
     }
 }

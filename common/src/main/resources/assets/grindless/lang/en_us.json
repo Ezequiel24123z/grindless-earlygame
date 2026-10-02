@@ -12,6 +12,7 @@
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
   "block.grindless.flux_pylon_mk3": "Flux Pylon MK3",
+  "block.grindless.flux_pylon_shaft": "Flux Pylon",
 
   "form.grindless.raw": "Raw %s",
   "form.grindless.crushed": "Crushed %s",

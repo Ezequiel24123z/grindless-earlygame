@@ -15,6 +15,24 @@ entries below reference those records by id.
 
 ### Added
 
+- **Crude Extractor (ADR-0053).** T0 consumer: 8 FU/t, twenty seconds per unit of the chunk vein,
+  scaled by richness, depletion and brownout. Power from a covering pylon or from an adjacent
+  dynamo. Output is the pack's preferred raw (or ore), into a one-slot buffer that hoppers pull
+  from and that auto-pushes into neighbouring inventories. Status is driven by the real loop
+  (idle / running / blocked / starved). `VerifyExtractor` covers the numbers; CI places the block
+  entity and the pylon tower.
+
+- **Three-block pylons with factory-scale coverage (ADR-0054).** A pylon occupies three blocks of
+  height (base plus two shafts). JSON models cannot exceed 32 units, so each third is its own
+  model. Supply cubes are 48 / 80 / 128 with link ranges 64 / 112 / 192. Shafts have no item and
+  drop nothing; breaking one breaks the pylon.
+
+- **Out-of-band visuals.** Extractor and terminal gain `out_of_band` textures (magenta) and a
+  shared witch-mote effect. Nothing sets that status yet; the art is in place for process
+  machines.
+
+- **The Multitool does not mine (ADR-0055).** Machines stay pickaxe-only.
+
 - **Machine states, per-machine art and effects (ADR-0052).** `status` (idle, running, blocked,
   starved, out_of_band) and `facing` block-state properties; the hand-crank dynamo and flux pylons
   publish their real status through a debounce, the extractor and terminal are shells whose status

@@ -1,0 +1,13 @@
+# Places a pylon and an extractor and checks the world actually accepted them.
+# Run after the 53-state scenario, which leaves 8 100 8 occupied.
+
+setblock 8 100 8 minecraft:air
+setblock 8 101 8 minecraft:air
+setblock 8 102 8 minecraft:air
+setblock 8 100 8 grindless:flux_pylon_mk1[status=idle]
+execute if block 8 101 8 grindless:flux_pylon_shaft[index=1,status=idle,tier=1] run say SHAFT-MID
+execute if block 8 102 8 grindless:flux_pylon_shaft[index=2,status=idle,tier=1] run say SHAFT-TOP
+setblock 8 100 8 minecraft:air
+execute unless block 8 101 8 grindless:flux_pylon_shaft run say SHAFT-GONE
+setblock 8 100 8 grindless:crude_extractor[facing=south,status=idle]
+execute if data block 8 100 8 Energy run say EXTRACTOR-BE

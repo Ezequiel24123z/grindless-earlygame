@@ -56,6 +56,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/states.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/states.expect
 
+      # The extractor has a block entity, and a pylon occupies the two blocks above it.
+      - name: Boot and exercise extractor and pylon tower
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/loop.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/loop.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

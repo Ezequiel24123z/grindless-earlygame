@@ -57,9 +57,12 @@ public final class VerifyAssets {
 
     private static void catalogueMatchesRegistry() throws IOException {
         List<String> inCode = registered("ModBlocks.java");
+        inCode.removeAll(BlockCatalogue.technical());
         List<String> inCatalogue = BlockCatalogue.blocks().stream().map(BlockCatalogue.Entry::name).toList();
-        yes("BlockCatalogue lists exactly the blocks ModBlocks registers " + inCode,
+        yes("BlockCatalogue lists exactly the player-facing blocks ModBlocks registers " + inCode,
                 inCode.size() == inCatalogue.size() && inCode.containsAll(inCatalogue));
+        yes("the pylon shaft has a blockstate",
+                exists(ASSETS.resolve("blockstates/flux_pylon_shaft.json")));
     }
 
     private static void blocks() throws IOException {

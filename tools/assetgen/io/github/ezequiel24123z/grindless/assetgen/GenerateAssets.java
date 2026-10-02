@@ -117,6 +117,8 @@ public final class GenerateAssets {
                 written += write(blocks, "pylon" + tier + "_top_" + status, MachineArt.pylonTop(tier, status));
             }
         }
+        written += write(blocks, "extractor_front_out_of_band", MachineArt.extractorFront("out_of_band"));
+        written += write(blocks, "terminal_front_out_of_band", MachineArt.terminalFront("out_of_band"));
 
         // ---- sounds ----
         // Loops are built from harmonics of their own loop frequency and must not be faded, or
@@ -300,10 +302,22 @@ public final class GenerateAssets {
             }
             written += writeText(new File(assets, "blockstates/" + n + ".json"),
                     "{\n  \"variants\": {\n" + variants + "\n  }\n}\n");
-            written += writeText(new File(assets, "models/item/" + n + ".json"),
-                    "{\n  \"parent\": \"grindless:block/" + block.modelName("idle") + "\"\n}\n");
+            if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
+                written += writeText(new File(assets, "models/item/" + n + ".json"),
+                        BlockModels.pylonItem(block.tier()));
+                for (String status : block.statuses()) {
+                    written += writeText(new File(assets, "models/block/" + n + "_part1_" + status + ".json"),
+                            BlockModels.pylonPart(block.tier(), 1, status));
+                    written += writeText(new File(assets, "models/block/" + n + "_part2_" + status + ".json"),
+                            BlockModels.pylonPart(block.tier(), 2, status));
+                }
+            } else {
+                written += writeText(new File(assets, "models/item/" + n + ".json"),
+                        "{\n  \"parent\": \"grindless:block/" + block.modelName("idle") + "\"\n}\n");
+            }
             written += writeText(new File(data, "grindless/loot_tables/blocks/" + n + ".json"), lootTable(n));
         }
+        written += writeShaft(assets, data, names);
         written += writeText(new File(assets, "models/item/" + BlockCatalogue.CASING_ITEM + ".json"),
                 "{\n  \"parent\": \"minecraft:block/cube_bottom_top\",\n  \"textures\": {\n"
                         + "    \"top\": \"grindless:block/casing_top\",\n"
@@ -315,6 +329,44 @@ public final class GenerateAssets {
         written += writeText(new File(smoke, "states.commands"), String.join("\n", commands) + "\n");
         written += writeText(new File(smoke, "states.expect"), String.join("\n", expect) + "\n");
         return written;
+    }
+
+    /**
+     * The two blocks above a pylon: occupancy and the middle/top models. Empty loot, pickaxe
+     * mineable, no item.
+     */
+    private static int writeShaft(File assets, File data, List<String> pickaxe) throws IOException {
+        StringBuilder variants = new StringBuilder();
+        List<String> grid = BlockCatalogue.GRID;
+        for (int tier = 1; tier <= 3; tier++) {
+            for (int index = 1; index <= 2; index++) {
+                for (String status : grid) {
+                    if (variants.length() > 0) {
+                        variants.append(",\n");
+                    }
+                    String model = "grindless:block/flux_pylon_mk" + tier + "_part" + index + "_" + status;
+                    variants.append("    \"index=").append(index)
+                            .append(",status=").append(status)
+                            .append(",tier=").append(tier)
+                            .append("\": { \"model\": \"").append(model).append("\" }");
+                }
+            }
+        }
+        int written = writeText(new File(assets, "blockstates/flux_pylon_shaft.json"),
+                "{\n  \"variants\": {\n" + variants + "\n  }\n}\n");
+        written += writeText(new File(data, "grindless/loot_tables/blocks/flux_pylon_shaft.json"),
+                emptyLoot());
+        pickaxe.add("grindless:flux_pylon_shaft");
+        return written;
+    }
+
+    private static String emptyLoot() {
+        return """
+                {
+                  "type": "minecraft:block",
+                  "pools": []
+                }
+                """;
     }
 
     private static String lootTable(String block) {

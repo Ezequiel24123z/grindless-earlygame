@@ -2,26 +2,14 @@
   "textures": {
     "base": "grindless:block/casing_side",
     "cap": "grindless:block/casing_top",
-    "side": "grindless:block/pylon1_side_starved",
-    "top": "grindless:block/pylon1_top_starved",
-    "particle": "grindless:block/pylon1_side_starved"
+    "side": "grindless:block/pylon3_side_running",
+    "top": "grindless:block/pylon3_top_running",
+    "particle": "grindless:block/pylon3_side_running"
   },
   "elements": [
     {
-      "from": [2, 0, 2],
-      "to": [14, 3, 14],
-      "faces": {
-        "up": { "texture": "#cap" },
-        "down": { "texture": "#cap" },
-        "north": { "texture": "#base" },
-        "south": { "texture": "#base" },
-        "east": { "texture": "#base" },
-        "west": { "texture": "#base" }
-      }
-    },
-    {
-      "from": [6, 3, 6],
-      "to": [10, 16, 10],
+      "from": [4, 0, 4],
+      "to": [12, 10, 12],
       "faces": {
         "up": { "texture": "#top" },
         "down": { "texture": "#top" },
@@ -32,8 +20,8 @@
       }
     },
     {
-      "from": [5, 12, 5],
-      "to": [11, 14, 11],
+      "from": [3, 0, 3],
+      "to": [13, 2, 13],
       "faces": {
         "up": { "texture": "#cap" },
         "down": { "texture": "#cap" },
@@ -41,6 +29,18 @@
         "south": { "texture": "#base" },
         "east": { "texture": "#base" },
         "west": { "texture": "#base" }
+      }
+    },
+    {
+      "from": [3, 10, 3],
+      "to": [13, 16, 13],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
       }
     }
   ]

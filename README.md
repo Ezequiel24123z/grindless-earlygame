@@ -184,15 +184,16 @@ forgot to connect. Grindless deletes the category.
 
 ### Supply areas
 
-A **Flux Pylon** projects a cubic **supply area** centred on itself. Every Grindless machine
-inside that cube is powered. There are no wires between pylons and machines, no per-face
-connections, and no cable loss to account for.
+A **Flux Pylon** is three blocks tall and projects a cubic **supply area** centred on its base.
+Every Grindless machine inside that cube is powered. There are no wires between pylons and
+machines, no per-face connections, and no cable loss to account for. One MK1 covers a small
+factory floor; an MK3 covers a chunk-scale base.
 
 | Pylon | Supply area | Throughput | Link range | Tier |
 | --- | --- | --- | --- | --- |
-| **MK1** | 16 × 16 × 16 | 512 FU/t | 24 blocks | LV–MV |
-| **MK2** | 32 × 32 × 32 | 4,096 FU/t | 48 blocks | MV–HV |
-| **MK3** | 64 × 64 × 64 | 32,768 FU/t | 96 blocks | HV–IV |
+| **MK1** | 48 × 48 × 48 | 512 FU/t | 64 blocks | LV–MV |
+| **MK2** | 80 × 80 × 80 | 4,096 FU/t | 112 blocks | MV–HV |
+| **MK3** | 128 × 128 × 128 | 32,768 FU/t | 192 blocks | HV–IV |
 
 Range and throughput scale together, so upgrading a pylon is always unambiguously good — the
 decision the player makes is *where* to put pylons and *how many*, which is the interesting
@@ -1925,7 +1926,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 13 | Pylon network, supply areas, `SavedData` | ✅ done — `network/`, ADR-0046 |
 | 13b | The Flux Pylon block, and machines drawing from their network | ✅ done |
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
-| 14b | The **runtime tag scan** — `MaterialRegistry`, and the Terrestrial Extractor | **next** |
+| 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
 | 16 | T0/T1 machines, menus and screens | pending |
 | 17 | Fluid layer: state, pressure, pipes, tanks | pending |
@@ -1954,21 +1955,12 @@ system itself — the part the whole machine layer rests on — is complete and 
 
 ### Where the project actually is
 
-Everything through step 14 is written, builds green and is covered by the behaviour checks in
-`tools/checks`. Nothing is **playable** yet: the Hand Crank Dynamo generates and pushes power, the
-Flux Pylon forms networks, and veins derive correctly — but no machine consumes anything, so there
-is no loop to play.
+Everything through step 14b is written, builds green and is covered by the behaviour checks in
+`tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
+Extractor (or a pylon that covers both), and the extractor pulls the chunk's vein into a chest.
 
-The shortest path to a first playable loop is **step 14b**, which is the next thing to do:
-
-1. `MaterialRegistry` currently only reserves its call site. It needs the real tag scan —
-   `forge:ores/*`, `forge:ingots/*` and the rest — producing `Material` records on datapack load
-   and rebuilding on reload (ADR-0004). Everything downstream is written against it already.
-2. The **Terrestrial Extractor**: a `MachineBlockEntity` that resolves its chunk's vein, draws
-   power from its network with `requestPower`/`drawPower`, and produces the vein's material at a
-   rate of `richness × remaining reserve × tier × voltage satisfaction`.
-
-That pair turns a hand crank, a pylon and an extractor into an actual loop: power in, ore out.
+The **Terrestrial Extractor** (T1, faster, network-only) is still ahead; T0 is enough to stop
+mining by hand. Next is menus, the T1 machines, and the recipe graph (steps 15–16).
 
 Two art questions are open and recorded in ADR-0048. Sound synthesis currently produces
 *serviceable* industrial noise rather than good audio, and CC0 libraries are the better answer;

@@ -39,6 +39,9 @@ public final class MachineEffects {
             case TERMINAL -> terminal(status, front, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
         }
+        if (status == MachineStatus.OUT_OF_BAND) {
+            outOfBand(level, pos, random);
+        }
     }
 
     private static void dynamo(MachineStatus status, Direction front, Level level, BlockPos pos,
@@ -81,6 +84,8 @@ public final class MachineEffects {
                 }
                 sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.6F);
             }
+            case OUT_OF_BAND -> {
+            }
             default -> {
             }
         }
@@ -112,6 +117,8 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.SMOKE, x, pos.getY() + 1.0, z, 0.0, 0.03, 0.0);
                 }
             }
+            case OUT_OF_BAND -> {
+            }
             default -> {
             }
         }
@@ -138,6 +145,22 @@ public final class MachineEffects {
             }
             sound(level, pos, ModSounds.BROWNOUT_ALARM.get(), random, 0.03F, 0.4F, 1.0F);
         }
+    }
+
+    /**
+     * Out-of-band is the same on every machine: purple motes and the brownout alarm at a higher
+     * pitch. Conditions being wrong is not a machine-specific failure, so it does not get a
+     * machine-specific effect.
+     */
+    private static void outOfBand(Level level, BlockPos pos, RandomSource random) {
+        if (random.nextFloat() < 0.5F) {
+            particle(level, ParticleTypes.WITCH,
+                    pos.getX() + 0.2 + random.nextDouble() * 0.6,
+                    pos.getY() + 0.4 + random.nextDouble() * 0.6,
+                    pos.getZ() + 0.2 + random.nextDouble() * 0.6,
+                    0.0, 0.04, 0.0);
+        }
+        sound(level, pos, ModSounds.BROWNOUT_ALARM.get(), random, 0.08F, 0.25F, 1.6F);
     }
 
     private static void particle(Level level, ParticleOptions type, double x, double y, double z,

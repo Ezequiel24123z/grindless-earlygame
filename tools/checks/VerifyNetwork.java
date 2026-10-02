@@ -26,22 +26,21 @@ public final class VerifyNetwork {
     }
 
     private static void tiers() {
-        eq("MK1 supply area", 16, PylonTier.MK1.supplyArea());
-        eq("MK3 supply area", 64, PylonTier.MK3.supplyArea());
-        eq("MK1 radius", 8, PylonTier.MK1.radius());
+        eq("MK1 supply area", 48, PylonTier.MK1.supplyArea());
+        eq("MK3 supply area", 128, PylonTier.MK3.supplyArea());
+        eq("MK1 radius", 24, PylonTier.MK1.radius());
+        eq("a pylon is three blocks tall", 3, PylonStructure.HEIGHT);
 
         BlockPos origin = new BlockPos(0, 64, 0);
         yes("covers its own position", PylonTier.MK1.covers(origin, origin));
-        yes("covers the cube edge", PylonTier.MK1.covers(origin, new BlockPos(8, 64, 0)));
-        no("does not cover past the edge", PylonTier.MK1.covers(origin, new BlockPos(9, 64, 0)));
-        yes("covers a corner", PylonTier.MK1.covers(origin, new BlockPos(8, 72, 8)));
+        yes("covers the cube edge", PylonTier.MK1.covers(origin, new BlockPos(24, 64, 0)));
+        no("does not cover past the edge", PylonTier.MK1.covers(origin, new BlockPos(25, 64, 0)));
+        yes("covers a corner", PylonTier.MK1.covers(origin, new BlockPos(24, 88, 24)));
         no("does not cover past a corner",
-                PylonTier.MK1.covers(origin, new BlockPos(8, 73, 8)));
-        yes("covers vertically too", PylonTier.MK1.covers(origin, new BlockPos(0, 56, 0)));
+                PylonTier.MK1.covers(origin, new BlockPos(24, 89, 24)));
+        yes("covers vertically too", PylonTier.MK1.covers(origin, new BlockPos(0, 40, 0)));
 
-        // Link range is governed by the shorter of the two, so a big pylon cannot capture a
-        // small one that could never reach back.
-        BlockPos far = new BlockPos(30, 64, 0);
+        BlockPos far = new BlockPos(80, 64, 0);
         no("MK1 pair beyond the shorter range does not link",
                 PylonTier.linksAutomatically(PylonTier.MK1, origin, PylonTier.MK1, far));
         no("MK3 cannot capture a distant MK1",
@@ -63,8 +62,8 @@ public final class VerifyNetwork {
         eq("one pylon indexed", 1, idx.size());
         yes("knows its tier", idx.tierAt(a) == PylonTier.MK1);
         eq("covers its own block", 1, idx.covering(a).size());
-        eq("covers inside the cube", 1, idx.covering(new BlockPos(5, 64, 5)).size());
-        eq("does not cover outside it", 0, idx.covering(new BlockPos(20, 64, 20)).size());
+        eq("covers inside the cube", 1, idx.covering(new BlockPos(20, 64, 20)).size());
+        eq("does not cover outside it", 0, idx.covering(new BlockPos(30, 64, 30)).size());
 
         // The chunk bucket is coarser than the cube, so a pylon can be filed under a chunk it
         // only clips. The exact per-axis test still has to run.
@@ -91,8 +90,8 @@ public final class VerifyNetwork {
         PylonIndex wide = new PylonIndex();
         wide.add(new BlockPos(0, 64, 0), PylonTier.MK3);
         eq("found near its centre", 1, wide.covering(new BlockPos(0, 64, 0)).size());
-        eq("found at the far edge", 1, wide.covering(new BlockPos(32, 64, 32)).size());
-        eq("not found past the edge", 0, wide.covering(new BlockPos(33, 64, 0)).size());
+        eq("found at the far edge", 1, wide.covering(new BlockPos(64, 64, 64)).size());
+        eq("not found past the edge", 0, wide.covering(new BlockPos(65, 64, 0)).size());
 
         wide.clear();
         eq("clear empties it", 0, wide.size());
@@ -101,7 +100,7 @@ public final class VerifyNetwork {
     private static void merging() {
         FluxNetworkData data = new FluxNetworkData();
         BlockPos a = new BlockPos(0, 64, 0);
-        BlockPos b = new BlockPos(20, 64, 0);
+        BlockPos b = new BlockPos(40, 64, 0);
         BlockPos far = new BlockPos(500, 64, 500);
 
         data.addPylon(a, PylonTier.MK1);
@@ -109,7 +108,7 @@ public final class VerifyNetwork {
         yes("the pylon has a network", data.networkAt(a) != null);
         eq("the network has one pylon", 1, data.networkAt(a).pylons().size());
 
-        // Within MK1 link range (24), so these join.
+        // Within MK1 link range (64), so these join.
         data.addPylon(b, PylonTier.MK1);
         eq("a linked pylon joins rather than creating", 1, data.networks().size());
         eq("the network now has two", 2, data.networkAt(a).pylons().size());
@@ -128,20 +127,19 @@ public final class VerifyNetwork {
         // A pylon bridging two networks merges them, which is how two bases get joined.
         FluxNetworkData bridge = new FluxNetworkData();
         bridge.addPylon(new BlockPos(0, 64, 0), PylonTier.MK1);
-        bridge.addPylon(new BlockPos(40, 64, 0), PylonTier.MK1);
+        bridge.addPylon(new BlockPos(80, 64, 0), PylonTier.MK1);
         eq("two separate networks", 2, bridge.networks().size());
-        bridge.addPylon(new BlockPos(20, 64, 0), PylonTier.MK1);
+        bridge.addPylon(new BlockPos(40, 64, 0), PylonTier.MK1);
         eq("the bridge merges them", 1, bridge.networks().size());
         eq("all three are on it", 3,
                 bridge.networkAt(new BlockPos(0, 64, 0)).pylons().size());
 
-        // Energy survives a merge: emptying a network before linking must never be the smart play.
         FluxNetworkData energetic = new FluxNetworkData();
         energetic.addPylon(new BlockPos(0, 64, 0), PylonTier.MK1);
-        energetic.addPylon(new BlockPos(40, 64, 0), PylonTier.MK1);
+        energetic.addPylon(new BlockPos(80, 64, 0), PylonTier.MK1);
         energetic.networkAt(new BlockPos(0, 64, 0)).receive(1000L, false);
-        energetic.networkAt(new BlockPos(40, 64, 0)).receive(2000L, false);
-        energetic.addPylon(new BlockPos(20, 64, 0), PylonTier.MK1);
+        energetic.networkAt(new BlockPos(80, 64, 0)).receive(2000L, false);
+        energetic.addPylon(new BlockPos(40, 64, 0), PylonTier.MK1);
         eq("energy is carried across the merge", 3000L,
                 energetic.networkAt(new BlockPos(0, 64, 0)).stored());
     }
@@ -150,8 +148,8 @@ public final class VerifyNetwork {
         // A chain of three. Removing the middle one disconnects the ends.
         FluxNetworkData data = new FluxNetworkData();
         BlockPos left = new BlockPos(0, 64, 0);
-        BlockPos middle = new BlockPos(20, 64, 0);
-        BlockPos right = new BlockPos(40, 64, 0);
+        BlockPos middle = new BlockPos(40, 64, 0);
+        BlockPos right = new BlockPos(80, 64, 0);
         data.addPylon(left, PylonTier.MK1);
         data.addPylon(middle, PylonTier.MK1);
         data.addPylon(right, PylonTier.MK1);

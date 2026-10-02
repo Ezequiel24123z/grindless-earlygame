@@ -15,6 +15,10 @@
     "facing=north,status=starved": { "model": "grindless:block/crude_extractor_starved" },
     "facing=east,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 90 },
     "facing=south,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 180 },
-    "facing=west,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 270 }
+    "facing=west,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 270 },
+    "facing=north,status=out_of_band": { "model": "grindless:block/crude_extractor_out_of_band" },
+    "facing=east,status=out_of_band": { "model": "grindless:block/crude_extractor_out_of_band", "y": 90 },
+    "facing=south,status=out_of_band": { "model": "grindless:block/crude_extractor_out_of_band", "y": 180 },
+    "facing=west,status=out_of_band": { "model": "grindless:block/crude_extractor_out_of_band", "y": 270 }
   }
 }

@@ -64,6 +64,9 @@ history — the reasoning that was wrong is itself useful information.
 | [0050](#adr-0050--grindless-supplies-a-material-only-where-the-pack-has-none) | Grindless supplies a material only where the pack has none | Accepted |
 | [0051](#adr-0051--every-block-ships-a-floor-of-assets-generated-from-one-list) | Every block ships a floor of assets generated from one list | Accepted |
 | [0052](#adr-0052--each-machine-has-its-own-shape-state-textures-and-effects) | Each machine has its own shape, state textures and effects | Accepted |
+| [0053](#adr-0053--the-crude-extractor-is-the-first-consumer) | The Crude Extractor is the first consumer | Accepted |
+| [0054](#adr-0054--pylons-are-three-blocks-tall-and-cover-a-factory) | Pylons are three blocks tall and cover a factory | Accepted |
+| [0055](#adr-0055--the-multitool-does-not-mine) | The Multitool does not mine | Accepted |
 
 ---
 
@@ -1913,3 +1916,81 @@ latter has no visuals. Effects are sparse one-shots, not looping sounds, and a p
 chunk keeps its last status until the chunk loads. Face lighting is not emissive: only the block
 light level changes. A client run (software GL under Xvfb) showed the models and textures
 rendering with no model errors in the log; it did not demonstrate the particles over time.
+
+
+## ADR-0053 — The Crude Extractor is the first consumer
+
+*2026-10-02 · Accepted*
+
+**Context.** The Hand Crank Dynamo generated power and the Flux Network could carry it, but nothing
+consumed it. `docs/PROCESSES.md` already specified the T0 extractor: F0, twenty seconds, one unit
+of the chunk's material. Veins, depletion and Deep Bore already had checks. The extractor was a
+shell with art and no behaviour.
+
+**Decision.** The Crude Extractor is a `MachineBlockEntity` that:
+
+1. Resolves its chunk's vein from the world seed and `MaterialRegistry.snapshot().mineable()`.
+2. Draws 8 FU/t from a covering Flux Network, or from its own buffer when an adjacent dynamo
+   pushes into it. T0 has no pylons, so adjacency is the bootstrap path.
+3. Progresses a 400-tick cycle scaled by `vein.rateAfter` (richness and depletion) and by how much
+   of the requested power actually arrived (brownouts slow it, they do not stall it).
+4. Outputs the pack's preferred raw form, or the ore if the pack has no raw, via `Unifier`.
+5. Holds one output slot that hoppers can pull from and that the machine pushes into neighbouring
+   inventories (vanilla `Container` first, Forge item capability otherwise).
+6. Publishes status through the same debounce as every other machine: idle with no vein, starved
+   with no power, blocked when the product cannot leave, running otherwise. A vein never idles
+   from exhaustion — that would contradict ADR-0047.
+
+Work is subscribed while there is a vein and the output is not stuck, and dropped the moment it
+is: an extractor next to a full chest costs nothing until a hopper or a neighbour change frees a
+slot. `ExtractorLogic` holds the numbers so `VerifyExtractor` can check them without a world.
+
+**Consequences.** The first playable loop exists: crank a dynamo next to an extractor, or cover
+both with a pylon, and put a chest on any face. The Terrestrial Extractor (T1, faster, network-only)
+is still ahead. The extractor has no menu yet; hoppers and auto-push are the interface.
+
+
+## ADR-0054 — Pylons are three blocks tall and cover a factory
+
+*2026-10-02 · Accepted*
+
+**Context.** Pylons were a one-block post with a 16/32/64-block supply cube. That is a lamp post,
+not a power pylon, and one MK1 could not cover a factory floor. Minecraft JSON models cannot
+extend past 32 units on an axis, so a three-block-tall model cannot hang off a single block.
+
+**Decision.**
+
+1. A pylon occupies three blocks of height. The player places the base; two `flux_pylon_shaft`
+   blocks occupy y+1 and y+2. The shafts have no item, drop nothing, and breaking one breaks the
+   base, which drops the pylon. Only the base is a network member.
+2. Each third has its own model, sliced from a 48-unit tower, because JSON cannot represent the
+   whole thing on one block. The item uses the tower scaled into 16 units.
+3. Shafts copy the base's tier and status so the lights stay in step. Coverage, throughput and
+   link range still key off the base position.
+4. Supply cubes grow to a factory scale: MK1 48³ / link 64, MK2 80³ / link 112, MK3 128³ / link 192.
+   Throughput is unchanged. The shorter of two link ranges still governs, so an MK3 cannot capture
+   an MK1 that cannot reach back. The cube-per-axis rule is unchanged; a player can still see the
+   coverage by eye.
+
+**Consequences.** An MK1 covers a small factory. An MK3 covers a chunk-scale base. The spatial
+index files an MK3 under at most 81 chunk buckets, which is still local density rather than world
+size. Existing worlds with 1-block pylons will miss their shafts until the pylon is broken and
+replaced; membership is unchanged.
+
+
+## ADR-0055 — The Multitool does not mine
+
+*2026-10-02 · Accepted*
+
+**Context.** ADR-0051 put every machine in `minecraft:mineable/pickaxe` and left open whether the
+Multitool should mine them. The Multitool is the T0 handheld that replaces the stone-tool *phase*,
+not the pickaxe.
+
+**Decision.** The Multitool is not a mining tool. Machines drop only for a pickaxe (or another
+item in `minecraft:mineable/pickaxe`). The Multitool stays a scanner, configurator and progression
+item. Giving it mining would collapse "requires the correct tool" into "the one item does
+everything", which is how the early game becomes a single hotbar slot instead of a first factory.
+
+**Consequences.** Players keep a pickaxe. If a later session wants a mining module on the
+Multitool, it is an upgrade with a cost, not the default.
+

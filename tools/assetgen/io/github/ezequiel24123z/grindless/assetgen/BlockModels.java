@@ -50,7 +50,7 @@ final class BlockModels {
             case DYNAMO -> dynamo();
             case EXTRACTOR -> extractor();
             case TERMINAL -> terminal();
-            case PYLON -> pylon(block.tier());
+            case PYLON -> pylonPiece(block.tier(), 0);
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -62,6 +62,39 @@ final class BlockModels {
         }
         out.append("  ]\n}\n");
         return out.toString();
+    }
+
+    /** The middle or top third of a pylon, as its own model sitting in 0–16. */
+    static String pylonPart(int tier, int piece, String status) {
+        return assembled(pylonPiece(tier, piece), pylonTextures(tier, status));
+    }
+
+    /** A full tower squashed into one block, for the item. JSON cannot extend past y=32. */
+    static String pylonItem(int tier) {
+        return assembled(pylonScaled(tier), pylonTextures(tier, "idle"));
+    }
+
+    private static String assembled(List<Box> boxes, String textures) {
+        StringBuilder out = new StringBuilder("{\n");
+        out.append("  \"textures\": {\n");
+        out.append(textures);
+        out.append("  },\n  \"elements\": [\n");
+        for (int i = 0; i < boxes.size(); i++) {
+            out.append(element(boxes.get(i)));
+            out.append(i + 1 < boxes.size() ? ",\n" : "\n");
+        }
+        out.append("  ]\n}\n");
+        return out.toString();
+    }
+
+    private static String pylonTextures(int tier, String status) {
+        List<String> lines = new ArrayList<>();
+        lines.add(slot("base", "casing_side"));
+        lines.add(slot("cap", "casing_top"));
+        lines.add(slot("side", "pylon" + tier + "_side_" + status));
+        lines.add(slot("top", "pylon" + tier + "_top_" + status));
+        lines.add(slot("particle", "pylon" + tier + "_side_" + status));
+        return String.join(",\n", lines) + "\n";
     }
 
     private static String textures(BlockCatalogue.Entry block, String status) {
@@ -150,18 +183,54 @@ final class BlockModels {
                 screen);
     }
 
-    private static List<Box> pylon(int tier) {
+    /**
+     * A three-block-tall tower in 0–48 space, sliced per piece into 0–16 (ADR-0054). JSON models
+     * cannot extend past 32 on an axis, so the middle and top live on their own blocks.
+     */
+    private static List<Box> pylonFull(int tier) {
+        int inset = 7 - tier;
         List<Box> boxes = new ArrayList<>();
-        boxes.add(box(3, 0, 3, 13, 2, 13, "cap", "base"));
-        int shaft = 10 + tier;
-        boxes.add(box(6, 2, 6, 10, shaft, 10, "top", "side"));
-        if (tier >= 2) {
-            boxes.add(box(5, 5, 5, 11, 7, 11, "cap", "base"));
+        boxes.add(box(2, 0, 2, 14, 3, 14, "cap", "base"));
+        boxes.add(box(inset, 3, inset, 16 - inset, 42, 16 - inset, "top", "side"));
+        for (int r = 0; r < tier; r++) {
+            int y = 12 + r * 10;
+            boxes.add(box(inset - 1, y, inset - 1, 16 - inset + 1, y + 2, 16 - inset + 1, "cap", "base"));
         }
-        if (tier >= 3) {
-            boxes.add(box(5, 9, 5, 11, 11, 11, "cap", "base"));
-        }
-        boxes.add(box(5, shaft, 5, 11, shaft + 3, 11, "top", "side"));
+        boxes.add(box(inset - 1, 42, inset - 1, 16 - inset + 1, 48, 16 - inset + 1, "top", "side"));
         return boxes;
+    }
+
+    private static List<Box> pylonPiece(int tier, int piece) {
+        double y0 = piece * 16.0;
+        double y1 = y0 + 16.0;
+        List<Box> sliced = new ArrayList<>();
+        for (Box box : pylonFull(tier)) {
+            if (box.to[1] <= y0 || box.from[1] >= y1) {
+                continue;
+            }
+            double fromY = Math.max(box.from[1], y0) - y0;
+            double toY = Math.min(box.to[1], y1) - y0;
+            if (toY - fromY < 0.05) {
+                continue;
+            }
+            sliced.add(new Box(
+                    new double[]{box.from[0], fromY, box.from[2]},
+                    new double[]{box.to[0], toY, box.to[2]},
+                    box.up, box.down, box.north, box.south, box.east, box.west,
+                    box.fullFrontUv, box.rotation));
+        }
+        return sliced;
+    }
+
+    private static List<Box> pylonScaled(int tier) {
+        List<Box> scaled = new ArrayList<>();
+        for (Box box : pylonFull(tier)) {
+            scaled.add(new Box(
+                    new double[]{box.from[0], box.from[1] / 3.0, box.from[2]},
+                    new double[]{box.to[0], box.to[1] / 3.0, box.to[2]},
+                    box.up, box.down, box.north, box.south, box.east, box.west,
+                    box.fullFrontUv, box.rotation));
+        }
+        return scaled;
     }
 }

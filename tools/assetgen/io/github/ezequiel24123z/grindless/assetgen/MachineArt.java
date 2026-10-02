@@ -21,6 +21,7 @@ public final class MachineArt {
     public static final int RUNNING = 0x00E5FF;
     public static final int BLOCKED = 0xFFB300;
     public static final int STARVED = 0xFF3D00;
+    public static final int OUT_OF_BAND = 0xD500F9;
 
     /** Per-machine accents, deliberately none of the three status colours. */
     public static final int DYNAMO = 0x76FF03;
@@ -40,6 +41,7 @@ public final class MachineArt {
             case "running" -> accent;
             case "blocked" -> BLOCKED;
             case "starved" -> STARVED;
+            case "out_of_band" -> OUT_OF_BAND;
             default -> -1;
         };
     }
@@ -56,6 +58,7 @@ public final class MachineArt {
                 case "running" -> RUNNING;
                 case "blocked" -> (x % 2 == 0) ? BLOCKED : dark;
                 case "starved" -> (x <= 5 || x == 9) ? STARVED : dark;
+                case "out_of_band" -> (x % 2 == 0) ? OUT_OF_BAND : dark;
                 default -> dark;
             };
             set(img, x, 13, colour);
@@ -157,6 +160,11 @@ public final class MachineArt {
                     case "starved" -> {
                         if ((x + y) % 3 == 0) {
                             pixel = Palette.shade(STARVED, -0.35);
+                        }
+                    }
+                    case "out_of_band" -> {
+                        if ((x == y || x + y == 15) && y >= 2 && y <= 8) {
+                            pixel = OUT_OF_BAND;
                         }
                     }
                     default -> {
