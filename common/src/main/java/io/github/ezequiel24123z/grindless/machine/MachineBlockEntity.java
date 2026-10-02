@@ -49,6 +49,8 @@ public abstract class MachineBlockEntity extends BlockEntity {
     private static final String KEY_ENERGY = "Energy";
     private static final String KEY_MARK = "ChassisMark";
     private static final String KEY_CONFIG = "Config";
+    private static final String KEY_UPGRADES = "Upgrades";
+    private static final String KEY_CONDITIONS = "Conditions";
 
     private final TickSubscriptions subscriptions = new TickSubscriptions();
     private final ContainerConfig containerConfig = new ContainerConfig();
@@ -303,6 +305,8 @@ public abstract class MachineBlockEntity extends BlockEntity {
         tag.put(KEY_ENERGY, energy.save(new CompoundTag()));
         tag.putByte(KEY_MARK, (byte) mark.ordinal());
         tag.put(KEY_CONFIG, containerConfig.save(new CompoundTag()));
+        tag.put(KEY_UPGRADES, upgrades.save(new CompoundTag()));
+        tag.put(KEY_CONDITIONS, conditions.save(new CompoundTag()));
     }
 
     @Override
@@ -314,6 +318,10 @@ public abstract class MachineBlockEntity extends BlockEntity {
         ChassisMark[] marks = ChassisMark.values();
         this.mark = ordinal >= 0 && ordinal < marks.length ? marks[ordinal] : ChassisMark.MK_I;
         this.energy.load(tag.getCompound(KEY_ENERGY));
+        this.upgrades = UpgradeSet.load(tag.getCompound(KEY_UPGRADES));
+        this.conditions = tag.contains(KEY_CONDITIONS)
+                ? ConditionState.load(tag.getCompound(KEY_CONDITIONS))
+                : ConditionState.AMBIENT;
         // Note: this fires the config's listeners, so updateSubscriptions() runs here on a
         // subclass that is only partly loaded — a subclass field read now holds its default,
         // not its saved value. That is survivable rather than correct by accident: the first

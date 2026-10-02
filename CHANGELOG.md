@@ -143,6 +143,16 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Capability listeners leaked.** `NeighbourCache` registered a new invalidation listener on every
+  re-lookup and never removed it, so a neighbour that kept invalidating accumulated listeners
+  without bound. The listener is now registered once per cached capability and removed on
+  `invalidate()`; `FluxPlatform.onInvalidated` returns the unsubscribe handle. The Hand-Crank
+  Dynamo also releases its caches in `setRemoved()`.
+- **The Hand-Crank Dynamo polled every pushed tick when nobody was listening.** Fruitless pushes
+  now back off exponentially up to 20 ticks (`PushBackoff`) and reset on crank or neighbour change.
+- **Machine upgrades and process conditions were lost on save.** `UpgradeSet` and `ConditionState`
+  are now written to and read from NBT. Machines saved before this change load with no upgrades and
+  ambient conditions.
 - **The mod crashed during construction.** `ModCreativeTabs.register()` called `get()` on registry
   objects before the registry was populated, so Forge refused to create the mod instance with
   `Registry Object not present: grindless:multitool`. The tab now receives lazy suppliers. The

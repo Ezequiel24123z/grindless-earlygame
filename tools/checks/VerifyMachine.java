@@ -1,7 +1,12 @@
 package io.github.ezequiel24123z.grindless.machine;
 
+import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
+import io.github.ezequiel24123z.grindless.process.ConditionState;
+import io.github.ezequiel24123z.grindless.process.ProcessField;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 /** Throwaway check of the machine layer. Not part of the mod. */
 public final class VerifyMachine {
@@ -12,6 +17,8 @@ public final class VerifyMachine {
         subscriptions();
         upgrades();
         chassis();
+        pushBackoff();
+        persistence();
 
         System.out.println(failures == 0
                 ? "ALL MACHINE CHECKS PASSED"
@@ -113,6 +120,67 @@ public final class VerifyMachine {
         }
         eq("period 20 fires once per 20 ticks", 1, due);
         yes("period 1 always fires", TickOffset.isDue(7L, offA, 1));
+    }
+
+    private static void persistence() {
+        UpgradeSet set = UpgradeSet.EMPTY
+                .install(MachineUpgrade.SPEED, ChassisMark.MK_V)
+                .install(MachineUpgrade.SPEED, ChassisMark.MK_V)
+                .install(MachineUpgrade.YIELD, ChassisMark.MK_V);
+        UpgradeSet back = UpgradeSet.load(set.save(new CompoundTag()));
+        eq("upgrade count survives a save", set.size(), back.size());
+        eq("stacked upgrades keep their count", 2, back.count(MachineUpgrade.SPEED));
+        eq("a single upgrade keeps its count", 1, back.count(MachineUpgrade.YIELD));
+        eq("derived multipliers survive too", set.timeMultiplier(), back.timeMultiplier());
+        yes("an empty set loads as the shared empty set",
+                UpgradeSet.load(UpgradeSet.EMPTY.save(new CompoundTag())) == UpgradeSet.EMPTY);
+        yes("a machine saved before upgrades were persisted loads empty",
+                UpgradeSet.load(new CompoundTag()) == UpgradeSet.EMPTY);
+
+        CompoundTag foreign = new CompoundTag();
+        foreign.putInt("SPEED", 1);
+        foreign.putInt("REMOVED_IN_A_LATER_VERSION", 3);
+        foreign.putInt("YIELD", 0);
+        foreign.putInt("PRECISION", -2);
+        UpgradeSet lenient = UpgradeSet.load(foreign);
+        eq("unknown, zero and negative entries are skipped", 1, lenient.size());
+        eq("the valid entry is kept", 1, lenient.count(MachineUpgrade.SPEED));
+
+        ConditionState hot = ConditionState.AMBIENT
+                .withTemperature(850.5)
+                .withPressure(12.25)
+                .withAtmosphere(Atmosphere.INERT)
+                .withField(ProcessField.MAGNETIC)
+                .withAgitation(Agitation.FLUIDISED)
+                .withCatalyst(new ResourceLocation("grindless", "platinum_mesh"));
+        yes("conditions survive a save",
+                hot.equals(ConditionState.load(hot.save(new CompoundTag()))));
+        yes("no catalyst stays no catalyst", ConditionState.AMBIENT.equals(
+                ConditionState.load(ConditionState.AMBIENT.save(new CompoundTag()))));
+        yes("a machine saved before conditions were persisted loads ambient",
+                ConditionState.AMBIENT.equals(ConditionState.load(new CompoundTag())));
+
+        CompoundTag damaged = hot.save(new CompoundTag());
+        damaged.putString("Atmosphere", "PLASMA_FROM_THE_FUTURE");
+        damaged.putDouble("Temperature", Double.NaN);
+        damaged.putString("Catalyst", "not a valid location!");
+        ConditionState degraded = ConditionState.load(damaged);
+        eq("an unknown atmosphere degrades to air", Atmosphere.AIR.ordinal(),
+                degraded.atmosphere().ordinal());
+        eq("a non-finite temperature degrades to ambient",
+                ConditionState.AMBIENT.temperature(), degraded.temperature());
+        yes("an unparseable catalyst is dropped", degraded.catalyst() == null);
+        eq("the rest of the damaged state is kept", hot.pressure(), degraded.pressure());
+    }
+
+    private static void pushBackoff() {
+        eq("full speed while power flows", 5, PushBackoff.period(5, 0));
+        eq("doubles after one fruitless push", 10, PushBackoff.period(5, 1));
+        eq("doubles again", 20, PushBackoff.period(5, 2));
+        eq("stops at the ceiling", PushBackoff.MAX_PERIOD, PushBackoff.period(5, 3));
+        eq("and stays there", PushBackoff.MAX_PERIOD, PushBackoff.period(5, 1_000_000));
+        yes("never faster than the base", PushBackoff.period(5, 0) >= 5);
+        eq("a base above the ceiling is left alone", 40, PushBackoff.period(40, 7));
     }
 
     private static void upgrades() {
