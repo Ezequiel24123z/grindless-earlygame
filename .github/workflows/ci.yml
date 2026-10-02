@@ -49,6 +49,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/blocks.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/blocks.expect
 
+      # Every status and facing of every machine must be a valid block state.
+      - name: Boot and place every machine state
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/states.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/states.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

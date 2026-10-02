@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Machine states, per-machine art and effects (ADR-0052).** `status` (idle, running, blocked,
+  starved, out_of_band) and `facing` block-state properties; the hand-crank dynamo and flux pylons
+  publish their real status through a debounce, the extractor and terminal are shells whose status
+  nothing sets yet. Each machine has its own element model and generated textures per status
+  (extractor, terminal with tilted screen, dynamo with crank, three pylon tiers). `MachineEffects`
+  spawns particles and sounds per geometry and status; five mono Ogg sounds ship in `sounds.json`
+  with subtitles (source WAVs in `tools/audio`, `tools/convert-audio.sh`). `VerifyAssets` checks
+  every state, rotation and sound; `tools/smoke/states.commands` places all 53 states in CI.
+  `pack.mcmeta` moved to the `forge` module.
+
 - **Block assets** (ADR-0051). Blockstates, block and item models, self-drop loot tables and the
   `minecraft:mineable/pickaxe` entries for all six blocks, plus placeholder sprites for the
   Multitool and Data Core and a model for the Machine Casing item, generated from

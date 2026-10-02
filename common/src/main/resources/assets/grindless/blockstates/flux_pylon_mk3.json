@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "grindless:block/flux_pylon_mk3" }
+    "status=idle": { "model": "grindless:block/flux_pylon_mk3_idle" },
+    "status=running": { "model": "grindless:block/flux_pylon_mk3_running" },
+    "status=starved": { "model": "grindless:block/flux_pylon_mk3_starved" }
   }
 }
