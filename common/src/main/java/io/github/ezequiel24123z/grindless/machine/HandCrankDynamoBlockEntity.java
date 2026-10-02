@@ -39,6 +39,10 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
 
     private TickSubscription pushing;
 
+    /** Consecutive pushes that moved nothing; drives {@link PushBackoff}. Not saved: it only
+     * paces polling, and a reloaded dynamo is entitled to a fresh start. */
+    private int fruitlessPushes;
+
     public HandCrankDynamoBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HAND_CRANK_DYNAMO.get(), pos, state);
     }
@@ -97,6 +101,7 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         energy().setStored(energy().getStored() + CHARGE_PER_CRANK);
         // The crank is exactly the kind of state change the subscription model needs told about:
         // it is what makes pushing worth doing, and nothing else would notice it.
+        fruitlessPushes = 0;
         updateSubscriptions();
     }
 
@@ -111,7 +116,7 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
     }
 
     private void push() {
-        if (!isDue(PUSH_PERIOD)) {
+        if (!isDue(PushBackoff.period(PUSH_PERIOD, fruitlessPushes))) {
             return;
         }
         // Output is rated per tick, so a throttled push moves a whole period's worth at once:
@@ -152,9 +157,13 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         long spent = allowance - budget;
         if (spent > 0L) {
             energy().setStored(energy().getStored() - spent);
+            fruitlessPushes = 0;
+        } else {
+            fruitlessPushes++;
         }
-        // Re-evaluate every time, so running dry unsubscribes rather than leaving the dynamo
-        // ticking forever over neighbours that are already full.
+        // Running dry unsubscribes. Having charge but nobody to give it to does not: a full
+        // neighbour draining raises no event, so the dynamo keeps polling, at the pace PushBackoff
+        // allows, rather than sleeping through the moment a sink appears.
         updateSubscriptions();
     }
 
@@ -167,7 +176,18 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
      */
     public void onNeighbourChanged() {
         neighbours.values().forEach(NeighbourCache::invalidate);
+        fruitlessPushes = 0;
         updateSubscriptions();
+    }
+
+    /**
+     * Unregisters from every neighbour on the way out. A neighbour's capability outlives this
+     * block entity, so a listener left on it would keep a removed dynamo reachable.
+     */
+    @Override
+    public void setRemoved() {
+        neighbours.values().forEach(NeighbourCache::invalidate);
+        super.setRemoved();
     }
 
     // No persistence of its own: the charge *is* the energy buffer, which the base class already
