@@ -1,5 +1,20 @@
 {
   "variants": {
-    "": { "model": "grindless:block/crude_extractor" }
+    "facing=north,status=idle": { "model": "grindless:block/crude_extractor_idle" },
+    "facing=east,status=idle": { "model": "grindless:block/crude_extractor_idle", "y": 90 },
+    "facing=south,status=idle": { "model": "grindless:block/crude_extractor_idle", "y": 180 },
+    "facing=west,status=idle": { "model": "grindless:block/crude_extractor_idle", "y": 270 },
+    "facing=north,status=running": { "model": "grindless:block/crude_extractor_running" },
+    "facing=east,status=running": { "model": "grindless:block/crude_extractor_running", "y": 90 },
+    "facing=south,status=running": { "model": "grindless:block/crude_extractor_running", "y": 180 },
+    "facing=west,status=running": { "model": "grindless:block/crude_extractor_running", "y": 270 },
+    "facing=north,status=blocked": { "model": "grindless:block/crude_extractor_blocked" },
+    "facing=east,status=blocked": { "model": "grindless:block/crude_extractor_blocked", "y": 90 },
+    "facing=south,status=blocked": { "model": "grindless:block/crude_extractor_blocked", "y": 180 },
+    "facing=west,status=blocked": { "model": "grindless:block/crude_extractor_blocked", "y": 270 },
+    "facing=north,status=starved": { "model": "grindless:block/crude_extractor_starved" },
+    "facing=east,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 90 },
+    "facing=south,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 180 },
+    "facing=west,status=starved": { "model": "grindless:block/crude_extractor_starved", "y": 270 }
   }
 }

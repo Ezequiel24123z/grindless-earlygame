@@ -36,5 +36,11 @@
   "material.grindless.titanium": "Titanium",
   "material.grindless.tungsten": "Tungsten",
   "material.grindless.platinum": "Platinum",
-  "material.grindless.steel": "Steel"
+  "material.grindless.steel": "Steel",
+
+  "subtitles.grindless.machine_hum": "Machine hums",
+  "subtitles.grindless.machine_hum_heavy": "Heavy machine rumbles",
+  "subtitles.grindless.pylon_link": "Pylon carries power",
+  "subtitles.grindless.relay_click": "Relay clicks",
+  "subtitles.grindless.brownout_alarm": "Grid alarm sounds"
 }

@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.network;
 
+import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -284,15 +285,35 @@ public final class FluxNetworkData extends SavedData {
 
     // ---- Per tick ---------------------------------------------------------------------------
 
+    /** Where a network's displayed status is written; the world, or a stand-in in a check. */
+    @FunctionalInterface
+    public interface StatusSink {
+        void show(BlockPos pylon, MachineStatus status);
+    }
+
+    /** Resolves supply against demand without showing anything. */
+    public void tickNetworks() {
+        tickNetworks((pylon, status) -> { });
+    }
+
     /**
-     * Resolves each network's supply against the demand registered this tick.
+     * Resolves each network's supply against the demand registered this tick, and shows the result
+     * on its pylons.
      *
      * <p>A loop over networks, not over pylons or machines, so its cost is the number of separate
-     * power grids a player has built — a number that stays small even in a large base.
+     * power grids a player has built — a number that stays small even in a large base. Pylons are
+     * written only when their network's displayed status changes or its membership does, which is
+     * a handful of times a minute at most thanks to the debounce, never every tick.
      */
-    public void tickNetworks() {
+    public void tickNetworks(StatusSink sink) {
         for (FluxNetwork network : networks.values()) {
             network.resolveTick();
+            if (network.takeDisplayStale()) {
+                MachineStatus status = network.displayStatus();
+                for (BlockPos pylon : network.pylons()) {
+                    sink.show(pylon, status);
+                }
+            }
         }
     }
 

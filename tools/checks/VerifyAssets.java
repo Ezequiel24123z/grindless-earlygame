@@ -30,6 +30,7 @@ public final class VerifyAssets {
         }
         catalogueMatchesRegistry();
         blocks();
+        sounds();
         everyModelResolves();
         itemsAreNamedAndModelled();
         finish();
@@ -41,8 +42,12 @@ public final class VerifyAssets {
     }
 
     private static List<String> registered(String file) throws IOException {
+        return registered(file, "register");
+    }
+
+    private static List<String> registered(String file, String call) throws IOException {
         String source = Files.readString(SOURCES.resolve("registry/" + file));
-        Matcher matcher = Pattern.compile("register\\(\"([a-z0-9_]+)\"").matcher(source);
+        Matcher matcher = Pattern.compile(call + "\\(\"([a-z0-9_]+)\"").matcher(source);
         List<String> names = new ArrayList<>();
         while (matcher.find()) {
             names.add(matcher.group(1));
@@ -68,12 +73,76 @@ public final class VerifyAssets {
                     exists(ASSETS.resolve("blockstates/" + n + ".json"))
                             && Files.readString(ASSETS.resolve("blockstates/" + n + ".json"))
                             .contains("grindless:block/" + n));
-            yes(n + " has a block model", exists(ASSETS.resolve("models/block/" + n + ".json")));
+            checkStates(block);
             yes(n + " has an item model", exists(ASSETS.resolve("models/item/" + n + ".json")));
             Path loot = RESOURCES.resolve("data/grindless/loot_tables/blocks/" + n + ".json");
             yes(n + " drops itself", exists(loot) && Files.readString(loot).contains("\"grindless:" + n + "\""));
             yes(n + " is mineable with a pickaxe", tagText.contains("\"grindless:" + n + "\""));
         }
+    }
+
+    /**
+     * Every state of a block must have a model, and the variants must be exactly the cross product
+     * of its properties: a missing one renders as the purple cube only in that state, which is the
+     * hardest kind of bug to find by looking.
+     */
+    private static void checkStates(BlockCatalogue.Entry block) throws IOException {
+        JsonObject variants = read(ASSETS.resolve("blockstates/" + block.name() + ".json")).getAsJsonObject("variants");
+        int expected = 0;
+        boolean complete = true;
+        boolean rotated = true;
+        List<String> facings = block.facing() ? BlockCatalogue.FACINGS : List.of("");
+        for (String status : block.statuses()) {
+            Path model = ASSETS.resolve("models/block/" + block.modelName(status) + ".json");
+            complete &= exists(model);
+            for (int i = 0; i < facings.size(); i++) {
+                expected++;
+                JsonObject variant = variants.has(block.variantKey(facings.get(i), status))
+                        ? variants.getAsJsonObject(block.variantKey(facings.get(i), status)) : null;
+                if (variant == null) {
+                    complete = false;
+                    continue;
+                }
+                int y = variant.has("y") ? variant.get("y").getAsInt() : 0;
+                rotated &= y == (block.facing() ? BlockCatalogue.FACING_ROTATIONS.get(i) : 0);
+                complete &= variant.get("model").getAsString().equals("grindless:block/" + block.modelName(status));
+            }
+        }
+        yes(block.name() + " has a model for each of its " + expected + " states", complete);
+        yes(block.name() + " has exactly those states and no others", variants.size() == expected);
+        yes(block.name() + " turns its model to match its facing", rotated);
+    }
+
+    /** Every sound event must exist in code, in sounds.json and on disk, and be mono. */
+    private static void sounds() throws IOException {
+        List<String> inCode = registered("ModSounds.java", "sound");
+        JsonObject events = read(ASSETS.resolve("sounds.json"));
+        yes("ModSounds registers something", !inCode.isEmpty());
+        yes("sounds.json defines exactly the events ModSounds registers " + inCode,
+                events.size() == inCode.size() && inCode.stream().allMatch(events::has));
+        JsonObject lang = read(ASSETS.resolve("lang/en_us.json"));
+        for (String name : inCode) {
+            Path file = ASSETS.resolve("sounds/" + name + ".ogg");
+            yes(name + " has an ogg file", exists(file));
+            yes(name + " is mono, or Minecraft will not place it in 3D", exists(file) && vorbisChannels(file) == 1);
+            yes(name + " has a subtitle", lang.has("subtitles.grindless." + name));
+        }
+    }
+
+    /** Reads the channel count from the Vorbis identification header. */
+    private static int vorbisChannels(Path file) throws IOException {
+        byte[] bytes = Files.readAllBytes(file);
+        byte[] marker = {0x01, 'v', 'o', 'r', 'b', 'i', 's'};
+        for (int i = 0; i + marker.length + 5 < Math.min(bytes.length, 200); i++) {
+            boolean match = true;
+            for (int j = 0; j < marker.length; j++) {
+                match &= bytes[i + j] == marker[j];
+            }
+            if (match) {
+                return bytes[i + marker.length + 4] & 0xFF;
+            }
+        }
+        return -1;
     }
 
     /** Every texture and parent a Grindless model names must exist, or the game draws a purple cube. */
@@ -99,8 +168,18 @@ public final class VerifyAssets {
             }
         }
         yes("scanned " + models + " models", models > 100);
+        yes("the server-side state scenario covers every state",
+                Files.readAllLines(Path.of("tools/smoke/states.expect")).size() == totalStates());
         yes("every texture and parent a model names exists" + (missing.isEmpty() ? "" : " " + missing),
                 missing.isEmpty());
+    }
+
+    private static int totalStates() {
+        int total = 0;
+        for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
+            total += block.statuses().size() * (block.facing() ? BlockCatalogue.FACINGS.size() : 1);
+        }
+        return total;
     }
 
     private static void checkParent(String parent, Path file, List<String> missing) {

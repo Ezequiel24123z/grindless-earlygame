@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless;
 
 import dev.architectury.event.events.common.TickEvent;
+import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.network.FluxNetworkData;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
@@ -8,6 +9,7 @@ import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import io.github.ezequiel24123z.grindless.registry.ModCreativeTabs;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
+import io.github.ezequiel24123z.grindless.registry.ModSounds;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,7 @@ public final class Grindless {
         ModItems.register();
         ModBlockEntities.register();
         ModMenus.register();
+        ModSounds.register();
         ModCreativeTabs.register();
 
         MaterialRegistry.bootstrap();
@@ -66,6 +69,11 @@ public final class Grindless {
      */
     private static void registerNetworkTick() {
         TickEvent.SERVER_LEVEL_POST.register(level ->
-                FluxNetworkData.get(level).tickNetworks());
+                FluxNetworkData.get(level).tickNetworks((pylon, status) -> {
+                    // A pylon in an unloaded chunk is skipped rather than loaded to repaint it.
+                    if (level.isLoaded(pylon)) {
+                        MachineProperties.publish(level, pylon, status);
+                    }
+                }));
     }
 }

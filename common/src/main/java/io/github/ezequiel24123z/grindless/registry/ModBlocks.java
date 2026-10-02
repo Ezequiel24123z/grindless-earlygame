@@ -4,6 +4,8 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
+import io.github.ezequiel24123z.grindless.machine.MachineShellBlock;
+import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
 import net.minecraft.core.registries.Registries;
@@ -34,11 +36,11 @@ public final class ModBlocks {
 
     /** T0 extractor. Slow and cheap, but it never needs a tunnel. */
     public static final RegistrySupplier<Block> CRUDE_EXTRACTOR = register("crude_extractor",
-            () -> new Block(machine().strength(2.5F)));
+            () -> new MachineShellBlock(BlockCatalogue.Geometry.EXTRACTOR, machine().strength(2.5F)));
 
     /** T0 progression gate. Consumes Data Cores and Flux Units to unlock blueprints. */
     public static final RegistrySupplier<Block> RESEARCH_TERMINAL = register("research_terminal",
-            () -> new Block(machine().strength(3.0F)));
+            () -> new MachineShellBlock(BlockCatalogue.Geometry.TERMINAL, machine().strength(3.0F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */
@@ -54,12 +56,19 @@ public final class ModBlocks {
     private ModBlocks() {
     }
 
-    /** Shared base properties for machine blocks: metallic, pickaxe-mined. */
+    /**
+     * Shared base properties for machine blocks: metallic, pickaxe-mined, lit by their status.
+     *
+     * <p>{@code noOcclusion} because none of their models fill the cube; without it the faces of
+     * every neighbouring block would be culled and the machine would look like a hole.
+     */
     private static BlockBehaviour.Properties machine() {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)
                 .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops();
+                .requiresCorrectToolForDrops()
+                .noOcclusion()
+                .lightLevel(MachineStatus::lightOf);
     }
 
     /** Registers a block and its matching {@link BlockItem} under the same name. */

@@ -19,6 +19,7 @@ public final class VerifyMachine {
         chassis();
         pushBackoff();
         persistence();
+        statuses();
 
         System.out.println(failures == 0
                 ? "ALL MACHINE CHECKS PASSED"
@@ -171,6 +172,67 @@ public final class VerifyMachine {
                 ConditionState.AMBIENT.temperature(), degraded.temperature());
         yes("an unparseable catalyst is dropped", degraded.catalyst() == null);
         eq("the rest of the damaged state is kept", hot.pressure(), degraded.pressure());
+    }
+
+    private static void statuses() {
+        eq("an empty dynamo is idle", MachineStatus.IDLE.ordinal(),
+                DynamoStatus.of(0L, 0).ordinal());
+        eq("a charged dynamo that is giving power is running", MachineStatus.RUNNING.ordinal(),
+                DynamoStatus.of(100L, 0).ordinal());
+        eq("one fruitless push is a blip, not a fault", MachineStatus.RUNNING.ordinal(),
+                DynamoStatus.of(100L, 1).ordinal());
+        eq("two are a fact: charge with nowhere to go is blocked", MachineStatus.BLOCKED.ordinal(),
+                DynamoStatus.of(100L, DynamoStatus.BLOCKED_AFTER).ordinal());
+        eq("running dry is idle whatever the push history", MachineStatus.IDLE.ordinal(),
+                DynamoStatus.of(0L, 9).ordinal());
+
+        StatusDebounce flicker = new StatusDebounce();
+        int changes = 0;
+        for (int tick = 0; tick < 200; tick++) {
+            // Power moves on one tick in five, as a throttled push does.
+            if (flicker.observe(tick % 5 == 0 ? MachineStatus.RUNNING : MachineStatus.IDLE)) {
+                changes++;
+            }
+        }
+        eq("a status that flaps every few ticks changes once, not forty times", 1, changes);
+        eq("and settles on running", MachineStatus.RUNNING.ordinal(), flicker.shown().ordinal());
+
+        StatusDebounce quiet = new StatusDebounce();
+        quiet.observe(MachineStatus.RUNNING);
+        for (int i = 0; i < StatusDebounce.IDLE_HOLD - 1; i++) {
+            quiet.observe(MachineStatus.IDLE);
+        }
+        eq("going quiet is not shown before the hold", MachineStatus.RUNNING.ordinal(), quiet.shown().ordinal());
+        quiet.observe(MachineStatus.IDLE);
+        eq("but is shown once it has held", MachineStatus.IDLE.ordinal(), quiet.shown().ordinal());
+
+        StatusDebounce fault = new StatusDebounce();
+        fault.observe(MachineStatus.RUNNING);
+        yes("a fault is shown at once", fault.observe(MachineStatus.STARVED));
+        for (int i = 0; i < StatusDebounce.RECOVER_HOLD - 1; i++) {
+            fault.observe(MachineStatus.RUNNING);
+        }
+        eq("and is not cleared by a brief recovery", MachineStatus.STARVED.ordinal(), fault.shown().ordinal());
+        fault.observe(MachineStatus.RUNNING);
+        eq("only by a sustained one", MachineStatus.RUNNING.ordinal(), fault.shown().ordinal());
+
+        StatusDebounce broken = new StatusDebounce();
+        broken.observe(MachineStatus.RUNNING);
+        broken.observe(MachineStatus.STARVED);
+        for (int i = 0; i < StatusDebounce.RECOVER_HOLD - 1; i++) {
+            broken.observe(MachineStatus.RUNNING);
+        }
+        broken.observe(MachineStatus.STARVED);
+        for (int i = 0; i < StatusDebounce.RECOVER_HOLD - 1; i++) {
+            broken.observe(MachineStatus.RUNNING);
+        }
+        eq("a recovery interrupted by the fault returning starts over", MachineStatus.STARVED.ordinal(),
+                broken.shown().ordinal());
+
+        eq("statuses parse from their serialised names", MachineStatus.OUT_OF_BAND.ordinal(),
+                MachineStatus.parse("out_of_band").ordinal());
+        eq("an idle machine emits no light", 0, MachineStatus.IDLE.lightLevel());
+        yes("a running one does", MachineStatus.RUNNING.lightLevel() > MachineStatus.STARVED.lightLevel());
     }
 
     private static void pushBackoff() {

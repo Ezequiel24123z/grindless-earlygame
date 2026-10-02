@@ -1,0 +1,32 @@
+{
+  "machine_hum": {
+    "subtitle": "subtitles.grindless.machine_hum",
+    "sounds": [
+      "grindless:machine_hum"
+    ]
+  },
+  "machine_hum_heavy": {
+    "subtitle": "subtitles.grindless.machine_hum_heavy",
+    "sounds": [
+      "grindless:machine_hum_heavy"
+    ]
+  },
+  "pylon_link": {
+    "subtitle": "subtitles.grindless.pylon_link",
+    "sounds": [
+      "grindless:pylon_link"
+    ]
+  },
+  "relay_click": {
+    "subtitle": "subtitles.grindless.relay_click",
+    "sounds": [
+      "grindless:relay_click"
+    ]
+  },
+  "brownout_alarm": {
+    "subtitle": "subtitles.grindless.brownout_alarm",
+    "sounds": [
+      "grindless:brownout_alarm"
+    ]
+  }
+}

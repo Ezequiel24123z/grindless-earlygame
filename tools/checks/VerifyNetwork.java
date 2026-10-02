@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.network;
 
+import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.StatusDebounce;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
@@ -14,6 +16,7 @@ public final class VerifyNetwork {
         merging();
         splitting();
         brownouts();
+        pylonStatus();
         persistence();
 
         System.out.println(failures == 0
@@ -257,6 +260,51 @@ public final class VerifyNetwork {
         eq("a simulated extract does not spend it", cap, limited.extract(cap * 5L, false));
     }
 
+    private static void pylonStatus() {
+        FluxNetworkData data = new FluxNetworkData();
+        BlockPos pylon = new BlockPos(0, 64, 0);
+        data.addPylon(pylon, PylonTier.MK1);
+        FluxNetwork network = data.networkAt(pylon);
+        java.util.List<String> writes = new java.util.ArrayList<>();
+        FluxNetworkData.StatusSink sink = (pos, status) -> writes.add(status.name());
+
+        data.tickNetworks(sink);
+        eq("a new pylon is told its starting status", 1, writes.size());
+        eq("which is idle", "IDLE", writes.get(0));
+        for (int i = 0; i < 100; i++) {
+            data.tickNetworks(sink);
+        }
+        eq("a quiet network writes nothing further", 1, writes.size());
+
+        network.receive(1000L, false);
+        data.tickNetworks(sink);
+        eq("power moving is shown at once", "RUNNING", writes.get(writes.size() - 1));
+        int afterRunning = writes.size();
+        for (int tick = 0; tick < 100; tick++) {
+            if (tick % 5 == 0) {
+                network.receive(10L, false);
+            }
+            data.tickNetworks(sink);
+        }
+        eq("a pulse every fifth tick does not flicker the pylon", afterRunning, writes.size());
+
+        network.registerDemand(PylonTier.MK1.throughput() * 4L);
+        data.tickNetworks(sink);
+        eq("demand it cannot meet is shown as starved", "STARVED", writes.get(writes.size() - 1));
+
+        for (int i = 0; i < StatusDebounce.IDLE_HOLD + StatusDebounce.RECOVER_HOLD + 5; i++) {
+            data.tickNetworks(sink);
+        }
+        eq("and a network left alone settles back to idle", "IDLE", writes.get(writes.size() - 1));
+
+        int before = writes.size();
+        data.addPylon(new BlockPos(5, 64, 0), PylonTier.MK1);
+        data.tickNetworks(sink);
+        eq("a pylon joining is told the network's status, and so is the rest", 2, writes.size() - before);
+        eq("the network reports what its pylons show", MachineStatus.IDLE.name(),
+                data.networkAt(pylon).displayStatus().name());
+    }
+
     private static void persistence() {
         FluxNetworkData data = new FluxNetworkData();
         data.addPylon(new BlockPos(0, 64, 0), PylonTier.MK1);
@@ -292,6 +340,14 @@ public final class VerifyNetwork {
             yes("a corrupt tier falls back", survived.networks().size() > 0);
         } catch (RuntimeException e) {
             fail("corrupt NBT threw " + e.getClass().getSimpleName());
+        }
+    }
+
+    private static void eq(String what, String expected, String actual) {
+        if (expected.equals(actual)) {
+            pass(what);
+        } else {
+            fail(what + ": expected " + expected + " but got " + actual);
         }
     }
 

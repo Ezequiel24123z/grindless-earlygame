@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.network;
 
+import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.StatusDebounce;
 import net.minecraft.core.BlockPos;
 
 import java.util.Collections;
@@ -39,6 +41,10 @@ public final class FluxNetwork {
     private double satisfaction = 1.0;
     /** FU extracted since the last {@link #resolveTick()}, bounded by {@link #throughput}. */
     private long drawnThisTick;
+    /** FU received since the last {@link #resolveTick()}; with draw, it tells whether power moved. */
+    private long receivedThisTick;
+    private final StatusDebounce display = new StatusDebounce();
+    private boolean displayStale = true;
 
     public FluxNetwork(int id) {
         this.id = id;
@@ -82,6 +88,7 @@ public final class FluxNetwork {
         if (pylons.add(pos.immutable())) {
             capacity += tier.throughput() * 20L;
             throughput += tier.throughput();
+            displayStale = true;
         }
     }
 
@@ -90,6 +97,7 @@ public final class FluxNetwork {
         if (pylons.remove(pos)) {
             capacity -= tier.throughput() * 20L;
             throughput -= tier.throughput();
+            displayStale = true;
             // A shrinking network must not keep energy it can no longer hold, or breaking and
             // replacing a pylon would be a way to manufacture power.
             stored = Math.min(stored, capacity);
@@ -104,6 +112,7 @@ public final class FluxNetwork {
         long accepted = Math.min(amount, Math.max(0L, capacity - stored));
         if (!simulate) {
             stored += accepted;
+            receivedThisTick += accepted;
         }
         return accepted;
     }
@@ -154,8 +163,41 @@ public final class FluxNetwork {
     public void resolveTick() {
         long available = Math.min(stored, throughput);
         satisfaction = demand <= 0L ? 1.0 : Math.min(1.0, (double) available / (double) demand);
+        boolean overdrawn = demand > 0L && satisfaction < 1.0;
+        boolean moved = receivedThisTick > 0L || drawnThisTick > 0L || demand > 0L;
+        if (display.observe(observedStatus(overdrawn, moved))) {
+            displayStale = true;
+        }
         demand = 0L;
         drawnThisTick = 0L;
+        receivedThisTick = 0L;
+    }
+
+    private static MachineStatus observedStatus(boolean overdrawn, boolean moved) {
+        if (overdrawn) {
+            return MachineStatus.STARVED;
+        }
+        return moved ? MachineStatus.RUNNING : MachineStatus.IDLE;
+    }
+
+    /**
+     * The status the network's pylons should show: carrying power, overdrawn, or quiet.
+     *
+     * <p>Debounced, so a network that moves power every few ticks reads as steadily running rather
+     * than flickering.
+     */
+    public MachineStatus displayStatus() {
+        return display.shown();
+    }
+
+    /**
+     * Whether the pylons' shown status needs writing: the network's status changed, or its
+     * membership did and a new pylon has not been told. Reading this clears it.
+     */
+    public boolean takeDisplayStale() {
+        boolean stale = displayStale;
+        displayStale = false;
+        return stale;
     }
 
     /**

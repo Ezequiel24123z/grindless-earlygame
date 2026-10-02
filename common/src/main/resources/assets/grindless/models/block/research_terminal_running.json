@@ -1,0 +1,49 @@
+{
+  "textures": {
+    "base": "grindless:block/casing_side",
+    "cap": "grindless:block/casing_top",
+    "front": "grindless:block/terminal_front_running",
+    "top": "grindless:block/terminal_top",
+    "side": "grindless:block/casing_side",
+    "particle": "grindless:block/casing_side"
+  },
+  "elements": [
+    {
+      "from": [1, 0, 2],
+      "to": [15, 7, 15],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [0, 0, 0],
+      "to": [16, 3, 2],
+      "faces": {
+        "up": { "texture": "#cap" },
+        "down": { "texture": "#cap" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east": { "texture": "#base" },
+        "west": { "texture": "#base" }
+      }
+    },
+    {
+      "from": [2, 7, 2],
+      "to": [14, 15, 4],
+      "rotation": { "angle": -22.5, "axis": "x", "origin": [8, 7, 3] },
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#front", "uv": [0, 0, 16, 16] },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    }
+  ]
+}

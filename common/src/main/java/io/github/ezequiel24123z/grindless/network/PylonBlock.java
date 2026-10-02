@@ -1,6 +1,15 @@
 package io.github.ezequiel24123z.grindless.network;
 
+import io.github.ezequiel24123z.grindless.machine.MachineEffects;
+import io.github.ezequiel24123z.grindless.machine.MachineProperties;
+import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -13,11 +22,26 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class PylonBlock extends BaseEntityBlock {
 
+    public static final EnumProperty<MachineStatus> STATUS =
+            MachineProperties.status(BlockCatalogue.GRID);
+
     private final PylonTier tier;
 
     public PylonBlock(PylonTier tier, Properties properties) {
         super(properties);
         this.tier = tier;
+        registerDefaultState(stateDefinition.any().setValue(STATUS, MachineStatus.IDLE));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(STATUS);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        MachineEffects.animate(BlockCatalogue.Geometry.PYLON, tier.ordinal() + 1,
+                state.getValue(STATUS), Direction.NORTH, level, pos, random);
     }
 
     public PylonTier tier() {

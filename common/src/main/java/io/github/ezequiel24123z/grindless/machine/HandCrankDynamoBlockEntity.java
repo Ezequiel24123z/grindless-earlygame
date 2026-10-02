@@ -103,6 +103,15 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         // it is what makes pushing worth doing, and nothing else would notice it.
         fruitlessPushes = 0;
         updateSubscriptions();
+        publishStatus();
+    }
+
+    /** Shows what the dynamo is doing on its block. Cheap when nothing changed. */
+    private void publishStatus() {
+        if (getLevel() != null && !getLevel().isClientSide()) {
+            MachineProperties.publish(getLevel(), getBlockPos(),
+                    DynamoStatus.of(energy().getStored(), fruitlessPushes));
+        }
     }
 
     @Override
@@ -165,6 +174,7 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         // neighbour draining raises no event, so the dynamo keeps polling, at the pace PushBackoff
         // allows, rather than sleeping through the moment a sink appears.
         updateSubscriptions();
+        publishStatus();
     }
 
     /**
@@ -178,6 +188,7 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
         neighbours.values().forEach(NeighbourCache::invalidate);
         fruitlessPushes = 0;
         updateSubscriptions();
+        publishStatus();
     }
 
     /**

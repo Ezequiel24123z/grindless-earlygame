@@ -63,6 +63,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0049](#adr-0049--a-green-build-must-include-a-booted-server) | A green build must include a booted server | Accepted |
 | [0050](#adr-0050--grindless-supplies-a-material-only-where-the-pack-has-none) | Grindless supplies a material only where the pack has none | Accepted |
 | [0051](#adr-0051--every-block-ships-a-floor-of-assets-generated-from-one-list) | Every block ships a floor of assets generated from one list | Accepted |
+| [0052](#adr-0052--each-machine-has-its-own-shape-state-textures-and-effects) | Each machine has its own shape, state textures and effects | Accepted |
 
 ---
 
@@ -1871,3 +1872,44 @@ still named gaps under ADR-0048: hero models, facing and active-state variants, 
 renderers. Rendering itself was not run: the checks prove the files exist and agree, and the server
 proves tags and loot, but only a client shows the pixels. No tool requirement tier is set, so any
 pickaxe works; whether the Multitool should mine is a design question this record does not answer.
+
+
+## ADR-0052 — Each machine has its own shape, state textures and effects
+
+*2026-10-02 · Accepted*
+
+**Context.** ADR-0051 gave every block a floor of assets, but all machines were the same casing cube
+with a different face, and none showed what it was doing. `docs/MACHINES.md` already defines five
+machine states (running, idle, blocked, starved, out-of-band); nothing exposed them to the player.
+
+**Decision.**
+
+1. *State is a block-state property.* `MachineStatus` (idle, running, blocked, starved,
+   out_of_band) is the `status` property; `facing` is added where the shape has a front. The light
+   level derives from the status. Changing a block state is a client-visible update, so every
+   publisher goes through `StatusDebounce`: entering running or a fault is immediate, leaving
+   running waits 40 ticks and recovering from a fault waits 20, so a machine flickering between two
+   conditions does not spam updates.
+2. *Colours mean the same on every machine; shape and accent colour say which machine it is.*
+   Running is cyan, blocked is amber, starved is red. Each geometry (dynamo, extractor, terminal,
+   pylon with three tiers) has its own element model and its own painter in `tools/assetgen`.
+3. *Effects are client-only, driven by `animateTick`.* `MachineEffects` spawns particles and plays
+   one-shot sounds per geometry and status. It references no client class, so `common` stays
+   server-safe. Sounds are mono Ogg Vorbis so Minecraft can position them in 3D; the source WAVs
+   live in `tools/audio` and `tools/convert-audio.sh` produces the shipped files, so they never
+   need hand editing.
+4. *The generator stays JDK-only and is driven by `BlockCatalogue`*, which now lists geometry, tier,
+   facing and statuses per block. `VerifyAssets` checks every state, rotation and sound.
+5. `pack.mcmeta` moves to the `forge` module resources: in a dev run only that module's resources
+   form the mod pack, and the old location produced a "failed to load a valid ResourcePackInfo"
+   warning.
+
+**Consequences.** The hand-crank dynamo reports running, idle and blocked from its own behaviour,
+and flux pylons report the state of their network (the network tick writes a pylon only when its
+debounced status is stale). The crude extractor and research terminal are `MachineShellBlock`s:
+they have every model, texture and effect, but nothing sets their status yet, because they have no
+behaviour. Starved pylon and out-of-band have no producer either; the former needs consumers, the
+latter has no visuals. Effects are sparse one-shots, not looping sounds, and a pylon in an unloaded
+chunk keeps its last status until the chunk loads. Face lighting is not emissive: only the block
+light level changes. A client run (software GL under Xvfb) showed the models and textures
+rendering with no model errors in the log; it did not demonstrate the particles over time.

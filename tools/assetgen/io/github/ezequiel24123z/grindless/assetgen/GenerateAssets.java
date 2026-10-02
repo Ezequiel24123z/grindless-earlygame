@@ -65,7 +65,7 @@ public final class GenerateAssets {
         File root = new File(args[0]);
         File items = resourceDir(root, "textures/item");
         File blocks = resourceDir(root, "textures/block");
-        File sounds = resourceDir(root, "sounds");
+        File sounds = new File(root, "tools/audio");
 
         int written = 0;
 
@@ -95,22 +95,27 @@ public final class GenerateAssets {
         }
         written += writeBlocks(root);
 
-        // ---- machine casings ----
+        // ---- machine textures ----
         // Names are kept deliberately short. Minecraft's asset layout is already deep
         // (assets/grindless/textures/block/...), and on Windows a long checkout path plus a long
         // asset path exceeds MAX_PATH — the hazard ADR-0024 documents for source files applies
-        // just as much here. "face_vent_on" rather than "machine_face_vent_active" buys a dozen
-        // characters for nothing.
-        written += write(blocks, "casing_side",
-                MachineTextures.side(MachineTextures.CASING));
-        written += write(blocks, "casing_top",
-                MachineTextures.top(MachineTextures.CASING));
-        for (MachineTextures.Motif motif : MachineTextures.Motif.values()) {
-            String name = "face_" + motif.name().toLowerCase();
-            written += write(blocks, name, MachineTextures.face(
-                    MachineTextures.CASING, MachineTextures.ACCENT, motif, false));
-            written += write(blocks, name + "_on", MachineTextures.face(
-                    MachineTextures.CASING, MachineTextures.ACCENT, motif, true));
+        // just as much here. "dynamo_front_idle" rather than "hand_crank_dynamo_front_idle" buys a
+        // dozen characters for nothing.
+        deleteTree(blocks);
+        blocks = resourceDir(root, "textures/block");
+        written += write(blocks, "casing_side", MachineTextures.side(MachineTextures.CASING));
+        written += write(blocks, "casing_top", MachineTextures.top(MachineTextures.CASING));
+        written += write(blocks, "dynamo_top", MachineArt.dynamoTop());
+        written += write(blocks, "extractor_top", MachineArt.extractorTop());
+        written += write(blocks, "terminal_top", MachineArt.terminalTop());
+        for (String status : List.of("idle", "running", "blocked", "starved")) {
+            written += write(blocks, "dynamo_front_" + status, MachineArt.dynamoFront(status));
+            written += write(blocks, "extractor_front_" + status, MachineArt.extractorFront(status));
+            written += write(blocks, "terminal_front_" + status, MachineArt.terminalFront(status));
+            for (int tier = 1; tier <= 3; tier++) {
+                written += write(blocks, "pylon" + tier + "_side_" + status, MachineArt.pylonSide(tier, status));
+                written += write(blocks, "pylon" + tier + "_top_" + status, MachineArt.pylonTop(tier, status));
+            }
         }
 
         // ---- sounds ----
@@ -250,7 +255,8 @@ public final class GenerateAssets {
     }
 
     /**
-     * Blockstates, models, loot tables and the pickaxe tag for every block in the catalogue.
+     * Blockstates, models, loot tables and the pickaxe tag for every block in the catalogue, and
+     * the server-side scenario that proves each state is one the game accepts.
      *
      * <p>Without these a block renders as the missing-texture cube and, because machines require
      * the correct tool, breaks into nothing. The loot table is a plain self-drop; the pickaxe tag
@@ -259,16 +265,43 @@ public final class GenerateAssets {
     private static int writeBlocks(File root) throws IOException {
         File assets = assetRoot(root);
         File data = new File(root, "common/src/main/resources/data");
+        deleteTree(new File(assets, "models/block"));
         int written = 0;
         List<String> names = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+        List<String> expect = new ArrayList<>();
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
             String n = block.name();
             names.add("grindless:" + n);
+            StringBuilder variants = new StringBuilder();
+            for (String status : block.statuses()) {
+                written += writeText(new File(assets, "models/block/" + block.modelName(status) + ".json"),
+                        BlockModels.model(block, status));
+                List<String> facings = block.facing() ? BlockCatalogue.FACINGS : List.of("");
+                for (int i = 0; i < facings.size(); i++) {
+                    if (variants.length() > 0) {
+                        variants.append(",\n");
+                    }
+                    int rotation = block.facing() ? BlockCatalogue.FACING_ROTATIONS.get(i) : 0;
+                    variants.append("    \"").append(block.variantKey(facings.get(i), status))
+                            .append("\": { \"model\": \"grindless:block/").append(block.modelName(status)).append('"');
+                    if (rotation != 0) {
+                        variants.append(", \"y\": ").append(rotation);
+                    }
+                    variants.append(" }");
+                    String state = block.facing()
+                            ? "[facing=" + facings.get(i) + ",status=" + status + "]"
+                            : "[status=" + status + "]";
+                    commands.add("setblock 8 100 8 grindless:" + n + state);
+                    commands.add("execute if block 8 100 8 grindless:" + n + state
+                            + " run say STATE-OK " + n + state);
+                    expect.add(("STATE-OK " + n + state).replace("[", "\\[").replace("]", "\\]"));
+                }
+            }
             written += writeText(new File(assets, "blockstates/" + n + ".json"),
-                    "{\n  \"variants\": {\n    \"\": { \"model\": \"grindless:block/" + n + "\" }\n  }\n}\n");
-            written += writeText(new File(assets, "models/block/" + n + ".json"), blockModel(block));
+                    "{\n  \"variants\": {\n" + variants + "\n  }\n}\n");
             written += writeText(new File(assets, "models/item/" + n + ".json"),
-                    "{\n  \"parent\": \"grindless:block/" + n + "\"\n}\n");
+                    "{\n  \"parent\": \"grindless:block/" + block.modelName("idle") + "\"\n}\n");
             written += writeText(new File(data, "grindless/loot_tables/blocks/" + n + ".json"), lootTable(n));
         }
         written += writeText(new File(assets, "models/item/" + BlockCatalogue.CASING_ITEM + ".json"),
@@ -278,20 +311,10 @@ public final class GenerateAssets {
                         + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n");
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
+        File smoke = new File(root, "tools/smoke");
+        written += writeText(new File(smoke, "states.commands"), String.join("\n", commands) + "\n");
+        written += writeText(new File(smoke, "states.expect"), String.join("\n", expect) + "\n");
         return written;
-    }
-
-    private static String blockModel(BlockCatalogue.Entry block) {
-        String face = "grindless:block/" + block.face();
-        return switch (block.shape()) {
-            case ORIENTABLE -> "{\n  \"parent\": \"minecraft:block/orientable\",\n  \"textures\": {\n"
-                    + "    \"top\": \"grindless:block/casing_top\",\n"
-                    + "    \"front\": \"" + face + "\",\n"
-                    + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n";
-            case COLUMN -> "{\n  \"parent\": \"minecraft:block/cube_column\",\n  \"textures\": {\n"
-                    + "    \"end\": \"grindless:block/casing_top\",\n"
-                    + "    \"side\": \"" + face + "\"\n  }\n}\n";
-        };
     }
 
     private static String lootTable(String block) {
