@@ -42,12 +42,16 @@ public class PylonBlock extends BaseEntityBlock {
      *
      * <p>Registration happens here rather than in the block entity's constructor because joining a
      * network needs the level, and during construction the block entity is not attached to one.
+     *
+     * <p>A block merely changing state is not a placement: re-adding a pylon that is already a
+     * member removes it first, which re-runs the split flood fill.
      */
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState,
                         boolean moving) {
         super.onPlace(state, level, pos, oldState, moving);
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof PylonBlockEntity pylon) {
+        if (!level.isClientSide() && !oldState.is(state.getBlock())
+                && level.getBlockEntity(pos) instanceof PylonBlockEntity pylon) {
             pylon.register();
         }
     }

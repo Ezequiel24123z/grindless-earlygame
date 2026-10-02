@@ -25,8 +25,6 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class PylonBlockEntity extends MachineBlockEntity {
 
-    private boolean registered;
-
     public PylonBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.FLUX_PYLON.get(), pos, state);
     }
@@ -71,33 +69,19 @@ public final class PylonBlockEntity extends MachineBlockEntity {
     }
 
     /**
-     * Re-marks this pylon as registered after a world load.
-     *
-     * <p>The network data already holds it — both were saved together — so this only restores the
-     * flag, which is what makes a later break deregister properly. Calling {@code addPylon} again
-     * would be harmless but would needlessly re-run the merge.
-     */
-    @Override
-    protected void onFirstTick() {
-        if (!registered && getLevel() instanceof ServerLevel server
-                && FluxNetworkData.get(server).index().contains(getBlockPos())) {
-            registered = true;
-        }
-    }
-
-    /**
      * Joins the network, merging with anything in link range.
      *
-     * <p>Idempotent, because it is reached from both placement and chunk load and the two are not
-     * mutually exclusive — a pylon placed in a chunk that then unloads and reloads would otherwise
-     * be registered twice.
+     * <p>Reached from placement only: a chunk load does not call {@code onPlace}, and the network
+     * data was saved with the world, so a reloaded pylon is already a member. Membership lives in
+     * {@link FluxNetworkData} and nowhere else. An earlier version kept a transient
+     * {@code registered} flag here, restored by a first-tick hook that pylons never reach because
+     * they have no ticker; after a reload the flag read false, {@link #deregister()} returned
+     * early, and a broken pylon stayed in its network as a ghost.
      */
     public void register() {
-        if (registered || !(getLevel() instanceof ServerLevel server)) {
-            return;
+        if (getLevel() instanceof ServerLevel server) {
+            FluxNetworkData.get(server).addPylon(getBlockPos(), tier());
         }
-        registered = true;
-        FluxNetworkData.get(server).addPylon(getBlockPos(), tier());
     }
 
     /**
@@ -108,11 +92,9 @@ public final class PylonBlockEntity extends MachineBlockEntity {
      * topology depend on which chunks a player happens to be standing near.
      */
     public void deregister() {
-        if (!registered || !(getLevel() instanceof ServerLevel server)) {
-            return;
+        if (getLevel() instanceof ServerLevel server) {
+            FluxNetworkData.get(server).removePylon(getBlockPos());
         }
-        registered = false;
-        FluxNetworkData.get(server).removePylon(getBlockPos());
     }
 
     @Override
