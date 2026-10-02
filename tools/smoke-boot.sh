@@ -86,6 +86,7 @@ while [ "$SECONDS" -lt "$deadline" ]; do
     if [ -n "$COMMANDS" ]; then
       while IFS= read -r command; do
         [ -z "$command" ] && continue
+        case "$command" in \#*) continue ;; esac
         echo "$command" >&3
         sleep 1
       done < "$COMMANDS"

@@ -326,6 +326,7 @@ public final class GenerateAssets {
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
         File smoke = new File(root, "tools/smoke");
+        commands.add(0, "forceload add 0 0");
         written += writeText(new File(smoke, "states.commands"), String.join("\n", commands) + "\n");
         written += writeText(new File(smoke, "states.expect"), String.join("\n", expect) + "\n");
         return written;

@@ -1,3 +1,4 @@
+forceload add 0 0
 setblock 8 100 8 grindless:hand_crank_dynamo[facing=north,status=idle]
 execute if block 8 100 8 grindless:hand_crank_dynamo[facing=north,status=idle] run say STATE-OK hand_crank_dynamo[facing=north,status=idle]
 setblock 8 100 8 grindless:hand_crank_dynamo[facing=east,status=idle]
