@@ -27,8 +27,9 @@ import java.util.Set;
  * zero to three, and never more than a base actually overlaps in one place. Cost tracks local
  * density rather than world size, which is the property that matters.
  *
- * <p>The buckets stay small because supply cubes are small: an MK3's 64-block cube spans at most
- * five chunks on a side, so one pylon occupies at most 25 buckets and most occupy four.
+ * <p>The buckets stay small because supply cubes, even at MK3, file under a few dozen chunks:
+ * a 128-block cube spans at most nine chunks on a side, so one pylon occupies at most 81
+ * buckets and most occupy far fewer.
  *
  * <p>Not thread-safe; this is server-thread state held by {@link FluxNetworkData}.
  */

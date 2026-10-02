@@ -12,9 +12,9 @@ import net.minecraft.core.BlockPos;
  */
 public enum PylonTier {
 
-    MK1("MK1", 16, 512L, 24, FluxTier.F3),
-    MK2("MK2", 32, 4_096L, 48, FluxTier.F5),
-    MK3("MK3", 64, 32_768L, 96, FluxTier.F6);
+    MK1("MK1", 48, 512L, 64, FluxTier.F3),
+    MK2("MK2", 80, 4_096L, 112, FluxTier.F5),
+    MK3("MK3", 128, 32_768L, 192, FluxTier.F6);
 
     private final String displayName;
     private final int supplyArea;

@@ -1,12 +1,13 @@
 package io.github.ezequiel24123z.grindless.network;
 
-import io.github.ezequiel24123z.grindless.machine.MachineEffects;
 import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * A Flux Pylon block. One class covers all three tiers; the tier is a property of the block
@@ -24,6 +27,8 @@ public class PylonBlock extends BaseEntityBlock {
 
     public static final EnumProperty<MachineStatus> STATUS =
             MachineProperties.status(BlockCatalogue.GRID);
+
+    public static final VoxelShape SHAPE = Block.box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0);
 
     private final PylonTier tier;
 
@@ -38,14 +43,30 @@ public class PylonBlock extends BaseEntityBlock {
         builder.add(STATUS);
     }
 
-    @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        MachineEffects.animate(BlockCatalogue.Geometry.PYLON, tier.ordinal() + 1,
-                state.getValue(STATUS), Direction.NORTH, level, pos, random);
-    }
-
     public PylonTier tier() {
         return tier;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos,
+                               CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return PylonStructure.hasRoom(context.getLevel(), context.getClickedPos(), context)
+                ? defaultBlockState()
+                : null;
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer,
+                            ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide()) {
+            PylonStructure.placeShafts(level, pos, state);
+        }
     }
 
     @Override
@@ -77,6 +98,8 @@ public class PylonBlock extends BaseEntityBlock {
         if (!level.isClientSide() && !oldState.is(state.getBlock())
                 && level.getBlockEntity(pos) instanceof PylonBlockEntity pylon) {
             pylon.register();
+            // setblock and worldgen skip setPlacedBy, so shafts still have to appear here.
+            PylonStructure.placeShafts(level, pos, state);
         }
     }
 
@@ -97,6 +120,9 @@ public class PylonBlock extends BaseEntityBlock {
         if (!level.isClientSide() && !state.is(newState.getBlock())
                 && level.getBlockEntity(pos) instanceof PylonBlockEntity pylon) {
             pylon.deregister();
+        }
+        if (!state.is(newState.getBlock())) {
+            PylonStructure.removeShafts(level, pos);
         }
         super.onRemove(state, level, pos, newState, moving);
     }
