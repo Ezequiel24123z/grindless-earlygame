@@ -62,6 +62,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0048](#adr-0048--assets-are-generated-from-the-jdk-with-a-named-list-of-what-cannot-be) | Assets are generated from the JDK, with a named list of what cannot be | Accepted |
 | [0049](#adr-0049--a-green-build-must-include-a-booted-server) | A green build must include a booted server | Accepted |
 | [0050](#adr-0050--grindless-supplies-a-material-only-where-the-pack-has-none) | Grindless supplies a material only where the pack has none | Accepted |
+| [0051](#adr-0051--every-block-ships-a-floor-of-assets-generated-from-one-list) | Every block ships a floor of assets generated from one list | Accepted |
 
 ---
 
@@ -1827,3 +1828,46 @@ listed by hand in `SupplyCatalogue`, so a Minecraft update that adds a vanilla f
 copper nugget, needs a one-line edit and a regeneration; the check `no registered name equals a
 vanilla item's name` guards the known cases. A player holding a hidden supply item (from `/give`
 or an old chest) still has a working item, since it is tagged, which is intended.
+
+---
+
+## ADR-0051 — Every block ships a floor of assets, generated from one list
+
+*2026-10-02 · Accepted*
+
+**Context.** Booting the server proved the mod loads, not that its blocks work. Auditing the
+resources found none of the six registered blocks had a blockstate or a model (the missing-texture
+cube), none had a loot table, and none was in a mining tag. Because machines set
+`requiresCorrectToolForDrops`, a player could place one and then destroy it for nothing. Three
+hand-registered items had no model either, and the Multitool and Data Core had no sprite.
+
+**Decision.** `BlockCatalogue` lists each block, its model shape and its decorated face. The
+generator writes, from that list alone, the blockstate, block model, item model, a self-drop loot
+table, and the entry in `minecraft:mineable/pickaxe`. Two shapes exist: an orientable casing with
+one decorated face, and a column with the decorated face on all four sides. Blocks have no facing
+property yet, so the decorated face is always north; that is a placeholder, not a design. The
+Multitool and Data Core get generated placeholder sprites, and the Machine Casing item renders as
+the casing cube.
+
+`VerifyAssets` reads `ModBlocks` and `ModItems` and fails if a registered block lacks any of those
+files, if any model names a texture or parent that does not exist, or if a hand-registered item has
+no display name or model. A server-boot scenario (`tools/smoke/blocks.commands`) places every block
+and checks that it is in the pickaxe tag and that its loot table drops one item with its real
+name.
+
+The pickaxe tag is the only thing Grindless ships into `minecraft:`. It is `"replace": false` and
+lists only Grindless blocks, so it can add to vanilla's tag and cannot remove from it. This narrows
+rule 3 of ADR-0050 ("nothing is shipped into `minecraft:`") to "nothing except mining tags", and
+`VerifyMaterial` now enforces the narrower form. Vanilla has no other mechanism: a block is
+mineable with a tool only by being in that tag.
+
+**Alternatives rejected.** Hand-writing the JSON (six blocks now, dozens later, and the
+catalogue-versus-registry drift this removes); generating the files from `ModBlocks` itself (it
+needs Minecraft and a loaded registry, and the generator deliberately needs only a JDK, ADR-0048);
+leaving it to the first person to launch the client (the situation ADR-0049 exists to end).
+
+**Consequences.** Every block renders, drops itself and mines with a pickaxe. Not covered, and
+still named gaps under ADR-0048: hero models, facing and active-state variants, block-entity
+renderers. Rendering itself was not run: the checks prove the files exist and agree, and the server
+proves tags and loot, but only a client shows the pixels. No tool requirement tier is set, so any
+pickaxe works; whether the Multitool should mine is a design question this record does not answer.

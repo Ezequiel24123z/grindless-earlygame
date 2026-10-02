@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Block assets** (ADR-0051). Blockstates, block and item models, self-drop loot tables and the
+  `minecraft:mineable/pickaxe` entries for all six blocks, plus placeholder sprites for the
+  Multitool and Data Core and a model for the Machine Casing item, generated from
+  `BlockCatalogue`. `VerifyAssets` fails if any registered block or item lacks them or if any
+  model names a missing texture. `tools/smoke-boot.sh` gains `SMOKE_COMMANDS` and
+  `SMOKE_EXPECT_FILE`; CI places every block and checks its tag and drop.
+
 - **Material compatibility (ADR-0050).** Grindless supplies 120 material items (tin, lead,
   silver, nickel, zinc, aluminium, titanium, tungsten, platinum, steel, and forms vanilla lacks
   for iron, copper and gold) and registers them regardless of other mods, but they are active
@@ -157,6 +164,9 @@ entries below reference those records by id.
 - One decision record, ADR-0046.
 
 ### Fixed
+
+- **Blocks rendered as missing-texture cubes and dropped nothing.** None of the six blocks had a
+  model or loot table, and machines require the correct tool, so breaking one yielded no item.
 
 - **The generator produced items vanilla already has.** Textures for iron ingot, gold ingot,
   gold nugget, iron nugget and copper ingot (and a crushed steel, which has no ore) are removed;
