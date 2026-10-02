@@ -243,6 +243,18 @@ public final class VerifyNetwork {
         yes("a shrinking network sheds what it cannot hold",
                 shrinking.stored() <= shrinking.capacity());
         yes("and really did shrink", shrinking.stored() < before);
+
+        // Pylons are a transmission limit: a full buffer cannot be drained faster than they carry.
+        FluxNetwork limited = new FluxNetwork(4);
+        limited.addPylon(new BlockPos(0, 64, 0), PylonTier.MK1);
+        limited.receive(limited.capacity(), false);
+        long cap = PylonTier.MK1.throughput();
+        eq("extraction is capped at throughput", cap, limited.extract(cap * 5L, false));
+        eq("and the allowance is spent for the tick", 0L, limited.extract(1L, false));
+        eq("a simulated extract sees the spent allowance", 0L, limited.extract(1L, true));
+        limited.resolveTick();
+        eq("the allowance returns next tick", cap, limited.extract(cap * 5L, true));
+        eq("a simulated extract does not spend it", cap, limited.extract(cap * 5L, false));
     }
 
     private static void persistence() {

@@ -153,6 +153,9 @@ entries below reference those records by id.
 - **Machine upgrades and process conditions were lost on save.** `UpgradeSet` and `ConditionState`
   are now written to and read from NBT. Machines saved before this change load with no upgrades and
   ambient conditions.
+- **Flux Network extraction ignored pylon throughput.** `FluxNetwork.extract` could drain a full
+  buffer in one call; it is now capped per tick at the pylons' combined throughput, restored by
+  `resolveTick()`.
 - **The mod crashed during construction.** `ModCreativeTabs.register()` called `get()` on registry
   objects before the registry was populated, so Forge refused to create the mod instance with
   `Registry Object not present: grindless:multitool`. The tab now receives lazy suppliers. The

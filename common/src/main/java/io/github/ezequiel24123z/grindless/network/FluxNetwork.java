@@ -37,6 +37,8 @@ public final class FluxNetwork {
     /** Demand registered this tick, reset each tick once satisfaction is computed. */
     private long demand;
     private double satisfaction = 1.0;
+    /** FU extracted since the last {@link #resolveTick()}, bounded by {@link #throughput}. */
+    private long drawnThisTick;
 
     public FluxNetwork(int id) {
         this.id = id;
@@ -106,14 +108,21 @@ public final class FluxNetwork {
         return accepted;
     }
 
-    /** Removes up to {@code amount} FU, returning what was removed. */
+    /**
+     * Removes up to {@code amount} FU, returning what was removed.
+     *
+     * <p>Bounded by the pylons' combined throughput per tick: pylons are a transmission limit, so
+     * a full buffer cannot be drained faster than they can carry it. The allowance is restored by
+     * {@link #resolveTick()}.
+     */
     public long extract(long amount, boolean simulate) {
         if (amount <= 0L) {
             return 0L;
         }
-        long removed = Math.min(amount, stored);
+        long removed = Math.min(Math.min(amount, stored), Math.max(0L, throughput - drawnThisTick));
         if (!simulate) {
             stored -= removed;
+            drawnThisTick += removed;
         }
         return removed;
     }
@@ -146,6 +155,7 @@ public final class FluxNetwork {
         long available = Math.min(stored, throughput);
         satisfaction = demand <= 0L ? 1.0 : Math.min(1.0, (double) available / (double) demand);
         demand = 0L;
+        drawnThisTick = 0L;
     }
 
     /**
