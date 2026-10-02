@@ -245,6 +245,7 @@ late. Mekanism's speed upgrades are the canonical example.
 | **Catalyst Feed** | catalysts replaced automatically from a buffer | an upgrade slot |
 | **Damping** | much less Resonance emitted | cycle time |
 | **Recovery** | captures byproducts that otherwise vent | an upgrade slot; an output buffer |
+| **Deep Bore** | a much higher floor on a worked vein (extractors only) | constant FU upkeep; nothing at all on a fresh vein |
 
 Three pairs are **mutually exclusive**, because wanting both is wanting the trade not to exist:
 

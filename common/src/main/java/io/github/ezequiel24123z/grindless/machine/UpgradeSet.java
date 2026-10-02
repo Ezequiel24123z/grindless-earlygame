@@ -181,4 +181,23 @@ public final class UpgradeSet {
     public boolean hasRecovery() {
         return has(MachineUpgrade.RECOVERY);
     }
+
+    /**
+     * The lowest fraction of its original rate this extractor can hold a vein to.
+     *
+     * <p>Each Deep Bore adds fifteen points to the vein's natural floor, so one takes a worked-out
+     * chunk from 30 % to 45 % and two reach 60 %. Diminishing returns are deliberate — the cap
+     * stops a stack of upgrades from making a single chunk infinite, which would remove the
+     * reason to expand at all.
+     *
+     * @param naturalFloor the vein's own floor
+     * @return the effective floor, capped at {@value #MAX_BORE_FLOOR}
+     */
+    public double veinFloor(double naturalFloor) {
+        return Math.min(MAX_BORE_FLOOR, naturalFloor + 0.15 * count(MachineUpgrade.DEEP_BORE));
+    }
+
+    /** However many Deep Bores are installed, a chunk never exceeds this fraction of its
+     * original rate. A vein must stay worth leaving. */
+    public static final double MAX_BORE_FLOOR = 0.75;
 }

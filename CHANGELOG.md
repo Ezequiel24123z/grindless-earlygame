@@ -15,6 +15,49 @@ entries below reference those records by id.
 
 ### Added
 
+- **Resource Genesis** (`common/.../vein/`, `material/`) — step 14, where raw material comes from.
+  `VeinGenerator` derives a chunk's vein from the world seed and coordinates, so an unexplored
+  chunk costs zero bytes and the same seed always produces the same map (ADR-0009); `ChunkVein` is
+  what a chunk would produce; `VeinData` persists only what has actually been taken out.
+  The derivation **version is pinned per world** and saved with the extraction data. Changing the
+  algorithm later would otherwise silently rewrite every surveyed-but-unbuilt chunk in every
+  existing save — a player's planned copper outpost quietly becoming tin. Old worlds keep deriving
+  under the version they were made with.
+  `Material` and `MaterialForm` are the first half of the runtime tag scan (ADR-0004) and the form
+  axis of the catalogue matrix (ADR-0032). A material carries only what a scan can honestly know,
+  and degrades gracefully: one with an ore but no dust simply skips the pulverizing step.
+- **Veins are deliberately long-lived, and extractors can be deepened** (ADR-0047). This closes a
+  failure mode the design had but did not address: if veins ran down quickly, "expand outward"
+  would stop meaning exploration and start meaning *abandon, relocate, rebuild the same layout,
+  repeat* — which is re-solving a solved problem, and therefore grind by this project's own
+  definition (ADR-0021). The system built to delete mining would have reinvented it.
+  Three changes. A chunk now holds roughly **forty hours** of continuous T1 extraction. The decay
+  curve is **gentle early and steep late** rather than linear — a quarter of the reserve gone is
+  still 96 % of the original rate and half is 83 % — because linear decay is noticeable from the
+  first hour and makes a player feel permanently on a clock. And the floor is **30 %**, not a
+  token amount, so a worked outpost stays a real contributor rather than becoming a monument.
+  (The checks caught the documentation here claiming 87 % where the curve actually gives 82.5 %.
+  The maths was right and the prose was aspirational — which is exactly the kind of drift that
+  turns a design document into fiction, so the numbers in `VerifyVein` are now the source of
+  truth and the prose quotes them.)
+  **Richness scales reserve as well as rate**, which makes a vein's lifetime independent of its
+  richness. A rich chunk is a find rather than a countdown, and the player is never asked to weigh
+  "rich but short" against "poor but long" — a false choice that adds arithmetic without adding a
+  decision.
+- **The Deep Bore upgrade** (`MACHINES.md`, eleventh in the upgrade table) reaches further into the
+  same chunk, raising the floor to 45 % with one and 60 % with two, capped at 75 %. A depleting
+  outpost therefore has two answers instead of one: deepen it, or found another, depending on
+  whether you are short of power or short of territory. The cap is what keeps expansion eventually
+  necessary — a chunk must never become infinite. It buys **nothing at a fresh vein**, which is
+  what makes it a decision rather than something installed reflexively on day one.
+- **`tools/checks/VerifyVein.java`** — the numbers above are claims, so they are checked: that the
+  derivation is deterministic and version-stamped, that richness stays in band across a hundred
+  chunks, that rare materials really are rare and common ones common, that **the map does not
+  stripe along an axis** (the giveaway of a weak hash, and the thing a player notices first), that
+  the rate never increases as a vein is worked, and that every generated vein really lasts tens of
+  hours rather than only the base constant doing so.
+- One decision record, ADR-0047.
+
 - **The Flux Pylon, and machines drawing from their network** — step 13b, which turns the network
   layer into something a player can build. Three pylon blocks (MK1–MK3) share **one block entity
   type**, because the tier lives on the block rather than on the block entity: a single type

@@ -58,6 +58,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0044](#adr-0044--neighbour-lookups-are-cached-against-capability-invalidation) | Neighbour lookups are cached against capability invalidation | Accepted |
 | [0045](#adr-0045--capabilities-are-attached-by-event-not-overridden-on-the-block-entity) | Capabilities are attached by event, not overridden on the block entity | Accepted |
 | [0046](#adr-0046--the-pylon-index-is-chunk-bucketed-and-brownouts-resolve-in-two-phases) | The pylon index is chunk-bucketed, and brownouts resolve in two phases | Accepted |
+| [0047](#adr-0047--veins-are-long-lived-and-deepening-competes-with-relocating) | Veins are long-lived, and deepening competes with relocating | Accepted |
 
 ---
 
@@ -1573,4 +1574,62 @@ has room for.
 The saved form stores membership and rebuilds the index on load, so the two cannot disagree. Tier
 ordinals are bounds-checked on read, because an unchecked enum ordinal from a future version
 throws during world load — which a player experiences as a corrupt save rather than as a mod bug.
+
+---
+
+## ADR-0047 — Veins are long-lived, and deepening competes with relocating
+
+*2026-10-02 · Accepted*
+
+**Context.** Resource Genesis replaces mining with extraction from a chunk that depletes toward a
+nonzero floor, and the README frames the resulting pressure as a virtue: a worked vein is slow, so
+the efficient move is to expand outward, and the game becomes exploration and layout rather than
+tunnelling.
+
+That argument has a failure mode it does not address. If veins run down quickly, "expand outward"
+stops meaning exploration and starts meaning **abandon, relocate, rebuild the same layout
+somewhere else, repeat**. Rebuilding a layout you have already solved is repeating an action whose
+outcome you already know, which is this project's own definition of grind (ADR-0021). The system
+designed to delete mining would have reinvented it with extra steps.
+
+The depletion rule was also written without numbers, so "slowly" could have meant anything.
+
+**Decision.** Three changes, all aimed at making an outpost something you build and then stop
+thinking about.
+
+1. **Veins are long.** A chunk holds roughly forty hours of continuous T1 extraction before
+   reaching its floor. The reserve is sized in hours against a reference rate rather than picked
+   as a round number, so the figure stays meaningful when rates are tuned.
+2. **The decay curve is gentle early and steep late**, not linear. A quarter of the reserve gone
+   still yields 96 % of the original rate and half yields 83 %; the slowdown only becomes obvious
+   past three quarters. Linear decay is noticeable from the first hour and makes a player feel
+   permanently on a clock, which is the opposite of the intended rhythm.
+3. **The floor is 30 %**, and a **Deep Bore** upgrade raises it — 45 % with one, 60 % with two,
+   capped at 75 %. A depleting outpost therefore has two answers instead of one: deepen it, or
+   found another.
+
+**Richness scales reserve as well as rate**, which makes a vein's lifetime independent of its
+richness. A rich chunk is a find rather than a countdown, and the player is never asked to weigh
+"rich but short" against "poor but long" — a false choice that adds arithmetic without adding a
+decision.
+
+**Alternatives rejected.** A token floor around 10 % (an old outpost becomes a monument rather
+than a contributor, and the treadmill returns); no floor at all (every extractor eventually
+becomes litter a player has to go and tidy up, which is a chore); infinite veins with no decay
+(removes the reason to expand, and the horizontal pressure is the part of this design worth
+keeping); making relocation cheap through better build tools (treats the symptom — the problem is
+being asked to re-solve a solved layout, not how long it takes).
+
+**Consequences.** The Deep Bore cap is what keeps the decision alive. Without it a stack of
+upgrades would make one chunk effectively infinite and expansion would stop being necessary at
+all; with it, deepening buys time rather than permanence, and territory still matters.
+
+Deep Bore buys nothing at a fresh vein, which is deliberate — it has to be a mid-game answer to a
+mid-game situation rather than something installed reflexively on day one, so it costs an upgrade
+slot and constant upkeep for no benefit if fitted early.
+
+The risk to watch is pacing. Forty hours is long enough that a player may never see depletion in a
+short playthrough, which makes the Deep Bore upgrade dead content for them. That is the right way
+round — far better than the alternative — but if testing shows the depletion curve is never
+experienced at all, the reserve comes down rather than the floor.
 

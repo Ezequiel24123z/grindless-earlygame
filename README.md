@@ -268,10 +268,39 @@ heavily worked vein keeps producing forever, just slowly.
 This single decision defines the mod's whole rhythm:
 
 - A vein is never *dead*, so no player ever loses an investment outright.
-- But a worked vein is slow, so the efficient move is always to **expand outward** — survey a new
+- But a worked vein is slower, so the efficient move is to **expand outward** — survey a new
   chunk, run a conduit, build another outpost.
 - The pressure is horizontal, not vertical. You are exploring and laying out infrastructure,
   which is fun, instead of digging another 3×3 tunnel, which is not.
+
+**Veins are deliberately long-lived** (ADR-0047). A chunk holds roughly **forty hours** of
+continuous T1 extraction, the decay curve is gentle rather than linear — a quarter of the reserve
+gone is still 96 % of the original rate, and half is 83 % — and the floor is **30 %**, not a token
+amount.
+
+That is a direct response to the failure mode this design could easily have had. If an outpost
+needed relocating every session, expansion would stop being exploration and become a chore:
+abandon, relocate, rebuild the same layout somewhere else, repeat. Rebuilding a solved layout is
+grind by this project's own definition, so a vein outlives the interest a player has in watching
+it.
+
+**Richness scales reserve as well as rate**, so a vein's *lifetime* is the same whether it is rich
+or poor. A rich chunk is a find rather than a countdown, and the player never has to weigh "rich
+but short" against "poor but long" — a false choice nobody enjoys making.
+
+### Deepening instead of moving
+
+An extractor is a machine, so it takes chassis marks and upgrades like any other. The one that
+matters here is **Deep Bore**: it reaches further into the same chunk, raising the rate a worked
+vein settles at — 30 % to 45 % with one, 60 % with two, capped at 75 % however many are fitted.
+
+So a depleting outpost has two answers rather than one: deepen it, or found another. Which is
+right depends on whether you are short of power or short of territory, and that changes over a
+playthrough. The cap is what keeps the choice alive — a chunk can never become infinite, so
+expansion is always eventually the answer.
+
+Deep Bore buys nothing at a fresh vein, which is what makes it a decision instead of a
+must-have: fitting it on day one wastes a slot and pays upkeep for nothing.
 
 ### Late game
 

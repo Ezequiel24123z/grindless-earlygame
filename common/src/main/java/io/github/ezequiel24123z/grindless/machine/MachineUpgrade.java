@@ -33,7 +33,23 @@ public enum MachineUpgrade {
             "an upgrade slot"),
     DAMPING("Damping", "much less Resonance emitted", "cycle time"),
     RECOVERY("Recovery", "captures byproducts that otherwise vent",
-            "an upgrade slot; an output buffer");
+            "an upgrade slot; an output buffer"),
+
+    /**
+     * Extractors only: reaches deeper into the same chunk, raising the rate a worked vein settles
+     * at rather than its peak.
+     *
+     * <p>This is the answer to the treadmill. Without it the only reply to a depleting outpost is
+     * to abandon it and rebuild the same layout elsewhere, which is repeating a solved problem —
+     * grind by this project's own definition. With it, <b>deepening an outpost competes with
+     * founding one</b>, and which is right depends on whether the player is short of power or
+     * short of territory.
+     *
+     * <p>It buys nothing at a fresh vein, which is what keeps it a decision rather than a
+     * must-have: installing it on day one is a wasted slot and a wasted upkeep.
+     */
+    DEEP_BORE("Deep Bore", "a much higher floor on a worked vein",
+            "constant FU upkeep; nothing at all on a fresh vein");
 
     private static final Map<MachineUpgrade, Set<MachineUpgrade>> CONFLICTS;
 
