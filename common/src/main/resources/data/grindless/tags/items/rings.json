@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:rings/iron",
+    "#grindless:rings/copper",
+    "#grindless:rings/gold",
+    "#grindless:rings/tin",
+    "#grindless:rings/lead",
+    "#grindless:rings/silver",
+    "#grindless:rings/nickel",
+    "#grindless:rings/zinc",
+    "#grindless:rings/aluminium",
+    "#grindless:rings/titanium",
+    "#grindless:rings/tungsten",
+    "#grindless:rings/platinum",
+    "#grindless:rings/steel"
+  ]
+}

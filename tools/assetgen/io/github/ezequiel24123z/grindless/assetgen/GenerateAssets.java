@@ -1,12 +1,20 @@
 package io.github.ezequiel24123z.grindless.assetgen;
 
+import io.github.ezequiel24123z.grindless.material.MaterialForm;
+import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map;
 
 /**
  * Writes every generated asset into the mod's resource tree.
@@ -45,7 +53,8 @@ public final class GenerateAssets {
             Palette.of("steel", 0x4A6E8A),
             Palette.of("aluminium", 0xCFD8DC),
             Palette.of("titanium", 0x9FA8AE),
-            Palette.of("tungsten", 0x5A5A66));
+            Palette.of("tungsten", 0x5A5A66),
+            Palette.of("platinum", 0xBFC9D9));
 
     public static void main(String[] args) throws IOException {
         if (args.length < 1) {
@@ -60,18 +69,21 @@ public final class GenerateAssets {
         int written = 0;
 
         // ---- the form x material matrix ----
-        for (Palette palette : PALETTES) {
-            String m = palette.name();
-            written += write(items, m + "_ingot", FormTextures.ingot(palette));
-            written += write(items, m + "_plate", FormTextures.plate(palette));
-            written += write(items, m + "_gear", FormTextures.gear(palette));
-            written += write(items, m + "_rod", FormTextures.rod(palette));
-            written += write(items, m + "_bolt", FormTextures.bolt(palette));
-            written += write(items, m + "_ring", FormTextures.ring(palette));
-            written += write(items, m + "_dust", FormTextures.dust(palette));
-            written += write(items, m + "_crushed", FormTextures.crushed(palette));
-            written += write(items, m + "_nugget", FormTextures.nugget(palette));
+        // Driven by SupplyCatalogue, the same list the mod registers its items from, so a texture
+        // can never exist for an item that is not registered or the other way round. Vanilla's own
+        // items (iron ingot, gold nugget, copper ingot...) are absent from it by design: Grindless
+        // never registers a rival to something Minecraft already provides (ADR-0050).
+        Set<String> expected = new HashSet<>();
+        for (SupplyCatalogue.Entry entry : SupplyCatalogue.entries()) {
+            Palette palette = paletteFor(entry.material());
+            written += write(items, entry.itemName(), texture(entry.form(), palette));
+            written += writeText(new File(resourceDir(root, "models/item"),
+                    entry.itemName() + ".json"), itemModel(entry.itemName()));
+            expected.add(entry.itemName());
         }
+        removeStale(items, ".png", expected);
+        removeStale(resourceDir(root, "models/item"), ".json", expected);
+        written += writeTags(root);
 
         // ---- machine casings ----
         // Names are kept deliberately short. Minecraft's asset layout is already deep
@@ -109,6 +121,122 @@ public final class GenerateAssets {
         writeProvenance(root, written);
         System.out.println("Generated " + written + " assets under "
                 + root.toPath().resolve("common/src/main/resources/assets/grindless"));
+    }
+
+    private static Palette paletteFor(String material) {
+        for (Palette palette : PALETTES) {
+            if (palette.name().equals(material)) {
+                return palette;
+            }
+        }
+        throw new IllegalStateException("SupplyCatalogue lists '" + material
+                + "' but PALETTES has no colour for it");
+    }
+
+    private static BufferedImage texture(MaterialForm form, Palette palette) {
+        return switch (form) {
+            case RAW -> FormTextures.raw(palette);
+            case CRUSHED -> FormTextures.crushed(palette);
+            case DUST -> FormTextures.dust(palette);
+            case NUGGET -> FormTextures.nugget(palette);
+            case INGOT -> FormTextures.ingot(palette);
+            case PLATE -> FormTextures.plate(palette);
+            case ROD -> FormTextures.rod(palette);
+            case BOLT -> FormTextures.bolt(palette);
+            case GEAR -> FormTextures.gear(palette);
+            case RING -> FormTextures.ring(palette);
+            default -> throw new IllegalStateException("no texture for form " + form);
+        };
+    }
+
+    private static String itemModel(String name) {
+        return "{\n  \"parent\": \"minecraft:item/generated\",\n  \"textures\": {\n"
+                + "    \"layer0\": \"grindless:item/" + name + "\"\n  }\n}\n";
+    }
+
+    /**
+     * Writes the tag files that put Grindless's items into the shared conventions.
+     *
+     * <p>Every file is {@code "replace": false}, so Grindless only ever <em>adds</em> to a tag and
+     * can never remove another mod's entries. Conventional forms go under {@code forge:}; forms
+     * with no agreed convention go under {@code grindless:} (ADR-0050).
+     */
+    private static int writeTags(File root) throws IOException {
+        File data = new File(root, "common/src/main/resources/data");
+        deleteTree(new File(data, "forge/tags/items"));
+        deleteTree(new File(data, "grindless/tags/items"));
+
+        Map<String, List<String>> parents = new TreeMap<>();
+        int written = 0;
+        for (SupplyCatalogue.Entry entry : SupplyCatalogue.entries()) {
+            MaterialForm form = entry.form();
+            String namespace = form.tagNamespace();
+            String path = form.tagPath(entry.material());
+            File file = new File(data, namespace + "/tags/items/" + path + ".json");
+            written += writeText(file, tagJson("grindless:" + entry.itemName()));
+            parents.computeIfAbsent(namespace + "/" + form.tagPath(), k -> new ArrayList<>())
+                    .add("#" + namespace + ":" + path);
+        }
+        for (Map.Entry<String, List<String>> parent : parents.entrySet()) {
+            File file = new File(data, parent.getKey().replaceFirst("/", "/tags/items/") + ".json");
+            written += writeText(file, tagJson(parent.getValue().toArray(new String[0])));
+        }
+        return written;
+    }
+
+    private static String tagJson(String... values) {
+        StringBuilder out = new StringBuilder("{\n  \"replace\": false,\n  \"values\": [\n");
+        for (int i = 0; i < values.length; i++) {
+            out.append("    \"").append(values[i]).append('"');
+            out.append(i + 1 < values.length ? ",\n" : "\n");
+        }
+        return out.append("  ]\n}\n").toString();
+    }
+
+    private static int writeText(File file, String text) throws IOException {
+        File parent = file.getParentFile();
+        if (!parent.exists() && !parent.mkdirs()) {
+            throw new IllegalStateException("could not create " + parent);
+        }
+        Files.writeString(file.toPath(), text, StandardCharsets.UTF_8);
+        return 1;
+    }
+
+    /**
+     * Removes generated files that no longer correspond to a supplied item.
+     *
+     * <p>Only names shaped like a supply item are touched, so a hand-written model or texture in
+     * the same directory is never deleted by a regeneration.
+     */
+    private static void removeStale(File dir, String extension, Set<String> expected) {
+        Set<String> shaped = new HashSet<>();
+        for (SupplyCatalogue.Supplied material : SupplyCatalogue.materials()) {
+            for (MaterialForm form : SupplyCatalogue.forms()) {
+                shaped.add(SupplyCatalogue.itemName(material.name(), form));
+            }
+        }
+        File[] files = dir.listFiles((d, n) -> n.endsWith(extension));
+        if (files != null) {
+            for (File file : files) {
+                String name = file.getName().substring(0, file.getName().length() - extension.length());
+                if (shaped.contains(name) && !expected.contains(name) && file.delete()) {
+                    System.out.println("removed stale " + file.getName());
+                }
+            }
+        }
+    }
+
+    private static void deleteTree(File dir) {
+        File[] children = dir.listFiles();
+        if (children != null) {
+            for (File child : children) {
+                if (child.isDirectory()) {
+                    deleteTree(child);
+                }
+                child.delete();
+            }
+        }
+        dir.delete();
     }
 
     /**

@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:gears/iron",
+    "#forge:gears/copper",
+    "#forge:gears/gold",
+    "#forge:gears/tin",
+    "#forge:gears/lead",
+    "#forge:gears/silver",
+    "#forge:gears/nickel",
+    "#forge:gears/zinc",
+    "#forge:gears/aluminium",
+    "#forge:gears/titanium",
+    "#forge:gears/tungsten",
+    "#forge:gears/platinum",
+    "#forge:gears/steel"
+  ]
+}

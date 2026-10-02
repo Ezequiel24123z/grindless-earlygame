@@ -166,6 +166,24 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /**
+     * An unrefined lump straight from the extractor: a few large, rough chunks.
+     *
+     * <p>Sits between crushed (many small fragments) and an ingot (one clean shape), so the three
+     * stages of the ore line read as three different objects at a glance.
+     */
+    public static BufferedImage raw(Palette palette) {
+        HeightField field = new HeightField();
+        Random random = new Random(palette.base() ^ 0x7A3F);
+        double[][] lumps = {{6.0, 8.5, 3.6}, {10.2, 7.0, 3.0}, {8.0, 5.2, 2.4}};
+        for (double[] lump : lumps) {
+            double jitter = random.nextDouble() * 0.6;
+            field.disc(lump[0] + jitter, lump[1], lump[2], 4.2 + random.nextDouble());
+        }
+        field.bevel(0.2);
+        return field.light(palette);
+    }
+
     /** A small cluster of nuggets. */
     public static BufferedImage nugget(Palette palette) {
         HeightField field = new HeightField();

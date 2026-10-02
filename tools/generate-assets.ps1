@@ -27,6 +27,11 @@ New-Item -ItemType Directory -Force -Path $out | Out-Null
 
 try {
     $sources = @(Get-ChildItem -Path $source -Filter '*.java' -Recurse -File | ForEach-Object { $_.FullName })
+    # SupplyCatalogue is shared with the mod so the list of materials is written once. It and
+    # MaterialForm have no Minecraft imports, which is what lets the generator compile them alone.
+    $material = Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\material'
+    $sources += (Join-Path $material 'SupplyCatalogue.java')
+    $sources += (Join-Path $material 'MaterialForm.java')
     & javac -nowarn -d $out $sources
     if ($LASTEXITCODE -ne 0) {
         Write-Output 'GENERATOR DID NOT COMPILE'
