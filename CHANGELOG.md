@@ -15,6 +15,30 @@ entries below reference those records by id.
 
 ### Added
 
+- **The asset generator** (`tools/assetgen`, `tools/generate-assets.ps1`) and **ADR-0048**. Art was
+  the project's largest unexamined risk, so it was investigated rather than assumed, and three
+  findings changed the plan. There is no Python and no Node on the toolchain. The JDK alone is
+  enough — `javax.imageio` writes PNG, `javax.sound.sampled` writes WAV — and is better anyway,
+  since it uses the toolchain the project already requires. And **audio turned out to be
+  generatable**, which contradicted the initial assessment: it had been written off as impossible
+  before being tried.
+  Sprites are described as **height fields and lit by one shared pass** rather than drawn as
+  coloured pixels. The first attempt picked a tone per pixel and produced flat shapes; shading
+  those convincingly would have meant hand-placing highlights on every form and redoing it on
+  every change. Describing geometry and lighting it afterwards inverts that — relief, bevels,
+  specular highlights and the dark outline all come from one pass, so improving the lighting lifts
+  all 108 textures at once. Nine forms across twelve materials.
+  Looping sounds are built only from harmonics of their own loop frequency, so the waveform is
+  periodic over exactly the loop length and the join is seamless *by construction* rather than by
+  fading. A click once per second is maddening on a machine a player stands beside for hours.
+  **ADR-0048's real output is the list of what this will not produce**: hero item sprites, complex
+  models, entity animation, music and anything recorded. A future session can see those are known
+  gaps with no owner rather than assuming art is handled because a generator exists.
+- `AGENTS.md` now documents the failure that cost **four sessions**: every command failing with
+  "Permission denied and could not request permission from user" means the session is in the app's
+  **Automatic** work mode, which cannot prompt for approval. The fix is to switch to Interactive.
+  Each lost session concluded the terminal had broken; it had not.
+
 - **Resource Genesis** (`common/.../vein/`, `material/`) — step 14, where raw material comes from.
   `VeinGenerator` derives a chunk's vein from the world seed and coordinates, so an unexplored
   chunk costs zero bytes and the same seed always produces the same map (ADR-0009); `ChunkVein` is

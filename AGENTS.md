@@ -137,6 +137,19 @@ work around a broken tool, it does not belong in history.
 
 ---
 
+## Troubleshooting: the terminal refuses every command
+
+If every shell command fails immediately with **"Permission denied and could not request
+permission from user"**, the session is running in the app's **Automatic** work mode, which cannot
+prompt for command approval. Nothing is wrong with the repository, the shell or the environment.
+
+**The fix is to switch the session to Interactive mode.** This cost four sessions before the cause
+was identified, each of which was abandoned believing the terminal had broken. It had not.
+
+While it is happening, the file tools still work — reading, writing and editing are all fine. Only
+commands are blocked, which means no builds and no commits. If that happens mid-session, keep
+working with files, then ask the user to run the build and `SETUP.ps1 -Commit -Message "..."`.
+
 ## Troubleshooting: `git push` fails
 
 If push fails with `fatal: Cannot prompt because user interactivity has been disabled`, git has no

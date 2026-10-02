@@ -1924,12 +1924,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 12d | Exposing machine buffers as Forge capabilities | ✅ done — ADR-0045 |
 | 13 | Pylon network, supply areas, `SavedData` | ✅ done — `network/`, ADR-0046 |
 | 13b | The Flux Pylon block, and machines drawing from their network | ✅ done |
-| 14 | Chunk veins + runtime material registry | pending |
+| 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
+| 14b | The **runtime tag scan** — `MaterialRegistry`, and the Terrestrial Extractor | **next** |
 | 15 | The `ProcessRecipe` type + tag-driven runtime recipe generation | pending |
 | 16 | T0/T1 machines, menus and screens | pending |
 | 17 | Fluid layer: state, pressure, pipes, tanks | pending |
 | 18 | Process Atlas + JEI/REI/EMI integration | pending |
-| 19 | Original textures and models via `tools/` scripts | pending |
+| 19 | Asset generation via `tools/assetgen` | ✅ **brought forward** — see ADR-0048 |
 | 20 | Research Terminal, fabrication gate and progression | pending |
 | 21 | Belts and the logistics layer | pending |
 | 22 | Flux Conduits: cores, named networks, diagnostics | pending |
@@ -1950,6 +1951,28 @@ Step 11 originally also carried the `ProcessRecipe` type. That moved to step 15,
 before the container contract it matches against (step 12) and the fluid stacks half its
 ingredients are (step 17) exist. Writing it earlier would have meant guessing both. The condition
 system itself — the part the whole machine layer rests on — is complete and standalone.
+
+### Where the project actually is
+
+Everything through step 14 is written, builds green and is covered by the behaviour checks in
+`tools/checks`. Nothing is **playable** yet: the Hand Crank Dynamo generates and pushes power, the
+Flux Pylon forms networks, and veins derive correctly — but no machine consumes anything, so there
+is no loop to play.
+
+The shortest path to a first playable loop is **step 14b**, which is the next thing to do:
+
+1. `MaterialRegistry` currently only reserves its call site. It needs the real tag scan —
+   `forge:ores/*`, `forge:ingots/*` and the rest — producing `Material` records on datapack load
+   and rebuilding on reload (ADR-0004). Everything downstream is written against it already.
+2. The **Terrestrial Extractor**: a `MachineBlockEntity` that resolves its chunk's vein, draws
+   power from its network with `requestPower`/`drawPower`, and produces the vein's material at a
+   rate of `richness × remaining reserve × tier × voltage satisfaction`.
+
+That pair turns a hand crank, a pylon and an extractor into an actual loop: power in, ore out.
+
+Two art questions are open and recorded in ADR-0048. Sound synthesis currently produces
+*serviceable* industrial noise rather than good audio, and CC0 libraries are the better answer;
+and hero sprites, complex models and entity animation are known gaps with no owner.
 
 Step 12d was an open architectural question and is now settled (ADR-0045). Forge exposes a block
 entity's energy buffer through `getCapability`, which has to be overridden on the block entity —
