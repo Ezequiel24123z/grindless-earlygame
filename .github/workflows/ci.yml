@@ -49,10 +49,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/blocks.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/blocks.expect
 
-      # Every status and facing of every machine must be a valid block state.
+      # Every status and facing of every machine must be a valid block state. The placements run
+      # as one datapack function so a ticking block entity cannot rewrite status before execute-if
+      # (ADR-0061). Hopper smokes still send console lines a second apart; they need those ticks.
       - name: Boot and place every machine state
         run: tools/smoke-boot.sh .
         env:
+          SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/states-pack
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/states.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/states.expect
 

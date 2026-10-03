@@ -376,8 +376,16 @@ public final class GenerateAssets {
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
         File smoke = new File(root, "tools/smoke");
-        commands.add(0, "forceload add 0 0");
-        written += writeText(new File(smoke, "states.commands"), String.join("\n", commands) + "\n");
+        // One function, one tick: a belt that is empty publishes idle, and an extractor over a
+        // vein publishes starved, so a 1s gap between setblock and execute-if misses STATE-OK
+        // (ADR-0061). Hopper smokes still send console lines a second apart; they need the ticks.
+        File function = new File(smoke, "states-pack/data/grindless/functions/states.mcfunction");
+        written += writeText(function, String.join("\n", commands) + "\n");
+        written += writeText(new File(smoke, "states-pack/pack.mcmeta"),
+                "{\n  \"pack\": {\n    \"description\": \"Places every Grindless machine state in one tick\",\n"
+                        + "    \"pack_format\": 15\n  }\n}\n");
+        written += writeText(new File(smoke, "states.commands"),
+                "forceload add 0 0\nfunction grindless:states\n");
         written += writeText(new File(smoke, "states.expect"), String.join("\n", expect) + "\n");
         return written;
     }

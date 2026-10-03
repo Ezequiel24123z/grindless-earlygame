@@ -72,6 +72,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0058](#adr-0058--build-playable-slices-not-system-layers) | Build playable slices, not system layers | Accepted |
 | [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Accepted |
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
+| [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 
 ---
 
@@ -2221,5 +2222,38 @@ menu family for three filters (sneak-click is the whole interesting verb).
 **Consequences.** Slice C can add fluids without touching the lanes. A faster belt is
 another `BeltLogic` constant and a new block, not a new representation. A successor that
 spawns `ItemEntity`s on a belt is reopening ADR-0008.
+
+---
+
+## ADR-0061 — The machine-state smoke runs as one function
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0049 requires a booted server. The states scenario then `setblock`s every
+facing and status and `say`s `STATE-OK` if the block is still that state. `tools/smoke-boot.sh`
+sends each console line a second later so hoppers have time to tick.
+
+A ticking machine does not keep a status the world did not earn. An empty belt publishes
+`idle`. A Crude Extractor over a chunk vein with no power publishes `starved`. A Terrestrial
+Extractor in an unsurveyed chunk publishes `out_of_band`. After a one-second gap the
+`execute if` is testing the live loop, not whether the blockstate exists. GitHub run
+37154213057 missed ten `STATE-OK` lines that way: the first idle of each extractor, every
+belt `running`, every manipulator `running`. Later idles of the same block type passed only
+because `MachineDisplay` would not republish a status it had already shown, so the
+`setblock` stuck. That is a debounce accident, not coverage.
+
+**Decision.** `GenerateAssets` writes `tools/smoke/states-pack` with one function that
+places every state and `say`s in the same tick, before block entities run. CI enables that
+datapack and sends `forceload` then `function grindless:states`. Hopper, belt-feed and
+loop smokes stay as one console line per second; they are waiting for the world to work.
+
+**Alternatives rejected.** Dropping the 1s pause for every smoke (hopper inserts would
+lose the race the other way); expecting only the block id and ignoring status (a missing
+variant would still boot); stopping machines from publishing during smoke (the live loop
+is correct; the test was asking the wrong question).
+
+**Consequences.** Adding a machine state is still one `BlockCatalogue` row. A successor
+that inlines the 315 console commands to "match the other smokes" is reopening this
+record.
 
 

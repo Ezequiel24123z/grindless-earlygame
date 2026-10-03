@@ -13,6 +13,14 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Fixed
+
+- **State smoke no longer races a ticking machine (ADR-0061).** CI placed every status with a
+  1s gap between `setblock` and `execute if`, so an empty belt published `idle` over `running`
+  and a Crude / Terrestrial Extractor published `starved` / `out_of_band` over the first `idle`.
+  Those placements now run as one datapack function in one tick. Belts also actually attach the
+  Forge `ITEM_HANDLER` the hopper commit imported.
+
 ### Changed
 
 - **Remaining work is playable slices, not system layers (ADR-0058).** First iron (Thermal

@@ -17,7 +17,10 @@
 #     SMOKE_TIMEOUT   seconds to wait for the server to finish starting (default 900)
 #     SMOKE_PORT      server port (default 25599)
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
-#     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line
+#                     or to hold a smoke function (ADR-0061)
+#     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line.
+#                     Each line is followed by a 1s pause so hoppers and belts can tick; a
+#                     scenario that must not yield to block entities should be a datapack function.
 #     SMOKE_EXPECT    extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
 set -u

@@ -171,8 +171,16 @@ public final class VerifyAssets {
             }
         }
         yes("scanned " + models + " models", models > 100);
+        int states = totalStates();
         yes("the server-side state scenario covers every state",
-                Files.readAllLines(Path.of("tools/smoke/states.expect")).size() == totalStates());
+                Files.readAllLines(Path.of("tools/smoke/states.expect")).size() == states);
+        long functionSays = Files.readAllLines(
+                        Path.of("tools/smoke/states-pack/data/grindless/functions/states.mcfunction"))
+                .stream().filter(line -> line.contains("say STATE-OK")).count();
+        yes("the state scenario runs as one function so a ticker cannot rewrite status first",
+                functionSays == states
+                        && Files.readString(Path.of("tools/smoke/states.commands"))
+                        .contains("function grindless:states"));
         yes("every texture and parent a model names exists" + (missing.isEmpty() ? "" : " " + missing),
                 missing.isEmpty());
     }
