@@ -44,11 +44,14 @@ public final class ProcessLookup {
                     material.has(MaterialForm.RAW),
                     material.has(MaterialForm.ORE),
                     material.has(MaterialForm.CRUSHED),
-                    material.has(MaterialForm.INGOT)));
+                    material.has(MaterialForm.INGOT),
+                    material.has(MaterialForm.PLATE),
+                    material.has(MaterialForm.ROD),
+                    material.has(MaterialForm.GEAR)));
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
-        Grindless.LOG.info("[{}] {} process recipes (B0×R1 / B1 / B1 wet / B1×R1)",
+        Grindless.LOG.info("[{}] {} process recipes (ore line / press / assembler)",
                 Grindless.MOD_NAME, recipes.size());
     }
 
@@ -124,17 +127,28 @@ public final class ProcessLookup {
             if (slot < inputs.size() && matches(inputs.get(slot), stack)) {
                 return true;
             }
+            int catalyst = slot - inputs.size();
+            if (catalyst >= 0 && catalyst < recipe.catalysts().size()
+                    && matches(recipe.catalysts().get(catalyst), stack)) {
+                return true;
+            }
         }
         return false;
     }
 
     public static boolean matches(ProcessRecipe recipe, ItemStack[] inputs) {
         List<IngredientSpec> needed = recipe.itemInputs();
-        if (inputs.length < needed.size()) {
+        List<IngredientSpec> catalysts = recipe.catalysts();
+        if (inputs.length < needed.size() + catalysts.size()) {
             return false;
         }
         for (int i = 0; i < needed.size(); i++) {
             if (!matches(needed.get(i), inputs[i])) {
+                return false;
+            }
+        }
+        for (int i = 0; i < catalysts.size(); i++) {
+            if (!matches(catalysts.get(i), inputs[needed.size() + i])) {
                 return false;
             }
         }
