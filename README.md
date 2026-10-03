@@ -1930,7 +1930,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
 | 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — `VerifyRecipes` is in; JEI waits |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
-| 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | pending |
+| 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | ✅ done — ADR-0062 |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | pending — ADR-0017 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | pending — pylons already cover; this must not obsolete them |
 | 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework |
@@ -1966,10 +1966,11 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is slice C — fluids**, not conduits and not the multiblock kernel. Slice B is in: the
-scanner marks a 3×3, the Terrestrial Extractor pulls a surveyed vein at F1, and an unpowered
-Conveyor plus splitter and Crude Manipulator move items as lane data. Fluids, conduits and
-multiblocks wait.
+**Next is slice D — the factory builds the factory**, not Flux conduits and not the
+multiblock kernel. Slice C is in: millibuckets with temperature and pressure, a Clay
+Conduit, a Hand Pump, a Basic Tank, a wet mill that still doubles, and CO that captures
+into a tank or burns in the Thermal Generator. Kiln / R2 are unblocked (there is now
+somewhere to put a gas) but they are not this slice.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

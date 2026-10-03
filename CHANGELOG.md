@@ -30,6 +30,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Slice C — first fluids (ADR-0058, ADR-0062).** `FluidState` is volume + temperature +
+  pressure in millibuckets. Clay Conduit (unpowered, ambient liquid, gravity or level),
+  Hand Pump (vanilla water source, does not drain it) and Basic Tank (16 B, refuses hot).
+  Wet B1 is the same crushed yield plus 0.5 B water. Arc Furnace CO pushes into a tank or
+  vents; captured CO burns 400 ticks in the Thermal Generator. Forge `FLUID_HANDLER` maps
+  without T/P. `VerifyFluid` drives the arithmetic. CI pumps water into a tank and burns
+  a bucket of CO.
+
 - **Slice B — first factory (ADR-0058, ADR-0060).** Conveyor Belt (unpowered, 8 items/s, two
   lanes of positions, not entities), Splitter (filter-plus-priority, sneak-click a face),
   Crude Manipulator (one item a second, unpowered), Terrestrial Extractor (F1, five seconds

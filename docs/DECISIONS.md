@@ -73,6 +73,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Accepted |
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
+| [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 
 ---
 
@@ -2255,5 +2256,59 @@ is correct; the test was asking the wrong question).
 **Consequences.** Adding a machine state is still one `BlockCatalogue` row. A successor
 that inlines the 315 console commands to "match the other smokes" is reopening this
 record.
+
+
+## ADR-0062 — First fluids are millibuckets, gravity clay and a named CO sink
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0058 scheduled slice C: volume, temperature and pressure, Clay Conduit, Hand
+Pump, Basic Tank, live `ProcessRecipe` fluid slots, a wet pulverizer, gas capture. ADR-0015
+already forbade modelling fluids as items. Three questions were still open.
+
+`PROCESSES.md` quotes volumes in buckets `B`. Forge and vanilla use millibuckets. Recipe
+counts have to pick one unit and stick to it, or wet B1 (0.5 B water) and R1 (1 B CO) will
+disagree with a tank that thinks 1 is a bucket.
+
+The Chemical Washer is B2 and T2. A T1 wet mill that produced slurry would have nowhere to
+put it (ADR-0036). Dry B1 already doubles raw into crushed. Water at T1 is a fluid-slot
+proof, not a new yield.
+
+R1 names 1 B of carbon monoxide. Slice A vented it as the named T1 sink. Slice C has a tank,
+so the sink can become a capture *or* a burn. Blocking the Arc Furnace until a tank takes
+the gas would stall first iron the moment the player built the second line.
+
+**Decision.**
+
+1. Volume is millibuckets internally. 1000 mB is one `B`. Recipe fluid counts are mB:
+   wet B1 takes 500, R1 names 1000 of CO. Temperature and pressure live on the stack
+   (`FluidState`). Mix weights both by volume. Empty is zero millibuckets, not a null.
+2. The Clay Conduit is unpowered, ambient liquid, level or downhill. Gases need pressure
+   a T1 pipe does not have. Horizontal placement is the T1 facing; `toY <= fromY` is the
+   rule so a later vertical piece does not invent a new check.
+3. The Hand Pump is unpowered. It reads a vanilla water *source* on the face it points at
+   or the block below, and does not drain it. 20 mB/t is a bucket every 2.5 s.
+4. The Basic Tank holds 16 B at ambient. Anything hotter than 40 °C is refused. Gases at
+   0.1 MPa are accepted — that is how captured CO waits to be burnt.
+5. Capture is a push. The Arc Furnace offers its 1 B of CO to neighbouring
+   `FluidEndpoint`s; whatever they refuse vents. The furnace never blocks on gas. The
+   named sink for captured CO is the Thermal Generator: 1 B burns 400 ticks of F1
+   (a quarter of a coal). Venting to atmosphere remains a legal sink.
+6. Wet B1 is the same crushed yield as dry B1 plus 0.5 B water. No slurry, no byproduct.
+   When the mill already holds enough water, the wet recipe wins; otherwise dry runs.
+7. Forge `FLUID_HANDLER` is attached by event (ADR-0045). `FluidStack` has no T/P:
+   export drops both, import is ambient. Carbon monoxide has no registered vanilla
+   `Fluid`; it stays on `FluidEndpoint` and is invisible to other mods' pipes.
+
+**Alternatives rejected.** Recipe counts in buckets (0.5 is not an int); a T1 slurry
+(no washer); blocking the furnace on uncaptured CO (first iron would stall); registering
+CO as a vanilla fluid in this slice (buckets, stills, textures, and a gas that clay
+cannot move); putting T/P on the Forge stack (Forge does not have those fields).
+
+**Consequences.** Slice D can add the Press without touching millibuckets. A successor
+that stores fluids as items is reopening ADR-0015. A successor that makes wet B1 a
+different yield from dry is inventing the washer a tier early. Kiln / R2 wait until
+the player has somewhere to put SO₂ — they now do, so that content is unblocked, not
+in this slice.
 
 

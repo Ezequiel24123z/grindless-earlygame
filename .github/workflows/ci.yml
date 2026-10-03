@@ -87,6 +87,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-factory.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-factory.expect
 
+      # Slice C: pump water through clay into a tank; captured CO burns in the generator.
+      - name: Boot and exercise first fluids
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-fluids.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-fluids.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

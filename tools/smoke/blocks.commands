@@ -37,3 +37,12 @@ loot spawn 8 102 8 loot grindless:blocks/crude_manipulator
 setblock 8 100 8 grindless:terrestrial_extractor
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK terrestrial_extractor
 loot spawn 8 102 8 loot grindless:blocks/terrestrial_extractor
+setblock 8 100 8 grindless:clay_conduit
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK clay_conduit
+loot spawn 8 102 8 loot grindless:blocks/clay_conduit
+setblock 8 100 8 grindless:hand_pump
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK hand_pump
+loot spawn 8 102 8 loot grindless:blocks/hand_pump
+setblock 8 100 8 grindless:basic_tank
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK basic_tank
+loot spawn 8 102 8 loot grindless:blocks/basic_tank
