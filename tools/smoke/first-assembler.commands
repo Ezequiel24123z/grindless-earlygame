@@ -1,13 +1,16 @@
 forceload add 0 0
+setblock 8 68 8 minecraft:stone
 setblock 8 69 8 minecraft:air
 setblock 8 70 8 minecraft:air
 setblock 8 71 8 minecraft:air
-setblock 8 70 8 grindless:press[facing=south,status=idle]{Items:[{Slot:1b,id:"grindless:plate_die",Count:1b}]}
+setblock 8 70 8 grindless:press[facing=south,status=idle]
 execute if block 8 70 8 grindless:press run say PRESS-OK
+item replace block 8 70 8 container.1 with grindless:plate_die
+data get block 8 70 8
 setblock 8 69 8 minecraft:hopper
 say WAIT-HOPPER
 say WAIT-HOPPER
-execute if data block 8 70 8 Items[{Slot:1b,id:"grindless:plate_die"}] run say DIE-STAYS
+execute if data block 8 70 8 Items[{id:"grindless:plate_die"}] run say DIE-STAYS
 setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:iron_ingot",Count:1b}]}
 say WAIT-HOPPER
 say WAIT-HOPPER
