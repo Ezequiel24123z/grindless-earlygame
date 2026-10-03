@@ -1,5 +1,6 @@
 GEN-OK
 id: "grindless:thermal_generator"
+WAIT-HOPPER
 FUEL-IN
 MILL-OK
 FURNACE-OK

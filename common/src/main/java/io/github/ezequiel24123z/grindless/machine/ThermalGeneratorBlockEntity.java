@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.SimpleContainer;
@@ -303,7 +304,13 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return FuelPlatform.burnTicks(stack) > 0;
+        if (stack.isEmpty()) {
+            return false;
+        }
+        // Coals are always fuel. The platform call covers other mods' furnace fuels
+        // and must not be the only check: a missing transform would reject coal and
+        // starve the first iron line.
+        return stack.is(ItemTags.COALS) || FuelPlatform.burnTicks(stack) > 0;
     }
 
     @Override
