@@ -9,6 +9,8 @@ setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:cobblestone",Coun
 say WAIT-BELT
 execute if data block 8 70 8 Lanes[0].Items[0] run say BELT-IN
 execute if data block 8 70 8 Lanes[1].Items[0] run say BELT-IN
+execute if data block 8 70 9 Lanes[0].Items[0] run say BELT-IN
+execute if data block 8 70 9 Lanes[1].Items[0] run say BELT-IN
 say WAIT-BELT
 say WAIT-BELT
 execute if data block 8 70 9 Lanes[0].Items[0] run say BELT-OUT

@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.container.forge;
 
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.MachineBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
