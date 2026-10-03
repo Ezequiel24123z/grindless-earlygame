@@ -75,6 +75,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
+| [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
 
 ---
 
@@ -2361,5 +2362,65 @@ extracting them).
 A successor that adds `flux_pylon_mk2.json` is reopening ADR-0017. A successor that
 starts the Wire Mill or the Kiln in this slice is ignoring the playable-slice order.
 Kiln / R2 remain unblocked by fluids and unstarted.
+
+
+## ADR-0064 — Energy spanning is distance and storage, not coverage
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0058 scheduled slice E as Flux Conduits, transformers and capacitor banks.
+Pylons already project supply areas and auto-link within range. Three documents disagree about
+what a Flux Conduit *is*.
+
+`README` System 1 and the tools table: a **hand item** that right-clicks two pylons into a
+manual link, with no length limit and an upkeep proportional to distance. `docs/DESIGN.md`
+says the same: "a hand item, not a block".
+
+`README` *Flux Conduits — one network* and ADR-0025: a **T2 chassis block** whose carried
+types are decided by cores (item, fluid, heat, signal, Flux). ADR-0026 names those networks.
+Shipping that in slice E would give the player a universal logistics pipe the moment they can
+span two pylons, which is exactly the trap ADR-0025 exists to prevent — and it would let a
+Flux Core cover spots pylons cannot, which is how pylons die.
+
+Slice E's own sentence is the tie-break: "this layer is named networks and distance, and must
+not obsolete pylons". The playable gap after the Assembler is an outpost beyond MK1 link
+range, a buffer that is not "place more pylons", and a tap that is not a second supply cube.
+
+**Decision.**
+
+1. The T1 Flux Conduit is the handheld linker. Right-click pylon A, right-click pylon B.
+   Clicking a shaft counts as the base. Sneak-click the pair to drop the link; sneak-click
+   air to clear a pending mark. The item is not consumed. Manual links have no length limit.
+2. Manual edges live in `FluxNetworkData` beside membership (ADR-0007). Flood-fill and
+   neighbour-merge follow them as well as automatic range. Breaking a pylon drops its
+   manual edges. Unloaded chunks do not. `PylonIndex.linkedTo` stays auto-range only.
+3. Upkeep is `ceil(distance / 8)` FU/t, minimum 1. It is demand on the shared pool, paid
+   from stored energy each tick. An unpaid link browns the network out; it does not
+   silently drop. Auto-range links cost nothing.
+4. A Capacitor Bank adds capacity to the **covering** network. It projects no supply cube.
+   Uncovered, it is inert. Capacity is 200 ticks of MK1 throughput (102 400 FU). Membership
+   of banks is SavedData, same as pylons: place registers, break unregisters, unload does
+   not.
+5. A Flux Transformer is a covered tap, not a pylon. It exchanges FU with the covering
+   network at F1 (32 FU/t) through a local buffer other mods can see as FE. Grindless
+   machines still resolve power by `networkCovering` — standing next to a transformer does
+   not power them. Per-face F0/F1 gating waits until the energy capability is re-invalidated
+   per face; the T1 step is the rate cap, not a second voltage network.
+6. Named conduit networks (ADR-0026) and the core-chassis block (ADR-0025) stay T2. Slice E's
+   "named network" is the Flux Network identity the linker joins. Item, fluid, heat and
+   signal cores are not in this slice.
+
+**Alternatives rejected.** Shipping the T2 chassis in E (obsoletes belts, pipes and pylons
+the moment spanning exists); giving the transformer or the bank a supply cube (a cheaper
+pylon); letting a Flux Core "for the rare spot a pylon cannot cover" land here (that *is*
+obsoleting pylons); colour channels (ADR-0026); dropping the link when upkeep cannot be
+paid (a silent topology change); putting manual edges only on the block entity (unloaded
+chunks would split the trunk).
+
+**Consequences.** An outpost beyond 64 blocks is a deliberate trunk with a running cost, not
+a line of pylons and not a cable. A successor that registers `flux_conduit` as a block with
+cores is starting ADR-0025, not extending this slice. A successor that lets
+`networkCovering` return a transformer is reopening this record. Kiln / R2 and Slice F are
+still unstarted.
 
 
