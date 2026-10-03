@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CIC",
+    "I I",
+    "CIC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:gear_die" }
+}

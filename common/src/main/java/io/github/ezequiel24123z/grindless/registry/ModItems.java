@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 /**
  * Items, and the register every block item is also added to.
  *
- * <p>Only the bootstrap set exists so far. Components — casings, motors, circuit boards and the
- * rest of the fabrication economy — arrive with the Assembler.
+ * <p>Bootstrap items plus Slice D fabrication (dies, coil, casing). Motors and circuit boards
+ * arrive with T2.
  */
 public final class ModItems {
 
@@ -34,6 +34,26 @@ public final class ModItems {
 
     /** The first fabricated component; every machine above T1 is built on one. */
     public static final RegistrySupplier<Item> MACHINE_CASING = register("machine_casing",
+            () -> new Item(new Item.Properties()));
+
+    /** Press catalyst. Selects plate from an ingot; not consumed. */
+    public static final RegistrySupplier<Item> PLATE_DIE = register("plate_die",
+            () -> new Item(new Item.Properties()));
+
+    /** Press catalyst. Selects rod from an ingot; not consumed. */
+    public static final RegistrySupplier<Item> ROD_DIE = register("rod_die",
+            () -> new Item(new Item.Properties()));
+
+    /** Press catalyst. Selects gear from an ingot; not consumed. */
+    public static final RegistrySupplier<Item> GEAR_DIE = register("gear_die",
+            () -> new Item(new Item.Properties()));
+
+    /** Press catalyst. Selects a copper coil from a copper ingot; not consumed. */
+    public static final RegistrySupplier<Item> COIL_DIE = register("coil_die",
+            () -> new Item(new Item.Properties()));
+
+    /** T1 electrical reagent. The Wire Mill is the dedicated T2 route. */
+    public static final RegistrySupplier<Item> COPPER_COIL = register("copper_coil",
             () -> new Item(new Item.Properties()));
 
     /** R1 gangue. A Grindless reagent, not a material form (ADR-0033). */

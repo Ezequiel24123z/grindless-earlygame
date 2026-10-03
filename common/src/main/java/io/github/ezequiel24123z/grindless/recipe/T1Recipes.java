@@ -20,6 +20,11 @@ public final class T1Recipes {
     public static final String FURNACE = "item:minecraft:furnace";
     public static final String CARBON = "tag:grindless:carbon";
     public static final String BELT = "item:grindless:conveyor_belt";
+    public static final String PLATE = "tag:forge:plates/iron";
+    public static final String ROD = "tag:forge:rods/iron";
+    public static final String GEAR = "tag:forge:gears/iron";
+    public static final String CASING = "item:grindless:machine_casing";
+    public static final String COIL = "item:grindless:copper_coil";
     public static final String VOLTAIC = "voltaic";
 
     private T1Recipes() {
@@ -78,6 +83,34 @@ public final class T1Recipes {
                 new Gated("basic_tank", VOLTAIC,
                         List.of("CGC", "G G", "CIC"),
                         Map.of("C", COBBLE, "G", GLASS, "I", IRON),
-                        "grindless:basic_tank"));
+                        "grindless:basic_tank"),
+                new Gated("press", VOLTAIC,
+                        List.of("CIC", "CIC", "CCC"),
+                        Map.of("C", COBBLE, "I", IRON),
+                        "grindless:press"),
+                new Gated("plate_die", VOLTAIC,
+                        List.of("CCC", "CIC", "CCC"),
+                        Map.of("C", COBBLE, "I", IRON),
+                        "grindless:plate_die"),
+                new Gated("rod_die", VOLTAIC,
+                        List.of(" C ", "CIC", " C "),
+                        Map.of("C", COBBLE, "I", IRON),
+                        "grindless:rod_die"),
+                new Gated("gear_die", VOLTAIC,
+                        List.of("CIC", "I I", "CIC"),
+                        Map.of("C", COBBLE, "I", IRON),
+                        "grindless:gear_die"),
+                new Gated("coil_die", VOLTAIC,
+                        List.of("CRC", "CIC", "CRC"),
+                        Map.of("C", COBBLE, "I", IRON, "R", REDSTONE),
+                        "grindless:coil_die"),
+                new Gated("machine_casing", VOLTAIC,
+                        List.of("P P", "R R", "P P"),
+                        Map.of("P", PLATE, "R", ROD),
+                        "grindless:machine_casing"),
+                new Gated("assembler", VOLTAIC,
+                        List.of(" G ", "CAC", " G "),
+                        Map.of("G", GEAR, "C", CASING, "A", COIL),
+                        "grindless:assembler"));
     }
 }

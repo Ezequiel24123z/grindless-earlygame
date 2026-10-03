@@ -13,8 +13,8 @@ import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
- * Pulverizer or Arc Furnace: family, envelope, slots and the conditions the machine holds
- * so R1 evaluates optimally without a player touching a dial (ADR-0058).
+ * Process consumer: family, envelope, slots and the conditions the machine holds
+ * so R1 evaluates optimally without a player touching a dial (ADR-0058, ADR-0063).
  */
 public enum ProcessMachineKind {
 
@@ -54,6 +54,42 @@ public enum ProcessMachineKind {
         @Override
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.ARC_FURNACE.get();
+        }
+    },
+
+    PRESS(MachineFamily.PRESS, MachineMenuKind.PRESS,
+            BlockCatalogue.Geometry.PRESS, "press") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.PRESS.get();
+        }
+    },
+
+    ASSEMBLER(MachineFamily.ASSEMBLER, MachineMenuKind.ASSEMBLER,
+            BlockCatalogue.Geometry.ASSEMBLER, "assembler") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.ASSEMBLER.get();
         }
     };
 

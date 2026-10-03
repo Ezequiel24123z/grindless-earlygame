@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Behaviour checks for generated B0×R1 / B1×R1 recipes and the Voltaic-gated T1 crafts.
+ * Behaviour checks for generated ore-line, press and assembler recipes and the Voltaic-gated T1 crafts.
  * Not part of the mod.
  */
 public final class VerifyRecipes {
@@ -33,13 +33,13 @@ public final class VerifyRecipes {
 
     private static void graph() {
         List<ProcessGraph.MaterialView> materials = List.of(
-                new ProcessGraph.MaterialView("iron", true, true, true, true),
-                new ProcessGraph.MaterialView("gold", true, false, false, true),
-                new ProcessGraph.MaterialView("steel", false, false, false, true),
-                new ProcessGraph.MaterialView("mythril", false, true, true, true));
+                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true),
+                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true),
+                new ProcessGraph.MaterialView("steel", false, false, false, true, true, true, true),
+                new ProcessGraph.MaterialView("mythril", false, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("iron, gold and mythril generate; steel does not", 9, recipes.size());
+        eq("ore line plus press forms plus coil and MK2", 20, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -90,6 +90,46 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(VerifyRecipes::namesMaterialItem));
         yes("every recipe id is unique",
                 recipes.stream().map(ProcessRecipe::id).distinct().count() == recipes.size());
+
+        ProcessRecipe ironPlate = recipe(recipes, "press/plate/iron");
+        ProcessRecipe ironRod = recipe(recipes, "press/rod/iron");
+        ProcessRecipe ironGear = recipe(recipes, "press/gear/iron");
+        ProcessRecipe coil = recipe(recipes, "press/coil/copper");
+        ProcessRecipe mk2 = recipe(recipes, "assemble/pylon_mk2");
+
+        eq("plate is the press", MachineFamily.PRESS, ironPlate.family());
+        eq("plate takes one ingot", "tag:forge:ingots/iron", ironPlate.itemInputs().get(0).qualified());
+        eq("plate uses the plate die", "item:grindless:plate_die", ironPlate.catalysts().get(0).qualified());
+        eq("plate makes one plate", "tag:forge:plates/iron", ironPlate.itemOutputs().get(0).qualified());
+        eq("press is four seconds", 20 * 4, ironPlate.durationTicks());
+        eq("press draws F1", 32L, ironPlate.fuPerTick());
+        yes("the die is not an input", ironPlate.itemInputs().size() == 1);
+        eq("rod uses the rod die", "item:grindless:rod_die", ironRod.catalysts().get(0).qualified());
+        eq("gear uses the gear die", "item:grindless:gear_die", ironGear.catalysts().get(0).qualified());
+
+        eq("coil is the press", MachineFamily.PRESS, coil.family());
+        eq("coil takes copper", "tag:forge:ingots/copper", coil.itemInputs().get(0).qualified());
+        eq("coil uses the coil die", "item:grindless:coil_die", coil.catalysts().get(0).qualified());
+        eq("coil is a reagent", "item:grindless:copper_coil", coil.itemOutputs().get(0).qualified());
+
+        eq("MK2 is the assembler", MachineFamily.ASSEMBLER, mk2.family());
+        eq("MK2 takes a casing", "item:grindless:machine_casing", mk2.itemInputs().get(0).qualified());
+        eq("MK2 takes four plates", 4, mk2.itemInputs().get(1).count());
+        eq("MK2 plates are iron", "tag:forge:plates/iron", mk2.itemInputs().get(1).qualified());
+        eq("MK2 takes two gears", 2, mk2.itemInputs().get(2).count());
+        eq("MK2 is twenty seconds", 20 * 20, mk2.durationTicks());
+        eq("MK2 draws F1", 32L, mk2.fuPerTick());
+        yes("MK2 has no catalyst", mk2.catalysts().isEmpty());
+        eq("MK2 makes the pylon", "item:grindless:flux_pylon_mk2", mk2.itemOutputs().get(0).qualified());
+
+        yes("steel with an ingot still presses",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
+        no("steel without a vein has no ore line",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("b0_r1/steel")));
+        yes("gold without crushed still presses",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("press/gear/gold")));
+        no("mythril without plate/rod/gear does not press",
+                recipes.stream().anyMatch(recipe -> recipe.id().startsWith("press/") && recipe.id().endsWith("/mythril")));
     }
 
     private static void logic() {
@@ -141,9 +181,15 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships twelve gated crafts", 12, T1Recipes.gated().size());
+        eq("T1 ships nineteen gated crafts", 19, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
+        yes("the assembler is the last crafting-table machine",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("assembler")));
+        yes("the press is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("press")));
+        no("MK2 has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
     }
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {

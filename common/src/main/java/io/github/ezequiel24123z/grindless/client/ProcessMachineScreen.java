@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 /**
- * One screen for the Thermal Generator, Pulverizer and Arc Furnace.
+ * One screen for every process machine.
  *
  * <p>Energy on the left, progress in the middle, named status on the title line. Slots are
  * placed by the menu.

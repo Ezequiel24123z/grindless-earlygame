@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * Pulverizer or Arc Furnace. One block class, kind on the instance.
+ * Process consumer. One block class, kind on the instance.
  */
 public class ProcessMachineBlock extends BaseEntityBlock {
 

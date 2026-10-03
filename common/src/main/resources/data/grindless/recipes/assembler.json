@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    " G ",
+    "CAC",
+    " G "
+  ],
+  "key": {
+    "G": { "tag": "forge:gears/iron" },
+    "C": { "item": "grindless:machine_casing" },
+    "A": { "item": "grindless:copper_coil" }
+  },
+  "result": { "item": "grindless:assembler" }
+}
