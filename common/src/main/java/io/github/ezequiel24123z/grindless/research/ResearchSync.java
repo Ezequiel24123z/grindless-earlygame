@@ -20,6 +20,10 @@ public final class ResearchSync {
     private ResearchSync() {
     }
 
+    /**
+     * Client only. Architectury's S2C receiver is a client method; calling it from common
+     * init crashes a dedicated server.
+     */
     public static void register() {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, ID, (buf, context) -> {
             Set<Blueprint> unlocked = EnumSet.noneOf(Blueprint.class);

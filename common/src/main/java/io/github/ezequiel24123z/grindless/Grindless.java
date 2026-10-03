@@ -12,7 +12,6 @@ import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.recipe.ModRecipes;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
 import io.github.ezequiel24123z.grindless.registry.ModSounds;
-import io.github.ezequiel24123z.grindless.research.ResearchSync;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +53,6 @@ public final class Grindless {
         ModCreativeTabs.register();
 
         MaterialRegistry.bootstrap();
-        ResearchSync.register();
         registerNetworkTick();
 
         LOG.info("[{}] common init complete", MOD_NAME);
