@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CCC",
+    "LIL",
+    "CCC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "L": { "item": "minecraft:clay_ball" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:clay_conduit", "count": 8 }
+}

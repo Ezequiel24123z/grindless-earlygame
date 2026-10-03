@@ -35,6 +35,9 @@ public final class MachineArt {
     public static final int SPLITTER = 0xFFAB40;
     public static final int MANIPULATOR = 0x69F0AE;
     public static final int DRILL = 0xFF6D00;
+    public static final int CONDUIT = 0x8D6E63;
+    public static final int PUMP = 0x4FC3F7;
+    public static final int TANK = 0x80CBC4;
 
     private static final double CX = 7.5;
     private static final double CY = 7.5;
@@ -55,6 +58,9 @@ public final class MachineArt {
             case SPLITTER -> splitterFront(status);
             case MANIPULATOR -> manipulatorFront(status);
             case DRILL -> drillFront(status);
+            case CONDUIT -> conduitFront(status);
+            case PUMP -> pumpFront(status);
+            case TANK -> tankFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -71,6 +77,9 @@ public final class MachineArt {
             case SPLITTER -> splitterTop();
             case MANIPULATOR -> manipulatorTop();
             case DRILL -> drillTop();
+            case CONDUIT -> conduitTop();
+            case PUMP -> pumpTop();
+            case TANK -> tankTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -484,6 +493,120 @@ public final class MachineArt {
         }
         set(img, 7, 7, DRILL);
         set(img, 8, 8, DRILL);
+        return img;
+    }
+
+    // ---- Clay Conduit --------------------------------------------------------------------
+
+    /** A U-shaped trough: the block is a thing liquid runs along. */
+    public static BufferedImage conduitFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, CONDUIT);
+        for (int y = 6; y <= 13; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean wall = x <= 2 || x >= 13 || y >= 12;
+                int pixel = wall ? Palette.shade(CASING, 0.15) : Palette.shade(CASING, -0.6);
+                if (!wall && glow >= 0 && y >= 9) {
+                    pixel = (x + y) % 2 == 0 ? glow : dim(glow);
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage conduitTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            set(img, 1, y, Palette.shade(CASING, 0.15));
+            set(img, 2, y, Palette.shade(CASING, 0.1));
+            set(img, 13, y, Palette.shade(CASING, 0.1));
+            set(img, 14, y, Palette.shade(CASING, 0.15));
+            for (int x = 3; x <= 12; x++) {
+                set(img, x, y, Palette.shade(CONDUIT, (x + y) % 3 == 0 ? -0.35 : -0.55));
+            }
+        }
+        return img;
+    }
+
+    // ---- Hand Pump -----------------------------------------------------------------------
+
+    /** A piston over a well: the block is a thing that lifts water. */
+    public static BufferedImage pumpFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, PUMP);
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 4; x <= 11; x++) {
+                double d = Math.hypot(x - CX, y - 11.0);
+                if (d <= 3.4) {
+                    int inside = glow < 0 ? Palette.shade(CASING, -0.65) : dim(glow);
+                    set(img, x, y, d >= 2.6 ? Palette.shade(CASING, 0.2) : inside);
+                }
+            }
+        }
+        for (int y = 2; y <= 8; y++) {
+            set(img, 7, y, Palette.shade(CASING, 0.25));
+            set(img, 8, y, Palette.shade(CASING, 0.25));
+        }
+        for (int x = 5; x <= 10; x++) {
+            set(img, x, 3, glow < 0 ? Palette.shade(CASING, -0.15) : glow);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage pumpTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                if (d <= 5.0) {
+                    set(img, x, y, d >= 4.0
+                            ? Palette.shade(CASING, 0.2)
+                            : Palette.shade(PUMP, -0.45 - (4.5 - d) * 0.05));
+                }
+            }
+        }
+        set(img, 7, 7, PUMP);
+        set(img, 8, 8, PUMP);
+        return img;
+    }
+
+    // ---- Basic Tank ----------------------------------------------------------------------
+
+    /** A sight glass: the block is a thing that holds a volume you can read. */
+    public static BufferedImage tankFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, TANK);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 5; x <= 10; x++) {
+                boolean frame = x == 5 || x == 10 || y == 3 || y == 12;
+                int pixel = frame ? Palette.shade(CASING, 0.25) : Palette.shade(CASING, -0.7);
+                if (!frame && glow >= 0 && y >= 8) {
+                    pixel = (x + y) % 2 == 0 ? glow : dim(glow);
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage tankTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                if (d <= 6.0) {
+                    set(img, x, y, d >= 5.0
+                            ? Palette.shade(CASING, 0.15)
+                            : Palette.shade(TANK, -0.25));
+                }
+            }
+        }
+        set(img, 7, 7, TANK);
+        set(img, 8, 7, TANK);
         return img;
     }
 

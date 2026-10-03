@@ -14,6 +14,9 @@
     "grindless:splitter",
     "grindless:crude_manipulator",
     "grindless:terrestrial_extractor",
+    "grindless:clay_conduit",
+    "grindless:hand_pump",
+    "grindless:basic_tank",
     "grindless:flux_pylon_shaft"
   ]
 }

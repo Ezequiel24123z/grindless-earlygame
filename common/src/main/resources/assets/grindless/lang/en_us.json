@@ -17,6 +17,9 @@
   "block.grindless.splitter": "Splitter",
   "block.grindless.crude_manipulator": "Crude Manipulator",
   "block.grindless.terrestrial_extractor": "Terrestrial Extractor",
+  "block.grindless.clay_conduit": "Clay Conduit",
+  "block.grindless.hand_pump": "Hand Pump",
+  "block.grindless.basic_tank": "Basic Tank",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",

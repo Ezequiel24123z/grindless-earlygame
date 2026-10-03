@@ -58,6 +58,9 @@ final class BlockModels {
             case SPLITTER -> splitter();
             case MANIPULATOR -> manipulator();
             case DRILL -> drill();
+            case CONDUIT -> conduit();
+            case PUMP -> pump();
+            case TANK -> tank();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -237,6 +240,32 @@ final class BlockModels {
                 box(7, 2, 7, 9, 10, 9, "top", "side"),
                 front(4, 8, 2, 12, 11, 8, "top", "side", "front"),
                 box(6, 9, 0, 10, 11, 2, "cap", "cap"));
+    }
+
+    /** An open trough: liquid sits in the channel, walls keep it in. */
+    private static List<Box> conduit() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                box(0, 2, 0, 2, 6, 16, "top", "side"),
+                box(14, 2, 0, 16, 6, 16, "top", "side"),
+                front(2, 2, 0, 14, 5, 16, "top", "side", "front"));
+    }
+
+    /** A well with a piston and a handle on the front. */
+    private static List<Box> pump() {
+        return List.of(
+                box(2, 0, 2, 14, 2, 14, "cap", "base"),
+                front(3, 2, 3, 13, 10, 13, "top", "side", "front"),
+                box(6, 10, 6, 10, 14, 10, "top", "side"),
+                box(5, 12, 1, 11, 15, 5, "cap", "cap"));
+    }
+
+    /** A squat cylinder with a cap; the front is the sight glass. */
+    private static List<Box> tank() {
+        return List.of(
+                box(2, 0, 2, 14, 2, 14, "cap", "base"),
+                front(3, 2, 3, 13, 13, 13, "top", "side", "front"),
+                box(4, 13, 4, 12, 16, 12, "cap", "cap"));
     }
 
     /** A heavier bore: wider collar and a deeper stack than the Crude Extractor. */
