@@ -22,6 +22,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Slice B — first factory (ADR-0058, ADR-0060).** Conveyor Belt (unpowered, 8 items/s, two
+  lanes of positions, not entities), Splitter (filter-plus-priority, sneak-click a face),
+  Crude Manipulator (one item a second, unpowered), Terrestrial Extractor (F1, five seconds
+  per unit, surveyed chunks only) and the Prospector's Scanner (3×3 survey + overlay).
+  Voltaic-gated crafts. `VerifyBelt` drives the lanes. CI places the line and hoppers a
+  cobble onto a belt.
+
 - **Slice A — first iron (ADR-0058, ADR-0059).** Generated B0×R1 / B1×R1 `ProcessRecipe` graph
   (item I/O, vented CO, `#grindless:carbon`, slag). Thermal Generator (F1, furnace fuel),
   Pulverizer and Arc Furnace as real consumers with one shared menu. Voltaic-gated crafts for

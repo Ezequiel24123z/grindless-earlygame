@@ -32,8 +32,19 @@ public final class BlockCatalogue {
         /** A chamber with a V of electrodes. */
         FURNACE,
         /** A tall tower; taller and more ringed with each tier. */
-        PYLON
+        PYLON,
+        /** A low slab with two lanes. */
+        BELT,
+        /** A low junction with three mouths. */
+        SPLITTER,
+        /** A short arm on a post. */
+        MANIPULATOR,
+        /** A heavier bore than the Crude Extractor. */
+        DRILL
     }
+
+    /** Belts and arms: they carry items or they do not. */
+    public static final List<String> BELT = List.of("idle", "running");
 
     /** A generator: it can have charge it cannot give away, but is never starved. */
     public static final List<String> GENERATOR = List.of("idle", "running", "blocked");
@@ -81,10 +92,15 @@ public final class BlockCatalogue {
             new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
-            new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID));
+            new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),
+            new Entry("conveyor_belt", Geometry.BELT, 1, true, BELT),
+            new Entry("splitter", Geometry.SPLITTER, 1, true, BELT),
+            new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
+            new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
-    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag");
+    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag",
+            "prospectors_scanner");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

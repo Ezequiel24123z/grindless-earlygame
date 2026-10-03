@@ -1929,7 +1929,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
 | 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — `VerifyRecipes` is in; JEI waits |
-| 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | pending — 0.2 |
+| 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | pending |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | pending — ADR-0017 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | pending — pylons already cover; this must not obsolete them |
@@ -1966,10 +1966,10 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is slice B — first factory**, not conduits and not fluids. Slice A is in: Voltaic unlocks
-the Thermal Generator, Pulverizer, Arc Furnace and Pylon MK1; generated B0×R1 / B1×R1 turn raw
-into ingots; hoppers and chests move items; CO vents. Belts, the Terrestrial Extractor and the
-Prospector's Scanner are the next playable thing. Fluids, conduits and multiblocks wait.
+**Next is slice C — fluids**, not conduits and not the multiblock kernel. Slice B is in: the
+scanner marks a 3×3, the Terrestrial Extractor pulls a surveyed vein at F1, and an unpowered
+Conveyor plus splitter and Crude Manipulator move items as lane data. Fluids, conduits and
+multiblocks wait.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

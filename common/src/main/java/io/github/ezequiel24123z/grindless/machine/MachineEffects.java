@@ -41,6 +41,10 @@ public final class MachineEffects {
             case MILL -> mill(status, level, pos, random);
             case FURNACE -> furnace(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
+            case BELT -> belt(status, level, pos, random);
+            case SPLITTER -> belt(status, level, pos, random);
+            case MANIPULATOR -> manipulator(status, front, level, pos, random);
+            case DRILL -> extractor(status, level, pos, random);
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);
@@ -186,6 +190,27 @@ public final class MachineEffects {
                 particle(level, ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 1.0,
                         pos.getZ() + 0.5, 0.0, 0.04, 0.0);
             }
+        }
+    }
+
+    private static void belt(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        if (status == MachineStatus.RUNNING && random.nextFloat() < 0.15F) {
+            particle(level, ParticleTypes.CRIT,
+                    pos.getX() + 0.2 + random.nextDouble() * 0.6,
+                    pos.getY() + 0.28,
+                    pos.getZ() + 0.2 + random.nextDouble() * 0.6,
+                    0.0, 0.01, 0.0);
+        }
+    }
+
+    private static void manipulator(MachineStatus status, Direction front, Level level, BlockPos pos,
+                                    RandomSource random) {
+        if (status == MachineStatus.RUNNING && random.nextFloat() < 0.25F) {
+            particle(level, ParticleTypes.CRIT,
+                    pos.getX() + 0.5 + front.getStepX() * 0.35,
+                    pos.getY() + 0.55,
+                    pos.getZ() + 0.5 + front.getStepZ() * 0.35,
+                    0.0, 0.02, 0.0);
         }
     }
 

@@ -54,6 +54,10 @@ final class BlockModels {
             case MILL -> mill();
             case FURNACE -> furnace();
             case PYLON -> pylonPiece(block.tier(), 0);
+            case BELT -> belt();
+            case SPLITTER -> splitter();
+            case MANIPULATOR -> manipulator();
+            case DRILL -> drill();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -205,6 +209,44 @@ final class BlockModels {
                 box(3, 12, 6, 6, 16, 10, "cap", "cap"),
                 box(10, 12, 6, 13, 16, 10, "cap", "cap"),
                 box(5, 14, 7, 11, 16, 9, "top", "side"));
+    }
+
+    /** A low slab with two raised rails. */
+    private static List<Box> belt() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                box(0, 2, 0, 2, 4, 16, "top", "side"),
+                box(14, 2, 0, 16, 4, 16, "top", "side"),
+                front(2, 2, 0, 14, 4, 16, "top", "side", "front"));
+    }
+
+    /** A slightly taller junction with three mouths. */
+    private static List<Box> splitter() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(1, 2, 1, 15, 6, 15, "top", "side", "front"),
+                box(6, 6, 0, 10, 7, 4, "top", "side"),
+                box(0, 6, 6, 4, 7, 10, "top", "side"),
+                box(12, 6, 6, 16, 7, 10, "top", "side"));
+    }
+
+    /** A post with a reaching arm. */
+    private static List<Box> manipulator() {
+        return List.of(
+                box(5, 0, 5, 11, 2, 11, "cap", "base"),
+                box(7, 2, 7, 9, 10, 9, "top", "side"),
+                front(4, 8, 2, 12, 11, 8, "top", "side", "front"),
+                box(6, 9, 0, 10, 11, 2, "cap", "cap"));
+    }
+
+    /** A heavier bore: wider collar and a deeper stack than the Crude Extractor. */
+    private static List<Box> drill() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "cap", "base"),
+                front(1, 3, 1, 15, 12, 15, "top", "side", "front"),
+                box(3, 12, 3, 13, 15, 13, "top", "side"),
+                box(6, 15, 6, 10, 16, 10, "cap", "base"),
+                box(4, 0, -1, 12, 3, 1, "cap", "cap"));
     }
 
     private static List<Box> terminal() {

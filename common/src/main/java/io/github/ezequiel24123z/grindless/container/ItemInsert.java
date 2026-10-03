@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.container;
 
+import io.github.ezequiel24123z.grindless.belt.BeltEndpoint;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
@@ -28,6 +29,9 @@ public final class ItemInsert {
         }
         BlockPos pos = from.relative(side);
         BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof BeltEndpoint belt) {
+            return belt.insert(side.getOpposite(), stack);
+        }
         if (blockEntity instanceof Container container) {
             return HopperBlockEntity.addItem(null, container, stack, side.getOpposite());
         }

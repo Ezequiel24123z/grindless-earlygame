@@ -91,6 +91,8 @@ public final class GenerateAssets {
         written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
+        written += write(items, "prospectors_scanner",
+                FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -107,28 +109,26 @@ public final class GenerateAssets {
         blocks = resourceDir(root, "textures/block");
         written += write(blocks, "casing_side", MachineTextures.side(MachineTextures.CASING));
         written += write(blocks, "casing_top", MachineTextures.top(MachineTextures.CASING));
-        written += write(blocks, "dynamo_top", MachineArt.dynamoTop());
-        written += write(blocks, "extractor_top", MachineArt.extractorTop());
-        written += write(blocks, "terminal_top", MachineArt.terminalTop());
-        written += write(blocks, "generator_top", MachineArt.generatorTop());
-        written += write(blocks, "mill_top", MachineArt.millTop());
-        written += write(blocks, "furnace_top", MachineArt.furnaceTop());
+        java.util.Set<io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry> tops =
+                new java.util.HashSet<>();
+        for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
+            if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
+                continue;
+            }
+            if (tops.add(block.geometry())) {
+                written += write(blocks, block.lower() + "_top", MachineArt.top(block.geometry()));
+                for (String status : block.statuses()) {
+                    written += write(blocks, block.lower() + "_front_" + status,
+                            MachineArt.front(block.geometry(), status));
+                }
+            }
+        }
         for (String status : List.of("idle", "running", "blocked", "starved")) {
-            written += write(blocks, "dynamo_front_" + status, MachineArt.dynamoFront(status));
-            written += write(blocks, "extractor_front_" + status, MachineArt.extractorFront(status));
-            written += write(blocks, "terminal_front_" + status, MachineArt.terminalFront(status));
-            written += write(blocks, "generator_front_" + status, MachineArt.generatorFront(status));
-            written += write(blocks, "mill_front_" + status, MachineArt.millFront(status));
-            written += write(blocks, "furnace_front_" + status, MachineArt.furnaceFront(status));
             for (int tier = 1; tier <= 3; tier++) {
                 written += write(blocks, "pylon" + tier + "_side_" + status, MachineArt.pylonSide(tier, status));
                 written += write(blocks, "pylon" + tier + "_top_" + status, MachineArt.pylonTop(tier, status));
             }
         }
-        written += write(blocks, "extractor_front_out_of_band", MachineArt.extractorFront("out_of_band"));
-        written += write(blocks, "terminal_front_out_of_band", MachineArt.terminalFront("out_of_band"));
-        written += write(blocks, "mill_front_out_of_band", MachineArt.millFront("out_of_band"));
-        written += write(blocks, "furnace_front_out_of_band", MachineArt.furnaceFront("out_of_band"));
         written += writeGui(root);
 
         // ---- sounds ----

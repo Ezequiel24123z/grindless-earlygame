@@ -1,0 +1,21 @@
+forceload add 0 0
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 8 70 9 minecraft:air
+setblock 8 70 8 grindless:conveyor_belt[facing=south,status=idle]
+execute if block 8 70 8 grindless:conveyor_belt run say BELT-OK
+setblock 8 70 9 grindless:conveyor_belt[facing=south,status=idle]
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:cobblestone",Count:1b}]}
+say WAIT-BELT
+execute if data block 8 70 8 Lanes[0].Items[0] run say BELT-IN
+execute if data block 8 70 8 Lanes[1].Items[0] run say BELT-IN
+say WAIT-BELT
+say WAIT-BELT
+execute if data block 8 70 9 Lanes[0].Items[0] run say BELT-OUT
+execute if data block 8 70 9 Lanes[1].Items[0] run say BELT-OUT
+setblock 10 70 8 grindless:splitter[facing=south,status=idle]
+execute if block 10 70 8 grindless:splitter run say SPLIT-OK
+setblock 12 70 8 grindless:crude_manipulator[facing=south,status=idle]
+execute if block 12 70 8 grindless:crude_manipulator run say ARM-OK
+setblock 14 70 8 grindless:terrestrial_extractor[facing=south,status=idle]
+execute if block 14 70 8 grindless:terrestrial_extractor run say DRILL-OK

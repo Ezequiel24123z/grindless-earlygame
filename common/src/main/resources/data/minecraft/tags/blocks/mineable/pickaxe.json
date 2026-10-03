@@ -10,6 +10,10 @@
     "grindless:flux_pylon_mk1",
     "grindless:flux_pylon_mk2",
     "grindless:flux_pylon_mk3",
+    "grindless:conveyor_belt",
+    "grindless:splitter",
+    "grindless:crude_manipulator",
+    "grindless:terrestrial_extractor",
     "grindless:flux_pylon_shaft"
   ]
 }

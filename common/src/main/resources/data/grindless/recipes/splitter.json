@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "IBI",
+    "B B",
+    "IBI"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "B": { "item": "grindless:conveyor_belt" }
+  },
+  "result": { "item": "grindless:splitter" }
+}

@@ -3,11 +3,15 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.SplitterBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlockEntity;
 import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -77,6 +81,31 @@ public final class ModBlockEntities {
      * every tier — and the tier cannot drift from what the player sees, because the block
      * <em>is</em> the tier.
      */
+    public static final RegistrySupplier<BlockEntityType<BeltBlockEntity>> CONVEYOR_BELT =
+            BLOCK_ENTITIES.register("conveyor_belt",
+                    () -> BlockEntityType.Builder
+                            .of(BeltBlockEntity::new, ModBlocks.CONVEYOR_BELT.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<SplitterBlockEntity>> SPLITTER =
+            BLOCK_ENTITIES.register("splitter",
+                    () -> BlockEntityType.Builder
+                            .of(SplitterBlockEntity::new, ModBlocks.SPLITTER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ManipulatorBlockEntity>> CRUDE_MANIPULATOR =
+            BLOCK_ENTITIES.register("crude_manipulator",
+                    () -> BlockEntityType.Builder
+                            .of(ManipulatorBlockEntity::new, ModBlocks.CRUDE_MANIPULATOR.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<TerrestrialExtractorBlockEntity>>
+            TERRESTRIAL_EXTRACTOR = BLOCK_ENTITIES.register("terrestrial_extractor",
+                    () -> BlockEntityType.Builder
+                            .of(TerrestrialExtractorBlockEntity::new,
+                                    ModBlocks.TERRESTRIAL_EXTRACTOR.get())
+                            .build(null));
+
     public static final RegistrySupplier<BlockEntityType<PylonBlockEntity>> FLUX_PYLON =
             BLOCK_ENTITIES.register("flux_pylon",
                     () -> BlockEntityType.Builder

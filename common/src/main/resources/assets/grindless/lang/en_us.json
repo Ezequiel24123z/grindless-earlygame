@@ -5,6 +5,7 @@
   "item.grindless.data_core": "Data Core",
   "item.grindless.machine_casing": "Machine Casing",
   "item.grindless.slag": "Slag",
+  "item.grindless.prospectors_scanner": "Prospector's Scanner",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
@@ -12,6 +13,10 @@
   "block.grindless.thermal_generator": "Thermal Generator",
   "block.grindless.pulverizer": "Pulverizer",
   "block.grindless.arc_furnace": "Arc Furnace",
+  "block.grindless.conveyor_belt": "Conveyor Belt",
+  "block.grindless.splitter": "Splitter",
+  "block.grindless.crude_manipulator": "Crude Manipulator",
+  "block.grindless.terrestrial_extractor": "Terrestrial Extractor",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -58,5 +63,12 @@
   "gui.grindless.status.running": "Running",
   "gui.grindless.status.blocked": "Blocked — empty the output",
   "gui.grindless.status.starved": "Starved — needs input or power",
-  "gui.grindless.status.out_of_band": "Out of band"
+  "gui.grindless.status.out_of_band": "Out of band",
+
+  "chat.grindless.scanner.vein": "%s · richness %s · reserve %s",
+  "chat.grindless.scanner.empty": "No mineable vein in this chunk",
+  "chat.grindless.splitter.filter": "Filter: %s",
+  "chat.grindless.splitter.clear": "Filter cleared",
+  "overlay.grindless.scanner.vein": "%s · richness %s",
+  "overlay.grindless.scanner.none": "Not surveyed — right-click to scan"
 }

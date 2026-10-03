@@ -223,6 +223,21 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the Prospector's Scanner: a dish on a grip. See {@link #dataCore}. */
+    public static BufferedImage scanner(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(8.0, 6.0, 4.4, 4.6);
+        field.disc(8.0, 6.0, 2.2, 2.4);
+        for (int y = 9; y <= 14; y++) {
+            for (int x = 7; x <= 9; x++) {
+                field.set(x, y, 2.8);
+            }
+        }
+        field.rect(6, 13, 10, 14, 3.4);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Multitool: a handle with a head. See {@link #dataCore}. */
     public static BufferedImage multitool(Palette palette) {
         HeightField field = new HeightField();

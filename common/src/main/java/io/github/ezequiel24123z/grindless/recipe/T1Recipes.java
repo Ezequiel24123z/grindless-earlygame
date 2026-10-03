@@ -19,6 +19,7 @@ public final class T1Recipes {
     public static final String FLINT = "item:minecraft:flint";
     public static final String FURNACE = "item:minecraft:furnace";
     public static final String CARBON = "tag:grindless:carbon";
+    public static final String BELT = "item:grindless:conveyor_belt";
     public static final String VOLTAIC = "voltaic";
 
     private T1Recipes() {
@@ -45,6 +46,26 @@ public final class T1Recipes {
                 new Gated("flux_pylon_mk1", VOLTAIC,
                         List.of("IGI", "IRI", "ICI"),
                         Map.of("I", IRON, "G", GLASS, "R", REDSTONE, "C", COBBLE),
-                        "grindless:flux_pylon_mk1"));
+                        "grindless:flux_pylon_mk1"),
+                new Gated("conveyor_belt", VOLTAIC,
+                        List.of("CCC", "III", "CCC"),
+                        Map.of("C", COBBLE, "I", IRON),
+                        "grindless:conveyor_belt"),
+                new Gated("splitter", VOLTAIC,
+                        List.of("IBI", "B B", "IBI"),
+                        Map.of("I", IRON, "B", BELT),
+                        "grindless:splitter"),
+                new Gated("crude_manipulator", VOLTAIC,
+                        List.of(" I ", "CIC", " I "),
+                        Map.of("I", IRON, "C", COBBLE),
+                        "grindless:crude_manipulator"),
+                new Gated("terrestrial_extractor", VOLTAIC,
+                        List.of("CIC", "IRI", "CIC"),
+                        Map.of("C", COBBLE, "I", IRON, "R", REDSTONE),
+                        "grindless:terrestrial_extractor"),
+                new Gated("prospectors_scanner", VOLTAIC,
+                        List.of("GIG", "IRI", " C "),
+                        Map.of("G", GLASS, "I", IRON, "R", REDSTONE, "C", COBBLE),
+                        "grindless:prospectors_scanner"));
     }
 }

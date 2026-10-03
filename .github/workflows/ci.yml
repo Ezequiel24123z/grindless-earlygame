@@ -77,6 +77,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-iron.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-iron.expect
 
+      # Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
+      - name: Boot and exercise first factory
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-factory.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-factory.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

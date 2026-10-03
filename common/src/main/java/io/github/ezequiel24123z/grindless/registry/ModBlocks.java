@@ -3,12 +3,16 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.belt.BeltBlock;
+import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
+import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlock;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
+import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
@@ -27,8 +31,8 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>T0 plus the Slice A dry line. Dynamo, extractor, pylons, terminal, Thermal Generator,
- * Pulverizer and Arc Furnace have block entities.
+ * <p>T0 through Slice B. Dynamo, extractors, pylons, terminal, Thermal Generator,
+ * Pulverizer, Arc Furnace, belts, splitter and manipulator have block entities.
  */
 public final class ModBlocks {
 
@@ -62,6 +66,26 @@ public final class ModBlocks {
     public static final RegistrySupplier<ProcessMachineBlock> ARC_FURNACE =
             register("arc_furnace",
                     () -> new ProcessMachineBlock(ProcessMachineKind.ARC_FURNACE, machine().strength(3.5F)));
+
+    /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
+    public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =
+            register("conveyor_belt",
+                    () -> new BeltBlock(machine().strength(1.5F)));
+
+    /** Filter-plus-priority junction. Front, left and right. */
+    public static final RegistrySupplier<SplitterBlock> SPLITTER =
+            register("splitter",
+                    () -> new SplitterBlock(machine().strength(2.0F)));
+
+    /** Crude inserter. One item a second, unpowered. */
+    public static final RegistrySupplier<ManipulatorBlock> CRUDE_MANIPULATOR =
+            register("crude_manipulator",
+                    () -> new ManipulatorBlock(machine().strength(2.0F)));
+
+    /** T1 extractor. F1, five seconds per unit, surveyed chunks only. */
+    public static final RegistrySupplier<TerrestrialExtractorBlock> TERRESTRIAL_EXTRACTOR =
+            register("terrestrial_extractor",
+                    () -> new TerrestrialExtractorBlock(machine().strength(3.5F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

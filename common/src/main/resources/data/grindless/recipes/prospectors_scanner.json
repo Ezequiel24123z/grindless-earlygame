@@ -1,0 +1,16 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "GIG",
+    "IRI",
+    " C "
+  ],
+  "key": {
+    "G": { "item": "minecraft:glass" },
+    "I": { "tag": "forge:ingots/iron" },
+    "R": { "item": "minecraft:redstone" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:prospectors_scanner" }
+}

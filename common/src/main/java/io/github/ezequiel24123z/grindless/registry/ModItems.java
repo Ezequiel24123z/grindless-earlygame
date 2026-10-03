@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
 import net.minecraft.core.registries.Registries;
@@ -38,6 +39,10 @@ public final class ModItems {
     /** R1 gangue. A Grindless reagent, not a material form (ADR-0033). */
     public static final RegistrySupplier<Item> SLAG = register("slag",
             () -> new Item(new Item.Properties()));
+
+    /** T1 handheld. Surveys the standing chunk and its neighbours. */
+    public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
+            () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

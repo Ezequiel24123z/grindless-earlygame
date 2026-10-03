@@ -71,6 +71,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Accepted |
 | [0058](#adr-0058--build-playable-slices-not-system-layers) | Build playable slices, not system layers | Accepted |
 | [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Accepted |
+| [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 
 ---
 
@@ -2172,5 +2173,53 @@ the next machine does not invent a new UI); capturing CO in slice A (there is no
 slots and turns the CO vent into a capture decision. A successor that adds JEI walks
 `ProcessLookup.recipes()`, not the vanilla manager. A successor that adds a second blueprint
 extends `Blueprint` and writes another gated JSON.
+
+
+## ADR-0060 — First factory is lane data, a survey and an unpowered belt
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0058 scheduled slice B: belts, splitter, manipulator, Terrestrial Extractor,
+Prospector's Scanner. Hoppers already move items. The Crude Extractor already pulls a vein
+without a survey. Three questions were still open.
+
+Belt mods usually spawn an `ItemEntity` per item. ADR-0008 already forbade that; the
+implementation still had to pick a packing and a tick. Factorio's yellow belt is 15 items/s
+with four items per tile per lane. Grindless's Conveyor is specified at 8 items/s.
+
+The Terrestrial Extractor is "placed in a surveyed chunk". The Crude Extractor cannot require
+that — T0 has no scanner. A survey that is only a chat message would let the T1 extractor
+run anywhere, which deletes the scanner.
+
+The splitter's interesting behaviour is filter plus priority. A full GUI is a second menu
+family. Sneak-clicking a face with an item is enough to name a filter; a matching filter
+already *is* a priority over an open face.
+
+**Decision.**
+
+1. Conveyor contents are two `Lane`s of `{id, count, position}` on the tile. Four slots per
+   lane at 8 items/s is one tile per second. The tile ticks once and advances the lanes;
+   items become stacks only at an endpoint (ADR-0008). Hoppers insert from above and pull
+   from below. A `BeltEndpoint` is how a manipulator or a neighbouring belt talks to one.
+2. The Crude Manipulator is unpowered and moves one item a second. The first inserter has
+   to work the moment the first belt does.
+3. The splitter has one input (the back) and three outputs (front, left, right). Sneak-click
+   a face with an item to filter it; empty hand clears. A matching filter beats an open
+   face; equal priority round-robins. Merger, tunnel, sorter and overflow wait.
+4. The Prospector's Scanner marks a 3×3 of chunks in `SurveyData`. The Terrestrial Extractor
+   draws F1, takes five seconds per unit at richness 1 (the rate `VeinGenerator` sizes
+   reserve against), and is `OUT_OF_BAND` until its chunk is surveyed. The Crude Extractor
+   does not read the set.
+5. All five crafts are Voltaic-gated JSON. `VerifyBelt` drives the lanes and the router
+   without a world.
+
+**Alternatives rejected.** Entity-per-item belts (ADR-0008); a powered first belt (the
+opening would still be a hopper line); requiring a survey on the Crude Extractor (T0 has
+no scanner); a survey that does not persist (the T1 extractor would ignore it); a second
+menu family for three filters (sneak-click is the whole interesting verb).
+
+**Consequences.** Slice C can add fluids without touching the lanes. A faster belt is
+another `BeltLogic` constant and a new block, not a new representation. A successor that
+spawns `ItemEntity`s on a belt is reopening ADR-0008.
 
 

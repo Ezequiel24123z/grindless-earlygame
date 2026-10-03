@@ -31,11 +31,48 @@ public final class MachineArt {
     public static final int MILL = 0x40C4FF;
     public static final int FURNACE = 0xFF8A80;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
+    public static final int BELT = 0xFFD54F;
+    public static final int SPLITTER = 0xFFAB40;
+    public static final int MANIPULATOR = 0x69F0AE;
+    public static final int DRILL = 0xFF6D00;
 
     private static final double CX = 7.5;
     private static final double CY = 7.5;
 
     private MachineArt() {
+    }
+
+    public static BufferedImage front(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry geometry,
+                                     String status) {
+        return switch (geometry) {
+            case DYNAMO -> dynamoFront(status);
+            case EXTRACTOR -> extractorFront(status);
+            case TERMINAL -> terminalFront(status);
+            case GENERATOR -> generatorFront(status);
+            case MILL -> millFront(status);
+            case FURNACE -> furnaceFront(status);
+            case BELT -> beltFront(status);
+            case SPLITTER -> splitterFront(status);
+            case MANIPULATOR -> manipulatorFront(status);
+            case DRILL -> drillFront(status);
+            case PYLON -> pylonSide(1, status);
+        };
+    }
+
+    public static BufferedImage top(io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry geometry) {
+        return switch (geometry) {
+            case DYNAMO -> dynamoTop();
+            case EXTRACTOR -> extractorTop();
+            case TERMINAL -> terminalTop();
+            case GENERATOR -> generatorTop();
+            case MILL -> millTop();
+            case FURNACE -> furnaceTop();
+            case BELT -> beltTop();
+            case SPLITTER -> splitterTop();
+            case MANIPULATOR -> manipulatorTop();
+            case DRILL -> drillTop();
+            case PYLON -> pylonTop(1, "idle");
+        };
     }
 
     /** The colour a status paints with, or {@code -1} for idle. */
@@ -301,6 +338,152 @@ public final class MachineArt {
         }
         set(img, 7, 7, FURNACE);
         set(img, 8, 8, FURNACE);
+        return img;
+    }
+
+    // ---- Conveyor Belt -------------------------------------------------------------------
+
+    /** Two lanes receding: the block is a thing that carries. */
+    public static BufferedImage beltFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, BELT);
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean rail = x <= 2 || x >= 13 || x == 7 || x == 8;
+                int pixel = rail ? Palette.shade(CASING, 0.25) : Palette.shade(CASING, -0.55);
+                if (!rail && glow >= 0 && (x + y) % 3 == 0) {
+                    pixel = glow;
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage beltTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 6; x++) {
+                set(img, x, y, Palette.shade(CASING, (x + y) % 2 == 0 ? -0.35 : -0.5));
+            }
+            for (int x = 9; x <= 14; x++) {
+                set(img, x, y, Palette.shade(CASING, (x + y) % 2 == 0 ? -0.35 : -0.5));
+            }
+            set(img, 7, y, Palette.shade(CASING, 0.2));
+            set(img, 8, y, Palette.shade(CASING, 0.2));
+        }
+        return img;
+    }
+
+    // ---- Splitter ------------------------------------------------------------------------
+
+    /** Three mouths: the block is a thing that chooses. */
+    public static BufferedImage splitterFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SPLITTER);
+        for (int y = 6; y <= 12; y++) {
+            for (int mouth = 0; mouth < 3; mouth++) {
+                int x0 = 2 + mouth * 4;
+                for (int x = x0; x <= x0 + 2; x++) {
+                    int pixel = glow < 0 ? Palette.shade(CASING, -0.6) : dim(glow);
+                    if (glow >= 0 && y == 9) {
+                        pixel = glow;
+                    }
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage splitterTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 6; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.5));
+            }
+        }
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 2; x <= 5; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+            for (int x = 10; x <= 13; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+        }
+        set(img, 7, 4, SPLITTER);
+        set(img, 8, 4, SPLITTER);
+        return img;
+    }
+
+    // ---- Crude Manipulator ---------------------------------------------------------------
+
+    /** A claw: the block is a thing that reaches. */
+    public static BufferedImage manipulatorFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, MANIPULATOR);
+        for (int y = 3; y <= 10; y++) {
+            set(img, 7, y, Palette.shade(CASING, 0.2));
+            set(img, 8, y, Palette.shade(CASING, 0.2));
+        }
+        for (int x = 4; x <= 11; x++) {
+            set(img, x, 4, glow < 0 ? Palette.shade(CASING, -0.2) : glow);
+        }
+        set(img, 4, 5, glow < 0 ? Palette.shade(CASING, -0.1) : glow);
+        set(img, 11, 5, glow < 0 ? Palette.shade(CASING, -0.1) : glow);
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage manipulatorTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            set(img, 7, y, Palette.shade(CASING, -0.4));
+            set(img, 8, y, Palette.shade(CASING, -0.4));
+        }
+        set(img, 7, 3, MANIPULATOR);
+        set(img, 8, 3, MANIPULATOR);
+        return img;
+    }
+
+    // ---- Terrestrial Extractor -----------------------------------------------------------
+
+    /** A wider bore with a collar: the machine is a heavier relative of the Crude Extractor. */
+    public static BufferedImage drillFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, DRILL);
+        for (int y = 1; y <= 11; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double d = Math.hypot(x - CX, y - 6.0);
+                if (d <= 4.6 && d >= 3.4) {
+                    set(img, x, y, Palette.shade(CASING, 0.25));
+                } else if (d < 3.4) {
+                    boolean bar = (x + y) % 3 == 0;
+                    int inside = glow < 0 ? Palette.shade(CASING, -0.7) : dim(glow);
+                    set(img, x, y, bar ? Palette.shade(CASING, 0.1) : inside);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage drillTop() {
+        BufferedImage img = MachineTextures.top(Palette.shade(CASING, -0.15));
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                if (d <= 5.2) {
+                    set(img, x, y, d >= 4.0
+                            ? Palette.shade(CASING, 0.2)
+                            : Palette.shade(CASING, -0.55 - (5.0 - d) * 0.05));
+                }
+            }
+        }
+        set(img, 7, 7, DRILL);
+        set(img, 8, 8, DRILL);
         return img;
     }
 
