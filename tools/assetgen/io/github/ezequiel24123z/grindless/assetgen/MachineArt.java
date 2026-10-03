@@ -40,6 +40,8 @@ public final class MachineArt {
     public static final int CONDUIT = 0x8D6E63;
     public static final int PUMP = 0x4FC3F7;
     public static final int TANK = 0x80CBC4;
+    public static final int BANK = 0xFFEE58;
+    public static final int TRANSFORMER = 0x7C4DFF;
 
     private static final double CX = 7.5;
     private static final double CY = 7.5;
@@ -65,6 +67,8 @@ public final class MachineArt {
             case CONDUIT -> conduitFront(status);
             case PUMP -> pumpFront(status);
             case TANK -> tankFront(status);
+            case BANK -> bankFront(status);
+            case TRANSFORMER -> transformerFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -86,6 +90,8 @@ public final class MachineArt {
             case CONDUIT -> conduitTop();
             case PUMP -> pumpTop();
             case TANK -> tankTop();
+            case BANK -> bankTop();
+            case TRANSFORMER -> transformerTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -684,6 +690,83 @@ public final class MachineArt {
         }
         set(img, 7, 7, TANK);
         set(img, 8, 7, TANK);
+        return img;
+    }
+
+    // ---- Capacitor Bank ------------------------------------------------------------------
+
+    public static BufferedImage bankFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, BANK);
+        for (int col = 0; col < 3; col++) {
+            int x0 = 3 + col * 4;
+            for (int y = 3; y <= 11; y++) {
+                for (int x = x0; x <= x0 + 2; x++) {
+                    boolean frame = x == x0 || x == x0 + 2 || y == 3 || y == 11;
+                    int pixel = frame ? Palette.shade(CASING, 0.2) : Palette.shade(CASING, -0.65);
+                    if (!frame && glow >= 0 && y >= 7) {
+                        pixel = (x + y) % 2 == 0 ? glow : dim(glow);
+                    }
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage bankTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int col = 0; col < 3; col++) {
+            int x0 = 3 + col * 4;
+            for (int y = 4; y <= 11; y++) {
+                for (int x = x0; x <= x0 + 2; x++) {
+                    set(img, x, y, Palette.shade(BANK, (x + y) % 2 == 0 ? -0.1 : -0.4));
+                }
+            }
+        }
+        return img;
+    }
+
+    // ---- Flux Transformer ----------------------------------------------------------------
+
+    public static BufferedImage transformerFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, TRANSFORMER);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.5));
+            }
+        }
+        for (int coil = 0; coil < 2; coil++) {
+            int y = 5 + coil * 4;
+            for (int x = 3; x <= 12; x++) {
+                int pixel = glow < 0 ? Palette.shade(TRANSFORMER, -0.45) : (x % 2 == 0 ? glow : dim(glow));
+                set(img, x, y, pixel);
+                set(img, x, y + 1, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage transformerTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 6; x++) {
+                set(img, x, y, Palette.shade(TRANSFORMER, -0.3));
+            }
+            for (int x = 9; x <= 12; x++) {
+                set(img, x, y, Palette.shade(TRANSFORMER, -0.3));
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.2));
+            }
+        }
+        set(img, 7, 7, TRANSFORMER);
+        set(img, 8, 8, TRANSFORMER);
         return img;
     }
 

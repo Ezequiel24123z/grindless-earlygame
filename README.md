@@ -223,6 +223,8 @@ pylon positions. Machines resolve their supplying network by querying that index
 - unloaded chunks do not break the network topology.
 
 Network membership is recomputed only on pylon placement, breakage or manual link change.
+Manual edges and capacitor extra live in the same `SavedData` as membership, so an unloaded
+chunk does not drop a trunk or forget a bank (ADR-0064).
 
 ---
 
@@ -1932,7 +1934,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | ✅ done — ADR-0062 |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
-| 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | pending — pylons already cover; this must not obsolete them |
+| 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
 | 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework |
 | 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |

@@ -11,6 +11,7 @@
   "item.grindless.copper_coil": "Copper Coil",
   "item.grindless.slag": "Slag",
   "item.grindless.prospectors_scanner": "Prospector's Scanner",
+  "item.grindless.flux_conduit": "Flux Conduit",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
@@ -27,6 +28,8 @@
   "block.grindless.clay_conduit": "Clay Conduit",
   "block.grindless.hand_pump": "Hand Pump",
   "block.grindless.basic_tank": "Basic Tank",
+  "block.grindless.capacitor_bank": "Capacitor Bank",
+  "block.grindless.flux_transformer": "Flux Transformer",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -80,5 +83,15 @@
   "chat.grindless.splitter.filter": "Filter: %s",
   "chat.grindless.splitter.clear": "Filter cleared",
   "overlay.grindless.scanner.vein": "%s · richness %s",
-  "overlay.grindless.scanner.none": "Not surveyed — right-click to scan"
+  "overlay.grindless.scanner.none": "Not surveyed — right-click to scan",
+
+  "chat.grindless.conduit.marked": "First pylon marked at %s, %s, %s",
+  "chat.grindless.conduit.linked": "Pylons linked — trunk upkeep %s FU/t",
+  "chat.grindless.conduit.unlinked": "Manual link dropped",
+  "chat.grindless.conduit.cleared": "Conduit mark cleared",
+  "chat.grindless.conduit.not_pylon": "Right-click a Flux Pylon",
+  "chat.grindless.conduit.missing": "That pylon is gone",
+  "chat.grindless.conduit.dimension": "Links cannot cross dimensions",
+  "tooltip.grindless.conduit.empty": "Right-click two pylons to link them",
+  "tooltip.grindless.conduit.marked": "First pylon: %s, %s, %s"
 }

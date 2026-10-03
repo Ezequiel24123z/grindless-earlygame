@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    " I ",
+    "IRI",
+    " G "
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "R": { "item": "minecraft:redstone" },
+    "G": { "item": "minecraft:glass" }
+  },
+  "result": { "item": "grindless:flux_conduit" }
+}

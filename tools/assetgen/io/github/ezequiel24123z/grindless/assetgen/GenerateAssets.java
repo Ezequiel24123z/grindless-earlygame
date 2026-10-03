@@ -93,6 +93,8 @@ public final class GenerateAssets {
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
+        written += write(items, "flux_conduit",
+                FormTextures.conduit(Palette.of("flux_conduit", 0x18FFFF)));
         written += write(items, "plate_die", FormTextures.die(Palette.of("plate_die", 0xB0BEC5)));
         written += write(items, "rod_die", FormTextures.die(Palette.of("rod_die", 0x90A4AE)));
         written += write(items, "gear_die", FormTextures.die(Palette.of("gear_die", 0xFFB74D)));

@@ -63,6 +63,8 @@ final class BlockModels {
             case CONDUIT -> conduit();
             case PUMP -> pump();
             case TANK -> tank();
+            case BANK -> bank();
+            case TRANSFORMER -> transformer();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -287,6 +289,24 @@ final class BlockModels {
                 box(2, 0, 2, 14, 2, 14, "cap", "base"),
                 front(3, 2, 3, 13, 13, 13, "top", "side", "front"),
                 box(4, 13, 4, 12, 16, 12, "cap", "cap"));
+    }
+
+    /** A cabinet of cells: a battery rack, not a tank and not a pylon. */
+    private static List<Box> bank() {
+        return List.of(
+                box(1, 0, 1, 15, 2, 15, "cap", "base"),
+                front(2, 2, 2, 14, 14, 14, "top", "side", "front"),
+                box(3, 14, 3, 7, 16, 13, "cap", "cap"),
+                box(9, 14, 3, 13, 16, 13, "cap", "cap"));
+    }
+
+    /** Two coils on a core, with a front face so the tap has a direction. */
+    private static List<Box> transformer() {
+        return List.of(
+                box(1, 0, 2, 15, 3, 14, "cap", "base"),
+                front(5, 3, 5, 11, 14, 11, "top", "side", "front"),
+                box(1, 4, 4, 5, 13, 12, "top", "side"),
+                box(11, 4, 4, 15, 13, 12, "top", "side"));
     }
 
     /** A heavier bore: wider collar and a deeper stack than the Crude Extractor. */

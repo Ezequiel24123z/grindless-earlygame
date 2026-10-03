@@ -50,7 +50,11 @@ public final class BlockCatalogue {
         /** A piston over a well. */
         PUMP,
         /** A squat cylinder with a sight glass. */
-        TANK
+        TANK,
+        /** A rack of cells. Capacity, not coverage. */
+        BANK,
+        /** Two coils on a core. A tap, not a pylon. */
+        TRANSFORMER
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -114,11 +118,14 @@ public final class BlockCatalogue {
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),
             new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP),
-            new Entry("basic_tank", Geometry.TANK, 1, true, BELT));
+            new Entry("basic_tank", Geometry.TANK, 1, true, BELT),
+            new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
+            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag",
-            "prospectors_scanner", "plate_die", "rod_die", "gear_die", "coil_die", "copper_coil");
+            "prospectors_scanner", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
+            "copper_coil");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

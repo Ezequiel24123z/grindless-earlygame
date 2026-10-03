@@ -16,6 +16,8 @@ PICKAXE-OK terrestrial_extractor$
 PICKAXE-OK clay_conduit$
 PICKAXE-OK hand_pump$
 PICKAXE-OK basic_tank$
+PICKAXE-OK capacitor_bank$
+PICKAXE-OK flux_transformer$
 Dropped 1 \[Hand Crank Dynamo\]
 Dropped 1 \[Crude Extractor\]
 Dropped 1 \[Research Terminal\]
@@ -34,3 +36,5 @@ Dropped 1 \[Terrestrial Extractor\]
 Dropped 1 \[Clay Conduit\]
 Dropped 1 \[Hand Pump\]
 Dropped 1 \[Basic Tank\]
+Dropped 1 \[Capacitor Bank\]
+Dropped 1 \[Flux Transformer\]

@@ -17,6 +17,8 @@ import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
+import io.github.ezequiel24123z.grindless.network.CapacitorBankBlock;
+import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
@@ -34,8 +36,9 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>T0 through Slice D. Dynamo, extractors, pylons, terminal, Thermal Generator,
- * process machines, belts, fluids and the T1 extractor have block entities.
+ * <p>T0 through Slice E. Dynamo, extractors, pylons, terminal, Thermal Generator,
+ * process machines, belts, fluids, the T1 extractor, capacitor bank and transformer
+ * have block entities.
  */
 public final class ModBlocks {
 
@@ -114,6 +117,16 @@ public final class ModBlocks {
     public static final RegistrySupplier<BasicTankBlock> BASIC_TANK =
             register("basic_tank",
                     () -> new BasicTankBlock(machine().strength(2.5F)));
+
+    /** T1 storage. Adds capacity to the covering network; no supply cube of its own. */
+    public static final RegistrySupplier<CapacitorBankBlock> CAPACITOR_BANK =
+            register("capacitor_bank",
+                    () -> new CapacitorBankBlock(machine().strength(3.0F)));
+
+    /** T1 tap. Exchanges FU with the covering network at F1. Not a pylon. */
+    public static final RegistrySupplier<FluxTransformerBlock> FLUX_TRANSFORMER =
+            register("flux_transformer",
+                    () -> new FluxTransformerBlock(machine().strength(3.0F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

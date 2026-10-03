@@ -111,6 +111,18 @@ public final class T1Recipes {
                 new Gated("assembler", VOLTAIC,
                         List.of(" G ", "CAC", " G "),
                         Map.of("G", GEAR, "C", CASING, "A", COIL),
-                        "grindless:assembler"));
+                        "grindless:assembler"),
+                new Gated("flux_conduit", VOLTAIC,
+                        List.of(" I ", "IRI", " G "),
+                        Map.of("I", IRON, "R", REDSTONE, "G", GLASS),
+                        "grindless:flux_conduit"),
+                new Gated("capacitor_bank", VOLTAIC,
+                        List.of("IRI", "I I", "IRI"),
+                        Map.of("I", IRON, "R", REDSTONE),
+                        "grindless:capacitor_bank"),
+                new Gated("flux_transformer", VOLTAIC,
+                        List.of("IRI", "CIC", "IRI"),
+                        Map.of("I", IRON, "R", REDSTONE, "C", COBBLE),
+                        "grindless:flux_transformer"));
     }
 }

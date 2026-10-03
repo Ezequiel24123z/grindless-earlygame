@@ -30,6 +30,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Slice E — energy spanning (ADR-0064).** Flux Conduit is a T1 hand item that right-clicks
+  two pylons into a manual link. No length limit; upkeep is `ceil(distance / 8)` FU/t.
+  Capacitor Bank adds 102 400 FU to the covering network and projects no supply cube.
+  Flux Transformer is a covered F1 tap, not a pylon. T2 chassis cores stay ADR-0025.
+  `VerifyNetwork` covers merge, split, upkeep, banks and the F0/F1 cap. CI places the
+  new blocks.
+
 - **Slice D — factory builds factory (ADR-0017, ADR-0063).** Press (4 s F1, die catalyst)
   and Assembler (20 s F1) as real consumers on the shared process menu. Machine Casing
   is 4 plates + 2 rods. T1 coil is copper + coil die; Wire Mill stays T2. Pylon MK2 has

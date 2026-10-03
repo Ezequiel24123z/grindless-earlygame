@@ -50,6 +50,8 @@ public final class MachineEffects {
             case CONDUIT -> belt(status, level, pos, random);
             case PUMP -> mill(status, level, pos, random);
             case TANK -> generator(status, level, pos, random);
+            case BANK -> pylon(1, status, level, pos, random);
+            case TRANSFORMER -> dynamo(status, front, level, pos, random);
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);
