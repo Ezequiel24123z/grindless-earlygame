@@ -30,6 +30,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Slice D — factory builds factory (ADR-0017, ADR-0063).** Press (4 s F1, die catalyst)
+  and Assembler (20 s F1) as real consumers on the shared process menu. Machine Casing
+  is 4 plates + 2 rods. T1 coil is copper + coil die; Wire Mill stays T2. Pylon MK2 has
+  no crafting-table recipe — the Assembler is the only source. Voltaic-gated crafts for
+  Press, four dies, casing and Assembler. `VerifyRecipes` dumps press and assembler
+  recipes. CI places both machines; a hopper cannot steal a die.
+
 - **Slice C — first fluids (ADR-0058, ADR-0062).** `FluidState` is volume + temperature +
   pressure in millibuckets. Clay Conduit (unpowered, ambient liquid, gravity or level),
   Hand Pump (vanilla water source, does not drain it) and Basic Tank (16 B, refuses hot).
