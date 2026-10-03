@@ -8,6 +8,7 @@ setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:coal",Count:1b}]}
 say WAIT-HOPPER
 say WAIT-HOPPER
 execute if data block 8 70 8 Fuel[{id:"minecraft:coal"}] run say FUEL-IN
+execute unless data block 8 70 8 {Burn:0} run say FUEL-IN
 setblock 10 70 8 grindless:pulverizer[facing=south,status=idle]
 execute if block 10 70 8 grindless:pulverizer run say MILL-OK
 setblock 12 70 8 grindless:arc_furnace[facing=south,status=idle]
