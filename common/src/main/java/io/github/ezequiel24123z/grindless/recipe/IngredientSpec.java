@@ -4,7 +4,7 @@ package io.github.ezequiel24123z.grindless.recipe;
  * One process input, as data.
  *
  * <p>Materials are always tags (ADR-0050). Fluids use the same record so the type is one union
- * (ADR-0058); slice A never generates a fluid input.
+ * (ADR-0058). Wet B1 is the first generated fluid input (ADR-0062).
  *
  * @param kind  {@code tag}, {@code item} or {@code fluid}
  * @param id    {@code namespace:path}, such as {@code forge:raw_materials/iron}
@@ -31,6 +31,10 @@ public record IngredientSpec(String kind, String id, int count) {
 
     public static IngredientSpec item(String id, int count) {
         return new IngredientSpec(ITEM, id, count);
+    }
+
+    public static IngredientSpec fluid(String id, int count) {
+        return new IngredientSpec(FLUID, id, count);
     }
 
     public boolean isFluid() {

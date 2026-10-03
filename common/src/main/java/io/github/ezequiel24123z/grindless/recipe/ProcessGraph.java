@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Generates the dry T1 processing line from a material set (ADR-0005, ADR-0058).
+ * Generates the T1 processing line from a material set (ADR-0005, ADR-0058, ADR-0062).
  *
- * <p>Only B0×R1 and B1×R1. Fluids stay empty except the vented CO that R1 names as its sink.
+ * <p>B0×R1, dry B1×R1, and wet B1 (0.5 B water, same crushed yield). CO from R1 stays a
+ * vented output on the recipe; capture is a runtime push into a tank (ADR-0062).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -44,6 +45,7 @@ public final class ProcessGraph {
             if (material.crushed()) {
                 String crushed = crushedTag(material.name());
                 recipes.add(pulverize(material.name(), feed, crushed));
+                recipes.add(wetPulverize(material.name(), feed, crushed));
                 recipes.add(reduce(material.name(), "b1_r1", crushed));
             }
         }
@@ -81,6 +83,24 @@ public final class ProcessGraph {
                 ProcessLogic.FU_PER_TICK);
     }
 
+    /**
+     * Same crushed yield as dry B1, with 0.5 B water. The byproduct step is the Chemical
+     * Washer (B2, T2); this only proves the fluid slot (ADR-0062).
+     */
+    private static ProcessRecipe wetPulverize(String material, String feed, String crushed) {
+        return new ProcessRecipe(
+                "b1_wet/" + material,
+                MachineFamily.PULVERIZER,
+                List.of(
+                        IngredientSpec.tag(feed, 1),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.WATER_MB)),
+                List.of(OutputSpec.tag(crushed, 2)),
+                Double.NaN,
+                null,
+                ProcessLogic.PULVERIZE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
     private static ProcessRecipe reduce(String material, String route, String feed) {
         return new ProcessRecipe(
                 route + "/" + material,
@@ -91,7 +111,7 @@ public final class ProcessGraph {
                 List.of(
                         OutputSpec.tag(ingotTag(material), 1),
                         OutputSpec.item(ProcessLogic.SLAG, 1),
-                        OutputSpec.ventedFluid(ProcessLogic.CARBON_MONOXIDE, 1)),
+                        OutputSpec.ventedFluid(ProcessLogic.CARBON_MONOXIDE, ProcessLogic.CO_MB)),
                 ProcessLogic.REDUCE_TEMPERATURE,
                 ProcessLogic.REDUCE_ATMOSPHERE,
                 ProcessLogic.REDUCE_TICKS,

@@ -22,6 +22,9 @@ public final class ProcessLogic {
     public static final String CARBON = "grindless:carbon";
     public static final String SLAG = "grindless:slag";
     public static final String CARBON_MONOXIDE = "grindless:carbon_monoxide";
+    public static final String WATER = "minecraft:water";
+    public static final int CO_MB = 1000;
+    public static final int WATER_MB = 500;
 
     private ProcessLogic() {
     }

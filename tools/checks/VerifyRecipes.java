@@ -39,10 +39,11 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("iron, gold and mythril generate; steel does not", 7, recipes.size());
+        eq("iron, gold and mythril generate; steel does not", 9, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
+        ProcessRecipe ironWet = recipe(recipes, "b1_wet/iron");
         ProcessRecipe ironR1 = recipe(recipes, "b1_r1/iron");
         ProcessRecipe goldB0 = recipe(recipes, "b0_r1/gold");
         ProcessRecipe mythrilB0 = recipe(recipes, "b0_r1/mythril");
@@ -54,6 +55,7 @@ public final class VerifyRecipes {
         eq("B0×R1 makes one slag", "item:grindless:slag", ironB0.itemOutputs().get(1).qualified());
         eq("B0×R1 vents one CO", "fluid:grindless:carbon_monoxide", ironB0.ventedOutputs().get(0).qualified());
         yes("CO is marked vented", ironB0.ventedOutputs().get(0).vented());
+        eq("CO is one bucket", 1000, ironB0.ventedOutputs().get(0).count());
         eq("R1 is 1500 C", 1500.0, ironB0.temperatureC());
         eq("R1 is reducing", "REDUCING", ironB0.atmosphere());
         eq("R1 is twelve seconds", 20 * 12, ironB0.durationTicks());
@@ -69,6 +71,11 @@ public final class VerifyRecipes {
         yes("B1 names no temperature", !ironB1.namesTemperature());
         yes("B1 names no atmosphere", !ironB1.namesAtmosphere());
         yes("B1 has empty fluid slots", ironB1.fluidInputs().isEmpty() && ironB1.fluidOutputs().isEmpty());
+        eq("wet B1 takes water", "fluid:minecraft:water", ironWet.fluidInputs().get(0).qualified());
+        eq("wet B1 takes half a bucket", 500, ironWet.fluidInputs().get(0).count());
+        eq("wet B1 still makes two crushed", 2, ironWet.itemOutputs().get(0).count());
+        eq("wet B1 is still the pulverizer", MachineFamily.PULVERIZER, ironWet.family());
+        yes("wet B1 is not a slurry step", ironWet.itemOutputs().size() == 1 && ironWet.ventedOutputs().isEmpty());
 
         eq("B1×R1 feeds crushed", "tag:grindless:crushed_materials/iron",
                 ironR1.itemInputs().get(0).qualified());
@@ -134,7 +141,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships nine gated crafts", 9, T1Recipes.gated().size());
+        eq("T1 ships twelve gated crafts", 12, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
     }

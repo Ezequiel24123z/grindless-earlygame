@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
@@ -47,7 +48,8 @@ public final class ProcessLookup {
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
-        Grindless.LOG.info("[{}] {} process recipes (B0×R1 / B1×R1)", Grindless.MOD_NAME, recipes.size());
+        Grindless.LOG.info("[{}] {} process recipes (B0×R1 / B1 / B1 wet / B1×R1)",
+                Grindless.MOD_NAME, recipes.size());
     }
 
     public static List<ProcessRecipe> recipes() {
@@ -60,6 +62,15 @@ public final class ProcessLookup {
      * <p>Indexed by the primary input's tags so a full scan is the miss path, not the hit path.
      */
     public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs) {
+        return find(family, inputs, FluidState.EMPTY);
+    }
+
+    /**
+     * The recipe this family should run. A wet mill wins over dry B1 when the fluid buffer
+     * already holds enough water (ADR-0062).
+     */
+    public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs,
+                                               FluidState fluid) {
         if (inputs.length == 0 || inputs[0].isEmpty()) {
             return Optional.empty();
         }
@@ -76,12 +87,29 @@ public final class ProcessLookup {
         if (byItem != null) {
             keyed.addAll(byItem);
         }
+        Optional<ProcessRecipe> dry = Optional.empty();
         for (ProcessRecipe recipe : keyed) {
-            if (recipe.family() == family && matches(recipe, inputs)) {
+            if (recipe.family() != family || !matches(recipe, inputs) || !matchesFluid(recipe, fluid)) {
+                continue;
+            }
+            if (!recipe.fluidInputs().isEmpty()) {
                 return Optional.of(recipe);
             }
+            dry = Optional.of(recipe);
         }
-        return Optional.empty();
+        return dry;
+    }
+
+    public static boolean matchesFluid(ProcessRecipe recipe, FluidState fluid) {
+        List<IngredientSpec> needed = recipe.fluidInputs();
+        if (needed.isEmpty()) {
+            return true;
+        }
+        if (fluid == null || fluid.isEmpty()) {
+            return false;
+        }
+        IngredientSpec spec = needed.get(0);
+        return fluid.is(spec.id()) && fluid.millibuckets() >= spec.count();
     }
 
     /** Whether {@code stack} is a legal insert for this family's input {@code slot}. */
