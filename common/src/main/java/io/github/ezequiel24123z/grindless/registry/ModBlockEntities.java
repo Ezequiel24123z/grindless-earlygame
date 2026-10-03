@@ -16,6 +16,8 @@ import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlockEntity;
+import io.github.ezequiel24123z.grindless.network.CapacitorBankBlockEntity;
+import io.github.ezequiel24123z.grindless.network.FluxTransformerBlockEntity;
 import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -150,6 +152,18 @@ public final class ModBlockEntities {
                                     ModBlocks.FLUX_PYLON_MK1.get(),
                                     ModBlocks.FLUX_PYLON_MK2.get(),
                                     ModBlocks.FLUX_PYLON_MK3.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<CapacitorBankBlockEntity>> CAPACITOR_BANK =
+            BLOCK_ENTITIES.register("capacitor_bank",
+                    () -> BlockEntityType.Builder
+                            .of(CapacitorBankBlockEntity::new, ModBlocks.CAPACITOR_BANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<FluxTransformerBlockEntity>> FLUX_TRANSFORMER =
+            BLOCK_ENTITIES.register("flux_transformer",
+                    () -> BlockEntityType.Builder
+                            .of(FluxTransformerBlockEntity::new, ModBlocks.FLUX_TRANSFORMER.get())
                             .build(null));
 
     private ModBlockEntities() {

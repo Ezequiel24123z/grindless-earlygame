@@ -238,6 +238,27 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the Flux Conduit: a wound cable on a grip. See {@link #dataCore}. */
+    public static BufferedImage conduit(Palette palette) {
+        HeightField field = new HeightField();
+        double centreX = 8.0;
+        double centreY = 6.0;
+        for (int y = 1; y <= 10; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double radius = Math.hypot(x - centreX, y - centreY);
+                if (radius <= 5.2 && radius >= 2.2) {
+                    double across = 1.0 - Math.abs((radius - 3.7) / 1.5);
+                    double wind = 0.5 * Math.max(0, Math.cos(Math.atan2(y - centreY, x - centreX) * 5));
+                    field.set(x, y, 2.4 + 2.0 * Math.max(0, across) + wind);
+                }
+            }
+        }
+        field.rect(7, 10, 9, 14, 3.0);
+        field.rect(6, 13, 10, 14, 3.4);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Multitool: a handle with a head. See {@link #dataCore}. */
     public static BufferedImage multitool(Palette palette) {
         HeightField field = new HeightField();

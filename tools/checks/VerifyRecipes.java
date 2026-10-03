@@ -181,13 +181,19 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships nineteen gated crafts", 19, T1Recipes.gated().size());
+        eq("T1 ships twenty-two gated crafts", 22, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("assembler")));
         yes("the press is hand-crafted",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("press")));
+        yes("the conduit is a hand item",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_conduit")));
+        yes("the capacitor is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("capacitor_bank")));
+        yes("the transformer is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
         no("MK2 has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
     }

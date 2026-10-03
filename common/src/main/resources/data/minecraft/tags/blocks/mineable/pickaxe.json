@@ -19,6 +19,8 @@
     "grindless:clay_conduit",
     "grindless:hand_pump",
     "grindless:basic_tank",
+    "grindless:capacitor_bank",
+    "grindless:flux_transformer",
     "grindless:flux_pylon_shaft"
   ]
 }

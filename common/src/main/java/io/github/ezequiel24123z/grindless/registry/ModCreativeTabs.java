@@ -47,6 +47,7 @@ public final class ModCreativeTabs {
                 lazy(ModItems.COPPER_COIL),
                 lazy(ModItems.SLAG),
                 lazy(ModItems.PROSPECTORS_SCANNER),
+                lazy(ModItems.FLUX_CONDUIT),
                 lazy(ModBlocks.HAND_CRANK_DYNAMO),
                 lazy(ModBlocks.CRUDE_EXTRACTOR),
                 lazy(ModBlocks.RESEARCH_TERMINAL),
@@ -62,6 +63,8 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.CLAY_CONDUIT),
                 lazy(ModBlocks.HAND_PUMP),
                 lazy(ModBlocks.BASIC_TANK),
+                lazy(ModBlocks.CAPACITOR_BANK),
+                lazy(ModBlocks.FLUX_TRANSFORMER),
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));

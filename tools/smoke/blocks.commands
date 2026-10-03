@@ -52,3 +52,9 @@ loot spawn 8 102 8 loot grindless:blocks/hand_pump
 setblock 8 100 8 grindless:basic_tank
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK basic_tank
 loot spawn 8 102 8 loot grindless:blocks/basic_tank
+setblock 8 100 8 grindless:capacitor_bank
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK capacitor_bank
+loot spawn 8 102 8 loot grindless:blocks/capacitor_bank
+setblock 8 100 8 grindless:flux_transformer
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK flux_transformer
+loot spawn 8 102 8 loot grindless:blocks/flux_transformer

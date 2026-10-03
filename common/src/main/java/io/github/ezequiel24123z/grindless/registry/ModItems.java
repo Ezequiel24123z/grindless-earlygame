@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
+import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
 import net.minecraft.core.registries.Registries;
@@ -17,8 +18,8 @@ import java.util.function.Supplier;
 /**
  * Items, and the register every block item is also added to.
  *
- * <p>Bootstrap items plus Slice D fabrication (dies, coil, casing). Motors and circuit boards
- * arrive with T2.
+ * <p>Bootstrap items plus Slice D fabrication (dies, coil, casing) and the Slice E
+ * linker. Motors and circuit boards arrive with T2.
  */
 public final class ModItems {
 
@@ -63,6 +64,10 @@ public final class ModItems {
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));
+
+    /** T1 handheld. Right-click two pylons to join them across any distance. */
+    public static final RegistrySupplier<Item> FLUX_CONDUIT = register("flux_conduit",
+            () -> new FluxConduitItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

@@ -5,6 +5,7 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -46,6 +47,23 @@ public final class PylonStructure {
     /** The base beneath a shaft of {@code index}. */
     public static BlockPos baseOf(BlockPos shaft, int index) {
         return shaft.below(index);
+    }
+
+    /**
+     * The pylon base at or under {@code pos}, or {@code null} if this is not a pylon tower.
+     *
+     * <p>The Flux Conduit is aimed at a tower, not at a specific third of it. Clicking a shaft
+     * must resolve to the base that is actually in the network.
+     */
+    public static BlockPos resolveBase(BlockGetter level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof PylonBlock) {
+            return pos;
+        }
+        if (state.getBlock() instanceof PylonShaftBlock) {
+            return baseOf(pos, state.getValue(PylonShaftBlock.INDEX));
+        }
+        return null;
     }
 
     /** Whether the two blocks above {@code base} can be replaced by shafts. */

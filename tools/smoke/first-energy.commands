@@ -1,0 +1,13 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 10 71 8 minecraft:air
+setblock 8 70 8 grindless:capacitor_bank[facing=south,status=idle]
+execute if block 8 70 8 grindless:capacitor_bank run say CAPACITOR-OK
+setblock 10 70 8 grindless:flux_transformer[facing=south,status=idle]
+execute if block 10 70 8 grindless:flux_transformer run say TRANSFORMER-OK
+setblock 12 70 8 grindless:flux_pylon_mk1
+execute if block 12 70 8 grindless:flux_pylon_mk1 run say PYLON-STAYS

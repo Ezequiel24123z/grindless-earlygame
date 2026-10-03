@@ -1,0 +1,60 @@
+{
+  "textures": {
+    "base": "grindless:block/casing_side",
+    "cap": "grindless:block/casing_top",
+    "front": "grindless:block/transformer_front_starved",
+    "top": "grindless:block/transformer_top",
+    "side": "grindless:block/casing_side",
+    "particle": "grindless:block/casing_side"
+  },
+  "elements": [
+    {
+      "from": [1, 0, 2],
+      "to": [15, 3, 14],
+      "faces": {
+        "up": { "texture": "#cap" },
+        "down": { "texture": "#cap" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east": { "texture": "#base" },
+        "west": { "texture": "#base" }
+      }
+    },
+    {
+      "from": [5, 3, 5],
+      "to": [11, 14, 11],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#front", "uv": [0, 0, 16, 16] },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [1, 4, 4],
+      "to": [5, 13, 12],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [11, 4, 4],
+      "to": [15, 13, 12],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    }
+  ]
+}
