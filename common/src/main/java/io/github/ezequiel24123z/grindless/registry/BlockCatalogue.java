@@ -40,11 +40,20 @@ public final class BlockCatalogue {
         /** A short arm on a post. */
         MANIPULATOR,
         /** A heavier bore than the Crude Extractor. */
-        DRILL
+        DRILL,
+        /** An open trough that liquid runs along. */
+        CONDUIT,
+        /** A piston over a well. */
+        PUMP,
+        /** A squat cylinder with a sight glass. */
+        TANK
     }
 
     /** Belts and arms: they carry items or they do not. */
     public static final List<String> BELT = List.of("idle", "running");
+
+    /** A pump: it has a source, or it does not. */
+    public static final List<String> PUMP = List.of("idle", "running", "starved");
 
     /** A generator: it can have charge it cannot give away, but is never starved. */
     public static final List<String> GENERATOR = List.of("idle", "running", "blocked");
@@ -96,7 +105,10 @@ public final class BlockCatalogue {
             new Entry("conveyor_belt", Geometry.BELT, 1, true, BELT),
             new Entry("splitter", Geometry.SPLITTER, 1, true, BELT),
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
-            new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER));
+            new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
+            new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),
+            new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP),
+            new Entry("basic_tank", Geometry.TANK, 1, true, BELT));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag",

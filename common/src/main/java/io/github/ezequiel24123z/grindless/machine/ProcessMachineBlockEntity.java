@@ -1,7 +1,13 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
+import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.github.ezequiel24123z.grindless.container.ItemInsert;
+import io.github.ezequiel24123z.grindless.fluid.FluidBuffer;
+import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.fluid.FluidNbt;
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuHost;
@@ -41,20 +47,23 @@ import java.util.Optional;
  * Shared consumer for the Pulverizer and Arc Furnace.
  *
  * <p>Looks up a generated {@link ProcessRecipe}, draws F1, and writes progress. Gaseous outputs
- * are vented — they are a named sink, not a missing tank (ADR-0036, ADR-0058). Hoppers and
- * neighbouring inventories are the logistics.
+ * push into an adjacent tank when one will take them, and vent otherwise (ADR-0036, ADR-0062).
+ * Hoppers and neighbouring inventories are the item logistics; conduits and tanks are the fluid
+ * logistics.
  */
 public final class ProcessMachineBlockEntity extends MachineBlockEntity
-        implements WorldlyContainer, ExtendedMenuProvider, MachineMenuHost {
+        implements WorldlyContainer, ExtendedMenuProvider, MachineMenuHost, FluidEndpoint {
 
     private static final String KEY_PROGRESS = "Progress";
     private static final String KEY_ITEMS = "Items";
     private static final String KEY_RECIPE = "Recipe";
+    private static final String KEY_FLUID = "Fluid";
 
     private final ProcessMachineKind kind;
     private final SimpleContainer items;
     private final StatusDebounce display = new StatusDebounce();
     private final SimpleContainerData data = new SimpleContainerData(ProcessMachineMenu.DATA_SIZE);
+    private final FluidBuffer fluid = FluidBuffer.ambient(FluidLogic.MACHINE_CAPACITY);
     private final int[] inputSlots;
     private final int[] outputSlots;
     private final int[] allSlots;
@@ -145,6 +154,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private void work() {
+        pullFluids();
         ProcessRecipe recipe = recipe();
         if (recipe == null) {
             progress = 0.0;
@@ -212,6 +222,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             }
         }
         pushOutputs();
+        captureOrVent(recipe);
+        consumeFluid(recipe);
         return true;
     }
 
@@ -296,7 +308,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (cached != null) {
             return cached;
         }
-        Optional<ProcessRecipe> found = ProcessLookup.find(kind.family(), inputs());
+        Optional<ProcessRecipe> found = ProcessLookup.find(kind.family(), inputs(), fluid.state());
         cached = found.orElse(null);
         cachedRecipeId = cached == null ? "" : cached.id();
         return cached;
@@ -308,6 +320,99 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             stacks[i] = items.getItem(i);
         }
         return stacks;
+    }
+
+    private void pullFluids() {
+        if (getLevel() == null || fluid.space() <= 0) {
+            return;
+        }
+        for (Direction side : Direction.values()) {
+            if (fluid.space() <= 0) {
+                break;
+            }
+            net.minecraft.world.level.block.entity.BlockEntity neighbour =
+                    getLevel().getBlockEntity(getBlockPos().relative(side));
+            if (!(neighbour instanceof FluidEndpoint endpoint)
+                    || !endpoint.canExtract(side.getOpposite())) {
+                continue;
+            }
+            FluidState taken = endpoint.extract(side.getOpposite(),
+                    Math.min(FluidLogic.CONDUIT_MB_PER_TICK, fluid.space()));
+            FluidState leftover = fluid.offer(taken);
+            if (!leftover.isEmpty()) {
+                endpoint.insert(side.getOpposite(), leftover);
+            }
+            if (!taken.isEmpty()) {
+                cached = null;
+                cachedRecipeId = "";
+                setChanged();
+            }
+        }
+    }
+
+    private void consumeFluid(ProcessRecipe recipe) {
+        for (var spec : recipe.fluidInputs()) {
+            fluid.extract(spec.id(), spec.count());
+        }
+        cached = null;
+        cachedRecipeId = "";
+    }
+
+    private void captureOrVent(ProcessRecipe recipe) {
+        if (getLevel() == null) {
+            return;
+        }
+        for (OutputSpec output : recipe.fluidOutputs()) {
+            FluidState remaining = FluidState.of(output.id(), output.count());
+            for (Direction side : Direction.values()) {
+                if (remaining.isEmpty()) {
+                    break;
+                }
+                remaining = FluidInsert.intoNeighbour(getLevel(), getBlockPos(), side, remaining);
+            }
+        }
+    }
+
+    @Override
+    public boolean canInsert(Direction from, FluidState state) {
+        return fluid.accepted(state) > 0;
+    }
+
+    @Override
+    public FluidState insert(Direction from, FluidState state) {
+        FluidState leftover = fluid.offer(state);
+        if (leftover.millibuckets() != (state == null ? 0 : state.millibuckets())) {
+            cached = null;
+            cachedRecipeId = "";
+            setChanged();
+        }
+        return leftover;
+    }
+
+    @Override
+    public boolean canExtract(Direction from) {
+        return !fluid.isEmpty();
+    }
+
+    @Override
+    public FluidState extract(Direction from, int millibuckets) {
+        FluidState taken = fluid.extract(null, millibuckets);
+        if (!taken.isEmpty()) {
+            cached = null;
+            cachedRecipeId = "";
+            setChanged();
+        }
+        return taken;
+    }
+
+    @Override
+    public FluidState contents() {
+        return fluid.state();
+    }
+
+    @Override
+    public int capacity() {
+        return fluid.capacity();
     }
 
     private boolean hasPartialInput() {
@@ -357,6 +462,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         tag.putDouble(KEY_PROGRESS, progress);
         tag.put(KEY_ITEMS, items.createTag());
         tag.putString(KEY_RECIPE, cachedRecipeId);
+        tag.put(KEY_FLUID, FluidNbt.save(fluid.state()));
     }
 
     @Override
@@ -366,6 +472,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         items.fromTag(tag.getList(KEY_ITEMS, net.minecraft.nbt.Tag.TAG_COMPOUND));
         cachedRecipeId = tag.getString(KEY_RECIPE);
         cached = null;
+        fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
         syncData();
     }
 

@@ -3,6 +3,9 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
+import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
+import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
 import io.github.ezequiel24123z.grindless.belt.BeltBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
@@ -31,8 +34,8 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>T0 through Slice B. Dynamo, extractors, pylons, terminal, Thermal Generator,
- * Pulverizer, Arc Furnace, belts, splitter and manipulator have block entities.
+ * <p>T0 through Slice C. Dynamo, extractors, pylons, terminal, Thermal Generator,
+ * Pulverizer, Arc Furnace, belts, fluids and the T1 extractor have block entities.
  */
 public final class ModBlocks {
 
@@ -86,6 +89,21 @@ public final class ModBlocks {
     public static final RegistrySupplier<TerrestrialExtractorBlock> TERRESTRIAL_EXTRACTOR =
             register("terrestrial_extractor",
                     () -> new TerrestrialExtractorBlock(machine().strength(3.5F)));
+
+    /** T1 gravity pipe. Ambient liquids only. */
+    public static final RegistrySupplier<ClayConduitBlock> CLAY_CONDUIT =
+            register("clay_conduit",
+                    () -> new ClayConduitBlock(machine().strength(1.5F)));
+
+    /** T1 unpowered water source. */
+    public static final RegistrySupplier<HandPumpBlock> HAND_PUMP =
+            register("hand_pump",
+                    () -> new HandPumpBlock(machine().strength(2.0F)));
+
+    /** T1 tank. Unpressurised; refuses hot fluid. */
+    public static final RegistrySupplier<BasicTankBlock> BASIC_TANK =
+            register("basic_tank",
+                    () -> new BasicTankBlock(machine().strength(2.5F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

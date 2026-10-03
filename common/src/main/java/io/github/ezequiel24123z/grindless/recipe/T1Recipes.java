@@ -66,6 +66,18 @@ public final class T1Recipes {
                 new Gated("prospectors_scanner", VOLTAIC,
                         List.of("GIG", "IRI", " C "),
                         Map.of("G", GLASS, "I", IRON, "R", REDSTONE, "C", COBBLE),
-                        "grindless:prospectors_scanner"));
+                        "grindless:prospectors_scanner"),
+                new Gated("clay_conduit", VOLTAIC,
+                        List.of("CCC", "LIL", "CCC"),
+                        Map.of("C", COBBLE, "L", "item:minecraft:clay_ball", "I", IRON),
+                        "grindless:clay_conduit"),
+                new Gated("hand_pump", VOLTAIC,
+                        List.of(" C ", "CIC", " C "),
+                        Map.of("C", COBBLE, "I", IRON),
+                        "grindless:hand_pump"),
+                new Gated("basic_tank", VOLTAIC,
+                        List.of("CGC", "G G", "CIC"),
+                        Map.of("C", COBBLE, "G", GLASS, "I", IRON),
+                        "grindless:basic_tank"));
     }
 }

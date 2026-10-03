@@ -3,6 +3,9 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.fluid.BasicTankBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlockEntity;
@@ -104,6 +107,24 @@ public final class ModBlockEntities {
                     () -> BlockEntityType.Builder
                             .of(TerrestrialExtractorBlockEntity::new,
                                     ModBlocks.TERRESTRIAL_EXTRACTOR.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ClayConduitBlockEntity>> CLAY_CONDUIT =
+            BLOCK_ENTITIES.register("clay_conduit",
+                    () -> BlockEntityType.Builder
+                            .of(ClayConduitBlockEntity::new, ModBlocks.CLAY_CONDUIT.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<HandPumpBlockEntity>> HAND_PUMP =
+            BLOCK_ENTITIES.register("hand_pump",
+                    () -> BlockEntityType.Builder
+                            .of(HandPumpBlockEntity::new, ModBlocks.HAND_PUMP.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<BasicTankBlockEntity>> BASIC_TANK =
+            BLOCK_ENTITIES.register("basic_tank",
+                    () -> BlockEntityType.Builder
+                            .of(BasicTankBlockEntity::new, ModBlocks.BASIC_TANK.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<PylonBlockEntity>> FLUX_PYLON =

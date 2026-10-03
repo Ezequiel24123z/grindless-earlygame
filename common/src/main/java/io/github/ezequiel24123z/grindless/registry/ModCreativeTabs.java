@@ -52,6 +52,9 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.SPLITTER),
                 lazy(ModBlocks.CRUDE_MANIPULATOR),
                 lazy(ModBlocks.TERRESTRIAL_EXTRACTOR),
+                lazy(ModBlocks.CLAY_CONDUIT),
+                lazy(ModBlocks.HAND_PUMP),
+                lazy(ModBlocks.BASIC_TANK),
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));

@@ -1,6 +1,9 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
+import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.container.NeighbourCache;
 import io.github.ezequiel24123z.grindless.energy.FluxStorage;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
@@ -132,20 +135,55 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     }
 
     private boolean canIgnite() {
-        return FuelPlatform.burnTicks(fuel.getItem(0)) > 0;
+        return FuelPlatform.burnTicks(fuel.getItem(0)) > 0 || neighbourHasCo();
+    }
+
+    private boolean neighbourHasCo() {
+        if (getLevel() == null) {
+            return false;
+        }
+        for (Direction side : Direction.values()) {
+            var neighbour = getLevel().getBlockEntity(getBlockPos().relative(side));
+            if (neighbour instanceof FluidEndpoint endpoint && endpoint.canExtract(side.getOpposite())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean tryIgnite() {
         ItemStack stack = fuel.getItem(0);
         int ticks = FuelPlatform.burnTicks(stack);
-        if (ticks <= 0) {
+        if (ticks > 0) {
+            stack.shrink(1);
+            fuel.setItem(0, stack);
+            burnRemaining = ticks;
+            burnDuration = ticks;
+            return true;
+        }
+        return tryIgniteCo();
+    }
+
+    private boolean tryIgniteCo() {
+        if (getLevel() == null) {
             return false;
         }
-        stack.shrink(1);
-        fuel.setItem(0, stack);
-        burnRemaining = ticks;
-        burnDuration = ticks;
-        return true;
+        for (Direction side : Direction.values()) {
+            var neighbour = getLevel().getBlockEntity(getBlockPos().relative(side));
+            if (!(neighbour instanceof FluidEndpoint endpoint) || !endpoint.canExtract(side.getOpposite())) {
+                continue;
+            }
+            FluidState taken = endpoint.extract(side.getOpposite(), FluidLogic.CO_MB);
+            if (taken.is(FluidLogic.CARBON_MONOXIDE) && taken.millibuckets() >= FluidLogic.CO_MB) {
+                burnRemaining = FluidLogic.CO_BURN_TICKS;
+                burnDuration = FluidLogic.CO_BURN_TICKS;
+                return true;
+            }
+            if (!taken.isEmpty()) {
+                endpoint.insert(side.getOpposite(), taken);
+            }
+        }
+        return false;
     }
 
     private void push() {

@@ -45,6 +45,9 @@ public final class MachineEffects {
             case SPLITTER -> belt(status, level, pos, random);
             case MANIPULATOR -> manipulator(status, front, level, pos, random);
             case DRILL -> extractor(status, level, pos, random);
+            case CONDUIT -> belt(status, level, pos, random);
+            case PUMP -> mill(status, level, pos, random);
+            case TANK -> generator(status, level, pos, random);
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);
