@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PGP",
+    "PCP"
+  ],
+  "key": {
+    "P": { "tag": "minecraft:planks" },
+    "G": { "item": "minecraft:glass" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:research_terminal" }
+}

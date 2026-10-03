@@ -1,0 +1,10 @@
+# The Gradle wrapper scripts must keep the line endings their interpreter expects.
+# gradlew is run by sh on Linux, macOS and CI, where CRLF makes it fail with a
+# "bad interpreter" error that gives no hint about line endings.
+gradlew      text eol=lf
+gradlew.bat  text eol=crlf
+
+# Never let a text filter corrupt binaries.
+*.jar  binary
+*.png  binary
+*.ogg  binary

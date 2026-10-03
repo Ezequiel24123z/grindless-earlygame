@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:bolts/iron",
+    "#grindless:bolts/copper",
+    "#grindless:bolts/gold",
+    "#grindless:bolts/tin",
+    "#grindless:bolts/lead",
+    "#grindless:bolts/silver",
+    "#grindless:bolts/nickel",
+    "#grindless:bolts/zinc",
+    "#grindless:bolts/aluminium",
+    "#grindless:bolts/titanium",
+    "#grindless:bolts/tungsten",
+    "#grindless:bolts/platinum",
+    "#grindless:bolts/steel"
+  ]
+}

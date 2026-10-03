@@ -1,0 +1,8 @@
+forceload add 0 0
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 8 70 8 grindless:research_terminal[facing=south,status=idle]
+execute if block 8 70 8 grindless:research_terminal run say TERMINAL-OK
+data get block 8 70 8
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"grindless:data_core",Count:1b}]}
+execute if data block 8 70 8 Input[{id:"grindless:data_core"}] run say CORE-IN

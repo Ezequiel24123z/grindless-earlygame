@@ -1,0 +1,225 @@
+package io.github.ezequiel24123z.grindless.recipe;
+
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
+import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.material.Material;
+import io.github.ezequiel24123z.grindless.material.MaterialForm;
+import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.process.Atmosphere;
+import io.github.ezequiel24123z.grindless.process.ProcessConditions;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * The live process graph: generated from the current tag scan and indexed for lookup (ADR-0043).
+ *
+ * <p>Replaced wholesale on every material rebuild. A machine caches the recipe it is running and
+ * drops that cache when inputs change; it never walks the whole list.
+ */
+public final class ProcessLookup {
+
+    private static volatile Graph GRAPH = Graph.EMPTY;
+
+    private ProcessLookup() {
+    }
+
+    /** Rebuilds from the current material snapshot. Called next to {@link MaterialRegistry#rebuild}. */
+    public static void rebuild(MaterialSnapshot snapshot) {
+        List<ProcessGraph.MaterialView> views = new ArrayList<>();
+        for (Material material : snapshot.materials()) {
+            views.add(new ProcessGraph.MaterialView(
+                    material.name(),
+                    material.has(MaterialForm.RAW),
+                    material.has(MaterialForm.ORE),
+                    material.has(MaterialForm.CRUSHED),
+                    material.has(MaterialForm.INGOT)));
+        }
+        List<ProcessRecipe> recipes = ProcessGraph.generate(views);
+        GRAPH = Graph.index(recipes);
+        Grindless.LOG.info("[{}] {} process recipes (B0×R1 / B1 / B1 wet / B1×R1)",
+                Grindless.MOD_NAME, recipes.size());
+    }
+
+    public static List<ProcessRecipe> recipes() {
+        return GRAPH.recipes;
+    }
+
+    /**
+     * The recipe this family should run for {@code inputs}, or empty when none matches.
+     *
+     * <p>Indexed by the primary input's tags so a full scan is the miss path, not the hit path.
+     */
+    public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs) {
+        return find(family, inputs, FluidState.EMPTY);
+    }
+
+    /**
+     * The recipe this family should run. A wet mill wins over dry B1 when the fluid buffer
+     * already holds enough water (ADR-0062).
+     */
+    public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs,
+                                               FluidState fluid) {
+        if (inputs.length == 0 || inputs[0].isEmpty()) {
+            return Optional.empty();
+        }
+        Graph graph = GRAPH;
+        List<ProcessRecipe> keyed = new ArrayList<>();
+        inputs[0].getTags().forEach(tag -> {
+            List<ProcessRecipe> found = graph.byTag.get(key(family, tag.location().toString()));
+            if (found != null) {
+                keyed.addAll(found);
+            }
+        });
+        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(inputs[0].getItem());
+        List<ProcessRecipe> byItem = graph.byTag.get(key(family, "item:" + itemId));
+        if (byItem != null) {
+            keyed.addAll(byItem);
+        }
+        Optional<ProcessRecipe> dry = Optional.empty();
+        for (ProcessRecipe recipe : keyed) {
+            if (recipe.family() != family || !matches(recipe, inputs) || !matchesFluid(recipe, fluid)) {
+                continue;
+            }
+            if (!recipe.fluidInputs().isEmpty()) {
+                return Optional.of(recipe);
+            }
+            dry = Optional.of(recipe);
+        }
+        return dry;
+    }
+
+    public static boolean matchesFluid(ProcessRecipe recipe, FluidState fluid) {
+        List<IngredientSpec> needed = recipe.fluidInputs();
+        if (needed.isEmpty()) {
+            return true;
+        }
+        if (fluid == null || fluid.isEmpty()) {
+            return false;
+        }
+        IngredientSpec spec = needed.get(0);
+        return fluid.is(spec.id()) && fluid.millibuckets() >= spec.count();
+    }
+
+    /** Whether {@code stack} is a legal insert for this family's input {@code slot}. */
+    public static boolean accepts(MachineFamily family, int slot, ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+        Graph graph = GRAPH;
+        List<ProcessRecipe> recipes = graph.byFamily.getOrDefault(family, List.of());
+        for (ProcessRecipe recipe : recipes) {
+            List<IngredientSpec> inputs = recipe.itemInputs();
+            if (slot < inputs.size() && matches(inputs.get(slot), stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean matches(ProcessRecipe recipe, ItemStack[] inputs) {
+        List<IngredientSpec> needed = recipe.itemInputs();
+        if (inputs.length < needed.size()) {
+            return false;
+        }
+        for (int i = 0; i < needed.size(); i++) {
+            if (!matches(needed.get(i), inputs[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean matches(IngredientSpec spec, ItemStack stack) {
+        if (stack.isEmpty() || stack.getCount() < spec.count()) {
+            return false;
+        }
+        if (IngredientSpec.ITEM.equals(spec.kind())) {
+            return BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id());
+        }
+        if (IngredientSpec.TAG.equals(spec.kind())) {
+            return stack.is(TagKey.create(Registries.ITEM, new ResourceLocation(spec.id())));
+        }
+        return false;
+    }
+
+    /** Resolves an item output to a stack, honouring the pack's preferred provider. */
+    public static Optional<ItemStack> resolve(OutputSpec output) {
+        if (output.vented() || output.isFluid()) {
+            return Optional.empty();
+        }
+        if (IngredientSpec.ITEM.equals(output.kind())) {
+            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(output.id()));
+            return item == null ? Optional.empty() : Optional.of(new ItemStack(item, output.count()));
+        }
+        ResourceLocation tag = new ResourceLocation(output.id());
+        int slash = tag.getPath().lastIndexOf('/');
+        if (slash < 0) {
+            return Optional.empty();
+        }
+        String formPath = tag.getPath().substring(0, slash);
+        String material = tag.getPath().substring(slash + 1);
+        MaterialForm form = MaterialForm.byTagPath(formPath);
+        if (form == null) {
+            return Optional.empty();
+        }
+        return MaterialRegistry.output(material, form)
+                .map(id -> new ItemStack(BuiltInRegistries.ITEM.get(id), output.count()));
+    }
+
+    public static ProcessConditions conditionsOf(ProcessRecipe recipe) {
+        ProcessConditions.Builder builder = ProcessConditions.builder();
+        if (recipe.namesTemperature()) {
+            builder.temperature(recipe.temperatureC());
+        }
+        if (recipe.namesAtmosphere()) {
+            Atmosphere atmosphere = Atmosphere.valueOf(recipe.atmosphere());
+            builder.atmosphere(atmosphere);
+        }
+        return builder.build();
+    }
+
+    private static String key(MachineFamily family, String id) {
+        return family.name() + "|" + id;
+    }
+
+    private record Graph(
+            List<ProcessRecipe> recipes,
+            Map<MachineFamily, List<ProcessRecipe>> byFamily,
+            Map<String, List<ProcessRecipe>> byTag) {
+
+        static final Graph EMPTY = new Graph(List.of(), Map.of(), Map.of());
+
+        static Graph index(List<ProcessRecipe> recipes) {
+            Map<MachineFamily, List<ProcessRecipe>> byFamily = new EnumMap<>(MachineFamily.class);
+            Map<String, List<ProcessRecipe>> byTag = new HashMap<>();
+            for (ProcessRecipe recipe : recipes) {
+                byFamily.computeIfAbsent(recipe.family(), ignored -> new ArrayList<>()).add(recipe);
+                if (recipe.itemInputs().isEmpty()) {
+                    continue;
+                }
+                IngredientSpec primary = recipe.itemInputs().get(0);
+                String id = IngredientSpec.ITEM.equals(primary.kind())
+                        ? "item:" + primary.id()
+                        : primary.id();
+                byTag.computeIfAbsent(key(recipe.family(), id), ignored -> new ArrayList<>()).add(recipe);
+            }
+            Map<MachineFamily, List<ProcessRecipe>> frozenFamily = new EnumMap<>(MachineFamily.class);
+            byFamily.forEach((family, list) -> frozenFamily.put(family, List.copyOf(list)));
+            Map<String, List<ProcessRecipe>> frozenTags = new HashMap<>();
+            byTag.forEach((key, list) -> frozenTags.put(key, List.copyOf(list)));
+            return new Graph(List.copyOf(recipes), Map.copyOf(frozenFamily), Map.copyOf(frozenTags));
+        }
+    }
+}

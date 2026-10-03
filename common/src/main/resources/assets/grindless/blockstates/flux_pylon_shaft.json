@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "index=1,status=idle,tier=1": { "model": "grindless:block/flux_pylon_mk1_part1_idle" },
+    "index=1,status=running,tier=1": { "model": "grindless:block/flux_pylon_mk1_part1_running" },
+    "index=1,status=starved,tier=1": { "model": "grindless:block/flux_pylon_mk1_part1_starved" },
+    "index=2,status=idle,tier=1": { "model": "grindless:block/flux_pylon_mk1_part2_idle" },
+    "index=2,status=running,tier=1": { "model": "grindless:block/flux_pylon_mk1_part2_running" },
+    "index=2,status=starved,tier=1": { "model": "grindless:block/flux_pylon_mk1_part2_starved" },
+    "index=1,status=idle,tier=2": { "model": "grindless:block/flux_pylon_mk2_part1_idle" },
+    "index=1,status=running,tier=2": { "model": "grindless:block/flux_pylon_mk2_part1_running" },
+    "index=1,status=starved,tier=2": { "model": "grindless:block/flux_pylon_mk2_part1_starved" },
+    "index=2,status=idle,tier=2": { "model": "grindless:block/flux_pylon_mk2_part2_idle" },
+    "index=2,status=running,tier=2": { "model": "grindless:block/flux_pylon_mk2_part2_running" },
+    "index=2,status=starved,tier=2": { "model": "grindless:block/flux_pylon_mk2_part2_starved" },
+    "index=1,status=idle,tier=3": { "model": "grindless:block/flux_pylon_mk3_part1_idle" },
+    "index=1,status=running,tier=3": { "model": "grindless:block/flux_pylon_mk3_part1_running" },
+    "index=1,status=starved,tier=3": { "model": "grindless:block/flux_pylon_mk3_part1_starved" },
+    "index=2,status=idle,tier=3": { "model": "grindless:block/flux_pylon_mk3_part2_idle" },
+    "index=2,status=running,tier=3": { "model": "grindless:block/flux_pylon_mk3_part2_running" },
+    "index=2,status=starved,tier=3": { "model": "grindless:block/flux_pylon_mk3_part2_starved" }
+  }
+}

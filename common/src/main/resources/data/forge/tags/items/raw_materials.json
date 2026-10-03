@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:raw_materials/tin",
+    "#forge:raw_materials/lead",
+    "#forge:raw_materials/silver",
+    "#forge:raw_materials/nickel",
+    "#forge:raw_materials/zinc",
+    "#forge:raw_materials/aluminium",
+    "#forge:raw_materials/titanium",
+    "#forge:raw_materials/tungsten",
+    "#forge:raw_materials/platinum"
+  ]
+}

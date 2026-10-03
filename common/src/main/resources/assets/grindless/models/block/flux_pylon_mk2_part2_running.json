@@ -1,0 +1,35 @@
+{
+  "textures": {
+    "base": "grindless:block/casing_side",
+    "cap": "grindless:block/casing_top",
+    "side": "grindless:block/pylon2_side_running",
+    "top": "grindless:block/pylon2_top_running",
+    "particle": "grindless:block/pylon2_side_running"
+  },
+  "elements": [
+    {
+      "from": [5, 0, 5],
+      "to": [11, 10, 11],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [4, 10, 4],
+      "to": [12, 16, 12],
+      "faces": {
+        "up": { "texture": "#top" },
+        "down": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east": { "texture": "#side" },
+        "west": { "texture": "#side" }
+      }
+    }
+  ]
+}

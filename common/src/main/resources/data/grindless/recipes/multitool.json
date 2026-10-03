@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "S",
+    "C"
+  ],
+  "key": {
+    "S": { "item": "minecraft:stick" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:multitool" }
+}

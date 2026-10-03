@@ -1,0 +1,16 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "IGI",
+    "IRI",
+    "ICI"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "G": { "item": "minecraft:glass" },
+    "R": { "item": "minecraft:redstone" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:flux_pylon_mk1" }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "grindless:block/casing_top",
+    "bottom": "grindless:block/casing_top",
+    "side": "grindless:block/casing_side"
+  }
+}

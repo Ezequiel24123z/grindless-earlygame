@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:crushed_materials/iron",
+    "#grindless:crushed_materials/copper",
+    "#grindless:crushed_materials/gold",
+    "#grindless:crushed_materials/tin",
+    "#grindless:crushed_materials/lead",
+    "#grindless:crushed_materials/silver",
+    "#grindless:crushed_materials/nickel",
+    "#grindless:crushed_materials/zinc",
+    "#grindless:crushed_materials/aluminium",
+    "#grindless:crushed_materials/titanium",
+    "#grindless:crushed_materials/tungsten",
+    "#grindless:crushed_materials/platinum"
+  ]
+}

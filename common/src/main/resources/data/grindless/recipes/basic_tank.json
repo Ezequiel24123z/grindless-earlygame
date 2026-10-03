@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CGC",
+    "G G",
+    "CIC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "G": { "item": "minecraft:glass" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:basic_tank" }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north,status=idle": { "model": "grindless:block/hand_pump_idle" },
+    "facing=east,status=idle": { "model": "grindless:block/hand_pump_idle", "y": 90 },
+    "facing=south,status=idle": { "model": "grindless:block/hand_pump_idle", "y": 180 },
+    "facing=west,status=idle": { "model": "grindless:block/hand_pump_idle", "y": 270 },
+    "facing=north,status=running": { "model": "grindless:block/hand_pump_running" },
+    "facing=east,status=running": { "model": "grindless:block/hand_pump_running", "y": 90 },
+    "facing=south,status=running": { "model": "grindless:block/hand_pump_running", "y": 180 },
+    "facing=west,status=running": { "model": "grindless:block/hand_pump_running", "y": 270 },
+    "facing=north,status=starved": { "model": "grindless:block/hand_pump_starved" },
+    "facing=east,status=starved": { "model": "grindless:block/hand_pump_starved", "y": 90 },
+    "facing=south,status=starved": { "model": "grindless:block/hand_pump_starved", "y": 180 },
+    "facing=west,status=starved": { "model": "grindless:block/hand_pump_starved", "y": 270 }
+  }
+}

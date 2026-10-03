@@ -1,0 +1,12 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+dependencies {
+    // Compile-time only. Loom builds the common project in a Fabric-shaped environment
+    // regardless of which platforms are enabled, so this stays even though Forge is the
+    // only build target (ADR-0039). Common code must never touch loader-specific classes
+    // outside of @ExpectPlatform stubs.
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "dev.architectury:architectury:${rootProject.architectury_api_version}"
+}

@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "grindless:hand_crank_dynamo",
+    "grindless:crude_extractor",
+    "grindless:research_terminal",
+    "grindless:thermal_generator",
+    "grindless:pulverizer",
+    "grindless:arc_furnace",
+    "grindless:flux_pylon_mk1",
+    "grindless:flux_pylon_mk2",
+    "grindless:flux_pylon_mk3",
+    "grindless:conveyor_belt",
+    "grindless:splitter",
+    "grindless:crude_manipulator",
+    "grindless:terrestrial_extractor",
+    "grindless:clay_conduit",
+    "grindless:hand_pump",
+    "grindless:basic_tank",
+    "grindless:flux_pylon_shaft"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "pack": {
+    "description": "Places every Grindless machine state in one tick",
+    "pack_format": 15
+  }
+}

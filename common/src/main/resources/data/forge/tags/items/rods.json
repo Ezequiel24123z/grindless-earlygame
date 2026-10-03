@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:rods/iron",
+    "#forge:rods/copper",
+    "#forge:rods/gold",
+    "#forge:rods/tin",
+    "#forge:rods/lead",
+    "#forge:rods/silver",
+    "#forge:rods/nickel",
+    "#forge:rods/zinc",
+    "#forge:rods/aluminium",
+    "#forge:rods/titanium",
+    "#forge:rods/tungsten",
+    "#forge:rods/platinum",
+    "#forge:rods/steel"
+  ]
+}

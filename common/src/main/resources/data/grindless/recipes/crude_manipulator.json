@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    " I ",
+    "CIC",
+    " I "
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:crude_manipulator" }
+}

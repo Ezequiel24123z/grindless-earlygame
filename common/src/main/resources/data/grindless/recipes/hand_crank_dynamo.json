@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CSC",
+    "CIC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "S": { "item": "minecraft:stick" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:hand_crank_dynamo" }
+}

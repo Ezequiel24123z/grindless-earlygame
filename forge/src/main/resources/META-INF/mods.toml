@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_range}"
+license = "MIT"
+issueTrackerURL = "https://github.com/Ezequiel24123z/grindless-earlygame/issues"
+
+[[mods]]
+modId = "grindless"
+version = "${version}"
+displayName = "Grindless"
+authors = "Ezequiel24123z"
+displayURL = "https://github.com/Ezequiel24123z/grindless-earlygame"
+description = '''
+Factorio-inspired futuristic automation that removes the Minecraft early-game grind.
+'''
+
+[[dependencies.grindless]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraft_version}]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.grindless]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"
