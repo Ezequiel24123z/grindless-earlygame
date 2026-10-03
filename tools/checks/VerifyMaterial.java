@@ -238,7 +238,11 @@ public final class VerifyMaterial {
                     additive &= json.has("replace") && !json.get("replace").getAsBoolean();
                     for (JsonElement value : json.getAsJsonArray("values")) {
                         String id = value.getAsString();
-                        foreignFree &= id.startsWith("grindless:") || id.startsWith("#" + namespace + ":");
+                        // A vanilla tag include (#minecraft:coals in grindless:carbon) is not a
+                        // rival item. Hard-wiring another mod's item id still fails this check.
+                        foreignFree &= id.startsWith("grindless:")
+                                || id.startsWith("#" + namespace + ":")
+                                || id.startsWith("#minecraft:");
                     }
                 }
             }
