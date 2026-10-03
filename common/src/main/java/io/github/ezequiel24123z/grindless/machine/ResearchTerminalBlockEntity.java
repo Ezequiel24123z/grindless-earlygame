@@ -9,6 +9,7 @@ import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.research.Blueprint;
 import io.github.ezequiel24123z.grindless.research.ResearchData;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
+import io.github.ezequiel24123z.grindless.research.ResearchSync;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -154,6 +155,7 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
             progress = 0.0;
             if (ResearchData.get(level).unlock(CURRENT)) {
                 input.setItem(0, ItemStack.EMPTY);
+                ResearchSync.broadcast(level.getServer());
                 level.getServer().getPlayerList().broadcastSystemMessage(
                         Component.translatable("chat.grindless.research.unlocked",
                                 Component.translatable("blueprint.grindless." + CURRENT.id())),

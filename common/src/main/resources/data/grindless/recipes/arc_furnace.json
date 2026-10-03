@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CIC",
+    "IRI",
+    "CIC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "I": { "tag": "forge:ingots/iron" },
+    "R": { "item": "minecraft:redstone" }
+  },
+  "result": { "item": "grindless:arc_furnace" }
+}

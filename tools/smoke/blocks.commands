@@ -7,6 +7,15 @@ loot spawn 8 102 8 loot grindless:blocks/crude_extractor
 setblock 8 100 8 grindless:research_terminal
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK research_terminal
 loot spawn 8 102 8 loot grindless:blocks/research_terminal
+setblock 8 100 8 grindless:thermal_generator
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK thermal_generator
+loot spawn 8 102 8 loot grindless:blocks/thermal_generator
+setblock 8 100 8 grindless:pulverizer
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK pulverizer
+loot spawn 8 102 8 loot grindless:blocks/pulverizer
+setblock 8 100 8 grindless:arc_furnace
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK arc_furnace
+loot spawn 8 102 8 loot grindless:blocks/arc_furnace
 setblock 8 100 8 grindless:flux_pylon_mk1
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK flux_pylon_mk1
 loot spawn 8 102 8 loot grindless:blocks/flux_pylon_mk1

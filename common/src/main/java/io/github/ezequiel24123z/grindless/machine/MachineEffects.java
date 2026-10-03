@@ -37,6 +37,9 @@ public final class MachineEffects {
             case DYNAMO -> dynamo(status, front, level, pos, random);
             case EXTRACTOR -> extractor(status, level, pos, random);
             case TERMINAL -> terminal(status, front, level, pos, random);
+            case GENERATOR -> generator(status, level, pos, random);
+            case MILL -> mill(status, level, pos, random);
+            case FURNACE -> furnace(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
         }
         if (status == MachineStatus.OUT_OF_BAND) {
@@ -120,6 +123,68 @@ public final class MachineEffects {
             case OUT_OF_BAND -> {
             }
             default -> {
+            }
+        }
+    }
+
+    private static void generator(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.3;
+        double z = pos.getZ() + 0.3;
+        if (status == MachineStatus.RUNNING) {
+            if (random.nextFloat() < 0.45F) {
+                particle(level, ParticleTypes.FLAME, x + 0.4, pos.getY() + 1.05, z + 0.4,
+                        0.0, 0.02, 0.0);
+            }
+            if (random.nextFloat() < 0.35F) {
+                particle(level, ParticleTypes.CAMPFIRE_COSY_SMOKE, x + 0.4, pos.getY() + 1.15, z + 0.4,
+                        0.0, 0.05, 0.0);
+            }
+            sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.08F, 0.3F, 0.7F);
+        } else if (status == MachineStatus.BLOCKED) {
+            if (random.nextFloat() < 0.3F) {
+                particle(level, ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 1.0,
+                        pos.getZ() + 0.5, 0.0, 0.04, 0.0);
+            }
+        }
+    }
+
+    private static void mill(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        if (status == MachineStatus.RUNNING) {
+            if (random.nextFloat() < 0.35F) {
+                particle(level, ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 0.7, pos.getZ() + 0.5,
+                        (random.nextDouble() - 0.5) * 0.15, 0.02, (random.nextDouble() - 0.5) * 0.15);
+            }
+            sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.35F, 1.1F);
+        } else if (status == MachineStatus.STARVED) {
+            sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.65F);
+        } else if (status == MachineStatus.BLOCKED) {
+            if (random.nextFloat() < 0.3F) {
+                particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5,
+                        0.0, 0.03, 0.0);
+            }
+        }
+    }
+
+    private static void furnace(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        if (status == MachineStatus.RUNNING) {
+            if (random.nextFloat() < 0.5F) {
+                particle(level, ParticleTypes.ELECTRIC_SPARK,
+                        pos.getX() + 0.3 + random.nextDouble() * 0.4,
+                        pos.getY() + 0.55 + random.nextDouble() * 0.3,
+                        pos.getZ() + 0.3 + random.nextDouble() * 0.4,
+                        0.0, 0.01, 0.0);
+            }
+            sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.4F, 0.55F);
+        } else if (status == MachineStatus.STARVED) {
+            if (random.nextFloat() < 0.15F) {
+                particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5,
+                        0.0, 0.02, 0.0);
+            }
+            sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.5F);
+        } else if (status == MachineStatus.BLOCKED) {
+            if (random.nextFloat() < 0.35F) {
+                particle(level, ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 1.0,
+                        pos.getZ() + 0.5, 0.0, 0.04, 0.0);
             }
         }
     }

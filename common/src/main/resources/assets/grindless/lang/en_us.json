@@ -4,10 +4,14 @@
   "item.grindless.multitool": "Multitool",
   "item.grindless.data_core": "Data Core",
   "item.grindless.machine_casing": "Machine Casing",
+  "item.grindless.slag": "Slag",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
   "block.grindless.research_terminal": "Research Terminal",
+  "block.grindless.thermal_generator": "Thermal Generator",
+  "block.grindless.pulverizer": "Pulverizer",
+  "block.grindless.arc_furnace": "Arc Furnace",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -47,5 +51,12 @@
 
   "blueprint.grindless.voltaic": "Voltaic",
   "chat.grindless.research.unlocked": "Blueprint unlocked: %s",
-  "chat.grindless.research.already": "Already researched: %s"
+  "chat.grindless.research.already": "Already researched: %s",
+
+  "gui.grindless.energy": "%s / %s FU",
+  "gui.grindless.status.idle": "Idle",
+  "gui.grindless.status.running": "Running",
+  "gui.grindless.status.blocked": "Blocked — empty the output",
+  "gui.grindless.status.starved": "Starved — needs input or power",
+  "gui.grindless.status.out_of_band": "Out of band"
 }

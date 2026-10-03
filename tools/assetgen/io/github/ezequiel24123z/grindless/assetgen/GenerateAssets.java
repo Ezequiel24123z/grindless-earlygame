@@ -85,10 +85,12 @@ public final class GenerateAssets {
         removeStale(items, ".png", expected);
         removeStale(resourceDir(root, "models/item"), ".json", expected);
         written += writeTags(root);
+        written += writeReagentTags(root);
 
         // ---- placeholder sprites, blocks, loot and mining tags ----
         written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
+        written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -108,10 +110,16 @@ public final class GenerateAssets {
         written += write(blocks, "dynamo_top", MachineArt.dynamoTop());
         written += write(blocks, "extractor_top", MachineArt.extractorTop());
         written += write(blocks, "terminal_top", MachineArt.terminalTop());
+        written += write(blocks, "generator_top", MachineArt.generatorTop());
+        written += write(blocks, "mill_top", MachineArt.millTop());
+        written += write(blocks, "furnace_top", MachineArt.furnaceTop());
         for (String status : List.of("idle", "running", "blocked", "starved")) {
             written += write(blocks, "dynamo_front_" + status, MachineArt.dynamoFront(status));
             written += write(blocks, "extractor_front_" + status, MachineArt.extractorFront(status));
             written += write(blocks, "terminal_front_" + status, MachineArt.terminalFront(status));
+            written += write(blocks, "generator_front_" + status, MachineArt.generatorFront(status));
+            written += write(blocks, "mill_front_" + status, MachineArt.millFront(status));
+            written += write(blocks, "furnace_front_" + status, MachineArt.furnaceFront(status));
             for (int tier = 1; tier <= 3; tier++) {
                 written += write(blocks, "pylon" + tier + "_side_" + status, MachineArt.pylonSide(tier, status));
                 written += write(blocks, "pylon" + tier + "_top_" + status, MachineArt.pylonTop(tier, status));
@@ -119,6 +127,9 @@ public final class GenerateAssets {
         }
         written += write(blocks, "extractor_front_out_of_band", MachineArt.extractorFront("out_of_band"));
         written += write(blocks, "terminal_front_out_of_band", MachineArt.terminalFront("out_of_band"));
+        written += write(blocks, "mill_front_out_of_band", MachineArt.millFront("out_of_band"));
+        written += write(blocks, "furnace_front_out_of_band", MachineArt.furnaceFront("out_of_band"));
+        written += writeGui(root);
 
         // ---- sounds ----
         // Loops are built from harmonics of their own loop frequency and must not be faded, or
@@ -199,6 +210,45 @@ public final class GenerateAssets {
             written += writeText(file, tagJson(parent.getValue().toArray(new String[0])));
         }
         return written;
+    }
+
+    /**
+     * Reagents that are not material forms. Written after {@link #writeTags} wipes the
+     * {@code grindless} item-tag tree, so they survive regeneration.
+     */
+    private static int writeReagentTags(File root) throws IOException {
+        File file = new File(root, "common/src/main/resources/data/grindless/tags/items/carbon.json");
+        return writeText(file, tagJson("#minecraft:coals"));
+    }
+
+    /** The shared machine menu background and a progress arrow strip. */
+    private static int writeGui(File root) throws IOException {
+        BufferedImage gui = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+        fill(gui, 0, 0, 176, 166, 0xC6C6C6);
+        fill(gui, 3, 3, 170, 160, 0x8B8B8B);
+        fill(gui, 7, 15, 14, 54, 0x373737);
+        fill(gui, 79, 35, 24, 17, 0x373737);
+        // Arrow source at u=176.
+        for (int x = 176; x < 200; x++) {
+            for (int y = 0; y < 17; y++) {
+                int mid = Math.abs(y - 8);
+                int rgb = mid <= (x - 176) / 3 ? 0xFFFFFF : 0x00000000;
+                if (rgb != 0) {
+                    gui.setRGB(x, y, 0xFF00E5FF);
+                }
+            }
+        }
+        File dir = resourceDir(root, "textures/gui");
+        return write(dir, "process_machine", gui);
+    }
+
+    private static void fill(BufferedImage img, int x, int y, int w, int h, int rgb) {
+        int argb = 0xFF000000 | rgb;
+        for (int yy = y; yy < y + h; yy++) {
+            for (int xx = x; xx < x + w; xx++) {
+                img.setRGB(xx, yy, argb);
+            }
+        }
     }
 
     private static String tagJson(String... values) {

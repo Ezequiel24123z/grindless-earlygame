@@ -40,9 +40,13 @@ public final class ModCreativeTabs {
                 lazy(ModItems.MULTITOOL),
                 lazy(ModItems.DATA_CORE),
                 lazy(ModItems.MACHINE_CASING),
+                lazy(ModItems.SLAG),
                 lazy(ModBlocks.HAND_CRANK_DYNAMO),
                 lazy(ModBlocks.CRUDE_EXTRACTOR),
                 lazy(ModBlocks.RESEARCH_TERMINAL),
+                lazy(ModBlocks.THERMAL_GENERATOR),
+                lazy(ModBlocks.PULVERIZER),
+                lazy(ModBlocks.ARC_FURNACE),
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));

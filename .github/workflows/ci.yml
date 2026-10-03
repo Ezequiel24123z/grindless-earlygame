@@ -70,6 +70,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/bootstrap.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/bootstrap.expect
 
+      # Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
+      - name: Boot and exercise first iron machines
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-iron.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-iron.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

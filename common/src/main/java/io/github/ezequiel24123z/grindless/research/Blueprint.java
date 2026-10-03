@@ -3,9 +3,8 @@ package io.github.ezequiel24123z.grindless.research;
 /**
  * A researched blueprint. Permanent once unlocked (ADR-0017).
  *
- * <p>T0 machines are never gated. The first research is Voltaic: it will gate T1 crafting when
- * those recipes exist. Unlocking it now is still the real loop — a Data Core and F0 in, a flag
- * out — so a later session attaches recipes to a switch that already flips.
+ * <p>T0 machines are never gated. Voltaic gates the T1 crafting-table recipes — Thermal
+ * Generator, Pulverizer, Arc Furnace and Pylon MK1 — via {@code GatedShapedRecipe}.
  */
 public enum Blueprint {
 

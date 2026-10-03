@@ -1,0 +1,16 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CFC",
+    "CGC",
+    "CIC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "F": { "item": "minecraft:furnace" },
+    "G": { "tag": "grindless:carbon" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:thermal_generator" }
+}

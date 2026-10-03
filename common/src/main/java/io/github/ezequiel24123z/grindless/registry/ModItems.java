@@ -35,6 +35,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> MACHINE_CASING = register("machine_casing",
             () -> new Item(new Item.Properties()));
 
+    /** R1 gangue. A Grindless reagent, not a material form (ADR-0033). */
+    public static final RegistrySupplier<Item> SLAG = register("slag",
+            () -> new Item(new Item.Properties()));
+
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.
      *

@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CFC",
+    "CIC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "F": { "item": "minecraft:flint" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:pulverizer" }
+}

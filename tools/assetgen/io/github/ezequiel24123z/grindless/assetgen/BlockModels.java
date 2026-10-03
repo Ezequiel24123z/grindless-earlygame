@@ -50,6 +50,9 @@ final class BlockModels {
             case DYNAMO -> dynamo();
             case EXTRACTOR -> extractor();
             case TERMINAL -> terminal();
+            case GENERATOR -> generator();
+            case MILL -> mill();
+            case FURNACE -> furnace();
             case PYLON -> pylonPiece(block.tier(), 0);
         };
         StringBuilder out = new StringBuilder("{\n");
@@ -173,6 +176,35 @@ final class BlockModels {
                 box(2, 11, 2, 14, 14, 14, "top", "side"),
                 box(10, 14, 10, 13, 16, 13, "cap", "base"),
                 box(5, 0, -1, 11, 3, 1, "cap", "cap"));
+    }
+
+    /** A squat boiler with a chimney on the back-left. */
+    private static List<Box> generator() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "cap", "base"),
+                front(1, 3, 2, 15, 12, 15, "top", "side", "front"),
+                box(2, 12, 3, 10, 14, 13, "top", "side"),
+                box(3, 14, 10, 7, 16, 14, "cap", "base"));
+    }
+
+    /** Two rollers over a hopper mouth. */
+    private static List<Box> mill() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 1, 15, 10, 15, "top", "side", "front"),
+                box(2, 10, 3, 7, 14, 13, "top", "side"),
+                box(9, 10, 3, 14, 14, 13, "top", "side"),
+                box(5, 0, -1, 11, 3, 1, "cap", "cap"));
+    }
+
+    /** A chamber with a V of electrodes on top. */
+    private static List<Box> furnace() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "cap", "base"),
+                front(1, 3, 2, 15, 12, 15, "top", "side", "front"),
+                box(3, 12, 6, 6, 16, 10, "cap", "cap"),
+                box(10, 12, 6, 13, 16, 10, "cap", "cap"),
+                box(5, 14, 7, 11, 16, 9, "top", "side"));
     }
 
     private static List<Box> terminal() {

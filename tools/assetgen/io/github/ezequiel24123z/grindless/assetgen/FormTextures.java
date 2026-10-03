@@ -213,6 +213,16 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for slag: an irregular cooled lump. */
+    public static BufferedImage slag(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(7.5, 8.0, 4.2, 4.0);
+        field.disc(5.2, 6.4, 2.2, 3.2);
+        field.disc(10.0, 7.2, 2.0, 3.0);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Multitool: a handle with a head. See {@link #dataCore}. */
     public static BufferedImage multitool(Palette palette) {
         HeightField field = new HeightField();

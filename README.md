@@ -1927,8 +1927,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 13b | The Flux Pylon block, and machines drawing from their network | ✅ done |
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
-| 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | pending — 0.1 definition of done, ADR-0058 |
-| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — pulled forward to ride on 15, not a separate content freeze |
+| 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
+| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — `VerifyRecipes` is in; JEI waits |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | pending — 0.2 |
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | pending |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | pending — ADR-0017 |
@@ -1966,10 +1966,10 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is slice A — first iron**, not "the rest of T1". Thermal Generator so F1 can run without a
-crank, Pulverizer + Arc Furnace on generated B0×R1 / B1×R1 recipes, one shared menu, Voltaic
-gating those recipes. Hoppers are enough. Fluids, belts, conduits and multiblocks wait. Voltaic
-currently gates nothing; slice A is what reads the flag.
+**Next is slice B — first factory**, not conduits and not fluids. Slice A is in: Voltaic unlocks
+the Thermal Generator, Pulverizer, Arc Furnace and Pylon MK1; generated B0×R1 / B1×R1 turn raw
+into ingots; hoppers and chests move items; CO vents. Belts, the Terrestrial Extractor and the
+Prospector's Scanner are the next playable thing. Fluids, conduits and multiblocks wait.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

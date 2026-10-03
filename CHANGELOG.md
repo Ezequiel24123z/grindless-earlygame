@@ -22,6 +22,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Slice A — first iron (ADR-0058, ADR-0059).** Generated B0×R1 / B1×R1 `ProcessRecipe` graph
+  (item I/O, vented CO, `#grindless:carbon`, slag). Thermal Generator (F1, furnace fuel),
+  Pulverizer and Arc Furnace as real consumers with one shared menu. Voltaic-gated crafts for
+  those three machines and Pylon MK1 (`grindless:gated_shaped` + client unlock cache).
+  `VerifyRecipes` dumps the graph. CI places the new machines and hoppers a coal into the
+  generator.
+
 - **T0 bootstrap recipes (ADR-0056).** Crafting-table JSON for the Multitool (cobble and sticks),
   Hand Crank Dynamo and Crude Extractor (one iron each), Research Terminal (planks, glass, cobble)
   and Data Core (cobble and redstone). Iron is `#forge:ingots/iron`; stone is
@@ -30,8 +37,7 @@ entries below reference those records by id.
 
 - **Research Terminal (ADR-0057).** Real consumer: 8 FU/t, thirty seconds, one Data Core unlocks
   Voltaic. World-scoped `ResearchData`. Right-click to insert or take the core; hoppers may insert
-  but not extract. Status idle / running / starved / blocked. Voltaic gates nothing yet — T1
-  recipes will read the flag.
+  but not extract. Status idle / running / starved / blocked.   Voltaic now gates the Slice A crafts (ADR-0059).
 
 - **Crude Extractor (ADR-0053).** T0 consumer: 8 FU/t, twenty seconds per unit of the chunk vein,
   scaled by richness, depletion and brownout. Power from a covering pylon or from an adjacent

@@ -5,7 +5,10 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlockEntity;
 import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -41,6 +44,30 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("research_terminal",
                     () -> BlockEntityType.Builder
                             .of(ResearchTerminalBlockEntity::new, ModBlocks.RESEARCH_TERMINAL.get())
+                            .build(null));
+
+    /** T1 generator: furnace fuel at 32 FU/t. */
+    public static final RegistrySupplier<BlockEntityType<ThermalGeneratorBlockEntity>> THERMAL_GENERATOR =
+            BLOCK_ENTITIES.register("thermal_generator",
+                    () -> BlockEntityType.Builder
+                            .of(ThermalGeneratorBlockEntity::new, ModBlocks.THERMAL_GENERATOR.get())
+                            .build(null));
+
+    /** T1 pulverizer. Same block-entity class as the arc furnace; the kind is the difference. */
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> PULVERIZER =
+            BLOCK_ENTITIES.register("pulverizer",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.PULVERIZER, pos, state),
+                                    ModBlocks.PULVERIZER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> ARC_FURNACE =
+            BLOCK_ENTITIES.register("arc_furnace",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.ARC_FURNACE, pos, state),
+                                    ModBlocks.ARC_FURNACE.get())
                             .build(null));
 
     /**

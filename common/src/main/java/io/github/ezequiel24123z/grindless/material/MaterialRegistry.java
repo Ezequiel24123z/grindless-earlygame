@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.material;
 
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public final class MaterialRegistry {
     public static void rebuild(TagView tags) {
         MaterialSnapshot next = MaterialSnapshot.scan(tags, unifier);
         snapshot = next;
+        ProcessLookup.rebuild(next);
         Grindless.LOG.info("[{}] {} materials found; Grindless supplies {} of its {} items",
                 Grindless.MOD_NAME, next.materials().size(),
                 next.activeFallbacks().size(), SupplyCatalogue.entries().size());

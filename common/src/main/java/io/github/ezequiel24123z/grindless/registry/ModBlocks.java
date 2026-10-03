@@ -6,7 +6,10 @@ import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlock;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
+import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
@@ -24,8 +27,8 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>The T0 bootstrap set. Dynamo, extractor, pylons and the Research Terminal have block
- * entities; menus arrive with T1.
+ * <p>T0 plus the Slice A dry line. Dynamo, extractor, pylons, terminal, Thermal Generator,
+ * Pulverizer and Arc Furnace have block entities.
  */
 public final class ModBlocks {
 
@@ -44,6 +47,21 @@ public final class ModBlocks {
     public static final RegistrySupplier<ResearchTerminalBlock> RESEARCH_TERMINAL =
             register("research_terminal",
                     () -> new ResearchTerminalBlock(machine().strength(3.0F)));
+
+    /** T1 walk-away power: furnace fuel at F1. */
+    public static final RegistrySupplier<ThermalGeneratorBlock> THERMAL_GENERATOR =
+            register("thermal_generator",
+                    () -> new ThermalGeneratorBlock(machine().strength(3.0F)));
+
+    /** T1 dry mill. B1: 1 raw → 2 crushed. */
+    public static final RegistrySupplier<ProcessMachineBlock> PULVERIZER =
+            register("pulverizer",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.PULVERIZER, machine().strength(3.0F)));
+
+    /** T1 carbothermic reduction. R1: feed + carbon → ingot + slag; CO vents. */
+    public static final RegistrySupplier<ProcessMachineBlock> ARC_FURNACE =
+            register("arc_furnace",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.ARC_FURNACE, machine().strength(3.5F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

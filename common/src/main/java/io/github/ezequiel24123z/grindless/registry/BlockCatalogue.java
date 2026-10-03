@@ -25,6 +25,12 @@ public final class BlockCatalogue {
         EXTRACTOR,
         /** A desk with a raked screen. */
         TERMINAL,
+        /** A boiler box with a chimney. */
+        GENERATOR,
+        /** Two rollers over a hopper. */
+        MILL,
+        /** A chamber with a V of electrodes. */
+        FURNACE,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON
     }
@@ -70,12 +76,15 @@ public final class BlockCatalogue {
             new Entry("hand_crank_dynamo", Geometry.DYNAMO, 1, true, GENERATOR),
             new Entry("crude_extractor", Geometry.EXTRACTOR, 1, true, CONSUMER),
             new Entry("research_terminal", Geometry.TERMINAL, 1, true, CONSUMER),
+            new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR),
+            new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER),
+            new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
-    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core");
+    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

@@ -27,6 +27,9 @@ public final class MachineArt {
     public static final int DYNAMO = 0x76FF03;
     public static final int EXTRACTOR = 0xFF8A00;
     public static final int TERMINAL = 0xB388FF;
+    public static final int GENERATOR = 0xFF6E40;
+    public static final int MILL = 0x40C4FF;
+    public static final int FURNACE = 0xFF8A80;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
 
     private static final double CX = 7.5;
@@ -193,6 +196,111 @@ public final class MachineArt {
                 set(img, x, y, Palette.shade(CASING, -0.55));
             }
         }
+        return img;
+    }
+
+    // ---- Thermal Generator ---------------------------------------------------------------
+
+    /** Firebox bars: the machine is a thing that burns. */
+    public static BufferedImage generatorFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, GENERATOR);
+        for (int y = 3; y <= 10; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean bar = x % 2 == 0;
+                int inside = glow < 0 ? Palette.shade(CASING, -0.7) : dim(glow);
+                if (glow >= 0 && !bar && y >= 6 && (x + y) % 2 == 0) {
+                    inside = glow;
+                }
+                set(img, x, y, bar ? Palette.shade(CASING, 0.15) : inside);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage generatorTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 8; y++) {
+            for (int x = 3; x <= 8; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+        }
+        set(img, 5, 5, GENERATOR);
+        set(img, 6, 5, GENERATOR);
+        return img;
+    }
+
+    // ---- Pulverizer ----------------------------------------------------------------------
+
+    /** Twin rollers: the machine is a thing that crushes. */
+    public static BufferedImage millFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, MILL);
+        for (int y = 3; y <= 10; y++) {
+            for (int x = 2; x <= 6; x++) {
+                double d = Math.hypot(x - 4.0, y - 6.5);
+                if (d <= 2.6) {
+                    set(img, x, y, glow < 0 ? Palette.shade(CASING, -0.35) : dim(glow));
+                }
+            }
+            for (int x = 9; x <= 13; x++) {
+                double d = Math.hypot(x - 11.0, y - 6.5);
+                if (d <= 2.6) {
+                    set(img, x, y, glow < 0 ? Palette.shade(CASING, -0.35) : dim(glow));
+                }
+            }
+        }
+        if (glow >= 0) {
+            set(img, 4, 6, glow);
+            set(img, 11, 6, glow);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage millTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 5; y <= 10; y++) {
+            for (int x = 3; x <= 6; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.4));
+            }
+            for (int x = 9; x <= 12; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.4));
+            }
+        }
+        return img;
+    }
+
+    // ---- Arc Furnace ---------------------------------------------------------------------
+
+    /** A dark window with an arc: the machine is a thing that melts. */
+    public static BufferedImage furnaceFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, FURNACE);
+        for (int y = 3; y <= 10; y++) {
+            for (int x = 3; x <= 12; x++) {
+                int pixel = Palette.shade(CASING, -0.75);
+                if (glow >= 0 && Math.abs(x - 7.5) + Math.abs(y - 6.5) < 4) {
+                    pixel = (x + y) % 2 == 0 ? glow : dim(glow);
+                } else if (glow < 0 && y == 7) {
+                    pixel = Palette.shade(CASING, -0.5);
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage furnaceTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 5; y <= 10; y++) {
+            set(img, 4, y, Palette.shade(CASING, 0.25));
+            set(img, 11, y, Palette.shade(CASING, 0.25));
+        }
+        set(img, 7, 7, FURNACE);
+        set(img, 8, 8, FURNACE);
         return img;
     }
 

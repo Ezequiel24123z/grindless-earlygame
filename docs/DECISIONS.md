@@ -70,6 +70,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags) | T0 bootstrap recipes are authored JSON using tags | Accepted |
 | [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Accepted |
 | [0058](#adr-0058--build-playable-slices-not-system-layers) | Build playable slices, not system layers | Accepted |
+| [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Accepted |
 
 ---
 
@@ -2127,5 +2128,49 @@ network before first iron is reopening this record. `ProcessRecipe` may ship wit
 implementation; adding fluids later fills the slot, it does not fork the type. Vented gas is
 deliberate T1 behaviour and becomes a capture decision in slice C, which is how R2 (roast for
 SO₂) starts.
+
+
+## ADR-0059 — First iron is a generated graph and a Voltaic gate
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0058 scheduled slice A: `ProcessRecipe` item-first, B0×R1 and B1×R1, Thermal
+Generator, Pulverizer, Arc Furnace, one shared menu, Voltaic-gated T1 crafts including Pylon MK1.
+Three implementation questions were still open.
+
+Forge `ICondition` is evaluated when recipes *load*, not against a world. Voltaic is world-scoped
+(`ResearchData`). Binding T1 crafts to a datapack condition would unlock them for every world
+as soon as anyone researched them in any world in the same JVM, or never, depending on when the
+condition ran.
+
+Vanilla `RecipeType` is the usual home for machine recipes. Half of a later process is fluids
+(ADR-0015), and slice C has not been written. Putting item-only recipes on `RecipeType` now
+would force a rewrite when tanks arrive, which is the pairing ADR-0058 rejected.
+
+**Decision.**
+
+1. Processing recipes are a generated graph (`ProcessGraph` / `ProcessLookup`), rebuilt with
+   `MaterialRegistry`, indexed by family and primary input tag (ADR-0005, ADR-0043). They are not
+   a vanilla `RecipeType`. Fluid slots exist on the record and stay empty except for vented CO.
+2. T1 crafting-table recipes are authored JSON of type `grindless:gated_shaped`. `matches`
+   consults `ResearchData` on the server and `ClientResearch` on the client. Unlock is synced on
+   login and when the Research Terminal flips the flag. Forge conditions are not used.
+3. Carbon is `#grindless:carbon`, currently `#minecraft:coals`. Slag is a Grindless reagent item,
+   not a material form (ADR-0033). CO from R1 is a vented fluid output — the named T1 sink
+   (ADR-0036), not a missing tank.
+4. The Thermal Generator, Pulverizer and Arc Furnace share one menu. Hoppers and neighbouring
+   inventories are the logistics. The Arc Furnace holds T 1500 reducing so R1 evaluates optimally
+   without a player setting a dial.
+5. `VerifyRecipes` dumps the generated graph and checks the gated JSON against `T1Recipes`.
+
+**Alternatives rejected.** Shipping B0×R1 as furnace JSON (it cannot name carbon, slag or CO);
+gating with Forge conditions (wrong lifetime); a vanilla `RecipeType` for two families that
+would be forked when fluids arrive; a per-machine screen (the point of the shared menu is that
+the next machine does not invent a new UI); capturing CO in slice A (there is nowhere to put it).
+
+**Consequences.** Slice B can add belts without touching the graph. Slice C fills the fluid
+slots and turns the CO vent into a capture decision. A successor that adds JEI walks
+`ProcessLookup.recipes()`, not the vanilla manager. A successor that adds a second blueprint
+extends `Blueprint` and writes another gated JSON.
 
 

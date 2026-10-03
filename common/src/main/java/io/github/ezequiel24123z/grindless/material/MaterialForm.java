@@ -91,4 +91,14 @@ public enum MaterialForm {
     public boolean isOreLine() {
         return grade > 0.0;
     }
+
+    /** The form published under {@code tagPath}, such as {@code ingots}, or {@code null}. */
+    public static MaterialForm byTagPath(String tagPath) {
+        for (MaterialForm form : values()) {
+            if (form.tagPath.equals(tagPath)) {
+                return form;
+            }
+        }
+        return null;
+    }
 }

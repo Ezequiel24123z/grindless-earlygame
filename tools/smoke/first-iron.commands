@@ -1,0 +1,12 @@
+forceload add 0 0
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 8 70 8 grindless:thermal_generator[facing=south,status=idle]
+execute if block 8 70 8 grindless:thermal_generator run say GEN-OK
+data get block 8 70 8
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:coal",Count:1b}]}
+execute if data block 8 70 8 Fuel[{id:"minecraft:coal"}] run say FUEL-IN
+setblock 10 70 8 grindless:pulverizer[facing=south,status=idle]
+execute if block 10 70 8 grindless:pulverizer run say MILL-OK
+setblock 12 70 8 grindless:arc_furnace[facing=south,status=idle]
+execute if block 12 70 8 grindless:arc_furnace run say FURNACE-OK
