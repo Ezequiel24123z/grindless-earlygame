@@ -74,6 +74,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
+| [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 
 ---
 
@@ -2310,5 +2311,55 @@ that stores fluids as items is reopening ADR-0015. A successor that makes wet B1
 different yield from dry is inventing the washer a tier early. Kiln / R2 wait until
 the player has somewhere to put SO₂ — they now do, so that content is unblocked, not
 in this slice.
+
+
+## ADR-0063 — The factory builds the factory at T1
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0017 forbids crafting-table recipes past the bootstrap. ADR-0058 scheduled
+slice D as Press, Machine Casing, Assembler, and the T2 fabrication gate. Two documents
+disagree about *when* those machines exist.
+
+`MACHINES.md` lists Press and Assembler as T2. `PROCESSES.md` bootstrap chain makes them
+the last crafting-table recipes, and says the Assembler is how T2+ is manufactured. Slice D
+cannot ship both readings. `PROCESSES.md` also lists coil as a Wire Mill product; the Wire
+Mill is T2, so the first Assembler would have no coil if that were the only route.
+
+The first T2 machine has to be something the player already wants. Pylon MK2 is already
+in the world as a block; MK1 is the Voltaic-gated craft. Making MK2 the Assembler's first
+recipe is the gate, not a new machine shell.
+
+**Decision.**
+
+1. Press and Assembler are T1 crafting-table recipes, Voltaic-gated. `MACHINES.md`'s T2
+   row is the industrial workhorse, not the first craft. The Assembler is the last
+   crafting-table machine. T2+ has no JSON craft.
+2. The Press is 4 s at F1. One ingot and a die. The die is a catalyst: it occupies a
+   menu input slot, is not consumed, and hoppers cannot pull it. Plate, rod and gear
+   dies cover the forms the casing needs. A coil die on copper makes the `copper_coil`
+   reagent. The Wire Mill remains the dedicated T2 route.
+3. Machine Casing is a crafting-table recipe: 4 iron plates and 2 iron rods, tags not
+   item ids. The 8 s Assembler process in `PROCESSES.md` is the later scale recipe, not
+   the bootstrap.
+4. The Assembler craft is 1 casing + 1 copper coil + 2 iron gears. Its first generated
+   recipe manufactures Pylon MK2 from 1 casing + 4 iron plates + 2 iron gears, 20 s at
+   F1. There is no `flux_pylon_mk2.json`.
+5. Dies, coil, Press, casing and Assembler are authored `gated_shaped` JSON. Press and
+   Assembler recipes are generated into `ProcessRecipe` with a `catalysts` list, so the
+   type does not fork.
+
+**Alternatives rejected.** Shipping Press/Assembler as T2-only (the bootstrap could not
+reach the Assembler, so ADR-0017 would never fire); a crafting-table recipe for MK2 "just
+this once" (the gate would be a comment); consuming the die (hoppers would steal the
+catalyst every cycle); waiting for the Wire Mill before the first coil (the Assembler
+would be uncraftable); putting the die in a separate inventory that hoppers cannot see
+(the shared menu already has input slots, and `canTakeItemThroughFace` already forbids
+extracting them).
+
+**Consequences.** Slice E can add Flux Conduits without inventing a fabrication story.
+A successor that adds `flux_pylon_mk2.json` is reopening ADR-0017. A successor that
+starts the Wire Mill or the Kiln in this slice is ignoring the playable-slice order.
+Kiln / R2 remain unblocked by fluids and unstarted.
 
 

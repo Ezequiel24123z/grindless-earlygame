@@ -30,6 +30,8 @@ public final class MachineArt {
     public static final int GENERATOR = 0xFF6E40;
     public static final int MILL = 0x40C4FF;
     public static final int FURNACE = 0xFF8A80;
+    public static final int PRESS = 0xFFCC80;
+    public static final int ASSEMBLER = 0x82B1FF;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -54,6 +56,8 @@ public final class MachineArt {
             case GENERATOR -> generatorFront(status);
             case MILL -> millFront(status);
             case FURNACE -> furnaceFront(status);
+            case PRESS -> pressFront(status);
+            case ASSEMBLER -> assemblerFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MANIPULATOR -> manipulatorFront(status);
@@ -73,6 +77,8 @@ public final class MachineArt {
             case GENERATOR -> generatorTop();
             case MILL -> millTop();
             case FURNACE -> furnaceTop();
+            case PRESS -> pressTop();
+            case ASSEMBLER -> assemblerTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MANIPULATOR -> manipulatorTop();
@@ -347,6 +353,77 @@ public final class MachineArt {
         }
         set(img, 7, 7, FURNACE);
         set(img, 8, 8, FURNACE);
+        return img;
+    }
+
+    // ---- Press ---------------------------------------------------------------------------
+
+    /** A ram over a dark bed: the machine is a thing that stamps. */
+    public static BufferedImage pressFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, PRESS);
+        for (int y = 8; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.55));
+            }
+        }
+        for (int y = 2; y <= 7; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, glow < 0 ? Palette.shade(CASING, 0.15) : dim(glow));
+            }
+        }
+        if (glow >= 0) {
+            set(img, 7, 7, glow);
+            set(img, 8, 7, glow);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage pressTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            set(img, x, 3, PRESS);
+        }
+        return img;
+    }
+
+    // ---- Assembler -----------------------------------------------------------------------
+
+    /** Two claws over a deck: the machine is a thing that builds. */
+    public static BufferedImage assemblerFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, ASSEMBLER);
+        for (int y = 7; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.5));
+            }
+        }
+        for (int y = 2; y <= 8; y++) {
+            set(img, 4, y, glow < 0 ? Palette.shade(CASING, 0.2) : dim(glow));
+            set(img, 11, y, glow < 0 ? Palette.shade(CASING, 0.2) : dim(glow));
+        }
+        set(img, 3, 3, glow < 0 ? Palette.shade(CASING, -0.1) : glow);
+        set(img, 5, 3, glow < 0 ? Palette.shade(CASING, -0.1) : glow);
+        set(img, 10, 3, glow < 0 ? Palette.shade(CASING, -0.1) : glow);
+        set(img, 12, 3, glow < 0 ? Palette.shade(CASING, -0.1) : glow);
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage assemblerTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            set(img, 4, y, Palette.shade(CASING, -0.4));
+            set(img, 11, y, Palette.shade(CASING, -0.4));
+        }
+        set(img, 4, 3, ASSEMBLER);
+        set(img, 11, 3, ASSEMBLER);
         return img;
     }
 

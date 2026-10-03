@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "P P",
+    "R R",
+    "P P"
+  ],
+  "key": {
+    "P": { "tag": "forge:plates/iron" },
+    "R": { "tag": "forge:rods/iron" }
+  },
+  "result": { "item": "grindless:machine_casing" }
+}

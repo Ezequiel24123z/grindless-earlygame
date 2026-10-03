@@ -252,4 +252,32 @@ public final class FormTextures {
         field.bevel(0.4);
         return field.light(palette);
     }
+
+    /** Placeholder sprite for a forming die: a stamp with a recessed face. See {@link #dataCore}. */
+    public static BufferedImage die(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 3, 12, 12, 3.6);
+        field.rect(5, 5, 10, 10, 2.0);
+        field.rect(6, 1, 9, 2, 2.8);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a copper coil: a wound torus. See {@link #dataCore}. */
+    public static BufferedImage coil(Palette palette) {
+        HeightField field = new HeightField();
+        double centre = (SIZE - 1) / 2.0;
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double radius = Math.hypot(x - centre, y - centre);
+                if (radius <= 6.2 && radius >= 2.6) {
+                    double across = 1.0 - Math.abs((radius - 4.4) / 1.8);
+                    double wind = 0.6 * Math.max(0, Math.cos(Math.atan2(y - centre, x - centre) * 6));
+                    field.set(x, y, 2.6 + 2.2 * Math.max(0, across) + wind);
+                }
+            }
+        }
+        field.bevel(0.35);
+        return field.light(palette);
+    }
 }

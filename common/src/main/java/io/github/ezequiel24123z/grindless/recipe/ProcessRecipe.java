@@ -18,6 +18,7 @@ import java.util.List;
  * @param atmosphere     required atmosphere name, or {@code null} when unnamed
  * @param durationTicks  cycle length at full power and optimal conditions
  * @param fuPerTick      draw while working
+ * @param catalysts      dies and other unconsumed extras; empty when the recipe has none
  */
 public record ProcessRecipe(
         String id,
@@ -27,11 +28,20 @@ public record ProcessRecipe(
         double temperatureC,
         String atmosphere,
         int durationTicks,
-        long fuPerTick) {
+        long fuPerTick,
+        List<IngredientSpec> catalysts) {
+
+    public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
+                         List<OutputSpec> outputs, double temperatureC, String atmosphere,
+                         int durationTicks, long fuPerTick) {
+        this(id, family, inputs, outputs, temperatureC, atmosphere, durationTicks, fuPerTick,
+                List.of());
+    }
 
     public ProcessRecipe {
         inputs = List.copyOf(inputs);
         outputs = List.copyOf(outputs);
+        catalysts = catalysts == null ? List.of() : List.copyOf(catalysts);
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("recipe id is required");
         }

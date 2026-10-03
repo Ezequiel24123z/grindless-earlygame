@@ -77,6 +77,22 @@ public final class ModBlockEntities {
                                     ModBlocks.ARC_FURNACE.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> PRESS =
+            BLOCK_ENTITIES.register("press",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.PRESS, pos, state),
+                                    ModBlocks.PRESS.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> ASSEMBLER =
+            BLOCK_ENTITIES.register("assembler",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.ASSEMBLER, pos, state),
+                                    ModBlocks.ASSEMBLER.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

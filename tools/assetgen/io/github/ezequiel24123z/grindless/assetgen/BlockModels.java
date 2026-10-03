@@ -53,6 +53,8 @@ final class BlockModels {
             case GENERATOR -> generator();
             case MILL -> mill();
             case FURNACE -> furnace();
+            case PRESS -> press();
+            case ASSEMBLER -> assembler();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -212,6 +214,25 @@ final class BlockModels {
                 box(3, 12, 6, 6, 16, 10, "cap", "cap"),
                 box(10, 12, 6, 13, 16, 10, "cap", "cap"),
                 box(5, 14, 7, 11, 16, 9, "top", "side"));
+    }
+
+    /** A ram over a forming bed. */
+    private static List<Box> press() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 8, 15, "top", "side", "front"),
+                box(3, 8, 4, 13, 14, 14, "top", "side"),
+                box(5, 14, 6, 11, 16, 12, "cap", "cap"));
+    }
+
+    /** Two arms over a fabrication deck. */
+    private static List<Box> assembler() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 10, 15, "top", "side", "front"),
+                box(2, 10, 3, 6, 15, 7, "top", "side"),
+                box(10, 10, 3, 14, 15, 7, "top", "side"),
+                box(6, 11, 8, 10, 13, 14, "cap", "cap"));
     }
 
     /** A low slab with two raised rails. */

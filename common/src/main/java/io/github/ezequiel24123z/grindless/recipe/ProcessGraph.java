@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Generates the T1 processing line from a material set (ADR-0005, ADR-0058, ADR-0062).
+ * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063).
  *
- * <p>B0×R1, dry B1×R1, and wet B1 (0.5 B water, same crushed yield). CO from R1 stays a
- * vented output on the recipe; capture is a runtime push into a tank (ADR-0062).
+ * <p>Ore line: B0×R1, dry B1×R1, wet B1. Forming: Press recipes keyed by die. Fabrication:
+ * one Assembler recipe that manufactures Pylon MK2, which has no crafting-table JSON.
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -21,34 +21,52 @@ public final class ProcessGraph {
      * @param ore     {@code forge:ores/<name>}
      * @param crushed {@code grindless:crushed_materials/<name>}
      * @param ingot   {@code forge:ingots/<name>}
+     * @param plate   {@code forge:plates/<name>}
+     * @param rod     {@code forge:rods/<name>}
+     * @param gear    {@code forge:gears/<name>}
      */
-    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean ingot) {
+    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean ingot,
+                               boolean plate, boolean rod, boolean gear) {
     }
 
     private ProcessGraph() {
     }
 
     /**
-     * Every B0×R1 and B1×R1 recipe the given materials support, in name then route order.
+     * Ore-line, press and assembler recipes the given materials support.
      *
-     * <p>A material without an ingot is skipped (nothing to reduce to). A material without a
-     * raw or ore form is skipped (nothing to feed). Missing crushed drops B1, not B0.
+     * <p>A material without an ingot is skipped for reduction and forming. A material without
+     * a raw or ore form is skipped for the ore line, not for the Press. Missing crushed drops
+     * B1, not B0.
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
         List<ProcessRecipe> recipes = new ArrayList<>();
         for (MaterialView material : materials) {
             String feed = feedTag(material);
-            if (feed == null || !material.ingot()) {
-                continue;
+            if (feed != null && material.ingot()) {
+                recipes.add(reduce(material.name(), "b0_r1", feed));
+                if (material.crushed()) {
+                    String crushed = crushedTag(material.name());
+                    recipes.add(pulverize(material.name(), feed, crushed));
+                    recipes.add(wetPulverize(material.name(), feed, crushed));
+                    recipes.add(reduce(material.name(), "b1_r1", crushed));
+                }
             }
-            recipes.add(reduce(material.name(), "b0_r1", feed));
-            if (material.crushed()) {
-                String crushed = crushedTag(material.name());
-                recipes.add(pulverize(material.name(), feed, crushed));
-                recipes.add(wetPulverize(material.name(), feed, crushed));
-                recipes.add(reduce(material.name(), "b1_r1", crushed));
+            if (material.ingot() && material.plate()) {
+                recipes.add(press(material.name(), "plate", "forge:plates/" + material.name(),
+                        FabricationLogic.PLATE_DIE));
+            }
+            if (material.ingot() && material.rod()) {
+                recipes.add(press(material.name(), "rod", "forge:rods/" + material.name(),
+                        FabricationLogic.ROD_DIE));
+            }
+            if (material.ingot() && material.gear()) {
+                recipes.add(press(material.name(), "gear", "forge:gears/" + material.name(),
+                        FabricationLogic.GEAR_DIE));
             }
         }
+        recipes.add(coilPress());
+        recipes.add(pylonMk2());
         return List.copyOf(recipes);
     }
 
@@ -116,6 +134,52 @@ public final class ProcessGraph {
                 ProcessLogic.REDUCE_ATMOSPHERE,
                 ProcessLogic.REDUCE_TICKS,
                 ProcessLogic.FU_PER_TICK);
+    }
+
+    private static ProcessRecipe press(String material, String form, String outputTag, String die) {
+        return new ProcessRecipe(
+                "press/" + form + "/" + material,
+                MachineFamily.PRESS,
+                List.of(IngredientSpec.tag(ingotTag(material), 1)),
+                List.of(OutputSpec.tag(outputTag, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.PRESS_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(die, 1)));
+    }
+
+    /** T1 coil: copper ingot and a coil die. The Wire Mill is the T2 dedicated route. */
+    private static ProcessRecipe coilPress() {
+        return new ProcessRecipe(
+                "press/coil/copper",
+                MachineFamily.PRESS,
+                List.of(IngredientSpec.tag("forge:ingots/copper", 1)),
+                List.of(OutputSpec.item(FabricationLogic.COPPER_COIL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.PRESS_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(FabricationLogic.COIL_DIE, 1)));
+    }
+
+    /**
+     * The fabrication gate (ADR-0017, ADR-0063). Pylon MK2 has no crafting-table recipe;
+     * the Assembler is the only source.
+     */
+    private static ProcessRecipe pylonMk2() {
+        return new ProcessRecipe(
+                "assemble/pylon_mk2",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.tag("forge:gears/iron", 2)),
+                List.of(OutputSpec.item(FabricationLogic.PYLON_MK2, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK);
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

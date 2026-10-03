@@ -94,6 +94,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-fluids.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-fluids.expect
 
+      # Slice D: Press and Assembler place; a hopper cannot steal a die and can insert an ingot.
+      - name: Boot and exercise first assembler
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-assembler.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-assembler.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4
