@@ -23,8 +23,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Exposes a machine that is a vanilla {@code Container} as Forge's item capability, so pipes from
- * other mods can pull from it the same way a hopper does.
+ * Exposes a machine or belt that is a vanilla {@code Container} as Forge's item capability, so
+ * hoppers and pipes from other mods can pull from it the same way a hopper does.
  *
  * <p>Forge hoppers talk to {@code ITEM_HANDLER}, not to {@code Container} directly. A plain
  * {@code InvWrapper} would let them extract from a {@code WorldlyContainer} that forbids it
@@ -42,7 +42,8 @@ public final class MachineItemCapability {
     @SubscribeEvent
     public static void onAttachCapabilities(AttachCapabilitiesEvent<BlockEntity> event) {
         BlockEntity blockEntity = event.getObject();
-        if (!(blockEntity instanceof MachineBlockEntity)) {
+        if (!(blockEntity instanceof MachineBlockEntity)
+                && !(blockEntity instanceof BeltBlockEntity)) {
             return;
         }
         if (blockEntity instanceof WorldlyContainer worldly) {
