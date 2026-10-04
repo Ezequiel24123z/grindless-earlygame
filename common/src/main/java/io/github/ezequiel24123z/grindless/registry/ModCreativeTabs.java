@@ -49,6 +49,7 @@ public final class ModCreativeTabs {
                 lazy(ModItems.MOTOR),
                 lazy(ModItems.VANADIA_PELLET),
                 lazy(ModItems.SLAG),
+                lazy(ModItems.REFRACTORY_BRICK),
                 lazy(ModItems.PROSPECTORS_SCANNER),
                 lazy(ModItems.PROCESS_ATLAS),
                 lazy(ModItems.FLUX_CONDUIT),

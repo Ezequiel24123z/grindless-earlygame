@@ -129,6 +129,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-contact.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-contact.expect
 
+      # Slice BE: the refractory brick item exists, and the Arc Furnace accepts slag.
+      - name: Boot and exercise refractory brick
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-refractory.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-refractory.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

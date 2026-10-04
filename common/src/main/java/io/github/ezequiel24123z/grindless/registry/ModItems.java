@@ -75,6 +75,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> SLAG = register("slag",
             () -> new Item(new Item.Properties()));
 
+    /** Furnace lining. Slag's named sink on the Arc Furnace (ADR-0091). */
+    public static final RegistrySupplier<Item> REFRACTORY_BRICK = register("refractory_brick",
+            () -> new Item(new Item.Properties()));
+
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));

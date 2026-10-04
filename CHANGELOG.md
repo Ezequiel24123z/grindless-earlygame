@@ -73,11 +73,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Refractory brick (ADR-0091).** The Arc Furnace turns 1 slag into 1 refractory brick
+  in 20 s at 1400 °C. That is the ceramics row's time and temperature, as one unit in
+  and one unit out. The furnace's 1500 °C hold stays inside the band. No new block.
+  Alumina, silica, the Kiln, aggregate and road fill wait. The next slice is BF —
+  metallurgical silicon, not started.
+
 - **Electric-arc steel (ADR-0090).** The Arc Furnace turns 10 iron ingots and 1 carbon
   into 10 steel ingots in 140 s at 1600 °C. That is the graph's 0.1 carbon per ingot
   and 14 s per ingot, as an integer batch. The furnace's 1500 °C hold stays inside the
   band. No new block. Oxygen blow, direct reduction, the washer and the Autoclave wait.
-  The next slice is BE — refractory brick, not started.
+  Refractory brick was named next and is now in (ADR-0091).
 
 - **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia

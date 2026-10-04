@@ -93,6 +93,8 @@ public final class GenerateAssets {
                 FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
+        written += write(items, "refractory_brick",
+                FormTextures.brick(Palette.of("refractory_brick", 0xC46A3A)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
         written += write(items, "process_atlas",
