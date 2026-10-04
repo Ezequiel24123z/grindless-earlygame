@@ -98,6 +98,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0084](#adr-0084--the-flux-drill-spends-cells-not-durability) | The Flux Drill spends cells, not durability | Accepted |
 | [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
 | [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
+| [0088](#adr-0088--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
 
 ---
 
@@ -3356,6 +3357,51 @@ item that does nothing until AC.
 **Consequences.** A successor that makes the planner mine or relocate is
 inventing the wrench this record refused. A successor that returns items
 to a chest here is starting the drone bay.
+
+
+## ADR-0088 — Replication cost is a graph walk and deconstruction yields one Matter
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice W is the Pattern Scanner and the Deconstructor.
+The README prices replication by walking the item's recipe graph (ADR-0010)
+and says anything can become Matter. The Replicator block is slice AH. A
+scanner that stores nothing, or a deconstructor whose yield is the inverse
+of the replication cost, would let a later replicator loop Matter back into
+the priced item.
+
+**Decision.**
+
+1. **Replication cost** is a world-free walk of item-id outputs. An item
+   with no matching line costs 1. The cost of one output is at least 1 and
+   at least the inputs shared across that line's output count, so one
+   output never costs less than its inputs. Fluids add `ceil(mB / 1000)`,
+   and at least 1 when the line has any fluid. A cycle returns 1 for the
+   item already on the stack. Tag outputs are not expanded to member
+   items; the Replicator (AH) resolves tags.
+2. **The Pattern Scanner** is Assembler-manufactured (casing, two motors,
+   four plates, Industrial). Right-click with an item. Matter, a blank
+   hand, and anything in the item tag `grindless:replication_blacklist`
+   are refused and not consumed. A new pattern spends F1 and one item
+   (creative does not spend the item) and stores the item id on the
+   world, the same scope as research. A pattern already stored is not
+   consumed again. Either way the scanner reports the cost. No power
+   means the item stays and the machine reads starved.
+3. **The Deconstructor** is the same Assembler craft. Right-click spends
+   F1 and one item and gives one Matter item. The blacklist does not
+   apply: junk is the sink. Matter smashed again is still one Matter, so
+   the yield is flat and not the inverse of the cost. The Replicator
+   block is not in this slice.
+
+**Alternatives rejected.** Yielding the replication cost as Matter, which
+a replicator could loop; expanding tags in this slice; a per-player
+pattern list; a hopper-only deconstructor with no right-click; shipping
+the Replicator block beside the cost.
+
+**Consequences.** A successor that makes deconstruction pay the graph cost
+reopens the loop this record closed. A successor that replicates items
+here is starting slice AH. A successor that treats a tag output as every
+member item is doing the Replicator's work early.
 
 
 
