@@ -70,6 +70,15 @@ public final class VerifyFluid {
         yes("ambient acid is liquid", FluidLogic.isLiquid(acid));
         no("ambient acid is not gas", FluidLogic.isGas(acid));
 
+        FluidState hydrogen = FluidState.of(FluidLogic.HYDROGEN, 1000);
+        FluidState oxygen = FluidState.of(FluidLogic.OXYGEN, 1000);
+        FluidState nitrogen = FluidState.of(FluidLogic.NITROGEN, 1000);
+        yes("ambient hydrogen is a gas", FluidLogic.isGas(hydrogen));
+        yes("ambient oxygen is a gas", FluidLogic.isGas(oxygen));
+        yes("ambient nitrogen is a gas", FluidLogic.isGas(nitrogen));
+        no("hydrogen does not gravity-flow", FluidLogic.canGravityFlow(hydrogen, 70, 69));
+        no("oxygen does not gravity-flow", FluidLogic.canGravityFlow(oxygen, 70, 69));
+
         List<FluidState> neighbours = List.of(FluidState.of(FluidLogic.WATER, 150), so3);
         eq("available sums matching neighbours", 150, FluidLogic.available(neighbours, FluidLogic.WATER));
         no("150 mB is not 0.2 B", FluidLogic.hasAtLeast(neighbours, FluidLogic.WATER, 200));
@@ -164,6 +173,12 @@ public final class VerifyFluid {
         no("SO2 is not burnt as CO",
                 FluidLogic.extractable(FluidState.of(FluidLogic.SULFUR_DIOXIDE, 1000),
                         FluidLogic.CARBON_MONOXIDE, 1000) > 0);
+        eq("hydrogen burns as long as CO", FluidLogic.CO_BURN_TICKS, FluidLogic.burnTicks(FluidLogic.HYDROGEN));
+        eq("CO still burns 400 ticks", FluidLogic.CO_BURN_TICKS, FluidLogic.burnTicks(FluidLogic.CARBON_MONOXIDE));
+        eq("oxygen is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.OXYGEN));
+        eq("nitrogen is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.NITROGEN));
+        eq("SO2 is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.SULFUR_DIOXIDE));
+        eq("water is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.WATER));
     }
 
     private static void eq(String what, int expected, int actual) {

@@ -64,6 +64,8 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.WIRE_MILL),
                 lazy(ModBlocks.CHEMICAL_REACTOR),
                 lazy(ModBlocks.CHEMICAL_WASHER),
+                lazy(ModBlocks.ELECTROLYSIS_CELL),
+                lazy(ModBlocks.ATMOSPHERIC_INTAKE),
                 lazy(ModBlocks.CONVEYOR_BELT),
                 lazy(ModBlocks.SPLITTER),
                 lazy(ModBlocks.MERGER),

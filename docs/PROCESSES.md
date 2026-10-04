@@ -610,6 +610,13 @@ a process needs an inert atmosphere that nitrogen would spoil. The Intake is T2,
 quiet prerequisite for most of the rest of this section: oxygen for roasting, nitrogen for ammonia
 and for `atm inert`, and the cryogenic cold that liquid nitrogen carries.
 
+The shipped intake does not run that line yet (ADR-0077). There is no Compressor, the machine
+buffer is 2 B of one fluid, and nitrogen and argon have no consumer. MK I drinks free air and
+stores `2 B oxygen` in 10 s — the oxygen cut of the 10 s separation, rounded to the buffer.
+Nitrogen, argon and liquid nitrogen wait until something in the graph spends them. Water
+electrolysis, which this section does not number, is `2 B water → 2 B hydrogen + 1 B oxygen`
+in 10 s. Hydrogen burns like CO. Oxygen recombines: `2 B hydrogen + 1 B oxygen → 2 B water`.
+
 ### Nitrogen fixation
 
 ```
@@ -899,7 +906,8 @@ can only void is not a byproduct, it is a disposal chore — and chores are
 | **Cracker offgas** | catalytic cracking | Fuel; hydrogen recovery over a palladium membrane. |
 | **Depleted uranium** | enrichment | Dense plating; reactor reflector; breeder feed. |
 | **Elemental sulfur** | plasma dissociation | Straight back into the acid line, skipping the roaster. |
-| **Hydrogen** | chlor-alkali | Never waste — ammonia, direct reduction, or fusion feed. |
+| **Hydrogen** | water electrolysis, later chlor-alkali | Thermal Generator (1 B burns like 1 B CO). Oxyhydrogen recombination returns it to water. Ammonia, direct reduction and fusion still wait. |
+| **Oxygen** | Atmospheric Intake, water electrolysis | Oxyhydrogen recombination. T1 roast does not require it. |
 | **Black liquor** | organics | Surfactant for flotation; alkali recovery. |
 | **Anything else** | anywhere | **Deconstructor → Matter**, the universal backstop. |
 

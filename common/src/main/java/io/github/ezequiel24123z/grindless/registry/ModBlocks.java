@@ -107,6 +107,16 @@ public final class ModBlocks {
             register("chemical_washer",
                     () -> new ProcessMachineBlock(ProcessMachineKind.CHEMICAL_WASHER, machine().strength(3.5F)));
 
+    /** T2 electrolysis. 2 B water → 2 B hydrogen + 1 B oxygen. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> ELECTROLYSIS_CELL =
+            register("electrolysis_cell",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.ELECTROLYSIS_CELL, machine().strength(3.5F)));
+
+    /** T2 air skim. Free air → 2 B oxygen. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> ATMOSPHERIC_INTAKE =
+            register("atmospheric_intake",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.ATMOSPHERIC_INTAKE, machine().strength(3.5F)));
+
     /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
     public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =
             register("conveyor_belt",

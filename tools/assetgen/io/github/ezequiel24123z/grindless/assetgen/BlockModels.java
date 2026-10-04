@@ -59,6 +59,8 @@ final class BlockModels {
             case WIRE_MILL -> wireMill();
             case REACTOR -> reactor();
             case WASHER -> washer();
+            case CELL -> cell();
+            case INTAKE -> intake();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -270,6 +272,25 @@ final class BlockModels {
                 front(1, 2, 2, 15, 8, 14, "top", "side", "front"),
                 box(3, 8, 6, 13, 10, 8, "top", "side"),
                 box(7, 2, 0, 9, 4, 2, "cap", "side"));
+    }
+
+    /** A vessel, two electrodes and a short cap. */
+    private static List<Box> cell() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 12, 14, "top", "side", "front"),
+                box(3, 4, 6, 5, 11, 10, "cap", "side"),
+                box(11, 4, 6, 13, 11, 10, "cap", "side"),
+                box(6, 12, 6, 10, 14, 10, "top", "side"));
+    }
+
+    /** A louvered body, a mouth and a stack. */
+    private static List<Box> intake() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 10, 14, "top", "side", "front"),
+                box(5, 4, 0, 11, 8, 2, "cap", "side"),
+                box(6, 10, 6, 10, 16, 10, "top", "side"));
     }
 
     /** A stirred vat with a shaft through the lid. */

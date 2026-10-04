@@ -136,6 +136,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-washer.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-washer.expect
 
+      # Slice M: Electrolysis Cell and Atmospheric Intake place; a tank holds the split water.
+      - name: Boot and exercise electrolysis
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-electrolysis.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-electrolysis.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

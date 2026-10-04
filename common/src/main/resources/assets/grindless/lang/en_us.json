@@ -30,6 +30,8 @@
   "block.grindless.wire_mill": "Wire Mill",
   "block.grindless.chemical_reactor": "Chemical Reactor",
   "block.grindless.chemical_washer": "Chemical Washer",
+  "block.grindless.electrolysis_cell": "Electrolysis Cell",
+  "block.grindless.atmospheric_intake": "Atmospheric Intake",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
   "block.grindless.merger": "Merger",

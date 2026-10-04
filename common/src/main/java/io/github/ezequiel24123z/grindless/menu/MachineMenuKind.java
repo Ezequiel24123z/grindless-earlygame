@@ -16,7 +16,10 @@ public enum MachineMenuKind {
     KILN(1, 1),
     WIRE_MILL(1, 1),
     CHEMICAL_REACTOR(1, 1),
-    CHEMICAL_WASHER(1, 2);
+    CHEMICAL_WASHER(1, 2),
+    /** Fluid-only. Ordinals are saved; new kinds are appended (ADR-0077). */
+    ELECTROLYSIS_CELL(0, 0),
+    ATMOSPHERIC_INTAKE(0, 0);
 
     private final int inputs;
     private final int outputs;

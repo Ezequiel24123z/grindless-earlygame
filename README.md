@@ -2002,12 +2002,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21c | **Slice J — Wire and motors:** Wire Mill, wire form, mill coil, motor | ✅ done — ADR-0074 |
 | 21d | **Slice K — Contact process:** Chemical Reactor, SO₂ → acid, pickle | ✅ done — ADR-0075 |
 | 21e | **Slice L — Washer and B2:** Chemical Washer, washed crushed, vein byproduct | ✅ done — ADR-0076 |
-| 22 | T2+ industry: electrolysis, flotation, solar/steam | pending — build-out M–S |
+| 21f | **Slice M — Electrolysis and air:** Electrolysis Cell, Atmospheric Intake, hydrogen and oxygen sinks | ✅ done — ADR-0077 |
+| 22 | T2+ industry: flotation, solar/steam, fluid well | pending — build-out N–S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **M**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **N**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2035,8 +2036,13 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is M — Electrolysis and air**, not flotation and not etching.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Washer is in (ADR-0076):
+**Next is N — Fluid Well**, not flotation and not etching.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Electrolysis Cell and the Atmospheric
+Intake are in (ADR-0077): Assembler-manufactured once Industrial is researched
+(`1 casing + 2 motor + 4 plates`). `2 B water → 2 B hydrogen + 1 B oxygen` in 10 s.
+Hydrogen burns like CO. Oxygen recombines to water on the Chemical Reactor. The intake
+stores `2 B oxygen` from free air in 10 s. Nitrogen and argon are not emitted. The
+Chemical Washer is in (ADR-0076):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in 20 s.
 That metal's Arc Furnace line is the named byproduct sink. Washed crushed reduces like

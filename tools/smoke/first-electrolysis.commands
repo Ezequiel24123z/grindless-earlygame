@@ -1,0 +1,13 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 12 70 8 minecraft:air
+setblock 8 70 8 grindless:electrolysis_cell[facing=south,status=idle]
+execute if block 8 70 8 grindless:electrolysis_cell run say CELL-OK
+setblock 10 70 8 grindless:basic_tank[facing=south,status=idle]{Fluid:{Id:"minecraft:water",Amount:2000,Temp:20.0d,Pressure:0.1d}}
+execute if block 10 70 8 grindless:basic_tank run say TANK-WATER
+setblock 12 70 8 grindless:atmospheric_intake[facing=south,status=idle]
+execute if block 12 70 8 grindless:atmospheric_intake run say INTAKE-OK

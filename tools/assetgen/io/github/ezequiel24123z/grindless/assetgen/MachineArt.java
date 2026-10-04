@@ -36,6 +36,8 @@ public final class MachineArt {
     public static final int WIRE_MILL = 0xFF8A65;
     public static final int REACTOR = 0xCDDC39;
     public static final int WASHER = 0x0277BD;
+    public static final int CELL = 0x00897B;
+    public static final int INTAKE = 0x5C6BC0;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -72,6 +74,8 @@ public final class MachineArt {
             case WIRE_MILL -> wireMillFront(status);
             case REACTOR -> reactorFront(status);
             case WASHER -> washerFront(status);
+            case CELL -> cellFront(status);
+            case INTAKE -> intakeFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -103,6 +107,8 @@ public final class MachineArt {
             case WIRE_MILL -> wireMillTop();
             case REACTOR -> reactorTop();
             case WASHER -> washerTop();
+            case CELL -> cellTop();
+            case INTAKE -> intakeTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -645,6 +651,79 @@ public final class MachineArt {
         }
         for (int x = 4; x <= 11; x++) {
             set(img, x, 6, WASHER);
+        }
+        return img;
+    }
+
+    // ---- Electrolysis Cell ---------------------------------------------------------------
+
+    /** Two electrodes in a bath: the machine is a thing that splits. */
+    public static BufferedImage cellFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, CELL);
+        int bath = glow < 0 ? Palette.shade(CELL, -0.25) : glow;
+        for (int y = 6; y <= 13; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean wall = y == 6 || y == 13 || x == 3 || x == 12;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.15) : bath);
+            }
+        }
+        for (int y = 7; y <= 12; y++) {
+            set(img, 5, y, Palette.shade(CASING, -0.45));
+            set(img, 10, y, Palette.shade(CASING, -0.45));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage cellTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        int bath = Palette.shade(CELL, -0.1);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean wall = y == 3 || y == 12 || x == 3 || x == 12;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.15) : bath);
+            }
+        }
+        for (int y = 5; y <= 10; y++) {
+            set(img, 5, y, CELL);
+            set(img, 10, y, CELL);
+        }
+        return img;
+    }
+
+    // ---- Atmospheric Intake --------------------------------------------------------------
+
+    /** Louvers and a stack: the machine is a thing that drinks air. */
+    public static BufferedImage intakeFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, INTAKE);
+        int slat = glow < 0 ? Palette.shade(INTAKE, -0.2) : glow;
+        for (int y = 5; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(img, x, y, (y % 2 == 0) ? slat : Palette.shade(CASING, -0.35));
+            }
+        }
+        for (int y = 2; y <= 4; y++) {
+            set(img, 7, y, Palette.shade(CASING, -0.2));
+            set(img, 8, y, Palette.shade(CASING, -0.2));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage intakeTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int i = 4; i <= 11; i++) {
+            set(img, i, 4, INTAKE);
+            set(img, i, 11, INTAKE);
+            set(img, 4, i, INTAKE);
+            set(img, 11, i, INTAKE);
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(INTAKE, -0.25));
+            }
         }
         return img;
     }

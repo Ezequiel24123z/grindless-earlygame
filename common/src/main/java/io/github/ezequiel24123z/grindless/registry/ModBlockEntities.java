@@ -131,6 +131,22 @@ public final class ModBlockEntities {
                                     ModBlocks.CHEMICAL_WASHER.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> ELECTROLYSIS_CELL =
+            BLOCK_ENTITIES.register("electrolysis_cell",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.ELECTROLYSIS_CELL, pos, state),
+                                    ModBlocks.ELECTROLYSIS_CELL.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> ATMOSPHERIC_INTAKE =
+            BLOCK_ENTITIES.register("atmospheric_intake",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.ATMOSPHERIC_INTAKE, pos, state),
+                                    ModBlocks.ATMOSPHERIC_INTAKE.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

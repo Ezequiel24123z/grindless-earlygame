@@ -169,6 +169,42 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.CHEMICAL_WASHER.get();
         }
+    },
+
+    ELECTROLYSIS_CELL(MachineFamily.ELECTROLYSIS_CELL, MachineMenuKind.ELECTROLYSIS_CELL,
+            BlockCatalogue.Geometry.CELL, "electrolysis_cell") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.ELECTROLYSIS_CELL;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withField(ProcessField.ELECTRIC);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.ELECTROLYSIS_CELL.get();
+        }
+    },
+
+    ATMOSPHERIC_INTAKE(MachineFamily.ATMOSPHERIC_INTAKE, MachineMenuKind.ATMOSPHERIC_INTAKE,
+            BlockCatalogue.Geometry.INTAKE, "atmospheric_intake") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.ATMOSPHERIC_INTAKE;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.ATMOSPHERIC_INTAKE.get();
+        }
     };
 
     private final MachineFamily family;

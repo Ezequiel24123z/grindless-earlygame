@@ -54,7 +54,7 @@ public final class ProcessLookup {
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
-        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / mill / contact / wash / assembler)",
+        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / mill / contact / wash / gas / assembler)",
                 Grindless.MOD_NAME, recipes.size());
     }
 

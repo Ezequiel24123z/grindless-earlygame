@@ -53,6 +53,31 @@ public final class ProcessLogic {
     public static final int WASH_CRUSHED = 8;
     public static final int WASH_WATER_MB = 2000;
 
+    /**
+     * Water electrolysis (ADR-0077). Two buckets fill the buffer; oxygen is the vented
+     * half-volume. Ten seconds matches the documented chlor-alkali cycle.
+     */
+    public static final String HYDROGEN = "grindless:hydrogen";
+    public static final String OXYGEN = "grindless:oxygen";
+    public static final String NITROGEN = "grindless:nitrogen";
+    public static final int ELECTROLYSIS_WATER_MB = 2000;
+    public static final int ELECTROLYSIS_HYDROGEN_MB = 2000;
+    public static final int ELECTROLYSIS_OXYGEN_MB = 1000;
+    public static final int ELECTROLYSIS_TICKS = 20 * 10;
+
+    /** Oxyhydrogen recombination. The named oxygen sink, and a second water source. */
+    public static final int RECOMBINE_HYDROGEN_MB = 2000;
+    public static final int RECOMBINE_OXYGEN_MB = 1000;
+    public static final int RECOMBINE_WATER_MB = 2000;
+    public static final int RECOMBINE_TICKS = 20 * 8;
+
+    /**
+     * Ambient air skim (ADR-0077). Two buckets is the oxygen cut of the documented
+     * ten-second separation, rounded to the machine buffer. Nitrogen and argon wait.
+     */
+    public static final int AIR_OXYGEN_MB = 2000;
+    public static final int AIR_TICKS = 20 * 10;
+
     private ProcessLogic() {
     }
 

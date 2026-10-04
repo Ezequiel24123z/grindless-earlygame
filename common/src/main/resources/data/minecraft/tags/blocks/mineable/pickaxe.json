@@ -13,6 +13,8 @@
     "grindless:wire_mill",
     "grindless:chemical_reactor",
     "grindless:chemical_washer",
+    "grindless:electrolysis_cell",
+    "grindless:atmospheric_intake",
     "grindless:flux_pylon_mk1",
     "grindless:flux_pylon_mk2",
     "grindless:flux_pylon_mk3",

@@ -45,6 +45,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Electrolysis and air (ADR-0077).** Electrolysis Cell and Atmospheric Intake are
+  Assembler-manufactured (casing, two motors, four plates; Industrial; no circuit board).
+  `2 B water → 2 B hydrogen + 1 B oxygen` in 10 s; oxygen vents into a neighbouring tank.
+  `1 B hydrogen` burns 400 ticks, the same as CO. `2 B hydrogen + 1 B oxygen → 2 B water`
+  in 8 s on the Chemical Reactor. The intake drinks free air and stores `2 B oxygen` in
+  10 s. Nitrogen and argon are not emitted. Chlor-alkali, the Fluid Well, Haber and roast
+  oxygen still wait. The behaviour graph is 51 recipes; a Grindless-only pack logs 190.
+  CI places the cell, a water tank and the intake.
+
 - **Washer and B2 (ADR-0076).** Chemical Washer is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). Washed crushed is a supplied form.
   `8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in

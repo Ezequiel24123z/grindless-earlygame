@@ -46,6 +46,8 @@ public final class MachineEffects {
             case WIRE_MILL -> mill(status, level, pos, random);
             case REACTOR -> mill(status, level, pos, random);
             case WASHER -> washer(status, level, pos, random);
+            case CELL -> cell(status, level, pos, random);
+            case INTAKE -> intake(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);
@@ -89,6 +91,60 @@ public final class MachineEffects {
                 }
                 sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.7F);
             }
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
+        }
+    }
+
+    /** Bubbles while current runs; a dry spark when the cell is waiting on water or power. */
+    private static void cell(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.6F) {
+                    particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 0.9, z,
+                            (random.nextDouble() - 0.5) * 0.05, 0.04, (random.nextDouble() - 0.5) * 0.05);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.05F, 0.12F, 1.6F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.2F) {
+                    particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 1.0, z, 0.0, 0.01, 0.0);
+                }
+            }
+            case STARVED -> {
+                if (random.nextFloat() < 0.2F) {
+                    particle(level, ParticleTypes.ELECTRIC_SPARK, x, pos.getY() + 0.7, z, 0.0, 0.0, 0.0);
+                }
+                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.15F, 1.4F);
+            }
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
+        }
+    }
+
+    /** A soft draw of cloud while the cowl is running; haze when the oxygen buffer is full. */
+    private static void intake(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.4F) {
+                    particle(level, ParticleTypes.CLOUD, x, pos.getY() + 1.05, z, 0.0, 0.02, 0.0);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.18F, 0.8F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.2F) {
+                    particle(level, ParticleTypes.CLOUD, x, pos.getY() + 1.1, z, 0.0, 0.01, 0.0);
+                }
+            }
+            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.6F);
             case OUT_OF_BAND -> {
             }
             default -> {

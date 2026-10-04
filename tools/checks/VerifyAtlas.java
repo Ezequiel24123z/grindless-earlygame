@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 46, rows.size());
+        eq("atlas lists every generated recipe", 51, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the reactor", "assemble/chemical_reactor",
+        eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("five assembler crafts in this set", 5,
+        eq("seven assembler crafts in this set", 7,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -52,6 +52,16 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:chemical_reactor").size());
         eq("the washer is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:chemical_washer").size());
+        eq("the cell is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:electrolysis_cell").size());
+        eq("the intake is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:atmospheric_intake").size());
+        eq("hydrogen has one electrolysis route", 1,
+                AtlasLogic.producing(recipes, "grindless:hydrogen").size());
+        eq("oxygen has the cell and the intake", 2,
+                AtlasLogic.producing(recipes, "grindless:oxygen").size());
+        eq("recombination is a water route", 1,
+                AtlasLogic.producing(recipes, "minecraft:water").size());
         eq("SO3 has one contact route", 1,
                 AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());
         eq("acid has one contact route", 1,
@@ -73,10 +83,18 @@ public final class VerifyAtlas {
         yes("the mill coil is copper", ids(mill).contains("mill/coil/copper"));
 
         List<AtlasLogic.Entry> reactor = AtlasLogic.family(recipes, MachineFamily.CHEMICAL_REACTOR);
-        eq("three reactor routes in this set", 3, reactor.size());
+        eq("four reactor routes in this set", 4, reactor.size());
         yes("oxidation is contact", ids(reactor).contains("contact/so3"));
         yes("absorption is contact", ids(reactor).contains("contact/acid"));
         yes("pickle spends acid", ids(reactor).contains("pickle/plate/iron"));
+        yes("recombination spends oxygen", ids(reactor).contains("recombine/water"));
+
+        List<AtlasLogic.Entry> cell = AtlasLogic.family(recipes, MachineFamily.ELECTROLYSIS_CELL);
+        eq("one electrolysis route", 1, cell.size());
+        yes("water splits", ids(cell).contains("electrolysis/water"));
+        List<AtlasLogic.Entry> intake = AtlasLogic.family(recipes, MachineFamily.ATMOSPHERIC_INTAKE);
+        eq("one air route", 1, intake.size());
+        yes("air yields oxygen", ids(intake).contains("air/oxygen"));
 
         List<AtlasLogic.Entry> washer = AtlasLogic.family(recipes, MachineFamily.CHEMICAL_WASHER);
         eq("two wash routes in this set", 2, washer.size());

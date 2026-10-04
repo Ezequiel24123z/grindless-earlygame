@@ -161,10 +161,11 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
             burnDuration = ticks;
             return true;
         }
-        return tryIgniteCo();
+        return tryIgniteGas();
     }
 
-    private boolean tryIgniteCo() {
+    /** One bucket of CO or hydrogen. Anything else goes back into the tank (ADR-0065, ADR-0077). */
+    private boolean tryIgniteGas() {
         if (getLevel() == null) {
             return false;
         }
@@ -173,10 +174,11 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
             if (!(neighbour instanceof FluidEndpoint endpoint) || !endpoint.canExtract(side.getOpposite())) {
                 continue;
             }
-            FluidState taken = endpoint.extract(side.getOpposite(), FluidLogic.CO_MB);
-            if (taken.is(FluidLogic.CARBON_MONOXIDE) && taken.millibuckets() >= FluidLogic.CO_MB) {
-                burnRemaining = FluidLogic.CO_BURN_TICKS;
-                burnDuration = FluidLogic.CO_BURN_TICKS;
+            FluidState taken = endpoint.extract(side.getOpposite(), FluidLogic.BUCKET);
+            int ticks = FluidLogic.burnTicks(taken.id());
+            if (ticks > 0 && taken.millibuckets() >= FluidLogic.BUCKET) {
+                burnRemaining = ticks;
+                burnDuration = ticks;
                 return true;
             }
             if (!taken.isEmpty()) {

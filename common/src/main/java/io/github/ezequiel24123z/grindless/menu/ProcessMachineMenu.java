@@ -66,6 +66,8 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new OutputSlot(container, 1, 116, 26));
                 addSlot(new OutputSlot(container, 2, 116, 44));
             }
+            case ELECTROLYSIS_CELL, ATMOSPHERIC_INTAKE -> {
+            }
             case ARC_FURNACE -> {
                 addSlot(new Slot(container, 0, 44, 26));
                 addSlot(new Slot(container, 1, 44, 44));

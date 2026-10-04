@@ -7,7 +7,8 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
  *
  * <p>The Clay Conduit is the first belt of fluids: unpowered, ambient liquids only, downhill
  * or level. Gases need pressure a T1 pipe does not have, so captured CO and SO₂ sit in a tank.
- * CO burns; SO₂ does not (ADR-0065). Heat is conserved on mix; it is not simulated as a solver.
+ * CO and hydrogen burn; SO₂, oxygen and nitrogen do not (ADR-0065, ADR-0077). Heat is
+ * conserved on mix; it is not simulated as a solver.
  */
 public final class FluidLogic {
 
@@ -37,8 +38,9 @@ public final class FluidLogic {
     /** R1 names 1 B CO. Captured into a tank when one will take it; otherwise vented. */
     public static final int CO_MB = BUCKET;
 
-    /** 1 B of captured CO burns 400 ticks — 20 s of F1, a quarter of a coal. */
+    /** 1 B of captured CO or hydrogen burns 400 ticks — 20 s of F1, a quarter of a coal. */
     public static final int CO_BURN_TICKS = 400;
+    public static final int HYDROGEN_BURN_TICKS = CO_BURN_TICKS;
 
     /** R2 roast names 1 B SO₂. Captured like CO; the Thermal Generator must not burn it. */
     public static final int SO2_MB = BUCKET;
@@ -48,6 +50,9 @@ public final class FluidLogic {
     public static final String SULFUR_DIOXIDE = "grindless:sulfur_dioxide";
     public static final String SULFUR_TRIOXIDE = "grindless:sulfur_trioxide";
     public static final String SULFURIC_ACID = "grindless:sulfuric_acid";
+    public static final String HYDROGEN = "grindless:hydrogen";
+    public static final String OXYGEN = "grindless:oxygen";
+    public static final String NITROGEN = "grindless:nitrogen";
 
     private FluidLogic() {
     }
@@ -60,8 +65,9 @@ public final class FluidLogic {
 
     /**
      * Gases at the reference state. Water is liquid below 100 °C at ambient pressure.
-     * Carbon monoxide and sulfur dioxide are gases at ambient. Unknown ids default to liquid
-     * so a T1 pipe will still move a foreign fluid that arrived through Forge interop.
+     * Carbon monoxide, the sulfur oxides, hydrogen, oxygen and nitrogen are gases at ambient.
+     * Unknown ids default to liquid so a T1 pipe will still move a foreign fluid that arrived
+     * through Forge interop.
      */
     public static boolean isGas(FluidState state) {
         if (state.isEmpty()) {
@@ -71,7 +77,20 @@ public final class FluidLogic {
             return state.temperatureC() >= 100.0 - 1e-9;
         }
         return CARBON_MONOXIDE.equals(state.id()) || SULFUR_DIOXIDE.equals(state.id())
-                || SULFUR_TRIOXIDE.equals(state.id());
+                || SULFUR_TRIOXIDE.equals(state.id()) || HYDROGEN.equals(state.id())
+                || OXYGEN.equals(state.id()) || NITROGEN.equals(state.id());
+    }
+
+    /**
+     * How long one bucket of {@code id} burns in the Thermal Generator, or {@code 0} when
+     * that fluid is not a fuel. Hydrogen matches CO (ADR-0077). Oxygen does not burn here;
+     * its sink is recombination.
+     */
+    public static int burnTicks(String id) {
+        if (CARBON_MONOXIDE.equals(id) || HYDROGEN.equals(id)) {
+            return CO_BURN_TICKS;
+        }
+        return 0;
     }
 
     public static boolean isLiquid(FluidState state) {

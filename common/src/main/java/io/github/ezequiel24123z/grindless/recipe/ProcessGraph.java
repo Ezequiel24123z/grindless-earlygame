@@ -13,8 +13,9 @@ import java.util.Locale;
  * Chemical Reactor and the Chemical Washer once Industrial is researched, with no
  * crafting-table JSON (ADR-0073, ADR-0074, ADR-0075, ADR-0076). Contact: SO₂ → SO₃ →
  * sulfuric acid, plus pickle. Wash: eight crushed and water become washed crushed plus the
- * next metal. No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting
- * the game.
+ * next metal. Gases: water splits to hydrogen and oxygen; free air yields oxygen; hydrogen
+ * and oxygen recombine to water (ADR-0077). No Minecraft imports: {@code VerifyRecipes}
+ * dumps this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -40,7 +41,7 @@ public final class ProcessGraph {
     }
 
     /**
-     * Ore-line, roast, press, mill, contact and assembler recipes the given materials support.
+     * Ore-line, roast, press, mill, contact, wash, gas and assembler recipes the given materials support.
      *
      * <p>A material without an ingot is skipped for reduction and forming. A material without
      * a raw or ore form is skipped for the ore line, not for the Press. Missing crushed drops
@@ -102,6 +103,11 @@ public final class ProcessGraph {
         recipes.add(pickleIron());
         recipes.add(chemicalReactor());
         recipes.add(chemicalWasher());
+        recipes.add(waterElectrolysis());
+        recipes.add(recombineWater());
+        recipes.add(airOxygen());
+        recipes.add(electrolysisCell());
+        recipes.add(atmosphericIntake());
         return List.copyOf(recipes);
     }
 
@@ -442,6 +448,87 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
                         IngredientSpec.tag("forge:plates/iron", 4)),
                 List.of(OutputSpec.item(FabricationLogic.CHEMICAL_WASHER, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /**
+     * 2 B water becomes 2 B hydrogen in the buffer and 1 B vented oxygen (ADR-0077).
+     */
+    private static ProcessRecipe waterElectrolysis() {
+        return new ProcessRecipe(
+                "electrolysis/water",
+                MachineFamily.ELECTROLYSIS_CELL,
+                List.of(IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.ELECTROLYSIS_WATER_MB)),
+                List.of(
+                        OutputSpec.fluid(ProcessLogic.HYDROGEN, ProcessLogic.ELECTROLYSIS_HYDROGEN_MB),
+                        OutputSpec.ventedFluid(ProcessLogic.OXYGEN, ProcessLogic.ELECTROLYSIS_OXYGEN_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.ELECTROLYSIS_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Named oxygen sink. Hydrogen is primary; oxygen comes from a neighbour. */
+    private static ProcessRecipe recombineWater() {
+        return new ProcessRecipe(
+                "recombine/water",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.fluid(ProcessLogic.HYDROGEN, ProcessLogic.RECOMBINE_HYDROGEN_MB),
+                        IngredientSpec.fluid(ProcessLogic.OXYGEN, ProcessLogic.RECOMBINE_OXYGEN_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.WATER, ProcessLogic.RECOMBINE_WATER_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.RECOMBINE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Free air, stored oxygen. No nitrogen and no argon until each has a sink. */
+    private static ProcessRecipe airOxygen() {
+        return new ProcessRecipe(
+                "air/oxygen",
+                MachineFamily.ATMOSPHERIC_INTAKE,
+                List.of(),
+                List.of(OutputSpec.fluid(ProcessLogic.OXYGEN, ProcessLogic.AIR_OXYGEN_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.AIR_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** The gas line's cell (ADR-0077). Casing, two motors, four plates. */
+    private static ProcessRecipe electrolysisCell() {
+        return new ProcessRecipe(
+                "assemble/electrolysis_cell",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.ELECTROLYSIS_CELL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** The gas line's intake (ADR-0077). Same craft as the cell. */
+    private static ProcessRecipe atmosphericIntake() {
+        return new ProcessRecipe(
+                "assemble/atmospheric_intake",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.ATMOSPHERIC_INTAKE, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

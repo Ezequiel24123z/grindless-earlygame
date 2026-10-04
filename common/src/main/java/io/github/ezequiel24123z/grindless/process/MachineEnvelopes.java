@@ -49,6 +49,21 @@ public final class MachineEnvelopes {
             .agitation(Agitation.STIRRED)
             .build();
 
+    /** Aqueous electrolysis. Chlor-alkali at 60 °C fits; molten salt does not (ADR-0077). */
+    public static final ConditionEnvelope ELECTROLYSIS_CELL = ConditionEnvelope.builder()
+            .temperature(10.0, 80.0)
+            .fields(ProcessField.ELECTRIC)
+            .build();
+
+    /**
+     * Air separation. The documented cryogenic cut still fits; MK I holds ambient and
+     * skims oxygen only until nitrogen has a sink (ADR-0077).
+     */
+    public static final ConditionEnvelope ATMOSPHERIC_INTAKE = ConditionEnvelope.builder()
+            .temperature(-200.0, 40.0)
+            .pressure(0.1, 1.0)
+            .build();
+
     /** High-pressure hydrothermal chemistry, and the only machine that can hold the 20 MPa the
      * Haber synthesis needs. */
     public static final ConditionEnvelope AUTOCLAVE = ConditionEnvelope.builder()

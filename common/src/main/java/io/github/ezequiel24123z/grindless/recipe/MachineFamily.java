@@ -7,7 +7,8 @@ package io.github.ezequiel24123z.grindless.recipe;
  * recipe's conditions can host it (ADR-0019, ADR-0020). Slice A shipped two families; Slice D
  * adds Press and Assembler; the Kiln adds roast without forking the type (ADR-0065). The
  * Wire Mill adds drawing as its own family (ADR-0074). The Chemical Reactor adds
- * the contact process (ADR-0075).
+ * the contact process (ADR-0075). The Washer adds B2 (ADR-0076). Electrolysis and
+ * the Intake add the gas line (ADR-0077).
  */
 public enum MachineFamily {
 
@@ -34,5 +35,11 @@ public enum MachineFamily {
     CHEMICAL_REACTOR,
 
     /** Wet line. 8 crushed + 2 B water → 8 washed crushed + one secondary crushed. T2. */
-    CHEMICAL_WASHER
+    CHEMICAL_WASHER,
+
+    /** Current through a fluid. 2 B water → 2 B hydrogen + 1 B oxygen. T2. */
+    ELECTROLYSIS_CELL,
+
+    /** Ambient air to stored oxygen. Nitrogen and argon wait for a sink. T2. */
+    ATMOSPHERIC_INTAKE
 }

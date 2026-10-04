@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle and washer", 46, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer and gas line", 51, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -299,6 +299,74 @@ public final class VerifyRecipes {
         eq("the washer makes the block", "item:grindless:chemical_washer",
                 washer.itemOutputs().get(0).qualified());
 
+        ProcessRecipe split = recipe(recipes, "electrolysis/water");
+        ProcessRecipe recombine = recipe(recipes, "recombine/water");
+        ProcessRecipe air = recipe(recipes, "air/oxygen");
+        ProcessRecipe cell = recipe(recipes, "assemble/electrolysis_cell");
+        ProcessRecipe intake = recipe(recipes, "assemble/atmospheric_intake");
+
+        eq("electrolysis is the cell", MachineFamily.ELECTROLYSIS_CELL, split.family());
+        yes("electrolysis has no items", split.itemInputs().isEmpty() && split.itemOutputs().isEmpty());
+        eq("electrolysis takes two buckets of water", 2000, split.fluidInputs().get(0).count());
+        eq("electrolysis water is water", "fluid:minecraft:water", split.fluidInputs().get(0).qualified());
+        eq("electrolysis stores two buckets of hydrogen", "fluid:grindless:hydrogen",
+                split.fluidOutputs().get(0).qualified());
+        eq("hydrogen is two buckets", 2000, split.fluidOutputs().get(0).count());
+        yes("hydrogen is stored", !split.fluidOutputs().get(0).vented());
+        eq("electrolysis vents one bucket of oxygen", "fluid:grindless:oxygen",
+                split.ventedOutputs().get(0).qualified());
+        eq("vented oxygen is one bucket", 1000, split.ventedOutputs().get(0).count());
+        eq("electrolysis is ten seconds", 20 * 10, split.durationTicks());
+        yes("electrolysis names no temperature", !split.namesTemperature());
+        yes("electrolysis names no atmosphere", !split.namesAtmosphere());
+
+        eq("recombination is the reactor", MachineFamily.CHEMICAL_REACTOR, recombine.family());
+        eq("recombination takes two buckets of hydrogen", "fluid:grindless:hydrogen",
+                recombine.fluidInputs().get(0).qualified());
+        eq("recombination hydrogen is two buckets", 2000, recombine.fluidInputs().get(0).count());
+        eq("recombination takes neighbour oxygen", "fluid:grindless:oxygen",
+                recombine.fluidInputs().get(1).qualified());
+        eq("recombination oxygen is one bucket", 1000, recombine.fluidInputs().get(1).count());
+        eq("recombination makes two buckets of water", "fluid:minecraft:water",
+                recombine.fluidOutputs().get(0).qualified());
+        eq("recombination water is two buckets", 2000, recombine.fluidOutputs().get(0).count());
+        yes("recombination water is stored", !recombine.fluidOutputs().get(0).vented());
+        eq("recombination is eight seconds", 20 * 8, recombine.durationTicks());
+        yes("recombination names no temperature", !recombine.namesTemperature());
+
+        eq("air is the intake", MachineFamily.ATMOSPHERIC_INTAKE, air.family());
+        yes("air has no inputs", air.itemInputs().isEmpty() && air.fluidInputs().isEmpty());
+        eq("air stores two buckets of oxygen", "fluid:grindless:oxygen",
+                air.fluidOutputs().get(0).qualified());
+        eq("air oxygen is two buckets", 2000, air.fluidOutputs().get(0).count());
+        yes("air oxygen is stored", !air.fluidOutputs().get(0).vented());
+        yes("air does not vent", air.ventedOutputs().isEmpty());
+        eq("air is ten seconds", 20 * 10, air.durationTicks());
+        yes("air names no temperature", !air.namesTemperature());
+        no("nitrogen is not emitted",
+                recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
+                        .anyMatch(spec -> spec.id().contains("nitrogen"))));
+        no("argon is not emitted",
+                recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
+                        .anyMatch(spec -> spec.id().contains("argon"))));
+        yes("roast still does not take oxygen",
+                recipes.stream().filter(candidate -> candidate.id().equals("roast/iron"))
+                        .allMatch(candidate -> candidate.fluidInputs().isEmpty()));
+
+        eq("the cell is the assembler", MachineFamily.ASSEMBLER, cell.family());
+        eq("the cell takes a casing", "item:grindless:machine_casing",
+                cell.itemInputs().get(0).qualified());
+        eq("the cell takes two motors", 2, cell.itemInputs().get(1).count());
+        eq("the cell takes four plates", 4, cell.itemInputs().get(2).count());
+        eq("the cell is twenty seconds", 20 * 20, cell.durationTicks());
+        eq("the cell needs Industrial", "industrial", cell.blueprint());
+        eq("the cell makes the block", "item:grindless:electrolysis_cell",
+                cell.itemOutputs().get(0).qualified());
+        eq("the intake is the assembler", MachineFamily.ASSEMBLER, intake.family());
+        eq("the intake makes the block", "item:grindless:atmospheric_intake",
+                intake.itemOutputs().get(0).qualified());
+        eq("the intake needs Industrial", "industrial", intake.blueprint());
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -399,6 +467,10 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
         no("the washer has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_washer.json")));
+        no("the cell has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("electrolysis_cell.json")));
+        no("the intake has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("atmospheric_intake.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }
