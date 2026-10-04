@@ -84,6 +84,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
+| [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 
 ---
 
@@ -2742,5 +2743,33 @@ deletes the sorter).
 **Consequences.** A successor that lets a backed-up filter spill to the front is shipping
 overflow on the wrong block. A successor that round-robins unfiltered sides is shipping a
 splitter.
+
+
+## ADR-0073 — Industrial is the second blueprint on the same terminal
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice I is the T2 gate: research Industrial, then Pylon MK2 is a real
+Assembler craft. The MK2 process already exists (`assemble/pylon_mk2`) and has no crafting-table
+JSON (ADR-0063). The terminal only unlocks Voltaic, and the Assembler does not ask whether
+Industrial is researched, so a T1 factory already manufactures the T2 pylon.
+
+**Decision.**
+
+1. **Industrial** is the second `Blueprint`. The same Research Terminal unlocks it after Voltaic.
+   It still draws F0. The cycle is sixty seconds. The spent item is an **Advanced Data Core**,
+   not a basic core. You cannot skip Voltaic.
+2. The Advanced Data Core is a Voltaic-gated crafting-table item: one Data Core and four iron
+   plates. Processed plates are the "advanced cores from processed ones" line in the README.
+3. `assemble/pylon_mk2` names blueprint `industrial`. The Assembler refuses the recipe until
+   that blueprint is unlocked. Atlas still lists it. Wire Mill, washer and Slice F still wait.
+
+**Alternatives rejected.** A second research block (the terminal is the production target);
+re-rating the terminal to F1 for this slice (the first T2 wait should not demand a new power
+tier); a crafting-table MK2 (ADR-0017); unlocking Industrial with a basic core (then the
+advanced item is flavour).
+
+**Consequences.** A successor that lets the Assembler build MK2 before Industrial is deleting
+the T2 gate. A successor that starts the Wire Mill in this slice is skipping J.
 
 
