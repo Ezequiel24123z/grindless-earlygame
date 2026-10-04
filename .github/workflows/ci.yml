@@ -199,6 +199,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-atlas.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-atlas.expect
 
+      # Slice BC: the quest book and the field guide are items.
+      - name: Boot and exercise the quest book
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-book.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-book.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

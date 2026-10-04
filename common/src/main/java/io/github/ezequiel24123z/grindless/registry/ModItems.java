@@ -3,7 +3,9 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.FieldGuideItem;
 import io.github.ezequiel24123z.grindless.item.MultitoolItem;
+import io.github.ezequiel24123z.grindless.item.QuestBookItem;
 import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
@@ -32,6 +34,14 @@ public final class ModItems {
     /** The T0 handheld. Replaces the stone-tool phase outright. */
     public static final RegistrySupplier<Item> MULTITOOL = register("multitool",
             () -> new MultitoolItem(new Item.Properties().stacksTo(1)));
+
+    /** The route, as tasks. Does not gate a machine (ADR-0100). */
+    public static final RegistrySupplier<Item> QUEST_BOOK = register("quest_book",
+            () -> new QuestBookItem(new Item.Properties().stacksTo(1)));
+
+    /** The route, as pages. Readable before any task is claimed (ADR-0100). */
+    public static final RegistrySupplier<Item> FIELD_GUIDE = register("field_guide",
+            () -> new FieldGuideItem(new Item.Properties().stacksTo(1)));
 
     /** Research currency. Produced by the factory, spent in the Research Terminal. */
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",

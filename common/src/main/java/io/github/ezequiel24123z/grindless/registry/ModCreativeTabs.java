@@ -38,6 +38,8 @@ public final class ModCreativeTabs {
         TABS.register();
         CreativeTabRegistry.append(MAIN,
                 lazy(ModItems.MULTITOOL),
+                lazy(ModItems.QUEST_BOOK),
+                lazy(ModItems.FIELD_GUIDE),
                 lazy(ModItems.DATA_CORE),
                 lazy(ModItems.ADVANCED_DATA_CORE),
                 lazy(ModItems.MACHINE_CASING),

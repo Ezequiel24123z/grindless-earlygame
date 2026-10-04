@@ -4,9 +4,11 @@ import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.menu.FieldGuideMenu;
 import io.github.ezequiel24123z.grindless.menu.LandingMapMenu;
 import io.github.ezequiel24123z.grindless.menu.ProcessAtlasMenu;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
+import io.github.ezequiel24123z.grindless.menu.QuestBookMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -31,6 +33,16 @@ public final class ModMenus {
     public static final RegistrySupplier<MenuType<LandingMapMenu>> LANDING_MAP =
             MENUS.register("landing_map",
                     () -> new MenuType<>(LandingMapMenu::new, FeatureFlags.VANILLA_SET));
+
+    /** The quest book. No slots (ADR-0100). */
+    public static final RegistrySupplier<MenuType<QuestBookMenu>> QUEST_BOOK =
+            MENUS.register("quest_book",
+                    () -> new MenuType<>(QuestBookMenu::new, FeatureFlags.VANILLA_SET));
+
+    /** The field guide. No slots (ADR-0100). */
+    public static final RegistrySupplier<MenuType<FieldGuideMenu>> FIELD_GUIDE =
+            MENUS.register("field_guide",
+                    () -> new MenuType<>(FieldGuideMenu::new, FeatureFlags.VANILLA_SET));
 
     private ModMenus() {
     }

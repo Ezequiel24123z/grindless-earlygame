@@ -8,10 +8,9 @@ cap and the early-game convenience framing. Anything not yet started below is **
 next calendar is the **modpack expansion**. The quest book is last, not first
 ([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BC — Original quest book and in-game guide.** Not implemented. BN (arrival
-at the galactic centre) is done. BK (teleportation orbs) is identified and not started.
-Do not pull it forward. The quest book is last, and it is the next slice. It is not started.
-K remains the last foundation slice. L–BB are held.
+**BC — Original quest book and in-game guide is done** (ADR-0100). No slice follows it.
+BN (arrival at the galactic centre) is done. BK (teleportation orbs) is identified and
+not started. Do not invent a slice. K remains the last foundation slice. L–BB are held.
 
 ---
 
@@ -199,11 +198,10 @@ the factory for real.
 
 ## Modpack expansion
 
-ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
-start the quest book.
+ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. The
+quest book is done. Do not open a row after it.
 
-**Next slice: BC — Original quest book and in-game guide.** Not implemented. Do not start
-it in the arrival change. BK (teleportation orbs) is not next.
+**No next slice.** BC is done (ADR-0100). BK (teleportation orbs) is not next.
 The Lunar Link and the Starward Link stay registered. The station replaced the hop
 (ADR-0098). The link block no longer moves a player. This pass does not delete it.
 
@@ -221,19 +219,20 @@ The Lunar Link and the Starward Link stay registered. The station replaced the h
 | **BM** | **Supraluminal station** | Ride a station to another star | The supraluminal station (ADR-0098). It climbs to the ceiling, and that ceiling is the arrival on the Drift. Assembler, Industrial: the berth is one starward link and four steel plates; the station is one casing, one motor and two array casings. Leaving any world but the Drift spends 6,553,600 FU. Leaving the Drift does not. ADR-0099 sends that free ride to the galactic centre. The Starward Link stays registered and no longer moves a player. | The quest book. Kardashev Type I, II and III. Further planets. A third teleport link. The teleportation orbs. | ✅ done |
 | **BN** | **Arrival at the galactic centre** | Reach the black hole by riding the station | The galactic centre (ADR-0099). Riding the station from the Drift arrives in a sealed chamber, `grindless:sagittarius`. The mass is unbreakable horizon shell, sixteen blocks tall, with no vein. The carve is a 7×4×7 room, one arrival mark, one berth, and a 3×3 shaft so the ride home has air. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. The Starward Link stays registered and still does not move a player. No new link and no new recipe. | The quest book. Kardashev Type I, II and III. Further planets. An empty arrival. An endless interior. A link. | ✅ done |
 
-The original quest book is last, with the in-game guide, after that arrival.
+The original quest book is in, with the in-game guide, after that arrival. Nothing follows it.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **BC** | **Original quest book and in-game guide** | Follow the pack, then read it in game | Last, after the black hole. An original quest book in the BetterQuesting style — lines, tasks, dependencies and rewards — together with the in-game guide. | Copying BetterQuesting, GregTech or Ad Astra code or assets. Planets are not this row. **Not implemented. Next, and not started.** |
+| **BC** | **Original quest book and in-game guide** | Follow the pack, then read it in game | Last, after the black hole. An original quest book — lines, tasks, dependencies and rewards — together with the in-game guide (ADR-0100). The lines run from the Multitool to the sealed chamber. | Copying BetterQuesting, GregTech or Ad Astra code or assets. Planets are not this row. A machine gate. A slice after this one. | ✅ done |
 
 ## How a session starts
 
-1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
-   slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BC. Held rows
-   are not a queue. The quest book is last, and it is not started. Do not start BK. Do not resume BN.
+1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's opening status, then the
+   row it names. BC is done, and the status names no following slice.
+2. Branch from the current tip. Implement only that slice. BC is done. Held rows
+   are not a queue. No slice follows the quest book. Do not start BK. Do not resume BN.
+   Do not invent a slice.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
-   and name the following slice before starting it.
+   and name the following slice before starting it. There is no following slice.
 
 Uncommitted work does not exist. A session does not work through L–BB while they are held.

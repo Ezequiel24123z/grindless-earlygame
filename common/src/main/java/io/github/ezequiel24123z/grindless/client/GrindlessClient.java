@@ -25,6 +25,8 @@ public final class GrindlessClient {
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_MACHINE.get(), ProcessMachineScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_ATLAS.get(), ProcessAtlasScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.LANDING_MAP.get(), LandingMapScreen::new);
+        MenuRegistry.registerScreenFactory(ModMenus.QUEST_BOOK.get(), QuestBookScreen::new);
+        MenuRegistry.registerScreenFactory(ModMenus.FIELD_GUIDE.get(), FieldGuideScreen::new);
         EntityRendererRegistry.register(ModEntities.SURVEY_ROCKET, SurveyRocketRenderer::new);
         EntityRendererRegistry.register(ModEntities.SUPRALUMINAL_STATION, SupraluminalStationRenderer::new);
         BlockEntityRendererRegistry.register(ModBlockEntities.CONVEYOR_BELT.get(), BeltRenderer::new);
