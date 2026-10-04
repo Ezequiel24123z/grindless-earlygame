@@ -532,6 +532,17 @@ Zero gravity and hard vacuum as *process conditions*, not flavour. Some products
 made under gravity: perfect crystals, large thin films, certain alloys that segregate when they
 settle. This is what makes the orbital stage a manufacturing necessity rather than a victory lap.
 
+### Horizon Gate
+
+T6 ring. Dialed pair, not a mining dimension
+([ADR-0068](DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)).
+Ring circumference is presence range and stability, not ore yield. The far ring is cargo you
+deliver once. After that, players and frames walk; bulk cargo still prefers the Mass Driver
+because the gate's FU-per-kilogram is worse on purpose.
+
+Addresses come from the planet registry. If a space mod is installed, those worlds are the
+book. Vanilla Nether and End are not in the book unless a datapack puts them there.
+
 ---
 
 ## Routes: many ways to the same output
@@ -668,3 +679,6 @@ Deliberately unresolved, recorded so a later session does not assume they were o
   validated against the processing chain's real power demands.
 - **Where the orbital line crosses GregTech's endgame.** Both exist in the same pack in some
   setups, and Grindless should complement rather than duplicate.
+- **Horizon Gate address format and open cost.** ADR-0068 names the pair and forbids mining
+  dims. Glyphs vs coordinates vs registry ids, and FU per kilogram through the ring, are not
+  chosen yet.

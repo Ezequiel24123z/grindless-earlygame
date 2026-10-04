@@ -952,10 +952,13 @@ has to do real, continuous work for the base back home.
 | 2 | **Rocket** | Assembled from parts on a production line. Carries payload mass to orbit. Consumed on launch. |
 | 3 | **Mass Driver** (multiblock) | The bulk answer. An electromagnetic launcher that fires cargo canisters to orbit for pure FU and no rocket. Cheap per kilogram, but useless for anything fragile or alive. |
 | 4 | **Orbital Platform** | Your space station. Built from launched modules; expands into a real base. |
+| 5 | **Horizon Gate** (multiblock, T6) | Dialed ring. Instant presence after a far gate is delivered. Not a mining dimension ([ADR-0068](docs/DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)). |
 
 Rockets are for the first trip and for anything crewed. **The Mass Driver is what makes an orbital
 economy viable** — once it is running, sending material up is an energy cost rather than a
-manufacturing project, which converts space from an event into infrastructure.
+manufacturing project, which converts space from an event into infrastructure. **The Horizon Gate
+is what kills the commute** — once a pair is standing, you walk; bulk ore still prefers the
+driver.
 
 ### Satellites that actually do something
 
@@ -1000,7 +1003,7 @@ chunk veins and remote-exploitation systems onto *their* dimensions rather than 
 competing set. This is the same principle as the tag-driven material registry: integrate with the
 pack, never duplicate it.
 
-Only when no space mod is present does Grindless add its own minimal set:
+Only when no space mod is present does Grindless add its own fallback set:
 
 | World | Character | Hazard | Signature resource |
 | --- | --- | --- | --- |
@@ -1009,6 +1012,8 @@ Only when no space mod is present does Grindless add its own minimal set:
 | **Vulcan** | Volcanic, hot, dense | Heat, ash | Heavy metals, geothermal power |
 | **Kryos** | Ice moon, subsurface ocean | Extreme cold | Deuterium, cryogenic volatiles |
 | **Erebus** | Rogue planet, no star, dark | Darkness, radiation | Exotic isotopes, strange matter |
+| **Thalassa** | Ocean world, thick air | Pressure, corrosion | High-pressure chemistry, dissolved volatiles |
+| **Helios** | Tidally locked | Dayside heat, nightside cold | Extreme process envelopes, not a second ore list |
 
 Every world has its own **vein weighting pool**, so the chunk vein system from
 [System 2](#system-2--resource-genesis) works identically off-world with different odds. Planets
@@ -1019,7 +1024,7 @@ planets by rarity, with no compat work.
 Solar output scales with distance from the star, hazards demand specific life support, and local
 gravity affects Mass Driver cost — so *where* you build is a genuine engineering decision.
 
-### Three ways to exploit a world
+### Four ways to exploit a world
 
 This is the part of the design I am most confident is worth building, because it is the question
 every space mod answers badly: **what do you do with a planet you cannot be standing on?**
@@ -1064,7 +1069,7 @@ unfolds, and runs without you.
 
 **Colonies are simulated abstractly, not tick-by-tick.** A colony is a small state machine with a
 computed production rate; it does not force-load chunks and does not run block entities while you
-are away. Twenty colonies across five planets cost approximately nothing in server performance.
+are away. Twenty colonies across the fallback worlds cost approximately nothing in server performance.
 
 This is deliberate and load-bearing. The usual implementation — force-loading a remote base so its
 machines keep ticking — is exactly how a server dies, and it is why most mods quietly discourage
@@ -1074,6 +1079,20 @@ industry instead.
 Colony integrity gives the system a slow, manageable rhythm: a colony wants attention every few
 hours, not every few minutes, and the attention it wants can itself be automated. That is the
 correct difficulty curve for something you are supposed to have dozens of.
+
+#### 4. Horizon Gate — walk there
+
+T6. In the tradition of a Stargate: a ring you dial, not a mining dimension you live in
+(ADR-0068).
+
+Deep Survey reveals **addresses**. You manufacture a second ring and deliver it once — rocket,
+Mass Driver or colony package. After the pair exists, you walk through: players, Proxy Frames,
+colony packages. Cargo *can* go through, at a worse FU-per-kilogram than the Mass Driver, so a
+belt of ore still belongs on the driver.
+
+The gate does not open a world whose only job is more ore. It dials planets already in the
+registry. If Ad Astra (or a friend) is installed, those are the destinations. Vanilla Nether and
+End stay out unless a pack author adds them by datapack.
 
 ### Orbital logistics
 
@@ -1095,7 +1114,7 @@ Every earlier system gains a new dimension rather than being replaced:
 | **Flux Network** | Relay satellites extend it across dimensions; bandwidth becomes a second, scarcer network resource. |
 | **Resource Genesis** | Survey satellites map veins remotely; every planet is a different distribution to exploit. |
 | **Matter Replication** | Orbital and exotic materials feed patterns that are unobtainable on the ground. |
-| **Logistics** | Mass drivers, drop pods and the space elevator turn logistics interplanetary. |
+| **Logistics** | Mass drivers, drop pods, the space elevator and Horizon Gates turn logistics interplanetary. Presence is the gate; bulk is the driver. |
 | **Tools** | The Exosuit becomes life support; Proxy Frames become a second body. |
 | **Resonance** | Orbital industry emits none to the surface — relocation is a real strategic answer. |
 | **Futuristic tier** | Helium-3 and deuterium from Luna and Kryos make fusion genuinely cheap. |
@@ -1207,7 +1226,7 @@ factory is capable of building this* — and a player has to clear both. See
 | **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Arc Reactor**, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank, **Arc Exosuit**. |
 | **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere, **Exotic Exosuit**. |
 | **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
-| **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator. |
+| **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
 
 The ramp is intentional. Ten minutes in, you are never hand-mining iron again. Everything after
 that is optimisation, which is the part worth playing.
@@ -1222,6 +1241,8 @@ exactly the moment the player has earned it:
   which is what lets multiblocks grow into real engineering problems.
 - **T5, the Survey Satellite** — the moment finding resources stops being an activity and becomes
   a map you read.
+- **T6, the Horizon Gate** — the moment the interplanetary commute dies. First contact is still a
+  delivery; after the pair stands, you walk.
 
 ---
 
@@ -1518,6 +1539,7 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Drop Pod Bay, Landing Beacon | T6 | Targeted surface delivery. |
 | Interplanetary Router | T6 | Item routing across dimensions. |
 | Space Elevator (multiblock) | T6 | Permanent ground-to-orbit link. |
+| Horizon Gate (multiblock) | T6 | Dialed pair. Commute, not a mining dimension (ADR-0068). |
 
 ### Satellites
 
@@ -1612,7 +1634,7 @@ The same rule applies to dimensions as to materials: **detect and integrate, nev
 | Situation | Behaviour |
 | --- | --- |
 | Ad Astra, Galacticraft, Beyond Earth or similar installed | Grindless registers **no planets of its own**. Its satellites, chunk veins, colonies and telepresence all operate on *their* dimensions, and each detected world gets a vein weighting pool derived from its existing characteristics. |
-| No space mod installed | Grindless adds its own minimal set — Luna, Tharsis, Vulcan, Kryos, Erebus. |
+| No space mod installed | Grindless adds its own minimal set — Luna, Tharsis, Vulcan, Kryos, Erebus, Thalassa, Helios. Horizon Gates dial those worlds. |
 | A space mod added to an existing world later | Its worlds are picked up on the next load and become valid targets. |
 
 Planet detection runs through a datapack-definable registry, so a pack author can point Grindless
@@ -1915,9 +1937,11 @@ mapped instead of hunted, and orbital solar carries real load.
 Planet registry with space-mod detection, and the fallback worlds. Per-planet vein pools and
 hazards. Life support. **Proxy Frames and telepresence.** **Colony Cores** with abstract
 simulation, integrity and resupply. Drop pods, interplanetary routing, Space Elevator.
+**Horizon Gates** (dialed pairs, not mining dimensions).
 
 **Definition of done:** a player can profitably exploit a planet they have never physically
-visited, and twenty remote colonies cost no measurable server performance.
+visited, walk to one through a gate after delivering the far ring, and twenty remote colonies
+cost no measurable server performance.
 
 ### 1.0 — Polish
 
@@ -1974,7 +1998,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |
 | 24 | Orbital layer: launch, satellites, station | pending |
-| 25 | Planetary layer: colonies, telepresence, planet registry | pending |
+| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — 0.9; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
@@ -2010,8 +2034,9 @@ Kiln / R2 are in: a T1 Kiln roasts feed to oxide and vents 1 B SO₂ into a tank
 atmosphere). The Arc Furnace reduces oxide + carbon to an ingot and slag in 10 s.
 Yield stays 1.00; 1.15 and sulfuric acid wait. Slice E spanning is already in.
 Modular armour and the Arc Reactor pair are **recorded, not started** (ADR-0067): T3 / F3,
-same unlock for the factory plant and the suit core, fed by a cell line. Do not start
-hatches to prepare for them.
+same unlock for the factory plant and the suit core, fed by a cell line. Horizon Gates and
+the extra fallback worlds are **recorded, not started** (ADR-0068): T6 commute, not a mining
+dimension. Do not start hatches, orbit, or a void world to prepare for them.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

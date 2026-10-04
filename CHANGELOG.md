@@ -30,6 +30,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Horizon Gates and exotic fallback worlds (ADR-0068).** Design only. T6 dialed ring pair
+  kills the interplanetary commute; it is not a mining dimension. People cheap, bulk still
+  on the Mass Driver. Fallback adds Thalassa and Helios when no space mod is installed.
+  Not started.
+
 - **Modular armour line and the Arc Reactor pair (ADR-0067).** Design only. T1–T4 chassis;
   T3 / F3 factory Arc Reactor and miniature suit core share a manufactured Arc Cell line.
   Direct FU, not steam. Not the Arc Furnace, not fission, not fusion. Not started.
