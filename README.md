@@ -752,26 +752,54 @@ extractor outpost, rebuilding it forty times by hand is precisely the tedium thi
 remove. Blueprints turn "I have solved this problem" into "I have solved this problem
 permanently", which is exactly what makes Factorio's mid-game feel good.
 
-### The Flux Exosuit
+### Modular armour
 
-Modular powered armour, in the tradition of Factorio's power armour. Four pieces, each with a
-grid of **equipment modules**; larger grids come with higher tiers.
+Modular powered armour, in the tradition of Factorio's power armour. It is a **chassis line**,
+not one T2 unlock ([ADR-0067](docs/DECISIONS.md#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier)).
+Four pieces per tier, each with a grid of **equipment modules**. Larger grids and better modules
+come with the next chassis. Modules pull out intact — experimenting is free, same as machine
+upgrades.
 
-| Module | Effect |
-| --- | --- |
-| **Flux Cell** | Onboard energy buffer. |
-| **Portable Reactor** | Generates FU while worn. |
-| **Network Tap** | Recharges the suit from any pylon supply area you walk through. |
-| **Exoskeleton Legs** | Movement and jump. |
-| **Thruster Pack** | Flight, with a real energy cost. |
-| **Shield Projector** | Regenerating personal shield that absorbs damage before health. |
-| **Auto-Repair Unit** | Repairs held and worn equipment from Matter. |
-| **Personal Drone Bay** | A handful of construction drones that follow you and build blueprints anywhere. |
-| **Night Vision** | Exactly what it says. |
-| **Magnet Module** | Pulls dropped items toward you. |
+| Chassis | Tier | What the last one could not do |
+| --- | --- | --- |
+| **Voltaic Harness** | T1 | Protection and a Flux Cell. No onboard generation. Vanilla armour stays valid until this exists. |
+| **Flux Exosuit** | T2 | Network Tap, mobility, shields. You recharge by walking through pylons. |
+| **Arc Exosuit** | T3 | **Miniature Arc Reactor** — generates FU while worn, on the same Arc Cells the factory reactor burns. |
+| **Exotic Exosuit** | T4 | Fusion-class cell, orbital life support. |
+
+| Module | First chassis | Effect |
+| --- | --- | --- |
+| **Flux Cell** | T1 | Onboard energy buffer. |
+| **Network Tap** | T2 | Recharges the suit from any pylon supply area you walk through. |
+| **Exoskeleton Legs** | T2 | Movement and jump. |
+| **Thruster Pack** | T2 | Flight, with a real energy cost. |
+| **Shield Projector** | T2 | Regenerating personal shield that absorbs damage before health. |
+| **Auto-Repair Unit** | T2 | Repairs held and worn equipment from Matter. |
+| **Night Vision** | T2 | Exactly what it says. |
+| **Magnet Module** | T2 | Pulls dropped items toward you. |
+| **Miniature Arc Reactor** | T3 | Generates FU while worn. Consumes Arc Cells. |
+| **Personal Drone Bay** | T3 | A handful of construction drones that follow you and build blueprints anywhere. |
 
 The grid layout is a genuine decision — energy generation competes with shields competes with
-mobility — and it scales all the way from "one cell and night vision" to a full late-game suit.
+mobility — and it scales from "one cell" to a full late-game suit. There is no free worn
+generator before T3: a Portable Reactor that needs no factory is not a module.
+
+### The Arc Reactor
+
+T3 / F3. The factory plant and the suit core are **one unlock** (ADR-0067).
+
+A formed multiblock that produces **FU directly** at Arc voltage. It is not the Arc Furnace
+(that smelts), not fission (heat into steam, neighbour bonus), not fusion (T4 D–T ignition).
+
+- **Feed** is a manufactured **Arc Cell** from a named processing line. If the line stops, the
+  reactor starves. The miniature suit reactor burns the same cell.
+- **Coolant or stability** is real logistics, not flavour. Hatches take cells and fluids.
+- **Playable**, not a trophy: output, starve, restart. Failure is recoverable (quench / idle),
+  not a crater.
+- Construction drones exist at this tier, so the structure can be a real design problem.
+
+Exact cell chemistry, hatch layout and size stay open until that slice. Slice F starts when
+this machine (or another that needs hatches) is scheduled — not as an empty kernel.
 
 ---
 
@@ -840,7 +868,9 @@ late-game ammunition, with no compat work.
 ## System 8 — The futuristic tier
 
 The endgame is where the mod stops being about *getting* materials and starts being about
-*transforming* them. Every machine here is a multiblock, and each one is a project.
+*transforming* them. Every machine here is a multiblock, and each one is a project. The first of
+those plants is the [Arc Reactor](#the-arc-reactor) at T3 / F3 — still a factory you feed, not
+this tier's trophy. Fission, fusion and the singularity are what follow.
 
 ### Fission Reactor
 
@@ -999,7 +1029,7 @@ every space mod answers badly: **what do you do with a planet you cannot be stan
 Fly there, land, build normally. Full control, full flexibility, full risk — and you have to
 actually be there, which means you are not at home doing anything else.
 
-Requires life support appropriate to the hazard: the Flux Exosuit with the right modules, or a
+Requires life support appropriate to the hazard: the Exosuit chassis with the right modules, or a
 pressurised base.
 
 #### 2. Telepresence — the Proxy Frame
@@ -1172,10 +1202,10 @@ factory is capable of building this* — and a player has to clear both. See
 | Tier | Time | Theme | Unlocks |
 | --- | --- | --- | --- |
 | **T0 — Bootstrap** | 0–10 min | Escape velocity | Hand Crank Dynamo, Crude Extractor, Multitool. Buildable from cobblestone, wood and two iron. **This is the moment the grind dies.** |
-| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret, Clay Conduit, Hand Pump, Basic Tank. |
+| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret, Clay Conduit, Hand Pump, Basic Tank, **Voltaic Harness**. |
 | **T2 — Industrial** | 1–3 h | Real automation | Flux Pylon MK2, Chemical Washer, Assembler, Solar and Steam generation, Pattern Scanner, Deconstructor, Flux Belt, Stack/Filter Manipulator, Sorter, Logic Controller, Flux Drill, **Blueprint Tool**, Flux Exosuit, Gauss Rifle, Laser Turret, Pressure Pipe, Electric Pump, Boiler, Condenser, Industrial Tank, Fluid Manipulator. |
-| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank. |
-| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere. |
+| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Arc Reactor**, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank, **Arc Exosuit**. |
+| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere, **Exotic Exosuit**. |
 | **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
 | **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator. |
 
@@ -1378,6 +1408,7 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Thermal Generator | T1 | Burns any furnace fuel. |
 | Solar Array | T2 | Daylight only; pairs with buffers. |
 | Steam Turbine | T2 | Consumes steam from any heat source. |
+| Arc Reactor (multiblock) | T3 | Direct F3 FU. Arc Cells. Same fuel as the suit core (ADR-0067). |
 | Heat Exchanger | T3 | Reactor heat → steam. |
 | Fission Reactor (multiblock) | T3 | Neighbour bonus; SCRAM on overheat. |
 | Fusion Reactor (multiblock) | T4 | Ignition cost; quench-safe failure. |
@@ -1511,7 +1542,8 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Integrated Circuit, Superconductor | T3 |
 | Quantum Core, Containment Ring | T4 |
 | Flux Drill, Blueprint Tool, Deconstruction Planner | T2 |
-| Flux Exosuit (4 pieces) + equipment modules | T2–T4 |
+| Voltaic Harness / Flux Exosuit / Arc Exosuit / Exotic Exosuit (4 pieces) + equipment modules | T1–T4 |
+| Arc Cell | T3 |
 | Terraformer, Matter Pattern Slate | T3 |
 | Data Core / Advanced Data Core / Exotic Data Core | T0 / T2 / T4 |
 | Matter, Raw materials, dusts, purified dusts, plates | various |
@@ -1849,8 +1881,9 @@ soft under-volt curve and proportional brownouts.
 ### 0.4 — Tools and matter
 
 Flux Drill, Multitool, **Blueprint Tool** and construction drones, Deconstruction Planner. Pattern
-Scanner, Deconstructor and Replicator with recipe-graph pricing. Flux Exosuit with its module
-grid.
+Scanner, Deconstructor and Replicator with recipe-graph pricing. Modular armour chassis line
+(T1 harness through T4 exotic) with the module grid. The T3 miniature Arc Reactor waits for the
+factory plant (ADR-0067).
 
 ### 0.5 — Resonance and defence
 
@@ -1859,8 +1892,9 @@ The T2–T3 weapon set and manufactured ammunition.
 
 ### 0.6 — The futuristic tier
 
-Drone logistics and the logistics crates. Deep Core Drill. Fission Reactor multiblock with
-neighbour bonuses and SCRAM. Centrifuge and the fuel cycle.
+Drone logistics and the logistics crates. Deep Core Drill. **Arc Reactor** multiblock (direct F3
+FU, Arc Cell line, same fuel as the suit). Fission Reactor multiblock with neighbour bonuses
+and SCRAM. Centrifuge and the fuel cycle.
 
 ### 0.7 — Endgame
 
@@ -1936,7 +1970,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
 | 20b | **Kiln / R2 — Roast then reduce:** T1 Kiln, oxide form, SO₂ capture | ✅ done — ADR-0065; 1.15 and acid stay later |
-| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework |
+| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework; Arc Reactor is a candidate (ADR-0067) |
 | 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |
 | 24 | Orbital layer: launch, satellites, station | pending |
@@ -1975,6 +2009,9 @@ The Process Atlas stub is in: a Voltaic-gated handheld lists the live process gr
 Kiln / R2 are in: a T1 Kiln roasts feed to oxide and vents 1 B SO₂ into a tank (or
 atmosphere). The Arc Furnace reduces oxide + carbon to an ingot and slag in 10 s.
 Yield stays 1.00; 1.15 and sulfuric acid wait. Slice E spanning is already in.
+Modular armour and the Arc Reactor pair are **recorded, not started** (ADR-0067): T3 / F3,
+same unlock for the factory plant and the suit core, fed by a cell line. Do not start
+hatches to prepare for them.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

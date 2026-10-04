@@ -30,6 +30,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Modular armour line and the Arc Reactor pair (ADR-0067).** Design only. T1–T4 chassis;
+  T3 / F3 factory Arc Reactor and miniature suit core share a manufactured Arc Cell line.
+  Direct FU, not steam. Not the Arc Furnace, not fission, not fusion. Not started.
+
 - **Process Atlas stub (ADR-0066).** Handheld lists the live `ProcessLookup` graph:
   family, I/O, catalysts, named conditions, duration and FU/t. `AtlasLogic` has no
   Minecraft imports; `VerifyAtlas` dumps it. No ratio solver. JEI still waits.
