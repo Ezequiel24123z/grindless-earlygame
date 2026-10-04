@@ -88,8 +88,20 @@ public final class VerifyBootstrap {
         eq("already unlocked is blocked, even with a core", MachineStatus.BLOCKED,
                 ResearchLogic.status(true, true, true, true));
         eq("voltaic is the first blueprint", "voltaic", Blueprint.VOLTAIC.id());
+        eq("industrial is the second", "industrial", Blueprint.INDUSTRIAL.id());
         yes("voltaic looks itself up", Blueprint.byId("voltaic") == Blueprint.VOLTAIC);
+        yes("industrial looks itself up", Blueprint.byId("industrial") == Blueprint.INDUSTRIAL);
         no("an unknown blueprint is null", Blueprint.byId("fusion") != null);
+        eq("industrial takes sixty seconds", 20 * 60, ResearchLogic.cycleTicks(Blueprint.INDUSTRIAL));
+        eq("voltaic still takes thirty", 20 * 30, ResearchLogic.cycleTicks(Blueprint.VOLTAIC));
+        eq("voltaic spends a data core", "grindless:data_core", ResearchLogic.coreId(Blueprint.VOLTAIC));
+        eq("industrial spends an advanced core", "grindless:advanced_data_core",
+                ResearchLogic.coreId(Blueprint.INDUSTRIAL));
+        eq("nothing unlocked starts at voltaic", "voltaic", ResearchLogic.next(java.util.Set.of()).id());
+        eq("voltaic done is industrial next", "industrial",
+                ResearchLogic.next(java.util.Set.of(Blueprint.VOLTAIC)).id());
+        yes("both done is null", ResearchLogic.next(
+                java.util.Set.of(Blueprint.VOLTAIC, Blueprint.INDUSTRIAL)) == null);
     }
 
     private static BootstrapRecipes.Shaped shaped(String name) {

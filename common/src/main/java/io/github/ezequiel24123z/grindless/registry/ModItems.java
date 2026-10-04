@@ -35,6 +35,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",
             () -> new Item(new Item.Properties()));
 
+    /** T2 research currency. Voltaic-gated; spent for Industrial (ADR-0073). */
+    public static final RegistrySupplier<Item> ADVANCED_DATA_CORE = register("advanced_data_core",
+            () -> new Item(new Item.Properties()));
+
     /** The first fabricated component; every machine above T1 is built on one. */
     public static final RegistrySupplier<Item> MACHINE_CASING = register("machine_casing",
             () -> new Item(new Item.Properties()));

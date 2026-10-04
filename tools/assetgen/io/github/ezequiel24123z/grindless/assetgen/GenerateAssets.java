@@ -89,6 +89,8 @@ public final class GenerateAssets {
 
         // ---- placeholder sprites, blocks, loot and mining tags ----
         written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
+        written += write(items, "advanced_data_core",
+                FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         written += write(items, "prospectors_scanner",

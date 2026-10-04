@@ -35,6 +35,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **T2 gate (ADR-0073).** Industrial is the second blueprint on the same terminal. Advanced
+  Data Core is Voltaic-gated (one core + four plates). `assemble/pylon_mk2` names that
+  blueprint. Wire Mill still waits.
+
 - **Sorter (ADR-0072).** Inline filter. Sneak-click left or right; matching items leave that
   face and hold if it is full. Unmatched continue. Voltaic craft. `VerifyBelt` dumps the
   route. Logic Controller still waits.

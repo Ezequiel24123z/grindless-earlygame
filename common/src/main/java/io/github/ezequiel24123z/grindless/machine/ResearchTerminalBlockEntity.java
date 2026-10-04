@@ -5,13 +5,13 @@ import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
-import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.research.Blueprint;
 import io.github.ezequiel24123z.grindless.research.ResearchData;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.research.ResearchSync;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.SimpleContainer;
 
 /**
- * The Research Terminal: spends one Data Core and F0 to unlock a blueprint.
+ * The Research Terminal: spends a matching core and F0 to unlock the next blueprint.
  *
  * <p>No menu. Right-click with a core to insert, empty-handed to take it back. Hoppers can feed
  * it, because research is a production target (ADR-0057). Progress is world-scoped: a core the
@@ -34,8 +34,6 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
     private static final String KEY_PROGRESS = "Progress";
     private static final String KEY_INPUT = "Input";
     private static final int[] SLOTS = {0};
-
-    private static final Blueprint CURRENT = Blueprint.VOLTAIC;
 
     private final SimpleContainer input = new SimpleContainer(1);
     private final StatusDebounce display = new StatusDebounce();
@@ -111,15 +109,16 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
             input.setItem(0, ItemStack.EMPTY);
             return true;
         }
-        if (!held.is(ModItems.DATA_CORE.get())) {
-            return false;
-        }
-        if (unlocked()) {
+        Blueprint next = current();
+        if (next == null) {
             player.displayClientMessage(
                     Component.translatable("chat.grindless.research.already",
-                            Component.translatable("blueprint.grindless." + CURRENT.id())),
+                            Component.translatable("blueprint.grindless." + Blueprint.INDUSTRIAL.id())),
                     true);
             return true;
+        }
+        if (!isCore(held, next)) {
+            return false;
         }
         if (!input.getItem(0).isEmpty()) {
             return true;
@@ -151,14 +150,15 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
             progress += gained;
             setChanged();
         }
-        if (progress >= ResearchLogic.CYCLE_TICKS && getLevel() instanceof ServerLevel level) {
+        if (progress >= cycleTicks() && getLevel() instanceof ServerLevel level) {
             progress = 0.0;
-            if (ResearchData.get(level).unlock(CURRENT)) {
+            Blueprint next = current();
+            if (next != null && ResearchData.get(level).unlock(next)) {
                 input.setItem(0, ItemStack.EMPTY);
                 ResearchSync.broadcast(level.getServer());
                 level.getServer().getPlayerList().broadcastSystemMessage(
                         Component.translatable("chat.grindless.research.unlocked",
-                                Component.translatable("blueprint.grindless." + CURRENT.id())),
+                                Component.translatable("blueprint.grindless." + next.id())),
                         false);
             }
             setChanged();
@@ -177,12 +177,32 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
     }
 
     private boolean hasCore() {
-        return input.getItem(0).is(ModItems.DATA_CORE.get());
+        Blueprint next = current();
+        return next != null && isCore(input.getItem(0), next);
     }
 
     private boolean unlocked() {
-        return getLevel() instanceof ServerLevel server
-                && ResearchData.get(server).isUnlocked(CURRENT);
+        return current() == null;
+    }
+
+    private Blueprint current() {
+        if (!(getLevel() instanceof ServerLevel server)) {
+            return Blueprint.VOLTAIC;
+        }
+        return ResearchLogic.next(ResearchData.get(server).unlocked());
+    }
+
+    private int cycleTicks() {
+        Blueprint next = current();
+        return next == null ? ResearchLogic.CYCLE_TICKS : ResearchLogic.cycleTicks(next);
+    }
+
+    private static boolean isCore(ItemStack stack, Blueprint blueprint) {
+        if (stack.isEmpty() || blueprint == null) {
+            return false;
+        }
+        return ResearchLogic.coreId(blueprint).equals(
+                BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
     }
 
     private void publishStatus(boolean hasCore, boolean unlocked, boolean powered, boolean workingNow) {
@@ -258,7 +278,7 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return stack.is(ModItems.DATA_CORE.get()) && !unlocked() && input.getItem(0).isEmpty();
+        return isCore(stack, current()) && current() != null && input.getItem(0).isEmpty();
     }
 
     @Override

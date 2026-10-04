@@ -39,6 +39,7 @@ public final class ModCreativeTabs {
         CreativeTabRegistry.append(MAIN,
                 lazy(ModItems.MULTITOOL),
                 lazy(ModItems.DATA_CORE),
+                lazy(ModItems.ADVANCED_DATA_CORE),
                 lazy(ModItems.MACHINE_CASING),
                 lazy(ModItems.PLATE_DIE),
                 lazy(ModItems.ROD_DIE),

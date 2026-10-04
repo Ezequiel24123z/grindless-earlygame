@@ -154,6 +154,7 @@ public final class VerifyRecipes {
         eq("MK2 draws F1", 32L, mk2.fuPerTick());
         yes("MK2 has no catalyst", mk2.catalysts().isEmpty());
         eq("MK2 makes the pylon", "item:grindless:flux_pylon_mk2", mk2.itemOutputs().get(0).qualified());
+        eq("MK2 needs Industrial", "industrial", mk2.blueprint());
 
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
@@ -218,7 +219,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships twenty-eight gated crafts", 28, T1Recipes.gated().size());
+        eq("T1 ships twenty-nine gated crafts", 29, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",
@@ -241,6 +242,8 @@ public final class VerifyRecipes {
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("overflow_gate")));
         yes("the sorter is hand-crafted",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("sorter")));
+        yes("the advanced core is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("advanced_data_core")));
         yes("the atlas is a hand item",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
         no("MK2 has no crafting-table recipe",

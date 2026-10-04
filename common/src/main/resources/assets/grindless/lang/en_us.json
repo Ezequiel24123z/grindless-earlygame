@@ -4,6 +4,7 @@
   "item.grindless.multitool": "Multitool",
   "tooltip.grindless.multitool": "Right-click to rotate. Sneak-click to pick up with contents.",
   "item.grindless.data_core": "Data Core",
+  "item.grindless.advanced_data_core": "Advanced Data Core",
   "item.grindless.machine_casing": "Machine Casing",
   "item.grindless.plate_die": "Plate Die",
   "item.grindless.rod_die": "Rod Die",
@@ -76,6 +77,7 @@
   "subtitles.grindless.brownout_alarm": "Grid alarm sounds",
 
   "blueprint.grindless.voltaic": "Voltaic",
+  "blueprint.grindless.industrial": "Industrial",
   "chat.grindless.research.unlocked": "Blueprint unlocked: %s",
   "chat.grindless.research.already": "Already researched: %s",
 

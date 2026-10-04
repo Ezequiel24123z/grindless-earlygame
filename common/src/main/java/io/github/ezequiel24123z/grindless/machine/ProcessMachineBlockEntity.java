@@ -22,6 +22,8 @@ import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import io.github.ezequiel24123z.grindless.research.Blueprint;
+import io.github.ezequiel24123z.grindless.research.ResearchAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -309,9 +311,19 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return cached;
         }
         Optional<ProcessRecipe> found = ProcessLookup.find(kind.family(), inputs(), fluid.state());
+        if (found.isPresent() && !researched(found.get())) {
+            found = Optional.empty();
+        }
         cached = found.orElse(null);
         cachedRecipeId = cached == null ? "" : cached.id();
         return cached;
+    }
+
+    private boolean researched(ProcessRecipe recipe) {
+        if (recipe.blueprint() == null || recipe.blueprint().isBlank()) {
+            return true;
+        }
+        return ResearchAccess.isUnlocked(getLevel(), Blueprint.byId(recipe.blueprint()));
     }
 
     private ItemStack[] inputs() {

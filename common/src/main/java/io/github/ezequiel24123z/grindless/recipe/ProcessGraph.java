@@ -9,8 +9,9 @@ import java.util.Locale;
  * ADR-0065).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
- * Fabrication: one Assembler recipe that manufactures Pylon MK2, which has no crafting-table
- * JSON. No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
+ * Fabrication: one Assembler recipe that manufactures Pylon MK2 once Industrial is researched,
+ * with no crafting-table JSON (ADR-0073). No Minecraft imports: {@code VerifyRecipes} dumps
+ * this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -228,7 +229,9 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK);
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

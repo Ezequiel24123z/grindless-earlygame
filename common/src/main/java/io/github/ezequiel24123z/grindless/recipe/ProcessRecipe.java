@@ -19,6 +19,7 @@ import java.util.List;
  * @param durationTicks  cycle length at full power and optimal conditions
  * @param fuPerTick      draw while working
  * @param catalysts      dies and other unconsumed extras; empty when the recipe has none
+ * @param blueprint      researched id required to run, or {@code null} when ungated
  */
 public record ProcessRecipe(
         String id,
@@ -29,13 +30,21 @@ public record ProcessRecipe(
         String atmosphere,
         int durationTicks,
         long fuPerTick,
-        List<IngredientSpec> catalysts) {
+        List<IngredientSpec> catalysts,
+        String blueprint) {
 
     public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
                          List<OutputSpec> outputs, double temperatureC, String atmosphere,
                          int durationTicks, long fuPerTick) {
         this(id, family, inputs, outputs, temperatureC, atmosphere, durationTicks, fuPerTick,
-                List.of());
+                List.of(), null);
+    }
+
+    public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
+                         List<OutputSpec> outputs, double temperatureC, String atmosphere,
+                         int durationTicks, long fuPerTick, List<IngredientSpec> catalysts) {
+        this(id, family, inputs, outputs, temperatureC, atmosphere, durationTicks, fuPerTick,
+                catalysts, null);
     }
 
     public ProcessRecipe {

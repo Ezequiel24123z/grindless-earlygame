@@ -1998,12 +1998,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
 | 20b | **Kiln / R2 — Roast then reduce:** T1 Kiln, oxide form, SO₂ capture | ✅ done — ADR-0065; 1.15 and acid stay later |
 | 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — build-out AD; Arc Reactor (ADR-0067) |
-| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out I–S |
+| 21b | **Slice I — T2 gate:** Industrial research, Advanced Data Core, MK2 gated | ✅ done — ADR-0073 |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out J–S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **I**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **J**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2031,8 +2032,11 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is I — T2 gate**, not Slice F and not the acid line.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Sorter is in (ADR-0072): matching sides peel
+**Next is J — Wire and motors**, not Slice F and not the acid line.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). Industrial is the second blueprint (ADR-0073):
+the same Research Terminal spends an Advanced Data Core at F0 for sixty seconds. Pylon MK2
+still has no crafting-table recipe; the Assembler refuses it until Industrial is unlocked.
+The Sorter is in (ADR-0072): matching sides peel
 a mixed line and hold when that lane is full; unmatched items continue. Merger, Tunnel Belt
 and Overflow Gate are in
 (ADR-0071): three inlets join, a pair skips one to five empty blocks, overflow dumps clockwise
