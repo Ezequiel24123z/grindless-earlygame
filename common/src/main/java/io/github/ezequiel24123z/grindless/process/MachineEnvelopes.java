@@ -43,6 +43,12 @@ public final class MachineEnvelopes {
             .catalystSlot()
             .build();
 
+    /** Wet beneficiation. Room temperature today; the range still contains a 90 °C leach. */
+    public static final ConditionEnvelope CHEMICAL_WASHER = ConditionEnvelope.builder()
+            .temperature(10.0, 100.0)
+            .agitation(Agitation.STIRRED)
+            .build();
+
     /** High-pressure hydrothermal chemistry, and the only machine that can hold the 20 MPa the
      * Haber synthesis needs. */
     public static final ConditionEnvelope AUTOCLAVE = ConditionEnvelope.builder()

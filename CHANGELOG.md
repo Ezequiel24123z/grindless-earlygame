@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **A hopper can fill a multi-count process input.** `accepts` required the incoming stack to
+  already hold the whole recipe count, so the first crushed of a wash (and the first plate of
+  an assembler craft) was the only one a hopper could move. Insertion now matches the item;
+  the recipe still waits until the count is there.
+
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
   Slice I placed the item at `8 72 8`, one block above the hopper feeding the
   terminal, so the entity vanished before `ADV-CORE-OK`. The core now appears
@@ -39,6 +44,14 @@ entries below reference those records by id.
   tanks exist. CI is marked done. The numbered plan from step 15 is rewritten to match.
 
 ### Added
+
+- **Washer and B2 (ADR-0076).** Chemical Washer is Assembler-manufactured (casing, two
+  motors, four plates; Industrial; no circuit board). Washed crushed is a supplied form.
+  `8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in
+  20 s. That metal's `b1_r1` is the named sink. Washed feed also reduces (`b2_r1`) and
+  roasts. Flotation and electrolysis still wait. The behaviour graph is 46 recipes;
+  a Grindless-only pack logs 185. CI places the washer, hoppers crushed iron, and
+  stands a water tank.
 
 - **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia

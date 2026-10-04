@@ -45,6 +45,7 @@ public final class MachineEffects {
             case KILN -> generator(status, level, pos, random);
             case WIRE_MILL -> mill(status, level, pos, random);
             case REACTOR -> mill(status, level, pos, random);
+            case WASHER -> washer(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);
@@ -62,6 +63,36 @@ public final class MachineEffects {
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);
+        }
+    }
+
+    /** Spray off the sluice while it runs; a dry click when it is waiting on water or feed. */
+    private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.7F) {
+                    particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.85, z,
+                            (random.nextDouble() - 0.5) * 0.2, 0.05, (random.nextDouble() - 0.5) * 0.2);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.25F) {
+                    particle(level, ParticleTypes.SPLASH, x, pos.getY() + 1.0, z, 0.0, 0.02, 0.0);
+                }
+            }
+            case STARVED -> {
+                if (random.nextFloat() < 0.15F) {
+                    particle(level, ParticleTypes.SMOKE, x, pos.getY() + 0.9, z, 0.0, 0.02, 0.0);
+                }
+                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.7F);
+            }
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
         }
     }
 

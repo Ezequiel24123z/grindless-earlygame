@@ -58,6 +58,7 @@ final class BlockModels {
             case KILN -> kiln();
             case WIRE_MILL -> wireMill();
             case REACTOR -> reactor();
+            case WASHER -> washer();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -260,6 +261,15 @@ final class BlockModels {
                 box(2, 4, 1, 5, 12, 5, "cap", "side"),
                 box(11, 4, 1, 14, 12, 5, "cap", "side"),
                 box(5, 10, 5, 11, 16, 11, "top", "side"));
+    }
+
+    /** An open sluice, a spray bar and a short drain. */
+    private static List<Box> washer() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 8, 14, "top", "side", "front"),
+                box(3, 8, 6, 13, 10, 8, "top", "side"),
+                box(7, 2, 0, 9, 4, 2, "cap", "side"));
     }
 
     /** A stirred vat with a shaft through the lid. */

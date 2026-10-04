@@ -2001,12 +2001,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21b | **Slice I — T2 gate:** Industrial research, Advanced Data Core, MK2 gated | ✅ done — ADR-0073 |
 | 21c | **Slice J — Wire and motors:** Wire Mill, wire form, mill coil, motor | ✅ done — ADR-0074 |
 | 21d | **Slice K — Contact process:** Chemical Reactor, SO₂ → acid, pickle | ✅ done — ADR-0075 |
-| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out L–S |
+| 21e | **Slice L — Washer and B2:** Chemical Washer, washed crushed, vein byproduct | ✅ done — ADR-0076 |
+| 22 | T2+ industry: electrolysis, flotation, solar/steam | pending — build-out M–S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **L**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **M**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2034,8 +2035,12 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is L — Washer and B2**, not Slice F and not etching.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
+**Next is M — Electrolysis and air**, not flotation and not etching.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Washer is in (ADR-0076):
+Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
+`8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in 20 s.
+That metal's Arc Furnace line is the named byproduct sink. Washed crushed reduces like
+crushed and roasts in the Kiln. The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
 sulfuric acid` in 4 s, water from a neighbouring tank. Pickle is the named sulfuric spend

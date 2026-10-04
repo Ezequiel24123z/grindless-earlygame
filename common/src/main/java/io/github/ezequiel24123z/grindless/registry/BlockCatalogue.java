@@ -41,6 +41,8 @@ public final class BlockCatalogue {
         WIRE_MILL,
         /** A stirred vat with a sight glass. Contact process. */
         REACTOR,
+        /** An open sluice with a spray bar. The wet line. */
+        WASHER,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON,
         /** A low slab with two lanes. */
@@ -126,6 +128,7 @@ public final class BlockCatalogue {
             new Entry("kiln", Geometry.KILN, 1, true, CONSUMER),
             new Entry("wire_mill", Geometry.WIRE_MILL, 1, true, CONSUMER),
             new Entry("chemical_reactor", Geometry.REACTOR, 1, true, CONSUMER),
+            new Entry("chemical_washer", Geometry.WASHER, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),

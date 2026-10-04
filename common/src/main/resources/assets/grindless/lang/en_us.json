@@ -29,6 +29,7 @@
   "block.grindless.kiln": "Kiln",
   "block.grindless.wire_mill": "Wire Mill",
   "block.grindless.chemical_reactor": "Chemical Reactor",
+  "block.grindless.chemical_washer": "Chemical Washer",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
   "block.grindless.merger": "Merger",
@@ -50,6 +51,7 @@
 
   "form.grindless.raw": "Raw %s",
   "form.grindless.crushed": "Crushed %s",
+  "form.grindless.washed": "Washed %s",
   "form.grindless.oxide": "%s Oxide",
   "form.grindless.dust": "%s Dust",
   "form.grindless.nugget": "%s Nugget",

@@ -151,6 +151,24 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.CHEMICAL_REACTOR.get();
         }
+    },
+
+    CHEMICAL_WASHER(MachineFamily.CHEMICAL_WASHER, MachineMenuKind.CHEMICAL_WASHER,
+            BlockCatalogue.Geometry.WASHER, "chemical_washer") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.CHEMICAL_WASHER;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withAgitation(Agitation.STIRRED);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.CHEMICAL_WASHER.get();
+        }
     };
 
     private final MachineFamily family;

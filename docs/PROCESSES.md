@@ -471,7 +471,9 @@ Per 1 u raw ore in:
 
 B1 is the familiar doubling and is available at T1. B2 adds a *byproduct* rather than more metal —
 the secondary material of the vein, resolved from the material's tags — which is exactly what the
-README's chain shows and is usually worth more than the extra metal would have been. B3 and B4 are
+README's chain shows and is usually worth more than the extra metal would have been. The shipped
+recipe scales that line by four so the 0.25 u is one item: 8 crushed + 2 B water → 8 washed
+crushed + 1 crushed of the next washable metal, in 20 s (ADR-0076). B3 and B4 are
 T2 and T3 and cost reagents and power.
 
 The **Magnetic Separator** and **Electrostatic Separator** are not a row here because they do not
@@ -887,6 +889,7 @@ can only void is not a byproduct, it is a disposal chore — and chores are
 | Byproduct | From | Sinks |
 | --- | --- | --- |
 | **Slag** | any reduction | Refractory brick; aggregate for construction blocks; road/ballast fill. |
+| **Wash byproduct** | B2, the next washable metal's crushed | That metal's Arc Furnace line (`b1_r1`). Washed crushed itself reduces as `b2_r1` and roasts in the Kiln. |
 | **Gangue / tailings** | separation | Re-leached at low grade; aggregate; Deconstructor. |
 | **SO₂** | roasting | Sulfuric acid — the loop that defines the mid game. |
 | **CO** | carbothermic reduction | Burned for heat; reductant for direct reduction; syngas feed. |

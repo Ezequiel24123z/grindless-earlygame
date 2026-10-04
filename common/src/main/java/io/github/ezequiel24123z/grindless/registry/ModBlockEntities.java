@@ -123,6 +123,14 @@ public final class ModBlockEntities {
                                     ModBlocks.CHEMICAL_REACTOR.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> CHEMICAL_WASHER =
+            BLOCK_ENTITIES.register("chemical_washer",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.CHEMICAL_WASHER, pos, state),
+                                    ModBlocks.CHEMICAL_WASHER.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

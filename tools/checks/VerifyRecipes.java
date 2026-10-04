@@ -33,13 +33,13 @@ public final class VerifyRecipes {
 
     private static void graph() {
         List<ProcessGraph.MaterialView> materials = List.of(
-                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true),
-                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true),
-                new ProcessGraph.MaterialView("steel", false, false, false, false, true, true, true, true),
-                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
+                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
+                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true, false),
+                new ProcessGraph.MaterialView("steel", false, false, false, false, true, true, true, true, false),
+                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact and pickle", 39, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle and washer", 46, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -246,6 +246,59 @@ public final class VerifyRecipes {
         eq("the reactor makes the block", "item:grindless:chemical_reactor",
                 reactor.itemOutputs().get(0).qualified());
 
+        ProcessRecipe ironWash = recipe(recipes, "b2/iron");
+        ProcessRecipe mythrilWash = recipe(recipes, "b2/mythril");
+        ProcessRecipe ironWashedReduce = recipe(recipes, "b2_r1/iron");
+        ProcessRecipe ironWashedRoast = recipe(recipes, "roast_washed/iron");
+        ProcessRecipe washer = recipe(recipes, "assemble/chemical_washer");
+
+        eq("wash is the washer", MachineFamily.CHEMICAL_WASHER, ironWash.family());
+        eq("wash takes eight crushed", 8, ironWash.itemInputs().get(0).count());
+        eq("wash feeds crushed iron", "tag:grindless:crushed_materials/iron",
+                ironWash.itemInputs().get(0).qualified());
+        eq("wash takes two buckets of water", 2000, ironWash.fluidInputs().get(0).count());
+        eq("wash water is water", "fluid:minecraft:water", ironWash.fluidInputs().get(0).qualified());
+        eq("wash makes eight washed", 8, ironWash.itemOutputs().get(0).count());
+        eq("washed is the grindless tag", "tag:grindless:washed_crushed/iron",
+                ironWash.itemOutputs().get(0).qualified());
+        eq("wash byproduct is the next metal", "tag:grindless:crushed_materials/mythril",
+                ironWash.itemOutputs().get(1).qualified());
+        eq("wash byproduct is one", 1, ironWash.itemOutputs().get(1).count());
+        eq("mythril's byproduct wraps to iron", "tag:grindless:crushed_materials/iron",
+                mythrilWash.itemOutputs().get(1).qualified());
+        yes("the byproduct has an arc furnace sink",
+                recipes.stream().anyMatch(candidate -> candidate.id().equals("b1_r1/mythril")
+                        && candidate.itemInputs().get(0).id().equals("grindless:crushed_materials/mythril")));
+        eq("wash is twenty seconds", 20 * 20, ironWash.durationTicks());
+        eq("wash draws F1", 32L, ironWash.fuPerTick());
+        yes("wash names no temperature", !ironWash.namesTemperature());
+        yes("wash names no atmosphere", !ironWash.namesAtmosphere());
+        yes("gold without washed does not wash",
+                recipes.stream().noneMatch(candidate -> candidate.id().equals("b2/gold")));
+
+        eq("washed reduction is the arc furnace", MachineFamily.ARC_FURNACE, ironWashedReduce.family());
+        eq("washed reduction feeds washed", "tag:grindless:washed_crushed/iron",
+                ironWashedReduce.itemInputs().get(0).qualified());
+        eq("washed reduction makes one ingot", 1, ironWashedReduce.itemOutputs().get(0).count());
+
+        eq("washed roast is the kiln", MachineFamily.KILN, ironWashedRoast.family());
+        eq("washed roast feeds washed", "tag:grindless:washed_crushed/iron",
+                ironWashedRoast.itemInputs().get(0).qualified());
+        eq("washed roast vents SO2", "fluid:grindless:sulfur_dioxide",
+                ironWashedRoast.ventedOutputs().get(0).qualified());
+
+        eq("the washer is the assembler", MachineFamily.ASSEMBLER, washer.family());
+        eq("the washer takes a casing", "item:grindless:machine_casing",
+                washer.itemInputs().get(0).qualified());
+        eq("the washer takes two motors", 2, washer.itemInputs().get(1).count());
+        eq("the washer motors are the reagent", "item:grindless:motor",
+                washer.itemInputs().get(1).qualified());
+        eq("the washer takes four plates", 4, washer.itemInputs().get(2).count());
+        eq("the washer is twenty seconds", 20 * 20, washer.durationTicks());
+        eq("the washer needs Industrial", "industrial", washer.blueprint());
+        eq("the washer makes the block", "item:grindless:chemical_washer",
+                washer.itemOutputs().get(0).qualified());
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -344,6 +397,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("motor.json")));
         no("the reactor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
+        no("the washer has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("chemical_washer.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

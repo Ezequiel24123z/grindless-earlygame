@@ -187,6 +187,32 @@ public final class FormTextures {
     }
 
     /**
+     * Washed rubble: fewer, flatter stones than crushed, with a water band along the bottom.
+     *
+     * <p>The wet line has to read as the same metal after a wash, not as dust and not as oxide.
+     */
+    public static BufferedImage washed(Palette palette) {
+        HeightField field = new HeightField();
+        Random random = new Random(palette.base() ^ 0x1A7E);
+        for (int i = 0; i < 8; i++) {
+            double cx = 3.0 + random.nextDouble() * 10;
+            double cy = 3.0 + random.nextDouble() * 7;
+            field.disc(cx, cy, 1.6 + random.nextDouble() * 0.8, 1.8 + random.nextDouble());
+        }
+        field.bevel(0.45);
+        BufferedImage img = field.light(palette);
+        int water = 0xFF4FC3F7;
+        for (int y = 11; y < SIZE; y++) {
+            for (int x = 2; x < SIZE - 2; x++) {
+                if ((img.getRGB(x, y) >>> 24) != 0) {
+                    img.setRGB(x, y, water);
+                }
+            }
+        }
+        return img;
+    }
+
+    /**
      * A sintered cake: one rounded mound, smoother than crushed rubble.
      *
      * <p>Roast is the reason this form exists, so it has to read as fired material rather than

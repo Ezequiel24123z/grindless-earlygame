@@ -60,6 +60,8 @@ public final class VerifyMaterial {
         no("an alloy has no raw form", SupplyCatalogue.isSupplied("steel", MaterialForm.RAW));
         no("nor a crushed form", SupplyCatalogue.isSupplied("steel", MaterialForm.CRUSHED));
         no("nor an oxide", SupplyCatalogue.isSupplied("steel", MaterialForm.OXIDE));
+        no("nor a washed form", SupplyCatalogue.isSupplied("steel", MaterialForm.WASHED));
+        yes("iron washed is supplied", SupplyCatalogue.isSupplied("iron", MaterialForm.WASHED));
         yes("but it has an ingot", SupplyCatalogue.isSupplied("steel", MaterialForm.INGOT));
         yes("vanilla has no iron oxide, so Grindless supplies one",
                 SupplyCatalogue.isSupplied("iron", MaterialForm.OXIDE));

@@ -45,6 +45,14 @@ public final class ProcessLogic {
     public static final double CONTACT_TEMPERATURE = 450.0;
     public static final String CONTACT_ATMOSPHERE = "OXIDISING";
 
+    /**
+     * B2 integer batch (ADR-0076). Four raw are eight crushed: 2 B water, 20 s, one byproduct.
+     * That is four times the per-raw line in {@code PROCESSES.md}.
+     */
+    public static final int WASH_TICKS = 20 * 20;
+    public static final int WASH_CRUSHED = 8;
+    public static final int WASH_WATER_MB = 2000;
+
     private ProcessLogic() {
     }
 

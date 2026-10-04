@@ -9,10 +9,12 @@ import java.util.Locale;
  * ADR-0065, ADR-0074, ADR-0075).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
- * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor and the
- * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
- * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle. No Minecraft
- * imports: {@code VerifyRecipes} dumps this graph without booting the game.
+ * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor, the
+ * Chemical Reactor and the Chemical Washer once Industrial is researched, with no
+ * crafting-table JSON (ADR-0073, ADR-0074, ADR-0075, ADR-0076). Contact: SO₂ → SO₃ →
+ * sulfuric acid, plus pickle. Wash: eight crushed and water become washed crushed plus the
+ * next metal. No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting
+ * the game.
  */
 public final class ProcessGraph {
 
@@ -28,9 +30,10 @@ public final class ProcessGraph {
      * @param plate   {@code forge:plates/<name>}
      * @param rod     {@code forge:rods/<name>}
      * @param gear    {@code forge:gears/<name>}
+     * @param washed  {@code grindless:washed_crushed/<name>}
      */
     public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean oxide,
-                               boolean ingot, boolean plate, boolean rod, boolean gear) {
+                               boolean ingot, boolean plate, boolean rod, boolean gear, boolean washed) {
     }
 
     private ProcessGraph() {
@@ -44,6 +47,7 @@ public final class ProcessGraph {
      * B1 and crushed roast, not B0. Missing oxide drops roast and R2, not R1.
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
+        List<String> washCycle = washCycle(materials);
         List<ProcessRecipe> recipes = new ArrayList<>();
         for (MaterialView material : materials) {
             String feed = feedTag(material);
@@ -55,11 +59,18 @@ public final class ProcessGraph {
                     recipes.add(wetPulverize(material.name(), feed, crushed));
                     recipes.add(reduce(material.name(), "b1_r1", crushed));
                 }
+                if (material.crushed() && material.washed()) {
+                    recipes.add(wash(material.name(), byproduct(washCycle, material.name())));
+                    recipes.add(reduce(material.name(), "b2_r1", washedTag(material.name())));
+                }
             }
             if (feed != null && material.oxide()) {
                 recipes.add(roast(material.name(), "roast", feed));
                 if (material.crushed()) {
                     recipes.add(roast(material.name(), "roast_crushed", crushedTag(material.name())));
+                }
+                if (material.crushed() && material.washed() && material.ingot()) {
+                    recipes.add(roast(material.name(), "roast_washed", washedTag(material.name())));
                 }
             }
             if (material.oxide() && material.ingot()) {
@@ -90,6 +101,7 @@ public final class ProcessGraph {
         recipes.add(contactAbsorption());
         recipes.add(pickleIron());
         recipes.add(chemicalReactor());
+        recipes.add(chemicalWasher());
         return List.copyOf(recipes);
     }
 
@@ -106,6 +118,10 @@ public final class ProcessGraph {
 
     public static String crushedTag(String material) {
         return "grindless:crushed_materials/" + material;
+    }
+
+    public static String washedTag(String material) {
+        return "grindless:washed_crushed/" + material;
     }
 
     public static String oxideTag(String material) {
@@ -359,6 +375,73 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
                         IngredientSpec.tag("forge:plates/iron", 4)),
                 List.of(OutputSpec.item(FabricationLogic.CHEMICAL_REACTOR, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /**
+     * B2. Eight crushed is four raw, so the 0.25 u byproduct is one whole item (ADR-0076).
+     * {@code byproduct} is null when the pack has no second washable metal.
+     */
+    private static ProcessRecipe wash(String material, String byproduct) {
+        List<OutputSpec> outputs = new ArrayList<>();
+        outputs.add(OutputSpec.tag(washedTag(material), ProcessLogic.WASH_CRUSHED));
+        if (byproduct != null) {
+            outputs.add(OutputSpec.tag(crushedTag(byproduct), 1));
+        }
+        return new ProcessRecipe(
+                "b2/" + material,
+                MachineFamily.CHEMICAL_WASHER,
+                List.of(
+                        IngredientSpec.tag(crushedTag(material), ProcessLogic.WASH_CRUSHED),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.WASH_WATER_MB)),
+                outputs,
+                Double.NaN,
+                null,
+                ProcessLogic.WASH_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Materials whose crushed form can be washed and whose ingot line can sink a byproduct. */
+    private static List<String> washCycle(List<MaterialView> materials) {
+        List<String> cycle = new ArrayList<>();
+        for (MaterialView material : materials) {
+            if (material.crushed() && material.ingot() && material.washed() && feedTag(material) != null) {
+                cycle.add(material.name());
+            }
+        }
+        return cycle;
+    }
+
+    /** The next washable metal, or {@code null} when there is no secondary. */
+    private static String byproduct(List<String> cycle, String name) {
+        if (cycle.size() < 2) {
+            return null;
+        }
+        int index = cycle.indexOf(name);
+        if (index < 0) {
+            return null;
+        }
+        return cycle.get((index + 1) % cycle.size());
+    }
+
+    /**
+     * The wet line's machine (ADR-0076). Casing, two motors, four plates. Circuit board waits
+     * on etching.
+     */
+    private static ProcessRecipe chemicalWasher() {
+        return new ProcessRecipe(
+                "assemble/chemical_washer",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.CHEMICAL_WASHER, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

@@ -47,8 +47,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Shared consumer for Pulverizer, Arc Furnace, Press, Assembler, Kiln, Wire Mill and
- * Chemical Reactor.
+ * Shared consumer for Pulverizer, Arc Furnace, Press, Assembler, Kiln, Wire Mill,
+ * Chemical Reactor and Chemical Washer.
  *
  * <p>Looks up a generated {@link ProcessRecipe}, draws F1, and writes progress. Gaseous outputs
  * push into an adjacent tank when one will take them, and vent otherwise (ADR-0036, ADR-0062).

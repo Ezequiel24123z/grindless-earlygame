@@ -35,6 +35,7 @@ public final class MachineArt {
     public static final int KILN = 0xE64A19;
     public static final int WIRE_MILL = 0xFF8A65;
     public static final int REACTOR = 0xCDDC39;
+    public static final int WASHER = 0x0277BD;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -70,6 +71,7 @@ public final class MachineArt {
             case KILN -> kilnFront(status);
             case WIRE_MILL -> wireMillFront(status);
             case REACTOR -> reactorFront(status);
+            case WASHER -> washerFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -100,6 +102,7 @@ public final class MachineArt {
             case KILN -> kilnTop();
             case WIRE_MILL -> wireMillTop();
             case REACTOR -> reactorTop();
+            case WASHER -> washerTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -599,6 +602,49 @@ public final class MachineArt {
             set(img, i, 8, REACTOR);
             set(img, 7, i, REACTOR);
             set(img, 8, i, REACTOR);
+        }
+        return img;
+    }
+
+    // ---- Chemical Washer -----------------------------------------------------------------
+
+    /** A sluice and a spray bar: the machine is a thing that washes. */
+    public static BufferedImage washerFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, WASHER);
+        int water = glow < 0 ? Palette.shade(WASHER, -0.35) : glow;
+        int rim = Palette.shade(CASING, 0.2);
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean wall = y == 8 || y == 13 || x == 2 || x == 13;
+                set(img, x, y, wall ? rim : water);
+            }
+        }
+        int spray = glow < 0 ? Palette.shade(WASHER, 0.35) : glow;
+        for (int x = 4; x <= 11; x++) {
+            set(img, x, 4, Palette.shade(CASING, -0.4));
+            if (x % 2 == 0) {
+                set(img, x, 5, spray);
+                set(img, x, 6, spray);
+            }
+        }
+        set(img, 7, 14, Palette.shade(CASING, -0.55));
+        set(img, 8, 14, Palette.shade(CASING, -0.55));
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage washerTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        int water = Palette.shade(WASHER, -0.15);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean wall = y == 3 || y == 12 || x == 2 || x == 13;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.15) : water);
+            }
+        }
+        for (int x = 4; x <= 11; x++) {
+            set(img, x, 6, WASHER);
         }
         return img;
     }

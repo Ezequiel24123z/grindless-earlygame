@@ -49,11 +49,12 @@ public final class ProcessLookup {
                     material.has(MaterialForm.INGOT),
                     material.has(MaterialForm.PLATE),
                     material.has(MaterialForm.ROD),
-                    material.has(MaterialForm.GEAR)));
+                    material.has(MaterialForm.GEAR),
+                    material.has(MaterialForm.WASHED)));
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
-        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / mill / contact / assembler)",
+        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / mill / contact / wash / assembler)",
                 Grindless.MOD_NAME, recipes.size());
     }
 
@@ -161,7 +162,12 @@ public final class ProcessLookup {
         return false;
     }
 
-    /** Whether {@code stack} is a legal insert for this family's input {@code slot}. */
+    /**
+     * Whether {@code stack} is a legal insert for this family's input {@code slot}.
+     *
+     * <p>Count is ignored. A hopper moves one item at a time, so a wash that wants eight
+     * crushed must accept the first one. The recipe still waits until the count is met.
+     */
     public static boolean accepts(MachineFamily family, int slot, ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
@@ -170,12 +176,12 @@ public final class ProcessLookup {
         List<ProcessRecipe> recipes = graph.byFamily.getOrDefault(family, List.of());
         for (ProcessRecipe recipe : recipes) {
             List<IngredientSpec> inputs = recipe.itemInputs();
-            if (slot < inputs.size() && matches(inputs.get(slot), stack)) {
+            if (slot < inputs.size() && sameItem(inputs.get(slot), stack)) {
                 return true;
             }
             int catalyst = slot - inputs.size();
             if (catalyst >= 0 && catalyst < recipe.catalysts().size()
-                    && matches(recipe.catalysts().get(catalyst), stack)) {
+                    && sameItem(recipe.catalysts().get(catalyst), stack)) {
                 return true;
             }
         }
@@ -202,7 +208,11 @@ public final class ProcessLookup {
     }
 
     public static boolean matches(IngredientSpec spec, ItemStack stack) {
-        if (stack.isEmpty() || stack.getCount() < spec.count()) {
+        return !stack.isEmpty() && stack.getCount() >= spec.count() && sameItem(spec, stack);
+    }
+
+    private static boolean sameItem(IngredientSpec spec, ItemStack stack) {
+        if (stack.isEmpty()) {
             return false;
         }
         if (IngredientSpec.ITEM.equals(spec.kind())) {

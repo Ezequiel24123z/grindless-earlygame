@@ -129,6 +129,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-contact.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-contact.expect
 
+      # Slice L: Chemical Washer places; a hopper can insert crushed; a tank holds the wash water.
+      - name: Boot and exercise washer
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-washer.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-washer.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

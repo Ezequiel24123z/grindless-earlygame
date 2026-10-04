@@ -134,6 +134,7 @@ maintain. A recipe runs in any machine whose envelope contains the recipe's cond
 | **Arc Furnace** | 1200–3500 °C | ambient | Any atmosphere; the metallurgy workhorse. |
 | **Induction Furnace** | 200–2000 °C | ambient | Clean, precise, electrically efficient. |
 | **Chemical Reactor** | −20–500 °C | 0.1–2 MPa | Liquid phase, stirred, catalyst slot. MK I holds 450 °C for contact oxidation (ADR-0075). |
+| **Chemical Washer** | 10–100 °C | ambient | Stirred sluice. MK I holds ambient for B2; the range still contains a 90 °C leach (ADR-0076). |
 | **Autoclave** | 100–400 °C | up to 25 MPa | Where hydrothermal chemistry lives. |
 | **Cryo Chamber** | −270–0 °C | any | Liquefaction, superconductors, separation by boiling point. |
 | **Vacuum Chamber** | ambient–1500 °C | vacuum | No oxidation; thin films; higher purity than any air process. |

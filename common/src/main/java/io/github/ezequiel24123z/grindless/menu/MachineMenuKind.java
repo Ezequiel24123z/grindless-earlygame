@@ -15,7 +15,8 @@ public enum MachineMenuKind {
     ASSEMBLER(3, 1),
     KILN(1, 1),
     WIRE_MILL(1, 1),
-    CHEMICAL_REACTOR(1, 1);
+    CHEMICAL_REACTOR(1, 1),
+    CHEMICAL_WASHER(1, 2);
 
     private final int inputs;
     private final int outputs;

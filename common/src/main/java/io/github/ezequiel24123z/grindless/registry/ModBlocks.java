@@ -102,6 +102,11 @@ public final class ModBlocks {
             register("chemical_reactor",
                     () -> new ProcessMachineBlock(ProcessMachineKind.CHEMICAL_REACTOR, machine().strength(3.5F)));
 
+    /** T2 wet line. Crushed and water become washed crushed plus a vein byproduct. */
+    public static final RegistrySupplier<ProcessMachineBlock> CHEMICAL_WASHER =
+            register("chemical_washer",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.CHEMICAL_WASHER, machine().strength(3.5F)));
+
     /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
     public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =
             register("conveyor_belt",
