@@ -740,7 +740,7 @@ category of busywork.
 | --- | --- | --- |
 | **Prospector's Scanner** | T1 | Surveys chunk veins — material, richness, reserve — with an overlay showing nearby surveyed chunks. |
 | **Flux Conduit** | T1 | Right-click two pylons to link them manually. |
-| **Multitool** | T1 | Rotates and configures machines; picks them up *with their contents and settings intact*. Removes the "empty the machine before moving it" tax entirely. |
+| **Multitool** | T0 | Right-click rotates a Grindless block. Sneak-click picks it up with contents and facing intact (ADR-0069). Does not mine (ADR-0055). |
 | **Flux Drill** | T2 | Powered mining tool. Area modes (1×1, 3×3, vein-mine, tunnel), silk/fortune modules, runs on a portable cell — no durability, only charge. |
 | **Blueprint Tool** | T2 | Captures a region as a **blueprint** and stamps it elsewhere. Construction drones build it from real items in the network. Blueprints are saveable, nameable and shareable between worlds. |
 | **Deconstruction Planner** | T2 | Marks a region for drones to tear down and return to storage. |
@@ -2030,6 +2030,7 @@ and redstone for a Data Core, then the Research Terminal spends one core and F0 
 **Next is Slice F — only when a machine needs hatches or size**, not a T1 framework.
 The Process Atlas stub is in: a Voltaic-gated handheld lists the live process graph
 (family, I/O, conditions, time, FU/t). It does not solve a line. JEI still waits.
+The Multitool now rotates and relocates Grindless blocks (ADR-0069); it still does not mine.
 Kiln / R2 are in: a T1 Kiln roasts feed to oxide and vents 1 B SO₂ into a tank (or
 atmosphere). The Arc Furnace reduces oxide + carbon to an ingot and slag in 10 s.
 Yield stays 1.00; 1.15 and sulfuric acid wait. Slice E spanning is already in.

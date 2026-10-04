@@ -30,6 +30,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Multitool rotates and relocates (ADR-0069).** Right-click turns a Grindless block.
+  Sneak-click picks it up with `BlockStateTag` and `BlockEntityTag` so contents do not spill.
+  Still not a pickaxe. `VerifyMultitool` dumps the facing cycle.
+
 - **Horizon Gates and exotic fallback worlds (ADR-0068).** Design only. T6 dialed ring pair
   kills the interplanetary commute; it is not a mining dimension. People cheap, bulk still
   on the Mass Driver. Fallback adds Thalassa and Helios when no space mod is installed.
