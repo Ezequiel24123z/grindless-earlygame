@@ -143,6 +143,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-electrolysis.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-electrolysis.expect
 
+      # Slice N: Fluid Well places, holds a charge, and pushes water into a tank.
+      - name: Boot and exercise fluid well
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-well.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-well.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

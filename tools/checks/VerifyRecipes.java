@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer and gas line", 51, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line and well", 52, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -367,6 +367,23 @@ public final class VerifyRecipes {
                 intake.itemOutputs().get(0).qualified());
         eq("the intake needs Industrial", "industrial", intake.blueprint());
 
+        ProcessRecipe well = recipe(recipes, "assemble/fluid_well");
+        eq("the well is the assembler", MachineFamily.ASSEMBLER, well.family());
+        eq("the well takes a casing", "item:grindless:machine_casing",
+                well.itemInputs().get(0).qualified());
+        eq("the well takes two motors", 2, well.itemInputs().get(1).count());
+        eq("the well takes four plates", 4, well.itemInputs().get(2).count());
+        eq("the well is twenty seconds", 20 * 20, well.durationTicks());
+        eq("the well needs Industrial", "industrial", well.blueprint());
+        eq("the well makes the block", "item:grindless:fluid_well",
+                well.itemOutputs().get(0).qualified());
+        no("brine is not emitted",
+                recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
+                        .anyMatch(spec -> spec.id().contains("brine"))));
+        no("geothermal is not emitted",
+                recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
+                        .anyMatch(spec -> spec.id().contains("geothermal"))));
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -471,6 +488,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("electrolysis_cell.json")));
         no("the intake has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("atmospheric_intake.json")));
+        no("the well has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("fluid_well.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

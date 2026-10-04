@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
+import io.github.ezequiel24123z.grindless.fluid.FluidWellBlock;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
 import io.github.ezequiel24123z.grindless.belt.BeltBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
@@ -116,6 +117,11 @@ public final class ModBlocks {
     public static final RegistrySupplier<ProcessMachineBlock> ATMOSPHERIC_INTAKE =
             register("atmospheric_intake",
                     () -> new ProcessMachineBlock(ProcessMachineKind.ATMOSPHERIC_INTAKE, machine().strength(3.5F)));
+
+    /** T2 aquifer. Powered chunk water. No vanilla source. Manufactured, not crafted. */
+    public static final RegistrySupplier<FluidWellBlock> FLUID_WELL =
+            register("fluid_well",
+                    () -> new FluidWellBlock(machine().strength(3.5F)));
 
     /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
     public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =

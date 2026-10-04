@@ -32,6 +32,7 @@
   "block.grindless.chemical_washer": "Chemical Washer",
   "block.grindless.electrolysis_cell": "Electrolysis Cell",
   "block.grindless.atmospheric_intake": "Atmospheric Intake",
+  "block.grindless.fluid_well": "Fluid Well",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
   "block.grindless.merger": "Merger",

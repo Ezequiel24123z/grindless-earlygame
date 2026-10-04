@@ -29,6 +29,9 @@ public final class FluidLogic {
     /** Hand Pump: 20 mB/t is 400 mB/s, a bucket every 2.5 s. Slow, unpowered, enough to fill a mill. */
     public static final int PUMP_MB_PER_TICK = 20;
 
+    /** Fluid Well: five times the Hand Pump, and it does not need a vanilla source (ADR-0078). */
+    public static final int WELL_MB_PER_TICK = 100;
+
     /** Clay Conduit: one tick moves 50 mB toward the facing neighbour if that neighbour is not uphill. */
     public static final int CONDUIT_MB_PER_TICK = 50;
 

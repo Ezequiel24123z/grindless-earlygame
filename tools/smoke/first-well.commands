@@ -1,0 +1,12 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 9 70 8 minecraft:air
+setblock 9 70 8 grindless:basic_tank[facing=west,status=idle]
+setblock 8 70 8 grindless:fluid_well[facing=east,status=idle]{Energy:{FluxStored:1280L}}
+execute if block 8 70 8 grindless:fluid_well run say WELL-OK
+say WAIT-WELL
+say WAIT-WELL
+say WAIT-WELL
+execute if data block 9 70 8 Fluid{Id:"minecraft:water"} run say WELL-WATER

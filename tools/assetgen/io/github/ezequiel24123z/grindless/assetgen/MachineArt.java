@@ -38,6 +38,7 @@ public final class MachineArt {
     public static final int WASHER = 0x0277BD;
     public static final int CELL = 0x00897B;
     public static final int INTAKE = 0x5C6BC0;
+    public static final int WELL = 0x1E88E5;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -76,6 +77,7 @@ public final class MachineArt {
             case WASHER -> washerFront(status);
             case CELL -> cellFront(status);
             case INTAKE -> intakeFront(status);
+            case WELL -> wellFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -109,6 +111,7 @@ public final class MachineArt {
             case WASHER -> washerTop();
             case CELL -> cellTop();
             case INTAKE -> intakeTop();
+            case WELL -> wellTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -723,6 +726,43 @@ public final class MachineArt {
         for (int y = 6; y <= 9; y++) {
             for (int x = 6; x <= 9; x++) {
                 set(img, x, y, Palette.shade(INTAKE, -0.25));
+            }
+        }
+        return img;
+    }
+
+    // ---- Fluid Well ----------------------------------------------------------------------
+
+    /** A bore and a riser: the machine is a thing that draws water from the chunk. */
+    public static BufferedImage wellFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, WELL);
+        int water = glow < 0 ? Palette.shade(WELL, -0.3) : glow;
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 4; x <= 11; x++) {
+                boolean wall = y == 8 || y == 13 || x == 4 || x == 11;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.1) : water);
+            }
+        }
+        for (int y = 3; y <= 7; y++) {
+            set(img, 7, y, Palette.shade(CASING, -0.25));
+            set(img, 8, y, Palette.shade(CASING, -0.25));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage wellTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int i = 5; i <= 10; i++) {
+            set(img, i, 5, WELL);
+            set(img, i, 10, WELL);
+            set(img, 5, i, WELL);
+            set(img, 10, i, WELL);
+        }
+        for (int y = 7; y <= 8; y++) {
+            for (int x = 7; x <= 8; x++) {
+                set(img, x, y, Palette.shade(WELL, -0.2));
             }
         }
         return img;

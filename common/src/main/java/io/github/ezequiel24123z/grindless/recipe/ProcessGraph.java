@@ -108,6 +108,7 @@ public final class ProcessGraph {
         recipes.add(airOxygen());
         recipes.add(electrolysisCell());
         recipes.add(atmosphericIntake());
+        recipes.add(fluidWell());
         return List.copyOf(recipes);
     }
 
@@ -529,6 +530,24 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
                         IngredientSpec.tag("forge:plates/iron", 4)),
                 List.of(OutputSpec.item(FabricationLogic.ATMOSPHERIC_INTAKE, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** Powered chunk water (ADR-0078). Same craft as the cell. */
+    private static ProcessRecipe fluidWell() {
+        return new ProcessRecipe(
+                "assemble/fluid_well",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.FLUID_WELL, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

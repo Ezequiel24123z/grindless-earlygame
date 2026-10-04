@@ -257,6 +257,10 @@ behaviour ([ADR-0015](DECISIONS.md#adr-0015--fluids-are-modelled-as-state-not-as
 | Fluid | Reference state | Produced by | Consumed by |
 | --- | --- | --- | --- |
 | **Water** | 20 °C, 0.1 MPa | Hand Pump, Fluid Well, Condenser | everything |
+
+The shipped Fluid Well (ADR-0078) is powered chunk water at 100 mB/t. It does not need a
+vanilla source. Brine, crude hydrocarbon and geothermal stay unemitted until a recipe
+spends them.
 | **Deionised water** | 20 °C | Chemical Washer, ion-exchange resin | the ultrapure chain, electrolyte make-up |
 | **Ultrapure water** | 20 °C | Distillation Tower (T3), Cryogenic Plant (T4), Vacuum Furnace (T5) | integrated circuits, crystal growth |
 | **Steam** | 150 °C, 0.5 MPa | Boiler, Heat Exchanger | Steam Turbine, stripping, heating |

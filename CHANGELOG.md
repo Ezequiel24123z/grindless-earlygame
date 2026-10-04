@@ -45,6 +45,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fluid Well (ADR-0078).** Assembler-manufactured (casing, two motors, four plates;
+  Industrial; no circuit board). Draws F1 and pumps 100 mB/t of ambient water from the
+  chunk, with no vanilla source, into a 2 B buffer and out the face it points at.
+  Brine, crude hydrocarbon and geothermal are not emitted. No new pipe. The behaviour
+  graph is 52 recipes; a Grindless-only pack logs 191. CI charges the well and checks
+  that a neighbouring tank receives water.
+
 - **Electrolysis and air (ADR-0077).** Electrolysis Cell and Atmospheric Intake are
   Assembler-manufactured (casing, two motors, four plates; Industrial; no circuit board).
   `2 B water → 2 B hydrogen + 1 B oxygen` in 10 s; oxygen vents into a neighbouring tank.

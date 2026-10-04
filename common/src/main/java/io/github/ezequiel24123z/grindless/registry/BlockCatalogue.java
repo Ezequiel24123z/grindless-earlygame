@@ -47,6 +47,8 @@ public final class BlockCatalogue {
         CELL,
         /** A louvered cowl with a stack. It drinks air. */
         INTAKE,
+        /** A wellhead over a bore. Chunk water, not a vanilla source. */
+        WELL,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON,
         /** A low slab with two lanes. */
@@ -135,6 +137,7 @@ public final class BlockCatalogue {
             new Entry("chemical_washer", Geometry.WASHER, 1, true, CONSUMER),
             new Entry("electrolysis_cell", Geometry.CELL, 1, true, CONSUMER),
             new Entry("atmospheric_intake", Geometry.INTAKE, 1, true, CONSUMER),
+            new Entry("fluid_well", Geometry.WELL, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),

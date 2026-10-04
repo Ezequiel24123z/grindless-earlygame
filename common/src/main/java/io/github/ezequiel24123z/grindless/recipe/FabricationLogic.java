@@ -32,6 +32,7 @@ public final class FabricationLogic {
     public static final String CHEMICAL_WASHER = "grindless:chemical_washer";
     public static final String ELECTROLYSIS_CELL = "grindless:electrolysis_cell";
     public static final String ATMOSPHERIC_INTAKE = "grindless:atmospheric_intake";
+    public static final String FLUID_WELL = "grindless:fluid_well";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

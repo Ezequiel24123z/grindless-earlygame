@@ -30,6 +30,8 @@ public final class VerifyFluid {
         eq("ambient is 0.1 MPa", 0.1, FluidLogic.AMBIENT_MPA);
         eq("the basic tank holds 16 B", 16_000, FluidLogic.TANK_CAPACITY);
         eq("wet mill takes half a bucket", 500, FluidLogic.WET_WATER_MB);
+        eq("the well is five times the hand pump", 100, FluidLogic.WELL_MB_PER_TICK);
+        eq("the hand pump stays at 20 mB per tick", 20, FluidLogic.PUMP_MB_PER_TICK);
         eq("R1 names 1 B of CO", 1000, FluidLogic.CO_MB);
         eq("R2 names 1 B of SO2", 1000, FluidLogic.SO2_MB);
         eq("CO id matches the process graph", ProcessLogic.CARBON_MONOXIDE, FluidLogic.CARBON_MONOXIDE);

@@ -48,6 +48,7 @@ public final class MachineEffects {
             case WASHER -> washer(status, level, pos, random);
             case CELL -> cell(status, level, pos, random);
             case INTAKE -> intake(status, level, pos, random);
+            case WELL -> well(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);
@@ -121,6 +122,31 @@ public final class MachineEffects {
                 }
                 sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.15F, 1.4F);
             }
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
+        }
+    }
+
+    /** A splash at the wellhead while it pumps; a dry click when it has no power. */
+    private static void well(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.5F) {
+                    particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.7, z,
+                            (random.nextDouble() - 0.5) * 0.1, 0.08, (random.nextDouble() - 0.5) * 0.1);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.2F, 0.7F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.15F) {
+                    particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.8, z, 0.0, 0.02, 0.0);
+                }
+            }
+            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.5F);
             case OUT_OF_BAND -> {
             }
             default -> {

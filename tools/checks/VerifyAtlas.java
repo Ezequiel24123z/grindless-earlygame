@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 51, rows.size());
+        eq("atlas lists every generated recipe", 52, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("seven assembler crafts in this set", 7,
+        eq("eight assembler crafts in this set", 8,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -56,6 +56,8 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:electrolysis_cell").size());
         eq("the intake is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:atmospheric_intake").size());
+        eq("the well is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:fluid_well").size());
         eq("hydrogen has one electrolysis route", 1,
                 AtlasLogic.producing(recipes, "grindless:hydrogen").size());
         eq("oxygen has the cell and the intake", 2,

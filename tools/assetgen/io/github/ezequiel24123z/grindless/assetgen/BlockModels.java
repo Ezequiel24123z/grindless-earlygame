@@ -61,6 +61,7 @@ final class BlockModels {
             case WASHER -> washer();
             case CELL -> cell();
             case INTAKE -> intake();
+            case WELL -> well();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -291,6 +292,15 @@ final class BlockModels {
                 front(1, 2, 2, 15, 10, 14, "top", "side", "front"),
                 box(5, 4, 0, 11, 8, 2, "cap", "side"),
                 box(6, 10, 6, 10, 16, 10, "top", "side"));
+    }
+
+    /** A collar, a bore and a short riser. */
+    private static List<Box> well() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 6, 14, "top", "side", "front"),
+                box(6, 6, 6, 10, 14, 10, "top", "side"),
+                box(5, 14, 5, 11, 16, 11, "cap", "side"));
     }
 
     /** A stirred vat with a shaft through the lid. */

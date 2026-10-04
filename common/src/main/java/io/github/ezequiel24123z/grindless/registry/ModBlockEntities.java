@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.FluidWellBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
@@ -207,6 +208,12 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("clay_conduit",
                     () -> BlockEntityType.Builder
                             .of(ClayConduitBlockEntity::new, ModBlocks.CLAY_CONDUIT.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<FluidWellBlockEntity>> FLUID_WELL =
+            BLOCK_ENTITIES.register("fluid_well",
+                    () -> BlockEntityType.Builder
+                            .of(FluidWellBlockEntity::new, ModBlocks.FLUID_WELL.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<HandPumpBlockEntity>> HAND_PUMP =
