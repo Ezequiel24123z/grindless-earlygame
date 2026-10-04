@@ -143,6 +143,7 @@ public final class ProcessGraph {
         recipes.add(redstoneInterface());
         recipes.add(fluxDrill());
         recipes.add(drillCell());
+        recipes.add(blueprintTool());
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);
@@ -847,6 +848,10 @@ public final class ProcessGraph {
                 FabricationLogic.FU_PER_TICK,
                 List.of(),
                 "industrial");
+    }
+
+    private static ProcessRecipe blueprintTool() {
+        return machineCraft("assemble/blueprint_tool", FabricationLogic.BLUEPRINT_TOOL);
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

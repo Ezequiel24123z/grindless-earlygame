@@ -192,6 +192,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-drill.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-drill.expect
 
+      # Slice U: the blueprint tool exists as an item.
+      - name: Boot and exercise the blueprint tool
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-blueprint.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-blueprint.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

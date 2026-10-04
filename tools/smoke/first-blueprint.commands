@@ -1,0 +1,5 @@
+forceload add 0 0
+say WAIT-CHUNK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:blueprint_tool",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:blueprint_tool"}}] run say BLUEPRINT-OK
+kill @e[type=item]

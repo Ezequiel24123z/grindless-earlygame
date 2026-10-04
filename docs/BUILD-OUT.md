@@ -7,7 +7,7 @@ The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013
 This file is the *schedule*. Open questions are answered here with the documented default; a
 session writes an ADR only when it must pick among real alternatives, then ships the slice.
 
-**Next slice: U — Blueprint Tool.** T (Flux Drill) is shipped.
+**Next slice: V — Deconstruction Planner.** U (Blueprint Tool) is shipped.
 
 ---
 
@@ -79,7 +79,7 @@ Induction Furnace and the Caster (O), the Froth Flotation Cell and the Magnetic
 Separator (P), the Solar Array, the Boiler and the Condenser (Q), the Pressure
 Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt and the
 Stack and Filter Manipulators (R), the Signal Cable, the Logic Controller
-and the Redstone Interface (S), the Flux Drill and the Drill Cell (T), and the design
+and the Redstone Interface (S), the Flux Drill and the Drill Cell (T), the Blueprint Tool (U), and the design
 records for armour (ADR-0067)
 and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to automated
 iron without hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel,
@@ -90,8 +90,8 @@ overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftove
 ## Remaining slices
 
 Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G. **G through T are done.** A session that finishes U
-marks U done and sets Next to V.
+it done here in the same PR that ships G. **G through U are done.** A session that finishes V
+marks V done and sets Next to W.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
@@ -127,7 +127,7 @@ the factory for real.
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
 | **T** | **Flux Drill** | Mine with charge, not durability | Area modes 1×1 / 3×3 / vein / tunnel. Cell fuel. | Multitool mining. | ✅ done |
-| **U** | **Blueprint Tool** | Save a layout and stamp it | The T2 checkpoint. Blueprints nameable and shareable. Drones still wait. | Construction Drones. |
+| **U** | **Blueprint Tool** | Save a layout and stamp it | The T2 checkpoint. Blueprints nameable and shareable. Drones still wait. | Construction Drones. | ✅ done |
 | **V** | **Deconstruction Planner** | Mark a region to tear down | Returns items to storage when drones exist; until then the planner may only mark, or pick with the Multitool relocate — do not invent a second wrench. | A new pickup tool. |
 | **W** | **Patterns** | Scan an item; smash to Matter | Pattern Scanner, Deconstructor. Replication *cost* from the graph (ADR-0010) can be computed before the Replicator block. | Replicator (T3, slice AE). |
 | **X** | **Voltaic Harness** | Wear T1 modular armour | Four pieces, small grid, protection + Flux Cell. No onboard generation. Vanilla armour stays valid until this ships. | Arc miniature. Network Tap. |

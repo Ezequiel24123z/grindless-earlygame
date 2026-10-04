@@ -459,4 +459,24 @@ public final class FormTextures {
         field.bevel(0.4);
         return field.light(palette);
     }
+
+    /** A folded sheet with a marked corner. Not the atlas. */
+    public static BufferedImage blueprintTool(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 12, 14, 2.6);
+        field.rect(9, 2, 13, 6, 3.4);
+        field.rect(4, 8, 8, 12, 3.2);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** The sheet the tool writes. A frame and one filled cell. */
+    public static BufferedImage blueprint(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 2, 13, 14, 2.2);
+        field.rect(4, 4, 7, 7, 3.6);
+        field.rect(8, 8, 11, 11, 3.2);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
 }

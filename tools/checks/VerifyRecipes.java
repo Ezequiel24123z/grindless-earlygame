@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic and the drill", 93, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill and the blueprint tool", 94, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -565,6 +565,12 @@ public final class VerifyRecipes {
         eq("the drill cell is four seconds", 20 * 4, drillCell.durationTicks());
         eq("the drill cell takes one coil", "item:grindless:copper_coil",
                 drillCell.itemInputs().get(0).qualified());
+        ProcessRecipe blueprintTool = recipe(recipes, "assemble/blueprint_tool");
+        eq("the blueprint tool is the assembler", MachineFamily.ASSEMBLER, blueprintTool.family());
+        eq("the blueprint tool makes the item", "item:grindless:blueprint_tool",
+                blueprintTool.itemOutputs().get(0).qualified());
+        no("a filled blueprint is not a recipe",
+                recipes.stream().anyMatch(candidate -> candidate.id().equals("assemble/blueprint")));
         eq("night is nothing", 0L, SolarLogic.generate(false));
 
         yes("steel with an ingot still presses",
@@ -715,6 +721,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("flux_drill.json")));
         no("the drill cell has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("drill_cell.json")));
+        no("the blueprint tool has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("blueprint_tool.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

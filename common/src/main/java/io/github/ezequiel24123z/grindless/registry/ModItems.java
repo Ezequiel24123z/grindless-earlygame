@@ -3,6 +3,8 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.BlueprintItem;
+import io.github.ezequiel24123z.grindless.item.BlueprintToolItem;
 import io.github.ezequiel24123z.grindless.item.DrillCellItem;
 import io.github.ezequiel24123z.grindless.item.FluxDrillItem;
 import io.github.ezequiel24123z.grindless.item.MultitoolItem;
@@ -103,6 +105,14 @@ public final class ModItems {
     /** Fuel for the Flux Drill. Not the armour Flux Cell. */
     public static final RegistrySupplier<Item> DRILL_CELL = register("drill_cell",
             () -> new DrillCellItem(new Item.Properties()));
+
+    /** T2 handheld. Captures a box into a blueprint (ADR-0085). */
+    public static final RegistrySupplier<Item> BLUEPRINT_TOOL = register("blueprint_tool",
+            () -> new BlueprintToolItem(new Item.Properties().stacksTo(1)));
+
+    /** A captured layout. Produced by the tool, not by a recipe. */
+    public static final RegistrySupplier<Item> BLUEPRINT = register("blueprint",
+            () -> new BlueprintItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.
