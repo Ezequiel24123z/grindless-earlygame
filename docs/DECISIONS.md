@@ -81,6 +81,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
+| [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
 
 ---
 
@@ -2646,5 +2647,40 @@ a T2 Blueprint-only move (too late for the machine you just placed at T0).
 **Consequences.** A successor that gives the Multitool pickaxe behaviour is reopening ADR-0055.
 A successor that starts the Sifter or a turret because "T1 is done" is skipping a tool the player
 already crafted.
+
+
+## ADR-0070 — Remaining work is the autonomous build-out
+
+*2026-10-04 · Accepted*
+
+**Context.** Slices A–E, Kiln/R2, the Atlas stub and the Multitool wrench are in. Armour and
+Horizon Gates are recorded, not started. The README implementation plan still has four coarse
+pending rows (F, T2+ industry, tools, orbit, planets). A session that infers "next" from those
+rows restarts Slice F, the Sifter without a graph, or a turret without Resonance — all of which
+the records already forbid.
+
+The owner asked for a closed list so a successor can finish the mod without asking.
+
+**Decision.**
+
+1. [`docs/BUILD-OUT.md`](BUILD-OUT.md) is the remaining schedule. The README stays the design
+   source of truth (ADR-0013). The build-out is the order.
+2. The next playable slice is **G — Belt junctions** (merger, tunnel, overflow), which
+   ADR-0060 already parked. Not F. Not the Sifter. Not a turret. Not armour.
+3. Slice F still starts when a machine needs hatches. That machine is the Arc Reactor at T3
+   (ADR-0067), as build-out **AD/AE**.
+4. A session does not stop to ask. Defaults come from the README, `MACHINES.md` and
+   `PROCESSES.md`. An ADR is written only when those conflict or are silent, then the slice
+   ships.
+5. One slice per stacked draft. Do not merge unless the owner asks. Do not squash.
+
+**Alternatives rejected.** Leaving "T2+ industry" as one row (a session dumps the chemical core
+into an unused kernel); starting F "so later slices are easier" (ADR-0058); asking the owner
+at every T1-named hole (the holes are already classified: Sifter needs a graph ADR, turret
+needs Resonance, harness is 0.4).
+
+**Consequences.** A successor that starts hatches, a Sifter shell, or JEI because the build-out
+looks long is ignoring this record. Updating the **Next slice** line is part of shipping G
+and every slice after it.
 
 
