@@ -92,6 +92,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
 | [0091](#adr-0091--refractory-brick-is-one-slag-in-twenty-seconds) | Refractory brick is one slag in twenty seconds | Accepted |
 | [0092](#adr-0092--metallurgical-silicon-runs-cold-on-sand-and-quartz) | Metallurgical silicon runs cold on sand and quartz | Accepted |
+| [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
 
 ---
 
@@ -3208,5 +3209,78 @@ the Thermal Generator. Two buckets is that same fluid, twice.
 or the 14 s is rewriting the graph. A successor who adds electronic silicon, a wafer, or
 a Siemens step here is starting the next line. A successor who treats the 1500 °C hold
 as a bug and moves it is retuning.
+
+---
+
+## ADR-0093 — Zone refining is ten metallurgical silicon in six hundred seconds
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BG says the concrete line is chosen when the slice starts. The graph
+past metallurgical silicon is the electronic grade: four routes, then a boule and a
+wafer.
+
+Vacuum float is a T5 Vacuum Furnace. Orbital growth is the orbital stage. Neither is
+this calendar. Siemens is `1 u met-Si + 3 B HCl` at 300 °C, then deposition at 1100 °C
+reducing. Nothing shipped produces hydrochloric acid, and chlor-alkali is held row M.
+A relative band at 1100 °C tolerates up to 1430 °C, so the Arc Furnace's 1500 °C hold
+would not start the deposition. A relative band at 300 °C tolerates up to 390 °C, so
+the Chemical Reactor's 450 °C hold would not start the chlorination. Shipping Siemens
+either invents an acid or resumes M, and neither step runs on the locked holds.
+
+Zone refining's feed is metallurgical silicon, which exists. `PROCESSES.md` gives it
+60 s and **0.70 u** out per unit in. The written conditions are `T 1420 ±5 · atm inert`
+on an Induction Furnace MK III. That furnace is held row O, with the Caster. An
+absolute ±5 °C band tolerates 1410–1430 °C, so 1500 °C is outside it. Inert does not
+match the reducing hold, and atmosphere is an exact match. Putting those conditions on
+the Arc Furnace produces a recipe that never runs. ADR-0090 refuses a line that cannot
+be run.
+
+A relative band at 1420 °C is optimal from 1207 °C to 1633 °C. The 1500 °C hold sits
+inside it. The Kiln stops at 900 °C and cannot reach the tolerance floor at 994 °C.
+The Arc Furnace envelope is 1200–3500 °C, so 1420 °C is inside the machine. The 0.30
+that does not come out is a yield, not a named byproduct. The boule names inert
+atmosphere and static agitation at 1450 °C, and its feed is this product.
+
+**Decision.**
+
+1. **The line is zone refining's ratio, on the Arc Furnace.** `silicon/zone_refining`.
+   No new block, no dial, no blueprint. Family lock is the host. The Induction Furnace
+   stays held. The ±5 °C band and the inert atmosphere are not written on this recipe:
+   either one would refuse the hold. The temperature centre stays 1420 °C, as the
+   ordinary relative band. Atmosphere is unnamed. An unwritten condition is not a
+   condition, and the held reducing atmosphere stays on the machine. `ProcessRecipe`
+   does not grow a half-width field for a band this slice is not applying. Own work
+   stays MIT (ADR-0089). This record copies nothing.
+2. **Integer batch.** **10 metallurgical silicon → 7 electronic silicon in 600 s** at
+   F1. That is 0.70 per unit and 60 s per unit, the smallest integers that keep both.
+   The product is `grindless:electronic_silicon`. It is not a supplied material, so
+   plates, rods, gears and wire do not appear. It is not `forge:ingots/silicon`. There
+   is no slag and no gas.
+3. **What waits.** Siemens, trichlorosilane, hydrochloric acid, the boule, the wafer,
+   vacuum float and orbital growth. The next slice is BH — megastructures, not started.
+
+**Alternatives rejected.**
+
+- Siemens, or a deposition-only step. The acid is not a fluid, and 1100 °C does not
+  admit 1500 °C.
+- The Induction Furnace or the Caster. That resumes held row O.
+- Writing ±5 or `INERT` on the Arc Furnace recipe. The hold would report out of band.
+- Retuning the furnace from 1500 °C to 1420 °C. R1 is written at 1500 °C.
+- Moving the centre to 1500 °C. The route's temperature is 1420 °C, and the relative
+  band already makes the hold optimal.
+- 1 → 1, which erases the 0.30 loss. 10 → 7 in 60 s, which is ten times the throughput.
+  100 → 70 in 6000 s, which waits ten times longer for the same ratio.
+- A fifth route with a different yield or a different time.
+- `forge:ingots/silicon`, a boule, or a wafer.
+- A byproduct item for the missing 0.30. The route names none.
+- Megastructures, planets, or the quest book.
+
+**Consequences.** A successor who adds ±5 or inert to `silicon/zone_refining` stops the
+line. A successor who builds the Induction Furnace here is resuming O. A successor who
+changes the 10:7 batch or the 600 s is rewriting the yield or the time. A successor who
+ships Siemens, a wafer, or a boule here is starting another line. A successor who treats
+the relative band as a mistake and restores ±5 on this furnace is making the recipe
+unrunnable. BH is next and is not started.
 
 

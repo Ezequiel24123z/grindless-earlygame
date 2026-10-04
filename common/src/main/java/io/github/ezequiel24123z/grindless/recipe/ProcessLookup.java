@@ -170,12 +170,12 @@ public final class ProcessLookup {
         List<ProcessRecipe> recipes = graph.byFamily.getOrDefault(family, List.of());
         for (ProcessRecipe recipe : recipes) {
             List<IngredientSpec> inputs = recipe.itemInputs();
-            if (slot < inputs.size() && matches(inputs.get(slot), stack)) {
+            if (slot < inputs.size() && sameItem(inputs.get(slot), stack)) {
                 return true;
             }
             int catalyst = slot - inputs.size();
             if (catalyst >= 0 && catalyst < recipe.catalysts().size()
-                    && matches(recipe.catalysts().get(catalyst), stack)) {
+                    && sameItem(recipe.catalysts().get(catalyst), stack)) {
                 return true;
             }
         }
@@ -202,7 +202,18 @@ public final class ProcessLookup {
     }
 
     public static boolean matches(IngredientSpec spec, ItemStack stack) {
-        if (stack.isEmpty() || stack.getCount() < spec.count()) {
+        return sameItem(spec, stack) && stack.getCount() >= spec.count();
+    }
+
+    /**
+     * Item identity, ignoring count.
+     *
+     * <p>A hopper moves one item per tick. Requiring the whole batch here would refuse
+     * the first insert of steel and of zone refining, so the line could never fill.
+     * The count is enforced when the recipe actually starts.
+     */
+    private static boolean sameItem(IngredientSpec spec, ItemStack stack) {
+        if (stack.isEmpty()) {
             return false;
         }
         if (IngredientSpec.ITEM.equals(spec.kind())) {

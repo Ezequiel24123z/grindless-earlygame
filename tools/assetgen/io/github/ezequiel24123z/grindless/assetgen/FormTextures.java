@@ -387,6 +387,17 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for electronic silicon: a pale crystal, distinct from the grey chunk. */
+    public static BufferedImage electronicSilicon(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(7, 2, 8, 13, 3.6);
+        field.rect(5, 4, 10, 11, 4.4);
+        field.rect(6, 6, 9, 9, 5.6);
+        field.disc(8.0, 7.5, 1.2, 6.2);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for metallurgical silicon: a faceted grey chunk. */
     public static BufferedImage metallurgicalSilicon(Palette palette) {
         HeightField field = new HeightField();

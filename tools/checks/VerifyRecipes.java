@@ -41,7 +41,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, steel, refractory and silicon", 42, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, steel, refractory, silicon and zone refining", 43, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -336,11 +336,44 @@ public final class VerifyRecipes {
                 siliconBand.reachableWithin(
                         MachineEnvelopes.KILN.minTemperature(),
                         MachineEnvelopes.KILN.maxTemperature()));
-        no("electronic silicon is not this slice",
-                recipes.stream().anyMatch(recipe -> recipe.id().contains("electronic")
-                        || recipe.id().contains("siemens")
+        no("siemens, wafers and boules are not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("siemens")
                         || recipe.id().contains("wafer")
-                        || recipe.id().contains("boule")));
+                        || recipe.id().contains("boule")
+                        || recipe.id().contains("trichlorosilane")));
+        ProcessRecipe zone = recipe(recipes, "silicon/zone_refining");
+        eq("zone refining is the arc furnace", MachineFamily.ARC_FURNACE, zone.family());
+        eq("zone refining takes ten metallurgical silicon", 10, zone.itemInputs().get(0).count());
+        eq("zone refining feed is the reagent", "item:grindless:metallurgical_silicon",
+                zone.itemInputs().get(0).qualified());
+        eq("zone refining makes seven electronic silicon", 7, zone.itemOutputs().get(0).count());
+        eq("zone refining output is the reagent", "item:grindless:electronic_silicon",
+                zone.itemOutputs().get(0).qualified());
+        eq("zone refining is six hundred seconds", 20 * 600, zone.durationTicks());
+        eq("zone refining draws F1", 32L, zone.fuPerTick());
+        eq("zone refining is 1420 C", 1420.0, zone.temperatureC());
+        yes("zone refining names no atmosphere", !zone.namesAtmosphere());
+        yes("zone refining has no catalyst", zone.catalysts().isEmpty());
+        yes("zone refining has no fluid", zone.fluidInputs().isEmpty() && zone.fluidOutputs().isEmpty());
+        yes("zone refining has no blueprint", zone.blueprint() == null);
+        yes("zone refining has no slag",
+                zone.itemOutputs().stream().noneMatch(output -> output.id().contains("slag")));
+        ConditionBand zoneBand = ConditionBand.relative(ProcessLogic.ZONE_TEMPERATURE);
+        yes("furnace hold is optimal for 1420 C", zoneBand.isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        no("a ±5 band at 1420 C would refuse the hold",
+                ConditionBand.absolute(ProcessLogic.ZONE_TEMPERATURE, 5.0)
+                        .admits(ProcessLogic.REDUCE_TEMPERATURE));
+        eq("the furnace still holds 1500 C", 1500.0, ProcessLogic.REDUCE_TEMPERATURE);
+        yes("1420 C is inside the arc furnace envelope",
+                zoneBand.reachableWithin(
+                        MachineEnvelopes.ARC_FURNACE.minTemperature(),
+                        MachineEnvelopes.ARC_FURNACE.maxTemperature()));
+        no("1420 C is outside the kiln",
+                zoneBand.reachableWithin(
+                        MachineEnvelopes.KILN.minTemperature(),
+                        MachineEnvelopes.KILN.maxTemperature()));
+        no("electronic silicon is not an ingot tag",
+                zone.itemOutputs().stream().anyMatch(output -> output.id().contains("forge:ingots/silicon")));
         no("silicon is not a supplied ingot tag",
                 silicon.itemOutputs().stream().anyMatch(output -> output.id().contains("forge:ingots/silicon")));
         no("the kiln does not fire the brick",
@@ -450,6 +483,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("refractory_brick.json")));
         no("metallurgical silicon has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("metallurgical_silicon.json")));
+        no("electronic silicon has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("electronic_silicon.json")));
         String silica = Files.readString(Path.of(
                 "common/src/main/resources/data/grindless/tags/items/silica.json"));
         yes("silica tag accepts sand", silica.contains("\"minecraft:sand\""));

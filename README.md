@@ -25,8 +25,8 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > ([ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression)).
 > T0–T6 are the specified start, not a cap. Slices defined past the contact process and
 > not yet started are held. Electric-arc steel is in (ADR-0090). Refractory brick is in
-> (ADR-0091). Metallurgical silicon is in (ADR-0092). The next slice is further
-> processing lines, not started. The original quest book
+> (ADR-0091). Metallurgical silicon is in (ADR-0092). Zone refining is in (ADR-0093).
+> The next slice is megastructures, not started. The original quest book
 > is last, with the in-game guide,
 > after the black hole.
 >
@@ -2033,9 +2033,11 @@ work. **BD — Electric-arc steel** is in: ten iron ingots and one carbon become
 ingots in the Arc Furnace (ADR-0090). **BE — Refractory brick** is in: one slag becomes one
 refractory brick in 20 s at 1400 °C on the same furnace (ADR-0091). **BF — Metallurgical
 silicon** is in: one silica and two carbon become one metallurgical silicon and 2 B of
-carbon monoxide in 14 s at 1900 °C on the same furnace (ADR-0092). The next slice is
-**BG — Further processing lines**, identified and not implemented. After it, still unsliced, in order:
-megastructures and Kardashev Type I, II and III, original planets with unique extractable
+carbon monoxide in 14 s at 1900 °C on the same furnace (ADR-0092). **BG — Further
+processing lines** is in: ten metallurgical silicon become seven electronic silicon in
+600 s at 1420 °C on the same furnace (ADR-0093). The next slice is **BH — Megastructures**,
+identified and not implemented: megastructures, then Kardashev Type I, II and III.
+After that, still unsliced, in order: original planets with unique extractable
 resources and interstellar travel,
 then arrival at the Milky Way's central black hole as the victory. The original quest book
 and the in-game guide are last, after that arrival.
@@ -2098,10 +2100,11 @@ Tracked order of work. Each step must build green before the next begins.
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
 | 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Unstarted rows L–BB are held (ADR-0088). |
-| 28 | **Modpack expansion** | in progress — ADR-0088, ADR-0090, ADR-0091, ADR-0092. BF metallurgical silicon is done. Next slice **BG — Further processing lines**, not implemented. Quest book is last. |
+| 28 | **Modpack expansion** | in progress — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093. BG zone refining is done. Next slice **BH — Megastructures**, not implemented. Quest book is last. |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
 | 28d | **BF — Metallurgical silicon** | ✅ done — ADR-0092. 1 silica + 2 carbon → 1 metallurgical silicon + 2 B CO in 14 s at 1900 °C on the Arc Furnace. |
+| 28e | **BG — Zone refining** | ✅ done — ADR-0093. 10 metallurgical silicon → 7 electronic silicon in 600 s at 1420 °C on the Arc Furnace. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2131,7 +2134,9 @@ Space and interstellar play are original. The goal is the black hole at the cent
 Milky Way: arriving is the victory, and the interior is a finite finale written when the
 route exists.
 
-**Next is BG — Further processing lines**, identified and not implemented.
+**Next is BH — Megastructures**, identified and not implemented.
+**BG — Zone refining** is in (ADR-0093): ten metallurgical silicon become seven electronic
+silicon in 600 s at 1420 °C. The ±5 °C inert band is not applied.
 **BF — Metallurgical silicon** is in (ADR-0092): one silica and two carbon become one
 metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C. Silica is sand and
 nether quartz. The Arc Furnace still holds 1500 °C, inside that band's tolerance.
@@ -2147,7 +2152,9 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is BG — Further processing lines.** It is not started. **Metallurgical silicon is in**
+**Next is BH — Megastructures.** It is not started. **Zone refining is in**
+(ADR-0093): the Arc Furnace runs `silicon/zone_refining`, 10 metallurgical silicon → 7
+electronic silicon in 600 s at 1420 °C. **Metallurgical silicon is in**
 (ADR-0092): the Arc Furnace runs `silicon/metallurgical`, 1 silica + 2 carbon → 1
 metallurgical silicon + 2 B CO in 14 s at 1900 °C. **Refractory brick is in**
 (ADR-0091): the Arc Furnace runs `ceramic/refractory_brick`, 1 slag → 1 refractory brick
@@ -2182,7 +2189,7 @@ is already in. Modular armour and the Arc Reactor pair are **recorded, not start
 line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
 row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
 slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
-next slice is further processing lines. The quest book waits until after the black hole.
+next slice is megastructures. The quest book waits until after the black hole.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

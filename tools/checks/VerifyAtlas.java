@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 42, rows.size());
+        eq("atlas lists every generated recipe", 43, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the reactor", "assemble/chemical_reactor",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -84,6 +84,11 @@ public final class VerifyAtlas {
         yes("silicon consumes carbon", ids(carbon).contains("silicon/metallurgical"));
         eq("metallurgical silicon has one route", 1,
                 AtlasLogic.producing(recipes, "grindless:metallurgical_silicon").size());
+        eq("electronic silicon has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:electronic_silicon").size());
+        yes("zone refining consumes metallurgical silicon",
+                ids(AtlasLogic.consuming(recipes, "grindless:metallurgical_silicon"))
+                        .contains("silicon/zone_refining"));
         yes("silica reduces to that silicon",
                 ids(AtlasLogic.consuming(recipes, "grindless:silica")).contains("silicon/metallurgical"));
         yes("that route vents CO",

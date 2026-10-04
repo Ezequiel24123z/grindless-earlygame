@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **A hopper can fill a batch recipe one item at a time.** `ProcessLookup.accepts`
+  required the whole batch, so the first insert of electric-arc steel or zone
+  refining was refused. Identity is checked on insert. The count is still
+  required before the cycle starts.
+
 - **The ADR-0065 index anchor matches the link checker.** The heading keeps the SO₂
   subscript. The checker drops that character when it builds the slug, so the index
   link now uses the slug without it.
@@ -73,13 +78,18 @@ entries below reference those records by id.
 
 ### Added
 
+- **Zone refining (ADR-0093).** The Arc Furnace turns 10 metallurgical silicon into
+  7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s
+  per unit, as an integer batch. The ±5 °C inert band stays with the Induction Furnace,
+  because that band does not admit the 1500 °C reducing hold. No new block. Siemens,
+  the boule and wafers wait. The next slice is BH — megastructures, not started.
+
 - **Metallurgical silicon (ADR-0092).** The Arc Furnace turns 1 silica and 2 carbon into
   1 metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C in a reducing
   atmosphere. Silica is the tag over sand and nether quartz; no silica item is
   registered. The furnace's 1500 °C hold stays, inside tolerance and outside the
   optimal zone, so the line runs slower and the yield stays one. No new block.
-  Electronic silicon, wafers and the Siemens line wait. The next slice is BG — further
-  processing lines, not started.
+  Zone refining was named next and is now in (ADR-0093).
 
 - **Refractory brick (ADR-0091).** The Arc Furnace turns 1 slag into 1 refractory brick
   in 20 s at 1400 °C. That is the ceramics row's time and temperature, as one unit in

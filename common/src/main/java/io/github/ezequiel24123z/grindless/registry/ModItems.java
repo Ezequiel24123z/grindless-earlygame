@@ -83,6 +83,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> METALLURGICAL_SILICON = register("metallurgical_silicon",
             () -> new Item(new Item.Properties()));
 
+    /** Six-nines silicon from zone refining. Not a circuit, a wafer or an ingot tag (ADR-0093). */
+    public static final RegistrySupplier<Item> ELECTRONIC_SILICON = register("electronic_silicon",
+            () -> new Item(new Item.Properties()));
+
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));
