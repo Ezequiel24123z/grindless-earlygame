@@ -82,6 +82,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
 | [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
+| [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 
 ---
 
@@ -2682,5 +2683,34 @@ needs Resonance, harness is 0.4).
 **Consequences.** A successor that starts hatches, a Sifter shell, or JEI because the build-out
 looks long is ignoring this record. Updating the **Next slice** line is part of shipping G
 and every slice after it.
+
+
+## ADR-0071 — T1 belt junctions are merger, tunnel and overflow
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0060 shipped the first belt, splitter and manipulator, and parked merger,
+tunnel, overflow and sorter. BUILD-OUT slice G is those three junctions. README already
+gives the T1 tunnel a range of five and describes overflow as the belt that does not stall
+when a chest fills. Three questions were still open.
+
+**Decision.**
+
+1. **Merger.** Three inlets (back, left, right), one outlet (front). Round-robin from the last
+   accepted face. No filters; that is the sorter (slice H).
+2. **Tunnel Belt.** An entrance/exit pair facing the same way. The gap is one to five empty
+   blocks (README range 5). Adjacent tiles are a conveyor, not a tunnel. Items travel only in
+   the facing direction. A craft yields two tiles.
+3. **Overflow Gate.** Front is preferred. The clockwise side takes the item only when the
+   front is backed up. Not a second splitter.
+4. Same lane model and BeltEndpoint as the conveyor (ADR-0008). Voltaic-gated crafts.
+   `VerifyBelt` dumps pick/range/route. Sorter still waits.
+
+**Alternatives rejected.** Powered T1 tunnels (the first belt is mechanical); opposite-facing
+two-way pairs in this slice (a second direction is another block, not this one); overflow as
+a splitter with a hidden filter (then two blocks do one job).
+
+**Consequences.** A successor that starts the sorter in this slice is skipping H. A successor
+that lets two tunnel tiles pair when they touch is deleting the conveyor.
 
 
