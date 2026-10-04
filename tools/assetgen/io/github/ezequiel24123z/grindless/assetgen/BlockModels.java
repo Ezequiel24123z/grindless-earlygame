@@ -59,6 +59,9 @@ final class BlockModels {
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
+            case MERGER -> merger();
+            case TUNNEL -> tunnel();
+            case OVERFLOW -> overflow();
             case MANIPULATOR -> manipulator();
             case DRILL -> drill();
             case CONDUIT -> conduit();
@@ -263,6 +266,33 @@ final class BlockModels {
                 box(6, 6, 0, 10, 7, 4, "top", "side"),
                 box(0, 6, 6, 4, 7, 10, "top", "side"),
                 box(12, 6, 6, 16, 7, 10, "top", "side"));
+    }
+
+    /** Three inlets, one outlet. */
+    private static List<Box> merger() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(2, 2, 2, 14, 6, 14, "top", "side", "front"),
+                box(6, 6, 0, 10, 7, 4, "top", "side"),
+                box(0, 4, 6, 3, 6, 10, "top", "side"),
+                box(13, 4, 6, 16, 6, 10, "top", "side"));
+    }
+
+    /** A low mouth that sits flush so a wall can stand on it. */
+    private static List<Box> tunnel() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                box(0, 2, 0, 3, 4, 16, "top", "side"),
+                box(13, 2, 0, 16, 4, 16, "top", "side"),
+                front(3, 2, 0, 13, 4, 8, "top", "side", "front"));
+    }
+
+    /** Front lane plus a clockwise dump. */
+    private static List<Box> overflow() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(2, 2, 1, 14, 5, 14, "top", "side", "front"),
+                box(12, 5, 6, 16, 6, 10, "top", "side"));
     }
 
     /** A post with a reaching arm. */

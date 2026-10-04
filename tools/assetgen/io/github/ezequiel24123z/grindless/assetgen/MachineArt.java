@@ -36,6 +36,9 @@ public final class MachineArt {
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
+    public static final int MERGER = 0xFFCA28;
+    public static final int TUNNEL = 0x90A4AE;
+    public static final int OVERFLOW = 0xFF7043;
     public static final int MANIPULATOR = 0x69F0AE;
     public static final int DRILL = 0xFF6D00;
     public static final int CONDUIT = 0x8D6E63;
@@ -64,6 +67,9 @@ public final class MachineArt {
             case KILN -> kilnFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
+            case MERGER -> mergerFront(status);
+            case TUNNEL -> tunnelFront(status);
+            case OVERFLOW -> overflowFront(status);
             case MANIPULATOR -> manipulatorFront(status);
             case DRILL -> drillFront(status);
             case CONDUIT -> conduitFront(status);
@@ -88,6 +94,9 @@ public final class MachineArt {
             case KILN -> kilnTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
+            case MERGER -> mergerTop();
+            case TUNNEL -> tunnelTop();
+            case OVERFLOW -> overflowTop();
             case MANIPULATOR -> manipulatorTop();
             case DRILL -> drillTop();
             case CONDUIT -> conduitTop();
@@ -559,6 +568,113 @@ public final class MachineArt {
         }
         set(img, 7, 4, SPLITTER);
         set(img, 8, 4, SPLITTER);
+        return img;
+    }
+
+    // ---- Merger --------------------------------------------------------------------------
+
+    /** One mouth: the block is a thing that joins. */
+    public static BufferedImage mergerFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, MERGER);
+        for (int y = 6; y <= 12; y++) {
+            for (int x = 5; x <= 10; x++) {
+                int pixel = glow < 0 ? Palette.shade(CASING, -0.6) : dim(glow);
+                if (glow >= 0 && y == 9) {
+                    pixel = glow;
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage mergerTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.5));
+            }
+        }
+        for (int y = 2; y <= 7; y++) {
+            for (int x = 2; x <= 5; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+            for (int x = 10; x <= 13; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+        }
+        set(img, 7, 11, MERGER);
+        set(img, 8, 11, MERGER);
+        return img;
+    }
+
+    // ---- Tunnel Belt ---------------------------------------------------------------------
+
+    /** A dark mouth: the block swallows a lane. */
+    public static BufferedImage tunnelFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, TUNNEL);
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean lip = x <= 4 || x >= 11 || y == 8 || y == 13;
+                int pixel = lip ? Palette.shade(CASING, 0.15) : Palette.shade(CASING, -0.7);
+                if (!lip && glow >= 0 && y == 10) {
+                    pixel = glow;
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage tunnelTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.65));
+            }
+        }
+        set(img, 7, 7, TUNNEL);
+        set(img, 8, 7, TUNNEL);
+        return img;
+    }
+
+    // ---- Overflow Gate -------------------------------------------------------------------
+
+    /** Front plus a side notch: the block is a thing that yields. */
+    public static BufferedImage overflowFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, OVERFLOW);
+        for (int y = 7; y <= 12; y++) {
+            for (int x = 4; x <= 11; x++) {
+                int pixel = glow < 0 ? Palette.shade(CASING, -0.55) : dim(glow);
+                if (glow >= 0 && x >= 10) {
+                    pixel = glow;
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage overflowTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.5));
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 10; x <= 14; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+        }
+        set(img, 12, 7, OVERFLOW);
+        set(img, 12, 8, OVERFLOW);
         return img;
     }
 

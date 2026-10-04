@@ -7,7 +7,7 @@ The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013
 This file is the *schedule*. Open questions are answered here with the documented default; a
 session writes an ADR only when it must pick among real alternatives, then ships the slice.
 
-**Next slice: G — Belt junctions.** Everything above G in the table is done.
+**Next slice: H — Sorter.** G (merger, tunnel, overflow) is shipped.
 
 ---
 
@@ -83,13 +83,14 @@ manipulator, scanner, terrestrial extractor are in; merger, tunnel, overflow and
 ## Remaining slices
 
 Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G.
+it done here in the same PR that ships G. **G is done.** A session that finishes H marks H
+done and sets Next to I.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
 | ID | Slice | Player can | Ship | Do not | Done when |
 | --- | --- | --- | --- | --- | --- |
-| **G** | **Belt junctions** | Join two belts; run a belt through a wall | Merger, tunnel belt, overflow. Same lane model (ADR-0008, ADR-0060). Voltaic crafts. `VerifyBelt` covers join/tunnel. | Sorter (H). Powered belts. | Two belts merge; a tunnel tile carries both lanes; overflow dumps to a side when the front is blocked. Smoke places them. |
+| **G** | **Belt junctions** | Join two belts; run a belt through a wall | Merger, tunnel belt, overflow. Same lane model (ADR-0008, ADR-0060, ADR-0071). Voltaic crafts. `VerifyBelt` covers join/tunnel. | Sorter (H). Powered belts. | ✅ done |
 | **H** | **Sorter** | Filter a stream by item | Sorter block. Sneak-filter like the splitter unless a GUI is required for multiple filters. | Logic Controller. | Filtered item leaves the named face. `VerifyBelt` dumps the route. |
 
 Sifter stays off this wave. Tailings exist as a form; there is no B-row. Do not register a

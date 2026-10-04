@@ -35,9 +35,12 @@ entries below reference those records by id.
 
 ### Added
 
-- **Autonomous build-out (ADR-0070).** `docs/BUILD-OUT.md` is the remaining schedule. Next
-  playable slice is G — belt junctions (merger, tunnel, overflow). Slice F still waits for
-  the Arc Reactor. Sifter, turret and armour stay parked until their rows.
+- **Belt junctions (ADR-0071).** Merger (three inlets, round-robin), Tunnel Belt (pair, skip
+  1–5 empty blocks) and Overflow Gate (front, then clockwise). Voltaic crafts. `VerifyBelt`
+  dumps pick/range/route. Sorter still waits.
+
+- **Autonomous build-out (ADR-0070).** `docs/BUILD-OUT.md` is the remaining schedule. Slice F
+  still waits for the Arc Reactor. Sifter, turret and armour stay parked until their rows.
 
 - **Multitool rotates and relocates (ADR-0069).** Right-click turns a Grindless block.
   Sneak-click picks it up with `BlockStateTag` and `BlockEntityTag` so contents do not spill.
