@@ -12,7 +12,8 @@ import java.util.Locale;
  * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor and the
  * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
  * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle.
- * Electric-arc steel: 10 iron ingots + 1 carbon → 10 steel ingots (ADR-0090). No Minecraft
+ * Electric-arc steel: 10 iron ingots + 1 carbon → 10 steel ingots (ADR-0090).
+ * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091). No Minecraft
  * imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -92,6 +93,7 @@ public final class ProcessGraph {
         recipes.add(pickleIron());
         recipes.add(chemicalReactor());
         recipes.add(electricArcSteel());
+        recipes.add(refractoryBrick());
         return List.copyOf(recipes);
     }
 
@@ -348,6 +350,22 @@ public final class ProcessGraph {
                 ProcessLogic.STEEL_TEMPERATURE,
                 null,
                 ProcessLogic.STEEL_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * Slag's named sink (ADR-0036, ADR-0091). Alumina and silica wait. The Kiln cannot
+     * hold 1400 °C. The furnace's 1500 °C hold is already inside this band.
+     */
+    private static ProcessRecipe refractoryBrick() {
+        return new ProcessRecipe(
+                "ceramic/refractory_brick",
+                MachineFamily.ARC_FURNACE,
+                List.of(IngredientSpec.item(ProcessLogic.SLAG, ProcessLogic.REFRACTORY_SLAG)),
+                List.of(OutputSpec.item(ProcessLogic.REFRACTORY_BRICK, ProcessLogic.REFRACTORY_OUT)),
+                ProcessLogic.REFRACTORY_TEMPERATURE,
+                null,
+                ProcessLogic.REFRACTORY_TICKS,
                 ProcessLogic.FU_PER_TICK);
     }
 

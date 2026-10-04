@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
+import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +41,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle and steel", 40, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, steel and refractory", 41, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -267,6 +268,43 @@ public final class VerifyRecipes {
         yes("furnace hold is optimal for 1600 C",
                 ConditionBand.relative(ProcessLogic.STEEL_TEMPERATURE)
                         .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        ProcessRecipe brick = recipe(recipes, "ceramic/refractory_brick");
+        eq("refractory brick is the arc furnace", MachineFamily.ARC_FURNACE, brick.family());
+        eq("refractory brick takes one slag", 1, brick.itemInputs().get(0).count());
+        eq("refractory brick slag is the reagent", "item:grindless:slag",
+                brick.itemInputs().get(0).qualified());
+        eq("refractory brick makes one brick", 1, brick.itemOutputs().get(0).count());
+        eq("refractory brick output is the reagent", "item:grindless:refractory_brick",
+                brick.itemOutputs().get(0).qualified());
+        eq("refractory brick is twenty seconds", 20 * 20, brick.durationTicks());
+        eq("refractory brick draws F1", 32L, brick.fuPerTick());
+        eq("refractory brick is 1400 C", 1400.0, brick.temperatureC());
+        yes("refractory brick names no atmosphere", !brick.namesAtmosphere());
+        yes("refractory brick has no catalyst", brick.catalysts().isEmpty());
+        yes("refractory brick has no fluid",
+                brick.fluidInputs().isEmpty() && brick.fluidOutputs().isEmpty());
+        yes("refractory brick has no blueprint", brick.blueprint() == null);
+        yes("furnace hold is optimal for 1400 C",
+                ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE)
+                        .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        yes("1400 C is inside the arc furnace envelope",
+                ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE).reachableWithin(
+                        MachineEnvelopes.ARC_FURNACE.minTemperature(),
+                        MachineEnvelopes.ARC_FURNACE.maxTemperature()));
+        no("1400 C is outside the kiln",
+                ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE).reachableWithin(
+                        MachineEnvelopes.KILN.minTemperature(),
+                        MachineEnvelopes.KILN.maxTemperature()));
+        no("alumina is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("alumina")
+                        || recipe.itemInputs().stream().anyMatch(input -> input.id().contains("alumina"))));
+        no("silica is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("silica")
+                        || recipe.itemInputs().stream().anyMatch(input -> input.id().contains("silica"))));
+        no("the kiln does not fire the brick",
+                recipes.stream().anyMatch(recipe -> recipe.family() == MachineFamily.KILN
+                        && recipe.id().contains("refractory")));
+
         no("oxygen blow is not this slice",
                 recipes.stream().anyMatch(recipe -> recipe.id().contains("oxygen")));
         no("direct reduction is not this slice",
@@ -366,6 +404,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("wire_mill.json")));
         no("the motor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("motor.json")));
+        no("refractory brick has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("refractory_brick.json")));
         no("the reactor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
         yes("vanadia is a hand reagent",

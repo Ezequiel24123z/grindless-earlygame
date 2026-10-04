@@ -386,4 +386,14 @@ public final class FormTextures {
         field.bevel(0.4);
         return field.light(palette);
     }
+
+    /** Placeholder sprite for a refractory brick: a fired block with a mortar cross. */
+    public static BufferedImage brick(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 4, 13, 11, 3.6);
+        field.rect(7, 4, 8, 11, 2.2);
+        field.rect(2, 7, 13, 8, 2.2);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
 }

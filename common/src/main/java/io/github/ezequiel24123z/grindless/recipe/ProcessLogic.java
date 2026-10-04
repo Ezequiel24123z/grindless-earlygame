@@ -55,6 +55,16 @@ public final class ProcessLogic {
     public static final int STEEL_TICKS = 20 * 14 * STEEL_OUT;
     public static final double STEEL_TEMPERATURE = 1600.0;
 
+    /**
+     * Refractory brick (ADR-0091). One slag is one reduction's output. Twenty seconds
+     * and 1400 °C are the only numbers the ceramics row already writes.
+     */
+    public static final String REFRACTORY_BRICK = "grindless:refractory_brick";
+    public static final int REFRACTORY_SLAG = 1;
+    public static final int REFRACTORY_OUT = 1;
+    public static final int REFRACTORY_TICKS = 20 * 20;
+    public static final double REFRACTORY_TEMPERATURE = 1400.0;
+
     private ProcessLogic() {
     }
 

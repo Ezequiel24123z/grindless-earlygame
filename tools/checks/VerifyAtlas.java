@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 40, rows.size());
+        eq("atlas lists every generated recipe", 41, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the reactor", "assemble/chemical_reactor",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -81,6 +81,10 @@ public final class VerifyAtlas {
         List<AtlasLogic.Entry> carbon = AtlasLogic.consuming(recipes, "grindless:carbon");
         yes("R2 consumes carbon", ids(carbon).contains("r2/iron"));
         yes("steel consumes carbon", ids(carbon).contains("alloy/steel"));
+        eq("refractory brick has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:refractory_brick").size());
+        yes("slag fires into that brick",
+                ids(AtlasLogic.consuming(recipes, "grindless:slag")).contains("ceramic/refractory_brick"));
         yes("the plate die is a catalyst, not an input",
                 ids(AtlasLogic.consuming(recipes, "grindless:plate_die")).contains("press/plate/iron"));
 

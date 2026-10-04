@@ -90,6 +90,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 and ADR-0090 |
 | [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
 | [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
+| [0091](#adr-0091--refractory-brick-is-one-slag-in-twenty-seconds) | Refractory brick is one slag in twenty seconds | Accepted |
 
 ---
 
@@ -3080,5 +3081,56 @@ Shipping it either cannot be run, or it resumes M. The washer is L.
 Next line said so is ignoring this record. A successor who adds oxygen blow or direct
 reduction here is starting held feeds. A successor who changes the batch without keeping
 0.1 carbon per ingot and 14 s per ingot is rewriting the graph.
+
+---
+
+## ADR-0091 — Refractory brick is one slag in twenty seconds
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BE is slag's named sink (ADR-0036). `PROCESSES.md` writes refractory
+brick as `alumina + silica [T 1400]` in 20 s, and names no counts. BUILD-OUT forbids that
+route, the Kiln, and a new furnace. The Arc Furnace envelope is 1200–3500 °C, so 1400 °C
+is inside it. The Kiln envelope stops at 900 °C. A 1400 °C band of ±15 % tolerates down
+to 980 °C, which the Kiln still cannot reach. The integer batch is not in the graph.
+
+The furnace holds 1500 °C for R1 and for electric-arc steel (ADR-0090). That hold sits
+inside 1400 ±15 % (1190–1610 °C), so a 1400 °C recipe runs at full speed without a second
+temperature. Alumina and silica are not items. One reduction already emits one slag.
+
+**Decision.**
+
+1. **The product is a reagent**, `grindless:refractory_brick`. It is the lining. It is not
+   a placeable block, and it is not `minecraft:brick`. Vanadia keeps its vanilla-brick
+   support. Aggregate and road fill stay later sinks. No new machine, no new blueprint.
+2. **Host.** `ceramic/refractory_brick` runs on the Arc Furnace. Family lock is the host.
+   The recipe names 1400 °C and nothing else: the ceramics row names no atmosphere and no
+   field, and an unwritten condition is not a condition. The held reducing atmosphere and
+   electric field stay on the machine. `ProcessRecipe` does not grow a field slot.
+3. **Integer batch.** **1 slag → 1 refractory brick in 20 s** at 1400 °C, F1. Twenty
+   seconds and 1400 °C are the only numbers the product already has. One unit in and one
+   unit out is the canonical unit (ADR-0034). One slag is what one reduction emits, so
+   one reduce cycle feeds one brick cycle with nothing left over. Own work stays MIT
+   (ADR-0089). This record copies nothing.
+
+**Alternatives rejected.**
+
+- Alumina + silica. Those feeds are not items, and BUILD-OUT forbids the route.
+- The Kiln, or a new furnace. 1400 °C is outside the Kiln even at the edge of tolerance.
+- Retuning the Arc Furnace from 1500 °C to 1400 °C. The existing hold is already optimal
+  for this band, and R1 is written at 1500 °C.
+- Naming `REDUCING` or an electric field on the recipe. Naming `OXIDISING` would refuse
+  the hold the furnace already has.
+- 2 slag → 1 brick, as if the two mineral names were a count.
+- 1 slag → 4 bricks, copying vanadia's four vanilla bricks.
+- 10 slag → 10 bricks in 200 s, or in 20 s. There is no tenth of an item to clear, so a
+  steel-style scale either waits ten times longer or runs ten times faster.
+- A placeable brick, an Industrial gate, or spending the brick as a furnace upgrade in
+  this slice. The sink is the recipe that consumes slag.
+
+**Consequences.** A successor who adds alumina or silica, moves the recipe to the Kiln, or
+retunes the furnace is ignoring this record. A successor who changes the 1:1 batch or the
+20 s is inventing a ratio the product did not have. A successor who ships aggregate or
+road fill here is starting the next sink.
 
 
