@@ -93,6 +93,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0079](#adr-0079--melt-is-144-mb-at-1000-c-and-the-arc-still-makes-ingots) | Melt is 144 mB at 1000 °C, and the arc still makes ingots | Accepted |
 | [0080](#adr-0080--flotation-is-an-integer-batch-and-the-magnet-splits-by-name) | Flotation is an integer batch, and the magnet splits by name | Accepted |
 | [0081](#adr-0081--daylight-is-f1-and-steam-closes-on-the-condenser) | Daylight is F1, and steam closes on the condenser | Accepted |
+| [0082](#adr-0082--t2-pipe-holds-steam-and-the-flux-belt-spends-lv) | T2 pipe holds steam, and the flux belt spends LV | Accepted |
 
 ---
 
@@ -3140,6 +3141,66 @@ Turbine (T3, with fission); treating rain as night.
 turbine. A successor that puts steam in a clay pipe is ignoring 150 °C. A
 successor that builds the turbine here is in slice AF. A successor that starts
 the pressure pipe here is skipping R.
+
+
+## ADR-0082 — T2 pipe holds steam, and the flux belt spends LV
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice R is how fluids and stacks move once T2 exists:
+Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt,
+Stack Manipulator and Filter Manipulator. Phase Manifold is T3. Steam is
+150 °C at 0.5 MPa and molten metal is 1000 °C at 0.1 MPa (ADR-0079, ADR-0081).
+The Clay Conduit and the Basic Tank still refuse anything above 40 °C or
+0.1 MPa (ADR-0062). The README calls the pressure pipe "MV pressures, hot".
+MV is the alias of F2, not a pressure, so a successor who treats it as a
+number will invent one. The Industrial Tank row says adjacent blocks merge
+into one tank. Slice F, the multiblock kernel, waits for the Arc Reactor
+(ADR-0058, ADR-0067). The Flux Belt row is 16 items/s at LV with a tunnel
+of 9. The T1 tunnel is 5 (ADR-0071). A Stack Manipulator moves up to 12
+items at once. A Filter Manipulator is a whitelist or a blacklist.
+
+**Decision.**
+
+1. **The T2 fluid rating is 1200 °C and 1.0 MPa.** Steam and molten metal
+   fit. Superheated steam (6 MPa) does not. The Clay Conduit and the Basic
+   Tank keep the ambient cap. Nothing in this slice raises it.
+2. **Pressure Pipe** is unpowered and Assembler-manufactured (casing, two
+   motors, four plates, Industrial). It pushes any accepted fluid toward the
+   face it points at, including gas and including uphill, at 200 mB/t, and
+   it holds 2 B. It does not create pressure. Gravity remains the clay rule.
+3. **Electric Pump** is the same craft and draws F1 only on a tick that
+   moves fluid. It pulls from the face opposite its facing and pushes out
+   the facing at 100 mB/t. It does not invent water. The Hand Pump and the
+   Fluid Well stay the sources. A full output is blocked. No input is starved.
+4. **Industrial Tank** is one block, 64 B, at the T2 rating. Adjacent tanks
+   do not merge. The merge is a multiblock and waits for slice F.
+5. **Fluid Manipulator** moves 1 B per second from the back face to the front.
+   It draws F1 while it has work and stays subscribed, because a tank filling
+   behind it does not notify the arm.
+6. **Flux Belt** carries 16 items/s. Packing stays two lanes of four, so the
+   belt moves two tiles a second. It draws F1 (LV) only while it holds items.
+   Without power the items sit. An empty belt draws nothing. The README's
+   tunnel range of 9 is recorded and is not a block. The T1 tunnel stays 5.
+7. **Stack Manipulator** moves up to 12 items in one 1-second cycle and draws
+   F1 while it has work. **Filter Manipulator** moves one item. An empty
+   filter passes every item. A set filter is a whitelist of one item id.
+   Sneak-use with an item sets it; sneak-use with an empty hand clears it.
+   Blacklist is not this slice. The arm reads a belt lane or an inventory
+   before it takes, so a rejected item is not picked up and put back.
+
+**Alternatives rejected.** Raising the clay and Basic Tank caps so steam fits
+there; a multiblock tank in this slice (that is slice F); one flux belt rated
+at MV or at 32 items/s (that is the Mag-Lev); changing the T1 tunnel to 9; a
+belt that keeps moving with no power; an electric pump that summons water; a
+pipe rated for 6 MPa; a blacklist mode; the Phase Manifold; a booster pump,
+relief valve or check valve (not in the slice row).
+
+**Consequences.** A successor that stores steam in clay is ignoring this
+record. A successor that merges industrial tanks is starting F. A successor
+that retunes the T1 tunnel to 9 is inventing the flux tunnel. A successor
+that makes an empty flux belt draw F1 is taxing a line that is doing nothing.
+A successor that builds the Phase Manifold here is in slice AJ.
 
 
 
