@@ -218,14 +218,17 @@ above 2^53. Any slice that needs those operations waits until the representation
 record does not change the type.
 
 **Quest book.** A book in the BetterQuesting style: lines, tasks, dependencies, rewards.
-Original implementation only. BetterQuesting's GitHub `LICENSE` is MIT and its CurseForge
-page says All Rights Reserved, so reuse is not confirmed (ADR-0088).
+BetterQuesting's code stays out until its license is one statement. The GitHub `LICENSE`
+is MIT and the CurseForge page says All Rights Reserved (ADR-0088). Changing our license
+does not resolve that (ADR-0089).
 
-**Quality of life.** Features known from other mods are in scope, built as original work.
+**Quality of life.** Features known from other mods are in scope, built as original work
+unless a later slice copies code under the terms in ADR-0089.
 
 **Provenance.** Ideas from GregTech, Ad Astra, BetterQuesting and similar mods may inform
-the design. Code and assets from them are not copied. Licenses, and the places this record
-is unsure, are in ADR-0088. Where a license was not confirmed, the default is no reuse.
+the design. Copying their code waits on the upstream license. Where that license was not
+confirmed, the default is no reuse (ADR-0088). The copyright holder accepts adding an
+upstream license so that compatible code can enter later (ADR-0089).
 
 ---
 
@@ -2219,4 +2222,6 @@ Code, comments, documentation and commit messages are written in English.
 
 ## License
 
-[MIT](LICENSE). Use it, fork it, ship it in your pack.
+Grindless's own work is [MIT](LICENSE). Use it, fork it, ship it in your pack. A file
+that arrives with its own license notice keeps that notice. The copyright holder accepts
+adding that upstream license when a slice copies code that requires it (ADR-0089).

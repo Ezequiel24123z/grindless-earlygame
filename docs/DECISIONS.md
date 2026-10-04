@@ -76,7 +76,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
-| [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
+| [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
@@ -87,7 +87,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
-| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Accepted |
+| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 |
+| [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
 
 ---
 
@@ -2866,7 +2867,11 @@ acid without pickle (or another spend) is reopening ADR-0036.
 
 ## ADR-0088 — Grindless is a modpack-scale progression
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0089](#adr-0089--external-code-may-enter-with-its-own-license)*
+
+> **Superseded in part.** The ban on ever changing our license so that copyleft code can be
+> copied is lifted. Unconfirmed licenses and All Rights Reserved material stay out. See
+> ADR-0089.
 
 **Context.** The early game is in: the T0 loop, slices A–E, the kiln, the atlas stub, the
 Multitool wrench, belt junctions, the sorter, the Industrial gate, the Wire Mill, and the
@@ -2953,5 +2958,58 @@ F9, or who widens `long` inside a feature slice without a record that the repres
 grew, is missing the ceiling in point 5. A successor who writes the black-hole interior
 before the route exists is early; a successor who makes that interior endless, or empty,
 is reopening the rejected alternatives.
+
+---
+
+## ADR-0089 — External code may enter with its own license
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0088 kept other mods' code out of this repository. Part of that ban was
+ours: GregTech CE Unofficial and GregTech-Modern are LGPL-3.0, and a MIT-only tree cannot
+offer those files under MIT alone. The copyright holder has now said they are willing to
+change Grindless's license in order to implement external code.
+
+Changing our grant does not create a right in someone else's work. It only lets us accept
+obligations we were previously refusing.
+
+**Decision.**
+
+1. **Grindless's own code and documentation stay MIT.** [`LICENSE`](../LICENSE) says so.
+   Pack authors can still ship that work.
+2. **The copyright holder accepts an extra upstream license when a slice copies code that
+   requires one.** The copied files keep their notices. The upstream license text is added
+   in that same slice. A file with its own notice is governed by that notice.
+3. **LGPL-3.0 code may enter on those terms.** GregTech CE Unofficial
+   (`GregTechCEu/GregTech`) and GregTech-Modern are LGPL-3.0. Copying them means those
+   files stay LGPL-3.0, the LGPL text ships with the repo, and the mod's distribution
+   satisfies LGPL for those parts (source and the ability to replace them). The GregTech
+   name is a separate permission, stated in their README, and is not granted here.
+4. **MIT code may already enter, with its notice kept.** Ad Astra's Terrarium License v1
+   puts Code under MIT. BetterQuesting's GitHub `LICENSE` on branch `1.12` is also MIT.
+   Neither needs a change to our MIT grant. Ad Astra's non-code is All Rights Reserved.
+   BetterQuesting's CurseForge page lists All Rights Reserved, which contradicts the
+   GitHub file. That contradiction is not fixed by editing our license. Both stay unused
+   until the grant is one statement. The quest book stays an original implementation.
+5. **All Rights Reserved material stays out.** No choice of license for Grindless unlocks
+   it. Original GregTech by Gregorius Techneticies, and assets whose license was not
+   checked file by file, stay out. Similar mods that were not confirmed stay out.
+6. **This record copies nothing.** No `LICENSE` swap to GPL-3.0. The whole project is not
+   relicensed in advance. The first slice that copies a file is the slice that adds that
+   file's license text.
+
+**Alternatives rejected.**
+
+- Relicensing all of Grindless to GPL-3.0 now, with no file being copied. That is stricter
+  than the LGPL code under discussion, and it still does not unlock All Rights Reserved
+  assets.
+- Treating the owner's willingness as permission to copy BetterQuesting, Ad Astra assets,
+  or any unchecked mod.
+- Keeping the permanent "MIT-only, so LGPL can never be vendored" ban from ADR-0088.
+
+**Consequences.** A successor who copies GregTech sources into a MIT file, or who drops the
+LGPL notice, is ignoring this record. A successor who copies BetterQuesting or an Ad Astra
+texture because the license file now mentions upstream terms is ignoring points 4 and 5.
+A successor who relicenses the whole tree without a copied file is early.
 
 

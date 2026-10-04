@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **The ADR-0065 index anchor matches the link checker.** The heading keeps the SO₂
+  subscript. The checker drops that character when it builds the slug, so the index
+  link now uses the slug without it.
+
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
   Slice I placed the item at `8 72 8`, one block above the hopper feeding the
   terminal, so the entity vanished before `ADV-CORE-OK`. The core now appears
@@ -32,6 +36,13 @@ entries below reference those records by id.
   Forge `ITEM_HANDLER` the hopper commit imported.
 
 ### Changed
+
+- **External code may enter with its own license (ADR-0089).** Grindless's own work
+  stays MIT. The copyright holder accepts adding an upstream license when a later
+  change copies code that requires it (LGPL-3.0 for GregTech CE Unofficial and
+  GregTech-Modern). That does not unlock All Rights Reserved assets, and it does
+  not resolve BetterQuesting's MIT-versus-All-Rights-Reserved contradiction. No
+  third-party code is copied in this change.
 
 - **The project is a modpack-scale progression (ADR-0088).** The early-game work already
   built stays the foundation. The "remove the early-game grind" framing and the T0–T6 cap

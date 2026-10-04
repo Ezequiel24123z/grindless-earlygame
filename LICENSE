@@ -19,3 +19,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Grindless's own code and documentation are under the MIT license above.
+
+The copyright holder accepts a further upstream license when a change copies
+external code that requires one. A file that carries its own license notice is
+governed by that notice. All Rights Reserved material is not brought in by
+editing this file. See ADR-0089.

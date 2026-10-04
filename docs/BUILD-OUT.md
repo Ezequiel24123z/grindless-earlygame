@@ -67,7 +67,8 @@ the records below, then implement.
 | JEI / REI / EMI | AY or AZ, both held | ADR-0066, ADR-0088 |
 | Horizon Gate, planets, mining dims | AT then AW, both held; original planets are the modpack expansion, not a mining dim | ADR-0068, ADR-0088 |
 | Resume any held row L–BB | A later record that un-holds that row | ADR-0088 |
-| Copy BetterQuesting, GregTech, or Ad Astra | Never, on the licenses in ADR-0088 | ADR-0088 |
+| Copy code whose license is unconfirmed or All Rights Reserved | Never | ADR-0088, ADR-0089 |
+| Copy LGPL or MIT code without its notice and license text | The slice that adds those terms | ADR-0089 |
 | Multitool mining | Never, without a new ADR | ADR-0055, ADR-0069 |
 | Arc Furnace as a generator | Never | ADR-0067 |
 
