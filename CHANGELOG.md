@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
+  Slice I placed the item at `8 72 8`, one block above the hopper feeding the
+  terminal, so the entity vanished before `ADV-CORE-OK`. The core now appears
+  at `8 100 8`, same as the Atlas and Wire Mill item smokes.
+
+- **Boot smokes handshake before scenario commands.** GitHub lost the first FIFO lines
+  after `Done`, so `PICKAXE-OK hand_crank_dynamo` and `ATLAS-OK` flaked while the same
+  commit passed on the other event. `smoke-boot.sh` now waits for a `[Server] SMOKE-READY`
+  broadcast. The loot scenario also `forceload`s chunk 0,0 like every other smoke.
+
 - **State smoke no longer races a ticking machine (ADR-0061).** CI placed every status with a
   1s gap between `setblock` and `execute if`, so an empty belt published `idle` over `running`
   and a Crude / Terrestrial Extractor published `starved` / `out_of_band` over the first `idle`.
@@ -29,6 +39,73 @@ entries below reference those records by id.
   tanks exist. CI is marked done. The numbered plan from step 15 is rewritten to match.
 
 ### Added
+
+- **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
+  motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia
+  with held air; `1 B SO₃ + 0.2 B water → 1 B sulfuric acid` in 4 s, water from a neighbouring
+  tank. Vanadia pellet is Voltaic (iron oxide + four bricks). Named spend is pickle:
+  `1 iron ingot + 0.1 B acid → 1 iron plate` in 4 s. R2 yield 1.15 and the washer still wait.
+  CI places the reactor, hoppers vanadia, and stands SO₂ and water tanks.
+
+- **Wire Mill, wire and motor (ADR-0074).** T2 mill is Assembler-manufactured (casing, two
+  coils, four plates; Industrial; no circuit board). Wire is a supplied form
+  (`grindless:wires/<m>`): 1 ingot → 2 wire in 8 s F1. Mill coil is 2 copper wire → 1
+  copper coil, no die. Motor is a reagent: casing + two coils + one rod in 10 s.
+  Acid still waits. CI places the mill and hoppers an ingot in.
+
+- **T2 gate (ADR-0073).** Industrial is the second blueprint on the same terminal. Advanced
+  Data Core is Voltaic-gated (one core + four plates). `assemble/pylon_mk2` names that
+  blueprint. Wire Mill is slice J.
+
+- **Sorter (ADR-0072).** Inline filter. Sneak-click left or right; matching items leave that
+  face and hold if it is full. Unmatched continue. Voltaic craft. `VerifyBelt` dumps the
+  route. Logic Controller still waits.
+
+- **Belt junctions (ADR-0071).** Merger (three inlets, round-robin), Tunnel Belt (pair, skip
+  1–5 empty blocks) and Overflow Gate (front, then clockwise). Voltaic crafts. `VerifyBelt`
+  dumps pick/range/route. Sorter is slice H.
+
+- **Autonomous build-out (ADR-0070).** `docs/BUILD-OUT.md` is the remaining schedule. Slice F
+  still waits for the Arc Reactor. Sifter, turret and armour stay parked until their rows.
+
+- **Multitool rotates and relocates (ADR-0069).** Right-click turns a Grindless block.
+  Sneak-click picks it up with `BlockStateTag` and `BlockEntityTag` so contents do not spill.
+  Still not a pickaxe. `VerifyMultitool` dumps the facing cycle.
+
+- **Horizon Gates and exotic fallback worlds (ADR-0068).** Design only. T6 dialed ring pair
+  kills the interplanetary commute; it is not a mining dimension. People cheap, bulk still
+  on the Mass Driver. Fallback adds Thalassa and Helios when no space mod is installed.
+  Not started.
+
+- **Modular armour line and the Arc Reactor pair (ADR-0067).** Design only. T1–T4 chassis;
+  T3 / F3 factory Arc Reactor and miniature suit core share a manufactured Arc Cell line.
+  Direct FU, not steam. Not the Arc Furnace, not fission, not fusion. Not started.
+
+- **Process Atlas stub (ADR-0066).** Handheld lists the live `ProcessLookup` graph:
+  family, I/O, catalysts, named conditions, duration and FU/t. `AtlasLogic` has no
+  Minecraft imports; `VerifyAtlas` dumps it. No ratio solver. JEI still waits.
+  Voltaic-gated craft. CI summons the item.
+
+- **Kiln / R2 — roast then reduce (ADR-0065).** T1 Kiln (8 s F1, 700 °C oxidising)
+  turns raw or crushed into oxide and vents 1 B SO₂. The named sink is the Basic
+  Tank; the Thermal Generator does not burn it. Oxide is `grindless:oxides/<m>`
+  (12 supply items). Arc Furnace R2 is oxide + carbon → ingot + slag in 10 s, no
+  CO. Yield 1.15, sulfuric acid and Slice F stay later. `VerifyRecipes` dumps
+  roast. CI places the Kiln and hoppers raw iron in.
+
+- **Slice E — energy spanning (ADR-0064).** Flux Conduit is a T1 hand item that right-clicks
+  two pylons into a manual link. No length limit; upkeep is `ceil(distance / 8)` FU/t.
+  Capacitor Bank adds 102 400 FU to the covering network and projects no supply cube.
+  Flux Transformer is a covered F1 tap, not a pylon. T2 chassis cores stay ADR-0025.
+  `VerifyNetwork` covers merge, split, upkeep, banks and the F0/F1 cap. CI places the
+  new blocks.
+
+- **Slice D — factory builds factory (ADR-0017, ADR-0063).** Press (4 s F1, die catalyst)
+  and Assembler (20 s F1) as real consumers on the shared process menu. Machine Casing
+  is 4 plates + 2 rods. T1 coil is copper + coil die; Wire Mill stays T2. Pylon MK2 has
+  no crafting-table recipe — the Assembler is the only source. Voltaic-gated crafts for
+  Press, four dies, casing and Assembler. `VerifyRecipes` dumps press and assembler
+  recipes. CI places both machines; a hopper cannot steal a die.
 
 - **Slice C — first fluids (ADR-0058, ADR-0062).** `FluidState` is volume + temperature +
   pressure in millibuckets. Clay Conduit (unpowered, ambient liquid, gravity or level),

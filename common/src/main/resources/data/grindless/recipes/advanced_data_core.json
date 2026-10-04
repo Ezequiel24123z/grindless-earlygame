@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    " P ",
+    "PDP",
+    " P "
+  ],
+  "key": {
+    "P": { "tag": "forge:plates/iron" },
+    "D": { "item": "grindless:data_core" }
+  },
+  "result": { "item": "grindless:advanced_data_core" }
+}

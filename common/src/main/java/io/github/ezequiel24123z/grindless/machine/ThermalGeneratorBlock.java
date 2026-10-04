@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.MenuRegistry;
+import io.github.ezequiel24123z.grindless.item.Relocation;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -114,7 +115,7 @@ public class ThermalGeneratorBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState,
                          boolean moving) {
-        if (!state.is(newState.getBlock())
+        if (!Relocation.active() && !state.is(newState.getBlock())
                 && level.getBlockEntity(pos) instanceof ThermalGeneratorBlockEntity generator) {
             Containers.dropContents(level, pos, generator);
         }

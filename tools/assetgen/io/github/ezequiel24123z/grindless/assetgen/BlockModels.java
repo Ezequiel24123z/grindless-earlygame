@@ -53,14 +53,25 @@ final class BlockModels {
             case GENERATOR -> generator();
             case MILL -> mill();
             case FURNACE -> furnace();
+            case PRESS -> press();
+            case ASSEMBLER -> assembler();
+            case KILN -> kiln();
+            case WIRE_MILL -> wireMill();
+            case REACTOR -> reactor();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
+            case MERGER -> merger();
+            case TUNNEL -> tunnel();
+            case OVERFLOW -> overflow();
+            case SORTER -> sorter();
             case MANIPULATOR -> manipulator();
             case DRILL -> drill();
             case CONDUIT -> conduit();
             case PUMP -> pump();
             case TANK -> tank();
+            case BANK -> bank();
+            case TRANSFORMER -> transformer();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -214,6 +225,52 @@ final class BlockModels {
                 box(5, 14, 7, 11, 16, 9, "top", "side"));
     }
 
+    /** A ram over a forming bed. */
+    private static List<Box> press() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 8, 15, "top", "side", "front"),
+                box(3, 8, 4, 13, 14, 14, "top", "side"),
+                box(5, 14, 6, 11, 16, 12, "cap", "cap"));
+    }
+
+    /** Two arms over a fabrication deck. */
+    private static List<Box> assembler() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 10, 15, "top", "side", "front"),
+                box(2, 10, 3, 6, 15, 7, "top", "side"),
+                box(10, 10, 3, 14, 15, 7, "top", "side"),
+                box(6, 11, 8, 10, 13, 14, "cap", "cap"));
+    }
+
+    /** A brick drum with a short stack. */
+    private static List<Box> kiln() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 12, 14, "top", "side", "front"),
+                box(5, 12, 5, 11, 16, 11, "cap", "cap"));
+    }
+
+    /** Two drawing dies and a spool. */
+    private static List<Box> wireMill() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 3, 15, 10, 14, "top", "side", "front"),
+                box(2, 4, 1, 5, 12, 5, "cap", "side"),
+                box(11, 4, 1, 14, 12, 5, "cap", "side"),
+                box(5, 10, 5, 11, 16, 11, "top", "side"));
+    }
+
+    /** A stirred vat with a shaft through the lid. */
+    private static List<Box> reactor() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 13, 14, "top", "side", "front"),
+                box(7, 13, 7, 9, 16, 9, "cap", "side"),
+                box(4, 14, 4, 12, 15, 12, "top", "side"));
+    }
+
     /** A low slab with two raised rails. */
     private static List<Box> belt() {
         return List.of(
@@ -231,6 +288,43 @@ final class BlockModels {
                 box(6, 6, 0, 10, 7, 4, "top", "side"),
                 box(0, 6, 6, 4, 7, 10, "top", "side"),
                 box(12, 6, 6, 16, 7, 10, "top", "side"));
+    }
+
+    /** Three inlets, one outlet. */
+    private static List<Box> merger() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(2, 2, 2, 14, 6, 14, "top", "side", "front"),
+                box(6, 6, 0, 10, 7, 4, "top", "side"),
+                box(0, 4, 6, 3, 6, 10, "top", "side"),
+                box(13, 4, 6, 16, 6, 10, "top", "side"));
+    }
+
+    /** A low mouth that sits flush so a wall can stand on it. */
+    private static List<Box> tunnel() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                box(0, 2, 0, 3, 4, 16, "top", "side"),
+                box(13, 2, 0, 16, 4, 16, "top", "side"),
+                front(3, 2, 0, 13, 4, 8, "top", "side", "front"));
+    }
+
+    /** Front lane plus a clockwise dump. */
+    private static List<Box> overflow() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(2, 2, 1, 14, 5, 14, "top", "side", "front"),
+                box(12, 5, 6, 16, 6, 10, "top", "side"));
+    }
+
+    /** Passthrough with two side mouths. */
+    private static List<Box> sorter() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(2, 2, 2, 14, 6, 14, "top", "side", "front"),
+                box(0, 4, 6, 3, 7, 10, "top", "side"),
+                box(13, 4, 6, 16, 7, 10, "top", "side"),
+                box(6, 6, 6, 10, 7, 10, "cap", "cap"));
     }
 
     /** A post with a reaching arm. */
@@ -266,6 +360,24 @@ final class BlockModels {
                 box(2, 0, 2, 14, 2, 14, "cap", "base"),
                 front(3, 2, 3, 13, 13, 13, "top", "side", "front"),
                 box(4, 13, 4, 12, 16, 12, "cap", "cap"));
+    }
+
+    /** A cabinet of cells: a battery rack, not a tank and not a pylon. */
+    private static List<Box> bank() {
+        return List.of(
+                box(1, 0, 1, 15, 2, 15, "cap", "base"),
+                front(2, 2, 2, 14, 14, 14, "top", "side", "front"),
+                box(3, 14, 3, 7, 16, 13, "cap", "cap"),
+                box(9, 14, 3, 13, 16, 13, "cap", "cap"));
+    }
+
+    /** Two coils on a core, with a front face so the tap has a direction. */
+    private static List<Box> transformer() {
+        return List.of(
+                box(1, 0, 2, 15, 3, 14, "cap", "base"),
+                front(5, 3, 5, 11, 14, 11, "top", "side", "front"),
+                box(1, 4, 4, 5, 13, 12, "top", "side"),
+                box(11, 4, 4, 15, 13, 12, "top", "side"));
     }
 
     /** A heavier bore: wider collar and a deeper stack than the Crude Extractor. */

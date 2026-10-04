@@ -133,7 +133,7 @@ maintain. A recipe runs in any machine whose envelope contains the recipe's cond
 | **Kiln** | 100–900 °C | ambient | Drying, calcining, roasting. |
 | **Arc Furnace** | 1200–3500 °C | ambient | Any atmosphere; the metallurgy workhorse. |
 | **Induction Furnace** | 200–2000 °C | ambient | Clean, precise, electrically efficient. |
-| **Chemical Reactor** | −20–250 °C | 0.1–2 MPa | Liquid phase, stirred, catalyst slot. |
+| **Chemical Reactor** | −20–500 °C | 0.1–2 MPa | Liquid phase, stirred, catalyst slot. MK I holds 450 °C for contact oxidation (ADR-0075). |
 | **Autoclave** | 100–400 °C | up to 25 MPa | Where hydrothermal chemistry lives. |
 | **Cryo Chamber** | −270–0 °C | any | Liquefaction, superconductors, separation by boiling point. |
 | **Vacuum Chamber** | ambient–1500 °C | vacuum | No oxidation; thin films; higher purity than any air process. |
@@ -293,7 +293,7 @@ many tiers and because a long ladder gives the endgame somewhere to go.
 | **F0** | Manual | 8 FU/t | Hand crank. |
 | **F1** | Voltaic | 32 FU/t | First real network. |
 | **F2** | Industrial | 128 FU/t | Steam and solar. |
-| **F3** | Arc | 512 FU/t | Serious metallurgy. |
+| **F3** | Arc | 512 FU/t | Arc Reactor. Serious metallurgy. |
 | **F4** | Plasma | 2 048 FU/t | Fission. |
 | **F5** | Quantum | 8 192 FU/t | Fusion. |
 | **F6** | Singular | 32 768 FU/t | Singularity reactor. |
@@ -459,6 +459,20 @@ This is the same stance as the [route viewer](#the-route-viewer): the game does 
 player does the design and the building. Testing a reactor core layout becomes an afternoon of
 genuine engineering rather than a savegame-backup ritual.
 
+### Arc Reactor
+
+T3 / F3. Direct FU, not heat into steam. The first generation multiblock that is a factory you
+feed, not a trophy ([ADR-0067](DECISIONS.md#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier)).
+
+Coil count and cell throughput set output. Hatches take **Arc Cells** and coolant (or whatever
+stability fluid the slice names). If the cell line stops, the reactor starves. The worn
+miniature on the Arc Exosuit burns the same cell, so the plant and the suit are one logistics
+problem.
+
+It is not the Arc Furnace. It is not fission's neighbour-bonus steam core. It is not T4 fusion.
+Exact chemistry and size stay open until this slice; Slice F starts when this machine (or
+another that needs hatches) is scheduled.
+
 ### Fission Reactor
 
 The flagship design problem. You lay out the core yourself — fuel rods, control rods, coolant
@@ -517,6 +531,17 @@ makes "is my confinement good enough" a genuine engineering question.
 Zero gravity and hard vacuum as *process conditions*, not flavour. Some products simply cannot be
 made under gravity: perfect crystals, large thin films, certain alloys that segregate when they
 settle. This is what makes the orbital stage a manufacturing necessity rather than a victory lap.
+
+### Horizon Gate
+
+T6 ring. Dialed pair, not a mining dimension
+([ADR-0068](DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)).
+Ring circumference is presence range and stability, not ore yield. The far ring is cargo you
+deliver once. After that, players and frames walk; bulk cargo still prefers the Mass Driver
+because the gate's FU-per-kilogram is worse on purpose.
+
+Addresses come from the planet registry. If a space mod is installed, those worlds are the
+book. Vanilla Nether and End are not in the book unless a datapack puts them there.
 
 ---
 
@@ -626,6 +651,9 @@ The native Atlas exists anyway because the ratio solver and route comparison nee
 viewers do not provide, and because a pack author who ships no recipe viewer must not end up with
 an unplayable mod.
 
+T1 ships the lookup stub only (ADR-0066): a handheld list of the live graph. The solver, cost
+overlay and JEI integration stay later.
+
 ---
 
 ## Open questions
@@ -642,9 +670,15 @@ Deliberately unresolved, recorded so a later session does not assume they were o
 - **Does the Atlas's line solver trivialise the game?** The position taken here is that arithmetic
   is not gameplay, but it should be watched: if "press solve, then build exactly that" becomes the
   whole loop, the solver should propose rather than prescribe.
+- **What is an Arc Cell made of?** ADR-0067 names the fuel and forbids furnace fuel, fissile rods
+  and D–T. The recipe is not chosen yet; it has to be a line the T3 factory already wants to
+  build, not a unique dead-end reagent.
 - **How is condition tuning taught?** Out-of-band failure has to be legible from the first
   machine, not discovered by reading this document.
 - **Exact tier ratios.** The 4× step per Flux tier is inherited from convention and has not been
   validated against the processing chain's real power demands.
 - **Where the orbital line crosses GregTech's endgame.** Both exist in the same pack in some
   setups, and Grindless should complement rather than duplicate.
+- **Horizon Gate address format and open cost.** ADR-0068 names the pair and forbids mining
+  dims. Glyphs vs coordinates vs registry ids, and FU per kilogram through the ring, are not
+  chosen yet.

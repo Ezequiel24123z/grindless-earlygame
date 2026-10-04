@@ -52,12 +52,18 @@ public final class VerifyMaterial {
                 SupplyCatalogue.isSupplied("copper", MaterialForm.NUGGET));
         yes("vanilla has no iron plate either", SupplyCatalogue.isSupplied("iron", MaterialForm.PLATE));
         yes("or iron gear", SupplyCatalogue.isSupplied("iron", MaterialForm.GEAR));
+        yes("or iron wire", SupplyCatalogue.isSupplied("iron", MaterialForm.WIRE));
+        yes("vanilla has no copper wire either", SupplyCatalogue.isSupplied("copper", MaterialForm.WIRE));
         yes("a material no vanilla item covers is fully supplied",
                 SupplyCatalogue.isSupplied("platinum", MaterialForm.INGOT)
                         && SupplyCatalogue.isSupplied("platinum", MaterialForm.RAW));
         no("an alloy has no raw form", SupplyCatalogue.isSupplied("steel", MaterialForm.RAW));
         no("nor a crushed form", SupplyCatalogue.isSupplied("steel", MaterialForm.CRUSHED));
+        no("nor an oxide", SupplyCatalogue.isSupplied("steel", MaterialForm.OXIDE));
         yes("but it has an ingot", SupplyCatalogue.isSupplied("steel", MaterialForm.INGOT));
+        yes("vanilla has no iron oxide, so Grindless supplies one",
+                SupplyCatalogue.isSupplied("iron", MaterialForm.OXIDE));
+        yes("and a platinum oxide", SupplyCatalogue.isSupplied("platinum", MaterialForm.OXIDE));
 
         Set<String> names = new HashSet<>();
         boolean unique = true;

@@ -25,4 +25,26 @@ public final class FluidInsert {
         }
         return state;
     }
+
+    /** Pulls {@code millibuckets} of {@code id} from neighbouring endpoints. Returns how much was taken. */
+    public static int takeFromNeighbours(Level level, BlockPos from, String id, int millibuckets) {
+        if (level == null || id == null || id.isBlank() || millibuckets <= 0) {
+            return 0;
+        }
+        int remaining = millibuckets;
+        for (Direction side : Direction.values()) {
+            if (remaining <= 0) {
+                break;
+            }
+            BlockEntity blockEntity = level.getBlockEntity(from.relative(side));
+            if (!(blockEntity instanceof FluidEndpoint endpoint)
+                    || !endpoint.canExtract(side.getOpposite())
+                    || !endpoint.contents().is(id)) {
+                continue;
+            }
+            FluidState taken = endpoint.extract(side.getOpposite(), remaining);
+            remaining -= taken.millibuckets();
+        }
+        return millibuckets - remaining;
+    }
 }

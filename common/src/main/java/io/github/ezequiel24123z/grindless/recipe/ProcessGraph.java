@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Generates the T1 processing line from a material set (ADR-0005, ADR-0058, ADR-0062).
+ * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063,
+ * ADR-0065, ADR-0074, ADR-0075).
  *
- * <p>B0×R1, dry B1×R1, and wet B1 (0.5 B water, same crushed yield). CO from R1 stays a
- * vented output on the recipe; capture is a runtime push into a tank (ADR-0062).
- * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
+ * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
+ * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor and the
+ * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
+ * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle. No Minecraft
+ * imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -20,35 +23,73 @@ public final class ProcessGraph {
      * @param raw     {@code forge:raw_materials/<name>}
      * @param ore     {@code forge:ores/<name>}
      * @param crushed {@code grindless:crushed_materials/<name>}
+     * @param oxide   {@code grindless:oxides/<name>}
      * @param ingot   {@code forge:ingots/<name>}
+     * @param plate   {@code forge:plates/<name>}
+     * @param rod     {@code forge:rods/<name>}
+     * @param gear    {@code forge:gears/<name>}
      */
-    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean ingot) {
+    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean oxide,
+                               boolean ingot, boolean plate, boolean rod, boolean gear) {
     }
 
     private ProcessGraph() {
     }
 
     /**
-     * Every B0×R1 and B1×R1 recipe the given materials support, in name then route order.
+     * Ore-line, roast, press, mill, contact and assembler recipes the given materials support.
      *
-     * <p>A material without an ingot is skipped (nothing to reduce to). A material without a
-     * raw or ore form is skipped (nothing to feed). Missing crushed drops B1, not B0.
+     * <p>A material without an ingot is skipped for reduction and forming. A material without
+     * a raw or ore form is skipped for the ore line, not for the Press. Missing crushed drops
+     * B1 and crushed roast, not B0. Missing oxide drops roast and R2, not R1.
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
         List<ProcessRecipe> recipes = new ArrayList<>();
         for (MaterialView material : materials) {
             String feed = feedTag(material);
-            if (feed == null || !material.ingot()) {
-                continue;
+            if (feed != null && material.ingot()) {
+                recipes.add(reduce(material.name(), "b0_r1", feed));
+                if (material.crushed()) {
+                    String crushed = crushedTag(material.name());
+                    recipes.add(pulverize(material.name(), feed, crushed));
+                    recipes.add(wetPulverize(material.name(), feed, crushed));
+                    recipes.add(reduce(material.name(), "b1_r1", crushed));
+                }
             }
-            recipes.add(reduce(material.name(), "b0_r1", feed));
-            if (material.crushed()) {
-                String crushed = crushedTag(material.name());
-                recipes.add(pulverize(material.name(), feed, crushed));
-                recipes.add(wetPulverize(material.name(), feed, crushed));
-                recipes.add(reduce(material.name(), "b1_r1", crushed));
+            if (feed != null && material.oxide()) {
+                recipes.add(roast(material.name(), "roast", feed));
+                if (material.crushed()) {
+                    recipes.add(roast(material.name(), "roast_crushed", crushedTag(material.name())));
+                }
+            }
+            if (material.oxide() && material.ingot()) {
+                recipes.add(reduceOxide(material.name()));
+            }
+            if (material.ingot() && material.plate()) {
+                recipes.add(press(material.name(), "plate", "forge:plates/" + material.name(),
+                        FabricationLogic.PLATE_DIE));
+            }
+            if (material.ingot() && material.rod()) {
+                recipes.add(press(material.name(), "rod", "forge:rods/" + material.name(),
+                        FabricationLogic.ROD_DIE));
+            }
+            if (material.ingot() && material.gear()) {
+                recipes.add(press(material.name(), "gear", "forge:gears/" + material.name(),
+                        FabricationLogic.GEAR_DIE));
+            }
+            if (material.ingot()) {
+                recipes.add(wire(material.name()));
             }
         }
+        recipes.add(coilPress());
+        recipes.add(coilMill());
+        recipes.add(pylonMk2());
+        recipes.add(wireMill());
+        recipes.add(motor());
+        recipes.add(contactOxidation());
+        recipes.add(contactAbsorption());
+        recipes.add(pickleIron());
+        recipes.add(chemicalReactor());
         return List.copyOf(recipes);
     }
 
@@ -67,8 +108,16 @@ public final class ProcessGraph {
         return "grindless:crushed_materials/" + material;
     }
 
+    public static String oxideTag(String material) {
+        return "grindless:oxides/" + material;
+    }
+
     public static String ingotTag(String material) {
         return "forge:ingots/" + material;
+    }
+
+    public static String wireTag(String material) {
+        return "grindless:wires/" + material;
     }
 
     private static ProcessRecipe pulverize(String material, String feed, String crushed) {
@@ -101,6 +150,40 @@ public final class ProcessGraph {
                 ProcessLogic.FU_PER_TICK);
     }
 
+    private static ProcessRecipe roast(String material, String route, String feed) {
+        return new ProcessRecipe(
+                route + "/" + material,
+                MachineFamily.KILN,
+                List.of(IngredientSpec.tag(feed, 1)),
+                List.of(
+                        OutputSpec.tag(oxideTag(material), 1),
+                        OutputSpec.ventedFluid(ProcessLogic.SULFUR_DIOXIDE, ProcessLogic.SO2_MB)),
+                ProcessLogic.ROAST_TEMPERATURE,
+                ProcessLogic.ROAST_ATMOSPHERE,
+                ProcessLogic.ROAST_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * Oxide reduction. Same furnace as R1, shorter cycle, no CO: PROCESSES names SO₂ and slag
+     * as the R2 byproducts (ADR-0065).
+     */
+    private static ProcessRecipe reduceOxide(String material) {
+        return new ProcessRecipe(
+                "r2/" + material,
+                MachineFamily.ARC_FURNACE,
+                List.of(
+                        IngredientSpec.tag(oxideTag(material), 1),
+                        IngredientSpec.tag(ProcessLogic.CARBON, 1)),
+                List.of(
+                        OutputSpec.tag(ingotTag(material), 1),
+                        OutputSpec.item(ProcessLogic.SLAG, 1)),
+                ProcessLogic.REDUCE_TEMPERATURE,
+                ProcessLogic.REDUCE_ATMOSPHERE,
+                ProcessLogic.OXIDE_REDUCE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
     private static ProcessRecipe reduce(String material, String route, String feed) {
         return new ProcessRecipe(
                 route + "/" + material,
@@ -116,6 +199,190 @@ public final class ProcessGraph {
                 ProcessLogic.REDUCE_ATMOSPHERE,
                 ProcessLogic.REDUCE_TICKS,
                 ProcessLogic.FU_PER_TICK);
+    }
+
+    private static ProcessRecipe press(String material, String form, String outputTag, String die) {
+        return new ProcessRecipe(
+                "press/" + form + "/" + material,
+                MachineFamily.PRESS,
+                List.of(IngredientSpec.tag(ingotTag(material), 1)),
+                List.of(OutputSpec.tag(outputTag, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.PRESS_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(die, 1)));
+    }
+
+    /** T1 coil: copper ingot and a coil die. The Wire Mill is the T2 dedicated route. */
+    private static ProcessRecipe coilPress() {
+        return new ProcessRecipe(
+                "press/coil/copper",
+                MachineFamily.PRESS,
+                List.of(IngredientSpec.tag("forge:ingots/copper", 1)),
+                List.of(OutputSpec.item(FabricationLogic.COPPER_COIL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.PRESS_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(FabricationLogic.COIL_DIE, 1)));
+    }
+
+    /** 1 ingot → 2 wire. Every material with an ingot; fine wire waits (ADR-0074). */
+    private static ProcessRecipe wire(String material) {
+        return new ProcessRecipe(
+                "mill/wire/" + material,
+                MachineFamily.WIRE_MILL,
+                List.of(IngredientSpec.tag(ingotTag(material), 1)),
+                List.of(OutputSpec.tag(wireTag(material), 2)),
+                Double.NaN,
+                null,
+                FabricationLogic.WIRE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    /** T2 coil: two copper wire, no die. The Press route stays for T1 (ADR-0063). */
+    private static ProcessRecipe coilMill() {
+        return new ProcessRecipe(
+                "mill/coil/copper",
+                MachineFamily.WIRE_MILL,
+                List.of(IngredientSpec.tag(wireTag("copper"), 2)),
+                List.of(OutputSpec.item(FabricationLogic.COPPER_COIL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.WIRE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    /**
+     * The fabrication gate (ADR-0017, ADR-0063). Pylon MK2 has no crafting-table recipe;
+     * the Assembler is the only source.
+     */
+    private static ProcessRecipe pylonMk2() {
+        return new ProcessRecipe(
+                "assemble/pylon_mk2",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.tag("forge:gears/iron", 2)),
+                List.of(OutputSpec.item(FabricationLogic.PYLON_MK2, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /**
+     * The first T2 process machine (ADR-0074). Casing, two coils, four plates. Circuit
+     * board waits on acid.
+     */
+    private static ProcessRecipe wireMill() {
+        return new ProcessRecipe(
+                "assemble/wire_mill",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /**
+     * Contact oxidation. Air is the oxidiser; bottled oxygen waits (ADR-0075). Temperature is
+     * unnamed so the held 450 °C also covers absorption.
+     */
+    private static ProcessRecipe contactOxidation() {
+        return new ProcessRecipe(
+                "contact/so3",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(IngredientSpec.fluid(ProcessLogic.SULFUR_DIOXIDE, ProcessLogic.SO2_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.SULFUR_TRIOXIDE, ProcessLogic.SO3_MB)),
+                Double.NaN,
+                ProcessLogic.CONTACT_ATMOSPHERE,
+                ProcessLogic.CONTACT_OXIDE_TICKS,
+                ProcessLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(FabricationLogic.VANADIA, 1)));
+    }
+
+    /**
+     * Contact absorption. Water stays in a neighbouring tank and is taken at finish
+     * (ADR-0075).
+     */
+    private static ProcessRecipe contactAbsorption() {
+        return new ProcessRecipe(
+                "contact/acid",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.fluid(ProcessLogic.SULFUR_TRIOXIDE, ProcessLogic.SO3_MB),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.ABSORB_WATER_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.SULFURIC_ACID, ProcessLogic.ACID_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.CONTACT_ACID_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Named sulfuric spend. The Press plate die remains (ADR-0075). */
+    private static ProcessRecipe pickleIron() {
+        return new ProcessRecipe(
+                "pickle/plate/iron",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.tag(ingotTag("iron"), 1),
+                        IngredientSpec.fluid(ProcessLogic.SULFURIC_ACID, ProcessLogic.PICKLE_ACID_MB)),
+                List.of(OutputSpec.tag("forge:plates/iron", 1)),
+                Double.NaN,
+                null,
+                ProcessLogic.PICKLE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * The second T2 process machine (ADR-0075). Casing, two motors, four plates. Circuit
+     * board waits on etching.
+     */
+    private static ProcessRecipe chemicalReactor() {
+        return new ProcessRecipe(
+                "assemble/chemical_reactor",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.CHEMICAL_REACTOR, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** Fabricated T2 component. No fluid gate (ADR-0074). */
+    private static ProcessRecipe motor() {
+        return new ProcessRecipe(
+                "assemble/motor",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:rods/iron", 1)),
+                List.of(OutputSpec.item(FabricationLogic.MOTOR, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.MOTOR_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

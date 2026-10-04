@@ -89,10 +89,24 @@ public final class GenerateAssets {
 
         // ---- placeholder sprites, blocks, loot and mining tags ----
         written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
+        written += write(items, "advanced_data_core",
+                FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
+        written += write(items, "process_atlas",
+                FormTextures.atlas(Palette.of("process_atlas", 0x26C6DA)));
+        written += write(items, "flux_conduit",
+                FormTextures.conduit(Palette.of("flux_conduit", 0x18FFFF)));
+        written += write(items, "plate_die", FormTextures.die(Palette.of("plate_die", 0xB0BEC5)));
+        written += write(items, "rod_die", FormTextures.die(Palette.of("rod_die", 0x90A4AE)));
+        written += write(items, "gear_die", FormTextures.die(Palette.of("gear_die", 0xFFB74D)));
+        written += write(items, "coil_die", FormTextures.die(Palette.of("coil_die", 0xB87333)));
+        written += write(items, "copper_coil", FormTextures.coil(Palette.of("copper_coil", 0xB87333)));
+        written += write(items, "motor", FormTextures.motor(Palette.of("motor", 0x5A6E8A)));
+        written += write(items, "vanadia_pellet",
+                FormTextures.vanadia(Palette.of("vanadia_pellet", 0xB85C38)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -165,6 +179,7 @@ public final class GenerateAssets {
         return switch (form) {
             case RAW -> FormTextures.raw(palette);
             case CRUSHED -> FormTextures.crushed(palette);
+            case OXIDE -> FormTextures.oxide(palette);
             case DUST -> FormTextures.dust(palette);
             case NUGGET -> FormTextures.nugget(palette);
             case INGOT -> FormTextures.ingot(palette);
@@ -173,6 +188,7 @@ public final class GenerateAssets {
             case BOLT -> FormTextures.bolt(palette);
             case GEAR -> FormTextures.gear(palette);
             case RING -> FormTextures.ring(palette);
+            case WIRE -> FormTextures.wire(palette);
             default -> throw new IllegalStateException("no texture for form " + form);
         };
     }

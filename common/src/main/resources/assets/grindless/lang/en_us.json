@@ -2,10 +2,21 @@
   "itemGroup.grindless.main": "Grindless",
 
   "item.grindless.multitool": "Multitool",
+  "tooltip.grindless.multitool": "Right-click to rotate. Sneak-click to pick up with contents.",
   "item.grindless.data_core": "Data Core",
+  "item.grindless.advanced_data_core": "Advanced Data Core",
   "item.grindless.machine_casing": "Machine Casing",
+  "item.grindless.plate_die": "Plate Die",
+  "item.grindless.rod_die": "Rod Die",
+  "item.grindless.gear_die": "Gear Die",
+  "item.grindless.coil_die": "Coil Die",
+  "item.grindless.copper_coil": "Copper Coil",
+  "item.grindless.motor": "Motor",
+  "item.grindless.vanadia_pellet": "Vanadia Pellet",
   "item.grindless.slag": "Slag",
   "item.grindless.prospectors_scanner": "Prospector's Scanner",
+  "item.grindless.process_atlas": "Process Atlas",
+  "item.grindless.flux_conduit": "Flux Conduit",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
@@ -13,13 +24,24 @@
   "block.grindless.thermal_generator": "Thermal Generator",
   "block.grindless.pulverizer": "Pulverizer",
   "block.grindless.arc_furnace": "Arc Furnace",
+  "block.grindless.press": "Press",
+  "block.grindless.assembler": "Assembler",
+  "block.grindless.kiln": "Kiln",
+  "block.grindless.wire_mill": "Wire Mill",
+  "block.grindless.chemical_reactor": "Chemical Reactor",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
+  "block.grindless.merger": "Merger",
+  "block.grindless.tunnel_belt": "Tunnel Belt",
+  "block.grindless.overflow_gate": "Overflow Gate",
+  "block.grindless.sorter": "Sorter",
   "block.grindless.crude_manipulator": "Crude Manipulator",
   "block.grindless.terrestrial_extractor": "Terrestrial Extractor",
   "block.grindless.clay_conduit": "Clay Conduit",
   "block.grindless.hand_pump": "Hand Pump",
   "block.grindless.basic_tank": "Basic Tank",
+  "block.grindless.capacitor_bank": "Capacitor Bank",
+  "block.grindless.flux_transformer": "Flux Transformer",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -28,6 +50,7 @@
 
   "form.grindless.raw": "Raw %s",
   "form.grindless.crushed": "Crushed %s",
+  "form.grindless.oxide": "%s Oxide",
   "form.grindless.dust": "%s Dust",
   "form.grindless.nugget": "%s Nugget",
   "form.grindless.ingot": "%s Ingot",
@@ -36,6 +59,7 @@
   "form.grindless.bolt": "%s Bolt",
   "form.grindless.gear": "%s Gear",
   "form.grindless.ring": "%s Ring",
+  "form.grindless.wire": "%s Wire",
 
   "material.grindless.iron": "Iron",
   "material.grindless.copper": "Copper",
@@ -58,6 +82,7 @@
   "subtitles.grindless.brownout_alarm": "Grid alarm sounds",
 
   "blueprint.grindless.voltaic": "Voltaic",
+  "blueprint.grindless.industrial": "Industrial",
   "chat.grindless.research.unlocked": "Blueprint unlocked: %s",
   "chat.grindless.research.already": "Already researched: %s",
 
@@ -68,10 +93,26 @@
   "gui.grindless.status.starved": "Starved — needs input or power",
   "gui.grindless.status.out_of_band": "Out of band",
 
+  "gui.grindless.atlas.title": "Process Atlas",
+  "gui.grindless.atlas.empty": "No process recipes loaded",
+  "tooltip.grindless.atlas": "Right-click to browse process recipes",
+
   "chat.grindless.scanner.vein": "%s · richness %s · reserve %s",
   "chat.grindless.scanner.empty": "No mineable vein in this chunk",
   "chat.grindless.splitter.filter": "Filter: %s",
   "chat.grindless.splitter.clear": "Filter cleared",
+  "chat.grindless.sorter.filter": "Filter: %s",
+  "chat.grindless.sorter.clear": "Filter cleared",
   "overlay.grindless.scanner.vein": "%s · richness %s",
-  "overlay.grindless.scanner.none": "Not surveyed — right-click to scan"
+  "overlay.grindless.scanner.none": "Not surveyed — right-click to scan",
+
+  "chat.grindless.conduit.marked": "First pylon marked at %s, %s, %s",
+  "chat.grindless.conduit.linked": "Pylons linked — trunk upkeep %s FU/t",
+  "chat.grindless.conduit.unlinked": "Manual link dropped",
+  "chat.grindless.conduit.cleared": "Conduit mark cleared",
+  "chat.grindless.conduit.not_pylon": "Right-click a Flux Pylon",
+  "chat.grindless.conduit.missing": "That pylon is gone",
+  "chat.grindless.conduit.dimension": "Links cannot cross dimensions",
+  "tooltip.grindless.conduit.empty": "Right-click two pylons to link them",
+  "tooltip.grindless.conduit.marked": "First pylon: %s, %s, %s"
 }

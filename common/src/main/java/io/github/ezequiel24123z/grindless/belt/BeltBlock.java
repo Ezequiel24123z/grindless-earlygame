@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.belt;
 
+import io.github.ezequiel24123z.grindless.item.Relocation;
 import io.github.ezequiel24123z.grindless.machine.MachineEffects;
 import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
@@ -98,7 +99,7 @@ public class BeltBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState,
                          boolean moving) {
-        if (!state.is(newState.getBlock())
+        if (!Relocation.active() && !state.is(newState.getBlock())
                 && level.getBlockEntity(pos) instanceof BeltBlockEntity belt) {
             dropLane(level, pos, belt.left());
             dropLane(level, pos, belt.right());

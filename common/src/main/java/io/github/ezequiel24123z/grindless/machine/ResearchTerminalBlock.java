@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.machine;
 
+import io.github.ezequiel24123z.grindless.item.Relocation;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -25,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * The Research Terminal: T0, F0, one Data Core and thirty seconds for the first blueprint.
+ * The Research Terminal: T0, F0. Data Core then Advanced Data Core unlock Voltaic then Industrial.
  */
 public class ResearchTerminalBlock extends BaseEntityBlock {
 
@@ -111,7 +112,7 @@ public class ResearchTerminalBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState,
                          boolean moving) {
-        if (!state.is(newState.getBlock())
+        if (!Relocation.active() && !state.is(newState.getBlock())
                 && level.getBlockEntity(pos) instanceof ResearchTerminalBlockEntity terminal) {
             Containers.dropContents(level, pos, terminal);
         }

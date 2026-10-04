@@ -18,10 +18,13 @@ import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.process.ConditionFault;
 import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.process.ProcessConditions;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import io.github.ezequiel24123z.grindless.research.Blueprint;
+import io.github.ezequiel24123z.grindless.research.ResearchAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -44,7 +47,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Shared consumer for the Pulverizer and Arc Furnace.
+ * Shared consumer for Pulverizer, Arc Furnace, Press, Assembler, Kiln, Wire Mill and
+ * Chemical Reactor.
  *
  * <p>Looks up a generated {@link ProcessRecipe}, draws F1, and writes progress. Gaseous outputs
  * push into an adjacent tank when one will take them, and vent otherwise (ADR-0036, ADR-0062).
@@ -150,6 +154,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     public void onNeighbourChanged() {
+        cached = null;
+        cachedRecipeId = "";
         updateSubscriptions();
     }
 
@@ -222,8 +228,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             }
         }
         pushOutputs();
-        captureOrVent(recipe);
         consumeFluid(recipe);
+        captureOrVent(recipe);
         return true;
     }
 
@@ -276,6 +282,27 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 return false;
             }
         }
+        if (!ProcessLookup.matchesFluid(recipe, fluid.state(), neighbourFluids())) {
+            return false;
+        }
+        FluidState afterConsume = fluid.state();
+        List<IngredientSpec> fluids = recipe.fluidInputs();
+        if (!fluids.isEmpty() && afterConsume.is(fluids.get(0).id())) {
+            afterConsume = afterConsume.withAmount(afterConsume.millibuckets() - fluids.get(0).count());
+        }
+        for (OutputSpec output : recipe.fluidOutputs()) {
+            if (output.vented()) {
+                continue;
+            }
+            FluidState made = FluidState.of(output.id(), output.count());
+            int take = FluidLogic.accepted(afterConsume, made, fluid.capacity(),
+                    FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA);
+            if (take < output.count()) {
+                return false;
+            }
+            afterConsume = FluidLogic.insert(afterConsume, made, fluid.capacity(),
+                    FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA);
+        }
         return true;
     }
 
@@ -308,10 +335,21 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (cached != null) {
             return cached;
         }
-        Optional<ProcessRecipe> found = ProcessLookup.find(kind.family(), inputs(), fluid.state());
+        Optional<ProcessRecipe> found = ProcessLookup.find(kind.family(), inputs(), fluid.state(),
+                neighbourFluids());
+        if (found.isPresent() && !researched(found.get())) {
+            found = Optional.empty();
+        }
         cached = found.orElse(null);
         cachedRecipeId = cached == null ? "" : cached.id();
         return cached;
+    }
+
+    private boolean researched(ProcessRecipe recipe) {
+        if (recipe.blueprint() == null || recipe.blueprint().isBlank()) {
+            return true;
+        }
+        return ResearchAccess.isUnlocked(getLevel(), Blueprint.byId(recipe.blueprint()));
     }
 
     private ItemStack[] inputs() {
@@ -336,6 +374,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                     || !endpoint.canExtract(side.getOpposite())) {
                 continue;
             }
+            FluidState present = endpoint.contents();
+            if (present.isEmpty() || !ProcessLookup.isPrimaryFluid(kind.family(), present.id())) {
+                continue;
+            }
             FluidState taken = endpoint.extract(side.getOpposite(),
                     Math.min(FluidLogic.CONDUIT_MB_PER_TICK, fluid.space()));
             FluidState leftover = fluid.offer(taken);
@@ -351,8 +393,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private void consumeFluid(ProcessRecipe recipe) {
-        for (var spec : recipe.fluidInputs()) {
-            fluid.extract(spec.id(), spec.count());
+        List<IngredientSpec> fluids = recipe.fluidInputs();
+        if (!fluids.isEmpty()) {
+            fluid.extract(fluids.get(0).id(), fluids.get(0).count());
+        }
+        for (int i = 1; i < fluids.size(); i++) {
+            IngredientSpec spec = fluids.get(i);
+            FluidInsert.takeFromNeighbours(getLevel(), getBlockPos(), spec.id(), spec.count());
         }
         cached = null;
         cachedRecipeId = "";
@@ -364,6 +411,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         for (OutputSpec output : recipe.fluidOutputs()) {
             FluidState remaining = FluidState.of(output.id(), output.count());
+            if (!output.vented()) {
+                remaining = fluid.offer(remaining);
+            }
             for (Direction side : Direction.values()) {
                 if (remaining.isEmpty()) {
                     break;
@@ -371,6 +421,21 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 remaining = FluidInsert.intoNeighbour(getLevel(), getBlockPos(), side, remaining);
             }
         }
+    }
+
+    private List<FluidState> neighbourFluids() {
+        if (getLevel() == null) {
+            return List.of();
+        }
+        List<FluidState> neighbours = new ArrayList<>();
+        for (Direction side : Direction.values()) {
+            net.minecraft.world.level.block.entity.BlockEntity neighbour =
+                    getLevel().getBlockEntity(getBlockPos().relative(side));
+            if (neighbour instanceof FluidEndpoint endpoint) {
+                neighbours.add(endpoint.contents());
+            }
+        }
+        return neighbours;
     }
 
     @Override
@@ -416,6 +481,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private boolean hasPartialInput() {
+        if (!fluid.isEmpty()) {
+            return true;
+        }
         for (int i = 0; i < kind.menuKind().inputs(); i++) {
             if (!items.getItem(i).isEmpty()) {
                 return true;

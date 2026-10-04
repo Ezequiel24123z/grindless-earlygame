@@ -18,6 +18,9 @@ public final class VerifyNetwork {
         brownouts();
         pylonStatus();
         persistence();
+        spanning();
+        banks();
+        transformer();
 
         System.out.println(failures == 0
                 ? "ALL NETWORK CHECKS PASSED"
@@ -339,6 +342,133 @@ public final class VerifyNetwork {
         } catch (RuntimeException e) {
             fail("corrupt NBT threw " + e.getClass().getSimpleName());
         }
+    }
+
+    private static void spanning() {
+        BlockPos a = new BlockPos(0, 64, 0);
+        BlockPos far = new BlockPos(200, 64, 0);
+        eq("200 blocks costs 25 FU/t", 25L, ManualLink.of(a, far).upkeep());
+        eq("64 blocks costs 8 FU/t", 8L, ManualLink.of(a, new BlockPos(64, 64, 0)).upkeep());
+        yes("A→B and B→A are the same edge",
+                ManualLink.of(a, far).equals(ManualLink.of(far, a)));
+
+        FluxNetworkData data = new FluxNetworkData();
+        data.addPylon(a, PylonTier.MK1);
+        data.addPylon(far, PylonTier.MK1);
+        eq("distant pylons stay two networks", 2, data.networks().size());
+        no("auto-range does not reach 200",
+                PylonTier.linksAutomatically(PylonTier.MK1, a, PylonTier.MK1, far));
+
+        yes("the conduit joins them", data.addManualLink(a, far));
+        eq("a manual link merges the two", 1, data.networks().size());
+        yes("both pylons share the network",
+                data.networkAt(a).id() == data.networkAt(far).id());
+        yes("the edge is remembered", data.hasManualLink(a, far));
+        yes("and is undirected", data.hasManualLink(far, a));
+
+        data.networkAt(a).receive(1000L, false);
+        data.tickNetworks();
+        eq("upkeep is paid from the pool", 1000L - 25L, data.networkAt(a).stored());
+
+        // A chain of three with a manual trunk between the ends: removing the middle pylon
+        // must not split them. That is the whole reason the conduit exists.
+        FluxNetworkData trunk = new FluxNetworkData();
+        BlockPos left = new BlockPos(0, 64, 0);
+        BlockPos middle = new BlockPos(40, 64, 0);
+        BlockPos right = new BlockPos(80, 64, 0);
+        trunk.addPylon(left, PylonTier.MK1);
+        trunk.addPylon(middle, PylonTier.MK1);
+        trunk.addPylon(right, PylonTier.MK1);
+        trunk.addManualLink(left, right);
+        trunk.removePylon(middle);
+        eq("a manual trunk survives losing the auto-range bridge", 1, trunk.networks().size());
+        yes("the ends stay on it",
+                trunk.networkAt(left).id() == trunk.networkAt(right).id());
+
+        trunk.removeManualLink(left, right);
+        eq("dropping the trunk splits them", 2, trunk.networks().size());
+        no("the ends are separate again",
+                trunk.networkAt(left).id() == trunk.networkAt(right).id());
+
+        no("linking a missing pylon does nothing",
+                data.addManualLink(a, new BlockPos(999, 64, 999)));
+        no("linking a pylon to itself does nothing", data.addManualLink(a, a));
+
+        FluxNetworkData saved = new FluxNetworkData();
+        saved.addPylon(a, PylonTier.MK1);
+        saved.addPylon(far, PylonTier.MK1);
+        saved.addManualLink(a, far);
+        saved.networkAt(a).receive(4000L, false);
+        FluxNetworkData loaded = FluxNetworkData.load(saved.save(new CompoundTag()));
+        eq("manual links survive a save", 1, loaded.networks().size());
+        yes("the loaded edge is still there", loaded.hasManualLink(a, far));
+        eq("upkeep still applies after load", 25L, ManualLink.of(a, far).upkeep());
+        loaded.removePylon(far);
+        no("breaking a pylon drops its manual edges", loaded.hasManualLink(a, far));
+        eq("and leaves the other pylon alone", 1, loaded.networks().size());
+    }
+
+    private static void banks() {
+        FluxNetworkData data = new FluxNetworkData();
+        BlockPos pylon = new BlockPos(0, 64, 0);
+        BlockPos covered = new BlockPos(4, 64, 4);
+        BlockPos uncovered = new BlockPos(400, 64, 400);
+        data.addPylon(pylon, PylonTier.MK1);
+        long pylonsOnly = data.networkAt(pylon).capacity();
+
+        data.addBank(covered, CapacitorLogic.CAPACITY);
+        eq("a covered bank adds its capacity", pylonsOnly + CapacitorLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+        eq("the extra is visible", CapacitorLogic.CAPACITY,
+                data.networkAt(pylon).extraCapacity());
+
+        data.addBank(uncovered, CapacitorLogic.CAPACITY);
+        eq("an uncovered bank adds nothing", pylonsOnly + CapacitorLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+        yes("and it still does not cover that spot",
+                data.networkCovering(uncovered) == null);
+
+        data.removeBank(covered);
+        eq("removing a bank returns pylon capacity", pylonsOnly,
+                data.networkAt(pylon).capacity());
+
+        data.addBank(covered, CapacitorLogic.CAPACITY);
+        data.networkAt(pylon).receive(pylonsOnly + 50L, false);
+        yes("the extra headroom can actually be filled",
+                data.networkAt(pylon).stored() > pylonsOnly);
+
+        FluxNetworkData loaded = FluxNetworkData.load(data.save(new CompoundTag()));
+        eq("bank extra survives a save", pylonsOnly + CapacitorLogic.CAPACITY,
+                loaded.networkAt(pylon).capacity());
+
+        loaded.removePylon(pylon);
+        eq("a bank does not keep a network alive", 0, loaded.networks().size());
+        yes("and does not start covering by itself",
+                loaded.networkCovering(covered) == null);
+    }
+
+    private static void transformer() {
+        eq("F1 to F0 is capped at F0", 8L,
+                TransformerLogic.throughput(
+                        io.github.ezequiel24123z.grindless.energy.FluxTier.F1,
+                        io.github.ezequiel24123z.grindless.energy.FluxTier.F0));
+        eq("F0 to F1 is the same cap", 8L,
+                TransformerLogic.throughput(
+                        io.github.ezequiel24123z.grindless.energy.FluxTier.F0,
+                        io.github.ezequiel24123z.grindless.energy.FluxTier.F1));
+        eq("the network exchange runs at F1", 32L, TransformerLogic.RATE);
+        eq("the low face would run at F0", 8L, TransformerLogic.LOW_RATE);
+
+        eq("an empty buffer pulls from the network", 32L,
+                TransformerLogic.exchange(0L, 6400L, 1000L, 10_000L, 3200L, 32L));
+        eq("a full buffer dumps into the network", -32L,
+                TransformerLogic.exchange(6400L, 6400L, 0L, 10_000L, 3200L, 32L));
+        eq("at the target it sits still", 0L,
+                TransformerLogic.exchange(3200L, 6400L, 1000L, 10_000L, 3200L, 32L));
+        eq("an empty network cannot fill it", 0L,
+                TransformerLogic.exchange(0L, 6400L, 0L, 10_000L, 3200L, 32L));
+        eq("a full network cannot take a dump", 0L,
+                TransformerLogic.exchange(6400L, 6400L, 10_000L, 10_000L, 3200L, 32L));
     }
 
     private static void eq(String what, String expected, String actual) {

@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "IRI",
+    "CIC",
+    "IRI"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "R": { "item": "minecraft:redstone" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:flux_transformer" }
+}

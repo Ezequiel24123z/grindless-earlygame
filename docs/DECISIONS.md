@@ -74,6 +74,19 @@ history — the reasoning that was wrong is itself useful information.
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
+| [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
+| [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
+| [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
+| [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
+| [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
+| [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
+| [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
+| [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
+| [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
+| [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
+| [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
+| [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
+| [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 
 ---
 
@@ -2310,5 +2323,530 @@ that stores fluids as items is reopening ADR-0015. A successor that makes wet B1
 different yield from dry is inventing the washer a tier early. Kiln / R2 wait until
 the player has somewhere to put SO₂ — they now do, so that content is unblocked, not
 in this slice.
+
+
+## ADR-0063 — The factory builds the factory at T1
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0017 forbids crafting-table recipes past the bootstrap. ADR-0058 scheduled
+slice D as Press, Machine Casing, Assembler, and the T2 fabrication gate. Two documents
+disagree about *when* those machines exist.
+
+`MACHINES.md` lists Press and Assembler as T2. `PROCESSES.md` bootstrap chain makes them
+the last crafting-table recipes, and says the Assembler is how T2+ is manufactured. Slice D
+cannot ship both readings. `PROCESSES.md` also lists coil as a Wire Mill product; the Wire
+Mill is T2, so the first Assembler would have no coil if that were the only route.
+
+The first T2 machine has to be something the player already wants. Pylon MK2 is already
+in the world as a block; MK1 is the Voltaic-gated craft. Making MK2 the Assembler's first
+recipe is the gate, not a new machine shell.
+
+**Decision.**
+
+1. Press and Assembler are T1 crafting-table recipes, Voltaic-gated. `MACHINES.md`'s T2
+   row is the industrial workhorse, not the first craft. The Assembler is the last
+   crafting-table machine. T2+ has no JSON craft.
+2. The Press is 4 s at F1. One ingot and a die. The die is a catalyst: it occupies a
+   menu input slot, is not consumed, and hoppers cannot pull it. Plate, rod and gear
+   dies cover the forms the casing needs. A coil die on copper makes the `copper_coil`
+   reagent. The Wire Mill remains the dedicated T2 route.
+3. Machine Casing is a crafting-table recipe: 4 iron plates and 2 iron rods, tags not
+   item ids. The 8 s Assembler process in `PROCESSES.md` is the later scale recipe, not
+   the bootstrap.
+4. The Assembler craft is 1 casing + 1 copper coil + 2 iron gears. Its first generated
+   recipe manufactures Pylon MK2 from 1 casing + 4 iron plates + 2 iron gears, 20 s at
+   F1. There is no `flux_pylon_mk2.json`.
+5. Dies, coil, Press, casing and Assembler are authored `gated_shaped` JSON. Press and
+   Assembler recipes are generated into `ProcessRecipe` with a `catalysts` list, so the
+   type does not fork.
+
+**Alternatives rejected.** Shipping Press/Assembler as T2-only (the bootstrap could not
+reach the Assembler, so ADR-0017 would never fire); a crafting-table recipe for MK2 "just
+this once" (the gate would be a comment); consuming the die (hoppers would steal the
+catalyst every cycle); waiting for the Wire Mill before the first coil (the Assembler
+would be uncraftable); putting the die in a separate inventory that hoppers cannot see
+(the shared menu already has input slots, and `canTakeItemThroughFace` already forbids
+extracting them).
+
+**Consequences.** Slice E can add Flux Conduits without inventing a fabrication story.
+A successor that adds `flux_pylon_mk2.json` is reopening ADR-0017. A successor that
+starts the Wire Mill or the Kiln in this slice is ignoring the playable-slice order.
+Kiln / R2 remain unblocked by fluids and unstarted.
+
+
+## ADR-0064 — Energy spanning is distance and storage, not coverage
+
+*2026-10-03 · Accepted*
+
+**Context.** ADR-0058 scheduled slice E as Flux Conduits, transformers and capacitor banks.
+Pylons already project supply areas and auto-link within range. Three documents disagree about
+what a Flux Conduit *is*.
+
+`README` System 1 and the tools table: a **hand item** that right-clicks two pylons into a
+manual link, with no length limit and an upkeep proportional to distance. `docs/DESIGN.md`
+says the same: "a hand item, not a block".
+
+`README` *Flux Conduits — one network* and ADR-0025: a **T2 chassis block** whose carried
+types are decided by cores (item, fluid, heat, signal, Flux). ADR-0026 names those networks.
+Shipping that in slice E would give the player a universal logistics pipe the moment they can
+span two pylons, which is exactly the trap ADR-0025 exists to prevent — and it would let a
+Flux Core cover spots pylons cannot, which is how pylons die.
+
+Slice E's own sentence is the tie-break: "this layer is named networks and distance, and must
+not obsolete pylons". The playable gap after the Assembler is an outpost beyond MK1 link
+range, a buffer that is not "place more pylons", and a tap that is not a second supply cube.
+
+**Decision.**
+
+1. The T1 Flux Conduit is the handheld linker. Right-click pylon A, right-click pylon B.
+   Clicking a shaft counts as the base. Sneak-click the pair to drop the link; sneak-click
+   air to clear a pending mark. The item is not consumed. Manual links have no length limit.
+2. Manual edges live in `FluxNetworkData` beside membership (ADR-0007). Flood-fill and
+   neighbour-merge follow them as well as automatic range. Breaking a pylon drops its
+   manual edges. Unloaded chunks do not. `PylonIndex.linkedTo` stays auto-range only.
+3. Upkeep is `ceil(distance / 8)` FU/t, minimum 1. It is demand on the shared pool, paid
+   from stored energy each tick. An unpaid link browns the network out; it does not
+   silently drop. Auto-range links cost nothing.
+4. A Capacitor Bank adds capacity to the **covering** network. It projects no supply cube.
+   Uncovered, it is inert. Capacity is 200 ticks of MK1 throughput (102 400 FU). Membership
+   of banks is SavedData, same as pylons: place registers, break unregisters, unload does
+   not.
+5. A Flux Transformer is a covered tap, not a pylon. It exchanges FU with the covering
+   network at F1 (32 FU/t) through a local buffer other mods can see as FE. Grindless
+   machines still resolve power by `networkCovering` — standing next to a transformer does
+   not power them. Per-face F0/F1 gating waits until the energy capability is re-invalidated
+   per face; the T1 step is the rate cap, not a second voltage network.
+6. Named conduit networks (ADR-0026) and the core-chassis block (ADR-0025) stay T2. Slice E's
+   "named network" is the Flux Network identity the linker joins. Item, fluid, heat and
+   signal cores are not in this slice.
+
+**Alternatives rejected.** Shipping the T2 chassis in E (obsoletes belts, pipes and pylons
+the moment spanning exists); giving the transformer or the bank a supply cube (a cheaper
+pylon); letting a Flux Core "for the rare spot a pylon cannot cover" land here (that *is*
+obsoleting pylons); colour channels (ADR-0026); dropping the link when upkeep cannot be
+paid (a silent topology change); putting manual edges only on the block entity (unloaded
+chunks would split the trunk).
+
+**Consequences.** An outpost beyond 64 blocks is a deliberate trunk with a running cost, not
+a line of pylons and not a cable. A successor that registers `flux_conduit` as a block with
+cores is starting ADR-0025, not extending this slice. A successor that lets
+`networkCovering` return a transformer is reopening this record. Kiln / R2 and Slice F are
+still unstarted.
+
+
+## ADR-0065 — T1 Kiln is roast and SO₂, not the acid line
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0058 scheduled playable slices, not system layers. ADR-0062 unblocked Kiln / R2
+the moment a tank could hold a gas. Slice E (ADR-0064) spanned energy; it did not start roasting.
+Three documents still disagree about what the first Kiln ships.
+
+`PROCESSES.md` R2 is roast then reduce: Kiln at `T 700 · atm O2` for 8 s, then Arc Furnace at
+`T 1200 · atm reducing` for 10 s, factor **1.15**, byproducts **1 B SO₂** and slag. The sulfur
+loop then burns that SO₂ to SO₃ with bottled oxygen and vanadia, and that is sulfuric acid.
+
+The T1 Arc Furnace is locked at 1500 °C reducing so R1 runs at full speed without a dial
+(ADR-0059). A 1200 °C point band would put 1500 °C in the tolerance zone and halve R2. T1 has
+no atmosphere bottles; `atm O2` is the oxidising envelope, not a fluid slot. Oxide is not a
+conventional Forge form. Yield 1.15 is the reason to rebuild the line later, not the reason to
+roast now — the reason to roast now is SO₂.
+
+Slice F is the multiblock kernel, and only when a machine needs hatches or size (ADR-0058).
+The Kiln does not.
+
+**Decision.**
+
+1. The T1 Kiln is a single-block `ProcessMachine` on the shared menu (1 in, 1 out). Envelope
+   `MachineEnvelopes.KILN`. Held conditions are 700 °C oxidising, so roast evaluates optimally
+   with no dial. Voltaic-gated crafting-table JSON, like the Pulverizer.
+2. Roast is generated per material that has a vein feed and an oxide form. 1 u raw (or ore)
+   or 1 u crushed → 1 u oxide + 1 B SO₂, 8 s at F1, `T 700 · OXIDISING`. No oxygen fluid.
+   Crushed roast is a second recipe, not a different yield. 1.15 stays deferred.
+3. Oxide is a Grindless form: `grindless:oxides/<material>`, not `forge:`. Supply covers
+   mineable catalogue materials; alloys have no oxide. Item path is `<material>_oxide`.
+4. R2 reduce is an Arc Furnace recipe: 1 u oxide + 1 u carbon → 1 ingot + slag, 10 s at F1.
+   It names 1500 °C reducing so the locked T1 furnace runs it at full speed. The PROCESSES
+   1200 °C is the envelope floor, not a second held temperature. It does not vent CO —
+   PROCESSES names SO₂ and slag only.
+5. SO₂ is a gas at ambient, like CO. The Kiln pushes 1 B into neighbouring `FluidEndpoint`s
+   and vents the rest. The named T1 sink is the Basic Tank. The Thermal Generator must not
+   burn it. Clay Conduit still refuses gases.
+6. No sulfuric acid, no SO₃, no vanadia, no bottled oxygen, no Chemical Washer, no Wire Mill,
+   no T2 cores, no Slice F kernel. Those wait for a machine that needs them.
+
+**Alternatives rejected.** Shipping the 1.15 yield (fractional stacks and a lie until a later
+route exists to justify the extra); a T1 oxygen fluid slot (nothing produces bottled O₂ yet);
+naming R2 reduce at 1200 °C (the locked furnace would run it at half speed); burning SO₂ in
+the Thermal Generator (that sink belongs to CO, and it would skip the acid line); registering
+oxide under `forge:` (no convention); starting the contact-process reactors in this slice
+(ADR-0036 would then demand a sulfuric-acid sink that T1 does not have).
+
+**Consequences.** The player roasts because they want a tank of SO₂, not because they want
+more metal. A successor that adds `sulfuric_acid` without a named spend is reopening
+ADR-0036. A successor that starts Slice F because "the Kiln should be a multiblock" is
+ignoring ADR-0058 — this Kiln does not need hatches.
+
+
+## ADR-0066 — The T1 Atlas is a live lookup, not the solver
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0023 ships a native Process Atlas with a ratio solver, because a pack without a
+recipe viewer would make parameterised recipes unplayable. README step 16 is `VerifyRecipes` plus
+an atlas stub; JEI, REI and EMI wait until 1.0 polish. After Kiln / R2 the live graph is ore line,
+roast, press and assembler. The solver — given a rate, emit machine counts — is the feature
+ADR-0023 itself flags as most at risk of going too far. Slice F is not next (ADR-0058).
+
+**Decision.**
+
+1. The T1 Atlas is a handheld item. Right-click opens a scrollable list of the live
+   `ProcessLookup` graph: family, inputs, catalysts, outputs, named conditions, duration and
+   FU/t. Query lives in `AtlasLogic` with no Minecraft imports so `VerifyAtlas` can dump it.
+2. It is a lookup, not a solver. No target rate, no machine counts, no FU-per-unit overlay, no
+   reachability against research. Those remain ADR-0023.
+3. JEI, REI and EMI still wait. Vanilla already shows T0 JSON crafts. The Atlas lists process
+   recipes only; a pack that ships no JEI can still see the graph that machines actually run.
+4. Voltaic-gated crafting-table JSON, like the Prospector's Scanner. Process recipes only run
+   after Voltaic machines exist; T0 table crafts do not need a second viewer.
+5. The screen reads `ProcessLookup` on the client after tag sync. No extra S2C. No graph widget
+   yet — a list of `AtlasLogic` lines is the stub.
+
+**Alternatives rejected.** Shipping the ratio solver in this step (it would prescribe the factory
+before the player has asked); JEI-only (ADR-0023 already rejected that); an always-available T0
+craft (the gap is process recipes, which appear with Voltaic); a block terminal (the scanner and
+linker are already handheld; a desk would duplicate the Research Terminal).
+
+**Consequences.** A successor that adds `solve(rate)` is finishing ADR-0023, not extending this
+stub. A successor that starts JEI integration is 1.0 polish, not a T1 blocker. Slice F is still
+only when a machine needs hatches or size.
+
+
+## ADR-0067 — Modular armour and the Arc Reactor are one tier
+
+*2026-10-04 · Accepted*
+
+**Context.** The README already has a T2 Flux Exosuit with a generic **Portable Reactor** module,
+and T4 Fusion as the first *named* compact-power fantasy. Flux F3 is already called **Arc** and
+has no generator. The Arc Furnace is a T1 smelter. Construction drones — the thing that makes a
+real multiblock playable — arrive at T3 (ADR-0031). The user asked for modular armour *at every
+research tier*, with upgrades, and for one of those tiers to carry a **miniature Arc Reactor**
+on the suit **and** a fully playable Arc Reactor generation multiblock, with the processing
+lines that feed it.
+
+A successor who ships the current T2 "portable reactor" as a free worn generator, or who turns
+the Arc Furnace into a power plant, or who drops an unfed trophy core in the world, has missed
+the request.
+
+**Decision.**
+
+1. **Armour is a chassis line, not one T2 unlock.** T1–T4 each ship a four-piece modular suit.
+   The grid grows. Modules are upgrades: inserting and removing is free, same as machine
+   upgrades. T1 is protection plus a cell — no onboard generation. T2 adds the Network Tap and
+   mobility (you walk through pylons). T3 is the Arc chassis. T4 is the exotic / orbital suit.
+   Vanilla armour stays valid until the T1 chassis exists.
+2. **The Arc pair is T3 / F3, together.** The factory **Arc Reactor** and the suit's
+   **miniature Arc Reactor** unlock on the same research tier. One without the other is a
+   different feature. The worn core burns the same manufactured fuel the multiblock burns, so
+   the line you built for the plant also charges the suit.
+3. **The factory reactor is a generator you have to run.** Formed structure, hatches, coolant
+   or stability as real logistics, and a **named processing line** whose product is the fuel
+   (working name: Arc Cell). It produces **FU directly** at F3, not heat into steam — fission
+   already owns that route. If the cell line stops, the reactor starves. It is not a trophy
+   block (MACHINES.md: every endgame system has a real use; this is the same rule at T3).
+4. **It is not the Arc Furnace, not fission, not fusion.** The Furnace stays a smelter. Fission
+   stays T3 heat + neighbour-bonus steam. Fusion stays T4 D–T ignition. The Arc Reactor is the
+   missing F3 plant: compact, fed, direct FU.
+5. **Do not start this in T1.** Slice F exists when *this* machine (or another that actually
+   needs hatches) is scheduled — not as an empty kernel (ADR-0058). Equipment waits for the
+   0.4 tools slice. Exact Arc Cell chemistry, hatch layout and grid sizes stay open.
+
+**Alternatives rejected.** Shipping a T2 worn reactor that needs no factory (the current
+Portable Reactor row); using the Arc Furnace as a generator (name collision and it already
+smelts); a trophy core with no feed line; putting the pair at T2 before drones (a processing-line
+multiblock you place by hand is a chore); starting Slice F "for later"; merging this into T4
+Fusion (then F3 still has no generator and the suit waits until the endgame).
+
+**Consequences.** A successor that adds `portable_reactor` as a T2 module with no cell recipe is
+reopening this record. A successor that starts hatches because "armour will need a reactor" is
+ignoring ADR-0058 — start F when the Arc Reactor (or another sized machine) is the slice, not
+before. The README Exosuit table is the player-facing version of this decision.
+
+
+## ADR-0068 — Horizon Gates are commute infrastructure, not mining dimensions
+
+*2026-10-04 · Accepted*
+
+**Context.** The README already rejects mining dimensions as "the same grind, in a different
+room." System 9 already has rockets, Mass Driver, telepresence and Colony Cores. ADR-0012
+already says planets come from installed space mods. The user asked for futuristic end goals
+in the Stargate tradition: gates, dimensions, exotic planets.
+
+A successor who adds a void-miner dimension, a creative teleport, or a second planet pack
+beside Ad Astra has missed both the request and the existing records.
+
+**Decision.**
+
+1. **The Horizon Gate is T6 commute infrastructure.** A ring multiblock you dial. Addresses
+   come from the planet registry after a Deep Survey, not from a creative list. It is the
+   moment the interplanetary commute dies, the same way the Crude Extractor killed mining and
+   the Blueprint Tool killed repeating a layout.
+2. **Two rings.** The far gate is cargo: you deliver it by rocket, Mass Driver or colony
+   package once. Until the pair exists, you still fly. After it exists, you walk. That is the
+   factory payoff, not a free portal.
+3. **People cheap, bulk expensive.** Players, Proxy Frames and colony packages go through at a
+   modest FU cost. Item cargo is allowed but costs more FU per kilogram than the Mass Driver, so
+   belts of ore still belong on the driver (principle 10: pay in layout or pay in power).
+4. **Not a mining dimension.** A Horizon Gate never opens a world whose only job is "more
+   ore." Destinations are planets in the registry — Ad Astra's if present (ADR-0012), otherwise
+   the fallback set. Vanilla Nether and End are not auto-registered; a pack author may add them
+   by datapack. Pocket "mining dims" and RFTools-style void worlds are out.
+5. **Exotic fallback worlds are process envelopes.** When no space mod is installed, the
+   existing five stay, and two more exotic worlds join: **Thalassa** (ocean, pressure chemistry)
+   and **Helios** (tidally locked heat/cold). Signature resources and hazards differ; the
+   material registry does not. Erebus remains the strange-matter world. Do not invent unique
+   untaggable ores that only exist there.
+6. **Do not start this in T1.** Orbital (0.8) and interplanetary (0.9) stay later. Slice F is
+   still only when a machine needs hatches. Exact dial cost, ring size and address format stay
+   open.
+
+**Alternatives rejected.** A mining or void dimension (already in the anti-pattern table);
+shipping Grindless planets beside Ad Astra (ADR-0012); a one-sided creative teleport (no
+factory); routing all cargo through the gate (obsoletes the Mass Driver); calling the block
+Stargate (someone else's name); treating the Nether as a planet by default.
+
+**Consequences.** A successor that registers `mining_dim` is reopening this record and the
+anti-pattern table. A successor that skips the far-gate delivery is shipping a creative
+teleporter. The README System 9 travel table is the player-facing version.
+
+
+## ADR-0069 — The Multitool rotates and relocates; it still does not mine
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0055 forbids the Multitool from mining. The README still promises it rotates
+machines and picks them up with contents and settings intact. The registered item is a blank
+`Item`: it does neither. That is the empty-the-machine tax the T0 handheld was meant to delete.
+Slice F, the Sifter, Resonance, the Ballistic Turret, armour and Horizon Gates are not the next
+playable hole.
+
+**Decision.**
+
+1. Right-click a Grindless block with the Multitool: rotate 90° clockwise if it has a horizontal
+   facing. The machine GUI, the dynamo crank and the Research Terminal do not open while the
+   Multitool is the used item.
+2. Sneak-right-click: pick the block up as its BlockItem, with `BlockStateTag` (facing, status)
+   and `BlockEntityTag` (buffers, lanes, fluids, filter). `Relocation` is active so
+   `onRemove` does not spill the inventory onto the floor. Pylon clicks resolve to the base
+   (ADR-0054); shafts are not a separate item.
+3. A pickaxe still breaks machines and they still drop empty (ADR-0051, ADR-0055). The Multitool
+   is not in `mineable/pickaxe` and has no destroy speed.
+4. Splitter face-filtering stays sneak-click *without* the Multitool. With it, sneak is relocate.
+5. This is not the Blueprint Tool and not a mining module.
+
+**Alternatives rejected.** Mining with the Multitool (ADR-0055); opening the GUI anyway (then
+rotate is unreachable on machines with menus); spilling contents on relocate (that *is* the tax);
+a T2 Blueprint-only move (too late for the machine you just placed at T0).
+
+**Consequences.** A successor that gives the Multitool pickaxe behaviour is reopening ADR-0055.
+A successor that starts the Sifter or a turret because "T1 is done" is skipping a tool the player
+already crafted.
+
+
+## ADR-0070 — Remaining work is the autonomous build-out
+
+*2026-10-04 · Accepted*
+
+**Context.** Slices A–E, Kiln/R2, the Atlas stub and the Multitool wrench are in. Armour and
+Horizon Gates are recorded, not started. The README implementation plan still has four coarse
+pending rows (F, T2+ industry, tools, orbit, planets). A session that infers "next" from those
+rows restarts Slice F, the Sifter without a graph, or a turret without Resonance — all of which
+the records already forbid.
+
+The owner asked for a closed list so a successor can finish the mod without asking.
+
+**Decision.**
+
+1. [`docs/BUILD-OUT.md`](BUILD-OUT.md) is the remaining schedule. The README stays the design
+   source of truth (ADR-0013). The build-out is the order.
+2. The next playable slice is **G — Belt junctions** (merger, tunnel, overflow), which
+   ADR-0060 already parked. Not F. Not the Sifter. Not a turret. Not armour.
+3. Slice F still starts when a machine needs hatches. That machine is the Arc Reactor at T3
+   (ADR-0067), as build-out **AD/AE**.
+4. A session does not stop to ask. Defaults come from the README, `MACHINES.md` and
+   `PROCESSES.md`. An ADR is written only when those conflict or are silent, then the slice
+   ships.
+5. One slice per stacked draft. Do not merge unless the owner asks. Do not squash.
+
+**Alternatives rejected.** Leaving "T2+ industry" as one row (a session dumps the chemical core
+into an unused kernel); starting F "so later slices are easier" (ADR-0058); asking the owner
+at every T1-named hole (the holes are already classified: Sifter needs a graph ADR, turret
+needs Resonance, harness is 0.4).
+
+**Consequences.** A successor that starts hatches, a Sifter shell, or JEI because the build-out
+looks long is ignoring this record. Updating the **Next slice** line is part of shipping G
+and every slice after it.
+
+
+## ADR-0071 — T1 belt junctions are merger, tunnel and overflow
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0060 shipped the first belt, splitter and manipulator, and parked merger,
+tunnel, overflow and sorter. BUILD-OUT slice G is those three junctions. README already
+gives the T1 tunnel a range of five and describes overflow as the belt that does not stall
+when a chest fills. Three questions were still open.
+
+**Decision.**
+
+1. **Merger.** Three inlets (back, left, right), one outlet (front). Round-robin from the last
+   accepted face. No filters; that is the sorter (slice H).
+2. **Tunnel Belt.** An entrance/exit pair facing the same way. The gap is one to five empty
+   blocks (README range 5). Adjacent tiles are a conveyor, not a tunnel. Items travel only in
+   the facing direction. A craft yields two tiles.
+3. **Overflow Gate.** Front is preferred. The clockwise side takes the item only when the
+   front is backed up. Not a second splitter.
+4. Same lane model and BeltEndpoint as the conveyor (ADR-0008). Voltaic-gated crafts.
+   `VerifyBelt` dumps pick/range/route. Sorter still waits.
+
+**Alternatives rejected.** Powered T1 tunnels (the first belt is mechanical); opposite-facing
+two-way pairs in this slice (a second direction is another block, not this one); overflow as
+a splitter with a hidden filter (then two blocks do one job).
+
+**Consequences.** A successor that starts the sorter in this slice is skipping H. A successor
+that lets two tunnel tiles pair when they touch is deleting the conveyor.
+
+
+## ADR-0072 — The T1 sorter peels; it does not split
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice H is the sorter ADR-0060 parked. README calls it an inline
+multi-output filter for a mixed ore line. The splitter already has three filtered outlets and
+round-robins unfiltered faces. If the sorter copied that, two blocks would do one job. The
+remaining question is what "inline" means when a matching lane is full.
+
+**Decision.**
+
+1. One inlet (the back). Front is always the passthrough: unmatched items continue. Left and
+   right are optional filters, sneak-clicked like the splitter. An empty filter does not steal.
+2. A matching side, if open, takes the item. If that side is backed up, the sorter holds.
+   Matching items never dump onto the front. That is the difference from the splitter, whose
+   backed-up filter yields to an open face.
+3. Two sides that name the same item round-robin. No GUI. Logic Controller still waits.
+4. Voltaic-gated craft with a hopper in the middle so the recipe is not the splitter. Same lane
+   model and BeltEndpoint (ADR-0008). `VerifyBelt` dumps the route.
+
+**Alternatives rejected.** A second splitter under a new name; a GUI for a list of filters
+(sneak-click is enough for two faces); overflowing a full copper lane onto the iron belt (that
+deletes the sorter).
+
+**Consequences.** A successor that lets a backed-up filter spill to the front is shipping
+overflow on the wrong block. A successor that round-robins unfiltered sides is shipping a
+splitter.
+
+
+## ADR-0073 — Industrial is the second blueprint on the same terminal
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice I is the T2 gate: research Industrial, then Pylon MK2 is a real
+Assembler craft. The MK2 process already exists (`assemble/pylon_mk2`) and has no crafting-table
+JSON (ADR-0063). The terminal only unlocks Voltaic, and the Assembler does not ask whether
+Industrial is researched, so a T1 factory already manufactures the T2 pylon.
+
+**Decision.**
+
+1. **Industrial** is the second `Blueprint`. The same Research Terminal unlocks it after Voltaic.
+   It still draws F0. The cycle is sixty seconds. The spent item is an **Advanced Data Core**,
+   not a basic core. You cannot skip Voltaic.
+2. The Advanced Data Core is a Voltaic-gated crafting-table item: one Data Core and four iron
+   plates. Processed plates are the "advanced cores from processed ones" line in the README.
+3. `assemble/pylon_mk2` names blueprint `industrial`. The Assembler refuses the recipe until
+   that blueprint is unlocked. Atlas still lists it. Wire Mill, washer and Slice F still wait.
+
+**Alternatives rejected.** A second research block (the terminal is the production target);
+re-rating the terminal to F1 for this slice (the first T2 wait should not demand a new power
+tier); a crafting-table MK2 (ADR-0017); unlocking Industrial with a basic core (then the
+advanced item is flavour).
+
+**Consequences.** A successor that lets the Assembler build MK2 before Industrial is deleting
+the T2 gate. A successor that starts the Wire Mill in this slice is skipping J.
+
+
+## ADR-0074 — The Wire Mill is T2 and does not wait for acid
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice J is wire, coil and motor. `MACHINES.md` puts the Wire Mill at T2
+for wire and coil. `PROCESSES.md` names Motor as `1 casing + 2 u coil + 1 u rod` in 10 s with
+no fluid, and the generic T2 machine as `1 casing + 2 Motor + 1 Circuit Board + 4 u plate`.
+Circuit Board needs etching acid (slice K). T1 already presses a copper coil with a die so
+the Assembler can exist (ADR-0063). Fine wire is MK III+. Pump waits on resin.
+
+**Decision.**
+
+1. **Wire Mill** is a T2 single-block process machine. The Assembler manufactures it once
+   Industrial is researched: `1 casing + 2 copper coil + 4 iron plates`, 20 s, F1. No circuit
+   board. No crafting-table JSON (ADR-0017). Ambient envelope. Menu is one in, one out.
+2. **Wire** is a supplied form for every catalogue material (`grindless:wires/<m>`, not
+   conventional). `1 ingot → 2 wire`, 8 s, F1, no named conditions. Fine wire waits.
+3. **T2 coil** is mill-only: `2 copper wire → 1 copper_coil`, 8 s, F1, no die. The Press plus
+   coil die remains the T1 bootstrap (ADR-0063). `MaterialForm.COIL` is still not supplied.
+4. **Motor** is a reagent item `grindless:motor`. Assembler: `1 casing + 2 copper coil +
+   1 iron rod`, 10 s, F1, Industrial. No JSON. Pump and the generic T2 machine recipe wait.
+
+**Alternatives rejected.** Using the generic T2 recipe this slice (that is acid); dropping
+the Press coil (the first Assembler would have nothing to wind); supplying fine wire
+(MK III); a crafting-table mill (ADR-0017); gating every mill recipe on Industrial (owning
+the mill is the gate).
+
+**Consequences.** A successor that starts sulfuric acid in this slice is skipping K. A
+successor that crafts the mill at a table is deleting the T2 manufacturing gate.
+
+
+## ADR-0075 — The contact process is air, vanadia and a pickle
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice K is the contact process: Chemical Reactor, SO₂ → SO₃ → sulfuric
+acid at the ratios in `PROCESSES.md`, vanadia as catalyst, named sinks, R2 yield 1.15 *may*
+go live. Washer and etching wait. Atmospheric Intake and electrolysis wait for M. Generic T2
+assembly wants a Circuit Board, which wants etching acid.
+
+`PROCESSES.md` names `0.5 B oxygen` and `T 450` for oxidation, `T 120` for absorption.
+`MACHINES.md` gives the Chemical Reactor −20–250 °C. One machine cannot hold both 450 °C and
+120 °C. One `FluidBuffer` cannot hold SO₃ and water at once. Arc Furnace R2 already fills
+both output slots (ingot + slag), so a 1.15 nugget has nowhere to land.
+
+**Decision.**
+
+1. **Chemical Reactor** is a T2 single-block process machine. The Assembler manufactures it
+   once Industrial is researched: `1 casing + 2 motor + 4 iron plates`, 20 s, F1. No circuit
+   board. No crafting-table JSON. Menu is one in (catalyst) and one out. Envelope is
+   `MachineEnvelopes.CHEMICAL_REACTOR` with the ceiling raised to 500 °C so 450 °C is inside.
+   Held conditions are 450 °C oxidising, stirred. Recipes in this slice do not name a
+   temperature; both steps run in-band without a dial.
+2. **Oxidation.** `1 B SO₂ → 1 B SO₃`, 6 s, F1, vanadia catalyst. Air is the oxidiser
+   (held OXIDISING). Bottled oxygen waits for M. SO₃ is a gas at ambient, like SO₂; the tank
+   is the buffer.
+3. **Absorption.** `1 B SO₃ + 0.2 B water → 1 B sulfuric acid`, 4 s, F1, no catalyst.
+   Water is taken from a neighbouring `FluidEndpoint` at finish; it is never pulled into the
+   reactor buffer, so a water tank cannot contaminate the sulfur oxide.
+4. **Vanadia pellet** is a Voltaic-gated crafting-table reagent: one iron oxide and four
+   bricks (ceramic support). Vanadium is not a catalogue material. Not consumed.
+5. **Named spend for sulfuric acid** is pickle: `1 iron ingot + 0.1 B sulfuric acid → 1 iron
+   plate`, 4 s, F1, no die. The Press remains. Washer and etching wait.
+6. **R2 yield 1.15 stays deferred.** A nugget would be a third Arc Furnace output.
+
+**Alternatives rejected.** Bottled oxygen this slice (that is M); a second fluid buffer
+(the neighbour pull is enough); naming 450 °C and 120 °C on the recipes (one hold cannot
+satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C band); shipping
+1.15 as a third item; a crafting-table reactor; using the generic T2 recipe (circuit board).
+
+**Consequences.** A successor that starts the washer in this slice is skipping L. A
+successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
+acid without pickle (or another spend) is reopening ADR-0036.
 
 

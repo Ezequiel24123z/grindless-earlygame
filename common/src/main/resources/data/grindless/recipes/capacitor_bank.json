@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "IRI",
+    "I I",
+    "IRI"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "R": { "item": "minecraft:redstone" }
+  },
+  "result": { "item": "grindless:capacitor_bank" }
+}

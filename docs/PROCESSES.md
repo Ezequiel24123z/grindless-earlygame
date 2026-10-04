@@ -191,7 +191,7 @@ whole pack.
 | **ring** | Press from rod | Seals, bearings. |
 | **wire** | Wire Mill | Everything electrical. |
 | **fine wire** | Wire Mill, MK III+ | Circuits, coils, superconductors. |
-| **coil** | Wire Mill | Motors, induction, containment. |
+| **coil** | Wire Mill; T1 Press + coil die | Motors, induction, containment. T1 ships the Press route so the Assembler is craftable (ADR-0063). |
 
 Dies live in the **catalyst slot** — they are not consumed, they degrade slowly, and they are the
 reason one Press covers nine forms instead of nine blocks covering one each. This is the
@@ -400,10 +400,9 @@ and it is audited in the [multi-route index](#products-reachable-by-more-than-on
 
 ## Tier 0 and Tier 1: the bootstrap chain
 
-The only part of the graph that is hand-crafted. Slice A of the
-[implementation plan](../README.md#implementation-plan) implements as far as automated iron
-(Pulverizer, Arc Furnace, Thermal Generator); Press and Assembler wait for slice D
-([ADR-0058](DECISIONS.md#adr-0058--build-playable-slices-not-system-layers)). Everything past the
+The only part of the graph that is hand-crafted. Slice D of the
+[implementation plan](../README.md#implementation-plan) ships Press, Machine Casing and
+Assembler ([ADR-0063](DECISIONS.md#adr-0063--the-factory-builds-the-factory-at-t1)). Everything past the
 Assembler is manufactured ([ADR-0017](DECISIONS.md#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted)).
 
 The bootstrap has exactly one job: **get the player to their first Assembler and then get out of

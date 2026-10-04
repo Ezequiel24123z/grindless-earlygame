@@ -1,0 +1,17 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 8 70 8 grindless:wire_mill[facing=south,status=idle]
+execute if block 8 70 8 grindless:wire_mill run say MILL-OK
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:iron_ingot",Count:1b}]}
+say WAIT-HOPPER
+say WAIT-HOPPER
+execute if data block 8 70 8 Items[{id:"minecraft:iron_ingot"}] run say INGOT-IN
+summon minecraft:item 8 100 8 {Item:{id:"grindless:motor",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:motor"}}] run say MOTOR-OK
+kill @e[type=item]
+summon minecraft:item 8 100 8 {Item:{id:"grindless:iron_wire",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:iron_wire"}}] run say WIRE-OK
+kill @e[type=item]

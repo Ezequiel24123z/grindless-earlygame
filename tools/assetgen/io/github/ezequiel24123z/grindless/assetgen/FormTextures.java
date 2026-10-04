@@ -130,6 +130,26 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** A drawn strand: thinner than a rod, with a second stroke so it reads as cable. */
+    public static BufferedImage wire(Palette palette) {
+        HeightField field = new HeightField();
+        for (int y = 2; y <= 13; y++) {
+            double wave = Math.sin((y - 2) * 0.7) * 1.4;
+            int cx = (int) Math.round(7.5 + wave);
+            for (int x = cx - 1; x <= cx; x++) {
+                double across = 1.0 - Math.abs((x - (7.5 + wave)) / 1.4);
+                field.set(x, y, 2.4 + 2.6 * Math.max(0, across));
+            }
+            int cx2 = (int) Math.round(7.5 - wave);
+            for (int x = cx2; x <= cx2 + 1; x++) {
+                double across = 1.0 - Math.abs((x - (7.5 - wave)) / 1.4);
+                field.set(x, y, Math.max(field.get(x, y), 2.0 + 2.2 * Math.max(0, across)));
+            }
+        }
+        field.bevel(0.28);
+        return field.light(palette);
+    }
+
     /** Fine powder: many small grains, nearly flat. */
     public static BufferedImage dust(Palette palette) {
         HeightField field = new HeightField();
@@ -163,6 +183,21 @@ public final class FormTextures {
                     3.0 + random.nextDouble() * 2.4);
         }
         field.bevel(0.25);
+        return field.light(palette);
+    }
+
+    /**
+     * A sintered cake: one rounded mound, smoother than crushed rubble.
+     *
+     * <p>Roast is the reason this form exists, so it has to read as fired material rather than
+     * as another pile of fragments or as an ingot that is not quite done.
+     */
+    public static BufferedImage oxide(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(7.5, 8.0, 5.0, 4.6);
+        field.disc(7.5, 7.4, 3.2, 5.4);
+        field.disc(6.2, 9.0, 2.0, 3.8);
+        field.bevel(0.35);
         return field.light(palette);
     }
 
@@ -238,6 +273,39 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the Process Atlas: a tablet with three graph nodes. See {@link #dataCore}. */
+    public static BufferedImage atlas(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 12, 13, 3.4);
+        field.rect(5, 4, 10, 10, 4.2);
+        field.disc(6.0, 6.0, 1.2, 5.2);
+        field.disc(10.0, 6.0, 1.2, 5.2);
+        field.disc(8.0, 9.0, 1.2, 5.2);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for the Flux Conduit: a wound cable on a grip. See {@link #dataCore}. */
+    public static BufferedImage conduit(Palette palette) {
+        HeightField field = new HeightField();
+        double centreX = 8.0;
+        double centreY = 6.0;
+        for (int y = 1; y <= 10; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double radius = Math.hypot(x - centreX, y - centreY);
+                if (radius <= 5.2 && radius >= 2.2) {
+                    double across = 1.0 - Math.abs((radius - 3.7) / 1.5);
+                    double wind = 0.5 * Math.max(0, Math.cos(Math.atan2(y - centreY, x - centreX) * 5));
+                    field.set(x, y, 2.4 + 2.0 * Math.max(0, across) + wind);
+                }
+            }
+        }
+        field.rect(7, 10, 9, 14, 3.0);
+        field.rect(6, 13, 10, 14, 3.4);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Multitool: a handle with a head. See {@link #dataCore}. */
     public static BufferedImage multitool(Palette palette) {
         HeightField field = new HeightField();
@@ -249,6 +317,72 @@ public final class FormTextures {
         }
         field.rect(3, 2, 11, 5, 3.6);
         field.disc(7.0, 3.5, 2.2, 5.0);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a forming die: a stamp with a recessed face. See {@link #dataCore}. */
+    public static BufferedImage die(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 3, 12, 12, 3.6);
+        field.rect(5, 5, 10, 10, 2.0);
+        field.rect(6, 1, 9, 2, 2.8);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a copper coil: a wound torus. See {@link #dataCore}. */
+    public static BufferedImage coil(Palette palette) {
+        HeightField field = new HeightField();
+        double centre = (SIZE - 1) / 2.0;
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double radius = Math.hypot(x - centre, y - centre);
+                if (radius <= 6.2 && radius >= 2.6) {
+                    double across = 1.0 - Math.abs((radius - 4.4) / 1.8);
+                    double wind = 0.6 * Math.max(0, Math.cos(Math.atan2(y - centre, x - centre) * 6));
+                    field.set(x, y, 2.6 + 2.2 * Math.max(0, across) + wind);
+                }
+            }
+        }
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a motor: a canned housing with a shaft. See {@link #dataCore}. */
+    public static BufferedImage motor(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 4, 12, 12, 3.4);
+        double centre = 8.0;
+        for (int y = 5; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                double radius = Math.hypot(x - centre, y - 8.0);
+                if (radius <= 3.6 && radius >= 1.6) {
+                    double across = 1.0 - Math.abs((radius - 2.6) / 1.0);
+                    field.set(x, y, 4.2 + 1.4 * Math.max(0, across));
+                }
+            }
+        }
+        field.rect(7, 1, 8, 4, 3.8);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a vanadia pellet: a ceramic bead with oxide speckles. */
+    public static BufferedImage vanadia(Palette palette) {
+        HeightField field = new HeightField();
+        double centre = 8.0;
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double radius = Math.hypot(x - centre, y - centre);
+                if (radius <= 5.4) {
+                    double across = 1.0 - radius / 5.4;
+                    field.set(x, y, 2.4 + 2.8 * Math.max(0, across));
+                }
+            }
+        }
+        field.rect(6, 6, 7, 7, 4.6);
+        field.rect(9, 8, 10, 9, 4.4);
         field.bevel(0.4);
         return field.light(palette);
     }

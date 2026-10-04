@@ -19,8 +19,10 @@
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
 #                     or to hold a smoke function (ADR-0061)
 #     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line.
-#                     Each line is followed by a 1s pause so hoppers and belts can tick; a
-#                     scenario that must not yield to block entities should be a datapack function.
+#                     After Done, the script probes with `say SMOKE-READY` until the broadcast
+#                     appears; Gradle can swallow the first FIFO writes. Each scenario line is
+#                     then followed by a 1s pause so hoppers and belts can tick; a scenario that
+#                     must not yield to block entities should be a datapack function.
 #     SMOKE_EXPECT    extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
 set -u
@@ -86,6 +88,22 @@ while [ "$SECONDS" -lt "$deadline" ]; do
   fi
   if grep -q 'Done (.*)! For help' "$LOG"; then
     grep -m1 'Done (.*)! For help' "$LOG"
+    # Done is not "stdin is live". GitHub runs 37166092661 (ATLAS-OK) and 37167232051
+    # (PICKAXE-OK hand_crank_dynamo) lost the first console lines; the same commits
+    # passed on the other event. Probe until the server broadcasts SMOKE-READY.
+    ready_deadline=$((SECONDS + 60))
+    while [ "$SECONDS" -lt "$ready_deadline" ]; do
+      if grep -E -q '\[Server\] SMOKE-READY' "$LOG"; then
+        break
+      fi
+      echo "say SMOKE-READY" >&3
+      sleep 1
+    done
+    if ! grep -E -q '\[Server\] SMOKE-READY' "$LOG"; then
+      echo "SMOKE BOOT FAILED: the server started but never echoed SMOKE-READY"
+      echo "stop" >&3
+      exit 1
+    fi
     if [ -n "$COMMANDS" ]; then
       while IFS= read -r command; do
         [ -z "$command" ] && continue

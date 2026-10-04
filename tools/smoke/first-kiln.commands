@@ -1,0 +1,14 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 8 70 8 grindless:kiln[facing=south,status=idle]
+execute if block 8 70 8 grindless:kiln run say KILN-OK
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b}]}
+say WAIT-HOPPER
+say WAIT-HOPPER
+execute if data block 8 70 8 Items[{id:"minecraft:raw_iron"}] run say RAW-IN
+setblock 10 70 8 grindless:basic_tank[facing=south,status=idle]
+execute if block 10 70 8 grindless:basic_tank run say TANK-SINK

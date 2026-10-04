@@ -8,7 +8,11 @@ import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.MergerBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.OverflowGateBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.SorterBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
@@ -16,6 +20,8 @@ import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlockEntity;
+import io.github.ezequiel24123z.grindless.network.CapacitorBankBlockEntity;
+import io.github.ezequiel24123z.grindless.network.FluxTransformerBlockEntity;
 import io.github.ezequiel24123z.grindless.network.PylonBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -77,6 +83,46 @@ public final class ModBlockEntities {
                                     ModBlocks.ARC_FURNACE.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> PRESS =
+            BLOCK_ENTITIES.register("press",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.PRESS, pos, state),
+                                    ModBlocks.PRESS.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> ASSEMBLER =
+            BLOCK_ENTITIES.register("assembler",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.ASSEMBLER, pos, state),
+                                    ModBlocks.ASSEMBLER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> KILN =
+            BLOCK_ENTITIES.register("kiln",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.KILN, pos, state),
+                                    ModBlocks.KILN.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> WIRE_MILL =
+            BLOCK_ENTITIES.register("wire_mill",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.WIRE_MILL, pos, state),
+                                    ModBlocks.WIRE_MILL.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> CHEMICAL_REACTOR =
+            BLOCK_ENTITIES.register("chemical_reactor",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.CHEMICAL_REACTOR, pos, state),
+                                    ModBlocks.CHEMICAL_REACTOR.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *
@@ -94,6 +140,30 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("splitter",
                     () -> BlockEntityType.Builder
                             .of(SplitterBlockEntity::new, ModBlocks.SPLITTER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<MergerBlockEntity>> MERGER =
+            BLOCK_ENTITIES.register("merger",
+                    () -> BlockEntityType.Builder
+                            .of(MergerBlockEntity::new, ModBlocks.MERGER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<TunnelBeltBlockEntity>> TUNNEL_BELT =
+            BLOCK_ENTITIES.register("tunnel_belt",
+                    () -> BlockEntityType.Builder
+                            .of(TunnelBeltBlockEntity::new, ModBlocks.TUNNEL_BELT.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<OverflowGateBlockEntity>> OVERFLOW_GATE =
+            BLOCK_ENTITIES.register("overflow_gate",
+                    () -> BlockEntityType.Builder
+                            .of(OverflowGateBlockEntity::new, ModBlocks.OVERFLOW_GATE.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<SorterBlockEntity>> SORTER =
+            BLOCK_ENTITIES.register("sorter",
+                    () -> BlockEntityType.Builder
+                            .of(SorterBlockEntity::new, ModBlocks.SORTER.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<ManipulatorBlockEntity>> CRUDE_MANIPULATOR =
@@ -134,6 +204,18 @@ public final class ModBlockEntities {
                                     ModBlocks.FLUX_PYLON_MK1.get(),
                                     ModBlocks.FLUX_PYLON_MK2.get(),
                                     ModBlocks.FLUX_PYLON_MK3.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<CapacitorBankBlockEntity>> CAPACITOR_BANK =
+            BLOCK_ENTITIES.register("capacitor_bank",
+                    () -> BlockEntityType.Builder
+                            .of(CapacitorBankBlockEntity::new, ModBlocks.CAPACITOR_BANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<FluxTransformerBlockEntity>> FLUX_TRANSFORMER =
+            BLOCK_ENTITIES.register("flux_transformer",
+                    () -> BlockEntityType.Builder
+                            .of(FluxTransformerBlockEntity::new, ModBlocks.FLUX_TRANSFORMER.get())
                             .build(null));
 
     private ModBlockEntities() {

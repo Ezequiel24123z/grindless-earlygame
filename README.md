@@ -69,6 +69,7 @@ where it opens up.
 - [Building](#building)
 - [Roadmap](#roadmap)
 - [Implementation plan](#implementation-plan)
+- [Autonomous build-out](docs/BUILD-OUT.md)
 - [Assets](#assets)
 - [Contributing](#contributing)
 
@@ -223,6 +224,8 @@ pylon positions. Machines resolve their supplying network by querying that index
 - unloaded chunks do not break the network topology.
 
 Network membership is recomputed only on pylon placement, breakage or manual link change.
+Manual edges and capacitor extra live in the same `SavedData` as membership, so an unloaded
+chunk does not drop a trunk or forget a bank (ADR-0064).
 
 ---
 
@@ -738,7 +741,7 @@ category of busywork.
 | --- | --- | --- |
 | **Prospector's Scanner** | T1 | Surveys chunk veins — material, richness, reserve — with an overlay showing nearby surveyed chunks. |
 | **Flux Conduit** | T1 | Right-click two pylons to link them manually. |
-| **Multitool** | T1 | Rotates and configures machines; picks them up *with their contents and settings intact*. Removes the "empty the machine before moving it" tax entirely. |
+| **Multitool** | T0 | Right-click rotates a Grindless block. Sneak-click picks it up with contents and facing intact (ADR-0069). Does not mine (ADR-0055). |
 | **Flux Drill** | T2 | Powered mining tool. Area modes (1×1, 3×3, vein-mine, tunnel), silk/fortune modules, runs on a portable cell — no durability, only charge. |
 | **Blueprint Tool** | T2 | Captures a region as a **blueprint** and stamps it elsewhere. Construction drones build it from real items in the network. Blueprints are saveable, nameable and shareable between worlds. |
 | **Deconstruction Planner** | T2 | Marks a region for drones to tear down and return to storage. |
@@ -750,26 +753,54 @@ extractor outpost, rebuilding it forty times by hand is precisely the tedium thi
 remove. Blueprints turn "I have solved this problem" into "I have solved this problem
 permanently", which is exactly what makes Factorio's mid-game feel good.
 
-### The Flux Exosuit
+### Modular armour
 
-Modular powered armour, in the tradition of Factorio's power armour. Four pieces, each with a
-grid of **equipment modules**; larger grids come with higher tiers.
+Modular powered armour, in the tradition of Factorio's power armour. It is a **chassis line**,
+not one T2 unlock ([ADR-0067](docs/DECISIONS.md#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier)).
+Four pieces per tier, each with a grid of **equipment modules**. Larger grids and better modules
+come with the next chassis. Modules pull out intact — experimenting is free, same as machine
+upgrades.
 
-| Module | Effect |
-| --- | --- |
-| **Flux Cell** | Onboard energy buffer. |
-| **Portable Reactor** | Generates FU while worn. |
-| **Network Tap** | Recharges the suit from any pylon supply area you walk through. |
-| **Exoskeleton Legs** | Movement and jump. |
-| **Thruster Pack** | Flight, with a real energy cost. |
-| **Shield Projector** | Regenerating personal shield that absorbs damage before health. |
-| **Auto-Repair Unit** | Repairs held and worn equipment from Matter. |
-| **Personal Drone Bay** | A handful of construction drones that follow you and build blueprints anywhere. |
-| **Night Vision** | Exactly what it says. |
-| **Magnet Module** | Pulls dropped items toward you. |
+| Chassis | Tier | What the last one could not do |
+| --- | --- | --- |
+| **Voltaic Harness** | T1 | Protection and a Flux Cell. No onboard generation. Vanilla armour stays valid until this exists. |
+| **Flux Exosuit** | T2 | Network Tap, mobility, shields. You recharge by walking through pylons. |
+| **Arc Exosuit** | T3 | **Miniature Arc Reactor** — generates FU while worn, on the same Arc Cells the factory reactor burns. |
+| **Exotic Exosuit** | T4 | Fusion-class cell, orbital life support. |
+
+| Module | First chassis | Effect |
+| --- | --- | --- |
+| **Flux Cell** | T1 | Onboard energy buffer. |
+| **Network Tap** | T2 | Recharges the suit from any pylon supply area you walk through. |
+| **Exoskeleton Legs** | T2 | Movement and jump. |
+| **Thruster Pack** | T2 | Flight, with a real energy cost. |
+| **Shield Projector** | T2 | Regenerating personal shield that absorbs damage before health. |
+| **Auto-Repair Unit** | T2 | Repairs held and worn equipment from Matter. |
+| **Night Vision** | T2 | Exactly what it says. |
+| **Magnet Module** | T2 | Pulls dropped items toward you. |
+| **Miniature Arc Reactor** | T3 | Generates FU while worn. Consumes Arc Cells. |
+| **Personal Drone Bay** | T3 | A handful of construction drones that follow you and build blueprints anywhere. |
 
 The grid layout is a genuine decision — energy generation competes with shields competes with
-mobility — and it scales all the way from "one cell and night vision" to a full late-game suit.
+mobility — and it scales from "one cell" to a full late-game suit. There is no free worn
+generator before T3: a Portable Reactor that needs no factory is not a module.
+
+### The Arc Reactor
+
+T3 / F3. The factory plant and the suit core are **one unlock** (ADR-0067).
+
+A formed multiblock that produces **FU directly** at Arc voltage. It is not the Arc Furnace
+(that smelts), not fission (heat into steam, neighbour bonus), not fusion (T4 D–T ignition).
+
+- **Feed** is a manufactured **Arc Cell** from a named processing line. If the line stops, the
+  reactor starves. The miniature suit reactor burns the same cell.
+- **Coolant or stability** is real logistics, not flavour. Hatches take cells and fluids.
+- **Playable**, not a trophy: output, starve, restart. Failure is recoverable (quench / idle),
+  not a crater.
+- Construction drones exist at this tier, so the structure can be a real design problem.
+
+Exact cell chemistry, hatch layout and size stay open until that slice. Slice F starts when
+this machine (or another that needs hatches) is scheduled — not as an empty kernel.
 
 ---
 
@@ -838,7 +869,9 @@ late-game ammunition, with no compat work.
 ## System 8 — The futuristic tier
 
 The endgame is where the mod stops being about *getting* materials and starts being about
-*transforming* them. Every machine here is a multiblock, and each one is a project.
+*transforming* them. Every machine here is a multiblock, and each one is a project. The first of
+those plants is the [Arc Reactor](#the-arc-reactor) at T3 / F3 — still a factory you feed, not
+this tier's trophy. Fission, fusion and the singularity are what follow.
 
 ### Fission Reactor
 
@@ -920,10 +953,13 @@ has to do real, continuous work for the base back home.
 | 2 | **Rocket** | Assembled from parts on a production line. Carries payload mass to orbit. Consumed on launch. |
 | 3 | **Mass Driver** (multiblock) | The bulk answer. An electromagnetic launcher that fires cargo canisters to orbit for pure FU and no rocket. Cheap per kilogram, but useless for anything fragile or alive. |
 | 4 | **Orbital Platform** | Your space station. Built from launched modules; expands into a real base. |
+| 5 | **Horizon Gate** (multiblock, T6) | Dialed ring. Instant presence after a far gate is delivered. Not a mining dimension ([ADR-0068](docs/DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)). |
 
 Rockets are for the first trip and for anything crewed. **The Mass Driver is what makes an orbital
 economy viable** — once it is running, sending material up is an energy cost rather than a
-manufacturing project, which converts space from an event into infrastructure.
+manufacturing project, which converts space from an event into infrastructure. **The Horizon Gate
+is what kills the commute** — once a pair is standing, you walk; bulk ore still prefers the
+driver.
 
 ### Satellites that actually do something
 
@@ -968,7 +1004,7 @@ chunk veins and remote-exploitation systems onto *their* dimensions rather than 
 competing set. This is the same principle as the tag-driven material registry: integrate with the
 pack, never duplicate it.
 
-Only when no space mod is present does Grindless add its own minimal set:
+Only when no space mod is present does Grindless add its own fallback set:
 
 | World | Character | Hazard | Signature resource |
 | --- | --- | --- | --- |
@@ -977,6 +1013,8 @@ Only when no space mod is present does Grindless add its own minimal set:
 | **Vulcan** | Volcanic, hot, dense | Heat, ash | Heavy metals, geothermal power |
 | **Kryos** | Ice moon, subsurface ocean | Extreme cold | Deuterium, cryogenic volatiles |
 | **Erebus** | Rogue planet, no star, dark | Darkness, radiation | Exotic isotopes, strange matter |
+| **Thalassa** | Ocean world, thick air | Pressure, corrosion | High-pressure chemistry, dissolved volatiles |
+| **Helios** | Tidally locked | Dayside heat, nightside cold | Extreme process envelopes, not a second ore list |
 
 Every world has its own **vein weighting pool**, so the chunk vein system from
 [System 2](#system-2--resource-genesis) works identically off-world with different odds. Planets
@@ -987,7 +1025,7 @@ planets by rarity, with no compat work.
 Solar output scales with distance from the star, hazards demand specific life support, and local
 gravity affects Mass Driver cost — so *where* you build is a genuine engineering decision.
 
-### Three ways to exploit a world
+### Four ways to exploit a world
 
 This is the part of the design I am most confident is worth building, because it is the question
 every space mod answers badly: **what do you do with a planet you cannot be standing on?**
@@ -997,7 +1035,7 @@ every space mod answers badly: **what do you do with a planet you cannot be stan
 Fly there, land, build normally. Full control, full flexibility, full risk — and you have to
 actually be there, which means you are not at home doing anything else.
 
-Requires life support appropriate to the hazard: the Flux Exosuit with the right modules, or a
+Requires life support appropriate to the hazard: the Exosuit chassis with the right modules, or a
 pressurised base.
 
 #### 2. Telepresence — the Proxy Frame
@@ -1032,7 +1070,7 @@ unfolds, and runs without you.
 
 **Colonies are simulated abstractly, not tick-by-tick.** A colony is a small state machine with a
 computed production rate; it does not force-load chunks and does not run block entities while you
-are away. Twenty colonies across five planets cost approximately nothing in server performance.
+are away. Twenty colonies across the fallback worlds cost approximately nothing in server performance.
 
 This is deliberate and load-bearing. The usual implementation — force-loading a remote base so its
 machines keep ticking — is exactly how a server dies, and it is why most mods quietly discourage
@@ -1042,6 +1080,20 @@ industry instead.
 Colony integrity gives the system a slow, manageable rhythm: a colony wants attention every few
 hours, not every few minutes, and the attention it wants can itself be automated. That is the
 correct difficulty curve for something you are supposed to have dozens of.
+
+#### 4. Horizon Gate — walk there
+
+T6. In the tradition of a Stargate: a ring you dial, not a mining dimension you live in
+(ADR-0068).
+
+Deep Survey reveals **addresses**. You manufacture a second ring and deliver it once — rocket,
+Mass Driver or colony package. After the pair exists, you walk through: players, Proxy Frames,
+colony packages. Cargo *can* go through, at a worse FU-per-kilogram than the Mass Driver, so a
+belt of ore still belongs on the driver.
+
+The gate does not open a world whose only job is more ore. It dials planets already in the
+registry. If Ad Astra (or a friend) is installed, those are the destinations. Vanilla Nether and
+End stay out unless a pack author adds them by datapack.
 
 ### Orbital logistics
 
@@ -1063,7 +1115,7 @@ Every earlier system gains a new dimension rather than being replaced:
 | **Flux Network** | Relay satellites extend it across dimensions; bandwidth becomes a second, scarcer network resource. |
 | **Resource Genesis** | Survey satellites map veins remotely; every planet is a different distribution to exploit. |
 | **Matter Replication** | Orbital and exotic materials feed patterns that are unobtainable on the ground. |
-| **Logistics** | Mass drivers, drop pods and the space elevator turn logistics interplanetary. |
+| **Logistics** | Mass drivers, drop pods, the space elevator and Horizon Gates turn logistics interplanetary. Presence is the gate; bulk is the driver. |
 | **Tools** | The Exosuit becomes life support; Proxy Frames become a second body. |
 | **Resonance** | Orbital industry emits none to the surface — relocation is a real strategic answer. |
 | **Futuristic tier** | Helium-3 and deuterium from Luna and Kryos make fusion genuinely cheap. |
@@ -1170,12 +1222,12 @@ factory is capable of building this* — and a player has to clear both. See
 | Tier | Time | Theme | Unlocks |
 | --- | --- | --- | --- |
 | **T0 — Bootstrap** | 0–10 min | Escape velocity | Hand Crank Dynamo, Crude Extractor, Multitool. Buildable from cobblestone, wood and two iron. **This is the moment the grind dies.** |
-| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret, Clay Conduit, Hand Pump, Basic Tank. |
+| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret, Clay Conduit, Hand Pump, Basic Tank, **Voltaic Harness**. |
 | **T2 — Industrial** | 1–3 h | Real automation | Flux Pylon MK2, Chemical Washer, Assembler, Solar and Steam generation, Pattern Scanner, Deconstructor, Flux Belt, Stack/Filter Manipulator, Sorter, Logic Controller, Flux Drill, **Blueprint Tool**, Flux Exosuit, Gauss Rifle, Laser Turret, Pressure Pipe, Electric Pump, Boiler, Condenser, Industrial Tank, Fluid Manipulator. |
-| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank. |
-| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere. |
+| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Arc Reactor**, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank, **Arc Exosuit**. |
+| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere, **Exotic Exosuit**. |
 | **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
-| **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator. |
+| **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
 
 The ramp is intentional. Ten minutes in, you are never hand-mining iron again. Everything after
 that is optimisation, which is the part worth playing.
@@ -1190,6 +1242,8 @@ exactly the moment the player has earned it:
   which is what lets multiblocks grow into real engineering problems.
 - **T5, the Survey Satellite** — the moment finding resources stops being an activity and becomes
   a map you read.
+- **T6, the Horizon Gate** — the moment the interplanetary commute dies. First contact is still a
+  delivery; after the pair stands, you walk.
 
 ---
 
@@ -1376,6 +1430,7 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Thermal Generator | T1 | Burns any furnace fuel. |
 | Solar Array | T2 | Daylight only; pairs with buffers. |
 | Steam Turbine | T2 | Consumes steam from any heat source. |
+| Arc Reactor (multiblock) | T3 | Direct F3 FU. Arc Cells. Same fuel as the suit core (ADR-0067). |
 | Heat Exchanger | T3 | Reactor heat → steam. |
 | Fission Reactor (multiblock) | T3 | Neighbour bonus; SCRAM on overheat. |
 | Fusion Reactor (multiblock) | T4 | Ignition cost; quench-safe failure. |
@@ -1485,6 +1540,7 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Drop Pod Bay, Landing Beacon | T6 | Targeted surface delivery. |
 | Interplanetary Router | T6 | Item routing across dimensions. |
 | Space Elevator (multiblock) | T6 | Permanent ground-to-orbit link. |
+| Horizon Gate (multiblock) | T6 | Dialed pair. Commute, not a mining dimension (ADR-0068). |
 
 ### Satellites
 
@@ -1509,7 +1565,8 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Integrated Circuit, Superconductor | T3 |
 | Quantum Core, Containment Ring | T4 |
 | Flux Drill, Blueprint Tool, Deconstruction Planner | T2 |
-| Flux Exosuit (4 pieces) + equipment modules | T2–T4 |
+| Voltaic Harness / Flux Exosuit / Arc Exosuit / Exotic Exosuit (4 pieces) + equipment modules | T1–T4 |
+| Arc Cell | T3 |
 | Terraformer, Matter Pattern Slate | T3 |
 | Data Core / Advanced Data Core / Exotic Data Core | T0 / T2 / T4 |
 | Matter, Raw materials, dusts, purified dusts, plates | various |
@@ -1578,7 +1635,7 @@ The same rule applies to dimensions as to materials: **detect and integrate, nev
 | Situation | Behaviour |
 | --- | --- |
 | Ad Astra, Galacticraft, Beyond Earth or similar installed | Grindless registers **no planets of its own**. Its satellites, chunk veins, colonies and telepresence all operate on *their* dimensions, and each detected world gets a vein weighting pool derived from its existing characteristics. |
-| No space mod installed | Grindless adds its own minimal set — Luna, Tharsis, Vulcan, Kryos, Erebus. |
+| No space mod installed | Grindless adds its own minimal set — Luna, Tharsis, Vulcan, Kryos, Erebus, Thalassa, Helios. Horizon Gates dial those worlds. |
 | A space mod added to an existing world later | Its worlds are picked up on the next load and become valid targets. |
 
 Planet detection runs through a datapack-definable registry, so a pack author can point Grindless
@@ -1847,8 +1904,9 @@ soft under-volt curve and proportional brownouts.
 ### 0.4 — Tools and matter
 
 Flux Drill, Multitool, **Blueprint Tool** and construction drones, Deconstruction Planner. Pattern
-Scanner, Deconstructor and Replicator with recipe-graph pricing. Flux Exosuit with its module
-grid.
+Scanner, Deconstructor and Replicator with recipe-graph pricing. Modular armour chassis line
+(T1 harness through T4 exotic) with the module grid. The T3 miniature Arc Reactor waits for the
+factory plant (ADR-0067).
 
 ### 0.5 — Resonance and defence
 
@@ -1857,8 +1915,9 @@ The T2–T3 weapon set and manufactured ammunition.
 
 ### 0.6 — The futuristic tier
 
-Drone logistics and the logistics crates. Deep Core Drill. Fission Reactor multiblock with
-neighbour bonuses and SCRAM. Centrifuge and the fuel cycle.
+Drone logistics and the logistics crates. Deep Core Drill. **Arc Reactor** multiblock (direct F3
+FU, Arc Cell line, same fuel as the suit). Fission Reactor multiblock with neighbour bonuses
+and SCRAM. Centrifuge and the fuel cycle.
 
 ### 0.7 — Endgame
 
@@ -1879,9 +1938,11 @@ mapped instead of hunted, and orbital solar carries real load.
 Planet registry with space-mod detection, and the fallback worlds. Per-planet vein pools and
 hazards. Life support. **Proxy Frames and telepresence.** **Colony Cores** with abstract
 simulation, integrity and resupply. Drop pods, interplanetary routing, Space Elevator.
+**Horizon Gates** (dialed pairs, not mining dimensions).
 
 **Definition of done:** a player can profitably exploit a planet they have never physically
-visited, and twenty remote colonies cost no measurable server performance.
+visited, walk to one through a gate after delivering the far ring, and twenty remote colonies
+cost no measurable server performance.
 
 ### 1.0 — Polish
 
@@ -1928,17 +1989,24 @@ Tracked order of work. Each step must build green before the next begins.
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
-| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — `VerifyRecipes` is in; JEI waits |
+| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | ✅ done — Atlas stub ADR-0066; JEI waits |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
+| 17b | **Slice G — Belt junctions:** merger, tunnel, overflow | ✅ done — ADR-0071 |
+| 17c | **Slice H — Sorter:** peel a mixed line by item | ✅ done — ADR-0072 |
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | ✅ done — ADR-0062 |
-| 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | pending — ADR-0017 |
-| 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | pending — pylons already cover; this must not obsolete them |
-| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework |
-| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |
-| 24 | Orbital layer: launch, satellites, station | pending |
-| 25 | Planetary layer: colonies, telepresence, planet registry | pending |
+| 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
+| 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
+| 20b | **Kiln / R2 — Roast then reduce:** T1 Kiln, oxide form, SO₂ capture | ✅ done — ADR-0065; 1.15 and acid stay later |
+| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — build-out AD; Arc Reactor (ADR-0067) |
+| 21b | **Slice I — T2 gate:** Industrial research, Advanced Data Core, MK2 gated | ✅ done — ADR-0073 |
+| 21c | **Slice J — Wire and motors:** Wire Mill, wire form, mill coil, motor | ✅ done — ADR-0074 |
+| 21d | **Slice K — Contact process:** Chemical Reactor, SO₂ → acid, pickle | ✅ done — ADR-0075 |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out L–S |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
+| 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
+| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **L**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -1966,11 +2034,34 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is slice D — the factory builds the factory**, not Flux conduits and not the
-multiblock kernel. Slice C is in: millibuckets with temperature and pressure, a Clay
-Conduit, a Hand Pump, a Basic Tank, a wet mill that still doubles, and CO that captures
-into a tank or burns in the Thermal Generator. Kiln / R2 are unblocked (there is now
-somewhere to put a gas) but they are not this slice.
+**Next is L — Washer and B2**, not Slice F and not etching.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
+Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
+`1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
+sulfuric acid` in 4 s, water from a neighbouring tank. Pickle is the named sulfuric spend
+(`1 iron ingot + 0.1 B acid → 1 iron plate`). R2 yield 1.15 still waits. The Wire Mill is in
+(ADR-0074): Assembler-manufactured
+once Industrial is researched (`1 casing + 2 coil + 4 plates`). `1 ingot → 2 wire` in 8 s;
+`2 copper wire → 1 coil` is the T2 mill route; the Press die remains the T1 bootstrap.
+Motor is `1 casing + 2 coil + 1 rod` in 10 s. Industrial is the second
+blueprint (ADR-0073):
+the same Research Terminal spends an Advanced Data Core at F0 for sixty seconds. Pylon MK2
+still has no crafting-table recipe; the Assembler refuses it until Industrial is unlocked.
+The Sorter is in (ADR-0072): matching sides peel
+a mixed line and hold when that lane is full; unmatched items continue. Merger, Tunnel Belt
+and Overflow Gate are in
+(ADR-0071): three inlets join, a pair skips one to five empty blocks, overflow dumps clockwise
+when the front is blocked. The Process Atlas stub is in: a Voltaic-gated
+handheld lists the live process graph (family, I/O, conditions, time, FU/t). It does not
+solve a line. JEI still waits. The Multitool now rotates and relocates Grindless blocks
+(ADR-0069); it still does not mine. Kiln / R2 are in: a T1 Kiln roasts feed to oxide and
+vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + carbon to an
+ingot and slag in 10 s. Yield stays 1.00 until the acid line (build-out K). Slice E spanning
+is already in. Modular armour and the Arc Reactor pair are **recorded, not started**
+(ADR-0067): T3 / F3, same unlock for the factory plant and the suit core, fed by a cell
+line. Horizon Gates and the extra fallback worlds are **recorded, not started** (ADR-0068):
+T6 commute, not a mining dimension. Do not start hatches, orbit, a Sifter shell, a turret,
+or a void world to prepare for them.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

@@ -17,6 +17,15 @@ execute if data block 8 70 9 Lanes[0].Items[0] run say BELT-OUT
 execute if data block 8 70 9 Lanes[1].Items[0] run say BELT-OUT
 setblock 10 70 8 grindless:splitter[facing=south,status=idle]
 execute if block 10 70 8 grindless:splitter run say SPLIT-OK
+setblock 16 70 8 grindless:merger[facing=south,status=idle]
+execute if block 16 70 8 grindless:merger run say MERGE-OK
+setblock 18 70 8 grindless:tunnel_belt[facing=south,status=idle]
+setblock 18 70 11 grindless:tunnel_belt[facing=south,status=idle]
+execute if block 18 70 8 grindless:tunnel_belt run say TUNNEL-OK
+setblock 20 70 8 grindless:overflow_gate[facing=south,status=idle]
+execute if block 20 70 8 grindless:overflow_gate run say OVERFLOW-OK
+setblock 22 70 8 grindless:sorter[facing=south,status=idle]
+execute if block 22 70 8 grindless:sorter run say SORT-OK
 setblock 12 70 8 grindless:crude_manipulator[facing=south,status=idle]
 execute if block 12 70 8 grindless:crude_manipulator run say ARM-OK
 setblock 14 70 8 grindless:terrestrial_extractor[facing=south,status=idle]

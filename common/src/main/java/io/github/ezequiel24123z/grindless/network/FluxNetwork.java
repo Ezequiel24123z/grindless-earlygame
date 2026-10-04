@@ -33,8 +33,12 @@ public final class FluxNetwork {
     private final Set<BlockPos> pylons = new LinkedHashSet<>();
 
     private long stored;
+    private long pylonCapacity;
+    private long extraCapacity;
     private long capacity;
     private long throughput;
+    /** Distance-link tax registered this tick, paid from stored in {@link #resolveTick()}. */
+    private long pendingUpkeep;
 
     /** Demand registered this tick, reset each tick once satisfaction is computed. */
     private long demand;
@@ -80,14 +84,16 @@ public final class FluxNetwork {
     /**
      * Adds a pylon and recomputes the pooled limits.
      *
-     * <p>Capacity is derived from the members rather than stored, so it can never drift out of
-     * step with them — the failure where a network remembers capacity for a pylon that was broken
-     * three sessions ago.
+     * <p>Pylon capacity is derived from the members rather than stored, so it can never drift
+     * out of step with them — the failure where a network remembers capacity for a pylon that
+     * was broken three sessions ago. Capacitor banks add {@link #extraCapacity()} on top; they
+     * are not pylons.
      */
     public void addPylon(BlockPos pos, PylonTier tier) {
         if (pylons.add(pos.immutable())) {
-            capacity += tier.throughput() * 20L;
+            pylonCapacity += tier.throughput() * 20L;
             throughput += tier.throughput();
+            recountCapacity();
             displayStale = true;
         }
     }
@@ -95,13 +101,45 @@ public final class FluxNetwork {
     /** Removes a pylon, recomputing the pooled limits and clamping the contents to fit. */
     public void removePylon(BlockPos pos, PylonTier tier) {
         if (pylons.remove(pos)) {
-            capacity -= tier.throughput() * 20L;
+            pylonCapacity -= tier.throughput() * 20L;
             throughput -= tier.throughput();
+            recountCapacity();
             displayStale = true;
-            // A shrinking network must not keep energy it can no longer hold, or breaking and
-            // replacing a pylon would be a way to manufacture power.
-            stored = Math.min(stored, capacity);
         }
+    }
+
+    /**
+     * Replaces the extra capacity contributed by covering capacitor banks.
+     *
+     * <p>Called from {@code FluxNetworkData} after topology changes, never from a bank's tick:
+     * a bank does not know which other banks share the network, and summing here would double
+     * count. Passing zero clears the banks' contribution without touching the pylons.
+     */
+    public void setExtraCapacity(long extra) {
+        extraCapacity = Math.max(0L, extra);
+        recountCapacity();
+    }
+
+    /** Capacity added by covering banks, not by pylons. */
+    public long extraCapacity() {
+        return extraCapacity;
+    }
+
+    /**
+     * Registers this tick's manual-link upkeep.
+     *
+     * <p>Paid in {@link #resolveTick()} from stored energy, and also counted as demand so an
+     * unpaid trunk browns the network out instead of dropping the link (ADR-0064).
+     */
+    public void addUpkeep(long amount) {
+        if (amount > 0L) {
+            pendingUpkeep += amount;
+        }
+    }
+
+    private void recountCapacity() {
+        capacity = Math.max(0L, pylonCapacity + extraCapacity);
+        stored = Math.min(stored, capacity);
     }
 
     /** Inserts up to {@code amount} FU, returning what was accepted. */
@@ -161,14 +199,22 @@ public final class FluxNetwork {
      * <p>Called once per tick, after demand is registered and before it is drawn.
      */
     public void resolveTick() {
+        if (pendingUpkeep > 0L) {
+            demand += pendingUpkeep;
+        }
         long available = Math.min(stored, throughput);
         satisfaction = demand <= 0L ? 1.0 : Math.min(1.0, (double) available / (double) demand);
         boolean overdrawn = demand > 0L && satisfaction < 1.0;
-        boolean moved = receivedThisTick > 0L || drawnThisTick > 0L || demand > 0L;
+        boolean moved = receivedThisTick > 0L || drawnThisTick > 0L || demand > 0L
+                || pendingUpkeep > 0L;
         if (display.observe(observedStatus(overdrawn, moved))) {
             displayStale = true;
         }
+        if (pendingUpkeep > 0L) {
+            stored -= Math.min(stored, pendingUpkeep);
+        }
         demand = 0L;
+        pendingUpkeep = 0L;
         drawnThisTick = 0L;
         receivedThisTick = 0L;
     }

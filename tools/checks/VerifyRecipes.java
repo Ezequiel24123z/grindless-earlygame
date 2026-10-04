@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Behaviour checks for generated B0×R1 / B1×R1 recipes and the Voltaic-gated T1 crafts.
+ * Behaviour checks for generated ore-line, press and assembler recipes and the Voltaic-gated T1 crafts.
  * Not part of the mod.
  */
 public final class VerifyRecipes {
@@ -33,13 +33,13 @@ public final class VerifyRecipes {
 
     private static void graph() {
         List<ProcessGraph.MaterialView> materials = List.of(
-                new ProcessGraph.MaterialView("iron", true, true, true, true),
-                new ProcessGraph.MaterialView("gold", true, false, false, true),
-                new ProcessGraph.MaterialView("steel", false, false, false, true),
-                new ProcessGraph.MaterialView("mythril", false, true, true, true));
+                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true),
+                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true),
+                new ProcessGraph.MaterialView("steel", false, false, false, false, true, true, true, true),
+                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("iron, gold and mythril generate; steel does not", 9, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact and pickle", 39, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -81,6 +81,39 @@ public final class VerifyRecipes {
                 ironR1.itemInputs().get(0).qualified());
         eq("B1×R1 still makes one ingot per crushed", 1, ironR1.itemOutputs().get(0).count());
 
+        ProcessRecipe ironRoast = recipe(recipes, "roast/iron");
+        ProcessRecipe ironRoastCrushed = recipe(recipes, "roast_crushed/iron");
+        ProcessRecipe ironR2 = recipe(recipes, "r2/iron");
+        ProcessRecipe goldRoast = recipe(recipes, "roast/gold");
+
+        eq("roast is the kiln", MachineFamily.KILN, ironRoast.family());
+        eq("roast takes one raw", "tag:forge:raw_materials/iron", ironRoast.itemInputs().get(0).qualified());
+        eq("roast makes one oxide", "tag:grindless:oxides/iron", ironRoast.itemOutputs().get(0).qualified());
+        eq("roast vents one SO2", "fluid:grindless:sulfur_dioxide", ironRoast.ventedOutputs().get(0).qualified());
+        eq("SO2 is one bucket", 1000, ironRoast.ventedOutputs().get(0).count());
+        eq("roast is 700 C", 700.0, ironRoast.temperatureC());
+        eq("roast is oxidising", "OXIDISING", ironRoast.atmosphere());
+        eq("roast is eight seconds", 20 * 8, ironRoast.durationTicks());
+        eq("roast draws F1", 32L, ironRoast.fuPerTick());
+        yes("roast has no fluid inputs", ironRoast.fluidInputs().isEmpty());
+        eq("crushed roast feeds crushed", "tag:grindless:crushed_materials/iron",
+                ironRoastCrushed.itemInputs().get(0).qualified());
+        eq("crushed roast still makes one oxide", 1, ironRoastCrushed.itemOutputs().get(0).count());
+
+        eq("R2 is the arc furnace", MachineFamily.ARC_FURNACE, ironR2.family());
+        eq("R2 takes oxide", "tag:grindless:oxides/iron", ironR2.itemInputs().get(0).qualified());
+        eq("R2 takes carbon", "tag:grindless:carbon", ironR2.itemInputs().get(1).qualified());
+        eq("R2 makes one ingot", 1, ironR2.itemOutputs().get(0).count());
+        eq("R2 makes slag", "item:grindless:slag", ironR2.itemOutputs().get(1).qualified());
+        yes("R2 does not vent CO", ironR2.ventedOutputs().isEmpty());
+        eq("R2 is ten seconds", 20 * 10, ironR2.durationTicks());
+        eq("R2 reduce is the locked furnace temperature", 1500.0, ironR2.temperatureC());
+        eq("R2 is reducing", "REDUCING", ironR2.atmosphere());
+
+        eq("gold without crushed still roasts the raw", "roast/gold", goldRoast.id());
+        no("gold has no crushed roast", recipes.stream().anyMatch(recipe -> recipe.id().equals("roast_crushed/gold")));
+        yes("gold still reduces oxide", recipes.stream().anyMatch(recipe -> recipe.id().equals("r2/gold")));
+
         eq("gold without crushed is B0 only", "b0_r1/gold", goldB0.id());
         no("gold has no B1", recipes.stream().anyMatch(recipe -> recipe.id().equals("b1/gold")));
         eq("mythril without raw uses the ore tag", "tag:forge:ores/mythril",
@@ -90,6 +123,141 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(VerifyRecipes::namesMaterialItem));
         yes("every recipe id is unique",
                 recipes.stream().map(ProcessRecipe::id).distinct().count() == recipes.size());
+
+        ProcessRecipe ironPlate = recipe(recipes, "press/plate/iron");
+        ProcessRecipe ironRod = recipe(recipes, "press/rod/iron");
+        ProcessRecipe ironGear = recipe(recipes, "press/gear/iron");
+        ProcessRecipe coil = recipe(recipes, "press/coil/copper");
+        ProcessRecipe mk2 = recipe(recipes, "assemble/pylon_mk2");
+
+        eq("plate is the press", MachineFamily.PRESS, ironPlate.family());
+        eq("plate takes one ingot", "tag:forge:ingots/iron", ironPlate.itemInputs().get(0).qualified());
+        eq("plate uses the plate die", "item:grindless:plate_die", ironPlate.catalysts().get(0).qualified());
+        eq("plate makes one plate", "tag:forge:plates/iron", ironPlate.itemOutputs().get(0).qualified());
+        eq("press is four seconds", 20 * 4, ironPlate.durationTicks());
+        eq("press draws F1", 32L, ironPlate.fuPerTick());
+        yes("the die is not an input", ironPlate.itemInputs().size() == 1);
+        eq("rod uses the rod die", "item:grindless:rod_die", ironRod.catalysts().get(0).qualified());
+        eq("gear uses the gear die", "item:grindless:gear_die", ironGear.catalysts().get(0).qualified());
+
+        eq("coil is the press", MachineFamily.PRESS, coil.family());
+        eq("coil takes copper", "tag:forge:ingots/copper", coil.itemInputs().get(0).qualified());
+        eq("coil uses the coil die", "item:grindless:coil_die", coil.catalysts().get(0).qualified());
+        eq("coil is a reagent", "item:grindless:copper_coil", coil.itemOutputs().get(0).qualified());
+
+        eq("MK2 is the assembler", MachineFamily.ASSEMBLER, mk2.family());
+        eq("MK2 takes a casing", "item:grindless:machine_casing", mk2.itemInputs().get(0).qualified());
+        eq("MK2 takes four plates", 4, mk2.itemInputs().get(1).count());
+        eq("MK2 plates are iron", "tag:forge:plates/iron", mk2.itemInputs().get(1).qualified());
+        eq("MK2 takes two gears", 2, mk2.itemInputs().get(2).count());
+        eq("MK2 is twenty seconds", 20 * 20, mk2.durationTicks());
+        eq("MK2 draws F1", 32L, mk2.fuPerTick());
+        yes("MK2 has no catalyst", mk2.catalysts().isEmpty());
+        eq("MK2 makes the pylon", "item:grindless:flux_pylon_mk2", mk2.itemOutputs().get(0).qualified());
+        eq("MK2 needs Industrial", "industrial", mk2.blueprint());
+
+        ProcessRecipe ironWire = recipe(recipes, "mill/wire/iron");
+        ProcessRecipe millCoil = recipe(recipes, "mill/coil/copper");
+        ProcessRecipe mill = recipe(recipes, "assemble/wire_mill");
+        ProcessRecipe motor = recipe(recipes, "assemble/motor");
+
+        eq("wire is the mill", MachineFamily.WIRE_MILL, ironWire.family());
+        eq("wire takes one ingot", "tag:forge:ingots/iron", ironWire.itemInputs().get(0).qualified());
+        eq("wire makes two", 2, ironWire.itemOutputs().get(0).count());
+        eq("wire is the grindless tag", "tag:grindless:wires/iron", ironWire.itemOutputs().get(0).qualified());
+        eq("wire is eight seconds", 20 * 8, ironWire.durationTicks());
+        eq("wire draws F1", 32L, ironWire.fuPerTick());
+        yes("wire has no catalyst", ironWire.catalysts().isEmpty());
+        yes("wire names no blueprint", ironWire.blueprint() == null);
+        yes("gold still mills", recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/gold")));
+        yes("steel still mills", recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/steel")));
+        yes("mythril with an ingot still mills",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/mythril")));
+
+        eq("mill coil is the mill", MachineFamily.WIRE_MILL, millCoil.family());
+        eq("mill coil takes two copper wire", 2, millCoil.itemInputs().get(0).count());
+        eq("mill coil feeds wire", "tag:grindless:wires/copper", millCoil.itemInputs().get(0).qualified());
+        eq("mill coil is a reagent", "item:grindless:copper_coil", millCoil.itemOutputs().get(0).qualified());
+        yes("mill coil has no die", millCoil.catalysts().isEmpty());
+
+        eq("the mill is the assembler", MachineFamily.ASSEMBLER, mill.family());
+        eq("the mill takes a casing", "item:grindless:machine_casing", mill.itemInputs().get(0).qualified());
+        eq("the mill takes two coils", 2, mill.itemInputs().get(1).count());
+        eq("the mill coils are the reagent", "item:grindless:copper_coil", mill.itemInputs().get(1).qualified());
+        eq("the mill takes four plates", 4, mill.itemInputs().get(2).count());
+        eq("the mill is twenty seconds", 20 * 20, mill.durationTicks());
+        eq("the mill needs Industrial", "industrial", mill.blueprint());
+        eq("the mill makes the block", "item:grindless:wire_mill", mill.itemOutputs().get(0).qualified());
+
+        eq("motor is the assembler", MachineFamily.ASSEMBLER, motor.family());
+        eq("motor takes a casing", "item:grindless:machine_casing", motor.itemInputs().get(0).qualified());
+        eq("motor takes two coils", 2, motor.itemInputs().get(1).count());
+        eq("motor takes a rod", "tag:forge:rods/iron", motor.itemInputs().get(2).qualified());
+        eq("motor is ten seconds", 20 * 10, motor.durationTicks());
+        eq("motor needs Industrial", "industrial", motor.blueprint());
+        eq("motor makes the reagent", "item:grindless:motor", motor.itemOutputs().get(0).qualified());
+
+        ProcessRecipe so3 = recipe(recipes, "contact/so3");
+        ProcessRecipe acid = recipe(recipes, "contact/acid");
+        ProcessRecipe pickle = recipe(recipes, "pickle/plate/iron");
+        ProcessRecipe reactor = recipe(recipes, "assemble/chemical_reactor");
+
+        eq("oxidation is the reactor", MachineFamily.CHEMICAL_REACTOR, so3.family());
+        eq("oxidation takes one bucket of SO2", "fluid:grindless:sulfur_dioxide",
+                so3.fluidInputs().get(0).qualified());
+        eq("oxidation makes one bucket of SO3", "fluid:grindless:sulfur_trioxide",
+                so3.fluidOutputs().get(0).qualified());
+        yes("SO3 is stored, not vented", !so3.fluidOutputs().get(0).vented());
+        eq("oxidation is six seconds", 20 * 6, so3.durationTicks());
+        eq("oxidation draws F1", 32L, so3.fuPerTick());
+        yes("oxidation names no temperature", !so3.namesTemperature());
+        eq("oxidation is oxidising", "OXIDISING", so3.atmosphere());
+        eq("vanadia is the catalyst", "item:grindless:vanadia_pellet", so3.catalysts().get(0).qualified());
+        yes("oxidation has no item input", so3.itemInputs().isEmpty());
+
+        eq("absorption is the reactor", MachineFamily.CHEMICAL_REACTOR, acid.family());
+        eq("absorption takes SO3", "fluid:grindless:sulfur_trioxide", acid.fluidInputs().get(0).qualified());
+        eq("absorption takes 0.2 B water", 200, acid.fluidInputs().get(1).count());
+        eq("absorption water is water", "fluid:minecraft:water", acid.fluidInputs().get(1).qualified());
+        eq("absorption makes one bucket of acid", "fluid:grindless:sulfuric_acid",
+                acid.fluidOutputs().get(0).qualified());
+        yes("acid is stored, not vented", !acid.fluidOutputs().get(0).vented());
+        eq("absorption is four seconds", 20 * 4, acid.durationTicks());
+        yes("absorption names no temperature", !acid.namesTemperature());
+        yes("absorption names no atmosphere", !acid.namesAtmosphere());
+        yes("absorption has no catalyst", acid.catalysts().isEmpty());
+
+        eq("pickle is the reactor", MachineFamily.CHEMICAL_REACTOR, pickle.family());
+        eq("pickle takes an iron ingot", "tag:forge:ingots/iron", pickle.itemInputs().get(0).qualified());
+        eq("pickle takes 0.1 B acid", 100, pickle.fluidInputs().get(0).count());
+        eq("pickle makes a plate", "tag:forge:plates/iron", pickle.itemOutputs().get(0).qualified());
+        eq("pickle is four seconds", 20 * 4, pickle.durationTicks());
+        yes("pickle has no die", pickle.catalysts().isEmpty());
+
+        eq("the reactor is the assembler", MachineFamily.ASSEMBLER, reactor.family());
+        eq("the reactor takes a casing", "item:grindless:machine_casing",
+                reactor.itemInputs().get(0).qualified());
+        eq("the reactor takes two motors", 2, reactor.itemInputs().get(1).count());
+        eq("the reactor motors are the reagent", "item:grindless:motor",
+                reactor.itemInputs().get(1).qualified());
+        eq("the reactor takes four plates", 4, reactor.itemInputs().get(2).count());
+        eq("the reactor is twenty seconds", 20 * 20, reactor.durationTicks());
+        eq("the reactor needs Industrial", "industrial", reactor.blueprint());
+        eq("the reactor makes the block", "item:grindless:chemical_reactor",
+                reactor.itemOutputs().get(0).qualified());
+
+        yes("steel with an ingot still presses",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
+        no("steel without a vein has no ore line",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("b0_r1/steel")));
+        no("steel without oxide does not roast",
+                recipes.stream().anyMatch(recipe -> recipe.id().startsWith("roast") && recipe.id().endsWith("/steel")));
+        no("steel without oxide has no R2",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("r2/steel")));
+        yes("gold without crushed still presses",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("press/gear/gold")));
+        no("mythril without plate/rod/gear does not press",
+                recipes.stream().anyMatch(recipe -> recipe.id().startsWith("press/") && recipe.id().endsWith("/mythril")));
     }
 
     private static void logic() {
@@ -141,9 +309,43 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships twelve gated crafts", 12, T1Recipes.gated().size());
+        eq("T1 ships thirty gated crafts", 30, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
+        yes("the assembler is the last crafting-table machine",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("assembler")));
+        yes("the press is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("press")));
+        yes("the conduit is a hand item",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_conduit")));
+        yes("the capacitor is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("capacitor_bank")));
+        yes("the transformer is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
+        yes("the kiln is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("kiln")));
+        yes("the merger is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("merger")));
+        yes("the tunnel is a pair",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("tunnel_belt")));
+        yes("the overflow is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("overflow_gate")));
+        yes("the sorter is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("sorter")));
+        yes("the advanced core is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("advanced_data_core")));
+        yes("the atlas is a hand item",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
+        no("MK2 has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
+        no("the mill has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("wire_mill.json")));
+        no("the motor has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("motor.json")));
+        no("the reactor has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
+        yes("vanadia is a hand reagent",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {

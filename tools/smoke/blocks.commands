@@ -1,3 +1,4 @@
+forceload add 0 0
 setblock 8 100 8 grindless:hand_crank_dynamo
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK hand_crank_dynamo
 loot spawn 8 102 8 loot grindless:blocks/hand_crank_dynamo
@@ -16,6 +17,15 @@ loot spawn 8 102 8 loot grindless:blocks/pulverizer
 setblock 8 100 8 grindless:arc_furnace
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK arc_furnace
 loot spawn 8 102 8 loot grindless:blocks/arc_furnace
+setblock 8 100 8 grindless:press
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK press
+loot spawn 8 102 8 loot grindless:blocks/press
+setblock 8 100 8 grindless:assembler
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK assembler
+loot spawn 8 102 8 loot grindless:blocks/assembler
+setblock 8 100 8 grindless:kiln
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK kiln
+loot spawn 8 102 8 loot grindless:blocks/kiln
 setblock 8 100 8 grindless:flux_pylon_mk1
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK flux_pylon_mk1
 loot spawn 8 102 8 loot grindless:blocks/flux_pylon_mk1
@@ -31,6 +41,18 @@ loot spawn 8 102 8 loot grindless:blocks/conveyor_belt
 setblock 8 100 8 grindless:splitter
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK splitter
 loot spawn 8 102 8 loot grindless:blocks/splitter
+setblock 8 100 8 grindless:merger
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK merger
+loot spawn 8 102 8 loot grindless:blocks/merger
+setblock 8 100 8 grindless:tunnel_belt
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK tunnel_belt
+loot spawn 8 102 8 loot grindless:blocks/tunnel_belt
+setblock 8 100 8 grindless:overflow_gate
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK overflow_gate
+loot spawn 8 102 8 loot grindless:blocks/overflow_gate
+setblock 8 100 8 grindless:sorter
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK sorter
+loot spawn 8 102 8 loot grindless:blocks/sorter
 setblock 8 100 8 grindless:crude_manipulator
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK crude_manipulator
 loot spawn 8 102 8 loot grindless:blocks/crude_manipulator
@@ -46,3 +68,9 @@ loot spawn 8 102 8 loot grindless:blocks/hand_pump
 setblock 8 100 8 grindless:basic_tank
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK basic_tank
 loot spawn 8 102 8 loot grindless:blocks/basic_tank
+setblock 8 100 8 grindless:capacitor_bank
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK capacitor_bank
+loot spawn 8 102 8 loot grindless:blocks/capacitor_bank
+setblock 8 100 8 grindless:flux_transformer
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK flux_transformer
+loot spawn 8 102 8 loot grindless:blocks/flux_transformer

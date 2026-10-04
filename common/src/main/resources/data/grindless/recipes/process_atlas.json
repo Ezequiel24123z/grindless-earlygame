@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "G G",
+    "GIG",
+    " C "
+  ],
+  "key": {
+    "G": { "item": "minecraft:glass" },
+    "I": { "tag": "forge:ingots/iron" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:process_atlas" }
+}

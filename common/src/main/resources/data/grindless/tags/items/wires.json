@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:wires/iron",
+    "#grindless:wires/copper",
+    "#grindless:wires/gold",
+    "#grindless:wires/tin",
+    "#grindless:wires/lead",
+    "#grindless:wires/silver",
+    "#grindless:wires/nickel",
+    "#grindless:wires/zinc",
+    "#grindless:wires/aluminium",
+    "#grindless:wires/titanium",
+    "#grindless:wires/tungsten",
+    "#grindless:wires/platinum",
+    "#grindless:wires/steel"
+  ]
+}

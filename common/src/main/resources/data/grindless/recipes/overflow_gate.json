@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    " B ",
+    "BIB",
+    " B "
+  ],
+  "key": {
+    "B": { "item": "grindless:conveyor_belt" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:overflow_gate" }
+}

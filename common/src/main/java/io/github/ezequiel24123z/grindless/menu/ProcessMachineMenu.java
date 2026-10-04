@@ -57,7 +57,7 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     private void addMachineSlots(Container container) {
         switch (kind) {
             case GENERATOR -> addSlot(new Slot(container, 0, 80, 36));
-            case PULVERIZER -> {
+            case PULVERIZER, KILN, WIRE_MILL, CHEMICAL_REACTOR -> {
                 addSlot(new Slot(container, 0, 52, 35));
                 addSlot(new OutputSlot(container, 1, 116, 35));
             }
@@ -66,6 +66,17 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new Slot(container, 1, 44, 44));
                 addSlot(new OutputSlot(container, 2, 116, 26));
                 addSlot(new OutputSlot(container, 3, 116, 44));
+            }
+            case PRESS -> {
+                addSlot(new Slot(container, 0, 44, 26));
+                addSlot(new Slot(container, 1, 44, 44));
+                addSlot(new OutputSlot(container, 2, 116, 35));
+            }
+            case ASSEMBLER -> {
+                addSlot(new Slot(container, 0, 44, 17));
+                addSlot(new Slot(container, 1, 44, 35));
+                addSlot(new Slot(container, 2, 44, 53));
+                addSlot(new OutputSlot(container, 3, 116, 35));
             }
         }
     }

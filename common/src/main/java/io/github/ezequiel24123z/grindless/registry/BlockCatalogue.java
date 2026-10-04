@@ -31,12 +31,30 @@ public final class BlockCatalogue {
         MILL,
         /** A chamber with a V of electrodes. */
         FURNACE,
+        /** A ram over a forming bed. */
+        PRESS,
+        /** Two arms over a fabrication deck. */
+        ASSEMBLER,
+        /** A brick drum with a short stack. The cheapest heat. */
+        KILN,
+        /** Two drawing dies and a spool. Wire, not crush. */
+        WIRE_MILL,
+        /** A stirred vat with a sight glass. Contact process. */
+        REACTOR,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON,
         /** A low slab with two lanes. */
         BELT,
         /** A low junction with three mouths. */
         SPLITTER,
+        /** Three inlets into one outlet. */
+        MERGER,
+        /** A low entrance that swallows a lane. */
+        TUNNEL,
+        /** Front preferred, side when the front backs up. */
+        OVERFLOW,
+        /** Passthrough with two filter mouths. */
+        SORTER,
         /** A short arm on a post. */
         MANIPULATOR,
         /** A heavier bore than the Crude Extractor. */
@@ -46,7 +64,11 @@ public final class BlockCatalogue {
         /** A piston over a well. */
         PUMP,
         /** A squat cylinder with a sight glass. */
-        TANK
+        TANK,
+        /** A rack of cells. Capacity, not coverage. */
+        BANK,
+        /** Two coils on a core. A tap, not a pylon. */
+        TRANSFORMER
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -99,20 +121,32 @@ public final class BlockCatalogue {
             new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR),
             new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER),
             new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
+            new Entry("press", Geometry.PRESS, 1, true, CONSUMER),
+            new Entry("assembler", Geometry.ASSEMBLER, 1, true, CONSUMER),
+            new Entry("kiln", Geometry.KILN, 1, true, CONSUMER),
+            new Entry("wire_mill", Geometry.WIRE_MILL, 1, true, CONSUMER),
+            new Entry("chemical_reactor", Geometry.REACTOR, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),
             new Entry("conveyor_belt", Geometry.BELT, 1, true, BELT),
             new Entry("splitter", Geometry.SPLITTER, 1, true, BELT),
+            new Entry("merger", Geometry.MERGER, 1, true, BELT),
+            new Entry("tunnel_belt", Geometry.TUNNEL, 1, true, BELT),
+            new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT),
+            new Entry("sorter", Geometry.SORTER, 1, true, BELT),
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),
             new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP),
-            new Entry("basic_tank", Geometry.TANK, 1, true, BELT));
+            new Entry("basic_tank", Geometry.TANK, 1, true, BELT),
+            new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
+            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
-    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag",
-            "prospectors_scanner");
+    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
+            "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
+            "copper_coil", "motor", "vanadia_pellet");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

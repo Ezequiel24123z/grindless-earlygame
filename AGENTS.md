@@ -74,8 +74,9 @@ legible to the wider Minecraft modding community.
 ## Session checklist
 
 **Starting.** Read this file, then `CHANGELOG.md` (`[Unreleased]` — what the last session did),
-then `docs/DECISIONS.md` (what is already settled), then the README's *Implementation plan* (what
-is next). That is the full handoff; nothing else is needed.
+then `docs/BUILD-OUT.md` (the next slice), then `docs/DECISIONS.md` (what is already settled),
+then the README's *Implementation plan*. That is the full handoff; nothing else is needed. Do
+not ask what to do next: the build-out already says.
 
 **Finishing, or when the terminal starts failing.** Update the changelog, add any ADRs, update the
 implementation plan, validate the documentation, then commit and push:
@@ -105,6 +106,7 @@ CHANGELOG.md         what changed, in order
 docs/DECISIONS.md    why it changed — architecture decision records
 docs/MACHINES.md     the machine layer: conditions, envelopes, chassis marks, multiblocks
 docs/PROCESSES.md    the content layer: items, fluids, recipe graph, routes and ratios
+docs/BUILD-OUT.md    remaining slices in ship order; a session implements the Next line
 docs/DESIGN.md       early standalone design note; superseded by README, kept for history
 SETUP.ps1            Windows bootstrap; also commits and pushes via -Commit
 tools/               repository scripts; check-links.ps1 validates the docs before a commit,
@@ -133,7 +135,7 @@ loader is what makes a future port a build change rather than a rewrite.
 id (`ADR-0007`) when a commit implements one. Include the trailer:
 
 ```
-Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>
+Co-authored-by: Ezequiel Castaño <ezeycema@gmail.com>
 ```
 
 **Never commit** build output (`build/`, `.gradle/`, `run/`), IDE files, or scratch and workaround

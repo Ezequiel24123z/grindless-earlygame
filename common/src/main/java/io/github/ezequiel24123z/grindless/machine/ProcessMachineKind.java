@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
+import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
@@ -13,8 +14,8 @@ import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
- * Pulverizer or Arc Furnace: family, envelope, slots and the conditions the machine holds
- * so R1 evaluates optimally without a player touching a dial (ADR-0058).
+ * Process consumer: family, envelope, slots and the conditions the machine holds
+ * so R1 and roast evaluate optimally without a player touching a dial (ADR-0058, ADR-0065).
  */
 public enum ProcessMachineKind {
 
@@ -54,6 +55,101 @@ public enum ProcessMachineKind {
         @Override
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.ARC_FURNACE.get();
+        }
+    },
+
+    PRESS(MachineFamily.PRESS, MachineMenuKind.PRESS,
+            BlockCatalogue.Geometry.PRESS, "press") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.PRESS.get();
+        }
+    },
+
+    ASSEMBLER(MachineFamily.ASSEMBLER, MachineMenuKind.ASSEMBLER,
+            BlockCatalogue.Geometry.ASSEMBLER, "assembler") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.ASSEMBLER.get();
+        }
+    },
+
+    KILN(MachineFamily.KILN, MachineMenuKind.KILN,
+            BlockCatalogue.Geometry.KILN, "kiln") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.KILN;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT
+                    .withTemperature(ProcessLogic.ROAST_TEMPERATURE)
+                    .withAtmosphere(Atmosphere.OXIDISING);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.KILN.get();
+        }
+    },
+
+    WIRE_MILL(MachineFamily.WIRE_MILL, MachineMenuKind.WIRE_MILL,
+            BlockCatalogue.Geometry.WIRE_MILL, "wire_mill") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.WIRE_MILL.get();
+        }
+    },
+
+    CHEMICAL_REACTOR(MachineFamily.CHEMICAL_REACTOR, MachineMenuKind.CHEMICAL_REACTOR,
+            BlockCatalogue.Geometry.REACTOR, "chemical_reactor") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.CHEMICAL_REACTOR;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT
+                    .withTemperature(ProcessLogic.CONTACT_TEMPERATURE)
+                    .withAtmosphere(Atmosphere.OXIDISING)
+                    .withAgitation(Agitation.STIRRED);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.CHEMICAL_REACTOR.get();
         }
     };
 

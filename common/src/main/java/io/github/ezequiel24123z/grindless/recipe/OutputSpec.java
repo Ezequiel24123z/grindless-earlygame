@@ -33,6 +33,10 @@ public record OutputSpec(String kind, String id, int count, boolean vented) {
         return new OutputSpec(IngredientSpec.ITEM, id, count, false);
     }
 
+    public static OutputSpec fluid(String id, int count) {
+        return new OutputSpec(IngredientSpec.FLUID, id, count, false);
+    }
+
     public static OutputSpec ventedFluid(String id, int count) {
         return new OutputSpec(IngredientSpec.FLUID, id, count, true);
     }

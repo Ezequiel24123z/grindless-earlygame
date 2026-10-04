@@ -40,14 +40,25 @@ public final class MachineEffects {
             case GENERATOR -> generator(status, level, pos, random);
             case MILL -> mill(status, level, pos, random);
             case FURNACE -> furnace(status, level, pos, random);
+            case PRESS -> mill(status, level, pos, random);
+            case ASSEMBLER -> manipulator(status, front, level, pos, random);
+            case KILN -> generator(status, level, pos, random);
+            case WIRE_MILL -> mill(status, level, pos, random);
+            case REACTOR -> mill(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);
+            case MERGER -> belt(status, level, pos, random);
+            case TUNNEL -> belt(status, level, pos, random);
+            case OVERFLOW -> belt(status, level, pos, random);
+            case SORTER -> belt(status, level, pos, random);
             case MANIPULATOR -> manipulator(status, front, level, pos, random);
             case DRILL -> extractor(status, level, pos, random);
             case CONDUIT -> belt(status, level, pos, random);
             case PUMP -> mill(status, level, pos, random);
             case TANK -> generator(status, level, pos, random);
+            case BANK -> pylon(1, status, level, pos, random);
+            case TRANSFORMER -> dynamo(status, front, level, pos, random);
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);

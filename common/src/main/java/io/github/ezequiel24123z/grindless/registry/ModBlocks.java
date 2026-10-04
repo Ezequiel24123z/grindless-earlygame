@@ -8,7 +8,11 @@ import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
 import io.github.ezequiel24123z.grindless.belt.BeltBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
+import io.github.ezequiel24123z.grindless.belt.MergerBlock;
+import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
+import io.github.ezequiel24123z.grindless.belt.SorterBlock;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
+import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlock;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
@@ -17,6 +21,8 @@ import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
+import io.github.ezequiel24123z.grindless.network.CapacitorBankBlock;
+import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
@@ -34,8 +40,9 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>T0 through Slice C. Dynamo, extractors, pylons, terminal, Thermal Generator,
- * Pulverizer, Arc Furnace, belts, fluids and the T1 extractor have block entities.
+ * <p>T0 through Kiln / R2 and the T2 Wire Mill. Dynamo, extractors, pylons, terminal,
+ * Thermal Generator, process machines, belts, fluids, the T1 extractor, capacitor bank,
+ * transformer, Kiln and Wire Mill have block entities.
  */
 public final class ModBlocks {
 
@@ -70,6 +77,31 @@ public final class ModBlocks {
             register("arc_furnace",
                     () -> new ProcessMachineBlock(ProcessMachineKind.ARC_FURNACE, machine().strength(3.5F)));
 
+    /** T1 forming. One ingot and a die; the die is not consumed. */
+    public static final RegistrySupplier<ProcessMachineBlock> PRESS =
+            register("press",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.PRESS, machine().strength(3.0F)));
+
+    /** T1 fabrication. The last crafting-table machine; T2+ is manufactured here. */
+    public static final RegistrySupplier<ProcessMachineBlock> ASSEMBLER =
+            register("assembler",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.ASSEMBLER, machine().strength(3.5F)));
+
+    /** T1 roast. 1 u feed → 1 u oxide; 1 B SO₂ vents or captures. */
+    public static final RegistrySupplier<ProcessMachineBlock> KILN =
+            register("kiln",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.KILN, machine().strength(3.0F)));
+
+    /** T2 drawing. 1 ingot → 2 wire; 2 copper wire → 1 coil. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> WIRE_MILL =
+            register("wire_mill",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.WIRE_MILL, machine().strength(3.5F)));
+
+    /** T2 contact process. SO₂ → SO₃ → sulfuric acid. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> CHEMICAL_REACTOR =
+            register("chemical_reactor",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.CHEMICAL_REACTOR, machine().strength(3.5F)));
+
     /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
     public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =
             register("conveyor_belt",
@@ -79,6 +111,26 @@ public final class ModBlocks {
     public static final RegistrySupplier<SplitterBlock> SPLITTER =
             register("splitter",
                     () -> new SplitterBlock(machine().strength(2.0F)));
+
+    /** Three inlets, one outlet. Round-robin. */
+    public static final RegistrySupplier<MergerBlock> MERGER =
+            register("merger",
+                    () -> new MergerBlock(machine().strength(2.0F)));
+
+    /** Entrance/exit pair. Skips one to five empty blocks. */
+    public static final RegistrySupplier<TunnelBeltBlock> TUNNEL_BELT =
+            register("tunnel_belt",
+                    () -> new TunnelBeltBlock(machine().strength(1.5F)));
+
+    /** Front until it backs up, then the clockwise side. */
+    public static final RegistrySupplier<OverflowGateBlock> OVERFLOW_GATE =
+            register("overflow_gate",
+                    () -> new OverflowGateBlock(machine().strength(2.0F)));
+
+    /** Inline filter. Matching sides peel; unmatched continue. */
+    public static final RegistrySupplier<SorterBlock> SORTER =
+            register("sorter",
+                    () -> new SorterBlock(machine().strength(2.0F)));
 
     /** Crude inserter. One item a second, unpowered. */
     public static final RegistrySupplier<ManipulatorBlock> CRUDE_MANIPULATOR =
@@ -104,6 +156,16 @@ public final class ModBlocks {
     public static final RegistrySupplier<BasicTankBlock> BASIC_TANK =
             register("basic_tank",
                     () -> new BasicTankBlock(machine().strength(2.5F)));
+
+    /** T1 storage. Adds capacity to the covering network; no supply cube of its own. */
+    public static final RegistrySupplier<CapacitorBankBlock> CAPACITOR_BANK =
+            register("capacitor_bank",
+                    () -> new CapacitorBankBlock(machine().strength(3.0F)));
+
+    /** T1 tap. Exchanges FU with the covering network at F1. Not a pylon. */
+    public static final RegistrySupplier<FluxTransformerBlock> FLUX_TRANSFORMER =
+            register("flux_transformer",
+                    () -> new FluxTransformerBlock(machine().strength(3.0F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

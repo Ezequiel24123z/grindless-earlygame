@@ -40,7 +40,7 @@ jobs:
         run: tools/smoke-boot.sh .
         env:
           SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
-          SMOKE_EXPECT: '32 materials found; Grindless supplies 118 of its 120'
+          SMOKE_EXPECT: '32 materials found; Grindless supplies 143 of its 145'
 
       # Every block must be mineable with a pickaxe and drop itself, with its real display name.
       - name: Boot and exercise block loot and mining tags
@@ -93,6 +93,48 @@ jobs:
         env:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-fluids.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-fluids.expect
+
+      # Slice D: Press and Assembler place; a hopper cannot steal a die and can insert an ingot.
+      - name: Boot and exercise first assembler
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-assembler.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-assembler.expect
+
+      # Slice E: capacitor and transformer place; they are not pylons (ADR-0064).
+      - name: Boot and exercise energy spanning
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-energy.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-energy.expect
+
+      # Kiln / R2: the Kiln places; a hopper can insert raw; a tank is the named SO2 sink.
+      - name: Boot and exercise first kiln
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-kiln.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-kiln.expect
+
+      # Slice J: Wire Mill places; a hopper can insert an ingot; motor and wire items exist.
+      - name: Boot and exercise wire mill
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-wire.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-wire.expect
+
+      # Slice K: Chemical Reactor places; a hopper can insert vanadia; tanks hold SO2 and water.
+      - name: Boot and exercise contact process
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-contact.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-contact.expect
+
+      # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
+      - name: Boot and exercise process atlas
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-atlas.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-atlas.expect
 
       - name: Upload server log
         if: always()
