@@ -15,6 +15,9 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **ADR-0065 index anchor.** The link checker drops the subscript in the heading,
+  so the index href now matches that slug.
+
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
   Slice I placed the item at `8 72 8`, one block above the hopper feeding the
   terminal, so the entity vanished before `ADV-CORE-OK`. The core now appears
