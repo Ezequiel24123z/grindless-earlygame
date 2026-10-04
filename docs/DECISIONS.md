@@ -95,6 +95,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0081](#adr-0081--daylight-is-f1-and-steam-closes-on-the-condenser) | Daylight is F1, and steam closes on the condenser | Accepted |
 | [0082](#adr-0082--t2-pipe-holds-steam-and-the-flux-belt-spends-lv) | T2 pipe holds steam, and the flux belt spends LV | Accepted |
 | [0083](#adr-0083--a-controller-holds-a-machine-below-five-hundred) | A controller holds a machine below five hundred | Accepted |
+| [0084](#adr-0084--the-flux-drill-spends-cells-not-durability) | The Flux Drill spends cells, not durability | Accepted |
 
 ---
 
@@ -3247,6 +3248,49 @@ a core is skipping the conduit. A successor that caps the cable at 15 is
 moving the redstone limit onto the wire. A successor that leaves a machine
 held after the controller is mined is inventing a latch. A successor that
 builds drones here is in slice AC.
+
+
+## ADR-0084 — The Flux Drill spends cells, not durability
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice T is the Flux Drill: area modes 1×1, 3×3,
+vein and tunnel, on cell fuel. The README also names silk and fortune
+modules and a portable cell, and it says the tool has no durability, only
+charge. The Multitool still does not mine (ADR-0055, ADR-0069). The Flux
+Cell is the T1 armour module (slice X), not a fuel item. Silk and fortune
+belong on that module grid, not on a second socket invented for one tool.
+
+**Decision.**
+
+1. **Flux Drill** is Assembler-manufactured (casing, two motors, four
+   plates, Industrial, 20 s). It is an item, not a block, and it has no
+   crafting JSON. Harvest level is diamond. It does not break bedrock, and
+   it does not break Grindless blocks, so a 3×3 cannot eat the factory.
+   Drops are the block's normal drops. No silk, no fortune, no enchantments.
+2. **No durability.** Charge is an integer on the stack. Each broken block
+   costs 32 FU, one F1 tick. The drill will not start a break it cannot
+   pay for.
+3. **Drill Cell** is the fuel, and it is not the Flux Cell. Assembler:
+   one copper coil and four iron plates, 4 s, Industrial. One cell is
+   3,200 FU. The drill holds 6,400 FU, two cells. A cell is consumed only
+   when the whole cell fits. Using the cell charges the drill in the other
+   hand.
+4. **Modes**, cycled by sneak-use, saved on the stack: single block; the
+   3×3 perpendicular to where the player is looking; a face-connected vein
+   of the same block, capped at 32; a horizontal 3×3 tunnel, eight blocks
+   deep. One cell pays for a full tunnel (72 blocks is 2,304 FU). Extras
+   stop when the charge runs out.
+
+**Alternatives rejected.** Mining with the Multitool; naming the fuel Flux
+Cell; a charger block; silk touch and fortune in this slice; letting the
+drill dismantle Grindless machines; a vertical tunnel.
+
+**Consequences.** A successor that puts durability on the drill is ignoring
+this record. A successor that teaches the Multitool to mine is reopening
+ADR-0055. A successor that adds silk or fortune here is starting the module
+grid early. A successor that spends the armour Flux Cell as fuel is
+colliding with slice X.
 
 
 
