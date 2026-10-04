@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  * Items, and the register every block item is also added to.
  *
  * <p>Bootstrap items plus Slice D fabrication (dies, coil, casing), the Slice E
- * linker, and the T2 motor. Circuit boards arrive with acid.
+ * linker, the T2 motor, and the contact-process catalyst. Circuit boards arrive with etching.
  */
 public final class ModItems {
 
@@ -65,6 +65,10 @@ public final class ModItems {
 
     /** T2 fabricated component. Feeds later electrical crafts (ADR-0074). */
     public static final RegistrySupplier<Item> MOTOR = register("motor",
+            () -> new Item(new Item.Properties()));
+
+    /** Contact-process catalyst. Iron oxide on a ceramic brick support (ADR-0075). */
+    public static final RegistrySupplier<Item> VANADIA_PELLET = register("vanadia_pellet",
             () -> new Item(new Item.Properties()));
 
     /** R1 gangue. A Grindless reagent, not a material form (ADR-0033). */

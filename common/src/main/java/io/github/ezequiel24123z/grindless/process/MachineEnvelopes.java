@@ -34,9 +34,9 @@ public final class MachineEnvelopes {
             .atmospheres(Atmosphere.INERT, Atmosphere.REDUCING)
             .build();
 
-    /** Stirred liquid-phase reactions with a catalyst slot. */
+    /** Stirred liquid-phase reactions with a catalyst slot. MK I also hosts contact oxidation. */
     public static final ConditionEnvelope CHEMICAL_REACTOR = ConditionEnvelope.builder()
-            .temperature(-20.0, 250.0)
+            .temperature(-20.0, 500.0)
             .pressure(0.1, 2.0)
             .atmospheres(Atmosphere.INERT, Atmosphere.OXIDISING, Atmosphere.REDUCING)
             .agitation(Agitation.STIRRED)

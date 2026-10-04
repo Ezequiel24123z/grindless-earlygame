@@ -39,6 +39,8 @@ public final class BlockCatalogue {
         KILN,
         /** Two drawing dies and a spool. Wire, not crush. */
         WIRE_MILL,
+        /** A stirred vat with a sight glass. Contact process. */
+        REACTOR,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON,
         /** A low slab with two lanes. */
@@ -123,6 +125,7 @@ public final class BlockCatalogue {
             new Entry("assembler", Geometry.ASSEMBLER, 1, true, CONSUMER),
             new Entry("kiln", Geometry.KILN, 1, true, CONSUMER),
             new Entry("wire_mill", Geometry.WIRE_MILL, 1, true, CONSUMER),
+            new Entry("chemical_reactor", Geometry.REACTOR, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),
@@ -143,7 +146,7 @@ public final class BlockCatalogue {
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
             "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
-            "copper_coil", "motor");
+            "copper_coil", "motor", "vanadia_pellet");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

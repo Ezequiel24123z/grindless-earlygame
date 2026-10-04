@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill and motor", 35, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact and pickle", 39, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -197,6 +197,55 @@ public final class VerifyRecipes {
         eq("motor needs Industrial", "industrial", motor.blueprint());
         eq("motor makes the reagent", "item:grindless:motor", motor.itemOutputs().get(0).qualified());
 
+        ProcessRecipe so3 = recipe(recipes, "contact/so3");
+        ProcessRecipe acid = recipe(recipes, "contact/acid");
+        ProcessRecipe pickle = recipe(recipes, "pickle/plate/iron");
+        ProcessRecipe reactor = recipe(recipes, "assemble/chemical_reactor");
+
+        eq("oxidation is the reactor", MachineFamily.CHEMICAL_REACTOR, so3.family());
+        eq("oxidation takes one bucket of SO2", "fluid:grindless:sulfur_dioxide",
+                so3.fluidInputs().get(0).qualified());
+        eq("oxidation makes one bucket of SO3", "fluid:grindless:sulfur_trioxide",
+                so3.fluidOutputs().get(0).qualified());
+        yes("SO3 is stored, not vented", !so3.fluidOutputs().get(0).vented());
+        eq("oxidation is six seconds", 20 * 6, so3.durationTicks());
+        eq("oxidation draws F1", 32L, so3.fuPerTick());
+        yes("oxidation names no temperature", !so3.namesTemperature());
+        eq("oxidation is oxidising", "OXIDISING", so3.atmosphere());
+        eq("vanadia is the catalyst", "item:grindless:vanadia_pellet", so3.catalysts().get(0).qualified());
+        yes("oxidation has no item input", so3.itemInputs().isEmpty());
+
+        eq("absorption is the reactor", MachineFamily.CHEMICAL_REACTOR, acid.family());
+        eq("absorption takes SO3", "fluid:grindless:sulfur_trioxide", acid.fluidInputs().get(0).qualified());
+        eq("absorption takes 0.2 B water", 200, acid.fluidInputs().get(1).count());
+        eq("absorption water is water", "fluid:minecraft:water", acid.fluidInputs().get(1).qualified());
+        eq("absorption makes one bucket of acid", "fluid:grindless:sulfuric_acid",
+                acid.fluidOutputs().get(0).qualified());
+        yes("acid is stored, not vented", !acid.fluidOutputs().get(0).vented());
+        eq("absorption is four seconds", 20 * 4, acid.durationTicks());
+        yes("absorption names no temperature", !acid.namesTemperature());
+        yes("absorption names no atmosphere", !acid.namesAtmosphere());
+        yes("absorption has no catalyst", acid.catalysts().isEmpty());
+
+        eq("pickle is the reactor", MachineFamily.CHEMICAL_REACTOR, pickle.family());
+        eq("pickle takes an iron ingot", "tag:forge:ingots/iron", pickle.itemInputs().get(0).qualified());
+        eq("pickle takes 0.1 B acid", 100, pickle.fluidInputs().get(0).count());
+        eq("pickle makes a plate", "tag:forge:plates/iron", pickle.itemOutputs().get(0).qualified());
+        eq("pickle is four seconds", 20 * 4, pickle.durationTicks());
+        yes("pickle has no die", pickle.catalysts().isEmpty());
+
+        eq("the reactor is the assembler", MachineFamily.ASSEMBLER, reactor.family());
+        eq("the reactor takes a casing", "item:grindless:machine_casing",
+                reactor.itemInputs().get(0).qualified());
+        eq("the reactor takes two motors", 2, reactor.itemInputs().get(1).count());
+        eq("the reactor motors are the reagent", "item:grindless:motor",
+                reactor.itemInputs().get(1).qualified());
+        eq("the reactor takes four plates", 4, reactor.itemInputs().get(2).count());
+        eq("the reactor is twenty seconds", 20 * 20, reactor.durationTicks());
+        eq("the reactor needs Industrial", "industrial", reactor.blueprint());
+        eq("the reactor makes the block", "item:grindless:chemical_reactor",
+                reactor.itemOutputs().get(0).qualified());
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -260,7 +309,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships twenty-nine gated crafts", 29, T1Recipes.gated().size());
+        eq("T1 ships thirty gated crafts", 30, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",
@@ -293,6 +342,10 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("wire_mill.json")));
         no("the motor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("motor.json")));
+        no("the reactor has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
+        yes("vanadia is a hand reagent",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {

@@ -115,6 +115,14 @@ public final class ModBlockEntities {
                                     ModBlocks.WIRE_MILL.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> CHEMICAL_REACTOR =
+            BLOCK_ENTITIES.register("chemical_reactor",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.CHEMICAL_REACTOR, pos, state),
+                                    ModBlocks.CHEMICAL_REACTOR.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

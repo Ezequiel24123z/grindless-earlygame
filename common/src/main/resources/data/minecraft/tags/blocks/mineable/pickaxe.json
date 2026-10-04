@@ -11,6 +11,7 @@
     "grindless:assembler",
     "grindless:kiln",
     "grindless:wire_mill",
+    "grindless:chemical_reactor",
     "grindless:flux_pylon_mk1",
     "grindless:flux_pylon_mk2",
     "grindless:flux_pylon_mk3",

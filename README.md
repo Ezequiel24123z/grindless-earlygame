@@ -2000,12 +2000,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — build-out AD; Arc Reactor (ADR-0067) |
 | 21b | **Slice I — T2 gate:** Industrial research, Advanced Data Core, MK2 gated | ✅ done — ADR-0073 |
 | 21c | **Slice J — Wire and motors:** Wire Mill, wire form, mill coil, motor | ✅ done — ADR-0074 |
-| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out K–S |
+| 21d | **Slice K — Contact process:** Chemical Reactor, SO₂ → acid, pickle | ✅ done — ADR-0075 |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out L–S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **K**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **L**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2033,11 +2034,16 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is K — Contact process**, not Slice F and not the washer.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Wire Mill is in (ADR-0074): Assembler-manufactured
+**Next is L — Washer and B2**, not Slice F and not etching.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
+Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
+`1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
+sulfuric acid` in 4 s, water from a neighbouring tank. Pickle is the named sulfuric spend
+(`1 iron ingot + 0.1 B acid → 1 iron plate`). R2 yield 1.15 still waits. The Wire Mill is in
+(ADR-0074): Assembler-manufactured
 once Industrial is researched (`1 casing + 2 coil + 4 plates`). `1 ingot → 2 wire` in 8 s;
 `2 copper wire → 1 coil` is the T2 mill route; the Press die remains the T1 bootstrap.
-Motor is `1 casing + 2 coil + 1 rod` in 10 s. Acid still waits. Industrial is the second
+Motor is `1 casing + 2 coil + 1 rod` in 10 s. Industrial is the second
 blueprint (ADR-0073):
 the same Research Terminal spends an Advanced Data Core at F0 for sixty seconds. Pylon MK2
 still has no crafting-table recipe; the Assembler refuses it until Industrial is unlocked.

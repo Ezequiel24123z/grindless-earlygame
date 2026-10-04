@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 35, rows.size());
+        eq("atlas lists every generated recipe", 39, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the motor", "assemble/motor",
+        eq("the first assembler row is the reactor", "assemble/chemical_reactor",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("three assembler crafts in this set", 3,
+        eq("four assembler crafts in this set", 4,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -46,6 +46,14 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:wire_mill").size());
         eq("the motor is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:motor").size());
+        eq("the reactor is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:chemical_reactor").size());
+        eq("SO3 has one contact route", 1,
+                AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());
+        eq("acid has one contact route", 1,
+                AtlasLogic.producing(recipes, "grindless:sulfuric_acid").size());
+        eq("pickle is a second iron plate route", 2,
+                AtlasLogic.producing(recipes, "forge:plates/iron").size());
         eq("iron wire has one mill route", 1,
                 AtlasLogic.producing(recipes, "grindless:wires/iron").size());
         eq("unknown product is empty", 0,
@@ -59,6 +67,12 @@ public final class VerifyAtlas {
         eq("five mill routes in this set", 5, mill.size());
         yes("iron wire is milled", ids(mill).contains("mill/wire/iron"));
         yes("the mill coil is copper", ids(mill).contains("mill/coil/copper"));
+
+        List<AtlasLogic.Entry> reactor = AtlasLogic.family(recipes, MachineFamily.CHEMICAL_REACTOR);
+        eq("three reactor routes in this set", 3, reactor.size());
+        yes("oxidation is contact", ids(reactor).contains("contact/so3"));
+        yes("absorption is contact", ids(reactor).contains("contact/acid"));
+        yes("pickle spends acid", ids(reactor).contains("pickle/plate/iron"));
 
         List<AtlasLogic.Entry> carbon = AtlasLogic.consuming(recipes, "grindless:carbon");
         yes("R2 consumes carbon", ids(carbon).contains("r2/iron"));

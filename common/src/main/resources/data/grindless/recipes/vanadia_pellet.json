@@ -1,0 +1,14 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    " B ",
+    "BOB",
+    " B "
+  ],
+  "key": {
+    "B": { "item": "minecraft:brick" },
+    "O": { "tag": "grindless:oxides/iron" }
+  },
+  "result": { "item": "grindless:vanadia_pellet" }
+}

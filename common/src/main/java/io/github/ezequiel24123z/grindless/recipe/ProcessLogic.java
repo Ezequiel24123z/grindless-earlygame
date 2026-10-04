@@ -29,10 +29,21 @@ public final class ProcessLogic {
     public static final String SLAG = "grindless:slag";
     public static final String CARBON_MONOXIDE = "grindless:carbon_monoxide";
     public static final String SULFUR_DIOXIDE = "grindless:sulfur_dioxide";
+    public static final String SULFUR_TRIOXIDE = "grindless:sulfur_trioxide";
+    public static final String SULFURIC_ACID = "grindless:sulfuric_acid";
     public static final String WATER = "minecraft:water";
     public static final int CO_MB = 1000;
     public static final int SO2_MB = 1000;
+    public static final int SO3_MB = 1000;
+    public static final int ACID_MB = 1000;
     public static final int WATER_MB = 500;
+    public static final int ABSORB_WATER_MB = 200;
+    public static final int PICKLE_ACID_MB = 100;
+    public static final int CONTACT_OXIDE_TICKS = 20 * 6;
+    public static final int CONTACT_ACID_TICKS = 20 * 4;
+    public static final int PICKLE_TICKS = 20 * 4;
+    public static final double CONTACT_TEMPERATURE = 450.0;
+    public static final String CONTACT_ATMOSPHERE = "OXIDISING";
 
     private ProcessLogic() {
     }

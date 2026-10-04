@@ -34,6 +34,7 @@ public final class MachineArt {
     public static final int ASSEMBLER = 0x82B1FF;
     public static final int KILN = 0xE64A19;
     public static final int WIRE_MILL = 0xFF8A65;
+    public static final int REACTOR = 0xCDDC39;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -68,6 +69,7 @@ public final class MachineArt {
             case ASSEMBLER -> assemblerFront(status);
             case KILN -> kilnFront(status);
             case WIRE_MILL -> wireMillFront(status);
+            case REACTOR -> reactorFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -97,6 +99,7 @@ public final class MachineArt {
             case ASSEMBLER -> assemblerTop();
             case KILN -> kilnTop();
             case WIRE_MILL -> wireMillTop();
+            case REACTOR -> reactorTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -544,6 +547,59 @@ public final class MachineArt {
         }
         set(img, 7, 7, WIRE_MILL);
         set(img, 8, 7, WIRE_MILL);
+        return img;
+    }
+
+    // ---- Chemical Reactor ----------------------------------------------------------------
+
+    /** A sight-glass vat with a stirrer: the machine is a thing that stirs. */
+    public static BufferedImage reactorFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, REACTOR);
+        int rim = Palette.shade(CASING, 0.15);
+        int dark = Palette.shade(CASING, -0.7);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double d = Math.hypot(x - CX, y - 8.0);
+                if (d <= 5.2 && d >= 4.2) {
+                    set(img, x, y, rim);
+                } else if (d < 4.2) {
+                    int fill = glow < 0 ? Palette.shade(REACTOR, -0.45) : glow;
+                    set(img, x, y, y >= 8 ? fill : dark);
+                }
+            }
+        }
+        int shaft = glow < 0 ? Palette.shade(REACTOR, -0.2) : glow;
+        for (int y = 3; y <= 10; y++) {
+            set(img, 7, y, shaft);
+            set(img, 8, y, shaft);
+        }
+        set(img, 5, 8, shaft);
+        set(img, 6, 8, shaft);
+        set(img, 9, 8, shaft);
+        set(img, 10, 8, shaft);
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage reactorTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                if (d <= 5.4 && d >= 4.0) {
+                    set(img, x, y, Palette.shade(REACTOR, -0.2));
+                } else if (d < 4.0) {
+                    set(img, x, y, Palette.shade(CASING, -0.65));
+                }
+            }
+        }
+        for (int i = 4; i <= 11; i++) {
+            set(img, i, 7, REACTOR);
+            set(img, i, 8, REACTOR);
+            set(img, 7, i, REACTOR);
+            set(img, 8, i, REACTOR);
+        }
         return img;
     }
 

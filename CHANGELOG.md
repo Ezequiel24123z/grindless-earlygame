@@ -40,6 +40,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
+  motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia
+  with held air; `1 B SO₃ + 0.2 B water → 1 B sulfuric acid` in 4 s, water from a neighbouring
+  tank. Vanadia pellet is Voltaic (iron oxide + four bricks). Named spend is pickle:
+  `1 iron ingot + 0.1 B acid → 1 iron plate` in 4 s. R2 yield 1.15 and the washer still wait.
+  CI places the reactor, hoppers vanadia, and stands SO₂ and water tanks.
+
 - **Wire Mill, wire and motor (ADR-0074).** T2 mill is Assembler-manufactured (casing, two
   coils, four plates; Industrial; no circuit board). Wire is a supplied form
   (`grindless:wires/<m>`): 1 ingot → 2 wire in 8 s F1. Mill coil is 2 copper wire → 1

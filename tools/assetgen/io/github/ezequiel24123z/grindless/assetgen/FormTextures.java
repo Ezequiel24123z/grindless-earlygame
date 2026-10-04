@@ -367,4 +367,23 @@ public final class FormTextures {
         field.bevel(0.4);
         return field.light(palette);
     }
+
+    /** Placeholder sprite for a vanadia pellet: a ceramic bead with oxide speckles. */
+    public static BufferedImage vanadia(Palette palette) {
+        HeightField field = new HeightField();
+        double centre = 8.0;
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double radius = Math.hypot(x - centre, y - centre);
+                if (radius <= 5.4) {
+                    double across = 1.0 - radius / 5.4;
+                    field.set(x, y, 2.4 + 2.8 * Math.max(0, across));
+                }
+            }
+        }
+        field.rect(6, 6, 7, 7, 4.6);
+        field.rect(9, 8, 10, 9, 4.4);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
 }

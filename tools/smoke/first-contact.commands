@@ -1,0 +1,20 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 6 70 8 minecraft:air
+setblock 8 70 8 grindless:chemical_reactor[facing=south,status=idle]
+execute if block 8 70 8 grindless:chemical_reactor run say REACTOR-OK
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"grindless:vanadia_pellet",Count:1b}]}
+say WAIT-HOPPER
+say WAIT-HOPPER
+execute if data block 8 70 8 Items[{id:"grindless:vanadia_pellet"}] run say VANADIA-IN
+setblock 10 70 8 grindless:basic_tank[facing=south,status=idle]{Fluid:{Id:"grindless:sulfur_dioxide",Amount:1000,Temp:20.0d,Pressure:0.1d}}
+execute if block 10 70 8 grindless:basic_tank run say TANK-SO2
+setblock 6 70 8 grindless:basic_tank[facing=south,status=idle]{Fluid:{Id:"minecraft:water",Amount:1000,Temp:20.0d,Pressure:0.1d}}
+execute if block 6 70 8 grindless:basic_tank run say TANK-WATER
+summon minecraft:item 8 100 8 {Item:{id:"grindless:vanadia_pellet",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:vanadia_pellet"}}] run say PELLET-OK
+kill @e[type=item]

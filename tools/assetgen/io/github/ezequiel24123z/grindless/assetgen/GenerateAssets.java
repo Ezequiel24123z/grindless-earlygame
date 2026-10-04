@@ -105,6 +105,8 @@ public final class GenerateAssets {
         written += write(items, "coil_die", FormTextures.die(Palette.of("coil_die", 0xB87333)));
         written += write(items, "copper_coil", FormTextures.coil(Palette.of("copper_coil", 0xB87333)));
         written += write(items, "motor", FormTextures.motor(Palette.of("motor", 0x5A6E8A)));
+        written += write(items, "vanadia_pellet",
+                FormTextures.vanadia(Palette.of("vanadia_pellet", 0xB85C38)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));

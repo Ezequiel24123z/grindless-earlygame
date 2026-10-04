@@ -6,11 +6,12 @@ import java.util.Locale;
 
 /**
  * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063,
- * ADR-0065, ADR-0074).
+ * ADR-0065, ADR-0074, ADR-0075).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
- * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill and the motor once
- * Industrial is researched, with no crafting-table JSON (ADR-0073, ADR-0074). No Minecraft
+ * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor and the
+ * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
+ * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle. No Minecraft
  * imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -36,7 +37,7 @@ public final class ProcessGraph {
     }
 
     /**
-     * Ore-line, roast, press, mill and assembler recipes the given materials support.
+     * Ore-line, roast, press, mill, contact and assembler recipes the given materials support.
      *
      * <p>A material without an ingot is skipped for reduction and forming. A material without
      * a raw or ore form is skipped for the ore line, not for the Press. Missing crushed drops
@@ -85,6 +86,10 @@ public final class ProcessGraph {
         recipes.add(pylonMk2());
         recipes.add(wireMill());
         recipes.add(motor());
+        recipes.add(contactOxidation());
+        recipes.add(contactAbsorption());
+        recipes.add(pickleIron());
+        recipes.add(chemicalReactor());
         return List.copyOf(recipes);
     }
 
@@ -283,6 +288,77 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4)),
                 List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /**
+     * Contact oxidation. Air is the oxidiser; bottled oxygen waits (ADR-0075). Temperature is
+     * unnamed so the held 450 °C also covers absorption.
+     */
+    private static ProcessRecipe contactOxidation() {
+        return new ProcessRecipe(
+                "contact/so3",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(IngredientSpec.fluid(ProcessLogic.SULFUR_DIOXIDE, ProcessLogic.SO2_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.SULFUR_TRIOXIDE, ProcessLogic.SO3_MB)),
+                Double.NaN,
+                ProcessLogic.CONTACT_ATMOSPHERE,
+                ProcessLogic.CONTACT_OXIDE_TICKS,
+                ProcessLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(FabricationLogic.VANADIA, 1)));
+    }
+
+    /**
+     * Contact absorption. Water stays in a neighbouring tank and is taken at finish
+     * (ADR-0075).
+     */
+    private static ProcessRecipe contactAbsorption() {
+        return new ProcessRecipe(
+                "contact/acid",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.fluid(ProcessLogic.SULFUR_TRIOXIDE, ProcessLogic.SO3_MB),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.ABSORB_WATER_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.SULFURIC_ACID, ProcessLogic.ACID_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.CONTACT_ACID_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Named sulfuric spend. The Press plate die remains (ADR-0075). */
+    private static ProcessRecipe pickleIron() {
+        return new ProcessRecipe(
+                "pickle/plate/iron",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.tag(ingotTag("iron"), 1),
+                        IngredientSpec.fluid(ProcessLogic.SULFURIC_ACID, ProcessLogic.PICKLE_ACID_MB)),
+                List.of(OutputSpec.tag("forge:plates/iron", 1)),
+                Double.NaN,
+                null,
+                ProcessLogic.PICKLE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * The second T2 process machine (ADR-0075). Casing, two motors, four plates. Circuit
+     * board waits on etching.
+     */
+    private static ProcessRecipe chemicalReactor() {
+        return new ProcessRecipe(
+                "assemble/chemical_reactor",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.CHEMICAL_REACTOR, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

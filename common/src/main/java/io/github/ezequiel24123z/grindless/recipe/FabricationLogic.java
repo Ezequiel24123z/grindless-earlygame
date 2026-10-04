@@ -7,7 +7,8 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
  *
  * <p>The Press is the first forming machine: one ingot and a die, four seconds, F1. The die is
  * a catalyst. The Assembler is the last crafting-table machine; from there T2 is manufactured.
- * The Wire Mill draws wire in eight seconds; the motor is ten.
+ * The Wire Mill draws wire in eight seconds; the motor is ten. The Chemical Reactor
+ * oxidises in six and absorbs in four (ADR-0075).
  */
 public final class FabricationLogic {
 
@@ -27,6 +28,8 @@ public final class FabricationLogic {
     public static final String PYLON_MK2 = "grindless:flux_pylon_mk2";
     public static final String WIRE_MILL = "grindless:wire_mill";
     public static final String MOTOR = "grindless:motor";
+    public static final String CHEMICAL_REACTOR = "grindless:chemical_reactor";
+    public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {
     }

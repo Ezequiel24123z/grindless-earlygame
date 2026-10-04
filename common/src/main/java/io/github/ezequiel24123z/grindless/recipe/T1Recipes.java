@@ -153,6 +153,10 @@ public final class T1Recipes {
                 new Gated("kiln", VOLTAIC,
                         List.of("CCC", "CIC", "CGC"),
                         Map.of("C", COBBLE, "I", IRON, "G", CARBON),
-                        "grindless:kiln"));
+                        "grindless:kiln"),
+                new Gated("vanadia_pellet", VOLTAIC,
+                        List.of(" B ", "BOB", " B "),
+                        Map.of("B", "item:minecraft:brick", "O", "tag:grindless:oxides/iron"),
+                        "grindless:vanadia_pellet"));
     }
 }

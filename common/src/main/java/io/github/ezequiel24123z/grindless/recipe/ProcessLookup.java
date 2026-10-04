@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.material.Material;
@@ -52,7 +53,7 @@ public final class ProcessLookup {
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
-        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / mill / assembler)",
+        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / mill / contact / assembler)",
                 Grindless.MOD_NAME, recipes.size());
     }
 
@@ -75,25 +76,43 @@ public final class ProcessLookup {
      */
     public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs,
                                                FluidState fluid) {
-        if (inputs.length == 0 || inputs[0].isEmpty()) {
-            return Optional.empty();
-        }
+        return find(family, inputs, fluid, List.of());
+    }
+
+    /**
+     * The recipe this family should run. Extra fluids (absorption water) come from neighbouring
+     * tanks and are never stored in the machine buffer (ADR-0075).
+     */
+    public static Optional<ProcessRecipe> find(MachineFamily family, ItemStack[] inputs,
+                                               FluidState fluid, List<FluidState> neighbours) {
         Graph graph = GRAPH;
         List<ProcessRecipe> keyed = new ArrayList<>();
-        inputs[0].getTags().forEach(tag -> {
-            List<ProcessRecipe> found = graph.byTag.get(key(family, tag.location().toString()));
-            if (found != null) {
-                keyed.addAll(found);
+        if (inputs.length > 0 && !inputs[0].isEmpty()) {
+            inputs[0].getTags().forEach(tag -> {
+                List<ProcessRecipe> found = graph.byTag.get(key(family, tag.location().toString()));
+                if (found != null) {
+                    keyed.addAll(found);
+                }
+            });
+            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(inputs[0].getItem());
+            List<ProcessRecipe> byItem = graph.byTag.get(key(family, "item:" + itemId));
+            if (byItem != null) {
+                keyed.addAll(byItem);
             }
-        });
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(inputs[0].getItem());
-        List<ProcessRecipe> byItem = graph.byTag.get(key(family, "item:" + itemId));
-        if (byItem != null) {
-            keyed.addAll(byItem);
+        }
+        if (fluid != null && !fluid.isEmpty()) {
+            List<ProcessRecipe> byFluid = graph.byTag.get(key(family, "fluid:" + fluid.id()));
+            if (byFluid != null) {
+                keyed.addAll(byFluid);
+            }
+        }
+        if (keyed.isEmpty()) {
+            keyed.addAll(graph.byFamily.getOrDefault(family, List.of()));
         }
         Optional<ProcessRecipe> dry = Optional.empty();
         for (ProcessRecipe recipe : keyed) {
-            if (recipe.family() != family || !matches(recipe, inputs) || !matchesFluid(recipe, fluid)) {
+            if (recipe.family() != family || !matches(recipe, inputs)
+                    || !matchesFluid(recipe, fluid, neighbours)) {
                 continue;
             }
             if (!recipe.fluidInputs().isEmpty()) {
@@ -105,15 +124,41 @@ public final class ProcessLookup {
     }
 
     public static boolean matchesFluid(ProcessRecipe recipe, FluidState fluid) {
+        return matchesFluid(recipe, fluid, List.of());
+    }
+
+    public static boolean matchesFluid(ProcessRecipe recipe, FluidState fluid,
+                                       List<FluidState> neighbours) {
         List<IngredientSpec> needed = recipe.fluidInputs();
         if (needed.isEmpty()) {
             return true;
         }
-        if (fluid == null || fluid.isEmpty()) {
+        IngredientSpec primary = needed.get(0);
+        if (fluid == null || fluid.isEmpty()
+                || !fluid.is(primary.id()) || fluid.millibuckets() < primary.count()) {
             return false;
         }
-        IngredientSpec spec = needed.get(0);
-        return fluid.is(spec.id()) && fluid.millibuckets() >= spec.count();
+        for (int i = 1; i < needed.size(); i++) {
+            IngredientSpec spec = needed.get(i);
+            if (!FluidLogic.hasAtLeast(neighbours, spec.id(), spec.count())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Whether this family has a recipe whose primary fluid is {@code id}. */
+    public static boolean isPrimaryFluid(MachineFamily family, String id) {
+        if (id == null || id.isBlank()) {
+            return false;
+        }
+        for (ProcessRecipe recipe : GRAPH.byFamily.getOrDefault(family, List.of())) {
+            List<IngredientSpec> fluids = recipe.fluidInputs();
+            if (!fluids.isEmpty() && id.equals(fluids.get(0).id())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Whether {@code stack} is a legal insert for this family's input {@code slot}. */
@@ -221,20 +266,30 @@ public final class ProcessLookup {
             Map<String, List<ProcessRecipe>> byTag = new HashMap<>();
             for (ProcessRecipe recipe : recipes) {
                 byFamily.computeIfAbsent(recipe.family(), ignored -> new ArrayList<>()).add(recipe);
-                if (recipe.itemInputs().isEmpty()) {
-                    continue;
+                if (!recipe.itemInputs().isEmpty()) {
+                    index(byTag, recipe, recipe.itemInputs().get(0));
+                } else if (!recipe.catalysts().isEmpty()) {
+                    index(byTag, recipe, recipe.catalysts().get(0));
                 }
-                IngredientSpec primary = recipe.itemInputs().get(0);
-                String id = IngredientSpec.ITEM.equals(primary.kind())
-                        ? "item:" + primary.id()
-                        : primary.id();
-                byTag.computeIfAbsent(key(recipe.family(), id), ignored -> new ArrayList<>()).add(recipe);
+                if (!recipe.fluidInputs().isEmpty()) {
+                    IngredientSpec fluid = recipe.fluidInputs().get(0);
+                    byTag.computeIfAbsent(key(recipe.family(), "fluid:" + fluid.id()),
+                            ignored -> new ArrayList<>()).add(recipe);
+                }
             }
             Map<MachineFamily, List<ProcessRecipe>> frozenFamily = new EnumMap<>(MachineFamily.class);
             byFamily.forEach((family, list) -> frozenFamily.put(family, List.copyOf(list)));
             Map<String, List<ProcessRecipe>> frozenTags = new HashMap<>();
             byTag.forEach((key, list) -> frozenTags.put(key, List.copyOf(list)));
             return new Graph(List.copyOf(recipes), Map.copyOf(frozenFamily), Map.copyOf(frozenTags));
+        }
+
+        private static void index(Map<String, List<ProcessRecipe>> byTag, ProcessRecipe recipe,
+                                  IngredientSpec primary) {
+            String id = IngredientSpec.ITEM.equals(primary.kind())
+                    ? "item:" + primary.id()
+                    : primary.id();
+            byTag.computeIfAbsent(key(recipe.family(), id), ignored -> new ArrayList<>()).add(recipe);
         }
     }
 }

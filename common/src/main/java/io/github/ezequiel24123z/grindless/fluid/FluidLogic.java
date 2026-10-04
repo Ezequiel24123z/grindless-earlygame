@@ -46,6 +46,8 @@ public final class FluidLogic {
     public static final String WATER = "minecraft:water";
     public static final String CARBON_MONOXIDE = "grindless:carbon_monoxide";
     public static final String SULFUR_DIOXIDE = "grindless:sulfur_dioxide";
+    public static final String SULFUR_TRIOXIDE = "grindless:sulfur_trioxide";
+    public static final String SULFURIC_ACID = "grindless:sulfuric_acid";
 
     private FluidLogic() {
     }
@@ -68,7 +70,8 @@ public final class FluidLogic {
         if (WATER.equals(state.id())) {
             return state.temperatureC() >= 100.0 - 1e-9;
         }
-        return CARBON_MONOXIDE.equals(state.id()) || SULFUR_DIOXIDE.equals(state.id());
+        return CARBON_MONOXIDE.equals(state.id()) || SULFUR_DIOXIDE.equals(state.id())
+                || SULFUR_TRIOXIDE.equals(state.id());
     }
 
     public static boolean isLiquid(FluidState state) {
@@ -145,5 +148,23 @@ public final class FluidLogic {
 
     public static MachineStatus tankStatus(boolean holding) {
         return holding ? MachineStatus.RUNNING : MachineStatus.IDLE;
+    }
+
+    /** How many millibuckets of {@code id} sit in {@code neighbours}. */
+    public static int available(Iterable<FluidState> neighbours, String id) {
+        if (neighbours == null || id == null || id.isBlank()) {
+            return 0;
+        }
+        int total = 0;
+        for (FluidState state : neighbours) {
+            if (state != null && state.is(id)) {
+                total += state.millibuckets();
+            }
+        }
+        return total;
+    }
+
+    public static boolean hasAtLeast(Iterable<FluidState> neighbours, String id, int millibuckets) {
+        return available(neighbours, id) >= millibuckets;
     }
 }

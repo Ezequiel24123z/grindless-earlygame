@@ -57,6 +57,7 @@ final class BlockModels {
             case ASSEMBLER -> assembler();
             case KILN -> kiln();
             case WIRE_MILL -> wireMill();
+            case REACTOR -> reactor();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -259,6 +260,15 @@ final class BlockModels {
                 box(2, 4, 1, 5, 12, 5, "cap", "side"),
                 box(11, 4, 1, 14, 12, 5, "cap", "side"),
                 box(5, 10, 5, 11, 16, 11, "top", "side"));
+    }
+
+    /** A stirred vat with a shaft through the lid. */
+    private static List<Box> reactor() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 13, 14, "top", "side", "front"),
+                box(7, 13, 7, 9, 16, 9, "cap", "side"),
+                box(4, 14, 4, 12, 15, 12, "top", "side"));
     }
 
     /** A low slab with two raised rails. */

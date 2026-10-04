@@ -3,6 +3,8 @@ package io.github.ezequiel24123z.grindless.fluid;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 
+import java.util.List;
+
 /** Behaviour checks for T1 fluids. Not part of the mod. */
 public final class VerifyFluid {
 
@@ -32,6 +34,8 @@ public final class VerifyFluid {
         eq("R2 names 1 B of SO2", 1000, FluidLogic.SO2_MB);
         eq("CO id matches the process graph", ProcessLogic.CARBON_MONOXIDE, FluidLogic.CARBON_MONOXIDE);
         eq("SO2 id matches the process graph", ProcessLogic.SULFUR_DIOXIDE, FluidLogic.SULFUR_DIOXIDE);
+        eq("SO3 id matches the process graph", ProcessLogic.SULFUR_TRIOXIDE, FluidLogic.SULFUR_TRIOXIDE);
+        eq("acid id matches the process graph", ProcessLogic.SULFURIC_ACID, FluidLogic.SULFURIC_ACID);
     }
 
     private static void stacks() {
@@ -56,6 +60,21 @@ public final class VerifyFluid {
                 FluidLogic.accepted(FluidState.EMPTY, so2, FluidLogic.TANK_CAPACITY,
                         FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA) == 1000);
         no("SO2 is not CO", so2.is(FluidLogic.CARBON_MONOXIDE));
+
+        FluidState so3 = FluidState.of(FluidLogic.SULFUR_TRIOXIDE, 1000);
+        yes("ambient SO3 is a gas", FluidLogic.isGas(so3));
+        yes("a tank at ambient will hold SO3",
+                FluidLogic.accepted(FluidState.EMPTY, so3, FluidLogic.TANK_CAPACITY,
+                        FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA) == 1000);
+        FluidState acid = FluidState.of(FluidLogic.SULFURIC_ACID, 1000);
+        yes("ambient acid is liquid", FluidLogic.isLiquid(acid));
+        no("ambient acid is not gas", FluidLogic.isGas(acid));
+
+        List<FluidState> neighbours = List.of(FluidState.of(FluidLogic.WATER, 150), so3);
+        eq("available sums matching neighbours", 150, FluidLogic.available(neighbours, FluidLogic.WATER));
+        no("150 mB is not 0.2 B", FluidLogic.hasAtLeast(neighbours, FluidLogic.WATER, 200));
+        yes("150 mB covers 0.1 B", FluidLogic.hasAtLeast(neighbours, FluidLogic.WATER, 100));
+        no("SO2 is not in those neighbours", FluidLogic.hasAtLeast(neighbours, FluidLogic.SULFUR_DIOXIDE, 1));
 
         FluidState mixed = water.merge(FluidState.of(FluidLogic.WATER, 500, 40.0, 0.1));
         eq("mix adds volumes", 1000, mixed.millibuckets());
