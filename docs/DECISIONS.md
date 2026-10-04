@@ -96,6 +96,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0082](#adr-0082--t2-pipe-holds-steam-and-the-flux-belt-spends-lv) | T2 pipe holds steam, and the flux belt spends LV | Accepted |
 | [0083](#adr-0083--a-controller-holds-a-machine-below-five-hundred) | A controller holds a machine below five hundred | Accepted |
 | [0084](#adr-0084--the-flux-drill-spends-cells-not-durability) | The Flux Drill spends cells, not durability | Accepted |
+| [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
 
 ---
 
@@ -3291,6 +3292,42 @@ this record. A successor that teaches the Multitool to mine is reopening
 ADR-0055. A successor that adds silk or fortune here is starting the module
 grid early. A successor that spends the armour Flux Cell as fuel is
 colliding with slice X.
+
+
+## ADR-0085 — A blueprint stamps from the inventory
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice U is the Blueprint Tool, the T2 checkpoint.
+The README says a blueprint is captured, stamped, nameable and shareable,
+and that construction drones build it from network items. Drones are slice
+AC. Waiting for them would leave U with nothing a player can do.
+
+**Decision.**
+
+1. **Blueprint Tool** is Assembler-manufactured (casing, two motors, four
+   plates, Industrial). No crafting JSON. Right-click two corners of a box.
+   Sneak-use clears the first corner. The box may be at most 32 blocks on
+   an edge and at most 512 non-air blocks. Anything past that is refused.
+2. **A Blueprint item** is what the capture produces. It stores block id
+   and facing, relative to the minimum corner. Status is not stored, so a
+   stamped machine is idle. Block entities are not copied, so a stamp
+   cannot duplicate an inventory. Blocks with no item are left out. The
+   item stacks to one, so an anvil can name it, and the stack itself is
+   how it moves between worlds. There is no file format.
+3. **Stamping** spends the player's inventory, not the network. The
+   minimum corner lands on the face that was clicked. The stamp is all or
+   nothing: missing items or a blocked cell spends nothing. Creative mode
+   does not spend. Rotation waits. Drones wait.
+
+**Alternatives rejected.** A stamp that does nothing until drones exist; a
+schematic file; copying block-entity contents; rotating the stamp in this
+slice; pulling items out of the flux network before the drone bay exists.
+
+**Consequences.** A successor that copies machine inventories into a
+blueprint is duplicating items. A successor that pulls from the network
+here is starting slice AC. A successor that writes blueprints to disk is
+inventing a share format the item already is.
 
 
 
