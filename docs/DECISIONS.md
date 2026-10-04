@@ -88,6 +88,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
+| [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Accepted |
 
 ---
 
@@ -2894,5 +2895,68 @@ T2 recipe (circuit board); shipping leachate, flotation or electrolysis in this 
 **Consequences.** A successor that emits a residue with no Arc Furnace line is reopening
 ADR-0036. A successor that starts the Froth Flotation Cell here is skipping P. A successor
 that starts the Electrolysis Cell here is skipping M.
+
+
+## ADR-0077 — Water splits in the buffer; air yields oxygen only
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice M is the Electrolysis Cell and the Atmospheric Intake: split
+water, take N₂/O₂, and give hydrogen and oxygen a named sink. `PROCESSES.md` quotes
+chlor-alkali (`1 B brine → 0.5 B chlorine + 0.5 B hydrogen + 1 B sodium hydroxide`) and
+air separation (`10 B compressed air [T −190 · P 0.6 MPa] 10 s → 7.8 B nitrogen + 2.1 B
+oxygen + 0.1 B argon`). Water electrolysis is named in the gas table and has no numbered
+line. Haber is `1 B nitrogen + 3 B hydrogen [T 450 · P 20 MPa]` on the Autoclave. One
+`FluidBuffer` holds 2 B of a single fluid. `canOutput` requires every non-vented fluid
+output to fit in that buffer; a vented output skips the buffer and is offered to
+neighbours, then lost (ADR-0065, ADR-0075). ADR-0036 forbids emitting a fluid that nothing
+in the graph consumes. T1 roast must not start requiring bottled oxygen (ADR-0065).
+Brine is the Fluid Well (slice N). The Compressor and the Cryogenic Plant are not this
+slice.
+
+**Decision.**
+
+1. **Electrolysis Cell** is a T2 single-block process machine. The Assembler manufactures
+   it once Industrial is researched: `1 casing + 2 motor + 4 iron plates`, 20 s, F1. No
+   circuit board. No crafting-table JSON. Menu is no item slots: the slice's recipe is
+   fluid-only. Envelope is 10–80 °C at ambient pressure, with an electric field, so a
+   later 60 °C chlor-alkali still fits and molten-salt electrolysis does not. Held
+   conditions are ambient plus electric. Recipes in this slice do not name a temperature:
+   the recipe record has no field dimension, and one hold cannot also be chlor-alkali.
+2. **Water split** is the integer batch that fills the buffer. Real stoichiometry is
+   two volumes of hydrogen per volume of oxygen:
+   `2 B water → 2 B hydrogen + 1 B oxygen` in 10 s at F1. Hydrogen is stored. Oxygen is
+   vented and captured when a neighbouring tank accepts it. Water is the primary fluid.
+3. **Hydrogen's sink** is the Thermal Generator. `1 B hydrogen` burns 400 ticks, the same
+   as `1 B CO`. Sulfur oxides, oxygen and nitrogen do not burn.
+4. **Oxygen's sink** is oxyhydrogen recombination on the Chemical Reactor:
+   `2 B hydrogen + 1 B oxygen → 2 B water` in 8 s at F1. Oxygen is the neighbour fluid,
+   as absorption water is (ADR-0075). The recipe does not name a temperature. Roast stays
+   free of bottled oxygen.
+5. **Atmospheric Intake** is the same Assembler craft and the same empty menu. Envelope
+   is −200–40 °C and 0.1–1.0 MPa, so the documented cryogenic separation still fits later.
+   Held conditions are ambient. This slice it drinks free air: no compressed-air input,
+   no catalyst. `2 B oxygen` in 10 s at F1, stored. That is the buffer, and it is the
+   oxygen cut of the documented 10 s separation (2.1 B) rounded to what one buffer can
+   hold.
+6. **Nitrogen and argon are not emitted.** Neither has a consumer in this graph. Haber
+   is 20 MPa on an Autoclave that does not exist, and faking it on the Chemical Reactor
+   would erase the envelope lesson (ADR-0075). Argon shielding and liquid nitrogen wait
+   with their consumers. The fluid ids exist and are gases, so a later recipe does not
+   have to rediscover that clay will not carry them.
+
+**Alternatives rejected.** Chlor-alkali this slice (brine is N, and chlorine and sodium
+hydroxide have no sink); three stored gases (the buffer refuses the second id);
+fractional 7.8 / 2.1 / 0.1 in one cycle (the buffer is 2 B, and argon would still lack
+a sink); inventing a Compressor so the intake can demand compressed air; holding −190 °C
+on MK I for a recipe that does not name it; bottled oxygen as a kiln input; a 20 MPa
+ammonia recipe on the reactor; burning oxygen or nitrogen for power; a second fluid
+buffer.
+
+**Consequences.** A successor that emits nitrogen or argon without a recipe that
+consumes it is reopening ADR-0036. A successor that requires oxygen on T1 roast is
+reopening ADR-0065. A successor that starts the Fluid Well here is skipping N. A
+successor that starts Haber, the Autoclave, or molten-salt electrolysis here is past
+this slice.
 
 
