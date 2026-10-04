@@ -80,7 +80,9 @@ public final class BlockCatalogue {
         /** Two posts and a lintel. A gate off the star, not the lunar ring. */
         SPAN,
         /** A full cube of plating. A floor between stars, not dust. */
-        DECK
+        DECK,
+        /** A low cradle. A rocket stands on it. Not a link and not a deck cube. */
+        PAD
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -156,6 +158,7 @@ public final class BlockCatalogue {
             new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID),
             new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
             new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID),
+            new Entry("launch_pad", Geometry.PAD, 1, false, GRID),
             new Entry("lunar_link", Geometry.LINK, 1, true, GRID),
             new Entry("lunar_regolith", Geometry.REGOLITH, 1, false, GRID),
             new Entry("starward_link", Geometry.SPAN, 1, true, GRID),
@@ -165,7 +168,7 @@ public final class BlockCatalogue {
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
             "refractory_brick", "metallurgical_silicon", "electronic_silicon",
             "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
-            "copper_coil", "motor", "vanadia_pellet", "helium_3");
+            "copper_coil", "motor", "vanadia_pellet", "helium_3", "survey_rocket");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

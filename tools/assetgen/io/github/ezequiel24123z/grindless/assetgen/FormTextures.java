@@ -409,6 +409,18 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the survey rocket: a body, a nose and two fins. See {@link #dataCore}. */
+    public static BufferedImage rocket(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(6, 3, 9, 13, 4.2);
+        field.rect(7, 1, 8, 4, 5.2);
+        field.rect(3, 10, 6, 13, 2.6);
+        field.rect(9, 10, 12, 13, 2.6);
+        field.rect(7, 12, 8, 15, 3.0);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for helium-3: a pale sealed cell, not a rock. */
     public static BufferedImage helium3(Palette palette) {
         HeightField field = new HeightField();

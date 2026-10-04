@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.flight.RocketFlight;
 import io.github.ezequiel24123z.grindless.planet.LunarLinkLogic;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkLogic;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
@@ -23,6 +24,7 @@ import java.util.Locale;
  * Ground Array: casing and controller, Industrial, no crafting table (ADR-0094).
  * Lunar Link: two array casings and one machine casing, Industrial (ADR-0095).
  * Starward Link: one lunar link and four array casings, Industrial (ADR-0096).
+ * Launch pad and survey rocket: local flight, Industrial (ADR-0097).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -109,6 +111,8 @@ public final class ProcessGraph {
         recipes.add(groundArray());
         recipes.add(lunarLink());
         recipes.add(starwardLink());
+        recipes.add(launchPad());
+        recipes.add(surveyRocket());
         return List.copyOf(recipes);
     }
 
@@ -487,6 +491,41 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.LUNAR_LINK, StarwardLinkLogic.LINKS),
                         IngredientSpec.item(FabricationLogic.ARRAY_CASING, StarwardLinkLogic.CASINGS)),
                 List.of(OutputSpec.item(FabricationLogic.STARWARD_LINK, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** The pad a survey rocket climbs from. Industrial (ADR-0017, ADR-0097). */
+    private static ProcessRecipe launchPad() {
+        return new ProcessRecipe(
+                "assemble/launch_pad",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, RocketFlight.PAD_CASINGS),
+                        IngredientSpec.tag("forge:plates/steel", RocketFlight.PAD_PLATES)),
+                List.of(OutputSpec.item(FabricationLogic.LAUNCH_PAD, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** The rocket itself. A motor, a casing and two plates. Industrial (ADR-0017, ADR-0097). */
+    private static ProcessRecipe surveyRocket() {
+        return new ProcessRecipe(
+                "assemble/survey_rocket",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, RocketFlight.ROCKET_CASINGS),
+                        IngredientSpec.item(FabricationLogic.MOTOR, RocketFlight.ROCKET_MOTORS),
+                        IngredientSpec.tag("forge:plates/steel", RocketFlight.ROCKET_PLATES)),
+                List.of(OutputSpec.item(FabricationLogic.SURVEY_ROCKET, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

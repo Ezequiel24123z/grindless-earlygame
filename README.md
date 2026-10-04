@@ -27,8 +27,12 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > not yet started are held. Electric-arc steel is in (ADR-0090). Refractory brick is in
 > (ADR-0091). Metallurgical silicon is in (ADR-0092). Zone refining is in (ADR-0093).
 > The Ground Array is in (ADR-0094). Luna is in (ADR-0095). The Drift is in
-> (ADR-0096). The next slice is arrival at the galactic centre, not started.
-> The original quest book
+> (ADR-0096). Local trips are rocket flights (ADR-0097): a survey rocket climbs
+> to the ceiling, then a landing map offers the home world and Luna. The Lunar
+> Link and the Starward Link stay as placeholders. Teleportation orbs (BK) are
+> named, ordered before that flight, and not started. The next slice is a
+> supraluminal station (BM), not started. Arrival at the galactic centre is that
+> ride, not a link. The original quest book
 > is last, with the in-game guide,
 > after the black hole.
 >
@@ -207,16 +211,26 @@ pylon covers the controller, it adds ten seconds of MK3 throughput to that netwo
 It does not generate, it does not project a supply cube, and it is not a Kardashev scale.
 
 **Planets.** Planetary gameplay has unique extractable resources. The first world is
-Luna (ADR-0095): regolith, no ore, helium-3 from the extractor, reached by a Lunar Link
-that spends one capacitor of Flux. The other worlds are not started. Space and
-interstellar gameplay stay original to Grindless. The first hop is the Drift
-(ADR-0096): one deck with no ore, reached by a Starward Link that spends the Ground
-Array's buffer. The black hole is the next slice and is not started.
+Luna (ADR-0095): regolith, no ore, helium-3 from the extractor. The Lunar Link still
+spends one capacitor of Flux to go there, and it is marked as a placeholder
+(ADR-0097). The flight that replaces it is the survey rocket: it climbs to the
+build ceiling, then a landing map offers the home world and Luna. Leaving home
+spends that same capacitor. Leaving Luna does not. The other worlds are not started.
+Just before that flight, an alternate route of a magical material — unnamed until
+its slice — is named as teleportation orbs (BK). Shift-right-click would set
+coordinates and dimension, right-click would teleport, and the orb could sit on
+a pedestal so a later trip to the same body skips the rocket. That row is not
+started and is not next. Draconic Evolution may inspire it; its code and assets
+are not copied. Space and interstellar gameplay stay original to Grindless. The
+first hop off the star is still the Drift (ADR-0096): one deck with no ore,
+reached for now by a Starward Link that spends the Ground Array's buffer. That
+link is a placeholder. The station that replaces it is the next slice (BM) and
+is not started.
 
 **Victory.** The goal is to reach the black hole at the centre of the Milky Way. Arriving is
-the victory. The interior is a finite finale, and its concrete content is written when the
-route exists. An empty arrival story is rejected. An endless second game inside the hole is
-rejected.
+the victory, and the way there is the station, not a link (ADR-0097). The interior is a
+finite finale, and its concrete content is written when that arrival is the slice. An empty
+arrival story is rejected. An endless second game inside the hole is rejected.
 
 **Energy.** Endgame generation reaches the maximum rate the energy system can represent.
 Per-tick rates and stored amounts are a Java `long` (`FluxTier.nominal`,
@@ -1071,11 +1085,16 @@ strategic option with a real cost.
 helium-3 from the same extractor the overworld uses, because the vein pool there is
 that reagent and nothing else. A manufactured Lunar Link spends 102,400 FU, one
 capacitor bank, to arrive, and the return does not draw again. It is not a Horizon
-Gate and not a mining dimension. The first hop off that star is the Drift
-(ADR-0096): one layer of plating over bedrock, no vein, reached by a manufactured
-Starward Link that spends 6,553,600 FU. The return does not draw again. It is not
-a second planet and not the black hole. The rest of this section is the later
-orbital design. Arrival at the galactic centre is not started.
+Gate and not a mining dimension. The link remains, marked as a placeholder for the
+survey rocket (ADR-0097). That rocket climbs to the build ceiling and opens a
+landing map of the home world and Luna. The first hop off that star is the Drift
+(ADR-0096): one layer of plating over bedrock, no vein, reached for now by a
+manufactured Starward Link that spends 6,553,600 FU. The return does not draw
+again. The link remains, marked as a placeholder for a station. It is not a
+second planet and not the black hole. The rest of this section is the later
+orbital design. Teleportation orbs (BK) are named before the rocket and are not
+started. The station (BM) is next and is not started. Arrival at the galactic
+centre is that ride, not a link, and it is not started.
 
 **If a space mod is already installed, Grindless uses its planets.** Ad Astra, Galacticraft,
 Beyond Earth and friends are detected at runtime, and Grindless layers its orbital mechanics,
@@ -1336,11 +1355,14 @@ exactly the moment the player has earned it:
   a map you read.
 - **T6, the Horizon Gate** — the moment the interplanetary commute dies. First contact is still a
   delivery; after the pair stands, you walk. This is a milestone, not the victory.
+- **The survey rocket** — the moment the local system is a flight. Up to the ceiling,
+  then a landing map of home and Luna (ADR-0097). The Lunar Link remains as a placeholder.
 - **The Drift** — the moment the home star is behind you. One hop, paid with the Ground
-  Array's buffer. The centre is still ahead (ADR-0096).
-- **The black hole at the centre of the Milky Way** — the goal. Arriving is the victory. The
-  interior is a finite finale written when that arrival is the slice (ADR-0088). It is
-  named next and is not started.
+  Array's buffer. The Starward Link remains as a placeholder. The centre is still ahead
+  (ADR-0096).
+- **The black hole at the centre of the Milky Way** — the goal. Arriving is the victory,
+  by riding the station, not by a link. The interior is a finite finale written when that
+  arrival is the slice (ADR-0088, ADR-0097). The station is next and is not started.
 
 ---
 
@@ -2065,10 +2087,14 @@ Ground Array, a fixed 3×3, adds ten seconds of MK3 throughput as storage while 
 stands (ADR-0094). Kardashev Type I, II and III are not that structure. **BI — Original
 planets** is in: Luna, regolith with no ore, helium-3 from the extractor, and a Lunar
 Link (ADR-0095). **BJ — Interstellar travel** is in: the Drift, a deck with no ore,
-and a Starward Link that spends 6,553,600 FU (ADR-0096). The next slice is
-**BK — Arrival at the galactic centre**, identified and not implemented. Arriving is
-the victory; the interior is written when that slice starts. The original quest book
-and the in-game guide are last, after that arrival.
+and a Starward Link that spends 6,553,600 FU (ADR-0096). Both links stay, marked as
+placeholders (ADR-0097). **BK — Teleportation orbs** is named and not started: an
+alternate route of a magical material, left unnamed, ends in orbs that remember a
+place. **BL — Rocket ascent** is in: a survey rocket climbs to the ceiling, then a
+landing map offers the home world and Luna. The next slice is
+**BM — Supraluminal station**, identified and not implemented. Arrival at the galactic
+centre (**BN**) is that ride, not a link, and its interior is written when that slice
+starts. The original quest book and the in-game guide are last, after that arrival.
 
 ### Beyond 1.0 — version ports
 
@@ -2128,14 +2154,16 @@ Tracked order of work. Each step must build green before the next begins.
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
 | 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Unstarted rows L–BB are held (ADR-0088). |
-| 28 | **Modpack expansion** | in progress — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093, ADR-0094, ADR-0095, ADR-0096. BJ the Drift is done. Next slice **BK — Arrival at the galactic centre**, not implemented. Quest book is last. |
+| 28 | **Modpack expansion** | in progress — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093, ADR-0094, ADR-0095, ADR-0096, ADR-0097. BL rocket ascent is done. BK teleportation orbs are named and not started. Next slice **BM — Supraluminal station**, not implemented. Quest book is last. |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
 | 28d | **BF — Metallurgical silicon** | ✅ done — ADR-0092. 1 silica + 2 carbon → 1 metallurgical silicon + 2 B CO in 14 s at 1900 °C on the Arc Furnace. |
 | 28e | **BG — Zone refining** | ✅ done — ADR-0093. 10 metallurgical silicon → 7 electronic silicon in 600 s at 1420 °C on the Arc Furnace. |
 | 28f | **BH — Megastructures** | ✅ done — ADR-0094. Ground Array: eight casings and one controller store 6,553,600 FU while a pylon covers a complete ring. |
 | 28g | **BI — Original planets** | ✅ done — ADR-0095. Luna: regolith, no ore, helium-3 from the extractor. A Lunar Link spends 102,400 FU to arrive; the return does not draw. |
-| 28h | **BJ — Interstellar travel** | ✅ done — ADR-0096. The Drift: one deck, no ore. A Starward Link spends 6,553,600 FU to leave the star; the return does not draw. |
+| 28h | **BJ — Interstellar travel** | ✅ done — ADR-0096. The Drift: one deck, no ore. A Starward Link spends 6,553,600 FU to leave the star; the return does not draw. The link stays as a placeholder (ADR-0097). |
+| 28i | **BK — Teleportation orbs** | named, not started. An alternate route of an unnamed magical material ends in orbs. Shift-right-click sets coordinates and dimension. Right-click teleports. The orb can sit on a pedestal. Not next. |
+| 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2163,11 +2191,17 @@ and the cap at six research tiers, are retired. Kardashev Type I, II and III are
 milestones, with megastructures between them. Planets have unique extractable resources.
 Space and interstellar play are original. The goal is the black hole at the centre of the
 Milky Way: arriving is the victory, and the interior is a finite finale written with that
-arrival. The first hop, the Drift, is already in.
+arrival, and the way there is the station (ADR-0097). The first hop, the Drift, is already in.
+Local flight is the survey rocket.
 
-**Next is BK — Arrival at the galactic centre**, identified and not implemented.
+**Next is BM — Supraluminal station**, identified and not implemented.
+**BK — Teleportation orbs** is named and not started, and it is not next. The
+material stays unnamed until that slice.
+**BL — Rocket ascent** is in (ADR-0097): the rocket climbs to the ceiling, then the
+landing map offers the home world and Luna.
 **BI — Original planets** is in (ADR-0095): Luna is regolith with no ore. An extractor
-there emits helium-3. A Lunar Link spends one capacitor of FU to arrive.
+there emits helium-3. A Lunar Link spends one capacitor of FU to arrive, and stays as
+a placeholder.
 **BH — Megastructures** is in (ADR-0094): the Ground Array stores ten seconds of MK3
 throughput while its 3×3 ring stands under a pylon.
 **BG — Zone refining** is in (ADR-0093): ten metallurgical silicon become seven electronic
@@ -2187,12 +2221,18 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is BK — Arrival at the galactic centre.** It is not started. **The Drift is in**
+**Next is BM — Supraluminal station.** It is not started. **Teleportation orbs
+(BK) are named and not started.** **Rocket ascent (BL) is in**
+(ADR-0097): `assemble/launch_pad` and `assemble/survey_rocket` under Industrial. A
+covered pad draws 102,400 FU, the rocket climbs to the ceiling, and the landing map
+offers the home world and Luna. The return from Luna does not draw. **The Drift is in**
 (ADR-0096): `assemble/starward_link` under Industrial. A covered link draws 6,553,600 FU,
-then a return pad on the deck sends the player home without a second draw. The Drift
+then a return pad on the deck sends the player home without a second draw. The link
+stays as a placeholder. The Drift
 has no vein. **Luna is in**
 (ADR-0095): `assemble/lunar_link` under Industrial. A covered link draws 102,400 FU,
-then a return pad on the regolith sends the player home without a second draw. Every
+then a return pad on the regolith sends the player home without a second draw. The
+link stays as a placeholder. Every
 Luna vein is helium-3. **The Ground Array is in**
 (ADR-0094): `assemble/ground_array` and `assemble/array_casing` under Industrial. A
 complete ring adds 6,553,600 FU to the covering network and nothing otherwise.
@@ -2233,7 +2273,7 @@ is already in. Modular armour and the Arc Reactor pair are **recorded, not start
 line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
 row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
 slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
-next slice is arrival at the galactic centre. The Drift is in (ADR-0096). Luna is in (ADR-0095). The quest book waits until after the black hole.
+next slice is the supraluminal station (BM). Teleportation orbs (BK) are named and not started. Rocket ascent (BL) is in (ADR-0097). The Drift is in (ADR-0096). Luna is in (ADR-0095). The quest book waits until after the black hole.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

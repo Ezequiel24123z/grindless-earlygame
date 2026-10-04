@@ -21,6 +21,8 @@
   "item.grindless.prospectors_scanner": "Prospector's Scanner",
   "item.grindless.process_atlas": "Process Atlas",
   "item.grindless.flux_conduit": "Flux Conduit",
+  "item.grindless.survey_rocket": "Survey Rocket",
+  "tooltip.grindless.survey_rocket": "Right-click a launch pad. It climbs to the ceiling, then you choose where to land.",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
@@ -48,7 +50,10 @@
   "block.grindless.flux_transformer": "Flux Transformer",
   "block.grindless.ground_array": "Ground Array",
   "block.grindless.array_casing": "Array Casing",
+  "block.grindless.launch_pad": "Launch Pad",
   "block.grindless.lunar_link": "Lunar Link",
+  "tooltip.grindless.lunar_link.placeholder": "Placeholder. A survey rocket replaces this flight.",
+  "tooltip.grindless.starward_link.placeholder": "Placeholder. A station replaces this hop.",
   "block.grindless.lunar_regolith": "Lunar Regolith",
   "block.grindless.starward_link": "Starward Link",
   "block.grindless.drift_deck": "Drift Deck",
@@ -138,5 +143,15 @@
   "chat.grindless.drift.departed": "The Drift",
   "chat.grindless.drift.returned": "Returned",
   "chat.grindless.drift.away": "Stand by the link",
-  "chat.grindless.drift.missing": "The Drift is not loaded"
+  "chat.grindless.drift.missing": "The Drift is not loaded",
+
+  "gui.grindless.landing.title": "Landing map",
+  "site.grindless.home": "Home",
+  "site.grindless.luna": "Luna",
+  "site.grindless.unknown": "Unknown",
+  "chat.grindless.rocket.climbing": "The rocket is climbing",
+  "chat.grindless.rocket.unpowered": "The pad needs a pylon",
+  "chat.grindless.rocket.pad": "The rocket needs its launch pad",
+  "chat.grindless.rocket.not_local": "A rocket flies the local system",
+  "chat.grindless.rocket.missing": "That world is not loaded"
 }

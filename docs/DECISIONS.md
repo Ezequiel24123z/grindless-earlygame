@@ -95,7 +95,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
 | [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
 | [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
-| [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Accepted |
+| [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0097 |
+| [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Accepted |
 
 ---
 
@@ -3472,7 +3473,13 @@ and is not started.
 
 ## ADR-0096 — The first interstellar hop is the Drift
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0097](#adr-0097--local-trips-are-rocket-flights)*
+
+> **Superseded in part.** The Drift and the Starward Link stay. That link is a placeholder.
+> Interstellar travel is a station the player rides. A rocket is the local-system flight,
+> and it is no longer rejected for that flight. See ADR-0097. The sentence below that
+> calls BK next used that id for arrival. BK is now the teleportation orbs and is not
+> next. BM, the station, is next.
 
 **Context.** Slice BJ says the concrete route is chosen when the slice starts. The player
 can already reach Luna, which is still a moon of the home star. The owner kept the
@@ -3536,5 +3543,99 @@ mining dimension. A successor who removes the FU cost is shipping a creative tel
 successor who makes the return draw power is stranding a player on a deck with no pylon.
 A successor who opens the black hole, a second star, or another planet here is outside
 this record. BK is next and is not started.
+
+---
+
+## ADR-0097 — Local trips are rocket flights
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0088 chose the victory: arriving at the black hole at the centre of the
+Milky Way is the win, and the interior is a finite finale, not an empty marker and not an
+endless second game. ADR-0096 then shipped the Drift as one deck short of that hole, and
+a Starward Link that spends the Ground Array's buffer to stand there. The Lunar Link
+does the same kind of thing for Luna, at the capacitor's toll. Both are right-click
+teleports. The owner has changed space travel. A third link, from the Drift into the
+hole, is the arrival this record refuses.
+
+The ways already named cannot be the new model.
+
+- Held row AO is a launch pad and a rocket inside the six-tier orbital layer, together
+  with payload mass. Resuming AO also resumes the held schedule. This flight is the
+  modpack expansion, not that row.
+- A Horizon Gate is held AW. It is a dialed pair after a far ring is delivered.
+- Copying a rocket from another mod is a license question, not a shortcut. Checked
+  2026-10-04:
+  - **Galacticraft** as shipped by micdoodle8 (`micdoodle8/Galacticraft`, `LICENSE.txt`)
+    is a custom non-commercial grant. It is not MIT, and it does not allow this
+    repository to offer those files under MIT. Not copied.
+  - **TeamGalacticraft/Galacticraft** is MIT, copyright 2019–2025 Team Galacticraft.
+    A copy would be allowed if that notice were kept. That tree is a later Minecraft
+    generation on Fabric. Dropping it in here would not build. Not copied.
+  - **Advanced Rocketry** (`Advanced-Rocketry/AdvancedRocketry`, branch `1.12`) is MIT,
+    and the CurseForge page for that project says MIT. **Advanced Rocketry 3** is
+    listed All Rights Reserved. The 1.12 sources are a different game version. AR3
+    cannot be vendored. Neither is copied. The station this record names is the
+    slice that would resemble a warp ship, and that slice is not started.
+  - **Ad Astra** stays as ADR-0088 and ADR-0089: code is MIT only with the notice
+    kept, textures are All Rights Reserved. Not copied.
+- No assets are copied from any of them. Own work stays MIT (ADR-0089).
+
+**Decision.**
+
+1. **Local-system trips are real flights.** The player seats a survey rocket on a
+   launch pad. The rocket climbs one block a tick until it reaches the dimension's
+   build ceiling, three blocks of clearance under the exclusive limit so the rider's
+   head stays inside the world. A landing map then lists the bodies of this star.
+   Choosing one lands the rocket. This slice's bodies are the home world
+   (`minecraft:overworld`) and Luna (`grindless:luna`). The Nether, the End, the Drift
+   and any black-hole id are not on the map, and a rocket there does not launch.
+   The shape of the flight — up to the ceiling, then a map — is the Galacticraft
+   idea. The code is original.
+2. **The toll is the lunar placeholder's, and only on the way out.** Leaving the home
+   world draws **102,400 FU** from the pylon that covers the pad, the capacitor's
+   buffer (ADR-0095). Leaving Luna draws nothing, so the flight home does not strand
+   a player on a world with no pylon. The return remembers the pad they left. Choosing
+   the world they are already in sets them back on that pad. The charge is spent once
+   the climb starts.
+3. **How it is built.** Assembler, Industrial, 20 s at F1. The launch pad is
+   **1 machine casing + 4 steel plates**. The survey rocket is **1 machine casing +
+   1 motor + 2 steel plates**. T2+ is manufactured (ADR-0017). No crafting-table
+   recipe. The motor is the engine. Helium-3 is not an ingredient.
+4. **Interstellar trips are a station.** The player rides a station that has a
+   superluminal engine. That station is the next slice and is not started. Arrival at
+   the galactic centre is that ride, not a link. The interior stays a finite finale
+   and is written when that arrival is the slice (ADR-0088). An empty arrival and an
+   endless interior stay rejected. The quest book stays last.
+5. **The Lunar Link and the Starward Link stay.** Both remain registered and keep
+   their behaviour. They are placeholders, marked in the block comments and on the
+   item tooltip, to be replaced by the rocket and the station. This pass does not
+   delete them and does not add a third link.
+6. **What waits.** The station. Arrival at the black hole, by that station. The
+   finite interior of the hole. Kardashev Type I, II and III. Further planets. The
+   quest book. Held row AO, including payload mass and the Mass Driver.
+
+**Alternatives rejected.**
+
+- Another link that teleports the player into the black hole.
+- Deleting the Lunar Link or the Starward Link in the same change that adds the rocket.
+- Putting the Drift, or a black hole, on the landing map.
+- An empty "you have reached the ceiling" with no choice of body.
+- An endless flight with no ceiling and no landing.
+- Charging the Ground Array's buffer for a moon trip. That toll stays on the
+  placeholder that leaves the star.
+- Charging the return from Luna. A world with no pylon would strand the rider.
+- Resuming held row AO, or starting the station, in this change.
+- Copying Galacticraft, Advanced Rocketry, or Ad Astra code or assets. Where the
+  license would have allowed a copy, this slice still does not take one, because
+  those trees do not build here or their assets are reserved. The flight is original.
+
+**Consequences.** A successor who adds a Starward-style link to the black hole is
+ignoring this record. A successor who deletes either placeholder link without the
+slice that replaces it strands a world that still documents that block. A successor
+who puts the Drift on the landing map is flying a rocket across stars. A successor
+who starts the station, the hole's interior, the quest book, or the teleportation
+orbs here is early. Those orbs are row BK: named, ordered before this flight, and
+not started. BM, the station, is next and is not started. The quest book stays last.
 
 

@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.flight.LaunchPadBlock;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
@@ -181,7 +182,16 @@ public final class ModBlocks {
     public static final RegistrySupplier<ArrayCasingBlock> ARRAY_CASING = register("array_casing",
             () -> new ArrayCasingBlock(machine().strength(3.0F)));
 
-    /** Departure to Luna. On Luna, the same block is the way home (ADR-0095). */
+    /**
+     * A pad a survey rocket climbs from (ADR-0097). Not a link.
+     */
+    public static final RegistrySupplier<LaunchPadBlock> LAUNCH_PAD = register("launch_pad",
+            () -> new LaunchPadBlock(machine().strength(3.5F)));
+
+    /**
+     * Departure to Luna. On Luna, the same block is the way home (ADR-0095).
+     * Placeholder: the rocket replaces this flight. Not deleted (ADR-0097).
+     */
     public static final RegistrySupplier<LunarLinkBlock> LUNAR_LINK = register("lunar_link",
             () -> new LunarLinkBlock(machine().strength(3.5F)));
 
@@ -195,7 +205,10 @@ public final class ModBlocks {
                     .strength(1.5F, 6.0F)
                     .requiresCorrectToolForDrops()));
 
-    /** Departure to the Drift. On the Drift, the same block is the way home (ADR-0096). */
+    /**
+     * Departure to the Drift. On the Drift, the same block is the way home (ADR-0096).
+     * Placeholder: the station replaces this hop. Not deleted (ADR-0097).
+     */
     public static final RegistrySupplier<StarwardLinkBlock> STARWARD_LINK = register("starward_link",
             () -> new StarwardLinkBlock(machine().strength(3.5F)));
 

@@ -34,6 +34,8 @@ public final class FabricationLogic {
     public static final String ARRAY_CASING = "grindless:array_casing";
     public static final String LUNAR_LINK = "grindless:lunar_link";
     public static final String STARWARD_LINK = "grindless:starward_link";
+    public static final String LAUNCH_PAD = "grindless:launch_pad";
+    public static final String SURVEY_ROCKET = "grindless:survey_rocket";
 
     private FabricationLogic() {
     }

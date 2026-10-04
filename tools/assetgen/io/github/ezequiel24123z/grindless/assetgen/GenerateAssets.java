@@ -115,6 +115,8 @@ public final class GenerateAssets {
                 FormTextures.vanadia(Palette.of("vanadia_pellet", 0xB85C38)));
         written += write(items, "helium_3",
                 FormTextures.helium3(Palette.of("helium_3", 0xE0F7FA)));
+        written += write(items, "survey_rocket",
+                FormTextures.rocket(Palette.of("survey_rocket", 0x00897B)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));

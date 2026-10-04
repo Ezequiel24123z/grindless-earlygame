@@ -86,3 +86,6 @@ loot spawn 8 102 8 loot grindless:blocks/lunar_link
 setblock 8 100 8 grindless:lunar_regolith
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK lunar_regolith
 loot spawn 8 102 8 loot grindless:blocks/lunar_regolith
+setblock 8 100 8 grindless:launch_pad
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK launch_pad
+loot spawn 8 102 8 loot grindless:blocks/launch_pad

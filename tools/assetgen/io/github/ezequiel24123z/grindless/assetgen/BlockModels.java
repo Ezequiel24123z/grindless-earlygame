@@ -78,6 +78,7 @@ final class BlockModels {
             case REGOLITH -> regolith();
             case SPAN -> span();
             case DECK -> deck();
+            case PAD -> pad();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -406,6 +407,14 @@ final class BlockModels {
                 box(1, 2, 1, 4, 14, 4, "top", "side"),
                 box(12, 2, 1, 15, 14, 4, "top", "side"),
                 front(1, 12, 1, 15, 15, 4, "top", "side", "front"));
+    }
+
+    /** A low cradle. Shorter than a link, with a post the rocket sits against. */
+    private static List<Box> pad() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "top", "side"),
+                box(2, 3, 2, 14, 4, 14, "top", "front"),
+                box(6, 4, 6, 10, 7, 10, "cap", "base"));
     }
 
     /** One plate cube. Every face is the deck texture, not dust and not a casing. */

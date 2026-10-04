@@ -8,7 +8,11 @@ import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,9 +32,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.List;
+
 /**
  * One block that trades the standing dimension for Luna. On Luna the same block
  * is the way home. It is not a dialed ring (ADR-0095).
+ *
+ * <p>Placeholder. A survey rocket replaces this flight (ADR-0097). The block stays
+ * until that replacement is the only way, and this pass does not delete it.
  */
 public class LunarLinkBlock extends BaseEntityBlock {
 
@@ -101,5 +110,10 @@ public class LunarLinkBlock extends BaseEntityBlock {
                                                                   BlockEntityType<T> type) {
         return level.isClientSide() ? null
                 : createTickerHelper(type, ModBlockEntities.LUNAR_LINK.get(), MachineBlockEntity::tick);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tooltip.grindless.lunar_link.placeholder"));
     }
 }

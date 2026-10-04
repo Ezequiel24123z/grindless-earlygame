@@ -1,0 +1,5 @@
+forceload add 0 0
+setblock 8 70 8 grindless:launch_pad
+execute if block 8 70 8 grindless:launch_pad run say PAD-OK
+summon grindless:survey_rocket 8.5 71 8.5
+execute as @e[type=grindless:survey_rocket,limit=1] run say ROCKET-OK
