@@ -43,7 +43,7 @@ entries below reference those records by id.
 
 ### Added
 
-- **Agent route map (ADR-0076).** `docs/AGENT-MAP.md` is a task index: the files to
+- **Agent route map (ADR-0087).** `docs/AGENT-MAP.md` is a task index: the files to
   open and the invariant each kind of change breaks. The same commit that changes a
   seam updates the map. It does not catalogue function bodies.
 

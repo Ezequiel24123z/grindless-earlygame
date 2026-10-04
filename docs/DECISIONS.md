@@ -87,7 +87,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
-| [0076](#adr-0076--a-task-indexed-route-map-updated-with-the-seam) | A task-indexed route map, updated with the seam | Accepted |
+| [0087](#adr-0087--a-task-indexed-route-map-updated-with-the-seam) | A task-indexed route map, updated with the seam | Accepted |
 
 ---
 
@@ -2852,7 +2852,7 @@ acid without pickle (or another spend) is reopening ADR-0036.
 
 ---
 
-## ADR-0076 — A task-indexed route map, updated with the seam
+## ADR-0087 — A task-indexed route map, updated with the seam
 
 *2026-10-04 · Accepted*
 

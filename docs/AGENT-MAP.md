@@ -10,7 +10,7 @@ Design stays in the [README](../README.md), [`MACHINES.md`](MACHINES.md),
 replace it with a link.
 
 The same commit that changes a seam updates this file
-([ADR-0076](DECISIONS.md#adr-0076--a-task-indexed-route-map-updated-with-the-seam)).
+([ADR-0087](DECISIONS.md#adr-0087--a-task-indexed-route-map-updated-with-the-seam)).
 
 Two rules apply to every entry. Versions are written only in `gradle.properties`.
 `common/` must not reference Forge types: loader differences go through an
