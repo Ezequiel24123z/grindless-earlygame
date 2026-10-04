@@ -45,6 +45,16 @@ public final class ProcessLogic {
     public static final double CONTACT_TEMPERATURE = 450.0;
     public static final String CONTACT_ATMOSPHERE = "OXIDISING";
 
+    /**
+     * Electric-arc steel (ADR-0090). The graph's 0.1 u of carbon is one coal per ten
+     * ingots, and 14 s per ingot is 140 s for that batch.
+     */
+    public static final int STEEL_IRON = 10;
+    public static final int STEEL_CARBON = 1;
+    public static final int STEEL_OUT = 10;
+    public static final int STEEL_TICKS = 20 * 14 * STEEL_OUT;
+    public static final double STEEL_TEMPERATURE = 1600.0;
+
     private ProcessLogic() {
     }
 

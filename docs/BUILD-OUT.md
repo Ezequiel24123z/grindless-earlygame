@@ -8,8 +8,8 @@ cap and the early-game convenience framing. Anything not yet started below is **
 next calendar is the **modpack expansion**. The quest book is last, not first
 ([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BD — Electric-arc steel.** Not implemented. K (Contact process) is the last
-shipped slice. L–BB are held. The quest book is not next.
+**Next slice: BE — Refractory brick.** Not implemented. BD (Electric-arc steel) is done.
+K remains the last foundation slice. L–BB are held. The quest book is not next.
 
 ---
 
@@ -78,8 +78,8 @@ the records below, then implement.
 ## Already shipped
 
 T0 loop, Slice A–E, Kiln/R2, Atlas stub, Multitool wrench, belt junctions (G), the sorter
-(H), the T2 gate (I), Wire Mill / motor (J), the contact process (K), and the design
-records for armour (ADR-0067)
+(H), the T2 gate (I), Wire Mill / motor (J), the contact process (K), electric-arc steel
+(BD), and the design records for armour (ADR-0067)
 and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to automated
 iron without hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel,
 overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftover row.
@@ -88,7 +88,7 @@ overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftove
 
 ## Remaining slices
 
-**G, H, I, J and K are done.** Every row below that is not marked done is **held**
+**G, H, I, J, K and BD are done.** Every row below that is not marked done is **held**
 (ADR-0088). A held row stays in this file so the history is not thrown away. It is not the
 next session. Do not mark a held row done by starting it.
 
@@ -200,13 +200,14 @@ the factory for real.
 ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
 start the quest book.
 
-**Next slice: BD — Electric-arc steel.** Not implemented.
+**Next slice: BE — Refractory brick.** Not implemented. Do not start it in the steel change.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **BD** | **Electric-arc steel** | Turn iron and coal into steel | The electric-arc route on the Arc Furnace: 10 iron ingots + 1 carbon → 10 steel ingots in 140 s at 1600 °C (ADR-0090). Plates, rods, gears and wire then follow the existing graph. | A new furnace. Oxygen blow. Direct reduction. The washer. The Autoclave. Planets. The quest book. **Not implemented.** |
+| **BD** | **Electric-arc steel** | Turn iron and coal into steel | The electric-arc route on the Arc Furnace: 10 iron ingots + 1 carbon → 10 steel ingots in 140 s at 1600 °C (ADR-0090). Plates, rods, gears and wire then follow the existing graph. | A new furnace. Oxygen blow. Direct reduction. The washer. The Autoclave. Planets. The quest book. | ✅ done |
+| **BE** | **Refractory brick** | Spend slag on a lining | Slag's named sink (ADR-0036), hosted by the Arc Furnace because 1400 °C is inside that envelope and outside the Kiln. The integer batch is not chosen yet: write it in an ADR before coding. | The Kiln. The alumina + silica route. A new furnace. Oxygen blow. Planets. The quest book. **Not implemented.** |
 
-After BD, still not sliced, in this order:
+After BE, still not sliced, in this order:
 
 1. Further intermediate and endgame tiers, more processing lines and more materials.
 2. Megastructures, then Kardashev Type I, II and III.
@@ -224,8 +225,8 @@ The original quest book is last, with the in-game guide, after that arrival.
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BD. Held rows
-   are not a queue. The quest book is last.
+2. Branch from the current tip. Implement only that slice. The next slice is BE. Held rows
+   are not a queue. The quest book is last. Do not resume BD.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
    and name the following slice before starting it.
 

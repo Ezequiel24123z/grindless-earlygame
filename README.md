@@ -24,9 +24,9 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > green on Forge 1.20.1**. The goal from here is a modpack-scale progression
 > ([ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression)).
 > T0–T6 are the specified start, not a cap. Slices defined past the contact process and
-> not yet started are held. The next calendar is the modpack expansion. Its next slice
-> is electric-arc steel, identified and not implemented (ADR-0090). The original quest
-> book is last, with the in-game guide, after the black hole.
+> not yet started are held. Electric-arc steel is in (ADR-0090). The next slice is
+> refractory brick, not started. The original quest book is last, with the in-game guide,
+> after the black hole.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -2027,8 +2027,9 @@ the unstarted six-tier schedule (ADR-0088).
 ### Modpack expansion *(next calendar)*
 
 ADR-0088, rescheduled by ADR-0090. Held slices L–BB stay on the books and are not the next
-work. The next slice is **BD — Electric-arc steel**: iron and coal into steel on the Arc
-Furnace, identified and not implemented. After it, still unsliced, in order: further
+work. **BD — Electric-arc steel** is in: ten iron ingots and one carbon become ten steel
+ingots in the Arc Furnace (ADR-0090). The next slice is **BE — Refractory brick**, the
+named slag sink, identified and not implemented. After it, still unsliced, in order: further
 intermediate and endgame tiers and processing lines, megastructures and Kardashev Type I,
 II and III, original planets with unique extractable resources and interstellar travel,
 then arrival at the Milky Way's central black hole as the victory. The original quest book
@@ -2092,7 +2093,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
 | 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Unstarted rows L–BB are held (ADR-0088). |
-| 28 | **Modpack expansion** | recorded — ADR-0088, ADR-0090. Next slice **BD — Electric-arc steel**, not implemented. Quest book is last. |
+| 28 | **Modpack expansion** | in progress — ADR-0088, ADR-0090. BD electric-arc steel is done. Next slice **BE — Refractory brick**, not implemented. Quest book is last. |
+| 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2122,10 +2124,12 @@ Space and interstellar play are original. The goal is the black hole at the cent
 Milky Way: arriving is the victory, and the interior is a finite finale written when the
 route exists.
 
-**Next is BD — Electric-arc steel** (ADR-0090), the first material line of the modpack
-expansion. It is not implemented. Ten iron ingots and one carbon become ten steel ingots
-in the Arc Furnace. Slices L through BB stay defined and are **held**. The original quest
-book and the in-game guide are last, after arrival at the black hole.
+**Next is BE — Refractory brick**, identified and not implemented. Slag's named sink, on
+the Arc Furnace, because 1400 °C fits that envelope and does not fit the Kiln. The batch
+is not chosen yet. **BD — Electric-arc steel** is in (ADR-0090): ten iron ingots and one
+carbon become ten steel ingots in 140 s at 1600 °C. Slices L through BB stay defined and
+are **held**. The original quest book and the in-game guide are last, after arrival at
+the black hole.
 
 Everything through step 14b is written, builds green and is covered by the behaviour checks in
 `tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
@@ -2133,7 +2137,9 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is BD — Electric-arc steel** (ADR-0090). The washer, Slice F and the rest of L–BB
+**Next is BE — Refractory brick.** It is not started. **Electric-arc steel is in**
+(ADR-0090): the Arc Furnace runs `alloy/steel`, 10 iron ingots + 1 carbon → 10 steel
+ingots in 140 s. The washer, Slice F and the rest of L–BB
 are held. The quest book is last.
 See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
@@ -2162,7 +2168,7 @@ is already in. Modular armour and the Arc Reactor pair are **recorded, not start
 line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
 row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
 slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
-next slice is electric-arc steel. The quest book waits until after the black hole.
+next slice is refractory brick, from slag. The quest book waits until after the black hole.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

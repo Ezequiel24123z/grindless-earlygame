@@ -42,8 +42,8 @@ entries below reference those records by id.
   with the in-game guide, after arrival at the galactic-centre black hole. The urgent
   calendar is intermediate and endgame tiers, more processing lines and materials,
   then megastructures and the Kardashev scales, then original planets and interstellar
-  travel, then the black hole. The next slice is BD — electric-arc steel on the Arc
-  Furnace, identified and not implemented. Rows L–BB stay held. No third-party code
+  travel, then the black hole. BD — electric-arc steel on the Arc Furnace was
+  named next. This change implements it. Rows L–BB stay held. No third-party code
   is copied. Own work stays MIT (ADR-0089).
 
 - **External code may enter with its own license (ADR-0089).** Grindless's own work
@@ -72,6 +72,12 @@ entries below reference those records by id.
   tanks exist. CI is marked done. The numbered plan from step 15 is rewritten to match.
 
 ### Added
+
+- **Electric-arc steel (ADR-0090).** The Arc Furnace turns 10 iron ingots and 1 carbon
+  into 10 steel ingots in 140 s at 1600 °C. That is the graph's 0.1 carbon per ingot
+  and 14 s per ingot, as an integer batch. The furnace's 1500 °C hold stays inside the
+  band. No new block. Oxygen blow, direct reduction, the washer and the Autoclave wait.
+  The next slice is BE — refractory brick, not started.
 
 - **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia
