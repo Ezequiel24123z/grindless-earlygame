@@ -77,6 +77,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
 | [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
+| [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 
 ---
 
@@ -2477,5 +2478,39 @@ oxide under `forge:` (no convention); starting the contact-process reactors in t
 more metal. A successor that adds `sulfuric_acid` without a named spend is reopening
 ADR-0036. A successor that starts Slice F because "the Kiln should be a multiblock" is
 ignoring ADR-0058 — this Kiln does not need hatches.
+
+
+## ADR-0066 — The T1 Atlas is a live lookup, not the solver
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0023 ships a native Process Atlas with a ratio solver, because a pack without a
+recipe viewer would make parameterised recipes unplayable. README step 16 is `VerifyRecipes` plus
+an atlas stub; JEI, REI and EMI wait until 1.0 polish. After Kiln / R2 the live graph is ore line,
+roast, press and assembler. The solver — given a rate, emit machine counts — is the feature
+ADR-0023 itself flags as most at risk of going too far. Slice F is not next (ADR-0058).
+
+**Decision.**
+
+1. The T1 Atlas is a handheld item. Right-click opens a scrollable list of the live
+   `ProcessLookup` graph: family, inputs, catalysts, outputs, named conditions, duration and
+   FU/t. Query lives in `AtlasLogic` with no Minecraft imports so `VerifyAtlas` can dump it.
+2. It is a lookup, not a solver. No target rate, no machine counts, no FU-per-unit overlay, no
+   reachability against research. Those remain ADR-0023.
+3. JEI, REI and EMI still wait. Vanilla already shows T0 JSON crafts. The Atlas lists process
+   recipes only; a pack that ships no JEI can still see the graph that machines actually run.
+4. Voltaic-gated crafting-table JSON, like the Prospector's Scanner. Process recipes only run
+   after Voltaic machines exist; T0 table crafts do not need a second viewer.
+5. The screen reads `ProcessLookup` on the client after tag sync. No extra S2C. No graph widget
+   yet — a list of `AtlasLogic` lines is the stub.
+
+**Alternatives rejected.** Shipping the ratio solver in this step (it would prescribe the factory
+before the player has asked); JEI-only (ADR-0023 already rejected that); an always-available T0
+craft (the gap is process recipes, which appear with Voltaic); a block terminal (the scanner and
+linker are already handheld; a desk would duplicate the Research Terminal).
+
+**Consequences.** A successor that adds `solve(rate)` is finishing ADR-0023, not extending this
+stub. A successor that starts JEI integration is 1.0 polish, not a T1 blocker. Slice F is still
+only when a machine needs hatches or size.
 
 
