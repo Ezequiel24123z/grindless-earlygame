@@ -518,6 +518,37 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** A framed plate. The exosuit, not the harness's solid chest. */
+    public static BufferedImage exosuit(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 13, 14, 2.4);
+        field.rect(5, 4, 11, 12, 4.0);
+        field.rect(1, 3, 3, 7, 3.0);
+        field.rect(13, 3, 15, 7, 3.0);
+        field.bevel(0.2);
+        return field.light(palette);
+    }
+
+    /** A short mast. The tap, not a cable. */
+    public static BufferedImage networkTap(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(6, 8, 10, 14, 2.6);
+        field.rect(7, 2, 9, 8, 4.2);
+        field.disc(8, 2, 2.2, 5.0);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
+    /** A spring. Legs, not boots. */
+    public static BufferedImage exoskeleton(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(4, 2, 7, 14, 3.2);
+        field.rect(9, 2, 12, 14, 3.2);
+        field.rect(4, 6, 12, 8, 4.0);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
     /** A brick battery. Not the drill cell's cylinder. */
     public static BufferedImage fluxCell(Palette palette) {
         HeightField field = new HeightField();

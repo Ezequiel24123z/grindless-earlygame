@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless;
 import dev.architectury.event.events.common.TickEvent;
 import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.item.ExosuitTick;
 import io.github.ezequiel24123z.grindless.network.FluxNetworkData;
 import io.github.ezequiel24123z.grindless.network.PylonStructure;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
@@ -71,13 +72,15 @@ public final class Grindless {
      * grids a player has built — a number that stays small even in a large base.
      */
     private static void registerNetworkTick() {
-        TickEvent.SERVER_LEVEL_POST.register(level ->
-                FluxNetworkData.get(level).tickNetworks((pylon, status) -> {
+        TickEvent.SERVER_LEVEL_POST.register(level -> {
+            ExosuitTick.tickLevel(level);
+            FluxNetworkData.get(level).tickNetworks((pylon, status) -> {
                     // A pylon in an unloaded chunk is skipped rather than loaded to repaint it.
                     if (level.isLoaded(pylon)) {
                         MachineProperties.publish(level, pylon, status);
                         PylonStructure.syncShafts(level, pylon, status);
                     }
-                }));
+                });
+        });
     }
 }

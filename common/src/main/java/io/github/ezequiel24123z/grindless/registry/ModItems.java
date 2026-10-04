@@ -3,7 +3,10 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.ExosuitItem;
+import io.github.ezequiel24123z.grindless.item.ExosuitLogic;
 import io.github.ezequiel24123z.grindless.item.FluxCellItem;
+import io.github.ezequiel24123z.grindless.item.SuitModuleItem;
 import io.github.ezequiel24123z.grindless.item.HarnessItem;
 import io.github.ezequiel24123z.grindless.item.DeconstructionPlannerItem;
 import io.github.ezequiel24123z.grindless.item.BlueprintItem;
@@ -142,6 +145,27 @@ public final class ModItems {
     /** Suit buffer. Not the drill cell (ADR-0084, ADR-0089). */
     public static final RegistrySupplier<Item> FLUX_CELL = register("flux_cell",
             () -> new FluxCellItem(new Item.Properties().stacksTo(1)));
+
+    /** T2 chassis. Two slots. Does not generate (ADR-0090). */
+    public static final RegistrySupplier<Item> FLUX_EXOSUIT_HELMET = register("flux_exosuit_helmet",
+            () -> new ExosuitItem(ArmorItem.Type.HELMET, new Item.Properties()));
+
+    public static final RegistrySupplier<Item> FLUX_EXOSUIT_CHESTPLATE = register("flux_exosuit_chestplate",
+            () -> new ExosuitItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+
+    public static final RegistrySupplier<Item> FLUX_EXOSUIT_LEGGINGS = register("flux_exosuit_leggings",
+            () -> new ExosuitItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistrySupplier<Item> FLUX_EXOSUIT_BOOTS = register("flux_exosuit_boots",
+            () -> new ExosuitItem(ArmorItem.Type.BOOTS, new Item.Properties()));
+
+    /** Pulls FU from pylon coverage into worn cells. */
+    public static final RegistrySupplier<Item> NETWORK_TAP = register("network_tap",
+            () -> new SuitModuleItem(ExosuitLogic.NETWORK_TAP, new Item.Properties()));
+
+    /** Spends a cell for movement speed. Not flight. */
+    public static final RegistrySupplier<Item> EXOSKELETON_LEGS = register("exoskeleton_legs",
+            () -> new SuitModuleItem(ExosuitLogic.EXOSKELETON, new Item.Properties()));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

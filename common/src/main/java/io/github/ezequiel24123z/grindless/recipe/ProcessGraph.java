@@ -147,6 +147,12 @@ public final class ProcessGraph {
         recipes.add(deconstructionPlanner());
         recipes.add(patternScanner());
         recipes.add(deconstructor());
+        recipes.add(machineCraft("assemble/flux_exosuit_helmet", FabricationLogic.FLUX_EXOSUIT_HELMET));
+        recipes.add(machineCraft("assemble/flux_exosuit_chestplate", FabricationLogic.FLUX_EXOSUIT_CHESTPLATE));
+        recipes.add(machineCraft("assemble/flux_exosuit_leggings", FabricationLogic.FLUX_EXOSUIT_LEGGINGS));
+        recipes.add(machineCraft("assemble/flux_exosuit_boots", FabricationLogic.FLUX_EXOSUIT_BOOTS));
+        recipes.add(machineCraft("assemble/network_tap", FabricationLogic.NETWORK_TAP));
+        recipes.add(machineCraft("assemble/exoskeleton_legs", FabricationLogic.EXOSKELETON_LEGS));
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);

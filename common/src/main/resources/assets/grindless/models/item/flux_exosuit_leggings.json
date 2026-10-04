@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "grindless:item/flux_exosuit_leggings"
+  }
+}

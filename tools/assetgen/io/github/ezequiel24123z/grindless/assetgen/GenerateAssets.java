@@ -126,6 +126,18 @@ public final class GenerateAssets {
         written += write(items, "voltaic_boots",
                 FormTextures.harnessBoots(Palette.of("voltaic_boots", 0x546E7A)));
         written += write(items, "flux_cell", FormTextures.fluxCell(Palette.of("flux_cell", 0xFFB300)));
+        written += write(items, "flux_exosuit_helmet",
+                FormTextures.exosuit(Palette.of("flux_exosuit_helmet", 0x00897B)));
+        written += write(items, "flux_exosuit_chestplate",
+                FormTextures.exosuit(Palette.of("flux_exosuit_chestplate", 0x00796B)));
+        written += write(items, "flux_exosuit_leggings",
+                FormTextures.exosuit(Palette.of("flux_exosuit_leggings", 0x00695C)));
+        written += write(items, "flux_exosuit_boots",
+                FormTextures.exosuit(Palette.of("flux_exosuit_boots", 0x004D40)));
+        written += write(items, "network_tap",
+                FormTextures.networkTap(Palette.of("network_tap", 0x26A69A)));
+        written += write(items, "exoskeleton_legs",
+                FormTextures.exoskeleton(Palette.of("exoskeleton_legs", 0x43A047)));
         written += writeArmorLayers(root);
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
@@ -269,6 +281,8 @@ public final class GenerateAssets {
         int written = 0;
         written += write(dir, "voltaic_layer_1", armorLayer(0xFF78909C));
         written += write(dir, "voltaic_layer_2", armorLayer(0xFF546E7A));
+        written += write(dir, "exosuit_layer_1", armorLayer(0xFF00897B));
+        written += write(dir, "exosuit_layer_2", armorLayer(0xFF004D40));
         return written;
     }
 

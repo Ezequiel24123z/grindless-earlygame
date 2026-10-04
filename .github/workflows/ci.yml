@@ -220,6 +220,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-harness.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-harness.expect
 
+      # Slice Y: the exosuit, the tap and the legs exist. The suit does not generate.
+      - name: Boot and exercise the flux exosuit
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-exosuit.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-exosuit.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

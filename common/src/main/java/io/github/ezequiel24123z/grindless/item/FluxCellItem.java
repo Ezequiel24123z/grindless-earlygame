@@ -78,6 +78,9 @@ public final class FluxCellItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack cell = player.getItemInHand(hand);
         ItemStack other = player.getItemInHand(other(hand));
+        if (other.getItem() instanceof ExosuitItem) {
+            return installExosuit(level, player, cell, other);
+        }
         if (!(other.getItem() instanceof HarnessItem)) {
             return InteractionResultHolder.pass(cell);
         }
@@ -96,6 +99,20 @@ public final class FluxCellItem extends Item {
                     next.charge(), HarnessLogic.CELL_CAPACITY), true);
         }
         return InteractionResultHolder.sidedSuccess(cell, level.isClientSide());
+    }
+
+    private static InteractionResultHolder<ItemStack> installExosuit(Level level, Player player,
+                                                                     ItemStack cell, ItemStack suit) {
+        if (level.isClientSide()) {
+            return InteractionResultHolder.sidedSuccess(cell, true);
+        }
+        if (!ExosuitItem.install(suit, HarnessLogic.FLUX_CELL, charge(cell))) {
+            player.displayClientMessage(Component.translatable("chat.grindless.exosuit.full"), true);
+            return InteractionResultHolder.fail(cell);
+        }
+        cell.shrink(1);
+        player.displayClientMessage(Component.translatable("chat.grindless.exosuit.installed"), true);
+        return InteractionResultHolder.sidedSuccess(cell, false);
     }
 
     private static int draw(Level level, BlockPos pos, int room) {

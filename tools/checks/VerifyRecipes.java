@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool, the planner and the pattern pair", 97, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool, the planner, the pattern pair and the exosuit", 103, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -583,6 +583,12 @@ public final class VerifyRecipes {
         eq("the deconstructor is the assembler", MachineFamily.ASSEMBLER, deconstructor.family());
         eq("the deconstructor makes the block", "item:grindless:deconstructor",
                 deconstructor.itemOutputs().get(0).qualified());
+        eq("the exosuit helmet is the assembler", MachineFamily.ASSEMBLER,
+                recipe(recipes, "assemble/flux_exosuit_helmet").family());
+        eq("the network tap is an assembler item", "item:grindless:network_tap",
+                recipe(recipes, "assemble/network_tap").itemOutputs().get(0).qualified());
+        eq("the exoskeleton is an assembler item", "item:grindless:exoskeleton_legs",
+                recipe(recipes, "assemble/exoskeleton_legs").itemOutputs().get(0).qualified());
         no("matter is not a recipe output",
                 recipes.stream().anyMatch(candidate -> candidate.itemOutputs().stream()
                         .anyMatch(output -> "grindless:matter".equals(output.id()))));
@@ -746,6 +752,10 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("deconstructor.json")));
         no("matter has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("matter.json")));
+        no("the exosuit has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("flux_exosuit_helmet.json")));
+        no("the network tap has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("network_tap.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

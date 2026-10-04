@@ -59,6 +59,12 @@ public final class FabricationLogic {
     public static final String PATTERN_SCANNER = "grindless:pattern_scanner";
     public static final String DECONSTRUCTOR = "grindless:deconstructor";
     public static final String MATTER = "grindless:matter";
+    public static final String FLUX_EXOSUIT_HELMET = "grindless:flux_exosuit_helmet";
+    public static final String FLUX_EXOSUIT_CHESTPLATE = "grindless:flux_exosuit_chestplate";
+    public static final String FLUX_EXOSUIT_LEGGINGS = "grindless:flux_exosuit_leggings";
+    public static final String FLUX_EXOSUIT_BOOTS = "grindless:flux_exosuit_boots";
+    public static final String NETWORK_TAP = "grindless:network_tap";
+    public static final String EXOSKELETON_LEGS = "grindless:exoskeleton_legs";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

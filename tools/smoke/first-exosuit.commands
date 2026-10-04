@@ -1,0 +1,11 @@
+forceload add 0 0
+say WAIT-CHUNK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:flux_exosuit_helmet",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:flux_exosuit_helmet"}}] run say EXO-HELMET-OK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:flux_exosuit_chestplate",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:flux_exosuit_chestplate"}}] run say EXO-CHEST-OK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:network_tap",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:network_tap"}}] run say TAP-OK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:exoskeleton_legs",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:exoskeleton_legs"}}] run say LEGS-MOD-OK
+kill @e[type=item]

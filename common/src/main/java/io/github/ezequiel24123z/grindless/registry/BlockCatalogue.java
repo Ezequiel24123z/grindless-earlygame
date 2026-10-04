@@ -218,7 +218,8 @@ public final class BlockCatalogue {
             "copper_coil", "motor", "vanadia_pellet", "ingot_mould", "plate_mould",
             "flux_drill", "drill_cell", "blueprint_tool", "blueprint", "deconstruction_planner",
             "matter", "voltaic_helmet", "voltaic_chestplate", "voltaic_leggings", "voltaic_boots",
-            "flux_cell");
+            "flux_cell", "flux_exosuit_helmet", "flux_exosuit_chestplate", "flux_exosuit_leggings",
+            "flux_exosuit_boots", "network_tap", "exoskeleton_legs");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";
