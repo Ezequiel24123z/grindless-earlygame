@@ -99,6 +99,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
 | [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
 | [0088](#adr-0088--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
+| [0089](#adr-0089--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
 
 ---
 
@@ -3402,6 +3403,45 @@ the Replicator block beside the cost.
 reopens the loop this record closed. A successor that replicates items
 here is starting slice AH. A successor that treats a tag output as every
 member item is doing the Replicator's work early.
+
+
+## ADR-0089 — The Voltaic Harness has one slot and no generator
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice X is the Voltaic Harness. ADR-0067 left the
+grid size open and said T1 is protection plus a Flux Cell, with no onboard
+generation. The Network Tap, which recharges a suit by walking through
+pylons, is slice Y. The drill's fuel is a Drill Cell, not this Flux Cell
+(ADR-0084).
+
+**Decision.**
+
+1. **Four pieces**, crafted at the crafting table from iron ingots, with
+   iron's protection and durability. Vanilla armour still equips. There
+   is no research gate and no Assembler recipe: this is T1 equipment, and
+   the Assembler is Industrial.
+2. **One module slot** on each piece. The only module is the Flux Cell.
+   Using the cell on a harness in the other hand moves the cell into the
+   slot. Sneak-using a filled piece gives the cell back. A second cell
+   does not fit. Inserting and removing spends nothing.
+3. **The Flux Cell** is its own item, `grindless:flux_cell`, crafted from
+   copper and iron ingots. It stores 6,400 FU. It does not generate.
+   Right-clicking a Capacitor Bank or a Flux Transformer, while that
+   block is inside a pylon's coverage, moves FU out of that network into
+   the cell. Walking through a pylon does not charge it.
+4. Nothing in this slice spends the stored FU. Shields, flight and the
+   Network Tap wait for Y. The Arc miniature is not a module.
+
+**Alternatives rejected.** A worn generator; charging by walking through
+pylons; naming the drill's fuel Flux Cell; an Assembler recipe that waits
+for Industrial; disabling vanilla armour; a grid larger than one slot
+before a second module exists.
+
+**Consequences.** A successor that recharges the suit by standing in a
+pylon area is starting slice Y. A successor that generates FU while the
+suit is worn is starting the Arc miniature. A successor that puts
+durability on the drill and calls it this cell is reopening ADR-0084.
 
 
 
