@@ -74,6 +74,8 @@ final class BlockModels {
             case TRANSFORMER -> transformer();
             case ARRAY -> array();
             case ARRAY_CASING -> arrayCasing();
+            case LINK -> link();
+            case REGOLITH -> regolith();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -125,7 +127,12 @@ final class BlockModels {
         String lower = block.lower();
         lines.add(slot("base", "casing_side"));
         lines.add(slot("cap", "casing_top"));
-        if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
+        if (block.geometry() == BlockCatalogue.Geometry.REGOLITH) {
+            lines.add(slot("front", lower + "_front_" + status));
+            lines.add(slot("top", lower + "_top"));
+            lines.add(slot("side", lower + "_front_" + status));
+            lines.add(slot("particle", lower + "_front_" + status));
+        } else if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
             lines.add(slot("side", "pylon" + block.tier() + "_side_" + status));
             lines.add(slot("top", "pylon" + block.tier() + "_top_" + status));
             lines.add(slot("particle", "pylon" + block.tier() + "_side_" + status));
@@ -373,6 +380,22 @@ final class BlockModels {
     }
 
     /** A low refractory course. Shorter than a machine, and not a belt. */
+    /** A low ring. The player stands beside it. It is not a tower and not a multiblock. */
+    private static List<Box> link() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "side"),
+                box(2, 2, 2, 14, 3, 14, "top", "front"),
+                box(1, 2, 1, 15, 4, 3, "cap", "base"),
+                box(1, 2, 13, 15, 4, 15, "cap", "base"),
+                box(1, 2, 3, 3, 4, 13, "cap", "base"),
+                box(13, 2, 3, 15, 4, 13, "cap", "base"));
+    }
+
+    /** One dust cube. Every face is the regolith texture, not the machine casing. */
+    private static List<Box> regolith() {
+        return List.of(box(0, 0, 0, 16, 16, 16, "top", "front"));
+    }
+
     private static List<Box> arrayCasing() {
         return List.of(
                 box(0, 0, 0, 16, 4, 16, "cap", "base"),

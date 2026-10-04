@@ -1,0 +1,16 @@
+{
+  "type": "grindless:luna",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "grindless:luna",
+      "lakes": false,
+      "features": false,
+      "layers": [
+        { "block": "minecraft:bedrock", "height": 1 },
+        { "block": "grindless:lunar_regolith", "height": 64 }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

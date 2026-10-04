@@ -409,6 +409,17 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for helium-3: a pale sealed cell, not a rock. */
+    public static BufferedImage helium3(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(8.0, 8.0, 4.6, 4.2);
+        field.disc(8.0, 8.0, 2.4, 5.4);
+        field.rect(7, 2, 8, 4, 3.2);
+        field.rect(6, 1, 9, 2, 2.6);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for a refractory brick: a fired block with a mortar cross. */
     public static BufferedImage brick(Palette palette) {
         HeightField field = new HeightField();

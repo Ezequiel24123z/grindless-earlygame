@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.item;
 
 import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
 import io.github.ezequiel24123z.grindless.vein.ChunkVein;
 import io.github.ezequiel24123z.grindless.vein.ClientSurvey;
 import io.github.ezequiel24123z.grindless.vein.SurveyData;
@@ -38,7 +39,8 @@ public final class ProspectorsScannerItem extends Item {
         if (level instanceof ServerLevel server && player instanceof ServerPlayer serverPlayer) {
             ChunkPos center = new ChunkPos(player.blockPosition());
             SurveyData data = SurveyData.get(server);
-            List<Material> mineable = MaterialRegistry.snapshot().mineable();
+            List<Material> mineable = PlanetCatalogue.veins(
+                    server.dimension().location().toString(), MaterialRegistry.snapshot().mineable());
             List<ClientSurvey.Entry> entries = new ArrayList<>();
             ClientSurvey.Entry standing = null;
             for (SurveyLogic.ChunkRef ref : SurveyLogic.around(center.x, center.z)) {

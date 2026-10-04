@@ -52,6 +52,7 @@ public final class ModCreativeTabs {
                 lazy(ModItems.REFRACTORY_BRICK),
                 lazy(ModItems.METALLURGICAL_SILICON),
                 lazy(ModItems.ELECTRONIC_SILICON),
+                lazy(ModItems.HELIUM_3),
                 lazy(ModItems.PROSPECTORS_SCANNER),
                 lazy(ModItems.PROCESS_ATLAS),
                 lazy(ModItems.FLUX_CONDUIT),
@@ -81,6 +82,8 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.FLUX_TRANSFORMER),
                 lazy(ModBlocks.GROUND_ARRAY),
                 lazy(ModBlocks.ARRAY_CASING),
+                lazy(ModBlocks.LUNAR_LINK),
+                lazy(ModBlocks.LUNAR_REGOLITH),
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));

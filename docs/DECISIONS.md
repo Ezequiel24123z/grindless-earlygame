@@ -94,6 +94,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0092](#adr-0092--metallurgical-silicon-runs-cold-on-sand-and-quartz) | Metallurgical silicon runs cold on sand and quartz | Accepted |
 | [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
 | [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
+| [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
 
 ---
 
@@ -3380,5 +3381,90 @@ without keeping ten seconds of MK3 is inventing a buffer. A successor who moves 
 recipe to the crafting table is ignoring ADR-0017. A successor who spends electronic
 silicon, or who builds the Dyson Collector, Type I, or the multiblock kernel here, is
 outside this record. BI is next and is not started.
+
+---
+
+## ADR-0095 — Luna is the first original planet
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BI says the concrete world is chosen when the slice starts. The ship
+column also names interstellar travel. The owner kept that travel, the black-hole finale
+and the quest book out of this change. A successor who builds all seven fallback worlds,
+a Horizon Gate, a rocket, or a void full of ore is guessing.
+
+The worlds already named cannot all be this one.
+
+- Luna's signature resource is helium-3, already written in `PROCESSES.md` as the D–³He
+  fuel. The other signatures are iron the overworld already has, fusion fuels with the
+  same missing reactor, or process envelopes that are not an extractable.
+- The fallback set as a whole is the planet registry (held AT) plus the travel that
+  this change does not ship.
+- A Horizon Gate is held AW, and it is a dialed pair after a far ring is delivered
+  (ADR-0068). Rockets are held AO. There is no way to deliver a far ring.
+- A dimension whose job is more of the pack's ores is the mining dimension ADR-0068
+  and the README both reject.
+- Vacuum damage without an exosuit (held X and Y) makes the world unusable.
+- Helium-3 as a `forge:raw_materials` entry would enter the overworld vein scan
+  (ADR-0004). An ore block in the ground would be mined with a pickaxe, which is the
+  tunnel this mod exists to leave behind.
+- The extractor outputs items. A fluid would need a tank that extractor does not have
+  (ADR-0015). Fusion, the named sink, is held AK.
+
+What the factory can already do is extract a chunk vein and spend stored FU. A capacitor
+bank holds ten seconds of an MK1 pylon, 102,400 FU (ADR-0064). That number fits in a
+`long`. The Ground Array's larger buffer is storage for the grid, not a toll this planet
+has to charge.
+
+**Decision.**
+
+1. **The world is Luna**, dimension `grindless:luna`. One world. The surface is
+   `grindless:lunar_regolith` over one layer of bedrock, flat, with features, lakes and
+   structure overrides off. The biome spawns nothing and adds no ores. The sky uses the
+   vanilla end effect and a fixed night, with enough ambient light to walk. There is no
+   vacuum damage and no life-support check. The other fallback worlds wait.
+   Own work stays MIT (ADR-0089). This record copies nothing.
+2. **The extractable is helium-3.** Every Luna chunk's vein is that material. Richness
+   still varies. The overworld pool is unchanged, and `VeinGenerator.VERSION` is not
+   bumped. The item is the reagent `grindless:helium_3`, tagged `grindless:helium_3`.
+   It is not a supply-catalogue material, not `forge:raw_materials/helium_3`, and not an
+   ore block. A Crude or Terrestrial Extractor, and the Prospector's Scanner, use this
+   pool when they stand on Luna and the pack pool everywhere else. The sink remains the
+   D–³He cycle already named in `PROCESSES.md`. This slice does not build the reactor,
+   and it does not add a recipe that consumes the item.
+3. **The way there is the Lunar Link**, `grindless:lunar_link`. One block. Right-click
+   under a pylon and it draws **102,400 FU** from that network, the capacitor's buffer,
+   at whatever throughput the covering pylon can carry. When the charge is full and the
+   player is within four blocks, they arrive on the regolith beside a return pad. The
+   return sends them to the link they left from and does not draw again. A link that is
+   already on Luna only returns. There is no address, no second destination, and no
+   cargo tariff. Nether and End are not planets; a link placed there still goes to Luna
+   and comes back to where it stood.
+4. **How it is built.** Assembler, Industrial, 20 s at F1: **2 array casings + 1 machine
+   casing → 1 lunar link**. T2+ is manufactured (ADR-0017). No crafting-table recipe.
+   Helium-3 is not an ingredient: the link is how the gas is reached.
+5. **What waits.** The other planets. Interstellar travel, which is the next slice and
+   is not started. The black-hole interior. The quest book. Kardashev Type I, II and
+   III. Horizon Gates, rockets, colonies, telepresence and life support.
+
+**Alternatives rejected.**
+
+- All seven fallback worlds, or Tharsis because iron is already extracted.
+- A mining dimension, a stone world, or ore features in the flat generator.
+- Registering helium-3 as a pack ore so the overworld can roll it.
+- A fluid, a cell crafted on the ground, or a burn recipe in the Thermal Generator.
+- The Horizon Gate, a rocket, or a creative item that teleports with no FU cost.
+- Charging the Ground Array's 6,553,600 FU. That toll waits on MK3 throughput for a
+  trip the capacitor can already pay.
+- Vacuum damage, or an exosuit requirement. Those rows are held.
+- Interstellar travel, a second star, or the black hole.
+- Copying Ad Astra's planets, textures or code. The end sky is vanilla.
+
+**Consequences.** A successor who adds ore to Luna, or who puts helium-3 on the
+overworld vein list, is building a mining dimension. A successor who removes the FU
+cost is shipping a creative teleport. A successor who makes the return draw power is
+stranding a player on a world with no pylon. A successor who starts Tharsis, the
+Horizon Gate, fusion, or interstellar travel here is outside this record. BJ is next
+and is not started.
 
 

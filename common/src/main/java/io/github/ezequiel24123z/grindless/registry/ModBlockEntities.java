@@ -16,6 +16,7 @@ import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.planet.LunarLinkBlockEntity;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
@@ -211,6 +212,12 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("capacitor_bank",
                     () -> BlockEntityType.Builder
                             .of(CapacitorBankBlockEntity::new, ModBlocks.CAPACITOR_BANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<LunarLinkBlockEntity>> LUNAR_LINK =
+            BLOCK_ENTITIES.register("lunar_link",
+                    () -> BlockEntityType.Builder
+                            .of(LunarLinkBlockEntity::new, ModBlocks.LUNAR_LINK.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<GroundArrayBlockEntity>> GROUND_ARRAY =

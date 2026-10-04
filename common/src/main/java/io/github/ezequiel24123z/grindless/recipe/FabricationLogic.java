@@ -32,6 +32,7 @@ public final class FabricationLogic {
     public static final String VANADIA = "grindless:vanadia_pellet";
     public static final String GROUND_ARRAY = "grindless:ground_array";
     public static final String ARRAY_CASING = "grindless:array_casing";
+    public static final String LUNAR_LINK = "grindless:lunar_link";
 
     private FabricationLogic() {
     }
