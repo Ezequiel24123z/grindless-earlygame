@@ -1,0 +1,8 @@
+forceload add 0 0
+execute in grindless:drift run say DRIFT-OK
+execute in grindless:drift run forceload add 0 0
+execute in grindless:drift run execute if block 0 0 0 minecraft:bedrock run say BEDROCK-OK
+execute in grindless:drift run execute if block 0 1 0 grindless:drift_deck run say DECK-OK
+execute in grindless:drift run execute if block 0 2 0 minecraft:air run say SURFACE-OK
+setblock 8 70 8 grindless:starward_link
+execute if block 8 70 8 grindless:starward_link run say LINK-OK

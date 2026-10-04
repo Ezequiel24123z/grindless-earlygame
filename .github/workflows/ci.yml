@@ -164,6 +164,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-luna.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-luna.expect
 
+      # Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
+      - name: Boot and exercise the Drift
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-drift.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-drift.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

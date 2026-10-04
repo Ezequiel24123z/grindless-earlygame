@@ -8,7 +8,7 @@ cap and the early-game convenience framing. Anything not yet started below is **
 next calendar is the **modpack expansion**. The quest book is last, not first
 ([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BJ — Interstellar travel.** Not implemented. BI (Luna) is done.
+**Next slice: BK — Arrival at the galactic centre.** Not implemented. BJ (the Drift) is done.
 K remains the last foundation slice. L–BB are held. The quest book is not next.
 
 ---
@@ -200,7 +200,7 @@ the factory for real.
 ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
 start the quest book.
 
-**Next slice: BJ — Interstellar travel.** Not implemented. Do not start it in the planet change.
+**Next slice: BK — Arrival at the galactic centre.** Not implemented. Do not start it in the interstellar change.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
@@ -210,12 +210,8 @@ start the quest book.
 | **BG** | **Further processing lines** | Extend the graph past metallurgical silicon | Zone refining on the Arc Furnace (ADR-0093): 10 metallurgical silicon → 7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s per unit. The ±5 °C inert band is not applied: it would refuse the 1500 °C reducing hold. | Siemens. The Induction Furnace. A boule. A wafer. Vacuum float. Orbital growth. Megastructures. Planets. The quest book. | ✅ done |
 | **BH** | **Megastructures** | Build the first structure past the factory | The Ground Array (ADR-0094): one controller and eight casings in a fixed 3×3. A complete ring under a pylon adds ten seconds of MK3 throughput, 6,553,600 FU, as storage. Assembler, Industrial. No generator, no supply cube, no hatches. | Kardashev Type I, II and III. The Dyson Collector. Planets. Interstellar travel. The black hole. The quest book. | ✅ done |
 | **BI** | **Original planets** | Reach a world with its own resources | Luna (ADR-0095): regolith, no ore, helium-3 from the existing extractor, and a Lunar Link that spends one capacitor of FU to go there. The return does not draw again. | The other fallback worlds. Interstellar travel. The black hole. The quest book. Kardashev Type I, II and III. Horizon Gates, rockets, colonies. | ✅ done |
-| **BJ** | **Interstellar travel** | Leave the star | Not sliced. Original travel between stars, on the way to the galactic centre. The concrete route is chosen when the slice starts. | The black-hole interior. The quest book. Kardashev Type I, II and III. Further planets. **Not implemented.** |
-
-After BJ, still not sliced:
-
-1. Arrival at the black hole at the centre of the Milky Way. Arriving is the victory. The
-   interior is a finite finale written when the route exists.
+| **BJ** | **Interstellar travel** | Leave the star | The Drift (ADR-0096): one deck between the home star and the galactic centre, with no ore. A Starward Link spends the Ground Array's buffer, 6,553,600 FU, to arrive. The return does not draw again. Assembler, Industrial: one lunar link and four array casings. | The black-hole interior. The quest book. Kardashev Type I, II and III. Further planets. | ✅ done |
+| **BK** | **Arrival at the galactic centre** | Reach the black hole | Not sliced. Arriving at the Milky Way's central black hole is the victory. The interior is a finite finale written when this slice starts. | The quest book. Kardashev Type I, II and III. Further planets. An empty arrival. An endless interior. **Not implemented.** |
 
 The original quest book is last, with the in-game guide, after that arrival.
 
@@ -227,8 +223,8 @@ The original quest book is last, with the in-game guide, after that arrival.
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BJ. Held rows
-   are not a queue. The quest book is last. Do not resume BI.
+2. Branch from the current tip. Implement only that slice. The next slice is BK. Held rows
+   are not a queue. The quest book is last. Do not resume BJ.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
    and name the following slice before starting it.
 

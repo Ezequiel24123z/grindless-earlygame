@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "status=idle": { "model": "grindless:block/drift_deck_idle" },
+    "status=running": { "model": "grindless:block/drift_deck_running" },
+    "status=starved": { "model": "grindless:block/drift_deck_starved" }
+  }
+}

@@ -76,7 +76,11 @@ public final class BlockCatalogue {
         /** A flat ring on a pad. One destination, not a dial. */
         LINK,
         /** A full cube of dust. Ground, not a machine. */
-        REGOLITH
+        REGOLITH,
+        /** Two posts and a lintel. A gate off the star, not the lunar ring. */
+        SPAN,
+        /** A full cube of plating. A floor between stars, not dust. */
+        DECK
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -153,7 +157,9 @@ public final class BlockCatalogue {
             new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
             new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID),
             new Entry("lunar_link", Geometry.LINK, 1, true, GRID),
-            new Entry("lunar_regolith", Geometry.REGOLITH, 1, false, GRID));
+            new Entry("lunar_regolith", Geometry.REGOLITH, 1, false, GRID),
+            new Entry("starward_link", Geometry.SPAN, 1, true, GRID),
+            new Entry("drift_deck", Geometry.DECK, 1, false, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",

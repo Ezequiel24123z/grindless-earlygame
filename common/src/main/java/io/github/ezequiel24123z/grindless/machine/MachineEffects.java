@@ -63,6 +63,8 @@ public final class MachineEffects {
             case ARRAY_CASING -> { }
             case LINK -> { }
             case REGOLITH -> { }
+            case SPAN -> { }
+            case DECK -> { }
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);

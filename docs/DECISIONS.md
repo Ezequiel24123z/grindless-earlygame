@@ -95,6 +95,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
 | [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
 | [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
+| [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Accepted |
 
 ---
 
@@ -3466,5 +3467,74 @@ cost is shipping a creative teleport. A successor who makes the return draw powe
 stranding a player on a world with no pylon. A successor who starts Tharsis, the
 Horizon Gate, fusion, or interstellar travel here is outside this record. BJ is next
 and is not started.
+
+---
+
+## ADR-0096 — The first interstellar hop is the Drift
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BJ says the concrete route is chosen when the slice starts. The player
+can already reach Luna, which is still a moon of the home star. The owner kept the
+black-hole interior, the quest book, the Kardashev scales and any further planet out of
+this change. A successor who builds a rocket, a Horizon Gate, Tharsis, or the hole itself
+is guessing.
+
+The ways already named cannot be this one.
+
+- A rocket is held AO. A Horizon Gate is held AW, and it is a dialed pair after a far
+  ring is delivered (ADR-0068). There is still no way to deliver that ring.
+- The other fallback worlds are further planets. The row forbids them. A world with its
+  own extractable is the planet slice, which already shipped Luna.
+- A dimension whose veins are the pack's ores is the mining dimension ADR-0068 rejects.
+- Arriving at the black hole is the victory (ADR-0088). The interior is a finite finale
+  written when that arrival is the slice. Shipping the hole here finishes the route
+  before the arrival slice exists.
+- Vacuum damage without an exosuit (held X and Y) makes the stop unusable.
+- The lunar toll is one capacitor, 102,400 FU. ADR-0095 refused the Ground Array's
+  6,553,600 FU for that trip, because a capacitor can already pay it. Leaving the star
+  is the trip that larger buffer was left for. The number fits in a `long`.
+
+**Decision.**
+
+1. **The hop is the Drift**, dimension `grindless:drift`. One stop, on the way from the
+   home star toward the galactic centre, and short of the hole. The floor is one layer of
+   `grindless:drift_deck` over one layer of bedrock. No features, no lakes, no structures,
+   no spawns. The sky is the vanilla end effect, with enough ambient light to walk. There
+   is no vacuum damage. The vein list is empty, so an extractor and the scanner find
+   nothing. It is not a planet and not a mining dimension.
+   Own work stays MIT (ADR-0089). This record copies nothing.
+2. **The way there is the Starward Link**, `grindless:starward_link`. One block. Right-click
+   under a pylon and it draws **6,553,600 FU** from that network, the Ground Array's
+   buffer, at whatever throughput the covering pylon can carry. When the charge is full
+   and the player is within four blocks, they arrive on the deck beside a return pad. The
+   return sends them to the link they left from and does not draw again. A link that is
+   already on the Drift only returns. There is no address, no second star, and no cargo
+   tariff. Luna, the Nether and the End are not the Drift; a link placed there still goes
+   to the Drift and comes back to where it stood. The lunar return is a different record.
+3. **How it is built.** Assembler, Industrial, 20 s at F1: **1 lunar link + 4 array
+   casings → 1 starward link**. T2+ is manufactured (ADR-0017). The lunar link is the
+   step already built. Four casings are half a ring. No crafting-table recipe. Helium-3
+   is not an ingredient.
+4. **What waits.** Arrival at the black hole, which is the next slice and is not started.
+   Its interior is written then. Further planets. Kardashev Type I, II and III. The quest
+   book. Horizon Gates, rockets, colonies, telepresence and life support.
+
+**Alternatives rejected.**
+
+- The black hole, or an empty "you have left the star" with nowhere to stand.
+- A chain of named stars. One hop is the route. A catalogue is several slices.
+- Tharsis, Vulcan, Kryos, Erebus, Thalassa, Helios, or any world with a signature ore.
+- Filling the Drift with the overworld vein pool.
+- A rocket, a launch pad, or a Horizon Gate.
+- Charging another capacitor. That toll is the moon. This toll is the array.
+- Vacuum damage, or an exosuit requirement. Those rows are held.
+- Copying Ad Astra's rockets, stations, textures or code. The end sky is vanilla.
+
+**Consequences.** A successor who adds a vein to the Drift is building a planet or a
+mining dimension. A successor who removes the FU cost is shipping a creative teleport. A
+successor who makes the return draw power is stranding a player on a deck with no pylon.
+A successor who opens the black hole, a second star, or another planet here is outside
+this record. BK is next and is not started.
 
 

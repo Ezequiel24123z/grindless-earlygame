@@ -76,6 +76,8 @@ final class BlockModels {
             case ARRAY_CASING -> arrayCasing();
             case LINK -> link();
             case REGOLITH -> regolith();
+            case SPAN -> span();
+            case DECK -> deck();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -127,7 +129,8 @@ final class BlockModels {
         String lower = block.lower();
         lines.add(slot("base", "casing_side"));
         lines.add(slot("cap", "casing_top"));
-        if (block.geometry() == BlockCatalogue.Geometry.REGOLITH) {
+        if (block.geometry() == BlockCatalogue.Geometry.REGOLITH
+                || block.geometry() == BlockCatalogue.Geometry.DECK) {
             lines.add(slot("front", lower + "_front_" + status));
             lines.add(slot("top", lower + "_top"));
             lines.add(slot("side", lower + "_front_" + status));
@@ -393,6 +396,20 @@ final class BlockModels {
 
     /** One dust cube. Every face is the regolith texture, not the machine casing. */
     private static List<Box> regolith() {
+        return List.of(box(0, 0, 0, 16, 16, 16, "top", "front"));
+    }
+
+    /** Two posts and a lintel on a pad. Taller than the lunar ring, and open in the middle. */
+    private static List<Box> span() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                box(1, 2, 1, 4, 14, 4, "top", "side"),
+                box(12, 2, 1, 15, 14, 4, "top", "side"),
+                front(1, 12, 1, 15, 15, 4, "top", "side", "front"));
+    }
+
+    /** One plate cube. Every face is the deck texture, not dust and not a casing. */
+    private static List<Box> deck() {
         return List.of(box(0, 0, 0, 16, 16, 16, "top", "front"));
     }
 
