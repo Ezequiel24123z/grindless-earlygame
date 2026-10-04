@@ -14,8 +14,9 @@ import net.minecraft.world.level.Level;
  * Moves one player between the dimension they are standing in and Luna (ADR-0095).
  *
  * <p>The link has one destination. It does not dial an address, and it does not open a
- * second star. The return pad is placed because no rocket exists yet to deliver a far
- * ring. That is this slice, not a Horizon Gate.
+ * second star. The return pad is placed because this link is still the placeholder
+ * for the moon (ADR-0097). The survey rocket is the flight that replaces it. The
+ * link is not a Horizon Gate, and this pass does not delete it.
  */
 public final class LunarTravel {
 

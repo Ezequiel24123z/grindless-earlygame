@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "status=idle": { "model": "grindless:block/launch_pad_idle" },
+    "status=running": { "model": "grindless:block/launch_pad_running" },
+    "status=starved": { "model": "grindless:block/launch_pad_starved" }
+  }
+}

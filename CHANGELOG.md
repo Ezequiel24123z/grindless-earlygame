@@ -78,6 +78,23 @@ entries below reference those records by id.
 
 ### Added
 
+- **Teleportation orbs are named and not started (BK).** Just before rocket ascent,
+  a later slice is an alternate route of a magical material, left unnamed, that ends
+  in orbs. Shift-right-click sets coordinates and dimension. Right-click teleports.
+  An orb can sit on a pedestal, so a return to a planet does not need another rocket.
+  Draconic Evolution may inspire that slice. Its current code is All Rights Reserved
+  (Don't Be a Jerk) and its assets are CC BY-NC-SA 4.0, so neither is copied. This
+  change does not build the route. The quest book stays last. The station stays next.
+
+- **Rocket ascent (ADR-0097).** Local trips are flights. A survey rocket, Assembler-built
+  under Industrial from one machine casing, one motor and two steel plates, stands on a
+  launch pad (one casing and four steel plates). It climbs to the build ceiling. A landing
+  map then offers the home world and Luna. Leaving home spends 102,400 FU. Leaving Luna
+  does not. The Lunar Link and the Starward Link stay, marked as placeholders. The next
+  slice is the supraluminal station (BM), and it is not started. Arrival at the
+  galactic centre is that ride, not a link. No third-party code or assets are copied.
+  Own work stays MIT (ADR-0089).
+
 - **The Drift (ADR-0096).** The first interstellar hop is one deck between the home star
   and the galactic centre. It has no ore: an extractor there finds nothing. A Starward
   Link, Assembler-built under Industrial from one lunar link and four array casings,

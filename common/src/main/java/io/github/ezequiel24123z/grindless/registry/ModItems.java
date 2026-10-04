@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.item.MultitoolItem;
 import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
+import io.github.ezequiel24123z.grindless.item.SurveyRocketItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
 import net.minecraft.core.registries.Registries;
@@ -102,6 +103,10 @@ public final class ModItems {
     /** T1 handheld. Right-click two pylons to join them across any distance. */
     public static final RegistrySupplier<Item> FLUX_CONDUIT = register("flux_conduit",
             () -> new FluxConduitItem(new Item.Properties().stacksTo(1)));
+
+    /** Local-system rocket. Placed on a launch pad; it climbs, then the map opens (ADR-0097). */
+    public static final RegistrySupplier<Item> SURVEY_ROCKET = register("survey_rocket",
+            () -> new SurveyRocketItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

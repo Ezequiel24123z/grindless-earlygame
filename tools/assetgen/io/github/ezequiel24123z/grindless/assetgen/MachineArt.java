@@ -57,6 +57,8 @@ public final class MachineArt {
     public static final int SPAN = 0x0D47A1;
     /** Blue-grey plate. A floor, not lunar dust. */
     public static final int DECK = 0x455A64;
+    /** Teal cradle. A pad, not the deck and not the moon-pale ring. */
+    public static final int PAD = 0x00897B;
     public static final int REGOLITH = 0x9E9E9E;
 
     private static final double CX = 7.5;
@@ -98,6 +100,7 @@ public final class MachineArt {
             case REGOLITH -> regolithFront(status);
             case SPAN -> spanFront(status);
             case DECK -> deckFront(status);
+            case PAD -> padFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -134,6 +137,7 @@ public final class MachineArt {
             case REGOLITH -> regolithFront("idle");
             case SPAN -> spanTop();
             case DECK -> deckTop();
+            case PAD -> padTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1189,6 +1193,40 @@ public final class MachineArt {
                 boolean beam = y <= 3;
                 if (post || beam) {
                     set(img, x, y, Palette.shade(SPAN, (x + y) % 2 == 0 ? 0.05 : -0.3));
+                }
+            }
+        }
+        return img;
+    }
+
+    /** A square cradle with a cross. A rocket stands here. Not a ring and not a deck cube. */
+    public static BufferedImage padFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, PAD);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean rim = x <= 3 || x >= 12 || y <= 3 || y >= 12;
+                boolean cross = (x >= 7 && x <= 8) || (y >= 7 && y <= 8);
+                if (rim) {
+                    set(img, x, y, Palette.shade(PAD, (x + y) % 2 == 0 ? 0.08 : -0.25));
+                } else if (cross) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(PAD, -0.35);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage padTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean rim = x <= 3 || x >= 12 || y <= 3 || y >= 12;
+                boolean cross = (x >= 7 && x <= 8) || (y >= 7 && y <= 8);
+                if (rim || cross) {
+                    set(img, x, y, Palette.shade(PAD, rim ? -0.2 : 0.12));
                 }
             }
         }

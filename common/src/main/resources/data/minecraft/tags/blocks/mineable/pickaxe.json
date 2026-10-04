@@ -30,6 +30,7 @@
     "grindless:flux_transformer",
     "grindless:ground_array",
     "grindless:array_casing",
+    "grindless:launch_pad",
     "grindless:lunar_link",
     "grindless:lunar_regolith",
     "grindless:starward_link",

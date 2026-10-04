@@ -164,6 +164,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-luna.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-luna.expect
 
+      # Local flight: the launch pad is a block and the survey rocket is an entity.
+      - name: Boot and exercise the survey rocket
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-rocket.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-rocket.expect
+
       # Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
       - name: Boot and exercise the Drift
         run: tools/smoke-boot.sh .
