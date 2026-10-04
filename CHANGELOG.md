@@ -15,6 +15,8 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Foreign-provider smoke expects the live supply line.** The boot still finds 32 materials, and the foreign tin ingot plus raw platinum still step two Grindless items aside. The catalogue is 181 supply items, so the log is `32 materials found; Grindless supplies 179 of its 181 items`. The old expect (`143 of its 145`) was the count from before this stack's forms.
+
 - **A hopper can fill a multi-count process input.** `accepts` required the incoming stack to
   already hold the whole recipe count, so the first crushed of a wash (and the first plate of
   an assembler craft) was the only one a hopper could move. Insertion now matches the item;

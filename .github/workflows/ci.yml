@@ -40,7 +40,7 @@ jobs:
         run: tools/smoke-boot.sh .
         env:
           SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
-          SMOKE_EXPECT: '32 materials found; Grindless supplies 143 of its 145'
+          SMOKE_EXPECT: '32 materials found; Grindless supplies 179 of its 181 items'
 
       # Every block must be mineable with a pickaxe and drop itself, with its real display name.
       - name: Boot and exercise block loot and mining tags
