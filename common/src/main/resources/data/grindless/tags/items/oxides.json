@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:oxides/iron",
+    "#grindless:oxides/copper",
+    "#grindless:oxides/gold",
+    "#grindless:oxides/tin",
+    "#grindless:oxides/lead",
+    "#grindless:oxides/silver",
+    "#grindless:oxides/nickel",
+    "#grindless:oxides/zinc",
+    "#grindless:oxides/aluminium",
+    "#grindless:oxides/titanium",
+    "#grindless:oxides/tungsten",
+    "#grindless:oxides/platinum"
+  ]
+}
