@@ -80,6 +80,17 @@ public final class ProcessLogic {
     public static final int SILICON_TICKS = 20 * 14;
     public static final double SILICON_TEMPERATURE = 1900.0;
 
+    /**
+     * Zone refining (ADR-0093). The graph's 0.70 u per metallurgical silicon is seven
+     * electronic silicon per ten, in ten times 60 s. The ±5 °C inert band waits with
+     * the Induction Furnace; 1420 °C here is the ordinary relative band.
+     */
+    public static final String ELECTRONIC_SILICON = "grindless:electronic_silicon";
+    public static final int ZONE_IN = 10;
+    public static final int ZONE_OUT = 7;
+    public static final int ZONE_TICKS = 20 * 60 * ZONE_IN;
+    public static final double ZONE_TEMPERATURE = 1420.0;
+
     private ProcessLogic() {
     }
 

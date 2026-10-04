@@ -97,6 +97,8 @@ public final class GenerateAssets {
                 FormTextures.brick(Palette.of("refractory_brick", 0xC46A3A)));
         written += write(items, "metallurgical_silicon",
                 FormTextures.metallurgicalSilicon(Palette.of("metallurgical_silicon", 0x7A8794)));
+        written += write(items, "electronic_silicon",
+                FormTextures.electronicSilicon(Palette.of("electronic_silicon", 0xC5D8EA)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
         written += write(items, "process_atlas",

@@ -15,6 +15,7 @@ import java.util.Locale;
  * Electric-arc steel: 10 iron ingots + 1 carbon → 10 steel ingots (ADR-0090).
  * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091).
  * Metallurgical silicon: 1 silica + 2 carbon → 1 silicon + 2 B CO in 14 s (ADR-0092).
+ * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -96,6 +97,7 @@ public final class ProcessGraph {
         recipes.add(electricArcSteel());
         recipes.add(refractoryBrick());
         recipes.add(metallurgicalSilicon());
+        recipes.add(zoneRefining());
         return List.copyOf(recipes);
     }
 
@@ -389,6 +391,24 @@ public final class ProcessGraph {
                 ProcessLogic.SILICON_TEMPERATURE,
                 ProcessLogic.REDUCE_ATMOSPHERE,
                 ProcessLogic.SILICON_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * Zone refining's yield and time on the Arc Furnace (ADR-0093). The ±5 °C inert
+     * hold is the Induction Furnace's, and that machine is held. A relative band at
+     * 1420 °C admits the furnace's 1500 °C hold. No atmosphere is named: inert would
+     * refuse the reducing hold, and the route's loss is not a byproduct.
+     */
+    private static ProcessRecipe zoneRefining() {
+        return new ProcessRecipe(
+                "silicon/zone_refining",
+                MachineFamily.ARC_FURNACE,
+                List.of(IngredientSpec.item(ProcessLogic.METALLURGICAL_SILICON, ProcessLogic.ZONE_IN)),
+                List.of(OutputSpec.item(ProcessLogic.ELECTRONIC_SILICON, ProcessLogic.ZONE_OUT)),
+                ProcessLogic.ZONE_TEMPERATURE,
+                null,
+                ProcessLogic.ZONE_TICKS,
                 ProcessLogic.FU_PER_TICK);
     }
 

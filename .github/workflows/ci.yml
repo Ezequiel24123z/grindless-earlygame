@@ -143,6 +143,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-silicon.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-silicon.expect
 
+      # Slice BG: electronic silicon exists, and the Arc Furnace accepts metallurgical silicon.
+      - name: Boot and exercise zone refining
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-electronic.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-electronic.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .
