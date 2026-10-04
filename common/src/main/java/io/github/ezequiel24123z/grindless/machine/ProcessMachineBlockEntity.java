@@ -67,7 +67,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private final SimpleContainer items;
     private final StatusDebounce display = new StatusDebounce();
     private final SimpleContainerData data = new SimpleContainerData(ProcessMachineMenu.DATA_SIZE);
-    private final FluidBuffer fluid = FluidBuffer.ambient(FluidLogic.MACHINE_CAPACITY);
+    private final FluidBuffer fluid;
     private final int[] inputSlots;
     private final int[] outputSlots;
     private final int[] allSlots;
@@ -81,6 +81,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
         super(kind.type(), pos, state);
         this.kind = kind;
+        this.fluid = kind.hotFluid()
+                ? new FluidBuffer(FluidLogic.MACHINE_CAPACITY, ProcessLogic.MOLTEN_MAX_C,
+                        FluidLogic.AMBIENT_MPA)
+                : FluidBuffer.ambient(FluidLogic.MACHINE_CAPACITY);
         this.items = new SimpleContainer(kind.menuKind().size());
         this.inputSlots = range(0, kind.menuKind().inputs());
         this.outputSlots = range(kind.menuKind().inputs(), kind.menuKind().size());
@@ -294,14 +298,14 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             if (output.vented()) {
                 continue;
             }
-            FluidState made = FluidState.of(output.id(), output.count());
+            FluidState made = FluidLogic.emitted(output.id(), output.count());
             int take = FluidLogic.accepted(afterConsume, made, fluid.capacity(),
-                    FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA);
+                    fluid.maxC(), fluid.maxP());
             if (take < output.count()) {
                 return false;
             }
             afterConsume = FluidLogic.insert(afterConsume, made, fluid.capacity(),
-                    FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA);
+                    fluid.maxC(), fluid.maxP());
         }
         return true;
     }
@@ -410,7 +414,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return;
         }
         for (OutputSpec output : recipe.fluidOutputs()) {
-            FluidState remaining = FluidState.of(output.id(), output.count());
+            FluidState remaining = FluidLogic.emitted(output.id(), output.count());
             if (!output.vented()) {
                 remaining = fluid.offer(remaining);
             }

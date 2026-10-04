@@ -41,5 +41,11 @@ public enum MachineFamily {
     ELECTROLYSIS_CELL,
 
     /** Ambient air to stored oxygen. Nitrogen and argon wait for a sink. T2. */
-    ATMOSPHERIC_INTAKE
+    ATMOSPHERIC_INTAKE,
+
+    /** Clean re-melt. 1 ingot → 144 mB molten, no slag. T2. */
+    INDUCTION_FURNACE,
+
+    /** 144 mB molten and a mould → one solid form. T2. */
+    CASTER
 }

@@ -39,6 +39,8 @@ public final class MachineArt {
     public static final int CELL = 0x00897B;
     public static final int INTAKE = 0x5C6BC0;
     public static final int WELL = 0x1E88E5;
+    public static final int INDUCTION = 0x26A69A;
+    public static final int CASTER = 0xF4511E;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -78,6 +80,8 @@ public final class MachineArt {
             case CELL -> cellFront(status);
             case INTAKE -> intakeFront(status);
             case WELL -> wellFront(status);
+            case INDUCTION -> inductionFront(status);
+            case CASTER -> casterFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -112,6 +116,8 @@ public final class MachineArt {
             case CELL -> cellTop();
             case INTAKE -> intakeTop();
             case WELL -> wellTop();
+            case INDUCTION -> inductionTop();
+            case CASTER -> casterTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -764,6 +770,85 @@ public final class MachineArt {
             for (int x = 7; x <= 8; x++) {
                 set(img, x, y, Palette.shade(WELL, -0.2));
             }
+        }
+        return img;
+    }
+
+    // ---- Induction Furnace ---------------------------------------------------------------
+
+    /** Coil turns around a crucible: the machine melts without a flame. */
+    public static BufferedImage inductionFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, INDUCTION);
+        int coil = glow < 0 ? Palette.shade(INDUCTION, -0.15) : glow;
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean turn = y == 4 || y == 6 || y == 8 || y == 10;
+                boolean edge = x == 3 || x == 12;
+                if (turn || edge) {
+                    set(img, x, y, coil);
+                }
+            }
+        }
+        for (int y = 12; y <= 13; y++) {
+            for (int x = 5; x <= 10; x++) {
+                set(img, x, y, glow < 0 ? 0xFF6D00 : glow);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage inductionTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int i = 3; i <= 12; i++) {
+            set(img, i, 3, INDUCTION);
+            set(img, i, 12, INDUCTION);
+            set(img, 3, i, INDUCTION);
+            set(img, 12, i, INDUCTION);
+            set(img, i, 5, Palette.shade(INDUCTION, -0.2));
+            set(img, i, 10, Palette.shade(INDUCTION, -0.2));
+        }
+        for (int y = 7; y <= 8; y++) {
+            for (int x = 7; x <= 8; x++) {
+                set(img, x, y, 0xFF6D00);
+            }
+        }
+        return img;
+    }
+
+    // ---- Caster --------------------------------------------------------------------------
+
+    /** An open mould and a pour lip: melt becomes a shape. */
+    public static BufferedImage casterFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, CASTER);
+        int metal = glow < 0 ? Palette.shade(CASTER, -0.25) : glow;
+        for (int y = 7; y <= 13; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean wall = y == 7 || y == 13 || x == 3 || x == 12;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.2) : metal);
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            set(img, x, 4, CASTER);
+            set(img, x, 5, CASTER);
+            set(img, x, 6, Palette.shade(CASTER, 0.15));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage casterTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean wall = y == 4 || y == 11 || x == 3 || x == 12;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.2) : Palette.shade(CASTER, -0.15));
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            set(img, x, 2, CASTER);
         }
         return img;
     }

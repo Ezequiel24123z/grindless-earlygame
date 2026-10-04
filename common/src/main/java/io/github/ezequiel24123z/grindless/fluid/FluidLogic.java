@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.fluid;
 
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 
 /**
  * T1 fluid numbers and rules, independent of a world (ADR-0015, ADR-0062).
@@ -89,6 +90,17 @@ public final class FluidLogic {
      * that fluid is not a fuel. Hydrogen matches CO (ADR-0077). Oxygen does not burn here;
      * its sink is recombination.
      */
+    /**
+     * The fluid a recipe emits. Molten ids are 1000 °C; everything else is the ambient
+     * reference state (ADR-0079). Count-only outputs cannot carry a temperature.
+     */
+    public static FluidState emitted(String id, int millibuckets) {
+        if (id != null && id.startsWith("grindless:molten/")) {
+            return FluidState.of(id, millibuckets, ProcessLogic.MOLTEN_C, AMBIENT_MPA);
+        }
+        return FluidState.of(id, millibuckets);
+    }
+
     public static int burnTicks(String id) {
         if (CARBON_MONOXIDE.equals(id) || HYDROGEN.equals(id)) {
             return CO_BURN_TICKS;

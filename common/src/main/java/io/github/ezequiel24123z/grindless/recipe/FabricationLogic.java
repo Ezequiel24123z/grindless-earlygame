@@ -33,6 +33,10 @@ public final class FabricationLogic {
     public static final String ELECTROLYSIS_CELL = "grindless:electrolysis_cell";
     public static final String ATMOSPHERIC_INTAKE = "grindless:atmospheric_intake";
     public static final String FLUID_WELL = "grindless:fluid_well";
+    public static final String INDUCTION_FURNACE = "grindless:induction_furnace";
+    public static final String CASTER = "grindless:caster";
+    public static final String INGOT_MOULD = "grindless:ingot_mould";
+    public static final String PLATE_MOULD = "grindless:plate_mould";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

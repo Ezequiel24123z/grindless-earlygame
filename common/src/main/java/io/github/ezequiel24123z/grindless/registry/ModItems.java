@@ -67,6 +67,13 @@ public final class ModItems {
     public static final RegistrySupplier<Item> MOTOR = register("motor",
             () -> new Item(new Item.Properties()));
 
+    /** Caster catalysts. Not consumed (ADR-0079). */
+    public static final RegistrySupplier<Item> INGOT_MOULD = register("ingot_mould",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistrySupplier<Item> PLATE_MOULD = register("plate_mould",
+            () -> new Item(new Item.Properties()));
+
     /** Contact-process catalyst. Iron oxide on a ceramic brick support (ADR-0075). */
     public static final RegistrySupplier<Item> VANADIA_PELLET = register("vanadia_pellet",
             () -> new Item(new Item.Properties()));

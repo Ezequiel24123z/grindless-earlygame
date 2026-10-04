@@ -747,6 +747,11 @@ The Caster's second line is the real payoff: molten → plate directly, skipping
 both*. Two steps saved per plate, forever, for the price of a hot pipe run. That is the
 [pay in layout](MACHINES.md#routes-many-ways-to-the-same-output) bargain in its purest form.
 
+The shipped pair (ADR-0079) remelts a finished ingot: `1 u → 144 mB` at 1000 °C, inert, with
+no slag, then casts that melt into an ingot or a plate. The Arc Furnace still makes the ingot.
+A later arc tap that emits melt is another route, not a replacement. The Basic Tank stays at
+40 °C, so the melt stays in the induction and caster buffers.
+
 Alloy compositions are resolved from tags where the pack already defines them, so Grindless does
 not register a rival bronze.
 

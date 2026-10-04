@@ -62,6 +62,8 @@ final class BlockModels {
             case CELL -> cell();
             case INTAKE -> intake();
             case WELL -> well();
+            case INDUCTION -> induction();
+            case CASTER -> caster();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -301,6 +303,25 @@ final class BlockModels {
                 front(2, 2, 2, 14, 6, 14, "top", "side", "front"),
                 box(6, 6, 6, 10, 14, 10, "top", "side"),
                 box(5, 14, 5, 11, 16, 11, "cap", "side"));
+    }
+
+    /** A crucible under a coil ring. */
+    private static List<Box> induction() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 10, 14, "top", "side", "front"),
+                box(3, 10, 3, 13, 12, 13, "top", "side"),
+                box(5, 12, 5, 11, 14, 11, "cap", "side"),
+                box(1, 6, 1, 15, 8, 15, "top", "side"));
+    }
+
+    /** A tray with a pour lip. */
+    private static List<Box> caster() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 6, 14, "top", "side", "front"),
+                box(3, 6, 4, 13, 8, 12, "top", "side"),
+                box(6, 6, 0, 10, 9, 3, "cap", "side"));
     }
 
     /** A stirred vat with a shaft through the lid. */

@@ -132,7 +132,7 @@ maintain. A recipe runs in any machine whose envelope contains the recipe's cond
 | --- | --- | --- | --- |
 | **Kiln** | 100–900 °C | ambient | Drying, calcining, roasting. |
 | **Arc Furnace** | 1200–3500 °C | ambient | Any atmosphere; the metallurgy workhorse. |
-| **Induction Furnace** | 200–2000 °C | ambient | Clean, precise, electrically efficient. |
+| **Induction Furnace** | 200–2000 °C | ambient | Clean, precise, electrically efficient. MK I holds 1000 °C inert for a 144 mB melt (ADR-0079). |
 | **Chemical Reactor** | −20–500 °C | 0.1–2 MPa | Liquid phase, stirred, catalyst slot. MK I holds 450 °C for contact oxidation (ADR-0075). |
 | **Chemical Washer** | 10–100 °C | ambient | Stirred sluice. MK I holds ambient for B2; the range still contains a 90 °C leach (ADR-0076). |
 | **Electrolysis Cell** | 10–80 °C | ambient | Electric field. MK I holds ambient for water; 60 °C chlor-alkali still fits. Molten salt does not (ADR-0077). |

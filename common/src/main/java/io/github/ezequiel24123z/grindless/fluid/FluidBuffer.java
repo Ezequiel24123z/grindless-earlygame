@@ -31,6 +31,14 @@ public final class FluidBuffer {
         return capacity;
     }
 
+    public double maxC() {
+        return maxC;
+    }
+
+    public double maxP() {
+        return maxP;
+    }
+
     public boolean isEmpty() {
         return state.isEmpty();
     }

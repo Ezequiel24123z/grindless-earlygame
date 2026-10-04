@@ -16,6 +16,8 @@
     "grindless:electrolysis_cell",
     "grindless:atmospheric_intake",
     "grindless:fluid_well",
+    "grindless:induction_furnace",
+    "grindless:caster",
     "grindless:flux_pylon_mk1",
     "grindless:flux_pylon_mk2",
     "grindless:flux_pylon_mk3",

@@ -49,6 +49,8 @@ public final class MachineEffects {
             case CELL -> cell(status, level, pos, random);
             case INTAKE -> intake(status, level, pos, random);
             case WELL -> well(status, level, pos, random);
+            case INDUCTION -> induction(status, level, pos, random);
+            case CASTER -> caster(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);
@@ -147,6 +149,59 @@ public final class MachineEffects {
                 }
             }
             case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.5F);
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
+        }
+    }
+
+    /** Heat above the coil while it holds a melt; a dry spark when power is missing. */
+    private static void induction(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.45F) {
+                    particle(level, ParticleTypes.FLAME, x, pos.getY() + 1.05, z, 0.0, 0.02, 0.0);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.05F, 0.16F, 1.2F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.2F) {
+                    particle(level, ParticleTypes.SMOKE, x, pos.getY() + 1.1, z, 0.0, 0.02, 0.0);
+                }
+            }
+            case STARVED -> {
+                if (random.nextFloat() < 0.2F) {
+                    particle(level, ParticleTypes.ELECTRIC_SPARK, x, pos.getY() + 0.7, z, 0.0, 0.0, 0.0);
+                }
+                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.12F, 1.3F);
+            }
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
+        }
+    }
+
+    /** A drip into the mould while casting; a click when the mould or the melt is missing. */
+    private static void caster(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.4F) {
+                    particle(level, ParticleTypes.LAVA, x, pos.getY() + 0.7, z, 0.0, 0.0, 0.0);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.14F, 0.9F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.15F) {
+                    particle(level, ParticleTypes.SMOKE, x, pos.getY() + 0.8, z, 0.0, 0.01, 0.0);
+                }
+            }
+            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.7F);
             case OUT_OF_BAND -> {
             }
             default -> {

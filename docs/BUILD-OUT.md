@@ -7,7 +7,7 @@ The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013
 This file is the *schedule*. Open questions are answered here with the documented default; a
 session writes an ADR only when it must pick among real alternatives, then ships the slice.
 
-**Next slice: O — Induction and caster.** N (Fluid Well) is shipped.
+**Next slice: P — Better separation.** O (Induction and caster) is shipped.
 
 ---
 
@@ -74,7 +74,8 @@ the records below, then implement.
 
 T0 loop, Slice A–E, Kiln/R2, Atlas stub, Multitool wrench, belt junctions (G), the sorter
 (H), the T2 gate (I), Wire Mill / motor (J), the contact process (K), the Chemical
-Washer (L), Electrolysis Cell and Atmospheric Intake (M), the Fluid Well (N), and the design
+Washer (L), Electrolysis Cell and Atmospheric Intake (M), the Fluid Well (N), the
+Induction Furnace and the Caster (O), and the design
 records for armour (ADR-0067)
 and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to automated
 iron without hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel,
@@ -85,8 +86,8 @@ overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftove
 ## Remaining slices
 
 Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G. **G through N are done.** A session that finishes O
-marks O done and sets Next to P.
+it done here in the same PR that ships G. **G through O are done.** A session that finishes P
+marks P done and sets Next to Q.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
@@ -111,7 +112,7 @@ the factory for real.
 | **L** | **Washer and B2** | Wet line, byproduct from the vein | Chemical Washer. B2: crushed + water → washed crushed + byproduct. | Flotation (P). Electrolysis. | ✅ done |
 | **M** | **Electrolysis and air** | Split water and take N₂/O₂ | Electrolysis Cell, Atmospheric Intake. Hydrogen/oxygen sinks. | Fluid Well if the slice is already large — then N is next. | ✅ done |
 | **N** | **Fluid Well** | Chunk fluids | Water, brine, geothermal as specified. | New pipe tier. | ✅ done |
-| **O** | **Induction and caster** | Clean melt; skip the ingot | Induction Furnace, Caster. | Vacuum furnace (T5). |
+| **O** | **Induction and caster** | Clean melt; skip the ingot | Induction Furnace, Caster. | Vacuum furnace (T5). | ✅ done |
 | **P** | **Better separation** | Concentrate sulfides; split mixed streams | Magnetic Separator, Froth Flotation Cell (B3). Surfactant reagent. Tailings sink. | Centrifuge (T3). Sifter still needs its own ADR. |
 | **Q** | **Heat and steam** | Power without burning coal only | Solar generation, Boiler, Condenser. Steam Turbine stays T3 with fission. | Arc Reactor. |
 | **R** | **T2 fluids and belts** | Move fluids and stacks | Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt, Stack/Filter Manipulator. | Phase Manifold (T3). |

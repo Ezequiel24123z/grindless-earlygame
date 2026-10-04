@@ -45,6 +45,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Induction Furnace and Caster (ADR-0079).** Assembler-manufactured (casing, two motors,
+  four plates; Industrial; no circuit board). An ingot mould and a plate mould are four
+  iron plates in 4 s. `1 ingot → 144 mB molten` in 8 s at 1000 °C, inert, with no slag.
+  `144 mB molten + mould → 1 ingot or 1 plate` in 4 s; the mould is not consumed. Molten
+  fluid is emitted at 1000 °C, so a Basic Tank and a clay conduit refuse it. The Arc
+  Furnace still makes ingots. The behaviour graph is 67 recipes; a Grindless-only pack
+  logs 240. CI places both machines.
+
 - **Fluid Well (ADR-0078).** Assembler-manufactured (casing, two motors, four plates;
   Industrial; no circuit board). Draws F1 and pumps 100 mB/t of ambient water from the
   chunk, with no vanilla source, into a 2 B buffer and out the face it points at.

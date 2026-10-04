@@ -123,6 +123,16 @@ public final class ModBlocks {
             register("fluid_well",
                     () -> new FluidWellBlock(machine().strength(3.5F)));
 
+    /** T2 clean re-melt. 1 ingot → 144 mB molten. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> INDUCTION_FURNACE =
+            register("induction_furnace",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.INDUCTION_FURNACE, machine().strength(3.5F)));
+
+    /** T2 caster. 144 mB molten and a mould → one solid form. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> CASTER =
+            register("caster",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.CASTER, machine().strength(3.5F)));
+
     /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
     public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =
             register("conveyor_belt",

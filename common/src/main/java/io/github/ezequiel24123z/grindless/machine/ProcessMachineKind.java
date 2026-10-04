@@ -205,6 +205,54 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.ATMOSPHERIC_INTAKE.get();
         }
+    },
+
+    INDUCTION_FURNACE(MachineFamily.INDUCTION_FURNACE, MachineMenuKind.INDUCTION_FURNACE,
+            BlockCatalogue.Geometry.INDUCTION, "induction_furnace") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.INDUCTION_FURNACE;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT
+                    .withTemperature(ProcessLogic.MELT_TEMPERATURE)
+                    .withAtmosphere(Atmosphere.INERT);
+        }
+
+        @Override
+        public boolean hotFluid() {
+            return true;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.INDUCTION_FURNACE.get();
+        }
+    },
+
+    CASTER(MachineFamily.CASTER, MachineMenuKind.CASTER,
+            BlockCatalogue.Geometry.CASTER, "caster") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public boolean hotFluid() {
+            return true;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.CASTER.get();
+        }
     };
 
     private final MachineFamily family;
@@ -241,4 +289,9 @@ public enum ProcessMachineKind {
     public abstract ConditionState heldConditions();
 
     public abstract BlockEntityType<ProcessMachineBlockEntity> type();
+
+    /** Whether the fluid buffer may hold melt. The tank and the clay pipe still refuse it. */
+    public boolean hotFluid() {
+        return false;
+    }
 }

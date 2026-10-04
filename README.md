@@ -2004,12 +2004,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21e | **Slice L — Washer and B2:** Chemical Washer, washed crushed, vein byproduct | ✅ done — ADR-0076 |
 | 21f | **Slice M — Electrolysis and air:** Electrolysis Cell, Atmospheric Intake, hydrogen and oxygen sinks | ✅ done — ADR-0077 |
 | 21g | **Slice N — Fluid Well:** powered chunk water | ✅ done — ADR-0078 |
-| 22 | T2+ industry: flotation, solar/steam, induction | pending — build-out O–S |
+| 21h | **Slice O — Induction and caster:** melt an ingot; cast a plate | ✅ done — ADR-0079 |
+| 22 | T2+ industry: flotation, solar/steam | pending — build-out P–S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **O**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **P**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2037,8 +2038,13 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is O — Induction and caster**, not flotation and not etching.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Fluid Well is in (ADR-0078):
+**Next is P — Better separation**, not etching and not the Sifter.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Induction Furnace and the Caster are in
+(ADR-0079): Assembler-manufactured once Industrial is researched
+(`1 casing + 2 motor + 4 plates`). `1 ingot → 144 mB molten` in 8 s at 1000 °C, inert,
+with no slag. `144 mB molten + mould → 1 ingot or 1 plate` in 4 s. The moulds are four
+iron plates. Molten fluid is 1000 °C, so a Basic Tank refuses it. The Arc Furnace still
+makes ingots. The Fluid Well is in (ADR-0078):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 It draws F1 and pumps 100 mB/t of chunk water with no vanilla source. Brine, oil and
 geothermal are not emitted. The Electrolysis Cell and the Atmospheric

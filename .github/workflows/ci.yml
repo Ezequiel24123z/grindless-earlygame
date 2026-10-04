@@ -150,6 +150,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-well.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-well.expect
 
+      # Slice O: Induction Furnace and Caster place as process machines.
+      - name: Boot and exercise induction and caster
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-cast.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-cast.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line and well", 52, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well and melt", 67, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -384,6 +384,67 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
                         .anyMatch(spec -> spec.id().contains("geothermal"))));
 
+        ProcessRecipe melt = recipe(recipes, "melt/iron");
+        ProcessRecipe castIngot = recipe(recipes, "cast/ingot/iron");
+        ProcessRecipe castPlate = recipe(recipes, "cast/plate/iron");
+        ProcessRecipe induction = recipe(recipes, "assemble/induction_furnace");
+        ProcessRecipe caster = recipe(recipes, "assemble/caster");
+        ProcessRecipe ingotMould = recipe(recipes, "assemble/ingot_mould");
+        ProcessRecipe plateMould = recipe(recipes, "assemble/plate_mould");
+
+        eq("melt is the induction furnace", MachineFamily.INDUCTION_FURNACE, melt.family());
+        eq("melt takes one iron ingot", "tag:forge:ingots/iron", melt.itemInputs().get(0).qualified());
+        eq("melt makes 144 mB", "fluid:grindless:molten/iron", melt.fluidOutputs().get(0).qualified());
+        eq("melt is one unit", 144, melt.fluidOutputs().get(0).count());
+        yes("melt is stored", !melt.fluidOutputs().get(0).vented());
+        eq("melt is 1000 C", 1000.0, melt.temperatureC());
+        eq("melt is inert", "INERT", melt.atmosphere());
+        eq("melt is eight seconds", 20 * 8, melt.durationTicks());
+        yes("melt makes no slag", melt.itemOutputs().isEmpty());
+        no("crushed is not melted",
+                recipes.stream().anyMatch(candidate -> candidate.id().startsWith("melt/")
+                        && candidate.itemInputs().stream().anyMatch(spec -> spec.id().contains("crushed"))));
+
+        eq("ingot cast is the caster", MachineFamily.CASTER, castIngot.family());
+        eq("ingot cast takes 144 mB", 144, castIngot.fluidInputs().get(0).count());
+        eq("ingot cast makes one ingot", "tag:forge:ingots/iron", castIngot.itemOutputs().get(0).qualified());
+        eq("ingot cast keeps the mould", "item:grindless:ingot_mould",
+                castIngot.catalysts().get(0).qualified());
+        yes("ingot cast names no temperature", !castIngot.namesTemperature());
+        eq("ingot cast is four seconds", 20 * 4, castIngot.durationTicks());
+
+        eq("plate cast is the caster", MachineFamily.CASTER, castPlate.family());
+        eq("plate cast takes molten iron", "fluid:grindless:molten/iron",
+                castPlate.fluidInputs().get(0).qualified());
+        eq("plate cast takes 144 mB", 144, castPlate.fluidInputs().get(0).count());
+        eq("plate cast keeps the plate mould", "item:grindless:plate_mould",
+                castPlate.catalysts().get(0).qualified());
+        eq("plate cast makes one plate", "tag:forge:plates/iron", castPlate.itemOutputs().get(0).qualified());
+        yes("plate cast names no temperature", !castPlate.namesTemperature());
+        no("mythril has no plate cast",
+                recipes.stream().anyMatch(candidate -> candidate.id().equals("cast/plate/mythril")));
+
+        eq("the induction furnace is the assembler", MachineFamily.ASSEMBLER, induction.family());
+        eq("the induction furnace takes a casing", "item:grindless:machine_casing",
+                induction.itemInputs().get(0).qualified());
+        eq("the induction furnace takes two motors", 2, induction.itemInputs().get(1).count());
+        eq("the induction furnace takes four plates", 4, induction.itemInputs().get(2).count());
+        eq("the induction furnace is twenty seconds", 20 * 20, induction.durationTicks());
+        eq("the induction furnace needs Industrial", "industrial", induction.blueprint());
+        eq("the induction furnace makes the block", "item:grindless:induction_furnace",
+                induction.itemOutputs().get(0).qualified());
+        eq("the caster is the assembler", MachineFamily.ASSEMBLER, caster.family());
+        eq("the caster makes the block", "item:grindless:caster",
+                caster.itemOutputs().get(0).qualified());
+        eq("the ingot mould is the assembler", MachineFamily.ASSEMBLER, ingotMould.family());
+        eq("the ingot mould takes four plates", 4, ingotMould.itemInputs().get(0).count());
+        eq("the ingot mould is four seconds", 20 * 4, ingotMould.durationTicks());
+        eq("the ingot mould needs Industrial", "industrial", ingotMould.blueprint());
+        eq("the ingot mould makes the item", "item:grindless:ingot_mould",
+                ingotMould.itemOutputs().get(0).qualified());
+        eq("the plate mould makes the item", "item:grindless:plate_mould",
+                plateMould.itemOutputs().get(0).qualified());
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -490,6 +551,14 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("atmospheric_intake.json")));
         no("the well has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("fluid_well.json")));
+        no("the induction furnace has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("induction_furnace.json")));
+        no("the caster has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("caster.json")));
+        no("the ingot mould has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("ingot_mould.json")));
+        no("the plate mould has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("plate_mould.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

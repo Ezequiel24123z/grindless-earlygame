@@ -17,6 +17,7 @@ public final class VerifyFluid {
         buffers();
         capture();
         burn();
+        molten();
 
         System.out.println(failures == 0
                 ? "ALL FLUID CHECKS PASSED"
@@ -181,6 +182,23 @@ public final class VerifyFluid {
         eq("nitrogen is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.NITROGEN));
         eq("SO2 is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.SULFUR_DIOXIDE));
         eq("water is not a generator fuel", 0, FluidLogic.burnTicks(FluidLogic.WATER));
+    }
+
+    private static void molten() {
+        FluidState melt = FluidLogic.emitted(ProcessLogic.moltenId("iron"), ProcessLogic.MOLTEN_MB);
+        eq("one unit of melt is 144 mB", 144, melt.millibuckets());
+        eq("melt is emitted at 1000 C", 1000.0, melt.temperatureC());
+        no("melt is not ambient", FluidLogic.isAmbient(melt));
+        eq("a tank at ambient refuses melt", 0,
+                FluidLogic.accepted(FluidState.EMPTY, melt, FluidLogic.TANK_CAPACITY,
+                        FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA));
+        eq("an ambient buffer refuses melt", 0, FluidBuffer.ambient(2000).accepted(melt));
+        FluidBuffer hot = new FluidBuffer(2000, ProcessLogic.MOLTEN_MAX_C, FluidLogic.AMBIENT_MPA);
+        eq("a hot buffer accepts one unit of melt", 144, hot.accepted(melt));
+        FluidState water = FluidLogic.emitted(FluidLogic.WATER, 1000);
+        yes("emitted water stays ambient", FluidLogic.isAmbient(water));
+        FluidState co = FluidLogic.emitted(FluidLogic.CARBON_MONOXIDE, 1000);
+        yes("emitted CO stays ambient", FluidLogic.isAmbient(co));
     }
 
     private static void eq(String what, int expected, int actual) {

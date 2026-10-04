@@ -18,21 +18,22 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 52, rows.size());
+        eq("atlas lists every generated recipe", 67, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("eight assembler crafts in this set", 8,
+        eq("twelve assembler crafts in this set", 12,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
-        eq("four routes make an iron ingot", 4, ironIngot.size());
+        eq("five routes make an iron ingot", 5, ironIngot.size());
         yes("B0 makes iron", ids(ironIngot).contains("b0_r1/iron"));
         yes("crushed R1 makes iron", ids(ironIngot).contains("b1_r1/iron"));
         yes("washed R1 makes iron", ids(ironIngot).contains("b2_r1/iron"));
         yes("R2 makes iron", ids(ironIngot).contains("r2/iron"));
+        yes("the caster makes iron", ids(ironIngot).contains("cast/ingot/iron"));
         yes("qualified kind also matches",
-                AtlasLogic.producing(recipes, "tag:forge:ingots/iron").size() == 4);
+                AtlasLogic.producing(recipes, "tag:forge:ingots/iron").size() == 5);
 
         List<AtlasLogic.Entry> oxide = AtlasLogic.producing(recipes, "grindless:oxides/iron");
         eq("three roast routes make iron oxide", 3, oxide.size());
@@ -58,6 +59,16 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:atmospheric_intake").size());
         eq("the well is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:fluid_well").size());
+        eq("the induction furnace is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:induction_furnace").size());
+        eq("the caster is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:caster").size());
+        eq("the ingot mould is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:ingot_mould").size());
+        eq("the plate mould is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:plate_mould").size());
+        eq("molten iron has one melt route", 1,
+                AtlasLogic.producing(recipes, "grindless:molten/iron").size());
         eq("hydrogen has one electrolysis route", 1,
                 AtlasLogic.producing(recipes, "grindless:hydrogen").size());
         eq("oxygen has the cell and the intake", 2,
@@ -68,7 +79,7 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());
         eq("acid has one contact route", 1,
                 AtlasLogic.producing(recipes, "grindless:sulfuric_acid").size());
-        eq("pickle is a second iron plate route", 2,
+        eq("cast is a third iron plate route", 3,
                 AtlasLogic.producing(recipes, "forge:plates/iron").size());
         eq("iron wire has one mill route", 1,
                 AtlasLogic.producing(recipes, "grindless:wires/iron").size());

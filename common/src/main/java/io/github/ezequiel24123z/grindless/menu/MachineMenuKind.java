@@ -19,7 +19,9 @@ public enum MachineMenuKind {
     CHEMICAL_WASHER(1, 2),
     /** Fluid-only. Ordinals are saved; new kinds are appended (ADR-0077). */
     ELECTROLYSIS_CELL(0, 0),
-    ATMOSPHERIC_INTAKE(0, 0);
+    ATMOSPHERIC_INTAKE(0, 0),
+    INDUCTION_FURNACE(1, 0),
+    CASTER(1, 1);
 
     private final int inputs;
     private final int outputs;

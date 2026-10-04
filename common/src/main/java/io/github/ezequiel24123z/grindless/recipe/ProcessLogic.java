@@ -78,6 +78,20 @@ public final class ProcessLogic {
     public static final int AIR_OXYGEN_MB = 2000;
     public static final int AIR_TICKS = 20 * 10;
 
+    /** 1 u of melt. The modded convention, so the caster needs no conversion table (ADR-0079). */
+    public static final int MOLTEN_MB = 144;
+    public static final double MOLTEN_C = 1000.0;
+    /** Induction and caster buffers. The Basic Tank stays at {@link io.github.ezequiel24123z.grindless.fluid.FluidLogic#AMBIENT_MAX_C}. */
+    public static final double MOLTEN_MAX_C = 1200.0;
+    public static final int MELT_TICKS = 20 * 8;
+    public static final int CAST_TICKS = 20 * 4;
+    public static final double MELT_TEMPERATURE = MOLTEN_C;
+    public static final String MELT_ATMOSPHERE = "INERT";
+
+    public static String moltenId(String material) {
+        return "grindless:molten/" + material;
+    }
+
     private ProcessLogic() {
     }
 

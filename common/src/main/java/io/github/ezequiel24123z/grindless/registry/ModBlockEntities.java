@@ -148,6 +148,22 @@ public final class ModBlockEntities {
                                     ModBlocks.ATMOSPHERIC_INTAKE.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> INDUCTION_FURNACE =
+            BLOCK_ENTITIES.register("induction_furnace",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.INDUCTION_FURNACE, pos, state),
+                                    ModBlocks.INDUCTION_FURNACE.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> CASTER =
+            BLOCK_ENTITIES.register("caster",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.CASTER, pos, state),
+                                    ModBlocks.CASTER.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

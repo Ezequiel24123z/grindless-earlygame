@@ -91,6 +91,13 @@ public final class ProcessGraph {
             }
             if (material.ingot()) {
                 recipes.add(wire(material.name()));
+                recipes.add(melt(material.name()));
+                recipes.add(cast(material.name(), "ingot", ingotTag(material.name()),
+                        FabricationLogic.INGOT_MOULD));
+                if (material.plate()) {
+                    recipes.add(cast(material.name(), "plate", "forge:plates/" + material.name(),
+                            FabricationLogic.PLATE_MOULD));
+                }
             }
         }
         recipes.add(coilPress());
@@ -109,6 +116,10 @@ public final class ProcessGraph {
         recipes.add(electrolysisCell());
         recipes.add(atmosphericIntake());
         recipes.add(fluidWell());
+        recipes.add(inductionFurnace());
+        recipes.add(caster());
+        recipes.add(ingotMould());
+        recipes.add(plateMould());
         return List.copyOf(recipes);
     }
 
@@ -533,6 +544,80 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** 1 ingot becomes 144 mB of melt. No slag (ADR-0079). */
+    private static ProcessRecipe melt(String material) {
+        return new ProcessRecipe(
+                "melt/" + material,
+                MachineFamily.INDUCTION_FURNACE,
+                List.of(IngredientSpec.tag(ingotTag(material), 1)),
+                List.of(OutputSpec.fluid(ProcessLogic.moltenId(material), ProcessLogic.MOLTEN_MB)),
+                ProcessLogic.MELT_TEMPERATURE,
+                ProcessLogic.MELT_ATMOSPHERE,
+                ProcessLogic.MELT_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** 144 mB of melt and a mould become one solid unit. The mould is not consumed. */
+    private static ProcessRecipe cast(String material, String form, String tag, String mould) {
+        return new ProcessRecipe(
+                "cast/" + form + "/" + material,
+                MachineFamily.CASTER,
+                List.of(IngredientSpec.fluid(ProcessLogic.moltenId(material), ProcessLogic.MOLTEN_MB)),
+                List.of(OutputSpec.tag(tag, 1)),
+                Double.NaN,
+                null,
+                ProcessLogic.CAST_TICKS,
+                ProcessLogic.FU_PER_TICK,
+                List.of(IngredientSpec.item(mould, 1)));
+    }
+
+    private static ProcessRecipe inductionFurnace() {
+        return machineCraft("assemble/induction_furnace", FabricationLogic.INDUCTION_FURNACE);
+    }
+
+    private static ProcessRecipe caster() {
+        return machineCraft("assemble/caster", FabricationLogic.CASTER);
+    }
+
+    private static ProcessRecipe machineCraft(String id, String result) {
+        return new ProcessRecipe(
+                id,
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(result, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    private static ProcessRecipe ingotMould() {
+        return mould("assemble/ingot_mould", FabricationLogic.INGOT_MOULD);
+    }
+
+    private static ProcessRecipe plateMould() {
+        return mould("assemble/plate_mould", FabricationLogic.PLATE_MOULD);
+    }
+
+    private static ProcessRecipe mould(String id, String result) {
+        return new ProcessRecipe(
+                id,
+                MachineFamily.ASSEMBLER,
+                List.of(IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(result, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.PRESS_TICKS,
                 FabricationLogic.FU_PER_TICK,
                 List.of(),
                 "industrial");

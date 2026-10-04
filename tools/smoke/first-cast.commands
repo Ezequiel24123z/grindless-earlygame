@@ -1,0 +1,9 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 8 70 8 grindless:induction_furnace[facing=south,status=idle]
+execute if block 8 70 8 grindless:induction_furnace run say INDUCTION-OK
+setblock 10 70 8 grindless:caster[facing=south,status=idle]
+execute if block 10 70 8 grindless:caster run say CASTER-OK
