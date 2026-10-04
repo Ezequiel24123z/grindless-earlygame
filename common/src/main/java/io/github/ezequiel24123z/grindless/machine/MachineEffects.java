@@ -66,8 +66,15 @@ public final class MachineEffects {
             case MANIPULATOR -> manipulator(status, front, level, pos, random);
             case DRILL -> extractor(status, level, pos, random);
             case CONDUIT -> belt(status, level, pos, random);
+            case PRESSURE -> belt(status, level, pos, random);
             case PUMP -> mill(status, level, pos, random);
+            case EPUMP -> mill(status, level, pos, random);
             case TANK -> generator(status, level, pos, random);
+            case INDUSTRIAL -> generator(status, level, pos, random);
+            case FLUID_ARM -> manipulator(status, front, level, pos, random);
+            case FLUX_BELT -> belt(status, level, pos, random);
+            case STACK_ARM -> manipulator(status, front, level, pos, random);
+            case FILTER_ARM -> manipulator(status, front, level, pos, random);
             case BANK -> pylon(1, status, level, pos, random);
             case TRANSFORMER -> dynamo(status, front, level, pos, random);
         }

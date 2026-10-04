@@ -83,10 +83,24 @@ public final class BlockCatalogue {
         DRILL,
         /** An open trough that liquid runs along. */
         CONDUIT,
+        /** A closed tube. Hot fluid and gas, not gravity. */
+        PRESSURE,
         /** A piston over a well. */
         PUMP,
+        /** A powered impeller. It moves fluid; it does not summon it. */
+        EPUMP,
         /** A squat cylinder with a sight glass. */
         TANK,
+        /** A tall rated vessel. One block, not a formed tank. */
+        INDUSTRIAL,
+        /** A nozzle on a post. Fluid, not items. */
+        FLUID_ARM,
+        /** A low slab with a flux rail. Twice the conveyor. */
+        FLUX_BELT,
+        /** A heavier arm. Twelve items in one cycle. */
+        STACK_ARM,
+        /** An arm with a gate. One whitelist id. */
+        FILTER_ARM,
         /** A rack of cells. Capacity, not coverage. */
         BANK,
         /** Two coils on a core. A tap, not a pylon. */
@@ -171,8 +185,15 @@ public final class BlockCatalogue {
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),
+            new Entry("pressure_pipe", Geometry.PRESSURE, 1, true, BELT),
             new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP),
+            new Entry("electric_pump", Geometry.EPUMP, 1, true, CONSUMER),
             new Entry("basic_tank", Geometry.TANK, 1, true, BELT),
+            new Entry("industrial_tank", Geometry.INDUSTRIAL, 1, true, BELT),
+            new Entry("fluid_manipulator", Geometry.FLUID_ARM, 1, true, CONSUMER),
+            new Entry("flux_belt", Geometry.FLUX_BELT, 1, true, CONSUMER),
+            new Entry("stack_manipulator", Geometry.STACK_ARM, 1, true, CONSUMER),
+            new Entry("filter_manipulator", Geometry.FILTER_ARM, 1, true, CONSUMER),
             new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
             new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
 

@@ -2007,12 +2007,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21h | **Slice O — Induction and caster:** melt an ingot; cast a plate | ✅ done — ADR-0079 |
 | 21i | **Slice P — Better separation:** flotation and a magnetic split | ✅ done — ADR-0080 |
 | 21j | **Slice Q — Heat and steam:** daylight power and a closed steam loop | ✅ done — ADR-0081 |
-| 22 | T2+ industry: pipes, logic | pending — build-out R–S |
+| 21k | **Slice R — T2 fluids and belts:** move steam, melt and stacks | ✅ done — ADR-0082 |
+| 22 | T2 logic | pending — build-out S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **R**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **S**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2040,8 +2041,16 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is R — T2 fluids and belts**, not the Steam Turbine and not the Arc Reactor.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Solar Array, the Boiler and the
+**Next is S — Logic**, not the Phase Manifold and not the flux tunnel.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Pressure Pipe, the Electric Pump,
+the Industrial Tank, the Fluid Manipulator, the Flux Belt and the Stack and
+Filter Manipulators are in (ADR-0082): Assembler-manufactured once Industrial
+is researched (`1 casing + 2 motor + 4 plates`). The pipe and the industrial
+tank accept fluid up to 1200 °C and 1.0 MPa. Steam and molten metal move.
+Superheated steam does not. The Clay Conduit and the Basic Tank still refuse
+both. The pump does not invent water. The tank is one block. The flux belt
+moves 16 items/s and spends F1 only while it carries items. The T1 tunnel
+stays at 5 blocks. The Solar Array, the Boiler and the
 Condenser are in (ADR-0081): Assembler-manufactured once Industrial is researched.
 The panel makes 32 FU/t in daylight and nothing at night. `1 B water → 1 B steam`
 in 10 s at 150 °C and 0.5 MPa, and the condenser returns that steam to water. The

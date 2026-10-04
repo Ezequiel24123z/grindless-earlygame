@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 81, rows.size());
+        eq("atlas lists every generated recipe", 88, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("seventeen assembler crafts in this set", 17,
+        eq("twenty-four assembler crafts in this set", 24,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -79,6 +79,20 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:boiler").size());
         eq("the condenser is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:condenser").size());
+        eq("the pressure pipe is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:pressure_pipe").size());
+        eq("the electric pump is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:electric_pump").size());
+        eq("the industrial tank is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:industrial_tank").size());
+        eq("the fluid manipulator is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:fluid_manipulator").size());
+        eq("the flux belt is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:flux_belt").size());
+        eq("the stack manipulator is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:stack_manipulator").size());
+        eq("the filter manipulator is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:filter_manipulator").size());
         eq("steam has one boiler route", 1,
                 AtlasLogic.producing(recipes, "grindless:steam").size());
         eq("molten iron has one melt route", 1,

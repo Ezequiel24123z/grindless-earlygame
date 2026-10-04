@@ -42,6 +42,13 @@ public final class FabricationLogic {
     public static final String SOLAR_ARRAY = "grindless:solar_array";
     public static final String BOILER = "grindless:boiler";
     public static final String CONDENSER = "grindless:condenser";
+    public static final String PRESSURE_PIPE = "grindless:pressure_pipe";
+    public static final String ELECTRIC_PUMP = "grindless:electric_pump";
+    public static final String INDUSTRIAL_TANK = "grindless:industrial_tank";
+    public static final String FLUID_MANIPULATOR = "grindless:fluid_manipulator";
+    public static final String FLUX_BELT = "grindless:flux_belt";
+    public static final String STACK_MANIPULATOR = "grindless:stack_manipulator";
+    public static final String FILTER_MANIPULATOR = "grindless:filter_manipulator";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

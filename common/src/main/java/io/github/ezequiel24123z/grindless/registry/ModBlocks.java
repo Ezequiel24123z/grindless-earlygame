@@ -5,11 +5,18 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
+import io.github.ezequiel24123z.grindless.fluid.ElectricPumpBlock;
+import io.github.ezequiel24123z.grindless.fluid.FluidManipulatorBlock;
 import io.github.ezequiel24123z.grindless.fluid.FluidWellBlock;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
+import io.github.ezequiel24123z.grindless.fluid.IndustrialTankBlock;
+import io.github.ezequiel24123z.grindless.fluid.PressurePipeBlock;
 import io.github.ezequiel24123z.grindless.belt.BeltBlock;
+import io.github.ezequiel24123z.grindless.belt.FilterManipulatorBlock;
+import io.github.ezequiel24123z.grindless.belt.FluxBeltBlock;
 import io.github.ezequiel24123z.grindless.belt.MagneticSeparatorBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
+import io.github.ezequiel24123z.grindless.belt.StackManipulatorBlock;
 import io.github.ezequiel24123z.grindless.belt.MergerBlock;
 import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
 import io.github.ezequiel24123z.grindless.belt.SorterBlock;
@@ -214,6 +221,41 @@ public final class ModBlocks {
     public static final RegistrySupplier<BasicTankBlock> BASIC_TANK =
             register("basic_tank",
                     () -> new BasicTankBlock(machine().strength(2.5F)));
+
+    /** T2 pipe. Steam and melt, gas and uphill. Manufactured, not crafted. */
+    public static final RegistrySupplier<PressurePipeBlock> PRESSURE_PIPE =
+            register("pressure_pipe",
+                    () -> new PressurePipeBlock(machine().strength(2.0F)));
+
+    /** T2 pump. Moves rated fluid. Does not summon water. Manufactured, not crafted. */
+    public static final RegistrySupplier<ElectricPumpBlock> ELECTRIC_PUMP =
+            register("electric_pump",
+                    () -> new ElectricPumpBlock(machine().strength(2.5F)));
+
+    /** T2 tank. 64 B at the steam and melt rating. One block. Manufactured, not crafted. */
+    public static final RegistrySupplier<IndustrialTankBlock> INDUSTRIAL_TANK =
+            register("industrial_tank",
+                    () -> new IndustrialTankBlock(machine().strength(3.0F)));
+
+    /** T2 fluid inserter. One bucket a second. Manufactured, not crafted. */
+    public static final RegistrySupplier<FluidManipulatorBlock> FLUID_MANIPULATOR =
+            register("fluid_manipulator",
+                    () -> new FluidManipulatorBlock(machine().strength(2.0F)));
+
+    /** T2 belt. 16 items/s while it spends LV. Manufactured, not crafted. */
+    public static final RegistrySupplier<FluxBeltBlock> FLUX_BELT =
+            register("flux_belt",
+                    () -> new FluxBeltBlock(machine().strength(2.0F)));
+
+    /** T2 inserter. Twelve items a second. Manufactured, not crafted. */
+    public static final RegistrySupplier<StackManipulatorBlock> STACK_MANIPULATOR =
+            register("stack_manipulator",
+                    () -> new StackManipulatorBlock(machine().strength(2.0F)));
+
+    /** T2 inserter. One whitelist. Manufactured, not crafted. */
+    public static final RegistrySupplier<FilterManipulatorBlock> FILTER_MANIPULATOR =
+            register("filter_manipulator",
+                    () -> new FilterManipulatorBlock(machine().strength(2.0F)));
 
     /** T1 storage. Adds capacity to the covering network; no supply cube of its own. */
     public static final RegistrySupplier<CapacitorBankBlock> CAPACITOR_BANK =

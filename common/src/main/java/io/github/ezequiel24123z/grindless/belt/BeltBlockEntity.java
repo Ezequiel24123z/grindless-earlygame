@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * <p>Hoppers insert from above and pull from below. A manipulator uses {@link BeltEndpoint}.
  * The tile ticks as one unit — advancing both lanes and offering the front items onward.
  */
-public final class BeltBlockEntity extends BlockEntity implements BeltEndpoint, WorldlyContainer {
+public final class BeltBlockEntity extends BlockEntity implements BeltEndpoint, BeltView, WorldlyContainer {
 
     private static final String KEY_LANES = "Lanes";
     private static final int[] INSERT_SLOTS = {0};
@@ -125,6 +125,12 @@ public final class BeltBlockEntity extends BlockEntity implements BeltEndpoint, 
     @Override
     public boolean canExtract(Direction from) {
         return pickLane(from).peekFront() != null;
+    }
+
+    @Override
+    public ItemStack preview(Direction from) {
+        LaneItem item = pickLane(from).nearest(extractTarget(from));
+        return BeltStacks.toStack(item);
     }
 
     @Override

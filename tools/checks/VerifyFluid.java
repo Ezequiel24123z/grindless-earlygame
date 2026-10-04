@@ -18,6 +18,7 @@ public final class VerifyFluid {
         capture();
         burn();
         molten();
+        pressure();
 
         System.out.println(failures == 0
                 ? "ALL FLUID CHECKS PASSED"
@@ -214,6 +215,32 @@ public final class VerifyFluid {
         FluidBuffer steamBuffer = new FluidBuffer(2000, ProcessLogic.STEAM_MAX_C, ProcessLogic.STEAM_MAX_MPA);
         eq("a boiler buffer accepts one bucket of steam", 1000, steamBuffer.accepted(steam));
         eq("steam is not a generator fuel", 0, FluidLogic.burnTicks(ProcessLogic.STEAM));
+    }
+
+    private static void pressure() {
+        eq("the pipe holds 2 B", 2000, PressureLogic.PIPE_CAPACITY);
+        eq("the pipe moves 200 mB a tick", 200, PressureLogic.PIPE_MB_PER_TICK);
+        eq("the electric pump moves 100 mB a tick", 100, PressureLogic.PUMP_MB_PER_TICK);
+        eq("the industrial tank holds 64 B", 64_000, PressureLogic.TANK_CAPACITY);
+        eq("the fluid arm moves one bucket", 1000, PressureLogic.MANIPULATOR_MB);
+        eq("the T2 ceiling is 1200 C", 1200.0, PressureLogic.MAX_C);
+        eq("the T2 ceiling is 1.0 MPa", 1.0, PressureLogic.MAX_MPA);
+        FluidState steam = FluidLogic.emitted(ProcessLogic.STEAM, 1000);
+        FluidState melt = FluidLogic.emitted(ProcessLogic.moltenId("iron"), ProcessLogic.MOLTEN_MB);
+        yes("steam fits the T2 rating", PressureLogic.accepts(steam));
+        yes("melt fits the T2 rating", PressureLogic.accepts(melt));
+        FluidState superheated = FluidState.of(ProcessLogic.STEAM, 1000, 450.0, 6.0);
+        no("superheated steam does not fit", PressureLogic.accepts(superheated));
+        FluidBuffer pipe = PressureLogic.buffer(PressureLogic.PIPE_CAPACITY);
+        eq("a pressure pipe accepts steam", 1000, pipe.accepted(steam));
+        eq("a pressure pipe accepts melt", 144, pipe.accepted(melt));
+        eq("a pressure pipe refuses superheated steam", 0, pipe.accepted(superheated));
+        eq("clay still refuses steam", 0, FluidBuffer.ambient(FluidLogic.CONDUIT_CAPACITY).accepted(steam));
+        eq("the basic tank still refuses steam", 0,
+                FluidBuffer.ambient(FluidLogic.TANK_CAPACITY).accepted(steam));
+        FluidBuffer tank = PressureLogic.buffer(PressureLogic.TANK_CAPACITY);
+        eq("the industrial tank accepts steam", 1000, tank.accepted(steam));
+        eq("the industrial tank accepts melt", 144, tank.accepted(melt));
     }
 
     private static void eq(String what, int expected, int actual) {

@@ -131,6 +131,13 @@ public final class ProcessGraph {
         recipes.add(solarArray());
         recipes.add(boiler());
         recipes.add(condenser());
+        recipes.add(pressurePipe());
+        recipes.add(electricPump());
+        recipes.add(industrialTank());
+        recipes.add(fluidManipulator());
+        recipes.add(fluxBelt());
+        recipes.add(stackManipulator());
+        recipes.add(filterManipulator());
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);
@@ -638,6 +645,34 @@ public final class ProcessGraph {
 
     private static ProcessRecipe condenser() {
         return machineCraft("assemble/condenser", FabricationLogic.CONDENSER);
+    }
+
+    private static ProcessRecipe pressurePipe() {
+        return machineCraft("assemble/pressure_pipe", FabricationLogic.PRESSURE_PIPE);
+    }
+
+    private static ProcessRecipe electricPump() {
+        return machineCraft("assemble/electric_pump", FabricationLogic.ELECTRIC_PUMP);
+    }
+
+    private static ProcessRecipe industrialTank() {
+        return machineCraft("assemble/industrial_tank", FabricationLogic.INDUSTRIAL_TANK);
+    }
+
+    private static ProcessRecipe fluidManipulator() {
+        return machineCraft("assemble/fluid_manipulator", FabricationLogic.FLUID_MANIPULATOR);
+    }
+
+    private static ProcessRecipe fluxBelt() {
+        return machineCraft("assemble/flux_belt", FabricationLogic.FLUX_BELT);
+    }
+
+    private static ProcessRecipe stackManipulator() {
+        return machineCraft("assemble/stack_manipulator", FabricationLogic.STACK_MANIPULATOR);
+    }
+
+    private static ProcessRecipe filterManipulator() {
+        return machineCraft("assemble/filter_manipulator", FabricationLogic.FILTER_MANIPULATOR);
     }
 
     /** Electrical heat. The turbine that would spend this steam is not this tier (ADR-0081). */

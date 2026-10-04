@@ -49,6 +49,26 @@ public final class ItemExtract {
         return ItemStack.EMPTY;
     }
 
+    /** A copy of the item a pull would take, or empty when the neighbour cannot say. */
+    public static ItemStack preview(Level level, BlockPos from, Direction side) {
+        BlockPos pos = from.relative(side);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof BeltEndpoint belt) {
+            return belt.preview(side.getOpposite());
+        }
+        if (blockEntity instanceof Container container) {
+            for (int slot = 0; slot < container.getContainerSize(); slot++) {
+                ItemStack stack = container.getItem(slot);
+                if (!stack.isEmpty()) {
+                    ItemStack copy = stack.copy();
+                    copy.setCount(1);
+                    return copy;
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
     public static boolean hasExtractable(Level level, BlockPos from, Direction side) {
         BlockPos pos = from.relative(side);
         BlockEntity blockEntity = level.getBlockEntity(pos);

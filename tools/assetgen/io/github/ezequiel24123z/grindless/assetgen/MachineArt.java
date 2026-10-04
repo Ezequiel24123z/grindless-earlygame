@@ -56,8 +56,15 @@ public final class MachineArt {
     public static final int MANIPULATOR = 0x69F0AE;
     public static final int DRILL = 0xFF6D00;
     public static final int CONDUIT = 0x8D6E63;
+    public static final int PRESSURE = 0x455A64;
     public static final int PUMP = 0x4FC3F7;
+    public static final int EPUMP = 0x0277BD;
     public static final int TANK = 0x80CBC4;
+    public static final int INDUSTRIAL = 0x546E7A;
+    public static final int FLUID_ARM = 0x00838F;
+    public static final int FLUX_BELT = 0x1565C0;
+    public static final int STACK_ARM = 0x6A1B9A;
+    public static final int FILTER_ARM = 0xF9A825;
     public static final int BANK = 0xFFEE58;
     public static final int TRANSFORMER = 0x7C4DFF;
 
@@ -101,8 +108,15 @@ public final class MachineArt {
             case MANIPULATOR -> manipulatorFront(status);
             case DRILL -> drillFront(status);
             case CONDUIT -> conduitFront(status);
+            case PRESSURE -> pressureFront(status);
             case PUMP -> pumpFront(status);
+            case EPUMP -> epumpFront(status);
             case TANK -> tankFront(status);
+            case INDUSTRIAL -> industrialFront(status);
+            case FLUID_ARM -> fluidArmFront(status);
+            case FLUX_BELT -> fluxBeltFront(status);
+            case STACK_ARM -> stackArmFront(status);
+            case FILTER_ARM -> filterArmFront(status);
             case BANK -> bankFront(status);
             case TRANSFORMER -> transformerFront(status);
             case PYLON -> pylonSide(1, status);
@@ -142,8 +156,15 @@ public final class MachineArt {
             case MANIPULATOR -> manipulatorTop();
             case DRILL -> drillTop();
             case CONDUIT -> conduitTop();
+            case PRESSURE -> pressureTop();
             case PUMP -> pumpTop();
+            case EPUMP -> epumpTop();
             case TANK -> tankTop();
+            case INDUSTRIAL -> industrialTop();
+            case FLUID_ARM -> fluidArmTop();
+            case FLUX_BELT -> fluxBeltTop();
+            case STACK_ARM -> stackArmTop();
+            case FILTER_ARM -> filterArmTop();
             case BANK -> bankTop();
             case TRANSFORMER -> transformerTop();
             case PYLON -> pylonTop(1, "idle");
@@ -1566,6 +1587,209 @@ public final class MachineArt {
                     pixel = dim(glow);
                 }
                 set(img, x, y, pixel);
+            }
+        }
+        return img;
+    }
+
+    // ---- Slice R -------------------------------------------------------------------------
+
+    /** A closed tube: a ring, not a trough. */
+    public static BufferedImage pressureFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, PRESSURE);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double d = Math.hypot(x - CX, y - 7.5);
+                if (d <= 5.2 && d >= 3.2) {
+                    set(img, x, y, glow < 0 ? Palette.shade(PRESSURE, 0.15) : glow);
+                } else if (d < 3.2) {
+                    set(img, x, y, glow < 0 ? Palette.shade(CASING, -0.7) : dim(glow));
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage pressureTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 4; x <= 11; x++) {
+                set(img, x, y, (x == 4 || x == 11) ? Palette.shade(PRESSURE, 0.2)
+                        : Palette.shade(PRESSURE, -0.45));
+            }
+        }
+        return img;
+    }
+
+    /** An impeller: a disc and a hub, not the hand pump's piston. */
+    public static BufferedImage epumpFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, EPUMP);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double d = Math.hypot(x - CX, y - 7.5);
+                if (d <= 4.6) {
+                    boolean blade = ((x + y) % 3 == 0);
+                    int pixel = glow < 0 ? Palette.shade(EPUMP, blade ? 0.2 : -0.4)
+                            : (blade ? glow : dim(glow));
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage epumpTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                set(img, x, y, Palette.shade(EPUMP, (x == 7 || y == 7) ? 0.25 : -0.35));
+            }
+        }
+        return img;
+    }
+
+    /** A tall vessel with a horizontal band. */
+    public static BufferedImage industrialFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, INDUSTRIAL);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean band = y == 7 || y == 8;
+                int pixel = band
+                        ? (glow < 0 ? Palette.shade(INDUSTRIAL, 0.35) : glow)
+                        : Palette.shade(INDUSTRIAL, y < 7 ? -0.15 : -0.4);
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage industrialTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                if (d <= 5.0) {
+                    set(img, x, y, d >= 4.0 ? Palette.shade(INDUSTRIAL, 0.2)
+                            : Palette.shade(INDUSTRIAL, -0.5));
+                }
+            }
+        }
+        return img;
+    }
+
+    /** A nozzle: a vertical slot of fluid colour. */
+    public static BufferedImage fluidArmFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, FLUID_ARM);
+        for (int y = 4; y <= 12; y++) {
+            set(img, 7, y, glow < 0 ? Palette.shade(FLUID_ARM, -0.2) : glow);
+            set(img, 8, y, glow < 0 ? Palette.shade(FLUID_ARM, -0.45) : dim(glow));
+        }
+        for (int x = 5; x <= 10; x++) {
+            set(img, x, 6, Palette.shade(FLUID_ARM, 0.15));
+            set(img, x, 10, Palette.shade(FLUID_ARM, 0.15));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage fluidArmTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int x = 6; x <= 9; x++) {
+            for (int y = 2; y <= 13; y++) {
+                set(img, x, y, Palette.shade(FLUID_ARM, y < 4 ? 0.2 : -0.4));
+            }
+        }
+        return img;
+    }
+
+    /** Two lanes plus a centre rail in flux blue. */
+    public static BufferedImage fluxBeltFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, FLUX_BELT);
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean rail = x == 7 || x == 8 || x <= 2 || x >= 13;
+                int pixel = rail
+                        ? (glow < 0 ? Palette.shade(FLUX_BELT, 0.2) : glow)
+                        : Palette.shade(CASING, -0.55);
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage fluxBeltTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 0; y < SIZE; y++) {
+            set(img, 1, y, Palette.shade(FLUX_BELT, 0.25));
+            set(img, 14, y, Palette.shade(FLUX_BELT, 0.25));
+            set(img, 7, y, Palette.shade(FLUX_BELT, 0.45));
+            set(img, 8, y, Palette.shade(FLUX_BELT, 0.45));
+            for (int x = 2; x <= 13; x++) {
+                if (x != 7 && x != 8) {
+                    set(img, x, y, Palette.shade(CASING, (y % 4 == 0) ? -0.2 : -0.45));
+                }
+            }
+        }
+        return img;
+    }
+
+    /** A wide claw. */
+    public static BufferedImage stackArmFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, STACK_ARM);
+        for (int y = 4; y <= 12; y++) {
+            set(img, 3, y, glow < 0 ? Palette.shade(STACK_ARM, 0.1) : glow);
+            set(img, 12, y, glow < 0 ? Palette.shade(STACK_ARM, 0.1) : glow);
+        }
+        for (int x = 3; x <= 12; x++) {
+            set(img, x, 5, glow < 0 ? Palette.shade(STACK_ARM, -0.2) : dim(glow));
+            set(img, x, 11, glow < 0 ? Palette.shade(STACK_ARM, -0.2) : dim(glow));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage stackArmTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int x = 3; x <= 12; x++) {
+            for (int y = 4; y <= 11; y++) {
+                set(img, x, y, Palette.shade(STACK_ARM, (x <= 4 || x >= 11) ? 0.25 : -0.4));
+            }
+        }
+        return img;
+    }
+
+    /** A gate: a small window in the arm. */
+    public static BufferedImage filterArmFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, FILTER_ARM);
+        for (int y = 5; y <= 11; y++) {
+            for (int x = 5; x <= 10; x++) {
+                boolean frame = x == 5 || x == 10 || y == 5 || y == 11;
+                int pixel = frame
+                        ? Palette.shade(FILTER_ARM, 0.2)
+                        : (glow < 0 ? Palette.shade(CASING, -0.65) : glow);
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage filterArmTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int x = 6; x <= 9; x++) {
+            for (int y = 3; y <= 12; y++) {
+                set(img, x, y, Palette.shade(FILTER_ARM, y == 6 ? 0.4 : -0.25));
             }
         }
         return img;

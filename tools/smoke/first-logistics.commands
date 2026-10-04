@@ -1,0 +1,24 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 12 70 8 minecraft:air
+setblock 14 70 8 minecraft:air
+setblock 8 72 8 minecraft:air
+setblock 10 72 8 minecraft:air
+setblock 12 72 8 minecraft:air
+setblock 8 70 8 grindless:pressure_pipe[facing=south,status=idle]
+execute if block 8 70 8 grindless:pressure_pipe run say PIPE-OK
+setblock 10 70 8 grindless:electric_pump[facing=south,status=idle]
+execute if block 10 70 8 grindless:electric_pump run say PUMP-OK
+setblock 12 70 8 grindless:industrial_tank[facing=south,status=idle]
+execute if block 12 70 8 grindless:industrial_tank run say TANK-OK
+setblock 14 70 8 grindless:fluid_manipulator[facing=south,status=idle]
+execute if block 14 70 8 grindless:fluid_manipulator run say FLUID-ARM-OK
+setblock 8 72 8 grindless:flux_belt[facing=south,status=idle]
+execute if block 8 72 8 grindless:flux_belt run say FLUX-OK
+setblock 10 72 8 grindless:stack_manipulator[facing=south,status=idle]
+execute if block 10 72 8 grindless:stack_manipulator run say STACK-OK
+setblock 12 72 8 grindless:filter_manipulator[facing=south,status=idle]
+execute if block 12 72 8 grindless:filter_manipulator run say FILTER-OK

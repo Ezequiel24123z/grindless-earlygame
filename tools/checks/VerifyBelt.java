@@ -37,6 +37,17 @@ public final class VerifyBelt {
         eq("a conveyor moves one tile per second", 1.0, BeltLogic.SPEED);
         eq("one second of travel is one tile", 1.0, BeltLogic.travel(20));
         eq("a tick of travel is a twentieth of a tile", 0.05, BeltLogic.travel(1));
+        eq("a flux belt moves sixteen items a second", 16, FluxBeltLogic.ITEMS_PER_SECOND);
+        eq("a flux belt moves two tiles a second", 2.0, FluxBeltLogic.SPEED);
+        eq("one second on a flux belt is two tiles", 2.0, FluxBeltLogic.travel(20));
+        eq("a flux belt spends LV", 32L, FluxBeltLogic.FU_PER_TICK);
+        eq("the flux tunnel range is recorded and is not the T1 tunnel", 9, FluxBeltLogic.TUNNEL_RANGE);
+        eq("the T1 tunnel stays at five", 5, TunnelLogic.RANGE);
+        eq("a stack arm moves twelve", 12, ArmLogic.STACK);
+        eq("a filter arm moves one", 1, ArmLogic.FILTER_STACK);
+        yes("an empty filter passes an item", ArmLogic.allows("", "minecraft:iron_ingot"));
+        yes("a matching filter passes", ArmLogic.allows("minecraft:iron_ingot", "minecraft:iron_ingot"));
+        no("a filter rejects a different item", ArmLogic.allows("minecraft:iron_ingot", "minecraft:gold_ingot"));
         yes("an empty tile accepts", BeltLogic.canEnter(0.25));
         no("a tile with an item at the mouth refuses", BeltLogic.canEnter(0.1));
         yes("an item at 1 is ready to leave", BeltLogic.readyToLeave(1.0));

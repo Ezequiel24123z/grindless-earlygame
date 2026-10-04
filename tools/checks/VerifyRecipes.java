@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation and steam", 81, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam and T2 logistics", 88, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -525,6 +525,22 @@ public final class VerifyRecipes {
         eq("the solar array makes the block", "item:grindless:solar_array",
                 solar.itemOutputs().get(0).qualified());
         eq("daylight is F1", 32L, SolarLogic.generate(true));
+        ProcessRecipe pipe = recipe(recipes, "assemble/pressure_pipe");
+        ProcessRecipe pump = recipe(recipes, "assemble/electric_pump");
+        ProcessRecipe tank = recipe(recipes, "assemble/industrial_tank");
+        ProcessRecipe fluidArm = recipe(recipes, "assemble/fluid_manipulator");
+        ProcessRecipe flux = recipe(recipes, "assemble/flux_belt");
+        ProcessRecipe stackArm = recipe(recipes, "assemble/stack_manipulator");
+        ProcessRecipe filterArm = recipe(recipes, "assemble/filter_manipulator");
+        eq("the pressure pipe is the assembler", MachineFamily.ASSEMBLER, pipe.family());
+        eq("the pressure pipe makes the block", "item:grindless:pressure_pipe",
+                pipe.itemOutputs().get(0).qualified());
+        eq("the electric pump is the assembler", MachineFamily.ASSEMBLER, pump.family());
+        eq("the industrial tank is the assembler", MachineFamily.ASSEMBLER, tank.family());
+        eq("the fluid arm is the assembler", MachineFamily.ASSEMBLER, fluidArm.family());
+        eq("the flux belt is the assembler", MachineFamily.ASSEMBLER, flux.family());
+        eq("the stack arm is the assembler", MachineFamily.ASSEMBLER, stackArm.family());
+        eq("the filter arm is the assembler", MachineFamily.ASSEMBLER, filterArm.family());
         eq("night is nothing", 0L, SolarLogic.generate(false));
 
         yes("steel with an ingot still presses",
@@ -651,6 +667,20 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("boiler.json")));
         no("the condenser has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("condenser.json")));
+        no("the pressure pipe has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("pressure_pipe.json")));
+        no("the electric pump has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("electric_pump.json")));
+        no("the industrial tank has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("industrial_tank.json")));
+        no("the fluid manipulator has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("fluid_manipulator.json")));
+        no("the flux belt has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("flux_belt.json")));
+        no("the stack manipulator has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("stack_manipulator.json")));
+        no("the filter manipulator has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("filter_manipulator.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

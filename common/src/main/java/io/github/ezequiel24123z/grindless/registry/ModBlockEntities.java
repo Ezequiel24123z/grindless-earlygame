@@ -5,11 +5,18 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.ElectricPumpBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.FluidManipulatorBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.FluidWellBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.IndustrialTankBlockEntity;
+import io.github.ezequiel24123z.grindless.fluid.PressurePipeBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.FilterManipulatorBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.FluxBeltBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.MagneticSeparatorBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.StackManipulatorBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.MergerBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.OverflowGateBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SorterBlockEntity;
@@ -280,6 +287,48 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("basic_tank",
                     () -> BlockEntityType.Builder
                             .of(BasicTankBlockEntity::new, ModBlocks.BASIC_TANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<PressurePipeBlockEntity>> PRESSURE_PIPE =
+            BLOCK_ENTITIES.register("pressure_pipe",
+                    () -> BlockEntityType.Builder
+                            .of(PressurePipeBlockEntity::new, ModBlocks.PRESSURE_PIPE.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ElectricPumpBlockEntity>> ELECTRIC_PUMP =
+            BLOCK_ENTITIES.register("electric_pump",
+                    () -> BlockEntityType.Builder
+                            .of(ElectricPumpBlockEntity::new, ModBlocks.ELECTRIC_PUMP.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<IndustrialTankBlockEntity>> INDUSTRIAL_TANK =
+            BLOCK_ENTITIES.register("industrial_tank",
+                    () -> BlockEntityType.Builder
+                            .of(IndustrialTankBlockEntity::new, ModBlocks.INDUSTRIAL_TANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<FluidManipulatorBlockEntity>> FLUID_MANIPULATOR =
+            BLOCK_ENTITIES.register("fluid_manipulator",
+                    () -> BlockEntityType.Builder
+                            .of(FluidManipulatorBlockEntity::new, ModBlocks.FLUID_MANIPULATOR.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<FluxBeltBlockEntity>> FLUX_BELT =
+            BLOCK_ENTITIES.register("flux_belt",
+                    () -> BlockEntityType.Builder
+                            .of(FluxBeltBlockEntity::new, ModBlocks.FLUX_BELT.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<StackManipulatorBlockEntity>> STACK_MANIPULATOR =
+            BLOCK_ENTITIES.register("stack_manipulator",
+                    () -> BlockEntityType.Builder
+                            .of(StackManipulatorBlockEntity::new, ModBlocks.STACK_MANIPULATOR.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<FilterManipulatorBlockEntity>> FILTER_MANIPULATOR =
+            BLOCK_ENTITIES.register("filter_manipulator",
+                    () -> BlockEntityType.Builder
+                            .of(FilterManipulatorBlockEntity::new, ModBlocks.FILTER_MANIPULATOR.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<PylonBlockEntity>> FLUX_PYLON =

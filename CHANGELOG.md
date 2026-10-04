@@ -45,6 +45,8 @@ entries below reference those records by id.
 
 ### Added
 
+- **Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt, Stack Manipulator and Filter Manipulator (ADR-0082).** Assembler-manufactured (casing, two motors, four plates; Industrial). The pipe and the industrial tank accept fluid up to 1200 °C and 1.0 MPa, so steam and molten metal fit and superheated steam does not. The pipe pushes 200 mB/t including gas and uphill, unpowered. The pump pulls 100 mB/t from behind and spends F1 only while it has fluid to move; it does not summon water. The tank is one block of 64 B and does not merge. The fluid arm moves 1 B/s. The flux belt moves 16 items/s and spends F1 only while it carries items. The stack arm moves 12 items a second. The filter arm is a whitelist of one item. The Clay Conduit, the Basic Tank and the T1 tunnel are unchanged. The behaviour graph is 88 recipes; a Grindless-only pack logs 291. CI places all seven.
+
 - **Solar Array, Boiler and Condenser (ADR-0081).** Assembler-manufactured (casing, two
   motors, four plates; Industrial). The panel makes 32 FU/t while it is day and the
   block above can see the sky, and nothing at night. `1 B water → 1 B steam` in 10 s

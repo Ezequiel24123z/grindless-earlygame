@@ -7,7 +7,7 @@ The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013
 This file is the *schedule*. Open questions are answered here with the documented default; a
 session writes an ADR only when it must pick among real alternatives, then ships the slice.
 
-**Next slice: R — T2 fluids and belts.** Q (Heat and steam) is shipped.
+**Next slice: S — Logic.** R (T2 fluids and belts) is shipped.
 
 ---
 
@@ -76,7 +76,9 @@ T0 loop, Slice A–E, Kiln/R2, Atlas stub, Multitool wrench, belt junctions (G),
 (H), the T2 gate (I), Wire Mill / motor (J), the contact process (K), the Chemical
 Washer (L), Electrolysis Cell and Atmospheric Intake (M), the Fluid Well (N), the
 Induction Furnace and the Caster (O), the Froth Flotation Cell and the Magnetic
-Separator (P), the Solar Array, the Boiler and the Condenser (Q), and the design
+Separator (P), the Solar Array, the Boiler and the Condenser (Q), the Pressure
+Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt and the
+Stack and Filter Manipulators (R), and the design
 records for armour (ADR-0067)
 and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to automated
 iron without hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel,
@@ -87,8 +89,8 @@ overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftove
 ## Remaining slices
 
 Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G. **G through Q are done.** A session that finishes R
-marks R done and sets Next to S.
+it done here in the same PR that ships G. **G through R are done.** A session that finishes S
+marks S done and sets Next to T.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
@@ -116,7 +118,7 @@ the factory for real.
 | **O** | **Induction and caster** | Clean melt; skip the ingot | Induction Furnace, Caster. | Vacuum furnace (T5). | ✅ done |
 | **P** | **Better separation** | Concentrate sulfides; split mixed streams | Magnetic Separator, Froth Flotation Cell (B3). Surfactant reagent. Tailings sink. | Centrifuge (T3). Sifter still needs its own ADR. | ✅ done |
 | **Q** | **Heat and steam** | Power without burning coal only | Solar generation, Boiler, Condenser. Steam Turbine stays T3 with fission. | Arc Reactor. | ✅ done |
-| **R** | **T2 fluids and belts** | Move fluids and stacks | Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt, Stack/Filter Manipulator. | Phase Manifold (T3). |
+| **R** | **T2 fluids and belts** | Move fluids and stacks | Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt, Stack/Filter Manipulator. | Phase Manifold (T3). | ✅ done |
 | **S** | **Logic** | Enable a machine from a condition | Signal Cable, Logic Controller, Redstone Interface. README: *run only while copper ingots < 500*. | Operator Drones (T3). |
 
 ### 0.4 — Tools, matter, first two armour chassis

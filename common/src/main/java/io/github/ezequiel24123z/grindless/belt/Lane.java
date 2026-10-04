@@ -83,11 +83,8 @@ public final class Lane {
         return front;
     }
 
-    /**
-     * Removes the item closest to {@code target} and returns it, or {@code null} if the lane
-     * is empty.
-     */
-    public LaneItem takeNearest(double target) {
+    /** The item {@link #takeNearest} would remove, without removing it. */
+    public LaneItem nearest(double target) {
         if (items.isEmpty()) {
             return null;
         }
@@ -100,6 +97,14 @@ public final class Lane {
                 best = item;
                 bestDistance = distance;
             }
+        }
+        return best;
+    }
+
+    public LaneItem takeNearest(double target) {
+        LaneItem best = nearest(target);
+        if (best == null) {
+            return null;
         }
         items.remove(best);
         return best;

@@ -171,6 +171,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-steam.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-steam.expect
 
+      # Slice R: pressure pipe, pump, tank, fluid arm, flux belt, stack and filter arms place.
+      - name: Boot and exercise T2 logistics
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-logistics.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-logistics.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

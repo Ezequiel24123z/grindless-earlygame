@@ -1,7 +1,7 @@
 package io.github.ezequiel24123z.grindless.client;
 
-import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltStacks;
+import io.github.ezequiel24123z.grindless.belt.BeltView;
 import io.github.ezequiel24123z.grindless.belt.Lane;
 import io.github.ezequiel24123z.grindless.belt.LaneItem;
 import io.github.ezequiel24123z.grindless.machine.MachineProperties;
@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -18,13 +19,13 @@ import com.mojang.math.Axis;
 /**
  * Draws belt contents from lane data. Items never exist as entities (ADR-0008).
  */
-public final class BeltRenderer implements BlockEntityRenderer<BeltBlockEntity> {
+public final class BeltRenderer<T extends BlockEntity & BeltView> implements BlockEntityRenderer<T> {
 
     public BeltRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    public void render(BeltBlockEntity belt, float partialTick, PoseStack pose,
+    public void render(T belt, float partialTick, PoseStack pose,
                        MultiBufferSource buffers, int packedLight, int packedOverlay) {
         Direction facing = belt.getBlockState().getValue(MachineProperties.FACING);
         Direction left = facing.getCounterClockWise();

@@ -79,8 +79,15 @@ final class BlockModels {
             case MANIPULATOR -> manipulator();
             case DRILL -> drill();
             case CONDUIT -> conduit();
+            case PRESSURE -> pressure();
             case PUMP -> pump();
+            case EPUMP -> epump();
             case TANK -> tank();
+            case INDUSTRIAL -> industrial();
+            case FLUID_ARM -> fluidArm();
+            case FLUX_BELT -> fluxBelt();
+            case STACK_ARM -> stackArm();
+            case FILTER_ARM -> filterArm();
             case BANK -> bank();
             case TRANSFORMER -> transformer();
         };
@@ -518,6 +525,68 @@ final class BlockModels {
         }
         boxes.add(box(inset - 1, 42, inset - 1, 16 - inset + 1, 48, 16 - inset + 1, "top", "side"));
         return boxes;
+    }
+
+    /** A closed round tube, not an open trough. */
+    private static List<Box> pressure() {
+        return List.of(
+                box(4, 4, 0, 12, 12, 16, "top", "side"),
+                front(5, 5, 0, 11, 11, 16, "top", "side", "front"));
+    }
+
+    /** An impeller housing with a collar, taller than the hand pump. */
+    private static List<Box> epump() {
+        return List.of(
+                box(1, 0, 1, 15, 3, 15, "cap", "base"),
+                front(3, 3, 3, 13, 12, 13, "top", "side", "front"),
+                box(6, 12, 6, 10, 16, 10, "cap", "cap"));
+    }
+
+    /** A tall vessel with a band, not the squat basic tank. */
+    private static List<Box> industrial() {
+        return List.of(
+                box(1, 0, 1, 15, 2, 15, "cap", "base"),
+                front(2, 2, 2, 14, 14, 14, "top", "side", "front"),
+                box(3, 14, 3, 13, 16, 13, "cap", "cap"),
+                box(2, 7, 2, 14, 9, 14, "cap", "side"));
+    }
+
+    /** A post and a nozzle aimed forward. */
+    private static List<Box> fluidArm() {
+        return List.of(
+                box(6, 0, 6, 10, 2, 10, "cap", "base"),
+                box(7, 2, 7, 9, 11, 9, "top", "side"),
+                front(5, 8, 1, 11, 12, 8, "top", "side", "front"),
+                box(6, 9, 0, 10, 11, 2, "cap", "cap"));
+    }
+
+    /** A belt with a raised centre rail. Taller than the conveyor. */
+    private static List<Box> fluxBelt() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                box(0, 2, 0, 2, 5, 16, "top", "side"),
+                box(14, 2, 0, 16, 5, 16, "top", "side"),
+                box(7, 2, 0, 9, 5, 16, "cap", "side"),
+                front(2, 2, 0, 14, 4, 16, "top", "side", "front"));
+    }
+
+    /** A thick arm and a wide claw. */
+    private static List<Box> stackArm() {
+        return List.of(
+                box(4, 0, 4, 12, 3, 12, "cap", "base"),
+                box(6, 3, 6, 10, 12, 10, "top", "side"),
+                front(2, 9, 1, 14, 13, 8, "top", "side", "front"),
+                box(3, 10, 0, 6, 12, 2, "cap", "cap"),
+                box(10, 10, 0, 13, 12, 2, "cap", "cap"));
+    }
+
+    /** A slim arm with a gate plate on the front. */
+    private static List<Box> filterArm() {
+        return List.of(
+                box(6, 0, 6, 10, 2, 10, "cap", "base"),
+                box(7, 2, 7, 9, 10, 9, "top", "side"),
+                front(5, 7, 3, 11, 12, 9, "top", "side", "front"),
+                box(6, 8, 1, 10, 11, 3, "cap", "cap"));
     }
 
     private static List<Box> pylonPiece(int tier, int piece) {

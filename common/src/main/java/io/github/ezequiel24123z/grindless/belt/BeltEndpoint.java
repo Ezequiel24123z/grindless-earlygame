@@ -19,4 +19,14 @@ public interface BeltEndpoint {
     boolean canExtract(Direction from);
 
     ItemStack extract(Direction from, int max);
+
+    /**
+     * The item {@link #extract} would take, without removing it.
+     *
+     * <p>A filter arm reads this before it pulls, so a rejected item stays put (ADR-0082).
+     * Junctions that do not override it are left alone rather than grabbed and replaced.
+     */
+    default ItemStack preview(Direction from) {
+        return ItemStack.EMPTY;
+    }
 }
