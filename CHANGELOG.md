@@ -40,6 +40,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Agent route map (ADR-0076).** `docs/AGENT-MAP.md` is a task index: the files to
+  open and the invariant each kind of change breaks. The same commit that changes a
+  seam updates the map. It does not catalogue function bodies.
+
 - **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia
   with held air; `1 B SO₃ + 0.2 B water → 1 B sulfuric acid` in 4 s, water from a neighbouring

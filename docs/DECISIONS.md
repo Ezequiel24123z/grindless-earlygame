@@ -87,6 +87,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
+| [0076](#adr-0076--a-task-indexed-route-map-updated-with-the-seam) | A task-indexed route map, updated with the seam | Accepted |
 
 ---
 
@@ -2848,5 +2849,32 @@ satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C ban
 **Consequences.** A successor that starts the washer in this slice is skipping L. A
 successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
 acid without pickle (or another spend) is reopening ADR-0036.
+
+---
+
+## ADR-0076 — A task-indexed route map, updated with the seam
+
+*2026-10-04 · Accepted*
+
+**Context.** Sessions start from the repository and nothing else. Finding where a
+machine, a recipe or a sink actually lives means walking the tree, and the walk is
+what gets lost when a session dies mid-way. A hand-maintained catalogue of function
+bodies looks like the fix and then rots: the next session stops trusting it, which
+is worse than having no catalogue.
+
+**Decision.** [`docs/AGENT-MAP.md`](AGENT-MAP.md) is a task index. Each entry is one
+kind of change, the few files to open, and the invariant that is easy to break.
+Code remains the source of the functions. Design stays in the README, `MACHINES.md`,
+`PROCESSES.md` and these records; the map links to them instead of restating them.
+The same commit that changes a seam updates the map, the same way it updates the
+changelog.
+
+**Alternatives rejected.** A catalogue of function bodies (it rots, and sessions
+stop trusting it). Leaving navigation entirely to search (it works once, and the
+invariants the checks enforce are not visible from a file name).
+
+**Consequences.** A successor that pastes method bodies into the map, or that
+changes `ProcessGraph`, registration or a check without touching the map, is
+reopening this record. `AGENTS.md` points at the map; it does not contain it.
 
 
