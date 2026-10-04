@@ -155,6 +155,13 @@ public final class GenerateAssets {
                 written += write(blocks, "pylon" + tier + "_top_" + status, MachineArt.pylonTop(tier, status));
             }
         }
+        for (BlockCatalogue.Geometry mass : List.of(BlockCatalogue.Geometry.SHELL, BlockCatalogue.Geometry.MARK)) {
+            String lower = mass.name().toLowerCase(java.util.Locale.ROOT);
+            written += write(blocks, lower + "_top", MachineArt.top(mass));
+            for (String status : BlockCatalogue.GRID) {
+                written += write(blocks, lower + "_front_" + status, MachineArt.front(mass, status));
+            }
+        }
         written += writeGui(root);
 
         // ---- sounds ----
@@ -400,6 +407,7 @@ public final class GenerateAssets {
             written += writeText(new File(data, "grindless/loot_tables/blocks/" + n + ".json"), lootTable(n));
         }
         written += writeShaft(assets, data, names);
+        written += writeMass(assets, data, names);
         written += writeText(new File(assets, "models/item/" + BlockCatalogue.CASING_ITEM + ".json"),
                 "{\n  \"parent\": \"minecraft:block/cube_bottom_top\",\n  \"textures\": {\n"
                         + "    \"top\": \"grindless:block/casing_top\",\n"
@@ -448,6 +456,39 @@ public final class GenerateAssets {
         written += writeText(new File(data, "grindless/loot_tables/blocks/flux_pylon_shaft.json"),
                 emptyLoot());
         pickaxe.add("grindless:flux_pylon_shaft");
+        return written;
+    }
+
+    /**
+     * The galactic centre's mass and its mark (ADR-0099). Full cubes, empty loot, pickaxe
+     * tagged, no item: neither can be carried out of the chamber.
+     */
+    private static int writeMass(File assets, File data, List<String> pickaxe) throws IOException {
+        int written = writeMassBlock(assets, data, new BlockCatalogue.Entry(
+                "horizon_shell", BlockCatalogue.Geometry.SHELL, 1, false, BlockCatalogue.GRID));
+        written += writeMassBlock(assets, data, new BlockCatalogue.Entry(
+                "arrival_mark", BlockCatalogue.Geometry.MARK, 1, false, BlockCatalogue.GRID));
+        pickaxe.add("grindless:horizon_shell");
+        pickaxe.add("grindless:arrival_mark");
+        return written;
+    }
+
+    private static int writeMassBlock(File assets, File data, BlockCatalogue.Entry block) throws IOException {
+        StringBuilder variants = new StringBuilder();
+        int written = 0;
+        for (String status : block.statuses()) {
+            written += writeText(new File(assets, "models/block/" + block.modelName(status) + ".json"),
+                    BlockModels.model(block, status));
+            if (variants.length() > 0) {
+                variants.append(",\n");
+            }
+            variants.append("    \"").append(block.variantKey("", status))
+                    .append("\": { \"model\": \"grindless:block/").append(block.modelName(status)).append("\" }");
+        }
+        written += writeText(new File(assets, "blockstates/" + block.name() + ".json"),
+                "{\n  \"variants\": {\n" + variants + "\n  }\n}\n");
+        written += writeText(new File(data, "grindless/loot_tables/blocks/" + block.name() + ".json"),
+                emptyLoot());
         return written;
     }
 

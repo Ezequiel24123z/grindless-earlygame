@@ -1,14 +1,15 @@
 package io.github.ezequiel24123z.grindless.station;
 
+import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
 import io.github.ezequiel24123z.grindless.star.DriftCatalogue;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkLogic;
 
 /**
- * Numbers for a ride on a supraluminal station (ADR-0098). Independent of a world.
+ * Numbers for a ride on a supraluminal station (ADR-0098, ADR-0099). Independent of a world.
  *
  * <p>The station climbs one block a tick. Reaching the ceiling is the arrival: the
- * Drift when leaving any other world, and the berth they left when leaving the Drift.
- * There is no map and no link. The black hole is not a destination.
+ * Drift when leaving any other world, the galactic centre when leaving the Drift, and
+ * the berth they left when leaving the centre. There is no map and no link.
  */
 public final class StationRide {
 
@@ -16,10 +17,10 @@ public final class StationRide {
     public static final String HOME = "minecraft:overworld";
 
     /**
-     * A dimension id this slice refuses. The rocket's checks already use this name for
-     * a hole. The interior is the next slice.
+     * The galactic centre. The rocket's checks already use this name for a hole, and a
+     * rocket still does not go there (ADR-0099).
      */
-    public static final String HOLE = "grindless:sagittarius";
+    public static final String HOLE = CentreCatalogue.SAGITTARIUS;
 
     /** FU a departure that is not the ride home must accumulate. The array's buffer. */
     public static final long COST = StarwardLinkLogic.COST;
@@ -68,23 +69,26 @@ public final class StationRide {
         return DriftCatalogue.isDrift(dimension);
     }
 
-    /** A station may leave any loaded world except the hole. The Drift is the ride home. */
+    /** A station may leave any loaded world. The centre is the ride home. */
     public static boolean canDepart(String dimension) {
-        return dimension != null && !dimension.isEmpty() && !isHole(dimension);
+        return dimension != null && !dimension.isEmpty();
     }
 
     /**
      * Where a departure from {@code dimension} arrives.
      *
-     * @return the Drift, {@link #HOME} when the ride home has no saved berth, or empty
-     *         when the station must not leave
+     * @return the Drift, the centre, {@link #HOME} when the ride out of the centre has no
+     *         saved berth, or empty when the station must not leave
      */
     public static String destination(String dimension) {
         if (!canDepart(dimension)) {
             return "";
         }
-        if (isDrift(dimension)) {
+        if (isHole(dimension)) {
             return HOME;
+        }
+        if (isDrift(dimension)) {
+            return HOLE;
         }
         return DriftCatalogue.DRIFT;
     }
@@ -98,7 +102,7 @@ public final class StationRide {
         if (!canDepart(dimension)) {
             return -1L;
         }
-        if (isDrift(dimension)) {
+        if (isDrift(dimension) || isHole(dimension)) {
             return 0L;
         }
         return COST;

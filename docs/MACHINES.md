@@ -602,6 +602,7 @@ of physics.**
 | **Starward Link** | One hop to the Drift, paid with that same buffer (ADR-0096) | Placeholder (ADR-0097). A station replaces this hop. Not deleted. Not a planet, not the black hole, not a Horizon Gate. |
 | **Launch Pad** | The block a survey rocket stands on (ADR-0097) | Local flight only. Not a link. |
 | **Survey Rocket** | Climbs to the build ceiling, then a landing map of the home world and Luna (ADR-0097) | Not the Drift, not the black hole, not a station. |
+| **Supraluminal Station** | Climbs to the ceiling. The Drift on the way out, the galactic centre from the Drift, the saved berth from the centre (ADR-0098, ADR-0099) | Not a link. The centre is a sealed chamber, not a second game. |
 | **Singularity Reactor** | Power from a contained micro-singularity, fed by matter | Mass becomes a fuel. Any matter is energy, so the junk problem inverts: waste becomes the power supply. |
 | **Matter Condenser array** | Energy back into arbitrary matter | Closes the loop with the Deconstructor. The economy becomes energy-only, which is a genuine phase change in how the game plays. |
 | **Transmutation Chain** | Element to element via the accelerator | Scarcity stops being geological and becomes energetic. |

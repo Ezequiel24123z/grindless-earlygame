@@ -36,6 +36,8 @@
     "grindless:lunar_regolith",
     "grindless:starward_link",
     "grindless:drift_deck",
-    "grindless:flux_pylon_shaft"
+    "grindless:flux_pylon_shaft",
+    "grindless:horizon_shell",
+    "grindless:arrival_mark"
   ]
 }

@@ -81,6 +81,10 @@ public final class BlockCatalogue {
         SPAN,
         /** A full cube of plating. A floor between stars, not dust. */
         DECK,
+        /** A full cube of dark mass. The wall of the galactic centre, not a deck. */
+        SHELL,
+        /** A full cube with a bright core. The mark in that chamber, not the mass. */
+        MARK,
         /** A low cradle. A rocket stands on it. Not a link and not a deck cube. */
         PAD,
         /** Two rails and a ring. A station stands on it. Not the rocket's cradle. */
@@ -197,6 +201,6 @@ public final class BlockCatalogue {
      * entry, generated separately. The pylon shaft is occupancy for the two blocks above a pylon.
      */
     public static List<String> technical() {
-        return List.of("flux_pylon_shaft");
+        return List.of("flux_pylon_shaft", "horizon_shell", "arrival_mark");
     }
 }

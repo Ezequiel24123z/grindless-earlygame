@@ -65,6 +65,8 @@ public final class MachineEffects {
             case REGOLITH -> { }
             case SPAN -> { }
             case DECK -> { }
+            case SHELL -> { }
+            case MARK -> { }
             case PAD -> { }
             case BERTH -> { }
         }

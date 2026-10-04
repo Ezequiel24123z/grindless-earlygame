@@ -3,6 +3,9 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.centre.ArrivalMarkBlock;
+import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
+import io.github.ezequiel24123z.grindless.centre.HorizonShellBlock;
 import io.github.ezequiel24123z.grindless.flight.LaunchPadBlock;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
@@ -229,6 +232,27 @@ public final class ModBlocks {
                     .sound(SoundType.METAL)
                     .strength(2.0F, 6.0F)
                     .requiresCorrectToolForDrops()));
+
+    /**
+     * The mass of the galactic centre (ADR-0099). No item: it cannot be carried home,
+     * and it cannot be broken, so the chamber stays one room.
+     */
+    public static final RegistrySupplier<HorizonShellBlock> HORIZON_SHELL =
+            BLOCKS.register("horizon_shell", () -> new HorizonShellBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .sound(SoundType.STONE)
+                    .strength(-1.0F, 3600000.0F)));
+
+    /**
+     * The mark in that chamber. No item. It lights the room, because the dimension has
+     * no skylight.
+     */
+    public static final RegistrySupplier<ArrivalMarkBlock> ARRIVAL_MARK =
+            BLOCKS.register("arrival_mark", () -> new ArrivalMarkBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .sound(SoundType.METAL)
+                    .strength(-1.0F, 3600000.0F)
+                    .lightLevel(state -> CentreCatalogue.MARK_LIGHT)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

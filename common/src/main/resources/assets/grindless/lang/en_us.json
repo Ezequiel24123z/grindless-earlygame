@@ -24,7 +24,7 @@
   "item.grindless.survey_rocket": "Survey Rocket",
   "tooltip.grindless.survey_rocket": "Right-click a launch pad. It climbs to the ceiling, then you choose where to land.",
   "item.grindless.supraluminal_station": "Supraluminal Station",
-  "tooltip.grindless.supraluminal_station": "Right-click a station berth. It climbs to the ceiling, and that is the arrival.",
+  "tooltip.grindless.supraluminal_station": "Right-click a station berth. It climbs to the ceiling. From the Drift, that ceiling is the galactic centre.",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
   "block.grindless.crude_extractor": "Crude Extractor",
@@ -60,6 +60,8 @@
   "block.grindless.lunar_regolith": "Lunar Regolith",
   "block.grindless.starward_link": "Starward Link",
   "block.grindless.drift_deck": "Drift Deck",
+  "block.grindless.horizon_shell": "Horizon Shell",
+  "block.grindless.arrival_mark": "Arrival Mark",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -152,8 +154,8 @@
   "chat.grindless.station.climbing": "The station is climbing",
   "chat.grindless.station.unpowered": "The berth needs a pylon",
   "chat.grindless.station.berth": "The station needs its berth",
-  "chat.grindless.station.hole": "A station does not enter the black hole",
   "chat.grindless.station.drift": "The Drift",
+  "chat.grindless.station.centre": "The galactic centre. Arriving is the victory.",
   "chat.grindless.station.returned": "Returned",
   "chat.grindless.station.missing": "That world is not loaded",
 

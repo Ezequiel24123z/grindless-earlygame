@@ -77,7 +77,7 @@ final class BlockModels {
             case LINK -> link();
             case REGOLITH -> regolith();
             case SPAN -> span();
-            case DECK -> deck();
+            case DECK, SHELL, MARK -> deck();
             case PAD -> pad();
             case BERTH -> berth();
         };
@@ -132,7 +132,9 @@ final class BlockModels {
         lines.add(slot("base", "casing_side"));
         lines.add(slot("cap", "casing_top"));
         if (block.geometry() == BlockCatalogue.Geometry.REGOLITH
-                || block.geometry() == BlockCatalogue.Geometry.DECK) {
+                || block.geometry() == BlockCatalogue.Geometry.DECK
+                || block.geometry() == BlockCatalogue.Geometry.SHELL
+                || block.geometry() == BlockCatalogue.Geometry.MARK) {
             lines.add(slot("front", lower + "_front_" + status));
             lines.add(slot("top", lower + "_top"));
             lines.add(slot("side", lower + "_front_" + status));

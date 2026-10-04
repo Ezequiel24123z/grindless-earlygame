@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "status=idle": { "model": "grindless:block/arrival_mark_idle" },
+    "status=running": { "model": "grindless:block/arrival_mark_running" },
+    "status=starved": { "model": "grindless:block/arrival_mark_starved" }
+  }
+}

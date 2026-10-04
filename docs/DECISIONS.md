@@ -97,7 +97,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
 | [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0097 |
 | [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Superseded in part by ADR-0098 |
-| [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Accepted |
+| [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Superseded in part by ADR-0099 |
+| [0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber) | The galactic centre is a sealed chamber | Accepted |
 
 ---
 
@@ -3647,7 +3648,11 @@ not started. BM, the station, is next and is not started. The quest book stays l
 
 ## ADR-0098 — The supraluminal station is the ride off the star
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber)*
+
+> **Superseded in part.** The ride from the Drift now arrives at the galactic centre, and a
+> station there departs for the berth saved on the way out. The climb, the toll, the
+> recipes and the Starward Link are unchanged. See ADR-0099.
 
 **Context.** Slice BM says the player rides a station to another star, and that the
 concrete ride is chosen when the slice starts. ADR-0097 already chose the shape: a
@@ -3734,5 +3739,85 @@ that still has the id. A successor who sends the station to `grindless:sagittari
 or who writes the hole's interior here, is starting the next slice. A successor who
 adds a planet to the destination is flying further worlds. BN is next and is not
 started. The quest book stays last. BK stays named and not started.
+
+---
+
+## ADR-0099 — The galactic centre is a sealed chamber
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BN says the player reaches the black hole by riding the station, and
+that the interior is written when the slice starts. ADR-0088 already chose the victory:
+arriving is the win. The interior is a finite finale. An empty arrival and an endless
+second game are both rejected. The way there is the station, not a link.
+
+ADR-0098 left the station one deck short of that hole. Leaving the Drift rides home, and
+`grindless:sagittarius` does not depart. That was so this slice could choose the room.
+The owner kept the quest book, the teleportation orbs, the Kardashev scales and any
+further planet out of this change.
+
+The ways already named cannot be this one.
+
+- A chat line and no room is the empty arrival ADR-0088 rejects.
+- Another flat deck, a vein, or a machine is an endless second game, or a planet.
+- A link into the hole is the arrival ADR-0097 and ADR-0098 refuse.
+- Sending the home-world departure straight to the hole skips the Drift, which is the
+  hop already built.
+- Charging the ride off the Drift, or the ride out of the chamber, strands a player
+  where no pylon stands. Both of those tolls stay zero.
+- A breakable shell, or an item that places the mass, lets the room be mined open or
+  carried home. The finale would stop being one room.
+- Copying a black-hole dimension from another mod is a license question, not a
+  shortcut. No such code or texture enters. Own work stays MIT (ADR-0089).
+
+**Decision.**
+
+1. **The ride from the Drift arrives at the centre.** The dimension is
+   `grindless:sagittarius`, the id the rocket's checks already use for a hole. Leaving
+   the Drift draws nothing. Leaving any other world still arrives on the Drift and
+   still draws 6,553,600 FU. This supersedes the Drift-returns-home half of ADR-0098,
+   and the sentence there that says the hole does not depart. The Starward Link stays
+   registered and still does not move a player. There is no new link and no new recipe.
+2. **The interior is one sealed chamber.** The dimension is a solid mass of
+   `grindless:horizon_shell`, sixteen blocks tall (`min_y` 0, `height` 16). No
+   features, no lakes, no structures, no spawns, no vein, no skylight, not ultrawarm.
+   On arrival the station carves a fixed room and nothing else:
+   - air where `x` and `z` are in [-3, 3] and `y` is in [2, 6);
+   - a station berth at (0, 2, 0);
+   - an arrival mark at (0, 2, -3), light level 15, so the room can be seen;
+   - a 3×3 shaft of air above the berth, `x` and `z` in [-1, 1], `y` from 6 through
+     15, so the ride out climbs through air.
+   The floor under that air stays shell. Every other block stays shell. That is 286
+   carved cells inside a mass that does not open onto a walkable world. The shell and
+   the mark are unbreakable and have no item. Each arrival applies the carve again, so
+   the room cannot be kept as a base. An extractor here finds nothing.
+3. **Arriving is the victory.** The landing message says so, and the mark is the
+   object in the room. Riding the station out of the chamber returns to the berth
+   saved when the station left for the Drift, or the home world's spawn when that
+   point was never written. That ride draws nothing. The saved point is kept through
+   the Drift and forgotten only on the way out, so the chamber is the turnaround and
+   not a loop with the Drift. A rocket still does not launch here, and the landing
+   map does not list the hole.
+4. **What waits.** The original quest book and the in-game guide, which are the next
+   slice and are not started. Teleportation orbs stay named and not started.
+   Kardashev Type I, II and III. Further planets.
+
+**Alternatives rejected.**
+
+- An empty "you have arrived" with nowhere to stand.
+- An endless deck, a second planet, or a vein inside the hole.
+- A link, or a Starward Link that moves a player again.
+- Skipping the Drift.
+- Charging either free ride.
+- A breakable shell, or a block item for the mass or the mark.
+- Deleting the return, which would strand the player in the chamber.
+- Copying third-party code or assets.
+
+**Consequences.** A successor who sends the Drift ride home again is skipping the
+victory this record added. A successor who adds a vein, a recipe, or a machine in the
+chamber is starting a second game. A successor who adds a link is reopening the
+rejected arrival. A successor who makes the shell breakable, or who gives it an item,
+is opening the room into a world. BC is next and is not started. BK stays named and
+not started. The quest book stays last.
 
 
