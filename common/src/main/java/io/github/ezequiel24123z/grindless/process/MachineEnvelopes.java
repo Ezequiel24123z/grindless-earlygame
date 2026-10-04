@@ -49,6 +49,12 @@ public final class MachineEnvelopes {
             .agitation(Agitation.STIRRED)
             .build();
 
+    /** Froth flotation. Same wet range as the washer; MK I holds ambient and stirred (ADR-0080). */
+    public static final ConditionEnvelope FLOTATION = ConditionEnvelope.builder()
+            .temperature(10.0, 100.0)
+            .agitation(Agitation.STIRRED)
+            .build();
+
     /** Aqueous electrolysis. Chlor-alkali at 60 °C fits; molten salt does not (ADR-0077). */
     public static final ConditionEnvelope ELECTROLYSIS_CELL = ConditionEnvelope.builder()
             .temperature(10.0, 80.0)

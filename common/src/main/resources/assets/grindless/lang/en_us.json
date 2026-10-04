@@ -37,6 +37,8 @@
   "block.grindless.fluid_well": "Fluid Well",
   "block.grindless.induction_furnace": "Induction Furnace",
   "block.grindless.caster": "Caster",
+  "block.grindless.flotation_cell": "Froth Flotation Cell",
+  "block.grindless.magnetic_separator": "Magnetic Separator",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
   "block.grindless.merger": "Merger",

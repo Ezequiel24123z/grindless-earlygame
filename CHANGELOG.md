@@ -45,6 +45,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Froth Flotation and Magnetic Separator (ADR-0080).** Assembler-manufactured (casing,
+  two motors, four plates; Industrial; no circuit board). `20 crushed + 500 mB surfactant
+  → 24 concentrate + 3 tailings` in 80 s. Concentrate reduces like crushed (`b3_r1`).
+  Ten tailings reduce to one ingot, so the batch is not a second 2.40. Surfactant is
+  `1 carbon + 1 B water → 1 B` on the Chemical Reactor. The magnet sends iron, nickel
+  and steel left and holds when that side is full; it does not change the item.
+  Concentrate does not roast. The behaviour graph is 76 recipes; a Grindless-only pack
+  logs 279. CI places both machines.
+
 - **Induction Furnace and Caster (ADR-0079).** Assembler-manufactured (casing, two motors,
   four plates; Industrial; no circuit board). An ingot mould and a plate mould are four
   iron plates in 4 s. `1 ingot → 144 mB molten` in 8 s at 1000 °C, inert, with no slag.

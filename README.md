@@ -2005,12 +2005,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21f | **Slice M — Electrolysis and air:** Electrolysis Cell, Atmospheric Intake, hydrogen and oxygen sinks | ✅ done — ADR-0077 |
 | 21g | **Slice N — Fluid Well:** powered chunk water | ✅ done — ADR-0078 |
 | 21h | **Slice O — Induction and caster:** melt an ingot; cast a plate | ✅ done — ADR-0079 |
-| 22 | T2+ industry: flotation, solar/steam | pending — build-out P–S |
+| 21i | **Slice P — Better separation:** flotation and a magnetic split | ✅ done — ADR-0080 |
+| 22 | T2+ industry: solar/steam, pipes, logic | pending — build-out Q–S |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **P**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **Q**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2038,8 +2039,13 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is P — Better separation**, not etching and not the Sifter.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Induction Furnace and the Caster are in
+**Next is Q — Heat and steam**, not the Centrifuge and not the Sifter.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Froth Flotation Cell and the Magnetic
+Separator are in (ADR-0080): Assembler-manufactured once Industrial is researched
+(`1 casing + 2 motor + 4 plates`). `20 crushed + 500 mB surfactant → 24 concentrate +
+3 tailings` in 80 s. Concentrate reduces on the Arc Furnace. Ten tailings make one
+ingot. Surfactant is carbon and water on the Chemical Reactor. The magnet pulls iron,
+nickel and steel to the left and does not change the item. The Induction Furnace and the Caster are in
 (ADR-0079): Assembler-manufactured once Industrial is researched
 (`1 casing + 2 motor + 4 plates`). `1 ingot → 144 mB molten` in 8 s at 1000 °C, inert,
 with no slag. `144 mB molten + mould → 1 ingot or 1 plate` in 4 s. The moulds are four

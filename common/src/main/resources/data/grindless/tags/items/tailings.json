@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:tailings/iron",
+    "#grindless:tailings/copper",
+    "#grindless:tailings/gold",
+    "#grindless:tailings/tin",
+    "#grindless:tailings/lead",
+    "#grindless:tailings/silver",
+    "#grindless:tailings/nickel",
+    "#grindless:tailings/zinc",
+    "#grindless:tailings/aluminium",
+    "#grindless:tailings/titanium",
+    "#grindless:tailings/tungsten",
+    "#grindless:tailings/platinum"
+  ]
+}

@@ -166,6 +166,33 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** A tight pile of bright grains. Denser than crushed, not a plate. */
+    public static BufferedImage concentrate(Palette palette) {
+        HeightField field = new HeightField();
+        Random random = new Random(palette.base() ^ 0xC0FF);
+        for (int i = 0; i < 22; i++) {
+            double cx = 2.5 + random.nextDouble() * 11;
+            double cy = 3.0 + random.nextDouble() * 10;
+            field.disc(cx, cy, 0.7 + random.nextDouble() * 0.6, 2.2 + random.nextDouble());
+        }
+        field.bevel(0.15);
+        return field.light(palette);
+    }
+
+    /** A flat, dull smear. The residue, not the metal. */
+    public static BufferedImage tailings(Palette palette) {
+        HeightField field = new HeightField();
+        Random random = new Random(palette.base() ^ 0x0A11);
+        for (int y = 5; y <= 12; y++) {
+            for (int x = 2; x <= 13; x++) {
+                if (random.nextDouble() < 0.55) {
+                    field.set(x, y, 0.4 + random.nextDouble() * 0.5);
+                }
+            }
+        }
+        return field.light(palette);
+    }
+
     /**
      * Ore rubble: fewer, chunkier, taller fragments than dust.
      *

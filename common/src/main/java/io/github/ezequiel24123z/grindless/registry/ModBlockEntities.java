@@ -8,6 +8,7 @@ import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.FluidWellBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.MagneticSeparatorBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.MergerBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.OverflowGateBlockEntity;
@@ -164,6 +165,14 @@ public final class ModBlockEntities {
                                     ModBlocks.CASTER.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> FLOTATION_CELL =
+            BLOCK_ENTITIES.register("flotation_cell",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.FLOTATION, pos, state),
+                                    ModBlocks.FLOTATION_CELL.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *
@@ -205,6 +214,12 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("sorter",
                     () -> BlockEntityType.Builder
                             .of(SorterBlockEntity::new, ModBlocks.SORTER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<MagneticSeparatorBlockEntity>> MAGNETIC_SEPARATOR =
+            BLOCK_ENTITIES.register("magnetic_separator",
+                    () -> BlockEntityType.Builder
+                            .of(MagneticSeparatorBlockEntity::new, ModBlocks.MAGNETIC_SEPARATOR.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<ManipulatorBlockEntity>> CRUDE_MANIPULATOR =

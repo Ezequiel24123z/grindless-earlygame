@@ -178,6 +178,16 @@ public final class VerifyBelt {
         yes("an explicit id matches", SorterLogic.matches("minecraft:raw_iron", "minecraft:raw_iron"));
         no("an empty filter does not steal", SorterLogic.matches("minecraft:cobblestone", ""));
         no("a different id does not", SorterLogic.matches("minecraft:raw_iron", "minecraft:coal"));
+
+        yes("raw iron is ferromagnetic", MagneticLogic.magnetic("minecraft:raw_iron"));
+        yes("a nickel ingot is ferromagnetic", MagneticLogic.magnetic("grindless:nickel_ingot"));
+        yes("steel plate is ferromagnetic", MagneticLogic.magnetic("grindless:steel_plate"));
+        no("copper is not ferromagnetic", MagneticLogic.magnetic("minecraft:copper_ingot"));
+        no("an iron-free id is not a magnet", MagneticLogic.magnetic("grindless:tin_crushed"));
+        eq("iron leaves left", 1, MagneticLogic.route("minecraft:iron_ingot", true, true));
+        eq("copper continues front", 0, MagneticLogic.route("minecraft:copper_ingot", true, true));
+        eq("a full magnet holds iron", -1, MagneticLogic.route("minecraft:iron_ingot", true, false));
+        eq("a full front holds copper", -1, MagneticLogic.route("minecraft:copper_ingot", false, true));
     }
 
     private static void manipulator() {

@@ -8,6 +8,7 @@ import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
 import io.github.ezequiel24123z.grindless.fluid.FluidWellBlock;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
 import io.github.ezequiel24123z.grindless.belt.BeltBlock;
+import io.github.ezequiel24123z.grindless.belt.MagneticSeparatorBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
 import io.github.ezequiel24123z.grindless.belt.MergerBlock;
 import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
@@ -128,6 +129,11 @@ public final class ModBlocks {
             register("induction_furnace",
                     () -> new ProcessMachineBlock(ProcessMachineKind.INDUCTION_FURNACE, machine().strength(3.5F)));
 
+    /** T2 flotation. Crushed and surfactant become concentrate and tailings. */
+    public static final RegistrySupplier<ProcessMachineBlock> FLOTATION_CELL =
+            register("flotation_cell",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.FLOTATION, machine().strength(3.5F)));
+
     /** T2 caster. 144 mB molten and a mould → one solid form. Manufactured, not crafted. */
     public static final RegistrySupplier<ProcessMachineBlock> CASTER =
             register("caster",
@@ -162,6 +168,11 @@ public final class ModBlocks {
     public static final RegistrySupplier<SorterBlock> SORTER =
             register("sorter",
                     () -> new SorterBlock(machine().strength(2.0F)));
+
+    /** T2 magnet. Ferromagnetic items leave left; the rest continue. Manufactured, not crafted. */
+    public static final RegistrySupplier<MagneticSeparatorBlock> MAGNETIC_SEPARATOR =
+            register("magnetic_separator",
+                    () -> new MagneticSeparatorBlock(machine().strength(2.0F)));
 
     /** Crude inserter. One item a second, unpowered. */
     public static final RegistrySupplier<ManipulatorBlock> CRUDE_MANIPULATOR =

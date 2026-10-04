@@ -253,6 +253,24 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.CASTER.get();
         }
+    },
+
+    FLOTATION(MachineFamily.FLOTATION, MachineMenuKind.FLOTATION,
+            BlockCatalogue.Geometry.FLOTATION, "flotation_cell") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.FLOTATION;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withAgitation(Agitation.STIRRED);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.FLOTATION_CELL.get();
+        }
     };
 
     private final MachineFamily family;

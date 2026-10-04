@@ -21,7 +21,8 @@ public enum MachineMenuKind {
     ELECTROLYSIS_CELL(0, 0),
     ATMOSPHERIC_INTAKE(0, 0),
     INDUCTION_FURNACE(1, 0),
-    CASTER(1, 1);
+    CASTER(1, 1),
+    FLOTATION(1, 2);
 
     private final int inputs;
     private final int outputs;

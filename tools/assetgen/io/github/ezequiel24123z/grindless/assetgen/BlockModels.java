@@ -64,6 +64,8 @@ final class BlockModels {
             case WELL -> well();
             case INDUCTION -> induction();
             case CASTER -> caster();
+            case FLOTATION -> flotation();
+            case MAGNET -> magnet();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -331,6 +333,23 @@ final class BlockModels {
                 front(2, 2, 2, 14, 13, 14, "top", "side", "front"),
                 box(7, 13, 7, 9, 16, 9, "cap", "side"),
                 box(4, 14, 4, 12, 15, 12, "top", "side"));
+    }
+
+    /** An open cell with a froth cap. */
+    private static List<Box> flotation() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 2, 15, 12, 14, "top", "side", "front"),
+                box(3, 12, 3, 13, 14, 13, "top", "side"));
+    }
+
+    /** A lane with a horseshoe standing over the left. */
+    private static List<Box> magnet() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(1, 2, 1, 15, 5, 15, "top", "side", "front"),
+                box(2, 5, 4, 4, 12, 8, "cap", "side"),
+                box(2, 11, 4, 10, 13, 8, "cap", "side"));
     }
 
     /** A low slab with two raised rails. */

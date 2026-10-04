@@ -51,6 +51,8 @@ public final class MachineEffects {
             case WELL -> well(status, level, pos, random);
             case INDUCTION -> induction(status, level, pos, random);
             case CASTER -> caster(status, level, pos, random);
+            case FLOTATION -> flotation(status, level, pos, random);
+            case MAGNET -> belt(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);
@@ -68,6 +70,31 @@ public final class MachineEffects {
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);
+        }
+    }
+
+    /** Froth while the cell runs; a dry click when surfactant or feed is missing. */
+    private static void flotation(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5;
+        double z = pos.getZ() + 0.5;
+        switch (status) {
+            case RUNNING -> {
+                if (random.nextFloat() < 0.6F) {
+                    particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 0.95, z,
+                            (random.nextDouble() - 0.5) * 0.15, 0.04, (random.nextDouble() - 0.5) * 0.15);
+                }
+                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.14F, 0.9F);
+            }
+            case BLOCKED -> {
+                if (random.nextFloat() < 0.2F) {
+                    particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 1.0, z, 0.0, 0.01, 0.0);
+                }
+            }
+            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.8F);
+            case OUT_OF_BAND -> {
+            }
+            default -> {
+            }
         }
     }
 

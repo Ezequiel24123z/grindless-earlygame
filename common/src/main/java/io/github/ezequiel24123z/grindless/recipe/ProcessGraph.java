@@ -64,6 +64,11 @@ public final class ProcessGraph {
                     recipes.add(wash(material.name(), byproduct(washCycle, material.name())));
                     recipes.add(reduce(material.name(), "b2_r1", washedTag(material.name())));
                 }
+                if (material.crushed()) {
+                    recipes.add(flotation(material.name()));
+                    recipes.add(reduce(material.name(), "b3_r1", concentrateTag(material.name())));
+                    recipes.add(reduceTailings(material.name()));
+                }
             }
             if (feed != null && material.oxide()) {
                 recipes.add(roast(material.name(), "roast", feed));
@@ -120,6 +125,9 @@ public final class ProcessGraph {
         recipes.add(caster());
         recipes.add(ingotMould());
         recipes.add(plateMould());
+        recipes.add(surfactant());
+        recipes.add(flotationCell());
+        recipes.add(magneticSeparator());
         return List.copyOf(recipes);
     }
 
@@ -140,6 +148,14 @@ public final class ProcessGraph {
 
     public static String washedTag(String material) {
         return "grindless:washed_crushed/" + material;
+    }
+
+    public static String concentrateTag(String material) {
+        return "grindless:concentrates/" + material;
+    }
+
+    public static String tailingsTag(String material) {
+        return "grindless:tailings/" + material;
     }
 
     public static String oxideTag(String material) {
@@ -547,6 +563,64 @@ public final class ProcessGraph {
                 FabricationLogic.FU_PER_TICK,
                 List.of(),
                 "industrial");
+    }
+
+    /** B3. Twenty crushed is ten raw, so 2.4 and 0.3 are whole items (ADR-0080). */
+    private static ProcessRecipe flotation(String material) {
+        return new ProcessRecipe(
+                "b3/" + material,
+                MachineFamily.FLOTATION,
+                List.of(
+                        IngredientSpec.tag(crushedTag(material), ProcessLogic.FLOTATION_CRUSHED),
+                        IngredientSpec.fluid(ProcessLogic.SURFACTANT, ProcessLogic.FLOTATION_SURFACTANT_MB)),
+                List.of(
+                        OutputSpec.tag(concentrateTag(material), ProcessLogic.FLOTATION_CONCENTRATE),
+                        OutputSpec.tag(tailingsTag(material), ProcessLogic.FLOTATION_TAILINGS)),
+                Double.NaN,
+                null,
+                ProcessLogic.FLOTATION_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Trace recovery. Ten tailings are one ingot, so a flotation batch is not a second yield. */
+    private static ProcessRecipe reduceTailings(String material) {
+        return new ProcessRecipe(
+                "tailings/r1/" + material,
+                MachineFamily.ARC_FURNACE,
+                List.of(
+                        IngredientSpec.tag(tailingsTag(material), ProcessLogic.TAILINGS_PER_INGOT),
+                        IngredientSpec.tag(ProcessLogic.CARBON, 1)),
+                List.of(
+                        OutputSpec.tag(ingotTag(material), 1),
+                        OutputSpec.item(ProcessLogic.SLAG, 1),
+                        OutputSpec.ventedFluid(ProcessLogic.CARBON_MONOXIDE, ProcessLogic.CO_MB)),
+                ProcessLogic.REDUCE_TEMPERATURE,
+                ProcessLogic.REDUCE_ATMOSPHERE,
+                ProcessLogic.REDUCE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Carbon stands in for black liquor until an organics line exists (ADR-0080). */
+    private static ProcessRecipe surfactant() {
+        return new ProcessRecipe(
+                "reagent/surfactant",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.tag(ProcessLogic.CARBON, 1),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.SURFACTANT_WATER_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.SURFACTANT, ProcessLogic.SURFACTANT_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.SURFACTANT_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    private static ProcessRecipe flotationCell() {
+        return machineCraft("assemble/flotation_cell", FabricationLogic.FLOTATION_CELL);
+    }
+
+    private static ProcessRecipe magneticSeparator() {
+        return machineCraft("assemble/magnetic_separator", FabricationLogic.MAGNETIC_SEPARATOR);
     }
 
     /** 1 ingot becomes 144 mB of melt. No slag (ADR-0079). */

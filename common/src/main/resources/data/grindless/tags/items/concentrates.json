@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#grindless:concentrates/iron",
+    "#grindless:concentrates/copper",
+    "#grindless:concentrates/gold",
+    "#grindless:concentrates/tin",
+    "#grindless:concentrates/lead",
+    "#grindless:concentrates/silver",
+    "#grindless:concentrates/nickel",
+    "#grindless:concentrates/zinc",
+    "#grindless:concentrates/aluminium",
+    "#grindless:concentrates/titanium",
+    "#grindless:concentrates/tungsten",
+    "#grindless:concentrates/platinum"
+  ]
+}

@@ -61,7 +61,11 @@ public final class VerifyMaterial {
         no("nor a crushed form", SupplyCatalogue.isSupplied("steel", MaterialForm.CRUSHED));
         no("nor an oxide", SupplyCatalogue.isSupplied("steel", MaterialForm.OXIDE));
         no("nor a washed form", SupplyCatalogue.isSupplied("steel", MaterialForm.WASHED));
+        no("nor a concentrate", SupplyCatalogue.isSupplied("steel", MaterialForm.CONCENTRATE));
+        no("nor tailings", SupplyCatalogue.isSupplied("steel", MaterialForm.TAILINGS));
         yes("iron washed is supplied", SupplyCatalogue.isSupplied("iron", MaterialForm.WASHED));
+        yes("iron concentrate is supplied", SupplyCatalogue.isSupplied("iron", MaterialForm.CONCENTRATE));
+        yes("iron tailings are supplied", SupplyCatalogue.isSupplied("iron", MaterialForm.TAILINGS));
         yes("but it has an ingot", SupplyCatalogue.isSupplied("steel", MaterialForm.INGOT));
         yes("vanilla has no iron oxide, so Grindless supplies one",
                 SupplyCatalogue.isSupplied("iron", MaterialForm.OXIDE));

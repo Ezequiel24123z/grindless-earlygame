@@ -71,6 +71,8 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.FLUID_WELL),
                 lazy(ModBlocks.INDUCTION_FURNACE),
                 lazy(ModBlocks.CASTER),
+                lazy(ModBlocks.FLOTATION_CELL),
+                lazy(ModBlocks.MAGNETIC_SEPARATOR),
                 lazy(ModBlocks.CONVEYOR_BELT),
                 lazy(ModBlocks.SPLITTER),
                 lazy(ModBlocks.MERGER),

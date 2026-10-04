@@ -135,6 +135,7 @@ maintain. A recipe runs in any machine whose envelope contains the recipe's cond
 | **Induction Furnace** | 200–2000 °C | ambient | Clean, precise, electrically efficient. MK I holds 1000 °C inert for a 144 mB melt (ADR-0079). |
 | **Chemical Reactor** | −20–500 °C | 0.1–2 MPa | Liquid phase, stirred, catalyst slot. MK I holds 450 °C for contact oxidation (ADR-0075). |
 | **Chemical Washer** | 10–100 °C | ambient | Stirred sluice. MK I holds ambient for B2; the range still contains a 90 °C leach (ADR-0076). |
+| **Froth Flotation Cell** | 10–100 °C | ambient | Stirred froth. MK I holds ambient for B3 (ADR-0080). |
 | **Electrolysis Cell** | 10–80 °C | ambient | Electric field. MK I holds ambient for water; 60 °C chlor-alkali still fits. Molten salt does not (ADR-0077). |
 | **Atmospheric Intake** | −200–40 °C | 0.1–1.0 MPa | MK I holds ambient and skims oxygen. The documented −190 °C / 0.6 MPa cut still fits (ADR-0077). |
 | **Autoclave** | 100–400 °C | up to 25 MPa | Where hydrothermal chemistry lives. |

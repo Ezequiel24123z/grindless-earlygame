@@ -47,5 +47,8 @@ public enum MachineFamily {
     INDUCTION_FURNACE,
 
     /** 144 mB molten and a mould → one solid form. T2. */
-    CASTER
+    CASTER,
+
+    /** Sulfide concentrate. 20 crushed + 500 mB surfactant → 24 concentrate + 3 tailings. T2. */
+    FLOTATION
 }

@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well and melt", 67, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt and flotation", 76, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -445,6 +445,67 @@ public final class VerifyRecipes {
         eq("the plate mould makes the item", "item:grindless:plate_mould",
                 plateMould.itemOutputs().get(0).qualified());
 
+        ProcessRecipe b3 = recipe(recipes, "b3/iron");
+        ProcessRecipe b3Reduce = recipe(recipes, "b3_r1/iron");
+        ProcessRecipe tailings = recipe(recipes, "tailings/r1/iron");
+        ProcessRecipe soap = recipe(recipes, "reagent/surfactant");
+        ProcessRecipe flotationCraft = recipe(recipes, "assemble/flotation_cell");
+        ProcessRecipe magnet = recipe(recipes, "assemble/magnetic_separator");
+
+        eq("flotation is the cell", MachineFamily.FLOTATION, b3.family());
+        eq("flotation takes twenty crushed", 20, b3.itemInputs().get(0).count());
+        eq("flotation crushed is the grindless tag", "tag:grindless:crushed_materials/iron",
+                b3.itemInputs().get(0).qualified());
+        eq("flotation takes 500 mB of surfactant", "fluid:grindless:surfactant",
+                b3.fluidInputs().get(0).qualified());
+        eq("flotation surfactant is half a bucket", 500, b3.fluidInputs().get(0).count());
+        eq("flotation makes 24 concentrate", 24, b3.itemOutputs().get(0).count());
+        eq("concentrate is the grindless tag", "tag:grindless:concentrates/iron",
+                b3.itemOutputs().get(0).qualified());
+        eq("flotation makes 3 tailings", 3, b3.itemOutputs().get(1).count());
+        eq("tailings are the grindless tag", "tag:grindless:tailings/iron",
+                b3.itemOutputs().get(1).qualified());
+        eq("flotation is eighty seconds", 20 * 80, b3.durationTicks());
+        yes("flotation names no temperature", !b3.namesTemperature());
+        no("gold without crushed does not float",
+                recipes.stream().anyMatch(candidate -> candidate.id().equals("b3/gold")));
+        no("mythril concentrate does not roast",
+                recipes.stream().anyMatch(candidate -> candidate.id().startsWith("roast")
+                        && candidate.itemInputs().stream().anyMatch(spec -> spec.id().contains("concentrates"))));
+
+        eq("concentrate reduction is the arc", MachineFamily.ARC_FURNACE, b3Reduce.family());
+        eq("concentrate reduction feeds concentrate", "tag:grindless:concentrates/iron",
+                b3Reduce.itemInputs().get(0).qualified());
+        eq("concentrate reduction makes one ingot", 1, b3Reduce.itemOutputs().get(0).count());
+
+        eq("tailings reduction takes ten", 10, tailings.itemInputs().get(0).count());
+        eq("tailings reduction feeds tailings", "tag:grindless:tailings/iron",
+                tailings.itemInputs().get(0).qualified());
+        eq("tailings reduction makes one ingot", 1, tailings.itemOutputs().get(0).count());
+        yes("mythril floats",
+                recipes.stream().anyMatch(candidate -> candidate.id().equals("b3/mythril")));
+
+        eq("surfactant is the reactor", MachineFamily.CHEMICAL_REACTOR, soap.family());
+        eq("surfactant takes carbon", "tag:grindless:carbon", soap.itemInputs().get(0).qualified());
+        eq("surfactant takes a bucket of water", 1000, soap.fluidInputs().get(0).count());
+        eq("surfactant makes a bucket", "fluid:grindless:surfactant",
+                soap.fluidOutputs().get(0).qualified());
+        eq("surfactant is eight seconds", 20 * 8, soap.durationTicks());
+        yes("surfactant names no temperature", !soap.namesTemperature());
+
+        eq("the flotation cell is the assembler", MachineFamily.ASSEMBLER, flotationCraft.family());
+        eq("the flotation cell takes a casing", "item:grindless:machine_casing",
+                flotationCraft.itemInputs().get(0).qualified());
+        eq("the flotation cell needs Industrial", "industrial", flotationCraft.blueprint());
+        eq("the flotation cell makes the block", "item:grindless:flotation_cell",
+                flotationCraft.itemOutputs().get(0).qualified());
+        eq("the magnet is the assembler", MachineFamily.ASSEMBLER, magnet.family());
+        eq("the magnet makes the block", "item:grindless:magnetic_separator",
+                magnet.itemOutputs().get(0).qualified());
+        no("the magnet is not a process that changes an item",
+                recipes.stream().anyMatch(candidate -> candidate.family() != MachineFamily.ASSEMBLER
+                        && candidate.id().contains("magnetic")));
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -559,6 +620,10 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("ingot_mould.json")));
         no("the plate mould has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("plate_mould.json")));
+        no("the flotation cell has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("flotation_cell.json")));
+        no("the magnet has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("magnetic_separator.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

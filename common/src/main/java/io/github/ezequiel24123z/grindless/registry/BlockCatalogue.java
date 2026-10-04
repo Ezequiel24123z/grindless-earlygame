@@ -53,6 +53,8 @@ public final class BlockCatalogue {
         INDUCTION,
         /** A spout over a mould. Melt becomes a solid form. */
         CASTER,
+        /** A froth cell. Sulfides become concentrate and tailings. */
+        FLOTATION,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON,
         /** A low slab with two lanes. */
@@ -67,6 +69,8 @@ public final class BlockCatalogue {
         OVERFLOW,
         /** Passthrough with two filter mouths. */
         SORTER,
+        /** A horseshoe over a lane. Ferromagnetic items leave left. */
+        MAGNET,
         /** A short arm on a post. */
         MANIPULATOR,
         /** A heavier bore than the Crude Extractor. */
@@ -144,6 +148,7 @@ public final class BlockCatalogue {
             new Entry("fluid_well", Geometry.WELL, 1, true, CONSUMER),
             new Entry("induction_furnace", Geometry.INDUCTION, 1, true, CONSUMER),
             new Entry("caster", Geometry.CASTER, 1, true, CONSUMER),
+            new Entry("flotation_cell", Geometry.FLOTATION, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),
@@ -153,6 +158,7 @@ public final class BlockCatalogue {
             new Entry("tunnel_belt", Geometry.TUNNEL, 1, true, BELT),
             new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT),
             new Entry("sorter", Geometry.SORTER, 1, true, BELT),
+            new Entry("magnetic_separator", Geometry.MAGNET, 1, true, BELT),
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),

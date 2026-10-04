@@ -199,6 +199,10 @@ public final class VerifyFluid {
         yes("emitted water stays ambient", FluidLogic.isAmbient(water));
         FluidState co = FluidLogic.emitted(FluidLogic.CARBON_MONOXIDE, 1000);
         yes("emitted CO stays ambient", FluidLogic.isAmbient(co));
+        FluidState surfactant = FluidState.of(ProcessLogic.SURFACTANT, 500);
+        yes("surfactant is ambient", FluidLogic.isAmbient(surfactant));
+        no("surfactant is not a gas", FluidLogic.isGas(surfactant));
+        eq("surfactant is not a generator fuel", 0, FluidLogic.burnTicks(ProcessLogic.SURFACTANT));
     }
 
     private static void eq(String what, int expected, int actual) {

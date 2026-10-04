@@ -92,6 +92,22 @@ public final class ProcessLogic {
         return "grindless:molten/" + material;
     }
 
+    /**
+     * B3 integer batch (ADR-0080). Ten raw are twenty crushed: 2.4 concentrate and
+     * 0.3 tailings become 24 and 3, and 0.05 B of surfactant becomes 500 mB.
+     * Eighty seconds is the documented eight, times ten.
+     */
+    public static final String SURFACTANT = "grindless:surfactant";
+    public static final int FLOTATION_CRUSHED = 20;
+    public static final int FLOTATION_SURFACTANT_MB = 500;
+    public static final int FLOTATION_CONCENTRATE = 24;
+    public static final int FLOTATION_TAILINGS = 3;
+    public static final int FLOTATION_TICKS = 20 * 80;
+    public static final int TAILINGS_PER_INGOT = 10;
+    public static final int SURFACTANT_WATER_MB = 1000;
+    public static final int SURFACTANT_MB = 1000;
+    public static final int SURFACTANT_TICKS = 20 * 8;
+
     private ProcessLogic() {
     }
 

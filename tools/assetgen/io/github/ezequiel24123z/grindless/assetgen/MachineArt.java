@@ -41,6 +41,8 @@ public final class MachineArt {
     public static final int WELL = 0x1E88E5;
     public static final int INDUCTION = 0x26A69A;
     public static final int CASTER = 0xF4511E;
+    public static final int FLOTATION = 0x9CCC65;
+    public static final int MAGNET = 0xAD1457;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -82,6 +84,8 @@ public final class MachineArt {
             case WELL -> wellFront(status);
             case INDUCTION -> inductionFront(status);
             case CASTER -> casterFront(status);
+            case FLOTATION -> flotationFront(status);
+            case MAGNET -> magnetFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -118,6 +122,8 @@ public final class MachineArt {
             case WELL -> wellTop();
             case INDUCTION -> inductionTop();
             case CASTER -> casterTop();
+            case FLOTATION -> flotationTop();
+            case MAGNET -> magnetTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -849,6 +855,82 @@ public final class MachineArt {
         }
         for (int x = 6; x <= 9; x++) {
             set(img, x, 2, CASTER);
+        }
+        return img;
+    }
+
+    // ---- Froth Flotation Cell ------------------------------------------------------------
+
+    /** A bath of froth: the machine is a thing that lifts sulfide. */
+    public static BufferedImage flotationFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, FLOTATION);
+        int froth = glow < 0 ? Palette.shade(FLOTATION, -0.15) : glow;
+        for (int y = 6; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean wall = y == 6 || y == 13 || x == 2 || x == 13;
+                boolean bubble = !wall && (x + y) % 3 == 0;
+                int pixel = wall ? Palette.shade(CASING, 0.15) : (bubble ? froth : Palette.shade(FLOTATION, -0.35));
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage flotationTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean wall = y == 3 || y == 12 || x == 3 || x == 12;
+                boolean bubble = !wall && (x * 3 + y) % 4 == 0;
+                set(img, x, y, wall ? Palette.shade(CASING, 0.15)
+                        : (bubble ? FLOTATION : Palette.shade(FLOTATION, -0.25)));
+            }
+        }
+        return img;
+    }
+
+    // ---- Magnetic Separator --------------------------------------------------------------
+
+    /** A horseshoe over a lane: ferromagnetic items are pulled aside. */
+    public static BufferedImage magnetFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, MAGNET);
+        int pole = glow < 0 ? MAGNET : glow;
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean rail = x <= 2 || x >= 13;
+                set(img, x, y, rail ? Palette.shade(CASING, 0.2) : Palette.shade(CASING, -0.45));
+            }
+        }
+        for (int y = 3; y <= 10; y++) {
+            set(img, 4, y, pole);
+            set(img, 11, y, pole);
+        }
+        for (int x = 4; x <= 11; x++) {
+            set(img, x, 3, pole);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage magnetTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 6; x++) {
+                set(img, x, y, Palette.shade(CASING, (x + y) % 2 == 0 ? -0.3 : -0.5));
+            }
+            for (int x = 9; x <= 13; x++) {
+                set(img, x, y, Palette.shade(CASING, (x + y) % 2 == 0 ? -0.3 : -0.5));
+            }
+        }
+        for (int i = 3; i <= 8; i++) {
+            set(img, 4, i, MAGNET);
+            set(img, 11, i, MAGNET);
+        }
+        for (int x = 4; x <= 11; x++) {
+            set(img, x, 3, MAGNET);
         }
         return img;
     }
