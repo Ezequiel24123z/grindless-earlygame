@@ -103,6 +103,10 @@ public final class GenerateAssets {
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
         written += write(items, "process_atlas",
                 FormTextures.atlas(Palette.of("process_atlas", 0x26C6DA)));
+        written += write(items, "quest_book",
+                FormTextures.questBook(Palette.of("quest_book", 0xC9A227)));
+        written += write(items, "field_guide",
+                FormTextures.fieldGuide(Palette.of("field_guide", 0x26A69A)));
         written += write(items, "flux_conduit",
                 FormTextures.conduit(Palette.of("flux_conduit", 0x18FFFF)));
         written += write(items, "plate_die", FormTextures.die(Palette.of("plate_die", 0xB0BEC5)));

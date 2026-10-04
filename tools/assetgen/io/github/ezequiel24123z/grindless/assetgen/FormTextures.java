@@ -273,6 +273,30 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the quest book: a bound volume with a marked spine. See {@link #dataCore}. */
+    public static BufferedImage questBook(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 12, 13, 3.2);
+        field.rect(3, 2, 5, 13, 4.6);
+        field.rect(7, 4, 11, 5, 4.0);
+        field.rect(7, 7, 11, 8, 4.0);
+        field.rect(7, 10, 10, 11, 4.0);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for the field guide: an open page with rules. See {@link #dataCore}. */
+    public static BufferedImage fieldGuide(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 2, 13, 13, 3.0);
+        field.rect(4, 4, 11, 5, 4.2);
+        field.rect(4, 7, 11, 8, 3.8);
+        field.rect(4, 9, 11, 10, 3.8);
+        field.rect(4, 11, 9, 12, 3.8);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Process Atlas: a tablet with three graph nodes. See {@link #dataCore}. */
     public static BufferedImage atlas(Palette palette) {
         HeightField field = new HeightField();

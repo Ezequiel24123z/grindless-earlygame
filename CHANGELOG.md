@@ -78,6 +78,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Original quest book and in-game guide (ADR-0100).** Two T0 handhelds. The quest
+  book is lines, tasks, dependencies and rewards for the route already built, from the
+  Multitool through Voltaic, the contact process, the Arc Furnace metals, the Ground
+  Array, Luna, the Drift and the sealed chamber. A claim watches an item in the
+  inventory, a blueprint the world has unlocked, or the dimension the player is
+  standing in. It does not consume that evidence and it does not gate a machine.
+  Claims are per player. The field guide is the same route, read as pages, with the
+  chamber last. Rewards are existing items. Nothing follows this slice. BK stays
+  named and not started. Rows L–BB stay held. No third-party code or assets are
+  copied. Own work stays MIT (ADR-0089).
+
 - **Arrival at the galactic centre (ADR-0099).** Riding the station from the Drift
   lands in a sealed chamber, `grindless:sagittarius`. The mass is unbreakable horizon
   shell, sixteen blocks tall, with no vein. The carve is a 7 by 4 by 7 room, one

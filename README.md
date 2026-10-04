@@ -35,8 +35,8 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > the ceiling, and that ceiling is the arrival on the Drift. Arrival at the
 > galactic centre (BN) is in (ADR-0099): riding on from the Drift lands in a
 > sealed chamber, and that arrival is the victory. The way there is the station,
-> not a link. The next slice is the original quest book (BC), with the in-game
-> guide. It is last, and it is not started.
+> not a link. The original quest book and the in-game guide (BC) are in
+> (ADR-0100). They are last. No slice follows them.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -248,8 +248,10 @@ above 2^53. Any slice that needs those operations waits until the representation
 record does not change the type.
 
 **Quest book.** A book in the BetterQuesting style: lines, tasks, dependencies, rewards.
-BetterQuesting's code stays out until its license is one statement. The GitHub `LICENSE`
-is MIT and the CurseForge page says All Rights Reserved (ADR-0088). Changing our license
+It is in (ADR-0100). Two T0 handhelds: the quest book follows the route from the
+Multitool to the sealed chamber, and the field guide reads that same route. The book
+does not gate a machine. BetterQuesting's code stays out. The GitHub `LICENSE` is MIT
+and the CurseForge page says All Rights Reserved (ADR-0088). Changing our license
 does not resolve that (ADR-0089).
 
 **Quality of life.** Features known from other mods are in scope, built as original work
@@ -1367,8 +1369,8 @@ exactly the moment the player has earned it:
   Starward Link remains registered and no longer moves a player. The centre is still ahead.
 - **The black hole at the centre of the Milky Way** — the goal. Arriving is the victory,
   by riding the station from the Drift, not by a link. The interior is a sealed chamber
-  (ADR-0088, ADR-0099). The station is in. That arrival is in. The quest book is next
-  and is not started.
+  (ADR-0088, ADR-0099). The station is in. That arrival is in. The quest book and
+  the field guide are in (ADR-0100). No slice follows them.
 
 ---
 
@@ -2101,8 +2103,8 @@ landing map offers the home world and Luna. **BM — Supraluminal station** is i
 (ADR-0098): the station climbs to the ceiling, and that ceiling arrives on the Drift.
 **BN — Arrival at the galactic centre** is in (ADR-0099): riding on from the Drift
 lands in a sealed chamber, and that is the victory. It is that ride, not a link.
-The next slice is the original quest book and the in-game guide. They are last,
-and they are not started.
+The original quest book and the in-game guide are in (ADR-0100). They are last.
+No slice follows them.
 
 ### Beyond 1.0 — version ports
 
@@ -2162,7 +2164,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
 | 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Unstarted rows L–BB are held (ADR-0088). |
-| 28 | **Modpack expansion** | in progress — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093, ADR-0094, ADR-0095, ADR-0096, ADR-0097, ADR-0098, ADR-0099. BN arrival at the galactic centre is done. BK teleportation orbs are named and not started. Next slice **BC — Original quest book and in-game guide**, not implemented. Quest book is last. |
+| 28 | **Modpack expansion** | the named rows are in — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093, ADR-0094, ADR-0095, ADR-0096, ADR-0097, ADR-0098, ADR-0099, ADR-0100. BN arrival at the galactic centre is done. BC the quest book and the in-game guide are done. BK teleportation orbs are named and not started. No slice follows BC. |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
 | 28d | **BF — Metallurgical silicon** | ✅ done — ADR-0092. 1 silica + 2 carbon → 1 metallurgical silicon + 2 B CO in 14 s at 1900 °C on the Arc Furnace. |
@@ -2174,6 +2176,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 | 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
 | 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
+| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. Lines, tasks, dependencies and rewards from the Multitool to the sealed chamber, plus a field guide of the same route. The book does not gate a machine. No slice follows it. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2204,7 +2207,7 @@ Milky Way: arriving is the victory, and the interior is a sealed chamber, and th
 there is the station (ADR-0097, ADR-0099). The first hop, the Drift, is already in, by
 riding that station. The centre is in. Local flight is the survey rocket.
 
-**Next is BC — Original quest book and in-game guide**, identified and not implemented.
+**BC — Original quest book and in-game guide** is in (ADR-0100). No slice follows it.
 **BN — Arrival at the galactic centre** is in (ADR-0099).
 **BK — Teleportation orbs** is named and not started, and it is not next. The
 material stays unnamed until that slice.
@@ -2223,8 +2226,8 @@ nether quartz. The Arc Furnace still holds 1500 °C, inside that band's toleranc
 **BE — Refractory brick** is in (ADR-0091): one slag becomes one refractory brick in 20 s
 at 1400 °C on the Arc Furnace. **BD — Electric-arc steel** is in (ADR-0090): ten iron
 ingots and one carbon become ten steel ingots in 140 s at 1600 °C. Slices L through BB stay defined and
-are **held**. The original quest book and the in-game guide are last. Arrival at
-the black hole is in. The book is next and is not started.
+are **held**. The original quest book and the in-game guide are in (ADR-0100). Arrival at
+the black hole is in. No slice follows the book.
 
 Everything through step 14b is written, builds green and is covered by the behaviour checks in
 `tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
@@ -2232,7 +2235,7 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is BC — Original quest book and in-game guide.** It is not started. **Arrival at
+**BC — Original quest book and in-game guide is in** (ADR-0100). No slice follows it. **Arrival at
 the galactic centre (BN) is in** (ADR-0099): riding the station from the Drift lands in
 a sealed chamber. Leaving the chamber returns to the berth saved on the way to the Drift
 and does not draw. **The supraluminal
@@ -2259,7 +2262,7 @@ metallurgical silicon + 2 B CO in 14 s at 1900 °C. **Refractory brick is in**
 in 20 s at 1400 °C. **Electric-arc steel is in**
 (ADR-0090): the Arc Furnace runs `alloy/steel`, 10 iron ingots + 1 carbon → 10 steel
 ingots in 140 s. The washer, Slice F and the rest of L–BB
-are held. The quest book is last.
+are held. The quest book is in (ADR-0100). No slice follows it.
 See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
@@ -2287,7 +2290,7 @@ is already in. Modular armour and the Arc Reactor pair are **recorded, not start
 line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
 row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
 slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
-next slice is the original quest book (BC). Arrival at the galactic centre (BN) is in (ADR-0099). The supraluminal station (BM) is in (ADR-0098). Teleportation orbs (BK) are named and not started. Rocket ascent (BL) is in (ADR-0097). The Drift is in (ADR-0096). Luna is in (ADR-0095). The quest book is last and is not started.
+quest book (BC) is in (ADR-0100), and no slice follows it. Arrival at the galactic centre (BN) is in (ADR-0099). The supraluminal station (BM) is in (ADR-0098). Teleportation orbs (BK) are named and not started. Rocket ascent (BL) is in (ADR-0097). The Drift is in (ADR-0096). Luna is in (ADR-0095). The quest book is last and it is done.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

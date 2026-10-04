@@ -98,7 +98,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0097 |
 | [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Superseded in part by ADR-0098 |
 | [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Superseded in part by ADR-0099 |
-| [0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber) | The galactic centre is a sealed chamber | Accepted |
+| [0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber) | The galactic centre is a sealed chamber | Superseded in part by ADR-0100 |
+| [0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it) | The quest book tracks the route and does not gate it | Accepted |
 
 ---
 
@@ -3744,7 +3745,10 @@ started. The quest book stays last. BK stays named and not started.
 
 ## ADR-0099 — The galactic centre is a sealed chamber
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)*
+
+> **Superseded in part.** The chamber is unchanged. The sentence that leaves the quest book
+> unstarted is withdrawn. The book is in. See ADR-0100.
 
 **Context.** Slice BN says the player reaches the black hole by riding the station, and
 that the interior is written when the slice starts. ADR-0088 already chose the victory:
@@ -3819,5 +3823,67 @@ chamber is starting a second game. A successor who adds a link is reopening the
 rejected arrival. A successor who makes the shell breakable, or who gives it an item,
 is opening the room into a world. BC is next and is not started. BK stays named and
 not started. The quest book stays last.
+
+---
+
+## ADR-0100 — The quest book tracks the route and does not gate it
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BC is the original quest book and the in-game guide. It is last, after
+arrival at the galactic centre. ADR-0088 chose a BetterQuesting-style book — lines, tasks,
+dependencies, rewards — and kept that mod's code out, because the GitHub `LICENSE` is MIT
+and the CurseForge listing says All Rights Reserved. ADR-0089 does not resolve that
+contradiction. ADR-0090 moved the book to the end of the calendar. The route it has to
+cover now exists: T0 through the sealed chamber (ADR-0099).
+
+Held row BA also names a guide, beside advancements, a config screen and `es_es`. A
+successor who treats BC as BA, who vendors BetterQuesting or Patchouli, or who makes the
+book a second research gate, builds the wrong slice. A successor who stops the book at
+the contact process ignores the route that was built after it.
+
+**Decision.**
+
+1. **The book is native.** No BetterQuesting classes, schema or assets, and no Patchouli.
+   Two handhelds, both ungated crafting-table recipes of paper and sticks, so they exist
+   at T0. `grindless:quest_book` is how you follow. `grindless:field_guide` is how you
+   read. The guide is pages of this route. It is not advancements, not a config screen
+   and not a translation. Those stay in held BA.
+2. **The book does not gate the factory.** Research still unlocks blueprints (ADR-0057).
+   Fabrication still gates everything above T1. A task watches evidence the game already
+   has: the named item is in the inventory, the named blueprint is unlocked on the world,
+   or the player is standing in the named dimension. Claiming does not consume that
+   evidence. A placed machine counts again when the Multitool has picked it back up.
+   Claims are stored per player on the overworld. Research is the factory's; the book is
+   the player's. One claim does not finish the book for anyone else.
+3. **A claim needs its dependencies and its evidence, once.** Dependencies are other
+   tasks. A second claim is refused. The reward is an existing item, at most one stack,
+   and it is not the evidence the next task asks for. There is no new material and no
+   quest token.
+4. **The lines are the route already built**, in that order: bootstrap, Voltaic, the
+   contact process, the Arc Furnace metals, the Ground Array, then the voyage through
+   Luna, the Drift and the sealed chamber. The guide has a page for each, and the chamber
+   page is last. Teleportation orbs, the Kardashev scales, the unbuilt fallback worlds
+   and every held row are not tasks. The Lunar Link and the Starward Link are mentioned
+   as what they already are. They are not quests.
+5. **Nothing follows this slice.** BK stays named and not started. L–BB stay held. This
+   record does not add a gameplay slice.
+
+**Alternatives rejected.**
+
+- Vendoring BetterQuesting, or taking a dependency on Patchouli.
+- Starting BA: advancements, a config screen, `es_es`.
+- A book that stops at the contact process.
+- Quest completion as a lock on a machine.
+- World-scoped claims, so the first player finishes the book for the server.
+- A unique reward item, or a reward that satisfies the next task's evidence.
+- A quest for the teleportation orbs, or for a world this pack does not have.
+- Inventing a slice after BC.
+
+**Consequences.** A successor who copies BetterQuesting is ignoring ADR-0088 and this
+record. A successor who locks the Arc Furnace behind a quest is adding a gate the
+research terminal already is. A successor who writes only the contact chapter is
+skipping the route. A successor who starts BK, resumes L–BB, or opens a new row because
+BC is done is inventing work this calendar does not name. Own work stays MIT (ADR-0089).
 
 

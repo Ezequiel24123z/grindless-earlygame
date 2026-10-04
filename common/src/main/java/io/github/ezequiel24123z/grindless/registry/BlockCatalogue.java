@@ -176,7 +176,7 @@ public final class BlockCatalogue {
             "refractory_brick", "metallurgical_silicon", "electronic_silicon",
             "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
             "copper_coil", "motor", "vanadia_pellet", "helium_3", "survey_rocket",
-            "supraluminal_station");
+            "supraluminal_station", "quest_book", "field_guide");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";
