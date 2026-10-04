@@ -4,8 +4,9 @@ import io.github.ezequiel24123z.grindless.container.ItemInsert;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.material.Material;
-import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
+import io.github.ezequiel24123z.grindless.planet.PlanetProduct;
 import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
@@ -14,9 +15,7 @@ import io.github.ezequiel24123z.grindless.vein.VeinData;
 import io.github.ezequiel24123z.grindless.vein.VeinGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -156,7 +155,8 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
         if (!(getLevel() instanceof ServerLevel server)) {
             return null;
         }
-        List<Material> mineable = MaterialRegistry.snapshot().mineable();
+        List<Material> mineable = PlanetCatalogue.veins(
+                server.dimension().location().toString(), MaterialRegistry.snapshot().mineable());
         ChunkPos chunk = new ChunkPos(getBlockPos());
         return VeinGenerator.generate(server.getSeed(), chunk.x, chunk.z, mineable);
     }
@@ -174,21 +174,10 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
     }
 
     private ItemStack productOf(ChunkVein vein) {
-        if (vein == null) {
+        if (!(getLevel() instanceof ServerLevel server)) {
             return ItemStack.EMPTY;
         }
-        Material material = MaterialRegistry.snapshot().material(vein.material()).orElse(null);
-        if (material == null) {
-            return ItemStack.EMPTY;
-        }
-        MaterialForm form = ExtractorLogic.outputForm(
-                material.has(MaterialForm.RAW), material.has(MaterialForm.ORE));
-        ResourceLocation id = MaterialRegistry.output(vein.material(), form).orElse(null);
-        if (id == null) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(id));
-        return stack.isEmpty() ? ItemStack.EMPTY : stack;
+        return PlanetProduct.resolve(server.dimension().location().toString(), vein);
     }
 
     private boolean canAcceptProduct(ItemStack product) {

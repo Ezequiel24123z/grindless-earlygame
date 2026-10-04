@@ -51,6 +51,9 @@ public final class MachineArt {
     public static final int TRANSFORMER = 0x7C4DFF;
     public static final int ARRAY = 0x5C6BC0;
     public static final int ARRAY_CASING = 0xC46A3A;
+    /** Moon-pale. Not cyan, amber or red, so a status still reads as a status. */
+    public static final int LINK = 0xECEFF1;
+    public static final int REGOLITH = 0x9E9E9E;
 
     private static final double CX = 7.5;
     private static final double CY = 7.5;
@@ -87,6 +90,8 @@ public final class MachineArt {
             case TRANSFORMER -> transformerFront(status);
             case ARRAY -> arrayFront(status);
             case ARRAY_CASING -> arrayCasingFront(status);
+            case LINK -> linkFront(status);
+            case REGOLITH -> regolithFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -119,6 +124,8 @@ public final class MachineArt {
             case TRANSFORMER -> transformerTop();
             case ARRAY -> arrayTop();
             case ARRAY_CASING -> arrayCasingTop();
+            case LINK -> linkTop();
+            case REGOLITH -> regolithFront("idle");
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1093,6 +1100,53 @@ public final class MachineArt {
                             ? Palette.shade(ARRAY_CASING, -0.45)
                             : Palette.shade(ARRAY_CASING, (x + course) % 2 == 0 ? 0.05 : -0.2));
                 }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage linkFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, LINK);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double d = Math.hypot(x - 7.5, y - 7.5);
+                if (d >= 4.2 && d <= 5.6) {
+                    set(img, x, y, Palette.shade(LINK, (x + y) % 2 == 0 ? 0.05 : -0.25));
+                } else if (d < 2.2) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(LINK, -0.45);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage linkTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                double d = Math.hypot(x - 7.5, y - 7.5);
+                if (d >= 4.0 && d <= 6.2) {
+                    set(img, x, y, Palette.shade(LINK, (x + y) % 2 == 0 ? 0.0 : -0.3));
+                } else if (d < 1.8) {
+                    set(img, x, y, LINK);
+                }
+            }
+        }
+        return img;
+    }
+
+    /** Dust, not a casing. The status strip is the only part that changes. */
+    public static BufferedImage regolithFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                int n = (x * 13 + y * 7) % 5;
+                double shade = n == 0 ? -0.22 : n == 1 ? 0.12 : (x + y) % 2 == 0 ? 0.0 : -0.08;
+                set(img, x, y, Palette.shade(REGOLITH, shade));
             }
         }
         strip(img, status);

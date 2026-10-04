@@ -17,6 +17,7 @@
   "item.grindless.refractory_brick": "Refractory Brick",
   "item.grindless.metallurgical_silicon": "Metallurgical Silicon",
   "item.grindless.electronic_silicon": "Electronic Silicon",
+  "item.grindless.helium_3": "Helium-3",
   "item.grindless.prospectors_scanner": "Prospector's Scanner",
   "item.grindless.process_atlas": "Process Atlas",
   "item.grindless.flux_conduit": "Flux Conduit",
@@ -47,6 +48,8 @@
   "block.grindless.flux_transformer": "Flux Transformer",
   "block.grindless.ground_array": "Ground Array",
   "block.grindless.array_casing": "Array Casing",
+  "block.grindless.lunar_link": "Lunar Link",
+  "block.grindless.lunar_regolith": "Lunar Regolith",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -79,6 +82,7 @@
   "material.grindless.tungsten": "Tungsten",
   "material.grindless.platinum": "Platinum",
   "material.grindless.steel": "Steel",
+  "material.grindless.helium_3": "Helium-3",
 
   "subtitles.grindless.machine_hum": "Machine hums",
   "subtitles.grindless.machine_hum_heavy": "Heavy machine rumbles",
@@ -119,5 +123,12 @@
   "chat.grindless.conduit.missing": "That pylon is gone",
   "chat.grindless.conduit.dimension": "Links cannot cross dimensions",
   "tooltip.grindless.conduit.empty": "Right-click two pylons to link them",
-  "tooltip.grindless.conduit.marked": "First pylon: %s, %s, %s"
+  "tooltip.grindless.conduit.marked": "First pylon: %s, %s, %s",
+
+  "chat.grindless.luna.charging": "The link is drawing power",
+  "chat.grindless.luna.unpowered": "The link needs a pylon",
+  "chat.grindless.luna.departed": "Luna",
+  "chat.grindless.luna.returned": "Returned",
+  "chat.grindless.luna.away": "Stand by the link",
+  "chat.grindless.luna.missing": "Luna is not loaded"
 }

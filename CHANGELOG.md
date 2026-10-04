@@ -78,13 +78,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Luna (ADR-0095).** The first original planet is a regolith world with no ore. Every
+  chunk's vein is helium-3, a reagent the Crude and Terrestrial Extractors emit only
+  there. A Lunar Link, Assembler-built under Industrial from two array casings and one
+  machine casing, draws 102,400 FU from a covering pylon and sends the player. The
+  return pad does not draw again. Interstellar travel is named next and is not started.
+  No vacuum damage, no Horizon Gate, no rocket, no black hole.
+
 - **Ground Array (ADR-0094).** The first megastructure is a fixed 3×3: one controller
   and eight casings. A complete ring under a pylon adds 6,553,600 FU to that network,
   ten seconds of MK3 throughput, as storage. It does not generate and it does not
   project a supply cube. Both blocks are Assembler recipes under Industrial: four
   refractory bricks and one steel ingot make a casing; one machine casing, four steel
   plates and four refractory bricks make the controller. Kardashev Type I, II and III
-  stay milestones. The next slice is BI — original planets, not started.
+  stay milestones. BI was named next and is now in (ADR-0095).
 
 - **Zone refining (ADR-0093).** The Arc Furnace turns 10 metallurgical silicon into
   7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s

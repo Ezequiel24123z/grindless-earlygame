@@ -157,6 +157,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-array.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-array.expect
 
+      # Slice BI: Luna loads, its surface is regolith, and helium-3 is an item.
+      - name: Boot and exercise Luna
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-luna.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-luna.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

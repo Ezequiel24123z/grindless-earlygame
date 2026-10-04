@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.planet.LunarLinkLogic;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Locale;
  * Metallurgical silicon: 1 silica + 2 carbon → 1 silicon + 2 B CO in 14 s (ADR-0092).
  * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
  * Ground Array: casing and controller, Industrial, no crafting table (ADR-0094).
+ * Lunar Link: two array casings and one machine casing, Industrial (ADR-0095).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -103,6 +105,7 @@ public final class ProcessGraph {
         recipes.add(zoneRefining());
         recipes.add(arrayCasing());
         recipes.add(groundArray());
+        recipes.add(lunarLink());
         return List.copyOf(recipes);
     }
 
@@ -447,6 +450,23 @@ public final class ProcessGraph {
                         IngredientSpec.tag("forge:plates/steel", GroundArrayLogic.CONTROLLER_PLATES),
                         IngredientSpec.item(ProcessLogic.REFRACTORY_BRICK, GroundArrayLogic.CONTROLLER_BRICKS)),
                 List.of(OutputSpec.item(FabricationLogic.GROUND_ARRAY, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** The way to Luna. Two ring parts and a casing. Industrial (ADR-0017, ADR-0095). */
+    private static ProcessRecipe lunarLink() {
+        return new ProcessRecipe(
+                "assemble/lunar_link",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.ARRAY_CASING, LunarLinkLogic.CASINGS),
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, LunarLinkLogic.MACHINE_CASINGS)),
+                List.of(OutputSpec.item(FabricationLogic.LUNAR_LINK, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

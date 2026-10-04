@@ -113,6 +113,8 @@ public final class GenerateAssets {
         written += write(items, "motor", FormTextures.motor(Palette.of("motor", 0x5A6E8A)));
         written += write(items, "vanadia_pellet",
                 FormTextures.vanadia(Palette.of("vanadia_pellet", 0xB85C38)));
+        written += write(items, "helium_3",
+                FormTextures.helium3(Palette.of("helium_3", 0xE0F7FA)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -243,6 +245,7 @@ public final class GenerateAssets {
         int written = writeText(new File(dir, "carbon.json"), tagJson("#minecraft:coals"));
         written += writeText(new File(dir, "silica.json"),
                 tagJson("minecraft:sand", "minecraft:quartz"));
+        written += writeText(new File(dir, "helium_3.json"), tagJson("grindless:helium_3"));
         return written;
     }
 

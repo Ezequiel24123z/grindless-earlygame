@@ -87,6 +87,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> ELECTRONIC_SILICON = register("electronic_silicon",
             () -> new Item(new Item.Properties()));
 
+    /** Luna's extractable. A reagent, not an ore and not a fluid (ADR-0095). */
+    public static final RegistrySupplier<Item> HELIUM_3 = register("helium_3",
+            () -> new Item(new Item.Properties()));
+
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));

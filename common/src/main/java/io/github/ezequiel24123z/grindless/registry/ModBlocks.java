@@ -22,6 +22,8 @@ import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
 import io.github.ezequiel24123z.grindless.network.CapacitorBankBlock;
+import io.github.ezequiel24123z.grindless.planet.LunarLinkBlock;
+import io.github.ezequiel24123z.grindless.planet.LunarRegolithBlock;
 import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
@@ -176,6 +178,20 @@ public final class ModBlocks {
     /** One of the eight blocks around a Ground Array. Not a machine. */
     public static final RegistrySupplier<ArrayCasingBlock> ARRAY_CASING = register("array_casing",
             () -> new ArrayCasingBlock(machine().strength(3.0F)));
+
+    /** Departure to Luna. On Luna, the same block is the way home (ADR-0095). */
+    public static final RegistrySupplier<LunarLinkBlock> LUNAR_LINK = register("lunar_link",
+            () -> new LunarLinkBlock(machine().strength(3.5F)));
+
+    /**
+     * Luna's surface. A full cube, so neighbours occlude. Not a machine silhouette.
+     */
+    public static final RegistrySupplier<LunarRegolithBlock> LUNAR_REGOLITH = register("lunar_regolith",
+            () -> new LunarRegolithBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GRAY)
+                    .sound(SoundType.GRAVEL)
+                    .strength(1.5F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */
