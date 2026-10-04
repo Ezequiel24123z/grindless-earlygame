@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Finishes a rocket flight once the rider has chosen a body (ADR-0097).
  *
  * <p>The rocket has already climbed. This class only lands. The Drift is not a choice.
- * Neither is a black hole: that ride is the station, and the station is not this slice.
+ * Neither is a black hole: that ride is the station (ADR-0098), and this rocket is not it.
  */
 public final class RocketTravel {
 

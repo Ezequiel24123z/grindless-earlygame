@@ -35,11 +35,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.util.List;
 
 /**
- * One block that trades the standing dimension for the Drift. On the Drift the same
- * block is the way home. It is not a dialed ring and not the black hole (ADR-0096).
+ * One block that used to trade the standing dimension for the Drift (ADR-0096).
  *
- * <p>Placeholder. A station with a superluminal engine replaces this hop (ADR-0097).
- * The block stays until that station is the way, and this pass does not delete it.
+ * <p>The supraluminal station replaced that hop (ADR-0098). The block stays registered
+ * so a world that already placed it keeps the block. Right-click does not move a player.
  */
 public class StarwardLinkBlock extends BaseEntityBlock {
 

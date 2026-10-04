@@ -36,6 +36,8 @@ public final class FabricationLogic {
     public static final String STARWARD_LINK = "grindless:starward_link";
     public static final String LAUNCH_PAD = "grindless:launch_pad";
     public static final String SURVEY_ROCKET = "grindless:survey_rocket";
+    public static final String STATION_BERTH = "grindless:station_berth";
+    public static final String SUPRALUMINAL_STATION = "grindless:supraluminal_station";
 
     private FabricationLogic() {
     }

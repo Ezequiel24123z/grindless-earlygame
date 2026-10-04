@@ -96,7 +96,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
 | [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
 | [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0097 |
-| [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Accepted |
+| [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Superseded in part by ADR-0098 |
+| [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Accepted |
 
 ---
 
@@ -3548,7 +3549,11 @@ this record. BK is next and is not started.
 
 ## ADR-0097 — Local trips are rocket flights
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star)*
+
+> **Superseded in part.** The survey rocket is unchanged. The station is no longer "next
+> and not started": it is the ride off the star. The Starward Link stays registered and
+> no longer moves a player. The Lunar Link still does. See ADR-0098.
 
 **Context.** ADR-0088 chose the victory: arriving at the black hole at the centre of the
 Milky Way is the win, and the interior is a finite finale, not an empty marker and not an
@@ -3637,5 +3642,97 @@ who puts the Drift on the landing map is flying a rocket across stars. A success
 who starts the station, the hole's interior, the quest book, or the teleportation
 orbs here is early. Those orbs are row BK: named, ordered before this flight, and
 not started. BM, the station, is next and is not started. The quest book stays last.
+
+---
+
+## ADR-0098 — The supraluminal station is the ride off the star
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BM says the player rides a station to another star, and that the
+concrete ride is chosen when the slice starts. ADR-0097 already chose the shape: a
+station with a superluminal engine, ridden, and the arrival is that ride rather than
+a link. The Starward Link was left in place until this slice replaced it. The owner
+kept the black-hole interior, the quest book, the Kardashev scales, further planets,
+the teleportation orbs and any third teleport link out of this change.
+
+The ways already named cannot be this one.
+
+- The Drift is the only off-star place that exists (ADR-0096). It is one deck between
+  the home star and the galactic centre. A new named star would be a further planet,
+  which this row forbids. "Another star" in the row is that hop.
+- Arriving at the black hole is the victory (ADR-0088). The interior is a finite
+  finale written when that arrival is the slice. Shipping the hole here finishes the
+  route before the arrival slice exists. The id `grindless:sagittarius` is already
+  the name the rocket's checks use for a hole, and a station must not go there.
+- A right-click that still fires the Starward Link is the arrival this record
+  refuses. Keeping both would mean the link was not replaced.
+- Deleting the link block drops it out of worlds that already placed it, and out of
+  the states the server smoke places. The rocket slice refused that deletion.
+- The launch pad's recipe is one machine casing and four steel plates. The survey
+  rocket's is one casing, one motor and two steel plates. A station recipe with
+  either of those input lists is the same craft, and the Assembler cannot tell them
+  apart.
+- Vacuum damage without an exosuit (held X and Y) makes the deck unusable.
+- Copying a warp ship is a license question, not a shortcut. Galacticraft, Advanced
+  Rocketry and Ad Astra stay as ADR-0097: not copied. Own work stays MIT (ADR-0089).
+
+**Decision.**
+
+1. **The player rides a station.** `grindless:supraluminal_station` is a seat placed
+   on `grindless:station_berth`. It climbs one block a tick until the dimension's
+   build ceiling, three blocks of clearance under the exclusive limit, so the rider's
+   head stays inside the world. Reaching the ceiling is the arrival. There is no
+   menu and no link click. The shape of the climb is the rocket's idea of a visible
+   flight. The code is original, and it does not open a landing map.
+2. **Where it arrives.** Leaving any dimension other than the Drift arrives on the
+   Drift, beside a berth, on the column the return link used
+   (`StarwardLinkLogic.ARRIVAL_*` and `STAND_*`). Leaving the Drift arrives on the
+   berth they left, or the home world's spawn when that point was never written.
+   `grindless:sagittarius` does not depart. The Nether, the End and Luna are not new
+   worlds: a station there still goes to the Drift, which is what the link used to
+   do. The survey rocket's map does not grow, and a rocket still does not launch
+   from the Drift.
+3. **The toll is the array's buffer, and only on the way out.** Leaving a world that
+   is not the Drift draws **6,553,600 FU** from the pylon that covers the berth, the
+   same number the link drew (ADR-0096). Leaving the Drift draws nothing, so the
+   ride home does not strand a player on a deck with no pylon. The charge is spent
+   once the climb starts. A refused dimension has no toll.
+4. **How it is built.** Assembler, Industrial, 20 s at F1. The berth is **1 starward
+   link + 4 steel plates**. Consuming the link is how the factory replaces the hop.
+   The station is **1 machine casing + 1 motor + 2 array casings**. The motor climbs.
+   Two casings are the hull's share of the ring that sized the toll. T2+ is
+   manufactured (ADR-0017). No crafting-table recipe. Helium-3 is not an ingredient.
+   Neither input list is the launch pad's or the survey rocket's.
+5. **The Starward Link stays registered and stops being the trip.** Right-click
+   tells the player to ride the station. It does not depart and it does not return.
+   A saved charge is dropped, so a link that was mid-draw does not finish the old
+   hop. When the station lands, a column that is air or a starward link becomes a
+   berth. Any other block is left alone. The Lunar Link is unchanged. This is not a
+   third teleport link.
+6. **What waits.** Arrival at the galactic centre, by riding this station, is the
+   next slice and is not started. Its interior is written then. An empty arrival
+   and an endless interior stay rejected (ADR-0088). Kardashev Type I, II and III.
+   Further planets. The quest book. The teleportation orbs.
+
+**Alternatives rejected.**
+
+- A third link, or a Starward Link that still teleports beside the station.
+- Deleting the Starward Link block.
+- A map of stars, a new planet, or the black hole.
+- An empty ceiling with nowhere to stand.
+- Charging the ride home from the Drift.
+- Charging a capacitor for this hop. That toll is the moon.
+- Sharing an Assembler input list with the launch pad or the survey rocket.
+- Copying Galacticraft, Advanced Rocketry, Ad Astra or Draconic Evolution code or
+  assets. Draconic Evolution is All Rights Reserved and its assets are CC BY-NC-SA
+  4.0. Ad Astra textures are All Rights Reserved. None of them enter this repository.
+
+**Consequences.** A successor who makes the link move a player again is reopening
+the hop this record closed. A successor who deletes the link block strands a world
+that still has the id. A successor who sends the station to `grindless:sagittarius`,
+or who writes the hole's interior here, is starting the next slice. A successor who
+adds a planet to the destination is flying further worlds. BN is next and is not
+started. The quest book stays last. BK stays named and not started.
 
 

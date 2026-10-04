@@ -69,7 +69,7 @@ public final class RocketFlight {
         return SITES.contains(dimension);
     }
 
-    /** A rocket flies only inside the local system. The Drift waits for the station. */
+    /** A rocket flies only inside the local system. The Drift is the station's ride (ADR-0098). */
     public static boolean canLaunch(String dimension) {
         return isSite(dimension);
     }

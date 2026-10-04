@@ -66,6 +66,7 @@ public final class MachineEffects {
             case SPAN -> { }
             case DECK -> { }
             case PAD -> { }
+            case BERTH -> { }
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);

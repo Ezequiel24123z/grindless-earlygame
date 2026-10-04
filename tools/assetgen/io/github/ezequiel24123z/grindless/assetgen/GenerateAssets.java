@@ -117,6 +117,8 @@ public final class GenerateAssets {
                 FormTextures.helium3(Palette.of("helium_3", 0xE0F7FA)));
         written += write(items, "survey_rocket",
                 FormTextures.rocket(Palette.of("survey_rocket", 0x00897B)));
+        written += write(items, "supraluminal_station",
+                FormTextures.station(Palette.of("supraluminal_station", 0x4527A0)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));

@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 49, rows.size());
+        eq("atlas lists every generated recipe", 51, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the casing", "assemble/array_casing",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("ten assembler crafts in this set, including the survey rocket", 10,
+        eq("twelve assembler crafts in this set, including the supraluminal station", 12,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");

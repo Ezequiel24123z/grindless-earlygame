@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "status=idle": { "model": "grindless:block/station_berth_idle" },
+    "status=running": { "model": "grindless:block/station_berth_running" },
+    "status=starved": { "model": "grindless:block/station_berth_starved" }
+  }
+}

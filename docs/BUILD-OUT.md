@@ -8,9 +8,9 @@ cap and the early-game convenience framing. Anything not yet started below is **
 next calendar is the **modpack expansion**. The quest book is last, not first
 ([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BM — Supraluminal station.** Not implemented. BL (rocket ascent) is done.
-BK (teleportation orbs) is identified, ordered before that flight, and not started.
-Do not pull it forward. The quest book is last.
+**Next slice: BN — Arrival at the galactic centre.** Not implemented. BM (supraluminal
+station) is done. BK (teleportation orbs) is identified and not started. Do not pull
+it forward. The quest book is last.
 K remains the last foundation slice. L–BB are held. The quest book is not next.
 
 ---
@@ -202,10 +202,10 @@ the factory for real.
 ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
 start the quest book.
 
-**Next slice: BM — Supraluminal station.** Not implemented. Do not start it in the rocket change.
-BK (teleportation orbs) is not next.
-The Lunar Link and the Starward Link stay registered. ADR-0097 marks both as placeholders
-to be replaced. This pass does not delete them.
+**Next slice: BN — Arrival at the galactic centre.** Not implemented. Do not start it in
+the station change. BK (teleportation orbs) is not next.
+The Lunar Link and the Starward Link stay registered. The station replaced the hop
+(ADR-0098). The link block no longer moves a player. This pass does not delete it.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
@@ -215,10 +215,10 @@ to be replaced. This pass does not delete them.
 | **BG** | **Further processing lines** | Extend the graph past metallurgical silicon | Zone refining on the Arc Furnace (ADR-0093): 10 metallurgical silicon → 7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s per unit. The ±5 °C inert band is not applied: it would refuse the 1500 °C reducing hold. | Siemens. The Induction Furnace. A boule. A wafer. Vacuum float. Orbital growth. Megastructures. Planets. The quest book. | ✅ done |
 | **BH** | **Megastructures** | Build the first structure past the factory | The Ground Array (ADR-0094): one controller and eight casings in a fixed 3×3. A complete ring under a pylon adds ten seconds of MK3 throughput, 6,553,600 FU, as storage. Assembler, Industrial. No generator, no supply cube, no hatches. | Kardashev Type I, II and III. The Dyson Collector. Planets. Interstellar travel. The black hole. The quest book. | ✅ done |
 | **BI** | **Original planets** | Reach a world with its own resources | Luna (ADR-0095): regolith, no ore, helium-3 from the existing extractor, and a Lunar Link that spends one capacitor of FU to go there. The return does not draw again. The link stays as a placeholder for the rocket (ADR-0097). | The other fallback worlds. Interstellar travel. The black hole. The quest book. Kardashev Type I, II and III. Horizon Gates, rockets, colonies. | ✅ done |
-| **BJ** | **Interstellar travel** | Leave the star | The Drift (ADR-0096): one deck between the home star and the galactic centre, with no ore. A Starward Link spends the Ground Array's buffer, 6,553,600 FU, to arrive. The return does not draw again. Assembler, Industrial: one lunar link and four array casings. The link stays as a placeholder for the station (ADR-0097). | The black-hole interior. The quest book. Kardashev Type I, II and III. Further planets. | ✅ done |
+| **BJ** | **Interstellar travel** | Leave the star | The Drift (ADR-0096): one deck between the home star and the galactic centre, with no ore. A Starward Link spends the Ground Array's buffer, 6,553,600 FU, to arrive. The return does not draw again. Assembler, Industrial: one lunar link and four array casings. The link stayed as a placeholder until the station (ADR-0098). | The black-hole interior. The quest book. Kardashev Type I, II and III. Further planets. | ✅ done |
 | **BK** | **Teleportation orbs** | Skip a repeat rocket trip | Not sliced. Just before spaceflight, an alternate route of a magical material — unnamed until this slice — ends in teleportation orbs. Shift-right-click sets coordinates and dimension. Right-click teleports. The orb can sit on a pedestal. After the first landing on a planet, the orb is how you return. Draconic Evolution may inspire the design. | Naming the material. Copying Draconic Evolution code or assets. The current tree is All Rights Reserved under the CoFH Don't Be a Jerk license, and the assets are CC BY-NC-SA 4.0, so neither enters this MIT repository (ADR-0089). The 1.7.10 MIT text is an older generation and is not this orb. Implementing this row. Replacing the rocket. The station. The quest book. **Not implemented. Not next.** |
 | **BL** | **Rocket ascent** | Fly to the ceiling and choose a landing site | The survey rocket (ADR-0097). It climbs to the build ceiling, then a landing map lists the home world and Luna. Assembler, Industrial: the pad is one machine casing and four steel plates; the rocket is one casing, one motor and two steel plates. Leaving home spends 102,400 FU. Leaving Luna does not. | The station. The black-hole interior. Deleting either placeholder link. The teleportation orbs. The quest book. Kardashev Type I, II and III. Further planets. | ✅ done |
-| **BM** | **Supraluminal station** | Ride a station to another star | Not sliced. Interstellar trips are a station with a superluminal engine. The player rides it. The Starward Link stays until this replaces it. | The quest book. The black-hole interior. Kardashev Type I, II and III. Further planets. A third teleport link. The teleportation orbs. **Not implemented.** |
+| **BM** | **Supraluminal station** | Ride a station to another star | The supraluminal station (ADR-0098). It climbs to the ceiling, and that ceiling is the arrival: the Drift on the way out, the berth they left on the way home. Assembler, Industrial: the berth is one starward link and four steel plates; the station is one casing, one motor and two array casings. Leaving any world but the Drift spends 6,553,600 FU. Leaving the Drift does not. The Starward Link stays registered and no longer moves a player. | The quest book. The black-hole interior. Kardashev Type I, II and III. Further planets. A third teleport link. The teleportation orbs. | ✅ done |
 | **BN** | **Arrival at the galactic centre** | Reach the black hole by riding the station | Not sliced. Arriving is the victory. The interior is a finite finale written when this slice starts. The way there is the station, not a link. | The quest book. Kardashev Type I, II and III. Further planets. An empty arrival. An endless interior. A link. **Not implemented.** |
 
 The original quest book is last, with the in-game guide, after that arrival.
@@ -231,8 +231,8 @@ The original quest book is last, with the in-game guide, after that arrival.
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BM. Held rows
-   are not a queue. The quest book is last. Do not start BK. Do not resume BL. Do not start the station here.
+2. Branch from the current tip. Implement only that slice. The next slice is BN. Held rows
+   are not a queue. The quest book is last. Do not start BK. Do not resume BM. Do not start the black-hole interior here.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
    and name the following slice before starting it.
 

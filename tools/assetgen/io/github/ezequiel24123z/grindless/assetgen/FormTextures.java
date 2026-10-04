@@ -409,6 +409,21 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /**
+     * Placeholder sprite for the supraluminal station: a wide hull and a ring, not a nose
+     * and not fins. See {@link #rocket}.
+     */
+    public static BufferedImage station(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 5, 12, 11, 3.8);
+        field.rect(1, 6, 3, 10, 2.4);
+        field.rect(12, 6, 14, 10, 2.4);
+        field.disc(8.0, 8.0, 2.2, 5.4);
+        field.rect(7, 2, 8, 5, 4.6);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the survey rocket: a body, a nose and two fins. See {@link #dataCore}. */
     public static BufferedImage rocket(Palette palette) {
         HeightField field = new HeightField();

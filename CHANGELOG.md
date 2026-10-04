@@ -78,6 +78,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Supraluminal station (ADR-0098).** Interstellar trips are a ride. A station,
+  Assembler-built under Industrial from one machine casing, one motor and two array
+  casings, stands on a berth (one starward link and four steel plates). It climbs to
+  the build ceiling. That ceiling is the arrival: the Drift on the way out, the berth
+  they left on the way home. Leaving any world but the Drift spends 6,553,600 FU.
+  Leaving the Drift does not. The Starward Link stays registered and no longer moves
+  a player. The next slice is arrival at the galactic centre (BN), and it is not
+  started. No third link, no black-hole interior, no further planet. No third-party
+  code or assets are copied. Own work stays MIT (ADR-0089).
+
 - **Teleportation orbs are named and not started (BK).** Just before rocket ascent,
   a later slice is an alternate route of a magical material, left unnamed, that ends
   in orbs. Shift-right-click sets coordinates and dimension. Right-click teleports.

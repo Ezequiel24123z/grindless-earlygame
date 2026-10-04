@@ -27,6 +27,7 @@ import io.github.ezequiel24123z.grindless.planet.LunarLinkBlock;
 import io.github.ezequiel24123z.grindless.planet.LunarRegolithBlock;
 import io.github.ezequiel24123z.grindless.star.DriftDeckBlock;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkBlock;
+import io.github.ezequiel24123z.grindless.station.StationBerthBlock;
 import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
@@ -206,8 +207,15 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()));
 
     /**
+     * A berth a supraluminal station climbs from (ADR-0098). Not a link.
+     */
+    public static final RegistrySupplier<StationBerthBlock> STATION_BERTH = register("station_berth",
+            () -> new StationBerthBlock(machine().strength(3.5F)));
+
+    /**
      * Departure to the Drift. On the Drift, the same block is the way home (ADR-0096).
-     * Placeholder: the station replaces this hop. Not deleted (ADR-0097).
+     * Placeholder: the station replaces this hop. The block stays registered and no longer
+     * moves a player (ADR-0098).
      */
     public static final RegistrySupplier<StarwardLinkBlock> STARWARD_LINK = register("starward_link",
             () -> new StarwardLinkBlock(machine().strength(3.5F)));

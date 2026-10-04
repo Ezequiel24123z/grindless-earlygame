@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.UUID;
 
 /**
- * Charges a departure from the covering pylon, then sends the player who clicked.
- * A link standing on the Drift does not charge: the trip out already paid for the return.
+ * A link that no longer moves a player (ADR-0098). Right-click drops any saved charge
+ * and says so. The station is the ride. The block stays so a placed link does not vanish.
  */
 public final class StarwardLinkBlockEntity extends MachineBlockEntity {
 
@@ -57,31 +57,18 @@ public final class StarwardLinkBlockEntity extends MachineBlockEntity {
     }
 
     /**
-     * Starts a departure, or walks home when this block is already on the Drift.
+     * Tells the player the station replaced this hop. The block does not move anyone
+     * (ADR-0098). A charge that was already saved is dropped here.
      */
     public void begin(ServerPlayer player) {
-        if (!(getLevel() instanceof ServerLevel server)) {
-            return;
-        }
-        if (DriftCatalogue.isDrift(server.dimension().location().toString())) {
-            if (StarwardTravel.home(player)) {
-                player.displayClientMessage(Component.translatable("chat.grindless.drift.returned"), true);
-            }
-            return;
-        }
-        if (network() == null && !StarwardLinkLogic.ready(stored)) {
-            MachineProperties.publish(server, getBlockPos(), MachineStatus.STARVED);
-            player.displayClientMessage(Component.translatable("chat.grindless.drift.unpowered"), true);
-            return;
-        }
-        traveller = player.getUUID();
+        stored = 0L;
+        traveller = null;
         setChanged();
-        if (StarwardLinkLogic.ready(stored)) {
-            finish(server, player);
-            return;
+        if (getLevel() instanceof ServerLevel server) {
+            MachineProperties.publish(server, getBlockPos(), MachineStatus.IDLE);
+            updateSubscriptions();
         }
-        updateSubscriptions();
-        player.displayClientMessage(Component.translatable("chat.grindless.drift.charging"), true);
+        player.displayClientMessage(Component.translatable("chat.grindless.drift.replaced"), true);
     }
 
     @Override
@@ -129,35 +116,19 @@ public final class StarwardLinkBlockEntity extends MachineBlockEntity {
     }
 
     private void finish(ServerLevel server, ServerPlayer player) {
-        if (player != null && player.level() == server && inRange(player)) {
-            if (StarwardTravel.depart(player, getBlockPos())) {
-                stored = 0L;
-                traveller = null;
-                setChanged();
-                MachineProperties.publish(server, getBlockPos(), MachineStatus.IDLE);
-                player.displayClientMessage(Component.translatable("chat.grindless.drift.departed"), true);
-                updateSubscriptions();
-                return;
-            }
-            player.displayClientMessage(Component.translatable("chat.grindless.drift.missing"), true);
-        } else if (player != null && player.level() == server) {
-            player.displayClientMessage(Component.translatable("chat.grindless.drift.away"), true);
-        }
-        MachineProperties.publish(server, getBlockPos(), MachineStatus.RUNNING);
+        stored = 0L;
+        traveller = null;
+        setChanged();
+        MachineProperties.publish(server, getBlockPos(), MachineStatus.IDLE);
         updateSubscriptions();
+        if (player != null) {
+            player.displayClientMessage(Component.translatable("chat.grindless.drift.replaced"), true);
+        }
     }
 
     private boolean onDrift() {
         return getLevel() instanceof ServerLevel server
                 && DriftCatalogue.isDrift(server.dimension().location().toString());
-    }
-
-    private boolean inRange(ServerPlayer player) {
-        BlockPos at = player.blockPosition();
-        return StarwardLinkLogic.inRange(
-                at.getX() - getBlockPos().getX(),
-                at.getY() - getBlockPos().getY(),
-                at.getZ() - getBlockPos().getZ());
     }
 
     @Override
@@ -172,7 +143,8 @@ public final class StarwardLinkBlockEntity extends MachineBlockEntity {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        stored = tag.getLong(KEY_CHARGE);
-        traveller = tag.hasUUID(KEY_TRAVELLER) ? tag.getUUID(KEY_TRAVELLER) : null;
+        // A link that was mid-charge must not finish the old hop (ADR-0098).
+        stored = 0L;
+        traveller = null;
     }
 }

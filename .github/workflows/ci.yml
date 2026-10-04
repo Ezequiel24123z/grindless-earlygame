@@ -171,6 +171,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-rocket.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-rocket.expect
 
+      # Slice BM: the berth is a block, the station is an entity, and the link id remains.
+      - name: Boot and exercise the supraluminal station
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-station.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-station.expect
+
       # Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
       - name: Boot and exercise the Drift
         run: tools/smoke-boot.sh .

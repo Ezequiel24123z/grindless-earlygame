@@ -41,7 +41,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, steel, refractory, silicon, zone refining, the ground array, the lunar link, the starward link, the launch pad and the survey rocket", 49, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, steel, refractory, silicon, zone refining, the ground array, the lunar link, the starward link, the launch pad, the survey rocket, the station berth and the supraluminal station", 51, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
