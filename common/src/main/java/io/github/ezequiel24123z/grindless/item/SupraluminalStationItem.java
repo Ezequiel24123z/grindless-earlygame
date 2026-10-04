@@ -21,7 +21,7 @@ import java.util.List;
  *
  * <p>The item is the station. It is manufactured, not crafted on a table. Right-click a
  * berth to set it down and sit. The climb starts once the berth has drawn its toll,
- * and the ceiling is the arrival.
+ * and the ceiling is the arrival. From the Drift, that arrival is the galactic centre.
  */
 public final class SupraluminalStationItem extends Item {
 

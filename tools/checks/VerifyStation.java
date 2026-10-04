@@ -42,13 +42,13 @@ public final class VerifyStation {
                 StationRide.destination("minecraft:the_nether"));
         eq("the end arrives on the drift", DriftCatalogue.DRIFT,
                 StationRide.destination("minecraft:the_end"));
-        eq("the drift rides home", StationRide.HOME, StationRide.destination(DriftCatalogue.DRIFT));
-        eq("the hole has no destination", "", StationRide.destination(StationRide.HOLE));
-        no("the hole can depart", StationRide.canDepart(StationRide.HOLE));
+        eq("the drift rides to the centre", StationRide.HOLE, StationRide.destination(DriftCatalogue.DRIFT));
+        eq("the centre rides home", StationRide.HOME, StationRide.destination(StationRide.HOLE));
+        yes("the centre can depart", StationRide.canDepart(StationRide.HOLE));
         yes("the drift can depart", StationRide.canDepart(DriftCatalogue.DRIFT));
         yes("home can depart", StationRide.canDepart(StationRide.HOME));
         no("an empty id can depart", StationRide.canDepart(""));
-        eq("the hole is the refused id", "grindless:sagittarius", StationRide.HOLE);
+        eq("the centre is the named hole", "grindless:sagittarius", StationRide.HOLE);
         eq("the berth uses the link's column", StarwardLinkLogic.ARRIVAL_Y, StationRide.DRIFT_BERTH_Y);
         eq("the rider stands beside that berth", StarwardLinkLogic.STAND_X, StationRide.DRIFT_STAND_X);
     }
@@ -76,7 +76,7 @@ public final class VerifyStation {
         eq("leaving home costs the array buffer", GroundArrayLogic.CAPACITY, StationRide.toll(StationRide.HOME));
         eq("that is the link's toll", StarwardLinkLogic.COST, StationRide.toll(PlanetCatalogue.LUNA));
         eq("leaving the drift is free", 0L, StationRide.toll(DriftCatalogue.DRIFT));
-        eq("the hole has no toll", -1L, StationRide.toll(StationRide.HOLE));
+        eq("leaving the centre is free", 0L, StationRide.toll(StationRide.HOLE));
         yes("a free toll is already ready", StationRide.ready(0L, 0L));
         no("one short of the array is not ready", StationRide.ready(StationRide.COST - 1L, StationRide.COST));
         yes("the array toll is enough", StationRide.ready(StationRide.COST, StationRide.COST));

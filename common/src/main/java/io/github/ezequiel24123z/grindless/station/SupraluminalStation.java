@@ -26,10 +26,11 @@ import net.minecraft.world.level.Level;
 import java.util.UUID;
 
 /**
- * A seat that climbs to the build ceiling and then arrives (ADR-0098).
+ * A seat that climbs to the build ceiling and then arrives (ADR-0098, ADR-0099).
  *
- * <p>It is not a link. The ceiling is the arrival: the Drift on the way out, the berth
- * they left on the way home. Shift does not end the trip once the climb has started.
+ * <p>It is not a link. The ceiling is the arrival: the Drift on the way out, the
+ * galactic centre from the Drift, and the berth they left on the way out of the
+ * centre. Shift does not end the trip once the climb has started.
  */
 public class SupraluminalStation extends Entity {
 
@@ -52,7 +53,6 @@ public class SupraluminalStation extends Entity {
     private UUID rider;
     private boolean settled;
     private boolean toldUnpowered;
-    private boolean toldHole;
     private boolean toldClimbing;
 
     public SupraluminalStation(EntityType<?> type, Level level) {
@@ -197,10 +197,6 @@ public class SupraluminalStation extends Entity {
         }
         String here = server.dimension().location().toString();
         if (!StationRide.canDepart(here)) {
-            if (!toldHole) {
-                toldHole = true;
-                player.displayClientMessage(Component.translatable("chat.grindless.station.hole"), true);
-            }
             return;
         }
         if (!isLaunched()) {

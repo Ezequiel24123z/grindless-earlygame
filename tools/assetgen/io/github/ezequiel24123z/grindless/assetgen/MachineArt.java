@@ -61,6 +61,10 @@ public final class MachineArt {
     public static final int PAD = 0x00897B;
     /** Violet rails. A berth, not the rocket's teal cradle and not the navy gate. */
     public static final int BERTH = 0x6A1B9A;
+    /** Near-black mass. A wall, not the deck's blue-grey plate and not the violet berth. */
+    public static final int SHELL = 0x1A0A24;
+    /** Pale core. A mark, not the mass and not a status colour. */
+    public static final int MARK = 0xF3E5F5;
     public static final int REGOLITH = 0x9E9E9E;
 
     private static final double CX = 7.5;
@@ -102,6 +106,8 @@ public final class MachineArt {
             case REGOLITH -> regolithFront(status);
             case SPAN -> spanFront(status);
             case DECK -> deckFront(status);
+            case SHELL -> shellFront(status);
+            case MARK -> markFront(status);
             case PAD -> padFront(status);
             case BERTH -> berthFront(status);
             case PYLON -> pylonSide(1, status);
@@ -140,6 +146,8 @@ public final class MachineArt {
             case REGOLITH -> regolithFront("idle");
             case SPAN -> spanTop();
             case DECK -> deckTop();
+            case SHELL -> shellTop();
+            case MARK -> markTop();
             case PAD -> padTop();
             case BERTH -> berthTop();
             case PYLON -> pylonTop(1, "idle");
@@ -1289,6 +1297,68 @@ public final class MachineArt {
             }
         }
         strip(img, status);
+        return img;
+    }
+
+    /** A dark field and one faint ring. Not plate seams and not dust. */
+    public static BufferedImage shellFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                boolean ring = d >= 3.2 && d <= 5.0;
+                set(img, x, y, ring
+                        ? Palette.shade(SHELL, 0.55)
+                        : Palette.shade(SHELL, (x + y) % 5 == 0 ? -0.2 : 0.08));
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage shellTop() {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                boolean ring = d >= 4.0 && d <= 5.4;
+                set(img, x, y, ring
+                        ? Palette.shade(SHELL, 0.4)
+                        : Palette.shade(SHELL, -0.05));
+            }
+        }
+        return img;
+    }
+
+    /** A bright disc on a dark field. The thing you arrived at, not the wall. */
+    public static BufferedImage markFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - 6.5);
+                if (d <= 2.2) {
+                    set(img, x, y, Palette.shade(MARK, 0.15));
+                } else if (d <= 4.4) {
+                    set(img, x, y, Palette.shade(MARK, -0.35));
+                } else {
+                    set(img, x, y, Palette.shade(SHELL, 0.1));
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage markTop() {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                set(img, x, y, d <= 3.0
+                        ? Palette.shade(MARK, 0.05)
+                        : Palette.shade(SHELL, 0.15));
+            }
+        }
         return img;
     }
 

@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.planet;
 
+import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
 import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.star.DriftCatalogue;
@@ -48,12 +49,13 @@ public final class PlanetCatalogue {
      * Materials a vein in {@code dimension} may roll.
      *
      * <p>Luna ignores {@code pack}. The Drift has no pool at all, so an extractor there
-     * cannot print the overworld's ore list (ADR-0096). Every other dimension, including
+     * cannot print the overworld's ore list (ADR-0096). The galactic centre is the same
+     * kind of empty: a finale, not a mine (ADR-0099). Every other dimension, including
      * ones this mod does not know, keeps the pack list so a Nether vein does not become
      * helium-3.
      */
     public static List<Material> veins(String dimension, List<Material> pack) {
-        if (DriftCatalogue.isDrift(dimension)) {
+        if (DriftCatalogue.isDrift(dimension) || CentreCatalogue.isCentre(dimension)) {
             return List.of();
         }
         return isLuna(dimension) ? LUNA_VEINS : pack;

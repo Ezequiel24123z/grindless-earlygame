@@ -78,6 +78,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Arrival at the galactic centre (ADR-0099).** Riding the station from the Drift
+  lands in a sealed chamber, `grindless:sagittarius`. The mass is unbreakable horizon
+  shell, sixteen blocks tall, with no vein. The carve is a 7 by 4 by 7 room, one
+  arrival mark, one berth, and a 3 by 3 shaft so the ride home has air. Leaving the
+  Drift and leaving the chamber draw nothing. Leaving the chamber returns to the
+  berth saved on the way to the Drift. The Starward Link stays registered and still
+  does not move a player. No new link and no new recipe. The next slice is the
+  original quest book (BC), and it is not started. No third-party code or assets
+  are copied. Own work stays MIT (ADR-0089).
+
 - **Supraluminal station (ADR-0098).** Interstellar trips are a ride. A station,
   Assembler-built under Industrial from one machine casing, one motor and two array
   casings, stands on a berth (one starward link and four steel plates). It climbs to

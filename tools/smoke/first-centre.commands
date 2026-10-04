@@ -1,0 +1,11 @@
+forceload add 0 0
+execute in grindless:sagittarius run say CENTRE-OK
+execute in grindless:sagittarius run forceload add 0 0
+execute in grindless:sagittarius run forceload add -1 0
+execute in grindless:sagittarius run forceload add 0 -1
+execute in grindless:sagittarius run forceload add -1 -1
+execute in grindless:sagittarius run execute if block 0 1 0 grindless:horizon_shell run say SHELL-OK
+execute in grindless:sagittarius run execute if block 4 2 0 grindless:horizon_shell run say WALL-OK
+execute in grindless:sagittarius run execute if block 0 8 0 grindless:horizon_shell run say MASS-OK
+setblock 8 70 8 grindless:arrival_mark
+execute if block 8 70 8 grindless:arrival_mark run say MARK-OK

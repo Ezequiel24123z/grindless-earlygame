@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.station;
 
+import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
+import io.github.ezequiel24123z.grindless.centre.CentreChamber;
 import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -12,10 +14,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Finishes a station ride once the ceiling is reached (ADR-0098).
+ * Finishes a station ride once the ceiling is reached (ADR-0098, ADR-0099).
  *
  * <p>The station has already climbed. This class only arrives. The Drift is the hop.
- * The black hole is not. There is no link and no landing map.
+ * The centre is the victory. There is no link and no landing map.
  */
 public final class StationTravel {
 
@@ -23,8 +25,8 @@ public final class StationTravel {
     }
 
     /**
-     * Lands {@code player} on the Drift, or back on the berth they climbed from when
-     * they are already on the Drift.
+     * Lands {@code player} on the Drift, in the galactic centre, or back on the berth
+     * saved when they left for the Drift.
      *
      * @return whether a destination dimension existed
      */
@@ -41,6 +43,9 @@ public final class StationTravel {
             return false;
         }
         if (StationRide.isDrift(here)) {
+            return toCentre(player, station, from);
+        }
+        if (StationRide.isHole(here)) {
             return home(player, station, from);
         }
         return toDrift(player, station, from);
@@ -102,6 +107,25 @@ public final class StationTravel {
             return false;
         }
         return landOnBerth(player, station, dest, x, y, z);
+    }
+
+    /**
+     * The victory. The saved berth is kept, so the ride out of the chamber still knows
+     * the way home. Drawing nothing here is what keeps a deck with no pylon from stranding them.
+     */
+    private static boolean toCentre(ServerPlayer player, SupraluminalStation station, ServerLevel from) {
+        ServerLevel dest = from.getServer().getLevel(key(StationRide.destination(from.dimension().location().toString())));
+        if (dest == null) {
+            player.displayClientMessage(Component.translatable("chat.grindless.station.missing"), true);
+            return false;
+        }
+        CentreChamber.carve(dest);
+        arriveAt(player, station, dest,
+                CentreCatalogue.STAND_X + 0.5,
+                CentreCatalogue.STAND_Y,
+                CentreCatalogue.STAND_Z + 0.5,
+                "chat.grindless.station.centre");
+        return true;
     }
 
     private static boolean landOnBerth(ServerPlayer player, SupraluminalStation station, ServerLevel dest,

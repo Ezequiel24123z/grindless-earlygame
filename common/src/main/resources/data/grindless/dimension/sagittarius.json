@@ -1,0 +1,15 @@
+{
+  "type": "grindless:sagittarius",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "grindless:sagittarius",
+      "lakes": false,
+      "features": false,
+      "layers": [
+        { "block": "grindless:horizon_shell", "height": 16 }
+      ],
+      "structure_overrides": []
+    }
+  }
+}
