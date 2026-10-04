@@ -87,6 +87,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
+| [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
 
 ---
 
@@ -2848,5 +2849,50 @@ satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C ban
 **Consequences.** A successor that starts the washer in this slice is skipping L. A
 successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
 acid without pickle (or another spend) is reopening ADR-0036.
+
+
+## ADR-0076 — The washer batch is eight crushed and the next metal
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice L is the Chemical Washer and B2. `PROCESSES.md` quotes the wash
+per 1 u raw, after the pulverizer has already made 2 u crushed: `agi stirred`, 0.5 B water,
+5 s, 2 u washed crushed and **0.25 u byproduct**, grade still 2.00. The byproduct is "the
+secondary material of the vein, resolved from the material's tags". Veins store one material
+(ADR-0009). `ProcessRecipe` counts items in whole units. Generic T2 assembly wants a circuit
+board, which wants etching acid (slice AI). Flotation, electrolysis and etching wait.
+
+**Decision.**
+
+1. **Chemical Washer** is a T2 single-block process machine. The Assembler manufactures it
+   once Industrial is researched: `1 casing + 2 motor + 4 iron plates`, 20 s, F1. No circuit
+   board. No crafting-table JSON. Menu is one in and two out. Envelope is 10–100 °C at
+   ambient pressure, stirred, so a later 90 °C leach still fits. Held conditions are ambient
+   and stirred. Recipes in this slice do not name a temperature or an agitation: the recipe
+   record has no agitation field, and one hold cannot also be the acid leach.
+2. **Washed crushed** is a supplied non-conventional form,
+   `grindless:washed_crushed/<m>`, grade 2.00. The item path is `<m>_washed`.
+3. **The integer batch** preserves the per-raw ratio. Four raw are eight crushed:
+   `8 crushed + 2 B water → 8 washed crushed + 1 byproduct` in 20 s at F1. Water is the
+   primary fluid and fills the 2 B machine buffer. 2 B is four times the documented
+   0.5 B; 20 s is four times the documented 5 s; one byproduct is four times 0.25 u.
+4. **The byproduct** is one crushed unit of the next material, in generation order, that
+   has crushed, washed and an ingot. The list wraps. That material's existing `b1_r1` is
+   the named sink (ADR-0036). A pack with fewer than two such materials still washes and
+   emits no byproduct: there is no secondary, and washing a metal into itself is not one.
+5. **Washed is not a dead end.** `b2_r1` reduces it like crushed (1 + carbon → 1 ingot +
+   slag + CO). `roast_washed` feeds the Kiln the same way crushed roast does, so B2×R2
+   stays reachable. R2 yield 1.15 stays deferred (ADR-0075).
+
+**Alternatives rejected.** A fractional 0.25 output (the type forbids it); an accumulator
+that emits the byproduct every fourth cycle (two machines with the same recipe would not
+agree, and a reload would have to persist a credit); a fixed iron→nickel table (a pack
+without nickel has no sink); storing a second material on the vein (ADR-0009, and a stack
+of crushed does not remember its chunk); a crafting-table washer (ADR-0017); the generic
+T2 recipe (circuit board); shipping leachate, flotation or electrolysis in this slice.
+
+**Consequences.** A successor that emits a residue with no Arc Furnace line is reopening
+ADR-0036. A successor that starts the Froth Flotation Cell here is skipping P. A successor
+that starts the Electrolysis Cell here is skipping M.
 
 
