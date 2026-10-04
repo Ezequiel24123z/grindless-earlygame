@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CIC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "tag": "forge:ingots/copper" },
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:flux_cell" }
+}

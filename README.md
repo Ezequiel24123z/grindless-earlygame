@@ -2013,12 +2013,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21n | **Slice U — Blueprint Tool:** save a layout and stamp it | ✅ done — ADR-0085 |
 | 21o | **Slice V — Deconstruction Planner:** mark a region | ✅ done — ADR-0086 |
 | 21p | **Slice W — Patterns:** scan an item; smash it to Matter | ✅ done — ADR-0088 |
+| 21q | **Slice X — Voltaic Harness:** wear T1 modular armour | ✅ done — ADR-0089 |
 | 22 | T2 logic | ✅ done — ADR-0083 |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out W–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **X**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **Y**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2046,8 +2047,11 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is X — Voltaic Harness**, not Construction Drones.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Pattern Scanner and the
+**Next is Y — Flux Exosuit**, not Construction Drones.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Voltaic Harness is in
+(ADR-0089): four crafting-table pieces, iron protection, one Flux Cell
+slot each. The cell stores 6,400 FU and does not generate. Walking
+through a pylon does not charge it. Vanilla armour still equips. The Pattern Scanner and the
 Deconstructor are in (ADR-0088): Assembler-manufactured once Industrial is
 researched. A scan stores the item id and reports a graph cost. A smash
 yields one Matter. The Replicator block is not in this slice. The Deconstruction Planner is in

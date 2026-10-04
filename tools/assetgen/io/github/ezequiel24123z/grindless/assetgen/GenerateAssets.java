@@ -117,6 +117,16 @@ public final class GenerateAssets {
         written += write(items, "deconstruction_planner",
                 FormTextures.planner(Palette.of("deconstruction_planner", 0x6D4C41)));
         written += write(items, "matter", FormTextures.matter(Palette.of("matter", 0x7C4DFF)));
+        written += write(items, "voltaic_helmet",
+                FormTextures.harnessHelmet(Palette.of("voltaic_helmet", 0x78909C)));
+        written += write(items, "voltaic_chestplate",
+                FormTextures.harnessChest(Palette.of("voltaic_chestplate", 0x78909C)));
+        written += write(items, "voltaic_leggings",
+                FormTextures.harnessLegs(Palette.of("voltaic_leggings", 0x607D8B)));
+        written += write(items, "voltaic_boots",
+                FormTextures.harnessBoots(Palette.of("voltaic_boots", 0x546E7A)));
+        written += write(items, "flux_cell", FormTextures.fluxCell(Palette.of("flux_cell", 0xFFB300)));
+        written += writeArmorLayers(root);
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -251,6 +261,26 @@ public final class GenerateAssets {
                 "common/src/main/resources/data/grindless/tags/items/replication_blacklist.json");
         return writeText(carbon, tagJson("#minecraft:coals"))
                 + writeText(blacklist, tagJson());
+    }
+
+    /** Worn-suit layers. A flat plate colour, so the model is not a missing texture. */
+    private static int writeArmorLayers(File root) throws IOException {
+        File dir = resourceDir(root, "textures/models/armor");
+        int written = 0;
+        written += write(dir, "voltaic_layer_1", armorLayer(0xFF78909C));
+        written += write(dir, "voltaic_layer_2", armorLayer(0xFF546E7A));
+        return written;
+    }
+
+    private static BufferedImage armorLayer(int argb) {
+        BufferedImage img = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < 32; y++) {
+            for (int x = 0; x < 64; x++) {
+                boolean trim = x % 8 == 0 || y % 8 == 0;
+                img.setRGB(x, y, trim ? 0xFF37474F : argb);
+            }
+        }
+        return img;
     }
 
     /** The shared machine menu background and a progress arrow strip. */

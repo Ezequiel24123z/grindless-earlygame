@@ -480,6 +480,53 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** A dome. The harness helmet, not a drill. */
+    public static BufferedImage harnessHelmet(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(8, 7, 5.2, 4.0);
+        field.rect(3, 10, 13, 13, 2.4);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
+    /** A plate with straps. The harness chest, not a casing cube. */
+    public static BufferedImage harnessChest(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 13, 14, 3.2);
+        field.rect(1, 3, 3, 8, 2.6);
+        field.rect(13, 3, 15, 8, 2.6);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
+    /** Two legs. Not a pair of boots. */
+    public static BufferedImage harnessLegs(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 7, 14, 3.0);
+        field.rect(9, 2, 13, 14, 3.0);
+        field.rect(3, 2, 13, 5, 3.4);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
+    /** A pair of boots. Low, not a leg. */
+    public static BufferedImage harnessBoots(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 8, 7, 14, 3.2);
+        field.rect(9, 8, 14, 14, 3.2);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
+    /** A brick battery. Not the drill cell's cylinder. */
+    public static BufferedImage fluxCell(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(4, 2, 12, 14, 3.6);
+        field.rect(6, 1, 10, 3, 4.4);
+        field.bevel(0.2);
+        return field.light(palette);
+    }
+
     /** A dense pellet. Matter, not a dust. */
     public static BufferedImage matter(Palette palette) {
         HeightField field = new HeightField();

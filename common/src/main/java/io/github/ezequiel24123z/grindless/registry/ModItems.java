@@ -3,6 +3,8 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.FluxCellItem;
+import io.github.ezequiel24123z.grindless.item.HarnessItem;
 import io.github.ezequiel24123z.grindless.item.DeconstructionPlannerItem;
 import io.github.ezequiel24123z.grindless.item.BlueprintItem;
 import io.github.ezequiel24123z.grindless.item.BlueprintToolItem;
@@ -15,6 +17,7 @@ import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -122,6 +125,23 @@ public final class ModItems {
     /** Fungible intermediate. A smash yields one; it is not a fluid (ADR-0088). */
     public static final RegistrySupplier<Item> MATTER = register("matter",
             () -> new Item(new Item.Properties()));
+
+    /** T1 suit. One slot, iron protection, no generator (ADR-0089). */
+    public static final RegistrySupplier<Item> VOLTAIC_HELMET = register("voltaic_helmet",
+            () -> new HarnessItem(ArmorItem.Type.HELMET, new Item.Properties()));
+
+    public static final RegistrySupplier<Item> VOLTAIC_CHESTPLATE = register("voltaic_chestplate",
+            () -> new HarnessItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+
+    public static final RegistrySupplier<Item> VOLTAIC_LEGGINGS = register("voltaic_leggings",
+            () -> new HarnessItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistrySupplier<Item> VOLTAIC_BOOTS = register("voltaic_boots",
+            () -> new HarnessItem(ArmorItem.Type.BOOTS, new Item.Properties()));
+
+    /** Suit buffer. Not the drill cell (ADR-0084, ADR-0089). */
+    public static final RegistrySupplier<Item> FLUX_CELL = register("flux_cell",
+            () -> new FluxCellItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

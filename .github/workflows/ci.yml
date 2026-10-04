@@ -213,6 +213,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-patterns.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-patterns.expect
 
+      # Slice X: four harness pieces and the Flux Cell exist. The cell is not the drill's fuel.
+      - name: Boot and exercise the voltaic harness
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-harness.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-harness.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

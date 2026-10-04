@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" }
+  },
+  "result": { "item": "grindless:voltaic_chestplate" }
+}
