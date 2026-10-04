@@ -89,6 +89,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
 | [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Accepted |
+| [0078](#adr-0078--the-fluid-well-is-powered-chunk-water) | The Fluid Well is powered chunk water | Accepted |
 
 ---
 
@@ -2958,5 +2959,45 @@ consumes it is reopening ADR-0036. A successor that requires oxygen on T1 roast 
 reopening ADR-0065. A successor that starts the Fluid Well here is skipping N. A
 successor that starts Haber, the Autoclave, or molten-salt electrolysis here is past
 this slice.
+
+
+## ADR-0078 — The Fluid Well is powered chunk water
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice N is the Fluid Well: chunk fluids, water, brine and
+geothermal, and not a new pipe tier. `MACHINES.md` also names oil-equivalents.
+`PROCESSES.md` sends crude hydrocarbon to the Distillation Tower (T3) and brine to
+chlor-alkali, whose chlorine and sodium hydroxide still have no sink (ADR-0077).
+Geothermal is a heat feed for the Boiler (slice Q). The Basic Tank refuses anything
+hotter than 40 °C (ADR-0062). The Hand Pump is the unpowered bootstrap: it needs a
+vanilla water source and moves 20 mB/t. Veins stay one material (ADR-0009).
+
+**Decision.**
+
+1. **Fluid Well** is a T2 machine, not a process recipe. The Assembler manufactures it
+   once Industrial is researched: `1 casing + 2 motor + 4 iron plates`, 20 s, F1. No
+   circuit board. No crafting-table JSON. It draws F1. It does not read a vanilla
+   water source. Every chunk is an aquifer.
+2. **Rate.** 100 mB/t of ambient water while powered — five times the Hand Pump — into
+   a 2 B buffer, pushed out the face it points at. A full buffer with nowhere to go is
+   blocked. No power is starved. It stays subscribed for its whole life: the aquifer
+   does not turn off, and a tank draining does not notify the well.
+3. **Brine, crude hydrocarbon and geothermal are not emitted.** None has a consumer
+   the clay line can spend. Hot geothermal would be refused by the only tank. A later
+   slice that gains a sink derives the chunk's fluid from the chunk seed under a new
+   saved key. It does not bump `VeinGenerator.VERSION`.
+4. **No new pipe.** The output is ambient water. Clay carries it.
+
+**Alternatives rejected.** A process-recipe batch (a well is a pump, like the Hand
+Pump, not a 10 s cycle); requiring a vanilla source (that is the Hand Pump); emitting
+brine or oil with nowhere to put it (ADR-0036); emitting geothermal into a tank that
+refuses it; a Pressure Pipe in this slice (that is R); storing a second material on
+the vein (ADR-0009).
+
+**Consequences.** A successor that emits brine, oil or geothermal without a recipe
+that consumes it is reopening ADR-0036. A successor that changes vein version to
+remember a fluid roll is reopening ADR-0009. A successor that starts the Induction
+Furnace or the Caster here is skipping O.
 
 
