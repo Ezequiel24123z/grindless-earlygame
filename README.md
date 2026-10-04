@@ -69,6 +69,7 @@ where it opens up.
 - [Building](#building)
 - [Roadmap](#roadmap)
 - [Implementation plan](#implementation-plan)
+- [Autonomous build-out](docs/BUILD-OUT.md)
 - [Assets](#assets)
 - [Contributing](#contributing)
 
@@ -1994,12 +1995,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
 | 20b | **Kiln / R2 — Roast then reduce:** T1 Kiln, oxide form, SO₂ capture | ✅ done — ADR-0065; 1.15 and acid stay later |
-| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework; Arc Reactor is a candidate (ADR-0067) |
-| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |
-| 24 | Orbital layer: launch, satellites, station | pending |
-| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — 0.9; ADR-0068 recorded |
+| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — build-out AD; Arc Reactor (ADR-0067) |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out I–S |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
+| 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
+| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **G**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2027,17 +2029,18 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is Slice F — only when a machine needs hatches or size**, not a T1 framework.
-The Process Atlas stub is in: a Voltaic-gated handheld lists the live process graph
-(family, I/O, conditions, time, FU/t). It does not solve a line. JEI still waits.
-The Multitool now rotates and relocates Grindless blocks (ADR-0069); it still does not mine.
-Kiln / R2 are in: a T1 Kiln roasts feed to oxide and vents 1 B SO₂ into a tank (or
-atmosphere). The Arc Furnace reduces oxide + carbon to an ingot and slag in 10 s.
-Yield stays 1.00; 1.15 and sulfuric acid wait. Slice E spanning is already in.
-Modular armour and the Arc Reactor pair are **recorded, not started** (ADR-0067): T3 / F3,
-same unlock for the factory plant and the suit core, fed by a cell line. Horizon Gates and
-the extra fallback worlds are **recorded, not started** (ADR-0068): T6 commute, not a mining
-dimension. Do not start hatches, orbit, or a void world to prepare for them.
+**Next is G — Belt junctions** (merger, tunnel, overflow), not Slice F.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Process Atlas stub is in: a Voltaic-gated
+handheld lists the live process graph (family, I/O, conditions, time, FU/t). It does not
+solve a line. JEI still waits. The Multitool now rotates and relocates Grindless blocks
+(ADR-0069); it still does not mine. Kiln / R2 are in: a T1 Kiln roasts feed to oxide and
+vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + carbon to an
+ingot and slag in 10 s. Yield stays 1.00 until the acid line (build-out K). Slice E spanning
+is already in. Modular armour and the Arc Reactor pair are **recorded, not started**
+(ADR-0067): T3 / F3, same unlock for the factory plant and the suit core, fed by a cell
+line. Horizon Gates and the extra fallback worlds are **recorded, not started** (ADR-0068):
+T6 commute, not a mining dimension. Do not start hatches, orbit, a Sifter shell, a turret,
+or a void world to prepare for them.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.
