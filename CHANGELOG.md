@@ -73,11 +73,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Metallurgical silicon (ADR-0092).** The Arc Furnace turns 1 silica and 2 carbon into
+  1 metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C in a reducing
+  atmosphere. Silica is the tag over sand and nether quartz; no silica item is
+  registered. The furnace's 1500 °C hold stays, inside tolerance and outside the
+  optimal zone, so the line runs slower and the yield stays one. No new block.
+  Electronic silicon, wafers and the Siemens line wait. The next slice is BG — further
+  processing lines, not started.
+
 - **Refractory brick (ADR-0091).** The Arc Furnace turns 1 slag into 1 refractory brick
   in 20 s at 1400 °C. That is the ceramics row's time and temperature, as one unit in
   and one unit out. The furnace's 1500 °C hold stays inside the band. No new block.
-  Alumina, silica, the Kiln, aggregate and road fill wait. The next slice is BF —
-  metallurgical silicon, not started.
+  Alumina, silica, the Kiln, aggregate and road fill wait. Metallurgical silicon was
+  named next and is now in (ADR-0092).
 
 - **Electric-arc steel (ADR-0090).** The Arc Furnace turns 10 iron ingots and 1 carbon
   into 10 steel ingots in 140 s at 1600 °C. That is the graph's 0.1 carbon per ingot

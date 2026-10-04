@@ -13,8 +13,9 @@ import java.util.Locale;
  * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
  * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle.
  * Electric-arc steel: 10 iron ingots + 1 carbon → 10 steel ingots (ADR-0090).
- * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091). No Minecraft
- * imports: {@code VerifyRecipes} dumps this graph without booting the game.
+ * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091).
+ * Metallurgical silicon: 1 silica + 2 carbon → 1 silicon + 2 B CO in 14 s (ADR-0092).
+ * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -94,6 +95,7 @@ public final class ProcessGraph {
         recipes.add(chemicalReactor());
         recipes.add(electricArcSteel());
         recipes.add(refractoryBrick());
+        recipes.add(metallurgicalSilicon());
         return List.copyOf(recipes);
     }
 
@@ -354,8 +356,9 @@ public final class ProcessGraph {
     }
 
     /**
-     * Slag's named sink (ADR-0036, ADR-0091). Alumina and silica wait. The Kiln cannot
-     * hold 1400 °C. The furnace's 1500 °C hold is already inside this band.
+     * Slag's named sink (ADR-0036, ADR-0091). Alumina waits. Silica is the silicon
+     * line, not this recipe. The Kiln cannot hold 1400 °C. The furnace's 1500 °C
+     * hold is already inside this band.
      */
     private static ProcessRecipe refractoryBrick() {
         return new ProcessRecipe(
@@ -366,6 +369,26 @@ public final class ProcessGraph {
                 ProcessLogic.REFRACTORY_TEMPERATURE,
                 null,
                 ProcessLogic.REFRACTORY_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * Carbothermic silicon on the Arc Furnace (ADR-0092). Electronic grade waits.
+     * The furnace hold stays 1500 °C; 1900 °C is named and tolerated, not retuned.
+     */
+    private static ProcessRecipe metallurgicalSilicon() {
+        return new ProcessRecipe(
+                "silicon/metallurgical",
+                MachineFamily.ARC_FURNACE,
+                List.of(
+                        IngredientSpec.tag(ProcessLogic.SILICA, ProcessLogic.SILICON_SILICA),
+                        IngredientSpec.tag(ProcessLogic.CARBON, ProcessLogic.SILICON_CARBON)),
+                List.of(
+                        OutputSpec.item(ProcessLogic.METALLURGICAL_SILICON, ProcessLogic.SILICON_OUT),
+                        OutputSpec.ventedFluid(ProcessLogic.CARBON_MONOXIDE, ProcessLogic.SILICON_CO_MB)),
+                ProcessLogic.SILICON_TEMPERATURE,
+                ProcessLogic.REDUCE_ATMOSPHERE,
+                ProcessLogic.SILICON_TICKS,
                 ProcessLogic.FU_PER_TICK);
     }
 

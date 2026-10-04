@@ -95,6 +95,8 @@ public final class GenerateAssets {
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         written += write(items, "refractory_brick",
                 FormTextures.brick(Palette.of("refractory_brick", 0xC46A3A)));
+        written += write(items, "metallurgical_silicon",
+                FormTextures.metallurgicalSilicon(Palette.of("metallurgical_silicon", 0x7A8794)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
         written += write(items, "process_atlas",
@@ -235,8 +237,11 @@ public final class GenerateAssets {
      * {@code grindless} item-tag tree, so they survive regeneration.
      */
     private static int writeReagentTags(File root) throws IOException {
-        File file = new File(root, "common/src/main/resources/data/grindless/tags/items/carbon.json");
-        return writeText(file, tagJson("#minecraft:coals"));
+        File dir = new File(root, "common/src/main/resources/data/grindless/tags/items");
+        int written = writeText(new File(dir, "carbon.json"), tagJson("#minecraft:coals"));
+        written += writeText(new File(dir, "silica.json"),
+                tagJson("minecraft:sand", "minecraft:quartz"));
+        return written;
     }
 
     /** The shared machine menu background and a progress arrow strip. */

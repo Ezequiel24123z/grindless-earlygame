@@ -136,6 +136,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-refractory.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-refractory.expect
 
+      # Slice BF: metallurgical silicon exists, and the Arc Furnace accepts sand.
+      - name: Boot and exercise metallurgical silicon
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-silicon.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-silicon.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

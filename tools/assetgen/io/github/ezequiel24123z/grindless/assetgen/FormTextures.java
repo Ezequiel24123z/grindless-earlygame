@@ -387,6 +387,17 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for metallurgical silicon: a faceted grey chunk. */
+    public static BufferedImage metallurgicalSilicon(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(4, 5, 11, 11, 3.4);
+        field.rect(5, 3, 10, 6, 4.4);
+        field.rect(6, 9, 10, 13, 4.0);
+        field.disc(8.0, 7.5, 1.8, 5.2);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for a refractory brick: a fired block with a mortar cross. */
     public static BufferedImage brick(Palette palette) {
         HeightField field = new HeightField();
