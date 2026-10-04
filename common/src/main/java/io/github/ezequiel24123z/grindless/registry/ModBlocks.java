@@ -8,7 +8,10 @@ import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
 import io.github.ezequiel24123z.grindless.belt.BeltBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
+import io.github.ezequiel24123z.grindless.belt.MergerBlock;
+import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
+import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlock;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
@@ -97,6 +100,21 @@ public final class ModBlocks {
     public static final RegistrySupplier<SplitterBlock> SPLITTER =
             register("splitter",
                     () -> new SplitterBlock(machine().strength(2.0F)));
+
+    /** Three inlets, one outlet. Round-robin. */
+    public static final RegistrySupplier<MergerBlock> MERGER =
+            register("merger",
+                    () -> new MergerBlock(machine().strength(2.0F)));
+
+    /** Entrance/exit pair. Skips one to five empty blocks. */
+    public static final RegistrySupplier<TunnelBeltBlock> TUNNEL_BELT =
+            register("tunnel_belt",
+                    () -> new TunnelBeltBlock(machine().strength(1.5F)));
+
+    /** Front until it backs up, then the clockwise side. */
+    public static final RegistrySupplier<OverflowGateBlock> OVERFLOW_GATE =
+            register("overflow_gate",
+                    () -> new OverflowGateBlock(machine().strength(2.0F)));
 
     /** Crude inserter. One item a second, unpowered. */
     public static final RegistrySupplier<ManipulatorBlock> CRUDE_MANIPULATOR =

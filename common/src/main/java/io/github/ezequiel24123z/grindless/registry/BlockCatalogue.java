@@ -43,6 +43,12 @@ public final class BlockCatalogue {
         BELT,
         /** A low junction with three mouths. */
         SPLITTER,
+        /** Three inlets into one outlet. */
+        MERGER,
+        /** A low entrance that swallows a lane. */
+        TUNNEL,
+        /** Front preferred, side when the front backs up. */
+        OVERFLOW,
         /** A short arm on a post. */
         MANIPULATOR,
         /** A heavier bore than the Crude Extractor. */
@@ -117,6 +123,9 @@ public final class BlockCatalogue {
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),
             new Entry("conveyor_belt", Geometry.BELT, 1, true, BELT),
             new Entry("splitter", Geometry.SPLITTER, 1, true, BELT),
+            new Entry("merger", Geometry.MERGER, 1, true, BELT),
+            new Entry("tunnel_belt", Geometry.TUNNEL, 1, true, BELT),
+            new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT),
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),

@@ -15,6 +15,9 @@ public final class VerifyBelt {
         numbers();
         lane();
         splitter();
+        merger();
+        tunnel();
+        overflow();
         manipulator();
         survey();
         terrestrial();
@@ -125,6 +128,33 @@ public final class VerifyBelt {
         yes("an empty filter accepts cobble", SplitterLogic.matches("minecraft:cobblestone", ""));
         yes("the same id matches", SplitterLogic.matches("minecraft:raw_iron", "minecraft:raw_iron"));
         no("a different id does not", SplitterLogic.matches("minecraft:raw_iron", "minecraft:coal"));
+    }
+
+    private static void merger() {
+        boolean[] all = {true, true, true};
+        eq("first inlet is back", 0, MergerLogic.pick(all, -1));
+        eq("second inlet is left", 1, MergerLogic.pick(all, 0));
+        eq("third inlet is right", 2, MergerLogic.pick(all, 1));
+        eq("fourth inlet wraps to back", 0, MergerLogic.pick(all, 2));
+        boolean[] onlyRight = {false, false, true};
+        eq("a single ready inlet wins", 2, MergerLogic.pick(onlyRight, 0));
+        eq("none ready is -1", -1, MergerLogic.pick(new boolean[]{false, false, false}, 1));
+    }
+
+    private static void tunnel() {
+        eq("T1 skips five empty blocks", 5, TunnelLogic.RANGE);
+        no("adjacent tiles are not a tunnel", TunnelLogic.inRange(1));
+        yes("one empty block is in range", TunnelLogic.inRange(2));
+        yes("five empty blocks is in range", TunnelLogic.inRange(6));
+        no("six empty blocks is too far", TunnelLogic.inRange(7));
+        eq("the scan walks six steps", 6, TunnelLogic.maxSteps());
+    }
+
+    private static void overflow() {
+        eq("front wins when both are open", 0, OverflowLogic.route(true, true));
+        eq("side takes the overflow", 1, OverflowLogic.route(false, true));
+        eq("a full gate holds", -1, OverflowLogic.route(false, false));
+        eq("front still wins if the side is closed", 0, OverflowLogic.route(true, false));
     }
 
     private static void manipulator() {

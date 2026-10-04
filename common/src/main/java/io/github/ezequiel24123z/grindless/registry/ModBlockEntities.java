@@ -8,7 +8,10 @@ import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.BeltBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.MergerBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.OverflowGateBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlockEntity;
+import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
@@ -120,6 +123,24 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("splitter",
                     () -> BlockEntityType.Builder
                             .of(SplitterBlockEntity::new, ModBlocks.SPLITTER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<MergerBlockEntity>> MERGER =
+            BLOCK_ENTITIES.register("merger",
+                    () -> BlockEntityType.Builder
+                            .of(MergerBlockEntity::new, ModBlocks.MERGER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<TunnelBeltBlockEntity>> TUNNEL_BELT =
+            BLOCK_ENTITIES.register("tunnel_belt",
+                    () -> BlockEntityType.Builder
+                            .of(TunnelBeltBlockEntity::new, ModBlocks.TUNNEL_BELT.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<OverflowGateBlockEntity>> OVERFLOW_GATE =
+            BLOCK_ENTITIES.register("overflow_gate",
+                    () -> BlockEntityType.Builder
+                            .of(OverflowGateBlockEntity::new, ModBlocks.OVERFLOW_GATE.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<ManipulatorBlockEntity>> CRUDE_MANIPULATOR =
