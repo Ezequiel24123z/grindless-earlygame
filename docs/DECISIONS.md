@@ -91,6 +91,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Accepted |
 | [0078](#adr-0078--the-fluid-well-is-powered-chunk-water) | The Fluid Well is powered chunk water | Accepted |
 | [0079](#adr-0079--melt-is-144-mb-at-1000-c-and-the-arc-still-makes-ingots) | Melt is 144 mB at 1000 °C, and the arc still makes ingots | Accepted |
+| [0080](#adr-0080--flotation-is-an-integer-batch-and-the-magnet-splits-by-name) | Flotation is an integer batch, and the magnet splits by name | Accepted |
 
 ---
 
@@ -3048,5 +3049,57 @@ a vacuum furnace (T5); rod and gear moulds in this slice.
 40 °C rating. A successor that melts ore without carbon is inventing a yield.
 A successor that deletes R1 in favour of a tap is past this slice. A successor
 that starts the Magnetic Separator or the Froth Flotation Cell here is skipping P.
+
+## ADR-0080 — Flotation is an integer batch, and the magnet splits by name
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice P is better separation: a Magnetic Separator, a Froth
+Flotation Cell (B3), a surfactant reagent, and a named sink for tailings. Centrifuge
+is B4 and T3. The Sifter still needs its own ADR. Veins stay one material (ADR-0009).
+`PROCESSES.md` sets B3, per 1 u raw, at 2.4 u concentrate + 0.3 u tailings with
+0.05 B surfactant in 8 s, grade 2.40. The magnetic and electrostatic separators are
+not a grade row: they split a mixed stream, and on a single-material vein they do
+not change the item. Counts on a `ProcessRecipe` are positive integers (ADR-0076).
+
+**Decision.**
+
+1. **Froth Flotation Cell** is a T2 process machine. The Assembler manufactures it
+   from 1 casing + 2 motors + 4 iron plates, Industrial, no circuit board. Envelope
+   matches the washer (10–100 °C, stirred). Held ambient and stirred. The recipe
+   does not name a temperature.
+2. **The batch is ten raw.** 20 crushed + 500 mB surfactant → 24 concentrate + 3
+   tailings in 80 s at F1. That is the documented line times ten, so 2.4 and 0.3
+   and 0.05 B are whole numbers. Concentrate is `grindless:concentrates/<m>`,
+   grade 2.40, item `<m>_concentrate`. Tailings are `grindless:tailings/<m>`,
+   item `<m>_tailings`, and they are not an ore-line grade.
+3. **Concentrate reduces like crushed.** `b3_r1/<m>` is 1 concentrate + 1 carbon →
+   1 ingot + slag + 1 B CO on the Arc Furnace, the same 12 s R1. Twenty-four
+   ingots from ten raw is the 2.40. Concentrate does not roast: B3 × R2 is T3.
+4. **Tailings have an arc sink.** `tailings/r1/<m>` is 10 tailings + 1 carbon →
+   1 ingot + slag + 1 B CO. Three tailings from a batch are not an ingot. The
+   extra metal is a trace, not a second 2.40. Deconstructor and re-leach wait.
+5. **Surfactant is a reactor fluid.** No organics line exists, so black liquor is
+   not invented. `reagent/surfactant` is 1 carbon + 1 B water → 1 B
+   `grindless:surfactant` in 8 s on the Chemical Reactor, ambient liquid, not a
+   fuel. Flotation is the sink.
+6. **Magnetic Separator** is a T2 belt block, same Assembler craft, not a process
+   recipe and not a grade change. Ferromagnetic item ids — a path token of
+   `iron`, `nickel` or `steel` — leave to the left. Everything else continues
+   forward. A backed-up magnet holds, it does not dump onto the front. The right
+   face is unused. Electrostatic separation is not this slice.
+
+**Alternatives rejected.** Fractional 2.4 and 0.3 outputs; a second vein material
+so the magnet has something to split (ADR-0009); treating the magnet as a
+pass-through process recipe; roasting concentrate in this slice; recovering one
+ingot per three tailings (that would add a tenth of a metal on top of 2.40);
+emitting surfactant with no consumer; a crafting-table cell; the Centrifuge; the
+Sifter; the Electrostatic Separator.
+
+**Consequences.** A successor that emits 2.4 items is ignoring integer counts.
+A successor that roasts concentrate here is in T3. A successor that makes the
+magnet change yield is inventing a grade row the document refuses. A successor
+that starts the Centrifuge or the Sifter here is past P. A successor that starts
+the boiler here is skipping Q.
 
 
