@@ -90,6 +90,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
 | [0077](#adr-0077--water-splits-in-the-buffer-air-yields-oxygen-only) | Water splits in the buffer; air yields oxygen only | Accepted |
 | [0078](#adr-0078--the-fluid-well-is-powered-chunk-water) | The Fluid Well is powered chunk water | Accepted |
+| [0079](#adr-0079--melt-is-144-mb-at-1000-c-and-the-arc-still-makes-ingots) | Melt is 144 mB at 1000 °C, and the arc still makes ingots | Accepted |
 
 ---
 
@@ -2999,5 +3000,53 @@ the vein (ADR-0009).
 that consumes it is reopening ADR-0036. A successor that changes vein version to
 remember a fluid roll is reopening ADR-0009. A successor that starts the Induction
 Furnace or the Caster here is skipping O.
+
+
+## ADR-0079 — Melt is 144 mB at 1000 °C, and the arc still makes ingots
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice O is the Induction Furnace and the Caster: a clean melt,
+and a way to skip the ingot. `PROCESSES.md` sets 1 u of melt at **144 mB**. Molten metal
+is quoted at 1000 °C+. The Basic Tank and the Clay Conduit refuse anything above 40 °C
+(ADR-0062). `canOutput` judged every fluid output against that ambient cap, and
+`FluidState.of(id, count)` is 20 °C, so a recipe could not emit a hot fluid at all.
+The documented caster lines are `1 u molten + ingot mould → 1 u ingot` and
+`1 u molten + plate mould → 1 u plate`, 4 s. Tapping the Arc Furnace straight to melt
+would replace R1's ingot, slag and CO. The Vacuum Furnace is T5.
+
+**Decision.**
+
+1. **Induction Furnace** and **Caster** are T2 process machines. The Assembler
+   manufactures each once Industrial is researched: `1 casing + 2 motor + 4 iron
+   plates`, 20 s, F1. No circuit board. No crafting-table JSON. The induction menu
+   is one item in. The caster menu is one mould slot and one item out. The mould is
+   a catalyst.
+2. **Melt** is `1 ingot → 144 mB grindless:molten/<m>` in 8 s at F1, 1000 °C, inert.
+   No slag and no CO. The induction holds 1000 °C and inert; its envelope is the
+   existing 200–2000 °C. Crushed, raw and oxide do not melt: that would skip
+   carbon and emit metal for free.
+3. **The fluid is hot.** A molten id is emitted at 1000 °C and 0.1 MPa.
+   `canOutput` and capture use the buffer's own rating, not the ambient cap.
+   Induction and caster buffers accept up to 1200 °C. The Basic Tank and the Clay
+   Conduit stay at 40 °C, so melt moves only between machines that accept it.
+   The caster's process envelope stays ambient: the heat is on the fluid, and the
+   cast recipes do not name a temperature.
+4. **Cast** is `144 mB molten + mould → 1 u` in 4 s at F1. Ingot mould and plate
+   mould are Assembler products, four iron plates each, Industrial, not consumed.
+   A material with no plate has no plate cast.
+5. **R1 is unchanged.** The arc still emits an ingot, slag and CO. The skip is the
+   Press: melt a finished ingot and cast a plate. An arc tap that emits melt instead
+   of an ingot is a later route, not a replacement.
+
+**Alternatives rejected.** Ambient "molten" that a tank and a clay pipe will carry
+(it is not molten); raising the tank's 40 °C cap (ADR-0062); melting crushed or
+oxide (free metal); replacing R1 with a tap (slag and CO would disappear);
+a vacuum furnace (T5); rod and gear moulds in this slice.
+
+**Consequences.** A successor that stores melt in the Basic Tank is ignoring the
+40 °C rating. A successor that melts ore without carbon is inventing a yield.
+A successor that deletes R1 in favour of a tap is past this slice. A successor
+that starts the Magnetic Separator or the Froth Flotation Cell here is skipping P.
 
 
