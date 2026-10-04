@@ -598,6 +598,7 @@ of physics.**
 
 | System | What it does | Why it is not just a bigger machine |
 | --- | --- | --- |
+| **Ground Array** | Ten seconds of MK3 throughput, as storage, once a fixed 3×3 stands (ADR-0094) | The first structure past the factory. Not a generator, not a pylon, not a Kardashev scale. |
 | **Singularity Reactor** | Power from a contained micro-singularity, fed by matter | Mass becomes a fuel. Any matter is energy, so the junk problem inverts: waste becomes the power supply. |
 | **Matter Condenser array** | Energy back into arbitrary matter | Closes the loop with the Deconstructor. The economy becomes energy-only, which is a genuine phase change in how the game plays. |
 | **Transmutation Chain** | Element to element via the accelerator | Scarcity stops being geological and becomes energetic. |

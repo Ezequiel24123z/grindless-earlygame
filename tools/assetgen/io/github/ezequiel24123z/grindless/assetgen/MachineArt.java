@@ -49,6 +49,8 @@ public final class MachineArt {
     public static final int TANK = 0x80CBC4;
     public static final int BANK = 0xFFEE58;
     public static final int TRANSFORMER = 0x7C4DFF;
+    public static final int ARRAY = 0x5C6BC0;
+    public static final int ARRAY_CASING = 0xC46A3A;
 
     private static final double CX = 7.5;
     private static final double CY = 7.5;
@@ -83,6 +85,8 @@ public final class MachineArt {
             case TANK -> tankFront(status);
             case BANK -> bankFront(status);
             case TRANSFORMER -> transformerFront(status);
+            case ARRAY -> arrayFront(status);
+            case ARRAY_CASING -> arrayCasingFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -113,6 +117,8 @@ public final class MachineArt {
             case TANK -> tankTop();
             case BANK -> bankTop();
             case TRANSFORMER -> transformerTop();
+            case ARRAY -> arrayTop();
+            case ARRAY_CASING -> arrayCasingTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1037,6 +1043,72 @@ public final class MachineArt {
             }
         }
         strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage arrayFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, ARRAY);
+        for (int y = 2; y <= 12; y++) {
+            for (int x = 6; x <= 9; x++) {
+                boolean frame = x == 6 || x == 9 || y == 2 || y == 12;
+                int pixel = frame
+                        ? Palette.shade(ARRAY, -0.2)
+                        : (glow >= 0 ? ((x + y) % 2 == 0 ? glow : dim(glow)) : Palette.shade(ARRAY, -0.55));
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage arrayTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                int dx = x - 7;
+                int dy = y - 7;
+                int d = dx * dx + dy * dy;
+                if (d >= 16 && d <= 36) {
+                    set(img, x, y, Palette.shade(ARRAY, (x + y) % 2 == 0 ? -0.05 : -0.35));
+                }
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, ARRAY);
+            }
+        }
+        return img;
+    }
+
+    public static BufferedImage arrayCasingFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        for (int course = 0; course < 3; course++) {
+            int y0 = 3 + course * 3;
+            for (int y = y0; y <= y0 + 2; y++) {
+                for (int x = 2; x <= 13; x++) {
+                    boolean mortar = y == y0 || x % 4 == 2;
+                    set(img, x, y, mortar
+                            ? Palette.shade(ARRAY_CASING, -0.45)
+                            : Palette.shade(ARRAY_CASING, (x + course) % 2 == 0 ? 0.05 : -0.2));
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage arrayCasingTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean rim = x <= 3 || x >= 12 || y <= 3 || y >= 12;
+                if (rim) {
+                    set(img, x, y, Palette.shade(ARRAY_CASING, (x + y) % 2 == 0 ? 0.0 : -0.25));
+                }
+            }
+        }
         return img;
     }
 

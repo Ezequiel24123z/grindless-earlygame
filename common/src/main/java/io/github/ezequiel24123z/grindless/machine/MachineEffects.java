@@ -59,6 +59,8 @@ public final class MachineEffects {
             case TANK -> generator(status, level, pos, random);
             case BANK -> pylon(1, status, level, pos, random);
             case TRANSFORMER -> dynamo(status, front, level, pos, random);
+            case ARRAY -> pylon(1, status, level, pos, random);
+            case ARRAY_CASING -> { }
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);

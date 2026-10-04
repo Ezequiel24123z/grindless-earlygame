@@ -72,6 +72,8 @@ final class BlockModels {
             case TANK -> tank();
             case BANK -> bank();
             case TRANSFORMER -> transformer();
+            case ARRAY -> array();
+            case ARRAY_CASING -> arrayCasing();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -360,6 +362,22 @@ final class BlockModels {
                 box(2, 0, 2, 14, 2, 14, "cap", "base"),
                 front(3, 2, 3, 13, 13, 13, "top", "side", "front"),
                 box(4, 13, 4, 12, 16, 12, "cap", "cap"));
+    }
+
+    /** A mast on a full pad. The centre of a ring, not a battery rack. */
+    private static List<Box> array() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "cap", "base"),
+                box(5, 3, 5, 11, 14, 11, "top", "side"),
+                front(6, 4, 4, 10, 12, 6, "top", "side", "front"));
+    }
+
+    /** A low refractory course. Shorter than a machine, and not a belt. */
+    private static List<Box> arrayCasing() {
+        return List.of(
+                box(0, 0, 0, 16, 4, 16, "cap", "base"),
+                box(2, 4, 2, 14, 8, 14, "top", "side"),
+                front(3, 4, 1, 13, 8, 4, "top", "side", "front"));
     }
 
     /** A cabinet of cells: a battery rack, not a tank and not a pylon. */

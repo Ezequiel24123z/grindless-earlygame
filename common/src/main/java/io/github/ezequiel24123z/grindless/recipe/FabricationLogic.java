@@ -30,6 +30,8 @@ public final class FabricationLogic {
     public static final String MOTOR = "grindless:motor";
     public static final String CHEMICAL_REACTOR = "grindless:chemical_reactor";
     public static final String VANADIA = "grindless:vanadia_pellet";
+    public static final String GROUND_ARRAY = "grindless:ground_array";
+    public static final String ARRAY_CASING = "grindless:array_casing";
 
     private FabricationLogic() {
     }

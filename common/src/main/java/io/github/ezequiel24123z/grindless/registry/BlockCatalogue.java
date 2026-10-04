@@ -68,7 +68,11 @@ public final class BlockCatalogue {
         /** A rack of cells. Capacity, not coverage. */
         BANK,
         /** Two coils on a core. A tap, not a pylon. */
-        TRANSFORMER
+        TRANSFORMER,
+        /** A mast on a pad. The centre of a Ground Array. */
+        ARRAY,
+        /** A low refractory course. One part of the array's ring. */
+        ARRAY_CASING
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -141,7 +145,9 @@ public final class BlockCatalogue {
             new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP),
             new Entry("basic_tank", Geometry.TANK, 1, true, BELT),
             new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
-            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
+            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID),
+            new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
+            new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",

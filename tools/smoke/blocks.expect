@@ -23,6 +23,8 @@ PICKAXE-OK hand_pump$
 PICKAXE-OK basic_tank$
 PICKAXE-OK capacitor_bank$
 PICKAXE-OK flux_transformer$
+PICKAXE-OK ground_array$
+PICKAXE-OK array_casing$
 Dropped 1 \[Hand Crank Dynamo\]
 Dropped 1 \[Crude Extractor\]
 Dropped 1 \[Research Terminal\]
@@ -48,3 +50,5 @@ Dropped 1 \[Hand Pump\]
 Dropped 1 \[Basic Tank\]
 Dropped 1 \[Capacitor Bank\]
 Dropped 1 \[Flux Transformer\]
+Dropped 1 \[Ground Array\]
+Dropped 1 \[Array Casing\]
