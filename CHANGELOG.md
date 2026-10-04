@@ -33,6 +33,19 @@ entries below reference those records by id.
 
 ### Changed
 
+- **The project is a modpack-scale progression (ADR-0088).** The early-game work already
+  built stays the foundation. The "remove the early-game grind" framing and the T0–T6 cap
+  are retired. Many more tiers, more processing lines and more materials follow, with
+  Kardashev Type I, II and III as the large milestones and megastructures along the way.
+  Planets have unique extractable resources. Space and interstellar play are original.
+  The goal is the black hole at the centre of the Milky Way: arriving is the victory, and
+  the interior is a finite finale written when the route exists. Endgame generation targets
+  the maximum a per-tick `long` can name, `Long.MAX_VALUE` FU/t. Sums, a multi-tick buffer
+  at that rate, and the FE `int` bridge cannot express operating there, so the
+  representation grows before that content ships. The quest book is an original
+  BetterQuesting-style implementation. Slices L–BB are held. The next slice is BC —
+  Original quest book, identified and not implemented.
+
 - **Remaining work is playable slices, not system layers (ADR-0058).** First iron (Thermal
   Generator, Pulverizer, Arc Furnace, `ProcessRecipe` item-first, shared menu, Voltaic gate)
   before fluids, belts, conduits or the multiblock framework. Gaseous T1 byproducts vent until

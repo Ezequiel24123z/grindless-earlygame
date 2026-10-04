@@ -1,24 +1,31 @@
 # Grindless
 
-**Grindless** is a Minecraft mod that deletes the early-game grind without deleting the game.
+**Grindless** is a full modpack-scale progression for Minecraft. The early game already
+built — a hand crank, the first factory, the contact process — is the foundation. It is
+the start of the ladder.
 
-Modpacks have a structural problem: the first two hours are almost always the same two hours.
-Punch wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next tier.
-The pack's actual content — the thing you installed it for — starts *after* that. Grindless
-replaces those two hours with a short, interesting automation puzzle, and then gets out of the way.
+The early-game convenience framing and the six-tier cap are retired. From here the mod
+keeps going: intermediate tiers, endgame tiers, more processing lines, more materials,
+megastructures, original planets and original interstellar play. The large milestones
+are the Kardashev scales. The goal is the black hole at the centre of the Milky Way.
+See [Modpack-scale progression](#modpack-scale-progression) and
+[ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression).
 
-It is inspired by Factorio: electric coverage areas instead of cable spaghetti, belts and
-splitters, resource patches that deplete and push you outward, industry that makes noise something
-notices, and a research tree that gates what you can build.
+The early hours of a typical pack are still the wrong way to start that ladder. Punch
+wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next
+tier: the foundation replaces that opening with automation, so the long game can begin.
+Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Their
+code and assets do not enter this repository (ADR-0088).
 
-The arc runs from a hand crank and two iron in the first ten minutes, through belts, reactors and
-a particle accelerator, to satellites that map your world's ore from orbit and colonies that
-harvest planets you have never set foot on. Factorio ends when you launch a rocket; here that is
-where it opens up.
+The arc runs from a hand crank and two iron, through belts, reactors and a particle
+accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 
-> **Status: pre-alpha.** The design below is complete and settled. The skeleton **builds green on
-> Forge 1.20.1**, registers the T0 bootstrap set and carries a working Flux energy layer — but the
-> machines have no behaviour yet, so nothing here is playable.
+> **Status: pre-alpha.** The foundation through the contact process is playable and **builds
+> green on Forge 1.20.1**. The goal from here is a modpack-scale progression
+> ([ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression)).
+> T0–T6 are the specified start, not a cap. Slices defined past the contact process and
+> not yet started are held. The next calendar is the modpack expansion. Its first slice,
+> the original quest book, is identified and not implemented.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -38,6 +45,7 @@ where it opens up.
 - [The problem](#the-problem)
 - [Design principles](#design-principles)
 - [The core promise](#the-core-promise)
+- [Modpack-scale progression](#modpack-scale-progression)
 **The eight systems**
 
 - [System 1 — The Flux Network](#system-1--the-flux-network) — power without cables
@@ -126,8 +134,10 @@ Existing solutions each break something:
 | Void miners / cheat generators | Solves it *too* hard. Infinite free resources, zero decisions, pack over. |
 | Creative-mode style item duplication | Trivialises every recipe in the pack at once. |
 
-Grindless aims at the narrow target all of those miss: **make resource acquisition an automation
-problem instead of a time-tax, starting ten minutes in, without making resources free.**
+The foundation still aims at the target those approaches miss: **make resource acquisition an
+automation problem instead of a time-tax, starting ten minutes in, without making resources
+free.** That is how the ladder starts. The mod after that start is the
+[modpack-scale progression](#modpack-scale-progression).
 
 ---
 
@@ -141,8 +151,9 @@ These are the rules every feature is measured against.
    fifteen, not mining until hour three.
 3. **Resources cost something, always.** Energy, space, infrastructure, research. Nothing is free,
    ever — that is the line between this and a cheat mod.
-4. **Feed the pack, don't replace it.** Yields are tuned to *supply* Thermal/Mekanism/Create
-   processing, not to obsolete it. Grindless should make other mods more playable.
+4. **Carry the ladder.** Grindless is the pack-scale progression: its own later tiers,
+   materials and processing lines. Early yields stay in a familiar range so the foundation
+   is legible beside other mods.
 5. **Work with mods it has never heard of.** Everything is driven by tags discovered at runtime.
    Zero hardcoded material lists, zero per-mod compat patches.
 6. **Fail legibly.** When something is wrong the player must be able to see *what* and *why* —
@@ -172,6 +183,49 @@ with no config, no compat addon and no patch release.
 Materials degrade gracefully. If a material has an ore but no dust form, the pulverizing step is
 simply skipped for it. If another mod already provides an item for a material, Grindless uses
 that item instead of registering a duplicate.
+
+---
+
+## Modpack-scale progression
+
+Recorded in [ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression).
+The systems below stay the foundation.
+
+**Tiers.** Many more than T0–T6: intermediate tiers, endgame tiers, more processing lines,
+more materials. The T0–T6 table further down is the ladder already specified. It is the start.
+
+**Milestones.** Kardashev scales are the large marks. Type I is a planet's energy, Type II a
+star's, Type III a galaxy's. Megastructures sit along the way between those marks. The names
+are milestones. A Flux Unit is not a physical watt.
+
+**Planets.** Planetary gameplay has unique extractable resources. Space and interstellar
+gameplay are original to Grindless.
+
+**Victory.** The goal is to reach the black hole at the centre of the Milky Way. Arriving is
+the victory. The interior is a finite finale, and its concrete content is written when the
+route exists. An empty arrival story is rejected. An endless second game inside the hole is
+rejected.
+
+**Energy.** Endgame generation reaches the maximum rate the energy system can represent.
+Per-tick rates and stored amounts are a Java `long` (`FluxTier.nominal`,
+`ProcessRecipe.fuPerTick`, `FluxStorage`). That maximum is `Long.MAX_VALUE` FU/t
+(9,223,372,036,854,775,807). Today's ladder stops at F9, 2,097,152 FU/t
+(`FluxTier.MAX_NOMINAL`), which is a content ceiling, not the type's ceiling. One `long` can
+name the target rate. It cannot hold that rate multiplied by a duration, or the sum of two
+such rates. The Forge Energy bridge saturates at `Integer.MAX_VALUE` (ADR-0037), and
+`ProcessLogic.work` divides those amounts in `double`, which cannot represent every integer
+above 2^53. Any slice that needs those operations waits until the representation grows. This
+record does not change the type.
+
+**Quest book.** A book in the BetterQuesting style: lines, tasks, dependencies, rewards.
+Original implementation only. BetterQuesting's GitHub `LICENSE` is MIT and its CurseForge
+page says All Rights Reserved, so reuse is not confirmed (ADR-0088).
+
+**Quality of life.** Features known from other mods are in scope, built as original work.
+
+**Provenance.** Ideas from GregTech, Ad Astra, BetterQuesting and similar mods may inform
+the design. Code and assets from them are not copied. Licenses, and the places this record
+is unsure, are in ADR-0088. Where a license was not confirmed, the default is no reuse.
 
 ---
 
@@ -1163,6 +1217,14 @@ leaving a player stuck and confused.
 (Over-volting is safe. Nothing explodes. Machines that explode when you connect the wrong cable
 are a tedium generator, not a difficulty mechanic.)
 
+### Endgame rate
+
+The ladder in the table above, and F6–F9 in code, are the foundation's power scale. F9 is
+2,097,152 FU/t. Endgame generation targets the largest rate a per-tick `long` can store,
+`Long.MAX_VALUE` FU/t, from one source. Sums, a buffer of more than one tick at that rate,
+and the FE `int` bridge cannot express operating there. The representation grows before that
+content exists. See [Modpack-scale progression](#modpack-scale-progression) and ADR-0088.
+
 ### Performance: idle machines cost nothing
 
 A base with thousands of machines is the design's explicit target, which makes machine ticking the
@@ -1227,10 +1289,15 @@ factory is capable of building this* — and a player has to clear both. See
 | **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Arc Reactor**, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank, **Arc Exosuit**. |
 | **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere, **Exotic Exosuit**. |
 | **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
-| **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
+| **T6 — Interplanetary** | the foundation's last specified tier | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
 
-The ramp is intentional. Ten minutes in, you are never hand-mining iron again. Everything after
-that is optimisation, which is the part worth playing.
+T0–T6 are the foundation already written down. ADR-0088 retires them as a cap. Tiers after
+T6, the Kardashev milestones, the megastructures and the route to the galactic-centre black
+hole are the modpack expansion. They are not in this table yet. The Horizon Gate is a commute
+milestone on the way. The victory is arrival at the black hole.
+
+The early ramp is intentional. Ten minutes in, the foundation has replaced hand-mining iron.
+The game continues long after T6.
 
 Three checkpoints are worth calling out, because each converts effort into permanent leverage at
 exactly the moment the player has earned it:
@@ -1243,7 +1310,9 @@ exactly the moment the player has earned it:
 - **T5, the Survey Satellite** — the moment finding resources stops being an activity and becomes
   a map you read.
 - **T6, the Horizon Gate** — the moment the interplanetary commute dies. First contact is still a
-  delivery; after the pair stands, you walk.
+  delivery; after the pair stands, you walk. This is a milestone, not the victory.
+- **The black hole at the centre of the Milky Way** — the goal. Arriving is the victory. The
+  interior is a finite finale written when the route exists (ADR-0088).
 
 ---
 
@@ -1919,10 +1988,11 @@ Drone logistics and the logistics crates. Deep Core Drill. **Arc Reactor** multi
 FU, Arc Cell line, same fuel as the suit). Fission Reactor multiblock with neighbour bonuses
 and SCRAM. Centrifuge and the fuel cycle.
 
-### 0.7 — Endgame
+### 0.7 — Exotic industry
 
 Fusion Reactor. Particle Accelerator with transmutation, exotic synthesis and Exotic Data Cores.
-Singularity Reactor. Quantum Assembler, Cryogenic Plant, Matter Condenser. T4 weapons.
+Singularity Reactor. Quantum Assembler, Cryogenic Plant, Matter Condenser. T4 weapons. This is
+the foundation's exotic tier, not the end of the mod.
 
 ### 0.8 — Orbit
 
@@ -1947,7 +2017,17 @@ cost no measurable server performance.
 ### 1.0 — Polish
 
 Full JEI/REI/EMI integration, advancements, an in-game guide, config UI, localisation, performance
-passes on belts and networks, and a balance pass against the major packs.
+passes on belts and networks, and a balance pass against the major packs. Held with the rest of
+the unstarted six-tier schedule (ADR-0088).
+
+### Modpack expansion *(next calendar, not started)*
+
+ADR-0088. Held slices L–BB stay on the books and are not the next work. The first future slice
+is **BC — Original quest book**: an original BetterQuesting-style book over the shipped
+foundation. It is identified and not implemented. After it, still unsliced: intermediate and
+endgame tiers, megastructures, Kardashev Type I, II and III, original planets with unique
+extractable resources, interstellar travel, and arrival at the Milky Way's central black hole
+as the victory.
 
 ### Beyond 1.0 — version ports
 
@@ -2001,12 +2081,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21b | **Slice I — T2 gate:** Industrial research, Advanced Data Core, MK2 gated | ✅ done — ADR-0073 |
 | 21c | **Slice J — Wire and motors:** Wire Mill, wire form, mill coil, motor | ✅ done — ADR-0074 |
 | 21d | **Slice K — Contact process:** Chemical Reactor, SO₂ → acid, pickle | ✅ done — ADR-0075 |
-| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — build-out L–S |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
-| 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
-| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | held — build-out L–S (ADR-0088) |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | held — build-out T–Y, AC, AH (ADR-0088) |
+| 24 | Orbital layer: launch, satellites, station | held — build-out AO–AS (ADR-0088) |
+| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **L**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Unstarted rows L–BB are held (ADR-0088). |
+| 28 | **Modpack expansion** | recorded — ADR-0088. Next slice **BC — Original quest book**, not implemented. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2028,13 +2109,26 @@ the record.
 
 ### Where the project actually is
 
+Grindless is a modpack-scale progression (ADR-0088). The work through the contact process
+stays the foundation. The framing that this mod removes the early-game grind and then stops,
+and the cap at six research tiers, are retired. Kardashev Type I, II and III are the large
+milestones, with megastructures between them. Planets have unique extractable resources.
+Space and interstellar play are original. The goal is the black hole at the centre of the
+Milky Way: arriving is the victory, and the interior is a finite finale written when the
+route exists.
+
+**Next is BC — Original quest book**, the first slice of the modpack expansion. It is not
+implemented. An original book, BetterQuesting in style: lines, tasks, dependencies and
+rewards for the shipped foundation. Slices L through BB stay defined and are **held**.
+
 Everything through step 14b is written, builds green and is covered by the behaviour checks in
 `tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
 Extractor (or a pylon that covers both), and the extractor pulls the chunk's vein into a chest.
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is L — Washer and B2**, not Slice F and not etching.
+**Next is BC — Original quest book** (ADR-0088). The washer, Slice F and the rest of L–BB
+are held.
 See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
@@ -2059,9 +2153,10 @@ vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + car
 ingot and slag in 10 s. Yield stays 1.00 until the acid line (build-out K). Slice E spanning
 is already in. Modular armour and the Arc Reactor pair are **recorded, not started**
 (ADR-0067): T3 / F3, same unlock for the factory plant and the suit core, fed by a cell
-line. Horizon Gates and the extra fallback worlds are **recorded, not started** (ADR-0068):
-T6 commute, not a mining dimension. Do not start hatches, orbit, a Sifter shell, a turret,
-or a void world to prepare for them.
+line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
+row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
+slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
+next slice is the quest book.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

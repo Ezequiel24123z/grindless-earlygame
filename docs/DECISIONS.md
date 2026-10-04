@@ -23,7 +23,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0009](#adr-0009--ore-veins-are-derived-from-seed-and-coordinates) | Ore veins derived from seed and coordinates | Accepted |
 | [0010](#adr-0010--replication-cost-is-derived-from-the-recipe-graph) | Replication cost derived from the recipe graph | Accepted |
 | [0011](#adr-0011--remote-colonies-are-simulated-abstractly-never-force-loaded) | Remote colonies simulated abstractly | Accepted |
-| [0012](#adr-0012--planets-come-from-installed-space-mods-and-satellites-have-no-upkeep) | Planets come from installed space mods | Accepted |
+| [0012](#adr-0012--planets-come-from-installed-space-mods-and-satellites-have-no-upkeep) | Planets come from installed space mods | Superseded in part by ADR-0088 |
 | [0013](#adr-0013--the-readme-is-the-design-source-of-truth) | The README is the design source of truth | Accepted |
 | [0014](#adr-0014--consolidate-the-orphaned-session-branches-into-one-history) | Consolidate the orphaned session branches | Accepted |
 | [0015](#adr-0015--fluids-are-modelled-as-state-not-as-items) | Fluids are modelled as state, not as items | Accepted |
@@ -32,7 +32,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0018](#adr-0018--one-container-contract-with-auto-void-off-by-default) | One container contract, auto-void off by default | Accepted |
 | [0019](#adr-0019--design-machines-before-recipes) | Design machines before recipes | Accepted |
 | [0020](#adr-0020--recipes-are-parameterised-by-process-conditions) | Recipes are parameterised by process conditions | Accepted |
-| [0021](#adr-0021--complexity-beyond-gregtech-with-no-grind) | Complexity beyond GregTech, with no grind | Accepted |
+| [0021](#adr-0021--complexity-beyond-gregtech-with-no-grind) | Complexity beyond GregTech, with no grind | Superseded in part by ADR-0088 |
 | [0022](#adr-0022--parametric-multiblocks-instead-of-fixed-schematics) | Parametric multiblocks instead of fixed schematics | Accepted |
 | [0023](#adr-0023--a-native-route-viewer-with-a-ratio-solver) | A native route viewer with a ratio solver | Accepted |
 | [0024](#adr-0024--loomplatform-markers-and-the-windows-path-length-limit) | `loom.platform` markers and the Windows path limit | Accepted |
@@ -81,12 +81,13 @@ history — the reasoning that was wrong is itself useful information.
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
-| [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
+| [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Superseded in part by ADR-0088 |
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
+| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Accepted |
 
 ---
 
@@ -308,7 +309,11 @@ person has to reconcile abstract state with real blocks.
 
 ## ADR-0012 — Planets come from installed space mods, and satellites have no upkeep
 
-*2026-09-29 · Accepted*
+*2026-09-29 · Superseded in part by [ADR-0088](#adr-0088--grindless-is-a-modpack-scale-progression)*
+
+> **Superseded in part.** The planet source is reversed: Grindless ships original space,
+> interstellar play, and planets with unique extractable resources. Satellites still have no
+> upkeep. See ADR-0088.
 
 **Context.** Packs that include an orbital layer usually already have a space mod with its own
 dimensions. Shipping a competing set of planets fragments the pack.
@@ -568,7 +573,11 @@ recorded as such in `MACHINES.md`.
 
 ## ADR-0021 — Complexity beyond GregTech, with no grind
 
-*2026-10-01 · Accepted*
+*2026-10-01 · Superseded in part by [ADR-0088](#adr-0088--grindless-is-a-modpack-scale-progression)*
+
+> **Superseded in part.** The project is no longer a short mod that refuses length. A repeated
+> chore is still not a new tier: solving the same problem again by hand is not content. Stopping
+> the ladder at T6 because more tiers would take time is retired. See ADR-0088.
 
 **Context.** The brief is a mod deeper than GregTech that nonetheless contains no grind. Those
 sound contradictory, because the genre's depth is habitually sold with repetition attached.
@@ -2656,7 +2665,11 @@ already crafted.
 
 ## ADR-0070 — Remaining work is the autonomous build-out
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0088](#adr-0088--grindless-is-a-modpack-scale-progression)*
+
+> **Superseded in part.** [`BUILD-OUT.md`](BUILD-OUT.md) remains the history of the slices already
+> defined. Anything not started is held. Finishing BB does not finish the mod. The next calendar
+> is the modpack expansion, and its first slice is BC. See ADR-0088.
 
 **Context.** Slices A–E, Kiln/R2, the Atlas stub and the Multitool wrench are in. Armour and
 Horizon Gates are recorded, not started. The README implementation plan still has four coarse
@@ -2848,5 +2861,97 @@ satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C ban
 **Consequences.** A successor that starts the washer in this slice is skipping L. A
 successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
 acid without pickle (or another spend) is reopening ADR-0036.
+
+---
+
+## ADR-0088 — Grindless is a modpack-scale progression
+
+*2026-10-04 · Accepted*
+
+**Context.** The early game is in: the T0 loop, slices A–E, the kiln, the atlas stub, the
+Multitool wrench, belt junctions, the sorter, the Industrial gate, the Wire Mill, and the
+contact process. The README still introduces the mod as something that deletes the opening
+grind and then gets out of the way, and the research ladder stops at T6. That framing and
+that cap are the wrong product. A successor who treats T6, or build-out slice BB, as the
+finish line will build a convenience mod.
+
+Per-tick Flux rates and stored amounts are a Java `long`: `FluxTier.nominal()`,
+`ProcessRecipe.fuPerTick`, and `FluxStorage`. The ladder in code stops at F9,
+`FluxTier.MAX_NOMINAL`, 2,097,152 FU/t. The largest rate one `long` can store is
+`Long.MAX_VALUE` (9,223,372,036,854,775,807) FU/t.
+
+**Decision.**
+
+1. **The product is a full modpack-scale progression.** The early-game work already built
+   stays the foundation. The "remove the early-game grind" framing is retired. So is the
+   six-tier cap. T0–T6 remain the specified start. They are not the end.
+2. **The ladder keeps going.** Intermediate tiers, endgame tiers, more processing lines,
+   more materials. Kardashev scales are the large milestones: Type I, Type II, Type III.
+   Megastructures sit along the way. Those names are milestones. They are not a claim that
+   a Flux Unit is a physical watt.
+3. **Planets are original.** Planetary gameplay has unique extractable resources. Space and
+   interstellar gameplay are original to Grindless. This supersedes the planet-source half
+   of ADR-0012. Satellites still have no upkeep. Horizon Gates stay commute infrastructure
+   (ADR-0068), a milestone on the way, not the victory and not a mining dimension.
+4. **The goal is the black hole at the centre of the Milky Way.** Arriving is the victory.
+   That default is already chosen. The interior is a finite finale. Its concrete content is
+   written when the route exists.
+5. **Endgame generation targets the maximum rate a per-tick `long` can name:**
+   `Long.MAX_VALUE` FU/t, from one source. F9 is not that ceiling. The `long` can store
+   that single rate. It cannot express an economy operating at it:
+   - a buffer of two or more ticks overflows (`rate × seconds` does not fit in a `long`,
+     and buffers are sized in seconds of throughput);
+   - the sum of two such sources does not fit in a `long`;
+   - `FluxConversion.toFe` saturates at `Integer.MAX_VALUE` (ADR-0037), so the Forge
+     Energy bridge cannot publish the rate;
+   - `ProcessLogic.work` divides the `long` amounts in `double`, and not every integer
+     above 2^53 is representable, so a partial tick near the ceiling is not exact.
+   Any slice that adds those rates together, stores more than one tick of them, or
+   publishes them over FE waits until the representation grows. This record does not
+   change the type, the ladder, or the bridge.
+6. **The quest book is original.** It is in the BetterQuesting style: lines, tasks,
+   dependencies, rewards. BetterQuesting's code is not reused. See the license notes.
+   Quality-of-life features known from other mods are in scope, built as original work.
+7. **Ideas may inform the design. Code and assets from other mods do not enter this
+   repository on the strength of this record.** Where a license was not confirmed, the
+   default is no reuse.
+8. **The schedule.** [`BUILD-OUT.md`](BUILD-OUT.md) keeps every slice already defined.
+   G through K stay done. L through BB are **held**: defined, not started, not next.
+   The next calendar is the **modpack expansion**. Its first slice is **BC — Original
+   quest book**, identified and not implemented here. Later slices of that calendar
+   (further tiers, megastructures, planets, the black-hole route) are not sliced yet.
+
+### Licenses
+
+Checked 2026-10-04 against the files named below. Grindless itself is MIT
+([`LICENSE`](../LICENSE), copyright 2026 Ezequiel24123z): use, copy, modification, merge,
+publication, distribution, sublicense and sale are permitted if that copyright notice and
+permission notice are kept.
+
+| Work | What the license allows | Reuse in this MIT repository |
+| --- | --- | --- |
+| **BetterQuesting** | `Funwayguy/BetterQuesting`, branch `1.12`, file `LICENSE`: MIT, copyright 2019 Funwayguy. That text would allow copying the licensed code into this repository if the Funwayguy copyright and permission notice are kept. The CurseForge page for the same project lists **All Rights Reserved**. File headers, the Standard Expansion, and later ports were not audited. | **Not confirmed.** The two statements contradict. Default applies: no reuse. The quest book is an original implementation only. |
+| **GregTech** | GregTech CE Unofficial (`GregTechCEu/GregTech` and `GregTech-Modern`) is LGPL-3.0 on GitHub. LGPL-3.0 allows linking against the library and requires the library's source and relink rights to travel with a combined work. It does not allow copying that source into this tree and offering it under MIT alone. Their README also says use of the name "GregTech" depends on permission. Original GregTech by Gregorius Techneticies, and GregTech assets, were not re-verified file by file. | **No.** LGPL code cannot be vendored into this MIT-only tree. Unverified lines are no reuse. |
+| **Ad Astra** | `terrarium-earth/Ad-Astra`, branch `1.20.x`, Terrarium License v1. Files they define as Code (including `.java`, data, shaders, build scripts, markdown and toml) are MIT, so copying those files is allowed if the copyright and MIT notice stay. Everything not defined as Code is All Rights Reserved. | **Code: allowed only with the notice kept. Assets: no.** This record copies neither. Planetary and interstellar content here is original. |
+| **Similar mods** | Mekanism, Thermal, Create, and the rest of the genre were not individually confirmed. | **Unsure. No reuse.** Ideas may still inform the design. |
+
+**Alternatives rejected.**
+
+- Staying an early-game convenience mod with six tiers.
+- An empty "you arrived" anecdote at the black hole, with no finale.
+- An endless second game inside the hole.
+- Copying BetterQuesting, GregTech, or Ad Astra code or assets into this repository while
+  any license above is unconfirmed or incompatible.
+- Implementing the wider energy representation, the quest book, or slice BC in the same
+  change as this record.
+
+**Consequences.** A successor who starts the washer, Slice F, or any held row L–BB because
+the old **Next slice** line said L is ignoring this record. The next slice is BC, and BC
+is not started here. A successor who vendors another mod's sources because "the idea is
+the same" is ignoring the license table. A successor who sets the endgame generator to
+F9, or who widens `long` inside a feature slice without a record that the representation
+grew, is missing the ceiling in point 5. A successor who writes the black-hole interior
+before the route exists is early; a successor who makes that interior endless, or empty,
+is reopening the rejected alternatives.
 
 

@@ -1,13 +1,14 @@
 # Autonomous build-out
 
-This is the remaining work, in the order a session implements it, so Grindless can be finished
-without asking the owner what is next.
+This file keeps the history of the slices already defined, and names the next calendar.
 
 The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013--the-readme-is-the-design-source-of-truth)).
-This file is the *schedule*. Open questions are answered here with the documented default; a
-session writes an ADR only when it must pick among real alternatives, then ships the slice.
+[ADR-0088](DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression) retires the six-tier
+cap and the early-game convenience framing. Anything not yet started below is **held**. The
+next calendar is the **modpack expansion**. Its first slice is identified and not implemented.
 
-**Next slice: L — Washer and B2.** K (Contact process) is shipped.
+**Next slice: BC — Original quest book.** Not implemented. K (Contact process) is the last
+shipped slice. L–BB are held.
 
 ---
 
@@ -62,9 +63,11 @@ the records below, then implement.
 | Ballistic Turret, Flux Wall, Aberrations | Z then AA (Resonance) | README 0.5 |
 | Voltaic Harness / any armour chassis | X (armour line) | ADR-0067: not a T1 factory hole |
 | Worn portable reactor with no cell recipe | AE | ADR-0067 |
-| Washer, etching, T2 cores | L onward | ADR-0064, ADR-0065, ADR-0074, ADR-0075 |
-| JEI / REI / EMI | AY or AZ | ADR-0066 |
-| Horizon Gate, planets, mining dims | AT then AW | ADR-0068, ADR-0012 |
+| Washer, etching, T2 cores | L onward, and L is held | ADR-0064, ADR-0065, ADR-0074, ADR-0075, ADR-0088 |
+| JEI / REI / EMI | AY or AZ, both held | ADR-0066, ADR-0088 |
+| Horizon Gate, planets, mining dims | AT then AW, both held; original planets are the modpack expansion, not a mining dim | ADR-0068, ADR-0088 |
+| Resume any held row L–BB | A later record that un-holds that row | ADR-0088 |
+| Copy BetterQuesting, GregTech, or Ad Astra | Never, on the licenses in ADR-0088 | ADR-0088 |
 | Multitool mining | Never, without a new ADR | ADR-0055, ADR-0069 |
 | Arc Furnace as a generator | Never | ADR-0067 |
 
@@ -83,9 +86,9 @@ overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftove
 
 ## Remaining slices
 
-Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G. **G, H, I, J and K are done.** A session that finishes L
-marks L done and sets Next to M.
+**G, H, I, J and K are done.** Every row below that is not marked done is **held**
+(ADR-0088). A held row stays in this file so the history is not thrown away. It is not the
+next session. Do not mark a held row done by starting it.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
@@ -99,6 +102,8 @@ machine that runs no graph.
 
 ### 0.3 — T2 industry (the acid payoff)
 
+I, J and K are done. L through S are held.
+
 Kiln already vents SO₂ into a tank. T2 is when that gas becomes acid and the factory builds
 the factory for real.
 
@@ -107,94 +112,108 @@ the factory for real.
 | **I** | **T2 gate** | Research Industrial; MK2 is a real craft | T2 research + Advanced Data Core. Pylon MK2 recipe (block already exists). Assembler-only, not a crafting table (ADR-0017). | Wire Mill. Slice F. | ✅ done |
 | **J** | **Wire and motors** | Fabricate coil, wire, motor | Wire Mill. Motor as a fabricated component. Feeds later electrical crafts. | Acid. | ✅ done |
 | **K** | **Contact process** | Turn SO₂ into sulfuric acid | Chemical Reactor. SO₂ → SO₃ → sulfuric acid with the ratios in `PROCESSES.md`. Vanadia as catalyst. Named sinks for every fluid. R2 yield **1.15** may go live; it was waiting on this line (ADR-0065). | Washer. Etching acid (needs nitric + hydrochloric). | ✅ done |
-| **L** | **Washer and B2** | Wet line, byproduct from the vein | Chemical Washer. B2: crushed + water → washed crushed + byproduct. | Flotation (P). Electrolysis. |
-| **M** | **Electrolysis and air** | Split water and take N₂/O₂ | Electrolysis Cell, Atmospheric Intake. Hydrogen/oxygen sinks. | Fluid Well if the slice is already large — then N is next. |
-| **N** | **Fluid Well** | Chunk fluids | Water, brine, geothermal as specified. | New pipe tier. |
-| **O** | **Induction and caster** | Clean melt; skip the ingot | Induction Furnace, Caster. | Vacuum furnace (T5). |
-| **P** | **Better separation** | Concentrate sulfides; split mixed streams | Magnetic Separator, Froth Flotation Cell (B3). Surfactant reagent. Tailings sink. | Centrifuge (T3). Sifter still needs its own ADR. |
-| **Q** | **Heat and steam** | Power without burning coal only | Solar generation, Boiler, Condenser. Steam Turbine stays T3 with fission. | Arc Reactor. |
-| **R** | **T2 fluids and belts** | Move fluids and stacks | Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt, Stack/Filter Manipulator. | Phase Manifold (T3). |
-| **S** | **Logic** | Enable a machine from a condition | Signal Cable, Logic Controller, Redstone Interface. README: *run only while copper ingots < 500*. | Operator Drones (T3). |
+| **L** | **Washer and B2** (held) | Wet line, byproduct from the vein | Chemical Washer. B2: crushed + water → washed crushed + byproduct. | Flotation (P). Electrolysis. |
+| **M** | **Electrolysis and air** (held) | Split water and take N₂/O₂ | Electrolysis Cell, Atmospheric Intake. Hydrogen/oxygen sinks. | Fluid Well if the slice is already large — then N is next. |
+| **N** | **Fluid Well** (held) | Chunk fluids | Water, brine, geothermal as specified. | New pipe tier. |
+| **O** | **Induction and caster** (held) | Clean melt; skip the ingot | Induction Furnace, Caster. | Vacuum furnace (T5). |
+| **P** | **Better separation** (held) | Concentrate sulfides; split mixed streams | Magnetic Separator, Froth Flotation Cell (B3). Surfactant reagent. Tailings sink. | Centrifuge (T3). Sifter still needs its own ADR. |
+| **Q** | **Heat and steam** (held) | Power without burning coal only | Solar generation, Boiler, Condenser. Steam Turbine stays T3 with fission. | Arc Reactor. |
+| **R** | **T2 fluids and belts** (held) | Move fluids and stacks | Pressure Pipe, Electric Pump, Industrial Tank, Fluid Manipulator, Flux Belt, Stack/Filter Manipulator. | Phase Manifold (T3). |
+| **S** | **Logic** (held) | Enable a machine from a condition | Signal Cable, Logic Controller, Redstone Interface. README: *run only while copper ingots < 500*. | Operator Drones (T3). |
 
-### 0.4 — Tools, matter, first two armour chassis
-
-| ID | Slice | Player can | Ship | Do not |
-| --- | --- | --- | --- | --- |
-| **T** | **Flux Drill** | Mine with charge, not durability | Area modes 1×1 / 3×3 / vein / tunnel. Cell fuel. | Multitool mining. |
-| **U** | **Blueprint Tool** | Save a layout and stamp it | The T2 checkpoint. Blueprints nameable and shareable. Drones still wait. | Construction Drones. |
-| **V** | **Deconstruction Planner** | Mark a region to tear down | Returns items to storage when drones exist; until then the planner may only mark, or pick with the Multitool relocate — do not invent a second wrench. | A new pickup tool. |
-| **W** | **Patterns** | Scan an item; smash to Matter | Pattern Scanner, Deconstructor. Replication *cost* from the graph (ADR-0010) can be computed before the Replicator block. | Replicator (T3, slice AE). |
-| **X** | **Voltaic Harness** | Wear T1 modular armour | Four pieces, small grid, protection + Flux Cell. No onboard generation. Vanilla armour stays valid until this ships. | Arc miniature. Network Tap. |
-| **Y** | **Flux Exosuit** | T2 chassis: network tap and mobility | Grid grows. Walk through pylons. **No worn reactor.** | Portable reactor module (ADR-0067). |
-
-### 0.5 — Resonance and defence
+### 0.4 — Tools, matter, first two armour chassis (held)
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **Z** | **Resonance** | See that industry has a cost | Emission, spread, decay, overlay. Configurable off. | Aberrations if the slice is already large — then AA. |
-| **AA** | **Ballistic defence** | Defend an unpowered outpost | Ballistic Turret, manufactured ammo, Flux Wall. | Laser (AB). |
-| **AB** | **Powered defence and T2 weapons** | Spend FU to fight | Laser Turret, Gauss Rifle, Arc Thrower, Flux Grenade. | Tesla / plasma (T3). |
+| **T** | **Flux Drill** (held) | Mine with charge, not durability | Area modes 1×1 / 3×3 / vein / tunnel. Cell fuel. | Multitool mining. |
+| **U** | **Blueprint Tool** (held) | Save a layout and stamp it | The T2 checkpoint. Blueprints nameable and shareable. Drones still wait. | Construction Drones. |
+| **V** | **Deconstruction Planner** (held) | Mark a region to tear down | Returns items to storage when drones exist; until then the planner may only mark, or pick with the Multitool relocate — do not invent a second wrench. | A new pickup tool. |
+| **W** | **Patterns** (held) | Scan an item; smash to Matter | Pattern Scanner, Deconstructor. Replication *cost* from the graph (ADR-0010) can be computed before the Replicator block. | Replicator (T3, slice AE). |
+| **X** | **Voltaic Harness** (held) | Wear T1 modular armour | Four pieces, small grid, protection + Flux Cell. No onboard generation. Vanilla armour stays valid until this ships. | Arc miniature. Network Tap. |
+| **Y** | **Flux Exosuit** (held) | T2 chassis: network tap and mobility | Grid grows. Walk through pylons. **No worn reactor.** | Portable reactor module (ADR-0067). |
 
-### 0.6 — T3, drones, Slice F, Arc pair, fission
-
-| ID | Slice | Player can | Ship | Do not |
-| --- | --- | --- | --- | --- |
-| **AC** | **T3 gate and drones** | Research Quantum; drones place blocks | T3 research, Construction Drones, Drone Bay. Drones consume a blueprint and network items. This is the T3 checkpoint. | Hand-placed 15³ trophy. |
-| **AD** | **Slice F kernel** | A formed structure with hatches | Formed multiblock + sided hatches as containers. Implemented *for* the Arc Reactor, not as an empty framework. | Distillation / fusion on this kernel before Arc runs. |
-| **AE** | **Arc pair** | F3 power you have to feed; a suit that burns the same cell | Arc Reactor (direct FU, not steam), Arc Cell line, Arc Exosuit miniature. Same unlock. If the cell line stops, both starve. | Arc Furnace as generator; fission; fusion. |
-| **AF** | **Fission** | Design a core | Parametric fission, neighbour bonus, coolant, SCRAM not boom, Steam Turbine. | Fusion. |
-| **AG** | **Deep Core and centrifuge** | Planetary pool; enrichment | Deep Core Drill, Centrifuge (B4). | Vacuum furnace. |
-| **AH** | **Replicator** | Matter + FU → scanned pattern | Priced from the live graph (ADR-0010). | Creative free items. |
-| **AI** | **Circuits for real** | Lithography bottleneck | Lithography Unit, circuit die, Integrated Circuit. Etching acid formulation in the Washer. | Quantum Assembler (T4). |
-| **AJ** | **T3 logistics and weapons** | Mag-Lev, crates, Tesla, shields, plasma, railgun, terraformer, cryo line/tank | As named in the T3 unlock row. | Phase Belt (T4). |
-
-### 0.7 — T4 exotic
+### 0.5 — Resonance and defence (held)
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **AK** | **Fusion** | Ignite D–T | Fusion Reactor, fuel cycles as in `MACHINES.md`. | p–¹¹B as the first cycle. |
-| **AL** | **Accelerator** | Make exotics and Exotic Data Cores | Particle Accelerator. Ring size changes *what* is possible. | A void ore dim. |
-| **AM** | **T4 factory** | Long chains, cold, dense Matter | Quantum Assembler, Cryogenic Plant, Matter Condenser. | Orbital vacuum machines. |
-| **AN** | **Exotic Exosuit and T4 weapons** | Last chassis; Fusion Lance, Singularity Charge | Exotic suit. Singularity Reactor if it is a real F-tier plant, not a trophy. | Horizon Gate. |
+| **Z** | **Resonance** (held) | See that industry has a cost | Emission, spread, decay, overlay. Configurable off. | Aberrations if the slice is already large — then AA. |
+| **AA** | **Ballistic defence** (held) | Defend an unpowered outpost | Ballistic Turret, manufactured ammo, Flux Wall. | Laser (AB). |
+| **AB** | **Powered defence and T2 weapons** (held) | Spend FU to fight | Laser Turret, Gauss Rifle, Arc Thrower, Flux Grenade. | Tesla / plasma (T3). |
 
-### 0.8 — Orbit (T5 checkpoint: Survey Satellite)
-
-| ID | Slice | Player can | Ship | Do not |
-| --- | --- | --- | --- | --- |
-| **AO** | **Leave the ground** | Launch a rocket | Launch Pad, Rocket, payload mass. | Mass Driver in the same PR if the pad is not yet booting. |
-| **AP** | **Bulk to orbit** | Fire cargo without a rocket | Mass Driver, Orbital Catcher. | Using this as a gate. |
-| **AQ** | **Station** | Live in orbit | Orbital Platform and modules. | Planets. |
-| **AR** | **Satellites** | Map veins from orbit; beam power | Survey (headline), Solar Power, Relay, Sentinel, Logistics. Rectenna. | Deep Survey (T6). |
-| **AS** | **Vacuum industry** | Make what gravity forbids | Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. | T6 colonies. |
-
-### 0.9 — Interplanetary (T6 checkpoint: Horizon Gate)
+### 0.6 — T3, drones, Slice F, Arc pair, fission (held)
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **AT** | **Planet registry** | See other worlds | Space-mod detection (ADR-0012). Fallback Thalassa + Helios (ADR-0068). Nether/End datapack-only. | A Grindless mining dimension. |
-| **AU** | **Colonies** | Profit without standing there | Colony Core, abstract simulation (ADR-0011), integrity, resupply, Drop Pods. | Force-loaded colony chunks. |
-| **AV** | **Telepresence** | Walk a Proxy Frame | Proxy Frame, Telepresence Terminal. | Creative possess-any-entity. |
-| **AW** | **Horizon Gate** | Walk after delivering the far ring | T6 dialed pair. People cheap, bulk still Mass Driver. Addresses from the registry. | Mining dim; skipping the cargo delivery. |
-| **AX** | **Permanent link** | Elevator and interplanetary routing | Space Elevator, Interplanetary Router. | Calling this 1.0. |
+| **AC** | **T3 gate and drones** (held) | Research Quantum; drones place blocks | T3 research, Construction Drones, Drone Bay. Drones consume a blueprint and network items. This is the T3 checkpoint. | Hand-placed 15³ trophy. |
+| **AD** | **Slice F kernel** (held) | A formed structure with hatches | Formed multiblock + sided hatches as containers. Implemented *for* the Arc Reactor, not as an empty framework. | Distillation / fusion on this kernel before Arc runs. |
+| **AE** | **Arc pair** (held) | F3 power you have to feed; a suit that burns the same cell | Arc Reactor (direct FU, not steam), Arc Cell line, Arc Exosuit miniature. Same unlock. If the cell line stops, both starve. | Arc Furnace as generator; fission; fusion. |
+| **AF** | **Fission** (held) | Design a core | Parametric fission, neighbour bonus, coolant, SCRAM not boom, Steam Turbine. | Fusion. |
+| **AG** | **Deep Core and centrifuge** (held) | Planetary pool; enrichment | Deep Core Drill, Centrifuge (B4). | Vacuum furnace. |
+| **AH** | **Replicator** (held) | Matter + FU → scanned pattern | Priced from the live graph (ADR-0010). | Creative free items. |
+| **AI** | **Circuits for real** (held) | Lithography bottleneck | Lithography Unit, circuit die, Integrated Circuit. Etching acid formulation in the Washer. | Quantum Assembler (T4). |
+| **AJ** | **T3 logistics and weapons** (held) | Mag-Lev, crates, Tesla, shields, plasma, railgun, terraformer, cryo line/tank | As named in the T3 unlock row. | Phase Belt (T4). |
 
-### 1.0 — Polish
+### 0.7 — T4 exotic (held)
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **AY** | **Native solver** | Ask the atlas *how many machines* | Route viewer with a ratio solver (ADR-0023). Atlas stops being a list. | Shipping JEI as a substitute for this. |
-| **AZ** | **Recipe plugins** | See Grindless in JEI/REI/EMI | Plugin after the graph and solver exist, or in parallel with AY if the stub is no longer enough. | Replacing the atlas. |
-| **BA** | **Guide, advancements, config, locales** | Learn in-game | Advancements, patchouli-or-native guide, config UI, `es_es` at least. | Stopping English as the source locale. |
-| **BB** | **Balance and perf** | A 300-mod pack runs | Belt/network perf, pack balance. Definition of 1.0. | New systems. |
+| **AK** | **Fusion** (held) | Ignite D–T | Fusion Reactor, fuel cycles as in `MACHINES.md`. | p–¹¹B as the first cycle. |
+| **AL** | **Accelerator** (held) | Make exotics and Exotic Data Cores | Particle Accelerator. Ring size changes *what* is possible. | A void ore dim. |
+| **AM** | **T4 factory** (held) | Long chains, cold, dense Matter | Quantum Assembler, Cryogenic Plant, Matter Condenser. | Orbital vacuum machines. |
+| **AN** | **Exotic Exosuit and T4 weapons** (held) | Last chassis; Fusion Lance, Singularity Charge | Exotic suit. Singularity Reactor if it is a real F-tier plant, not a trophy. | Horizon Gate. |
+
+### 0.8 — Orbit (T5 checkpoint: Survey Satellite) (held)
+
+| ID | Slice | Player can | Ship | Do not |
+| --- | --- | --- | --- | --- |
+| **AO** | **Leave the ground** (held) | Launch a rocket | Launch Pad, Rocket, payload mass. | Mass Driver in the same PR if the pad is not yet booting. |
+| **AP** | **Bulk to orbit** (held) | Fire cargo without a rocket | Mass Driver, Orbital Catcher. | Using this as a gate. |
+| **AQ** | **Station** (held) | Live in orbit | Orbital Platform and modules. | Planets. |
+| **AR** | **Satellites** (held) | Map veins from orbit; beam power | Survey (headline), Solar Power, Relay, Sentinel, Logistics. Rectenna. | Deep Survey (T6). |
+| **AS** | **Vacuum industry** (held) | Make what gravity forbids | Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. | T6 colonies. |
+
+### 0.9 — Interplanetary (T6 checkpoint: Horizon Gate) (held)
+
+| ID | Slice | Player can | Ship | Do not |
+| --- | --- | --- | --- | --- |
+| **AT** | **Planet registry** (held) | See other worlds | Space-mod detection (ADR-0012). Fallback Thalassa + Helios (ADR-0068). Nether/End datapack-only. | A Grindless mining dimension. |
+| **AU** | **Colonies** (held) | Profit without standing there | Colony Core, abstract simulation (ADR-0011), integrity, resupply, Drop Pods. | Force-loaded colony chunks. |
+| **AV** | **Telepresence** (held) | Walk a Proxy Frame | Proxy Frame, Telepresence Terminal. | Creative possess-any-entity. |
+| **AW** | **Horizon Gate** (held) | Walk after delivering the far ring | T6 dialed pair. People cheap, bulk still Mass Driver. Addresses from the registry. | Mining dim; skipping the cargo delivery. |
+| **AX** | **Permanent link** (held) | Elevator and interplanetary routing | Space Elevator, Interplanetary Router. | Calling this 1.0. |
+
+### 1.0 — Polish (held)
+
+| ID | Slice | Player can | Ship | Do not |
+| --- | --- | --- | --- | --- |
+| **AY** | **Native solver** (held) | Ask the atlas *how many machines* | Route viewer with a ratio solver (ADR-0023). Atlas stops being a list. | Shipping JEI as a substitute for this. |
+| **AZ** | **Recipe plugins** (held) | See Grindless in JEI/REI/EMI | Plugin after the graph and solver exist, or in parallel with AY if the stub is no longer enough. | Replacing the atlas. |
+| **BA** | **Guide, advancements, config, locales** (held) | Learn in-game | Advancements, patchouli-or-native guide, config UI, `es_es` at least. | Stopping English as the source locale. |
+| **BB** | **Balance and perf** (held) | A 300-mod pack runs | Belt/network perf, pack balance. Definition of 1.0. | New systems. |
 
 ---
+
+## Modpack expansion
+
+ADR-0088. This is the next calendar. Implement **BC**. Do not resume L.
+
+| ID | Slice | Player can | Ship | Do not |
+| --- | --- | --- | --- | --- |
+| **BC** | **Original quest book** | Follow the shipped foundation in a book | An original quest book in the BetterQuesting style: lines, tasks, dependencies and rewards, covering T0 through the contact process. | Copying BetterQuesting, GregTech or Ad Astra code or assets. New tiers. Planets. Changing the `long` energy representation. **Not implemented.** |
+
+Later slices of this calendar are not identified yet. They carry intermediate and endgame
+tiers, further processing lines and materials, megastructures, Kardashev Type I, II and III,
+original planets with unique extractable resources, interstellar travel, and arrival at the
+black hole at the centre of the Milky Way. Arriving is the victory. The interior is a finite
+finale written when the route exists.
 
 ## How a session starts
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice.
+2. Branch from the current tip. Implement only that slice. The next slice is BC. Held rows
+   are not a queue.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
-   set **Next slice** to the following id, and start it.
+   and name the following slice before starting it.
 
-If the owner is absent, keep going until BB is done or the session dies. Uncommitted work does
-not exist.
+Uncommitted work does not exist. A session does not work through L–BB while they are held.
