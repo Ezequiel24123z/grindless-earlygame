@@ -78,6 +78,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
 | [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
+| [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 
 ---
 
@@ -2512,5 +2513,56 @@ linker are already handheld; a desk would duplicate the Research Terminal).
 **Consequences.** A successor that adds `solve(rate)` is finishing ADR-0023, not extending this
 stub. A successor that starts JEI integration is 1.0 polish, not a T1 blocker. Slice F is still
 only when a machine needs hatches or size.
+
+
+## ADR-0067 — Modular armour and the Arc Reactor are one tier
+
+*2026-10-04 · Accepted*
+
+**Context.** The README already has a T2 Flux Exosuit with a generic **Portable Reactor** module,
+and T4 Fusion as the first *named* compact-power fantasy. Flux F3 is already called **Arc** and
+has no generator. The Arc Furnace is a T1 smelter. Construction drones — the thing that makes a
+real multiblock playable — arrive at T3 (ADR-0031). The user asked for modular armour *at every
+research tier*, with upgrades, and for one of those tiers to carry a **miniature Arc Reactor**
+on the suit **and** a fully playable Arc Reactor generation multiblock, with the processing
+lines that feed it.
+
+A successor who ships the current T2 "portable reactor" as a free worn generator, or who turns
+the Arc Furnace into a power plant, or who drops an unfed trophy core in the world, has missed
+the request.
+
+**Decision.**
+
+1. **Armour is a chassis line, not one T2 unlock.** T1–T4 each ship a four-piece modular suit.
+   The grid grows. Modules are upgrades: inserting and removing is free, same as machine
+   upgrades. T1 is protection plus a cell — no onboard generation. T2 adds the Network Tap and
+   mobility (you walk through pylons). T3 is the Arc chassis. T4 is the exotic / orbital suit.
+   Vanilla armour stays valid until the T1 chassis exists.
+2. **The Arc pair is T3 / F3, together.** The factory **Arc Reactor** and the suit's
+   **miniature Arc Reactor** unlock on the same research tier. One without the other is a
+   different feature. The worn core burns the same manufactured fuel the multiblock burns, so
+   the line you built for the plant also charges the suit.
+3. **The factory reactor is a generator you have to run.** Formed structure, hatches, coolant
+   or stability as real logistics, and a **named processing line** whose product is the fuel
+   (working name: Arc Cell). It produces **FU directly** at F3, not heat into steam — fission
+   already owns that route. If the cell line stops, the reactor starves. It is not a trophy
+   block (MACHINES.md: every endgame system has a real use; this is the same rule at T3).
+4. **It is not the Arc Furnace, not fission, not fusion.** The Furnace stays a smelter. Fission
+   stays T3 heat + neighbour-bonus steam. Fusion stays T4 D–T ignition. The Arc Reactor is the
+   missing F3 plant: compact, fed, direct FU.
+5. **Do not start this in T1.** Slice F exists when *this* machine (or another that actually
+   needs hatches) is scheduled — not as an empty kernel (ADR-0058). Equipment waits for the
+   0.4 tools slice. Exact Arc Cell chemistry, hatch layout and grid sizes stay open.
+
+**Alternatives rejected.** Shipping a T2 worn reactor that needs no factory (the current
+Portable Reactor row); using the Arc Furnace as a generator (name collision and it already
+smelts); a trophy core with no feed line; putting the pair at T2 before drones (a processing-line
+multiblock you place by hand is a chore); starting Slice F "for later"; merging this into T4
+Fusion (then F3 still has no generator and the suit waits until the endgame).
+
+**Consequences.** A successor that adds `portable_reactor` as a T2 module with no cell recipe is
+reopening this record. A successor that starts hatches because "armour will need a reactor" is
+ignoring ADR-0058 — start F when the Arc Reactor (or another sized machine) is the slice, not
+before. The README Exosuit table is the player-facing version of this decision.
 
 
