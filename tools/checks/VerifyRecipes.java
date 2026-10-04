@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill and the blueprint tool", 94, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool and the planner", 95, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -571,6 +571,10 @@ public final class VerifyRecipes {
                 blueprintTool.itemOutputs().get(0).qualified());
         no("a filled blueprint is not a recipe",
                 recipes.stream().anyMatch(candidate -> candidate.id().equals("assemble/blueprint")));
+        ProcessRecipe planner = recipe(recipes, "assemble/deconstruction_planner");
+        eq("the planner is the assembler", MachineFamily.ASSEMBLER, planner.family());
+        eq("the planner makes the item", "item:grindless:deconstruction_planner",
+                planner.itemOutputs().get(0).qualified());
         eq("night is nothing", 0L, SolarLogic.generate(false));
 
         yes("steel with an ingot still presses",
@@ -723,6 +727,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("drill_cell.json")));
         no("the blueprint tool has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("blueprint_tool.json")));
+        no("the planner has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("deconstruction_planner.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

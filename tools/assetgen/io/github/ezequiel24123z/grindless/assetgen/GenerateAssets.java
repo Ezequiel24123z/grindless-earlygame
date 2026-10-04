@@ -114,6 +114,8 @@ public final class GenerateAssets {
         written += write(items, "blueprint_tool",
                 FormTextures.blueprintTool(Palette.of("blueprint_tool", 0x3949AB)));
         written += write(items, "blueprint", FormTextures.blueprint(Palette.of("blueprint", 0x5C6BC0)));
+        written += write(items, "deconstruction_planner",
+                FormTextures.planner(Palette.of("deconstruction_planner", 0x6D4C41)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));

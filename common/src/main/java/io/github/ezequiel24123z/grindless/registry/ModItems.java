@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.DeconstructionPlannerItem;
 import io.github.ezequiel24123z.grindless.item.BlueprintItem;
 import io.github.ezequiel24123z.grindless.item.BlueprintToolItem;
 import io.github.ezequiel24123z.grindless.item.DrillCellItem;
@@ -113,6 +114,10 @@ public final class ModItems {
     /** A captured layout. Produced by the tool, not by a recipe. */
     public static final RegistrySupplier<Item> BLUEPRINT = register("blueprint",
             () -> new BlueprintItem(new Item.Properties().stacksTo(1)));
+
+    /** T2 handheld. Marks a box. Does not pick it up (ADR-0086). */
+    public static final RegistrySupplier<Item> DECONSTRUCTION_PLANNER = register("deconstruction_planner",
+            () -> new DeconstructionPlannerItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

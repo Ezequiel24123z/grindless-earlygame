@@ -57,6 +57,7 @@ public final class ModCreativeTabs {
                 lazy(ModItems.FLUX_DRILL),
                 lazy(ModItems.DRILL_CELL),
                 lazy(ModItems.BLUEPRINT_TOOL),
+                lazy(ModItems.DECONSTRUCTION_PLANNER),
                 lazy(ModBlocks.HAND_CRANK_DYNAMO),
                 lazy(ModBlocks.CRUDE_EXTRACTOR),
                 lazy(ModBlocks.RESEARCH_TERMINAL),

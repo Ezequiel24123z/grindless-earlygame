@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 94, rows.size());
+        eq("atlas lists every generated recipe", 95, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("thirty assembler crafts in this set", 30,
+        eq("thirty-one assembler crafts in this set", 31,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -105,6 +105,8 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:drill_cell").size());
         eq("the blueprint tool is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:blueprint_tool").size());
+        eq("the planner is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:deconstruction_planner").size());
         eq("steam has one boiler route", 1,
                 AtlasLogic.producing(recipes, "grindless:steam").size());
         eq("molten iron has one melt route", 1,

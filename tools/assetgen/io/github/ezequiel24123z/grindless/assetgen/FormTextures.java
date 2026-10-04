@@ -479,4 +479,15 @@ public final class FormTextures {
         field.bevel(0.3);
         return field.light(palette);
     }
+
+    /** Two corner brackets. A mark, not a wrench. */
+    public static BufferedImage planner(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 2, 6, 3, 3.4);
+        field.rect(2, 2, 3, 6, 3.4);
+        field.rect(10, 12, 14, 13, 3.4);
+        field.rect(13, 9, 14, 13, 3.4);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
 }

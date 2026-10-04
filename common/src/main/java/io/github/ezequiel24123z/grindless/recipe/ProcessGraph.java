@@ -144,6 +144,7 @@ public final class ProcessGraph {
         recipes.add(fluxDrill());
         recipes.add(drillCell());
         recipes.add(blueprintTool());
+        recipes.add(deconstructionPlanner());
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);
@@ -852,6 +853,10 @@ public final class ProcessGraph {
 
     private static ProcessRecipe blueprintTool() {
         return machineCraft("assemble/blueprint_tool", FabricationLogic.BLUEPRINT_TOOL);
+    }
+
+    private static ProcessRecipe deconstructionPlanner() {
+        return machineCraft("assemble/deconstruction_planner", FabricationLogic.DECONSTRUCTION_PLANNER);
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

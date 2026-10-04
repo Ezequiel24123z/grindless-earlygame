@@ -2011,12 +2011,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21l | **Slice S — Logic:** enable a machine from a count | ✅ done — ADR-0083 |
 | 21m | **Slice T — Flux Drill:** mine with charge | ✅ done — ADR-0084 |
 | 21n | **Slice U — Blueprint Tool:** save a layout and stamp it | ✅ done — ADR-0085 |
+| 21o | **Slice V — Deconstruction Planner:** mark a region | ✅ done — ADR-0086 |
 | 22 | T2 logic | ✅ done — ADR-0083 |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out V–Y, AC, AH |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out W–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **V**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **W**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2044,8 +2045,11 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is V — Deconstruction Planner**, not Construction Drones.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Blueprint Tool is in
+**Next is W — Patterns**, not Construction Drones.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Deconstruction Planner is in
+(ADR-0086): Assembler-manufactured once Industrial is researched. Two corners
+mark a box of at most 32 on an edge. The mark stays on the item. The tool
+does not break blocks. The Multitool relocate is still the pickup. The Blueprint Tool is in
 (ADR-0085): Assembler-manufactured once Industrial is researched. Two corners
 capture a box of at most 32 on an edge and 512 blocks. The blueprint keeps
 facing and drops status. Stamping spends the inventory, all or nothing.

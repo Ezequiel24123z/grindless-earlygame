@@ -45,6 +45,8 @@ entries below reference those records by id.
 
 ### Added
 
+- **Deconstruction Planner (ADR-0086).** Assembler-manufactured (casing, two motors, four plates; Industrial). Right-click two corners. The box uses the same 32-block edge as a blueprint. The mark stays on the item and the tool reports the volume. It does not break blocks and it does not relocate them. The Multitool relocate is unchanged. Drones still wait. The behaviour graph is 95 recipes; a Grindless-only pack logs 298. CI summons the planner.
+
 - **Blueprint Tool (ADR-0085).** Assembler-manufactured (casing, two motors, four plates; Industrial). Right-click two corners. The box may be 32 blocks on an edge and 512 blocks with an item. The Blueprint item keeps the block id and its facing, not the status and not the block entity, so a stamp cannot copy an inventory. Using it places that layout on the clicked face and spends the player's inventory, all or nothing. Creative mode does not spend. An anvil names it. Drones and the network wait. The behaviour graph is 94 recipes; a Grindless-only pack logs 297. CI summons the tool.
 
 - **Flux Drill and Drill Cell (ADR-0084).** Assembler-manufactured. The drill is a casing, two motors and four plates in 20 s. The cell is one copper coil and four plates in 4 s. The drill has no durability: each broken block costs 32 FU, a cell is 3,200 FU, and the drill holds two cells. Sneak-use cycles single, 3×3, vein (32, face-connected) and a horizontal tunnel (3×3, eight deep). It mines at diamond level, drops the block's normal loot, and does not break Grindless blocks. The Multitool still does not mine. Silk and fortune are not in this slice. The behaviour graph is 93 recipes; a Grindless-only pack logs 296. CI summons both items.
