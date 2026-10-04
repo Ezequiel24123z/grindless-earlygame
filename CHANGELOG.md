@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **A hopper can fill a batch recipe one item at a time.** `ProcessLookup.accepts`
+  required the whole batch, so the first insert of electric-arc steel or zone
+  refining was refused. Identity is checked on insert. The count is still
+  required before the cycle starts.
+
 - **The ADR-0065 index anchor matches the link checker.** The heading keeps the SO₂
   subscript. The checker drops that character when it builds the slug, so the index
   link now uses the slug without it.
