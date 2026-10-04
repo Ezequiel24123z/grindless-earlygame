@@ -79,6 +79,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> REFRACTORY_BRICK = register("refractory_brick",
             () -> new Item(new Item.Properties()));
 
+    /** 99 % silicon. Carbothermic product; not the circuit grade (ADR-0092). */
+    public static final RegistrySupplier<Item> METALLURGICAL_SILICON = register("metallurgical_silicon",
+            () -> new Item(new Item.Properties()));
+
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));

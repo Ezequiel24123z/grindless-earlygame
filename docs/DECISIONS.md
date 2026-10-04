@@ -91,6 +91,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
 | [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
 | [0091](#adr-0091--refractory-brick-is-one-slag-in-twenty-seconds) | Refractory brick is one slag in twenty seconds | Accepted |
+| [0092](#adr-0092--metallurgical-silicon-runs-cold-on-sand-and-quartz) | Metallurgical silicon runs cold on sand and quartz | Accepted |
 
 ---
 
@@ -3132,5 +3133,80 @@ temperature. Alumina and silica are not items. One reduction already emits one s
 retunes the furnace is ignoring this record. A successor who changes the 1:1 batch or the
 20 s is inventing a ratio the product did not have. A successor who ships aggregate or
 road fill here is starting the next sink.
+
+---
+
+## ADR-0092 — Metallurgical silicon runs cold on sand and quartz
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BF is the carbothermic line in `PROCESSES.md`:
+
+```
+1 u silica + 2 u carbon
+  [T 1900 · atm reducing]  14 s
+  ──> 1 u metallurgical silicon + 2 B CO             (Arc Furnace, T1)
+```
+
+Two facts are not implementable as written.
+
+Silica is not a shipped item. ADR-0091 refused to invent it as a brick feed. This line
+names it as the feed, so a recipe that waits for a silica item cannot be run. Sand and
+nether quartz are both silica, and both already exist in vanilla. `#minecraft:sand`
+also contains red sand, which is not that feed. Glass is silica that has already been
+melted. Sandstone is a block of sand, not one unit. A new compound item would be a
+reagent with no source.
+
+The Arc Furnace holds 1500 °C, a reducing atmosphere and an electric field. BUILD-OUT
+forbids retuning that hold and forbids a new furnace. A relative band at 1900 °C is
+optimal from 1615 °C to 2185 °C and tolerated from 1330 °C to 2470 °C. 1500 °C is
+inside tolerance and outside the optimal zone, so the line runs and costs time, never
+yield (ADR-0040). The furnace envelope is 1200–3500 °C, so 1900 °C is inside the
+machine. The Kiln stops at 900 °C and cannot reach the tolerance floor. The counts are
+already integers: one silica, two carbon, fourteen seconds, two buckets. There is no
+tenth of an item to clear.
+
+Metallurgical silicon is a grade. `PROCESSES.md` says it is useless for circuits.
+Putting the output on `forge:ingots/silicon` would let a later circuit recipe accept
+99 % metal. Electronic silicon, wafers and the Siemens line are not this slice. The
+product is a reagent, the same boundary slag and refractory brick use (ADR-0033).
+
+CO already has a named sink (ADR-0036, ADR-0062): vent, or a neighbouring tank, then
+the Thermal Generator. Two buckets is that same fluid, twice.
+
+**Decision.**
+
+1. **Feed.** `#grindless:silica` is the item ids `minecraft:sand` and
+   `minecraft:quartz`. No silica item is registered. The values are item ids, not
+   `#minecraft:sand`: that tag also contains red sand, and nether quartz has no
+   vanilla item tag. ADR-0051 forbids writing one into the `minecraft` namespace.
+2. **Product.** `grindless:metallurgical_silicon`, one item. It is not a supplied
+   material, so the ore line, plates, rods, gears and wire do not appear. It is not
+   `forge:ingots/silicon`.
+3. **Host and ratio.** `silicon/metallurgical` runs on the Arc Furnace: 1 silica + 2
+   carbon → 1 metallurgical silicon + 2 B vented CO, in 14 s, at F1, at 1900 °C, in a
+   reducing atmosphere. The furnace hold stays 1500 °C and reducing. That hold admits
+   the band and is not optimal. No new block, no dial, no blueprint. The electric field
+   stays on the machine. `ProcessRecipe` does not grow a field slot. Own work stays MIT
+   (ADR-0089). This record copies nothing.
+
+**Alternatives rejected.**
+
+- A silica item, glass, red sand, slag, or sandstone as the feed.
+- Retuning the Arc Furnace to 1900 °C, or a second furnace that holds 1900 °C.
+- Writing the recipe at 1500 °C so the hold is optimal. That rewrites the graph.
+- Widening this recipe's band so 1500 °C counts as optimal.
+- Scaling to 2 silica + 4 carbon. The graph is already an integer batch.
+- `forge:ingots/silicon`, a full supply-catalogue material, plates, wire, electronic
+  silicon, or wafers.
+- A stored CO item, or a new gas. The sink is the one R1 already uses.
+- Naming an electric field on the recipe. The graph names temperature and atmosphere.
+- The Kiln. 1900 °C is outside it even at the edge of tolerance.
+
+**Consequences.** A successor who ships a silica item, retunes the furnace, or emits
+`forge:ingots/silicon` is ignoring this record. A successor who changes the 1:2:1 batch
+or the 14 s is rewriting the graph. A successor who adds electronic silicon, a wafer, or
+a Siemens step here is starting the next line. A successor who treats the 1500 °C hold
+as a bug and moves it is retuning.
 
 

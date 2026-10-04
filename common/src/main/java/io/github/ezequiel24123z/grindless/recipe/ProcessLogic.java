@@ -65,6 +65,21 @@ public final class ProcessLogic {
     public static final int REFRACTORY_TICKS = 20 * 20;
     public static final double REFRACTORY_TEMPERATURE = 1400.0;
 
+    /**
+     * Metallurgical silicon (ADR-0092). The graph's 1 u silica and 2 u carbon are
+     * already an integer batch, so the cycle stays 14 s. Silica is a tag over sand
+     * and quartz. The furnace hold stays 1500 °C, inside tolerance and outside the
+     * optimal zone of 1900 °C.
+     */
+    public static final String SILICA = "grindless:silica";
+    public static final String METALLURGICAL_SILICON = "grindless:metallurgical_silicon";
+    public static final int SILICON_SILICA = 1;
+    public static final int SILICON_CARBON = 2;
+    public static final int SILICON_OUT = 1;
+    public static final int SILICON_CO_MB = 2 * CO_MB;
+    public static final int SILICON_TICKS = 20 * 14;
+    public static final double SILICON_TEMPERATURE = 1900.0;
+
     private ProcessLogic() {
     }
 

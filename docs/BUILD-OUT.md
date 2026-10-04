@@ -8,7 +8,7 @@ cap and the early-game convenience framing. Anything not yet started below is **
 next calendar is the **modpack expansion**. The quest book is last, not first
 ([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BF — Metallurgical silicon.** Not implemented. BE (Refractory brick) is done.
+**Next slice: BG — Further processing lines.** Not implemented. BF (Metallurgical silicon) is done.
 K remains the last foundation slice. L–BB are held. The quest book is not next.
 
 ---
@@ -200,20 +200,20 @@ the factory for real.
 ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
 start the quest book.
 
-**Next slice: BF — Metallurgical silicon.** Not implemented. Do not start it in the refractory change.
+**Next slice: BG — Further processing lines.** Not implemented. Do not start it in the silicon change.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
 | **BD** | **Electric-arc steel** | Turn iron and coal into steel | The electric-arc route on the Arc Furnace: 10 iron ingots + 1 carbon → 10 steel ingots in 140 s at 1600 °C (ADR-0090). Plates, rods, gears and wire then follow the existing graph. | A new furnace. Oxygen blow. Direct reduction. The washer. The Autoclave. Planets. The quest book. | ✅ done |
 | **BE** | **Refractory brick** | Spend slag on a lining | Slag's named sink (ADR-0036, ADR-0091): 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. The furnace's 1500 °C hold stays inside that band. | The Kiln. The alumina + silica route. A new furnace. Oxygen blow. Aggregate and road fill. Planets. The quest book. | ✅ done |
-| **BF** | **Metallurgical silicon** | Turn silica and carbon into metal | The Arc Furnace line in `PROCESSES.md`: `1 u silica + 2 u carbon [T 1900 · atm reducing]` 14 s → `1 u metallurgical silicon + 2 B CO`. Silica is not a shipped item, and the furnace still holds 1500 °C. Write both in an ADR before coding. | Electronic silicon. A new furnace. Retuning the 1500 °C hold. The washer. Planets. Megastructures. The quest book. **Not implemented.** |
+| **BF** | **Metallurgical silicon** | Turn silica and carbon into metal | The Arc Furnace line in `PROCESSES.md`: `1 u silica + 2 u carbon [T 1900 · atm reducing]` 14 s → `1 u metallurgical silicon + 2 B CO`. Silica is `#grindless:silica` (sand and nether quartz). The furnace's 1500 °C hold stays; 1900 °C is tolerated (ADR-0092). | Electronic silicon. A new furnace. Retuning the 1500 °C hold. The washer. Planets. Megastructures. The quest book. | ✅ done |
+| **BG** | **Further processing lines** | Extend the graph past metallurgical silicon | Not sliced. Further intermediate and endgame tiers, more processing lines and more materials. The concrete line is chosen when the slice starts. | Megastructures. Kardashev Type I, II and III. Planets. Interstellar travel. The black hole. The quest book. **Not implemented.** |
 
-After BF, still not sliced, in this order:
+After BG, still not sliced, in this order:
 
-1. Further intermediate and endgame tiers, more processing lines and more materials.
-2. Megastructures, then Kardashev Type I, II and III.
-3. Original planets with unique extractable resources, and interstellar travel.
-4. Arrival at the black hole at the centre of the Milky Way. Arriving is the victory. The
+1. Megastructures, then Kardashev Type I, II and III.
+2. Original planets with unique extractable resources, and interstellar travel.
+3. Arrival at the black hole at the centre of the Milky Way. Arriving is the victory. The
    interior is a finite finale written when the route exists.
 
 The original quest book is last, with the in-game guide, after that arrival.
@@ -226,8 +226,8 @@ The original quest book is last, with the in-game guide, after that arrival.
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BF. Held rows
-   are not a queue. The quest book is last. Do not resume BE.
+2. Branch from the current tip. Implement only that slice. The next slice is BG. Held rows
+   are not a queue. The quest book is last. Do not resume BF.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
    and name the following slice before starting it.
 
