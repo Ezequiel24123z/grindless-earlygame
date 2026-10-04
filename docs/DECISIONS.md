@@ -83,6 +83,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
 | [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
+| [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
 
 ---
 
@@ -2712,5 +2713,34 @@ a splitter with a hidden filter (then two blocks do one job).
 
 **Consequences.** A successor that starts the sorter in this slice is skipping H. A successor
 that lets two tunnel tiles pair when they touch is deleting the conveyor.
+
+
+## ADR-0072 — The T1 sorter peels; it does not split
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice H is the sorter ADR-0060 parked. README calls it an inline
+multi-output filter for a mixed ore line. The splitter already has three filtered outlets and
+round-robins unfiltered faces. If the sorter copied that, two blocks would do one job. The
+remaining question is what "inline" means when a matching lane is full.
+
+**Decision.**
+
+1. One inlet (the back). Front is always the passthrough: unmatched items continue. Left and
+   right are optional filters, sneak-clicked like the splitter. An empty filter does not steal.
+2. A matching side, if open, takes the item. If that side is backed up, the sorter holds.
+   Matching items never dump onto the front. That is the difference from the splitter, whose
+   backed-up filter yields to an open face.
+3. Two sides that name the same item round-robin. No GUI. Logic Controller still waits.
+4. Voltaic-gated craft with a hopper in the middle so the recipe is not the splitter. Same lane
+   model and BeltEndpoint (ADR-0008). `VerifyBelt` dumps the route.
+
+**Alternatives rejected.** A second splitter under a new name; a GUI for a list of filters
+(sneak-click is enough for two faces); overflowing a full copper lane onto the iron belt (that
+deletes the sorter).
+
+**Consequences.** A successor that lets a backed-up filter spill to the front is shipping
+overflow on the wrong block. A successor that round-robins unfiltered sides is shipping a
+splitter.
 
 
