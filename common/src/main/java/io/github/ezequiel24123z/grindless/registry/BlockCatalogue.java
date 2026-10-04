@@ -127,7 +127,7 @@ public final class BlockCatalogue {
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "slag",
-            "prospectors_scanner", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
+            "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
             "copper_coil");
 
     /** The item that renders as the bare casing cube. */

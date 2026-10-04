@@ -11,6 +11,7 @@
   "item.grindless.copper_coil": "Copper Coil",
   "item.grindless.slag": "Slag",
   "item.grindless.prospectors_scanner": "Prospector's Scanner",
+  "item.grindless.process_atlas": "Process Atlas",
   "item.grindless.flux_conduit": "Flux Conduit",
 
   "block.grindless.hand_crank_dynamo": "Hand Crank Dynamo",
@@ -79,6 +80,10 @@
   "gui.grindless.status.blocked": "Blocked — empty the output",
   "gui.grindless.status.starved": "Starved — needs input or power",
   "gui.grindless.status.out_of_band": "Out of band",
+
+  "gui.grindless.atlas.title": "Process Atlas",
+  "gui.grindless.atlas.empty": "No process recipes loaded",
+  "tooltip.grindless.atlas": "Right-click to browse process recipes",
 
   "chat.grindless.scanner.vein": "%s · richness %s · reserve %s",
   "chat.grindless.scanner.empty": "No mineable vein in this chunk",

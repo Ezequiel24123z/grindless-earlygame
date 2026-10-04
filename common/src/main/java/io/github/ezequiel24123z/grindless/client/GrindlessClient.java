@@ -21,6 +21,7 @@ public final class GrindlessClient {
         ResearchSync.register();
         SurveySync.register();
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_MACHINE.get(), ProcessMachineScreen::new);
+        MenuRegistry.registerScreenFactory(ModMenus.PROCESS_ATLAS.get(), ProcessAtlasScreen::new);
         BlockEntityRendererRegistry.register(ModBlockEntities.CONVEYOR_BELT.get(), BeltRenderer::new);
         ClientGuiEvent.RENDER_HUD.register(SurveyOverlay::render);
     }

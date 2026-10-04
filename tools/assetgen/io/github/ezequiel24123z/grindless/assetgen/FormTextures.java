@@ -253,6 +253,18 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the Process Atlas: a tablet with three graph nodes. See {@link #dataCore}. */
+    public static BufferedImage atlas(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 12, 13, 3.4);
+        field.rect(5, 4, 10, 10, 4.2);
+        field.disc(6.0, 6.0, 1.2, 5.2);
+        field.disc(10.0, 6.0, 1.2, 5.2);
+        field.disc(8.0, 9.0, 1.2, 5.2);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Flux Conduit: a wound cable on a grip. See {@link #dataCore}. */
     public static BufferedImage conduit(Palette palette) {
         HeightField field = new HeightField();

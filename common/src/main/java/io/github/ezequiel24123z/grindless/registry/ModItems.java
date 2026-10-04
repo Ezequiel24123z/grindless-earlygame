@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
@@ -64,6 +65,10 @@ public final class ModItems {
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));
+
+    /** T1 handheld. Lists live process recipes. Not a solver (ADR-0066). */
+    public static final RegistrySupplier<Item> PROCESS_ATLAS = register("process_atlas",
+            () -> new ProcessAtlasItem(new Item.Properties().stacksTo(1)));
 
     /** T1 handheld. Right-click two pylons to join them across any distance. */
     public static final RegistrySupplier<Item> FLUX_CONDUIT = register("flux_conduit",
