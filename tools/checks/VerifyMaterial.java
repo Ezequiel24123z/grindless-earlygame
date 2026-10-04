@@ -52,6 +52,8 @@ public final class VerifyMaterial {
                 SupplyCatalogue.isSupplied("copper", MaterialForm.NUGGET));
         yes("vanilla has no iron plate either", SupplyCatalogue.isSupplied("iron", MaterialForm.PLATE));
         yes("or iron gear", SupplyCatalogue.isSupplied("iron", MaterialForm.GEAR));
+        yes("or iron wire", SupplyCatalogue.isSupplied("iron", MaterialForm.WIRE));
+        yes("vanilla has no copper wire either", SupplyCatalogue.isSupplied("copper", MaterialForm.WIRE));
         yes("a material no vanilla item covers is fully supplied",
                 SupplyCatalogue.isSupplied("platinum", MaterialForm.INGOT)
                         && SupplyCatalogue.isSupplied("platinum", MaterialForm.RAW));

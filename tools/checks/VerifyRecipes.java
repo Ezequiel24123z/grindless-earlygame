@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus coil and MK2", 28, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill and motor", 35, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -156,6 +156,47 @@ public final class VerifyRecipes {
         eq("MK2 makes the pylon", "item:grindless:flux_pylon_mk2", mk2.itemOutputs().get(0).qualified());
         eq("MK2 needs Industrial", "industrial", mk2.blueprint());
 
+        ProcessRecipe ironWire = recipe(recipes, "mill/wire/iron");
+        ProcessRecipe millCoil = recipe(recipes, "mill/coil/copper");
+        ProcessRecipe mill = recipe(recipes, "assemble/wire_mill");
+        ProcessRecipe motor = recipe(recipes, "assemble/motor");
+
+        eq("wire is the mill", MachineFamily.WIRE_MILL, ironWire.family());
+        eq("wire takes one ingot", "tag:forge:ingots/iron", ironWire.itemInputs().get(0).qualified());
+        eq("wire makes two", 2, ironWire.itemOutputs().get(0).count());
+        eq("wire is the grindless tag", "tag:grindless:wires/iron", ironWire.itemOutputs().get(0).qualified());
+        eq("wire is eight seconds", 20 * 8, ironWire.durationTicks());
+        eq("wire draws F1", 32L, ironWire.fuPerTick());
+        yes("wire has no catalyst", ironWire.catalysts().isEmpty());
+        yes("wire names no blueprint", ironWire.blueprint() == null);
+        yes("gold still mills", recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/gold")));
+        yes("steel still mills", recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/steel")));
+        yes("mythril with an ingot still mills",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/mythril")));
+
+        eq("mill coil is the mill", MachineFamily.WIRE_MILL, millCoil.family());
+        eq("mill coil takes two copper wire", 2, millCoil.itemInputs().get(0).count());
+        eq("mill coil feeds wire", "tag:grindless:wires/copper", millCoil.itemInputs().get(0).qualified());
+        eq("mill coil is a reagent", "item:grindless:copper_coil", millCoil.itemOutputs().get(0).qualified());
+        yes("mill coil has no die", millCoil.catalysts().isEmpty());
+
+        eq("the mill is the assembler", MachineFamily.ASSEMBLER, mill.family());
+        eq("the mill takes a casing", "item:grindless:machine_casing", mill.itemInputs().get(0).qualified());
+        eq("the mill takes two coils", 2, mill.itemInputs().get(1).count());
+        eq("the mill coils are the reagent", "item:grindless:copper_coil", mill.itemInputs().get(1).qualified());
+        eq("the mill takes four plates", 4, mill.itemInputs().get(2).count());
+        eq("the mill is twenty seconds", 20 * 20, mill.durationTicks());
+        eq("the mill needs Industrial", "industrial", mill.blueprint());
+        eq("the mill makes the block", "item:grindless:wire_mill", mill.itemOutputs().get(0).qualified());
+
+        eq("motor is the assembler", MachineFamily.ASSEMBLER, motor.family());
+        eq("motor takes a casing", "item:grindless:machine_casing", motor.itemInputs().get(0).qualified());
+        eq("motor takes two coils", 2, motor.itemInputs().get(1).count());
+        eq("motor takes a rod", "tag:forge:rods/iron", motor.itemInputs().get(2).qualified());
+        eq("motor is ten seconds", 20 * 10, motor.durationTicks());
+        eq("motor needs Industrial", "industrial", motor.blueprint());
+        eq("motor makes the reagent", "item:grindless:motor", motor.itemOutputs().get(0).qualified());
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -248,6 +289,10 @@ public final class VerifyRecipes {
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
         no("MK2 has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
+        no("the mill has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("wire_mill.json")));
+        no("the motor has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("motor.json")));
     }
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {

@@ -6,12 +6,12 @@ import java.util.Locale;
 
 /**
  * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063,
- * ADR-0065).
+ * ADR-0065, ADR-0074).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
- * Fabrication: one Assembler recipe that manufactures Pylon MK2 once Industrial is researched,
- * with no crafting-table JSON (ADR-0073). No Minecraft imports: {@code VerifyRecipes} dumps
- * this graph without booting the game.
+ * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill and the motor once
+ * Industrial is researched, with no crafting-table JSON (ADR-0073, ADR-0074). No Minecraft
+ * imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -36,7 +36,7 @@ public final class ProcessGraph {
     }
 
     /**
-     * Ore-line, roast, press and assembler recipes the given materials support.
+     * Ore-line, roast, press, mill and assembler recipes the given materials support.
      *
      * <p>A material without an ingot is skipped for reduction and forming. A material without
      * a raw or ore form is skipped for the ore line, not for the Press. Missing crushed drops
@@ -76,9 +76,15 @@ public final class ProcessGraph {
                 recipes.add(press(material.name(), "gear", "forge:gears/" + material.name(),
                         FabricationLogic.GEAR_DIE));
             }
+            if (material.ingot()) {
+                recipes.add(wire(material.name()));
+            }
         }
         recipes.add(coilPress());
+        recipes.add(coilMill());
         recipes.add(pylonMk2());
+        recipes.add(wireMill());
+        recipes.add(motor());
         return List.copyOf(recipes);
     }
 
@@ -103,6 +109,10 @@ public final class ProcessGraph {
 
     public static String ingotTag(String material) {
         return "forge:ingots/" + material;
+    }
+
+    public static String wireTag(String material) {
+        return "grindless:wires/" + material;
     }
 
     private static ProcessRecipe pulverize(String material, String feed, String crushed) {
@@ -213,6 +223,32 @@ public final class ProcessGraph {
                 List.of(IngredientSpec.item(FabricationLogic.COIL_DIE, 1)));
     }
 
+    /** 1 ingot → 2 wire. Every material with an ingot; fine wire waits (ADR-0074). */
+    private static ProcessRecipe wire(String material) {
+        return new ProcessRecipe(
+                "mill/wire/" + material,
+                MachineFamily.WIRE_MILL,
+                List.of(IngredientSpec.tag(ingotTag(material), 1)),
+                List.of(OutputSpec.tag(wireTag(material), 2)),
+                Double.NaN,
+                null,
+                FabricationLogic.WIRE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    /** T2 coil: two copper wire, no die. The Press route stays for T1 (ADR-0063). */
+    private static ProcessRecipe coilMill() {
+        return new ProcessRecipe(
+                "mill/coil/copper",
+                MachineFamily.WIRE_MILL,
+                List.of(IngredientSpec.tag(wireTag("copper"), 2)),
+                List.of(OutputSpec.item(FabricationLogic.COPPER_COIL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.WIRE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
     /**
      * The fabrication gate (ADR-0017, ADR-0063). Pylon MK2 has no crafting-table recipe;
      * the Assembler is the only source.
@@ -229,6 +265,45 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /**
+     * The first T2 process machine (ADR-0074). Casing, two coils, four plates. Circuit
+     * board waits on acid.
+     */
+    private static ProcessRecipe wireMill() {
+        return new ProcessRecipe(
+                "assemble/wire_mill",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** Fabricated T2 component. No fluid gate (ADR-0074). */
+    private static ProcessRecipe motor() {
+        return new ProcessRecipe(
+                "assemble/motor",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:rods/iron", 1)),
+                List.of(OutputSpec.item(FabricationLogic.MOTOR, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.MOTOR_TICKS,
                 FabricationLogic.FU_PER_TICK,
                 List.of(),
                 "industrial");

@@ -130,6 +130,26 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** A drawn strand: thinner than a rod, with a second stroke so it reads as cable. */
+    public static BufferedImage wire(Palette palette) {
+        HeightField field = new HeightField();
+        for (int y = 2; y <= 13; y++) {
+            double wave = Math.sin((y - 2) * 0.7) * 1.4;
+            int cx = (int) Math.round(7.5 + wave);
+            for (int x = cx - 1; x <= cx; x++) {
+                double across = 1.0 - Math.abs((x - (7.5 + wave)) / 1.4);
+                field.set(x, y, 2.4 + 2.6 * Math.max(0, across));
+            }
+            int cx2 = (int) Math.round(7.5 - wave);
+            for (int x = cx2; x <= cx2 + 1; x++) {
+                double across = 1.0 - Math.abs((x - (7.5 - wave)) / 1.4);
+                field.set(x, y, Math.max(field.get(x, y), 2.0 + 2.2 * Math.max(0, across)));
+            }
+        }
+        field.bevel(0.28);
+        return field.light(palette);
+    }
+
     /** Fine powder: many small grains, nearly flat. */
     public static BufferedImage dust(Palette palette) {
         HeightField field = new HeightField();
@@ -326,6 +346,25 @@ public final class FormTextures {
             }
         }
         field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a motor: a canned housing with a shaft. See {@link #dataCore}. */
+    public static BufferedImage motor(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 4, 12, 12, 3.4);
+        double centre = 8.0;
+        for (int y = 5; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                double radius = Math.hypot(x - centre, y - 8.0);
+                if (radius <= 3.6 && radius >= 1.6) {
+                    double across = 1.0 - Math.abs((radius - 2.6) / 1.0);
+                    field.set(x, y, 4.2 + 1.4 * Math.max(0, across));
+                }
+            }
+        }
+        field.rect(7, 1, 8, 4, 3.8);
+        field.bevel(0.4);
         return field.light(palette);
     }
 }

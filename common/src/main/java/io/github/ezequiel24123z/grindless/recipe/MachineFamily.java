@@ -5,7 +5,8 @@ package io.github.ezequiel24123z.grindless.recipe;
  *
  * <p>A recipe names a family, not a block. Any block of that family whose envelope covers the
  * recipe's conditions can host it (ADR-0019, ADR-0020). Slice A shipped two families; Slice D
- * adds Press and Assembler; the Kiln adds roast without forking the type (ADR-0065).
+ * adds Press and Assembler; the Kiln adds roast without forking the type (ADR-0065). The
+ * Wire Mill adds drawing as its own family (ADR-0074).
  */
 public enum MachineFamily {
 
@@ -23,5 +24,8 @@ public enum MachineFamily {
     ASSEMBLER,
 
     /** Roast. 1 u feed → 1 u oxide; 1 B SO₂ vents or captures. */
-    KILN
+    KILN,
+
+    /** Drawing. 1 ingot → 2 wire; 2 copper wire → 1 coil. T2. */
+    WIRE_MILL
 }

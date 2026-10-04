@@ -56,6 +56,7 @@ final class BlockModels {
             case PRESS -> press();
             case ASSEMBLER -> assembler();
             case KILN -> kiln();
+            case WIRE_MILL -> wireMill();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -248,6 +249,16 @@ final class BlockModels {
                 box(0, 0, 0, 16, 2, 16, "cap", "base"),
                 front(2, 2, 2, 14, 12, 14, "top", "side", "front"),
                 box(5, 12, 5, 11, 16, 11, "cap", "cap"));
+    }
+
+    /** Two drawing dies and a spool. */
+    private static List<Box> wireMill() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 3, 15, 10, 14, "top", "side", "front"),
+                box(2, 4, 1, 5, 12, 5, "cap", "side"),
+                box(11, 4, 1, 14, 12, 5, "cap", "side"),
+                box(5, 10, 5, 11, 16, 11, "top", "side"));
     }
 
     /** A low slab with two raised rails. */

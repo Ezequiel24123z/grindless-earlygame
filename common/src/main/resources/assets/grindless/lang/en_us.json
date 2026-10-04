@@ -11,6 +11,7 @@
   "item.grindless.gear_die": "Gear Die",
   "item.grindless.coil_die": "Coil Die",
   "item.grindless.copper_coil": "Copper Coil",
+  "item.grindless.motor": "Motor",
   "item.grindless.slag": "Slag",
   "item.grindless.prospectors_scanner": "Prospector's Scanner",
   "item.grindless.process_atlas": "Process Atlas",
@@ -25,6 +26,7 @@
   "block.grindless.press": "Press",
   "block.grindless.assembler": "Assembler",
   "block.grindless.kiln": "Kiln",
+  "block.grindless.wire_mill": "Wire Mill",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
   "block.grindless.merger": "Merger",
@@ -55,6 +57,7 @@
   "form.grindless.bolt": "%s Bolt",
   "form.grindless.gear": "%s Gear",
   "form.grindless.ring": "%s Ring",
+  "form.grindless.wire": "%s Wire",
 
   "material.grindless.iron": "Iron",
   "material.grindless.copper": "Copper",

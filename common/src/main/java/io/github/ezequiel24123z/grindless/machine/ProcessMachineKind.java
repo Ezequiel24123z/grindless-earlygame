@@ -111,6 +111,24 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.KILN.get();
         }
+    },
+
+    WIRE_MILL(MachineFamily.WIRE_MILL, MachineMenuKind.WIRE_MILL,
+            BlockCatalogue.Geometry.WIRE_MILL, "wire_mill") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.WIRE_MILL.get();
+        }
     };
 
     private final MachineFamily family;

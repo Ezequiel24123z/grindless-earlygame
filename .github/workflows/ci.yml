@@ -40,7 +40,7 @@ jobs:
         run: tools/smoke-boot.sh .
         env:
           SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
-          SMOKE_EXPECT: '32 materials found; Grindless supplies 130 of its 132'
+          SMOKE_EXPECT: '32 materials found; Grindless supplies 143 of its 145'
 
       # Every block must be mineable with a pickaxe and drop itself, with its real display name.
       - name: Boot and exercise block loot and mining tags
@@ -114,6 +114,13 @@ jobs:
         env:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-kiln.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-kiln.expect
+
+      # Slice J: Wire Mill places; a hopper can insert an ingot; motor and wire items exist.
+      - name: Boot and exercise wire mill
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-wire.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-wire.expect
 
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas

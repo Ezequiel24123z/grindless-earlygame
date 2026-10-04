@@ -7,7 +7,7 @@ The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013
 This file is the *schedule*. Open questions are answered here with the documented default; a
 session writes an ADR only when it must pick among real alternatives, then ships the slice.
 
-**Next slice: J — Wire and motors.** I (T2 gate) is shipped.
+**Next slice: K — Contact process.** J (Wire and motors) is shipped.
 
 ---
 
@@ -62,7 +62,7 @@ the records below, then implement.
 | Ballistic Turret, Flux Wall, Aberrations | Z then AA (Resonance) | README 0.5 |
 | Voltaic Harness / any armour chassis | X (armour line) | ADR-0067: not a T1 factory hole |
 | Worn portable reactor with no cell recipe | AE | ADR-0067 |
-| Wire Mill, acid, washer, T2 cores | I onward | ADR-0064, ADR-0065 |
+| Acid, washer, T2 cores | K onward | ADR-0064, ADR-0065, ADR-0074 |
 | JEI / REI / EMI | AY or AZ | ADR-0066 |
 | Horizon Gate, planets, mining dims | AT then AW | ADR-0068, ADR-0012 |
 | Multitool mining | Never, without a new ADR | ADR-0055, ADR-0069 |
@@ -73,18 +73,18 @@ the records below, then implement.
 ## Already shipped
 
 T0 loop, Slice A–E, Kiln/R2, Atlas stub, Multitool wrench, belt junctions (G), the sorter
-(H), the T2 gate (I), and the design records for armour (ADR-0067) and Horizon Gates
-(ADR-0068). Roadmap 0.1 definition of done — empty world to automated iron without
-hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel, overflow,
-sorter) are in. Powered belts wait for R. Belt Reader is not a leftover row.
+(H), the T2 gate (I), Wire Mill / motor (J), and the design records for armour (ADR-0067)
+and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to automated
+iron without hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel,
+overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftover row.
 
 ---
 
 ## Remaining slices
 
 Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G. **G, H and I are done.** A session that finishes J
-marks J done and sets Next to K.
+it done here in the same PR that ships G. **G, H, I and J are done.** A session that finishes K
+marks K done and sets Next to L.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
@@ -104,7 +104,7 @@ the factory for real.
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
 | **I** | **T2 gate** | Research Industrial; MK2 is a real craft | T2 research + Advanced Data Core. Pylon MK2 recipe (block already exists). Assembler-only, not a crafting table (ADR-0017). | Wire Mill. Slice F. | ✅ done |
-| **J** | **Wire and motors** | Fabricate coil, wire, motor | Wire Mill. Motor as a fabricated component. Feeds later electrical crafts. | Acid. |
+| **J** | **Wire and motors** | Fabricate coil, wire, motor | Wire Mill. Motor as a fabricated component. Feeds later electrical crafts. | Acid. | ✅ done |
 | **K** | **Contact process** | Turn SO₂ into sulfuric acid | Chemical Reactor. SO₂ → SO₃ → sulfuric acid with the ratios in `PROCESSES.md`. Vanadia as catalyst. Named sinks for every fluid. R2 yield **1.15** may go live; it was waiting on this line (ADR-0065). | Washer. Etching acid (needs nitric + hydrochloric). |
 | **L** | **Washer and B2** | Wet line, byproduct from the vein | Chemical Washer. B2: crushed + water → washed crushed + byproduct. | Flotation (P). Electrolysis. |
 | **M** | **Electrolysis and air** | Split water and take N₂/O₂ | Electrolysis Cell, Atmospheric Intake. Hydrogen/oxygen sinks. | Fluid Well if the slice is already large — then N is next. |

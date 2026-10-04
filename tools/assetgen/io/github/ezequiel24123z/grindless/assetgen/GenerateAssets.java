@@ -104,6 +104,7 @@ public final class GenerateAssets {
         written += write(items, "gear_die", FormTextures.die(Palette.of("gear_die", 0xFFB74D)));
         written += write(items, "coil_die", FormTextures.die(Palette.of("coil_die", 0xB87333)));
         written += write(items, "copper_coil", FormTextures.coil(Palette.of("copper_coil", 0xB87333)));
+        written += write(items, "motor", FormTextures.motor(Palette.of("motor", 0x5A6E8A)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -185,6 +186,7 @@ public final class GenerateAssets {
             case BOLT -> FormTextures.bolt(palette);
             case GEAR -> FormTextures.gear(palette);
             case RING -> FormTextures.ring(palette);
+            case WIRE -> FormTextures.wire(palette);
             default -> throw new IllegalStateException("no texture for form " + form);
         };
     }

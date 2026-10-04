@@ -32,7 +32,7 @@ public final class SupplyCatalogue {
     private static final List<MaterialForm> FORMS = List.of(
             MaterialForm.RAW, MaterialForm.CRUSHED, MaterialForm.OXIDE, MaterialForm.DUST,
             MaterialForm.NUGGET, MaterialForm.INGOT, MaterialForm.PLATE, MaterialForm.ROD,
-            MaterialForm.BOLT, MaterialForm.GEAR, MaterialForm.RING);
+            MaterialForm.BOLT, MaterialForm.GEAR, MaterialForm.RING, MaterialForm.WIRE);
 
     /**
      * One material Grindless can supply.

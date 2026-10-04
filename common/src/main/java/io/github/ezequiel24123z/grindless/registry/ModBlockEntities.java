@@ -107,6 +107,14 @@ public final class ModBlockEntities {
                                     ModBlocks.KILN.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> WIRE_MILL =
+            BLOCK_ENTITIES.register("wire_mill",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.WIRE_MILL, pos, state),
+                                    ModBlocks.WIRE_MILL.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

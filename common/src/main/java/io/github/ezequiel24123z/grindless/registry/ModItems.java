@@ -20,8 +20,8 @@ import java.util.function.Supplier;
 /**
  * Items, and the register every block item is also added to.
  *
- * <p>Bootstrap items plus Slice D fabrication (dies, coil, casing) and the Slice E
- * linker. Motors and circuit boards arrive with T2.
+ * <p>Bootstrap items plus Slice D fabrication (dies, coil, casing), the Slice E
+ * linker, and the T2 motor. Circuit boards arrive with acid.
  */
 public final class ModItems {
 
@@ -61,6 +61,10 @@ public final class ModItems {
 
     /** T1 electrical reagent. The Wire Mill is the dedicated T2 route. */
     public static final RegistrySupplier<Item> COPPER_COIL = register("copper_coil",
+            () -> new Item(new Item.Properties()));
+
+    /** T2 fabricated component. Feeds later electrical crafts (ADR-0074). */
+    public static final RegistrySupplier<Item> MOTOR = register("motor",
             () -> new Item(new Item.Properties()));
 
     /** R1 gangue. A Grindless reagent, not a material form (ADR-0033). */

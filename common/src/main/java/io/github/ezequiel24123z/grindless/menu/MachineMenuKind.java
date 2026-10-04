@@ -3,7 +3,7 @@ package io.github.ezequiel24123z.grindless.menu;
 /**
  * Layout of the shared machine menu.
  *
- * <p>One screen, six slot maps. Energy, progress and the named fault are the same on every
+ * <p>One screen, seven slot maps. Energy, progress and the named fault are the same on every
  * machine (ADR-0058).
  */
 public enum MachineMenuKind {
@@ -13,7 +13,8 @@ public enum MachineMenuKind {
     ARC_FURNACE(2, 2),
     PRESS(2, 1),
     ASSEMBLER(3, 1),
-    KILN(1, 1);
+    KILN(1, 1),
+    WIRE_MILL(1, 1);
 
     private final int inputs;
     private final int outputs;

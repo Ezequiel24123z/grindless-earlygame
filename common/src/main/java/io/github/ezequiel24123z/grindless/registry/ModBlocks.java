@@ -40,9 +40,9 @@ import java.util.function.Supplier;
  * Blocks. Every entry registers its own {@link BlockItem} into {@link ModItems}, so the two
  * registers stay in step and nothing can ship a block that cannot be picked up.
  *
- * <p>T0 through Kiln / R2. Dynamo, extractors, pylons, terminal, Thermal Generator,
- * process machines, belts, fluids, the T1 extractor, capacitor bank, transformer
- * and Kiln have block entities.
+ * <p>T0 through Kiln / R2 and the T2 Wire Mill. Dynamo, extractors, pylons, terminal,
+ * Thermal Generator, process machines, belts, fluids, the T1 extractor, capacitor bank,
+ * transformer, Kiln and Wire Mill have block entities.
  */
 public final class ModBlocks {
 
@@ -91,6 +91,11 @@ public final class ModBlocks {
     public static final RegistrySupplier<ProcessMachineBlock> KILN =
             register("kiln",
                     () -> new ProcessMachineBlock(ProcessMachineKind.KILN, machine().strength(3.0F)));
+
+    /** T2 drawing. 1 ingot → 2 wire; 2 copper wire → 1 coil. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> WIRE_MILL =
+            register("wire_mill",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.WIRE_MILL, machine().strength(3.5F)));
 
     /** T1 unpowered conveyor. 8 items/s, two lanes, lane data not entities. */
     public static final RegistrySupplier<BeltBlock> CONVEYOR_BELT =

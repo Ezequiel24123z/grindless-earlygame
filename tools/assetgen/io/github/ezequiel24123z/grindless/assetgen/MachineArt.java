@@ -33,6 +33,7 @@ public final class MachineArt {
     public static final int PRESS = 0xFFCC80;
     public static final int ASSEMBLER = 0x82B1FF;
     public static final int KILN = 0xE64A19;
+    public static final int WIRE_MILL = 0xFF8A65;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -66,6 +67,7 @@ public final class MachineArt {
             case PRESS -> pressFront(status);
             case ASSEMBLER -> assemblerFront(status);
             case KILN -> kilnFront(status);
+            case WIRE_MILL -> wireMillFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -94,6 +96,7 @@ public final class MachineArt {
             case PRESS -> pressTop();
             case ASSEMBLER -> assemblerTop();
             case KILN -> kilnTop();
+            case WIRE_MILL -> wireMillTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -494,6 +497,53 @@ public final class MachineArt {
         }
         set(img, 7, 7, KILN);
         set(img, 8, 7, KILN);
+        return img;
+    }
+
+    // ---- Wire Mill -----------------------------------------------------------------------
+
+    /** Two drawing dies with a strand: the machine is a thing that draws wire. */
+    public static BufferedImage wireMillFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, WIRE_MILL);
+        int die = Palette.shade(CASING, 0.2);
+        int dark = Palette.shade(CASING, -0.65);
+        for (int y = 3; y <= 11; y++) {
+            for (int x = 2; x <= 5; x++) {
+                set(img, x, y, die);
+            }
+            for (int x = 10; x <= 13; x++) {
+                set(img, x, y, die);
+            }
+        }
+        for (int y = 5; y <= 9; y++) {
+            set(img, 3, y, dark);
+            set(img, 4, y, dark);
+            set(img, 11, y, dark);
+            set(img, 12, y, dark);
+        }
+        int strand = glow < 0 ? Palette.shade(WIRE_MILL, -0.35) : glow;
+        for (int x = 5; x <= 10; x++) {
+            set(img, x, 7, strand);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage wireMillTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                if (d <= 4.2 && d >= 2.4) {
+                    set(img, x, y, Palette.shade(WIRE_MILL, -0.25));
+                } else if (d < 2.4) {
+                    set(img, x, y, Palette.shade(CASING, -0.55));
+                }
+            }
+        }
+        set(img, 7, 7, WIRE_MILL);
+        set(img, 8, 7, WIRE_MILL);
         return img;
     }
 

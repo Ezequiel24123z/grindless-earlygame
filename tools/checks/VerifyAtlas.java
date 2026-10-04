@@ -18,10 +18,12 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 28, rows.size());
+        eq("atlas lists every generated recipe", 35, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the assembler row is the MK2", "assemble/pylon_mk2",
+        eq("the first assembler row is the motor", "assemble/motor",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
+        eq("three assembler crafts in this set", 3,
+                AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
         eq("three routes make an iron ingot", 3, ironIngot.size());
@@ -40,12 +42,23 @@ public final class VerifyAtlas {
         eq("five roast routes vent SO2", 5, so2.size());
         eq("MK2 is the assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:flux_pylon_mk2").size());
+        eq("the mill is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:wire_mill").size());
+        eq("the motor is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:motor").size());
+        eq("iron wire has one mill route", 1,
+                AtlasLogic.producing(recipes, "grindless:wires/iron").size());
         eq("unknown product is empty", 0,
                 AtlasLogic.producing(recipes, "forge:ingots/unobtainium").size());
 
         List<AtlasLogic.Entry> kiln = AtlasLogic.family(recipes, MachineFamily.KILN);
         eq("five kiln routes in this set", 5, kiln.size());
         no("steel does not roast", ids(kiln).stream().anyMatch(id -> id.endsWith("/steel")));
+
+        List<AtlasLogic.Entry> mill = AtlasLogic.family(recipes, MachineFamily.WIRE_MILL);
+        eq("five mill routes in this set", 5, mill.size());
+        yes("iron wire is milled", ids(mill).contains("mill/wire/iron"));
+        yes("the mill coil is copper", ids(mill).contains("mill/coil/copper"));
 
         List<AtlasLogic.Entry> carbon = AtlasLogic.consuming(recipes, "grindless:carbon");
         yes("R2 consumes carbon", ids(carbon).contains("r2/iron"));

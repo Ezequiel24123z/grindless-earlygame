@@ -43,6 +43,7 @@ public final class MachineEffects {
             case PRESS -> mill(status, level, pos, random);
             case ASSEMBLER -> manipulator(status, front, level, pos, random);
             case KILN -> generator(status, level, pos, random);
+            case WIRE_MILL -> mill(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);

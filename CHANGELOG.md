@@ -35,9 +35,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Wire Mill, wire and motor (ADR-0074).** T2 mill is Assembler-manufactured (casing, two
+  coils, four plates; Industrial; no circuit board). Wire is a supplied form
+  (`grindless:wires/<m>`): 1 ingot → 2 wire in 8 s F1. Mill coil is 2 copper wire → 1
+  copper coil, no die. Motor is a reagent: casing + two coils + one rod in 10 s.
+  Acid still waits. CI places the mill and hoppers an ingot in.
+
 - **T2 gate (ADR-0073).** Industrial is the second blueprint on the same terminal. Advanced
   Data Core is Voltaic-gated (one core + four plates). `assemble/pylon_mk2` names that
-  blueprint. Wire Mill still waits.
+  blueprint. Wire Mill is slice J.
 
 - **Sorter (ADR-0072).** Inline filter. Sneak-click left or right; matching items leave that
   face and hold if it is full. Unmatched continue. Voltaic craft. `VerifyBelt` dumps the
