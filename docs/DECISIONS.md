@@ -100,6 +100,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
 | [0088](#adr-0088--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
 | [0089](#adr-0089--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
+| [0090](#adr-0090--the-exosuit-taps-a-pylon-and-does-not-generate) | The exosuit taps a pylon and does not generate | Accepted |
 
 ---
 
@@ -3442,6 +3443,40 @@ before a second module exists.
 pylon area is starting slice Y. A successor that generates FU while the
 suit is worn is starting the Arc miniature. A successor that puts
 durability on the drill and calls it this cell is reopening ADR-0084.
+
+
+## ADR-0090 — The exosuit taps a pylon and does not generate
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice Y is the Flux Exosuit. ADR-0067 says the grid
+grows, the Network Tap recharges by walking through pylons, and there is
+still no worn reactor. Flight, shields and the other T2 modules are named
+in the README; this slice only has to make the tap and mobility real.
+
+**Decision.**
+
+1. **Four pieces**, Assembler-manufactured (casing, two motors, four
+   plates, Industrial). Protection matches the harness. Each piece has
+   **two** slots. The harness stays at one (ADR-0089).
+2. **Network Tap** and **Exoskeleton Legs** are the same Assembler craft.
+   They install only into an exosuit. A Flux Cell still installs into
+   either chassis. The tap does not fit the harness.
+3. **While worn**, a tap pulls up to 32 FU/t from the pylon network
+   covering the player into Flux Cells on the exosuit. No coverage, no
+   pull. Legs add 0.04 to movement speed and spend 1 FU/t from a cell on
+   the suit. No charge, no speed. Nothing generates FU.
+4. Thrusters, shields, night vision, the magnet and the miniature Arc
+   Reactor are not in this slice.
+
+**Alternatives rejected.** A worn generator; letting the tap fit the
+one-slot harness; flight in the same slice as the first mobility module;
+charging the suit from a capacitor click (that remains the cell's own
+use, ADR-0089).
+
+**Consequences.** A successor that makes the worn suit produce FU is
+starting the Arc miniature. A successor that puts a third slot here is
+growing the grid again before a third module exists.
 
 
 
