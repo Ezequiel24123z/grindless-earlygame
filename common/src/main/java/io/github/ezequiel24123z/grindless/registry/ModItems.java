@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.MultitoolItem;
 import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
@@ -28,7 +29,7 @@ public final class ModItems {
 
     /** The T0 handheld. Replaces the stone-tool phase outright. */
     public static final RegistrySupplier<Item> MULTITOOL = register("multitool",
-            () -> new Item(new Item.Properties().stacksTo(1)));
+            () -> new MultitoolItem(new Item.Properties().stacksTo(1)));
 
     /** Research currency. Produced by the factory, spent in the Research Terminal. */
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",

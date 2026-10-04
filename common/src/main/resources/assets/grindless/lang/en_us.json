@@ -2,6 +2,7 @@
   "itemGroup.grindless.main": "Grindless",
 
   "item.grindless.multitool": "Multitool",
+  "tooltip.grindless.multitool": "Right-click to rotate. Sneak-click to pick up with contents.",
   "item.grindless.data_core": "Data Core",
   "item.grindless.machine_casing": "Machine Casing",
   "item.grindless.plate_die": "Plate Die",

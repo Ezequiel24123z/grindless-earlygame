@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.machine;
 
+import io.github.ezequiel24123z.grindless.item.Relocation;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -111,7 +112,7 @@ public class ResearchTerminalBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState,
                          boolean moving) {
-        if (!state.is(newState.getBlock())
+        if (!Relocation.active() && !state.is(newState.getBlock())
                 && level.getBlockEntity(pos) instanceof ResearchTerminalBlockEntity terminal) {
             Containers.dropContents(level, pos, terminal);
         }
