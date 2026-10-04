@@ -86,6 +86,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
+| [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 
 ---
 
@@ -2803,5 +2804,49 @@ the mill is the gate).
 
 **Consequences.** A successor that starts sulfuric acid in this slice is skipping K. A
 successor that crafts the mill at a table is deleting the T2 manufacturing gate.
+
+
+## ADR-0075 — The contact process is air, vanadia and a pickle
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice K is the contact process: Chemical Reactor, SO₂ → SO₃ → sulfuric
+acid at the ratios in `PROCESSES.md`, vanadia as catalyst, named sinks, R2 yield 1.15 *may*
+go live. Washer and etching wait. Atmospheric Intake and electrolysis wait for M. Generic T2
+assembly wants a Circuit Board, which wants etching acid.
+
+`PROCESSES.md` names `0.5 B oxygen` and `T 450` for oxidation, `T 120` for absorption.
+`MACHINES.md` gives the Chemical Reactor −20–250 °C. One machine cannot hold both 450 °C and
+120 °C. One `FluidBuffer` cannot hold SO₃ and water at once. Arc Furnace R2 already fills
+both output slots (ingot + slag), so a 1.15 nugget has nowhere to land.
+
+**Decision.**
+
+1. **Chemical Reactor** is a T2 single-block process machine. The Assembler manufactures it
+   once Industrial is researched: `1 casing + 2 motor + 4 iron plates`, 20 s, F1. No circuit
+   board. No crafting-table JSON. Menu is one in (catalyst) and one out. Envelope is
+   `MachineEnvelopes.CHEMICAL_REACTOR` with the ceiling raised to 500 °C so 450 °C is inside.
+   Held conditions are 450 °C oxidising, stirred. Recipes in this slice do not name a
+   temperature; both steps run in-band without a dial.
+2. **Oxidation.** `1 B SO₂ → 1 B SO₃`, 6 s, F1, vanadia catalyst. Air is the oxidiser
+   (held OXIDISING). Bottled oxygen waits for M. SO₃ is a gas at ambient, like SO₂; the tank
+   is the buffer.
+3. **Absorption.** `1 B SO₃ + 0.2 B water → 1 B sulfuric acid`, 4 s, F1, no catalyst.
+   Water is taken from a neighbouring `FluidEndpoint` at finish; it is never pulled into the
+   reactor buffer, so a water tank cannot contaminate the sulfur oxide.
+4. **Vanadia pellet** is a Voltaic-gated crafting-table reagent: one iron oxide and four
+   bricks (ceramic support). Vanadium is not a catalogue material. Not consumed.
+5. **Named spend for sulfuric acid** is pickle: `1 iron ingot + 0.1 B sulfuric acid → 1 iron
+   plate`, 4 s, F1, no die. The Press remains. Washer and etching wait.
+6. **R2 yield 1.15 stays deferred.** A nugget would be a third Arc Furnace output.
+
+**Alternatives rejected.** Bottled oxygen this slice (that is M); a second fluid buffer
+(the neighbour pull is enough); naming 450 °C and 120 °C on the recipes (one hold cannot
+satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C band); shipping
+1.15 as a third item; a crafting-table reactor; using the generic T2 recipe (circuit board).
+
+**Consequences.** A successor that starts the washer in this slice is skipping L. A
+successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
+acid without pickle (or another spend) is reopening ADR-0036.
 
 
