@@ -37,6 +37,15 @@ entries below reference those records by id.
 
 ### Changed
 
+- **The quest book is last, and the next slice is electric-arc steel (ADR-0090).**
+  The owner deferred the original quest book until the end of the pack. It now sits
+  with the in-game guide, after arrival at the galactic-centre black hole. The urgent
+  calendar is intermediate and endgame tiers, more processing lines and materials,
+  then megastructures and the Kardashev scales, then original planets and interstellar
+  travel, then the black hole. The next slice is BD — electric-arc steel on the Arc
+  Furnace, identified and not implemented. Rows L–BB stay held. No third-party code
+  is copied. Own work stays MIT (ADR-0089).
+
 - **External code may enter with its own license (ADR-0089).** Grindless's own work
   stays MIT. The copyright holder accepts adding an upstream license when a later
   change copies code that requires it (LGPL-3.0 for GregTech CE Unofficial and
@@ -54,8 +63,8 @@ entries below reference those records by id.
   the maximum a per-tick `long` can name, `Long.MAX_VALUE` FU/t. Sums, a multi-tick buffer
   at that rate, and the FE `int` bridge cannot express operating there, so the
   representation grows before that content ships. The quest book is an original
-  BetterQuesting-style implementation. Slices L–BB are held. The next slice is BC —
-  Original quest book, identified and not implemented.
+  BetterQuesting-style implementation. Slices L–BB are held. That record named BC —
+  Original quest book as the next slice. ADR-0090 moves the book to the end.
 
 - **Remaining work is playable slices, not system layers (ADR-0058).** First iron (Thermal
   Generator, Pulverizer, Arc Furnace, `ProcessRecipe` item-first, shared menu, Voltaic gate)

@@ -5,10 +5,11 @@ This file keeps the history of the slices already defined, and names the next ca
 The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013--the-readme-is-the-design-source-of-truth)).
 [ADR-0088](DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression) retires the six-tier
 cap and the early-game convenience framing. Anything not yet started below is **held**. The
-next calendar is the **modpack expansion**. Its first slice is identified and not implemented.
+next calendar is the **modpack expansion**. The quest book is last, not first
+([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BC — Original quest book.** Not implemented. K (Contact process) is the last
-shipped slice. L–BB are held.
+**Next slice: BD — Electric-arc steel.** Not implemented. K (Contact process) is the last
+shipped slice. L–BB are held. The quest book is not next.
 
 ---
 
@@ -196,24 +197,35 @@ the factory for real.
 
 ## Modpack expansion
 
-ADR-0088. This is the next calendar. Implement **BC**. Do not resume L.
+ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
+start the quest book.
+
+**Next slice: BD — Electric-arc steel.** Not implemented.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
-| **BC** | **Original quest book** | Follow the shipped foundation in a book | An original quest book in the BetterQuesting style: lines, tasks, dependencies and rewards, covering T0 through the contact process. | Copying BetterQuesting, GregTech or Ad Astra code or assets. New tiers. Planets. Changing the `long` energy representation. **Not implemented.** |
+| **BD** | **Electric-arc steel** | Turn iron and coal into steel | The electric-arc route on the Arc Furnace: 10 iron ingots + 1 carbon → 10 steel ingots in 140 s at 1600 °C (ADR-0090). Plates, rods, gears and wire then follow the existing graph. | A new furnace. Oxygen blow. Direct reduction. The washer. The Autoclave. Planets. The quest book. **Not implemented.** |
 
-Later slices of this calendar are not identified yet. They carry intermediate and endgame
-tiers, further processing lines and materials, megastructures, Kardashev Type I, II and III,
-original planets with unique extractable resources, interstellar travel, and arrival at the
-black hole at the centre of the Milky Way. Arriving is the victory. The interior is a finite
-finale written when the route exists.
+After BD, still not sliced, in this order:
+
+1. Further intermediate and endgame tiers, more processing lines and more materials.
+2. Megastructures, then Kardashev Type I, II and III.
+3. Original planets with unique extractable resources, and interstellar travel.
+4. Arrival at the black hole at the centre of the Milky Way. Arriving is the victory. The
+   interior is a finite finale written when the route exists.
+
+The original quest book is last, with the in-game guide, after that arrival.
+
+| ID | Slice | Player can | Ship | Do not |
+| --- | --- | --- | --- | --- |
+| **BC** | **Original quest book and in-game guide** | Follow the pack, then read it in game | Last, after the black hole. An original quest book in the BetterQuesting style — lines, tasks, dependencies and rewards — together with the in-game guide. | Copying BetterQuesting, GregTech or Ad Astra code or assets. Starting this before the black hole. Planets are not this row. **Not next.** |
 
 ## How a session starts
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BC. Held rows
-   are not a queue.
+2. Branch from the current tip. Implement only that slice. The next slice is BD. Held rows
+   are not a queue. The quest book is last.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
    and name the following slice before starting it.
 

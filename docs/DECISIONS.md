@@ -87,8 +87,9 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
-| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 |
+| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 and ADR-0090 |
 | [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
+| [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
 
 ---
 
@@ -2867,11 +2868,12 @@ acid without pickle (or another spend) is reopening ADR-0036.
 
 ## ADR-0088 — Grindless is a modpack-scale progression
 
-*2026-10-04 · Superseded in part by [ADR-0089](#adr-0089--external-code-may-enter-with-its-own-license)*
+*2026-10-04 · Superseded in part by [ADR-0089](#adr-0089--external-code-may-enter-with-its-own-license) and [ADR-0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact)*
 
 > **Superseded in part.** The ban on ever changing our license so that copyleft code can be
 > copied is lifted. Unconfirmed licenses and All Rights Reserved material stay out. See
-> ADR-0089.
+> ADR-0089. The schedule that puts the quest book next is withdrawn. The book is last.
+> See ADR-0090.
 
 **Context.** The early game is in: the T0 loop, slices A–E, the kiln, the atlas stub, the
 Multitool wrench, belt junctions, the sorter, the Industrial gate, the Wire Mill, and the
@@ -3011,5 +3013,72 @@ obligations we were previously refusing.
 LGPL notice, is ignoring this record. A successor who copies BetterQuesting or an Ad Astra
 texture because the license file now mentions upstream terms is ignoring points 4 and 5.
 A successor who relicenses the whole tree without a copied file is early.
+
+---
+
+## ADR-0090 — Electric-arc steel is the first line past contact
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0088 named a modpack-scale progression and left the steps after the quest
+book unidentified. It set the next slice to BC, an original quest book. The owner has
+deferred that book until the end of the pack. The urgent calendar, which ADR-0088 names
+and does not slice, is intermediate and endgame tiers, more processing lines and more
+materials, then megastructures and the Kardashev scales, then original planets and
+interstellar travel, then arrival at the galactic-centre black hole. The quest book and
+the in-game guide come after that arrival. They are last.
+
+The foundation on this branch ends at the contact process (slice K). Rows L–BB stay held.
+A successor who starts the washer, the quest book, or an Autoclave from the old Next line
+is guessing.
+
+`PROCESSES.md` opens the materials stratum with alloys, and the first alloy it spells out
+is steel, three ways. Steel is already a supplied material, and the Press, rod, gear and
+Wire Mill recipes already exist for it once an ingot does. Nothing produces the ingot.
+Of the three routes, only electric arc runs on a shipped machine with shipped inputs:
+iron ingots and `#grindless:carbon`, in the Arc Furnace, which already holds 1500 °C, a
+reducing atmosphere and an electric field (ADR-0059). Oxygen blow needs molten metal and
+the Atmospheric Intake (held O and M). Direct reduction needs hydrogen (held M). The
+Haber line needs an Autoclave plus nitrogen and hydrogen from those same held machines.
+Shipping it either cannot be run, or it resumes M. The washer is L.
+
+**Decision.**
+
+1. **The quest book is last.** BC stays the original quest book. It moves to the end of
+   the modpack expansion, after arrival at the black hole, together with the in-game
+   guide. It is not the next slice. L–BB stay held. This record copies no BetterQuesting,
+   GregTech or Ad Astra code or assets. Grindless's own work stays MIT (ADR-0089).
+2. **The next slice is BD — Electric-arc steel.** One material line, on the machine the
+   graph already names. That machine is the Arc Furnace. No new block, no new research
+   tier, no new blueprint. A second furnace would duplicate an envelope that already
+   contains the reaction.
+3. **Ratio.** `PROCESSES.md` writes `1 u scrap iron + 0.1 u carbon → 1.0 u` in 14 s.
+   A tenth of an item does not exist (ADR-0034: 1 u = 1 ingot). The integer batch that
+   keeps both the carbon ratio and the throughput is **10 iron ingots + 1 carbon → 10
+   steel ingots in 140 s** (ten times 14 s), at F1, family `ARC_FURNACE`. The named
+   temperature is 1600 °C. The furnace's 1500 °C hold sits inside that band (±15 %).
+   Scrap is `forge:ingots/iron`, not a new item. The output is `forge:ingots/steel`.
+   There is no slag and no CO: the route names neither (ADR-0036). The electric field
+   stays the furnace's held field. `ProcessRecipe` does not grow a field slot for one
+   host that already applies it.
+4. **The other two steel routes wait.** Oxygen blow and direct reduction are not this
+   slice. Planets, megastructures and the quest book are not this slice.
+
+**Alternatives rejected.**
+
+- The quest book, or the in-game guide, as the next slice.
+- Resuming any held row L–BB, including the washer, electrolysis, the Atmospheric Intake
+  and the Induction Furnace.
+- Haber, the Autoclave, or nitric acid in this slice. Their feeds are M, or the line
+  cannot run.
+- A new alloy furnace, or a T7 blueprint, for a reaction the Arc Furnace already holds.
+- `1 iron + 1 carbon → 1 steel`, which spends ten times the coal the graph charges.
+- `10 iron + 1 carbon` in 14 s, which is ten times the throughput.
+- A scrap item, a slag output, or bottled hydrogen.
+
+**Consequences.** A successor who starts BC, the washer, or the Autoclave because an older
+Next line said so is ignoring this record. A successor who adds oxygen blow or direct
+reduction here is starting held feeds. A successor who changes the batch without keeping
+0.1 carbon per ingot and 14 s per ingot is rewriting the graph.
 
 
