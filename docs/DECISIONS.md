@@ -80,6 +80,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
+| [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
 
 ---
 
@@ -2612,5 +2613,38 @@ Stargate (someone else's name); treating the Nether as a planet by default.
 **Consequences.** A successor that registers `mining_dim` is reopening this record and the
 anti-pattern table. A successor that skips the far-gate delivery is shipping a creative
 teleporter. The README System 9 travel table is the player-facing version.
+
+
+## ADR-0069 — The Multitool rotates and relocates; it still does not mine
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0055 forbids the Multitool from mining. The README still promises it rotates
+machines and picks them up with contents and settings intact. The registered item is a blank
+`Item`: it does neither. That is the empty-the-machine tax the T0 handheld was meant to delete.
+Slice F, the Sifter, Resonance, the Ballistic Turret, armour and Horizon Gates are not the next
+playable hole.
+
+**Decision.**
+
+1. Right-click a Grindless block with the Multitool: rotate 90° clockwise if it has a horizontal
+   facing. The machine GUI, the dynamo crank and the Research Terminal do not open while the
+   Multitool is the used item.
+2. Sneak-right-click: pick the block up as its BlockItem, with `BlockStateTag` (facing, status)
+   and `BlockEntityTag` (buffers, lanes, fluids, filter). `Relocation` is active so
+   `onRemove` does not spill the inventory onto the floor. Pylon clicks resolve to the base
+   (ADR-0054); shafts are not a separate item.
+3. A pickaxe still breaks machines and they still drop empty (ADR-0051, ADR-0055). The Multitool
+   is not in `mineable/pickaxe` and has no destroy speed.
+4. Splitter face-filtering stays sneak-click *without* the Multitool. With it, sneak is relocate.
+5. This is not the Blueprint Tool and not a mining module.
+
+**Alternatives rejected.** Mining with the Multitool (ADR-0055); opening the GUI anyway (then
+rotate is unreachable on machines with menus); spilling contents on relocate (that *is* the tax);
+a T2 Blueprint-only move (too late for the machine you just placed at T0).
+
+**Consequences.** A successor that gives the Multitool pickaxe behaviour is reopening ADR-0055.
+A successor that starts the Sifter or a turret because "T1 is done" is skipping a tool the player
+already crafted.
 
 
