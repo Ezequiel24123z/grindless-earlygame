@@ -5,19 +5,23 @@ package io.github.ezequiel24123z.grindless.recipe;
  *
  * <p>A recipe names a family, not a block. Any block of that family whose envelope covers the
  * recipe's conditions can host it (ADR-0019, ADR-0020). Slice A shipped two families; Slice D
- * adds Press and Assembler without forking the type.
+ * adds Press and Assembler; the Kiln adds roast without forking the type (ADR-0065).
  */
 public enum MachineFamily {
 
     /** Dry mill. B1: 1 u raw → 2 u crushed. */
     PULVERIZER,
 
-    /** Carbothermic reduction. R1: graded feed + carbon → ingot + slag; CO vents. */
+    /** Carbothermic reduction. R1: graded feed + carbon → ingot + slag; CO vents.
+     * R2 reduce: oxide + carbon → ingot + slag; no CO. */
     ARC_FURNACE,
 
     /** Forming. One ingot and a die; the die is not consumed. */
     PRESS,
 
     /** Multi-ingredient fabrication. The last crafting-table machine; T2+ is manufactured here. */
-    ASSEMBLER
+    ASSEMBLER,
+
+    /** Roast. 1 u feed → 1 u oxide; 1 B SO₂ vents or captures. */
+    KILN
 }

@@ -33,13 +33,13 @@ public final class VerifyRecipes {
 
     private static void graph() {
         List<ProcessGraph.MaterialView> materials = List.of(
-                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true),
-                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true),
-                new ProcessGraph.MaterialView("steel", false, false, false, true, true, true, true),
-                new ProcessGraph.MaterialView("mythril", false, true, true, true, false, false, false));
+                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true),
+                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true),
+                new ProcessGraph.MaterialView("steel", false, false, false, false, true, true, true, true),
+                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus press forms plus coil and MK2", 20, recipes.size());
+        eq("ore line plus roast plus press forms plus coil and MK2", 28, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -80,6 +80,39 @@ public final class VerifyRecipes {
         eq("B1×R1 feeds crushed", "tag:grindless:crushed_materials/iron",
                 ironR1.itemInputs().get(0).qualified());
         eq("B1×R1 still makes one ingot per crushed", 1, ironR1.itemOutputs().get(0).count());
+
+        ProcessRecipe ironRoast = recipe(recipes, "roast/iron");
+        ProcessRecipe ironRoastCrushed = recipe(recipes, "roast_crushed/iron");
+        ProcessRecipe ironR2 = recipe(recipes, "r2/iron");
+        ProcessRecipe goldRoast = recipe(recipes, "roast/gold");
+
+        eq("roast is the kiln", MachineFamily.KILN, ironRoast.family());
+        eq("roast takes one raw", "tag:forge:raw_materials/iron", ironRoast.itemInputs().get(0).qualified());
+        eq("roast makes one oxide", "tag:grindless:oxides/iron", ironRoast.itemOutputs().get(0).qualified());
+        eq("roast vents one SO2", "fluid:grindless:sulfur_dioxide", ironRoast.ventedOutputs().get(0).qualified());
+        eq("SO2 is one bucket", 1000, ironRoast.ventedOutputs().get(0).count());
+        eq("roast is 700 C", 700.0, ironRoast.temperatureC());
+        eq("roast is oxidising", "OXIDISING", ironRoast.atmosphere());
+        eq("roast is eight seconds", 20 * 8, ironRoast.durationTicks());
+        eq("roast draws F1", 32L, ironRoast.fuPerTick());
+        yes("roast has no fluid inputs", ironRoast.fluidInputs().isEmpty());
+        eq("crushed roast feeds crushed", "tag:grindless:crushed_materials/iron",
+                ironRoastCrushed.itemInputs().get(0).qualified());
+        eq("crushed roast still makes one oxide", 1, ironRoastCrushed.itemOutputs().get(0).count());
+
+        eq("R2 is the arc furnace", MachineFamily.ARC_FURNACE, ironR2.family());
+        eq("R2 takes oxide", "tag:grindless:oxides/iron", ironR2.itemInputs().get(0).qualified());
+        eq("R2 takes carbon", "tag:grindless:carbon", ironR2.itemInputs().get(1).qualified());
+        eq("R2 makes one ingot", 1, ironR2.itemOutputs().get(0).count());
+        eq("R2 makes slag", "item:grindless:slag", ironR2.itemOutputs().get(1).qualified());
+        yes("R2 does not vent CO", ironR2.ventedOutputs().isEmpty());
+        eq("R2 is ten seconds", 20 * 10, ironR2.durationTicks());
+        eq("R2 reduce is the locked furnace temperature", 1500.0, ironR2.temperatureC());
+        eq("R2 is reducing", "REDUCING", ironR2.atmosphere());
+
+        eq("gold without crushed still roasts the raw", "roast/gold", goldRoast.id());
+        no("gold has no crushed roast", recipes.stream().anyMatch(recipe -> recipe.id().equals("roast_crushed/gold")));
+        yes("gold still reduces oxide", recipes.stream().anyMatch(recipe -> recipe.id().equals("r2/gold")));
 
         eq("gold without crushed is B0 only", "b0_r1/gold", goldB0.id());
         no("gold has no B1", recipes.stream().anyMatch(recipe -> recipe.id().equals("b1/gold")));
@@ -126,6 +159,10 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("b0_r1/steel")));
+        no("steel without oxide does not roast",
+                recipes.stream().anyMatch(recipe -> recipe.id().startsWith("roast") && recipe.id().endsWith("/steel")));
+        no("steel without oxide has no R2",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("r2/steel")));
         yes("gold without crushed still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/gear/gold")));
         no("mythril without plate/rod/gear does not press",
@@ -181,7 +218,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships twenty-two gated crafts", 22, T1Recipes.gated().size());
+        eq("T1 ships twenty-three gated crafts", 23, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",
@@ -194,6 +231,8 @@ public final class VerifyRecipes {
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("capacitor_bank")));
         yes("the transformer is hand-crafted",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
+        yes("the kiln is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("kiln")));
         no("MK2 has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
     }

@@ -95,6 +95,14 @@ public final class ModBlockEntities {
                                     ModBlocks.ASSEMBLER.get())
                             .build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> KILN =
+            BLOCK_ENTITIES.register("kiln",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.KILN, pos, state),
+                                    ModBlocks.KILN.get())
+                            .build(null));
+
     /**
      * One type for all three pylon tiers.
      *

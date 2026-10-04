@@ -22,6 +22,9 @@ loot spawn 8 102 8 loot grindless:blocks/press
 setblock 8 100 8 grindless:assembler
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK assembler
 loot spawn 8 102 8 loot grindless:blocks/assembler
+setblock 8 100 8 grindless:kiln
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK kiln
+loot spawn 8 102 8 loot grindless:blocks/kiln
 setblock 8 100 8 grindless:flux_pylon_mk1
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK flux_pylon_mk1
 loot spawn 8 102 8 loot grindless:blocks/flux_pylon_mk1

@@ -55,6 +55,7 @@ final class BlockModels {
             case FURNACE -> furnace();
             case PRESS -> press();
             case ASSEMBLER -> assembler();
+            case KILN -> kiln();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -235,6 +236,14 @@ final class BlockModels {
                 box(2, 10, 3, 6, 15, 7, "top", "side"),
                 box(10, 10, 3, 14, 15, 7, "top", "side"),
                 box(6, 11, 8, 10, 13, 14, "cap", "cap"));
+    }
+
+    /** A brick drum with a short stack. */
+    private static List<Box> kiln() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 12, 14, "top", "side", "front"),
+                box(5, 12, 5, 11, 16, 11, "cap", "cap"));
     }
 
     /** A low slab with two raised rails. */

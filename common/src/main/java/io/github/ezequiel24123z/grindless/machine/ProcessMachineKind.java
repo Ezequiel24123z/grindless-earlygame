@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
  * Process consumer: family, envelope, slots and the conditions the machine holds
- * so R1 evaluates optimally without a player touching a dial (ADR-0058, ADR-0063).
+ * so R1 and roast evaluate optimally without a player touching a dial (ADR-0058, ADR-0065).
  */
 public enum ProcessMachineKind {
 
@@ -90,6 +90,26 @@ public enum ProcessMachineKind {
         @Override
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.ASSEMBLER.get();
+        }
+    },
+
+    KILN(MachineFamily.KILN, MachineMenuKind.KILN,
+            BlockCatalogue.Geometry.KILN, "kiln") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.KILN;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT
+                    .withTemperature(ProcessLogic.ROAST_TEMPERATURE)
+                    .withAtmosphere(Atmosphere.OXIDISING);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.KILN.get();
         }
     };
 

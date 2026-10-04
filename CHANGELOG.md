@@ -30,6 +30,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Kiln / R2 — roast then reduce (ADR-0065).** T1 Kiln (8 s F1, 700 °C oxidising)
+  turns raw or crushed into oxide and vents 1 B SO₂. The named sink is the Basic
+  Tank; the Thermal Generator does not burn it. Oxide is `grindless:oxides/<m>`
+  (12 supply items). Arc Furnace R2 is oxide + carbon → ingot + slag in 10 s, no
+  CO. Yield 1.15, sulfuric acid and Slice F stay later. `VerifyRecipes` dumps
+  roast. CI places the Kiln and hoppers raw iron in.
+
 - **Slice E — energy spanning (ADR-0064).** Flux Conduit is a T1 hand item that right-clicks
   two pylons into a manual link. No length limit; upkeep is `ceil(distance / 8)` FU/t.
   Capacitor Bank adds 102 400 FU to the covering network and projects no supply cube.

@@ -40,7 +40,7 @@ jobs:
         run: tools/smoke-boot.sh .
         env:
           SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
-          SMOKE_EXPECT: '32 materials found; Grindless supplies 118 of its 120'
+          SMOKE_EXPECT: '32 materials found; Grindless supplies 130 of its 132'
 
       # Every block must be mineable with a pickaxe and drop itself, with its real display name.
       - name: Boot and exercise block loot and mining tags
@@ -107,6 +107,13 @@ jobs:
         env:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-energy.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-energy.expect
+
+      # Kiln / R2: the Kiln places; a hopper can insert raw; a tank is the named SO2 sink.
+      - name: Boot and exercise first kiln
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-kiln.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-kiln.expect
 
       - name: Upload server log
         if: always()

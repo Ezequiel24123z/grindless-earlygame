@@ -1,0 +1,15 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "CCC",
+    "CIC",
+    "CGC"
+  ],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "I": { "tag": "forge:ingots/iron" },
+    "G": { "tag": "grindless:carbon" }
+  },
+  "result": { "item": "grindless:kiln" }
+}

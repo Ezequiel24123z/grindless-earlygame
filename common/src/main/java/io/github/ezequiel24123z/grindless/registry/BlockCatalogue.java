@@ -35,6 +35,8 @@ public final class BlockCatalogue {
         PRESS,
         /** Two arms over a fabrication deck. */
         ASSEMBLER,
+        /** A brick drum with a short stack. The cheapest heat. */
+        KILN,
         /** A tall tower; taller and more ringed with each tier. */
         PYLON,
         /** A low slab with two lanes. */
@@ -109,6 +111,7 @@ public final class BlockCatalogue {
             new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
             new Entry("press", Geometry.PRESS, 1, true, CONSUMER),
             new Entry("assembler", Geometry.ASSEMBLER, 1, true, CONSUMER),
+            new Entry("kiln", Geometry.KILN, 1, true, CONSUMER),
             new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
             new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
             new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),

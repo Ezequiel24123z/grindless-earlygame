@@ -32,6 +32,7 @@ public final class MachineArt {
     public static final int FURNACE = 0xFF8A80;
     public static final int PRESS = 0xFFCC80;
     public static final int ASSEMBLER = 0x82B1FF;
+    public static final int KILN = 0xE64A19;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -60,6 +61,7 @@ public final class MachineArt {
             case FURNACE -> furnaceFront(status);
             case PRESS -> pressFront(status);
             case ASSEMBLER -> assemblerFront(status);
+            case KILN -> kilnFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MANIPULATOR -> manipulatorFront(status);
@@ -83,6 +85,7 @@ public final class MachineArt {
             case FURNACE -> furnaceTop();
             case PRESS -> pressTop();
             case ASSEMBLER -> assemblerTop();
+            case KILN -> kilnTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MANIPULATOR -> manipulatorTop();
@@ -430,6 +433,55 @@ public final class MachineArt {
         }
         set(img, 4, 3, ASSEMBLER);
         set(img, 11, 3, ASSEMBLER);
+        return img;
+    }
+
+    // ---- Kiln ----------------------------------------------------------------------------
+
+    /** Brick courses around a dark arch: the machine is a thing that roasts. */
+    public static BufferedImage kilnFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, KILN);
+        int brick = Palette.shade(KILN, -0.55);
+        int mortar = Palette.shade(CASING, -0.25);
+        for (int y = 2; y <= 12; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean course = (y % 2) == 0;
+                boolean joint = course ? (x % 3 == 0) : (x % 3 == 1);
+                set(img, x, y, joint ? mortar : brick);
+            }
+        }
+        for (int y = 5; y <= 11; y++) {
+            for (int x = 5; x <= 10; x++) {
+                double dx = Math.abs(x - 7.5);
+                double dy = 11 - y;
+                if (dx * dx / 9.0 + dy * dy / 36.0 <= 1.0) {
+                    int pixel = Palette.shade(CASING, -0.8);
+                    if (glow >= 0 && y >= 8) {
+                        pixel = (x + y) % 2 == 0 ? glow : dim(glow);
+                    }
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage kilnTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 5; y <= 10; y++) {
+            for (int x = 5; x <= 10; x++) {
+                double d = Math.hypot(x - 7.5, y - 7.5);
+                if (d <= 3.6 && d >= 1.8) {
+                    set(img, x, y, Palette.shade(KILN, -0.35));
+                } else if (d < 1.8) {
+                    set(img, x, y, Palette.shade(CASING, -0.7));
+                }
+            }
+        }
+        set(img, 7, 7, KILN);
+        set(img, 8, 7, KILN);
         return img;
     }
 

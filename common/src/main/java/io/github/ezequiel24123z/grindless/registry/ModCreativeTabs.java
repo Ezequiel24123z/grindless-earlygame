@@ -56,6 +56,7 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.ARC_FURNACE),
                 lazy(ModBlocks.PRESS),
                 lazy(ModBlocks.ASSEMBLER),
+                lazy(ModBlocks.KILN),
                 lazy(ModBlocks.CONVEYOR_BELT),
                 lazy(ModBlocks.SPLITTER),
                 lazy(ModBlocks.CRUDE_MANIPULATOR),

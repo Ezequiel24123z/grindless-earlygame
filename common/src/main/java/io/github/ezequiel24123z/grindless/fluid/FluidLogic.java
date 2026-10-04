@@ -6,8 +6,8 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
  * T1 fluid numbers and rules, independent of a world (ADR-0015, ADR-0062).
  *
  * <p>The Clay Conduit is the first belt of fluids: unpowered, ambient liquids only, downhill
- * or level. Gases need pressure a T1 pipe does not have, so captured CO sits in a tank until
- * the player burns it. Heat is conserved on mix; it is not simulated as a solver.
+ * or level. Gases need pressure a T1 pipe does not have, so captured CO and SO₂ sit in a tank.
+ * CO burns; SO₂ does not (ADR-0065). Heat is conserved on mix; it is not simulated as a solver.
  */
 public final class FluidLogic {
 
@@ -40,8 +40,12 @@ public final class FluidLogic {
     /** 1 B of captured CO burns 400 ticks — 20 s of F1, a quarter of a coal. */
     public static final int CO_BURN_TICKS = 400;
 
+    /** R2 roast names 1 B SO₂. Captured like CO; the Thermal Generator must not burn it. */
+    public static final int SO2_MB = BUCKET;
+
     public static final String WATER = "minecraft:water";
     public static final String CARBON_MONOXIDE = "grindless:carbon_monoxide";
+    public static final String SULFUR_DIOXIDE = "grindless:sulfur_dioxide";
 
     private FluidLogic() {
     }
@@ -54,8 +58,8 @@ public final class FluidLogic {
 
     /**
      * Gases at the reference state. Water is liquid below 100 °C at ambient pressure.
-     * Carbon monoxide is a gas at ambient. Unknown ids default to liquid so a T1 pipe will
-     * still move a foreign fluid that arrived through Forge interop.
+     * Carbon monoxide and sulfur dioxide are gases at ambient. Unknown ids default to liquid
+     * so a T1 pipe will still move a foreign fluid that arrived through Forge interop.
      */
     public static boolean isGas(FluidState state) {
         if (state.isEmpty()) {
@@ -64,7 +68,7 @@ public final class FluidLogic {
         if (WATER.equals(state.id())) {
             return state.temperatureC() >= 100.0 - 1e-9;
         }
-        return CARBON_MONOXIDE.equals(state.id());
+        return CARBON_MONOXIDE.equals(state.id()) || SULFUR_DIOXIDE.equals(state.id());
     }
 
     public static boolean isLiquid(FluidState state) {

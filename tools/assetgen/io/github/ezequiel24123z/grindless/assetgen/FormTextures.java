@@ -167,6 +167,21 @@ public final class FormTextures {
     }
 
     /**
+     * A sintered cake: one rounded mound, smoother than crushed rubble.
+     *
+     * <p>Roast is the reason this form exists, so it has to read as fired material rather than
+     * as another pile of fragments or as an ingot that is not quite done.
+     */
+    public static BufferedImage oxide(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(7.5, 8.0, 5.0, 4.6);
+        field.disc(7.5, 7.4, 3.2, 5.4);
+        field.disc(6.2, 9.0, 2.0, 3.8);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /**
      * An unrefined lump straight from the extractor: a few large, rough chunks.
      *
      * <p>Sits between crushed (many small fragments) and an ingot (one clean shape), so the three

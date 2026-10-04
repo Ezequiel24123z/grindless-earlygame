@@ -123,6 +123,10 @@ public final class T1Recipes {
                 new Gated("flux_transformer", VOLTAIC,
                         List.of("IRI", "CIC", "IRI"),
                         Map.of("I", IRON, "R", REDSTONE, "C", COBBLE),
-                        "grindless:flux_transformer"));
+                        "grindless:flux_transformer"),
+                new Gated("kiln", VOLTAIC,
+                        List.of("CCC", "CIC", "CGC"),
+                        Map.of("C", COBBLE, "I", IRON, "G", CARBON),
+                        "grindless:kiln"));
     }
 }

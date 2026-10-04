@@ -29,7 +29,9 @@ public final class VerifyFluid {
         eq("the basic tank holds 16 B", 16_000, FluidLogic.TANK_CAPACITY);
         eq("wet mill takes half a bucket", 500, FluidLogic.WET_WATER_MB);
         eq("R1 names 1 B of CO", 1000, FluidLogic.CO_MB);
+        eq("R2 names 1 B of SO2", 1000, FluidLogic.SO2_MB);
         eq("CO id matches the process graph", ProcessLogic.CARBON_MONOXIDE, FluidLogic.CARBON_MONOXIDE);
+        eq("SO2 id matches the process graph", ProcessLogic.SULFUR_DIOXIDE, FluidLogic.SULFUR_DIOXIDE);
     }
 
     private static void stacks() {
@@ -48,6 +50,12 @@ public final class VerifyFluid {
         FluidState co = FluidState.of(FluidLogic.CARBON_MONOXIDE, 1000);
         yes("ambient CO is a gas", FluidLogic.isGas(co));
         yes("ambient CO is still ambient pressure", FluidLogic.isAmbient(co));
+        FluidState so2 = FluidState.of(FluidLogic.SULFUR_DIOXIDE, 1000);
+        yes("ambient SO2 is a gas", FluidLogic.isGas(so2));
+        yes("a tank at ambient will hold SO2",
+                FluidLogic.accepted(FluidState.EMPTY, so2, FluidLogic.TANK_CAPACITY,
+                        FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA) == 1000);
+        no("SO2 is not CO", so2.is(FluidLogic.CARBON_MONOXIDE));
 
         FluidState mixed = water.merge(FluidState.of(FluidLogic.WATER, 500, 40.0, 0.1));
         eq("mix adds volumes", 1000, mixed.millibuckets());
@@ -133,6 +141,9 @@ public final class VerifyFluid {
                         FluidLogic.CARBON_MONOXIDE, 1000) == 1000);
         no("water is not CO",
                 FluidLogic.extractable(FluidState.of(FluidLogic.WATER, 1000),
+                        FluidLogic.CARBON_MONOXIDE, 1000) > 0);
+        no("SO2 is not burnt as CO",
+                FluidLogic.extractable(FluidState.of(FluidLogic.SULFUR_DIOXIDE, 1000),
                         FluidLogic.CARBON_MONOXIDE, 1000) > 0);
     }
 

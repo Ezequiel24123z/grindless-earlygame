@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063).
+ * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063,
+ * ADR-0065).
  *
- * <p>Ore line: B0×R1, dry B1×R1, wet B1. Forming: Press recipes keyed by die. Fabrication:
- * one Assembler recipe that manufactures Pylon MK2, which has no crafting-table JSON.
- * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
+ * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
+ * Fabrication: one Assembler recipe that manufactures Pylon MK2, which has no crafting-table
+ * JSON. No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -20,24 +21,25 @@ public final class ProcessGraph {
      * @param raw     {@code forge:raw_materials/<name>}
      * @param ore     {@code forge:ores/<name>}
      * @param crushed {@code grindless:crushed_materials/<name>}
+     * @param oxide   {@code grindless:oxides/<name>}
      * @param ingot   {@code forge:ingots/<name>}
      * @param plate   {@code forge:plates/<name>}
      * @param rod     {@code forge:rods/<name>}
      * @param gear    {@code forge:gears/<name>}
      */
-    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean ingot,
-                               boolean plate, boolean rod, boolean gear) {
+    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean oxide,
+                               boolean ingot, boolean plate, boolean rod, boolean gear) {
     }
 
     private ProcessGraph() {
     }
 
     /**
-     * Ore-line, press and assembler recipes the given materials support.
+     * Ore-line, roast, press and assembler recipes the given materials support.
      *
      * <p>A material without an ingot is skipped for reduction and forming. A material without
      * a raw or ore form is skipped for the ore line, not for the Press. Missing crushed drops
-     * B1, not B0.
+     * B1 and crushed roast, not B0. Missing oxide drops roast and R2, not R1.
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
         List<ProcessRecipe> recipes = new ArrayList<>();
@@ -51,6 +53,15 @@ public final class ProcessGraph {
                     recipes.add(wetPulverize(material.name(), feed, crushed));
                     recipes.add(reduce(material.name(), "b1_r1", crushed));
                 }
+            }
+            if (feed != null && material.oxide()) {
+                recipes.add(roast(material.name(), "roast", feed));
+                if (material.crushed()) {
+                    recipes.add(roast(material.name(), "roast_crushed", crushedTag(material.name())));
+                }
+            }
+            if (material.oxide() && material.ingot()) {
+                recipes.add(reduceOxide(material.name()));
             }
             if (material.ingot() && material.plate()) {
                 recipes.add(press(material.name(), "plate", "forge:plates/" + material.name(),
@@ -85,6 +96,10 @@ public final class ProcessGraph {
         return "grindless:crushed_materials/" + material;
     }
 
+    public static String oxideTag(String material) {
+        return "grindless:oxides/" + material;
+    }
+
     public static String ingotTag(String material) {
         return "forge:ingots/" + material;
     }
@@ -116,6 +131,40 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 ProcessLogic.PULVERIZE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    private static ProcessRecipe roast(String material, String route, String feed) {
+        return new ProcessRecipe(
+                route + "/" + material,
+                MachineFamily.KILN,
+                List.of(IngredientSpec.tag(feed, 1)),
+                List.of(
+                        OutputSpec.tag(oxideTag(material), 1),
+                        OutputSpec.ventedFluid(ProcessLogic.SULFUR_DIOXIDE, ProcessLogic.SO2_MB)),
+                ProcessLogic.ROAST_TEMPERATURE,
+                ProcessLogic.ROAST_ATMOSPHERE,
+                ProcessLogic.ROAST_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * Oxide reduction. Same furnace as R1, shorter cycle, no CO: PROCESSES names SO₂ and slag
+     * as the R2 byproducts (ADR-0065).
+     */
+    private static ProcessRecipe reduceOxide(String material) {
+        return new ProcessRecipe(
+                "r2/" + material,
+                MachineFamily.ARC_FURNACE,
+                List.of(
+                        IngredientSpec.tag(oxideTag(material), 1),
+                        IngredientSpec.tag(ProcessLogic.CARBON, 1)),
+                List.of(
+                        OutputSpec.tag(ingotTag(material), 1),
+                        OutputSpec.item(ProcessLogic.SLAG, 1)),
+                ProcessLogic.REDUCE_TEMPERATURE,
+                ProcessLogic.REDUCE_ATMOSPHERE,
+                ProcessLogic.OXIDE_REDUCE_TICKS,
                 ProcessLogic.FU_PER_TICK);
     }
 

@@ -44,6 +44,7 @@ public final class ProcessLookup {
                     material.has(MaterialForm.RAW),
                     material.has(MaterialForm.ORE),
                     material.has(MaterialForm.CRUSHED),
+                    material.has(MaterialForm.OXIDE),
                     material.has(MaterialForm.INGOT),
                     material.has(MaterialForm.PLATE),
                     material.has(MaterialForm.ROD),
@@ -51,7 +52,7 @@ public final class ProcessLookup {
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
-        Grindless.LOG.info("[{}] {} process recipes (ore line / press / assembler)",
+        Grindless.LOG.info("[{}] {} process recipes (ore line / roast / press / assembler)",
                 Grindless.MOD_NAME, recipes.size());
     }
 

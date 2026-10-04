@@ -1935,6 +1935,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | ✅ done — ADR-0062 |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
+| 20b | **Kiln / R2 — Roast then reduce:** T1 Kiln, oxide form, SO₂ capture | ✅ done — ADR-0065; 1.15 and acid stay later |
 | 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — not a T1 framework |
 | 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | pending — 0.3 |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — 0.4 |
@@ -1968,11 +1969,10 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is slice E — energy spanning**, not the multiblock kernel. Slice D is in: a Press
-forms plates, rods, gears and a T1 copper coil; Machine Casing is craftable; the
-Assembler is the last crafting-table machine and manufactures Pylon MK2. T2+ has no
-JSON craft. Kiln / R2 are unblocked (there is somewhere to put a gas) but they are
-not this slice.
+**Next is Slice F — only when a machine needs hatches or size**, not a T1 framework.
+Kiln / R2 are in: a T1 Kiln roasts feed to oxide and vents 1 B SO₂ into a tank (or
+atmosphere). The Arc Furnace reduces oxide + carbon to an ingot and slag in 10 s.
+Yield stays 1.00; 1.15 and sulfuric acid wait. Slice E spanning is already in.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

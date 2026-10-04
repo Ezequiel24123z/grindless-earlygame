@@ -21,6 +21,7 @@
   "block.grindless.arc_furnace": "Arc Furnace",
   "block.grindless.press": "Press",
   "block.grindless.assembler": "Assembler",
+  "block.grindless.kiln": "Kiln",
   "block.grindless.conveyor_belt": "Conveyor Belt",
   "block.grindless.splitter": "Splitter",
   "block.grindless.crude_manipulator": "Crude Manipulator",
@@ -38,6 +39,7 @@
 
   "form.grindless.raw": "Raw %s",
   "form.grindless.crushed": "Crushed %s",
+  "form.grindless.oxide": "%s Oxide",
   "form.grindless.dust": "%s Dust",
   "form.grindless.nugget": "%s Nugget",
   "form.grindless.ingot": "%s Ingot",

@@ -6,24 +6,32 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 /**
  * Cycle math and status for process machines, independent of a world.
  *
- * <p>B1 is six seconds; R1 is twelve. Both draw F1. Condition efficiency scales progress,
- * never yield (ADR-0040).
+ * <p>B1 is six seconds; R1 is twelve; roast is eight; oxide reduce is ten. All draw F1.
+ * Condition efficiency scales progress, never yield (ADR-0040).
  */
 public final class ProcessLogic {
 
     public static final int PULVERIZE_TICKS = 20 * 6;
     public static final int REDUCE_TICKS = 20 * 12;
+    public static final int ROAST_TICKS = 20 * 8;
+    public static final int OXIDE_REDUCE_TICKS = 20 * 10;
     public static final long FU_PER_TICK = FluxTier.F1.nominal();
 
-    /** R1 carbothermic reduction. */
+    /** R1 carbothermic reduction. The T1 Arc Furnace holds this without a dial. */
     public static final double REDUCE_TEMPERATURE = 1500.0;
     public static final String REDUCE_ATMOSPHERE = "REDUCING";
+
+    /** R2 roast. The T1 Kiln holds this without a dial (ADR-0065). */
+    public static final double ROAST_TEMPERATURE = 700.0;
+    public static final String ROAST_ATMOSPHERE = "OXIDISING";
 
     public static final String CARBON = "grindless:carbon";
     public static final String SLAG = "grindless:slag";
     public static final String CARBON_MONOXIDE = "grindless:carbon_monoxide";
+    public static final String SULFUR_DIOXIDE = "grindless:sulfur_dioxide";
     public static final String WATER = "minecraft:water";
     public static final int CO_MB = 1000;
+    public static final int SO2_MB = 1000;
     public static final int WATER_MB = 500;
 
     private ProcessLogic() {
