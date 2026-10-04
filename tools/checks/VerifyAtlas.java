@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 43, rows.size());
+        eq("atlas lists every generated recipe", 45, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the reactor", "assemble/chemical_reactor",
+        eq("the first assembler row is the casing", "assemble/array_casing",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("four assembler crafts in this set", 4,
+        eq("six assembler crafts in this set", 6,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -95,6 +95,10 @@ public final class VerifyAtlas {
                 ids(AtlasLogic.producing(recipes, "grindless:carbon_monoxide")).contains("silicon/metallurgical"));
         eq("refractory brick has one route", 1,
                 AtlasLogic.producing(recipes, "grindless:refractory_brick").size());
+        eq("the ground array has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:ground_array").size());
+        eq("the array casing has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:array_casing").size());
         yes("slag fires into that brick",
                 ids(AtlasLogic.consuming(recipes, "grindless:slag")).contains("ceramic/refractory_brick"));
         yes("the plate die is a catalyst, not an input",

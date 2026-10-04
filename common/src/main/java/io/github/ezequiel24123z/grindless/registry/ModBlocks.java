@@ -22,6 +22,8 @@ import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
 import io.github.ezequiel24123z.grindless.network.CapacitorBankBlock;
+import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
+import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
@@ -166,6 +168,14 @@ public final class ModBlocks {
     public static final RegistrySupplier<FluxTransformerBlock> FLUX_TRANSFORMER =
             register("flux_transformer",
                     () -> new FluxTransformerBlock(machine().strength(3.0F)));
+
+    /** Centre of the Ground Array. Storage, once eight casings stand (ADR-0094). */
+    public static final RegistrySupplier<GroundArrayBlock> GROUND_ARRAY = register("ground_array",
+            () -> new GroundArrayBlock(machine().strength(3.5F)));
+
+    /** One of the eight blocks around a Ground Array. Not a machine. */
+    public static final RegistrySupplier<ArrayCasingBlock> ARRAY_CASING = register("array_casing",
+            () -> new ArrayCasingBlock(machine().strength(3.0F)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

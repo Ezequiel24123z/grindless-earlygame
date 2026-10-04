@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -16,6 +18,7 @@ import java.util.Locale;
  * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091).
  * Metallurgical silicon: 1 silica + 2 carbon → 1 silicon + 2 B CO in 14 s (ADR-0092).
  * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
+ * Ground Array: casing and controller, Industrial, no crafting table (ADR-0094).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -98,6 +101,8 @@ public final class ProcessGraph {
         recipes.add(refractoryBrick());
         recipes.add(metallurgicalSilicon());
         recipes.add(zoneRefining());
+        recipes.add(arrayCasing());
+        recipes.add(groundArray());
         return List.copyOf(recipes);
     }
 
@@ -410,6 +415,44 @@ public final class ProcessGraph {
                 null,
                 ProcessLogic.ZONE_TICKS,
                 ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * One part of the Ground Array's ring (ADR-0094). Four bricks line the part. They are
+     * not the eight of the ring.
+     */
+    private static ProcessRecipe arrayCasing() {
+        return new ProcessRecipe(
+                "assemble/array_casing",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(ProcessLogic.REFRACTORY_BRICK, GroundArrayLogic.CASING_BRICKS),
+                        IngredientSpec.tag(ingotTag("steel"), GroundArrayLogic.CASING_STEEL)),
+                List.of(OutputSpec.item(FabricationLogic.ARRAY_CASING, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** The Ground Array controller. Industrial, like every other T2+ block (ADR-0017, ADR-0094). */
+    private static ProcessRecipe groundArray() {
+        return new ProcessRecipe(
+                "assemble/ground_array",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, GroundArrayLogic.CONTROLLER_CASINGS),
+                        IngredientSpec.tag("forge:plates/steel", GroundArrayLogic.CONTROLLER_PLATES),
+                        IngredientSpec.item(ProcessLogic.REFRACTORY_BRICK, GroundArrayLogic.CONTROLLER_BRICKS)),
+                List.of(OutputSpec.item(FabricationLogic.GROUND_ARRAY, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
     }
 
     /** Named sulfuric spend. The Press plate die remains (ADR-0075). */

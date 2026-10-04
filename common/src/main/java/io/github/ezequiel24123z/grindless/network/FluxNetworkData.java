@@ -49,6 +49,7 @@ public final class FluxNetworkData extends SavedData {
     private static final String TAG_A = "A";
     private static final String TAG_B = "B";
     private static final String TAG_BANKS = "Banks";
+    private static final String TAG_ARRAYS = "Arrays";
     private static final String TAG_EXTRA = "Extra";
 
     private final PylonIndex index = new PylonIndex();
@@ -56,6 +57,7 @@ public final class FluxNetworkData extends SavedData {
     private final Map<BlockPos, Integer> membership = new HashMap<>();
     private final Set<ManualLink> links = new HashSet<>();
     private final Map<BlockPos, Long> banks = new HashMap<>();
+    private final Map<BlockPos, Long> arrays = new HashMap<>();
 
     private int nextId = 1;
 
@@ -155,7 +157,7 @@ public final class FluxNetworkData extends SavedData {
 
         target.addPylon(key, tier);
         membership.put(key, target.id());
-        assignBanks();
+        assignExtra();
         setDirty();
     }
 
@@ -179,19 +181,19 @@ public final class FluxNetworkData extends SavedData {
 
         FluxNetwork network = id == null ? null : networks.get(id);
         if (network == null) {
-            assignBanks();
+            assignExtra();
             setDirty();
             return;
         }
         network.removePylon(key, tier);
         if (network.isEmpty()) {
             networks.remove(network.id());
-            assignBanks();
+            assignExtra();
             setDirty();
             return;
         }
         resplit(network);
-        assignBanks();
+        assignExtra();
         setDirty();
     }
 
@@ -219,7 +221,7 @@ public final class FluxNetworkData extends SavedData {
             absorb(target, source);
         }
         if (added) {
-            assignBanks();
+            assignExtra();
             setDirty();
         }
         return true;
@@ -239,7 +241,7 @@ public final class FluxNetworkData extends SavedData {
         if (network != null) {
             resplit(network);
         }
-        assignBanks();
+        assignExtra();
         setDirty();
         return true;
     }
@@ -257,14 +259,41 @@ public final class FluxNetworkData extends SavedData {
      */
     public void addBank(BlockPos pos, long extra) {
         banks.put(pos.immutable(), Math.max(0L, extra));
-        assignBanks();
+        assignExtra();
         setDirty();
     }
 
     /** Unregisters the capacitor bank at {@code pos}, if any. */
     public void removeBank(BlockPos pos) {
         if (banks.remove(pos.immutable()) != null) {
-            assignBanks();
+            assignExtra();
+            setDirty();
+        }
+    }
+
+    /**
+     * Registers a Ground Array at {@code pos} (ADR-0094).
+     *
+     * <p>Same coverage rule as a bank: no covering pylon means the extra waits. An array is
+     * not a bank, and the two extras add when they share a network. A repeat of the same
+     * value does not dirty the world.
+     */
+    public void addArray(BlockPos pos, long extra) {
+        long value = Math.max(0L, extra);
+        BlockPos key = pos.immutable();
+        Long existing = arrays.get(key);
+        if (existing != null && existing == value) {
+            return;
+        }
+        arrays.put(key, value);
+        assignExtra();
+        setDirty();
+    }
+
+    /** Unregisters the Ground Array at {@code pos}, if any. */
+    public void removeArray(BlockPos pos) {
+        if (arrays.remove(pos.immutable()) != null) {
+            assignExtra();
             setDirty();
         }
     }
@@ -371,21 +400,27 @@ public final class FluxNetworkData extends SavedData {
     }
 
     /**
-     * Writes each bank's extra onto the network that covers it, and nowhere else.
+     * Writes each bank's and each Ground Array's extra onto the network that covers it.
      *
-     * <p>Called after every topology change rather than every tick. A bank in overlapping
-     * coverage follows {@link #networkCovering}: the first covering pylon wins.
+     * <p>Called after every topology change rather than every tick. Overlapping coverage
+     * follows {@link #networkCovering}: the first covering pylon wins. Banks and arrays
+     * add. Neither is a pylon.
      */
-    private void assignBanks() {
+    private void assignExtra() {
         Map<Integer, Long> extra = new HashMap<>();
-        for (Map.Entry<BlockPos, Long> bank : banks.entrySet()) {
-            FluxNetwork network = networkCovering(bank.getKey());
-            if (network != null) {
-                extra.merge(network.id(), bank.getValue(), Long::sum);
-            }
-        }
+        contribute(extra, banks);
+        contribute(extra, arrays);
         for (FluxNetwork network : networks.values()) {
             network.setExtraCapacity(extra.getOrDefault(network.id(), 0L));
+        }
+    }
+
+    private void contribute(Map<Integer, Long> extra, Map<BlockPos, Long> sources) {
+        for (Map.Entry<BlockPos, Long> source : sources.entrySet()) {
+            FluxNetwork network = networkCovering(source.getKey());
+            if (network != null) {
+                extra.merge(network.id(), source.getValue(), Long::sum);
+            }
         }
     }
 
@@ -506,6 +541,15 @@ public final class FluxNetworkData extends SavedData {
             bankList.add(bankTag);
         }
         tag.put(TAG_BANKS, bankList);
+
+        ListTag arrayList = new ListTag();
+        for (Map.Entry<BlockPos, Long> array : arrays.entrySet()) {
+            CompoundTag arrayTag = new CompoundTag();
+            arrayTag.putLong(TAG_POS, array.getKey().asLong());
+            arrayTag.putLong(TAG_EXTRA, array.getValue());
+            arrayList.add(arrayTag);
+        }
+        tag.put(TAG_ARRAYS, arrayList);
         return tag;
     }
 
@@ -558,7 +602,12 @@ public final class FluxNetworkData extends SavedData {
             CompoundTag bankTag = bankList.getCompound(i);
             data.banks.put(BlockPos.of(bankTag.getLong(TAG_POS)), Math.max(0L, bankTag.getLong(TAG_EXTRA)));
         }
-        data.assignBanks();
+        ListTag arrayList = tag.getList(TAG_ARRAYS, Tag.TAG_COMPOUND);
+        for (int i = 0; i < arrayList.size(); i++) {
+            CompoundTag arrayTag = arrayList.getCompound(i);
+            data.arrays.put(BlockPos.of(arrayTag.getLong(TAG_POS)), Math.max(0L, arrayTag.getLong(TAG_EXTRA)));
+        }
+        data.assignExtra();
         return data;
     }
 }

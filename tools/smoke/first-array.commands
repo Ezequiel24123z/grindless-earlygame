@@ -1,0 +1,20 @@
+forceload add 0 0
+setblock 2 71 2 minecraft:air
+setblock 2 72 2 minecraft:air
+setblock 2 70 2 grindless:flux_pylon_mk1
+execute if block 2 70 2 grindless:flux_pylon_mk1 run say PYLON-OK
+setblock 8 70 8 grindless:ground_array
+say WAIT-OPEN
+execute if block 8 70 8 grindless:ground_array[status=starved] run say ARRAY-OPEN
+setblock 7 70 7 grindless:array_casing
+setblock 8 70 7 grindless:array_casing
+setblock 9 70 7 grindless:array_casing
+setblock 7 70 8 grindless:array_casing
+setblock 9 70 8 grindless:array_casing
+setblock 7 70 9 grindless:array_casing
+setblock 8 70 9 grindless:array_casing
+setblock 9 70 9 grindless:array_casing
+execute if block 9 70 9 grindless:array_casing run say CASING-OK
+execute if block 8 70 8 grindless:ground_array[status=idle] run say ARRAY-FORMED
+setblock 9 70 9 minecraft:air
+execute if block 8 70 8 grindless:ground_array[status=starved] run say ARRAY-BROKEN

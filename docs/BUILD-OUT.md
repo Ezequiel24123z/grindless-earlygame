@@ -8,7 +8,7 @@ cap and the early-game convenience framing. Anything not yet started below is **
 next calendar is the **modpack expansion**. The quest book is last, not first
 ([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
 
-**Next slice: BH — Megastructures.** Not implemented. BG (Zone refining) is done.
+**Next slice: BI — Original planets.** Not implemented. BH (Ground Array) is done.
 K remains the last foundation slice. L–BB are held. The quest book is not next.
 
 ---
@@ -200,7 +200,7 @@ the factory for real.
 ADR-0088, rescheduled by ADR-0090. This is the urgent calendar. Do not resume L. Do not
 start the quest book.
 
-**Next slice: BH — Megastructures.** Not implemented. Do not start it in the zone-refining change.
+**Next slice: BI — Original planets.** Not implemented. Do not start it in the megastructure change.
 
 | ID | Slice | Player can | Ship | Do not |
 | --- | --- | --- | --- | --- |
@@ -208,12 +208,12 @@ start the quest book.
 | **BE** | **Refractory brick** | Spend slag on a lining | Slag's named sink (ADR-0036, ADR-0091): 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. The furnace's 1500 °C hold stays inside that band. | The Kiln. The alumina + silica route. A new furnace. Oxygen blow. Aggregate and road fill. Planets. The quest book. | ✅ done |
 | **BF** | **Metallurgical silicon** | Turn silica and carbon into metal | The Arc Furnace line in `PROCESSES.md`: `1 u silica + 2 u carbon [T 1900 · atm reducing]` 14 s → `1 u metallurgical silicon + 2 B CO`. Silica is `#grindless:silica` (sand and nether quartz). The furnace's 1500 °C hold stays; 1900 °C is tolerated (ADR-0092). | Electronic silicon. A new furnace. Retuning the 1500 °C hold. The washer. Planets. Megastructures. The quest book. | ✅ done |
 | **BG** | **Further processing lines** | Extend the graph past metallurgical silicon | Zone refining on the Arc Furnace (ADR-0093): 10 metallurgical silicon → 7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s per unit. The ±5 °C inert band is not applied: it would refuse the 1500 °C reducing hold. | Siemens. The Induction Furnace. A boule. A wafer. Vacuum float. Orbital growth. Megastructures. Planets. The quest book. | ✅ done |
-| **BH** | **Megastructures** | Build the first structure past the factory | Not sliced. Megastructures, then Kardashev Type I, II and III. The concrete structure is chosen when the slice starts. | Planets. Interstellar travel. The black hole. The quest book. **Not implemented.** |
+| **BH** | **Megastructures** | Build the first structure past the factory | The Ground Array (ADR-0094): one controller and eight casings in a fixed 3×3. A complete ring under a pylon adds ten seconds of MK3 throughput, 6,553,600 FU, as storage. Assembler, Industrial. No generator, no supply cube, no hatches. | Kardashev Type I, II and III. The Dyson Collector. Planets. Interstellar travel. The black hole. The quest book. | ✅ done |
+| **BI** | **Original planets** | Reach a world with its own resources | Not sliced. Original planets with unique extractable resources, and interstellar travel. The concrete world is chosen when the slice starts. | The black hole. The quest book. Kardashev Type I, II and III. **Not implemented.** |
 
-After BH, still not sliced, in this order:
+After BI, still not sliced:
 
-1. Original planets with unique extractable resources, and interstellar travel.
-2. Arrival at the black hole at the centre of the Milky Way. Arriving is the victory. The
+1. Arrival at the black hole at the centre of the Milky Way. Arriving is the victory. The
    interior is a finite finale written when the route exists.
 
 The original quest book is last, with the in-game guide, after that arrival.
@@ -226,8 +226,8 @@ The original quest book is last, with the in-game guide, after that arrival.
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's **Next slice** line, then that
    slice's row.
-2. Branch from the current tip. Implement only that slice. The next slice is BH. Held rows
-   are not a queue. The quest book is last. Do not resume BG.
+2. Branch from the current tip. Implement only that slice. The next slice is BI. Held rows
+   are not a queue. The quest book is last. Do not resume BH.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
    and name the following slice before starting it.
 

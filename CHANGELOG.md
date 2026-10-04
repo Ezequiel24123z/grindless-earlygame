@@ -78,11 +78,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Ground Array (ADR-0094).** The first megastructure is a fixed 3×3: one controller
+  and eight casings. A complete ring under a pylon adds 6,553,600 FU to that network,
+  ten seconds of MK3 throughput, as storage. It does not generate and it does not
+  project a supply cube. Both blocks are Assembler recipes under Industrial: four
+  refractory bricks and one steel ingot make a casing; one machine casing, four steel
+  plates and four refractory bricks make the controller. Kardashev Type I, II and III
+  stay milestones. The next slice is BI — original planets, not started.
+
 - **Zone refining (ADR-0093).** The Arc Furnace turns 10 metallurgical silicon into
   7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s
   per unit, as an integer batch. The ±5 °C inert band stays with the Induction Furnace,
   because that band does not admit the 1500 °C reducing hold. No new block. Siemens,
-  the boule and wafers wait. The next slice is BH — megastructures, not started.
+  the boule and wafers wait. BH was named next and is now in (ADR-0094).
 
 - **Metallurgical silicon (ADR-0092).** The Arc Furnace turns 1 silica and 2 carbon into
   1 metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C in a reducing

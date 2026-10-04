@@ -79,6 +79,8 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.BASIC_TANK),
                 lazy(ModBlocks.CAPACITOR_BANK),
                 lazy(ModBlocks.FLUX_TRANSFORMER),
+                lazy(ModBlocks.GROUND_ARRAY),
+                lazy(ModBlocks.ARRAY_CASING),
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));

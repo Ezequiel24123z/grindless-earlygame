@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "status=idle": { "model": "grindless:block/array_casing_idle" }
+  }
+}

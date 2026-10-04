@@ -28,6 +28,8 @@
     "grindless:basic_tank",
     "grindless:capacitor_bank",
     "grindless:flux_transformer",
+    "grindless:ground_array",
+    "grindless:array_casing",
     "grindless:flux_pylon_shaft"
   ]
 }

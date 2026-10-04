@@ -16,6 +16,7 @@ import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.structure.GroundArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
@@ -210,6 +211,12 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("capacitor_bank",
                     () -> BlockEntityType.Builder
                             .of(CapacitorBankBlockEntity::new, ModBlocks.CAPACITOR_BANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<GroundArrayBlockEntity>> GROUND_ARRAY =
+            BLOCK_ENTITIES.register("ground_array",
+                    () -> BlockEntityType.Builder
+                            .of(GroundArrayBlockEntity::new, ModBlocks.GROUND_ARRAY.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<FluxTransformerBlockEntity>> FLUX_TRANSFORMER =

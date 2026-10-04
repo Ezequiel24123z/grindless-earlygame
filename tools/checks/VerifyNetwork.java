@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.network;
 
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
 import io.github.ezequiel24123z.grindless.machine.StatusDebounce;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +21,7 @@ public final class VerifyNetwork {
         persistence();
         spanning();
         banks();
+        arrays();
         transformer();
 
         System.out.println(failures == 0
@@ -445,6 +447,71 @@ public final class VerifyNetwork {
         eq("a bank does not keep a network alive", 0, loaded.networks().size());
         yes("and does not start covering by itself",
                 loaded.networkCovering(covered) == null);
+    }
+
+    private static void arrays() {
+        eq("the ring is eight", 8, GroundArrayLogic.RING);
+        no("seven casings are not a structure", GroundArrayLogic.formed(7));
+        yes("eight casings are a structure", GroundArrayLogic.formed(8));
+        eq("an open ring stores nothing", 0L, GroundArrayLogic.contribution(false));
+        eq("a complete array stores ten seconds of MK3",
+                PylonTier.MK3.throughput() * GroundArrayLogic.BUFFER_TICKS, GroundArrayLogic.CAPACITY);
+
+        BlockPos centre = new BlockPos(0, 64, 0);
+        BlockPos[] ring = GroundArrayLogic.ring(centre);
+        eq("the ring lists eight positions", GroundArrayLogic.RING, ring.length);
+        boolean shape = true;
+        java.util.Set<Long> seen = new java.util.HashSet<>();
+        for (BlockPos pos : ring) {
+            if (pos.equals(centre) || pos.getY() != centre.getY()) {
+                shape = false;
+            }
+            int reach = Math.max(Math.abs(pos.getX() - centre.getX()), Math.abs(pos.getZ() - centre.getZ()));
+            if (reach != 1 || !seen.add(pos.asLong())) {
+                shape = false;
+            }
+        }
+        yes("the ring is the Moore neighbourhood on one layer", shape);
+        boolean seesController = false;
+        for (BlockPos back : GroundArrayLogic.ring(ring[0])) {
+            if (back.equals(centre)) {
+                seesController = true;
+            }
+        }
+        yes("a corner casing can see the controller", seesController);
+
+        FluxNetworkData data = new FluxNetworkData();
+        BlockPos pylon = new BlockPos(0, 64, 0);
+        BlockPos covered = new BlockPos(4, 64, 4);
+        BlockPos uncovered = new BlockPos(400, 64, 400);
+        data.addPylon(pylon, PylonTier.MK1);
+        long pylonsOnly = data.networkAt(pylon).capacity();
+
+        data.addArray(covered, GroundArrayLogic.CAPACITY);
+        eq("a covered array adds its capacity", pylonsOnly + GroundArrayLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+        data.addArray(covered, GroundArrayLogic.CAPACITY);
+        eq("repeating the array does not double it", pylonsOnly + GroundArrayLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+        data.addBank(covered, CapacitorLogic.CAPACITY);
+        eq("a bank and an array add",
+                pylonsOnly + GroundArrayLogic.CAPACITY + CapacitorLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+        data.addArray(uncovered, GroundArrayLogic.CAPACITY);
+        eq("an uncovered array adds nothing",
+                pylonsOnly + GroundArrayLogic.CAPACITY + CapacitorLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+        data.removeArray(covered);
+        eq("removing the array leaves the bank", pylonsOnly + CapacitorLogic.CAPACITY,
+                data.networkAt(pylon).capacity());
+
+        data.addArray(covered, GroundArrayLogic.CAPACITY);
+        FluxNetworkData loaded = FluxNetworkData.load(data.save(new CompoundTag()));
+        eq("array extra survives a save",
+                pylonsOnly + GroundArrayLogic.CAPACITY + CapacitorLogic.CAPACITY,
+                loaded.networkAt(pylon).capacity());
+        loaded.removePylon(pylon);
+        eq("an array does not keep a network alive", 0, loaded.networks().size());
     }
 
     private static void transformer() {
