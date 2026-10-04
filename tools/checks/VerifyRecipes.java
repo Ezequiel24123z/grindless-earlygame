@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt and flotation", 76, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation and steam", 81, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -506,6 +506,27 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(candidate -> candidate.family() != MachineFamily.ASSEMBLER
                         && candidate.id().contains("magnetic")));
 
+        ProcessRecipe boil = recipe(recipes, "boiler/steam");
+        ProcessRecipe condense = recipe(recipes, "condense/water");
+        ProcessRecipe solar = recipe(recipes, "assemble/solar_array");
+        eq("the boiler turns water to steam", MachineFamily.BOILER, boil.family());
+        eq("the boiler takes one bucket of water", 1000, boil.fluidInputs().get(0).count());
+        eq("the boiler makes steam", "fluid:grindless:steam", boil.fluidOutputs().get(0).qualified());
+        eq("the boiler is ten seconds", 20 * 10, boil.durationTicks());
+        yes("the boiler names no temperature", !boil.namesTemperature());
+        eq("the condenser is the steam sink", MachineFamily.CONDENSER, condense.family());
+        eq("the condenser takes steam", "fluid:grindless:steam", condense.fluidInputs().get(0).qualified());
+        eq("the condenser makes water", "fluid:minecraft:water", condense.fluidOutputs().get(0).qualified());
+        eq("the condenser is four seconds", 20 * 4, condense.durationTicks());
+        no("superheated steam is not emitted",
+                recipes.stream().anyMatch(candidate -> candidate.outputs().stream()
+                        .anyMatch(spec -> spec.id().contains("superheat"))));
+        eq("the solar array is the assembler", MachineFamily.ASSEMBLER, solar.family());
+        eq("the solar array makes the block", "item:grindless:solar_array",
+                solar.itemOutputs().get(0).qualified());
+        eq("daylight is F1", 32L, SolarLogic.generate(true));
+        eq("night is nothing", 0L, SolarLogic.generate(false));
+
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
         no("steel without a vein has no ore line",
@@ -624,6 +645,12 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("flotation_cell.json")));
         no("the magnet has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("magnetic_separator.json")));
+        no("the solar array has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("solar_array.json")));
+        no("the boiler has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("boiler.json")));
+        no("the condenser has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("condenser.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

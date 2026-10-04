@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 76, rows.size());
+        eq("atlas lists every generated recipe", 81, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("fourteen assembler crafts in this set", 14,
+        eq("seventeen assembler crafts in this set", 17,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -73,13 +73,21 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:flotation_cell").size());
         eq("the magnet is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:magnetic_separator").size());
+        eq("the solar array is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:solar_array").size());
+        eq("the boiler is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:boiler").size());
+        eq("the condenser is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:condenser").size());
+        eq("steam has one boiler route", 1,
+                AtlasLogic.producing(recipes, "grindless:steam").size());
         eq("molten iron has one melt route", 1,
                 AtlasLogic.producing(recipes, "grindless:molten/iron").size());
         eq("hydrogen has one electrolysis route", 1,
                 AtlasLogic.producing(recipes, "grindless:hydrogen").size());
         eq("oxygen has the cell and the intake", 2,
                 AtlasLogic.producing(recipes, "grindless:oxygen").size());
-        eq("recombination is a water route", 1,
+        eq("recombination and the condenser make water", 2,
                 AtlasLogic.producing(recipes, "minecraft:water").size());
         eq("SO3 has one contact route", 1,
                 AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());

@@ -53,6 +53,9 @@ public final class MachineEffects {
             case CASTER -> caster(status, level, pos, random);
             case FLOTATION -> flotation(status, level, pos, random);
             case MAGNET -> belt(status, level, pos, random);
+            case SOLAR -> dynamo(status, front, level, pos, random);
+            case BOILER -> generator(status, level, pos, random);
+            case CONDENSER -> intake(status, level, pos, random);
             case PYLON -> pylon(tier, status, level, pos, random);
             case BELT -> belt(status, level, pos, random);
             case SPLITTER -> belt(status, level, pos, random);

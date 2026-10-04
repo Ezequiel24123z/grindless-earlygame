@@ -128,6 +128,11 @@ public final class ProcessGraph {
         recipes.add(surfactant());
         recipes.add(flotationCell());
         recipes.add(magneticSeparator());
+        recipes.add(solarArray());
+        recipes.add(boiler());
+        recipes.add(condenser());
+        recipes.add(boilSteam());
+        recipes.add(condenseSteam());
         return List.copyOf(recipes);
     }
 
@@ -621,6 +626,44 @@ public final class ProcessGraph {
 
     private static ProcessRecipe magneticSeparator() {
         return machineCraft("assemble/magnetic_separator", FabricationLogic.MAGNETIC_SEPARATOR);
+    }
+
+    private static ProcessRecipe solarArray() {
+        return machineCraft("assemble/solar_array", FabricationLogic.SOLAR_ARRAY);
+    }
+
+    private static ProcessRecipe boiler() {
+        return machineCraft("assemble/boiler", FabricationLogic.BOILER);
+    }
+
+    private static ProcessRecipe condenser() {
+        return machineCraft("assemble/condenser", FabricationLogic.CONDENSER);
+    }
+
+    /** Electrical heat. The turbine that would spend this steam is not this tier (ADR-0081). */
+    private static ProcessRecipe boilSteam() {
+        return new ProcessRecipe(
+                "boiler/steam",
+                MachineFamily.BOILER,
+                List.of(IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.BOILER_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.STEAM, ProcessLogic.BOILER_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.BOILER_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** The named steam sink. Water comes back ambient. */
+    private static ProcessRecipe condenseSteam() {
+        return new ProcessRecipe(
+                "condense/water",
+                MachineFamily.CONDENSER,
+                List.of(IngredientSpec.fluid(ProcessLogic.STEAM, ProcessLogic.BOILER_MB)),
+                List.of(OutputSpec.fluid(ProcessLogic.WATER, ProcessLogic.BOILER_MB)),
+                Double.NaN,
+                null,
+                ProcessLogic.CONDENSE_TICKS,
+                ProcessLogic.FU_PER_TICK);
     }
 
     /** 1 ingot becomes 144 mB of melt. No slag (ADR-0079). */

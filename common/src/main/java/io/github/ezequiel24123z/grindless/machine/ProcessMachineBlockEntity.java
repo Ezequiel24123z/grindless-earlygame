@@ -81,10 +81,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
         super(kind.type(), pos, state);
         this.kind = kind;
-        this.fluid = kind.hotFluid()
-                ? new FluidBuffer(FluidLogic.MACHINE_CAPACITY, ProcessLogic.MOLTEN_MAX_C,
-                        FluidLogic.AMBIENT_MPA)
-                : FluidBuffer.ambient(FluidLogic.MACHINE_CAPACITY);
+        this.fluid = new FluidBuffer(FluidLogic.MACHINE_CAPACITY, kind.fluidMaxC(), kind.fluidMaxP());
         this.items = new SimpleContainer(kind.menuKind().size());
         this.inputSlots = range(0, kind.menuKind().inputs());
         this.outputSlots = range(kind.menuKind().inputs(), kind.menuKind().size());

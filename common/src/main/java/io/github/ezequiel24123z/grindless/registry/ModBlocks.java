@@ -19,6 +19,7 @@ import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlock;
+import io.github.ezequiel24123z.grindless.machine.SolarArrayBlock;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
@@ -173,6 +174,21 @@ public final class ModBlocks {
     public static final RegistrySupplier<MagneticSeparatorBlock> MAGNETIC_SEPARATOR =
             register("magnetic_separator",
                     () -> new MagneticSeparatorBlock(machine().strength(2.0F)));
+
+    /** T2 daylight. 32 FU/t while the sky is open. Manufactured, not crafted. */
+    public static final RegistrySupplier<SolarArrayBlock> SOLAR_ARRAY =
+            register("solar_array",
+                    () -> new SolarArrayBlock(machine().strength(2.0F)));
+
+    /** T2 boiler. 1 B water → 1 B steam. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> BOILER =
+            register("boiler",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.BOILER, machine().strength(3.5F)));
+
+    /** T2 condenser. 1 B steam → 1 B water. Manufactured, not crafted. */
+    public static final RegistrySupplier<ProcessMachineBlock> CONDENSER =
+            register("condenser",
+                    () -> new ProcessMachineBlock(ProcessMachineKind.CONDENSER, machine().strength(3.5F)));
 
     /** Crude inserter. One item a second, unpowered. */
     public static final RegistrySupplier<ManipulatorBlock> CRUDE_MANIPULATOR =

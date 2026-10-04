@@ -71,6 +71,12 @@ public final class BlockCatalogue {
         SORTER,
         /** A horseshoe over a lane. Ferromagnetic items leave left. */
         MAGNET,
+        /** A flat panel. Daylight, not fuel. */
+        SOLAR,
+        /** A kettle and a stack. Water becomes steam. */
+        BOILER,
+        /** A coil of cold pipe. Steam becomes water. */
+        CONDENSER,
         /** A short arm on a post. */
         MANIPULATOR,
         /** A heavier bore than the Crude Extractor. */
@@ -159,6 +165,9 @@ public final class BlockCatalogue {
             new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT),
             new Entry("sorter", Geometry.SORTER, 1, true, BELT),
             new Entry("magnetic_separator", Geometry.MAGNET, 1, true, BELT),
+            new Entry("solar_array", Geometry.SOLAR, 1, true, GENERATOR),
+            new Entry("boiler", Geometry.BOILER, 1, true, CONSUMER),
+            new Entry("condenser", Geometry.CONDENSER, 1, true, CONSUMER),
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),

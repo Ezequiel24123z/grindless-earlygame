@@ -50,5 +50,11 @@ public enum MachineFamily {
     CASTER,
 
     /** Sulfide concentrate. 20 crushed + 500 mB surfactant → 24 concentrate + 3 tailings. T2. */
-    FLOTATION
+    FLOTATION,
+
+    /** 1 B water → 1 B steam at 150 °C. T2. */
+    BOILER,
+
+    /** 1 B steam → 1 B water. The steam sink until the turbine. T2. */
+    CONDENSER
 }

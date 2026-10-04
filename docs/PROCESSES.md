@@ -263,7 +263,7 @@ vanilla source. Brine, crude hydrocarbon and geothermal stay unemitted until a r
 spends them.
 | **Deionised water** | 20 °C | Chemical Washer, ion-exchange resin | the ultrapure chain, electrolyte make-up |
 | **Ultrapure water** | 20 °C | Distillation Tower (T3), Cryogenic Plant (T4), Vacuum Furnace (T5) | integrated circuits, crystal growth |
-| **Steam** | 150 °C, 0.5 MPa | Boiler, Heat Exchanger | Steam Turbine, stripping, heating |
+| **Steam** | 150 °C, 0.5 MPa | Boiler, Heat Exchanger | Condenser now; Steam Turbine with fission. The shipped loop is 1 B water → 1 B steam in 10 s, back to water in 4 s (ADR-0081). |
 | **Superheated steam** | 450 °C, 6 MPa | reactor secondary loop | the same turbine, far higher output |
 | **Supercritical water** | 400 °C, 25 MPa | reactor primary loop | heat transport, hydrothermal chemistry |
 | **Compressed air** | 20 °C, 0.6 MPa | Compressor | Atmospheric Intake feed, agitation |

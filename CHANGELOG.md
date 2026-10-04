@@ -45,6 +45,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Solar Array, Boiler and Condenser (ADR-0081).** Assembler-manufactured (casing, two
+  motors, four plates; Industrial). The panel makes 32 FU/t while it is day and the
+  block above can see the sky, and nothing at night. `1 B water → 1 B steam` in 10 s
+  at 150 °C and 0.5 MPa. `1 B steam → 1 B water` in 4 s. The Basic Tank refuses the
+  steam. The turbine is not in this slice. The behaviour graph is 81 recipes; a
+  Grindless-only pack logs 284. CI places all three.
+
 - **Froth Flotation and Magnetic Separator (ADR-0080).** Assembler-manufactured (casing,
   two motors, four plates; Industrial; no circuit board). `20 crushed + 500 mB surfactant
   → 24 concentrate + 3 tailings` in 80 s. Concentrate reduces like crushed (`b3_r1`).

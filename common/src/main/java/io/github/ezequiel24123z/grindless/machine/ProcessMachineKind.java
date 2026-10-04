@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.machine;
 
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
@@ -271,6 +272,62 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.FLOTATION_CELL.get();
         }
+    },
+
+    BOILER(MachineFamily.BOILER, MachineMenuKind.BOILER,
+            BlockCatalogue.Geometry.BOILER, "boiler") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public double fluidMaxC() {
+            return ProcessLogic.STEAM_MAX_C;
+        }
+
+        @Override
+        public double fluidMaxP() {
+            return ProcessLogic.STEAM_MAX_MPA;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.BOILER.get();
+        }
+    },
+
+    CONDENSER(MachineFamily.CONDENSER, MachineMenuKind.CONDENSER,
+            BlockCatalogue.Geometry.CONDENSER, "condenser") {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public double fluidMaxC() {
+            return ProcessLogic.STEAM_MAX_C;
+        }
+
+        @Override
+        public double fluidMaxP() {
+            return ProcessLogic.STEAM_MAX_MPA;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.CONDENSER.get();
+        }
     };
 
     private final MachineFamily family;
@@ -311,5 +368,15 @@ public enum ProcessMachineKind {
     /** Whether the fluid buffer may hold melt. The tank and the clay pipe still refuse it. */
     public boolean hotFluid() {
         return false;
+    }
+
+    /** Hottest fluid this buffer will accept. Melt uses {@link ProcessLogic#MOLTEN_MAX_C}. */
+    public double fluidMaxC() {
+        return hotFluid() ? ProcessLogic.MOLTEN_MAX_C : FluidLogic.AMBIENT_MAX_C;
+    }
+
+    /** Highest pressure this buffer will accept. Steam uses {@link ProcessLogic#STEAM_MAX_MPA}. */
+    public double fluidMaxP() {
+        return FluidLogic.AMBIENT_MPA;
     }
 }

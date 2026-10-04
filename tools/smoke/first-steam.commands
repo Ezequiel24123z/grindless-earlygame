@@ -1,0 +1,12 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 10 70 8 minecraft:air
+setblock 12 70 8 minecraft:air
+setblock 8 70 8 grindless:solar_array[facing=south,status=idle]
+execute if block 8 70 8 grindless:solar_array run say SOLAR-OK
+setblock 10 70 8 grindless:boiler[facing=south,status=idle]
+execute if block 10 70 8 grindless:boiler run say BOILER-OK
+setblock 12 70 8 grindless:condenser[facing=south,status=idle]
+execute if block 12 70 8 grindless:condenser run say CONDENSER-OK

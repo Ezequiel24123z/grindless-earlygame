@@ -39,6 +39,9 @@ public final class FabricationLogic {
     public static final String PLATE_MOULD = "grindless:plate_mould";
     public static final String FLOTATION_CELL = "grindless:flotation_cell";
     public static final String MAGNETIC_SEPARATOR = "grindless:magnetic_separator";
+    public static final String SOLAR_ARRAY = "grindless:solar_array";
+    public static final String BOILER = "grindless:boiler";
+    public static final String CONDENSER = "grindless:condenser";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

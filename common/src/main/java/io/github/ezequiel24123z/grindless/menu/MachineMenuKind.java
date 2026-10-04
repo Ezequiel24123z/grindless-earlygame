@@ -22,7 +22,9 @@ public enum MachineMenuKind {
     ATMOSPHERIC_INTAKE(0, 0),
     INDUCTION_FURNACE(1, 0),
     CASTER(1, 1),
-    FLOTATION(1, 2);
+    FLOTATION(1, 2),
+    BOILER(0, 0),
+    CONDENSER(0, 0);
 
     private final int inputs;
     private final int outputs;

@@ -203,6 +203,17 @@ public final class VerifyFluid {
         yes("surfactant is ambient", FluidLogic.isAmbient(surfactant));
         no("surfactant is not a gas", FluidLogic.isGas(surfactant));
         eq("surfactant is not a generator fuel", 0, FluidLogic.burnTicks(ProcessLogic.SURFACTANT));
+        FluidState steam = FluidLogic.emitted(ProcessLogic.STEAM, 1000);
+        eq("steam is 150 C", 150.0, steam.temperatureC());
+        eq("steam is 0.5 MPa", 0.5, steam.pressureMPa());
+        yes("steam is a gas", FluidLogic.isGas(steam));
+        no("steam is not ambient", FluidLogic.isAmbient(steam));
+        eq("a tank refuses steam", 0,
+                FluidLogic.accepted(FluidState.EMPTY, steam, FluidLogic.TANK_CAPACITY,
+                        FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA));
+        FluidBuffer steamBuffer = new FluidBuffer(2000, ProcessLogic.STEAM_MAX_C, ProcessLogic.STEAM_MAX_MPA);
+        eq("a boiler buffer accepts one bucket of steam", 1000, steamBuffer.accepted(steam));
+        eq("steam is not a generator fuel", 0, FluidLogic.burnTicks(ProcessLogic.STEAM));
     }
 
     private static void eq(String what, int expected, int actual) {

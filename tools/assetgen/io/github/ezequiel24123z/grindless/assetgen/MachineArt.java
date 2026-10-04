@@ -43,6 +43,9 @@ public final class MachineArt {
     public static final int CASTER = 0xF4511E;
     public static final int FLOTATION = 0x9CCC65;
     public static final int MAGNET = 0xAD1457;
+    public static final int SOLAR = 0x0D47A1;
+    public static final int BOILER_ACCENT = 0xE65100;
+    public static final int CONDENSER = 0x006064;
     public static final int[] PYLON = {0x18FFFF, 0x69F0AE, 0xE040FB};
     public static final int BELT = 0xFFD54F;
     public static final int SPLITTER = 0xFFAB40;
@@ -86,6 +89,9 @@ public final class MachineArt {
             case CASTER -> casterFront(status);
             case FLOTATION -> flotationFront(status);
             case MAGNET -> magnetFront(status);
+            case SOLAR -> solarFront(status);
+            case BOILER -> boilerFront(status);
+            case CONDENSER -> condenserFront(status);
             case BELT -> beltFront(status);
             case SPLITTER -> splitterFront(status);
             case MERGER -> mergerFront(status);
@@ -124,6 +130,9 @@ public final class MachineArt {
             case CASTER -> casterTop();
             case FLOTATION -> flotationTop();
             case MAGNET -> magnetTop();
+            case SOLAR -> solarTop();
+            case BOILER -> boilerTop();
+            case CONDENSER -> condenserTop();
             case BELT -> beltTop();
             case SPLITTER -> splitterTop();
             case MERGER -> mergerTop();
@@ -931,6 +940,88 @@ public final class MachineArt {
         }
         for (int x = 4; x <= 11; x++) {
             set(img, x, 3, MAGNET);
+        }
+        return img;
+    }
+
+    // ---- Solar, boiler, condenser --------------------------------------------------------
+
+    public static BufferedImage solarFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SOLAR);
+        int cell = glow < 0 ? SOLAR : glow;
+        for (int y = 4; y <= 12; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean grid = x % 4 == 2 || y % 4 == 0;
+                set(img, x, y, grid ? Palette.shade(CASING, 0.3) : cell);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage solarTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean grid = x % 4 == 0 || y % 4 == 0;
+                set(img, x, y, grid ? Palette.shade(CASING, 0.25) : SOLAR);
+            }
+        }
+        return img;
+    }
+
+    public static BufferedImage boilerFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, BOILER_ACCENT);
+        int fire = glow < 0 ? Palette.shade(BOILER_ACCENT, -0.2) : glow;
+        for (int y = 8; y <= 13; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(img, x, y, (x == 3 || x == 12 || y == 13) ? Palette.shade(CASING, 0.15) : fire);
+            }
+        }
+        for (int y = 2; y <= 7; y++) {
+            set(img, 7, y, Palette.shade(CASING, -0.2));
+            set(img, 8, y, Palette.shade(CASING, -0.2));
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage boilerTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int i = 5; i <= 10; i++) {
+            set(img, i, 5, BOILER_ACCENT);
+            set(img, i, 10, BOILER_ACCENT);
+            set(img, 5, i, BOILER_ACCENT);
+            set(img, 10, i, BOILER_ACCENT);
+        }
+        return img;
+    }
+
+    public static BufferedImage condenserFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, CONDENSER);
+        int coil = glow < 0 ? CONDENSER : glow;
+        for (int y = 4; y <= 12; y++) {
+            set(img, 4, y, coil);
+            set(img, 11, y, coil);
+            if (y % 2 == 0) {
+                for (int x = 4; x <= 11; x++) {
+                    set(img, x, y, coil);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage condenserTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int i = 3; i <= 12; i++) {
+            set(img, i, 4, CONDENSER);
+            set(img, i, 8, CONDENSER);
+            set(img, i, 12, CONDENSER);
         }
         return img;
     }

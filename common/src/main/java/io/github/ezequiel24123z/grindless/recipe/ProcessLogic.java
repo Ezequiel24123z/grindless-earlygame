@@ -108,6 +108,16 @@ public final class ProcessLogic {
     public static final int SURFACTANT_MB = 1000;
     public static final int SURFACTANT_TICKS = 20 * 8;
 
+    /** Steam at the documented boiler point. The tank refuses both the heat and the pressure. */
+    public static final String STEAM = "grindless:steam";
+    public static final double STEAM_C = 150.0;
+    public static final double STEAM_MPA = 0.5;
+    public static final double STEAM_MAX_C = 200.0;
+    public static final double STEAM_MAX_MPA = 1.0;
+    public static final int BOILER_MB = 1000;
+    public static final int BOILER_TICKS = 20 * 10;
+    public static final int CONDENSE_TICKS = 20 * 4;
+
     private ProcessLogic() {
     }
 

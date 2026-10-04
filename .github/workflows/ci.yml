@@ -164,6 +164,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-separation.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-separation.expect
 
+      # Slice Q: solar array, boiler and condenser place.
+      - name: Boot and exercise heat and steam
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-steam.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-steam.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

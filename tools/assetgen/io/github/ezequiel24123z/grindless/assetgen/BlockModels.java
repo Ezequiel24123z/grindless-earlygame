@@ -66,6 +66,9 @@ final class BlockModels {
             case CASTER -> caster();
             case FLOTATION -> flotation();
             case MAGNET -> magnet();
+            case SOLAR -> solar();
+            case BOILER -> boiler();
+            case CONDENSER -> condenser();
             case PYLON -> pylonPiece(block.tier(), 0);
             case BELT -> belt();
             case SPLITTER -> splitter();
@@ -341,6 +344,27 @@ final class BlockModels {
                 box(0, 0, 0, 16, 2, 16, "cap", "base"),
                 front(1, 2, 2, 15, 12, 14, "top", "side", "front"),
                 box(3, 12, 3, 13, 14, 13, "top", "side"));
+    }
+
+    private static List<Box> solar() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(1, 2, 1, 15, 4, 15, "top", "side", "front"),
+                tilted(box(1, 4, 2, 15, 5, 14, "top", "side"), -22.5, new double[]{8, 4, 8}));
+    }
+
+    private static List<Box> boiler() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 2, 14, 10, 14, "top", "side", "front"),
+                box(6, 10, 6, 10, 16, 10, "cap", "side"));
+    }
+
+    private static List<Box> condenser() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                front(2, 2, 3, 14, 12, 13, "top", "side", "front"),
+                box(3, 6, 1, 13, 8, 4, "top", "side"));
     }
 
     /** A lane with a horseshoe standing over the left. */

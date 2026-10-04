@@ -82,7 +82,8 @@ public final class FluidLogic {
         }
         return CARBON_MONOXIDE.equals(state.id()) || SULFUR_DIOXIDE.equals(state.id())
                 || SULFUR_TRIOXIDE.equals(state.id()) || HYDROGEN.equals(state.id())
-                || OXYGEN.equals(state.id()) || NITROGEN.equals(state.id());
+                || OXYGEN.equals(state.id()) || NITROGEN.equals(state.id())
+                || ProcessLogic.STEAM.equals(state.id());
     }
 
     /**
@@ -97,6 +98,9 @@ public final class FluidLogic {
     public static FluidState emitted(String id, int millibuckets) {
         if (id != null && id.startsWith("grindless:molten/")) {
             return FluidState.of(id, millibuckets, ProcessLogic.MOLTEN_C, AMBIENT_MPA);
+        }
+        if (ProcessLogic.STEAM.equals(id)) {
+            return FluidState.of(id, millibuckets, ProcessLogic.STEAM_C, ProcessLogic.STEAM_MPA);
         }
         return FluidState.of(id, millibuckets);
     }

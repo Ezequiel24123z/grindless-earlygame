@@ -18,6 +18,7 @@ import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.SolarArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
@@ -171,6 +172,28 @@ public final class ModBlockEntities {
                             .of((pos, state) -> new ProcessMachineBlockEntity(
                                     ProcessMachineKind.FLOTATION, pos, state),
                                     ModBlocks.FLOTATION_CELL.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> BOILER =
+            BLOCK_ENTITIES.register("boiler",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.BOILER, pos, state),
+                                    ModBlocks.BOILER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> CONDENSER =
+            BLOCK_ENTITIES.register("condenser",
+                    () -> BlockEntityType.Builder
+                            .of((pos, state) -> new ProcessMachineBlockEntity(
+                                    ProcessMachineKind.CONDENSER, pos, state),
+                                    ModBlocks.CONDENSER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<SolarArrayBlockEntity>> SOLAR_ARRAY =
+            BLOCK_ENTITIES.register("solar_array",
+                    () -> BlockEntityType.Builder
+                            .of(SolarArrayBlockEntity::new, ModBlocks.SOLAR_ARRAY.get())
                             .build(null));
 
     /**
