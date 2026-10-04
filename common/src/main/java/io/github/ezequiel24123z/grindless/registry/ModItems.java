@@ -119,6 +119,10 @@ public final class ModItems {
     public static final RegistrySupplier<Item> DECONSTRUCTION_PLANNER = register("deconstruction_planner",
             () -> new DeconstructionPlannerItem(new Item.Properties().stacksTo(1)));
 
+    /** Fungible intermediate. A smash yields one; it is not a fluid (ADR-0088). */
+    public static final RegistrySupplier<Item> MATTER = register("matter",
+            () -> new Item(new Item.Properties()));
+
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.
      *

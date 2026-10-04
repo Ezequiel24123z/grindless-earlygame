@@ -145,6 +145,8 @@ public final class ProcessGraph {
         recipes.add(drillCell());
         recipes.add(blueprintTool());
         recipes.add(deconstructionPlanner());
+        recipes.add(patternScanner());
+        recipes.add(deconstructor());
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);
@@ -857,6 +859,14 @@ public final class ProcessGraph {
 
     private static ProcessRecipe deconstructionPlanner() {
         return machineCraft("assemble/deconstruction_planner", FabricationLogic.DECONSTRUCTION_PLANNER);
+    }
+
+    private static ProcessRecipe patternScanner() {
+        return machineCraft("assemble/pattern_scanner", FabricationLogic.PATTERN_SCANNER);
+    }
+
+    private static ProcessRecipe deconstructor() {
+        return machineCraft("assemble/deconstructor", FabricationLogic.DECONSTRUCTOR);
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

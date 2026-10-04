@@ -78,6 +78,8 @@ public final class MachineEffects {
             case SIGNAL -> belt(status, level, pos, random);
             case LOGIC -> terminal(status, front, level, pos, random);
             case INTERFACE -> dynamo(status, front, level, pos, random);
+            case SCANNER -> terminal(status, front, level, pos, random);
+            case DECONSTRUCTOR -> mill(status, level, pos, random);
             case BANK -> pylon(1, status, level, pos, random);
             case TRANSFORMER -> dynamo(status, front, level, pos, random);
         }

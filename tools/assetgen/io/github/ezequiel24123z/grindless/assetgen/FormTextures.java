@@ -480,6 +480,15 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** A dense pellet. Matter, not a dust. */
+    public static BufferedImage matter(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(8, 8, 5.5, 4.2);
+        field.disc(8, 8, 2.2, 5.4);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
     /** Two corner brackets. A mark, not a wrench. */
     public static BufferedImage planner(Palette palette) {
         HeightField field = new HeightField();

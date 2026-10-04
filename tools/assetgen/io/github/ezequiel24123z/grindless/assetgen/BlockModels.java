@@ -93,6 +93,8 @@ final class BlockModels {
             case INTERFACE -> face();
             case BANK -> bank();
             case TRANSFORMER -> transformer();
+            case SCANNER -> scanner();
+            case DECONSTRUCTOR -> deconstructor();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -614,6 +616,24 @@ final class BlockModels {
                 box(7, 2, 7, 9, 10, 9, "top", "side"),
                 front(5, 7, 3, 11, 12, 9, "top", "side", "front"),
                 box(6, 8, 1, 10, 11, 3, "cap", "cap"));
+    }
+
+    /** A wide table and a lens barrel. Not the logic mast. */
+    private static List<Box> scanner() {
+        return List.of(
+                box(0, 0, 4, 16, 3, 16, "cap", "base"),
+                box(5, 3, 8, 11, 9, 14, "top", "side"),
+                front(3, 4, 1, 13, 12, 8, "top", "side", "front"),
+                box(6, 9, 9, 10, 12, 13, "cap", "cap"));
+    }
+
+    /** A bowl and a ram. Not a pair of rollers. */
+    private static List<Box> deconstructor() {
+        return List.of(
+                box(2, 0, 2, 14, 6, 14, "top", "side"),
+                box(4, 5, 4, 12, 7, 12, "cap", "cap"),
+                box(6, 7, 6, 10, 16, 10, "top", "side"),
+                front(3, 1, 1, 13, 5, 4, "top", "side", "front"));
     }
 
     private static List<Box> pylonPiece(int tier, int piece) {

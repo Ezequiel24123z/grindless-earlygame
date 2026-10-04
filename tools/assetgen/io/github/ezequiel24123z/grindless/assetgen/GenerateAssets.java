@@ -116,6 +116,7 @@ public final class GenerateAssets {
         written += write(items, "blueprint", FormTextures.blueprint(Palette.of("blueprint", 0x5C6BC0)));
         written += write(items, "deconstruction_planner",
                 FormTextures.planner(Palette.of("deconstruction_planner", 0x6D4C41)));
+        written += write(items, "matter", FormTextures.matter(Palette.of("matter", 0x7C4DFF)));
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             written += writeText(new File(resourceDir(root, "models/item"), sprite + ".json"),
                     itemModel(sprite));
@@ -241,12 +242,15 @@ public final class GenerateAssets {
     }
 
     /**
-     * Reagents that are not material forms. Written after {@link #writeTags} wipes the
-     * {@code grindless} item-tag tree, so they survive regeneration.
+     * Reagents that are not material forms, plus the empty replication blacklist. Written after
+     * {@link #writeTags} wipes the {@code grindless} item-tag tree, so they survive regeneration.
      */
     private static int writeReagentTags(File root) throws IOException {
-        File file = new File(root, "common/src/main/resources/data/grindless/tags/items/carbon.json");
-        return writeText(file, tagJson("#minecraft:coals"));
+        File carbon = new File(root, "common/src/main/resources/data/grindless/tags/items/carbon.json");
+        File blacklist = new File(root,
+                "common/src/main/resources/data/grindless/tags/items/replication_blacklist.json");
+        return writeText(carbon, tagJson("#minecraft:coals"))
+                + writeText(blacklist, tagJson());
     }
 
     /** The shared machine menu background and a progress arrow strip. */

@@ -1,0 +1,9 @@
+forceload add 0 0
+say WAIT-CHUNK
+setblock 8 64 8 grindless:pattern_scanner[facing=south,status=idle]
+execute if block 8 64 8 grindless:pattern_scanner run say SCANNER-OK
+setblock 10 64 8 grindless:deconstructor[facing=south,status=idle]
+execute if block 10 64 8 grindless:deconstructor run say DECONSTRUCTOR-OK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:matter",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:matter"}}] run say MATTER-OK
+kill @e[type=item]

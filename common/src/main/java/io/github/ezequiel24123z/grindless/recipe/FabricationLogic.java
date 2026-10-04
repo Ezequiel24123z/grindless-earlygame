@@ -56,6 +56,9 @@ public final class FabricationLogic {
     public static final String DRILL_CELL = "grindless:drill_cell";
     public static final String BLUEPRINT_TOOL = "grindless:blueprint_tool";
     public static final String DECONSTRUCTION_PLANNER = "grindless:deconstruction_planner";
+    public static final String PATTERN_SCANNER = "grindless:pattern_scanner";
+    public static final String DECONSTRUCTOR = "grindless:deconstructor";
+    public static final String MATTER = "grindless:matter";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

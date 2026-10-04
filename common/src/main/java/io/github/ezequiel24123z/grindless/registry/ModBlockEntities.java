@@ -22,6 +22,8 @@ import io.github.ezequiel24123z.grindless.belt.OverflowGateBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SorterBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
+import io.github.ezequiel24123z.grindless.pattern.DeconstructorBlockEntity;
+import io.github.ezequiel24123z.grindless.pattern.PatternScannerBlockEntity;
 import io.github.ezequiel24123z.grindless.logic.LogicControllerBlockEntity;
 import io.github.ezequiel24123z.grindless.logic.RedstoneInterfaceBlockEntity;
 import io.github.ezequiel24123z.grindless.logic.SignalCableBlockEntity;
@@ -344,6 +346,18 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("redstone_interface",
                     () -> BlockEntityType.Builder
                             .of(RedstoneInterfaceBlockEntity::new, ModBlocks.REDSTONE_INTERFACE.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<PatternScannerBlockEntity>> PATTERN_SCANNER =
+            BLOCK_ENTITIES.register("pattern_scanner",
+                    () -> BlockEntityType.Builder
+                            .of(PatternScannerBlockEntity::new, ModBlocks.PATTERN_SCANNER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<DeconstructorBlockEntity>> DECONSTRUCTOR =
+            BLOCK_ENTITIES.register("deconstructor",
+                    () -> BlockEntityType.Builder
+                            .of(DeconstructorBlockEntity::new, ModBlocks.DECONSTRUCTOR.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<FilterManipulatorBlockEntity>> FILTER_MANIPULATOR =

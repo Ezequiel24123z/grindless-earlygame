@@ -206,6 +206,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-planner.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-planner.expect
 
+      # Slice W: the scanner and the deconstructor place. Matter is an item, not a recipe.
+      - name: Boot and exercise patterns
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-patterns.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-patterns.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool and the planner", 95, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool, the planner and the pattern pair", 97, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -575,6 +575,17 @@ public final class VerifyRecipes {
         eq("the planner is the assembler", MachineFamily.ASSEMBLER, planner.family());
         eq("the planner makes the item", "item:grindless:deconstruction_planner",
                 planner.itemOutputs().get(0).qualified());
+        ProcessRecipe scanner = recipe(recipes, "assemble/pattern_scanner");
+        ProcessRecipe deconstructor = recipe(recipes, "assemble/deconstructor");
+        eq("the scanner is the assembler", MachineFamily.ASSEMBLER, scanner.family());
+        eq("the scanner makes the block", "item:grindless:pattern_scanner",
+                scanner.itemOutputs().get(0).qualified());
+        eq("the deconstructor is the assembler", MachineFamily.ASSEMBLER, deconstructor.family());
+        eq("the deconstructor makes the block", "item:grindless:deconstructor",
+                deconstructor.itemOutputs().get(0).qualified());
+        no("matter is not a recipe output",
+                recipes.stream().anyMatch(candidate -> candidate.itemOutputs().stream()
+                        .anyMatch(output -> "grindless:matter".equals(output.id()))));
         eq("night is nothing", 0L, SolarLogic.generate(false));
 
         yes("steel with an ingot still presses",
@@ -729,6 +740,12 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("blueprint_tool.json")));
         no("the planner has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("deconstruction_planner.json")));
+        no("the scanner has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("pattern_scanner.json")));
+        no("the deconstructor has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("deconstructor.json")));
+        no("matter has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("matter.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

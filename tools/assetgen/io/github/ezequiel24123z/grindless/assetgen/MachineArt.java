@@ -68,6 +68,8 @@ public final class MachineArt {
     public static final int SIGNAL = 0x0097A7;
     public static final int LOGIC = 0x5E35B1;
     public static final int INTERFACE = 0xC62828;
+    public static final int SCANNER = 0x00ACC1;
+    public static final int DECONSTRUCTOR = 0x4E342E;
     public static final int BANK = 0xFFEE58;
     public static final int TRANSFORMER = 0x7C4DFF;
 
@@ -125,6 +127,8 @@ public final class MachineArt {
             case INTERFACE -> interfaceFront(status);
             case BANK -> bankFront(status);
             case TRANSFORMER -> transformerFront(status);
+            case SCANNER -> scannerFront(status);
+            case DECONSTRUCTOR -> deconstructorFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -176,6 +180,8 @@ public final class MachineArt {
             case INTERFACE -> interfaceTop();
             case BANK -> bankTop();
             case TRANSFORMER -> transformerTop();
+            case SCANNER -> scannerTop();
+            case DECONSTRUCTOR -> deconstructorTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1890,6 +1896,80 @@ public final class MachineArt {
             for (int y = 5; y <= 10; y++) {
                 boolean ring = x == 5 || x == 10 || y == 5 || y == 10;
                 set(img, x, y, Palette.shade(INTERFACE, ring ? 0.2 : -0.4));
+            }
+        }
+        return img;
+    }
+
+    /** A lens, not a crosshair. The reader window is the logic controller. */
+    public static BufferedImage scannerFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SCANNER);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                int dx = x - 7;
+                int dy = y - 7;
+                int r2 = dx * dx + dy * dy;
+                if (r2 > 16) {
+                    continue;
+                }
+                int pixel = r2 >= 9
+                        ? Palette.shade(SCANNER, 0.35)
+                        : (glow < 0 ? Palette.shade(SCANNER, -0.2) : glow);
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage scannerTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            set(img, 2, y, Palette.shade(SCANNER, 0.2));
+            set(img, 13, y, Palette.shade(SCANNER, 0.2));
+        }
+        for (int x = 5; x <= 10; x++) {
+            for (int y = 5; y <= 10; y++) {
+                set(img, x, y, Palette.shade(SCANNER, -0.25));
+            }
+        }
+        return img;
+    }
+
+    /** A ram slot down the middle. Not the mill's rollers. */
+    public static BufferedImage deconstructorFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, DECONSTRUCTOR);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 3; x <= 12; x++) {
+                boolean jaw = x <= 4 || x >= 11;
+                boolean ram = x >= 7 && x <= 8 && y <= 8;
+                int pixel;
+                if (ram) {
+                    pixel = glow < 0 ? Palette.shade(DECONSTRUCTOR, 0.15) : glow;
+                } else if (jaw) {
+                    pixel = Palette.shade(DECONSTRUCTOR, -0.15);
+                } else {
+                    pixel = Palette.shade(CASING, -0.55);
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage deconstructorTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int x = 3; x <= 12; x++) {
+            for (int y = 3; y <= 12; y++) {
+                boolean rim = x == 3 || x == 12 || y == 3 || y == 12;
+                boolean well = x >= 6 && x <= 9 && y >= 6 && y <= 9;
+                int pixel = rim
+                        ? Palette.shade(DECONSTRUCTOR, 0.25)
+                        : (well ? Palette.shade(DECONSTRUCTOR, -0.45) : Palette.shade(CASING, -0.2));
+                set(img, x, y, pixel);
             }
         }
         return img;

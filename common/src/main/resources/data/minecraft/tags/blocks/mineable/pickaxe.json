@@ -47,6 +47,8 @@
     "grindless:signal_cable",
     "grindless:logic_controller",
     "grindless:redstone_interface",
+    "grindless:pattern_scanner",
+    "grindless:deconstructor",
     "grindless:capacitor_bank",
     "grindless:flux_transformer",
     "grindless:flux_pylon_shaft"

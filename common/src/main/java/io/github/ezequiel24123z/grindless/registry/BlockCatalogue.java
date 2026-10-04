@@ -110,7 +110,11 @@ public final class BlockCatalogue {
         /** A rack of cells. Capacity, not coverage. */
         BANK,
         /** Two coils on a core. A tap, not a pylon. */
-        TRANSFORMER
+        TRANSFORMER,
+        /** A lens over a table. It stores an item id. */
+        SCANNER,
+        /** A ram over a bowl. One item becomes one Matter. */
+        DECONSTRUCTOR
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -203,6 +207,8 @@ public final class BlockCatalogue {
             new Entry("signal_cable", Geometry.SIGNAL, 1, true, BELT),
             new Entry("logic_controller", Geometry.LOGIC, 1, true, BELT),
             new Entry("redstone_interface", Geometry.INTERFACE, 1, true, BELT),
+            new Entry("pattern_scanner", Geometry.SCANNER, 1, true, CONSUMER),
+            new Entry("deconstructor", Geometry.DECONSTRUCTOR, 1, true, CONSUMER),
             new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
             new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
 
@@ -210,7 +216,8 @@ public final class BlockCatalogue {
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
             "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
             "copper_coil", "motor", "vanadia_pellet", "ingot_mould", "plate_mould",
-            "flux_drill", "drill_cell", "blueprint_tool", "blueprint", "deconstruction_planner");
+            "flux_drill", "drill_cell", "blueprint_tool", "blueprint", "deconstruction_planner",
+            "matter");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

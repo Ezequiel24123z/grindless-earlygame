@@ -22,6 +22,8 @@ import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
 import io.github.ezequiel24123z.grindless.belt.SorterBlock;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
 import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlock;
+import io.github.ezequiel24123z.grindless.pattern.DeconstructorBlock;
+import io.github.ezequiel24123z.grindless.pattern.PatternScannerBlock;
 import io.github.ezequiel24123z.grindless.logic.LogicControllerBlock;
 import io.github.ezequiel24123z.grindless.logic.RedstoneInterfaceBlock;
 import io.github.ezequiel24123z.grindless.logic.SignalCableBlock;
@@ -274,6 +276,16 @@ public final class ModBlocks {
     public static final RegistrySupplier<RedstoneInterfaceBlock> REDSTONE_INTERFACE =
             register("redstone_interface",
                     () -> new RedstoneInterfaceBlock(machine().strength(2.0F)));
+
+    /** T2 scanner. Stores an item id and reports its replication cost. Manufactured, not crafted. */
+    public static final RegistrySupplier<PatternScannerBlock> PATTERN_SCANNER =
+            register("pattern_scanner",
+                    () -> new PatternScannerBlock(machine().strength(2.5F)));
+
+    /** T2 sink. One item becomes one Matter. Manufactured, not crafted. */
+    public static final RegistrySupplier<DeconstructorBlock> DECONSTRUCTOR =
+            register("deconstructor",
+                    () -> new DeconstructorBlock(machine().strength(3.0F)));
 
     /** T1 storage. Adds capacity to the covering network; no supply cube of its own. */
     public static final RegistrySupplier<CapacitorBankBlock> CAPACITOR_BANK =
