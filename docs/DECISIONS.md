@@ -92,6 +92,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0078](#adr-0078--the-fluid-well-is-powered-chunk-water) | The Fluid Well is powered chunk water | Accepted |
 | [0079](#adr-0079--melt-is-144-mb-at-1000-c-and-the-arc-still-makes-ingots) | Melt is 144 mB at 1000 °C, and the arc still makes ingots | Accepted |
 | [0080](#adr-0080--flotation-is-an-integer-batch-and-the-magnet-splits-by-name) | Flotation is an integer batch, and the magnet splits by name | Accepted |
+| [0081](#adr-0081--daylight-is-f1-and-steam-closes-on-the-condenser) | Daylight is F1, and steam closes on the condenser | Accepted |
 
 ---
 
@@ -3101,5 +3102,44 @@ A successor that roasts concentrate here is in T3. A successor that makes the
 magnet change yield is inventing a grade row the document refuses. A successor
 that starts the Centrifuge or the Sifter here is past P. A successor that starts
 the boiler here is skipping Q.
+
+## ADR-0081 — Daylight is F1, and steam closes on the condenser
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice Q is heat and steam: solar generation, a Boiler and a
+Condenser. The Steam Turbine stays with fission. The Arc Reactor is not this slice.
+PROCESSES.md sets steam at 150 °C and 0.5 MPa. The Basic Tank and the clay conduit
+refuse anything above 40 °C or 0.1 MPa (ADR-0062). The catalogue calls F2 steam and
+solar at 128 FU/t, and also lists a T2 Steam Turbine; the calendar says the turbine
+waits. One panel at 128 FU/t would retire the Thermal Generator during the day.
+
+**Decision.**
+
+1. **Solar Array** is a T2 generator, Assembler-manufactured (casing, two motors,
+   four plates, Industrial). It makes 32 FU/t (F1) while the world is day and the
+   block above can see the sky. Night and a cover make 0. Rain does not stop it.
+   It stays subscribed, because dawn does not notify the block. One panel matches
+   the Thermal Generator; F2 waits for the turbine.
+2. **Boiler** is a T2 process machine, same craft. It draws F1. 1 B water becomes
+   1 B steam in 10 s. Steam is grindless:steam, emitted at 150 °C and 0.5 MPa.
+   The boiler buffer accepts up to 200 °C and 1.0 MPa, so this steam fits and
+   superheated steam (450 °C, 6 MPa) does not. The recipe does not name a
+   temperature. Geothermal is still not emitted.
+3. **Condenser** is a T2 process machine, same craft. 1 B steam becomes 1 B water
+   in 4 s at F1. The water is ambient. The condenser is the named steam sink. Its
+   buffer has the same ceiling as the boiler, so it can hold the steam the tank
+   refuses. No turbine, no superheated steam, no heat exchanger.
+
+**Alternatives rejected.** One panel at F2 (it deletes the reason to burn coal at
+night); a fuel-fired boiler that replaces the Thermal Generator; emitting
+geothermal from the well in this slice; storing steam in the Basic Tank; a Steam
+Turbine (T3, with fission); treating rain as night.
+
+**Consequences.** A successor that rates one panel at 128 FU/t is skipping the
+turbine. A successor that puts steam in a clay pipe is ignoring 150 °C. A
+successor that builds the turbine here is in slice AF. A successor that starts
+the pressure pipe here is skipping R.
+
 
 
