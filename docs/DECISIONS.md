@@ -94,6 +94,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0080](#adr-0080--flotation-is-an-integer-batch-and-the-magnet-splits-by-name) | Flotation is an integer batch, and the magnet splits by name | Accepted |
 | [0081](#adr-0081--daylight-is-f1-and-steam-closes-on-the-condenser) | Daylight is F1, and steam closes on the condenser | Accepted |
 | [0082](#adr-0082--t2-pipe-holds-steam-and-the-flux-belt-spends-lv) | T2 pipe holds steam, and the flux belt spends LV | Accepted |
+| [0083](#adr-0083--a-controller-holds-a-machine-below-five-hundred) | A controller holds a machine below five hundred | Accepted |
 
 ---
 
@@ -3201,6 +3202,51 @@ record. A successor that merges industrial tanks is starting F. A successor
 that retunes the T1 tunnel to 9 is inventing the flux tunnel. A successor
 that makes an empty flux belt draw F1 is taxing a line that is doing nothing.
 A successor that builds the Phase Manifold here is in slice AJ.
+
+
+## ADR-0083 — A controller holds a machine below five hundred
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice S is the first logic: Signal Cable, Logic
+Controller, Redstone Interface. The README's example is *run only while
+copper ingots < 500*. Operator Drones are T3. From T2 the README also says
+Signal Cable stops being its own block and becomes a signal core inside a
+Flux Conduit. That conduit is a later collapse of four networks. This slice
+has to be playable before that collapse exists. Signals in the README are
+not capped at redstone's 0–15. An Arithmetic Unit and a Network Monitor are
+in the same table and are not in the slice row.
+
+**Decision.**
+
+1. **Signal Cable is a block.** It carries one integer in the direction it
+   faces, one block per tick, with no 0–15 cap. It is not a signal core.
+   The core waits until Flux Conduits gain cores. A value written by a
+   neighbour replaces what the tile holds.
+2. **Logic Controller** counts one item id in the inventory on its back
+   face. The threshold is 500. The machine in front is allowed to run while
+   the count is below 500, and held idle at 500 or above. Sneak-use with an
+   item sets the id. An empty filter does not hold the machine. The
+   controller writes 1 while the machine may run and 0 while it is held,
+   into every adjacent signal cable. The hold is not saved: the controller
+   sets it every tick and clears it when the controller is removed.
+3. **Redstone Interface** faces the redstone and keeps the cable on the
+   opposite face. Redstone power on the front writes 0–15 into that cable
+   and the interface does not also emit. With no redstone input, a cable
+   value above 0 emits `min(15, value)` from the front.
+4. All three are Assembler-manufactured (casing, two motors, four plates,
+   Industrial). No crafting JSON.
+
+**Alternatives rejected.** A signal core with no conduit to put it in; a
+0–15 signal on the cable; a configurable threshold GUI in this slice; an
+Arithmetic Unit; a Network Monitor; Operator Drones; saving the hold so a
+machine stays stopped after the controller is gone.
+
+**Consequences.** A successor that deletes the cable block and leaves only
+a core is skipping the conduit. A successor that caps the cable at 15 is
+moving the redstone limit onto the wire. A successor that leaves a machine
+held after the controller is mined is inventing a latch. A successor that
+builds drones here is in slice AC.
 
 
 
