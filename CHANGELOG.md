@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Boot smokes handshake before scenario commands.** GitHub lost the first FIFO lines
+  after `Done`, so `PICKAXE-OK hand_crank_dynamo` and `ATLAS-OK` flaked while the same
+  commit passed on the other event. `smoke-boot.sh` now waits for a `[Server] SMOKE-READY`
+  broadcast. The loot scenario also `forceload`s chunk 0,0 like every other smoke.
+
 - **State smoke no longer races a ticking machine (ADR-0061).** CI placed every status with a
   1s gap between `setblock` and `execute if`, so an empty belt published `idle` over `running`
   and a Crude / Terrestrial Extractor published `starved` / `out_of_band` over the first `idle`.
