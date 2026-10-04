@@ -1,5 +1,7 @@
 {
   "variants": {
-    "status=idle": { "model": "grindless:block/array_casing_idle" }
+    "status=idle": { "model": "grindless:block/array_casing_idle" },
+    "status=running": { "model": "grindless:block/array_casing_running" },
+    "status=starved": { "model": "grindless:block/array_casing_starved" }
   }
 }

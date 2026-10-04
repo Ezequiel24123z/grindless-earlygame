@@ -16,13 +16,13 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
  * including a controller on the diagonal, which a neighbour notification does not reach
  * (ADR-0094).
  *
- * <p>The single {@code idle} status exists so the generated blockstate has a property to
- * name. The casing never changes it.
+ * <p>The status property has the three grid values because an enum property with one
+ * value is illegal. The casing never leaves idle: it does not tick.
  */
 public class ArrayCasingBlock extends Block {
 
     public static final EnumProperty<MachineStatus> STATUS =
-            MachineProperties.status(BlockCatalogue.PART);
+            MachineProperties.status(BlockCatalogue.GRID);
 
     public ArrayCasingBlock(Properties properties) {
         super(properties);

@@ -3337,7 +3337,10 @@ controller itself. That is this ring, not a hatched kernel.
    and eight `grindless:array_casing` blocks in the horizontal Moore neighbourhood on
    the same Y. The controller is the centre. Seven casings are not a structure. The
    check is this footprint only. There are no hatches, no item or fluid slots, no
-   parametric size, no process family and no new research tier. Slice F stays held.
+   parametric size, no process family and no new research tier. The casing's status
+   property lists idle, running and starved, because a property with one value is
+   illegal and the dedicated server will not boot. The casing never leaves idle.
+   Slice F stays held.
    Own work stays MIT (ADR-0089). This record copies nothing.
 2. **What it does.** While the ring is complete and a pylon covers the controller, the
    array adds **6,553,600 FU** to that network. That is 200 ticks of MK3 throughput,

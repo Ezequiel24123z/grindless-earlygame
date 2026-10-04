@@ -87,9 +87,6 @@ public final class BlockCatalogue {
     /** The grid: it carries power, or is overdrawn. */
     public static final List<String> GRID = List.of("idle", "running", "starved");
 
-    /** A placed part. It does not run, so it has nothing to report but idle. */
-    public static final List<String> PART = List.of("idle");
-
     /** A consumer: it can be stuck on output, on input, or on conditions. */
     public static final List<String> CONSUMER = List.of("idle", "running", "blocked", "starved", "out_of_band");
 
@@ -150,7 +147,7 @@ public final class BlockCatalogue {
             new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
             new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID),
             new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
-            new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, PART));
+            new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
