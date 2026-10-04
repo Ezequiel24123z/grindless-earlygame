@@ -76,6 +76,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
+| [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 
 ---
 
@@ -2422,5 +2423,59 @@ a line of pylons and not a cable. A successor that registers `flux_conduit` as a
 cores is starting ADR-0025, not extending this slice. A successor that lets
 `networkCovering` return a transformer is reopening this record. Kiln / R2 and Slice F are
 still unstarted.
+
+
+## ADR-0065 — T1 Kiln is roast and SO₂, not the acid line
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0058 scheduled playable slices, not system layers. ADR-0062 unblocked Kiln / R2
+the moment a tank could hold a gas. Slice E (ADR-0064) spanned energy; it did not start roasting.
+Three documents still disagree about what the first Kiln ships.
+
+`PROCESSES.md` R2 is roast then reduce: Kiln at `T 700 · atm O2` for 8 s, then Arc Furnace at
+`T 1200 · atm reducing` for 10 s, factor **1.15**, byproducts **1 B SO₂** and slag. The sulfur
+loop then burns that SO₂ to SO₃ with bottled oxygen and vanadia, and that is sulfuric acid.
+
+The T1 Arc Furnace is locked at 1500 °C reducing so R1 runs at full speed without a dial
+(ADR-0059). A 1200 °C point band would put 1500 °C in the tolerance zone and halve R2. T1 has
+no atmosphere bottles; `atm O2` is the oxidising envelope, not a fluid slot. Oxide is not a
+conventional Forge form. Yield 1.15 is the reason to rebuild the line later, not the reason to
+roast now — the reason to roast now is SO₂.
+
+Slice F is the multiblock kernel, and only when a machine needs hatches or size (ADR-0058).
+The Kiln does not.
+
+**Decision.**
+
+1. The T1 Kiln is a single-block `ProcessMachine` on the shared menu (1 in, 1 out). Envelope
+   `MachineEnvelopes.KILN`. Held conditions are 700 °C oxidising, so roast evaluates optimally
+   with no dial. Voltaic-gated crafting-table JSON, like the Pulverizer.
+2. Roast is generated per material that has a vein feed and an oxide form. 1 u raw (or ore)
+   or 1 u crushed → 1 u oxide + 1 B SO₂, 8 s at F1, `T 700 · OXIDISING`. No oxygen fluid.
+   Crushed roast is a second recipe, not a different yield. 1.15 stays deferred.
+3. Oxide is a Grindless form: `grindless:oxides/<material>`, not `forge:`. Supply covers
+   mineable catalogue materials; alloys have no oxide. Item path is `<material>_oxide`.
+4. R2 reduce is an Arc Furnace recipe: 1 u oxide + 1 u carbon → 1 ingot + slag, 10 s at F1.
+   It names 1500 °C reducing so the locked T1 furnace runs it at full speed. The PROCESSES
+   1200 °C is the envelope floor, not a second held temperature. It does not vent CO —
+   PROCESSES names SO₂ and slag only.
+5. SO₂ is a gas at ambient, like CO. The Kiln pushes 1 B into neighbouring `FluidEndpoint`s
+   and vents the rest. The named T1 sink is the Basic Tank. The Thermal Generator must not
+   burn it. Clay Conduit still refuses gases.
+6. No sulfuric acid, no SO₃, no vanadia, no bottled oxygen, no Chemical Washer, no Wire Mill,
+   no T2 cores, no Slice F kernel. Those wait for a machine that needs them.
+
+**Alternatives rejected.** Shipping the 1.15 yield (fractional stacks and a lie until a later
+route exists to justify the extra); a T1 oxygen fluid slot (nothing produces bottled O₂ yet);
+naming R2 reduce at 1200 °C (the locked furnace would run it at half speed); burning SO₂ in
+the Thermal Generator (that sink belongs to CO, and it would skip the acid line); registering
+oxide under `forge:` (no convention); starting the contact-process reactors in this slice
+(ADR-0036 would then demand a sulfuric-acid sink that T1 does not have).
+
+**Consequences.** The player roasts because they want a tank of SO₂, not because they want
+more metal. A successor that adds `sulfuric_acid` without a named spend is reopening
+ADR-0036. A successor that starts Slice F because "the Kiln should be a multiblock" is
+ignoring ADR-0058 — this Kiln does not need hatches.
 
 
