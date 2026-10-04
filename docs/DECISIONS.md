@@ -97,6 +97,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0083](#adr-0083--a-controller-holds-a-machine-below-five-hundred) | A controller holds a machine below five hundred | Accepted |
 | [0084](#adr-0084--the-flux-drill-spends-cells-not-durability) | The Flux Drill spends cells, not durability | Accepted |
 | [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
+| [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
 
 ---
 
@@ -3328,6 +3329,33 @@ slice; pulling items out of the flux network before the drone bay exists.
 blueprint is duplicating items. A successor that pulls from the network
 here is starting slice AC. A successor that writes blueprints to disk is
 inventing a share format the item already is.
+
+
+## ADR-0086 — The planner marks and does not pick up
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice V is the Deconstruction Planner. It marks a
+region to tear down. Returning the items to storage waits until drones
+exist (slice AC). Until then the planner may only mark, or the player
+picks the block up with the Multitool relocate. A second wrench is
+forbidden.
+
+**Decision.** The planner is Assembler-manufactured (casing, two motors,
+four plates, Industrial). Right-click two corners. Sneak-use clears the
+mark. The box uses the same 32-block edge as a blueprint (ADR-0085). The
+mark stays on the item: the two corners and the volume. It does not break
+blocks, drop items, or relocate anything. The Multitool relocate is
+unchanged. Drones, when they exist, read this mark. They are not in this
+slice.
+
+**Alternatives rejected.** A new pickup tool; breaking the region now and
+spilling the drops; a second copy of the Multitool relocate; an unmarked
+item that does nothing until AC.
+
+**Consequences.** A successor that makes the planner mine or relocate is
+inventing the wrench this record refused. A successor that returns items
+to a chest here is starting the drone bay.
 
 
 
