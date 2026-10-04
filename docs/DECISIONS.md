@@ -93,6 +93,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0091](#adr-0091--refractory-brick-is-one-slag-in-twenty-seconds) | Refractory brick is one slag in twenty seconds | Accepted |
 | [0092](#adr-0092--metallurgical-silicon-runs-cold-on-sand-and-quartz) | Metallurgical silicon runs cold on sand and quartz | Accepted |
 | [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
+| [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
 
 ---
 
@@ -3282,5 +3283,99 @@ changes the 10:7 batch or the 600 s is rewriting the yield or the time. A succes
 ships Siemens, a wafer, or a boule here is starting another line. A successor who treats
 the relative band as a mistake and restores ±5 on this furnace is making the recipe
 unrunnable. BH is next and is not started.
+
+---
+
+## ADR-0094 — The first megastructure is the Ground Array
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BH says the concrete structure is chosen when the slice starts. The
+ship column then names Kardashev Type I, II and III. Those are the milestones after the
+first structure. They are not three more blocks in the same change.
+
+The structures already named cannot be this one.
+
+- The Dyson Collector is orbital-ring solar at F8–F9 and takes a space programme
+  (held AO–AR). It is the source that outruns a singularity, which is past the first
+  structure.
+- The Stellar Forge is necessarily orbital (held AS).
+- The Planetary Engine moves a colony. Planets are the following slice. Colonies are
+  held AU.
+- The Space Elevator is held AX.
+- The Singularity Reactor is held AN. Fission, fusion and the Arc Reactor are held
+  AF, AK and AE. The README still calls the Arc Reactor the first plant of that tier,
+  and that plant is not this calendar.
+- Solar generation is held Q. F2 is that row. F3 through F7 are the held plants above.
+  Shipping a generator claims one of those tiers.
+- A formed multiblock with hatches is the Slice F kernel (held AD), and that kernel is
+  for the Arc Reactor. A general shape API here is that row.
+- Endgame generation at `Long.MAX_VALUE` FU/t cannot be operated: a multi-tick buffer
+  and the sum of two such sources do not fit in a `long` (ADR-0088). This slice does
+  not widen the type.
+
+What the factory can already make, and what a structure can already do, is storage.
+The capacitor bank holds ten seconds of an MK1 pylon, 200 ticks of 512 FU/t, and only
+while a pylon covers it (ADR-0064). It is one block. MK3 is the largest pylon the
+factory has, 32,768 FU/t. Ten seconds of that is a buffer the bank cannot be. The
+number is the same rule, applied to the ceiling that already ships. It fits in a
+`long`.
+
+Refractory brick is the lining (ADR-0091). Steel is the frame the arc just learned to
+pour (ADR-0090). Electronic silicon is for circuits, and that line is held AI.
+Metallurgical silicon is for solar cells, and solar generation is held Q. Neither
+grade is a feed here.
+
+Hand placement at this point in the design is a 3×3 to a 5×5 (MACHINES.md). A 3×3 is
+the smallest footprint that is a structure rather than another machine. Minecraft
+notifies only the six orthogonal neighbours, so a corner casing has to tell the
+controller itself. That is this ring, not a hatched kernel.
+
+**Decision.**
+
+1. **The structure is the Ground Array.** One controller, `grindless:ground_array`,
+   and eight `grindless:array_casing` blocks in the horizontal Moore neighbourhood on
+   the same Y. The controller is the centre. Seven casings are not a structure. The
+   check is this footprint only. There are no hatches, no item or fluid slots, no
+   parametric size, no process family and no new research tier. Slice F stays held.
+   Own work stays MIT (ADR-0089). This record copies nothing.
+2. **What it does.** While the ring is complete and a pylon covers the controller, the
+   array adds **6,553,600 FU** to that network. That is 200 ticks of MK3 throughput,
+   the same ten seconds the capacitor uses for MK1. It does not generate. It does not
+   project a supply cube. Uncovered, or with the ring broken, it adds nothing. A
+   casing may sit in more than one ring: layout is the point, and the cost is still
+   the blocks. The extra is saved beside the capacitor banks, not as one of them.
+3. **How it is built.** Both blocks are Assembler recipes under the Industrial
+   blueprint that already exists. T2+ is manufactured (ADR-0017). The casing is
+   **4 refractory bricks + 1 steel ingot → 1 casing** in 20 s at F1. The controller is
+   **1 machine casing + 4 steel plates + 4 refractory bricks → 1 ground array** in
+   20 s at F1. Four bricks line one part. They are not the eight of the ring, which
+   would hide the structure inside one item. No crafting-table recipe.
+4. **What waits.** Kardashev Type I, II and III. The Dyson Collector, the Stellar
+   Forge, the Planetary Engine, the Space Elevator, and every held generator. The
+   next slice is **BI — Original planets**, not started.
+
+**Alternatives rejected.**
+
+- Type I, II and III as three further structures in this slice.
+- The Dyson Collector, or any F2–F9 generator. Those tiers belong to held rows, and
+  F9 is not the `long` ceiling (ADR-0088).
+- A single block with the capacity baked in. That is a larger capacitor, not a
+  structure the player builds.
+- The Slice F kernel, hatches, or a variable rectangle. AD is held, and the Arc
+  Reactor is the machine that kernel is for.
+- Filling the shaft in for the player, the way a pylon does. A megastructure is the
+  blocks the player places.
+- Electronic silicon or metallurgical silicon in the recipe. Those grades have named
+  uses this slice does not start.
+- A new blueprint or a T7 gate. Industrial already gates the Assembler.
+- Planets, interstellar travel, the black hole, or the quest book.
+
+**Consequences.** A successor who adds a generator, a supply cube, or a second
+footprint here is starting another structure. A successor who changes 6,553,600 FU
+without keeping ten seconds of MK3 is inventing a buffer. A successor who moves the
+recipe to the crafting table is ignoring ADR-0017. A successor who spends electronic
+silicon, or who builds the Dyson Collector, Type I, or the multiblock kernel here, is
+outside this record. BI is next and is not started.
 
 
