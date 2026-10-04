@@ -50,6 +50,8 @@
   "block.grindless.array_casing": "Array Casing",
   "block.grindless.lunar_link": "Lunar Link",
   "block.grindless.lunar_regolith": "Lunar Regolith",
+  "block.grindless.starward_link": "Starward Link",
+  "block.grindless.drift_deck": "Drift Deck",
 
   "block.grindless.flux_pylon_mk1": "Flux Pylon MK1",
   "block.grindless.flux_pylon_mk2": "Flux Pylon MK2",
@@ -130,5 +132,11 @@
   "chat.grindless.luna.departed": "Luna",
   "chat.grindless.luna.returned": "Returned",
   "chat.grindless.luna.away": "Stand by the link",
-  "chat.grindless.luna.missing": "Luna is not loaded"
+  "chat.grindless.luna.missing": "Luna is not loaded",
+  "chat.grindless.drift.charging": "The link is drawing power",
+  "chat.grindless.drift.unpowered": "The link needs a pylon",
+  "chat.grindless.drift.departed": "The Drift",
+  "chat.grindless.drift.returned": "Returned",
+  "chat.grindless.drift.away": "Stand by the link",
+  "chat.grindless.drift.missing": "The Drift is not loaded"
 }

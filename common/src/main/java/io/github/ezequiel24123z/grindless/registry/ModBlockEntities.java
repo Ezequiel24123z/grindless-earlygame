@@ -17,6 +17,7 @@ import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.planet.LunarLinkBlockEntity;
+import io.github.ezequiel24123z.grindless.star.StarwardLinkBlockEntity;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
@@ -218,6 +219,12 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("lunar_link",
                     () -> BlockEntityType.Builder
                             .of(LunarLinkBlockEntity::new, ModBlocks.LUNAR_LINK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<StarwardLinkBlockEntity>> STARWARD_LINK =
+            BLOCK_ENTITIES.register("starward_link",
+                    () -> BlockEntityType.Builder
+                            .of(StarwardLinkBlockEntity::new, ModBlocks.STARWARD_LINK.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<GroundArrayBlockEntity>> GROUND_ARRAY =

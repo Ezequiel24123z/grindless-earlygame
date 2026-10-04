@@ -24,6 +24,8 @@ import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
 import io.github.ezequiel24123z.grindless.network.CapacitorBankBlock;
 import io.github.ezequiel24123z.grindless.planet.LunarLinkBlock;
 import io.github.ezequiel24123z.grindless.planet.LunarRegolithBlock;
+import io.github.ezequiel24123z.grindless.star.DriftDeckBlock;
+import io.github.ezequiel24123z.grindless.star.StarwardLinkBlock;
 import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
@@ -191,6 +193,20 @@ public final class ModBlocks {
                     .mapColor(MapColor.COLOR_GRAY)
                     .sound(SoundType.GRAVEL)
                     .strength(1.5F, 6.0F)
+                    .requiresCorrectToolForDrops()));
+
+    /** Departure to the Drift. On the Drift, the same block is the way home (ADR-0096). */
+    public static final RegistrySupplier<StarwardLinkBlock> STARWARD_LINK = register("starward_link",
+            () -> new StarwardLinkBlock(machine().strength(3.5F)));
+
+    /**
+     * The Drift's floor. A full cube, so neighbours occlude. Plating, not a machine.
+     */
+    public static final RegistrySupplier<DriftDeckBlock> DRIFT_DECK = register("drift_deck",
+            () -> new DriftDeckBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .sound(SoundType.METAL)
+                    .strength(2.0F, 6.0F)
                     .requiresCorrectToolForDrops()));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply

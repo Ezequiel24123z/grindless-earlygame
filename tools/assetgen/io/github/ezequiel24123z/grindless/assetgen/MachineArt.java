@@ -53,6 +53,10 @@ public final class MachineArt {
     public static final int ARRAY_CASING = 0xC46A3A;
     /** Moon-pale. Not cyan, amber or red, so a status still reads as a status. */
     public static final int LINK = 0xECEFF1;
+    /** Deep navy. A gate, not the moon-pale ring and not the array's indigo. */
+    public static final int SPAN = 0x0D47A1;
+    /** Blue-grey plate. A floor, not lunar dust. */
+    public static final int DECK = 0x455A64;
     public static final int REGOLITH = 0x9E9E9E;
 
     private static final double CX = 7.5;
@@ -92,6 +96,8 @@ public final class MachineArt {
             case ARRAY_CASING -> arrayCasingFront(status);
             case LINK -> linkFront(status);
             case REGOLITH -> regolithFront(status);
+            case SPAN -> spanFront(status);
+            case DECK -> deckFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -126,6 +132,8 @@ public final class MachineArt {
             case ARRAY_CASING -> arrayCasingTop();
             case LINK -> linkTop();
             case REGOLITH -> regolithFront("idle");
+            case SPAN -> spanTop();
+            case DECK -> deckTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1150,6 +1158,68 @@ public final class MachineArt {
             }
         }
         strip(img, status);
+        return img;
+    }
+
+    /** Two posts and a lintel. The centre is the opening, not a ring. */
+    public static BufferedImage spanFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SPAN);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean post = x <= 4 || x >= 11;
+                boolean lintel = y <= 3;
+                if (post || lintel) {
+                    set(img, x, y, Palette.shade(SPAN, (x + y) % 2 == 0 ? 0.08 : -0.28));
+                } else if (x >= 6 && x <= 9 && y >= 7 && y <= 10) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(SPAN, -0.55);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage spanTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 6; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean post = (x <= 4 || x >= 11) && y <= 6;
+                boolean beam = y <= 3;
+                if (post || beam) {
+                    set(img, x, y, Palette.shade(SPAN, (x + y) % 2 == 0 ? 0.05 : -0.3));
+                }
+            }
+        }
+        return img;
+    }
+
+    /** Plates with seams. Not the noisy dust of regolith. */
+    public static BufferedImage deckFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                boolean seam = y % 4 == 0 || x % 8 == 0;
+                set(img, x, y, seam
+                        ? Palette.shade(DECK, -0.4)
+                        : Palette.shade(DECK, (x / 8 + y / 4) % 2 == 0 ? 0.06 : -0.08));
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage deckTop() {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                boolean seam = y % 4 == 0 || x % 4 == 0;
+                set(img, x, y, seam
+                        ? Palette.shade(DECK, -0.35)
+                        : Palette.shade(DECK, 0.04));
+            }
+        }
         return img;
     }
 

@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
 import io.github.ezequiel24123z.grindless.planet.LunarLinkLogic;
+import io.github.ezequiel24123z.grindless.star.StarwardLinkLogic;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.Locale;
  * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
  * Ground Array: casing and controller, Industrial, no crafting table (ADR-0094).
  * Lunar Link: two array casings and one machine casing, Industrial (ADR-0095).
+ * Starward Link: one lunar link and four array casings, Industrial (ADR-0096).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -106,6 +108,7 @@ public final class ProcessGraph {
         recipes.add(arrayCasing());
         recipes.add(groundArray());
         recipes.add(lunarLink());
+        recipes.add(starwardLink());
         return List.copyOf(recipes);
     }
 
@@ -467,6 +470,23 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.ARRAY_CASING, LunarLinkLogic.CASINGS),
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, LunarLinkLogic.MACHINE_CASINGS)),
                 List.of(OutputSpec.item(FabricationLogic.LUNAR_LINK, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
+    /** The way off the star. The lunar link plus half a ring. Industrial (ADR-0017, ADR-0096). */
+    private static ProcessRecipe starwardLink() {
+        return new ProcessRecipe(
+                "assemble/starward_link",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.LUNAR_LINK, StarwardLinkLogic.LINKS),
+                        IngredientSpec.item(FabricationLogic.ARRAY_CASING, StarwardLinkLogic.CASINGS)),
+                List.of(OutputSpec.item(FabricationLogic.STARWARD_LINK, 1)),
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,

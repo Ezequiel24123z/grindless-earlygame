@@ -84,6 +84,8 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.ARRAY_CASING),
                 lazy(ModBlocks.LUNAR_LINK),
                 lazy(ModBlocks.LUNAR_REGOLITH),
+                lazy(ModBlocks.STARWARD_LINK),
+                lazy(ModBlocks.DRIFT_DECK),
                 lazy(ModBlocks.FLUX_PYLON_MK1),
                 lazy(ModBlocks.FLUX_PYLON_MK2),
                 lazy(ModBlocks.FLUX_PYLON_MK3));

@@ -78,6 +78,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Drift (ADR-0096).** The first interstellar hop is one deck between the home star
+  and the galactic centre. It has no ore: an extractor there finds nothing. A Starward
+  Link, Assembler-built under Industrial from one lunar link and four array casings,
+  draws 6,553,600 FU from a covering pylon and sends the player. The return pad does not
+  draw again. Arrival at the black hole is named next and is not started. No vacuum
+  damage, no Horizon Gate, no rocket, no further planet, no black-hole interior.
+
 - **Luna (ADR-0095).** The first original planet is a regolith world with no ore. Every
   chunk's vein is helium-3, a reagent the Crude and Terrestrial Extractors emit only
   there. A Lunar Link, Assembler-built under Industrial from two array casings and one

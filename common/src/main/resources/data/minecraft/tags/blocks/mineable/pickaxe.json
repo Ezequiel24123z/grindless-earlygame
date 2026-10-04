@@ -32,6 +32,8 @@
     "grindless:array_casing",
     "grindless:lunar_link",
     "grindless:lunar_regolith",
+    "grindless:starward_link",
+    "grindless:drift_deck",
     "grindless:flux_pylon_shaft"
   ]
 }
