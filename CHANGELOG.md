@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
+  Slice I placed the item at `8 72 8`, one block above the hopper feeding the
+  terminal, so the entity vanished before `ADV-CORE-OK`. The core now appears
+  at `8 100 8`, same as the Atlas and Wire Mill item smokes.
+
 - **Boot smokes handshake before scenario commands.** GitHub lost the first FIFO lines
   after `Done`, so `PICKAXE-OK hand_crank_dynamo` and `ATLAS-OK` flaked while the same
   commit passed on the other event. `smoke-boot.sh` now waits for a `[Server] SMOKE-READY`

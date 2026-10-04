@@ -6,5 +6,6 @@ execute if block 8 70 8 grindless:research_terminal run say TERMINAL-OK
 data get block 8 70 8
 setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"grindless:data_core",Count:1b}]}
 execute if data block 8 70 8 Input[{id:"grindless:data_core"}] run say CORE-IN
-summon item 8 72 8 {Item:{id:"grindless:advanced_data_core",Count:1b}}
+summon minecraft:item 8 100 8 {Item:{id:"grindless:advanced_data_core",Count:1b}}
 execute if entity @e[type=item,nbt={Item:{id:"grindless:advanced_data_core"}}] run say ADV-CORE-OK
+kill @e[type=item]
