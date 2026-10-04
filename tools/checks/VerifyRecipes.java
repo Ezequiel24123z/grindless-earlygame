@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.recipe;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.process.ConditionBand;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +40,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact and pickle", 39, recipes.size());
+        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle and steel", 40, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -248,6 +249,29 @@ public final class VerifyRecipes {
 
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
+        ProcessRecipe steel = recipe(recipes, "alloy/steel");
+        eq("steel is the arc furnace", MachineFamily.ARC_FURNACE, steel.family());
+        eq("steel takes ten iron", 10, steel.itemInputs().get(0).count());
+        eq("steel iron is ingots", "tag:forge:ingots/iron", steel.itemInputs().get(0).qualified());
+        eq("steel takes one carbon", 1, steel.itemInputs().get(1).count());
+        eq("steel carbon is the tag", "tag:grindless:carbon", steel.itemInputs().get(1).qualified());
+        eq("steel makes ten ingots", 10, steel.itemOutputs().get(0).count());
+        eq("steel output is the ingot tag", "tag:forge:ingots/steel", steel.itemOutputs().get(0).qualified());
+        eq("steel is 140 seconds", 20 * 140, steel.durationTicks());
+        eq("steel draws F1", 32L, steel.fuPerTick());
+        eq("steel is 1600 C", 1600.0, steel.temperatureC());
+        yes("steel names no atmosphere", !steel.namesAtmosphere());
+        yes("steel has no catalyst", steel.catalysts().isEmpty());
+        yes("steel has no fluid", steel.fluidInputs().isEmpty() && steel.fluidOutputs().isEmpty());
+        yes("steel has no blueprint", steel.blueprint() == null);
+        yes("furnace hold is optimal for 1600 C",
+                ConditionBand.relative(ProcessLogic.STEEL_TEMPERATURE)
+                        .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        no("oxygen blow is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("oxygen")));
+        no("direct reduction is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("hydrogen")
+                        || recipe.id().contains("direct")));
         no("steel without a vein has no ore line",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("b0_r1/steel")));
         no("steel without oxide does not roast",

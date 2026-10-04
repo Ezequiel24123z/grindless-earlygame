@@ -11,7 +11,8 @@ import java.util.Locale;
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
  * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor and the
  * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
- * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle. No Minecraft
+ * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle.
+ * Electric-arc steel: 10 iron ingots + 1 carbon → 10 steel ingots (ADR-0090). No Minecraft
  * imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -90,6 +91,7 @@ public final class ProcessGraph {
         recipes.add(contactAbsorption());
         recipes.add(pickleIron());
         recipes.add(chemicalReactor());
+        recipes.add(electricArcSteel());
         return List.copyOf(recipes);
     }
 
@@ -328,6 +330,24 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 ProcessLogic.CONTACT_ACID_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * Electric-arc steel on the Arc Furnace (ADR-0090). Oxygen blow and direct reduction
+     * wait. No slag: the route names none.
+     */
+    private static ProcessRecipe electricArcSteel() {
+        return new ProcessRecipe(
+                "alloy/steel",
+                MachineFamily.ARC_FURNACE,
+                List.of(
+                        IngredientSpec.tag(ingotTag("iron"), ProcessLogic.STEEL_IRON),
+                        IngredientSpec.tag(ProcessLogic.CARBON, ProcessLogic.STEEL_CARBON)),
+                List.of(OutputSpec.tag(ingotTag("steel"), ProcessLogic.STEEL_OUT)),
+                ProcessLogic.STEEL_TEMPERATURE,
+                null,
+                ProcessLogic.STEEL_TICKS,
                 ProcessLogic.FU_PER_TICK);
     }
 

@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 39, rows.size());
+        eq("atlas lists every generated recipe", 40, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the reactor", "assemble/chemical_reactor",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -58,6 +58,10 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:wires/iron").size());
         eq("unknown product is empty", 0,
                 AtlasLogic.producing(recipes, "forge:ingots/unobtainium").size());
+        eq("steel has one arc route", 1,
+                AtlasLogic.producing(recipes, "forge:ingots/steel").size());
+        yes("that route is electric arc",
+                ids(AtlasLogic.producing(recipes, "forge:ingots/steel")).contains("alloy/steel"));
 
         List<AtlasLogic.Entry> kiln = AtlasLogic.family(recipes, MachineFamily.KILN);
         eq("five kiln routes in this set", 5, kiln.size());
@@ -76,6 +80,7 @@ public final class VerifyAtlas {
 
         List<AtlasLogic.Entry> carbon = AtlasLogic.consuming(recipes, "grindless:carbon");
         yes("R2 consumes carbon", ids(carbon).contains("r2/iron"));
+        yes("steel consumes carbon", ids(carbon).contains("alloy/steel"));
         yes("the plate die is a catalyst, not an input",
                 ids(AtlasLogic.consuming(recipes, "grindless:plate_die")).contains("press/plate/iron"));
 
