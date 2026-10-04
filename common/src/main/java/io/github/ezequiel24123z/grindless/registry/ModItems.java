@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.item.MultitoolItem;
 import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
+import io.github.ezequiel24123z.grindless.item.SupraluminalStationItem;
 import io.github.ezequiel24123z.grindless.item.SurveyRocketItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
@@ -107,6 +108,10 @@ public final class ModItems {
     /** Local-system rocket. Placed on a launch pad; it climbs, then the map opens (ADR-0097). */
     public static final RegistrySupplier<Item> SURVEY_ROCKET = register("survey_rocket",
             () -> new SurveyRocketItem(new Item.Properties().stacksTo(1)));
+
+    /** Interstellar station. Placed on a berth; it climbs, and the ceiling is the arrival (ADR-0098). */
+    public static final RegistrySupplier<Item> SUPRALUMINAL_STATION = register("supraluminal_station",
+            () -> new SupraluminalStationItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

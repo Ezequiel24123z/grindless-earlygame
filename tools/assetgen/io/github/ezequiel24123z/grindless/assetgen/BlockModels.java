@@ -79,6 +79,7 @@ final class BlockModels {
             case SPAN -> span();
             case DECK -> deck();
             case PAD -> pad();
+            case BERTH -> berth();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -407,6 +408,15 @@ final class BlockModels {
                 box(1, 2, 1, 4, 14, 4, "top", "side"),
                 box(12, 2, 1, 15, 14, 4, "top", "side"),
                 front(1, 12, 1, 15, 15, 4, "top", "side", "front"));
+    }
+
+    /** Two rails and a ring, lower than the gate. A station stands here, not a rocket. */
+    private static List<Box> berth() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "side"),
+                box(0, 2, 0, 3, 5, 16, "top", "front"),
+                box(13, 2, 0, 16, 5, 16, "top", "front"),
+                box(6, 2, 6, 10, 6, 10, "cap", "base"));
     }
 
     /** A low cradle. Shorter than a link, with a post the rocket sits against. */

@@ -59,6 +59,8 @@ public final class MachineArt {
     public static final int DECK = 0x455A64;
     /** Teal cradle. A pad, not the deck and not the moon-pale ring. */
     public static final int PAD = 0x00897B;
+    /** Violet rails. A berth, not the rocket's teal cradle and not the navy gate. */
+    public static final int BERTH = 0x6A1B9A;
     public static final int REGOLITH = 0x9E9E9E;
 
     private static final double CX = 7.5;
@@ -101,6 +103,7 @@ public final class MachineArt {
             case SPAN -> spanFront(status);
             case DECK -> deckFront(status);
             case PAD -> padFront(status);
+            case BERTH -> berthFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -138,6 +141,7 @@ public final class MachineArt {
             case SPAN -> spanTop();
             case DECK -> deckTop();
             case PAD -> padTop();
+            case BERTH -> berthTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1216,6 +1220,46 @@ public final class MachineArt {
             }
         }
         strip(img, status);
+        return img;
+    }
+
+    /** Two rails and a ring. A station stands here. Not the pad's cross. */
+    public static BufferedImage berthFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, BERTH);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 13; x++) {
+                int dx = x - 7;
+                int dy = y - 8;
+                int dist = dx * dx + dy * dy;
+                boolean rail = x <= 3 || x >= 12;
+                boolean ring = dist >= 8 && dist <= 16;
+                if (rail) {
+                    set(img, x, y, Palette.shade(BERTH, (x + y) % 2 == 0 ? 0.1 : -0.22));
+                } else if (ring) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(BERTH, -0.15);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage berthTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                int dx = x - 7;
+                int dy = y - 7;
+                int dist = dx * dx + dy * dy;
+                boolean rail = x <= 3 || x >= 12;
+                boolean ring = dist >= 8 && dist <= 16;
+                if (rail || ring) {
+                    set(img, x, y, Palette.shade(BERTH, rail ? -0.2 : 0.12));
+                }
+            }
+        }
         return img;
     }
 

@@ -11,11 +11,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
 /**
- * Moves one player between the dimension they are standing in and the Drift (ADR-0096).
+ * The old hop between a dimension and the Drift (ADR-0096).
  *
- * <p>The link has one destination, short of the galactic centre. It does not dial an
- * address, and it does not open the black hole. The return pad is placed because no
- * rocket exists yet to deliver a far ring.
+ * <p>The station replaced this path (ADR-0098). {@link StarwardLinkBlockEntity} does
+ * not call it. The methods stay so a world that still has the class loaded does not
+ * need a new id, and so a successor does not invent a third link to get the same
+ * movement back. The black hole is still not a destination.
  */
 public final class StarwardTravel {
 
