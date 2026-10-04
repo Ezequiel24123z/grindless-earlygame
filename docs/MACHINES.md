@@ -626,6 +626,9 @@ The native Atlas exists anyway because the ratio solver and route comparison nee
 viewers do not provide, and because a pack author who ships no recipe viewer must not end up with
 an unplayable mod.
 
+T1 ships the lookup stub only (ADR-0066): a handheld list of the live graph. The solver, cost
+overlay and JEI integration stay later.
+
 ---
 
 ## Open questions

@@ -1930,7 +1930,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
-| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | pending — `VerifyRecipes` is in; JEI waits |
+| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | ✅ done — Atlas stub ADR-0066; JEI waits |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | ✅ done — ADR-0062 |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
@@ -1970,6 +1970,8 @@ T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and ex
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
 **Next is Slice F — only when a machine needs hatches or size**, not a T1 framework.
+The Process Atlas stub is in: a Voltaic-gated handheld lists the live process graph
+(family, I/O, conditions, time, FU/t). It does not solve a line. JEI still waits.
 Kiln / R2 are in: a T1 Kiln roasts feed to oxide and vents 1 B SO₂ into a tank (or
 atmosphere). The Arc Furnace reduces oxide + carbon to an ingot and slag in 10 s.
 Yield stays 1.00; 1.15 and sulfuric acid wait. Slice E spanning is already in.

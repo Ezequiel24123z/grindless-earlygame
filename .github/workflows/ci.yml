@@ -115,6 +115,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-kiln.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-kiln.expect
 
+      # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
+      - name: Boot and exercise process atlas
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-atlas.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-atlas.expect
+
       - name: Upload server log
         if: always()
         uses: actions/upload-artifact@v4

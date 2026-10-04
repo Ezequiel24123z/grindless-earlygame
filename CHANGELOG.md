@@ -30,6 +30,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Process Atlas stub (ADR-0066).** Handheld lists the live `ProcessLookup` graph:
+  family, I/O, catalysts, named conditions, duration and FU/t. `AtlasLogic` has no
+  Minecraft imports; `VerifyAtlas` dumps it. No ratio solver. JEI still waits.
+  Voltaic-gated craft. CI summons the item.
+
 - **Kiln / R2 — roast then reduce (ADR-0065).** T1 Kiln (8 s F1, 700 °C oxidising)
   turns raw or crushed into oxide and vents 1 B SO₂. The named sink is the Basic
   Tank; the Thermal Generator does not burn it. Oxide is `grindless:oxides/<m>`

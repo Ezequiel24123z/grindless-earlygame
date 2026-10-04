@@ -1,0 +1,4 @@
+forceload add 0 0
+summon minecraft:item 8 70 8 {Item:{id:"grindless:process_atlas",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:process_atlas"}}] run say ATLAS-OK
+kill @e[type=item]
