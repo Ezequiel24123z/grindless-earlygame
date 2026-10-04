@@ -79,6 +79,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
+| [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
 
 ---
 
@@ -2564,5 +2565,52 @@ Fusion (then F3 still has no generator and the suit waits until the endgame).
 reopening this record. A successor that starts hatches because "armour will need a reactor" is
 ignoring ADR-0058 — start F when the Arc Reactor (or another sized machine) is the slice, not
 before. The README Exosuit table is the player-facing version of this decision.
+
+
+## ADR-0068 — Horizon Gates are commute infrastructure, not mining dimensions
+
+*2026-10-04 · Accepted*
+
+**Context.** The README already rejects mining dimensions as "the same grind, in a different
+room." System 9 already has rockets, Mass Driver, telepresence and Colony Cores. ADR-0012
+already says planets come from installed space mods. The user asked for futuristic end goals
+in the Stargate tradition: gates, dimensions, exotic planets.
+
+A successor who adds a void-miner dimension, a creative teleport, or a second planet pack
+beside Ad Astra has missed both the request and the existing records.
+
+**Decision.**
+
+1. **The Horizon Gate is T6 commute infrastructure.** A ring multiblock you dial. Addresses
+   come from the planet registry after a Deep Survey, not from a creative list. It is the
+   moment the interplanetary commute dies, the same way the Crude Extractor killed mining and
+   the Blueprint Tool killed repeating a layout.
+2. **Two rings.** The far gate is cargo: you deliver it by rocket, Mass Driver or colony
+   package once. Until the pair exists, you still fly. After it exists, you walk. That is the
+   factory payoff, not a free portal.
+3. **People cheap, bulk expensive.** Players, Proxy Frames and colony packages go through at a
+   modest FU cost. Item cargo is allowed but costs more FU per kilogram than the Mass Driver, so
+   belts of ore still belong on the driver (principle 10: pay in layout or pay in power).
+4. **Not a mining dimension.** A Horizon Gate never opens a world whose only job is "more
+   ore." Destinations are planets in the registry — Ad Astra's if present (ADR-0012), otherwise
+   the fallback set. Vanilla Nether and End are not auto-registered; a pack author may add them
+   by datapack. Pocket "mining dims" and RFTools-style void worlds are out.
+5. **Exotic fallback worlds are process envelopes.** When no space mod is installed, the
+   existing five stay, and two more exotic worlds join: **Thalassa** (ocean, pressure chemistry)
+   and **Helios** (tidally locked heat/cold). Signature resources and hazards differ; the
+   material registry does not. Erebus remains the strange-matter world. Do not invent unique
+   untaggable ores that only exist there.
+6. **Do not start this in T1.** Orbital (0.8) and interplanetary (0.9) stay later. Slice F is
+   still only when a machine needs hatches. Exact dial cost, ring size and address format stay
+   open.
+
+**Alternatives rejected.** A mining or void dimension (already in the anti-pattern table);
+shipping Grindless planets beside Ad Astra (ADR-0012); a one-sided creative teleport (no
+factory); routing all cargo through the gate (obsoletes the Mass Driver); calling the block
+Stargate (someone else's name); treating the Nether as a planet by default.
+
+**Consequences.** A successor that registers `mining_dim` is reopening this record and the
+anti-pattern table. A successor that skips the far-gate delivery is shipping a creative
+teleporter. The README System 9 travel table is the player-facing version.
 
 
