@@ -178,6 +178,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-logistics.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-logistics.expect
 
+      # Slice S: signal cable, logic controller and redstone interface place.
+      - name: Boot and exercise logic
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-logic.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-logic.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

@@ -138,6 +138,9 @@ public final class ProcessGraph {
         recipes.add(fluxBelt());
         recipes.add(stackManipulator());
         recipes.add(filterManipulator());
+        recipes.add(signalCable());
+        recipes.add(logicController());
+        recipes.add(redstoneInterface());
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);
@@ -673,6 +676,18 @@ public final class ProcessGraph {
 
     private static ProcessRecipe filterManipulator() {
         return machineCraft("assemble/filter_manipulator", FabricationLogic.FILTER_MANIPULATOR);
+    }
+
+    private static ProcessRecipe signalCable() {
+        return machineCraft("assemble/signal_cable", FabricationLogic.SIGNAL_CABLE);
+    }
+
+    private static ProcessRecipe logicController() {
+        return machineCraft("assemble/logic_controller", FabricationLogic.LOGIC_CONTROLLER);
+    }
+
+    private static ProcessRecipe redstoneInterface() {
+        return machineCraft("assemble/redstone_interface", FabricationLogic.REDSTONE_INTERFACE);
     }
 
     /** Electrical heat. The turbine that would spend this steam is not this tier (ADR-0081). */

@@ -70,6 +70,9 @@ public abstract class MachineBlockEntity extends BlockEntity {
     private ConditionState conditions = ConditionState.AMBIENT;
     private boolean initialised;
 
+    /** Set by a Logic Controller. Not saved: the controller is the source of truth (ADR-0083). */
+    private boolean logisticsHold;
+
     protected MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         this.tickOffset = TickOffset.forPosition(pos);
@@ -157,6 +160,25 @@ public abstract class MachineBlockEntity extends BlockEntity {
 
     public SimpleFluxStorage energy() {
         return energy;
+    }
+
+    /** Whether a Logic Controller is holding this machine idle (ADR-0083). */
+    public boolean logisticsHold() {
+        return logisticsHold;
+    }
+
+    /**
+     * Holds or releases this machine. A hold publishes idle. Releasing lets the next tick
+     * show the real status. The flag is not written to NBT.
+     */
+    public void setLogisticsHold(boolean hold) {
+        if (this.logisticsHold == hold) {
+            return;
+        }
+        this.logisticsHold = hold;
+        if (hold && getLevel() != null) {
+            MachineProperties.publish(getLevel(), getBlockPos(), MachineStatus.IDLE);
+        }
     }
 
     public ContainerConfig containerConfig() {
@@ -275,6 +297,9 @@ public abstract class MachineBlockEntity extends BlockEntity {
             // is still loading. By the first tick both are true.
             onFirstTick();
             updateSubscriptions();
+        }
+        if (logisticsHold) {
+            return;
         }
         subscriptions.tick();
     }

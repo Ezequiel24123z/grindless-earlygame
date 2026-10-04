@@ -58,6 +58,9 @@
   "block.grindless.flux_belt": "Flux Belt",
   "block.grindless.stack_manipulator": "Stack Manipulator",
   "block.grindless.filter_manipulator": "Filter Manipulator",
+  "block.grindless.signal_cable": "Signal Cable",
+  "block.grindless.logic_controller": "Logic Controller",
+  "block.grindless.redstone_interface": "Redstone Interface",
   "block.grindless.hand_pump": "Hand Pump",
   "block.grindless.basic_tank": "Basic Tank",
   "block.grindless.capacitor_bank": "Capacitor Bank",
@@ -126,6 +129,8 @@
   "chat.grindless.sorter.clear": "Filter cleared",
   "chat.grindless.filter_manipulator.filter": "Filter: %s",
   "chat.grindless.filter_manipulator.clear": "Filter cleared",
+  "chat.grindless.logic_controller.filter": "Filter: %s",
+  "chat.grindless.logic_controller.clear": "Filter cleared",
   "overlay.grindless.scanner.vein": "%s · richness %s",
   "overlay.grindless.scanner.none": "Not surveyed — right-click to scan",
 

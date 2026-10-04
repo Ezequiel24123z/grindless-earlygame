@@ -65,6 +65,9 @@ public final class MachineArt {
     public static final int FLUX_BELT = 0x1565C0;
     public static final int STACK_ARM = 0x6A1B9A;
     public static final int FILTER_ARM = 0xF9A825;
+    public static final int SIGNAL = 0x0097A7;
+    public static final int LOGIC = 0x5E35B1;
+    public static final int INTERFACE = 0xC62828;
     public static final int BANK = 0xFFEE58;
     public static final int TRANSFORMER = 0x7C4DFF;
 
@@ -117,6 +120,9 @@ public final class MachineArt {
             case FLUX_BELT -> fluxBeltFront(status);
             case STACK_ARM -> stackArmFront(status);
             case FILTER_ARM -> filterArmFront(status);
+            case SIGNAL -> signalFront(status);
+            case LOGIC -> logicFront(status);
+            case INTERFACE -> interfaceFront(status);
             case BANK -> bankFront(status);
             case TRANSFORMER -> transformerFront(status);
             case PYLON -> pylonSide(1, status);
@@ -165,6 +171,9 @@ public final class MachineArt {
             case FLUX_BELT -> fluxBeltTop();
             case STACK_ARM -> stackArmTop();
             case FILTER_ARM -> filterArmTop();
+            case SIGNAL -> signalTop();
+            case LOGIC -> logicTop();
+            case INTERFACE -> interfaceTop();
             case BANK -> bankTop();
             case TRANSFORMER -> transformerTop();
             case PYLON -> pylonTop(1, "idle");
@@ -1790,6 +1799,97 @@ public final class MachineArt {
         for (int x = 6; x <= 9; x++) {
             for (int y = 3; y <= 12; y++) {
                 set(img, x, y, Palette.shade(FILTER_ARM, y == 6 ? 0.4 : -0.25));
+            }
+        }
+        return img;
+    }
+
+    /** A dashed spine. The cable is a line, not a trough. */
+    public static BufferedImage signalFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SIGNAL);
+        for (int x = 1; x <= 14; x++) {
+            int pixel = (x % 3 == 0)
+                    ? (glow < 0 ? Palette.shade(SIGNAL, 0.35) : glow)
+                    : Palette.shade(CASING, -0.55);
+            set(img, x, 7, pixel);
+            set(img, x, 8, pixel);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage signalTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 0; y < SIZE; y++) {
+            int pixel = (y % 3 == 0)
+                    ? Palette.shade(SIGNAL, 0.4)
+                    : Palette.shade(SIGNAL, -0.45);
+            set(img, 7, y, pixel);
+            set(img, 8, y, pixel);
+        }
+        return img;
+    }
+
+    /** A reader window with a cross, not an arm. */
+    public static BufferedImage logicFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, LOGIC);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 4; x <= 11; x++) {
+                boolean frame = x == 4 || x == 11 || y == 4 || y == 11;
+                boolean cross = x == 7 || x == 8 || y == 7 || y == 8;
+                int pixel;
+                if (frame) {
+                    pixel = Palette.shade(LOGIC, 0.25);
+                } else if (cross) {
+                    pixel = glow < 0 ? Palette.shade(LOGIC, -0.15) : glow;
+                } else {
+                    pixel = Palette.shade(CASING, -0.6);
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage logicTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int x = 4; x <= 11; x++) {
+            for (int y = 4; y <= 11; y++) {
+                boolean ring = x == 4 || x == 11 || y == 4 || y == 11;
+                set(img, x, y, Palette.shade(LOGIC, ring ? 0.3 : -0.35));
+            }
+        }
+        for (int y = 0; y <= 3; y++) {
+            set(img, 7, y, Palette.shade(LOGIC, 0.45));
+            set(img, 8, y, Palette.shade(LOGIC, 0.45));
+        }
+        return img;
+    }
+
+    /** A redstone cross on a plate. */
+    public static BufferedImage interfaceFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, INTERFACE);
+        int ink = glow < 0 ? Palette.shade(INTERFACE, 0.15) : glow;
+        for (int i = 3; i <= 12; i++) {
+            set(img, i, 7, ink);
+            set(img, i, 8, ink);
+            set(img, 7, i, ink);
+            set(img, 8, i, ink);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage interfaceTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int x = 5; x <= 10; x++) {
+            for (int y = 5; y <= 10; y++) {
+                boolean ring = x == 5 || x == 10 || y == 5 || y == 10;
+                set(img, x, y, Palette.shade(INTERFACE, ring ? 0.2 : -0.4));
             }
         }
         return img;

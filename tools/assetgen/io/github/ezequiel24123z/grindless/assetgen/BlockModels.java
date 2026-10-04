@@ -88,6 +88,9 @@ final class BlockModels {
             case FLUX_BELT -> fluxBelt();
             case STACK_ARM -> stackArm();
             case FILTER_ARM -> filterArm();
+            case SIGNAL -> signal();
+            case LOGIC -> logic();
+            case INTERFACE -> face();
             case BANK -> bank();
             case TRANSFORMER -> transformer();
         };
@@ -578,6 +581,30 @@ final class BlockModels {
                 front(2, 9, 1, 14, 13, 8, "top", "side", "front"),
                 box(3, 10, 0, 6, 12, 2, "cap", "cap"),
                 box(10, 10, 0, 13, 12, 2, "cap", "cap"));
+    }
+
+    /** A thin run on the ground. Not a trough and not a belt. */
+    private static List<Box> signal() {
+        return List.of(
+                box(6, 0, 0, 10, 2, 16, "top", "side"),
+                front(7, 2, 0, 9, 3, 16, "cap", "cap", "front"));
+    }
+
+    /** A reader housing, a lens, and a short mast. */
+    private static List<Box> logic() {
+        return List.of(
+                box(2, 0, 2, 14, 3, 14, "cap", "base"),
+                box(3, 3, 5, 13, 9, 14, "top", "side"),
+                front(4, 4, 2, 12, 8, 6, "top", "side", "front"),
+                box(7, 9, 7, 9, 14, 9, "cap", "cap"));
+    }
+
+    /** A standing plate with a collar on the back. */
+    private static List<Box> face() {
+        return List.of(
+                box(4, 0, 6, 12, 2, 14, "cap", "base"),
+                front(3, 2, 4, 13, 12, 8, "top", "side", "front"),
+                box(6, 4, 12, 10, 8, 16, "cap", "cap"));
     }
 
     /** A slim arm with a gate plate on the front. */

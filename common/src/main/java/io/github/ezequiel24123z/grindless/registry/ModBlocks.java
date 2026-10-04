@@ -22,6 +22,9 @@ import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
 import io.github.ezequiel24123z.grindless.belt.SorterBlock;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
 import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlock;
+import io.github.ezequiel24123z.grindless.logic.LogicControllerBlock;
+import io.github.ezequiel24123z.grindless.logic.RedstoneInterfaceBlock;
+import io.github.ezequiel24123z.grindless.logic.SignalCableBlock;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
@@ -256,6 +259,21 @@ public final class ModBlocks {
     public static final RegistrySupplier<FilterManipulatorBlock> FILTER_MANIPULATOR =
             register("filter_manipulator",
                     () -> new FilterManipulatorBlock(machine().strength(2.0F)));
+
+    /** T2 signal wire. One integer, one direction. Manufactured, not crafted. */
+    public static final RegistrySupplier<SignalCableBlock> SIGNAL_CABLE =
+            register("signal_cable",
+                    () -> new SignalCableBlock(machine().strength(1.5F)));
+
+    /** T2 controller. Holds a machine at 500 items. Manufactured, not crafted. */
+    public static final RegistrySupplier<LogicControllerBlock> LOGIC_CONTROLLER =
+            register("logic_controller",
+                    () -> new LogicControllerBlock(machine().strength(2.5F)));
+
+    /** T2 bridge between a signal cable and vanilla redstone. Manufactured, not crafted. */
+    public static final RegistrySupplier<RedstoneInterfaceBlock> REDSTONE_INTERFACE =
+            register("redstone_interface",
+                    () -> new RedstoneInterfaceBlock(machine().strength(2.0F)));
 
     /** T1 storage. Adds capacity to the covering network; no supply cube of its own. */
     public static final RegistrySupplier<CapacitorBankBlock> CAPACITOR_BANK =

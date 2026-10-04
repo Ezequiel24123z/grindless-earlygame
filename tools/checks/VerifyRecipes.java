@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam and T2 logistics", 88, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics and logic", 91, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -541,6 +541,18 @@ public final class VerifyRecipes {
         eq("the flux belt is the assembler", MachineFamily.ASSEMBLER, flux.family());
         eq("the stack arm is the assembler", MachineFamily.ASSEMBLER, stackArm.family());
         eq("the filter arm is the assembler", MachineFamily.ASSEMBLER, filterArm.family());
+        ProcessRecipe cable = recipe(recipes, "assemble/signal_cable");
+        ProcessRecipe controller = recipe(recipes, "assemble/logic_controller");
+        ProcessRecipe face = recipe(recipes, "assemble/redstone_interface");
+        eq("the signal cable is the assembler", MachineFamily.ASSEMBLER, cable.family());
+        eq("the signal cable makes the block", "item:grindless:signal_cable",
+                cable.itemOutputs().get(0).qualified());
+        eq("the logic controller is the assembler", MachineFamily.ASSEMBLER, controller.family());
+        eq("the logic controller makes the block", "item:grindless:logic_controller",
+                controller.itemOutputs().get(0).qualified());
+        eq("the redstone interface is the assembler", MachineFamily.ASSEMBLER, face.family());
+        eq("the redstone interface makes the block", "item:grindless:redstone_interface",
+                face.itemOutputs().get(0).qualified());
         eq("night is nothing", 0L, SolarLogic.generate(false));
 
         yes("steel with an ingot still presses",
@@ -681,6 +693,12 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("stack_manipulator.json")));
         no("the filter manipulator has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("filter_manipulator.json")));
+        no("the signal cable has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("signal_cable.json")));
+        no("the logic controller has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("logic_controller.json")));
+        no("the redstone interface has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("redstone_interface.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

@@ -101,6 +101,12 @@ public final class BlockCatalogue {
         STACK_ARM,
         /** An arm with a gate. One whitelist id. */
         FILTER_ARM,
+        /** A thin run of cable. One integer, one direction. */
+        SIGNAL,
+        /** A reader. It holds the machine in front. */
+        LOGIC,
+        /** A plate that speaks redstone. */
+        INTERFACE,
         /** A rack of cells. Capacity, not coverage. */
         BANK,
         /** Two coils on a core. A tap, not a pylon. */
@@ -194,6 +200,9 @@ public final class BlockCatalogue {
             new Entry("flux_belt", Geometry.FLUX_BELT, 1, true, CONSUMER),
             new Entry("stack_manipulator", Geometry.STACK_ARM, 1, true, CONSUMER),
             new Entry("filter_manipulator", Geometry.FILTER_ARM, 1, true, CONSUMER),
+            new Entry("signal_cable", Geometry.SIGNAL, 1, true, BELT),
+            new Entry("logic_controller", Geometry.LOGIC, 1, true, BELT),
+            new Entry("redstone_interface", Geometry.INTERFACE, 1, true, BELT),
             new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
             new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
 

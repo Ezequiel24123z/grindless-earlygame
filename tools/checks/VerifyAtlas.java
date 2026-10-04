@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 88, rows.size());
+        eq("atlas lists every generated recipe", 91, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("twenty-four assembler crafts in this set", 24,
+        eq("twenty-seven assembler crafts in this set", 27,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -93,6 +93,12 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:stack_manipulator").size());
         eq("the filter manipulator is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:filter_manipulator").size());
+        eq("the signal cable is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:signal_cable").size());
+        eq("the logic controller is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:logic_controller").size());
+        eq("the redstone interface is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:redstone_interface").size());
         eq("steam has one boiler route", 1,
                 AtlasLogic.producing(recipes, "grindless:steam").size());
         eq("molten iron has one melt route", 1,

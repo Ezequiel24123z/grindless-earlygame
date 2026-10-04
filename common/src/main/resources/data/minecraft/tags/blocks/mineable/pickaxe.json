@@ -44,6 +44,9 @@
     "grindless:flux_belt",
     "grindless:stack_manipulator",
     "grindless:filter_manipulator",
+    "grindless:signal_cable",
+    "grindless:logic_controller",
+    "grindless:redstone_interface",
     "grindless:capacitor_bank",
     "grindless:flux_transformer",
     "grindless:flux_pylon_shaft"

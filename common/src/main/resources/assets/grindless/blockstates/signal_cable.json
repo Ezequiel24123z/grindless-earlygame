@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,status=idle": { "model": "grindless:block/signal_cable_idle" },
+    "facing=east,status=idle": { "model": "grindless:block/signal_cable_idle", "y": 90 },
+    "facing=south,status=idle": { "model": "grindless:block/signal_cable_idle", "y": 180 },
+    "facing=west,status=idle": { "model": "grindless:block/signal_cable_idle", "y": 270 },
+    "facing=north,status=running": { "model": "grindless:block/signal_cable_running" },
+    "facing=east,status=running": { "model": "grindless:block/signal_cable_running", "y": 90 },
+    "facing=south,status=running": { "model": "grindless:block/signal_cable_running", "y": 180 },
+    "facing=west,status=running": { "model": "grindless:block/signal_cable_running", "y": 270 }
+  }
+}

@@ -2008,12 +2008,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21i | **Slice P — Better separation:** flotation and a magnetic split | ✅ done — ADR-0080 |
 | 21j | **Slice Q — Heat and steam:** daylight power and a closed steam loop | ✅ done — ADR-0081 |
 | 21k | **Slice R — T2 fluids and belts:** move steam, melt and stacks | ✅ done — ADR-0082 |
-| 22 | T2 logic | pending — build-out S |
+| 21l | **Slice S — Logic:** enable a machine from a count | ✅ done — ADR-0083 |
+| 22 | T2 logic | ✅ done — ADR-0083 |
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **S**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **T**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2041,8 +2042,15 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is S — Logic**, not the Phase Manifold and not the flux tunnel.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Pressure Pipe, the Electric Pump,
+**Next is T — Flux Drill**, not Operator Drones and not an Arithmetic Unit.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Signal Cable, the Logic
+Controller and the Redstone Interface are in (ADR-0083): Assembler-manufactured
+once Industrial is researched (`1 casing + 2 motor + 4 plates`). The cable
+carries one integer one block per tick and is not capped at 15. The controller
+lets the machine in front run while the inventory behind holds fewer than 500
+of one item, and holds it at 500 or above. An empty filter does not hold.
+The interface turns redstone into that integer, and the other way, and does
+not emit while redstone is coming in. The Pressure Pipe, the Electric Pump,
 the Industrial Tank, the Fluid Manipulator, the Flux Belt and the Stack and
 Filter Manipulators are in (ADR-0082): Assembler-manufactured once Industrial
 is researched (`1 casing + 2 motor + 4 plates`). The pipe and the industrial

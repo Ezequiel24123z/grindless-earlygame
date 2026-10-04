@@ -49,6 +49,9 @@ public final class FabricationLogic {
     public static final String FLUX_BELT = "grindless:flux_belt";
     public static final String STACK_MANIPULATOR = "grindless:stack_manipulator";
     public static final String FILTER_MANIPULATOR = "grindless:filter_manipulator";
+    public static final String SIGNAL_CABLE = "grindless:signal_cable";
+    public static final String LOGIC_CONTROLLER = "grindless:logic_controller";
+    public static final String REDSTONE_INTERFACE = "grindless:redstone_interface";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

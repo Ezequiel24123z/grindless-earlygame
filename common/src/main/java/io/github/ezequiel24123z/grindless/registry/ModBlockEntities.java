@@ -22,6 +22,9 @@ import io.github.ezequiel24123z.grindless.belt.OverflowGateBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SorterBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlockEntity;
 import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlockEntity;
+import io.github.ezequiel24123z.grindless.logic.LogicControllerBlockEntity;
+import io.github.ezequiel24123z.grindless.logic.RedstoneInterfaceBlockEntity;
+import io.github.ezequiel24123z.grindless.logic.SignalCableBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
@@ -323,6 +326,24 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("stack_manipulator",
                     () -> BlockEntityType.Builder
                             .of(StackManipulatorBlockEntity::new, ModBlocks.STACK_MANIPULATOR.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<SignalCableBlockEntity>> SIGNAL_CABLE =
+            BLOCK_ENTITIES.register("signal_cable",
+                    () -> BlockEntityType.Builder
+                            .of(SignalCableBlockEntity::new, ModBlocks.SIGNAL_CABLE.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<LogicControllerBlockEntity>> LOGIC_CONTROLLER =
+            BLOCK_ENTITIES.register("logic_controller",
+                    () -> BlockEntityType.Builder
+                            .of(LogicControllerBlockEntity::new, ModBlocks.LOGIC_CONTROLLER.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<RedstoneInterfaceBlockEntity>> REDSTONE_INTERFACE =
+            BLOCK_ENTITIES.register("redstone_interface",
+                    () -> BlockEntityType.Builder
+                            .of(RedstoneInterfaceBlockEntity::new, ModBlocks.REDSTONE_INTERFACE.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<FilterManipulatorBlockEntity>> FILTER_MANIPULATOR =

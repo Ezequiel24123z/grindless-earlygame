@@ -75,6 +75,9 @@ public final class MachineEffects {
             case FLUX_BELT -> belt(status, level, pos, random);
             case STACK_ARM -> manipulator(status, front, level, pos, random);
             case FILTER_ARM -> manipulator(status, front, level, pos, random);
+            case SIGNAL -> belt(status, level, pos, random);
+            case LOGIC -> terminal(status, front, level, pos, random);
+            case INTERFACE -> dynamo(status, front, level, pos, random);
             case BANK -> pylon(1, status, level, pos, random);
             case TRANSFORMER -> dynamo(status, front, level, pos, random);
         }
