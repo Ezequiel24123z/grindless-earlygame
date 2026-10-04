@@ -52,6 +52,8 @@ public final class FabricationLogic {
     public static final String SIGNAL_CABLE = "grindless:signal_cable";
     public static final String LOGIC_CONTROLLER = "grindless:logic_controller";
     public static final String REDSTONE_INTERFACE = "grindless:redstone_interface";
+    public static final String FLUX_DRILL = "grindless:flux_drill";
+    public static final String DRILL_CELL = "grindless:drill_cell";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

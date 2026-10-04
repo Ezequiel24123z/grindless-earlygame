@@ -185,6 +185,13 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-logic.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-logic.expect
 
+      # Slice T: the Flux Drill and its cell exist as items.
+      - name: Boot and exercise the flux drill
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-drill.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-drill.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .

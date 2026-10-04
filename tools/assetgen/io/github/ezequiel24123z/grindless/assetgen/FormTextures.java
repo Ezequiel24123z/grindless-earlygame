@@ -439,4 +439,24 @@ public final class FormTextures {
         field.bevel(0.4);
         return field.light(palette);
     }
+
+    /** A bit, a shaft and a grip. Not the Multitool's disc head. */
+    public static BufferedImage drill(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(6, 1, 9, 4, 3.4);
+        field.rect(7, 4, 8, 12, 2.4);
+        field.rect(4, 11, 11, 15, 4.0);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
+
+    /** A canister with a cap. Not a die and not a coil. */
+    public static BufferedImage cell(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(5, 3, 10, 14, 3.2);
+        field.rect(6, 1, 9, 3, 2.6);
+        field.rect(6, 7, 9, 8, 4.0);
+        field.bevel(0.4);
+        return field.light(palette);
+    }
 }

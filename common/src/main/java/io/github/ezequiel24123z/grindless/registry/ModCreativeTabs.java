@@ -54,6 +54,8 @@ public final class ModCreativeTabs {
                 lazy(ModItems.PROSPECTORS_SCANNER),
                 lazy(ModItems.PROCESS_ATLAS),
                 lazy(ModItems.FLUX_CONDUIT),
+                lazy(ModItems.FLUX_DRILL),
+                lazy(ModItems.DRILL_CELL),
                 lazy(ModBlocks.HAND_CRANK_DYNAMO),
                 lazy(ModBlocks.CRUDE_EXTRACTOR),
                 lazy(ModBlocks.RESEARCH_TERMINAL),

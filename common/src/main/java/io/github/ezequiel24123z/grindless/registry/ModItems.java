@@ -3,6 +3,8 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.DrillCellItem;
+import io.github.ezequiel24123z.grindless.item.FluxDrillItem;
 import io.github.ezequiel24123z.grindless.item.MultitoolItem;
 import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
@@ -93,6 +95,14 @@ public final class ModItems {
     /** T1 handheld. Right-click two pylons to join them across any distance. */
     public static final RegistrySupplier<Item> FLUX_CONDUIT = register("flux_conduit",
             () -> new FluxConduitItem(new Item.Properties().stacksTo(1)));
+
+    /** T2 handheld. Mines with charge, never durability (ADR-0084). */
+    public static final RegistrySupplier<Item> FLUX_DRILL = register("flux_drill",
+            () -> new FluxDrillItem(new Item.Properties().stacksTo(1)));
+
+    /** Fuel for the Flux Drill. Not the armour Flux Cell. */
+    public static final RegistrySupplier<Item> DRILL_CELL = register("drill_cell",
+            () -> new DrillCellItem(new Item.Properties()));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

@@ -1,0 +1,8 @@
+forceload add 0 0
+say WAIT-CHUNK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:flux_drill",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:flux_drill"}}] run say DRILL-OK
+kill @e[type=item]
+summon minecraft:item 8 100 8 {Item:{id:"grindless:drill_cell",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:drill_cell"}}] run say CELL-OK
+kill @e[type=item]

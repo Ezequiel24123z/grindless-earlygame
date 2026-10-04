@@ -2009,12 +2009,13 @@ Tracked order of work. Each step must build green before the next begins.
 | 21j | **Slice Q — Heat and steam:** daylight power and a closed steam loop | ✅ done — ADR-0081 |
 | 21k | **Slice R — T2 fluids and belts:** move steam, melt and stacks | ✅ done — ADR-0082 |
 | 21l | **Slice S — Logic:** enable a machine from a count | ✅ done — ADR-0083 |
+| 21m | **Slice T — Flux Drill:** mine with charge | ✅ done — ADR-0084 |
 | 22 | T2 logic | ✅ done — ADR-0083 |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out T–Y, AC, AH |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out U–Y, AC, AH |
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **T**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **U**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2042,8 +2043,12 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is T — Flux Drill**, not Operator Drones and not an Arithmetic Unit.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Signal Cable, the Logic
+**Next is U — Blueprint Tool**, not Construction Drones and not silk or fortune.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Flux Drill and the Drill Cell
+are in (ADR-0084): Assembler-manufactured once Industrial is researched. The
+drill spends 32 FU a block and holds two cells of 3,200 FU. Sneak-use cycles
+single, 3×3, vein and a horizontal tunnel. It does not break Grindless blocks.
+The Multitool still does not mine. The Signal Cable, the Logic
 Controller and the Redstone Interface are in (ADR-0083): Assembler-manufactured
 once Industrial is researched (`1 casing + 2 motor + 4 plates`). The cable
 carries one integer one block per tick and is not capped at 15. The controller

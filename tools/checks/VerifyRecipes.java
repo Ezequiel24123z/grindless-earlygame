@@ -39,7 +39,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics and logic", 91, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic and the drill", 93, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -553,6 +553,18 @@ public final class VerifyRecipes {
         eq("the redstone interface is the assembler", MachineFamily.ASSEMBLER, face.family());
         eq("the redstone interface makes the block", "item:grindless:redstone_interface",
                 face.itemOutputs().get(0).qualified());
+        ProcessRecipe drill = recipe(recipes, "assemble/flux_drill");
+        ProcessRecipe drillCell = recipe(recipes, "assemble/drill_cell");
+        eq("the flux drill is the assembler", MachineFamily.ASSEMBLER, drill.family());
+        eq("the flux drill makes the item", "item:grindless:flux_drill",
+                drill.itemOutputs().get(0).qualified());
+        eq("the drill is twenty seconds", 20 * 20, drill.durationTicks());
+        eq("the drill cell is the assembler", MachineFamily.ASSEMBLER, drillCell.family());
+        eq("the drill cell makes the item", "item:grindless:drill_cell",
+                drillCell.itemOutputs().get(0).qualified());
+        eq("the drill cell is four seconds", 20 * 4, drillCell.durationTicks());
+        eq("the drill cell takes one coil", "item:grindless:copper_coil",
+                drillCell.itemInputs().get(0).qualified());
         eq("night is nothing", 0L, SolarLogic.generate(false));
 
         yes("steel with an ingot still presses",
@@ -699,6 +711,10 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("logic_controller.json")));
         no("the redstone interface has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("redstone_interface.json")));
+        no("the flux drill has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("flux_drill.json")));
+        no("the drill cell has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("drill_cell.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

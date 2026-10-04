@@ -141,6 +141,8 @@ public final class ProcessGraph {
         recipes.add(signalCable());
         recipes.add(logicController());
         recipes.add(redstoneInterface());
+        recipes.add(fluxDrill());
+        recipes.add(drillCell());
         recipes.add(boilSteam());
         recipes.add(condenseSteam());
         return List.copyOf(recipes);
@@ -688,6 +690,27 @@ public final class ProcessGraph {
 
     private static ProcessRecipe redstoneInterface() {
         return machineCraft("assemble/redstone_interface", FabricationLogic.REDSTONE_INTERFACE);
+    }
+
+    private static ProcessRecipe fluxDrill() {
+        return machineCraft("assemble/flux_drill", FabricationLogic.FLUX_DRILL);
+    }
+
+    /** Fuel, not a machine. One coil and four plates (ADR-0084). */
+    private static ProcessRecipe drillCell() {
+        return new ProcessRecipe(
+                "assemble/drill_cell",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 1),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.DRILL_CELL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.PRESS_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
     }
 
     /** Electrical heat. The turbine that would spend this steam is not this tier (ADR-0081). */
