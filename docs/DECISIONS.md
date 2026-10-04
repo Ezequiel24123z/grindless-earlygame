@@ -85,6 +85,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
+| [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 
 ---
 
@@ -2771,5 +2772,36 @@ advanced item is flavour).
 
 **Consequences.** A successor that lets the Assembler build MK2 before Industrial is deleting
 the T2 gate. A successor that starts the Wire Mill in this slice is skipping J.
+
+
+## ADR-0074 — The Wire Mill is T2 and does not wait for acid
+
+*2026-10-04 · Accepted*
+
+**Context.** BUILD-OUT slice J is wire, coil and motor. `MACHINES.md` puts the Wire Mill at T2
+for wire and coil. `PROCESSES.md` names Motor as `1 casing + 2 u coil + 1 u rod` in 10 s with
+no fluid, and the generic T2 machine as `1 casing + 2 Motor + 1 Circuit Board + 4 u plate`.
+Circuit Board needs etching acid (slice K). T1 already presses a copper coil with a die so
+the Assembler can exist (ADR-0063). Fine wire is MK III+. Pump waits on resin.
+
+**Decision.**
+
+1. **Wire Mill** is a T2 single-block process machine. The Assembler manufactures it once
+   Industrial is researched: `1 casing + 2 copper coil + 4 iron plates`, 20 s, F1. No circuit
+   board. No crafting-table JSON (ADR-0017). Ambient envelope. Menu is one in, one out.
+2. **Wire** is a supplied form for every catalogue material (`grindless:wires/<m>`, not
+   conventional). `1 ingot → 2 wire`, 8 s, F1, no named conditions. Fine wire waits.
+3. **T2 coil** is mill-only: `2 copper wire → 1 copper_coil`, 8 s, F1, no die. The Press plus
+   coil die remains the T1 bootstrap (ADR-0063). `MaterialForm.COIL` is still not supplied.
+4. **Motor** is a reagent item `grindless:motor`. Assembler: `1 casing + 2 copper coil +
+   1 iron rod`, 10 s, F1, Industrial. No JSON. Pump and the generic T2 machine recipe wait.
+
+**Alternatives rejected.** Using the generic T2 recipe this slice (that is acid); dropping
+the Press coil (the first Assembler would have nothing to wind); supplying fine wire
+(MK III); a crafting-table mill (ADR-0017); gating every mill recipe on Industrial (owning
+the mill is the gate).
+
+**Consequences.** A successor that starts sulfuric acid in this slice is skipping K. A
+successor that crafts the mill at a table is deleting the T2 manufacturing gate.
 
 
