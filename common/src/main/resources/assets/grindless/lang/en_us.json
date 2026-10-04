@@ -29,6 +29,7 @@
   "block.grindless.merger": "Merger",
   "block.grindless.tunnel_belt": "Tunnel Belt",
   "block.grindless.overflow_gate": "Overflow Gate",
+  "block.grindless.sorter": "Sorter",
   "block.grindless.crude_manipulator": "Crude Manipulator",
   "block.grindless.terrestrial_extractor": "Terrestrial Extractor",
   "block.grindless.clay_conduit": "Clay Conduit",
@@ -93,6 +94,8 @@
   "chat.grindless.scanner.empty": "No mineable vein in this chunk",
   "chat.grindless.splitter.filter": "Filter: %s",
   "chat.grindless.splitter.clear": "Filter cleared",
+  "chat.grindless.sorter.filter": "Filter: %s",
+  "chat.grindless.sorter.clear": "Filter cleared",
   "overlay.grindless.scanner.vein": "%s · richness %s",
   "overlay.grindless.scanner.none": "Not surveyed — right-click to scan",
 

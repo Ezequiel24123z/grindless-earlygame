@@ -49,6 +49,8 @@ public final class BlockCatalogue {
         TUNNEL,
         /** Front preferred, side when the front backs up. */
         OVERFLOW,
+        /** Passthrough with two filter mouths. */
+        SORTER,
         /** A short arm on a post. */
         MANIPULATOR,
         /** A heavier bore than the Crude Extractor. */
@@ -126,6 +128,7 @@ public final class BlockCatalogue {
             new Entry("merger", Geometry.MERGER, 1, true, BELT),
             new Entry("tunnel_belt", Geometry.TUNNEL, 1, true, BELT),
             new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT),
+            new Entry("sorter", Geometry.SORTER, 1, true, BELT),
             new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
             new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
             new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),

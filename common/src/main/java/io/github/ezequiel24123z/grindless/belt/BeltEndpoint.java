@@ -6,8 +6,8 @@ import net.minecraft.world.item.ItemStack;
 /**
  * A block that can take an item from a belt or a manipulator and give one back.
  *
- * <p>Belts and the splitter implement this. Inventories do not — they stay on
- * {@code Container} / {@code ItemInsert}.
+ * <p>Belts, the splitter, junctions and the sorter implement this. Inventories do not —
+ * they stay on {@code Container} / {@code ItemInsert}.
  */
 public interface BeltEndpoint {
 

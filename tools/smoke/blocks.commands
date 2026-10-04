@@ -50,6 +50,9 @@ loot spawn 8 102 8 loot grindless:blocks/tunnel_belt
 setblock 8 100 8 grindless:overflow_gate
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK overflow_gate
 loot spawn 8 102 8 loot grindless:blocks/overflow_gate
+setblock 8 100 8 grindless:sorter
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK sorter
+loot spawn 8 102 8 loot grindless:blocks/sorter
 setblock 8 100 8 grindless:crude_manipulator
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK crude_manipulator
 loot spawn 8 102 8 loot grindless:blocks/crude_manipulator

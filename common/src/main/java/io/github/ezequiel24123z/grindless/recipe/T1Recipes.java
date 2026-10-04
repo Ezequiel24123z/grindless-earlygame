@@ -20,6 +20,7 @@ public final class T1Recipes {
     public static final String FURNACE = "item:minecraft:furnace";
     public static final String CARBON = "tag:grindless:carbon";
     public static final String BELT = "item:grindless:conveyor_belt";
+    public static final String HOPPER = "item:minecraft:hopper";
     public static final String PLATE = "tag:forge:plates/iron";
     public static final String ROD = "tag:forge:rods/iron";
     public static final String GEAR = "tag:forge:gears/iron";
@@ -72,6 +73,10 @@ public final class T1Recipes {
                         List.of(" B ", "BIB", " B "),
                         Map.of("B", BELT, "I", IRON),
                         "grindless:overflow_gate"),
+                new Gated("sorter", VOLTAIC,
+                        List.of("IBI", "BHB", "IBI"),
+                        Map.of("I", IRON, "B", BELT, "H", HOPPER),
+                        "grindless:sorter"),
                 new Gated("crude_manipulator", VOLTAIC,
                         List.of(" I ", "CIC", " I "),
                         Map.of("I", IRON, "C", COBBLE),

@@ -49,6 +49,7 @@ public final class MachineEffects {
             case MERGER -> belt(status, level, pos, random);
             case TUNNEL -> belt(status, level, pos, random);
             case OVERFLOW -> belt(status, level, pos, random);
+            case SORTER -> belt(status, level, pos, random);
             case MANIPULATOR -> manipulator(status, front, level, pos, random);
             case DRILL -> extractor(status, level, pos, random);
             case CONDUIT -> belt(status, level, pos, random);

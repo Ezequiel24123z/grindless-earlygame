@@ -39,6 +39,7 @@ public final class MachineArt {
     public static final int MERGER = 0xFFCA28;
     public static final int TUNNEL = 0x90A4AE;
     public static final int OVERFLOW = 0xFF7043;
+    public static final int SORTER = 0x26C6DA;
     public static final int MANIPULATOR = 0x69F0AE;
     public static final int DRILL = 0xFF6D00;
     public static final int CONDUIT = 0x8D6E63;
@@ -70,6 +71,7 @@ public final class MachineArt {
             case MERGER -> mergerFront(status);
             case TUNNEL -> tunnelFront(status);
             case OVERFLOW -> overflowFront(status);
+            case SORTER -> sorterFront(status);
             case MANIPULATOR -> manipulatorFront(status);
             case DRILL -> drillFront(status);
             case CONDUIT -> conduitFront(status);
@@ -97,6 +99,7 @@ public final class MachineArt {
             case MERGER -> mergerTop();
             case TUNNEL -> tunnelTop();
             case OVERFLOW -> overflowTop();
+            case SORTER -> sorterTop();
             case MANIPULATOR -> manipulatorTop();
             case DRILL -> drillTop();
             case CONDUIT -> conduitTop();
@@ -675,6 +678,54 @@ public final class MachineArt {
         }
         set(img, 12, 7, OVERFLOW);
         set(img, 12, 8, OVERFLOW);
+        return img;
+    }
+
+    // ---- Sorter --------------------------------------------------------------------------
+
+    /** Two side mouths and a passthrough: the block is a thing that peels. */
+    public static BufferedImage sorterFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SORTER);
+        for (int y = 6; y <= 12; y++) {
+            for (int x = 5; x <= 10; x++) {
+                int pixel = glow < 0 ? Palette.shade(CASING, -0.6) : dim(glow);
+                if (glow >= 0 && y == 9) {
+                    pixel = glow;
+                }
+                set(img, x, y, pixel);
+            }
+        }
+        for (int y = 7; y <= 11; y++) {
+            int pixel = glow < 0 ? Palette.shade(CASING, -0.4) : dim(glow);
+            set(img, 1, y, pixel);
+            set(img, 2, y, pixel);
+            set(img, 13, y, pixel);
+            set(img, 14, y, pixel);
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage sorterTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.5));
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 1; x <= 4; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+            for (int x = 11; x <= 14; x++) {
+                set(img, x, y, Palette.shade(CASING, -0.45));
+            }
+        }
+        set(img, 2, 7, SORTER);
+        set(img, 2, 8, SORTER);
+        set(img, 13, 7, SORTER);
+        set(img, 13, 8, SORTER);
         return img;
     }
 

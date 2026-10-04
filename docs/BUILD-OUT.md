@@ -7,7 +7,7 @@ The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013
 This file is the *schedule*. Open questions are answered here with the documented default; a
 session writes an ADR only when it must pick among real alternatives, then ships the slice.
 
-**Next slice: H — Sorter.** G (merger, tunnel, overflow) is shipped.
+**Next slice: I — T2 gate.** H (sorter) is shipped.
 
 ---
 
@@ -72,26 +72,26 @@ the records below, then implement.
 
 ## Already shipped
 
-T0 loop, Slice A–E, Kiln/R2, Atlas stub, Multitool wrench, and the design records for armour
-(ADR-0067) and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to
-automated iron without hand-mining — is met. 0.2 logistics is **partial**: belts, splitter,
-manipulator, scanner, terrestrial extractor are in; merger, tunnel, overflow and sorter waited
-([ADR-0060](DECISIONS.md#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt)).
+T0 loop, Slice A–E, Kiln/R2, Atlas stub, Multitool wrench, belt junctions (G) and the sorter
+(H), and the design records for armour (ADR-0067) and Horizon Gates (ADR-0068). Roadmap 0.1
+definition of done — empty world to automated iron without hand-mining — is met. 0.2 logistics
+leftovers from ADR-0060 (merger, tunnel, overflow, sorter) are in. Powered belts wait for R.
+Belt Reader is not a leftover row.
 
 ---
 
 ## Remaining slices
 
 Status is `pending` until the slice's PR exists on the stack. A session that finishes G marks
-it done here in the same PR that ships G. **G is done.** A session that finishes H marks H
-done and sets Next to I.
+it done here in the same PR that ships G. **G is done. H is done.** A session that finishes I
+marks I done and sets Next to J.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
 | ID | Slice | Player can | Ship | Do not | Done when |
 | --- | --- | --- | --- | --- | --- |
 | **G** | **Belt junctions** | Join two belts; run a belt through a wall | Merger, tunnel belt, overflow. Same lane model (ADR-0008, ADR-0060, ADR-0071). Voltaic crafts. `VerifyBelt` covers join/tunnel. | Sorter (H). Powered belts. | ✅ done |
-| **H** | **Sorter** | Filter a stream by item | Sorter block. Sneak-filter like the splitter unless a GUI is required for multiple filters. | Logic Controller. | Filtered item leaves the named face. `VerifyBelt` dumps the route. |
+| **H** | **Sorter** | Filter a stream by item | Sorter block. Sneak-filter like the splitter unless a GUI is required for multiple filters. | Logic Controller. | ✅ done |
 
 Sifter stays off this wave. Tailings exist as a form; there is no B-row. Do not register a
 machine that runs no graph.

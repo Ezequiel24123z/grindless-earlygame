@@ -15,6 +15,7 @@ PICKAXE-OK splitter$
 PICKAXE-OK merger$
 PICKAXE-OK tunnel_belt$
 PICKAXE-OK overflow_gate$
+PICKAXE-OK sorter$
 PICKAXE-OK crude_manipulator$
 PICKAXE-OK terrestrial_extractor$
 PICKAXE-OK clay_conduit$
@@ -39,6 +40,7 @@ Dropped 1 \[Splitter\]
 Dropped 1 \[Merger\]
 Dropped 1 \[Tunnel Belt\]
 Dropped 1 \[Overflow Gate\]
+Dropped 1 \[Sorter\]
 Dropped 1 \[Crude Manipulator\]
 Dropped 1 \[Terrestrial Extractor\]
 Dropped 1 \[Clay Conduit\]

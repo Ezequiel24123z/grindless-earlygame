@@ -35,9 +35,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Sorter (ADR-0072).** Inline filter. Sneak-click left or right; matching items leave that
+  face and hold if it is full. Unmatched continue. Voltaic craft. `VerifyBelt` dumps the
+  route. Logic Controller still waits.
+
 - **Belt junctions (ADR-0071).** Merger (three inlets, round-robin), Tunnel Belt (pair, skip
   1–5 empty blocks) and Overflow Gate (front, then clockwise). Voltaic crafts. `VerifyBelt`
-  dumps pick/range/route. Sorter still waits.
+  dumps pick/range/route. Sorter is slice H.
 
 - **Autonomous build-out (ADR-0070).** `docs/BUILD-OUT.md` is the remaining schedule. Slice F
   still waits for the Arc Reactor. Sifter, turret and armour stay parked until their rows.

@@ -62,6 +62,7 @@ final class BlockModels {
             case MERGER -> merger();
             case TUNNEL -> tunnel();
             case OVERFLOW -> overflow();
+            case SORTER -> sorter();
             case MANIPULATOR -> manipulator();
             case DRILL -> drill();
             case CONDUIT -> conduit();
@@ -293,6 +294,16 @@ final class BlockModels {
                 box(0, 0, 0, 16, 2, 16, "top", "base"),
                 front(2, 2, 1, 14, 5, 14, "top", "side", "front"),
                 box(12, 5, 6, 16, 6, 10, "top", "side"));
+    }
+
+    /** Passthrough with two side mouths. */
+    private static List<Box> sorter() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "base"),
+                front(2, 2, 2, 14, 6, 14, "top", "side", "front"),
+                box(0, 4, 6, 3, 7, 10, "top", "side"),
+                box(13, 4, 6, 16, 7, 10, "top", "side"),
+                box(6, 6, 6, 10, 7, 10, "cap", "cap"));
     }
 
     /** A post with a reaching arm. */

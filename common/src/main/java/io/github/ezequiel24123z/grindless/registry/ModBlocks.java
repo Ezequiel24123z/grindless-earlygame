@@ -10,6 +10,7 @@ import io.github.ezequiel24123z.grindless.belt.BeltBlock;
 import io.github.ezequiel24123z.grindless.belt.ManipulatorBlock;
 import io.github.ezequiel24123z.grindless.belt.MergerBlock;
 import io.github.ezequiel24123z.grindless.belt.OverflowGateBlock;
+import io.github.ezequiel24123z.grindless.belt.SorterBlock;
 import io.github.ezequiel24123z.grindless.belt.SplitterBlock;
 import io.github.ezequiel24123z.grindless.belt.TunnelBeltBlock;
 import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
@@ -115,6 +116,11 @@ public final class ModBlocks {
     public static final RegistrySupplier<OverflowGateBlock> OVERFLOW_GATE =
             register("overflow_gate",
                     () -> new OverflowGateBlock(machine().strength(2.0F)));
+
+    /** Inline filter. Matching sides peel; unmatched continue. */
+    public static final RegistrySupplier<SorterBlock> SORTER =
+            register("sorter",
+                    () -> new SorterBlock(machine().strength(2.0F)));
 
     /** Crude inserter. One item a second, unpowered. */
     public static final RegistrySupplier<ManipulatorBlock> CRUDE_MANIPULATOR =

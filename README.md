@@ -1992,6 +1992,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | ✅ done — Atlas stub ADR-0066; JEI waits |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
 | 17b | **Slice G — Belt junctions:** merger, tunnel, overflow | ✅ done — ADR-0071 |
+| 17c | **Slice H — Sorter:** peel a mixed line by item | ✅ done — ADR-0072 |
 | 18 | **Slice C — Fluids:** state, Clay Conduit, Hand Pump, Basic Tank, gas capture, wet pulverizer | ✅ done — ADR-0062 |
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
@@ -2002,7 +2003,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **H**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **I**. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2030,8 +2031,10 @@ Extractor (or a pylon that covers both), and the extractor pulls the chunk's vei
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is H — Sorter**, not Slice F and not T2.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). Merger, Tunnel Belt and Overflow Gate are in
+**Next is I — T2 gate**, not Slice F and not the acid line.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Sorter is in (ADR-0072): matching sides peel
+a mixed line and hold when that lane is full; unmatched items continue. Merger, Tunnel Belt
+and Overflow Gate are in
 (ADR-0071): three inlets join, a pair skips one to five empty blocks, overflow dumps clockwise
 when the front is blocked. The Process Atlas stub is in: a Voltaic-gated
 handheld lists the live process graph (family, I/O, conditions, time, FU/t). It does not

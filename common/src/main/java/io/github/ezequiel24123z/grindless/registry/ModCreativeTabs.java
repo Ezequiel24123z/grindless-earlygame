@@ -63,6 +63,7 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.MERGER),
                 lazy(ModBlocks.TUNNEL_BELT),
                 lazy(ModBlocks.OVERFLOW_GATE),
+                lazy(ModBlocks.SORTER),
                 lazy(ModBlocks.CRUDE_MANIPULATOR),
                 lazy(ModBlocks.TERRESTRIAL_EXTRACTOR),
                 lazy(ModBlocks.CLAY_CONDUIT),

@@ -6,7 +6,7 @@ import io.github.ezequiel24123z.grindless.vein.SurveyLogic;
 
 import java.util.List;
 
-/** Behaviour checks for belts, the splitter, the manipulator and the T1 extractor. Not part of the mod. */
+/** Behaviour checks for belts, junctions, the sorter, the manipulator and the T1 extractor. Not part of the mod. */
 public final class VerifyBelt {
 
     private static int failures = 0;
@@ -18,6 +18,7 @@ public final class VerifyBelt {
         merger();
         tunnel();
         overflow();
+        sorter();
         manipulator();
         survey();
         terrestrial();
@@ -155,6 +156,28 @@ public final class VerifyBelt {
         eq("side takes the overflow", 1, OverflowLogic.route(false, true));
         eq("a full gate holds", -1, OverflowLogic.route(false, false));
         eq("front still wins if the side is closed", 0, OverflowLogic.route(true, false));
+    }
+
+    private static void sorter() {
+        eq("unmatched continues front", 0, SorterLogic.route(
+                "minecraft:cobblestone", "", "", true, true, true, -1));
+        eq("left peels a match", 1, SorterLogic.route(
+                "minecraft:raw_iron", "minecraft:raw_iron", "", true, true, true, -1));
+        eq("right peels a match", 2, SorterLogic.route(
+                "minecraft:coal", "", "minecraft:coal", true, true, true, -1));
+        eq("a full matching side holds", -1, SorterLogic.route(
+                "minecraft:raw_iron", "minecraft:raw_iron", "", true, false, true, -1));
+        eq("unmatched holds if the front is full", -1, SorterLogic.route(
+                "minecraft:cobblestone", "minecraft:raw_iron", "", false, true, true, -1));
+        eq("both matching sides round-robin left first", 1, SorterLogic.route(
+                "minecraft:raw_iron", "minecraft:raw_iron", "minecraft:raw_iron",
+                true, true, true, -1));
+        eq("then the other side", 2, SorterLogic.route(
+                "minecraft:raw_iron", "minecraft:raw_iron", "minecraft:raw_iron",
+                true, true, true, 1));
+        yes("an explicit id matches", SorterLogic.matches("minecraft:raw_iron", "minecraft:raw_iron"));
+        no("an empty filter does not steal", SorterLogic.matches("minecraft:cobblestone", ""));
+        no("a different id does not", SorterLogic.matches("minecraft:raw_iron", "minecraft:coal"));
     }
 
     private static void manipulator() {

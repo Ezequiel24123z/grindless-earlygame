@@ -218,7 +218,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships twenty-seven gated crafts", 27, T1Recipes.gated().size());
+        eq("T1 ships twenty-eight gated crafts", 28, T1Recipes.gated().size());
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",
@@ -239,6 +239,8 @@ public final class VerifyRecipes {
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("tunnel_belt")));
         yes("the overflow is hand-crafted",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("overflow_gate")));
+        yes("the sorter is hand-crafted",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("sorter")));
         yes("the atlas is a hand item",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
         no("MK2 has no crafting-table recipe",
