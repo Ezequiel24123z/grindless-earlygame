@@ -3176,8 +3176,10 @@ the Thermal Generator. Two buckets is that same fluid, twice.
 
 **Decision.**
 
-1. **Feed.** `#grindless:silica` is `minecraft:sand` and `minecraft:quartz`. No silica
-   item is registered.
+1. **Feed.** `#grindless:silica` is the item ids `minecraft:sand` and
+   `minecraft:quartz`. No silica item is registered. The values are item ids, not
+   `#minecraft:sand`: that tag also contains red sand, and nether quartz has no
+   vanilla item tag. ADR-0051 forbids writing one into the `minecraft` namespace.
 2. **Product.** `grindless:metallurgical_silicon`, one item. It is not a supplied
    material, so the ore line, plates, rods, gears and wire do not appear. It is not
    `forge:ingots/silicon`.
