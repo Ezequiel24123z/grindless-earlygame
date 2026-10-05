@@ -98,6 +98,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0084](#adr-0084--the-flux-drill-spends-cells-not-durability) | The Flux Drill spends cells, not durability | Accepted |
 | [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
 | [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
+| [0087](#adr-0087--a-task-indexed-route-map-updated-with-the-seam) | A task-indexed route map, updated with the seam | Accepted |
 | [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 and ADR-0090 |
 | [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
 | [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
@@ -114,6 +115,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0101](#adr-0101--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
 | [0102](#adr-0102--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
 | [0103](#adr-0103--the-exosuit-taps-a-pylon-and-does-not-generate) | The exosuit taps a pylon and does not generate | Accepted |
+| [0104](#adr-0104--parallel-stacks-reconcile-by-renumbering-the-smaller-reference-set) | Parallel stacks reconcile by renumbering the smaller reference set | Accepted |
 
 ---
 
@@ -2890,8 +2892,6 @@ acid without pickle (or another spend) is reopening ADR-0036.
 
 ---
 
----
-
 ## ADR-0076 — The washer batch is eight crushed and the next metal
 
 *2026-10-04 · Accepted*
@@ -3395,6 +3395,33 @@ item that does nothing until AC.
 **Consequences.** A successor that makes the planner mine or relocate is
 inventing the wrench this record refused. A successor that returns items
 to a chest here is starting the drone bay.
+
+---
+
+## ADR-0087 — A task-indexed route map, updated with the seam
+
+*2026-10-04 · Accepted*
+
+**Context.** Sessions start from the repository and nothing else. Finding where a
+machine, a recipe or a sink actually lives means walking the tree, and the walk is
+what gets lost when a session dies mid-way. A hand-maintained catalogue of function
+bodies looks like the fix and then rots: the next session stops trusting it, which
+is worse than having no catalogue.
+
+**Decision.** [`docs/AGENT-MAP.md`](AGENT-MAP.md) is a task index. Each entry is one
+kind of change, the few files to open, and the invariant that is easy to break.
+Code remains the source of the functions. Design stays in the README, `MACHINES.md`,
+`PROCESSES.md` and these records; the map links to them instead of restating them.
+The same commit that changes a seam updates the map, the same way it updates the
+changelog.
+
+**Alternatives rejected.** A catalogue of function bodies (it rots, and sessions
+stop trusting it). Leaving navigation entirely to search (it works once, and the
+invariants the checks enforce are not visible from a file name).
+
+**Consequences.** A successor that pastes method bodies into the map, or that
+changes `ProcessGraph`, registration or a check without touching the map, is
+reopening this record. `AGENTS.md` points at the map; it does not contain it.
 
 ---
 
@@ -4528,4 +4555,48 @@ use, ADR-0102).
 **Consequences.** A successor that makes the worn suit produce FU is
 starting the Arc miniature. A successor that puts a third slot here is
 growing the grid again before a third module exists.
+
+---
+
+## ADR-0104 — Parallel stacks reconcile by renumbering the smaller reference set
+
+*2026-10-05 · Accepted*
+
+**Context.** Over one weekend two stacks of pull requests were built from the same tip
+of `main` by sessions that could not see each other. One shipped build-out slices L
+through Y, the T2 foundation. The other shipped the modpack expansion, BD through BN
+and then BC. Each allocated ADR-0088, ADR-0089 and ADR-0090 for different decisions,
+and the expansion stack put rows L through BB on hold on the strength of its own
+ADR-0088 while the other stack was implementing exactly those rows.
+
+An ADR id is a permanent name. Two records with one id is not a merge conflict that
+can be resolved by choosing a side: both decisions are live and both are referenced
+from code comments, checks and the handoff documents.
+
+**Decision.**
+
+1. When two ranges collide, the stack with **fewer references** is renumbered, and it
+   moves **above** the other range rather than into gaps. Here the foundation stack's
+   three records carried about thirty references against the expansion stack's three
+   hundred, so they became ADR-0101, ADR-0102 and ADR-0103.
+2. Renumbering is done on the files that belong to one stack only. In a merged tree
+   `ADR-0090` is ambiguous; in a single stack's tree it is not.
+3. `DECISIONS.md` is reordered so its sections run in the same order as its index.
+   Sections are separated by `---`, which is what every record before this weekend used.
+4. Where the two stacks disagree about **status** rather than content, the code wins.
+   Rows L through Y are recorded as shipped because they are shipped; only Z through BB
+   stay held under ADR-0088.
+
+**Alternatives rejected.** Renumbering the larger stack, which multiplies the chance of
+a missed reference by ten. Letting both ranges keep their ids and disambiguating by
+prose, which breaks the index check and every `ADR-00xx` link. Reverting one stack and
+replaying it, which discards reviewed, green work. Closing the pull requests and
+reimplementing, which is the same thing with extra steps.
+
+**Consequences.** A successor reading a commit from before this merge will find
+ADR-0088 to ADR-0090 meaning the foundation stack's decisions; in the tree they mean
+the expansion stack's. The changelog entries for those three slices name the new ids.
+ADR-0087 was a gap until the route-map pull request filled it, so the index is now
+contiguous from 0001 to 0104. A successor that opens parallel stacks again should
+reserve an ADR range per stack before starting, which is cheaper than this merge was.
 

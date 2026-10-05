@@ -78,6 +78,10 @@ then `docs/BUILD-OUT.md` (the next slice), then `docs/DECISIONS.md` (what is alr
 then the README's *Implementation plan*. That is the full handoff; nothing else is needed. Do
 not ask what to do next: the build-out already says.
 
+When the slice needs code, open [`docs/AGENT-MAP.md`](docs/AGENT-MAP.md). It names the
+files and the invariant for each kind of change. Do not paste that map into this file.
+The same commit that changes a seam updates the map, the same way it updates the changelog.
+
 **Finishing, or when the terminal starts failing.** Update the changelog, add any ADRs, update the
 implementation plan, validate the documentation, then commit and push:
 
@@ -107,6 +111,7 @@ docs/DECISIONS.md    why it changed — architecture decision records
 docs/MACHINES.md     the machine layer: conditions, envelopes, chassis marks, multiblocks
 docs/PROCESSES.md    the content layer: items, fluids, recipe graph, routes and ratios
 docs/BUILD-OUT.md    remaining slices in ship order; a session implements the Next line
+docs/AGENT-MAP.md    task index of files and invariants; updated with the seam
 docs/DESIGN.md       early standalone design note; superseded by README, kept for history
 SETUP.ps1            Windows bootstrap; also commits and pushes via -Commit
 tools/               repository scripts; check-links.ps1 validates the docs before a commit,

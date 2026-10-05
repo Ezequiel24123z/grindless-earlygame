@@ -13,6 +13,29 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Changed
+
+- **The two weekend stacks are one line of history (ADR-0104).** Twenty-seven stacked
+  pull requests were built from the same tip of `main` by sessions that could not see
+  each other: PRs #25–#39 shipped build-out slices L through Y, PRs #40–#51 shipped the
+  modpack expansion BD through BN and then BC, and PR #29 added the agent route map.
+  Both large stacks allocated ADR-0088, ADR-0089 and ADR-0090. The expansion stack keeps
+  them; the foundation stack's three records are now **ADR-0101, ADR-0102 and ADR-0103**,
+  renamed everywhere they are referenced. `docs/DECISIONS.md` is reordered so its sections
+  run in index order and every record is separated by `---`; ADR-0087 (the route map)
+  fills the one gap, so the index is contiguous from 0001 to 0104.
+
+- **Rows L–Y are shipped, not held.** The expansion stack held L through BB under
+  ADR-0088 while the other stack was implementing L through Y. `BUILD-OUT.md`, the README
+  implementation plan and *Where the project is now* record what is actually in the tree:
+  G–Y and BD–BN plus BC are done, and only **Z–BB** are held.
+
+- **The generated graph is the union of both stacks.** 39 recipes on `main`, plus 64 from
+  the foundation stack and 12 from the expansion stack, is **115**. `VerifyRecipes` and
+  `VerifyAtlas` assert that number, 47 assembler rows, and the two routes to a steel ingot
+  (the electric arc and the caster). Regeneration emits 1366 assets byte-identical to what
+  both stacks committed, which is independent evidence the merged registries agree.
+
 ### Fixed
 
 - **Foreign-provider smoke expects the live supply line.** The boot still finds 32 materials, and the foreign tin ingot plus raw platinum still step two Grindless items aside. The catalogue is 181 supply items, so the log is `32 materials found; Grindless supplies 179 of its 181 items`. The old expect (`143 of its 145`) was the count from before this stack's forms.
@@ -26,6 +49,16 @@ entries below reference those records by id.
 - **The ADR-0065 index anchor matches the link checker.** The heading keeps the SO₂
   subscript. The checker drops that character when it builds the slug, so the index
   link now uses the slug without it.
+
+- **`VerifyMaterial` no longer fails on Windows for a path separator.** The vanilla-namespace
+  assertion compared a relativized path against `tags/blocks/mineable/`, but `relativize`
+  yields backslashes on Windows, so the check had been red on every run of `run-checks.ps1`
+  since it was written. Nothing was ever shipped into that namespace.
+
+- **The asset generator writes UTF-8 on Windows.** `generate-assets.ps1` called `javac`
+  without `-encoding UTF-8`, so Windows read the em dash in the provenance text as cp1252
+  and wrote mojibake into `GENERATED.md`. Both generator scripts and both check runners now
+  pass the flag.
 
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
   Slice I placed the item at `8 72 8`, one block above the hopper feeding the
@@ -80,6 +113,10 @@ entries below reference those records by id.
   tanks exist. CI is marked done. The numbered plan from step 15 is rewritten to match.
 
 ### Added
+
+- **Agent route map (ADR-0087).** `docs/AGENT-MAP.md` is a task index: the files to
+  open and the invariant each kind of change breaks. The same commit that changes a
+  seam updates the map. It does not catalogue function bodies.
 
 - **Flux Exosuit, Network Tap and Exoskeleton Legs (ADR-0103).** Assembler-manufactured (casing, two motors, four plates; Industrial). Four pieces with the harness's protection and two slots each. The harness stays at one slot. The tap and the legs install only into an exosuit. A worn tap pulls up to 32 FU/t from pylon coverage into Flux Cells on the suit. Legs add 0.04 speed and spend 1 FU/t from a cell. No charge, no speed. The suit does not generate. The behaviour graph is 103 recipes; a Grindless-only pack logs 306. CI summons the helmet, the chest, the tap and the legs.
 
