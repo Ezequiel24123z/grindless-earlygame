@@ -33,7 +33,9 @@ try {
     $sources += (Join-Path $material 'SupplyCatalogue.java')
     $sources += (Join-Path $material 'MaterialForm.java')
     $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\registry\BlockCatalogue.java')
-    & javac -nowarn -d $out $sources
+    # -encoding UTF-8 is not optional. Windows javac defaults to the console codepage, reads the
+    # em dash in GenerateAssets' provenance text as cp1252, and writes mojibake into GENERATED.md.
+    & javac -nowarn -encoding UTF-8 -d $out $sources
     if ($LASTEXITCODE -ne 0) {
         Write-Output 'GENERATOR DID NOT COMPILE'
         exit 1

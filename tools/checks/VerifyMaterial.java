@@ -227,7 +227,9 @@ public final class VerifyMaterial {
         if (Files.exists(vanilla)) {
             try (Stream<Path> files = Files.walk(vanilla)) {
                 for (Path file : (Iterable<Path>) files.filter(Files::isRegularFile)::iterator) {
-                    onlyMiningTags &= vanilla.relativize(file).toString()
+                    // Windows relativizes with backslashes, so compare on a normalised separator.
+                    // Without this the assertion is false on every Windows run of run-checks.ps1.
+                    onlyMiningTags &= vanilla.relativize(file).toString().replace('\\', '/')
                             .startsWith("tags/blocks/mineable/");
                 }
             }

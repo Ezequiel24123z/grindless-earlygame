@@ -78,7 +78,7 @@ try {
     Set-Content -Path $compileArgs -Value "-cp `"$compileCp`"" -Encoding ASCII
     Set-Content -Path $runArgs -Value "-cp `"$runCp`"" -Encoding ASCII
 
-    & javac -nowarn "@$compileArgs" -d $out $sources
+    & javac -nowarn -encoding UTF-8 "@$compileArgs" -d $out $sources
     if ($LASTEXITCODE -ne 0) {
         Write-Output 'CHECKS DID NOT COMPILE'
         exit 1

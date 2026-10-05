@@ -728,11 +728,21 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(recipe -> recipe.family() == MachineFamily.KILN
                         && recipe.id().contains("refractory")));
 
+        // Steelmaking is the electric arc and nothing else. The gas line (ADR-0077) does make
+        // oxygen and hydrogen, so these assertions scope to the alloy route rather than the
+        // whole graph, which is what they always meant.
         no("oxygen blow is not this slice",
-                recipes.stream().anyMatch(recipe -> recipe.id().contains("oxygen")));
+                recipes.stream().filter(recipe -> recipe.id().startsWith("alloy/"))
+                        .anyMatch(recipe -> recipe.itemInputs().stream()
+                                .anyMatch(input -> input.id().contains("oxygen"))
+                                || recipe.fluidInputs().stream()
+                                        .anyMatch(input -> input.id().contains("oxygen"))));
         no("direct reduction is not this slice",
-                recipes.stream().anyMatch(recipe -> recipe.id().contains("hydrogen")
-                        || recipe.id().contains("direct")));
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("direct")));
+        no("no alloy route reduces with hydrogen",
+                recipes.stream().filter(recipe -> recipe.id().startsWith("alloy/"))
+                        .anyMatch(recipe -> recipe.fluidInputs().stream()
+                                .anyMatch(input -> input.id().contains("hydrogen"))));
         no("steel without a vein has no ore line",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("b0_r1/steel")));
         no("steel without oxide does not roast",

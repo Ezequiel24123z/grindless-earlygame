@@ -32,7 +32,7 @@ trap 'rm -rf "$OUT"' EXIT
 CP_COMPILE="$CLASSES:$MC_JAR:$DEPS"
 CP_RUN="$OUT:$CLASSES:$MC_JAR:$DEPS"
 
-javac -nowarn -cp "$CP_COMPILE" -d "$OUT" "${SOURCES[@]}" || { echo "CHECKS DID NOT COMPILE"; exit 1; }
+javac -nowarn -encoding UTF-8 -cp "$CP_COMPILE" -d "$OUT" "${SOURCES[@]}" || { echo "CHECKS DID NOT COMPILE"; exit 1; }
 
 FAILED=0
 for src in "${SOURCES[@]}"; do

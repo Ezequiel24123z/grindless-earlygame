@@ -139,10 +139,14 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:wires/iron").size());
         eq("unknown product is empty", 0,
                 AtlasLogic.producing(recipes, "forge:ingots/unobtainium").size());
-        eq("steel has one arc route", 1,
+        // Steel has no vein, so the arc route is the only way to make it from scratch. The caster
+        // is a second route only because it recasts a melt that the arc already produced.
+        eq("steel has the arc route and the caster", 2,
                 AtlasLogic.producing(recipes, "forge:ingots/steel").size());
-        yes("that route is electric arc",
+        yes("the arc route is electric arc",
                 ids(AtlasLogic.producing(recipes, "forge:ingots/steel")).contains("alloy/steel"));
+        yes("the other route is the caster",
+                ids(AtlasLogic.producing(recipes, "forge:ingots/steel")).contains("cast/ingot/steel"));
 
         List<AtlasLogic.Entry> kiln = AtlasLogic.family(recipes, MachineFamily.KILN);
         eq("seven kiln routes in this set", 7, kiln.size());
