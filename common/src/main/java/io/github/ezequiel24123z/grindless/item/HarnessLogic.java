@@ -1,7 +1,7 @@
 package io.github.ezequiel24123z.grindless.item;
 
 /**
- * The T1 suit grid (ADR-0089). One slot, one module, no generation.
+ * The T1 suit grid (ADR-0102). One slot, one module, no generation.
  *
  * <p>No Minecraft types. The Flux Cell is not the drill's fuel. Walking through a pylon does not
  * charge it; that is the Network Tap (slice Y).

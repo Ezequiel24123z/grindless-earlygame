@@ -72,6 +72,23 @@ public final class MachineArt {
     public static final int DECONSTRUCTOR = 0x4E342E;
     public static final int BANK = 0xFFEE58;
     public static final int TRANSFORMER = 0x7C4DFF;
+    public static final int ARRAY = 0x5C6BC0;
+    public static final int ARRAY_CASING = 0xC46A3A;
+    /** Moon-pale. Not cyan, amber or red, so a status still reads as a status. */
+    public static final int LINK = 0xECEFF1;
+    /** Deep navy. A gate, not the moon-pale ring and not the array's indigo. */
+    public static final int SPAN = 0x0D47A1;
+    /** Blue-grey plate. A floor, not lunar dust. */
+    public static final int DECK = 0x455A64;
+    /** Teal cradle. A pad, not the deck and not the moon-pale ring. */
+    public static final int PAD = 0x00897B;
+    /** Violet rails. A berth, not the rocket's teal cradle and not the navy gate. */
+    public static final int BERTH = 0x6A1B9A;
+    /** Near-black mass. A wall, not the deck's blue-grey plate and not the violet berth. */
+    public static final int SHELL = 0x1A0A24;
+    /** Pale core. A mark, not the mass and not a status colour. */
+    public static final int MARK = 0xF3E5F5;
+    public static final int REGOLITH = 0x9E9E9E;
 
     private static final double CX = 7.5;
     private static final double CY = 7.5;
@@ -129,6 +146,16 @@ public final class MachineArt {
             case TRANSFORMER -> transformerFront(status);
             case SCANNER -> scannerFront(status);
             case DECONSTRUCTOR -> deconstructorFront(status);
+            case ARRAY -> arrayFront(status);
+            case ARRAY_CASING -> arrayCasingFront(status);
+            case LINK -> linkFront(status);
+            case REGOLITH -> regolithFront(status);
+            case SPAN -> spanFront(status);
+            case DECK -> deckFront(status);
+            case SHELL -> shellFront(status);
+            case MARK -> markFront(status);
+            case PAD -> padFront(status);
+            case BERTH -> berthFront(status);
             case PYLON -> pylonSide(1, status);
         };
     }
@@ -182,6 +209,16 @@ public final class MachineArt {
             case TRANSFORMER -> transformerTop();
             case SCANNER -> scannerTop();
             case DECONSTRUCTOR -> deconstructorTop();
+            case ARRAY -> arrayTop();
+            case ARRAY_CASING -> arrayCasingTop();
+            case LINK -> linkTop();
+            case REGOLITH -> regolithFront("idle");
+            case SPAN -> spanTop();
+            case DECK -> deckTop();
+            case SHELL -> shellTop();
+            case MARK -> markTop();
+            case PAD -> padTop();
+            case BERTH -> berthTop();
             case PYLON -> pylonTop(1, "idle");
         };
     }
@@ -1496,6 +1533,317 @@ public final class MachineArt {
             }
         }
         strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage arrayFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, ARRAY);
+        for (int y = 2; y <= 12; y++) {
+            for (int x = 6; x <= 9; x++) {
+                boolean frame = x == 6 || x == 9 || y == 2 || y == 12;
+                int pixel = frame
+                        ? Palette.shade(ARRAY, -0.2)
+                        : (glow >= 0 ? ((x + y) % 2 == 0 ? glow : dim(glow)) : Palette.shade(ARRAY, -0.55));
+                set(img, x, y, pixel);
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage arrayTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                int dx = x - 7;
+                int dy = y - 7;
+                int d = dx * dx + dy * dy;
+                if (d >= 16 && d <= 36) {
+                    set(img, x, y, Palette.shade(ARRAY, (x + y) % 2 == 0 ? -0.05 : -0.35));
+                }
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 6; x <= 9; x++) {
+                set(img, x, y, ARRAY);
+            }
+        }
+        return img;
+    }
+
+    public static BufferedImage arrayCasingFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        for (int course = 0; course < 3; course++) {
+            int y0 = 3 + course * 3;
+            for (int y = y0; y <= y0 + 2; y++) {
+                for (int x = 2; x <= 13; x++) {
+                    boolean mortar = y == y0 || x % 4 == 2;
+                    set(img, x, y, mortar
+                            ? Palette.shade(ARRAY_CASING, -0.45)
+                            : Palette.shade(ARRAY_CASING, (x + course) % 2 == 0 ? 0.05 : -0.2));
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage linkFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, LINK);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double d = Math.hypot(x - 7.5, y - 7.5);
+                if (d >= 4.2 && d <= 5.6) {
+                    set(img, x, y, Palette.shade(LINK, (x + y) % 2 == 0 ? 0.05 : -0.25));
+                } else if (d < 2.2) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(LINK, -0.45);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage linkTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                double d = Math.hypot(x - 7.5, y - 7.5);
+                if (d >= 4.0 && d <= 6.2) {
+                    set(img, x, y, Palette.shade(LINK, (x + y) % 2 == 0 ? 0.0 : -0.3));
+                } else if (d < 1.8) {
+                    set(img, x, y, LINK);
+                }
+            }
+        }
+        return img;
+    }
+
+    /** Dust, not a casing. The status strip is the only part that changes. */
+    public static BufferedImage regolithFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                int n = (x * 13 + y * 7) % 5;
+                double shade = n == 0 ? -0.22 : n == 1 ? 0.12 : (x + y) % 2 == 0 ? 0.0 : -0.08;
+                set(img, x, y, Palette.shade(REGOLITH, shade));
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    /** Two posts and a lintel. The centre is the opening, not a ring. */
+    public static BufferedImage spanFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, SPAN);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean post = x <= 4 || x >= 11;
+                boolean lintel = y <= 3;
+                if (post || lintel) {
+                    set(img, x, y, Palette.shade(SPAN, (x + y) % 2 == 0 ? 0.08 : -0.28));
+                } else if (x >= 6 && x <= 9 && y >= 7 && y <= 10) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(SPAN, -0.55);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage spanTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 6; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean post = (x <= 4 || x >= 11) && y <= 6;
+                boolean beam = y <= 3;
+                if (post || beam) {
+                    set(img, x, y, Palette.shade(SPAN, (x + y) % 2 == 0 ? 0.05 : -0.3));
+                }
+            }
+        }
+        return img;
+    }
+
+    /** A square cradle with a cross. A rocket stands here. Not a ring and not a deck cube. */
+    public static BufferedImage padFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, PAD);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean rim = x <= 3 || x >= 12 || y <= 3 || y >= 12;
+                boolean cross = (x >= 7 && x <= 8) || (y >= 7 && y <= 8);
+                if (rim) {
+                    set(img, x, y, Palette.shade(PAD, (x + y) % 2 == 0 ? 0.08 : -0.25));
+                } else if (cross) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(PAD, -0.35);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    /** Two rails and a ring. A station stands here. Not the pad's cross. */
+    public static BufferedImage berthFront(String status) {
+        BufferedImage img = casingBase(CASING);
+        int glow = statusColour(status, BERTH);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 2; x <= 13; x++) {
+                int dx = x - 7;
+                int dy = y - 8;
+                int dist = dx * dx + dy * dy;
+                boolean rail = x <= 3 || x >= 12;
+                boolean ring = dist >= 8 && dist <= 16;
+                if (rail) {
+                    set(img, x, y, Palette.shade(BERTH, (x + y) % 2 == 0 ? 0.1 : -0.22));
+                } else if (ring) {
+                    int pixel = glow >= 0 ? glow : Palette.shade(BERTH, -0.15);
+                    set(img, x, y, pixel);
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage berthTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                int dx = x - 7;
+                int dy = y - 7;
+                int dist = dx * dx + dy * dy;
+                boolean rail = x <= 3 || x >= 12;
+                boolean ring = dist >= 8 && dist <= 16;
+                if (rail || ring) {
+                    set(img, x, y, Palette.shade(BERTH, rail ? -0.2 : 0.12));
+                }
+            }
+        }
+        return img;
+    }
+
+    public static BufferedImage padTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                boolean rim = x <= 3 || x >= 12 || y <= 3 || y >= 12;
+                boolean cross = (x >= 7 && x <= 8) || (y >= 7 && y <= 8);
+                if (rim || cross) {
+                    set(img, x, y, Palette.shade(PAD, rim ? -0.2 : 0.12));
+                }
+            }
+        }
+        return img;
+    }
+
+    /** Plates with seams. Not the noisy dust of regolith. */
+    public static BufferedImage deckFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                boolean seam = y % 4 == 0 || x % 8 == 0;
+                set(img, x, y, seam
+                        ? Palette.shade(DECK, -0.4)
+                        : Palette.shade(DECK, (x / 8 + y / 4) % 2 == 0 ? 0.06 : -0.08));
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    /** A dark field and one faint ring. Not plate seams and not dust. */
+    public static BufferedImage shellFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                boolean ring = d >= 3.2 && d <= 5.0;
+                set(img, x, y, ring
+                        ? Palette.shade(SHELL, 0.55)
+                        : Palette.shade(SHELL, (x + y) % 5 == 0 ? -0.2 : 0.08));
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage shellTop() {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                boolean ring = d >= 4.0 && d <= 5.4;
+                set(img, x, y, ring
+                        ? Palette.shade(SHELL, 0.4)
+                        : Palette.shade(SHELL, -0.05));
+            }
+        }
+        return img;
+    }
+
+    /** A bright disc on a dark field. The thing you arrived at, not the wall. */
+    public static BufferedImage markFront(String status) {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - 6.5);
+                if (d <= 2.2) {
+                    set(img, x, y, Palette.shade(MARK, 0.15));
+                } else if (d <= 4.4) {
+                    set(img, x, y, Palette.shade(MARK, -0.35));
+                } else {
+                    set(img, x, y, Palette.shade(SHELL, 0.1));
+                }
+            }
+        }
+        strip(img, status);
+        return img;
+    }
+
+    public static BufferedImage markTop() {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                double d = Math.hypot(x - CX, y - CY);
+                set(img, x, y, d <= 3.0
+                        ? Palette.shade(MARK, 0.05)
+                        : Palette.shade(SHELL, 0.15));
+            }
+        }
+        return img;
+    }
+
+    public static BufferedImage deckTop() {
+        BufferedImage img = MachineTextures.blank();
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                boolean seam = y % 4 == 0 || x % 4 == 0;
+                set(img, x, y, seam
+                        ? Palette.shade(DECK, -0.35)
+                        : Palette.shade(DECK, 0.04));
+            }
+        }
+        return img;
+    }
+
+    public static BufferedImage arrayCasingTop() {
+        BufferedImage img = MachineTextures.top(CASING);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean rim = x <= 3 || x >= 12 || y <= 3 || y >= 12;
+                if (rim) {
+                    set(img, x, y, Palette.shade(ARRAY_CASING, (x + y) % 2 == 0 ? 0.0 : -0.25));
+                }
+            }
+        }
         return img;
     }
 

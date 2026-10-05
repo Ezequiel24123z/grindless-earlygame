@@ -344,7 +344,7 @@ is route selection operating on a single machine.
 | **Liquid helium** | −269 °C | Cryogenic Plant (T4) | singularity containment |
 | **Deuterium** | pressurised gas | Centrifuge / electrolysis of heavy water | fusion fuel |
 | **Tritium** | pressurised gas | lithium breeding blanket | D–T fusion |
-| **Helium-3** | pressurised gas | lunar regolith | D–³He fusion |
+| **Helium-3** | reagent item; the gas form waits | Luna vein, extracted (ADR-0095) | D–³He fusion |
 | **Plasma** | magnetically contained | Plasma Chamber, Fusion Reactor | dissociation, exotic synthesis |
 
 Note the coolant ladder carefully: **liquid nitrogen is available at T2**, from the Atmospheric
@@ -821,7 +821,7 @@ it is the correct shape — real enrichment plants are exactly this.
 | --- | --- | --- |
 | **Deuterium** | Centrifuge on heavy water, or electrolysis of enriched water | D–D, D–T |
 | **Tritium** | lithium blanket bred in a running reactor | D–T |
-| **Helium-3** | lunar regolith, via the orbital layer | D–³He, aneutronic |
+| **Helium-3** | Luna, from a vein extractor (ADR-0095) | D–³He, aneutronic |
 | **Boron-11** | boron ore, enriched | p–¹¹B, the late trophy |
 
 Tritium being *bred in the reactor that consumes it* is the design in miniature: the reactor's

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * One item becomes one Matter. Matter smashed again is still one Matter (ADR-0088).
+ * One item becomes one Matter. Matter smashed again is still one Matter (ADR-0101).
  */
 public class DeconstructorBlockEntity extends PoweredLogisticsBlockEntity {
 

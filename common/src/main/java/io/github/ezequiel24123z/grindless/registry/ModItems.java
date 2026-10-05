@@ -13,10 +13,14 @@ import io.github.ezequiel24123z.grindless.item.BlueprintItem;
 import io.github.ezequiel24123z.grindless.item.BlueprintToolItem;
 import io.github.ezequiel24123z.grindless.item.DrillCellItem;
 import io.github.ezequiel24123z.grindless.item.FluxDrillItem;
+import io.github.ezequiel24123z.grindless.item.FieldGuideItem;
 import io.github.ezequiel24123z.grindless.item.MultitoolItem;
+import io.github.ezequiel24123z.grindless.item.QuestBookItem;
 import io.github.ezequiel24123z.grindless.item.ProcessAtlasItem;
 import io.github.ezequiel24123z.grindless.item.ProspectorsScannerItem;
 import io.github.ezequiel24123z.grindless.item.FluxConduitItem;
+import io.github.ezequiel24123z.grindless.item.SupraluminalStationItem;
+import io.github.ezequiel24123z.grindless.item.SurveyRocketItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
 import net.minecraft.core.registries.Registries;
@@ -41,6 +45,14 @@ public final class ModItems {
     /** The T0 handheld. Replaces the stone-tool phase outright. */
     public static final RegistrySupplier<Item> MULTITOOL = register("multitool",
             () -> new MultitoolItem(new Item.Properties().stacksTo(1)));
+
+    /** The route, as tasks. Does not gate a machine (ADR-0100). */
+    public static final RegistrySupplier<Item> QUEST_BOOK = register("quest_book",
+            () -> new QuestBookItem(new Item.Properties().stacksTo(1)));
+
+    /** The route, as pages. Readable before any task is claimed (ADR-0100). */
+    public static final RegistrySupplier<Item> FIELD_GUIDE = register("field_guide",
+            () -> new FieldGuideItem(new Item.Properties().stacksTo(1)));
 
     /** Research currency. Produced by the factory, spent in the Research Terminal. */
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",
@@ -93,6 +105,22 @@ public final class ModItems {
     public static final RegistrySupplier<Item> SLAG = register("slag",
             () -> new Item(new Item.Properties()));
 
+    /** Furnace lining. Slag's named sink on the Arc Furnace (ADR-0091). */
+    public static final RegistrySupplier<Item> REFRACTORY_BRICK = register("refractory_brick",
+            () -> new Item(new Item.Properties()));
+
+    /** 99 % silicon. Carbothermic product; not the circuit grade (ADR-0092). */
+    public static final RegistrySupplier<Item> METALLURGICAL_SILICON = register("metallurgical_silicon",
+            () -> new Item(new Item.Properties()));
+
+    /** Six-nines silicon from zone refining. Not a circuit, a wafer or an ingot tag (ADR-0093). */
+    public static final RegistrySupplier<Item> ELECTRONIC_SILICON = register("electronic_silicon",
+            () -> new Item(new Item.Properties()));
+
+    /** Luna's extractable. A reagent, not an ore and not a fluid (ADR-0095). */
+    public static final RegistrySupplier<Item> HELIUM_3 = register("helium_3",
+            () -> new Item(new Item.Properties()));
+
     /** T1 handheld. Surveys the standing chunk and its neighbours. */
     public static final RegistrySupplier<Item> PROSPECTORS_SCANNER = register("prospectors_scanner",
             () -> new ProspectorsScannerItem(new Item.Properties().stacksTo(1)));
@@ -125,11 +153,11 @@ public final class ModItems {
     public static final RegistrySupplier<Item> DECONSTRUCTION_PLANNER = register("deconstruction_planner",
             () -> new DeconstructionPlannerItem(new Item.Properties().stacksTo(1)));
 
-    /** Fungible intermediate. A smash yields one; it is not a fluid (ADR-0088). */
+    /** Fungible intermediate. A smash yields one; it is not a fluid (ADR-0101). */
     public static final RegistrySupplier<Item> MATTER = register("matter",
             () -> new Item(new Item.Properties()));
 
-    /** T1 suit. One slot, iron protection, no generator (ADR-0089). */
+    /** T1 suit. One slot, iron protection, no generator (ADR-0102). */
     public static final RegistrySupplier<Item> VOLTAIC_HELMET = register("voltaic_helmet",
             () -> new HarnessItem(ArmorItem.Type.HELMET, new Item.Properties()));
 
@@ -142,11 +170,11 @@ public final class ModItems {
     public static final RegistrySupplier<Item> VOLTAIC_BOOTS = register("voltaic_boots",
             () -> new HarnessItem(ArmorItem.Type.BOOTS, new Item.Properties()));
 
-    /** Suit buffer. Not the drill cell (ADR-0084, ADR-0089). */
+    /** Suit buffer. Not the drill cell (ADR-0084, ADR-0102). */
     public static final RegistrySupplier<Item> FLUX_CELL = register("flux_cell",
             () -> new FluxCellItem(new Item.Properties().stacksTo(1)));
 
-    /** T2 chassis. Two slots. Does not generate (ADR-0090). */
+    /** T2 chassis. Two slots. Does not generate (ADR-0103). */
     public static final RegistrySupplier<Item> FLUX_EXOSUIT_HELMET = register("flux_exosuit_helmet",
             () -> new ExosuitItem(ArmorItem.Type.HELMET, new Item.Properties()));
 
@@ -166,6 +194,14 @@ public final class ModItems {
     /** Spends a cell for movement speed. Not flight. */
     public static final RegistrySupplier<Item> EXOSKELETON_LEGS = register("exoskeleton_legs",
             () -> new SuitModuleItem(ExosuitLogic.EXOSKELETON, new Item.Properties()));
+
+    /** Local-system rocket. Placed on a launch pad; it climbs, then the map opens (ADR-0097). */
+    public static final RegistrySupplier<Item> SURVEY_ROCKET = register("survey_rocket",
+            () -> new SurveyRocketItem(new Item.Properties().stacksTo(1)));
+
+    /** Interstellar station. Placed on a berth; it climbs, and the ceiling is the arrival (ADR-0098). */
+    public static final RegistrySupplier<Item> SUPRALUMINAL_STATION = register("supraluminal_station",
+            () -> new SupraluminalStationItem(new Item.Properties().stacksTo(1)));
 
     /**
      * Every material item Grindless supplies, registered whether or not the pack needs it.

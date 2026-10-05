@@ -3,6 +3,10 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.centre.ArrivalMarkBlock;
+import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
+import io.github.ezequiel24123z.grindless.centre.HorizonShellBlock;
+import io.github.ezequiel24123z.grindless.flight.LaunchPadBlock;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
 import io.github.ezequiel24123z.grindless.fluid.ElectricPumpBlock;
@@ -37,6 +41,13 @@ import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
 import io.github.ezequiel24123z.grindless.network.CapacitorBankBlock;
+import io.github.ezequiel24123z.grindless.planet.LunarLinkBlock;
+import io.github.ezequiel24123z.grindless.planet.LunarRegolithBlock;
+import io.github.ezequiel24123z.grindless.star.DriftDeckBlock;
+import io.github.ezequiel24123z.grindless.star.StarwardLinkBlock;
+import io.github.ezequiel24123z.grindless.station.StationBerthBlock;
+import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
+import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
@@ -296,6 +307,82 @@ public final class ModBlocks {
     public static final RegistrySupplier<FluxTransformerBlock> FLUX_TRANSFORMER =
             register("flux_transformer",
                     () -> new FluxTransformerBlock(machine().strength(3.0F)));
+
+    /** Centre of the Ground Array. Storage, once eight casings stand (ADR-0094). */
+    public static final RegistrySupplier<GroundArrayBlock> GROUND_ARRAY = register("ground_array",
+            () -> new GroundArrayBlock(machine().strength(3.5F)));
+
+    /** One of the eight blocks around a Ground Array. Not a machine. */
+    public static final RegistrySupplier<ArrayCasingBlock> ARRAY_CASING = register("array_casing",
+            () -> new ArrayCasingBlock(machine().strength(3.0F)));
+
+    /**
+     * A pad a survey rocket climbs from (ADR-0097). Not a link.
+     */
+    public static final RegistrySupplier<LaunchPadBlock> LAUNCH_PAD = register("launch_pad",
+            () -> new LaunchPadBlock(machine().strength(3.5F)));
+
+    /**
+     * Departure to Luna. On Luna, the same block is the way home (ADR-0095).
+     * Placeholder: the rocket replaces this flight. Not deleted (ADR-0097).
+     */
+    public static final RegistrySupplier<LunarLinkBlock> LUNAR_LINK = register("lunar_link",
+            () -> new LunarLinkBlock(machine().strength(3.5F)));
+
+    /**
+     * Luna's surface. A full cube, so neighbours occlude. Not a machine silhouette.
+     */
+    public static final RegistrySupplier<LunarRegolithBlock> LUNAR_REGOLITH = register("lunar_regolith",
+            () -> new LunarRegolithBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GRAY)
+                    .sound(SoundType.GRAVEL)
+                    .strength(1.5F, 6.0F)
+                    .requiresCorrectToolForDrops()));
+
+    /**
+     * A berth a supraluminal station climbs from (ADR-0098). Not a link.
+     */
+    public static final RegistrySupplier<StationBerthBlock> STATION_BERTH = register("station_berth",
+            () -> new StationBerthBlock(machine().strength(3.5F)));
+
+    /**
+     * Departure to the Drift. On the Drift, the same block is the way home (ADR-0096).
+     * Placeholder: the station replaces this hop. The block stays registered and no longer
+     * moves a player (ADR-0098).
+     */
+    public static final RegistrySupplier<StarwardLinkBlock> STARWARD_LINK = register("starward_link",
+            () -> new StarwardLinkBlock(machine().strength(3.5F)));
+
+    /**
+     * The Drift's floor. A full cube, so neighbours occlude. Plating, not a machine.
+     */
+    public static final RegistrySupplier<DriftDeckBlock> DRIFT_DECK = register("drift_deck",
+            () -> new DriftDeckBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .sound(SoundType.METAL)
+                    .strength(2.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
+
+    /**
+     * The mass of the galactic centre (ADR-0099). No item: it cannot be carried home,
+     * and it cannot be broken, so the chamber stays one room.
+     */
+    public static final RegistrySupplier<HorizonShellBlock> HORIZON_SHELL =
+            BLOCKS.register("horizon_shell", () -> new HorizonShellBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .sound(SoundType.STONE)
+                    .strength(-1.0F, 3600000.0F)));
+
+    /**
+     * The mark in that chamber. No item. It lights the room, because the dimension has
+     * no skylight.
+     */
+    public static final RegistrySupplier<ArrivalMarkBlock> ARRIVAL_MARK =
+            BLOCKS.register("arrival_mark", () -> new ArrivalMarkBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .sound(SoundType.METAL)
+                    .strength(-1.0F, 3600000.0F)
+                    .lightLevel(state -> CentreCatalogue.MARK_LIGHT)));
 
     /** The three Flux Pylons. Power reaches a machine because it stands inside one's supply
      * area — there are no wires between pylons and machines. */

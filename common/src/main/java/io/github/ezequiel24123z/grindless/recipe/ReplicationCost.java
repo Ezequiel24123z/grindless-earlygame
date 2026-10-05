@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * What one item costs to replicate, walked from the recipe graph (ADR-0010, ADR-0088).
+ * What one item costs to replicate, walked from the recipe graph (ADR-0010, ADR-0101).
  *
  * <p>No Minecraft types. A line matches an item id, never a tag: expanding a tag to its members
  * is the Replicator's job (slice AH). An item with no line, and an item already on the stack,

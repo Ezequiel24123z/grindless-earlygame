@@ -95,6 +95,14 @@ final class BlockModels {
             case TRANSFORMER -> transformer();
             case SCANNER -> scanner();
             case DECONSTRUCTOR -> deconstructor();
+            case ARRAY -> array();
+            case ARRAY_CASING -> arrayCasing();
+            case LINK -> link();
+            case REGOLITH -> regolith();
+            case SPAN -> span();
+            case DECK, SHELL, MARK -> deck();
+            case PAD -> pad();
+            case BERTH -> berth();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -146,7 +154,15 @@ final class BlockModels {
         String lower = block.lower();
         lines.add(slot("base", "casing_side"));
         lines.add(slot("cap", "casing_top"));
-        if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
+        if (block.geometry() == BlockCatalogue.Geometry.REGOLITH
+                || block.geometry() == BlockCatalogue.Geometry.DECK
+                || block.geometry() == BlockCatalogue.Geometry.SHELL
+                || block.geometry() == BlockCatalogue.Geometry.MARK) {
+            lines.add(slot("front", lower + "_front_" + status));
+            lines.add(slot("top", lower + "_top"));
+            lines.add(slot("side", lower + "_front_" + status));
+            lines.add(slot("particle", lower + "_front_" + status));
+        } else if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
             lines.add(slot("side", "pylon" + block.tier() + "_side_" + status));
             lines.add(slot("top", "pylon" + block.tier() + "_top_" + status));
             lines.add(slot("particle", "pylon" + block.tier() + "_side_" + status));
@@ -477,6 +493,69 @@ final class BlockModels {
                 box(2, 0, 2, 14, 2, 14, "cap", "base"),
                 front(3, 2, 3, 13, 13, 13, "top", "side", "front"),
                 box(4, 13, 4, 12, 16, 12, "cap", "cap"));
+    }
+
+    /** A mast on a full pad. The centre of a ring, not a battery rack. */
+    private static List<Box> array() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "cap", "base"),
+                box(5, 3, 5, 11, 14, 11, "top", "side"),
+                front(6, 4, 4, 10, 12, 6, "top", "side", "front"));
+    }
+
+    /** A low refractory course. Shorter than a machine, and not a belt. */
+    /** A low ring. The player stands beside it. It is not a tower and not a multiblock. */
+    private static List<Box> link() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "side"),
+                box(2, 2, 2, 14, 3, 14, "top", "front"),
+                box(1, 2, 1, 15, 4, 3, "cap", "base"),
+                box(1, 2, 13, 15, 4, 15, "cap", "base"),
+                box(1, 2, 3, 3, 4, 13, "cap", "base"),
+                box(13, 2, 3, 15, 4, 13, "cap", "base"));
+    }
+
+    /** One dust cube. Every face is the regolith texture, not the machine casing. */
+    private static List<Box> regolith() {
+        return List.of(box(0, 0, 0, 16, 16, 16, "top", "front"));
+    }
+
+    /** Two posts and a lintel on a pad. Taller than the lunar ring, and open in the middle. */
+    private static List<Box> span() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "cap", "base"),
+                box(1, 2, 1, 4, 14, 4, "top", "side"),
+                box(12, 2, 1, 15, 14, 4, "top", "side"),
+                front(1, 12, 1, 15, 15, 4, "top", "side", "front"));
+    }
+
+    /** Two rails and a ring, lower than the gate. A station stands here, not a rocket. */
+    private static List<Box> berth() {
+        return List.of(
+                box(0, 0, 0, 16, 2, 16, "top", "side"),
+                box(0, 2, 0, 3, 5, 16, "top", "front"),
+                box(13, 2, 0, 16, 5, 16, "top", "front"),
+                box(6, 2, 6, 10, 6, 10, "cap", "base"));
+    }
+
+    /** A low cradle. Shorter than a link, with a post the rocket sits against. */
+    private static List<Box> pad() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "top", "side"),
+                box(2, 3, 2, 14, 4, 14, "top", "front"),
+                box(6, 4, 6, 10, 7, 10, "cap", "base"));
+    }
+
+    /** One plate cube. Every face is the deck texture, not dust and not a casing. */
+    private static List<Box> deck() {
+        return List.of(box(0, 0, 0, 16, 16, 16, "top", "front"));
+    }
+
+    private static List<Box> arrayCasing() {
+        return List.of(
+                box(0, 0, 0, 16, 4, 16, "cap", "base"),
+                box(2, 4, 2, 14, 8, 14, "top", "side"),
+                front(3, 4, 1, 13, 8, 4, "top", "side", "front"));
     }
 
     /** A cabinet of cells: a battery rack, not a tank and not a pylon. */

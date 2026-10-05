@@ -74,3 +74,18 @@ loot spawn 8 102 8 loot grindless:blocks/capacitor_bank
 setblock 8 100 8 grindless:flux_transformer
 execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK flux_transformer
 loot spawn 8 102 8 loot grindless:blocks/flux_transformer
+setblock 8 100 8 grindless:ground_array
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK ground_array
+loot spawn 8 102 8 loot grindless:blocks/ground_array
+setblock 8 100 8 grindless:array_casing
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK array_casing
+loot spawn 8 102 8 loot grindless:blocks/array_casing
+setblock 8 100 8 grindless:lunar_link
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK lunar_link
+loot spawn 8 102 8 loot grindless:blocks/lunar_link
+setblock 8 100 8 grindless:lunar_regolith
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK lunar_regolith
+loot spawn 8 102 8 loot grindless:blocks/lunar_regolith
+setblock 8 100 8 grindless:launch_pad
+execute if block 8 100 8 #minecraft:mineable/pickaxe run say PICKAXE-OK launch_pad
+loot spawn 8 102 8 loot grindless:blocks/launch_pad

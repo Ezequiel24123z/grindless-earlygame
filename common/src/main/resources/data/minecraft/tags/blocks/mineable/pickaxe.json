@@ -51,6 +51,16 @@
     "grindless:deconstructor",
     "grindless:capacitor_bank",
     "grindless:flux_transformer",
-    "grindless:flux_pylon_shaft"
+    "grindless:ground_array",
+    "grindless:array_casing",
+    "grindless:launch_pad",
+    "grindless:station_berth",
+    "grindless:lunar_link",
+    "grindless:lunar_regolith",
+    "grindless:starward_link",
+    "grindless:drift_deck",
+    "grindless:flux_pylon_shaft",
+    "grindless:horizon_shell",
+    "grindless:arrival_mark"
   ]
 }

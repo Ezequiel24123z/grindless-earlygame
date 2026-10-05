@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-/** T2 chassis. Two slots. Does not generate (ADR-0090). */
+/** T2 chassis. Two slots. Does not generate (ADR-0103). */
 public final class ExosuitItem extends ArmorItem {
 
     public ExosuitItem(Type type, Properties properties) {

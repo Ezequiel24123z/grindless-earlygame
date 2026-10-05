@@ -251,10 +251,14 @@ public final class VerifyMaterial {
                     for (JsonElement value : json.getAsJsonArray("values")) {
                         String id = value.getAsString();
                         // A vanilla tag include (#minecraft:coals in grindless:carbon) is not a
-                        // rival item. Hard-wiring another mod's item id still fails this check.
+                        // rival item. Sand and nether quartz are item ids because #minecraft:sand
+                        // also contains red sand, and quartz has no vanilla item tag (ADR-0092).
+                        // Hard-wiring another mod's item id still fails this check.
                         foreignFree &= id.startsWith("grindless:")
                                 || id.startsWith("#" + namespace + ":")
-                                || id.startsWith("#minecraft:");
+                                || id.startsWith("#minecraft:")
+                                || id.equals("minecraft:sand")
+                                || id.equals("minecraft:quartz");
                     }
                 }
             }

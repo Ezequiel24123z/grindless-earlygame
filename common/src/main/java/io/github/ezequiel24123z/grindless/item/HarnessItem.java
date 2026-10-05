@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-/** One piece of the Voltaic Harness. One slot. No generator (ADR-0089). */
+/** One piece of the Voltaic Harness. One slot. No generator (ADR-0102). */
 public final class HarnessItem extends ArmorItem {
 
     public HarnessItem(Type type, Properties properties) {

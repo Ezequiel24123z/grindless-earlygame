@@ -114,7 +114,27 @@ public final class BlockCatalogue {
         /** A lens over a table. It stores an item id. */
         SCANNER,
         /** A ram over a bowl. One item becomes one Matter. */
-        DECONSTRUCTOR
+        DECONSTRUCTOR,
+        /** A mast on a pad. The centre of a Ground Array. */
+        ARRAY,
+        /** A low refractory course. One part of the array's ring. */
+        ARRAY_CASING,
+        /** A flat ring on a pad. One destination, not a dial. */
+        LINK,
+        /** A full cube of dust. Ground, not a machine. */
+        REGOLITH,
+        /** Two posts and a lintel. A gate off the star, not the lunar ring. */
+        SPAN,
+        /** A full cube of plating. A floor between stars, not dust. */
+        DECK,
+        /** A full cube of dark mass. The wall of the galactic centre, not a deck. */
+        SHELL,
+        /** A full cube with a bright core. The mark in that chamber, not the mass. */
+        MARK,
+        /** A low cradle. A rocket stands on it. Not a link and not a deck cube. */
+        PAD,
+        /** Two rails and a ring. A station stands on it. Not the rocket's cradle. */
+        BERTH
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -210,16 +230,26 @@ public final class BlockCatalogue {
             new Entry("pattern_scanner", Geometry.SCANNER, 1, true, CONSUMER),
             new Entry("deconstructor", Geometry.DECONSTRUCTOR, 1, true, CONSUMER),
             new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
-            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID));
+            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID),
+            new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
+            new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID),
+            new Entry("launch_pad", Geometry.PAD, 1, false, GRID),
+            new Entry("station_berth", Geometry.BERTH, 1, false, GRID),
+            new Entry("lunar_link", Geometry.LINK, 1, true, GRID),
+            new Entry("lunar_regolith", Geometry.REGOLITH, 1, false, GRID),
+            new Entry("starward_link", Geometry.SPAN, 1, true, GRID),
+            new Entry("drift_deck", Geometry.DECK, 1, false, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
+            "refractory_brick", "metallurgical_silicon", "electronic_silicon",
             "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
             "copper_coil", "motor", "vanadia_pellet", "ingot_mould", "plate_mould",
             "flux_drill", "drill_cell", "blueprint_tool", "blueprint", "deconstruction_planner",
             "matter", "voltaic_helmet", "voltaic_chestplate", "voltaic_leggings", "voltaic_boots",
             "flux_cell", "flux_exosuit_helmet", "flux_exosuit_chestplate", "flux_exosuit_leggings",
-            "flux_exosuit_boots", "network_tap", "exoskeleton_legs");
+            "flux_exosuit_boots", "network_tap", "exoskeleton_legs",
+            "helium_3", "survey_rocket", "supraluminal_station", "quest_book", "field_guide");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";
@@ -244,6 +274,6 @@ public final class BlockCatalogue {
      * entry, generated separately. The pylon shaft is occupancy for the two blocks above a pylon.
      */
     public static List<String> technical() {
-        return List.of("flux_pylon_shaft");
+        return List.of("flux_pylon_shaft", "horizon_shell", "arrival_mark");
     }
 }

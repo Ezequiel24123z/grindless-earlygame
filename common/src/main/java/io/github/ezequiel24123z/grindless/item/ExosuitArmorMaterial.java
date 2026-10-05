@@ -7,7 +7,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
-/** Same protection as the harness. The grid is the upgrade (ADR-0090). */
+/** Same protection as the harness. The grid is the upgrade (ADR-0103). */
 public enum ExosuitArmorMaterial implements ArmorMaterial {
     EXOSUIT;
 

@@ -326,6 +326,30 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for the quest book: a bound volume with a marked spine. See {@link #dataCore}. */
+    public static BufferedImage questBook(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 2, 12, 13, 3.2);
+        field.rect(3, 2, 5, 13, 4.6);
+        field.rect(7, 4, 11, 5, 4.0);
+        field.rect(7, 7, 11, 8, 4.0);
+        field.rect(7, 10, 10, 11, 4.0);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for the field guide: an open page with rules. See {@link #dataCore}. */
+    public static BufferedImage fieldGuide(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 2, 13, 13, 3.0);
+        field.rect(4, 4, 11, 5, 4.2);
+        field.rect(4, 7, 11, 8, 3.8);
+        field.rect(4, 9, 11, 10, 3.8);
+        field.rect(4, 11, 9, 12, 3.8);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** Placeholder sprite for the Process Atlas: a tablet with three graph nodes. See {@link #dataCore}. */
     public static BufferedImage atlas(Palette palette) {
         HeightField field = new HeightField();
@@ -480,11 +504,60 @@ public final class FormTextures {
         return field.light(palette);
     }
 
+    /** Placeholder sprite for electronic silicon: a pale crystal, distinct from the grey chunk. */
+    public static BufferedImage electronicSilicon(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(7, 2, 8, 13, 3.6);
+        field.rect(5, 4, 10, 11, 4.4);
+        field.rect(6, 6, 9, 9, 5.6);
+        field.disc(8.0, 7.5, 1.2, 6.2);
+        field.bevel(0.25);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for metallurgical silicon: a faceted grey chunk. */
+    public static BufferedImage metallurgicalSilicon(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(4, 5, 11, 11, 3.4);
+        field.rect(5, 3, 10, 6, 4.4);
+        field.rect(6, 9, 10, 13, 4.0);
+        field.disc(8.0, 7.5, 1.8, 5.2);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
+    /**
+     * Placeholder sprite for the supraluminal station: a wide hull and a ring, not a nose
+     * and not fins. See {@link #rocket}.
+     */
+    public static BufferedImage station(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(3, 5, 12, 11, 3.8);
+        field.rect(1, 6, 3, 10, 2.4);
+        field.rect(12, 6, 14, 10, 2.4);
+        field.disc(8.0, 8.0, 2.2, 5.4);
+        field.rect(7, 2, 8, 5, 4.6);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
     /** A dome. The harness helmet, not a drill. */
     public static BufferedImage harnessHelmet(Palette palette) {
         HeightField field = new HeightField();
         field.disc(8, 7, 5.2, 4.0);
         field.rect(3, 10, 13, 13, 2.4);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for the survey rocket: a body, a nose and two fins. See {@link #dataCore}. */
+    public static BufferedImage rocket(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(6, 3, 9, 13, 4.2);
+        field.rect(7, 1, 8, 4, 5.2);
+        field.rect(3, 10, 6, 13, 2.6);
+        field.rect(9, 10, 12, 13, 2.6);
+        field.rect(7, 12, 8, 15, 3.0);
         field.bevel(0.3);
         return field.light(palette);
     }
@@ -574,6 +647,27 @@ public final class FormTextures {
         field.rect(2, 2, 3, 6, 3.4);
         field.rect(10, 12, 14, 13, 3.4);
         field.rect(13, 9, 14, 13, 3.4);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for helium-3: a pale sealed cell, not a rock. */
+    public static BufferedImage helium3(Palette palette) {
+        HeightField field = new HeightField();
+        field.disc(8.0, 8.0, 4.6, 4.2);
+        field.disc(8.0, 8.0, 2.4, 5.4);
+        field.rect(7, 2, 8, 4, 3.2);
+        field.rect(6, 1, 9, 2, 2.6);
+        field.bevel(0.3);
+        return field.light(palette);
+    }
+
+    /** Placeholder sprite for a refractory brick: a fired block with a mortar cross. */
+    public static BufferedImage brick(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 4, 13, 11, 3.6);
+        field.rect(7, 4, 8, 11, 2.2);
+        field.rect(2, 7, 13, 8, 2.2);
         field.bevel(0.35);
         return field.light(palette);
     }

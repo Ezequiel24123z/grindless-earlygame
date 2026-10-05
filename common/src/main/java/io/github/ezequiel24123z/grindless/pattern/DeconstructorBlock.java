@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** Turns one item into one Matter. The blacklist does not apply (ADR-0088). */
+/** Turns one item into one Matter. The blacklist does not apply (ADR-0101). */
 public class DeconstructorBlock extends FacingLogisticsBlock {
 
     public static final EnumProperty<MachineStatus> STATUS =

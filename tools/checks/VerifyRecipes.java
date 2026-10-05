@@ -3,6 +3,8 @@ package io.github.ezequiel24123z.grindless.recipe;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.process.ConditionBand;
+import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +41,7 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool, the planner, the pattern pair and the exosuit", 103, recipes.size());
+        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool, the planner, the pattern pair, the exosuit, steel, refractory, silicon, zone refining, the ground array, the lunar link, the starward link, the launch pad, the survey rocket, the station berth and the supraluminal station", 115, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -596,6 +598,141 @@ public final class VerifyRecipes {
 
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
+        ProcessRecipe steel = recipe(recipes, "alloy/steel");
+        eq("steel is the arc furnace", MachineFamily.ARC_FURNACE, steel.family());
+        eq("steel takes ten iron", 10, steel.itemInputs().get(0).count());
+        eq("steel iron is ingots", "tag:forge:ingots/iron", steel.itemInputs().get(0).qualified());
+        eq("steel takes one carbon", 1, steel.itemInputs().get(1).count());
+        eq("steel carbon is the tag", "tag:grindless:carbon", steel.itemInputs().get(1).qualified());
+        eq("steel makes ten ingots", 10, steel.itemOutputs().get(0).count());
+        eq("steel output is the ingot tag", "tag:forge:ingots/steel", steel.itemOutputs().get(0).qualified());
+        eq("steel is 140 seconds", 20 * 140, steel.durationTicks());
+        eq("steel draws F1", 32L, steel.fuPerTick());
+        eq("steel is 1600 C", 1600.0, steel.temperatureC());
+        yes("steel names no atmosphere", !steel.namesAtmosphere());
+        yes("steel has no catalyst", steel.catalysts().isEmpty());
+        yes("steel has no fluid", steel.fluidInputs().isEmpty() && steel.fluidOutputs().isEmpty());
+        yes("steel has no blueprint", steel.blueprint() == null);
+        yes("furnace hold is optimal for 1600 C",
+                ConditionBand.relative(ProcessLogic.STEEL_TEMPERATURE)
+                        .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        ProcessRecipe brick = recipe(recipes, "ceramic/refractory_brick");
+        eq("refractory brick is the arc furnace", MachineFamily.ARC_FURNACE, brick.family());
+        eq("refractory brick takes one slag", 1, brick.itemInputs().get(0).count());
+        eq("refractory brick slag is the reagent", "item:grindless:slag",
+                brick.itemInputs().get(0).qualified());
+        eq("refractory brick makes one brick", 1, brick.itemOutputs().get(0).count());
+        eq("refractory brick output is the reagent", "item:grindless:refractory_brick",
+                brick.itemOutputs().get(0).qualified());
+        eq("refractory brick is twenty seconds", 20 * 20, brick.durationTicks());
+        eq("refractory brick draws F1", 32L, brick.fuPerTick());
+        eq("refractory brick is 1400 C", 1400.0, brick.temperatureC());
+        yes("refractory brick names no atmosphere", !brick.namesAtmosphere());
+        yes("refractory brick has no catalyst", brick.catalysts().isEmpty());
+        yes("refractory brick has no fluid",
+                brick.fluidInputs().isEmpty() && brick.fluidOutputs().isEmpty());
+        yes("refractory brick has no blueprint", brick.blueprint() == null);
+        yes("furnace hold is optimal for 1400 C",
+                ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE)
+                        .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        yes("1400 C is inside the arc furnace envelope",
+                ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE).reachableWithin(
+                        MachineEnvelopes.ARC_FURNACE.minTemperature(),
+                        MachineEnvelopes.ARC_FURNACE.maxTemperature()));
+        no("1400 C is outside the kiln",
+                ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE).reachableWithin(
+                        MachineEnvelopes.KILN.minTemperature(),
+                        MachineEnvelopes.KILN.maxTemperature()));
+        no("alumina is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("alumina")
+                        || recipe.itemInputs().stream().anyMatch(input -> input.id().contains("alumina"))));
+        no("the brick does not take silica",
+                brick.itemInputs().stream().anyMatch(input -> input.id().contains("silica")));
+        ProcessRecipe silicon = recipe(recipes, "silicon/metallurgical");
+        eq("metallurgical silicon is the arc furnace", MachineFamily.ARC_FURNACE, silicon.family());
+        eq("silicon takes one silica", 1, silicon.itemInputs().get(0).count());
+        eq("silicon silica is the tag", "tag:grindless:silica", silicon.itemInputs().get(0).qualified());
+        eq("silicon takes two carbon", 2, silicon.itemInputs().get(1).count());
+        eq("silicon carbon is the tag", "tag:grindless:carbon", silicon.itemInputs().get(1).qualified());
+        eq("silicon makes one item", 1, silicon.itemOutputs().get(0).count());
+        eq("silicon output is the reagent", "item:grindless:metallurgical_silicon",
+                silicon.itemOutputs().get(0).qualified());
+        eq("silicon vents two buckets of CO", 2000, silicon.ventedOutputs().get(0).count());
+        eq("silicon CO is the named gas", "fluid:grindless:carbon_monoxide",
+                silicon.ventedOutputs().get(0).qualified());
+        yes("silicon CO is marked vented", silicon.ventedOutputs().get(0).vented());
+        eq("silicon is fourteen seconds", 20 * 14, silicon.durationTicks());
+        eq("silicon draws F1", 32L, silicon.fuPerTick());
+        eq("silicon is 1900 C", 1900.0, silicon.temperatureC());
+        eq("silicon names reducing", "REDUCING", silicon.atmosphere());
+        yes("silicon has no catalyst", silicon.catalysts().isEmpty());
+        yes("silicon has no blueprint", silicon.blueprint() == null);
+        yes("silicon has no slag", silicon.itemOutputs().stream().noneMatch(output -> output.id().contains("slag")));
+        ConditionBand siliconBand = ConditionBand.relative(ProcessLogic.SILICON_TEMPERATURE);
+        yes("furnace hold admits 1900 C", siliconBand.admits(ProcessLogic.REDUCE_TEMPERATURE));
+        no("furnace hold is not optimal for 1900 C", siliconBand.isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        eq("the furnace still holds 1500 C", 1500.0, ProcessLogic.REDUCE_TEMPERATURE);
+        yes("1900 C is inside the arc furnace envelope",
+                siliconBand.reachableWithin(
+                        MachineEnvelopes.ARC_FURNACE.minTemperature(),
+                        MachineEnvelopes.ARC_FURNACE.maxTemperature()));
+        yes("the arc envelope can hold 1900 C at full speed",
+                siliconBand.optimallyReachableWithin(
+                        MachineEnvelopes.ARC_FURNACE.minTemperature(),
+                        MachineEnvelopes.ARC_FURNACE.maxTemperature()));
+        no("1900 C is outside the kiln",
+                siliconBand.reachableWithin(
+                        MachineEnvelopes.KILN.minTemperature(),
+                        MachineEnvelopes.KILN.maxTemperature()));
+        no("siemens, wafers and boules are not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("siemens")
+                        || recipe.id().contains("wafer")
+                        || recipe.id().contains("boule")
+                        || recipe.id().contains("trichlorosilane")));
+        ProcessRecipe zone = recipe(recipes, "silicon/zone_refining");
+        eq("zone refining is the arc furnace", MachineFamily.ARC_FURNACE, zone.family());
+        eq("zone refining takes ten metallurgical silicon", 10, zone.itemInputs().get(0).count());
+        eq("zone refining feed is the reagent", "item:grindless:metallurgical_silicon",
+                zone.itemInputs().get(0).qualified());
+        eq("zone refining makes seven electronic silicon", 7, zone.itemOutputs().get(0).count());
+        eq("zone refining output is the reagent", "item:grindless:electronic_silicon",
+                zone.itemOutputs().get(0).qualified());
+        eq("zone refining is six hundred seconds", 20 * 600, zone.durationTicks());
+        eq("zone refining draws F1", 32L, zone.fuPerTick());
+        eq("zone refining is 1420 C", 1420.0, zone.temperatureC());
+        yes("zone refining names no atmosphere", !zone.namesAtmosphere());
+        yes("zone refining has no catalyst", zone.catalysts().isEmpty());
+        yes("zone refining has no fluid", zone.fluidInputs().isEmpty() && zone.fluidOutputs().isEmpty());
+        yes("zone refining has no blueprint", zone.blueprint() == null);
+        yes("zone refining has no slag",
+                zone.itemOutputs().stream().noneMatch(output -> output.id().contains("slag")));
+        ConditionBand zoneBand = ConditionBand.relative(ProcessLogic.ZONE_TEMPERATURE);
+        yes("furnace hold is optimal for 1420 C", zoneBand.isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
+        no("a ±5 band at 1420 C would refuse the hold",
+                ConditionBand.absolute(ProcessLogic.ZONE_TEMPERATURE, 5.0)
+                        .admits(ProcessLogic.REDUCE_TEMPERATURE));
+        eq("the furnace still holds 1500 C", 1500.0, ProcessLogic.REDUCE_TEMPERATURE);
+        yes("1420 C is inside the arc furnace envelope",
+                zoneBand.reachableWithin(
+                        MachineEnvelopes.ARC_FURNACE.minTemperature(),
+                        MachineEnvelopes.ARC_FURNACE.maxTemperature()));
+        no("1420 C is outside the kiln",
+                zoneBand.reachableWithin(
+                        MachineEnvelopes.KILN.minTemperature(),
+                        MachineEnvelopes.KILN.maxTemperature()));
+        no("electronic silicon is not an ingot tag",
+                zone.itemOutputs().stream().anyMatch(output -> output.id().contains("forge:ingots/silicon")));
+        no("silicon is not a supplied ingot tag",
+                silicon.itemOutputs().stream().anyMatch(output -> output.id().contains("forge:ingots/silicon")));
+        no("the kiln does not fire the brick",
+                recipes.stream().anyMatch(recipe -> recipe.family() == MachineFamily.KILN
+                        && recipe.id().contains("refractory")));
+
+        no("oxygen blow is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("oxygen")));
+        no("direct reduction is not this slice",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("hydrogen")
+                        || recipe.id().contains("direct")));
         no("steel without a vein has no ore line",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("b0_r1/steel")));
         no("steel without oxide does not roast",
@@ -606,6 +743,40 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/gear/gold")));
         no("mythril without plate/rod/gear does not press",
                 recipes.stream().anyMatch(recipe -> recipe.id().startsWith("press/") && recipe.id().endsWith("/mythril")));
+        ProcessRecipe casing = recipe(recipes, "assemble/array_casing");
+        eq("the casing is the assembler", MachineFamily.ASSEMBLER, casing.family());
+        eq("the casing takes four bricks", 4, casing.itemInputs().get(0).count());
+        eq("the casing brick is the reagent", "item:grindless:refractory_brick",
+                casing.itemInputs().get(0).qualified());
+        eq("the casing takes one steel ingot", 1, casing.itemInputs().get(1).count());
+        eq("the casing steel is the ingot tag", "tag:forge:ingots/steel",
+                casing.itemInputs().get(1).qualified());
+        eq("the casing makes one casing", 1, casing.itemOutputs().get(0).count());
+        eq("the casing output is the block", "item:grindless:array_casing",
+                casing.itemOutputs().get(0).qualified());
+        eq("the casing is twenty seconds", 20 * 20, casing.durationTicks());
+        eq("the casing draws F1", 32L, casing.fuPerTick());
+        eq("the casing needs Industrial", "industrial", casing.blueprint());
+        yes("the casing names no temperature", Double.isNaN(casing.temperatureC()));
+        ProcessRecipe array = recipe(recipes, "assemble/ground_array");
+        eq("the array is the assembler", MachineFamily.ASSEMBLER, array.family());
+        eq("the array takes one machine casing", 1, array.itemInputs().get(0).count());
+        eq("the array casing input is the reagent", "item:grindless:machine_casing",
+                array.itemInputs().get(0).qualified());
+        eq("the array takes four steel plates", 4, array.itemInputs().get(1).count());
+        eq("the array plates are the tag", "tag:forge:plates/steel",
+                array.itemInputs().get(1).qualified());
+        eq("the array takes four bricks", 4, array.itemInputs().get(2).count());
+        eq("the array makes one controller", 1, array.itemOutputs().get(0).count());
+        eq("the array output is the block", "item:grindless:ground_array",
+                array.itemOutputs().get(0).qualified());
+        eq("the array is twenty seconds", 20 * 20, array.durationTicks());
+        eq("the array draws F1", 32L, array.fuPerTick());
+        eq("the array needs Industrial", "industrial", array.blueprint());
+        no("the array is not a dyson collector",
+                recipes.stream().anyMatch(recipe -> recipe.id().contains("dyson")
+                        || recipe.id().contains("kardashev")
+                        || recipe.id().contains("stellar_forge")));
     }
 
     private static void logic() {
@@ -690,6 +861,23 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("wire_mill.json")));
         no("the motor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("motor.json")));
+        no("refractory brick has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("refractory_brick.json")));
+        no("metallurgical silicon has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("metallurgical_silicon.json")));
+        no("electronic silicon has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("electronic_silicon.json")));
+        no("the array has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("ground_array.json")));
+        no("the casing has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("array_casing.json")));
+        String silica = Files.readString(Path.of(
+                "common/src/main/resources/data/grindless/tags/items/silica.json"));
+        yes("silica tag accepts sand", silica.contains("\"minecraft:sand\""));
+        yes("silica tag accepts quartz", silica.contains("\"minecraft:quartz\""));
+        no("silica tag does not name red sand", silica.contains("red_sand"));
+        no("silica tag does not name a grindless item", silica.contains("grindless:"));
+        no("silica tag does not name glass", silica.contains("glass"));
         no("the reactor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
         no("the washer has no crafting-table recipe",

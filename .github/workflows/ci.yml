@@ -227,12 +227,82 @@ jobs:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-exosuit.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-exosuit.expect
 
+      # Slice BE: the refractory brick item exists, and the Arc Furnace accepts slag.
+      - name: Boot and exercise refractory brick
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-refractory.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-refractory.expect
+
+      # Slice BF: metallurgical silicon exists, and the Arc Furnace accepts sand.
+      - name: Boot and exercise metallurgical silicon
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-silicon.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-silicon.expect
+
+      # Slice BG: electronic silicon exists, and the Arc Furnace accepts metallurgical silicon.
+      - name: Boot and exercise zone refining
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-electronic.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-electronic.expect
+
+      # Slice BH: a 3×3 Ground Array stores only while the ring stands.
+      - name: Boot and exercise the ground array
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-array.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-array.expect
+
+      # Slice BI: Luna loads, its surface is regolith, and helium-3 is an item.
+      - name: Boot and exercise Luna
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-luna.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-luna.expect
+
+      # Local flight: the launch pad is a block and the survey rocket is an entity.
+      - name: Boot and exercise the survey rocket
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-rocket.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-rocket.expect
+
+      # Slice BM: the berth is a block, the station is an entity, and the link id remains.
+      - name: Boot and exercise the supraluminal station
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-station.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-station.expect
+
+      # Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
+      - name: Boot and exercise the Drift
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-drift.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-drift.expect
+
+      # Slice BN: the galactic centre loads as shell, and the arrival mark is a block.
+      - name: Boot and exercise the galactic centre
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-centre.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-centre.expect
+
       # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
       - name: Boot and exercise process atlas
         run: tools/smoke-boot.sh .
         env:
           SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-atlas.commands
           SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-atlas.expect
+
+      # Slice BC: the quest book and the field guide are items.
+      - name: Boot and exercise the quest book
+        run: tools/smoke-boot.sh .
+        env:
+          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-book.commands
+          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-book.expect
 
       - name: Upload server log
         if: always()

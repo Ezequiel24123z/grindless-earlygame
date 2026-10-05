@@ -66,6 +66,14 @@ public final class FabricationLogic {
     public static final String NETWORK_TAP = "grindless:network_tap";
     public static final String EXOSKELETON_LEGS = "grindless:exoskeleton_legs";
     public static final String VANADIA = "grindless:vanadia_pellet";
+    public static final String GROUND_ARRAY = "grindless:ground_array";
+    public static final String ARRAY_CASING = "grindless:array_casing";
+    public static final String LUNAR_LINK = "grindless:lunar_link";
+    public static final String STARWARD_LINK = "grindless:starward_link";
+    public static final String LAUNCH_PAD = "grindless:launch_pad";
+    public static final String SURVEY_ROCKET = "grindless:survey_rocket";
+    public static final String STATION_BERTH = "grindless:station_berth";
+    public static final String SUPRALUMINAL_STATION = "grindless:supraluminal_station";
 
     private FabricationLogic() {
     }

@@ -1,24 +1,42 @@
 # Grindless
 
-**Grindless** is a Minecraft mod that deletes the early-game grind without deleting the game.
+**Grindless** is a full modpack-scale progression for Minecraft. The early game already
+built — a hand crank, the first factory, the contact process — is the foundation. It is
+the start of the ladder.
 
-Modpacks have a structural problem: the first two hours are almost always the same two hours.
-Punch wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next tier.
-The pack's actual content — the thing you installed it for — starts *after* that. Grindless
-replaces those two hours with a short, interesting automation puzzle, and then gets out of the way.
+The early-game convenience framing and the six-tier cap are retired. From here the mod
+keeps going: intermediate tiers, endgame tiers, more processing lines, more materials,
+megastructures, original planets and original interstellar play. The large milestones
+are the Kardashev scales. The goal is the black hole at the centre of the Milky Way.
+See [Modpack-scale progression](#modpack-scale-progression) and
+[ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression).
 
-It is inspired by Factorio: electric coverage areas instead of cable spaghetti, belts and
-splitters, resource patches that deplete and push you outward, industry that makes noise something
-notices, and a research tree that gates what you can build.
+The early hours of a typical pack are still the wrong way to start that ladder. Punch
+wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next
+tier: the foundation replaces that opening with automation, so the long game can begin.
+Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Their
+code and assets do not enter this repository (ADR-0088).
 
-The arc runs from a hand crank and two iron in the first ten minutes, through belts, reactors and
-a particle accelerator, to satellites that map your world's ore from orbit and colonies that
-harvest planets you have never set foot on. Factorio ends when you launch a rocket; here that is
-where it opens up.
+The arc runs from a hand crank and two iron, through belts, reactors and a particle
+accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 
-> **Status: pre-alpha.** The design below is complete and settled. The skeleton **builds green on
-> Forge 1.20.1**, registers the T0 bootstrap set and carries a working Flux energy layer — but the
-> machines have no behaviour yet, so nothing here is playable.
+> **Status: pre-alpha.** The foundation through the contact process is playable and **builds
+> green on Forge 1.20.1**. The goal from here is a modpack-scale progression
+> ([ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression)).
+> T0–T6 are the specified start, not a cap. Slices defined past the contact process and
+> not yet started are held. Electric-arc steel is in (ADR-0090). Refractory brick is in
+> (ADR-0091). Metallurgical silicon is in (ADR-0092). Zone refining is in (ADR-0093).
+> The Ground Array is in (ADR-0094). Luna is in (ADR-0095). The Drift is in
+> (ADR-0096). Local trips are rocket flights (ADR-0097): a survey rocket climbs
+> to the ceiling, then a landing map offers the home world and Luna. The Lunar
+> Link stays as a placeholder. The Starward Link stays registered and no longer
+> moves a player. Teleportation orbs (BK) are named, ordered before that flight,
+> and not started. The supraluminal station (BM) is in (ADR-0098): it climbs to
+> the ceiling, and that ceiling is the arrival on the Drift. Arrival at the
+> galactic centre (BN) is in (ADR-0099): riding on from the Drift lands in a
+> sealed chamber, and that arrival is the victory. The way there is the station,
+> not a link. The original quest book and the in-game guide (BC) are in
+> (ADR-0100). They are last. No slice follows them.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -38,6 +56,7 @@ where it opens up.
 - [The problem](#the-problem)
 - [Design principles](#design-principles)
 - [The core promise](#the-core-promise)
+- [Modpack-scale progression](#modpack-scale-progression)
 **The eight systems**
 
 - [System 1 — The Flux Network](#system-1--the-flux-network) — power without cables
@@ -126,8 +145,10 @@ Existing solutions each break something:
 | Void miners / cheat generators | Solves it *too* hard. Infinite free resources, zero decisions, pack over. |
 | Creative-mode style item duplication | Trivialises every recipe in the pack at once. |
 
-Grindless aims at the narrow target all of those miss: **make resource acquisition an automation
-problem instead of a time-tax, starting ten minutes in, without making resources free.**
+The foundation still aims at the target those approaches miss: **make resource acquisition an
+automation problem instead of a time-tax, starting ten minutes in, without making resources
+free.** That is how the ladder starts. The mod after that start is the
+[modpack-scale progression](#modpack-scale-progression).
 
 ---
 
@@ -141,8 +162,9 @@ These are the rules every feature is measured against.
    fifteen, not mining until hour three.
 3. **Resources cost something, always.** Energy, space, infrastructure, research. Nothing is free,
    ever — that is the line between this and a cheat mod.
-4. **Feed the pack, don't replace it.** Yields are tuned to *supply* Thermal/Mekanism/Create
-   processing, not to obsolete it. Grindless should make other mods more playable.
+4. **Carry the ladder.** Grindless is the pack-scale progression: its own later tiers,
+   materials and processing lines. Early yields stay in a familiar range so the foundation
+   is legible beside other mods.
 5. **Work with mods it has never heard of.** Everything is driven by tags discovered at runtime.
    Zero hardcoded material lists, zero per-mod compat patches.
 6. **Fail legibly.** When something is wrong the player must be able to see *what* and *why* —
@@ -172,6 +194,73 @@ with no config, no compat addon and no patch release.
 Materials degrade gracefully. If a material has an ore but no dust form, the pulverizing step is
 simply skipped for it. If another mod already provides an item for a material, Grindless uses
 that item instead of registering a duplicate.
+
+---
+
+## Modpack-scale progression
+
+Recorded in [ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression).
+The systems below stay the foundation.
+
+**Tiers.** Many more than T0–T6: intermediate tiers, endgame tiers, more processing lines,
+more materials. The T0–T6 table further down is the ladder already specified. It is the start.
+
+**Milestones.** Kardashev scales are the large marks. Type I is a planet's energy, Type II a
+star's, Type III a galaxy's. Megastructures sit along the way between those marks. The names
+are milestones. A Flux Unit is not a physical watt. The first structure is the Ground Array
+(ADR-0094): a fixed 3×3 of one controller and eight casings. While the ring is complete and a
+pylon covers the controller, it adds ten seconds of MK3 throughput to that network as storage.
+It does not generate, it does not project a supply cube, and it is not a Kardashev scale.
+
+**Planets.** Planetary gameplay has unique extractable resources. The first world is
+Luna (ADR-0095): regolith, no ore, helium-3 from the extractor. The Lunar Link still
+spends one capacitor of Flux to go there, and it is marked as a placeholder
+(ADR-0097). The flight that replaces it is the survey rocket: it climbs to the
+build ceiling, then a landing map offers the home world and Luna. Leaving home
+spends that same capacitor. Leaving Luna does not. The other worlds are not started.
+Just before that flight, an alternate route of a magical material — unnamed until
+its slice — is named as teleportation orbs (BK). Shift-right-click would set
+coordinates and dimension, right-click would teleport, and the orb could sit on
+a pedestal so a later trip to the same body skips the rocket. That row is not
+started and is not next. Draconic Evolution may inspire it; its code and assets
+are not copied. Space and interstellar gameplay stay original to Grindless. The
+first hop off the star is still the Drift (ADR-0096): one deck with no ore,
+reached by riding a supraluminal station that spends the Ground Array's buffer
+(ADR-0098). The station climbs to the ceiling, and that ceiling is the arrival.
+Riding on from the Drift reaches the galactic centre (ADR-0099). The Starward
+Link stays registered and no longer moves a player.
+
+**Victory.** The goal is to reach the black hole at the centre of the Milky Way. Arriving is
+the victory, and the way there is the station, not a link (ADR-0097, ADR-0099). The interior
+is a sealed chamber: unbreakable horizon shell, one room, one mark, and a shaft the ride
+home climbs through. An empty arrival story is rejected. An endless second game inside
+the hole is rejected.
+
+**Energy.** Endgame generation reaches the maximum rate the energy system can represent.
+Per-tick rates and stored amounts are a Java `long` (`FluxTier.nominal`,
+`ProcessRecipe.fuPerTick`, `FluxStorage`). That maximum is `Long.MAX_VALUE` FU/t
+(9,223,372,036,854,775,807). Today's ladder stops at F9, 2,097,152 FU/t
+(`FluxTier.MAX_NOMINAL`), which is a content ceiling, not the type's ceiling. One `long` can
+name the target rate. It cannot hold that rate multiplied by a duration, or the sum of two
+such rates. The Forge Energy bridge saturates at `Integer.MAX_VALUE` (ADR-0037), and
+`ProcessLogic.work` divides those amounts in `double`, which cannot represent every integer
+above 2^53. Any slice that needs those operations waits until the representation grows. This
+record does not change the type.
+
+**Quest book.** A book in the BetterQuesting style: lines, tasks, dependencies, rewards.
+It is in (ADR-0100). Two T0 handhelds: the quest book follows the route from the
+Multitool to the sealed chamber, and the field guide reads that same route. The book
+does not gate a machine. BetterQuesting's code stays out. The GitHub `LICENSE` is MIT
+and the CurseForge page says All Rights Reserved (ADR-0088). Changing our license
+does not resolve that (ADR-0089).
+
+**Quality of life.** Features known from other mods are in scope, built as original work
+unless a later slice copies code under the terms in ADR-0089.
+
+**Provenance.** Ideas from GregTech, Ad Astra, BetterQuesting and similar mods may inform
+the design. Copying their code waits on the upstream license. Where that license was not
+confirmed, the default is no reuse (ADR-0088). The copyright holder accepts adding an
+upstream license so that compatible code can enter later (ADR-0089).
 
 ---
 
@@ -998,6 +1087,22 @@ strategic option with a real cost.
 
 ### The planets
 
+**Luna is in** (ADR-0095). It is one original world: regolith, no ore features, and
+helium-3 from the same extractor the overworld uses, because the vein pool there is
+that reagent and nothing else. A manufactured Lunar Link spends 102,400 FU, one
+capacitor bank, to arrive, and the return does not draw again. It is not a Horizon
+Gate and not a mining dimension. The link remains, marked as a placeholder for the
+survey rocket (ADR-0097). That rocket climbs to the build ceiling and opens a
+landing map of the home world and Luna. The first hop off that star is the Drift
+(ADR-0096): one layer of plating over bedrock, no vein, reached for now by a
+manufactured Starward Link that spends 6,553,600 FU. The return does not draw
+again. The link remains registered, and it no longer moves a player: the
+station replaced that hop (ADR-0098). It is not a second planet and not the
+black hole. The rest of this section is the later orbital design. Teleportation
+orbs (BK) are named before the rocket and are not started. The station (BM) is
+in. Arrival at the galactic centre is that ride, not a link, and it is in
+(ADR-0099): a sealed chamber, not an empty marker and not a second world.
+
 **If a space mod is already installed, Grindless uses its planets.** Ad Astra, Galacticraft,
 Beyond Earth and friends are detected at runtime, and Grindless layers its orbital mechanics,
 chunk veins and remote-exploitation systems onto *their* dimensions rather than adding a
@@ -1163,6 +1268,14 @@ leaving a player stuck and confused.
 (Over-volting is safe. Nothing explodes. Machines that explode when you connect the wrong cable
 are a tedium generator, not a difficulty mechanic.)
 
+### Endgame rate
+
+The ladder in the table above, and F6–F9 in code, are the foundation's power scale. F9 is
+2,097,152 FU/t. Endgame generation targets the largest rate a per-tick `long` can store,
+`Long.MAX_VALUE` FU/t, from one source. Sums, a buffer of more than one tick at that rate,
+and the FE `int` bridge cannot express operating there. The representation grows before that
+content exists. See [Modpack-scale progression](#modpack-scale-progression) and ADR-0088.
+
 ### Performance: idle machines cost nothing
 
 A base with thousands of machines is the design's explicit target, which makes machine ticking the
@@ -1227,10 +1340,15 @@ factory is capable of building this* — and a player has to clear both. See
 | **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Arc Reactor**, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank, **Arc Exosuit**. |
 | **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere, **Exotic Exosuit**. |
 | **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
-| **T6 — Interplanetary** | endgame+ | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
+| **T6 — Interplanetary** | the foundation's last specified tier | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
 
-The ramp is intentional. Ten minutes in, you are never hand-mining iron again. Everything after
-that is optimisation, which is the part worth playing.
+T0–T6 are the foundation already written down. ADR-0088 retires them as a cap. Tiers after
+T6, the Kardashev milestones, the megastructures and the route to the galactic-centre black
+hole are the modpack expansion. They are not in this table yet. The Horizon Gate is a commute
+milestone on the way. The victory is arrival at the black hole.
+
+The early ramp is intentional. Ten minutes in, the foundation has replaced hand-mining iron.
+The game continues long after T6.
 
 Three checkpoints are worth calling out, because each converts effort into permanent leverage at
 exactly the moment the player has earned it:
@@ -1243,7 +1361,16 @@ exactly the moment the player has earned it:
 - **T5, the Survey Satellite** — the moment finding resources stops being an activity and becomes
   a map you read.
 - **T6, the Horizon Gate** — the moment the interplanetary commute dies. First contact is still a
-  delivery; after the pair stands, you walk.
+  delivery; after the pair stands, you walk. This is a milestone, not the victory.
+- **The survey rocket** — the moment the local system is a flight. Up to the ceiling,
+  then a landing map of home and Luna (ADR-0097). The Lunar Link remains as a placeholder.
+- **The Drift** — the moment the home star is behind you. One hop, paid with the Ground
+  Array's buffer, by riding the station to the ceiling (ADR-0096, ADR-0098). The
+  Starward Link remains registered and no longer moves a player. The centre is still ahead.
+- **The black hole at the centre of the Milky Way** — the goal. Arriving is the victory,
+  by riding the station from the Drift, not by a link. The interior is a sealed chamber
+  (ADR-0088, ADR-0099). The station is in. That arrival is in. The quest book and
+  the field guide are in (ADR-0100). No slice follows them.
 
 ---
 
@@ -1631,6 +1758,9 @@ at `Integer.MAX_VALUE` instead of overflowing and is treated as a request rather
 ### Space mod integration
 
 The same rule applies to dimensions as to materials: **detect and integrate, never duplicate.**
+Luna is the exception that now ships (ADR-0088, ADR-0095): one original world, whether or
+not another space mod is installed. The rows below are the held interplanetary design.
+They are not what the game does today, and they are not a reason to remove Luna.
 
 | Situation | Behaviour |
 | --- | --- |
@@ -1919,10 +2049,11 @@ Drone logistics and the logistics crates. Deep Core Drill. **Arc Reactor** multi
 FU, Arc Cell line, same fuel as the suit). Fission Reactor multiblock with neighbour bonuses
 and SCRAM. Centrifuge and the fuel cycle.
 
-### 0.7 — Endgame
+### 0.7 — Exotic industry
 
 Fusion Reactor. Particle Accelerator with transmutation, exotic synthesis and Exotic Data Cores.
-Singularity Reactor. Quantum Assembler, Cryogenic Plant, Matter Condenser. T4 weapons.
+Singularity Reactor. Quantum Assembler, Cryogenic Plant, Matter Condenser. T4 weapons. This is
+the foundation's exotic tier, not the end of the mod.
 
 ### 0.8 — Orbit
 
@@ -1947,7 +2078,33 @@ cost no measurable server performance.
 ### 1.0 — Polish
 
 Full JEI/REI/EMI integration, advancements, an in-game guide, config UI, localisation, performance
-passes on belts and networks, and a balance pass against the major packs.
+passes on belts and networks, and a balance pass against the major packs. Held with the rest of
+the unstarted six-tier schedule (ADR-0088).
+
+### Modpack expansion *(next calendar)*
+
+ADR-0088, rescheduled by ADR-0090. Held slices L–BB stay on the books and are not the next
+work. **BD — Electric-arc steel** is in: ten iron ingots and one carbon become ten steel
+ingots in the Arc Furnace (ADR-0090). **BE — Refractory brick** is in: one slag becomes one
+refractory brick in 20 s at 1400 °C on the same furnace (ADR-0091). **BF — Metallurgical
+silicon** is in: one silica and two carbon become one metallurgical silicon and 2 B of
+carbon monoxide in 14 s at 1900 °C on the same furnace (ADR-0092). **BG — Further
+processing lines** is in: ten metallurgical silicon become seven electronic silicon in
+600 s at 1420 °C on the same furnace (ADR-0093). **BH — Megastructures** is in: the
+Ground Array, a fixed 3×3, adds ten seconds of MK3 throughput as storage while the ring
+stands (ADR-0094). Kardashev Type I, II and III are not that structure. **BI — Original
+planets** is in: Luna, regolith with no ore, helium-3 from the extractor, and a Lunar
+Link (ADR-0095). **BJ — Interstellar travel** is in: the Drift, a deck with no ore,
+and a Starward Link that spends 6,553,600 FU (ADR-0096). Both links stay, marked as
+placeholders (ADR-0097). **BK — Teleportation orbs** is named and not started: an
+alternate route of a magical material, left unnamed, ends in orbs that remember a
+place. **BL — Rocket ascent** is in: a survey rocket climbs to the ceiling, then a
+landing map offers the home world and Luna. **BM — Supraluminal station** is in
+(ADR-0098): the station climbs to the ceiling, and that ceiling arrives on the Drift.
+**BN — Arrival at the galactic centre** is in (ADR-0099): riding on from the Drift
+lands in a sealed chamber, and that is the victory. It is that ride, not a link.
+The original quest book and the in-game guide are in (ADR-0100). They are last.
+No slice follows them.
 
 ### Beyond 1.0 — version ports
 
@@ -2012,14 +2169,28 @@ Tracked order of work. Each step must build green before the next begins.
 | 21m | **Slice T — Flux Drill:** mine with charge | ✅ done — ADR-0084 |
 | 21n | **Slice U — Blueprint Tool:** save a layout and stamp it | ✅ done — ADR-0085 |
 | 21o | **Slice V — Deconstruction Planner:** mark a region | ✅ done — ADR-0086 |
-| 21p | **Slice W — Patterns:** scan an item; smash it to Matter | ✅ done — ADR-0088 |
-| 21q | **Slice X — Voltaic Harness:** wear T1 modular armour | ✅ done — ADR-0089 |
-| 22 | T2 logic | ✅ done — ADR-0083 |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | pending — build-out W–Y, AC, AH |
-| 24 | Orbital layer: launch, satellites, station | pending — build-out AO–AS |
-| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | pending — build-out AT–AX; ADR-0068 recorded |
+| 21p | **Slice W — Patterns:** scan an item; smash it to Matter | ✅ done — ADR-0101 |
+| 21q | **Slice X — Voltaic Harness:** wear T1 modular armour | ✅ done — ADR-0102 |
+| 21r | **Slice Y — Flux Exosuit:** T2 chassis, network tap, exoskeleton legs | ✅ done — ADR-0103 |
+| 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | ✅ done — build-out L–S |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | partly done — build-out T–Y are in; AC and AH are held (ADR-0088) |
+| 24 | Orbital layer: launch, satellites, station | held — build-out AO–AS (ADR-0088) |
+| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Next slice **Y**. |
+| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Rows G–Y are in; unstarted rows Z–BB are held (ADR-0088). |
+| 28 | **Modpack expansion** | the named rows are in — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093, ADR-0094, ADR-0095, ADR-0096, ADR-0097, ADR-0098, ADR-0099, ADR-0100. BN arrival at the galactic centre is done. BC the quest book and the in-game guide are done. BK teleportation orbs are named and not started. No slice follows BC. |
+| 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
+| 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
+| 28d | **BF — Metallurgical silicon** | ✅ done — ADR-0092. 1 silica + 2 carbon → 1 metallurgical silicon + 2 B CO in 14 s at 1900 °C on the Arc Furnace. |
+| 28e | **BG — Zone refining** | ✅ done — ADR-0093. 10 metallurgical silicon → 7 electronic silicon in 600 s at 1420 °C on the Arc Furnace. |
+| 28f | **BH — Megastructures** | ✅ done — ADR-0094. Ground Array: eight casings and one controller store 6,553,600 FU while a pylon covers a complete ring. |
+| 28g | **BI — Original planets** | ✅ done — ADR-0095. Luna: regolith, no ore, helium-3 from the extractor. A Lunar Link spends 102,400 FU to arrive; the return does not draw. |
+| 28h | **BJ — Interstellar travel** | ✅ done — ADR-0096. The Drift: one deck, no ore. A Starward Link spends 6,553,600 FU to leave the star; the return does not draw. The link stays as a placeholder (ADR-0097). |
+| 28i | **BK — Teleportation orbs** | named, not started. An alternate route of an unnamed magical material ends in orbs. Shift-right-click sets coordinates and dimension. Right-click teleports. The orb can sit on a pedestal. Not next. |
+| 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
+| 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
+| 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
+| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. Lines, tasks, dependencies and rewards from the Multitool to the sealed chamber, plus a field guide of the same route. The book does not gate a machine. No slice follows it. |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2041,18 +2212,55 @@ the record.
 
 ### Where the project actually is
 
+Grindless is a modpack-scale progression (ADR-0088). The work through the contact process
+stays the foundation. The framing that this mod removes the early-game grind and then stops,
+and the cap at six research tiers, are retired. Kardashev Type I, II and III are the large
+milestones, with megastructures between them. Planets have unique extractable resources.
+Space and interstellar play are original. The goal is the black hole at the centre of the
+Milky Way: arriving is the victory, and the interior is a sealed chamber, and the way
+there is the station (ADR-0097, ADR-0099). The first hop, the Drift, is already in, by
+riding that station. The centre is in. Local flight is the survey rocket.
+
+**BC — Original quest book and in-game guide** is in (ADR-0100). No slice follows it.
+**BN — Arrival at the galactic centre** is in (ADR-0099).
+**BK — Teleportation orbs** is named and not started, and it is not next. The
+material stays unnamed until that slice.
+**BL — Rocket ascent** is in (ADR-0097): the rocket climbs to the ceiling, then the
+landing map offers the home world and Luna.
+**BI — Original planets** is in (ADR-0095): Luna is regolith with no ore. An extractor
+there emits helium-3. A Lunar Link spends one capacitor of FU to arrive, and stays as
+a placeholder.
+**BH — Megastructures** is in (ADR-0094): the Ground Array stores ten seconds of MK3
+throughput while its 3×3 ring stands under a pylon.
+**BG — Zone refining** is in (ADR-0093): ten metallurgical silicon become seven electronic
+silicon in 600 s at 1420 °C. The ±5 °C inert band is not applied.
+**BF — Metallurgical silicon** is in (ADR-0092): one silica and two carbon become one
+metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C. Silica is sand and
+nether quartz. The Arc Furnace still holds 1500 °C, inside that band's tolerance.
+**BE — Refractory brick** is in (ADR-0091): one slag becomes one refractory brick in 20 s
+at 1400 °C on the Arc Furnace. **BD — Electric-arc steel** is in (ADR-0090): ten iron
+ingots and one carbon become ten steel ingots in 140 s at 1600 °C. Slices Z through BB stay
+defined and are **held**; L through Y shipped alongside this calendar. The original quest book
+and the in-game guide are in (ADR-0100). Arrival at the black hole is in. No slice follows the
+book.
+
 Everything through step 14b is written, builds green and is covered by the behaviour checks in
 `tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
 Extractor (or a pylon that covers both), and the extractor pulls the chunk's vein into a chest.
 T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
 and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
 
-**Next is Y — Flux Exosuit**, not Construction Drones.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Voltaic Harness is in
-(ADR-0089): four crafting-table pieces, iron protection, one Flux Cell
+**There is no next slice.** Two calendars ran over the same weekend and both are in: the T2
+foundation through **Y**, and the modpack expansion through **BC**. Only **Z–BB** stay held.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Flux Exosuit is in
+(ADR-0103): Assembler-manufactured once Industrial is researched. Four pieces with the
+harness's protection and two module slots each. A worn Network Tap pulls up to 32 FU/t
+from pylon coverage into Flux Cells on the suit; Exoskeleton Legs add 0.04 speed for
+1 FU/t. The suit does not generate. The Voltaic Harness is in
+(ADR-0102): four crafting-table pieces, iron protection, one Flux Cell
 slot each. The cell stores 6,400 FU and does not generate. Walking
 through a pylon does not charge it. Vanilla armour still equips. The Pattern Scanner and the
-Deconstructor are in (ADR-0088): Assembler-manufactured once Industrial is
+Deconstructor are in (ADR-0101): Assembler-manufactured once Industrial is
 researched. A scan stores the item id and reports a graph cost. A smash
 yields one Matter. The Replicator block is not in this slice. The Deconstruction Planner is in
 (ADR-0086): Assembler-manufactured once Industrial is researched. Two corners
@@ -2106,7 +2314,36 @@ Chemical Washer is in (ADR-0076):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in 20 s.
 That metal's Arc Furnace line is the named byproduct sink. Washed crushed reduces like
-crushed and roasts in the Kiln. The Chemical Reactor is in (ADR-0075):
+crushed and roasts in the Kiln.
+**BC — Original quest book and in-game guide is in** (ADR-0100). No slice follows it. **Arrival at
+the galactic centre (BN) is in** (ADR-0099): riding the station from the Drift lands in
+a sealed chamber. Leaving the chamber returns to the berth saved on the way to the Drift
+and does not draw. **The supraluminal
+station (BM) is in** (ADR-0098): `assemble/station_berth` and `assemble/station` under Industrial. A covered berth draws 6,553,600 FU,
+the station climbs to the ceiling, and that ceiling is the Drift. The ride on from the
+Drift does not draw. The Starward Link stays registered and no longer moves a player. **Teleportation
+orbs (BK) are named and not started.** **Rocket ascent (BL) is in**
+(ADR-0097): `assemble/launch_pad` and `assemble/survey_rocket` under Industrial. A
+covered pad draws 102,400 FU, the rocket climbs to the ceiling, and the landing map
+offers the home world and Luna. The return from Luna does not draw. **The Drift is in**
+(ADR-0096): one deck, no vein. The hop is the station, not the link. **Luna is in**
+(ADR-0095): `assemble/lunar_link` under Industrial. A covered link draws 102,400 FU,
+then a return pad on the regolith sends the player home without a second draw. The
+link stays as a placeholder. Every
+Luna vein is helium-3. **The Ground Array is in**
+(ADR-0094): `assemble/ground_array` and `assemble/array_casing` under Industrial. A
+complete ring adds 6,553,600 FU to the covering network and nothing otherwise.
+**Zone refining is in**
+(ADR-0093): the Arc Furnace runs `silicon/zone_refining`, 10 metallurgical silicon → 7
+electronic silicon in 600 s at 1420 °C. **Metallurgical silicon is in**
+(ADR-0092): the Arc Furnace runs `silicon/metallurgical`, 1 silica + 2 carbon → 1
+metallurgical silicon + 2 B CO in 14 s at 1900 °C. **Refractory brick is in**
+(ADR-0091): the Arc Furnace runs `ceramic/refractory_brick`, 1 slag → 1 refractory brick
+in 20 s at 1400 °C. **Electric-arc steel is in**
+(ADR-0090): the Arc Furnace runs `alloy/steel`, 10 iron ingots + 1 carbon → 10 steel
+ingots in 140 s. Slice F and the rest of Z–BB
+are held. The quest book is in (ADR-0100). No slice follows it.
+See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
 sulfuric acid` in 4 s, water from a neighbouring tank. Pickle is the named sulfuric spend
@@ -2130,9 +2367,10 @@ vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + car
 ingot and slag in 10 s. Yield stays 1.00 until the acid line (build-out K). Slice E spanning
 is already in. Modular armour and the Arc Reactor pair are **recorded, not started**
 (ADR-0067): T3 / F3, same unlock for the factory plant and the suit core, fed by a cell
-line. Horizon Gates and the extra fallback worlds are **recorded, not started** (ADR-0068):
-T6 commute, not a mining dimension. Do not start hatches, orbit, a Sifter shell, a turret,
-or a void world to prepare for them.
+line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
+row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
+slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
+quest book (BC) is in (ADR-0100), and no slice follows it. Arrival at the galactic centre (BN) is in (ADR-0099). The supraluminal station (BM) is in (ADR-0098). Teleportation orbs (BK) are named and not started. Rocket ascent (BL) is in (ADR-0097). The Drift is in (ADR-0096). Luna is in (ADR-0095). The quest book is last and it is done.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.
@@ -2195,4 +2433,6 @@ Code, comments, documentation and commit messages are written in English.
 
 ## License
 
-[MIT](LICENSE). Use it, fork it, ship it in your pack.
+Grindless's own work is [MIT](LICENSE). Use it, fork it, ship it in your pack. A file
+that arrives with its own license notice keeps that notice. The copyright holder accepts
+adding that upstream license when a slice copies code that requires it (ADR-0089).

@@ -8,7 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 /**
- * Iron's protection on a suit that can hold a cell (ADR-0089). Not a generator.
+ * Iron's protection on a suit that can hold a cell (ADR-0102). Not a generator.
  */
 public enum VoltaicArmorMaterial implements ArmorMaterial {
     VOLTAIC;

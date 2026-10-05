@@ -1,7 +1,7 @@
 package io.github.ezequiel24123z.grindless.pattern;
 
 /**
- * What may be scanned, and what a smash yields (ADR-0088).
+ * What may be scanned, and what a smash yields (ADR-0101).
  *
  * <p>No Minecraft types. The blacklist tag is applied by the scanner block; this class only
  * refuses a blank id and Matter itself, so Matter cannot be a pattern. Deconstruction is a

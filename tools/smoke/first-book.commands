@@ -1,0 +1,8 @@
+forceload add 0 0
+say WAIT-CHUNK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:quest_book",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:quest_book"}}] run say BOOK-OK
+kill @e[type=item]
+summon minecraft:item 8 100 8 {Item:{id:"grindless:field_guide",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:field_guide"}}] run say GUIDE-OK
+kill @e[type=item]

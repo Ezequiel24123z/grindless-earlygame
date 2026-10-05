@@ -1,6 +1,6 @@
 package io.github.ezequiel24123z.grindless.item;
 
-/** Behaviour checks for the exosuit grid (ADR-0090). Not part of the mod. */
+/** Behaviour checks for the exosuit grid (ADR-0103). Not part of the mod. */
 public final class VerifyExosuit {
 
     private static int failures = 0;

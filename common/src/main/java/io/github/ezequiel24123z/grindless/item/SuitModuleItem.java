@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/** A module that fits an exosuit slot and does not fit the harness (ADR-0090). */
+/** A module that fits an exosuit slot and does not fit the harness (ADR-0103). */
 public final class SuitModuleItem extends Item {
 
     private final String moduleId;

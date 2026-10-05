@@ -17,10 +17,15 @@ entries below reference those records by id.
 
 - **Foreign-provider smoke expects the live supply line.** The boot still finds 32 materials, and the foreign tin ingot plus raw platinum still step two Grindless items aside. The catalogue is 181 supply items, so the log is `32 materials found; Grindless supplies 179 of its 181 items`. The old expect (`143 of its 145`) was the count from before this stack's forms.
 
-- **A hopper can fill a multi-count process input.** `accepts` required the incoming stack to
-  already hold the whole recipe count, so the first crushed of a wash (and the first plate of
-  an assembler craft) was the only one a hopper could move. Insertion now matches the item;
-  the recipe still waits until the count is there.
+- **A hopper can fill a multi-count process input one item at a time.** `ProcessLookup.accepts`
+  required the incoming stack to already hold the whole recipe count, so the first crushed of a
+  wash, the first plate of an assembler craft and the first insert of electric-arc steel or zone
+  refining were all refused. Insertion now matches the item; the recipe still waits until the
+  count is there. Both weekend stacks found this independently.
+
+- **The ADR-0065 index anchor matches the link checker.** The heading keeps the SO₂
+  subscript. The checker drops that character when it builds the slug, so the index
+  link now uses the slug without it.
 
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
   Slice I placed the item at `8 72 8`, one block above the hopper feeding the
@@ -40,6 +45,35 @@ entries below reference those records by id.
 
 ### Changed
 
+- **The quest book is last, and the next slice is electric-arc steel (ADR-0090).**
+  The owner deferred the original quest book until the end of the pack. It now sits
+  with the in-game guide, after arrival at the galactic-centre black hole. The urgent
+  calendar is intermediate and endgame tiers, more processing lines and materials,
+  then megastructures and the Kardashev scales, then original planets and interstellar
+  travel, then the black hole. BD — electric-arc steel on the Arc Furnace was
+  named next. This change implements it. Rows L–BB stay held. No third-party code
+  is copied. Own work stays MIT (ADR-0089).
+
+- **External code may enter with its own license (ADR-0089).** Grindless's own work
+  stays MIT. The copyright holder accepts adding an upstream license when a later
+  change copies code that requires it (LGPL-3.0 for GregTech CE Unofficial and
+  GregTech-Modern). That does not unlock All Rights Reserved assets, and it does
+  not resolve BetterQuesting's MIT-versus-All-Rights-Reserved contradiction. No
+  third-party code is copied in this change.
+
+- **The project is a modpack-scale progression (ADR-0088).** The early-game work already
+  built stays the foundation. The "remove the early-game grind" framing and the T0–T6 cap
+  are retired. Many more tiers, more processing lines and more materials follow, with
+  Kardashev Type I, II and III as the large milestones and megastructures along the way.
+  Planets have unique extractable resources. Space and interstellar play are original.
+  The goal is the black hole at the centre of the Milky Way: arriving is the victory, and
+  the interior is a finite finale written when the route exists. Endgame generation targets
+  the maximum a per-tick `long` can name, `Long.MAX_VALUE` FU/t. Sums, a multi-tick buffer
+  at that rate, and the FE `int` bridge cannot express operating there, so the
+  representation grows before that content ships. The quest book is an original
+  BetterQuesting-style implementation. Slices L–BB are held. That record named BC —
+  Original quest book as the next slice. ADR-0090 moves the book to the end.
+
 - **Remaining work is playable slices, not system layers (ADR-0058).** First iron (Thermal
   Generator, Pulverizer, Arc Furnace, `ProcessRecipe` item-first, shared menu, Voltaic gate)
   before fluids, belts, conduits or the multiblock framework. Gaseous T1 byproducts vent until
@@ -47,11 +81,11 @@ entries below reference those records by id.
 
 ### Added
 
-- **Flux Exosuit, Network Tap and Exoskeleton Legs (ADR-0090).** Assembler-manufactured (casing, two motors, four plates; Industrial). Four pieces with the harness's protection and two slots each. The harness stays at one slot. The tap and the legs install only into an exosuit. A worn tap pulls up to 32 FU/t from pylon coverage into Flux Cells on the suit. Legs add 0.04 speed and spend 1 FU/t from a cell. No charge, no speed. The suit does not generate. The behaviour graph is 103 recipes; a Grindless-only pack logs 306. CI summons the helmet, the chest, the tap and the legs.
+- **Flux Exosuit, Network Tap and Exoskeleton Legs (ADR-0103).** Assembler-manufactured (casing, two motors, four plates; Industrial). Four pieces with the harness's protection and two slots each. The harness stays at one slot. The tap and the legs install only into an exosuit. A worn tap pulls up to 32 FU/t from pylon coverage into Flux Cells on the suit. Legs add 0.04 speed and spend 1 FU/t from a cell. No charge, no speed. The suit does not generate. The behaviour graph is 103 recipes; a Grindless-only pack logs 306. CI summons the helmet, the chest, the tap and the legs.
 
-- **Voltaic Harness and Flux Cell (ADR-0089).** Four crafting-table pieces with iron's protection and one module slot each. Vanilla armour still equips. The Flux Cell stores 6,400 FU and is not the drill's fuel. Using it on a harness in the other hand installs it; sneak-use gives it back. Right-clicking a Capacitor Bank or a Flux Transformer inside pylon coverage fills it from that network. Walking through a pylon does not. The suit does not generate. The behaviour graph stays 97 recipes; a Grindless-only pack still logs 300. CI summons all five items.
+- **Voltaic Harness and Flux Cell (ADR-0102).** Four crafting-table pieces with iron's protection and one module slot each. Vanilla armour still equips. The Flux Cell stores 6,400 FU and is not the drill's fuel. Using it on a harness in the other hand installs it; sneak-use gives it back. Right-clicking a Capacitor Bank or a Flux Transformer inside pylon coverage fills it from that network. Walking through a pylon does not. The suit does not generate. The behaviour graph stays 97 recipes; a Grindless-only pack still logs 300. CI summons all five items.
 
-- **Pattern Scanner, Deconstructor and Matter (ADR-0088).** Assembler-manufactured (casing, two motors, four plates; Industrial). The scanner stores an item id on the world and reports a replication cost walked from item outputs. Matter, a blank hand, and the `grindless:replication_blacklist` tag are refused. A stored pattern is not consumed again. No power leaves the item in hand. The deconstructor spends F1 and one item and gives one Matter. The blacklist does not block a smash, and Matter smashed again is still one Matter. Tag outputs are not expanded. The Replicator block is not in this slice. The behaviour graph is 97 recipes; a Grindless-only pack logs 300. CI places both blocks and summons Matter.
+- **Pattern Scanner, Deconstructor and Matter (ADR-0101).** Assembler-manufactured (casing, two motors, four plates; Industrial). The scanner stores an item id on the world and reports a replication cost walked from item outputs. Matter, a blank hand, and the `grindless:replication_blacklist` tag are refused. A stored pattern is not consumed again. No power leaves the item in hand. The deconstructor spends F1 and one item and gives one Matter. The blacklist does not block a smash, and Matter smashed again is still one Matter. Tag outputs are not expanded. The Replicator block is not in this slice. The behaviour graph is 97 recipes; a Grindless-only pack logs 300. CI places both blocks and summons Matter.
 
 - **Deconstruction Planner (ADR-0086).** Assembler-manufactured (casing, two motors, four plates; Industrial). Right-click two corners. The box uses the same 32-block edge as a blueprint. The mark stays on the item and the tool reports the volume. It does not break blocks and it does not relocate them. The Multitool relocate is unchanged. Drones still wait. The behaviour graph is 95 recipes; a Grindless-only pack logs 298. CI summons the planner.
 
@@ -110,6 +144,101 @@ entries below reference those records by id.
   roasts. Flotation and electrolysis still wait. The behaviour graph is 46 recipes;
   a Grindless-only pack logs 185. CI places the washer, hoppers crushed iron, and
   stands a water tank.
+
+- **Original quest book and in-game guide (ADR-0100).** Two T0 handhelds. The quest
+  book is lines, tasks, dependencies and rewards for the route already built, from the
+  Multitool through Voltaic, the contact process, the Arc Furnace metals, the Ground
+  Array, Luna, the Drift and the sealed chamber. A claim watches an item in the
+  inventory, a blueprint the world has unlocked, or the dimension the player is
+  standing in. It does not consume that evidence and it does not gate a machine.
+  Claims are per player. The field guide is the same route, read as pages, with the
+  chamber last. Rewards are existing items. Nothing follows this slice. BK stays
+  named and not started. Rows L–BB stay held. No third-party code or assets are
+  copied. Own work stays MIT (ADR-0089).
+
+- **Arrival at the galactic centre (ADR-0099).** Riding the station from the Drift
+  lands in a sealed chamber, `grindless:sagittarius`. The mass is unbreakable horizon
+  shell, sixteen blocks tall, with no vein. The carve is a 7 by 4 by 7 room, one
+  arrival mark, one berth, and a 3 by 3 shaft so the ride home has air. Leaving the
+  Drift and leaving the chamber draw nothing. Leaving the chamber returns to the
+  berth saved on the way to the Drift. The Starward Link stays registered and still
+  does not move a player. No new link and no new recipe. The next slice is the
+  original quest book (BC), and it is not started. No third-party code or assets
+  are copied. Own work stays MIT (ADR-0089).
+
+- **Supraluminal station (ADR-0098).** Interstellar trips are a ride. A station,
+  Assembler-built under Industrial from one machine casing, one motor and two array
+  casings, stands on a berth (one starward link and four steel plates). It climbs to
+  the build ceiling. That ceiling is the arrival: the Drift on the way out, the berth
+  they left on the way home. Leaving any world but the Drift spends 6,553,600 FU.
+  Leaving the Drift does not. The Starward Link stays registered and no longer moves
+  a player. The next slice is arrival at the galactic centre (BN), and it is not
+  started. No third link, no black-hole interior, no further planet. No third-party
+  code or assets are copied. Own work stays MIT (ADR-0089).
+
+- **Teleportation orbs are named and not started (BK).** Just before rocket ascent,
+  a later slice is an alternate route of a magical material, left unnamed, that ends
+  in orbs. Shift-right-click sets coordinates and dimension. Right-click teleports.
+  An orb can sit on a pedestal, so a return to a planet does not need another rocket.
+  Draconic Evolution may inspire that slice. Its current code is All Rights Reserved
+  (Don't Be a Jerk) and its assets are CC BY-NC-SA 4.0, so neither is copied. This
+  change does not build the route. The quest book stays last. The station stays next.
+
+- **Rocket ascent (ADR-0097).** Local trips are flights. A survey rocket, Assembler-built
+  under Industrial from one machine casing, one motor and two steel plates, stands on a
+  launch pad (one casing and four steel plates). It climbs to the build ceiling. A landing
+  map then offers the home world and Luna. Leaving home spends 102,400 FU. Leaving Luna
+  does not. The Lunar Link and the Starward Link stay, marked as placeholders. The next
+  slice is the supraluminal station (BM), and it is not started. Arrival at the
+  galactic centre is that ride, not a link. No third-party code or assets are copied.
+  Own work stays MIT (ADR-0089).
+
+- **The Drift (ADR-0096).** The first interstellar hop is one deck between the home star
+  and the galactic centre. It has no ore: an extractor there finds nothing. A Starward
+  Link, Assembler-built under Industrial from one lunar link and four array casings,
+  draws 6,553,600 FU from a covering pylon and sends the player. The return pad does not
+  draw again. Arrival at the black hole is named next and is not started. No vacuum
+  damage, no Horizon Gate, no rocket, no further planet, no black-hole interior.
+
+- **Luna (ADR-0095).** The first original planet is a regolith world with no ore. Every
+  chunk's vein is helium-3, a reagent the Crude and Terrestrial Extractors emit only
+  there. A Lunar Link, Assembler-built under Industrial from two array casings and one
+  machine casing, draws 102,400 FU from a covering pylon and sends the player. The
+  return pad does not draw again. Interstellar travel is named next and is not started.
+  No vacuum damage, no Horizon Gate, no rocket, no black hole.
+
+- **Ground Array (ADR-0094).** The first megastructure is a fixed 3×3: one controller
+  and eight casings. A complete ring under a pylon adds 6,553,600 FU to that network,
+  ten seconds of MK3 throughput, as storage. It does not generate and it does not
+  project a supply cube. Both blocks are Assembler recipes under Industrial: four
+  refractory bricks and one steel ingot make a casing; one machine casing, four steel
+  plates and four refractory bricks make the controller. Kardashev Type I, II and III
+  stay milestones. BI was named next and is now in (ADR-0095).
+
+- **Zone refining (ADR-0093).** The Arc Furnace turns 10 metallurgical silicon into
+  7 electronic silicon in 600 s at 1420 °C. That is the graph's 0.70 yield and 60 s
+  per unit, as an integer batch. The ±5 °C inert band stays with the Induction Furnace,
+  because that band does not admit the 1500 °C reducing hold. No new block. Siemens,
+  the boule and wafers wait. BH was named next and is now in (ADR-0094).
+
+- **Metallurgical silicon (ADR-0092).** The Arc Furnace turns 1 silica and 2 carbon into
+  1 metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C in a reducing
+  atmosphere. Silica is the tag over sand and nether quartz; no silica item is
+  registered. The furnace's 1500 °C hold stays, inside tolerance and outside the
+  optimal zone, so the line runs slower and the yield stays one. No new block.
+  Zone refining was named next and is now in (ADR-0093).
+
+- **Refractory brick (ADR-0091).** The Arc Furnace turns 1 slag into 1 refractory brick
+  in 20 s at 1400 °C. That is the ceramics row's time and temperature, as one unit in
+  and one unit out. The furnace's 1500 °C hold stays inside the band. No new block.
+  Alumina, silica, the Kiln, aggregate and road fill wait. Metallurgical silicon was
+  named next and is now in (ADR-0092).
+
+- **Electric-arc steel (ADR-0090).** The Arc Furnace turns 10 iron ingots and 1 carbon
+  into 10 steel ingots in 140 s at 1600 °C. That is the graph's 0.1 carbon per ingot
+  and 14 s per ingot, as an integer batch. The furnace's 1500 °C hold stays inside the
+  band. No new block. Oxygen blow, direct reduction, the washer and the Autoclave wait.
+  Refractory brick was named next and is now in (ADR-0091).
 
 - **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia

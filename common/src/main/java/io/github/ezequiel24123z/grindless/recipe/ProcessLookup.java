@@ -211,6 +211,13 @@ public final class ProcessLookup {
         return !stack.isEmpty() && stack.getCount() >= spec.count() && sameItem(spec, stack);
     }
 
+    /**
+     * Item identity, ignoring count.
+     *
+     * <p>A hopper moves one item per tick. Requiring the whole batch here would refuse
+     * the first insert of steel and of zone refining, so the line could never fill.
+     * The count is enforced when the recipe actually starts.
+     */
     private static boolean sameItem(IngredientSpec spec, ItemStack stack) {
         if (stack.isEmpty()) {
             return false;

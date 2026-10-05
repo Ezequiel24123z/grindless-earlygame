@@ -1,0 +1,14 @@
+forceload add 0 0
+setblock 8 68 8 minecraft:stone
+setblock 8 69 8 minecraft:air
+setblock 8 70 8 minecraft:air
+setblock 8 71 8 minecraft:air
+setblock 8 70 8 grindless:arc_furnace[facing=south,status=idle]
+execute if block 8 70 8 grindless:arc_furnace run say FURNACE-OK
+setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"grindless:metallurgical_silicon",Count:10b}]}
+say WAIT-HOPPER
+say WAIT-HOPPER
+execute if data block 8 70 8 Items[{id:"grindless:metallurgical_silicon"}] run say METAL-SI-IN
+summon minecraft:item 8 100 8 {Item:{id:"grindless:electronic_silicon",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:electronic_silicon"}}] run say ELECTRONIC-OK
+kill @e[type=item]

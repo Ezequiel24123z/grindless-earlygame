@@ -31,6 +31,9 @@ import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.SolarArrayBlockEntity;
+import io.github.ezequiel24123z.grindless.planet.LunarLinkBlockEntity;
+import io.github.ezequiel24123z.grindless.star.StarwardLinkBlockEntity;
+import io.github.ezequiel24123z.grindless.structure.GroundArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
@@ -379,6 +382,24 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("capacitor_bank",
                     () -> BlockEntityType.Builder
                             .of(CapacitorBankBlockEntity::new, ModBlocks.CAPACITOR_BANK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<LunarLinkBlockEntity>> LUNAR_LINK =
+            BLOCK_ENTITIES.register("lunar_link",
+                    () -> BlockEntityType.Builder
+                            .of(LunarLinkBlockEntity::new, ModBlocks.LUNAR_LINK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<StarwardLinkBlockEntity>> STARWARD_LINK =
+            BLOCK_ENTITIES.register("starward_link",
+                    () -> BlockEntityType.Builder
+                            .of(StarwardLinkBlockEntity::new, ModBlocks.STARWARD_LINK.get())
+                            .build(null));
+
+    public static final RegistrySupplier<BlockEntityType<GroundArrayBlockEntity>> GROUND_ARRAY =
+            BLOCK_ENTITIES.register("ground_array",
+                    () -> BlockEntityType.Builder
+                            .of(GroundArrayBlockEntity::new, ModBlocks.GROUND_ARRAY.get())
                             .build(null));
 
     public static final RegistrySupplier<BlockEntityType<FluxTransformerBlockEntity>> FLUX_TRANSFORMER =

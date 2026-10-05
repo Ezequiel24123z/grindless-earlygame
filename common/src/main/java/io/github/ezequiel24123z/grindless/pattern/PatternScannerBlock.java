@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** Stores one item id and reports what it would cost to replicate (ADR-0088). */
+/** Stores one item id and reports what it would cost to replicate (ADR-0101). */
 public class PatternScannerBlock extends FacingLogisticsBlock {
 
     public static final EnumProperty<MachineStatus> STATUS =

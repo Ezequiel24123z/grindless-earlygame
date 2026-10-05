@@ -23,7 +23,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0009](#adr-0009--ore-veins-are-derived-from-seed-and-coordinates) | Ore veins derived from seed and coordinates | Accepted |
 | [0010](#adr-0010--replication-cost-is-derived-from-the-recipe-graph) | Replication cost derived from the recipe graph | Accepted |
 | [0011](#adr-0011--remote-colonies-are-simulated-abstractly-never-force-loaded) | Remote colonies simulated abstractly | Accepted |
-| [0012](#adr-0012--planets-come-from-installed-space-mods-and-satellites-have-no-upkeep) | Planets come from installed space mods | Accepted |
+| [0012](#adr-0012--planets-come-from-installed-space-mods-and-satellites-have-no-upkeep) | Planets come from installed space mods | Superseded in part by ADR-0088 |
 | [0013](#adr-0013--the-readme-is-the-design-source-of-truth) | The README is the design source of truth | Accepted |
 | [0014](#adr-0014--consolidate-the-orphaned-session-branches-into-one-history) | Consolidate the orphaned session branches | Accepted |
 | [0015](#adr-0015--fluids-are-modelled-as-state-not-as-items) | Fluids are modelled as state, not as items | Accepted |
@@ -32,7 +32,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0018](#adr-0018--one-container-contract-with-auto-void-off-by-default) | One container contract, auto-void off by default | Accepted |
 | [0019](#adr-0019--design-machines-before-recipes) | Design machines before recipes | Accepted |
 | [0020](#adr-0020--recipes-are-parameterised-by-process-conditions) | Recipes are parameterised by process conditions | Accepted |
-| [0021](#adr-0021--complexity-beyond-gregtech-with-no-grind) | Complexity beyond GregTech, with no grind | Accepted |
+| [0021](#adr-0021--complexity-beyond-gregtech-with-no-grind) | Complexity beyond GregTech, with no grind | Superseded in part by ADR-0088 |
 | [0022](#adr-0022--parametric-multiblocks-instead-of-fixed-schematics) | Parametric multiblocks instead of fixed schematics | Accepted |
 | [0023](#adr-0023--a-native-route-viewer-with-a-ratio-solver) | A native route viewer with a ratio solver | Accepted |
 | [0024](#adr-0024--loomplatform-markers-and-the-windows-path-length-limit) | `loom.platform` markers and the Windows path limit | Accepted |
@@ -76,12 +76,12 @@ history — the reasoning that was wrong is itself useful information.
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
-| [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
+| [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
-| [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Accepted |
+| [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Superseded in part by ADR-0088 |
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
@@ -98,9 +98,22 @@ history — the reasoning that was wrong is itself useful information.
 | [0084](#adr-0084--the-flux-drill-spends-cells-not-durability) | The Flux Drill spends cells, not durability | Accepted |
 | [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
 | [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
-| [0088](#adr-0088--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
-| [0089](#adr-0089--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
-| [0090](#adr-0090--the-exosuit-taps-a-pylon-and-does-not-generate) | The exosuit taps a pylon and does not generate | Accepted |
+| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 and ADR-0090 |
+| [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
+| [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
+| [0091](#adr-0091--refractory-brick-is-one-slag-in-twenty-seconds) | Refractory brick is one slag in twenty seconds | Accepted |
+| [0092](#adr-0092--metallurgical-silicon-runs-cold-on-sand-and-quartz) | Metallurgical silicon runs cold on sand and quartz | Accepted |
+| [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
+| [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
+| [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
+| [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0097 |
+| [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Superseded in part by ADR-0098 |
+| [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Superseded in part by ADR-0099 |
+| [0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber) | The galactic centre is a sealed chamber | Superseded in part by ADR-0100 |
+| [0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it) | The quest book tracks the route and does not gate it | Accepted |
+| [0101](#adr-0101--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
+| [0102](#adr-0102--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
+| [0103](#adr-0103--the-exosuit-taps-a-pylon-and-does-not-generate) | The exosuit taps a pylon and does not generate | Accepted |
 
 ---
 
@@ -322,7 +335,11 @@ person has to reconcile abstract state with real blocks.
 
 ## ADR-0012 — Planets come from installed space mods, and satellites have no upkeep
 
-*2026-09-29 · Accepted*
+*2026-09-29 · Superseded in part by [ADR-0088](#adr-0088--grindless-is-a-modpack-scale-progression)*
+
+> **Superseded in part.** The planet source is reversed: Grindless ships original space,
+> interstellar play, and planets with unique extractable resources. Satellites still have no
+> upkeep. See ADR-0088.
 
 **Context.** Packs that include an orbital layer usually already have a space mod with its own
 dimensions. Shipping a competing set of planets fragments the pack.
@@ -582,7 +599,11 @@ recorded as such in `MACHINES.md`.
 
 ## ADR-0021 — Complexity beyond GregTech, with no grind
 
-*2026-10-01 · Accepted*
+*2026-10-01 · Superseded in part by [ADR-0088](#adr-0088--grindless-is-a-modpack-scale-progression)*
+
+> **Superseded in part.** The project is no longer a short mod that refuses length. A repeated
+> chore is still not a new tier: solving the same problem again by hand is not content. Stopping
+> the ladder at T6 because more tiers would take time is retired. See ADR-0088.
 
 **Context.** The brief is a mod deeper than GregTech that nonetheless contains no grind. Those
 sound contradictory, because the genre's depth is habitually sold with repetition attached.
@@ -2670,7 +2691,11 @@ already crafted.
 
 ## ADR-0070 — Remaining work is the autonomous build-out
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0088](#adr-0088--grindless-is-a-modpack-scale-progression)*
+
+> **Superseded in part.** [`BUILD-OUT.md`](BUILD-OUT.md) remains the history of the slices already
+> defined. Anything not started is held. Finishing BB does not finish the mod. The next calendar
+> is the modpack expansion, and its first slice is BC. See ADR-0088.
 
 **Context.** Slices A–E, Kiln/R2, the Atlas stub and the Multitool wrench are in. Armour and
 Horizon Gates are recorded, not started. The README implementation plan still has four coarse
@@ -2863,6 +2888,9 @@ satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C ban
 successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
 acid without pickle (or another spend) is reopening ADR-0036.
 
+---
+
+---
 
 ## ADR-0076 — The washer batch is eight crushed and the next metal
 
@@ -2908,6 +2936,7 @@ T2 recipe (circuit board); shipping leachate, flotation or electrolysis in this 
 ADR-0036. A successor that starts the Froth Flotation Cell here is skipping P. A successor
 that starts the Electrolysis Cell here is skipping M.
 
+---
 
 ## ADR-0077 — Water splits in the buffer; air yields oxygen only
 
@@ -2971,6 +3000,7 @@ reopening ADR-0065. A successor that starts the Fluid Well here is skipping N. A
 successor that starts Haber, the Autoclave, or molten-salt electrolysis here is past
 this slice.
 
+---
 
 ## ADR-0078 — The Fluid Well is powered chunk water
 
@@ -3011,6 +3041,7 @@ that consumes it is reopening ADR-0036. A successor that changes vein version to
 remember a fluid roll is reopening ADR-0009. A successor that starts the Induction
 Furnace or the Caster here is skipping O.
 
+---
 
 ## ADR-0079 — Melt is 144 mB at 1000 °C, and the arc still makes ingots
 
@@ -3149,6 +3180,7 @@ turbine. A successor that puts steam in a clay pipe is ignoring 150 °C. A
 successor that builds the turbine here is in slice AF. A successor that starts
 the pressure pipe here is skipping R.
 
+---
 
 ## ADR-0082 — T2 pipe holds steam, and the flux belt spends LV
 
@@ -3209,6 +3241,7 @@ that retunes the T1 tunnel to 9 is inventing the flux tunnel. A successor
 that makes an empty flux belt draw F1 is taxing a line that is doing nothing.
 A successor that builds the Phase Manifold here is in slice AJ.
 
+---
 
 ## ADR-0083 — A controller holds a machine below five hundred
 
@@ -3254,6 +3287,7 @@ moving the redstone limit onto the wire. A successor that leaves a machine
 held after the controller is mined is inventing a latch. A successor that
 builds drones here is in slice AC.
 
+---
 
 ## ADR-0084 — The Flux Drill spends cells, not durability
 
@@ -3297,6 +3331,7 @@ ADR-0055. A successor that adds silk or fortune here is starting the module
 grid early. A successor that spends the armour Flux Cell as fuel is
 colliding with slice X.
 
+---
 
 ## ADR-0085 — A blueprint stamps from the inventory
 
@@ -3333,6 +3368,7 @@ blueprint is duplicating items. A successor that pulls from the network
 here is starting slice AC. A successor that writes blueprints to disk is
 inventing a share format the item already is.
 
+---
 
 ## ADR-0086 — The planner marks and does not pick up
 
@@ -3360,8 +3396,1021 @@ item that does nothing until AC.
 inventing the wrench this record refused. A successor that returns items
 to a chest here is starting the drone bay.
 
+---
 
-## ADR-0088 — Replication cost is a graph walk and deconstruction yields one Matter
+## ADR-0088 — Grindless is a modpack-scale progression
+
+*2026-10-04 · Superseded in part by [ADR-0089](#adr-0089--external-code-may-enter-with-its-own-license) and [ADR-0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact)*
+
+> **Superseded in part.** The ban on ever changing our license so that copyleft code can be
+> copied is lifted. Unconfirmed licenses and All Rights Reserved material stay out. See
+> ADR-0089. The schedule that puts the quest book next is withdrawn. The book is last.
+> See ADR-0090.
+
+**Context.** The early game is in: the T0 loop, slices A–E, the kiln, the atlas stub, the
+Multitool wrench, belt junctions, the sorter, the Industrial gate, the Wire Mill, and the
+contact process. The README still introduces the mod as something that deletes the opening
+grind and then gets out of the way, and the research ladder stops at T6. That framing and
+that cap are the wrong product. A successor who treats T6, or build-out slice BB, as the
+finish line will build a convenience mod.
+
+Per-tick Flux rates and stored amounts are a Java `long`: `FluxTier.nominal()`,
+`ProcessRecipe.fuPerTick`, and `FluxStorage`. The ladder in code stops at F9,
+`FluxTier.MAX_NOMINAL`, 2,097,152 FU/t. The largest rate one `long` can store is
+`Long.MAX_VALUE` (9,223,372,036,854,775,807) FU/t.
+
+**Decision.**
+
+1. **The product is a full modpack-scale progression.** The early-game work already built
+   stays the foundation. The "remove the early-game grind" framing is retired. So is the
+   six-tier cap. T0–T6 remain the specified start. They are not the end.
+2. **The ladder keeps going.** Intermediate tiers, endgame tiers, more processing lines,
+   more materials. Kardashev scales are the large milestones: Type I, Type II, Type III.
+   Megastructures sit along the way. Those names are milestones. They are not a claim that
+   a Flux Unit is a physical watt.
+3. **Planets are original.** Planetary gameplay has unique extractable resources. Space and
+   interstellar gameplay are original to Grindless. This supersedes the planet-source half
+   of ADR-0012. Satellites still have no upkeep. Horizon Gates stay commute infrastructure
+   (ADR-0068), a milestone on the way, not the victory and not a mining dimension.
+4. **The goal is the black hole at the centre of the Milky Way.** Arriving is the victory.
+   That default is already chosen. The interior is a finite finale. Its concrete content is
+   written when the route exists.
+5. **Endgame generation targets the maximum rate a per-tick `long` can name:**
+   `Long.MAX_VALUE` FU/t, from one source. F9 is not that ceiling. The `long` can store
+   that single rate. It cannot express an economy operating at it:
+   - a buffer of two or more ticks overflows (`rate × seconds` does not fit in a `long`,
+     and buffers are sized in seconds of throughput);
+   - the sum of two such sources does not fit in a `long`;
+   - `FluxConversion.toFe` saturates at `Integer.MAX_VALUE` (ADR-0037), so the Forge
+     Energy bridge cannot publish the rate;
+   - `ProcessLogic.work` divides the `long` amounts in `double`, and not every integer
+     above 2^53 is representable, so a partial tick near the ceiling is not exact.
+   Any slice that adds those rates together, stores more than one tick of them, or
+   publishes them over FE waits until the representation grows. This record does not
+   change the type, the ladder, or the bridge.
+6. **The quest book is original.** It is in the BetterQuesting style: lines, tasks,
+   dependencies, rewards. BetterQuesting's code is not reused. See the license notes.
+   Quality-of-life features known from other mods are in scope, built as original work.
+7. **Ideas may inform the design. Code and assets from other mods do not enter this
+   repository on the strength of this record.** Where a license was not confirmed, the
+   default is no reuse.
+8. **The schedule.** [`BUILD-OUT.md`](BUILD-OUT.md) keeps every slice already defined.
+   G through K stay done. L through BB are **held**: defined, not started, not next.
+   The next calendar is the **modpack expansion**. Its first slice is **BC — Original
+   quest book**, identified and not implemented here. Later slices of that calendar
+   (further tiers, megastructures, planets, the black-hole route) are not sliced yet.
+
+### Licenses
+
+Checked 2026-10-04 against the files named below. Grindless itself is MIT
+([`LICENSE`](../LICENSE), copyright 2026 Ezequiel24123z): use, copy, modification, merge,
+publication, distribution, sublicense and sale are permitted if that copyright notice and
+permission notice are kept.
+
+| Work | What the license allows | Reuse in this MIT repository |
+| --- | --- | --- |
+| **BetterQuesting** | `Funwayguy/BetterQuesting`, branch `1.12`, file `LICENSE`: MIT, copyright 2019 Funwayguy. That text would allow copying the licensed code into this repository if the Funwayguy copyright and permission notice are kept. The CurseForge page for the same project lists **All Rights Reserved**. File headers, the Standard Expansion, and later ports were not audited. | **Not confirmed.** The two statements contradict. Default applies: no reuse. The quest book is an original implementation only. |
+| **GregTech** | GregTech CE Unofficial (`GregTechCEu/GregTech` and `GregTech-Modern`) is LGPL-3.0 on GitHub. LGPL-3.0 allows linking against the library and requires the library's source and relink rights to travel with a combined work. It does not allow copying that source into this tree and offering it under MIT alone. Their README also says use of the name "GregTech" depends on permission. Original GregTech by Gregorius Techneticies, and GregTech assets, were not re-verified file by file. | **No.** LGPL code cannot be vendored into this MIT-only tree. Unverified lines are no reuse. |
+| **Ad Astra** | `terrarium-earth/Ad-Astra`, branch `1.20.x`, Terrarium License v1. Files they define as Code (including `.java`, data, shaders, build scripts, markdown and toml) are MIT, so copying those files is allowed if the copyright and MIT notice stay. Everything not defined as Code is All Rights Reserved. | **Code: allowed only with the notice kept. Assets: no.** This record copies neither. Planetary and interstellar content here is original. |
+| **Similar mods** | Mekanism, Thermal, Create, and the rest of the genre were not individually confirmed. | **Unsure. No reuse.** Ideas may still inform the design. |
+
+**Alternatives rejected.**
+
+- Staying an early-game convenience mod with six tiers.
+- An empty "you arrived" anecdote at the black hole, with no finale.
+- An endless second game inside the hole.
+- Copying BetterQuesting, GregTech, or Ad Astra code or assets into this repository while
+  any license above is unconfirmed or incompatible.
+- Implementing the wider energy representation, the quest book, or slice BC in the same
+  change as this record.
+
+**Consequences.** A successor who starts the washer, Slice F, or any held row L–BB because
+the old **Next slice** line said L is ignoring this record. The next slice is BC, and BC
+is not started here. A successor who vendors another mod's sources because "the idea is
+the same" is ignoring the license table. A successor who sets the endgame generator to
+F9, or who widens `long` inside a feature slice without a record that the representation
+grew, is missing the ceiling in point 5. A successor who writes the black-hole interior
+before the route exists is early; a successor who makes that interior endless, or empty,
+is reopening the rejected alternatives.
+
+---
+
+## ADR-0089 — External code may enter with its own license
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0088 kept other mods' code out of this repository. Part of that ban was
+ours: GregTech CE Unofficial and GregTech-Modern are LGPL-3.0, and a MIT-only tree cannot
+offer those files under MIT alone. The copyright holder has now said they are willing to
+change Grindless's license in order to implement external code.
+
+Changing our grant does not create a right in someone else's work. It only lets us accept
+obligations we were previously refusing.
+
+**Decision.**
+
+1. **Grindless's own code and documentation stay MIT.** [`LICENSE`](../LICENSE) says so.
+   Pack authors can still ship that work.
+2. **The copyright holder accepts an extra upstream license when a slice copies code that
+   requires one.** The copied files keep their notices. The upstream license text is added
+   in that same slice. A file with its own notice is governed by that notice.
+3. **LGPL-3.0 code may enter on those terms.** GregTech CE Unofficial
+   (`GregTechCEu/GregTech`) and GregTech-Modern are LGPL-3.0. Copying them means those
+   files stay LGPL-3.0, the LGPL text ships with the repo, and the mod's distribution
+   satisfies LGPL for those parts (source and the ability to replace them). The GregTech
+   name is a separate permission, stated in their README, and is not granted here.
+4. **MIT code may already enter, with its notice kept.** Ad Astra's Terrarium License v1
+   puts Code under MIT. BetterQuesting's GitHub `LICENSE` on branch `1.12` is also MIT.
+   Neither needs a change to our MIT grant. Ad Astra's non-code is All Rights Reserved.
+   BetterQuesting's CurseForge page lists All Rights Reserved, which contradicts the
+   GitHub file. That contradiction is not fixed by editing our license. Both stay unused
+   until the grant is one statement. The quest book stays an original implementation.
+5. **All Rights Reserved material stays out.** No choice of license for Grindless unlocks
+   it. Original GregTech by Gregorius Techneticies, and assets whose license was not
+   checked file by file, stay out. Similar mods that were not confirmed stay out.
+6. **This record copies nothing.** No `LICENSE` swap to GPL-3.0. The whole project is not
+   relicensed in advance. The first slice that copies a file is the slice that adds that
+   file's license text.
+
+**Alternatives rejected.**
+
+- Relicensing all of Grindless to GPL-3.0 now, with no file being copied. That is stricter
+  than the LGPL code under discussion, and it still does not unlock All Rights Reserved
+  assets.
+- Treating the owner's willingness as permission to copy BetterQuesting, Ad Astra assets,
+  or any unchecked mod.
+- Keeping the permanent "MIT-only, so LGPL can never be vendored" ban from ADR-0088.
+
+**Consequences.** A successor who copies GregTech sources into a MIT file, or who drops the
+LGPL notice, is ignoring this record. A successor who copies BetterQuesting or an Ad Astra
+texture because the license file now mentions upstream terms is ignoring points 4 and 5.
+A successor who relicenses the whole tree without a copied file is early.
+
+---
+
+## ADR-0090 — Electric-arc steel is the first line past contact
+
+*2026-10-04 · Accepted*
+
+**Context.** ADR-0088 named a modpack-scale progression and left the steps after the quest
+book unidentified. It set the next slice to BC, an original quest book. The owner has
+deferred that book until the end of the pack. The urgent calendar, which ADR-0088 names
+and does not slice, is intermediate and endgame tiers, more processing lines and more
+materials, then megastructures and the Kardashev scales, then original planets and
+interstellar travel, then arrival at the galactic-centre black hole. The quest book and
+the in-game guide come after that arrival. They are last.
+
+The foundation on this branch ends at the contact process (slice K). Rows L–BB stay held.
+A successor who starts the washer, the quest book, or an Autoclave from the old Next line
+is guessing.
+
+`PROCESSES.md` opens the materials stratum with alloys, and the first alloy it spells out
+is steel, three ways. Steel is already a supplied material, and the Press, rod, gear and
+Wire Mill recipes already exist for it once an ingot does. Nothing produces the ingot.
+Of the three routes, only electric arc runs on a shipped machine with shipped inputs:
+iron ingots and `#grindless:carbon`, in the Arc Furnace, which already holds 1500 °C, a
+reducing atmosphere and an electric field (ADR-0059). Oxygen blow needs molten metal and
+the Atmospheric Intake (held O and M). Direct reduction needs hydrogen (held M). The
+Haber line needs an Autoclave plus nitrogen and hydrogen from those same held machines.
+Shipping it either cannot be run, or it resumes M. The washer is L.
+
+**Decision.**
+
+1. **The quest book is last.** BC stays the original quest book. It moves to the end of
+   the modpack expansion, after arrival at the black hole, together with the in-game
+   guide. It is not the next slice. L–BB stay held. This record copies no BetterQuesting,
+   GregTech or Ad Astra code or assets. Grindless's own work stays MIT (ADR-0089).
+2. **The next slice is BD — Electric-arc steel.** One material line, on the machine the
+   graph already names. That machine is the Arc Furnace. No new block, no new research
+   tier, no new blueprint. A second furnace would duplicate an envelope that already
+   contains the reaction.
+3. **Ratio.** `PROCESSES.md` writes `1 u scrap iron + 0.1 u carbon → 1.0 u` in 14 s.
+   A tenth of an item does not exist (ADR-0034: 1 u = 1 ingot). The integer batch that
+   keeps both the carbon ratio and the throughput is **10 iron ingots + 1 carbon → 10
+   steel ingots in 140 s** (ten times 14 s), at F1, family `ARC_FURNACE`. The named
+   temperature is 1600 °C. The furnace's 1500 °C hold sits inside that band (±15 %).
+   Scrap is `forge:ingots/iron`, not a new item. The output is `forge:ingots/steel`.
+   There is no slag and no CO: the route names neither (ADR-0036). The electric field
+   stays the furnace's held field. `ProcessRecipe` does not grow a field slot for one
+   host that already applies it.
+4. **The other two steel routes wait.** Oxygen blow and direct reduction are not this
+   slice. Planets, megastructures and the quest book are not this slice.
+
+**Alternatives rejected.**
+
+- The quest book, or the in-game guide, as the next slice.
+- Resuming any held row L–BB, including the washer, electrolysis, the Atmospheric Intake
+  and the Induction Furnace.
+- Haber, the Autoclave, or nitric acid in this slice. Their feeds are M, or the line
+  cannot run.
+- A new alloy furnace, or a T7 blueprint, for a reaction the Arc Furnace already holds.
+- `1 iron + 1 carbon → 1 steel`, which spends ten times the coal the graph charges.
+- `10 iron + 1 carbon` in 14 s, which is ten times the throughput.
+- A scrap item, a slag output, or bottled hydrogen.
+
+**Consequences.** A successor who starts BC, the washer, or the Autoclave because an older
+Next line said so is ignoring this record. A successor who adds oxygen blow or direct
+reduction here is starting held feeds. A successor who changes the batch without keeping
+0.1 carbon per ingot and 14 s per ingot is rewriting the graph.
+
+---
+
+## ADR-0091 — Refractory brick is one slag in twenty seconds
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BE is slag's named sink (ADR-0036). `PROCESSES.md` writes refractory
+brick as `alumina + silica [T 1400]` in 20 s, and names no counts. BUILD-OUT forbids that
+route, the Kiln, and a new furnace. The Arc Furnace envelope is 1200–3500 °C, so 1400 °C
+is inside it. The Kiln envelope stops at 900 °C. A 1400 °C band of ±15 % tolerates down
+to 980 °C, which the Kiln still cannot reach. The integer batch is not in the graph.
+
+The furnace holds 1500 °C for R1 and for electric-arc steel (ADR-0090). That hold sits
+inside 1400 ±15 % (1190–1610 °C), so a 1400 °C recipe runs at full speed without a second
+temperature. Alumina and silica are not items. One reduction already emits one slag.
+
+**Decision.**
+
+1. **The product is a reagent**, `grindless:refractory_brick`. It is the lining. It is not
+   a placeable block, and it is not `minecraft:brick`. Vanadia keeps its vanilla-brick
+   support. Aggregate and road fill stay later sinks. No new machine, no new blueprint.
+2. **Host.** `ceramic/refractory_brick` runs on the Arc Furnace. Family lock is the host.
+   The recipe names 1400 °C and nothing else: the ceramics row names no atmosphere and no
+   field, and an unwritten condition is not a condition. The held reducing atmosphere and
+   electric field stay on the machine. `ProcessRecipe` does not grow a field slot.
+3. **Integer batch.** **1 slag → 1 refractory brick in 20 s** at 1400 °C, F1. Twenty
+   seconds and 1400 °C are the only numbers the product already has. One unit in and one
+   unit out is the canonical unit (ADR-0034). One slag is what one reduction emits, so
+   one reduce cycle feeds one brick cycle with nothing left over. Own work stays MIT
+   (ADR-0089). This record copies nothing.
+
+**Alternatives rejected.**
+
+- Alumina + silica. Those feeds are not items, and BUILD-OUT forbids the route.
+- The Kiln, or a new furnace. 1400 °C is outside the Kiln even at the edge of tolerance.
+- Retuning the Arc Furnace from 1500 °C to 1400 °C. The existing hold is already optimal
+  for this band, and R1 is written at 1500 °C.
+- Naming `REDUCING` or an electric field on the recipe. Naming `OXIDISING` would refuse
+  the hold the furnace already has.
+- 2 slag → 1 brick, as if the two mineral names were a count.
+- 1 slag → 4 bricks, copying vanadia's four vanilla bricks.
+- 10 slag → 10 bricks in 200 s, or in 20 s. There is no tenth of an item to clear, so a
+  steel-style scale either waits ten times longer or runs ten times faster.
+- A placeable brick, an Industrial gate, or spending the brick as a furnace upgrade in
+  this slice. The sink is the recipe that consumes slag.
+
+**Consequences.** A successor who adds alumina or silica, moves the recipe to the Kiln, or
+retunes the furnace is ignoring this record. A successor who changes the 1:1 batch or the
+20 s is inventing a ratio the product did not have. A successor who ships aggregate or
+road fill here is starting the next sink.
+
+---
+
+## ADR-0092 — Metallurgical silicon runs cold on sand and quartz
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BF is the carbothermic line in `PROCESSES.md`:
+
+```
+1 u silica + 2 u carbon
+  [T 1900 · atm reducing]  14 s
+  ──> 1 u metallurgical silicon + 2 B CO             (Arc Furnace, T1)
+```
+
+Two facts are not implementable as written.
+
+Silica is not a shipped item. ADR-0091 refused to invent it as a brick feed. This line
+names it as the feed, so a recipe that waits for a silica item cannot be run. Sand and
+nether quartz are both silica, and both already exist in vanilla. `#minecraft:sand`
+also contains red sand, which is not that feed. Glass is silica that has already been
+melted. Sandstone is a block of sand, not one unit. A new compound item would be a
+reagent with no source.
+
+The Arc Furnace holds 1500 °C, a reducing atmosphere and an electric field. BUILD-OUT
+forbids retuning that hold and forbids a new furnace. A relative band at 1900 °C is
+optimal from 1615 °C to 2185 °C and tolerated from 1330 °C to 2470 °C. 1500 °C is
+inside tolerance and outside the optimal zone, so the line runs and costs time, never
+yield (ADR-0040). The furnace envelope is 1200–3500 °C, so 1900 °C is inside the
+machine. The Kiln stops at 900 °C and cannot reach the tolerance floor. The counts are
+already integers: one silica, two carbon, fourteen seconds, two buckets. There is no
+tenth of an item to clear.
+
+Metallurgical silicon is a grade. `PROCESSES.md` says it is useless for circuits.
+Putting the output on `forge:ingots/silicon` would let a later circuit recipe accept
+99 % metal. Electronic silicon, wafers and the Siemens line are not this slice. The
+product is a reagent, the same boundary slag and refractory brick use (ADR-0033).
+
+CO already has a named sink (ADR-0036, ADR-0062): vent, or a neighbouring tank, then
+the Thermal Generator. Two buckets is that same fluid, twice.
+
+**Decision.**
+
+1. **Feed.** `#grindless:silica` is the item ids `minecraft:sand` and
+   `minecraft:quartz`. No silica item is registered. The values are item ids, not
+   `#minecraft:sand`: that tag also contains red sand, and nether quartz has no
+   vanilla item tag. ADR-0051 forbids writing one into the `minecraft` namespace.
+2. **Product.** `grindless:metallurgical_silicon`, one item. It is not a supplied
+   material, so the ore line, plates, rods, gears and wire do not appear. It is not
+   `forge:ingots/silicon`.
+3. **Host and ratio.** `silicon/metallurgical` runs on the Arc Furnace: 1 silica + 2
+   carbon → 1 metallurgical silicon + 2 B vented CO, in 14 s, at F1, at 1900 °C, in a
+   reducing atmosphere. The furnace hold stays 1500 °C and reducing. That hold admits
+   the band and is not optimal. No new block, no dial, no blueprint. The electric field
+   stays on the machine. `ProcessRecipe` does not grow a field slot. Own work stays MIT
+   (ADR-0089). This record copies nothing.
+
+**Alternatives rejected.**
+
+- A silica item, glass, red sand, slag, or sandstone as the feed.
+- Retuning the Arc Furnace to 1900 °C, or a second furnace that holds 1900 °C.
+- Writing the recipe at 1500 °C so the hold is optimal. That rewrites the graph.
+- Widening this recipe's band so 1500 °C counts as optimal.
+- Scaling to 2 silica + 4 carbon. The graph is already an integer batch.
+- `forge:ingots/silicon`, a full supply-catalogue material, plates, wire, electronic
+  silicon, or wafers.
+- A stored CO item, or a new gas. The sink is the one R1 already uses.
+- Naming an electric field on the recipe. The graph names temperature and atmosphere.
+- The Kiln. 1900 °C is outside it even at the edge of tolerance.
+
+**Consequences.** A successor who ships a silica item, retunes the furnace, or emits
+`forge:ingots/silicon` is ignoring this record. A successor who changes the 1:2:1 batch
+or the 14 s is rewriting the graph. A successor who adds electronic silicon, a wafer, or
+a Siemens step here is starting the next line. A successor who treats the 1500 °C hold
+as a bug and moves it is retuning.
+
+---
+
+## ADR-0093 — Zone refining is ten metallurgical silicon in six hundred seconds
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BG says the concrete line is chosen when the slice starts. The graph
+past metallurgical silicon is the electronic grade: four routes, then a boule and a
+wafer.
+
+Vacuum float is a T5 Vacuum Furnace. Orbital growth is the orbital stage. Neither is
+this calendar. Siemens is `1 u met-Si + 3 B HCl` at 300 °C, then deposition at 1100 °C
+reducing. Nothing shipped produces hydrochloric acid, and chlor-alkali is held row M.
+A relative band at 1100 °C tolerates up to 1430 °C, so the Arc Furnace's 1500 °C hold
+would not start the deposition. A relative band at 300 °C tolerates up to 390 °C, so
+the Chemical Reactor's 450 °C hold would not start the chlorination. Shipping Siemens
+either invents an acid or resumes M, and neither step runs on the locked holds.
+
+Zone refining's feed is metallurgical silicon, which exists. `PROCESSES.md` gives it
+60 s and **0.70 u** out per unit in. The written conditions are `T 1420 ±5 · atm inert`
+on an Induction Furnace MK III. That furnace is held row O, with the Caster. An
+absolute ±5 °C band tolerates 1410–1430 °C, so 1500 °C is outside it. Inert does not
+match the reducing hold, and atmosphere is an exact match. Putting those conditions on
+the Arc Furnace produces a recipe that never runs. ADR-0090 refuses a line that cannot
+be run.
+
+A relative band at 1420 °C is optimal from 1207 °C to 1633 °C. The 1500 °C hold sits
+inside it. The Kiln stops at 900 °C and cannot reach the tolerance floor at 994 °C.
+The Arc Furnace envelope is 1200–3500 °C, so 1420 °C is inside the machine. The 0.30
+that does not come out is a yield, not a named byproduct. The boule names inert
+atmosphere and static agitation at 1450 °C, and its feed is this product.
+
+**Decision.**
+
+1. **The line is zone refining's ratio, on the Arc Furnace.** `silicon/zone_refining`.
+   No new block, no dial, no blueprint. Family lock is the host. The Induction Furnace
+   stays held. The ±5 °C band and the inert atmosphere are not written on this recipe:
+   either one would refuse the hold. The temperature centre stays 1420 °C, as the
+   ordinary relative band. Atmosphere is unnamed. An unwritten condition is not a
+   condition, and the held reducing atmosphere stays on the machine. `ProcessRecipe`
+   does not grow a half-width field for a band this slice is not applying. Own work
+   stays MIT (ADR-0089). This record copies nothing.
+2. **Integer batch.** **10 metallurgical silicon → 7 electronic silicon in 600 s** at
+   F1. That is 0.70 per unit and 60 s per unit, the smallest integers that keep both.
+   The product is `grindless:electronic_silicon`. It is not a supplied material, so
+   plates, rods, gears and wire do not appear. It is not `forge:ingots/silicon`. There
+   is no slag and no gas.
+3. **What waits.** Siemens, trichlorosilane, hydrochloric acid, the boule, the wafer,
+   vacuum float and orbital growth. The next slice is BH — megastructures, not started.
+
+**Alternatives rejected.**
+
+- Siemens, or a deposition-only step. The acid is not a fluid, and 1100 °C does not
+  admit 1500 °C.
+- The Induction Furnace or the Caster. That resumes held row O.
+- Writing ±5 or `INERT` on the Arc Furnace recipe. The hold would report out of band.
+- Retuning the furnace from 1500 °C to 1420 °C. R1 is written at 1500 °C.
+- Moving the centre to 1500 °C. The route's temperature is 1420 °C, and the relative
+  band already makes the hold optimal.
+- 1 → 1, which erases the 0.30 loss. 10 → 7 in 60 s, which is ten times the throughput.
+  100 → 70 in 6000 s, which waits ten times longer for the same ratio.
+- A fifth route with a different yield or a different time.
+- `forge:ingots/silicon`, a boule, or a wafer.
+- A byproduct item for the missing 0.30. The route names none.
+- Megastructures, planets, or the quest book.
+
+**Consequences.** A successor who adds ±5 or inert to `silicon/zone_refining` stops the
+line. A successor who builds the Induction Furnace here is resuming O. A successor who
+changes the 10:7 batch or the 600 s is rewriting the yield or the time. A successor who
+ships Siemens, a wafer, or a boule here is starting another line. A successor who treats
+the relative band as a mistake and restores ±5 on this furnace is making the recipe
+unrunnable. BH is next and is not started.
+
+---
+
+## ADR-0094 — The first megastructure is the Ground Array
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BH says the concrete structure is chosen when the slice starts. The
+ship column then names Kardashev Type I, II and III. Those are the milestones after the
+first structure. They are not three more blocks in the same change.
+
+The structures already named cannot be this one.
+
+- The Dyson Collector is orbital-ring solar at F8–F9 and takes a space programme
+  (held AO–AR). It is the source that outruns a singularity, which is past the first
+  structure.
+- The Stellar Forge is necessarily orbital (held AS).
+- The Planetary Engine moves a colony. Planets are the following slice. Colonies are
+  held AU.
+- The Space Elevator is held AX.
+- The Singularity Reactor is held AN. Fission, fusion and the Arc Reactor are held
+  AF, AK and AE. The README still calls the Arc Reactor the first plant of that tier,
+  and that plant is not this calendar.
+- Solar generation is held Q. F2 is that row. F3 through F7 are the held plants above.
+  Shipping a generator claims one of those tiers.
+- A formed multiblock with hatches is the Slice F kernel (held AD), and that kernel is
+  for the Arc Reactor. A general shape API here is that row.
+- Endgame generation at `Long.MAX_VALUE` FU/t cannot be operated: a multi-tick buffer
+  and the sum of two such sources do not fit in a `long` (ADR-0088). This slice does
+  not widen the type.
+
+What the factory can already make, and what a structure can already do, is storage.
+The capacitor bank holds ten seconds of an MK1 pylon, 200 ticks of 512 FU/t, and only
+while a pylon covers it (ADR-0064). It is one block. MK3 is the largest pylon the
+factory has, 32,768 FU/t. Ten seconds of that is a buffer the bank cannot be. The
+number is the same rule, applied to the ceiling that already ships. It fits in a
+`long`.
+
+Refractory brick is the lining (ADR-0091). Steel is the frame the arc just learned to
+pour (ADR-0090). Electronic silicon is for circuits, and that line is held AI.
+Metallurgical silicon is for solar cells, and solar generation is held Q. Neither
+grade is a feed here.
+
+Hand placement at this point in the design is a 3×3 to a 5×5 (MACHINES.md). A 3×3 is
+the smallest footprint that is a structure rather than another machine. Minecraft
+notifies only the six orthogonal neighbours, so a corner casing has to tell the
+controller itself. That is this ring, not a hatched kernel.
+
+**Decision.**
+
+1. **The structure is the Ground Array.** One controller, `grindless:ground_array`,
+   and eight `grindless:array_casing` blocks in the horizontal Moore neighbourhood on
+   the same Y. The controller is the centre. Seven casings are not a structure. The
+   check is this footprint only. There are no hatches, no item or fluid slots, no
+   parametric size, no process family and no new research tier. The casing's status
+   property lists idle, running and starved, because a property with one value is
+   illegal and the dedicated server will not boot. The casing never leaves idle.
+   Slice F stays held.
+   Own work stays MIT (ADR-0089). This record copies nothing.
+2. **What it does.** While the ring is complete and a pylon covers the controller, the
+   array adds **6,553,600 FU** to that network. That is 200 ticks of MK3 throughput,
+   the same ten seconds the capacitor uses for MK1. It does not generate. It does not
+   project a supply cube. Uncovered, or with the ring broken, it adds nothing. A
+   casing may sit in more than one ring: layout is the point, and the cost is still
+   the blocks. The extra is saved beside the capacitor banks, not as one of them.
+3. **How it is built.** Both blocks are Assembler recipes under the Industrial
+   blueprint that already exists. T2+ is manufactured (ADR-0017). The casing is
+   **4 refractory bricks + 1 steel ingot → 1 casing** in 20 s at F1. The controller is
+   **1 machine casing + 4 steel plates + 4 refractory bricks → 1 ground array** in
+   20 s at F1. Four bricks line one part. They are not the eight of the ring, which
+   would hide the structure inside one item. No crafting-table recipe.
+4. **What waits.** Kardashev Type I, II and III. The Dyson Collector, the Stellar
+   Forge, the Planetary Engine, the Space Elevator, and every held generator. The
+   next slice is **BI — Original planets**, not started.
+
+**Alternatives rejected.**
+
+- Type I, II and III as three further structures in this slice.
+- The Dyson Collector, or any F2–F9 generator. Those tiers belong to held rows, and
+  F9 is not the `long` ceiling (ADR-0088).
+- A single block with the capacity baked in. That is a larger capacitor, not a
+  structure the player builds.
+- The Slice F kernel, hatches, or a variable rectangle. AD is held, and the Arc
+  Reactor is the machine that kernel is for.
+- Filling the shaft in for the player, the way a pylon does. A megastructure is the
+  blocks the player places.
+- Electronic silicon or metallurgical silicon in the recipe. Those grades have named
+  uses this slice does not start.
+- A new blueprint or a T7 gate. Industrial already gates the Assembler.
+- Planets, interstellar travel, the black hole, or the quest book.
+
+**Consequences.** A successor who adds a generator, a supply cube, or a second
+footprint here is starting another structure. A successor who changes 6,553,600 FU
+without keeping ten seconds of MK3 is inventing a buffer. A successor who moves the
+recipe to the crafting table is ignoring ADR-0017. A successor who spends electronic
+silicon, or who builds the Dyson Collector, Type I, or the multiblock kernel here, is
+outside this record. BI is next and is not started.
+
+---
+
+## ADR-0095 — Luna is the first original planet
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BI says the concrete world is chosen when the slice starts. The ship
+column also names interstellar travel. The owner kept that travel, the black-hole finale
+and the quest book out of this change. A successor who builds all seven fallback worlds,
+a Horizon Gate, a rocket, or a void full of ore is guessing.
+
+The worlds already named cannot all be this one.
+
+- Luna's signature resource is helium-3, already written in `PROCESSES.md` as the D–³He
+  fuel. The other signatures are iron the overworld already has, fusion fuels with the
+  same missing reactor, or process envelopes that are not an extractable.
+- The fallback set as a whole is the planet registry (held AT) plus the travel that
+  this change does not ship.
+- A Horizon Gate is held AW, and it is a dialed pair after a far ring is delivered
+  (ADR-0068). Rockets are held AO. There is no way to deliver a far ring.
+- A dimension whose job is more of the pack's ores is the mining dimension ADR-0068
+  and the README both reject.
+- Vacuum damage without an exosuit (held X and Y) makes the world unusable.
+- Helium-3 as a `forge:raw_materials` entry would enter the overworld vein scan
+  (ADR-0004). An ore block in the ground would be mined with a pickaxe, which is the
+  tunnel this mod exists to leave behind.
+- The extractor outputs items. A fluid would need a tank that extractor does not have
+  (ADR-0015). Fusion, the named sink, is held AK.
+
+What the factory can already do is extract a chunk vein and spend stored FU. A capacitor
+bank holds ten seconds of an MK1 pylon, 102,400 FU (ADR-0064). That number fits in a
+`long`. The Ground Array's larger buffer is storage for the grid, not a toll this planet
+has to charge.
+
+**Decision.**
+
+1. **The world is Luna**, dimension `grindless:luna`. One world. The surface is
+   `grindless:lunar_regolith` over one layer of bedrock, flat, with features, lakes and
+   structure overrides off. The biome spawns nothing and adds no ores. The sky uses the
+   vanilla end effect and a fixed night, with enough ambient light to walk. There is no
+   vacuum damage and no life-support check. The other fallback worlds wait.
+   Own work stays MIT (ADR-0089). This record copies nothing.
+2. **The extractable is helium-3.** Every Luna chunk's vein is that material. Richness
+   still varies. The overworld pool is unchanged, and `VeinGenerator.VERSION` is not
+   bumped. The item is the reagent `grindless:helium_3`, tagged `grindless:helium_3`.
+   It is not a supply-catalogue material, not `forge:raw_materials/helium_3`, and not an
+   ore block. A Crude or Terrestrial Extractor, and the Prospector's Scanner, use this
+   pool when they stand on Luna and the pack pool everywhere else. The sink remains the
+   D–³He cycle already named in `PROCESSES.md`. This slice does not build the reactor,
+   and it does not add a recipe that consumes the item.
+3. **The way there is the Lunar Link**, `grindless:lunar_link`. One block. Right-click
+   under a pylon and it draws **102,400 FU** from that network, the capacitor's buffer,
+   at whatever throughput the covering pylon can carry. When the charge is full and the
+   player is within four blocks, they arrive on the regolith beside a return pad. The
+   return sends them to the link they left from and does not draw again. A link that is
+   already on Luna only returns. There is no address, no second destination, and no
+   cargo tariff. Nether and End are not planets; a link placed there still goes to Luna
+   and comes back to where it stood.
+4. **How it is built.** Assembler, Industrial, 20 s at F1: **2 array casings + 1 machine
+   casing → 1 lunar link**. T2+ is manufactured (ADR-0017). No crafting-table recipe.
+   Helium-3 is not an ingredient: the link is how the gas is reached.
+5. **What waits.** The other planets. Interstellar travel, which is the next slice and
+   is not started. The black-hole interior. The quest book. Kardashev Type I, II and
+   III. Horizon Gates, rockets, colonies, telepresence and life support.
+
+**Alternatives rejected.**
+
+- All seven fallback worlds, or Tharsis because iron is already extracted.
+- A mining dimension, a stone world, or ore features in the flat generator.
+- Registering helium-3 as a pack ore so the overworld can roll it.
+- A fluid, a cell crafted on the ground, or a burn recipe in the Thermal Generator.
+- The Horizon Gate, a rocket, or a creative item that teleports with no FU cost.
+- Charging the Ground Array's 6,553,600 FU. That toll waits on MK3 throughput for a
+  trip the capacitor can already pay.
+- Vacuum damage, or an exosuit requirement. Those rows are held.
+- Interstellar travel, a second star, or the black hole.
+- Copying Ad Astra's planets, textures or code. The end sky is vanilla.
+
+**Consequences.** A successor who adds ore to Luna, or who puts helium-3 on the
+overworld vein list, is building a mining dimension. A successor who removes the FU
+cost is shipping a creative teleport. A successor who makes the return draw power is
+stranding a player on a world with no pylon. A successor who starts Tharsis, the
+Horizon Gate, fusion, or interstellar travel here is outside this record. BJ is next
+and is not started.
+
+---
+
+## ADR-0096 — The first interstellar hop is the Drift
+
+*2026-10-04 · Superseded in part by [ADR-0097](#adr-0097--local-trips-are-rocket-flights)*
+
+> **Superseded in part.** The Drift and the Starward Link stay. That link is a placeholder.
+> Interstellar travel is a station the player rides. A rocket is the local-system flight,
+> and it is no longer rejected for that flight. See ADR-0097. The sentence below that
+> calls BK next used that id for arrival. BK is now the teleportation orbs and is not
+> next. BM, the station, is next.
+
+**Context.** Slice BJ says the concrete route is chosen when the slice starts. The player
+can already reach Luna, which is still a moon of the home star. The owner kept the
+black-hole interior, the quest book, the Kardashev scales and any further planet out of
+this change. A successor who builds a rocket, a Horizon Gate, Tharsis, or the hole itself
+is guessing.
+
+The ways already named cannot be this one.
+
+- A rocket is held AO. A Horizon Gate is held AW, and it is a dialed pair after a far
+  ring is delivered (ADR-0068). There is still no way to deliver that ring.
+- The other fallback worlds are further planets. The row forbids them. A world with its
+  own extractable is the planet slice, which already shipped Luna.
+- A dimension whose veins are the pack's ores is the mining dimension ADR-0068 rejects.
+- Arriving at the black hole is the victory (ADR-0088). The interior is a finite finale
+  written when that arrival is the slice. Shipping the hole here finishes the route
+  before the arrival slice exists.
+- Vacuum damage without an exosuit (held X and Y) makes the stop unusable.
+- The lunar toll is one capacitor, 102,400 FU. ADR-0095 refused the Ground Array's
+  6,553,600 FU for that trip, because a capacitor can already pay it. Leaving the star
+  is the trip that larger buffer was left for. The number fits in a `long`.
+
+**Decision.**
+
+1. **The hop is the Drift**, dimension `grindless:drift`. One stop, on the way from the
+   home star toward the galactic centre, and short of the hole. The floor is one layer of
+   `grindless:drift_deck` over one layer of bedrock. No features, no lakes, no structures,
+   no spawns. The sky is the vanilla end effect, with enough ambient light to walk. There
+   is no vacuum damage. The vein list is empty, so an extractor and the scanner find
+   nothing. It is not a planet and not a mining dimension.
+   Own work stays MIT (ADR-0089). This record copies nothing.
+2. **The way there is the Starward Link**, `grindless:starward_link`. One block. Right-click
+   under a pylon and it draws **6,553,600 FU** from that network, the Ground Array's
+   buffer, at whatever throughput the covering pylon can carry. When the charge is full
+   and the player is within four blocks, they arrive on the deck beside a return pad. The
+   return sends them to the link they left from and does not draw again. A link that is
+   already on the Drift only returns. There is no address, no second star, and no cargo
+   tariff. Luna, the Nether and the End are not the Drift; a link placed there still goes
+   to the Drift and comes back to where it stood. The lunar return is a different record.
+3. **How it is built.** Assembler, Industrial, 20 s at F1: **1 lunar link + 4 array
+   casings → 1 starward link**. T2+ is manufactured (ADR-0017). The lunar link is the
+   step already built. Four casings are half a ring. No crafting-table recipe. Helium-3
+   is not an ingredient.
+4. **What waits.** Arrival at the black hole, which is the next slice and is not started.
+   Its interior is written then. Further planets. Kardashev Type I, II and III. The quest
+   book. Horizon Gates, rockets, colonies, telepresence and life support.
+
+**Alternatives rejected.**
+
+- The black hole, or an empty "you have left the star" with nowhere to stand.
+- A chain of named stars. One hop is the route. A catalogue is several slices.
+- Tharsis, Vulcan, Kryos, Erebus, Thalassa, Helios, or any world with a signature ore.
+- Filling the Drift with the overworld vein pool.
+- A rocket, a launch pad, or a Horizon Gate.
+- Charging another capacitor. That toll is the moon. This toll is the array.
+- Vacuum damage, or an exosuit requirement. Those rows are held.
+- Copying Ad Astra's rockets, stations, textures or code. The end sky is vanilla.
+
+**Consequences.** A successor who adds a vein to the Drift is building a planet or a
+mining dimension. A successor who removes the FU cost is shipping a creative teleport. A
+successor who makes the return draw power is stranding a player on a deck with no pylon.
+A successor who opens the black hole, a second star, or another planet here is outside
+this record. BK is next and is not started.
+
+---
+
+## ADR-0097 — Local trips are rocket flights
+
+*2026-10-04 · Superseded in part by [ADR-0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star)*
+
+> **Superseded in part.** The survey rocket is unchanged. The station is no longer "next
+> and not started": it is the ride off the star. The Starward Link stays registered and
+> no longer moves a player. The Lunar Link still does. See ADR-0098.
+
+**Context.** ADR-0088 chose the victory: arriving at the black hole at the centre of the
+Milky Way is the win, and the interior is a finite finale, not an empty marker and not an
+endless second game. ADR-0096 then shipped the Drift as one deck short of that hole, and
+a Starward Link that spends the Ground Array's buffer to stand there. The Lunar Link
+does the same kind of thing for Luna, at the capacitor's toll. Both are right-click
+teleports. The owner has changed space travel. A third link, from the Drift into the
+hole, is the arrival this record refuses.
+
+The ways already named cannot be the new model.
+
+- Held row AO is a launch pad and a rocket inside the six-tier orbital layer, together
+  with payload mass. Resuming AO also resumes the held schedule. This flight is the
+  modpack expansion, not that row.
+- A Horizon Gate is held AW. It is a dialed pair after a far ring is delivered.
+- Copying a rocket from another mod is a license question, not a shortcut. Checked
+  2026-10-04:
+  - **Galacticraft** as shipped by micdoodle8 (`micdoodle8/Galacticraft`, `LICENSE.txt`)
+    is a custom non-commercial grant. It is not MIT, and it does not allow this
+    repository to offer those files under MIT. Not copied.
+  - **TeamGalacticraft/Galacticraft** is MIT, copyright 2019–2025 Team Galacticraft.
+    A copy would be allowed if that notice were kept. That tree is a later Minecraft
+    generation on Fabric. Dropping it in here would not build. Not copied.
+  - **Advanced Rocketry** (`Advanced-Rocketry/AdvancedRocketry`, branch `1.12`) is MIT,
+    and the CurseForge page for that project says MIT. **Advanced Rocketry 3** is
+    listed All Rights Reserved. The 1.12 sources are a different game version. AR3
+    cannot be vendored. Neither is copied. The station this record names is the
+    slice that would resemble a warp ship, and that slice is not started.
+  - **Ad Astra** stays as ADR-0088 and ADR-0089: code is MIT only with the notice
+    kept, textures are All Rights Reserved. Not copied.
+- No assets are copied from any of them. Own work stays MIT (ADR-0089).
+
+**Decision.**
+
+1. **Local-system trips are real flights.** The player seats a survey rocket on a
+   launch pad. The rocket climbs one block a tick until it reaches the dimension's
+   build ceiling, three blocks of clearance under the exclusive limit so the rider's
+   head stays inside the world. A landing map then lists the bodies of this star.
+   Choosing one lands the rocket. This slice's bodies are the home world
+   (`minecraft:overworld`) and Luna (`grindless:luna`). The Nether, the End, the Drift
+   and any black-hole id are not on the map, and a rocket there does not launch.
+   The shape of the flight — up to the ceiling, then a map — is the Galacticraft
+   idea. The code is original.
+2. **The toll is the lunar placeholder's, and only on the way out.** Leaving the home
+   world draws **102,400 FU** from the pylon that covers the pad, the capacitor's
+   buffer (ADR-0095). Leaving Luna draws nothing, so the flight home does not strand
+   a player on a world with no pylon. The return remembers the pad they left. Choosing
+   the world they are already in sets them back on that pad. The charge is spent once
+   the climb starts.
+3. **How it is built.** Assembler, Industrial, 20 s at F1. The launch pad is
+   **1 machine casing + 4 steel plates**. The survey rocket is **1 machine casing +
+   1 motor + 2 steel plates**. T2+ is manufactured (ADR-0017). No crafting-table
+   recipe. The motor is the engine. Helium-3 is not an ingredient.
+4. **Interstellar trips are a station.** The player rides a station that has a
+   superluminal engine. That station is the next slice and is not started. Arrival at
+   the galactic centre is that ride, not a link. The interior stays a finite finale
+   and is written when that arrival is the slice (ADR-0088). An empty arrival and an
+   endless interior stay rejected. The quest book stays last.
+5. **The Lunar Link and the Starward Link stay.** Both remain registered and keep
+   their behaviour. They are placeholders, marked in the block comments and on the
+   item tooltip, to be replaced by the rocket and the station. This pass does not
+   delete them and does not add a third link.
+6. **What waits.** The station. Arrival at the black hole, by that station. The
+   finite interior of the hole. Kardashev Type I, II and III. Further planets. The
+   quest book. Held row AO, including payload mass and the Mass Driver.
+
+**Alternatives rejected.**
+
+- Another link that teleports the player into the black hole.
+- Deleting the Lunar Link or the Starward Link in the same change that adds the rocket.
+- Putting the Drift, or a black hole, on the landing map.
+- An empty "you have reached the ceiling" with no choice of body.
+- An endless flight with no ceiling and no landing.
+- Charging the Ground Array's buffer for a moon trip. That toll stays on the
+  placeholder that leaves the star.
+- Charging the return from Luna. A world with no pylon would strand the rider.
+- Resuming held row AO, or starting the station, in this change.
+- Copying Galacticraft, Advanced Rocketry, or Ad Astra code or assets. Where the
+  license would have allowed a copy, this slice still does not take one, because
+  those trees do not build here or their assets are reserved. The flight is original.
+
+**Consequences.** A successor who adds a Starward-style link to the black hole is
+ignoring this record. A successor who deletes either placeholder link without the
+slice that replaces it strands a world that still documents that block. A successor
+who puts the Drift on the landing map is flying a rocket across stars. A successor
+who starts the station, the hole's interior, the quest book, or the teleportation
+orbs here is early. Those orbs are row BK: named, ordered before this flight, and
+not started. BM, the station, is next and is not started. The quest book stays last.
+
+---
+
+## ADR-0098 — The supraluminal station is the ride off the star
+
+*2026-10-04 · Superseded in part by [ADR-0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber)*
+
+> **Superseded in part.** The ride from the Drift now arrives at the galactic centre, and a
+> station there departs for the berth saved on the way out. The climb, the toll, the
+> recipes and the Starward Link are unchanged. See ADR-0099.
+
+**Context.** Slice BM says the player rides a station to another star, and that the
+concrete ride is chosen when the slice starts. ADR-0097 already chose the shape: a
+station with a superluminal engine, ridden, and the arrival is that ride rather than
+a link. The Starward Link was left in place until this slice replaced it. The owner
+kept the black-hole interior, the quest book, the Kardashev scales, further planets,
+the teleportation orbs and any third teleport link out of this change.
+
+The ways already named cannot be this one.
+
+- The Drift is the only off-star place that exists (ADR-0096). It is one deck between
+  the home star and the galactic centre. A new named star would be a further planet,
+  which this row forbids. "Another star" in the row is that hop.
+- Arriving at the black hole is the victory (ADR-0088). The interior is a finite
+  finale written when that arrival is the slice. Shipping the hole here finishes the
+  route before the arrival slice exists. The id `grindless:sagittarius` is already
+  the name the rocket's checks use for a hole, and a station must not go there.
+- A right-click that still fires the Starward Link is the arrival this record
+  refuses. Keeping both would mean the link was not replaced.
+- Deleting the link block drops it out of worlds that already placed it, and out of
+  the states the server smoke places. The rocket slice refused that deletion.
+- The launch pad's recipe is one machine casing and four steel plates. The survey
+  rocket's is one casing, one motor and two steel plates. A station recipe with
+  either of those input lists is the same craft, and the Assembler cannot tell them
+  apart.
+- Vacuum damage without an exosuit (held X and Y) makes the deck unusable.
+- Copying a warp ship is a license question, not a shortcut. Galacticraft, Advanced
+  Rocketry and Ad Astra stay as ADR-0097: not copied. Own work stays MIT (ADR-0089).
+
+**Decision.**
+
+1. **The player rides a station.** `grindless:supraluminal_station` is a seat placed
+   on `grindless:station_berth`. It climbs one block a tick until the dimension's
+   build ceiling, three blocks of clearance under the exclusive limit, so the rider's
+   head stays inside the world. Reaching the ceiling is the arrival. There is no
+   menu and no link click. The shape of the climb is the rocket's idea of a visible
+   flight. The code is original, and it does not open a landing map.
+2. **Where it arrives.** Leaving any dimension other than the Drift arrives on the
+   Drift, beside a berth, on the column the return link used
+   (`StarwardLinkLogic.ARRIVAL_*` and `STAND_*`). Leaving the Drift arrives on the
+   berth they left, or the home world's spawn when that point was never written.
+   `grindless:sagittarius` does not depart. The Nether, the End and Luna are not new
+   worlds: a station there still goes to the Drift, which is what the link used to
+   do. The survey rocket's map does not grow, and a rocket still does not launch
+   from the Drift.
+3. **The toll is the array's buffer, and only on the way out.** Leaving a world that
+   is not the Drift draws **6,553,600 FU** from the pylon that covers the berth, the
+   same number the link drew (ADR-0096). Leaving the Drift draws nothing, so the
+   ride home does not strand a player on a deck with no pylon. The charge is spent
+   once the climb starts. A refused dimension has no toll.
+4. **How it is built.** Assembler, Industrial, 20 s at F1. The berth is **1 starward
+   link + 4 steel plates**. Consuming the link is how the factory replaces the hop.
+   The station is **1 machine casing + 1 motor + 2 array casings**. The motor climbs.
+   Two casings are the hull's share of the ring that sized the toll. T2+ is
+   manufactured (ADR-0017). No crafting-table recipe. Helium-3 is not an ingredient.
+   Neither input list is the launch pad's or the survey rocket's.
+5. **The Starward Link stays registered and stops being the trip.** Right-click
+   tells the player to ride the station. It does not depart and it does not return.
+   A saved charge is dropped, so a link that was mid-draw does not finish the old
+   hop. When the station lands, a column that is air or a starward link becomes a
+   berth. Any other block is left alone. The Lunar Link is unchanged. This is not a
+   third teleport link.
+6. **What waits.** Arrival at the galactic centre, by riding this station, is the
+   next slice and is not started. Its interior is written then. An empty arrival
+   and an endless interior stay rejected (ADR-0088). Kardashev Type I, II and III.
+   Further planets. The quest book. The teleportation orbs.
+
+**Alternatives rejected.**
+
+- A third link, or a Starward Link that still teleports beside the station.
+- Deleting the Starward Link block.
+- A map of stars, a new planet, or the black hole.
+- An empty ceiling with nowhere to stand.
+- Charging the ride home from the Drift.
+- Charging a capacitor for this hop. That toll is the moon.
+- Sharing an Assembler input list with the launch pad or the survey rocket.
+- Copying Galacticraft, Advanced Rocketry, Ad Astra or Draconic Evolution code or
+  assets. Draconic Evolution is All Rights Reserved and its assets are CC BY-NC-SA
+  4.0. Ad Astra textures are All Rights Reserved. None of them enter this repository.
+
+**Consequences.** A successor who makes the link move a player again is reopening
+the hop this record closed. A successor who deletes the link block strands a world
+that still has the id. A successor who sends the station to `grindless:sagittarius`,
+or who writes the hole's interior here, is starting the next slice. A successor who
+adds a planet to the destination is flying further worlds. BN is next and is not
+started. The quest book stays last. BK stays named and not started.
+
+---
+
+## ADR-0099 — The galactic centre is a sealed chamber
+
+*2026-10-04 · Superseded in part by [ADR-0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)*
+
+> **Superseded in part.** The chamber is unchanged. The sentence that leaves the quest book
+> unstarted is withdrawn. The book is in. See ADR-0100.
+
+**Context.** Slice BN says the player reaches the black hole by riding the station, and
+that the interior is written when the slice starts. ADR-0088 already chose the victory:
+arriving is the win. The interior is a finite finale. An empty arrival and an endless
+second game are both rejected. The way there is the station, not a link.
+
+ADR-0098 left the station one deck short of that hole. Leaving the Drift rides home, and
+`grindless:sagittarius` does not depart. That was so this slice could choose the room.
+The owner kept the quest book, the teleportation orbs, the Kardashev scales and any
+further planet out of this change.
+
+The ways already named cannot be this one.
+
+- A chat line and no room is the empty arrival ADR-0088 rejects.
+- Another flat deck, a vein, or a machine is an endless second game, or a planet.
+- A link into the hole is the arrival ADR-0097 and ADR-0098 refuse.
+- Sending the home-world departure straight to the hole skips the Drift, which is the
+  hop already built.
+- Charging the ride off the Drift, or the ride out of the chamber, strands a player
+  where no pylon stands. Both of those tolls stay zero.
+- A breakable shell, or an item that places the mass, lets the room be mined open or
+  carried home. The finale would stop being one room.
+- Copying a black-hole dimension from another mod is a license question, not a
+  shortcut. No such code or texture enters. Own work stays MIT (ADR-0089).
+
+**Decision.**
+
+1. **The ride from the Drift arrives at the centre.** The dimension is
+   `grindless:sagittarius`, the id the rocket's checks already use for a hole. Leaving
+   the Drift draws nothing. Leaving any other world still arrives on the Drift and
+   still draws 6,553,600 FU. This supersedes the Drift-returns-home half of ADR-0098,
+   and the sentence there that says the hole does not depart. The Starward Link stays
+   registered and still does not move a player. There is no new link and no new recipe.
+2. **The interior is one sealed chamber.** The dimension is a solid mass of
+   `grindless:horizon_shell`, sixteen blocks tall (`min_y` 0, `height` 16). No
+   features, no lakes, no structures, no spawns, no vein, no skylight, not ultrawarm.
+   On arrival the station carves a fixed room and nothing else:
+   - air where `x` and `z` are in [-3, 3] and `y` is in [2, 6);
+   - a station berth at (0, 2, 0);
+   - an arrival mark at (0, 2, -3), light level 15, so the room can be seen;
+   - a 3×3 shaft of air above the berth, `x` and `z` in [-1, 1], `y` from 6 through
+     15, so the ride out climbs through air.
+   The floor under that air stays shell. Every other block stays shell. That is 286
+   carved cells inside a mass that does not open onto a walkable world. The shell and
+   the mark are unbreakable and have no item. Each arrival applies the carve again, so
+   the room cannot be kept as a base. An extractor here finds nothing.
+3. **Arriving is the victory.** The landing message says so, and the mark is the
+   object in the room. Riding the station out of the chamber returns to the berth
+   saved when the station left for the Drift, or the home world's spawn when that
+   point was never written. That ride draws nothing. The saved point is kept through
+   the Drift and forgotten only on the way out, so the chamber is the turnaround and
+   not a loop with the Drift. A rocket still does not launch here, and the landing
+   map does not list the hole.
+4. **What waits.** The original quest book and the in-game guide, which are the next
+   slice and are not started. Teleportation orbs stay named and not started.
+   Kardashev Type I, II and III. Further planets.
+
+**Alternatives rejected.**
+
+- An empty "you have arrived" with nowhere to stand.
+- An endless deck, a second planet, or a vein inside the hole.
+- A link, or a Starward Link that moves a player again.
+- Skipping the Drift.
+- Charging either free ride.
+- A breakable shell, or a block item for the mass or the mark.
+- Deleting the return, which would strand the player in the chamber.
+- Copying third-party code or assets.
+
+**Consequences.** A successor who sends the Drift ride home again is skipping the
+victory this record added. A successor who adds a vein, a recipe, or a machine in the
+chamber is starting a second game. A successor who adds a link is reopening the
+rejected arrival. A successor who makes the shell breakable, or who gives it an item,
+is opening the room into a world. BC is next and is not started. BK stays named and
+not started. The quest book stays last.
+
+---
+
+## ADR-0100 — The quest book tracks the route and does not gate it
+
+*2026-10-04 · Accepted*
+
+**Context.** Slice BC is the original quest book and the in-game guide. It is last, after
+arrival at the galactic centre. ADR-0088 chose a BetterQuesting-style book — lines, tasks,
+dependencies, rewards — and kept that mod's code out, because the GitHub `LICENSE` is MIT
+and the CurseForge listing says All Rights Reserved. ADR-0089 does not resolve that
+contradiction. ADR-0090 moved the book to the end of the calendar. The route it has to
+cover now exists: T0 through the sealed chamber (ADR-0099).
+
+Held row BA also names a guide, beside advancements, a config screen and `es_es`. A
+successor who treats BC as BA, who vendors BetterQuesting or Patchouli, or who makes the
+book a second research gate, builds the wrong slice. A successor who stops the book at
+the contact process ignores the route that was built after it.
+
+**Decision.**
+
+1. **The book is native.** No BetterQuesting classes, schema or assets, and no Patchouli.
+   Two handhelds, both ungated crafting-table recipes of paper and sticks, so they exist
+   at T0. `grindless:quest_book` is how you follow. `grindless:field_guide` is how you
+   read. The guide is pages of this route. It is not advancements, not a config screen
+   and not a translation. Those stay in held BA.
+2. **The book does not gate the factory.** Research still unlocks blueprints (ADR-0057).
+   Fabrication still gates everything above T1. A task watches evidence the game already
+   has: the named item is in the inventory, the named blueprint is unlocked on the world,
+   or the player is standing in the named dimension. Claiming does not consume that
+   evidence. A placed machine counts again when the Multitool has picked it back up.
+   Claims are stored per player on the overworld. Research is the factory's; the book is
+   the player's. One claim does not finish the book for anyone else.
+3. **A claim needs its dependencies and its evidence, once.** Dependencies are other
+   tasks. A second claim is refused. The reward is an existing item, at most one stack,
+   and it is not the evidence the next task asks for. There is no new material and no
+   quest token.
+4. **The lines are the route already built**, in that order: bootstrap, Voltaic, the
+   contact process, the Arc Furnace metals, the Ground Array, then the voyage through
+   Luna, the Drift and the sealed chamber. The guide has a page for each, and the chamber
+   page is last. Teleportation orbs, the Kardashev scales, the unbuilt fallback worlds
+   and every held row are not tasks. The Lunar Link and the Starward Link are mentioned
+   as what they already are. They are not quests.
+5. **Nothing follows this slice.** BK stays named and not started. L–BB stay held. This
+   record does not add a gameplay slice.
+
+**Alternatives rejected.**
+
+- Vendoring BetterQuesting, or taking a dependency on Patchouli.
+- Starting BA: advancements, a config screen, `es_es`.
+- A book that stops at the contact process.
+- Quest completion as a lock on a machine.
+- World-scoped claims, so the first player finishes the book for the server.
+- A unique reward item, or a reward that satisfies the next task's evidence.
+- A quest for the teleportation orbs, or for a world this pack does not have.
+- Inventing a slice after BC.
+
+**Consequences.** A successor who copies BetterQuesting is ignoring ADR-0088 and this
+record. A successor who locks the Arc Furnace behind a quest is adding a gate the
+research terminal already is. A successor who writes only the contact chapter is
+skipping the route. A successor who starts BK, resumes L–BB, or opens a new row because
+BC is done is inventing work this calendar does not name. Own work stays MIT (ADR-0089).
+
+---
+
+## ADR-0101 — Replication cost is a graph walk and deconstruction yields one Matter
 
 *2026-10-04 · Accepted*
 
@@ -3405,8 +4454,9 @@ reopens the loop this record closed. A successor that replicates items
 here is starting slice AH. A successor that treats a tag output as every
 member item is doing the Replicator's work early.
 
+---
 
-## ADR-0089 — The Voltaic Harness has one slot and no generator
+## ADR-0102 — The Voltaic Harness has one slot and no generator
 
 *2026-10-04 · Accepted*
 
@@ -3444,8 +4494,9 @@ pylon area is starting slice Y. A successor that generates FU while the
 suit is worn is starting the Arc miniature. A successor that puts
 durability on the drill and calls it this cell is reopening ADR-0084.
 
+---
 
-## ADR-0090 — The exosuit taps a pylon and does not generate
+## ADR-0103 — The exosuit taps a pylon and does not generate
 
 *2026-10-04 · Accepted*
 
@@ -3458,7 +4509,7 @@ in the README; this slice only has to make the tap and mobility real.
 
 1. **Four pieces**, Assembler-manufactured (casing, two motors, four
    plates, Industrial). Protection matches the harness. Each piece has
-   **two** slots. The harness stays at one (ADR-0089).
+   **two** slots. The harness stays at one (ADR-0102).
 2. **Network Tap** and **Exoskeleton Legs** are the same Assembler craft.
    They install only into an exosuit. A Flux Cell still installs into
    either chassis. The tap does not fit the harness.
@@ -3472,11 +4523,9 @@ in the README; this slice only has to make the tap and mobility real.
 **Alternatives rejected.** A worn generator; letting the tap fit the
 one-slot harness; flight in the same slice as the first mobility module;
 charging the suit from a capacitor click (that remains the cell's own
-use, ADR-0089).
+use, ADR-0102).
 
 **Consequences.** A successor that makes the worn suit produce FU is
 starting the Arc miniature. A successor that puts a third slot here is
 growing the grid again before a third module exists.
-
-
 

@@ -1,7 +1,7 @@
 package io.github.ezequiel24123z.grindless.item;
 
 /**
- * The T2 suit grid (ADR-0090). Two slots, a pylon tap, and speed that spends charge.
+ * The T2 suit grid (ADR-0103). Two slots, a pylon tap, and speed that spends charge.
  *
  * <p>No Minecraft types. The suit does not generate. The harness stays at one slot.
  */

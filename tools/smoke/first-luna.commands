@@ -1,0 +1,10 @@
+forceload add 0 0
+execute in grindless:luna run say LUNA-OK
+execute in grindless:luna run forceload add 0 0
+execute in grindless:luna run execute if block 0 0 0 minecraft:bedrock run say BEDROCK-OK
+execute in grindless:luna run execute if block 0 64 0 grindless:lunar_regolith run say REGOLITH-OK
+execute in grindless:luna run execute if block 0 65 0 minecraft:air run say SURFACE-OK
+setblock 8 70 8 grindless:lunar_link
+execute if block 8 70 8 grindless:lunar_link run say LINK-OK
+summon minecraft:item 8 80 8 {Item:{id:"grindless:helium_3",Count:1b}}
+execute if entity @e[type=minecraft:item,nbt={Item:{id:"grindless:helium_3"}}] run say HELIUM-OK

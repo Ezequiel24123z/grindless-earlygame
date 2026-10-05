@@ -3,7 +3,7 @@ package io.github.ezequiel24123z.grindless.item;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/** Behaviour checks for the Voltaic Harness grid (ADR-0089). Not part of the mod. */
+/** Behaviour checks for the Voltaic Harness grid (ADR-0102). Not part of the mod. */
 public final class VerifyHarness {
 
     private static final Path RECIPES = Path.of("common/src/main/resources/data/grindless/recipes");

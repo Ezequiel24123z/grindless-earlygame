@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 /**
- * The suit's buffer. Not the drill's fuel, and not a generator (ADR-0084, ADR-0089).
+ * The suit's buffer. Not the drill's fuel, and not a generator (ADR-0084, ADR-0102).
  */
 public final class FluxCellItem extends Item {
 

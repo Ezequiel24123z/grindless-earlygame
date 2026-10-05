@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 103, rows.size());
+        eq("atlas lists every generated recipe", 115, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the intake", "assemble/atmospheric_intake",
+        eq("the first assembler row is the casing", "assemble/array_casing",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("thirty-nine assembler crafts in this set", 39,
+        eq("forty-seven assembler crafts in this set, including the supraluminal station", 47,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -139,6 +139,10 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:wires/iron").size());
         eq("unknown product is empty", 0,
                 AtlasLogic.producing(recipes, "forge:ingots/unobtainium").size());
+        eq("steel has one arc route", 1,
+                AtlasLogic.producing(recipes, "forge:ingots/steel").size());
+        yes("that route is electric arc",
+                ids(AtlasLogic.producing(recipes, "forge:ingots/steel")).contains("alloy/steel"));
 
         List<AtlasLogic.Entry> kiln = AtlasLogic.family(recipes, MachineFamily.KILN);
         eq("seven kiln routes in this set", 7, kiln.size());
@@ -176,6 +180,27 @@ public final class VerifyAtlas {
 
         List<AtlasLogic.Entry> carbon = AtlasLogic.consuming(recipes, "grindless:carbon");
         yes("R2 consumes carbon", ids(carbon).contains("r2/iron"));
+        yes("steel consumes carbon", ids(carbon).contains("alloy/steel"));
+        yes("silicon consumes carbon", ids(carbon).contains("silicon/metallurgical"));
+        eq("metallurgical silicon has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:metallurgical_silicon").size());
+        eq("electronic silicon has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:electronic_silicon").size());
+        yes("zone refining consumes metallurgical silicon",
+                ids(AtlasLogic.consuming(recipes, "grindless:metallurgical_silicon"))
+                        .contains("silicon/zone_refining"));
+        yes("silica reduces to that silicon",
+                ids(AtlasLogic.consuming(recipes, "grindless:silica")).contains("silicon/metallurgical"));
+        yes("that route vents CO",
+                ids(AtlasLogic.producing(recipes, "grindless:carbon_monoxide")).contains("silicon/metallurgical"));
+        eq("refractory brick has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:refractory_brick").size());
+        eq("the ground array has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:ground_array").size());
+        eq("the array casing has one route", 1,
+                AtlasLogic.producing(recipes, "grindless:array_casing").size());
+        yes("slag fires into that brick",
+                ids(AtlasLogic.consuming(recipes, "grindless:slag")).contains("ceramic/refractory_brick"));
         yes("the plate die is a catalyst, not an input",
                 ids(AtlasLogic.consuming(recipes, "grindless:plate_die")).contains("press/plate/iron"));
 

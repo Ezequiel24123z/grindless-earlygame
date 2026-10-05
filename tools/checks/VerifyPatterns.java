@@ -8,7 +8,7 @@ import io.github.ezequiel24123z.grindless.recipe.ReplicationCost;
 
 import java.util.List;
 
-/** Behaviour checks for replication cost and the Matter yield (ADR-0088). Not part of the mod. */
+/** Behaviour checks for replication cost and the Matter yield (ADR-0101). Not part of the mod. */
 public final class VerifyPatterns {
 
     private static int failures = 0;

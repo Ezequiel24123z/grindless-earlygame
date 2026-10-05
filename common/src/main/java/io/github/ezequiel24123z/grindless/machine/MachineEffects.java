@@ -82,6 +82,16 @@ public final class MachineEffects {
             case DECONSTRUCTOR -> mill(status, level, pos, random);
             case BANK -> pylon(1, status, level, pos, random);
             case TRANSFORMER -> dynamo(status, front, level, pos, random);
+            case ARRAY -> pylon(1, status, level, pos, random);
+            case ARRAY_CASING -> { }
+            case LINK -> { }
+            case REGOLITH -> { }
+            case SPAN -> { }
+            case DECK -> { }
+            case SHELL -> { }
+            case MARK -> { }
+            case PAD -> { }
+            case BERTH -> { }
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);

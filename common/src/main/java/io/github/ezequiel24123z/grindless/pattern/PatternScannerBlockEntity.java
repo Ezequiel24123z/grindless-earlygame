@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * One right-click stores an item id, once, and says what the graph says it costs (ADR-0088).
+ * One right-click stores an item id, once, and says what the graph says it costs (ADR-0101).
  */
 public class PatternScannerBlockEntity extends PoweredLogisticsBlockEntity {
 
