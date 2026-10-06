@@ -477,11 +477,59 @@ belt segment ticks as one unit rather than as N items.
 | **Manipulator** | The inserter. Moves items between belts and inventories. Tiers: **Crude**, **Fast**, **Stack** (moves up to 12 at once), **Filter** (whitelist/blacklist by item or tag). |
 | **Sorter** | An inline multi-output filter, for splitting a mixed ore line into per-material lanes. |
 | **Overflow Gate** | Passes items only when the downstream lane is backed up — the standard "send the excess to storage" pattern, as one block. |
-| **Belt Reader** | Emits a redstone/logic signal describing lane contents. |
+| **Belt Reader** | Emits a redstone/logic signal describing lane contents — *what* is on the belt right now. |
+| **Flow Meter** | Clamps onto a belt, a pipe or a flux cable and reports the **average rate**: items/min, B/min, FU/t. See below. |
 
 The splitter's filter-plus-priority behaviour is copied faithfully from Factorio on purpose. It is
 the single most expressive logistics primitive in that game, and almost every interesting belt
 layout is built out of it.
+
+### The Flow Meter
+
+The Belt Reader answers *what is on this belt*. The Flow Meter answers *how much is actually
+getting through*, which is the question a player asks when a line is underperforming and nothing
+looks broken.
+
+It is **one module, not three blocks**. The same item attaches to a belt, a fluid pipe or a flux
+cable, and reads whichever carrier it is on:
+
+| Carrier | Reads | Unit |
+| --- | --- | --- |
+| Belt | items past this point | items/min |
+| Pipe | fluid past this point | **B/min** (buckets, the unit the rest of the fluid layer uses) |
+| Flux cable / conduit | energy past this point | FU/t |
+
+Three rules make it trustworthy:
+
+- **It is a measurement, not a machine.** It adds no latency, no buffer and no backpressure.
+  Removing a Flow Meter never changes what the line does. A diagnostic that perturbs the thing it
+  measures is worse than no diagnostic.
+- **It reports an average over a window, not an instant.** An instantaneous count on a belt that
+  moves 8 items/s is noise, and a machine that runs a 600 s cycle reads zero almost always. The
+  readout is a rolling average, displayed per minute, so a number can be compared against the
+  ratios in [`PROCESSES.md`](docs/PROCESSES.md#the-recipe-graph) without arithmetic.
+- **It is also a logic signal.** The value feeds the Logic Controller, so *run only while the
+  output line is below 300 items/min* is buildable, not just readable.
+
+This is the handheld [Process Atlas](docs/MACHINES.md#the-route-viewer) question — *where is the
+line actually limited?* — answered in-world at a single point.
+
+### Diagonal belts and pipes
+
+Belts and pipes connect **diagonally in the horizontal plane**, not only along the axes. A
+diagonal segment is still one block in one block space; what changes is which neighbours it will
+join to.
+
+A diagonal step covers √2 blocks of ground, so an item or a fluid parcel spends √2 times as long
+crossing it. Ground speed is therefore constant and a diagonal run carries about **71 %** of the
+line's rated items per second. That is the whole balance: diagonals are a routing and layout
+freedom, never a speed upgrade, and no player-facing throughput number in the tables above
+changes.
+
+Junctions stay orthogonal. Splitters, mergers, sorters, overflow gates, tunnel endpoints and
+manipulators attach on an axis; a diagonal segment is plain transport. Keeping the junction set
+axis-aligned is what stops the lane model ([ADR-0008](docs/DECISIONS.md#adr-0008--belt-contents-are-lane-data-not-entities))
+from needing a second geometry.
 
 ### Drone logistics — and the pylon's second job
 
@@ -1626,7 +1674,7 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Block | Tier |
 | --- | --- |
 | Conveyor / Flux / Mag-Lev / Phase Belt | T1 / T2 / T3 / T4 |
-| Splitter, Merger, Tunnel Belt, Sorter, Overflow Gate, Belt Reader | T1–T2 |
+| Splitter, Merger, Tunnel Belt, Sorter, Overflow Gate, Belt Reader, Flow Meter | T1–T2 |
 | Manipulator: Crude / Fast / Stack / Filter | T1–T2 |
 | Signal Cable, Logic Controller, Arithmetic Unit, Redstone Interface | T2 |
 | Basic / Flux / Phase / Singular Conduit | T2 / T3 / T4 / T5 |

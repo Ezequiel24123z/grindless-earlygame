@@ -147,8 +147,14 @@ not the Arc Furnace.
 
 - `tools/checks/Verify*.java`, via `tools/run-checks.sh .` after `:common:build`.
 - `tools/check-links.ps1` — relative links and the ADR index.
-- `tools/smoke/` and `tools/smoke-boot.sh` when a block, a menu or a boot-visible
-  item changes.
+- `tools/smoke/scenarios.txt` — the scenario list, when a block, a menu or a
+  boot-visible item changes. Run it with `tools/run-smokes.ps1` or `run-smokes.sh`.
+
+Every tool here has a `.ps1` and a `.sh` twin, because the desk that validates a
+branch runs Windows ([ADR-0106](DECISIONS.md#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk)).
+A new scenario is a line in `scenarios.txt` and its `<name>.commands` / `<name>.expect`
+files, never a step in `ci.yml`
+([ADR-0105](DECISIONS.md#adr-0105--smoke-scenarios-are-a-list-sharded-across-parallel-ci-jobs)).
 
 A new graph row updates the size assertion in `VerifyRecipes`. A new block updates
 `BlockCatalogue`, which `VerifyAssets` reads. Arithmetic policy stays in a check

@@ -13,7 +13,42 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Added
+
+- **Flow Meter and diagonal transport, in the design.** Two design-only additions to the
+  logistics chapter; no code yet, and neither has a build-out row. The **Flow Meter** is one
+  module that clamps onto a belt, a pipe or a flux cable and reports a rolling average rate —
+  items/min, B/min, FU/t — as a readout and as a logic signal. It answers "how much is getting
+  through", where the existing Belt Reader answers "what is on the belt". It adds no latency and
+  no buffer, so removing one never changes what a line does. **Belts and pipes also connect
+  diagonally** in the horizontal plane: a diagonal step covers √2 blocks, so it takes √2 times as
+  long and carries about 71 % of the line's rated rate. Ground speed stays constant, no
+  throughput table changes, and junctions stay axis-aligned so the lane model (ADR-0008) needs no
+  second geometry.
+
+- **The smoke scenarios run on Windows (ADR-0106).** `tools/smoke-boot.ps1` is the Windows twin
+  of `smoke-boot.sh`, and `tools/run-smokes.ps1` / `tools/run-smokes.sh` run the whole list,
+  `--only` a few, or `--shard i --of n`. The shell script feeds the server console through a
+  FIFO, and a Cygwin FIFO cannot be read by a native Windows `java.exe`: under Git Bash the
+  server booted and then every scenario failed at the handshake, which reads as a mod bug and
+  is not. The PowerShell twin uses a real Win32 pipe, and copies the datapack through
+  extended-length paths so a deep checkout does not trip MAX_PATH (ADR-0024).
+
 ### Changed
+
+- **Smoke scenarios are a list, and CI shards them (ADR-0105).** Every slice had been adding a
+  `Boot and exercise ...` step to `ci.yml`, each booting a full dedicated server; the merged
+  branch reached **39 steps in one sequential job** against `timeout-minutes: 45`. GitHub
+  reports a timed-out job as *cancelled* rather than failed, so this never looked like a broken
+  build — but every run from `cursor/interstellar-travel-e61d` onward was killed at 45.3 minutes
+  and **six pull requests were merged on evidence that never finished**. The list now lives in
+  `tools/smoke/scenarios.txt`, and CI is `verify` plus a six-way `smoke` matrix. Adding a
+  scenario is a line in that file, never a step in `ci.yml`.
+
+- **Where the work happens is written down (ADR-0106).** Slices are authored remotely as
+  stacked pull requests; this Windows desk builds, smokes, fixes and merges them. `AGENTS.md`
+  records that a branch is not finished when CI is green, that a tool which fails only on
+  Windows is a bug in the tool, and that every `tools/*.sh` needs its `.ps1` twin.
 
 - **The two weekend stacks are one line of history (ADR-0104).** Twenty-seven stacked
   pull requests were built from the same tip of `main` by sessions that could not see

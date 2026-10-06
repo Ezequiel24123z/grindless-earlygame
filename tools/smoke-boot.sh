@@ -63,16 +63,35 @@ mkfifo "$FIFO"
 exec 3<>"$FIFO"
 
 cd "$ROOT" || exit 1
-setsid ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
-SERVER_PID=$!
+# setsid puts Gradle and the server it forks in their own process group, so cleanup can signal
+# the whole tree at once. Git Bash on Windows has no setsid, and refusing to run there would
+# make this script CI-only -- which is the opposite of what it is for, since a developer who
+# can boot locally finds a loading crash before pushing. Fall back to signalling the launcher.
+if command -v setsid >/dev/null 2>&1; then
+  setsid ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
+  SERVER_PID=$!
+  KILL_TARGET="-$SERVER_PID"
+else
+  ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
+  SERVER_PID=$!
+  KILL_TARGET="$SERVER_PID"
+fi
 
 cleanup() {
+  # The happy path has already sent `stop` and waited; this is the abort path.
+  if kill -0 "$SERVER_PID" 2>/dev/null; then
+    echo "stop" >&3 2>/dev/null
+    for _ in $(seq 1 15); do
+      kill -0 "$SERVER_PID" 2>/dev/null || break
+      sleep 1
+    done
+  fi
   exec 3>&-
   rm -f "$FIFO"
   if kill -0 "$SERVER_PID" 2>/dev/null; then
-    kill -TERM -- "-$SERVER_PID" 2>/dev/null
+    kill -TERM -- "$KILL_TARGET" 2>/dev/null
     sleep 2
-    kill -KILL -- "-$SERVER_PID" 2>/dev/null
+    kill -KILL -- "$KILL_TARGET" 2>/dev/null
   fi
   rm -rf "$RUN_DIR/smoke-world"
 }

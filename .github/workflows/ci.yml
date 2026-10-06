@@ -10,9 +10,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Build and the offline behaviour checks. Neither instantiates Forge, which is why the smoke
+  # jobs below exist at all (ADR-0049).
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -29,285 +31,39 @@ jobs:
       - name: Behaviour checks
         run: tools/run-checks.sh .
 
-      # ADR-0049: build and checks never instantiate Forge, so only booting the server proves
-      # the mod can load. CI=true is set by Actions and authorises writing eula.txt.
-      - name: Boot the dedicated server
-        run: tools/smoke-boot.sh .
+  # Every scenario in tools/smoke/scenarios.txt, spread across parallel shards.
+  #
+  # These used to be 39 steps in one sequential job. Each one boots a full dedicated server, so
+  # the job grew past `timeout-minutes: 45` and every run from the interstellar-travel branch
+  # onwards was killed at 45 minutes and reported as "cancelled" -- six pull requests merged
+  # without the smoke evidence ADR-0049 requires. Sharding is the fix (ADR-0105).
+  #
+  # Adding a scenario means adding a line to scenarios.txt, never a step here.
+  smoke:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@v4
 
-      # ADR-0050: the same boot with a datapack standing in for another mod that already provides
-      # tin ingots and raw platinum. Two Grindless supply items must step aside.
-      - name: Boot with foreign material providers
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/foreign-providers
-          SMOKE_EXPECT: '32 materials found; Grindless supplies 179 of its 181 items'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
 
-      # Every block must be mineable with a pickaxe and drop itself, with its real display name.
-      - name: Boot and exercise block loot and mining tags
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/blocks.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/blocks.expect
+      - uses: gradle/actions/setup-gradle@v4
 
-      # Every status and facing of every machine must be a valid block state. The placements run
-      # as one datapack function so a ticking block entity cannot rewrite status before execute-if
-      # (ADR-0061). Hopper smokes still send console lines a second apart; they need those ticks.
-      - name: Boot and place every machine state
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_DATAPACK: ${{ github.workspace }}/tools/smoke/states-pack
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/states.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/states.expect
+      - name: Smoke shard ${{ matrix.shard }}
+        run: tools/run-smokes.sh . --shard ${{ matrix.shard }} --of 6
 
-      # The extractor has a block entity, and a pylon occupies the two blocks above it.
-      - name: Boot and exercise extractor and pylon tower
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/loop.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/loop.expect
-
-      # The Research Terminal has a block entity; T0 recipes are checked offline by VerifyBootstrap.
-      - name: Boot and place the Research Terminal
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/bootstrap.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/bootstrap.expect
-
-      # Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
-      - name: Boot and exercise first iron machines
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-iron.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-iron.expect
-
-      # Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
-      - name: Boot and exercise first factory
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-factory.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-factory.expect
-
-      # Slice C: pump water through clay into a tank; captured CO burns in the generator.
-      - name: Boot and exercise first fluids
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-fluids.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-fluids.expect
-
-      # Slice D: Press and Assembler place; a hopper cannot steal a die and can insert an ingot.
-      - name: Boot and exercise first assembler
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-assembler.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-assembler.expect
-
-      # Slice E: capacitor and transformer place; they are not pylons (ADR-0064).
-      - name: Boot and exercise energy spanning
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-energy.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-energy.expect
-
-      # Kiln / R2: the Kiln places; a hopper can insert raw; a tank is the named SO2 sink.
-      - name: Boot and exercise first kiln
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-kiln.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-kiln.expect
-
-      # Slice J: Wire Mill places; a hopper can insert an ingot; motor and wire items exist.
-      - name: Boot and exercise wire mill
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-wire.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-wire.expect
-
-      # Slice K: Chemical Reactor places; a hopper can insert vanadia; tanks hold SO2 and water.
-      - name: Boot and exercise contact process
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-contact.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-contact.expect
-
-      # Slice L: Chemical Washer places; a hopper can insert crushed; a tank holds the wash water.
-      - name: Boot and exercise washer
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-washer.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-washer.expect
-
-      # Slice M: Electrolysis Cell and Atmospheric Intake place; a tank holds the split water.
-      - name: Boot and exercise electrolysis
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-electrolysis.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-electrolysis.expect
-
-      # Slice N: Fluid Well places, holds a charge, and pushes water into a tank.
-      - name: Boot and exercise fluid well
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-well.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-well.expect
-
-      # Slice O: Induction Furnace and Caster place as process machines.
-      - name: Boot and exercise induction and caster
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-cast.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-cast.expect
-
-      # Slice P: flotation cell and magnetic separator place.
-      - name: Boot and exercise separation
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-separation.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-separation.expect
-
-      # Slice Q: solar array, boiler and condenser place.
-      - name: Boot and exercise heat and steam
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-steam.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-steam.expect
-
-      # Slice R: pressure pipe, pump, tank, fluid arm, flux belt, stack and filter arms place.
-      - name: Boot and exercise T2 logistics
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-logistics.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-logistics.expect
-
-      # Slice S: signal cable, logic controller and redstone interface place.
-      - name: Boot and exercise logic
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-logic.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-logic.expect
-
-      # Slice T: the Flux Drill and its cell exist as items.
-      - name: Boot and exercise the flux drill
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-drill.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-drill.expect
-
-      # Slice U: the blueprint tool exists as an item.
-      - name: Boot and exercise the blueprint tool
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-blueprint.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-blueprint.expect
-
-      # Slice V: the deconstruction planner exists as an item. It does not break blocks.
-      - name: Boot and exercise the deconstruction planner
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-planner.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-planner.expect
-
-      # Slice W: the scanner and the deconstructor place. Matter is an item, not a recipe.
-      - name: Boot and exercise patterns
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-patterns.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-patterns.expect
-
-      # Slice X: four harness pieces and the Flux Cell exist. The cell is not the drill's fuel.
-      - name: Boot and exercise the voltaic harness
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-harness.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-harness.expect
-
-      # Slice Y: the exosuit, the tap and the legs exist. The suit does not generate.
-      - name: Boot and exercise the flux exosuit
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-exosuit.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-exosuit.expect
-
-      # Slice BE: the refractory brick item exists, and the Arc Furnace accepts slag.
-      - name: Boot and exercise refractory brick
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-refractory.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-refractory.expect
-
-      # Slice BF: metallurgical silicon exists, and the Arc Furnace accepts sand.
-      - name: Boot and exercise metallurgical silicon
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-silicon.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-silicon.expect
-
-      # Slice BG: electronic silicon exists, and the Arc Furnace accepts metallurgical silicon.
-      - name: Boot and exercise zone refining
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-electronic.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-electronic.expect
-
-      # Slice BH: a 3×3 Ground Array stores only while the ring stands.
-      - name: Boot and exercise the ground array
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-array.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-array.expect
-
-      # Slice BI: Luna loads, its surface is regolith, and helium-3 is an item.
-      - name: Boot and exercise Luna
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-luna.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-luna.expect
-
-      # Local flight: the launch pad is a block and the survey rocket is an entity.
-      - name: Boot and exercise the survey rocket
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-rocket.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-rocket.expect
-
-      # Slice BM: the berth is a block, the station is an entity, and the link id remains.
-      - name: Boot and exercise the supraluminal station
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-station.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-station.expect
-
-      # Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
-      - name: Boot and exercise the Drift
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-drift.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-drift.expect
-
-      # Slice BN: the galactic centre loads as shell, and the arrival mark is a block.
-      - name: Boot and exercise the galactic centre
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-centre.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-centre.expect
-
-      # Process Atlas: the handheld exists so a pack without JEI can still see the graph.
-      - name: Boot and exercise process atlas
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-atlas.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-atlas.expect
-
-      # Slice BC: the quest book and the field guide are items.
-      - name: Boot and exercise the quest book
-        run: tools/smoke-boot.sh .
-        env:
-          SMOKE_COMMANDS: ${{ github.workspace }}/tools/smoke/first-book.commands
-          SMOKE_EXPECT_FILE: ${{ github.workspace }}/tools/smoke/first-book.expect
-
-      - name: Upload server log
+      - name: Upload server logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-boot-log
-          path: forge/run/smoke-boot.log
+          name: smoke-logs-shard-${{ matrix.shard }}
+          path: forge/run/smoke-*.log
           if-no-files-found: ignore

@@ -91,13 +91,37 @@ powershell -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .
 ```
 
 On Linux and macOS use `tools/run-checks.sh .` instead of the second one. Neither runs Forge, so
-also run `GRINDLESS_ACCEPT_EULA=true tools/smoke-boot.sh .` after any change to registration,
-block entities or loader code (ADR-0049): a build and 309 passing checks coexisted with a mod that
-could not start.
+also boot the server after any change to registration, block entities or loader code
+(ADR-0049): a build and 309 passing checks coexisted with a mod that could not start.
 
-Both are worth the approval they cost. The first has caught broken links and a drifted ADR index
-more than once; the second has caught two real bugs that compiled cleanly. If the terminal is already broken, say so plainly and
-tell the user to run `SETUP.ps1 -Commit`, which commits and pushes without the app.
+```powershell
+$env:GRINDLESS_ACCEPT_EULA='true'
+powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only states
+powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root .   # all 39, tens of minutes
+```
+
+`tools/run-smokes.sh .` is the same thing elsewhere. The scenario list is
+[`tools/smoke/scenarios.txt`](tools/smoke/scenarios.txt); add a line there, never a step in
+`ci.yml` (ADR-0105). `-Only states` is the cheapest single check that every block still
+registers and places.
+
+All of them are worth the approval they cost. The link checker has caught broken links and a
+drifted ADR index more than once; the behaviour checks have caught real bugs that compiled
+cleanly; the smokes are the only thing that catches a mod which builds and cannot start. If the
+terminal is already broken, say so plainly and tell the user to run `SETUP.ps1 -Commit`, which
+commits and pushes without the app.
+
+### Where the work happens
+
+Slices are written away from this machine, in Cursor, as stacked pull requests. This Windows
+desk is where they are built, smoked, fixed and merged (ADR-0106). So:
+
+- **A branch is not finished when CI is green.** It is finished when it has been through here.
+  CI reports a timed-out job as *cancelled*, which is not a pass.
+- **A tool that fails only on Windows is a bug in the tool.** Fix it there. Three such bugs had
+  made the sequence above unusable on the one machine that validates.
+- **Every `tools/*.sh` needs its `.ps1` twin**, and vice versa. A step that only runs on Linux
+  cannot be validated before the merge.
 
 ---
 
@@ -114,8 +138,11 @@ docs/BUILD-OUT.md    remaining slices in ship order; a session implements the Ne
 docs/AGENT-MAP.md    task index of files and invariants; updated with the seam
 docs/DESIGN.md       early standalone design note; superseded by README, kept for history
 SETUP.ps1            Windows bootstrap; also commits and pushes via -Commit
-tools/               repository scripts; check-links.ps1 validates the docs before a commit,
-                     run-checks.ps1 runs the behaviour checks in tools/checks/
+tools/               repository scripts, each with a .ps1 and a .sh twin (ADR-0106):
+                     check-links  validates the docs before a commit
+                     run-checks   runs the behaviour checks in tools/checks/
+                     run-smokes   boots the scenarios in tools/smoke/scenarios.txt
+                     smoke-boot   one scenario; the .ps1 is a real implementation, not a wrapper
 
 build.gradle         root Gradle config shared by all subprojects
 settings.gradle      includes common, forge

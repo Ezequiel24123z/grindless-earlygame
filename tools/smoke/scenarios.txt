@@ -1,0 +1,55 @@
+# Every smoke scenario, in order. One line per scenario:
+#
+#     <name>    <what booting it proves>
+#
+# This is the single list. tools/run-smokes.ps1 and tools/run-smokes.sh read it, and CI shards
+# it across parallel jobs. Adding a scenario means adding a line here and the files it names --
+# never a new block in .github/workflows/ci.yml, which is how the step list grew to 39 boots in
+# one sequential job and stopped fitting in the timeout (ADR-0105).
+#
+# A scenario called <name> picks up, when they exist:
+#     tools/smoke/<name>.commands   console commands to run once the server is up
+#     tools/smoke/<name>.expect     extended regexes that must each appear in the log
+#     tools/smoke/<name>-pack/      a datapack to enable, or tools/smoke/<name>/ if that is
+#                                   a directory and no -pack exists
+# A scenario that names none of them is a plain boot.
+
+boot                 The mod loads at all. Nothing else runs until this passes (ADR-0049).
+foreign-providers    A datapack stands in for a mod that already supplies tin and platinum, and two Grindless items step aside (ADR-0050).
+blocks               Every block is mineable with a pickaxe and drops itself, with its real display name.
+states               Every status and facing of every machine is a valid block state, placed as one datapack function (ADR-0061).
+loop                 The extractor has a block entity, and a pylon occupies the two blocks above it.
+bootstrap            The Research Terminal has a block entity. T0 recipes are checked offline by VerifyBootstrap.
+first-iron           Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
+first-factory        Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
+first-fluids         Slice C: pump water through clay into a tank; captured CO burns in the generator.
+first-assembler      Slice D: Press and Assembler place; a hopper cannot steal a die and can insert an ingot.
+first-energy         Slice E: capacitor and transformer place; they are not pylons (ADR-0064).
+first-kiln           Kiln / R2: the Kiln places; a hopper can insert raw; a tank is the named SO2 sink.
+first-wire           Slice J: Wire Mill places; a hopper can insert an ingot; motor and wire items exist.
+first-contact        Slice K: Chemical Reactor places; a hopper can insert vanadia; tanks hold SO2 and water.
+first-washer         Slice L: Chemical Washer places; a hopper can insert crushed; a tank holds the wash water.
+first-electrolysis   Slice M: Electrolysis Cell and Atmospheric Intake place; a tank holds the split water.
+first-well           Slice N: Fluid Well places, holds a charge, and pushes water into a tank.
+first-cast           Slice O: Induction Furnace and Caster place as process machines.
+first-separation     Slice P: flotation cell and magnetic separator place.
+first-steam          Slice Q: solar array, boiler and condenser place.
+first-logistics      Slice R: pressure pipe, pump, tank, fluid arm, flux belt, stack and filter arms place.
+first-logic          Slice S: signal cable, logic controller and redstone interface place.
+first-drill          Slice T: the Flux Drill and its cell exist as items.
+first-blueprint      Slice U: the blueprint tool exists as an item.
+first-planner        Slice V: the deconstruction planner exists as an item. It does not break blocks.
+first-patterns       Slice W: the scanner and the deconstructor place. Matter is an item, not a recipe.
+first-harness        Slice X: four harness pieces and the Flux Cell exist. The cell is not the drill's fuel.
+first-exosuit        Slice Y: the exosuit, the tap and the legs exist. The suit does not generate.
+first-refractory     Slice BE: the refractory brick item exists, and the Arc Furnace accepts slag.
+first-silicon        Slice BF: metallurgical silicon exists, and the Arc Furnace accepts sand.
+first-electronic     Slice BG: electronic silicon exists, and the Arc Furnace accepts metallurgical silicon.
+first-array          Slice BH: a 3x3 Ground Array stores only while the ring stands.
+first-luna           Slice BI: Luna loads, its surface is regolith, and helium-3 is an item.
+first-rocket         Slice BL: the launch pad is a block and the survey rocket is an entity.
+first-station        Slice BM: the berth is a block, the station is an entity, and the link id remains.
+first-drift          Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
+first-centre         Slice BN: the galactic centre loads as shell, and the arrival mark is a block.
+first-atlas          Process Atlas: the handheld exists so a pack without JEI can still see the graph.
+first-book           Slice BC: the quest book and the field guide exist and open.

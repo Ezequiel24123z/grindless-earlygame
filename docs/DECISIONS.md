@@ -116,6 +116,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0102](#adr-0102--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
 | [0103](#adr-0103--the-exosuit-taps-a-pylon-and-does-not-generate) | The exosuit taps a pylon and does not generate | Accepted |
 | [0104](#adr-0104--parallel-stacks-reconcile-by-renumbering-the-smaller-reference-set) | Parallel stacks reconcile by renumbering the smaller reference set | Accepted |
+| [0105](#adr-0105--smoke-scenarios-are-a-list-sharded-across-parallel-ci-jobs) | Smoke scenarios are a list, sharded across parallel CI jobs | Accepted |
+| [0106](#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk) | Code is written remotely; it is validated on the Windows desk | Accepted |
 
 ---
 
@@ -4599,4 +4601,95 @@ the expansion stack's. The changelog entries for those three slices name the new
 ADR-0087 was a gap until the route-map pull request filled it, so the index is now
 contiguous from 0001 to 0104. A successor that opens parallel stacks again should
 reserve an ADR range per stack before starting, which is cheaper than this merge was.
+
+---
+
+## ADR-0105 — Smoke scenarios are a list, sharded across parallel CI jobs
+
+*2026-10-05 · Accepted*
+
+**Context.** Every slice added its own `Boot and exercise ...` step to `ci.yml`, each booting
+a full dedicated server. The list reached 39 steps in one sequential job against
+`timeout-minutes: 45`.
+
+GitHub reports a timed-out job as **cancelled**, not failed, so this never looked like a
+broken build. Every run from `cursor/interstellar-travel-e61d` onward was killed at 45.3
+minutes, and six pull requests were merged on evidence that did not exist. Consolidating the
+two weekend stacks (ADR-0104) made it strictly worse: the merged branch runs the union of
+both stacks' scenarios.
+
+The second-order problem is that `ci.yml` *held* the scenario list. Adding a scenario meant
+pasting a nine-line block, so the list could only grow, and nothing tied a scenario to the
+files it reads.
+
+**Decision.**
+
+1. `tools/smoke/scenarios.txt` is the single list: one line per scenario, the name and what
+   booting it proves. A scenario named `<name>` picks up `<name>.commands`, `<name>.expect`
+   and `<name>-pack/` when those exist, and is a plain boot when they do not.
+2. `tools/run-smokes.ps1` and `tools/run-smokes.sh` run that list, or `--only` a few, or
+   `--shard i --of n`. Sharding is round-robin, not contiguous: the slow scenarios are not
+   evenly spread through the list, and striping keeps the shards near the same wall clock.
+3. CI is two jobs: `verify` (build and the offline checks) and `smoke`, a six-way matrix.
+   Adding a scenario is a line in `scenarios.txt`, never a step in `ci.yml`.
+
+**Alternatives rejected.** Raising `timeout-minutes` (the list keeps growing, and a
+seventy-minute CI on every push is its own tax). One job per scenario, 39 of them (queueing
+and Gradle setup dominate the boot they wrap). Dropping scenarios to fit (they are the only
+evidence a block registers and loads, ADR-0049). Generating the matrix from `scenarios.txt`
+with a `setup` job that emits JSON (more machinery than a fixed six, and the shard count
+rarely changes).
+
+**Consequences.** A successor that adds a `Boot and exercise ...` step to `ci.yml` is
+reopening this record. A successor that adds a scenario file without a line in
+`scenarios.txt` has written a scenario nothing runs. The shard count lives in two places,
+the matrix and the `--of` beside it, and they must change together. A cancelled CI job is
+not a passing one: the conclusion to check on a smoke job is `success`.
+
+---
+
+## ADR-0106 — Code is written remotely; it is validated on the Windows desk
+
+*2026-10-05 · Accepted*
+
+**Context.** Work on Grindless happens in two places. Slices are written away from the desk
+in Cursor, as stacked pull requests. The Windows desk is where those branches are built,
+smoked, fixed and merged. The two weekend stacks are what that looks like when the second
+half never happens: 27 pull requests, a duplicated ADR range, and six of them green only
+because CI timed out before it could disagree (ADR-0104, ADR-0105).
+
+That division is worth keeping — writing and validating are different jobs, and separating
+them is why the collision was caught at all. It only works if the desk can actually run
+everything CI runs. It could not: `tools/smoke-boot.sh` feeds the server console through a
+FIFO, and a Cygwin FIFO cannot be read by a native Windows `java.exe`. Under Git Bash the
+server boots and then every scenario fails at the handshake, which reads as a mod bug and is
+not. `VerifyMaterial` compared a path against a forward-slash prefix, so one check was red on
+Windows for reasons that had nothing to do with the code. `generate-assets.ps1` ran `javac`
+without `-encoding UTF-8` and wrote mojibake into a tracked file.
+
+**Decision.**
+
+1. Authoring is remote and lands as stacked pull requests. Validation, conflict resolution
+   and the merge to `main` happen on the desk.
+2. Every tool a validation pass needs has a working Windows entry point:
+   `run-checks.ps1`, `check-links.ps1`, `generate-assets.ps1`, `run-smokes.ps1` and
+   `smoke-boot.ps1`. The `.ps1` is not a courtesy wrapper; where the platforms genuinely
+   differ it is a separate implementation, as the Win32 pipe is.
+3. A Windows-only failure in a tool is a **bug in the tool** and is fixed there, not worked
+   around in the session that trips over it. Three such bugs had been sitting in the
+   repository long enough to make the documented pre-commit sequence unusable.
+4. CI stays the authority for merge. The desk is the faster loop, not a replacement: it
+   catches the failure in minutes instead of waiting forty-five for a job to be cancelled.
+
+**Alternatives rejected.** Running the shell scripts under WSL (it boots a Linux Java, so it
+stops being evidence about the machine the developer builds on, and it hides exactly the
+class of bug listed above). Making the desk authoritative and dropping CI (one machine, one
+operating system, no record). Writing code on the desk too (the split is what made the
+duplicate ADR range visible before it reached `main`).
+
+**Consequences.** A successor on Windows that cannot run a check should expect the tool to be
+at fault and fix it. A successor that adds a `tools/*.sh` without its `.ps1` twin has made
+the desk unable to validate that step, which is the thing this record exists to prevent. A
+pull request authored remotely is not finished when CI is green; it is finished when it has
+been through the desk.
 
