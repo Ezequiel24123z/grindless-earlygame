@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **The T0/F0–T15/F15 progression lattice (ADR-0107), in design.** Technology, physical
+  Control Matrix rating and nominal Flux tier now advance together across sixteen named
+  tiers. Every frontier braids materials, chemistry, computation/control and energy before
+  its matrix, and each later tier grows through more routes, conditions, logistics and
+  spatial scale rather than inflated stack counts or timers. Five matrix architectures
+  provide better retrospective routes, the Research Terminal becomes a T4 Research Station
+  for reusable physical patterns, and arrival at Sagittarius remains victory while
+  black-hole exploitation becomes postgame T15.
+
 - **Flow Meter and diagonal transport, in the design.** Two design-only additions to the
   logistics chapter; no code yet, and neither has a build-out row. The **Flow Meter** is one
   module that clamps onto a belt, a pipe or a flux cable and reports a rolling average rate —
@@ -35,6 +44,12 @@ entries below reference those records by id.
   extended-length paths so a deep checkout does not trip MAX_PATH (ADR-0024).
 
 ### Changed
+
+- **The next build-out slice is BO, prototype isolation.** The Ground Array, links, rocket,
+  station and destination worlds remain registered and smoke-tested, but their Industrial
+  survival recipes and premature quest route are withdrawn before Control Matrix work begins.
+  BP then introduces the matrix model and first T1 Relay Matrix; BQ migrates T2 fabrication
+  away from global Voltaic/Industrial blueprint permissions.
 
 - **Smoke scenarios are a list, and CI shards them (ADR-0105).** Every slice had been adding a
   `Boot and exercise ...` step to `ci.yml`, each booting a full dedicated server; the merged

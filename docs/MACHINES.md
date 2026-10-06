@@ -27,13 +27,14 @@ of machines can host an enormous recipe space.
 - [Process conditions: the central mechanic](#process-conditions-the-central-mechanic)
 - [Machines are condition envelopes](#machines-are-condition-envelopes)
 - [Anatomy of a machine](#anatomy-of-a-machine)
+- [Control matrices](#control-matrices)
 - [Chassis marks and upgrades](#chassis-marks-and-upgrades)
 - [The Flux tier ladder](#the-flux-tier-ladder)
 - [Scaling: parallel, overclock, multiblock](#scaling-parallel-overclock-multiblock)
 - [Single-block machines](#single-block-machines)
 - [Multiblocks: shape is a parameter](#multiblocks-shape-is-a-parameter)
 - [Routes: many ways to the same output](#routes-many-ways-to-the-same-output)
-- [The endgame tier](#the-endgame-tier)
+- [Late-game systems](#late-game-systems)
 - [The route viewer](#the-route-viewer)
 - [Open questions](#open-questions)
 
@@ -69,6 +70,13 @@ The operating rule:
 Everything below follows from that. Depth comes from the recipe graph, from condition tuning, from
 route selection and from ratio balancing. None of those are repetitive, and all of them get *more*
 interesting the larger your factory gets.
+
+The tier ladder therefore grows approximately monotonically in meaningful content. A later tier
+has more interacting process families, deeper routes, a larger logistics problem and a larger
+signature project than an earlier one. It also supplies the leverage needed to handle that scale:
+Assembler automation, Process Cards, construction drones, Assembly Fields, abstract colonies and
+self-replicating infrastructure. Larger stack counts, longer timers and more manual placement do
+not count as content (ADR-0107).
 
 ---
 
@@ -168,7 +176,7 @@ checkbox.
 
 ## Anatomy of a machine
 
-Every machine, from the T0 Crude Extractor to a T6 orbital assembler, is built from the same parts.
+Every machine, from the T0 Crude Extractor to a T15 horizon system, is built from the same parts.
 Learn the interface once.
 
 | Part | Behaviour |
@@ -178,6 +186,7 @@ Learn the interface once.
 | **Catalyst slot** | Not consumed; degrades with use; some recipes require it, some are merely faster with it. |
 | **Condition controls** | Target temperature, pressure, atmosphere. Settable by hand, by logic signal, or by a Process Card. |
 | **Energy buffer** | FU, sized by tier. |
+| **Control Matrix** | Physical controller and Flux rating. Every T1+ machine contains one; it replaces a hidden research permission. |
 | **Upgrade slots** | Count set by chassis mark. See [chassis and upgrades](#chassis-marks-and-upgrades). |
 | **Process Card** | A saved condition set plus a recipe selection. Copyable, so configuring the second machine is never a repeat of configuring the first. |
 | **Status output** | Running, idle, blocked, starved, out-of-band — as a logic signal and as a visible indicator. |
@@ -193,6 +202,35 @@ always better telemetry rather than less complexity.
 
 ---
 
+## Control matrices
+
+Technology tier, controller rating and Flux tier advance together from T0/F0 through T15/F15
+(ADR-0107). The matrix is the physical proof that a factory reached a tier: every T1+ machine
+contains one of the required rating. Recipes remain visible before the player can make their
+matrix, so the Atlas can explain the missing route rather than an invisible permission refusing it.
+
+The first route to rating Tn consumes a Tn-1 matrix and products from the tier's materials,
+chemistry, computation/control and energy lines. Those lines are braided before the final
+assembly; the matrix is not four ceremonial tokens placed beside one another.
+
+| Architecture | Frontier ratings | Backward route |
+| --- | --- | --- |
+| **Relay** | T1-T3 | discrete wire, coils, ceramic and redstone |
+| **Integrated** | T4-T6 | lithography batches older Relay ratings |
+| **Superconducting** | T7-T9 | cryogenic fabrication compresses Integrated chains |
+| **Photonic** | T10-T12 | zero-g optics replace long terrestrial interconnect chains |
+| **Causal** | T13-T15 | relativistic control compresses every earlier architecture |
+
+A new architecture can satisfy an old rating more cheaply, faster or in a larger batch. The old
+route remains the low-infrastructure option. A higher rating may substitute for a lower one, but
+wasting frontier control hardware on an old machine is rarely economical.
+
+The Research Terminal is not this gate. It returns at T4 as a Research Station that produces
+reusable physical patterns for advanced components and process modes. Patterns are catalysts;
+ordinary machines never ask a world-scoped permission whether their recipe exists.
+
+---
+
 ## Chassis marks and upgrades
 
 Two independent dials. The **chassis mark** is the machine's capability ceiling; **upgrades** tune
@@ -201,17 +239,20 @@ copies of every machine.
 
 ### The chassis mark
 
-Every machine exists at marks **MK I** through **MK V**. A mark is not a different block — you
+Every machine exists at marks **MK I** through **MK VIII**. A mark is not a different block — you
 apply a **Chassis Upgrade Kit** to the machine in place, keeping its position, its contents, its
 configuration and its connections. Nothing is ever rebuilt or re-piped.
 
-| Mark | Upgrade slots | Max Flux tier | Envelope width | Research |
+| Mark | Upgrade slots | Max Flux tier | Envelope width | First technology |
 | --- | --- | --- | --- | --- |
 | **MK I** | 1 | F1 | narrow | T1 |
 | **MK II** | 2 | F3 | — | T2 |
-| **MK III** | 3 | F5 | — | T3 |
-| **MK IV** | 4 | F7 | — | T4 |
-| **MK V** | 6 | F9 | full | T5 |
+| **MK III** | 3 | F5 | — | T4 |
+| **MK IV** | 4 | F7 | — | T6 |
+| **MK V** | 6 | F9 | — | T8 |
+| **MK VI** | 8 | F11 | — | T10 |
+| **MK VII** | 10 | F13 | — | T12 |
+| **MK VIII** | 12 | F15 | full | T14 |
 
 The important column is the last-but-one. **A higher mark widens the condition envelope**, and
 because recipes are selected by conditions (ADR-0020), that means a mark unlocks *recipes* rather
@@ -224,6 +265,10 @@ than merely adding speed:
 | MK III | 2800 °C | melt tungsten-class materials |
 | MK IV | 3200 °C | run carbothermic reduction of the hardest carbides |
 | MK V | 3500 °C | everything the machine type is physically capable of |
+
+That Arc Furnace reaches its physical envelope at MK V. MK VI-MK VIII still improve structural
+rating, buffers and upgrade capacity, but they do not turn an arc into a plasma chamber. A higher
+mark expands only capabilities the machine type can physically provide.
 
 This is the answer to GregTech's voltage ladder. There, a tier is the same machine with a bigger
 number; here a mark changes *what is possible*, which makes upgrading a goal rather than a tax.
@@ -288,27 +333,36 @@ machine harder.
 
 ## The Flux tier ladder
 
-Research tiers (T0–T6) gate *what you may build*. Flux tiers gate *how much power a machine can
-accept*. They are deliberately separate axes, and the ladder is long because the user asked for
-many tiers and because a long ladder gives the endgame somewhere to go.
+Technology tier Tn, Control Matrix rating Tn and Flux tier Fn advance together. Chassis marks remain
+independent because a controller rating and a physical process envelope are different properties.
 
-| Flux tier | Name | Throughput | Typical era |
-| --- | --- | --- | --- |
-| **F0** | Manual | 8 FU/t | Hand crank. |
-| **F1** | Voltaic | 32 FU/t | First real network. |
-| **F2** | Industrial | 128 FU/t | Steam and solar. |
-| **F3** | Arc | 512 FU/t | Arc Reactor. Serious metallurgy. |
-| **F4** | Plasma | 2 048 FU/t | Fission. |
-| **F5** | Quantum | 8 192 FU/t | Fusion. |
-| **F6** | Singular | 32 768 FU/t | Singularity reactor. |
-| **F7** | Stellar | 131 072 FU/t | Orbital solar, beamed power. |
-| **F8** | Exotic | 524 288 FU/t | Interplanetary grid. |
-| **F9** | Transcendent | 2 097 152 FU/t | Endgame; see [the endgame tier](#the-endgame-tier). |
+| Flux tier | Name | Throughput |
+| --- | --- | ---: |
+| **F0** | Manual | 8 FU/t |
+| **F1** | Voltaic | 32 FU/t |
+| **F2** | Industrial | 128 FU/t |
+| **F3** | Arc | 512 FU/t |
+| **F4** | Precision | 2 048 FU/t |
+| **F5** | Nuclear | 8 192 FU/t |
+| **F6** | Cryogenic | 32 768 FU/t |
+| **F7** | Fusion | 131 072 FU/t |
+| **F8** | Particle | 524 288 FU/t |
+| **F9** | Quantum | 2 097 152 FU/t |
+| **F10** | Orbital | 8 388 608 FU/t |
+| **F11** | Planetary | 33 554 432 FU/t |
+| **F12** | Stellar | 134 217 728 FU/t |
+| **F13** | Interstellar | 536 870 912 FU/t |
+| **F14** | Galactic | 2 147 483 648 FU/t |
+| **F15** | Event Horizon | 8 589 934 592 FU/t |
 
-A machine runs on any tier at or above its rating; feeding it more than its rating does nothing
-unless it is overclocked. Transformers step between tiers, and feeding a machine a tier it is not
-rated for is the one place where damage is possible — and even then it burns out a cheap, visible
-component rather than deleting the block.
+The nominal rule is always `8 × 4^n FU/t`. F15 is the last named tier. Postgame T15
+black-hole infrastructure scales within that tier toward `Long.MAX_VALUE` rather than adding
+F16-F30.
+
+A machine reaches full throughput on its rated tier or above; extra supply does nothing unless a
+Speed upgrade spends it. Under-volting slows smoothly and over-volting is safe. Transformers still
+matter because conductors and chassis have transfer limits, not because one mistaken connection
+deletes a machine.
 
 ---
 
@@ -356,7 +410,7 @@ craft and re-pipe.
 | **Terrestrial Extractor** | T1 | The workhorse. Pulls from the chunk vein. |
 | **Fluid Well** | T2 | Chunk-level fluid extraction: water, brine, oil-equivalents, geothermal. |
 | **Atmospheric Intake** | T2 | Separates air into its gases. The nitrogen and oxygen source. |
-| **Deep Core Drill** | T3 | Multiblock. Weighted planetary pool rather than a single chunk. |
+| **Deep Core Drill** | T5 | Multiblock. Weighted planetary pool rather than a single chunk. |
 
 ### Comminution and separation
 
@@ -366,8 +420,8 @@ craft and re-pipe.
 | **Sifter** | T1 | Size separation. Cheap concentration with no power beyond mechanical. |
 | **Magnetic Separator** | T2 | Pulls ferromagnetics out of a mixed stream, nearly free. |
 | **Froth Flotation Cell** | T2 | Concentrates sulfides with surfactant. The classic cheap upgrade. |
-| **Centrifuge** | T3 | Density and isotope separation; the enrichment machine. |
-| **Electrostatic Separator** | T3 | Separates by conductivity, where density fails. |
+| **Centrifuge** | T5 | Density and isotope separation; the enrichment machine. |
+| **Electrostatic Separator** | T4 | Separates by conductivity, where density fails. |
 
 ### Thermal
 
@@ -376,8 +430,8 @@ craft and re-pipe.
 | **Kiln** | T1 | Drying, calcining, roasting. The cheapest heat. |
 | **Arc Furnace** | T1 | 1200–3500 °C. Metallurgy. |
 | **Induction Furnace** | T2 | Precise, efficient, clean. |
-| **Vacuum Furnace** | T5 | No atmosphere, so no oxidation and the highest purity available. |
-| **Cryogenic Plant** | T4 | The cold end: liquefaction and separation by boiling point. |
+| **Vacuum Furnace** | T10 | No atmosphere, so no oxidation and the highest purity available. |
+| **Cryogenic Plant** | T6 | The cold end: liquefaction and separation by boiling point. |
 
 ### Chemical
 
@@ -386,20 +440,20 @@ craft and re-pipe.
 | **Chemical Reactor** | T2 | Stirred liquid-phase reactions with a catalyst slot. |
 | **Chemical Washer** | T2 | Leaching and purification. |
 | **Electrolysis Cell** | T2 | Splits compounds with current. Brine, water, alumina. |
-| **Autoclave** | T3 | High-pressure hydrothermal chemistry, and crystal growth. |
+| **Autoclave** | T4 | High-pressure hydrothermal chemistry, and crystal growth. |
 | **Catalytic Cracker** | T3 | Breaks long molecules into useful short ones. |
-| **Polymerizer** | T3 | The reverse. Plastics, resins, composites. |
+| **Polymerizer** | T4 | The reverse. Plastics, resins, composites. |
 
 ### Forming and fabrication
 
 | Machine | First tier | Role |
 | --- | --- | --- |
-| **Assembler** | T2 | Multi-ingredient fabrication. The machine that makes machines. |
-| **Press** | T2 | Plates, rods, gears, casings, with a die in the catalyst slot. |
+| **Assembler** | T1 | Multi-ingredient fabrication. The machine that makes machines. |
+| **Press** | T1 | Plates, rods, gears, casings, with a die in the catalyst slot. |
 | **Caster** | T2 | Molten metal to solid shapes, skipping the ingot stage. |
 | **Wire Mill** | T2 | Wire and coil, which everything electrical needs. |
-| **Lithography Unit** | T3 | Wafers to circuit dies. The circuit bottleneck, deliberately. |
-| **Quantum Assembler** | T4 | Resolves long component chains in one block. |
+| **Lithography Unit** | T4 | Wafers to circuit dies. The circuit bottleneck, deliberately. |
+| **Quantum Assembler** | T9 | Resolves long component chains and programmable matter in one plant. |
 
 ### Matter
 
@@ -407,8 +461,8 @@ craft and re-pipe.
 | --- | --- | --- |
 | **Pattern Scanner** | T2 | Stores an item's pattern permanently. |
 | **Deconstructor** | T2 | Any item to generic Matter. |
-| **Replicator** | T3 | Matter plus FU to a stored pattern, priced from the recipe graph. |
-| **Matter Condenser** | T4 | Compressed Matter storage. |
+| **Replicator** | T4 | Matter plus FU to a stored pattern, priced from the recipe graph. |
+| **Matter Condenser** | T9 | Compressed Matter storage and high-throughput matter handling. |
 
 ---
 
@@ -441,9 +495,10 @@ Multiblock scale therefore grows with the player's ability to build:
 | Era | Typical scale | Built by |
 | --- | --- | --- |
 | **T2** | 3×3×3 – 5×5×5 | hand placement; small enough to be reasonable |
-| **T3** | up to ~15³ | Construction Drones from a blueprint |
-| **T4** | up to ~32³, hundreds of internal components | drone swarms |
-| **T5–T6** | structures measured in chunks | the Assembly Field, which materialises a whole blueprint at once |
+| **T3–T5** | up to ~15³ | Construction Drones from a blueprint |
+| **T6–T9** | up to ~32³, hundreds of internal components | drone swarms |
+| **T10–T12** | structures measured in chunks | the Assembly Field materialises complete blueprint sections |
+| **T13–T15** | structures distributed across worlds and systems | abstract construction fleets; the player designs and supplies them |
 
 ### Simulate before you build
 
@@ -473,14 +528,16 @@ stability fluid the slice names). If the cell line stops, the reactor starves. T
 miniature on the Arc Exosuit burns the same cell, so the plant and the suit are one logistics
 problem.
 
-It is not the Arc Furnace. It is not fission's neighbour-bonus steam core. It is not T4 fusion.
+It is not the Arc Furnace. It is not fission's neighbour-bonus steam core. It is not T7 fusion.
 Exact chemistry and size stay open until this slice; Slice F starts when this machine (or
 another that needs hatches) is scheduled.
 
 ### Fission Reactor
 
+T5 / F5.
+
 The flagship design problem. You lay out the core yourself — fuel rods, control rods, coolant
-channels, moderator, reflector — at any size the era supports, which by T4 means a core with
+channels, moderator, reflector — at any size the era supports, which by T5 means a core with
 hundreds of internal positions.
 
 - Fuel rods adjacent to other fuel rods produce a **neighbour bonus**: more output, more heat.
@@ -512,11 +569,15 @@ you can split at all. Scaling up is a layout decision rather than a tier upgrade
 
 ### Particle Accelerator
 
+T8 / F8.
+
 Ring circumference determines achievable particle energy, which determines which transmutations are
 reachable. A small ring makes isotopes; a large one makes exotic matter. This is the clearest case
 of a multiblock whose size changes *what is possible* and not merely how fast.
 
 ### Fusion Reactor
+
+T7 / F7.
 
 Coil count and containment strength determine which fuel cycles will ignite:
 
@@ -532,13 +593,17 @@ makes "is my confinement good enough" a genuine engineering question.
 
 ### Orbital Assembly Bay
 
+T10 / F10.
+
 Zero gravity and hard vacuum as *process conditions*, not flavour. Some products simply cannot be
 made under gravity: perfect crystals, large thin films, certain alloys that segregate when they
 settle. This is what makes the orbital stage a manufacturing necessity rather than a victory lap.
 
 ### Horizon Gate
 
-T6 ring. Dialed pair, not a mining dimension
+T11 / F11.
+
+T11 ring. Dialed pair, not a mining dimension
 ([ADR-0068](DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)).
 Ring circumference is presence range and stability, not ore yield. The far ring is cargo you
 deliver once. After that, players and frames walk; bulk cargo still prefers the Mass Driver
@@ -591,30 +656,30 @@ and that is the point at which a factory stops being a set of lines and becomes 
 
 ---
 
-## The endgame tier
+## Late-game systems
 
 The brief is explicit: a bigger endgame than GregTech or Mekanism, more useful, more futuristic,
-and still believable. The orbital and planetary stages in the README are that endgame's first half.
-This is the second.
+and still believable. T10-T15 decompress orbit, planets, stars, interstellar expansion, the
+galaxy and the final approach instead of treating all of them as one tier.
 
 The organising idea: **at the end, the factory stops being made of machines and starts being made
 of physics.**
 
 | System | What it does | Why it is not just a bigger machine |
 | --- | --- | --- |
-| **Ground Array** | Ten seconds of MK3 throughput, as storage, once a fixed 3×3 stands (ADR-0094) | The first structure past the factory. Not a generator, not a pylon, not a Kardashev scale. |
-| **Starward Link** | One hop to the Drift, paid with that same buffer (ADR-0096) | Placeholder (ADR-0097). A station replaces this hop. Not deleted. Not a planet, not the black hole, not a Horizon Gate. |
-| **Launch Pad** | The block a survey rocket stands on (ADR-0097) | Local flight only. Not a link. |
-| **Survey Rocket** | Climbs to the build ceiling, then a landing map of the home world and Luna (ADR-0097) | Not the Drift, not the black hole, not a station. |
-| **Supraluminal Station** | Climbs to the ceiling. The Drift on the way out, the galactic centre from the Drift, the saved berth from the centre (ADR-0098, ADR-0099) | Not a link. The centre is a sealed chamber, not a second game. |
-| **Singularity Reactor** | Power from a contained micro-singularity, fed by matter | Mass becomes a fuel. Any matter is energy, so the junk problem inverts: waste becomes the power supply. |
-| **Matter Condenser array** | Energy back into arbitrary matter | Closes the loop with the Deconstructor. The economy becomes energy-only, which is a genuine phase change in how the game plays. |
-| **Transmutation Chain** | Element to element via the accelerator | Scarcity stops being geological and becomes energetic. |
-| **Dyson Collector** | Orbital-ring solar at F8–F9 | The only power source that outruns a singularity, and it takes a space programme to build. |
-| **Space Elevator** | Permanent ground-to-orbit link | Turns orbit from a destination into part of the base. |
-| **Stellar Forge** | Processing at stellar temperatures and pressures | The only way to make the final materials; necessarily orbital. |
-| **Causal Buffer** | Stores *process state*, not items | Pause a running process and resume it elsewhere. Lets huge batch processes migrate between planets. |
-| **Planetary Engine** | Moves a colony's orbit over very long timescales | Changes insolation and temperature, and therefore which processes run there. Infrastructure as geoengineering. |
+| **Ground Array** | Validated fixed-ring storage prototype (ADR-0094) | Registered for tests; its Industrial recipe is withdrawn until the expanded route assigns it. |
+| **Lunar / Starward Link** | Validated travel placeholders | Registered for compatibility and tests, not survival shortcuts. |
+| **Launch Pad and Survey Rocket** | T10 local-system flight (ADR-0097) | Opens orbit and nearby bodies; never crosses stars. |
+| **Matter Condenser array** | T9 energy back into arbitrary matter | Closes the loop with the Deconstructor without removing the need for throughput. |
+| **Transmutation Chain** | T8+ element-to-element conversion via the accelerator | Scarcity becomes energetic; ring size changes what is reachable. |
+| **Space Elevator** | T11 permanent ground-to-orbit link | Turns orbit from a destination into part of the planetary factory. |
+| **Dyson Network** | T12 stellar collection | Reaches Type II by scaling an orbital system, not one trophy block. |
+| **Stellar Forge** | T12 processing at stellar temperatures and pressures | Makes materials no terrestrial or orbital chamber can hold. |
+| **Causal Buffer** | T13 storage of *process state*, not items | Lets large batches migrate coherently between star systems. |
+| **Supraluminal Station** | T13 ride to the Drift | Interstellar transport, not a link or a local rocket. |
+| **Singularity Reactor** | T14 power from a contained micro-singularity | Mass becomes fuel for a Type III network; it is not a T4 shortcut. |
+| **Planetary Engine** | T11-T12 long-timescale orbit control | Changes insolation and therefore the processes a colony can run. |
+| **Event-horizon infrastructure** | T15 approach, shielding and postgame extraction | Arrival is victory; accretion resources and rotational power remain useful afterward. |
 
 Two rules keep this from collapsing into "you win":
 

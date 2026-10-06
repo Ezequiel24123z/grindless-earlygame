@@ -49,7 +49,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0035](#adr-0035--routes-compose-from-a-beneficiation-stage-and-a-reduction-stage) | Routes compose from a beneficiation and a reduction stage | Accepted |
 | [0036](#adr-0036--every-byproduct-must-have-a-named-sink) | Every byproduct must have a named sink | Accepted |
 | [0037](#adr-0037--flux-amounts-are-long-and-clamp-at-the-fe-boundary) | Flux amounts are `long` and clamp at the FE boundary | Accepted |
-| [0038](#adr-0038--one-flux-ladder-with-voltage-names-as-aliases) | One Flux ladder, with voltage names as aliases | Accepted |
+| [0038](#adr-0038--one-flux-ladder-with-voltage-names-as-aliases) | One Flux ladder, with voltage names as aliases | Superseded in part by ADR-0107 |
 | [0039](#adr-0039--forge-1201-is-the-only-build-target) | Forge 1.20.1 is the only build target | Accepted |
 | [0040](#adr-0040--running-out-of-band-costs-time-never-yield) | Running out of band costs time, never yield | Accepted |
 | [0041](#adr-0041--a-condition-check-returns-a-named-fault-not-a-boolean) | A condition check returns a named fault, not a boolean | Accepted |
@@ -68,7 +68,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0054](#adr-0054--pylons-are-three-blocks-tall-and-cover-a-factory) | Pylons are three blocks tall and cover a factory | Accepted |
 | [0055](#adr-0055--the-multitool-does-not-mine) | The Multitool does not mine | Accepted |
 | [0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags) | T0 bootstrap recipes are authored JSON using tags | Accepted |
-| [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Accepted |
+| [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Superseded by ADR-0107 |
 | [0058](#adr-0058--build-playable-slices-not-system-layers) | Build playable slices, not system layers | Accepted |
 | [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Accepted |
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
@@ -79,12 +79,12 @@ history — the reasoning that was wrong is itself useful information.
 | [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
-| [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
+| [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Superseded in part by ADR-0107 |
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
 | [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Superseded in part by ADR-0088 |
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
-| [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
+| [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Superseded by ADR-0107 |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
@@ -99,25 +99,26 @@ history — the reasoning that was wrong is itself useful information.
 | [0085](#adr-0085--a-blueprint-stamps-from-the-inventory) | A blueprint stamps from the inventory | Accepted |
 | [0086](#adr-0086--the-planner-marks-and-does-not-pick-up) | The planner marks and does not pick up | Accepted |
 | [0087](#adr-0087--a-task-indexed-route-map-updated-with-the-seam) | A task-indexed route map, updated with the seam | Accepted |
-| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089 and ADR-0090 |
+| [0088](#adr-0088--grindless-is-a-modpack-scale-progression) | Grindless is a modpack-scale progression | Superseded in part by ADR-0089, ADR-0090 and ADR-0107 |
 | [0089](#adr-0089--external-code-may-enter-with-its-own-license) | External code may enter with its own license | Accepted |
 | [0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) | Electric-arc steel is the first line past contact | Accepted |
 | [0091](#adr-0091--refractory-brick-is-one-slag-in-twenty-seconds) | Refractory brick is one slag in twenty seconds | Accepted |
 | [0092](#adr-0092--metallurgical-silicon-runs-cold-on-sand-and-quartz) | Metallurgical silicon runs cold on sand and quartz | Accepted |
 | [0093](#adr-0093--zone-refining-is-ten-metallurgical-silicon-in-six-hundred-seconds) | Zone refining is ten metallurgical silicon in six hundred seconds | Accepted |
-| [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Accepted |
-| [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Accepted |
-| [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0097 |
-| [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Superseded in part by ADR-0098 |
-| [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Superseded in part by ADR-0099 |
-| [0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber) | The galactic centre is a sealed chamber | Superseded in part by ADR-0100 |
-| [0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it) | The quest book tracks the route and does not gate it | Accepted |
+| [0094](#adr-0094--the-first-megastructure-is-the-ground-array) | The first megastructure is the Ground Array | Superseded in part by ADR-0107 |
+| [0095](#adr-0095--luna-is-the-first-original-planet) | Luna is the first original planet | Superseded in part by ADR-0107 |
+| [0096](#adr-0096--the-first-interstellar-hop-is-the-drift) | The first interstellar hop is the Drift | Superseded in part by ADR-0107 |
+| [0097](#adr-0097--local-trips-are-rocket-flights) | Local trips are rocket flights | Superseded in part by ADR-0107 |
+| [0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star) | The supraluminal station is the ride off the star | Superseded in part by ADR-0107 |
+| [0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber) | The galactic centre is a sealed chamber | Superseded in part by ADR-0107 |
+| [0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it) | The quest book tracks the route and does not gate it | Superseded in part by ADR-0107 |
 | [0101](#adr-0101--replication-cost-is-a-graph-walk-and-deconstruction-yields-one-matter) | Replication cost is a graph walk and deconstruction yields one Matter | Accepted |
 | [0102](#adr-0102--the-voltaic-harness-has-one-slot-and-no-generator) | The Voltaic Harness has one slot and no generator | Accepted |
 | [0103](#adr-0103--the-exosuit-taps-a-pylon-and-does-not-generate) | The exosuit taps a pylon and does not generate | Accepted |
 | [0104](#adr-0104--parallel-stacks-reconcile-by-renumbering-the-smaller-reference-set) | Parallel stacks reconcile by renumbering the smaller reference set | Accepted |
 | [0105](#adr-0105--smoke-scenarios-are-a-list-sharded-across-parallel-ci-jobs) | Smoke scenarios are a list, sharded across parallel CI jobs | Accepted |
 | [0106](#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk) | Code is written remotely; it is validated on the Windows desk | Accepted |
+| [0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices) | Sixteen aligned tiers grow through Control Matrices | Accepted |
 
 ---
 
@@ -1197,7 +1198,11 @@ negative, so a clamp can never manufacture or destroy energy.
 
 ## ADR-0038 — One Flux ladder, with voltage names as aliases
 
-*2026-10-01 · Accepted*
+*2026-10-01 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded in part.** There is still one Flux ladder and LV through IV remain display
+> aliases. The ladder now runs through F15, and technology tier Tn is deliberately aligned
+> with Flux tier Fn. See ADR-0107.
 
 **Context.** The design accumulated two power scales. The README describes **voltage tiers** LV, MV,
 HV, EV and IV at 32, 128, 512, 2 048 and 8 192 FU/t, while `MACHINES.md` describes the **Flux tier
@@ -2087,7 +2092,11 @@ blueprint (ADR-0057). Processing-chain recipes remain generated (ADR-0005).
 
 ## ADR-0057 — The Research Terminal unlocks world-scoped blueprints
 
-*2026-10-02 · Accepted*
+*2026-10-02 · Superseded by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded.** A world-scoped permission no longer unlocks ordinary machines. Physical
+> Control Matrices carry tier progression. The block returns later as a Research Station for
+> reusable advanced-process patterns. See ADR-0107.
 
 **Context.** The Research Terminal was a `MachineShellBlock`: art, no block entity, no behaviour.
 The README has the player insert Data Cores and Flux to unlock blueprints, and has research as a
@@ -2615,7 +2624,11 @@ before. The README Exosuit table is the player-facing version of this decision.
 
 ## ADR-0068 — Horizon Gates are commute infrastructure, not mining dimensions
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded in part.** The gate remains a delivered pair and commute infrastructure,
+> never a mining dimension. Its tier moves from the old T6 cap into the expanded planetary
+> progression. See ADR-0107.
 
 **Context.** The README already rejects mining dimensions as "the same grind, in a different
 room." System 9 already has rockets, Mass Driver, telepresence and Colony Cores. ADR-0012
@@ -2792,7 +2805,11 @@ splitter.
 
 ## ADR-0073 — Industrial is the second blueprint on the same terminal
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded.** Industrial is now reached by manufacturing its physical Control Matrix.
+> The Research Terminal no longer owns a global Voltaic/Industrial permission ladder. See
+> ADR-0107.
 
 **Context.** BUILD-OUT slice I is the T2 gate: research Industrial, then Pylon MK2 is a real
 Assembler craft. The MK2 process already exists (`assemble/pylon_mk2`) and has no crafting-table
@@ -3429,12 +3446,13 @@ reopening this record. `AGENTS.md` points at the map; it does not contain it.
 
 ## ADR-0088 — Grindless is a modpack-scale progression
 
-*2026-10-04 · Superseded in part by [ADR-0089](#adr-0089--external-code-may-enter-with-its-own-license) and [ADR-0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact)*
+*2026-10-04 · Superseded in part by [ADR-0089](#adr-0089--external-code-may-enter-with-its-own-license), [ADR-0090](#adr-0090--electric-arc-steel-is-the-first-line-past-contact) and [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
 
 > **Superseded in part.** The ban on ever changing our license so that copyleft code can be
 > copied is lifted. Unconfirmed licenses and All Rights Reserved material stay out. See
 > ADR-0089. The schedule that puts the quest book next is withdrawn. The book is last.
-> See ADR-0090.
+> See ADR-0090. ADR-0107 replaces the compressed tier outline and reclassifies the
+> implemented route to Sagittarius as prototype infrastructure.
 
 **Context.** The early game is in: the T0 loop, slices A–E, the kiln, the atlas stub, the
 Multitool wrench, belt junctions, the sorter, the Industrial gate, the Wire Mill, and the
@@ -3845,7 +3863,11 @@ unrunnable. BH is next and is not started.
 
 ## ADR-0094 — The first megastructure is the Ground Array
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded in part.** The registered structure and its tested storage behaviour remain
+> useful prototype code. Its Industrial survival recipe and position as the next
+> megastructure are withdrawn pending placement in the T0-T15 route. See ADR-0107.
 
 **Context.** Slice BH says the concrete structure is chosen when the slice starts. The
 ship column then names Kardashev Type I, II and III. Those are the milestones after the
@@ -3942,7 +3964,11 @@ outside this record. BI is next and is not started.
 
 ## ADR-0095 — Luna is the first original planet
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded in part.** Luna, its regolith and helium-3 remain. The Industrial Lunar Link
+> recipe and early survival access are withdrawn; local-system flight belongs to T10. See
+> ADR-0107.
 
 **Context.** Slice BI says the concrete world is chosen when the slice starts. The ship
 column also names interstellar travel. The owner kept that travel, the black-hole finale
@@ -4027,13 +4053,14 @@ and is not started.
 
 ## ADR-0096 — The first interstellar hop is the Drift
 
-*2026-10-04 · Superseded in part by [ADR-0097](#adr-0097--local-trips-are-rocket-flights)*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
 
 > **Superseded in part.** The Drift and the Starward Link stay. That link is a placeholder.
 > Interstellar travel is a station the player rides. A rocket is the local-system flight,
 > and it is no longer rejected for that flight. See ADR-0097. The sentence below that
 > calls BK next used that id for arrival. BK is now the teleportation orbs and is not
-> next. BM, the station, is next.
+> next. BM, the station, is next. ADR-0107 additionally withdraws the Industrial
+> Starward Link recipe and places the Drift in T13.
 
 **Context.** Slice BJ says the concrete route is chosen when the slice starts. The player
 can already reach Luna, which is still a moon of the home star. The owner kept the
@@ -4102,11 +4129,12 @@ this record. BK is next and is not started.
 
 ## ADR-0097 — Local trips are rocket flights
 
-*2026-10-04 · Superseded in part by [ADR-0098](#adr-0098--the-supraluminal-station-is-the-ride-off-the-star)*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
 
 > **Superseded in part.** The survey rocket is unchanged. The station is no longer "next
 > and not started": it is the ride off the star. The Starward Link stays registered and
-> no longer moves a player. The Lunar Link still does. See ADR-0098.
+> no longer moves a player. The Lunar Link still does. See ADR-0098. ADR-0107 withdraws
+> the prototype recipes and schedules local-system flight for T10.
 
 **Context.** ADR-0088 chose the victory: arriving at the black hole at the centre of the
 Milky Way is the win, and the interior is a finite finale, not an empty marker and not an
@@ -4200,11 +4228,12 @@ not started. BM, the station, is next and is not started. The quest book stays l
 
 ## ADR-0098 — The supraluminal station is the ride off the star
 
-*2026-10-04 · Superseded in part by [ADR-0099](#adr-0099--the-galactic-centre-is-a-sealed-chamber)*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
 
 > **Superseded in part.** The ride from the Drift now arrives at the galactic centre, and a
 > station there departs for the berth saved on the way out. The climb, the toll, the
-> recipes and the Starward Link are unchanged. See ADR-0099.
+> Starward Link registration are unchanged. See ADR-0099. ADR-0107 withdraws the
+> Industrial recipes and places the supraluminal station in T13.
 
 **Context.** Slice BM says the player rides a station to another star, and that the
 concrete ride is chosen when the slice starts. ADR-0097 already chose the shape: a
@@ -4296,10 +4325,11 @@ started. The quest book stays last. BK stays named and not started.
 
 ## ADR-0099 — The galactic centre is a sealed chamber
 
-*2026-10-04 · Superseded in part by [ADR-0100](#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
 
 > **Superseded in part.** The chamber is unchanged. The sentence that leaves the quest book
-> unstarted is withdrawn. The book is in. See ADR-0100.
+> unstarted is withdrawn. The book is in. See ADR-0100. ADR-0107 keeps arrival as victory
+> but makes it T15 and moves black-hole exploitation into postgame.
 
 **Context.** Slice BN says the player reaches the black hole by riding the station, and
 that the interior is written when the slice starts. ADR-0088 already chose the victory:
@@ -4379,7 +4409,11 @@ not started. The quest book stays last.
 
 ## ADR-0100 — The quest book tracks the route and does not gate it
 
-*2026-10-04 · Accepted*
+*2026-10-04 · Superseded in part by [ADR-0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)*
+
+> **Superseded in part.** The book remains a native, per-player route tracker and never
+> gates a machine. Its prototype route to the centre is withdrawn until the T0-T15 campaign
+> exists; machine research evidence disappears with the old global unlocks. See ADR-0107.
 
 **Context.** Slice BC is the original quest book and the in-game guide. It is last, after
 arrival at the galactic centre. ADR-0088 chose a BetterQuesting-style book — lines, tasks,
@@ -4693,3 +4727,151 @@ the desk unable to validate that step, which is the thing this record exists to 
 pull request authored remotely is not finished when CI is green; it is finished when it has
 been through the desk.
 
+---
+
+## ADR-0107 — Sixteen aligned tiers grow through Control Matrices
+
+*2026-10-06 · Accepted*
+
+**Context.** The consolidated branch has a complete, locally validated prototype path from
+the hand crank to the galactic centre. That path is not a viable campaign: the Ground Array,
+rocket and supraluminal station are all small Industrial Assembler recipes, so the nominal
+victory bypasses the retained T3-T6 factory and every Kardashev milestone.
+
+The old progression also has two gates for the same fact. The Research Terminal stores a
+world-scoped permission saying a blueprint may run, while the Assembler recipe is supposed
+to prove that the factory can physically manufacture the machine. A permission is invisible
+in the production graph, and extending it through a long campaign would create a second tree
+that can drift away from the real material requirements.
+
+The current T3 and T4 descriptions compress pressure chemistry, lithography, fission,
+cryogenics, fusion, particle acceleration, quantum fabrication and singularity power into
+two tiers. Later tiers need more content, more interacting routes and a larger spatial scale
+than earlier ones, not a faster repetition of the same recipes. The player also wants many
+recognisable tiers, but F30 is too many labels merely to preserve the existing fourfold power
+step up to the numerical ceiling.
+
+**Decision.**
+
+1. **Technology, controller and power use one aligned T0/F0-T15/F15 ladder.** Tn names
+   what can be built, Fn is its nominal Flux rate, and a Control Matrix rated Tn is the
+   physical controller in every Tn machine. A higher-rated matrix may substitute, but doing
+   so wastes a more valuable component. Chassis marks remain a separate physical-envelope
+   axis: a controller cannot make a chamber hold a temperature, pressure or field that its
+   chassis cannot survive.
+
+   | Tier | Name | Nominal FU/t | Main transition |
+   | --- | --- | ---: | --- |
+   | T0 / F0 | Bootstrap | 8 | hand work to assisted extraction |
+   | T1 / F1 | Voltaic | 32 | first powered factory |
+   | T2 / F2 | Industrial | 128 | fluids, steel and closed chemical loops |
+   | T3 / F3 | Arc | 512 | fed direct power and construction drones |
+   | T4 / F4 | Precision | 2,048 | high-pressure chemistry, purity and lithography |
+   | T5 / F5 | Nuclear | 8,192 | isotope cascades and fission |
+   | T6 / F6 | Cryogenic | 32,768 | deep cooling and superconducting infrastructure |
+   | T7 / F7 | Fusion | 131,072 | breeding blankets and sustained plasma |
+   | T8 / F8 | Particle | 524,288 | accelerator isotopes and exotic precursors |
+   | T9 / F9 | Quantum | 2,097,152 | quantum control and programmable matter |
+   | T10 / F10 | Orbital | 8,388,608 | a factory split between ground and orbit |
+   | T11 / F11 | Planetary | 33,554,432 | colonies, telepresence and Type I scale |
+   | T12 / F12 | Stellar | 134,217,728 | stellar processing and Type II scale |
+   | T13 / F13 | Interstellar | 536,870,912 | multiple star systems and the Drift |
+   | T14 / F14 | Galactic | 2,147,483,648 | abstract expansion and Type III scale |
+   | T15 / F15 | Event Horizon | 8,589,934,592 | the route to the galactic centre |
+
+   The exact rule is `F(n) = 8 * 4^n FU/t`. It preserves every existing F0-F9 value.
+   F14 is the first nominal rate above the Forge Energy `int` boundary, so external transfer
+   saturates there while internal Flux remains wider. F15 is the last named tier, not the
+   numerical ceiling. After arrival, T15 black-hole infrastructure scales from its nominal
+   rate to `Long.MAX_VALUE` FU/t as postgame progression without another fifteen matrix names.
+   The representation must grow before a network sums or buffers those rates.
+
+2. **Control Matrices replace global machine unlocks.** Recipes are visible from the start;
+   the Atlas reports the physical inputs and missing infrastructure. The first T1 matrix is
+   a deliberately small hand-crafted batch so even the first factory has a controller.
+   Every later matrix is manufactured. The first route to rating Tn depends on a Tn-1 matrix,
+   so a tier cannot be skipped, but this is not one rigid recursive recipe forever.
+
+   Matrices have both a **rating** and an **architecture**:
+
+   | Architecture | Frontier ratings | Character |
+   | --- | --- | --- |
+   | **Relay** | T1-T3 | wire, coils, ceramic insulation and discrete logic |
+   | **Integrated** | T4-T6 | silicon, etchant, polymer and fine interconnects |
+   | **Superconducting** | T7-T9 | cryogenic films, coherent control and exotic dopants |
+   | **Photonic** | T10-T12 | zero-g crystals, lasers and optical routing |
+   | **Causal** | T13-T15 | exotic matter, distributed clocks and relativistic control |
+
+   A new architecture opens cheaper, faster or larger-batch routes to older ratings. The
+   original route remains the low-infrastructure option. This keeps old matrix factories
+   useful, makes later factories better at producing their own foundations, and provides
+   route choice instead of fifteen ceremonial reskins.
+
+3. **The Research Terminal no longer grants ordinary machine permissions.** It is redesigned
+   at T4 Precision as the **Research Station**. It analyses samples and Data Cores to produce
+   reusable physical patterns for genuinely advanced components and process modes. Patterns
+   are catalysts, not world-scoped booleans and not a second tier ladder. Normal machines,
+   matrices and visible recipes never require a hidden research flag. Existing Data Cores
+   become pattern media rather than tier currency.
+
+4. **Every tier is a braided factory, not four independent checklists.** Its four persistent
+   domains are materials, chemistry, computation/control and energy. They exchange reagents,
+   catalysts, byproducts, condition hardware and intermediate components throughout the tier,
+   then converge again in the frontier Control Matrix. From T2 onward, no domain's headline
+   output may be completed without at least one other domain.
+
+   Each later tier is approximately longer and richer than the one before it: more process
+   families, deeper routes, more cross-domain loops, a larger logistics problem and a larger
+   signature project. Length comes from new decisions, not inflated stack counts or timers.
+   Every increase in scale ships with proportional leverage: Assembler automation, reusable
+   Process Cards, construction drones, the Assembly Field, abstract colonies and eventually
+   self-replicating infrastructure. Solving a larger problem is progression; repeating a
+   solved action is grind.
+
+5. **The late campaign is decompressed.** Arc, Precision, Nuclear, Cryogenic, Fusion,
+   Particle and Quantum each get their own tier. Rockets and orbital production start at
+   T10. Planetary industry and Horizon Gates belong to T11. Stellar industry and Type II
+   belong to T12. The supraluminal station and the Drift belong to T13. Galactic expansion
+   and Type III belong to T14. The final route to Sagittarius belongs to T15.
+
+   Arrival at the galactic centre remains the victory. Exploiting the supermassive black hole
+   is postgame T15: accretion resources, rotational-energy extraction and the climb toward the
+   absolute Flux rate. The existing chamber is therefore a prototype destination, not the
+   final amount of gameplay at the centre.
+
+6. **The validated space implementation is retained as test infrastructure but withdrawn
+   from survival progression now.** The Ground Array, Lunar and Starward Links, launch pad,
+   survey rocket, station berth, supraluminal station, Luna, Drift and Sagittarius remain
+   registered so their code, worlds and smoke scenarios are not discarded. Their Industrial
+   recipes and the quest path that advertises the shortcut are removed in the next slice.
+   They return to survival only when their assigned tier has its real routes and matrix.
+   No black-hole recipe is authored before T15.
+
+**Alternatives rejected.**
+
+- Keeping a Research Terminal permission in addition to physical fabrication. Two gates for
+  one capability drift and make the recipe graph lie.
+- One recursive matrix item with no alternative architectures. It keeps every old line busy
+  but never rewards later technology with better manufacturing.
+- Independent technology and Flux ladders. That distinction served a six-tier outline; the
+  matrix now gives each named technology a physical power rating without making undervolting
+  a hard wall.
+- F0-F30 solely to reach `Long.MAX_VALUE` at a fourfold step, or changing the fourfold step
+  so F15 lands there. Thirty named tiers dilute their identity; a variable ratio makes the
+  ladder harder to predict and invalidates the proven early balance.
+- Making later tiers longer through larger ingredient counts, longer timers or manual
+  multiblock placement. That is repetition, not content.
+- Leaving the Industrial recipes as a convenient vertical slice. A survival victory at T2
+  makes the actual campaign optional.
+- Making black-hole extraction the victory condition. Arrival remains the clear campaign
+  finish; exploitation is an open-ended postgame with practical rewards.
+
+**Consequences.** `FluxTier`, machine recipes, chassis documentation, the quest catalogue and
+the current research save data still implement the old model until their named slices change
+them. Migration must preserve placed blocks and old worlds; unused research flags may be read
+and ignored rather than deleting saves. The next slice is the narrow survival-boundary change:
+remove prototype endgame recipes and quests while keeping registrations and smokes. The slice
+after that introduces matrix rating/architecture data and the recoverable T1 Relay Matrix route;
+the following slice moves T2 fabrication off the Voltaic/Industrial permission checks. Later
+tiers are specified in route-sized increments before their code is released; this record does
+not pretend that one table is fifteen finished recipe sets.

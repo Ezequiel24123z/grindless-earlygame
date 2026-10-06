@@ -25,6 +25,7 @@ The order was deliberate (ADR-0019): capabilities first, content second. The pay
 - [Units, ratios and time](#units-ratios-and-time)
 - [The item catalogue](#the-item-catalogue)
 - [The fluid catalogue](#the-fluid-catalogue)
+- [The progression lattice](#the-progression-lattice)
 - [The recipe graph](#the-recipe-graph)
 - [Tier 0 and Tier 1: the bootstrap chain](#tier-0-and-tier-1-the-bootstrap-chain)
 - [Ore processing: beneficiation and reduction](#ore-processing-beneficiation-and-reduction)
@@ -262,7 +263,7 @@ The shipped Fluid Well (ADR-0078) is powered chunk water at 100 mB/t. It does no
 vanilla source. Brine, crude hydrocarbon and geothermal stay unemitted until a recipe
 spends them.
 | **Deionised water** | 20 °C | Chemical Washer, ion-exchange resin | the ultrapure chain, electrolyte make-up |
-| **Ultrapure water** | 20 °C | Distillation Tower (T3), Cryogenic Plant (T4), Vacuum Furnace (T5) | integrated circuits, crystal growth |
+| **Ultrapure water** | 20 °C | Distillation Tower (T4), Cryogenic Plant (T6), Vacuum Furnace (T10) | integrated circuits, crystal growth |
 | **Steam** | 150 °C, 0.5 MPa | Boiler, Heat Exchanger | Condenser now; Steam Turbine with fission. The shipped loop is 1 B water → 1 B steam in 10 s, back to water in 4 s (ADR-0081). |
 | **Superheated steam** | 450 °C, 6 MPa | reactor secondary loop | the same turbine, far higher output |
 | **Supercritical water** | 400 °C, 25 MPa | reactor primary loop | heat transport, hydrothermal chemistry |
@@ -340,17 +341,96 @@ is route selection operating on a single machine.
 | **Glycol coolant** | −40 °C | Chemical Reactor, chilled | machine cooling, T2–T3 process cooling |
 | **Liquid nitrogen** | −196 °C | Atmospheric Intake | cryo lines, superconductor fabrication, containment |
 | **Liquid oxygen** | −183 °C | Atmospheric Intake | rocket propellant, high-intensity combustion |
-| **Cryogenic coolant** | −250 °C | Cryogenic Plant (T4) | fusion, quantum components |
-| **Liquid helium** | −269 °C | Cryogenic Plant (T4) | singularity containment |
+| **Cryogenic coolant** | −250 °C | Cryogenic Plant (T6) | fusion, quantum components |
+| **Liquid helium** | −269 °C | Cryogenic Plant (T6) | fusion, quantum components; later singularity containment |
 | **Deuterium** | pressurised gas | Centrifuge / electrolysis of heavy water | fusion fuel |
 | **Tritium** | pressurised gas | lithium breeding blanket | D–T fusion |
 | **Helium-3** | reagent item; the gas form waits | Luna vein, extracted (ADR-0095) | D–³He fusion |
 | **Plasma** | magnetically contained | Plasma Chamber, Fusion Reactor | dissociation, exotic synthesis |
 
 Note the coolant ladder carefully: **liquid nitrogen is available at T2**, from the Atmospheric
-Intake, because air separation is itself a cryogenic process. That is what lets a T3 Superconductor
-be cooled without a T4 Cryogenic Plant, and it is why the tier ordering in the README's component
-table holds. See [clarifications](#clarifications-to-earlier-documents).
+Intake, because air separation is itself a cryogenic process. It supports early cold processes;
+the controlled helium and deep-coolant infrastructure that makes T6 Superconducting Matrices
+practical still belongs to the Cryogenic tier.
+
+---
+
+## The progression lattice
+
+ADR-0107 aligns technology Tn, Control Matrix rating Tn and Flux tier Fn from T0/F0 through
+T15/F15. Four domains persist for the whole campaign:
+
+- **materials** — beneficiation, reduction, alloys, ceramics, composites and exotics;
+- **chemistry** — reagents, process fluids, catalysts, fuels and coolants;
+- **computation/control** — conductors, circuits, sensors, patterns and distributed logic;
+- **energy** — generation, storage, conversion, fields and the infrastructure that carries them.
+
+They are not four independent quest lines. Materials need chemical purification and energy;
+chemistry needs controlled machines and resistant materials; electronics needs ultrapure reagents
+and stable power; every generator needs structures, process media and control. The frontier Control
+Matrix is where the four outputs converge again, not where they first meet.
+
+| Tier | Materials route | Chemical route | Control route | Energy route and scale |
+| --- | --- | --- | --- | --- |
+| **T0 Bootstrap** | raw iron/copper, stone and hand-formed parts | fired clay, carbon and basic glass | redstone contacts and a primitive relay | Hand Crank; a few adjacent blocks; first T1 Relay Matrix batch |
+| **T1 Voltaic** | B1 milling, R1/R2 reduction, plates/rods/gears | water handling, roast gases and ceramic insulation | copper wire, coils, relays and the first Assembler | Thermal power and first pylon; one-room factory |
+| **T2 Industrial** | steel, B2/B3 wet beneficiation, clean melt and casting | sulfur loop, electrolysis, air separation, brine and basic resin | motors, pumps, discrete control panels and wired logic | steam/solar F2; several closed loops across one or two buildings |
+| **T3 Arc** | refractory structures, hot-fluid routing and tougher alloys | first hydrocarbon fractions and the Arc Cell medium | industrial controllers, logistics crates and Construction Drones | fed Arc Reactor; first designed multiblock |
+| **T4 Precision** | electronic silicon, technical ceramics and recovered noble metals | pressure chemistry, nitric/HCl, etchant, polymers and ultrapure water | lithography, Integrated Matrices, ICs and reusable research patterns | precision power conditioning; a multi-line industrial campus |
+| **T5 Nuclear** | fuel cladding, moderators, reflectors and radiation alloys | UF6, heavy water, coolant cleanup and spent-fuel reprocessing | radiation-hard controllers and sensor banks | parametric fission, heat exchange and turbine halls |
+| **T6 Cryogenic** | superconducting alloys, high-field magnets and low-temperature composites | liquid helium, deep cryogens and fusion-feed separation | low-noise control and superconducting interconnects | pulse banks and cryogenic distribution across the campus |
+| **T7 Fusion** | neutron-resistant walls, blankets and containment rings | D-T breeding, D-D alternatives and helium recovery | real-time plasma diagnostics and coherent control | sustained fusion; drone-built structures up to the era's ~32³ limit |
+| **T8 Particle** | accelerator isotopes, target foils and exotic precursors | target preparation, radionuclide separation and recovery loops | beam timing, detector arrays and advanced physical patterns | ring circumference unlocks reactions; fusion feeds the pulse load |
+| **T9 Quantum** | coherent substrates, metamaterials and programmable Matter | nanochemical deposition and quantum coolants | Quantum Cores, advanced replication and the Quantum Assembler | phase storage and aneutronic fusion; the terrestrial factory becomes a campus |
+| **T10 Orbital** | structural composites, ablatives, vacuum alloys and zero-g crystals | propellants, life support and orbital cryogenics | guidance, satellite buses, relays and Photonic Matrices | rockets, Mass Driver, orbital solar and a two-location factory |
+| **T11 Planetary** | regolith beneficiation and world-specific construction materials | ISRU atmosphere processing, closed life support and local fuels | telepresence, Colony Cores, Deep Survey and interplanetary routing | several worlds, Space Elevator and Horizon Gates; Kardashev Type I |
+| **T12 Stellar** | star-lifted matter and Stellar Forge materials | stellar plasma separation and extreme process media | photonic stellar control and swarm coordination | Dyson network and system-scale industry; Kardashev Type II |
+| **T13 Interstellar** | materials and components sourced across several systems | long-duration fuels, deep cryogens and closed-loop voyage chemistry | Causal Matrices, distributed clocks and process-state transport | supraluminal station, the Drift and a multi-system factory |
+| **T14 Galactic** | industrial antimatter, stable exotic matter and singularity structures | annihilation media and galaxy-scale recovery loops | self-replicating probes, causal routing and distributed computation | singularity power and abstract expansion; Kardashev Type III |
+| **T15 Event Horizon** | relativistic shielding and accretion-resistant structures | final cryogenic, plasma and antimatter service loops | galactic navigation, timing and horizon telemetry | the route to Sagittarius; arrival is victory, extraction is postgame |
+
+### Growth contract
+
+Each tier has an entry bootstrap, several interacting route expansions, a logistics or scaling
+problem, a signature project and a frontier matrix. Later tiers are approximately larger and
+longer than earlier ones, but the extra duration must come from new decisions. Larger stack counts,
+longer timers and hand-placing more blocks do not count.
+
+The counterweight is permanent automation. The Assembler removes repeated fabrication, Process
+Cards remove repeated tuning, Construction Drones remove repeated placement, the Assembly Field
+handles chunk-scale structures, colonies are simulated rather than force-loaded, and galactic
+expansion is abstract and self-replicating. Complexity rises; chores do not.
+
+### Control Matrix routes
+
+The first route to a new rating has this shape:
+
+```
+previous-rating matrix
+  + structural component
+  + process-conditioned component
+  + computation/control component
+  + power-coupling component
+  ──> frontier Control Matrix
+```
+
+Those four components are real products used elsewhere, not matrix-only tokens, and each already
+depends on another domain. The T1 Relay Matrix is the only bootstrap exception: a small manual
+batch starts the first factory, after which the Assembler automates it.
+
+Five architectures overlap rather than replace one another:
+
+| Architecture | Frontier ratings | New route opened |
+| --- | --- | --- |
+| **Relay** | T1-T3 | discrete, cheap-infrastructure matrices |
+| **Integrated** | T4-T6 | semiconductor batches for old Relay ratings |
+| **Superconducting** | T7-T9 | cryogenic high-throughput routes for Integrated and Relay ratings |
+| **Photonic** | T10-T12 | zero-g optical routes that collapse long terrestrial interconnect chains |
+| **Causal** | T13-T15 | distributed fabrication of every older rating at system scale |
+
+The frontier recipe always carries the previous rating, so progression cannot be skipped. A later
+architecture may bypass that recursive chain only for ratings below its frontier. That is the
+reward: old machines become cheap to reproduce precisely when factories need them by the hundreds.
 
 ---
 
@@ -478,7 +558,7 @@ the secondary material of the vein, resolved from the material's tags — which 
 README's chain shows and is usually worth more than the extra metal would have been. The shipped
 recipe scales that line by four so the 0.25 u is one item: 8 crushed + 2 B water → 8 washed
 crushed + 1 crushed of the next washable metal, in 20 s (ADR-0076). B3 and B4 are
-T2 and T3 and cost reagents and power. The shipped flotation batch (ADR-0080) is that
+T2 and T5 and cost reagents and power. The shipped flotation batch (ADR-0080) is that
 line times ten: `20 crushed + 500 mB surfactant → 24 concentrate + 3 tailings` in 80 s.
 Concentrate reduces as `b3_r1` (one ingot, same as crushed). Ten tailings reduce to one
 ingot, so the trace does not add another 2.40. Surfactant is `1 carbon + 1 B water` on
@@ -507,8 +587,8 @@ numbers. Their costs differ in *kind*, which is the requirement:
 | --- | --- | --- | --- | --- |
 | R1 | T1 | low | one machine | It is the only thing you can build. It never stops being cheap. |
 | R2 | T1 | low | two machines + gas feed | You want the SO₂. The acid line starts here. |
-| R3 | T3 | **high** | acid line + cell | You are material-limited and power-rich. |
-| R4 | T5 | **absurd** | plasma containment | Power has stopped being scarce; you want the sulfur elemental. |
+| R3 | T4 | **high** | acid line + cell | You are material-limited and power-rich. |
+| R4 | T8 | **absurd** | plasma containment | Fusion power is established; you want the sulfur elemental. |
 
 ### The composed table
 
@@ -521,10 +601,10 @@ Metal per unit of raw ore, for the combinations worth naming:
 | B2 × R1 | **2.00** + byproduct | T2 | The README's "2× + byproduct". |
 | B3 × R1 | **2.40** | T2 | Flotation pays for itself immediately. |
 | B2 × R2 | **2.30** + SO₂ + byproduct | T2 | The acid bootstrap. Most players' second line. |
-| B3 × R2 | **2.76** + SO₂ | T3 | |
-| B3 × R3 | **3.12** | T3 | The hydrometallurgical plateau. |
-| B4 × R3 | **3.32** | T4 | |
-| B4 × R4 | **4.08** | T5 | The practical ceiling. |
+| B3 × R2 | **2.76** + SO₂ | T2 | |
+| B3 × R3 | **3.12** | T4 | The hydrometallurgical plateau. |
+| B4 × R3 | **3.32** | T5 | |
+| B4 × R4 | **4.08** | T8 | The practical ceiling. |
 
 The ladder runs **1× to roughly 4×**, which sits inside the Thermal-to-Mekanism band the README
 commits to — Mekanism's own ladder tops out at 5×. Grindless reaches a little less, and charges for
@@ -694,10 +774,10 @@ ways to the same item — two of them make a different, cheaper item that has it
 
 | Route to **electronic** silicon | Process | Time | Out per 1 u met-Si | Needs |
 | --- | --- | --- | --- | --- |
-| **Siemens** | `1 u met-Si + 3 B HCl [T 300] ──> 1 B trichlorosilane + H₂`, then `[T 1100 · atm reducing] ──> e-Si + 3 B HCl returned` | 10 + 20 s | **0.95 u** | chlorine economy, two machines |
-| **Zone refining** | `[T 1420 ±5 · atm inert]` in an Induction Furnace MK III | 60 s | **0.70 u** | one machine, a precise envelope, patience |
-| **Vacuum float** | `[T 1450 · P vac]` in a Vacuum Furnace | 30 s | **0.98 u** | T5 |
-| **Orbital growth** | zero-g, hard vacuum | 30 s | **1.00 u**, no dislocations | the orbital stage |
+| **Siemens** | `1 u met-Si + 3 B HCl [T 300] ──> 1 B trichlorosilane + H₂`, then `[T 1100 · atm reducing] ──> e-Si + 3 B HCl returned` | 10 + 20 s | **0.95 u** | T4 chlorine economy, two machines |
+| **Zone refining** | `[T 1420 ±5 · atm inert]` in an Induction Furnace MK III | 60 s | **0.70 u** | T4 precision, one machine, patience |
+| **Vacuum float** | `[T 1450 · P vac]` in a Vacuum Furnace | 30 s | **0.98 u** | T10 |
+| **Orbital growth** | zero-g, hard vacuum | 30 s | **1.00 u**, no dislocations | T10 orbital stage |
 
 Zone refining is the interesting one: it is **worse on every axis except infrastructure**. It
 needs no chemistry at all, just one machine held inside a ±5 °C band — which is a chassis-mark
@@ -717,7 +797,7 @@ as intended.
 
 1 u wafer + 0.2 B etching acid + 0.05 u gold fine wire
   [T 60]  12 s
-  ──> 1 u circuit die + 0.2 B spent etchant          (Lithography Unit, T3)
+  ──> 1 u circuit die + 0.2 B spent etchant          (Lithography Unit, T4)
 
 4 u circuit die + 1 u plate + 0.1 B polymer resin
   ──> 1 Circuit Board                                (Assembler)
@@ -791,21 +871,20 @@ has hydrogen from chlor-alkali but no coal line is not stuck.
 | --- | --- | --- | --- | --- |
 | **Water** | 20 °C | pump | T1 | machines, the first reactors |
 | **Glycol coolant** | −40 °C | Chemical Reactor, chilled | T2 | process cooling, condensers |
-| **Liquid nitrogen** | −196 °C | **Atmospheric Intake** | **T2** | superconductor fabrication, cryo lines, containment rings |
-| **Cryogenic coolant** | −250 °C | Cryogenic Plant | T4 | fusion magnets, quantum cores |
-| **Liquid helium** | −269 °C | Cryogenic Plant | T4 | singularity containment |
+| **Liquid nitrogen** | −196 °C | **Atmospheric Intake** | **T2** | early cryo lines and cold process work |
+| **Cryogenic coolant** | −250 °C | Cryogenic Plant | T6 | fusion magnets, quantum cores |
+| **Liquid helium** | −269 °C | Cryogenic Plant | T6 | superconducting control; later singularity containment |
 
-The ladder is written out because the tier ordering matters: a T3 Superconductor needs cryogenic
-cooling and the Cryogenic Plant is T4, which would be a gate inversion if liquid nitrogen were not
-already available at T2 from air separation. It is, so it is not. Real high-temperature
-superconductors are cooled with liquid nitrogen for exactly this reason.
+The ladder is written out because the tier ordering matters. T2 liquid nitrogen teaches cold
+handling and remains useful, while the T6 Cryogenic Plant supplies the deeper cooling and purity
+needed for Superconducting Matrices and fusion magnets.
 
 ### Isotope separation
 
 ```
 1 B uranium hexafluoride
   [high g · fld n/a]  30 s
-  ──> 0.007 B enriched + 0.993 B depleted            (Centrifuge, T3)
+  ──> 0.007 B enriched + 0.993 B depleted            (Centrifuge, T5)
 
 n × Centrifuge in cascade  ──> reactor-grade at 4 %
 ```
@@ -842,11 +921,11 @@ a fluid. Those gates, with the processes behind them:
 | **Machine Casing** | T1 | `4 u plate + 2 u rod` 8 s | none — the bootstrap |
 | **Motor** | T2 | `1 casing stock + 2 u coil + 1 u rod` 10 s | none |
 | **Pump** | T2 | `1 casing + 1 motor + 2 u ring + 0.1 B resin` 12 s | **resin** — so the organics line gates all plumbing |
-| **Circuit Board** | T2 | `4 u circuit die + 1 u plate + 0.1 B resin`, etched | **etching acid** |
-| **Integrated Circuit** | T3 | `1 board + 0.2 u gold fine wire + 0.5 B ultrapure water` 16 s | **ultrapure water** |
-| **Superconductor** | T3 | `1 u fine wire + 0.3 B liquid nitrogen [T -196 · atm inert]` 20 s | **liquid nitrogen** |
-| **Quantum Core** | T4 | `1 IC + 1 u exotic + 0.5 B cryogenic coolant` 30 s | **cryogenic coolant** |
-| **Containment Ring** | T4 | `4 u superconductor + 2 u composite + 1 B liquid nitrogen` 40 s | **liquid nitrogen** |
+| **Circuit Board** | T3-T4 | `4 u circuit die + 1 u plate + 0.1 B resin`, etched | **etching acid** |
+| **Integrated Circuit** | T4 | `1 board + 0.2 u gold fine wire + 0.5 B ultrapure water` 16 s | **ultrapure water** |
+| **Superconductor** | T6 | `1 u fine wire + 0.3 B deep coolant [T -250 · atm inert]` 20 s | **cryogenic coolant** |
+| **Containment Ring** | T7 | `4 u superconductor + 2 u composite + 1 B liquid helium` 40 s | **liquid helium** |
+| **Quantum Core** | T9 | `1 coherent controller + 1 u exotic + 0.5 B cryogenic coolant` 30 s | **physical research pattern** |
 
 Each fluid gate is placed where it forces a *small* piece of infrastructure at a point where small
 is affordable — and never where it would force a rebuild. The gates arrive in the order
@@ -856,8 +935,8 @@ grows, so no gate is ever a surprise.
 Machines themselves are assembled from these:
 
 ```
-1 Machine Casing + 2 Motor + 1 Circuit Board + 4 u plate
-  [+ researched blueprint]  20 s
+1 Machine Casing + 2 Motor + 1 T2 Relay Matrix + 4 u plate
+  20 s
   ──> 1 <T2 machine>                                 (Assembler)
 ```
 
@@ -877,7 +956,7 @@ cost.* Every row below differs in kind, not merely in amount.
 | **Sulfuric acid** | 3 — roaster SO₂, elemental sulfur burn, raffinate regeneration | whether you already roast, mine or leach |
 | **Hydrogen** | 4 — chlor-alkali, water electrolysis, steam reforming, cracker offgas | power ↔ carbon feedstock ↔ coproducts |
 | **Oxygen** | 3 — air separation, water electrolysis, peroxide decomposition | scale ↔ purity ↔ power |
-| **Ultrapure water** | 3 — distil + deionise (T3), cryogenic (T4), vacuum (T5) | tier ↔ throughput |
+| **Ultrapure water** | 3 — distil + deionise (T4), cryogenic (T6), vacuum (T10) | tier ↔ throughput |
 | **Chlorine** | 2 — chlor-alkali, HCl recovered from Siemens | whether the silicon line exists yet |
 | **Ammonia** | 2 — Haber, coke-oven liquor recovery | pressure infrastructure ↔ having a coke line |
 | **Polymer resin** | 3 — naphtha cracking, syngas route, replication | feedstock ↔ power |
@@ -937,10 +1016,10 @@ Tensions found while writing this document, and how each was resolved. None requ
 
 | Tension | Resolution |
 | --- | --- |
-| **Ultrapure water gates the T3 Integrated Circuit, but the README lists only T4 and T5 sources.** | A T3 route is specified here: deionisation in the Chemical Washer followed by double distillation in the Distillation Tower. The T4/T5 sources remain the better ones. The README's *Source* column is the best source, not the only one. |
-| **The T3 Superconductor needs cryogenic coolant, and the Cryogenic Plant is T4.** | No change needed. Liquid nitrogen is a cryogenic coolant and comes from the **T2** Atmospheric Intake, since air separation is itself cryogenic. The [coolant ladder](#fuels-coolants-and-isotopes) makes the grades explicit. |
+| **Ultrapure water gates the T4 Integrated Circuit.** | The first route is deionisation in the Chemical Washer followed by double distillation in a T4-capable Distillation Tower. Cryogenic and vacuum routes improve it at T6 and T10. |
+| **Superconductors need colder infrastructure than the T2 liquid-nitrogen line.** | They enter at T6 with the Cryogenic Plant and deep coolant. T2 liquid nitrogen remains an earlier teaching and process fluid, not a substitute for the T6 frontier. |
 | **The README sources etching acid from the Chemical Washer, but acid synthesis belongs in the Chemical Reactor.** | Both are right once synthesis and *formulation* are distinguished. Etching acid is a mixture; the Washer formulates it from acids the Reactor made. |
-| **`MACHINES.md` gives the Distillation Tower no tier.** | Fixed at **T3** here, alongside the Autoclave, Cracker and Polymerizer it works with. An addition, not a contradiction. |
+| **`MACHINES.md` gives the Distillation Tower no first tier.** | Fixed at **T3** here for coarse hydrocarbon fractions. Its T4-capable precision route is what first makes ultrapure water. |
 | **"Leachate" is one fluid in the README but must select between metals.** | Specified as a **family** of four lixiviants. The README entry stays true as the family's generic name. |
 | **`MACHINES.md` asks whether six condition dimensions overload the UI.** | Partly answered by the [omission rule](#how-to-read-a-process): no recipe names more than three, because unwritten conditions are not requirements. The question stays open for the *machine* UI. |
 
@@ -956,9 +1035,9 @@ Recorded so a later session knows they were considered and left open, not missed
 - **Should grade be a continuous number on the stack rather than a form?** Continuous grade is more
   realistic and would collapse four forms into one, but it makes every stack unique, which is bad
   for belts, storage and the player's ability to predict a recipe.
-- **How much of the chemical core should be mandatory?** Resin, etching acid, ultrapure water and
-  liquid nitrogen are currently hard gates. Four may be one too many for a player who wants to
-  reach T4 without ever enjoying chemistry.
+- **How many new chemical sub-lines should one frontier require?** Every frontier must braid
+  chemistry into its other routes, but T4's acid, polymer and ultrapure-water work should be
+  prototyped to ensure that "interacting" does not become "three unrelated factories".
 - **Reagent loop losses are a flat 10 %.** It should probably depend on pipe tier, temperature and
   whether a Condenser is fitted — a loop you maintain well should be a loop that pays better.
 - **Catalyst degradation rate is unspecified.** It has to be slow enough never to feel like a

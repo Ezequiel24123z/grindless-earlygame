@@ -1,17 +1,35 @@
 # Autonomous build-out
 
-This file keeps the history of the slices already defined, and names the next calendar.
+This file keeps the history of the slices already defined and names the next executable slice.
 
 The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013--the-readme-is-the-design-source-of-truth)).
-[ADR-0088](DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression) retires the six-tier
-cap and the early-game convenience framing. Anything not yet started below is **held**. The
-next calendar is the **modpack expansion**. The quest book is last, not first
-([ADR-0090](DECISIONS.md#adr-0090--electric-arc-steel-is-the-first-line-past-contact)).
+[ADR-0107](DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)
+replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The tables from G
+through BN remain below as implementation history; their old tier placement is not an active
+queue.
 
-**No next slice.** Two calendars ran in parallel and both are in: the T2 foundation
-through **Y** (Flux Exosuit), and the modpack expansion through **BC** (the quest book,
-ADR-0100). BN (arrival at the galactic centre) is done. BK (teleportation orbs) is
-identified and not started. **Z–BB stay held** (ADR-0088). Do not invent a slice.
+**Next: BO — withdraw the prototype survival shortcut.** The consolidated tree is locally
+validated, but its Ground Array, placeholder links, rocket and supraluminal station are all
+Industrial Assembler recipes. That lets survival bypass T3–T15 and reach the nominal victory.
+BO removes that access without deleting or weakening the tested destination infrastructure.
+
+---
+
+## Campaign restoration
+
+Only the first incomplete row is active. Later rows are named so a session does not have to
+reconstruct the intended order, but it does not start them early.
+
+| ID | Slice | Player can | Ship | Preserve | Done when |
+| --- | --- | --- | --- | --- | --- |
+| **BO** | **Withdraw prototype survival shortcut** | Follow every currently implemented survival quest without being sent into future-tier test infrastructure | Remove the Industrial Assembler recipes for Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth and Supraluminal Station. End the quest/guide route at the last genuinely reachable T2 objective. Update graph counts and checks. | All block/item registrations, Luna, the Drift, Sagittarius, travel logic, commands and smoke scenarios. Existing worlds may still contain and exercise every prototype. | No survival recipe or quest reaches a prototype destination; all checks pass; a boot smoke still proves registrations. |
+| **BP** | **Control Matrix foundation** | Build the first T1 Relay Matrix and inspect its rating/architecture | Matrix item/data model, substitution rules, first recoverable T1 batch, legacy-state migration seam and Atlas visibility. Extend `FluxTier` through F15 without changing existing values. | Existing worlds and the current T0 bootstrap. | Matrix behaviour checks cover rating, architecture, substitution and migration; F0–F15 values match ADR-0107. |
+| **BQ** | **Physical T2 gate** | Manufacture T2 machines from a T2 Relay Matrix rather than a world permission | T2 matrix route braided through the existing material, chemical, control and power lines. Remove Voltaic/Industrial checks from ordinary fabrication. Recast Data Cores as pattern media. | Existing fabricated machines and player progress. | Every T2 machine consumes the physical rating; no ordinary recipe consults a global blueprint flag. |
+| **BR** | **T3 Arc frontier** | Build a larger factory with drones and fed Arc power | Refractory/Arc Cell routes, Construction Drones, the first parametric multiblock kernel, Arc Reactor and T3 Relay Matrix. | The existing T0–T2 lines as useful low-infrastructure routes. | The four lattice domains interact before the T3 matrix, and the Arc Reactor runs in a booted server. |
+
+T4–T15 follow the lattice in
+[`PROCESSES.md`](PROCESSES.md#the-progression-lattice). Split each frontier into playable slices
+when its predecessor is real; do not create empty machine shells or a whole tier in one review.
 
 ---
 
@@ -93,16 +111,16 @@ electric-arc steel (BD) to the galactic centre (BN) and the quest book (BC), and
 records for armour (ADR-0067)
 and Horizon Gates (ADR-0068). Roadmap 0.1 definition of done — empty world to automated
 iron without hand-mining — is met. 0.2 logistics leftovers from ADR-0060 (merger, tunnel,
-overflow, sorter) are in. Powered belts wait for R. Belt Reader is not a leftover row.
+overflow, sorter) and the powered belts from R are in. Belt Reader is not a leftover row.
 
 ---
 
-## Remaining slices
+## Historical six-tier slices
 
 **G through Y are done**, and so is the whole modpack expansion (BD–BN, then BC). Every
-row below that is not marked done is **held** (ADR-0088): that is Z–BB, and BK. A held row
-stays in this file so the history is not thrown away. It is not the next session. Do not
-mark a held row done by starting it.
+row below that is not marked done was **held** by ADR-0088: Z–BB and BK. ADR-0107 supersedes
+their tier placement and the active campaign calendar now starts at BO. These rows stay so the
+history is not thrown away; do not execute them as written.
 
 ### 0.2 leftovers — the factory starts feeling like a factory
 
@@ -207,15 +225,15 @@ the factory for real.
 
 ---
 
-## Modpack expansion
+## Historical modpack expansion
 
 ADR-0088, rescheduled by ADR-0090. This calendar ran alongside the T2 foundation rows
-L–Y, which shipped in parallel and are no longer held. The quest book is done. Do not
-open a row after it.
+L–Y and is complete as prototype infrastructure. ADR-0107 supersedes its survival tier
+placement; the active calendar is [Campaign restoration](#campaign-restoration).
 
-**No next slice.** BC is done (ADR-0100). BK (teleportation orbs) is not next.
+BC is done (ADR-0100). BK (teleportation orbs) remains only a historical proposal.
 The Lunar Link and the Starward Link stay registered. The station replaced the hop
-(ADR-0098). The link block no longer moves a player. This pass does not delete it.
+(ADR-0098). The link block no longer moves a player.
 
 | ID | Slice | Player can | Ship | Do not | Done when |
 | --- | --- | --- | --- | --- | --- |
@@ -240,11 +258,10 @@ The original quest book is in, with the in-game guide, after that arrival. Nothi
 ## How a session starts
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's opening status, then the
-   row it names. BC is done, and the status names no following slice.
-2. Branch from the current tip. Implement only that slice. BC is done. Held rows
-   are not a queue. No slice follows the quest book. Do not start BK. Do not resume BN.
-   Do not invent a slice.
+   row it names. BO is next.
+2. Branch from the current tip. Implement only the active row. The historical held rows
+   are not a queue. Do not start BK or resume BN.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,
-   and name the following slice before starting it. There is no following slice.
+   and name the following slice before starting it.
 
-Uncommitted work does not exist. A session does not work through Z–BB while they are held.
+Uncommitted work does not exist. A session does not work through historical Z–BB out of order.

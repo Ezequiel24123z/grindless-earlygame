@@ -1,15 +1,17 @@
 # Grindless
 
 **Grindless** is a full modpack-scale progression for Minecraft. The early game already
-built — a hand crank, the first factory, the contact process — is the foundation. It is
-the start of the ladder.
+built — a hand crank, the first factory, the contact process — is the foundation of an
+aligned **T0/F0-T15/F15** ladder carried by physical Control Matrices.
 
-The early-game convenience framing and the six-tier cap are retired. From here the mod
-keeps going: intermediate tiers, endgame tiers, more processing lines, more materials,
-megastructures, original planets and original interstellar play. The large milestones
-are the Kardashev scales. The goal is the black hole at the centre of the Milky Way.
-See [Modpack-scale progression](#modpack-scale-progression) and
-[ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression).
+Each tier is a larger braided factory: materials, chemistry, computation/control and
+energy interact throughout the tier and converge in the next frontier matrix. Later
+tiers add more routes, conditions, logistics and spatial scale, while better automation
+removes the repetition that scale would otherwise create. The large milestones are the
+Kardashev scales. The goal is the black hole at the centre of the Milky Way. See
+[Modpack-scale progression](#modpack-scale-progression),
+[ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression) and
+[ADR-0107](docs/DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices).
 
 The early hours of a typical pack are still the wrong way to start that ladder. Punch
 wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next
@@ -20,23 +22,12 @@ code and assets do not enter this repository (ADR-0088).
 The arc runs from a hand crank and two iron, through belts, reactors and a particle
 accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 
-> **Status: pre-alpha.** The foundation through the contact process is playable and **builds
-> green on Forge 1.20.1**. The goal from here is a modpack-scale progression
-> ([ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression)).
-> T0–T6 are the specified start, not a cap. Slices defined past the contact process and
-> not yet started are held. Electric-arc steel is in (ADR-0090). Refractory brick is in
-> (ADR-0091). Metallurgical silicon is in (ADR-0092). Zone refining is in (ADR-0093).
-> The Ground Array is in (ADR-0094). Luna is in (ADR-0095). The Drift is in
-> (ADR-0096). Local trips are rocket flights (ADR-0097): a survey rocket climbs
-> to the ceiling, then a landing map offers the home world and Luna. The Lunar
-> Link stays as a placeholder. The Starward Link stays registered and no longer
-> moves a player. Teleportation orbs (BK) are named, ordered before that flight,
-> and not started. The supraluminal station (BM) is in (ADR-0098): it climbs to
-> the ceiling, and that ceiling is the arrival on the Drift. Arrival at the
-> galactic centre (BN) is in (ADR-0099): riding on from the Drift lands in a
-> sealed chamber, and that arrival is the victory. The way there is the station,
-> not a link. The original quest book and the in-game guide (BC) are in
-> (ADR-0100). They are last. No slice follows them.
+> **Status: pre-alpha.** The foundation through Industrial is playable and the consolidated
+> branch is locally validated on Forge 1.20.1. The Ground Array, Luna, Drift, rocket,
+> station and galactic-centre chamber are also implemented and smoke-tested, but ADR-0107
+> reclassifies them as prototype/test infrastructure rather than an Industrial survival
+> shortcut. Their recipes and premature quest path are the next cleanup slice. The real
+> campaign reaches orbit at T10, the Drift at T13 and Sagittarius at T15.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -66,14 +57,14 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 - [System 5 — Fluids, pressure and phase](#system-5--fluids-pressure-and-phase) — pipes, tanks, loops
 - [System 6 — Tools and equipment](#system-6--tools-and-equipment) — blueprints, drills, exosuit
 - [System 7 — Resonance, defence and weapons](#system-7--resonance-defence-and-weapons)
-- [System 8 — The futuristic tier](#system-8--the-futuristic-tier) — fission, fusion, accelerator
+- [System 8 — The futuristic tiers](#system-8--the-futuristic-tiers) — fission, fusion, accelerator
 - [System 9 — Orbit and the planets](#system-9--orbit-and-the-planets) — satellites, remote colonies
 
 **Mechanics**
 
 - [Energy: Flux Units](#energy-flux-units)
 - [Processing chain](#processing-chain)
-- [Progression: the Research Terminal](#progression-the-research-terminal)
+- [Progression: Control Matrices and research](#progression-control-matrices-and-research)
 - [Fabrication: the factory builds the factory](#fabrication-the-factory-builds-the-factory)
 - [Containers: buffers, filters and voiding](#containers-buffers-filters-and-voiding)
 - [Block and item catalogue](#block-and-item-catalogue)
@@ -202,57 +193,36 @@ that item instead of registering a duplicate.
 Recorded in [ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-progression).
 The systems below stay the foundation.
 
-**Tiers.** Many more than T0–T6: intermediate tiers, endgame tiers, more processing lines,
-more materials. The T0–T6 table further down is the ladder already specified. It is the start.
+**Tiers.** Technology, controller and power advance together from T0/F0 through T15/F15
+(ADR-0107). Every T1+ machine contains a physical Control Matrix of its rating. There is no
+separate world permission that says a visible recipe is allowed.
 
 **Milestones.** Kardashev scales are the large marks. Type I is a planet's energy, Type II a
 star's, Type III a galaxy's. Megastructures sit along the way between those marks. The names
-are milestones. A Flux Unit is not a physical watt. The first structure is the Ground Array
-(ADR-0094): a fixed 3×3 of one controller and eight casings. While the ring is complete and a
-pylon covers the controller, it adds ten seconds of MK3 throughput to that network as storage.
-It does not generate, it does not project a supply cube, and it is not a Kardashev scale.
+are milestones. A Flux Unit is not a physical watt. Type I belongs to the Planetary tier,
+Type II to Stellar and Type III to Galactic.
 
-**Planets.** Planetary gameplay has unique extractable resources. The first world is
-Luna (ADR-0095): regolith, no ore, helium-3 from the extractor. The Lunar Link still
-spends one capacitor of Flux to go there, and it is marked as a placeholder
-(ADR-0097). The flight that replaces it is the survey rocket: it climbs to the
-build ceiling, then a landing map offers the home world and Luna. Leaving home
-spends that same capacitor. Leaving Luna does not. The other worlds are not started.
-Just before that flight, an alternate route of a magical material — unnamed until
-its slice — is named as teleportation orbs (BK). Shift-right-click would set
-coordinates and dimension, right-click would teleport, and the orb could sit on
-a pedestal so a later trip to the same body skips the rocket. That row is not
-started and is not next. Draconic Evolution may inspire it; its code and assets
-are not copied. Space and interstellar gameplay stay original to Grindless. The
-first hop off the star is still the Drift (ADR-0096): one deck with no ore,
-reached by riding a supraluminal station that spends the Ground Array's buffer
-(ADR-0098). The station climbs to the ceiling, and that ceiling is the arrival.
-Riding on from the Drift reaches the galactic centre (ADR-0099). The Starward
-Link stays registered and no longer moves a player.
+**Planets.** Planetary gameplay has unique extractable resources. Luna, its regolith and
+helium-3 already exist as validated prototypes (ADR-0095), but survival reaches them through
+the T10 local-flight programme, not an Industrial teleport recipe. T11 turns worlds into an
+interacting production network through life support, telepresence, abstract colonies and
+Horizon Gates. Space and interstellar gameplay stay original to Grindless.
 
-**Victory.** The goal is to reach the black hole at the centre of the Milky Way. Arriving is
-the victory, and the way there is the station, not a link (ADR-0097, ADR-0099). The interior
-is a sealed chamber: unbreakable horizon shell, one room, one mark, and a shaft the ride
-home climbs through. An empty arrival story is rejected. An endless second game inside
-the hole is rejected.
+**Victory.** The goal is to reach the black hole at the centre of the Milky Way in T15.
+Arriving is the victory, and the way there is the station, not a link (ADR-0097, ADR-0099).
+Exploiting the accretion environment and rotational energy is useful postgame T15 content,
+not an extra tier and not a prerequisite for the victory.
 
-**Energy.** Endgame generation reaches the maximum rate the energy system can represent.
-Per-tick rates and stored amounts are a Java `long` (`FluxTier.nominal`,
-`ProcessRecipe.fuPerTick`, `FluxStorage`). That maximum is `Long.MAX_VALUE` FU/t
-(9,223,372,036,854,775,807). Today's ladder stops at F9, 2,097,152 FU/t
-(`FluxTier.MAX_NOMINAL`), which is a content ceiling, not the type's ceiling. One `long` can
-name the target rate. It cannot hold that rate multiplied by a duration, or the sum of two
-such rates. The Forge Energy bridge saturates at `Integer.MAX_VALUE` (ADR-0037), and
-`ProcessLogic.work` divides those amounts in `double`, which cannot represent every integer
-above 2^53. Any slice that needs those operations waits until the representation grows. This
-record does not change the type.
+**Energy.** Nominal tier rates remain predictable: `F(n) = 8 × 4ⁿ FU/t`. F15 is
+8,589,934,592 FU/t. Postgame black-hole infrastructure scales within T15 from that nominal
+rate to `Long.MAX_VALUE` FU/t rather than adding F16-F30. Sums, multi-tick buffers and precise
+work accounting require a wider representation before that content ships; the FE bridge
+continues to saturate at its `int` boundary (ADR-0037, ADR-0107).
 
-**Quest book.** A book in the BetterQuesting style: lines, tasks, dependencies, rewards.
-It is in (ADR-0100). Two T0 handhelds: the quest book follows the route from the
-Multitool to the sealed chamber, and the field guide reads that same route. The book
-does not gate a machine. BetterQuesting's code stays out. The GitHub `LICENSE` is MIT
-and the CurseForge page says All Rights Reserved (ADR-0088). Changing our license
-does not resolve that (ADR-0089).
+**Quest book.** A native book in the BetterQuesting style: lines, tasks, dependencies and
+rewards. It never gates a machine (ADR-0100). Its current prototype route is shortened to
+implemented survival content, then grows with the T0-T15 campaign. BetterQuesting's code
+stays out.
 
 **Quality of life.** Features known from other mods are in scope, built as original work
 unless a later slice copies code under the terms in ADR-0089.
@@ -398,7 +368,7 @@ must-have: fitting it on day one wastes a slot and pays upkeep for nothing.
 ### Late game
 
 The **Deep Core Drill** stops caring about local geology entirely and pulls from a weighted
-planetary pool — any material in the pack, at a rate set by tier and power. It is the T3 answer
+planetary pool — any material in the pack, at a rate set by tier and power. It is the T5 answer
 to "I need a bit of everything and I do not want to think about it", and its cost reflects that.
 
 ---
@@ -456,7 +426,7 @@ Belts carry items along their surface, visibly, and feed machines directly.
 | **Conveyor Belt** | 8 items/s | none — mechanical | 5 blocks | T1 |
 | **Flux Belt** | 16 items/s | LV | 9 blocks | T2 |
 | **Mag-Lev Belt** | 32 items/s | MV | 15 blocks | T3 |
-| **Phase Belt** | 64 items/s, items are inert to entities | HV | 24 blocks | T3 |
+| **Phase Belt** | 64 items/s, items are inert to entities | F9 | 24 blocks | T9 |
 
 The first belt tier is **deliberately unpowered**. Belts must be available at the exact moment
 the player builds their first extractor, before they have a real power network, or the early game
@@ -571,7 +541,7 @@ effects from reflectors, all of it designed by the player and placed by the swar
 designing is iterative instead of ruinous. The details are in
 [`docs/MACHINES.md`](docs/MACHINES.md#multiblocks-shape-is-a-parameter).
 
-At T5 the **Assembly Field** replaces the swarm and materialises a whole blueprint at once, for
+At T10 the **Assembly Field** replaces the swarm and materialises a whole blueprint at once, for
 structures measured in chunks.
 
 ### Operator Drones — work that is a sequence, not a flow
@@ -647,7 +617,7 @@ high-volume — a belt moves more ore in a second than a drone moves in a minute
 where continuous flow loses: **irregular, conditional, multi-step work**, and locations that do not
 justify permanent infrastructure.
 
-At T6 the same routines run on remote colonies, where belts cannot reach at all, which is what
+At T11 the same routines run on remote colonies, where belts cannot reach at all, which is what
 turns an off-world base from a resource trickle into a real factory.
 
 ### Control and logic
@@ -719,8 +689,8 @@ Three failings of existing conduit mods, addressed on purpose:
 | --- | --- | --- | --- |
 | **Basic Conduit** | low | none for items, pumps still needed for fluid | T2 |
 | **Flux Conduit** | moderate | small, constant | T3 |
-| **Phase Conduit** | high | proportional to load and to distance from ambient | T4 |
-| **Singular Conduit** | effectively unlimited within a network | high | T5 |
+| **Phase Conduit** | high | proportional to load and to distance from ambient | T9 |
+| **Singular Conduit** | effectively unlimited within a network | high | T13 |
 
 #### Why belts and pipes survive this
 
@@ -739,7 +709,7 @@ So the division that emerges is the one real factories have: **belts and pipes m
 move logistics.** The ore line is a belt. The forty-seven different components feeding an assembler
 array are conduits, because running forty-seven belts there would be absurd.
 
-At T5 the Singular Conduit genuinely can replace everything, and by then power is abundant enough
+At T13 the Singular Conduit genuinely can replace everything, and by then power is abundant enough
 that some players will — which is a legitimate way to play and an expensive one. The trade is the
 same one the mod makes everywhere: **pay in layout, or pay in power.**
 
@@ -809,8 +779,8 @@ Pipes do not move fluid by magic, and this is where the realism earns its place:
 | --- | --- | --- | --- |
 | **Clay Conduit** | T1 | ambient, gravity only | Unpowered. Available before any power network, like the first belt. |
 | **Pressure Pipe** | T2 | MV pressures, hot | The workhorse. Corrosion-resistant lining. |
-| **Cryo Line** | T3 | cryogenic, insulated | No boil-off while intact. |
-| **Plasma Conduit** | T4 | magnetic containment | Consumes FU merely to stay intact; containment loss vents the line. |
+| **Cryo Line** | T6 | cryogenic, insulated | No boil-off while intact. |
+| **Plasma Conduit** | T7 | magnetic containment | Consumes FU merely to stay intact; containment loss vents the line. |
 
 | Component | Role |
 | --- | --- |
@@ -827,7 +797,7 @@ Pipes do not move fluid by magic, and this is where the realism earns its place:
 
 ### The Phase Network — when fluids stop being plumbing
 
-At T3 the mod's central idea arrives for fluids. A **Phase Manifold** is to fluids exactly what a
+At T9 the mod's central idea arrives for fluids. A **Phase Manifold** is to fluids exactly what a
 Flux Pylon is to power: inside its coverage area, any registered tank or machine can push and pull
 any fluid the network holds, with no pipes at all.
 
@@ -846,8 +816,8 @@ plumbing can buy their way out. Neither is wrong, and the mod does not force the
 | --- | --- | --- |
 | **Basic Tank** | T1 | Unpressurised, ambient only. Hot fluid will not enter it. |
 | **Industrial Tank** | T2 | Rated pressure and temperature; blocks combine into one larger multiblock tank. |
-| **Cryo Tank** | T3 | Insulated. Boils off slowly if it loses power — a real reason to care about brownouts. |
-| **Containment Sphere** | T4 | Plasma and exotics. Powered containment. |
+| **Cryo Tank** | T6 | Insulated. Boils off slowly if it loses power — a real reason to care about brownouts. |
+| **Containment Sphere** | T7 | Plasma and exotics. Powered containment. |
 
 Every tank obeys the shared container contract — filters, buffer targets, configurable auto-void
 and signal output. See [Containers](#containers-buffers-filters-and-voiding).
@@ -858,9 +828,9 @@ Two hooks make fluids load-bearing rather than decorative, and both are delibera
 
 1. **Wet processing beats dry processing.** Slurry and leachate steps in the ore chain give
    materially better yields and recover byproducts that the dry line simply loses.
-2. **You cannot build a circuit without acid, and you cannot build a machine without a circuit.**
-   That is the [fabrication](#fabrication-the-factory-builds-the-factory) rule, and it means every
-   player passes through fluids on the way to their second tier of machines.
+2. **Each frontier consumes fluid-made components.** T2 pumps need polymer seals, T4 controllers
+   need etchant and ultrapure water, and later matrices need cryogens, plasma media and life-support
+   loops. That is the [fabrication](#fabrication-the-factory-builds-the-factory) rule.
 
 Neither hook is a wall. The dry chain keeps working forever, so a player who hates plumbing is
 slowed, never stopped.
@@ -903,7 +873,7 @@ upgrades.
 | **Voltaic Harness** | T1 | Protection and a Flux Cell. No onboard generation. Vanilla armour stays valid until this exists. |
 | **Flux Exosuit** | T2 | Network Tap, mobility, shields. You recharge by walking through pylons. |
 | **Arc Exosuit** | T3 | **Miniature Arc Reactor** — generates FU while worn, on the same Arc Cells the factory reactor burns. |
-| **Exotic Exosuit** | T4 | Fusion-class cell, orbital life support. |
+| **Exotic Exosuit** | T10 | High-density cell, radiation shielding and orbital life support. |
 
 | Module | First chassis | Effect |
 | --- | --- | --- |
@@ -927,7 +897,7 @@ generator before T3: a Portable Reactor that needs no factory is not a module.
 T3 / F3. The factory plant and the suit core are **one unlock** (ADR-0067).
 
 A formed multiblock that produces **FU directly** at Arc voltage. It is not the Arc Furnace
-(that smelts), not fission (heat into steam, neighbour bonus), not fusion (T4 D–T ignition).
+(that smelts), not fission (heat into steam, neighbour bonus), not fusion (T7 D–T ignition).
 
 - **Feed** is a manufactured **Arc Cell** from a named processing line. If the line stops, the
   reactor starves. The miniature suit reactor burns the same cell.
@@ -990,12 +960,12 @@ found.
 | --- | --- | --- |
 | **Gauss Rifle** | T2 | Electromagnetic coilgun. Consumes FU plus slugs, which the Assembler makes from any dense metal in the pack. Chargeable shot: hold for a heavier hit. |
 | **Arc Thrower** | T2 | Chains lightning between nearby targets, drains the suit's cell fast. |
-| **Plasma Caster** | T3 | Superheated projectile with area damage and a burn field. |
-| **Railgun** | T3 | Extreme single-target damage, long charge, pierces everything in a line. |
-| **Fusion Lance** | T4 | A sustained beam. The endgame answer to anything still standing. |
+| **Plasma Caster** | T8 | Superheated projectile with area damage and a burn field. |
+| **Railgun** | T8 | Extreme single-target damage, long charge, pierces everything in a line. |
+| **Fusion Lance** | T14 | A sustained beam. The late-game answer to anything still standing. |
 | **Flux Grenade** | T2 | Standard explosive, produced on a belt line. |
-| **EMP Charge** | T3 | Disables Aberration abilities and drains hostile energy in an area. |
-| **Singularity Charge** | T4 | Pulls entities and loose items to a point, then collapses. |
+| **EMP Charge** | T8 | Disables Aberration abilities and drains hostile energy in an area. |
+| **Singularity Charge** | T14 | Pulls entities and loose items to a point, then collapses. |
 
 Ammunition tiers scale with the materials the pack provides, discovered through the same tag
 system as everything else — so a pack with exotic late-game metals automatically gets exotic
@@ -1003,16 +973,17 @@ late-game ammunition, with no compat work.
 
 ---
 
-## System 8 — The futuristic tier
+## System 8 — The futuristic tiers
 
-The endgame is where the mod stops being about *getting* materials and starts being about
+The late campaign is where the mod stops being about *getting* materials and starts being about
 *transforming* them. Every machine here is a multiblock, and each one is a project. The first of
 those plants is the [Arc Reactor](#the-arc-reactor) at T3 / F3 — still a factory you feed, not
-this tier's trophy. Fission, fusion and the singularity are what follow.
+a trophy. Fission at T5, fusion at T7, particle engineering at T8 and singularity power at T14
+each receive their own factory era rather than sharing one compressed "endgame tier".
 
 ### Fission Reactor
 
-A multiblock reactor running on fuel rods assembled from any fissile material in the pack —
+A T5 multiblock reactor running on fuel rods assembled from any fissile material in the pack —
 discovered by tag, so uranium, thorium, plutonium or whatever a modded pack adds all work.
 
 - Produces **heat**, which drives **Heat Exchangers** → **steam** → **Steam Turbines**.
@@ -1028,8 +999,9 @@ Explosive failure is available as an opt-in config for packs that want it.
 
 ### Fusion Reactor
 
-The T4 power source. Deuterium and tritium are separated out of water by the Chemical Washer and
-Centrifuge chain, then confined magnetically.
+The T7 power source. T6 cryogenic infrastructure separates and stores deuterium; a running
+reactor breeds tritium in a lithium blanket. High-field superconducting magnets confine the
+plasma, so chemistry, materials, control and power remain coupled after ignition.
 
 - **Ignition** costs a large burst of energy, so a fusion plant must be bootstrapped by an
   existing grid — a satisfying moment where the old base powers on the new one.
@@ -1041,14 +1013,14 @@ Centrifuge chain, then confined magnetically.
 
 ### Particle Accelerator
 
-A large ring multiblock, and the most interesting machine in the mod.
+A T8 large-ring multiblock, and one of the most important machines in the mod.
 
 | Mode | What it does |
 | --- | --- |
 | **Transmutation** | Converts one material into another. Cost is derived from the two materials' relative rarity in the loaded pack, so it is automatically balanced for *any* mod set. The universal answer to "I have twelve thousand copper and no tin." |
 | **Exotic synthesis** | Produces materials that exist nowhere else: antimatter, exotic isotopes, strange matter. |
 | **Matter creation** | Converts raw energy into generic Matter at a deliberately dreadful rate — E = mc² is not a good deal, and it should not be. |
-| **Research** | Generates **Exotic Data Cores**, the only key to T4 research. |
+| **Research** | Irradiates samples and records beam data used by the T4+ Research Station to make reusable physical patterns. |
 
 Transmutation is the endgame's real payoff. It closes the loop opened on the first day: once you
 have an accelerator, *any* material in the pack can become *any other*, and the only remaining
@@ -1057,19 +1029,19 @@ is the most satisfying possible end state for a mod about deleting the resource 
 
 ### Singularity Reactor
 
-The final tier. An artificial micro-singularity fed with Matter, producing power at a scale where
-the constraint is no longer generation but the network's ability to carry it. Unlocks the last
-Pylon tier and the Fusion Lance.
+The T14 Galactic power project. An artificial micro-singularity fed with Matter produces power at
+a scale where the constraint is no longer generation but the network's ability to carry and
+coordinate it. It supports Type III expansion and the final T15 route; it is not itself victory.
 
 ### Supporting endgame machines
 
 | Machine | Role |
 | --- | --- |
-| **Centrifuge** | Isotope separation, fuel enrichment, deuterium extraction. |
-| **Heat Exchanger / Steam Turbine** | Converts reactor heat into FU. |
-| **Cryogenic Plant** | Liquefaction and superconductor production. |
-| **Quantum Assembler** | Multi-step crafting in a single block, for recipes with long ingredient chains. |
-| **Matter Condenser** | Compresses Matter for storage and transport. |
+| **Centrifuge (T5)** | Isotope separation, fuel enrichment, deuterium extraction. |
+| **Heat Exchanger / Steam Turbine (T5)** | Converts reactor heat into FU. |
+| **Cryogenic Plant (T6)** | Deep liquefaction and superconductor production. |
+| **Quantum Assembler (T9)** | Resolves long component chains and programmable matter in one plant. |
+| **Matter Condenser (T9)** | Compresses Matter for storage and high-throughput transport. |
 
 ---
 
@@ -1086,11 +1058,11 @@ has to do real, continuous work for the base back home.
 
 | Step | Block | Notes |
 | --- | --- | --- |
-| 1 | **Launch Pad** (multiblock) | Assembles and launches rockets. Requires exotic materials from the Particle Accelerator, so T4 industry is a hard prerequisite. |
+| 1 | **Launch Pad** (multiblock, T10) | Assembles and launches rockets. Requires Particle-era materials, Quantum guidance and an Orbital Matrix. |
 | 2 | **Rocket** | Assembled from parts on a production line. Carries payload mass to orbit. Consumed on launch. |
-| 3 | **Mass Driver** (multiblock) | The bulk answer. An electromagnetic launcher that fires cargo canisters to orbit for pure FU and no rocket. Cheap per kilogram, but useless for anything fragile or alive. |
-| 4 | **Orbital Platform** | Your space station. Built from launched modules; expands into a real base. |
-| 5 | **Horizon Gate** (multiblock, T6) | Dialed ring. Instant presence after a far gate is delivered. Not a mining dimension ([ADR-0068](docs/DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)). |
+| 3 | **Mass Driver** (multiblock, T10) | The bulk answer. An electromagnetic launcher that fires cargo canisters to orbit for pure FU and no rocket. Cheap per kilogram, but useless for anything fragile or alive. |
+| 4 | **Orbital Platform** (T10) | Your space station. Built from launched modules; expands into a real base. |
+| 5 | **Horizon Gate** (multiblock, T11) | Dialed ring. Instant presence after a far gate is delivered. Not a mining dimension ([ADR-0068](docs/DECISIONS.md#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions)). |
 
 Rockets are for the first trip and for anything crewed. **The Mass Driver is what makes an orbital
 economy viable** — once it is running, sending material up is an energy cost rather than a
@@ -1135,21 +1107,12 @@ strategic option with a real cost.
 
 ### The planets
 
-**Luna is in** (ADR-0095). It is one original world: regolith, no ore features, and
-helium-3 from the same extractor the overworld uses, because the vein pool there is
-that reagent and nothing else. A manufactured Lunar Link spends 102,400 FU, one
-capacitor bank, to arrive, and the return does not draw again. It is not a Horizon
-Gate and not a mining dimension. The link remains, marked as a placeholder for the
-survey rocket (ADR-0097). That rocket climbs to the build ceiling and opens a
-landing map of the home world and Luna. The first hop off that star is the Drift
-(ADR-0096): one layer of plating over bedrock, no vein, reached for now by a
-manufactured Starward Link that spends 6,553,600 FU. The return does not draw
-again. The link remains registered, and it no longer moves a player: the
-station replaced that hop (ADR-0098). It is not a second planet and not the
-black hole. The rest of this section is the later orbital design. Teleportation
-orbs (BK) are named before the rocket and are not started. The station (BM) is
-in. Arrival at the galactic centre is that ride, not a link, and it is in
-(ADR-0099): a sealed chamber, not an empty marker and not a second world.
+**Luna, the Drift and the galactic-centre chamber are implemented prototypes**
+(ADR-0095–ADR-0099). Their worlds, travel logic and smoke coverage stay because they validate
+the destination systems. Their Industrial recipes and premature quest route do not belong to
+survival. The real campaign reaches Luna through T10 rocket flight, the Drift aboard the T13
+supraluminal station and Sagittarius through the T15 final route. The Lunar and Starward Links
+remain registered compatibility/test placeholders, not shortcuts.
 
 **If a space mod is already installed, Grindless uses its planets.** Ad Astra, Galacticraft,
 Beyond Earth and friends are detected at runtime, and Grindless layers its orbital mechanics,
@@ -1236,7 +1199,7 @@ correct difficulty curve for something you are supposed to have dozens of.
 
 #### 4. Horizon Gate — walk there
 
-T6. In the tradition of a Stargate: a ring you dial, not a mining dimension you live in
+T11. In the tradition of a Stargate: a ring you dial, not a mining dimension you live in
 (ADR-0068).
 
 Deep Survey reveals **addresses**. You manufacture a second ring and deliver it once — rocket,
@@ -1257,7 +1220,7 @@ End stay out unless a pack author adds them by datapack.
 | **Landing Beacon** | Marks a drop-pod destination. |
 | **Rectenna** | Receives beamed power from Solar Power Satellites. |
 | **Interplanetary Router** | Routes items between ground, station and colonies using logistics satellites. |
-| **Space Elevator** (multiblock, T6) | Permanent, high-throughput, energy-only ground-to-orbit link. Makes the Mass Driver obsolete and orbit feel genuinely attached to the world. |
+| **Space Elevator** (multiblock, T11) | Permanent, high-throughput, energy-only ground-to-orbit link. Makes the Mass Driver obsolete and orbit feel genuinely attached to the world. |
 
 ### Why space is not just "more numbers"
 
@@ -1271,7 +1234,7 @@ Every earlier system gains a new dimension rather than being replaced:
 | **Logistics** | Mass drivers, drop pods, the space elevator and Horizon Gates turn logistics interplanetary. Presence is the gate; bulk is the driver. |
 | **Tools** | The Exosuit becomes life support; Proxy Frames become a second body. |
 | **Resonance** | Orbital industry emits none to the surface — relocation is a real strategic answer. |
-| **Futuristic tier** | Helium-3 and deuterium from Luna and Kryos make fusion genuinely cheap. |
+| **Futuristic tiers** | Helium-3 and deuterium from Luna and Kryos improve mature fusion routes. |
 
 ---
 
@@ -1292,17 +1255,31 @@ bridge provably lossless and the mod a good citizen in a 300-mod pack.
 
 What makes FU genuinely *different* is its semantics, not its exchange rate.
 
-### Voltage tiers
+### Flux tiers
 
-Every machine has a voltage requirement, and every energy source a voltage.
+Every Tn machine is nominally rated for Fn. LV through IV remain familiar display aliases
+on F1 through F5; there is still only one power ladder (ADR-0038, ADR-0107).
 
-| Tier | Name | Nominal | Typical era |
-| --- | --- | --- | --- |
-| **LV** | Low | 32 FU/t | T0–T1 |
-| **MV** | Medium | 128 FU/t | T1–T2 |
-| **HV** | High | 512 FU/t | T2 |
-| **EV** | Extreme | 2,048 FU/t | T2–T3 |
-| **IV** | Insane | 8,192 FU/t | T3 |
+| Tier | Name | Nominal |
+| --- | --- | ---: |
+| **F0** | Bootstrap / Manual | 8 FU/t |
+| **F1 / LV** | Voltaic | 32 FU/t |
+| **F2 / MV** | Industrial | 128 FU/t |
+| **F3 / HV** | Arc | 512 FU/t |
+| **F4 / EV** | Precision | 2,048 FU/t |
+| **F5 / IV** | Nuclear | 8,192 FU/t |
+| **F6** | Cryogenic | 32,768 FU/t |
+| **F7** | Fusion | 131,072 FU/t |
+| **F8** | Particle | 524,288 FU/t |
+| **F9** | Quantum | 2,097,152 FU/t |
+| **F10** | Orbital | 8,388,608 FU/t |
+| **F11** | Planetary | 33,554,432 FU/t |
+| **F12** | Stellar | 134,217,728 FU/t |
+| **F13** | Interstellar | 536,870,912 FU/t |
+| **F14** | Galactic | 2,147,483,648 FU/t |
+| **F15** | Event Horizon | 8,589,934,592 FU/t |
+
+The rule is always `F(n) = 8 × 4ⁿ FU/t`. F0-F9 therefore keep their existing values.
 
 **Under-volting degrades speed smoothly rather than stalling the machine** — roughly halving
 throughput per tier below requirement. Run an MV machine on LV and it works at about half speed;
@@ -1318,11 +1295,11 @@ are a tedium generator, not a difficulty mechanic.)
 
 ### Endgame rate
 
-The ladder in the table above, and F6–F9 in code, are the foundation's power scale. F9 is
-2,097,152 FU/t. Endgame generation targets the largest rate a per-tick `long` can store,
-`Long.MAX_VALUE` FU/t, from one source. Sums, a buffer of more than one tick at that rate,
-and the FE `int` bridge cannot express operating there. The representation grows before that
-content exists. See [Modpack-scale progression](#modpack-scale-progression) and ADR-0088.
+F15 is the last named tier, not an arbitrary numerical finish. Black-hole infrastructure
+scales inside postgame T15 from 8,589,934,592 FU/t to `Long.MAX_VALUE` FU/t. That avoids
+fifteen empty F16-F30 labels while preserving the fourfold rule. F14 is the first nominal
+rate above the FE `int` boundary. Sums and practical buffers near the absolute ceiling need
+a wider internal amount type before that content exists (ADR-0088, ADR-0107).
 
 ### Performance: idle machines cost nothing
 
@@ -1363,62 +1340,66 @@ player stuck without knowing why.
 
 ---
 
-## Progression: the Research Terminal
+## Progression: Control Matrices and research
 
-This is what keeps Grindless from being a creative-mode cheat. Machines are not craftable until
-they are researched. You insert **Data Cores** and Flux Units into a **Research Terminal** to
-unlock blueprints.
+Progress is physical. Every machine from T1 onward contains a **Control Matrix** rated for
+its technology and Flux tier. If the factory can manufacture that matrix, it can manufacture
+the machine; there is no second world-scoped permission that makes a visible recipe silently
+fail. Under-volting still works, slowly, so building the first machine of a new tier never
+requires an impossible power bootstrap.
 
-Data Cores are themselves produced by the factory — basic cores from early materials, advanced
-cores from processed ones, exotic cores only from the Particle Accelerator. Research is therefore
-a *production target*, not a timer, and the research tree is something you automate like anything
-else. That is straight out of Factorio, and it is what makes progression feel earned.
+The first route to Tn uses a Tn−1 matrix plus products from materials, chemistry,
+computation/control and energy. Those domains interact before they converge: electronics
+needs ultrapure chemicals and stable power; chemistry needs controlled equipment and
+corrosion-resistant materials; energy plants need both controllers and process fluids.
 
-Research is necessary but **not sufficient**. Past T1 a blueprint does not become a crafting
-recipe: it becomes something an Assembler can manufacture, given the components and the power. The
-two gates are deliberately different — research says *you may build this*, fabrication says *your
-factory is capable of building this* — and a player has to clear both. See
-[Fabrication](#fabrication-the-factory-builds-the-factory).
+Five architectures prevent the matrix line from becoming one fifteen-step tax:
 
-| Tier | Time | Theme | Unlocks |
-| --- | --- | --- | --- |
-| **T0 — Bootstrap** | 0–10 min | Escape velocity | Hand Crank Dynamo, Crude Extractor, Multitool. Buildable from cobblestone, wood and two iron. **This is the moment the grind dies.** |
-| **T1 — Voltaic** | 10–40 min | First factory | Thermal Generator, Flux Pylon MK1, Terrestrial Extractor, Pulverizer, Arc Furnace, Conveyor Belt, Crude Manipulator, Splitter, Prospector's Scanner, Ballistic Turret, Clay Conduit, Hand Pump, Basic Tank, **Voltaic Harness**. |
-| **T2 — Industrial** | 1–3 h | Real automation | Flux Pylon MK2, Chemical Washer, Assembler, Solar and Steam generation, Pattern Scanner, Deconstructor, Flux Belt, Stack/Filter Manipulator, Sorter, Logic Controller, Flux Drill, **Blueprint Tool**, Flux Exosuit, Gauss Rifle, Laser Turret, Pressure Pipe, Electric Pump, Boiler, Condenser, Industrial Tank, Fluid Manipulator. |
-| **T3 — Quantum** | 3–10 h | Post-scarcity | Flux Pylon MK3, Deep Core Drill, Replicator, Mag-Lev Belt, Drone Bay and logistics crates, Construction Drones, **Arc Reactor**, **Fission Reactor**, Steam Turbine, Centrifuge, Terraformer, Tesla Turret, Shield Projector, Plasma Caster, Railgun, Phase Manifold, Cryo Line, Cryo Tank, **Arc Exosuit**. |
-| **T4 — Exotic** | 10–25 h | Energy is the only currency | Phase Belt, **Fusion Reactor**, **Particle Accelerator**, Singularity Reactor, Quantum Assembler, Cryogenic Plant, Matter Condenser, Fusion Lance, Singularity Charge, Plasma Conduit, Containment Sphere, **Exotic Exosuit**. |
-| **T5 — Orbital** | 25–40 h | Leaving the ground | Launch Pad, Rocket, **Orbital Platform**, Mass Driver, Orbital Catcher, Rectenna, the satellite line (Survey, Solar Power, Relay, Sentinel, Logistics), Vacuum Furnace, Zero-G Crystallizer, Orbital Cryo Plant, Orbital Assembly Bay. |
-| **T6 — Interplanetary** | the foundation's last specified tier | Worlds as infrastructure | Deep Survey Satellite, interplanetary transfer, **Colony Core** and its modules, **Proxy Frame** and Telepresence Terminal, Drop Pod Bay, Interplanetary Router, Space Elevator, **Horizon Gate**. |
+| Architecture | Frontier tiers | Later payoff |
+| --- | --- | --- |
+| **Relay** | T1–T3 | the cheap, low-infrastructure foundation |
+| **Integrated** | T4–T6 | semiconductor routes batch-produce old Relay ratings |
+| **Superconducting** | T7–T9 | cryogenic routes compress Integrated production |
+| **Photonic** | T10–T12 | zero-g optics replace long terrestrial interconnect chains |
+| **Causal** | T13–T15 | relativistic control compresses every earlier architecture |
 
-T0–T6 are the foundation already written down. ADR-0088 retires them as a cap. Tiers after
-T6, the Kardashev milestones, the megastructures and the route to the galactic-centre black
-hole are the modpack expansion. They are not in this table yet. The Horizon Gate is a commute
-milestone on the way. The victory is arrival at the black hole.
+Old routes remain valid. New architectures trade greater infrastructure for lower unit cost,
+larger batches or higher throughput. A higher-rated matrix can substitute for a lower one,
+but is rarely economical.
 
-The early ramp is intentional. Ten minutes in, the foundation has replaced hand-mining iron.
-The game continues long after T6.
+| Tier | Theme | Braided progression and signature scale |
+| --- | --- | --- |
+| **T0 — Bootstrap** | Escape velocity | Assisted extraction, primitive material/chemical/control parts and manual power culminate in the first Relay Matrix batch. |
+| **T1 — Voltaic** | First factory | Milling, reduction, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
+| **T2 — Industrial** | Closed loops | Steel and wet beneficiation feed sulfur, electrolysis and resin loops; motors, discrete control, steam and solar turn them into a multi-line factory. |
+| **T3 — Arc** | Powered construction | Refractories, hot metal, Arc Cells and industrial control feed the Arc Reactor and Construction Drones. |
+| **T4 — Precision** | Purity and control | Pressure chemistry, ultrapure water, electronic silicon, lithography and the Research Station produce Integrated Matrices and reusable advanced patterns. |
+| **T5 — Nuclear** | Designed cores | Fuel chemistry, isotope cascades, reactor alloys and radiation-hard control converge in parametric fission. |
+| **T6 — Cryogenic** | Deep cold | Liquid helium, superconductors, high-field magnets and pulse storage prepare the fusion era. |
+| **T7 — Fusion** | Sustained plasma | Breeding blankets, neutron-resistant materials, plasma control and fuel loops sustain fusion. |
+| **T8 — Particle** | Designed nuclei | Accelerator size, target chemistry, isotope recovery and beam control create exotic precursors. |
+| **T9 — Quantum** | Programmable matter | Quantum substrates, nanoprocesses, advanced replication and coherent power make matter a designed input. |
+| **T10 — Orbital** | Ground and orbit | Propellant, composites, guidance, satellites, beamed power and zero-g industry form one distributed factory. |
+| **T11 — Planetary** | Worlds as infrastructure | ISRU, life support, telepresence, colonies, routing and Horizon Gates reach Kardashev Type I. |
+| **T12 — Stellar** | A star as infrastructure | Stellar materials, the Stellar Forge, photonic control and a Dyson network reach Type II. |
+| **T13 — Interstellar** | Several systems | Causal logistics, supraluminal navigation and the Drift move the factory beyond its home star. |
+| **T14 — Galactic** | Self-expanding industry | Antimatter, singularity power, distributed computation and abstract replication reach Type III. |
+| **T15 — Event Horizon** | The galactic centre | Relativistic shielding, final navigation and galactic power reach Sagittarius. Arrival is victory; black-hole exploitation is postgame. |
 
-Three checkpoints are worth calling out, because each converts effort into permanent leverage at
-exactly the moment the player has earned it:
+Later tiers are approximately longer and contain more meaningful content than earlier ones.
+The growth is in interacting routes, conditions, logistics and projects — never merely larger
+stacks or longer timers. Automation grows with the burden: Assembler, Process Cards,
+construction drones, Assembly Fields, abstract colonies and self-replicating infrastructure.
 
-- **T0, the Crude Extractor** — the grind dies here, ten minutes in.
-- **T2, the Blueprint Tool** — arrives right when the player has just worked out a layout worth
-  repeating, and makes that insight permanent.
-- **T3, the Construction Drone** — the moment building stops being placement and becomes design,
-  which is what lets multiblocks grow into real engineering problems.
-- **T5, the Survey Satellite** — the moment finding resources stops being an activity and becomes
-  a map you read.
-- **T6, the Horizon Gate** — the moment the interplanetary commute dies. First contact is still a
-  delivery; after the pair stands, you walk. This is a milestone, not the victory.
-- **The survey rocket** — the moment the local system is a flight. Up to the ceiling,
-  then a landing map of home and Luna (ADR-0097). The Lunar Link remains as a placeholder.
-- **The Drift** — the moment the home star is behind you. One hop, paid with the Ground
-  Array's buffer, by riding the station to the ceiling (ADR-0096, ADR-0098). The
-  Starward Link remains registered and no longer moves a player. The centre is still ahead.
-- **The black hole at the centre of the Milky Way** — the goal. Arriving is the victory,
-  by riding the station from the Drift, not by a link. The interior is a sealed chamber
-  (ADR-0088, ADR-0099). The station is in. That arrival is in. The quest book and
-  the field guide are in (ADR-0100). No slice follows them.
+The old **Research Terminal** is not discarded. At T4 it becomes the **Research Station**:
+samples plus Data Cores produce reusable physical patterns for advanced components and process
+modes. A pattern is a catalyst in a recipe, not a permanent global unlock and never the gate
+for an ordinary machine.
+
+The early ramp remains intentional. The Crude Extractor removes manual mining first; the
+Assembler removes hand fabrication; drones remove block placement; satellites remove manual
+survey; gates remove repeated travel; abstract colonies and swarms remove remote ticking and
+manual expansion.
 
 ---
 
@@ -1489,10 +1470,12 @@ The single most important structural rule in Grindless:
 
 | Tier | How you obtain the machine |
 | --- | --- |
-| **T0–T1** | Crafting table. The bootstrap, and only the bootstrap. |
-| **T2–T3** | **Assembler** — consumes a researched blueprint, fabricated components, FU and time. |
-| **T4** | **Quantum Assembler** — long component chains resolved in one machine. |
-| **T5–T6** | **Orbital Assembly Bay** — in orbit, because vacuum and zero gravity are prerequisites, not flavour. |
+| **T0** | Crafting table. The bootstrap, and only the ungated bootstrap. |
+| **T1** | Crafting table or Press, but every machine consumes a T1 Relay Matrix. The first matrix is made in a small batch; the Assembler then automates it. |
+| **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
+| **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
+| **T10–T12** | **Orbital Assembly Bay** and **Assembly Field** — vacuum, zero gravity and blueprint-scale construction. |
+| **T13–T15** | Distributed Assembly Fields — systems manufacture and deliver megastructure sections rather than individual blocks. |
 
 A machine above T1 has **no crafting-table recipe at all**. Not a hidden one, not a deliberately
 expensive one — none exists. The only way to obtain it is to run the process, which means owning
@@ -1506,23 +1489,24 @@ production chain lives:
 | Component | Tier | Built from | What it gates |
 | --- | --- | --- | --- |
 | **Machine Casing** | T1 | plates | The first thing any Assembler makes. |
+| **Control Matrix** | T1–T15 | a prior rating plus the tier's braided material, chemical, control and power products | Every machine at its rating. Five architectures add better routes to older ratings. |
 | **Motor** | T2 | casing stock + copper coil | Anything that moves. |
 | **Pump** | T2 | casing + motor + seals | The entire fluid tier. |
-| **Circuit Board** | T2 | silicon wafer + **etching acid** | The first hard fluid gate. |
-| **Integrated Circuit** | T3 | board + gold + **ultrapure water** | T3 machines and logic. |
-| **Superconductor** | T3 | wire + **cryogenic coolant** | Reactors, rails, containment. |
-| **Quantum Core** | T4 | IC + exotic material + **supercooled coolant** | The exotic tier. |
-| **Containment Ring** | T4 | superconductor + **liquid nitrogen** | Fusion, plasma, singularity. |
+| **Circuit Board** | T3–T4 | silicon wafer + **etching acid** | Industrial control, then Integrated Matrices. |
+| **Integrated Circuit** | T4 | board + gold + **ultrapure water** | Precision machines and logic. |
+| **Superconductor** | T6 | fine wire + cryogenic processing | Fusion magnets and Superconducting Matrices. |
+| **Quantum Core** | T9 | coherent substrate + exotic material + cryogenic coolant | Quantum fabrication and programmable matter. |
+| **Containment Ring** | T7+ | superconductor + composite + coolant | Fusion first; particle, singularity and horizon systems later. |
 
 Every ingredient above is resolved from tags, so "plates", "gold" and "silicon" mean whatever the
 installed pack provides — the same runtime material registry everything else uses (ADR-0004). A
 pack that already has a circuit will have Grindless use *its* circuit rather than registering a
 rival one.
 
-Note how the fluid dependencies are placed. Circuits need acid, machines need circuits, so every
-player builds a small chemical line on the way to their second tier of machines. Fluids are not a
-side system the player can skip; they are on the critical path, once, early, at a point where the
-scale required is small.
+Note how the fluid dependencies are placed. T2 pumps need resin; T4 circuits need etchant and
+ultrapure water; T6 and later matrices need progressively deeper coolants and process media.
+Fluids are not a side system the player can skip, but each new dependency begins at a scale the
+current factory can automate.
 
 ### Why the rule exists
 
@@ -1531,21 +1515,21 @@ scale required is small.
    decoration.
 2. **It closes the hand-craft bypass.** A player who arrives with a full inventory of a pack's
    mid-game materials would otherwise skip straight past everything Grindless is about.
-3. **It gives research teeth.** A blueprint you can immediately hand-craft is a note. A blueprint
-   that has to be fed into an assembly line is a production target — which is exactly what makes
-   research feel earned rather than clicked through.
+3. **It makes progression physical.** A matrix that has to be fed into an assembly line is a
+   production target. A world flag in a menu is not.
 
 ### The counterweight
 
 This rule must never become the grind it exists to delete. The guard rails are deliberate:
 
-- **Blueprints are permanent.** Research a machine once and you can build it forever.
+- **Matrices and patterns are reusable infrastructure.** Matrix production is automated, and a
+  Research Station pattern is a catalyst rather than a consumed permission token.
 - **Assemblers are cheap and parallelise.** Building ten of them is a throughput decision, not a
   punishment. The answer to "this is slow" is always "build another one", which is the correct
   answer in a factory game.
-- **The bootstrap is never gated.** T0 and T1 stay hand-craftable permanently, so a player who
-  loses everything can always rebuild the ladder from cobblestone and two iron. There is no
-  softlock, ever.
+- **The bootstrap is always recoverable.** T0 stays ungated, and the first T1 Relay Matrix has a
+  small manual route, so a player who loses everything can rebuild the ladder from local
+  materials. There is no softlock, ever.
 - **Pack authors can relax it.** The gate is datapack-driven, so a pack that wants hand-craftable
   T2 machines can have them without a mod patch.
 
@@ -1555,7 +1539,7 @@ This rule must never become the grind it exists to delete. The guard rails are d
 
 Every container in Grindless — item crates, fluid tanks, and the input and output buffers built
 into machines — obeys one shared contract. Learn the interface once and it is the same everywhere,
-on a T1 tank and on a T6 colony module alike.
+on a T1 tank and on a T11 colony module alike.
 
 | Control | Behaviour |
 | --- | --- |
@@ -1595,7 +1579,8 @@ thousand gravel".
 
 ## Block and item catalogue
 
-The full planned content set, for reference. Tier is the research tier that unlocks it.
+The full planned content set, for reference. Tier is the technology and Control Matrix rating
+needed to manufacture it.
 
 ### Power generation
 
@@ -1606,16 +1591,16 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Solar Array | T2 | Daylight only; pairs with buffers. |
 | Steam Turbine | T2 | Consumes steam from any heat source. |
 | Arc Reactor (multiblock) | T3 | Direct F3 FU. Arc Cells. Same fuel as the suit core (ADR-0067). |
-| Heat Exchanger | T3 | Reactor heat → steam. |
-| Fission Reactor (multiblock) | T3 | Neighbour bonus; SCRAM on overheat. |
-| Fusion Reactor (multiblock) | T4 | Ignition cost; quench-safe failure. |
-| Singularity Reactor (multiblock) | T4 | Final tier. |
+| Heat Exchanger | T5 | Reactor heat → steam. |
+| Fission Reactor (multiblock) | T5 | Neighbour bonus; SCRAM on overheat. |
+| Fusion Reactor (multiblock) | T7 | Ignition cost; breeding blanket; quench-safe failure. |
+| Singularity Reactor (multiblock) | T14 | Type III generation and final-route power. |
 
 ### Distribution
 
 | Block | Tier | Notes |
 | --- | --- | --- |
-| Flux Pylon MK1 / MK2 / MK3 | T1 / T2 / T3 | Supply area + drone area. |
+| Flux Pylon chassis MK I–MK VIII | T1–T15 | Supply area + drone area; upgraded in place. |
 | Flux Capacitor Bank | T2 | Network energy storage buffer. |
 | Flux Transformer | T2 | Steps voltage between tiers. |
 | Network Monitor | T2 | Power, deficit and drone telemetry. |
@@ -1626,7 +1611,7 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | --- | --- | --- |
 | Crude Extractor | T0 | Slow, cheap, immediate. |
 | Terrestrial Extractor | T1 | The workhorse. |
-| Deep Core Drill (multiblock) | T3 | Weighted planetary pool. |
+| Deep Core Drill (multiblock) | T5 | Weighted planetary pool. |
 
 ### Processing
 
@@ -1635,11 +1620,13 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Arc Furnace | T1 | Smelting. |
 | Pulverizer | T1 | Ore → dust. |
 | Chemical Washer | T2 | Purification and byproducts. |
-| Assembler | T2 | Multi-ingredient crafting. |
-| Centrifuge | T3 | Isotopes, enrichment, deuterium. |
-| Cryogenic Plant | T4 | Liquefaction, superconductors. |
-| Quantum Assembler | T4 | Long ingredient chains in one block. |
-| Particle Accelerator (multiblock) | T4 | Transmutation, exotics, research. |
+| Assembler | T1 | Multi-ingredient crafting. |
+| Lithography Unit | T4 | Wafers, masks and Integrated Matrix batches. |
+| Centrifuge | T5 | Isotopes, enrichment, deuterium. |
+| Cryogenic Plant | T6 | Deep liquefaction and superconductors. |
+| Fusion Reactor support plant | T7 | Fuel cleanup and blanket processing. |
+| Particle Accelerator (multiblock) | T8 | Transmutation, exotics and sample irradiation. |
+| Quantum Assembler | T9 | Long ingredient chains and programmable matter. |
 
 ### Fluids
 
@@ -1656,9 +1643,9 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Pressure Relief Valve / Check Valve | T2 | Rupture insurance; one-way flow. |
 | Separator | T2 | Splits mixed and multi-phase fluids. |
 | Fluid Reader | T2 | Level, temperature and pressure as logic signals. |
-| Cryo Line / Cryo Tank | T3 | Insulated. Boil-off when unpowered. |
-| Phase Manifold | T3 | Coverage-area fluid network. Costs FU per unit moved. |
-| Plasma Conduit / Containment Sphere | T4 | Powered magnetic containment. |
+| Cryo Line / Cryo Tank | T6 | Insulated. Boil-off when unpowered. |
+| Plasma Conduit / Containment Sphere | T7 | Powered magnetic containment. |
+| Phase Manifold | T9 | Coverage-area fluid network. Costs FU per unit moved. |
 
 ### Matter
 
@@ -1666,32 +1653,32 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | --- | --- | --- |
 | Pattern Scanner | T2 | Stores item patterns. |
 | Deconstructor | T2 | Items → Matter. |
-| Replicator | T3 | Matter + FU → patterned item. |
-| Matter Condenser | T4 | Compressed Matter storage. |
+| Replicator | T4 | Matter + FU → patterned item. |
+| Matter Condenser | T9 | Compressed Matter storage and throughput. |
 
 ### Logistics
 
 | Block | Tier |
 | --- | --- |
-| Conveyor / Flux / Mag-Lev / Phase Belt | T1 / T2 / T3 / T4 |
+| Conveyor / Flux / Mag-Lev / Phase Belt | T1 / T2 / T3 / T9 |
 | Splitter, Merger, Tunnel Belt, Sorter, Overflow Gate, Belt Reader, Flow Meter | T1–T2 |
 | Manipulator: Crude / Fast / Stack / Filter | T1–T2 |
 | Signal Cable, Logic Controller, Arithmetic Unit, Redstone Interface | T2 |
-| Basic / Flux / Phase / Singular Conduit | T2 / T3 / T4 / T5 |
-| Conduit cores: Item, Fluid, Heat, Signal, Flux | T2–T4 |
-| Conduit upgrades: Bore, Filter, Routing, Insulation, Phase | T2–T4 |
+| Basic / Flux / Phase / Singular Conduit | T2 / T3 / T9 / T13 |
+| Conduit cores: Item, Fluid, Heat, Signal, Flux | T2–T7 |
+| Conduit upgrades: Bore, Filter, Routing, Insulation, Phase | T2–T9 |
 | Drone Bay, Provider / Requester / Buffer / Storage Crate | T3 |
 | Operator Bay, Operator Drone | T3 |
-| Construction Drone, Assembly Field (multiblock) | T3 / T5 |
+| Construction Drone, Assembly Field (multiblock) | T3 / T10 |
 | Design Terminal — blueprint validation and simulation | T3 |
 | Instruction Cards (11 kinds), Routine Card, Locator | T3 |
-| Drone pods: Cargo, Fluid, Thermal, Tool Arm, Sensor, Range Extender | T3–T4 |
+| Drone pods: Cargo, Fluid, Thermal, Tool Arm, Sensor, Range Extender | T3–T11 |
 
 ### Research and defence
 
 | Block | Tier |
 | --- | --- |
-| Research Terminal | T0 |
+| Research Station | T4 |
 | Ballistic Turret, Flux Wall | T1 |
 | Laser Turret | T2 |
 | Tesla Turret, Shield Projector, Combat Drone Bay | T3 |
@@ -1700,33 +1687,33 @@ The full planned content set, for reference. Tier is the research tier that unlo
 
 | Block | Tier | Notes |
 | --- | --- | --- |
-| Launch Pad (multiblock) | T5 | Assembles and launches rockets. |
-| Mass Driver (multiblock) | T5 | Bulk cargo to orbit for pure energy. |
-| Orbital Catcher | T5 | Receives Mass Driver canisters. |
-| Orbital Platform modules | T5 | The space station itself. |
-| Rectenna | T5 | Receives beamed satellite power. |
-| Vacuum Furnace | T5 | Higher purity than any ground smelter. |
-| Zero-G Crystallizer | T5 | Flawless crystal substrates. |
-| Orbital Cryo Plant | T5 | Cheap liquefaction and superconductors. |
-| Vacuum Deposition Chamber | T5 | Thin films, exotic alloys. |
-| Orbital Assembly Bay | T5 | Builds what gravity will not allow. |
-| Telepresence Terminal | T6 | Drive a Proxy Frame on another world. |
-| Colony Core + modules | T6 | Abstractly simulated automated colony. |
-| Drop Pod Bay, Landing Beacon | T6 | Targeted surface delivery. |
-| Interplanetary Router | T6 | Item routing across dimensions. |
-| Space Elevator (multiblock) | T6 | Permanent ground-to-orbit link. |
-| Horizon Gate (multiblock) | T6 | Dialed pair. Commute, not a mining dimension (ADR-0068). |
+| Launch Pad (multiblock) | T10 | Assembles and launches rockets. |
+| Mass Driver (multiblock) | T10 | Bulk cargo to orbit for pure energy. |
+| Orbital Catcher | T10 | Receives Mass Driver canisters. |
+| Orbital Platform modules | T10 | The space station itself. |
+| Rectenna | T10 | Receives beamed satellite power. |
+| Vacuum Furnace | T10 | Higher purity than any ground smelter. |
+| Zero-G Crystallizer | T10 | Flawless crystal substrates. |
+| Orbital Cryo Plant | T10 | Efficient liquefaction and superconductors. |
+| Vacuum Deposition Chamber | T10 | Thin films, exotic alloys. |
+| Orbital Assembly Bay | T10 | Builds what gravity will not allow. |
+| Telepresence Terminal | T11 | Drive a Proxy Frame on another world. |
+| Colony Core + modules | T11 | Abstractly simulated automated colony. |
+| Drop Pod Bay, Landing Beacon | T11 | Targeted surface delivery. |
+| Interplanetary Router | T11 | Item routing across dimensions. |
+| Space Elevator (multiblock) | T11 | Permanent ground-to-orbit link. |
+| Horizon Gate (multiblock) | T11 | Dialed pair. Commute, not a mining dimension (ADR-0068). |
 
 ### Satellites
 
 | Satellite | Tier | Utility |
 | --- | --- | --- |
-| Survey Satellite | T5 | Maps chunk veins from orbit. |
-| Solar Power Satellite | T5 | Constant beamed power. |
-| Relay Satellite | T5 | Cross-dimension network + bandwidth. |
-| Sentinel Satellite | T5 | Global Resonance map, swarm warning. |
-| Logistics Satellite | T5 | Drop-pod targeting, orbital routing. |
-| Deep Survey Satellite | T6 | Surveys other planets remotely. |
+| Survey Satellite | T10 | Maps chunk veins from orbit. |
+| Solar Power Satellite | T10 | Constant beamed power. |
+| Relay Satellite | T10 | Cross-dimension network + bandwidth. |
+| Sentinel Satellite | T10 | Global Resonance map, swarm warning. |
+| Logistics Satellite | T10 | Drop-pod targeting, orbital routing. |
+| Deep Survey Satellite | T11 | Surveys other planets remotely. |
 
 ### Items
 
@@ -1735,24 +1722,26 @@ The full planned content set, for reference. Tier is the research tier that unlo
 | Multitool | T0 |
 | Prospector's Scanner, Flux Conduit | T1 |
 | Machine Casing, Motor, Pump, Circuit Board | T1–T2 |
-| Chassis Upgrade Kit MK II–MK V | T2–T5 |
-| Machine upgrades: Speed, Parallel, Efficiency, Yield, Precision, Insulation, Containment, Catalyst Feed, Damping, Recovery | T2–T4 |
-| Integrated Circuit, Superconductor | T3 |
-| Quantum Core, Containment Ring | T4 |
+| Chassis Upgrade Kit MK II–MK VIII | T2–T14 |
+| Machine upgrades: Speed, Parallel, Efficiency, Yield, Precision, Insulation, Containment, Catalyst Feed, Damping, Recovery | T2–T9 |
+| Integrated Circuit | T4 |
+| Superconductor | T6 |
+| Containment Ring | T7+ |
+| Quantum Core | T9 |
 | Flux Drill, Blueprint Tool, Deconstruction Planner | T2 |
-| Voltaic Harness / Flux Exosuit / Arc Exosuit / Exotic Exosuit (4 pieces) + equipment modules | T1–T4 |
+| Voltaic Harness / Flux Exosuit / Arc Exosuit / Exotic Exosuit (4 pieces) + equipment modules | T1 / T2 / T3 / T10 |
 | Arc Cell | T3 |
 | Terraformer, Matter Pattern Slate | T3 |
-| Data Core / Advanced Data Core / Exotic Data Core | T0 / T2 / T4 |
+| Data Core / Advanced Data Core / Exotic Data Core | reusable pattern media from T4; existing items migrate rather than disappear |
 | Matter, Raw materials, dusts, purified dusts, plates | various |
-| Ammunition: slugs, plasma cells, rail slugs | T2–T4 |
+| Ammunition: slugs, plasma cells, rail slugs | T2–T8 |
 | Gauss Rifle, Arc Thrower, Flux Grenade | T2 |
-| Plasma Caster, Railgun, EMP Charge | T3 |
-| Fusion Lance, Singularity Charge | T4 |
-| Rocket parts, cargo canisters, satellite chassis | T5 |
-| Life support modules (vacuum, thermal, radiation) | T5 |
-| Helium-3, deuterium, exotic isotopes, strange matter | T5–T6 |
-| Proxy Frame, colony modules, orbital survey charts | T6 |
+| Plasma Caster, Railgun, EMP Charge | T8 |
+| Fusion Lance, Singularity Charge | T14 |
+| Rocket parts, cargo canisters, satellite chassis | T10 |
+| Life support modules (vacuum, thermal, radiation) | T10 |
+| Deuterium / helium-3 / exotic isotopes / strange matter | T6 / T10 / T8 / T9 |
+| Proxy Frame, colony modules, orbital survey charts | T11 |
 
 ---
 
@@ -2058,103 +2047,64 @@ and only happens once.
 
 ## Roadmap
 
-### 0.1 — Foundation *(in progress)*
+### Validated prototype foundation
 
-Build green on Forge. Registry layer, Flux energy API and its capability bridge, the pylon network
-with supply areas and manual linking, deterministic chunk veins, the runtime tag-driven material
-registry, and a minimal playable T0→T1 loop: Hand Crank Dynamo, Crude Extractor, Terrestrial
-Extractor, Arc Furnace, Pulverizer, Research Terminal.
+The Forge 1.20.1 build already contains the playable T0–T2 factory foundation: extraction,
+tag-driven materials, dry and wet ore routes, belts, fluids, logic, fabricated machines, tools,
+matter scanning and the first two armour chassis. It also contains locally smoke-tested prototype
+worlds and travel systems through Sagittarius. Those prototypes prove the technical seams; they
+are not the survival campaign.
 
-**Definition of done:** a player can go from an empty world to automated iron in under fifteen
-minutes without mining it by hand.
+**Foundation definition of done:** a player can go from an empty world to automated iron in under
+fifteen minutes without mining it by hand. This is met.
 
-### 0.2 — Logistics
+### Campaign restoration *(current)*
 
-Belts and lane data model, splitters, mergers, tunnel belts, manipulators, sorters. Signal cable
-and the logic controller. This is the release where the mod starts feeling like Factorio.
+ADR-0107 replaces the compressed six-tier schedule with T0/F0–T15/F15. Work resumes in small,
+playable slices:
 
-### 0.3 — Industry
+1. **BO — withdraw the survival shortcut.** Remove Industrial recipes for the Ground Array,
+   placeholder links, rocket, launch pad, station berth and station. Shorten quests and the guide
+   to genuinely reachable survival content. Keep registrations, worlds, commands and smokes.
+2. **BP — matrix foundation.** Add matrix rating/architecture data, world-safe migration for the
+   existing Voltaic and Industrial state, and the first T1 Relay Matrix route.
+3. **BQ — physical T2 gate.** Move T2 fabrication from the global Industrial permission to a
+   consumed T2 Relay Matrix and convert Data Cores into future pattern media.
+4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
+   its Control Matrix, its signature project and the automation that makes its larger scale
+   manageable.
 
-Chemical Washer, Assembler, the full processing chain with byproducts. Solar and steam
-generation. Flux Transformer and capacitor banks. Voltage tiers fully implemented, including the
-soft under-volt curve and proportional brownouts.
+### Terrestrial factory eras
 
-### 0.4 — Tools and matter
+| Range | Campaign work |
+| --- | --- |
+| **T3 Arc** | Refractories, Arc Cells, construction drones, the multiblock kernel and fed Arc power. |
+| **T4 Precision** | Pressure chemistry, ultrapure water, electronic silicon, lithography, Integrated Matrices and Research Station patterns. |
+| **T5 Nuclear** | Fuel conversion, isotope cascades, reactor materials, heat exchange and parametric fission. |
+| **T6 Cryogenic** | Deep cooling, liquid helium, superconductors, high-field magnets and pulse storage. |
+| **T7 Fusion** | Fuel breeding, plasma-facing materials, containment control and sustained fusion. |
+| **T8 Particle** | Accelerator scale, target chemistry, isotope recovery and exotic precursors. |
+| **T9 Quantum** | Coherent substrates, programmable matter, Quantum Assembly and high-throughput replication. |
 
-Flux Drill, Multitool, **Blueprint Tool** and construction drones, Deconstruction Planner. Pattern
-Scanner, Deconstructor and Replicator with recipe-graph pricing. Modular armour chassis line
-(T1 harness through T4 exotic) with the module grid. The T3 miniature Arc Reactor waits for the
-factory plant (ADR-0067).
+### Distributed factory eras
 
-### 0.5 — Resonance and defence
+| Range | Campaign work |
+| --- | --- |
+| **T10 Orbital** | Rocket flight, ground–orbit logistics, satellites, beamed power and zero-g industry. |
+| **T11 Planetary** | Life support, ISRU, telepresence, abstract colonies, Space Elevators, Horizon Gates and Type I. |
+| **T12 Stellar** | Stellar materials, the Stellar Forge, photonic control, a Dyson network and Type II. |
+| **T13 Interstellar** | Causal logistics, supraluminal navigation, multiple systems and the Drift. |
+| **T14 Galactic** | Self-expanding industry, antimatter, singularity power, distributed control and Type III. |
+| **T15 Event Horizon** | Relativistic shielding, final navigation and arrival at Sagittarius; exploitation follows as postgame T15. |
 
-Resonance emission, spread and decay. Aberrations. Turret line, Flux Walls, Shield Projector.
-The T2–T3 weapon set and manufactured ammunition.
+### Polish
 
-### 0.6 — The futuristic tier
+The native Atlas solver, JEI/REI/EMI integration, configuration, localisation, accessibility,
+balance and performance are developed alongside the campaign seams they explain rather than
+postponed behind an obsolete 1.0 bucket. Version ports still wait until the Forge 1.20.1 campaign
+is coherent.
 
-Drone logistics and the logistics crates. Deep Core Drill. **Arc Reactor** multiblock (direct F3
-FU, Arc Cell line, same fuel as the suit). Fission Reactor multiblock with neighbour bonuses
-and SCRAM. Centrifuge and the fuel cycle.
-
-### 0.7 — Exotic industry
-
-Fusion Reactor. Particle Accelerator with transmutation, exotic synthesis and Exotic Data Cores.
-Singularity Reactor. Quantum Assembler, Cryogenic Plant, Matter Condenser. T4 weapons. This is
-the foundation's exotic tier, not the end of the mod.
-
-### 0.8 — Orbit
-
-Launch Pad and rockets. Orbital Platform and station modules. Mass Driver and Orbital Catcher. The
-satellite line, with the **Survey Satellite** as the headline feature. Rectenna and beamed power.
-Vacuum and zero-g processing machines.
-
-**Definition of done:** a satellite constellation measurably improves the ground base — veins are
-mapped instead of hunted, and orbital solar carries real load.
-
-### 0.9 — Interplanetary
-
-Planet registry with space-mod detection, and the fallback worlds. Per-planet vein pools and
-hazards. Life support. **Proxy Frames and telepresence.** **Colony Cores** with abstract
-simulation, integrity and resupply. Drop pods, interplanetary routing, Space Elevator.
-**Horizon Gates** (dialed pairs, not mining dimensions).
-
-**Definition of done:** a player can profitably exploit a planet they have never physically
-visited, walk to one through a gate after delivering the far ring, and twenty remote colonies
-cost no measurable server performance.
-
-### 1.0 — Polish
-
-Full JEI/REI/EMI integration, advancements, an in-game guide, config UI, localisation, performance
-passes on belts and networks, and a balance pass against the major packs. Held with the rest of
-the unstarted six-tier schedule (ADR-0088).
-
-### Modpack expansion *(next calendar)*
-
-ADR-0088, rescheduled by ADR-0090. Held slices L–BB stay on the books and are not the next
-work. **BD — Electric-arc steel** is in: ten iron ingots and one carbon become ten steel
-ingots in the Arc Furnace (ADR-0090). **BE — Refractory brick** is in: one slag becomes one
-refractory brick in 20 s at 1400 °C on the same furnace (ADR-0091). **BF — Metallurgical
-silicon** is in: one silica and two carbon become one metallurgical silicon and 2 B of
-carbon monoxide in 14 s at 1900 °C on the same furnace (ADR-0092). **BG — Further
-processing lines** is in: ten metallurgical silicon become seven electronic silicon in
-600 s at 1420 °C on the same furnace (ADR-0093). **BH — Megastructures** is in: the
-Ground Array, a fixed 3×3, adds ten seconds of MK3 throughput as storage while the ring
-stands (ADR-0094). Kardashev Type I, II and III are not that structure. **BI — Original
-planets** is in: Luna, regolith with no ore, helium-3 from the extractor, and a Lunar
-Link (ADR-0095). **BJ — Interstellar travel** is in: the Drift, a deck with no ore,
-and a Starward Link that spends 6,553,600 FU (ADR-0096). Both links stay, marked as
-placeholders (ADR-0097). **BK — Teleportation orbs** is named and not started: an
-alternate route of a magical material, left unnamed, ends in orbs that remember a
-place. **BL — Rocket ascent** is in: a survey rocket climbs to the ceiling, then a
-landing map offers the home world and Luna. **BM — Supraluminal station** is in
-(ADR-0098): the station climbs to the ceiling, and that ceiling arrives on the Drift.
-**BN — Arrival at the galactic centre** is in (ADR-0099): riding on from the Drift
-lands in a sealed chamber, and that is the victory. It is that ride, not a link.
-The original quest book and the in-game guide are in (ADR-0100). They are last.
-No slice follows them.
-
-### Beyond 1.0 — version ports
+### Version ports
 
 | Target | Notes |
 | --- | --- |
@@ -2202,7 +2152,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 19 | **Slice D — Factory builds factory:** Press, Machine Casing, Assembler, T2+ fabrication gate | ✅ done — ADR-0017, ADR-0063 |
 | 20 | **Slice E — Energy spanning:** Flux Conduits, transformers, capacitor banks | ✅ done — ADR-0064; pylons stay coverage |
 | 20b | **Kiln / R2 — Roast then reduce:** T1 Kiln, oxide form, SO₂ capture | ✅ done — ADR-0065; 1.15 and acid stay later |
-| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | pending — build-out AD; Arc Reactor (ADR-0067) |
+| 21 | **Slice F — Multiblock kernel:** formed structure + hatches, when a machine needs size or hatches | rescheduled into the T3 Arc campaign after BQ (ADR-0067, ADR-0107) |
 | 21b | **Slice I — T2 gate:** Industrial research, Advanced Data Core, MK2 gated | ✅ done — ADR-0073 |
 | 21c | **Slice J — Wire and motors:** Wire Mill, wire form, mill coil, motor | ✅ done — ADR-0074 |
 | 21d | **Slice K — Contact process:** Chemical Reactor, SO₂ → acid, pickle | ✅ done — ADR-0075 |
@@ -2221,12 +2171,12 @@ Tracked order of work. Each step must build green before the next begins.
 | 21q | **Slice X — Voltaic Harness:** wear T1 modular armour | ✅ done — ADR-0102 |
 | 21r | **Slice Y — Flux Exosuit:** T2 chassis, network tap, exoskeleton legs | ✅ done — ADR-0103 |
 | 22 | T2+ industry: washer, flotation, electrolysis, solar/steam | ✅ done — build-out L–S |
-| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | partly done — build-out T–Y are in; AC and AH are held (ADR-0088) |
-| 24 | Orbital layer: launch, satellites, station | held — build-out AO–AS (ADR-0088) |
-| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | held — build-out AT–AX; ADR-0068 recorded, ADR-0088 holds the rows |
+| 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | partly done — scanner/deconstructor and tools are in; drones move to T3, replication to T4/T9 |
+| 24 | Orbital layer: launch, satellites, station | prototypes exist; survival implementation is rescheduled to T10 (ADR-0107) |
+| 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | planned for T11 (ADR-0068, ADR-0107) |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | ✅ done — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md), ADR-0070. Rows G–Y are in; unstarted rows Z–BB are held (ADR-0088). |
-| 28 | **Modpack expansion** | the named rows are in — ADR-0088, ADR-0090, ADR-0091, ADR-0092, ADR-0093, ADR-0094, ADR-0095, ADR-0096, ADR-0097, ADR-0098, ADR-0099, ADR-0100. BN arrival at the galactic centre is done. BC the quest book and the in-game guide are done. BK teleportation orbs are named and not started. No slice follows BC. |
+| 27 | **Autonomous build-out** | active — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) preserves the shipped calendars and names BO as next |
+| 28 | **Prototype expansion** | ✅ technically complete — worlds, travel and quests are validated prototypes; ADR-0107 withdraws their premature survival route |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
 | 28d | **BF — Metallurgical silicon** | ✅ done — ADR-0092. 1 silica + 2 carbon → 1 metallurgical silicon + 2 B CO in 14 s at 1900 °C on the Arc Furnace. |
@@ -2238,7 +2188,12 @@ Tracked order of work. Each step must build green before the next begins.
 | 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 | 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
 | 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
-| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. Lines, tasks, dependencies and rewards from the Multitool to the sealed chamber, plus a field guide of the same route. The book does not gate a machine. No slice follows it. |
+| 28m | **BC — Original quest book and in-game guide** | ✅ prototype done — ADR-0100. BO shortens its campaign to genuinely reachable survival content. |
+| 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
+| 30 | **BO — Withdraw prototype survival shortcut** | **next** — remove premature recipes and quest claims; preserve registrations, destinations and smokes |
+| 31 | **BP — Control Matrix foundation** | pending after BO — rating/architecture model, migration and first T1 Relay Matrix |
+| 32 | **BQ — Physical T2 gate** | pending after BP — replace the Industrial world permission with a consumed matrix |
+| 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2260,47 +2215,23 @@ the record.
 
 ### Where the project actually is
 
-Grindless is a modpack-scale progression (ADR-0088). The work through the contact process
-stays the foundation. The framing that this mod removes the early-game grind and then stops,
-and the cap at six research tiers, are retired. Kardashev Type I, II and III are the large
-milestones, with megastructures between them. Planets have unique extractable resources.
-Space and interstellar play are original. The goal is the black hole at the centre of the
-Milky Way: arriving is the victory, and the interior is a sealed chamber, and the way
-there is the station (ADR-0097, ADR-0099). The first hop, the Drift, is already in, by
-riding that station. The centre is in. Local flight is the survey rocket.
+The consolidated branch is locally validated: build, all behaviour checks, documentation and
+39 smoke scenarios pass. The genuinely playable survival foundation reaches T2 and includes
+extraction, logistics, fluids, fabricated machines, tools and matter scanning. Electric-arc steel,
+refractory brick, metallurgical silicon and zone refining extend that foundation.
 
-**BC — Original quest book and in-game guide** is in (ADR-0100). No slice follows it.
-**BN — Arrival at the galactic centre** is in (ADR-0099).
-**BK — Teleportation orbs** is named and not started, and it is not next. The
-material stays unnamed until that slice.
-**BL — Rocket ascent** is in (ADR-0097): the rocket climbs to the ceiling, then the
-landing map offers the home world and Luna.
-**BI — Original planets** is in (ADR-0095): Luna is regolith with no ore. An extractor
-there emits helium-3. A Lunar Link spends one capacitor of FU to arrive, and stays as
-a placeholder.
-**BH — Megastructures** is in (ADR-0094): the Ground Array stores ten seconds of MK3
-throughput while its 3×3 ring stands under a pylon.
-**BG — Zone refining** is in (ADR-0093): ten metallurgical silicon become seven electronic
-silicon in 600 s at 1420 °C. The ±5 °C inert band is not applied.
-**BF — Metallurgical silicon** is in (ADR-0092): one silica and two carbon become one
-metallurgical silicon and 2 B of carbon monoxide in 14 s at 1900 °C. Silica is sand and
-nether quartz. The Arc Furnace still holds 1500 °C, inside that band's tolerance.
-**BE — Refractory brick** is in (ADR-0091): one slag becomes one refractory brick in 20 s
-at 1400 °C on the Arc Furnace. **BD — Electric-arc steel** is in (ADR-0090): ten iron
-ingots and one carbon become ten steel ingots in 140 s at 1600 °C. Slices Z through BB stay
-defined and are **held**; L through Y shipped alongside this calendar. The original quest book
-and the in-game guide are in (ADR-0100). Arrival at the black hole is in. No slice follows the
-book.
+Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and the original quest
+book are also implemented and tested. ADR-0107 reclassifies that vertical route as prototype
+infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
+and smoke coverage stay; their survival recipes and premature quest claims leave in **BO**, the
+next slice. **BP** then introduces Control Matrix data and the recoverable T1 Relay Matrix route;
+**BQ** replaces the current Industrial world permission with physical T2 fabrication.
 
-Everything through step 14b is written, builds green and is covered by the behaviour checks in
-`tools/checks`. The first playable loop is in: a Hand Crank Dynamo feeds an adjacent Crude
-Extractor (or a pylon that covers both), and the extractor pulls the chunk's vein into a chest.
-T0 is craftable: cobble and sticks for the Multitool, two iron for dynamo and extractor, cobble
-and redstone for a Data Core, then the Research Terminal spends one core and F0 to unlock Voltaic.
+The runtime still implements the superseded Research Terminal and Voltaic/Industrial blueprint
+flags until BP/BQ migrate existing worlds. The details below record that current implementation,
+not the final progression contract. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 
-**There is no next slice.** Two calendars ran over the same weekend and both are in: the T2
-foundation through **Y**, and the modpack expansion through **BC**. Only **Z–BB** stay held.
-See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Flux Exosuit is in
+The Flux Exosuit is in
 (ADR-0103): Assembler-manufactured once Industrial is researched. Four pieces with the
 harness's protection and two module slots each. A worn Network Tap pulls up to 32 FU/t
 from pylon coverage into Flux Cells on the suit; Exoskeleton Legs add 0.04 speed for
@@ -2363,7 +2294,8 @@ Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 pl
 `8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in 20 s.
 That metal's Arc Furnace line is the named byproduct sink. Washed crushed reduces like
 crushed and roasts in the Kiln.
-**BC — Original quest book and in-game guide is in** (ADR-0100). No slice follows it. **Arrival at
+**BC — Original quest book and in-game guide is in** as a prototype (ADR-0100). BO trims its
+survival route before matrix work begins. **Arrival at
 the galactic centre (BN) is in** (ADR-0099): riding the station from the Drift lands in
 a sealed chamber. Leaving the chamber returns to the berth saved on the way to the Drift
 and does not draw. **The supraluminal
@@ -2389,8 +2321,8 @@ metallurgical silicon + 2 B CO in 14 s at 1900 °C. **Refractory brick is in**
 (ADR-0091): the Arc Furnace runs `ceramic/refractory_brick`, 1 slag → 1 refractory brick
 in 20 s at 1400 °C. **Electric-arc steel is in**
 (ADR-0090): the Arc Furnace runs `alloy/steel`, 10 iron ingots + 1 carbon → 10 steel
-ingots in 140 s. Slice F and the rest of Z–BB
-are held. The quest book is in (ADR-0100). No slice follows it.
+ingots in 140 s. The old Slice F and Z–BB rows remain historical; ADR-0107 reschedules their
+systems into the T0–T15 campaign. The quest book prototype is in (ADR-0100), and BO is next.
 See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
@@ -2415,10 +2347,10 @@ vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + car
 ingot and slag in 10 s. Yield stays 1.00 until the acid line (build-out K). Slice E spanning
 is already in. Modular armour and the Arc Reactor pair are **recorded, not started**
 (ADR-0067): T3 / F3, same unlock for the factory plant and the suit core, fed by a cell
-line. Horizon Gates and the extra fallback worlds are **recorded, not started**, and that
-row is held (ADR-0068, ADR-0088): T6 commute, not a mining dimension. Do not start a held
-slice, hatches, orbit, a Sifter shell, a turret, or a void world to prepare for them. The
-quest book (BC) is in (ADR-0100), and no slice follows it. Arrival at the galactic centre (BN) is in (ADR-0099). The supraluminal station (BM) is in (ADR-0098). Teleportation orbs (BK) are named and not started. Rocket ascent (BL) is in (ADR-0097). The Drift is in (ADR-0096). Luna is in (ADR-0095). The quest book is last and it is done.
+line. Horizon Gates and the extra fallback worlds are **recorded, not started**; ADR-0107
+places that commute infrastructure at T11, never in a mining dimension. The quest book (BC),
+arrival chamber (BN), supraluminal station (BM), rocket (BL), Drift and Luna are implemented
+prototypes. BO removes their premature survival path while retaining those tested systems.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.
