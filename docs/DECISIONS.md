@@ -122,6 +122,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0108](#adr-0108--finish-one-mechanical-tier-before-opening-the-next) | Finish one mechanical tier before opening the next | Accepted |
 | [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
 | [0110](#adr-0110--b2-pairs-materials-exactly-without-stack-nbt) | B2 pairs materials exactly without stack NBT | Accepted |
+| [0111](#adr-0111--shared-world-smokes-are-the-fast-local-loop) | Shared-world smokes are the fast local loop | Accepted |
 
 ---
 
@@ -4991,3 +4992,28 @@ logistics); keeping the previous crushed output (couples the trace to an unrelat
 
 **Consequences.** The B2 graph is deterministic and visible in the Atlas. Generated assets use
 the renamed washed-crushed form, and the stale former `*_washed` assets are removed.
+
+---
+
+## ADR-0111 — Shared-world smokes are the fast local loop
+
+*2026-10-07 · Accepted*
+
+**Context.** A Forge startup takes a material fraction of every smoke scenario. The isolated
+39-scenario matrix is the correct integration evidence, but it turns small local changes into a
+long wait even when most scenarios have not changed.
+
+**Decision.** `tools/run-smokes-batch.ps1` boots one temporary Forge world and runs the ordinary
+scenario command files consecutively, checking each scenario's existing expected markers. It is
+the fast local feedback loop, not a replacement for isolated validation. `foreign-providers` and
+`states` stay out of a batch because they require their own datapack at world creation; they run
+through `tools/run-smokes.ps1`, as does the full historical matrix before integration.
+
+**Alternatives rejected.** Rebooting the server for every local edit (sound isolation but poor
+iteration); loading all datapacks into one world (changes the provider and state guarantees being
+tested); calling the shared-world batch merge evidence (state leaked by an earlier scenario could
+mask a regression).
+
+**Consequences.** Developers can exercise broad Minecraft seams quickly while retaining a clear,
+stronger isolated gate for branch integration. A batch failure is actionable; a batch pass only
+authorizes faster iteration, not merge acceptance.

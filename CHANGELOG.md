@@ -60,6 +60,11 @@ entries below reference those records by id.
 
 ### Changed
 
+- **Fast shared-world smoke batches are available locally (ADR-0111).**
+  `tools/run-smokes-batch.ps1` starts Forge once and exercises the ordinary scenarios in sequence
+  for the daily development loop. The provider and state scenarios retain fresh worlds, and the
+  existing isolated matrix remains the integration evidence.
+
 - **The runtime Flux ladder now reaches F15.** `FluxTier` preserves every existing nominal
   F0–F9 rate, extends the fourfold sequence through Event Horizon at 8,589,934,592 FU/t, aligns
   all sixteen display names with ADR-0107 and saturates lookup at F15. The energy checks now prove

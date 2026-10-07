@@ -12,6 +12,6 @@ say WAIT-HOPPER
 execute if data block 8 70 8 Items[{id:"grindless:iron_crushed"}] run say CRUSHED-IN
 setblock 10 70 8 grindless:basic_tank[facing=south,status=idle]{Fluid:{Id:"minecraft:water",Amount:2000,Temp:20.0d,Pressure:0.1d}}
 execute if block 10 70 8 grindless:basic_tank run say TANK-WATER
-summon minecraft:item 8 100 8 {Item:{id:"grindless:iron_washed",Count:1b}}
-execute if entity @e[type=item,nbt={Item:{id:"grindless:iron_washed"}}] run say WASHED-OK
+summon minecraft:item 8 100 8 {Item:{id:"grindless:iron_washed_crushed",Count:1b}}
+execute if entity @e[type=item,nbt={Item:{id:"grindless:iron_washed_crushed"}}] run say WASHED-OK
 kill @e[type=item]
