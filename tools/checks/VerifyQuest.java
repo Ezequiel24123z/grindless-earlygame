@@ -2,12 +2,9 @@ package io.github.ezequiel24123z.grindless.quest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
-import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
 import io.github.ezequiel24123z.grindless.research.Blueprint;
-import io.github.ezequiel24123z.grindless.star.DriftCatalogue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +16,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Behaviour checks for the original quest book and field guide (ADR-0100). Not part of the mod. */
+/** Behaviour checks for the reachable quest route and field guide (ADR-0100). Not part of the mod. */
 public final class VerifyQuest {
 
     private static final Path ROOT = Path.of(".");
@@ -28,7 +25,7 @@ public final class VerifyQuest {
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
-            "bootstrap", "voltaic", "contact", "metals", "array", "voyage");
+            "bootstrap", "voltaic", "contact", "metals");
 
     private static final List<String> FORBIDDEN = List.of(
             "betterquesting", "patchouli", "funwayguy", "draconic", "galacticraft",
@@ -56,10 +53,10 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("eighteen tasks, from the crank to the chamber", 18, tasks.size());
-        eq("six lines", LINES, QuestCatalogue.lines());
+        eq("eleven tasks, from the multitool to electronic silicon", 11, tasks.size());
+        eq("four reachable lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
-        eq("the last task is the arrival", "centre", tasks.get(tasks.size() - 1).id());
+        eq("the last task is electronic silicon", "electronic", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
                 (int) tasks.stream().map(QuestCatalogue.Task::id).distinct().count());
     }
@@ -79,30 +76,24 @@ public final class VerifyQuest {
         eq("brick follows steel", "grindless:refractory_brick", subject("brick"));
         eq("silicon follows steel", "grindless:metallurgical_silicon", subject("silicon"));
         eq("electronic silicon follows that", "grindless:electronic_silicon", subject("electronic"));
-        eq("the array is the controller", "grindless:ground_array", subject("array"));
-        eq("the rocket is the local flight", "grindless:survey_rocket", subject("rocket"));
-        eq("luna is the planet already built", PlanetCatalogue.LUNA, subject("luna"));
-        eq("the station is the ride", "grindless:supraluminal_station", subject("station"));
-        eq("the drift is the deck", DriftCatalogue.DRIFT, subject("drift"));
-        eq("the centre is the chamber", CentreCatalogue.SAGITTARIUS, subject("centre"));
-        yes("the centre depends on the drift", task("centre").requires().contains("drift"));
-        yes("the drift depends on the station", task("drift").requires().contains("station"));
-        yes("luna depends on the rocket", task("luna").requires().contains("rocket"));
-        yes("the station waits for the array and the rocket",
-                task("station").requires().contains("array") && task("station").requires().contains("rocket"));
-        yes("a walk from the multitool reaches the chamber", reaches("multitool", "centre"));
+        yes("a walk from the multitool reaches electronic silicon", reaches("multitool", "electronic"));
+        no("the survival route has no dimension objectives",
+                tasks.stream().anyMatch(task -> task.evidence() == QuestCatalogue.Evidence.DIMENSION));
         for (QuestCatalogue.Task task : tasks) {
             String blob = (task.id() + " " + task.subject() + " " + task.line()).toLowerCase();
-            no(task.id() + " is not an orb or an unbuilt world",
+            no(task.id() + " is not a spatial prototype or an unbuilt world",
                     blob.contains("orb") || blob.contains("tharsis") || blob.contains("kardashev")
-                            || blob.contains("teleport"));
+                            || blob.contains("teleport") || blob.contains("array")
+                            || blob.contains("rocket") || blob.contains("luna")
+                            || blob.contains("station") || blob.contains("drift")
+                            || blob.contains("sagittarius") || blob.contains("voyage"));
         }
     }
 
     private static void claims() {
         Set<String> empty = Set.of();
-        eq("the chamber is locked at the start", QuestLogic.Status.LOCKED,
-                QuestLogic.consider(task("centre"), empty, true));
+        eq("electronic silicon is locked at the start", QuestLogic.Status.LOCKED,
+                QuestLogic.consider(task("electronic"), empty, true));
         eq("the multitool is unmet until it is held", QuestLogic.Status.UNMET,
                 QuestLogic.consider(task("multitool"), empty, false));
         eq("the multitool is claimable when it is held", QuestLogic.Status.CLAIMABLE,
@@ -129,13 +120,7 @@ public final class VerifyQuest {
         no("zero is not enough", QuestEvidence.met(item, 0, false, "minecraft:overworld"));
         QuestCatalogue.Task research = task("voltaic");
         yes("an unlocked blueprint counts", QuestEvidence.met(research, 0, true, "minecraft:overworld"));
-        no("a locked blueprint does not", QuestEvidence.met(research, 99, false, PlanetCatalogue.LUNA));
-        QuestCatalogue.Task where = task("centre");
-        yes("standing in the chamber counts",
-                QuestEvidence.met(where, 0, false, CentreCatalogue.SAGITTARIUS));
-        no("standing on the drift is not the chamber",
-                QuestEvidence.met(where, 0, true, DriftCatalogue.DRIFT));
-        no("luna is not the chamber", QuestEvidence.met(where, 0, true, PlanetCatalogue.LUNA));
+        no("a locked blueprint does not", QuestEvidence.met(research, 99, false, "minecraft:overworld"));
     }
 
     private static void rewards() throws IOException {
@@ -158,9 +143,7 @@ public final class VerifyQuest {
 
     private static void guide() throws IOException {
         List<String> pages = GuideCatalogue.pages();
-        List<String> lines = new ArrayList<>(QuestCatalogue.lines());
-        lines.add("centre");
-        eq("the guide follows the lines and ends at the chamber", lines, pages);
+        eq("the guide follows the reachable quest lines", QuestCatalogue.lines(), pages);
         JsonObject lang = JsonParser.parseString(Files.readString(LANG)).getAsJsonObject();
         StringBuilder all = new StringBuilder();
         for (String page : pages) {
@@ -173,10 +156,13 @@ public final class VerifyQuest {
         String text = all.toString();
         for (String mark : List.of(
                 "Multitool", "Hand Crank", "Crude Extractor", "Voltaic", "Chemical Reactor",
-                "contact process", "steel", "refractory", "metallurgical", "electronic",
-                "Ground Array", "Luna", "helium-3", "rocket", "Drift", "station",
-                "Starward Link", "sealed chamber", "Arriving is the victory")) {
+                "contact process", "steel", "refractory", "metallurgical", "electronic")) {
             yes("the guide mentions " + mark, text.contains(mark));
+        }
+        for (String prototype : List.of(
+                "ground array", "luna", "helium-3", "rocket", "drift", "station",
+                "starward link", "sealed chamber", "arriving is the victory")) {
+            no("the guide does not advertise " + prototype, text.toLowerCase().contains(prototype));
         }
         no("the guide does not send the reader to an orb", text.toLowerCase().contains("orb"));
         no("the guide does not name a forbidden mod", containsForbidden(text.toLowerCase()));

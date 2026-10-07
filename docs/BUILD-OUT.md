@@ -8,10 +8,9 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Next: BO — withdraw the prototype survival shortcut.** The consolidated tree is locally
-validated, but its Ground Array, placeholder links, rocket and supraluminal station are all
-Industrial Assembler recipes. That lets survival bypass T3–T15 and reach the nominal victory.
-BO removes that access without deleting or weakening the tested destination infrastructure.
+**Next: BP — Control Matrix foundation.** BO is shipped: the Ground Array, placeholder links,
+rocket and supraluminal station remain registered and smoke-tested, but have no generated or
+crafting-table survival recipes. The quest book and guide now stop at electronic silicon.
 
 ---
 
@@ -22,7 +21,7 @@ reconstruct the intended order, but it does not start them early.
 
 | ID | Slice | Player can | Ship | Preserve | Done when |
 | --- | --- | --- | --- | --- | --- |
-| **BO** | **Withdraw prototype survival shortcut** | Follow every currently implemented survival quest without being sent into future-tier test infrastructure | Remove the Industrial Assembler recipes for Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth and Supraluminal Station. End the quest/guide route at the last genuinely reachable T2 objective. Update graph counts and checks. | All block/item registrations, Luna, the Drift, Sagittarius, travel logic, commands and smoke scenarios. Existing worlds may still contain and exercise every prototype. | No survival recipe or quest reaches a prototype destination; all checks pass; a boot smoke still proves registrations. |
+| **BO** | **Withdraw prototype survival shortcut** | Follow every currently implemented survival quest without being sent into future-tier test infrastructure | Remove the Industrial Assembler recipes for Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth and Supraluminal Station. End the quest/guide route at the last genuinely reachable T2 objective. Update graph counts and checks. | All block/item registrations, Luna, the Drift, Sagittarius, travel logic, commands and smoke scenarios. Existing worlds may still contain and exercise every prototype. | ✅ done — 107 graph rows, 39 Assembler rows, eleven quests through electronic silicon, no prototype recipe or dimension quest. |
 | **BP** | **Control Matrix foundation** | Build the first T1 Relay Matrix and inspect its rating/architecture | Matrix item/data model, substitution rules, first recoverable T1 batch, legacy-state migration seam and Atlas visibility. Extend `FluxTier` through F15 without changing existing values. | Existing worlds and the current T0 bootstrap. | Matrix behaviour checks cover rating, architecture, substitution and migration; F0–F15 values match ADR-0107. |
 | **BQ** | **Physical T2 gate** | Manufacture T2 machines from a T2 Relay Matrix rather than a world permission | T2 matrix route braided through the existing material, chemical, control and power lines. Remove Voltaic/Industrial checks from ordinary fabrication. Recast Data Cores as pattern media. | Existing fabricated machines and player progress. | Every T2 machine consumes the physical rating; no ordinary recipe consults a global blueprint flag. |
 | **BR** | **T3 Arc frontier** | Build a larger factory with drones and fed Arc power | Refractory/Arc Cell routes, Construction Drones, the first parametric multiblock kernel, Arc Reactor and T3 Relay Matrix. | The existing T0–T2 lines as useful low-infrastructure routes. | The four lattice domains interact before the T3 matrix, and the Arc Reactor runs in a booted server. |
@@ -258,7 +257,7 @@ The original quest book is in, with the in-game guide, after that arrival. Nothi
 ## How a session starts
 
 1. Read `AGENTS.md`, `CHANGELOG.md` `[Unreleased]`, this file's opening status, then the
-   row it names. BO is next.
+   row it names. BP is next.
 2. Branch from the current tip. Implement only the active row. The historical held rows
    are not a queue. Do not start BK or resume BN.
 3. When the slice is green locally, push, open or update the stacked draft, mark the row done,

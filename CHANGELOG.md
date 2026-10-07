@@ -45,11 +45,12 @@ entries below reference those records by id.
 
 ### Changed
 
-- **The next build-out slice is BO, prototype isolation.** The Ground Array, links, rocket,
-  station and destination worlds remain registered and smoke-tested, but their Industrial
-  survival recipes and premature quest route are withdrawn before Control Matrix work begins.
-  BP then introduces the matrix model and first T1 Relay Matrix; BQ migrates T2 fabrication
-  away from global Voltaic/Industrial blueprint permissions.
+- **BO isolates the spatial prototypes from survival.** The generated graph no longer includes
+  the eight Industrial recipes for the Ground Array, links, rocket or station, and the Atlas now
+  exposes 107 reachable recipes with 39 Assembler rows. The quest book and field guide stop at
+  electronic silicon: eleven tasks across four lines, with no dimension objective. Registrations,
+  existing blocks and items, Luna, the Drift, Sagittarius, travel logic, commands and all smoke
+  scenarios remain. **BP — Control Matrix foundation is next.**
 
 - **Smoke scenarios are a list, and CI shards them (ADR-0105).** Every slice had been adding a
   `Boot and exercise ...` step to `ci.yml`, each booting a full dedicated server; the merged

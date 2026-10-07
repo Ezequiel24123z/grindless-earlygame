@@ -1,9 +1,6 @@
 package io.github.ezequiel24123z.grindless.quest;
 
-import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
-import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
 import io.github.ezequiel24123z.grindless.research.Blueprint;
-import io.github.ezequiel24123z.grindless.star.DriftCatalogue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +8,9 @@ import java.util.List;
 /**
  * The original quest book (ADR-0100).
  *
- * <p>Lines, tasks, dependencies and rewards for the route that already exists: T0 through
- * arrival at the galactic centre. The book does not gate a machine. It does not name a
- * teleportation orb, a Kardashev scale, or a world this pack has not built.
+ * <p>Lines, tasks, dependencies and rewards for the currently reachable survival route:
+ * T0 through electronic silicon at T2. The book does not gate a machine or expose the
+ * registered spatial prototypes before their campaign tiers.
  */
 public final class QuestCatalogue {
 
@@ -73,21 +70,7 @@ public final class QuestCatalogue {
             task("silicon", "metals", Evidence.ITEM, "grindless:metallurgical_silicon", 1,
                     List.of("steel"), reward("minecraft:coal", 4)),
             task("electronic", "metals", Evidence.ITEM, "grindless:electronic_silicon", 1,
-                    List.of("silicon"), reward("grindless:data_core", 1)),
-            task("casing", "array", Evidence.ITEM, "grindless:array_casing", 1,
-                    List.of("brick", "electronic"), reward("grindless:data_core", 1)),
-            task("array", "array", Evidence.ITEM, "grindless:ground_array", 1,
-                    List.of("casing"), reward("grindless:data_core", 1)),
-            task("rocket", "voyage", Evidence.ITEM, "grindless:survey_rocket", 1,
-                    List.of("industrial", "steel"), reward("minecraft:coal", 8)),
-            task("luna", "voyage", Evidence.DIMENSION, PlanetCatalogue.LUNA, 1,
-                    List.of("rocket"), reward("grindless:data_core", 1)),
-            task("station", "voyage", Evidence.ITEM, "grindless:supraluminal_station", 1,
-                    List.of("array", "rocket"), reward("grindless:data_core", 1)),
-            task("drift", "voyage", Evidence.DIMENSION, DriftCatalogue.DRIFT, 1,
-                    List.of("station"), reward("grindless:data_core", 1)),
-            task("centre", "voyage", Evidence.DIMENSION, CentreCatalogue.SAGITTARIUS, 1,
-                    List.of("drift"), reward("grindless:data_core", 1)));
+                    List.of("silicon"), reward("grindless:data_core", 1)));
 
     private QuestCatalogue() {
     }

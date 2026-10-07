@@ -1,11 +1,5 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
-import io.github.ezequiel24123z.grindless.flight.RocketFlight;
-import io.github.ezequiel24123z.grindless.planet.LunarLinkLogic;
-import io.github.ezequiel24123z.grindless.star.StarwardLinkLogic;
-import io.github.ezequiel24123z.grindless.station.StationRide;
-import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -25,11 +19,8 @@ import java.util.Locale;
  * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091).
  * Metallurgical silicon: 1 silica + 2 carbon → 1 silicon + 2 B CO in 14 s (ADR-0092).
  * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
- * Ground Array: casing and controller, Industrial, no crafting table (ADR-0094).
- * Lunar Link: two array casings and one machine casing, Industrial (ADR-0095).
- * Starward Link: one lunar link and four array casings, Industrial (ADR-0096).
- * Launch pad and survey rocket: local flight, Industrial (ADR-0097).
- * Station berth and supraluminal station: the ride off the star, Industrial (ADR-0098).
+ * Spatial prototypes stay registered and testable but have no survival recipes until their
+ * T10-T15 campaign frontiers (ADR-0107).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
@@ -174,14 +165,6 @@ public final class ProcessGraph {
         recipes.add(refractoryBrick());
         recipes.add(metallurgicalSilicon());
         recipes.add(zoneRefining());
-        recipes.add(arrayCasing());
-        recipes.add(groundArray());
-        recipes.add(lunarLink());
-        recipes.add(starwardLink());
-        recipes.add(launchPad());
-        recipes.add(surveyRocket());
-        recipes.add(stationBerth());
-        recipes.add(supraluminalStation());
         return List.copyOf(recipes);
     }
 
@@ -506,148 +489,6 @@ public final class ProcessGraph {
                 null,
                 ProcessLogic.ZONE_TICKS,
                 ProcessLogic.FU_PER_TICK);
-    }
-
-    /**
-     * One part of the Ground Array's ring (ADR-0094). Four bricks line the part. They are
-     * not the eight of the ring.
-     */
-    private static ProcessRecipe arrayCasing() {
-        return new ProcessRecipe(
-                "assemble/array_casing",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(ProcessLogic.REFRACTORY_BRICK, GroundArrayLogic.CASING_BRICKS),
-                        IngredientSpec.tag(ingotTag("steel"), GroundArrayLogic.CASING_STEEL)),
-                List.of(OutputSpec.item(FabricationLogic.ARRAY_CASING, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The Ground Array controller. Industrial, like every other T2+ block (ADR-0017, ADR-0094). */
-    private static ProcessRecipe groundArray() {
-        return new ProcessRecipe(
-                "assemble/ground_array",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, GroundArrayLogic.CONTROLLER_CASINGS),
-                        IngredientSpec.tag("forge:plates/steel", GroundArrayLogic.CONTROLLER_PLATES),
-                        IngredientSpec.item(ProcessLogic.REFRACTORY_BRICK, GroundArrayLogic.CONTROLLER_BRICKS)),
-                List.of(OutputSpec.item(FabricationLogic.GROUND_ARRAY, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The way to Luna. Two ring parts and a casing. Industrial (ADR-0017, ADR-0095). */
-    private static ProcessRecipe lunarLink() {
-        return new ProcessRecipe(
-                "assemble/lunar_link",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.ARRAY_CASING, LunarLinkLogic.CASINGS),
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, LunarLinkLogic.MACHINE_CASINGS)),
-                List.of(OutputSpec.item(FabricationLogic.LUNAR_LINK, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The way off the star. The lunar link plus half a ring. Industrial (ADR-0017, ADR-0096). */
-    private static ProcessRecipe starwardLink() {
-        return new ProcessRecipe(
-                "assemble/starward_link",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.LUNAR_LINK, StarwardLinkLogic.LINKS),
-                        IngredientSpec.item(FabricationLogic.ARRAY_CASING, StarwardLinkLogic.CASINGS)),
-                List.of(OutputSpec.item(FabricationLogic.STARWARD_LINK, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The pad a survey rocket climbs from. Industrial (ADR-0017, ADR-0097). */
-    private static ProcessRecipe launchPad() {
-        return new ProcessRecipe(
-                "assemble/launch_pad",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, RocketFlight.PAD_CASINGS),
-                        IngredientSpec.tag("forge:plates/steel", RocketFlight.PAD_PLATES)),
-                List.of(OutputSpec.item(FabricationLogic.LAUNCH_PAD, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The rocket itself. A motor, a casing and two plates. Industrial (ADR-0017, ADR-0097). */
-    private static ProcessRecipe surveyRocket() {
-        return new ProcessRecipe(
-                "assemble/survey_rocket",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, RocketFlight.ROCKET_CASINGS),
-                        IngredientSpec.item(FabricationLogic.MOTOR, RocketFlight.ROCKET_MOTORS),
-                        IngredientSpec.tag("forge:plates/steel", RocketFlight.ROCKET_PLATES)),
-                List.of(OutputSpec.item(FabricationLogic.SURVEY_ROCKET, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The berth a station climbs from. The link, consumed. Industrial (ADR-0017, ADR-0098). */
-    private static ProcessRecipe stationBerth() {
-        return new ProcessRecipe(
-                "assemble/station_berth",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.STARWARD_LINK, StationRide.BERTH_LINKS),
-                        IngredientSpec.tag("forge:plates/steel", StationRide.BERTH_PLATES)),
-                List.of(OutputSpec.item(FabricationLogic.STATION_BERTH, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
-    }
-
-    /** The station itself. A casing, a motor and two array casings. Industrial (ADR-0017, ADR-0098). */
-    private static ProcessRecipe supraluminalStation() {
-        return new ProcessRecipe(
-                "assemble/station",
-                MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, StationRide.STATION_CASINGS),
-                        IngredientSpec.item(FabricationLogic.MOTOR, StationRide.STATION_MOTORS),
-                        IngredientSpec.item(FabricationLogic.ARRAY_CASING, StationRide.STATION_ARRAY_CASINGS)),
-                List.of(OutputSpec.item(FabricationLogic.SUPRALUMINAL_STATION, 1)),
-                Double.NaN,
-                null,
-                FabricationLogic.ASSEMBLE_TICKS,
-                FabricationLogic.FU_PER_TICK,
-                List.of(),
-                "industrial");
     }
 
     /** Named sulfuric spend. The Press plate die remains (ADR-0075). */

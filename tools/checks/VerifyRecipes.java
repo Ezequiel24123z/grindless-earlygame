@@ -19,6 +19,24 @@ import java.util.Map;
 public final class VerifyRecipes {
 
     private static final Path RECIPES = Path.of("common/src/main/resources/data/grindless/recipes");
+    private static final List<String> PROTOTYPE_RECIPE_IDS = List.of(
+            "assemble/array_casing",
+            "assemble/ground_array",
+            "assemble/lunar_link",
+            "assemble/starward_link",
+            "assemble/launch_pad",
+            "assemble/survey_rocket",
+            "assemble/station_berth",
+            "assemble/station");
+    private static final List<String> PROTOTYPE_ITEMS = List.of(
+            "array_casing",
+            "ground_array",
+            "lunar_link",
+            "starward_link",
+            "launch_pad",
+            "survey_rocket",
+            "station_berth",
+            "supraluminal_station");
 
     private static int failures = 0;
 
@@ -41,7 +59,8 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus wash plus press forms plus mill, coil, mill coil, mill, motor, contact, pickle, washer, gas line, well, melt, flotation, steam, T2 logistics, logic, the drill, the blueprint tool, the planner, the pattern pair, the exosuit, steel, refractory, silicon, zone refining, the ground array, the lunar link, the starward link, the launch pad, the survey rocket, the station berth and the supraluminal station", 115, recipes.size());
+        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, steel and silicon graph",
+                107, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -125,6 +144,15 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(VerifyRecipes::namesMaterialItem));
         yes("every recipe id is unique",
                 recipes.stream().map(ProcessRecipe::id).distinct().count() == recipes.size());
+        for (String id : PROTOTYPE_RECIPE_IDS) {
+            no(id + " is not in the survival graph",
+                    recipes.stream().anyMatch(recipe -> recipe.id().equals(id)));
+        }
+        for (String item : PROTOTYPE_ITEMS) {
+            no(item + " has no generated survival route",
+                    recipes.stream().flatMap(recipe -> recipe.itemOutputs().stream())
+                            .anyMatch(output -> output.qualified().equals("item:grindless:" + item)));
+        }
 
         ProcessRecipe ironPlate = recipe(recipes, "press/plate/iron");
         ProcessRecipe ironRod = recipe(recipes, "press/rod/iron");
@@ -753,36 +781,6 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/gear/gold")));
         no("mythril without plate/rod/gear does not press",
                 recipes.stream().anyMatch(recipe -> recipe.id().startsWith("press/") && recipe.id().endsWith("/mythril")));
-        ProcessRecipe casing = recipe(recipes, "assemble/array_casing");
-        eq("the casing is the assembler", MachineFamily.ASSEMBLER, casing.family());
-        eq("the casing takes four bricks", 4, casing.itemInputs().get(0).count());
-        eq("the casing brick is the reagent", "item:grindless:refractory_brick",
-                casing.itemInputs().get(0).qualified());
-        eq("the casing takes one steel ingot", 1, casing.itemInputs().get(1).count());
-        eq("the casing steel is the ingot tag", "tag:forge:ingots/steel",
-                casing.itemInputs().get(1).qualified());
-        eq("the casing makes one casing", 1, casing.itemOutputs().get(0).count());
-        eq("the casing output is the block", "item:grindless:array_casing",
-                casing.itemOutputs().get(0).qualified());
-        eq("the casing is twenty seconds", 20 * 20, casing.durationTicks());
-        eq("the casing draws F1", 32L, casing.fuPerTick());
-        eq("the casing needs Industrial", "industrial", casing.blueprint());
-        yes("the casing names no temperature", Double.isNaN(casing.temperatureC()));
-        ProcessRecipe array = recipe(recipes, "assemble/ground_array");
-        eq("the array is the assembler", MachineFamily.ASSEMBLER, array.family());
-        eq("the array takes one machine casing", 1, array.itemInputs().get(0).count());
-        eq("the array casing input is the reagent", "item:grindless:machine_casing",
-                array.itemInputs().get(0).qualified());
-        eq("the array takes four steel plates", 4, array.itemInputs().get(1).count());
-        eq("the array plates are the tag", "tag:forge:plates/steel",
-                array.itemInputs().get(1).qualified());
-        eq("the array takes four bricks", 4, array.itemInputs().get(2).count());
-        eq("the array makes one controller", 1, array.itemOutputs().get(0).count());
-        eq("the array output is the block", "item:grindless:ground_array",
-                array.itemOutputs().get(0).qualified());
-        eq("the array is twenty seconds", 20 * 20, array.durationTicks());
-        eq("the array draws F1", 32L, array.fuPerTick());
-        eq("the array needs Industrial", "industrial", array.blueprint());
         no("the array is not a dyson collector",
                 recipes.stream().anyMatch(recipe -> recipe.id().contains("dyson")
                         || recipe.id().contains("kardashev")
@@ -877,10 +875,10 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("metallurgical_silicon.json")));
         no("electronic silicon has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("electronic_silicon.json")));
-        no("the array has no crafting-table recipe",
-                Files.isRegularFile(RECIPES.resolve("ground_array.json")));
-        no("the casing has no crafting-table recipe",
-                Files.isRegularFile(RECIPES.resolve("array_casing.json")));
+        for (String item : PROTOTYPE_ITEMS) {
+            no(item + " has no crafting-table recipe",
+                    Files.isRegularFile(RECIPES.resolve(item + ".json")));
+        }
         String silica = Files.readString(Path.of(
                 "common/src/main/resources/data/grindless/tags/items/silica.json"));
         yes("silica tag accepts sand", silica.contains("\"minecraft:sand\""));

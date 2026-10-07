@@ -2,10 +2,7 @@ package io.github.ezequiel24123z.grindless.flight;
 
 import io.github.ezequiel24123z.grindless.planet.LunarLinkLogic;
 import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
-import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
-import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
-import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.star.DriftCatalogue;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkLogic;
 
@@ -87,29 +84,11 @@ public final class VerifyRocket {
     }
 
     private static void recipe() throws IOException {
-        List<ProcessRecipe> recipes = ProcessGraph.generate(List.of());
-        ProcessRecipe pad = find(recipes, "assemble/launch_pad");
-        ProcessRecipe rocket = find(recipes, "assemble/survey_rocket");
-        if (pad == null || rocket == null) {
-            return;
-        }
-        eq("the pad is the assembler", MachineFamily.ASSEMBLER, pad.family());
-        eq("the pad takes one casing", RocketFlight.PAD_CASINGS, pad.itemInputs().get(0).count());
-        eq("that casing is the machine casing", "item:" + FabricationLogic.MACHINE_CASING,
-                pad.itemInputs().get(0).qualified());
-        eq("the pad takes four plates", RocketFlight.PAD_PLATES, pad.itemInputs().get(1).count());
-        eq("those plates are steel", "tag:forge:plates/steel", pad.itemInputs().get(1).qualified());
-        eq("the pad makes one block", 1, pad.itemOutputs().get(0).count());
-        eq("the output is the launch pad", "item:" + FabricationLogic.LAUNCH_PAD,
-                pad.itemOutputs().get(0).qualified());
-        eq("the rocket takes one motor", RocketFlight.ROCKET_MOTORS, rocket.itemInputs().get(1).count());
-        eq("that motor is the motor", "item:" + FabricationLogic.MOTOR,
-                rocket.itemInputs().get(1).qualified());
-        eq("the rocket takes two plates", RocketFlight.ROCKET_PLATES, rocket.itemInputs().get(2).count());
-        eq("the output is the survey rocket", "item:" + FabricationLogic.SURVEY_ROCKET,
-                rocket.itemOutputs().get(0).qualified());
-        eq("both are twenty seconds", FabricationLogic.ASSEMBLE_TICKS, pad.durationTicks());
-        eq("both need Industrial", "industrial", rocket.blueprint());
+        var recipes = ProcessGraph.generate(List.of());
+        no("the launch pad has no generated survival recipe",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("assemble/launch_pad")));
+        no("the survey rocket has no generated survival recipe",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("assemble/survey_rocket")));
         Path recipesDir = DATA.resolve("grindless/recipes");
         no("the pad has no crafting-table recipe",
                 Files.isRegularFile(recipesDir.resolve("launch_pad.json")));
@@ -126,16 +105,6 @@ public final class VerifyRocket {
                 blocks.contains("Placeholder: the rocket replaces this flight"));
         yes("the starward link is marked as a placeholder",
                 blocks.contains("Placeholder: the station replaces this hop"));
-    }
-
-    private static ProcessRecipe find(List<ProcessRecipe> recipes, String id) {
-        for (ProcessRecipe recipe : recipes) {
-            if (id.equals(recipe.id())) {
-                return recipe;
-            }
-        }
-        fail("missing recipe " + id);
-        return null;
     }
 
     private static void eq(String what, Object expected, Object actual) {

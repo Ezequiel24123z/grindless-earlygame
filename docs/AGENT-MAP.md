@@ -50,11 +50,12 @@ T2 and above are manufactured, never a crafting table
 - `research/Blueprint.java` and `research/ResearchLogic.java` — a new blueprint id.
   Assembler recipes name it as a string (`industrial` today).
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (115) and the gated
-craft count (30); `VerifyAtlas` pins the same size and the assembler row count (47).
+`tools/checks/VerifyRecipes.java` pins the generated graph size (107) and the gated
+craft count (30); `VerifyAtlas` pins the same size and the assembler row count (39).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
-gain a file under `data/grindless/recipes/`.
+gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have
+neither a graph row nor a crafting JSON until their T10-T15 campaign frontiers.
 Ratios are in [`PROCESSES.md`](PROCESSES.md#the-recipe-graph).
 
 ## Fluid
@@ -120,6 +121,7 @@ Network Tap draws from pylon coverage and the drill's cell is not the suit's cel
 the FU each departure draws and that no return draws again. A link block that no longer
 moves a player stays registered rather than being deleted
 ([ADR-0098](DECISIONS.md#adr-0098--the-supraluminal-station-is-the-ride-off-the-star)).
+The first four checks also pin that the prototype transport has no generated survival recipe.
 
 ## Quests and the guide
 
@@ -129,6 +131,8 @@ moves a player stays registered rather than being deleted
 
 `VerifyQuest` holds that a claim never consumes its evidence and never gates a machine
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).
+The active route has eleven tasks in four lines, stops at electronic silicon and contains
+no dimension evidence; spatial pages return only with their campaign tiers.
 
 ## Multiblock
 

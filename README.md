@@ -26,8 +26,10 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > branch is locally validated on Forge 1.20.1. The Ground Array, Luna, Drift, rocket,
 > station and galactic-centre chamber are also implemented and smoke-tested, but ADR-0107
 > reclassifies them as prototype/test infrastructure rather than an Industrial survival
-> shortcut. Their recipes and premature quest path are the next cleanup slice. The real
-> campaign reaches orbit at T10, the Drift at T13 and Sagittarius at T15.
+> shortcut. BO removed their recipes and premature quest path while preserving the tested
+> systems; the survival guide now ends at electronic silicon. BP, the Control Matrix
+> foundation, is next. The real campaign reaches orbit at T10, the Drift at T13 and
+> Sagittarius at T15.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -2063,10 +2065,9 @@ fifteen minutes without mining it by hand. This is met.
 ADR-0107 replaces the compressed six-tier schedule with T0/F0–T15/F15. Work resumes in small,
 playable slices:
 
-1. **BO — withdraw the survival shortcut.** Remove Industrial recipes for the Ground Array,
-   placeholder links, rocket, launch pad, station berth and station. Shorten quests and the guide
-   to genuinely reachable survival content. Keep registrations, worlds, commands and smokes.
-2. **BP — matrix foundation.** Add matrix rating/architecture data, world-safe migration for the
+1. **BO — survival shortcut withdrawn.** The eight prototype recipes are gone and the quest
+   book and guide stop at electronic silicon. Registrations, worlds, commands and smokes remain.
+2. **BP — matrix foundation *(next)*.** Add matrix rating/architecture data, world-safe migration for the
    existing Voltaic and Industrial state, and the first T1 Relay Matrix route.
 3. **BQ — physical T2 gate.** Move T2 fabrication from the global Industrial permission to a
    consumed T2 Relay Matrix and convert Data Cores into future pattern media.
@@ -2175,7 +2176,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 24 | Orbital layer: launch, satellites, station | prototypes exist; survival implementation is rescheduled to T10 (ADR-0107) |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | planned for T11 (ADR-0068, ADR-0107) |
 | 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | active — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) preserves the shipped calendars and names BO as next |
+| 27 | **Autonomous build-out** | active — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) preserves the shipped calendars and names BP as next |
 | 28 | **Prototype expansion** | ✅ technically complete — worlds, travel and quests are validated prototypes; ADR-0107 withdraws their premature survival route |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
@@ -2188,10 +2189,10 @@ Tracked order of work. Each step must build green before the next begins.
 | 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 | 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
 | 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
-| 28m | **BC — Original quest book and in-game guide** | ✅ prototype done — ADR-0100. BO shortens its campaign to genuinely reachable survival content. |
+| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to eleven reachable tasks ending at electronic silicon. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
-| 30 | **BO — Withdraw prototype survival shortcut** | **next** — remove premature recipes and quest claims; preserve registrations, destinations and smokes |
-| 31 | **BP — Control Matrix foundation** | pending after BO — rating/architecture model, migration and first T1 Relay Matrix |
+| 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
+| 31 | **BP — Control Matrix foundation** | **next** — rating/architecture model, migration and first T1 Relay Matrix |
 | 32 | **BQ — Physical T2 gate** | pending after BP — replace the Industrial world permission with a consumed matrix |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 
@@ -2223,8 +2224,9 @@ refractory brick, metallurgical silicon and zone refining extend that foundation
 Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and the original quest
 book are also implemented and tested. ADR-0107 reclassifies that vertical route as prototype
 infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
-and smoke coverage stay; their survival recipes and premature quest claims leave in **BO**, the
-next slice. **BP** then introduces Control Matrix data and the recoverable T1 Relay Matrix route;
+and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
+book and guide now stop at electronic silicon. **BP**, the next slice, introduces Control Matrix
+data and the recoverable T1 Relay Matrix route;
 **BQ** replaces the current Industrial world permission with physical T2 fabrication.
 
 The runtime still implements the superseded Research Terminal and Voltaic/Industrial blueprint
@@ -2294,24 +2296,27 @@ Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 pl
 `8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in 20 s.
 That metal's Arc Furnace line is the named byproduct sink. Washed crushed reduces like
 crushed and roasts in the Kiln.
-**BC — Original quest book and in-game guide is in** as a prototype (ADR-0100). BO trims its
-survival route before matrix work begins. **Arrival at
+**BO — prototype isolation is in.** The generated graph has 107 recipes and 39 Assembler rows.
+Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth
+and Supraluminal Station have neither a generated route nor a crafting-table recipe. The quest
+book has eleven tasks in four lines and the field guide stops at electronic silicon, with no
+dimension objective. **Arrival at
 the galactic centre (BN) is in** (ADR-0099): riding the station from the Drift lands in
 a sealed chamber. Leaving the chamber returns to the berth saved on the way to the Drift
 and does not draw. **The supraluminal
-station (BM) is in** (ADR-0098): `assemble/station_berth` and `assemble/station` under Industrial. A covered berth draws 6,553,600 FU,
+station (BM) remains a registered prototype** (ADR-0098). A covered berth draws 6,553,600 FU,
 the station climbs to the ceiling, and that ceiling is the Drift. The ride on from the
 Drift does not draw. The Starward Link stays registered and no longer moves a player. **Teleportation
 orbs (BK) are named and not started.** **Rocket ascent (BL) is in**
-(ADR-0097): `assemble/launch_pad` and `assemble/survey_rocket` under Industrial. A
+(ADR-0097) as a registered prototype. A
 covered pad draws 102,400 FU, the rocket climbs to the ceiling, and the landing map
 offers the home world and Luna. The return from Luna does not draw. **The Drift is in**
 (ADR-0096): one deck, no vein. The hop is the station, not the link. **Luna is in**
-(ADR-0095): `assemble/lunar_link` under Industrial. A covered link draws 102,400 FU,
+(ADR-0095) as a prototype world. A covered link draws 102,400 FU,
 then a return pad on the regolith sends the player home without a second draw. The
 link stays as a placeholder. Every
 Luna vein is helium-3. **The Ground Array is in**
-(ADR-0094): `assemble/ground_array` and `assemble/array_casing` under Industrial. A
+(ADR-0094) as a registered prototype. A
 complete ring adds 6,553,600 FU to the covering network and nothing otherwise.
 **Zone refining is in**
 (ADR-0093): the Arc Furnace runs `silicon/zone_refining`, 10 metallurgical silicon → 7
@@ -2322,7 +2327,7 @@ metallurgical silicon + 2 B CO in 14 s at 1900 °C. **Refractory brick is in**
 in 20 s at 1400 °C. **Electric-arc steel is in**
 (ADR-0090): the Arc Furnace runs `alloy/steel`, 10 iron ingots + 1 carbon → 10 steel
 ingots in 140 s. The old Slice F and Z–BB rows remain historical; ADR-0107 reschedules their
-systems into the T0–T15 campaign. The quest book prototype is in (ADR-0100), and BO is next.
+systems into the T0–T15 campaign. The reachable quest route is in (ADR-0100), and BP is next.
 See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
@@ -2350,7 +2355,7 @@ is already in. Modular armour and the Arc Reactor pair are **recorded, not start
 line. Horizon Gates and the extra fallback worlds are **recorded, not started**; ADR-0107
 places that commute infrastructure at T11, never in a mining dimension. The quest book (BC),
 arrival chamber (BN), supraluminal station (BM), rocket (BL), Drift and Luna are implemented
-prototypes. BO removes their premature survival path while retaining those tested systems.
+prototypes. BO removed their premature survival path while retaining those tested systems.
 
 The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enough to stop mining
 by hand; T1 extraction is a throughput upgrade, not the missing process.

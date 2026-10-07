@@ -1,10 +1,7 @@
 package io.github.ezequiel24123z.grindless.station;
 
 import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
-import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
-import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
-import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.star.DriftCatalogue;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkLogic;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
@@ -87,32 +84,11 @@ public final class VerifyStation {
     }
 
     private static void recipe() throws IOException {
-        List<ProcessRecipe> recipes = ProcessGraph.generate(List.of());
-        ProcessRecipe berth = find(recipes, "assemble/station_berth");
-        ProcessRecipe station = find(recipes, "assemble/station");
-        if (berth == null || station == null) {
-            return;
-        }
-        eq("the berth is the assembler", MachineFamily.ASSEMBLER, berth.family());
-        eq("the berth takes one link", StationRide.BERTH_LINKS, berth.itemInputs().get(0).count());
-        eq("that link is the starward link", "item:" + FabricationLogic.STARWARD_LINK,
-                berth.itemInputs().get(0).qualified());
-        eq("the berth takes four plates", StationRide.BERTH_PLATES, berth.itemInputs().get(1).count());
-        eq("those plates are steel", "tag:forge:plates/steel", berth.itemInputs().get(1).qualified());
-        eq("the output is the berth", "item:" + FabricationLogic.STATION_BERTH,
-                berth.itemOutputs().get(0).qualified());
-        eq("the station takes one casing", StationRide.STATION_CASINGS, station.itemInputs().get(0).count());
-        eq("the station takes one motor", StationRide.STATION_MOTORS, station.itemInputs().get(1).count());
-        eq("that motor is the motor", "item:" + FabricationLogic.MOTOR,
-                station.itemInputs().get(1).qualified());
-        eq("the station takes two array casings", StationRide.STATION_ARRAY_CASINGS,
-                station.itemInputs().get(2).count());
-        eq("those casings are array casings", "item:" + FabricationLogic.ARRAY_CASING,
-                station.itemInputs().get(2).qualified());
-        eq("the output is the station", "item:" + FabricationLogic.SUPRALUMINAL_STATION,
-                station.itemOutputs().get(0).qualified());
-        eq("both are twenty seconds", FabricationLogic.ASSEMBLE_TICKS, berth.durationTicks());
-        eq("both need Industrial", "industrial", station.blueprint());
+        var recipes = ProcessGraph.generate(List.of());
+        no("the station berth has no generated survival recipe",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("assemble/station_berth")));
+        no("the station has no generated survival recipe",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("assemble/station")));
         Path recipesDir = DATA.resolve("grindless/recipes");
         no("the berth has no crafting-table recipe",
                 Files.isRegularFile(recipesDir.resolve("station_berth.json")));
@@ -130,16 +106,6 @@ public final class VerifyStation {
                 blocks.contains("Placeholder: the station replaces this hop"));
         no("the link entity no longer departs", link.contains("StarwardTravel.depart"));
         no("the link entity no longer returns", link.contains("StarwardTravel.home"));
-    }
-
-    private static ProcessRecipe find(List<ProcessRecipe> recipes, String id) {
-        for (ProcessRecipe recipe : recipes) {
-            if (id.equals(recipe.id())) {
-                return recipe;
-            }
-        }
-        fail("missing recipe " + id);
-        return null;
     }
 
     private static void eq(String what, Object expected, Object actual) {

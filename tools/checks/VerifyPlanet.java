@@ -7,9 +7,7 @@ import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.network.CapacitorLogic;
-import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
-import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.vein.ChunkVein;
 import io.github.ezequiel24123z.grindless.vein.VeinGenerator;
 
@@ -98,32 +96,9 @@ public final class VerifyPlanet {
     }
 
     private static void recipe() throws IOException {
-        List<ProcessRecipe> recipes = ProcessGraph.generate(List.of());
-        ProcessRecipe link = null;
-        for (ProcessRecipe recipe : recipes) {
-            if ("assemble/lunar_link".equals(recipe.id())) {
-                link = recipe;
-            }
-        }
-        yes("the link is an assembler recipe", link != null);
-        if (link == null) {
-            return;
-        }
-        eq("the link is the assembler", MachineFamily.ASSEMBLER, link.family());
-        eq("the link takes two array casings", LunarLinkLogic.CASINGS, link.itemInputs().get(0).count());
-        eq("those casings are the block", "item:grindless:array_casing",
-                link.itemInputs().get(0).qualified());
-        eq("the link takes one machine casing", LunarLinkLogic.MACHINE_CASINGS,
-                link.itemInputs().get(1).count());
-        eq("that casing is the reagent", "item:grindless:machine_casing",
-                link.itemInputs().get(1).qualified());
-        eq("the link makes one block", 1, link.itemOutputs().get(0).count());
-        eq("the output is the link", "item:grindless:lunar_link",
-                link.itemOutputs().get(0).qualified());
-        eq("the link is twenty seconds", 20 * 20, link.durationTicks());
-        eq("the link draws F1", 32L, link.fuPerTick());
-        eq("the link needs Industrial", "industrial", link.blueprint());
-        yes("the link names no temperature", Double.isNaN(link.temperatureC()));
+        var recipes = ProcessGraph.generate(List.of());
+        no("the lunar link has no generated survival recipe",
+                recipes.stream().anyMatch(recipe -> recipe.id().equals("assemble/lunar_link")));
         no("helium-3 is not a process output",
                 recipes.stream().anyMatch(recipe -> recipe.id().contains("helium")));
         Path recipesDir = DATA.resolve("grindless/recipes");

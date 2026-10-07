@@ -8,9 +8,7 @@ import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.network.PylonTier;
 import io.github.ezequiel24123z.grindless.planet.LunarLinkLogic;
 import io.github.ezequiel24123z.grindless.planet.PlanetCatalogue;
-import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
-import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayLogic;
 import io.github.ezequiel24123z.grindless.vein.VeinGenerator;
 
@@ -78,32 +76,9 @@ public final class VerifyStarward {
     }
 
     private static void recipe() throws IOException {
-        List<ProcessRecipe> recipes = ProcessGraph.generate(List.of());
-        ProcessRecipe link = null;
-        for (ProcessRecipe recipe : recipes) {
-            if ("assemble/starward_link".equals(recipe.id())) {
-                link = recipe;
-            }
-        }
-        yes("the link is an assembler recipe", link != null);
-        if (link == null) {
-            return;
-        }
-        eq("the link is the assembler", MachineFamily.ASSEMBLER, link.family());
-        eq("the link takes one lunar link", StarwardLinkLogic.LINKS, link.itemInputs().get(0).count());
-        eq("that input is the lunar link", "item:grindless:lunar_link",
-                link.itemInputs().get(0).qualified());
-        eq("the link takes four array casings", StarwardLinkLogic.CASINGS,
-                link.itemInputs().get(1).count());
-        eq("those casings are the block", "item:grindless:array_casing",
-                link.itemInputs().get(1).qualified());
-        eq("the link makes one block", 1, link.itemOutputs().get(0).count());
-        eq("the output is the starward link", "item:grindless:starward_link",
-                link.itemOutputs().get(0).qualified());
-        eq("the link is twenty seconds", 20 * 20, link.durationTicks());
-        eq("the link draws F1", 32L, link.fuPerTick());
-        eq("the link needs Industrial", "industrial", link.blueprint());
-        yes("the link names no temperature", Double.isNaN(link.temperatureC()));
+        no("the starward link has no generated survival recipe",
+                ProcessGraph.generate(List.of()).stream()
+                        .anyMatch(recipe -> recipe.id().equals("assemble/starward_link")));
         Path recipesDir = DATA.resolve("grindless/recipes");
         no("the link has no crafting-table recipe",
                 Files.isRegularFile(recipesDir.resolve("starward_link.json")));

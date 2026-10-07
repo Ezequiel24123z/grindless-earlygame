@@ -18,11 +18,11 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 115, rows.size());
+        eq("atlas lists every generated recipe", 107, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
-        eq("the first assembler row is the casing", "assemble/array_casing",
+        eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("forty-seven assembler crafts in this set, including the supraluminal station", 47,
+        eq("thirty-nine reachable assembler crafts in this set", 39,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
@@ -199,10 +199,12 @@ public final class VerifyAtlas {
                 ids(AtlasLogic.producing(recipes, "grindless:carbon_monoxide")).contains("silicon/metallurgical"));
         eq("refractory brick has one route", 1,
                 AtlasLogic.producing(recipes, "grindless:refractory_brick").size());
-        eq("the ground array has one route", 1,
-                AtlasLogic.producing(recipes, "grindless:ground_array").size());
-        eq("the array casing has one route", 1,
-                AtlasLogic.producing(recipes, "grindless:array_casing").size());
+        for (String item : List.of(
+                "array_casing", "ground_array", "lunar_link", "starward_link",
+                "launch_pad", "survey_rocket", "station_berth", "supraluminal_station")) {
+            eq(item + " is absent from the survival atlas", 0,
+                    AtlasLogic.producing(recipes, "grindless:" + item).size());
+        }
         yes("slag fires into that brick",
                 ids(AtlasLogic.consuming(recipes, "grindless:slag")).contains("ceramic/refractory_brick"));
         yes("the plate die is a catalyst, not an input",
