@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "grindless:item/aluminium_washed"
+    "layer0": "grindless:item/lead_washed_crushed"
   }
 }

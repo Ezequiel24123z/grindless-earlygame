@@ -34,7 +34,7 @@ public enum MachineFamily {
     /** Stirred contact process. SO₂ → SO₃ → sulfuric acid. T2. */
     CHEMICAL_REACTOR,
 
-    /** Wet line. 8 crushed + 2 B water → 8 washed crushed + one secondary crushed. T2. */
+    /** Wet line. 8 crushed + 2 B water → 8 washed crushed + one secondary ingot. T2. */
     CHEMICAL_WASHER,
 
     /** Current through a fluid. 2 B water → 2 B hydrogen + 1 B oxygen. T2. */

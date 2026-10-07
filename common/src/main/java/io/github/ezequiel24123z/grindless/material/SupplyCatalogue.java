@@ -30,7 +30,7 @@ public final class SupplyCatalogue {
 
     /** The forms Grindless can supply, in creative-tab order. */
     private static final List<MaterialForm> FORMS = List.of(
-            MaterialForm.RAW, MaterialForm.CRUSHED, MaterialForm.WASHED,
+            MaterialForm.RAW, MaterialForm.CRUSHED, MaterialForm.WASHED_CRUSHED,
             MaterialForm.CONCENTRATE, MaterialForm.TAILINGS, MaterialForm.OXIDE,
             MaterialForm.DUST,
             MaterialForm.NUGGET, MaterialForm.INGOT, MaterialForm.PLATE, MaterialForm.ROD,
@@ -104,7 +104,7 @@ public final class SupplyCatalogue {
         }
         // Raw, crushed and oxide are steps of the ore line; an alloy has no ore to be any of.
         boolean oreLine = form == MaterialForm.RAW || form == MaterialForm.CRUSHED
-                || form == MaterialForm.WASHED || form == MaterialForm.CONCENTRATE
+                || form == MaterialForm.WASHED_CRUSHED || form == MaterialForm.CONCENTRATE
                 || form == MaterialForm.TAILINGS || form == MaterialForm.OXIDE;
         return !oreLine || material.mineable();
     }

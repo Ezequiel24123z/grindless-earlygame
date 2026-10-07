@@ -16,6 +16,7 @@ import java.util.List;
  * @param outputs        item outputs plus vented fluids
  * @param temperatureC   required temperature, or {@code NaN} when unnamed
  * @param atmosphere     required atmosphere name, or {@code null} when unnamed
+ * @param agitation      required agitation name, or {@code null} when unnamed
  * @param durationTicks  cycle length at full power and optimal conditions
  * @param fuPerTick      draw while working
  * @param catalysts      dies and other unconsumed extras; empty when the recipe has none
@@ -28,6 +29,7 @@ public record ProcessRecipe(
         List<OutputSpec> outputs,
         double temperatureC,
         String atmosphere,
+        String agitation,
         int durationTicks,
         long fuPerTick,
         List<IngredientSpec> catalysts,
@@ -36,15 +38,23 @@ public record ProcessRecipe(
     public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
                          List<OutputSpec> outputs, double temperatureC, String atmosphere,
                          int durationTicks, long fuPerTick) {
-        this(id, family, inputs, outputs, temperatureC, atmosphere, durationTicks, fuPerTick,
+        this(id, family, inputs, outputs, temperatureC, atmosphere, null, durationTicks, fuPerTick,
                 List.of(), null);
     }
 
     public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
                          List<OutputSpec> outputs, double temperatureC, String atmosphere,
                          int durationTicks, long fuPerTick, List<IngredientSpec> catalysts) {
-        this(id, family, inputs, outputs, temperatureC, atmosphere, durationTicks, fuPerTick,
+        this(id, family, inputs, outputs, temperatureC, atmosphere, null, durationTicks, fuPerTick,
                 catalysts, null);
+    }
+
+    public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
+                         List<OutputSpec> outputs, double temperatureC, String atmosphere,
+                         int durationTicks, long fuPerTick, List<IngredientSpec> catalysts,
+                         String blueprint) {
+        this(id, family, inputs, outputs, temperatureC, atmosphere, null, durationTicks, fuPerTick,
+                catalysts, blueprint);
     }
 
     public ProcessRecipe {
@@ -71,6 +81,10 @@ public record ProcessRecipe(
 
     public boolean namesAtmosphere() {
         return atmosphere != null && !atmosphere.isBlank();
+    }
+
+    public boolean namesAgitation() {
+        return agitation != null && !agitation.isBlank();
     }
 
     public List<IngredientSpec> itemInputs() {

@@ -309,6 +309,11 @@ Because it is derived rather than stored, no world data is generated up front, t
 always produces the same map, and the system costs nothing in worlds where the player never
 builds an extractor.
 
+Each primary material also has a deterministic **trace secondary**: the next eligible mineable
+material in the runtime registry's stable name order. It is a property of the material's generated
+process route rather than stack NBT, so raw ore from different chunks remains freely stackable.
+The Chemical Washer exposes that trace material in B2 (ADR-0076).
+
 Rarer materials are weighted to appear in fewer chunks and, usually, at lower richness — so a
 diamond chunk is a find, and a copper chunk is not. Material weighting is derived from the
 material's position in the pack's own progression where that can be inferred, and is
@@ -2316,8 +2321,8 @@ Hydrogen burns like CO. Oxygen recombines to water on the Chemical Reactor. The 
 stores `2 B oxygen` from free air in 10 s. Nitrogen and argon are not emitted. The
 Chemical Washer is in (ADR-0076):
 Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
-`8 crushed + 2 B water → 8 washed crushed + 1 crushed of the next washable metal` in 20 s.
-That metal's Arc Furnace line is the named byproduct sink. Washed crushed reduces like
+`8 crushed + 2 B water → 8 washed crushed + 1 ingot of the next eligible metal` in 20 s.
+The ingot feeds that material's forming and wire lines as the named byproduct sink. Washed crushed reduces like
 crushed and roasts in the Kiln.
 **BO — prototype isolation is in.** The generated graph has 107 recipes and 39 Assembler rows.
 Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth

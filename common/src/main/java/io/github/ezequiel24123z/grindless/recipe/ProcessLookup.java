@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
 import io.github.ezequiel24123z.grindless.process.ProcessConditions;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -50,7 +51,7 @@ public final class ProcessLookup {
                     material.has(MaterialForm.PLATE),
                     material.has(MaterialForm.ROD),
                     material.has(MaterialForm.GEAR),
-                    material.has(MaterialForm.WASHED)));
+                    material.has(MaterialForm.WASHED_CRUSHED)));
         }
         List<ProcessRecipe> recipes = ProcessGraph.generate(views);
         GRAPH = Graph.index(recipes);
@@ -263,6 +264,9 @@ public final class ProcessLookup {
         if (recipe.namesAtmosphere()) {
             Atmosphere atmosphere = Atmosphere.valueOf(recipe.atmosphere());
             builder.atmosphere(atmosphere);
+        }
+        if (recipe.namesAgitation()) {
+            builder.agitation(Agitation.valueOf(recipe.agitation()));
         }
         return builder.build();
     }

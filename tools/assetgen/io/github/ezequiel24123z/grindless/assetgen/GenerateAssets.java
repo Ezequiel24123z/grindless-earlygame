@@ -236,7 +236,7 @@ public final class GenerateAssets {
         return switch (form) {
             case RAW -> FormTextures.raw(palette);
             case CRUSHED -> FormTextures.crushed(palette);
-            case WASHED -> FormTextures.washed(palette);
+            case WASHED_CRUSHED -> FormTextures.washed(palette);
             case CONCENTRATE -> FormTextures.concentrate(palette);
             case TAILINGS -> FormTextures.tailings(palette);
             case OXIDE -> FormTextures.oxide(palette);

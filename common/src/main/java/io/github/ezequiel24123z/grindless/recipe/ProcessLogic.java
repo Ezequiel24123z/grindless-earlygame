@@ -44,6 +44,7 @@ public final class ProcessLogic {
     public static final int PICKLE_TICKS = 20 * 4;
     public static final double CONTACT_TEMPERATURE = 450.0;
     public static final String CONTACT_ATMOSPHERE = "OXIDISING";
+    public static final String WASH_AGITATION = "STIRRED";
 
     /**
      * B2 integer batch (ADR-0076). Four raw are eight crushed: 2 B water, 20 s, one byproduct.

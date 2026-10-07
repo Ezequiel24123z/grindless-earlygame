@@ -121,6 +121,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices) | Sixteen aligned tiers grow through Control Matrices | Accepted |
 | [0108](#adr-0108--finish-one-mechanical-tier-before-opening-the-next) | Finish one mechanical tier before opening the next | Accepted |
 | [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
+| [0110](#adr-0110--b2-pairs-materials-exactly-without-stack-nbt) | B2 pairs materials exactly without stack NBT | Accepted |
 
 ---
 
@@ -4965,3 +4966,28 @@ terms require it yet).
 **Consequences.** Future sessions may use compliant upstream work, including code and visual
 assets, but must document provenance before committing it. An asset is no longer required to be
 CC0 solely because it is external. No third-party component is introduced by this decision.
+
+---
+
+## ADR-0110 — B2 pairs materials exactly without stack NBT
+
+*2026-10-07 · Accepted · Supersedes ADR-0076's secondary-output contract*
+
+**Context.** The original B2 batch used a crushed secondary selected from the washer's eligible
+cycle. That made the documented 0.25 u trace depend on the primary material's processing route,
+and item stacks could not identify their source vein without adding NBT provenance. The precise
+contract needs a deterministic, pack-derived output with an ordinary item stack.
+
+**Decision.** The Washer scales B2 by four: `8 crushed + 2 B water → 8 washed crushed + 1
+secondary ingot` in 20 seconds at F1, stirred. Eligible secondaries have a mineable feed and an
+ingot; their stable name order forms a wrapping ring. A one-material pool has no B2 recipe.
+Washed crushed uses `grindless:washed_crushed_materials/<material>`. The secondary ingot enters
+that material's existing wire and forming routes, so it has a named sink without new NBT, random
+output or fractional stacks.
+
+**Alternatives rejected.** Random output (breaks exact short-run behaviour); nugget rounding
+(does not represent 0.25 u); storing a secondary on item stacks (splits stacks and complicates
+logistics); keeping the previous crushed output (couples the trace to an unrelated ore route).
+
+**Consequences.** The B2 graph is deterministic and visible in the Atlas. Generated assets use
+the renamed washed-crushed form, and the stale former `*_washed` assets are removed.

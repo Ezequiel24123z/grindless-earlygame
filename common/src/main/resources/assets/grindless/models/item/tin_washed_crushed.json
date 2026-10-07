@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "grindless:item/tin_washed"
+    "layer0": "grindless:item/tin_washed_crushed"
   }
 }

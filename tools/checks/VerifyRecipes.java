@@ -289,16 +289,16 @@ public final class VerifyRecipes {
         eq("wash takes two buckets of water", 2000, ironWash.fluidInputs().get(0).count());
         eq("wash water is water", "fluid:minecraft:water", ironWash.fluidInputs().get(0).qualified());
         eq("wash makes eight washed", 8, ironWash.itemOutputs().get(0).count());
-        eq("washed is the grindless tag", "tag:grindless:washed_crushed/iron",
+        eq("washed is the grindless tag", "tag:grindless:washed_crushed_materials/iron",
                 ironWash.itemOutputs().get(0).qualified());
-        eq("wash byproduct is the next metal", "tag:grindless:crushed_materials/mythril",
+        eq("wash byproduct is the next metal", "tag:forge:ingots/mythril",
                 ironWash.itemOutputs().get(1).qualified());
         eq("wash byproduct is one", 1, ironWash.itemOutputs().get(1).count());
-        eq("mythril's byproduct wraps to iron", "tag:grindless:crushed_materials/iron",
+        eq("the stable name order selects the next secondary", "tag:forge:ingots/gold",
                 mythrilWash.itemOutputs().get(1).qualified());
-        yes("the byproduct has an arc furnace sink",
-                recipes.stream().anyMatch(candidate -> candidate.id().equals("b1_r1/mythril")
-                        && candidate.itemInputs().get(0).id().equals("grindless:crushed_materials/mythril")));
+        yes("the byproduct has a material sink",
+                recipes.stream().anyMatch(candidate -> candidate.id().equals("mill/wire/mythril")
+                        && candidate.itemInputs().get(0).id().equals("forge:ingots/mythril")));
         eq("wash is twenty seconds", 20 * 20, ironWash.durationTicks());
         eq("wash draws F1", 32L, ironWash.fuPerTick());
         yes("wash names no temperature", !ironWash.namesTemperature());
@@ -307,12 +307,12 @@ public final class VerifyRecipes {
                 recipes.stream().noneMatch(candidate -> candidate.id().equals("b2/gold")));
 
         eq("washed reduction is the arc furnace", MachineFamily.ARC_FURNACE, ironWashedReduce.family());
-        eq("washed reduction feeds washed", "tag:grindless:washed_crushed/iron",
+        eq("washed reduction feeds washed", "tag:grindless:washed_crushed_materials/iron",
                 ironWashedReduce.itemInputs().get(0).qualified());
         eq("washed reduction makes one ingot", 1, ironWashedReduce.itemOutputs().get(0).count());
 
         eq("washed roast is the kiln", MachineFamily.KILN, ironWashedRoast.family());
-        eq("washed roast feeds washed", "tag:grindless:washed_crushed/iron",
+        eq("washed roast feeds washed", "tag:grindless:washed_crushed_materials/iron",
                 ironWashedRoast.itemInputs().get(0).qualified());
         eq("washed roast vents SO2", "fluid:grindless:sulfur_dioxide",
                 ironWashedRoast.ventedOutputs().get(0).qualified());

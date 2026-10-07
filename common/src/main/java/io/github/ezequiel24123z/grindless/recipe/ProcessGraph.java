@@ -1,8 +1,10 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063,
@@ -37,7 +39,7 @@ public final class ProcessGraph {
      * @param plate   {@code forge:plates/<name>}
      * @param rod     {@code forge:rods/<name>}
      * @param gear    {@code forge:gears/<name>}
-     * @param washed  {@code grindless:washed_crushed/<name>}
+     * @param washed  {@code grindless:washed_crushed_materials/<name>}
      */
     public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean oxide,
                                boolean ingot, boolean plate, boolean rod, boolean gear, boolean washed) {
@@ -54,10 +56,11 @@ public final class ProcessGraph {
      * B1 and crushed roast, not B0. Missing oxide drops roast and R2, not R1.
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
-        List<String> washCycle = washCycle(materials);
         List<ProcessRecipe> recipes = new ArrayList<>();
+        List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);
+            Optional<String> secondary = nextSecondary(material.name(), secondaryMaterials);
             if (feed != null && material.ingot()) {
                 recipes.add(reduce(material.name(), "b0_r1", feed));
                 if (material.crushed()) {
@@ -66,8 +69,8 @@ public final class ProcessGraph {
                     recipes.add(wetPulverize(material.name(), feed, crushed));
                     recipes.add(reduce(material.name(), "b1_r1", crushed));
                 }
-                if (material.crushed() && material.washed()) {
-                    recipes.add(wash(material.name(), byproduct(washCycle, material.name())));
+                if (material.crushed() && material.washed() && secondary.isPresent()) {
+                    recipes.add(wash(material.name(), secondary.get()));
                     recipes.add(reduce(material.name(), "b2_r1", washedTag(material.name())));
                 }
                 if (material.crushed()) {
@@ -81,7 +84,7 @@ public final class ProcessGraph {
                 if (material.crushed()) {
                     recipes.add(roast(material.name(), "roast_crushed", crushedTag(material.name())));
                 }
-                if (material.crushed() && material.washed() && material.ingot()) {
+                if (material.crushed() && material.washed() && material.ingot() && secondary.isPresent()) {
                     recipes.add(roast(material.name(), "roast_washed", washedTag(material.name())));
                 }
             }
@@ -184,7 +187,7 @@ public final class ProcessGraph {
     }
 
     public static String washedTag(String material) {
-        return "grindless:washed_crushed/" + material;
+        return "grindless:washed_crushed_materials/" + material;
     }
 
     public static String concentrateTag(String material) {
@@ -528,49 +531,50 @@ public final class ProcessGraph {
     }
 
     /**
-     * B2. Eight crushed is four raw, so the 0.25 u byproduct is one whole item (ADR-0076).
-     * {@code byproduct} is null when the pack has no second washable metal.
+     * B2. Eight crushed is four raw, so the secondary ingot is exactly 0.25 u per raw
+     * (ADR-0076).
      */
-    private static ProcessRecipe wash(String material, String byproduct) {
-        List<OutputSpec> outputs = new ArrayList<>();
-        outputs.add(OutputSpec.tag(washedTag(material), ProcessLogic.WASH_CRUSHED));
-        if (byproduct != null) {
-            outputs.add(OutputSpec.tag(crushedTag(byproduct), 1));
-        }
+    private static ProcessRecipe wash(String material, String secondary) {
         return new ProcessRecipe(
                 "b2/" + material,
                 MachineFamily.CHEMICAL_WASHER,
                 List.of(
                         IngredientSpec.tag(crushedTag(material), ProcessLogic.WASH_CRUSHED),
                         IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.WASH_WATER_MB)),
-                outputs,
+                List.of(
+                        OutputSpec.tag(washedTag(material), ProcessLogic.WASH_CRUSHED),
+                        OutputSpec.tag(ingotTag(secondary), 1)),
                 Double.NaN,
                 null,
+                ProcessLogic.WASH_AGITATION,
                 ProcessLogic.WASH_TICKS,
-                ProcessLogic.FU_PER_TICK);
+                ProcessLogic.FU_PER_TICK,
+                List.of(),
+                null);
     }
 
-    /** Materials whose crushed form can be washed and whose ingot line can sink a byproduct. */
-    private static List<String> washCycle(List<MaterialView> materials) {
-        List<String> cycle = new ArrayList<>();
-        for (MaterialView material : materials) {
-            if (material.crushed() && material.ingot() && material.washed() && feedTag(material) != null) {
-                cycle.add(material.name());
-            }
-        }
-        return cycle;
+    /** The stable, pack-derived trace-material ring from ADR-0076. */
+    public static Optional<String> secondaryOf(List<MaterialView> materials, String primary) {
+        return nextSecondary(primary, eligibleSecondaries(materials));
     }
 
-    /** The next washable metal, or {@code null} when there is no secondary. */
-    private static String byproduct(List<String> cycle, String name) {
-        if (cycle.size() < 2) {
-            return null;
+    private static List<String> eligibleSecondaries(List<MaterialView> materials) {
+        return materials.stream()
+                .filter(material -> feedTag(material) != null && material.ingot())
+                .map(MaterialView::name)
+                .sorted(Comparator.naturalOrder())
+                .toList();
+    }
+
+    private static Optional<String> nextSecondary(String primary, List<String> eligible) {
+        if (eligible.size() < 2) {
+            return Optional.empty();
         }
-        int index = cycle.indexOf(name);
+        int index = eligible.indexOf(primary);
         if (index < 0) {
-            return null;
+            return Optional.empty();
         }
-        return cycle.get((index + 1) % cycle.size());
+        return Optional.of(eligible.get((index + 1) % eligible.size()));
     }
 
     /**

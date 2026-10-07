@@ -557,7 +557,7 @@ B1 is the familiar doubling and is available at T1. B2 adds a *byproduct* rather
 the secondary material of the vein, resolved from the material's tags — which is exactly what the
 README's chain shows and is usually worth more than the extra metal would have been. The shipped
 recipe scales that line by four so the 0.25 u is one item: 8 crushed + 2 B water → 8 washed
-crushed + 1 crushed of the next washable metal, in 20 s (ADR-0076). B3 and B4 are
+crushed + 1 ingot of the next eligible metal in stable name order, in 20 s (ADR-0110). B3 and B4 are
 T2 and T5 and cost reagents and power. The shipped flotation batch (ADR-0080) is that
 line times ten: `20 crushed + 500 mB surfactant → 24 concentrate + 3 tailings` in 80 s.
 Concentrate reduces as `b3_r1` (one ingot, same as crushed). Ten tailings reduce to one

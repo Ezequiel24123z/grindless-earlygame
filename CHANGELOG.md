@@ -108,6 +108,11 @@ entries below reference those records by id.
   both stacks committed, which is independent evidence the merged registries agree.
 ### Changed
 
+- **B2 now pairs materials exactly without stack NBT or random output.** The Chemical Washer
+  produces one ingot of the next eligible material in stable name order for every eight crushed
+  input, preserving the documented 0.25 u trace per raw. Washed crushed is the explicit
+  `washed_crushed_materials` form; stale generated assets are removed (ADR-0110).
+
 - **Third-party reuse is allowed when its licence permits it.** Grindless may now copy or adapt
   compatible code, textures, sounds and other material from upstream projects. Every import needs
   its exact source, version, licence, scope and required notices in `THIRD_PARTY_NOTICES.md`;
