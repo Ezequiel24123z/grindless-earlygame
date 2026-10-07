@@ -76,7 +76,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
-| [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
+| [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
@@ -87,6 +87,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
+| [0076](#adr-0076--b2-batches-exactly-and-pairs-materials-without-nbt) | B2 batches exactly and pairs materials without NBT | Accepted |
 
 ---
 
@@ -2850,3 +2851,64 @@ successor that adds bottled oxygen here is skipping M. A successor that emits su
 acid without pickle (or another spend) is reopening ADR-0036.
 
 
+## ADR-0076 — B2 batches exactly and pairs materials without NBT
+
+*2026-10-07 · Accepted*
+
+**Context.** BUILD-OUT slice L is the Chemical Washer and B2. `PROCESSES.md` quotes B2 per
+unit of raw feed: the Pulverizer makes 2 u crushed, then the Washer spends 0.5 B water in
+5 s to return 2 u washed crushed plus 0.25 u of the vein's secondary material.
+
+Minecraft item counts are integers and the smallest ordinary material form is a nugget at
+1/9 u. Two nuggets are 0.222... u and three are 0.333... u; either would make the quoted
+ratio false. A probabilistic ingot would average 0.25 u but make a short production line
+disagree with the Atlas and turn an exact process graph into expected-value arithmetic.
+
+There is also no secondary field on `ChunkVein`. Raw and crushed material items are ordinary,
+stackable per-material items, so by the time one reaches a Washer it does not identify its
+source chunk. Carrying the chunk's secondary material as stack NBT would split otherwise
+identical ore stacks, make filters and storage depend on NBT, and undo the cheap item model
+chosen in ADR-0032.
+
+Finally, the generic T2 machine recipe in `PROCESSES.md` names a Circuit Board, while slice L
+explicitly keeps etching out. The Washer must still be manufactured rather than hand-crafted
+(ADR-0017).
+
+**Decision.**
+
+1. `washed crushed` is a non-conventional material form with grade 2.00. Its tag is
+   `grindless:washed_crushed_materials/<material>` and Grindless supplies one fallback item
+   for every mineable catalogue material.
+2. The executable Washer recipe scales the documented ratio by four:
+   `8 crushed + 2 B water -> 8 washed crushed + 1 secondary ingot` in 20 s at F1,
+   stirred. This is exactly 2 washed crushed and 0.25 u byproduct per unit of raw feed;
+   no rounding and no random output are involved.
+3. A material's secondary is the next eligible mineable material, in the runtime
+   material registry's stable name order, wrapping at the end. Eligible means the material
+   has a raw or ore feed and an ingot output. The pairing is therefore deterministic,
+   balanced and pack-derived. It changes only at the neighbouring point when a pack adds or
+   removes a material. A pool with fewer than two eligible materials has no B2 recipe.
+4. The pairing belongs to the process graph, not to item NBT or `ChunkVein`. Every vein of
+   one primary material has the same trace secondary in a given loaded pack. The Atlas shows
+   that concrete output before the player builds the line.
+5. Washed crushed is valid graded feed for R1 and for roasting into R2. R2's deferred 1.15
+   yield remains deferred; slice L does not invent a third Arc Furnace output.
+6. The Chemical Washer is a T2 single-block F1 machine with one item input, two item outputs,
+   the shared 16 B fluid buffer and held stirred agitation. Its existing buffer pulls the
+   recipe's 2 B water. The Assembler manufactures it after Industrial from one casing, two
+   motors and four iron plates in 20 s. Like the Chemical Reactor, it has no Circuit Board
+   until the etching line exists and no crafting-table recipe.
+7. The secondary ingot is not waste. Its named sinks are the existing forming, wiring and
+   fabrication graph for that material. Flotation, electrolysis and etching remain in their
+   scheduled slices.
+
+**Alternatives rejected.** A 25 % random ingot (the graph and short runs stop being exact);
+two or three nuggets (neither is 0.25 u); NBT provenance on raw and crushed stacks (splits
+stacks and makes logistics NBT-sensitive); a generic gangue item (not the secondary material
+promised by B2); a crafting-table Washer (ADR-0017); waiting for Circuit Boards (contradicts
+the slice order).
+
+**Consequences.** Slice L adds twelve fallback washed-crushed items and a two-output shared
+machine layout. Recipe generation now needs the whole stable material view at once to choose
+the successor pair. A successor that emits probabilistically, stores a secondary on stacks,
+or rounds the byproduct to nuggets is reopening this record.

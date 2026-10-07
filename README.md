@@ -248,6 +248,11 @@ Because it is derived rather than stored, no world data is generated up front, t
 always produces the same map, and the system costs nothing in worlds where the player never
 builds an extractor.
 
+Each primary material also has a deterministic **trace secondary**: the next eligible mineable
+material in the runtime registry's stable name order. It is a property of the material's generated
+process route rather than stack NBT, so raw ore from different chunks remains freely stackable.
+The Chemical Washer exposes that trace material in B2 (ADR-0076).
+
 Rarer materials are weighted to appear in fewer chunks and, usually, at lower richness — so a
 diamond chunk is a find, and a copper chunk is not. Material weighting is derived from the
 material's position in the pack's own progression where that can be inferred, and is

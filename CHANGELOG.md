@@ -15,6 +15,8 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **ADR-0065's index link follows the repository's ASCII slug rule.**
+
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
   Slice I placed the item at `8 72 8`, one block above the hopper feeding the
   terminal, so the entity vanished before `ADV-CORE-OK`. The core now appears
@@ -39,6 +41,12 @@ entries below reference those records by id.
   tanks exist. CI is marked done. The numbered plan from step 15 is rewritten to match.
 
 ### Added
+
+- **B2 execution contract (ADR-0076).** The Washer scales the documented ratio by four:
+  `8 crushed + 2 B water -> 8 washed crushed + 1 secondary ingot` in 20 s at F1,
+  stirred. Secondary materials form a deterministic ring over eligible mineable materials;
+  no random yield or stack NBT. The machine is Assembler-manufactured without the still-
+  unavailable Circuit Board. Implementation follows in slice L.
 
 - **Contact process (ADR-0075).** Chemical Reactor is Assembler-manufactured (casing, two
   motors, four plates; Industrial; no circuit board). `1 B SO₂ → 1 B SO₃` in 6 s on vanadia

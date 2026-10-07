@@ -470,9 +470,11 @@ Per 1 u raw ore in:
 | B4 | **centrifuge** | …→ Centrifuge | `fld` n/a, high g | +10 s | 2.55 u purified dust + 0.4 u gangue | **2.55** |
 
 B1 is the familiar doubling and is available at T1. B2 adds a *byproduct* rather than more metal —
-the secondary material of the vein, resolved from the material's tags — which is exactly what the
-README's chain shows and is usually worth more than the extra metal would have been. B3 and B4 are
-T2 and T3 and cost reagents and power.
+the secondary material paired with the vein's primary material from the runtime tag scan — which is
+exactly what the README's chain shows and is usually worth more than the extra metal would have
+been. The executable B2 recipe batches four quoted units
+(`8 crushed + 2 B water → 8 washed crushed + 1 secondary ingot` in 20 s) so the 0.25 u ratio stays
+exact with integer item counts (ADR-0076). B3 and B4 are T2 and T3 and cost reagents and power.
 
 The **Magnetic Separator** and **Electrostatic Separator** are not a row here because they do not
 raise grade; they *split a mixed stream* into two single-material streams, each of which then
