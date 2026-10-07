@@ -174,6 +174,14 @@ Co-authored-by: Ezequiel Castaño <ezeycema@gmail.com>
 files. `.gitignore` covers the first two; the third is a judgement call — if a file exists only to
 work around a broken tool, it does not belong in history.
 
+**Third-party material.** Code, textures, sounds and other assets from other projects may be
+reused or adapted when their licence permits the intended distribution. Before copying anything,
+record its exact source, version or commit, licence, scope and required notices in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md), and keep the required attribution and licence
+text with the distribution. Do not assume that the repository's MIT licence grants rights to
+somebody else's work; if a source requires a different compatible distribution licence, record
+that consequence before importing it.
+
 ---
 
 ## Troubleshooting: the terminal refuses every command

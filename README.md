@@ -2384,7 +2384,8 @@ The **Terrestrial Extractor** moves to slice B with belts. T0 extraction is enou
 by hand; T1 extraction is a throughput upgrade, not the missing process.
 
 Two art questions are open and recorded in ADR-0048. Sound synthesis currently produces
-*serviceable* industrial noise rather than good audio, and CC0 libraries are the better answer;
+*serviceable* industrial noise rather than good audio, and compatible upstream libraries are the
+better answer when their notices and licence terms are recorded (ADR-0109);
 and hero sprites, complex models and entity animation are known gaps with no owner.
 
 Step 12d was an open architectural question and is now settled (ADR-0045). Forge exposes a block
@@ -2405,9 +2406,11 @@ the project wanted before writing the systems code.
 
 ## Assets
 
-All textures and models in this repository are **original work created for Grindless**, generated
-reproducibly by committed scripts in `tools/`. No Minecraft assets are redistributed, and no
-third-party art is vendored.
+Textures and models are normally **original work created for Grindless**, generated reproducibly
+by committed scripts in `tools/`. Code, textures, sounds and other material from another project
+may be copied or adapted when that project's licence permits the intended distribution. Every such
+import is recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) with its exact source,
+version, licence, scope and required notices; no Minecraft assets are redistributed.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of
@@ -2441,6 +2444,7 @@ Code, comments, documentation and commit messages are written in English.
 
 ## License
 
-Grindless's own work is [MIT](LICENSE). Use it, fork it, ship it in your pack. A file
-that arrives with its own license notice keeps that notice. The copyright holder accepts
-adding that upstream license when a slice copies code that requires it (ADR-0089).
+[MIT](LICENSE) applies to Grindless-authored material. Code, textures, sounds and other imported
+third-party material keeps its own required notices and licence terms; see
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Use it, fork it, ship it in your pack subject
+to those terms.

@@ -120,6 +120,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0106](#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk) | Code is written remotely; it is validated on the Windows desk | Accepted |
 | [0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices) | Sixteen aligned tiers grow through Control Matrices | Accepted |
 | [0108](#adr-0108--finish-one-mechanical-tier-before-opening-the-next) | Finish one mechanical tier before opening the next | Accepted |
+| [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
 
 ---
 
@@ -4935,3 +4936,32 @@ change (slow evidence about mostly untouched systems rather than the active tier
 T1 Relay Matrix batch, so BP is T0 completion work rather than permission to move on. T1 remains
 locked until the T0 route is mechanically complete. The same gate then repeats through T15. Art
 debt stays explicit and deferred, but placeholder assets and mechanical feedback remain maintained.
+
+---
+
+## ADR-0109 — Upstream material may be reused under its own licence
+
+*2026-10-07 · Accepted · Supersedes the external-asset restriction in ADR-0048*
+
+**Context.** Grindless is intentionally designed to coexist with and learn from established
+technology mods. The owner explicitly permits copying or adapting their code, textures, sounds
+and other material where the upstream licence allows the intended use. The prior asset provenance
+rule only allowed CC0-equivalent third-party assets, which unnecessarily ruled out legitimate
+reuse and incorrectly made originality an absolute project claim.
+
+**Decision.** Grindless may reuse or adapt upstream material only after a per-component licence
+review. `THIRD_PARTY_NOTICES.md` records the upstream project and URL, exact release or commit,
+licence, imported scope, required attribution and the distribution consequence. Required notices
+and licence text travel with the distribution. The repository's MIT licence continues to apply to
+Grindless-authored material only; a compatible licence change is made before distribution if an
+import requires one. Inspiration that copies no protected expression needs no entry, but any
+copied or adapted source or asset does.
+
+**Alternatives rejected.** An all-original-only rule (needlessly discards usable compatible work);
+an unqualified permission to copy from any mod (a repository licence cannot grant rights held by
+an upstream author); deciding a new project-wide licence now (there is no imported component whose
+terms require it yet).
+
+**Consequences.** Future sessions may use compliant upstream work, including code and visual
+assets, but must document provenance before committing it. An asset is no longer required to be
+CC0 solely because it is external. No third-party component is introduced by this decision.
