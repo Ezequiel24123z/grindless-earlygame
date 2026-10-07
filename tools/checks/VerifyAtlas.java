@@ -11,35 +11,37 @@ public final class VerifyAtlas {
 
     public static void main(String[] args) {
         List<ProcessGraph.MaterialView> materials = List.of(
-                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true),
-                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true),
-                new ProcessGraph.MaterialView("steel", false, false, false, false, true, true, true, true),
-                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
+                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
+                new ProcessGraph.MaterialView("gold", true, false, false, false, true, true, true, true, true),
+                new ProcessGraph.MaterialView("steel", false, false, false, false, false, true, true, true, true),
+                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, true, false, false, false));
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 39, rows.size());
+        eq("atlas lists every generated recipe", 46, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the reactor", "assemble/chemical_reactor",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("four assembler crafts in this set", 4,
+        eq("five assembler crafts in this set", 5,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
-        eq("three routes make an iron ingot", 3, ironIngot.size());
+        eq("four routes make an iron ingot", 4, ironIngot.size());
         yes("B0 makes iron", ids(ironIngot).contains("b0_r1/iron"));
         yes("crushed R1 makes iron", ids(ironIngot).contains("b1_r1/iron"));
+        yes("washed R1 makes iron", ids(ironIngot).contains("b2_r1/iron"));
         yes("R2 makes iron", ids(ironIngot).contains("r2/iron"));
         yes("qualified kind also matches",
-                AtlasLogic.producing(recipes, "tag:forge:ingots/iron").size() == 3);
+                AtlasLogic.producing(recipes, "tag:forge:ingots/iron").size() == 4);
 
         List<AtlasLogic.Entry> oxide = AtlasLogic.producing(recipes, "grindless:oxides/iron");
-        eq("two roast routes make iron oxide", 2, oxide.size());
+        eq("three roast routes make iron oxide", 3, oxide.size());
         yes("raw roast makes oxide", ids(oxide).contains("roast/iron"));
         yes("crushed roast makes oxide", ids(oxide).contains("roast_crushed/iron"));
+        yes("washed roast makes oxide", ids(oxide).contains("roast_washed/iron"));
 
         List<AtlasLogic.Entry> so2 = AtlasLogic.producing(recipes, "grindless:sulfur_dioxide");
-        eq("five roast routes vent SO2", 5, so2.size());
+        eq("seven roast routes vent SO2", 7, so2.size());
         eq("MK2 is the assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:flux_pylon_mk2").size());
         eq("the mill is an assembler output", 1,
@@ -48,6 +50,8 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:motor").size());
         eq("the reactor is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:chemical_reactor").size());
+        eq("the washer is an assembler output", 1,
+                AtlasLogic.producing(recipes, "grindless:chemical_washer").size());
         eq("SO3 has one contact route", 1,
                 AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());
         eq("acid has one contact route", 1,
@@ -73,6 +77,14 @@ public final class VerifyAtlas {
         yes("oxidation is contact", ids(reactor).contains("contact/so3"));
         yes("absorption is contact", ids(reactor).contains("contact/acid"));
         yes("pickle spends acid", ids(reactor).contains("pickle/plate/iron"));
+
+        List<AtlasLogic.Entry> washer = AtlasLogic.family(recipes, MachineFamily.CHEMICAL_WASHER);
+        eq("two B2 routes in this set", 2, washer.size());
+        AtlasLogic.Entry ironWash = washer.stream()
+                .filter(row -> row.id().equals("b2/iron"))
+                .findFirst()
+                .orElseThrow();
+        yes("washer line names stirred", AtlasLogic.line(ironWash).contains("STIRRED"));
 
         List<AtlasLogic.Entry> carbon = AtlasLogic.consuming(recipes, "grindless:carbon");
         yes("R2 consumes carbon", ids(carbon).contains("r2/iron"));

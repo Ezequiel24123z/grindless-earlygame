@@ -19,6 +19,7 @@ public enum MaterialForm {
     ORE("ores", 1.00, true),
     RAW("raw_materials", 1.00, true),
     CRUSHED("crushed_materials", 2.00, false),
+    WASHED_CRUSHED("washed_crushed_materials", 2.00, false),
     OXIDE("oxides", 0.0, false),
     PURIFIED("purified_materials", 2.55, false),
     DUST("dusts", 2.00, true),

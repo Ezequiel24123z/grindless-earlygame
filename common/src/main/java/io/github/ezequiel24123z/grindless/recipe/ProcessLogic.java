@@ -15,6 +15,7 @@ public final class ProcessLogic {
     public static final int REDUCE_TICKS = 20 * 12;
     public static final int ROAST_TICKS = 20 * 8;
     public static final int OXIDE_REDUCE_TICKS = 20 * 10;
+    public static final int WASH_TICKS = 20 * 20;
     public static final long FU_PER_TICK = FluxTier.F1.nominal();
 
     /** R1 carbothermic reduction. The T1 Arc Furnace holds this without a dial. */
@@ -37,6 +38,7 @@ public final class ProcessLogic {
     public static final int SO3_MB = 1000;
     public static final int ACID_MB = 1000;
     public static final int WATER_MB = 500;
+    public static final int WASH_WATER_MB = 2000;
     public static final int ABSORB_WATER_MB = 200;
     public static final int PICKLE_ACID_MB = 100;
     public static final int CONTACT_OXIDE_TICKS = 20 * 6;
@@ -44,6 +46,7 @@ public final class ProcessLogic {
     public static final int PICKLE_TICKS = 20 * 4;
     public static final double CONTACT_TEMPERATURE = 450.0;
     public static final String CONTACT_ATMOSPHERE = "OXIDISING";
+    public static final String WASH_AGITATION = "STIRRED";
 
     private ProcessLogic() {
     }

@@ -42,6 +42,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **B2 process domain (ADR-0076).** `washed crushed` is a grade-2.00 supplied form.
+  The generated graph pairs eligible mineable materials in stable name order, runs the
+  exact four-unit Washer batch, and lets washed feed enter R1 or roast into R2. Agitation
+  is now a first-class recipe/Atlas condition. Machine registration and assets follow.
+
 - **B2 execution contract (ADR-0076).** The Washer scales the documented ratio by four:
   `8 crushed + 2 B water -> 8 washed crushed + 1 secondary ingot` in 20 s at F1,
   stirred. Secondary materials form a deterministic ring over eligible mineable materials;

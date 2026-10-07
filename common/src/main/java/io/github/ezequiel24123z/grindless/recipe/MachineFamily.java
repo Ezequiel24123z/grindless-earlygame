@@ -31,5 +31,8 @@ public enum MachineFamily {
     WIRE_MILL,
 
     /** Stirred contact process. SO₂ → SO₃ → sulfuric acid. T2. */
-    CHEMICAL_REACTOR
+    CHEMICAL_REACTOR,
+
+    /** Stirred wet separation. B2: crushed + water → washed crushed + trace metal. T2. */
+    CHEMICAL_WASHER
 }

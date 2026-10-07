@@ -29,6 +29,7 @@ public final class FabricationLogic {
     public static final String WIRE_MILL = "grindless:wire_mill";
     public static final String MOTOR = "grindless:motor";
     public static final String CHEMICAL_REACTOR = "grindless:chemical_reactor";
+    public static final String CHEMICAL_WASHER = "grindless:chemical_washer";
     public static final String VANADIA = "grindless:vanadia_pellet";
 
     private FabricationLogic() {

@@ -1,18 +1,21 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Generates the T1 processing and fabrication line from a material set (ADR-0005, ADR-0063,
- * ADR-0065, ADR-0074, ADR-0075).
+ * ADR-0065, ADR-0074, ADR-0075, ADR-0076).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
  * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor and the
- * Chemical Reactor once Industrial is researched, with no crafting-table JSON (ADR-0073,
- * ADR-0074, ADR-0075). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle. No Minecraft
- * imports: {@code VerifyRecipes} dumps this graph without booting the game.
+ * Chemical Reactor and Chemical Washer once Industrial is researched, with no crafting-table
+ * JSON (ADR-0073 through ADR-0076). Contact: SO₂ → SO₃ → sulfuric acid, plus pickle. B2:
+ * exact four-unit batches with a deterministic secondary material. No Minecraft imports:
+ * {@code VerifyRecipes} dumps this graph without booting the game.
  */
 public final class ProcessGraph {
 
@@ -23,14 +26,16 @@ public final class ProcessGraph {
      * @param raw     {@code forge:raw_materials/<name>}
      * @param ore     {@code forge:ores/<name>}
      * @param crushed {@code grindless:crushed_materials/<name>}
+     * @param washed  {@code grindless:washed_crushed_materials/<name>}
      * @param oxide   {@code grindless:oxides/<name>}
      * @param ingot   {@code forge:ingots/<name>}
      * @param plate   {@code forge:plates/<name>}
      * @param rod     {@code forge:rods/<name>}
      * @param gear    {@code forge:gears/<name>}
      */
-    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed, boolean oxide,
-                               boolean ingot, boolean plate, boolean rod, boolean gear) {
+    public record MaterialView(String name, boolean raw, boolean ore, boolean crushed,
+                               boolean washed, boolean oxide, boolean ingot, boolean plate,
+                               boolean rod, boolean gear) {
     }
 
     private ProcessGraph() {
@@ -45,8 +50,10 @@ public final class ProcessGraph {
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
         List<ProcessRecipe> recipes = new ArrayList<>();
+        List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);
+            Optional<String> secondary = nextSecondary(material.name(), secondaryMaterials);
             if (feed != null && material.ingot()) {
                 recipes.add(reduce(material.name(), "b0_r1", feed));
                 if (material.crushed()) {
@@ -54,12 +61,20 @@ public final class ProcessGraph {
                     recipes.add(pulverize(material.name(), feed, crushed));
                     recipes.add(wetPulverize(material.name(), feed, crushed));
                     recipes.add(reduce(material.name(), "b1_r1", crushed));
+                    if (material.washed() && secondary.isPresent()) {
+                        String washed = washedTag(material.name());
+                        recipes.add(wash(material.name(), secondary.get(), crushed, washed));
+                        recipes.add(reduce(material.name(), "b2_r1", washed));
+                    }
                 }
             }
             if (feed != null && material.oxide()) {
                 recipes.add(roast(material.name(), "roast", feed));
                 if (material.crushed()) {
                     recipes.add(roast(material.name(), "roast_crushed", crushedTag(material.name())));
+                }
+                if (material.ingot() && material.washed() && secondary.isPresent()) {
+                    recipes.add(roast(material.name(), "roast_washed", washedTag(material.name())));
                 }
             }
             if (material.oxide() && material.ingot()) {
@@ -90,6 +105,7 @@ public final class ProcessGraph {
         recipes.add(contactAbsorption());
         recipes.add(pickleIron());
         recipes.add(chemicalReactor());
+        recipes.add(chemicalWasher());
         return List.copyOf(recipes);
     }
 
@@ -110,6 +126,10 @@ public final class ProcessGraph {
 
     public static String oxideTag(String material) {
         return "grindless:oxides/" + material;
+    }
+
+    public static String washedTag(String material) {
+        return "grindless:washed_crushed_materials/" + material;
     }
 
     public static String ingotTag(String material) {
@@ -148,6 +168,29 @@ public final class ProcessGraph {
                 null,
                 ProcessLogic.PULVERIZE_TICKS,
                 ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * B2 as an exact four-unit batch. The input is the eight crushed items produced from four
+     * raw units; the secondary ingot is therefore exactly 0.25 u per raw (ADR-0076).
+     */
+    private static ProcessRecipe wash(String material, String secondary, String crushed, String washed) {
+        return new ProcessRecipe(
+                "b2/" + material,
+                MachineFamily.CHEMICAL_WASHER,
+                List.of(
+                        IngredientSpec.tag(crushed, 8),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.WASH_WATER_MB)),
+                List.of(
+                        OutputSpec.tag(washed, 8),
+                        OutputSpec.tag(ingotTag(secondary), 1)),
+                Double.NaN,
+                null,
+                ProcessLogic.WASH_AGITATION,
+                ProcessLogic.WASH_TICKS,
+                ProcessLogic.FU_PER_TICK,
+                List.of(),
+                null);
     }
 
     private static ProcessRecipe roast(String material, String route, String feed) {
@@ -367,6 +410,24 @@ public final class ProcessGraph {
                 "industrial");
     }
 
+    /** Board-free Industrial fabrication while etching remains parked (ADR-0076). */
+    private static ProcessRecipe chemicalWasher() {
+        return new ProcessRecipe(
+                "assemble/chemical_washer",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4)),
+                List.of(OutputSpec.item(FabricationLogic.CHEMICAL_WASHER, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
+    }
+
     /** Fabricated T2 component. No fluid gate (ADR-0074). */
     private static ProcessRecipe motor() {
         return new ProcessRecipe(
@@ -383,6 +444,30 @@ public final class ProcessGraph {
                 FabricationLogic.FU_PER_TICK,
                 List.of(),
                 "industrial");
+    }
+
+    /** The stable, balanced trace-material ring from ADR-0076. */
+    public static Optional<String> secondaryOf(List<MaterialView> materials, String primary) {
+        return nextSecondary(primary, eligibleSecondaries(materials));
+    }
+
+    private static List<String> eligibleSecondaries(List<MaterialView> materials) {
+        return materials.stream()
+                .filter(material -> feedTag(material) != null && material.ingot())
+                .map(MaterialView::name)
+                .sorted(Comparator.naturalOrder())
+                .toList();
+    }
+
+    private static Optional<String> nextSecondary(String primary, List<String> eligible) {
+        if (eligible.size() < 2) {
+            return Optional.empty();
+        }
+        int index = eligible.indexOf(primary);
+        if (index < 0) {
+            return Optional.empty();
+        }
+        return Optional.of(eligible.get((index + 1) % eligible.size()));
     }
 
     /** The material path of a generated recipe id such as {@code b0_r1/iron}. */

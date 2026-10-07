@@ -33,13 +33,13 @@ public final class VerifyRecipes {
 
     private static void graph() {
         List<ProcessGraph.MaterialView> materials = List.of(
-                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true),
-                new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true),
-                new ProcessGraph.MaterialView("steel", false, false, false, false, true, true, true, true),
-                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false));
+                new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
+                new ProcessGraph.MaterialView("gold", true, false, false, false, true, true, true, true, true),
+                new ProcessGraph.MaterialView("steel", false, false, false, false, false, true, true, true, true),
+                new ProcessGraph.MaterialView("mythril", false, true, true, true, true, true, false, false, false));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("ore line plus roast plus press forms plus mill, coil, mill coil, mill, motor, contact and pickle", 39, recipes.size());
+        eq("ore line plus B2, roast, forming, contact and assembler", 46, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -47,6 +47,8 @@ public final class VerifyRecipes {
         ProcessRecipe ironR1 = recipe(recipes, "b1_r1/iron");
         ProcessRecipe goldB0 = recipe(recipes, "b0_r1/gold");
         ProcessRecipe mythrilB0 = recipe(recipes, "b0_r1/mythril");
+        ProcessRecipe ironWash = recipe(recipes, "b2/iron");
+        ProcessRecipe ironWashedR1 = recipe(recipes, "b2_r1/iron");
 
         eq("B0×R1 is the arc furnace", MachineFamily.ARC_FURNACE, ironB0.family());
         eq("B0×R1 takes one raw", "tag:forge:raw_materials/iron", ironB0.itemInputs().get(0).qualified());
@@ -81,8 +83,29 @@ public final class VerifyRecipes {
                 ironR1.itemInputs().get(0).qualified());
         eq("B1×R1 still makes one ingot per crushed", 1, ironR1.itemOutputs().get(0).count());
 
+        eq("B2 is the washer", MachineFamily.CHEMICAL_WASHER, ironWash.family());
+        eq("B2 batches eight crushed", 8, ironWash.itemInputs().get(0).count());
+        eq("B2 takes two buckets of water", 2000, ironWash.fluidInputs().get(0).count());
+        eq("B2 returns eight washed crushed", "tag:grindless:washed_crushed_materials/iron",
+                ironWash.itemOutputs().get(0).qualified());
+        eq("B2 returns the next eligible material", "tag:forge:ingots/mythril",
+                ironWash.itemOutputs().get(1).qualified());
+        eq("B2 secondary output is one exact unit", 1, ironWash.itemOutputs().get(1).count());
+        eq("B2 is twenty seconds for the four-unit batch", 20 * 20, ironWash.durationTicks());
+        eq("B2 draws F1", 32L, ironWash.fuPerTick());
+        eq("B2 names stirred agitation", "STIRRED", ironWash.agitation());
+        yes("B2 names no temperature", !ironWash.namesTemperature());
+        yes("B2 names no atmosphere", !ironWash.namesAtmosphere());
+        eq("washed crushed feeds R1", "tag:grindless:washed_crushed_materials/iron",
+                ironWashedR1.itemInputs().get(0).qualified());
+        eq("sorted secondary ring wraps", "gold",
+                ProcessGraph.secondaryOf(materials, "mythril").orElseThrow());
+        yes("a one-material pool has no false secondary",
+                ProcessGraph.secondaryOf(List.of(materials.get(0)), "iron").isEmpty());
+
         ProcessRecipe ironRoast = recipe(recipes, "roast/iron");
         ProcessRecipe ironRoastCrushed = recipe(recipes, "roast_crushed/iron");
+        ProcessRecipe ironRoastWashed = recipe(recipes, "roast_washed/iron");
         ProcessRecipe ironR2 = recipe(recipes, "r2/iron");
         ProcessRecipe goldRoast = recipe(recipes, "roast/gold");
 
@@ -99,6 +122,8 @@ public final class VerifyRecipes {
         eq("crushed roast feeds crushed", "tag:grindless:crushed_materials/iron",
                 ironRoastCrushed.itemInputs().get(0).qualified());
         eq("crushed roast still makes one oxide", 1, ironRoastCrushed.itemOutputs().get(0).count());
+        eq("washed roast feeds washed crushed", "tag:grindless:washed_crushed_materials/iron",
+                ironRoastWashed.itemInputs().get(0).qualified());
 
         eq("R2 is the arc furnace", MachineFamily.ARC_FURNACE, ironR2.family());
         eq("R2 takes oxide", "tag:grindless:oxides/iron", ironR2.itemInputs().get(0).qualified());
@@ -201,6 +226,7 @@ public final class VerifyRecipes {
         ProcessRecipe acid = recipe(recipes, "contact/acid");
         ProcessRecipe pickle = recipe(recipes, "pickle/plate/iron");
         ProcessRecipe reactor = recipe(recipes, "assemble/chemical_reactor");
+        ProcessRecipe washer = recipe(recipes, "assemble/chemical_washer");
 
         eq("oxidation is the reactor", MachineFamily.CHEMICAL_REACTOR, so3.family());
         eq("oxidation takes one bucket of SO2", "fluid:grindless:sulfur_dioxide",
@@ -245,6 +271,16 @@ public final class VerifyRecipes {
         eq("the reactor needs Industrial", "industrial", reactor.blueprint());
         eq("the reactor makes the block", "item:grindless:chemical_reactor",
                 reactor.itemOutputs().get(0).qualified());
+
+        eq("the washer is the assembler", MachineFamily.ASSEMBLER, washer.family());
+        eq("the washer takes a casing", "item:grindless:machine_casing",
+                washer.itemInputs().get(0).qualified());
+        eq("the washer takes two motors", 2, washer.itemInputs().get(1).count());
+        eq("the washer takes four plates", 4, washer.itemInputs().get(2).count());
+        eq("the washer is twenty seconds", 20 * 20, washer.durationTicks());
+        eq("the washer needs Industrial", "industrial", washer.blueprint());
+        eq("the washer makes the block", "item:grindless:chemical_washer",
+                washer.itemOutputs().get(0).qualified());
 
         yes("steel with an ingot still presses",
                 recipes.stream().anyMatch(recipe -> recipe.id().equals("press/plate/steel")));
@@ -344,6 +380,8 @@ public final class VerifyRecipes {
                 Files.isRegularFile(RECIPES.resolve("motor.json")));
         no("the reactor has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("chemical_reactor.json")));
+        no("the washer has no crafting-table recipe",
+                Files.isRegularFile(RECIPES.resolve("chemical_washer.json")));
         yes("vanadia is a hand reagent",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }

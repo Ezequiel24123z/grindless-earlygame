@@ -27,6 +27,7 @@ public final class AtlasLogic {
      * @param catalysts      qualified unconsumed extras
      * @param temperatureC   required temperature, or {@code NaN} when unnamed
      * @param atmosphere     required atmosphere name, or {@code null} when unnamed
+     * @param agitation      required agitation name, or {@code null} when unnamed
      * @param durationTicks  cycle length at full power
      * @param fuPerTick      draw while working
      */
@@ -38,6 +39,7 @@ public final class AtlasLogic {
             List<String> catalysts,
             double temperatureC,
             String atmosphere,
+            String agitation,
             int durationTicks,
             long fuPerTick) {
     }
@@ -79,6 +81,7 @@ public final class AtlasLogic {
                 List.copyOf(catalysts),
                 recipe.temperatureC(),
                 recipe.atmosphere(),
+                recipe.agitation(),
                 recipe.durationTicks(),
                 recipe.fuPerTick());
     }
@@ -132,6 +135,9 @@ public final class AtlasLogic {
         }
         if (row.atmosphere() != null && !row.atmosphere().isBlank()) {
             text.append("  ").append(row.atmosphere());
+        }
+        if (row.agitation() != null && !row.agitation().isBlank()) {
+            text.append("  ").append(row.agitation());
         }
         return text.toString();
     }
