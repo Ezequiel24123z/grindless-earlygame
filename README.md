@@ -1403,6 +1403,20 @@ Assembler removes hand fabrication; drones remove block placement; satellites re
 survey; gates remove repeated travel; abstract colonies and swarms remove remote ticking and
 manual expansion.
 
+### Mechanical tier gate
+
+Development closes one tier completely before opening the next (ADR-0108). A tier is complete only
+when a survival player can enter from the previous frontier, run every required material, chemical,
+control and energy line, automate the machines and logistics, handle byproducts and normal failure
+states, and manufacture the next Control Matrix or terminal objective without commands or hidden
+permissions. Fast behaviour checks hold policy; targeted boot/interaction smokes cover changed
+Minecraft-only seams; the full historical smoke matrix is an integration pass rather than the
+inner loop.
+
+Final hero art, bespoke animation, polished sound, effects and full localization are deferred to
+the project-wide art pass. Functional placeholder assets, readable names, tooltips, menus and
+machine-state feedback remain part of mechanical playability.
+
 ---
 
 ## Processing chain
@@ -2057,18 +2071,20 @@ matter scanning and the first two armour chassis. It also contains locally smoke
 worlds and travel systems through Sagittarius. Those prototypes prove the technical seams; they
 are not the survival campaign.
 
-**Foundation definition of done:** a player can go from an empty world to automated iron in under
-fifteen minutes without mining it by hand. This is met.
+**Prototype-foundation milestone:** a player can go from an empty world to automated iron in under
+fifteen minutes without mining it by hand. This is met, but it predates the complete T0 mechanical
+gate and does not by itself accept Bootstrap.
 
 ### Campaign restoration *(current)*
 
 ADR-0107 replaces the compressed six-tier schedule with T0/F0–T15/F15. Work resumes in small,
-playable slices:
+playable slices under the mechanical gate in ADR-0108:
 
 1. **BO — survival shortcut withdrawn.** The eight prototype recipes are gone and the quest
    book and guide stop at electronic silicon. Registrations, worlds, commands and smokes remain.
-2. **BP — matrix foundation *(next)*.** Add matrix rating/architecture data, world-safe migration for the
-   existing Voltaic and Industrial state, and the first T1 Relay Matrix route.
+2. **BP — close T0 Bootstrap *(active)*.** Audit the complete two-iron bootstrap, add matrix
+   rating/architecture data and the recoverable first T1 Relay Matrix batch, extend F0–F15 without
+   changing existing values, and accept T0 only after an end-to-end survival playthrough.
 3. **BQ — physical T2 gate.** Move T2 fabrication from the global Industrial permission to a
    consumed T2 Relay Matrix and convert Data Cores into future pattern media.
 4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
@@ -2192,9 +2208,10 @@ Tracked order of work. Each step must build green before the next begins.
 | 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to eleven reachable tasks ending at electronic silicon. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Control Matrix foundation** | **next** — rating/architecture model, migration and first T1 Relay Matrix |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — full mechanical audit, rating/architecture model, migration and first T1 Relay Matrix |
 | 32 | **BQ — Physical T2 gate** | pending after BP — replace the Industrial world permission with a consumed matrix |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
+| 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2226,12 +2243,17 @@ book are also implemented and tested. ADR-0107 reclassifies that vertical route 
 infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
 book and guide now stop at electronic silicon. **BP**, the next slice, introduces Control Matrix
-data and the recoverable T1 Relay Matrix route;
+data and the recoverable T1 Relay Matrix route as the last objective of the full T0 audit;
 **BQ** replaces the current Industrial world permission with physical T2 fabrication.
 
 The runtime still implements the superseded Research Terminal and Voltaic/Industrial blueprint
 flags until BP/BQ migrate existing worlds. The details below record that current implementation,
 not the final progression contract. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
+
+T0 Bootstrap is the only mechanically active tier. Its audit covers the complete survival route,
+not just registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical
+and control parts, discoverability, persistence, automation and the recoverable first T1 Relay
+Matrix batch. T1 stays locked until that route passes the shared gate in ADR-0108.
 
 The Flux Exosuit is in
 (ADR-0103): Assembler-manufactured once Industrial is researched. Four pieces with the

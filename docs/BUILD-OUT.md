@@ -8,9 +8,72 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Next: BP — Control Matrix foundation.** BO is shipped: the Ground Array, placeholder links,
-rocket and supraluminal station remain registered and smoke-tested, but have no generated or
-crafting-table survival recipes. The quest book and guide now stop at electronic silicon.
+**Active tier: T0 Bootstrap. Next slice: BP — Control Matrix foundation.** BO is shipped: the
+Ground Array, placeholder links, rocket and supraluminal station remain registered and
+smoke-tested, but have no generated or crafting-table survival recipes. The quest book and guide
+now stop at electronic silicon. T1 stays locked until T0 passes the gate below.
+
+---
+
+## Mechanical tier completion workflow
+
+[ADR-0108](DECISIONS.md#adr-0108--finish-one-mechanical-tier-before-opening-the-next) makes this
+the release gate for every tier. Work down the checklist for the active tier; split implementation
+into checkpoint commits and small slices, but do not activate the next row early.
+
+### Completion gate
+
+1. **Entry and exit are explicit.** The tier names its survival starting state, its frontier
+   Control Matrix or terminal objective, its expected scale and a target playtime range.
+2. **The four routes are complete and braided.** Materials, chemistry, computation/control and
+   energy have concrete inputs, processes, outputs and at least the cross-dependencies promised by
+   the progression lattice. Every required byproduct has a reachable sink.
+3. **Everything required is obtainable.** Resources, intermediates, catalysts, machines, tools,
+   upgrades, power, storage and transport all have survival routes. No creative item, command,
+   hidden world permission or future-tier prototype closes a gap.
+4. **Machines work as factory parts.** Input and output automation, power and conditions,
+   actionable status/fault feedback, persistence, blocked-output recovery and safe relocation or
+   drops are covered. The route works after save/reload and does not depend on one exact placement
+   unless that layout is the documented puzzle.
+5. **Progression is discoverable.** The Atlas, quest book, guide and tooltips agree with the live
+   route. A player does not need source code or an external wiki to discover the next mechanical
+   action.
+6. **The tier is played end to end.** Starting from the stated survival entry, the player reaches
+   the frontier objective without commands. Repetition stays inside the tier's intentional scale;
+   missing automation is a failure, not "difficulty".
+7. **Evidence is green.** Relevant pure behaviour checks, `:common:compileJava`, all repository
+   checks, link validation and the full build pass. Use targeted boot/interaction smokes for
+   registration, loader, menu, persistence or other Minecraft-only seams. Run the full historical
+   smoke matrix for integration/merge, not after every data-only edit.
+8. **Handoff is complete.** ADRs capture choices, the changelog records the result, this table and
+   the README name the accepted frontier, and only then is the next tier unlocked.
+
+### Deferred art boundary
+
+Final textures/models, animation, polished sound, effects and complete localization wait for the
+project-wide art pass. Every tier still needs functional placeholder assets, readable names,
+tooltips, menus and state feedback: presentation polish is deferred; mechanical legibility is not.
+
+### Tier status
+
+| Tier | Mechanical status | Acceptance objective |
+| --- | --- | --- |
+| **T0 Bootstrap** | **active audit** | A fresh survival player reaches a recoverable first T1 Relay Matrix batch with assisted extraction and F0 power. |
+| **T1 Voltaic** | locked by T0 | The first powered factory manufactures a T2 Relay Matrix and no longer depends on hand fabrication. |
+| **T2 Industrial** | locked by T1 | Closed material, chemical, control and energy loops manufacture the T3 frontier matrix. |
+| **T3 Arc** | locked by T2 | Construction Drones and a fed Arc Reactor support the first designed multiblock frontier. |
+| **T4 Precision** | locked by T3 | Precision chemistry, lithography and reusable patterns produce the first Integrated frontier. |
+| **T5 Nuclear** | locked by T4 | A complete fuel cycle and designed fission core close the tier. |
+| **T6 Cryogenic** | locked by T5 | Deep cryogens, superconductors, magnets and pulse storage prepare sustained fusion. |
+| **T7 Fusion** | locked by T6 | A closed D-T fuel and blanket loop sustains fusion. |
+| **T8 Particle** | locked by T7 | Accelerator scale, targets, separation and beam control produce the frontier exotics. |
+| **T9 Quantum** | locked by T8 | Quantum control and programmable Matter operate as a terrestrial campus. |
+| **T10 Orbital** | locked by T9 | Ground and orbit form one supplied production network. |
+| **T11 Planetary** | locked by T10 | Several worlds operate as one recoverable industrial system. |
+| **T12 Stellar** | locked by T11 | Stellar processing and a Dyson network reach Type II scale. |
+| **T13 Interstellar** | locked by T12 | Several star systems exchange production through the real supraluminal route. |
+| **T14 Galactic** | locked by T13 | Abstract self-expansion, antimatter and singularity power reach Type III scale. |
+| **T15 Event Horizon** | locked by T14 | The complete route reaches Sagittarius; arrival is victory. |
 
 ---
 
@@ -22,7 +85,7 @@ reconstruct the intended order, but it does not start them early.
 | ID | Slice | Player can | Ship | Preserve | Done when |
 | --- | --- | --- | --- | --- | --- |
 | **BO** | **Withdraw prototype survival shortcut** | Follow every currently implemented survival quest without being sent into future-tier test infrastructure | Remove the Industrial Assembler recipes for Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth and Supraluminal Station. End the quest/guide route at the last genuinely reachable T2 objective. Update graph counts and checks. | All block/item registrations, Luna, the Drift, Sagittarius, travel logic, commands and smoke scenarios. Existing worlds may still contain and exercise every prototype. | ✅ done — 107 graph rows, 39 Assembler rows, eleven quests through electronic silicon, no prototype recipe or dimension quest. |
-| **BP** | **Control Matrix foundation** | Build the first T1 Relay Matrix and inspect its rating/architecture | Matrix item/data model, substitution rules, first recoverable T1 batch, legacy-state migration seam and Atlas visibility. Extend `FluxTier` through F15 without changing existing values. | Existing worlds and the current T0 bootstrap. | Matrix behaviour checks cover rating, architecture, substitution and migration; F0–F15 values match ADR-0107. |
+| **BP** | **T0 closure: Control Matrix foundation** | Complete Bootstrap by building and inspecting the first T1 Relay Matrix batch | Matrix item/data model, substitution rules, first recoverable T1 batch, legacy-state migration seam and Atlas visibility. Extend `FluxTier` through F15 without changing existing values. Audit the whole T0 route against the tier gate. | Existing worlds and the current two-iron extraction bootstrap. | T0 passes the mechanical gate; matrix checks cover rating, architecture, substitution and migration; F0–F15 values match ADR-0107. |
 | **BQ** | **Physical T2 gate** | Manufacture T2 machines from a T2 Relay Matrix rather than a world permission | T2 matrix route braided through the existing material, chemical, control and power lines. Remove Voltaic/Industrial checks from ordinary fabrication. Recast Data Cores as pattern media. | Existing fabricated machines and player progress. | Every T2 machine consumes the physical rating; no ordinary recipe consults a global blueprint flag. |
 | **BR** | **T3 Arc frontier** | Build a larger factory with drones and fed Arc power | Refractory/Arc Cell routes, Construction Drones, the first parametric multiblock kernel, Arc Reactor and T3 Relay Matrix. | The existing T0–T2 lines as useful low-infrastructure routes. | The four lattice domains interact before the T3 matrix, and the Arc Reactor runs in a booted server. |
 
@@ -42,6 +105,9 @@ the records below, then implement.
 
 - Playable slices, not system layers ([ADR-0058](DECISIONS.md#adr-0058--build-playable-slices-not-system-layers)).
   A slice ships when a player can do a new thing in-world.
+- Finish one mechanical tier before opening the next
+  ([ADR-0108](DECISIONS.md#adr-0108--finish-one-mechanical-tier-before-opening-the-next)).
+  Several small slices may close one tier; none may silently start the next.
 - One slice per stacked pull request. Do not batch two slices because they "feel small".
 - Slice F (multiblock kernel) starts when a machine needs hatches or size. That machine is the
   **Arc Reactor** at T3 ([ADR-0067](DECISIONS.md#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier)).
@@ -68,8 +134,9 @@ the records below, then implement.
 2. Behaviour check in `tools/checks` with no Minecraft where the policy is arithmetic.
 3. `./gradlew :common:compileJava` then `tools/run-checks.sh .`
 4. `./gradlew build`
-5. Smoke in `tools/smoke/` and a CI job when the slice adds a block, a menu, or a boot-visible
-   item. Handshake after `Done` (`SMOKE-READY`) before scenario commands.
+5. Targeted smoke in `tools/smoke/` when the slice changes a block, item, menu, registration,
+   persistence or another Minecraft-only seam. Handshake after `Done` (`SMOKE-READY`) before
+   scenario commands. The complete scenario matrix is the integration/merge pass.
 6. `CHANGELOG.md`, README implementation plan / *Where the project is*, this file's status column.
 7. Draft stacked PR. Subscribe CI. Continue the next slice; do not wait for GitHub unless the
    **tip** is a real red (not the FIFO flake). Parent drafts may stay red.

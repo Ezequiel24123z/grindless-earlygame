@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **A mechanical completion gate for every tier (ADR-0108).** Only one tier is active at a
+  time. Resources, all four braided routes, machines, power, automation, byproduct sinks,
+  progression guidance, failure recovery and an end-to-end survival playthrough must close
+  before the next tier opens. Final hero art, animation, polished audio/effects and complete
+  localization wait for the project-wide art pass; functional placeholders and mechanical
+  legibility do not. Validation uses fast checks plus smokes targeted at changed Minecraft seams,
+  with the full historical smoke matrix reserved for integration. T0 Bootstrap is the active
+  audit, and BP is now its closure rather than permission to start T1.
+
 - **The T0/F0–T15/F15 progression lattice (ADR-0107), in design.** Technology, physical
   Control Matrix rating and nominal Flux tier now advance together across sixteen named
   tiers. Every frontier braids materials, chemistry, computation/control and energy before

@@ -119,6 +119,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0105](#adr-0105--smoke-scenarios-are-a-list-sharded-across-parallel-ci-jobs) | Smoke scenarios are a list, sharded across parallel CI jobs | Accepted |
 | [0106](#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk) | Code is written remotely; it is validated on the Windows desk | Accepted |
 | [0107](#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices) | Sixteen aligned tiers grow through Control Matrices | Accepted |
+| [0108](#adr-0108--finish-one-mechanical-tier-before-opening-the-next) | Finish one mechanical tier before opening the next | Accepted |
 
 ---
 
@@ -4875,3 +4876,62 @@ after that introduces matrix rating/architecture data and the recoverable T1 Rel
 the following slice moves T2 fabrication off the Voltaic/Industrial permission checks. Later
 tiers are specified in route-sized increments before their code is released; this record does
 not pretend that one table is fifteen finished recipe sets.
+
+---
+
+## ADR-0108 — Finish one mechanical tier before opening the next
+
+*2026-10-07 · Accepted*
+
+**Context.** The repository contains a wide validated foundation and several later prototypes,
+but "implemented" has sometimes meant that a block registers, a pure policy check passes or an
+isolated smoke can place it. That is necessary evidence, not proof that a player can enter a tier,
+build every required line, recover from normal failure states and reach the next frontier without
+commands or creative-only gaps.
+
+Continuing to add slices across many tiers would make those gaps compound. Conversely, requiring
+finished hero art, bespoke animation, final sound and every locale before mechanics settle would
+front-load work that is likely to be redone. Running all historical smoke scenarios after every
+recipe or guide change has the same problem: it spends many server boots proving untouched
+registrations while the actual tier route is still incomplete.
+
+**Decision.**
+
+1. **Only one tier is mechanically active.** Work may be split into small reviewable slices, but
+   the next tier stays locked until the active tier passes the completion gate in
+   `BUILD-OUT.md`. Existing later-tier code may remain registered for compatibility and tests; it
+   is not evidence that its tier is accepted and must not provide a survival shortcut.
+2. **A tier is accepted by an end-to-end survival route.** From a documented entry state, a player
+   can obtain its resources, power every required machine, run all mandatory material, chemical,
+   control and energy lines, automate their transport, handle every byproduct, recover from blocked
+   or starved states and produce the frontier Control Matrix or terminal objective. No command,
+   hidden world permission, creative item or unexplained external-mod assumption may bridge a gap.
+3. **Mechanical usability is part of correctness.** Required recipes are discoverable, machine
+   states name actionable faults, inventories and capabilities automate, state survives reload,
+   and the quest/guide route matches what survival can actually do. A system that only works by
+   reading source code is not complete.
+4. **Final art is not a tier gate.** Hero textures and models, animation, polished sound, visual
+   effects and complete localization are deferred to the final art/polish pass. Functional
+   placeholder assets, readable names, tooltips, menus and state feedback remain mandatory because
+   invisible or uninterpretable mechanics are not playable.
+5. **Validation follows risk.** Pure arithmetic and policy stay in fast behaviour checks. Every
+   tier closes with compile, all behaviour checks and a full build. A targeted boot or interaction
+   smoke is added or run when the tier changes registration, loader wiring, menus, persistence or
+   another Minecraft-only seam. The full historical smoke matrix is an integration/merge check,
+   not the inner loop for data-only changes. This complements ADR-0049; it does not permit a tier
+   release that has never booted.
+6. **Acceptance is recorded.** `BUILD-OUT.md` owns the gate and tier status, the README records the
+   playable frontier, and the changelog records each closed tier. The next tier becomes active only
+   in the commit that accepts its predecessor.
+
+**Alternatives rejected.** Continuing feature-by-feature across the whole ladder (maximises breadth
+while leaving uncertain player routes behind); one enormous pull request per tier (too much
+uncommitted and unreviewable work, contrary to the repository's checkpoint rule); final art as part
+of every tier (slows mechanical iteration and invites rework); no in-world acceptance, only unit
+checks (cannot prove reachability or capability wiring); all 39+ historical smokes after every
+change (slow evidence about mostly untouched systems rather than the active tier).
+
+**Consequences.** T0 Bootstrap is the active audit. Its accepted endpoint is a recoverable first
+T1 Relay Matrix batch, so BP is T0 completion work rather than permission to move on. T1 remains
+locked until the T0 route is mechanically complete. The same gate then repeats through T15. Art
+debt stays explicit and deferred, but placeholder assets and mechanical feedback remain maintained.
