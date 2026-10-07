@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **The design-reference hierarchy is explicit (ADR-0113).** GregTech guides industrial chains,
+  material forms, machine roles and progression; Factorio and Satisfactory are secondary
+  references for readable automation and scale. This records inspiration only, not an upstream
+  material import.
+
 - **A recoverable four-unit T1 Relay Matrix hand batch (ADR-0112).** After Voltaic research, the
   crafting table combines glass, tagged copper, redstone and a Data Core into the first four
   physical matrices. It closes the first T0 route without consuming the bootstrap's two iron or

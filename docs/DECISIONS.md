@@ -124,6 +124,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0110](#adr-0110--b2-pairs-materials-exactly-without-stack-nbt) | B2 pairs materials exactly without stack NBT | Accepted |
 | [0111](#adr-0111--shared-world-smokes-are-the-fast-local-loop) | Shared-world smokes are the fast local loop | Accepted |
 | [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Accepted |
+| [0113](#adr-0113--gregtech-is-the-primary-design-reference) | GregTech is the primary design reference | Accepted |
 
 ---
 
@@ -5042,3 +5043,28 @@ softlock recovery when those blocks are lost).
 **Consequences.** T0 now has a concrete frontier item after the Research Terminal's first cycle.
 The subsequent BP work can migrate legacy blueprint state and make the Atlas, guide and quest route
 describe this batch before T0 acceptance is considered.
+
+---
+
+## ADR-0113 — GregTech is the primary design reference
+
+*2026-10-07 · Accepted*
+
+**Context.** Grindless aims for a coherent industrial progression rather than an unconnected set
+of machines. Several automation games and technology mods offer useful lessons, but without a
+reference hierarchy their sometimes-conflicting conventions would dilute the project.
+
+**Decision.** GregTech is the primary reference for industrial coherence: processing chains,
+material forms, machine roles, gating and progression scale. Factorio and Satisfactory are
+secondary references for readable factory flow, throughput feedback, automation ergonomics and
+spatial scale. This is design inspiration, not an import of protected expression. Any copied or
+adapted code, texture, sound or other asset still requires the per-component licence review and
+provenance record mandated by ADR-0109.
+
+**Alternatives rejected.** Treating all references as equivalent (weakens a clear industrial
+identity); treating inspiration as permission to copy (does not grant upstream rights); refusing
+all external influence (discards established design knowledge without improving originality).
+
+**Consequences.** New mechanics should first be evaluated against the GregTech-style industrial
+chain and then use the secondary references to make that chain legible and pleasant to automate.
+`THIRD_PARTY_NOTICES.md` remains empty until protected upstream material is actually imported.
