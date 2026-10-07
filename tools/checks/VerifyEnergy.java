@@ -110,10 +110,19 @@ public final class VerifyEnergy {
 
     private static void tiers() {
         eq("F0 is the hand crank", 8L, FluxTier.F0.nominal());
-        eq("F9 is the ceiling", FluxTier.MAX_NOMINAL, FluxTier.F9.nominal());
-        yes("the ladder is x4 per tier", FluxTier.F1.nominal() * 4 == FluxTier.F2.nominal());
-        yes("F9 is the top", FluxTier.F9.next() == FluxTier.F9);
+        eq("F15 is the ceiling", FluxTier.MAX_NOMINAL, FluxTier.F15.nominal());
+        eq("there are sixteen aligned tiers", 16L, FluxTier.values().length);
+        for (int i = 1; i < FluxTier.values().length; i++) {
+            FluxTier previous = FluxTier.values()[i - 1];
+            FluxTier current = FluxTier.values()[i];
+            eq(current.name() + " is four times " + previous.name(),
+                    previous.nominal() * 4L, current.nominal());
+        }
+        yes("F15 is the top", FluxTier.F15.next() == FluxTier.F15);
         yes("tiers step up", FluxTier.F0.next() == FluxTier.F1);
+        eq("F0 has the aligned name", "Bootstrap", FluxTier.F0.tierName());
+        eq("F4 has the aligned name", "Precision", FluxTier.F4.tierName());
+        eq("F15 has the aligned name", "Event Horizon", FluxTier.F15.tierName());
 
         // Voltage names are aliases on one ladder, not a second scale (ADR-0038).
         eq("LV is F1", "LV", FluxTier.F1.voltageAlias());
@@ -127,11 +136,12 @@ public final class VerifyEnergy {
         eq("one tier down is half speed", 0.5, FluxTier.F3.throughputFactor(FluxTier.F2));
         eq("two tiers down is a quarter", 0.25, FluxTier.F3.throughputFactor(FluxTier.F1));
         yes("far under-volting still runs",
-                FluxTier.F9.throughputFactor(FluxTier.F0) > 0.0);
+                FluxTier.F15.throughputFactor(FluxTier.F0) > 0.0);
 
         eq("exact fit picks that tier", FluxTier.F2, FluxTier.forThroughput(128L));
         eq("just over steps up", FluxTier.F3, FluxTier.forThroughput(129L));
-        eq("beyond the ladder saturates", FluxTier.F9, FluxTier.forThroughput(Long.MAX_VALUE));
+        eq("F14 crosses the FE int boundary", 2_147_483_648L, FluxTier.F14.nominal());
+        eq("beyond the ladder saturates", FluxTier.F15, FluxTier.forThroughput(Long.MAX_VALUE));
     }
 
     private static void eq(String what, long expected, long actual) {

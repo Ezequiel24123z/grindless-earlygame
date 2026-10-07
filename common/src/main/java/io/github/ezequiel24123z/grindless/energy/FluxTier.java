@@ -7,24 +7,31 @@ package io.github.ezequiel24123z.grindless.energy;
  * <em>aliases</em> on F1 through F5, not a second scale — their nominal rates are identical, and
  * modelling them separately would guarantee the two drift apart. See ADR-0038.
  *
- * <p>Research tiers (T0–T6) are a different axis again: they gate what the player may
- * <em>build</em>, while this gates how much power a built thing may <em>accept</em>.
+ * <p>Technology Tn, Control Matrix rating Tn and Flux tier Fn share one aligned index from
+ * Bootstrap through Event Horizon. The matrix controls what may be built; this enum controls
+ * how much power the built thing may accept (ADR-0107).
  */
 public enum FluxTier {
 
-    F0("Manual", 8L, null),
+    F0("Bootstrap", 8L, null),
     F1("Voltaic", 32L, "LV"),
     F2("Industrial", 128L, "MV"),
     F3("Arc", 512L, "HV"),
-    F4("Plasma", 2_048L, "EV"),
-    F5("Quantum", 8_192L, "IV"),
-    F6("Singular", 32_768L, null),
-    F7("Stellar", 131_072L, null),
-    F8("Exotic", 524_288L, null),
-    F9("Transcendent", 2_097_152L, null);
+    F4("Precision", 2_048L, "EV"),
+    F5("Nuclear", 8_192L, "IV"),
+    F6("Cryogenic", 32_768L, null),
+    F7("Fusion", 131_072L, null),
+    F8("Particle", 524_288L, null),
+    F9("Quantum", 2_097_152L, null),
+    F10("Orbital", 8_388_608L, null),
+    F11("Planetary", 33_554_432L, null),
+    F12("Stellar", 134_217_728L, null),
+    F13("Interstellar", 536_870_912L, null),
+    F14("Galactic", 2_147_483_648L, null),
+    F15("Event Horizon", 8_589_934_592L, null);
 
     /** Nominal throughput of the highest tier, in FU/t. */
-    public static final long MAX_NOMINAL = 2_097_152L;
+    public static final long MAX_NOMINAL = 8_589_934_592L;
 
     private static final FluxTier[] VALUES = values();
 
@@ -58,7 +65,7 @@ public enum FluxTier {
 
     /** The next tier up, or this one if already at the top. */
     public FluxTier next() {
-        return this == F9 ? this : VALUES[ordinal() + 1];
+        return this == F15 ? this : VALUES[ordinal() + 1];
     }
 
     /**
@@ -78,13 +85,13 @@ public enum FluxTier {
         return deficit <= 0 ? 1.0 : Math.pow(0.5, deficit);
     }
 
-    /** The lowest tier whose nominal throughput covers {@code fuPerTick}, or {@link #F9}. */
+    /** The lowest tier whose nominal throughput covers {@code fuPerTick}, or {@link #F15}. */
     public static FluxTier forThroughput(long fuPerTick) {
         for (FluxTier tier : VALUES) {
             if (tier.nominal >= fuPerTick) {
                 return tier;
             }
         }
-        return F9;
+        return F15;
     }
 }

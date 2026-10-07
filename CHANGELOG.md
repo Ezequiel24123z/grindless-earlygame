@@ -54,6 +54,11 @@ entries below reference those records by id.
 
 ### Changed
 
+- **The runtime Flux ladder now reaches F15.** `FluxTier` preserves every existing nominal
+  F0–F9 rate, extends the fourfold sequence through Event Horizon at 8,589,934,592 FU/t, aligns
+  all sixteen display names with ADR-0107 and saturates lookup at F15. The energy checks now prove
+  every adjacent ratio, the complete tier count and the Forge Energy `int` boundary at F14.
+
 - **BO isolates the spatial prototypes from survival.** The generated graph no longer includes
   the eight Industrial recipes for the Ground Array, links, rocket or station, and the Atlas now
   exposes 107 reachable recipes with 39 Assembler rows. The quest book and field guide stop at

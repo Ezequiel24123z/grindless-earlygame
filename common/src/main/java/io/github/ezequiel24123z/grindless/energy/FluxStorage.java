@@ -5,7 +5,7 @@ package io.github.ezequiel24123z.grindless.energy;
  *
  * <p>This is Grindless's own energy contract. It is deliberately close in shape to Forge's
  * {@code IEnergyStorage} so the bridge stays trivial, with one difference that matters: amounts are
- * {@code long}, not {@code int}. The Flux ladder reaches {@link FluxTier#MAX_NOMINAL} FU/t at F9
+ * {@code long}, not {@code int}. The Flux ladder reaches {@link FluxTier#MAX_NOMINAL} FU/t at F15
  * and buffers are sized in seconds of throughput, which overflows a signed 32-bit integer well
  * before the endgame. See ADR-0037 for why the clamping happens at the FE boundary instead.
  *
