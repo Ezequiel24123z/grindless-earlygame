@@ -123,6 +123,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
 | [0110](#adr-0110--b2-pairs-materials-exactly-without-stack-nbt) | B2 pairs materials exactly without stack NBT | Accepted |
 | [0111](#adr-0111--shared-world-smokes-are-the-fast-local-loop) | Shared-world smokes are the fast local loop | Accepted |
+| [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Accepted |
 
 ---
 
@@ -5017,3 +5018,27 @@ mask a regression).
 **Consequences.** Developers can exercise broad Minecraft seams quickly while retaining a clear,
 stronger isolated gate for branch integration. A batch failure is actionable; a batch pass only
 authorizes faster iteration, not merge acceptance.
+
+---
+
+## ADR-0112 — The first Relay Matrix is a four-unit Voltaic hand batch
+
+*2026-10-07 · Accepted*
+
+**Context.** The physical T1 Relay Matrix existed as an item, but a fresh player had no survival
+recipe for the first matrices. Making it require a T1 machine would be circular; making it free or
+available before the terminal would bypass the material, control and manual-power bootstrap.
+
+**Decision.** After Voltaic research, a crafting-table recipe turns two glass, two tagged copper
+ingots, two redstone and one Data Core into four T1 Relay Matrices. The recipe is Voltaic-gated,
+but needs no T1 machine and consumes none of the two iron ingots that seed the dynamo and crude
+extractor. Its small batch supplies the first factory and preserves a local recovery path.
+
+**Alternatives rejected.** A single matrix per craft (turns initial expansion into repetition);
+a free ungated matrix (does not prove the bootstrap route); a Press or Assembler recipe (requires
+the factory the matrix is supposed to start); consuming the original two bootstrap iron (can
+softlock recovery when those blocks are lost).
+
+**Consequences.** T0 now has a concrete frontier item after the Research Terminal's first cycle.
+The subsequent BP work can migrate legacy blueprint state and make the Atlas, guide and quest route
+describe this batch before T0 acceptance is considered.

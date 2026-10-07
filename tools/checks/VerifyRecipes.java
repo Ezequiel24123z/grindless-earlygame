@@ -827,6 +827,9 @@ public final class VerifyRecipes {
                     json.get("blueprint").getAsString());
             eq(recipe.name() + " result", recipe.result(),
                     json.getAsJsonObject("result").get("item").getAsString());
+            int count = json.getAsJsonObject("result").has("count")
+                    ? json.getAsJsonObject("result").get("count").getAsInt() : 1;
+            eq(recipe.name() + " result count", recipe.resultCount(), count);
             yes(recipe.name() + " pattern matches the catalogue",
                     json.getAsJsonArray("pattern").toString().contains(recipe.pattern().get(0)));
             JsonObject key = json.getAsJsonObject("key");
@@ -836,7 +839,10 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships thirty gated crafts", 30, T1Recipes.gated().size());
+        eq("T1 ships thirty-one gated crafts", 31, T1Recipes.gated().size());
+        yes("the first Relay Matrix is a four-unit hand batch",
+                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
+                        && recipe.resultCount() == 4));
         yes("the pylon is among them",
                 T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",

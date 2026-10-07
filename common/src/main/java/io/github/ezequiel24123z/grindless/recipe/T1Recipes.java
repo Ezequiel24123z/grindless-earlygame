@@ -16,6 +16,7 @@ public final class T1Recipes {
     public static final String IRON = "tag:forge:ingots/iron";
     public static final String REDSTONE = "item:minecraft:redstone";
     public static final String GLASS = "item:minecraft:glass";
+    public static final String COPPER = "tag:forge:ingots/copper";
     public static final String FLINT = "item:minecraft:flint";
     public static final String FURNACE = "item:minecraft:furnace";
     public static final String CARBON = "tag:grindless:carbon";
@@ -34,10 +35,24 @@ public final class T1Recipes {
 
     public record Gated(String name, String blueprint, List<String> pattern,
                         Map<String, String> key, String result) {
+
+        /** Craft counts are data too: transport is batched and the first controllers seed a factory. */
+        public int resultCount() {
+            return switch (name) {
+                case "conveyor_belt", "clay_conduit" -> 8;
+                case "tunnel_belt" -> 2;
+                case "relay_matrix" -> 4;
+                default -> 1;
+            };
+        }
     }
 
     public static List<Gated> gated() {
         return List.of(
+                new Gated("relay_matrix", VOLTAIC,
+                        List.of("GCG", "RDR", "GCG"),
+                        Map.of("G", GLASS, "C", COPPER, "R", REDSTONE, "D", DATA_CORE),
+                        "grindless:relay_matrix"),
                 new Gated("thermal_generator", VOLTAIC,
                         List.of("CFC", "CGC", "CIC"),
                         Map.of("C", COBBLE, "F", FURNACE, "G", CARBON, "I", IRON),

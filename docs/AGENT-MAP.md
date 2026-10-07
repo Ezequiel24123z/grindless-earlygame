@@ -45,7 +45,8 @@ T2 and above are manufactured, never a crafting table
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
 - `recipe/T1Recipes.java` and `common/src/main/resources/data/grindless/recipes/` —
-  Voltaic-gated crafting JSON (`grindless:gated_shaped`).
+  Voltaic-gated crafting JSON (`grindless:gated_shaped`), including the four-unit first Relay
+  Matrix batch.
 - `recipe/BootstrapRecipes.java` — T0 shaped JSON.
 - `research/Blueprint.java` and `research/ResearchLogic.java` — a new blueprint id.
   Assembler recipes name it as a string (`industrial` today).

@@ -27,8 +27,8 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > station and galactic-centre chamber are also implemented and smoke-tested, but ADR-0107
 > reclassifies them as prototype/test infrastructure rather than an Industrial survival
 > shortcut. BO removed their recipes and premature quest path while preserving the tested
-> systems; the survival guide now ends at electronic silicon. BP, the Control Matrix
-> foundation, is next. The real campaign reaches orbit at T10, the Drift at T13 and
+> systems; the survival guide now ends at electronic silicon. BP's first recoverable Relay Matrix
+> batch is in; legacy migration, guidance and the T0 audit remain. The real campaign reaches orbit at T10, the Drift at T13 and
 > Sagittarius at T15.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
@@ -2213,7 +2213,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to eleven reachable tasks ending at electronic silicon. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model and registered T1 item are in; survival batch, migration, guidance and machine fixes remain |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model and registered T1 item are in; the four-unit survival batch is in, while migration, guidance and machine fixes remain |
 | 32 | **BQ — Physical T2 gate** | pending after BP — replace the Industrial world permission with a consumed matrix |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
@@ -2248,8 +2248,8 @@ book are also implemented and tested. ADR-0107 reclassifies that vertical route 
 infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
 book and guide now stop at electronic silicon. **BP** has introduced F0-F15, physical Control
-Matrix rating/architecture data and the registered T1 Relay Matrix item. Its recoverable survival
-batch, legacy-state seam, guidance and remaining machine fixes are the active T0 work;
+Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable four-unit
+survival batch. Its legacy-state seam, guidance and remaining machine fixes are the active T0 work;
 **BQ** replaces the current Industrial world permission with physical T2 fabrication.
 
 The runtime still implements the superseded Research Terminal and Voltaic/Industrial blueprint

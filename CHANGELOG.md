@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **A recoverable four-unit T1 Relay Matrix hand batch (ADR-0112).** After Voltaic research, the
+  crafting table combines glass, tagged copper, redstone and a Data Core into the first four
+  physical matrices. It closes the first T0 route without consuming the bootstrap's two iron or
+  requiring an impossible T1 machine.
+
 - **The physical Control Matrix foundation.** Five architecture ranges now model frontier and
   retrospective ratings, a higher matrix rating substitutes for a lower one, and T0 has a
   registered T1 Relay Matrix item with persistent rating data, generated placeholder art and

@@ -1,0 +1,16 @@
+{
+  "type": "grindless:gated_shaped",
+  "blueprint": "voltaic",
+  "pattern": [
+    "GCG",
+    "RDR",
+    "GCG"
+  ],
+  "key": {
+    "G": { "item": "minecraft:glass" },
+    "C": { "tag": "forge:ingots/copper" },
+    "R": { "item": "minecraft:redstone" },
+    "D": { "item": "grindless:data_core" }
+  },
+  "result": { "item": "grindless:relay_matrix", "count": 4 }
+}
