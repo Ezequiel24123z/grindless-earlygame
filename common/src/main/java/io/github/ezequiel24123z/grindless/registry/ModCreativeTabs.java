@@ -40,6 +40,7 @@ public final class ModCreativeTabs {
                 lazy(ModItems.MULTITOOL),
                 lazy(ModItems.QUEST_BOOK),
                 lazy(ModItems.FIELD_GUIDE),
+                lazy(ModItems.RELAY_MATRIX),
                 lazy(ModItems.DATA_CORE),
                 lazy(ModItems.ADVANCED_DATA_CORE),
                 lazy(ModItems.MACHINE_CASING),

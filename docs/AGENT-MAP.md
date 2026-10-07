@@ -58,6 +58,23 @@ gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs
 neither a graph row nor a crafting JSON until their T10-T15 campaign frontiers.
 Ratios are in [`PROCESSES.md`](PROCESSES.md#the-recipe-graph).
 
+## Control Matrix and Flux rating
+
+- `energy/FluxTier.java` — the aligned F0-F15 rates and display names.
+- `matrix/MatrixArchitecture.java` — Relay through Causal frontier ranges and retrospective
+  manufacturing support.
+- `matrix/ControlMatrixSpec.java` — physical rating, substitution and validation.
+- `item/ControlMatrixItem.java` — stack persistence, names and tooltips.
+- `registry/ModItems.java`, `registry/BlockCatalogue.java` and `tools/assetgen/` — registration
+  and generated functional art.
+
+There is no T0 Control Matrix. Matrix rating Tn uses the same ordinal as Flux Fn; a higher
+physical rating may substitute for a lower one, but an architecture cannot carry a rating above
+its frontier range. A missing rating tag means that architecture's first frontier for vanilla
+recipe compatibility; malformed explicit data is invalid rather than silently upgraded.
+`VerifyEnergy` pins all sixteen rates and `VerifyControlMatrix` pins architecture and substitution
+policy ([ADR-0107](DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)).
+
 ## Fluid
 
 - `fluid/FluidState.java` and `fluid/FluidLogic.java` — volume, temperature, pressure.

@@ -8,10 +8,12 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Next slice: BP — Control Matrix foundation.** BO is shipped: the
-Ground Array, placeholder links, rocket and supraluminal station remain registered and
-smoke-tested, but have no generated or crafting-table survival recipes. The quest book and guide
-now stop at electronic silicon. T1 stays locked until T0 passes the gate below.
+**Active tier: T0 Bootstrap. Next slice: BP — complete the first Relay Matrix route.** BO is
+shipped: the Ground Array, placeholder links, rocket and supraluminal station remain registered
+and smoke-tested, but have no generated or crafting-table survival recipes. F0-F15 and the physical
+matrix rating/architecture model are now in code, including a registered T1 Relay Matrix with
+functional generated art. The recoverable manual batch, legacy-state seam, Atlas/quest route and
+remaining T0 machine audit are still active. T1 stays locked until T0 passes the gate below.
 
 ---
 

@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.registry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import io.github.ezequiel24123z.grindless.item.ExosuitItem;
 import io.github.ezequiel24123z.grindless.item.ExosuitLogic;
 import io.github.ezequiel24123z.grindless.item.FluxCellItem;
@@ -23,6 +24,7 @@ import io.github.ezequiel24123z.grindless.item.SupraluminalStationItem;
 import io.github.ezequiel24123z.grindless.item.SurveyRocketItem;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.material.SupplyItem;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -53,6 +55,10 @@ public final class ModItems {
     /** The route, as pages. Readable before any task is claimed (ADR-0100). */
     public static final RegistrySupplier<Item> FIELD_GUIDE = register("field_guide",
             () -> new FieldGuideItem(new Item.Properties().stacksTo(1)));
+
+    /** The T1-T3 discrete controller architecture. The first stack is made by hand at T0. */
+    public static final RegistrySupplier<Item> RELAY_MATRIX = register("relay_matrix",
+            () -> new ControlMatrixItem(MatrixArchitecture.RELAY, new Item.Properties()));
 
     /** Research currency. Produced by the factory, spent in the Research Terminal. */
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",

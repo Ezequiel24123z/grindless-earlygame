@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **The physical Control Matrix foundation.** Five architecture ranges now model frontier and
+  retrospective ratings, a higher matrix rating substitutes for a lower one, and T0 has a
+  registered T1 Relay Matrix item with persistent rating data, generated placeholder art and
+  legible rating/architecture tooltips. Behaviour checks cover architecture bounds, invalid T0
+  matrices and substitution. The manual survival batch is the next T0 route change.
+
 - **A mechanical completion gate for every tier (ADR-0108).** Only one tier is active at a
   time. Resources, all four braided routes, machines, power, automation, byproduct sinks,
   progression guidance, failure recovery and an end-to-end survival playthrough must close

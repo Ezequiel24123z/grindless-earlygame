@@ -241,7 +241,7 @@ public final class BlockCatalogue {
             new Entry("drift_deck", Geometry.DECK, 1, false, GRID));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
-    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "data_core", "advanced_data_core", "slag",
+    private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "relay_matrix", "data_core", "advanced_data_core", "slag",
             "refractory_brick", "metallurgical_silicon", "electronic_silicon",
             "prospectors_scanner", "process_atlas", "flux_conduit", "plate_die", "rod_die", "gear_die", "coil_die",
             "copper_coil", "motor", "vanadia_pellet", "ingot_mould", "plate_mould",
