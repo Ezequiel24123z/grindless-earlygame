@@ -2088,9 +2088,11 @@ the project wanted before writing the systems code.
 
 ## Assets
 
-All textures and models in this repository are **original work created for Grindless**, generated
-reproducibly by committed scripts in `tools/`. No Minecraft assets are redistributed, and no
-third-party art is vendored.
+Textures and models are normally **original work created for Grindless**, generated reproducibly
+by committed scripts in `tools/`. Code, textures, sounds and other material from another project
+may be copied or adapted when that project's licence permits the intended distribution. Every such
+import is recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) with its exact source,
+version, licence, scope and required notices; no Minecraft assets are redistributed.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of
@@ -2124,4 +2126,6 @@ Code, comments, documentation and commit messages are written in English.
 
 ## License
 
-[MIT](LICENSE). Use it, fork it, ship it in your pack.
+[MIT](LICENSE) applies to Grindless-authored material. Imported third-party material keeps its
+own required notices and licence terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+Use it, fork it, ship it in your pack subject to those terms.

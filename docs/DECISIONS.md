@@ -76,7 +76,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
-| [0065](#adr-0065--t1-kiln-is-roast-and-so₂-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
+| [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Accepted |
@@ -87,6 +87,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Accepted |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
+| [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
 
 ---
 
@@ -2848,5 +2849,34 @@ satisfy both); putting oxidation in the Kiln (700 °C is outside the 450 °C ban
 **Consequences.** A successor that starts the washer in this slice is skipping L. A
 successor that adds bottled oxygen here is skipping M. A successor that emits sulfuric
 acid without pickle (or another spend) is reopening ADR-0036.
+
+---
+
+## ADR-0109 — Upstream material may be reused under its own licence
+
+*2026-10-07 · Accepted · Supersedes the external-asset restriction in ADR-0048*
+
+**Context.** Grindless is intentionally designed to coexist with and learn from established
+technology mods. The owner explicitly permits copying or adapting their code, textures, sounds
+and other material where the upstream licence allows the intended use. The prior asset provenance
+rule only allowed CC0-equivalent third-party assets, which unnecessarily ruled out legitimate
+reuse and incorrectly made originality an absolute project claim.
+
+**Decision.** Grindless may reuse or adapt upstream material only after a per-component licence
+review. `THIRD_PARTY_NOTICES.md` records the upstream project and URL, exact release or commit,
+licence, imported scope, required attribution and the distribution consequence. Required notices
+and licence text travel with the distribution. The repository's MIT licence continues to apply to
+Grindless-authored material only; a compatible licence change is made before distribution if an
+import requires one. Inspiration that copies no protected expression needs no entry, but any
+copied or adapted source or asset does.
+
+**Alternatives rejected.** An all-original-only rule (needlessly discards usable compatible work);
+an unqualified permission to copy from any mod (a repository licence cannot grant rights held by
+an upstream author); deciding a new project-wide licence now (there is no imported component whose
+terms require it yet).
+
+**Consequences.** Future sessions may use compliant upstream work, including code and visual
+assets, but must document provenance before committing it. An asset is no longer required to be
+CC0 solely because it is external. No third-party component is introduced by this decision.
 
 

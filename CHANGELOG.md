@@ -13,6 +13,14 @@ entries below reference those records by id.
 
 ## [Unreleased]
 
+### Changed
+
+- **Third-party reuse is allowed when its licence permits it.** Grindless may now copy or adapt
+  compatible code, textures, sounds and other material from upstream projects. Every import needs
+  its exact source, version, licence, scope and required notices in `THIRD_PARTY_NOTICES.md`;
+  upstream terms remain controlling. MIT continues to cover Grindless-authored material unless a
+  documented import requires a compatible distribution change (ADR-0109).
+
 ### Fixed
 
 - **Bootstrap smoke no longer summons the Advanced Data Core onto the hopper.**
