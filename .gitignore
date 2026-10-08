@@ -10,6 +10,9 @@ run/
 runs/
 remappedSrc/
 
+# Locally assembled CurseForge-ready distributions. Source manifests stay in pack/.
+dist/
+
 # IDE
 .idea/
 *.iml

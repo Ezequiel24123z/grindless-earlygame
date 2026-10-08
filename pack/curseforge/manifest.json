@@ -1,0 +1,30 @@
+{
+  "minecraft": {
+    "version": "1.20.1",
+    "modLoaders": [
+      {
+        "id": "forge-47.4.23",
+        "primary": true
+      }
+    ]
+  },
+  "manifestType": "minecraftModpack",
+  "manifestVersion": 1,
+  "name": "Grindless T0",
+  "version": "0.1.0-t0.1",
+  "author": "Ezequiel24123z",
+  "files": [
+    { "projectID": 238222, "fileID": 8292131, "required": true },
+    { "projectID": 324717, "fileID": 8479276, "required": true },
+    { "projectID": 422301, "fileID": 9083935, "required": true },
+    { "projectID": 618298, "fileID": 9083873, "required": true },
+    { "projectID": 410811, "fileID": 7609948, "required": true },
+    { "projectID": 314906, "fileID": 8216874, "required": true },
+    { "projectID": 404465, "fileID": 8226927, "required": true },
+    { "projectID": 404468, "fileID": 7499810, "required": true },
+    { "projectID": 790626, "fileID": 9032601, "required": true },
+    { "projectID": 429235, "fileID": 4810975, "required": true },
+    { "projectID": 908741, "fileID": 5681725, "required": true }
+  ],
+  "overrides": "overrides"
+}

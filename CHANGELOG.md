@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **First local T0 client-pack candidate and live JEI bridge (ADR-0120).** `pack/` pins the
+  Forge 1.20.1 quality-of-life stack (JEI, Jade, Sophisticated Backpacks, FTB homes/claims and
+  performance baseline), while paired build scripts compile the local jar into an importable
+  CurseForge archive. JEI reads every live generated process from `ProcessLookup` and exposes the
+  physical Research Terminal calibration alongside ordinary data recipes. AE2 is intentionally
+  held for its complete T4 Precision integration rather than being an un-gated early escape.
+
 - **The Bootstrap quest now crosses the physical Relay Matrix.** The native book leads from a
   Calibrated Data Core to the four-Matrix batch before it asks for an Arc Furnace, while the Field
   Guide states how that seed batch becomes the first Thermal Generator, Pulverizer, Arc Furnace

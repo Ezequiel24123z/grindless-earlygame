@@ -188,3 +188,19 @@ A new graph row updates the size assertion in `VerifyRecipes`. A new block updat
 `BlockCatalogue`, which `VerifyAssets` reads. Arithmetic policy stays in a check
 that does not boot Minecraft, the way `ProcessGraph`, `FluidLogic` and `AtlasLogic`
 already do.
+
+## Optional pack bridges
+
+- `forge/.../jei/GrindlessJeiPlugin.java` — JEI entry point; generated recipes are read from
+  `ProcessLookup`, never copied into a second recipe list.
+- `forge/.../jei/GrindlessProcessCategory.java` — item/tag alternatives plus the non-native fluid
+  conditions of a process. It must keep the live graph visible even when no Forge fluid exists.
+- `forge/.../jei/GrindlessCalibrationCategory.java` — the Research Terminal's physical cycle,
+  which is not a JSON recipe and must therefore be registered explicitly.
+- `pack/curseforge/manifest.json` — exact launcher-managed dependency file ids.
+- `tools/build-modpack.ps1` and `.sh` — build the local jar and stage it as a pack override; they
+  must keep the manifest version equal to `pack_version` in `gradle.properties`.
+
+JEI is optional at runtime: the standalone Grindless jar must load without it. The T0 client pack
+does not include AE2; its T4 recipe/energy/material integration needs a complete frontier slice,
+not an unmodified early-game dependency (ADR-0120).

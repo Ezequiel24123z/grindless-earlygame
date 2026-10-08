@@ -173,6 +173,16 @@
   "gui.grindless.atlas.empty": "No process recipes loaded",
   "tooltip.grindless.atlas": "Right-click to browse process recipes",
 
+  "jei.grindless.process": "%s Process",
+  "jei.grindless.calibration": "Research Terminal Calibration",
+  "jei.grindless.fluid_input": "In: %s (%s mB)",
+  "jei.grindless.fluid_output": "Out: %s (%s mB)",
+  "jei.grindless.fluid_vent": "Vents: %s (%s mB)",
+  "jei.grindless.temperature": "Temperature: %s C",
+  "jei.grindless.atmosphere": "Atmosphere: %s",
+  "jei.grindless.agitation": "Agitation: %s",
+  "jei.grindless.energy_time": "%s FU/t · %.1f s",
+
   "chat.grindless.scanner.vein": "%s · richness %s · reserve %s",
   "chat.grindless.scanner.empty": "No mineable vein in this chunk",
   "chat.grindless.splitter.filter": "Filter: %s",

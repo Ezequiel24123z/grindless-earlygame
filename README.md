@@ -2137,12 +2137,19 @@ playable slices under the mechanical gate in ADR-0108:
 | **T14 Galactic** | Self-expanding industry, antimatter, singularity power, distributed control and Type III. |
 | **T15 Event Horizon** | Relativistic shielding, final navigation and arrival at Sagittarius; exploitation follows as postgame T15. |
 
-### Polish
+### Pack and recipe-viewer integration
 
-The native Atlas solver, JEI/REI/EMI integration, configuration, localisation, accessibility,
-balance and performance are developed alongside the campaign seams they explain rather than
-postponed behind an obsolete 1.0 bucket. Version ports still wait until the Forge 1.20.1 campaign
-is coherent.
+The first local T0 pack is defined in [`pack/`](pack/README.md). It includes JEI, Jade,
+Sophisticated Backpacks, FTB Essentials/Chunks and a small performance baseline. JEI's Forge
+bridge reads the live generated graph, so it shows every Grindless process and the physical
+Research Terminal calibration as well as the ordinary data recipes. Grindless's simulated-fluid
+amounts are displayed as process conditions until they become registered Forge fluid ingredients.
+
+AE2 is intentionally reserved for **T4 Precision**. It joins only when its recipe replacement,
+material/energy bridges and in-game route make storage, patterns and autocrafting a genuine T4
+capability rather than an early escape hatch. REI/EMI, configuration, localisation, accessibility,
+balance and performance continue alongside the campaign seams they explain; version ports wait
+until the Forge 1.20.1 campaign is coherent.
 
 ### Version ports
 
@@ -2184,7 +2191,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 14 | Chunk veins + vein derivation and persistence | ✅ done — `vein/`, ADR-0047 |
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
-| 16 | Recipe visibility: `VerifyRecipes` + atlas stub; JEI/REI/EMI when the graph exists | ✅ done — Atlas stub ADR-0066; JEI waits |
+| 16 | Recipe visibility: `VerifyRecipes` + Atlas + JEI bridge; REI/EMI when supported | ✅ done — live JEI process/calibration categories and the Atlas; ADR-0120 |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
 | 17b | **Slice G — Belt junctions:** merger, tunnel, overflow | ✅ done — ADR-0071 |
 | 17c | **Slice H — Sorter:** peel a mixed line by item | ✅ done — ADR-0072 |

@@ -131,6 +131,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0117](#adr-0117--recurrent-base-materials-gain-industrial-renewal-routes) | Recurrent base materials gain industrial renewal routes | Accepted |
 | [0118](#adr-0118--redstone-is-synthesised-from-renewable-silicon-and-water) | Redstone is synthesised from renewable silicon and water | Accepted |
 | [0119](#adr-0119--relay-matrices-are-consumed-machine-components) | Relay Matrices are consumed machine components | Accepted |
+| [0120](#adr-0120--the-first-client-pack-is-t0-scoped-and-jei-reads-the-live-graph) | The first client pack is T0-scoped and JEI reads the live graph | Accepted |
 
 ---
 
@@ -5271,3 +5272,44 @@ component that carries progression through recipe inputs rather than a permissio
 first batch remains recoverable, but continued T1 expansion is automated once its four seed
 machines exist. Future T2+ machine recipes must consume their matching physical Matrix as part of
 their own frontier slice; they are not silently converted by this T1 change.
+
+---
+
+## ADR-0120 — The first client pack is T0-scoped and JEI reads the live graph
+
+*2026-10-08 · Accepted*
+
+**Context.** Grindless is intended to be played as a modpack, but an early pack needs quality of
+life and recipe discoverability without silently adding an alternate technology tree. The project
+has generated machine processes and a physical Research Terminal calibration that neither vanilla
+JSON recipes nor a static exported JEI list can describe. Applied Energistics 2 is desired for the
+campaign, but its unmodified ore, device and autocrafting route would be available at Bootstrap if
+it were simply installed now.
+
+**Decision.** Ship a reproducible local CurseForge-format **client-pack candidate** for Forge
+1.20.1 with JEI, Jade, Sophisticated Backpacks, FTB Essentials, FTB Chunks/Teams/Library and the
+ModernFix/FerriteCore/Embeddium performance baseline. The tracked manifest pins each launcher
+file; the packaging scripts build the local Grindless jar and add it as an override instead of
+committing a binary.
+
+The Forge-only optional JEI bridge reads `ProcessLookup` at registration time, one category per
+machine family, and registers the physical calibration page independently. Ordinary data recipes
+remain JEI's vanilla responsibility. Until Grindless state fluids are registered Forge fluids, JEI
+shows their names and millibucket amounts as explicit process-condition text rather than
+misrepresenting them as fillable fluid ingredients.
+
+Reserve AE2 for the T4 Precision frontier. That slice must establish recipe replacement, material
+bridges, Flux/AE energy behaviour, a storage/pattern/autocrafting route, and a survival proof in
+one release. It is not enough to hide an AE2 recipe or name a tier in a document.
+
+**Alternatives rejected.** Including unmodified AE2 in T0 (bypasses the intended early
+frontier); producing a hand-maintained JEI recipe copy (it drifts from generated processes);
+waiting for a perfect server distribution before players can exercise the local pack (delays the
+useful client proof); treating ordinary crafting JSON as Grindless custom JEI pages (duplicates
+vanilla's viewer behaviour).
+
+**Consequences.** A local archive can be created consistently and all currently authored
+Grindless recipes/processes are visible in JEI. This improves testability and discoverability but
+does **not** close the T0 mechanical gate: an end-to-end normal-survival playthrough is still the
+acceptance evidence. Server-pack assembly and AE2 integration are future scoped work, not hidden
+claims of this first client candidate.
