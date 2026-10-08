@@ -52,7 +52,7 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("eleven tasks, from the multitool to electronic silicon", 11, tasks.size());
+        eq("twelve tasks, from the multitool to electronic silicon", 12, tasks.size());
         eq("four reachable lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
         eq("the last task is electronic silicon", "electronic", tasks.get(tasks.size() - 1).id());
@@ -66,6 +66,8 @@ public final class VerifyQuest {
         eq("then the crank", "grindless:hand_crank_dynamo", subject("crank"));
         eq("then the extractor", "grindless:crude_extractor", subject("extractor"));
         eq("voltaic follows a calibrated core", "grindless:calibrated_data_core", subject("voltaic"));
+        eq("the physical Bootstrap exit is a Relay Matrix", "grindless:relay_matrix", subject("relay"));
+        eq("the furnace follows the Relay Matrix", List.of("relay"), task("furnace").requires());
         eq("the furnace is the spine", "grindless:arc_furnace", subject("furnace"));
         eq("industrial follows an advanced data core", "grindless:advanced_data_core", subject("industrial"));
         eq("contact is the reactor", "grindless:chemical_reactor", subject("reactor"));
@@ -119,6 +121,9 @@ public final class VerifyQuest {
         QuestCatalogue.Task calibrated = task("voltaic");
         yes("a calibrated core counts", QuestEvidence.met(calibrated, 1, "minecraft:overworld"));
         no("no calibrated core does not count", QuestEvidence.met(calibrated, 0, "minecraft:overworld"));
+        QuestCatalogue.Task relay = task("relay");
+        yes("a Relay Matrix counts", QuestEvidence.met(relay, 1, "minecraft:overworld"));
+        no("no Relay Matrix does not count", QuestEvidence.met(relay, 0, "minecraft:overworld"));
     }
 
     private static void rewards() throws IOException {
@@ -153,7 +158,7 @@ public final class VerifyQuest {
         }
         String text = all.toString();
         for (String mark : List.of(
-                "Multitool", "Hand Crank", "Crude Extractor", "Voltaic", "Chemical Reactor",
+                "Multitool", "Hand Crank", "Crude Extractor", "Voltaic", "Relay Matrices", "Assembler", "Chemical Reactor",
                 "contact process", "steel", "refractory", "metallurgical", "electronic")) {
             yes("the guide mentions " + mark, text.contains(mark));
         }

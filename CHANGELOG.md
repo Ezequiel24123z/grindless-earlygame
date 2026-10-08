@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Bootstrap quest now crosses the physical Relay Matrix.** The native book leads from a
+  Calibrated Data Core to the four-Matrix batch before it asks for an Arc Furnace, while the Field
+  Guide states how that seed batch becomes the first Thermal Generator, Pulverizer, Arc Furnace
+  and Assembler. The in-game route now matches the consumed-matrix crafts.
+
 - **Relay Matrices are now the real T1 machine component (ADR-0119).** The first four-unit
   Bootstrap batch is consumed one each by the Thermal Generator, Pulverizer, Arc Furnace and
   Assembler. The Assembler then repeats that same physical four-input batch in twenty seconds,

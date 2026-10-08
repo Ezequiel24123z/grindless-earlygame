@@ -2228,7 +2228,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 | 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
 | 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
-| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to eleven reachable tasks ending at electronic silicon. |
+| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to twelve reachable tasks ending at electronic silicon, including the physical Relay Matrix exit. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
 | 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the four-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
@@ -2349,7 +2349,7 @@ crushed and roasts in the Kiln.
 **BO — prototype isolation is in.** The generated graph has 107 recipes and 39 Assembler rows.
 Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth
 and Supraluminal Station have neither a generated route nor a crafting-table recipe. The quest
-book has eleven tasks in four lines and the field guide stops at electronic silicon, with no
+book has twelve tasks in four lines and the field guide stops at electronic silicon, with no
 dimension objective. **Arrival at
 the galactic centre (BN) is in** (ADR-0099): riding the station from the Drift lands in
 a sealed chamber. Leaving the chamber returns to the berth saved on the way to the Drift

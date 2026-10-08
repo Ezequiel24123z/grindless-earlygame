@@ -154,7 +154,8 @@ The first four checks also pin that the prototype transport has no generated sur
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).
 The Field Guide states the complete two-iron Bootstrap contract and points from its four-Matrix
 exit to the renewable-glass line; it remains readable independently of quest claims.
-The active route has eleven tasks in four lines, stops at electronic silicon and contains
+The active route has twelve tasks in four lines, with the physical Relay Matrix between calibration
+and the first Arc Furnace; it stops at electronic silicon and contains
 no dimension evidence; spatial pages return only with their campaign tiers.
 
 ## Multiblock
