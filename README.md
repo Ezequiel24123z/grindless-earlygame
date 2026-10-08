@@ -2261,65 +2261,65 @@ and control parts, discoverability, persistence, automation and the recoverable 
 Matrix batch. T1 stays locked until that route passes the shared gate in ADR-0108.
 
 The Flux Exosuit is in
-(ADR-0103): Assembler-manufactured once Industrial is researched. Four pieces with the
+(ADR-0103): Assembler-manufactured from visible components. Four pieces with the
 harness's protection and two module slots each. A worn Network Tap pulls up to 32 FU/t
 from pylon coverage into Flux Cells on the suit; Exoskeleton Legs add 0.04 speed for
 1 FU/t. The suit does not generate. The Voltaic Harness is in
 (ADR-0102): four crafting-table pieces, iron protection, one Flux Cell
 slot each. The cell stores 6,400 FU and does not generate. Walking
 through a pylon does not charge it. Vanilla armour still equips. The Pattern Scanner and the
-Deconstructor are in (ADR-0101): Assembler-manufactured once Industrial is
-researched. A scan stores the item id and reports a graph cost. A smash
+Deconstructor are in (ADR-0101): Assembler-manufactured from visible components.
+A scan stores the item id and reports a graph cost. A smash
 yields one Matter. The Replicator block is not in this slice. The Deconstruction Planner is in
-(ADR-0086): Assembler-manufactured once Industrial is researched. Two corners
+(ADR-0086): Assembler-manufactured from visible components. Two corners
 mark a box of at most 32 on an edge. The mark stays on the item. The tool
 does not break blocks. The Multitool relocate is still the pickup. The Blueprint Tool is in
-(ADR-0085): Assembler-manufactured once Industrial is researched. Two corners
+(ADR-0085): Assembler-manufactured from visible components. Two corners
 capture a box of at most 32 on an edge and 512 blocks. The blueprint keeps
 facing and drops status. Stamping spends the inventory, all or nothing.
 Drones still wait. The Flux Drill and the Drill Cell
-are in (ADR-0084): Assembler-manufactured once Industrial is researched. The
+are in (ADR-0084): Assembler-manufactured from visible components. The
 drill spends 32 FU a block and holds two cells of 3,200 FU. Sneak-use cycles
 single, 3×3, vein and a horizontal tunnel. It does not break Grindless blocks.
 The Multitool still does not mine. The Signal Cable, the Logic
 Controller and the Redstone Interface are in (ADR-0083): Assembler-manufactured
-once Industrial is researched (`1 casing + 2 motor + 4 plates`). The cable
+from visible components (`1 casing + 2 motor + 4 plates`). The cable
 carries one integer one block per tick and is not capped at 15. The controller
 lets the machine in front run while the inventory behind holds fewer than 500
 of one item, and holds it at 500 or above. An empty filter does not hold.
 The interface turns redstone into that integer, and the other way, and does
 not emit while redstone is coming in. The Pressure Pipe, the Electric Pump,
 the Industrial Tank, the Fluid Manipulator, the Flux Belt and the Stack and
-Filter Manipulators are in (ADR-0082): Assembler-manufactured once Industrial
-is researched (`1 casing + 2 motor + 4 plates`). The pipe and the industrial
+Filter Manipulators are in (ADR-0082): Assembler-manufactured from visible
+components (`1 casing + 2 motor + 4 plates`). The pipe and the industrial
 tank accept fluid up to 1200 °C and 1.0 MPa. Steam and molten metal move.
 Superheated steam does not. The Clay Conduit and the Basic Tank still refuse
 both. The pump does not invent water. The tank is one block. The flux belt
 moves 16 items/s and spends F1 only while it carries items. The T1 tunnel
 stays at 5 blocks. The Solar Array, the Boiler and the
-Condenser are in (ADR-0081): Assembler-manufactured once Industrial is researched.
+Condenser are in (ADR-0081): Assembler-manufactured from visible components.
 The panel makes 32 FU/t in daylight and nothing at night. `1 B water → 1 B steam`
 in 10 s at 150 °C and 0.5 MPa, and the condenser returns that steam to water. The
 turbine stays with fission. The Froth Flotation Cell and the Magnetic
-Separator are in (ADR-0080): Assembler-manufactured once Industrial is researched
+Separator are in (ADR-0080): Assembler-manufactured from visible components
 (`1 casing + 2 motor + 4 plates`). `20 crushed + 500 mB surfactant → 24 concentrate +
 3 tailings` in 80 s. Concentrate reduces on the Arc Furnace. Ten tailings make one
 ingot. Surfactant is carbon and water on the Chemical Reactor. The magnet pulls iron,
 nickel and steel to the left and does not change the item. The Induction Furnace and the Caster are in
-(ADR-0079): Assembler-manufactured once Industrial is researched
+(ADR-0079): Assembler-manufactured from visible components
 (`1 casing + 2 motor + 4 plates`). `1 ingot → 144 mB molten` in 8 s at 1000 °C, inert,
 with no slag. `144 mB molten + mould → 1 ingot or 1 plate` in 4 s. The moulds are four
 iron plates. Molten fluid is 1000 °C, so a Basic Tank refuses it. The Arc Furnace still
 makes ingots. The Fluid Well is in (ADR-0078):
-Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
+Assembler-manufactured from visible components (`1 casing + 2 motor + 4 plates`).
 It draws F1 and pumps 100 mB/t of chunk water with no vanilla source. Brine, oil and
 geothermal are not emitted. The Electrolysis Cell and the Atmospheric
-Intake are in (ADR-0077): Assembler-manufactured once Industrial is researched
+Intake are in (ADR-0077): Assembler-manufactured from visible components
 (`1 casing + 2 motor + 4 plates`). `2 B water → 2 B hydrogen + 1 B oxygen` in 10 s.
 Hydrogen burns like CO. Oxygen recombines to water on the Chemical Reactor. The intake
 stores `2 B oxygen` from free air in 10 s. Nitrogen and argon are not emitted. The
 Chemical Washer is in (ADR-0076):
-Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
+Assembler-manufactured from visible components (`1 casing + 2 motor + 4 plates`).
 `8 crushed + 2 B water → 8 washed crushed + 1 ingot of the next eligible metal` in 20 s.
 The ingot feeds that material's forming and wire lines as the named byproduct sink. Washed crushed reduces like
 crushed and roasts in the Kiln.
@@ -2356,12 +2356,12 @@ in 20 s at 1400 °C. **Electric-arc steel is in**
 ingots in 140 s. The old Slice F and Z–BB rows remain historical; ADR-0107 reschedules their
 systems into the T0–T15 campaign. The reachable quest route is in (ADR-0100), and BP is next.
 See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md). The Chemical Reactor is in (ADR-0075):
-Assembler-manufactured once Industrial is researched (`1 casing + 2 motor + 4 plates`).
+Assembler-manufactured from visible components (`1 casing + 2 motor + 4 plates`).
 `1 B SO₂ → 1 B SO₃` in 6 s on a vanadia pellet with held air; `1 B SO₃ + 0.2 B water → 1 B
 sulfuric acid` in 4 s, water from a neighbouring tank. Pickle is the named sulfuric spend
 (`1 iron ingot + 0.1 B acid → 1 iron plate`). R2 yield 1.15 still waits. The Wire Mill is in
 (ADR-0074): Assembler-manufactured
-once Industrial is researched (`1 casing + 2 coil + 4 plates`). `1 ingot → 2 wire` in 8 s;
+from visible components (`1 casing + 2 coil + 4 plates`). `1 ingot → 2 wire` in 8 s;
 `2 copper wire → 1 coil` is the T2 mill route; the Press die remains the T1 bootstrap.
 Motor is `1 casing + 2 coil + 1 rod` in 10 s. Pylon MK2 still has no crafting-table recipe; its
 Assembler route is a physical fabrication requirement, not a world unlock.
@@ -2369,8 +2369,9 @@ The Sorter is in (ADR-0072): matching sides peel
 a mixed line and hold when that lane is full; unmatched items continue. Merger, Tunnel Belt
 and Overflow Gate are in
 (ADR-0071): three inlets join, a pair skips one to five empty blocks, overflow dumps clockwise
-when the front is blocked. The Process Atlas stub is in: a handheld lists the live process graph
-(family, I/O, conditions, time, FU/t). It does not
+when the front is blocked. The Process Atlas stub is in: a handheld lists live Grindless routes
+(workstation, I/O, conditions, time, FU/t), including physical calibration and authored hand crafts.
+It does not
 solve a line. JEI still waits. The Multitool now rotates and relocates Grindless blocks
 (ADR-0069); it still does not mine. Kiln / R2 are in: a T1 Kiln roasts feed to oxide and
 vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + carbon to an

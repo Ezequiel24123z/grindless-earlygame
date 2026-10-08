@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Item ids this world has scanned.
  *
- * <p>World-scoped, like research: a pattern is a factory fact, not a personal one. Storing an id
+ * <p>World-scoped: a pattern is a factory fact, not a personal one. Storing an id
  * twice is a no-op. The Replicator (slice AH) reads this set; it is not built here (ADR-0101).
  */
 public final class PatternData extends SavedData {

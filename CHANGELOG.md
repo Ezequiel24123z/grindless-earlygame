@@ -81,6 +81,10 @@ entries below reference those records by id.
 
 ### Changed
 
+- **Active documentation names visible components, not obsolete unlocks.** Current machine
+  descriptions now say that Assembler routes use their stated physical components. Historical ADRs
+  retain the old terminology as an accurate record of the superseded design.
+
 - **Bootstrap smoke now exercises the whole T0 machine seam.** One local server run proves
   Dynamo-to-Extractor power transfer, automated vein output to a chest, hopper-fed physical Data
   Core calibration, hopper extraction of its result and safe recovery of a legacy Advanced Data
