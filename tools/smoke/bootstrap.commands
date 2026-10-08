@@ -1,11 +1,40 @@
 forceload add 0 0
+setblock 8 69 8 minecraft:air
 setblock 8 70 8 minecraft:air
 setblock 8 71 8 minecraft:air
+setblock 12 69 8 minecraft:air
+setblock 12 70 8 minecraft:air
+setblock 16 70 8 minecraft:air
+setblock 17 70 8 minecraft:air
+setblock 18 70 8 minecraft:air
 setblock 8 70 8 grindless:research_terminal[facing=south,status=idle]
 execute if block 8 70 8 grindless:research_terminal run say TERMINAL-OK
-data get block 8 70 8
+setblock 8 69 8 minecraft:hopper
 setblock 8 71 8 minecraft:hopper{Items:[{Slot:0b,id:"grindless:data_core",Count:1b}]}
+say WAIT-INPUT
+say WAIT-INPUT
 execute if data block 8 70 8 Input[{id:"grindless:data_core"}] run say CORE-IN
-summon minecraft:item 8 100 8 {Item:{id:"grindless:advanced_data_core",Count:1b}}
-execute if entity @e[type=item,nbt={Item:{id:"grindless:advanced_data_core"}}] run say ADV-CORE-OK
-kill @e[type=item]
+data merge block 8 70 8 {Energy:{FluxStored:16L},Progress:599.0d}
+say WAIT-CALIBRATION
+say WAIT-CALIBRATION
+say WAIT-CALIBRATION
+execute if data block 8 69 8 Items[{id:"grindless:calibrated_data_core"}] run say CALIBRATED-OUT
+setblock 12 70 8 grindless:research_terminal[facing=south,status=idle]{Input:[{Slot:0b,id:"grindless:advanced_data_core",Count:1b}]}
+setblock 12 69 8 minecraft:hopper
+say WAIT-LEGACY
+say WAIT-LEGACY
+execute if data block 12 69 8 Items[{id:"grindless:advanced_data_core"}] run say LEGACY-OUT
+setblock 16 70 8 grindless:hand_crank_dynamo[facing=east,status=idle]
+setblock 17 70 8 grindless:crude_extractor[facing=east,status=idle]
+setblock 18 70 8 minecraft:chest
+execute if block 16 70 8 grindless:hand_crank_dynamo run say DYNAMO-OK
+execute if block 17 70 8 grindless:crude_extractor run say EXTRACTOR-OK
+say WAIT-EXTRACTOR-INIT
+say WAIT-EXTRACTOR-INIT
+data merge block 16 70 8 {Energy:{FluxStored:800L}}
+data merge block 17 70 8 {Progress:399.0d}
+say WAIT-EXTRACTOR
+say WAIT-EXTRACTOR
+say WAIT-EXTRACTOR
+say WAIT-EXTRACTOR
+execute if data block 18 70 8 Items[{}] run say EXTRACTED-OUT

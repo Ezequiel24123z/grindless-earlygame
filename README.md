@@ -2214,7 +2214,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to eleven reachable tasks ending at electronic silicon. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the four-unit survival batch and Atlas visibility are in; the full T0 machine and playthrough audit remains |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the four-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
 | 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |

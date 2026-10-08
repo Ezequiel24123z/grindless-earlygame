@@ -19,7 +19,7 @@ foreign-providers    A datapack stands in for a mod that already supplies tin an
 blocks               Every block is mineable with a pickaxe and drops itself, with its real display name.
 states               Every status and facing of every machine is a valid block state, placed as one datapack function (ADR-0061).
 loop                 The extractor has a block entity, and a pylon occupies the two blocks above it.
-bootstrap            The Research Terminal has a block entity. T0 recipes are checked offline by VerifyBootstrap.
+bootstrap            The three T0 machines transfer power, extract a vein, calibrate a core and recover legacy output.
 first-iron           Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
 first-factory        Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
 first-fluids         Slice C: pump water through clay into a tank; captured CO burns in the generator.

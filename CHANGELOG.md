@@ -81,6 +81,11 @@ entries below reference those records by id.
 
 ### Changed
 
+- **Bootstrap smoke now exercises the whole T0 machine seam.** One local server run proves
+  Dynamo-to-Extractor power transfer, automated vein output to a chest, hopper-fed physical Data
+  Core calibration, hopper extraction of its result and safe recovery of a legacy Advanced Data
+  Core. This is evidence for the still-active T0 audit, not a claim that the tier is accepted.
+
 - **Fast shared-world smoke batches are available locally (ADR-0111).**
   `tools/run-smokes-batch.ps1` starts Forge once and exercises the ordinary scenarios in sequence
   for the daily development loop. The provider and state scenarios retain fresh worlds, and the
