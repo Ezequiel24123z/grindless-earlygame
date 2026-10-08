@@ -462,11 +462,15 @@ previous-rating matrix
 
 Those four components are real products used elsewhere, not matrix-only tokens, and each already
 depends on another domain. The T1 Relay Matrix is the only bootstrap exception: a small manual
-batch starts the first factory, after which the Assembler automates it. The F0-powered terminal
-calibrates one Data Core in thirty seconds; `2 glass + 2 copper ingots + 2 redstone + 1 Calibrated
-Data Core` then make a four-unit Relay Matrix hand batch. Glass brings the primitive chemical
-route, copper the material route, and the calibrated core/redstone the control route. The physical
-output proves the manual-power route was used without consulting a world permission.
+batch starts the first factory, after which the Assembler repeats the same four-unit recipe. The
+F0-powered terminal calibrates one Data Core in thirty seconds; `2 glass + 2 copper ingots +
+2 redstone + 1 Calibrated Data Core` make four Relay Matrices, by hand for the seed batch or in
+twenty seconds at F1 in the Assembler. The seed matrices are consumed one each by the Thermal
+Generator, Pulverizer, Arc Furnace and Assembler. Thereafter every active T1 processing,
+generation or extraction machine consumes one Relay Matrix; passive grid, storage and transport
+blocks do not pretend to need a controller. Glass brings the primitive chemical route, copper the
+material route, and the calibrated core/redstone the control route. The physical output proves the
+manual-power route was used without consulting a world permission.
 
 Five architectures overlap rather than replace one another:
 
@@ -562,6 +566,9 @@ Press            [cat plate die]   4 s  ──> 1 u plate
                         ▼
               4 u plate + 2 u rod  ──>  1 Machine Casing   (crafting table, T1)
               1 Machine Casing + 1 u coil + 2 u gear  ──>  Assembler  (crafting table, T1)
+                        │
+                        ▼
+2 glass + 2 copper + 2 redstone + 1 Calibrated Data Core ──> 4 Relay Matrices (Assembler, 20 s)
                         │
                         ▼
                  the crafting table is finished

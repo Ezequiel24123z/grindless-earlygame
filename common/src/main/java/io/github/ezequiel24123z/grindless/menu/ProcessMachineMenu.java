@@ -85,10 +85,11 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new OutputSlot(container, 2, 116, 35));
             }
             case ASSEMBLER -> {
-                addSlot(new Slot(container, 0, 44, 17));
-                addSlot(new Slot(container, 1, 44, 35));
-                addSlot(new Slot(container, 2, 44, 53));
-                addSlot(new OutputSlot(container, 3, 116, 35));
+                addSlot(new Slot(container, 0, 35, 26));
+                addSlot(new Slot(container, 1, 53, 26));
+                addSlot(new Slot(container, 2, 35, 44));
+                addSlot(new Slot(container, 3, 53, 44));
+                addSlot(new OutputSlot(container, 4, 116, 35));
             }
         }
     }

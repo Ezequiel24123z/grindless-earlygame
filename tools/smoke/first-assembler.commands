@@ -17,3 +17,8 @@ say WAIT-HOPPER
 execute if data block 8 70 8 Items[{id:"minecraft:iron_ingot"}] run say INGOT-IN
 setblock 10 70 8 grindless:assembler[facing=south,status=idle]
 execute if block 10 70 8 grindless:assembler run say ASSEMBLER-OK
+item replace block 10 70 8 container.0 with minecraft:glass 2
+item replace block 10 70 8 container.1 with minecraft:copper_ingot 2
+item replace block 10 70 8 container.2 with minecraft:redstone 2
+item replace block 10 70 8 container.3 with grindless:calibrated_data_core
+execute if data block 10 70 8 {Recipe:"assemble/relay_matrix"} run say MATRIX-RECIPE-OK

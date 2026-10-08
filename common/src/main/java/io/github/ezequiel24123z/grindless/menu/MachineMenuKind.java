@@ -12,7 +12,8 @@ public enum MachineMenuKind {
     PULVERIZER(1, 1),
     ARC_FURNACE(2, 2),
     PRESS(2, 1),
-    ASSEMBLER(3, 1),
+    /** Four inputs preserve the complete physical Relay Matrix batch. */
+    ASSEMBLER(4, 1),
     KILN(1, 1),
     WIRE_MILL(1, 1),
     CHEMICAL_REACTOR(1, 1),

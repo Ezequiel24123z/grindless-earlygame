@@ -120,6 +120,7 @@ public final class ProcessGraph {
         }
         recipes.add(coilPress());
         recipes.add(coilMill());
+        recipes.add(relayMatrix());
         recipes.add(pylonMk2());
         recipes.add(wireMill());
         recipes.add(motor());
@@ -377,6 +378,27 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 FabricationLogic.WIRE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    /**
+     * The first factory reproduces its own physical T1 controller in the same four-unit batch
+     * as the Bootstrap craft. The four inputs deliberately retain glass, copper, redstone and
+     * the calibrated core: automation removes repetition, not the control route.
+     */
+    private static ProcessRecipe relayMatrix() {
+        return new ProcessRecipe(
+                "assemble/relay_matrix",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.item("minecraft:glass", 2),
+                        IngredientSpec.tag("forge:ingots/copper", 2),
+                        IngredientSpec.item("minecraft:redstone", 2),
+                        IngredientSpec.item(FabricationLogic.CALIBRATED_DATA_CORE, 1)),
+                List.of(OutputSpec.item(FabricationLogic.RELAY_MATRIX, FabricationLogic.RELAY_MATRIX_BATCH)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
                 FabricationLogic.FU_PER_TICK);
     }
 

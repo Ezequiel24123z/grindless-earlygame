@@ -197,8 +197,9 @@ Recorded in [ADR-0088](docs/DECISIONS.md#adr-0088--grindless-is-a-modpack-scale-
 The systems below stay the foundation.
 
 **Tiers.** Technology, controller and power advance together from T0/F0 through T15/F15
-(ADR-0107). Every T1+ machine contains a physical Control Matrix of its rating. There is no
-separate world permission that says a visible recipe is allowed.
+(ADR-0107). Every active T1+ processing, generation or extraction machine consumes a physical
+Control Matrix of its rating; passive grid, storage and transport infrastructure does not. There
+is no separate world permission that says a visible recipe is allowed.
 
 **Milestones.** Kardashev scales are the large marks. Type I is a planet's energy, Type II a
 star's, Type III a galaxy's. Megastructures sit along the way between those marks. The names
@@ -1350,11 +1351,12 @@ player stuck without knowing why.
 
 ## Progression: Control Matrices and research
 
-Progress is physical. Every machine from T1 onward contains a **Control Matrix** rated for
-its technology and Flux tier. If the factory can manufacture that matrix, it can manufacture
-the machine; there is no second world-scoped permission that makes a visible recipe silently
-fail. Under-volting still works, slowly, so building the first machine of a new tier never
-requires an impossible power bootstrap.
+Progress is physical. Every active processing, generation or extraction machine from T1 onward
+consumes a **Control Matrix** rated for its technology and Flux tier; passive infrastructure is
+not charged a fictional controller. If the factory can manufacture that matrix, it can
+manufacture the machine; there is no second world-scoped permission that makes a visible recipe
+silently fail. Under-volting still works, slowly, so building the first machine of a new tier
+never requires an impossible power bootstrap.
 
 The first route to Tn uses a Tn−1 matrix plus products from materials, chemistry,
 computation/control and energy. Those domains interact before they converge: electronics
@@ -1508,7 +1510,7 @@ The single most important structural rule in Grindless:
 | Tier | How you obtain the machine |
 | --- | --- |
 | **T0** | Crafting table. The bootstrap, and only the ungated bootstrap. |
-| **T1** | Crafting table or Press, but every machine consumes a T1 Relay Matrix. The first matrix is made in a small batch; the Assembler then automates it. |
+| **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first four-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace and Assembler, which then automates the same batch. |
 | **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
 | **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
 | **T10–T12** | **Orbital Assembly Bay** and **Assembly Field** — vacuum, zero gravity and blueprint-scale construction. |
@@ -1526,7 +1528,7 @@ production chain lives:
 | Component | Tier | Built from | What it gates |
 | --- | --- | --- | --- |
 | **Machine Casing** | T1 | plates | The first thing any Assembler makes. |
-| **Control Matrix** | T1–T15 | a prior rating plus the tier's braided material, chemical, control and power products | Every machine at its rating. Five architectures add better routes to older ratings. |
+| **Control Matrix** | T1–T15 | a prior rating plus the tier's braided material, chemical, control and power products | Every active processing, generation or extraction machine at its rating. Five architectures add better routes to older ratings. |
 | **Motor** | T2 | casing stock + copper coil | Anything that moves. |
 | **Pump** | T2 | casing + motor + seals | The entire fluid tier. |
 | **Circuit Board** | T3–T4 | silicon wafer + **etching acid** | Industrial control, then Integrated Matrices. |

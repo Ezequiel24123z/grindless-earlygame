@@ -3,13 +3,14 @@
   "pattern": [
     "CFC",
     "CGC",
-    "CIC"
+    "MIC"
   ],
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "F": { "item": "minecraft:furnace" },
     "G": { "tag": "grindless:carbon" },
-    "I": { "tag": "forge:ingots/iron" }
+    "I": { "tag": "forge:ingots/iron" },
+    "M": { "item": "grindless:relay_matrix" }
   },
   "result": { "item": "grindless:thermal_generator" }
 }

@@ -18,15 +18,15 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 110, rows.size());
+        eq("atlas lists every generated recipe", 111, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("thirty-nine reachable assembler crafts in this set", 39,
+        eq("forty reachable assembler crafts in this set", 40,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 142, allRows.size());
+        eq("atlas includes every machine, hand craft and calibration route", 143, allRows.size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -41,6 +41,14 @@ public final class VerifyAtlas {
         eq("relay displays its batch inputs", "2x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
                 AtlasLogic.describe(relay.inputs()));
         eq("relay displays four physical outputs", "4x relay_matrix", AtlasLogic.describe(relay.outputs()));
+        AtlasLogic.Entry assembledRelay = route(allRows, "assemble/relay_matrix");
+        eq("assembled relay names the Assembler", "ASSEMBLER", assembledRelay.station());
+        eq("assembled relay keeps all seven physical input units", 7, assembledRelay.inputs().size());
+        eq("assembled relay displays its batch inputs",
+                "2x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
+                AtlasLogic.describe(assembledRelay.inputs()));
+        eq("assembled relay displays four physical outputs", "4x relay_matrix",
+                AtlasLogic.describe(assembledRelay.outputs()));
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
         eq("seven routes make an iron ingot", 7, ironIngot.size());

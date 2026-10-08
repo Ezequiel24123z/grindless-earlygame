@@ -24,6 +24,8 @@ capability event
 - `recipe/MachineFamily.java` — the family a recipe names, not a block.
 - `machine/ProcessMachineKind.java` — envelope, held conditions, block-entity type.
 - `menu/MachineMenuKind.java` — slot counts on the shared menu.
+- `menu/ProcessMachineMenu.java` and `machine/ProcessMachineBlockEntity.java` — visible slot
+  placement and persisted inventory layout; widening a menu must migrate any shifted saved slots.
 - `process/MachineEnvelopes.java` — when the machine holds a band from
   [`MACHINES.md`](MACHINES.md#machines-are-condition-envelopes).
 - `registry/BlockCatalogue.java` — geometry and the asset list.
@@ -45,13 +47,14 @@ T2 and above are manufactured, never a crafting table
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
 - `recipe/T1Recipes.java` and `common/src/main/resources/data/grindless/recipes/` —
-  ordinary shaped crafting JSON, including the four-unit first Relay Matrix batch.
+  ordinary shaped crafting JSON, including the four-unit first Relay Matrix batch and its one-Matrix
+  T1 processing-machine costs.
 - `recipe/BootstrapRecipes.java` — T0 shaped JSON.
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (110) and the ordinary
-craft count (31); `VerifyAtlas` pins 110 generated rows, 39 Assembler rows and 142 total
+`tools/checks/VerifyRecipes.java` pins the generated graph size (111) and the ordinary
+craft count (31); `VerifyAtlas` pins 111 generated rows, 40 Assembler rows and 143 total
 handheld routes (including 31 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not

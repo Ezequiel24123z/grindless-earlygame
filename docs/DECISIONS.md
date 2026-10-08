@@ -130,6 +130,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0116](#adr-0116--bootstrap-has-an-explicit-survival-entry-and-exit) | Bootstrap has an explicit survival entry and exit | Accepted |
 | [0117](#adr-0117--recurrent-base-materials-gain-industrial-renewal-routes) | Recurrent base materials gain industrial renewal routes | Accepted |
 | [0118](#adr-0118--redstone-is-synthesised-from-renewable-silicon-and-water) | Redstone is synthesised from renewable silicon and water | Accepted |
+| [0119](#adr-0119--relay-matrices-are-consumed-machine-components) | Relay Matrices are consumed machine components | Accepted |
 
 ---
 
@@ -5236,3 +5237,37 @@ factory bottleneck. The source chain deliberately spans material, chemistry, con
 it gives the first small factory a reason to connect its coal/charcoal, water and silica lines.
 Copper/iron recovery and mineral ceramics remain separate future routes; they must not be silently
 substituted by this control-material loop.
+
+---
+
+## ADR-0119 — Relay Matrices are consumed machine components
+
+*2026-10-08 · Accepted*
+
+**Context.** A T1 Relay Matrix already had a physical item, calibration route and manual batch,
+but the T1 machine recipes did not consume it. That made the Matrix a one-off milestone rather
+than the primary machine-control component intended by the progression lattice, and it left the
+first Assembler unable to reproduce its own controller.
+
+**Decision.** The four Matrix seed batch is allocated one each to the Thermal Generator,
+Pulverizer, Arc Furnace and Assembler. The Assembler repeats the exact physical batch — two
+glass, two copper ingots, two redstone and one Calibrated Data Core — into four Relay Matrices in
+twenty seconds at F1. Press, Kiln and Terrestrial Extractor each consume one Matrix when crafted.
+Passive grids, storage, transport and hand tools do not consume a Matrix because they do not host
+an autonomous process controller. The Assembler gains a fourth input slot so this route neither
+omits an ingredient nor invents an intermediate solely to fit a UI limit.
+
+Existing Assemblers save their old three input slots and output at slots 0–3. On loading legacy
+data, the former output at slot 3 moves to the new output slot 4 before the inventory is read.
+
+**Alternatives rejected.** Leaving matrices out of machine recipes (turns the frontier into a
+token); adding a separate, artificial contact item just to preserve a three-slot Assembler
+(creates a manual or circular extra step); dropping glass, redstone or the calibrated core from
+automated production (makes the factory route materially different from the physical Bootstrap
+route); charging passive belts, pylons or tanks (adds a controller tax where no controller exists).
+
+**Consequences.** The Matrix behaves like a GregTech-style circuit: a consumed, scalable
+component that carries progression through recipe inputs rather than a permission check. The
+first batch remains recoverable, but continued T1 expansion is automated once its four seed
+machines exist. Future T2+ machine recipes must consume their matching physical Matrix as part of
+their own frontier slice; they are not silently converted by this T1 change.

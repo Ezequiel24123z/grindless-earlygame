@@ -1,14 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CFC",
+    "MFC",
     "CIC",
     "CCC"
   ],
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "F": { "item": "minecraft:flint" },
-    "I": { "tag": "forge:ingots/iron" }
+    "I": { "tag": "forge:ingots/iron" },
+    "M": { "item": "grindless:relay_matrix" }
   },
   "result": { "item": "grindless:pulverizer" }
 }

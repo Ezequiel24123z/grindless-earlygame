@@ -59,8 +59,8 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel and silicon graph",
-                110, recipes.size());
+        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel, silicon and Relay Matrix graph",
+                111, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -71,6 +71,24 @@ public final class VerifyRecipes {
         ProcessRecipe renewableSand = recipe(recipes, "renew/sand");
         ProcessRecipe renewableGlass = recipe(recipes, "renew/glass");
         ProcessRecipe renewableRedstone = recipe(recipes, "synthesise/redstone");
+        ProcessRecipe relayMatrix = recipe(recipes, "assemble/relay_matrix");
+
+        eq("the Relay Matrix batch is assembled", MachineFamily.ASSEMBLER, relayMatrix.family());
+        eq("the Relay Matrix batch retains glass", "item:minecraft:glass",
+                relayMatrix.itemInputs().get(0).qualified());
+        eq("the Relay Matrix batch retains copper", "tag:forge:ingots/copper",
+                relayMatrix.itemInputs().get(1).qualified());
+        eq("the Relay Matrix batch retains redstone", "item:minecraft:redstone",
+                relayMatrix.itemInputs().get(2).qualified());
+        eq("the Relay Matrix batch consumes the calibrated core", "item:grindless:calibrated_data_core",
+                relayMatrix.itemInputs().get(3).qualified());
+        eq("the Relay Matrix batch has four inputs", 4, relayMatrix.itemInputs().size());
+        eq("the Relay Matrix batch makes physical matrices", "item:grindless:relay_matrix",
+                relayMatrix.itemOutputs().get(0).qualified());
+        eq("the Relay Matrix batch makes four", FabricationLogic.RELAY_MATRIX_BATCH,
+                relayMatrix.itemOutputs().get(0).count());
+        eq("the Relay Matrix batch is twenty seconds", FabricationLogic.ASSEMBLE_TICKS,
+                relayMatrix.durationTicks());
 
         eq("renewable sand uses the pulverizer", MachineFamily.PULVERIZER, renewableSand.family());
         eq("renewable sand consumes cobblestone", "item:minecraft:cobblestone",
@@ -877,6 +895,15 @@ public final class VerifyRecipes {
         yes("the first Relay Matrix is a four-unit hand batch",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
                         && recipe.resultCount() == 4));
+        for (String machine : List.of("thermal_generator", "pulverizer", "arc_furnace", "assembler",
+                "press", "kiln", "terrestrial_extractor")) {
+            yes(machine + " consumes one physical Relay Matrix",
+                    T1Recipes.shaped().stream()
+                            .filter(recipe -> recipe.name().equals(machine))
+                            .anyMatch(recipe -> recipe.key().containsValue(T1Recipes.RELAY_MATRIX)
+                                    && recipe.pattern().stream().flatMapToInt(String::chars)
+                                    .filter(symbol -> symbol == 'M').count() == 1));
+        }
         yes("the pylon is among them",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",

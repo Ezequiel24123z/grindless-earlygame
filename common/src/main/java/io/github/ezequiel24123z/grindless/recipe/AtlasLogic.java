@@ -77,21 +77,21 @@ public final class AtlasLogic {
     public static Entry entry(ProcessRecipe recipe) {
         List<String> inputs = new ArrayList<>();
         for (IngredientSpec spec : recipe.itemInputs()) {
-            inputs.add(spec.qualified());
+            addUnits(inputs, spec.qualified(), spec.count());
         }
         for (IngredientSpec spec : recipe.fluidInputs()) {
-            inputs.add(spec.qualified());
+            addUnits(inputs, spec.qualified(), spec.count());
         }
         List<String> outputs = new ArrayList<>();
         for (OutputSpec spec : recipe.itemOutputs()) {
-            outputs.add(spec.qualified());
+            addUnits(outputs, spec.qualified(), spec.count());
         }
         for (OutputSpec spec : recipe.fluidOutputs()) {
-            outputs.add(spec.qualified());
+            addUnits(outputs, spec.qualified(), spec.count());
         }
         List<String> catalysts = new ArrayList<>();
         for (IngredientSpec spec : recipe.catalysts()) {
-            catalysts.add(spec.qualified());
+            addUnits(catalysts, spec.qualified(), spec.count());
         }
         return new Entry(
                 recipe.id(),
@@ -105,6 +105,13 @@ public final class AtlasLogic {
                 recipe.agitation(),
                 recipe.durationTicks(),
                 recipe.fuPerTick());
+    }
+
+    /** Preserve recipe quantities in a viewer row so a four-unit batch never looks singular. */
+    private static void addUnits(List<String> values, String qualified, int count) {
+        for (int unit = 0; unit < count; unit++) {
+            values.add(qualified);
+        }
     }
 
     private static Entry calibration() {

@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Relay Matrices are now the real T1 machine component (ADR-0119).** The first four-unit
+  Bootstrap batch is consumed one each by the Thermal Generator, Pulverizer, Arc Furnace and
+  Assembler. The Assembler then repeats that same physical four-input batch in twenty seconds,
+  while Press, Kiln and Terrestrial Extractor also consume one Matrix. Its menu now has four
+  inputs, and existing three-input Assemblers migrate their persisted output safely.
+
 - **Renewable redstone closes the first source stack (ADR-0118).** The Chemical Reactor turns
   one renewable metallurgical silicon and 500 mB pumped water into four redstone at F1. The route
   connects the cobblestone/silica, tree-charcoal, Hand Pump and Thermal Generator sources without

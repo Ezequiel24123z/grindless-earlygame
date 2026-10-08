@@ -1,14 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CCC",
+    "MCC",
     "CIC",
     "CGC"
   ],
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "I": { "tag": "forge:ingots/iron" },
-    "G": { "tag": "grindless:carbon" }
+    "G": { "tag": "grindless:carbon" },
+    "M": { "item": "grindless:relay_matrix" }
   },
   "result": { "item": "grindless:kiln" }
 }

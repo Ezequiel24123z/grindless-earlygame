@@ -186,7 +186,7 @@ Learn the interface once.
 | **Catalyst slot** | Not consumed; degrades with use; some recipes require it, some are merely faster with it. |
 | **Condition controls** | Target temperature, pressure, atmosphere. Settable by hand, by logic signal, or by a Process Card. |
 | **Energy buffer** | FU, sized by tier. |
-| **Control Matrix** | Physical controller and Flux rating. Every T1+ machine contains one; it replaces a hidden research permission. |
+| **Control Matrix** | Physical controller and Flux rating. Every T1+ processing, generation or extraction machine contains one; passive grid, storage and transport infrastructure does not. It replaces a hidden research permission. |
 | **Upgrade slots** | Count set by chassis mark. See [chassis and upgrades](#chassis-marks-and-upgrades). |
 | **Process Card** | A saved condition set plus a recipe selection. Copyable, so configuring the second machine is never a repeat of configuring the first. |
 | **Status output** | Running, idle, blocked, starved, out-of-band — as a logic signal and as a visible indicator. |
@@ -205,8 +205,8 @@ always better telemetry rather than less complexity.
 ## Control matrices
 
 Technology tier, controller rating and Flux tier advance together from T0/F0 through T15/F15
-(ADR-0107). The matrix is the physical proof that a factory reached a tier: every T1+ machine
-contains one of the required rating. Recipes remain visible before the player can make their
+(ADR-0107). The matrix is the physical proof that a factory reached a tier: every T1+
+processing, generation or extraction machine contains one of the required rating. Recipes remain visible before the player can make their
 matrix, so the Atlas can explain the missing route rather than an invisible permission refusing it.
 
 The first route to rating Tn consumes a Tn-1 matrix and products from the tier's materials,

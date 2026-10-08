@@ -26,6 +26,7 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -60,6 +61,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private static final String KEY_ITEMS = "Items";
     private static final String KEY_RECIPE = "Recipe";
     private static final String KEY_FLUID = "Fluid";
+    /** Marks the four-input Assembler layout; absent data is the former three-input layout. */
+    private static final String KEY_ITEM_LAYOUT = "ItemLayout";
+    private static final int CURRENT_ITEM_LAYOUT = 2;
 
     private final ProcessMachineKind kind;
     private final SimpleContainer items;
@@ -518,6 +522,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         super.saveAdditional(tag);
         tag.putDouble(KEY_PROGRESS, progress);
         tag.put(KEY_ITEMS, items.createTag());
+        tag.putInt(KEY_ITEM_LAYOUT, CURRENT_ITEM_LAYOUT);
         tag.putString(KEY_RECIPE, cachedRecipeId);
         tag.put(KEY_FLUID, FluidNbt.save(fluid.state()));
     }
@@ -526,11 +531,30 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     public void load(CompoundTag tag) {
         super.load(tag);
         progress = Math.max(0.0, tag.getDouble(KEY_PROGRESS));
-        items.fromTag(tag.getList(KEY_ITEMS, net.minecraft.nbt.Tag.TAG_COMPOUND));
+        ListTag savedItems = tag.getList(KEY_ITEMS, net.minecraft.nbt.Tag.TAG_COMPOUND);
+        if (kind == ProcessMachineKind.ASSEMBLER
+                && tag.getInt(KEY_ITEM_LAYOUT) < CURRENT_ITEM_LAYOUT) {
+            migrateLegacyAssemblerOutput(savedItems);
+        }
+        items.fromTag(savedItems);
         cachedRecipeId = tag.getString(KEY_RECIPE);
         cached = null;
         fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
         syncData();
+    }
+
+    /**
+     * Assemblers used slots 0-2 for inputs and slot 3 for their output before the Relay Matrix
+     * batch needed a fourth ingredient. Shift that one persisted output to its new slot before
+     * {@link SimpleContainer#fromTag(ListTag)} reads it, preserving existing worlds.
+     */
+    private static void migrateLegacyAssemblerOutput(ListTag savedItems) {
+        for (int index = 0; index < savedItems.size(); index++) {
+            CompoundTag stack = savedItems.getCompound(index);
+            if (stack.getByte("Slot") == 3) {
+                stack.putByte("Slot", (byte) 4);
+            }
+        }
     }
 
     @Override

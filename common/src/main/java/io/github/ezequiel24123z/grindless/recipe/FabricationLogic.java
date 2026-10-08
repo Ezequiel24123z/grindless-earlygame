@@ -25,6 +25,9 @@ public final class FabricationLogic {
 
     public static final String MACHINE_CASING = "grindless:machine_casing";
     public static final String COPPER_COIL = "grindless:copper_coil";
+    public static final String RELAY_MATRIX = "grindless:relay_matrix";
+    public static final String CALIBRATED_DATA_CORE = "grindless:calibrated_data_core";
+    public static final int RELAY_MATRIX_BATCH = 4;
     public static final String PYLON_MK2 = "grindless:flux_pylon_mk2";
     public static final String WIRE_MILL = "grindless:wire_mill";
     public static final String MOTOR = "grindless:motor";
