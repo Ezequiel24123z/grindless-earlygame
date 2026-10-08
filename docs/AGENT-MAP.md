@@ -51,7 +51,8 @@ T2 and above are manufactured, never a crafting table
   Data Core calibration cycle. It must never write or read a global permission.
 
 `tools/checks/VerifyRecipes.java` pins the generated graph size (107) and the ordinary
-craft count (31); `VerifyAtlas` pins the same size and the assembler row count (39).
+craft count (31); `VerifyAtlas` pins 107 generated rows, 39 Assembler rows and 139 total
+handheld routes (including 31 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
 gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have

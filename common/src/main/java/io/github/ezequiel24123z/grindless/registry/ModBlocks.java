@@ -83,7 +83,7 @@ public final class ModBlocks {
     public static final RegistrySupplier<CrudeExtractorBlock> CRUDE_EXTRACTOR = register("crude_extractor",
             () -> new CrudeExtractorBlock(machine().strength(2.5F)));
 
-    /** T0 progression gate. Consumes Data Cores and Flux Units to unlock blueprints. */
+    /** T0 physical calibration. Turns a Data Core and F0 Flux into a Calibrated Data Core. */
     public static final RegistrySupplier<ResearchTerminalBlock> RESEARCH_TERMINAL =
             register("research_terminal",
                     () -> new ResearchTerminalBlock(machine().strength(3.0F)));

@@ -70,7 +70,7 @@ public final class ModBlockEntities {
                             .of(CrudeExtractorBlockEntity::new, ModBlocks.CRUDE_EXTRACTOR.get())
                             .build(null));
 
-    /** T0 progression: one Data Core and thirty seconds at F0 unlocks Voltaic. */
+    /** T0 physical calibration: one Data Core and thirty seconds at F0 make a Calibrated Data Core. */
     public static final RegistrySupplier<BlockEntityType<ResearchTerminalBlockEntity>> RESEARCH_TERMINAL =
             BLOCK_ENTITIES.register("research_terminal",
                     () -> BlockEntityType.Builder

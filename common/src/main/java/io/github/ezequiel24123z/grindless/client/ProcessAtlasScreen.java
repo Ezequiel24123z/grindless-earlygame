@@ -41,7 +41,7 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
     @Override
     protected void init() {
         super.init();
-        rows = AtlasLogic.entries(ProcessLookup.recipes());
+        rows = AtlasLogic.allEntries(ProcessLookup.recipes());
         scroll = 0;
         selected = rows.isEmpty() ? -1 : 0;
     }
@@ -121,17 +121,17 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
         }
         AtlasLogic.Entry row = rows.get(selected);
         int y = imageHeight - DETAIL_HEIGHT + 6;
-        graphics.drawString(font, row.family().name() + "  " + row.id(), 8, y, HEADER, false);
+        graphics.drawString(font, row.station() + "  " + row.id(), 8, y, HEADER, false);
         graphics.drawString(font, font.plainSubstrByWidth(
-                "in  " + String.join(" + ", row.inputs()), imageWidth - 16), 8, y + 10, ROW, false);
+                "in  " + AtlasLogic.describe(row.inputs()), imageWidth - 16), 8, y + 10, ROW, false);
         if (!row.catalysts().isEmpty()) {
             graphics.drawString(font, font.plainSubstrByWidth(
-                    "cat " + String.join(" + ", row.catalysts()), imageWidth - 16), 8, y + 20, MUTED, false);
+                    "cat " + AtlasLogic.describe(row.catalysts()), imageWidth - 16), 8, y + 20, MUTED, false);
             graphics.drawString(font, font.plainSubstrByWidth(
-                    "out " + String.join(" + ", row.outputs()), imageWidth - 16), 8, y + 30, ROW, false);
+                    "out " + AtlasLogic.describe(row.outputs()), imageWidth - 16), 8, y + 30, ROW, false);
         } else {
             graphics.drawString(font, font.plainSubstrByWidth(
-                    "out " + String.join(" + ", row.outputs()), imageWidth - 16), 8, y + 20, ROW, false);
+                    "out " + AtlasLogic.describe(row.outputs()), imageWidth - 16), 8, y + 20, ROW, false);
         }
     }
 

@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Atlas exposes physical Bootstrap routes (ADR-0115).** The Process Atlas now lists the
+  Research Terminal's Data Core calibration and every authored Grindless shaped recipe alongside
+  generated machine processes. The first Relay Matrix batch therefore shows its real ingredients,
+  four-item output and physical workstation without adding a solver or a hidden gate.
+
 - **Physical calibration replaces global research permissions (ADR-0114).** The Research
   Terminal now turns a Data Core into a hopper-recoverable Calibrated Data Core in thirty seconds
   at F0. The four-unit Relay Matrix batch consumes that physical output. The world research save,

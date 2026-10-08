@@ -3,7 +3,7 @@ package io.github.ezequiel24123z.grindless.recipe;
 import java.util.List;
 
 /**
- * Behaviour checks for the Process Atlas lookup (ADR-0066). Not part of the mod.
+ * Behaviour checks for the Process Atlas lookup (ADR-0066, ADR-0115). Not part of the mod.
  */
 public final class VerifyAtlas {
 
@@ -24,6 +24,23 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
         eq("thirty-nine reachable assembler crafts in this set", 39,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
+
+        List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
+        eq("atlas includes every machine, hand craft and calibration route", 139, allRows.size());
+        AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
+        eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
+        yes("calibration has no generated machine family", calibration.family() == null);
+        eq("calibration consumes the raw core", "item:grindless:data_core", calibration.inputs().get(0));
+        eq("calibration produces the physical core", "item:grindless:calibrated_data_core",
+                calibration.outputs().get(0));
+        eq("calibration keeps its F0 duration", 600, calibration.durationTicks());
+        eq("calibration keeps its F0 draw", 8L, calibration.fuPerTick());
+        AtlasLogic.Entry relay = route(allRows, "craft/relay_matrix");
+        eq("relay names the crafting table", "CRAFTING_TABLE", relay.station());
+        eq("relay records every shaped input", 9, relay.inputs().size());
+        eq("relay displays its batch inputs", "4x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
+                AtlasLogic.describe(relay.inputs()));
+        eq("relay displays four physical outputs", "4x relay_matrix", AtlasLogic.describe(relay.outputs()));
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
         eq("seven routes make an iron ingot", 7, ironIngot.size());
@@ -233,6 +250,10 @@ public final class VerifyAtlas {
         return rows.stream().map(AtlasLogic.Entry::id).toList();
     }
 
+    private static AtlasLogic.Entry route(List<AtlasLogic.Entry> rows, String id) {
+        return rows.stream().filter(row -> row.id().equals(id)).findFirst().orElseThrow();
+    }
+
     private static void eq(String what, String expected, String actual) {
         if (expected.equals(actual)) {
             System.out.println("  ok   " + what);
@@ -242,6 +263,14 @@ public final class VerifyAtlas {
     }
 
     private static void eq(String what, int expected, int actual) {
+        if (expected == actual) {
+            System.out.println("  ok   " + what);
+        } else {
+            fail(what + ": expected " + expected + " but got " + actual);
+        }
+    }
+
+    private static void eq(String what, long expected, long actual) {
         if (expected == actual) {
             System.out.println("  ok   " + what);
         } else {

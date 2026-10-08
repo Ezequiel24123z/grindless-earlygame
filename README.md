@@ -28,7 +28,8 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > reclassifies them as prototype/test infrastructure rather than an Industrial survival
 > shortcut. BO removed their recipes and premature quest path while preserving the tested
 > systems; the survival guide now ends at electronic silicon. BP's first recoverable Relay Matrix
-> batch is in and uses a physical calibrated core; guidance and the T0 audit remain. The real campaign reaches orbit at T10, the Drift at T13 and
+> batch is in and uses a physical calibrated core; the Atlas now exposes that route and the T0
+> audit remains. The real campaign reaches orbit at T10, the Drift at T13 and
 > Sagittarius at T15.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
@@ -2087,11 +2088,11 @@ playable slices under the mechanical gate in ADR-0108:
 
 1. **BO — survival shortcut withdrawn.** The eight prototype recipes are gone and the quest
    book and guide stop at electronic silicon. Registrations, worlds, commands and smokes remain.
-2. **BP — close T0 Bootstrap *(active)*.** Audit the complete two-iron bootstrap, add matrix
-   rating/architecture data and the recoverable first T1 Relay Matrix batch, extend F0–F15 without
-   changing existing values, and accept T0 only after an end-to-end survival playthrough.
-3. **BQ — physical T2 gate.** Move T2 fabrication from the global Industrial permission to a
-   consumed T2 Relay Matrix and convert Data Cores into future pattern media.
+2. **BP — close T0 Bootstrap *(active)*.** The matrix rating/architecture data, F0–F15, physical
+   calibration, first recoverable T1 Relay Matrix batch and Atlas visibility are in. Audit the
+   complete two-iron bootstrap and accept T0 only after an end-to-end survival playthrough.
+3. **BQ — physical T2 gate.** Introduce the consumed T2 Relay Matrix route and convert Advanced
+   Data Cores into future pattern media.
 4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
    its Control Matrix, its signature project and the automation that makes its larger scale
    manageable.
@@ -2213,7 +2214,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to eleven reachable tasks ending at electronic silicon. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model and registered T1 item are in; the four-unit survival batch is in, while migration, guidance and machine fixes remain |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the four-unit survival batch and Atlas visibility are in; the full T0 machine and playthrough audit remains |
 | 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
@@ -2249,8 +2250,8 @@ infrastructure because its Industrial recipes bypass T3–T15. The destination c
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
 book and guide now stop at electronic silicon. **BP** has introduced F0-F15, physical Control
 Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable four-unit
-survival batch. Its physical calibration route, guidance and remaining machine fixes are the active T0 work;
-**BQ** adds physical T2 fabrication. The superseded Research Terminal permission system has been
+survival batch. Its physical calibration route and Atlas visibility are in; the full T0 machine and
+playthrough audit is the active work. **BQ** adds physical T2 fabrication. The superseded Research Terminal permission system has been
 removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
 ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 

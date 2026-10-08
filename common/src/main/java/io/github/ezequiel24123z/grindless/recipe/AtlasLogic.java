@@ -2,8 +2,12 @@ package io.github.ezequiel24123z.grindless.recipe;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 
 /**
  * Queries the generated process graph for the Process Atlas (ADR-0066).
@@ -21,7 +25,8 @@ public final class AtlasLogic {
      * One viewer row.
      *
      * @param id             recipe id, such as {@code roast/iron}
-     * @param family         which machine runs it
+     * @param station        which workstation performs the route
+     * @param family         generated-process family, or {@code null} for a physical supplemental route
      * @param inputs         qualified item and fluid inputs
      * @param outputs        qualified item and fluid outputs, including vented fluids
      * @param catalysts      qualified unconsumed extras
@@ -33,6 +38,7 @@ public final class AtlasLogic {
      */
     public record Entry(
             String id,
+            String station,
             MachineFamily family,
             List<String> inputs,
             List<String> outputs,
@@ -44,14 +50,28 @@ public final class AtlasLogic {
             long fuPerTick) {
     }
 
-    /** Every recipe as a sorted viewer row: family name, then id. */
+    /** Generated process recipes as sorted viewer rows: station, then id. */
     public static List<Entry> entries(List<ProcessRecipe> recipes) {
         List<Entry> rows = new ArrayList<>(recipes.size());
         for (ProcessRecipe recipe : recipes) {
             rows.add(entry(recipe));
         }
-        rows.sort(Comparator.comparing((Entry row) -> row.family().name()).thenComparing(Entry::id));
-        return List.copyOf(rows);
+        return sorted(rows);
+    }
+
+    /**
+     * Every live Grindless-owned route the handheld can explain.
+     *
+     * <p>Machine processes remain generated graph rows. The terminal cycle and authored shaped
+     * recipes are supplemental physical routes, deliberately bounded to data the mod owns.
+     */
+    public static List<Entry> allEntries(List<ProcessRecipe> recipes) {
+        List<Entry> rows = new ArrayList<>(entries(recipes));
+        rows.add(calibration());
+        for (T1Recipes.Shaped recipe : T1Recipes.shaped()) {
+            rows.add(crafting(recipe));
+        }
+        return sorted(rows);
     }
 
     public static Entry entry(ProcessRecipe recipe) {
@@ -75,6 +95,7 @@ public final class AtlasLogic {
         }
         return new Entry(
                 recipe.id(),
+                recipe.family().name(),
                 recipe.family(),
                 List.copyOf(inputs),
                 List.copyOf(outputs),
@@ -84,6 +105,58 @@ public final class AtlasLogic {
                 recipe.agitation(),
                 recipe.durationTicks(),
                 recipe.fuPerTick());
+    }
+
+    private static Entry calibration() {
+        return new Entry(
+                "calibrate/data_core",
+                "RESEARCH_TERMINAL",
+                null,
+                List.of("item:" + ResearchLogic.DATA_CORE),
+                List.of("item:" + ResearchLogic.CALIBRATED_DATA_CORE),
+                List.of(),
+                Double.NaN,
+                null,
+                null,
+                ResearchLogic.CYCLE_TICKS,
+                ResearchLogic.FU_PER_TICK);
+    }
+
+    private static Entry crafting(T1Recipes.Shaped recipe) {
+        List<String> outputs = new ArrayList<>(recipe.resultCount());
+        for (int count = 0; count < recipe.resultCount(); count++) {
+            outputs.add("item:" + recipe.result());
+        }
+        return new Entry(
+                "craft/" + recipe.name(),
+                "CRAFTING_TABLE",
+                null,
+                craftingInputs(recipe),
+                List.copyOf(outputs),
+                List.of(),
+                Double.NaN,
+                null,
+                null,
+                0,
+                0L);
+    }
+
+    private static List<String> craftingInputs(T1Recipes.Shaped recipe) {
+        List<String> inputs = new ArrayList<>();
+        for (String row : recipe.pattern()) {
+            for (int index = 0; index < row.length(); index++) {
+                char symbol = row.charAt(index);
+                if (symbol == ' ') {
+                    continue;
+                }
+                String ingredient = recipe.key().get(String.valueOf(symbol));
+                if (ingredient == null) {
+                    throw new IllegalArgumentException("missing crafting key " + symbol + " in " + recipe.name());
+                }
+                inputs.add(ingredient);
+            }
+        }
+        return List.copyOf(inputs);
     }
 
     /** Routes whose outputs name {@code query} as a qualified id or as the id after the kind. */
@@ -121,7 +194,7 @@ public final class AtlasLogic {
     /** One compact line the stub screen can print. */
     public static String line(Entry row) {
         StringBuilder text = new StringBuilder();
-        text.append(row.family().name());
+        text.append(row.station());
         text.append("  ").append(row.id());
         text.append("  ").append(join(row.inputs()));
         if (!row.catalysts().isEmpty()) {
@@ -164,14 +237,32 @@ public final class AtlasLogic {
     }
 
     private static String join(List<String> qualified) {
+        Map<String, Integer> counts = new LinkedHashMap<>();
+        for (String value : qualified) {
+            counts.merge(value, 1, Integer::sum);
+        }
         StringBuilder text = new StringBuilder();
-        for (int i = 0; i < qualified.size(); i++) {
-            if (i > 0) {
+        int index = 0;
+        for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+            if (index++ > 0) {
                 text.append(" + ");
             }
-            text.append(shorten(qualified.get(i)));
+            if (entry.getValue() > 1) {
+                text.append(entry.getValue()).append("x ");
+            }
+            text.append(shorten(entry.getKey()));
         }
         return text.toString();
+    }
+
+    /** Compact, count-aware text for the handheld's detail pane. */
+    public static String describe(List<String> qualified) {
+        return join(qualified);
+    }
+
+    private static List<Entry> sorted(List<Entry> rows) {
+        rows.sort(Comparator.comparing(Entry::station).thenComparing(Entry::id));
+        return List.copyOf(rows);
     }
 
     /** {@code tag:forge:ingots/iron} → {@code ingots/iron}. */

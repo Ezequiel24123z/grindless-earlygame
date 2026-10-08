@@ -77,7 +77,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
 | [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
-| [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Accepted |
+| [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Superseded in part by ADR-0115 |
 | [0067](#adr-0067--modular-armour-and-the-arc-reactor-are-one-tier) | Modular armour each tier; Arc Reactor is F3 factory and suit | Accepted |
 | [0068](#adr-0068--horizon-gates-are-commute-infrastructure-not-mining-dimensions) | Horizon Gates are commute infrastructure, not mining dimensions | Superseded in part by ADR-0107 |
 | [0069](#adr-0069--the-multitool-rotates-and-relocates-it-still-does-not-mine) | The Multitool rotates and relocates; it still does not mine | Accepted |
@@ -126,6 +126,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Superseded in part by ADR-0114 |
 | [0113](#adr-0113--gregtech-is-the-primary-design-reference) | GregTech is the primary design reference | Accepted |
 | [0114](#adr-0114--physical-components-replace-global-research-permissions) | Physical components replace global research permissions | Accepted |
+| [0115](#adr-0115--the-atlas-shows-physical-bootstrap-routes) | The Atlas shows physical Bootstrap routes | Accepted |
 
 ---
 
@@ -5098,3 +5099,31 @@ and make the matrix route less tangible).
 their saved stack so a player can retrieve it; an older Advanced Data Core is not destroyed.
 Process graph milestone labels remain design metadata only until a future physical matrix route
 replaces them. No gameplay path reads a world- or player-scoped research permission.
+
+---
+
+## ADR-0115 — The Atlas shows physical Bootstrap routes
+
+*2026-10-08 · Accepted · Supersedes part of ADR-0066*
+
+**Context.** The Process Atlas originally listed only generated machine-process rows. The first
+Relay Matrix route is instead a physical terminal calibration followed by an ordinary crafting
+table recipe. Leaving those two transformations outside the Atlas would make the Bootstrap
+frontier less discoverable precisely when the player needs to find it, despite both routes being
+live game data.
+
+**Decision.** The Atlas includes two kinds of supplemental live route: the Research Terminal's
+Data Core calibration and every authored Grindless shaped crafting recipe. They use explicit
+`RESEARCH_TERMINAL` and `CRAFTING_TABLE` stations alongside the existing machine family names.
+The route view derives its ingredient multiplicities from the same data that writes and verifies
+the recipe JSON. It remains a sorted lookup: it does not gain reachability checks, target-rate
+solving, vanilla-recipe enumeration, or recipe-viewer integration.
+
+**Alternatives rejected.** A guide-only explanation (does not let the player inspect the actual
+recipe); showing only the Relay Matrix (leaves the other real hand crafts inconsistent); treating
+the calibration as an invisible exception (reintroduces an unexplained gate); scanning every
+vanilla recipe (is outside the mod's route graph and makes the handheld unusable).
+
+**Consequences.** The fresh T0 player can see the complete physical core-to-matrix route in the
+native handheld. The Atlas remains bounded to Grindless-owned data and stays testable without a
+Minecraft runtime. The later solver and third-party viewer integrations remain deferred.
