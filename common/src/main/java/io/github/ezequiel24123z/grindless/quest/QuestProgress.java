@@ -16,10 +16,9 @@ import java.util.UUID;
 /**
  * Which tasks each player has claimed (ADR-0100).
  *
- * <p>Overworld {@code SavedData}, keyed by player. Research stays world-scoped because a
- * hopper can feed the terminal. The book is the player's own route, so one claim does not
- * finish it for the server. Stored here, not on a Forge player tag, so {@code common/}
- * does not take a loader type.
+ * <p>Overworld {@code SavedData}, keyed by player. The book is the player's own route, so one
+ * claim does not finish it for the server. Stored here, not on a Forge player tag, so
+ * {@code common/} does not take a loader type.
  */
 public final class QuestProgress extends SavedData {
 

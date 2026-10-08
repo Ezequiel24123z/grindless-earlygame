@@ -45,14 +45,13 @@ T2 and above are manufactured, never a crafting table
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
 - `recipe/T1Recipes.java` and `common/src/main/resources/data/grindless/recipes/` —
-  Voltaic-gated crafting JSON (`grindless:gated_shaped`), including the four-unit first Relay
-  Matrix batch.
+  ordinary shaped crafting JSON, including the four-unit first Relay Matrix batch.
 - `recipe/BootstrapRecipes.java` — T0 shaped JSON.
-- `research/Blueprint.java` and `research/ResearchLogic.java` — a new blueprint id.
-  Assembler recipes name it as a string (`industrial` today).
+- `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
+  Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (107) and the gated
-craft count (30); `VerifyAtlas` pins the same size and the assembler row count (39).
+`tools/checks/VerifyRecipes.java` pins the generated graph size (107) and the ordinary
+craft count (31); `VerifyAtlas` pins the same size and the assembler row count (39).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
 gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have

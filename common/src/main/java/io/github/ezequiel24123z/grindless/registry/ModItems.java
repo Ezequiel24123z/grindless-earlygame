@@ -60,11 +60,15 @@ public final class ModItems {
     public static final RegistrySupplier<Item> RELAY_MATRIX = register("relay_matrix",
             () -> new ControlMatrixItem(MatrixArchitecture.RELAY, new Item.Properties()));
 
-    /** Research currency. Produced by the factory, spent in the Research Terminal. */
+    /** Raw T0 data substrate. The Research Terminal calibrates it into a physical component. */
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",
             () -> new Item(new Item.Properties()));
 
-    /** T2 research currency. Voltaic-gated; spent for Industrial (ADR-0073). */
+    /** Physical T0 component made by the Research Terminal and consumed by the first matrix. */
+    public static final RegistrySupplier<Item> CALIBRATED_DATA_CORE = register("calibrated_data_core",
+            () -> new Item(new Item.Properties()));
+
+    /** A denser data component reserved for later physical fabrication routes. */
     public static final RegistrySupplier<Item> ADVANCED_DATA_CORE = register("advanced_data_core",
             () -> new Item(new Item.Properties()));
 

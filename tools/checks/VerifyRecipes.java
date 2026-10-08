@@ -184,7 +184,7 @@ public final class VerifyRecipes {
         eq("MK2 draws F1", 32L, mk2.fuPerTick());
         yes("MK2 has no catalyst", mk2.catalysts().isEmpty());
         eq("MK2 makes the pylon", "item:grindless:flux_pylon_mk2", mk2.itemOutputs().get(0).qualified());
-        eq("MK2 needs Industrial", "industrial", mk2.blueprint());
+        eq("MK2 carries the Industrial milestone", "industrial", mk2.milestone());
 
         ProcessRecipe ironWire = recipe(recipes, "mill/wire/iron");
         ProcessRecipe millCoil = recipe(recipes, "mill/coil/copper");
@@ -198,7 +198,7 @@ public final class VerifyRecipes {
         eq("wire is eight seconds", 20 * 8, ironWire.durationTicks());
         eq("wire draws F1", 32L, ironWire.fuPerTick());
         yes("wire has no catalyst", ironWire.catalysts().isEmpty());
-        yes("wire names no blueprint", ironWire.blueprint() == null);
+        yes("wire has no milestone", ironWire.milestone() == null);
         yes("gold still mills", recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/gold")));
         yes("steel still mills", recipes.stream().anyMatch(recipe -> recipe.id().equals("mill/wire/steel")));
         yes("mythril with an ingot still mills",
@@ -216,7 +216,7 @@ public final class VerifyRecipes {
         eq("the mill coils are the reagent", "item:grindless:copper_coil", mill.itemInputs().get(1).qualified());
         eq("the mill takes four plates", 4, mill.itemInputs().get(2).count());
         eq("the mill is twenty seconds", 20 * 20, mill.durationTicks());
-        eq("the mill needs Industrial", "industrial", mill.blueprint());
+        eq("the mill carries the Industrial milestone", "industrial", mill.milestone());
         eq("the mill makes the block", "item:grindless:wire_mill", mill.itemOutputs().get(0).qualified());
 
         eq("motor is the assembler", MachineFamily.ASSEMBLER, motor.family());
@@ -224,7 +224,7 @@ public final class VerifyRecipes {
         eq("motor takes two coils", 2, motor.itemInputs().get(1).count());
         eq("motor takes a rod", "tag:forge:rods/iron", motor.itemInputs().get(2).qualified());
         eq("motor is ten seconds", 20 * 10, motor.durationTicks());
-        eq("motor needs Industrial", "industrial", motor.blueprint());
+        eq("motor carries the Industrial milestone", "industrial", motor.milestone());
         eq("motor makes the reagent", "item:grindless:motor", motor.itemOutputs().get(0).qualified());
 
         ProcessRecipe so3 = recipe(recipes, "contact/so3");
@@ -272,7 +272,7 @@ public final class VerifyRecipes {
                 reactor.itemInputs().get(1).qualified());
         eq("the reactor takes four plates", 4, reactor.itemInputs().get(2).count());
         eq("the reactor is twenty seconds", 20 * 20, reactor.durationTicks());
-        eq("the reactor needs Industrial", "industrial", reactor.blueprint());
+        eq("the reactor carries the Industrial milestone", "industrial", reactor.milestone());
         eq("the reactor makes the block", "item:grindless:chemical_reactor",
                 reactor.itemOutputs().get(0).qualified());
 
@@ -325,7 +325,7 @@ public final class VerifyRecipes {
                 washer.itemInputs().get(1).qualified());
         eq("the washer takes four plates", 4, washer.itemInputs().get(2).count());
         eq("the washer is twenty seconds", 20 * 20, washer.durationTicks());
-        eq("the washer needs Industrial", "industrial", washer.blueprint());
+        eq("the washer carries the Industrial milestone", "industrial", washer.milestone());
         eq("the washer makes the block", "item:grindless:chemical_washer",
                 washer.itemOutputs().get(0).qualified());
 
@@ -389,13 +389,13 @@ public final class VerifyRecipes {
         eq("the cell takes two motors", 2, cell.itemInputs().get(1).count());
         eq("the cell takes four plates", 4, cell.itemInputs().get(2).count());
         eq("the cell is twenty seconds", 20 * 20, cell.durationTicks());
-        eq("the cell needs Industrial", "industrial", cell.blueprint());
+        eq("the cell carries the Industrial milestone", "industrial", cell.milestone());
         eq("the cell makes the block", "item:grindless:electrolysis_cell",
                 cell.itemOutputs().get(0).qualified());
         eq("the intake is the assembler", MachineFamily.ASSEMBLER, intake.family());
         eq("the intake makes the block", "item:grindless:atmospheric_intake",
                 intake.itemOutputs().get(0).qualified());
-        eq("the intake needs Industrial", "industrial", intake.blueprint());
+        eq("the intake carries the Industrial milestone", "industrial", intake.milestone());
 
         ProcessRecipe well = recipe(recipes, "assemble/fluid_well");
         eq("the well is the assembler", MachineFamily.ASSEMBLER, well.family());
@@ -404,7 +404,7 @@ public final class VerifyRecipes {
         eq("the well takes two motors", 2, well.itemInputs().get(1).count());
         eq("the well takes four plates", 4, well.itemInputs().get(2).count());
         eq("the well is twenty seconds", 20 * 20, well.durationTicks());
-        eq("the well needs Industrial", "industrial", well.blueprint());
+        eq("the well carries the Industrial milestone", "industrial", well.milestone());
         eq("the well makes the block", "item:grindless:fluid_well",
                 well.itemOutputs().get(0).qualified());
         no("brine is not emitted",
@@ -460,7 +460,7 @@ public final class VerifyRecipes {
         eq("the induction furnace takes two motors", 2, induction.itemInputs().get(1).count());
         eq("the induction furnace takes four plates", 4, induction.itemInputs().get(2).count());
         eq("the induction furnace is twenty seconds", 20 * 20, induction.durationTicks());
-        eq("the induction furnace needs Industrial", "industrial", induction.blueprint());
+        eq("the induction furnace carries the Industrial milestone", "industrial", induction.milestone());
         eq("the induction furnace makes the block", "item:grindless:induction_furnace",
                 induction.itemOutputs().get(0).qualified());
         eq("the caster is the assembler", MachineFamily.ASSEMBLER, caster.family());
@@ -469,7 +469,7 @@ public final class VerifyRecipes {
         eq("the ingot mould is the assembler", MachineFamily.ASSEMBLER, ingotMould.family());
         eq("the ingot mould takes four plates", 4, ingotMould.itemInputs().get(0).count());
         eq("the ingot mould is four seconds", 20 * 4, ingotMould.durationTicks());
-        eq("the ingot mould needs Industrial", "industrial", ingotMould.blueprint());
+        eq("the ingot mould carries the Industrial milestone", "industrial", ingotMould.milestone());
         eq("the ingot mould makes the item", "item:grindless:ingot_mould",
                 ingotMould.itemOutputs().get(0).qualified());
         eq("the plate mould makes the item", "item:grindless:plate_mould",
@@ -526,7 +526,7 @@ public final class VerifyRecipes {
         eq("the flotation cell is the assembler", MachineFamily.ASSEMBLER, flotationCraft.family());
         eq("the flotation cell takes a casing", "item:grindless:machine_casing",
                 flotationCraft.itemInputs().get(0).qualified());
-        eq("the flotation cell needs Industrial", "industrial", flotationCraft.blueprint());
+        eq("the flotation cell carries the Industrial milestone", "industrial", flotationCraft.milestone());
         eq("the flotation cell makes the block", "item:grindless:flotation_cell",
                 flotationCraft.itemOutputs().get(0).qualified());
         eq("the magnet is the assembler", MachineFamily.ASSEMBLER, magnet.family());
@@ -640,7 +640,7 @@ public final class VerifyRecipes {
         yes("steel names no atmosphere", !steel.namesAtmosphere());
         yes("steel has no catalyst", steel.catalysts().isEmpty());
         yes("steel has no fluid", steel.fluidInputs().isEmpty() && steel.fluidOutputs().isEmpty());
-        yes("steel has no blueprint", steel.blueprint() == null);
+        yes("steel has no milestone", steel.milestone() == null);
         yes("furnace hold is optimal for 1600 C",
                 ConditionBand.relative(ProcessLogic.STEEL_TEMPERATURE)
                         .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
@@ -659,7 +659,7 @@ public final class VerifyRecipes {
         yes("refractory brick has no catalyst", brick.catalysts().isEmpty());
         yes("refractory brick has no fluid",
                 brick.fluidInputs().isEmpty() && brick.fluidOutputs().isEmpty());
-        yes("refractory brick has no blueprint", brick.blueprint() == null);
+        yes("refractory brick has no milestone", brick.milestone() == null);
         yes("furnace hold is optimal for 1400 C",
                 ConditionBand.relative(ProcessLogic.REFRACTORY_TEMPERATURE)
                         .isOptimal(ProcessLogic.REDUCE_TEMPERATURE));
@@ -694,7 +694,7 @@ public final class VerifyRecipes {
         eq("silicon is 1900 C", 1900.0, silicon.temperatureC());
         eq("silicon names reducing", "REDUCING", silicon.atmosphere());
         yes("silicon has no catalyst", silicon.catalysts().isEmpty());
-        yes("silicon has no blueprint", silicon.blueprint() == null);
+        yes("silicon has no milestone", silicon.milestone() == null);
         yes("silicon has no slag", silicon.itemOutputs().stream().noneMatch(output -> output.id().contains("slag")));
         ConditionBand siliconBand = ConditionBand.relative(ProcessLogic.SILICON_TEMPERATURE);
         yes("furnace hold admits 1900 C", siliconBand.admits(ProcessLogic.REDUCE_TEMPERATURE));
@@ -731,7 +731,7 @@ public final class VerifyRecipes {
         yes("zone refining names no atmosphere", !zone.namesAtmosphere());
         yes("zone refining has no catalyst", zone.catalysts().isEmpty());
         yes("zone refining has no fluid", zone.fluidInputs().isEmpty() && zone.fluidOutputs().isEmpty());
-        yes("zone refining has no blueprint", zone.blueprint() == null);
+        yes("zone refining has no milestone", zone.milestone() == null);
         yes("zone refining has no slag",
                 zone.itemOutputs().stream().noneMatch(output -> output.id().contains("slag")));
         ConditionBand zoneBand = ConditionBand.relative(ProcessLogic.ZONE_TEMPERATURE);
@@ -819,12 +819,10 @@ public final class VerifyRecipes {
     }
 
     private static void crafts() throws IOException {
-        for (T1Recipes.Gated recipe : T1Recipes.gated()) {
+        for (T1Recipes.Shaped recipe : T1Recipes.shaped()) {
             JsonObject json = read(recipe.name());
-            eq(recipe.name() + " is gated shaped", "grindless:gated_shaped",
+            eq(recipe.name() + " is ordinary shaped", "minecraft:crafting_shaped",
                     json.get("type").getAsString());
-            eq(recipe.name() + " is voltaic-gated", recipe.blueprint(),
-                    json.get("blueprint").getAsString());
             eq(recipe.name() + " result", recipe.result(),
                     json.getAsJsonObject("result").get("item").getAsString());
             int count = json.getAsJsonObject("result").has("count")
@@ -839,36 +837,36 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships thirty-one gated crafts", 31, T1Recipes.gated().size());
+        eq("T1 ships thirty-one physical crafts", 31, T1Recipes.shaped().size());
         yes("the first Relay Matrix is a four-unit hand batch",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
                         && recipe.resultCount() == 4));
         yes("the pylon is among them",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_pylon_mk1")));
         yes("the assembler is the last crafting-table machine",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("assembler")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("assembler")));
         yes("the press is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("press")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("press")));
         yes("the conduit is a hand item",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_conduit")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_conduit")));
         yes("the capacitor is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("capacitor_bank")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("capacitor_bank")));
         yes("the transformer is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
         yes("the kiln is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("kiln")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("kiln")));
         yes("the merger is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("merger")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("merger")));
         yes("the tunnel is a pair",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("tunnel_belt")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("tunnel_belt")));
         yes("the overflow is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("overflow_gate")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("overflow_gate")));
         yes("the sorter is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("sorter")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("sorter")));
         yes("the advanced core is hand-crafted",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("advanced_data_core")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("advanced_data_core")));
         yes("the atlas is a hand item",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
         no("MK2 has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
         no("the mill has no crafting-table recipe",
@@ -959,7 +957,7 @@ public final class VerifyRecipes {
         no("the network tap has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("network_tap.json")));
         yes("vanadia is a hand reagent",
-                T1Recipes.gated().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("vanadia_pellet")));
     }
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {

@@ -68,9 +68,9 @@ history — the reasoning that was wrong is itself useful information.
 | [0054](#adr-0054--pylons-are-three-blocks-tall-and-cover-a-factory) | Pylons are three blocks tall and cover a factory | Accepted |
 | [0055](#adr-0055--the-multitool-does-not-mine) | The Multitool does not mine | Accepted |
 | [0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags) | T0 bootstrap recipes are authored JSON using tags | Accepted |
-| [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Superseded by ADR-0107 |
+| [0057](#adr-0057--the-research-terminal-unlocks-world-scoped-blueprints) | The Research Terminal unlocks world-scoped blueprints | Superseded by ADR-0114 |
 | [0058](#adr-0058--build-playable-slices-not-system-layers) | Build playable slices, not system layers | Accepted |
-| [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Accepted |
+| [0059](#adr-0059--first-iron-is-a-generated-graph-and-a-voltaic-gate) | First iron is a generated graph and a Voltaic gate | Superseded in part by ADR-0114 |
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
@@ -84,7 +84,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0070](#adr-0070--remaining-work-is-the-autonomous-build-out) | Remaining work is the autonomous build-out | Superseded in part by ADR-0088 |
 | [0071](#adr-0071--t1-belt-junctions-are-merger-tunnel-and-overflow) | T1 belt junctions are merger, tunnel and overflow | Accepted |
 | [0072](#adr-0072--the-t1-sorter-peels-it-does-not-split) | The T1 sorter peels; it does not split | Accepted |
-| [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Superseded by ADR-0107 |
+| [0073](#adr-0073--industrial-is-the-second-blueprint-on-the-same-terminal) | Industrial is the second blueprint on the same terminal | Superseded by ADR-0114 |
 | [0074](#adr-0074--the-wire-mill-is-t2-and-does-not-wait-for-acid) | The Wire Mill is T2 and does not wait for acid | Accepted |
 | [0075](#adr-0075--the-contact-process-is-air-vanadia-and-a-pickle) | The contact process is air, vanadia and a pickle | Accepted |
 | [0076](#adr-0076--the-washer-batch-is-eight-crushed-and-the-next-metal) | The washer batch is eight crushed and the next metal | Accepted |
@@ -123,8 +123,9 @@ history — the reasoning that was wrong is itself useful information.
 | [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
 | [0110](#adr-0110--b2-pairs-materials-exactly-without-stack-nbt) | B2 pairs materials exactly without stack NBT | Accepted |
 | [0111](#adr-0111--shared-world-smokes-are-the-fast-local-loop) | Shared-world smokes are the fast local loop | Accepted |
-| [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Accepted |
+| [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Superseded in part by ADR-0114 |
 | [0113](#adr-0113--gregtech-is-the-primary-design-reference) | GregTech is the primary design reference | Accepted |
+| [0114](#adr-0114--physical-components-replace-global-research-permissions) | Physical components replace global research permissions | Accepted |
 
 ---
 
@@ -5068,3 +5069,32 @@ all external influence (discards established design knowledge without improving 
 **Consequences.** New mechanics should first be evaluated against the GregTech-style industrial
 chain and then use the secondary references to make that chain legible and pleasant to automate.
 `THIRD_PARTY_NOTICES.md` remains empty until protected upstream material is actually imported.
+
+---
+
+## ADR-0114 — Physical components replace global research permissions
+
+*2026-10-07 · Accepted · Supersedes the gated-recipe portion of ADR-0057, ADR-0073 and ADR-0112*
+
+**Context.** The original Research Terminal stored Voltaic and Industrial unlocks in world-scoped
+saved data. Both crafting-table and process recipes consulted that invisible state. This made a
+recipe unavailable even when a player held every visible ingredient, and it obscured what the
+factory had actually achieved.
+
+**Decision.** Remove the global blueprint state, client synchronisation, recipe serializer and
+all runtime checks of it. Every ordinary recipe matches from its visible ingredients alone. The
+T0 Research Terminal remains a physical F0 machine: it consumes a Data Core over thirty seconds
+at 8 FU/t and leaves a Calibrated Data Core in its output slot. The first four Relay Matrices
+consume that output, alongside glass, copper and redstone. The terminal output can be recovered
+by hand or hopper. Existing `grindless_research` saved data is deliberately left unread: it is
+inert legacy data, rather than a migration source for a permission that no longer exists.
+
+**Alternatives rejected.** Retaining the old unlock purely as a convenience flag (still hides
+the requirement); automatically granting the result to worlds with saved unlocks (preserves an
+invisible entitlement); removing the terminal entirely (would bypass the first powered machine
+and make the matrix route less tangible).
+
+**Consequences.** Quests observe physical cores without gating anything. Existing terminals keep
+their saved stack so a player can retrieve it; an older Advanced Data Core is not destroyed.
+Process graph milestone labels remain design metadata only until a future physical matrix route
+replaces them. No gameplay path reads a world- or player-scoped research permission.

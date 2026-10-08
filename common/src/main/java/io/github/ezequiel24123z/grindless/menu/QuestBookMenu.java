@@ -6,8 +6,6 @@ import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
-import io.github.ezequiel24123z.grindless.research.Blueprint;
-import io.github.ezequiel24123z.grindless.research.ResearchData;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -105,7 +103,7 @@ public final class QuestBookMenu extends AbstractContainerMenu {
     }
 
     private static boolean evidenceMet(ServerPlayer player, QuestCatalogue.Task task) {
-        return QuestEvidence.met(task, held(player, task.subject()), researched(player, task.subject()),
+        return QuestEvidence.met(task, held(player, task.subject()),
                 player.level().dimension().location().toString());
     }
 
@@ -122,11 +120,6 @@ public final class QuestBookMenu extends AbstractContainerMenu {
             }
         }
         return count;
-    }
-
-    private static boolean researched(ServerPlayer player, String blueprintId) {
-        Blueprint blueprint = Blueprint.byId(blueprintId);
-        return blueprint != null && ResearchData.get(player.serverLevel()).isUnlocked(blueprint);
     }
 
     private static void give(ServerPlayer player, QuestCatalogue.Reward reward) {

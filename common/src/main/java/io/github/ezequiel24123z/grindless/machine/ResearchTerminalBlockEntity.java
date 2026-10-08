@@ -5,16 +5,12 @@ import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
-import io.github.ezequiel24123z.grindless.research.Blueprint;
-import io.github.ezequiel24123z.grindless.research.ResearchData;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
-import io.github.ezequiel24123z.grindless.research.ResearchSync;
+import io.github.ezequiel24123z.grindless.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
@@ -23,11 +19,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.SimpleContainer;
 
 /**
- * The Research Terminal: spends a matching core and F0 to unlock the next blueprint.
+ * The Research Terminal: uses F0 to calibrate a Data Core into a physical recipe component.
  *
- * <p>No menu. Right-click with a core to insert, empty-handed to take it back. Hoppers can feed
- * it, because research is a production target (ADR-0057). Progress is world-scoped: a core the
- * factory pushed in still counts.
+ * <p>No menu. Right-click with a Data Core to insert, empty-handed to take it back. Hoppers can
+ * feed the input and pull the calibrated output. Progress belongs to this machine, never to a
+ * player or world.
  */
 public final class ResearchTerminalBlockEntity extends MachineBlockEntity implements WorldlyContainer {
 
@@ -79,15 +75,15 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
         if (getLevel() == null) {
             return;
         }
-        boolean unlocked = unlocked();
         boolean hasCore = hasCore();
-        if (hasCore && !unlocked) {
+        boolean hasOutput = hasOutput();
+        if (hasCore) {
             working = subscriptions().subscribe(working, this::work);
         } else if (working != null) {
             working.unsubscribe();
             working = null;
         }
-        publishStatus(hasCore, unlocked, hasPowerWaiting(), false);
+        publishStatus(hasCore, hasOutput, hasPowerWaiting(), false);
     }
 
     public void onNeighbourChanged() {
@@ -95,7 +91,8 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
     }
 
     /**
-     * Inserts or extracts a Data Core. Returns whether the click was this machine's.
+     * Inserts a Data Core or extracts the stored input/output. Returns whether the click was
+     * this machine's.
      */
     public boolean interact(Player player, ItemStack held) {
         if (held.isEmpty()) {
@@ -109,15 +106,7 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
             input.setItem(0, ItemStack.EMPTY);
             return true;
         }
-        Blueprint next = current();
-        if (next == null) {
-            player.displayClientMessage(
-                    Component.translatable("chat.grindless.research.already",
-                            Component.translatable("blueprint.grindless." + Blueprint.INDUSTRIAL.id())),
-                    true);
-            return true;
-        }
-        if (!isCore(held, next)) {
+        if (!isDataCore(held)) {
             return false;
         }
         if (!input.getItem(0).isEmpty()) {
@@ -129,10 +118,9 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
     }
 
     private void work() {
-        boolean unlocked = unlocked();
         boolean hasCore = hasCore();
-        if (!hasCore || unlocked) {
-            publishStatus(hasCore, unlocked, false, false);
+        if (!hasCore) {
+            publishStatus(false, hasOutput(), false, false);
             updateSubscriptions();
             return;
         }
@@ -150,17 +138,9 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
             progress += gained;
             setChanged();
         }
-        if (progress >= cycleTicks() && getLevel() instanceof ServerLevel level) {
+        if (progress >= ResearchLogic.CYCLE_TICKS) {
             progress = 0.0;
-            Blueprint next = current();
-            if (next != null && ResearchData.get(level).unlock(next)) {
-                input.setItem(0, ItemStack.EMPTY);
-                ResearchSync.broadcast(level.getServer());
-                level.getServer().getPlayerList().broadcastSystemMessage(
-                        Component.translatable("chat.grindless.research.unlocked",
-                                Component.translatable("blueprint.grindless." + next.id())),
-                        false);
-            }
+            input.setItem(0, new ItemStack(ModItems.CALIBRATED_DATA_CORE.get()));
             setChanged();
             updateSubscriptions();
             return;
@@ -177,39 +157,24 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
     }
 
     private boolean hasCore() {
-        Blueprint next = current();
-        return next != null && isCore(input.getItem(0), next);
+        return isDataCore(input.getItem(0));
     }
 
-    private boolean unlocked() {
-        return current() == null;
+    private boolean hasOutput() {
+        ItemStack stack = input.getItem(0);
+        return !stack.isEmpty() && !isDataCore(stack);
     }
 
-    private Blueprint current() {
-        if (!(getLevel() instanceof ServerLevel server)) {
-            return Blueprint.VOLTAIC;
-        }
-        return ResearchLogic.next(ResearchData.get(server).unlocked());
-    }
-
-    private int cycleTicks() {
-        Blueprint next = current();
-        return next == null ? ResearchLogic.CYCLE_TICKS : ResearchLogic.cycleTicks(next);
-    }
-
-    private static boolean isCore(ItemStack stack, Blueprint blueprint) {
-        if (stack.isEmpty() || blueprint == null) {
-            return false;
-        }
-        return ResearchLogic.coreId(blueprint).equals(
+    private static boolean isDataCore(ItemStack stack) {
+        return !stack.isEmpty() && ResearchLogic.DATA_CORE.equals(
                 BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
     }
 
-    private void publishStatus(boolean hasCore, boolean unlocked, boolean powered, boolean workingNow) {
+    private void publishStatus(boolean hasCore, boolean hasOutput, boolean powered, boolean workingNow) {
         if (getLevel() == null || getLevel().isClientSide()) {
             return;
         }
-        MachineStatus observed = ResearchLogic.status(hasCore, unlocked, powered, workingNow);
+        MachineStatus observed = ResearchLogic.status(hasCore, hasOutput, powered, workingNow);
         if (display.observe(observed)) {
             MachineProperties.publish(getLevel(), getBlockPos(), display.shown());
         }
@@ -229,7 +194,7 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
         input.fromTag(tag.getList(KEY_INPUT, net.minecraft.nbt.Tag.TAG_COMPOUND));
     }
 
-    // ---- Container: hoppers may insert Data Cores, nothing else -----------------------------
+    // ---- Container: hoppers may insert Data Cores and pull physical outputs -----------------
 
     @Override
     public int getContainerSize() {
@@ -278,7 +243,7 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return isCore(stack, current()) && current() != null && input.getItem(0).isEmpty();
+        return isDataCore(stack) && input.getItem(0).isEmpty();
     }
 
     @Override
@@ -293,7 +258,6 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
 
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
-        // The core is spent, not extracted. A hopper pulling it out would stall research.
-        return false;
+        return !isDataCore(stack);
     }
 }

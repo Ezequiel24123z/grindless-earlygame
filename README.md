@@ -28,7 +28,7 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > reclassifies them as prototype/test infrastructure rather than an Industrial survival
 > shortcut. BO removed their recipes and premature quest path while preserving the tested
 > systems; the survival guide now ends at electronic silicon. BP's first recoverable Relay Matrix
-> batch is in; legacy migration, guidance and the T0 audit remain. The real campaign reaches orbit at T10, the Drift at T13 and
+> batch is in and uses a physical calibrated core; guidance and the T0 audit remain. The real campaign reaches orbit at T10, the Drift at T13 and
 > Sagittarius at T15.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
@@ -2214,7 +2214,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
 | 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model and registered T1 item are in; the four-unit survival batch is in, while migration, guidance and machine fixes remain |
-| 32 | **BQ — Physical T2 gate** | pending after BP — replace the Industrial world permission with a consumed matrix |
+| 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
 
@@ -2249,12 +2249,10 @@ infrastructure because its Industrial recipes bypass T3–T15. The destination c
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
 book and guide now stop at electronic silicon. **BP** has introduced F0-F15, physical Control
 Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable four-unit
-survival batch. Its legacy-state seam, guidance and remaining machine fixes are the active T0 work;
-**BQ** replaces the current Industrial world permission with physical T2 fabrication.
-
-The runtime still implements the superseded Research Terminal and Voltaic/Industrial blueprint
-flags until BP/BQ migrate existing worlds. The details below record that current implementation,
-not the final progression contract. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
+survival batch. Its physical calibration route, guidance and remaining machine fixes are the active T0 work;
+**BQ** adds physical T2 fabrication. The superseded Research Terminal permission system has been
+removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
+ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 
 T0 Bootstrap is the only mechanically active tier. Its audit covers the complete survival route,
 not just registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical
@@ -2364,16 +2362,14 @@ sulfuric acid` in 4 s, water from a neighbouring tank. Pickle is the named sulfu
 (ADR-0074): Assembler-manufactured
 once Industrial is researched (`1 casing + 2 coil + 4 plates`). `1 ingot → 2 wire` in 8 s;
 `2 copper wire → 1 coil` is the T2 mill route; the Press die remains the T1 bootstrap.
-Motor is `1 casing + 2 coil + 1 rod` in 10 s. Industrial is the second
-blueprint (ADR-0073):
-the same Research Terminal spends an Advanced Data Core at F0 for sixty seconds. Pylon MK2
-still has no crafting-table recipe; the Assembler refuses it until Industrial is unlocked.
+Motor is `1 casing + 2 coil + 1 rod` in 10 s. Pylon MK2 still has no crafting-table recipe; its
+Assembler route is a physical fabrication requirement, not a world unlock.
 The Sorter is in (ADR-0072): matching sides peel
 a mixed line and hold when that lane is full; unmatched items continue. Merger, Tunnel Belt
 and Overflow Gate are in
 (ADR-0071): three inlets join, a pair skips one to five empty blocks, overflow dumps clockwise
-when the front is blocked. The Process Atlas stub is in: a Voltaic-gated
-handheld lists the live process graph (family, I/O, conditions, time, FU/t). It does not
+when the front is blocked. The Process Atlas stub is in: a handheld lists the live process graph
+(family, I/O, conditions, time, FU/t). It does not
 solve a line. JEI still waits. The Multitool now rotates and relocates Grindless blocks
 (ADR-0069); it still does not mine. Kiln / R2 are in: a T1 Kiln roasts feed to oxide and
 vents 1 B SO₂ into a tank (or atmosphere). The Arc Furnace reduces oxide + carbon to an

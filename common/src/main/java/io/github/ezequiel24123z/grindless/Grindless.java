@@ -11,7 +11,6 @@ import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import io.github.ezequiel24123z.grindless.registry.ModCreativeTabs;
 import io.github.ezequiel24123z.grindless.registry.ModEntities;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
-import io.github.ezequiel24123z.grindless.recipe.ModRecipes;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
 import io.github.ezequiel24123z.grindless.registry.ModSounds;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +50,6 @@ public final class Grindless {
         ModEntities.register();
         ModBlockEntities.register();
         ModMenus.register();
-        ModRecipes.register();
         ModSounds.register();
         ModCreativeTabs.register();
 

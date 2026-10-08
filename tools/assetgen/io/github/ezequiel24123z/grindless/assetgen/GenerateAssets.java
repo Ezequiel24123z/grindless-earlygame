@@ -89,6 +89,8 @@ public final class GenerateAssets {
 
         // ---- placeholder sprites, blocks, loot and mining tags ----
         written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
+        written += write(items, "calibrated_data_core",
+                FormTextures.dataCore(Palette.of("calibrated_data_core", 0x66BB6A)));
         written += write(items, "advanced_data_core",
                 FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "relay_matrix",

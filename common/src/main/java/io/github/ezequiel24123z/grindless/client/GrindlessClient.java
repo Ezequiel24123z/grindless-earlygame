@@ -7,7 +7,6 @@ import dev.architectury.registry.menu.MenuRegistry;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import io.github.ezequiel24123z.grindless.registry.ModEntities;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
-import io.github.ezequiel24123z.grindless.research.ResearchSync;
 import io.github.ezequiel24123z.grindless.vein.SurveySync;
 
 /**
@@ -20,7 +19,6 @@ public final class GrindlessClient {
     }
 
     public static void init() {
-        ResearchSync.register();
         SurveySync.register();
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_MACHINE.get(), ProcessMachineScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_ATLAS.get(), ProcessAtlasScreen::new);

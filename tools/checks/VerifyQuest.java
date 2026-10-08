@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
-import io.github.ezequiel24123z.grindless.research.Blueprint;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -66,10 +65,9 @@ public final class VerifyQuest {
         eq("bootstrap starts at the multitool", "grindless:multitool", subject("multitool"));
         eq("then the crank", "grindless:hand_crank_dynamo", subject("crank"));
         eq("then the extractor", "grindless:crude_extractor", subject("extractor"));
-        eq("voltaic is research", QuestCatalogue.Evidence.RESEARCH, task("voltaic").evidence());
-        eq("voltaic names the blueprint", Blueprint.VOLTAIC.id(), task("voltaic").subject());
+        eq("voltaic follows a calibrated core", "grindless:calibrated_data_core", subject("voltaic"));
         eq("the furnace is the spine", "grindless:arc_furnace", subject("furnace"));
-        eq("industrial is research", Blueprint.INDUSTRIAL.id(), task("industrial").subject());
+        eq("industrial follows an advanced data core", "grindless:advanced_data_core", subject("industrial"));
         eq("contact is the reactor", "grindless:chemical_reactor", subject("reactor"));
         eq("steel is the supplied ingot",
                 "grindless:" + SupplyCatalogue.itemName("steel", MaterialForm.INGOT), subject("steel"));
@@ -116,11 +114,11 @@ public final class VerifyQuest {
 
     private static void evidence() {
         QuestCatalogue.Task item = task("multitool");
-        yes("one multitool is enough", QuestEvidence.met(item, 1, false, "minecraft:overworld"));
-        no("zero is not enough", QuestEvidence.met(item, 0, false, "minecraft:overworld"));
-        QuestCatalogue.Task research = task("voltaic");
-        yes("an unlocked blueprint counts", QuestEvidence.met(research, 0, true, "minecraft:overworld"));
-        no("a locked blueprint does not", QuestEvidence.met(research, 99, false, "minecraft:overworld"));
+        yes("one multitool is enough", QuestEvidence.met(item, 1, "minecraft:overworld"));
+        no("zero is not enough", QuestEvidence.met(item, 0, "minecraft:overworld"));
+        QuestCatalogue.Task calibrated = task("voltaic");
+        yes("a calibrated core counts", QuestEvidence.met(calibrated, 1, "minecraft:overworld"));
+        no("no calibrated core does not count", QuestEvidence.met(calibrated, 0, "minecraft:overworld"));
     }
 
     private static void rewards() throws IOException {

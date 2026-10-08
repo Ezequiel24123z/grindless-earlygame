@@ -416,11 +416,11 @@ previous-rating matrix
 
 Those four components are real products used elsewhere, not matrix-only tokens, and each already
 depends on another domain. The T1 Relay Matrix is the only bootstrap exception: a small manual
-batch starts the first factory, after which the Assembler automates it. After the player researches
-Voltaic at the F0-powered terminal, `2 glass + 2 copper ingots + 2 redstone + 1 Data Core` make a
-four-unit Relay Matrix hand batch. Glass brings the primitive chemical route, copper the material
-route, and the Data Core/redstone the control route; the Voltaic gate proves the manual-power
-route was actually used.
+batch starts the first factory, after which the Assembler automates it. The F0-powered terminal
+calibrates one Data Core in thirty seconds; `2 glass + 2 copper ingots + 2 redstone + 1 Calibrated
+Data Core` then make a four-unit Relay Matrix hand batch. Glass brings the primitive chemical
+route, copper the material route, and the calibrated core/redstone the control route. The physical
+output proves the manual-power route was used without consulting a world permission.
 
 Five architectures overlap rather than replace one another:
 

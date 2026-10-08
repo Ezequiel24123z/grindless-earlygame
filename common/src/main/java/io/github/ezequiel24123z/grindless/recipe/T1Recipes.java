@@ -6,9 +6,8 @@ import java.util.Map;
 /**
  * The T1 crafting-table recipes, as data.
  *
- * <p>Hand-crafted and Voltaic-gated (ADR-0017, ADR-0057). They live as JSON of type
- * {@code grindless:gated_shaped}; this catalogue is what {@code VerifyRecipes} checks them
- * against. Iron is a tag. Carbon is {@code #grindless:carbon}.
+ * <p>Hand-crafted physical recipes. They live as ordinary shaped JSON; this catalogue is what
+ * {@code VerifyRecipes} checks them against. Iron is a tag. Carbon is {@code #grindless:carbon}.
  */
 public final class T1Recipes {
 
@@ -23,18 +22,17 @@ public final class T1Recipes {
     public static final String BELT = "item:grindless:conveyor_belt";
     public static final String HOPPER = "item:minecraft:hopper";
     public static final String DATA_CORE = "item:grindless:data_core";
+    public static final String CALIBRATED_DATA_CORE = "item:grindless:calibrated_data_core";
     public static final String PLATE = "tag:forge:plates/iron";
     public static final String ROD = "tag:forge:rods/iron";
     public static final String GEAR = "tag:forge:gears/iron";
     public static final String CASING = "item:grindless:machine_casing";
     public static final String COIL = "item:grindless:copper_coil";
-    public static final String VOLTAIC = "voltaic";
 
     private T1Recipes() {
     }
 
-    public record Gated(String name, String blueprint, List<String> pattern,
-                        Map<String, String> key, String result) {
+    public record Shaped(String name, List<String> pattern, Map<String, String> key, String result) {
 
         /** Craft counts are data too: transport is batched and the first controllers seed a factory. */
         public int resultCount() {
@@ -47,129 +45,129 @@ public final class T1Recipes {
         }
     }
 
-    public static List<Gated> gated() {
+    public static List<Shaped> shaped() {
         return List.of(
-                new Gated("relay_matrix", VOLTAIC,
+                new Shaped("relay_matrix",
                         List.of("GCG", "RDR", "GCG"),
-                        Map.of("G", GLASS, "C", COPPER, "R", REDSTONE, "D", DATA_CORE),
+                        Map.of("G", GLASS, "C", COPPER, "R", REDSTONE, "D", CALIBRATED_DATA_CORE),
                         "grindless:relay_matrix"),
-                new Gated("thermal_generator", VOLTAIC,
+                new Shaped("thermal_generator",
                         List.of("CFC", "CGC", "CIC"),
                         Map.of("C", COBBLE, "F", FURNACE, "G", CARBON, "I", IRON),
                         "grindless:thermal_generator"),
-                new Gated("pulverizer", VOLTAIC,
+                new Shaped("pulverizer",
                         List.of("CFC", "CIC", "CCC"),
                         Map.of("C", COBBLE, "F", FLINT, "I", IRON),
                         "grindless:pulverizer"),
-                new Gated("arc_furnace", VOLTAIC,
+                new Shaped("arc_furnace",
                         List.of("CIC", "IRI", "CIC"),
                         Map.of("C", COBBLE, "I", IRON, "R", REDSTONE),
                         "grindless:arc_furnace"),
-                new Gated("flux_pylon_mk1", VOLTAIC,
+                new Shaped("flux_pylon_mk1",
                         List.of("IGI", "IRI", "ICI"),
                         Map.of("I", IRON, "G", GLASS, "R", REDSTONE, "C", COBBLE),
                         "grindless:flux_pylon_mk1"),
-                new Gated("conveyor_belt", VOLTAIC,
+                new Shaped("conveyor_belt",
                         List.of("CCC", "III", "CCC"),
                         Map.of("C", COBBLE, "I", IRON),
                         "grindless:conveyor_belt"),
-                new Gated("splitter", VOLTAIC,
+                new Shaped("splitter",
                         List.of("IBI", "B B", "IBI"),
                         Map.of("I", IRON, "B", BELT),
                         "grindless:splitter"),
-                new Gated("merger", VOLTAIC,
+                new Shaped("merger",
                         List.of("IBI", "BBB", "IBI"),
                         Map.of("I", IRON, "B", BELT),
                         "grindless:merger"),
-                new Gated("tunnel_belt", VOLTAIC,
+                new Shaped("tunnel_belt",
                         List.of(" B ", "BCB", " B "),
                         Map.of("B", BELT, "C", COBBLE),
                         "grindless:tunnel_belt"),
-                new Gated("overflow_gate", VOLTAIC,
+                new Shaped("overflow_gate",
                         List.of(" B ", "BIB", " B "),
                         Map.of("B", BELT, "I", IRON),
                         "grindless:overflow_gate"),
-                new Gated("sorter", VOLTAIC,
+                new Shaped("sorter",
                         List.of("IBI", "BHB", "IBI"),
                         Map.of("I", IRON, "B", BELT, "H", HOPPER),
                         "grindless:sorter"),
-                new Gated("advanced_data_core", VOLTAIC,
+                new Shaped("advanced_data_core",
                         List.of(" P ", "PDP", " P "),
                         Map.of("P", PLATE, "D", DATA_CORE),
                         "grindless:advanced_data_core"),
-                new Gated("crude_manipulator", VOLTAIC,
+                new Shaped("crude_manipulator",
                         List.of(" I ", "CIC", " I "),
                         Map.of("I", IRON, "C", COBBLE),
                         "grindless:crude_manipulator"),
-                new Gated("terrestrial_extractor", VOLTAIC,
+                new Shaped("terrestrial_extractor",
                         List.of("CIC", "IRI", "CIC"),
                         Map.of("C", COBBLE, "I", IRON, "R", REDSTONE),
                         "grindless:terrestrial_extractor"),
-                new Gated("prospectors_scanner", VOLTAIC,
+                new Shaped("prospectors_scanner",
                         List.of("GIG", "IRI", " C "),
                         Map.of("G", GLASS, "I", IRON, "R", REDSTONE, "C", COBBLE),
                         "grindless:prospectors_scanner"),
-                new Gated("process_atlas", VOLTAIC,
+                new Shaped("process_atlas",
                         List.of("G G", "GIG", " C "),
                         Map.of("G", GLASS, "I", IRON, "C", COBBLE),
                         "grindless:process_atlas"),
-                new Gated("clay_conduit", VOLTAIC,
+                new Shaped("clay_conduit",
                         List.of("CCC", "LIL", "CCC"),
                         Map.of("C", COBBLE, "L", "item:minecraft:clay_ball", "I", IRON),
                         "grindless:clay_conduit"),
-                new Gated("hand_pump", VOLTAIC,
+                new Shaped("hand_pump",
                         List.of(" C ", "CIC", " C "),
                         Map.of("C", COBBLE, "I", IRON),
                         "grindless:hand_pump"),
-                new Gated("basic_tank", VOLTAIC,
+                new Shaped("basic_tank",
                         List.of("CGC", "G G", "CIC"),
                         Map.of("C", COBBLE, "G", GLASS, "I", IRON),
                         "grindless:basic_tank"),
-                new Gated("press", VOLTAIC,
+                new Shaped("press",
                         List.of("CIC", "CIC", "CCC"),
                         Map.of("C", COBBLE, "I", IRON),
                         "grindless:press"),
-                new Gated("plate_die", VOLTAIC,
+                new Shaped("plate_die",
                         List.of("CCC", "CIC", "CCC"),
                         Map.of("C", COBBLE, "I", IRON),
                         "grindless:plate_die"),
-                new Gated("rod_die", VOLTAIC,
+                new Shaped("rod_die",
                         List.of(" C ", "CIC", " C "),
                         Map.of("C", COBBLE, "I", IRON),
                         "grindless:rod_die"),
-                new Gated("gear_die", VOLTAIC,
+                new Shaped("gear_die",
                         List.of("CIC", "I I", "CIC"),
                         Map.of("C", COBBLE, "I", IRON),
                         "grindless:gear_die"),
-                new Gated("coil_die", VOLTAIC,
+                new Shaped("coil_die",
                         List.of("CRC", "CIC", "CRC"),
                         Map.of("C", COBBLE, "I", IRON, "R", REDSTONE),
                         "grindless:coil_die"),
-                new Gated("machine_casing", VOLTAIC,
+                new Shaped("machine_casing",
                         List.of("P P", "R R", "P P"),
                         Map.of("P", PLATE, "R", ROD),
                         "grindless:machine_casing"),
-                new Gated("assembler", VOLTAIC,
+                new Shaped("assembler",
                         List.of(" G ", "CAC", " G "),
                         Map.of("G", GEAR, "C", CASING, "A", COIL),
                         "grindless:assembler"),
-                new Gated("flux_conduit", VOLTAIC,
+                new Shaped("flux_conduit",
                         List.of(" I ", "IRI", " G "),
                         Map.of("I", IRON, "R", REDSTONE, "G", GLASS),
                         "grindless:flux_conduit"),
-                new Gated("capacitor_bank", VOLTAIC,
+                new Shaped("capacitor_bank",
                         List.of("IRI", "I I", "IRI"),
                         Map.of("I", IRON, "R", REDSTONE),
                         "grindless:capacitor_bank"),
-                new Gated("flux_transformer", VOLTAIC,
+                new Shaped("flux_transformer",
                         List.of("IRI", "CIC", "IRI"),
                         Map.of("I", IRON, "R", REDSTONE, "C", COBBLE),
                         "grindless:flux_transformer"),
-                new Gated("kiln", VOLTAIC,
+                new Shaped("kiln",
                         List.of("CCC", "CIC", "CGC"),
                         Map.of("C", COBBLE, "I", IRON, "G", CARBON),
                         "grindless:kiln"),
-                new Gated("vanadia_pellet", VOLTAIC,
+                new Shaped("vanadia_pellet",
                         List.of(" B ", "BOB", " B "),
                         Map.of("B", "item:minecraft:brick", "O", "tag:grindless:oxides/iron"),
                         "grindless:vanadia_pellet"));

@@ -15,15 +15,21 @@ entries below reference those records by id.
 
 ### Added
 
+- **Physical calibration replaces global research permissions (ADR-0114).** The Research
+  Terminal now turns a Data Core into a hopper-recoverable Calibrated Data Core in thirty seconds
+  at F0. The four-unit Relay Matrix batch consumes that physical output. The world research save,
+  client sync, gated-recipe serializer and all runtime permission checks are removed; quests
+  follow physical cores and never gate machines.
+
 - **The design-reference hierarchy is explicit (ADR-0113).** GregTech guides industrial chains,
   material forms, machine roles and progression; Factorio and Satisfactory are secondary
   references for readable automation and scale. This records inspiration only, not an upstream
   material import.
 
-- **A recoverable four-unit T1 Relay Matrix hand batch (ADR-0112).** After Voltaic research, the
-  crafting table combines glass, tagged copper, redstone and a Data Core into the first four
-  physical matrices. It closes the first T0 route without consuming the bootstrap's two iron or
-  requiring an impossible T1 machine.
+- **A recoverable four-unit T1 Relay Matrix hand batch (ADR-0112).** The crafting table combines
+  glass, tagged copper, redstone and a Calibrated Data Core into the first four physical
+  matrices. It closes the first T0 route without consuming the bootstrap's two iron or requiring
+  an impossible T1 machine.
 
 - **The physical Control Matrix foundation.** Five architecture ranges now model frontier and
   retrospective ratings, a higher matrix rating substitutes for a lower one, and T0 has a

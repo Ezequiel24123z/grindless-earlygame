@@ -1,6 +1,5 @@
 {
-  "type": "grindless:gated_shaped",
-  "blueprint": "voltaic",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "GIG",
     "IRI",

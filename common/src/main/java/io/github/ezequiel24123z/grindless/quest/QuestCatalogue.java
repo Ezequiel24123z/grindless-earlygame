@@ -1,7 +1,5 @@
 package io.github.ezequiel24123z.grindless.quest;
 
-import io.github.ezequiel24123z.grindless.research.Blueprint;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +15,6 @@ public final class QuestCatalogue {
     public enum Evidence {
         /** The named item is in the player's inventory. */
         ITEM,
-        /** The named blueprint is unlocked on the world. */
-        RESEARCH,
         /** The player is standing in the named dimension. */
         DIMENSION
     }
@@ -33,8 +29,8 @@ public final class QuestCatalogue {
      * @param id       stable id, saved on the player
      * @param line     the quest line it belongs to
      * @param evidence what the game already knows how to see
-     * @param subject  an item id, a blueprint id, or a dimension id
-     * @param count    how many of an item; ignored for the other evidence
+     * @param subject  an item id or a dimension id
+     * @param count    how many of an item; ignored for dimension evidence
      * @param requires tasks that must already be claimed
      * @param reward   given on the first successful claim, and not consumed from the evidence
      */
@@ -55,11 +51,11 @@ public final class QuestCatalogue {
                     List.of("multitool"), reward("minecraft:coal", 4)),
             task("extractor", "bootstrap", Evidence.ITEM, "grindless:crude_extractor", 1,
                     List.of("crank"), reward("grindless:data_core", 1)),
-            task("voltaic", "voltaic", Evidence.RESEARCH, Blueprint.VOLTAIC.id(), 1,
+            task("voltaic", "voltaic", Evidence.ITEM, "grindless:calibrated_data_core", 1,
                     List.of("extractor"), reward("grindless:process_atlas", 1)),
             task("furnace", "voltaic", Evidence.ITEM, "grindless:arc_furnace", 1,
                     List.of("voltaic"), reward("minecraft:coal", 8)),
-            task("industrial", "contact", Evidence.RESEARCH, Blueprint.INDUSTRIAL.id(), 1,
+            task("industrial", "contact", Evidence.ITEM, "grindless:advanced_data_core", 1,
                     List.of("voltaic"), reward("grindless:data_core", 1)),
             task("reactor", "contact", Evidence.ITEM, "grindless:chemical_reactor", 1,
                     List.of("industrial"), reward("grindless:vanadia_pellet", 1)),

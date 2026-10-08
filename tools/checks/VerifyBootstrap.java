@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
-import io.github.ezequiel24123z.grindless.research.Blueprint;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 
 import java.io.IOException;
@@ -74,34 +73,22 @@ public final class VerifyBootstrap {
     }
 
     private static void research() {
-        eq("voltaic takes thirty seconds", 20 * 30, ResearchLogic.CYCLE_TICKS);
+        eq("calibration takes thirty seconds", 20 * 30, ResearchLogic.CYCLE_TICKS);
         eq("it draws F0", 8L, ResearchLogic.FU_PER_TICK);
         eq("full power is one tick of work", 1.0, ResearchLogic.work(8L, 8L));
         eq("a brownout at half power is half work", 0.5, ResearchLogic.work(4L, 8L));
         eq("zero draw is zero work", 0.0, ResearchLogic.work(0L, 8L));
-        eq("no core and nothing unlocked is idle", MachineStatus.IDLE,
+        eq("no core is idle", MachineStatus.IDLE,
                 ResearchLogic.status(false, false, false, false));
         eq("a core and no power is starved", MachineStatus.STARVED,
                 ResearchLogic.status(true, false, false, false));
         eq("powered and working is running", MachineStatus.RUNNING,
                 ResearchLogic.status(true, false, true, true));
-        eq("already unlocked is blocked, even with a core", MachineStatus.BLOCKED,
-                ResearchLogic.status(true, true, true, true));
-        eq("voltaic is the first blueprint", "voltaic", Blueprint.VOLTAIC.id());
-        eq("industrial is the second", "industrial", Blueprint.INDUSTRIAL.id());
-        yes("voltaic looks itself up", Blueprint.byId("voltaic") == Blueprint.VOLTAIC);
-        yes("industrial looks itself up", Blueprint.byId("industrial") == Blueprint.INDUSTRIAL);
-        no("an unknown blueprint is null", Blueprint.byId("fusion") != null);
-        eq("industrial takes sixty seconds", 20 * 60, ResearchLogic.cycleTicks(Blueprint.INDUSTRIAL));
-        eq("voltaic still takes thirty", 20 * 30, ResearchLogic.cycleTicks(Blueprint.VOLTAIC));
-        eq("voltaic spends a data core", "grindless:data_core", ResearchLogic.coreId(Blueprint.VOLTAIC));
-        eq("industrial spends an advanced core", "grindless:advanced_data_core",
-                ResearchLogic.coreId(Blueprint.INDUSTRIAL));
-        eq("nothing unlocked starts at voltaic", "voltaic", ResearchLogic.next(java.util.Set.of()).id());
-        eq("voltaic done is industrial next", "industrial",
-                ResearchLogic.next(java.util.Set.of(Blueprint.VOLTAIC)).id());
-        yes("both done is null", ResearchLogic.next(
-                java.util.Set.of(Blueprint.VOLTAIC, Blueprint.INDUSTRIAL)) == null);
+        eq("completed core is blocked until extracted", MachineStatus.BLOCKED,
+                ResearchLogic.status(false, true, true, true));
+        eq("calibration consumes a data core", "grindless:data_core", ResearchLogic.DATA_CORE);
+        eq("calibration produces a physical core", "grindless:calibrated_data_core",
+                ResearchLogic.CALIBRATED_DATA_CORE);
     }
 
     private static BootstrapRecipes.Shaped shaped(String name) {

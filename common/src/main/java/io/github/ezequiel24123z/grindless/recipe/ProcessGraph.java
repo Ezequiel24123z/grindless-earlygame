@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
  * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor, the
- * Chemical Reactor and the Chemical Washer once Industrial is researched, with no
+ * Chemical Reactor and the Chemical Washer in the Industrial-era route, with no
  * crafting-table JSON (ADR-0073, ADR-0074, ADR-0075, ADR-0076). Contact: SO₂ → SO₃ →
  * sulfuric acid, plus pickle. Wash: eight crushed and water become washed crushed plus the
  * next metal. Gases: water splits to hydrogen and oxygen; free air yields oxygen; hydrogen

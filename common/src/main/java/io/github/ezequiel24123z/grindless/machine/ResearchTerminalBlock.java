@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * The Research Terminal: T0, F0. Data Core then Advanced Data Core unlock Voltaic then Industrial.
+ * The Research Terminal: T0, F0. It physically calibrates a Data Core for a first Relay Matrix.
  */
 public class ResearchTerminalBlock extends BaseEntityBlock {
 
