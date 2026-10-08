@@ -50,8 +50,8 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (109) and the ordinary
-craft count (31); `VerifyAtlas` pins 109 generated rows, 39 Assembler rows and 141 total
+`tools/checks/VerifyRecipes.java` pins the generated graph size (110) and the ordinary
+craft count (31); `VerifyAtlas` pins 110 generated rows, 39 Assembler rows and 142 total
 handheld routes (including 31 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not

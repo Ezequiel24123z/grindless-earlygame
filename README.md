@@ -1417,10 +1417,12 @@ renewable route before volume demand makes gathering it a chore. Those routes st
 space and intermediate products: they are factory problems, never invisible permissions or free
 item generation.
 
-The first implemented line is **cobblestone → Pulverizer → sand/silica → Arc Furnace → glass**.
-A vanilla cobblestone generator makes its feed indefinite; the same sand is already valid silica
-for metallurgical silicon. Redstone, renewable metals and industrial ceramics follow the same
-contract, each with its own named process rather than one universal source block.
+The first implemented lines are **cobblestone → Pulverizer → sand/silica → Arc Furnace → glass**
+and **metallurgical silicon + 500 mB water → Chemical Reactor → 4 redstone**. A vanilla
+cobblestone generator makes the silica feed indefinite; an automatically replanted tree farm and
+furnace provide charcoal for carbon; the Hand Pump provides water; and a charcoal-fed Thermal
+Generator supplies the first unattended F1 power. Renewable metals and industrial ceramics follow
+the same contract, each with its own named process rather than one universal source block.
 
 ### Mechanical tier gate
 
@@ -2266,7 +2268,9 @@ Matrix rating/architecture data, the registered T1 Relay Matrix item and its rec
 survival batch. Its physical calibration route and Atlas visibility are in; the full T0 machine and
 playthrough audit is the active work. The first Voltaic renewable line now turns cobblestone into
 sand/silica and then glass, but this does not itself accept T1: **BQ** adds physical T2 fabrication
-after the Bootstrap gate. The superseded Research Terminal permission system has been
+after the Bootstrap gate. The Industrial Chemical Reactor can now turn that renewable
+metallurgical silicon and pumped water into redstone, completing the first renewable source stack
+without replacing the Bootstrap audit. The superseded Research Terminal permission system has been
 removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
 ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 

@@ -129,6 +129,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0115](#adr-0115--the-atlas-shows-physical-bootstrap-routes) | The Atlas shows physical Bootstrap routes | Accepted |
 | [0116](#adr-0116--bootstrap-has-an-explicit-survival-entry-and-exit) | Bootstrap has an explicit survival entry and exit | Accepted |
 | [0117](#adr-0117--recurrent-base-materials-gain-industrial-renewal-routes) | Recurrent base materials gain industrial renewal routes | Accepted |
+| [0118](#adr-0118--redstone-is-synthesised-from-renewable-silicon-and-water) | Redstone is synthesised from renewable silicon and water | Accepted |
 
 ---
 
@@ -5199,3 +5200,39 @@ names their place immediately after the first Matrix batch. The design records t
 contract openly: renewable metal recovery, redstone recovery/synthesis and ceramic feed must each
 gain a named industrial route before their demand becomes a sustained bottleneck. The Bootstrap
 audit remains active until its survival playthrough is complete.
+
+---
+
+## ADR-0118 — Redstone is synthesised from renewable silicon and water
+
+*2026-10-08 · Accepted*
+
+**Context.** Redstone is a recurring control ingredient from the first Matrix onward. Mining it is
+an appropriate Bootstrap seed, but it becomes grind if every later relay, pylon and controller
+requires more cave exploration. The newly renewable sand line already provides silica, while a
+tree/charcoal loop supplies the carbon that makes metallurgical silicon. The Hand Pump supplies
+renewable water before the faster Fluid Well exists, and the Thermal Generator can burn charcoal
+to power the line.
+
+**Decision.** The Industrial Chemical Reactor synthesises four redstone dust from one
+metallurgical silicon and 500 mB water in twenty seconds at F1, 450 °C, oxidising atmosphere and
+stirred agitation. The complete renewable source stack is therefore: a cobblestone generator to
+the Pulverizer for sand, renewable wood to charcoal/carbon, the Arc Furnace for metallurgical
+silicon, a Hand Pump for water, and the Chemical Reactor for redstone. A Hand Crank can commission
+the starter machines; a charcoal-fed Thermal Generator is the first unattended F1 source.
+
+The tree source is deliberately an open vanilla/pack integration: any automatically replanted
+tree farm supplies logs, and an automatically fed vanilla furnace supplies charcoal. Grindless
+does not add a duplicate early planter before the factory needs a distinct agricultural process.
+The source contract records the later dedicated biomass expansion instead.
+
+**Alternatives rejected.** A free redstone generator (removes the control-resource problem);
+turning cobblestone directly into redstone (hides both carbon and water infrastructure); requiring
+nether-only ingredients (would make an early control material dimension-dependent); adding a
+Grindless tree-farm block that only duplicates a simple vanilla automation line.
+
+**Consequences.** Redstone has a fully renewable automated route before it becomes a sustained
+factory bottleneck. The source chain deliberately spans material, chemistry, control and energy:
+it gives the first small factory a reason to connect its coal/charcoal, water and silica lines.
+Copper/iron recovery and mineral ceramics remain separate future routes; they must not be silently
+substituted by this control-material loop.

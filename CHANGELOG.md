@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Renewable redstone closes the first source stack (ADR-0118).** The Chemical Reactor turns
+  one renewable metallurgical silicon and 500 mB pumped water into four redstone at F1. The route
+  connects the cobblestone/silica, tree-charcoal, Hand Pump and Thermal Generator sources without
+  a free resource block; the Atlas, Field Guide and source contract expose the whole line.
+
 - **Renewable glass is the first continuous base-input line (ADR-0117).** A vanilla cobblestone
   generator can feed the Pulverizer for sand/silica, then the Arc Furnace vitrifies that sand into
   glass at F1. The Field Guide now states the exact two-iron Bootstrap contract and sends the

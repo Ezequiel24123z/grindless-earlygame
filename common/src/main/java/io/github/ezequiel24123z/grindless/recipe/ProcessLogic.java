@@ -151,6 +151,13 @@ public final class ProcessLogic {
     /** Electric vitrification keeps glass an industrial input instead of a hand-smelt chore. */
     public static final int VITRIFY_GLASS_TICKS = 20 * 10;
     public static final double VITRIFY_GLASS_TEMPERATURE = 1500.0;
+    /** Renewable redstone: metallurgical silicon and pumped water in the first reactor loop. */
+    public static final int REDSTONE_WATER_MB = 500;
+    public static final int REDSTONE_OUT = 4;
+    public static final int REDSTONE_TICKS = 20 * 20;
+    public static final double REDSTONE_TEMPERATURE = 450.0;
+    public static final String REDSTONE_ATMOSPHERE = "OXIDISING";
+    public static final String REDSTONE_AGITATION = "STIRRED";
     public static final String METALLURGICAL_SILICON = "grindless:metallurgical_silicon";
     public static final int SILICON_SILICA = 1;
     public static final int SILICON_CARBON = 2;

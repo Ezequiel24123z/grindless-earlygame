@@ -23,6 +23,8 @@ import java.util.Optional;
  * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
  * Renewable glass: cobblestone → sand → glass, on the Pulverizer and Arc Furnace respectively
  * (ADR-0117).
+ * Renewable redstone: metallurgical silicon + water → redstone in the Chemical Reactor
+ * (ADR-0118).
  * Spatial prototypes stay registered and testable but have no survival recipes until their
  * T10-T15 campaign frontiers (ADR-0107).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
@@ -171,6 +173,7 @@ public final class ProcessGraph {
         recipes.add(renewableSand());
         recipes.add(vitrifyGlass());
         recipes.add(metallurgicalSilicon());
+        recipes.add(synthesiseRedstone());
         recipes.add(zoneRefining());
         return List.copyOf(recipes);
     }
@@ -507,6 +510,27 @@ public final class ProcessGraph {
                 ProcessLogic.REDUCE_ATMOSPHERE,
                 ProcessLogic.SILICON_TICKS,
                 ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * The first renewable control material. Silicon carries the renewable carbon/silica route;
+     * pumped water and the reactor's held conditions turn it into a four-dust redstone batch.
+     */
+    private static ProcessRecipe synthesiseRedstone() {
+        return new ProcessRecipe(
+                "synthesise/redstone",
+                MachineFamily.CHEMICAL_REACTOR,
+                List.of(
+                        IngredientSpec.item(ProcessLogic.METALLURGICAL_SILICON, 1),
+                        IngredientSpec.fluid(ProcessLogic.WATER, ProcessLogic.REDSTONE_WATER_MB)),
+                List.of(OutputSpec.item("minecraft:redstone", ProcessLogic.REDSTONE_OUT)),
+                ProcessLogic.REDSTONE_TEMPERATURE,
+                ProcessLogic.REDSTONE_ATMOSPHERE,
+                ProcessLogic.REDSTONE_AGITATION,
+                ProcessLogic.REDSTONE_TICKS,
+                ProcessLogic.FU_PER_TICK,
+                List.of(),
+                "industrial");
     }
 
     /**

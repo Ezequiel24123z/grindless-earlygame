@@ -374,7 +374,7 @@ Matrix is where the four outputs converge again, not where they first meet.
 | --- | --- | --- | --- | --- |
 | **T0 Bootstrap** | raw iron/copper, stone and hand-formed parts | fired clay, carbon and basic glass | redstone contacts and a primitive relay | Hand Crank; a few adjacent blocks; first T1 Relay Matrix batch |
 | **T1 Voltaic** | B1 milling, R1/R2 reduction, plates/rods/gears and renewable glass | water handling, roast gases and ceramic insulation | copper wire, coils, relays and the first Assembler | Thermal power and first pylon; one-room factory |
-| **T2 Industrial** | steel, B2/B3 wet beneficiation, clean melt and casting | sulfur loop, electrolysis, air separation, brine and basic resin | motors, pumps, discrete control panels and wired logic | steam/solar F2; several closed loops across one or two buildings |
+| **T2 Industrial** | steel, B2/B3 wet beneficiation, clean melt and casting | sulfur loop, renewable redstone synthesis, electrolysis, air separation, brine and basic resin | motors, pumps, discrete control panels and wired logic | steam/solar F2; several closed loops across one or two buildings |
 | **T3 Arc** | refractory structures, hot-fluid routing and tougher alloys | first hydrocarbon fractions and the Arc Cell medium | industrial controllers, logistics crates and Construction Drones | fed Arc Reactor; first designed multiblock |
 | **T4 Precision** | electronic silicon, technical ceramics and recovered noble metals | pressure chemistry, nitric/HCl, etchant, polymers and ultrapure water | lithography, Integrated Matrices, ICs and reusable research patterns | precision power conditioning; a multi-line industrial campus |
 | **T5 Nuclear** | fuel cladding, moderators, reflectors and radiation alloys | UF6, heavy water, coolant cleanup and spent-fuel reprocessing | radiation-hard controllers and sensor banks | parametric fission, heat exchange and turbine halls |
@@ -412,17 +412,40 @@ factory reward for solving the relevant line.
 | Base input | Seed route | Renewable factory route | Status |
 | --- | --- | --- | --- |
 | stone | ordinary stone/cobblestone | vanilla cobblestone generator | available at Bootstrap |
-| wood and carbon | trees and charcoal | tree farm feeding charcoal/biochar handling | vanilla source; industrial handling expands later |
-| water | surface water | Hand Pump / Fluid Well | existing Voltaic/Industrial infrastructure |
+| wood and carbon | trees and charcoal | automatically replanted tree farm → furnace → charcoal/biochar | vanilla source; industrial handling expands later |
+| water | surface water | Hand Pump at 20 mB/t, then Fluid Well at 100 mB/t | implemented Voltaic/Industrial infrastructure |
 | silica and glass | sand or nether quartz, then a furnace | cobblestone → Pulverizer → sand/silica → Arc Furnace → glass | implemented Voltaic line |
 | copper and iron | chunk-vein extraction | mineral recovery route after the first closed fluid loops | planned; the existing extractor removes hand-mining first |
-| redstone | ordinary ore or pack equivalent | dedicated recovery/synthesis route using an industrial reagent loop | planned before redstone becomes a sustained bottleneck |
+| redstone | ordinary ore or pack equivalent | metallurgical silicon + 500 mB water → 4 redstone in the Chemical Reactor | implemented Industrial line |
 | clay and ceramics | surface clay | mineral dust plus water, then Kiln | planned with the ceramic expansion |
 
 The order is deliberate. T0 has to escape manual mining and demonstrate physical control, not
 manufacture every future input for free. T1 starts converting the first recurring ingredients into
 continuous factory feeds; glass is first because the same renewable sand also supplies silica for
 the silicon route.
+
+### First renewable source stack
+
+The early factory is deliberately assembled from simple, inspectable sources rather than a magic
+resource block:
+
+```
+automatically replanted tree farm ──> logs ──> vanilla furnace ──> charcoal/carbon
+                                                               │
+cobblestone generator ──> Pulverizer ──> sand/silica ──> Arc Furnace ──> metallurgical silicon
+                                                               │
+surface water ──> Hand Pump (20 mB/t) ────────────────────────┤
+                                                               ▼
+                                      Chemical Reactor [F1] ──> 4 redstone
+```
+
+The Hand Crank starts individual F0 machines. Once charcoal is available, the Thermal Generator
+burns it at 32 FU/t (F1) and makes the first unattended source. A pylon distributes that source
+to the Pulverizer, Arc Furnace and Reactor. The Hand Pump's 20 mB/t is more than enough for the
+500 mB redstone batch; the Fluid Well is the later 100 mB/t upgrade that no longer needs a nearby
+surface source. Any vanilla or pack-provided tree farm that replants saplings satisfies the wood
+source; Grindless intentionally does not add a duplicate planter before biomass becomes its own
+industrial route.
 
 ### Control Matrix routes
 
@@ -531,6 +554,9 @@ Pulverizer       [F1]           6 s   ──> 2 u crushed
 Arc Furnace      [T 1500 · atm reducing · +1 u carbon]  12 s  ──> 1 u ingot per grade
 Pulverizer       [F1]           6 s   cobblestone ──> 1 u renewable sand/silica
 Arc Furnace      [F1 · T 1500] 10 s   sand ──> 1 u renewable glass
+Arc Furnace      [F1 · T 1900] 14 s   silica + 2 carbon ──> 1 u metallurgical silicon + 2 B CO
+Chemical Reactor [F1 · T 450 · atm O2 · agi stirred] 20 s
+                                 silicon + 500 mB water ──> 4 redstone
 Press            [cat plate die]   4 s  ──> 1 u plate
                         │
                         ▼

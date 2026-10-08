@@ -64,7 +64,7 @@ tooltips, menus and state feedback: presentation polish is deferred; mechanical 
 | --- | --- | --- |
 | **T0 Bootstrap** | **active audit** | From visible vanilla materials and a two-iron Grindless machine budget, a player reaches a recoverable first four-T1-Relay-Matrix batch with assisted extraction and F0 power in roughly twenty minutes. |
 | **T1 Voltaic** | locked by T0 | The first powered factory turns recurrent inputs into continuous feeds — beginning with renewable glass — manufactures a T2 Relay Matrix and no longer depends on hand fabrication. |
-| **T2 Industrial** | locked by T1 | Closed material, chemical, control and energy loops manufacture the T3 frontier matrix. |
+| **T2 Industrial** | locked by T1 | Closed material, chemical, control and energy loops — including renewable redstone — manufacture the T3 frontier matrix. |
 | **T3 Arc** | locked by T2 | Construction Drones and a fed Arc Reactor support the first designed multiblock frontier. |
 | **T4 Precision** | locked by T3 | Precision chemistry, lithography and reusable patterns produce the first Integrated frontier. |
 | **T5 Nuclear** | locked by T4 | A complete fuel cycle and designed fission core close the tier. |

@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 109, rows.size());
+        eq("atlas lists every generated recipe", 110, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -26,7 +26,7 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 141, allRows.size());
+        eq("atlas includes every machine, hand craft and calibration route", 142, allRows.size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -175,12 +175,13 @@ public final class VerifyAtlas {
         yes("the mill coil is copper", ids(mill).contains("mill/coil/copper"));
 
         List<AtlasLogic.Entry> reactor = AtlasLogic.family(recipes, MachineFamily.CHEMICAL_REACTOR);
-        eq("five reactor routes in this set", 5, reactor.size());
+        eq("six reactor routes in this set", 6, reactor.size());
         yes("oxidation is contact", ids(reactor).contains("contact/so3"));
         yes("absorption is contact", ids(reactor).contains("contact/acid"));
         yes("pickle spends acid", ids(reactor).contains("pickle/plate/iron"));
         yes("recombination spends oxygen", ids(reactor).contains("recombine/water"));
         yes("surfactant is a reactor route", ids(reactor).contains("reagent/surfactant"));
+        yes("renewable redstone is a reactor route", ids(reactor).contains("synthesise/redstone"));
 
         List<AtlasLogic.Entry> flotation = AtlasLogic.family(recipes, MachineFamily.FLOTATION);
         eq("two flotation routes in this set", 2, flotation.size());
@@ -220,6 +221,13 @@ public final class VerifyAtlas {
                 ids(AtlasLogic.consuming(recipes, "minecraft:cobblestone")).contains("renew/sand"));
         yes("the renewable glass chain ends at the arc furnace",
                 ids(AtlasLogic.consuming(recipes, "minecraft:sand")).contains("renew/glass"));
+        eq("renewable redstone has one synthesis route", 1,
+                AtlasLogic.producing(recipes, "minecraft:redstone").size());
+        yes("renewable redstone consumes metallurgical silicon",
+                ids(AtlasLogic.consuming(recipes, "grindless:metallurgical_silicon"))
+                        .contains("synthesise/redstone"));
+        yes("renewable redstone consumes water",
+                ids(AtlasLogic.consuming(recipes, "minecraft:water")).contains("synthesise/redstone"));
         yes("that route vents CO",
                 ids(AtlasLogic.producing(recipes, "grindless:carbon_monoxide")).contains("silicon/metallurgical"));
         eq("refractory brick has one route", 1,

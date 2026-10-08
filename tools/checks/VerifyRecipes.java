@@ -59,8 +59,8 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, steel and silicon graph",
-                109, recipes.size());
+        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel and silicon graph",
+                110, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -70,6 +70,7 @@ public final class VerifyRecipes {
         ProcessRecipe mythrilB0 = recipe(recipes, "b0_r1/mythril");
         ProcessRecipe renewableSand = recipe(recipes, "renew/sand");
         ProcessRecipe renewableGlass = recipe(recipes, "renew/glass");
+        ProcessRecipe renewableRedstone = recipe(recipes, "synthesise/redstone");
 
         eq("renewable sand uses the pulverizer", MachineFamily.PULVERIZER, renewableSand.family());
         eq("renewable sand consumes cobblestone", "item:minecraft:cobblestone",
@@ -87,6 +88,22 @@ public final class VerifyRecipes {
                 renewableGlass.temperatureC());
         eq("renewable glass is ten seconds", ProcessLogic.VITRIFY_GLASS_TICKS,
                 renewableGlass.durationTicks());
+        eq("renewable redstone uses the chemical reactor", MachineFamily.CHEMICAL_REACTOR,
+                renewableRedstone.family());
+        eq("renewable redstone consumes metallurgical silicon", "item:grindless:metallurgical_silicon",
+                renewableRedstone.itemInputs().get(0).qualified());
+        eq("renewable redstone consumes pumped water", "fluid:minecraft:water",
+                renewableRedstone.fluidInputs().get(0).qualified());
+        eq("renewable redstone uses half a bucket", ProcessLogic.REDSTONE_WATER_MB,
+                renewableRedstone.fluidInputs().get(0).count());
+        eq("renewable redstone produces four dust", "item:minecraft:redstone",
+                renewableRedstone.itemOutputs().get(0).qualified());
+        eq("renewable redstone batch size", ProcessLogic.REDSTONE_OUT,
+                renewableRedstone.itemOutputs().get(0).count());
+        eq("renewable redstone is held at 450 C", ProcessLogic.REDSTONE_TEMPERATURE,
+                renewableRedstone.temperatureC());
+        eq("renewable redstone is twenty seconds", ProcessLogic.REDSTONE_TICKS,
+                renewableRedstone.durationTicks());
 
         eq("B0×R1 is the arc furnace", MachineFamily.ARC_FURNACE, ironB0.family());
         eq("B0×R1 takes one raw", "tag:forge:raw_materials/iron", ironB0.itemInputs().get(0).qualified());
