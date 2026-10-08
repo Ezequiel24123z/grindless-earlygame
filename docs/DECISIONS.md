@@ -128,6 +128,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0114](#adr-0114--physical-components-replace-global-research-permissions) | Physical components replace global research permissions | Accepted |
 | [0115](#adr-0115--the-atlas-shows-physical-bootstrap-routes) | The Atlas shows physical Bootstrap routes | Accepted |
 | [0116](#adr-0116--bootstrap-has-an-explicit-survival-entry-and-exit) | Bootstrap has an explicit survival entry and exit | Accepted |
+| [0117](#adr-0117--recurrent-base-materials-gain-industrial-renewal-routes) | Recurrent base materials gain industrial renewal routes | Accepted |
 
 ---
 
@@ -5161,3 +5162,40 @@ tier gate).
 Matrix inputs/output. The field guide and Atlas name the same route. A local smoke proves the
 machine seam, while an end-to-end survival playthrough remains the final acceptance evidence
 before T1 opens.
+
+---
+
+## ADR-0117 — Recurrent base materials gain industrial renewal routes
+
+*2026-10-08 · Accepted*
+
+**Context.** The intended experience is GregTech-style production-chain complexity without the
+corresponding requirement to repeat manual gathering for ingredients such as glass or redstone.
+T0 correctly begins from visible Overworld resources, but a resource that stays finite and manual
+after it becomes a continuous machine input turns scale into grind. A universal free-source block
+would solve that problem by deleting the industrial decisions the mod is meant to create.
+
+**Decision.** Every recurring base material has two explicit stages: a natural or pack-provided
+seed route for the opening, then an indefinitely renewable industrial route before sustained
+consumption makes manual supply a chore. The second route must name its feed, machine, energy or
+logistics cost, and any byproduct; it is never an invisible permission, creative supply or one
+universal generator.
+
+The first implementation is glass. A vanilla cobblestone generator feeds one cobblestone to the
+Pulverizer for one sand in six seconds at F1; the Arc Furnace vitrifies one sand into one glass in
+ten seconds at F1 and 1500 °C. Sand remains valid `#grindless:silica`, so this single line also
+makes the existing metallurgical-silicon feed renewable. T0 remains the short physical bootstrap:
+the line is a Voltaic factory capability and does not itself accept T1 or replace its completion
+gate.
+
+**Alternatives rejected.** Keeping glass as a permanent furnace-and-shovel chore (contradicts
+the no-grind goal); making glass directly from power (removes the material/logistics puzzle);
+adding every future renewable material in one broad slice (creates untested empty routes and
+obscures their proper tier); moving industrial self-supply into T0 (blurs the intentional
+transition from assisted extraction to a factory).
+
+**Consequences.** The Process Atlas exposes `renew/sand` and `renew/glass`, and the Field Guide
+names their place immediately after the first Matrix batch. The design records the remaining
+contract openly: renewable metal recovery, redstone recovery/synthesis and ceramic feed must each
+gain a named industrial route before their demand becomes a sustained bottleneck. The Bootstrap
+audit remains active until its survival playthrough is complete.

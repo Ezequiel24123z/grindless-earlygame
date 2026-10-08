@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Renewable glass is the first continuous base-input line (ADR-0117).** A vanilla cobblestone
+  generator can feed the Pulverizer for sand/silica, then the Arc Furnace vitrifies that sand into
+  glass at F1. The Field Guide now states the exact two-iron Bootstrap contract and sends the
+  player from its four-Matrix exit to that line; the Atlas exposes both machine routes.
+
+### Fixed
+
+- **The Relay Matrix craft now matches its two-glass Bootstrap contract.** The live shaped recipe
+  had four glass despite the authored T0 route, Atlas, guide and Bootstrap check all specifying
+  two; its diagonal layout now consumes exactly two glass, two copper and two redstone.
+
 - **Bootstrap entry and exit are explicit (ADR-0116).** T0 now names its normal-survival
   vanilla inputs, two-iron mod machinery budget, physical four-Relay-Matrix exit and roughly
   twenty-minute target. The Bootstrap check pins the complete visible Matrix batch.

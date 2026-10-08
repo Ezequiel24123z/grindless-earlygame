@@ -48,7 +48,7 @@ public final class T1Recipes {
     public static List<Shaped> shaped() {
         return List.of(
                 new Shaped("relay_matrix",
-                        List.of("GCG", "RDR", "GCG"),
+                        List.of("G C", "RDR", "C G"),
                         Map.of("G", GLASS, "C", COPPER, "R", REDSTONE, "D", CALIBRATED_DATA_CORE),
                         "grindless:relay_matrix"),
                 new Shaped("thermal_generator",

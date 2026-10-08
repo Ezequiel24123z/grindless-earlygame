@@ -21,6 +21,8 @@ import java.util.Optional;
  * Refractory brick: 1 slag → 1 brick in 20 s at 1400 °C (ADR-0091).
  * Metallurgical silicon: 1 silica + 2 carbon → 1 silicon + 2 B CO in 14 s (ADR-0092).
  * Zone refining: 10 metallurgical silicon → 7 electronic silicon in 600 s (ADR-0093).
+ * Renewable glass: cobblestone → sand → glass, on the Pulverizer and Arc Furnace respectively
+ * (ADR-0117).
  * Spatial prototypes stay registered and testable but have no survival recipes until their
  * T10-T15 campaign frontiers (ADR-0107).
  * No Minecraft imports: {@code VerifyRecipes} dumps this graph without booting the game.
@@ -166,6 +168,8 @@ public final class ProcessGraph {
         recipes.add(condenseSteam());
         recipes.add(electricArcSteel());
         recipes.add(refractoryBrick());
+        recipes.add(renewableSand());
+        recipes.add(vitrifyGlass());
         recipes.add(metallurgicalSilicon());
         recipes.add(zoneRefining());
         return List.copyOf(recipes);
@@ -219,6 +223,35 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 ProcessLogic.PULVERIZE_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /**
+     * The first renewable industrial input. A vanilla cobblestone generator is the actual
+     * source; the Pulverizer supplies sand, which is also a member of {@code #silica}.
+     */
+    private static ProcessRecipe renewableSand() {
+        return new ProcessRecipe(
+                "renew/sand",
+                MachineFamily.PULVERIZER,
+                List.of(IngredientSpec.item("minecraft:cobblestone", 1)),
+                List.of(OutputSpec.item("minecraft:sand", 1)),
+                Double.NaN,
+                null,
+                ProcessLogic.RENEWABLE_SAND_TICKS,
+                ProcessLogic.FU_PER_TICK);
+    }
+
+    /** Electric vitrification turns the renewable silica feed into a fully automatable glass line. */
+    private static ProcessRecipe vitrifyGlass() {
+        return new ProcessRecipe(
+                "renew/glass",
+                MachineFamily.ARC_FURNACE,
+                List.of(IngredientSpec.item("minecraft:sand", 1)),
+                List.of(OutputSpec.item("minecraft:glass", 1)),
+                ProcessLogic.VITRIFY_GLASS_TEMPERATURE,
+                null,
+                ProcessLogic.VITRIFY_GLASS_TICKS,
                 ProcessLogic.FU_PER_TICK);
     }
 

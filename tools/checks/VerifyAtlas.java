@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 107, rows.size());
+        eq("atlas lists every generated recipe", 109, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -26,7 +26,7 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 139, allRows.size());
+        eq("atlas includes every machine, hand craft and calibration route", 141, allRows.size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -37,8 +37,8 @@ public final class VerifyAtlas {
         eq("calibration keeps its F0 draw", 8L, calibration.fuPerTick());
         AtlasLogic.Entry relay = route(allRows, "craft/relay_matrix");
         eq("relay names the crafting table", "CRAFTING_TABLE", relay.station());
-        eq("relay records every shaped input", 9, relay.inputs().size());
-        eq("relay displays its batch inputs", "4x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
+        eq("relay records every shaped input", 7, relay.inputs().size());
+        eq("relay displays its batch inputs", "2x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
                 AtlasLogic.describe(relay.inputs()));
         eq("relay displays four physical outputs", "4x relay_matrix", AtlasLogic.describe(relay.outputs()));
 
@@ -212,6 +212,14 @@ public final class VerifyAtlas {
                         .contains("silicon/zone_refining"));
         yes("silica reduces to that silicon",
                 ids(AtlasLogic.consuming(recipes, "grindless:silica")).contains("silicon/metallurgical"));
+        eq("renewable cobblestone milling makes sand", 1,
+                AtlasLogic.producing(recipes, "minecraft:sand").size());
+        eq("renewable sand vitrification makes glass", 1,
+                AtlasLogic.producing(recipes, "minecraft:glass").size());
+        yes("the renewable glass chain begins at the pulverizer",
+                ids(AtlasLogic.consuming(recipes, "minecraft:cobblestone")).contains("renew/sand"));
+        yes("the renewable glass chain ends at the arc furnace",
+                ids(AtlasLogic.consuming(recipes, "minecraft:sand")).contains("renew/glass"));
         yes("that route vents CO",
                 ids(AtlasLogic.producing(recipes, "grindless:carbon_monoxide")).contains("silicon/metallurgical"));
         eq("refractory brick has one route", 1,

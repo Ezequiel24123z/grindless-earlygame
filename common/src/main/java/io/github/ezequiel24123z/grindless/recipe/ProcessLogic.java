@@ -146,6 +146,11 @@ public final class ProcessLogic {
      * optimal zone of 1900 °C.
      */
     public static final String SILICA = "grindless:silica";
+    /** Renewable glass starts as sand milled from vanilla-renewable cobblestone. */
+    public static final int RENEWABLE_SAND_TICKS = 20 * 6;
+    /** Electric vitrification keeps glass an industrial input instead of a hand-smelt chore. */
+    public static final int VITRIFY_GLASS_TICKS = 20 * 10;
+    public static final double VITRIFY_GLASS_TEMPERATURE = 1500.0;
     public static final String METALLURGICAL_SILICON = "grindless:metallurgical_silicon";
     public static final int SILICON_SILICA = 1;
     public static final int SILICON_CARBON = 2;

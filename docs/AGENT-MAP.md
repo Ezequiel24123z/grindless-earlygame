@@ -50,8 +50,8 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (107) and the ordinary
-craft count (31); `VerifyAtlas` pins 107 generated rows, 39 Assembler rows and 139 total
+`tools/checks/VerifyRecipes.java` pins the generated graph size (109) and the ordinary
+craft count (31); `VerifyAtlas` pins 109 generated rows, 39 Assembler rows and 141 total
 handheld routes (including 31 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
@@ -149,6 +149,8 @@ The first four checks also pin that the prototype transport has no generated sur
 
 `VerifyQuest` holds that a claim never consumes its evidence and never gates a machine
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).
+The Field Guide states the complete two-iron Bootstrap contract and points from its four-Matrix
+exit to the renewable-glass line; it remains readable independently of quest claims.
 The active route has eleven tasks in four lines, stops at electronic silicon and contains
 no dimension evidence; spatial pages return only with their campaign tiers.
 

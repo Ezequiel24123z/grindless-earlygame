@@ -373,7 +373,7 @@ Matrix is where the four outputs converge again, not where they first meet.
 | Tier | Materials route | Chemical route | Control route | Energy route and scale |
 | --- | --- | --- | --- | --- |
 | **T0 Bootstrap** | raw iron/copper, stone and hand-formed parts | fired clay, carbon and basic glass | redstone contacts and a primitive relay | Hand Crank; a few adjacent blocks; first T1 Relay Matrix batch |
-| **T1 Voltaic** | B1 milling, R1/R2 reduction, plates/rods/gears | water handling, roast gases and ceramic insulation | copper wire, coils, relays and the first Assembler | Thermal power and first pylon; one-room factory |
+| **T1 Voltaic** | B1 milling, R1/R2 reduction, plates/rods/gears and renewable glass | water handling, roast gases and ceramic insulation | copper wire, coils, relays and the first Assembler | Thermal power and first pylon; one-room factory |
 | **T2 Industrial** | steel, B2/B3 wet beneficiation, clean melt and casting | sulfur loop, electrolysis, air separation, brine and basic resin | motors, pumps, discrete control panels and wired logic | steam/solar F2; several closed loops across one or two buildings |
 | **T3 Arc** | refractory structures, hot-fluid routing and tougher alloys | first hydrocarbon fractions and the Arc Cell medium | industrial controllers, logistics crates and Construction Drones | fed Arc Reactor; first designed multiblock |
 | **T4 Precision** | electronic silicon, technical ceramics and recovered noble metals | pressure chemistry, nitric/HCl, etchant, polymers and ultrapure water | lithography, Integrated Matrices, ICs and reusable research patterns | precision power conditioning; a multi-line industrial campus |
@@ -400,6 +400,29 @@ The counterweight is permanent automation. The Assembler removes repeated fabric
 Cards remove repeated tuning, Construction Drones remove repeated placement, the Assembly Field
 handles chunk-scale structures, colonies are simulated rather than force-loaded, and galactic
 expansion is abstract and self-replicating. Complexity rises; chores do not.
+
+### Renewable base-input contract
+
+A material may begin as an Overworld find, but no ingredient used continuously may remain a
+manual gathering chore. Every recurring base material therefore needs a visible **seed route**
+and a later automated, indefinitely renewable route with a real energy, machine or logistics
+cost. The renewable route is not a free creative source and does not erase geography; it is the
+factory reward for solving the relevant line.
+
+| Base input | Seed route | Renewable factory route | Status |
+| --- | --- | --- | --- |
+| stone | ordinary stone/cobblestone | vanilla cobblestone generator | available at Bootstrap |
+| wood and carbon | trees and charcoal | tree farm feeding charcoal/biochar handling | vanilla source; industrial handling expands later |
+| water | surface water | Hand Pump / Fluid Well | existing Voltaic/Industrial infrastructure |
+| silica and glass | sand or nether quartz, then a furnace | cobblestone → Pulverizer → sand/silica → Arc Furnace → glass | implemented Voltaic line |
+| copper and iron | chunk-vein extraction | mineral recovery route after the first closed fluid loops | planned; the existing extractor removes hand-mining first |
+| redstone | ordinary ore or pack equivalent | dedicated recovery/synthesis route using an industrial reagent loop | planned before redstone becomes a sustained bottleneck |
+| clay and ceramics | surface clay | mineral dust plus water, then Kiln | planned with the ceramic expansion |
+
+The order is deliberate. T0 has to escape manual mining and demonstrate physical control, not
+manufacture every future input for free. T1 starts converting the first recurring ingredients into
+continuous factory feeds; glass is first because the same renewable sand also supplies silica for
+the silicon route.
 
 ### Control Matrix routes
 
@@ -506,6 +529,8 @@ Crude Extractor  [F0]  20 s  ──> 1 u raw <chunk material>
 Kiln             [T 400]        8 s   ──> dried / calcined feed
 Pulverizer       [F1]           6 s   ──> 2 u crushed
 Arc Furnace      [T 1500 · atm reducing · +1 u carbon]  12 s  ──> 1 u ingot per grade
+Pulverizer       [F1]           6 s   cobblestone ──> 1 u renewable sand/silica
+Arc Furnace      [F1 · T 1500] 10 s   sand ──> 1 u renewable glass
 Press            [cat plate die]   4 s  ──> 1 u plate
                         │
                         ▼

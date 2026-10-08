@@ -1378,7 +1378,7 @@ but is rarely economical.
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
 | **T0 — Bootstrap** | Escape velocity | Assisted extraction, primitive material/chemical/control parts and manual power culminate in the first Relay Matrix batch. |
-| **T1 — Voltaic** | First factory | Milling, reduction, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
+| **T1 — Voltaic** | First factory | Milling, reduction, renewable glass/silica, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
 | **T2 — Industrial** | Closed loops | Steel and wet beneficiation feed sulfur, electrolysis and resin loops; motors, discrete control, steam and solar turn them into a multi-line factory. |
 | **T3 — Arc** | Powered construction | Refractories, hot metal, Arc Cells and industrial control feed the Arc Reactor and Construction Drones. |
 | **T4 — Precision** | Purity and control | Pressure chemistry, ultrapure water, electronic silicon, lithography and the Research Station produce Integrated Matrices and reusable advanced patterns. |
@@ -1408,6 +1408,19 @@ The early ramp remains intentional. The Crude Extractor removes manual mining fi
 Assembler removes hand fabrication; drones remove block placement; satellites remove manual
 survey; gates remove repeated travel; abstract colonies and swarms remove remote ticking and
 manual expansion.
+
+### Renewable inputs, not free resources
+
+The project treats automation as the alternative to grind. A base material may enter through
+normal exploration, but any material consumed continuously needs an automated and indefinitely
+renewable route before volume demand makes gathering it a chore. Those routes still consume power,
+space and intermediate products: they are factory problems, never invisible permissions or free
+item generation.
+
+The first implemented line is **cobblestone → Pulverizer → sand/silica → Arc Furnace → glass**.
+A vanilla cobblestone generator makes its feed indefinite; the same sand is already valid silica
+for metallurgical silicon. Redstone, renewable metals and industrial ceramics follow the same
+contract, each with its own named process rather than one universal source block.
 
 ### Mechanical tier gate
 
@@ -2251,7 +2264,9 @@ and smoke coverage stay; their survival recipes and premature quest claims left 
 book and guide now stop at electronic silicon. **BP** has introduced F0-F15, physical Control
 Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable four-unit
 survival batch. Its physical calibration route and Atlas visibility are in; the full T0 machine and
-playthrough audit is the active work. **BQ** adds physical T2 fabrication. The superseded Research Terminal permission system has been
+playthrough audit is the active work. The first Voltaic renewable line now turns cobblestone into
+sand/silica and then glass, but this does not itself accept T1: **BQ** adds physical T2 fabrication
+after the Bootstrap gate. The superseded Research Terminal permission system has been
 removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
 ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 

@@ -59,8 +59,8 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, steel and silicon graph",
-                107, recipes.size());
+        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, steel and silicon graph",
+                109, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -68,6 +68,25 @@ public final class VerifyRecipes {
         ProcessRecipe ironR1 = recipe(recipes, "b1_r1/iron");
         ProcessRecipe goldB0 = recipe(recipes, "b0_r1/gold");
         ProcessRecipe mythrilB0 = recipe(recipes, "b0_r1/mythril");
+        ProcessRecipe renewableSand = recipe(recipes, "renew/sand");
+        ProcessRecipe renewableGlass = recipe(recipes, "renew/glass");
+
+        eq("renewable sand uses the pulverizer", MachineFamily.PULVERIZER, renewableSand.family());
+        eq("renewable sand consumes cobblestone", "item:minecraft:cobblestone",
+                renewableSand.itemInputs().get(0).qualified());
+        eq("renewable sand produces sand", "item:minecraft:sand",
+                renewableSand.itemOutputs().get(0).qualified());
+        eq("renewable sand is six seconds", ProcessLogic.RENEWABLE_SAND_TICKS,
+                renewableSand.durationTicks());
+        eq("renewable glass uses the arc furnace", MachineFamily.ARC_FURNACE, renewableGlass.family());
+        eq("renewable glass consumes sand", "item:minecraft:sand",
+                renewableGlass.itemInputs().get(0).qualified());
+        eq("renewable glass produces glass", "item:minecraft:glass",
+                renewableGlass.itemOutputs().get(0).qualified());
+        eq("renewable glass is 1500 C", ProcessLogic.VITRIFY_GLASS_TEMPERATURE,
+                renewableGlass.temperatureC());
+        eq("renewable glass is ten seconds", ProcessLogic.VITRIFY_GLASS_TICKS,
+                renewableGlass.durationTicks());
 
         eq("B0×R1 is the arc furnace", MachineFamily.ARC_FURNACE, ironB0.family());
         eq("B0×R1 takes one raw", "tag:forge:raw_materials/iron", ironB0.itemInputs().get(0).qualified());
