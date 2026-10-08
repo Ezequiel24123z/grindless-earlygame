@@ -127,6 +127,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0113](#adr-0113--gregtech-is-the-primary-design-reference) | GregTech is the primary design reference | Accepted |
 | [0114](#adr-0114--physical-components-replace-global-research-permissions) | Physical components replace global research permissions | Accepted |
 | [0115](#adr-0115--the-atlas-shows-physical-bootstrap-routes) | The Atlas shows physical Bootstrap routes | Accepted |
+| [0116](#adr-0116--bootstrap-has-an-explicit-survival-entry-and-exit) | Bootstrap has an explicit survival entry and exit | Accepted |
 
 ---
 
@@ -5127,3 +5128,36 @@ vanilla recipe (is outside the mod's route graph and makes the handheld unusable
 **Consequences.** The fresh T0 player can see the complete physical core-to-matrix route in the
 native handheld. The Atlas remains bounded to Grindless-owned data and stays testable without a
 Minecraft runtime. The later solver and third-party viewer integrations remain deferred.
+
+---
+
+## ADR-0116 — Bootstrap has an explicit survival entry and exit
+
+*2026-10-08 · Accepted*
+
+**Context.** The previous “two iron” wording correctly described the mod-specific metal spend,
+but it was too easy to misread as the whole inventory for the first Matrix. The actual physical
+route also visibly needs a normal Overworld source of stone, wood, sand or another glass source,
+redstone and copper. The tier gate requires an explicit entry, exit, scale and target playtime;
+without those, a later audit can claim success from isolated recipes rather than a route a player
+can follow.
+
+**Decision.** T0 starts in ordinary Overworld survival once the player has a crafting table and
+can gather wood, stone, sand or another glass source, redstone, copper and exactly two tagged iron
+ingots for Grindless machinery. The two iron pay only for the Hand Crank Dynamo and Crude
+Extractor; the Multitool, Terminal and Data Core do not spend them. The player powers both F0
+machines, uses the extractor at least once, calibrates a Data Core, and crafts four T1 Relay
+Matrices from the calibrated core, two glass, two copper and two redstone. That is the T0 exit.
+The target is roughly twenty minutes from this vanilla-material entry, with no repeated hand craft
+after the recoverable four-matrix batch.
+
+**Alternatives rejected.** Calling two iron the entire inventory (hides real visible inputs);
+granting copper, redstone or glass through a hidden starter state (makes the route less legible);
+requiring a particular chunk material from the extractor (turns seed variation into a softlock);
+accepting a collection of unit tests without one route contract (does not meet the mechanical
+tier gate).
+
+**Consequences.** `VerifyBootstrap` must pin both the two-iron machine budget and the physical
+Matrix inputs/output. The field guide and Atlas name the same route. A local smoke proves the
+machine seam, while an end-to-end survival playthrough remains the final acceptance evidence
+before T1 opens.

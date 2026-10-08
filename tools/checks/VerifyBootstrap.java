@@ -24,6 +24,7 @@ public final class VerifyBootstrap {
         budget();
         recipes();
         research();
+        exit();
 
         System.out.println(failures == 0
                 ? "ALL BOOTSTRAP CHECKS PASSED"
@@ -89,6 +90,36 @@ public final class VerifyBootstrap {
         eq("calibration consumes a data core", "grindless:data_core", ResearchLogic.DATA_CORE);
         eq("calibration produces a physical core", "grindless:calibrated_data_core",
                 ResearchLogic.CALIBRATED_DATA_CORE);
+    }
+
+    /** The physical T0 exit contract from ADR-0116. */
+    private static void exit() {
+        T1Recipes.Shaped relay = T1Recipes.shaped().stream()
+                .filter(recipe -> recipe.name().equals("relay_matrix"))
+                .findFirst()
+                .orElseThrow();
+        eq("the physical Bootstrap exit is a four-matrix batch", 4, relay.resultCount());
+        eq("the matrix consumes one calibrated core", 1,
+                count(relay, T1Recipes.CALIBRATED_DATA_CORE));
+        eq("the matrix consumes two copper", 2, count(relay, T1Recipes.COPPER));
+        eq("the matrix consumes two redstone", 2, count(relay, T1Recipes.REDSTONE));
+        eq("the matrix consumes two glass", 2, count(relay, T1Recipes.GLASS));
+        eq("the matrix spends none of the two Bootstrap iron", 0, count(relay, BootstrapRecipes.IRON));
+        no("the physical exit names no blueprint or permission", relay.key().values().stream()
+                .anyMatch(ingredient -> ingredient.contains("blueprint") || ingredient.contains("permission")));
+    }
+
+    private static int count(T1Recipes.Shaped recipe, String ingredient) {
+        int count = 0;
+        for (String row : recipe.pattern()) {
+            for (int index = 0; index < row.length(); index++) {
+                String key = String.valueOf(row.charAt(index));
+                if (ingredient.equals(recipe.key().get(key))) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private static BootstrapRecipes.Shaped shaped(String name) {

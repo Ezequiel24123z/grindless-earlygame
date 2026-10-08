@@ -2089,8 +2089,8 @@ playable slices under the mechanical gate in ADR-0108:
 1. **BO — survival shortcut withdrawn.** The eight prototype recipes are gone and the quest
    book and guide stop at electronic silicon. Registrations, worlds, commands and smokes remain.
 2. **BP — close T0 Bootstrap *(active)*.** The matrix rating/architecture data, F0–F15, physical
-   calibration, first recoverable T1 Relay Matrix batch and Atlas visibility are in. Audit the
-   complete two-iron bootstrap and accept T0 only after an end-to-end survival playthrough.
+   calibration, first recoverable T1 Relay Matrix batch, Atlas visibility and explicit
+   survival entry/exit are in. Accept T0 only after an end-to-end survival playthrough.
 3. **BQ — physical T2 gate.** Introduce the consumed T2 Relay Matrix route and convert Advanced
    Data Cores into future pattern media.
 4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
@@ -2255,10 +2255,12 @@ playthrough audit is the active work. **BQ** adds physical T2 fabrication. The s
 removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
 ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 
-T0 Bootstrap is the only mechanically active tier. Its audit covers the complete survival route,
-not just registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical
-and control parts, discoverability, persistence, automation and the recoverable first T1 Relay
-Matrix batch. T1 stays locked until that route passes the shared gate in ADR-0108.
+T0 Bootstrap is the only mechanically active tier. It starts with ordinary Overworld sources of
+wood, stone, glass, redstone and copper plus two iron for Grindless machinery, then exits with a
+recoverable four-Relay-Matrix batch. Its audit covers the complete survival route, not just
+registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical and control
+parts, discoverability, persistence and automation. T1 stays locked until that route passes the
+shared gate in ADR-0108.
 
 The Flux Exosuit is in
 (ADR-0103): Assembler-manufactured from visible components. Four pieces with the

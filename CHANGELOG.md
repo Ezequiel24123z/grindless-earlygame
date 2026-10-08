@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bootstrap entry and exit are explicit (ADR-0116).** T0 now names its normal-survival
+  vanilla inputs, two-iron mod machinery budget, physical four-Relay-Matrix exit and roughly
+  twenty-minute target. The Bootstrap check pins the complete visible Matrix batch.
+
 - **The Atlas exposes physical Bootstrap routes (ADR-0115).** The Process Atlas now lists the
   Research Terminal's Data Core calibration and every authored Grindless shaped recipe alongside
   generated machine processes. The first Relay Matrix batch therefore shows its real ingredients,
