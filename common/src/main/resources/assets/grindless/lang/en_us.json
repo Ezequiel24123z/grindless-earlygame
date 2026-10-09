@@ -309,6 +309,7 @@
   "gui.grindless.quest.line.renewables": "Renewable Inputs",
   "gui.grindless.quest.line.logistics": "Logistics and Heat",
   "gui.grindless.quest.line.factory_world": "Factory World",
+  "gui.grindless.quest.line.industrial": "Industrial Matrix",
   "gui.grindless.quest.task.multitool": "Craft a Multitool",
   "gui.grindless.quest.task.crank": "Craft a Hand Crank Dynamo",
   "gui.grindless.quest.task.extractor": "Craft a Crude Extractor",
@@ -328,6 +329,7 @@
   "gui.grindless.quest.task.logistics": "Craft eight Conveyor Belts",
   "gui.grindless.quest.task.kiln": "Craft a Kiln",
   "gui.grindless.quest.task.factory_world": "Craft a Factory Portal",
+  "gui.grindless.quest.task.industrial_matrix": "Assemble an F2 Relay Matrix",
 
   "gui.grindless.guide.title": "Field Guide",
   "gui.grindless.guide.prev": "Previous",
@@ -348,5 +350,7 @@
   "gui.grindless.guide.logistics.title": "Logistics and Heat",
   "gui.grindless.guide.logistics.body": "Conveyor Belts move items through the first factory; splitters, mergers, sorters and tunnel belts organise the line without power. A Basic Tank and Clay Conduit hold and move ambient water. The Kiln handles low-temperature fired feeds. Use the Process Atlas for exact live recipes and conditions: it describes a route, but leaves the layout decision to you.",
   "gui.grindless.guide.factory_world.title": "Factory World",
-  "gui.grindless.guide.factory_world.body": "After the Assembler can replace consumed matrices, craft a Factory Portal with glass, copper, redstone and one Relay Matrix. It leads to a flat grass construction world at permanent midday, with no weather or hostile spawns. Return through its arrival portal to the exact portal that sent you. Its resource fields remain finite and surveyed, so clean terrain is never free material."
+  "gui.grindless.guide.factory_world.body": "After the Assembler can replace consumed matrices, craft a Factory Portal with glass, copper, redstone and one Relay Matrix. It leads to a flat grass construction world at permanent midday, with no weather or hostile spawns. Return through its arrival portal to the exact portal that sent you. Its resource fields remain finite and surveyed, so clean terrain is never free material.",
+  "gui.grindless.guide.industrial.title": "Industrial Matrix",
+  "gui.grindless.guide.industrial.body": "T1 ends with a physical F2 Relay Matrix, not a permission. In the Assembler, combine one F1 Relay Matrix, a Machine Casing, four renewable glass and a Flux Cell. The former Matrix is consumed: its relay control is carried forward, the casing is the structure, glass is the dielectric and the cell is the power coupling. This is the hand-off to Industrial; do not expect an F2 machine to be hand-crafted."
 }

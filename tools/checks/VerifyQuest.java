@@ -23,7 +23,8 @@ public final class VerifyQuest {
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
-            "bootstrap", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world");
+            "bootstrap", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
+            "industrial");
 
     private static final List<String> FORBIDDEN = List.of(
             "betterquesting", "patchouli", "funwayguy", "draconic", "galacticraft",
@@ -51,10 +52,10 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("nineteen tasks, from the multitool to the Factory Portal", 19, tasks.size());
-        eq("eight T0-to-T1 lines", LINES, QuestCatalogue.lines());
+        eq("twenty tasks, from the multitool to the F2 Matrix", 20, tasks.size());
+        eq("nine T0-to-T1 lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
-        eq("the last task opens the Factory World", "factory_world", tasks.get(tasks.size() - 1).id());
+        eq("the last task is the physical Industrial hand-off", "industrial_matrix", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
                 (int) tasks.stream().map(QuestCatalogue.Task::id).distinct().count());
     }
@@ -75,7 +76,10 @@ public final class VerifyQuest {
         eq("the Assembler unlocks the repeated Matrix line", List.of("assembler"), task("matrix_line").requires());
         eq("renewable glass has a physical stock objective", "minecraft:glass", subject("glass"));
         eq("the Factory Portal finishes the current route", "grindless:factory_portal", subject("factory_world"));
-        yes("a walk from the multitool reaches the Factory Portal", reaches("multitool", "factory_world"));
+        eq("the F2 Matrix is the T1 exit", "grindless:relay_matrix", subject("industrial_matrix"));
+        eq("the F2 Matrix requires F2", io.github.ezequiel24123z.grindless.energy.FluxTier.F2,
+                task("industrial_matrix").matrixRating());
+        yes("a walk from the multitool reaches the F2 Matrix", reaches("multitool", "industrial_matrix"));
         no("the survival route has no dimension objectives",
                 tasks.stream().anyMatch(task -> task.evidence() == QuestCatalogue.Evidence.DIMENSION));
         for (QuestCatalogue.Task task : tasks) {
@@ -123,6 +127,9 @@ public final class VerifyQuest {
         QuestCatalogue.Task relay = task("relay");
         no("four Relay Matrices do not complete the five-machine seed", QuestEvidence.met(relay, 4, "minecraft:overworld"));
         yes("five Relay Matrices complete the seed", QuestEvidence.met(relay, 5, "minecraft:overworld"));
+        QuestCatalogue.Task industrial = task("industrial_matrix");
+        no("no F2 Matrix does not complete the Industrial hand-off", QuestEvidence.met(industrial, 0, "minecraft:overworld"));
+        yes("one F2 Matrix completes the Industrial hand-off", QuestEvidence.met(industrial, 1, "minecraft:overworld"));
     }
 
     private static void rewards() throws IOException {

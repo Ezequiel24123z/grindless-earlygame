@@ -134,6 +134,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0120](#adr-0120--the-first-client-pack-is-t0-scoped-and-jei-reads-the-live-graph) | The first client pack is T0-scoped and JEI reads the live graph | Accepted |
 | [0121](#adr-0121--the-factory-world-is-clean-building-space-not-a-resource-shortcut) | The Factory World is clean building space, not a resource shortcut | Accepted |
 | [0122](#adr-0122--the-seed-matrix-batch-funds-the-forming-press) | The seed Matrix batch funds the forming Press | Accepted |
+| [0123](#adr-0123--the-voltaic-exit-is-a-rated-physical-f2-relay-matrix) | The Voltaic exit is a rated physical F2 Relay Matrix | Accepted |
 
 ---
 
@@ -5378,3 +5379,23 @@ two-iron machinery budget and single calibration ingredient list. T1 can now beg
 factory route, but it is not accepted until its physical T2 Matrix frontier and end-to-end
 survival playthrough are complete. `VerifyBootstrap`, `VerifyRecipes` and `VerifyQuest` pin the
 allocation and the expanded in-game route.
+
+---
+
+## ADR-0123 — The Voltaic exit is a rated physical F2 Relay Matrix
+
+*2026-10-09 · Accepted*
+
+**Context.** T1 can reproduce its F1 Relay Matrix batch, but that alone cannot prove that the
+factory has reached Industrial. A world flag, a quest claim or an untagged copy of the same item
+would recreate the permission system removed by ADR-0114.
+
+**Decision.** The Assembler consumes an F1 Relay Matrix, Machine Casing, four renewable glass and
+a Flux Cell in forty seconds at F1, and emits one Relay Matrix carrying `Rating = F2`. The former
+Matrix is consumed and supplies both the required prior rating and the control component; casing,
+glass and cell are the structural, dielectric and power-coupling components. `IngredientSpec` and
+`OutputSpec` carry matrix ratings, so lookup verifies F1 and machine output writes F2 NBT. The
+Quest Book counts only F2 stacks for its terminal task.
+
+**Consequences.** T1 now has a visible physical exit without unlocking an F2 machine early. The
+next slice can attach T2 consumers to this rating; it must not add a global permission.

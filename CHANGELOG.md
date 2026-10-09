@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Physical T1 exit (ADR-0123).** The Assembler now turns an F1 Relay Matrix, Machine Casing,
+  renewable glass and Flux Cell into one NBT-rated F2 Relay Matrix. The Quest Book tracks that
+  exact rating as its Industrial hand-off rather than accepting a bootstrap Matrix.
+
 - **T0-to-T1 factory bridge and expanded quest route (ADR-0122).** The initial Relay Matrix
   batch now contains five controllers: Thermal Generator, Pulverizer, Arc Furnace, Press and
   Assembler can all exist without a second pre-automation hand batch. The native Quest Book and

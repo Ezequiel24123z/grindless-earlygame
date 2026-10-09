@@ -12,7 +12,8 @@ import java.util.List;
 public final class GuideCatalogue {
 
     private static final List<String> PAGES = List.of(
-            "bootstrap", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world");
+            "bootstrap", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
+            "industrial");
 
     private GuideCatalogue() {
     }

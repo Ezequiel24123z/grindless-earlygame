@@ -60,7 +60,7 @@ public final class VerifyRecipes {
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel, silicon and Relay Matrix graph",
-                111, recipes.size());
+                112, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -72,6 +72,7 @@ public final class VerifyRecipes {
         ProcessRecipe renewableGlass = recipe(recipes, "renew/glass");
         ProcessRecipe renewableRedstone = recipe(recipes, "synthesise/redstone");
         ProcessRecipe relayMatrix = recipe(recipes, "assemble/relay_matrix");
+        ProcessRecipe industrialRelayMatrix = recipe(recipes, "assemble/relay_matrix_f2");
 
         eq("the Relay Matrix batch is assembled", MachineFamily.ASSEMBLER, relayMatrix.family());
         eq("the Relay Matrix batch retains glass", "item:minecraft:glass",
@@ -89,6 +90,18 @@ public final class VerifyRecipes {
                 relayMatrix.itemOutputs().get(0).count());
         eq("the Relay Matrix batch is twenty seconds", FabricationLogic.ASSEMBLE_TICKS,
                 relayMatrix.durationTicks());
+        eq("the Industrial Matrix is assembled", MachineFamily.ASSEMBLER, industrialRelayMatrix.family());
+        eq("the Industrial Matrix consumes an F1 physical Matrix", 1,
+                industrialRelayMatrix.itemInputs().get(0).matrixRating());
+        eq("the Industrial Matrix consumes a casing", "item:grindless:machine_casing",
+                industrialRelayMatrix.itemInputs().get(1).qualified());
+        eq("the Industrial Matrix consumes renewable dielectric glass", "item:minecraft:glass",
+                industrialRelayMatrix.itemInputs().get(2).qualified());
+        eq("the Industrial Matrix consumes a Flux Cell", "item:grindless:flux_cell",
+                industrialRelayMatrix.itemInputs().get(3).qualified());
+        eq("the Industrial Matrix produces F2", 2, industrialRelayMatrix.itemOutputs().get(0).matrixRating());
+        eq("the Industrial Matrix takes forty seconds", FabricationLogic.ASSEMBLE_TICKS * 2,
+                industrialRelayMatrix.durationTicks());
 
         eq("renewable sand uses the pulverizer", MachineFamily.PULVERIZER, renewableSand.family());
         eq("renewable sand consumes cobblestone", "item:minecraft:cobblestone",

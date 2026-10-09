@@ -2108,8 +2108,9 @@ playable slices under the mechanical gate in ADR-0108:
 2. **BP — close T0 Bootstrap *(active)*.** The matrix rating/architecture data, F0–F15, physical
    calibration, first recoverable T1 Relay Matrix batch, Atlas visibility and explicit
    survival entry/exit are in. Accept T0 only after an end-to-end survival playthrough.
-3. **BQ — physical T2 gate.** Introduce the consumed T2 Relay Matrix route and convert Advanced
-   Data Cores into future pattern media.
+3. **BQ — physical T2 gate *(in progress)*.** The consumed F2 Relay Matrix route is now made in
+   the Assembler from an F1 Matrix, casing, renewable glass and Flux Cell; attach its first T2
+   consumer and convert Advanced Data Cores into future pattern media.
 4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
    its Control Matrix, its signature project and the automation that makes its larger scale
    manageable.

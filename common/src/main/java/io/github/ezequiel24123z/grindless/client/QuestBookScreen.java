@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.client;
 import io.github.ezequiel24123z.grindless.menu.QuestBookMenu;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
+import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -206,6 +207,9 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         ResourceLocation id = ResourceLocation.tryParse(task.subject());
         Item item = id == null ? Items.AIR : BuiltInRegistries.ITEM.get(id);
         String name = item == null || item == Items.AIR ? task.subject() : item.getDescription().getString();
+        if (task.evidence() == QuestCatalogue.Evidence.MATRIX && item instanceof ControlMatrixItem matrix) {
+            name = matrix.stackFor(task.matrixRating(), 1).getHoverName().getString();
+        }
         return Component.translatable("gui.grindless.quest.objective.item", name,
                 menu.held(selected), task.count()).getString();
     }

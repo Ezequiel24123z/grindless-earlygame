@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.quest;
 
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,9 @@ public final class QuestCatalogue {
         /** The named item is in the player's inventory. */
         ITEM,
         /** The player is standing in the named dimension. */
-        DIMENSION
+        DIMENSION,
+        /** A named Control Matrix item carries the required physical rating. */
+        MATRIX
     }
 
     /** An existing item, given once. Not a new material. */
@@ -30,6 +33,7 @@ public final class QuestCatalogue {
      * @param evidence what the game already knows how to see
      * @param subject  an item id or a dimension id
      * @param count    how many of an item; ignored for dimension evidence
+     * @param matrixRating required physical rating for Matrix evidence; null otherwise
      * @param requires tasks that must already be claimed
      * @param reward   given on the first successful claim, and not consumed from the evidence
      */
@@ -39,6 +43,7 @@ public final class QuestCatalogue {
             Evidence evidence,
             String subject,
             int count,
+            FluxTier matrixRating,
             List<String> requires,
             Reward reward) {
     }
@@ -81,7 +86,9 @@ public final class QuestCatalogue {
             task("kiln", "logistics", Evidence.ITEM, "grindless:kiln", 1,
                     List.of("matrix_line"), reward("minecraft:brick", 8)),
             task("factory_world", "factory_world", Evidence.ITEM, "grindless:factory_portal", 1,
-                    List.of("matrix_line", "glass"), reward("minecraft:grass_block", 16)));
+                    List.of("matrix_line", "glass"), reward("minecraft:grass_block", 16)),
+            matrixTask("industrial_matrix", "industrial", "grindless:relay_matrix", FluxTier.F2, 1,
+                    List.of("matrix_line", "glass", "factory_world"), reward("minecraft:iron_ingot", 8)));
 
     private QuestCatalogue() {
     }
@@ -112,7 +119,12 @@ public final class QuestCatalogue {
 
     private static Task task(String id, String line, Evidence evidence, String subject, int count,
                              List<String> requires, Reward reward) {
-        return new Task(id, line, evidence, subject, count, List.copyOf(requires), reward);
+        return new Task(id, line, evidence, subject, count, null, List.copyOf(requires), reward);
+    }
+
+    private static Task matrixTask(String id, String line, String subject, FluxTier rating, int count,
+                                   List<String> requires, Reward reward) {
+        return new Task(id, line, Evidence.MATRIX, subject, count, rating, List.copyOf(requires), reward);
     }
 
     private static Reward reward(String itemId, int count) {

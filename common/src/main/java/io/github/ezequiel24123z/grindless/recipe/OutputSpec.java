@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+
 /**
  * One process output, as data.
  *
@@ -11,8 +13,13 @@ package io.github.ezequiel24123z.grindless.recipe;
  * @param id     {@code namespace:path}
  * @param count  units produced
  * @param vented whether this output is discarded by a named sink rather than stored
+ * @param matrixRating physical Flux rating written to a Control Matrix, or zero for ordinary items
  */
-public record OutputSpec(String kind, String id, int count, boolean vented) {
+public record OutputSpec(String kind, String id, int count, boolean vented, int matrixRating) {
+
+    public OutputSpec(String kind, String id, int count, boolean vented) {
+        this(kind, id, count, vented, 0);
+    }
 
     public OutputSpec {
         if (count <= 0) {
@@ -23,6 +30,10 @@ public record OutputSpec(String kind, String id, int count, boolean vented) {
                 && !IngredientSpec.FLUID.equals(kind)) {
             throw new IllegalArgumentException("unknown output kind: " + kind);
         }
+        if (matrixRating < 0 || matrixRating >= FluxTier.values().length
+                || (matrixRating > 0 && (!IngredientSpec.ITEM.equals(kind) || vented))) {
+            throw new IllegalArgumentException("invalid Control Matrix rating");
+        }
     }
 
     public static OutputSpec tag(String id, int count) {
@@ -31,6 +42,14 @@ public record OutputSpec(String kind, String id, int count, boolean vented) {
 
     public static OutputSpec item(String id, int count) {
         return new OutputSpec(IngredientSpec.ITEM, id, count, false);
+    }
+
+    /** An item result carrying a physical Control Matrix rating. */
+    public static OutputSpec matrix(String id, FluxTier rating, int count) {
+        if (rating == null || rating == FluxTier.F0) {
+            throw new IllegalArgumentException("a Control Matrix must be F1 or higher");
+        }
+        return new OutputSpec(IngredientSpec.ITEM, id, count, false, rating.ordinal());
     }
 
     public static OutputSpec fluid(String id, int count) {

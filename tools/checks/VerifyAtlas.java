@@ -18,15 +18,15 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 111, rows.size());
+        eq("atlas lists every generated recipe", 112, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("forty reachable assembler crafts in this set", 40,
+        eq("forty-one reachable assembler crafts in this set", 41,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 144, allRows.size());
+        eq("atlas includes every machine, hand craft and calibration route", 145, allRows.size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -49,6 +49,13 @@ public final class VerifyAtlas {
                 AtlasLogic.describe(assembledRelay.inputs()));
         eq("assembled relay displays five physical outputs", "5x relay_matrix",
                 AtlasLogic.describe(assembledRelay.outputs()));
+        AtlasLogic.Entry industrialRelay = route(allRows, "assemble/relay_matrix_f2");
+        eq("the Industrial Matrix names the Assembler", "ASSEMBLER", industrialRelay.station());
+        eq("the Industrial Matrix retains all seven physical input units", 7, industrialRelay.inputs().size());
+        eq("the Industrial Matrix carries a physical Matrix forward", "item:grindless:relay_matrix",
+                industrialRelay.inputs().get(0));
+        eq("the Industrial Matrix shows its physical output", "relay_matrix",
+                AtlasLogic.describe(industrialRelay.outputs()));
         AtlasLogic.Entry factoryPortal = route(allRows, "craft/factory_portal");
         eq("factory portal is a crafting-table route", "CRAFTING_TABLE", factoryPortal.station());
         yes("factory portal consumes its physical Matrix",

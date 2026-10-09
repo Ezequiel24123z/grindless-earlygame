@@ -6,6 +6,7 @@ import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
+import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -107,7 +108,7 @@ public final class QuestBookMenu extends AbstractContainerMenu {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         for (int i = 0; i < tasks.size(); i++) {
             QuestCatalogue.Task task = tasks.get(i);
-            int held = held(server, task.subject());
+            int held = held(server, task);
             state.set(i, QuestLogic.consider(task, claimed, QuestEvidence.met(task, held,
                     server.level().dimension().location().toString())).ordinal());
             state.set(tasks.size() + i, held);
@@ -115,27 +116,35 @@ public final class QuestBookMenu extends AbstractContainerMenu {
     }
 
     private static boolean evidenceMet(ServerPlayer player, QuestCatalogue.Task task) {
-        return QuestEvidence.met(task, held(player, task.subject()),
+        return QuestEvidence.met(task, held(player, task),
                 player.level().dimension().location().toString());
     }
 
-    private static int held(ServerPlayer player, String itemId) {
+    private static int held(ServerPlayer player, QuestCatalogue.Task task) {
         int count = 0;
         Inventory inventory = player.getInventory();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.getItem(i);
-            if (stack.isEmpty()) {
-                continue;
-            }
-            if (itemId.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString())) {
+            if (matches(task, stack)) {
                 count += stack.getCount();
             }
         }
         ItemStack offhand = player.getOffhandItem();
-        if (!offhand.isEmpty() && itemId.equals(BuiltInRegistries.ITEM.getKey(offhand.getItem()).toString())) {
+        if (matches(task, offhand)) {
             count += offhand.getCount();
         }
         return count;
+    }
+
+    private static boolean matches(QuestCatalogue.Task task, ItemStack stack) {
+        if (stack.isEmpty() || !task.subject().equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString())) {
+            return false;
+        }
+        if (task.evidence() != QuestCatalogue.Evidence.MATRIX) {
+            return true;
+        }
+        return stack.getItem() instanceof ControlMatrixItem matrix
+                && matrix.spec(stack).map(value -> value.rating() == task.matrixRating()).orElse(false);
     }
 
     private static void give(ServerPlayer player, QuestCatalogue.Reward reward) {

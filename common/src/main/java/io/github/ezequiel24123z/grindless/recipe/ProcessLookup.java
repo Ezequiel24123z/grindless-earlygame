@@ -6,6 +6,8 @@ import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.material.Material;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
@@ -223,6 +225,13 @@ public final class ProcessLookup {
         if (stack.isEmpty()) {
             return false;
         }
+        if (spec.matrixRating() > 0) {
+            if (!(stack.getItem() instanceof ControlMatrixItem matrix)) {
+                return false;
+            }
+            return matrix.spec(stack).map(value -> value.rating().ordinal() == spec.matrixRating())
+                    .orElse(false);
+        }
         if (IngredientSpec.ITEM.equals(spec.kind())) {
             return BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id());
         }
@@ -239,7 +248,16 @@ public final class ProcessLookup {
         }
         if (IngredientSpec.ITEM.equals(output.kind())) {
             Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(output.id()));
-            return item == null ? Optional.empty() : Optional.of(new ItemStack(item, output.count()));
+            if (item == null) {
+                return Optional.empty();
+            }
+            if (output.matrixRating() > 0) {
+                if (!(item instanceof ControlMatrixItem matrix)) {
+                    return Optional.empty();
+                }
+                return Optional.of(matrix.stackFor(FluxTier.values()[output.matrixRating()], output.count()));
+            }
+            return Optional.of(new ItemStack(item, output.count()));
         }
         ResourceLocation tag = new ResourceLocation(output.id());
         int slash = tag.getPath().lastIndexOf('/');

@@ -472,6 +472,11 @@ blocks do not pretend to need a controller. Glass brings the primitive chemical 
 material route, and the calibrated core/redstone the control route. The physical output proves the
 manual-power route was used without consulting a world permission.
 
+T1 closes with the first F2 Relay Matrix: the Assembler consumes one F1 Matrix, one Machine
+Casing, four units of renewable glass and one Flux Cell in forty seconds at F1. The output is the
+same physical Matrix item with its `F2` rating written into the stack, ready for the first
+Industrial machine; it is not a quest permission or a separate controller item.
+
 Five architectures overlap rather than replace one another:
 
 | Architecture | Frontier ratings | New route opened |

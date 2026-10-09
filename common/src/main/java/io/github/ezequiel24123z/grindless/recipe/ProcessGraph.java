@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -121,6 +123,7 @@ public final class ProcessGraph {
         recipes.add(coilPress());
         recipes.add(coilMill());
         recipes.add(relayMatrix());
+        recipes.add(industrialRelayMatrix());
         recipes.add(pylonMk2());
         recipes.add(wireMill());
         recipes.add(motor());
@@ -399,6 +402,27 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    /**
+     * T1's exit: the former physical Relay controller, a structural casing, renewable
+     * dielectric glass and a Flux Cell become the F2 Relay Matrix. The former matrix is both
+     * the required prior rating and the control component; no research flag is consulted.
+     */
+    private static ProcessRecipe industrialRelayMatrix() {
+        return new ProcessRecipe(
+                "assemble/relay_matrix_f2",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1),
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item("minecraft:glass", 4),
+                        IngredientSpec.item(FabricationLogic.FLUX_CELL, 1)),
+                List.of(OutputSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS * 2,
                 FabricationLogic.FU_PER_TICK);
     }
 
