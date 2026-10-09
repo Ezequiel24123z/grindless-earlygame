@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **T0-to-T1 factory bridge and expanded quest route (ADR-0122).** The initial Relay Matrix
+  batch now contains five controllers: Thermal Generator, Pulverizer, Arc Furnace, Press and
+  Assembler can all exist without a second pre-automation hand batch. The native Quest Book and
+  Field Guide now follow that complete powered-factory route through surveyed extraction,
+  renewable glass, logistics and the Factory Portal, without advertising T2 prototypes.
+
 - **Factory World construction space (ADR-0121).** A post-Matrix Factory Portal now returns each
   player to their own flat grass world entrance. The dimension is fixed at midday, has no terrain
   features, weather or hostile spawns, and retains ordinary finite Grindless chunk-vein fields so
@@ -27,14 +33,8 @@ entries below reference those records by id.
   physical Research Terminal calibration alongside ordinary data recipes. AE2 is intentionally
   held for its complete T4 Precision integration rather than being an un-gated early escape.
 
-- **The Bootstrap quest now crosses the physical Relay Matrix.** The native book leads from a
-  Calibrated Data Core to the four-Matrix batch before it asks for an Arc Furnace, while the Field
-  Guide states how that seed batch becomes the first Thermal Generator, Pulverizer, Arc Furnace
-  and Assembler. The in-game route now matches the consumed-matrix crafts.
-
-- **Relay Matrices are now the real T1 machine component (ADR-0119).** The first four-unit
-  Bootstrap batch is consumed one each by the Thermal Generator, Pulverizer, Arc Furnace and
-  Assembler. The Assembler then repeats that same physical four-input batch in twenty seconds,
+- **Relay Matrices are now the real T1 machine component (ADR-0119).** The original Bootstrap
+  batch was consumed by early processing machines. The Assembler repeats the physical batch in twenty seconds,
   while Press, Kiln and Terrestrial Extractor also consume one Matrix. Its menu now has four
   inputs, and existing three-input Assemblers migrate their persisted output safely.
 
@@ -46,7 +46,7 @@ entries below reference those records by id.
 - **Renewable glass is the first continuous base-input line (ADR-0117).** A vanilla cobblestone
   generator can feed the Pulverizer for sand/silica, then the Arc Furnace vitrifies that sand into
   glass at F1. The Field Guide now states the exact two-iron Bootstrap contract and sends the
-  player from its four-Matrix exit to that line; the Atlas exposes both machine routes.
+  player from its five-Matrix exit to that line; the Atlas exposes both machine routes.
 
 ### Fixed
 
@@ -55,7 +55,7 @@ entries below reference those records by id.
   two; its diagonal layout now consumes exactly two glass, two copper and two redstone.
 
 - **Bootstrap entry and exit are explicit (ADR-0116).** T0 now names its normal-survival
-  vanilla inputs, two-iron mod machinery budget, physical four-Relay-Matrix exit and roughly
+  vanilla inputs, two-iron mod machinery budget, physical five-Relay-Matrix exit and roughly
   twenty-minute target. The Bootstrap check pins the complete visible Matrix batch.
 
 - **The Atlas exposes physical Bootstrap routes (ADR-0115).** The Process Atlas now lists the
@@ -65,7 +65,7 @@ entries below reference those records by id.
 
 - **Physical calibration replaces global research permissions (ADR-0114).** The Research
   Terminal now turns a Data Core into a hopper-recoverable Calibrated Data Core in thirty seconds
-  at F0. The four-unit Relay Matrix batch consumes that physical output. The world research save,
+  at F0. The current five-unit Relay Matrix batch consumes that physical output. The world research save,
   client sync, gated-recipe serializer and all runtime permission checks are removed; quests
   follow physical cores and never gate machines.
 

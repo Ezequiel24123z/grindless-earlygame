@@ -47,7 +47,7 @@ T2 and above are manufactured, never a crafting table
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
 - `recipe/T1Recipes.java` and `common/src/main/resources/data/grindless/recipes/` —
-  ordinary shaped crafting JSON, including the four-unit first Relay Matrix batch and its one-Matrix
+  ordinary shaped crafting JSON, including the five-unit first Relay Matrix batch and its one-Matrix
   T1 processing-machine costs.
 - `recipe/BootstrapRecipes.java` — T0 shaped JSON.
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
@@ -152,11 +152,11 @@ The first four checks also pin that the prototype transport has no generated sur
 
 `VerifyQuest` holds that a claim never consumes its evidence and never gates a machine
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).
-The Field Guide states the complete two-iron Bootstrap contract and points from its four-Matrix
-exit to the renewable-glass line; it remains readable independently of quest claims.
-The active route has twelve tasks in four lines, with the physical Relay Matrix between calibration
-and the first Arc Furnace; it stops at electronic silicon and contains
-no dimension evidence; spatial pages return only with their campaign tiers.
+The Field Guide states the complete two-iron Bootstrap contract and points from its five-Matrix
+exit through the complete Voltaic factory; it remains readable independently of quest claims.
+The active route has nineteen tasks in eight lines, with the physical Relay Matrix between
+calibration and the first powered machines; it ends at the Factory Portal, contains no dimension
+evidence and does not advertise spatial campaign prototypes.
 
 ## Multiblock
 

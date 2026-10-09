@@ -98,7 +98,7 @@ public final class VerifyBootstrap {
                 .filter(recipe -> recipe.name().equals("relay_matrix"))
                 .findFirst()
                 .orElseThrow();
-        eq("the physical Bootstrap exit is a four-matrix batch", 4, relay.resultCount());
+        eq("the physical Bootstrap exit is a five-matrix batch", 5, relay.resultCount());
         eq("the matrix consumes one calibrated core", 1,
                 count(relay, T1Recipes.CALIBRATED_DATA_CORE));
         eq("the matrix consumes two copper", 2, count(relay, T1Recipes.COPPER));

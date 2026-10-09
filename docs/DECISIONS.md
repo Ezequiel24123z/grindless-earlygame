@@ -123,7 +123,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0109](#adr-0109--upstream-material-may-be-reused-under-its-own-licence) | Upstream material may be reused under its own licence | Accepted |
 | [0110](#adr-0110--b2-pairs-materials-exactly-without-stack-nbt) | B2 pairs materials exactly without stack NBT | Accepted |
 | [0111](#adr-0111--shared-world-smokes-are-the-fast-local-loop) | Shared-world smokes are the fast local loop | Accepted |
-| [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Superseded in part by ADR-0114 |
+| [0112](#adr-0112--the-first-relay-matrix-is-a-four-unit-voltaic-hand-batch) | The first Relay Matrix is a four-unit Voltaic hand batch | Superseded in part by ADR-0114, ADR-0122 |
 | [0113](#adr-0113--gregtech-is-the-primary-design-reference) | GregTech is the primary design reference | Accepted |
 | [0114](#adr-0114--physical-components-replace-global-research-permissions) | Physical components replace global research permissions | Accepted |
 | [0115](#adr-0115--the-atlas-shows-physical-bootstrap-routes) | The Atlas shows physical Bootstrap routes | Accepted |
@@ -133,6 +133,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0119](#adr-0119--relay-matrices-are-consumed-machine-components) | Relay Matrices are consumed machine components | Accepted |
 | [0120](#adr-0120--the-first-client-pack-is-t0-scoped-and-jei-reads-the-live-graph) | The first client pack is T0-scoped and JEI reads the live graph | Accepted |
 | [0121](#adr-0121--the-factory-world-is-clean-building-space-not-a-resource-shortcut) | The Factory World is clean building space, not a resource shortcut | Accepted |
+| [0122](#adr-0122--the-seed-matrix-batch-funds-the-forming-press) | The seed Matrix batch funds the forming Press | Accepted |
 
 ---
 
@@ -5081,7 +5082,7 @@ chain and then use the secondary references to make that chain legible and pleas
 
 ## ADR-0114 — Physical components replace global research permissions
 
-*2026-10-07 · Accepted · Supersedes the gated-recipe portion of ADR-0057, ADR-0073 and ADR-0112*
+*2026-10-07 · Accepted · Supersedes the gated-recipe portion of ADR-0057, ADR-0073 and ADR-0112; batch count revised by ADR-0122*
 
 **Context.** The original Research Terminal stored Voltaic and Industrial unlocks in world-scoped
 saved data. Both crafting-table and process recipes consulted that invisible state. This made a
@@ -5091,7 +5092,7 @@ factory had actually achieved.
 **Decision.** Remove the global blueprint state, client synchronisation, recipe serializer and
 all runtime checks of it. Every ordinary recipe matches from its visible ingredients alone. The
 T0 Research Terminal remains a physical F0 machine: it consumes a Data Core over thirty seconds
-at 8 FU/t and leaves a Calibrated Data Core in its output slot. The first four Relay Matrices
+at 8 FU/t and leaves a Calibrated Data Core in its output slot. The first five Relay Matrices
 consume that output, alongside glass, copper and redstone. The terminal output can be recovered
 by hand or hopper. Existing `grindless_research` saved data is deliberately left unread: it is
 inert legacy data, rather than a migration source for a permission that no longer exists.
@@ -5151,10 +5152,10 @@ can follow.
 can gather wood, stone, sand or another glass source, redstone, copper and exactly two tagged iron
 ingots for Grindless machinery. The two iron pay only for the Hand Crank Dynamo and Crude
 Extractor; the Multitool, Terminal and Data Core do not spend them. The player powers both F0
-machines, uses the extractor at least once, calibrates a Data Core, and crafts four T1 Relay
+machines, uses the extractor at least once, calibrates a Data Core, and crafts five T1 Relay
 Matrices from the calibrated core, two glass, two copper and two redstone. That is the T0 exit.
 The target is roughly twenty minutes from this vanilla-material entry, with no repeated hand craft
-after the recoverable four-matrix batch.
+after the recoverable five-matrix batch.
 
 **Alternatives rejected.** Calling two iron the entire inventory (hides real visible inputs);
 granting copper, redstone or glass through a hidden starter state (makes the route less legible);
@@ -5251,10 +5252,11 @@ but the T1 machine recipes did not consume it. That made the Matrix a one-off mi
 than the primary machine-control component intended by the progression lattice, and it left the
 first Assembler unable to reproduce its own controller.
 
-**Decision.** The four Matrix seed batch is allocated one each to the Thermal Generator,
-Pulverizer, Arc Furnace and Assembler. The Assembler repeats the exact physical batch — two
-glass, two copper ingots, two redstone and one Calibrated Data Core — into four Relay Matrices in
-twenty seconds at F1. Press, Kiln and Terrestrial Extractor each consume one Matrix when crafted.
+**Decision.** The seed Matrix batch is allocated to the first factory's active machines. Its final
+count is five — Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler — under
+ADR-0122. The Assembler repeats the exact physical batch — two glass, two copper ingots, two
+redstone and one Calibrated Data Core — into five Relay Matrices in twenty seconds at F1. Press,
+Kiln and Terrestrial Extractor each consume one Matrix when crafted.
 Passive grids, storage, transport and hand tools do not consume a Matrix because they do not host
 an autonomous process controller. The Assembler gains a fourth input slot so this route neither
 omits an ingredient nor invents an intermediate solely to fit a UI limit.
@@ -5270,7 +5272,7 @@ route); charging passive belts, pylons or tanks (adds a controller tax where no 
 
 **Consequences.** The Matrix behaves like a GregTech-style circuit: a consumed, scalable
 component that carries progression through recipe inputs rather than a permission check. The
-first batch remains recoverable, but continued T1 expansion is automated once its four seed
+first batch remains recoverable, but continued T1 expansion is automated once its five seed
 machines exist. Future T2+ machine recipes must consume their matching physical Matrix as part of
 their own frontier slice; they are not silently converted by this T1 change.
 
@@ -5345,3 +5347,34 @@ for an unrelated milestone).
 available, while all ordinary resource/energy/logistics decisions remain. The portal is a compact
 two-way access block rather than a replacement for Luna, orbital or interstellar campaign travel.
 `VerifyFactory` pins the physical craft, fixed-noon world data and finite-field policy.
+
+---
+
+## ADR-0122 — The seed Matrix batch funds the forming Press
+
+*2026-10-09 · Accepted*
+
+**Context.** The first Relay Matrix batch contained four controllers for the Thermal Generator,
+Pulverizer, Arc Furnace and Assembler. That allocation was not mechanically reachable: the
+Assembler needs a casing, gears and a copper coil, and those parts require the Matrix-consuming
+Press. Asking the player to calibrate another core and hand-craft a second batch before the
+Assembler exists would make the advertised automation transition depend on a repeated hidden
+bootstrap.
+
+**Decision.** The manual and automated recipe both produce **five** Relay Matrices from the same
+two glass, two copper, two redstone and one Calibrated Data Core. The initial allocation is one
+each to Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler. The native Quest Book and
+Field Guide follow this exact route through Voltaic power, surveyed extraction, renewable glass,
+basic logistics and the optional Factory Portal. They remain non-gating evidence: holding an item
+unlocks only a claim and a small reward, never a machine.
+
+**Alternatives rejected.** A second manual seed batch before the Assembler (repetition at the
+moment automation should begin); removing the Matrix from the Press (makes the primary machine
+component inconsistent); free pre-pressed parts (hides the forming route); keeping a four-Matrix
+book that claims an unreachable factory (misleads the player).
+
+**Consequences.** The T0 exit becomes a recoverable five-Matrix batch while retaining its
+two-iron machinery budget and single calibration ingredient list. T1 can now begin as a coherent
+factory route, but it is not accepted until its physical T2 Matrix frontier and end-to-end
+survival playthrough are complete. `VerifyBootstrap`, `VerifyRecipes` and `VerifyQuest` pin the
+allocation and the expanded in-game route.

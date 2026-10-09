@@ -40,7 +40,7 @@ public final class T1Recipes {
             return switch (name) {
                 case "conveyor_belt", "clay_conduit" -> 8;
                 case "tunnel_belt" -> 2;
-                case "relay_matrix" -> 4;
+                case "relay_matrix" -> 5;
                 default -> 1;
             };
         }

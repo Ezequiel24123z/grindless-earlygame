@@ -40,14 +40,14 @@ public final class VerifyAtlas {
         eq("relay records every shaped input", 7, relay.inputs().size());
         eq("relay displays its batch inputs", "2x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
                 AtlasLogic.describe(relay.inputs()));
-        eq("relay displays four physical outputs", "4x relay_matrix", AtlasLogic.describe(relay.outputs()));
+        eq("relay displays five physical outputs", "5x relay_matrix", AtlasLogic.describe(relay.outputs()));
         AtlasLogic.Entry assembledRelay = route(allRows, "assemble/relay_matrix");
         eq("assembled relay names the Assembler", "ASSEMBLER", assembledRelay.station());
         eq("assembled relay keeps all seven physical input units", 7, assembledRelay.inputs().size());
         eq("assembled relay displays its batch inputs",
                 "2x glass + 2x ingots/copper + 2x redstone + calibrated_data_core",
                 AtlasLogic.describe(assembledRelay.inputs()));
-        eq("assembled relay displays four physical outputs", "4x relay_matrix",
+        eq("assembled relay displays five physical outputs", "5x relay_matrix",
                 AtlasLogic.describe(assembledRelay.outputs()));
         AtlasLogic.Entry factoryPortal = route(allRows, "craft/factory_portal");
         eq("factory portal is a crafting-table route", "CRAFTING_TABLE", factoryPortal.station());

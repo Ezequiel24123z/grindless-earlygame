@@ -6,9 +6,8 @@ import java.util.List;
 /**
  * The original quest book (ADR-0100).
  *
- * <p>Lines, tasks, dependencies and rewards for the currently reachable survival route:
- * T0 through electronic silicon at T2. The book does not gate a machine or expose the
- * registered spatial prototypes before their campaign tiers.
+ * <p>Lines, tasks, dependencies and rewards for the T0-to-T1 survival route. The book does
+ * not gate a machine or expose registered future-tier prototypes before their campaign tiers.
  */
 public final class QuestCatalogue {
 
@@ -51,24 +50,38 @@ public final class QuestCatalogue {
                     List.of("multitool"), reward("minecraft:coal", 4)),
             task("extractor", "bootstrap", Evidence.ITEM, "grindless:crude_extractor", 1,
                     List.of("crank"), reward("grindless:data_core", 1)),
-            task("voltaic", "voltaic", Evidence.ITEM, "grindless:calibrated_data_core", 1,
+            task("calibrate", "relay", Evidence.ITEM, "grindless:calibrated_data_core", 1,
                     List.of("extractor"), reward("grindless:process_atlas", 1)),
-            task("relay", "voltaic", Evidence.ITEM, "grindless:relay_matrix", 1,
-                    List.of("voltaic"), reward("minecraft:coal", 8)),
-            task("furnace", "voltaic", Evidence.ITEM, "grindless:arc_furnace", 1,
-                    List.of("relay"), reward("minecraft:coal", 8)),
-            task("industrial", "contact", Evidence.ITEM, "grindless:advanced_data_core", 1,
-                    List.of("voltaic"), reward("grindless:data_core", 1)),
-            task("reactor", "contact", Evidence.ITEM, "grindless:chemical_reactor", 1,
-                    List.of("industrial"), reward("grindless:vanadia_pellet", 1)),
-            task("steel", "metals", Evidence.ITEM, "grindless:steel_ingot", 1,
-                    List.of("furnace"), reward("minecraft:coal", 8)),
-            task("brick", "metals", Evidence.ITEM, "grindless:refractory_brick", 1,
-                    List.of("steel"), reward("grindless:data_core", 1)),
-            task("silicon", "metals", Evidence.ITEM, "grindless:metallurgical_silicon", 1,
-                    List.of("steel"), reward("minecraft:coal", 4)),
-            task("electronic", "metals", Evidence.ITEM, "grindless:electronic_silicon", 1,
-                    List.of("silicon"), reward("grindless:data_core", 1)));
+            task("relay", "relay", Evidence.ITEM, "grindless:relay_matrix", 5,
+                    List.of("calibrate"), reward("minecraft:flint", 2)),
+            task("thermal", "power", Evidence.ITEM, "grindless:thermal_generator", 1,
+                    List.of("relay"), reward("minecraft:coal", 16)),
+            task("pylon", "power", Evidence.ITEM, "grindless:flux_pylon_mk1", 1,
+                    List.of("thermal"), reward("minecraft:redstone", 4)),
+            task("scanner", "extraction", Evidence.ITEM, "grindless:prospectors_scanner", 1,
+                    List.of("pylon"), reward("minecraft:charcoal", 4)),
+            task("terrestrial", "extraction", Evidence.ITEM, "grindless:terrestrial_extractor", 1,
+                    List.of("scanner", "thermal"), reward("grindless:data_core", 1)),
+            task("pulverizer", "factory", Evidence.ITEM, "grindless:pulverizer", 1,
+                    List.of("thermal"), reward("minecraft:cobblestone", 32)),
+            task("furnace", "factory", Evidence.ITEM, "grindless:arc_furnace", 1,
+                    List.of("thermal", "pulverizer"), reward("minecraft:coal", 8)),
+            task("press", "factory", Evidence.ITEM, "grindless:press", 1,
+                    List.of("furnace"), reward("minecraft:iron_ingot", 4)),
+            task("assembler", "factory", Evidence.ITEM, "grindless:assembler", 1,
+                    List.of("press", "furnace"), reward("grindless:data_core", 1)),
+            task("matrix_line", "factory", Evidence.ITEM, "grindless:relay_matrix", 5,
+                    List.of("assembler"), reward("minecraft:redstone", 8)),
+            task("glass", "renewables", Evidence.ITEM, "minecraft:glass", 8,
+                    List.of("pulverizer", "furnace"), reward("minecraft:clay_ball", 16)),
+            task("water", "renewables", Evidence.ITEM, "grindless:hand_pump", 1,
+                    List.of("thermal"), reward("minecraft:bucket", 1)),
+            task("logistics", "logistics", Evidence.ITEM, "grindless:conveyor_belt", 8,
+                    List.of("assembler"), reward("minecraft:hopper", 1)),
+            task("kiln", "logistics", Evidence.ITEM, "grindless:kiln", 1,
+                    List.of("matrix_line"), reward("minecraft:brick", 8)),
+            task("factory_world", "factory_world", Evidence.ITEM, "grindless:factory_portal", 1,
+                    List.of("matrix_line", "glass"), reward("minecraft:grass_block", 16)));
 
     private QuestCatalogue() {
     }

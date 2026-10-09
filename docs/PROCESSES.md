@@ -462,11 +462,11 @@ previous-rating matrix
 
 Those four components are real products used elsewhere, not matrix-only tokens, and each already
 depends on another domain. The T1 Relay Matrix is the only bootstrap exception: a small manual
-batch starts the first factory, after which the Assembler repeats the same four-unit recipe. The
+batch starts the first factory, after which the Assembler repeats the same five-unit recipe. The
 F0-powered terminal calibrates one Data Core in thirty seconds; `2 glass + 2 copper ingots +
-2 redstone + 1 Calibrated Data Core` make four Relay Matrices, by hand for the seed batch or in
+2 redstone + 1 Calibrated Data Core` make five Relay Matrices, by hand for the seed batch or in
 twenty seconds at F1 in the Assembler. The seed matrices are consumed one each by the Thermal
-Generator, Pulverizer, Arc Furnace and Assembler. Thereafter every active T1 processing,
+Generator, Pulverizer, Arc Furnace, Press and Assembler. Thereafter every active T1 processing,
 generation or extraction machine consumes one Relay Matrix; passive grid, storage and transport
 blocks do not pretend to need a controller. Glass brings the primitive chemical route, copper the
 material route, and the calibrated core/redstone the control route. The physical output proves the

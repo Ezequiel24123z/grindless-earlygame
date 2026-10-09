@@ -1510,7 +1510,7 @@ The single most important structural rule in Grindless:
 | Tier | How you obtain the machine |
 | --- | --- |
 | **T0** | Crafting table. The bootstrap, and only the ungated bootstrap. |
-| **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first four-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace and Assembler, which then automates the same batch. |
+| **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first five-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler, which then automates the same batch. |
 | **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
 | **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
 | **T10–T12** | **Orbital Assembly Bay** and **Assembly Field** — vacuum, zero gravity and blueprint-scale construction. |
@@ -2245,10 +2245,10 @@ Tracked order of work. Each step must build green before the next begins.
 | 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 | 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
 | 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
-| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. BO shortened its campaign to twelve reachable tasks ending at electronic silicon, including the physical Relay Matrix exit. |
+| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. The native book now tracks the live T0-to-T1 factory route without exposing future-tier prototypes. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the four-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the five-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
 | 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
@@ -2282,8 +2282,8 @@ Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and th
 book are also implemented and tested. ADR-0107 reclassifies that vertical route as prototype
 infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
-book and guide now stop at electronic silicon. **BP** has introduced F0-F15, physical Control
-Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable four-unit
+book and guide now describe the reachable T0-to-T1 factory instead of prototype travel. **BP** has introduced F0-F15, physical Control
+Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable five-unit
 survival batch. Its physical calibration route and Atlas visibility are in; the full T0 machine and
 playthrough audit is the active work. The first Voltaic renewable line now turns cobblestone into
 sand/silica and then glass, but this does not itself accept T1: **BQ** adds physical T2 fabrication
@@ -2295,7 +2295,7 @@ ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 
 T0 Bootstrap is the only mechanically active tier. It starts with ordinary Overworld sources of
 wood, stone, glass, redstone and copper plus two iron for Grindless machinery, then exits with a
-recoverable four-Relay-Matrix batch. Its audit covers the complete survival route, not just
+recoverable five-Relay-Matrix batch. Its audit covers the complete survival route, not just
 registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical and control
 parts, discoverability, persistence and automation. T1 stays locked until that route passes the
 shared gate in ADR-0108.

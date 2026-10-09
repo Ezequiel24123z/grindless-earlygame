@@ -382,7 +382,7 @@ public final class ProcessGraph {
     }
 
     /**
-     * The first factory reproduces its own physical T1 controller in the same four-unit batch
+     * The first factory reproduces its own physical T1 controller in the same five-unit batch
      * as the Bootstrap craft. The four inputs deliberately retain glass, copper, redstone and
      * the calibrated core: automation removes repetition, not the control route.
      */

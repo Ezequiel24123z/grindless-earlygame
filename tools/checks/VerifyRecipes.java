@@ -85,7 +85,7 @@ public final class VerifyRecipes {
         eq("the Relay Matrix batch has four inputs", 4, relayMatrix.itemInputs().size());
         eq("the Relay Matrix batch makes physical matrices", "item:grindless:relay_matrix",
                 relayMatrix.itemOutputs().get(0).qualified());
-        eq("the Relay Matrix batch makes four", FabricationLogic.RELAY_MATRIX_BATCH,
+        eq("the Relay Matrix batch makes five", FabricationLogic.RELAY_MATRIX_BATCH,
                 relayMatrix.itemOutputs().get(0).count());
         eq("the Relay Matrix batch is twenty seconds", FabricationLogic.ASSEMBLE_TICKS,
                 relayMatrix.durationTicks());
@@ -892,9 +892,9 @@ public final class VerifyRecipes {
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
         eq("T1 ships thirty-two physical crafts", 32, T1Recipes.shaped().size());
-        yes("the first Relay Matrix is a four-unit hand batch",
+        yes("the first Relay Matrix is a five-unit hand batch",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
-                        && recipe.resultCount() == 4));
+                        && recipe.resultCount() == 5));
         for (String machine : List.of("thermal_generator", "pulverizer", "arc_furnace", "assembler",
                 "press", "kiln", "terrestrial_extractor")) {
             yes(machine + " consumes one physical Relay Matrix",

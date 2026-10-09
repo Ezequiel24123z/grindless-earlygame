@@ -2,7 +2,6 @@ package io.github.ezequiel24123z.grindless.quest;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ public final class VerifyQuest {
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
-            "bootstrap", "voltaic", "contact", "metals");
+            "bootstrap", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world");
 
     private static final List<String> FORBIDDEN = List.of(
             "betterquesting", "patchouli", "funwayguy", "draconic", "galacticraft",
@@ -52,10 +51,10 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("twelve tasks, from the multitool to electronic silicon", 12, tasks.size());
-        eq("four reachable lines", LINES, QuestCatalogue.lines());
+        eq("nineteen tasks, from the multitool to the Factory Portal", 19, tasks.size());
+        eq("eight T0-to-T1 lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
-        eq("the last task is electronic silicon", "electronic", tasks.get(tasks.size() - 1).id());
+        eq("the last task opens the Factory World", "factory_world", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
                 (int) tasks.stream().map(QuestCatalogue.Task::id).distinct().count());
     }
@@ -65,18 +64,18 @@ public final class VerifyQuest {
         eq("bootstrap starts at the multitool", "grindless:multitool", subject("multitool"));
         eq("then the crank", "grindless:hand_crank_dynamo", subject("crank"));
         eq("then the extractor", "grindless:crude_extractor", subject("extractor"));
-        eq("voltaic follows a calibrated core", "grindless:calibrated_data_core", subject("voltaic"));
-        eq("the physical Bootstrap exit is a Relay Matrix", "grindless:relay_matrix", subject("relay"));
-        eq("the furnace follows the Relay Matrix", List.of("relay"), task("furnace").requires());
-        eq("the furnace is the spine", "grindless:arc_furnace", subject("furnace"));
-        eq("industrial follows an advanced data core", "grindless:advanced_data_core", subject("industrial"));
-        eq("contact is the reactor", "grindless:chemical_reactor", subject("reactor"));
-        eq("steel is the supplied ingot",
-                "grindless:" + SupplyCatalogue.itemName("steel", MaterialForm.INGOT), subject("steel"));
-        eq("brick follows steel", "grindless:refractory_brick", subject("brick"));
-        eq("silicon follows steel", "grindless:metallurgical_silicon", subject("silicon"));
-        eq("electronic silicon follows that", "grindless:electronic_silicon", subject("electronic"));
-        yes("a walk from the multitool reaches electronic silicon", reaches("multitool", "electronic"));
+        eq("calibration follows the extractor", "grindless:calibrated_data_core", subject("calibrate"));
+        eq("the physical Bootstrap exit is five Relay Matrices", "grindless:relay_matrix", subject("relay"));
+        eq("the first power source follows the Matrix", List.of("relay"), task("thermal").requires());
+        eq("the pylon follows unattended power", "grindless:flux_pylon_mk1", subject("pylon"));
+        eq("surveying precedes terrestrial extraction", List.of("pylon"), task("scanner").requires());
+        eq("the extractor follows the scanner", "grindless:terrestrial_extractor", subject("terrestrial"));
+        eq("the furnace is the factory spine", "grindless:arc_furnace", subject("furnace"));
+        eq("the Press precedes the Assembler", List.of("press", "furnace"), task("assembler").requires());
+        eq("the Assembler unlocks the repeated Matrix line", List.of("assembler"), task("matrix_line").requires());
+        eq("renewable glass has a physical stock objective", "minecraft:glass", subject("glass"));
+        eq("the Factory Portal finishes the current route", "grindless:factory_portal", subject("factory_world"));
+        yes("a walk from the multitool reaches the Factory Portal", reaches("multitool", "factory_world"));
         no("the survival route has no dimension objectives",
                 tasks.stream().anyMatch(task -> task.evidence() == QuestCatalogue.Evidence.DIMENSION));
         for (QuestCatalogue.Task task : tasks) {
@@ -92,8 +91,8 @@ public final class VerifyQuest {
 
     private static void claims() {
         Set<String> empty = Set.of();
-        eq("electronic silicon is locked at the start", QuestLogic.Status.LOCKED,
-                QuestLogic.consider(task("electronic"), empty, true));
+        eq("the Factory Portal is locked at the start", QuestLogic.Status.LOCKED,
+                QuestLogic.consider(task("factory_world"), empty, true));
         eq("the multitool is unmet until it is held", QuestLogic.Status.UNMET,
                 QuestLogic.consider(task("multitool"), empty, false));
         eq("the multitool is claimable when it is held", QuestLogic.Status.CLAIMABLE,
@@ -118,12 +117,12 @@ public final class VerifyQuest {
         QuestCatalogue.Task item = task("multitool");
         yes("one multitool is enough", QuestEvidence.met(item, 1, "minecraft:overworld"));
         no("zero is not enough", QuestEvidence.met(item, 0, "minecraft:overworld"));
-        QuestCatalogue.Task calibrated = task("voltaic");
+        QuestCatalogue.Task calibrated = task("calibrate");
         yes("a calibrated core counts", QuestEvidence.met(calibrated, 1, "minecraft:overworld"));
         no("no calibrated core does not count", QuestEvidence.met(calibrated, 0, "minecraft:overworld"));
         QuestCatalogue.Task relay = task("relay");
-        yes("a Relay Matrix counts", QuestEvidence.met(relay, 1, "minecraft:overworld"));
-        no("no Relay Matrix does not count", QuestEvidence.met(relay, 0, "minecraft:overworld"));
+        no("four Relay Matrices do not complete the five-machine seed", QuestEvidence.met(relay, 4, "minecraft:overworld"));
+        yes("five Relay Matrices complete the seed", QuestEvidence.met(relay, 5, "minecraft:overworld"));
     }
 
     private static void rewards() throws IOException {
@@ -133,14 +132,15 @@ public final class VerifyQuest {
             if (task.evidence() == QuestCatalogue.Evidence.ITEM) {
                 String path = path(task.subject());
                 itemSubjects.add(task.subject());
-                yes(task.id() + " names an item this mod registers", known.contains(path));
+                yes(task.id() + " names a registered or vanilla item", known.contains(path)
+                        || task.subject().startsWith("minecraft:"));
             }
             String reward = task.reward().itemId();
             no(task.id() + " reward is not some task's evidence", itemSubjects.contains(reward)
                     || QuestCatalogue.tasks().stream().anyMatch(other ->
                     other.evidence() == QuestCatalogue.Evidence.ITEM && other.subject().equals(reward)));
-            yes(task.id() + " reward is coal or a grindless item",
-                    reward.equals("minecraft:coal") || known.contains(path(reward)));
+            yes(task.id() + " reward is a vanilla or Grindless item",
+                    reward.startsWith("minecraft:") || known.contains(path(reward)));
         }
     }
 
@@ -158,8 +158,9 @@ public final class VerifyQuest {
         }
         String text = all.toString();
         for (String mark : List.of(
-                "Multitool", "Hand Crank", "Crude Extractor", "Voltaic", "Relay Matrices", "Assembler", "Chemical Reactor",
-                "contact process", "steel", "refractory", "metallurgical", "electronic")) {
+                "Multitool", "Hand Crank", "Crude Extractor", "Relay Matrices", "Thermal Generator", "Flux Pylon",
+                "Prospector", "Terrestrial Extractor", "Pulverizer", "Arc Furnace", "Press", "Assembler", "cobblestone",
+                "Conveyor Belts", "Factory Portal")) {
             yes("the guide mentions " + mark, text.contains(mark));
         }
         for (String prototype : List.of(

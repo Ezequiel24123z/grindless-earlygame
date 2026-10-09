@@ -27,7 +27,8 @@ public final class FabricationLogic {
     public static final String COPPER_COIL = "grindless:copper_coil";
     public static final String RELAY_MATRIX = "grindless:relay_matrix";
     public static final String CALIBRATED_DATA_CORE = "grindless:calibrated_data_core";
-    public static final int RELAY_MATRIX_BATCH = 4;
+    /** One controller for each first-factory machine: power, milling, heat, forming and assembly. */
+    public static final int RELAY_MATRIX_BATCH = 5;
     public static final String PYLON_MK2 = "grindless:flux_pylon_mk2";
     public static final String WIRE_MILL = "grindless:wire_mill";
     public static final String MOTOR = "grindless:motor";

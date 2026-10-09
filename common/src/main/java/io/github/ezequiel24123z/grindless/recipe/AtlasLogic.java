@@ -107,7 +107,7 @@ public final class AtlasLogic {
                 recipe.fuPerTick());
     }
 
-    /** Preserve recipe quantities in a viewer row so a four-unit batch never looks singular. */
+    /** Preserve recipe quantities in a viewer row so a batched Matrix craft never looks singular. */
     private static void addUnits(List<String> values, String qualified, int count) {
         for (int unit = 0; unit < count; unit++) {
             values.add(qualified);

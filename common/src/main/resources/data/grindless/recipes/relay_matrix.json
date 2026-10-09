@@ -11,5 +11,5 @@
     "R": { "item": "minecraft:redstone" },
     "D": { "item": "grindless:calibrated_data_core" }
   },
-  "result": { "item": "grindless:relay_matrix", "count": 4 }
+  "result": { "item": "grindless:relay_matrix", "count": 5 }
 }
