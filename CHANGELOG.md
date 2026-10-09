@@ -19,7 +19,8 @@ entries below reference those records by id.
   batch now contains five controllers: Thermal Generator, Pulverizer, Arc Furnace, Press and
   Assembler can all exist without a second pre-automation hand batch. The native Quest Book and
   Field Guide now follow that complete powered-factory route through surveyed extraction,
-  renewable glass, logistics and the Factory Portal, without advertising T2 prototypes.
+  renewable glass, logistics and the Factory Portal, without advertising T2 prototypes. The book
+  synchronizes and displays live item-count progress for every objective.
 
 - **Factory World construction space (ADR-0121).** A post-Matrix Factory Portal now returns each
   player to their own flat grass world entrance. The dimension is fixed at midday, has no terrain

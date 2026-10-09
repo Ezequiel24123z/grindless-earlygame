@@ -297,6 +297,8 @@
   "gui.grindless.quest.locked": "Locked",
   "gui.grindless.quest.unmet": "Not yet",
   "gui.grindless.quest.needs": "Needs ",
+  "gui.grindless.quest.objective.item": "Hold: %s (%s / %s)",
+  "gui.grindless.quest.objective.dimension": "Visit: %s",
   "gui.grindless.quest.reward": "Reward: %s × %s",
   "chat.grindless.quest.claimed": "Claimed: %s",
   "gui.grindless.quest.line.bootstrap": "Bootstrap",

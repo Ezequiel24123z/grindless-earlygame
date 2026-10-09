@@ -24,9 +24,9 @@ import java.util.Set;
 /**
  * The quest book. No slots: a claim is a button, not an item moved by hand (ADR-0100).
  *
- * <p>Button ids are indexes into {@link QuestCatalogue#tasks()}. One data slot per task
- * carries {@link QuestLogic.Status} so the client can show the line without reading the
- * save.
+ * <p>Button ids are indexes into {@link QuestCatalogue#tasks()}. The first data-slot bank carries
+ * {@link QuestLogic.Status}; the second carries the current held-item count. The client therefore
+ * shows live progress without reading a player inventory or the quest save itself.
  */
 public final class QuestBookMenu extends AbstractContainerMenu {
 
@@ -36,15 +36,24 @@ public final class QuestBookMenu extends AbstractContainerMenu {
     public QuestBookMenu(int id, Inventory inventory) {
         super(ModMenus.QUEST_BOOK.get(), id);
         this.player = inventory.player;
-        this.state = new SimpleContainerData(QuestCatalogue.tasks().size());
+        this.state = new SimpleContainerData(QuestCatalogue.tasks().size() * 2);
         addDataSlots(state);
     }
 
     public QuestLogic.Status status(int index) {
-        if (index < 0 || index >= state.getCount()) {
+        if (index < 0 || index >= QuestCatalogue.tasks().size()) {
             return QuestLogic.Status.UNMET;
         }
         return QuestLogic.byCode(state.get(index));
+    }
+
+    /** Current inventory evidence for an item task, synchronized from the server. */
+    public int held(int index) {
+        int taskCount = QuestCatalogue.tasks().size();
+        if (index < 0 || index >= taskCount) {
+            return 0;
+        }
+        return state.get(taskCount + index);
     }
 
     @Override
@@ -98,7 +107,10 @@ public final class QuestBookMenu extends AbstractContainerMenu {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         for (int i = 0; i < tasks.size(); i++) {
             QuestCatalogue.Task task = tasks.get(i);
-            state.set(i, QuestLogic.consider(task, claimed, evidenceMet(server, task)).ordinal());
+            int held = held(server, task.subject());
+            state.set(i, QuestLogic.consider(task, claimed, QuestEvidence.met(task, held,
+                    server.level().dimension().location().toString())).ordinal());
+            state.set(tasks.size() + i, held);
         }
     }
 
@@ -118,6 +130,10 @@ public final class QuestBookMenu extends AbstractContainerMenu {
             if (itemId.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString())) {
                 count += stack.getCount();
             }
+        }
+        ItemStack offhand = player.getOffhandItem();
+        if (!offhand.isEmpty() && itemId.equals(BuiltInRegistries.ITEM.getKey(offhand.getItem()).toString())) {
+            count += offhand.getCount();
         }
         return count;
     }

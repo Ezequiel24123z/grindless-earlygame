@@ -28,6 +28,36 @@ param([Parameter(Mandatory = $true)][string]$Root)
 
 $ErrorActionPreference = 'Stop'
 
+# The project targets Java 17, but a Windows PATH commonly still resolves to an old Java 8
+# launcher.  Java 8 treats the argfile below as a class name, making every check look as though
+# it failed. Prefer an explicitly configured JDK 17; otherwise discover Temurin's standard JDK
+# 17 installation.
+$javaHome = $env:JAVA_HOME
+if ($javaHome -and (Test-Path -LiteralPath (Join-Path $javaHome 'bin\javac.exe'))) {
+    $configuredVersion = & (Join-Path $javaHome 'bin\javac.exe') -version 2>&1
+    if ($configuredVersion -notmatch '^javac 17(\.|$)') { $javaHome = $null }
+} else {
+    $javaHome = $null
+}
+
+if (-not $javaHome) {
+    $adoptium = Join-Path $env:ProgramFiles 'Eclipse Adoptium'
+    if (Test-Path -LiteralPath $adoptium) {
+        $candidate = Get-ChildItem -LiteralPath $adoptium -Directory -Filter 'jdk-17*' |
+            Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'bin\javac.exe') } |
+            Select-Object -First 1
+        if ($candidate) { $javaHome = $candidate.FullName }
+    }
+}
+
+if (-not $javaHome -or -not (Test-Path -LiteralPath (Join-Path $javaHome 'bin\javac.exe'))) {
+    Write-Output 'A JDK 17 is required for checks. Set JAVA_HOME to its installation directory.'
+    exit 1
+}
+
+$java = Join-Path $javaHome 'bin\java.exe'
+$javac = Join-Path $javaHome 'bin\javac.exe'
+
 $classes = Join-Path $Root 'common\build\classes\java\main'
 if (-not (Test-Path -LiteralPath $classes)) {
     Write-Output "No compiled classes at $classes - run gradlew :common:build first."
@@ -78,7 +108,7 @@ try {
     Set-Content -Path $compileArgs -Value "-cp `"$compileCp`"" -Encoding ASCII
     Set-Content -Path $runArgs -Value "-cp `"$runCp`"" -Encoding ASCII
 
-    & javac -nowarn -encoding UTF-8 "@$compileArgs" -d $out $sources
+    & $javac -nowarn -encoding UTF-8 "@$compileArgs" -d $out $sources
     if ($LASTEXITCODE -ne 0) {
         Write-Output 'CHECKS DID NOT COMPILE'
         exit 1
@@ -89,7 +119,7 @@ try {
         $name = [System.IO.Path]::GetFileNameWithoutExtension($source)
         $package = (Select-String -Path $source -Pattern '^package\s+([\w.]+);' | Select-Object -First 1).Matches[0].Groups[1].Value
         Write-Output "--- $name ---"
-        & java "@$runArgs" "$package.$name"
+        & $java "@$runArgs" "$package.$name"
         if ($LASTEXITCODE -ne 0) { $failed++ }
     }
 

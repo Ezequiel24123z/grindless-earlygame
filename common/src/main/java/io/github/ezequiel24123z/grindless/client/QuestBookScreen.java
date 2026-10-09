@@ -33,7 +33,7 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
     private static final int DONE = 0xFF546E7A;
     private static final int ROW_HEIGHT = 10;
     private static final int LIST_TOP = 18;
-    private static final int DETAIL_HEIGHT = 56;
+    private static final int DETAIL_HEIGHT = 68;
 
     private final List<Integer> rows = new ArrayList<>();
     private int scroll;
@@ -173,7 +173,8 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         if (!needs.isEmpty()) {
             graphics.drawString(font, font.plainSubstrByWidth(needs, imageWidth - 16), 8, y + 12, MUTED, false);
         }
-        graphics.drawString(font, font.plainSubstrByWidth(reward(task), imageWidth - 16), 8, y + 22, ROW, false);
+        graphics.drawString(font, font.plainSubstrByWidth(objective(task), imageWidth - 16), 8, y + 22, ROW, false);
+        graphics.drawString(font, font.plainSubstrByWidth(reward(task), imageWidth - 16), 8, y + 32, ROW, false);
     }
 
     private String needs(QuestCatalogue.Task task) {
@@ -196,6 +197,17 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         Item item = id == null ? Items.AIR : BuiltInRegistries.ITEM.get(id);
         String name = item == null || item == Items.AIR ? reward.itemId() : item.getDescription().getString();
         return Component.translatable("gui.grindless.quest.reward", name, reward.count()).getString();
+    }
+
+    private String objective(QuestCatalogue.Task task) {
+        if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
+            return Component.translatable("gui.grindless.quest.objective.dimension", task.subject()).getString();
+        }
+        ResourceLocation id = ResourceLocation.tryParse(task.subject());
+        Item item = id == null ? Items.AIR : BuiltInRegistries.ITEM.get(id);
+        String name = item == null || item == Items.AIR ? task.subject() : item.getDescription().getString();
+        return Component.translatable("gui.grindless.quest.objective.item", name,
+                menu.held(selected), task.count()).getString();
     }
 
     private static int color(QuestLogic.Status status) {

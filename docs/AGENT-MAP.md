@@ -148,7 +148,8 @@ The first four checks also pin that the prototype transport has no generated sur
 
 - `quest/QuestCatalogue.java` and `quest/GuideCatalogue.java` — the lines and the pages.
 - `quest/QuestLogic.java`, `quest/QuestEvidence.java`, `quest/QuestProgress.java` — what
-  a claim watches, and per-player progress.
+  a claim watches, and per-player progress. `menu/QuestBookMenu.java` synchronizes each task's
+  live item count alongside its claim status for the client screen.
 
 `VerifyQuest` holds that a claim never consumes its evidence and never gates a machine
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).

@@ -196,6 +196,12 @@ public final class VerifyQuest {
                 menus.contains("register(\"quest_book\"") && menus.contains("register(\"field_guide\""));
         yes("both screens are bound",
                 client.contains("QuestBookScreen") && client.contains("FieldGuideScreen"));
+        String questMenu = Files.readString(SOURCES.resolve("menu/QuestBookMenu.java"));
+        String questScreen = Files.readString(SOURCES.resolve("client/QuestBookScreen.java"));
+        yes("the book synchronizes held-item progress", questMenu.contains("public int held(int index)")
+                && questMenu.contains("tasks.size() + i"));
+        yes("the screen shows the synchronized objective", questScreen.contains("menu.held(selected)")
+                && lang.has("gui.grindless.quest.objective.item"));
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             yes(task.id() + " has a row label", lang.has("gui.grindless.quest.task." + task.id()));
         }
