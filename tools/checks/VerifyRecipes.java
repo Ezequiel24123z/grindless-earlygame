@@ -891,7 +891,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships thirty-one physical crafts", 31, T1Recipes.shaped().size());
+        eq("T1 ships thirty-two physical crafts", 32, T1Recipes.shaped().size());
         yes("the first Relay Matrix is a four-unit hand batch",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
                         && recipe.resultCount() == 4));
@@ -916,6 +916,9 @@ public final class VerifyRecipes {
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("capacitor_bank")));
         yes("the transformer is hand-crafted",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("flux_transformer")));
+        yes("the Factory Portal is hand-crafted after the first Matrix",
+                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("factory_portal")
+                        && recipe.key().containsValue(T1Recipes.RELAY_MATRIX)));
         yes("the kiln is hand-crafted",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("kiln")));
         yes("the merger is hand-crafted",

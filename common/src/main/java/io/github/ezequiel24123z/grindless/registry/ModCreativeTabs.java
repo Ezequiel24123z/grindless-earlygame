@@ -129,6 +129,7 @@ public final class ModCreativeTabs {
                 lazy(ModBlocks.FLUX_TRANSFORMER),
                 lazy(ModBlocks.GROUND_ARRAY),
                 lazy(ModBlocks.ARRAY_CASING),
+                lazy(ModBlocks.FACTORY_PORTAL),
                 lazy(ModBlocks.LAUNCH_PAD),
                 lazy(ModBlocks.STATION_BERTH),
                 lazy(ModBlocks.LUNAR_LINK),

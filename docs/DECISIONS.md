@@ -132,6 +132,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0118](#adr-0118--redstone-is-synthesised-from-renewable-silicon-and-water) | Redstone is synthesised from renewable silicon and water | Accepted |
 | [0119](#adr-0119--relay-matrices-are-consumed-machine-components) | Relay Matrices are consumed machine components | Accepted |
 | [0120](#adr-0120--the-first-client-pack-is-t0-scoped-and-jei-reads-the-live-graph) | The first client pack is T0-scoped and JEI reads the live graph | Accepted |
+| [0121](#adr-0121--the-factory-world-is-clean-building-space-not-a-resource-shortcut) | The Factory World is clean building space, not a resource shortcut | Accepted |
 
 ---
 
@@ -5313,3 +5314,34 @@ Grindless recipes/processes are visible in JEI. This improves testability and di
 does **not** close the T0 mechanical gate: an end-to-end normal-survival playthrough is still the
 acceptance evidence. Server-pack assembly and AE2 integration are future scoped work, not hidden
 claims of this first client candidate.
+
+---
+
+## ADR-0121 — The Factory World is clean building space, not a resource shortcut
+
+*2026-10-09 · Accepted*
+
+**Context.** A large automated base is more legible and enjoyable on a controlled plane than in a
+terrain-cleared overworld. Players should be able to make that choice early enough to build their
+first serious factory there. However, a visually empty dimension that silently supplies infinite
+materials would contradict the no-grind promise: resource acquisition must stay an automation
+problem with finite fields and relocation decisions.
+
+**Decision.** A Factory Portal, crafted after the first Relay Matrix, sends a player to
+`grindless:factory` and returns that player to the particular gate from which they left. The
+dimension has one bedrock layer, three dirt layers and a grass surface; no lakes, structures,
+terrain features, rain or hostile spawns; a normal sky fixed at Minecraft midday. The factory
+dimension retains the installed material pool through the existing `ChunkVein` model. Its patches
+are surveyed, extracted and depleted like overworld patches, but no ore terrain interrupts the
+level building surface.
+
+**Alternatives rejected.** Requiring the player to clear an overworld biome (reintroduces a
+terrain chore); free resource generators in an otherwise empty building world (trivialises the
+material route); a separate visible-ore generator (duplicates the mod's established surveyed-vein
+contract); tying the gate to orbital travel or a campaign tier (makes practical factory layout wait
+for an unrelated milestone).
+
+**Consequences.** Solar arrays receive uninterrupted daylight there once they are legitimately
+available, while all ordinary resource/energy/logistics decisions remain. The portal is a compact
+two-way access block rather than a replacement for Luna, orbital or interstellar campaign travel.
+`VerifyFactory` pins the physical craft, fixed-noon world data and finite-field policy.

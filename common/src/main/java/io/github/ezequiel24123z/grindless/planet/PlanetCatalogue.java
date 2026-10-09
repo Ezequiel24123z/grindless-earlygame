@@ -58,6 +58,8 @@ public final class PlanetCatalogue {
         if (DriftCatalogue.isDrift(dimension) || CentreCatalogue.isCentre(dimension)) {
             return List.of();
         }
+        // Factory World deliberately retains the pack pool. Its floor stays clean because
+        // Grindless veins are surveyed fields, not exposed ore blocks; extraction still depletes.
         return isLuna(dimension) ? LUNA_VEINS : pack;
     }
 

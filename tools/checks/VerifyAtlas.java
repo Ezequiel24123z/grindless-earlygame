@@ -26,7 +26,7 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 143, allRows.size());
+        eq("atlas includes every machine, hand craft and calibration route", 144, allRows.size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -49,6 +49,10 @@ public final class VerifyAtlas {
                 AtlasLogic.describe(assembledRelay.inputs()));
         eq("assembled relay displays four physical outputs", "4x relay_matrix",
                 AtlasLogic.describe(assembledRelay.outputs()));
+        AtlasLogic.Entry factoryPortal = route(allRows, "craft/factory_portal");
+        eq("factory portal is a crafting-table route", "CRAFTING_TABLE", factoryPortal.station());
+        yes("factory portal consumes its physical Matrix",
+                factoryPortal.inputs().contains("item:grindless:relay_matrix"));
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
         eq("seven routes make an iron ingot", 7, ironIngot.size());

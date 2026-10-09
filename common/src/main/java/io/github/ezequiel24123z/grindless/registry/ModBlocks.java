@@ -8,6 +8,7 @@ import io.github.ezequiel24123z.grindless.centre.CentreCatalogue;
 import io.github.ezequiel24123z.grindless.centre.HorizonShellBlock;
 import io.github.ezequiel24123z.grindless.flight.LaunchPadBlock;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlock;
+import io.github.ezequiel24123z.grindless.factory.FactoryPortalBlock;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlock;
 import io.github.ezequiel24123z.grindless.fluid.ElectricPumpBlock;
 import io.github.ezequiel24123z.grindless.fluid.FluidManipulatorBlock;
@@ -315,6 +316,10 @@ public final class ModBlocks {
     /** One of the eight blocks around a Ground Array. Not a machine. */
     public static final RegistrySupplier<ArrayCasingBlock> ARRAY_CASING = register("array_casing",
             () -> new ArrayCasingBlock(machine().strength(3.0F)));
+
+    /** T1 access to a flat, fixed-noon construction world with ordinary Grindless vein fields. */
+    public static final RegistrySupplier<FactoryPortalBlock> FACTORY_PORTAL = register("factory_portal",
+            () -> new FactoryPortalBlock(machine().strength(3.5F)));
 
     /**
      * A pad a survey rocket climbs from (ADR-0097). Not a link.

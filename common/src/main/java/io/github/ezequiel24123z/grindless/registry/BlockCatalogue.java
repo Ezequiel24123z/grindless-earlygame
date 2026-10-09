@@ -233,6 +233,7 @@ public final class BlockCatalogue {
             new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID),
             new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
             new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID),
+            new Entry("factory_portal", Geometry.LINK, 1, true, GRID),
             new Entry("launch_pad", Geometry.PAD, 1, false, GRID),
             new Entry("station_berth", Geometry.BERTH, 1, false, GRID),
             new Entry("lunar_link", Geometry.LINK, 1, true, GRID),

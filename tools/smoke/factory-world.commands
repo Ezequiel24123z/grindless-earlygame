@@ -1,0 +1,9 @@
+forceload add 0 0
+execute in grindless:factory run say FACTORY-OK
+execute in grindless:factory run forceload add 0 0
+execute in grindless:factory run execute if block 0 0 0 minecraft:bedrock run say BEDROCK-OK
+execute in grindless:factory run execute if block 0 3 0 minecraft:dirt run say DIRT-OK
+execute in grindless:factory run execute if block 0 4 0 minecraft:grass_block run say GRASS-OK
+execute in grindless:factory run execute if block 0 5 0 minecraft:air run say SURFACE-OK
+execute in grindless:factory run setblock 8 5 8 grindless:factory_portal
+execute in grindless:factory run execute if block 8 5 8 grindless:factory_portal run say PORTAL-OK

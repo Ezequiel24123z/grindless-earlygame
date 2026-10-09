@@ -54,7 +54,7 @@ T2 and above are manufactured, never a crafting table
   Data Core calibration cycle. It must never write or read a global permission.
 
 `tools/checks/VerifyRecipes.java` pins the generated graph size (111) and the ordinary
-craft count (31); `VerifyAtlas` pins 111 generated rows, 40 Assembler rows and 143 total
+craft count (32); `VerifyAtlas` pins 111 generated rows, 40 Assembler rows and 144 total
 handheld routes (including 31 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
@@ -188,6 +188,20 @@ A new graph row updates the size assertion in `VerifyRecipes`. A new block updat
 `BlockCatalogue`, which `VerifyAssets` reads. Arithmetic policy stays in a check
 that does not boot Minecraft, the way `ProcessGraph`, `FluidLogic` and `AtlasLogic`
 already do.
+
+## Factory World
+
+- `factory/FactoryCatalogue.java` — the fixed-noon flat-floor contract.
+- `factory/FactoryPortalBlock.java` and `FactoryTravel.java` — a reusable physical portal and
+  player-specific round trip. It does not consume power or replace a campaign travel system.
+- `factory/FactoryReturnData.java` — saved return endpoints, stored on the overworld.
+- `data/grindless/dimension/factory.json`, its type and biome — bedrock, three dirt, one grass;
+  no structures, terrain features, rain or hostile spawns.
+
+The Factory World keeps the installed Grindless material pool through `PlanetCatalogue.veins`.
+Its resource fields are surveyed/depleted ChunkVeins, not exposed ore terrain: clean construction
+space must never become an infinite free resource. `VerifyFactory` holds the floor, noon, safety,
+portal component and finite-field contract (ADR-0121).
 
 ## Optional pack bridges
 

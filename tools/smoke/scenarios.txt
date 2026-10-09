@@ -47,6 +47,7 @@ first-silicon        Slice BF: metallurgical silicon exists, and the Arc Furnace
 first-electronic     Slice BG: electronic silicon exists, and the Arc Furnace accepts metallurgical silicon.
 first-array          Slice BH: a 3x3 Ground Array stores only while the ring stands.
 first-luna           Slice BI: Luna loads, its surface is regolith, and helium-3 is an item.
+factory-world        Factory World: a fixed-noon grass construction plane and its portal load.
 first-rocket         Slice BL: the launch pad is a block and the survey rocket is an entity.
 first-station        Slice BM: the berth is a block, the station is an entity, and the link id remains.
 first-drift          Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.

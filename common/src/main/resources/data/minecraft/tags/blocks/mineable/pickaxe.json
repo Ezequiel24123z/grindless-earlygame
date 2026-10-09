@@ -53,6 +53,7 @@
     "grindless:flux_transformer",
     "grindless:ground_array",
     "grindless:array_casing",
+    "grindless:factory_portal",
     "grindless:launch_pad",
     "grindless:station_berth",
     "grindless:lunar_link",

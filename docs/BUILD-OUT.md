@@ -16,7 +16,8 @@ functional generated art and its recoverable four-unit manual batch. The former 
 state is removed and ignored in existing saves; the Atlas exposes the physical route and the
 remaining T0 machine audit is still active. A first local client-pack candidate now packages the
 current route and its utility integrations, but it is not T0 acceptance evidence: the required
-no-command survival playthrough remains. T1 stays locked until T0 passes
+no-command survival playthrough remains. The optional Factory World is a post-Matrix construction
+aid, not a new technology frontier or a resource shortcut. T1 stays locked until T0 passes
 the gate below.
 
 ---

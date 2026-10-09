@@ -2151,6 +2151,15 @@ capability rather than an early escape hatch. REI/EMI, configuration, localisati
 balance and performance continue alongside the campaign seams they explain; version ports wait
 until the Forge 1.20.1 campaign is coherent.
 
+### Factory World
+
+After the first Matrix, a crafted **Factory Portal** opens the Factory World: a perfectly level
+grass floor with no terrain features, weather or hostile spawns, permanently fixed at midday. It
+is the place to scale a base without flattening an overworld biome. Its resource patches remain
+the ordinary finite Grindless chunk veins, so they are surveyed and extracted exactly as elsewhere;
+the clean floor is not a free-material dimension. The portal returns each player to the particular
+gate from which they entered (ADR-0121).
+
 ### Version ports
 
 | Target | Notes |
@@ -2192,6 +2201,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 14b | The **runtime tag scan** — `MaterialRegistry`, and the Crude Extractor | ✅ done — ADR-0050, ADR-0053 |
 | 15 | **Slice A — First iron:** `ProcessRecipe` (item-first), Thermal Generator, Pulverizer, Arc Furnace, Pylon MK1 recipe, shared menu, Voltaic gate | ✅ done — ADR-0058, ADR-0059 |
 | 16 | Recipe visibility: `VerifyRecipes` + Atlas + JEI bridge; REI/EMI when supported | ✅ done — live JEI process/calibration categories and the Atlas; ADR-0120 |
+| 16b | Factory World: flat construction space, player-specific return portal and ordinary finite resource fields | ✅ done — fixed-noon grass world; ADR-0121 |
 | 17 | **Slice B — First factory:** belts, splitter, manipulator, Terrestrial Extractor, Prospector's Scanner | ✅ done — ADR-0060 |
 | 17b | **Slice G — Belt junctions:** merger, tunnel, overflow | ✅ done — ADR-0071 |
 | 17c | **Slice H — Sorter:** peel a mixed line by item | ✅ done — ADR-0072 |

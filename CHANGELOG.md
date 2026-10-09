@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Factory World construction space (ADR-0121).** A post-Matrix Factory Portal now returns each
+  player to their own flat grass world entrance. The dimension is fixed at midday, has no terrain
+  features, weather or hostile spawns, and retains ordinary finite Grindless chunk-vein fields so
+  a clean building floor never becomes a free-resource dimension.
+
 - **First local T0 client-pack candidate and live JEI bridge (ADR-0120).** `pack/` pins the
   Forge 1.20.1 quality-of-life stack (JEI, Jade, Sophisticated Backpacks, FTB homes/claims and
   performance baseline), while paired build scripts compile the local jar into an importable

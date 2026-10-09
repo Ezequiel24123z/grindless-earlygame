@@ -111,6 +111,8 @@
   "block.grindless.flux_transformer": "Flux Transformer",
   "block.grindless.ground_array": "Ground Array",
   "block.grindless.array_casing": "Array Casing",
+  "block.grindless.factory_portal": "Factory Portal",
+  "tooltip.grindless.factory_portal": "Right-click for the fixed-noon Factory World. Resource fields still deplete.",
   "block.grindless.launch_pad": "Launch Pad",
   "block.grindless.station_berth": "Station Berth",
   "block.grindless.lunar_link": "Lunar Link",
@@ -255,6 +257,9 @@
   "tooltip.grindless.conduit.marked": "First pylon: %s, %s, %s",
 
   "chat.grindless.luna.charging": "The link is drawing power",
+  "chat.grindless.factory.departed": "Factory World",
+  "chat.grindless.factory.returned": "Returned",
+  "chat.grindless.factory.missing": "Factory World is not loaded",
   "chat.grindless.luna.unpowered": "The link needs a pylon",
   "chat.grindless.luna.departed": "Luna",
   "chat.grindless.luna.returned": "Returned",
