@@ -93,15 +93,19 @@ split, registry rename, new serialization file format or broad refactor occurs i
 
 ## Findings and corrective actions
 
+Findings describe the audited source HEAD unless the action explicitly records a documentation
+correction made by this verification.
+
 | ID | Evidence | Assessment / required action |
 | --- | --- | --- |
 | V1 | No recorded baseline/checkpoint, architecture roadmap or old validation logs | **Blocking provenance gap.** Recover the original session's committed handoff and SHA before assigning this code to Astra or continuing its architecture work. |
-| V2 | `recipe/AtlasLogic.java:77-100` uses `qualified()` strings; `IngredientSpec` and `OutputSpec` omit rating from that representation. `tools/checks/VerifyAtlas.java:52-61` pins an unqualified Matrix input/output. | **Candidate integration gap.** The F2 route is listed, but its displayed input/output does not distinguish F1 from F2. Preserve ratings in the Atlas presentation and test that distinction in a separate corrective task. |
+| V2 | `recipe/AtlasLogic.java:77-100` uses `qualified()` strings; `IngredientSpec.java:63-64` and `OutputSpec.java:71-72` omit rating from that representation. `tools/checks/VerifyAtlas.java:52-58` pins an unqualified Matrix input/output. | **Candidate integration gap.** The F2 route is listed, but its displayed input/output does not distinguish F1 from F2. Preserve ratings in the Atlas presentation and test that distinction in a separate corrective task. |
 | V3 | `tools/checks/VerifyQuest.java:127-132` supplies already-filtered integer counts; `VerifyRecipes.java:93-105` inspects graph metadata. `tools/smoke/first-assembler.commands` selects only the F1 batch; `first-book.commands` only summons the two book items. | **Missing acceptance coverage.** These checks do not prove F1 rejection/F2 acceptance in a player's inventory, produced NBT, consumption, reload, blocked-output recovery, or a completed F2 Assembler cycle. Add targeted runtime coverage before accepting the candidate's new seam. |
 | V4 | `docs/AGENT-MAP.md:56-58,160-162` still says 111/40/144 graph counts and 19 tasks/eight lines ending at the portal; current checks expect 112/41/145 and 20 tasks/nine lines ending at the Matrix. | **Candidate documentation drift.** Update the map with the eventual corrective checkpoint. |
 | V5 | `README.md` implementation row 32 says the Matrix route is pending although the roadmap and ADR-0123 say it exists. Its former current-status paragraph asserted that all 39 smokes pass without a revision-bound report. | **Documentation accuracy.** This verification clarifies the row and labels historical validation as historical, linking current evidence instead. |
 | V6 | `docs/BUILD-OUT.md:13-22,93-98` keeps BP active/T1 locked but calls BQ in progress and says to attach a T2 consumer next. | **Continuation ambiguity.** ADR-0108's T0 acceptance gate wins. Do not treat BQ's partial implementation as permission to skip BP. |
 | V7 | `tools/check-links.ps1`, `tools/convert-audio.sh`, `tools/run-smokes-batch.ps1` have no opposite-platform twin. `build.gradle:4` hardcodes Shadow 8.1.1. | **Pre-existing convention drift**, outside the candidate diff. Record separately; do not silently repair it in a verification-only task. |
+| V8 | Push of the new verification branch returned HTTP 403 / permission denied, Git exit 128. | **Publication blocker.** Evidence is committed locally, not pushed. An authorized contributor must publish it; no credential/remote workaround was attempted. |
 
 No unrelated edits, removed assertions, disabled tests, newly hard-coded machine paths,
 unresolved TODO additions, binary assets or accidental generated files were found in the
@@ -132,7 +136,20 @@ not evidence that runtime behavior was tested.
 The supported Windows entry points are the committed Gradle wrapper, `tools/run-checks.ps1`,
 `tools/check-links.ps1` and `tools/run-smokes.ps1`, not a recovered session-specific runner.
 See [the execution ledger](../testing/latest-validation.md) for commands, exit codes,
-start conditions, logs and limitations. Execution is still in progress at this document checkpoint.
+start conditions, logs and limitations. Shared compilation, all 30 supported behavior suites
+and full build pass. Four isolated scenarios (`states`, `first-assembler`, `first-atlas`,
+`first-book`) passed with runner exit 0 and a 4-pass/0-fail HTML report. Port 25599 had no
+listener after completion. No command or script repair was required after restoring Java.
+Passing graph and count checks does not close V2/V3 or establish missing provenance.
+No failure was observed in the selected executable checks; no claim is made about the
+unselected 36 smokes, full client interactions or tier acceptance.
+
+No production-code repair was made. The only repository edits are the requested evidence
+documents, changelog and narrow README status corrections. Missing Java was repaired by a
+checksum-verified session-local JDK; missing Git identity was handled per command.
+The provisional evidence commit `bcdb162ae4baa7e3d0ca308514e818d003f1859e` and its final
+evidence follow-up remain local because publication was denied. The source candidate itself
+was already published; the failed push concerns only this verification branch.
 
 ## Capabilities actually available
 
@@ -165,6 +182,9 @@ misreported as loaded.
 
 ## Claim verification
 
+These are tested verification hypotheses, not quotations attributed to a recovered handoff:
+no such previous-session document was available.
+
 | Claim | Rating | Evidence |
 | --- | --- | --- |
 | The available source tip is published | VERIFIED | Live remote SHA equals local HEAD; Git evidence above |
@@ -196,6 +216,11 @@ acceptance gate. The narrower gate is retained, not silently resolved by startin
 **Exact next task:** recover and identify the original Astra baseline/checkpoint/handoff;
 do not start the next refactor phase. There is no refactor-roadmap file here from which
 to truthfully name a next architecture phase.
+
+**Final decision: NO-GO.** The available candidate builds and passes the checks actually run,
+but provenance and new-seam acceptance remain incomplete. An authorized contributor must also
+publish the local verification commits. No broad implementation or corrective production
+refactor was started.
 
 ## Limitations
 

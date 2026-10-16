@@ -17,8 +17,10 @@ entries below reference those records by id.
 
 - **Previous-session verification evidence.** A new verification report, local execution ledger
   and handoff distinguish the published `0d79860` candidate from an unidentified Astra
-  checkpoint. Architectural continuation is held pending provenance recovery and current
-  validation; no production code is changed.
+  checkpoint. Shared compilation, all 30 behavior suites, the full build and four isolated
+  Forge smokes pass on the fresh Windows environment after restoring JDK 17. Architectural
+  continuation remains NO-GO pending provenance and F2 acceptance coverage; no production
+  code is changed. Verification commits remain local because GitHub denied publication.
 
 - **Physical T1 exit (ADR-0123).** The Assembler now turns an F1 Relay Matrix, Machine Casing,
   renewable glass and Flux Cell into one NBT-rated F2 Relay Matrix. The Quest Book tracks that

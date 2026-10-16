@@ -21,15 +21,22 @@ Only `b78e5bc..0d79860` was patch-audited as a provisional candidate range.
 - No production code, asset, dependency manifest or validation runner changed.
 - Java was initially missing; a checksum-verified JDK 17 was restored in session-local storage.
 - Original documentation links and static script/JSON parsing pass.
-- Compilation and subsequent executable validation are still in progress at this document checkpoint.
+- Shared compilation, all 30 behavior suites and full build pass. Four isolated smokes
+  (`states`, `first-assembler`, `first-atlas`, `first-book`) pass; the smoke port is closed.
+  The full 40-scenario matrix and interactive F2/survival acceptance were not run.
 - Candidate gaps include rating-blind Atlas presentation, untested runtime F2/NBT behavior,
   stale route-map counts and ambiguous BP/BQ continuation wording.
+- Provisional evidence commit `bcdb162ae4baa7e3d0ca308514e818d003f1859e` exists locally.
+  Push failed with HTTP 403 / permission denied. The verification branch has no upstream;
+  publishing requires an authorized contributor, not a credential workaround.
 
 ## Exact next task
 
-Finish recording this verification's executable results, then stop. Recover the original
+Verification is complete at the recorded scope; stop architectural work. Recover the original
 Astra session's baseline/checkpoint SHA, branch or PR, committed handoff and validation logs
 from its original environment. Compare recovered objects read-only before any integration.
+Have an authorized contributor publish this branch's local evidence commits; the source
+candidate is on origin, but these new reports are not.
 
 After an actual checkpoint is identified and its defects are repaired and validated in
 separate bounded work, the repository's next unfinished product gate is **BP: no-command
