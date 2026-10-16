@@ -1,9 +1,9 @@
 # Active foundation handoff
 
-Date: 2026-10-16. Phase B: F2 persistence repaired; strict smoke shutdown blocked.
+Date: 2026-10-16. Phase B: production-artifact runtime repaired; complete inventory next.
 Branch: `ezequiel24123z-agent-ready-t0-foundation`.
 Authorized source baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
-Last published HEAD before this checkpoint: `b07ed1678b3e48bf1ae1765d5378b97aed0a0ad2`.
+Last published HEAD before this checkpoint: `b48e3f64a1726ff0b56cdf9024b0e0ffb55fe7b6`.
 The commit containing this file records the evidence-integration checkpoint; do not confuse
 the source revision under test with a later documentation commit.
 
@@ -19,15 +19,14 @@ the source revision under test with a later documentation commit.
 - Completed commits: `e55c518` evidence, `735daa4` check classpath, `b07ed16` Atlas/JEI.
   This checkpoint adds ADR-0125, indexed process inventory NBT, strict rating decoding,
   single-count quest evidence and the registered-item lifecycle scenario.
-- Gate: **NO-GO while shutdown is broken**. All 31 checks pass and all 16 F2 scenario
-  assertions pass, but its launcher hangs after saving every dimension; EOF did not repair it.
-  Three bounded probes and owned-process thread dumps are recorded in the current ledger.
+- Gate: **NO-GO pending the complete inventory and independent review**. The ADR-0126
+  production-artifact path passes plain boot and all 16 F2 assertions with clean exit. Its mod
+  jar matches the build hash. The separate dev-launch hang remains documented, not hidden.
 - Background work: none. External research finished without edits or imported material.
   Its canonical pinned sources await the research document. No unrelated files are staged.
 - Evidence: [current validation](../docs/testing/latest-validation.md), archived reports and
   [pending checks](pending-checks.json). Raw new executable logs will use `build/validation/`.
 
-**Next safe task:** eliminate the dev-launch dependency from the smoke path by validating the
-actual built jar on an isolated, official production Forge server, keeping strict exit checks.
-Do not use reflection, forced JVM exits or weaker assertions to turn the hang green. Then run
-the complete isolated inventory. BP, player acceptance and broad T0 changes remain held.
+**Next safe task:** run all 41 isolated production smokes and an independent gate review.
+While they run, write the pinned-source research and non-gameplay preparation documents.
+BP, player acceptance and broad T0 changes remain held.

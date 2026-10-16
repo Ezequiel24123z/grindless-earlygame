@@ -191,6 +191,9 @@ not the Arc Furnace.
 - `tools/check-links.ps1` — relative links and the ADR index.
 - `tools/smoke/scenarios.txt` — the scenario list, when a block, a menu or a
   boot-visible item changes. Run it with `tools/run-smokes.ps1` or `run-smokes.sh`.
+- `forge/build.gradle` — `prepareSmokeServer` installs the pinned official server and stages the
+  actual remapped mod jar plus Architectury. Boot scripts run that artifact, not development
+  transformer classes; generated libraries/worlds stay under ignored `forge/run/smoke-server`.
 
 Every tool here has a `.ps1` and a `.sh` twin, because the desk that validates a
 branch runs Windows ([ADR-0106](DECISIONS.md#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk)).
@@ -210,8 +213,9 @@ silently swallowing long-path errors.
 Smoke expectations may be scheduled functions; both boot runners wait at most
 `SMOKE_EXPECT_TIMEOUT` (120 seconds by default). They fail on fatal scenario errors or an
 unclean/nonzero shutdown, rather than reporting a forced cleanup as a pass. Smoke servers
-bind only to loopback. The strict shutdown check currently exposes the development-JVM hang
-recorded in the [validation ledger](testing/latest-validation.md).
+bind only to loopback. The canonical production path exits cleanly; the optional
+`:forge:runServer` development-JVM hang remains in the [validation ledger](testing/latest-validation.md)
+and must not be reported as an upstream fix (ADR-0126).
 
 ## Factory World
 

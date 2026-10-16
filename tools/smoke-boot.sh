@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Boots a headless Forge dedicated server with the mod loaded and fails if it does not come up.
+# Boots the remapped distributable on an isolated production Forge server (ADR-0126).
+# Requires boot, scenario assertions and a clean successful process exit.
 #
 #     tools/smoke-boot.sh [project-root]
 #
@@ -29,7 +30,7 @@
 set -u
 
 ROOT="$(cd "${1:-.}" && pwd)"
-RUN_DIR="$ROOT/forge/run"
+RUN_DIR="$ROOT/forge/run/smoke-server"
 LOG="${SMOKE_LOG:-$ROOT/forge/run/smoke-boot.log}"
 TIMEOUT="${SMOKE_TIMEOUT:-900}"
 EXPECT_TIMEOUT="${SMOKE_EXPECT_TIMEOUT:-120}"
@@ -51,6 +52,17 @@ if [ "${GRINDLESS_ACCEPT_EULA:-}" != "true" ] && [ "${CI:-}" != "true" ]; then
   exit 2
 fi
 
+cd "$ROOT" || exit 1
+./gradlew --no-daemon --console=plain :forge:prepareSmokeServer ||
+  { echo "SMOKE BOOT FAILED: could not prepare the production Forge server."; exit 1; }
+FORGE_VERSION="$(sed -n 's/^forge_version=//p' "$ROOT/gradle.properties" | tail -1 | tr -d '\r')"
+case "$FORGE_VERSION" in
+  ""|*[!0-9A-Za-z._+-]*) echo "Invalid or missing forge_version."; exit 1 ;;
+esac
+LAUNCH_ARGS="$RUN_DIR/libraries/net/minecraftforge/forge/$FORGE_VERSION/unix_args.txt"
+if [ ! -f "$LAUNCH_ARGS" ]; then echo "Forge did not produce $LAUNCH_ARGS"; exit 1; fi
+JAVA="${JAVA_HOME:+$JAVA_HOME/bin/}java"
+
 mkdir -p "$RUN_DIR"
 printf 'eula=true\n' > "$RUN_DIR/eula.txt"
 printf 'online-mode=false\nserver-ip=127.0.0.1\nserver-port=%s\nlevel-name=smoke-world\nview-distance=2\nsimulation-distance=2\n' \
@@ -71,17 +83,17 @@ mkfifo "$FIFO"
 exec 3<>"$FIFO"
 CONSOLE_OPEN=1
 
-cd "$ROOT" || exit 1
-# setsid puts Gradle and the server it forks in their own process group, so cleanup can signal
+cd "$RUN_DIR" || exit 1
+# setsid puts the server in its own process group, so cleanup can signal
 # the whole tree at once. Git Bash on Windows has no setsid, and refusing to run there would
 # make this script CI-only -- which is the opposite of what it is for, since a developer who
 # can boot locally finds a loading crash before pushing. Fall back to signalling the launcher.
 if command -v setsid >/dev/null 2>&1; then
-  setsid ./gradlew --no-daemon :forge:runServer < "$FIFO" 3>&- > "$LOG" 2>&1 &
+  setsid "$JAVA" -Xmx2G "@$LAUNCH_ARGS" nogui < "$FIFO" 3>&- > "$LOG" 2>&1 &
   SERVER_PID=$!
   KILL_TARGET="-$SERVER_PID"
 else
-  ./gradlew --no-daemon :forge:runServer < "$FIFO" 3>&- > "$LOG" 2>&1 &
+  "$JAVA" -Xmx2G "@$LAUNCH_ARGS" nogui < "$FIFO" 3>&- > "$LOG" 2>&1 &
   SERVER_PID=$!
   KILL_TARGET="$SERVER_PID"
 fi

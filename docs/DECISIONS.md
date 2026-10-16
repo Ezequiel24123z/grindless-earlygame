@@ -137,6 +137,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0123](#adr-0123--the-voltaic-exit-is-a-rated-physical-f2-relay-matrix) | The Voltaic exit is a rated physical F2 Relay Matrix | Accepted |
 | [0124](#adr-0124--atlas-rating-labels-do-not-change-recipe-identity) | Atlas rating labels do not change recipe identity | Accepted |
 | [0125](#adr-0125--machine-inventories-persist-slots-with-explicit-legacy-migration) | Machine inventories persist slots with explicit legacy migration | Accepted |
+| [0126](#adr-0126--integration-smokes-boot-the-distributable-forge-jar) | Integration smokes boot the distributable Forge jar | Accepted |
 
 ---
 
@@ -5475,3 +5476,41 @@ reconstruction. Valid old stacks are retained, but missing historical slot infor
 recreated honestly. Back up a world before testing a downgrade: an older jar will once again
 compact inventories. Player UI, quest interaction and no-command survival acceptance remain
 separate evidence from headless NBT checks.
+
+---
+
+## ADR-0126 — Integration smokes boot the distributable Forge jar
+
+*2026-10-16 · Accepted*
+
+**Context.** Enforcing clean shutdown exposed a hang after every dimension had saved. It
+reproduced on a plain `:forge:runServer` boot as well as the new Matrix scenario. Thread dumps
+of the probe's own processes showed the game main/server threads gone and eight non-daemon
+executor workers still waiting. Closing stdin did not fix it. The precise upstream worker
+owner was not proven, and killing the process must not be labelled a successful exit.
+
+The development launch also tests transformed development classes, not the remapped jar a
+player installs. That is a weaker integration boundary than the artifact the build produces.
+
+**Decision.** `:forge:prepareSmokeServer` installs the official Forge server matching
+`forge_version` into ignored `forge/run/smoke-server`, then stages the actual `remapJar`
+artifact and the pinned Architectury runtime dependency. All coordinates remain in
+`gradle.properties`. Both smoke boot scripts launch Java using Forge's generated platform
+argument file, with a fresh scenario world and loopback-only binding. The existing scenario
+manifest and assertion protocol remain authoritative.
+
+Installer libraries and jars are generated development outputs, never committed or added to a
+distribution notice as newly copied source. Stable staged filenames prevent old Grindless
+versions from accumulating. Optional JEI is absent in this minimal server, which also verifies
+that the standalone jar does not require the viewer.
+
+**Alternatives rejected.** Forced `System.exit`, reflective executor shutdown or suppressing the
+new exit failure (hides a broken lifecycle); speculative Forge/Loom version upgrades (no verified
+fix and unnecessary dependency churn); treating a development-class boot as proof of the packaged
+jar (misses packaging/remapping failures).
+
+**Consequences.** A plain production boot and the full Matrix lifecycle both exit 0 without
+forced cleanup. The loaded and built mod jars have identical SHA-256. The upstream dev-launch
+hang remains a documented limitation of the optional development path, not a claimed upstream
+repair. First preparation needs official Forge/Mojang artifact access; subsequent runs reuse the
+installed libraries. The full isolated inventory still runs before integration acceptance.

@@ -79,3 +79,24 @@ EOF was a bounded unsuccessful attempt, retained here. The repository creates no
 in its Java sources; exact ownership of the eight non-daemon pools is not yet proven.
 No full integration smoke pass or GO is claimed. Interactive client screens, an actual player
 quest claim and the no-command survival route also remain unexecuted.
+
+## Production-artifact smoke runtime
+
+Source Java: `b48e3f6`; runtime preparation changed under ADR-0126, without a Forge or
+Architectury version change. The official installer and its libraries stay inside the
+worktree's ignored `forge/run/smoke-server`. No host-wide installation is required.
+
+| Command | Time (UTC+02:00) | Exit / observed result | Evidence |
+| --- | --- | --- | --- |
+| `powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only boot` | 23:52:40-23:54:32 | 0; official server installed, built jar boots and exits cleanly | `build/validation/production-boot.log`, `forge/run/smoke-boot.log` |
+| Same command with `-Only matrix-lifecycle` | 23:56:10-23:57:58 | 0; all 16 F2 markers and clean exit, no forced termination | `build/validation/production-matrix.log`, `forge/run/smoke-matrix-lifecycle.log` |
+| SHA-256 comparison of built jar and staged `mods/grindless.jar` | After the successful scenario | Equal; value below | Tool execution `production-matrix` |
+| Port 25599 after the successful scenario | After Java exited | No listener | Same tool execution |
+
+Built and loaded SHA-256:
+`e0267ee23fdcfde776749df069e29effc72379dfca3b4fb58dc0b0e95a307866`.
+
+This isolates the prior hang to the dev-launch path; it does not identify or patch the exact
+upstream executor owner. The canonical integration path now tests what is shipped, including
+loading without optional JEI. The first installation needs network access; the second preparation
+was entirely up-to-date. Complete inventory and independent review are next, not inferred passes.

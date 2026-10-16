@@ -1,5 +1,5 @@
-# Windows twin of tools/smoke-boot.sh: boots a headless Forge dedicated server with the mod
-# loaded and fails if it does not come up.
+# Windows twin of tools/smoke-boot.sh: boots the remapped distributable on an isolated
+# production Forge server, then requires its assertions and clean shutdown (ADR-0126).
 #
 #     powershell -ExecutionPolicy Bypass -File .\tools\smoke-boot.ps1 -Root .
 #
@@ -29,8 +29,8 @@ param([Parameter(Mandatory = $true)][string]$Root)
 $ErrorActionPreference = 'Stop'
 
 $Root = (Resolve-Path $Root).Path
-$runDir = Join-Path $Root 'forge\run'
-$log = if ($env:SMOKE_LOG) { $env:SMOKE_LOG } else { Join-Path $runDir 'smoke-boot.log' }
+$runDir = Join-Path $Root 'forge\run\smoke-server'
+$log = if ($env:SMOKE_LOG) { $env:SMOKE_LOG } else { Join-Path $Root 'forge\run\smoke-boot.log' }
 $timeout = if ($env:SMOKE_TIMEOUT) { [int]$env:SMOKE_TIMEOUT } else { 900 }
 $expectTimeout = if ($env:SMOKE_EXPECT_TIMEOUT) { [int]$env:SMOKE_EXPECT_TIMEOUT } else { 120 }
 if ($timeout -le 0 -or $expectTimeout -le 0) { throw 'Smoke timeouts must be positive.' }
@@ -72,6 +72,23 @@ function Remove-Tree([string]$path) {
     }
 }
 
+Push-Location $Root
+try {
+    & (Join-Path $Root 'gradlew.bat') --no-daemon --console=plain :forge:prepareSmokeServer
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output 'SMOKE BOOT FAILED: could not prepare the production Forge server.'
+        exit 1
+    }
+} finally {
+    Pop-Location
+}
+$versionLine = Get-Content -LiteralPath (Join-Path $Root 'gradle.properties') |
+        Where-Object { $_ -match '^forge_version=' } | Select-Object -Last 1
+$forgeVersion = $versionLine -replace '^forge_version=', ''
+if ($forgeVersion -notmatch '^[0-9A-Za-z._+-]+$') { throw 'Invalid or missing forge_version.' }
+$launchArgs = Join-Path $runDir "libraries\net\minecraftforge\forge\$forgeVersion\win_args.txt"
+if (-not (Test-Path -LiteralPath $launchArgs)) { throw "Forge did not produce $launchArgs" }
+
 New-Item -ItemType Directory -Force -Path $runDir | Out-Null
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText((Join-Path $runDir 'eula.txt'), "eula=true`n", $utf8)
@@ -88,15 +105,15 @@ if ($datapack) {
 [System.IO.File]::WriteAllText((Join-Path $runDir 'server.properties'), $properties, $utf8)
 [System.IO.File]::WriteAllText($log, '', $utf8)
 
-# Gradle's output arrives on background threads, so collect it in a concurrent queue and drain
+# Server output arrives on background threads, so collect it in a concurrent queue and drain
 # it from the polling loop. Reading a file that another thread is still writing is the
 # alternative, and on Windows that means fighting the share mode for no benefit.
 $queue = New-Object 'System.Collections.Concurrent.ConcurrentQueue[string]'
 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
-$psi.FileName = Join-Path $Root 'gradlew.bat'
-$psi.Arguments = '--no-daemon :forge:runServer'
-$psi.WorkingDirectory = $Root
+$psi.FileName = if ($env:JAVA_HOME) { Join-Path $env:JAVA_HOME 'bin\java.exe' } else { 'java.exe' }
+$psi.Arguments = "-Xmx2G `"@$launchArgs`" nogui"
+$psi.WorkingDirectory = $runDir
 $psi.UseShellExecute = $false
 $psi.CreateNoWindow = $true
 $psi.RedirectStandardInput = $true
@@ -126,7 +143,7 @@ function Pump {
     }
 }
 
-# Stop-Process does not take the tree, and a cancelled run leaves Gradle's forked server behind
+# Stop-Process does not take the tree, and a cancelled run must not leave a server behind
 # holding the port. Walk the parent links and stop each descendant by id.
 function Stop-Tree([int]$processId) {
     $all = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
@@ -256,7 +273,6 @@ try {
             }
             if (-not $proc.HasExited) {
                 if (-not (Send-Console 'stop')) { $failed = $true }
-                # Gradle's stdin forwarder also needs EOF after Minecraft saves and stops.
                 $proc.StandardInput.Close()
             }
             for ($i = 0; $i -lt 60; $i++) {

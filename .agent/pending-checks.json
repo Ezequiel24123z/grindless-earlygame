@@ -4,7 +4,7 @@
   "gate": "NO-GO",
   "checks": [
     {"id": "atlas-ratings", "status": "passed", "evidence": "build/validation/atlas-green-checks.log"},
-    {"id": "f2-lifecycle-nbt", "status": "blocked_by_shutdown", "evidence": "build/validation/matrix-smoke-eof.log"},
+    {"id": "f2-lifecycle-nbt", "status": "passed", "evidence": "build/validation/production-matrix.log"},
     {"id": "compile-and-behavior", "status": "pending", "evidence": null},
     {"id": "full-build-resources", "status": "pending", "evidence": null},
     {"id": "complete-isolated-smokes", "status": "pending", "evidence": null},

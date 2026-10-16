@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integration smokes exercise the shipped Forge jar (ADR-0126).** Paired boot scripts now
+  prepare an isolated official production server and load the exact remapped mod artifact,
+  without development transformer workers. Plain boot and the complete F2 lifecycle exit
+  cleanly; the built and loaded jars have identical hashes. Strict shutdown checks remain
+  enabled. The separate development-launch hang is recorded, not hidden or patched by reflection.
+
 - **F2 persistence is characterized and repaired (ADR-0125).** Process inventories now save
   slot indices, retain legacy compact stacks without guessing their lost positions and migrate
   the old Assembler output explicitly. Real NBT checks cover sparse slots, reconstruction,

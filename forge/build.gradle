@@ -8,6 +8,16 @@ architectury {
 }
 
 configurations {
+    smokeInstaller {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
+    smokeMods {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
     common {
         canBeResolved = true
         canBeConsumed = false
@@ -27,6 +37,8 @@ dependencies {
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
     modCompileOnly "mezz.jei:jei-1.20.1-forge-api:${rootProject.jei_version}"
     modRuntimeOnly "mezz.jei:jei-1.20.1-forge:${rootProject.jei_version}"
+    smokeInstaller "net.minecraftforge:forge:${rootProject.forge_version}:installer"
+    smokeMods "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive = false }
     shadowBundle project(path: ":common", configuration: "transformProductionForge")
@@ -57,4 +69,31 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     archiveClassifier = "forge"
+}
+
+def smokeServer = layout.projectDirectory.dir("run/smoke-server")
+tasks.register("installSmokeServer", JavaExec) {
+    classpath = configurations.smokeInstaller
+    mainClass.set("net.minecraftforge.installer.SimpleInstaller")
+    workingDir smokeServer.asFile
+    args "--installServer", smokeServer.asFile.absolutePath
+    inputs.property "forgeVersion", rootProject.forge_version
+    outputs.files(
+            smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/win_args.txt"),
+            smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/unix_args.txt"))
+    doFirst {
+        smokeServer.asFile.mkdirs()
+    }
+}
+
+// Test the distributable jars without the development transformer's persistent worker pools.
+tasks.register("prepareSmokeServer", Copy) {
+    dependsOn tasks.named("installSmokeServer"), tasks.named("remapJar")
+    from(tasks.named("remapJar").flatMap { it.archiveFile }) {
+        rename { "grindless.jar" }
+    }
+    from(configurations.smokeMods) {
+        rename { "architectury.jar" }
+    }
+    into smokeServer.dir("mods")
 }
