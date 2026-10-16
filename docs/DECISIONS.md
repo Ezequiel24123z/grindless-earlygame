@@ -135,6 +135,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0121](#adr-0121--the-factory-world-is-clean-building-space-not-a-resource-shortcut) | The Factory World is clean building space, not a resource shortcut | Accepted |
 | [0122](#adr-0122--the-seed-matrix-batch-funds-the-forming-press) | The seed Matrix batch funds the forming Press | Accepted |
 | [0123](#adr-0123--the-voltaic-exit-is-a-rated-physical-f2-relay-matrix) | The Voltaic exit is a rated physical F2 Relay Matrix | Accepted |
+| [0124](#adr-0124--atlas-rating-labels-do-not-change-recipe-identity) | Atlas rating labels do not change recipe identity | Accepted |
 
 ---
 
@@ -5399,3 +5400,33 @@ Quest Book counts only F2 stacks for its terminal task.
 
 **Consequences.** T1 now has a visible physical exit without unlocking an F2 machine early. The
 next slice can attach T2 consumers to this rating; it must not add a global permission.
+
+---
+
+## ADR-0124 — Atlas rating labels do not change recipe identity
+
+*2026-10-16 · Accepted*
+
+**Context.** ADR-0123 records an exact F1-to-F2 conversion, but the Atlas prints only the item
+identifier. The same Relay item therefore appears on both sides without its different rating.
+`qualified()` is also used as stable recipe identity by other consumers; decorating that shared
+value would mix presentation with graph identity.
+
+**Decision.** Decorate explicitly rated Atlas inputs, outputs and catalysts with `[F<n>]` only
+inside `AtlasLogic`. Preserve the unqualified registry and recipe identifiers, ordinary item
+labels, quantities and the existing menu protocol. Bare item lookup still finds every rating;
+an explicitly rated lookup must match that rating. JEI resolves rated item ingredients through
+the same stack resolver used for rated outputs, rather than reconstructing an untagged stack.
+
+The F2 manufacturing recipe continues to consume exactly F1. This is not the more permissive
+`canControl` rule for installing a stronger controller: accepting F2 as its own upgrade feed
+would spend a finished controller for no progress. No T2 consumer is introduced.
+
+**Alternatives rejected.** Changing `qualified()` everywhere (unnecessary identity/API churn);
+adding separate F1 and F2 registry items (saved-world migration for a display defect); displaying
+only the recipe suffix (hides the physical input distinction); treating ordinary unqualified
+ingredients as exactly F1 (they do not currently enforce a rating).
+
+**Consequences.** The handheld's existing input/output detail lines carry the distinction in text,
+not color alone. Existing untagged bootstrap stacks remain F1 under the existing item contract.
+No NBT format, packet, registry identifier, recipe balance or survival gate changes here.

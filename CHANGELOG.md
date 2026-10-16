@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Atlas preserves physical Matrix ratings (ADR-0124).** The F2 route now shows its
+  exact F1 input and F2 output in both compact and detail text. Bare item lookup still finds
+  every route; rated lookup distinguishes them without changing recipe identities or NBT.
+  JEI uses the live resolver for rated inputs as well as outputs. Four reproduced Atlas
+  regression failures now pass; BP remains active pending runtime and survival acceptance.
+
 - **Behavior checks use Gradle's resolved classpath on both platforms.** The Windows cache
   scanner could not open the mapped game in a deep worktree and silently reported it missing.
   Both runners now prepare the current common classes through `writeCheckClasspath`, preserve

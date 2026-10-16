@@ -52,10 +52,31 @@ public final class VerifyAtlas {
         AtlasLogic.Entry industrialRelay = route(allRows, "assemble/relay_matrix_f2");
         eq("the Industrial Matrix names the Assembler", "ASSEMBLER", industrialRelay.station());
         eq("the Industrial Matrix retains all seven physical input units", 7, industrialRelay.inputs().size());
-        eq("the Industrial Matrix carries a physical Matrix forward", "item:grindless:relay_matrix",
+        eq("the Industrial Matrix requires an explicit F1 input", "item:grindless:relay_matrix [F1]",
                 industrialRelay.inputs().get(0));
-        eq("the Industrial Matrix shows its physical output", "relay_matrix",
+        eq("the Industrial Matrix shows its F2 output", "relay_matrix [F2]",
                 AtlasLogic.describe(industrialRelay.outputs()));
+        yes("the compact line retains both physical ratings",
+                AtlasLogic.line(industrialRelay).contains("relay_matrix [F1]")
+                        && AtlasLogic.line(industrialRelay).contains("relay_matrix [F2]"));
+        yes("the detail pane distinguishes the bootstrap and Industrial outputs",
+                !AtlasLogic.describe(assembledRelay.outputs())
+                        .equals(AtlasLogic.describe(industrialRelay.outputs())));
+        eq("bare Matrix lookup still finds both generated production routes", 2,
+                AtlasLogic.producing(recipes, "grindless:relay_matrix").size());
+        eq("kind-qualified Matrix lookup still finds both generated production routes", 2,
+                AtlasLogic.producing(recipes, "item:grindless:relay_matrix").size());
+        yes("an explicit F2 lookup finds only the upgrade",
+                ids(AtlasLogic.producing(recipes, "grindless:relay_matrix [F2]"))
+                        .equals(List.of("assemble/relay_matrix_f2")));
+        yes("bare Matrix consumption still finds the upgrade",
+                ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix"))
+                        .contains("assemble/relay_matrix_f2"));
+        no("an F1 query never matches an F2 output",
+                AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:relay_matrix [F1]"));
+        no("rating display does not turn another item into a Matrix",
+                AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:flux_cell"));
+        no("blank lookup still matches nothing", AtlasLogic.names(industrialRelay.outputs().get(0), ""));
         AtlasLogic.Entry factoryPortal = route(allRows, "craft/factory_portal");
         eq("factory portal is a crafting-table route", "CRAFTING_TABLE", factoryPortal.station());
         yes("factory portal consumes its physical Matrix",

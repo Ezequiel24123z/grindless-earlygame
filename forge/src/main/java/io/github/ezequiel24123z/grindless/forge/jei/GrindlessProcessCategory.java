@@ -13,7 +13,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -103,11 +102,9 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
         int x = 4 + ((index % 4) * 20);
         int y = 4 + ((index / 4) * 20);
         if (IngredientSpec.ITEM.equals(spec.kind())) {
-            Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(spec.id()));
-            if (item != null) {
-                builder.addInputSlot(x, y).setStandardSlotBackground()
-                        .addItemStack(new ItemStack(item, spec.count()));
-            }
+            ProcessLookup.resolve(new OutputSpec(spec.kind(), spec.id(), spec.count(), false,
+                    spec.matrixRating())).ifPresent(stack ->
+                    builder.addInputSlot(x, y).setStandardSlotBackground().addItemStack(stack));
             return;
         }
         if (IngredientSpec.TAG.equals(spec.kind())) {

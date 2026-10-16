@@ -3,7 +3,7 @@
   "branch": "ezequiel24123z-agent-ready-t0-foundation",
   "gate": "NOT_EVALUATED",
   "checks": [
-    {"id": "atlas-ratings", "status": "pending", "evidence": null},
+    {"id": "atlas-ratings", "status": "passed", "evidence": "build/validation/atlas-green-checks.log"},
     {"id": "f2-lifecycle-nbt", "status": "pending", "evidence": null},
     {"id": "compile-and-behavior", "status": "pending", "evidence": null},
     {"id": "full-build-resources", "status": "pending", "evidence": null},

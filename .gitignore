@@ -3,6 +3,8 @@
 build/
 out/
 classes/
+# Minecraft logging from standalone behavior checks.
+/logs/
 
 # Loom / Architectury
 .architectury-transformer/

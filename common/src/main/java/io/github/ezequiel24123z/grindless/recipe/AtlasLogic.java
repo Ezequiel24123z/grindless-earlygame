@@ -27,9 +27,9 @@ public final class AtlasLogic {
      * @param id             recipe id, such as {@code roast/iron}
      * @param station        which workstation performs the route
      * @param family         generated-process family, or {@code null} for a physical supplemental route
-     * @param inputs         qualified item and fluid inputs
-     * @param outputs        qualified item and fluid outputs, including vented fluids
-     * @param catalysts      qualified unconsumed extras
+     * @param inputs         qualified item and fluid inputs, with explicit Matrix rating labels
+     * @param outputs        qualified outputs, including vented fluids and explicit Matrix ratings
+     * @param catalysts      qualified unconsumed extras, with explicit Matrix rating labels
      * @param temperatureC   required temperature, or {@code NaN} when unnamed
      * @param atmosphere     required atmosphere name, or {@code null} when unnamed
      * @param agitation      required agitation name, or {@code null} when unnamed
@@ -77,21 +77,21 @@ public final class AtlasLogic {
     public static Entry entry(ProcessRecipe recipe) {
         List<String> inputs = new ArrayList<>();
         for (IngredientSpec spec : recipe.itemInputs()) {
-            addUnits(inputs, spec.qualified(), spec.count());
+            addUnits(inputs, rated(spec.qualified(), spec.matrixRating()), spec.count());
         }
         for (IngredientSpec spec : recipe.fluidInputs()) {
             addUnits(inputs, spec.qualified(), spec.count());
         }
         List<String> outputs = new ArrayList<>();
         for (OutputSpec spec : recipe.itemOutputs()) {
-            addUnits(outputs, spec.qualified(), spec.count());
+            addUnits(outputs, rated(spec.qualified(), spec.matrixRating()), spec.count());
         }
         for (OutputSpec spec : recipe.fluidOutputs()) {
             addUnits(outputs, spec.qualified(), spec.count());
         }
         List<String> catalysts = new ArrayList<>();
         for (IngredientSpec spec : recipe.catalysts()) {
-            addUnits(catalysts, spec.qualified(), spec.count());
+            addUnits(catalysts, rated(spec.qualified(), spec.matrixRating()), spec.count());
         }
         return new Entry(
                 recipe.id(),
@@ -105,6 +105,10 @@ public final class AtlasLogic {
                 recipe.agitation(),
                 recipe.durationTicks(),
                 recipe.fuPerTick());
+    }
+
+    private static String rated(String qualified, int rating) {
+        return rating == 0 ? qualified : qualified + " [F" + rating + "]";
     }
 
     /** Preserve recipe quantities in a viewer row so a batched Matrix craft never looks singular. */
@@ -166,7 +170,7 @@ public final class AtlasLogic {
         return List.copyOf(inputs);
     }
 
-    /** Routes whose outputs name {@code query} as a qualified id or as the id after the kind. */
+    /** Routes matching an output id, optionally restricted by an explicit {@code [F<n>]} label. */
     public static List<Entry> producing(List<ProcessRecipe> recipes, String query) {
         List<Entry> found = new ArrayList<>();
         for (Entry row : entries(recipes)) {
@@ -231,7 +235,11 @@ public final class AtlasLogic {
         }
         int colon = qualified.indexOf(':');
         String id = colon < 0 ? qualified : qualified.substring(colon + 1);
-        return id.equals(query);
+        if (id.equals(query)) {
+            return true;
+        }
+        int rating = qualified.indexOf(" [F");
+        return rating >= 0 && names(qualified.substring(0, rating), query);
     }
 
     private static boolean namesAny(List<String> qualified, String query) {

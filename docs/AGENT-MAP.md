@@ -62,6 +62,10 @@ gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs
 neither a graph row nor a crafting JSON until their T10-T15 campaign frontiers.
 Ratios are in [`PROCESSES.md`](PROCESSES.md#the-recipe-graph).
 
+`recipe/AtlasLogic.java` decorates explicit physical ratings for display and rated lookup only.
+Keep `IngredientSpec.qualified()` and `OutputSpec.qualified()` as unmodified graph identities;
+unrated item lookup must still find the F2 route (ADR-0124).
+
 ## Control Matrix and Flux rating
 
 - `energy/FluxTier.java` — the aligned F0-F15 rates and display names.
@@ -215,7 +219,9 @@ portal component and finite-field contract (ADR-0121).
 - `forge/.../jei/GrindlessJeiPlugin.java` — JEI entry point; generated recipes are read from
   `ProcessLookup`, never copied into a second recipe list.
 - `forge/.../jei/GrindlessProcessCategory.java` — item/tag alternatives plus the non-native fluid
-  conditions of a process. It must keep the live graph visible even when no Forge fluid exists.
+  conditions of a process. Rated item inputs and outputs use `ProcessLookup.resolve`, so the
+  viewer preserves their NBT rather than substituting an untagged stack. It must keep the live
+  graph visible even when no Forge fluid exists.
 - `forge/.../jei/GrindlessCalibrationCategory.java` — the Research Terminal's physical cycle,
   which is not a JSON recipe and must therefore be registered explicitly.
 - `pack/curseforge/manifest.json` — exact launcher-managed dependency file ids.
