@@ -26,3 +26,25 @@ Current source compilation, all behavior checks, full build, F2 runtime/NBT cove
 complete isolated smokes and interactive acceptance have not yet run. Gradle `test NO-SOURCE`
 must never be described as a passing unit suite. There is no current GO decision.
 The supported executable unit layer is `tools/checks/Verify*.java`.
+
+## Phase B execution, before its corrective commits
+
+The following commands ran on baseline `e55c518` plus the named working-tree patches, not on
+an already published result. The first source compile still used unchanged production Java.
+The commit history identifies the following runner repair and Atlas patch separately.
+
+| Check | Time (UTC+02:00) / start state | Exit / result | Ignored evidence |
+| --- | --- | --- | --- |
+| `.\gradlew.bat --no-daemon --console=plain :common:compileJava` | 22:58:02-23:04:23; unchanged baseline, cold workspace cache | 0; common compiled; a dependency source-remapping warning is not a compilation failure | `build/validation/baseline-compile.log` |
+| Direct `javac` characterization without the game classpath | Before the supported runner; isolated output directory | 1; missing Minecraft types, not a behavioral result; superseded by the supported runner below | Tool execution `atlas-characterization` |
+| `powershell -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .` | 23:05:55; compiled classes present, original cache-scanning runner using the explicit cache | 1; "Could not locate a mapped Minecraft jar"; environment/tool defect | `build/validation/atlas-characterization.log` |
+| Same runner command after Gradle classpath repair, before Atlas production changes | 23:08:19-23:09:16; baseline Java and new characterization assertions | 1; exactly four Atlas rating assertions fail, the other 29 suites pass; expected red characterization | `build/validation/atlas-red-checks.log` |
+| Same runner command with the Atlas repair | 23:10:38 onward; explicit rating labels and preserved bare-id lookup | 0; all 30 suites pass, no mixed-SLF4J-cache initialization error | `build/validation/atlas-green-checks.log` |
+| `.\gradlew.bat --no-daemon --console=plain build` | Completed 23:12:01; same patch, including the optional JEI bridge | 0; full build; Gradle test tasks are NO-SOURCE | `build/validation/atlas-build.log` |
+| `powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only states` | 23:12:55-23:15:22; unused port 25599, explicit EULA opt-in | 0; Forge boots, handshake and all state markers pass | `build/validation/atlas-states.log`, `forge/run/smoke-states.log` |
+
+The supported runners now ask Gradle to write
+`common/build/checks/runtime-classpath.txt`; they neither guess a mapped jar nor mix every
+SLF4J version from a shared cache. The `.sh` twin no longer discards suite stderr.
+This repairs the validation environment, not the game. Linux/macOS execution is not claimed.
+F2 runtime persistence and interactive/client acceptance remain unproved at this checkpoint.

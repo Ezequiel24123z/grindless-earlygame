@@ -10,3 +10,17 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "dev.architectury:architectury:${rootProject.architectury_api_version}"
 }
+
+// The standalone checks must use the same resolved game and libraries as common, not every
+// version in a developer's cache. Gradle also handles mapped jar paths beyond Windows MAX_PATH.
+tasks.register("writeCheckClasspath") {
+    dependsOn tasks.named("classes")
+    def destination = layout.buildDirectory.file("checks/runtime-classpath.txt")
+    inputs.files(sourceSets.main.runtimeClasspath)
+    outputs.file(destination)
+    doLast {
+        def file = destination.get().asFile
+        file.parentFile.mkdirs()
+        file.setText(sourceSets.main.runtimeClasspath.asPath, "UTF-8")
+    }
+}

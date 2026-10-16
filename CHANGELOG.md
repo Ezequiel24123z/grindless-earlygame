@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Behavior checks use Gradle's resolved classpath on both platforms.** The Windows cache
+  scanner could not open the mapped game in a deep worktree and silently reported it missing.
+  Both runners now prepare the current common classes through `writeCheckClasspath`, preserve
+  dependency resolution and expose failures instead of scanning every cached library version.
+  The source-verified recipe and quest counts in the agent map are also corrected.
+
 - **Sanitized verification integration.** The published verification commits `bcdb162a` and
   `46eb83fe` are retained as historical reports with machine-specific paths removed. The
   integration record distinguishes their actual NO-GO from the new authorized `0d79860`

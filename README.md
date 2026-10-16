@@ -2253,7 +2253,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **Checkpoint verification and integration** | active — historical evidence integrated against the explicitly authorized `0d79860` baseline; [integration decision](docs/integration/verification-branch-integration.md), [historical report](docs/reviews/previous-session-verification.md) and [current validation](docs/testing/latest-validation.md); no new GO claimed |
+| 35 | **Checkpoint verification and integration** | active — evidence integrated; deterministic checks now use Gradle's resolved classpath on both platforms; [integration decision](docs/integration/verification-branch-integration.md), [historical report](docs/reviews/previous-session-verification.md) and [current validation](docs/testing/latest-validation.md); no new GO claimed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

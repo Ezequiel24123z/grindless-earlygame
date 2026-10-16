@@ -53,8 +53,8 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (111) and the ordinary
-craft count (32); `VerifyAtlas` pins 111 generated rows, 40 Assembler rows and 144 total
+`tools/checks/VerifyRecipes.java` pins the generated graph size (112) and the ordinary
+craft count (32); `VerifyAtlas` pins 112 generated rows, 41 Assembler rows and 145 total
 handheld routes (including 31 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
@@ -157,8 +157,8 @@ The first four checks also pin that the prototype transport has no generated sur
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).
 The Field Guide states the complete two-iron Bootstrap contract and points from its five-Matrix
 exit through the complete Voltaic factory; it remains readable independently of quest claims.
-The active route has nineteen tasks in eight lines, with the physical Relay Matrix between
-calibration and the first powered machines; it ends at the Factory Portal, contains no dimension
+The active route has twenty tasks in nine lines, with the physical Relay Matrix between
+calibration and the first powered machines; it ends at the F2 Relay Matrix, contains no dimension
 evidence and does not advertise spatial campaign prototypes.
 
 ## Multiblock
@@ -191,6 +191,10 @@ A new graph row updates the size assertion in `VerifyRecipes`. A new block updat
 `BlockCatalogue`, which `VerifyAssets` reads. Arithmetic policy stays in a check
 that does not boot Minecraft, the way `ProcessGraph`, `FluidLogic` and `AtlasLogic`
 already do.
+
+Both behavior runners ask `:common:writeCheckClasspath` for Gradle's resolved runtime classpath
+and current classes. They honor `GRADLE_USER_HOME` without scanning unrelated caches or
+silently swallowing long-path errors.
 
 ## Factory World
 
