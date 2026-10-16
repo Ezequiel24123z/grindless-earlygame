@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Sanitized verification integration.** The published verification commits `bcdb162a` and
+  `46eb83fe` are retained as historical reports with machine-specific paths removed. The
+  integration record distinguishes their actual NO-GO from the new authorized `0d79860`
+  baseline; the active handoff, pending checks and validation ledger do not reuse old passes.
+
+- **Previous-session verification evidence.** A new verification report, local execution ledger
+  and handoff distinguish the published `0d79860` candidate from an unidentified Astra
+  checkpoint. Shared compilation, all 30 behavior suites, the full build and four isolated
+  Forge smokes pass on the fresh Windows environment after restoring JDK 17. Architectural
+  continuation remains NO-GO pending provenance and F2 acceptance coverage; no production
+  code was changed. Publication was denied during that session; the later integration record
+  confirms both commits are now on the preserved remote evidence branch.
+
 - **Physical T1 exit (ADR-0123).** The Assembler now turns an F1 Relay Matrix, Machine Casing,
   renewable glass and Flux Cell into one NBT-rated F2 Relay Matrix. The Quest Book tracks that
   exact rating as its Industrial hand-off rather than accepting a bootstrap Matrix.

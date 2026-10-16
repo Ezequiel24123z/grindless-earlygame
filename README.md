@@ -2250,9 +2250,10 @@ Tracked order of work. Each step must build green before the next begins.
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
 | 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the five-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
-| 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
+| 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
+| 35 | **Checkpoint verification and integration** | active — historical evidence integrated against the explicitly authorized `0d79860` baseline; [integration decision](docs/integration/verification-branch-integration.md), [historical report](docs/reviews/previous-session-verification.md) and [current validation](docs/testing/latest-validation.md); no new GO claimed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2274,8 +2275,10 @@ the record.
 
 ### Where the project actually is
 
-The consolidated branch is locally validated: build, all behaviour checks, documentation and
-39 smoke scenarios pass. The genuinely playable survival foundation reaches T2 and includes
+The earlier consolidated branch was recorded as locally validated, including build, behaviour
+checks, documentation and 39 smoke scenarios. That historical statement is not evidence for a
+new checkout; see the revision-bound [current validation](docs/testing/latest-validation.md).
+The implemented survival foundation reaches T2 and includes
 extraction, logistics, fluids, fabricated machines, tools and matter scanning. Electric-arc steel,
 refractory brick, metallurgical silicon and zone refining extend that foundation.
 
