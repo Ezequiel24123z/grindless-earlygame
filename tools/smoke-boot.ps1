@@ -16,6 +16,7 @@
 #
 # Environment (identical contract to smoke-boot.sh, so CI and a desk agree):
 #     SMOKE_TIMEOUT      seconds to wait for the server to finish starting (default 900)
+#     SMOKE_EXPECT_TIMEOUT seconds to await scheduled scenario assertions (default 120)
 #     SMOKE_PORT         server port (default 25599)
 #     SMOKE_DATAPACK     a datapack directory to enable in the new world (ADR-0061)
 #     SMOKE_COMMANDS     a file of console commands to run once the server is up
@@ -31,6 +32,8 @@ $Root = (Resolve-Path $Root).Path
 $runDir = Join-Path $Root 'forge\run'
 $log = if ($env:SMOKE_LOG) { $env:SMOKE_LOG } else { Join-Path $runDir 'smoke-boot.log' }
 $timeout = if ($env:SMOKE_TIMEOUT) { [int]$env:SMOKE_TIMEOUT } else { 900 }
+$expectTimeout = if ($env:SMOKE_EXPECT_TIMEOUT) { [int]$env:SMOKE_EXPECT_TIMEOUT } else { 120 }
+if ($timeout -le 0 -or $expectTimeout -le 0) { throw 'Smoke timeouts must be positive.' }
 $port = if ($env:SMOKE_PORT) { $env:SMOKE_PORT } else { '25599' }
 $datapack = $env:SMOKE_DATAPACK
 $commandsFile = $env:SMOKE_COMMANDS
@@ -73,7 +76,7 @@ New-Item -ItemType Directory -Force -Path $runDir | Out-Null
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText((Join-Path $runDir 'eula.txt'), "eula=true`n", $utf8)
 
-$properties = "online-mode=false`nserver-port=$port`nlevel-name=smoke-world`nview-distance=2`nsimulation-distance=2`n"
+$properties = "online-mode=false`nserver-ip=127.0.0.1`nserver-port=$port`nlevel-name=smoke-world`nview-distance=2`nsimulation-distance=2`n"
 $world = Join-Path $runDir 'smoke-world'
 Remove-Tree $world
 if ($datapack) {
@@ -209,7 +212,11 @@ try {
                 foreach ($command in [System.IO.File]::ReadAllLines($commandsFile)) {
                     if ([string]::IsNullOrWhiteSpace($command)) { continue }
                     if ($command.TrimStart().StartsWith('#')) { continue }
-                    [void](Send-Console $command)
+                    if (-not (Send-Console $command)) {
+                        Write-Output "SMOKE BOOT FAILED: console closed while sending: $command"
+                        $failed = $true
+                        break
+                    }
                     # Hoppers and belts need ticks between lines; a scenario that must not yield
                     # to a block entity belongs in a datapack function (ADR-0061).
                     Start-Sleep -Seconds 1
@@ -220,8 +227,18 @@ try {
             }
 
             if ($expect) {
-                foreach ($pattern in ($expect -split "`r?`n")) {
-                    if ([string]::IsNullOrWhiteSpace($pattern)) { continue }
+                $patterns = @($expect -split "`r?`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+                $expectDeadline = (Get-Date).AddSeconds($expectTimeout)
+                do {
+                    Pump
+                    $missing = @($patterns | Where-Object { $script:text -notmatch $_ })
+                    if ($missing.Count -eq 0 -or $proc.HasExited -or $script:text -match $failPattern -or $failed) {
+                        break
+                    }
+                    Start-Sleep -Milliseconds 500
+                } while ((Get-Date) -lt $expectDeadline)
+                Pump
+                foreach ($pattern in $patterns) {
                     $hit = ($script:text -split "`n") | Where-Object { $_ -match $pattern } | Select-Object -First 1
                     if ($hit) {
                         Write-Output $hit
@@ -233,13 +250,29 @@ try {
                 }
             }
 
-            [void](Send-Console 'stop')
+            if ($script:text -match $failPattern) {
+                Write-Output 'SMOKE BOOT FAILED: the server hit a fatal error during the scenario.'
+                $failed = $true
+            }
+            if (-not $proc.HasExited) {
+                if (-not (Send-Console 'stop')) { $failed = $true }
+                # Gradle's stdin forwarder also needs EOF after Minecraft saves and stops.
+                $proc.StandardInput.Close()
+            }
             for ($i = 0; $i -lt 60; $i++) {
                 if ($proc.HasExited) { break }
                 Pump
                 Start-Sleep -Seconds 1
             }
             Pump
+            if (-not $proc.HasExited) {
+                Write-Output 'SMOKE BOOT FAILED: the server did not stop within 60 seconds.'
+                $failed = $true
+            } elseif ($proc.ExitCode -ne 0) {
+                Write-Output "SMOKE BOOT FAILED: the server launcher exited with $($proc.ExitCode)."
+                $failed = $true
+            }
+            if ($script:text -match $failPattern) { $failed = $true }
 
             if ($failed) {
                 $exitCode = 1

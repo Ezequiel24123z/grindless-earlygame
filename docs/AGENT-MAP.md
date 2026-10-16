@@ -26,6 +26,8 @@ capability event
 - `menu/MachineMenuKind.java` — slot counts on the shared menu.
 - `menu/ProcessMachineMenu.java` and `machine/ProcessMachineBlockEntity.java` — visible slot
   placement and persisted inventory layout; widening a menu must migrate any shifted saved slots.
+- `container/SlottedContainer.java` — indexed vanilla inventory NBT. Layout 3 keeps sparse slots;
+  compact legacy lists retain their recorded order, not guessed historical positions (ADR-0125).
 - `process/MachineEnvelopes.java` — when the machine holds a band from
   [`MACHINES.md`](MACHINES.md#machines-are-condition-envelopes).
 - `registry/BlockCatalogue.java` — geometry and the asset list.
@@ -73,6 +75,9 @@ unrated item lookup must still find the F2 route (ADR-0124).
   manufacturing support.
 - `matrix/ControlMatrixSpec.java` — physical rating, substitution and validation.
 - `item/ControlMatrixItem.java` — stack persistence, names and tooltips.
+- `matrix/ControlMatrixNbt.java` — the unchanged `Rating` key, legacy default and lossless numeric
+  validation. `VerifyPersistence` exercises binary NBT and packet round-trips; `matrix-lifecycle`
+  exercises the actual registered item and Assembler in Forge.
 - `registry/ModItems.java`, `registry/BlockCatalogue.java` and `tools/assetgen/` — registration
   and generated functional art.
 
@@ -154,6 +159,8 @@ The first four checks also pin that the prototype transport has no generated sur
 - `quest/QuestLogic.java`, `quest/QuestEvidence.java`, `quest/QuestProgress.java` — what
   a claim watches, and per-player progress. `menu/QuestBookMenu.java` synchronizes each task's
   live item count alongside its claim status for the client screen.
+- `quest/QuestInventoryEvidence.java` — counts each inventory slot once; vanilla's inventory
+  already includes the offhand. Matrix evidence checks both the item and exact valid rating.
 - `recipe/IngredientSpec.java` and `recipe/OutputSpec.java` — process inputs and outputs; their
   optional Matrix rating makes the T1-to-T2 hand-off physical rather than a global unlock.
 
@@ -199,6 +206,12 @@ already do.
 Both behavior runners ask `:common:writeCheckClasspath` for Gradle's resolved runtime classpath
 and current classes. They honor `GRADLE_USER_HOME` without scanning unrelated caches or
 silently swallowing long-path errors.
+
+Smoke expectations may be scheduled functions; both boot runners wait at most
+`SMOKE_EXPECT_TIMEOUT` (120 seconds by default). They fail on fatal scenario errors or an
+unclean/nonzero shutdown, rather than reporting a forced cleanup as a pass. Smoke servers
+bind only to loopback. The strict shutdown check currently exposes the development-JVM hang
+recorded in the [validation ledger](testing/latest-validation.md).
 
 ## Factory World
 

@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.machine;
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.github.ezequiel24123z.grindless.container.ItemInsert;
+import io.github.ezequiel24123z.grindless.container.SlottedContainer;
 import io.github.ezequiel24123z.grindless.fluid.FluidBuffer;
 import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
@@ -61,9 +62,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private static final String KEY_ITEMS = "Items";
     private static final String KEY_RECIPE = "Recipe";
     private static final String KEY_FLUID = "Fluid";
-    /** Marks the four-input Assembler layout; absent data is the former three-input layout. */
+    /** Layout 2 added the fourth Assembler input; layout 3 preserves every inventory slot. */
     private static final String KEY_ITEM_LAYOUT = "ItemLayout";
-    private static final int CURRENT_ITEM_LAYOUT = 2;
+    private static final int CURRENT_ITEM_LAYOUT = 3;
+    private static final int FOUR_INPUT_LAYOUT = 2;
 
     private final ProcessMachineKind kind;
     private final SimpleContainer items;
@@ -79,16 +81,20 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private ProcessRecipe cached;
     private TickSubscription working;
     private ConditionFault lastFault = ConditionFault.NONE;
+    private boolean loadingInventory;
 
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
         super(kind.type(), pos, state);
         this.kind = kind;
         this.fluid = new FluidBuffer(FluidLogic.MACHINE_CAPACITY, kind.fluidMaxC(), kind.fluidMaxP());
-        this.items = new SimpleContainer(kind.menuKind().size());
+        this.items = new SlottedContainer(kind.menuKind().size());
         this.inputSlots = range(0, kind.menuKind().inputs());
         this.outputSlots = range(kind.menuKind().inputs(), kind.menuKind().size());
         this.allSlots = range(0, kind.menuKind().size());
         items.addListener(container -> {
+            if (loadingInventory) {
+                return;
+            }
             cached = null;
             cachedRecipeId = "";
             setChanged();
@@ -140,7 +146,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     protected void updateSubscriptions() {
-        if (getLevel() == null) {
+        if (loadingInventory || getLevel() == null) {
             return;
         }
         ProcessRecipe recipe = recipe();
@@ -529,29 +535,36 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     public void load(CompoundTag tag) {
-        super.load(tag);
-        progress = Math.max(0.0, tag.getDouble(KEY_PROGRESS));
-        ListTag savedItems = tag.getList(KEY_ITEMS, net.minecraft.nbt.Tag.TAG_COMPOUND);
-        if (kind == ProcessMachineKind.ASSEMBLER
-                && tag.getInt(KEY_ITEM_LAYOUT) < CURRENT_ITEM_LAYOUT) {
-            migrateLegacyAssemblerOutput(savedItems);
+        loadingInventory = true;
+        try {
+            super.load(tag);
+            progress = Math.max(0.0, tag.getDouble(KEY_PROGRESS));
+            ListTag savedItems = tag.getList(KEY_ITEMS, net.minecraft.nbt.Tag.TAG_COMPOUND).copy();
+            if (kind == ProcessMachineKind.ASSEMBLER
+                    && tag.getInt(KEY_ITEM_LAYOUT) < FOUR_INPUT_LAYOUT) {
+                migrateLegacyAssemblerOutput(savedItems);
+            }
+            items.fromTag(savedItems);
+            cachedRecipeId = tag.getString(KEY_RECIPE);
+            cached = null;
+            fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
+        } finally {
+            loadingInventory = false;
         }
-        items.fromTag(savedItems);
-        cachedRecipeId = tag.getString(KEY_RECIPE);
-        cached = null;
-        fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
+        updateSubscriptions();
         syncData();
     }
 
     /**
      * Assemblers used slots 0-2 for inputs and slot 3 for their output before the Relay Matrix
      * batch needed a fourth ingredient. Shift that one persisted output to its new slot before
-     * {@link SimpleContainer#fromTag(ListTag)} reads it, preserving existing worlds.
+     * {@link SlottedContainer#fromTag(ListTag)} reads it, preserving existing worlds.
      */
     private static void migrateLegacyAssemblerOutput(ListTag savedItems) {
         for (int index = 0; index < savedItems.size(); index++) {
             CompoundTag stack = savedItems.getCompound(index);
-            if (stack.getByte("Slot") == 3) {
+            int slot = stack.contains("Slot") ? stack.getByte("Slot") : index;
+            if (slot == 3) {
                 stack.putByte("Slot", (byte) 4);
             }
         }

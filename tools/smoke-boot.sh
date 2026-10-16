@@ -15,6 +15,7 @@
 #
 # Environment:
 #     SMOKE_TIMEOUT   seconds to wait for the server to finish starting (default 900)
+#     SMOKE_EXPECT_TIMEOUT  seconds to await scheduled scenario assertions (default 120)
 #     SMOKE_PORT      server port (default 25599)
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
 #                     or to hold a smoke function (ADR-0061)
@@ -31,6 +32,13 @@ ROOT="$(cd "${1:-.}" && pwd)"
 RUN_DIR="$ROOT/forge/run"
 LOG="${SMOKE_LOG:-$ROOT/forge/run/smoke-boot.log}"
 TIMEOUT="${SMOKE_TIMEOUT:-900}"
+EXPECT_TIMEOUT="${SMOKE_EXPECT_TIMEOUT:-120}"
+case "$TIMEOUT:$EXPECT_TIMEOUT" in
+  *[!0-9:]*|:*|*:) echo "Smoke timeouts must be positive integers."; exit 1 ;;
+esac
+if [ "$TIMEOUT" -le 0 ] || [ "$EXPECT_TIMEOUT" -le 0 ]; then
+  echo "Smoke timeouts must be positive."; exit 1
+fi
 PORT="${SMOKE_PORT:-25599}"
 DATAPACK="${SMOKE_DATAPACK:-}"
 EXPECT="${SMOKE_EXPECT:-}"
@@ -45,7 +53,7 @@ fi
 
 mkdir -p "$RUN_DIR"
 printf 'eula=true\n' > "$RUN_DIR/eula.txt"
-printf 'online-mode=false\nserver-port=%s\nlevel-name=smoke-world\nview-distance=2\nsimulation-distance=2\n' \
+printf 'online-mode=false\nserver-ip=127.0.0.1\nserver-port=%s\nlevel-name=smoke-world\nview-distance=2\nsimulation-distance=2\n' \
   "$PORT" > "$RUN_DIR/server.properties"
 rm -rf "$RUN_DIR/smoke-world"
 if [ -n "$DATAPACK" ]; then
@@ -61,6 +69,7 @@ fi
 FIFO="$(mktemp -u /tmp/grindless-smoke.XXXXXX)"
 mkfifo "$FIFO"
 exec 3<>"$FIFO"
+CONSOLE_OPEN=1
 
 cd "$ROOT" || exit 1
 # setsid puts Gradle and the server it forks in their own process group, so cleanup can signal
@@ -68,11 +77,11 @@ cd "$ROOT" || exit 1
 # make this script CI-only -- which is the opposite of what it is for, since a developer who
 # can boot locally finds a loading crash before pushing. Fall back to signalling the launcher.
 if command -v setsid >/dev/null 2>&1; then
-  setsid ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
+  setsid ./gradlew --no-daemon :forge:runServer < "$FIFO" 3>&- > "$LOG" 2>&1 &
   SERVER_PID=$!
   KILL_TARGET="-$SERVER_PID"
 else
-  ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
+  ./gradlew --no-daemon :forge:runServer < "$FIFO" 3>&- > "$LOG" 2>&1 &
   SERVER_PID=$!
   KILL_TARGET="$SERVER_PID"
 fi
@@ -80,7 +89,7 @@ fi
 cleanup() {
   # The happy path has already sent `stop` and waited; this is the abort path.
   if kill -0 "$SERVER_PID" 2>/dev/null; then
-    echo "stop" >&3 2>/dev/null
+    if [ "$CONSOLE_OPEN" -eq 1 ]; then echo "stop" >&3 2>/dev/null; fi
     for _ in $(seq 1 15); do
       kill -0 "$SERVER_PID" 2>/dev/null || break
       sleep 1
@@ -121,6 +130,8 @@ while [ "$SECONDS" -lt "$deadline" ]; do
     if ! grep -E -q '\[Server\] SMOKE-READY' "$LOG"; then
       echo "SMOKE BOOT FAILED: the server started but never echoed SMOKE-READY"
       echo "stop" >&3
+      exec 3>&-
+      CONSOLE_OPEN=0
       exit 1
     fi
     if [ -n "$COMMANDS" ]; then
@@ -133,6 +144,18 @@ while [ "$SECONDS" -lt "$deadline" ]; do
       sleep 2
     fi
     if [ -n "$EXPECT" ]; then
+      expect_deadline=$((SECONDS + EXPECT_TIMEOUT))
+      while [ "$SECONDS" -lt "$expect_deadline" ]; do
+        missing=0
+        while IFS= read -r pattern; do
+          [ -z "$pattern" ] && continue
+          grep -Eq "$pattern" "$LOG" || missing=1
+        done <<< "$EXPECT"
+        [ "$missing" -eq 0 ] && break
+        kill -0 "$SERVER_PID" 2>/dev/null || break
+        grep -Eq "$FAIL_PATTERN" "$LOG" && break
+        sleep 1
+      done
       while IFS= read -r pattern; do
         [ -z "$pattern" ] && continue
         if grep -Eq "$pattern" "$LOG"; then
@@ -144,11 +167,27 @@ while [ "$SECONDS" -lt "$deadline" ]; do
         fi
       done <<< "$EXPECT"
     fi
+    if grep -Eq "$FAIL_PATTERN" "$LOG"; then
+      echo "SMOKE BOOT FAILED: the server hit a fatal error during the scenario."
+      exit 1
+    fi
     echo "stop" >&3
     for _ in $(seq 1 60); do
       kill -0 "$SERVER_PID" 2>/dev/null || break
       sleep 1
     done
+    if kill -0 "$SERVER_PID" 2>/dev/null; then
+      echo "SMOKE BOOT FAILED: the server did not stop within 60 seconds."
+      exit 1
+    fi
+    if ! wait "$SERVER_PID"; then
+      echo "SMOKE BOOT FAILED: the server launcher exited unsuccessfully."
+      exit 1
+    fi
+    if grep -Eq "$FAIL_PATTERN" "$LOG"; then
+      echo "SMOKE BOOT FAILED: the server hit a fatal error before shutdown completed."
+      exit 1
+    fi
     echo "SMOKE BOOT PASSED"
     exit 0
   fi

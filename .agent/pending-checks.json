@@ -1,10 +1,10 @@
 {
   "source_baseline": "0d798607c66ff7e4b581d2786cfa32dc4a02ded7",
   "branch": "ezequiel24123z-agent-ready-t0-foundation",
-  "gate": "NOT_EVALUATED",
+  "gate": "NO-GO",
   "checks": [
     {"id": "atlas-ratings", "status": "passed", "evidence": "build/validation/atlas-green-checks.log"},
-    {"id": "f2-lifecycle-nbt", "status": "pending", "evidence": null},
+    {"id": "f2-lifecycle-nbt", "status": "blocked_by_shutdown", "evidence": "build/validation/matrix-smoke-eof.log"},
     {"id": "compile-and-behavior", "status": "pending", "evidence": null},
     {"id": "full-build-resources", "status": "pending", "evidence": null},
     {"id": "complete-isolated-smokes", "status": "pending", "evidence": null},

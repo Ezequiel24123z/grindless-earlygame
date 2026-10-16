@@ -136,6 +136,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0122](#adr-0122--the-seed-matrix-batch-funds-the-forming-press) | The seed Matrix batch funds the forming Press | Accepted |
 | [0123](#adr-0123--the-voltaic-exit-is-a-rated-physical-f2-relay-matrix) | The Voltaic exit is a rated physical F2 Relay Matrix | Accepted |
 | [0124](#adr-0124--atlas-rating-labels-do-not-change-recipe-identity) | Atlas rating labels do not change recipe identity | Accepted |
+| [0125](#adr-0125--machine-inventories-persist-slots-with-explicit-legacy-migration) | Machine inventories persist slots with explicit legacy migration | Accepted |
 
 ---
 
@@ -5430,3 +5431,47 @@ ingredients as exactly F1 (they do not currently enforce a rating).
 **Consequences.** The handheld's existing input/output detail lines carry the distinction in text,
 not color alone. Existing untagged bootstrap stacks remain F1 under the existing item contract.
 No NBT format, packet, registry identifier, recipe balance or survival gate changes here.
+
+---
+
+## ADR-0125 — Machine inventories persist slots with explicit legacy migration
+
+*2026-10-16 · Accepted*
+
+**Context.** F2 lifecycle characterization reproduced five failures with the vanilla
+`SimpleContainer.createTag/fromTag` methods used by process machines. They save compact item
+lists, then merge items into the first available slots. A lone output in Assembler slot 4
+therefore reloads into input 0. The previous output-slot migration edited `Slot`, but the
+vanilla compact reader ignored that field. A build or completed recipe cannot prove persistence.
+
+**Decision.** Process machines use a slot-preserving container built on vanilla
+`ContainerHelper` NBT serialization. `Items` remains the list key; `ItemLayout = 3` identifies
+new slot-indexed saves. All item IDs, rating tags, counts, menu slots and automation sides stay
+unchanged. Loading does not publish intermediate partially restored inventories.
+
+Migration is explicit and non-speculative:
+
+- Slot-indexed saves retain their exact positions. An Assembler layout older than 2 moves
+  its explicit former output slot 3 to current output slot 4, once.
+- Legacy compact lists have no record of empty slots. Retain their item order and payload,
+  logging that original positions are unavailable. For an old three-input Assembler, a fourth
+  compact entry necessarily occupied its old output and moves to slot 4.
+- Do not infer missing historical positions from item type or the last recipe. A player can
+  recover an ambiguous legacy stack through the ordinary menu; no item or rating is fabricated.
+
+The Matrix codec retains `Rating` and the untagged architecture-frontier default. Existing
+lossless integral numeric tags remain readable; fractional, wrapped, non-finite, wrong-type
+or unsupported ratings are invalid rather than silently becoming an F1/F2 controller. The
+existing invalid-Matrix name/tooltip remains the recovery feedback.
+
+**Alternatives rejected.** Keeping compact saves and changing only tests (leaves output
+reconstruction broken); renaming the Matrix item or deleting old data (breaks worlds);
+guessing an old output from its type (a player may have placed that item in an input);
+claiming a paper carrier's packet check proves a registered Matrix's whole lifecycle (the
+dedicated Forge smoke must also produce, consume, block, recover and reconstruct that item).
+
+**Consequences.** A new save keeps sparse inputs and output ratings through binary NBT and
+reconstruction. Valid old stacks are retained, but missing historical slot information cannot be
+recreated honestly. Back up a world before testing a downgrade: an older jar will once again
+compact inventories. Player UI, quest interaction and no-command survival acceptance remain
+separate evidence from headless NBT checks.

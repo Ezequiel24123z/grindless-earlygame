@@ -1,0 +1,1 @@
+execute if data block 8 70 8 {Items:[{Slot:4b,id:"grindless:relay_matrix",Count:1b,tag:{Rating:2}}]} unless data block 8 70 8 Items[{Slot:0b}] unless data block 8 70 8 Items[{Slot:1b}] unless data block 8 70 8 Items[{Slot:2b}] unless data block 8 70 8 Items[{Slot:3b}] run say MATRIX-RECOVERED-ONCE

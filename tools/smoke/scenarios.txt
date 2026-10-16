@@ -24,6 +24,7 @@ first-iron           Slice A: Thermal Generator, Pulverizer and Arc Furnace have
 first-factory        Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
 first-fluids         Slice C: pump water through clay into a tank; captured CO burns in the generator.
 first-assembler      Slice D: Press and Assembler place; a hopper cannot steal a die and can insert an ingot.
+matrix-lifecycle     F2: exact rating validation, full powered cycle, sparse inventory NBT reconstruction, blocked-output recovery and hopper extraction.
 first-energy         Slice E: capacitor and transformer place; they are not pylons (ADR-0064).
 first-kiln           Kiln / R2: the Kiln places; a hopper can insert raw; a tank is the named SO2 sink.
 first-wire           Slice J: Wire Mill places; a hopper can insert an ingot; motor and wire items exist.
@@ -53,4 +54,4 @@ first-station        Slice BM: the berth is a block, the station is an entity, a
 first-drift          Slice BJ: the Drift loads, its floor is one deck, and the Starward Link is a block.
 first-centre         Slice BN: the galactic centre loads as shell, and the arrival mark is a block.
 first-atlas          Process Atlas: the handheld exists so a pack without JEI can still see the graph.
-first-book           Slice BC: the quest book and the field guide exist and open.
+first-book           Slice BC: the quest book and the field guide items exist; opening their client screens is interactive acceptance.

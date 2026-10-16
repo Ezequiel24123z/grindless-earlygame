@@ -48,3 +48,34 @@ The supported runners now ask Gradle to write
 SLF4J version from a shared cache. The `.sh` twin no longer discards suite stderr.
 This repairs the validation environment, not the game. Linux/macOS execution is not claimed.
 F2 runtime persistence and interactive/client acceptance remain unproved at this checkpoint.
+
+## F2 lifecycle corrective checkpoint
+
+Source: `b07ed16` plus the ADR-0125 patch. `VerifyPersistence` first reproduced **five** failures
+using the same vanilla compact-container methods as the original process machine; the ordinary
+item packet retained its tag. After the slot-preserving implementation, the supported runner
+passes **31 suites**, including binary NBT, sparse slots, repeated reconstruction, legacy compact
+data, all integral numeric rating types, malformed/overflowing ratings and offhand counting.
+
+| Check | Current result | Evidence |
+| --- | --- | --- |
+| Targeted `javac`/`java` for `VerifyPersistence` against Gradle's exported classpath | Exit 1, five expected pre-fix slot failures | `build/validation/persistence-red.log` |
+| `powershell -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .` | Exit 0, 31 suites | `build/validation/persistence-checks.log` |
+| `powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only matrix-lifecycle` | 23:32:20-23:35:34, exit 1; all 16 gameplay assertions pass, launcher does not exit within 60 seconds | `build/validation/matrix-smoke.log`, `build/validation/matrix-initial-shutdown.log` |
+| Same scenario after explicitly closing stdin | 23:37:09-23:40:06, exit 1; EOF alone does not repair shutdown | `build/validation/matrix-smoke-eof.log` |
+| Plain boot plus thread dumps of only the probe's owned Java processes | Same hang without the Matrix scenario; world saving completes, non-daemon executor pools remain | `build/validation/shutdown-probe-server.log`, `shutdown-probe.out`, `shutdown-8592.log`, `shutdown-13344.log`, `shutdown-18696.log` under the same directory |
+| Port 25599 after failure cleanup | No listener; no unrelated process stopped | Tool execution `matrix-smoke-postcondition` |
+
+The new smoke covers exact F1 input, F2/fraction/string/overflow/architecture rejection,
+legacy untagged F1, old output-slot migration, retained compact stacks, a zero-progress
+charcoal-powered full cycle, mid-cycle reconstruction, output NBT reconstruction, hopper
+extraction and blocked-output recovery without double consumption. The second blocked branch
+alone starts near completion; the first cycle is not shortened. These observations are not
+a passing smoke because its process lifecycle fails.
+
+The stricter runner exposed a pre-existing dev-launch behavior that the earlier implementation
+silently killed after waiting. It is not an F2 assertion failure, but it must not be suppressed.
+EOF was a bounded unsuccessful attempt, retained here. The repository creates no executor pool
+in its Java sources; exact ownership of the eight non-daemon pools is not yet proven.
+No full integration smoke pass or GO is claimed. Interactive client screens, an actual player
+quest claim and the no-command survival route also remain unexecuted.

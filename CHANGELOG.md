@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **F2 persistence is characterized and repaired (ADR-0125).** Process inventories now save
+  slot indices, retain legacy compact stacks without guessing their lost positions and migrate
+  the old Assembler output explicitly. Real NBT checks cover sparse slots, reconstruction,
+  numeric rating validation and item packets. Quest evidence no longer double-counts offhand
+  stacks. A new isolated Forge scenario exercises the complete F2 cycle and output recovery;
+  its 16 assertions pass, but strict shutdown validation exposed a development-JVM hang, so
+  this checkpoint is not a passing smoke or a GO.
+
 - **The Atlas preserves physical Matrix ratings (ADR-0124).** The F2 route now shows its
   exact F1 input and F2 output in both compact and detail text. Bare item lookup still finds
   every route; rated lookup distinguishes them without changing recipe identities or NBT.

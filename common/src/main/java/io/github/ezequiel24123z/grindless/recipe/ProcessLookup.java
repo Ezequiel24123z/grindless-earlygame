@@ -226,7 +226,8 @@ public final class ProcessLookup {
             return false;
         }
         if (spec.matrixRating() > 0) {
-            if (!(stack.getItem() instanceof ControlMatrixItem matrix)) {
+            if (!(stack.getItem() instanceof ControlMatrixItem matrix)
+                    || !BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id())) {
                 return false;
             }
             return matrix.spec(stack).map(value -> value.rating().ordinal() == spec.matrixRating())
