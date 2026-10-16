@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Smoke dispatch itself is now regression-tested (ADR-0127).** The Bash report loop leaked
+  its scenario variable and repeatedly ran the final selected scenario while displaying
+  different row names. A three-case executable fixture reproduced that false green. Local
+  variables fix it; the same fixture checks exact dispatch and failure reporting in both Bash
+  and PowerShell. Historical Linux aggregate smoke passes are not complete-inventory evidence.
+
 - **Integration smokes exercise the shipped Forge jar (ADR-0126).** Paired boot scripts now
   prepare an isolated official production server and load the exact remapped mod artifact,
   without development transformer workers. Plain boot and the complete F2 lifecycle exit

@@ -188,6 +188,9 @@ not the Arc Furnace.
 ## Checks
 
 - `tools/checks/Verify*.java`, via `tools/run-checks.sh .` after `:common:build`.
+- `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
+  temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
+  report variables must remain local (ADR-0127).
 - `tools/check-links.ps1` — relative links and the ADR index.
 - `tools/smoke/scenarios.txt` — the scenario list, when a block, a menu or a
   boot-visible item changes. Run it with `tools/run-smokes.ps1` or `run-smokes.sh`.
@@ -195,7 +198,7 @@ not the Arc Furnace.
   actual remapped mod jar plus Architectury. Boot scripts run that artifact, not development
   transformer classes; generated libraries/worlds stay under ignored `forge/run/smoke-server`.
 
-Every tool here has a `.ps1` and a `.sh` twin, because the desk that validates a
+Every tool here must have a `.ps1` and a `.sh` twin, because the desk that validates a
 branch runs Windows ([ADR-0106](DECISIONS.md#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk)).
 A new scenario is a line in `scenarios.txt` and its `<name>.commands` / `<name>.expect`
 files, never a step in `ci.yml`

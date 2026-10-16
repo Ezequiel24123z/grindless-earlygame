@@ -100,3 +100,30 @@ This isolates the prior hang to the dev-launch path; it does not identify or pat
 upstream executor owner. The canonical integration path now tests what is shipped, including
 loading without optional JEI. The first installation needs network access; the second preparation
 was entirely up-to-date. Complete inventory and independent review are next, not inferred passes.
+
+## Linux dispatch correction
+
+The `verify` job of [CI run 38968479378](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/38968479378)
+passed, but its smoke shard 3 repeatedly executed Atlas assertions for other named scenarios.
+The raw failed-job log is `build/validation/prior-linux-ci-failure.log`. The source defect and
+its evidence consequence are recorded in ADR-0127.
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| `VerifySmokeHarness --bash <Bash executable>` before the fix | Exit 1 from the regression check: runner dispatched `gamma` three times and falsely exited 0 | `build/validation/bash-dispatch-red.log` |
+| Same fixture after the fix | Exit 0: exact `alpha,beta,gamma`; the intentional beta failure propagates; report agrees | `build/validation/bash-dispatch-green.log` |
+| `VerifySmokeHarness` on Windows | Exit 0 with the native PowerShell twin and the same failure contract | `build/validation/powershell-dispatch-green.log` |
+| `bash -n` on the three changed shell runners | All exit 0 | Tool execution `smoke-dispatch-green` |
+
+No Bash was on PATH or in the app's minimal Git distribution. After that missing-tool result,
+Portable Git `v2.56.0.windows.2` was installed only under ignored `build/tooling/portable-git`.
+The [official release](https://github.com/git-for-windows/git/releases/tag/v2.56.0.windows.2)
+archive matched its GitHub SHA-256
+`075e158ef8e1f0ab80b347e245405d3eca735c2dc88fd8e032e137d0ca61f61b` and had a valid
+Authenticode signature before execution. No key, global PATH or Git identity was changed.
+This is a local test tool, not imported mod material.
+
+The Windows full inventory started at **2026-10-17 00:03:19 UTC+02:00**, source `0ca31e3`.
+Its PowerShell runner and game artifact are unchanged by the Bash-only correction. The pending
+run uses `build/validation/full-smokes.log` and `forge/run/smoke-report.html`. Do not count its
+in-progress rows as passes or count the pre-fix Linux aggregate as independent confirmation.

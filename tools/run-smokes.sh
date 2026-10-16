@@ -75,6 +75,7 @@ for _ in "${SELECTED[@]}"; do STATUS+=("pending"); SECS+=("0"); done
 
 write_report() {
   local done_count=0 passed=0 failed=0 active="no" rows="" idx=0 pct=0
+  local name s
   for s in "${STATUS[@]}"; do
     case "$s" in
       passed) done_count=$((done_count + 1)); passed=$((passed + 1)) ;;

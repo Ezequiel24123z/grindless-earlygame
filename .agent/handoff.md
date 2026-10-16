@@ -1,9 +1,9 @@
 # Active foundation handoff
 
-Date: 2026-10-16. Phase B: production-artifact runtime repaired; complete inventory next.
+Date: 2026-10-17. Phase B: full Windows inventory running; Linux dispatch corrected.
 Branch: `ezequiel24123z-agent-ready-t0-foundation`.
 Authorized source baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
-Last published HEAD before this checkpoint: `b48e3f64a1726ff0b56cdf9024b0e0ffb55fe7b6`.
+Last published HEAD before this checkpoint: `0ca31e39448ad0078af4eab9ff26ead613b243c5`.
 The commit containing this file records the evidence-integration checkpoint; do not confuse
 the source revision under test with a later documentation commit.
 
@@ -22,11 +22,15 @@ the source revision under test with a later documentation commit.
 - Gate: **NO-GO pending the complete inventory and independent review**. The ADR-0126
   production-artifact path passes plain boot and all 16 F2 assertions with clean exit. Its mod
   jar matches the build hash. The separate dev-launch hang remains documented, not hidden.
-- Background work: none. External research finished without edits or imported material.
-  Its canonical pinned sources await the research document. No unrelated files are staged.
+- Background check: `full-integration-smokes`, started 00:03:19 UTC+02:00 on `0ca31e3`;
+  full output `build/validation/full-smokes.log`, live `forge/run/smoke-report.html`.
+- Linux dispatch repair: ADR-0127; a real fake-boot regression exposed repeated last-scenario
+  execution. Both Bash and PowerShell fixture checks now pass. New CI is needed for Linux.
+- External research finished without imports. Independent review initially lacked local file
+  tools; a narrowly scoped source excerpt review is pending and is not full repository clearance.
 - Evidence: [current validation](../docs/testing/latest-validation.md), archived reports and
   [pending checks](pending-checks.json). Raw new executable logs will use `build/validation/`.
 
-**Next safe task:** run all 41 isolated production smokes and an independent gate review.
+**Next safe task:** collect all 41 isolated production results and corrected Linux CI.
 While they run, write the pinned-source research and non-gameplay preparation documents.
 BP, player acceptance and broad T0 changes remain held.

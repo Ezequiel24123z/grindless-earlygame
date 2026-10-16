@@ -7,9 +7,16 @@
     {"id": "f2-lifecycle-nbt", "status": "passed", "evidence": "build/validation/production-matrix.log"},
     {"id": "compile-and-behavior", "status": "pending", "evidence": null},
     {"id": "full-build-resources", "status": "pending", "evidence": null},
-    {"id": "complete-isolated-smokes", "status": "pending", "evidence": null},
+    {"id": "complete-isolated-smokes", "status": "running", "evidence": "build/validation/full-smokes.log"},
     {"id": "independent-gate-review", "status": "pending", "evidence": null},
     {"id": "client-ui-and-survival", "status": "pending", "evidence": null}
   ],
-  "background_checks": []
+  "background_checks": [
+    {
+      "id": "full-integration-smokes",
+      "source_commit": "0ca31e39448ad0078af4eab9ff26ead613b243c5",
+      "started_at": "2026-10-17T00:03:19+02:00",
+      "log": "build/validation/full-smokes.log"
+    }
+  ]
 }

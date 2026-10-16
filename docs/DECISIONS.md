@@ -138,6 +138,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0124](#adr-0124--atlas-rating-labels-do-not-change-recipe-identity) | Atlas rating labels do not change recipe identity | Accepted |
 | [0125](#adr-0125--machine-inventories-persist-slots-with-explicit-legacy-migration) | Machine inventories persist slots with explicit legacy migration | Accepted |
 | [0126](#adr-0126--integration-smokes-boot-the-distributable-forge-jar) | Integration smokes boot the distributable Forge jar | Accepted |
+| [0127](#adr-0127--smoke-runner-dispatch-is-tested-independently-of-minecraft) | Smoke-runner dispatch is tested independently of Minecraft | Accepted |
 
 ---
 
@@ -5514,3 +5515,33 @@ forced cleanup. The loaded and built mod jars have identical SHA-256. The upstre
 hang remains a documented limitation of the optional development path, not a claimed upstream
 repair. First preparation needs official Forge/Mojang artifact access; subsequent runs reuse the
 installed libraries. The full isolated inventory still runs before integration acceptance.
+
+---
+
+## ADR-0127 — Smoke-runner dispatch is tested independently of Minecraft
+
+*2026-10-17 · Accepted*
+
+**Context.** Linux CI run `38968479378` printed `ATLAS-OK` while nominally running blocks,
+fluids and other scenarios. `write_report` in `run-smokes.sh` iterated the global `name`
+variable, leaving it set to the final selected scenario before the caller chose its command,
+expectation, datapack and log files. A green report could therefore represent repeated runs
+of the last scenario instead of the stated inventory.
+
+**Decision.** Reporting loop variables are function-local. `VerifySmokeHarness` exercises the
+actual platform runner in a disposable fixture with three fake boots, one deliberately failing.
+It asserts exact dispatch order, nonzero failure propagation and the report's two-pass/one-fail
+result. It does not launch Minecraft or replace any real smoke. Windows runs the PowerShell
+twin; Linux/macOS run Bash. An explicit `--bash <executable>` also tests Bash on Windows.
+
+The pre-fix Bash fixture executed `gamma, gamma, gamma`, missed the failing `beta`, and reported
+all three passed. With the fix, Bash and PowerShell execute `alpha, beta, gamma` and report the
+failure correctly. These are actual process results, not source-pattern assertions.
+
+**Alternatives rejected.** Trusting a report's labels or aggregate exit alone (both lied
+together); removing the failing Atlas scenario (would conceal the dispatch error); adding a
+second scenario list in CI (duplicates the source of truth).
+
+**Consequences.** Historical Linux aggregate smoke successes are not full-inventory evidence.
+The Windows production inventory remains independent. New Linux integration evidence must come
+from the corrected runner. This changes no game data or runtime behavior.
