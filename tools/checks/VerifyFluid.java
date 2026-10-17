@@ -121,9 +121,10 @@ public final class VerifyFluid {
         NativeEndpoint primary = new NativeEndpoint(FluidState.of(ProcessLogic.HYDROGEN, 100), 70);
         NativeEndpoint first = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 80, 47.0, 0.3), 60);
         NativeEndpoint second = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 70, 29.0, 0.2), 40);
+        second.extractFace = Direction.SOUTH;
         List<IngredientSpec> demand = List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
                 IngredientSpec.fluid(FluidLogic.WATER, 150));
-        List<FluidInsert.Source> split = List.of(source(first, Direction.NORTH), source(second, Direction.NORTH));
+        List<FluidInsert.Source> split = List.of(source(first, Direction.NORTH), source(second, Direction.SOUTH));
         boolean[] settled = {false};
         primary.afterChanged = () -> yes("primary notification observes settled consumption", settled[0]);
         first.afterChanged = () -> yes("split-source notification observes all withdrawals",
@@ -132,7 +133,7 @@ public final class VerifyFluid {
         NativeFluidStore.Batch batch = FluidInsert.plan(primary.nativeStore(), demand, split).orElseThrow();
         eq("planning does not withdraw from the primary", 100, primary.contents().millibuckets());
         eq("planning does not withdraw from a secondary", 80, first.contents().millibuckets());
-        yes("split extract-only sources pay one exact native batch", batch.commit(() -> settled[0] = true));
+        yes("split extract-only faces pay one exact native batch", batch.commit(() -> settled[0] = true));
         eq("primary withdrawal debits its quota", 0, primary.quota);
         eq("first split receipt debits its quota", 0, first.quota);
         eq("second split receipt debits its quota", 0, second.quota);
@@ -148,6 +149,8 @@ public final class VerifyFluid {
         no("backing aliases cannot manufacture a second payment",
                 FluidInsert.plan(primary.nativeStore(), List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 1),
                         IngredientSpec.fluid(FluidLogic.WATER, 150)), aliases).isPresent());
+        eq("insufficient secondary stock leaves the planned primary untouched",
+                FluidState.of(ProcessLogic.HYDROGEN, 1), primary.contents());
         no("the owner planner also rejects duplicate aliases across requests", NativeFluidStore.plan(List.of(
                 new NativeFluidStore.Request(FluidLogic.WATER, 80,
                         List.of(new NativeFluidStore.Access(shared.nativeStore(), () -> true))),
@@ -223,6 +226,7 @@ public final class VerifyFluid {
         ProcessMachineBlockEntity producer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
         loadFluid(producer, water, 350);
         producer.containerConfig().setSideMode(Direction.NORTH, SideMode.EXTRACT);
+        cacheCompleted(producer, fixture);
         no("a process output source need not permit return insertion",
                 producer.canInsert(Direction.NORTH, water.withAmount(100)));
         NativeEndpoint late = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), 60);
@@ -236,14 +240,20 @@ public final class VerifyFluid {
         eq("late abort restores an earlier process source's complete state", water, producer.contents());
         eq("late abort restores the earlier process output quota", 350,
                 producer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        Field producerCache = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+        producerCache.setAccessible(true);
+        eq("late abort does not notify or invalidate an earlier source", fixture, producerCache.get(producer));
         eq("late abort preserves the untouched participant state",
                 FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), late.contents());
         eq("late abort leaves paid progress unchanged", 20.0,
                 consumer.saveWithoutMetadata().getDouble("Progress"));
+        eq("late abort retains the selected recipe", fixture.id(),
+                consumer.saveWithoutMetadata().getString("Recipe"));
         eq("late abort does not consume items", 1, consumer.getItem(0).getCount());
         yes("late abort does not create an item output",
                 consumer.getItem(consumer.menuKind().inputs()).isEmpty());
         eq("late abort sends no source notification", 0, late.notifications);
+        eq("late abort leaves the untouched participant quota unchanged", 60, late.quota);
         eq("late abort never calls an external extraction", 0, late.extractCalls);
         eq("late abort never tries insertion-based restoration", 0, late.insertCalls);
 
@@ -427,6 +437,7 @@ public final class VerifyFluid {
         private int extractCalls;
         private int insertCalls;
         private boolean nativeEnabled = true;
+        private Direction extractFace = Direction.NORTH;
         private BooleanSupplier allowed = () -> true;
         private Runnable afterChanged = () -> { };
 
@@ -458,7 +469,7 @@ public final class VerifyFluid {
 
         @Override
         public boolean canExtract(Direction from) {
-            return from == Direction.NORTH && allowed.getAsBoolean() && !buffer.isEmpty();
+            return from == extractFace && allowed.getAsBoolean() && !buffer.isEmpty();
         }
 
         @Override
