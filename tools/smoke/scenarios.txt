@@ -10,6 +10,8 @@
 # A scenario called <name> picks up, when they exist:
 #     tools/smoke/<name>.commands   console commands to run once the server is up
 #     tools/smoke/<name>.expect     extended regexes that must each appear in the log
+#     tools/smoke/<name>.timeout    optional positive assertion-budget seconds (ADR-0139);
+#                                   explicit SMOKE_EXPECT_TIMEOUT wins, otherwise default 120
 #     tools/smoke/<name>-pack/      a datapack to enable, or tools/smoke/<name>/ if that is
 #                                   a directory and no -pack exists
 # A scenario that names none of them is a plain boot.

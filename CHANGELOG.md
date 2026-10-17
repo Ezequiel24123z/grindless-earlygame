@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Per-scenario smoke budgets decided (ADR-0139).** Long real T0 cycles will declare a
+  positive assertion deadline in a sibling `.timeout` file, below an explicit environment
+  override and above the existing default. Twin-runner support and ordinary-invocation
+  validation are required; no global deadline, recipe speed or assertion is weakened.
 - **Native fluid completion integrated with exception compensation (ADR-0138).** Batches
   revalidate native identity, face access, full fluid state and output quota before exact
   withdrawal, deduplicate backing stores and defer notifications until settlement. Explicit

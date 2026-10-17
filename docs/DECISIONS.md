@@ -150,6 +150,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched) | C3 integration keeps the two-iron budget and leaves vanilla tags untouched | Accepted |
 | [0137](#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it) | The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it | Accepted |
 | [0138](#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly) | A batch completes only after its fluid inputs are re-verified and drawn exactly | Accepted |
+| [0139](#adr-0139--long-native-smokes-carry-their-own-assertion-budget) | Long native smokes carry their own assertion budget | Accepted |
 
 ---
 
@@ -6250,3 +6251,32 @@ the reference table is not a blanket permission to reuse third-party material.
   T1 or T2 content. A targeted process fixture is not a played-survival or retained-world pass.
 - The C3 acceptance on partial extraction now includes verified secondary completion
   (plan amendment PA-0002).
+
+---
+
+## ADR-0139 — Long native smokes carry their own assertion budget
+
+**Status.** Accepted, 2026-10-18; runner support and the native-cycle fixture are in progress.
+
+**Context.** The renewable T0 smoke executes real machine work. Even Bench fabrication and
+Terminal calibration together need 1,200 powered ticks, before source and downstream cycles.
+The ordinary assertion deadline is 120 seconds. Passing only with a manually supplied
+`SMOKE_EXPECT_TIMEOUT` would leave the normal runner and CI broken for the same fixture.
+
+**Decision.** A scenario may add a sibling `tools/smoke/<name>.timeout` containing one
+positive integer assertion budget in seconds. The existing explicit `SMOKE_EXPECT_TIMEOUT`
+override wins, then the scenario budget, then the unchanged 120-second boot-helper default.
+Server-startup `SMOKE_TIMEOUT` is separate and unchanged. The PowerShell and Bash runners
+must forward identical values, reject malformed selected metadata before booting, and never
+leak one scenario's budget into another or into the caller's environment.
+
+Keep `scenarios.txt` as the single scenario list, with its existing syntax. No per-scenario
+CI step, global timeout increase, machine-speed override or skipped assertion is added.
+Fake-boot harness checks cover selection, invalid budgets, explicit override, consecutive
+scenarios and platform parity. The real long scenario must also pass through the ordinary
+runner with no environment override; a special invocation alone does not close integration.
+
+**Alternatives rejected.** Raising every scenario's deadline would delay unrelated failures.
+Changing recipe durations or injecting outputs would invalidate the production proof.
+Adding a second scenario list or bespoke runner would bypass the existing shard/selection
+contract. A small optional fixture file preserves that contract and local/CI parity.
