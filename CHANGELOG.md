@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **A static, revision-bound repository dashboard renderer.** The vanilla HTML/CSS/JS viewer
+  reads the generator's schema-1 `data.json`, with T0-T15 navigation, resource/side-stream
+  filters, bounded dependency graphs, machine/multiblock and quest detail, asset queues and
+  observed validation/manual evidence. Labels come from the canonical dictionary; explicit
+  deliverable fractions expose their denominator and require matching source commits.
+  Missing data never falls back to synthetic snapshots. Isolated, labeled browser fixtures
+  and paired JDK test-server scripts accompany the renderer; generator/audit integration
+  remains separate from this increment and does not block gameplay development.
+
 - **Mod-owned sustainability is binding across progression (ADR-0131).** Mandatory resources
   must close recursively without canonical vanilla farms or permanently finite inputs. Resource
   and by-product classes, bootstrap safety, handling and truthful player/dashboard views are

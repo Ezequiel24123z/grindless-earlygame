@@ -1,0 +1,1 @@
+This is deliberately invalid JSON for the synthetic renderer test.

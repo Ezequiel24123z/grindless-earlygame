@@ -1,0 +1,8 @@
+.test-page { padding: 24px; }
+.test-page > p { max-width: 90ch; }
+.test-page li { padding: 4px; overflow-wrap: anywhere; }
+.test-page li[data-result="pass"] { color: var(--cyan); }
+.test-page li[data-result="fail"] { color: var(--red); }
+.test-frame-scroll { max-width: 100%; overflow: auto; }
+.test-page iframe { display: block; border: 1px solid var(--line); background: var(--ground); }
+#case-mount { position: absolute; left: -10000px; top: 0; }

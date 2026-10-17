@@ -2262,6 +2262,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 35 | **T0 workshop rework** | W1 automatedly validated — ceramics, formed firing, recovery and handling are in; assembled settling is next; manual acceptance remains pending (ADR-0129) |
 | 35 | **Checkpoint verification and integration** | **CONDITIONAL GO** — 33 suites, build, links and all 41 distinct production smokes completed across recorded batches; no-command/client/saved-world acceptance still blocks broad T0 work; [current gate](docs/reviews/go-gate.md), [current validation](docs/testing/latest-validation.md) |
 | 36 | **Gated T0 rework preparation** | research and audit artifacts only — [Tier specification](docs/tiers/t0.md), [external research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [exact acceptance checklist](docs/testing/t0-survival-acceptance.md); no new gameplay or accepted tier |
+| 37 | **Repository sustainability dashboard** | static [renderer and contract](docs/dashboard/README.md) implemented — schema-1 generated data only, T0-T15, classified side streams, dependency neighborhoods and revision-bound evidence; canonical generator/audit integration remains active, not a gameplay-development gate |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

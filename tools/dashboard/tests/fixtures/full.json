@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "context": {
+    "repository": "SYNTHETIC TEST DATA - dashboard renderer",
+    "repository_url": "https://github.com/example/grindless-dashboard-test",
+    "branch": "synthetic-tests-only",
+    "commit": "1111111111111111111111111111111111111111",
+    "pull_request_url": null,
+    "pull_request_state": null,
+    "active_tier": 0,
+    "active_slice": "Synthetic renderer test; not gameplay or acceptance evidence",
+    "mode": "local",
+    "generated_at": "2000-01-01T00:00:00Z",
+    "status": "in_progress",
+    "milestones": [
+      {"id": "synthetic-milestone", "title": "Synthetic milestone", "status": "pending", "commit": null}
+    ],
+    "recent_commits": [
+      {"sha": "1111111111111111111111111111111111111111", "subject": "Synthetic test identity, not a repository commit", "url": "https://github.com/example/grindless-dashboard-test/commit/1111111111111111111111111111111111111111"}
+    ]
+  },
+  "classifications": [
+    {"id": "bootstrap", "label": "Test bootstrap label", "description": "Synthetic finite seed classification.", "localization_key": "test.bootstrap", "color": "#f1c16d", "icon": "B", "domain": "resource"},
+    {"id": "renewable", "label": "Test renewable label", "description": "Synthetic source annotation, not certified gameplay.", "localization_key": "test.renewable", "color": "#70e7ea", "icon": "R", "domain": "resource"},
+    {"id": "catalytic", "label": "Test catalyst label", "description": "Synthetic catalyst annotation.", "localization_key": "test.catalytic", "color": "#70e7ea", "icon": "C", "domain": "resource"},
+    {"id": "finite_optional", "label": "Test optional finite label", "description": "Synthetic optional source.", "localization_key": "test.finite", "color": "#abbac8", "icon": "F", "domain": "resource"},
+    {"id": "byproduct_current", "label": "Test current side stream", "description": "Synthetic implemented-consumer annotation.", "localization_key": "test.current", "color": "#70e7ea", "icon": "C", "domain": "byproduct"},
+    {"id": "byproduct_future", "label": "Test future feedstock", "description": "Synthetic named future-plan annotation.", "localization_key": "test.future", "color": "#f1c16d", "icon": "F", "domain": "byproduct"},
+    {"id": "byproduct_optional", "label": "Test optional side stream", "description": "Synthetic optional annotation.", "localization_key": "test.optional", "color": "#abbac8", "icon": "O", "domain": "byproduct"},
+    {"id": "waste_recoverable", "label": "Test recoverable waste", "description": "Synthetic recycling annotation.", "localization_key": "test.recovery", "color": "#bdb4f4", "icon": "R", "domain": "byproduct"},
+    {"id": "waste_hazardous", "label": "Test hazardous waste", "description": "Synthetic hazard annotation.", "localization_key": "test.hazard", "color": "#ffaaa3", "icon": "!", "domain": "byproduct"},
+    {"id": "waste_inert", "label": "Test inert waste", "description": "Synthetic inert annotation.", "localization_key": "test.inert", "color": "#abbac8", "icon": "I", "domain": "byproduct"},
+    {"id": "process_loss", "label": "Test process loss", "description": "Synthetic non-stack loss.", "localization_key": "test.loss", "color": "#abbac8", "icon": "L", "domain": "byproduct"},
+    {"id": "emission", "label": "Test emission", "description": "Synthetic emission.", "localization_key": "test.emission", "color": "#abbac8", "icon": "E", "domain": "byproduct"},
+    {"id": "catalyst_spent", "label": "Test spent catalyst", "description": "Synthetic spent-catalyst annotation.", "localization_key": "test.spent", "color": "#f1c16d", "icon": "S", "domain": "byproduct"},
+    {"id": "potential_future_use", "label": "Test uncertain potential", "description": "Synthetic uncertain-use annotation; no promise.", "localization_key": "test.potential", "color": "#f1c16d", "icon": "?", "domain": "byproduct"}
+  ],
+  "tiers": [
+    {
+      "id": 0, "name": "Synthetic Bootstrap", "purpose": "Exercise renderer behavior only.",
+      "entry": "Synthetic finite seed", "exit": "Synthetic physical evidence; never a real Tier claim",
+      "implementation_state": "in_progress", "bootstrap_resources": ["test:clay"],
+      "renewable_routes": ["test:source"], "improved_resources": ["test:water"],
+      "recycling_routes": ["test:recycle"], "useful_byproducts": ["test:grog"],
+      "vanilla_dependencies_eliminated": [], "finite_optional": ["test:vanilla"],
+      "deadlock_protection": ["Synthetic seed is reported, not inferred by the renderer."],
+      "resource_ids": ["test:water", "test:clay", "test:grog", "test:hazard"],
+      "machine_ids": ["test:mixer", "test:assembled", "test:storage"],
+      "quest_ids": ["test:first", "test:follow"],
+      "blockers": ["Synthetic blocker; no gameplay conclusion."],
+      "manual_checks": [{"id": "synthetic-survival", "status": "not_run", "description": "Synthetic manual check only."}],
+      "source_path": "tests/catalogue.json"
+    },
+    {
+      "id": 1, "name": "Synthetic planned tier", "purpose": "Exercise planned state.",
+      "entry": null, "exit": null, "implementation_state": "planned",
+      "bootstrap_resources": [], "renewable_routes": [], "improved_resources": [],
+      "recycling_routes": [], "useful_byproducts": [], "vanilla_dependencies_eliminated": [],
+      "finite_optional": [], "deadlock_protection": [], "resource_ids": ["test:catalyst"],
+      "machine_ids": ["test:standard"], "quest_ids": [], "blockers": [], "manual_checks": [],
+      "source_path": "tests/planned-tier.json"
+    }
+  ],
+  "resources": [
+    {
+      "id": "test:water", "kind": "fluid", "name": "Synthetic water", "resource_classes": ["renewable"],
+      "byproduct_classes": [], "mandatory_for_progression": true, "first_use_tier": 0, "first_renewable_tier": 0,
+      "bootstrap_source": "Synthetic seed", "renewable_routes": ["test:source"], "input_dependencies": [],
+      "output_rate": "10 units / synthetic cycle", "current_consumers": ["test:mix"], "future_consumers": [],
+      "recycling_routes": [], "catalyst_behavior": null, "automation": {"input": "reported", "output": "reported"},
+      "vanilla_dependency": false, "deadlock_risk": "Synthetic test only",
+      "handling": {"current_action": "Synthetic storage", "storage": "Synthetic tank", "disposal": null, "treatment": null, "discard_allowed": null, "hazardous": false, "containment_required": null},
+      "description": "Synthetic fixture, not a gameplay source.", "icon": null,
+      "source_path": "tests/catalogue.json", "validation_status": "passed", "finding_ids": []
+    },
+    {
+      "id": "test:clay", "kind": "item",
+      "name": "Synthetic long resource name for deterministic wrapping and dense table behavior across narrow mobile and wide desktop viewports with no hidden canonical identity and no misleading ellipsis in the detail panel",
+      "resource_classes": ["bootstrap"], "byproduct_classes": [], "mandatory_for_progression": true,
+      "first_use_tier": 0, "first_renewable_tier": null, "bootstrap_source": "Synthetic finite construction seed",
+      "renewable_routes": [], "input_dependencies": ["test:water"], "current_consumers": ["test:mix"],
+      "source_path": "tests/catalogue.json", "validation_status": "unresolved", "finding_ids": ["test:debt"]
+    },
+    {
+      "id": "test:catalyst", "kind": "item", "name": "Synthetic catalyst", "resource_classes": ["catalytic"],
+      "byproduct_classes": [], "mandatory_for_progression": true, "first_use_tier": 1, "first_renewable_tier": null,
+      "catalyst_behavior": "Synthetic unconsumed input; replacement is not inferred.",
+      "source_path": "tests/catalogue.json", "validation_status": "unknown", "finding_ids": []
+    },
+    {
+      "id": "test:grog", "kind": "item", "name": "Synthetic recoverable side stream",
+      "resource_classes": [], "byproduct_classes": ["byproduct_current", "waste_recoverable"],
+      "mandatory_for_progression": false, "first_use_tier": 0, "first_renewable_tier": null,
+      "current_consumers": ["test:recycle"], "future_consumers": [], "recycling_routes": ["test:recycle"],
+      "handling": {"current_action": "Recover in the synthetic route", "storage": "Reported container", "discard_allowed": false, "hazardous": false},
+      "source_path": "tests/catalogue.json", "validation_status": "passed", "finding_ids": []
+    },
+    {
+      "id": "test:future", "kind": "item", "name": "Synthetic future feedstock",
+      "resource_classes": [], "byproduct_classes": ["byproduct_future"],
+      "mandatory_for_progression": false, "first_use_tier": 0, "first_renewable_tier": null,
+      "current_consumers": [], "future_consumers": [{"tier": 4, "system": "Synthetic future system", "process": "Synthetic named committed plan"}],
+      "recycling_routes": [], "handling": {"discard_allowed": null}, "source_path": "tests/catalogue.json", "validation_status": "planned", "finding_ids": []
+    },
+    {
+      "id": "test:potential", "kind": "item", "name": "Synthetic uncertain potential",
+      "resource_classes": [], "byproduct_classes": ["potential_future_use"],
+      "first_use_tier": null, "first_renewable_tier": null, "future_consumers": [], "handling": null,
+      "source_path": "tests/catalogue.json", "validation_status": "not_reported", "finding_ids": []
+    },
+    {
+      "id": "test:hazard", "kind": "fluid", "name": "Synthetic hazardous residue",
+      "resource_classes": [], "byproduct_classes": ["waste_hazardous"], "mandatory_for_progression": true,
+      "first_use_tier": 0, "first_renewable_tier": null, "current_consumers": [], "future_consumers": [],
+      "handling": {"current_action": "Synthetic containment", "storage": "Synthetic sealed tank", "disposal": "Not permitted", "treatment": null, "discard_allowed": false, "hazardous": true, "containment_required": true},
+      "source_path": "tests/catalogue.json", "validation_status": "failed", "finding_ids": ["test:hazard-finding"]
+    },
+    {
+      "id": "test:inert", "kind": "item", "name": "Synthetic disposable inert residue",
+      "resource_classes": [], "byproduct_classes": ["waste_inert"], "mandatory_for_progression": false,
+      "first_use_tier": 0, "first_renewable_tier": null, "current_consumers": [], "future_consumers": [],
+      "handling": {"current_action": "Synthetic explicit disposal", "discard_allowed": true, "hazardous": false, "containment_required": false},
+      "source_path": "tests/catalogue.json", "validation_status": "passed", "finding_ids": []
+    },
+    {
+      "id": "test:spent", "kind": "item", "name": "Synthetic spent catalyst",
+      "resource_classes": [], "byproduct_classes": ["catalyst_spent"], "first_use_tier": 1,
+      "catalyst_behavior": "Synthetic origin: test:catalyst", "recycling_routes": [],
+      "handling": {"discard_allowed": null}, "source_path": "tests/catalogue.json", "validation_status": "unknown", "finding_ids": []
+    },
+    {
+      "id": "test:loss", "kind": "loss", "name": "Synthetic process loss",
+      "resource_classes": [], "byproduct_classes": ["process_loss"], "first_use_tier": 0,
+      "handling": null, "source_path": "tests/catalogue.json", "validation_status": "not_reported", "finding_ids": []
+    },
+    {
+      "id": "test:emission", "kind": "emission", "name": "Synthetic emission",
+      "resource_classes": [], "byproduct_classes": ["emission"], "first_use_tier": 0,
+      "handling": null, "source_path": "tests/catalogue.json", "validation_status": "not_reported", "finding_ids": []
+    },
+    {
+      "id": "test:unknown-handling", "kind": "item", "name": "Synthetic unknown handling",
+      "resource_classes": [], "byproduct_classes": ["byproduct_optional"], "first_use_tier": null,
+      "handling": {"discard_allowed": null, "hazardous": null, "containment_required": null},
+      "source_path": "tests/catalogue.json", "validation_status": "a_future_status", "finding_ids": []
+    },
+    {
+      "id": "test:vanilla", "kind": "tag", "name": "Synthetic optional tag",
+      "resource_classes": ["finite_optional"], "byproduct_classes": [], "mandatory_for_progression": false,
+      "first_use_tier": 0, "first_renewable_tier": null, "vanilla_dependency": true,
+      "source_path": "tests/catalogue.json", "validation_status": "not_run", "finding_ids": []
+    },
+    {
+      "id": "test:environment", "kind": "environmental_source", "name": "Synthetic environmental input",
+      "resource_classes": [], "byproduct_classes": [], "first_use_tier": 0,
+      "source_path": "tests/catalogue.json", "validation_status": null, "finding_ids": []
+    },
+    {
+      "id": "test:html", "kind": "item", "name": "<img src=x onerror=window.syntheticInjection=true>",
+      "resource_classes": ["not_in_dictionary"], "byproduct_classes": [], "first_use_tier": null,
+      "description": "Synthetic hostile metadata only.",
+      "source_path": "javascript:alert(1)", "validation_status": "a_future_status", "finding_ids": []
+    }
+  ],
+  "routes": [
+    {
+      "id": "test:source", "name": "Synthetic source route", "tier": 0, "machine_id": "test:mixer", "multiblock_id": null,
+      "origin": "source", "canonical": true, "inputs": [{"resource_id": "test:environment", "amount": 1, "consumed": true}],
+      "outputs": [{"resource_id": "test:water", "amount": 10, "role": "primary"}, {"resource_id": "test:loss", "amount": 1, "role": "loss"}],
+      "duration_ticks": 20, "fu_per_tick": 0, "conditions": {"synthetic": true},
+      "source_path": "tests/catalogue.json", "validation_status": "passed"
+    },
+    {
+      "id": "test:mix", "name": "Synthetic mixing route", "tier": 0, "machine_id": "test:mixer", "multiblock_id": null,
+      "origin": "process", "canonical": true,
+      "inputs": [{"resource_id": "test:water", "amount": 5, "consumed": true}, {"resource_id": "test:clay", "amount": 2, "consumed": true}, {"resource_id": "test:catalyst", "amount": 1, "consumed": false}],
+      "outputs": [{"resource_id": "test:grog", "amount": 1, "role": "byproduct"}, {"resource_id": "test:emission", "amount": 1, "role": "emission"}],
+      "duration_ticks": 100, "fu_per_tick": 4, "conditions": null,
+      "source_path": "tests/catalogue.json", "validation_status": "passed"
+    },
+    {
+      "id": "test:recycle", "name": "Synthetic recycling route", "tier": 0, "machine_id": null, "multiblock_id": "test:assembled",
+      "origin": "recycle", "canonical": true, "inputs": [{"resource_id": "test:grog", "amount": 2, "consumed": true}],
+      "outputs": [{"resource_id": "test:clay", "amount": 1, "role": "primary"}],
+      "duration_ticks": 40, "fu_per_tick": 2, "conditions": null,
+      "source_path": "tests/catalogue.json", "validation_status": "passed"
+    },
+    {
+      "id": "test:compat", "name": "Synthetic optional compatibility route", "tier": 0, "machine_id": null, "multiblock_id": null,
+      "origin": "craft", "canonical": false, "inputs": [{"resource_id": "test:vanilla", "amount": 1, "consumed": true}],
+      "outputs": [{"resource_id": "test:clay", "amount": 1, "role": "primary"}],
+      "duration_ticks": null, "fu_per_tick": null, "conditions": null,
+      "source_path": "tests/catalogue.json", "validation_status": "not_run"
+    },
+    {
+      "id": "test:missing-ref", "name": "Synthetic unresolved reference route", "tier": null, "machine_id": null,
+      "origin": "process", "canonical": null, "inputs": [{"resource_id": "test:not-in-snapshot", "amount": 1, "consumed": null}],
+      "outputs": [{"resource_id": "test:future", "amount": 1, "role": "byproduct"}],
+      "source_path": "tests/catalogue.json", "validation_status": "unresolved"
+    }
+  ],
+  "machines": [
+    {"id": "test:mixer", "name": "Synthetic mixer", "family": "synthetic", "tier": 0, "kind": "ordinary", "recipe_ids": ["test:mix", "test:source"], "resource_ids": ["test:water"], "conditions": null, "automation": {"input": "Synthetic reported inlet", "output": "Synthetic reported outlet"}, "persistence": "Synthetic test metadata", "preview": null, "source_path": "tests/catalogue.json", "validation_status": "passed"},
+    {"id": "test:standard", "name": "Synthetic standard multiblock", "family": "synthetic", "tier": 1, "kind": "standard_multiblock", "recipe_ids": [], "resource_ids": [], "conditions": null, "automation": null, "persistence": null, "preview": "tests/synthetic-preview.png", "source_path": "tests/catalogue.json", "validation_status": "planned"},
+    {"id": "test:assembled", "name": "Synthetic assembled multiblock", "family": "synthetic", "tier": 0, "kind": "assembled_multiblock", "recipe_ids": ["test:recycle"], "resource_ids": ["test:grog"], "conditions": {"clearance": "Synthetic"}, "automation": {"input": "Synthetic controller"}, "persistence": "Synthetic controller-owned state", "preview": "tests/synthetic-preview.png", "source_path": "tests/catalogue.json", "validation_status": "not_run"},
+    {"id": "test:storage", "name": "Synthetic storage", "family": "synthetic", "tier": 0, "kind": "storage", "recipe_ids": [], "resource_ids": ["test:water"], "conditions": null, "automation": null, "persistence": null, "preview": null, "source_path": "tests/catalogue.json", "validation_status": null},
+    {"id": "test:part", "name": "Synthetic static part", "family": "synthetic", "tier": 0, "kind": "parts", "recipe_ids": [], "resource_ids": [], "conditions": null, "automation": null, "persistence": null, "preview": null, "source_path": "tests/catalogue.json", "validation_status": "a_future_status"}
+  ],
+  "quests": [
+    {"id": "test:first", "line": "Synthetic workshop", "name": "Synthetic physical evidence", "requires": [], "subject": "test:clay", "count": 2, "optional": false, "reward": {"id": "test:water", "count": 1}, "teaches": ["Synthetic handling lesson"], "source_path": "tests/catalogue.json", "validation_status": "passed"},
+    {"id": "test:follow", "line": "Synthetic workshop", "name": "Synthetic optional follow-up", "requires": ["test:first"], "subject": "test:grog", "count": 1, "optional": true, "reward": null, "teaches": ["Synthetic recycling lesson"], "source_path": "tests/catalogue.json", "validation_status": "not_run"},
+    {"id": "test:cycle-a", "line": "Synthetic cycle test", "name": "Synthetic cycle A", "requires": ["test:cycle-b"], "subject": null, "count": null, "optional": null, "reward": null, "teaches": [], "source_path": "tests/catalogue.json", "validation_status": "unresolved"},
+    {"id": "test:cycle-b", "line": "Synthetic cycle test", "name": "Synthetic cycle B", "requires": ["test:cycle-a"], "subject": null, "count": null, "optional": null, "reward": null, "teaches": [], "source_path": "tests/catalogue.json", "validation_status": "unresolved"}
+  ],
+  "assets": {
+    "entries": [{"id": "synthetic-texture", "name": "Synthetic texture", "kind": "texture", "status": "passed", "source_path": "tests/synthetic-texture.png", "dimensions": "16x16", "description": "Synthetic metadata; no asset is shipped."}],
+    "generation_queue": [{"id": "synthetic-generate", "name": "Synthetic generation request", "status": "pending", "source_path": "tests/queue.json"}],
+    "qc_queue": [{"id": "synthetic-review", "name": "Synthetic unreviewed asset", "status": "not_run", "source_path": "tests/queue.json"}],
+    "checks": [{"id": "synthetic-asset-check", "name": "Synthetic dimensions check", "status": "passed", "source_path": "tests/checks.json"}]
+  },
+  "validation": {
+    "status": "in_progress",
+    "checks": [
+      {"id": "synthetic-current", "name": "Synthetic current check", "status": "passed", "source_commit": "1111111111111111111111111111111111111111", "evidence": "tests/evidence.json", "details": "Synthetic observation only."},
+      {"id": "synthetic-old", "name": "Synthetic historical check", "status": "passed", "source_commit": "2222222222222222222222222222222222222222", "evidence": "tests/old-evidence.json", "details": "Must not be promoted to this commit."},
+      {"id": "synthetic-cancelled", "name": "Synthetic cancelled check", "status": "cancelled", "source_commit": "1111111111111111111111111111111111111111", "evidence": null, "details": "Cancellation is not a pass."}
+    ],
+    "ci": [],
+    "manual_acceptance": [
+      {"id": "synthetic-manual", "name": "Synthetic no-command/client/saved-world check", "status": "not_run", "source_commit": null, "evidence": null, "details": "No observed manual acceptance."}
+    ],
+    "required_deliverables": [
+      {"id": "synthetic-d1", "name": "Synthetic current completion", "status": "passed", "source_commit": "1111111111111111111111111111111111111111", "evidence": "tests/evidence.json"},
+      {"id": "synthetic-d2", "name": "Synthetic old completion", "status": "passed", "source_commit": "2222222222222222222222222222222222222222", "evidence": "tests/old-evidence.json"},
+      {"id": "synthetic-d3", "name": "Synthetic skipped deliverable", "status": "skipped", "source_commit": "1111111111111111111111111111111111111111", "evidence": null},
+      {"id": "synthetic-d4", "name": "Synthetic waived deliverable", "status": "waived", "source_commit": "1111111111111111111111111111111111111111", "evidence": null}
+    ]
+  },
+  "findings": [
+    {"id": "test:debt", "rule": "synthetic-finite-dependency", "severity": "high", "resource_id": "test:clay", "tier": 0, "message": "Synthetic unresolved supply.", "waived": true, "remediation": "Synthetic versioned remediation, never a gameplay plan.", "source_path": "tests/findings.json"},
+    {"id": "test:hazard-finding", "rule": "synthetic-hazard-check", "severity": "medium", "resource_id": "test:hazard", "tier": 0, "message": "Synthetic handling evidence missing.", "waived": false, "remediation": "Synthetic observed handling required.", "source_path": "tests/findings.json"}
+  ]
+}

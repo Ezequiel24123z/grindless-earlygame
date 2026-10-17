@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grindless renderer tests | Synthetic test data only</title>
+  <link rel="stylesheet" href="../dashboard.css">
+  <link rel="stylesheet" href="tests.css">
+  <script defer src="../dashboard-model.js"></script>
+  <script defer src="tests.js"></script>
+</head>
+<body class="test-page">
+  <h1>Dashboard renderer tests</h1>
+  <p class="notice warning">SYNTHETIC TEST DATA ONLY. These fixtures are not canonical gameplay, sustainability findings or Tier acceptance evidence.</p>
+  <p id="test-status" role="status">Running deterministic renderer checks...</p>
+  <ol id="test-results"></ol>
+  <h2>Desktop renderer - 1440 x 1000</h2>
+  <p>The real renderer runs below, served by the test server's explicit fixture mount.</p>
+  <div class="test-frame-scroll">
+    <iframe id="desktop" title="Desktop renderer with synthetic test data" width="1440" height="1000"></iframe>
+  </div>
+  <h2>Mobile renderer - 390 x 844</h2>
+  <iframe id="mobile" title="Mobile renderer with synthetic test data" width="390" height="844"></iframe>
+  <div id="case-mount"></div>
+</body>
+</html>

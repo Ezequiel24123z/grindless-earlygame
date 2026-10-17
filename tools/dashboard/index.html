@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<!--
+THESIS: A revision-bound operations ledger, not a completion scoreboard.
+OWN-WORLD: Grindless graphite panels, cyan navigation, amber uncertainty, square
+controls, system type and compact ruled tables inherit the in-game Atlas.
+STORY: Identify the snapshot, locate a resource or process, inspect its evidence
+and follow its canonical source. Missing evidence stays missing.
+FIRST VIEWPORT: A persistent revision band above a narrow navigation rail and
+wide working table; a separate detail column keeps provenance beside the data.
+FORM: An owner-specified industrial read/operate console. Dense lists and a
+bounded dependency neighborhood take precedence over promotional cards.
+-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Grindless | Repository dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script defer src="dashboard-model.js"></script>
+  <script defer src="dashboard.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to dashboard content</a>
+  <header class="masthead">
+    <a class="wordmark" href="#/overview" aria-label="Grindless dashboard overview">
+      <span class="brand-mark" aria-hidden="true">G</span>
+      <span>Grindless <span class="wordmark-label">Repository dashboard</span></span>
+    </a>
+    <button id="refresh" type="button">Refresh snapshot</button>
+  </header>
+  <section class="revision-band" aria-label="Snapshot identity">
+    <div id="identity"><strong>Snapshot not loaded</strong><span>Reading data.json from this directory.</span></div>
+    <p id="snapshot-notice">No live gameplay, CI or acceptance state is inferred.</p>
+  </section>
+  <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+  <div class="workspace">
+    <nav id="navigation" class="navigation" aria-label="Dashboard views">
+      <h2>Repository</h2>
+      <a href="#/overview">Overview</a>
+      <a href="#/resources">Resource sustainability</a>
+      <a href="#/byproducts">By-products &amp; waste</a>
+      <a href="#/production">Production dependencies</a>
+      <a href="#/machines">Machines &amp; multiblocks</a>
+      <a href="#/logistics">Logistics &amp; automation</a>
+      <a href="#/quests">Questbook</a>
+      <a href="#/assets">Assets</a>
+      <a href="#/validation">Tests &amp; acceptance</a>
+      <h2>Progression tiers</h2>
+      <div id="tier-navigation" class="tier-navigation"></div>
+    </nav>
+    <main id="main-content" tabindex="-1" aria-busy="true">
+      <h1>Loading repository snapshot</h1>
+      <p class="empty-state">Reading the generated projection. No demonstration data is used.</p>
+    </main>
+    <aside id="detail-panel" class="detail-panel" aria-labelledby="detail-title">
+      <h2 id="detail-title" tabindex="-1">Inspect an entry</h2>
+      <p>Select a resource, process, machine, quest or finding to see its reported data and source.</p>
+    </aside>
+  </div>
+  <footer>
+    <span>Canonical catalogues own gameplay. This dashboard is a read-only projection.</span>
+    <span id="footer-revision">Schema 1</span>
+  </footer>
+  <noscript>This dashboard requires JavaScript to read the generated data.json. No status is available without it.</noscript>
+</body>
+</html>
