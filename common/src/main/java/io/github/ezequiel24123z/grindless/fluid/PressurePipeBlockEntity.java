@@ -19,6 +19,10 @@ public final class PressurePipeBlockEntity extends BlockEntity implements FluidE
     private static final String KEY_FLUID = "Fluid";
 
     private final FluidBuffer buffer = PressureLogic.buffer(PressureLogic.PIPE_CAPACITY);
+    private final NativeFluidStore nativeFluids = new NativeFluidStore(buffer, () -> {
+        setChanged();
+        sync();
+    });
 
     public PressurePipeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PRESSURE_PIPE.get(), pos, state);
@@ -88,6 +92,11 @@ public final class PressurePipeBlockEntity extends BlockEntity implements FluidE
     @Override
     public FluidState contents() {
         return buffer.state();
+    }
+
+    @Override
+    public NativeFluidStore nativeStore() {
+        return nativeFluids;
     }
 
     @Override

@@ -40,6 +40,14 @@ public interface FluidEndpoint {
      */
     FluidState extract(Direction from, int millibuckets);
 
+    /**
+     * The private native backing owner, or {@code null} for an unsupported handler. Recipe
+     * batches use its reversible, notification-free withdrawals, not external extract/insert.
+     */
+    default NativeFluidStore nativeStore() {
+        return null;
+    }
+
     /** Current contents, for Forge's tank view. Temperature and pressure are Grindless-only. */
     FluidState contents();
 
