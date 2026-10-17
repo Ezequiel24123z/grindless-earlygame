@@ -29,7 +29,8 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     public static final int DATA_KIND = 5;
     public static final int DATA_STRUCTURE = 6;
     public static final int DATA_FLUID = 7;
-    public static final int DATA_SIZE = 8;
+    public static final int DATA_FLUID_OUTPUT = 8;
+    public static final int DATA_SIZE = 9;
 
     private final MachineMenuHost host;
     private final ContainerData data;
@@ -143,6 +144,11 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     /** Primary fluid volume synchronized through the ordinary menu data protocol. */
     public int fluidAmount() {
         return Math.max(0, data.get(DATA_FLUID));
+    }
+
+    /** The portion of stored fluid available to the automatic front output. */
+    public int fluidOutputAmount() {
+        return Math.max(0, data.get(DATA_FLUID_OUTPUT));
     }
 
     public MachineMenuHost host() {

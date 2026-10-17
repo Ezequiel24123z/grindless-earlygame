@@ -117,8 +117,7 @@ public final class MachineFluidCapability {
                 return 0;
             }
             if (action.simulate()) {
-                FluidState leftover = simulateInsert(incoming);
-                return incoming.millibuckets() - leftover.millibuckets();
+                return endpoint.acceptedAmount(face(), incoming);
             }
             FluidState leftover = endpoint.insert(face(), incoming);
             return incoming.millibuckets() - leftover.millibuckets();
@@ -146,22 +145,6 @@ public final class MachineFluidCapability {
             return toForge(endpoint.extract(face(), maxDrain));
         }
 
-        /**
-         * Fill simulation must not mutate the buffer. Insert then extract the taken amount
-         * would be a round trip; instead, compare against capacity of the same substance.
-         */
-        private FluidState simulateInsert(FluidState incoming) {
-            FluidState current = endpoint.contents();
-            if (current.isEmpty()) {
-                int take = Math.min(incoming.millibuckets(), endpoint.capacity());
-                return incoming.withAmount(incoming.millibuckets() - take);
-            }
-            if (!current.id().equals(incoming.id())) {
-                return incoming;
-            }
-            int space = Math.max(0, endpoint.capacity() - current.millibuckets());
-            return incoming.withAmount(incoming.millibuckets() - Math.min(incoming.millibuckets(), space));
-        }
     }
 
     static FluidStack toForge(FluidState state) {

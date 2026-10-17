@@ -60,7 +60,16 @@ collision/model boxes and a generated preview. Its fast validation passed at
 `build/validation/20261017T151215457Z/status.tsv`. The native batch passed states, the repaired
 workshop and book fixtures; settling still fails `TROUGH-WATER-RECOVERED` after producing solids
 and retaining exactly 750 mB. Evidence: `build/validation/settling-native-smokes.log`.
-Fix that transfer first; do not weaken the expected volume or call a retained buffer a closed loop.
+That failure is preserved, and ADR-0132 now repairs it: the unified validator and all three
+workshop/settling/Matrix scenarios pass in `build/validation/fluid-output-recovery.log`.
+The exact volume assertion remains, with input protection, legacy quota and output ownership
+reconstruction coverage. This closes the transfer, not upstream resource sustainability.
+
+The dashboard renderer child delivered `e2c2a0a` / `0cea296`, integrated as `40d5260` / `a533888`.
+Its code and 26 synthetic browser checks are scoped to rendering; there is no production
+`data.json` yet. The inventory worker returned a 315-process default-material projection and
+50 authored crafts as source-backed summary, not the requested JSON artifact. Implement the
+canonical exporter/auditor directly. The child's README/CHANGELOG ownership has ended.
 
 The initial supply review is [resource sustainability](../docs/RESOURCE-SUSTAINABILITY.md).
 Vanilla-derived dirt/wood/carbon and finite ore supply are not certified renewable. The next

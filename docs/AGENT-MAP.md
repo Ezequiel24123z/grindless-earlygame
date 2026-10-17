@@ -215,6 +215,11 @@ Outputs are reserved before any ingredient is consumed. Fluid arrival wakes work
 has its own bounded export subscription, including after a neighboring inventory is emptied.
 F0 kinds pass their rating into the base constructor before buffer creation, rather than reading
 an uninitialized subclass field. Existing menu ordinals and `ItemLayout=3` stay unchanged.
+`FluidOutputQuota` records only completed non-vented output. A front-side subscription exports
+that quota without draining a ready recipe's primary batch. Consumption/extraction debits it;
+missing legacy ownership stays unmarked, and invalid explicit ownership is logged, never used
+to drain input. `FluidEndpoint.acceptedAmount` is shared by execution and Forge simulation.
+Process work runs at most once per world tick despite subscription changes (ADR-0132).
 
 ## Checks
 

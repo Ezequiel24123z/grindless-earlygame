@@ -32,6 +32,30 @@ No final 42-scenario integration pass is inferred from these targeted runs.
 Graphical acceptance, full survival pacing and retained-world process restart remain unobserved.
 The exact [manual checklist](t0-survival-acceptance.md) now includes the workshop and its structure.
 
+## Subsequent assembled-fluid correction and dashboard integration
+
+The first W2 batch passed states/workshop/book but failed exact water recovery:
+`build/validation/settling-native-smokes.log`. The preserved failing server log is
+`build/validation/failed-water-export-server.log`. This was an actual producer/pipe gap:
+the conduit forwards pushed fluid, while completed process fluid had no export owner.
+
+ADR-0132's working tree after `ee9ae09` passed the unified validator at
+`build/validation/20261017T163448732Z/status.tsv` (environment, full build, 34 suites, links),
+then all three production scenarios `workshop`, `settling` and `matrix-lifecycle`, with natural
+exit 0: `build/validation/fluid-output-recovery.log`. Settling retains the exact 750 mB assertion
+and now also checks that input is not exported, legacy/invalid ownership preserves stock, and
+completed output ownership survives reconstruction. No smoke was weakened or skipped as a pass.
+
+The isolated dashboard renderer was integrated as `40d5260` and `a533888`. Its child-reported
+26 browser fixture checks and limits are recorded in [the renderer contract](../dashboard/README.md); a real canonical
+snapshot, generator, CI integration and parent real-data review remain pending. Synthetic
+fixtures are not progression evidence. The read-only inventory worker supplied useful
+source-backed counts and fluid rows but no JSON artifact; the parent must generate the complete
+machine-readable inventory rather than claim that task was fulfilled by a summary.
+
+The sustainability/classification/source milestone remains in progress. The 43-case final
+integration inventory and all manual acceptance remain unclaimed.
+
 ## Preserved foundation ledger
 
 Updated: 2026-10-17. Authorized baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.

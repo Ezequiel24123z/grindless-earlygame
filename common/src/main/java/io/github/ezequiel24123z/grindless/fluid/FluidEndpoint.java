@@ -12,6 +12,18 @@ public interface FluidEndpoint {
 
     boolean canInsert(Direction from, FluidState state);
 
+    /** Non-mutating acceptance used by capability simulation as well as transfer planning. */
+    default int acceptedAmount(Direction from, FluidState state) {
+        if (state == null || state.isEmpty() || !canInsert(from, state)) {
+            return 0;
+        }
+        FluidState current = contents();
+        if (!current.isEmpty() && !current.is(state.id())) {
+            return 0;
+        }
+        return Math.min(state.millibuckets(), Math.max(0, capacity() - current.millibuckets()));
+    }
+
     FluidState insert(Direction from, FluidState state);
 
     boolean canExtract(Direction from);

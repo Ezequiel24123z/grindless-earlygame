@@ -173,6 +173,12 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Recovered process fluids now really leave the machine (ADR-0132).** Proven output volume
+  has a persisted quota and a front-side export subscription, while incoming or legacy
+  unmarked fluid is preserved. Intake respects the process batch and Forge simulation uses the
+  same acceptance contract. The native settling line now recovers exactly 750 mB through its
+  conduit, including after output reconstruction; all three targeted lifecycle scenarios pass.
+
 - **Dashboard navigation preserves the current working view.** The skip link focuses main
   content without resetting the hash router, stale graph centers stay explicitly unresolved,
   and nested detail records no longer inherit a narrow default indentation. The browser

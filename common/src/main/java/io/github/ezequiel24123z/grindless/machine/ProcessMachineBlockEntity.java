@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
+import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.github.ezequiel24123z.grindless.container.ItemInsert;
 import io.github.ezequiel24123z.grindless.container.SlottedContainer;
@@ -30,6 +31,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -64,6 +66,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private static final String KEY_RECIPE = "Recipe";
     private static final String KEY_WORK_RECIPE = "WorkRecipe";
     private static final String KEY_FLUID = "Fluid";
+    private static final String KEY_FLUID_OUTPUT = "FluidOutputQuota";
     /** Layout 2 added the fourth Assembler input; layout 3 preserves every inventory slot. */
     private static final String KEY_ITEM_LAYOUT = "ItemLayout";
     private static final int CURRENT_ITEM_LAYOUT = 3;
@@ -85,6 +88,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private TickSubscription working;
     private TickSubscription filling;
     private TickSubscription exporting;
+    private TickSubscription draining;
+    private int fluidOutput;
+    private long lastWorkTick = Long.MIN_VALUE;
     private ConditionFault lastFault = ConditionFault.NONE;
     private WorkshopStructure.Fault structureFault = WorkshopStructure.Fault.NONE;
     private boolean loadingInventory;
@@ -175,6 +181,12 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             exporting.unsubscribe();
             exporting = null;
         }
+        if (fluidOutput > 0) {
+            draining = subscriptions().subscribe(draining, this::pushProducedFluid);
+        } else if (draining != null) {
+            draining.unsubscribe();
+            draining = null;
+        }
         if (recipe == null || stuck || structureFault != WorkshopStructure.Fault.NONE) {
             publishStatus(recipe, missing, stuck, hasPowerWaiting(), false, ConditionReport.OPTIMAL);
         }
@@ -187,13 +199,17 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private void work() {
+        long tick = getLevel().getGameTime();
+        if (lastWorkTick == tick) {
+            return;
+        }
+        lastWorkTick = tick;
         structureFault = checkStructure();
         if (structureFault != WorkshopStructure.Fault.NONE) {
             publishStatus(cached, false, false, false, false, ConditionReport.OPTIMAL);
             syncData();
             return;
         }
-        pullFluids();
         ProcessRecipe recipe = recipe();
         if (recipe == null) {
             progress = 0.0;
@@ -300,6 +316,36 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private void fillFromNeighbours() {
         if (isDue(4)) {
             pullFluids();
+            updateSubscriptions();
+        }
+    }
+
+    private void pushProducedFluid() {
+        if (!isDue(4) || getLevel() == null) {
+            return;
+        }
+        Direction front = getBlockState().getValue(MachineProperties.FACING);
+        if (!containerConfig().allowsExtract(front)) {
+            return;
+        }
+        ProcessRecipe active = recipe();
+        int reserved = active == null || active.fluidInputs().isEmpty()
+                ? 0 : active.fluidInputs().get(0).count();
+        int available = Math.min(fluidOutput, Math.max(0, fluid.state().millibuckets() - reserved));
+        FluidState offered = fluid.state().withAmount(Math.min(available, FluidLogic.CONDUIT_MB_PER_TICK));
+        if (offered.isEmpty()) {
+            return;
+        }
+        FluidState leftover = FluidInsert.intoNeighbour(getLevel(), getBlockPos(), front, offered);
+        int moved = offered.millibuckets() - leftover.millibuckets();
+        if (moved < 0 || moved > offered.millibuckets()) {
+            throw new IllegalStateException("A fluid endpoint returned an invalid remainder");
+        }
+        if (moved > 0) {
+            fluid.extract(null, moved);
+            fluidOutput -= moved;
+            cached = null;
+            setChanged();
             updateSubscriptions();
         }
     }
@@ -471,11 +517,14 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             if (present.isEmpty() || !ProcessLookup.isPrimaryFluid(kind.family(), present.id())) {
                 continue;
             }
-            FluidState taken = endpoint.extract(side.getOpposite(),
-                    Math.min(FluidLogic.CONDUIT_MB_PER_TICK, fluid.space()));
+            int accepted = Math.min(FluidLogic.CONDUIT_MB_PER_TICK, acceptedAmount(side, present));
+            if (accepted <= 0) {
+                continue;
+            }
+            FluidState taken = endpoint.extract(side.getOpposite(), accepted);
             FluidState leftover = fluid.offer(taken);
             if (!leftover.isEmpty()) {
-                endpoint.insert(side.getOpposite(), leftover);
+                throw new IllegalStateException("Reserved primary fluid did not fit the process buffer");
             }
             if (!taken.isEmpty()) {
                 cached = null;
@@ -487,7 +536,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private void consumeFluid(ProcessRecipe recipe) {
         List<IngredientSpec> fluids = recipe.fluidInputs();
         if (!fluids.isEmpty()) {
-            fluid.extract(fluids.get(0).id(), fluids.get(0).count());
+            FluidState taken = fluid.extract(fluids.get(0).id(), fluids.get(0).count());
+            fluidOutput = Math.max(0, fluidOutput - taken.millibuckets());
         }
         for (int i = 1; i < fluids.size(); i++) {
             IngredientSpec spec = fluids.get(i);
@@ -504,6 +554,11 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             FluidState remaining = FluidLogic.emitted(output.id(), output.count());
             if (!output.vented()) {
                 remaining = fluid.offer(remaining);
+                if (!remaining.isEmpty()) {
+                    throw new IllegalStateException("Reserved fluid output did not fit the process buffer");
+                }
+                fluidOutput += output.count();
+                continue;
             }
             for (Direction side : Direction.values()) {
                 if (remaining.isEmpty()) {
@@ -522,7 +577,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         for (Direction side : Direction.values()) {
             net.minecraft.world.level.block.entity.BlockEntity neighbour =
                     getLevel().getBlockEntity(getBlockPos().relative(side));
-            if (neighbour instanceof FluidEndpoint endpoint) {
+            if (neighbour instanceof FluidEndpoint endpoint && endpoint.canExtract(side.getOpposite())) {
                 neighbours.add(endpoint.contents());
             }
         }
@@ -531,33 +586,46 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     public boolean canInsert(Direction from, FluidState state) {
-        return state != null && ProcessLookup.isPrimaryFluid(kind.family(), state.id())
-                && fluid.accepted(state) > 0;
+        return acceptedAmount(from, state) > 0;
+    }
+
+    @Override
+    public int acceptedAmount(Direction from, FluidState state) {
+        if (state == null || state.isEmpty() || from != null && !containerConfig().allowsInsert(from)) {
+            return 0;
+        }
+        int target = ProcessLookup.primaryFluidTarget(kind.family(), inputs(), state.id());
+        return Math.min(fluid.accepted(state), Math.max(0, target - fluid.state().millibuckets()));
     }
 
     @Override
     public FluidState insert(Direction from, FluidState state) {
-        if (!canInsert(from, state)) {
+        int accepted = acceptedAmount(from, state);
+        if (accepted == 0) {
             return state;
         }
-        FluidState leftover = fluid.offer(state);
-        if (leftover.millibuckets() != (state == null ? 0 : state.millibuckets())) {
-            cached = null;
-            setChanged();
-            updateSubscriptions();
+        if (!fluid.offer(state.withAmount(accepted)).isEmpty()) {
+            throw new IllegalStateException("Reserved inserted fluid did not fit the process buffer");
         }
-        return leftover;
+        cached = null;
+        setChanged();
+        updateSubscriptions();
+        return state.withAmount(state.millibuckets() - accepted);
     }
 
     @Override
     public boolean canExtract(Direction from) {
-        return !fluid.isEmpty();
+        return !fluid.isEmpty() && (from == null || containerConfig().allowsExtract(from));
     }
 
     @Override
     public FluidState extract(Direction from, int millibuckets) {
+        if (!canExtract(from)) {
+            return FluidState.EMPTY;
+        }
         FluidState taken = fluid.extract(null, millibuckets);
         if (!taken.isEmpty()) {
+            fluidOutput = Math.max(0, fluidOutput - taken.millibuckets());
             cached = null;
             setChanged();
             updateSubscriptions();
@@ -604,6 +672,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         lastFault = report.fault();
         MachineStatus observed = ProcessLogic.status(recipe != null, missing, stuck,
                 report.canRun() || recipe == null, powered, workingNow);
+        if (recipe == null && fluidOutput > 0) {
+            observed = MachineStatus.BLOCKED;
+        }
         if (structureFault != WorkshopStructure.Fault.NONE) {
             observed = MachineStatus.OUT_OF_BAND;
         }
@@ -624,6 +695,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         data.set(ProcessMachineMenu.DATA_KIND, kind.menuKind().ordinal());
         data.set(ProcessMachineMenu.DATA_STRUCTURE, structureFault.ordinal());
         data.set(ProcessMachineMenu.DATA_FLUID, fluid.state().millibuckets());
+        data.set(ProcessMachineMenu.DATA_FLUID_OUTPUT, fluidOutput);
     }
 
     @Override
@@ -635,6 +707,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         tag.putString(KEY_RECIPE, cachedRecipeId);
         tag.putString(KEY_WORK_RECIPE, workRecipeId);
         tag.put(KEY_FLUID, FluidNbt.save(fluid.state()));
+        tag.putInt(KEY_FLUID_OUTPUT, fluidOutput);
     }
 
     @Override
@@ -653,6 +726,18 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             workRecipeId = tag.contains(KEY_WORK_RECIPE) ? tag.getString(KEY_WORK_RECIPE) : cachedRecipeId;
             cached = null;
             fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
+            fluidOutput = 0;
+            if (tag.contains(KEY_FLUID_OUTPUT)) {
+                if (tag.get(KEY_FLUID_OUTPUT) instanceof NumericTag value
+                        && Double.isFinite(value.getAsDouble())
+                        && value.getAsDouble() == value.getAsInt()
+                        && value.getAsInt() >= 0 && value.getAsInt() <= fluid.state().millibuckets()) {
+                    fluidOutput = value.getAsInt();
+                } else {
+                    Grindless.LOG.warn("Ignoring invalid process fluid output quota at {}; stored fluid is preserved",
+                            getBlockPos());
+                }
+            }
         } finally {
             loadingInventory = false;
         }

@@ -143,6 +143,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0129](#adr-0129--bootstrap-grows-through-a-connected-ceramic-workshop) | Bootstrap grows through a connected ceramic workshop | Accepted |
 | [0130](#adr-0130--settling-uses-an-open-oriented-assembly-with-stateless-parts) | Settling uses an open oriented assembly with stateless parts | Accepted |
 | [0131](#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified) | Mandatory supply is mod-owned, renewable and explicitly classified | Accepted |
+| [0132](#adr-0132--fluid-output-is-owned-volume-not-an-unmarked-input-buffer) | Fluid output is owned volume, not an unmarked input buffer | Accepted |
 
 ---
 
@@ -5769,3 +5770,42 @@ a dashboard from hand-maintained completion claims.
 **Consequences.** T0 self-sustaining supply, audit/metadata and the first dashboard increment
 are active implementation, not documentation-only work. The owner permits PR management and
 merging when ready, but automated and manual acceptance requirements remain.
+
+---
+
+## ADR-0132 — Fluid output is owned volume, not an unmarked input buffer
+
+*2026-10-17 · Accepted*
+
+**Context.** The settling smoke produced the correct 750 mB, but it remained in the controller.
+Clay Conduits forward what a source pushes; they do not pull from a machine. Simply pumping
+every stored fluid would drain the incoming water before the process could run, and could
+return it to its source tank instead of the intended output line.
+
+**Decision.** Retain the existing single `Fluid` buffer and add `FluidOutputQuota`, the volume
+known to have been produced by completed non-vented outputs. A bounded subscription pushes only
+that quota through the controller's front, respecting extraction configuration. Consumption or
+external extraction debits produced volume first. Incoming water never increases the quota.
+The menu reports the output-ready portion separately from total stored volume. A ready recipe
+reserves its primary batch against automatic export, and a process claims at most one work
+callback per world tick so subscription changes cannot overclock it.
+
+Intake is limited to the applicable primary-fluid batch instead of topping up continuously
+during work. Pulls reserve actual acceptance before extracting from a neighbor; Forge fill
+simulation uses the endpoint's same acceptance contract. Secondary-fluid availability counts
+only neighbors that really permit extraction from that face. Vented gas handling is unchanged.
+
+**Migration.** Existing `Fluid`, inventory layout and recipe keys are unchanged. Missing quota
+means legacy unmarked stock, kept intact and not automatically exported. It may be reused in
+a later batch or extracted through the existing capability. Do not guess whether an old buffer
+contained input or output. Invalid explicit quotas are logged and ignored, never converted into
+permission to drain unproven input.
+
+**Alternatives rejected.** Teaching every gravity pipe to steal its upstream machine's input;
+exporting the whole buffer; discarding excess/legacy fluid; silently moving an ambiguous saved
+buffer into a new tank; or treating a 750 mB readout as proof of actual fluid logistics.
+
+**Consequences.** Put process fluid outputs at the front and supply input on another free face.
+The settling fixture must preserve input while unformed, reconstruct both fluid and output
+ownership, then recover exactly 750 mB through a real conduit. Existing input/output quantities
+and manual extraction remain valid.

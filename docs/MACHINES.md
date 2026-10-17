@@ -51,6 +51,7 @@ process roles on the shared machine engine, not recolored T1 ore processors.
 | Quern | Aggregate milling and recovery of fired/unfired ceramic stock | one input, two outputs | 4 FU/t; F0-rated 320 FU buffer; ambient | Single block; hopper input and automatic neighboring output |
 | Clay Mixer | Clay plus sand/grog and water become a ceramic body | two inputs, one output | 8 FU/t; F0-rated 320 FU buffer; ambient, stirred | Single block; a facing Hand Pump or adjacent water tank supplies its primary fluid |
 | Firing Chamber | Fuel-backed batch ceramics and brick firing | two inputs, two outputs | 8 FU/t control; 850 C held while fuel is a required recipe input | Controller plus seven brick blocks, fixed 2x2x2; all interfaces stay on the controller |
+| Settling Trough | Clay/aggregate separation with water recovery | one input, two outputs; 2000 mB buffer | 4 FU/t; F0-rated 320 FU buffer; ambient | Same-facing channel then screen behind the controller; air above the passive parts |
 
 The Firing Chamber's front-left bottom block is the controller. Fill the other seven positions
 with `minecraft:bricks`, in any of four horizontal orientations. Its front/left faces remain
@@ -64,6 +65,18 @@ waiting for its first recipe, and waiting outputs retry when a neighbor gains ro
 batch does not pay another work tick merely because its output was blocked. Shared indexed NBT
 and the physical Matrix codecs remain in force; the new `WorkRecipe` key associates retained work
 with its owner independently of the currently selectable recipe.
+
+The settling assembly uses `WorkshopGeometry` for both collision and generated models. Its
+passive parts have no block entity or fake status. All interfaces remain on the controller;
+its top accepts a hopper. Process fluid products automatically leave the controller's front,
+so supply water on another free side. `FluidOutputQuota` distinguishes produced volume from
+input and survives reconstruction; legacy unmarked fluid is kept intact rather than guessed
+to be output. A ready recipe reserves its primary batch against automatic export (ADR-0132).
+
+![Schematic idle and active settling assemblies](assets/t0-settling-preview.png)
+
+The preview shares the authored geometry and texture functions. It is not a client screenshot
+or a substitute for manual lighting/UV/gameplay acceptance.
 
 See [the exact workshop routes](PROCESSES.md#bootstrap-ceramic-workshop) and
 [the active specification](tiers/t0.md). The later parametric Arc Reactor kernel remains T3.

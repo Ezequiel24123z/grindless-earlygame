@@ -8,7 +8,9 @@ setblock 4 280 4 grindless:settling_channel[facing=north]
 setblock 4 280 5 grindless:settling_screen[facing=east]
 setblock 4 279 3 minecraft:chest
 setblock 4 281 3 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:dirt",Count:2b}]}
-setblock 4 280 2 grindless:basic_tank[facing=south,status=idle]{Fluid:{Id:"minecraft:water",Amount:1000,Temp:20.0d,Pressure:0.1d}}
+setblock 5 280 3 grindless:basic_tank[facing=west,status=idle]{Fluid:{Id:"minecraft:water",Amount:1000,Temp:20.0d,Pressure:0.1d}}
+setblock 4 280 1 grindless:basic_tank[facing=north,status=idle]
+setblock 4 280 2 grindless:clay_conduit[facing=north,status=idle]
 setblock 3 280 3 grindless:hand_crank_dynamo[facing=east,status=idle]{Energy:{FluxStored:800L}}
 setblock 10 280 5 grindless:settling_trough[facing=south,status=idle]{ItemLayout:3,Items:[{Slot:0b,id:"minecraft:dirt",Count:2b}],Fluid:{Id:"minecraft:water",Amount:1000,Temp:20.0d,Pressure:0.1d}}
 setblock 10 280 4 grindless:settling_channel[facing=south]
@@ -25,4 +27,8 @@ setblock 11 280 10 grindless:settling_channel[facing=west]
 setblock 12 280 10 grindless:settling_screen[facing=west]
 setblock 10 279 10 minecraft:chest
 setblock 10 280 11 grindless:hand_crank_dynamo[facing=north,status=idle]{Energy:{FluxStored:800L}}
+setblock 13 280 9 grindless:settling_trough{Fluid:{Id:"minecraft:water",Amount:1000}}
+execute if data block 13 280 9 {Fluid:{Id:"minecraft:water",Amount:1000},FluidOutputQuota:0} run say TROUGH-LEGACY-STOCK-KEPT
+setblock 13 280 12 grindless:settling_trough{Fluid:{Id:"minecraft:water",Amount:1000},FluidOutputQuota:2001}
+execute if data block 13 280 12 {Fluid:{Id:"minecraft:water",Amount:1000},FluidOutputQuota:0} run say TROUGH-INVALID-QUOTA-KEPT
 schedule function grindless_settling:ready 40t replace

@@ -172,11 +172,29 @@ public final class ProcessLookup {
                 continue;
             }
             IngredientSpec primary = recipe.fluidInputs().get(0);
-            if ((fluid.isEmpty() || fluid.is(primary.id())) && fluid.millibuckets() < primary.count()) {
+            if (fluid.isEmpty() || fluid.is(primary.id())
+                    && fluid.millibuckets() < primaryFluidTarget(family, inputs, primary.id())) {
                 return true;
             }
         }
         return false;
+    }
+
+    /** Batch-sized intake; preloading without complete items uses the family's largest matching batch. */
+    public static int primaryFluidTarget(MachineFamily family, ItemStack[] inputs, String id) {
+        int matched = Integer.MAX_VALUE;
+        int preload = 0;
+        for (ProcessRecipe recipe : GRAPH.byFamily.getOrDefault(family, List.of())) {
+            if (recipe.fluidInputs().isEmpty() || !recipe.fluidInputs().get(0).id().equals(id)) {
+                continue;
+            }
+            int amount = recipe.fluidInputs().get(0).count();
+            preload = Math.max(preload, amount);
+            if (matches(recipe, inputs)) {
+                matched = Math.min(matched, amount);
+            }
+        }
+        return matched == Integer.MAX_VALUE ? preload : matched;
     }
 
     /**
