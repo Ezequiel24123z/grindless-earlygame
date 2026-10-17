@@ -1,4 +1,72 @@
-# Active T0 workshop handoff
+# Active orchestration handoff
+
+Updated: 2026-10-17. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
+This commit preserves C3 WIP for a clean-context migration; it does not finish the product.
+The latest published checkpoint before preservation was
+`d292dab005c8f8a321061d9885dd12b8351dd69c`. The fresh kickoff supplies the exact new checkpoint;
+do not guess a self-referential SHA.
+
+## Cold start
+
+Read [the detailed transfer](migration-handoff.md), [the durable work plan](work-plan.json)
+and [pending checks](pending-checks.json), then the active build-out, relevant ADRs, README
+plan, route map and validation ledger. The original three request documents accompany the
+new session as attachments, not a replay of this conversation. Their earlier instruction
+that Astra is the primary coder is superseded by the owner's latest orchestration decision.
+
+The new session is an isolated-worktree **Astra coordinator**. Astra owns architecture,
+product/Tiers, sustainability, graphs, machine families/multiblocks, migrations, integration
+and final review. Delegate bounded implementation and test execution: Sol 6.1 Max for normal
+coding, Luna for mechanical work. Explicit file ownership and a single publisher are required.
+The old session stops product work; do not fork its chat, switch the main checkout or delete
+its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
+
+## Current state and next action
+
+- W1 ceramic workshop (`0aad62a`) and W2 settling plus actual fluid recovery (`d292dab`)
+  have historical targeted automated evidence. Their old passes do not certify changed code.
+- C3 geological/biological sources, biomass power, primitive assembly and partial generated
+  assets are preserved **unaccepted WIP**. Only a common compile was observed on the earlier
+  working tree; no full C3 build, complete suite or native renewable cycle is claimed.
+- The asset worker was cancelled without a handoff but left generator/assets/state-fixture
+  changes. Preserve and review them; do not call them quality-approved.
+- The dashboard renderer is integrated; 26 synthetic browser checks are not real production
+  data. The complete inventory/exporter, recursive audit, canonical classifications/handling,
+  player communication, real dashboard data and CI integration remain incomplete.
+- Inventory research was partial and produced no requested JSON artifact.
+
+**After confirming receipt:** reload the JSON tasks and delegate bounded C3 review/integration.
+Review condition regulation and its ceiling, partial gas extraction, every Forge/JEI/client/
+localization case, actual recipe/test/budget counts, the Bench's physical Matrix exit and
+cancelled assets. A pinned read-only inventory extraction can run alongside it. Astra owns
+the schema and design; do not duplicate recipe quantities or postpone gameplay until every
+dashboard detail is finished.
+
+The functional multiblock-port request is **after the current source/sustainability/
+communication/dashboard integration**, starting with its required architecture audit.
+It is not the next task. Manual acceptance continues to gate merge and Tier acceptance,
+not all further authorized T0 feature work.
+
+## PR continuity and quiescence
+
+Keep draft [PR54](https://github.com/Ezequiel24123z/grindless-earlygame/pull/54), head
+`ezequiel24123z-tier-0-rework`, based on `ezequiel24123z-agent-ready-t0-foundation` /
+draft [PR53](https://github.com/Ezequiel24123z/grindless-earlygame/pull/53).
+The new app-managed branch does not inherit tracked PR identity. The new coordinator alone
+integrates/publishes continuation: update PR54 explicitly by repository/number and preserve
+its head by reviewed fast-forward publication only. Do not create a duplicate PR, retarget,
+force-push or rewrite history. Verify live state and ancestry; stop if another publisher moved
+the remote unexpectedly. Never write the old or main checkout to accomplish this.
+
+Old Agent merge is **disabled**, including execution of its saved merge action. No session
+automation or event subscription is attached. No smoke process remains (25599 was closed).
+Do not re-enable old automation during migration. Conditional merge authority does not waive
+current-source checks, actual GUI/JEI, no-command survival or retained-world restart acceptance.
+
+## Archived workshop handoff
+
+Everything below is historical context. Its old next actions, no-expansion restrictions and
+instructions to implement directly are superseded by the active handoff above and ADR-0134.
 
 Updated: 2026-10-17. State: **IMPLEMENTATION IN PROGRESS**.
 Branch: `ezequiel24123z-tier-0-rework`. Preserved foundation: `c62de724632cce158988ddce62d4669619398f13`,

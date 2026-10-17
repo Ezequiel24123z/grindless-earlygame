@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["PPP", "C C", "CCC"],
+  "key": {
+    "P": { "tag": "minecraft:planks" },
+    "C": { "tag": "minecraft:stone_crafting_materials" }
+  },
+  "result": { "item": "grindless:geological_collector" }
+}

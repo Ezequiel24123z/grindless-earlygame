@@ -3,7 +3,7 @@
   "pattern": ["CCC", "CFC", "CSC"],
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
-    "F": { "item": "minecraft:flint" },
+    "F": { "tag": "minecraft:stone_crafting_materials" },
     "S": { "item": "minecraft:stick" }
   },
   "result": { "item": "grindless:quern" }

@@ -64,6 +64,11 @@ public final class ProcessGraph {
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
         List<ProcessRecipe> recipes = new ArrayList<>();
         recipes.addAll(BootstrapProcesses.recipes());
+        recipes.addAll(RenewableProcesses.recipes());
+        recipes.addAll(BootstrapAssembly.recipes(MachineFamily.ASSEMBLY_BENCH,
+                io.github.ezequiel24123z.grindless.source.SourceLogic.BENCH_TICKS, FluxTier.F0.nominal()));
+        recipes.addAll(BootstrapAssembly.recipes(MachineFamily.ASSEMBLER,
+                io.github.ezequiel24123z.grindless.source.SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS, FluxTier.F1.nominal()));
         List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);

@@ -163,6 +163,8 @@ public final class MachineArt {
             case SETTLER -> settlingFront(status);
             case CHANNEL -> channelFront(false);
             case SCREEN -> channelFront(true);
+            case COLLECTOR, CULTURE, BIOGEN, BENCH -> bootstrapFront(geometry, status);
+            case FIBREBOARD -> BootstrapArt.fibreboard(false);
         };
     }
 
@@ -232,7 +234,16 @@ public final class MachineArt {
             case SETTLER -> settlingTop(0);
             case CHANNEL -> settlingTop(1);
             case SCREEN -> settlingTop(2);
+            case COLLECTOR, CULTURE, BIOGEN, BENCH -> BootstrapArt.top(geometry);
+            case FIBREBOARD -> BootstrapArt.fibreboard(true);
         };
+    }
+
+    private static BufferedImage bootstrapFront(
+            io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry geometry, String status) {
+        BufferedImage image = BootstrapArt.front(geometry, status);
+        strip(image, status);
+        return image;
     }
 
     /** Parallel stone courses and a distinct grain feed, not the powered mill's rollers. */

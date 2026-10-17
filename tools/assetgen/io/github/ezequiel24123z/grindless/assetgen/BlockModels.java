@@ -108,6 +108,11 @@ final class BlockModels {
             case MIXER -> clayMixer();
             case FIREBOX -> firebox();
             case SETTLER, CHANNEL, SCREEN -> workshop(block.geometry());
+            case COLLECTOR -> collector();
+            case CULTURE -> culture();
+            case BIOGEN -> biogen();
+            case BENCH -> bench();
+            case FIBREBOARD -> deck();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -147,6 +152,72 @@ final class BlockModels {
                 front(0, 0, 0, 16, 16, 16, "#top", "#side", "#front"),
                 box(4, 3, -1, 12, 5, 0, "#cap", "#base"),
                 box(12, 6, -1, 14, 10, 0, "#cap", "#base"));
+    }
+
+    /** A wet sample tray and short probe above an exposed rock footing. */
+    private static List<Box> collector() {
+        return List.of(
+                box(0, 0, 0, 16, 3, 16, "cap", "base"),
+                box(3, 3, 4, 13, 4, 12, "top", "base"),
+                front(1, 3, 2, 15, 8, 4, "side", "side", "front"),
+                box(1, 3, 12, 15, 8, 14, "side", "side"),
+                box(1, 3, 4, 3, 8, 12, "side", "side"),
+                box(13, 3, 4, 15, 8, 12, "side", "side"),
+                box(3, 8, 7, 5, 13, 9, "side", "side"),
+                box(11, 8, 7, 13, 13, 9, "side", "side"),
+                box(3, 12, 7, 13, 14, 9, "side", "side"),
+                box(7, 4, 7, 9, 12, 9, "cap", "base"));
+    }
+
+    /** An uncovered growing bed; the raised culture stays below its timber rim. */
+    private static List<Box> culture() {
+        return List.of(
+                box(1, 0, 1, 3, 3, 3, "cap", "base"),
+                box(13, 0, 1, 15, 3, 3, "cap", "base"),
+                box(1, 0, 13, 3, 3, 15, "cap", "base"),
+                box(13, 0, 13, 15, 3, 15, "cap", "base"),
+                box(1, 2, 1, 15, 4, 15, "cap", "base"),
+                front(1, 4, 1, 15, 8, 3, "cap", "side", "front"),
+                box(1, 4, 13, 15, 8, 15, "cap", "side"),
+                box(1, 4, 3, 3, 8, 13, "cap", "side"),
+                box(13, 4, 3, 15, 8, 13, "cap", "side"),
+                box(3, 4, 3, 13, 5, 13, "top", "base"),
+                box(4, 5, 4, 7, 7, 7, "top", "top"),
+                box(9, 5, 8, 12, 7, 11, "top", "top"),
+                box(4, 5, 9, 7, 6, 12, "top", "top"));
+    }
+
+    /** A small clay firepot and exposed side rotor, not the F1 boiler's metal box and stack. */
+    private static List<Box> biogen() {
+        return List.of(
+                box(0, 0, 1, 16, 2, 15, "cap", "base"),
+                front(1, 2, 2, 9, 10, 13, "side", "side", "front"),
+                box(2, 10, 4, 8, 11, 12, "top", "side"),
+                box(1, 10, 3, 3, 13, 13, "side", "side"),
+                box(7, 10, 3, 9, 13, 13, "side", "side"),
+                box(3, 10, 3, 7, 13, 5, "side", "side"),
+                box(3, 10, 11, 7, 13, 13, "side", "side"),
+                box(9, 6, 7, 12, 8, 9, "cap", "base"),
+                box(11, 3, 6, 14, 5, 10, "cap", "base"),
+                box(11, 9, 6, 14, 11, 10, "cap", "base"),
+                box(11, 5, 4, 14, 9, 6, "cap", "base"),
+                box(11, 5, 10, 14, 9, 12, "cap", "base"),
+                box(11, 6, 6, 14, 8, 10, "cap", "base"));
+    }
+
+    /** Four legs, a low shelf and a pegged worktop with a stone-faced vise. */
+    private static List<Box> bench() {
+        return List.of(
+                box(1, 0, 1, 4, 10, 4, "cap", "base"),
+                box(12, 0, 1, 15, 10, 4, "cap", "base"),
+                box(1, 0, 12, 4, 10, 15, "cap", "base"),
+                box(12, 0, 12, 15, 10, 15, "cap", "base"),
+                box(2, 3, 3, 14, 5, 14, "cap", "base"),
+                front(0, 10, 0, 16, 13, 16, "top", "side", "front"),
+                box(3, 13, 4, 11, 14, 12, "top", "base"),
+                box(12, 13, 3, 15, 16, 5, "stone", "stone"),
+                box(12, 13, 7, 15, 16, 9, "stone", "stone"),
+                box(13, 14, 5, 14, 15, 7, "cap", "base"));
     }
 
     private static List<Box> workshop(BlockCatalogue.Geometry geometry) {
@@ -198,7 +269,8 @@ final class BlockModels {
         if (block.geometry() == BlockCatalogue.Geometry.REGOLITH
                 || block.geometry() == BlockCatalogue.Geometry.DECK
                 || block.geometry() == BlockCatalogue.Geometry.SHELL
-                || block.geometry() == BlockCatalogue.Geometry.MARK) {
+                || block.geometry() == BlockCatalogue.Geometry.MARK
+                || block.geometry() == BlockCatalogue.Geometry.FIBREBOARD) {
             lines.add(slot("front", lower + "_front_" + status));
             lines.add(slot("top", lower + "_top"));
             lines.add(slot("side", lower + "_front_" + status));
@@ -207,6 +279,20 @@ final class BlockModels {
             lines.add(slot("side", "pylon" + block.tier() + "_side_" + status));
             lines.add(slot("top", "pylon" + block.tier() + "_top_" + status));
             lines.add(slot("particle", "pylon" + block.tier() + "_side_" + status));
+        } else if (block.geometry() == BlockCatalogue.Geometry.COLLECTOR
+                || block.geometry() == BlockCatalogue.Geometry.CULTURE
+                || block.geometry() == BlockCatalogue.Geometry.BIOGEN
+                || block.geometry() == BlockCatalogue.Geometry.BENCH) {
+            boolean stoneBase = block.geometry() == BlockCatalogue.Geometry.COLLECTOR
+                    || block.geometry() == BlockCatalogue.Geometry.BIOGEN;
+            lines.set(0, slot("base", stoneBase ? "bootstrap_stone" : "bootstrap_timber"));
+            lines.set(1, slot("cap", stoneBase ? "bootstrap_stone" : "bootstrap_timber"));
+            lines.add(slot("front", lower + "_front_" + status));
+            lines.add(slot("top", lower + "_top"));
+            lines.add(slot("side", block.geometry() == BlockCatalogue.Geometry.BIOGEN
+                    ? "bootstrap_clay" : "bootstrap_timber"));
+            lines.add(slot("stone", "bootstrap_stone"));
+            lines.add(slot("particle", stoneBase ? "bootstrap_stone" : "bootstrap_timber"));
         } else {
             lines.add(slot("front", lower + "_front_" + status));
             lines.add(slot("top", lower + "_top"));

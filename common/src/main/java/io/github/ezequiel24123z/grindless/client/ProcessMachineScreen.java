@@ -5,6 +5,7 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.source.SourceSite;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -53,7 +54,8 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
         Component line = statusLine();
         graphics.drawString(font, font.plainSubstrByWidth(line.getString(), imageWidth - 40),
                 32, 70, 0x404040, false);
-        if (menu.kind() == MachineMenuKind.CLAY_MIXER || menu.kind() == MachineMenuKind.SETTLING_TROUGH) {
+        if (menu.kind() == MachineMenuKind.CLAY_MIXER || menu.kind() == MachineMenuKind.SETTLING_TROUGH
+                || menu.kind() == MachineMenuKind.GEOLOGICAL_COLLECTOR || menu.kind() == MachineMenuKind.BIOCULTIVATOR) {
             Component water = menu.fluidOutputAmount() > 0
                     ? Component.translatable("gui.grindless.workshop.water_output",
                             menu.fluidAmount(), menu.fluidOutputAmount())
@@ -63,6 +65,9 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
     }
 
     private Component statusLine() {
+        if (menu.siteFault() != SourceSite.Fault.NONE) {
+            return Component.translatable(menu.siteFault().translationKey());
+        }
         if (menu.structureFault() != WorkshopStructure.Fault.NONE) {
             return Component.translatable(menu.structureFault().translationKey());
         }

@@ -1,0 +1,174 @@
+{
+  "schema": "grindless.work-plan",
+  "schema_version": 1,
+  "updated": "2026-10-17",
+  "phase": "preservation_checkpoint_for_fresh_orchestrated_continuation",
+  "product_gate": "IMPLEMENTATION_IN_PROGRESS",
+  "tier_accepted": false,
+  "merge_ready": false,
+  "session_sqlite_tasks_migrate": false,
+  "migration": {
+    "checkpoint_commit": null,
+    "checkpoint_resolution": "Exact preservation SHA supplied in fresh kickoff; never a guessed self-reference",
+    "fresh_session_id": null,
+    "receipt_status_at_checkpoint": "pending_creation",
+    "workspace_mode": "new_isolated_worktree_based_on_preservation_checkpoint_not_forked_chat",
+    "old_session_after_publication": "quiescent_no_product_edits",
+    "old_agent_merge_enabled": false,
+    "old_session_automation_attached": false,
+    "old_event_subscriptions": [],
+    "original_documents": "staged_attachments_available_on_demand",
+    "environment_bootstrap": "private_paths_not_committed",
+    "preserve": ["old_worktrees", "prior_sessions", "renderer_child", "ignored_toolchains_caches_and_evidence"]
+  },
+  "execution": {
+    "coordinator": "Astra",
+    "authority": ["architecture", "product_and_tiers", "sustainability_and_production_graphs", "machine_families_and_multiblocks", "migrations", "integration", "final_review"],
+    "coordinator_work": ["investigation", "design", "read_only_review", "evidence_evaluation", "handoff", "git_integration"],
+    "delegated_work": ["application_implementation", "test_execution", "extraction", "localization", "deterministic_assets", "documentation_synchronization"],
+    "normal_coding": {"model": "gpt-6.1-sol", "reasoning_effort": "max"},
+    "simple_repetitive": {"model": "gpt-6-luna"},
+    "worker_contract": ["bounded_outcome", "input_revision", "owned_files", "acceptance_criteria", "stop_condition"],
+    "coordination": "Few workers; serialize shared files, mutable-input validation, integration and publication; escalate design to Astra"
+  },
+  "publication": {
+    "repository": "Ezequiel24123z/grindless-earlygame",
+    "pr_number": 54,
+    "pr_url": "https://github.com/Ezequiel24123z/grindless-earlygame/pull/54",
+    "head_branch": "ezequiel24123z-tier-0-rework",
+    "base_branch": "ezequiel24123z-agent-ready-t0-foundation",
+    "base_pr_url": "https://github.com/Ezequiel24123z/grindless-earlygame/pull/53",
+    "latest_published_pre_preservation_commit": "d292dab005c8f8a321061d9885dd12b8351dd69c",
+    "continuation_publisher": "new_Astra_coordinator_only",
+    "new_app_branch_inherits_pr_identity": false,
+    "rules": "Maintain PR54 explicitly by repo/number; verify live PR/head/base and ancestry; fast-forward-only reviewed publication to its existing head; publish own branch as appropriate; stop on unexpected remote movement",
+    "prohibited": ["duplicate_or_replacement_PR", "retarget", "force_push", "history_rewrite", "old_or_main_checkout_writes", "independent_worker_push_to_PR54"],
+    "keep_draft_until_accepted": true,
+    "reactivate_old_automation": false
+  },
+  "input_documents": [
+    {"id": "original_t0_charter", "file": "pasted-text-7bc75a7f-2014-4a1f-860a-a955e07f1a81.txt", "sha256": "17E7F5E31AB378A28182AEC5D11A37E2D57C8252C84AB2C505DAACC19854F1CB", "note": "Latest orchestration request supersedes its primary-coder role"},
+    {"id": "sustainability_communication_dashboard", "file": "pasted-text-ce219e39-f8b4-47d7-98bd-93f99a28f718.txt", "sha256": "760629032A3BDE601F9A7398095C46763B6EA755E38EDFF7AB7262BF4D5457A6"},
+    {"id": "later_functional_ports", "file": "pasted-text-50bf95a6-b365-450d-b4e6-db75a39da104.txt", "sha256": "2A125EE17ACDB55C743CD3B6652AE1DCE04F76F1C4B4F4C8A28279B5A600AACA", "note": "Starts only after current T0 source/sustainability/communication/dashboard integration"}
+  ],
+  "references": {
+    "handoff": ".agent/handoff.md",
+    "details": ".agent/migration-handoff.md",
+    "checks": ".agent/pending-checks.json",
+    "active_queue": "docs/BUILD-OUT.md",
+    "decisions": "docs/DECISIONS.md",
+    "seams": "docs/AGENT-MAP.md",
+    "validation": "docs/testing/latest-validation.md",
+    "manual_acceptance": "docs/testing/t0-survival-acceptance.md",
+    "dashboard": "docs/dashboard/README.md"
+  },
+  "status_semantics": {
+    "done": "Only the named historical deliverable; never a current-source pass or Tier acceptance",
+    "partial_research": "Research received, not a complete inventory/exporter",
+    "paused_for_migration": "Unfinished work preserved; successor resumes after receipt",
+    "pending": "Required work not completed",
+    "held": "Do not dispatch before dependencies are complete",
+    "depends_on": "Dispatch prerequisites, not implicit array ordering",
+    "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
+  },
+  "next_task_after_receipt": "renewable-t0",
+  "parallel_opportunity": "Pinned read-only inventory extraction alongside bounded C3 work; Astra owns canonical schema and no worker duplicates recipe quantities",
+  "acceptance": {
+    "automated_milestone": ["Exact-source build and current suites", "Relevant native cycles and full current integration scenario inventory with natural exit", "Built/loaded artifact hashes and honest failure ledger", "Complete inventory, recursive audit, JSON/human reports and CI ratchet", "Canonical gameplay/player/dashboard data and real-data review", "Safe bootstrap, renewable automation, physical Matrix exit and persistence", "Astra final review and checkpoint publication"],
+    "manual_merge_and_tier_gates": ["Observed GUI and JEI interaction", "No-command survival progression", "Retained-world restart and migration acceptance"],
+    "manual_pending_rule": "Pending manual acceptance blocks merge/Tier acceptance, not further owner-authorized T0 development",
+    "sustainability_debt": "Exact versioned pre-existing exceptions require concrete remediation and remain visible debt; new unresolved mandatory dependencies fail CI"
+  },
+  "tasks": [
+    {
+      "id": "foundation", "title": "Preserving the corrected foundation", "status": "done", "depends_on": [],
+      "owner": "historical", "result": "c62de724632cce158988ddce62d4669619398f13 preserved; main untouched",
+      "acceptance": "Historical 33-suite/41-smoke evidence retained, not inherited by changed code"
+    },
+    {
+      "id": "t0-contract", "title": "Establishing the active T0 contract", "status": "done", "depends_on": ["foundation"],
+      "owner": "Astra", "result": "9aea30e and ADR-0129 authorize workshop development",
+      "acceptance": "Manual gates remain merge conditions, not a global no-expansion restriction"
+    },
+    {
+      "id": "t0-processing", "title": "Implementing the ceramic workshop", "status": "done", "depends_on": ["t0-contract"],
+      "owner": "historical", "result": "0aad62a2ccc3b659f34970e4efb142c89667ab70; W1 and 19-marker native evidence",
+      "acceptance": "Preserve WorkRecipe, indexed inventory, reservations, fluid wakeup and paginated guide"
+    },
+    {
+      "id": "t0-structures", "title": "Implementing settling and real recovery", "status": "done", "depends_on": ["t0-processing"],
+      "owner": "historical", "result": "ee9ae09 partial and d292dab fluid correction; three targeted scenarios passed",
+      "acceptance": "Keep initial failure, static oriented parts, output quota and input/legacy preservation"
+    },
+    {
+      "id": "dashboard-renderer", "title": "Integrating the static renderer", "status": "done", "depends_on": [],
+      "owner": "historical renderer child", "result": "40d5260 and a533888; 26 synthetic browser checks reported",
+      "acceptance": "No production data or mod acceptance inferred; original child work remains preserved"
+    },
+    {
+      "id": "inventory-audit", "title": "Retaining partial inventory research", "status": "partial_research", "depends_on": [],
+      "owner": "historical Luna worker", "result": "Baseline counts/rows only; production-inventory.json was NOT delivered",
+      "next_action": "Use as a lead, never as an exhaustive export or current WIP count"
+    },
+    {
+      "id": "coordinator-receipt", "title": "Receiving the preservation checkpoint", "status": "pending", "depends_on": [],
+      "owner": "new Astra coordinator",
+      "next_action": "Verify supplied checkpoint, isolated branch, original documents and current PR54 state; reload this plan",
+      "acceptance": "Fresh context, preserved WIP, correct ownership and model policy; only migration pause lifted"
+    },
+    {
+      "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "paused_for_migration", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
+      "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
+      "next_action": "Review existing source/generator/Bench/asset WIP and integrate all relevant surfaces",
+      "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Automated physical Matrix exit", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
+    },
+    {
+      "id": "production-inventory", "title": "Exporting the complete live inventory", "status": "pending", "depends_on": ["coordinator-receipt"],
+      "owner": "bounded extraction/export worker; Astra schema authority", "input_revision": null,
+      "next_action": "Pin agreed inputs and export real graph, crafts, supplies, tags and objectives; do not edit runtime quantities",
+      "acceptance": ["Machine-readable output, not a summary", "ProcessGraph/SupplyCatalogue/local tags/BootstrapRecipes/T1Recipes/other authored JSON/quests covered", "Explicit environmental sources", "Source-bound counts and deterministic refresh after runtime changes"]
+    },
+    {
+      "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "paused_for_migration", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
+      "owner": "Astra architecture; bounded implementation workers",
+      "next_action": "Design canonical annotations/roots while runtime and inventory work proceed; implement validator and reports",
+      "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
+    },
+    {
+      "id": "resource-communication", "title": "Exposing canonical player guidance", "status": "pending", "depends_on": ["sustainability-model"],
+      "owner": "bounded implementation/localization workers; Astra product review",
+      "next_action": "Project classifications and handling into items, fluids/gases, JEI/Atlas, machines, quests and guide",
+      "acceptance": "Consistent names/routes/handling/uncertainty; no duplicate quantities, fictional consumers or mandatory hoarding"
+    },
+    {
+      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "paused_for_migration", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
+      "owner": "bounded integration workers; Astra schema and real-data review",
+      "next_action": "Generate adjacent schema-1 data.json from canonical data/evidence; integrate local serving and PR CI artifact",
+      "acceptance": ["Real source-bound data without sensitive paths/logs", "No synthetic fallback", "Canonical labels and explicit discard/unknown states", "Exact source_commit/context.commit deliverable rule", "Real-data/browser review", "Stable publication only from validated milestones through an approved mechanism"]
+    },
+    {
+      "id": "t0-integration", "title": "Integrating the current T0 milestone", "status": "pending", "depends_on": ["t0-processing", "t0-structures", "renewable-t0", "resource-communication", "dashboard-integration"],
+      "owner": "Astra integration/final review; delegated validation",
+      "next_action": "Serialize integration, refresh projections, run automated milestone gates through workers and record manual gaps",
+      "acceptance": "Automated milestone criteria met on integrated source; PR54 preserved; manual gates reported honestly, never assumed"
+    },
+    {
+      "id": "multiblock-ports-audit", "title": "Auditing functional multiblock ports", "status": "held", "depends_on": ["t0-integration"],
+      "owner": "Astra architecture; bounded audit workers",
+      "next_action": "Read the later ports request; audit Firing/Trough/Ground Array and all authored structures before implementation",
+      "acceptance": "Current/target findings, affected files, migration and risks; approved roles/ownership/tiers/aggregation design"
+    },
+    {
+      "id": "multiblock-ports", "title": "Implementing functional ports", "status": "held", "depends_on": ["multiblock-ports-audit"],
+      "owner": "bounded development workers; Astra architecture",
+      "next_action": "Implement real reusable buses/hatches and aggregated transactional capability views",
+      "acceptance": "Positions/min-max/roles/tiers/directions/filters/ownership/forming/invalidation/persistence; safe partial IO; optional verified AE2 boundary, no fake integration"
+    },
+    {
+      "id": "ports-integration", "title": "Validating port integration", "status": "held", "depends_on": ["multiblock-ports"],
+      "owner": "delegated validation/review; Astra final integration",
+      "next_action": "Exercise ownership, chunks, unload/reform/NBT, relocation, partial transfers and optional integration",
+      "acceptance": "Exact-source regression evidence, documentation and troubleshooting, preserved saves and reviewed publication; manual gates remain explicit"
+    }
+  ]
+}

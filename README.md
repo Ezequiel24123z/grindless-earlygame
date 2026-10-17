@@ -32,11 +32,13 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > audit remains. The real campaign reaches orbit at T10, the Drift at T13 and
 > Sagittarius at T15.
 >
-> **Active development:** the connected T0 ceramic workshop in
-> [ADR-0129](docs/DECISIONS.md#adr-0129--bootstrap-grows-through-a-connected-ceramic-workshop)
-> extends the physical core route with milling, wet mixing, formed firing and recycling,
-> followed by an assembled settling line. See [the T0 specification](docs/tiers/t0.md).
-> Manual acceptance is pending; it blocks merge, not further T0 feature development.
+> **Active development:** W1 ceramics and W2 settling/real-water recovery have historical
+> targeted automated evidence. ADR-0133 renewable sources, primitive assembly and partial
+> assets are preserved C3 WIP, not accepted gameplay. A clean Astra coordinator resumes
+> through bounded workers from [the handoff](.agent/handoff.md) and
+> [durable plan](.agent/work-plan.json). Complete sources, sustainability, player guidance and
+> real dashboard data before the later functional-port audit. Manual acceptance still gates
+> merge, not further authorized T0 development; old passes do not certify changed code.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -2183,7 +2185,9 @@ one.
 
 ## Implementation plan
 
-Tracked order of work. Each step must build green before the next begins.
+Historical completions below are source-scoped, not current-WIP acceptance. The active
+[work plan](.agent/work-plan.json) permits renewable implementation and production auditing
+to proceed together under Astra; integration and manual gates still control acceptance.
 
 | # | Step | Status |
 | --- | --- | --- |
@@ -2259,10 +2263,12 @@ Tracked order of work. Each step must build green before the next begins.
 | 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **T0 workshop rework** | W1/W2 targeted automation checks pass — ceramics, formed firing, assembled settling and real water recovery are in; internal renewable supply and classification audit are active; manual acceptance remains pending (ADR-0129 to ADR-0132) |
-| 35 | **Checkpoint verification and integration** | **CONDITIONAL GO** — 33 suites, build, links and all 41 distinct production smokes completed across recorded batches; no-command/client/saved-world acceptance still blocks broad T0 work; [current gate](docs/reviews/go-gate.md), [current validation](docs/testing/latest-validation.md) |
-| 36 | **Gated T0 rework preparation** | research and audit artifacts only — [Tier specification](docs/tiers/t0.md), [external research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [exact acceptance checklist](docs/testing/t0-survival-acceptance.md); no new gameplay or accepted tier |
-| 37 | **Repository sustainability dashboard** | static [renderer and contract](docs/dashboard/README.md) implemented and browser-checked with 26 synthetic renderer checks — schema-1 generated data only, T0-T15, classified side streams, dependency neighborhoods and revision-bound evidence; canonical generator/audit integration remains active, not a gameplay-development gate |
+| 35 | **T0 workshop and renewable supply** | W1/W2 historical targeted passes; ADR-0133 sources/primitive assembly and partial assets remain unaccepted C3 WIP, with a prior common compile observation only |
+| 35a | **Historical foundation verification** | historical **CONDITIONAL GO** — 33 suites/build/docs and 41 production scenarios; not current-WIP or Tier acceptance. Manual gates block merge, not authorized T0 development; [validation ledger](docs/testing/latest-validation.md) |
+| 36 | **Historical T0 preparation** | [Tier specification](docs/tiers/t0.md), [research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [manual checklist](docs/testing/t0-survival-acceptance.md) remain useful; the old no-expansion restriction is superseded |
+| 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md) integrated with 26 synthetic checks; complete inventory/exporter/auditor, real data, CI artifact and real-data review remain incomplete alongside gameplay |
+| 38 | **Clean-context orchestration** | WIP and [reloadable planning](.agent/work-plan.json) preserved; fresh coordinator receipt follows publication. Astra owns design/integration/review; bounded workers implement and execute checks (ADR-0134) |
+| 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

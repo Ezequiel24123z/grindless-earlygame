@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["CFC", "CIC", "CSC"],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "F": { "item": "minecraft:furnace" },
+    "I": { "tag": "forge:ingots/iron" },
+    "S": { "item": "minecraft:stick" }
+  },
+  "result": { "item": "grindless:biomass_dynamo" }
+}

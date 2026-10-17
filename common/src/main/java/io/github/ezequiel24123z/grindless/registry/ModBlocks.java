@@ -38,6 +38,7 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlock;
 import io.github.ezequiel24123z.grindless.machine.SolarArrayBlock;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
@@ -111,6 +112,17 @@ public final class ModBlocks {
 
     public static final RegistrySupplier<WorkshopPartBlock> SETTLING_SCREEN = register("settling_screen",
             () -> new WorkshopPartBlock(BlockCatalogue.Geometry.SCREEN, machine().strength(1.5F)));
+
+    public static final RegistrySupplier<ProcessMachineBlock> GEOLOGICAL_COLLECTOR = register("geological_collector",
+            () -> new ProcessMachineBlock(ProcessMachineKind.GEOLOGICAL_COLLECTOR, machine().strength(2.5F)));
+    public static final RegistrySupplier<ProcessMachineBlock> BIOCULTIVATOR = register("biocultivator",
+            () -> new ProcessMachineBlock(ProcessMachineKind.BIOCULTIVATOR, machine().strength(2.0F)));
+    public static final RegistrySupplier<ProcessMachineBlock> ASSEMBLY_BENCH = register("assembly_bench",
+            () -> new ProcessMachineBlock(ProcessMachineKind.ASSEMBLY_BENCH, machine().strength(2.0F)));
+    public static final RegistrySupplier<ThermalGeneratorBlock> BIOMASS_DYNAMO = register("biomass_dynamo",
+            () -> new ThermalGeneratorBlock(GeneratorKind.BIOMASS, machine().strength(2.5F)));
+    public static final RegistrySupplier<Block> FIBREBOARD = register("fibreboard",
+            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD)));
 
     /** T1 walk-away power: furnace fuel at F1. */
     public static final RegistrySupplier<ThermalGeneratorBlock> THERMAL_GENERATOR =

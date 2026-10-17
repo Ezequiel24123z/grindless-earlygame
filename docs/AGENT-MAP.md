@@ -19,6 +19,11 @@ Two rules apply to every entry. Versions are written only in `gradle.properties`
 capability event
 ([ADR-0045](DECISIONS.md#adr-0045--capabilities-are-attached-by-event-not-overridden-on-the-block-entity)).
 
+Coordination follows [AGENTS](../AGENTS.md) and
+[the durable plan](../.agent/work-plan.json). Astra owns design/final integration; workers
+own bounded implementation/check execution with explicit files and input revisions.
+Current C3 source/assets are preserved WIP, not accepted functionality or permission to start ports.
+
 ## Machine
 
 - `recipe/MachineFamily.java` — the family a recipe names, not a block.
@@ -72,6 +77,29 @@ Ratios are in [`PROCESSES.md`](PROCESSES.md#the-recipe-graph).
 Keep `IngredientSpec.qualified()` and `OutputSpec.qualified()` as unmodified graph identities;
 unrated item lookup must still find the F2 route (ADR-0124).
 
+## C3 sources, primitive assembly and generation
+
+- `source/SourceLogic.java` / `source/SourceSite.java` — source costs, environmental eligibility
+  and site faults. Declare environmental inputs; do not relabel finite veins renewable.
+- `recipe/RenewableProcesses.java` — aggregate/biomass and downstream F0 routes.
+- `recipe/BootstrapAssembly.java` — Bench/Assembler projections of existing craft quantities.
+  The current Bench covers Bootstrap/four vanilla crafts, not necessarily the Relay Matrix
+  in `T1Recipes`; physical exit automation requires proof.
+- `item/CrankHandleItem.java` — bounded bootstrap/emergency F0 work, not perpetual manual power.
+- `machine/GeneratorKind.java` and the thermal generator implementation — shared F0/F1
+  behavior; biomass registration follows supplier availability. Probe-before-drain alone does
+  not guarantee exact extraction or safe handling of partial drains.
+- Process kinds/block entities/menus/screens and registries — new source faults/enum cases
+  must reach Forge, JEI, client effects, names and tooltips. Output slots append from two to
+  five without moving old indexes; ten menu data fields include site faults.
+
+Review global per-tick `heldConditions` before certifying the intended Firing regulation and
+1450 C ceiling. Preserve `WorkRecipe`, `ItemLayout=3`, output reservations and single work
+execution per tick. Recalculate the pre-C3 graph/Atlas/craft counts above and `ironBudget`
+two-versus-three from source, not by weakening assertions.
+Cancelled asset-generator changes and generated/state-fixture outputs exist without final QC;
+review them before regeneration or acceptance.
+
 ## Control Matrix and Flux rating
 
 - `energy/FluxTier.java` — the aligned F0-F15 rates and display names.
@@ -110,11 +138,11 @@ them. The catalogue is [`PROCESSES.md`](PROCESSES.md#the-fluid-catalogue).
 - The Thermal Generator burns only `FluidLogic.CARBON_MONOXIDE`
   (`machine/ThermalGeneratorBlockEntity.java`).
 
-A process may emit a byproduct only when [`PROCESSES.md`](PROCESSES.md#byproducts-and-their-sinks)
-already names a sink for it
-([ADR-0036](DECISIONS.md#adr-0036--every-byproduct-must-have-a-named-sink)).
-Deconstructing into Matter does not count. Sulfur dioxide's sink is the tank and
-then the contact process; the Thermal Generator must not burn it.
+ADR-0131 supersedes ADR-0036's universal consumer requirement with honest classification and
+handling. Current consumers must exist; future plans differ from uncertain potential.
+Inert waste may be discarded, hazards need real handling and losses/emissions need not be
+items. Matter deconstruction is not proof of recursive renewable supply.
+Sulfur dioxide belongs in the tank/contact route, not generator fuel.
 
 ## Registration
 
@@ -220,6 +248,25 @@ that quota without draining a ready recipe's primary batch. Consumption/extracti
 missing legacy ownership stays unmarked, and invalid explicit ownership is logged, never used
 to drain input. `FluidEndpoint.acceptedAmount` is shared by execution and Forge simulation.
 Process work runs at most once per world tick despite subscription changes (ADR-0132).
+
+## Sustainability export and dashboard ownership
+
+The four static runtime files under `tools/dashboard/` implement the renderer only.
+See [its schema-1 contract](dashboard/README.md): adjacent `data.json`, no synthetic fallback,
+canonical labels and explicit source-bound evidence. Fixtures are not progression evidence.
+
+Astra owns canonical schema/annotations. A bounded worker extracts real `ProcessGraph`,
+`SupplyCatalogue`, local tags, `BootstrapRecipes`, `T1Recipes`, other authored JSON and quests
+from an agreed pinned revision. Existing catalogues retain quantity authority; serialize shared
+metadata/catalogue edits. Full inventory/exporter, recursive auditor, real data, CI reports/
+artifacts and production serving remain incomplete; this section names ownership, not existing
+implementations. Player communication and dashboard views must project the same model.
+
+The functional-port follow-up starts after current integration with an audit of Firing/Trough/
+Ground Array and all authored structures. It does not authorize starting the old kernel slice
+early. Astra decides roles, positions, ownership, aggregated capabilities and migration before
+workers implement actual buses/hatches and transaction/chunk/reform tests. AE2 is optional and
+version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
 

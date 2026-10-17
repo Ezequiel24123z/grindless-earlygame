@@ -29,7 +29,10 @@ public enum MachineMenuKind {
     QUERN(1, 2),
     CLAY_MIXER(2, 1),
     FIRING_CHAMBER(2, 2),
-    SETTLING_TROUGH(1, 2);
+    SETTLING_TROUGH(1, 5),
+    GEOLOGICAL_COLLECTOR(0, 2),
+    BIOCULTIVATOR(1, 1),
+    ASSEMBLY_BENCH(4, 1);
 
     private final int inputs;
     private final int outputs;

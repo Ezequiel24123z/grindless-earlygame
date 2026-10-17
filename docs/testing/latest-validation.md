@@ -1,5 +1,35 @@
 # Current T0 rework validation
 
+## C3 preservation and coordination transfer, 2026-10-17
+
+**Not C3 completion, Tier acceptance or merge readiness.** The published checkpoint preceding
+preservation is `d292dab005c8f8a321061d9885dd12b8351dd69c`. The containing handoff commit
+preserves later source/assets WIP; prior passes below do not certify it.
+
+| Scope | Observed state | Evidence boundary |
+| --- | --- | --- |
+| C3 common compile | Observed successful, about 1m5s | Prior terminal observation on the working tree; no exact source-bound report supplied here |
+| Complete C3 Forge build and behavior suites | Pending | No pass inherited from W1/W2 or the foundation |
+| Renewable source/power/Bench native cycle | Pending | Sustained automation, recovery reserves and the physical Matrix exit are not proved |
+| Asset worker | Cancelled without handoff, partial files present | Generator/BootstrapArt/assets/mining tags/state fixtures preserved; no final QC/build/smoke claimed |
+| Inventory extraction | Partial baseline research | No requested JSON artifact; old counts are not current totals |
+| Exporter/auditor/reports/real dashboard data/CI integration | Incomplete | Synthetic renderer checks do not fulfill these requirements |
+| Full current integration and manual acceptance | Pending | Actual GUI/JEI, no-command survival and retained-world restart remain open |
+
+Before continuation, review condition regulation/ceiling, partial gas-drain transactions, all
+Forge/JEI/client/menu/localization cases, exact count/budget changes, Bench/Matrix exit coverage
+and cancelled assets. Workers execute checks; Astra reviews design, provenance and integration.
+The delegated migration-only integrity run passed: 485 relative links in 32 Markdown files,
+134 ADR headings/index rows, `git diff --check`, both JSON parses, 16 unique task IDs,
+20 dispatch references plus one completion reference, acyclic dependencies, nine existing
+file references and all three original-document SHA-256 fingerprints. This is handoff
+integrity evidence only, not a C3 runtime check or a complete product validation.
+
+Old Agent merge is disabled; no attached session automation or event subscriptions were found.
+No smoke process remains; port 25599 was closed. Preserve ignored evidence and prior sessions.
+See [the detailed transfer](../../.agent/migration-handoff.md) and
+[reloadable plan](../../.agent/work-plan.json).
+
 ## Workshop execution, 2026-10-17
 
 State: **IMPLEMENTATION IN PROGRESS** on `ezequiel24123z-tier-0-rework`, based on preserved

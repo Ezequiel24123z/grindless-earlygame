@@ -3,7 +3,7 @@
   "pattern": ["P P", "PCP", "SSS"],
   "key": {
     "P": { "tag": "minecraft:planks" },
-    "C": { "tag": "forge:ingots/copper" },
+    "C": { "tag": "minecraft:stone_crafting_materials" },
     "S": { "item": "minecraft:stick" }
   },
   "result": { "item": "grindless:clay_mixer" }

@@ -144,6 +144,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0130](#adr-0130--settling-uses-an-open-oriented-assembly-with-stateless-parts) | Settling uses an open oriented assembly with stateless parts | Accepted |
 | [0131](#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified) | Mandatory supply is mod-owned, renewable and explicitly classified | Accepted |
 | [0132](#adr-0132--fluid-output-is-owned-volume-not-an-unmarked-input-buffer) | Fluid output is owned volume, not an unmarked input buffer | Accepted |
+| [0133](#adr-0133--bootstrap-closes-on-geology-biomass-and-primitive-assembly) | Bootstrap closes on geology, biomass and primitive assembly | Accepted |
+| [0134](#adr-0134--astra-orchestrates-bounded-workers-after-an-isolated-cold-start) | Astra orchestrates bounded workers after an isolated cold start | Accepted |
 
 ---
 
@@ -5809,3 +5811,105 @@ buffer into a new tank; or treating a 750 mB readout as proof of actual fluid lo
 The settling fixture must preserve input while unformed, reconstruct both fluid and output
 ownership, then recover exactly 750 mB through a real conduit. Existing input/output quantities
 and manual extraction remain valid.
+
+---
+
+## ADR-0133 — Bootstrap closes on geology, biomass and primitive assembly
+
+*2026-10-17 · Accepted*
+
+**Context.** ADR-0131 forbids treating vanilla tree/cobblestone farms and finite veins as the
+canonical industrial base. The ceramic workshop needs renewable aggregate, clay, construction
+wood, carbon, basic metals, redstone, glass and power before T0 can be called self-sustaining.
+
+**Decision.** Add four concrete F0 roles on existing machine contracts:
+
+- A Geological Collector consumes 250 mB water and 200 ticks at 4 FU/t to collect one mineral
+  aggregate and one clay ball. It taps an explicitly abstracted terrestrial geological reservoir
+  through a valid rock bed; it does not label the existing finite chunk vein renewable or operate
+  in an airless/spatial prototype dimension.
+- A sunlit Biocultivator consumes one aggregate and 250 mB water over 160 ticks at 4 FU/t to grow
+  four biomass. Ambient carbon, water, mineral nutrients and sunlight explain the source.
+  No vanilla tree/crop growth, mob drops or consumable seed is required.
+- A Biomass Dynamo burns the registered 200-tick biomass fuel at 8 FU/t. The existing Thermal
+  Generator remains the stronger F1 conversion. Stored energy still exports after fuel runs out;
+  a full buffer does not consume more fuel. Gas probes validate fuel identity/volume before
+  extracting rather than discarding an unsuccessful refund.
+- An Assembly Bench automates the limited primitive construction catalogue at F0. The T1
+  Assembler retains the advanced fabrication domain and faster repeat routes. Recipes are
+  projected from the existing crafting catalogues, not independently duplicated quantities.
+
+The aggregate has three real uses: dry stone/gravel recovery, wet recovery of basic iron/copper/
+redstone fractions, and biological nutrients. Biomass supplies fuel, charcoal, paper and
+fibreboard. Fibreboard is an original placeable plank-compatible material, not a vanilla tree
+farm. Settling's expanded output slots append after its old outputs, preserving indexed saves.
+
+Remove unnecessary metal/redstone bottlenecks from primitive pump, mixing, grinding, settling
+and firing-control crafts. The existing two-iron Dynamo/Extractor remains an optional quicker
+bootstrap, not the only way to recover. A reusable wood/stone Crank Handle can supply bounded
+manual work to F0 process machines when a metal bootstrap was lost. It is a bootstrap/emergency
+action, never the canonical automated energy route.
+
+Firing recipes name their controlled fuel-backed operating band: ceramics, biomass
+carbonization, glass and low-grade iron/copper reduction. The chamber holds the selected band
+within its declared ceiling; inputs supply the thermal fuel. Initial chamber bricks may use
+the ordinary furnace as finite bootstrap fabrication, but repeated industrial bricks/fuel/glass
+have mod-owned routes. Later machines improve throughput, yield, conditions and conversion.
+
+**Audit boundary.** Environmental geological/biological inputs are declared and checked,
+not hidden zero-input recipes. Exact counts are original game abstractions, not measured
+chemical mass yields. The audit must distinguish an energy-producing loop fed by sunlight/
+geology from a resource-positive recycling exploit, prove a metal-free bootstrap path and
+show any unresolved later-tier sources rather than claiming universal closure.
+
+**Alternatives rejected.** Renaming depleted veins renewable; farming vanilla trees by another
+name; requiring a one-off seed or the producer's own metal before recovery is possible;
+free material recipes with no physical source; and moving basic supply beyond the active tier.
+
+**Consequences.** Existing registry IDs remain. New source, material and bench IDs are additive.
+F0 recipe/field state, output reservations, persistence, tooltips, audit and native full-cycle
+checks accompany the sources. T0 acceptance remains pending until its complete source closure
+and required observed playthrough are established.
+
+---
+
+## ADR-0134 — Astra orchestrates bounded workers after an isolated cold start
+
+*2026-10-17 · Accepted*
+
+**Context.** The owner stopped the loaded conversation and requested a new clean session,
+carrying all work/planning, with Astra leading orchestration and implementation performed
+through subagents. C3 source/assets are incomplete and must survive the transition without
+being mislabeled as a validated product.
+
+**Decision.** Preserve all WIP and an explicit handoff/JSON plan in Git. Start a genuinely new
+isolated-worktree Astra coordinator at the published preservation checkpoint, not a fork of
+the chat or a branch session in the main checkout. Transfer original requests as attachments
+and private environment hints separately. Verify receipt before resuming bounded work.
+
+Astra owns architecture, product/Tiers, sustainability/production graphs, machine families,
+standard and assembled multiblocks, migrations, integration and final review. Delegate
+application implementation and test execution; prefer Sol 6.1 Max for normal coding and
+Luna for simple/repetitive work. Keep architectural decisions with Astra rather than
+downgrading them for latency. Each worker has an input revision, outcome, owned files,
+acceptance criteria and stop condition. Use few workers and serialize shared-file edits.
+
+The coordinator may investigate, design, review code/evidence, maintain handoffs and integrate
+Git; it must not quietly resume solo application coding. Report missing worker capabilities.
+This is repository execution policy, not a rule inferred for unrelated projects.
+
+Preserve draft PR54 and its base PR53. The new app branch does not inherit PR identity:
+maintain the existing PR explicitly, with a single new-coordinator publisher and reviewed
+fast-forward continuation after live-state/ancestry checks. No duplicate PR, retarget or history
+rewrite is part of migration. The retiring session stops product writes and its merger remains
+off; preserve its worktree/evidence. Conditional merge authority never substitutes for
+automated or observed manual acceptance.
+
+**Alternatives rejected.** Copying the entire overloaded chat; switching the main checkout;
+discarding incomplete code/assets; replacing the review with another PR; coordinator solo
+coding; unbounded worker pools; and claiming old checks validate a new revision.
+
+**Consequences.** The [handoff](../.agent/handoff.md) and [plan](../.agent/work-plan.json)
+are reloadable without session history. C3/audit work resumes first; functional ports follow
+the current integration milestone. Migration neither accepts a Tier nor creates a new manual
+approval gate before authorized feature development.

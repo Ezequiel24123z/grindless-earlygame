@@ -71,6 +71,30 @@ legible to the wider Minecraft modding community.
 
 ---
 
+## Orchestrated execution
+
+The project owner requires an Astra leader/orchestrator with bounded workers (ADR-0134).
+This is project policy, not a preference inferred for unrelated repositories.
+
+- **Astra owns** architecture, product and Tier progression, sustainability and production
+  graphs, machine-family and multiblock design, migrations, integration and final review.
+- Delegate application implementation and test execution. Prefer **Sol 6.1 Max** for normal
+  coding and **Luna** for simple or repetitive work, including extraction, localization,
+  deterministic assets, straightforward checks and documentation synchronization.
+- The coordinator may investigate, make design decisions, review code/evidence, maintain the
+  handoff and perform Git integration. It must not quietly become the application coder.
+  Report unavailable worker capabilities instead of silently changing that division of work.
+- Give each worker a bounded outcome, source revision, owned files, acceptance criteria and
+  stop condition. Use the fewest useful workers. Serialize shared-file edits, validation
+  against changing inputs, commits and publication; never have competing publishers.
+- Do not downgrade architectural or product-critical work merely to reduce latency. Workers
+  escalate decisions in those domains to Astra rather than inventing a second authority.
+
+For a clean-context migration, preserve a Git checkpoint and start a genuinely new isolated
+session, not a fork of the entire conversation or a branch session in the main checkout.
+Read [the active handoff](.agent/handoff.md) and [reloadable plan](.agent/work-plan.json).
+Preserve old worktrees and evidence; migration is not acceptance of unfinished code.
+
 ## Session checklist
 
 **Starting.** Read this file, then `CHANGELOG.md` (`[Unreleased]` — what the last session did),

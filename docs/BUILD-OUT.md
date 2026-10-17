@@ -8,32 +8,53 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Next slice: T0-W2 — assembled settling (ADR-0129).** BO is
-shipped: the Ground Array, placeholder links, rocket and supraluminal station remain registered
-and smoke-tested, but have no generated or crafting-table survival recipes. F0-F15 and the physical
-matrix rating/architecture model are now in code, including a registered T1 Relay Matrix with
-functional generated art and its recoverable five-unit manual batch. The former global research
-state is removed and ignored in existing saves; the Atlas exposes the physical route and the
-remaining T0 machine audit is still active. A first local client-pack candidate now packages the
-current route and its utility integrations, but it is not T0 acceptance evidence: the required
-no-command survival playthrough remains. The optional Factory World is a post-Matrix construction
-aid, not a new technology frontier or a resource shortcut. T1 stays locked until T0 passes
-the gate below.
+**Active tier: T0 Bootstrap. Next: receive the preservation checkpoint in a fresh Astra
+coordinator, then delegate bounded C3 source integration (ADR-0133, ADR-0134).**
+The old session is paused for migration, not continuing application implementation.
+The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
+[reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
 
-The corrected foundation at `c62de72` is preserved. Its 33 checks and 41 production scenarios
-are historical baseline evidence, not acceptance of a changed jar. The current owner-directed
-scope authorizes the [connected T0 workshop](tiers/t0.md); the
-[gate](reviews/go-gate.md) now treats manual acceptance as a merge condition rather than a
-feature-development blocker. No T2 consumer or unrelated T1 implementation starts here.
+Foundation `c62de72`, W1 ceramics and W2 settling/actual water recovery are preserved.
+Their passing historical checks do not certify the C3 runtime and cancelled-worker assets.
+Astra owns architecture/product/Tiers, sustainability/graphs, multiblocks, migrations,
+integration and final review. Sol 6.1 Max workers implement normal code; Luna handles
+mechanical tasks. Checks are delegated, shared files serialized and publication single-owned.
 
-| Unit | Playable outcome | Status |
+After receipt, review C3 condition regulation, partial gas extraction, Forge/JEI/client/menu/
+localization, real quantity/budget expectations, Bench exit automation and cancelled assets.
+An independent pinned inventory extraction may run alongside runtime work; Astra owns schema
+and source semantics. Do not duplicate recipe quantities or impose a documentation-first
+waterfall. Sustainability, handling, player guidance and real dashboard data are required
+implementation, not substitutes for renewable gameplay.
+
+| Unit | Outcome | Status |
 | --- | --- | --- |
-| T0-W1 | Mill, mix and fire ceramics; recover grog; fabricate a physical core and basic automation | automatedly validated; manual acceptance pending |
-| T0-W2 | Assemble an oriented settling line that supplies clay/gravel and recovers water | pending after W1 |
-| T0-W3 | Complete current-jar automation, structure, asset and progression evidence; publish a draft | pending after W1/W2 |
+| T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
+| T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | preserved WIP; prior common compile only, full integration pending |
+| production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
+| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | in progress; closure not certified |
+| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |
+| dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
+| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | incomplete; follows renderer/model |
+| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | pending sources/model/communication/dashboard |
+| multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
+| multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |
 
-The historical schedule below does not override this active owner-directed scope. Fixed T0
-workshop structures are the ADR-0129 exception; the T3 Arc Reactor remains a later frontier.
+Every mandatory resource must recursively reach an unlimited automatable mod-owned source;
+finite mining, vanilla farms, exploits, repeated loot and dimension drops cannot remain
+canonical supply. T0 must become self-sustaining; unaudited T0-T15 details remain unknown.
+Manual GUI/no-command survival/retained-world acceptance gates merge and Tier acceptance,
+not every further owner-authorized T0 feature. No unrelated T1/T2 work starts here.
+
+Keep draft PR54 based on draft PR53, without a replacement PR or rewritten history. Old
+Agent merge is off. The new coordinator alone publishes reviewed fast-forward continuation,
+checking live remote state/ancestry without writing the old or main checkout.
+
+The historical schedule and standing rules below do not override current owner authority,
+ADR-0131 side-stream semantics or ADR-0134 orchestration. Fixed workshop structures are the
+ADR-0129 exception. The later functional-port request starts with its own audit, not an
+automatic jump to an old campaign row.
 
 ---
 

@@ -146,7 +146,12 @@ public final class BlockCatalogue {
         /** A continuous open bed with two side rails; no block entity. */
         CHANNEL,
         /** A raised grate across the working channel; no block entity. */
-        SCREEN
+        SCREEN,
+        COLLECTOR,
+        CULTURE,
+        BIOGEN,
+        BENCH,
+        FIBREBOARD
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -211,6 +216,11 @@ public final class BlockCatalogue {
             new Entry("settling_trough", Geometry.SETTLER, 1, true, CONSUMER),
             new Entry("settling_channel", Geometry.CHANNEL, 1, true, List.of("idle")),
             new Entry("settling_screen", Geometry.SCREEN, 1, true, List.of("idle")),
+            new Entry("geological_collector", Geometry.COLLECTOR, 1, true, CONSUMER),
+            new Entry("biocultivator", Geometry.CULTURE, 1, true, CONSUMER),
+            new Entry("biomass_dynamo", Geometry.BIOGEN, 1, true, GENERATOR),
+            new Entry("assembly_bench", Geometry.BENCH, 1, true, CONSUMER),
+            new Entry("fibreboard", Geometry.FIBREBOARD, 1, false, List.of("idle")),
             new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR),
             new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER),
             new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
@@ -278,7 +288,8 @@ public final class BlockCatalogue {
             "flux_cell", "flux_exosuit_helmet", "flux_exosuit_chestplate", "flux_exosuit_leggings",
             "flux_exosuit_boots", "network_tap", "exoskeleton_legs",
             "helium_3", "survey_rocket", "supraluminal_station", "quest_book", "field_guide",
-            "ceramic_grog", "unfired_ceramic", "ceramic_insulator");
+            "ceramic_grog", "unfired_ceramic", "ceramic_insulator",
+            "mineral_aggregate", "biomass", "crank_handle");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

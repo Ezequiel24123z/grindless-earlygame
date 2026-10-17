@@ -25,6 +25,82 @@ public final class FormTextures {
     private FormTextures() {
     }
 
+    /** Angular mixed pebbles with pale clay inclusions, not a pure-metal ore or a dust pile. */
+    public static BufferedImage mineralAggregate(Palette palette) {
+        HeightField field = new HeightField();
+        double[][] pebbles = {{5, 7, 3.6, 4.1}, {10, 9, 3.3, 3.6}, {6, 11, 3.0, 2.8}};
+        for (double[] pebble : pebbles) {
+            for (int y = 2; y <= 13; y++) {
+                for (int x = 2; x <= 13; x++) {
+                    double distance = Math.abs(x - pebble[0]) + Math.abs(y - pebble[1]);
+                    if (distance <= pebble[2]) {
+                        field.set(x, y, Math.max(field.get(x, y), pebble[3] - distance * 0.3));
+                    }
+                }
+            }
+        }
+        field.bevel(0.4);
+        BufferedImage image = field.light(palette);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                if (field.solid(x - 1, y) && field.solid(x + 1, y)
+                        && field.solid(x, y - 1) && field.solid(x, y + 1)
+                        && (x * 3 + y * 7) % 11 == 0) {
+                    image.setRGB(x, y, 0xFFB8A183);
+                }
+            }
+        }
+        return image;
+    }
+
+    /** A loose three-leaf culture harvest with exposed pale stems. */
+    public static BufferedImage biomass(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(6, 7, 9, 13, 2.7);
+        double[][] leaves = {{4.5, 7, 2.6, 4}, {8, 5, 2.8, 4}, {11, 8, 2.5, 3.7}};
+        for (double[] leaf : leaves) {
+            for (int y = 2; y <= 12; y++) {
+                for (int x = 2; x <= 13; x++) {
+                    double distance = Math.abs(x - leaf[0]) / leaf[2] + Math.abs(y - leaf[1]) / leaf[3];
+                    if (distance < 1.0) {
+                        field.set(x, y, Math.max(field.get(x, y), 3.2 + (1.0 - distance) * 1.6));
+                    }
+                }
+            }
+        }
+        field.bevel(0.35);
+        BufferedImage image = field.light(palette);
+        for (int y = 9; y <= 12; y++) {
+            image.setRGB(7, y, 0xFFBEAC6E);
+            if (y > 10) {
+                image.setRGB(8, y, 0xFF8E804F);
+            }
+        }
+        return image;
+    }
+
+    /** An offset wooden grip and a bored stone socket; a hand tool, never a machine sprite. */
+    public static BufferedImage crankHandle(Palette palette) {
+        HeightField handle = new HeightField();
+        handle.rect(6, 5, 11, 7, 3.2);
+        handle.rect(10, 7, 12, 13, 4.0);
+        handle.bevel(0.35);
+        BufferedImage image = handle.light(palette);
+        HeightField socket = new HeightField();
+        socket.rect(2, 2, 7, 7, 3.6);
+        socket.clearDisc(4.5, 4.5, 1.0);
+        socket.bevel(0.3);
+        BufferedImage stone = socket.light(Palette.of("crank_socket", BootstrapArt.STONE));
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                if ((stone.getRGB(x, y) >>> 24) != 0) {
+                    image.setRGB(x, y, stone.getRGB(x, y));
+                }
+            }
+        }
+        return image;
+    }
+
     /** Three angular, separately outlined fired fragments, ready to return to a clay body. */
     public static BufferedImage ceramicGrog(Palette palette) {
         HeightField field = new HeightField();

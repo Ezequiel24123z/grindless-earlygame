@@ -30,7 +30,8 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     public static final int DATA_STRUCTURE = 6;
     public static final int DATA_FLUID = 7;
     public static final int DATA_FLUID_OUTPUT = 8;
-    public static final int DATA_SIZE = 9;
+    public static final int DATA_SITE = 9;
+    public static final int DATA_SIZE = 10;
 
     private final MachineMenuHost host;
     private final ContainerData data;
@@ -61,14 +62,24 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     private void addMachineSlots(Container container) {
         switch (kind) {
             case GENERATOR -> addSlot(new Slot(container, 0, 80, 36));
-            case PULVERIZER, KILN, WIRE_MILL, CHEMICAL_REACTOR -> {
+            case PULVERIZER, KILN, WIRE_MILL, CHEMICAL_REACTOR, BIOCULTIVATOR -> {
                 addSlot(new Slot(container, 0, 52, 35));
                 addSlot(new OutputSlot(container, 1, 116, 35));
             }
-            case CHEMICAL_WASHER, FLOTATION, QUERN, SETTLING_TROUGH -> {
+            case CHEMICAL_WASHER, FLOTATION, QUERN -> {
                 addSlot(new Slot(container, 0, 44, 35));
                 addSlot(new OutputSlot(container, 1, 116, 26));
                 addSlot(new OutputSlot(container, 2, 116, 44));
+            }
+            case GEOLOGICAL_COLLECTOR -> {
+                addSlot(new OutputSlot(container, 0, 116, 26));
+                addSlot(new OutputSlot(container, 1, 116, 44));
+            }
+            case SETTLING_TROUGH -> {
+                addSlot(new Slot(container, 0, 44, 35));
+                for (int index = 0; index < 5; index++) {
+                    addSlot(new OutputSlot(container, index + 1, 107 + index % 3 * 18, 26 + index / 3 * 18));
+                }
             }
             case ELECTROLYSIS_CELL, ATMOSPHERIC_INTAKE, BOILER, CONDENSER -> {
             }
@@ -88,7 +99,7 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new Slot(container, 1, 44, 44));
                 addSlot(new OutputSlot(container, 2, 116, 35));
             }
-            case ASSEMBLER -> {
+            case ASSEMBLER, ASSEMBLY_BENCH -> {
                 addSlot(new Slot(container, 0, 35, 26));
                 addSlot(new Slot(container, 1, 53, 26));
                 addSlot(new Slot(container, 2, 35, 44));
@@ -149,6 +160,12 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     /** The portion of stored fluid available to the automatic front output. */
     public int fluidOutputAmount() {
         return Math.max(0, data.get(DATA_FLUID_OUTPUT));
+    }
+
+    public io.github.ezequiel24123z.grindless.source.SourceSite.Fault siteFault() {
+        var faults = io.github.ezequiel24123z.grindless.source.SourceSite.Fault.values();
+        int ordinal = data.get(DATA_SITE);
+        return ordinal >= 0 && ordinal < faults.length ? faults[ordinal] : faults[1];
     }
 
     public MachineMenuHost host() {

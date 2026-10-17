@@ -103,6 +103,12 @@ public final class GenerateAssets {
                 FormTextures.unfiredCeramic(Palette.of("unfired_ceramic", 0xB8A183)));
         written += write(items, "ceramic_insulator",
                 FormTextures.ceramicInsulator(Palette.of("ceramic_insulator", 0xE6D6B2)));
+        written += write(items, "mineral_aggregate",
+                FormTextures.mineralAggregate(Palette.of("mineral_aggregate", BootstrapArt.STONE)));
+        written += write(items, "biomass",
+                FormTextures.biomass(Palette.of("biomass", BootstrapArt.BIOMASS)));
+        written += write(items, "crank_handle",
+                FormTextures.crankHandle(Palette.of("crank_handle", BootstrapArt.TIMBER)));
         written += write(items, "refractory_brick",
                 FormTextures.brick(Palette.of("refractory_brick", 0xC46A3A)));
         written += write(items, "metallurgical_silicon",
@@ -181,6 +187,9 @@ public final class GenerateAssets {
         blocks = resourceDir(root, "textures/block");
         written += write(blocks, "casing_side", MachineTextures.side(MachineTextures.CASING));
         written += write(blocks, "casing_top", MachineTextures.top(MachineTextures.CASING));
+        written += write(blocks, "bootstrap_stone", BootstrapArt.stone());
+        written += write(blocks, "bootstrap_timber", BootstrapArt.timber());
+        written += write(blocks, "bootstrap_clay", BootstrapArt.clay());
         java.util.Set<io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry> tops =
                 new java.util.HashSet<>();
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
@@ -432,11 +441,16 @@ public final class GenerateAssets {
         deleteTree(new File(assets, "models/block"));
         int written = 0;
         List<String> names = new ArrayList<>();
+        List<String> axe = new ArrayList<>();
         List<String> commands = new ArrayList<>();
         List<String> expect = new ArrayList<>();
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
             String n = block.name();
-            names.add("grindless:" + n);
+            if (block.geometry() == BlockCatalogue.Geometry.FIBREBOARD) {
+                axe.add("grindless:" + n);
+            } else {
+                names.add("grindless:" + n);
+            }
             StringBuilder variants = new StringBuilder();
             for (String status : block.statuses()) {
                 written += writeText(new File(assets, "models/block/" + block.modelName(status) + ".json"),
@@ -487,6 +501,8 @@ public final class GenerateAssets {
                         + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n");
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
+        written += writeText(new File(data, "minecraft/tags/blocks/mineable/axe.json"),
+                tagJson(axe.toArray(new String[0])));
         File smoke = new File(root, "tools/smoke");
         // One function, one tick: a belt that is empty publishes idle, and an extractor over a
         // vein publishes starved, so a 1s gap between setblock and execute-if misses STATE-OK

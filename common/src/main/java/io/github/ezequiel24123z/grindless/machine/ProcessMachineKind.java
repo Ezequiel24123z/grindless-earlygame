@@ -15,6 +15,8 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.source.SourceSite;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
@@ -373,7 +375,8 @@ public enum ProcessMachineKind {
             BlockCatalogue.Geometry.FIREBOX, "firing_chamber", FluxTier.F0) {
         @Override
         public ConditionEnvelope envelope() {
-            return MachineEnvelopes.KILN;
+            return ConditionEnvelope.builder().temperature(20, 1450)
+                    .atmospheres(Atmosphere.OXIDISING, Atmosphere.REDUCING).build();
         }
 
         @Override
@@ -413,6 +416,33 @@ public enum ProcessMachineKind {
         @Override
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.SETTLING_TROUGH.get();
+        }
+    },
+
+    GEOLOGICAL_COLLECTOR(MachineFamily.GEOLOGICAL_COLLECTOR, MachineMenuKind.GEOLOGICAL_COLLECTOR,
+            BlockCatalogue.Geometry.COLLECTOR, "geological_collector", FluxTier.F0) {
+        @Override public ConditionEnvelope envelope() { return ConditionEnvelope.builder().build(); }
+        @Override public ConditionState heldConditions() { return ConditionState.AMBIENT; }
+        @Override public SourceSite site() { return SourceSite.GEOLOGICAL; }
+        @Override public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.GEOLOGICAL_COLLECTOR.get();
+        }
+    },
+    BIOCULTIVATOR(MachineFamily.BIOCULTIVATOR, MachineMenuKind.BIOCULTIVATOR,
+            BlockCatalogue.Geometry.CULTURE, "biocultivator", FluxTier.F0) {
+        @Override public ConditionEnvelope envelope() { return ConditionEnvelope.builder().build(); }
+        @Override public ConditionState heldConditions() { return ConditionState.AMBIENT; }
+        @Override public SourceSite site() { return SourceSite.SUNLIT_CULTURE; }
+        @Override public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.BIOCULTIVATOR.get();
+        }
+    },
+    ASSEMBLY_BENCH(MachineFamily.ASSEMBLY_BENCH, MachineMenuKind.ASSEMBLY_BENCH,
+            BlockCatalogue.Geometry.BENCH, "assembly_bench", FluxTier.F0) {
+        @Override public ConditionEnvelope envelope() { return ConditionEnvelope.builder().build(); }
+        @Override public ConditionState heldConditions() { return ConditionState.AMBIENT; }
+        @Override public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.ASSEMBLY_BENCH.get();
         }
     };
 
@@ -466,6 +496,19 @@ public enum ProcessMachineKind {
     /** A fixed workshop structure only when the process requires one. */
     public WorkshopStructure structure() {
         return WorkshopStructure.NONE;
+    }
+
+    public SourceSite site() {
+        return SourceSite.NONE;
+    }
+
+    /** The primitive chamber regulates its declared fuel-backed band rather than faking one fixed temperature. */
+    public ConditionState heldConditions(ProcessRecipe recipe) {
+        if (this != FIRING_CHAMBER || recipe == null) {
+            return heldConditions();
+        }
+        return heldConditions().withTemperature(recipe.temperatureC())
+                .withAtmosphere(Atmosphere.valueOf(recipe.atmosphere()));
     }
 
     /** Whether the fluid buffer may hold melt. The tank and the clay pipe still refuse it. */

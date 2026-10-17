@@ -35,6 +35,7 @@ import io.github.ezequiel24123z.grindless.planet.LunarLinkBlockEntity;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkBlockEntity;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlockEntity;
@@ -101,6 +102,22 @@ public final class ModBlockEntities {
                     () -> BlockEntityType.Builder.of((pos, state) ->
                             new ProcessMachineBlockEntity(ProcessMachineKind.SETTLING_TROUGH, pos, state),
                             ModBlocks.SETTLING_TROUGH.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> GEOLOGICAL_COLLECTOR =
+            BLOCK_ENTITIES.register("geological_collector", () -> BlockEntityType.Builder.of(
+                    (pos, state) -> new ProcessMachineBlockEntity(ProcessMachineKind.GEOLOGICAL_COLLECTOR, pos, state),
+                    ModBlocks.GEOLOGICAL_COLLECTOR.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> BIOCULTIVATOR =
+            BLOCK_ENTITIES.register("biocultivator", () -> BlockEntityType.Builder.of(
+                    (pos, state) -> new ProcessMachineBlockEntity(ProcessMachineKind.BIOCULTIVATOR, pos, state),
+                    ModBlocks.BIOCULTIVATOR.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> ASSEMBLY_BENCH =
+            BLOCK_ENTITIES.register("assembly_bench", () -> BlockEntityType.Builder.of(
+                    (pos, state) -> new ProcessMachineBlockEntity(ProcessMachineKind.ASSEMBLY_BENCH, pos, state),
+                    ModBlocks.ASSEMBLY_BENCH.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<ThermalGeneratorBlockEntity>> BIOMASS_DYNAMO =
+            BLOCK_ENTITIES.register("biomass_dynamo", () -> BlockEntityType.Builder.of(
+                    (pos, state) -> new ThermalGeneratorBlockEntity(GeneratorKind.BIOMASS, pos, state),
+                    ModBlocks.BIOMASS_DYNAMO.get()).build(null));
 
     /** T1 generator: furnace fuel at 32 FU/t. */
     public static final RegistrySupplier<BlockEntityType<ThermalGeneratorBlockEntity>> THERMAL_GENERATOR =

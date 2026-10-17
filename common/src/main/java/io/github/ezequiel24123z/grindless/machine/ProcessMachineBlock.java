@@ -2,6 +2,8 @@ package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.MenuRegistry;
 import io.github.ezequiel24123z.grindless.item.Relocation;
+import io.github.ezequiel24123z.grindless.item.CrankHandleItem;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPartBlock;
 import net.minecraft.core.BlockPos;
@@ -100,6 +102,9 @@ public class ProcessMachineBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
                                  InteractionHand hand, BlockHitResult hit) {
+        if (kind.tier() == FluxTier.F0 && player.getItemInHand(hand).getItem() instanceof CrankHandleItem) {
+            return InteractionResult.PASS;
+        }
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }

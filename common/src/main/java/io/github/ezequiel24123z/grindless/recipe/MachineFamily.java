@@ -68,5 +68,8 @@ public enum MachineFamily {
     FIRING_CHAMBER,
 
     /** F0 clay/aggregate separation with partial water recovery in an open assembled channel. */
-    SETTLING_TROUGH
+    SETTLING_TROUGH,
+    GEOLOGICAL_COLLECTOR,
+    BIOCULTIVATOR,
+    ASSEMBLY_BENCH
 }

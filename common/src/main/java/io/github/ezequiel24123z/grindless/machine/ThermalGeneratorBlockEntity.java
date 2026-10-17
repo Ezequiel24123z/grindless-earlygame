@@ -5,6 +5,7 @@ import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.container.NeighbourCache;
+import io.github.ezequiel24123z.grindless.container.SlottedContainer;
 import io.github.ezequiel24123z.grindless.energy.FluxStorage;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.energy.FuelPlatform;
@@ -47,7 +48,8 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     private static final String KEY_FUEL = "Fuel";
     private static final int[] SLOTS = {0};
 
-    private final SimpleContainer fuel = new SimpleContainer(1);
+    private final SimpleContainer fuel = new SlottedContainer(1);
+    private final GeneratorKind kind;
     private final StatusDebounce display = new StatusDebounce();
     private final Map<Direction, NeighbourCache> neighbours = new EnumMap<>(Direction.class);
     private final SimpleContainerData data = new SimpleContainerData(ProcessMachineMenu.DATA_SIZE);
@@ -56,10 +58,20 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     private int burnDuration;
     private int fruitlessPushes;
     private TickSubscription working;
+    private boolean loading;
+    private long lastWorkTick = Long.MIN_VALUE;
 
     public ThermalGeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.THERMAL_GENERATOR.get(), pos, state);
+        this(GeneratorKind.THERMAL, pos, state);
+    }
+
+    public ThermalGeneratorBlockEntity(GeneratorKind kind, BlockPos pos, BlockState state) {
+        super(kind.type(), pos, state, kind.tier());
+        this.kind = kind;
         fuel.addListener(container -> {
+            if (loading) {
+                return;
+            }
             setChanged();
             updateSubscriptions();
         });
@@ -78,7 +90,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     protected FluxTier ratedTier() {
-        return FluxTier.F1;
+        return powerTier();
     }
 
     @Override
@@ -88,7 +100,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     protected SimpleFluxStorage createEnergyBuffer() {
-        return new SimpleFluxStorage(bufferCapacity(), 0L, FluxTier.F1.nominal(), () -> {
+        return new SimpleFluxStorage(bufferCapacity(), 0L, powerTier().nominal(), () -> {
             setChanged();
             if (getLevel() != null && !getLevel().isClientSide()) {
                 updateSubscriptions();
@@ -98,10 +110,10 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     protected void updateSubscriptions() {
-        if (getLevel() == null) {
+        if (loading || getLevel() == null) {
             return;
         }
-        if (burnRemaining > 0 || canIgnite()) {
+        if (burnRemaining > 0 || canIgnite() || energy().getStored() > 0) {
             working = subscriptions().subscribe(working, this::work);
         } else if (working != null) {
             working.unsubscribe();
@@ -118,24 +130,27 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     }
 
     private void work() {
-        if (burnRemaining <= 0 && !tryIgnite()) {
-            publishStatus(false);
-            updateSubscriptions();
+        long tick = getLevel().getGameTime();
+        if (lastWorkTick == tick) {
             return;
         }
-        burnRemaining--;
-        energy().setStored(energy().getStored() + ThermalLogic.generate(true));
+        lastWorkTick = tick;
+        boolean burning = false;
+        if (energy().getCapacity() - energy().getStored() >= kind.tier().nominal()
+                && (burnRemaining > 0 || tryIgnite())) {
+            burnRemaining--;
+            energy().setStored(energy().getStored() + kind.tier().nominal());
+            burning = true;
+        }
         push();
         setChanged();
-        publishStatus(true);
+        publishStatus(burning);
         syncData();
-        if (burnRemaining <= 0 && !canIgnite() && energy().getStored() <= 0L) {
-            updateSubscriptions();
-        }
+        updateSubscriptions();
     }
 
     private boolean canIgnite() {
-        return FuelPlatform.burnTicks(fuel.getItem(0)) > 0 || neighbourHasCo();
+        return FuelPlatform.burnTicks(fuel.getItem(0)) > 0 || kind.acceptsGas() && neighbourHasCo();
     }
 
     private boolean neighbourHasCo() {
@@ -144,7 +159,9 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
         }
         for (Direction side : Direction.values()) {
             var neighbour = getLevel().getBlockEntity(getBlockPos().relative(side));
-            if (neighbour instanceof FluidEndpoint endpoint && endpoint.canExtract(side.getOpposite())) {
+            if (neighbour instanceof FluidEndpoint endpoint && endpoint.canExtract(side.getOpposite())
+                    && endpoint.contents().millibuckets() >= FluidLogic.BUCKET
+                    && FluidLogic.burnTicks(endpoint.contents().id()) > 0) {
                 return true;
             }
         }
@@ -155,13 +172,13 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
         ItemStack stack = fuel.getItem(0);
         int ticks = FuelPlatform.burnTicks(stack);
         if (ticks > 0) {
-            stack.shrink(1);
-            fuel.setItem(0, stack);
             burnRemaining = ticks;
             burnDuration = ticks;
+            stack.shrink(1);
+            fuel.setItem(0, stack);
             return true;
         }
-        return tryIgniteGas();
+        return kind.acceptsGas() && tryIgniteGas();
     }
 
     /** One bucket of CO or hydrogen. Anything else goes back into the tank (ADR-0065, ADR-0077). */
@@ -174,22 +191,24 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
             if (!(neighbour instanceof FluidEndpoint endpoint) || !endpoint.canExtract(side.getOpposite())) {
                 continue;
             }
+            FluidState available = endpoint.contents();
+            int ticks = FluidLogic.burnTicks(available.id());
+            if (ticks <= 0 || available.millibuckets() < FluidLogic.BUCKET) {
+                continue;
+            }
             FluidState taken = endpoint.extract(side.getOpposite(), FluidLogic.BUCKET);
-            int ticks = FluidLogic.burnTicks(taken.id());
-            if (ticks > 0 && taken.millibuckets() >= FluidLogic.BUCKET) {
-                burnRemaining = ticks;
-                burnDuration = ticks;
-                return true;
+            if (!taken.is(available.id()) || taken.millibuckets() != FluidLogic.BUCKET) {
+                throw new IllegalStateException("Fuel-gas endpoint violated its extraction contract");
             }
-            if (!taken.isEmpty()) {
-                endpoint.insert(side.getOpposite(), taken);
-            }
+            burnRemaining = ticks;
+            burnDuration = ticks;
+            return true;
         }
         return false;
     }
 
     private void push() {
-        long allowance = Math.min(energy().getStored(), FluxTier.F1.nominal());
+        long allowance = Math.min(energy().getStored(), kind.tier().nominal());
         long budget = allowance;
         FluxNetwork network = network();
         if (network != null) {
@@ -255,10 +274,16 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     public void load(CompoundTag tag) {
-        super.load(tag);
-        burnRemaining = Math.max(0, tag.getInt(KEY_BURN));
-        burnDuration = Math.max(0, tag.getInt(KEY_DURATION));
-        fuel.fromTag(tag.getList(KEY_FUEL, net.minecraft.nbt.Tag.TAG_COMPOUND));
+        loading = true;
+        try {
+            super.load(tag);
+            burnRemaining = Math.max(0, tag.getInt(KEY_BURN));
+            burnDuration = Math.max(0, tag.getInt(KEY_DURATION));
+            fuel.fromTag(tag.getList(KEY_FUEL, net.minecraft.nbt.Tag.TAG_COMPOUND));
+        } finally {
+            loading = false;
+        }
+        updateSubscriptions();
         syncData();
     }
 
@@ -289,7 +314,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.grindless.thermal_generator");
+        return Component.translatable("block.grindless." + kind.id());
     }
 
     @Override

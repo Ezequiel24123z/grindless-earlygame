@@ -34,9 +34,15 @@ public class ThermalGeneratorBlock extends BaseEntityBlock {
 
     public static final EnumProperty<MachineStatus> STATUS =
             MachineProperties.status(BlockCatalogue.GENERATOR);
+    private final GeneratorKind kind;
 
     public ThermalGeneratorBlock(Properties properties) {
+        this(GeneratorKind.THERMAL, properties);
+    }
+
+    public ThermalGeneratorBlock(GeneratorKind kind, Properties properties) {
         super(properties);
+        this.kind = kind;
         registerDefaultState(stateDefinition.any()
                 .setValue(MachineProperties.FACING, Direction.NORTH)
                 .setValue(STATUS, MachineStatus.IDLE));
@@ -66,13 +72,13 @@ public class ThermalGeneratorBlock extends BaseEntityBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        MachineEffects.animate(BlockCatalogue.Geometry.GENERATOR, 1, state.getValue(STATUS),
+        MachineEffects.animate(kind.geometry(), 1, state.getValue(STATUS),
                 state.getValue(MachineProperties.FACING), level, pos, random);
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ThermalGeneratorBlockEntity(pos, state);
+        return new ThermalGeneratorBlockEntity(kind, pos, state);
     }
 
     @Override
@@ -108,7 +114,7 @@ public class ThermalGeneratorBlock extends BaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
                                                                   BlockEntityType<T> type) {
         return level.isClientSide() ? null
-                : createTickerHelper(type, ModBlockEntities.THERMAL_GENERATOR.get(),
+                : createTickerHelper(type, kind.type(),
                         MachineBlockEntity::tick);
     }
 

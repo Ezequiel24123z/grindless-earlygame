@@ -26,9 +26,14 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import io.github.ezequiel24123z.grindless.source.SourceSite;
+import io.github.ezequiel24123z.grindless.factory.FactoryCatalogue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NumericTag;
@@ -43,6 +48,8 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.SimpleContainer;
 
 import java.util.ArrayList;
@@ -93,6 +100,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private long lastWorkTick = Long.MIN_VALUE;
     private ConditionFault lastFault = ConditionFault.NONE;
     private WorkshopStructure.Fault structureFault = WorkshopStructure.Fault.NONE;
+    private SourceSite.Fault siteFault = SourceSite.Fault.NONE;
     private boolean loadingInventory;
 
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
@@ -160,6 +168,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             return;
         }
         structureFault = checkStructure();
+        siteFault = checkSite();
         ProcessRecipe recipe = recipe();
         boolean missing = hasPartialInput() && recipe == null;
         boolean stuck = recipe != null && progress >= recipe.durationTicks() && !canOutput(recipe);
@@ -187,7 +196,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             draining.unsubscribe();
             draining = null;
         }
-        if (recipe == null || stuck || structureFault != WorkshopStructure.Fault.NONE) {
+        if (recipe == null || stuck || structureFault != WorkshopStructure.Fault.NONE
+                || siteFault != SourceSite.Fault.NONE) {
             publishStatus(recipe, missing, stuck, hasPowerWaiting(), false, ConditionReport.OPTIMAL);
         }
         syncData();
@@ -205,7 +215,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         lastWorkTick = tick;
         structureFault = checkStructure();
-        if (structureFault != WorkshopStructure.Fault.NONE) {
+        siteFault = checkSite();
+        if (structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
             publishStatus(cached, false, false, false, false, ConditionReport.OPTIMAL);
             syncData();
             return;
@@ -218,6 +229,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             publishStatus(null, hasPartialInput(), false, false, false, ConditionReport.OPTIMAL);
             updateSubscriptions();
             return;
+        }
+        var held = kind.heldConditions(recipe);
+        if (!held.equals(conditions())) {
+            setConditions(held);
         }
         ProcessConditions conditions = ProcessLookup.conditionsOf(recipe);
         ConditionReport report = conditions.evaluate(conditions());
@@ -491,6 +506,28 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         };
     }
 
+    private SourceSite.Fault checkSite() {
+        if (kind.site() == SourceSite.NONE || getLevel() == null) {
+            return SourceSite.Fault.NONE;
+        }
+        String dimension = getLevel().dimension().location().toString();
+        boolean terrestrial = getLevel().dimension().equals(Level.OVERWORLD) || FactoryCatalogue.isFactory(dimension);
+        boolean rock = getLevel().getBlockState(getBlockPos().below()).is(
+                TagKey.create(Registries.BLOCK, Grindless.id("geological_bed")));
+        boolean sky = getLevel().canSeeSky(getBlockPos().above());
+        boolean daylight = getLevel().getBrightness(LightLayer.SKY, getBlockPos().above())
+                - getLevel().getSkyDarken() >= 9;
+        return kind.site().evaluate(terrestrial, rock, sky, daylight);
+    }
+
+    /** A bounded bootstrap fallback when the player has not yet made automatic power. */
+    public void crankByHand() {
+        if (kind.tier() != FluxTier.F0 || getLevel() == null || getLevel().isClientSide()) {
+            return;
+        }
+        energy().setStored(Math.min(energy().getCapacity(), energy().getStored() + SourceLogic.MANUAL_CHARGE));
+    }
+
     private ItemStack[] inputs() {
         ItemStack[] stacks = new ItemStack[kind.menuKind().inputs()];
         for (int i = 0; i < stacks.length; i++) {
@@ -675,10 +712,11 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (recipe == null && fluidOutput > 0) {
             observed = MachineStatus.BLOCKED;
         }
-        if (structureFault != WorkshopStructure.Fault.NONE) {
+        if (structureFault != WorkshopStructure.Fault.NONE || siteFault != SourceSite.Fault.NONE) {
             observed = MachineStatus.OUT_OF_BAND;
         }
-        boolean stableIdle = recipe == null && !missing && structureFault == WorkshopStructure.Fault.NONE;
+        boolean stableIdle = recipe == null && !missing && structureFault == WorkshopStructure.Fault.NONE
+                && siteFault == SourceSite.Fault.NONE;
         if (stableIdle ? display.settle(MachineStatus.IDLE) : display.observe(observed)) {
             MachineProperties.publish(getLevel(), getBlockPos(), display.shown());
         }
@@ -696,6 +734,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         data.set(ProcessMachineMenu.DATA_STRUCTURE, structureFault.ordinal());
         data.set(ProcessMachineMenu.DATA_FLUID, fluid.state().millibuckets());
         data.set(ProcessMachineMenu.DATA_FLUID_OUTPUT, fluidOutput);
+        data.set(ProcessMachineMenu.DATA_SITE, siteFault.ordinal());
     }
 
     @Override

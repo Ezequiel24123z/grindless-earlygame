@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Renewable-source WIP preserved for clean-context orchestration (ADR-0133, ADR-0134).**
+  Geological/biological sources, biomass power, primitive assembly, recovery tooling and
+  cancelled-worker generated assets are checkpointed without claiming completion. Only a
+  prior common compile was observed; full C3 build, behavior, asset and native-cycle evidence
+  remain pending. The active handoff and reloadable JSON plan carry source/audit/player-view/
+  dashboard work and the later ports request. Astra leads design, integration and review;
+  bounded workers implement and execute checks. The old merger is paused and PR54 is retained.
+
 - **A static, revision-bound repository dashboard renderer.** The vanilla HTML/CSS/JS viewer
   reads the generator's schema-1 `data.json`, with T0-T15 navigation, resource/side-stream
   filters, bounded dependency graphs, machine/multiblock and quest detail, asset queues and
