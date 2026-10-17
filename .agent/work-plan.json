@@ -3,7 +3,7 @@
   "schema_version": 1,
   "plan_revision": 4,
   "updated": "2026-10-18",
-  "phase": "s1_native_c3_integrated_composed_gate_and_native_cycle",
+  "phase": "s1_native_c3_verified_native_cycle_and_smoke_budget_in_progress",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -139,7 +139,7 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "S1 core is verified on 639881f and the reviewed native C3 correction is locally integrated at dcb8010. The persistent gate validates their composition while the independent native renewable-cycle fixture continues. S2 and live closure remain pending; integration and publication stay serialized.",
+  "parallel_opportunity": "S1 and the reviewed native C3 correction pass the composed dcb8010 gate: 36 suites, production states and settling, source-bound reports. The native renewable-cycle fixture and its twin-runner assertion-budget support proceed independently. S2 and live closure remain pending.",
   "prepared_assignments": [
     {
       "id": "t0-native-renewable-cycle",
@@ -158,13 +158,14 @@
     {
       "id": "s1-persistent-execution-gate",
       "task_id": "sustainability-model",
-      "status": "core_passed_composed_source_gate_in_progress",
+      "status": "passed_reviewed_core_and_composed_scope",
       "worker_session_id": "fd99d2f6-c478-49b9-aaab-8c40e2dba154",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "639881f5985b2662059ca48981441c1fd38c31dc",
       "composed_input_revision": "dcb801056566dcd728cb3023de16c56cc6009dbd",
       "composed_scope": "Fast-forward the same clean isolated worktree, run official combined suites and production states,settling; execution/evidence only, no source edits",
+      "composed_result": "Unchanged source, 36 suites pass including 285 fluid assertions; states 945/945 and settling 19/19 pass on the production jar, with identical built/deployed SHA256 ef954dce5514d3737a01f2c4161563a29aa77e6b739d386ff2937a6a94e5cf03. A separate live JVM matches runner reports; live remains non-certifying.",
       "result": "Unchanged source: 36 official suites, 1126 sustainability assertions and 95 adapter assertions pass; all twelve repaired requirements exercised; two independent live JVMs produce identical reports. Live has 2 errors, 1247 unknowns and no annotations; no T0 closure or S2 acceptance.",
       "evidence": "build/validation/s1-execution-gate/execution-report.md in the worker session; SHA256 f2063f68c43101c6072aec6f6974e132fad7e7f243c5d4eeb7c5d60a70bccd7d",
       "worktree_scope": "isolated_application_worktree",
@@ -347,7 +348,7 @@
     {
       "id": "c3-completion-safety",
       "task_id": "renewable-t0",
-      "status": "reviewed_locally_integrated_composed_validation_pending",
+      "status": "integrated_verified_bounded_unit_complete",
       "native_delivery_commit": "9782853f744d80cccc443b121864c4af07fd4826",
       "native_delivery_evidence": "34 suites and production states/first-fluids/first-contact passed on 9782853; first-contact is setup evidence, not a complete chemical cycle",
       "blocking_review": "Original P1 reproduced with 15 red fluid assertions in b26ee8a, repaired in fa3e708 and closed by the same reviewer's targeted recheck",
@@ -363,7 +364,7 @@
       "delivery_commit": "092af29991db9f45731794a657996dcbe3925236",
       "dispatch_rule": "Dispatched on pinned b08deeaa21842a90c82f975b88466d6fd5b98d08 in an isolated application worktree. Isolation removes only the technical shared-worktree compile conflict that had made this wait for S1; it does not change product-task order, dependencies or acceptance. Keep all validation source-bound and serialize Astra integration and remote publication.",
       "delivery_status": "reviewed_native_runtime_and_exception_correction_integrated_locally",
-      "outcome": "Native identity/face/state/quota plans, exact private receipts and explicit consumer compensation preserve inputs/work on boolean and exceptional aborts; composed validation is in progress",
+      "outcome": "Native identity/face/state/quota plans and source/consumer compensation preserve inputs/work on boolean and exceptional aborts; reviewed and verified on composed dcb8010, not full C3 acceptance",
       "baseline_validation": {
         "scope": "Partial local commit 092af29991db9f45731794a657996dcbe3925236 only",
         "attempt_1": {"check": "run-checks wrapper/capture", "exit_code": 1, "failure": "NativeCommandError"},
@@ -525,7 +526,7 @@
     {
       "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "in_progress", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
-      "next_action": "Receive the composed S1/native C3 gate on dcb8010 and the independent renewable-cycle fixture. Native exception compensation is reviewed and locally integrated; complete source-bound validation before treating that unit as delivered. Client/JEI, full native exit, visual review, full integration and manual gates remain open.",
+      "next_action": "Bounded native completion is verified on dcb8010. Finish the independent renewable-cycle fixture and ordinary-runner timeout integration, then continue the existing client/JEI, source/exit, visual and full-integration gates without claiming manual acceptance.",
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {

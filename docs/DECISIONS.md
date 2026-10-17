@@ -6132,8 +6132,8 @@ The settled design says it does not:
 ## ADR-0138 — A batch completes only after its fluid inputs are re-verified and drawn exactly
 
 **Status.** Correctness requirements accepted 2026-10-17; source-backed native-store design
-accepted 2026-10-18. Native implementation and exception correction reviewed, integrated
-locally as `dcb8010`; composed-source validation is pending. This is not full C3 acceptance under
+accepted 2026-10-18. Native implementation and exception correction reviewed and verified
+on composed source `dcb8010`. This is not full C3 acceptance under
 [ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
 
 **Context.** A process recipe takes its first fluid input from the machine's own buffer. Any
@@ -6245,8 +6245,8 @@ the reference table is not a blanket permission to reuse third-party material.
   `NativeFluidStore`, `FluidInsert` and the private process `Completion` implement the
   native-only contract. A first delivery handled boolean rejection but missed exceptions;
   red fixtures in `b26ee8a` exposed 15 failures, and `fa3e708` repaired them before integration.
-  The same reviewer closed that P1. Child evidence is 34 suites plus production
-  `states,settling`; composed S1/native-source evidence is still required.
+  The same reviewer closed that P1. Composed S1/native source `dcb8010` subsequently
+  passed 36 suites plus production `states,settling`, with matching built/deployed hashes.
 - The common-machine fix preserves the two Chemical Reactor recipes without opening new
   T1 or T2 content. A targeted process fixture is not a played-survival or retained-world pass.
 - The C3 acceptance on partial extraction now includes verified secondary completion

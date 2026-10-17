@@ -16,7 +16,8 @@ The reviewed Bench-only checkpoint `092af299` is locally integrated with its
 34-suite pass; its initial capture failure is retained in the check ledger.
 
 ADR-0138's native-store implementation and exception correction are reviewed and locally
-integrated at `dcb8010`; the composed S1/native gate is running. The ADR records three
+integrated and verified at `dcb8010`: 36 suites and production states/settling passed.
+The ADR records three
 pinned upstream investigations and licence boundaries; no code was imported and no generic
 external rollback is claimed. The manual Matrix exit, existing native
 sources and external side restrictions are preserved.
@@ -26,7 +27,7 @@ allocation, initial boards/bricks need explicit bootstrap, and Astra must reconc
 crank/extractor progression with quest prerequisites before S2. Static resource review found
 no proven C3 mapping defect; client/visual acceptance remains pending.
 
-Next: receive the composed S1/native gate and independent renewable-cycle proof, then
+Next: finish the independent renewable-cycle proof and its ordinary-runner budget, then
 integrate serially; prepare S2 from the verified core and source evidence. Product
 dependencies, held ports and manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
@@ -52,7 +53,7 @@ data are required implementation, not substitutes for renewable gameplay.
 | --- | --- | --- |
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
-| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | native correction reviewed and locally integrated at `dcb8010`; composed validation and independent renewable-cycle fixture active; client/JEI, visual acceptance and full integration pending |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | native correction verified on composed `dcb8010`; renewable-cycle fixture and runner budget active; client/JEI, visual acceptance and full integration pending |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
 | sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified: 36 suites and deterministic reports; S2 annotations, canonical pack resolution and live closure pending |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |

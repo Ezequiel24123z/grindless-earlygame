@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Composed S1/native gate passed on `dcb8010`.** The unchanged integration passes all
+  36 suites, including 285 fluid assertions, and production states 945/945 plus settling
+  19/19 with identical built/deployed jar hashes. A separate live JVM reproduces the runner's
+  reports; live sustainability remains false and unannotated. This verifies the bounded
+  native-completion unit, not renewable-cycle, full integration or manual acceptance.
 - **Per-scenario smoke budgets decided (ADR-0139).** Long real T0 cycles will declare a
   positive assertion deadline in a sibling `.timeout` file, below an explicit environment
   override and above the existing default. Twin-runner support and ordinary-invocation

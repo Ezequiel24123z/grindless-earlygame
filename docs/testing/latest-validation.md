@@ -45,10 +45,17 @@ The same reviewer closed the P1. Child evidence is preserved in session
 `b2ef80f6-6560-44b8-9f0b-53290f389c06`, `files/c3-p1-completion-result.txt`.
 
 The four native commits were cherry-picked as `9e19d15`, `66b52aa`, `f933a96`, `dcb8010`
-without overlapping the S1 files. The persistent validator now runs the official combined
-suite and `states,settling` on exact integration revision
-`dcb801056566dcd728cb3023de16c56cc6009dbd`. Its result is pending; child-local passes
-do not silently certify the composition, full native exit, survival or retained worlds.
+without overlapping the S1 files. The persistent validator passed the official combined
+36 suites and `states,settling` on exact integration revision
+`dcb801056566dcd728cb3023de16c56cc6009dbd`, without source changes. `VerifyFluid` has
+285 explicit passing assertions; states matches 945/945 and settling 19/19. Built and
+deployed production jars share SHA-256
+`ef954dce5514d3737a01f2c4161563a29aa77e6b739d386ff2937a6a94e5cf03`.
+A separate `--live-only` JVM passes 728 assertions and produces the same report bytes as
+the runner (JSON `4bc05aa241fb004e5c806baaaac35ef16ec17f6f067147ae0c1d62fabfb4763a`).
+The worker's `build/validation/s1-execution-gate/composition-dcb8010/execution-report.md`
+has SHA-256 `c06cd68efc04b98bffe6e78ed5ba9475c7e20d5ffc9a9eaf9da3531b3a53c3e0`.
+This is composed-source evidence, not full native exit, survival or retained-world acceptance.
 
 ## C3 preservation and coordination transfer, 2026-10-17
 
