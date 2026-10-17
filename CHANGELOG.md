@@ -15,17 +15,37 @@ entries below reference those records by id.
 
 ### Added
 
+- **Repaired S1 source preserved before its execution gate.** The loader-free model,
+  adapters, fixed-point audit, quantitative reserve, debt ratchet and report writers plus
+  two check suites are now in Git as unaccepted work. Twelve independent review findings
+  prompted the frozen repairs; the subsequent combined launch exited `-196608` before
+  any tests because of malformed PowerShell arguments. Interrupted rechecks delivered
+  no result. Prior S1 counts do not validate these repairs, and live T0 classifications,
+  source closure, dashboard integration and CI enforcement remain unfinished.
+- **Parallel execution and source-backed C3 repair (PA-0003, ADR-0138).** Independent
+  algorithm and adapter reviews found twelve S1 issues; both repair lanes are now frozen
+  for validation, without S1 acceptance. The reviewed
+  Bench-only guard `092af299` is locally integrated after 34 suites passed; its initial
+  `NativeCommandError` capture failure is retained. Pinned GregTech CEu, GregTech Modern and
+  Mekanism research informed the bounded native-store decision recorded in ADR-0138.
+  Its implementation continues in an isolated worktree; no upstream code was imported,
+  generic rollback or new saved state assumed, or external insertion policy bypassed.
+  T0 bootstrap evidence awaits S2 reconciliation, and static asset review is not visual
+  acceptance. Product dependencies, held ports and manual gates are unchanged.
 - **Two C3 follow-ups decided (ADR-0137, ADR-0138, PA-0002).**
   - The T0 Relay Matrix exit stays a hand craft. The Bench never projects it.
   - "Physical exit" now means exit-root supply evidence: a Research Terminal core,
     T0-route inputs and a recoverable five-unit batch.
-  - The "rate-limited secondary fluid" finding turned out to be a stale cached match that is
-    committed without re-verifying fluids. Completion will re-verify every fluid input and
-    draw secondaries in two phases, with rollback. The generic reserve-and-commit seam stays
-    with the held ports task.
+  - ADR-0138 initially attributed the secondary-fluid issue to a stale match, but the owner
+    has withdrawn that diagnosis: `canOutput` already calls `matchesFluid`. Sources may reject
+    `insert`, so rollback through insertion is not guaranteed. The zero-loss/zero-duplication
+    invariant and extract-only boundary remain. At PA-0002 no mechanism was selected; after
+    static source/version/license research, the owner recorded a bounded native mechanism in
+    ADR-0138.
   - Plan revision 3 amends only two `renewable-t0` acceptance items and prepares one bounded
     C3 assignment. Order, dependencies and statuses are unchanged.
-  - Decisions only; the code and checks are not written yet.
+  - The C3 assignment later returned a local partial with a 34-suite run-check pass after an
+    initial wrapper/capture `NativeCommandError`; the guard is integrated, not the runtime fix.
 - **Canonical sustainability audit design (ADR-0135).** It decides the loader-free
   `sustainability` package, which annotations are declared and which are derived, and the
   terminal sources. Availability and renewability are least fixed points, so unseeded cycles

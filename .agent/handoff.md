@@ -1,6 +1,6 @@
 # Active orchestration handoff
 
-Updated: 2026-10-17. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
+Updated: 2026-10-18. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
 Preservation checkpoint `b012bc467df469522d1624e630f306cfd8d79842` was received in a fresh,
 isolated worktree, following `d292dab005c8f8a321061d9885dd12b8351dd69c`.
 This receipt changes coordination documentation only; it does not finish or validate C3.
@@ -37,18 +37,44 @@ the owner's latest orchestration decision.
 
 The new session is an isolated-worktree **Astra coordinator**. Astra owns architecture,
 product/Tiers, sustainability, graphs, machine families/multiblocks, migrations, integration
-and final review. Delegate bounded implementation and test execution: Sol 6.1 Max for normal
+and final review. The primary coordinator is now on `gpt-6-astra`; this is the actual model
+switch for this session. Delegate bounded implementation and test execution: Sol 6.1 Max for normal
 coding, Luna for mechanical work. Explicit file ownership and a single publisher are required.
 The old session stops product work; do not fork its chat, switch the main checkout or delete
 its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
+
+**Session-scoped throughput directive (2026-10-17).** The user directed:
+> “The primary Astra agent should behave primarily as the: lead architect, orchestrator, integration owner, decision maker, conflict resolver, final reviewer”
+> “Whenever technically safe, validation must NOT unnecessarily block unrelated implementation”
+> “Apply this policy to the current task immediately and retain it for the remainder of this session.”
+
+This applies to the current task and the remainder of this session only. It is not a
+cross-repository memory preference and does not authorize advancing held ports or changing
+product dependency order. Parallelize bounded implementation and read-only evidence when
+isolated worktrees or immutable pins remove coupling. Serialize validation only where inputs
+are actually shared and mutable; Astra retains sole integration and remote-publication ownership.
+
+**Session-scoped ADR-0138 research policy.** The user directed solved-problem-first evidence
+before novel infrastructure. Three parallel read-only exact-source/version/license investigations
+completed as static reference only: `GregTechCEu/GregTech`
+(`9fe140febe8747bbe2f06dfd570421331ec06f4b`, LGPLv3, MC 1.12.2; agent
+`f07d4bd2-d4ab-43bf-950e-dd90ef6a0fa2`), `GregTechCEu/GregTech-Modern`
+(`91a79b8a7a2b62ec6277423e6c0ded4af89a831e`, LGPLv3, MC 1.20.1; agent
+`06bcbd7f-12dc-4f4e-9f89-913d4debed5f`) and canonical `mekanism/Mekanism`
+(`95b03e838aa94128596db42154a1527048372999`, MIT, MC 1.20.1; agent
+`63448b55-a53a-4f5b-96a0-34d8fd1074a5`). Their patterns informed the bounded choice now recorded
+by the owner in ADR-0138; the sources do not prove generic rollback. No code was imported and
+no runtime tests were performed. This instruction applies to this task/session only, not as a
+cross-repository memory preference.
 
 ## Current state and next action
 
 - W1 ceramic workshop (`0aad62a`) and W2 settling plus actual fluid recovery (`d292dab`)
   have historical targeted automated evidence. Their old passes do not certify changed code.
-- C3 geological/biological sources, biomass power, primitive assembly and partial generated
-  assets are preserved **unaccepted WIP**. Only a common compile was observed on the earlier
-  working tree; no full C3 build, complete suite or native renewable cycle is claimed.
+- **Historical preservation state (`b012bc4`):** only a common compile had been observed at that
+  snapshot. This is not current validation; the later C3 partial run-check and ongoing native
+  implementation are described below. Geological/biological sources, biomass power, primitive
+  assembly and partial generated assets remain **unaccepted WIP**.
 - The asset worker was cancelled without a handoff but left generator/assets/state-fixture
   changes. Preserve and review them; do not call them quality-approved.
 - The dashboard renderer is integrated; 26 synthetic browser checks are not real production
@@ -59,39 +85,81 @@ its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
 **Integrated, still unaccepted C3 units.** These are reviewed and published:
 - The Firing envelope and private gas buffer (`c5d5fa0`).
 - The [ADR-0136](../docs/DECISIONS.md#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched)
-  Forge integration, in the commit containing this note.
+  Forge integration, published at
+  `ba7ee7455383b3d214cde79a56672f76ccc97e97`.
 
-With them, Forge compiles, all 34 suites pass and the production-jar states smoke matches
-945/945. Still open in C3:
+At published revision `ba7ee7455383b3d214cde79a56672f76ccc97e97`, Forge compiled, 34 suites
+passed and the production-jar states smoke matched 945/945. These are historical unit results,
+not validation of the later local C3 partial. Still open in C3:
 - client/JEI interaction;
 - a native renewable cycle, including the exit-root evidence of
   [ADR-0137](../docs/DECISIONS.md#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it)
   (the exit stays a hand craft; a check must keep the Bench from outputting a Relay Matrix);
-- verified secondary-fluid completion under
-  [ADR-0138](../docs/DECISIONS.md#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly);
-- the asset quality review;
+- the owner-corrected ADR-0138 invariant that secondary fluids cannot cause loss or duplication
+  while retaining support for extract-only sources. The owner selected bounded native-owned
+  storage using existing `FluidBuffer`, exact snapshots/receipts and internal restitution
+  independent of `insert`; no tentative callbacks or external exposure, all native fluids
+  retained, no cross-mod transaction, new keys or ports. This is a design decision, not an
+  implementation pass; the child is authorized to implement it and validation is pending.
+- client/visual asset review. The static assets/resources lane found no proven ID/resource defect,
+  but did not inspect client visuals and does not approve the complete asset set;
 - the full smoke set.
-
-The boundary check and the ADR-0138 fix form the prepared `c3-completion-safety`
-assignment. It is dispatched after `sustainability-core` integrates, because the checks
-compile together.
 
 A Luna worker produced a partial pinned-inventory session artifact with eight unresolved
 dynamic cases. It is a lead, not the export.
 [ADR-0135](../docs/DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
-fixes the sustainability audit design; its first slice, `sustainability-core`, is dispatched
-to a Sol 6.1 Max worker pinned to the published C3 Forge integration.
+fixes the sustainability audit design. Its first slice, `sustainability-core`, has delivered
+12 new files at source `b08deeaa21842a90c82f975b88466d6fd5b98d08`; its original dispatch pin
+was `ba7ee7455383b3d214cde79a56672f76ccc97e97`. Sol 6.1 Max agent
+`291ed9b1-b3d1-4dd0-873f-4db713937bee` stopped writes after that initial delivery, reporting
+35 suites/5,729 assertions and a live report-only audit with 2 errors and 1,153 unknowns
+(`build\validation\sustainability-core\report-final.log`). These are worker claims, not an
+accepted pass or acceptance. Independent read-only reviews returned 8 algorithm findings
+(agent `8b3b9ef3-ebd8-455d-9c10-b13a349d1808`) and 4 adapter findings (agent
+`6e9c8cc5-e2e2-48c2-bb78-3fdaac643dd8`). S1 is unaccepted; the original Sol agent
+`291ed9b1-b3d1-4dd0-873f-4db713937bee` and new Sol agent
+`7917e6cc-dfb1-4cd3-8c19-0dab4dc271b6` have frozen their disjoint repairs. The saved
+combined attempt on `092af299` plus the source-hashed S1 files exited `-196608` before
+Gradle or tests: PowerShell received a malformed `-File` argument. Temporary validation
+and recheck workers disappeared after interruption; no final recheck result was recovered.
+The containing checkpoint preserves the 13 S1 files as unaccepted work, not a new pass.
 PA-0001 traces the complete functional-port requirements into the three held port tasks;
 they remain held behind current integration.
 
-**Original next step, now dispatched:** the bounded C3 review/integration.
-Its first safety unit owns condition regulation and generator fuel transactions; the exact
-files, pinned input, acceptance criteria and escalation/stop rules are in the JSON plan.
-Review condition regulation and its ceiling, partial gas extraction, every Forge/JEI/client/
-localization case, actual recipe/test/budget counts, the Bench's physical Matrix exit and
-cancelled assets. A pinned read-only inventory extraction can run alongside it. Astra owns
-the schema and design; do not duplicate recipe quantities or postpone gameplay until every
-dashboard detail is finished.
+**C3 reviewed partial and active native implementation.**
+- `c3-completion-safety` returned local partial commit
+  `092af29991db9f45731794a657996dcbe3925236` from isolated application worktree session
+  `b2ef80f6-6560-44b8-9f0b-53290f389c06`, pinned to `b08deeaa21842a90c82f975b88466d6fd5b98d08`.
+  It contains the exact-extraction/nonreversible-insert Javadoc and a family-wide Bench output
+  guard only. Astra reviewed and locally integrated this exact commit by fast-forward.
+  The first `run-checks` wrapper/capture attempt exited 1 with
+  `NativeCommandError`; the same runner with stdout/stderr separated then passed with exit 0 and
+  34 suites. No states smoke was required for this Javadoc/test-only partial. This result does not
+  validate the new implementation.
+- The child is now authorized and implementing the bounded native ADR-0138 mechanism in its
+  isolated worktree. Its implementation and validation remain pending; Astra has not integrated
+  or published it.
+- Source-bound T0 source/bootstrap evidence has been delivered by Astra agent
+  `02d2781e-ca34-4025-984b-aa54ba6011ae` at `b08dee`. It does not author classifications or
+  claim renewable closure. Pending S2 inputs: two iron is an optional manual construction
+  allocation, not an unconditional guarantee; initial boards/bricks need explicit manual
+  bootstrap; Astra must reconcile ADR-0133's optional crank/extractor with the quest
+  prerequisite chain.
+- The static C3 assets/resources review by Luna agent
+  `ef2442a2-e8fb-4660-97c0-b122d9a7ab1e` at `b08dee` is complete with no proven ID/resource
+  defect. It did not review client visuals and does not approve the complete asset set; visual
+  acceptance remains pending.
+- The three ADR-0138 source investigations completed as static references only: classic
+  `GregTechCEu/GregTech` `9fe140febe8747bbe2f06dfd570421331ec06f4b` (LGPLv3, MC 1.12.2),
+  modern `GregTechCEu/GregTech-Modern` `91a79b8a7a2b62ec6277423e6c0ded4af89a831e` (LGPLv3,
+  MC 1.20.1), and canonical `mekanism/Mekanism` `95b03e838aa94128596db42154a1527048372999`
+  (MIT, MC 1.20.1). These were not runtime-tested and no code was imported.
+
+Next: finish S1's execution gate on the preserved source and receive the independently
+implemented/validated native C3 unit. The C3 session was resumed after interruption.
+Astra reviews and integrates the results serially. Reconcile
+the delivered T0 evidence for S2; product-task order, dependencies, acceptance and all three
+held port tasks remain unchanged.
 
 The functional multiblock-port request is **after the current source/sustainability/
 communication/dashboard integration**, starting with its required architecture audit.

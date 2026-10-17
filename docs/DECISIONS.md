@@ -6130,8 +6130,8 @@ The settled design says it does not:
 
 ## ADR-0138 — A batch completes only after its fluid inputs are re-verified and drawn exactly
 
-**Status.** Accepted, 2026-10-17. Resolves the "foreign rate-limited secondary fluids" C3
-follow-up of
+**Status.** Correctness requirements accepted 2026-10-17; source-backed native-store design
+accepted 2026-10-18, with implementation and validation pending. This does not close the secondary-fluid C3 follow-up of
 [ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
 
 **Context.** A process recipe takes its first fluid input from the machine's own buffer. Any
@@ -6139,19 +6139,25 @@ further fluid input is a *secondary*, drawn from neighbours when the batch compl
 only two Chemical Reactor recipes have one: `contact/acid` (sulfur trioxide plus water) and
 `recombine/water` (hydrogen plus oxygen).
 
-The match is cached when the recipe is resolved. A neighbour can lose that fluid before the
-batch completes: another machine, a conduit or a Forge capability caller can drain it, and
-none of them invalidates the cache. `finish()` re-checks item inputs and output room, but not
-fluids. `consumeFluid` then ignores how much `FluidInsert.takeFromNeighbours` delivered. A
-drained neighbour therefore produces full outputs for a partial payment, which is a
-duplication.
+The initial review attributed a possible partial payment to a stale cached match, claiming
+that completion did not re-check fluid availability. Reinspection of `b08deeaa` corrected
+that claim: `finish()` calls `canOutput()`, which already calls `ProcessLookup.matchesFluid`.
+The claimed stale-neighbour duplication is therefore withdrawn, not treated as a reproduced
+bug. Missing inputs are nevertheless conflated with full outputs, and the returned amount
+from `FluidInsert.takeFromNeighbours` is not checked at consumption.
 
-Investigation narrowed the cause:
+The bounded implementation investigation established:
 - Every in-mod `FluidEndpoint` extracts exactly `min(requested, contents)` from a face that
-  permits extraction, through `FluidBuffer` and `FluidLogic.extractable`.
+  permits extraction in the inspected buffer implementations.
 - `takeFromNeighbours` only draws from in-mod endpoints; a foreign Forge handler is never a
   secondary source.
-- So nothing is rate-limited. The defect is a stale match committed without re-verification.
+- An exact drain does not imply a reversible drain. `HandPumpBlockEntity` and
+  `FluidWellBlockEntity` reject insertion, while a process machine can expose an extract-only
+  face or reject the drained fluid as a new input.
+- If an earlier source delivers 100 mB and a later source violates its drain contract,
+  ordinary `insert` cannot guarantee returning the earlier volume. Logging that rejection
+  is not loss prevention. No observed in-mod rate limit establishes such a violation; this
+  is a counterexample to the proposed rollback guarantee.
 
 **Decision.**
 1. Completion verifies before it mutates. In the completion tick, before any item, fluid or
@@ -6163,30 +6169,74 @@ Investigation narrowed the cause:
    waits at completion. While waiting it draws no power, gains no progress and reports the
    missing input. It completes once the input returns. Changes to the machine's own inventory
    still re-resolve the recipe as they do today.
-3. Secondaries are drawn as a two-phase take: a non-mutating per-face plan, then a commit
-   that verifies every face delivered its planned amount. A shortfall breaks the endpoint
-   contract. It returns the drawn volume to the faces it came from, aborts the batch before
-   any item or primary mutation, and logs the violation. It never pays partially.
-4. `FluidEndpoint` documents the exactness contract that this relies on. A behaviour check
-   proves both the completion rule and the rollback with fake endpoints.
-5. A general reserve-and-commit model for foreign, rate-limited or port-backed sources is
+3. A batch must not produce unpaid outputs or lose already drawn fluid on a failed take.
+   The original proposal to restore every source through ordinary `insert` is withdrawn.
+   Simulation is not a reservation, and insertion permissions are not a restoration
+   contract.
+4. Use the existing native `FluidBuffer` as the owned storage boundary. A bounded internal
+   batch operation plans exact withdrawals from identified native stores, checks identities,
+   current contents and face permissions again, and commits against those stores without
+   calling arbitrary external extraction handlers. Duplicate backing stores cannot be
+   counted twice. Native participants own any snapshot/receipt and restoration operation;
+   callers must not gain an unrestricted buffer setter.
+5. All participating native stores must support exact abort/restoration independently of
+   their external insertion rules. Preserve complete `FluidState` metadata and output-volume
+   accounting, not only an amount. Keep notifications, synchronization and subscription
+   changes out of the tentative mutation phase; notify only after the batch and the
+   machine's own input/output commit are settled. An aborted operation leaves no committed
+   item, primary-fluid, output or source-accounting mutation.
+6. Adapt every currently supported native source, including output-only pumps and wells;
+   do not silently restrict recipes to refillable tanks. External sided capabilities retain
+   their existing restrictions and cannot obtain internal restoration access. Unknown
+   implementations do not receive an optimistic contents-based transaction fallback.
+7. This is a synchronous server-thread, native-store guarantee, not an arbitrary-handler,
+   cross-thread or crash-atomic world transaction. No new persistent escrow, saved key,
+   port or Forge/AE2 integration is authorized. If the bounded contract cannot preserve
+   existing native sources without such changes, escalate before implementation.
+8. `FluidEndpoint` documents its actual exact-extraction and non-reversible-insertion
+   contract. Behavioural evidence must cover missing input, split sources, extract-only
+   sources, partial execution and restoration before a stronger guarantee is accepted.
+9. A general reserve-and-commit model for foreign, rate-limited or port-backed sources is
    *not* built here. That includes Forge handlers, hatches and AE2. It belongs to the held
    `multiblock-ports` task's PA-0001 criterion that recipes simulate, reserve, process and
    commit atomically. Until that exists, secondary sources stay restricted to in-mod
    endpoints.
 
-**Alternatives rejected.**
-- *A persisted per-batch secondary escrow.* It adds saved state and a migration to solve a
-  same-tick verification problem.
-- *Invalidating the cache on every neighbour change.* It needs neighbour subscriptions and
-  still leaves the commit unverified.
+**Solved-problem-first evidence.** Three parallel read-only investigations inspected these
+exact upstream implementations; no runtime failure-injection result is claimed:
+
+| Reference and pin | Verified semantics relevant here | Reuse boundary |
+| --- | --- | --- |
+| [GregTech CEu 2.8.10](https://github.com/GregTechCEu/GregTech/blob/9fe140febe8747bbe2f06dfd570421331ec06f4b/src/main/java/gregtech/api/util/GTTransferUtils.java#L34-L98), Minecraft 1.12.2 | Simulated drain/fill followed by sequential execution; the ordinary transfer ignores final acceptance. [Recipe input execution](https://github.com/GregTechCEu/GregTech/blob/9fe140febe8747bbe2f06dfd570421331ec06f4b/src/main/java/gregtech/api/recipes/Recipe.java#L192-L242) is not a general reversible batch. | [LGPLv3](https://github.com/GregTechCEu/GregTech/blob/9fe140febe8747bbe2f06dfd570421331ec06f4b/LICENSE); different loader/API generation, not MIT-only copyable code. |
+| [GregTech Modern 7.5.3-1.20.1](https://github.com/GregTechCEu/GregTech-Modern/blob/91a79b8a7a2b62ec6277423e6c0ded4af89a831e/src/main/java/com/gregtechceu/gtceu/common/machine/multiblock/part/FluidHatchPartMachine.java#L200-L223), Forge 47.3.0 | Hatches eagerly stage inputs in owned tanks. [Recipe allocation](https://github.com/GregTechCEu/GregTech-Modern/blob/91a79b8a7a2b62ec6277423e6c0ded4af89a831e/src/main/java/com/gregtechceu/gtceu/api/recipe/RecipeRunner.java#L174-L239) simulates then executes; no general source rollback is established. | [LGPLv3](https://github.com/GregTechCEu/GregTech-Modern/blob/91a79b8a7a2b62ec6277423e6c0ded4af89a831e/LICENSE); direct reuse also brings its Forge/LDLib storage contracts. |
+| [Mekanism 10.4.16.80](https://github.com/mekanism/Mekanism/blob/95b03e838aa94128596db42154a1527048372999/src/main/java/mekanism/common/capabilities/fluid/BasicFluidTank.java#L155-L228), Minecraft 1.20.1, Forge build 47.1.76, API 10.4.0 | Separates external insertion policy from owner-controlled storage access. [Multi-input processing](https://github.com/mekanism/Mekanism/blob/95b03e838aa94128596db42154a1527048372999/src/api/java/mekanism/api/recipes/cache/PressurizedReactionCachedRecipe.java#L54-L120) still relies on owned-handler behavior, not arbitrary-source compensation. | [MIT](https://github.com/mekanism/Mekanism/blob/95b03e838aa94128596db42154a1527048372999/LICENSE), with its copyright/permission notice required for copied portions; Forge-specific code is not a loader-free drop-in. |
+
+The selected precedent is **owner-controlled storage separated from public access policy**,
+adapted to Grindless's existing native buffer. None of the inspected implementations proves
+the stronger arbitrary-handler rollback guarantee, so their unchecked-result behavior is
+not copied. Adding eager multi-tank intake would change saved state and input custody, and
+introducing foreign storage libraries would widen this bounded repair unnecessarily.
+Implementation will reuse Grindless's existing storage primitives and independently apply
+the ownership pattern. No upstream code or assets have been imported. Any later direct
+reuse requires exact source, licence and notices in `THIRD_PARTY_NOTICES.md` before copying;
+the reference table is not a blanket permission to reuse third-party material.
+
+**Alternatives not authorized.**
+- *Ordinary insertion as rollback.* An extract-only source is a concrete counterexample.
+- *Rejecting buffering or restoration contracts before inspecting existing solutions.*
+  The initial dismissal of escrow was premature. After comparison, transient native-store
+  operations preserve the existing storage layout; persistent staging remains outside this fix.
+- *Invalidating the cache on every neighbour change as a transaction guarantee.*
+  Notification alone does not define exact execution or restoration.
 - *Building the generic transaction seam now.* It is ports work, and the port audit must
   design it first.
 - *Throwing on underpayment.* That crashes the server tick over a recoverable condition.
 
 **Consequences.**
-- No recipe, quantity, saved key or tier changes.
-- The fix is common machine logic, so it also protects the two post-T0 Chemical Reactor
-  recipes. It opens no T1 or T2 content.
+- No recipe, quantity, saved key or tier change is authorized by this investigation.
+- The independent Bench boundary check and unrelated sustainability work may continue.
+  The transactional portion remains unimplemented; the accepted design is not validation.
+- Any eventual common-machine fix must preserve the two Chemical Reactor recipes without
+  opening new T1 or T2 content.
 - The C3 acceptance on partial extraction now includes verified secondary completion
   (plan amendment PA-0002).

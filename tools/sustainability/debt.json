@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "version": 1,
+  "scope": "ADR-0135 S1: live audit is report-only; no live classifications or debt baseline are accepted.",
+  "entries": []
+}

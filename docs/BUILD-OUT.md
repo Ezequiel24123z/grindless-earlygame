@@ -8,10 +8,27 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. C3's safety unit and Forge integration are integrated
-(ADR-0136); sustainability slice S1 is in flight (ADR-0135). Next: the bounded C3
-completion-safety unit (ADR-0137, ADR-0138), then S2 annotations (ADR-0133, ADR-0134).**
-The old session is paused for migration, not continuing application implementation.
+**Active tier: T0 Bootstrap; parallel implementation and source-bound validation.**
+S1 review found eight algorithm and four adapter issues. Both disjoint repair lanes are
+frozen and preserved as unaccepted work. The combined launch failed before tests and
+interrupted rechecks supplied no final result; finish the execution gate on the preserved
+source. The reviewed Bench-only checkpoint `092af299` is locally integrated with its
+34-suite pass; its initial capture failure is retained in the check ledger.
+
+The isolated C3 worker implements ADR-0138's native-store contract over existing
+`FluidBuffer` storage. The ADR records three pinned upstream investigations and licence
+boundaries; no code was imported and no generic external rollback is claimed. This new
+implementation still needs its own validation. The manual Matrix exit, existing native
+sources and external side restrictions are preserved.
+
+T0 source evidence is not classification: the two-iron quick start is an optional manual
+allocation, initial boards/bricks need explicit bootstrap, and Astra must reconcile optional
+crank/extractor progression with quest prerequisites before S2. Static resource review found
+no proven C3 mapping defect; client/visual acceptance remains pending.
+
+Next: complete S1's interrupted execution gate and receive the independently validated native C3
+unit; integrate serially. Product dependencies, held ports and manual gates are unchanged.
+The retired session remains quiescent; Astra alone integrates and publishes.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
 
@@ -22,20 +39,21 @@ integration and final review. Sol 6.1 Max workers implement normal code; Luna ha
 mechanical tasks. Checks are delegated, shared files serialized and publication single-owned.
 
 Remaining C3 review: client/JEI/menu interaction, the native renewable cycle with exit-root
-evidence (the exit stays a hand craft, ADR-0137), verified secondary-fluid completion
-(ADR-0138), cancelled assets and the full smoke set.
-An independent pinned inventory extraction may run alongside runtime work; Astra owns schema
-and source semantics. Do not duplicate recipe quantities or impose a documentation-first
-waterfall. Sustainability, handling, player guidance and real dashboard data are required
-implementation, not substitutes for renewable gameplay.
+evidence (the exit stays a hand craft, ADR-0137), delivery and validation of the bounded
+ADR-0138 implementation, client/visual asset acceptance and the full smoke set. The delivered
+source/bootstrap evidence does not author classifications or certify
+renewable closure. The static asset/resource review found no proven ID/resource defect but is
+not visual or gameplay acceptance. Do not duplicate recipe quantities or impose a
+documentation-first waterfall. Sustainability, handling, player guidance and real dashboard
+data are required implementation, not substitutes for renewable gameplay.
 
 | Unit | Outcome | Status |
 | --- | --- | --- |
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
-| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | safety unit and Forge integration integrated (34 suites, states smoke 945/945); completion safety, client/JEI, native cycle, assets and full smokes pending |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | partial `092af299` run-checks passed 34 suites; bounded native implementation active in child worktree, not coordinator-integrated and its new code awaits validation; client/JEI, native cycle, visual asset acceptance and full smokes pending |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
-| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | in progress; closure not certified |
+| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | repaired S1 preserved after 8 algorithm + 4 adapter findings; launch failed before tests, execution gate pending; S1 not accepted |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
 | dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | incomplete; follows renderer/model |

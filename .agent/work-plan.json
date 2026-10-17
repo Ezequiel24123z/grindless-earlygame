@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 3,
-  "updated": "2026-10-17",
-  "phase": "c3_forge_integrated_sustainability_core_in_flight",
+  "plan_revision": 4,
+  "updated": "2026-10-18",
+  "phase": "s1_repair_preservation_pending_execution_gate_c3_resumed",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -27,13 +27,29 @@
   },
   "execution": {
     "coordinator": "Astra",
+    "active_model": "gpt-6-astra",
     "authority": ["architecture", "product_and_tiers", "sustainability_and_production_graphs", "machine_families_and_multiblocks", "migrations", "integration", "final_review"],
     "coordinator_work": ["investigation", "design", "read_only_review", "evidence_evaluation", "handoff", "git_integration"],
     "delegated_work": ["application_implementation", "test_execution", "extraction", "localization", "deterministic_assets", "documentation_synchronization"],
     "normal_coding": {"model": "gpt-6.1-sol", "reasoning_effort": "max"},
     "simple_repetitive": {"model": "gpt-6-luna"},
     "worker_contract": ["bounded_outcome", "input_revision", "owned_files", "acceptance_criteria", "stop_condition"],
-    "coordination": "Few workers; serialize shared files, mutable-input validation, integration and publication; escalate design to Astra"
+    "session_scoped_throughput_directive": {
+      "scope": "current_task_and_remainder_of_this_session_only",
+      "cross_repository_memory_preference": false,
+      "verbatim": [
+        "The primary Astra agent should behave primarily as the: lead architect, orchestrator, integration owner, decision maker, conflict resolver, final reviewer",
+        "Whenever technically safe, validation must NOT unnecessarily block unrelated implementation",
+        "Apply this policy to the current task immediately and retain it for the remainder of this session."
+      ],
+      "limits": "Not permission to advance held ports or change product dependency order"
+    },
+    "session_scoped_research_directive": {
+      "scope": "current ADR-0138 research and the remainder of this session",
+      "policy": "Use solved-problem-first exact-source/version/license evidence before novel infrastructure; the owner has recorded a bounded native mechanism in ADR-0138",
+      "limits": ["Do not broaden or reselect the owner-approved mechanism", "External patterns were reference-only; no code was imported"]
+    },
+    "coordination": "For this session, prioritize useful wall-clock throughput: run independent bounded implementation, review and read-only evidence concurrently when isolated or immutable; do not serialize safe work to conserve credits. Avoid redundant agents; serialize shared mutable files/input validation, Astra integration and the single publication."
   },
   "publication": {
     "repository": "Ezequiel24123z/grindless-earlygame",
@@ -82,6 +98,22 @@
           "order_changed": false,
           "dependencies_changed": false,
           "statuses_changed": false
+        },
+        {
+          "id": "PA-0003",
+          "plan_revision": 4,
+          "date": "2026-10-17",
+          "title": "Parallelize isolated C3 work and record the bounded ADR-0138 implementation",
+          "source": "User session-scoped throughput and solved-problem-first directives; owner-corrected ADR-0138",
+          "reason": "Isolated C3 work removed the shared-worktree wait. Exact-source/version/license research is complete and the owner selected a bounded native mechanism; implementation and validation are still pending. S1 review findings require two disjoint remediation lanes and one combined validation after both freeze.",
+          "method": "Preserve all product tasks, dependencies, acceptance and gates. Record the C3 partial run-check result without coordinator integration, the owner's bounded native implementation scope, the completed static research, and parallel disjoint S1 remediations followed by a single combined validation.",
+          "affected_assignments": ["sustainability-core", "sustainability-core-algorithm-review", "sustainability-core-adapter-review", "sustainability-core-algorithm-remediation", "sustainability-core-adapter-remediation", "c3-completion-safety", "t0-source-bootstrap-evidence", "c3-assets-resource-audit", "adr-0138-gtceu", "adr-0138-gregtech-modern", "adr-0138-mekanism"],
+          "order_changed": false,
+          "dependencies_changed": false,
+          "product_task_acceptance_changed": false,
+          "task_statuses_changed": false,
+          "new_tasks": 0,
+          "new_approval_gates": 0
         }
       ],
   "references": {
@@ -98,6 +130,8 @@
   "status_semantics": {
     "done": "Only the named historical deliverable; never a current-source pass or Tier acceptance",
     "partial_research": "Research received, not a complete inventory/exporter",
+    "delivered_pending_review": "Worker output received and writes stopped; independent review, coordinator integration and acceptance are still pending",
+    "partial_local_pending_validation": "Local partial checkpoint only; no coordinator integration, with exact-source validation still pending",
     "paused_for_migration": "Unfinished work preserved; successor resumes after receipt",
     "pending": "Required work not completed",
     "held": "Do not dispatch before dependencies are complete",
@@ -105,7 +139,7 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "Pinned read-only inventory extraction alongside bounded C3 work; Astra owns canonical schema and no worker duplicates recipe quantities",
+  "parallel_opportunity": "Preserve the frozen S1 repairs and finish their interrupted execution gate on an immutable checkpoint. The attempted runner failed before Gradle or tests, and temporary recheck workers are no longer available. The independent native C3 child was resumed after interruption. Three source/version/license investigations are complete; product dependencies and acceptance are unchanged.",
   "prepared_assignments": [
     {
       "id": "c3-core-safety",
@@ -174,18 +208,38 @@
     {
       "id": "sustainability-core",
       "task_id": "sustainability-model",
-      "status": "dispatched",
+      "status": "frozen_pending_combined_validation",
+      "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
+      "delivery_status": "12_review_findings_addressed_by_workers_pending_validation_and_recheck",
+      "worktree_scope": "current_worktree",
       "input_revision": "ba7ee7455383b3d214cde79a56672f76ccc97e97",
+      "delivery_base_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
+      "delivered_new_file_count": 12,
+      "initial_delivery_writes_stopped": true,
+      "remediation_writes_active": false,
+      "remediated_new_file_count": 13,
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "design": "ADR-0135 slice S1",
-      "dispatch_rule": "Only after c3-forge-integration is reviewed, because Gradle compiles every common source and run-checks compiles every tools/checks source together; pin the reviewed revision",
+      "dispatch_rule": "Initially dispatched after c3-forge-integration was reviewed at ba7ee7455383b3d214cde79a56672f76ccc97e97; delivery is source-bound to b08deeaa21842a90c82f975b88466d6fd5b98d08",
       "outcome": "Implement the loader-free sustainability model, live-authority adapters, availability/renewability least fixed points, ADR-0131 rules, fingerprinted debt ratchet and audit reports with synthetic rule fixtures",
       "owned_files": [
-        "common/src/main/java/io/github/ezequiel24123z/grindless/sustainability/ (new package)",
-        "tools/checks/VerifySustainability.java",
-        "tools/sustainability/debt.json"
+        "S1 algorithm implementation files only (disjoint from adapter remediation)",
+        "tools/checks/VerifySustainability.java (existing)"
       ],
+      "ownership_note": "Algorithm remediation owns only its disjoint algorithm files and the existing VerifySustainability check; adapter/report/debt/tag files are assigned to the separate remediation worker.",
+      "worker_claims": {
+        "checks": "35 suites and 5729 assertions reported by the worker; independent reviews returned 8 algorithm and 4 adapter findings, so the original result does not accept S1 and remediation now precedes one combined validation",
+        "live_report_only": {
+          "errors": 2,
+          "unknowns": 1153,
+          "report": "build\\validation\\sustainability-core\\report-final.log",
+          "interpretation": "Report-only evidence; does not certify classifications or renewable closure"
+        }
+      },
+      "review_findings": {"algorithm": 8, "adapters": 4},
+      "review_status": "Both independent read-only reviews completed with findings; S1 is not accepted",
+      "combined_validation": "Recovered attempt on 092af299 plus source-hashed S1 files exited -196608 before tests because the PowerShell -File argument was malformed. No post-repair pass; preserve the exact repairs before completing the execution gate.",
       "acceptance": [
         "No Minecraft/Forge imports in the model or auditor; no recipe quantity copied into annotations",
         "Synthetic fixtures prove: unseeded cycle and self-constructing producer rejected; seeded closed loop and environmental loop accepted; finite/vanilla canonical dependency, unresolved tag, zero-input route without environmental justification, insufficient exact bootstrap guarantee and resource-positive recycling detected",
@@ -194,27 +248,197 @@
         "audit.json and audit.md written under build/sustainability; deterministic ordering",
         "Live T0 annotations are NOT authored in S1: the live run reports unknowns/findings honestly"
       ],
-      "stop_condition": "Return diff and run-checks evidence; escalate any classification, tier, terminal-source or scope decision to Astra; no commit, push or PR write"
+      "stop_condition": "Preserve the frozen repairs as unaccepted WIP; execute and review the remaining source-bound gate before S1 acceptance."
+    },
+    {
+      "id": "sustainability-core-algorithm-review",
+      "task_id": "sustainability-model",
+      "status": "recheck_interrupted_no_result",
+      "agent_id": "8b3b9ef3-ebd8-455d-9c10-b13a349d1808",
+      "delivery_base_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
+      "delivery_file_count": 12,
+      "outcome": "Independent algorithm review returned 8 findings; S1 remains unaccepted",
+      "owned_files": [],
+      "acceptance": [
+        "Review the algorithm and test evidence without editing or integrating the delivery",
+        "Return source-bound findings; do not mark S1 accepted or its worker claims passed"
+      ],
+      "stop_condition": "Review returned; original Sol agent is remediating algorithm files only. No S1 acceptance or validation pass."
+    },
+    {
+      "id": "sustainability-core-adapter-review",
+      "task_id": "sustainability-model",
+      "status": "recheck_interrupted_no_result",
+      "agent_id": "6e9c8cc5-e2e2-48c2-bb78-3fdaac643dd8",
+      "delivery_base_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
+      "delivery_file_count": 12,
+      "outcome": "Independent adapter review returned 4 findings; S1 remains unaccepted",
+      "owned_files": [],
+      "acceptance": [
+        "Review adapter/source-bound behavior without editing or integrating the delivery",
+        "Return findings to Astra; do not mark S1 accepted or its worker claims passed"
+      ],
+      "stop_condition": "Review returned; adapter/report/debt/tag remediation is assigned to a separate Sol worker. No S1 acceptance or validation pass."
+    },
+    {
+      "id": "sustainability-core-algorithm-remediation",
+      "task_id": "sustainability-model",
+      "status": "frozen_ready_for_validation",
+      "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
+      "parallel_group": "s1-disjoint-remediation",
+      "owned_files": [
+        "sustainability/SustainabilityAudit.java",
+        "sustainability/ConstructionReserve.java",
+        "tools/checks/VerifySustainability.java (existing)"
+      ],
+      "outcome": "Address the 8 independent algorithm-review findings without editing adapter/report/debt/tag files",
+      "validation_rule": "Writes stopped; the combined validator owns execution on the frozen source",
+      "stop_condition": "Return the bounded algorithm remediation; no validation pass, coordinator integration, commit or publication"
+    },
+    {
+      "id": "sustainability-core-adapter-remediation",
+      "task_id": "sustainability-model",
+      "status": "frozen_ready_for_validation",
+      "agent_id": "7917e6cc-dfb1-4cd3-8c19-0dab4dc271b6",
+      "parallel_group": "s1-disjoint-remediation",
+      "owned_files": [
+        "S1 adapter files",
+        "S1 report files",
+        "tools/sustainability/debt.json",
+        "S1 tag files",
+        "tools/checks/VerifySustainabilityAdapters.java (new)"
+      ],
+      "outcome": "Address the 4 independent adapter-review findings without editing algorithm files or VerifySustainability.java",
+      "validation_rule": "Writes stopped; the combined validator owns execution on the frozen source",
+      "stop_condition": "Return the bounded adapter remediation; no validation pass, coordinator integration, commit or publication"
     },
     {
       "id": "c3-completion-safety",
       "task_id": "renewable-t0",
-      "status": "prepared_not_dispatched",
+      "status": "bounded_native_implementation_in_progress",
+      "worker_session_id": "b2ef80f6-6560-44b8-9f0b-53290f389c06",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "design": "ADR-0137 boundary and ADR-0138",
-      "dispatch_rule": "After sustainability-core is integrated, because run-checks compiles every tools/checks source together; pin the integrated revision",
-      "outcome": "Process batches complete only after re-verified fluid inputs and an exact two-phase secondary take; a check proves Bench routes never output a Relay Matrix",
-      "owned_files": ["ProcessMachineBlockEntity.java", "container/FluidInsert.java", "fluid/FluidEndpoint.java (contract documentation only)", "tools/checks/VerifyFluid.java", "tools/checks/VerifyRecipes.java"],
+      "input_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
+      "application_source_revision": "ba7ee7455383b3d214cde79a56672f76ccc97e97",
+      "worktree_scope": "isolated_application_worktree",
+      "delivery_commit": "092af29991db9f45731794a657996dcbe3925236",
+      "dispatch_rule": "Dispatched on pinned b08deeaa21842a90c82f975b88466d6fd5b98d08 in an isolated application worktree. Isolation removes only the technical shared-worktree compile conflict that had made this wait for S1; it does not change product-task order, dependencies or acceptance. Keep all validation source-bound and serialize Astra integration and remote publication.",
+      "delivery_status": "reviewed_partial_092af_locally_integrated_native_implementation_in_progress",
+      "outcome": "The local partial contains exact-extraction/nonreversible-insert Javadoc and the family-wide Bench guard. The child is now implementing the owner-approved bounded native mechanism from ADR-0138; implementation and its validation are pending.",
+      "baseline_validation": {
+        "scope": "Partial local commit 092af29991db9f45731794a657996dcbe3925236 only",
+        "attempt_1": {"check": "run-checks wrapper/capture", "exit_code": 1, "failure": "NativeCommandError"},
+        "attempt_2": {"check": "same run-checks runner with stdout/stderr separated", "exit_code": 0, "result": "PASS", "suites": 34},
+        "states_smoke": "Not required for this Javadoc/test-only partial",
+        "coordinator_integration": "Not done"
+      },
+      "implementation_scope": "External references were static patterns only and do not prove generic rollback; no code was imported. Follow owner-corrected ADR-0138 only: native-owned storage using existing FluidBuffer, exact snapshots/receipts, and internal restitution independent of insert; no tentative callbacks or external exposure; retain all native fluids. No cross-mod transaction, new saved keys or ports. Preserve zero loss/duplication, support extract-only secondary sources, and do not restrict ordinary tank/pump behavior.",
+      "owned_files": ["machine/ProcessMachineBlockEntity.java", "container/FluidInsert.java", "fluid/FluidBuffer.java", "fluid/FluidEndpoint.java", "fluid/NativeFluidStore.java (bounded helper)", "fluid/BasicTankBlockEntity.java", "fluid/IndustrialTankBlockEntity.java", "fluid/ClayConduitBlockEntity.java", "fluid/PressurePipeBlockEntity.java", "fluid/ElectricPumpBlockEntity.java", "fluid/FluidWellBlockEntity.java", "fluid/HandPumpBlockEntity.java", "tools/checks/VerifyFluid.java", "tools/checks/VerifyRecipes.java"],
       "acceptance": [
-        "No item, fluid or output mutation unless the primary and every secondary are verified in the completion tick with the same filter that draws them",
-        "A short input waits at completion: recipe and progress kept, no power drawn, no progress gained, missing input reported",
-        "Secondary take is plan-then-commit; a shortfall restores drawn volume to its faces, aborts before any item or primary mutation and logs, never pays partially",
-        "Fake-endpoint behaviour fixtures for drained neighbour, split-face supply and contract-violating endpoint",
+        "Preserve the accepted zero-loss/zero-duplication invariant for items and fluids",
+        "Preserve support for extract-only secondary-fluid sources; do not assume ordinary insert can restore a drain",
+        "Implement only the bounded native-owned storage using existing FluidBuffer, exact snapshots/receipts, and internal restitution independent of insert",
+        "Do not add tentative callbacks, external exposure, cross-mod transactions, new keys or ports; retain all native fluids",
         "VerifyRecipes fails if any ASSEMBLY_BENCH route outputs a Relay Matrix",
-        "No recipe, quantity, saved key or tier change; run-checks exit 0 and the states smoke still passes"
+        "No recipe, quantity, saved key or tier change; validate the new implementation independently before coordinator integration"
       ],
-      "stop_condition": "Return diff and logs; escalate any transactional design beyond ADR-0138 to Astra; no commit, push or PR write"
+      "stop_condition": "Return the bounded implementation and source-bound validation; no coordinator integration, remote publication or separate PR. Do not expand ADR-0138 scope."
+    },
+    {
+      "id": "t0-source-bootstrap-evidence",
+      "task_id": "sustainability-model",
+      "status": "delivered_read_only_pending_astra_reconciliation",
+      "agent_id": "02d2781e-ca34-4025-984b-aa54ba6011ae",
+      "model": "gpt-6-astra",
+      "input_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
+      "delivery_status": "source_bound_evidence_delivered_no_classifications",
+      "outcome": "Source-bound evidence for S2 T0 annotations delivered; Astra reconciliation is required and no classification or renewable closure is claimed",
+      "key_pending_s2_inputs": [
+        "The two-iron allocation is an optional manual construction allocation, not an unconditional guarantee",
+        "Initial boards and bricks need explicit manual bootstrap",
+        "Astra must reconcile ADR-0133's optional crank/extractor with the quest prerequisite chain"
+      ],
+      "owned_files": [],
+      "acceptance": [
+        "Return findings tied to the exact pinned revision and inspected source",
+        "Do not edit files, author classifications or assert renewable closure"
+      ],
+      "stop_condition": "Evidence delivered. Astra reconciles these inputs before S2 classifications; no worker-authored classifications or renewable-closure claim"
+    },
+    {
+      "id": "c3-assets-resource-audit",
+      "task_id": "renewable-t0",
+      "status": "static_review_complete_visual_pending",
+      "agent_id": "ef2442a2-e8fb-4660-97c0-b122d9a7ab1e",
+      "model": "gpt-6-luna",
+      "input_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
+      "outcome": "Static review complete with no proven ID/resource defect; client/visual review was not performed and the full assets are not approved",
+      "owned_files": [],
+      "delivery_status": "static_only_no_defect_proven_visual_client_review_pending",
+      "acceptance": [
+        "Keep findings source-bound to the pinned revision",
+        "Do not edit files or claim visual/gameplay acceptance"
+      ],
+      "stop_condition": "Static read-only review returned; keep client/visual acceptance pending"
+    },
+    {
+      "id": "adr-0138-gtceu",
+      "task_id": "renewable-t0",
+      "status": "completed_static_research",
+      "agent_id": "f07d4bd2-d4ab-43bf-950e-dd90ef6a0fa2",
+      "parallel_group": "adr-0138-solved-problem-first",
+      "target_repository": "GregTechCEu/GregTech",
+      "source_commit": "9fe140febe8747bbe2f06dfd570421331ec06f4b",
+      "license": "LGPLv3",
+      "minecraft_version": "1.12.2",
+      "outcome": "Static source/license research complete; classic GregTech reference only, not runtime-tested and no code imported",
+      "owned_files": [],
+      "acceptance": [
+        "Record the exact version, commit and source paths inspected",
+        "Verify the applicable license from the repository's authoritative license text and summarize reuse/attribution limits",
+        "Return evidence only; no architecture selection, code import or repository changes"
+      ],
+      "stop_condition": "Research returned; no runtime test, architecture selection or code import"
+    },
+    {
+      "id": "adr-0138-gregtech-modern",
+      "task_id": "renewable-t0",
+      "status": "completed_static_research",
+      "agent_id": "06bcbd7f-12dc-4f4e-9f89-913d4debed5f",
+      "parallel_group": "adr-0138-solved-problem-first",
+      "target_repository": "GregTechCEu/GregTech-Modern",
+      "source_commit": "91a79b8a7a2b62ec6277423e6c0ded4af89a831e",
+      "license": "LGPLv3",
+      "minecraft_version": "1.20.1",
+      "outcome": "Static source/license research complete; modern GregTech reference only, not runtime-tested and no code imported",
+      "owned_files": [],
+      "acceptance": [
+        "Record the exact version, commit and source paths inspected",
+        "Verify the applicable license from the repository's authoritative license text and summarize reuse/attribution limits",
+        "Return evidence only; no architecture selection, code import or repository changes"
+      ],
+      "stop_condition": "Research returned; no runtime test, architecture selection or code import"
+    },
+    {
+      "id": "adr-0138-mekanism",
+      "task_id": "renewable-t0",
+      "status": "completed_static_research",
+      "agent_id": "63448b55-a53a-4f5b-96a0-34d8fd1074a5",
+      "parallel_group": "adr-0138-solved-problem-first",
+      "target_repository": "mekanism/Mekanism",
+      "source_commit": "95b03e838aa94128596db42154a1527048372999",
+      "license": "MIT",
+      "minecraft_version": "1.20.1",
+      "outcome": "Static source/license research complete; canonical Mekanism casing confirmed, not runtime-tested and no code imported",
+      "owned_files": [],
+      "acceptance": [
+        "Record the exact version, commit and source paths inspected",
+        "Verify the applicable license from the repository's authoritative license text and summarize reuse/attribution limits",
+        "Return evidence only; no architecture selection, code import or repository changes"
+      ],
+      "stop_condition": "Research returned; no runtime test, architecture selection or code import"
     }
   ],
   "acceptance": {
@@ -264,7 +488,7 @@
     {
       "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "in_progress", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
-      "next_action": "Dispatch c3-completion-safety after sustainability-core integrates; then client/JEI, native renewable cycle with exit-root evidence, asset review and full smokes",
+      "next_action": "The Bench-only partial 092af299 is reviewed and locally integrated, with its 34-suite pass and initial capture failure retained. Receive the isolated native-store implementation and its own checks/states evidence. S1's frozen repairs are being validated separately. Integrate serially, then continue client/JEI, native renewable cycle with exit-root evidence, visual asset review and full smokes.",
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {
@@ -277,7 +501,7 @@
       "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "in_progress", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "design": "ADR-0135 accepted: typed loader-free annotations over live authorities, least-fixed-point availability/renewability, construction reserve, recycling rule, fingerprinted debt ratchet, generated reports",
-      "next_action": "Dispatch prepared sustainability-core (S1) after C3 validation is reviewed; then S2 T0 annotations with Astra classification decisions",
+      "next_action": "Complete the interrupted S1 execution gate on its preservation checkpoint; recover only observed evidence, fix any reproduced errors and review the repaired proof boundaries. For S2, reconcile optional crank/extractor quest coupling and declare actual manual bootstrap without inventing guaranteed iron, boards or bricks.",
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
     },
     {

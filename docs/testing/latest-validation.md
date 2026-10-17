@@ -1,5 +1,24 @@
 # Current T0 rework validation
 
+## Orchestrated continuation, 2026-10-18
+
+**Implementation in progress; no Tier or merge acceptance.** The reviewed Bench-only
+checkpoint `092af29991db9f45731794a657996dcbe3925236` is integrated. The following
+preservation commit contains S1 repairs, not a successful post-repair validation.
+
+| Scope | Observed result | Evidence boundary |
+| --- | --- | --- |
+| C3 Forge integration at `ba7ee74` | Forge compile, 34 suites / 4,740 assertions and production states 945/945 passed | `build/validation/c3-forge-integration/`; not native renewable cycle, client or full smoke acceptance |
+| Bench guard at `092af299` | Official runner passed 34 suites on attempt 2; initial capture `NativeCommandError` retained | Child source-bound report; Javadoc/test-only, no new runtime atomicity claim |
+| Original S1 delivery over `b08deeaa` | Worker reported 35 suites / 5,729 assertions, but review found 8 algorithm and 4 adapter defects | `build/validation/sustainability-core/report-final.log`; not acceptance of the repaired source |
+| Repaired S1 combined attempt | Process exit `-196608`; malformed PowerShell `-File` argument; no Gradle or tests executed | `build/validation/sustainability-core-remediation/combined-20261017T225805319Z/` and saved source inventory |
+| Final S1 read-only rechecks | Interrupted; temporary workers unavailable and no final result recovered | Pending, not inferred from prior review or new fixtures |
+| Native C3 transaction implementation | Independent child resumed after interruption; new runtime validation pending | No inherited pass from the Bench guard |
+
+The live S1 report is deliberately report-only. T0 classifications, exact renewable closure,
+real dashboard integration, no-command survival, GUI/JEI and retained-world restart remain
+unaccepted. The sections below are historical evidence tied to their named revisions.
+
 ## C3 preservation and coordination transfer, 2026-10-17
 
 **Not C3 completion, Tier acceptance or merge readiness.** The published checkpoint preceding
