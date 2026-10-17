@@ -3,7 +3,7 @@
   "schema_version": 1,
   "plan_revision": 4,
   "updated": "2026-10-18",
-  "phase": "s1_repair_preservation_pending_execution_gate_c3_resumed",
+  "phase": "s1_persistent_execution_gate_c3_exception_remediation",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -139,8 +139,22 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "Preserve the frozen S1 repairs and finish their interrupted execution gate on an immutable checkpoint. The attempted runner failed before Gradle or tests, and temporary recheck workers are no longer available. The independent native C3 child was resumed after interruption. Three source/version/license investigations are complete; product dependencies and acceptance are unchanged.",
+  "parallel_opportunity": "S1's persistent isolated execution gate starts at published 639881f. C3's independent native unit at 9782853 has targeted passing evidence but a blocking exception-restoration review finding; the same child is correcting it. Both lanes remain active, with integration and publication serialized. No product dependencies changed.",
   "prepared_assignments": [
+    {
+      "id": "s1-persistent-execution-gate",
+      "task_id": "sustainability-model",
+      "status": "in_progress",
+      "worker_session_id": "fd99d2f6-c478-49b9-aaab-8c40e2dba154",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "639881f5985b2662059ca48981441c1fd38c31dc",
+      "worktree_scope": "isolated_application_worktree",
+      "owned_files": ["common/src/main/java/io/github/ezequiel24123z/grindless/sustainability/", "tools/checks/VerifySustainability.java", "tools/checks/VerifySustainabilityAdapters.java"],
+      "outcome": "Complete the interrupted execution gate on committed repairs; correct only reproduced S1 defects, prove the twelve targeted regressions and deterministic report identity",
+      "acceptance": ["Official combined runner with real exit capture", "Exact source-bound regression results and independent-process report determinism", "Live audit remains report-only; no invented classifications or debt baseline"],
+      "stop_condition": "Return existing validated SHA or local fix checkpoints and preserved attempt evidence; no shared docs, remote publication, S2, C3 runtime or ports edits"
+    },
     {
       "id": "c3-core-safety",
       "task_id": "renewable-t0",
@@ -315,7 +329,10 @@
     {
       "id": "c3-completion-safety",
       "task_id": "renewable-t0",
-      "status": "bounded_native_implementation_in_progress",
+      "status": "exception_restoration_remediation_in_progress",
+      "native_delivery_commit": "9782853f744d80cccc443b121864c4af07fd4826",
+      "native_delivery_evidence": "34 suites and production states/first-fluids/first-contact passed on 9782853; first-contact is setup evidence, not a complete chemical cycle",
+      "blocking_review": "P1: synchronous exceptions in late participant validation or consumer settlement can escape without restoring native receipts and consumer state; correction and exact regressions assigned to the same child",
       "worker_session_id": "b2ef80f6-6560-44b8-9f0b-53290f389c06",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",

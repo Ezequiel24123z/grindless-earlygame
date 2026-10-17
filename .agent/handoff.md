@@ -69,6 +69,14 @@ cross-repository memory preference.
 
 ## Current state and next action
 
+**Persistent execution after interruption.** Published checkpoint
+`639881f5985b2662059ca48981441c1fd38c31dc` preserves all repaired S1 files. Isolated session
+`fd99d2f6-c478-49b9-aaab-8c40e2dba154` now completes its execution gate and fixes only
+reproduced S1 defects. Native C3 session `b2ef80f6-6560-44b8-9f0b-53290f389c06` delivered
+`9782853` with targeted passing evidence, but final review found a P1 exception-restoration
+gap. That child is correcting native receipts and consumer compensation; do not integrate
+the delivered runtime or reuse its passes for the correction. Both lanes are independent.
+
 - W1 ceramic workshop (`0aad62a`) and W2 settling plus actual fluid recovery (`d292dab`)
   have historical targeted automated evidence. Their old passes do not certify changed code.
 - **Historical preservation state (`b012bc4`):** only a common compile had been observed at that

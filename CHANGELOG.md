@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Persistent S1 execution and C3 exception correction tracked.** The execution gate now
+  runs from published `639881f` in an isolated session. Native C3 `9782853` has targeted
+  passing checks, but review found that synchronous exceptions could bypass restoration;
+  its worker must correct source receipts and consumer compensation before integration.
+  Existing passes remain attached to their original revisions.
 - **Repaired S1 source preserved before its execution gate.** The loader-free model,
   adapters, fixed-point audit, quantitative reserve, debt ratchet and report writers plus
   two check suites are now in Git as unaccepted work. Twelve independent review findings
