@@ -194,6 +194,8 @@ not the Arc Furnace.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
   report variables must remain local (ADR-0127).
+  `-Only` / `--only` accepts comma-separated names through the actual CLI; unknown or empty
+  selections fail before any boot, never silently shrinking or expanding the requested scope.
 - `tools/checks/VerifyT0Preparation.java` — verifies the non-runtime
   `docs/tiers/t0-production-graph.json` references and topology, plus the existing textures/models
   named by `docs/assets/t0-asset-manifest.json`. These are audit projections, never new gameplay

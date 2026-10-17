@@ -50,7 +50,15 @@ foreach ($line in [System.IO.File]::ReadAllLines((Join-Path $smokeDir 'scenarios
 }
 
 $selected = $all
-if ($Only) { $selected = @($all | Where-Object { $Only -contains $_.Name }) }
+if ($PSBoundParameters.ContainsKey('Only')) {
+    $names = @($Only | ForEach-Object { $_ -split ',' } |
+            ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
+    if ($names.Count -eq 0) { throw 'At least one smoke scenario must be named with -Only.' }
+    $known = @($all | ForEach-Object { $_.Name })
+    $unknown = @($names | Where-Object { $known -notcontains $_ })
+    if ($unknown.Count -gt 0) { throw "Unknown smoke scenario(s): $($unknown -join ', ')" }
+    $selected = @($all | Where-Object { $names -contains $_.Name })
+}
 
 if ($Of -gt 0) {
     if ($Shard -lt 1 -or $Shard -gt $Of) { throw "Shard must be between 1 and $Of" }

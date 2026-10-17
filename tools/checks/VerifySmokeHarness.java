@@ -72,17 +72,11 @@ public final class VerifySmokeHarness {
         }
         command.add(root.toString());
         Path output = root.resolve("runner.log");
-        Process process = new ProcessBuilder(command).redirectErrorStream(true)
-                .redirectOutput(output.toFile()).start();
-        if (!process.waitFor(60, TimeUnit.SECONDS)) {
-            process.descendants().forEach(ProcessHandle::destroyForcibly);
-            process.destroyForcibly().waitFor();
-            throw new IOException("The fixture smoke runner did not finish within 60 seconds");
-        }
+        int code = run(command, output);
         List<String> calls = Files.exists(root.resolve("calls.txt"))
                 ? Files.readAllLines(root.resolve("calls.txt")) : List.of();
         boolean dispatched = calls.equals(List.of("alpha", "beta", "gamma"));
-        boolean failed = process.exitValue() != 0;
+        boolean failed = code != 0;
         String report = Files.exists(root.resolve("forge/run/smoke-report.html"))
                 ? Files.readString(root.resolve("forge/run/smoke-report.html")) : "";
         boolean reported = report.contains("1 failed") && report.contains("<b>2</b> passed");
@@ -92,6 +86,35 @@ public final class VerifySmokeHarness {
         if (!dispatched || !failed || !reported) {
             System.out.println(Files.readString(output));
         }
-        return dispatched && failed && reported;
+        Files.deleteIfExists(root.resolve("calls.txt"));
+        List<String> selected = new ArrayList<>(command);
+        selected.addAll(List.of(bash ? "--only" : "-Only", "alpha,gamma"));
+        int selectedCode = run(selected, root.resolve("selected.log"));
+        List<String> selectedCalls = Files.exists(root.resolve("calls.txt"))
+                ? Files.readAllLines(root.resolve("calls.txt")) : List.of();
+        boolean exactSelection = selectedCode == 0 && selectedCalls.equals(List.of("alpha", "gamma"));
+        System.out.println((exactSelection ? "PASS " : "FAIL ") + "comma-separated CLI selection: " + selectedCalls);
+
+        Files.deleteIfExists(root.resolve("calls.txt"));
+        selected.set(selected.size() - 1, "alpha,missing");
+        boolean unknownRejected = run(selected, root.resolve("unknown.log")) != 0
+                && !Files.exists(root.resolve("calls.txt"));
+        System.out.println((unknownRejected ? "PASS " : "FAIL ") + "unknown selected names fail before any boot");
+        selected.set(selected.size() - 1, " ");
+        boolean emptyRejected = run(selected, root.resolve("empty.log")) != 0
+                && !Files.exists(root.resolve("calls.txt"));
+        System.out.println((emptyRejected ? "PASS " : "FAIL ") + "empty selection never expands to every scenario");
+        return dispatched && failed && reported && exactSelection && unknownRejected && emptyRejected;
+    }
+
+    private static int run(List<String> command, Path output) throws Exception {
+        Process process = new ProcessBuilder(command).redirectErrorStream(true)
+                .redirectOutput(output.toFile()).start();
+        if (!process.waitFor(60, TimeUnit.SECONDS)) {
+            process.descendants().forEach(ProcessHandle::destroyForcibly);
+            process.destroyForcibly().waitFor();
+            throw new IOException("The fixture smoke runner did not finish within 60 seconds");
+        }
+        return process.exitValue();
     }
 }

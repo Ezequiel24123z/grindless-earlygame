@@ -11,13 +11,14 @@ set -u
 
 ROOT="."
 ONLY=""
+ONLY_SET="no"
 SHARD=0
 OF=0
 LIST="no"
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --only) ONLY="$2"; shift 2 ;;
+    --only) ONLY="$2"; ONLY_SET="yes"; shift 2 ;;
     --shard) SHARD="$2"; shift 2 ;;
     --of) OF="$2"; shift 2 ;;
     --list) LIST="yes"; shift ;;
@@ -41,6 +42,26 @@ while IFS= read -r line; do
   ALL+=("$(printf '%s' "$line" | awk '{print $1}')")
   DESCRIPTIONS+=("$(printf '%s' "$line" | sed -E 's/^[^[:space:]]+[[:space:]]+//')")
 done < "$SMOKE_DIR/scenarios.txt"
+
+if [ "$ONLY_SET" = "yes" ]; then
+  IFS=',' read -r -a REQUESTED <<< "$ONLY"
+  NORMALIZED=()
+  for requested in "${REQUESTED[@]}"; do
+    requested="$(printf '%s' "$requested" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+    [ -z "$requested" ] && continue
+    known="no"
+    for name in "${ALL[@]}"; do
+      if [ "$name" = "$requested" ]; then known="yes"; break; fi
+    done
+    if [ "$known" = "no" ]; then echo "Unknown smoke scenario: $requested" >&2; exit 1; fi
+    NORMALIZED+=("$requested")
+  done
+  if [ "${#NORMALIZED[@]}" -eq 0 ]; then
+    echo "At least one smoke scenario must be named with --only." >&2
+    exit 1
+  fi
+  ONLY="$(IFS=','; printf '%s' "${NORMALIZED[*]}")"
+fi
 
 SELECTED=()
 index=0

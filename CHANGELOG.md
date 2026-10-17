@@ -132,6 +132,10 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Selected smoke batches work through the documented Windows CLI.** Comma-separated `-Only`
+  values are normalized before selection. Both platform runners reject unknown or empty
+  selections before booting anything, and the real-runner fixture checks those boundaries.
+
 - **The Relay Matrix craft now matches its two-glass Bootstrap contract.** The live shaped recipe
   had four glass despite the authored T0 route, Atlas, guide and Bootstrap check all specifying
   two; its diagonal layout now consumes exactly two glass, two copper and two redstone.
