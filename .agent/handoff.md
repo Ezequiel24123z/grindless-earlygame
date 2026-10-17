@@ -64,17 +64,23 @@ its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
 With them, Forge compiles, all 34 suites pass and the production-jar states smoke matches
 945/945. Still open in C3:
 - client/JEI interaction;
-- a native renewable cycle;
-- the Bench's physical Matrix exit;
-- foreign rate-limited secondary fluids;
+- a native renewable cycle, including the exit-root evidence of
+  [ADR-0137](../docs/DECISIONS.md#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it)
+  (the exit stays a hand craft; a check must keep the Bench from outputting a Relay Matrix);
+- verified secondary-fluid completion under
+  [ADR-0138](../docs/DECISIONS.md#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly);
 - the asset quality review;
 - the full smoke set.
+
+The boundary check and the ADR-0138 fix form the prepared `c3-completion-safety`
+assignment. It is dispatched after `sustainability-core` integrates, because the checks
+compile together.
 
 A Luna worker produced a partial pinned-inventory session artifact with eight unresolved
 dynamic cases. It is a lead, not the export.
 [ADR-0135](../docs/DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
-fixes the sustainability audit design; its first slice, `sustainability-core`, is now the
-next dispatch.
+fixes the sustainability audit design; its first slice, `sustainability-core`, is dispatched
+to a Sol 6.1 Max worker pinned to the published C3 Forge integration.
 PA-0001 traces the complete functional-port requirements into the three held port tasks;
 they remain held behind current integration.
 

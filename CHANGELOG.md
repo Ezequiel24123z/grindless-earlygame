@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Two C3 follow-ups decided (ADR-0137, ADR-0138, PA-0002).**
+  - The T0 Relay Matrix exit stays a hand craft. The Bench never projects it.
+  - "Physical exit" now means exit-root supply evidence: a Research Terminal core,
+    T0-route inputs and a recoverable five-unit batch.
+  - The "rate-limited secondary fluid" finding turned out to be a stale cached match that is
+    committed without re-verifying fluids. Completion will re-verify every fluid input and
+    draw secondaries in two phases, with rollback. The generic reserve-and-commit seam stays
+    with the held ports task.
+  - Plan revision 3 amends only two `renewable-t0` acceptance items and prepares one bounded
+    C3 assignment. Order, dependencies and statuses are unchanged.
+  - Decisions only; the code and checks are not written yet.
 - **Canonical sustainability audit design (ADR-0135).** It decides the loader-free
   `sustainability` package, which annotations are declared and which are derived, and the
   terminal sources. Availability and renewability are least fixed points, so unseeded cycles

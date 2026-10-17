@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 2,
+  "plan_revision": 3,
   "updated": "2026-10-17",
-  "phase": "coordinator_receipt_verified_prepared_work_not_dispatched",
+  "phase": "c3_forge_integrated_sustainability_core_in_flight",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -66,6 +66,19 @@
           "reason": "Compact port acceptance named the general architecture but not the explicit ME components, the separate pattern interface, specialized-port extensibility, private-buffer exposure, resource/declarative constraints or most mandatory test cases of the preserved original",
           "method": "Section-indexed requirements_trace on affected tasks only; the original stays authoritative and is not copied",
           "affected_tasks": ["multiblock-ports-audit", "multiblock-ports", "ports-integration"],
+          "order_changed": false,
+          "dependencies_changed": false,
+          "statuses_changed": false
+        },
+        {
+          "id": "PA-0002",
+          "plan_revision": 3,
+          "date": "2026-10-17",
+          "title": "Resolve two C3 follow-ups into decided acceptance criteria",
+          "source": "ADR-0137 and ADR-0138",
+          "reason": "'Automated physical Matrix exit' contradicted the T0/T1 boundary (T1 removes hand fabrication); 'foreign rate-limited secondary fluids' was diagnosed as a stale match committed without fluid re-verification",
+          "method": "Replace the two affected renewable-t0 acceptance items and add one prepared C3 assignment; the generic transactional seam stays with the held multiblock-ports task",
+          "affected_tasks": ["renewable-t0"],
           "order_changed": false,
           "dependencies_changed": false,
           "statuses_changed": false
@@ -161,7 +174,8 @@
     {
       "id": "sustainability-core",
       "task_id": "sustainability-model",
-      "status": "prepared_not_dispatched",
+      "status": "dispatched",
+      "input_revision": "ba7ee7455383b3d214cde79a56672f76ccc97e97",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "design": "ADR-0135 slice S1",
@@ -181,6 +195,26 @@
         "Live T0 annotations are NOT authored in S1: the live run reports unknowns/findings honestly"
       ],
       "stop_condition": "Return diff and run-checks evidence; escalate any classification, tier, terminal-source or scope decision to Astra; no commit, push or PR write"
+    },
+    {
+      "id": "c3-completion-safety",
+      "task_id": "renewable-t0",
+      "status": "prepared_not_dispatched",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "design": "ADR-0137 boundary and ADR-0138",
+      "dispatch_rule": "After sustainability-core is integrated, because run-checks compiles every tools/checks source together; pin the integrated revision",
+      "outcome": "Process batches complete only after re-verified fluid inputs and an exact two-phase secondary take; a check proves Bench routes never output a Relay Matrix",
+      "owned_files": ["ProcessMachineBlockEntity.java", "container/FluidInsert.java", "fluid/FluidEndpoint.java (contract documentation only)", "tools/checks/VerifyFluid.java", "tools/checks/VerifyRecipes.java"],
+      "acceptance": [
+        "No item, fluid or output mutation unless the primary and every secondary are verified in the completion tick with the same filter that draws them",
+        "A short input waits at completion: recipe and progress kept, no power drawn, no progress gained, missing input reported",
+        "Secondary take is plan-then-commit; a shortfall restores drawn volume to its faces, aborts before any item or primary mutation and logs, never pays partially",
+        "Fake-endpoint behaviour fixtures for drained neighbour, split-face supply and contract-violating endpoint",
+        "VerifyRecipes fails if any ASSEMBLY_BENCH route outputs a Relay Matrix",
+        "No recipe, quantity, saved key or tier change; run-checks exit 0 and the states smoke still passes"
+      ],
+      "stop_condition": "Return diff and logs; escalate any transactional design beyond ADR-0138 to Astra; no commit, push or PR write"
     }
   ],
   "acceptance": {
@@ -230,8 +264,8 @@
     {
       "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "in_progress", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
-      "next_action": "Review existing source/generator/Bench/asset WIP and integrate all relevant surfaces",
-      "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Automated physical Matrix exit", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
+      "next_action": "Dispatch c3-completion-safety after sustainability-core integrates; then client/JEI, native renewable cycle with exit-root evidence, asset review and full smokes",
+      "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {
       "id": "production-inventory", "title": "Exporting the complete live inventory", "status": "in_progress", "depends_on": ["coordinator-receipt"],

@@ -8,8 +8,9 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Receipt of `b012bc4` is verified in the fresh Astra coordinator.
-Next after the reception-only turn: delegate bounded C3 source integration (ADR-0133, ADR-0134).**
+**Active tier: T0 Bootstrap. C3's safety unit and Forge integration are integrated
+(ADR-0136); sustainability slice S1 is in flight (ADR-0135). Next: the bounded C3
+completion-safety unit (ADR-0137, ADR-0138), then S2 annotations (ADR-0133, ADR-0134).**
 The old session is paused for migration, not continuing application implementation.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
@@ -20,8 +21,9 @@ Astra owns architecture/product/Tiers, sustainability/graphs, multiblocks, migra
 integration and final review. Sol 6.1 Max workers implement normal code; Luna handles
 mechanical tasks. Checks are delegated, shared files serialized and publication single-owned.
 
-After receipt, review C3 condition regulation, partial gas extraction, Forge/JEI/client/menu/
-localization, real quantity/budget expectations, Bench exit automation and cancelled assets.
+Remaining C3 review: client/JEI/menu interaction, the native renewable cycle with exit-root
+evidence (the exit stays a hand craft, ADR-0137), verified secondary-fluid completion
+(ADR-0138), cancelled assets and the full smoke set.
 An independent pinned inventory extraction may run alongside runtime work; Astra owns schema
 and source semantics. Do not duplicate recipe quantities or impose a documentation-first
 waterfall. Sustainability, handling, player guidance and real dashboard data are required
@@ -31,7 +33,7 @@ implementation, not substitutes for renewable gameplay.
 | --- | --- | --- |
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
-| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | preserved WIP; prior common compile only, full integration pending |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | safety unit and Forge integration integrated (34 suites, states smoke 945/945); completion safety, client/JEI, native cycle, assets and full smokes pending |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
 | sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | in progress; closure not certified |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |

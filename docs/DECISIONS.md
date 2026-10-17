@@ -148,6 +148,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0134](#adr-0134--astra-orchestrates-bounded-workers-after-an-isolated-cold-start) | Astra orchestrates bounded workers after an isolated cold start | Accepted |
 | [0135](#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations) | Sustainability is a fixed-point audit over live authorities and typed annotations | Accepted |
 | [0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched) | C3 integration keeps the two-iron budget and leaves vanilla tags untouched | Accepted |
+| [0137](#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it) | The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it | Accepted |
+| [0138](#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly) | A batch completes only after its fluid inputs are re-verified and drawn exactly | Accepted |
 
 ---
 
@@ -6075,3 +6077,116 @@ are product questions, not stale numbers:
 recipe files move to the owned board tag. The Bench's physical Relay Matrix exit, the asset
 quality review and the secondary-fluid reservation for foreign rate-limited endpoints remain
 separate, visible C3 follow-ups.
+
+---
+
+## ADR-0137 — The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it
+
+**Status.** Accepted, 2026-10-17. Resolves the "Bench physical Matrix exit" C3 follow-up of
+[ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
+
+**Context.** The Assembly Bench projects the Bootstrap crafting catalogue and four vanilla
+basics. The T0 exit, one five-unit F1 Relay Matrix batch, is the `T1Recipes` shaped craft.
+The integration review asked for proof of "automated physical exit fabrication" rather than
+assumed coverage. The ambiguity is whether T0 must automate that craft.
+
+The settled design says it does not:
+- [`docs/tiers/t0.md`](tiers/t0.md) defines the exit as physically calibrating a core and
+  recovering one five-Matrix batch through the shaped craft.
+- The README's T1 row says that the first batch builds the T1 machines, and that the Assembler
+  then automates the same batch.
+- The T1 acceptance objective in the build-out is that the factory "no longer depends on hand
+  fabrication".
+- [ADR-0133](#adr-0133--bootstrap-closes-on-geology-biomass-and-primitive-assembly) gives the
+  Bench only the limited primitive construction catalogue and keeps advanced fabrication in
+  the T1 Assembler.
+
+**Decision.**
+1. The T0 exit stays a hand craft at a crafting table. The Bench must not project
+   `T1Recipes` or any Relay Matrix route.
+2. "Physical exit" means three things:
+   - the calibrated core is produced by the physical Research Terminal;
+   - the core's glass, copper and redstone inputs come from T0 machine routes;
+   - the five-unit batch is recoverable.
+   It does not mean automated fabrication.
+3. The follow-up becomes one evidence requirement for the C3 native renewable cycle and the
+   sustainability audit: the exit objective is a T0 mandatory root, and its consumed inputs
+   reach mod-owned renewable sources. The no-command played route to the exit remains a
+   manual acceptance gate.
+
+**Alternatives rejected.**
+- *Letting the Bench project the Matrix craft.* That moves T1's defining milestone (removing
+  hand fabrication) into T0 and blurs the tier boundary.
+- *A Bench-only Matrix recipe.* It is a second quantity authority for the same item.
+- *Dropping the requirement.* The exit inputs still need recursive supply proof.
+
+**Consequences.**
+- No recipe, machine or count changes.
+- A check guards the boundary: Bench routes never output a Relay Matrix.
+- The work plan's renewable acceptance criterion changes from "automated physical Matrix
+  exit" to the exit-root supply evidence above (plan amendment PA-0002).
+
+---
+
+## ADR-0138 — A batch completes only after its fluid inputs are re-verified and drawn exactly
+
+**Status.** Accepted, 2026-10-17. Resolves the "foreign rate-limited secondary fluids" C3
+follow-up of
+[ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
+
+**Context.** A process recipe takes its first fluid input from the machine's own buffer. Any
+further fluid input is a *secondary*, drawn from neighbours when the batch completes. Today
+only two Chemical Reactor recipes have one: `contact/acid` (sulfur trioxide plus water) and
+`recombine/water` (hydrogen plus oxygen).
+
+The match is cached when the recipe is resolved. A neighbour can lose that fluid before the
+batch completes: another machine, a conduit or a Forge capability caller can drain it, and
+none of them invalidates the cache. `finish()` re-checks item inputs and output room, but not
+fluids. `consumeFluid` then ignores how much `FluidInsert.takeFromNeighbours` delivered. A
+drained neighbour therefore produces full outputs for a partial payment, which is a
+duplication.
+
+Investigation narrowed the cause:
+- Every in-mod `FluidEndpoint` extracts exactly `min(requested, contents)` from a face that
+  permits extraction, through `FluidBuffer` and `FluidLogic.extractable`.
+- `takeFromNeighbours` only draws from in-mod endpoints; a foreign Forge handler is never a
+  secondary source.
+- So nothing is rate-limited. The defect is a stale match committed without re-verification.
+
+**Decision.**
+1. Completion verifies before it mutates. In the completion tick, before any item, fluid or
+   output changes, the machine checks:
+   - the primary fluid against its own buffer;
+   - every secondary against the extractable neighbour volume, computed with exactly the same
+     face and identity filter that will draw it.
+2. A short input means no mutation. The batch keeps its recipe and completed progress and
+   waits at completion. While waiting it draws no power, gains no progress and reports the
+   missing input. It completes once the input returns. Changes to the machine's own inventory
+   still re-resolve the recipe as they do today.
+3. Secondaries are drawn as a two-phase take: a non-mutating per-face plan, then a commit
+   that verifies every face delivered its planned amount. A shortfall breaks the endpoint
+   contract. It returns the drawn volume to the faces it came from, aborts the batch before
+   any item or primary mutation, and logs the violation. It never pays partially.
+4. `FluidEndpoint` documents the exactness contract that this relies on. A behaviour check
+   proves both the completion rule and the rollback with fake endpoints.
+5. A general reserve-and-commit model for foreign, rate-limited or port-backed sources is
+   *not* built here. That includes Forge handlers, hatches and AE2. It belongs to the held
+   `multiblock-ports` task's PA-0001 criterion that recipes simulate, reserve, process and
+   commit atomically. Until that exists, secondary sources stay restricted to in-mod
+   endpoints.
+
+**Alternatives rejected.**
+- *A persisted per-batch secondary escrow.* It adds saved state and a migration to solve a
+  same-tick verification problem.
+- *Invalidating the cache on every neighbour change.* It needs neighbour subscriptions and
+  still leaves the commit unverified.
+- *Building the generic transaction seam now.* It is ports work, and the port audit must
+  design it first.
+- *Throwing on underpayment.* That crashes the server tick over a recoverable condition.
+
+**Consequences.**
+- No recipe, quantity, saved key or tier changes.
+- The fix is common machine logic, so it also protects the two post-T0 Chemical Reactor
+  recipes. It opens no T1 or T2 content.
+- The C3 acceptance on partial extraction now includes verified secondary completion
+  (plan amendment PA-0002).
