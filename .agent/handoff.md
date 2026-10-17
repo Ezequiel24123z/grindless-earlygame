@@ -56,7 +56,17 @@ its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
   player communication, real dashboard data and CI integration remain incomplete.
 - Inventory research was partial and produced no requested JSON artifact.
 
-**Next, after this reception-only turn:** dispatch the prepared bounded C3 review/integration.
+**In flight (not yet reviewed or accepted).** The coordinator dispatched the C3 safety unit
+to a Sol 6.1 Max worker. Its constraints are the Firing envelope enforced with a visible
+fault, and a private, persisted one-bucket gas buffer with no discard or tick-path throw.
+A second Luna worker is producing the pinned inventory session artifact; the first attempt
+wrote nothing. [ADR-0135](../docs/DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
+fixes the sustainability audit design. Its first slice, `sustainability-core`, is prepared and
+waits for the reviewed C3 check run, because every check source compiles together.
+PA-0001 traces the complete functional-port requirements into the three held port tasks;
+they remain held behind current integration.
+
+**Original next step, now dispatched:** the bounded C3 review/integration.
 Its first safety unit owns condition regulation and generator fuel transactions; the exact
 files, pinned input, acceptance criteria and escalation/stop rules are in the JSON plan.
 Review condition regulation and its ceiling, partial gas extraction, every Forge/JEI/client/

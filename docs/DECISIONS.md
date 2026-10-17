@@ -146,6 +146,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0132](#adr-0132--fluid-output-is-owned-volume-not-an-unmarked-input-buffer) | Fluid output is owned volume, not an unmarked input buffer | Accepted |
 | [0133](#adr-0133--bootstrap-closes-on-geology-biomass-and-primitive-assembly) | Bootstrap closes on geology, biomass and primitive assembly | Accepted |
 | [0134](#adr-0134--astra-orchestrates-bounded-workers-after-an-isolated-cold-start) | Astra orchestrates bounded workers after an isolated cold start | Accepted |
+| [0135](#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations) | Sustainability is a fixed-point audit over live authorities and typed annotations | Accepted |
 
 ---
 
@@ -5913,3 +5914,116 @@ coding; unbounded worker pools; and claiming old checks validate a new revision.
 are reloadable without session history. C3/audit work resumes first; functional ports follow
 the current integration milestone. Migration neither accepts a Tier nor creates a new manual
 approval gate before authorized feature development.
+
+---
+
+## ADR-0135 — Sustainability is a fixed-point audit over live authorities and typed annotations
+
+*2026-10-17 · Accepted*
+
+**Context.** ADR-0131 requires recursive proof that mandatory supply is renewable, mod-owned and
+honestly classified, shared by validation, tooltips, recipe viewers, the quest book and the
+dashboard. The live authorities are scattered: `ProcessGraph.generate` over a material view
+(including `RenewableProcesses`, `BootstrapProcesses` and `BootstrapAssembly`), the shipped
+crafting JSON checked against `BootstrapRecipes`/`T1Recipes`, generator fuel tables, quest
+rewards and local tags. No classification code exists, and a parallel metadata file that copies
+quantities would drift. Graph reachability alone would certify unseeded cycles as renewable.
+
+**Decision.** *Authority.* Canonical metadata is typed Java data in a new loader-free package,
+`io.github.ezequiel24123z.grindless.sustainability`, with no Minecraft or Forge imports in its
+model or auditor. The game UI, checks and exporters share it. Annotations never copy a recipe
+quantity; adapters read the live authorities. The canonical audit pack is standalone
+Grindless + vanilla + Forge: the graph generated over `SupplyCatalogue`'s materials. Other packs
+may add optional routes, never canonical ones.
+
+*Graph.* Resource nodes are items, tags, fluids, the `energy` pseudo-resource in FU, and
+environmental terminals. Route nodes come from `ProcessGraph`, shipped crafting JSON, generator
+fuel tables, one-shot quest rewards, declared bootstrap sources and an explicit allowlist of
+vanilla transformation recipes that must exist on the resolved classpath. A route has consumed
+inputs, non-consumed catalysts, a machine requirement (family to constructible block or
+multiblock), energy demand and outputs. An input that the same route returns counts only as its
+net consumption. Tags resolve through local tag JSON, then through vanilla/Forge tag resources
+on the classpath; an unresolved tag is a finding, never silently satisfied.
+
+*Annotations, declared.* Each resource can declare:
+- resource and side-stream classes, and first-use and first-renewable tiers;
+- a canonical route, required when several non-optional producers exist;
+- future consumers {tier, system, plan reference};
+- handling {action, discard allowed, hazardous, containment, treatment route};
+- recycling {route, planned tier} and, for spent catalysts, the originating catalyst.
+
+Declarations outside a single resource:
+- closed loops {carrier, member routes, make-up source};
+- the environmental justification of each route whose matter or energy has no item input;
+- optional per-route output-role overrides;
+- each machine family's unlock tier;
+- a T0-T15 ledger with roots and explicit unknowns.
+
+*Annotations, derived and never declared.* Current consumers, the mandatory flag, producers,
+vanilla/finite dependency and the conventional description key.
+
+*Terminals.* Environmental sources are geology at a rock bed, sunlight or culture, a world water
+body through a collector and atmosphere through an intake, each with its `SourceSite` and whether
+the collector is automatable. Bootstrap sources are:
+- quest rewards, with exact quantities derived from `QuestCatalogue`;
+- manual world gathering, declared per resource with a justification;
+- manual labour such as the crank.
+
+World generation, mob drops, loot, tree/crop growth, block generators and trading are never
+renewable terminals.
+
+*Analysis.* Mandatory roots are the ledger's tier roots (for T0, the non-optional quest subjects
+and the exit objective). Their closure follows canonical routes: consumed inputs, catalysts,
+energy and machine-construction ingredients.
+- **Availability** A(t) is the least fixed point over all terminals and the routes/machines
+  unlocked at or below tier t.
+- **Renewability** R(t) is the least fixed point over automatable environmental terminals only.
+  Consumed inputs and energy must be R; catalysts and machines need A; manual sources never
+  qualify. A declared closed loop must net its carrier to zero or less across its member routes
+  and replace losses from R.
+- Least fixed points reject unseeded cycles and self-constructing producers by construction.
+- **Construction reserve.** For every exact bootstrap guarantee, the establishment set (the
+  machines first needed to reach R for the closure) must not exceed it, and the margin is
+  reported. Manual-world bootstrap is reported as manual dependence and never counts as
+  guaranteed.
+- **Recycling.** A declared recycling route may not return more of any resource than its
+  canonical forward route consumed. Other positive-gain cycles without an environmental input
+  are reported for review.
+- The ADR-0131 compatibility and handling rules hold per tier: hazardous output needs handling
+  available at its first production tier, future feedstock is never required before its tier,
+  and potential future use is never required.
+
+*Findings and ratchet.* A finding has a stable fingerprint `rule:subject[:detail]` and a
+severity of error, warning or unknown.
+- `tools/sustainability/debt.json` holds exact versioned fingerprints, each with its origin,
+  concrete remediation and owning task.
+- An unlisted error fails the check. A listed one is reported as `waived_debt`, which is still
+  a failure in every report and never a pass.
+- A stale entry that matches nothing also fails, so debt only shrinks.
+- Unauthored T1-T15 detail is reported as unknown, not as failure or closure.
+
+*Outputs.* `tools/checks/VerifySustainability.java` runs through `run-checks` and CI. It writes
+`build/sustainability/audit.json` (audit schema 1) and a human `audit.md`. The dashboard
+`data.json` (schema 1) is a generated, commit-bound projection, never committed. UIs render
+projections and never reclassify.
+
+**Implementation order.**
+- S1: model, adapters, fixed points, rules, ratchet and synthetic rule fixtures.
+- S2: T0 annotations and the debt baseline. Classification is Astra's decision; drafting may be
+  delegated.
+- S3: the dashboard projection.
+- Player communication follows. Checks compile together, so S1 starts only after the
+  concurrent C3 validation finishes.
+
+**Alternatives rejected.**
+- Runtime-parsed YAML/JSON metadata, which is untyped and off-convention.
+- Copying quantities into metadata.
+- Renewability by reachability.
+- Per-route roles as the default.
+- Treating every quest as mandatory.
+- Committing generated dashboard data.
+- Blanket or open-ended waivers.
+
+**Consequences.** Until S2 lands, the report shows unknowns rather than classifications. The
+pinned inventory extraction checks adapter coverage but is not the auditor. ADR-0120's AE2 scope
+is unaffected.

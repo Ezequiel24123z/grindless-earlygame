@@ -261,6 +261,9 @@ from an agreed pinned revision. Existing catalogues retain quantity authority; s
 metadata/catalogue edits. Full inventory/exporter, recursive auditor, real data, CI reports/
 artifacts and production serving remain incomplete; this section names ownership, not existing
 implementations. Player communication and dashboard views must project the same model.
+The planned seam is [ADR-0135](DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations):
+loader-free `sustainability` package, `VerifySustainability`, `tools/sustainability/debt.json`
+and generated `build/sustainability/` reports. None of it exists until slice S1 lands.
 
 The functional-port follow-up starts after current integration with an audit of Firing/Trough/
 Ground Array and all authored structures. It does not authorize starting the old kernel slice

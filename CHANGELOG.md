@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Canonical sustainability audit design (ADR-0135).** It decides the loader-free
+  `sustainability` package, which annotations are declared and which are derived, and the
+  terminal sources. Availability and renewability are least fixed points, so unseeded cycles
+  fail. It also defines the construction-reserve and recycling rules, the fingerprinted debt
+  ratchet and generated reports. Slices S1–S3 are serialized after C3 validation. This is design
+  only; no auditor, annotation or report exists yet.
 - **Functional-port requirements traced into the held plan (PA-0001).** Plan revision 2 adds
   a section-indexed `requirements_trace` to only the three held port tasks of
   `.agent/work-plan.json`, naming the ME Item/Fluid bus and hatch, Storage Interface and
