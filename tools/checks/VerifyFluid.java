@@ -16,7 +16,9 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -25,8 +27,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 /** Behaviour checks for T1 fluids. Not part of the mod. */
@@ -49,6 +53,8 @@ public final class VerifyFluid {
         nativeBatches();
         completionRevalidation();
         completedWorkRecovery();
+        nativeExceptions();
+        completionExceptions();
 
         System.out.println(failures == 0
                 ? "ALL FLUID CHECKS PASSED"
@@ -390,6 +396,183 @@ public final class VerifyFluid {
                 blocked.saveWithoutMetadata().getDouble("Progress"));
     }
 
+    private static void nativeExceptions() throws Exception {
+        for (boolean duringSettlement : new boolean[] {false, true}) {
+            String stage = duringSettlement ? "settlement exception" : "late guard exception";
+            NativeEndpoint primary = new NativeEndpoint(FluidState.of(ProcessLogic.HYDROGEN, 100, 53.0, 0.4), 70);
+            NativeEndpoint water = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 500, 41.0, 0.3), 350);
+            NativeEndpoint late = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), 60);
+            List<FluidInsert.Source> sources = List.of(source(water, Direction.NORTH), source(late, Direction.NORTH));
+            List<IngredientSpec> inputs = List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
+                    IngredientSpec.fluid(FluidLogic.WATER, 100), IngredientSpec.fluid(ProcessLogic.OXYGEN, 50));
+            CompoundTag[] local = {new CompoundTag()};
+            local[0].put("Input", new ItemStack(Items.DIRT).save(new CompoundTag()));
+            local[0].put("Output", ItemStack.EMPTY.save(new CompoundTag()));
+            local[0].putString("Recipe", "check/native_exception");
+            local[0].putString("WorkRecipe", "check/native_exception");
+            local[0].putDouble("Progress", 20.0);
+            CompoundTag beforeLocal = local[0].copy();
+            List<CompoundTag> beforeStores = List.of(nativeState(primary), nativeState(water), nativeState(late));
+            RuntimeException failure = new IllegalStateException("check " + stage);
+            int[] probes = {0};
+            if (!duringSettlement) {
+                late.allowed = () -> {
+                    if (++probes[0] == 3) {
+                        throw failure;
+                    }
+                    return true;
+                };
+            }
+            NativeFluidStore.Batch batch = FluidInsert.plan(primary.nativeStore(), inputs, sources).orElseThrow();
+            originalFailure("native helper preserves the original " + stage, failure, () -> batch.commit(() -> {
+                local[0].put("Input", ItemStack.EMPTY.save(new CompoundTag()));
+                local[0].put("Output", new ItemStack(Items.CLAY_BALL, 2).save(new CompoundTag()));
+                local[0].putString("Recipe", "");
+                local[0].putString("WorkRecipe", "");
+                local[0].putDouble("Progress", 0.0);
+                primary.buffer.set(FluidState.of(FluidLogic.WATER, 125, 61.0, 0.5));
+                primary.quota = 125;
+                throw failure;
+            }));
+            eq("native helper restores every full state and quota after " + stage, beforeStores,
+                    List.of(nativeState(primary), nativeState(water), nativeState(late)));
+            eq("native helper restores items/output/recipe/work/progress after " + stage, beforeLocal, local[0]);
+            eq("native helper sends no commit callbacks after " + stage, 0,
+                    primary.notifications + water.notifications + late.notifications);
+            late.allowed = () -> true;
+            Optional<NativeFluidStore.Batch> retry = FluidInsert.plan(primary.nativeStore(), inputs, sources);
+            yes("native helper retains a retryable exact batch after " + stage, retry.isPresent());
+            if (retry.isPresent()) {
+                yes("native helper retry completes after " + stage, retry.get().commit(() -> { }));
+                eq("native helper retry consumes each source exactly after " + stage,
+                        List.of(0, 400, 30), List.of(primary.contents().millibuckets(),
+                                water.contents().millibuckets(), late.contents().millibuckets()));
+            }
+        }
+    }
+
+    private static void completionExceptions() throws Exception {
+        for (boolean duringSettlement : new boolean[] {false, true}) {
+            String stage = duringSettlement ? "consumer mutation exception" : "late participant exception";
+            ProcessRecipe fixture = new ProcessRecipe("check/completion_exception", MachineFamily.CHEMICAL_REACTOR,
+                    List.of(IngredientSpec.item("minecraft:dirt", 1),
+                            IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
+                            IngredientSpec.fluid(FluidLogic.WATER, 100),
+                            IngredientSpec.fluid(ProcessLogic.OXYGEN, 50)),
+                    List.of(OutputSpec.item("minecraft:clay_ball", 2)), Double.NaN, null, 20, 4);
+            ProcessMachineBlockEntity consumer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+            loadFluid(consumer, FluidState.of(ProcessLogic.HYDROGEN, 100, 53.0, 0.4), 70);
+            consumer.setItem(0, new ItemStack(Items.DIRT));
+            cacheCompleted(consumer, fixture);
+            ProcessMachineBlockEntity producer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+            loadFluid(producer, FluidState.of(FluidLogic.WATER, 500, 41.0, 0.3), 350);
+            producer.containerConfig().setSideMode(Direction.NORTH, SideMode.EXTRACT);
+            cacheCompleted(producer, fixture);
+            NativeEndpoint late = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), 60);
+            List<FluidInsert.Source> sources = List.of(source(producer, Direction.NORTH), source(late, Direction.NORTH));
+            RuntimeException failure = new IllegalStateException("check " + stage);
+            int[] probes = {0};
+            if (duringSettlement) {
+                Field field = ProcessMachineBlockEntity.class.getDeclaredField("items");
+                field.setAccessible(true);
+                field.set(consumer, new FailingInventory((SimpleContainer) field.get(consumer),
+                        consumer.menuKind().inputs(), failure));
+            } else {
+                late.allowed = () -> {
+                    if (++probes[0] == 3) {
+                        throw failure;
+                    }
+                    return true;
+                };
+            }
+            CompoundTag beforeConsumer = consumer.saveWithoutMetadata();
+            CompoundTag beforeProducer = producer.saveWithoutMetadata();
+            CompoundTag beforeLate = nativeState(late);
+            originalFailure("real process preserves the original " + stage, failure,
+                    () -> complete(consumer, fixture, sources));
+            eq("real process restores COMPLETE consumer NBT after " + stage, beforeConsumer,
+                    consumer.saveWithoutMetadata());
+            eq("real process restores COMPLETE source NBT after " + stage, beforeProducer,
+                    producer.saveWithoutMetadata());
+            eq("real process restores COMPLETE late-source state after " + stage, beforeLate, nativeState(late));
+            Field cache = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+            cache.setAccessible(true);
+            eq("real process preserves consumer recipe cache after " + stage, fixture, cache.get(consumer));
+            eq("real process sends no source-cache notification after " + stage, fixture, cache.get(producer));
+            eq("real process sends no late-source commit callback after " + stage, 0, late.notifications);
+            Field loading = ProcessMachineBlockEntity.class.getDeclaredField("loadingInventory");
+            loading.setAccessible(true);
+            no("real process releases inventory suppression after " + stage, loading.getBoolean(consumer));
+            late.allowed = () -> true;
+            yes("real process retries its paid batch after " + stage, complete(consumer, fixture, sources));
+            eq("real process retry makes exactly one output after " + stage, 2,
+                    consumer.getItem(consumer.menuKind().inputs()).getCount());
+            eq("real process retry debits progress exactly once after " + stage, 0.0,
+                    consumer.saveWithoutMetadata().getDouble("Progress"));
+            eq("real process retry debits source quota exactly after " + stage, 250,
+                    producer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        }
+    }
+
+    private static CompoundTag nativeState(NativeEndpoint endpoint) {
+        CompoundTag state = new CompoundTag();
+        state.put("Fluid", FluidNbt.save(endpoint.contents()));
+        state.putInt("FluidOutputQuota", endpoint.quota);
+        return state;
+    }
+
+    private static void originalFailure(String what, RuntimeException expected, FailingAction action) throws Exception {
+        try {
+            action.run();
+            fail(what + ": expected the synchronous exception");
+        } catch (RuntimeException actual) {
+            yes(what, actual == expected);
+        }
+    }
+
+    @FunctionalInterface
+    private interface FailingAction {
+        void run() throws Exception;
+    }
+
+    private static final class FailingInventory extends SimpleContainer {
+        private final SimpleContainer delegate;
+        private final int failedSlot;
+        private RuntimeException failure;
+
+        private FailingInventory(SimpleContainer delegate, int failedSlot, RuntimeException failure) {
+            super(delegate.getContainerSize());
+            this.delegate = delegate;
+            this.failedSlot = failedSlot;
+            this.failure = failure;
+        }
+
+        @Override
+        public ItemStack getItem(int slot) {
+            return delegate.getItem(slot);
+        }
+
+        @Override
+        public ItemStack removeItem(int slot, int count) {
+            return delegate.removeItem(slot, count);
+        }
+
+        @Override
+        public void setItem(int slot, ItemStack stack) {
+            delegate.setItem(slot, stack);
+            if (slot == failedSlot && failure != null) {
+                RuntimeException thrown = failure;
+                failure = null;
+                throw thrown;
+            }
+        }
+
+        @Override
+        public ListTag createTag() {
+            return delegate.createTag();
+        }
+    }
+
     private static void loadFluid(ProcessMachineBlockEntity machine, FluidState state, int quota) {
         CompoundTag saved = machine.saveWithoutMetadata();
         saved.put("Fluid", FluidNbt.save(state));
@@ -415,7 +598,14 @@ public final class VerifyFluid {
                                     List<FluidInsert.Source> sources) throws Exception {
         Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("complete", ProcessRecipe.class, List.class);
         method.setAccessible(true);
-        return (boolean) method.invoke(machine, recipe, sources);
+        try {
+            return (boolean) method.invoke(machine, recipe, sources);
+        } catch (InvocationTargetException exception) {
+            if (exception.getCause() instanceof RuntimeException failure) {
+                throw failure;
+            }
+            throw exception;
+        }
     }
 
     private static void work(ProcessMachineBlockEntity machine, long tick,
