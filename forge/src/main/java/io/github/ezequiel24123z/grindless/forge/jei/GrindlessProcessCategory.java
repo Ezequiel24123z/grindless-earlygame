@@ -27,7 +27,7 @@ import java.util.List;
 /** One JEI page per live machine family, with tag alternatives and process conditions intact. */
 final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
 
-    private static final int WIDTH = 162;
+    private static final int WIDTH = 180;
     private static final int HEIGHT = 76;
 
     private final MachineFamily family;
@@ -81,7 +81,11 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
         for (OutputSpec spec : recipe.itemOutputs()) {
             java.util.Optional<ItemStack> resolved = ProcessLookup.resolve(spec);
             if (resolved.isPresent()) {
-                builder.addOutputSlot(118 + (output++ * 20), 20)
+                // Aggregate settling has five solids; keep both rows above the fluid/detail text.
+                int x = 118 + (output % 3 * 20);
+                int y = 4 + (output / 3 * 20);
+                output++;
+                builder.addOutputSlot(x, y)
                         .setOutputSlotBackground().addItemStack(resolved.get());
             }
         }

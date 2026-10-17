@@ -317,6 +317,7 @@ public final class GenerateAssets {
         written += writeText(new File(dir, "silica.json"),
                 tagJson("minecraft:sand", "minecraft:quartz"));
         written += writeText(new File(dir, "helium_3.json"), tagJson("grindless:helium_3"));
+        written += writeText(new File(dir, "boards.json"), tagJson("#minecraft:planks", "grindless:fibreboard"));
         return written;
     }
 
@@ -428,12 +429,12 @@ public final class GenerateAssets {
     }
 
     /**
-     * Blockstates, models, loot tables and the pickaxe tag for every block in the catalogue, and
+     * Blockstates, models, loot tables and the declared mining tag for every catalogue block, and
      * the server-side scenario that proves each state is one the game accepts.
      *
      * <p>Without these a block renders as the missing-texture cube and, because machines require
-     * the correct tool, breaks into nothing. The loot table is a plain self-drop; the pickaxe tag
-     * is additive and is the one place Grindless writes into {@code minecraft:} (ADR-0051).
+     * the correct tool, breaks into nothing. Loot tables are plain self-drops; mining tags are
+     * additive and the only files Grindless writes into {@code minecraft:} (ADR-0051, ADR-0136).
      */
     private static int writeBlocks(File root) throws IOException {
         File assets = assetRoot(root);
@@ -446,10 +447,9 @@ public final class GenerateAssets {
         List<String> expect = new ArrayList<>();
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
             String n = block.name();
-            if (block.geometry() == BlockCatalogue.Geometry.FIBREBOARD) {
-                axe.add("grindless:" + n);
-            } else {
-                names.add("grindless:" + n);
+            switch (block.miningTool()) {
+                case AXE -> axe.add("grindless:" + n);
+                case PICKAXE -> names.add("grindless:" + n);
             }
             StringBuilder variants = new StringBuilder();
             for (String status : block.statuses()) {
@@ -553,9 +553,11 @@ public final class GenerateAssets {
      */
     private static int writeMass(File assets, File data, List<String> pickaxe) throws IOException {
         int written = writeMassBlock(assets, data, new BlockCatalogue.Entry(
-                "horizon_shell", BlockCatalogue.Geometry.SHELL, 1, false, BlockCatalogue.GRID));
+                "horizon_shell", BlockCatalogue.Geometry.SHELL, 1, false, BlockCatalogue.GRID,
+                BlockCatalogue.MiningTool.PICKAXE));
         written += writeMassBlock(assets, data, new BlockCatalogue.Entry(
-                "arrival_mark", BlockCatalogue.Geometry.MARK, 1, false, BlockCatalogue.GRID));
+                "arrival_mark", BlockCatalogue.Geometry.MARK, 1, false, BlockCatalogue.GRID,
+                BlockCatalogue.MiningTool.PICKAXE));
         pickaxe.add("grindless:horizon_shell");
         pickaxe.add("grindless:arrival_mark");
         return written;

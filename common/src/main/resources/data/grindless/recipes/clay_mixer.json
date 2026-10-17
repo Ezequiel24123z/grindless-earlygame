@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": ["P P", "PCP", "SSS"],
   "key": {
-    "P": { "tag": "minecraft:planks" },
+    "P": { "tag": "grindless:boards" },
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "S": { "item": "minecraft:stick" }
   },

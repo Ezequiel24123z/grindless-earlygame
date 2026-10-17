@@ -5,7 +5,7 @@
     "ICI"
   ],
   "key": {
-    "P": { "tag": "minecraft:planks" },
+    "P": { "tag": "grindless:boards" },
     "C": { "tag": "forge:ingots/copper" },
     "I": { "item": "grindless:ceramic_insulator" }
   },

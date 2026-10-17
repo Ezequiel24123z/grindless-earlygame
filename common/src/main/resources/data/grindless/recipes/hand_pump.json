@@ -6,7 +6,7 @@
     " P "
   ],
   "key": {
-    "P": { "tag": "minecraft:planks" },
+    "P": { "tag": "grindless:boards" },
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "S": { "item": "minecraft:stick" }
   },

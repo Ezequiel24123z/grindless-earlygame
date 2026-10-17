@@ -4,7 +4,7 @@
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "L": { "item": "minecraft:clay_ball" },
-    "P": { "tag": "minecraft:planks" }
+    "P": { "tag": "grindless:boards" }
   },
   "result": { "item": "grindless:biocultivator" }
 }

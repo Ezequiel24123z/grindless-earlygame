@@ -56,13 +56,25 @@ its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
   player communication, real dashboard data and CI integration remain incomplete.
 - Inventory research was partial and produced no requested JSON artifact.
 
-**In flight (not yet reviewed or accepted).** The coordinator dispatched the C3 safety unit
-to a Sol 6.1 Max worker. Its constraints are the Firing envelope enforced with a visible
-fault, and a private, persisted one-bucket gas buffer with no discard or tick-path throw.
-A second Luna worker is producing the pinned inventory session artifact; the first attempt
-wrote nothing. [ADR-0135](../docs/DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
-fixes the sustainability audit design. Its first slice, `sustainability-core`, is prepared and
-waits for the reviewed C3 check run, because every check source compiles together.
+**Integrated, still unaccepted C3 units.** These are reviewed and published:
+- The Firing envelope and private gas buffer (`c5d5fa0`).
+- The [ADR-0136](../docs/DECISIONS.md#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched)
+  Forge integration, in the commit containing this note.
+
+With them, Forge compiles, all 34 suites pass and the production-jar states smoke matches
+945/945. Still open in C3:
+- client/JEI interaction;
+- a native renewable cycle;
+- the Bench's physical Matrix exit;
+- foreign rate-limited secondary fluids;
+- the asset quality review;
+- the full smoke set.
+
+A Luna worker produced a partial pinned-inventory session artifact with eight unresolved
+dynamic cases. It is a lead, not the export.
+[ADR-0135](../docs/DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
+fixes the sustainability audit design; its first slice, `sustainability-core`, is now the
+next dispatch.
 PA-0001 traces the complete functional-port requirements into the three held port tasks;
 they remain held behind current integration.
 

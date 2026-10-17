@@ -17,7 +17,7 @@ public final class BootstrapRecipes {
 
     /** Vanilla cobble, blackstone, cobbled deepslate — the first stone a player has. */
     public static final String COBBLE = "tag:minecraft:stone_crafting_materials";
-    public static final String PLANKS = "tag:minecraft:planks";
+    public static final String PLANKS = "tag:grindless:boards";
     public static final String STICK = "item:minecraft:stick";
     /** Tag, not {@code minecraft:iron_ingot}: a pack's iron must craft the bootstrap too. */
     public static final String IRON = "tag:forge:ingots/iron";
@@ -138,8 +138,8 @@ public final class BootstrapRecipes {
                         "grindless:assembly_bench", 0),
                 new Shaped("biomass_dynamo",
                         List.of("CFC", "CIC", "CSC"),
-                        Map.of("C", COBBLE, "F", "item:minecraft:furnace", "I", IRON, "S", STICK),
-                        "grindless:biomass_dynamo", 1));
+                        Map.of("C", COBBLE, "F", "item:minecraft:furnace", "I", COPPER, "S", STICK),
+                        "grindless:biomass_dynamo", 0));
     }
 
     public static List<Shapeless> shapeless() {

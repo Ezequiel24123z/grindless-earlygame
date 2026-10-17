@@ -147,7 +147,8 @@
     {
       "id": "c3-forge-integration",
       "task_id": "renewable-t0",
-      "status": "dispatched_awaiting_review",
+      "status": "integrated_reviewed",
+      "result": "Forge compileJava exit 0; run-checks exit 0 (34 suites, 4740 assertions, 0 failed); deterministic asset generation; production-jar states smoke 945/945; counts attributed by route id; not client/JEI, native renewable cycle, Matrix exit or full smokes",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "c5d5fa040e5db8cf2826bbb0f395554decaa0e0b plus the ADR-0136 documentation commit",

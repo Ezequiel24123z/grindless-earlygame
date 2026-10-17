@@ -7,7 +7,7 @@
   ],
   "key": {
     "G": { "item": "minecraft:glass" },
-    "P": { "tag": "minecraft:planks" },
+    "P": { "tag": "grindless:boards" },
     "S": { "item": "minecraft:stick" }
   },
   "result": { "item": "grindless:process_atlas" }

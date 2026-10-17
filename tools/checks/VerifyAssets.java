@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -66,9 +70,17 @@ public final class VerifyAssets {
     }
 
     private static void blocks() throws IOException {
-        JsonObject pickaxe = read(RESOURCES.resolve("data/minecraft/tags/blocks/mineable/pickaxe.json"));
-        yes("the pickaxe tag is additive", pickaxe != null && !pickaxe.get("replace").getAsBoolean());
-        String tagText = pickaxe == null ? "" : pickaxe.getAsJsonArray("values").toString();
+        Map<BlockCatalogue.MiningTool, Set<String>> mining = new EnumMap<>(BlockCatalogue.MiningTool.class);
+        for (BlockCatalogue.MiningTool tool : BlockCatalogue.MiningTool.values()) {
+            JsonObject tag = read(RESOURCES.resolve("data/minecraft/tags/blocks/" + tool.tagPath() + ".json"));
+            yes("the " + tool.tagPath() + " tag is additive",
+                    tag != null && tag.has("replace") && !tag.get("replace").getAsBoolean());
+            Set<String> values = new HashSet<>();
+            if (tag != null && tag.has("values")) {
+                tag.getAsJsonArray("values").forEach(value -> values.add(value.getAsString()));
+            }
+            mining.put(tool, values);
+        }
 
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
             String n = block.name();
@@ -80,7 +92,11 @@ public final class VerifyAssets {
             yes(n + " has an item model", exists(ASSETS.resolve("models/item/" + n + ".json")));
             Path loot = RESOURCES.resolve("data/grindless/loot_tables/blocks/" + n + ".json");
             yes(n + " drops itself", exists(loot) && Files.readString(loot).contains("\"grindless:" + n + "\""));
-            yes(n + " is mineable with a pickaxe", tagText.contains("\"grindless:" + n + "\""));
+            yes(n + " is mineable only with its declared " + block.miningTool().tagPath(),
+                    mining.get(block.miningTool()).contains("grindless:" + n)
+                            && mining.entrySet().stream()
+                            .filter(entry -> entry.getKey() != block.miningTool())
+                            .noneMatch(entry -> entry.getValue().contains("grindless:" + n)));
         }
     }
 
@@ -216,6 +232,12 @@ public final class VerifyAssets {
                 unnamed.add(block.name());
             }
         }
+        for (io.github.ezequiel24123z.grindless.source.SourceSite.Fault fault
+                : io.github.ezequiel24123z.grindless.source.SourceSite.Fault.values()) {
+            yes(fault.name() + " source fault has a display message", lang.has(fault.translationKey()));
+        }
+        yes("the Crank Handle has an instruction tooltip", lang.has("tooltip.grindless.crank_handle"));
+        yes("JEI process titles inherit the localized catalyst name", lang.has("jei.grindless.process"));
         yes("every hand-registered item and block has a display name" + (unnamed.isEmpty() ? "" : " " + unnamed),
                 unnamed.isEmpty());
         yes("and every hand-registered item has a model" + (unmodelled.isEmpty() ? "" : " " + unmodelled),

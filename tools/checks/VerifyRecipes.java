@@ -2,13 +2,16 @@ package io.github.ezequiel24123z.grindless.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
+import io.github.ezequiel24123z.grindless.source.SourceLogic;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,8 +62,10 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel, silicon and Relay Matrix graph",
-                121, recipes.size());
+        // ADR-0133 adds 12 RenewableProcesses rows and 28 BootstrapAssembly rows per station.
+        eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
+                189, recipes.size());
+        c3Routes(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -852,6 +857,79 @@ public final class VerifyRecipes {
                 recipes.stream().anyMatch(recipe -> recipe.id().contains("dyson")
                         || recipe.id().contains("kardashev")
                         || recipe.id().contains("stellar_forge")));
+    }
+
+    private static void c3Routes(List<ProcessRecipe> recipes) {
+        List<String> renewableIds = List.of(
+                "source/geological_aggregate", "source/biomass", "bootstrap/dry_aggregate",
+                "bootstrap/wet_aggregate", "bootstrap/flint_separation", "bootstrap/fibreboard",
+                "bootstrap/paper", "bootstrap/sticks", "bootstrap/biocarbon", "bootstrap/glass",
+                "bootstrap/reduce_iron", "bootstrap/reduce_copper");
+        List<ProcessRecipe> renewable = RenewableProcesses.recipes();
+        yes("the twelve C3 source/material routes have explicit provenance",
+                renewable.stream().map(ProcessRecipe::id).toList().equals(renewableIds));
+        for (ProcessRecipe row : renewable) {
+            yes(row.id() + " reaches the graph unchanged from RenewableProcesses", recipes.contains(row));
+        }
+
+        // BootstrapAssembly projects 23 shaped crafts, the shapeless core and four vanilla basics.
+        List<String> primitiveCrafts = List.of(
+                "multitool", "hand_crank_dynamo", "crude_extractor", "research_terminal",
+                "quern", "clay_mixer", "firing_chamber", "settling_trough", "settling_channel",
+                "settling_screen", "hand_pump", "basic_tank", "clay_conduit", "conveyor_belt",
+                "crude_manipulator", "process_atlas", "quest_book", "field_guide", "crank_handle",
+                "geological_collector", "biocultivator", "assembly_bench", "biomass_dynamo",
+                "data_core", "chest", "crafting_table", "furnace", "brick_block");
+        for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
+            boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
+            String prefix = bench ? "bench/" : "assemble/bootstrap/";
+            List<String> projectedIds = recipes.stream().map(ProcessRecipe::id)
+                    .filter(id -> id.startsWith(prefix)).map(id -> id.substring(prefix.length())).toList();
+            yes(family + " has exactly the twenty-eight primitive construction projections",
+                    projectedIds.equals(primitiveCrafts));
+            for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
+                Map<String, Integer> inputs = new LinkedHashMap<>();
+                for (String line : craft.pattern()) {
+                    for (char symbol : line.toCharArray()) {
+                        if (symbol != ' ') {
+                            inputs.merge(craft.key().get(String.valueOf(symbol)), 1, Integer::sum);
+                        }
+                    }
+                }
+                projection(recipes, family, prefix + craft.name(), inputs, craft.result(), craft.resultCount());
+            }
+            for (BootstrapRecipes.Shapeless craft : BootstrapRecipes.shapeless()) {
+                Map<String, Integer> inputs = new LinkedHashMap<>();
+                craft.ingredients().forEach(input -> inputs.merge(input, 1, Integer::sum));
+                projection(recipes, family, prefix + craft.name(), inputs, craft.result(), 1);
+            }
+            projection(recipes, family, prefix + "chest", Map.of(BootstrapRecipes.PLANKS, 8),
+                    "minecraft:chest", 1);
+            projection(recipes, family, prefix + "crafting_table", Map.of(BootstrapRecipes.PLANKS, 4),
+                    "minecraft:crafting_table", 1);
+            projection(recipes, family, prefix + "furnace", Map.of(BootstrapRecipes.COBBLE, 8),
+                    "minecraft:furnace", 1);
+            projection(recipes, family, prefix + "brick_block", Map.of("item:minecraft:brick", 4),
+                    "minecraft:bricks", 1);
+        }
+    }
+
+    private static void projection(List<ProcessRecipe> recipes, MachineFamily family, String id,
+                                   Map<String, Integer> inputs, String output, int count) {
+        ProcessRecipe row = recipe(recipes, id);
+        Map<String, Integer> actualInputs = new LinkedHashMap<>();
+        row.inputs().forEach(input -> actualInputs.merge(input.qualified(), input.count(), Integer::sum));
+        yes(id + " preserves every crafting input quantity", actualInputs.equals(inputs));
+        yes(id + " preserves the complete crafting output batch",
+                row.outputs().equals(List.of(OutputSpec.item(output, count))));
+        yes(id + " fits four input slots without a catalyst",
+                row.itemInputs().size() <= 4 && row.catalysts().isEmpty());
+        eq(id + " runs on its declared station", family, row.family());
+        boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
+        eq(id + " keeps its station's cycle", bench ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
+                row.durationTicks());
+        eq(id + " keeps its station's power", bench ? FluxTier.F0.nominal() : FluxTier.F1.nominal(),
+                row.fuPerTick());
     }
 
     private static void logic() {

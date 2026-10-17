@@ -202,6 +202,20 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **C3 integrates with Forge and the check suites again (ADR-0136, unaccepted).** Forge
+  compiles: JEI catalysts and category layout cover the Geological Collector, Biocultivator
+  and Assembly Bench, and the new blocks, items, source faults and Crank Handle tooltip are
+  named.
+  - The Biomass Dynamo takes tagged copper, so the T0 iron budget stays at two.
+  - Grindless board recipes use the owned `grindless:boards` tag (`#minecraft:planks` plus
+    Fibreboard); the vanilla planks inject is deleted.
+  - Each block's mining tool is declared in `BlockCatalogue`; only Fibreboard takes an axe.
+  - Recipe and Atlas counts rose only with routes attributed by id to `RenewableProcesses`
+    and `BootstrapAssembly`.
+  - Evidence: all 34 suites pass (4,740 assertions), asset generation is deterministic, and the
+    production-jar states smoke matches 945/945 markers.
+  - Not covered: client/JEI interaction, a native renewable cycle, the Bench's physical Matrix
+    exit, foreign rate-limited secondary fluids, the full smoke set and manual gates.
 - **Firing regulation and partial generator gas are bounded (C3, unaccepted).** The Firing
   Chamber regulates only inside its 20-1450 C envelope and allowed atmospheres. Anything else
   is a visible fault, not a crash or silent clamp. The thermal generator now buffers partial

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": ["PIP", "C C", "PPP"],
   "key": {
-    "P": { "tag": "minecraft:planks" },
+    "P": { "tag": "grindless:boards" },
     "I": { "item": "grindless:ceramic_insulator" },
     "C": { "tag": "minecraft:stone_crafting_materials" }
   },

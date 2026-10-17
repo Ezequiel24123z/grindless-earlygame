@@ -9,7 +9,7 @@
     "S": { "item": "minecraft:stick" },
     "I": { "item": "grindless:ceramic_insulator" },
     "C": { "tag": "forge:ingots/copper" },
-    "P": { "tag": "minecraft:planks" }
+    "P": { "tag": "grindless:boards" }
   },
   "result": { "item": "grindless:crude_manipulator" }
 }
