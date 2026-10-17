@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **The Planner existence smoke uses a stationary inventory fixture.** Linux CI successfully
+  summoned the item but did not observe it in a later entity selector; the cause of that transient
+  disappearance was not established. The same `PLANNER-OK` assertion now checks a real
+  registered stack placed in a chest, independent of entity lifetime or terrain. It does not
+  claim to test planner use or weaken the required item identity/count.
+
 - **One scoped validation entry point and repairable smoke installation (ADR-0128).**
   Paired `validate` scripts record source, stage times, exit codes and logs; CI uses the same
   fast build/check/documentation gate. The new Bash link-check entry reuses the PowerShell

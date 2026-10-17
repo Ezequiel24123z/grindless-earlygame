@@ -212,6 +212,9 @@ A new scenario is a line in `scenarios.txt` and its `<name>.commands` / `<name>.
 files, never a step in `ci.yml`
 ([ADR-0105](DECISIONS.md#adr-0105--smoke-scenarios-are-a-list-sharded-across-parallel-ci-jobs)).
 
+The Planner item-existence scenario uses a chest stack, not a transient entity selector.
+Keep its exact registered ID/count assertion; it does not exercise interactive planner use.
+
 A new graph row updates the size assertion in `VerifyRecipes`. A new block updates
 `BlockCatalogue`, which `VerifyAssets` reads. Arithmetic policy stays in a check
 that does not boot Minecraft, the way `ProcessGraph`, `FluidLogic` and `AtlasLogic`

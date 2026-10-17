@@ -7,7 +7,7 @@
     {"id": "f2-lifecycle-nbt", "status": "passed", "evidence": "build/validation/production-matrix.log"},
     {"id": "compile-and-behavior", "status": "passed_33_suites", "evidence": "build/validation/20261017T112251069Z/status.tsv"},
     {"id": "full-build-resources", "status": "passed", "evidence": "build/validation/20261017T112251069Z/status.tsv"},
-    {"id": "complete-isolated-smokes", "status": "interrupted_23_of_41_passed", "evidence": "build/validation/full-smokes.log"},
+    {"id": "complete-isolated-smokes", "status": "36_distinct_passed_across_recorded_batches", "evidence": "docs/testing/latest-validation.md"},
     {"id": "independent-gate-review", "status": "limited_excerpt_review_finding_repaired", "evidence": "docs/reviews/foundation-independent-review.md"},
     {"id": "client-ui-and-survival", "status": "pending", "evidence": null}
   ],

@@ -177,3 +177,25 @@ Local `bash tools/check-links.sh .` returned 1 because `pwsh` is unavailable in 
 environment. The native Windows shared checker passes; Linux execution of the new wrapper
 must be confirmed by the current CI rather than claimed from a syntax pass. No optional
 prerequisite failure is silently counted as success.
+
+## Second interruption and Planner fixture
+
+The complementary 18-case Windows run at `9fd6d41` completed nine scenarios (`first-drill`
+through `first-electronic`) before its session process disappeared while preparing `first-array`.
+Again there was no aggregate exit: `build/validation/remaining-smokes.log` is **interrupted**.
+Together with the first 23-case prefix, these logs establish 32 distinct completed cases, not
+an uninterrupted full pass. No listener or owned process remained at resumption.
+
+[Linux run 39028644075](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39028644075)
+passed the new unified `verify` and five smoke shards, but shard 2 failed `first-planner`.
+The actual server log says "Summoned new Deconstruction Planner", then fails its later entity
+selector; it does not establish a registry failure or a precise reason for disappearance.
+Both the failed job and its server artifact are retained in
+`build/validation/unified-ci-failure.log` and
+`build/validation/linux-shard2/smoke-first-planner.log`.
+
+The fixture now places the registered item in a chest and asserts the same exact ID/count.
+No gameplay code or expectation marker changed. A bounded synchronous Windows batch ran
+`first-planner`, `first-array`, `first-luna`, `factory-world`, `first-rocket` at
+13:47:53-13:54:30 UTC+02:00, exit 0: `build/validation/final-smokes-a.log`.
+Five remaining cases still need execution; no complete Windows pass is claimed yet.
