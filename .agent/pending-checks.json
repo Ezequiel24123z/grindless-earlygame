@@ -1,19 +1,29 @@
 {
   "source_baseline": "0d798607c66ff7e4b581d2786cfa32dc4a02ded7",
-  "executable_revision": "e2dfc2c847dd220178572b83e7516a9949bb8b58",
+  "foundation_executable_revision": "e2dfc2c847dd220178572b83e7516a9949bb8b58",
   "branch": "ezequiel24123z-tier-0-rework",
   "gate": "IMPLEMENTATION IN PROGRESS",
   "broad_t0_authorized": true,
   "authorization": "Owner-directed T0 rework, ADR-0129; manual acceptance remains required for merge",
   "current_work": {
     "foundation": "c62de724632cce158988ddce62d4669619398f13",
-    "workshop": "not_implemented",
+    "workshop": "AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING",
     "assembled_settling": "not_implemented",
-    "local_baseline": "environment_failed_java_not_configured_restoration_in_progress",
+    "local_baseline": "jdk_and_dependency_caches_restored_then_current_source_compiled",
+    "last_published_checkpoint_at_validation": "0838e88",
+    "workshop_artifact_sha256": "3005B11CFC748FECBE7B542DABB8C16C12590344059A6BC0190659CAD25826DC",
     "merge_ready": false
   },
   "foundation_checks_are_historical_not_current_jar_evidence": true,
   "checks": [
+    {"id": "workshop-unified-validation", "status": "passed_34_suites_full_build_and_docs", "evidence": "build/validation/20261017T142252076Z/status.tsv"},
+    {"id": "workshop-native-lifecycle", "status": "passed_19_markers_and_natural_exit", "evidence": "build/validation/workshop-final-smoke.log"},
+    {"id": "workshop-assets", "status": "passed_46_distinct_pngs", "evidence": "build/validation/20261017T142252076Z/behavior.log"},
+    {"id": "complete-final-integration", "status": "pending_after_assembled_settling", "evidence": "docs/testing/latest-validation.md"},
+    {"id": "client-ui-and-survival", "status": "not_run", "evidence": "docs/testing/t0-survival-acceptance.md"},
+    {"id": "retained-world-restart", "status": "not_run", "evidence": "docs/testing/t0-survival-acceptance.md"}
+  ],
+  "foundation_checks": [
     {"id": "atlas-ratings", "status": "passed", "evidence": "build/validation/atlas-green-checks.log"},
     {"id": "f2-lifecycle-nbt", "status": "passed", "evidence": "build/validation/production-matrix.log"},
     {"id": "compile-and-behavior", "status": "passed_33_suites", "evidence": "build/validation/20261017T112251069Z/status.tsv"},

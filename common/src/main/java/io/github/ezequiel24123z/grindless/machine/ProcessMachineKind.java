@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
@@ -9,9 +10,11 @@ import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.process.ProcessField;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
@@ -328,19 +331,86 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.CONDENSER.get();
         }
+    },
+
+    QUERN(MachineFamily.QUERN, MachineMenuKind.QUERN,
+            BlockCatalogue.Geometry.QUERN, "quern", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.QUERN.get();
+        }
+    },
+
+    CLAY_MIXER(MachineFamily.CLAY_MIXER, MachineMenuKind.CLAY_MIXER,
+            BlockCatalogue.Geometry.MIXER, "clay_mixer", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.CHEMICAL_WASHER;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withAgitation(Agitation.STIRRED);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.CLAY_MIXER.get();
+        }
+    },
+
+    FIRING_CHAMBER(MachineFamily.FIRING_CHAMBER, MachineMenuKind.FIRING_CHAMBER,
+            BlockCatalogue.Geometry.FIREBOX, "firing_chamber", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.KILN;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withTemperature(BootstrapProcesses.FIRING_C)
+                    .withAtmosphere(Atmosphere.OXIDISING);
+        }
+
+        @Override
+        public WorkshopStructure structure() {
+            return WorkshopStructure.FIRING_CHAMBER;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.FIRING_CHAMBER.get();
+        }
     };
 
     private final MachineFamily family;
     private final MachineMenuKind menuKind;
     private final BlockCatalogue.Geometry geometry;
     private final String translation;
+    private final FluxTier tier;
 
     ProcessMachineKind(MachineFamily family, MachineMenuKind menuKind,
                        BlockCatalogue.Geometry geometry, String translation) {
+        this(family, menuKind, geometry, translation, FluxTier.F1);
+    }
+
+    ProcessMachineKind(MachineFamily family, MachineMenuKind menuKind,
+                       BlockCatalogue.Geometry geometry, String translation, FluxTier tier) {
         this.family = family;
         this.menuKind = menuKind;
         this.geometry = geometry;
         this.translation = translation;
+        this.tier = tier;
     }
 
     public MachineFamily family() {
@@ -364,6 +434,16 @@ public enum ProcessMachineKind {
     public abstract ConditionState heldConditions();
 
     public abstract BlockEntityType<ProcessMachineBlockEntity> type();
+
+    /** Rated input and buffer sizing, independent of the selected recipe's instantaneous draw. */
+    public FluxTier tier() {
+        return tier;
+    }
+
+    /** A fixed workshop structure only when the process requires one. */
+    public WorkshopStructure structure() {
+        return WorkshopStructure.NONE;
+    }
 
     /** Whether the fluid buffer may hold melt. The tank and the clay pipe still refuse it. */
     public boolean hotFluid() {

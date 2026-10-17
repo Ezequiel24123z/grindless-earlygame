@@ -165,6 +165,20 @@ public final class ProcessLookup {
         return false;
     }
 
+    /** Whether complete item inputs are waiting for their primary fluid, including fluid-only work. */
+    public static boolean needsPrimaryFluid(MachineFamily family, ItemStack[] inputs, FluidState fluid) {
+        for (ProcessRecipe recipe : GRAPH.byFamily.getOrDefault(family, List.of())) {
+            if (!matches(recipe, inputs) || recipe.fluidInputs().isEmpty()) {
+                continue;
+            }
+            IngredientSpec primary = recipe.fluidInputs().get(0);
+            if ((fluid.isEmpty() || fluid.is(primary.id())) && fluid.millibuckets() < primary.count()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Whether {@code stack} is a legal insert for this family's input {@code slot}.
      *

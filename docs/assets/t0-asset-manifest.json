@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "status": "preparatory_existing_placeholders",
-  "runtime_changes": false,
+  "status": "original_generated_workshop",
+  "runtime_changes": true,
   "generator": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
   "sources": ["BlockCatalogue", "MachineTextures", "MachineArt", "FormTextures"],
   "provider_status": {
@@ -79,6 +79,33 @@
       "states": ["idle", "running", "blocked", "starved", "out_of_band"],
       "gui": "core insertion and empty-hand retrieval, no replacement menu",
       "candidate_output": "build/assets/t0/candidates/research_terminal-atlas.png"
+    },
+    {
+      "id": "quern",
+      "prefix": "quern",
+      "component": "F0 aggregate milling and ceramic recovery",
+      "silhouette": "two stone discs on a compact frame with an offset spindle",
+      "states": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "gui": "one input and two outputs; inherited Flux and progress display",
+      "candidate_output": "build/assets/t0/candidates/quern-atlas.png"
+    },
+    {
+      "id": "clay_mixer",
+      "prefix": "mixer",
+      "component": "F0 water-fed clay-body preparation",
+      "silhouette": "open clay bowl, copper binding and a visible transverse paddle",
+      "states": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "gui": "two inputs and one output, with synchronized water volume",
+      "candidate_output": "build/assets/t0/candidates/clay_mixer-atlas.png"
+    },
+    {
+      "id": "firing_chamber",
+      "prefix": "firebox",
+      "component": "fuel-backed ceramic batch firing",
+      "silhouette": "inset fire door at the front-left bottom of a two-by-two brick chamber",
+      "states": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "gui": "ceramic feed and carbon fuel inputs, insulator and grog outputs; synchronized structure fault",
+      "candidate_output": "build/assets/t0/candidates/firing_chamber-atlas.png"
     }
   ],
   "items": [
@@ -88,7 +115,10 @@
     {"id": "relay_matrix", "accent": "#EF6C00", "role": "physical controller; rating remains text/NBT, not a new item"},
     {"id": "process_atlas", "accent": "#26C6DA", "role": "route lookup"},
     {"id": "quest_book", "accent": "#C9A227", "role": "non-gating objective evidence"},
-    {"id": "field_guide", "accent": "#26A69A", "role": "readable route guidance"}
+    {"id": "field_guide", "accent": "#26A69A", "role": "readable route guidance"},
+    {"id": "ceramic_grog", "accent": "#B37C56", "role": "three distinct fired fragments for reuse"},
+    {"id": "unfired_ceramic", "accent": "#B8A183", "role": "stacked damp clay blanks"},
+    {"id": "ceramic_insulator", "accent": "#E6D6B2", "role": "ribbed fired spool with a visible bore"}
   ],
   "candidate_atlas": {
     "status": "not_generated",
@@ -100,8 +130,10 @@
     "cell_order": ["front_idle", "front_running", "front_blocked", "front_starved", "front_out_of_band", "top", "side", "bottom", "rear", "item"],
     "rule": "Unused cells stay transparent; do not independently regenerate the stable body for each state"
   },
-  "multiblocks": [],
-  "multiblock_boundary": "No T0 multiblock is approved; assembled continuity and port identity belong to the future T3 machine's own manifest",
+  "multiblocks": [
+    {"id": "firing_chamber", "dimensions": [2, 2, 2], "controller": "front-left bottom", "surround": "seven minecraft:bricks blocks", "orientations": ["north", "east", "south", "west"], "interfaces": "controller only", "active_region": "controller fire door and status strip", "provenance": "original generated controller geometry/textures; vanilla blocks referenced, not copied", "license": "MIT for original generated files"}
+  ],
+  "multiblock_boundary": "Only bounded process-driven workshop structures under ADR-0129; no speculative parametric Arc Reactor kernel",
   "prompt_template": "Create an original 16x16 pixel-art candidate for {component}, using the declared Grindless palette and {silhouette}. Preserve the supplied stable body exactly and draw only the named front/state layer. Hard nearest-neighbour edges, clear mechanism, no text, no logos, no copied game or mod imagery. Output only the declared atlas cells, with unchanged regions pixel-identical. This is a candidate for human QC, not a production-ready asset.",
   "generation_metadata_required": ["provider", "model", "request_timestamp", "prompt", "seed_if_supported", "source_image_hashes", "output_hashes", "licence_terms_reference", "qc_result"],
   "generation_policy": "No calls without configured credentials; no automatic replacement of tracked assets; no unverified external material"

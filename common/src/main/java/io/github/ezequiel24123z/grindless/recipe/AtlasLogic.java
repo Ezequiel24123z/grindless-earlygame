@@ -69,7 +69,15 @@ public final class AtlasLogic {
         List<Entry> rows = new ArrayList<>(entries(recipes));
         rows.add(calibration());
         for (T1Recipes.Shaped recipe : T1Recipes.shaped()) {
-            rows.add(crafting(recipe));
+            rows.add(crafting(recipe.name(), craftingInputs(recipe.name(), recipe.pattern(), recipe.key()),
+                    recipe.result(), recipe.resultCount()));
+        }
+        for (BootstrapRecipes.Shaped recipe : BootstrapRecipes.shaped()) {
+            rows.add(crafting(recipe.name(), craftingInputs(recipe.name(), recipe.pattern(), recipe.key()),
+                    recipe.result(), recipe.resultCount()));
+        }
+        for (BootstrapRecipes.Shapeless recipe : BootstrapRecipes.shapeless()) {
+            rows.add(crafting(recipe.name(), recipe.ingredients(), recipe.result(), 1));
         }
         return sorted(rows);
     }
@@ -133,16 +141,16 @@ public final class AtlasLogic {
                 ResearchLogic.FU_PER_TICK);
     }
 
-    private static Entry crafting(T1Recipes.Shaped recipe) {
-        List<String> outputs = new ArrayList<>(recipe.resultCount());
-        for (int count = 0; count < recipe.resultCount(); count++) {
-            outputs.add("item:" + recipe.result());
+    private static Entry crafting(String name, List<String> inputs, String result, int resultCount) {
+        List<String> outputs = new ArrayList<>(resultCount);
+        for (int count = 0; count < resultCount; count++) {
+            outputs.add("item:" + result);
         }
         return new Entry(
-                "craft/" + recipe.name(),
+                "craft/" + name,
                 "CRAFTING_TABLE",
                 null,
-                craftingInputs(recipe),
+                List.copyOf(inputs),
                 List.copyOf(outputs),
                 List.of(),
                 Double.NaN,
@@ -152,17 +160,17 @@ public final class AtlasLogic {
                 0L);
     }
 
-    private static List<String> craftingInputs(T1Recipes.Shaped recipe) {
+    private static List<String> craftingInputs(String name, List<String> pattern, Map<String, String> key) {
         List<String> inputs = new ArrayList<>();
-        for (String row : recipe.pattern()) {
+        for (String row : pattern) {
             for (int index = 0; index < row.length(); index++) {
                 char symbol = row.charAt(index);
                 if (symbol == ' ') {
                     continue;
                 }
-                String ingredient = recipe.key().get(String.valueOf(symbol));
+                String ingredient = key.get(String.valueOf(symbol));
                 if (ingredient == null) {
-                    throw new IllegalArgumentException("missing crafting key " + symbol + " in " + recipe.name());
+                    throw new IllegalArgumentException("missing crafting key " + symbol + " in " + name);
                 }
                 inputs.add(ingredient);
             }

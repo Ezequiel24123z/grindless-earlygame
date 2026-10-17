@@ -24,8 +24,10 @@ import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -38,7 +40,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.SimpleContainer;
 
@@ -50,7 +51,7 @@ import java.util.Optional;
  * Shared consumer for Pulverizer, Arc Furnace, Press, Assembler, Kiln, Wire Mill,
  * Chemical Reactor and Chemical Washer.
  *
- * <p>Looks up a generated {@link ProcessRecipe}, draws F1, and writes progress. Gaseous outputs
+ * <p>Looks up a generated {@link ProcessRecipe}, draws its requested Flux, and writes progress. Gaseous outputs
  * push into an adjacent tank when one will take them, and vent otherwise (ADR-0036, ADR-0062).
  * Hoppers and neighbouring inventories are the item logistics; conduits and tanks are the fluid
  * logistics.
@@ -61,6 +62,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private static final String KEY_PROGRESS = "Progress";
     private static final String KEY_ITEMS = "Items";
     private static final String KEY_RECIPE = "Recipe";
+    private static final String KEY_WORK_RECIPE = "WorkRecipe";
     private static final String KEY_FLUID = "Fluid";
     /** Layout 2 added the fourth Assembler input; layout 3 preserves every inventory slot. */
     private static final String KEY_ITEM_LAYOUT = "ItemLayout";
@@ -78,13 +80,17 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     private double progress;
     private String cachedRecipeId = "";
+    private String workRecipeId = "";
     private ProcessRecipe cached;
     private TickSubscription working;
+    private TickSubscription filling;
+    private TickSubscription exporting;
     private ConditionFault lastFault = ConditionFault.NONE;
+    private WorkshopStructure.Fault structureFault = WorkshopStructure.Fault.NONE;
     private boolean loadingInventory;
 
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
-        super(kind.type(), pos, state);
+        super(kind.type(), pos, state, kind.tier());
         this.kind = kind;
         this.fluid = new FluidBuffer(FluidLogic.MACHINE_CAPACITY, kind.fluidMaxC(), kind.fluidMaxP());
         this.items = new SlottedContainer(kind.menuKind().size());
@@ -96,7 +102,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 return;
             }
             cached = null;
-            cachedRecipeId = "";
             setChanged();
             updateSubscriptions();
         });
@@ -124,7 +129,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     protected SimpleFluxStorage createEnergyBuffer() {
-        return new SimpleFluxStorage(bufferCapacity(), ratedTier().nominal(), 0L, () -> {
+        return new SimpleFluxStorage(bufferCapacity(), powerTier().nominal(), 0L, () -> {
             setChanged();
             if (getLevel() != null && !getLevel().isClientSide()) {
                 updateSubscriptions();
@@ -140,7 +145,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     @Override
     public void setUpgrades(UpgradeSet newUpgrades) {
         cached = null;
-        cachedRecipeId = "";
         super.setUpgrades(newUpgrades);
     }
 
@@ -149,6 +153,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (loadingInventory || getLevel() == null) {
             return;
         }
+        structureFault = checkStructure();
         ProcessRecipe recipe = recipe();
         boolean missing = hasPartialInput() && recipe == null;
         boolean stuck = recipe != null && progress >= recipe.durationTicks() && !canOutput(recipe);
@@ -158,21 +163,42 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             working.unsubscribe();
             working = null;
         }
-        publishStatus(recipe, missing, stuck, hasPowerWaiting(), false, ConditionReport.OPTIMAL);
+        if (ProcessLookup.needsPrimaryFluid(kind.family(), inputs(), fluid.state())) {
+            filling = subscriptions().subscribe(filling, this::fillFromNeighbours);
+        } else if (filling != null) {
+            filling.unsubscribe();
+            filling = null;
+        }
+        if (hasOutput()) {
+            exporting = subscriptions().subscribe(exporting, this::exportWaitingOutput);
+        } else if (exporting != null) {
+            exporting.unsubscribe();
+            exporting = null;
+        }
+        if (recipe == null || stuck || structureFault != WorkshopStructure.Fault.NONE) {
+            publishStatus(recipe, missing, stuck, hasPowerWaiting(), false, ConditionReport.OPTIMAL);
+        }
         syncData();
     }
 
     public void onNeighbourChanged() {
         cached = null;
-        cachedRecipeId = "";
         updateSubscriptions();
     }
 
     private void work() {
+        structureFault = checkStructure();
+        if (structureFault != WorkshopStructure.Fault.NONE) {
+            publishStatus(cached, false, false, false, false, ConditionReport.OPTIMAL);
+            syncData();
+            return;
+        }
         pullFluids();
         ProcessRecipe recipe = recipe();
         if (recipe == null) {
             progress = 0.0;
+            cachedRecipeId = "";
+            workRecipeId = "";
             publishStatus(null, hasPartialInput(), false, false, false, ConditionReport.OPTIMAL);
             updateSubscriptions();
             return;
@@ -191,6 +217,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             updateSubscriptions();
             return;
         }
+        if (progress >= recipe.durationTicks() && complete(recipe)) {
+            updateSubscriptions();
+            return;
+        }
 
         requestPower(recipe.fuPerTick());
         long drawn = drawPower(recipe.fuPerTick());
@@ -205,55 +235,73 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             progress += gained;
             setChanged();
         }
-        if (progress >= recipe.durationTicks() && finish(recipe)) {
-            progress -= recipe.durationTicks();
-            cached = null;
-            cachedRecipeId = "";
-            setChanged();
+        if (progress >= recipe.durationTicks()) {
+            complete(recipe);
         }
-        stuck = recipe() != null && progress >= recipe.durationTicks() && !canOutput(recipe);
-        publishStatus(recipe(), !ProcessLookup.matches(recipe, inputs()), stuck, powered, gained > 0.0, report);
+        ProcessRecipe next = recipe();
+        stuck = next != null && progress >= next.durationTicks() && !canOutput(next);
+        publishStatus(next, hasPartialInput() && next == null, stuck, powered, gained > 0.0, report);
         syncData();
-        if (stuck || recipe() == null) {
+        updateSubscriptions();
+    }
+
+    private boolean complete(ProcessRecipe recipe) {
+        if (!finish(recipe)) {
+            return false;
+        }
+        progress = Math.max(0.0, progress - recipe.durationTicks());
+        cached = null;
+        setChanged();
+        return true;
+    }
+
+    private boolean finish(ProcessRecipe recipe) {
+        if (!ProcessLookup.matches(recipe, inputs()) || !canOutput(recipe)) {
+            return false;
+        }
+        ItemStack[] outputs = plannedOutputs(recipe);
+        if (outputs == null) {
+            return false;
+        }
+        loadingInventory = true;
+        try {
+            for (int i = 0; i < recipe.itemInputs().size(); i++) {
+                items.removeItem(i, recipe.itemInputs().get(i).count());
+            }
+            for (int i = 0; i < outputs.length; i++) {
+                items.setItem(kind.menuKind().inputs() + i, outputs[i]);
+            }
+            consumeFluid(recipe);
+            captureOrVent(recipe);
+            pushOutputs();
+        } finally {
+            loadingInventory = false;
+        }
+        setChanged();
+        return true;
+    }
+
+    private boolean hasOutput() {
+        for (int slot : outputSlots) {
+            if (!items.getItem(slot).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void exportWaitingOutput() {
+        if (isDue(8)) {
+            pushOutputs();
             updateSubscriptions();
         }
     }
 
-    private boolean finish(ProcessRecipe recipe) {
-        if (!canOutput(recipe)) {
-            return false;
+    private void fillFromNeighbours() {
+        if (isDue(4)) {
+            pullFluids();
+            updateSubscriptions();
         }
-        List<ItemStack> produced = resolvedOutputs(recipe);
-        for (int i = 0; i < recipe.itemInputs().size(); i++) {
-            ItemStack stack = items.getItem(i);
-            stack.shrink(recipe.itemInputs().get(i).count());
-            items.setItem(i, stack);
-        }
-        int outBase = kind.menuKind().inputs();
-        for (ItemStack producedStack : produced) {
-            ItemStack leftover = HopperBlockEntity.addItem(null, outputView(), producedStack, null);
-            if (!leftover.isEmpty()) {
-                items.setItem(outBase, leftover);
-            }
-        }
-        pushOutputs();
-        consumeFluid(recipe);
-        captureOrVent(recipe);
-        return true;
-    }
-
-    private SimpleContainer outputView() {
-        SimpleContainer view = new SimpleContainer(kind.menuKind().outputs());
-        int base = kind.menuKind().inputs();
-        for (int i = 0; i < view.getContainerSize(); i++) {
-            view.setItem(i, items.getItem(base + i));
-        }
-        view.addListener(container -> {
-            for (int i = 0; i < view.getContainerSize(); i++) {
-                items.setItem(base + i, view.getItem(i));
-            }
-        });
-        return view;
     }
 
     private void pushOutputs() {
@@ -262,7 +310,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         int base = kind.menuKind().inputs();
         for (int slot = base; slot < items.getContainerSize(); slot++) {
-            ItemStack stack = items.getItem(slot);
+            ItemStack stack = items.getItem(slot).copy();
             if (stack.isEmpty()) {
                 continue;
             }
@@ -272,14 +320,16 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 }
                 stack = ItemInsert.intoNeighbour(getLevel(), getBlockPos(), side, stack);
             }
-            items.setItem(slot, stack);
+            if (!ItemStack.matches(items.getItem(slot), stack)) {
+                items.setItem(slot, stack);
+            }
         }
     }
 
-    private boolean canOutput(ProcessRecipe recipe) {
+    private ItemStack[] plannedOutputs(ProcessRecipe recipe) {
         List<ItemStack> produced = resolvedOutputs(recipe);
         if (produced.size() < recipe.itemOutputs().size()) {
-            return false;
+            return null;
         }
         int base = kind.menuKind().inputs();
         ItemStack[] simulated = new ItemStack[kind.menuKind().outputs()];
@@ -288,8 +338,15 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         for (ItemStack stack : produced) {
             if (!merge(simulated, stack)) {
-                return false;
+                return null;
             }
+        }
+        return simulated;
+    }
+
+    private boolean canOutput(ProcessRecipe recipe) {
+        if (plannedOutputs(recipe) == null) {
+            return false;
         }
         if (!ProcessLookup.matchesFluid(recipe, fluid.state(), neighbourFluids())) {
             return false;
@@ -317,16 +374,20 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     private static boolean merge(ItemStack[] slots, ItemStack incoming) {
         ItemStack remaining = incoming.copy();
-        for (int i = 0; i < slots.length && !remaining.isEmpty(); i++) {
-            ItemStack current = slots[i];
-            if (current.isEmpty()) {
-                slots[i] = remaining;
+        for (ItemStack current : slots) {
+            if (!current.isEmpty() && ItemStack.isSameItemSameTags(current, remaining)) {
+                int moved = Math.min(remaining.getCount(),
+                        Math.max(0, current.getMaxStackSize() - current.getCount()));
+                current.grow(moved);
+                remaining.shrink(moved);
+            }
+            if (remaining.isEmpty()) {
                 return true;
             }
-            if (ItemStack.isSameItemSameTags(current, remaining)
-                    && current.getCount() + remaining.getCount() <= current.getMaxStackSize()) {
-                current.grow(remaining.getCount());
-                return true;
+        }
+        for (int i = 0; i < slots.length && !remaining.isEmpty(); i++) {
+            if (slots[i].isEmpty()) {
+                slots[i] = remaining.split(Math.min(remaining.getCount(), remaining.getMaxStackSize()));
             }
         }
         return remaining.isEmpty();
@@ -348,7 +409,32 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 neighbourFluids());
         cached = found.orElse(null);
         cachedRecipeId = cached == null ? "" : cached.id();
+        if (cached != null) {
+            if (!workRecipeId.isEmpty() && !workRecipeId.equals(cached.id())) {
+                progress = 0.0;
+            }
+            workRecipeId = cached.id();
+        }
         return cached;
+    }
+
+    private WorkshopStructure.Fault checkStructure() {
+        if (kind.structure() == WorkshopStructure.NONE || getLevel() == null) {
+            return WorkshopStructure.Fault.NONE;
+        }
+        int turns = switch (getBlockState().getValue(MachineProperties.FACING)) {
+            case NORTH -> 0;
+            case EAST -> 1;
+            case SOUTH -> 2;
+            case WEST -> 3;
+            default -> throw new IllegalStateException("a workshop controller must face horizontally");
+        };
+        return kind.structure().check(turns, offset -> {
+            BlockPos cell = getBlockPos().offset(offset.x(), offset.y(), offset.z());
+            return getLevel().hasChunkAt(cell)
+                    ? BuiltInRegistries.BLOCK.getKey(getLevel().getBlockState(cell).getBlock()).toString()
+                    : null;
+        });
     }
 
     private ItemStack[] inputs() {
@@ -385,7 +471,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             }
             if (!taken.isEmpty()) {
                 cached = null;
-                cachedRecipeId = "";
                 setChanged();
             }
         }
@@ -401,7 +486,6 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             FluidInsert.takeFromNeighbours(getLevel(), getBlockPos(), spec.id(), spec.count());
         }
         cached = null;
-        cachedRecipeId = "";
     }
 
     private void captureOrVent(ProcessRecipe recipe) {
@@ -439,16 +523,20 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     public boolean canInsert(Direction from, FluidState state) {
-        return fluid.accepted(state) > 0;
+        return state != null && ProcessLookup.isPrimaryFluid(kind.family(), state.id())
+                && fluid.accepted(state) > 0;
     }
 
     @Override
     public FluidState insert(Direction from, FluidState state) {
+        if (!canInsert(from, state)) {
+            return state;
+        }
         FluidState leftover = fluid.offer(state);
         if (leftover.millibuckets() != (state == null ? 0 : state.millibuckets())) {
             cached = null;
-            cachedRecipeId = "";
             setChanged();
+            updateSubscriptions();
         }
         return leftover;
     }
@@ -463,8 +551,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         FluidState taken = fluid.extract(null, millibuckets);
         if (!taken.isEmpty()) {
             cached = null;
-            cachedRecipeId = "";
             setChanged();
+            updateSubscriptions();
         }
         return taken;
     }
@@ -492,7 +580,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private boolean hasPowerWaiting() {
-        if (energy().getStored() >= ProcessLogic.FU_PER_TICK) {
+        long needed = cached == null ? kind.tier().nominal() : cached.fuPerTick();
+        if (energy().getStored() >= needed) {
             return true;
         }
         FluxNetwork network = network();
@@ -507,7 +596,11 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         lastFault = report.fault();
         MachineStatus observed = ProcessLogic.status(recipe != null, missing, stuck,
                 report.canRun() || recipe == null, powered, workingNow);
-        if (display.observe(observed)) {
+        if (structureFault != WorkshopStructure.Fault.NONE) {
+            observed = MachineStatus.OUT_OF_BAND;
+        }
+        boolean stableIdle = recipe == null && !missing && structureFault == WorkshopStructure.Fault.NONE;
+        if (stableIdle ? display.settle(MachineStatus.IDLE) : display.observe(observed)) {
             MachineProperties.publish(getLevel(), getBlockPos(), display.shown());
         }
     }
@@ -521,6 +614,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         data.set(ProcessMachineMenu.DATA_CYCLE, cycle);
         data.set(ProcessMachineMenu.DATA_STATUS, display.shown().ordinal());
         data.set(ProcessMachineMenu.DATA_KIND, kind.menuKind().ordinal());
+        data.set(ProcessMachineMenu.DATA_STRUCTURE, structureFault.ordinal());
+        data.set(ProcessMachineMenu.DATA_FLUID, fluid.state().millibuckets());
     }
 
     @Override
@@ -530,6 +625,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         tag.put(KEY_ITEMS, items.createTag());
         tag.putInt(KEY_ITEM_LAYOUT, CURRENT_ITEM_LAYOUT);
         tag.putString(KEY_RECIPE, cachedRecipeId);
+        tag.putString(KEY_WORK_RECIPE, workRecipeId);
         tag.put(KEY_FLUID, FluidNbt.save(fluid.state()));
     }
 
@@ -546,6 +642,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             }
             items.fromTag(savedItems);
             cachedRecipeId = tag.getString(KEY_RECIPE);
+            workRecipeId = tag.contains(KEY_WORK_RECIPE) ? tag.getString(KEY_WORK_RECIPE) : cachedRecipeId;
             cached = null;
             fluid.set(FluidNbt.load(tag.getCompound(KEY_FLUID)));
         } finally {

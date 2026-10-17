@@ -94,6 +94,7 @@ public class ProcessMachineBlock extends BaseEntityBlock {
         }
         if (player instanceof ServerPlayer server
                 && level.getBlockEntity(pos) instanceof ProcessMachineBlockEntity machine) {
+            machine.onNeighbourChanged();
             MenuRegistry.openExtendedMenu(server, machine);
             return InteractionResult.CONSUME;
         }

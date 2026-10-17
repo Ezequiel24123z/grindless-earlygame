@@ -1,13 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " C ",
-    "CIC",
-    " C "
+    " S ",
+    "PCP",
+    " P "
   ],
   "key": {
-    "C": { "tag": "minecraft:stone_crafting_materials" },
-    "I": { "tag": "forge:ingots/iron" }
+    "P": { "tag": "minecraft:planks" },
+    "C": { "tag": "forge:ingots/copper" },
+    "S": { "item": "minecraft:stick" }
   },
   "result": { "item": "grindless:hand_pump" }
 }

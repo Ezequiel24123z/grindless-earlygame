@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["BBB", "BFB", "CRC"],
+  "key": {
+    "B": { "item": "minecraft:brick" },
+    "F": { "item": "minecraft:furnace" },
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "R": { "item": "minecraft:redstone" }
+  },
+  "result": { "item": "grindless:firing_chamber" }
+}

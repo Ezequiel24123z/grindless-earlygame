@@ -23,7 +23,7 @@ public final class VerifyQuest {
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
-            "bootstrap", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
+            "bootstrap", "workshop", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
             "industrial");
 
     private static final List<String> FORBIDDEN = List.of(
@@ -52,8 +52,8 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("twenty tasks, from the multitool to the F2 Matrix", 20, tasks.size());
-        eq("nine T0-to-T1 lines", LINES, QuestCatalogue.lines());
+        eq("twenty-four tasks, including the connected workshop", 24, tasks.size());
+        eq("ten T0-to-T1 lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
         eq("the last task is the physical Industrial hand-off", "industrial_matrix", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
@@ -66,6 +66,16 @@ public final class VerifyQuest {
         eq("then the crank", "grindless:hand_crank_dynamo", subject("crank"));
         eq("then the extractor", "grindless:crude_extractor", subject("extractor"));
         eq("calibration follows the extractor", "grindless:calibrated_data_core", subject("calibrate"));
+        eq("calibration now follows physical ceramics", List.of("ceramics"), task("calibrate").requires());
+        eq("water supply precedes wet mixing", List.of("quern", "water"), task("clay_mixer").requires());
+        for (QuestCatalogue.Task task : tasks) {
+            if (task.line().equals("bootstrap") || task.line().equals("workshop")) {
+                no(task.id() + " cannot reward a bypass around ceramic manufacture",
+                        Set.of("grindless:data_core", "grindless:calibrated_data_core",
+                                "grindless:relay_matrix", "grindless:ceramic_insulator")
+                                .contains(task.reward().itemId()));
+            }
+        }
         eq("the physical Bootstrap exit is five Relay Matrices", "grindless:relay_matrix", subject("relay"));
         eq("the first power source follows the Matrix", List.of("relay"), task("thermal").requires());
         eq("the pylon follows unattended power", "grindless:flux_pylon_mk1", subject("pylon"));
@@ -152,6 +162,19 @@ public final class VerifyQuest {
     }
 
     private static void guide() throws IOException {
+        List<Integer> longText = java.util.stream.IntStream.range(0, 31).boxed().toList();
+        List<List<Integer>> parts = GuideCatalogue.paginate(longText, 15);
+        eq("long guide content uses three physical pages", 3, parts.size());
+        eq("pagination never drops or duplicates a wrapped line", longText,
+                parts.stream().flatMap(List::stream).toList());
+        yes("each guide page fits the body area", parts.stream().allMatch(part -> part.size() <= 15));
+        eq("an empty topic still has a titled page", 1, GuideCatalogue.paginate(List.of(), 15).size());
+        try {
+            GuideCatalogue.paginate(longText, 0);
+            fail("a zero-line page must be rejected");
+        } catch (IllegalArgumentException expected) {
+            yes("a zero-line page is rejected explicitly", true);
+        }
         List<String> pages = GuideCatalogue.pages();
         eq("the guide follows the reachable quest lines", QuestCatalogue.lines(), pages);
         JsonObject lang = JsonParser.parseString(Files.readString(LANG)).getAsJsonObject();
@@ -167,7 +190,7 @@ public final class VerifyQuest {
         for (String mark : List.of(
                 "Multitool", "Hand Crank", "Crude Extractor", "Relay Matrices", "Thermal Generator", "Flux Pylon",
                 "Prospector", "Terrestrial Extractor", "Pulverizer", "Arc Furnace", "Press", "Assembler", "cobblestone",
-                "Conveyor Belts", "Factory Portal")) {
+                "Conveyor Belts", "Factory Portal", "Quern", "Clay Mixer", "Firing Chamber", "grog")) {
             yes("the guide mentions " + mark, text.contains(mark));
         }
         for (String prototype : List.of(

@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.menu;
 
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,7 +27,9 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     public static final int DATA_CYCLE = 3;
     public static final int DATA_STATUS = 4;
     public static final int DATA_KIND = 5;
-    public static final int DATA_SIZE = 6;
+    public static final int DATA_STRUCTURE = 6;
+    public static final int DATA_FLUID = 7;
+    public static final int DATA_SIZE = 8;
 
     private final MachineMenuHost host;
     private final ContainerData data;
@@ -61,7 +64,7 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new Slot(container, 0, 52, 35));
                 addSlot(new OutputSlot(container, 1, 116, 35));
             }
-            case CHEMICAL_WASHER, FLOTATION -> {
+            case CHEMICAL_WASHER, FLOTATION, QUERN -> {
                 addSlot(new Slot(container, 0, 44, 35));
                 addSlot(new OutputSlot(container, 1, 116, 26));
                 addSlot(new OutputSlot(container, 2, 116, 44));
@@ -73,13 +76,13 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new Slot(container, 0, 52, 35));
                 addSlot(new OutputSlot(container, 1, 116, 35));
             }
-            case ARC_FURNACE -> {
+            case ARC_FURNACE, FIRING_CHAMBER -> {
                 addSlot(new Slot(container, 0, 44, 26));
                 addSlot(new Slot(container, 1, 44, 44));
                 addSlot(new OutputSlot(container, 2, 116, 26));
                 addSlot(new OutputSlot(container, 3, 116, 44));
             }
-            case PRESS -> {
+            case PRESS, CLAY_MIXER -> {
                 addSlot(new Slot(container, 0, 44, 26));
                 addSlot(new Slot(container, 1, 44, 44));
                 addSlot(new OutputSlot(container, 2, 116, 35));
@@ -128,6 +131,18 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
 
     public int statusOrdinal() {
         return data.get(DATA_STATUS);
+    }
+
+    /** The server's structure diagnosis; the client must not infer it from its own chunk view. */
+    public WorkshopStructure.Fault structureFault() {
+        int ordinal = data.get(DATA_STRUCTURE);
+        WorkshopStructure.Fault[] faults = WorkshopStructure.Fault.values();
+        return ordinal >= 0 && ordinal < faults.length ? faults[ordinal] : WorkshopStructure.Fault.UNLOADED;
+    }
+
+    /** Primary fluid volume synchronized through the ordinary menu data protocol. */
+    public int fluidAmount() {
+        return Math.max(0, data.get(DATA_FLUID));
     }
 
     public MachineMenuHost host() {

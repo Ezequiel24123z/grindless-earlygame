@@ -8,7 +8,7 @@ operator, dates and evidence paths when this checklist is actually performed.
 
 **Survival world:** create a fresh ordinary Overworld, Survival, cheats off. Use the same jar
 as the validated candidate, with the documented optional client pack if testing its UI.
-Gather entry materials normally. The twenty-minute target starts at the documented vanilla-
+Gather entry materials normally. The provisional 35-60-minute target starts at the documented vanilla-
 material entry, not a bare spawn; record acquisition time separately. No `/give`, `/setblock`,
 `/data`, creative mode or carried inventory from a diagnostic world is permitted.
 
@@ -20,14 +20,17 @@ Keep both worlds and their logs separate. Back up any existing world before migr
 
 | Step | Action | Expected observation / failure indicator | Evidence to record |
 | --- | --- | --- | --- |
-| Entry | Gather wood, crafting stone, glass/sand, copper and redstone; reserve two tagged iron for mod machines. Craft a chest from ordinary wood. | Inputs are visible and obtainable without a future-tier device. A missing source or an extra mandatory mod-machine iron cost is a failure. | Starting inventory, seed, acquisition time. |
-| Tools | Craft the Multitool, Dynamo, Extractor, Terminal and one Data Core from their visible recipes. | Dynamo and Extractor spend one iron each; Terminal/Core/Multitool spend none. No quest permission is required. | Recipe discovery route and before/after inventory. |
+| Entry | Gather wood, crafting stone, glass/sand, copper, redstone, clay, gravel and carbon fuel; reserve two tagged iron for Dynamo/Extractor. Craft a chest from ordinary wood. | Inputs are obtainable without a future-tier device. Count the five controller bricks and seven brick blocks for the chamber; no command items fill a gap. | Starting inventory, seed, acquisition time. |
+| Tools | Craft the Multitool, Dynamo, Extractor, Terminal and early Process Atlas from their visible recipes. | Dynamo and Extractor spend one iron each; the other workshop crafts need no iron or Matrix. No quest permission is required. | Recipe discovery route and before/after inventory. |
 | Extraction | Place Dynamo next to Extractor and a chest next to the Extractor. Right-click the Dynamo, replenishing within its two-crank capacity. | Work proceeds and a real vein product reaches the chest. Material need not be iron. Record actual cycle time and vein variability; do not assume every deposit is richness 1. | Machine positions, status transitions, chest output. |
 | Starvation | Let power run out, then crank again. | State explains lack of power; work/input/output are not lost and work resumes. | Before/after work and contents. |
+| Ceramics | Mill gravel in a Quern. Put a Hand Pump over water facing the Clay Mixer; supply two clay, one sand and F0 power. Build the 2x2x2 Firing Chamber and feed three unfired pieces plus carbon. | Exactly three unfired pieces, then two insulators and one grog. Water arriving after the items wakes the Mixer. Insulator plus redstone makes the core; no early reward bypasses it. | Visible recipe routes, water amount, ingredients and outputs. |
+| Structure recovery | During firing, remove the far top brick, wait, then repair it. Rotate/rebuild the layout in another direction. | Work and input/fuel remain; the menu names the missing structure. Repair resumes; the rotated layout works. | Before/after work, orientation, status and fuel counts. |
+| Recovery and handling | Reuse grog with fresh clay/water. Build ceramic-based transport and storage; block an output and empty its target. | Grog has a useful sink without net solid gain. Pending output resumes automatically; no duplicate batch or permanent stall. | Inventory counts and observed automation. |
 | Calibration | Allocate the Dynamo to the Terminal, avoiding simultaneous full-rate demand from the Extractor. Right-click Terminal with one Data Core. Keep supplying F0. | One core becomes one Calibrated Data Core after 600 full-power ticks; no hidden unlock. Empty-hand right-click retrieves it. An output-waiting blocked state is normal. | Core counts, timing, status and retrieval. |
 | Relocation/reload | With recoverable contents or partial work, Shift-right-click a Grindless block with the Multitool, place it again, then save/quit and reopen the world. | Charge, contents and relevant work remain; no duplicate drops. Ordinary right-click with the Multitool rotates instead. | Inventory before/after, world save/reopen notes, client log. |
 | Exit | Craft the physical batch from the calibrated core, two glass, two copper and two redstone. | Exactly five F1 Relay Matrices, recoverable from the craft. One batch funds the five named first factory controllers. | Exit inventory and elapsed time from material entry. |
-| Discovery | Use the available guide/book/viewer during the route, not source code or an external wiki. | Every necessary action is discoverable. Record missing native Bootstrap recipe coverage rather than assuming the Atlas is exhaustive. | Screenshots and exact confusing/missing text. |
+| Discovery | Use the available guide/book/viewer during the route, not source code or an external wiki. | Every necessary action and Bootstrap craft is discoverable. Check the complete long structure-fault tooltip and water readout at each GUI scale. | Screenshots and exact confusing/missing text. |
 
 Output-blocking/automation stress beyond the initial material budget belongs in the diagnostic
 world or later survival continuation. Do not quietly add command-spawned hoppers to the

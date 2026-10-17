@@ -52,12 +52,16 @@ T2 and above are manufactured, never a crafting table
   ordinary shaped crafting JSON, including the five-unit first Relay Matrix batch and its one-Matrix
   T1 processing-machine costs.
 - `recipe/BootstrapRecipes.java` — T0 shaped JSON.
+- `recipe/BootstrapProcesses.java` — the F0 ceramic routes, appended to `ProcessGraph`;
+  quantities and recovery yields live here, never in a second JSON recipe graph.
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins the generated graph size (112) and the ordinary
-craft count (32); `VerifyAtlas` pins 112 generated rows, 41 Assembler rows and 145 total
-handheld routes (including 32 T1 shaped crafts and the physical calibration).
+`tools/checks/VerifyRecipes.java` pins 120 generated rows for its four-material fixture and
+26 T1 crafts; `VerifyBootstrap` covers 15 T0 shaped crafts and the ceramic Data Core.
+`VerifyAtlas` pins 120 generated rows, 41 Assembler rows and 163 total handheld routes,
+including both crafting catalogues, the shapeless core and physical calibration.
+Actual runtime counts depend on installed material tags; eight workshop rows are unconditional.
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
 gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have
@@ -156,6 +160,8 @@ The first four checks also pin that the prototype transport has no generated sur
 ## Quests and the guide
 
 - `quest/QuestCatalogue.java` and `quest/GuideCatalogue.java` — the lines and the pages.
+- `client/FieldGuideScreen.java` — wraps each topic into physical pages; `GuideCatalogue.paginate`
+  must retain every wrapped line rather than silently clipping a long topic or translation.
 - `quest/QuestLogic.java`, `quest/QuestEvidence.java`, `quest/QuestProgress.java` — what
   a claim watches, and per-player progress. `menu/QuestBookMenu.java` synchronizes each task's
   live item count alongside its claim status for the client screen.
@@ -166,15 +172,17 @@ The first four checks also pin that the prototype transport has no generated sur
 
 `VerifyQuest` holds that a claim never consumes its evidence and never gates a machine
 ([ADR-0100](DECISIONS.md#adr-0100--the-quest-book-tracks-the-route-and-does-not-gate-it)).
-The Field Guide states the complete two-iron Bootstrap contract and points from its five-Matrix
+The Field Guide states the ceramic-workshop Bootstrap contract and points from its five-Matrix
 exit through the complete Voltaic factory; it remains readable independently of quest claims.
-The active route has twenty tasks in nine lines, with the physical Relay Matrix between
+The Dynamo/Extractor still spend two iron; optional vanilla equipment is outside that budget.
+The active route has twenty-four tasks in ten lines, with ceramics before calibration and the physical Relay Matrix between
 calibration and the first powered machines; it ends at the F2 Relay Matrix, contains no dimension
 evidence and does not advertise spatial campaign prototypes.
+Early quest rewards must never supply a core, insulator or Matrix that bypasses the workshop.
 
 ## Multiblock
 
-There is no kernel. The Ground Array is a fixed shape, not one. Do not add a kernel
+There is no parametric kernel. The Ground Array is a fixed shape, not one. Do not add a kernel
 ahead of its slice. Shape, hatches and the Arc
 Reactor are specified in
 [`MACHINES.md`](MACHINES.md#multiblocks-shape-is-a-parameter),
@@ -184,6 +192,19 @@ The schedule is slice AD in [`BUILD-OUT.md`](BUILD-OUT.md).
 
 Slice F starts when a machine needs hatches or size. That machine is the Arc Reactor,
 not the Arc Furnace.
+
+ADR-0129 adds fixed, process-driven T0 workshop structures independently of that future kernel.
+`structure/WorkshopStructure.java` owns local cells and clockwise rotations; the process block
+entity reads only loaded world cells before working. The Firing Chamber is its controller plus
+seven bricks in a 2x2x2 volume. Never persist a trusted "formed" flag or force-load a missing cell.
+
+`ProcessMachineBlockEntity` retains paid work under `WorkRecipe`, separately from the live
+`Recipe` selection (which is empty when inputs are invalid). Legacy saves derive the owner from
+`Recipe`. A different recipe resets work; quantity changes, starvation and structure repair do not.
+Outputs are reserved before any ingredient is consumed. Fluid arrival wakes work; pending output
+has its own bounded export subscription, including after a neighboring inventory is emptied.
+F0 kinds pass their rating into the base constructor before buffer creation, rather than reading
+an uninitialized subclass field. Existing menu ordinals and `ItemLayout=3` stay unchanged.
 
 ## Checks
 
@@ -196,10 +217,13 @@ not the Arc Furnace.
   report variables must remain local (ADR-0127).
   `-Only` / `--only` accepts comma-separated names through the actual CLI; unknown or empty
   selections fail before any boot, never silently shrinking or expanding the requested scope.
-- `tools/checks/VerifyT0Preparation.java` — verifies the non-runtime
-  `docs/tiers/t0-production-graph.json` references and topology, plus the existing textures/models
+- `tools/checks/VerifyT0Preparation.java` — verifies the active
+  `docs/tiers/t0-production-graph.json` references and topology, plus the original textures/models
   named by `docs/assets/t0-asset-manifest.json`. These are audit projections, never new gameplay
   sources of truth or proof of a balanced economy.
+- `tools/checks/VerifyWorkshop.java` — exact F0 counts, non-amplifying ceramic solid potential,
+  reachable sinks and every rotated/missing chamber cell. `workshop` is the registered Forge
+  counterpart for full cycles, finite-water wakeup, NBT reconstruction and blocked-output recovery.
 - `tools/check-links.ps1` — relative links and the ADR index.
 - `tools/smoke/scenarios.txt` — the scenario list, when a block, a menu or a
   boot-visible item changes. Run it with `tools/run-smokes.ps1` or `run-smokes.sh`.

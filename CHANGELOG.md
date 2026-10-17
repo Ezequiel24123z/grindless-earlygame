@@ -15,6 +15,22 @@ entries below reference those records by id.
 
 ### Added
 
+- **The ceramic workshop connects T0 materials, water, fuel and control (ADR-0129).** The Quern,
+  Clay Mixer and formed 2x2x2 Firing Chamber share eight F0 processes, three original ceramic
+  items, grog recovery, physical Data Core manufacture and primitive plumbing/handling crafts.
+  Original generated shapes/state textures, Atlas/JEI routes, a workshop quest line, exact
+  quantity/rotation checks and a full-cycle Forge scenario accompany the chain.
+
+- **Process work has an explicit retained owner.** `WorkRecipe` keeps paid progress separate
+  from the currently selectable `Recipe`, preserving legacy reads and preventing progress from
+  transferring to another process. Fluid arrival wakes waiting work; outputs retry after a
+  neighboring inventory is emptied, including when no new input is present. Output reservation
+  precedes ingredient consumption, and a completed blocked batch does not pay a second work tick.
+
+- **Long guide topics remain readable.** Wrapped text now continues onto additional book pages
+  instead of disappearing below the fixed panel. The workshop's structural recovery message
+  also remains available in full through its status tooltip.
+
 - **Connected T0 workshop rework authorized (ADR-0129).** The corrected foundation is preserved
   on a dedicated feature branch. The active plan now braids ceramic milling, water mixing,
   formed batch firing, grog recovery and assembled settling into the physical Data Core route.

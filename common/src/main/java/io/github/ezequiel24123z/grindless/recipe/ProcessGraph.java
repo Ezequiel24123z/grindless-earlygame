@@ -63,6 +63,7 @@ public final class ProcessGraph {
      */
     public static List<ProcessRecipe> generate(List<MaterialView> materials) {
         List<ProcessRecipe> recipes = new ArrayList<>();
+        recipes.addAll(BootstrapProcesses.recipes());
         List<String> secondaryMaterials = eligibleSecondaries(materials);
         for (MaterialView material : materials) {
             String feed = feedTag(material);

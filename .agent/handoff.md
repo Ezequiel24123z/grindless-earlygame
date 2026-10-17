@@ -11,19 +11,42 @@ ADR-0129 ceramic workshop, then assembled settling, with current-build checks an
 commits. Manual client/survival/retained-world acceptance remains a merge condition, not a
 feature-development blocker. No merge or unrelated T1/T2 work is authorized.
 
-Local baseline validation first failed at environment because Java was not configured; a
-workspace-isolated JDK restoration is running. This is not a source-code failure or a pass.
-Evidence starts at `build/validation/20261017T124234896Z/`.
-The foundation's current GitHub PR run passed, while its push run `39031845162` failed the
-transient item-entity `ATLAS-OK` fixture; preserve that failure and exercise a stable inventory
-fixture when touching Atlas coverage.
+Completed checkpoints: `9aea30e` (active contract), `0838e88` (exact Windows/Bash smoke
+selection), and the W1 workshop unit containing this handoff. `0838e88` was HEAD when its final
+working-tree validation began; use `git rev-parse HEAD` for the containing commit, not a
+self-referencing guessed SHA.
 
-**Next safe task:** finish current-worktree toolchain validation, then implement T0-W1 from
-[the active specification](../docs/tiers/t0.md). No new gameplay is claimed in this contract
-checkpoint. Read the current validation ledger for later results rather than inheriting the
-historical passes below.
+**W1: AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING.** Quern, Clay Mixer, the formed
+Firing Chamber, eight F0 routes, three ceramic items, recycling, early transport/plumbing,
+complete Bootstrap Atlas routes and non-clipping guide pages are implemented. The shared
+engine keeps work identity, wakes for fluids, reserves outputs and retries blocked/idle export.
+Registry identities, Matrix ratings, existing menu ordinals and indexed inventory layout remain.
+
+The final unified validator passed environment, full build, **34 suites** and documentation:
+`build/validation/20261017T142252076Z/status.tsv`. The final production `workshop` scenario
+passed all **19 markers** and natural shutdown: `build/validation/workshop-final-smoke.log`.
+Built/loaded jar SHA-256:
+`3005B11CFC748FECBE7B542DABB8C16C12590344059A6BC0190659CAD25826DC`.
+`states` and the 16-marker Matrix lifecycle also passed during the W1 batch; their exact scope
+and the initial workshop timing failure remain in the validation ledger. Full final integration
+and observed client/survival/retained-world acceptance are not claimed. No smoke server remains.
+
+The local JDK is restored. Fabric Maven timed out on online resolution, so only dependency
+caches were copied from the preserved foundation into this worktree; no world, source,
+configuration or old build output was copied. Normal validation then worked. Keep `JAVA_HOME`
+on JDK 17 and `GRADLE_USER_HOME` on this worktree's `.gradle/user-home`.
+Image keys remain absent; 46 T0 PNGs pass technical QC and the original generator supplies the
+functional assets. No AI image generation or final graphical acceptance is claimed.
+
+**Next safe task: T0-W2, assembled settling.** Add the fixed open three-block trough and its
+oriented static parts, dirt/clay/gravel/water route, real geometry, quantity/formation checks
+and native lifecycle. Then complete the final asset/automation/integration milestone and keep
+a draft PR. No unrelated T1/T2 consumer or merge is authorized.
 
 ## Preserved foundation handoff
+
+Historical evidence only; the restrictions and next action below are superseded by the active
+owner-directed handoff above and ADR-0129.
 
 Updated: 2026-10-17. Phase: bounded foundation remediation complete; broad T0 work held.
 Repository account: `Ezequiel24123z`. Exposed Copilot context: `t-ecastano_microsoft`.

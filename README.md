@@ -2259,7 +2259,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **T0 workshop rework** | IMPLEMENTATION IN PROGRESS — ADR-0129; preserve the corrected foundation, ship ceramics and assembled settling, then record current-jar evidence |
+| 35 | **T0 workshop rework** | W1 automatedly validated — ceramics, formed firing, recovery and handling are in; assembled settling is next; manual acceptance remains pending (ADR-0129) |
 | 35 | **Checkpoint verification and integration** | **CONDITIONAL GO** — 33 suites, build, links and all 41 distinct production smokes completed across recorded batches; no-command/client/saved-world acceptance still blocks broad T0 work; [current gate](docs/reviews/go-gate.md), [current validation](docs/testing/latest-validation.md) |
 | 36 | **Gated T0 rework preparation** | research and audit artifacts only — [Tier specification](docs/tiers/t0.md), [external research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [exact acceptance checklist](docs/testing/t0-survival-acceptance.md); no new gameplay or accepted tier |
 
@@ -2306,11 +2306,21 @@ removed: its F0 cycle now produces a physical Calibrated Data Core, and old rese
 ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
 
 T0 Bootstrap is the only mechanically active tier. It starts with ordinary Overworld sources of
-wood, stone, glass, redstone and copper plus two iron for Grindless machinery, then exits with a
-recoverable five-Relay-Matrix batch. Its audit covers the complete survival route, not just
-registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical and control
-parts, discoverability, persistence and automation. T1 stays locked until that route passes the
-shared gate in ADR-0108.
+wood, stone, glass, redstone, copper, clay, gravel and carbon fuel. The Dynamo and Extractor
+still spend two iron in total; optional vanilla tools and hoppers are outside that budget.
+The Quern, water-fed Clay Mixer and formed Firing Chamber now braid milling, wet preparation,
+fuel-backed heat and grog recovery into ceramic insulators. Insulators supply Data Cores and
+primitive plumbing/handling. The physical five-Relay-Matrix exit is unchanged.
+
+The chamber is a 2x2x2 volume with the controller at the front-left bottom and seven brick blocks
+around it. Breaking a corner pauses its work without consuming the batch; repair or indexed-NBT
+reconstruction resumes it. The shared machine engine wakes for arriving water and retries
+waiting outputs after a neighboring inventory is emptied. Every Bootstrap craft, including
+the guide/book and ceramic core, is now visible in the Atlas.
+
+The [workshop specification](docs/tiers/t0.md) targets 35-60 minutes from the material entry,
+not an observed playtime. Its full no-command, graphical and retained-world acceptance is still
+pending. That prevents merge and acceptance of the next tier, not further T0 development.
 
 The Flux Exosuit is in
 (ADR-0103): Assembler-manufactured from visible components. Four pieces with the

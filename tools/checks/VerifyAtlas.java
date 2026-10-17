@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 112, rows.size());
+        eq("atlas lists every generated recipe", 120, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -26,7 +26,15 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 145, allRows.size());
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 163, allRows.size());
+        for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
+            AtlasLogic.Entry row = route(allRows, "craft/" + craft.name());
+            eq(craft.name() + " exposes its complete output batch", craft.resultCount(), row.outputs().size());
+        }
+        AtlasLogic.Entry core = route(allRows, "craft/data_core");
+        yes("the Atlas exposes the ceramic core rather than the retired stone bypass",
+                core.inputs().equals(List.of("item:grindless:ceramic_insulator", "item:minecraft:redstone")));
+        eq("the grog sink is visible", 1, AtlasLogic.consuming(recipes, BootstrapProcesses.GROG).size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -253,8 +261,9 @@ public final class VerifyAtlas {
                         .contains("silicon/zone_refining"));
         yes("silica reduces to that silicon",
                 ids(AtlasLogic.consuming(recipes, "grindless:silica")).contains("silicon/metallurgical"));
-        eq("renewable cobblestone milling makes sand", 1,
-                AtlasLogic.producing(recipes, "minecraft:sand").size());
+        yes("sand exposes industrial milling, primitive milling and unfired recovery",
+                new java.util.HashSet<>(ids(AtlasLogic.producing(recipes, "minecraft:sand")))
+                        .equals(java.util.Set.of("renew/sand", "bootstrap/sand", "bootstrap/unfired_recovery")));
         eq("renewable sand vitrification makes glass", 1,
                 AtlasLogic.producing(recipes, "minecraft:glass").size());
         yes("the renewable glass chain begins at the pulverizer",

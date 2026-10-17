@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CCC",
-    "III",
-    "CCC"
+    "PPP",
+    "ICI"
   ],
   "key": {
-    "C": { "tag": "minecraft:stone_crafting_materials" },
-    "I": { "tag": "forge:ingots/iron" }
+    "P": { "tag": "minecraft:planks" },
+    "C": { "tag": "forge:ingots/copper" },
+    "I": { "item": "grindless:ceramic_insulator" }
   },
   "result": { "item": "grindless:conveyor_belt", "count": 8 }
 }

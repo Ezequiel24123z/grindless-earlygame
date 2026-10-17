@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
+import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/** Checks non-runtime T0 graph and asset preparation against the existing live catalogues and images. */
+/** Checks the T0 audit projection and original assets against the live catalogues and images. */
 public final class VerifyT0Preparation {
 
     private static final Path ASSETS = Path.of("common", "src", "main", "resources", "assets", "grindless");
@@ -39,15 +40,24 @@ public final class VerifyT0Preparation {
 
     private static void graph() throws IOException {
         JsonObject graph = read(Path.of("docs", "tiers", "t0-production-graph.json"));
-        check("graph is an audit, not runtime recipes",
-                graph.get("status").getAsString().equals("audit_only_no_runtime_recipes"));
-        for (String field : List.of("new_runtime_items", "new_runtime_machines", "new_runtime_multiblocks")) {
-            check(field + " remains empty behind the gate", graph.getAsJsonArray(field).isEmpty());
+        check("the graph projects the active workshop rather than supplying runtime recipes",
+                graph.get("status").getAsString().equals("active_runtime_audit"));
+        check("the exact three new material roles are inventoried",
+                new HashSet<>(strings(graph.getAsJsonArray("new_runtime_items"))).equals(
+                        Set.of("ceramic_grog", "unfired_ceramic", "ceramic_insulator")));
+        check("the exact three process machines are inventoried",
+                new HashSet<>(strings(graph.getAsJsonArray("new_runtime_machines"))).equals(
+                        Set.of("quern", "clay_mixer", "firing_chamber")));
+        check("the fixed firing chamber is inventoried",
+                strings(graph.getAsJsonArray("new_runtime_multiblocks")).equals(List.of("firing_chamber")));
+        for (String machine : strings(graph.getAsJsonArray("new_runtime_machines"))) {
+            check(machine + " is registered", BlockCatalogue.block(machine) != null);
         }
         Set<String> sources = new HashSet<>(List.of("ExtractorLogic", "ResearchLogic"));
         BootstrapRecipes.shaped().forEach(recipe -> sources.add("BootstrapRecipes.shaped:" + recipe.name()));
         BootstrapRecipes.shapeless().forEach(recipe -> sources.add("BootstrapRecipes.shapeless:" + recipe.name()));
         T1Recipes.shaped().forEach(recipe -> sources.add("T1Recipes.shaped:" + recipe.name()));
+        BootstrapProcesses.recipes().forEach(recipe -> sources.add("BootstrapProcesses:" + recipe.id()));
         Map<String, List<String>> edges = new HashMap<>();
         for (JsonElement element : graph.getAsJsonArray("nodes")) {
             JsonObject node = element.getAsJsonObject();
@@ -97,8 +107,13 @@ public final class VerifyT0Preparation {
 
     private static void assets() throws IOException {
         JsonObject manifest = read(Path.of("docs", "assets", "t0-asset-manifest.json"));
-        check("asset preparation does not change runtime", !manifest.get("runtime_changes").getAsBoolean());
-        check("no T0 multiblock is introduced", manifest.getAsJsonArray("multiblocks").isEmpty());
+        check("the asset manifest identifies the intentional runtime additions",
+                manifest.get("runtime_changes").getAsBoolean());
+        check("the fixed chamber has a visual composition contract",
+                manifest.getAsJsonArray("multiblocks").size() == 1
+                        && manifest.getAsJsonArray("multiblocks").get(0).getAsJsonObject()
+                        .get("id").getAsString().equals("firing_chamber"));
+        check("all six T0 machines have asset contracts", manifest.getAsJsonArray("machines").size() == 6);
         JsonObject animation = manifest.getAsJsonObject("defaults").getAsJsonObject("animation");
         check("current placeholders are static", animation.get("frame_count").getAsInt() == 1
                 && !animation.get("interpolate").getAsBoolean() && animation.get("mcmeta").isJsonNull());

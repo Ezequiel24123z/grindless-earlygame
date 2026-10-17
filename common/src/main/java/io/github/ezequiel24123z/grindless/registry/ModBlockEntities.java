@@ -77,6 +77,25 @@ public final class ModBlockEntities {
                             .of(ResearchTerminalBlockEntity::new, ModBlocks.RESEARCH_TERMINAL.get())
                             .build(null));
 
+    /** F0 ceramic workshop machines share the process engine and indexed inventory. */
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> QUERN =
+            BLOCK_ENTITIES.register("quern",
+                    () -> BlockEntityType.Builder.of((pos, state) ->
+                            new ProcessMachineBlockEntity(ProcessMachineKind.QUERN, pos, state),
+                            ModBlocks.QUERN.get()).build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> CLAY_MIXER =
+            BLOCK_ENTITIES.register("clay_mixer",
+                    () -> BlockEntityType.Builder.of((pos, state) ->
+                            new ProcessMachineBlockEntity(ProcessMachineKind.CLAY_MIXER, pos, state),
+                            ModBlocks.CLAY_MIXER.get()).build(null));
+
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> FIRING_CHAMBER =
+            BLOCK_ENTITIES.register("firing_chamber",
+                    () -> BlockEntityType.Builder.of((pos, state) ->
+                            new ProcessMachineBlockEntity(ProcessMachineKind.FIRING_CHAMBER, pos, state),
+                            ModBlocks.FIRING_CHAMBER.get()).build(null));
+
     /** T1 generator: furnace fuel at 32 FU/t. */
     public static final RegistrySupplier<BlockEntityType<ThermalGeneratorBlockEntity>> THERMAL_GENERATOR =
             BLOCK_ENTITIES.register("thermal_generator",

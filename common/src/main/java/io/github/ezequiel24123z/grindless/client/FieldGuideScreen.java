@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,10 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
     private static final int TEXT_BOTTOM = 168;
 
     private int page;
+    private List<GuidePage> pages = List.of();
+
+    private record GuidePage(String id, List<FormattedCharSequence> lines) {
+    }
 
     public FieldGuideScreen(FieldGuideMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -37,6 +42,16 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
     @Override
     protected void init() {
         super.init();
+        List<GuidePage> wrapped = new ArrayList<>();
+        int linesPerPage = Math.max(1, (TEXT_BOTTOM - TEXT_TOP) / font.lineHeight);
+        for (String id : GuideCatalogue.pages()) {
+            List<FormattedCharSequence> lines = font.split(
+                    Component.translatable(GuideCatalogue.bodyKey(id)), imageWidth - 16);
+            for (List<FormattedCharSequence> part : GuideCatalogue.paginate(lines, linesPerPage)) {
+                wrapped.add(new GuidePage(id, part));
+            }
+        }
+        pages = List.copyOf(wrapped);
         addRenderableWidget(Button.builder(Component.translatable("gui.grindless.guide.prev"),
                 button -> turn(-1)).bounds(leftPos + 8, topPos + imageHeight - 22, 72, 16).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.grindless.guide.next"),
@@ -57,21 +72,15 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        List<String> pages = GuideCatalogue.pages();
         if (pages.isEmpty()) {
             return;
         }
         page = Math.max(0, Math.min(pages.size() - 1, page));
-        String id = pages.get(page);
+        GuidePage current = pages.get(page);
         graphics.drawString(font, title, 8, 6, HEADER, false);
-        graphics.drawString(font, Component.translatable(GuideCatalogue.titleKey(id)), 8, 18, HEADER, false);
-        List<FormattedCharSequence> lines = font.split(
-                Component.translatable(GuideCatalogue.bodyKey(id)), imageWidth - 16);
+        graphics.drawString(font, Component.translatable(GuideCatalogue.titleKey(current.id())), 8, 18, HEADER, false);
         int y = TEXT_TOP;
-        for (FormattedCharSequence line : lines) {
-            if (y + font.lineHeight > TEXT_BOTTOM) {
-                break;
-            }
+        for (FormattedCharSequence line : current.lines()) {
             graphics.drawString(font, line, 8, y, BODY, false);
             y += font.lineHeight;
         }
@@ -80,7 +89,7 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
     }
 
     private void turn(int delta) {
-        int size = GuideCatalogue.pages().size();
+        int size = pages.size();
         if (size == 0) {
             return;
         }

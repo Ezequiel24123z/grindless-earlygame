@@ -573,19 +573,49 @@ Press            [cat plate die]   4 s  ──> 1 u plate
               1 Machine Casing + 1 u coil + 2 u gear  ──>  Assembler  (crafting table, T1)
                         │
                         ▼
-2 glass + 2 copper + 2 redstone + 1 Calibrated Data Core ──> 4 Relay Matrices (Assembler, 20 s)
+2 glass + 2 copper + 2 redstone + 1 Calibrated Data Core ──> 5 Relay Matrices (Assembler, 20 s)
                         │
                         ▼
                  the crafting table is finished
 ```
 
 That last line is the point. The Assembler is the **last machine with a crafting-table recipe**;
-from there the factory builds the factory. The bootstrap is six machines and perhaps twenty minutes,
-against GregTech's several hours of hand-crafting, and nothing in it is repeated once passed.
+from there the factory builds the factory. ADR-0129 expands the prior minimal Bootstrap into
+the ceramic workshop below; its 35-60-minute material-entry target is not yet observed pacing.
 
-**T0 power is a hand crank and that is deliberate.** 8 FU/t is enough for the Crude Extractor and
-nothing else, so the first real decision a player makes is what to power — which is the whole game
-in miniature.
+**T0 power is a hand crank and that is deliberate.** Its 8 FU/t can feed one full-rate extractor,
+mixer, firing controller or calibration cycle, or a 4 FU/t Quern. Allocating the source and
+buffering material is a real workshop decision; it does not promise every consumer full power
+at once.
+
+---
+
+## Bootstrap ceramic workshop
+
+`BootstrapProcesses` owns these original game quantities (ADR-0129). They are not physical
+mass measurements or copied industrial recipes. Every row also appears in the native Atlas and JEI.
+
+| Station | Inputs | Outputs | Full-power work |
+| --- | --- | --- | --- |
+| Quern | one gravel | one sand | 100 ticks, 4 FU/t |
+| Quern | one brick | one ceramic grog | 60 ticks, 4 FU/t |
+| Quern | one ceramic insulator | one ceramic grog | 60 ticks, 4 FU/t |
+| Quern | three unfired ceramic | two clay balls and one sand | 100 ticks, 4 FU/t |
+| Clay Mixer | two clay balls, one sand, 250 mB water | three unfired ceramic | 120 ticks, 8 FU/t |
+| Clay Mixer | two clay balls, one ceramic grog, 250 mB water | three unfired ceramic | 80 ticks, 8 FU/t |
+| Firing Chamber | three unfired ceramic, one tagged carbon fuel | two ceramic insulators and one ceramic grog | 200 ticks, 8 FU/t; formed, 850 C |
+| Firing Chamber | four clay balls, one tagged carbon fuel | four bricks | 200 ticks, 8 FU/t; formed, 850 C |
+
+Grog's named sink is the second Mixer route; it replaces aggregate and reduces work time without
+increasing yield. Unfired recovery returns solids but never spent water. A positive unit potential
+on these ceramic solids proves no combination of these rows can amplify solid stock; this is
+a bounded economy check, not a proof about every installed mod.
+
+An insulator and redstone now make the Data Core. Insulators also supply the Basic Tank,
+Clay Conduit, Conveyor Belt and Crude Manipulator. The pump's copper/wood/stick recipe is available
+before ceramics, so water access is not circular. Bootstrap chamber bricks can be fired in a
+vanilla furnace; the batch brick route is a continuation, not its own prerequisite. Existing
+crafted cores and matrices remain valid; early quest rewards no longer skip their new route.
 
 ---
 

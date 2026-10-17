@@ -64,6 +64,18 @@ public final class ModItems {
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",
             () -> new Item(new Item.Properties()));
 
+    /** Fired aggregate recovered from bricks and the ceramic process. */
+    public static final RegistrySupplier<Item> CERAMIC_GROG = register("ceramic_grog",
+            () -> new Item(new Item.Properties()));
+
+    /** A wet-formed ceramic body, recoverable before firing. */
+    public static final RegistrySupplier<Item> UNFIRED_CERAMIC = register("unfired_ceramic",
+            () -> new Item(new Item.Properties()));
+
+    /** Fired substrate for physical cores, plumbing and primitive handling. */
+    public static final RegistrySupplier<Item> CERAMIC_INSULATOR = register("ceramic_insulator",
+            () -> new Item(new Item.Properties()));
+
     /** Physical T0 component made by the Research Terminal and consumed by the first matrix. */
     public static final RegistrySupplier<Item> CALIBRATED_DATA_CORE = register("calibrated_data_core",
             () -> new Item(new Item.Properties()));

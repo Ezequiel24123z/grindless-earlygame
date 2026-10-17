@@ -89,6 +89,18 @@ public final class ModBlocks {
             register("research_terminal",
                     () -> new ResearchTerminalBlock(machine().strength(3.0F)));
 
+    /** F0 milling and recovery; no ore-beneficiation recipes. */
+    public static final RegistrySupplier<ProcessMachineBlock> QUERN = register("quern",
+            () -> new ProcessMachineBlock(ProcessMachineKind.QUERN, machine().strength(2.0F)));
+
+    /** F0 clay-body mixing with a real water input. */
+    public static final RegistrySupplier<ProcessMachineBlock> CLAY_MIXER = register("clay_mixer",
+            () -> new ProcessMachineBlock(ProcessMachineKind.CLAY_MIXER, machine().strength(2.0F)));
+
+    /** F0 ceramic firing, only while the seven-brick chamber stands. */
+    public static final RegistrySupplier<ProcessMachineBlock> FIRING_CHAMBER = register("firing_chamber",
+            () -> new ProcessMachineBlock(ProcessMachineKind.FIRING_CHAMBER, machine().strength(3.0F)));
+
     /** T1 walk-away power: furnace fuel at F1. */
     public static final RegistrySupplier<ThermalGeneratorBlock> THERMAL_GENERATOR =
             register("thermal_generator",

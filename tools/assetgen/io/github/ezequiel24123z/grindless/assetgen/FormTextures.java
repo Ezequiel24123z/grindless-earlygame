@@ -25,6 +25,40 @@ public final class FormTextures {
     private FormTextures() {
     }
 
+    /** Three angular, separately outlined fired fragments, ready to return to a clay body. */
+    public static BufferedImage ceramicGrog(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 7, 6, 12, 3.4);
+        field.rect(5, 3, 9, 7, 4.1);
+        field.rect(10, 8, 13, 12, 3.0);
+        field.set(2, 7, 0.0);
+        field.set(9, 3, 0.0);
+        field.bevel(0.55);
+        return field.light(palette);
+    }
+
+    /** Stacked damp blanks, distinct from the finished ribbed insulator. */
+    public static BufferedImage unfiredCeramic(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(2, 8, 13, 12, 2.6);
+        field.rect(3, 5, 12, 8, 3.8);
+        field.rect(4, 3, 11, 5, 4.8);
+        field.bevel(0.45);
+        return field.light(palette);
+    }
+
+    /** A ribbed ceramic spool with a visible bore, not a recolored data core. */
+    public static BufferedImage ceramicInsulator(Palette palette) {
+        HeightField field = new HeightField();
+        field.rect(5, 3, 10, 12, 3.2);
+        field.rect(3, 3, 12, 5, 4.3);
+        field.rect(3, 7, 12, 9, 4.3);
+        field.rect(3, 11, 12, 13, 4.3);
+        field.clearDisc(7.5, 4.0, 1.3);
+        field.bevel(0.35);
+        return field.light(palette);
+    }
+
     /** A trapezoidal ingot: domed top face, chamfered sides, narrowing as it rises. */
     public static BufferedImage ingot(Palette palette) {
         HeightField field = new HeightField();

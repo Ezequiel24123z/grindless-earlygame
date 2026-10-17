@@ -8,7 +8,7 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Next slice: T0-W1 — the ceramic workshop (ADR-0129).** BO is
+**Active tier: T0 Bootstrap. Next slice: T0-W2 — assembled settling (ADR-0129).** BO is
 shipped: the Ground Array, placeholder links, rocket and supraluminal station remain registered
 and smoke-tested, but have no generated or crafting-table survival recipes. F0-F15 and the physical
 matrix rating/architecture model are now in code, including a registered T1 Relay Matrix with
@@ -28,7 +28,7 @@ feature-development blocker. No T2 consumer or unrelated T1 implementation start
 
 | Unit | Playable outcome | Status |
 | --- | --- | --- |
-| T0-W1 | Mill, mix and fire ceramics; recover grog; fabricate a physical core and basic automation | IMPLEMENTATION IN PROGRESS |
+| T0-W1 | Mill, mix and fire ceramics; recover grog; fabricate a physical core and basic automation | automatedly validated; manual acceptance pending |
 | T0-W2 | Assemble an oriented settling line that supplies clay/gravel and recovers water | pending after W1 |
 | T0-W3 | Complete current-jar automation, structure, asset and progression evidence; publish a draft | pending after W1/W2 |
 

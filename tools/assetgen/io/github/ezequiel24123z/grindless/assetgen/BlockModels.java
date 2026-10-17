@@ -103,6 +103,9 @@ final class BlockModels {
             case DECK, SHELL, MARK -> deck();
             case PAD -> pad();
             case BERTH -> berth();
+            case QUERN -> quern();
+            case MIXER -> clayMixer();
+            case FIREBOX -> firebox();
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -114,6 +117,34 @@ final class BlockModels {
         }
         out.append("  ]\n}\n");
         return out.toString();
+    }
+
+    private static List<Box> quern() {
+        return List.of(
+                box(1, 0, 1, 15, 3, 15, "#cap", "#base"),
+                box(3, 3, 2, 13, 6, 14, "#top", "#side"),
+                front(2, 6, 3, 14, 10, 13, "#top", "#side", "#front"),
+                box(6, 10, 6, 10, 13, 10, "#cap", "#base"),
+                box(8, 12, 7, 15, 14, 9, "#top", "#side"));
+    }
+
+    private static List<Box> clayMixer() {
+        return List.of(
+                box(2, 0, 2, 14, 3, 14, "#cap", "#base"),
+                front(2, 3, 2, 14, 9, 4, "#top", "#side", "#front"),
+                box(2, 3, 12, 14, 9, 14, "#top", "#side"),
+                box(2, 3, 4, 4, 9, 12, "#top", "#side"),
+                box(12, 3, 4, 14, 9, 12, "#top", "#side"),
+                box(4, 3, 4, 12, 4, 12, "#top", "#base"),
+                box(1, 9, 7, 15, 11, 9, "#cap", "#base"),
+                box(7, 4, 6, 9, 13, 10, "#top", "#side"));
+    }
+
+    private static List<Box> firebox() {
+        return List.of(
+                front(0, 0, 0, 16, 16, 16, "#top", "#side", "#front"),
+                box(4, 3, -1, 12, 5, 0, "#cap", "#base"),
+                box(12, 6, -1, 14, 10, 0, "#cap", "#base"));
     }
 
     /** The middle or top third of a pylon, as its own model sitting in 0–16. */

@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CGC",
+    "IGI",
     "G G",
-    "CIC"
+    "ICI"
   ],
   "key": {
-    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "C": { "tag": "forge:ingots/copper" },
     "G": { "item": "minecraft:glass" },
-    "I": { "tag": "forge:ingots/iron" }
+    "I": { "item": "grindless:ceramic_insulator" }
   },
   "result": { "item": "grindless:basic_tank" }
 }

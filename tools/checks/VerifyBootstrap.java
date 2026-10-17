@@ -47,6 +47,9 @@ public final class VerifyBootstrap {
                     json.get("type").getAsString());
             eq(recipe.name() + " result", recipe.result(),
                     json.getAsJsonObject("result").get("item").getAsString());
+            int count = json.getAsJsonObject("result").has("count")
+                    ? json.getAsJsonObject("result").get("count").getAsInt() : 1;
+            eq(recipe.name() + " batch count", recipe.resultCount(), count);
             List<String> pattern = strings(json.getAsJsonArray("pattern"));
             yes(recipe.name() + " pattern matches the catalogue", pattern.equals(recipe.pattern()));
             JsonObject key = json.getAsJsonObject("key");

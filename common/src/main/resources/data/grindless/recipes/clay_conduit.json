@@ -1,14 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CCC",
-    "LIL",
+    "I I",
     "CCC"
   ],
   "key": {
     "C": { "tag": "minecraft:stone_crafting_materials" },
-    "L": { "item": "minecraft:clay_ball" },
-    "I": { "tag": "forge:ingots/iron" }
+    "I": { "item": "grindless:ceramic_insulator" }
   },
   "result": { "item": "grindless:clay_conduit", "count": 8 }
 }

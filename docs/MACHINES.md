@@ -23,6 +23,7 @@ of machines can host an enormous recipe space.
 
 ## Contents
 
+- [Active T0 workshop](#active-t0-workshop)
 - [The design target: complexity is not grind](#the-design-target-complexity-is-not-grind)
 - [Process conditions: the central mechanic](#process-conditions-the-central-mechanic)
 - [Machines are condition envelopes](#machines-are-condition-envelopes)
@@ -39,6 +40,33 @@ of machines can host an enormous recipe space.
 - [Open questions](#open-questions)
 
 ---
+
+## Active T0 workshop
+
+ADR-0129 adds a connected primitive workshop before the physical Data Core. These are original
+process roles on the shared machine engine, not recolored T1 ore processors.
+
+| Machine | Role | Item slots | Power and conditions | Structure / automation |
+| --- | --- | --- | --- | --- |
+| Quern | Aggregate milling and recovery of fired/unfired ceramic stock | one input, two outputs | 4 FU/t; F0-rated 320 FU buffer; ambient | Single block; hopper input and automatic neighboring output |
+| Clay Mixer | Clay plus sand/grog and water become a ceramic body | two inputs, one output | 8 FU/t; F0-rated 320 FU buffer; ambient, stirred | Single block; a facing Hand Pump or adjacent water tank supplies its primary fluid |
+| Firing Chamber | Fuel-backed batch ceramics and brick firing | two inputs, two outputs | 8 FU/t control; 850 C held while fuel is a required recipe input | Controller plus seven brick blocks, fixed 2x2x2; all interfaces stay on the controller |
+
+The Firing Chamber's front-left bottom block is the controller. Fill the other seven positions
+with `minecraft:bricks`, in any of four horizontal orientations. Its front/left faces remain
+available for inputs and power; the bottom is available for a hopper. A missing corner stops
+work even when it is not directly adjacent to the controller. Repair resumes the retained
+cycle; no fuel or process input is consumed while invalid. The menu shows a synchronized
+recovery instruction, not a client-side guess about formation.
+
+Inventory and fluid changes wake subscriptions. A complete item batch can pull water while
+waiting for its first recipe, and waiting outputs retry when a neighbor gains room. A completed
+batch does not pay another work tick merely because its output was blocked. Shared indexed NBT
+and the physical Matrix codecs remain in force; the new `WorkRecipe` key associates retained work
+with its owner independently of the currently selectable recipe.
+
+See [the exact workshop routes](PROCESSES.md#bootstrap-ceramic-workshop) and
+[the active specification](tiers/t0.md). The later parametric Arc Reactor kernel remains T3.
 
 ## The design target: complexity is not grind
 

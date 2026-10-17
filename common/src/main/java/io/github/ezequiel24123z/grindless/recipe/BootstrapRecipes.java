@@ -23,6 +23,8 @@ public final class BootstrapRecipes {
     public static final String IRON = "tag:forge:ingots/iron";
     public static final String REDSTONE = "item:minecraft:redstone";
     public static final String GLASS = "item:minecraft:glass";
+    public static final String COPPER = "tag:forge:ingots/copper";
+    public static final String INSULATOR = "item:" + BootstrapProcesses.INSULATOR;
 
     private BootstrapRecipes() {
     }
@@ -34,6 +36,10 @@ public final class BootstrapRecipes {
      */
     public record Shaped(String name, List<String> pattern, Map<String, String> key,
                          String result, int iron) {
+        /** Primitive transport is fabricated in useful batches. */
+        public int resultCount() {
+            return name.equals("conveyor_belt") || name.equals("clay_conduit") ? 8 : 1;
+        }
     }
 
     public record Shapeless(String name, List<String> ingredients, String result) {
@@ -56,12 +62,57 @@ public final class BootstrapRecipes {
                 new Shaped("research_terminal",
                         List.of("PPP", "PGP", "PCP"),
                         Map.of("P", PLANKS, "G", GLASS, "C", COBBLE),
-                        "grindless:research_terminal", 0));
+                        "grindless:research_terminal", 0),
+                new Shaped("quern",
+                        List.of("CCC", "CFC", "CSC"),
+                        Map.of("C", COBBLE, "F", "item:minecraft:flint", "S", STICK),
+                        "grindless:quern", 0),
+                new Shaped("clay_mixer",
+                        List.of("P P", "PCP", "SSS"),
+                        Map.of("P", PLANKS, "C", COPPER, "S", STICK),
+                        "grindless:clay_mixer", 0),
+                new Shaped("firing_chamber",
+                        List.of("BBB", "BFB", "CRC"),
+                        Map.of("B", "item:minecraft:brick", "F", "item:minecraft:furnace",
+                                "C", COBBLE, "R", REDSTONE),
+                        "grindless:firing_chamber", 0),
+                new Shaped("hand_pump",
+                        List.of(" S ", "PCP", " P "),
+                        Map.of("P", PLANKS, "C", COPPER, "S", STICK),
+                        "grindless:hand_pump", 0),
+                new Shaped("basic_tank",
+                        List.of("IGI", "G G", "ICI"),
+                        Map.of("I", INSULATOR, "G", GLASS, "C", COPPER),
+                        "grindless:basic_tank", 0),
+                new Shaped("clay_conduit",
+                        List.of("I I", "CCC"),
+                        Map.of("I", INSULATOR, "C", COBBLE),
+                        "grindless:clay_conduit", 0),
+                new Shaped("conveyor_belt",
+                        List.of("PPP", "ICI"),
+                        Map.of("P", PLANKS, "I", INSULATOR, "C", COPPER),
+                        "grindless:conveyor_belt", 0),
+                new Shaped("crude_manipulator",
+                        List.of(" S ", "ICI", " P "),
+                        Map.of("S", STICK, "I", INSULATOR, "C", COPPER, "P", PLANKS),
+                        "grindless:crude_manipulator", 0),
+                new Shaped("process_atlas",
+                        List.of(" P ", "PGP", " S "),
+                        Map.of("P", PLANKS, "G", GLASS, "S", STICK),
+                        "grindless:process_atlas", 0),
+                new Shaped("quest_book",
+                        List.of("P", "S", "S"),
+                        Map.of("P", "item:minecraft:paper", "S", STICK),
+                        "grindless:quest_book", 0),
+                new Shaped("field_guide",
+                        List.of("P", "P", "S"),
+                        Map.of("P", "item:minecraft:paper", "S", STICK),
+                        "grindless:field_guide", 0));
     }
 
     public static List<Shapeless> shapeless() {
         return List.of(new Shapeless("data_core",
-                List.of(COBBLE, REDSTONE), "grindless:data_core"));
+                List.of(INSULATOR, REDSTONE), "grindless:data_core"));
     }
 
     /** Iron spent across the whole T0 loop. Dynamo and extractor take one each. */

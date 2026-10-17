@@ -134,7 +134,13 @@ public final class BlockCatalogue {
         /** A low cradle. A rocket stands on it. Not a link and not a deck cube. */
         PAD,
         /** Two rails and a ring. A station stands on it. Not the rocket's cradle. */
-        BERTH
+        BERTH,
+        /** A pair of stone milling discs and a small feed mouth. */
+        QUERN,
+        /** An open clay bowl with a horizontal mixing paddle. */
+        MIXER,
+        /** A low fire door and draft indicator in a formed brick chamber. */
+        FIREBOX
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -184,6 +190,9 @@ public final class BlockCatalogue {
             new Entry("hand_crank_dynamo", Geometry.DYNAMO, 1, true, GENERATOR),
             new Entry("crude_extractor", Geometry.EXTRACTOR, 1, true, CONSUMER),
             new Entry("research_terminal", Geometry.TERMINAL, 1, true, CONSUMER),
+            new Entry("quern", Geometry.QUERN, 1, true, CONSUMER),
+            new Entry("clay_mixer", Geometry.MIXER, 1, true, CONSUMER),
+            new Entry("firing_chamber", Geometry.FIREBOX, 1, true, CONSUMER),
             new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR),
             new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER),
             new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
@@ -250,7 +259,8 @@ public final class BlockCatalogue {
             "matter", "voltaic_helmet", "voltaic_chestplate", "voltaic_leggings", "voltaic_boots",
             "flux_cell", "flux_exosuit_helmet", "flux_exosuit_chestplate", "flux_exosuit_leggings",
             "flux_exosuit_boots", "network_tap", "exoskeleton_legs",
-            "helium_3", "survey_rocket", "supraluminal_station", "quest_book", "field_guide");
+            "helium_3", "survey_rocket", "supraluminal_station", "quest_book", "field_guide",
+            "ceramic_grog", "unfired_ceramic", "ceramic_insulator");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

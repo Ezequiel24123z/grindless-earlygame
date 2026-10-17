@@ -2,7 +2,9 @@ package io.github.ezequiel24123z.grindless.client;
 
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -48,6 +50,19 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, titleLabelX, titleLabelY, 0x404040, false);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
+        Component line = statusLine();
+        graphics.drawString(font, font.plainSubstrByWidth(line.getString(), imageWidth - 40),
+                32, 70, 0x404040, false);
+        if (menu.kind() == MachineMenuKind.CLAY_MIXER) {
+            graphics.drawString(font, Component.translatable("gui.grindless.workshop.water",
+                    menu.fluidAmount()), 80, 57, 0x404040, false);
+        }
+    }
+
+    private Component statusLine() {
+        if (menu.structureFault() != WorkshopStructure.Fault.NONE) {
+            return Component.translatable(menu.structureFault().translationKey());
+        }
         MachineStatus[] statuses = MachineStatus.values();
         int ordinal = menu.statusOrdinal();
         MachineStatus status = ordinal >= 0 && ordinal < statuses.length ? statuses[ordinal] : MachineStatus.IDLE;
@@ -56,7 +71,7 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
                 && status == MachineStatus.OUT_OF_BAND) {
             line = menu.host().menuFault();
         }
-        graphics.drawString(font, line, 32, 70, 0x404040, false);
+        return line;
     }
 
     @Override
@@ -64,6 +79,10 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
         renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
+        if (mouseX >= leftPos + 32 && mouseX < leftPos + imageWidth - 8
+                && mouseY >= topPos + 69 && mouseY < topPos + 80) {
+            graphics.renderTooltip(font, statusLine(), mouseX, mouseY);
+        }
         if (mouseX >= leftPos + 8 && mouseX < leftPos + 20
                 && mouseY >= topPos + 16 && mouseY < topPos + 70) {
             graphics.renderTooltip(font, Component.translatable("gui.grindless.energy",

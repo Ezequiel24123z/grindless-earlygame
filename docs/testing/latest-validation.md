@@ -1,4 +1,38 @@
-# Current foundation validation
+# Current T0 rework validation
+
+## Workshop execution, 2026-10-17
+
+State: **IMPLEMENTATION IN PROGRESS** on `ezequiel24123z-tier-0-rework`, based on preserved
+foundation `c62de72`. Contract checkpoint `9aea30e`; exact smoke-selection correction `0838e88`.
+The workshop code is a subsequent working-tree unit, not the old foundation jar.
+
+| Command / scope | Observed result | Evidence |
+| --- | --- | --- |
+| Unified validator at intake | Environment exit 9009: Java absent; no source compile occurred | `build/validation/20261017T124234896Z/` |
+| Workspace-local Temurin restoration | Official archive SHA-256 verified; interrupted extraction completed; Java 17.0.20.1 and Gradle 8.8 run | Toolchain restoration tool executions; no system-wide installation |
+| Online Gradle compilation and bounded retries | Did not reach source compilation: Fabric Maven connections timed out while resolving the Architectury marker; direct Architectury HTTP returned 200 | `workshop-compile.log`, `workshop-compile-bounded.log`, `workshop-compile-ipv4.log`, `maven-resolution-debug.log` under `build/validation/` |
+| Dependency-cache restoration and offline compile | Only module/resource/metadata and Minecraft dependency caches copied from the preserved foundation into this worktree; no code, worlds, configuration or old build outputs copied. First compile then exposed an introduced misplaced method; repaired | `build/validation/workshop-offline-compile.log` |
+| `gradlew --offline :common:compileJava :forge:compileJava :common:writeCheckClasspath` | Exit 0 after that repair | `build/validation/workshop-compile-fixed.log` |
+| Official behavior runner, initial pass | One Atlas expectation still assumed only one sand producer; all other suites passed, including 46 distinct T0 PNGs. The assertion now requires the exact three legitimate routes | `build/validation/workshop-checks.log` |
+| Direct `VerifyWorkshop` | Exit 0: exact counts, non-amplifying ceramic loops, every rotated/missing brick and unloaded-cell rejection | `build/validation/workshop-pure.log` |
+| Original generator | Exit 0; reports 1,424 generated assets. No image-provider credentials were configured; no AI-generated images are claimed | `build/validation/workshop-assets.log` |
+| Documented comma-separated smoke selection, before fix | Exit 1 before any boot: no scenarios selected | `build/validation/workshop-smokes.log` |
+| Real-runner fixtures after selection fix | Native PowerShell and the previously installed isolated Bash both pass exact dispatch, failure propagation, comma selection, and unknown/empty rejection | `0838e88`; `VerifySmokeHarness` tool output |
+| Initial states/workshop/Matrix production batch | States and all 16 Matrix markers pass; workshop fails its exact-at-80-ticks blocked assertion, so the batch exits 1 | `build/validation/workshop-smokes-runtime.log` |
+| Workshop diagnostic rerun | Exit 0, all 19 markers; captured the exact full-output/input-preserved state. A green retry alone is not the repair | `build/validation/workshop-blocked-diagnostic.log`, `workshop-diagnostic-server.log` |
+| State-driven workshop fixture | Instead of assuming startup timing, wait boundedly for exactly 60 paid work ticks, blocked status, the input and both full outputs before releasing capacity; exit 0 | `build/validation/workshop-state-driven-smoke.log` |
+| Final unified validation, including long-guide pagination | Environment/build/34 behavior-resource suites/documentation all exit 0 | `build/validation/20261017T142252076Z/status.tsv` |
+| Final workshop production artifact | All 19 markers and natural exit 0; built and loaded SHA-256 match | `build/validation/workshop-final-smoke.log` |
+
+Final W1 jar SHA-256:
+`3005B11CFC748FECBE7B542DABB8C16C12590344059A6BC0190659CAD25826DC`.
+The source was the W1 working tree after `0838e88`; its following commit preserves that unit.
+No final 42-scenario integration pass is inferred from these targeted runs.
+
+Graphical acceptance, full survival pacing and retained-world process restart remain unobserved.
+The exact [manual checklist](t0-survival-acceptance.md) now includes the workshop and its structure.
+
+## Preserved foundation ledger
 
 Updated: 2026-10-17. Authorized baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
 Branch: `ezequiel24123z-agent-ready-t0-foundation`. All commands run at this worktree's root

@@ -97,6 +97,12 @@ public final class GenerateAssets {
                 FormTextures.dataCore(Palette.of("relay_matrix", 0xEF6C00)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
+        written += write(items, "ceramic_grog",
+                FormTextures.ceramicGrog(Palette.of("ceramic_grog", 0xB37C56)));
+        written += write(items, "unfired_ceramic",
+                FormTextures.unfiredCeramic(Palette.of("unfired_ceramic", 0xB8A183)));
+        written += write(items, "ceramic_insulator",
+                FormTextures.ceramicInsulator(Palette.of("ceramic_insulator", 0xE6D6B2)));
         written += write(items, "refractory_brick",
                 FormTextures.brick(Palette.of("refractory_brick", 0xC46A3A)));
         written += write(items, "metallurgical_silicon",

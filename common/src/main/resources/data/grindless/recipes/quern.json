@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["CCC", "CFC", "CSC"],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "F": { "item": "minecraft:flint" },
+    "S": { "item": "minecraft:stick" }
+  },
+  "result": { "item": "grindless:quern" }
+}

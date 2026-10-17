@@ -60,7 +60,7 @@ public final class VerifyRecipes {
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel, silicon and Relay Matrix graph",
-                112, recipes.size());
+                120, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -904,7 +904,8 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 ships thirty-two physical crafts", 32, T1Recipes.shaped().size());
+        eq("T1 retains twenty-six physical crafts after primitive transport moves to T0", 26,
+                T1Recipes.shaped().size());
         yes("the first Relay Matrix is a five-unit hand batch",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
                         && recipe.resultCount() == 5));
@@ -945,7 +946,7 @@ public final class VerifyRecipes {
         yes("the advanced core is hand-crafted",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("advanced_data_core")));
         yes("the atlas is a hand item",
-                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
+                BootstrapRecipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("process_atlas")));
         no("MK2 has no crafting-table recipe",
                 Files.isRegularFile(RECIPES.resolve("flux_pylon_mk2.json")));
         no("the mill has no crafting-table recipe",
