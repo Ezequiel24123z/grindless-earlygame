@@ -55,10 +55,8 @@ execute store result score n renewable_check run data get block 8 280 8 Energy.F
 scoreboard players operation stored renewable_check += n renewable_check
 execute store result score n renewable_check run data get block 8 280 6 Energy.FluxStored
 scoreboard players operation stored renewable_check += n renewable_check
-execute store result score startup renewable_check run data get block 9 280 8 Energy.FluxStored
-execute store result score n renewable_check run data get block 8 280 5 Energy.FluxStored
-scoreboard players operation startup renewable_check += n renewable_check
-scoreboard players operation stored renewable_check += startup renewable_check
+scoreboard players set startup renewable_check 0
+execute if data block 8 280 7 {Duration:1600} run scoreboard players operation startup renewable_check = burn renewable_check
 scoreboard players operation paid renewable_check = geo renewable_check
 scoreboard players operation paid renewable_check *= geo_cost renewable_check
 scoreboard players operation n renewable_check = bio renewable_check
@@ -74,7 +72,7 @@ scoreboard players operation generated renewable_check *= fuel_value renewable_c
 scoreboard players operation n renewable_check = burn renewable_check
 scoreboard players operation n renewable_check *= eight renewable_check
 scoreboard players operation generated renewable_check -= n renewable_check
-scoreboard players set balance renewable_check 3840
+scoreboard players set balance renewable_check 12800
 scoreboard players operation balance renewable_check += generated renewable_check
 scoreboard players operation balance renewable_check -= paid renewable_check
 scoreboard players operation balance renewable_check -= stored renewable_check

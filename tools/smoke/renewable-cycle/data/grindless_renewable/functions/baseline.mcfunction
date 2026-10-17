@@ -13,3 +13,4 @@ execute store result storage grindless:renewable_check baseline.potential_fu int
 execute store result storage grindless:renewable_check baseline.balance_fu int 1 run scoreboard players get balance renewable_check
 say RENEWABLE-EXTERNAL-STARTUP-EXHAUSTED
 data get storage grindless:renewable_check baseline
+function grindless_renewable:report

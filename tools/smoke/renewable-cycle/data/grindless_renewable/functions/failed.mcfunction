@@ -13,3 +13,4 @@ data get storage grindless:renewable_check failure
 data get block 8 280 8
 data get block 8 280 6
 data get block 8 280 7
+function grindless_renewable:report
