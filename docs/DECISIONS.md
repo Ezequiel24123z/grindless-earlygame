@@ -6131,7 +6131,8 @@ The settled design says it does not:
 ## ADR-0138 — A batch completes only after its fluid inputs are re-verified and drawn exactly
 
 **Status.** Correctness requirements accepted 2026-10-17; source-backed native-store design
-accepted 2026-10-18, with implementation and validation pending. This does not close the secondary-fluid C3 follow-up of
+accepted 2026-10-18. Native implementation and exception correction reviewed, integrated
+locally as `dcb8010`; composed-source validation is pending. This is not full C3 acceptance under
 [ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
 
 **Context.** A process recipe takes its first fluid input from the machine's own buffer. Any
@@ -6185,6 +6186,11 @@ The bounded implementation investigation established:
    changes out of the tentative mutation phase; notify only after the batch and the
    machine's own input/output commit are settled. An aborted operation leaves no committed
    item, primary-fluid, output or source-accounting mutation.
+   This includes synchronous exceptions during validation, withdrawal or consumer settlement,
+   not only boolean rejection. The consumer supplies explicit compensation even when it has
+   no fluid withdrawal. Restore attempted native receipts and deep consumer state before
+   propagating the original unexpected exception; retain compensation diagnostics without
+   skipping remaining restores. Fatal VM errors and world-crash atomicity remain excluded.
 6. Adapt every currently supported native source, including output-only pumps and wells;
    do not silently restrict recipes to refillable tanks. External sided capabilities retain
    their existing restrictions and cannot obtain internal restoration access. Unknown
@@ -6216,7 +6222,7 @@ adapted to Grindless's existing native buffer. None of the inspected implementat
 the stronger arbitrary-handler rollback guarantee, so their unchecked-result behavior is
 not copied. Adding eager multi-tank intake would change saved state and input custody, and
 introducing foreign storage libraries would widen this bounded repair unnecessarily.
-Implementation will reuse Grindless's existing storage primitives and independently apply
+The implementation reuses Grindless's existing storage primitives and independently applies
 the ownership pattern. No upstream code or assets have been imported. Any later direct
 reuse requires exact source, licence and notices in `THIRD_PARTY_NOTICES.md` before copying;
 the reference table is not a blanket permission to reuse third-party material.
@@ -6235,8 +6241,12 @@ the reference table is not a blanket permission to reuse third-party material.
 **Consequences.**
 - No recipe, quantity, saved key or tier change is authorized by this investigation.
 - The independent Bench boundary check and unrelated sustainability work may continue.
-  The transactional portion remains unimplemented; the accepted design is not validation.
-- Any eventual common-machine fix must preserve the two Chemical Reactor recipes without
-  opening new T1 or T2 content.
+  `NativeFluidStore`, `FluidInsert` and the private process `Completion` implement the
+  native-only contract. A first delivery handled boolean rejection but missed exceptions;
+  red fixtures in `b26ee8a` exposed 15 failures, and `fa3e708` repaired them before integration.
+  The same reviewer closed that P1. Child evidence is 34 suites plus production
+  `states,settling`; composed S1/native-source evidence is still required.
+- The common-machine fix preserves the two Chemical Reactor recipes without opening new
+  T1 or T2 content. A targeted process fixture is not a played-survival or retained-world pass.
 - The C3 acceptance on partial extraction now includes verified secondary completion
   (plan amendment PA-0002).

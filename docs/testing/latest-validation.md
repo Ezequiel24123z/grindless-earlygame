@@ -32,6 +32,24 @@ The live S1 report is deliberately report-only. T0 classifications, exact renewa
 real dashboard integration, no-command survival, GUI/JEI and retained-world restart remain
 unaccepted. The sections below are historical evidence tied to their named revisions.
 
+### Native completion and its exceptional-abort correction
+
+Initial native delivery `9782853` passed 34 suites and three targeted production smokes,
+but review found an uncompensated synchronous exception path. Test-only `b26ee8a` reproduced
+15 fluid assertion failures before any runtime repair. Correction `fa3e708` then passed
+the 34-suite runner and production `states,settling` with identical built/deployed jar SHA-256
+`493413D96B2EF36C32639174F21225DDF37994C74B2ACA9B06A1A01C6462239B`.
+Full source/consumer state, quotas, caches, original exceptions, absent tentative callbacks
+and exact retries are exercised by `VerifyFluid`, not attributed to the production smoke.
+The same reviewer closed the P1. Child evidence is preserved in session
+`b2ef80f6-6560-44b8-9f0b-53290f389c06`, `files/c3-p1-completion-result.txt`.
+
+The four native commits were cherry-picked as `9e19d15`, `66b52aa`, `f933a96`, `dcb8010`
+without overlapping the S1 files. The persistent validator now runs the official combined
+suite and `states,settling` on exact integration revision
+`dcb801056566dcd728cb3023de16c56cc6009dbd`. Its result is pending; child-local passes
+do not silently certify the composition, full native exit, survival or retained worlds.
+
 ## C3 preservation and coordination transfer, 2026-10-17
 
 **Not C3 completion, Tier acceptance or merge readiness.** The published checkpoint preceding

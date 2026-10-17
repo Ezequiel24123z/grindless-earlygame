@@ -15,10 +15,10 @@ The live audit is still report-only and unannotated, so this is not T0 sustainab
 The reviewed Bench-only checkpoint `092af299` is locally integrated with its
 34-suite pass; its initial capture failure is retained in the check ledger.
 
-The isolated C3 worker implements ADR-0138's native-store contract over existing
-`FluidBuffer` storage. The ADR records three pinned upstream investigations and licence
-boundaries; no code was imported and no generic external rollback is claimed. This new
-implementation still needs its own validation. The manual Matrix exit, existing native
+ADR-0138's native-store implementation and exception correction are reviewed and locally
+integrated at `dcb8010`; the composed S1/native gate is running. The ADR records three
+pinned upstream investigations and licence boundaries; no code was imported and no generic
+external rollback is claimed. The manual Matrix exit, existing native
 sources and external side restrictions are preserved.
 
 T0 source evidence is not classification: the two-iron quick start is an optional manual
@@ -26,7 +26,7 @@ allocation, initial boards/bricks need explicit bootstrap, and Astra must reconc
 crank/extractor progression with quest prerequisites before S2. Static resource review found
 no proven C3 mapping defect; client/visual acceptance remains pending.
 
-Next: receive the corrected native C3 unit and independent renewable-cycle proof, then
+Next: receive the composed S1/native gate and independent renewable-cycle proof, then
 integrate serially; prepare S2 from the verified core and source evidence. Product
 dependencies, held ports and manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
@@ -52,7 +52,7 @@ data are required implementation, not substitutes for renewable gameplay.
 | --- | --- | --- |
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
-| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | partial `092af299` run-checks passed 34 suites; bounded native implementation active in child worktree, not coordinator-integrated and its new code awaits validation; client/JEI, native cycle, visual asset acceptance and full smokes pending |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | native correction reviewed and locally integrated at `dcb8010`; composed validation and independent renewable-cycle fixture active; client/JEI, visual acceptance and full integration pending |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
 | sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified: 36 suites and deterministic reports; S2 annotations, canonical pack resolution and live closure pending |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |

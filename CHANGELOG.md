@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Native fluid completion integrated with exception compensation (ADR-0138).** Batches
+  revalidate native identity, face access, full fluid state and output quota before exact
+  withdrawal, deduplicate backing stores and defer notifications until settlement. Explicit
+  consumer compensation restores items, output, recipe/cache and paid work alongside native
+  receipts on boolean rejection or synchronous exceptions; public `insert` is never rollback.
+  Completed batches wait for fluids without more Flux and report starvation separately from
+  output blockage. The review's exception defect was reproduced red, repaired and rechecked.
+  Child checks and `states,settling` pass at `fa3e708`; validation of local integration
+  `dcb8010` with S1 is pending. No recipe, tier, NBT key or external integration changed.
 - **S1 core verified on unchanged `639881f` (ADR-0135).** The persistent execution gate
   passed all 36 official suites, including 1,126 sustainability and 95 adapter assertions
   and all twelve repaired requirements. Two independent live JVMs reproduced byte-identical

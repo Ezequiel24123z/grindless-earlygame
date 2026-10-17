@@ -75,10 +75,11 @@ cross-repository memory preference.
 36 suites passed, including all twelve repaired requirements; independent live processes
 produced byte-identical reports. Astra accepts the S1 core scope only. The live audit has
 2 errors, 1,247 unknowns and no annotations: S2 and renewable closure remain pending.
-Native C3 session `b2ef80f6-6560-44b8-9f0b-53290f389c06` delivered
-`9782853` with targeted passing evidence, but final review found a P1 exception-restoration
-gap. That child is correcting native receipts and consumer compensation; do not integrate
-the delivered runtime or reuse its passes for the correction. Isolated session
+Native C3 session `b2ef80f6-6560-44b8-9f0b-53290f389c06` corrected the exception-restoration
+P1 after reproducing 15 failures in `b26ee8a`; `fa3e708` passes its 34 suites and production
+`states,settling`, and the same reviewer closed the P1. The four native commits are integrated
+locally as `9e19d15`, `66b52aa`, `f933a96`, `dcb8010`. The persistent gate now validates
+that composition with S1 on exact `dcb8010`; do not substitute child passes for it. Isolated session
 `6b1c9b59-c772-4031-a234-c8b0eaa33042` implements the independent native renewable-cycle
 fixture. Its scope separates actual sources/downstream/core from recipe assertions and
 the still-manual physical Matrix craft; it must not invent a console crafting hook.
@@ -169,7 +170,7 @@ they remain held behind current integration.
   MC 1.20.1), and canonical `mekanism/Mekanism` `95b03e838aa94128596db42154a1527048372999`
   (MIT, MC 1.20.1). These were not runtime-tested and no code was imported.
 
-Next: receive the corrected native C3 unit and renewable-cycle evidence, and prepare S2
+Next: receive the composed native C3/S1 gate and renewable-cycle evidence, and prepare S2
 from the verified core without promoting its report-only unknowns to closure.
 Astra reviews and integrates the results serially. Reconcile
 the delivered T0 evidence for S2; product-task order, dependencies, acceptance and all three

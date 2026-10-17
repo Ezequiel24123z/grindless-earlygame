@@ -83,8 +83,8 @@ unrated item lookup must still find the F2 route (ADR-0124).
   and site faults. Declare environmental inputs; do not relabel finite veins renewable.
 - `recipe/RenewableProcesses.java` — aggregate/biomass and downstream F0 routes.
 - `recipe/BootstrapAssembly.java` — Bench/Assembler projections of existing craft quantities.
-  The current Bench covers Bootstrap/four vanilla crafts, not necessarily the Relay Matrix
-  in `T1Recipes`; physical exit automation requires proof.
+  The Bench covers Bootstrap/four vanilla crafts, never a Relay Matrix. The family-wide
+  `VerifyRecipes` guard preserves the T0 hand-crafted exit (ADR-0137).
 - `item/CrankHandleItem.java` — bounded bootstrap/emergency F0 work, not perpetual manual power.
 - `machine/GeneratorKind.java` and the thermal generator implementation — shared F0/F1
   behavior; biomass registration follows supplier availability. Probe-before-drain alone does
@@ -124,12 +124,23 @@ policy ([ADR-0107](DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-con
 
 - `fluid/FluidState.java` and `fluid/FluidLogic.java` — volume, temperature, pressure.
   Ids are strings, not a Forge fluid type.
-- `fluid/FluidBuffer.java` and `container/FluidInsert.java`.
+- `fluid/FluidBuffer.java` — each buffer has one native owner.
+- `fluid/NativeFluidStore.java` — private snapshots/receipts and synchronous batch withdrawal,
+  with explicit consumer `Settlement.apply/restore`. Restoration never uses public insertion.
+- `container/FluidInsert.java` — source identity, backing-store deduplication and opposite-face
+  permissions shared by selection and commit. Unsupported handlers do not participate.
+- `fluid/FluidEndpoint.java` — native store bridge for the seven logistics endpoints and
+  `ProcessMachineBlockEntity`; external capability restrictions are unchanged.
 - `forge/.../fluid/forge/MachineFluidCapability.java` — the Forge `FLUID_HANDLER` map.
 
 `tools/checks/VerifyFluid.java` requires the ids in `FluidLogic` and `ProcessLogic`
 to be the same strings. Ambient gases do not travel the Clay Conduit; a tank holds
 them. The catalogue is [`PROCESSES.md`](PROCESSES.md#the-fluid-catalogue).
+The same suite exercises real native/process completion: split and extract-only sources,
+aliases, stale identity/state/quota/permissions, boolean and exceptional aborts, complete
+consumer/source restoration, deferred callbacks and exact retries. Source quota mutation is
+silent until settlement. Preserve original exceptions and all remaining compensations if
+one restoration reports an error; no VM/crash or external-handler guarantee is implied.
 
 ## Byproduct sink
 
@@ -237,8 +248,11 @@ enum. `VerifyT0Preparation` checks the static parts, exact texture-end continuit
 idle/active preview in addition to the ordinary controller models.
 
 `ProcessMachineBlockEntity` retains paid work under `WorkRecipe`, separately from the live
-`Recipe` selection (which is empty when inputs are invalid). Legacy saves derive the owner from
-`Recipe`. A different recipe resets work; quantity changes, starvation and structure repair do not.
+`Recipe` selection. An incomplete selection may clear when inputs become invalid, but a
+completed batch retains its selected recipe while primary/secondary fluids are unavailable.
+Legacy saves derive the owner from `Recipe`. A different recipe resets work; quantity changes,
+starvation and structure repair do not. Completed input waits poll without drawing more Flux;
+missing fluid is `STARVED`, not output `BLOCKED`. No new persistence keys are introduced.
 Outputs are reserved before any ingredient is consumed. Fluid arrival wakes work; pending output
 has its own bounded export subscription, including after a neighboring inventory is emptied.
 F0 kinds pass their rating into the base constructor before buffer creation, rather than reading
