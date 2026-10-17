@@ -24,10 +24,20 @@ public interface FluidEndpoint {
         return Math.min(state.millibuckets(), Math.max(0, capacity() - current.millibuckets()));
     }
 
+    /**
+     * Returns the unaccepted remainder. An extractable face need not accept insertion, so this
+     * operation is not a guaranteed inverse of {@link #extract(Direction, int)}.
+     */
     FluidState insert(Direction from, FluidState state);
 
     boolean canExtract(Direction from);
 
+    /**
+     * For a positive request on an extractable face, returns exactly the lesser of the requested
+     * amount and the current contents, retaining their fluid identity, temperature and pressure.
+     * Returns empty when extraction is disallowed or the request is non-positive. In-mod
+     * endpoints do not apply a hidden rate limit to this operation (ADR-0138).
+     */
     FluidState extract(Direction from, int millibuckets);
 
     /** Current contents, for Forge's tank view. Temperature and pressure are Grindless-only. */

@@ -860,6 +860,10 @@ public final class VerifyRecipes {
     }
 
     private static void c3Routes(List<ProcessRecipe> recipes) {
+        no("the Assembly Bench never fabricates a Relay Matrix (ADR-0137)",
+                recipes.stream().filter(recipe -> recipe.family() == MachineFamily.ASSEMBLY_BENCH)
+                        .flatMap(recipe -> recipe.itemOutputs().stream())
+                        .anyMatch(output -> output.id().equals("grindless:relay_matrix")));
         List<String> renewableIds = List.of(
                 "source/geological_aggregate", "source/biomass", "bootstrap/dry_aggregate",
                 "bootstrap/wet_aggregate", "bootstrap/flint_separation", "bootstrap/fibreboard",
