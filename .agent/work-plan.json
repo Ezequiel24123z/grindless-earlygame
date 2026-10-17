@@ -2,22 +2,25 @@
   "schema": "grindless.work-plan",
   "schema_version": 1,
   "updated": "2026-10-17",
-  "phase": "preservation_checkpoint_for_fresh_orchestrated_continuation",
+  "phase": "coordinator_receipt_verified_prepared_work_not_dispatched",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
   "session_sqlite_tasks_migrate": false,
   "migration": {
-    "checkpoint_commit": null,
-    "checkpoint_resolution": "Exact preservation SHA supplied in fresh kickoff; never a guessed self-reference",
-    "fresh_session_id": null,
-    "receipt_status_at_checkpoint": "pending_creation",
+    "checkpoint_commit": "b012bc467df469522d1624e630f306cfd8d79842",
+    "checkpoint_resolution": "Received preservation source; the containing receipt commit is resolved from Git, not a guessed self-reference",
+    "fresh_session_id": "471f2731-3479-49e1-9d10-08eee32bbcbd",
+    "coordinator_branch": "ezequiel24123z-direccion-orquestada-t0",
+    "receipt_status_at_checkpoint": "verified_isolated_clean_intake_originals_and_live_draft_PRs",
     "workspace_mode": "new_isolated_worktree_based_on_preservation_checkpoint_not_forked_chat",
     "old_session_after_publication": "quiescent_no_product_edits",
     "old_agent_merge_enabled": false,
     "old_session_automation_attached": false,
     "old_event_subscriptions": [],
-    "original_documents": "staged_attachments_available_on_demand",
+    "original_documents": "two_staged_attachments_plus_authorized_legacy_reference_all_three_added_to_native_Library",
+    "receipt_turn_scope": "Documentation and mechanical receipt integrity only; no application edits, builds, behavior suites, smokes or C3 dispatch",
+    "session_tasks_reconstructed": {"tasks": 16, "dispatch_dependencies": 20, "completion_requirements": 1},
     "environment_bootstrap": "private_paths_not_committed",
     "preserve": ["old_worktrees", "prior_sessions", "renderer_child", "ignored_toolchains_caches_and_evidence"]
   },
@@ -47,9 +50,9 @@
     "reactivate_old_automation": false
   },
   "input_documents": [
-    {"id": "original_t0_charter", "file": "pasted-text-7bc75a7f-2014-4a1f-860a-a955e07f1a81.txt", "sha256": "17E7F5E31AB378A28182AEC5D11A37E2D57C8252C84AB2C505DAACC19854F1CB", "note": "Latest orchestration request supersedes its primary-coder role"},
-    {"id": "sustainability_communication_dashboard", "file": "pasted-text-ce219e39-f8b4-47d7-98bd-93f99a28f718.txt", "sha256": "760629032A3BDE601F9A7398095C46763B6EA755E38EDFF7AB7262BF4D5457A6"},
-    {"id": "later_functional_ports", "file": "pasted-text-50bf95a6-b365-450d-b4e6-db75a39da104.txt", "sha256": "2A125EE17ACDB55C743CD3B6652AE1DCE04F76F1C4B4F4C8A28279B5A600AACA", "note": "Starts only after current T0 source/sustainability/communication/dashboard integration"}
+    {"id": "original_t0_charter", "file": "pasted-text-7bc75a7f-2014-4a1f-860a-a955e07f1a81.txt", "sha256": "17E7F5E31AB378A28182AEC5D11A37E2D57C8252C84AB2C505DAACC19854F1CB", "received_via": "authorized_legacy_local_reference_not_staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed", "note": "Latest orchestration request supersedes its primary-coder role"},
+    {"id": "sustainability_communication_dashboard", "file": "pasted-text-ce219e39-f8b4-47d7-98bd-93f99a28f718.txt", "sha256": "760629032A3BDE601F9A7398095C46763B6EA755E38EDFF7AB7262BF4D5457A6", "received_via": "staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed"},
+    {"id": "later_functional_ports", "file": "pasted-text-50bf95a6-b365-450d-b4e6-db75a39da104.txt", "sha256": "2A125EE17ACDB55C743CD3B6652AE1DCE04F76F1C4B4F4C8A28279B5A600AACA", "received_via": "staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed", "note": "Starts only after current T0 source/sustainability/communication/dashboard integration"}
   ],
   "references": {
     "handoff": ".agent/handoff.md",
@@ -73,6 +76,54 @@
   },
   "next_task_after_receipt": "renewable-t0",
   "parallel_opportunity": "Pinned read-only inventory extraction alongside bounded C3 work; Astra owns canonical schema and no worker duplicates recipe quantities",
+  "prepared_assignments": [
+    {
+      "id": "c3-core-safety",
+      "task_id": "renewable-t0",
+      "status": "prepared_not_dispatched",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "b012bc467df469522d1624e630f306cfd8d79842",
+      "dispatch_rule": "After the reception turn, resolve the receipt HEAD and verify application inputs still match the pinned preservation revision",
+      "outcome": "Review and repair the bounded C3 condition-regulation and fuel-transaction seams before broader integration",
+      "owned_files": [
+        "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ProcessMachineKind.java",
+        "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ProcessMachineBlockEntity.java",
+        "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ThermalGeneratorBlockEntity.java",
+        "common/src/main/java/io/github/ezequiel24123z/grindless/machine/GeneratorKind.java",
+        "tools/checks/VerifyMachine.java",
+        "tools/checks/VerifyEnergy.java",
+        "tools/checks/VerifyWorkshop.java",
+        "tools/checks/VerifyFluid.java"
+      ],
+      "acceptance": [
+        "Restrict heldConditions regulation appropriately and enforce the existing 1450 C Firing ceiling without rewriting unrelated condition controls",
+        "Prove fuel admission, partial extraction and backpressure cannot lose or duplicate fuel; preserve F0/F1 behavior and output reservations",
+        "Run the smallest relevant checks only after edits are stable; report exact source, failures and remaining evidence gaps",
+        "Do not change catalogue quantities, ironBudget policy, Matrix progression, assets or shared coordination documents"
+      ],
+      "stop_condition": "Return the bounded diff and evidence, or escalate required architectural decisions/new file ownership to Astra before expanding; no commit, push or PR write",
+      "remaining_C3_scope": "Forge/JEI/client/localization, exact counts and bootstrap budget, physical Bench/Matrix exit, cancelled assets and sustained source cycles remain separate unaccepted follow-ups"
+    },
+    {
+      "id": "pinned-inventory-extraction",
+      "task_id": "production-inventory",
+      "status": "prepared_not_dispatched",
+      "model": "gpt-6-luna",
+      "input_revision": "b012bc467df469522d1624e630f306cfd8d79842",
+      "outcome": "Extract source-bound machine-readable inventory facts for Astra's canonical model, not another prose-only summary",
+      "owned_files": [],
+      "owned_output": "Session artifact production-inventory-b012bc4.json; no repository writes",
+      "read_scope": ["ProcessGraph and its recipe contributors", "SupplyCatalogue", "local tags", "BootstrapRecipes", "T1Recipes", "other authored recipe JSON", "quests and objectives"],
+      "acceptance": [
+        "Read immutable pinned Git inputs, never a runtime tree changing under C3 work",
+        "Include IDs, input/output/catalyst roles, authoritative quantities, projection context and source file/line/revision provenance",
+        "Identify environmental declarations and unresolved dynamic projections without inventing renewable verdicts or treating a fixture as the live catalogue",
+        "A partial result does not complete production-inventory; refresh the real export after integrated C3 changes"
+      ],
+      "stop_condition": "Return the JSON artifact with coverage and explicit unresolved cases; no runtime edits, independent schema authority, publication or broad test run"
+    }
+  ],
   "acceptance": {
     "automated_milestone": ["Exact-source build and current suites", "Relevant native cycles and full current integration scenario inventory with natural exit", "Built/loaded artifact hashes and honest failure ledger", "Complete inventory, recursive audit, JSON/human reports and CI ratchet", "Canonical gameplay/player/dashboard data and real-data review", "Safe bootstrap, renewable automation, physical Matrix exit and persistence", "Astra final review and checkpoint publication"],
     "manual_merge_and_tier_gates": ["Observed GUI and JEI interaction", "No-command survival progression", "Retained-world restart and migration acceptance"],
@@ -111,25 +162,26 @@
       "next_action": "Use as a lead, never as an exhaustive export or current WIP count"
     },
     {
-      "id": "coordinator-receipt", "title": "Receiving the preservation checkpoint", "status": "pending", "depends_on": [],
+      "id": "coordinator-receipt", "title": "Receiving the preservation checkpoint", "status": "done", "depends_on": [],
       "owner": "new Astra coordinator",
-      "next_action": "Verify supplied checkpoint, isolated branch, original documents and current PR54 state; reload this plan",
+      "result": "b012bc4 verified in independent clean worktree; live PR54/PR53 remain drafts; all three hashes matched and native Library entries confirmed; 16 tasks reconstructed",
+      "next_action": "Publish this documentation receipt, send the single requested confirmation and end the reception turn; prepared implementation/extraction remain undispatched",
       "acceptance": "Fresh context, preserved WIP, correct ownership and model policy; only migration pause lifted"
     },
     {
-      "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "paused_for_migration", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
+      "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "pending", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
       "next_action": "Review existing source/generator/Bench/asset WIP and integrate all relevant surfaces",
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Automated physical Matrix exit", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {
       "id": "production-inventory", "title": "Exporting the complete live inventory", "status": "pending", "depends_on": ["coordinator-receipt"],
-      "owner": "bounded extraction/export worker; Astra schema authority", "input_revision": null,
+      "owner": "bounded extraction/export worker; Astra schema authority", "input_revision": "b012bc467df469522d1624e630f306cfd8d79842",
       "next_action": "Pin agreed inputs and export real graph, crafts, supplies, tags and objectives; do not edit runtime quantities",
       "acceptance": ["Machine-readable output, not a summary", "ProcessGraph/SupplyCatalogue/local tags/BootstrapRecipes/T1Recipes/other authored JSON/quests covered", "Explicit environmental sources", "Source-bound counts and deterministic refresh after runtime changes"]
     },
     {
-      "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "paused_for_migration", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
+      "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "pending", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "next_action": "Design canonical annotations/roots while runtime and inventory work proceed; implement validator and reports",
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
@@ -141,7 +193,7 @@
       "acceptance": "Consistent names/routes/handling/uncertainty; no duplicate quantities, fictional consumers or mandatory hoarding"
     },
     {
-      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "paused_for_migration", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
+      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "pending", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
       "owner": "bounded integration workers; Astra schema and real-data review",
       "next_action": "Generate adjacent schema-1 data.json from canonical data/evidence; integrate local serving and PR CI artifact",
       "acceptance": ["Real source-bound data without sensitive paths/logs", "No synthetic fallback", "Canonical labels and explicit discard/unknown states", "Exact source_commit/context.commit deliverable rule", "Real-data/browser review", "Stable publication only from validated milestones through an approved mechanism"]

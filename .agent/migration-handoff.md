@@ -20,6 +20,12 @@ Do not use `fork_session`, replay the whole chat, or switch a branch in the main
 Original request documents are transferred as staged attachments, available on demand.
 The local environment bootstrap is private; do not put personal paths or credentials here.
 
+**Receipt correction:** two originals arrived as staged attachments; the T0 charter arrived
+through its authorized legacy local reference. All three hashes were verified and all three
+originals were added through the native Library tool. The [active handoff](handoff.md) records
+the receiving coordinator and checkpoint. This corrects the intended attachment modality above;
+it does not claim that three staged attachments were copied.
+
 Confirm the received commit, new branch, attachment fingerprints and understood open work.
 Reload tasks from `work-plan.json`; the old session's SQLite task table is not transferred.
 Receipt lifts the migration pause only, not product/manual acceptance gates. Continue through

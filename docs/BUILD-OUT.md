@@ -8,8 +8,8 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Next: receive the preservation checkpoint in a fresh Astra
-coordinator, then delegate bounded C3 source integration (ADR-0133, ADR-0134).**
+**Active tier: T0 Bootstrap. Receipt of `b012bc4` is verified in the fresh Astra coordinator.
+Next after the reception-only turn: delegate bounded C3 source integration (ADR-0133, ADR-0134).**
 The old session is paused for migration, not continuing application implementation.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.

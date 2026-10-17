@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Clean-context coordinator receipt recorded (ADR-0134).** The new isolated Astra session
+  received `b012bc4`, verified the live draft PR54/PR53 chain and all three original hashes,
+  and reconstructed 16 tasks with separate dispatch/completion dependencies. Two originals
+  arrived as staged attachments and the T0 charter by authorized legacy reference; all three
+  were added to the receiving Library. Bounded Sol 6.1 Max C3 and pinned Luna extraction
+  assignments are prepared, not dispatched. This documentation-only receipt does not run
+  application builds/smokes or accept C3, manual progression or a Tier.
+
 - **Renewable-source WIP preserved for clean-context orchestration (ADR-0133, ADR-0134).**
   Geological/biological sources, biomass power, primitive assembly, recovery tooling and
   cancelled-worker generated assets are checkpointed without claiming completion. Only a

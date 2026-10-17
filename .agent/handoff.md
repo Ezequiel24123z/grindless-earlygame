@@ -1,18 +1,39 @@
 # Active orchestration handoff
 
 Updated: 2026-10-17. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
-This commit preserves C3 WIP for a clean-context migration; it does not finish the product.
-The latest published checkpoint before preservation was
-`d292dab005c8f8a321061d9885dd12b8351dd69c`. The fresh kickoff supplies the exact new checkpoint;
-do not guess a self-referential SHA.
+Preservation checkpoint `b012bc467df469522d1624e630f306cfd8d79842` was received in a fresh,
+isolated worktree, following `d292dab005c8f8a321061d9885dd12b8351dd69c`.
+This receipt changes coordination documentation only; it does not finish or validate C3.
+
+## Verified coordinator receipt
+
+The independent Astra session is `471f2731-3479-49e1-9d10-08eee32bbcbd`, on
+`ezequiel24123z-direccion-orquestada-t0`. Intake HEAD matched the preservation checkpoint
+and the worktree was clean. The session has no coordinating creator. Live PR54 and PR53
+were both open drafts; PR54's head matched the received checkpoint and its base remained
+`ezequiel24123z-agent-ready-t0-foundation`.
+
+All three original-document SHA-256 fingerprints match [the plan](work-plan.json).
+Two documents arrived as staged attachments. The T0 charter arrived by an explicitly
+authorized legacy local reference, not as a third staged attachment. The native Library
+tool successfully added all three originals, and the Library listing confirmed three entries.
+No private paths or copied attachment workarounds are part of this repository.
+
+The session task database was reconstructed from all 16 JSON tasks, with 20 dispatch
+dependencies and one separate completion requirement. Partial inventory research is not a
+completed export. The prepared C3 and pinned extraction assignments have not been dispatched.
+This reception turn runs no application build, behavior suite, smoke or asset regeneration.
+The containing Git commit records the receipt; resolve its identity from Git rather than
+guessing a self-referential SHA.
 
 ## Cold start
 
 Read [the detailed transfer](migration-handoff.md), [the durable work plan](work-plan.json)
 and [pending checks](pending-checks.json), then the active build-out, relevant ADRs, README
-plan, route map and validation ledger. The original three request documents accompany the
-new session as attachments, not a replay of this conversation. Their earlier instruction
-that Astra is the primary coder is superseded by the owner's latest orchestration decision.
+plan, route map and validation ledger. The three original requests are available in the
+receiving session's Library through the modalities recorded above, not a replay of the old
+conversation. Their earlier instruction that Astra is the primary coder is superseded by
+the owner's latest orchestration decision.
 
 The new session is an isolated-worktree **Astra coordinator**. Astra owns architecture,
 product/Tiers, sustainability, graphs, machine families/multiblocks, migrations, integration
@@ -35,7 +56,9 @@ its worktree, JDK, caches, logs, worlds or the renderer child's preserved work.
   player communication, real dashboard data and CI integration remain incomplete.
 - Inventory research was partial and produced no requested JSON artifact.
 
-**After confirming receipt:** reload the JSON tasks and delegate bounded C3 review/integration.
+**Next, after this reception-only turn:** dispatch the prepared bounded C3 review/integration.
+Its first safety unit owns condition regulation and generator fuel transactions; the exact
+files, pinned input, acceptance criteria and escalation/stop rules are in the JSON plan.
 Review condition regulation and its ceiling, partial gas extraction, every Forge/JEI/client/
 localization case, actual recipe/test/budget counts, the Bench's physical Matrix exit and
 cancelled assets. A pinned read-only inventory extraction can run alongside it. Astra owns
