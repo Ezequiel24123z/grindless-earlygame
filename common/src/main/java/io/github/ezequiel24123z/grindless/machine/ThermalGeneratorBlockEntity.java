@@ -1,8 +1,10 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
+import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.fluid.FluidNbt;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.container.NeighbourCache;
 import io.github.ezequiel24123z.grindless.container.SlottedContainer;
@@ -16,7 +18,6 @@ import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
 import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.recipe.ThermalLogic;
-import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -32,6 +33,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.SimpleContainer;
 
 import java.util.EnumMap;
@@ -46,9 +48,11 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     private static final String KEY_BURN = "Burn";
     private static final String KEY_DURATION = "Duration";
     private static final String KEY_FUEL = "Fuel";
+    private static final String KEY_GAS = "GasFuel";
     private static final int[] SLOTS = {0};
 
     private final SimpleContainer fuel = new SlottedContainer(1);
+    private final GasFuel gas = new GasFuel();
     private final GeneratorKind kind;
     private final StatusDebounce display = new StatusDebounce();
     private final Map<Direction, NeighbourCache> neighbours = new EnumMap<>(Direction.class);
@@ -66,7 +70,12 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     }
 
     public ThermalGeneratorBlockEntity(GeneratorKind kind, BlockPos pos, BlockState state) {
-        super(kind.type(), pos, state, kind.tier());
+        this(kind.type(), kind, pos, state);
+    }
+
+    private ThermalGeneratorBlockEntity(BlockEntityType<ThermalGeneratorBlockEntity> type,
+                                        GeneratorKind kind, BlockPos pos, BlockState state) {
+        super(type, pos, state, kind.tier());
         this.kind = kind;
         fuel.addListener(container -> {
             if (loading) {
@@ -113,7 +122,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
         if (loading || getLevel() == null) {
             return;
         }
-        if (burnRemaining > 0 || canIgnite() || energy().getStored() > 0) {
+        if (burnRemaining > 0 || canIgnite() || energy().getStored() > 0 || gas.hasReturn()) {
             working = subscriptions().subscribe(working, this::work);
         } else if (working != null) {
             working.unsubscribe();
@@ -135,6 +144,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
             return;
         }
         lastWorkTick = tick;
+        returnGas();
         boolean burning = false;
         if (energy().getCapacity() - energy().getStored() >= kind.tier().nominal()
                 && (burnRemaining > 0 || tryIgnite())) {
@@ -150,18 +160,18 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     }
 
     private boolean canIgnite() {
-        return FuelPlatform.burnTicks(fuel.getItem(0)) > 0 || kind.acceptsGas() && neighbourHasCo();
+        return FuelPlatform.burnTicks(fuel.getItem(0)) > 0
+                || kind.acceptsGas() && (gas.ready() || neighbourHasGas());
     }
 
-    private boolean neighbourHasCo() {
+    private boolean neighbourHasGas() {
         if (getLevel() == null) {
             return false;
         }
         for (Direction side : Direction.values()) {
             var neighbour = getLevel().getBlockEntity(getBlockPos().relative(side));
             if (neighbour instanceof FluidEndpoint endpoint && endpoint.canExtract(side.getOpposite())
-                    && endpoint.contents().millibuckets() >= FluidLogic.BUCKET
-                    && FluidLogic.burnTicks(endpoint.contents().id()) > 0) {
+                    && gas.canCollect(endpoint.contents())) {
                 return true;
             }
         }
@@ -169,42 +179,150 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
     }
 
     private boolean tryIgnite() {
-        ItemStack stack = fuel.getItem(0);
-        int ticks = FuelPlatform.burnTicks(stack);
+        return tryIgniteItem(FuelPlatform.burnTicks(fuel.getItem(0)))
+                || kind.acceptsGas() && tryIgniteGas();
+    }
+
+    private boolean tryIgniteItem(int ticks) {
         if (ticks > 0) {
             burnRemaining = ticks;
             burnDuration = ticks;
+            ItemStack stack = fuel.getItem(0);
             stack.shrink(1);
             fuel.setItem(0, stack);
             return true;
         }
-        return kind.acceptsGas() && tryIgniteGas();
+        return false;
     }
 
-    /** One bucket of CO or hydrogen. Anything else goes back into the tank (ADR-0065, ADR-0077). */
+    /** Partial deliveries remain private until one complete bucket can ignite. */
     private boolean tryIgniteGas() {
+        int ticks = gas.ignite();
+        if (ticks > 0) {
+            burnRemaining = ticks;
+            burnDuration = ticks;
+            return true;
+        }
         if (getLevel() == null) {
             return false;
         }
         for (Direction side : Direction.values()) {
             var neighbour = getLevel().getBlockEntity(getBlockPos().relative(side));
-            if (!(neighbour instanceof FluidEndpoint endpoint) || !endpoint.canExtract(side.getOpposite())) {
+            if (!(neighbour instanceof FluidEndpoint endpoint)) {
                 continue;
             }
-            FluidState available = endpoint.contents();
-            int ticks = FluidLogic.burnTicks(available.id());
-            if (ticks <= 0 || available.millibuckets() < FluidLogic.BUCKET) {
-                continue;
+            gas.collect(endpoint, side.getOpposite());
+            ticks = gas.ignite();
+            if (ticks > 0) {
+                burnRemaining = ticks;
+                burnDuration = ticks;
+                return true;
             }
-            FluidState taken = endpoint.extract(side.getOpposite(), FluidLogic.BUCKET);
-            if (!taken.is(available.id()) || taken.millibuckets() != FluidLogic.BUCKET) {
-                throw new IllegalStateException("Fuel-gas endpoint violated its extraction contract");
-            }
-            burnRemaining = ticks;
-            burnDuration = ticks;
-            return true;
         }
         return false;
+    }
+
+    private void returnGas() {
+        if (!gas.hasReturn() || gas.returnFace == null || getLevel() == null) {
+            return;
+        }
+        var neighbour = getLevel().getBlockEntity(getBlockPos().relative(gas.returnFace.getOpposite()));
+        if (neighbour instanceof FluidEndpoint endpoint) {
+            gas.returnTo(endpoint);
+        }
+    }
+
+    /** A refused contract-violation refund is escrow, not additional burnable capacity. */
+    private static final class GasFuel {
+        private FluidState stored = FluidState.EMPTY;
+        private FluidState pendingReturn = FluidState.EMPTY;
+        private Direction returnFace;
+
+        private boolean hasReturn() {
+            return !pendingReturn.isEmpty();
+        }
+
+        private boolean ready() {
+            return !hasReturn() && stored.millibuckets() >= FluidLogic.BUCKET
+                    && FluidLogic.burnTicks(stored.id()) > 0;
+        }
+
+        private boolean canCollect(FluidState available) {
+            return !hasReturn() && stored.millibuckets() < FluidLogic.BUCKET
+                    && available != null && !available.isEmpty() && FluidLogic.burnTicks(available.id()) > 0
+                    && (stored.isEmpty() || stored.is(available.id()));
+        }
+
+        private void collect(FluidEndpoint endpoint, Direction face) {
+            if (!endpoint.canExtract(face)) {
+                return;
+            }
+            FluidState available = endpoint.contents();
+            if (!canCollect(available)) {
+                return;
+            }
+            int requested = Math.min(FluidLogic.BUCKET - stored.millibuckets(), available.millibuckets());
+            FluidState taken = endpoint.extract(face, requested);
+            if (taken == null || taken.isEmpty()) {
+                return;
+            }
+            int kept = taken.is(available.id()) ? Math.min(requested, taken.millibuckets()) : 0;
+            if (kept > 0) {
+                stored = stored.merge(taken.withAmount(kept));
+            }
+            pendingReturn = taken.withAmount(taken.millibuckets() - kept);
+            if (hasReturn()) {
+                returnFace = face;
+                returnTo(endpoint);
+                if (hasReturn()) {
+                    Grindless.LOG.warn("Retaining {} mB of {} after a fuel-gas extraction contract violation; "
+                                    + "return to source face {} is blocked",
+                            pendingReturn.millibuckets(), pendingReturn.id(), returnFace);
+                }
+            }
+        }
+
+        private void returnTo(FluidEndpoint endpoint) {
+            if (!hasReturn() || returnFace == null) {
+                return;
+            }
+            FluidState remaining = endpoint.insert(returnFace, pendingReturn);
+            if (remaining == null || !remaining.isEmpty() && !remaining.is(pendingReturn.id())
+                    || remaining.millibuckets() > pendingReturn.millibuckets()) {
+                Grindless.LOG.warn("Fuel-gas endpoint returned an invalid refund remainder; escrow is retained");
+                return;
+            }
+            pendingReturn = remaining;
+            if (!hasReturn()) {
+                returnFace = null;
+            }
+        }
+
+        private int ignite() {
+            if (!ready()) {
+                return 0;
+            }
+            int ticks = FluidLogic.burnTicks(stored.id());
+            stored = stored.withAmount(stored.millibuckets() - FluidLogic.BUCKET);
+            return ticks;
+        }
+
+        private void save(CompoundTag root) {
+            CompoundTag tag = new CompoundTag();
+            tag.put("Stored", FluidNbt.save(stored));
+            tag.put("Return", FluidNbt.save(pendingReturn));
+            if (returnFace != null) {
+                tag.putString("ReturnFace", returnFace.getName());
+            }
+            root.put(KEY_GAS, tag);
+        }
+
+        private void load(CompoundTag root) {
+            CompoundTag tag = root.getCompound(KEY_GAS);
+            stored = FluidNbt.load(tag.getCompound("Stored"));
+            pendingReturn = FluidNbt.load(tag.getCompound("Return"));
+            returnFace = Direction.byName(tag.getString("ReturnFace"));
+        }
     }
 
     private void push() {
@@ -242,11 +360,21 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
         if (getLevel() == null || getLevel().isClientSide()) {
             return;
         }
-        MachineStatus observed = ThermalLogic.status(burning || burnRemaining > 0,
-                energy().getStored(), fruitlessPushes);
-        if (display.observe(observed)) {
+        if (observeStatus(burning)) {
             MachineProperties.publish(getLevel(), getBlockPos(), display.shown());
         }
+    }
+
+    private boolean observeStatus(boolean burning) {
+        MachineStatus observed = ThermalLogic.status(burning || burnRemaining > 0,
+                energy().getStored(), fruitlessPushes);
+        if (!burning && burnRemaining == 0 && gas.hasReturn()) {
+            observed = MachineStatus.BLOCKED;
+        }
+        // An unsubscribed machine has no future observations to finish an idle debounce.
+        boolean stableIdle = !burning && burnRemaining == 0 && energy().getStored() == 0
+                && working == null && !gas.hasReturn();
+        return stableIdle ? display.settle(MachineStatus.IDLE) : display.observe(observed);
     }
 
     private void syncData() {
@@ -270,6 +398,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
         tag.putInt(KEY_BURN, burnRemaining);
         tag.putInt(KEY_DURATION, burnDuration);
         tag.put(KEY_FUEL, fuel.createTag());
+        gas.save(tag);
     }
 
     @Override
@@ -280,6 +409,7 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
             burnRemaining = Math.max(0, tag.getInt(KEY_BURN));
             burnDuration = Math.max(0, tag.getInt(KEY_DURATION));
             fuel.fromTag(tag.getList(KEY_FUEL, net.minecraft.nbt.Tag.TAG_COMPOUND));
+            gas.load(tag);
         } finally {
             loading = false;
         }
@@ -309,7 +439,9 @@ public final class ThermalGeneratorBlockEntity extends MachineBlockEntity
 
     @Override
     public Component menuFault() {
-        return Component.empty();
+        return gas.hasReturn()
+                ? Component.literal("Fuel-gas return is blocked; make room in the source endpoint")
+                : Component.empty();
     }
 
     @Override

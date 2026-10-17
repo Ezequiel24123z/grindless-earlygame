@@ -19,7 +19,6 @@ import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.process.ConditionFault;
 import io.github.ezequiel24123z.grindless.process.ConditionReport;
-import io.github.ezequiel24123z.grindless.process.ProcessConditions;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
@@ -48,6 +47,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.SimpleContainer;
@@ -104,7 +104,12 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private boolean loadingInventory;
 
     public ProcessMachineBlockEntity(ProcessMachineKind kind, BlockPos pos, BlockState state) {
-        super(kind.type(), pos, state, kind.tier());
+        this(kind.type(), kind, pos, state);
+    }
+
+    private ProcessMachineBlockEntity(BlockEntityType<ProcessMachineBlockEntity> type,
+                                      ProcessMachineKind kind, BlockPos pos, BlockState state) {
+        super(type, pos, state, kind.tier());
         this.kind = kind;
         this.fluid = new FluidBuffer(FluidLogic.MACHINE_CAPACITY, kind.fluidMaxC(), kind.fluidMaxP());
         this.items = new SlottedContainer(kind.menuKind().size());
@@ -153,7 +158,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     protected void onFirstTick() {
-        setConditions(kind.heldConditions());
+        if (!kind.heldConditions().equals(conditions())) {
+            setConditions(kind.heldConditions());
+        }
     }
 
     @Override
@@ -170,6 +177,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         structureFault = checkStructure();
         siteFault = checkSite();
         ProcessRecipe recipe = recipe();
+        ConditionReport regulation = kind.regulationReport(recipe);
         boolean missing = hasPartialInput() && recipe == null;
         boolean stuck = recipe != null && progress >= recipe.durationTicks() && !canOutput(recipe);
         if (recipe != null && !stuck) {
@@ -197,8 +205,8 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             draining = null;
         }
         if (recipe == null || stuck || structureFault != WorkshopStructure.Fault.NONE
-                || siteFault != SourceSite.Fault.NONE) {
-            publishStatus(recipe, missing, stuck, hasPowerWaiting(), false, ConditionReport.OPTIMAL);
+                || siteFault != SourceSite.Fault.NONE || !regulation.canRun()) {
+            publishStatus(recipe, missing, stuck, hasPowerWaiting(), false, regulation);
         }
         syncData();
     }
@@ -230,13 +238,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             updateSubscriptions();
             return;
         }
-        var held = kind.heldConditions(recipe);
-        if (!held.equals(conditions())) {
-            setConditions(held);
-        }
-        ProcessConditions conditions = ProcessLookup.conditionsOf(recipe);
-        ConditionReport report = conditions.evaluate(conditions());
-        lastFault = report.fault();
+        ConditionReport report = regulateConditions(recipe);
         if (!report.canRun()) {
             publishStatus(recipe, false, false, hasPowerWaiting(), false, report);
             syncData();
@@ -274,6 +276,19 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         publishStatus(next, hasPartialInput() && next == null, stuck, powered, gained > 0.0, report);
         syncData();
         updateSubscriptions();
+    }
+
+    private ConditionReport regulateConditions(ProcessRecipe recipe) {
+        var held = kind.regulatesConditions() ? kind.heldConditions(recipe) : kind.heldConditions();
+        if (!held.equals(conditions())) {
+            setConditions(held);
+        }
+        ConditionReport report = kind.regulationReport(recipe);
+        if (report.canRun()) {
+            report = ProcessLookup.conditionsOf(recipe).evaluate(conditions());
+        }
+        lastFault = report.fault();
+        return report;
     }
 
     private boolean complete(ProcessRecipe recipe) {

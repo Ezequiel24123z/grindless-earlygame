@@ -1,8 +1,26 @@
 package io.github.ezequiel24123z.grindless.fluid;
 
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /** Behaviour checks for T1 fluids. Not part of the mod. */
@@ -10,7 +28,9 @@ public final class VerifyFluid {
 
     private static int failures = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
         units();
         stacks();
         gravity();
@@ -19,11 +39,84 @@ public final class VerifyFluid {
         burn();
         molten();
         pressure();
+        processReservations();
 
         System.out.println(failures == 0
                 ? "ALL FLUID CHECKS PASSED"
                 : failures + " FLUID CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void processReservations() throws Exception {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        ProcessMachineBlockEntity collector = machine(ProcessMachineKind.GEOLOGICAL_COLLECTOR);
+        FluidState water = FluidState.of(FluidLogic.WATER, 400);
+        eq("batch-sized insertion reserves only 250 mB", 250, collector.acceptedAmount(null, water));
+        eq("insert returns exactly the unreserved volume", 150, collector.insert(null, water).millibuckets());
+        eq("reserved inserted fluid fits without a throw", 250, collector.contents().millibuckets());
+        eq("a full input batch accepts no more", 400, collector.insert(null, water).millibuckets());
+
+        CompoundTag overfull = collector.saveWithoutMetadata();
+        overfull.put("Fluid", FluidNbt.save(FluidState.of(FluidLogic.WATER, 3000)));
+        overfull.remove("FluidOutputQuota");
+        collector.load(overfull);
+        eq("overfull NBT is retained rather than silently clipped", 3000, collector.contents().millibuckets());
+        eq("overfull NBT cannot reserve an insertion", 0, collector.acceptedAmount(null, water));
+        eq("overfull NBT returns an insert intact", water, collector.insert(null, water));
+        eq("overfull NBT remains recoverable by extraction", 1000, collector.extract(null, 1000).millibuckets());
+        eq("extraction debits the preserved stock exactly", 2000, collector.contents().millibuckets());
+
+        for (int amount : new int[] {0, 1950, 2000, 3000}) {
+            FluidBuffer destination = FluidBuffer.ambient(2000);
+            destination.set(FluidState.of(FluidLogic.WATER, amount));
+            FluidBuffer source = FluidBuffer.ambient(1000);
+            source.set(FluidState.of(FluidLogic.WATER, 1000));
+            int reserved = Math.min(FluidLogic.CONDUIT_MB_PER_TICK, destination.accepted(source.state()));
+            FluidState taken = source.extract(null, Math.min(reserved, 25));
+            yes("a rate-limited primary pull fits its reservation at " + amount + " mB",
+                    destination.offer(taken).isEmpty());
+            eq("a partial primary pull conserves source plus buffer", amount + 1000,
+                    source.state().millibuckets() + destination.state().millibuckets());
+            yes("an overfull buffer reserves no additional primary fluid",
+                    amount <= destination.capacity() || reserved == 0);
+        }
+
+        ProcessMachineBlockEntity trough = machine(ProcessMachineKind.SETTLING_TROUGH);
+        Field field = ProcessMachineBlockEntity.class.getDeclaredField("fluid");
+        field.setAccessible(true);
+        FluidBuffer buffer = (FluidBuffer) field.get(trough);
+        ProcessRecipe batch = new ProcessRecipe("check/fluid_output", MachineFamily.SETTLING_TROUGH,
+                List.of(IngredientSpec.fluid(FluidLogic.WATER, 1000)),
+                List.of(OutputSpec.fluid(FluidLogic.WATER, 750)), Double.NaN, null, 160, 4);
+        Method canOutput = ProcessMachineBlockEntity.class.getDeclaredMethod("canOutput", ProcessRecipe.class);
+        canOutput.setAccessible(true);
+        buffer.set(FluidState.of(FluidLogic.WATER, 3000));
+        no("an overfull remainder blocks before output commit", (boolean) canOutput.invoke(trough, batch));
+        eq("failed output reservation preserves all input", 3000, buffer.state().millibuckets());
+        buffer.set(FluidState.of(FluidLogic.WATER, 2250));
+        yes("output reserves against the exact post-consumption state", (boolean) canOutput.invoke(trough, batch));
+        Method consume = ProcessMachineBlockEntity.class.getDeclaredMethod("consumeFluid", ProcessRecipe.class);
+        consume.setAccessible(true);
+        consume.invoke(trough, batch);
+        yes("reserved non-vented output fits after consumption",
+                buffer.offer(FluidLogic.emitted(FluidLogic.WATER, 750)).isEmpty());
+        eq("output commit preserves the exact reserved volume", 2000, buffer.state().millibuckets());
+
+        FluidBuffer target = FluidBuffer.ambient(1000);
+        target.set(FluidState.of(FluidLogic.WATER, 900));
+        FluidState offered = FluidState.of(FluidLogic.WATER, 250);
+        FluidState remainder = target.offer(offered);
+        int moved = offered.millibuckets() - remainder.millibuckets();
+        yes("an in-mod partial insert returns a bounded same-id remainder",
+                remainder.is(offered.id()) && moved >= 0 && moved <= offered.millibuckets());
+        eq("partial output acceptance leaves every unaccepted mB", 150, remainder.millibuckets());
+    }
+
+    private static ProcessMachineBlockEntity machine(ProcessMachineKind kind) throws Exception {
+        Constructor<ProcessMachineBlockEntity> constructor = ProcessMachineBlockEntity.class.getDeclaredConstructor(
+                BlockEntityType.class, ProcessMachineKind.class, BlockPos.class, BlockState.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance(null, kind, BlockPos.ZERO, Blocks.STONE.defaultBlockState());
     }
 
     private static void units() {

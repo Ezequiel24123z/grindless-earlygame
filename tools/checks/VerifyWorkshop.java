@@ -3,6 +3,8 @@ package io.github.ezequiel24123z.grindless.recipe;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import io.github.ezequiel24123z.grindless.structure.WorkshopGeometry;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,9 +22,23 @@ public final class VerifyWorkshop {
         conservation();
         structures();
         settling();
+        firingEnvelope();
         System.out.println(failures == 0 ? "ALL WORKSHOP CHECKS PASSED"
                 : failures + " WORKSHOP CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void firingEnvelope() {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        List<ProcessRecipe> firing = ProcessLookup.recipes().stream()
+                .filter(recipe -> recipe.family() == MachineFamily.FIRING_CHAMBER).toList();
+        check("the live generated catalogue includes firing recipes", !firing.isEmpty());
+        ProcessMachineKind chamber = ProcessMachineKind.FIRING_CHAMBER;
+        for (ProcessRecipe recipe : firing) {
+            check(recipe.id() + " lies inside the declared firing envelope",
+                    chamber.regulationReport(recipe).canRun()
+                            && ProcessLookup.conditionsOf(recipe).evaluate(chamber.heldConditions(recipe)).canRun());
+        }
     }
 
     private static void recipes() {

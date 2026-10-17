@@ -3,28 +3,141 @@ package io.github.ezequiel24123z.grindless.machine;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
+import io.github.ezequiel24123z.grindless.process.ConditionDimension;
+import io.github.ezequiel24123z.grindless.process.ConditionFault;
+import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.ProcessField;
+import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /** Throwaway check of the machine layer. Not part of the mod. */
 public final class VerifyMachine {
 
     private static int failures = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
         subscriptions();
         upgrades();
         chassis();
         pushBackoff();
         persistence();
         statuses();
+        regulation();
 
         System.out.println(failures == 0
                 ? "ALL MACHINE CHECKS PASSED"
                 : failures + " MACHINE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void regulation() throws Exception {
+        ProcessMachineKind chamber = ProcessMachineKind.FIRING_CHAMBER;
+        yes("the firing chamber declares regulation", chamber.regulatesConditions());
+        for (ProcessMachineKind kind : ProcessMachineKind.values()) {
+            if (kind == chamber) {
+                continue;
+            }
+            no(kind + " does not regulate recipe bands", kind.regulatesConditions());
+            ProcessRecipe unnamed = new ProcessRecipe("check/fixed", kind.family(),
+                    List.of(), List.of(), Double.NaN, null, 80, 4);
+            yes(kind + " retains its fixed held state", kind.heldConditions().equals(kind.heldConditions(unnamed)));
+            ProcessMachineBlockEntity fixed = machine(kind);
+            regulate(fixed, unnamed);
+            ConditionState first = fixed.conditions();
+            regulate(fixed, unnamed);
+            yes(kind + " does not replace unchanged conditions", first == fixed.conditions());
+        }
+
+        ProcessMachineBlockEntity machine = machine(chamber);
+        for (double temperature : new double[] {20, 500, 850, 1400, 1450}) {
+            ProcessRecipe recipe = firing(temperature, "REDUCING");
+            ConditionReport report = regulate(machine, recipe);
+            yes(temperature + " C is admitted", report.canRun());
+            eq(temperature + " C is held exactly", temperature, machine.conditions().temperature());
+            yes("the requested reducing atmosphere is held",
+                    machine.conditions().atmosphere() == Atmosphere.REDUCING);
+            ConditionState held = machine.conditions();
+            regulate(machine, recipe);
+            yes("unchanged regulated conditions are not replaced", held == machine.conditions());
+            yes("valid conditions clear the visible fault", machine.menuFault().getString().isEmpty());
+        }
+        ConditionReport unnamed = regulate(machine, firing(Double.NaN, "OXIDISING"));
+        yes("an unnamed temperature does not fault", unnamed.canRun());
+        eq("NaN keeps the default firing temperature", BootstrapProcesses.FIRING_C,
+                machine.conditions().temperature());
+
+        for (double temperature : new double[] {1450.01, 19.99, Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY}) {
+            firingFault(machine, firing(temperature, "REDUCING"), ConditionDimension.TEMPERATURE);
+        }
+        for (String atmosphere : new String[] {"INERT", "VACUUM", null, "", " ", "UNKNOWN", "reducing"}) {
+            firingFault(machine, firing(1000, atmosphere), ConditionDimension.ATMOSPHERE);
+        }
+
+        CompoundTag legacy = new CompoundTag();
+        ConditionState old = ConditionState.AMBIENT.withTemperature(1900).withAtmosphere(Atmosphere.INERT);
+        legacy.put("Conditions", old.save(new CompoundTag()));
+        legacy.putDouble("Progress", 12);
+        legacy.putString("WorkRecipe", "check/firing");
+        machine.load(legacy);
+        yes("load retains the old saved conditions until regulation", old.equals(machine.conditions()));
+        Method firstTick = ProcessMachineBlockEntity.class.getDeclaredMethod("onFirstTick");
+        firstTick.setAccessible(true);
+        firstTick.invoke(machine);
+        yes("the first tick restores a safe default", chamber.heldConditions().equals(machine.conditions()));
+        ConditionReport restored = regulate(machine, firing(1100, "REDUCING"));
+        yes("the next work regulation admits the selected saved-world recipe", restored.canRun());
+        eq("old-save regulation uses the recipe, not saved 1900 C", 1100, machine.conditions().temperature());
+        eq("regulation preserves paid work", 12, machine.saveWithoutMetadata().getDouble("Progress"));
+    }
+
+    private static void firingFault(ProcessMachineBlockEntity machine, ProcessRecipe recipe,
+                                    ConditionDimension dimension) throws Exception {
+        ConditionReport report = regulate(machine, recipe);
+        no(recipe.temperatureC() + "/" + recipe.atmosphere() + " cannot run", report.canRun());
+        yes("the fault names the unreachable dimension", report.fault() == ConditionFault.OUTSIDE_ENVELOPE
+                && report.limiting() == dimension);
+        yes("invalid conditions are never held or clamped",
+                machine.conditions().equals(ProcessMachineKind.FIRING_CHAMBER.heldConditions()));
+        yes("the existing menu exposes the condition fault", !machine.menuFault().getString().isEmpty());
+        yes("the published report selects OUT_OF_BAND even with blocked output",
+                ProcessLogic.status(true, false, true, report.canRun(), true, false)
+                        == MachineStatus.OUT_OF_BAND);
+    }
+
+    private static ProcessRecipe firing(double temperature, String atmosphere) {
+        return new ProcessRecipe("check/firing", ProcessMachineKind.FIRING_CHAMBER.family(),
+                List.of(), List.of(), temperature, atmosphere, 80, 4);
+    }
+
+    private static ConditionReport regulate(ProcessMachineBlockEntity machine, ProcessRecipe recipe)
+            throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("regulateConditions", ProcessRecipe.class);
+        method.setAccessible(true);
+        return (ConditionReport) method.invoke(machine, recipe);
+    }
+
+    private static ProcessMachineBlockEntity machine(ProcessMachineKind kind) throws Exception {
+        Constructor<ProcessMachineBlockEntity> constructor = ProcessMachineBlockEntity.class.getDeclaredConstructor(
+                BlockEntityType.class, ProcessMachineKind.class, BlockPos.class, BlockState.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance(null, kind, BlockPos.ZERO, Blocks.STONE.defaultBlockState());
     }
 
     private static void subscriptions() {

@@ -5,7 +5,9 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
+import io.github.ezequiel24123z.grindless.process.ConditionDimension;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
+import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.process.ProcessField;
@@ -386,6 +388,11 @@ public enum ProcessMachineKind {
         }
 
         @Override
+        public boolean regulatesConditions() {
+            return true;
+        }
+
+        @Override
         public WorkshopStructure structure() {
             return WorkshopStructure.FIRING_CHAMBER;
         }
@@ -502,13 +509,47 @@ public enum ProcessMachineKind {
         return SourceSite.NONE;
     }
 
-    /** The primitive chamber regulates its declared fuel-backed band rather than faking one fixed temperature. */
+    /** Only a declared regulator may change its held state with the selected recipe. */
+    public boolean regulatesConditions() {
+        return false;
+    }
+
+    /** Admission precedes recipe condition parsing, including malformed atmosphere names. */
+    public ConditionReport regulationReport(ProcessRecipe recipe) {
+        if (!regulatesConditions() || recipe == null) {
+            return ConditionReport.OPTIMAL;
+        }
+        ConditionEnvelope band = envelope();
+        double temperature = recipe.namesTemperature()
+                ? recipe.temperatureC() : heldConditions().temperature();
+        if (!Double.isFinite(temperature) || temperature < band.minTemperature()
+                || temperature > band.maxTemperature()) {
+            return ConditionReport.outsideEnvelope(ConditionDimension.TEMPERATURE);
+        }
+        Atmosphere atmosphere = regulatedAtmosphere(recipe);
+        if (atmosphere == null || !band.supportsAtmosphere(atmosphere)) {
+            return ConditionReport.outsideEnvelope(ConditionDimension.ATMOSPHERE);
+        }
+        return ConditionReport.OPTIMAL;
+    }
+
+    /** The primitive chamber holds only a valid fuel-backed band, never a clamped substitute. */
     public ConditionState heldConditions(ProcessRecipe recipe) {
-        if (this != FIRING_CHAMBER || recipe == null) {
+        if (!regulatesConditions() || recipe == null || !regulationReport(recipe).canRun()) {
             return heldConditions();
         }
-        return heldConditions().withTemperature(recipe.temperatureC())
-                .withAtmosphere(Atmosphere.valueOf(recipe.atmosphere()));
+        ConditionState held = heldConditions();
+        return held.withTemperature(recipe.namesTemperature() ? recipe.temperatureC() : held.temperature())
+                .withAtmosphere(regulatedAtmosphere(recipe));
+    }
+
+    private static Atmosphere regulatedAtmosphere(ProcessRecipe recipe) {
+        for (Atmosphere value : Atmosphere.values()) {
+            if (value.name().equals(recipe.atmosphere())) {
+                return value;
+            }
+        }
+        return null;
     }
 
     /** Whether the fluid buffer may hold melt. The tank and the clay pipe still refuse it. */
