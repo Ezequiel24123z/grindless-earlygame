@@ -3,8 +3,8 @@
 Date: 2026-10-17. Phase B gate closure and non-gameplay T0 preparation.
 Branch: `ezequiel24123z-agent-ready-t0-foundation`.
 Authorized source baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
-Last published HEAD before this checkpoint: `3eb7351d45a3e1b2295bc5b796b651bfd62d099f`.
-The commit containing this file records the preparation checkpoint; do not confuse
+Last published HEAD before this checkpoint: `38f8691ec6d28215a7b50595473650f2b037340d`.
+The commit containing this file records the validation-tool checkpoint; do not confuse
 the source revision under test with a later documentation commit.
 
 - Original verification commits: `bcdb162a`, `46eb83fe`, preserved on their remote branch.
@@ -32,13 +32,14 @@ the source revision under test with a later documentation commit.
   All 33 suites pass; the asset check verifies 25 existing PNGs. Image keys are absent.
 - Independent excerpt review found incomplete installer-output tracking. The fix now records
   installed libraries; a missing official jar was removed and correctly regenerated with the
-  same SHA-256. The full review limits and failed first repair attempt still need recording.
-- Pending coherent tooling patch: single validation entry, installer completeness and moving the
-  existing Shadow version into gradle.properties without changing its value.
+  same SHA-256. Review limits and the failed first repair attempt are recorded.
+- Validation tooling: unified entry point, stage ledgers and installer completeness are in.
+  The final fast gate passes 33 suites, build and docs; a missing-JDK regression fails explicitly.
+  The existing Shadow version is centralized without changing its value.
 - Background checks: none at this snapshot.
 - Evidence: [current validation](../docs/testing/latest-validation.md), archived reports and
   [pending checks](pending-checks.json). Raw new executable logs will use `build/validation/`.
 
-**Next safe task:** checkpoint the validation-tool patch, execute the 18 remaining Windows
+**Next safe task:** execute the 18 remaining Windows
 scenarios, finalize the honest gate and create a draft PR. BP, player acceptance and broad
 T0 changes remain held. Do not claim this proposal is a finalized expanded Tier.

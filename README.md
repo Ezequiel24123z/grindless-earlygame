@@ -2232,7 +2232,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | partly done — scanner/deconstructor and tools are in; drones move to T3, replication to T4/T9 |
 | 24 | Orbital layer: launch, satellites, station | prototypes exist; survival implementation is rescheduled to T10 (ADR-0107) |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | planned for T11 (ADR-0068, ADR-0107) |
-| 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
+| 26 | CI workflow | ✅ done — unified fast [validation entry](docs/testing/test-strategy.md) plus isolated production smoke shards; ADR-0049, ADR-0126, ADR-0128 |
 | 27 | **Autonomous build-out** | active — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) preserves the shipped calendars and names BP as next |
 | 28 | **Prototype expansion** | ✅ technically complete — worlds, travel and quests are validated prototypes; ADR-0107 withdraws their premature survival route |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |

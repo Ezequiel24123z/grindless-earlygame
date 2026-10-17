@@ -20,7 +20,7 @@ its private location is not a repository dependency. New Gradle files use
 Raw build/check logs will be ignored files under `build/validation/`; smoke outputs use
 `forge/run/smoke-<scenario>.log` and `forge/run/smoke-report.html`.
 
-## Not yet established
+## Initial intake status (superseded by the execution records below)
 
 Current source compilation, all behavior checks, full build, F2 runtime/NBT coverage,
 complete isolated smokes and interactive acceptance have not yet run. Gradle `test NO-SOURCE`
@@ -154,3 +154,26 @@ Full smokes were explicitly not requested in that fast run.
 Image-provider configuration was checked without displaying credentials: both supported keys
 were absent. No image-generation call was made. The manifest includes prompts, atlas layout,
 metadata and QC rules; existing generated placeholders remain unchanged.
+
+## Review remediation and unified entry point
+
+The [independent excerpt review](../reviews/foundation-independent-review.md) found one concrete
+installer-completeness defect. It did not independently authenticate the checkout or log files.
+The first repair attempt (directory output declaration alone) still left the installer up to
+date after a library was removed; the known local backup was restored. The final explicit
+path/size inventory forced the official installer to repair that missing jar, with matching
+SHA-256. Both attempts are retained in `build/validation/installer-repair.log`,
+`installer-inventory.log` and `installer-repair-verified.log`.
+
+The final unified fast command is
+`powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\validate.ps1 -Root .`.
+Environment, full build, **33 suites** and all links pass with stage exits 0 in
+`build/validation/20261017T112251069Z/status.tsv`. A separate nonexistent-JDK fixture exits
+nonzero at the first stage with an explicit error and does not launch a build/smoke:
+`build/validation/unified-failure-verified.log`. Native compiler stderr is retained; actual
+exit codes decide success. Bash/PowerShell script syntax passes.
+
+Local `bash tools/check-links.sh .` returned 1 because `pwsh` is unavailable in this Windows
+environment. The native Windows shared checker passes; Linux execution of the new wrapper
+must be confirmed by the current CI rather than claimed from a syntax pass. No optional
+prerequisite failure is silently counted as success.

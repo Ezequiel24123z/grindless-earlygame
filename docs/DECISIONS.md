@@ -139,6 +139,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0125](#adr-0125--machine-inventories-persist-slots-with-explicit-legacy-migration) | Machine inventories persist slots with explicit legacy migration | Accepted |
 | [0126](#adr-0126--integration-smokes-boot-the-distributable-forge-jar) | Integration smokes boot the distributable Forge jar | Accepted |
 | [0127](#adr-0127--smoke-runner-dispatch-is-tested-independently-of-minecraft) | Smoke-runner dispatch is tested independently of Minecraft | Accepted |
+| [0128](#adr-0128--validation-records-its-scope-and-repairs-incomplete-server-installations) | Validation records its scope and repairs incomplete server installations | Accepted |
 
 ---
 
@@ -5545,3 +5546,44 @@ second scenario list in CI (duplicates the source of truth).
 **Consequences.** Historical Linux aggregate smoke successes are not full-inventory evidence.
 The Windows production inventory remains independent. New Linux integration evidence must come
 from the corrected runner. This changes no game data or runtime behavior.
+
+---
+
+## ADR-0128 — Validation records its scope and repairs incomplete server installations
+
+*2026-10-17 · Accepted*
+
+**Context.** Independent review of supplied source excerpts identified that two generated Forge
+argument files do not establish a complete installed runtime. A removed library can coexist with
+an up-to-date preparation task. A local deletion/recovery regression confirmed the weakness;
+declaring the libraries directory alone did not repair the already-recorded installation.
+The full Windows run was also interrupted after 23 scenarios, reinforcing that start/finish,
+exit status and scope must be recorded instead of inferred.
+
+**Decision.** The installer owns its libraries and writes an explicit inventory of runtime jar
+and argument-file paths and sizes. Preparation is up to date only while every recorded file
+exists at its recorded size. A missing/truncated file reruns the official installer. This is a
+completeness check, not a cryptographic corruption audit. Mutable worlds and staged mod jars
+remain outside the installer's ownership.
+
+`tools/validate.ps1` and `.sh` provide one fast foundation entry point: environment, compile/
+full build, all behavior/resource checks and documentation. `-Smokes` / `--smokes` adds the
+complete isolated inventory. Every stage records UTC times, its actual exit code and log in
+ignored `build/validation/<run-id>/status.tsv`; the source snapshot records HEAD and dirty
+paths. Failure stops the sequence, and an unrequested smoke stage is explicitly not acceptance.
+CI uses the same fast entry point and retains its logs; the existing six smoke shards remain.
+
+The Bash documentation entry calls the same PowerShell implementation through PowerShell Core
+(`pwsh`), a documented prerequisite available on the CI runner. No second anchor algorithm is
+maintained. The shared checker includes non-ignored new Markdown as well as tracked files.
+
+**Alternatives rejected.** Assuming argument files imply intact libraries (the reviewed
+counterexample reproduced); silently falling back to another installation; installing globally;
+duplicating every check in CI; treating a cancelled run or an omitted smoke stage as green;
+reimplementing the established Markdown anchor rules independently on another platform.
+
+**Consequences.** The deletion regression restores the official Forge jar with the same SHA-256.
+Fast validation passes all 33 current suites and links. PowerShell Core is required for local
+Linux/macOS documentation validation; absence is a failure, not a skipped check. The existing
+Shadow version moves to `gradle.properties` without a version change. None of these tooling
+changes authorizes a new gameplay tier.

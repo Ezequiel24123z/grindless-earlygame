@@ -37,7 +37,7 @@ The exact-rating manufacturing input remains distinct from stronger-controller s
 | Full quantitative production-graph analysis | Existing checks pin recipes and the new audit graph names dependencies; no economy solver exists | Add a live-catalogue validator only for a chosen chain after its requirements are stable. |
 | Native Bootstrap recipe-view coverage | Atlas currently includes the T1 shaped catalogue and calibration, not every Bootstrap/vanilla recipe | Assess discoverability in BP, then a bounded viewer slice if needed. |
 | Script twins | `convert-audio.ps1` and `run-smokes-batch.sh` remain missing at this checkpoint | Port only when those optional workflows are exercised; do not claim full tooling parity. |
-| Hardcoded Shadow plugin coordinate | Pre-existing `build.gradle` literal conflicts with version-location convention | A separate no-version-change build cleanup; not a reason to rework the mod's dependencies. |
+| Version ownership | Shadow's existing coordinate moved from a build-script literal into `gradle.properties` under ADR-0128 | Keep all future version changes centralized; no dependency version was changed. |
 | Optional development launch hang | Reproduced; production acceptance no longer uses it | Upstream ownership/fix investigation, without reflective shutdown or forced green. |
 | Final art and localization | Intentionally deferred by ADR-0108 | Original candidates and visual QC after mechanics, following the asset manifest. |
 

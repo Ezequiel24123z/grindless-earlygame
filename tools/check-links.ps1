@@ -20,6 +20,7 @@
 param([Parameter(Mandatory=$true)][string]$Root)
 
 $ErrorActionPreference = 'Stop'
+$Root = (Resolve-Path -LiteralPath $Root).Path
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 
 function Get-Slug([string]$heading) {
@@ -40,7 +41,7 @@ function Get-Slug([string]$heading) {
 # gives exactly the right set: committed documentation, never build output.
 Push-Location $Root
 try {
-    $tracked = @(git ls-files '*.md')
+    $tracked = @(git ls-files --cached --others --exclude-standard '*.md' | Sort-Object -Unique)
 } finally {
     Pop-Location
 }

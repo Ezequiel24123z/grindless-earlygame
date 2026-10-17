@@ -72,17 +72,43 @@ remapJar {
 }
 
 def smokeServer = layout.projectDirectory.dir("run/smoke-server")
+def smokeInventory = smokeServer.file("installation-files.txt")
 tasks.register("installSmokeServer", JavaExec) {
     classpath = configurations.smokeInstaller
     mainClass.set("net.minecraftforge.installer.SimpleInstaller")
     workingDir smokeServer.asFile
     args "--installServer", smokeServer.asFile.absolutePath
     inputs.property "forgeVersion", rootProject.forge_version
+    outputs.dir(smokeServer.dir("libraries"))
     outputs.files(
             smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/win_args.txt"),
-            smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/unix_args.txt"))
+            smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/unix_args.txt"),
+            smokeInventory)
+    outputs.upToDateWhen {
+        def inventory = smokeInventory.asFile
+        if (!inventory.isFile()) {
+            return false
+        }
+        def entries = inventory.readLines("UTF-8")
+        !entries.isEmpty() && entries.every { line ->
+            def entry = line.split("\t", 2)
+            def installed = new File(smokeServer.asFile, entry[0])
+            entry.length == 2 && installed.isFile() && installed.length().toString() == entry[1]
+        }
+    }
     doFirst {
         smokeServer.asFile.mkdirs()
+    }
+    doLast {
+        def libraries = fileTree(smokeServer.dir("libraries")).matching {
+            include "**/*.jar", "**/*_args.txt"
+        }.files.sort()
+        if (libraries.isEmpty()) {
+            throw new GradleException("Forge installation did not produce runtime libraries")
+        }
+        smokeInventory.asFile.setText(libraries.collect { file ->
+            "${smokeServer.asFile.toPath().relativize(file.toPath())}\t${file.length()}"
+        }.join("\n") + "\n", "UTF-8")
     }
 }
 

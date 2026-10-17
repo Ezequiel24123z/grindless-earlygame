@@ -25,11 +25,16 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build
-        run: ./gradlew build
+      - name: Foundation validation
+        run: bash tools/validate.sh .
 
-      - name: Behaviour checks
-        run: tools/run-checks.sh .
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: foundation-validation
+          path: build/validation/
+          if-no-files-found: warn
 
   # Every scenario in tools/smoke/scenarios.txt, spread across parallel shards.
   #

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **One scoped validation entry point and repairable smoke installation (ADR-0128).**
+  Paired `validate` scripts record source, stage times, exit codes and logs; CI uses the same
+  fast build/check/documentation gate. The new Bash link-check entry reuses the PowerShell
+  algorithm rather than drifting. Independent excerpt review found incomplete Forge library
+  tracking; an explicit inventory now restores a deliberately removed official jar. The
+  existing Shadow plugin version is centralized without changing its value.
+
 - **Gated T0 preparation is now executable evidence, not gameplay.** A pinned-source research
   report, reuse-screening register, current-contract Tier specification, audit graph, asset
   manifest/prompts and exact survival/client checklist are recorded. `VerifyT0Preparation`

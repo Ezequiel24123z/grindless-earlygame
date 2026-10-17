@@ -187,6 +187,9 @@ not the Arc Furnace.
 
 ## Checks
 
+- `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;
+  opt into full smokes explicitly. Per-stage results live under `build/validation/<run-id>/`.
+  See [the testing strategy](testing/test-strategy.md).
 - `tools/checks/Verify*.java`, via `tools/run-checks.sh .` after `:common:build`.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
@@ -201,6 +204,7 @@ not the Arc Furnace.
 - `forge/build.gradle` — `prepareSmokeServer` installs the pinned official server and stages the
   actual remapped mod jar plus Architectury. Boot scripts run that artifact, not development
   transformer classes; generated libraries/worlds stay under ignored `forge/run/smoke-server`.
+  The installer checks its path/size inventory before accepting an up-to-date runtime.
 
 Every tool here must have a `.ps1` and a `.sh` twin, because the desk that validates a
 branch runs Windows ([ADR-0106](DECISIONS.md#adr-0106--code-is-written-remotely-it-is-validated-on-the-windows-desk)).
