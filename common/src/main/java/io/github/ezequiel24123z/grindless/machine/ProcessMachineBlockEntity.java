@@ -324,20 +324,11 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (outputs == null) {
             return false;
         }
+        Completion settlement = new Completion(recipe, outputs);
         boolean completed;
         loadingInventory = true;
         try {
-            completed = plan.get().commit(() -> {
-                for (int i = 0; i < recipe.itemInputs().size(); i++) {
-                    items.removeItem(i, recipe.itemInputs().get(i).count());
-                }
-                for (int i = 0; i < outputs.length; i++) {
-                    items.setItem(kind.menuKind().inputs() + i, outputs[i]);
-                }
-                storeFluidOutputs(recipe);
-                progress = Math.max(0.0, progress - recipe.durationTicks());
-                cached = null;
-            });
+            completed = plan.get().commit(settlement);
         } finally {
             loadingInventory = false;
         }
@@ -350,6 +341,48 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         pushOutputs();
         setChanged();
         return true;
+    }
+
+    private final class Completion implements NativeFluidStore.Settlement {
+        private final ProcessRecipe recipe;
+        private final ItemStack[] outputs;
+        private final ItemStack[] beforeItems = new ItemStack[items.getContainerSize()];
+        private final double beforeProgress = progress;
+        private final String beforeRecipeId = cachedRecipeId;
+        private final String beforeWorkRecipeId = workRecipeId;
+        private final ProcessRecipe beforeRecipe = cached;
+
+        private Completion(ProcessRecipe recipe, ItemStack[] outputs) {
+            this.recipe = recipe;
+            this.outputs = outputs;
+            for (int slot = 0; slot < beforeItems.length; slot++) {
+                beforeItems[slot] = items.getItem(slot).copy();
+            }
+        }
+
+        @Override
+        public void apply() {
+            for (int i = 0; i < recipe.itemInputs().size(); i++) {
+                items.removeItem(i, recipe.itemInputs().get(i).count());
+            }
+            for (int i = 0; i < outputs.length; i++) {
+                items.setItem(kind.menuKind().inputs() + i, outputs[i]);
+            }
+            storeFluidOutputs(recipe);
+            progress = Math.max(0.0, progress - recipe.durationTicks());
+            cached = null;
+        }
+
+        @Override
+        public void restore() {
+            for (int slot = 0; slot < beforeItems.length; slot++) {
+                items.setItem(slot, beforeItems[slot].copy());
+            }
+            progress = beforeProgress;
+            cachedRecipeId = beforeRecipeId;
+            workRecipeId = beforeWorkRecipeId;
+            cached = beforeRecipe;
+        }
     }
 
     private boolean hasOutput() {

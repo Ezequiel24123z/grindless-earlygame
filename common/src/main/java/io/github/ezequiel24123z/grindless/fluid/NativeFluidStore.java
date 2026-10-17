@@ -39,7 +39,7 @@ public final class NativeFluidStore {
         return buffer.state();
     }
 
-    /** A native store reached through one still-valid endpoint identity and face. */
+    /** A native store reached through one still-valid endpoint identity and face; the check is read-only. */
     public record Access(NativeFluidStore store, BooleanSupplier allowed) {
         public Access {
             Objects.requireNonNull(store);
@@ -56,10 +56,37 @@ public final class NativeFluidStore {
         }
     }
 
+    /** Consumer-owned mutations and their silent, complete compensation. */
+    public interface Settlement {
+        void apply();
+
+        void restore();
+    }
+
+    private static final Settlement NO_SETTLEMENT = new Settlement() {
+        @Override
+        public void apply() {
+        }
+
+        @Override
+        public void restore() {
+        }
+    };
+
     /** Plans without mutation, counting a backing store only once across faces and requests. */
     public static Optional<Batch> plan(List<Request> requests) {
+        return plan(null, requests);
+    }
+
+    /** Also retains the consumer's native state, even when it has no fluid input to withdraw. */
+    public static Optional<Batch> plan(NativeFluidStore consumer, List<Request> requests) {
         Map<NativeFluidStore, Receipt> byStore = new IdentityHashMap<>();
         List<Receipt> receipts = new ArrayList<>();
+        if (consumer != null) {
+            Receipt receipt = new Receipt(consumer, consumer.snapshot());
+            byStore.put(consumer, receipt);
+            receipts.add(receipt);
+        }
         for (Request request : requests) {
             int remaining = request.millibuckets();
             for (Access access : request.sources()) {
@@ -132,9 +159,11 @@ public final class NativeFluidStore {
         }
 
         private boolean withdraw() {
+            if (amount == 0) {
+                return true;
+            }
             FluidState taken = store.buffer.extract(before.state().id(), amount);
             if (!taken.equals(before.state().withAmount(amount))) {
-                store.restore(before);
                 return false;
             }
             store.restoreQuota.accept(Math.max(0, before.quota() - amount));
@@ -150,38 +179,93 @@ public final class NativeFluidStore {
             this.receipts = List.copyOf(receipts);
         }
 
+        /** A withdrawal-only batch has no non-native consumer state to compensate. */
+        public boolean commit() {
+            return commit(NO_SETTLEMENT);
+        }
+
         /**
-         * Rechecks every source, then withdraws silently. A late failure restores earlier owners
-         * exactly. Settlement must finish the consumer's own mutations before any notification.
+         * Rechecks every source, then withdraws and settles silently. A rejection or synchronous
+         * runtime exception compensates every attempted withdrawal and any consumer mutation.
+         * Restoration must not notify; unexpected failures retain their original exception and
+         * any compensation failures as suppressed diagnostics. Fatal VM errors are not caught.
+         * Notifications run only after settlement succeeds and are outside the tentative phase.
          * This single-use operation runs on the server thread, never across ticks or a world crash.
          */
-        public boolean commit(Runnable settle) {
-            Objects.requireNonNull(settle);
+        public boolean commit(Settlement settlement) {
+            Objects.requireNonNull(settlement);
             if (attempted) {
                 throw new IllegalStateException("a native fluid batch is single-use");
             }
             attempted = true;
-            for (Receipt receipt : receipts) {
-                if (!receipt.valid()) {
-                    return false;
-                }
-            }
-            int withdrawn = 0;
-            for (Receipt receipt : receipts) {
-                if (!receipt.valid() || !receipt.withdraw()) {
-                    for (int i = withdrawn - 1; i >= 0; i--) {
-                        Receipt previous = receipts.get(i);
-                        previous.store.restore(previous.before);
+            int touched = 0;
+            boolean settling = false;
+            boolean accepted = true;
+            try {
+                for (Receipt receipt : receipts) {
+                    if (!receipt.valid()) {
+                        return false;
                     }
-                    return false;
                 }
-                withdrawn++;
+                for (Receipt receipt : receipts) {
+                    if (!receipt.valid()) {
+                        accepted = false;
+                        break;
+                    }
+                    touched++;
+                    if (!receipt.withdraw()) {
+                        accepted = false;
+                        break;
+                    }
+                }
+                if (accepted) {
+                    settling = true;
+                    settlement.apply();
+                }
+            } catch (RuntimeException failure) {
+                compensate(touched, settling ? settlement : null, failure);
+                throw failure;
             }
-            settle.run();
+            if (!accepted) {
+                RuntimeException failure = compensate(touched, null, null);
+                if (failure != null) {
+                    throw failure;
+                }
+                return false;
+            }
             for (Receipt receipt : receipts) {
                 receipt.store.changed.run();
             }
             return true;
+        }
+
+        private RuntimeException compensate(int touched, Settlement settlement, RuntimeException failure) {
+            if (settlement != null) {
+                try {
+                    settlement.restore();
+                } catch (RuntimeException restorationFailure) {
+                    failure = retain(failure, restorationFailure);
+                }
+            }
+            for (int i = touched - 1; i >= 0; i--) {
+                Receipt receipt = receipts.get(i);
+                try {
+                    receipt.store.restore(receipt.before);
+                } catch (RuntimeException restorationFailure) {
+                    failure = retain(failure, restorationFailure);
+                }
+            }
+            return failure;
+        }
+
+        private static RuntimeException retain(RuntimeException original, RuntimeException restorationFailure) {
+            if (original == null) {
+                return restorationFailure;
+            }
+            if (original != restorationFailure) {
+                original.addSuppressed(restorationFailure);
+            }
+            return original;
         }
     }
 }

@@ -139,7 +139,8 @@ public final class VerifyFluid {
         NativeFluidStore.Batch batch = FluidInsert.plan(primary.nativeStore(), demand, split).orElseThrow();
         eq("planning does not withdraw from the primary", 100, primary.contents().millibuckets());
         eq("planning does not withdraw from a secondary", 80, first.contents().millibuckets());
-        yes("split extract-only faces pay one exact native batch", batch.commit(() -> settled[0] = true));
+        yes("split extract-only faces pay one exact native batch",
+                batch.commit(settlement(() -> settled[0] = true, () -> settled[0] = false)));
         eq("primary withdrawal debits its quota", 0, primary.quota);
         eq("first split receipt debits its quota", 0, first.quota);
         eq("second split receipt debits its quota", 0, second.quota);
@@ -187,7 +188,7 @@ public final class VerifyFluid {
                         IngredientSpec.fluid(FluidLogic.WATER, 20)), List.of(replaceable)).orElseThrow();
         selected[0] = alias;
         no("a replaced endpoint identity aborts even with the same backing",
-                staleIdentity.commit(() -> fail("stale identity must not settle")));
+                staleIdentity.commit(settlement(() -> fail("stale identity must not settle"), () -> { })));
         eq("identity failure preserves source quota", 80, shared.quota);
         eq("identity failure sends no tentative notification", 0, shared.notifications);
 
@@ -197,14 +198,14 @@ public final class VerifyFluid {
         FluidState replacement = FluidState.of(FluidLogic.WATER, 100, 66.0, 0.4);
         shared.buffer.set(replacement);
         no("a changed temperature/pressure snapshot aborts before mutation",
-                staleState.commit(() -> fail("stale state must not settle")));
+                staleState.commit(settlement(() -> fail("stale state must not settle"), () -> { })));
         eq("a stale plan does not overwrite a newer full fluid state", replacement, shared.contents());
         NativeFluidStore.Batch staleQuota = NativeFluidStore.plan(List.of(new NativeFluidStore.Request(
                 FluidLogic.WATER, 50, List.of(new NativeFluidStore.Access(shared.nativeStore(), () -> true)))))
                 .orElseThrow();
         shared.quota = 31;
         no("a changed owner quota also invalidates the snapshot",
-                staleQuota.commit(() -> fail("stale quota must not settle")));
+                staleQuota.commit(settlement(() -> fail("stale quota must not settle"), () -> { })));
         eq("a stale plan preserves the newer owner quota", 31, shared.quota);
         NativeFluidStore.Batch closedFace = FluidInsert.plan(shared.nativeStore(),
                 List.of(IngredientSpec.fluid(FluidLogic.WATER, 20),
@@ -212,7 +213,7 @@ public final class VerifyFluid {
                 .orElseThrow();
         shared.allowed = () -> false;
         no("a face closed after planning aborts before withdrawal",
-                closedFace.commit(() -> fail("closed face must not settle")));
+                closedFace.commit(settlement(() -> fail("closed face must not settle"), () -> { })));
         eq("permission failure preserves full state", replacement, shared.contents());
     }
 
@@ -424,7 +425,7 @@ public final class VerifyFluid {
                 };
             }
             NativeFluidStore.Batch batch = FluidInsert.plan(primary.nativeStore(), inputs, sources).orElseThrow();
-            originalFailure("native helper preserves the original " + stage, failure, () -> batch.commit(() -> {
+            originalFailure("native helper preserves the original " + stage, failure, () -> batch.commit(settlement(() -> {
                 local[0].put("Input", ItemStack.EMPTY.save(new CompoundTag()));
                 local[0].put("Output", new ItemStack(Items.CLAY_BALL, 2).save(new CompoundTag()));
                 local[0].putString("Recipe", "");
@@ -433,7 +434,7 @@ public final class VerifyFluid {
                 primary.buffer.set(FluidState.of(FluidLogic.WATER, 125, 61.0, 0.5));
                 primary.quota = 125;
                 throw failure;
-            }));
+            }, () -> local[0] = beforeLocal.copy())));
             eq("native helper restores every full state and quota after " + stage, beforeStores,
                     List.of(nativeState(primary), nativeState(water), nativeState(late)));
             eq("native helper restores items/output/recipe/work/progress after " + stage, beforeLocal, local[0]);
@@ -443,12 +444,57 @@ public final class VerifyFluid {
             Optional<NativeFluidStore.Batch> retry = FluidInsert.plan(primary.nativeStore(), inputs, sources);
             yes("native helper retains a retryable exact batch after " + stage, retry.isPresent());
             if (retry.isPresent()) {
-                yes("native helper retry completes after " + stage, retry.get().commit(() -> { }));
+                yes("native helper retry completes after " + stage, retry.get().commit());
                 eq("native helper retry consumes each source exactly after " + stage,
                         List.of(0, 400, 30), List.of(primary.contents().millibuckets(),
                                 water.contents().millibuckets(), late.contents().millibuckets()));
             }
         }
+        NativeEndpoint outputOnly = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 50, 44.0, 0.2), 40);
+        CompoundTag beforeOutput = nativeState(outputOnly);
+        RuntimeException outputFailure = new IllegalStateException("check output-only settlement");
+        RuntimeException restoreFailure = new IllegalArgumentException("check compensation diagnostic");
+        int[] localOutput = {0};
+        NativeFluidStore.Batch outputBatch = FluidInsert.plan(outputOnly.nativeStore(), List.of(), List.of())
+                .orElseThrow();
+        originalFailure("an output-only consumer retains the original exception", outputFailure,
+                () -> outputBatch.commit(settlement(() -> {
+                    outputOnly.buffer.set(FluidState.of(FluidLogic.WATER, 150, 31.0, 0.1));
+                    outputOnly.quota = 140;
+                    localOutput[0] = 2;
+                    throw outputFailure;
+                }, () -> {
+                    localOutput[0] = 0;
+                    throw restoreFailure;
+                })));
+        eq("an output-only native participant restores its full state without a withdrawal",
+                beforeOutput, nativeState(outputOnly));
+        eq("an output-only consumer compensates its own output", 0, localOutput[0]);
+        eq("a compensation diagnostic is suppressed on the original exception",
+                List.of(restoreFailure), List.of(outputFailure.getSuppressed()));
+        eq("a compensation exception never emits a commit notification", 0, outputOnly.notifications);
+        yes("an output-only native batch can be retried", FluidInsert.plan(outputOnly.nativeStore(),
+                List.of(), List.of()).orElseThrow().commit());
+
+        FluidBuffer accountingBuffer = FluidBuffer.ambient(1000);
+        FluidState accountingBefore = FluidState.of(FluidLogic.WATER, 500, 35.0, 0.1);
+        accountingBuffer.set(accountingBefore);
+        int[] quota = {350};
+        int[] callbacks = {0};
+        RuntimeException accountingFailure = new IllegalStateException("check native quota assignment");
+        NativeFluidStore accounting = new NativeFluidStore(accountingBuffer, () -> quota[0], value -> {
+            quota[0] = value;
+            if (value == 250) {
+                throw accountingFailure;
+            }
+        }, () -> callbacks[0]++);
+        NativeFluidStore.Batch accountingBatch = NativeFluidStore.plan(List.of(new NativeFluidStore.Request(
+                FluidLogic.WATER, 100, List.of(new NativeFluidStore.Access(accounting, () -> true)))))
+                .orElseThrow();
+        originalFailure("a native accounting exception retains its diagnostic", accountingFailure, accountingBatch::commit);
+        eq("a partially mutated withdrawal restores its entire fluid state", accountingBefore, accounting.contents());
+        eq("a partially mutated withdrawal restores its quota", 350, quota[0]);
+        eq("a partially mutated withdrawal emits no commit callback", 0, callbacks[0]);
     }
 
     private static void completionExceptions() throws Exception {
@@ -462,7 +508,9 @@ public final class VerifyFluid {
                     List.of(OutputSpec.item("minecraft:clay_ball", 2)), Double.NaN, null, 20, 4);
             ProcessMachineBlockEntity consumer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
             loadFluid(consumer, FluidState.of(ProcessLogic.HYDROGEN, 100, 53.0, 0.4), 70);
-            consumer.setItem(0, new ItemStack(Items.DIRT));
+            ItemStack taggedInput = new ItemStack(Items.DIRT);
+            taggedInput.getOrCreateTag().putString("Check", "completion-compensation");
+            consumer.setItem(0, taggedInput);
             cacheCompleted(consumer, fixture);
             ProcessMachineBlockEntity producer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
             loadFluid(producer, FluidState.of(FluidLogic.WATER, 500, 41.0, 0.3), 350);
@@ -519,6 +567,20 @@ public final class VerifyFluid {
         state.put("Fluid", FluidNbt.save(endpoint.contents()));
         state.putInt("FluidOutputQuota", endpoint.quota);
         return state;
+    }
+
+    private static NativeFluidStore.Settlement settlement(Runnable apply, Runnable restore) {
+        return new NativeFluidStore.Settlement() {
+            @Override
+            public void apply() {
+                apply.run();
+            }
+
+            @Override
+            public void restore() {
+                restore.run();
+            }
+        };
     }
 
     private static void originalFailure(String what, RuntimeException expected, FailingAction action) throws Exception {

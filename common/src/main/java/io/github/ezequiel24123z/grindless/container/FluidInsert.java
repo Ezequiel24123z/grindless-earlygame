@@ -95,7 +95,7 @@ public final class FluidInsert {
                     ? List.of(new NativeFluidStore.Access(primary, () -> true)) : neighbours;
             requests.add(new NativeFluidStore.Request(input.id(), input.count(), candidates));
         }
-        return NativeFluidStore.plan(requests);
+        return NativeFluidStore.plan(primary, requests);
     }
 
     private static List<NativeFluidStore.Access> accesses(List<Source> sources) {
@@ -119,7 +119,7 @@ public final class FluidInsert {
         if (plan.isEmpty()) {
             return 0;
         }
-        if (!plan.get().commit(() -> { })) {
+        if (!plan.get().commit()) {
             Grindless.LOG.warn("Native fluid sources changed during withdrawal of {} mB {} at {}; "
                     + "tentative withdrawals were restored", millibuckets, id, from);
             return 0;
