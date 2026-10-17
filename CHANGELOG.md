@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Gated T0 preparation is now executable evidence, not gameplay.** A pinned-source research
+  report, reuse-screening register, current-contract Tier specification, audit graph, asset
+  manifest/prompts and exact survival/client checklist are recorded. `VerifyT0Preparation`
+  validates graph prerequisites and 25 existing 16x16 RGBA textures against the live catalogues.
+  No materials, recipes, machines, multiblocks or generated art are added. The repository-specific
+  Copilot entry point links the active gate and handoff rather than archived passes.
+
 - **Smoke dispatch itself is now regression-tested (ADR-0127).** The Bash report loop leaked
   its scenario variable and repeatedly ran the final selected scenario while displaying
   different row names. A three-case executable fixture reproduced that false green. Local

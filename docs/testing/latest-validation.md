@@ -124,6 +124,33 @@ Authenticode signature before execution. No key, global PATH or Git identity was
 This is a local test tool, not imported mod material.
 
 The Windows full inventory started at **2026-10-17 00:03:19 UTC+02:00**, source `0ca31e3`.
-Its PowerShell runner and game artifact are unchanged by the Bash-only correction. The pending
-run uses `build/validation/full-smokes.log` and `forge/run/smoke-report.html`. Do not count its
-in-progress rows as passes or count the pre-fix Linux aggregate as independent confirmation.
+On resumption at 13:07, the shell no longer existed. Its durable log records **23 completed
+passes**, then stops during preparation of scenario 24 (`first-drill`) at approximately 00:36.
+There is no final exit code or full-inventory success marker: this run is **interrupted**,
+not 41 passed. The server port is closed. Logs remain in `build/validation/full-smokes.log`;
+the remaining 18 scenarios must be executed separately.
+
+[Corrected Linux CI run 38974943530](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/38974943530)
+at `3eb7351` completed with `verify` and all six smoke shards successful. It uses the corrected
+dispatch and production runtime. Runs `38973202746` and `38972106991` were cancelled and are
+not passes. Linux evidence does not replace the remaining Windows desk work.
+
+## Gated preparation and resumed fast validation
+
+`VerifyT0Preparation` ran directly against the exported classpath: exit 0, graph references/
+cycles/missing-prerequisite fixtures and **25 distinct PNGs** checked. It checks PNG signature,
+16x16 dimensions, 8-bit RGBA encoding, declared model/state coverage, shared body texture
+references and idle/running pixel difference. It does not certify hero art, future animation
+mask continuity, scientific recipe balance or no-command survival.
+Evidence: `build/validation/t0-preparation.log`.
+
+At 13:08-13:12 on 2026-10-17, the resumed build and all **33 behavior suites** passed with
+the preparation artifacts and pending validation-tool patches:
+`build/validation/review-fix-build.log` and `build/validation/all-foundation-checks.log`.
+The new single-entry fast validator also passed environment, build, behavior and documentation;
+its complete timestamp/exit ledger is `build/validation/20261017T111720160Z/status.tsv`.
+Full smokes were explicitly not requested in that fast run.
+
+Image-provider configuration was checked without displaying credentials: both supported keys
+were absent. No image-generation call was made. The manifest includes prompts, atlas layout,
+metadata and QC rules; existing generated placeholders remain unchanged.

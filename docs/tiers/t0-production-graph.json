@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "audit_only_no_runtime_recipes",
+  "tier": "T0",
+  "entry_contract": "ADR-0116",
+  "quantity_authority": "The referenced Java catalogues and live recipes, not this audit graph",
+  "nodes": [
+    {"id": "vanilla_entry", "kind": "external_source", "constraint": "Normal survival materials; no creative source"},
+    {"id": "multitool", "kind": "craft", "source": "BootstrapRecipes.shaped:multitool", "requires": ["vanilla_entry"]},
+    {"id": "dynamo", "kind": "craft", "source": "BootstrapRecipes.shaped:hand_crank_dynamo", "requires": ["vanilla_entry"]},
+    {"id": "extractor", "kind": "craft", "source": "BootstrapRecipes.shaped:crude_extractor", "requires": ["vanilla_entry"]},
+    {"id": "terminal", "kind": "craft", "source": "BootstrapRecipes.shaped:research_terminal", "requires": ["vanilla_entry"]},
+    {"id": "data_core", "kind": "craft", "source": "BootstrapRecipes.shapeless:data_core", "requires": ["vanilla_entry"]},
+    {"id": "assisted_extraction", "kind": "operation", "source": "ExtractorLogic", "requires": ["dynamo", "extractor"], "constraint": "Any valid chunk material; not a required specific metal"},
+    {"id": "calibration", "kind": "process", "source": "ResearchLogic", "requires": ["dynamo", "terminal", "data_core"]},
+    {"id": "relay_batch", "kind": "craft", "source": "T1Recipes.shaped:relay_matrix", "requires": ["vanilla_entry", "calibration"]},
+    {"id": "bootstrap_exit", "kind": "acceptance", "requires": ["multitool", "assisted_extraction", "relay_batch"]}
+  ],
+  "external_resource_sources": ["vanilla_entry"],
+  "renewable_supply_proven": false,
+  "byproducts": [],
+  "new_runtime_items": [],
+  "new_runtime_machines": [],
+  "new_runtime_multiblocks": [],
+  "excluded_from_repeatable_graph": ["one-off quest rewards", "creative items", "prototype space recipes"],
+  "future_graph_checks": ["cycle and reachability", "quantity balance from live recipes", "byproduct sinks", "renewable-source cost", "no tier bypass", "no unautomatable mandatory repetition"],
+  "limitation": "Topology is an audit projection, not a quantitative economy solver or proof of survival acceptance"
+}

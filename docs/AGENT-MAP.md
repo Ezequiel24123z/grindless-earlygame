@@ -57,7 +57,7 @@ T2 and above are manufactured, never a crafting table
 
 `tools/checks/VerifyRecipes.java` pins the generated graph size (112) and the ordinary
 craft count (32); `VerifyAtlas` pins 112 generated rows, 41 Assembler rows and 145 total
-handheld routes (including 31 shaped crafts and the physical calibration).
+handheld routes (including 32 T1 shaped crafts and the physical calibration).
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
 gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have
@@ -191,6 +191,10 @@ not the Arc Furnace.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
   report variables must remain local (ADR-0127).
+- `tools/checks/VerifyT0Preparation.java` — verifies the non-runtime
+  `docs/tiers/t0-production-graph.json` references and topology, plus the existing textures/models
+  named by `docs/assets/t0-asset-manifest.json`. These are audit projections, never new gameplay
+  sources of truth or proof of a balanced economy.
 - `tools/check-links.ps1` — relative links and the ADR index.
 - `tools/smoke/scenarios.txt` — the scenario list, when a block, a menu or a
   boot-visible item changes. Run it with `tools/run-smokes.ps1` or `run-smokes.sh`.

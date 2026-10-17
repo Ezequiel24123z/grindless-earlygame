@@ -2253,7 +2253,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **Checkpoint verification and integration** | active — evidence, Atlas/JEI, F2 NBT and actual smoke dispatch are covered; full production inventory is running, while player acceptance still holds the [current gate](docs/reviews/go-gate.md); [current validation](docs/testing/latest-validation.md) |
+| 35 | **Checkpoint verification and integration** | active — Atlas/JEI, F2 NBT and actual smoke dispatch are covered; corrected Linux CI is green, Windows completed 23 scenarios before interruption, and player acceptance remains pending; [current gate](docs/reviews/go-gate.md), [current validation](docs/testing/latest-validation.md) |
+| 36 | **Gated T0 rework preparation** | research and audit artifacts only — [Tier specification](docs/tiers/t0.md), [external research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [exact acceptance checklist](docs/testing/t0-survival-acceptance.md); no new gameplay or accepted tier |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

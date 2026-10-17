@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "status": "preparatory_existing_placeholders",
+  "runtime_changes": false,
+  "generator": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
+  "sources": ["BlockCatalogue", "MachineTextures", "MachineArt", "FormTextures"],
+  "provider_status": {
+    "checked_on": "2026-10-17",
+    "openai_key_configured": false,
+    "gemini_key_configured": false,
+    "generated_candidates": []
+  },
+  "defaults": {
+    "texture_resolution": [16, 16],
+    "format": "PNG",
+    "mode": "RGBA",
+    "palette": {"casing": "#3A3F44", "power": "#00E5FF", "relay": "#EF6C00", "calibrated": "#66BB6A"},
+    "material_language": "Original dark industrial frames, visible mechanisms and restrained power/control accents",
+    "surface_treatment": "Hard pixel edges, shallow bevels and readable fasteners; no borrowed logos or text",
+    "silhouette_principle": "The mechanism communicates the process; preserve the current distinct block geometry",
+    "faces": {
+      "front": "textures/block/{prefix}_front_{status}.png",
+      "top": "textures/block/{prefix}_top.png",
+      "side": "textures/block/casing_side.png",
+      "rear": "textures/block/casing_side.png",
+      "bottom": "textures/block/casing_top.png"
+    },
+    "item_icon": "Machine items render their existing models/item/{id}.json; standalone icons use textures/item/{id}.png",
+    "gui": "Preserve current text/in-world interaction; no new GUI texture is introduced",
+    "state_appearance": {
+      "off": "Not a separate registered state; reuse idle unless an accepted behavior requires more",
+      "idle": "Mechanism at rest, low-emphasis indicator",
+      "running": "Readable active indicator without changing the shared body maps",
+      "blocked": "Distinct output/capacity feedback; not a universal error",
+      "starved": "Missing input or power feedback on consumers",
+      "out_of_band": "Retain the existing consumer condition state; no new T0 condition is invented"
+    },
+    "layers": ["stable body", "front mechanism/panel", "indicator", "optional future emissive overlay", "state overlay"],
+    "animated_regions": [],
+    "emissive_layers": [],
+    "animation": {"frame_count": 1, "frame_time_ticks": 1, "interpolate": false, "mcmeta": null},
+    "model_references": "models/block/{id}_{status}.json and models/item/{id}.json",
+    "qc_rules": [
+      "Exact 16x16 PNG with alpha channel",
+      "Legal lowercase identifiers and existing model/texture references",
+      "State list agrees with BlockCatalogue, not a separate runtime enum",
+      "Shared body texture references remain identical across states",
+      "Running and idle front pixels differ",
+      "Static placeholders have one frame and no animation metadata",
+      "Nearest-neighbour preview scaling only",
+      "Future composed frames preserve every pixel outside the approved animated-region mask",
+      "Human review still checks silhouette, readability, continuity and originality"
+    ]
+  },
+  "machines": [
+    {
+      "id": "hand_crank_dynamo",
+      "prefix": "dynamo",
+      "component": "bounded manual F0 power",
+      "silhouette": "visible hand crank on a compact frame",
+      "states": ["idle", "running", "blocked"],
+      "gui": "right-click crank and in-world state, no replacement menu",
+      "candidate_output": "build/assets/t0/candidates/hand_crank_dynamo-atlas.png"
+    },
+    {
+      "id": "crude_extractor",
+      "prefix": "extractor",
+      "component": "finite chunk-vein output",
+      "silhouette": "short visible extraction bore",
+      "states": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "gui": "in-world state and recoverable output, no replacement menu",
+      "candidate_output": "build/assets/t0/candidates/crude_extractor-atlas.png"
+    },
+    {
+      "id": "research_terminal",
+      "prefix": "terminal",
+      "component": "physical core calibration",
+      "silhouette": "single-core workstation with readable front panel",
+      "states": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "gui": "core insertion and empty-hand retrieval, no replacement menu",
+      "candidate_output": "build/assets/t0/candidates/research_terminal-atlas.png"
+    }
+  ],
+  "items": [
+    {"id": "multitool", "accent": "#C9A227", "role": "rotation and relocation, not mining"},
+    {"id": "data_core", "accent": "#00E5FF", "role": "uncalibrated physical input"},
+    {"id": "calibrated_data_core", "accent": "#66BB6A", "role": "calibration result"},
+    {"id": "relay_matrix", "accent": "#EF6C00", "role": "physical controller; rating remains text/NBT, not a new item"},
+    {"id": "process_atlas", "accent": "#26C6DA", "role": "route lookup"},
+    {"id": "quest_book", "accent": "#C9A227", "role": "non-gating objective evidence"},
+    {"id": "field_guide", "accent": "#26A69A", "role": "readable route guidance"}
+  ],
+  "candidate_atlas": {
+    "status": "not_generated",
+    "columns": 4,
+    "rows": 4,
+    "native_cell_pixels": 16,
+    "preview_cell_pixels": 64,
+    "preview_scale_filter": "nearest",
+    "cell_order": ["front_idle", "front_running", "front_blocked", "front_starved", "front_out_of_band", "top", "side", "bottom", "rear", "item"],
+    "rule": "Unused cells stay transparent; do not independently regenerate the stable body for each state"
+  },
+  "multiblocks": [],
+  "multiblock_boundary": "No T0 multiblock is approved; assembled continuity and port identity belong to the future T3 machine's own manifest",
+  "prompt_template": "Create an original 16x16 pixel-art candidate for {component}, using the declared Grindless palette and {silhouette}. Preserve the supplied stable body exactly and draw only the named front/state layer. Hard nearest-neighbour edges, clear mechanism, no text, no logos, no copied game or mod imagery. Output only the declared atlas cells, with unchanged regions pixel-identical. This is a candidate for human QC, not a production-ready asset.",
+  "generation_metadata_required": ["provider", "model", "request_timestamp", "prompt", "seed_if_supported", "source_image_hashes", "output_hashes", "licence_terms_reference", "qc_result"],
+  "generation_policy": "No calls without configured credentials; no automatic replacement of tracked assets; no unverified external material"
+}

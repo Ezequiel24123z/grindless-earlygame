@@ -1,10 +1,10 @@
 # Active foundation handoff
 
-Date: 2026-10-17. Phase B: full Windows inventory running; Linux dispatch corrected.
+Date: 2026-10-17. Phase B gate closure and non-gameplay T0 preparation.
 Branch: `ezequiel24123z-agent-ready-t0-foundation`.
 Authorized source baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
-Last published HEAD before this checkpoint: `0ca31e39448ad0078af4eab9ff26ead613b243c5`.
-The commit containing this file records the evidence-integration checkpoint; do not confuse
+Last published HEAD before this checkpoint: `3eb7351d45a3e1b2295bc5b796b651bfd62d099f`.
+The commit containing this file records the preparation checkpoint; do not confuse
 the source revision under test with a later documentation commit.
 
 - Original verification commits: `bcdb162a`, `46eb83fe`, preserved on their remote branch.
@@ -22,15 +22,23 @@ the source revision under test with a later documentation commit.
 - Gate: **NO-GO pending the complete inventory and independent review**. The ADR-0126
   production-artifact path passes plain boot and all 16 F2 assertions with clean exit. Its mod
   jar matches the build hash. The separate dev-launch hang remains documented, not hidden.
-- Background check: `full-integration-smokes`, started 00:03:19 UTC+02:00 on `0ca31e3`;
-  full output `build/validation/full-smokes.log`, live `forge/run/smoke-report.html`.
-- Linux dispatch repair: ADR-0127; a real fake-boot regression exposed repeated last-scenario
-  execution. Both Bash and PowerShell fixture checks now pass. New CI is needed for Linux.
-- External research finished without imports. Independent review initially lacked local file
-  tools; a narrowly scoped source excerpt review is pending and is not full repository clearance.
+- Interrupted check: the full Windows run completed 23/41 scenarios, then stopped while
+  preparing `first-drill`. No aggregate exit code exists; the process and port are now gone.
+  Resume the remaining 18, preserving `build/validation/full-smokes.log`.
+- Corrected Linux CI `38974943530` at `3eb7351`: verify and all six shards pass. Earlier cancelled
+  or mis-dispatched jobs do not count.
+- Preparation: research, licence-screening register, T0 contract/audit graph, asset manifest,
+  prompts and exact human acceptance checklist are written, with no new gameplay or imports.
+  All 33 suites pass; the asset check verifies 25 existing PNGs. Image keys are absent.
+- Independent excerpt review found incomplete installer-output tracking. The fix now records
+  installed libraries; a missing official jar was removed and correctly regenerated with the
+  same SHA-256. The full review limits and failed first repair attempt still need recording.
+- Pending coherent tooling patch: single validation entry, installer completeness and moving the
+  existing Shadow version into gradle.properties without changing its value.
+- Background checks: none at this snapshot.
 - Evidence: [current validation](../docs/testing/latest-validation.md), archived reports and
   [pending checks](pending-checks.json). Raw new executable logs will use `build/validation/`.
 
-**Next safe task:** collect all 41 isolated production results and corrected Linux CI.
-While they run, write the pinned-source research and non-gameplay preparation documents.
-BP, player acceptance and broad T0 changes remain held.
+**Next safe task:** checkpoint the validation-tool patch, execute the 18 remaining Windows
+scenarios, finalize the honest gate and create a draft PR. BP, player acceptance and broad
+T0 changes remain held. Do not claim this proposal is a finalized expanded Tier.
