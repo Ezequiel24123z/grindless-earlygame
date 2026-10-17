@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **S1 core verified on unchanged `639881f` (ADR-0135).** The persistent execution gate
+  passed all 36 official suites, including 1,126 sustainability and 95 adapter assertions
+  and all twelve repaired requirements. Two independent live JVMs reproduced byte-identical
+  reports with checked source/binary identities. No further source fix was needed. The
+  live report remains non-certifying: 2 errors, 1,247 unknowns, no T0 annotations and no
+  live ratchet pass. The prior launcher failure and interrupted reviews remain recorded.
 - **Persistent S1 execution and C3 exception correction tracked.** The execution gate now
   runs from published `639881f` in an isolated session. Native C3 `9782853` has targeted
   passing checks, but review found that synchronous exceptions could bypass restoration;

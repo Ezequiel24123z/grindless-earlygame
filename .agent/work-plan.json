@@ -3,7 +3,7 @@
   "schema_version": 1,
   "plan_revision": 4,
   "updated": "2026-10-18",
-  "phase": "s1_persistent_execution_gate_c3_exception_remediation",
+  "phase": "s1_core_verified_c3_exception_repair_and_native_cycle",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -139,16 +139,32 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "S1's persistent isolated execution gate starts at published 639881f. C3's independent native unit at 9782853 has targeted passing evidence but a blocking exception-restoration review finding; the same child is correcting it. Both lanes remain active, with integration and publication serialized. No product dependencies changed.",
+  "parallel_opportunity": "S1 core is verified on published 639881f. C3's native exception correction and renewable-cycle fixture proceed in separate worktrees. S2 still needs canonical annotations and pack/source decisions; source closure is not inherited from S1's core pass. Integration and publication remain serialized.",
   "prepared_assignments": [
+    {
+      "id": "t0-native-renewable-cycle",
+      "task_id": "renewable-t0",
+      "status": "in_progress",
+      "worker_session_id": "6b1c9b59-c772-4031-a234-c8b0eaa33042",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "3c42333ff2890e27b2075ce714b5b3ffc11be514",
+      "worktree_scope": "isolated_application_worktree",
+      "owned_files": ["new tools/smoke renewable-cycle fixture and expectation", "tools/smoke/scenarios.txt", "exact scenario enumeration checks only if required"],
+      "outcome": "Prove actual native source, biomass power, downstream inputs and Research Terminal core after explicit finite setup; no fixture-injected claimed outputs",
+      "acceptance": ["Source-derived cycle and stock/energy assertions", "Production-remapped-jar smoke with source and artifact identity", "Separate native core/input evidence, existing recipe assertions and still-manual physical Matrix craft"],
+      "stop_condition": "Return local fixture checkpoint and honest evidence; no new craft hook, gameplay changes, S1 edits, publication or manual acceptance claim"
+    },
     {
       "id": "s1-persistent-execution-gate",
       "task_id": "sustainability-model",
-      "status": "in_progress",
+      "status": "passed_reviewed_core_scope",
       "worker_session_id": "fd99d2f6-c478-49b9-aaab-8c40e2dba154",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "639881f5985b2662059ca48981441c1fd38c31dc",
+      "result": "Unchanged source: 36 official suites, 1126 sustainability assertions and 95 adapter assertions pass; all twelve repaired requirements exercised; two independent live JVMs produce identical reports. Live has 2 errors, 1247 unknowns and no annotations; no T0 closure or S2 acceptance.",
+      "evidence": "build/validation/s1-execution-gate/execution-report.md in the worker session; SHA256 f2063f68c43101c6072aec6f6974e132fad7e7f243c5d4eeb7c5d60a70bccd7d",
       "worktree_scope": "isolated_application_worktree",
       "owned_files": ["common/src/main/java/io/github/ezequiel24123z/grindless/sustainability/", "tools/checks/VerifySustainability.java", "tools/checks/VerifySustainabilityAdapters.java"],
       "outcome": "Complete the interrupted execution gate on committed repairs; correct only reproduced S1 defects, prove the twelve targeted regressions and deterministic report identity",
@@ -222,9 +238,9 @@
     {
       "id": "sustainability-core",
       "task_id": "sustainability-model",
-      "status": "frozen_pending_combined_validation",
+      "status": "integrated_verified_core_only",
       "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
-      "delivery_status": "12_review_findings_addressed_by_workers_pending_validation_and_recheck",
+      "delivery_status": "13_files_preserved_in_639881f_then_verified_by_persistent_execution_gate",
       "worktree_scope": "current_worktree",
       "input_revision": "ba7ee7455383b3d214cde79a56672f76ccc97e97",
       "delivery_base_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
@@ -252,8 +268,8 @@
         }
       },
       "review_findings": {"algorithm": 8, "adapters": 4},
-      "review_status": "Both independent read-only reviews completed with findings; S1 is not accepted",
-      "combined_validation": "Recovered attempt on 092af299 plus source-hashed S1 files exited -196608 before tests because the PowerShell -File argument was malformed. No post-repair pass; preserve the exact repairs before completing the execution gate.",
+      "review_status": "Initial independent reviews found twelve issues; the persistent gate exercised their repaired contracts and the coordinator reviewed the core proof boundary. No independent final recheck was recovered from the interrupted workers.",
+      "combined_validation": "The failed launcher is retained. The persistent gate on unchanged 639881f passed all 36 suites and the twelve repaired contracts; independent-process reports were byte-identical. Coordinator reviewed proof boundaries and evidence. Only S1 core is accepted.",
       "acceptance": [
         "No Minecraft/Forge imports in the model or auditor; no recipe quantity copied into annotations",
         "Synthetic fixtures prove: unseeded cycle and self-constructing producer rejected; seeded closed loop and environmental loop accepted; finite/vanilla canonical dependency, unresolved tag, zero-input route without environmental justification, insufficient exact bootstrap guarantee and resource-positive recycling detected",
@@ -262,7 +278,7 @@
         "audit.json and audit.md written under build/sustainability; deterministic ordering",
         "Live T0 annotations are NOT authored in S1: the live run reports unknowns/findings honestly"
       ],
-      "stop_condition": "Preserve the frozen repairs as unaccepted WIP; execute and review the remaining source-bound gate before S1 acceptance."
+      "stop_condition": "S1 core complete; do not infer live T0 classification, canonical pack resolution or full sustainability completion. Continue S2 after Astra's source/ledger decisions."
     },
     {
       "id": "sustainability-core-algorithm-review",
@@ -297,7 +313,7 @@
     {
       "id": "sustainability-core-algorithm-remediation",
       "task_id": "sustainability-model",
-      "status": "frozen_ready_for_validation",
+      "status": "verified_by_persistent_execution_gate",
       "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
       "parallel_group": "s1-disjoint-remediation",
       "owned_files": [
@@ -312,7 +328,7 @@
     {
       "id": "sustainability-core-adapter-remediation",
       "task_id": "sustainability-model",
-      "status": "frozen_ready_for_validation",
+      "status": "verified_by_persistent_execution_gate",
       "agent_id": "7917e6cc-dfb1-4cd3-8c19-0dab4dc271b6",
       "parallel_group": "s1-disjoint-remediation",
       "owned_files": [
@@ -518,7 +534,7 @@
       "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "in_progress", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "design": "ADR-0135 accepted: typed loader-free annotations over live authorities, least-fixed-point availability/renewability, construction reserve, recycling rule, fingerprinted debt ratchet, generated reports",
-      "next_action": "Complete the interrupted S1 execution gate on its preservation checkpoint; recover only observed evidence, fix any reproduced errors and review the repaired proof boundaries. For S2, reconcile optional crank/extractor quest coupling and declare actual manual bootstrap without inventing guaranteed iron, boards or bricks.",
+      "next_action": "S1 core is verified on 639881f. For S2, author canonical T0 annotations and pack resolution from source evidence, reconcile optional crank/extractor quest coupling and declare actual manual bootstrap without inventing guaranteed iron, boards or bricks. Live closure remains uncertified.",
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
     },
     {

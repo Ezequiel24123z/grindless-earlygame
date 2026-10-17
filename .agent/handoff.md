@@ -71,11 +71,17 @@ cross-repository memory preference.
 
 **Persistent execution after interruption.** Published checkpoint
 `639881f5985b2662059ca48981441c1fd38c31dc` preserves all repaired S1 files. Isolated session
-`fd99d2f6-c478-49b9-aaab-8c40e2dba154` now completes its execution gate and fixes only
-reproduced S1 defects. Native C3 session `b2ef80f6-6560-44b8-9f0b-53290f389c06` delivered
+`fd99d2f6-c478-49b9-aaab-8c40e2dba154` completed its execution gate without source changes:
+36 suites passed, including all twelve repaired requirements; independent live processes
+produced byte-identical reports. Astra accepts the S1 core scope only. The live audit has
+2 errors, 1,247 unknowns and no annotations: S2 and renewable closure remain pending.
+Native C3 session `b2ef80f6-6560-44b8-9f0b-53290f389c06` delivered
 `9782853` with targeted passing evidence, but final review found a P1 exception-restoration
 gap. That child is correcting native receipts and consumer compensation; do not integrate
-the delivered runtime or reuse its passes for the correction. Both lanes are independent.
+the delivered runtime or reuse its passes for the correction. Isolated session
+`6b1c9b59-c772-4031-a234-c8b0eaa33042` implements the independent native renewable-cycle
+fixture. Its scope separates actual sources/downstream/core from recipe assertions and
+the still-manual physical Matrix craft; it must not invent a console crafting hook.
 
 - W1 ceramic workshop (`0aad62a`) and W2 settling plus actual fluid recovery (`d292dab`)
   have historical targeted automated evidence. Their old passes do not certify changed code.
@@ -163,8 +169,8 @@ they remain held behind current integration.
   MC 1.20.1), and canonical `mekanism/Mekanism` `95b03e838aa94128596db42154a1527048372999`
   (MIT, MC 1.20.1). These were not runtime-tested and no code was imported.
 
-Next: finish S1's execution gate on the preserved source and receive the independently
-implemented/validated native C3 unit. The C3 session was resumed after interruption.
+Next: receive the corrected native C3 unit and renewable-cycle evidence, and prepare S2
+from the verified core without promoting its report-only unknowns to closure.
 Astra reviews and integrates the results serially. Reconcile
 the delivered T0 evidence for S2; product-task order, dependencies, acceptance and all three
 held port tasks remain unchanged.

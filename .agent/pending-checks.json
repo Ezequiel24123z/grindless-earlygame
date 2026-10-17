@@ -31,7 +31,7 @@
     "workshop": "AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING",
     "assembled_settling": "automatedly_validated_fluid_recovery_manual_pending",
     "dashboard": "renderer_integrated_canonical_generator_pending",
-    "sustainability_and_classifications": "Frozen S1 repairs preserved after 8 algorithm and 4 adapter findings; recovered combined launch failed before tests, and interrupted rechecks supplied no result; no post-repair acceptance",
+    "sustainability_and_classifications": "S1 core verified on unchanged 639881f: 36 suites and twelve repaired contracts pass, report determinism verified. Live remains report-only with 2 errors/1247 unknowns and no annotations; S2 and T0 closure are pending.",
     "c3": "reviewed Bench-only partial 092af299 is locally integrated with its 34-suite pass; the native ADR-0138 implementation remains in the isolated child",
     "c3_validation": "Attempt 1 wrapper/capture failed with NativeCommandError; same runner with separated stdout/stderr passed exit 0/34 suites on 092af299; no states smoke required for this Javadoc/test-only partial; new implementation validation pending",
     "c3_assets": "static review found no proven ID/resource defect; client/visual review pending; complete assets not approved",
@@ -48,7 +48,7 @@
   },
   "foundation_checks_are_historical_not_current_jar_evidence": true,
   "checks": [
-    {"id": "s1-persistent-execution-gate", "status": "in_progress", "source_commit": "639881f5985b2662059ca48981441c1fd38c31dc", "worker_session_id": "fd99d2f6-c478-49b9-aaab-8c40e2dba154", "scope": "Official runner, twelve targeted regression contracts and deterministic report identity; live report-only, no S1 acceptance yet"},
+    {"id": "s1-persistent-execution-gate", "status": "passed_reviewed_core_scope", "source_commit": "639881f5985b2662059ca48981441c1fd38c31dc", "worker_session_id": "fd99d2f6-c478-49b9-aaab-8c40e2dba154", "scope": "Official runner and twelve targeted regression contracts; core only, not live T0 closure", "suites": 36, "sustainability_assertions": {"passed": 1126, "failed": 0}, "adapter_assertions": {"passed": 95, "failed": 0}, "independent_live_runs": {"runs": 2, "exit_codes": [0, 0], "assertions_each": 728, "byte_identical_reports": true}, "report_sha256": {"json": "4e129e9521562d53c5dd4049555ef0b547c1efb5fff28ff68a230f94b4ed76fc", "markdown": "0e094646ffbf28dad13ed053d8f0371c19c1335f3e53a946aa4eee6d5fa4f533"}, "evidence": "build/validation/s1-execution-gate/execution-report.md in the worker session", "evidence_sha256": "f2063f68c43101c6072aec6f6974e132fad7e7f243c5d4eeb7c5d60a70bccd7d", "source_changes": 0, "live": {"resources": 628, "routes": 468, "tags": 213, "objectives": 25, "errors": 2, "unknowns": 1247, "annotations": 0, "ratchet_pass": false, "sustainability_pass": false}},
     {"id": "c3-native-delivery-review", "status": "blocking_P1_exception_restoration_gap", "source_commit": "9782853f744d80cccc443b121864c4af07fd4826", "worker_session_id": "b2ef80f6-6560-44b8-9f0b-53290f389c06", "worker_evidence": {"suites": 34, "smokes": ["states", "first-fluids", "first-contact"], "jar_sha256": "FCB60CB10126E6E01FBBE2449DE26B1E06F1A85D36BC3A432FD0F47C8C1510F8"}, "review_finding": "Boolean rejection restores receipts but synchronous exceptions and partially mutating consumer settlement do not; not integrated", "next": "Same worker corrects exception compensation and reruns source-bound checks and relevant production smokes"},
     {"id": "coordinator-receipt", "status": "passed_read_only_Git_PR_identity_three_original_hashes_and_plan_integrity", "source_commit": "b012bc467df469522d1624e630f306cfd8d79842", "scope": "receipt_only_no_application_build_behavior_smoke_or_asset_QC", "evidence": ".agent/handoff.md"},
     {"id": "c3-forge-integration-checks", "status": "passed_automated_scope", "source_base": "a7221200d71f8ac61fe2845985b3cb5ebd6991e7", "scope": "ADR-0136 Forge/JEI/localization/tag/mining-tool integration and attributed counts", "attempts": [{"check": ":forge:compileJava", "exit_code": 0}, {"check": "generate-assets.ps1 twice with SHA-256 comparison", "exit_code": 0, "generated_files": 1520, "deterministic": true}, {"check": "run-checks.ps1", "exit_code": 0, "suites": 34, "assertions_passed": 4740, "assertions_failed": 0}, {"check": "run-smokes.ps1 -Only states (production jar)", "exit_code": 0, "state_markers": "945/945", "jar_sha256": "79AF417A4F20EC779C294938064F393A258499E41EC2B4A703E0E0ABE31A58E6"}], "supersedes_failures": ["c3-states-smoke-after-core-safety", "c3-core-safety-checks"], "not_run": ["full smoke set", "native renewable production cycle", "client/JEI interaction", "Bench physical Matrix exit", "manual gates"], "note": "Logs live in the ignored build/validation/c3-forge-integration directory of the integrating worktree; the earlier failures stay recorded as failures of their own revisions"},
@@ -72,7 +72,7 @@
     {"id": "retained-world-restart", "status": "not_run", "evidence": "docs/testing/t0-survival-acceptance.md"},
     {
       "id": "sustainability-core-dispatch",
-      "status": "frozen_preserved_execution_gate_pending_no_acceptance",
+      "status": "original_delivery_repaired_and_verified_by_s1_persistent_execution_gate",
       "dispatch_source_commit": "ba7ee7455383b3d214cde79a56672f76ccc97e97",
       "source_commit": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
       "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
@@ -83,8 +83,8 @@
       "remediation_writes_active": false,
       "worker_claims": {"suites": 35, "assertions": 5729, "live_report_only": {"errors": 2, "unknowns": 1153, "report": "build\\validation\\sustainability-core\\report-final.log"}},
       "review_findings": {"algorithm": 8, "adapters": 4},
-      "review_status": "Both reviews returned findings; S1 is not accepted and has no new validation pass",
-      "scope": "Both remediation lanes are frozen; preservation is not a passing execution gate"
+      "review_status": "Original reviews returned twelve findings; repaired contracts subsequently passed the persistent gate on 639881f",
+      "scope": "See s1-persistent-execution-gate for the current core pass; original counts below are historical"
     },
     {
       "id": "sustainability-core-algorithm-review",
@@ -106,14 +106,14 @@
     },
     {
       "id": "sustainability-core-algorithm-remediation",
-      "status": "frozen_ready_for_validation",
+      "status": "verified_by_s1_persistent_execution_gate",
       "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
       "owned_files": ["S1 algorithm files only", "tools/checks/VerifySustainability.java (existing)"],
       "scope": "Address 8 algorithm findings; freeze before one combined S1 validation"
     },
     {
       "id": "sustainability-core-adapter-remediation",
-      "status": "frozen_ready_for_validation",
+      "status": "verified_by_s1_persistent_execution_gate",
       "agent_id": "7917e6cc-dfb1-4cd3-8c19-0dab4dc271b6",
       "owned_files": ["S1 adapter/report/debt/tag files", "tools/checks/VerifySustainabilityAdapters.java (new)"],
       "scope": "Address 4 adapter findings; freeze before one combined S1 validation"

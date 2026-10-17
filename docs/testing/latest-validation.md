@@ -6,6 +6,19 @@
 checkpoint `092af29991db9f45731794a657996dcbe3925236` is integrated. The following
 preservation commit contains S1 repairs, not a successful post-repair validation.
 
+**Subsequent source-bound S1 gate:** isolated session
+`fd99d2f6-c478-49b9-aaab-8c40e2dba154` verified unchanged
+`639881f5985b2662059ca48981441c1fd38c31dc` with all 36 official suites passing.
+`VerifySustainability` passed 1,126 assertions and `VerifySustainabilityAdapters` passed 95;
+all twelve repaired contracts were exercised without changing their oracles. Two separate
+live JVMs passed 728 assertions each and produced byte-identical JSON/Markdown reports.
+The worker's `build/validation/s1-execution-gate/execution-report.md` has SHA-256
+`f2063f68c43101c6072aec6f6974e132fad7e7f243c5d4eeb7c5d60a70bccd7d`.
+The JSON SHA-256 is `4e129e9521562d53c5dd4049555ef0b547c1efb5fff28ff68a230f94b4ed76fc`.
+All 2,156 tracked inputs remained unchanged; reported source and binary identities were
+checked independently. S1 core is accepted, not T0 closure: live remains report-only with
+2 errors, 1,247 unknowns, no annotations and both ratchet/sustainability verdicts false.
+
 | Scope | Observed result | Evidence boundary |
 | --- | --- | --- |
 | C3 Forge integration at `ba7ee74` | Forge compile, 34 suites / 4,740 assertions and production states 945/945 passed | `build/validation/c3-forge-integration/`; not native renewable cycle, client or full smoke acceptance |

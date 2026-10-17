@@ -9,10 +9,10 @@ through BN remain below as implementation history; their old tier placement is n
 queue.
 
 **Active tier: T0 Bootstrap; parallel implementation and source-bound validation.**
-S1 review found eight algorithm and four adapter issues. Both disjoint repair lanes are
-frozen and preserved as unaccepted work. The combined launch failed before tests and
-interrupted rechecks supplied no final result; finish the execution gate on the preserved
-source. The reviewed Bench-only checkpoint `092af299` is locally integrated with its
+S1 core is verified on unchanged `639881f`: all 36 suites and twelve repaired requirements
+pass, with deterministic source-bound reports. The earlier failed launcher remains history.
+The live audit is still report-only and unannotated, so this is not T0 sustainability closure.
+The reviewed Bench-only checkpoint `092af299` is locally integrated with its
 34-suite pass; its initial capture failure is retained in the check ledger.
 
 The isolated C3 worker implements ADR-0138's native-store contract over existing
@@ -26,8 +26,9 @@ allocation, initial boards/bricks need explicit bootstrap, and Astra must reconc
 crank/extractor progression with quest prerequisites before S2. Static resource review found
 no proven C3 mapping defect; client/visual acceptance remains pending.
 
-Next: complete S1's interrupted execution gate and receive the independently validated native C3
-unit; integrate serially. Product dependencies, held ports and manual gates are unchanged.
+Next: receive the corrected native C3 unit and independent renewable-cycle proof, then
+integrate serially; prepare S2 from the verified core and source evidence. Product
+dependencies, held ports and manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
@@ -53,7 +54,7 @@ data are required implementation, not substitutes for renewable gameplay.
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
 | renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | partial `092af299` run-checks passed 34 suites; bounded native implementation active in child worktree, not coordinator-integrated and its new code awaits validation; client/JEI, native cycle, visual asset acceptance and full smokes pending |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
-| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | repaired S1 preserved after 8 algorithm + 4 adapter findings; launch failed before tests, execution gate pending; S1 not accepted |
+| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified: 36 suites and deterministic reports; S2 annotations, canonical pack resolution and live closure pending |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
 | dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | incomplete; follows renderer/model |
