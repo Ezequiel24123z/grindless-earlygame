@@ -168,7 +168,7 @@
     if (!fields.length) return element("span", "muted", "No fields reported");
     const dl = element("dl", "nested-data");
     fields.forEach(([key, child]) => {
-      if (/(?:^|_)(?:secret|password|token|credential|api_key|raw_log|logs?)(?:s)?$/i.test(key)) return;
+      if (/(?:^|_)(?:secret|password|token|credential|api_key|authorization|auth|raw_log|logs?)(?:s)?$/i.test(key)) return;
       const type = key === "resource_id" ? "resource" : key === "route_id" || key === "recipe_id" ? "route" : key === "machine_id" || key === "multiblock_id" ? "machine" : key === "quest_id" ? "quest" : key === "tier" ? "tier" : key === "id" ? preferredType : null;
       dl.append(element("dt", "", M.label(key)));
       dl.append(element("dd", "", key === "source_path" || key === "path" ? sourceReference(child) : key === "evidence" ? evidence(child) : dataValue(child, type, level + 1)));
@@ -495,7 +495,8 @@
     const results = element("section");
     const entries = Array.from(network.nodes.values()).sort((a, b) => M.ordered(a.id, b.id));
     if (!entries.length) return paragraph("No graph nodes are reported in this snapshot.", "empty-state");
-    const initial = network.nodes.has(state.params.get("root")) ? state.params.get("root") : entries[0].id;
+    const requested = state.params.get("root");
+    const initial = requested || entries[0].id;
     const update = () => {
       const center = state.params.get("root") || initial;
       const neighborhood = M.neighborhood(network, center, {
@@ -519,7 +520,9 @@
         { title: "Edge semantics", render: row => [row.optional ? "Optional / non-canonical" : "No optional flag reported", row.catalytic ? "Catalytic" : "", row.recycling ? "Recycling" : ""].filter(Boolean).join("; ") }
       ], neighborhood.edges, "Text equivalent of every shown dependency edge"));
     };
-    selectFilter(controls, "root", "Center (any node)", entries.map(node => [node.id, M.text(node.name) + " [" + node.type + "]"]), update, initial);
+    const choices = entries.map(node => [node.id, M.text(node.name) + " [" + node.type + "]"]);
+    if (requested && !network.nodes.has(requested)) choices.unshift([requested, "Not in snapshot: " + M.text(requested)]);
+    selectFilter(controls, "root", "Center (any node)", choices, update, initial);
     selectFilter(controls, "depth", "Neighborhood depth", [["1", "1 connection"], ["2", "2 connections"], ["3", "3 connections"]], update, "1");
     checkboxFilter(controls, "optional", kind === "quests" ? "Include optional quest edges" : "Include optional / non-canonical routes", update, true);
     if (kind !== "quests") {
@@ -804,7 +807,8 @@
     ];
     const dl = element("dl");
     fields.forEach(([name, key, preferred]) => {
-      dl.append(element("dt", "", name), element("dd", "", dataValue(record[key], preferred)));
+      const value = key === "preview" && typeof record[key] === "string" ? sourceReference(record[key]) : dataValue(record[key], preferred);
+      dl.append(element("dt", "", name), element("dd", "", value));
     });
     if (typeof entry === "string") dl.append(element("dt", "", "Reported entry"), element("dd", "", M.narrative(entry)));
     detail.append(dl);
@@ -839,6 +843,7 @@
       const node = link("T" + id, href("tier/" + id));
       const tier = state.model ? M.tier(state.model, id) : null;
       node.title = "T" + id + " - " + (tier ? M.text(tier.name) + " / " + M.label(tier.implementation_state) : "Not reported");
+      if (state.model?.context.active_tier === id) node.title += " / active tier";
       node.setAttribute("aria-label", node.title);
       node.dataset.active = String(state.model?.context.active_tier === id);
       tiers.append(node);
@@ -935,6 +940,11 @@
   }
 
   refresh.addEventListener("click", load);
+  document.querySelector(".skip-link").addEventListener("click", event => {
+    event.preventDefault();
+    main.focus();
+    main.scrollIntoView({ block: "start" });
+  });
   window.addEventListener("hashchange", handleRoute);
   renderNavigation();
   load();

@@ -173,6 +173,13 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Dashboard navigation preserves the current working view.** The skip link focuses main
+  content without resetting the hash router, stale graph centers stay explicitly unresolved,
+  and nested detail records no longer inherit a narrow default indentation. The browser
+  harness now uses real 1440px/390px content viewports; its initial 22/23 run and repaired
+  26/26 confirmation are recorded separately. A cancelled repository-check attempt is not
+  reported as a pass.
+
 - **Selected smoke batches work through the documented Windows CLI.** Comma-separated `-Only`
   values are normalized before selection. Both platform runners reject unknown or empty
   selections before booting anything, and the real-runner fixture checks those boundaries.

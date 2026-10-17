@@ -164,8 +164,29 @@ these static renderer-only changes; they do not touch registration, loaders, gam
 
 ## Checkpoint evidence and integration limits
 
-The initial renderer checkpoint adds implementation, synthetic fixtures and the executable
-browser harness. Browser results are not claimed until the subsequent validation record.
-The canonical generator/audit, CI wiring, live classifications, gameplay sources and final
-integration review remain coordinator-owned. No independent PR, deployment, merge, accepted
-Tier status or repair of the parent's settling-water failure is included.
+Observed on Windows, 2026-10-17. Initial implementation:
+`e2c2a0a4ad0d3facb8974b5c4e5aaedbe1bcc1cd`. The confirmation below covers that source plus
+the repair patch preserved in the commit containing this record, not the parent mod's
+previously reported passes.
+
+| Scope | Observed result |
+| --- | --- |
+| JDK 17 source-file server, native `serve.ps1` | Starts successfully; test-page HTTP response is 200; loopback only |
+| Initial browser run | **22 / 23 passed**. The mobile fixture advertised 390px but its border-box iframe had a 388px content viewport; the assertion correctly failed |
+| Bounded repair | Make iframe dimensions actual content dimensions; preserve the current route when using the skip link; expose vanished graph centers explicitly; remove nested definition-list indentation; retain active-tier cues and usable mobile control targets |
+| Confirmation in the browser canvas | **26 / 26 passed**, including real 48/91-node rendering, persisted unknown centers and skip-link route preservation |
+| Desktop/mobile layout and screenshots | Real iframe viewports are 1440px and 390px. Document widths are 1425px and 375px respectively (vertical scrollbars); tables/graphs do not widen the page. Desktop capture is scaled only to fit the browser canvas |
+| Measured palette contrast | Text/ground 15.54:1; muted/panel 8.42:1; selected cyan/selection 9.04:1; amber/panel 10.01:1. These are the measured pairs, not an exhaustive accessibility certification |
+| Documentation links | Native repository link checker passes: 458 relative links, 31 Markdown files, 131 ADR sections/index rows |
+| Repository behavior runner | **Cancelled, not passed.** Started with JDK 17, produced no output in the 120-second synchronous wait or subsequent status read, and yielded no observed suite results before cancellation |
+
+There was one desktop/mobile inspection and one repair/confirmation pass; no open-ended
+polish cycle. Keyboard coverage checks native targets, labels, programmatic focus and skip
+behavior; physical keyboard/screen-reader certification is not claimed. The Bash server twin
+is supplied but was not executed on this Windows host. No mod build, Forge smoke, gameplay
+survival, client/JEI or retained-world acceptance is claimed by these renderer checks.
+
+The temporary browser test server is stopped after inspection. The canonical generator/audit,
+CI wiring, live classifications, gameplay sources, shared agent-map entry and final integration
+review remain coordinator-owned. No independent PR, deployment, merge, accepted Tier status
+or repair of the parent's settling-water failure is included.

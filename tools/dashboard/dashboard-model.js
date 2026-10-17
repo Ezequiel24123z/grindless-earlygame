@@ -24,6 +24,7 @@
       .replace(/\/(?:home|Users|private|mnt)\/[^\s<>"']*/g, "[local path omitted]")
       .replace(/\b(?:gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+|sk-[A-Za-z0-9_-]{16,})\b/g, "[credential omitted]")
       .replace(/\bBearer\s+[A-Za-z0-9_.~+/-]+=*/gi, "[credential omitted]")
+      .replace(/\bAuthorization\s*:\s*Basic\s+\S+/gi, "[credential omitted]")
       .replace(/\b(password|token|secret|api[_ -]?key)\s*[:=]\s*\S+/gi, "$1=[credential omitted]")
       .replace(/https?:\/\/[^/\s]+@/gi, "https://[credentials omitted]@")
       .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[contact omitted]");
