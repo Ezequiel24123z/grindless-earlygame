@@ -8,7 +8,7 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Next slice: BP — complete the first Relay Matrix route.** BO is
+**Active tier: T0 Bootstrap. Next slice: T0-W1 — the ceramic workshop (ADR-0129).** BO is
 shipped: the Ground Array, placeholder links, rocket and supraluminal station remain registered
 and smoke-tested, but have no generated or crafting-table survival recipes. F0-F15 and the physical
 matrix rating/architecture model are now in code, including a registered T1 Relay Matrix with
@@ -20,11 +20,20 @@ no-command survival playthrough remains. The optional Factory World is a post-Ma
 aid, not a new technology frontier or a resource shortcut. T1 stays locked until T0 passes
 the gate below.
 
-The [foundation gate](reviews/go-gate.md) is **CONDITIONAL GO** after the 2026-10-17
-Atlas/NBT/tooling corrections, 33 checks and complete 41-scenario production coverage.
-That is not BP acceptance: the [exact no-command/client checklist](testing/t0-survival-acceptance.md)
-remains unexecuted. The [T0 preparation](tiers/t0.md) is a proposal/audit, not an active new
-content slice. No T2 consumer or broad T0 expansion starts on this conditional result.
+The corrected foundation at `c62de72` is preserved. Its 33 checks and 41 production scenarios
+are historical baseline evidence, not acceptance of a changed jar. The current owner-directed
+scope authorizes the [connected T0 workshop](tiers/t0.md); the
+[gate](reviews/go-gate.md) now treats manual acceptance as a merge condition rather than a
+feature-development blocker. No T2 consumer or unrelated T1 implementation starts here.
+
+| Unit | Playable outcome | Status |
+| --- | --- | --- |
+| T0-W1 | Mill, mix and fire ceramics; recover grog; fabricate a physical core and basic automation | IMPLEMENTATION IN PROGRESS |
+| T0-W2 | Assemble an oriented settling line that supplies clay/gravel and recovers water | pending after W1 |
+| T0-W3 | Complete current-jar automation, structure, asset and progression evidence; publish a draft | pending after W1/W2 |
+
+The historical schedule below does not override this active owner-directed scope. Fixed T0
+workshop structures are the ADR-0129 exception; the T3 Arc Reactor remains a later frontier.
 
 ---
 

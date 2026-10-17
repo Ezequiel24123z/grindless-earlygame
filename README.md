@@ -32,6 +32,12 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 > audit remains. The real campaign reaches orbit at T10, the Drift at T13 and
 > Sagittarius at T15.
 >
+> **Active development:** the connected T0 ceramic workshop in
+> [ADR-0129](docs/DECISIONS.md#adr-0129--bootstrap-grows-through-a-connected-ceramic-workshop)
+> extends the physical core route with milling, wet mixing, formed firing and recycling,
+> followed by an assembled settling line. See [the T0 specification](docs/tiers/t0.md).
+> Manual acceptance is pending; it blocks merge, not further T0 feature development.
+>
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
 >
@@ -2253,6 +2259,7 @@ Tracked order of work. Each step must build green before the next begins.
 | 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
+| 35 | **T0 workshop rework** | IMPLEMENTATION IN PROGRESS — ADR-0129; preserve the corrected foundation, ship ceramics and assembled settling, then record current-jar evidence |
 | 35 | **Checkpoint verification and integration** | **CONDITIONAL GO** — 33 suites, build, links and all 41 distinct production smokes completed across recorded batches; no-command/client/saved-world acceptance still blocks broad T0 work; [current gate](docs/reviews/go-gate.md), [current validation](docs/testing/latest-validation.md) |
 | 36 | **Gated T0 rework preparation** | research and audit artifacts only — [Tier specification](docs/tiers/t0.md), [external research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [exact acceptance checklist](docs/testing/t0-survival-acceptance.md); no new gameplay or accepted tier |
 

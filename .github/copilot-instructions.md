@@ -13,6 +13,7 @@ catalogues as sources of truth and keep loader-specific types out of common.
 Do not turn a test fixture, a proposed Tier document or an agent's unsupported summary into
 accepted gameplay.
 
-The [foundation gate](../docs/reviews/go-gate.md) controls broad T0 work. No-command survival,
-client interaction and saved-world compatibility must be described honestly. Commit coherent
+The [current gate](../docs/reviews/go-gate.md) separates authorized T0 development from merge
+acceptance under ADR-0129. No-command survival, client interaction and saved-world compatibility
+must be described honestly. Commit coherent
 checkpoints with the required documentation; never hide a cancelled, skipped or failed check.

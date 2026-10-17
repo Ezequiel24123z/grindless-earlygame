@@ -1,4 +1,29 @@
-# Active foundation handoff
+# Active T0 workshop handoff
+
+Updated: 2026-10-17. State: **IMPLEMENTATION IN PROGRESS**.
+Branch: `ezequiel24123z-tier-0-rework`. Preserved foundation: `c62de724632cce158988ddce62d4669619398f13`,
+fast-forwarded from the published foundation branch without changing that branch or main.
+Repository authentication was verified as `Ezequiel24123z`; the exposed Copilot identity remains
+`t-ecastano_microsoft`. The worktree was clean at intake and had no unpublished commits.
+
+The current owner-directed assignment supersedes the old no-expansion gate. Implement the
+ADR-0129 ceramic workshop, then assembled settling, with current-build checks and checkpoint
+commits. Manual client/survival/retained-world acceptance remains a merge condition, not a
+feature-development blocker. No merge or unrelated T1/T2 work is authorized.
+
+Local baseline validation first failed at environment because Java was not configured; a
+workspace-isolated JDK restoration is running. This is not a source-code failure or a pass.
+Evidence starts at `build/validation/20261017T124234896Z/`.
+The foundation's current GitHub PR run passed, while its push run `39031845162` failed the
+transient item-entity `ATLAS-OK` fixture; preserve that failure and exercise a stable inventory
+fixture when touching Atlas coverage.
+
+**Next safe task:** finish current-worktree toolchain validation, then implement T0-W1 from
+[the active specification](../docs/tiers/t0.md). No new gameplay is claimed in this contract
+checkpoint. Read the current validation ledger for later results rather than inheriting the
+historical passes below.
+
+## Preserved foundation handoff
 
 Updated: 2026-10-17. Phase: bounded foundation remediation complete; broad T0 work held.
 Repository account: `Ezequiel24123z`. Exposed Copilot context: `t-ecastano_microsoft`.

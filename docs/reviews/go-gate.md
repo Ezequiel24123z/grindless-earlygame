@@ -1,9 +1,21 @@
-# Foundation GO gate
+# Development and merge gate
+
+**Current state: IMPLEMENTATION IN PROGRESS.** ADR-0129 and the 2026-10-17 owner-directed
+rework authorize further T0 implementation on the feature branch. Automatedly validated units
+may be committed, pushed and continued while manual acceptance is pending. T1/T2 expansion
+and merging remain outside this authorization.
+
+**Merge conditions remain open:** observed client/JEI interaction, no-command survival through
+the expanded T0 route, retained-world restart/compatibility, current automated checks and the
+complete integration inventory. A future passing automated milestone must say
+**AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING**, not MERGE READY.
+
+## Preserved foundation decision
 
 **Result: CONDITIONAL GO**
 
 Executable checkpoint: `e2dfc2c847dd220178572b83e7516a9949bb8b58`, 2026-10-17.
-This is the current execution gate, separate from the archived previous-session decision.
+This was the foundation assignment's execution gate, preserved as historical evidence.
 It permits review of the bounded foundation fixes, **not broad T0 implementation, Tier acceptance
 or a merge**. A full GO requires the outstanding observed player acceptance below.
 
@@ -34,6 +46,8 @@ using the validated jar. Back up any existing world used for migration checks. T
 compact format never recorded empty slots; the new format prevents future loss but cannot
 infer every original sparse position.
 
-Until the conditions are observed, the proposed T0 graph/specification, asset manifest and
+Under that earlier assignment, the proposed T0 graph/specification, asset manifest and
 research stay preparatory. Do not add a T2 consumer, expand the campaign, add registry IDs,
-or build a speculative multiblock framework. The draft pull request remains unmerged.
+or build a speculative multiblock framework was its restriction. ADR-0129 supersedes that
+restriction for the connected T0 workshop, not the remaining manual acceptance requirements.
+The foundation draft pull request remains unmerged.

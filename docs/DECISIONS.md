@@ -140,6 +140,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0126](#adr-0126--integration-smokes-boot-the-distributable-forge-jar) | Integration smokes boot the distributable Forge jar | Accepted |
 | [0127](#adr-0127--smoke-runner-dispatch-is-tested-independently-of-minecraft) | Smoke-runner dispatch is tested independently of Minecraft | Accepted |
 | [0128](#adr-0128--validation-records-its-scope-and-repairs-incomplete-server-installations) | Validation records its scope and repairs incomplete server installations | Accepted |
+| [0129](#adr-0129--bootstrap-grows-through-a-connected-ceramic-workshop) | Bootstrap grows through a connected ceramic workshop | Accepted |
 
 ---
 
@@ -5587,3 +5588,72 @@ Fast validation passes all 33 current suites and links. PowerShell Core is requi
 Linux/macOS documentation validation; absence is a failure, not a skipped check. The existing
 Shadow version moves to `gradle.properties` without a version change. None of these tooling
 changes authorizes a new gameplay tier.
+
+---
+
+## ADR-0129 — Bootstrap grows through a connected ceramic workshop
+
+*2026-10-17 · Accepted*
+
+**Context.** The current owner-directed rework explicitly authorizes continued T0 implementation,
+including useful primitive processes, automation and formed machinery. The foundation at
+`c62de72` preserves the inventory, Matrix, viewer and production-smoke corrections above main.
+Its earlier conditional gate was written for a narrower assignment; it must not silently veto
+the new one. Nor may new authorization be mistaken for an observed survival or client pass.
+
+**Decision.** Keep T0/F0 as the only active frontier and the five-F1-Relay-Matrix exit. Expand
+the material route into a small ceramic workshop, with quantities owned by the live Java
+recipe catalogues:
+
+- A Quern mills gravel into sand and fired ceramic into reusable grog. It never doubles ores.
+- A Clay Mixer combines two clay balls, one sand or grog, and 250 mB water into three unfired
+  ceramic pieces. Grog reduces processing time, not material cost or yield.
+- A Firing Chamber consumes three unfired pieces and one carbon fuel to make two ceramic
+  insulators and one grog. Fuel supplies the process heat; F0 powers handling/control.
+  A controller and seven ordinary brick blocks form its fixed 2x2x2 chamber. The controller is
+  the front-left bottom corner; all item/fluid/power interfaces remain on the controller.
+- Ceramic insulators replace stone in newly crafted Data Cores and supply primitive plumbing
+  and item handling. Remove early quest rewards that would bypass their manufacture.
+  Existing cores, matrices, machines, registry IDs, saved quest IDs and rating data remain valid.
+- A later Settling Trough separates two dirt and 1000 mB water into two clay balls, one gravel
+  and 750 mB recovered water. Its controller, channel and screen form a three-block-long open
+  assembly, with clear space above and matching orientations. The gravel feeds the Quern;
+  clay feeds the Mixer. This is a deliberately simplified game resource route, not a scientific
+  mass-balance claim.
+
+Every mandatory transformation has a visible Atlas/JEI/guide route. Every new intermediate
+has a process or construction sink. Recovering grog requires fresh clay, water, fuel and power;
+no cycle manufactures its own net solid input. Quests guide and reward but never grant machine
+permissions. Copper/wood/ceramic recipes bring existing unpowered plumbing and handling into
+T0 without new transport engines or a second energy system. The Dynamo/Extractor still require
+two iron in total; optional vanilla hoppers, tools and later infrastructure are not included
+in that narrow budget.
+
+The fixed workshop structures share only the bounded local-cell validation needed by these
+two concrete consumers. A broken, obstructed, misoriented or unloaded cell pauses work before
+energy/input consumption. Formation is derived from the world, not trusted from saved NBT.
+Progress and indexed inventories survive repair/reload. This is not the future parametric
+Arc Reactor kernel, does not move that reactor out of T3, and never force-loads chunks.
+
+**Scope and gates.** This supersedes the twenty-minute minimal material route of ADR-0116 and
+the T0 structure exclusion of ADR-0108/ADR-0067 only for these process-driven workshop machines.
+The working target is 35-60 minutes from the stated material entry, not an observed playtime
+or a timer requirement. Manual graphical, no-command survival and retained-world acceptance
+are **merge conditions**, not blockers to further validated feature-branch development.
+Use IMPLEMENTATION IN PROGRESS, AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING, MERGE READY,
+or BLOCKED precisely. No merge or unrelated T1/T2 expansion is authorized here.
+
+**Research and alternatives.** The pinned mod screening remains conceptual only. Digitalfire's
+[grog reference](https://digitalfire.com/material/grog), inspected 2026-10-17, supports reusing
+crushed fired ceramic as a body aggregate and its drying/shrinkage role; its text/images are
+not imported. Exact game counts and timings are original balancing choices. A second ore
+doubler, cosmetic recolored furnaces, fuel-free heat, mandatory repeated handcrafting, and a
+general multiblock framework without consumers are rejected. So is preserving the old
+stone-to-core bypass while calling ceramics a meaningful progression rework.
+
+**Consequences.** Changes ship as separately committed playable units on the dedicated T0
+branch, based on the preserved foundation. Automated checks cover live graph quantities,
+resource loops, inventory/recipe changes, fluid wakeup, structure rotation/invalidation and
+the packaged Forge lifecycle. Old validation is historical evidence, never proof of a new jar.
+Assets remain original deterministic geometry/textures unless a configured image provider
+produces candidates that pass both technical and visual review.

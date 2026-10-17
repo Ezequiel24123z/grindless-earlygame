@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Connected T0 workshop rework authorized (ADR-0129).** The corrected foundation is preserved
+  on a dedicated feature branch. The active plan now braids ceramic milling, water mixing,
+  formed batch firing, grog recovery and assembled settling into the physical Data Core route.
+  Manual acceptance remains mandatory for merge, not a prohibition on further T0 development.
+
 - **Foundation gate: CONDITIONAL GO, not Tier acceptance.** All 33 behavior/resource suites,
   the full build, links and 41 distinct production Forge smoke scenarios have completed.
   Per-scenario hashes and the two interrupted aggregate attempts are preserved. The built and

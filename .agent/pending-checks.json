@@ -1,9 +1,18 @@
 {
   "source_baseline": "0d798607c66ff7e4b581d2786cfa32dc4a02ded7",
   "executable_revision": "e2dfc2c847dd220178572b83e7516a9949bb8b58",
-  "branch": "ezequiel24123z-agent-ready-t0-foundation",
-  "gate": "CONDITIONAL GO",
-  "broad_t0_authorized": false,
+  "branch": "ezequiel24123z-tier-0-rework",
+  "gate": "IMPLEMENTATION IN PROGRESS",
+  "broad_t0_authorized": true,
+  "authorization": "Owner-directed T0 rework, ADR-0129; manual acceptance remains required for merge",
+  "current_work": {
+    "foundation": "c62de724632cce158988ddce62d4669619398f13",
+    "workshop": "not_implemented",
+    "assembled_settling": "not_implemented",
+    "local_baseline": "environment_failed_java_not_configured_restoration_in_progress",
+    "merge_ready": false
+  },
+  "foundation_checks_are_historical_not_current_jar_evidence": true,
   "checks": [
     {"id": "atlas-ratings", "status": "passed", "evidence": "build/validation/atlas-green-checks.log"},
     {"id": "f2-lifecycle-nbt", "status": "passed", "evidence": "build/validation/production-matrix.log"},

@@ -1,5 +1,23 @@
 # T0 research: candidate screening, not permission to import
 
+## Workshop decision, 2026-10-17
+
+ADR-0129 activates a connected ceramic workshop without importing upstream material.
+The inspected [Digitalfire grog reference](https://digitalfire.com/material/grog) describes
+ground fired ceramics used as aggregate and the effect on drying/shrinkage. That supports
+the role of a reusable fired byproduct, not a copied recipe or an exact game yield.
+The reference text and images have no reuse permission established here and are not copied.
+Classification: **conceptual inspiration only**, no dependency, no integration cost beyond
+original implementation, low originality risk when retaining only the general material role.
+
+The active design uses original counts and times. Dirt settling is an explicitly simplified
+resource route; no precise scientific mass-balance claim is made. A charcoal-retort route was
+considered but not selected: it would require a meaningful condensate sink before adding new
+gas/fluid types. No speculative retort or copied industrial recipe is shipped.
+
+The screening below is historical preparation. Its former no-expansion gate is superseded
+for this workshop by the current owner-directed scope, not by the research itself.
+
 Retrieved 2026-10-16; recorded 2026-10-17. Scope: conceptual preparation while the
 [foundation gate](../../reviews/go-gate.md) remains closed. No upstream code, assets, recipes,
 names, text or source layout were copied. No dependency was added for T0.
