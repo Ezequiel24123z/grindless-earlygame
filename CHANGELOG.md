@@ -202,6 +202,19 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Firing regulation and partial generator gas are bounded (C3, unaccepted).** The Firing
+  Chamber regulates only inside its 20-1450 C envelope and allowed atmospheres. Anything else
+  is a visible fault, not a crash or silent clamp. The thermal generator now buffers partial
+  same-id gas in a private, persisted one-bucket store. Wrong-id or excess gas is refunded to
+  its source, and a refused refund is held in escrow rather than voided.
+  - The four owned suites pass.
+  - The full check runner still fails 15 pre-existing C3 assertions.
+  - The states smoke cannot boot because preserved C3 work leaves Forge's JEI catalyst switch
+    incomplete.
+  - [ADR-0136](docs/DECISIONS.md#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched)
+    decides the product side of those failures: two iron stay, the vanilla planks inject goes,
+    Fibreboard takes an axe, and count changes must be attributed to real routes.
+
 - **Recovered process fluids now really leave the machine (ADR-0132).** Proven output volume
   has a persisted quota and a front-side export subscription, while incoming or legacy
   unmarked fluid is preserved. Intake respects the process batch and Forge simulation uses the

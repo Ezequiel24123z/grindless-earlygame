@@ -147,6 +147,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0133](#adr-0133--bootstrap-closes-on-geology-biomass-and-primitive-assembly) | Bootstrap closes on geology, biomass and primitive assembly | Accepted |
 | [0134](#adr-0134--astra-orchestrates-bounded-workers-after-an-isolated-cold-start) | Astra orchestrates bounded workers after an isolated cold start | Accepted |
 | [0135](#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations) | Sustainability is a fixed-point audit over live authorities and typed annotations | Accepted |
+| [0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched) | C3 integration keeps the two-iron budget and leaves vanilla tags untouched | Accepted |
 
 ---
 
@@ -6027,3 +6028,50 @@ projections and never reclassify.
 **Consequences.** Until S2 lands, the report shows unknowns rather than classifications. The
 pinned inventory extraction checks adapter coverage but is not the auditor. ADR-0120's AE2 scope
 is unaffected.
+
+## ADR-0136 — C3 integration keeps the two-iron budget and leaves vanilla tags untouched
+
+**Status.** Accepted, 2026-10-17. Refines the C3 integration under ADR-0129 and ADR-0131.
+
+**Context.** The preserved C3 work-in-progress fails 15 behaviour assertions, and Forge does
+not compile. The JEI catalyst switch does not cover the new machine families. Three failures
+are product questions, not stale numbers:
+- The Biomass Dynamo spends an iron ingot, raising `ironBudget` to three. The two-iron
+  contract is settled in [ADR-0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags)
+  and [`docs/tiers/t0.md`](tiers/t0.md).
+- `data/minecraft/tags/items/planks.json` adds Fibreboard to the vanilla planks tag. That makes
+  Fibreboard a substitute in every vanilla and third-party planks recipe. It also breaks
+  [ADR-0051](#adr-0051--every-block-ships-a-floor-of-assets-generated-from-one-list), under
+  which the only thing in the `minecraft` namespace is a mining tag.
+- Fibreboard is axe-mineable, but the asset check expects every block to take a pickaxe.
+
+**Decision.**
+1. **Two iron.** The iron budget stays at two: the Hand Crank Dynamo and the Crude Extractor.
+   The Biomass Dynamo uses one tagged copper ingot in place of iron. Copper is already a
+   declared T0 entry input.
+2. **No vanilla tag inject.** Grindless recipes that accept boards use a Grindless-owned item
+   tag containing `#minecraft:planks` and `grindless:fibreboard`.
+   - `BootstrapRecipes.PLANKS` and the authored JSON reference that tag.
+   - The vanilla planks file is deleted.
+   - The renewable Fibreboard route therefore satisfies Grindless construction without
+     changing vanilla crafting.
+3. **Declared tool.** Each block's harvest tool comes from the single asset list and is
+   checked against it. Fibreboard is the axe exception; stone-like machines stay on the
+   pickaxe.
+4. **Counts with attribution.** Changed Atlas and recipe counts are accepted only when every
+   added route is attributed to a live `RenewableProcesses`, `BootstrapAssembly` or crafting
+   source. An unexplained route is a defect, not a new expectation. Each assertion keeps its
+   semantic intent; renaming a "one route" assertion to a larger number needs a stated reason.
+
+**Alternatives rejected.**
+- Accepting a third iron because it is small. It silently breaks a documented entry contract
+  and the sustainability construction reserve.
+- Keeping the vanilla tag inject because it makes boards renewable everywhere. It changes other
+  mods' and vanilla recipes behind the player's back.
+- Weakening the asset check to "pickaxe or axe" for every block.
+- Updating expected counts to whatever the code now produces.
+
+**Consequences.** One crafting recipe and one catalogue entry change, and seven Grindless
+recipe files move to the owned board tag. The Bench's physical Relay Matrix exit, the asset
+quality review and the secondary-fluid reservation for foreign rate-limited endpoints remain
+separate, visible C3 follow-ups.

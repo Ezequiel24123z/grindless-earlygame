@@ -97,7 +97,8 @@
     {
       "id": "c3-core-safety",
       "task_id": "renewable-t0",
-      "status": "dispatched_awaiting_review",
+      "status": "integrated_c5d5fa0",
+      "result": "Firing envelope fault and private persisted gas buffer integrated as c5d5fa040e5db8cf2826bbb0f395554decaa0e0b; owned suites 790/0; full runner still exits 1 with 15 pre-existing WIP failures; states smoke blocked by the pre-existing Forge JEI compile error",
       "dispatch": "Sol 6.1 Max (max reasoning) worker dispatched at docs-only HEAD 73fc32edf7836c6ad674903596577e64f3c5b406 whose application inputs equal b012bc4; coordinator Firing-envelope and private gas-buffer decisions given as constraints; no result reviewed yet",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -126,7 +127,8 @@
     {
       "id": "pinned-inventory-extraction",
       "task_id": "production-inventory",
-      "status": "dispatched_awaiting_review",
+      "status": "delivered_partial",
+      "result": "Session artifact parsed, SHA-256 CE9D2F5C0B3A74BBCD7EF191AAD99232C6D545DEADC80A02530935F3E487074B; 289 files and 364 records; eight dynamic projections unresolved (MaterialView expansion, BootstrapAssembly, dynamic supply, unevaluated tick/energy expressions, pattern quantities, other ProcessGraph helpers, weighted veins, flux_cell and voltaic outputs); no local forge:ingots/iron tag. Adapter-coverage lead for S1 only; production-inventory is not complete",
       "dispatch": "First Luna task-agent attempt wrote nothing because its harness refused any output file; a second Luna general-purpose worker was dispatched with the same pinned scope and explicit authorization for the single session artifact; no artifact reviewed yet",
       "model": "gpt-6-luna",
       "input_revision": "b012bc467df469522d1624e630f306cfd8d79842",
@@ -143,13 +145,26 @@
       "stop_condition": "Return the JSON artifact with coverage and explicit unresolved cases; no runtime edits, independent schema authority, publication or broad test run"
     },
     {
+      "id": "c3-forge-integration",
+      "task_id": "renewable-t0",
+      "status": "dispatched_awaiting_review",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "c5d5fa040e5db8cf2826bbb0f395554decaa0e0b plus the ADR-0136 documentation commit",
+      "design": "ADR-0136",
+      "outcome": "Forge compiles and the states smoke boots; the 15 pre-existing assertion failures are resolved by ADR-0136 decisions or attributed count changes, not weakened",
+      "owned_files": ["forge/src/**", "common/src/main/resources/assets/grindless/lang/**", "common/src/main/resources/data/**", "BootstrapRecipes.java", "asset generator list and generated mining tags", "tools/checks/VerifyAssets.java", "VerifyAtlas.java", "VerifyBootstrap.java", "VerifyMaterial.java", "VerifyRecipes.java", "tools/smoke/states-* fixtures only if a new block requires it"],
+      "acceptance": ["Forge compileJava and the production jar build", "run-checks exit 0, or every remaining failure escalated with evidence", "run-smokes -Only states passes", "Every changed count lists its added route sources", "No quantity, tier or Matrix change beyond ADR-0136"],
+      "stop_condition": "Return diff and logs; escalate product decisions; no commit, push or PR write"
+    },
+    {
       "id": "sustainability-core",
       "task_id": "sustainability-model",
       "status": "prepared_not_dispatched",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "design": "ADR-0135 slice S1",
-      "dispatch_rule": "Only after the C3 worker's check runs finish and its diff is reviewed, because run-checks compiles every tools/checks source together; pin the reviewed revision",
+      "dispatch_rule": "Only after c3-forge-integration is reviewed, because Gradle compiles every common source and run-checks compiles every tools/checks source together; pin the reviewed revision",
       "outcome": "Implement the loader-free sustainability model, live-authority adapters, availability/renewability least fixed points, ADR-0131 rules, fingerprinted debt ratchet and audit reports with synthetic rule fixtures",
       "owned_files": [
         "common/src/main/java/io/github/ezequiel24123z/grindless/sustainability/ (new package)",
