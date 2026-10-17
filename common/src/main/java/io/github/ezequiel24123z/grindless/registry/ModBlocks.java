@@ -49,6 +49,7 @@ import io.github.ezequiel24123z.grindless.star.StarwardLinkBlock;
 import io.github.ezequiel24123z.grindless.station.StationBerthBlock;
 import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPartBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
@@ -100,6 +101,16 @@ public final class ModBlocks {
     /** F0 ceramic firing, only while the seven-brick chamber stands. */
     public static final RegistrySupplier<ProcessMachineBlock> FIRING_CHAMBER = register("firing_chamber",
             () -> new ProcessMachineBlock(ProcessMachineKind.FIRING_CHAMBER, machine().strength(3.0F)));
+
+    /** F0 open-channel separation; only the controller owns process state. */
+    public static final RegistrySupplier<ProcessMachineBlock> SETTLING_TROUGH = register("settling_trough",
+            () -> new ProcessMachineBlock(ProcessMachineKind.SETTLING_TROUGH, machine().strength(2.0F)));
+
+    public static final RegistrySupplier<WorkshopPartBlock> SETTLING_CHANNEL = register("settling_channel",
+            () -> new WorkshopPartBlock(BlockCatalogue.Geometry.CHANNEL, machine().strength(1.5F)));
+
+    public static final RegistrySupplier<WorkshopPartBlock> SETTLING_SCREEN = register("settling_screen",
+            () -> new WorkshopPartBlock(BlockCatalogue.Geometry.SCREEN, machine().strength(1.5F)));
 
     /** T1 walk-away power: furnace fuel at F1. */
     public static final RegistrySupplier<ThermalGeneratorBlock> THERMAL_GENERATOR =

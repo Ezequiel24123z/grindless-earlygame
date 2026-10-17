@@ -160,6 +160,9 @@ public final class MachineArt {
             case QUERN -> quernFront(status);
             case MIXER -> mixerFront(status);
             case FIREBOX -> fireboxFront(status);
+            case SETTLER -> settlingFront(status);
+            case CHANNEL -> channelFront(false);
+            case SCREEN -> channelFront(true);
         };
     }
 
@@ -226,6 +229,9 @@ public final class MachineArt {
             case QUERN -> quernTop();
             case MIXER -> mixerTop();
             case FIREBOX -> fireboxTop();
+            case SETTLER -> settlingTop(0);
+            case CHANNEL -> settlingTop(1);
+            case SCREEN -> settlingTop(2);
         };
     }
 
@@ -304,6 +310,53 @@ public final class MachineArt {
             for (int x = 1; x <= 14; x++) {
                 boolean mortar = y % 4 == 0 || (x + (y / 4 % 2) * 4) % 8 == 0;
                 set(image, x, y, mortar ? 0x594A40 : ((x + y) % 3 == 0 ? 0xB87A58 : 0x985F48));
+            }
+        }
+        return image;
+    }
+
+    /** The controller's feed gate and active indicator are distinct from its passive channel. */
+    public static BufferedImage settlingFront(String status) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 3; y <= 10; y++) {
+            for (int x = 4; x <= 11; x++) {
+                set(image, x, y, y == 4 || x == 4 || x == 11 ? 0xD3B98E : 0x365564);
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            set(image, x, 7, status.equals("running") ? RUNNING : 0x987655);
+        }
+        strip(image, status);
+        return image;
+    }
+
+    private static BufferedImage channelFront(boolean screen) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(image, x, y, screen && x % 2 == 0 ? 0xC7B79A : 0x365564);
+            }
+        }
+        return image;
+    }
+
+    /** All segment ends share identical pixels; only the middle carries role-specific detail. */
+    private static BufferedImage settlingTop(int part) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(image, x, y, x == 3 || x == 12 ? 0xA18B6F : 0x486878);
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 4; x <= 11; x++) {
+                if (part == 0 && y == 7) {
+                    set(image, x, y, 0x96724C);
+                } else if (part == 1 && (x + y) % 5 == 0) {
+                    set(image, x, y, 0x7297A1);
+                } else if (part == 2 && x % 2 == 0) {
+                    set(image, x, y, 0xC7B79A);
+                }
             }
         }
         return image;

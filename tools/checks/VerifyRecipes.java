@@ -60,7 +60,7 @@ public final class VerifyRecipes {
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable glass, redstone, steel, silicon and Relay Matrix graph",
-                120, recipes.size());
+                121, recipes.size());
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");

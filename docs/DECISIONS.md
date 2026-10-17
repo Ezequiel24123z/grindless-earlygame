@@ -141,6 +141,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0127](#adr-0127--smoke-runner-dispatch-is-tested-independently-of-minecraft) | Smoke-runner dispatch is tested independently of Minecraft | Accepted |
 | [0128](#adr-0128--validation-records-its-scope-and-repairs-incomplete-server-installations) | Validation records its scope and repairs incomplete server installations | Accepted |
 | [0129](#adr-0129--bootstrap-grows-through-a-connected-ceramic-workshop) | Bootstrap grows through a connected ceramic workshop | Accepted |
+| [0130](#adr-0130--settling-uses-an-open-oriented-assembly-with-stateless-parts) | Settling uses an open oriented assembly with stateless parts | Accepted |
+| [0131](#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified) | Mandatory supply is mod-owned, renewable and explicitly classified | Accepted |
 
 ---
 
@@ -5657,3 +5659,113 @@ resource loops, inventory/recipe changes, fluid wakeup, structure rotation/inval
 the packaged Forge lifecycle. Old validation is historical evidence, never proof of a new jar.
 Assets remain original deterministic geometry/textures unless a configured image provider
 produces candidates that pass both technical and visual review.
+
+---
+
+## ADR-0130 — Settling uses an open oriented assembly with stateless parts
+
+*2026-10-17 · Accepted*
+
+**Context.** The ceramic workshop is now implemented and headlessly validated. Its clay and
+aggregate inputs need a useful supplied route, and ADR-0129 calls for an assembled 3D T0 process
+rather than a concept image or a decorative large machine.
+
+**Decision.** Add a Settling Trough controller, one channel behind it and one screen behind
+the channel. All three face the same horizontal direction. The channel and screen each require
+air above; the controller's top deliberately remains available to an input hopper. This
+clarifies ADR-0129's open-space rule without obstructing automation. The footprint is 1x3 blocks
+with one block of overhead clearance over the working channel.
+
+Two dirt and 1000 mB water yield two clay balls, one gravel and 750 mB recovered water in
+160 ticks at 4 FU/t. The Quern consumes gravel; the Mixer consumes clay and water. The controller
+owns all item, fluid, power, progress and NBT interfaces. Existing process side behavior remains
+unchanged. Missing parts, wrong orientation, overhead obstruction or an unloaded cell stop work
+before consumption; repair resumes the retained cycle.
+
+The two structure parts have only horizontal facing, no inventory, ticking block entity,
+artificial machine status or saved owner. A single visual state in `BlockCatalogue` therefore
+means no `status` property; model generation, blockstate keys and the state smoke use that same
+rule. `WorkshopGeometry` supplies the same original boxes to collision, model generation and
+the assembled preview; controller/channel/screen segments share continuous bed/rail boundaries.
+The controller supplies the active-state indication and process effects.
+
+Extend only the existing bounded `WorkshopStructure` cell checker with observed block identity
+and facing. Do not create a graph of hatches, ownership services or a generic multiblock kernel.
+The layout's roles and orientation prevent another overlapping controller from treating the
+same part sequence as its own.
+
+**Research and balance.** The
+[USGS sediment reference](https://www.usgs.gov/water-science-school/science/sediment-and-suspended-sediment),
+inspected 2026-10-17, supports the general role of slower water allowing suspended solids to
+settle. The game counts and times are original abstractions, not measured physical yields.
+No source text, diagram, image or code is imported. The bounded economy check assigns two
+potential units to dirt and one to each ceramic/aggregate item; every F0 process is
+non-increasing under that potential. This is neither physical mass nor a whole-mod economy proof.
+
+**Alternatives rejected.** Three independent processing block entities (duplicated inventory and
+ambiguous ownership); an oversized cube with no process role; a single-state Minecraft enum
+property (invalid/useless state); requiring air above the input controller (blocks its hopper);
+copying another mod's model or asset; and storing a trusted formation flag across world changes.
+
+**Consequences.** New registry IDs are additive. The menu kind and fault values append to their
+existing ordinals. Deterministic checks exercise all four rotations, every required part,
+clearance and orientation. A production Forge scenario must prove real separation, water
+recovery, input preservation, reconstruction and repair before this unit is considered validated.
+
+---
+
+## ADR-0131 — Mandatory supply is mod-owned, renewable and explicitly classified
+
+*2026-10-17 · Accepted*
+
+**Context.** The owner established a project-wide invariant: every mandatory basic material and
+consumable must ultimately have an unlimited, automatable, mod-owned supply. The existing
+cobblestone-generator/tree-charcoal assumptions do not satisfy it. Nor does a repeating final
+recipe whose upstream ingredients remain finite. The owner also rejects forced usefulness for
+every residue and requires canonical classifications across gameplay and a factual dashboard.
+
+**Decision.** Audit the complete authored production/progression graph recursively, including
+machine construction, tools, fuels, fluids, catalysts, physical objectives and side streams.
+Keep recipes and quantities in their existing live Java catalogues; canonical annotation data
+adds source provenance, resource/by-product classes, handling, tier roles and bootstrap guarantees.
+Generated audit and dashboard outputs are projections of those authorities, not parallel recipes.
+
+Resource classes are `bootstrap`, `renewable`, `closed_loop`, `catalytic`, `lossy_loop`,
+`finite_optional` and `forbidden_dependency`. A renewable claim needs a validated internal route
+whose consumables recursively close. Bootstrap quantities must cover producer construction and
+recovery without an unseeded cycle. Optional vanilla inputs or emergency shortcuts may remain,
+but never the permanent canonical farm, exploit, loot or manual-mining dependency.
+
+By-product classes are `byproduct_current`, `byproduct_future`, `byproduct_optional`,
+`waste_recoverable`, `waste_hazardous`, `waste_inert`, `process_loss`, `emission`,
+`catalyst_spent` and `potential_future_use`. Validate their compatibility and evidence:
+current consumers exist; future consumers name a real plan; spent catalysts name their origin;
+hazards have implemented handling; inert waste is not mandatory; potential use is not promised.
+This supersedes ADR-0036 only where it implied every side stream must gain a material consumer.
+A truthful disposal, emission or loss policy is a valid handling destination.
+
+The same metadata supplies human-readable classifications, localization, handling advice,
+tooltips, supported recipe-viewer/quest integration and the repository-driven dashboard.
+Missing or unresolved metadata stays visible. Planned tiers and unobserved manual acceptance
+must not acquire invented progress percentages or passing status.
+
+CI rejects new unresolved mandatory violations, unseeded circular dependencies, finite/vanilla
+canonical dependencies, contradictory classifications, unsafe handling, bootstrap starvation,
+resource-positive recycling and stale generated projections. Pre-existing exceptions, if needed,
+are exact versioned findings with concrete remediation; they remain reported failures/debt,
+never a blanket waiver for new resources or a claim that a tier is sustainable.
+
+**First implementation direction.** Preserve and repair the current ceramic/settling machinery,
+then close foundational supply with original geological collection, biological biomass and
+automatic low-tier power. Model environmental energy/material inputs explicitly; do not invent
+matter without an industrial, biological, geological or other coherent source. Vanilla farms
+are not the fallback implementation. Later tiers improve these routes rather than undoing them.
+
+**Alternatives rejected.** Renaming finite extraction "renewable"; assuming tree/cobblestone
+farms are internal machines; treating recycling as a source without a seed or replacement for
+losses; making every waste valuable; hard-coding different tag meanings in each UI; and drawing
+a dashboard from hand-maintained completion claims.
+
+**Consequences.** T0 self-sustaining supply, audit/metadata and the first dashboard increment
+are active implementation, not documentation-only work. The owner permits PR management and
+merging when ready, but automated and manual acceptance requirements remain.

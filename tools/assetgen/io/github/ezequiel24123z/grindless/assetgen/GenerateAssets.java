@@ -209,6 +209,7 @@ public final class GenerateAssets {
             }
         }
         written += writeGui(root);
+        written += WorkshopPreview.write(root);
 
         // ---- sounds ----
         // Loops are built from harmonics of their own loop frequency and must not be faded, or
@@ -452,9 +453,8 @@ public final class GenerateAssets {
                         variants.append(", \"y\": ").append(rotation);
                     }
                     variants.append(" }");
-                    String state = block.facing()
-                            ? "[facing=" + facings.get(i) + ",status=" + status + "]"
-                            : "[status=" + status + "]";
+                    String properties = block.variantKey(facings.get(i), status);
+                    String state = properties.isEmpty() ? "" : "[" + properties + "]";
                     commands.add("setblock 8 100 8 grindless:" + n + state);
                     commands.add("execute if block 8 100 8 grindless:" + n + state
                             + " run say STATE-OK " + n + state);

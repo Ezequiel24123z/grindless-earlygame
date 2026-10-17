@@ -96,6 +96,12 @@ public final class ModBlockEntities {
                             new ProcessMachineBlockEntity(ProcessMachineKind.FIRING_CHAMBER, pos, state),
                             ModBlocks.FIRING_CHAMBER.get()).build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> SETTLING_TROUGH =
+            BLOCK_ENTITIES.register("settling_trough",
+                    () -> BlockEntityType.Builder.of((pos, state) ->
+                            new ProcessMachineBlockEntity(ProcessMachineKind.SETTLING_TROUGH, pos, state),
+                            ModBlocks.SETTLING_TROUGH.get()).build(null));
+
     /** T1 generator: furnace fuel at 32 FU/t. */
     public static final RegistrySupplier<BlockEntityType<ThermalGeneratorBlockEntity>> THERMAL_GENERATOR =
             BLOCK_ENTITIES.register("thermal_generator",

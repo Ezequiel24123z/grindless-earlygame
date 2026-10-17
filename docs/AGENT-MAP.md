@@ -57,11 +57,11 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins 120 generated rows for its four-material fixture and
-26 T1 crafts; `VerifyBootstrap` covers 15 T0 shaped crafts and the ceramic Data Core.
-`VerifyAtlas` pins 120 generated rows, 41 Assembler rows and 163 total handheld routes,
+`tools/checks/VerifyRecipes.java` pins 121 generated rows for its four-material fixture and
+26 T1 crafts; `VerifyBootstrap` covers 18 T0 shaped crafts and the ceramic Data Core.
+`VerifyAtlas` pins 121 generated rows, 41 Assembler rows and 167 total handheld routes,
 including both crafting catalogues, the shapeless core and physical calibration.
-Actual runtime counts depend on installed material tags; eight workshop rows are unconditional.
+Actual runtime counts depend on installed material tags; nine workshop rows are unconditional.
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
 gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have
@@ -175,7 +175,7 @@ The first four checks also pin that the prototype transport has no generated sur
 The Field Guide states the ceramic-workshop Bootstrap contract and points from its five-Matrix
 exit through the complete Voltaic factory; it remains readable independently of quest claims.
 The Dynamo/Extractor still spend two iron; optional vanilla equipment is outside that budget.
-The active route has twenty-four tasks in ten lines, with ceramics before calibration and the physical Relay Matrix between
+The active route has twenty-five tasks in eleven lines, with ceramics before calibration and the physical Relay Matrix between
 calibration and the first powered machines; it ends at the F2 Relay Matrix, contains no dimension
 evidence and does not advertise spatial campaign prototypes.
 Early quest rewards must never supply a core, insulator or Matrix that bypasses the workshop.
@@ -197,6 +197,16 @@ ADR-0129 adds fixed, process-driven T0 workshop structures independently of that
 `structure/WorkshopStructure.java` owns local cells and clockwise rotations; the process block
 entity reads only loaded world cells before working. The Firing Chamber is its controller plus
 seven bricks in a 2x2x2 volume. Never persist a trusted "formed" flag or force-load a missing cell.
+The Settling Trough requires a same-facing channel then screen behind its controller, with air
+above those two parts. `WorkshopPartBlock` has facing but no artificial status or block entity.
+`WorkshopGeometry` is the shared box source for collision, JSON models and the schematic preview.
+The controller top remains usable by hoppers. Missing, wrong-facing, covered and unloaded cells
+have separate synchronized faults; every fault enum addition appends to existing values.
+
+`BlockCatalogue.Entry.hasStatus()` is false for a single visual variant. The generator and
+state-smoke keys must omit the nonexistent property rather than create a one-value Minecraft
+enum. `VerifyT0Preparation` checks the static parts, exact texture-end continuity and the
+idle/active preview in addition to the ordinary controller models.
 
 `ProcessMachineBlockEntity` retains paid work under `WorkRecipe`, separately from the live
 `Recipe` selection (which is empty when inputs are invalid). Legacy saves derive the owner from
@@ -224,6 +234,9 @@ an uninitialized subclass field. Existing menu ordinals and `ItemLayout=3` stay 
 - `tools/checks/VerifyWorkshop.java` — exact F0 counts, non-amplifying ceramic solid potential,
   reachable sinks and every rotated/missing chamber cell. `workshop` is the registered Forge
   counterpart for full cycles, finite-water wakeup, NBT reconstruction and blocked-output recovery.
+  `settling` proves actual separation in four orientations, wrong-facing/covered suspension,
+  reconstructed fluid/work and exact conduit recovery. Scheduled checks wait boundedly for
+  observed work rather than equating world age with block-entity processing ticks.
 - `tools/check-links.ps1` — relative links and the ADR index.
 - `tools/smoke/scenarios.txt` — the scenario list, when a block, a menu or a
   boot-visible item changes. Run it with `tools/run-smokes.ps1` or `run-smokes.sh`.

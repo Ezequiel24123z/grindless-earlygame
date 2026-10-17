@@ -37,7 +37,15 @@ public final class BootstrapProcesses {
                 firing("insulators", UNFIRED, 3,
                         List.of(OutputSpec.item(INSULATOR, 2), OutputSpec.item(GROG, 1))),
                 firing("bricks", "minecraft:clay_ball", 4,
-                        List.of(OutputSpec.item("minecraft:brick", 4))));
+                        List.of(OutputSpec.item("minecraft:brick", 4))),
+                new ProcessRecipe("bootstrap/settle_clay", MachineFamily.SETTLING_TROUGH,
+                        List.of(IngredientSpec.item("minecraft:dirt", 2),
+                                IngredientSpec.fluid("minecraft:water", 1000)),
+                        List.of(OutputSpec.item("minecraft:clay_ball", 2),
+                                OutputSpec.item("minecraft:gravel", 1),
+                                OutputSpec.fluid("minecraft:water", 750)),
+                        Double.NaN, null, 160, FluxTier.F0.nominal() / 2,
+                        List.of(), "bootstrap"));
     }
 
     private static ProcessRecipe milling(String id, String input, int count,

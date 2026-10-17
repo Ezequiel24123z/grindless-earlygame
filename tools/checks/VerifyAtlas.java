@@ -18,7 +18,7 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 120, rows.size());
+        eq("atlas lists every generated recipe", 121, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
@@ -26,7 +26,7 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 163, allRows.size());
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 167, allRows.size());
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
             AtlasLogic.Entry row = route(allRows, "craft/" + craft.name());
             eq(craft.name() + " exposes its complete output batch", craft.resultCount(), row.outputs().size());
@@ -192,7 +192,7 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:hydrogen").size());
         eq("oxygen has the cell and the intake", 2,
                 AtlasLogic.producing(recipes, "grindless:oxygen").size());
-        eq("recombination and the condenser make water", 2,
+        eq("recombination, condensation and settling recovery make water", 3,
                 AtlasLogic.producing(recipes, "minecraft:water").size());
         eq("SO3 has one contact route", 1,
                 AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());

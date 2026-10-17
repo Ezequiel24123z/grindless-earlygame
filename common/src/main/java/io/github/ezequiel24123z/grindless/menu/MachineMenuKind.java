@@ -28,7 +28,8 @@ public enum MachineMenuKind {
     CONDENSER(0, 0),
     QUERN(1, 2),
     CLAY_MIXER(2, 1),
-    FIRING_CHAMBER(2, 2);
+    FIRING_CHAMBER(2, 2),
+    SETTLING_TROUGH(1, 2);
 
     private final int inputs;
     private final int outputs;

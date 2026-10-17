@@ -105,11 +105,12 @@ public abstract class MachineBlockEntity extends BlockEntity {
     /**
      * The Flux tier this machine is rated for. Under-volting slows it rather than stalling it.
      *
-     * <p><b>Must return a constant.</b> This is called from the constructor to size the energy
+     * <p><b>The legacy constructor requires a constant override.</b> This is called to size the energy
      * buffer, which means it runs <em>before</em> the subclass constructor body — so an
      * implementation that reads a subclass field will see that field's default value, not the
      * one it was about to be assigned. Returning an enum constant is always safe; returning
-     * anything derived from instance state is not.
+     * anything derived from uninitialized subclass state is not. Catalogue-driven machines use
+     * the explicit-tier constructor instead, then may return {@link #powerTier()} safely.
      */
     protected abstract FluxTier ratedTier();
 

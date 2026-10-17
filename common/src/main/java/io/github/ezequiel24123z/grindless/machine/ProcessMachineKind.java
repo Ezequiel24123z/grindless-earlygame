@@ -391,6 +391,29 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.FIRING_CHAMBER.get();
         }
+    },
+
+    SETTLING_TROUGH(MachineFamily.SETTLING_TROUGH, MachineMenuKind.SETTLING_TROUGH,
+            BlockCatalogue.Geometry.SETTLER, "settling_trough", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public WorkshopStructure structure() {
+            return WorkshopStructure.SETTLING_TROUGH;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.SETTLING_TROUGH.get();
+        }
     };
 
     private final MachineFamily family;

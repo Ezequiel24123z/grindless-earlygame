@@ -15,6 +15,13 @@ resource route; no precise scientific mass-balance claim is made. A charcoal-ret
 considered but not selected: it would require a meaningful condensate sink before adding new
 gas/fluid types. No speculative retort or copied industrial recipe is shipped.
 
+For ADR-0130, the [USGS sediment reference](https://www.usgs.gov/water-science-school/science/sediment-and-suspended-sediment)
+was inspected on 2026-10-17. It supports the general separation role of slower water and
+settling solids, not the chosen dirt/clay/gravel counts. Classification: conceptual inspiration
+only; original implementation on the existing process engine, low integration cost and low
+originality risk for the general physical principle. No text, figure, asset or code is imported,
+and no blanket image or redistribution licence is inferred from the hosting organization.
+
 The screening below is historical preparation. Its former no-expansion gate is superseded
 for this workshop by the current owner-directed scope, not by the research itself.
 

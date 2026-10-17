@@ -124,7 +124,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     @Override
     protected FluxTier ratedTier() {
-        return FluxTier.F1;
+        return powerTier();
     }
 
     @Override
@@ -422,19 +422,27 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (kind.structure() == WorkshopStructure.NONE || getLevel() == null) {
             return WorkshopStructure.Fault.NONE;
         }
-        int turns = switch (getBlockState().getValue(MachineProperties.FACING)) {
+        int turns = horizontalTurns(getBlockState());
+        return kind.structure().check(turns, offset -> {
+            BlockPos cell = getBlockPos().offset(offset.x(), offset.y(), offset.z());
+            if (!getLevel().hasChunkAt(cell)) {
+                return null;
+            }
+            BlockState state = getLevel().getBlockState(cell);
+            return new WorkshopStructure.Present(state.isAir() ? "minecraft:air"
+                    : BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString(),
+                    state.hasProperty(MachineProperties.FACING) ? horizontalTurns(state) : -1);
+        });
+    }
+
+    private static int horizontalTurns(BlockState state) {
+        return switch (state.getValue(MachineProperties.FACING)) {
             case NORTH -> 0;
             case EAST -> 1;
             case SOUTH -> 2;
             case WEST -> 3;
-            default -> throw new IllegalStateException("a workshop controller must face horizontally");
+            default -> throw new IllegalStateException("a workshop component must face horizontally");
         };
-        return kind.structure().check(turns, offset -> {
-            BlockPos cell = getBlockPos().offset(offset.x(), offset.y(), offset.z());
-            return getLevel().hasChunkAt(cell)
-                    ? BuiltInRegistries.BLOCK.getKey(getLevel().getBlockState(cell).getBlock()).toString()
-                    : null;
-        });
     }
 
     private ItemStack[] inputs() {

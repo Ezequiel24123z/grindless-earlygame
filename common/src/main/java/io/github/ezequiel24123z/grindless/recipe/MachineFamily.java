@@ -65,5 +65,8 @@ public enum MachineFamily {
     CLAY_MIXER,
 
     /** F0 fuel-backed batch firing in a formed brick chamber. */
-    FIRING_CHAMBER
+    FIRING_CHAMBER,
+
+    /** F0 clay/aggregate separation with partial water recovery in an open assembled channel. */
+    SETTLING_TROUGH
 }

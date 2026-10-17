@@ -155,6 +155,31 @@ forge/               Forge entrypoint and bridges only (this jar also loads on N
 
 ## Conventions
 
+**Resource sustainability.** Every basic material or consumable required by mandatory
+progression must ultimately have an unlimited, automatable, mod-owned renewable route.
+Trace every consumable dependency to its terminal source. Vanilla inputs are allowed as
+optional compatibility routes, finite bootstrap supplies or emergency alternatives, never as
+the permanent canonical farm, exploit, loot or manual-mining solution.
+
+Finite bootstrap is valid only when its quantities and recovery margin can establish the
+renewable producer without a circular dependency or consuming its only construction supply.
+T0 must establish the first internally self-sustaining base. Later tiers improve those routes
+rather than restoring a dependency on vanilla farms.
+
+**Resource and by-product metadata.** Classifications, handling advice, first-use/renewable
+tiers and source provenance are canonical machine-readable data shared by validation,
+tooltips, recipe viewers, the quest book and the dashboard. Never mark a repeatable recipe
+renewable while an upstream consumed input is finite. New unresolved mandatory dependencies
+fail CI. Existing exceptions must be explicit, versioned and have a concrete remediation plan;
+an exception is visible debt, not a passing sustainability claim.
+
+By-products need honest classification and handling, not an invented consumer. A current
+by-product needs an implemented consumer; a future feedstock needs a named committed plan.
+Uncertain future usefulness must say so. Inert waste is optional and discardable; hazardous
+waste needs actual handling/containment rules. Losses and emissions need not become item stacks.
+Do not force unlimited hoarding or artificial recipes merely to make waste appear valuable.
+See [ADR-0131](docs/DECISIONS.md#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified).
+
 **Versions.** Every version lives in `gradle.properties` and is referenced as
 `rootProject.<name>`. Never hardcode a version in a build script.
 

@@ -9,10 +9,14 @@ Repository authentication was verified as `Ezequiel24123z`; the exposed Copilot 
 The current owner-directed assignment supersedes the old no-expansion gate. Implement the
 ADR-0129 ceramic workshop, then assembled settling, with current-build checks and checkpoint
 commits. Manual client/survival/retained-world acceptance remains a merge condition, not a
-feature-development blocker. No merge or unrelated T1/T2 work is authorized.
+feature-development blocker. The owner additionally authorized PR management and merging on
+2026-10-17; merge only after all required automated and observed manual conditions pass.
+Unrelated T1/T2 work remains outside scope.
 
 Completed checkpoints: `9aea30e` (active contract), `0838e88` (exact Windows/Bash smoke
-selection), and the W1 workshop unit containing this handoff. `0838e88` was HEAD when its final
+selection), and `0aad62a` (W1 workshop). The active draft is
+[the T0 rework](https://github.com/Ezequiel24123z/grindless-earlygame/pull/54), based on the
+preserved foundation. `0838e88` was HEAD when W1's final
 working-tree validation began; use `git rev-parse HEAD` for the containing commit, not a
 self-referencing guessed SHA.
 
@@ -41,7 +45,27 @@ functional assets. No AI image generation or final graphical acceptance is claim
 **Next safe task: T0-W2, assembled settling.** Add the fixed open three-block trough and its
 oriented static parts, dirt/clay/gravel/water route, real geometry, quantity/formation checks
 and native lifecycle. Then complete the final asset/automation/integration milestone and keep
-a draft PR. No unrelated T1/T2 consumer or merge is authorized.
+a draft PR. No unrelated T1/T2 consumer is authorized; merge permission does not waive
+the outstanding acceptance conditions.
+
+## Current continuation: sustainability and classified side streams
+
+The owner expanded the active task under ADR-0131. Audit all authored progression resources,
+add canonical resource/by-product metadata and deterministic reports/CI gates, expose it in
+player views and a repository-driven dashboard, and implement the first missing mod-owned T0
+renewable loops. Do not stop gameplay work at schemas or dashboards.
+
+The W2 implementation is now present: four-orientation settling, stateless parts, shared
+collision/model boxes and a generated preview. Its fast validation passed at
+`build/validation/20261017T151215457Z/status.tsv`. The native batch passed states, the repaired
+workshop and book fixtures; settling still fails `TROUGH-WATER-RECOVERED` after producing solids
+and retaining exactly 750 mB. Evidence: `build/validation/settling-native-smokes.log`.
+Fix that transfer first; do not weaken the expected volume or call a retained buffer a closed loop.
+
+The initial supply review is [resource sustainability](../docs/RESOURCE-SUSTAINABILITY.md).
+Vanilla-derived dirt/wood/carbon and finite ore supply are not certified renewable. The next
+code milestone adds real internal sources and an audit, with exact pre-existing exceptions only
+if they have a versioned remediation plan. Current gate remains IMPLEMENTATION IN PROGRESS.
 
 ## Preserved foundation handoff
 

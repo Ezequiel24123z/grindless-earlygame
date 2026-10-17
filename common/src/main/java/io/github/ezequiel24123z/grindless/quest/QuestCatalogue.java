@@ -65,6 +65,8 @@ public final class QuestCatalogue {
                     List.of("clay_mixer"), reward("minecraft:charcoal", 4)),
             task("workshop_flow", "workshop", Evidence.ITEM, "grindless:crude_manipulator", 1,
                     List.of("ceramics"), reward("minecraft:stick", 8)),
+            task("settling", "settling", Evidence.ITEM, "grindless:settling_trough", 1,
+                    List.of("ceramics", "water"), reward("minecraft:dirt", 16)),
             task("calibrate", "relay", Evidence.ITEM, "grindless:calibrated_data_core", 1,
                     List.of("ceramics"), reward("grindless:process_atlas", 1)),
             task("relay", "relay", Evidence.ITEM, "grindless:relay_matrix", 5,

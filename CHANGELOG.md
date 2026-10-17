@@ -15,6 +15,22 @@ entries below reference those records by id.
 
 ### Added
 
+- **Mod-owned sustainability is binding across progression (ADR-0131).** Mandatory resources
+  must close recursively without canonical vanilla farms or permanently finite inputs. Resource
+  and by-product classes, bootstrap safety, handling and truthful player/dashboard views are
+  now required. The initial review identifies concrete supply and fluid-export gaps instead of
+  promoting repeating recipes to renewable status.
+
+- **Assembled settling implementation checkpoint.** One controller and two stateless oriented
+  parts use shared collision/model geometry and a generated schematic preview. The current
+  native test proves solids in four orientations and retained covered work/NBT, but water export
+  remains blocked and is not claimed complete.
+
+- **Assembled settling is the next T0 process (ADR-0130).** Its controller, oriented channel
+  and screen have explicit clearance, interfaces and original resource ratios. Static parts
+  will not acquire fake machine state or ticking block entities. PR management and merging are
+  now owner-authorized once the outstanding automated and manual acceptance conditions pass.
+
 - **The ceramic workshop connects T0 materials, water, fuel and control (ADR-0129).** The Quern,
   Clay Mixer and formed 2x2x2 Firing Chamber share eight F0 processes, three original ceramic
   items, grog recovery, physical Data Core manufacture and primitive plumbing/handling crafts.

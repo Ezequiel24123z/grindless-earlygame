@@ -1,5 +1,6 @@
 scoreboard objectives add workshop_check dummy
 scoreboard players set blocked_tries workshop_check 0
+scoreboard players set firing_tries workshop_check 0
 fill 2 277 2 14 282 14 minecraft:air
 setblock 4 280 4 grindless:quern[facing=north,status=idle]{Energy:{FluxStored:9999L}}
 execute if data block 4 280 4 {Energy:{FluxStored:320L}} run say WORKSHOP-F0-BUFFER
@@ -29,5 +30,5 @@ setblock 3 280 12 grindless:hand_crank_dynamo[facing=east,status=idle]{Energy:{F
 setblock 5 280 12 minecraft:dispenser{Items:[{Slot:0b,id:"minecraft:stone",Count:64b},{Slot:1b,id:"minecraft:stone",Count:64b},{Slot:2b,id:"minecraft:stone",Count:64b},{Slot:3b,id:"minecraft:stone",Count:64b},{Slot:4b,id:"minecraft:stone",Count:64b},{Slot:5b,id:"minecraft:stone",Count:64b},{Slot:6b,id:"minecraft:stone",Count:64b},{Slot:7b,id:"minecraft:stone",Count:64b},{Slot:8b,id:"minecraft:stone",Count:64b}]}
 schedule function grindless_workshop:water 20t replace
 schedule function grindless_workshop:switch 50t replace
-schedule function grindless_workshop:break 80t replace
+schedule function grindless_workshop:break 20t replace
 schedule function grindless_workshop:blocked 80t replace

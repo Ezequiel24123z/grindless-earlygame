@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.assetgen;
 
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
+import io.github.ezequiel24123z.grindless.structure.WorkshopGeometry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +107,7 @@ final class BlockModels {
             case QUERN -> quern();
             case MIXER -> clayMixer();
             case FIREBOX -> firebox();
+            case SETTLER, CHANNEL, SCREEN -> workshop(block.geometry());
         };
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"textures\": {\n");
@@ -145,6 +147,14 @@ final class BlockModels {
                 front(0, 0, 0, 16, 16, 16, "#top", "#side", "#front"),
                 box(4, 3, -1, 12, 5, 0, "#cap", "#base"),
                 box(12, 6, -1, 14, 10, 0, "#cap", "#base"));
+    }
+
+    private static List<Box> workshop(BlockCatalogue.Geometry geometry) {
+        return WorkshopGeometry.boxes(geometry).stream().map(box -> new Box(
+                new double[]{box.x0(), box.y0(), box.z0()},
+                new double[]{box.x1(), box.y1(), box.z1()},
+                box.top(), box.top(), box.front() == null ? box.side() : box.front(),
+                box.side(), box.side(), box.side(), box.front() != null, null)).toList();
     }
 
     /** The middle or top third of a pylon, as its own model sitting in 0–16. */

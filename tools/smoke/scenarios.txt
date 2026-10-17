@@ -21,6 +21,7 @@ states               Every status and facing of every machine is a valid block s
 loop                 The extractor has a block entity, and a pylon occupies the two blocks above it.
 bootstrap            The three T0 machines transfer power, extract a vein, calibrate a core and recover legacy output.
 workshop             Full F0 ceramic cycles, finite-water wakeup, recipe identity, formation, NBT repair, blocked output and idle export.
+settling             Four real oriented assemblies separate dirt, preserve covered work and NBT, and recover exactly 750 mB through a conduit.
 first-iron           Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
 first-factory        Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
 first-fluids         Slice C: pump water through clay into a tank; captured CO burns in the generator.

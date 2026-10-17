@@ -64,7 +64,7 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
                 addSlot(new Slot(container, 0, 52, 35));
                 addSlot(new OutputSlot(container, 1, 116, 35));
             }
-            case CHEMICAL_WASHER, FLOTATION, QUERN -> {
+            case CHEMICAL_WASHER, FLOTATION, QUERN, SETTLING_TROUGH -> {
                 addSlot(new Slot(container, 0, 44, 35));
                 addSlot(new OutputSlot(container, 1, 116, 26));
                 addSlot(new OutputSlot(container, 2, 116, 44));

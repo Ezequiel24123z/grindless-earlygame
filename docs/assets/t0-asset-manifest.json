@@ -106,7 +106,20 @@
       "states": ["idle", "running", "blocked", "starved", "out_of_band"],
       "gui": "ceramic feed and carbon fuel inputs, insulator and grog outputs; synchronized structure fault",
       "candidate_output": "build/assets/t0/candidates/firing_chamber-atlas.png"
+    },
+    {
+      "id": "settling_trough",
+      "prefix": "settler",
+      "component": "F0 dirt separation with partial water recovery",
+      "silhouette": "hopper-fed headbox joined to a full-length open channel and raised screen",
+      "states": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "gui": "one input, two outputs, synchronized water volume and specific structure fault",
+      "candidate_output": "build/assets/t0/candidates/settling_trough-atlas.png"
     }
+  ],
+  "parts": [
+    {"id": "settling_channel", "prefix": "channel", "states": ["idle"], "role": "open working volume", "block_entity": false},
+    {"id": "settling_screen", "prefix": "screen", "states": ["idle"], "role": "terminal separation grate", "block_entity": false}
   ],
   "items": [
     {"id": "multitool", "accent": "#C9A227", "role": "rotation and relocation, not mining"},
@@ -131,7 +144,8 @@
     "rule": "Unused cells stay transparent; do not independently regenerate the stable body for each state"
   },
   "multiblocks": [
-    {"id": "firing_chamber", "dimensions": [2, 2, 2], "controller": "front-left bottom", "surround": "seven minecraft:bricks blocks", "orientations": ["north", "east", "south", "west"], "interfaces": "controller only", "active_region": "controller fire door and status strip", "provenance": "original generated controller geometry/textures; vanilla blocks referenced, not copied", "license": "MIT for original generated files"}
+    {"id": "firing_chamber", "dimensions": [2, 2, 2], "controller": "front-left bottom", "surround": "seven minecraft:bricks blocks", "orientations": ["north", "east", "south", "west"], "interfaces": "controller only", "active_region": "controller fire door and status strip", "provenance": "original generated controller geometry/textures; vanilla blocks referenced, not copied", "license": "MIT for original generated files"},
+    {"id": "settling_trough", "dimensions": [1, 2, 3], "controller": "front headbox; channel then screen behind", "clearance": "air above channel and screen; hopper permitted above controller", "orientations": ["north", "east", "south", "west"], "interfaces": "controller only", "geometry_source": "WorkshopGeometry", "active_region": "controller feed gate and status strip; static parts have no artificial status", "continuity": "identical bed/rail boundaries and matching top-texture end rows", "preview": "docs/assets/t0-settling-preview.png", "preview_dimensions": [720, 256], "preview_note": "left idle, right active; schematic geometry/texture preview, not a client screenshot", "provenance": "original JDK-generated geometry, textures and preview", "license": "MIT"}
   ],
   "multiblock_boundary": "Only bounded process-driven workshop structures under ADR-0129; no speculative parametric Arc Reactor kernel",
   "prompt_template": "Create an original 16x16 pixel-art candidate for {component}, using the declared Grindless palette and {silhouette}. Preserve the supplied stable body exactly and draw only the named front/state layer. Hard nearest-neighbour edges, clear mechanism, no text, no logos, no copied game or mod imagery. Output only the declared atlas cells, with unchanged regions pixel-identical. This is a candidate for human QC, not a production-ready asset.",

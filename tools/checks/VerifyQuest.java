@@ -23,7 +23,7 @@ public final class VerifyQuest {
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
-            "bootstrap", "workshop", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
+            "bootstrap", "workshop", "settling", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
             "industrial");
 
     private static final List<String> FORBIDDEN = List.of(
@@ -52,8 +52,8 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("twenty-four tasks, including the connected workshop", 24, tasks.size());
-        eq("ten T0-to-T1 lines", LINES, QuestCatalogue.lines());
+        eq("twenty-five tasks, including the assembled settling line", 25, tasks.size());
+        eq("eleven T0-to-T1 lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
         eq("the last task is the physical Industrial hand-off", "industrial_matrix", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
@@ -69,7 +69,7 @@ public final class VerifyQuest {
         eq("calibration now follows physical ceramics", List.of("ceramics"), task("calibrate").requires());
         eq("water supply precedes wet mixing", List.of("quern", "water"), task("clay_mixer").requires());
         for (QuestCatalogue.Task task : tasks) {
-            if (task.line().equals("bootstrap") || task.line().equals("workshop")) {
+            if (Set.of("bootstrap", "workshop", "settling").contains(task.line())) {
                 no(task.id() + " cannot reward a bypass around ceramic manufacture",
                         Set.of("grindless:data_core", "grindless:calibrated_data_core",
                                 "grindless:relay_matrix", "grindless:ceramic_insulator")
@@ -190,7 +190,8 @@ public final class VerifyQuest {
         for (String mark : List.of(
                 "Multitool", "Hand Crank", "Crude Extractor", "Relay Matrices", "Thermal Generator", "Flux Pylon",
                 "Prospector", "Terrestrial Extractor", "Pulverizer", "Arc Furnace", "Press", "Assembler", "cobblestone",
-                "Conveyor Belts", "Factory Portal", "Quern", "Clay Mixer", "Firing Chamber", "grog")) {
+                "Conveyor Belts", "Factory Portal", "Quern", "Clay Mixer", "Firing Chamber", "grog",
+                "Settling Trough", "Settling Channel", "Settling Screen")) {
             yes("the guide mentions " + mark, text.contains(mark));
         }
         for (String prototype : List.of(

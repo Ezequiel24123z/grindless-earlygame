@@ -3,7 +3,8 @@
 **Current state: IMPLEMENTATION IN PROGRESS.** ADR-0129 and the 2026-10-17 owner-directed
 rework authorize further T0 implementation on the feature branch. Automatedly validated units
 may be committed, pushed and continued while manual acceptance is pending. T1/T2 expansion
-and merging remain outside this authorization.
+remains outside this authorization. The owner additionally authorized PR management and merging
+on 2026-10-17; that permission applies only once the required merge conditions below are satisfied.
 
 **Merge conditions remain open:** observed client/JEI interaction, no-command survival through
 the expanded T0 route, retained-world restart/compatibility, current automated checks and the

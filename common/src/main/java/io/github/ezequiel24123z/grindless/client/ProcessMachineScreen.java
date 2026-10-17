@@ -53,9 +53,9 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
         Component line = statusLine();
         graphics.drawString(font, font.plainSubstrByWidth(line.getString(), imageWidth - 40),
                 32, 70, 0x404040, false);
-        if (menu.kind() == MachineMenuKind.CLAY_MIXER) {
+        if (menu.kind() == MachineMenuKind.CLAY_MIXER || menu.kind() == MachineMenuKind.SETTLING_TROUGH) {
             graphics.drawString(font, Component.translatable("gui.grindless.workshop.water",
-                    menu.fluidAmount()), 80, 57, 0x404040, false);
+                    menu.fluidAmount()), 32, 16, 0x404040, false);
         }
     }
 

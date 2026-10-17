@@ -95,6 +95,8 @@ public final class MachineEffects {
             case QUERN -> mill(status, level, pos, random);
             case MIXER -> washer(status, level, pos, random);
             case FIREBOX -> generator(status, level, pos, random);
+            case SETTLER -> washer(status, level, pos, random);
+            case CHANNEL, SCREEN -> { }
         }
         if (status == MachineStatus.OUT_OF_BAND) {
             outOfBand(level, pos, random);

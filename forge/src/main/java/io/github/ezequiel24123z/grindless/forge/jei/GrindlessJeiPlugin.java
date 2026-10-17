@@ -90,6 +90,7 @@ public final class GrindlessJeiPlugin implements IModPlugin {
             case QUERN -> ModBlocks.QUERN.get();
             case CLAY_MIXER -> ModBlocks.CLAY_MIXER.get();
             case FIRING_CHAMBER -> ModBlocks.FIRING_CHAMBER.get();
+            case SETTLING_TROUGH -> ModBlocks.SETTLING_TROUGH.get();
         };
     }
 }

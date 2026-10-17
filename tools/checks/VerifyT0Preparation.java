@@ -45,11 +45,14 @@ public final class VerifyT0Preparation {
         check("the exact three new material roles are inventoried",
                 new HashSet<>(strings(graph.getAsJsonArray("new_runtime_items"))).equals(
                         Set.of("ceramic_grog", "unfired_ceramic", "ceramic_insulator")));
-        check("the exact three process machines are inventoried",
+        check("the exact four process machines are inventoried",
                 new HashSet<>(strings(graph.getAsJsonArray("new_runtime_machines"))).equals(
-                        Set.of("quern", "clay_mixer", "firing_chamber")));
-        check("the fixed firing chamber is inventoried",
-                strings(graph.getAsJsonArray("new_runtime_multiblocks")).equals(List.of("firing_chamber")));
+                        Set.of("quern", "clay_mixer", "firing_chamber", "settling_trough")));
+        check("the two static parts are inventoried", strings(graph.getAsJsonArray("new_runtime_parts"))
+                .equals(List.of("settling_channel", "settling_screen")));
+        check("both bounded structures are inventoried",
+                strings(graph.getAsJsonArray("new_runtime_multiblocks"))
+                        .equals(List.of("firing_chamber", "settling_trough")));
         for (String machine : strings(graph.getAsJsonArray("new_runtime_machines"))) {
             check(machine + " is registered", BlockCatalogue.block(machine) != null);
         }
@@ -110,10 +113,10 @@ public final class VerifyT0Preparation {
         check("the asset manifest identifies the intentional runtime additions",
                 manifest.get("runtime_changes").getAsBoolean());
         check("the fixed chamber has a visual composition contract",
-                manifest.getAsJsonArray("multiblocks").size() == 1
+                manifest.getAsJsonArray("multiblocks").size() == 2
                         && manifest.getAsJsonArray("multiblocks").get(0).getAsJsonObject()
                         .get("id").getAsString().equals("firing_chamber"));
-        check("all six T0 machines have asset contracts", manifest.getAsJsonArray("machines").size() == 6);
+        check("all seven T0 machines have asset contracts", manifest.getAsJsonArray("machines").size() == 7);
         JsonObject animation = manifest.getAsJsonObject("defaults").getAsJsonObject("animation");
         check("current placeholders are static", animation.get("frame_count").getAsInt() == 1
                 && !animation.get("interpolate").getAsBoolean() && animation.get("mcmeta").isJsonNull());
@@ -159,6 +162,35 @@ public final class VerifyT0Preparation {
             check(id + " is in the sprite catalogue", BlockCatalogue.placeholderSprites().contains(id));
             png(ASSETS.resolve("textures/item/" + id + ".png"));
             check(id + " has an item model", Files.isRegularFile(ASSETS.resolve("models/item/" + id + ".json")));
+        }
+        check("both stateless parts have asset contracts", manifest.getAsJsonArray("parts").size() == 2);
+        for (JsonElement element : manifest.getAsJsonArray("parts")) {
+            JsonObject part = element.getAsJsonObject();
+            String id = part.get("id").getAsString();
+            String prefix = part.get("prefix").getAsString();
+            BlockCatalogue.Entry block = BlockCatalogue.block(id);
+            check(id + " is a unique, stateless authored part", ids.add(id) && !block.hasStatus()
+                    && !part.get("block_entity").getAsBoolean());
+            check(id + " has one visual variant", strings(part.getAsJsonArray("states"))
+                    .equals(block.statuses()) && block.statuses().equals(List.of("idle")));
+            png(ASSETS.resolve("textures/block/" + prefix + "_front_idle.png"));
+            png(ASSETS.resolve("textures/block/" + prefix + "_top.png"));
+        }
+        BufferedImage channel = ImageIO.read(ASSETS.resolve("textures/block/channel_top.png").toFile());
+        int[] edge = channel.getRGB(0, 0, 16, 1, null, 0, 16);
+        for (String prefix : List.of("settler", "channel", "screen")) {
+            BufferedImage top = ImageIO.read(ASSETS.resolve("textures/block/" + prefix + "_top.png").toFile());
+            check(prefix + " has continuous entry/exit pixels",
+                    Arrays.equals(edge, top.getRGB(0, 0, 16, 1, null, 0, 16))
+                            && Arrays.equals(edge, top.getRGB(0, 15, 16, 1, null, 0, 16)));
+        }
+        BufferedImage preview = ImageIO.read(Path.of("docs", "assets", "t0-settling-preview.png").toFile());
+        check("the assembled preview has the exact declared dimensions",
+                preview != null && preview.getWidth() == 720 && preview.getHeight() == 256);
+        if (preview != null && preview.getWidth() == 720 && preview.getHeight() == 256) {
+            check("the preview distinguishes inactive and active controllers", !Arrays.equals(
+                    preview.getRGB(0, 0, 360, 256, null, 0, 360),
+                    preview.getRGB(360, 0, 360, 256, null, 0, 360)));
         }
     }
 

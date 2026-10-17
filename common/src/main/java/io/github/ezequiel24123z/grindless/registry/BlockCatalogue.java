@@ -140,7 +140,13 @@ public final class BlockCatalogue {
         /** An open clay bowl with a horizontal mixing paddle. */
         MIXER,
         /** A low fire door and draft indicator in a formed brick chamber. */
-        FIREBOX
+        FIREBOX,
+        /** A hopper-fed headbox and outlet for an assembled settling line. */
+        SETTLER,
+        /** A continuous open bed with two side rails; no block entity. */
+        CHANNEL,
+        /** A raised grate across the working channel; no block entity. */
+        SCREEN
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -169,7 +175,16 @@ public final class BlockCatalogue {
 
         /** The blockstate variant key for one state, such as {@code facing=north,status=idle}. */
         public String variantKey(String facingValue, String status) {
-            return facing ? "facing=" + facingValue + ",status=" + status : "status=" + status;
+            String properties = facing ? "facing=" + facingValue : "";
+            if (hasStatus()) {
+                properties += (properties.isEmpty() ? "" : ",") + "status=" + status;
+            }
+            return properties;
+        }
+
+        /** A single visual variant does not invent a one-valued Minecraft state property. */
+        public boolean hasStatus() {
+            return statuses.size() > 1;
         }
 
         /** The model name for one status, shared by every facing. */
@@ -193,6 +208,9 @@ public final class BlockCatalogue {
             new Entry("quern", Geometry.QUERN, 1, true, CONSUMER),
             new Entry("clay_mixer", Geometry.MIXER, 1, true, CONSUMER),
             new Entry("firing_chamber", Geometry.FIREBOX, 1, true, CONSUMER),
+            new Entry("settling_trough", Geometry.SETTLER, 1, true, CONSUMER),
+            new Entry("settling_channel", Geometry.CHANNEL, 1, true, List.of("idle")),
+            new Entry("settling_screen", Geometry.SCREEN, 1, true, List.of("idle")),
             new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR),
             new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER),
             new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
