@@ -54,7 +54,14 @@
   }
 
   async function route(frame, name) {
-    frame.contentWindow.location.hash = "#/" + name;
+    const win = frame.contentWindow;
+    const hash = "#/" + name;
+    if (win.location.hash !== hash) {
+      await new Promise(resolve => {
+        win.addEventListener("hashchange", resolve, { once: true });
+        win.location.hash = hash;
+      });
+    }
     await until(() => frame.contentDocument.getElementById("view-title")?.textContent === ({
       resources: "Resource sustainability", byproducts: "By-products & waste", machines: "Machines & multiblocks",
       logistics: "Logistics & automation", production: "Production dependencies", quests: "Questbook",
@@ -160,6 +167,7 @@
     equal(M.repositoryPath("/home/synthetic/secret.txt"), null);
     assert(!M.text("C:\\Users\\Synthetic\\secret.txt").includes("Synthetic"));
     assert(!M.text("ghp_syntheticFixtureTokenOnly1234").includes("syntheticFixture"));
+    assert(!M.text("Authorization: Basic c3ludGhldGljOnRlc3Q=").includes("c3ludGhldGlj"));
     assert(!M.narrative("Caused by: synthetic\n at fake.Method(Fake.java:1)").includes("fake.Method"));
     assert(M.sourceUrl(model.context, "tests/catalogue.json").includes("/blob/" + original.context.commit + "/tests/catalogue.json"));
   });
@@ -228,6 +236,31 @@
     await until(() => doc.getElementById("detail-title").textContent === "Synthetic mixing route");
     assert(doc.querySelector("#detail-panel").textContent.includes("Duration (ticks)"));
   });
+  await test("real large-graph rendering exposes 48 / 91 nodes without hiding its bound", async () => {
+    doc = await route(desktop, "production");
+    const win = desktop.contentWindow;
+    const fetch = win.fetch;
+    const large = clone(original);
+    large.resources = [{ id: "test:hub", name: "Synthetic hub" }];
+    large.routes = Array.from({ length: 90 }, (_, i) => ({ id: "test:large-" + String(i).padStart(3, "0"), inputs: [{ resource_id: "test:hub", consumed: true }], outputs: [] }));
+    win.fetch = async () => new win.Response(JSON.stringify(large), { status: 200, headers: { "Content-Type": "application/json" } });
+    doc.getElementById("refresh").click();
+    await until(() => doc.querySelectorAll(".graph-node").length === 48);
+    assert(doc.querySelector("main").textContent.includes("48 / 91 nodes"));
+    assert(doc.querySelector("main").textContent.includes("48-node display limit"));
+    equal(doc.getElementById("filter-root").options.length, 91);
+    win.fetch = fetch;
+    doc.getElementById("refresh").click();
+    await until(() => doc.getElementById("filter-root").options.length === M.graph(model, "production").nodes.size);
+  });
+  await test("a persisted graph center missing from a new snapshot remains explicitly unresolved", async () => {
+    desktop.contentWindow.location.hash = "#/production?root=resource%3Atest%3Ano-longer-present";
+    await until(() => doc.querySelector("main").textContent.includes("The selected node is not in this snapshot"));
+    equal(doc.getElementById("filter-root").selectedOptions[0].textContent, "Not in snapshot: resource:test:no-longer-present");
+    equal(doc.querySelectorAll(".graph-node").length, 0);
+    choose(doc, "filter-root", "resource:test:water");
+    assert(doc.querySelectorAll(".graph-node").length > 0);
+  });
   await test("machine kinds, logistics, quest physical evidence and all asset queues are reachable", async () => {
     doc = await route(desktop, "machines");
     choose(doc, "filter-kind", "standard_multiblock");
@@ -271,9 +304,20 @@
     select.focus();
     equal(doc.activeElement, select);
     assert(select.closest("label"));
+    const graphLink = doc.querySelector("#resource-results td a");
+    graphLink.focus();
+    equal(doc.activeElement, graphLink);
     assert(doc.querySelector('a.skip-link[href="#main-content"]'));
     assert(doc.getElementById("main-content").tabIndex === -1);
     assert(doc.querySelector('link[href="dashboard.css"]'));
+  });
+  await test("skip navigation focuses the current main region without replacing the selected view", async () => {
+    doc = await route(desktop, "resources");
+    const previous = desktop.contentWindow.location.hash;
+    doc.querySelector(".skip-link").click();
+    equal(doc.activeElement.id, "main-content");
+    equal(desktop.contentWindow.location.hash, previous);
+    equal(doc.querySelector("h1").textContent, "Resource sustainability");
   });
   await test("refresh failure clears stale data and retry restores only a successful fetch", async () => {
     const win = desktop.contentWindow;
@@ -357,4 +401,9 @@
   window.dashboardTestResults = { passed, failed, tests: results };
   document.documentElement.dataset.tests = failed ? "failed" : "passed";
   status.textContent = passed + " / " + results.length + " checks passed; " + failed + " failed. Synthetic renderer checks only, not gameplay acceptance.";
-})();
+})().catch(error => {
+  const message = window.GrindlessDashboardModel.text(error.message);
+  document.getElementById("test-status").textContent = "Test harness failed before completion: " + message;
+  document.documentElement.dataset.tests = "failed";
+  window.dashboardTestResults = { passed: 0, failed: 1, tests: [{ name: "Harness execution", passed: false, error: message }] };
+});

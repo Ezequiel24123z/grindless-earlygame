@@ -84,6 +84,7 @@ strong { font-weight: 650; }
 .navigation a[aria-current="page"] { color: var(--cyan); background: #21323a; border-color: #46636d; }
 .tier-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
 .tier-navigation a { padding: 7px 10px; border: 1px solid transparent; border-radius: 3px; text-decoration: none; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tier-navigation a[data-active="true"] { color: var(--cyan); }
 .tier-navigation a[data-active="true"]::after { content: " active"; color: var(--cyan); font-size: .75rem; }
 main { min-width: 0; padding: 26px 24px 40px; }
 .view-header { margin-bottom: 20px; }
@@ -99,6 +100,9 @@ main { min-width: 0; padding: 26px 24px 40px; }
 .detail-panel ul { padding-left: 18px; margin: 4px 0; }
 .detail-panel li { margin-bottom: 5px; }
 .detail-panel .nested-data { padding-left: 12px; border-left: 1px solid var(--line); }
+.nested-data { margin: 4px 0; }
+.nested-data dt { color: var(--muted); font-size: .82rem; margin-top: 6px; }
+.nested-data dd { margin: 0 0 6px; }
 .source-ref { display: block; margin: 6px 0; font-size: .85rem; }
 .filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin: 18px 0 12px; }
 .filter { display: flex; flex-direction: column; gap: 5px; min-width: 130px; font-size: .85rem; color: var(--muted); }
@@ -193,6 +197,7 @@ footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wr
   .navigation { border-right: 0; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 3px; padding: 12px; }
   .navigation h2 { flex-basis: 100%; margin: 6px 4px; }
   .navigation > a { padding: 8px; font-size: .84rem; }
+  .navigation > a, .tier-navigation a { min-height: 44px; }
   .tier-navigation { width: 100%; grid-template-columns: repeat(8, minmax(0, 1fr)); }
   .tier-navigation a { padding: 7px 2px; text-align: center; font-size: .82rem; }
   .tier-navigation a[data-active="true"]::after { content: ""; }
@@ -201,6 +206,7 @@ footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wr
   .filters { gap: 10px; }
   .filter { flex: 1 1 130px; min-width: 0; }
   .filter.search { flex-basis: 100%; }
+  button, .button, input[type="search"], select { min-height: 44px; }
   .tier-sections { grid-template-columns: 1fr; }
   .facts { grid-template-columns: 1fr; gap: 2px; }
   .facts dd { margin-bottom: 10px; }
