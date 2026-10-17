@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Foundation gate: CONDITIONAL GO, not Tier acceptance.** All 33 behavior/resource suites,
+  the full build, links and 41 distinct production Forge smoke scenarios have completed.
+  Per-scenario hashes and the two interrupted aggregate attempts are preserved. The built and
+  loaded jar hashes match, and isolated regeneration matches 1,377 files. Broad T0 work remains
+  held for the exact no-command/client/saved-world acceptance checklist; the preparation
+  documents are not accepted new gameplay.
+
 - **The Planner existence smoke uses a stationary inventory fixture.** Linux CI successfully
   summoned the item but did not observe it in a later entity selector; the cause of that transient
   disappearance was not established. The same `PLANNER-OK` assertion now checks a real

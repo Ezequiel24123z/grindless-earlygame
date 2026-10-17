@@ -1,15 +1,22 @@
 {
   "source_baseline": "0d798607c66ff7e4b581d2786cfa32dc4a02ded7",
+  "executable_revision": "e2dfc2c847dd220178572b83e7516a9949bb8b58",
   "branch": "ezequiel24123z-agent-ready-t0-foundation",
-  "gate": "NO-GO",
+  "gate": "CONDITIONAL GO",
+  "broad_t0_authorized": false,
   "checks": [
     {"id": "atlas-ratings", "status": "passed", "evidence": "build/validation/atlas-green-checks.log"},
     {"id": "f2-lifecycle-nbt", "status": "passed", "evidence": "build/validation/production-matrix.log"},
     {"id": "compile-and-behavior", "status": "passed_33_suites", "evidence": "build/validation/20261017T112251069Z/status.tsv"},
     {"id": "full-build-resources", "status": "passed", "evidence": "build/validation/20261017T112251069Z/status.tsv"},
-    {"id": "complete-isolated-smokes", "status": "36_distinct_passed_across_recorded_batches", "evidence": "docs/testing/latest-validation.md"},
+    {"id": "complete-isolated-smokes", "status": "passed_41_distinct_across_recorded_batches", "evidence": "docs/testing/integration-smoke-results.md"},
+    {"id": "asset-regeneration", "status": "passed_1377_files", "evidence": "build/validation/asset-regeneration.log"},
+    {"id": "linux-ci", "status": "passed_verify_and_six_smoke_shards", "evidence": "https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39030528423"},
     {"id": "independent-gate-review", "status": "limited_excerpt_review_finding_repaired", "evidence": "docs/reviews/foundation-independent-review.md"},
-    {"id": "client-ui-and-survival", "status": "pending", "evidence": null}
+    {"id": "client-ui-and-survival", "status": "not_run_requires_observed_player_acceptance", "evidence": "docs/testing/t0-survival-acceptance.md"},
+    {"id": "retained-world-restart", "status": "not_run_binary_nbt_and_reconstruction_are_not_full_restart_acceptance", "evidence": "docs/testing/t0-survival-acceptance.md"},
+    {"id": "image-generation", "status": "not_run_no_configured_provider_keys", "evidence": "docs/assets/t0-asset-manifest.json"}
   ],
-  "background_checks": []
+  "background_checks": [],
+  "historical_failures_and_interruptions": "docs/testing/latest-validation.md"
 }

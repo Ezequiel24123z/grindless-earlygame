@@ -1,8 +1,13 @@
 # Current foundation validation
 
-Date: 2026-10-16. Authorized baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
+Updated: 2026-10-17. Authorized baseline: `0d798607c66ff7e4b581d2786cfa32dc4a02ded7`.
 Branch: `ezequiel24123z-agent-ready-t0-foundation`. All commands run at this worktree's root
-unless stated otherwise. Production sources are unchanged at the evidence-integration checkpoint.
+unless stated otherwise. Latest executable checkpoint: `e2dfc2c`.
+
+**Current result: 33 behavior/resource suites, full build, links and 41 distinct production
+smokes pass.** Smoke coverage is combined from recorded batches, not an uninterrupted run.
+The [gate is CONDITIONAL GO](../reviews/go-gate.md): real client/quest/survival and retained-world
+restart acceptance are not observed. No local build or server remains running.
 
 This is a new execution ledger, not a promotion of [historical passes](previous-session-validation.md).
 The [integration record](../integration/verification-branch-integration.md) explains provenance.
@@ -199,3 +204,45 @@ No gameplay code or expectation marker changed. A bounded synchronous Windows ba
 `first-planner`, `first-array`, `first-luna`, `factory-world`, `first-rocket` at
 13:47:53-13:54:30 UTC+02:00, exit 0: `build/validation/final-smokes-a.log`.
 Five remaining cases still need execution; no complete Windows pass is claimed yet.
+
+## Completed Windows inventory and final artifact
+
+The final synchronous batch ran `first-station`, `first-drift`, `first-centre`, `first-atlas`,
+`first-book` at **13:55:31-14:01:19 UTC+02:00**, source `e2dfc2c`, exit 0.
+Evidence: `build/validation/final-smokes-b.log`.
+
+An exact manifest-to-completed-marker comparison found **41 selected names, 41 distinct
+completed passes, no missing scenario** across the four retained batch logs. Java and game
+resources are unchanged across those batches. Built and staged jar SHA-256 still equals
+`e0267ee23fdcfde776749df069e29effc72379dfca3b4fb58dc0b0e95a307866`; port 25599 has no listener.
+The [per-scenario ledger](integration-smoke-results.md) retains source batches and server-log hashes.
+Both interrupted aggregates remain interrupted with no invented final exit.
+
+An isolated regeneration wrote to `build/validation/asset-roundtrip`, never the live resource
+tree: **1,377 generated files match**, binary files by SHA-256 and text normalized for Git CRLF.
+Its first scratch run failed because the fixture lacked `tools/audio`; creating that expected
+directory allowed the unchanged generator to complete. This was a scratch-fixture failure, not
+a hidden production repair. Evidence: `build/validation/asset-regeneration.log`.
+All nine tracked PowerShell files and 917 JSON/mcmeta files parse; all tracked Bash scripts
+pass syntax, and common has no Forge/Fabric loader imports. No whole-repository package-cycle
+or full economic-loop proof is claimed.
+
+The PR-triggered [Linux run 39028997198](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39028997198)
+at `9fd6d41` completed successfully. Its earlier push-triggered sibling failed the transient
+Planner selector and remains recorded above; a green retry alone is not the fix. The stable
+fixture is committed and passed locally at `e2dfc2c`.
+[Its PR CI run 39030528423](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39030528423)
+completed successfully: unified verify plus all six production-smoke shards. This is actual
+post-fix Linux evidence, not inferred from the earlier retry. A later evidence-only commit may
+trigger another CI run; read live GitHub state before merging.
+
+**Not executed:** graphical client/JEI interactions, real-player F2 claim/reconnect, a retained
+survival world's full process restart/migration, the no-command BP route, macOS execution and
+image generation (no configured provider keys). The exact human checklist is committed.
+The independent review is scope-limited. The optional dev-launch hang remains documented;
+canonical production checks pass without forced-success cleanup.
+
+Scratch class/regeneration directories were removed after retaining their logs; the installed
+JDK reference, Portable Git and ignored production server remain available for repeatable checks.
+Final documentation validation resolves 441 links across 29 Markdown files and 128 ADR entries;
+the per-scenario table matches every captured log hash. No outstanding local process remains.

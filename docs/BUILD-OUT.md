@@ -20,6 +20,12 @@ no-command survival playthrough remains. The optional Factory World is a post-Ma
 aid, not a new technology frontier or a resource shortcut. T1 stays locked until T0 passes
 the gate below.
 
+The [foundation gate](reviews/go-gate.md) is **CONDITIONAL GO** after the 2026-10-17
+Atlas/NBT/tooling corrections, 33 checks and complete 41-scenario production coverage.
+That is not BP acceptance: the [exact no-command/client checklist](testing/t0-survival-acceptance.md)
+remains unexecuted. The [T0 preparation](tiers/t0.md) is a proposal/audit, not an active new
+content slice. No T2 consumer or broad T0 expansion starts on this conditional result.
+
 ---
 
 ## Mechanical tier completion workflow
