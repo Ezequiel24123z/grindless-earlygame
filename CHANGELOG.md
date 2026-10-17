@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Functional-port requirements traced into the held plan (PA-0001).** Plan revision 2 adds
+  a section-indexed `requirements_trace` to only the three held port tasks of
+  `.agent/work-plan.json`, naming the ME Item/Fluid bus and hatch, Storage Interface and
+  separate Pattern/Autocrafting Interface, specialized-port extensibility, buffer exposure and
+  the mandatory test cases of the SHA-verified original without copying it. ADR-0120's AE2
+  scope is a reserved audit decision. Order, dependencies and statuses are unchanged; no
+  application code changed.
 - **Clean-context coordinator receipt recorded (ADR-0134).** The new isolated Astra session
   received `b012bc4`, verified the live draft PR54/PR53 chain and all three original hashes,
   and reconstructed 16 tasks with separate dispatch/completion dependencies. Two originals

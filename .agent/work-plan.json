@@ -1,6 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
+  "plan_revision": 2,
   "updated": "2026-10-17",
   "phase": "coordinator_receipt_verified_prepared_work_not_dispatched",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
@@ -54,6 +55,22 @@
     {"id": "sustainability_communication_dashboard", "file": "pasted-text-ce219e39-f8b4-47d7-98bd-93f99a28f718.txt", "sha256": "760629032A3BDE601F9A7398095C46763B6EA755E38EDFF7AB7262BF4D5457A6", "received_via": "staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed"},
     {"id": "later_functional_ports", "file": "pasted-text-50bf95a6-b365-450d-b4e6-db75a39da104.txt", "sha256": "2A125EE17ACDB55C743CD3B6652AE1DCE04F76F1C4B4F4C8A28279B5A600AACA", "received_via": "staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed", "note": "Starts only after current T0 source/sustainability/communication/dashboard integration"}
   ],
+      "amendments": [
+        {
+          "id": "PA-0001",
+          "plan_revision": 2,
+          "date": "2026-10-17",
+          "title": "Trace later functional-port requirements into the held port tasks",
+          "source": "later_functional_ports",
+          "source_sha256": "2A125EE17ACDB55C743CD3B6652AE1DCE04F76F1C4B4F4C8A28279B5A600AACA",
+          "reason": "Compact port acceptance named the general architecture but not the explicit ME components, the separate pattern interface, specialized-port extensibility, private-buffer exposure, resource/declarative constraints or most mandatory test cases of the preserved original",
+          "method": "Section-indexed requirements_trace on affected tasks only; the original stays authoritative and is not copied",
+          "affected_tasks": ["multiblock-ports-audit", "multiblock-ports", "ports-integration"],
+          "order_changed": false,
+          "dependencies_changed": false,
+          "statuses_changed": false
+        }
+      ],
   "references": {
     "handoff": ".agent/handoff.md",
     "details": ".agent/migration-handoff.md",
@@ -208,19 +225,56 @@
       "id": "multiblock-ports-audit", "title": "Auditing functional multiblock ports", "status": "held", "depends_on": ["t0-integration"],
       "owner": "Astra architecture; bounded audit workers",
       "next_action": "Read the later ports request; audit Firing/Trough/Ground Array and all authored structures before implementation",
-      "acceptance": "Current/target findings, affected files, migration and risks; approved roles/ownership/tiers/aggregation design"
+      "acceptance": "Current/target findings, affected files, migration and risks; approved roles/ownership/tiers/aggregation design",
+      "requirements_trace": {
+        "amendment": "PA-0001",
+        "source_sections": ["Fase 1: auditoría obligatoria", "Modelo arquitectónico objetivo", "Patrones y posiciones reemplazables", "Integración opcional con Applied Energistics 2"],
+        "criteria": [
+          "Read the whole SHA-verified original by section; this trace is an index, never a replacement",
+          "Classify every authored multiblock and its I/O strategy before code",
+          "Record the real Minecraft/loader/AE2 version, dependency system and available API from inspected sources; unverified API is reported as unconfirmed",
+          "Reserved Astra decision: reconcile optional AE2 adapters with ADR-0120 (no AE2 in the T0 pack; AE2 progression belongs to the T4 frontier)"
+        ]
+      }
     },
     {
       "id": "multiblock-ports", "title": "Implementing functional ports", "status": "held", "depends_on": ["multiblock-ports-audit"],
       "owner": "bounded development workers; Astra architecture",
       "next_action": "Implement real reusable buses/hatches and aggregated transactional capability views",
-      "acceptance": "Positions/min-max/roles/tiers/directions/filters/ownership/forming/invalidation/persistence; safe partial IO; optional verified AE2 boundary, no fake integration"
+      "acceptance": "Positions/min-max/roles/tiers/directions/filters/ownership/forming/invalidation/persistence; safe partial IO; optional verified AE2 boundary, no fake integration",
+      "requirements_trace": {
+        "amendment": "PA-0001",
+        "source_sections": ["Patrones y posiciones reemplazables", "Formación del multibloque", "Puertos estándar obligatorios", "Direccionalidad", "Tiers", "Semántica y seguridad de recetas", "Integración opcional con Applied Energistics 2", "ME Item Input Bus", "ME Item Output Bus", "ME Fluid Input Hatch", "ME Fluid Output Hatch", "ME Storage Interface", "ME Pattern or Autocrafting Interface", "Semántica de nombres", "Compatibilidad futura", "Rendimiento"],
+        "criteria": [
+          "Patterns distinguish mandatory casing, replaceable casing, explicit port position, controller and internal/special positions, each with declarative accepted roles/resources/tiers/orientation/limits",
+          "Parts declare role, direction, resource type, tier, capacity/rate, filters, accessible sides and constraints through reusable data-driven abstractions, not concrete-class chains",
+          "Discovery at formation, exclusive controller linking, role-aggregated views and event-driven invalidation",
+          "Item buses plus fluid and energy hatches are real; specialized variants are addable without base-controller changes and get content only when their mechanic exists; extension points, not registered empty shells",
+          "Strict directionality, bidirectional only with an explicit persistent mode, and no exposure of private inventories, catalysts, tools or internal buffers",
+          "Recipes simulate, reserve, process and commit atomically, blocking or buffering on unavailable outputs without loss or duplication",
+          "AE2 stays in an isolated optional adapter module: core and controllers import no AE2 types, registration is conditional and absence keeps worlds safe",
+          "Against the verified API only: ME Item Input/Output Bus, ME Fluid Input/Output Hatch and ME Storage Interface with authorized-only, single, non-recursive exposure",
+          "ME Pattern/Autocrafting Interface is a separate component; without a confirmed API deliver its specification, internal interfaces and verifiable extension points only",
+          "Direction-explicit player names and tooltips; performance rules never weaken transactional correctness"
+        ]
+      }
     },
     {
       "id": "ports-integration", "title": "Validating port integration", "status": "held", "depends_on": ["multiblock-ports"],
       "owner": "delegated validation/review; Astra final integration",
       "next_action": "Exercise ownership, chunks, unload/reform/NBT, relocation, partial transfers and optional integration",
-      "acceptance": "Exact-source regression evidence, documentation and troubleshooting, preserved saves and reviewed publication; manual gates remain explicit"
+      "acceptance": "Exact-source regression evidence, documentation and troubleshooting, preserved saves and reviewed publication; manual gates remain explicit",
+      "requirements_trace": {
+        "amendment": "PA-0001",
+        "source_sections": ["Pruebas obligatorias", "Migración", "Documentación", "Criterios finales de aceptación", "Forma de trabajar"],
+        "criteria": [
+          "Every case in Pruebas obligatorias is automated or recorded as an explicit limitation with the strongest available automation; none is dropped silently",
+          "Named cases include formation with casing and each port class, invalid position/tier, break/reform, save/reload, chunk unload, competing controllers, full outputs, partial insertion, AE2 absent/present, disconnected or full ME network, restart mid-process, no duplication or voiding, single exposure and no recursive loops",
+          "Preserve registry IDs, worlds, NBT, inventories, recipes and built structures, or ship an explicit documented migration",
+          "Deliver the architecture, guides, role/direction table, tiers, safety invariants, real examples and invalid-structure troubleshooting named by Documentación",
+          "Close against Criterios finales de aceptación with an independent review and a final report of files, decisions, risks and debt"
+        ]
+      }
     }
   ]
 }

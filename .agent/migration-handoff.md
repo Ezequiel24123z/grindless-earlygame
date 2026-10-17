@@ -260,6 +260,9 @@ Only then start the owner's 521-line functional-port follow-up:
    absence and real ME behavior; do not claim a fictional integration.
 6. Delegate focused tests and independent review where warranted; Astra owns final review.
 
+Plan amendment PA-0001 indexes the original's sections into the three held port tasks of
+[the work plan](work-plan.json) as `requirements_trace`; read the original, not only that index.
+
 No unrelated T1/T2 consumer or campaign frontier is authorized. Observed GUI/JEI, no-command
 survival and retained-world restart remain required before merge/Tier acceptance; they are
 not a new blanket freeze on further authorized T0 development.
