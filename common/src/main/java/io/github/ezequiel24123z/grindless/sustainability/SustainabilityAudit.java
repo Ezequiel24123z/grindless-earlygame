@@ -156,6 +156,23 @@ public final class SustainabilityAudit {
         return derivingTier == tier;
     }
 
+    private void includeEntryWitness(ConstructionReserve witness, int tier) {
+        if (!deriving(tier)) {
+            return;
+        }
+        EntryProfile bill = witness.derivedProfile();
+        if (bill == null) {
+            return;
+        }
+        Map<Resource, Long> provided = new TreeMap<>(bill.playerProvided());
+        if (derivedEntry != null) {
+            derivedEntry.playerProvided().forEach((resource, amount) -> provided.merge(resource, amount, Math::max));
+        }
+        // Independent proofs replay separately; they do not consume one another's finite custody.
+        derivedEntry = bill.withBill(provided, Math.max(bill.manualWorkActions(),
+                derivedEntry == null ? 0 : derivedEntry.manualWorkActions()));
+    }
+
     boolean manualWorkReady(Route route, int tier, Set<Resource> available) {
         EntryProfile profile = entryProfile(tier);
         ManualWork work = profile == null ? null : profile.manualWork();
@@ -473,9 +490,7 @@ public final class SustainabilityAudit {
         }
         ConstructionReserve reserve = new ConstructionReserve(snapshot, annotations, this, tier, available, renewable);
         List<Reserve> reserves = reserve.analyse(construction, closureRoutes, roots);
-        if (deriving(tier)) {
-            derivedEntry = reserve.derivedProfile();
-        }
+        includeEntryWitness(reserve, tier);
         reserve.findings().forEach(this::finding);
         return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes,
                 renewableRoutes, reserves, reserve.retainedInventory(), reserve.manualWorkReserve(),
@@ -835,6 +850,7 @@ public final class SustainabilityAudit {
             }
             return null;
         }
+        includeEntryWitness(witness, tier);
         if (independentMakeUp) {
             unlimited.add(loop.carrier());
         }

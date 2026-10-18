@@ -180,6 +180,21 @@ public final class VerifySustainability {
                 AuditReports.json(derived.replay(), "fixture:first-bench", true),
                 AuditReports.json(SustainabilityAudit.deriveEntryProfile(first.builder.build(), first.annotations(),
                         first.debt, 0).replay(), "fixture:first-bench", true));
+        first = firstBench(Authority.CRAFTING_JSON, false, false);
+        first.add(new Route("quest/shortcut", Authority.QUEST_REWARD, "fixture:optional-reward", null,
+                Map.of(), Map.of(SAFE, 1L), Map.of(RAW, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                true, true, false)).policy("quest/shortcut", 0, true);
+        first.builder.objective(new Objective("shortcut", SAFE, 1, Set.of(), "quest/shortcut", "fixture:shortcut"));
+        result = first.audit();
+        eq("an unselected optional claim is not silently added to native establishment", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/shortcut", 0L));
+        eq("an unselected optional claim does not fund the first Bench", 0L,
+                result.tiers().get(0).reserves().stream().filter(row -> row.resource().equals(RAW))
+                        .findFirst().orElseThrow().claimedRewards());
+        first.requiredQuests.add("shortcut");
+        result = first.audit();
+        eq("an explicitly selected optional objective can still execute its real conditional claim", 1L,
+                result.tiers().get(0).establishmentBatches().get("quest/shortcut"));
 
         first = firstBench(Authority.CRAFTING_JSON, false, false).seed(PRODUCT, 5);
         Resource unbuilt = item("unbuilt_goal_machine");
@@ -546,8 +561,42 @@ public final class VerifySustainability {
         fixture.workProfile(Map.of(), 100, Set.of("GEOLOGICAL_COLLECTOR", "BIOCULTIVATOR"));
         no("ample manual work cannot turn finite water into the native renewable system",
                 renewable(fixture.audit(), ENERGY));
+        derivedStartupBudget(live);
         conditionalLoopSeed();
         physicalManualSource();
+    }
+
+    private static void derivedStartupBudget(Snapshot live) {
+        Fixture fixture = productiveFixture(live, 0, true, false).seed(TOOL, 1);
+        Resource entry = item("acquired_entry");
+        Resource power = new Resource(Kind.ITEM, "grindless:biomass_dynamo");
+        fixture.terminal("manual_entry", entry, TerminalKind.MANUAL_WORLD, false, true);
+        fixture.add(route("auto_bench", Map.of(SAFE, 1L, ENERGY, 160L), Map.of(), Map.of(MACHINE, 1L), "BENCH"));
+        fixture.add(route("auto_power", Map.of(SAFE, 1L, ENERGY, 160L, entry, 3L), Map.of(), Map.of(power, 1L), "BENCH"));
+        fixture.add(new Route("manual_bench", Authority.CRAFTING_JSON, "fixture:manual-bench", null,
+                Map.of(entry, 1L), Map.of(), Map.of(MACHINE, 1L), Set.of(), 0, 0, Map.of(),
+                Set.of(), false, true, false));
+        fixture.add(new Route("manual_power", Authority.CRAFTING_JSON, "fixture:manual-power", null,
+                Map.of(entry, 1L), Map.of(), Map.of(power, 1L), Set.of(), 0, 0, Map.of(),
+                Set.of(), false, true, false));
+        fixture.machines.put("BENCH", new Machine("BENCH", MACHINE, 0));
+        fixture.meta(MACHINE, renewable("auto_bench")).meta(power, renewable("auto_power"));
+        fixture.workProfile(Map.of(), 0, Set.of("BENCH", "GEOLOGICAL_COLLECTOR", "BIOCULTIVATOR"));
+        var derived = SustainabilityAudit.deriveEntryProfile(fixture.builder.build(), fixture.annotations(),
+                DebtManifest.empty(), 0);
+        eq("entry work includes the successful standalone startup, not just the cheaper establishment order",
+                10L, derived.profile().manualWorkActions());
+        eq("alternative proofs share a sufficient custody bound, not the sum of their separate executions",
+                Map.of(entry, 4L), derived.profile().playerProvided());
+        yes("a fresh finite replay really proves native power with the combined bill",
+                renewable(derived.replay(), ENERGY));
+        no("independent startup costs cannot leave a false-negative insufficient replay",
+                hasRule(derived.replay(), "entry_work_insufficient"));
+        no("independent startup costs cannot leave an unproved profiled native circulation",
+                findingAt(derived.replay(), "loop_startup_unproven", "native_production", "T0"));
+        fixture.entryProfile = derived.profile().withBill(derived.profile().playerProvided(), 9);
+        no("one action below the actual standalone proof requirement stays unproved",
+                renewable(fixture.audit(), ENERGY));
     }
 
     private static void conditionalLoopSeed() {
@@ -793,6 +842,10 @@ public final class VerifySustainability {
     }
 
     private static Fixture productiveFixture(Snapshot live, long entryFu, boolean renewableWater) {
+        return productiveFixture(live, entryFu, renewableWater, true);
+    }
+
+    private static Fixture productiveFixture(Snapshot live, long entryFu, boolean renewableWater, boolean seededPower) {
         Fixture fixture = new Fixture();
         Resource aggregate = new Resource(Kind.ITEM, SourceLogic.AGGREGATE);
         Resource biomass = new Resource(Kind.ITEM, SourceLogic.BIOMASS);
@@ -809,7 +862,9 @@ public final class VerifySustainability {
         for (String id : List.of("source/geological_aggregate", "source/biomass", "fuel/biomass_dynamo/biomass")) {
             Route route = live.routes().get(id);
             Resource controller = new Resource(Kind.ITEM, "grindless:" + route.family().toLowerCase(java.util.Locale.ROOT));
-            fixture.seed(controller, 1);
+            if (seededPower || route.authority() != Authority.GENERATOR_FUEL) {
+                fixture.seed(controller, 1);
+            }
             fixture.machines.put(route.family(), new Machine(route.family(), controller, 0));
             if (route.id().startsWith("source/")) {
                 fixture.environment(route);

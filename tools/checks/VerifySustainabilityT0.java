@@ -43,6 +43,12 @@ public final class VerifySustainabilityT0 {
                 + "; local ProcessMachine actions=" + derivation.profile().manualWorkActions());
         System.out.println("T0 JSON SHA-256 " + hashes.json());
         System.out.println("T0 MARKDOWN SHA-256 " + hashes.markdown());
+        for (AuditFinding finding : derivation.derivationFindings()) {
+            if (finding.detail().equals("T0")) {
+                System.out.println("DERIVATION ONLY " + finding.severity() + " " + finding.fingerprint()
+                        + ": " + finding.message());
+            }
+        }
         for (AuditFinding finding : result.findings().findings()) {
             if (finding.detail().equals("T0")) {
                 System.out.println("T0 " + finding.severity() + " " + finding.fingerprint() + ": " + finding.message());

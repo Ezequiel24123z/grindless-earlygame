@@ -584,7 +584,7 @@ final class ConstructionReserve {
         try {
             for (Route source : snapshot.routes().values()) {
                 if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
-                        && audit.unlocked(source, tier) && !claimed.contains(source.id())
+                        && audit.unlocked(source, tier) && selectedClaim(source) && !claimed.contains(source.id())
                         && audit.outputAmount(source, resource) > 0) {
                     execute(source, 1);
                     if (free(resource) >= amount) {
@@ -682,6 +682,16 @@ final class ConstructionReserve {
                     || "minecraft:crafting_shapeless".equals(route.conditions().get("crafting_type")));
             default -> false;
         };
+    }
+
+    private boolean selectedClaim(Route route) {
+        RoutePolicy policy = annotations.routes().get(route.id());
+        if (policy != null && !policy.optional()) {
+            return true;
+        }
+        return annotations.ledger().get(tier).requiredQuests().stream()
+                .map(snapshot.objectives()::get).filter(java.util.Objects::nonNull)
+                .anyMatch(objective -> route.id().equals(objective.rewardRoute()));
     }
 
     private Route replenishing(Resource resource) {
