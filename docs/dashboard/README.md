@@ -1,11 +1,11 @@
-# Repository dashboard renderer
+# Repository sustainability dashboard
 
 This is the **static renderer**, not a second catalogue, audit engine or acceptance authority.
 The canonical generator supplies `data.json` beside
-[`index.html`](../../tools/dashboard/index.html). No production snapshot is included in this
-renderer checkpoint. Missing data produces an actionable error, never a synthetic fallback.
-Integration of the generator and audit belongs to the active T0 work; gameplay development is
-not blocked on dashboard polish.
+[`index.html`](../../tools/dashboard/index.html). Production snapshots are generated under
+ignored `build/`, never committed. Missing data produces an actionable error, never a
+synthetic fallback. The exporter is a read-only projection of the actual S2 `Result`, not a
+second recipe inventory or a replacement for gameplay acceptance.
 
 The governing rules are
 [ADR-0131](../DECISIONS.md#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified),
@@ -16,8 +16,45 @@ saved-world compatibility.
 
 ## Serve and inspect
 
-Serve `tools/dashboard/` over HTTP from a single origin after the generator writes `data.json`.
-Open `index.html`; opening it as a local file cannot reliably fetch JSON. The four runtime files
+Select the existing JDK 17 through `JAVA_HOME`. The paired entry points use Gradle's
+`:common:writeCheckClasspath`, including its resolved standalone vanilla/Forge pack export.
+They do not scan dependency caches, install Node/Python, require global tools, or run Minecraft.
+Gradle uses a 768 MiB heap and two workers; the standalone JVM uses 256 MiB and two CPUs.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\dashboard\export.ps1 -CheckOnly
+# Commit coherent source first: production export rejects dirty or changing source.
+powershell -ExecutionPolicy Bypass -File .\tools\dashboard\export.ps1
+powershell -ExecutionPolicy Bypass -File .\tools\dashboard\serve.ps1 -Port 8878
+```
+
+```bash
+bash tools/dashboard/export.sh --check-only
+bash tools/dashboard/export.sh
+bash tools/dashboard/serve.sh build/dashboard/site 8878
+```
+
+`-Offline` / `--offline` selects already-resolved dependencies. `-Root` / `--root`,
+`-Output` / `--output` and `-Mode` / `--mode` select the repository, an ignored build
+subdirectory and `local`, `pr` or `stable` wording. A mode is not an acceptance state or PR
+identity. `-CheckOnly` / `--check-only` checks the actual result plus serializer/privacy
+counterexamples without publishing an artifact or claiming clean-commit evidence.
+
+Open `http://127.0.0.1:8878/index.html`. The production server follows the existing JDK
+`HttpServer` test-server pattern but serves **only** the eight artifact filenames: the four
+runtime files, `data.json`, `provenance.json`, `audit.json` and `audit.md`. It binds only to
+loopback, has no write endpoint, mounts no synthetic cases, rejects symlinks and never exposes
+the repository, arbitrary files or test harness. Stop it after a bounded local check.
+
+The artifact directory defaults to `build/dashboard/site`. It is ready for a same-repository
+CI artifact upload after the export command succeeds; workflow/build integration remains
+coordinator-owned. There is no public deployment, Pages change or access/permission change.
+`provenance.json` records actual source and class hashes, pack/registry identities, runtime
+and generated-file hashes and the asset manifest's separate historical source. No absolute
+cache/user path, raw log, credential or contact is published. Output sanitization rejects
+unsafe data instead of silently changing canonical identifiers.
+
+Opening `index.html` as a local file cannot reliably fetch JSON. The four runtime files
 are ordinary HTML, CSS and JavaScript: no Node, package installation, external library, font,
 build framework, network API or deployment service is required.
 
@@ -48,6 +85,8 @@ reclassifying their meaning or changing quantities.
 - References use their supplied ids. Input/output objects retain `resource_id`, `amount`,
   `consumed` and `role`. Nested records such as handling, conditions, automation, future plans
   and persistence are rendered as labeled data, not interpreted as a new gameplay rule.
+- Native integral values outside JavaScript's safe integer range are exact decimal strings,
+  including negative limits. Safe integers remain numbers. No amount is rounded in export.
 - `assets.entries`, `generation_queue`, `qc_queue` and `checks` accept objects with
   `id`, `name` or `title`, reported `status` / `validation_status`, `kind` / `type`,
   `source_path` / `path`, and description/summary/details. Optional dimensions remain in detail.
@@ -57,6 +96,38 @@ reclassifying their meaning or changing quantities.
 - Evidence accepts a repository-relative path, an HTTPS URL, an array of references, or
   `{source_path|path|url|reference, summary}`. Raw logs are not embedded. The generator remains
   responsible for public, sanitized summaries and an exact evidence revision.
+
+### Canonical projection boundary
+
+[`DashboardProjection`](../../common/src/main/java/io/github/ezequiel24123z/grindless/sustainability/DashboardProjection.java)
+consumes `AuditReports.document(Result, revision, reportOnly)`, the same newly constructed
+report tree serialized by the existing audit JSON method. It does not parse Markdown or
+maintain another inventory. The standalone
+[`DashboardExport`](../../tools/dashboard/DashboardExport.java) reuses exactly the source-bound
+canonical registry/pack invocation, T0 source augmentation, entry template, annotations and
+finite replay used by `VerifySustainabilityT0`. Source binding and auditor algorithms are unchanged.
+
+Resource ids, full tag registries, Matrix ratings, gross quantities, catalysts, discharge,
+conditions, producer/consumer certainty, quest counts/dependencies/rewards, declared machine
+families, ledger evidence and every finding retain their canonical values. Output roles are
+reported only when explicitly declared; a map's iteration order is not a primary/by-product
+authority. Resource side-stream classifications do not silently author per-route output roles.
+Missing machine kinds, names, localization keys, persistent-state claims and rates stay null.
+Classification labels/descriptions are presentation of the approved seven/ten-class taxonomy,
+not a new class or renewable assertion.
+
+`active_t0_conditional_gate` is the actual gate, including its scope, obligations and every
+finding decision. R0 proof is neither global sustainability nor Tier, client, no-command,
+retained-world or merge acceptance. Unknown T1-T15 ledgers retain their diagnostics, not an
+empty accepted plan or a demonstrated future gameplay failure. Global mandatory status is
+null unless a known tier establishes it or every tier is assessed. The per-tier model facts
+remain separately inspectable.
+
+The asset collection projects only `source_bound_readiness` in the existing asset manifest.
+Its historical source revision and inventory-only scope remain explicit; no file-presence
+count becomes visual approval. CI, manual acceptance, required-deliverable denominator and
+unavailable queues remain null, rather than receiving invented statuses or historical passes
+relabeled for the generated commit.
 
 ### Deliverables, not subjective percentages
 
@@ -162,7 +233,7 @@ that the repository's CI already runs it.
 Stop the test server when the bounded inspection is finished. No Forge smoke is required for
 these static renderer-only changes; they do not touch registration, loaders, game state or saves.
 
-## Checkpoint evidence and integration limits
+## Historical renderer-only evidence and integration limits
 
 Observed on Windows, 2026-10-17. Initial implementation:
 `e2c2a0a4ad0d3facb8974b5c4e5aaedbe1bcc1cd`. The confirmation below covers that source plus
@@ -186,7 +257,7 @@ behavior; physical keyboard/screen-reader certification is not claimed. The Bash
 is supplied but was not executed on this Windows host. No mod build, Forge smoke, gameplay
 survival, client/JEI or retained-world acceptance is claimed by these renderer checks.
 
-The temporary browser test server is stopped after inspection. The canonical generator/audit,
-CI wiring, live classifications, gameplay sources, shared agent-map entry and final integration
-review remain coordinator-owned. No independent PR, deployment, merge, accepted Tier status
-or repair of the parent's settling-water failure is included.
+The temporary synthetic browser test server was stopped after that inspection. These historical
+results do not validate the new canonical exporter. CI wiring, global documentation and final
+integration review remain coordinator-owned. No independent PR, deployment, merge, accepted
+Tier status or repair of the parent's settling-water failure is included.

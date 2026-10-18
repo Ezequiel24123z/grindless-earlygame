@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -52,6 +53,11 @@ public final class AuditReports {
 
     /** Returns schema-1 audit JSON in deterministic key and collection order. */
     public static String json(SustainabilityAudit.Result result, String revision, boolean reportOnly) {
+        return JSON.toJson(document(result, revision, reportOnly)) + "\n";
+    }
+
+    /** Returns the same newly built report tree without reparsing serialized JSON or mutating the result. */
+    public static Map<String, Object> document(SustainabilityAudit.Result result, String revision, boolean reportOnly) {
         Snapshot snapshot = result.authorities();
         AuthorityAdapters.ImplementationIdentity implementation = AuthorityAdapters.implementationIdentity();
         Map<String, Object> document = row(
@@ -194,7 +200,7 @@ public final class AuditReports {
                     "message", finding.message(), "sources", finding.sources()));
         }
         document.put("findings", findings);
-        return JSON.toJson(document) + "\n";
+        return Collections.unmodifiableMap(document);
     }
 
     private static Map<String, Object> entryProfile(EntryProfile profile) {
