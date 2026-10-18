@@ -106,7 +106,7 @@ public final class VerifySustainability {
                 VerifySustainability::localWorkNativeProduction, VerifySustainability::manualEstablishment,
                 VerifySustainability::unitPotentialCertificates, VerifySustainability::conditionalGateScope,
                 VerifySustainability::jointConditionalObligations, VerifySustainability::storedNativeFeed,
-                VerifySustainability::singletonOutputCustody)) {
+                VerifySustainability::singletonOutputCustody, VerifySustainability::heldQuestAccess)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -114,6 +114,83 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void heldQuestAccess() {
+        group("R23 a real held quest book precedes claims and is reused without consumption");
+        Resource book = item("claim_book");
+        Fixture fixture = questAccessFixture(1);
+        var result = fixture.audit();
+        yes("finite pre-claim materials establish the real interface and both dependent claims",
+                T0ConditionalGate.evaluate(result).pass());
+        eq("one real manual book batch serves both claims", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("craft/book", 0L));
+        eq("the first claim completes once after its non-consumed interface requirement", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/first", 0L));
+        eq("the second claim reuses the same book rather than paying for another", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/second", 0L));
+        no("a reusable manually crafted UI tool is not thereby renewable supply", renewable(result, book));
+        no("UI use does not require inventing an industrial consumed input", fixture.builder.build()
+                .routes().values().stream().anyMatch(route -> route.inputs().containsKey(book)));
+        ResourceMetadata metadata = fixture.resources.get(book);
+        fixture.meta(book, new ResourceMetadata(metadata.resourceClass(), metadata.sideStreamClass(), null,
+                metadata.firstRenewableTier(), metadata.canonicalRoute(), metadata.futureConsumers(),
+                metadata.handling(), metadata.recycling(), metadata.originatingCatalyst(), metadata.uncertainty()));
+        yes("a non-consumed T0 UI use cannot hide behind the output-only first-use exception",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + book.key()));
+        fixture = questAccessFixture(0);
+        result = fixture.audit();
+        no("a reward cannot finance the book needed to claim that same reward",
+                T0ConditionalGate.evaluate(result).pass());
+        eq("no book is invented before the initial finite materials exist", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("craft/book", 0L));
+        eq("the first claim cannot pay retrospectively for its own interface", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/first", 0L));
+        eq("a dependent claim also remains unavailable without actual interface custody", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/second", 0L));
+        var derived = SustainabilityAudit.deriveEntryProfile(fixture.builder.build(), fixture.annotations(),
+                DebtManifest.empty(), 0);
+        eq("the derived bill pays for the interface before any conditional reward", Map.of(RAW, 1L),
+                derived.profile().playerProvided());
+        yes("that pre-claim bill is separately replayed with finite custody",
+                T0ConditionalGate.evaluate(derived.replay()).pass());
+    }
+
+    private static Fixture questAccessFixture(long entry) {
+        Resource book = item("claim_book");
+        Resource first = item("first_claim_grant");
+        Resource second = item("second_claim_grant");
+        Fixture fixture = new Fixture().terminal("entry_raw", RAW, TerminalKind.MANUAL_WORLD, false, false);
+        fixture.meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        fixture.add(new Route("craft/book", Authority.CRAFTING_JSON, "fixture:manual_book", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(book, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                false, true, false));
+        fixture.meta(book, metadata(ResourceClass.BOOTSTRAP, null, "craft/book",
+                List.of(), null, null, null, null));
+        fixture.add(new Route("quest/first", Authority.QUEST_REWARD, "fixture:first_claim", null,
+                Map.of(), Map.of(SAFE, 1L, book, 1L), Map.of(first, 1L, RAW, 1L), Set.of(), 0, 0,
+                Map.of(), Set.of(), true, true, false));
+        fixture.add(new Route("quest/second", Authority.QUEST_REWARD, "fixture:second_claim", null,
+                Map.of(), Map.of(SAFE, 1L, book, 1L), Map.of(second, 1L), Set.of(), 0, 0,
+                Map.of(), Set.of("quest/first"), true, true, false));
+        fixture.meta(first, metadata(ResourceClass.BOOTSTRAP, null, "quest/first",
+                List.of(), null, null, null, null));
+        fixture.meta(second, metadata(ResourceClass.BOOTSTRAP, null, "quest/second",
+                List.of(), null, null, null, null));
+        fixture.add(new Route("manual_exit", Authority.CRAFTING_JSON, "fixture:manual_exit", null,
+                Map.of(SAFE, 1L), Map.of(first, 1L, second, 1L), Map.of(PRODUCT, 5L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, false));
+        fixture.meta(PRODUCT, metadata(ResourceClass.BOOTSTRAP, null, "manual_exit",
+                List.of(), null, null, null, null));
+        fixture.builder.objective(new Objective("first", SAFE, 1, Set.of(), "quest/first", "fixture:first"));
+        fixture.builder.objective(new Objective("second", SAFE, 1, Set.of("first"), "quest/second", "fixture:second"));
+        fixture.builder.objective(new Objective("exit", PRODUCT, 5, Set.of("second"), null, "fixture:exit"));
+        fixture.requiredQuests.add("exit");
+        fixture.exitObjective = PRODUCT;
+        fixture.entryProfile = new EntryProfile("fixture:held_book", entry > 0 ? Map.of(RAW, entry) : Map.of(),
+                0, null, Set.of("Finite pre-claim entry materials; no initial book or claim gift."),
+                "fixture:held_book");
+        return fixture;
     }
 
     private static void storedNativeFeed() {

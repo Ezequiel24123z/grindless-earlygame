@@ -66,6 +66,26 @@ public final class VerifySustainabilityT0 {
         eq("future unaccepted tiers remain unknown", true, result.tiers().get(1).unknown() != null);
         eq("future unknowns are not a global sustainability certificate", false, result.sustainabilityPass());
         eq("the active declaration cannot waive debt", 0, debt.entries().size());
+        Resource book = new Resource(Kind.ITEM, "grindless:quest_book");
+        eq("the real held-book interface has source-bound access evidence", true,
+                snapshot.inputHashes().containsKey("mechanics_binding:QuestBookItem_QuestBookMenu"));
+        eq("UI access is a real first T0 use even without an industrial consumer", 0,
+                annotations.resources().get(book).firstUseTier());
+        for (Route route : snapshot.routes().values()) {
+            if (route.authority() == Authority.QUEST_REWARD) {
+                eq("every actual claim requires the book beforehand without consuming it: " + route.id(), 1L,
+                        route.catalysts().get(book));
+            }
+        }
+        eq("there is no initial guaranteed or player-provided quest book", false,
+                tier.reserves().stream().anyMatch(reserve -> reserve.resource().equals(book)
+                        && (reserve.guaranteed() > 0 || reserve.playerProvided() > 0)));
+        eq("the interface book is actually fabricated in the same finite witness", true,
+                tier.establishmentBatches().getOrDefault("craft/quest_book", 0L)
+                        + tier.establishmentBatches().getOrDefault("bench/quest_book", 0L) > 0);
+        eq("no quest invents a free book for the first interface access", false,
+                snapshot.routes().values().stream().filter(route -> route.authority() == Authority.QUEST_REWARD)
+                        .anyMatch(route -> route.outputs().containsKey(book)));
         eq("actual source/entry authorities resolve the provisional raw-inventory absence finding", 0L,
                 result.findings().findings().stream().filter(finding ->
                         finding.rule().equals("bootstrap_sources_unknown")).count());

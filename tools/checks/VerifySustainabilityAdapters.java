@@ -41,6 +41,7 @@ public final class VerifySustainabilityAdapters {
             tagComposition();
             registryEntriesAndRemovals();
             checkedDeclarationInventory();
+            questAccessPrerequisites();
             canonicalInventory();
             canonicalVanillaCrafts();
             reportRelationships();
@@ -53,6 +54,34 @@ public final class VerifySustainabilityAdapters {
         if (failed != 0) {
             throw new AssertionError("Sustainability adapter counterexamples failed");
         }
+    }
+
+    private static void questAccessPrerequisites() throws IOException {
+        Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
+        Resource book = new Resource(Kind.ITEM, io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes.shaped()
+                .stream().filter(craft -> craft.name().equals("quest_book")).findFirst().orElseThrow().result());
+        for (Route route : snapshot.routes().values()) {
+            if (route.authority() == Authority.QUEST_REWARD) {
+                eq("actual claim access requires one reusable book: " + route.id(), 1L,
+                        route.catalysts().get(book));
+                eq("claiming never consumes the interface book: " + route.id(), false,
+                        route.inputs().containsKey(book));
+                eq("claim provenance identifies its actual handheld interface: " + route.id(),
+                        "held_quest_book_menu", route.conditions().get("claim_access"));
+            }
+        }
+        Route craft = snapshot.routes().get("craft/quest_book");
+        eq("the actual first-book craft keeps its authored paper cost", 1L,
+                craft.inputs().get(new Resource(Kind.ITEM, "minecraft:paper")));
+        eq("the actual first-book craft keeps its authored stick cost", 2L,
+                craft.inputs().get(new Resource(Kind.ITEM, "minecraft:stick")));
+        eq("the actual bootstrap book remains manually crafted", false, craft.automatable());
+        Map<String, String> sources = AuthorityAdapters.authoritySourceHashes(Path.of(""));
+        String prefix = "common/src/main/java/io/github/ezequiel24123z/grindless/";
+        eq("source provenance includes the actual book opener without loading it", true,
+                sources.containsKey(prefix + "item/QuestBookItem.java"));
+        eq("source provenance includes the actual held-book validity and claim handler", true,
+                sources.containsKey(prefix + "menu/QuestBookMenu.java"));
     }
 
     private static void debtCannotWaiveGeneratedDebt() {

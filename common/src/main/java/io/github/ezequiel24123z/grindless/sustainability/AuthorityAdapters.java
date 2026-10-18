@@ -348,6 +348,9 @@ public final class AuthorityAdapters {
                 OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class)) {
             pending.add(entry.getName());
         }
+        // Read the physical claim-access authority as source without loading game classes.
+        pending.add(PROJECT_PACKAGE + ".item.QuestBookItem");
+        pending.add(PROJECT_PACKAGE + ".menu.QuestBookMenu");
         Set<String> visited = new TreeSet<>();
         Map<String, String> hashes = new TreeMap<>();
         while (!pending.isEmpty()) {
@@ -667,6 +670,8 @@ public final class AuthorityAdapters {
     }
 
     private static void readQuests(Builder builder) {
+        Resource book = item(BootstrapRecipes.shaped().stream().filter(craft -> craft.name().equals("quest_book"))
+                .findFirst().orElseThrow(() -> new IllegalStateException("Missing authored quest-book craft")).result());
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION ? null
                     : new Resource(Kind.ITEM, task.subject(),
@@ -678,10 +683,14 @@ public final class AuthorityAdapters {
                 builder.finding(unknown("objective_unknown", task.id(), "Dimension evidence requires a world adapter."));
                 continue;
             }
-            builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id(),
-                    null, Map.of(), Map.of(subject, (long) task.count()),
+            Map<Resource, Long> requirements = new TreeMap<>();
+            requirements.put(subject, (long) task.count());
+            requirements.merge(book, 1L, Math::max);
+            builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id()
+                    + " + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+                    null, Map.of(), requirements,
                     Map.of(item(task.reward().itemId()), (long) task.reward().count()), Set.of(), 0, 0,
-                    Map.of("evidence", task.evidence().name()),
+                    Map.of("evidence", task.evidence().name(), "claim_access", "held_quest_book_menu"),
                     task.requires().stream().map(id -> "quest/" + id)
                             .collect(java.util.stream.Collectors.toSet()), true, true, false));
         }

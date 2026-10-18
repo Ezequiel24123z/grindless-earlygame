@@ -83,6 +83,7 @@ public final class VerifySustainabilityRegistry {
                 registry.element(item("other_mod:conditional_member")));
         conditionalDeclarations(root);
         physicalSourceCounterexamples(root);
+        questAccessCounterexamples(root);
 
         Builder declarationsOnly = new Builder();
         AuthorityAdapters.contributeCheckedDeclarations(declarationsOnly, registry);
@@ -171,6 +172,9 @@ public final class VerifySustainabilityRegistry {
         ClassTree dynamo = mechanicsSource(root, "machine", "HandCrankDynamoBlockEntity", hashes);
         ClassTree dynamoBlock = mechanicsSource(root, "machine", "HandCrankDynamoBlock", hashes);
         ClassTree solar = mechanicsSource(root, "machine", "SolarArrayBlockEntity", hashes);
+        ClassTree questItem = mechanicsSource(root, "item", "QuestBookItem", hashes);
+        ClassTree questMenu = mechanicsSource(root, "menu", "QuestBookMenu", hashes);
+        ClassTree items = mechanicsSource(root, "registry", "ModItems", hashes);
         mechanicsSource(root, "machine", "ProcessMachineKind", hashes);
         mechanicsSource(root, "source", "SourceLogic", hashes);
         ClassTree worldSite = mechanicsSource(root, "source", "SourceSite", hashes);
@@ -180,7 +184,7 @@ public final class VerifySustainabilityRegistry {
         Map<String, Machine> constructions = new TreeMap<>();
         for (ProcessMachineKind kind : ProcessMachineKind.values()) {
             if (T0Sustainability.processFamilies().contains(kind.family().name())) {
-                Resource controller = controller(blocks, kind.name(), "ProcessMachineBlock",
+                Resource controller = registeredItem(blocks, kind.name(), "ProcessMachineBlock",
                         "ProcessMachineKind." + kind.name(), declared);
                 constructions.put(kind.family().name(), new Machine(kind.family().name(), controller, 0));
             }
@@ -190,9 +194,20 @@ public final class VerifySustainabilityRegistry {
                 new String[]{"RESEARCH_TERMINAL", "ResearchTerminalBlock"},
                 new String[]{"BIOMASS_DYNAMO", "ThermalGeneratorBlock", "GeneratorKind.BIOMASS"},
                 new String[]{"HAND_CRANK_DYNAMO", "HandCrankDynamoBlock"})) {
-            Resource controller = controller(blocks, binding[0], binding[1],
+            Resource controller = registeredItem(blocks, binding[0], binding[1],
                     binding.length > 2 ? binding[2] : null, declared);
             constructions.put(binding[0], new Machine(binding[0], controller, 0));
+        }
+        Resource questBook = registeredItem(items, "QUEST_BOOK", "QuestBookItem", null, declared);
+        eq("the physical quest interface requires the held registered book and does not consume it", true,
+                questBookAccess(questItem, questMenu));
+        for (Route route : inventory.routes().values()) {
+            if (route.authority() == Authority.QUEST_REWARD) {
+                eq("each real claim retains the actual held-book requirement: " + route.id(), 1L,
+                        route.catalysts().get(questBook));
+                eq("the interface book is not consumed by a claim: " + route.id(), false,
+                        route.inputs().containsKey(questBook));
+            }
         }
 
         eq("the real tool accepts only ProcessMachine/F0 recipients and server-side cooldown-limited actions",
@@ -343,6 +358,12 @@ public final class VerifySustainabilityRegistry {
         hashes.forEach(builder::input);
         builder.input("mechanics_binding:CrankHandle_ProcessMachine_F0",
                 AuthorityAdapters.sha256(work.toString().getBytes(StandardCharsets.UTF_8)));
+        builder.input("mechanics_binding:QuestBookItem_QuestBookMenu",
+                AuthorityAdapters.sha256((questBook.key() + "\n"
+                        + normalized(method(questItem, "use", 3).getBody()) + "\n"
+                        + normalized(method(questMenu, "stillValid", 1).getBody()) + "\n"
+                        + normalized(method(questMenu, "clickMenuButton", 2).getBody()))
+                        .getBytes(StandardCharsets.UTF_8)));
         builder.terminal(new Terminal(work.terminal(), new Resource(Kind.ENVIRONMENT, "grindless:local_crank_actions"),
                 TerminalKind.MANUAL_LABOUR, null, false, true, null, 0,
                 "A player with the constructed Crank Handle may charge only a server-side F0 ProcessMachine; "
@@ -434,9 +455,9 @@ public final class VerifySustainabilityRegistry {
                 constructions, Map.of(), Map.of(), Map.of()));
     }
 
-    private static Resource controller(ClassTree blocks, String fieldName, String constructor,
+    private static Resource registeredItem(ClassTree registry, String fieldName, String constructor,
                                        String kind, Map<Resource, String> declared) throws IOException {
-        VariableTree field = field(blocks, fieldName);
+        VariableTree field = field(registry, fieldName);
         if (!(field.getInitializer() instanceof MethodInvocationTree register)
                 || !normalized(register.getMethodSelect()).equals("register") || register.getArguments().size() != 2
                 || !(register.getArguments().get(0) instanceof LiteralTree literal)
@@ -444,18 +465,54 @@ public final class VerifySustainabilityRegistry {
                 || !(register.getArguments().get(1) instanceof LambdaExpressionTree supplier)
                 || !supplier.getParameters().isEmpty()
                 || !(supplier.getBody() instanceof NewClassTree body)) {
-            throw new IOException("Unsupported checked controller binding: ModBlocks." + fieldName);
+            throw new IOException("Unsupported checked registration binding: " + registry.getSimpleName() + "." + fieldName);
         }
-        eq("a checked controller constructs the actual implementing block: " + fieldName, constructor,
+        eq("a checked registration constructs the actual implementing type: " + fieldName, constructor,
                 normalized(body.getIdentifier()));
         if (kind != null) {
             eq("the registered block actually selects its declared process/generator kind: " + fieldName,
                     kind, normalized(body.getArguments().get(0)));
         }
         Resource resource = item("grindless:" + name);
-        eq("a controller binding reuses the single verified declaration inventory: " + fieldName,
+        eq("an implementation binding reuses the single verified declaration inventory: " + fieldName,
                 true, declared.containsKey(resource));
         return resource;
+    }
+
+    private static boolean questBookAccess(ClassTree item, ClassTree menu) throws IOException {
+        return normalized(method(item, "use", 3).getBody()).equals(
+                "{ItemStackstack=player.getItemInHand(hand);if(playerinstanceofServerPlayerserver){"
+                        + "MenuRegistry.openMenu(server,newSimpleMenuProvider((id,inventory,opener)->"
+                        + "newQuestBookMenu(id,inventory),Component.translatable(\"gui.grindless.quest.title\")));}"
+                        + "returnInteractionResultHolder.sidedSuccess(stack,level.isClientSide());}")
+                && normalized(method(menu, "stillValid", 1).getBody()).equals(
+                "{returnplayer.getMainHandItem().is(ModItems.QUEST_BOOK.get())"
+                        + "||player.getOffhandItem().is(ModItems.QUEST_BOOK.get());}")
+                && normalized(method(menu, "clickMenuButton", 2).getBody()).equals(
+                "{if(!(playerinstanceofServerPlayerserver)){returnfalse;}"
+                        + "List<QuestCatalogue.Task>tasks=QuestCatalogue.tasks();"
+                        + "if(id<0||id>=tasks.size()){returnfalse;}QuestCatalogue.Tasktask=tasks.get(id);"
+                        + "QuestProgressprogress=QuestProgress.get(server);Set<String>claimed=progress.claimed(server.getUUID());"
+                        + "if(QuestLogic.consider(task,claimed,evidenceMet(server,task))!=QuestLogic.Status.CLAIMABLE){returnfalse;}"
+                        + "if(!progress.claim(server.getUUID(),task.id())){returnfalse;}give(server,task.reward());"
+                        + "server.displayClientMessage(Component.translatable(\"chat.grindless.quest.claimed\","
+                        + "Component.translatable(\"gui.grindless.quest.task.\"+task.id())),false);refresh();returntrue;}");
+    }
+
+    private static void questAccessCounterexamples(Path root) throws IOException {
+        String item = Files.readString(root.resolve(JAVA.resolve(Path.of("item", "QuestBookItem.java"))));
+        String menu = Files.readString(root.resolve(JAVA.resolve(Path.of("menu", "QuestBookMenu.java"))));
+        eq("the inspected physical book access contract is recognized", true,
+                questBookAccess(parse("QuestBookItem", item), parse("QuestBookMenu", menu)));
+        eq("an unheld menu cannot certify the current book prerequisite", false,
+                questBookAccess(parse("QuestBookItem", item), parse("QuestBookMenu", menu.replace(
+                        "player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "true"))));
+        eq("a different menu opener cannot certify this claim interface", false,
+                questBookAccess(parse("QuestBookItem", item.replace("new QuestBookMenu(id, inventory)",
+                        "new DifferentMenu(id, inventory)")), parse("QuestBookMenu", menu)));
+        eq("a consuming handler cannot certify a reusable non-consumed book", false,
+                questBookAccess(parse("QuestBookItem", item), parse("QuestBookMenu", menu.replace(
+                        "give(server, task.reward());", "player.getMainHandItem().shrink(1); give(server, task.reward());"))));
     }
 
     private static ClassTree mechanicsSource(Path root, String folder, String name,
