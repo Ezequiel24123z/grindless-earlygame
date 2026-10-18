@@ -342,6 +342,11 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/smoke/renewable-cycle/`, its `.expect`/`.timeout` and manifest entry — verified
   ordinary native source-window/material/core proof. Downstream command staging/Mk1, derived
   water costs and the manual Matrix craft are explicit limits, not full factory acceptance.
+  The revised oracle accounts for actual unburnt startup coal; its explicit
+  `oracle-regression.commands`/`.expect` invokes ten synthetic native cases separately from
+  production. Those markers are not a substitute for the ordinary24-marker scenario.
+  Native execution of this correction remains pending; runner cleanup must not erase the
+  only diagnostic evidence before it is retained.
 - `tools/run-smokes.ps1` / `.sh` read optional per-scenario `.timeout` files; an explicit
   `SMOKE_EXPECT_TIMEOUT` wins over that assertion budget and the unchanged 120-second
   default. Validate selected metadata before boot, retain startup `SMOKE_TIMEOUT`, and do

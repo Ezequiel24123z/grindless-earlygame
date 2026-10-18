@@ -50,6 +50,24 @@ not combined into an artificial green matrix. Historical740 failures in `first-d
 `first-exosuit` are separate evidence. CI recovery is assigned without an assumed common
 cause, timeout increase, removed assertion or gameplay waiver.
 
+**Renewable failure refinement.** The push-run log at12:08:47-48 records valid initial
+one-coal setup, then zero cycles/products/burn/work/buffer FU and a balance of+12,800.
+The oracle omitted the still-unignited coal and immediately stopped its phase. Why the
+Dynamo had not yet ignited is not established; this does not justify changing runtime.
+The revised fixture reads actual remaining coal, subtracts its unspent allowance, rejects
+invalid/unavailable/extra fuel, and preserves all24 markers, thresholds and budgets.
+Eight source-arithmetic cases pass; ten synthetic native cases with eleven gated markers
+are prepared but unexecuted. Keep their log separate from the ordinary production proof.
+The initial static PowerShell helper-name collision is retained as an invocation failure.
+
+The missing-water cause remains unknown. A read-only observer is prepared under ignored
+`build/ci-fixtures`, but the canonical runner deletes its temporary world before returning.
+Retain a bounded console trace after the unchanged original command prefix, not a
+post-return copy from a deleted world or a race with cleanup. Do not insert commands that
+move the original water predicate, manufacture a success marker or repeat until green.
+Parser/native inventory behavior, the synthetic regression run and the observed water
+reproduction remain pending a serialized resource grant. Application code is unchanged.
+
 Local quest source `f106397d7a90e1120c4b28ee085a5d124b206af4` passes Forge compilation and
 254 pure contracts against the selected binary, then one real dedicated-server boot:
 `Done` and `Heracles quest projection ready: 25 catalogue quests` at14:56:19, followed by
@@ -67,11 +85,15 @@ from4e81. These failure/retry/tampering/real-loader checks still require executi
 the f106 binding/lifecycle boot only if those checks establish the changed loader path;
 do not relabel that boot as execution of4e81. No client or human save is validated.
 
-Dashboard checkpoints `90c6ba1`/`858abab` contain the real-result projection, export/serve
-twins and checks, but canonical execution/export/browser remain pending. A PS5 root-binding
-failure was repaired locally; missing offline Minecraft dependencies and a later Loom
-subprocess crash are preserved, not passing exports. The dashboard owns the current JVM
-window, with the quest bundle recheck queued. QA's idle CLI was paused for memory while
+Dashboard checkpoints `90c6ba1`/`858abab` were initially unexecuted. The worker now reports
+real export on `cb0ff909f0ae041336b45e1bc18ef95b99b439e0`:73,591 productive comparisons,
+23 real-data browser checks and16 HTTP restrictions. Final data SHA-256 is
+`08c297bed36d33d93f8060bb7b2cd47ac18010f6361f67ff6c1174d71b86d292`.
+Source/artifact review and integration remain; new authority/resolved-pack identities are
+not relabeled as debd identities. PS5 root-binding, missing offline dependencies, Loom
+child-JVM allocation and privacy-filter false positives remain preserved attempts.
+The dashboard has released its JVMs/listener; the quest bundle recheck now owns the window.
+QA's idle CLI was paused for memory while
 its session, worktree and evidence were retained; do not restart it merely for a status read.
 
 ## Reusable client integration

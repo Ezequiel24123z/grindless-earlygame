@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Pre-ignition smoke accounting corrected in source.** The failed debd renewable run
+  observed the initial coal before ignition but its oracle counted the whole12,800 FU as
+  already generated. The revised fixture subtracts actual unburnt coal, rejects invalid
+  inventory reads/extra fuel, and retains every observation,24 production markers and
+  existing thresholds/budgets. Ten separate synthetic native regressions are prepared;
+  eight arithmetic cases pass static evaluation, not native execution. The missing-water
+  failure still has no established cause; its diagnostic must retain data before runner
+  cleanup without changing the original command timing.
 - **Composed S2 refresh closed on `debd3ae`.** Serial source-bound checks pass735 model,
   232 adapter,1020 registry/source and295 conditional-T0 assertions; three independent
   report processes produce identical bytes. New report identities are recorded without

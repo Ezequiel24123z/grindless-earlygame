@@ -1,3 +1,16 @@
+# Read the native single-slot inventory; an unavailable read is not an empty slot.
+scoreboard players set coal renewable_check -1
+scoreboard players set fuel_valid renewable_check 0
+scoreboard players set fuel_read renewable_check 0
+scoreboard players set fuel_slots renewable_check -1
+scoreboard players set fuel_count_read renewable_check 0
+scoreboard players set fuel_count renewable_check -1
+execute if block 8 280 7 grindless:biomass_dynamo store success score fuel_read renewable_check store result score fuel_slots renewable_check run data get block 8 280 7 Fuel
+execute if score fuel_read renewable_check matches 1 if score fuel_slots renewable_check matches 0 run scoreboard players set coal renewable_check 0
+execute if score fuel_read renewable_check matches 1 if score fuel_slots renewable_check matches 1 store success score fuel_count_read renewable_check store result score fuel_count renewable_check run data get block 8 280 7 Fuel[0].Count
+execute if score fuel_count_read renewable_check matches 1 if data block 8 280 7 {Fuel:[{Slot:0b,id:"minecraft:coal",Count:1b}]} run scoreboard players operation coal renewable_check = fuel_count renewable_check
+execute if score fuel_count_read renewable_check matches 1 if score fuel_count renewable_check matches 1..64 if data block 8 280 7 {Fuel:[{Slot:0b,id:"grindless:biomass"}]} run scoreboard players set coal renewable_check 0
+execute if score fuel_read renewable_check matches 1 if score fuel_slots renewable_check matches 0..1 if score coal renewable_check matches 0..1 run scoreboard players set fuel_valid renewable_check 1
 # Every clay ball witnesses one geological cycle. No clay or aggregate is seeded.
 scoreboard players set geo renewable_check 0
 scoreboard players set aggregate renewable_check 0
@@ -72,7 +85,10 @@ scoreboard players operation generated renewable_check *= fuel_value renewable_c
 scoreboard players operation n renewable_check = burn renewable_check
 scoreboard players operation n renewable_check *= eight renewable_check
 scoreboard players operation generated renewable_check -= n renewable_check
-scoreboard players set balance renewable_check 12800
+scoreboard players operation coal_fu renewable_check = coal renewable_check
+scoreboard players operation coal_fu renewable_check *= startup_value renewable_check
+scoreboard players operation balance renewable_check = startup_value renewable_check
+scoreboard players operation balance renewable_check -= coal_fu renewable_check
 scoreboard players operation balance renewable_check += generated renewable_check
 scoreboard players operation balance renewable_check -= paid renewable_check
 scoreboard players operation balance renewable_check -= stored renewable_check

@@ -28,12 +28,20 @@ all remaining aggregate. Four biomass per biological cycle are either in real
 inventory or have ignited the Dynamo's real 200-tick, 8-FU/t fuel cycle.
 
 At every 10-tick observation, require the exact integer equality:
-  12800 + (4 * bio_cycles - biomass_stock) * 1600 - burn_remaining * 8
+  12800 - 12800 * unburnt_coal
+    + (4 * bio_cycles - biomass_stock) * 1600 - burn_remaining * 8
     = geo_cycles * 800 + bio_cycles * 640
       + geo_progress * 4 + bio_progress * 4 + all_three_energy_buffers
+Read unburnt_coal from the Dynamo's real single-slot Fuel inventory: only zero or
+one named initial coal is valid. A missing/invalid inventory read is not presumed
+coal or an empty slot. Before ignition the remaining coal accounts for the whole
+startup allowance; after consumption the equation is unchanged from the original
+burn/work/buffer accounting. Extra coal or other fuel fails explicitly.
 During startup burn_remaining refers to the one coal; after its complete burn it
 refers to biomass. The steady baseline requires the actual native Duration=200
 biomass ignition, no coal in fuel inventory and zero startup burn remaining.
+Correct pre-ignition accounting does not extend the original 600/601 poll bound:
+a Dynamo that never ignites must still fail within that existing limit.
 Require at least four additional complete cycles of each source over at least
 800 elapsed game ticks, at least one actually burned produced biomass, 32 retained
 biomass and 15,000 FU of additional stored/fuel potential. This cannot pass by
@@ -45,6 +53,15 @@ Clay/aggregate totals remain below a stack in this bounded run; a missing or
 ambiguous inventory selector cannot silently satisfy the exact balance.
 The report/number/digit functions emit named five-digit decimal metrics through
 ordinary say commands, because Minecraft suppresses data-get feedback inside functions.
+
+The optional oracle-regression.commands/.expect pair explicitly invokes
+grindless_renewable:oracle_regression. Its ten synthetic cases check pre-ignition,
+the coal/biomass transitions, real imbalance, invalid/injected/unavailable fuel and
+the original poll boundary, with eleven gated markers including the final summary.
+It is not called by normal load/begin and is not the 24-marker production proof.
+Run it separately from the ordinary scenario so its synthetic baseline markers
+cannot be mistaken for production. At this checkpoint only source/arithmetic
+inspection has run; native parser, inventory-read and regression execution are pending.
 
 After that window, an empty chest collects 12 real biomass. Roofing the culture
 suspends it through its actual environmental requirement. An observed-empty first

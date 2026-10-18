@@ -81,8 +81,9 @@ invalidated assumption or a genuine new property.
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
 | Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Both original `26c8c2e`/`b982b10` and updated `740ec84` preparation ZIPs are preserved and delivered. Real740 production-bridge probe and one canonical states run945/945 pass. No new client rendering, no-command, update-compatibility or Tier acceptance is inferred. |
 | Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Local `f106397`: compile,254 pure contracts and one real25-quest boot pass. Atomic owned-bundle repair `4e81fb4`, with strengthened harness `9e0a94e`, awaits its real-loader/failure-recovery recheck and integration review. No automatic adoption/deletion of unpublished loose definitions; no client/save acceptance. |
-| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Local `90c6ba1`/`858abab` project Result through the reserved AuditReports seam; only explicit output-role overrides, with discharged and declared side-stream class separate. Canonical execution/export/browser still pending after preserved PS5/dependency/Loom failures. |
-| CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Investigates current `first-fluids` and `renewable-cycle` failures. The selected specialist exposes read/search only, so cannot edit or execute; no patch exists. An implementation-capable worker must handle a demonstrated fix. No speculative runtime change, weakened marker or ungranted JVM; Astra retains docs and Git integration. |
+| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Worker reports real cb0 export:73,591 productive comparisons,23 browser checks and16 HTTP restrictions. Local source/artifact review and integration remain; earlier PS5/dependency/Loom/privacy-filter failures are preserved. Only explicit output-role overrides, with discharged and declared side-stream class separate. |
+| CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
+| Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
 
 The exact composed JSON is
 `a501f60598abea3e5360f652d6cc4dc16679e7ff36468dfe55a61b22f84ac5cf`;
@@ -96,12 +97,18 @@ Both current CI runs remain red:39125286533 fails `first-fluids`/`WATER-IN`;
 Verification passes in both. The first is a PR merge checkout with a verified tree identical
 to debd, not an exact debd checkout. See the ledger for actual revisions and run links.
 Do not aggregate the two partial matrices into a pass or assume either failure is a flake.
+The revised renewable conservation equation accounts for the real remaining initial coal.
+Do not skip pre-ignition observations or credit synthetic oracle markers as production.
+The existing600/601 poll boundary still rejects a Dynamo that never ignites.
 
-**Resource custody:** dashboard currently owns Gradle/JVM execution; the9e0 quest recheck
-is next. S2 has finished and left no validation JVM. QA's idle CLI was deliberately paused
+**Resource custody:** dashboard has released its JVMs and listener8878; the9e0 quest recheck
+now owns the serial window. The native-fixture worker is next only after a separate grant.
+S2 has finished its debd refresh and left no validation JVM. QA's idle CLI was deliberately paused
 to release memory, not archived or deleted; its worktree/source/logs remain intact.
 No new server is reserved. Keep native runs/Gradle and game-edge logging serial on this host.
-The CI worker may inspect/code independently but must obtain a resource turn before Java.
+The implementation worker may inspect/code independently but must obtain a resource turn
+before Java. S2's exact debd refresh remains closed while its next bounded increment prepares
+the changed claim-service source binding without touching AuditReports or gameplay.
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and

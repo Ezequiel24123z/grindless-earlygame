@@ -1,4 +1,10 @@
 scoreboard players set phase renewable_check -1
+execute store result storage grindless:renewable_check failure.coal_remaining int 1 run scoreboard players get coal renewable_check
+execute store result storage grindless:renewable_check failure.fuel_read_success int 1 run scoreboard players get fuel_read renewable_check
+execute store result storage grindless:renewable_check failure.fuel_entries int 1 run scoreboard players get fuel_slots renewable_check
+execute store result storage grindless:renewable_check failure.fuel_count_read_success int 1 run scoreboard players get fuel_count_read renewable_check
+execute store result storage grindless:renewable_check failure.fuel_count int 1 run scoreboard players get fuel_count renewable_check
+execute store result storage grindless:renewable_check failure.fuel_inventory_valid int 1 run scoreboard players get fuel_valid renewable_check
 execute store result storage grindless:renewable_check failure.balance_fu int 1 run scoreboard players get balance renewable_check
 execute store result storage grindless:renewable_check failure.geological_cycles int 1 run scoreboard players get geo renewable_check
 execute store result storage grindless:renewable_check failure.biological_cycles int 1 run scoreboard players get bio renewable_check

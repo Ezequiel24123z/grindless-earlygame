@@ -8,6 +8,7 @@ scoreboard players set water_cost renewable_check 250
 scoreboard players set geo_cost renewable_check 800
 scoreboard players set bio_cost renewable_check 640
 scoreboard players set fuel_value renewable_check 1600
+scoreboard players set startup_value renewable_check 12800
 scoreboard players set ten renewable_check 10
 scoreboard players set minus_one renewable_check -1
 gamerule doDaylightCycle false
