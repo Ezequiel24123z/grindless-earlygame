@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **T0 model references regenerated and checked.** Two complete staged JDK generations
+  produce1,521 byte-identical files. Only22 block-model JSON files are installed, correcting
+  696 doubled texture prefixes; geometry/UVs and all PNG/WAV bytes are unchanged. Other
+  generated text differs only by CRLF/LF normalization and was not copied over active work.
+  `VerifyAssets` passes the actual inheritance/alias regressions. The initial staging
+  failure from absent `tools/audio` is preserved; this is not a client visual pass.
 - **Guidance execution-provenance gap closed in source.** Guidance generation/checking
   now shares the normal export's implementation identities and projector-class hashes in
   its sidecar, independently of the stable declaration-content fingerprint. The same

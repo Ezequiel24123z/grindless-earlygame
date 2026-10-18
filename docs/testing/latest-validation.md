@@ -199,6 +199,19 @@ client, human-save, Survival, Tier or merge pass is implied.
 
 ## Reusable client integration
 
+The T0 texture-alias source correction is now followed by actual staged generation and
+asset checks. Two complete JDK17/256MiB/CPU2 runs produce1,521 byte-identical files;
+the sorted generated-manifest SHA-256 is
+`87096318911ae7a325b4bd8d8f9ee1f64b4edd85c6172d1ecf1b6260553788bc`.
+Only22 block-model JSONs are installed, correcting696 doubled prefixes. Geometry/UVs
+and all PNG/WAV bytes are unchanged. Other generated text compares equal after CRLF/LF
+normalization and was not installed over active language/guidance work. Raw worktree text
+hashes therefore differ from LF staging hashes. `VerifyAssets` compiled from real sources
+and passes its alias/inheritance/cycle cases; no Gradle/server or game rendering was used.
+The first staging run failed because `tools/audio` was absent; it is preserved separately
+from the two successful complete runs. Source inputs and logs remain under
+`build/assetgen-d9d477`, not a new visual or production-art acceptance claim.
+
 On exact client source740ec84, the actual production jar passes the platform-bridge and
 payload probe. One canonical states invocation exits0 with945/945 patterns, no timeout
 override, and observed DedicatedServer initialization of `MachineFluidView`. This is

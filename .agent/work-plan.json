@@ -81,8 +81,8 @@
     },
     "resource_window": {
       "owner_session_id": null,
-      "owner_worker_agent_id": "9d32dd27-39b9-41fc-8d49-6af58856f904",
-      "scope": "Staged T0 asset generation/comparison with bounded JDK; S2 official4061 checks/export passed and released its JVMs, no server",
+      "owner_worker_agent_id": null,
+      "scope": "Asset generation finished and released its JVM; next is reviewed canonical guidance generation/compile on a frozen pin, no server",
       "next_worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
       "next_scope": "Canonical guidance generation/compile after the provenance correction and source freeze",
       "native_blocker": "1909MiB free commit below canonical2GiB server plus overhead; no local boot. Managed cloud Sandbox returned403 and created no validation evidence.",
@@ -237,13 +237,13 @@
     {
       "id": "t0-texture-aliases",
       "task_id": "renewable-t0",
-      "status": "source_fix_and_regressions_prepared_generation_pending",
+      "status": "staged_generation_and_asset_regressions_passed",
       "worker_agent_id": "9d32dd27-39b9-41fc-8d49-6af58856f904",
       "model": "gpt-6-luna",
       "input_revision": "48e3ba1d84cd12348b60eb63e22d5dc7905dbe7f",
       "owned_files": ["BlockModels.java generator", "VerifyAssets.java alias/inheritance regression", "only changed generated block-model JSON after staged regeneration"],
       "invariants": "One # per reference, valid texture binding/inheritance, unchanged geometry/UVs/PNG/WAV/registry IDs and WorkshopPreview; no language/guidance asset overwrite or T1 screenshot investigation",
-      "evidence": "Actual T0 clay-mixer/firing/settling/quern faces contain double prefixes; source fix prepared, no JVM/regeneration/visual pass",
+      "evidence": "Two JDK256/CPU2 staged runs produce1521 byte-identical files;22 installed model JSONs fix696 refs with geometry/UV/PNG/WAV unchanged. VerifyAssets exit0; other text EOL-only and not overwritten. No visual pass.",
       "stop_condition": "Frozen coherent source checkpoint, then explicitly granted staged generation and complete output comparison; no publication"
     },
     {

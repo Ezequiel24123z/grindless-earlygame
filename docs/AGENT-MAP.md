@@ -340,8 +340,10 @@ the predecessor checklist is not the post-S2 route or an instruction to advance 
 `tools/assetgen/.../BlockModels.java` owns generated face references: internal boxes use bare
 keys, the JSON writer adds one `#`, and shared `WorkshopGeometry` references are normalized
 only at that boundary. `WorkshopPreview` retains its convention. `VerifyAssets` checks
-local face resolution/inherited aliases and cycles; a source fix without regenerated model
-JSON is not completed asset delivery. Generate in staging while other workers own assets/lang.
+local face resolution/inherited aliases and cycles. The corrected22 model JSONs now come
+from two byte-identical staged runs; geometry, UVs and PNG/WAV bytes are unchanged.
+Keep staging/raw-checkout EOL identities distinct. Generate in staging while other workers
+own assets/lang, and never call alias resolution a client visual pass.
 
 Resource communication follows
 [ADR-0143](DECISIONS.md#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations).

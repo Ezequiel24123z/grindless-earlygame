@@ -17,6 +17,20 @@
     "status": "source_bound_inventory_only",
     "schema_compatibility": "Additive fields only; schema_version remains 1. Existing VerifyT0Preparation dependencies on the seven legacy machine contracts, two parts, two multiblock records, and static-frame defaults remain intact, so no check change is required.",
     "visual_readiness": "Generated functional art and source mappings are inventoried; production-quality art and player acceptance are not claimed.",
+    "model_reference_validation": {
+      "generator_source_checkpoint": "d9d477f26a728b82fa25089bd7c8d8250d13b108",
+      "status": "staged_regeneration_and_asset_checks_passed_not_visual_acceptance",
+      "changed_block_models": 22,
+      "corrected_double_prefix_references": 696,
+      "two_generated_runs_files_each": 1521,
+      "two_runs_byte_identical": true,
+      "sorted_generated_manifest_sha256": "87096318911ae7a325b4bd8d8f9ee1f64b4edd85c6172d1ecf1b6260553788bc",
+      "unchanged": ["geometry", "UVs", "PNG bytes", "WAV bytes", "WorkshopGeometry", "WorkshopPreview"],
+      "text_boundary": "Non-model generated text compares equal after CRLF/LF normalization and was not installed; staging and raw worktree text hashes differ.",
+      "preserved_failure": "First staging execution lacked tools/audio; its log is retained and complete reruns followed after creating that staging directory.",
+      "evidence": "build/assetgen-d9d477/logs",
+      "not_claimed": "No native client rendering, new pixels, production-art or Tier acceptance"
+    },
     "provider_status_note": "The provider_status date is historical. No current key or credential availability was inspected for this inventory.",
     "source_refs": [
       "docs/AGENT-MAP.md",
