@@ -18,6 +18,9 @@ import java.util.Locale;
  * Shared settling geometry keeps its {@code #key} convention for the preview and is normalized at
  * the model boundary.
  *
+ * <p>The vanilla {@code block/block} parent supplies only item display and GUI-light metadata.
+ * Local elements, UVs and texture bindings remain the placed block's visual authority.
+ *
  * <p>Texture slots: {@code #front} (the status-dependent face), {@code #top}, {@code #side},
  * {@code #base} and {@code #cap} (the shared casing, which does not change with status).
  */
@@ -118,7 +121,7 @@ final class BlockModels {
             case BENCH -> bench();
             case FIBREBOARD -> deck();
         };
-        StringBuilder out = new StringBuilder("{\n");
+        StringBuilder out = new StringBuilder("{\n  \"parent\": \"minecraft:block/block\",\n");
         out.append("  \"textures\": {\n");
         out.append(textures(block, status));
         out.append("  },\n  \"elements\": [\n");

@@ -1,6 +1,6 @@
 # Active orchestration handoff
 
-Updated: 2026-10-18. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
+Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
 ## Active product transition
 
@@ -78,6 +78,37 @@ occurred. A new private grant tied to the committed manifest/contract/runner and
 candidate directory is still required; never replace an ambiguous spend ledger.
 The palette remains artistically unapproved until the owner chooses among the actual
 three Quern candidates. CI invokes the no-provider guard twin only, not generation.
+
+**Subsequent calibration result and owner approval.** Reviewed tool checkpoint7dad69d
+generated A/B/C once, all3 HTTP200/response_saved. Its grant is exhausted, not available
+for reuse after a crash. The five-file private ZIP was delivered and byte/contents
+checked; the owner then explicitly approved all three sounds. Keep the immutable
+request manifest/receipt and source/QC history, including C's raw boundary warning.
+The style guide and separate hash-bound approval record must distinguish preview
+listening from runtime, factory-mix and release acceptance. Do not ask for a single
+choice again or regenerate approved candidates. A is Astra's first Quern integration
+reference; B/C remain equally owner-approved alternatives, not new per-state sounds.
+The source grant/key and account data never enter Git.
+The [sound style guide](../docs/assets/t0-sound-style.md) and
+[hash-bound approval](../docs/assets/t0-sound-approval.json) preserve that distinction
+without rewriting executed request inputs. Continue ordinary bounded work under the
+owner's existing directive; do not reintroduce a per-step approval waterfall.
+
+**Art batch ready for integration.** Native audit found19/19 actual3D BlockItems already
+present; vanilla display inheritance was missing. Four reviewed generator/check
+sources produce261 parent-only state-model changes and nine physical-item sprites.
+Two1616-file stages match,814 checks pass on each and after installation, and the
+coordinator independently matched all270 installed file hashes.573 other PNGs and
+five WAVs remain unchanged. Astra viewed/accepted the source-pixel refinement; native
+client rendering and full art/human acceptance remain open. Manifest formats and
+hashes are explicit in the validation ledger; the worker's initial short label was
+not a TSV identity. No additional art regeneration is needed just to record this result.
+
+**Archived context:** the app reports C3 completion-safety session
+`b2ef80f6-6560-44b8-9f0b-53290f389c06` durably archived. Do not message it, command its
+old workspace or assume its ignored evidence is accessible. Integrated Git/source and
+previously captured evidence remain the continuation basis. Ask the owner to restore
+it through the app only if its unavailable raw context is genuinely required.
 
 ADR-0146 records the owner's art correction: preserve placed blocks/machines, improve
 item volume/materiality and the Data Core/Calibrated Core/Relay family, and inspect

@@ -5,13 +5,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +30,8 @@ public final class VerifyAssets {
     private static final Path RESOURCES = Path.of("common/src/main/resources");
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
     private static final Path ASSETS = RESOURCES.resolve("assets/grindless");
+    // Minecraft 1.20.1: display/gui_light only, not a second source of geometry or textures.
+    private static final String NATIVE_BLOCK_PRESENTATION = "minecraft:block/block";
 
     private static int failures = 0;
 
@@ -36,10 +43,13 @@ public final class VerifyAssets {
         }
         catalogueMatchesRegistry();
         blocks();
+        blockItemPresentation();
+        presentationRegressionCases();
         sounds();
         everyModelResolves();
         textureReferenceRegressionCases();
         itemsAreNamedAndModelled();
+        physicalItemSprites();
         finish();
     }
 
@@ -101,6 +111,18 @@ public final class VerifyAssets {
                             .filter(entry -> entry.getKey() != block.miningTool())
                             .noneMatch(entry -> entry.getValue().contains("grindless:" + n)));
         }
+        for (String technical : BlockCatalogue.technical()) {
+            // The shaft uses the separately assembled pylon parts, not BlockModels.model().
+            if (technical.equals("flux_pylon_shaft")) {
+                continue;
+            }
+            boolean presentation = true;
+            for (String status : BlockCatalogue.GRID) {
+                presentation &= isSharedBlockModel(
+                        read(ASSETS.resolve("models/block/" + technical + "_" + status + ".json")));
+            }
+            yes(technical + " shares native presentation without replacing its mass geometry", presentation);
+        }
     }
 
     /**
@@ -113,10 +135,12 @@ public final class VerifyAssets {
         int expected = 0;
         boolean complete = true;
         boolean rotated = true;
+        boolean presentation = true;
         List<String> facings = block.facing() ? BlockCatalogue.FACINGS : List.of("");
         for (String status : block.statuses()) {
             Path model = ASSETS.resolve("models/block/" + block.modelName(status) + ".json");
             complete &= exists(model);
+            presentation &= isSharedBlockModel(read(model));
             for (int i = 0; i < facings.size(); i++) {
                 expected++;
                 JsonObject variant = variants.has(block.variantKey(facings.get(i), status))
@@ -133,6 +157,123 @@ public final class VerifyAssets {
         yes(block.name() + " has a model for each of its " + expected + " states", complete);
         yes(block.name() + " has exactly those states and no others", variants.size() == expected);
         yes(block.name() + " turns its model to match its facing", rotated);
+        yes(block.name() + " keeps local geometry and inherits native block presentation", presentation);
+    }
+
+    private static boolean isSharedBlockModel(JsonObject model) {
+        return model != null && model.has("parent")
+                && NATIVE_BLOCK_PRESENTATION.equals(model.get("parent").getAsString())
+                && model.has("textures") && model.has("elements")
+                && model.getAsJsonArray("elements").size() > 0
+                && !hasPresentationOverrides(model);
+    }
+
+    private static boolean hasPresentationOverrides(JsonObject model) {
+        return model.has("display") || model.has("gui_light")
+                || model.has("transform") || model.has("loader");
+    }
+
+    /** Item wrappers keep the exact idle model; the shared block root supplies native transforms. */
+    private static void blockItemPresentation() throws IOException {
+        Path modelRoot = ASSETS.resolve("models").normalize();
+        ModelLookup lookup = modelId -> {
+            Path file = modelRoot.resolve(modelId + ".json").normalize();
+            return file.startsWith(modelRoot) ? read(file) : null;
+        };
+        for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
+            // pylonItem()/assembled() are intentionally outside the shared presentation repair.
+            if (block.geometry() == BlockCatalogue.Geometry.PYLON) {
+                continue;
+            }
+            String modelId = "item/" + block.name();
+            JsonObject item = lookup.load(modelId);
+            yes(block.name() + " item only inherits its existing idle block model",
+                    item != null && item.size() == 1 && item.has("parent")
+                            && ("grindless:block/" + block.modelName("idle"))
+                            .equals(item.get("parent").getAsString()));
+            yes(block.name() + " item reaches native block presentation through its model hierarchy",
+                    inheritsNativeBlockPresentation(modelId, item, lookup, new HashSet<>()));
+        }
+    }
+
+    private static boolean inheritsNativeBlockPresentation(String modelId, JsonObject model,
+                                                           ModelLookup lookup, Set<String> visiting)
+            throws IOException {
+        if (model == null || !visiting.add(modelId)) {
+            return false;
+        }
+        try {
+            if (!model.has("parent") || hasPresentationOverrides(model)) {
+                return false;
+            }
+            String parent = model.get("parent").getAsString();
+            if (NATIVE_BLOCK_PRESENTATION.equals(parent)) {
+                return true;
+            }
+            if (!parent.startsWith("grindless:")) {
+                return false;
+            }
+            String parentId = parent.substring("grindless:".length());
+            return inheritsNativeBlockPresentation(parentId, lookup.load(parentId), lookup, visiting);
+        } finally {
+            visiting.remove(modelId);
+        }
+    }
+
+    private static JsonObject presentationModel(String parent) {
+        JsonObject model = new JsonObject();
+        if (parent != null) {
+            model.addProperty("parent", parent);
+        }
+        return model;
+    }
+
+    private static void presentationRegressionCases() throws IOException {
+        JsonObject root = presentationModel(NATIVE_BLOCK_PRESENTATION);
+        root.add("textures", JsonParser.parseString("{\"front\":\"grindless:block/casing_side\"}"));
+        root.add("elements", JsonParser.parseString("[{\"from\":[2,1,3],\"to\":[14,9,12],"
+                + "\"faces\":{\"north\":{\"texture\":\"#front\",\"uv\":[1,2,15,14]}}}]"));
+        JsonObject before = root.deepCopy();
+        JsonObject item = presentationModel("grindless:block/middle");
+        Map<String, JsonObject> hierarchy = Map.of(
+                "block/root", root,
+                "block/middle", presentationModel("grindless:block/root"),
+                "item/part", item);
+        yes("an item can inherit native display metadata through intermediate block models",
+                inheritsNativeBlockPresentation("item/part", item, hierarchy::get, new HashSet<>()));
+        yes("native presentation keeps local elements, UVs and textures unchanged",
+                isSharedBlockModel(root) && root.equals(before));
+        Map<String, String> bindings = effectiveTextureBindings("block/root", root, hierarchy::get,
+                new HashSet<>(), new ArrayList<>());
+        yes("a native metadata parent leaves local face texture bindings authoritative",
+                resolvesTextureKey("front", bindings, new HashSet<>()));
+        yes("a legacy parentless model does not acquire block display transforms automatically",
+                !inheritsNativeBlockPresentation("block/legacy", presentationModel(null),
+                        hierarchy::get, new HashSet<>()));
+        yes("a generated sprite is not mistaken for native block presentation",
+                !inheritsNativeBlockPresentation("item/sprite", presentationModel("minecraft:item/generated"),
+                        hierarchy::get, new HashSet<>()));
+        yes("a missing local presentation parent fails closed",
+                !inheritsNativeBlockPresentation("item/missing", presentationModel("grindless:block/missing"),
+                        hierarchy::get, new HashSet<>()));
+        Map<String, JsonObject> cycle = Map.of(
+                "block/first", presentationModel("grindless:block/second"),
+                "block/second", presentationModel("grindless:block/first"));
+        yes("cyclic presentation inheritance is rejected",
+                !inheritsNativeBlockPresentation("block/first", cycle.get("block/first"),
+                        cycle::get, new HashSet<>()));
+        for (String override : List.of("display", "gui_light", "transform", "loader")) {
+            JsonObject overridden = root.deepCopy();
+            if (override.equals("gui_light") || override.equals("loader")) {
+                overridden.addProperty(override, override.equals("gui_light") ? "front" : "forge:obj");
+            } else {
+                overridden.add(override, new JsonObject());
+            }
+            yes("local " + override + " cannot silently replace shared native presentation",
+                    !isSharedBlockModel(overridden)
+                            && !inheritsNativeBlockPresentation("block/overridden", overridden,
+                            hierarchy::get, new HashSet<>()));
+        }
     }
 
     /** Every sound event must exist in code, in sounds.json and on disk, and be mono. */
@@ -404,6 +545,70 @@ public final class VerifyAssets {
                 unmodelled.isEmpty());
         for (String sprite : BlockCatalogue.placeholderSprites()) {
             yes(sprite + " has a sprite", exists(ASSETS.resolve("textures/item/" + sprite + ".png")));
+        }
+    }
+
+    /** Structural sprite guards, not an artistic or in-game rendering acceptance claim. */
+    private static void physicalItemSprites() throws IOException {
+        Map<String, BufferedImage> sprites = new HashMap<>();
+        for (String name : List.of("data_core", "calibrated_data_core", "relay_matrix",
+                "mineral_aggregate", "biomass", "slag",
+                "ceramic_grog", "unfired_ceramic", "ceramic_insulator")) {
+            Path file = ASSETS.resolve("textures/item/" + name + ".png");
+            BufferedImage image = exists(file) ? ImageIO.read(file.toFile()) : null;
+            yes(name + " remains a native 16x16 sprite",
+                    image != null && image.getWidth() == 16 && image.getHeight() == 16);
+            sprites.put(name, image);
+        }
+        yes("raw and calibrated cores have different physical silhouettes, not only different hues",
+                differentSilhouettes(sprites.get("data_core"), sprites.get("calibrated_data_core")));
+        yes("the relay matrix has a different physical silhouette from the raw core",
+                differentSilhouettes(sprites.get("relay_matrix"), sprites.get("data_core")));
+        yes("the relay matrix has a different physical silhouette from the calibrated core",
+                differentSilhouettes(sprites.get("relay_matrix"), sprites.get("calibrated_data_core")));
+
+        // Alpha-only baselines from 102d68f: surfaces may change, these approved shapes may not.
+        Map<String, String> preservedSilhouettes = Map.of(
+                "ceramic_grog", "7df62b2e4d70a470a70b0df6d7489420afed6bb258c049dec76636294512af8f",
+                "unfired_ceramic", "4e9016f43140bfad11af57a941b7a7d199e82c909ed1580470ee10f6eadb1e0c",
+                "ceramic_insulator", "182f2c8a9cdedb56cde3f71f8a3f6ed871b7639603533848e4e580dbf61d6a86",
+                "biomass", "c32cd59207c6e970dfeec105890428e171eab15d551a888463f8af2c1261bdb1");
+        for (Map.Entry<String, String> entry : preservedSilhouettes.entrySet()) {
+            yes(entry.getKey() + " retains its pre-refinement silhouette",
+                    entry.getValue().equals(alphaFingerprint(sprites.get(entry.getKey()))));
+        }
+        Path advanced = ASSETS.resolve("textures/item/advanced_data_core.png");
+        yes("advanced_data_core retains its exact 102d68f PNG bytes outside the T0 batch",
+                exists(advanced)
+                        && "95d3c92c3f348b473bf062be37ebcb08d8a1d18901a6efdec3c85189892bb1be"
+                        .equals(sha256(Files.readAllBytes(advanced))));
+    }
+
+    private static boolean differentSilhouettes(BufferedImage first, BufferedImage second) {
+        return first != null && second != null
+                && first.getWidth() == second.getWidth() && first.getHeight() == second.getHeight()
+                && !alphaFingerprint(first).equals(alphaFingerprint(second));
+    }
+
+    private static String alphaFingerprint(BufferedImage image) {
+        if (image == null) {
+            return "";
+        }
+        byte[] alpha = new byte[image.getWidth() * image.getHeight()];
+        int index = 0;
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                alpha[index++] = (byte) (image.getRGB(x, y) >>> 24);
+            }
+        }
+        return sha256(alpha);
+    }
+
+    private static String sha256(byte[] bytes) {
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        } catch (NoSuchAlgorithmException impossible) {
+            throw new AssertionError("A Java 17 runtime must provide SHA-256", impossible);
         }
     }
 

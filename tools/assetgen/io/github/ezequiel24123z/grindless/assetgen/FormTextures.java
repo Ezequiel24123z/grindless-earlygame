@@ -13,7 +13,8 @@ import java.util.Random;
  *
  * <p>This is the half of the art problem a generator genuinely solves (ADR-0048). A pack with
  * forty materials needs forty plates differing only in palette: enormous by hand, trivial here,
- * and consistency <em>is</em> the quality. Hero items are the opposite and are not generated.
+ * and consistency <em>is</em> the quality. The three Bootstrap progression objects instead use
+ * authored local material layers and different reliefs, not palette swaps of one matrix template.
  *
  * <p>Every template is deterministic — the same palette always gives the same image — so
  * regenerating never produces a spurious diff.
@@ -21,6 +22,12 @@ import java.util.Random;
 public final class FormTextures {
 
     public static final int SIZE = HeightField.SIZE;
+
+    /** Local materials for the three Bootstrap progression objects, not the material matrix. */
+    private static final Palette CORE_CERAMIC =
+            new Palette("core_ceramic", 0xB9A78A, 0xE2D5B8, 0x79674F);
+    private static final Palette CORE_CONTACT =
+            new Palette("core_contact", 0x967044, 0xD5B36D, 0x4E3C30);
 
     private FormTextures() {
     }
@@ -34,22 +41,23 @@ public final class FormTextures {
                 for (int x = 2; x <= 13; x++) {
                     double distance = Math.abs(x - pebble[0]) + Math.abs(y - pebble[1]);
                     if (distance <= pebble[2]) {
-                        field.set(x, y, Math.max(field.get(x, y), pebble[3] - distance * 0.3));
+                        double facet = (x < pebble[0] ? 0.35 : -0.20)
+                                + (y < pebble[1] ? 0.25 : -0.15);
+                        field.set(x, y, Math.max(field.get(x, y), pebble[3] - distance * 0.3 + facet));
                     }
                 }
             }
         }
         field.bevel(0.4);
-        BufferedImage image = field.light(palette);
-        for (int y = 3; y <= 12; y++) {
-            for (int x = 3; x <= 12; x++) {
-                if (field.solid(x - 1, y) && field.solid(x + 1, y)
-                        && field.solid(x, y - 1) && field.solid(x, y + 1)
-                        && (x * 3 + y * 7) % 11 == 0) {
-                    image.setRGB(x, y, 0xFFB8A183);
-                }
-            }
-        }
+        Palette stone = new Palette(palette.name(), palette.base(),
+                Palette.shade(palette.base(), 0.18), palette.shadow());
+        BufferedImage image = field.light(stone);
+        // Two clay seams follow the pebbles, instead of scattering unrelated bright speckles.
+        surfacePixel(image, 5, 6, 0xC9B498);
+        surfacePixel(image, 6, 6, 0xB8A183);
+        surfacePixel(image, 6, 7, 0x97836B);
+        surfacePixel(image, 9, 10, 0xB8A183);
+        surfacePixel(image, 10, 10, 0x97836B);
         return image;
     }
 
@@ -63,13 +71,25 @@ public final class FormTextures {
                 for (int x = 2; x <= 13; x++) {
                     double distance = Math.abs(x - leaf[0]) / leaf[2] + Math.abs(y - leaf[1]) / leaf[3];
                     if (distance < 1.0) {
-                        field.set(x, y, Math.max(field.get(x, y), 3.2 + (1.0 - distance) * 1.6));
+                        double fold = Math.max(0, 1.0 - Math.abs(x - leaf[0]) * 0.8) * 0.55;
+                        field.set(x, y, Math.max(field.get(x, y),
+                                3.0 + (1.0 - distance) * 1.6 + fold));
                     }
                 }
             }
         }
         field.bevel(0.35);
-        BufferedImage image = field.light(palette);
+        Palette leaf = new Palette(palette.name(), palette.base(),
+                Palette.shade(palette.base(), 0.22), Palette.shade(palette.base(), -0.30));
+        BufferedImage image = field.light(leaf);
+        // Short midribs describe the existing leaves without changing their silhouette.
+        surfacePixel(image, 7, 4, leaf.highlight());
+        surfacePixel(image, 7, 5, leaf.highlight());
+        surfacePixel(image, 8, 6, leaf.base());
+        surfacePixel(image, 4, 7, leaf.highlight());
+        surfacePixel(image, 5, 8, leaf.base());
+        surfacePixel(image, 10, 7, leaf.highlight());
+        surfacePixel(image, 11, 8, leaf.base());
         for (int y = 9; y <= 12; y++) {
             image.setRGB(7, y, 0xFFBEAC6E);
             if (y > 10) {
@@ -109,8 +129,19 @@ public final class FormTextures {
         field.rect(10, 8, 13, 12, 3.0);
         field.set(2, 7, 0.0);
         field.set(9, 3, 0.0);
+        field.rect(3, 8, 5, 9, 3.9);
+        field.rect(6, 4, 8, 5, 4.5);
+        field.rect(11, 9, 12, 10, 3.5);
+        field.set(5, 11, 2.7);
+        field.set(7, 6, 3.1);
         field.bevel(0.55);
-        return field.light(palette);
+        Palette fired = new Palette(palette.name(), palette.base(),
+                Palette.shade(palette.base(), 0.22), palette.shadow());
+        BufferedImage image = field.light(fired);
+        surfacePixel(image, 4, 10, Palette.shade(palette.base(), -0.25));
+        surfacePixel(image, 7, 6, Palette.shade(palette.base(), -0.25));
+        surfacePixel(image, 11, 11, Palette.shade(palette.base(), -0.25));
+        return image;
     }
 
     /** Stacked damp blanks, distinct from the finished ribbed insulator. */
@@ -119,8 +150,19 @@ public final class FormTextures {
         field.rect(2, 8, 13, 12, 2.6);
         field.rect(3, 5, 12, 8, 3.8);
         field.rect(4, 3, 11, 5, 4.8);
+        // Undercut front edges separate the three damp blanks; none of their mask is removed.
+        field.rect(3, 8, 12, 8, 1.9);
+        field.rect(4, 5, 11, 5, 2.7);
+        field.set(12, 10, 2.2);
         field.bevel(0.45);
-        return field.light(palette);
+        Palette clay = new Palette(palette.name(), palette.base(),
+                Palette.shade(palette.base(), 0.16), Palette.shade(palette.base(), -0.28));
+        BufferedImage image = field.light(clay);
+        surfacePixel(image, 6, 4, clay.highlight());
+        surfacePixel(image, 7, 4, clay.highlight());
+        surfacePixel(image, 9, 6, Palette.shade(palette.base(), -0.18));
+        surfacePixel(image, 10, 6, Palette.shade(palette.base(), -0.18));
+        return image;
     }
 
     /** A ribbed ceramic spool with a visible bore, not a recolored data core. */
@@ -131,8 +173,22 @@ public final class FormTextures {
         field.rect(3, 7, 12, 9, 4.3);
         field.rect(3, 11, 12, 13, 4.3);
         field.clearDisc(7.5, 4.0, 1.3);
+        for (int y : new int[]{4, 8, 12}) {
+            for (int x = 3; x <= 12; x++) {
+                if (field.solid(x, y)) {
+                    double across = 1.0 - Math.abs(x - 7.5) / 4.5;
+                    field.set(x, y, 3.4 + across * 1.4);
+                }
+            }
+        }
         field.bevel(0.35);
-        return field.light(palette);
+        Palette glazed = new Palette(palette.name(), palette.base(),
+                Palette.shade(palette.base(), 0.20), Palette.shade(palette.base(), -0.32));
+        BufferedImage image = field.light(glazed);
+        surfacePixel(image, 4, 7, glazed.highlight());
+        surfacePixel(image, 5, 7, glazed.highlight());
+        surfacePixel(image, 6, 3, glazed.shadow());
+        return image;
     }
 
     /** A trapezoidal ingot: domed top face, chamfered sides, narrowing as it rises. */
@@ -392,12 +448,128 @@ public final class FormTextures {
         return field.light(palette);
     }
 
-    /**
-     * Placeholder sprite for the Data Core: a chip with a lit centre.
-     *
-     * <p>A stand-in, not art. Hero item sprites are a named gap in ADR-0048; this exists so the
-     * item is recognisable and is not the purple-and-black missing-texture square.
-     */
+    /** An unsealed ceramic carrier, a raised data inlay and three exposed contact fingers. */
+    public static BufferedImage bootstrapDataCore(Palette palette) {
+        HeightField contacts = new HeightField();
+        for (int x : new int[]{4, 7, 10}) {
+            contacts.rect(x, 12, x + 1, 14, 2.8);
+        }
+        BufferedImage image = contacts.light(CORE_CONTACT);
+        HeightField body = new HeightField();
+        body.rect(3, 4, 11, 11, 3.0);
+        body.rect(4, 3, 10, 12, 3.0);
+        body.rect(4, 4, 10, 9, 3.7);
+        body.rect(4, 10, 10, 11, 2.5);
+        body.set(10, 4, 2.6);
+        body.bevel(0.28);
+        overlaySolid(image, body.light(CORE_CERAMIC));
+        HeightField inlay = new HeightField();
+        inlay.rect(5, 5, 8, 9, 4.2);
+        inlay.rect(6, 4, 7, 10, 4.7);
+        inlay.bevel(0.22);
+        overlaySolid(image, inlay.light(palette));
+        surfacePixel(image, 4, 4, CORE_CERAMIC.highlight());
+        surfacePixel(image, 5, 4, CORE_CERAMIC.highlight());
+        surfacePixel(image, 9, 6, CORE_CERAMIC.shadow());
+        surfacePixel(image, 9, 7, CORE_CERAMIC.shadow());
+        surfacePixel(image, 6, 5, palette.highlight());
+        for (int x : new int[]{4, 7, 10}) {
+            surfacePixel(image, x, 13, CORE_CONTACT.highlight());
+        }
+        return image;
+    }
+
+    /** The same substrate sealed in a tall green capsule with a metal mount and side clamps. */
+    public static BufferedImage calibratedDataCore(Palette palette) {
+        HeightField mount = new HeightField();
+        mount.rect(4, 2, 11, 13, 3.1);
+        mount.rect(2, 5, 13, 10, 3.1);
+        mount.rect(5, 13, 6, 14, 2.5);
+        mount.rect(9, 13, 10, 14, 2.5);
+        mount.bevel(0.25);
+        BufferedImage image = mount.light(CORE_CONTACT);
+        HeightField body = new HeightField();
+        body.rect(5, 3, 10, 12, 3.7);
+        body.rect(4, 5, 11, 10, 3.7);
+        body.bevel(0.24);
+        overlaySolid(image, body.light(CORE_CERAMIC));
+        HeightField capsule = new HeightField();
+        capsule.rect(6, 4, 9, 10, 4.6);
+        capsule.disc(7.5, 6.5, 2.1, 5.3);
+        capsule.rect(7, 10, 8, 11, 3.6);
+        capsule.bevel(0.25);
+        overlaySolid(image, capsule.light(palette));
+        surfacePixel(image, 6, 2, CORE_CONTACT.highlight());
+        surfacePixel(image, 7, 2, CORE_CONTACT.highlight());
+        surfacePixel(image, 3, 5, CORE_CONTACT.highlight());
+        surfacePixel(image, 12, 5, CORE_CONTACT.base());
+        surfacePixel(image, 3, 9, CORE_CONTACT.shadow());
+        surfacePixel(image, 6, 5, palette.highlight());
+        surfacePixel(image, 8, 10, palette.shadow());
+        return image;
+    }
+
+    /** Three discrete relay bodies sit above a ceramic tray and a visible branching contact bus. */
+    public static BufferedImage relayMatrix(Palette palette) {
+        HeightField frame = new HeightField();
+        frame.rect(1, 5, 14, 12, 3.0);
+        frame.rect(2, 4, 13, 13, 3.0);
+        frame.bevel(0.22);
+        BufferedImage image = frame.light(CORE_CONTACT);
+        HeightField tray = new HeightField();
+        tray.rect(3, 5, 12, 11, 3.2);
+        tray.rect(4, 6, 11, 10, 3.7);
+        tray.bevel(0.25);
+        overlaySolid(image, tray.light(CORE_CERAMIC));
+        HeightField bus = new HeightField();
+        bus.rect(4, 7, 11, 8, 3.4);
+        bus.rect(7, 7, 8, 11, 3.7);
+        overlaySolid(image, bus.light(CORE_CONTACT));
+        for (int x = 5; x <= 11; x++) {
+            surfacePixel(image, x, 7, CORE_CONTACT.highlight());
+        }
+        HeightField relays = new HeightField();
+        relays.rect(2, 2, 6, 6, 4.4);
+        relays.rect(9, 2, 13, 6, 4.4);
+        relays.rect(6, 8, 10, 12, 4.1);
+        relays.bevel(0.22);
+        overlaySolid(image, relays.light(Palette.of("relay_shell", 0x7E8C87)));
+        HeightField caps = new HeightField();
+        caps.rect(3, 3, 5, 5, 5.4);
+        caps.rect(10, 3, 12, 5, 5.4);
+        caps.rect(7, 9, 9, 11, 5.2);
+        caps.bevel(0.25);
+        overlaySolid(image, caps.light(palette));
+        surfacePixel(image, 3, 2, 0xC4CDC4);
+        surfacePixel(image, 4, 2, 0xAAB8B0);
+        surfacePixel(image, 10, 2, 0xAAB8B0);
+        surfacePixel(image, 3, 3, palette.highlight());
+        surfacePixel(image, 10, 3, palette.highlight());
+        surfacePixel(image, 7, 9, palette.highlight());
+        surfacePixel(image, 4, 12, CORE_CONTACT.highlight());
+        surfacePixel(image, 5, 12, CORE_CONTACT.base());
+        return image;
+    }
+
+    /** Composites local solid surfaces; all layers use the unchanged upper-left HeightField light. */
+    private static void overlaySolid(BufferedImage image, BufferedImage layer) {
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                if ((layer.getRGB(x, y) >>> 24) != 0) {
+                    image.setRGB(x, y, layer.getRGB(x, y));
+                }
+            }
+        }
+    }
+
+    /** A deliberate material mark may shade a surface, never grow the existing silhouette. */
+    private static void surfacePixel(BufferedImage image, int x, int y, int rgb) {
+        if ((image.getRGB(x, y) >>> 24) != 0) {
+            image.setRGB(x, y, 0xFF000000 | rgb);
+        }
+    }
+
+    /** Legacy chip relief retained unchanged for advanced_data_core, outside the T0 art batch. */
     public static BufferedImage dataCore(Palette palette) {
         HeightField field = new HeightField();
         field.rect(3, 3, 12, 12, 3.2);
@@ -411,14 +583,30 @@ public final class FormTextures {
         return field.light(palette);
     }
 
-    /** Placeholder sprite for slag: an irregular cooled lump. */
+    /** A cooled, fractured lump with two recessed pores and one small glassy inclusion. */
     public static BufferedImage slag(Palette palette) {
         HeightField field = new HeightField();
         field.disc(7.5, 8.0, 4.2, 4.0);
         field.disc(5.2, 6.4, 2.2, 3.2);
         field.disc(10.0, 7.2, 2.0, 3.0);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                if (field.solid(x, y)) {
+                    double facet = x + y < 14 ? 0.6 : x > 8 ? -0.7 : 0.0;
+                    field.set(x, y, Math.max(0.4, field.get(x, y) + facet));
+                }
+            }
+        }
+        field.set(6, 8, 1.0);
+        field.set(9, 7, 1.4);
         field.bevel(0.25);
-        return field.light(palette);
+        Palette cooled = new Palette(palette.name(), palette.base(), 0x948C7E, 0x393936);
+        BufferedImage image = field.light(cooled);
+        surfacePixel(image, 6, 8, cooled.shadow());
+        surfacePixel(image, 9, 7, cooled.shadow());
+        surfacePixel(image, 6, 5, 0x9CA59C);
+        surfacePixel(image, 7, 5, 0x7F8A83);
+        return image;
     }
 
     /** Placeholder sprite for the Prospector's Scanner: a dish on a grip. See {@link #dataCore}. */

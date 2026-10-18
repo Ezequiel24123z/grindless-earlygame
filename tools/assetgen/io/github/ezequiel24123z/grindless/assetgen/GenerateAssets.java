@@ -88,13 +88,14 @@ public final class GenerateAssets {
         written += writeReagentTags(root);
 
         // ---- placeholder sprites, blocks, loot and mining tags ----
-        written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
+        written += write(items, "data_core",
+                FormTextures.bootstrapDataCore(Palette.of("data_core", MachineTextures.ACCENT)));
         written += write(items, "calibrated_data_core",
-                FormTextures.dataCore(Palette.of("calibrated_data_core", 0x66BB6A)));
+                FormTextures.calibratedDataCore(Palette.of("calibrated_data_core", 0x66BB6A)));
         written += write(items, "advanced_data_core",
                 FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "relay_matrix",
-                FormTextures.dataCore(Palette.of("relay_matrix", 0xEF6C00)));
+                FormTextures.relayMatrix(Palette.of("relay_matrix", 0xEF6C00)));
         written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         written += write(items, "ceramic_grog",

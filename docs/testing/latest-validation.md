@@ -1,5 +1,56 @@
 # Current T0 rework validation
 
+## Physical-item generation and Quern audition
+
+The first ADR-0146 item batch compiles14 generator/two checker sources into31 new
+classes with JDK17/256MiB/CPU2/SerialGC/headless. The source identity is102d68f plus
+the four recorded generator/check hashes, frozen while HEAD was a2aea87; later
+documentation/sound checkpoint7dad69d changed none of those inputs. Do not relabel
+this as a pure102d or7dad full build.
+
+The new checker produces142 expected baseline failures and zero unexpected ones.
+Two complete isolated1616-file trees match in paths and bytes; each passes814 asset
+checks. Controlled installation copies261 model JSONs with only native
+`minecraft:block/block` metadata added, plus nine real item PNGs. Installed814 checks
+pass again.573 other PNGs and five WAVs, the advanced-core PNG, item-model parents,
+pylon parts and placed geometry/UV/bindings are preserved.671 EOL-only differences
+are explicitly not byte-identical and were not copied. All270 installed hashes were
+also independently matched against the actual TSV by the coordinator.
+
+`approved-270.sha256` hashes to
+`1e5fd8e561790de0de942b8bd7ba3b36d315e731a9a9c5c3a2c246fd56c25f73`;
+`approved-changes.json` to
+`8470ca67dc0efdb5265fc487d609d3a7670b7a5eaffb4450e76c4a85289a38df`;
+`approved-270.tsv` to
+`1e947c1f5f4dd905244604f51c81858314b47545513a770025a34ee4103a8dda`.
+The initial worker label omitted the extension; these are three different formats,
+not conflicting bytes. Originals and review copies match. The contact sheet
+`acc459ad3f85515b7ce7e03d2e64fd903372bb061c4da6d61362ab7bbda33556`
+was reviewed by Astra at native/enlarged source-pixel scope. Real client item/JEI
+render and full human art acceptance remain unobserved. Preserve the execution-policy,
+wrapper continuation and pre-copy nested-array failures. No JVM remains.
+
+The separate ADR-0145 Quern calibration ran the reviewed7dad69d development tool
+once: exactly3 authorized provider requests, each HTTP200 and `response_saved`, zero
+failed/ambiguous calls or retries. Each preview is3s, mono44.1kHz PCM16 with fixed-3dB
+processing; no clipping/silence flags. Raw sources are stereo; C additionally has
+a0.022812 boundary jump above the0.02 screening threshold, retained even though the
+processed preview is below it. No seam repair or extra generation was performed.
+Raw MP3 hashes A/B/C:
+`22a3acd88d733cd500b21e69e01f401c29d981559c8829e0037a6a431db8d152`,
+`267c63c0a1caa930b01c6139db96b5d7a09e57fb1eec8b1448a03d987d83a61e`,
+`9e589f1ac5975212387bde67e5d452cee7856827b841568eae83266b31917352`.
+
+The private audition ZIP has5 entries/631764 bytes and SHA-256
+`3e8f62b02448497cd8b4e3a7cb6ff8592dcdec4f4cc32208bcc3c76b1c08491d`;
+the coordinator checked its safe relative contents and all three actual receipt/source
+hashes. A local packaging attempt was corrected offline, not by another provider call.
+The owner explicitly approved all three delivered sounds. That is genuine initial
+preview listening approval, not runtime/factory-mix, full sound-pass, licence-import,
+Superflat or release acceptance. Request IDs were not captured. Secrets/grants and
+account data are excluded from the repository and delivery. The original generation
+receipt remains immutable; the three-request grant is exhausted.
+
 ## External development-storage verification on 102d68f
 
 The coordinator's selected `:common:writeCheckClasspath` task finishes with actual exit0,

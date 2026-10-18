@@ -2,7 +2,7 @@
   "schema": "grindless.work-plan",
   "schema_version": 1,
   "plan_revision": 9,
-  "updated": "2026-10-18",
+  "updated": "2026-10-19",
   "phase": "t0_playable_release_candidate_product_and_polish",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
   "tier_accepted": false,
@@ -275,6 +275,8 @@
     "manual_acceptance": "docs/testing/t0-survival-acceptance.md",
     "playable_release": "plan/process-t0-playable-release-1.md",
     "sound_design": "docs/assets/t0-sound-design.json",
+    "sound_style": "docs/assets/t0-sound-style.md",
+    "sound_approval": "docs/assets/t0-sound-approval.json",
     "dashboard": "docs/dashboard/README.md"
   },
   "status_semantics": {
@@ -318,14 +320,14 @@
       "stop_condition": "Astra selects verified composition and bounded configuration changes before implementation"
     },
     {
-      "id": "playable-art-intake", "task_id": "t0-art-pass", "status": "contact_sheet_returned_followup_interrupted",
+      "id": "playable-art-intake", "task_id": "t0-art-pass", "status": "first_item_batch_installed_checked_and_source_pixels_reviewed",
       "worker_agent_id": "9387cad0-caf5-46dc-a750-ff78e91464e9", "model": "gpt-6-luna",
       "recovery_worker_agent_id": "24a06f11-33a6-4546-a964-2249c91a66e0",
-      "recovery_state": "Native model audit and four generator/test sources reviewed; isolated generation now granted, no generated/visual pass yet",
+      "recovery_state": "Nineteen native3D item chains audited; four-source implementation yields261 parent-only JSON and9 PNGs. Two1616-file stages identical,814 checks each/installed,270 installed hashes matched; Astra source-pixel review accepted, native client unobserved",
       "input_revision": "33b4af21d661bd6306fde270f25670278adf72ae",
       "owned_files": ["ignored build/product-review/asset-intake-33b4af2 contact sheet and input manifest"],
       "scope": "Actual36-source contact sheet returned; owner preserves placed machines and requires physical item materiality plus native BlockItem3D model reuse",
-      "result": "Contact-sheet hash1987c12795f6355547ff89602e48b8c39629ee8b75b2030fc9a83b0fc86c62f1 preserved; no sprite/model edits or completed native item-model audit",
+      "result": "Baseline intake retained; new comparison sheet acc459ad3f85515b7ce7e03d2e64fd903372bb061c4da6d61362ab7bbda33556 shows real physical-item refinement.573 other PNGs and5 WAVs preserved,671 EOL-only differences not copied. No in-game model render or full human art pass",
       "stop_condition": "Recover actual model-parent audit, then implement only demonstrated gaps and generator-preserving item art"
     },
     {
@@ -336,15 +338,16 @@
       "stop_condition": "Return usable shortlist, preview/licence evidence and listening/loop risks; no audio or engine change"
     },
     {
-      "id": "sound-calibration-tooling", "task_id": "t0-sound-pass", "status": "reviewed_offline_and_real_codec_checks_passed_generation_pending",
+      "id": "sound-calibration-tooling", "task_id": "t0-sound-pass", "status": "three_previews_generated_delivered_and_owner_approved",
       "worker_agent_id": "023f7f7b-f1c2-422f-91e1-a43f1fc8b544", "model": "gpt-6.1-sol", "reasoning_effort": "max",
       "recovery_worker_agent_id": "1a21cc14-ff7b-440f-964d-eafc7a96b2be",
-      "recovery_state": "Standalone source reviewed;67 offline guards plus27 actual codec cases pass using pinned portable FFmpeg9.0.2. WinPS stderr capture corrected after reproduction. No provider grant, secret read or generation",
+      "recovery_state": "67 offline plus27 codec checks pass; reviewed tool committed as7dad69d. One authorized execution produced3 HTTP200 saved responses with no retries/unknowns. Private audition delivered and owner approved allthree; no runtime/factory-mix/full release pass",
       "input_revision": "9d2b5a1c2876d84c133de7c68f8566368212eca8",
       "owned_files": ["docs/assets/t0-sound-design.json", "tools/sound-design development-only twins, contract, template and focused tests"],
-      "result": "Four crash-surviving drafts are now a bounded development-only Plan/Generate/QC pipeline with paired tests, durable max3 budget and real codec evidence. No paid candidate or artistic/runtime approval; prior drafts/failures preserved",
+      "result": "Actual preview ZIP has5entries,631764bytes,SHA2563e8f62b02448497cd8b4e3a7cb6ff8592dcdec4f4cc32208bcc3c76b1c08491d; all3 preview/source hashes checked. C source boundary warning retained. Separate style/approval record now follows; immutable generation receipt not rewritten",
       "generation_limit": 3,
       "generation_approved": false,
+      "completed_generation": {"source_commit": "7dad69df7f5f7cba2eaf83fb1db1a50c0ad6338c", "requests": 3, "successful": 3, "failed": 0, "ambiguous": 0, "retries": 0, "grant_exhausted": true, "owner_preview_listening_approved": true, "runtime_approved": false, "release_approved": false},
       "scope": "Complete small secret-safe bounded calibration with real binary response/provenance and technical QC; Quern stone grinding, three artistic variants, no runtime/build API dependency",
       "stop_condition": "Review and commit manifest/tooling before generation; do not auto-resend ambiguous requests, expand before owner selection or publish isolated audio as a library"
     },
@@ -1058,13 +1061,13 @@
     {
       "id": "t0-art-pass", "title": "Polishing actual T0 sprites and visuals", "status": "in_progress", "depends_on": ["playable-release-policy"], "completion_requires": ["superflat-t0"],
       "owner": "Astra art direction; bounded asset worker",
-      "next_action": "Apply ADR0146: preserve placed blocks, audit native item-model parents and improve physical item volume/materiality with special Core/Relay attention; keep generator/source authority",
+      "next_action": "Integrate the checked/source-pixel-reviewed nine-item and native-parent batch; preserve good remaining art and qualify representative native item/JEI rendering without unnecessary regeneration",
       "acceptance": "Readable Minecraft pixel-art objects with coherent light/depth/materials, rewarding Core/Relay family, preserved good placed machines and native3D machine-item hierarchy where applicable; maintained source pipeline, actual visual review and exhaustive resource checks"
     },
     {
       "id": "t0-sound-pass", "title": "Giving T0 a convincing industrial sound pass", "status": "in_progress", "depends_on": ["playable-release-policy"],
       "owner": "Bounded recording/licence research and audio worker; Astra direction",
-      "next_action": "Complete the draft minimal sound manifest and development-only ElevenLabs tooling, then generate at most3 technically checked Quern candidates for initial owner choice; no expansion before selection",
+      "next_action": "Record the actual allthree preview approval and sound style guide separately from immutable generation inputs; integrate the selected small physical palette with runtime/factory-mix verification. Do not regenerate approved calibration clips or reuse the exhausted grant",
       "acceptance": "ADR0145 small shared physical palette, no per-state alarms, secret-free provider/date/prompt/model/parameter/hash/transform/use/rights trace, approved local assets build without API, sane loops/gain/attenuation/concurrency and actual listening; no mass generation or synth relabel"
     },
     {

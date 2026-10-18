@@ -360,7 +360,13 @@ The active section of `docs/testing/t0-survival-acceptance.md` controls client p
 the predecessor checklist is not the post-S2 route or an instruction to advance into T2.
 `tools/assetgen/.../BlockModels.java` owns generated face references: internal boxes use bare
 keys, the JSON writer adds one `#`, and shared `WorkshopGeometry` references are normalized
-only at that boundary. `WorkshopPreview` retains its convention. `VerifyAssets` checks
+only at that boundary. `WorkshopPreview` retains its convention. The shared model root
+inherits `minecraft:block/block` for native item display metadata, retaining local
+elements/UV/textures and existing BlockItem parents; assembled pylon paths remain
+separate. `FormTextures.bootstrapDataCore`, `calibratedDataCore` and `relayMatrix`
+own the T0 physical forms, while legacy `dataCore` still serves the unchanged advanced
+item. Refine local materials without changing global lighting/palettes or placed
+machine textures (ADR-0146). `VerifyAssets` checks
 local face resolution/inherited aliases and cycles. The corrected22 model JSONs now come
 from two byte-identical staged runs; geometry, UVs and PNG/WAV bytes are unchanged.
 Keep staging/raw-checkout EOL identities distinct. Generate in staging while other workers

@@ -15,6 +15,21 @@ entries below reference those records by id.
 
 ### Added
 
+- **Physical T0 item art and native machine-item presentation installed (ADR-0146).**
+  Nine16x16 sprites now distinguish material depth and the Core/Calibrated/Relay family.
+  The shared block-model builder adds vanilla presentation inheritance to261 existing
+  state JSONs without changing placed geometry, UVs, textures or item parents.
+  Two1616-file stages match exactly;814 asset checks pass on both and the installed
+  result, following142 expected baseline failures.573 other PNGs/five WAVs and the
+  advanced core remain unchanged. Astra reviewed the real pixels; native client
+  rendering and full art acceptance remain pending. Initial invocation/collection
+  failures and the clarified manifest-hash labels are preserved.
+- **Three actual Quern calibration sounds delivered and heard (ADR-0145).** Exactly
+  three requests succeeded, without retry; the owner approved all three preview clips.
+  Technical stereo/boundary findings remain recorded, including C's raw loop warning.
+  The private five-file audition bundle contains no key, grant, account or development
+  path. Initial artistic direction is accepted, not the runtime mix or full sound pass;
+  no automatic regeneration or provider-budget reset follows.
 - **Bounded sound calibration tooling and actual codec checks are ready.** A shared
   PowerShell/SH entry supports offline Plan/QC and an explicit three-request Generate
   mode, with reviewed input/grant bindings, durable pre-request budget, no redirects
