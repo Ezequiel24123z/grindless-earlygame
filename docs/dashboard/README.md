@@ -263,6 +263,22 @@ Private attempt logs are retained only under ignored `build/validation/dashboard
 not public artifact files. No native server/client, survival, Tier, retained-world or merge
 acceptance is inferred. Bash execution remains unobserved on this Windows host.
 
+The first production-export attempt at `073c5bf32efb5bc5f0f6cd552ab72cebb8008d86` was
+**rejected before artifact output**, not passed: the conservative contact filter mistook
+canonical declaration keys such as `registry_declaration:item:grindless:slag@ModItems.SLAG`
+for email addresses. The repaired filter recognizes only exact key names in the audit's
+`input_hashes` and `registry_binding_hashes` root maps and their structural provenance copies.
+Each recognized key must full-match the checked declarator grammar, exist in the actual
+`Result` and retain its expected identity SHA-256. Only the Java-reference separator is
+disambiguated during checking; emitted keys, quantities and hashes are unchanged. Values,
+other locations, external domains, private paths and credentials retain normal filtering.
+
+The subsequent complete `-CheckOnly` invocation observed **75,533 assertions**, now including
+the exact approved presentation role of every output and negative declaration-location,
+value, invented-key and altered-hash cases. Both audit and provenance are constructed and
+privacy-checked in check mode as well as export mode. This remains engineering evidence;
+production export and browser results are recorded separately against their actual source.
+
 ## Historical renderer-only evidence and integration limits
 
 Observed on Windows, 2026-10-17. Initial implementation:

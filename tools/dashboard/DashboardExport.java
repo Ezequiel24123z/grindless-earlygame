@@ -61,17 +61,15 @@ public final class DashboardExport {
                 ? "verification_only_no_artifact_or_clean_commit_claim"
                 : "clean_source_commit_with_observed_binary_and_authority_identities");
         int assertions = VerifyDashboardProjection.verify(result, data, revision);
+        String auditJson = AuditReports.json(result, revision, true);
+        String auditMarkdown = AuditReports.markdown(result, revision, true);
+        DashboardProjection.requirePublic(JsonParser.parseString(auditJson), result);
+        DashboardProjection.requirePublic(JSON.toJsonTree(auditMarkdown), result);
         if (checkOnly) {
             assertions += VerifyDashboardProjection.counterexamples(result, context);
-            System.out.println("DASHBOARD PROJECTION: " + assertions + " passed; no artifact or acceptance claim.");
-            return;
         }
         Map<String, Object> audit = AuditReports.document(result, revision, true);
         String json = DashboardProjection.json(data);
-        String auditJson = AuditReports.json(result, revision, true);
-        String auditMarkdown = AuditReports.markdown(result, revision, true);
-        DashboardProjection.requirePublic(JsonParser.parseString(auditJson));
-        DashboardProjection.requirePublic(JSON.toJsonTree(auditMarkdown));
         Map<String, byte[]> files = new LinkedHashMap<>();
         for (String name : RUNTIME) {
             files.put(name, Files.readAllBytes(root.resolve(Path.of("tools", "dashboard", name))));
@@ -86,7 +84,8 @@ public final class DashboardExport {
                 "generated_at", context.generatedAt(), "files_sha256", fileHashes,
                 "projection_assertions", assertions,
                 "scope", "Canonical conditional model projection; not global, manual, Tier or merge acceptance.",
-                "source_cleanliness", "Tracked and ordinary untracked files checked before and after generation.")).getAsJsonObject();
+                "source_cleanliness", checkOnly ? "Working-tree verification; no clean-source artifact claim."
+                        : "Tracked and ordinary untracked files checked before and after generation.")).getAsJsonObject();
         for (String name : List.of("source_revision", "source_state", "authority_sha256", "authority_snapshot_sha256",
                 "authority_sources_sha256", "implementation_sha256", "implementation_state", "implementation_hashes",
                 "implementation_unresolved", "implementation_source_sha256", "implementation_source_hashes",
@@ -100,7 +99,11 @@ public final class DashboardExport {
         provenance.add("asset_manifest", JSON.toJsonTree(Map.of("source_path", ASSETS,
                 "sha256", AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(ASSETS))),
                 "scope", "Historical source-bound inventory, not current visual acceptance.")));
-        files.put("provenance.json", DashboardProjection.json(provenance).getBytes(StandardCharsets.UTF_8));
+        files.put("provenance.json", DashboardProjection.json(provenance, result).getBytes(StandardCharsets.UTF_8));
+        if (checkOnly) {
+            System.out.println("DASHBOARD PROJECTION: " + assertions + " passed; no artifact or acceptance claim.");
+            return;
+        }
         requireClean(root, revision);
         Path output = output(root, Path.of(args[1]));
         try (var children = Files.list(output)) {

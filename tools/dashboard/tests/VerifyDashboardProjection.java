@@ -127,6 +127,11 @@ public final class VerifyDashboardProjection {
                         metadata == null ? null : lower(metadata.sideStreamClass()),
                         nullableString(output.get("declared_side_stream_class")));
                 eq("no invented output role " + route.id(), declared == null, output.get("role").isJsonNull());
+                eq("exact approved presentation role " + route.id(), declared == null ? null : switch (declared) {
+                    case PRIMARY -> "primary";
+                    case SIDE_STREAM -> "byproduct";
+                    case DISCHARGED -> "discharged";
+                }, nullableString(output.get("role")));
                 eq("actual discharge " + route.id(), route.discharged().contains(resource), output.get("discharged").getAsBoolean());
             }
         }
@@ -221,6 +226,59 @@ public final class VerifyDashboardProjection {
         }
         eq("null stays null", JsonNull.INSTANCE, exact.get("unknown"));
         eq("serialization does not mutate numeric input", true, extremes.get("long_max").getAsJsonPrimitive().isNumber());
+        JsonObject declarations = new JsonObject();
+        result.authorities().inputHashes().forEach((key, hash) -> {
+            if (key.startsWith("registry_declaration:")) declarations.addProperty(key, hash);
+        });
+        eq("canonical Java declaration example exists", true,
+                declarations.has("registry_declaration:item:grindless:slag@ModItems.SLAG"));
+        JsonObject publicSources = new JsonObject();
+        publicSources.add("input_hashes", declarations);
+        publicSources.add("registry_binding_hashes", declarations.deepCopy());
+        DashboardProjection.requirePublic(publicSources, result);
+        assertions++;
+        eq("serialization preserves every canonical declaration key and digest", publicSources,
+                JsonParser.parseString(DashboardProjection.json(publicSources, result)));
+        boolean misplacedDeclarationRejected = false;
+        try {
+            DashboardProjection.requirePublic(declarations, result);
+        } catch (IllegalArgumentException expected) {
+            misplacedDeclarationRejected = true;
+        }
+        eq("declaration grammar is exempt only in canonical source-name maps", true, misplacedDeclarationRejected);
+        JsonObject privateSourceName = new JsonObject();
+        privateSourceName.addProperty("registry_declaration:item:grindless:slag@fixture.example", "public_digest");
+        JsonObject privateSources = new JsonObject();
+        privateSources.add("input_hashes", privateSourceName);
+        boolean contactInSourceNameRejected = false;
+        try {
+            DashboardProjection.requirePublic(privateSources, result);
+        } catch (IllegalArgumentException expected) {
+            contactInSourceNameRejected = true;
+        }
+        eq("source-name exception does not admit contact domains", true, contactInSourceNameRejected);
+        privateSourceName.remove("registry_declaration:item:grindless:slag@fixture.example");
+        privateSourceName.addProperty("registry_declaration:item:grindless:fixture_unregistered@ModItems.SLAG", "public_digest");
+        boolean undeclaredReferenceRejected = false;
+        try {
+            DashboardProjection.requirePublic(privateSources, result);
+        } catch (IllegalArgumentException expected) {
+            undeclaredReferenceRejected = true;
+        }
+        eq("a Java-shaped declaration absent from the actual Result is not exempt", true, undeclaredReferenceRejected);
+        privateSourceName.remove("registry_declaration:item:grindless:fixture_unregistered@ModItems.SLAG");
+        privateSourceName.addProperty("registry_declaration:item:grindless:fixture@outlook.com", "public_digest");
+        eq("an external domain cannot masquerade as a declarator", true, rejectsPrivate(privateSources, result));
+        JsonObject changedHash = publicSources.deepCopy();
+        changedHash.getAsJsonObject("input_hashes").addProperty(
+                "registry_declaration:item:grindless:slag@ModItems.SLAG", "0".repeat(64));
+        eq("an altered canonical declaration hash is not exempt", true, rejectsPrivate(changedHash, result));
+        JsonObject misplacedValue = new JsonObject();
+        misplacedValue.addProperty("reference", "registry_declaration:item:grindless:slag@ModItems.SLAG");
+        eq("the same declaration string is not exempt as a value", true, rejectsPrivate(misplacedValue, result));
+        JsonObject misplacedMap = new JsonObject();
+        misplacedMap.add("unrelated", publicSources.deepCopy());
+        eq("an unrelated same-named nested map is not exempt", true, rejectsPrivate(misplacedMap, result));
         for (String privateValue : Set.of("C:\\Users\\private\\example", "/home/private/example",
                 "fixture@example.invalid", "Bearer fixture-credential", "password=fixture-not-a-secret",
                 "[12:34:56] fixture raw log", "https://fixture:credential@example.invalid/repository")) {
@@ -233,6 +291,15 @@ public final class VerifyDashboardProjection {
             eq("private fixture rejected without publishing it", true, rejected);
         }
         return assertions - before;
+    }
+
+    private static boolean rejectsPrivate(JsonElement value, SustainabilityAudit.Result result) {
+        try {
+            DashboardProjection.requirePublic(value, result);
+            return false;
+        } catch (IllegalArgumentException expected) {
+            return true;
+        }
     }
 
     private static void insulatorRoles(SustainabilityAudit.Result result, JsonObject data, String scenario) {

@@ -9,11 +9,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -32,6 +34,9 @@ public final class DashboardProjection {
                     + "|\\b(?:password|token|secret|api[_ -]?key)\\s*[:=]\\s*\\S+"
                     + "|\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b"
                     + "|https?://[^/\\s]+@|(?:^|\\n)\\s*(?:at [\\w.$]+\\(|Caused by:|\\[\\d{2}:\\d{2}:\\d{2}\\]))");
+    private static final Pattern DECLARATION_FIELD = Pattern.compile(
+            "registry_declaration:item(?:\\[blocks\\])?:grindless:[a-z0-9_./-]+@"
+                    + "(?:Mod(?:Items|Blocks)\\.[A-Z][A-Z0-9_]*|SupplyCatalogue\\.entries/[a-z0-9_]+)");
 
     private DashboardProjection() {
     }
@@ -87,23 +92,61 @@ public final class DashboardProjection {
 
     /** Serializes exact Java integers as strings only where JavaScript would otherwise round them. */
     public static String json(JsonObject document) {
+        return json(document, Map.of());
+    }
+
+    /** Preserves verified declaration field names in a canonical report's source-hash maps. */
+    public static String json(JsonObject document, SustainabilityAudit.Result result) {
+        return json(document, declarations(result));
+    }
+
+    private static String json(JsonObject document, Map<String, String> declarations) {
         JsonObject exact = exactNumbers(document).getAsJsonObject();
-        requirePublic(exact);
+        requirePublic(exact, "$", declarations);
         return JSON.toJson(exact) + "\n";
     }
 
     /** Rejects private output rather than silently replacing a canonical identity or quantity. */
     public static void requirePublic(JsonElement value) {
+        requirePublic(value, "$", Map.of());
+    }
+
+    /** Checks all values while recognizing only source names verified by this result. */
+    public static void requirePublic(JsonElement value, SustainabilityAudit.Result result) {
+        requirePublic(value, "$", declarations(result));
+    }
+
+    private static Map<String, String> declarations(SustainabilityAudit.Result result) {
+        Map<String, String> declarations = new TreeMap<>();
+        result.authorities().inputHashes().forEach((key, hash) -> {
+            if (DECLARATION_FIELD.matcher(key).matches() && AuthorityAdapters.sha256(
+                    key.substring("registry_declaration:".length()).getBytes(StandardCharsets.UTF_8)).equals(hash)) {
+                declarations.put(key, hash);
+            }
+        });
+        return declarations;
+    }
+
+    private static void requirePublic(JsonElement value, String location, Map<String, String> declarations) {
         if (value.isJsonObject()) {
             value.getAsJsonObject().entrySet().forEach(entry -> {
-                requirePublic(new JsonPrimitive(entry.getKey()));
-                requirePublic(entry.getValue());
+                boolean declaration = (location.equals("$.input_hashes") || location.equals("$.registry_binding_hashes"))
+                        && declarations.containsKey(entry.getKey()) && entry.getValue().isJsonPrimitive()
+                        && entry.getValue().getAsJsonPrimitive().isString()
+                        && declarations.get(entry.getKey()).equals(entry.getValue().getAsString());
+                // Only the checked Java-reference separator is not an email address; emitted keys stay unchanged.
+                requirePublic(new JsonPrimitive(declaration ? entry.getKey().replace('@', '#') : entry.getKey()),
+                        location + " (field name)", declarations);
+                requirePublic(entry.getValue(), location + "." + entry.getKey(), declarations);
             });
         } else if (value.isJsonArray()) {
-            value.getAsJsonArray().forEach(DashboardProjection::requirePublic);
+            for (int index = 0; index < value.getAsJsonArray().size(); index++) {
+                requirePublic(value.getAsJsonArray().get(index), location + "[" + index + "]", declarations);
+            }
         } else if (value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()
                 && PRIVATE.matcher(value.getAsString()).find()) {
-            throw new IllegalArgumentException("Public dashboard output contains a private path, credential, contact or raw log.");
+            throw new IllegalArgumentException("Public dashboard output contains a private path, credential, contact or raw log at "
+                    + location + ".");
         }
     }
 
