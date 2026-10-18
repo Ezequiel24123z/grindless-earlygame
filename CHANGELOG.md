@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Guidance execution-provenance gap closed in source.** Guidance generation/checking
+  now shares the normal export's implementation identities and projector-class hashes in
+  its sidecar, independently of the stable declaration-content fingerprint. The same
+  reviewer closed the P2; counterexamples are prepared but not executed. Runtime payload,
+  declarations and acceptance boundaries are unchanged; real generation is still pending.
 - **Official check runner handles real JDK diagnostics.** The paired runners validate
   exit0 and exactly one real JDK17 version while retaining both output streams; WinPS
   no longer treats the JAVA_TOOL_OPTIONS banner as a fatal version-probe error. The32-case

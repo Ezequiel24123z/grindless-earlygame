@@ -8,7 +8,13 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidance;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceJson;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -291,6 +297,134 @@ public final class VerifyDashboardProjection {
             eq("private fixture rejected without publishing it", true, rejected);
         }
         return assertions - before;
+    }
+
+    /** Real sidecar parity and in-memory counterexamples; no synthetic declaration asset is written. */
+    static int guidanceProvenance(Path root, ResourceGuidance.Document declarations, JsonObject audit,
+                                  JsonObject provenance, Map<String, String> projectors) throws IOException {
+        int before = assertions;
+        String payload = ResourceGuidanceJson.write(declarations);
+        executionIdentity(audit, provenance, projectors);
+        eq("sidecar identifies the unchanged declaration content", declarations.contentSha256(),
+                provenance.get("declaration_content_sha256").getAsString());
+        eq("runtime shape contains only declarations", Set.of("schema_version", "content_sha256", "resources"),
+                JsonParser.parseString(payload).getAsJsonObject().keySet());
+        String javaPackage = "io/github/ezequiel24123z/grindless/sustainability/";
+        for (String type : List.of("T0Sustainability", "SustainabilityAudit")) {
+            eq("executed implementation bytes are attributed: " + type, true,
+                    provenance.getAsJsonObject("implementation_hashes").has(javaPackage + type + ".class"));
+            eq("implementation source is attributed: " + type, true,
+                    provenance.getAsJsonObject("implementation_source_hashes").keySet().stream()
+                            .anyMatch(path -> path.endsWith("/" + type + ".java")));
+        }
+        for (String type : List.of("DashboardProjection", "DashboardProjection$Context", "DashboardProjection$1")) {
+            eq("normal projector bytes are retained: " + type, true,
+                    provenance.getAsJsonObject("projector_class_hashes").has(javaPackage + type + ".class"));
+        }
+        Map<String, String> helpers = new LinkedHashMap<>();
+        for (String type : List.of("VerifySustainability", "VerifySustainabilityAdapters", "VerifySustainabilityRegistry",
+                "VerifySustainabilityT0", "VerifyResourceGuidance")) {
+            helpers.put("tools/checks/" + type + ".java", type);
+        }
+        helpers.put("tools/dashboard/DashboardExport.java", "DashboardExport");
+        helpers.put("tools/dashboard/tests/VerifyDashboardProjection.java", "VerifyDashboardProjection");
+        for (var helper : helpers.entrySet()) {
+            eq("every selected bootstrap source has its actual Root bytes: " + helper.getKey(),
+                    AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(helper.getKey()))),
+                    provenance.getAsJsonObject("tool_source_hashes").get(helper.getKey()).getAsString());
+            eq("every compiled bootstrap helper is attributed: " + helper.getValue(), true,
+                    provenance.getAsJsonObject("tool_class_directory_hashes").has(javaPackage + helper.getValue() + ".class"));
+        }
+        for (String map : List.of("guidance_source_hashes", "guidance_class_hashes")) {
+            eq("prepared-guidance helper attribution is not replaced by implementation attribution: " + map,
+                    true, provenance.getAsJsonObject(map).size() > 0);
+        }
+        for (String forbidden : List.of("summary", "active_t0_conditional_gate", "sustainability_pass",
+                "ratchet_pass", "tiers", "entry_profile", "player_provided")) {
+            eq("execution selection does not copy unrelated audit field " + forbidden, false, provenance.has(forbidden));
+        }
+
+        JsonObject oldIncomplete = provenance.deepCopy();
+        implementationFields(audit).forEach(oldIncomplete::remove);
+        oldIncomplete.remove("projector_class_hashes");
+        boolean rejected = false;
+        try {
+            executionIdentity(audit, oldIncomplete, projectors);
+        } catch (AssertionError expected) {
+            rejected = true;
+        }
+        eq("the original P2 fails despite identical declaration digest", true, rejected);
+        eq("the original P2 kept the same declaration digest", provenance.get("declaration_content_sha256"),
+                oldIncomplete.get("declaration_content_sha256"));
+
+        for (String field : implementationFields(audit)) {
+            JsonObject changedAudit = audit.deepCopy();
+            JsonElement value = changedAudit.get(field);
+            if (value.isJsonObject()) {
+                value.getAsJsonObject().addProperty("fixture/new_helper_not_acceptance", "c".repeat(64));
+            } else if (value.isJsonArray()) {
+                value.getAsJsonArray().add("fixture_unresolved_not_acceptance");
+            } else {
+                changedAudit.addProperty(field, field.endsWith("_state") ? "fixture_changed_not_acceptance"
+                        : value.getAsString().equals("c".repeat(64)) ? "d".repeat(64) : "c".repeat(64));
+            }
+            JsonObject changed = provenance.deepCopy();
+            DashboardExport.executionProvenance(changed, changedAudit, projectors);
+            executionIdentity(changedAudit, changed, projectors);
+            eq("implementation change cannot alias the old complete provenance: " + field, false, changed.equals(provenance));
+            eq("implementation change leaves the declaration digest unchanged: " + field,
+                    provenance.get("declaration_content_sha256"), changed.get("declaration_content_sha256"));
+            eq("implementation change leaves the runtime bytes unchanged: " + field, payload, ResourceGuidanceJson.write(declarations));
+        }
+        Map<String, String> changedProjectors = new TreeMap<>(projectors);
+        changedProjectors.put(javaPackage + "DashboardProjection.class", "d".repeat(64));
+        changedProjectors.put(javaPackage + "DashboardProjection$Fixture.class", "e".repeat(64));
+        JsonObject changed = provenance.deepCopy();
+        DashboardExport.executionProvenance(changed, audit, changedProjectors);
+        executionIdentity(audit, changed, changedProjectors);
+        eq("changed/new projector bytes change complete provenance", false, changed.equals(provenance));
+        eq("projector change leaves the declaration digest unchanged",
+                provenance.get("declaration_content_sha256"), changed.get("declaration_content_sha256"));
+        eq("projector change leaves the runtime bytes unchanged", payload, ResourceGuidanceJson.write(declarations));
+        for (String missing : implementationFields(audit)) {
+            JsonObject incomplete = audit.deepCopy();
+            incomplete.remove(missing);
+            boolean refused = false;
+            try {
+                DashboardExport.executionProvenance(new JsonObject(), incomplete, projectors);
+            } catch (IllegalArgumentException expected) {
+                refused = true;
+            }
+            eq("missing execution field is not silently omitted: " + missing, true, refused);
+        }
+        boolean emptyProjectorsRefused = false;
+        try {
+            DashboardExport.executionProvenance(new JsonObject(), audit, Map.of());
+        } catch (IllegalArgumentException expected) {
+            emptyProjectorsRefused = true;
+        }
+        eq("an absent projector manifest is not an empty success", true, emptyProjectorsRefused);
+        JsonObject extendedAudit = audit.deepCopy();
+        extendedAudit.addProperty("implementation_fixture_extension", "fixture_not_acceptance");
+        JsonObject extended = provenance.deepCopy();
+        DashboardExport.executionProvenance(extended, extendedAudit, projectors);
+        executionIdentity(extendedAudit, extended, projectors);
+        eq("future implementation fields are not lost to a frozen name list",
+                extendedAudit.get("implementation_fixture_extension"), extended.get("implementation_fixture_extension"));
+        return assertions - before;
+    }
+
+    private static void executionIdentity(JsonObject audit, JsonObject provenance, Map<String, String> projectors) {
+        eq("all and only actual implementation identity fields", implementationFields(audit), implementationFields(provenance));
+        for (String field : implementationFields(audit)) {
+            eq("exact normal-report implementation provenance: " + field, audit.get(field), provenance.get(field));
+        }
+        eq("exact normal-export projector provenance", JSON.toJsonTree(projectors), provenance.get("projector_class_hashes"));
+    }
+
+    private static Set<String> implementationFields(JsonObject document) {
+        return document.keySet().stream().filter(field -> field.startsWith("implementation_"))
+                .collect(java.util.stream.Collectors.toCollection(TreeSet::new));
     }
 
     private static boolean rejectsPrivate(JsonElement value, SustainabilityAudit.Result result) {

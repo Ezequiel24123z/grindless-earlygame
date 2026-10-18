@@ -85,7 +85,11 @@ context. A separate source review found an open P2: the guidance sidecar lists s
 hashes but omits executed implementation identities such as T0Sustainability,
 SustainabilityAudit and DashboardProjection. The declaration fingerprint may correctly stay
 stable when unrelated implementation changes; the execution provenance must still change.
-Generation, compilation, drift checks and the same reviewer's correction recheck are pending.
+The same reviewer subsequently closed the P2 in the two-file correction: guidance provenance
+now shares complete `implementation_*` and `projector_class_hashes` with the normal export.
+Prepared counterexamples hold payload/hash stable while changing execution identities and
+reject omissions. That is a static closure, not execution. Generation, compilation and
+drift/Java checks remain pending; no runtime verdict was added to the declaration resource.
 
 [PR run39125286533](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39125286533)
 checks out temporary merge `7b72424a7d9793d1b22c4774e0bc9ed27db6b004`, not the reported PR

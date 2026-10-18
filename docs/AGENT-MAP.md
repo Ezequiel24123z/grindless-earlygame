@@ -351,8 +351,10 @@ runtime cache. `client/ResourceGuidanceClient` is the shared native formatter; F
 Field Guide, Atlas, machine and quest displays reuse those adapters.
 `tools/generate-resource-guidance.ps1`/`.sh` use the shared canonical exporter/bootstrap;
 `VerifyResourceGuidance` checks projection/runtime/drift boundaries. Real resource generation
-and compilation remain pending, as does complete executed-implementation provenance in its
-sidecar. Canonical Result metadata is the only declaration authority.
+and compilation remain pending. Its sidecar reuses complete implementation identities and
+projector-class hashes separately from the stable declaration fingerprint; do not omit
+executed helpers or copy acceptance flags into the runtime resource.
+Canonical Result metadata is the only declaration authority.
 Installed-client hover must not call the source-root
 `AuthorityAdapters` or invent an entry profile; generated fields are checked for drift.
 Actual recipe objects/amounts stay in the existing process/Atlas/JEI authorities. Guide

@@ -84,7 +84,7 @@ invalidated assumption or a genuine new property.
 | Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Reviewed through546c/01828 and composed. The same reviewer closed Root source-attribution P2;38 PS root-selection checks and a separate546c canonical export pass. cb0 retains its23 browser/16 HTTP scope. Combined export and new same-repository CI artifact step remain unexecuted; no retitled worker output. |
 | CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
 | Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
-| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` |26-file ADR-0143 implementation is preserved but uncompiled and ungenerated. Native readers now use compact player context. Open P2: sidecar provenance misses some executed implementation identities; the same reviewer must recheck the fix. No fake resource, catalogue/quantity copy or Tier verdict. |
+| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` | ADR-0143 implementation is preserved but uncompiled/ungenerated. Native readers use compact player context; the same reviewer closed the sidecar execution-provenance P2. Real generation/drift/Java/client evidence remains pending, with no fake resource or Tier verdict. |
 | Exosuit fixture / worker `2632f51f-8ae8-4e00-a5fb-694dca8c1987` | Reviewed source patch: one summon per tagged item, actual coherent observation and160 polls under the same120s runner. Retained diagnostics now use conditional say, not silent function data-get. Static25 contracts/12 mutations only; Java/native execution pending. No T1 gameplay expansion. |
 | T0 texture aliases / worker `9d32dd27-39b9-41fc-8d49-6af58856f904` | Root generator/asset-regression fix prepared for proven T0 double-prefix references. No JVM or regeneration yet; existing JSON remains broken until a staged, compared regeneration. Keep pixels/geometry/preview and the guidance worker's assets/lang untouched. |
 
@@ -130,8 +130,9 @@ composed and the combined export must establish its new identities.
 Local composition preserves the worker histories: quest merge `fe4e74e`, binder merge
 `91c10af`, then the dashboard tip `01828b9`. Resolve the containing dashboard integration
 commit from Git. Remote publication still requires the guarded normal fast-forward to both
-existing refs. The current hosted c760 runs must finish or be recorded honestly if replaced;
-the delayed740 notification does not describe the current head.
+existing refs. The verified ancestor4061 was published to both refs, deliberately excluding
+later local unvalidated guidance/assets/exosuit work; local history still contains4061
+and was not rewritten. The delayed740 notification does not describe the current head.
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and

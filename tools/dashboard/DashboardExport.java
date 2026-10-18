@@ -35,6 +35,8 @@ public final class DashboardExport {
     static final List<String> RUNTIME = List.of("index.html", "dashboard.css", "dashboard.js", "dashboard-model.js");
     static final Set<String> ARTIFACT = Set.of("index.html", "dashboard.css", "dashboard.js",
             "dashboard-model.js", "data.json", "provenance.json", "audit.json", "audit.md");
+    private static final Set<String> IMPLEMENTATION_FIELDS = Set.of("implementation_sha256", "implementation_state",
+            "implementation_hashes", "implementation_unresolved", "implementation_source_sha256", "implementation_source_hashes");
     private static final String ASSETS = "docs/assets/t0-asset-manifest.json";
     private static final Gson JSON = new GsonBuilder().serializeNulls().disableHtmlEscaping()
             .setPrettyPrinting().create();
@@ -97,15 +99,13 @@ public final class DashboardExport {
                 "source_cleanliness", checkOnly ? "Working-tree verification; no clean-source artifact claim."
                         : "Tracked and ordinary untracked files checked before and after generation.")).getAsJsonObject();
         for (String name : List.of("source_revision", "source_state", "authority_sha256", "authority_snapshot_sha256",
-                "authority_sources_sha256", "implementation_sha256", "implementation_state", "implementation_hashes",
-                "implementation_unresolved", "implementation_source_sha256", "implementation_source_hashes",
-                "tag_resolution_scope", "resolved_pack_hashes", "registry_binding_hashes", "registry_binding_conditions",
+                "authority_sources_sha256", "tag_resolution_scope", "resolved_pack_hashes", "registry_binding_hashes", "registry_binding_conditions",
                 "input_hashes", "mode", "summary", "active_t0_conditional_gate")) {
             provenance.add(name, JSON.toJsonTree(audit.get(name)));
         }
         provenance.add("tool_source_hashes", JSON.toJsonTree(toolSources(root)));
         provenance.add("tool_class_directory_hashes", JSON.toJsonTree(toolClasses(root)));
-        provenance.add("projector_class_hashes", JSON.toJsonTree(projectorClasses()));
+        executionProvenance(provenance, JSON.toJsonTree(audit).getAsJsonObject(), projectorClasses());
         provenance.add("asset_manifest", JSON.toJsonTree(Map.of("source_path", ASSETS,
                 "sha256", AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(ASSETS))),
                 "scope", "Historical source-bound inventory, not current visual acceptance.")));
@@ -173,11 +173,25 @@ public final class DashboardExport {
                 "tool_class_directory_hashes", toolClasses(root),
                 "guidance_source_hashes", guidanceSources(root),
                 "guidance_class_hashes", guidanceClasses())).getAsJsonObject();
+        JsonObject audit = JSON.toJsonTree(AuditReports.document(result, git(root, "rev-parse", "HEAD"), true)).getAsJsonObject();
+        Map<String, String> projectors = projectorClasses();
+        executionProvenance(provenance, audit, projectors);
+        assertions += VerifyDashboardProjection.guidanceProvenance(root, projection, audit, provenance, projectors);
         Path evidence = output(root, Path.of("build", "resource-guidance"));
         Files.writeString(evidence.resolve("provenance.json"), DashboardProjection.json(provenance), StandardCharsets.UTF_8);
         System.out.println("CANONICAL RESOURCE GUIDANCE: " + projection.resources().size() + " declarations; "
                 + assertions + " comparisons; SHA-256 " + projection.contentSha256());
         System.out.println("Prepared declarations only; not current-world, client, Survival or Tier acceptance.");
+    }
+
+    /** Shared lateral execution evidence; never part of the stable runtime declaration payload. */
+    static void executionProvenance(JsonObject provenance, JsonObject audit, Map<String, String> projectors) {
+        if (!audit.keySet().containsAll(IMPLEMENTATION_FIELDS) || projectors.isEmpty()) {
+            throw new IllegalArgumentException("Canonical implementation and projector provenance is incomplete.");
+        }
+        audit.entrySet().stream().filter(entry -> entry.getKey().startsWith("implementation_"))
+                .forEach(entry -> provenance.add(entry.getKey(), entry.getValue().deepCopy()));
+        provenance.add("projector_class_hashes", JSON.toJsonTree(projectors));
     }
 
     static JsonObject assets(Path root) throws IOException {
