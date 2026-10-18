@@ -54,6 +54,16 @@ Execution on the next clean pin remains pending. Earlier offline dependency/mapp
 and the failed suite remain in `build/guidance-validation/6d6610b-20261018T171000Z`.
 This is not a complete suite, clean-Git artifact, native client or Tier pass.
 
+The lookup correction on `a0097a84b91a6822fce92822b529c7352d8011a3` passes common/Forge
+compilation,25,484 guidance cases (including Matrix/default/invalid/NBT/CRLF),
+1,085 UI cases and Atlas. The unchanged Quest suite then fails because the revised guide
+omits the canonical plural `Relay Matrices`. One wording-only change restores that name
+without altering meaning, authority, expectations or the resource; Quest passes in the
+amended working tree. Its language-file SHA-256 is
+`dee8e5fcc02724a95d06bd567b241282254849ddf3c173790381057dcff51318`.
+Remaining integrated checks, CheckOnly/provenance and packaging are still pending on a
+new clean pin. The failed06 and amended06b attempts are separate, not a full a009 pass.
+
 On published `c760c4d219a35148b1d1fc5e5f4b6cc21eefb615`,
 [PR run39134798621](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134798621)
 and [push run39134794760](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134794760)

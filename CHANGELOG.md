@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Guidance Matrix identity checks pass on `a0097a8`.** Common/Forge compile,25,484 guidance
+  cases,1,085 UI cases and Atlas pass. The unchanged Quest check then caught a missing
+  canonical plural name in guide prose; the one-line wording correction preserves meaning
+  and passes that check in the amended tree. Remaining integration/packaging checks are
+  not relabeled as complete, and the canonical resource bytes remain unchanged.
 - **Matrix guidance keeps physical identity separate from lookup.** Ordinary ITEM quest
   context stays unrated; exact MATRIX context stays rated. A validated native default
   Matrix may use the same item's ordinary declaration only when no exact rated entry

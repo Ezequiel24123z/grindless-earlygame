@@ -249,7 +249,7 @@
     {
       "id": "canonical-resource-guidance",
       "task_id": "resource-communication",
-      "status": "canonical_resource_generated_matrix_lookup_fix_execution_pending",
+      "status": "matrix_guidance_checks_passed_final_integration_pending",
       "worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -260,7 +260,7 @@
       "precedent": "GT Modern v1.4.6/MC1.20.1 aa41aba: registered definitions to presence-sensitive tooltips, actual recipe objects to guide views; pattern-only LGPL3 reference, no imports",
       "review": "Same reviewer closed P2 after the shared sidecar seam retained complete implementation_* and projector_class_hashes separately from declaration content. Counterexamples prepared; real generation/compile/Java checks remain pending.",
       "evidence": "Exact6d generation and CheckOnly each4880 comparisons, common/Forge compile and real Root44 pass. Real68-entry resource generated; suite09 failed an incorrect relay ITEM rating1 expectation. Remaining suites stopped; no authority altered.",
-      "identity_decision": "ADR0143 lookup fix is prepared: ITEM relay0/MATRIX industrial2; physical identity retained, exact declaration first, same-item native default fallback only. Invalid/non-default/other-item data cannot borrow T0 context; identity/non-mutation/CRLF cases await execution.",
+      "identity_decision": "ADR0143 lookup/identity/non-mutation/CRLF cases pass within25484 guidance checks on a009. UI1085/Atlas and compile pass; unchanged Quest check found a missing canonical plural in prose, corrected without expectation/authority/resource changes. Final integration/packaging pending.",
       "stop_condition": "Coherent implementation for review with real generation pending if JVM-gated; no placeholder data, global docs edits, commits or publication"
     },
     {
