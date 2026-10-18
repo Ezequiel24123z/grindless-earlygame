@@ -13,6 +13,7 @@ import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.fluid.NativeFluidStore;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
+import io.github.ezequiel24123z.grindless.menu.MachineFluidView;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuHost;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
@@ -788,6 +789,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     private void syncData() {
         ProcessRecipe recipe = cached;
+        FluidState storedFluid = fluid.state();
         int cycle = recipe == null ? 1 : recipe.durationTicks();
         data.set(ProcessMachineMenu.DATA_ENERGY, (int) Math.min(Integer.MAX_VALUE, energy().getStored()));
         data.set(ProcessMachineMenu.DATA_CAPACITY, (int) Math.min(Integer.MAX_VALUE, energy().getCapacity()));
@@ -796,9 +798,12 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         data.set(ProcessMachineMenu.DATA_STATUS, display.shown().ordinal());
         data.set(ProcessMachineMenu.DATA_KIND, kind.menuKind().ordinal());
         data.set(ProcessMachineMenu.DATA_STRUCTURE, structureFault.ordinal());
-        data.set(ProcessMachineMenu.DATA_FLUID, fluid.state().millibuckets());
+        data.set(ProcessMachineMenu.DATA_FLUID, storedFluid.millibuckets());
         data.set(ProcessMachineMenu.DATA_FLUID_OUTPUT, fluidOutput);
         data.set(ProcessMachineMenu.DATA_SITE, siteFault.ordinal());
+        if (getLevel() != null && !getLevel().isClientSide()) {
+            data.set(ProcessMachineMenu.DATA_FLUID_IS_WATER, MachineFluidView.waterFlag(storedFluid));
+        }
     }
 
     @Override

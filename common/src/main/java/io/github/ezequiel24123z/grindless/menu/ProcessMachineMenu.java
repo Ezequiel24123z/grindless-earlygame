@@ -34,7 +34,8 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     public static final int DATA_FLUID = 7;
     public static final int DATA_FLUID_OUTPUT = 8;
     public static final int DATA_SITE = 9;
-    public static final int DATA_SIZE = 10;
+    public static final int DATA_FLUID_IS_WATER = 10;
+    public static final int DATA_SIZE = 11;
 
     private final MachineMenuHost host;
     private final ContainerData data;
@@ -125,13 +126,13 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     }
 
     /**
-     * Bootstrap's four water-only families use the existing synchronized amount/quota and
-     * the same capacity constant as their native buffer. This does not infer other fluid IDs.
+     * Bootstrap's water tanks use synchronized identity/amount/quota and their native capacity.
+     * Saved non-water contents remain visible with an unconfirmed identity.
      */
-    public Optional<MachineFluidView> waterView() {
+    public Optional<MachineFluidView> primaryFluidView() {
         return MachineMenuLayout.waterTank(kind()).map(tank ->
-                new MachineFluidView(FluidLogic.WATER, fluidAmount(), FluidLogic.MACHINE_CAPACITY,
-                        fluidOutputAmount()));
+                MachineFluidView.fromMenuData(data.get(DATA_FLUID_IS_WATER), fluidAmount(),
+                        FluidLogic.MACHINE_CAPACITY, fluidOutputAmount()));
     }
 
     public io.github.ezequiel24123z.grindless.source.SourceSite.Fault siteFault() {

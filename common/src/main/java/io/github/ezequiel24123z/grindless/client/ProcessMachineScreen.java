@@ -50,10 +50,11 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
         }
         MachineMenuLayout.waterTank(menu.kind()).ifPresent(tank -> {
             drawRecessed(graphics, x + tank.x(), y + tank.y(), tank.width(), tank.height());
-            menu.waterView().ifPresent(fluid -> {
+            menu.primaryFluidView().ifPresent(fluid -> {
                 int fill = fluid.fillHeight(tank.height() - 2);
-                if (fill > 0 && !FluidClientPlatform.draw(graphics, fluid.id(), x + tank.x() + 1,
-                        y + tank.y() + tank.height() - 1 - fill, tank.width() - 2, fill)) {
+                if (fill > 0 && !fluid.id().map(id -> FluidClientPlatform.draw(graphics, id,
+                        x + tank.x() + 1, y + tank.y() + tank.height() - 1 - fill,
+                        tank.width() - 2, fill)).orElse(false)) {
                     fluidAppearanceUnavailable = true;
                     graphics.drawString(font, "?", x + tank.x() + 6, y + tank.y() + 13, 0xAA0000, false);
                 }
@@ -102,7 +103,7 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
                 graphics.drawString(font, lines.get(index), MachineMenuLayout.STATUS_X, y, 0x404040, false);
             }
         }
-        menu.waterView().ifPresent(fluid -> graphics.drawString(font,
+        menu.primaryFluidView().ifPresent(fluid -> graphics.drawString(font,
                 Component.translatable("gui.grindless.fluid_amount", fluid.amount(), fluid.capacity()),
                 32, 16, 0x404040, false));
     }
@@ -143,17 +144,23 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
         MachineMenuLayout.waterTank(menu.kind()).ifPresent(tank -> {
             if (mouseX >= leftPos + tank.x() && mouseX < leftPos + tank.x() + tank.width()
                     && mouseY >= topPos + tank.y() && mouseY < topPos + tank.y() + tank.height()) {
-                menu.waterView().ifPresent(fluid -> {
+                menu.primaryFluidView().ifPresent(fluid -> {
                     var tooltip = new ArrayList<Component>();
-                    tooltip.add(FluidClientPlatform.name(fluid.id()));
+                    tooltip.add(fluid.id().map(FluidClientPlatform::name).orElseGet(() ->
+                            Component.translatable(fluid.amount() == 0
+                                    ? "gui.grindless.fluid_empty" : "gui.grindless.fluid_unknown")));
                     tooltip.add(Component.translatable("gui.grindless.fluid_amount",
                             fluid.amount(), fluid.capacity()));
                     if (menu.kind() == MachineMenuKind.SETTLING_TROUGH) {
                         tooltip.add(Component.translatable("gui.grindless.fluid_output_quota", fluid.outputQuota()));
                     }
-                    if (fluidAppearanceUnavailable) {
-                        tooltip.add(Component.translatable("gui.grindless.fluid_unavailable", fluid.id())
+                    if (fluid.amount() > 0 && fluid.id().isEmpty()) {
+                        tooltip.add(Component.translatable("gui.grindless.fluid_unknown_details")
                                 .withStyle(ChatFormatting.RED));
+                    } else if (fluidAppearanceUnavailable) {
+                        fluid.id().ifPresent(id -> tooltip.add(
+                                Component.translatable("gui.grindless.fluid_unavailable", id)
+                                        .withStyle(ChatFormatting.RED)));
                     }
                     graphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
                 });
