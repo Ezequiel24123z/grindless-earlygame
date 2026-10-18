@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Catalogue-backed Heracles integration composed through `9e0a94e` (ADR-0142).** The
+  registered book retains its fallback, while an existing framework displays the stable
+  per-player claim projection. The shared server service preserves physical-book access,
+  current evidence, prerequisites and single reward delivery; generated native rewards
+  remain empty. Owned definitions publish as one atomic ZIP with collision/tamper refusal.
+  The307 publisher-binary contracts pass at9e0; the unchanged lifecycle reuses the real
+  25-quest f106 boot within its recorded bounds. Both client pack profiles now select the
+  pinned launcher-managed backend; old delivered archives are untouched. The changed S2
+  source binding and complete composed build/export remain separate pending integration.
 - **Pre-ignition smoke accounting corrected in source.** The failed debd renewable run
   observed the initial coal before ignition but its oracle counted the whole12,800 FU as
   already generated. The revised fixture subtracts actual unburnt coal, rejects invalid

@@ -80,10 +80,11 @@
       "publisher": "Astra coordinator only; workers create local checkpoints"
     },
     "resource_window": {
-      "owner_session_id": "cc947b37-3c8f-4ec0-a495-f8d499c28378",
-      "scope": "One serial quest9e0 contract/real-loader recheck; dashboard released its JVMs and listener",
-      "next_worker_agent_id": "7e914b91-7c56-47f8-9ce0-d531343e068a",
-      "next_scope": "Separately granted targeted native oracle and observed first-fluids checks; no concurrent server",
+      "owner_session_id": "e2c2110f-b8f5-4d20-8e73-1a146e41c1a3",
+      "scope": "Small cross-root dashboard provenance fix/recheck; no native server",
+      "next_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
+      "next_scope": "Source-only checker3a9 against pinned Quest9e0 authority inputs",
+      "native_blocker": "1909MiB free commit below canonical2GiB server plus overhead; no local boot. Managed cloud Sandbox returned403 and created no validation evidence.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",
       "preservation": "Only the idle QA CLI was paused for memory; session/worktree/source/evidence remain intact. No global configuration change, archive or deletion."
@@ -277,7 +278,7 @@
     {
       "id": "quest-backend-integration",
       "task_id": "resource-communication",
-      "status": "local_native_boot_passed_atomic_bundle_recheck_pending",
+      "status": "composed_307_contracts_passed_combined_source_checks_pending",
       "worker_session_id": "cc947b37-3c8f-4ec0-a495-f8d499c28378",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -287,9 +288,9 @@
       "owned_files": ["quest claim/projection service and book/menu compatibility", "Forge optional Heracles integration", "quest checks", "coordinated dependency/version/pack changes"],
       "invariants": "No native/autoclaim reward duplication, no team-sharing change, no foreign data overwrite or new recipe/tier gate; actual binary API and licence verified",
       "dispatch_boundary": "Existing quest UI/engine adaptation; new catalogue content or gameplay changes need a separate decision",
-      "evidence": "f106 compile and254 pure contracts pass; one real boot loaded25 native quests with individual progress and no native rewards, then stopped cleanly. Earlier Bootstrap/malloc failures remain preserved. Atomic ZIP publication at4e81 and strengthened real-loader harness9e0 await execution/review.",
+      "evidence": "f106 compile/254 contracts and one real25-quest boot pass. Exact9e0 passes307 publisher-binary contracts including five loader calls from empty maps, ZIP/Quest.CODEC and failure/retry/collision coverage; no code changed during run. Earlier failures retained; no second Forge boot or human save/client claim.",
       "migration_boundary": "No automatic adoption/conversion/deletion of unpublished loose f106 definitions; visible refusal and preservation of legacy/foreign collisions. Catalogue/book/claim ledger unchanged.",
-      "reuse_boundary": "Reuse the unchanged f106 binding/lifecycle boot only after actual published ZIP loader plus Quest.CODEC and real failure/retry checks pass; no client or human-save acceptance"
+      "reuse_boundary": "9e0 satisfies the condition for f106 binding/lifecycle reuse; combined source rebind/build/export remain separate and no client or human-save acceptance follows"
     },
     {
       "id": "t0-ui-jei-feedback",
@@ -356,7 +357,7 @@
       },
       "annotation_scope": "Approved T0 source/workshop chains only; R0 claims must be proved, construction requires A, no roots inferred from registration. Slag has potential future use, explicit unknown first-use placement and ordinary disposal, not an invented T0 consumer/automated void sink. Actual environment/manual-labour facts do not grant availability or budgets.",
       "model_review": "dba3993 closes all five6c9counterexamples: simultaneous claim requirements, absent-ledger safety, executed objective scope, rule-specific tier context and first-use exception. Source/certificate reviews also closed; red attempts remain preserved.",
-      "next_increment": "Prepare a closed-analysis claim binding for the actual QuestClaimService and legacy/Heracles sender-owned entrypoints at9e0; no AuditReports/model/catalogue/build edits or JVM before a separate grant",
+      "next_increment": "Local3a9a27bdab2d93a715f5969d3e5823994fedc3a1 prepares the closed AST claim binding for12 actual Quest9e0 authorities/31 methods,37 negative mutations and1 positive. Source-only compile/execution pending; no model/AuditReports/catalogue/build change.",
       "stop_condition": "Return coherent local source-bound increments and real closure findings; no invented kit, tier, terminal, waiver or public private-path leak; no remote publication or acceptance claims"
     },
     {

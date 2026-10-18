@@ -49,8 +49,10 @@ only for an uncovered property or changed assumption, using
 Product dependencies, held ports, required CI and genuine manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
 Real-client UI/JEI and audio repairs are integrated under ADR-0142, including the production
-bridge/states evidence on740. Local Heracles f106 has one real25-quest boot; its atomic
-bundle repair and dashboard real-data execution remain pending. Do not turn the deferred
+bridge/states evidence on740. The Heracles adapter is composed through9e0 with307 pure
+contracts and reuse of the real25-quest f106 boot. Changed-source binding and complete
+composed build/export remain pending; the dashboard's cross-root provenance fix is under
+recheck after its real-data browser/export pass. Do not turn the deferred
 T1 output screenshots into the next scope. The owner authorizes merge only after genuine T0 completion, followed
 by a portable Git handoff; existing acceptance and branch protection are unchanged.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and

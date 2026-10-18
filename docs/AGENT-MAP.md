@@ -305,6 +305,19 @@ acceptance switch. `ConstructionReserve` must prove shared custody, simultaneous
 requirements and real canonical exit production; the same Quest Book is held before claims.
 Refresh game-edge exports on composed source, serializing or isolating Minecraft log output.
 
+The optional quest UI follows `QuestBookItem` -> `QuestBackendPlatform` -> the Forge
+`quest/forge/QuestBackendPlatformImpl`. All claims, including legacy menu buttons and the
+sender-owned Heracles packet, delegate to common `QuestClaimService`; loader types stay out
+of common. `QuestProjection` derives stable IDs from `QuestCatalogue`. Forge's
+`HeraclesDefinitions`, `GrindlessClaimTask`, `HeraclesClaimProjection`, network and client
+widget own only the framework projection. Native completion means an existing legacy claim,
+not sticky possession; native rewards/autoclaim stay empty and progress stays individual.
+Definitions and their ownership proof share one atomically replaced archive; collisions,
+modified content and unpublished loose files are preserved/refused, never silently adopted.
+`VerifyQuestClaims` covers the service; `tools/quest-checks/VerifyHeracles.java`, through
+`:forge:verifyQuestBackend`, checks the actual selected codecs/loader, recovery and packets.
+Those pure contracts are not a Forge boot or human save/client acceptance.
+
 Stable asset readiness lives in `docs/assets/t0-asset-manifest.json`; `source_bound_readiness`
 is its complete current inventory, while legacy arrays preserve candidate descriptors.
 The worker inventoried existing source/state/model/icon/effect coverage, not approved art.

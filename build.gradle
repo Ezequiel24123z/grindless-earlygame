@@ -118,6 +118,14 @@ allprojects {
                 jei?.fileName != "jei-${rootProject.minecraft_version}-forge-${rootProject.jei_version}.jar") {
             throw new GradleException("Architectury/JEI pins do not match gradle.properties.")
         }
+        def heracles = dependencies.find { it.projectID == 845831 }
+        def resourceful = dependencies.find { it.projectID == 570073 }
+        if (heracles?.fileName != "Heracles-forge-${rootProject.minecraft_version}-${rootProject.heracles_version}.jar" ||
+                heracles?.fileID?.toString() != rootProject.heracles_curse_file ||
+                resourceful?.fileName != "resourcefullib-forge-${rootProject.minecraft_version}-${rootProject.resourcefullib_version}.jar" ||
+                resourceful?.fileID?.toString() != rootProject.resourcefullib_curse_file) {
+            throw new GradleException("Quest backend pins do not match gradle.properties.")
+        }
         [manifest: manifest, dependencies: dependencies, status: selected.status]
     }
 
@@ -128,7 +136,7 @@ allprojects {
             def expanded = resolveClientPack("expanded", readPackInputs())
             def preparation = resolveClientPack("preparation", readPackInputs())
             assert expanded.manifest.files.size() == readPackInputs().manifest.files.size()
-            assert preparation.manifest.files.collect { it.projectID }.toSet() == [419699, 238222].toSet()
+            assert preparation.manifest.files.collect { it.projectID }.toSet() == [419699, 238222, 845831, 570073].toSet()
             assert preparation.manifest.version == "${rootProject.pack_version}-preparation"
             def cases = [
                 [change: { it.manifest.version = rootProject.minecraft_version }, message: "root version differs"],
@@ -137,6 +145,10 @@ allprojects {
                 [change: { it.manifest.files.find { f -> f.projectID == 419699 }.fileID = -1 }, message: "verification metadata"],
                 [change: { it.metadata.files.find { f -> f.projectID == 419699 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
                 [change: { it.metadata.files.find { f -> f.projectID == 238222 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
+                [change: { it.manifest.files.find { f -> f.projectID == 845831 }.fileID = -1 }, message: "verification metadata"],
+                [change: { it.metadata.files.find { f -> f.projectID == 845831 }.fileName = "invalid" }, message: "Quest backend pins"],
+                [change: { it.metadata.files.find { f -> f.projectID == 570073 }.fileName = "invalid" }, message: "Quest backend pins"],
+                [change: { it.profiles.preparation.projectIDs = it.profiles.preparation.projectIDs.findAll { id -> id != 570073 } }, message: "Missing required project"],
                 [change: { it.metadata.files.find { f -> f.projectID == 238222 }.requiredProjectIDs = [-1] }, message: "Missing required project"],
                 [change: { it.profiles.preparation.projectIDs += -1 }, message: "missing or duplicate dependency pins"]
             ]

@@ -80,7 +80,7 @@ invalidated assumption or a genuine new property.
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
 | Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Both original `26c8c2e`/`b982b10` and updated `740ec84` preparation ZIPs are preserved and delivered. Real740 production-bridge probe and one canonical states run945/945 pass. No new client rendering, no-command, update-compatibility or Tier acceptance is inferred. |
-| Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Local `f106397`: compile,254 pure contracts and one real25-quest boot pass. Atomic owned-bundle repair `4e81fb4`, with strengthened harness `9e0a94e`, awaits its real-loader/failure-recovery recheck and integration review. No automatic adoption/deletion of unpublished loose definitions; no client/save acceptance. |
+| Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Composed through `9e0a94e`:307 pure contracts and five real ZIP-loader calls from empty maps pass; unchanged binding/lifecycle reuses the real25-quest f106 boot. The S2 checker/composed build-export remain next steps. No automatic loose-definition adoption/deletion or client/save acceptance. |
 | Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Worker reports real cb0 export:73,591 productive comparisons,23 browser checks and16 HTTP restrictions. Local source/artifact review and integration remain; earlier PS5/dependency/Loom/privacy-filter failures are preserved. Only explicit output-role overrides, with discharged and declared side-stream class separate. |
 | CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
 | Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
@@ -101,10 +101,13 @@ The revised renewable conservation equation accounts for the real remaining init
 Do not skip pre-ignition observations or credit synthetic oracle markers as production.
 The existing600/601 poll boundary still rejects a Dynamo that never ignites.
 
-**Resource custody:** dashboard has released its JVMs and listener8878; the9e0 quest recheck
-now owns the serial window. The native-fixture worker is next only after a separate grant.
+**Resource custody:** dashboard owns only its small cross-root provenance recheck;
+Quest9e0 completed and released its window. The native-fixture grant ended without a boot:
+only1909MiB commit margin was available.
+Managed cloud Sandbox provisioning also returned403, so neither path produced native evidence.
 S2 has finished its debd refresh and left no validation JVM. QA's idle CLI was deliberately paused
 to release memory, not archived or deleted; its worktree/source/logs remain intact.
+S2's source-only binding check is next.
 No new server is reserved. Keep native runs/Gradle and game-edge logging serial on this host.
 The implementation worker may inspect/code independently but must obtain a resource turn
 before Java. S2's exact debd refresh remains closed while its next bounded increment prepares
@@ -121,8 +124,10 @@ S2's larger unannotated inventory is not a regression in closure or a certificat
 and local worker results are in the validation ledger; the reviewed source-binding fixes and
 actual annotations are prerequisites for trusting its canonical verdict. No client/Survival
 or retained-world acceptance is recorded, and existing personal worlds remain untouched.
-The portable reference profile contains Grindless, required Architectury and optional JEI;
-the existing expanded pack remains separate. Do not repair VM drivers, invent a world/save
+The delivered740 reference profile contains Grindless, Architectury and JEI. Newly built
+profiles add the selected Heracles/ResourcefulLib interface and remain unaccepted integration
+previews; no new archive is implied by these edits. The expanded pack remains separate.
+Do not repair VM drivers, invent a world/save
 or call this pre-S2 bundle the final acceptance candidate. Packaging owns only `pack/`,
 the paired build-modpack tools and related checks; source pins remain coordinator-controlled.
 The shared `buildModpack`/`verifyModpack` tasks now live in root `build.gradle`; wrappers
@@ -155,10 +160,10 @@ Quest implementation is now assigned to `cc947b37-3c8f-4ec0-a495-f8d499c28378`.
 Selected adaptation: Heracles UI/task framework, with one Grindless task whose completion
 means the legacy per-player claim is recorded. Native reward minting is disabled for these
 generated quests; canonical catalogue and claim ledger remain authoritative. The published
-binary exposes a supported interactive widget API. The f106 boot is real, but the later
-atomic publication repair and full build/dependency/source-binding composition remain
-coordinated work. Reuse unchanged lifecycle evidence only after the actual ZIP loader path
-passes. Never replace the physical book, catalogue or claim ledger with a native reward API.
+binary exposes a supported interactive widget API. The f106 boot and307-contract9e0
+ZIP-loader/recovery recheck are real; the latter satisfies the agreed condition for lifecycle
+reuse. Composed build/dependency/source-binding evidence remains separate work.
+Never replace the physical book, catalogue or claim ledger with a native reward API.
 
 ## Publication and preservation
 

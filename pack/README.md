@@ -13,14 +13,16 @@ are required. Never include account files or personal launcher configuration in 
 ## Two profiles, one set of dependency pins
 
 The default **expanded** pack below keeps its existing convenience/performance role.
-The **preparation** profile contains only Grindless, its required Architectury API, and JEI
-for recipe-viewer observations. It deliberately excludes the expanded extras: these are not
-Grindless requirements or prerequisites for the standalone S2 evidence.
+The **preparation** profile contains Grindless, its required Architectury API, JEI for
+recipe-viewer observations, and the selected Heracles/ResourcefulLib quest interface.
+It deliberately excludes the expanded convenience extras: these are not Grindless
+requirements or prerequisites for the standalone S2 evidence. The quest integration is
+optional for Grindless itself; both current pack profiles include the selected backend.
 
 Both profiles select pins from `curseforge/manifest.json`; `profiles.json` selects project
 IDs, not alternative versions. `dependency-metadata.json` records independently checked
 file metadata and required-project edges, and builders reject a stale/missing record or a
-Minecraft/Forge/Architectury/JEI mismatch against `gradle.properties`.
+Minecraft/Forge/Architectury/JEI/quest-backend mismatch against `gradle.properties`.
 
 ## Included integrations
 
@@ -28,6 +30,7 @@ Minecraft/Forge/Architectury/JEI mismatch against `gradle.properties`.
 | --- | --- | --- |
 | Architectury API | Required Grindless platform runtime. | Required in both profiles. |
 | JEI | Shows vanilla data recipes plus Grindless's generated machine graph and the Research Terminal calibration. | Available immediately; it reveals recipes, not permissions. |
+| Heracles + ResourcefulLib | Existing quest UI with a catalogue-backed Grindless task/widget adapter. | Claims still require the physical Grindless book and server-validated evidence/prerequisites. Native rewards/autoclaim are disabled for generated Grindless quests. |
 | Jade | In-world machine and block information. | Available immediately. |
 | Sophisticated Backpacks | Portable, upgradable inventory. | Available immediately. |
 | FTB Essentials | `/home`, `/sethome`, `/back`, and practical single-player/server utilities. | Available immediately. |
@@ -75,15 +78,17 @@ The preparation filename includes `-preparation-<package-source-short-sha>`.
    Forge versions and the supplied mod set. No custom gameplay configuration is needed:
    this package uses mod defaults, not personal settings or diagnostic overrides.
 3. Launch to the title screen. Confirm Minecraft/Forge versions and that Mods lists
-   Grindless, Architectury and JEI. Report any startup error, or recipe-viewer text that is
+   Grindless, Architectury, JEI, Heracles and ResourcefulLib. Report any startup error, or recipe-viewer text that is
    missing/truncated, with the GUI scale. This is client preparation, not progression evidence.
 4. Only once the coordinator authorizes the candidate/route, create a **new ordinary
    Overworld Survival** world, cheats **OFF**, bonus chest **OFF**, default generation and
    structures enabled. Record its agreed creation settings. No save is bundled: no world
    has been generated or played as part of this package, and no smoke/diagnostic save is reused.
 
-The current reference preparation is **not post-S2 and not T0 accepted**. S2, canonical
-source/budget/quest reconciliation, the final guide and the physical exit remain pending.
+The previously delivered26c8/740 archives remain pre-S2 preparation; their provenance is
+not relabeled. Newly built preparation archives use their recorded source and remain
+**integration previews, not T0 acceptance**. S2 inventory/model engineering is established
+on debd, but changed-source reconciliation, final guidance and physical acceptance remain.
 Do not treat the optional two-iron Dynamo/Extractor as a guaranteed entry allocation.
 The eventual unique run uses only actual world supplies, no commands/creative/injection,
 and observes one physical craft of the first **five F1 Relay Matrices** plus the intended
@@ -91,10 +96,25 @@ T1 handoff, stopping before T1 machinery. No final route is invented here.
 Authentic retained-world compatibility is a separate, provenance-known copy plus a full
 save/exit/process-restart/reopen; a fresh world or serializer test cannot substitute for it.
 
+## Quest definitions and existing data
+
+The Grindless book opens its Heracles group when the compatible backend is present and
+ready; otherwise the registered legacy menu remains the fallback. The catalogue and
+per-player `grindless_quest_progress` ledger remain authoritative. Reconstructing the
+native projection never pays rewards again or shares individual progress through parties.
+
+Generated definitions and their ownership hashes are published together in the owned
+`config/heracles/quests/grindless.zip`. Existing foreign/modified definitions and colliding
+IDs are preserved and refused visibly, not overwritten. The unpublished development
+layout of loose JSON files is not automatically converted or deleted. Keep diagnostics
+and existing configuration intact; use a fresh isolated preview instance rather than
+attempting to repair a personal configuration by deleting files.
+
 ## Dependency provenance
 
 The manifest makes the launcher download each upstream file; it does not vendor their jars in this
 repository. Exact CurseForge project/file identifiers are pinned in `curseforge/manifest.json`.
-Their licences remain theirs: Architectury API (LGPL-3.0-only), JEI (MIT), Jade (LGPL-3.0), Sophisticated Backpacks and Core (ARR),
+Their licences remain theirs: Architectury API (LGPL-3.0-only), JEI (MIT),
+Heracles and ResourcefulLib (MIT), Jade (LGPL-3.0), Sophisticated Backpacks and Core (ARR),
 FTB Essentials/Chunks/Teams/Library (ARR), ModernFix (LGPL-3.0), FerriteCore (MIT), and Embeddium
 (LGPL-3.0). See the upstream project pages before redistributing a modified dependency.

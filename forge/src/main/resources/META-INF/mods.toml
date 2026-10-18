@@ -21,6 +21,13 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.grindless]]
+modId = "heracles"
+mandatory = false
+versionRange = "[${heracles_version}]"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.grindless]]
 modId = "architectury"
 mandatory = true
 versionRange = "[9.2.14,)"

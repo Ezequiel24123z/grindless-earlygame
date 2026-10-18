@@ -13,8 +13,9 @@ its committed tools.
 
 The first local client-pack manifest names launcher-managed dependency files but does **not** copy
 their jars, code or assets into this repository. The user receives each file directly through the
-CurseForge or Prism launcher. The reference preparation profile selects Architectury and
-JEI; the expanded profile retains the other integrations. Verified file hashes and required
+CurseForge or Prism launcher. The current reference preparation profile selects Architectury,
+JEI, Heracles and ResourcefulLib; the expanded profile retains the other integrations. The
+previously delivered26c8/740 archives are unchanged. Verified file hashes and required
 project edges are recorded in `pack/dependency-metadata.json`, not a second version selector.
 Their licences govern redistribution and modification of those files:
 
@@ -34,9 +35,9 @@ texture or asset import still needs its own full provenance entry below, before 
 
 ## Quest-backend dependency selection
 
-The following optional integration is being implemented under ADR-0142. It is not present
+The following optional integration is implemented under ADR-0142. It is not present
 in the previously delivered740ec84 preparation package. No upstream source, asset or jar
-is copied into Grindless's distribution by this selection; future pack references remain
+is copied into Grindless's distribution by this selection; current pack references remain
 launcher-managed.
 
 | Component | Exact artifact/provenance | Licence evidence |

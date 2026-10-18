@@ -81,9 +81,19 @@ The subsequent local `4e81fb4a703e15504529410b06a70a23298690ca` changes only def
 publication and its tests: one owned ZIP with internal manifest and atomic replacement.
 Its strengthened harness `9e0a94e` clears native fixture state before each real loader call,
 so an old last-good map cannot stand in for reading the archive. Application code is unchanged
-from4e81. These failure/retry/tampering/real-loader checks still require execution and review. Reuse
-the f106 binding/lifecycle boot only if those checks establish the changed loader path;
-do not relabel that boot as execution of4e81. No client or human save is validated.
+from4e81. The exact9e0 recheck now passes307 contracts in54s, including application/harness
+compilation and five `QuestHandler.load` calls from empty native maps. The actual ZIP loader
+plus Quest.CODEC, first/update publication, injected write failure, orphan/retry, ownership,
+tampering, collisions and foreign coexistence all pass. The reviewed changed path satisfies
+the recorded condition for reusing the unchanged f106 binding/lifecycle boot;307 contracts
+are not another Forge boot, client or human-save test. Environment limits were temporary
+and restored; no source changed during the run and no JVM/server remained afterward.
+
+The coordinator composes this source while preserving S2's Forge classpath-export task.
+The current old quest-source binding does not recognize the extracted service; its prepared
+checker3a9 increment is next, not a waived guard. Combined build/projection evidence remains
+pending until that source and the dashboard are composed. An initial merge command stopped
+before edits because Git lacked committer identity; retry used transient identity only.
 
 Dashboard checkpoints `90c6ba1`/`858abab` were initially unexecuted. The worker now reports
 real export on `cb0ff909f0ae041336b45e1bc18ef95b99b439e0`:73,591 productive comparisons,

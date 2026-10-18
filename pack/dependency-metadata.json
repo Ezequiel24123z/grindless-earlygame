@@ -8,6 +8,8 @@
   "files": [
     { "projectID": 419699, "fileID": 5137938, "fileName": "architectury-9.2.14-forge.jar", "sha1": "a52918a500ff421180a1cbd1a0cabee712134ec4", "bytes": 580602, "requiredProjectIDs": [], "licence": "LGPL-3.0-only" },
     { "projectID": 238222, "fileID": 8292131, "fileName": "jei-1.20.1-forge-15.20.0.132.jar", "sha1": "0da050b53b9904533cfd27039d612d986bc364c7", "bytes": 1409767, "requiredProjectIDs": [], "licence": "MIT" },
+    { "projectID": 845831, "fileID": 5406935, "fileName": "Heracles-forge-1.20.1-1.1.13.jar", "sha1": "ca6de15e1631ccbf5463fcf3df6d3ad37aa5d6e5", "bytes": 1420890, "requiredProjectIDs": [570073], "licence": "MIT", "bundled": [{"artifact": "earth.terrarium.hermes:hermes-forge-1.20", "version": "1.6.0", "licence": "MIT"}, {"artifact": "io.github.llamalad7:mixinextras-forge", "version": "0.2.1", "licence": "MIT"}] },
+    { "projectID": 570073, "fileID": 5659871, "fileName": "resourcefullib-forge-1.20.1-2.1.29.jar", "sha1": "6fc590a7c56a720fec57e290cbb0a106efbb3ffa", "bytes": 432753, "requiredProjectIDs": [], "licence": "MIT" },
     { "projectID": 324717, "fileID": 8479276, "fileName": "Jade-1.20.1-Forge-11.13.3.jar", "sha1": "d08e64e66521d69e083c8525f1fc507f1c202384", "bytes": 553487, "requiredProjectIDs": [], "licence": "LGPL-3.0" },
     { "projectID": 422301, "fileID": 9083935, "fileName": "sophisticatedbackpacks-1.20.1-3.26.9.2194.jar", "sha1": "e8e9e19257c2a161439ff6ba9119f720f09e39c9", "bytes": 1215726, "requiredProjectIDs": [618298], "licence": "All Rights Reserved" },
     { "projectID": 618298, "fileID": 9083873, "fileName": "sophisticatedcore-1.20.1-1.5.6.2378.jar", "sha1": "001be29eac9684d8aa8402e3d983146242ddf42d", "bytes": 1758791, "requiredProjectIDs": [], "licence": "All Rights Reserved" },
