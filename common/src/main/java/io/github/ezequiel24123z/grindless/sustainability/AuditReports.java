@@ -391,7 +391,8 @@ public final class AuditReports {
         Map<String, String> hashes = new TreeMap<>();
         snapshot.inputHashes().forEach((source, hash) -> {
             if (source.startsWith("registry_membership:") || source.startsWith("registration_source:")
-                    || source.startsWith("registry_profile:") || source.startsWith("registry_condition:")) {
+                    || source.startsWith("registry_profile:") || source.startsWith("registry_condition:")
+                    || source.startsWith("registry_declaration:")) {
                 hashes.put(source, hash);
             }
         });

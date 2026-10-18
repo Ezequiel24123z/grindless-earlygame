@@ -40,6 +40,7 @@ public final class VerifySustainabilityAdapters {
             debtCannotWaiveGeneratedDebt();
             tagComposition();
             registryEntriesAndRemovals();
+            checkedDeclarationInventory();
             canonicalInventory();
             reportRelationships();
             contentAndImplementationIdentity();
@@ -299,10 +300,10 @@ public final class VerifySustainabilityAdapters {
 
             Resource unknown = tag("grindless:fixture/unknown");
             authored.add(local(data, unknown,
-                    "{\"values\":[{\"id\":\"fixture:unknown\",\"required\":false}]}"));
+                    "{\"values\":[\"fixture:a\",{\"id\":\"fixture:unknown\",\"required\":false}]}"));
             resolution = new TagResolver(fixture, ordered(packs), registry).resolve(unknown);
-            eq("unbound optional element membership is not fabricated", Set.of(), resolution.members());
-            eq("unknown registry membership is not proven absence", false, resolution.complete());
+            eq("unbound optional membership is not fabricated beside a real member", Set.of(item("a")), resolution.members());
+            eq("unknown optional membership cannot certify a falsely complete singleton", false, resolution.complete());
             eq("the unbound registry element remains explicit", true,
                     resolution.unresolved().contains("registry_membership_unknown:item:fixture:unknown"));
 
@@ -342,6 +343,41 @@ public final class VerifySustainabilityAdapters {
         }
     }
 
+    private static void checkedDeclarationInventory() {
+        Resource declaredItem = item("checked_item");
+        Resource declaredBlock = new Resource(Kind.ITEM, "fixture:checked_block", 0, "blocks");
+        Map<Resource, String> declarations = Map.of(declaredItem, "fixture:checked_field",
+                declaredBlock, "fixture:provenance_is_not_code/register(\"ghost\")/\"base\"+suffix");
+        TagResolver.ElementLookup checked = new TagResolver.ElementLookup() {
+            @Override
+            public TagResolver.ElementStatus element(Resource resource) {
+                return TagResolver.ElementStatus.UNKNOWN;
+            }
+
+            @Override
+            public Map<Resource, String> declarations() {
+                return declarations;
+            }
+        };
+        Builder builder = new Builder().resource(item("catalogue_reference"));
+        AuthorityAdapters.contributeCheckedDeclarations(builder, checked);
+        Snapshot inventory = builder.build();
+        eq("checked inventory is exactly catalogue references plus verified declarations, without extras",
+                Set.of(item("catalogue_reference"), declaredItem, declaredBlock), inventory.resources());
+        eq("the inventory and tag lookup consume the same declaration set", declarations.keySet(),
+                checked.declarations().keySet());
+        eq("public declaration provenance is retained for every checked declaration", 2L,
+                inventory.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_declaration:")).count());
+        eq("an inventory reference is not a registry membership proof", TagResolver.ElementStatus.UNKNOWN,
+                checked.element(declaredItem));
+        Builder unbound = new Builder();
+        AuthorityAdapters.contributeCheckedDeclarations(unbound, ignored -> TagResolver.ElementStatus.UNKNOWN);
+        eq("unbound registration evidence does not invent prototype inventory", Set.of(), unbound.build().resources());
+        eq("unbound declaration inventory is an explicit finding, not a successful empty registry", true,
+                unbound.build().findings().stream()
+                        .anyMatch(finding -> finding.rule().equals("canonical_registration_inventory_unbound")));
+    }
+
     private static void canonicalInventory() throws IOException, InterruptedException {
         Path root = Path.of("").toAbsolutePath().normalize();
         CanonicalPack pack = CanonicalPack.resolved(root);
@@ -370,12 +406,14 @@ public final class VerifySustainabilityAdapters {
         Snapshot second = AuthorityAdapters.canonical(root, ignored -> TagResolver.ElementStatus.UNKNOWN);
         eq("canonical authority content is deterministic", AuditReports.authorityHash(first),
                 AuditReports.authorityHash(second));
-        eq("the full prototype item inventory is retained without assigning it a tier", true,
-                first.resources().contains(new Resource(Kind.ITEM, "grindless:survey_rocket")));
+        eq("unbound canonical tags do not supply registration declarations", 0L,
+                first.inputHashes().keySet().stream().filter(source -> source.startsWith("registry_declaration:")).count());
         eq("a block-only registration never invents a registered item", false,
                 first.resources().contains(new Resource(Kind.ITEM, "grindless:horizon_shell")));
-        eq("the block-only prototype remains in its actual registry", true,
+        eq("a block reference remains inventoried without being promoted to a checked registration", true,
                 first.resources().contains(new Resource(Kind.ITEM, "grindless:horizon_shell", 0, "blocks")));
+        eq("unbound canonical registration inventory remains explicitly incomplete", true,
+                first.findings().stream().anyMatch(finding -> finding.rule().equals("canonical_registration_inventory_unbound")));
         eq("resolved artifacts have real binary hashes", 2L, first.inputHashes().keySet().stream()
                 .filter(source -> source.startsWith("resolved_pack:")).count());
         eq("public authority identities never expose the private classpath", false,

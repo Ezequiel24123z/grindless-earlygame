@@ -88,7 +88,7 @@ public final class AuthorityAdapters {
         Builder builder = inventory(root, tags);
         pack.contribute(builder);
         elements.inputHashes().forEach(builder::input);
-        readRegistrations(root, builder);
+        contributeCheckedDeclarations(builder, elements);
         pendingDeclarations(builder);
         return builder.build();
     }
@@ -131,31 +131,18 @@ public final class AuthorityAdapters {
                 "No canonical vanilla transformation allowlist is authored by this unannotated inventory."));
     }
 
-    private static void readRegistrations(Path root, Builder builder) throws IOException {
-        Pattern literal = Pattern.compile("(?<![\\w$.])register\\s*\\(\\s*\"([a-z0-9_]+)\"");
-        Pattern blockOnly = Pattern.compile("\\bBLOCKS\\.register\\s*\\(\\s*\"([a-z0-9_]+)\"");
-        for (String name : List.of("ModItems", "ModBlocks")) {
-            Path relative = JAVA_ROOT.resolve(Path.of("io", "github", "ezequiel24123z", "grindless",
-                    "registry", name + ".java"));
-            byte[] bytes = Files.readAllBytes(root.resolve(relative));
-            String source = relative.toString().replace('\\', '/');
-            builder.input(source, sha256(bytes));
-            String code = new String(bytes, StandardCharsets.UTF_8)
-                    .replaceAll("(?s)/\\*.*?\\*/|//[^\\r\\n]*", " ");
-            Matcher entries = literal.matcher(code);
-            while (entries.find()) {
-                builder.resource(item("grindless:" + entries.group(1)));
-                if (name.equals("ModBlocks")) {
-                    builder.resource(new Resource(Kind.ITEM, "grindless:" + entries.group(1), 0, "blocks"));
-                }
-            }
-            if (name.equals("ModBlocks")) {
-                Matcher blocks = blockOnly.matcher(code);
-                while (blocks.find()) {
-                    builder.resource(new Resource(Kind.ITEM, "grindless:" + blocks.group(1), 0, "blocks"));
-                }
-            }
+    static void contributeCheckedDeclarations(Builder builder, TagResolver.ElementLookup elements) {
+        Map<Resource, String> declarations = elements.declarations();
+        if (declarations.isEmpty()) {
+            builder.finding(unknown("canonical_registration_inventory_unbound", "grindless",
+                    "No checked registration declaration inventory was supplied; source text and assets do not fill it."));
         }
+        declarations.forEach((resource, source) -> {
+            SustainabilityModel.requireText(source, "registration declaration provenance");
+            builder.resource(resource);
+            String identity = resource.key() + "@" + source;
+            builder.input("registry_declaration:" + identity, sha256(identity.getBytes(StandardCharsets.UTF_8)));
+        });
     }
 
     /** Returns the standalone material view, never adding synthetic fixture materials to it. */

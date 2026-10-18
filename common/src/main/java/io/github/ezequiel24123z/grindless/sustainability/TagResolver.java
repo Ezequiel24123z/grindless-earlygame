@@ -38,6 +38,11 @@ public final class TagResolver {
         default Map<String, String> inputHashes() {
             return Map.of();
         }
+
+        /** Verified declaration inventory and public provenance, not an inferred closed registry universe. */
+        default Map<Resource, String> declarations() {
+            return Map.of();
+        }
     }
 
     /**
