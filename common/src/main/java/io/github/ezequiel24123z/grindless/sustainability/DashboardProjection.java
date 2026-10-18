@@ -76,7 +76,7 @@ public final class DashboardProjection {
                                 "status", null, "source_commit", context.commit(), "evidence", null,
                                 "details", row("sustainability_pass", audit.get("sustainability_pass"),
                                         "ratchet_pass", audit.get("ratchet_pass"), "summary", audit.get("summary"),
-                                        "scope", "Missing future ledgers are unassessed, not accepted future gameplay.")))),
+                                        "scope", "Missing future ledgers are unassessed, not accepted future gameplay."))),
                 "ci", null, "manual_acceptance", null, "required_deliverables", null));
         for (String field : List.of("active_t0_conditional_gate", "summary", "tags", "terminals",
                 "closed_loops", "committed_plans", "cycle_balance_certificates", "debt")) {

@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$Root = (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent),
+    [string]$Root,
     [string]$Output = 'build\dashboard\site',
     [ValidateSet('local', 'pr', 'stable')][string]$Mode = 'local',
     [switch]$CheckOnly,
@@ -8,6 +8,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+if ([string]::IsNullOrWhiteSpace($Root)) {
+    $Root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+}
 $Root = (Resolve-Path -LiteralPath $Root).Path
 if (-not $env:JAVA_HOME) { throw 'Select JDK 17 with JAVA_HOME before exporting the dashboard.' }
 $java = Join-Path $env:JAVA_HOME 'bin\java.exe'
@@ -21,8 +24,14 @@ if ($Offline) { $gradleArgs += '--offline' }
 $gradleArgs += ':common:writeCheckClasspath'
 Push-Location $Root
 try {
-    & (Join-Path $Root 'gradlew.bat') @gradleArgs
-    if ($LASTEXITCODE -ne 0) { throw 'Gradle could not prepare the canonical dashboard classpath.' }
+    $previousJavaOptions = $env:JDK_JAVA_OPTIONS
+    try {
+        $env:JDK_JAVA_OPTIONS = ($previousJavaOptions + ' -Xmx256m -XX:ActiveProcessorCount=2').Trim()
+        & (Join-Path $Root 'gradlew.bat') @gradleArgs
+        if ($LASTEXITCODE -ne 0) { throw 'Gradle could not prepare the canonical dashboard classpath.' }
+    } finally {
+        $env:JDK_JAVA_OPTIONS = $previousJavaOptions
+    }
     $classpath = [IO.File]::ReadAllText((Join-Path $Root 'common\build\checks\runtime-classpath.txt')).Trim()
     if ([string]::IsNullOrWhiteSpace($classpath)) { throw 'Gradle exported an empty classpath.' }
     $out = Join-Path $Root ('build\dashboard-tools-' + [guid]::NewGuid().ToString('N'))

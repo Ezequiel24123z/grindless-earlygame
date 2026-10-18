@@ -18,8 +18,10 @@ saved-world compatibility.
 
 Select the existing JDK 17 through `JAVA_HOME`. The paired entry points use Gradle's
 `:common:writeCheckClasspath`, including its resolved standalone vanilla/Forge pack export.
-They do not scan dependency caches, install Node/Python, require global tools, or run Minecraft.
-Gradle uses a 768 MiB heap and two workers; the standalone JVM uses 256 MiB and two CPUs.
+They do not scan dependency caches, install Node/Python, require global tools, or start a
+Minecraft server or client. Gradle uses a 768 MiB heap, two workers and two CPUs. Its setup
+child JVMs are temporarily bounded to 256 MiB/two CPUs; the prior environment is restored
+after Gradle returns. The standalone check/export JVM also uses 256 MiB and two CPUs.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\tools\dashboard\export.ps1 -CheckOnly
@@ -237,6 +239,29 @@ that the repository's CI already runs it.
 
 Stop the test server when the bounded inspection is finished. No Forge smoke is required for
 these static renderer-only changes; they do not touch registration, loaders, game state or saves.
+
+## Canonical integration execution
+
+The source checkpoint `858ababf3ec4f8dae436c5083e492979389530d4` required the narrowly owned
+Windows/tooling and syntax repairs preserved with this entry before its first compiled check.
+The successful `-CheckOnly` invocation observed **74,841 projection assertions** against the
+actual canonical result, including document/JSON equality, non-mutation, exact large integers,
+privacy rejection, complete collection/reference/quantity comparisons and the insulator/grog
+insertion-order counterexample. This was working-tree verification, not a clean-source artifact
+or browser pass. Artifact and browser evidence must name their own exact source commit.
+
+Earlier attempts remain failed, not implied passes:
+
+| Attempt | Observed outcome |
+| --- | --- |
+| 1 | PowerShell 5 bound a default before `$PSScriptRoot` was available; moved root/artifact default calculation into each script body |
+| 2 | Offline Gradle preparation lacked resolved Minecraft inputs; no checks ran |
+| 3 | Normal dependency preparation reached Loom's `MERGE_MAPPING`, whose unbounded child JVM failed a 901,775,360-byte G1 native allocation; private crash evidence retained |
+| 4 | Bounding setup child JVMs allowed preparation to advance; compilation then exposed one extra projection parenthesis, repaired before the successful fifth invocation |
+
+Private attempt logs are retained only under ignored `build/validation/dashboard`; they are
+not public artifact files. No native server/client, survival, Tier, retained-world or merge
+acceptance is inferred. Bash execution remains unobserved on this Windows host.
 
 ## Historical renderer-only evidence and integration limits
 
