@@ -2,13 +2,79 @@
 
 ## Current reviewed integration
 
-S2 through `dba3993` is integrated after the original reviewers closed every assigned
-registry, cadence, physical-book, finite-custody and gate-scope finding. The original6c9
-counterexamples reproduced16 assertion failures including an NPE; the repair passes735
-model,232 adapter and295 T0 assertions with serial deterministic exact-source exports.
-Those worker identities are not relabeled as the new merge's identities: the composed
-source refresh is a separate pending step. The conditional gate still does not certify
-client/no-command/Tier or global future progression.
+S2 through `dba3993` is integrated and its composed refresh is complete on exact
+`debd3ae3015126b5efa3dd63b19fbc55a6655016`. The original reviewers closed every assigned
+registry, cadence, physical-book, finite-custody and gate-scope finding; the original6c9
+counterexamples retain their16 assertion failures including an NPE.
+
+The composed Windows refresh reuses its already successful common/check compilation and
+runs every JVM serially with256MiB heap/CPU2:735 model,232 adapter,1020 registry/source
+and295 conditional-T0 assertions pass. Two further independent T0 processes each pass295
+assertions. Direct byte comparison and hashes agree across all three JSON/Markdown exports.
+The earlier concurrent attempt remains failed: native-thread allocation, jimage.dll and
+G1 virtual-space failures, with both crash reports preserved. No failed log was overwritten.
+
+| Identity on `debd3ae` | SHA-256 |
+| --- | --- |
+| Conditional JSON | `a501f60598abea3e5360f652d6cc4dc16679e7ff36468dfe55a61b22f84ac5cf` |
+| Conditional Markdown | `663cade7fe2605ed719a1fb8ff25aecf1e526bc73149572bc658ff6d53fa8bf8` |
+| Authority content | `6150cfc42d873e03f203edf5e7c5db29878a47bd355cd0668a16bfa599f68a41` |
+| Authority source manifest | `7a9c0ca45b85eb7b69be037f31c6e84fd7f518e76f9fafa4918ba855de9e1ca7` |
+
+The normalized snapshot, executed implementation bytes/sources, entry profile, all tier
+results/findings/gate and resolved-pack hashes remain identical to `dba3993`. Seven source
+entries account for the composed UI/audio changes;573 hash entries were checked against
+tracked source. The inventory is1384 resources/474 routes/259 tags/25 objectives/11 terminals.
+The active conditional gate passes with no blocking findings or unmet obligations; global
+sustainability remains false with1739 unknowns,15 future unseeded-loop errors under absent
+later ledgers,0 warnings and0 debt. The sufficient33/41/21/20 entry bill and741/178/563
+action budget/use/margin are unchanged, not a minimum kit or player instructions.
+This proof does not cover the pending claim-service/dashboard changes, client, no-command,
+retained-world, physical craft, night/restart or Tier acceptance.
+
+## Current CI and projection increments
+
+[PR run39125286533](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39125286533)
+checks out temporary merge `7b72424a7d9793d1b22c4774e0bc9ed27db6b004`, not the reported PR
+head itself. GitHub's Git API and the local Git tree agree that its tree
+`54d8d05bf402c4428ff9d522bc0b0970c67ac216` is identical to `debd3ae`.
+The downloaded verification artifact records environment/build/behavior/documentation
+exit0, including the735 model plus1200 live-projection assertions. Shards1-5 pass; shard6
+fails `first-fluids` because `WATER-IN` is absent. The server did start and `CO-BURN` passed;
+the log alone does not establish the missing-water root cause.
+
+[Push run39125284389](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39125284389)
+on `debd3ae` also passes verification. Shards1/2/4/5/6 pass; shard3 fails `renewable-cycle`
+because `RENEWABLE-EXTERNAL-STARTUP-EXHAUSTED` is absent. Both complete runs remain failed,
+not combined into an artificial green matrix. Historical740 failures in `first-drill` and
+`first-exosuit` are separate evidence. CI recovery is assigned without an assumed common
+cause, timeout increase, removed assertion or gameplay waiver.
+
+Local quest source `f106397d7a90e1120c4b28ee085a5d124b206af4` passes Forge compilation and
+254 pure contracts against the selected binary, then one real dedicated-server boot:
+`Done` and `Heracles quest projection ready: 25 catalogue quests` at14:56:19, followed by
+clean shutdown. Native readiness checks loaded IDs/tasks/dependencies, individual progress
+and empty native rewards; it is not just a generated-file count. Boot log SHA-256:
+`620e9fef8bd53b183895f52d4904f6ff01fb1bf51500d2f80962e36fcccb13d8`;
+artifact SHA-256: `8626deac5a251fca300ad45f4fa5c382fbaf3d948fa6ec679dd9c57a14717f5d`.
+Earlier Forge-Bootstrap/classpath and native-malloc failures remain preserved.
+
+The subsequent local `4e81fb4a703e15504529410b06a70a23298690ca` changes only definition
+publication and its tests: one owned ZIP with internal manifest and atomic replacement.
+Its strengthened harness `9e0a94e` clears native fixture state before each real loader call,
+so an old last-good map cannot stand in for reading the archive. Application code is unchanged
+from4e81. These failure/retry/tampering/real-loader checks still require execution and review. Reuse
+the f106 binding/lifecycle boot only if those checks establish the changed loader path;
+do not relabel that boot as execution of4e81. No client or human save is validated.
+
+Dashboard checkpoints `90c6ba1`/`858abab` contain the real-result projection, export/serve
+twins and checks, but canonical execution/export/browser remain pending. A PS5 root-binding
+failure was repaired locally; missing offline Minecraft dependencies and a later Loom
+subprocess crash are preserved, not passing exports. The dashboard owns the current JVM
+window, with the quest bundle recheck queued. QA's idle CLI was paused for memory while
+its session, worktree and evidence were retained; do not restart it merely for a status read.
+
+## Reusable client integration
 
 On exact client source740ec84, the actual production jar passes the platform-bridge and
 payload probe. One canonical states invocation exits0 with945/945 patterns, no timeout

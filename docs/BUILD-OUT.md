@@ -11,7 +11,8 @@ queue.
 **Active tier: T0 Bootstrap; risk-based validation and reusable source-bound proof (ADR-0140).**
 S1 core is verified on unchanged `639881f`: all 36 suites and twelve repaired requirements
 pass, with deterministic source-bound reports. The earlier failed launcher remains history.
-The live audit is still report-only and unannotated, so this is not T0 sustainability closure.
+That S1 snapshot was report-only and unannotated. The later canonical S2 integration now
+passes its active conditional gate on `debd3ae`; global future progression remains unaccepted.
 The reviewed Bench-only checkpoint `092af299` is locally integrated with its
 34-suite pass; its initial capture failure is retained in the check ledger.
 
@@ -33,11 +34,13 @@ ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its R
 clarification does not require another server run. Downstream/core material evidence is
 not complete downstream power/autonomy or physical Matrix crafting acceptance.
 
-Next: close canonical T0 under ADR-0141 / PA-0005: S2 real authorities, classifications,
-formed construction, finite conditional establishment and the honest manual-exit witness.
-The local pack/registry checkpoint is under targeted review correction; it is not accepted
-canonical closure. Current documentation, client-profile preparation and stable asset
-inventory proceed independently. Freeze the post-S2 candidate and canonical entry/path
+Next: integrate canonical T0 projections under ADR-0141/0142. Reviewed S2 real authorities,
+classifications, formation and finite conditional establishment pass the exact `debd3ae`
+refresh with deterministic reports; that engineering result is not a played manual exit.
+Finish the real dashboard, the existing-framework quest adapter and shared player guidance.
+Diagnose the two current CI failures without weakening their conditions. Current
+documentation, client-profile preparation and stable asset work proceed independently.
+Freeze the post-S2 candidate and canonical entry/path
 before the one full no-command Survival acceptance. Player-facing coherence and production
 asset work follow the trustworthy contracts and observed feedback, not new T1-T15 breadth.
 Reuse the existing shared contracts; select new native/manual evidence
@@ -45,10 +48,10 @@ only for an uncovered property or changed assumption, using
 [the classification matrix](testing/test-strategy.md#outstanding-work-classification).
 Product dependencies, held ports, required CI and genuine manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
-Real-client feedback now has independent UI/JEI and audio implementation checkpoints under
-ADR-0142, with targeted QA and separate quest-backend/API/licence research. Do not wait for
-unrelated S2 work to repair presentation defects, or turn the deferred T1 output screenshots
-into the next scope. The owner authorizes merge only after genuine T0 completion, followed
+Real-client UI/JEI and audio repairs are integrated under ADR-0142, including the production
+bridge/states evidence on740. Local Heracles f106 has one real25-quest boot; its atomic
+bundle repair and dashboard real-data execution remain pending. Do not turn the deferred
+T1 output screenshots into the next scope. The owner authorizes merge only after genuine T0 completion, followed
 by a portable Git handoff; existing acceptance and branch protection are unchanged.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
@@ -73,12 +76,12 @@ data are required implementation, not substitutes for renewable gameplay.
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
 | renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | composed native contract and bounded renewable cycle verified; reuse their scopes, assess only remaining distinct factory/player/persistence properties |
-| production-inventory | Complete source-bound graph/craft/tag/objective export | S2 exports actual pack inputs and a larger local inventory; conservative registry binding and omitted physical authorities still under correction, not accepted |
-| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified; S2 local formation/normalizer increments and conditional-entry/manual-exit implementation in progress; annotations/live closure pending |
-| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |
+| production-inventory | Complete source-bound graph/craft/tag/objective export | complete on debd:1384 resources/474 routes/259 tags/25 objectives/11 terminals with source-bound deterministic refresh; later authority changes require affected rebinding |
+| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | reviewed conditional T0 model/gate passes on debd; global future unknowns remain explicit, not Tier or played acceptance |
+| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | UI/JEI/audio engineering integrated; selected quest backend and shared canonical guidance still in progress |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
-| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | incomplete; follows renderer/model |
-| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | current docs reconciled and isolated launcher profile prepared; no observed game window/world yet. Final candidate, physical exit, single Survival route and retained-world acceptance remain pending |
+| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | local Result projection/export/serve checkpoints exist; canonical execution, browser and CI artifact remain incomplete |
+| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | real-host exploratory Survival reported and740 preparation delivered; final candidate, current CI recovery, physical exit, whole no-command route and retained-world acceptance remain pending |
 | multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
 | multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |
 

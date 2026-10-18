@@ -3,7 +3,7 @@
   "schema_version": 1,
   "plan_revision": 7,
   "updated": "2026-10-18",
-  "phase": "canonical_t0_closure_and_player_feedback_implementation",
+  "phase": "canonical_t0_projection_integration_and_ci_recovery",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -78,6 +78,15 @@
       "portable_delivery": "Owner redirected blocked VM client work to a Prism-importable ZIP on the real host; b982b10 is authorized for preparation, not post-S2 acceptance",
       "breadth_limit": "No T1-T15 implementation expansion or port-stage dispatch before the existing T0 acceptance/dependencies permit it",
       "publisher": "Astra coordinator only; workers create local checkpoints"
+    },
+    "resource_window": {
+      "owner_session_id": "e2c2110f-b8f5-4d20-8e73-1a146e41c1a3",
+      "scope": "Dashboard Gradle and canonical JVMs in series; diagnose preserved startup failures before retry",
+      "next_session_id": "cc947b37-3c8f-4ec0-a495-f8d499c28378",
+      "next_scope": "One serial quest-bundle contract/real-loader recheck, no new server reserved",
+      "s2_validation_finished": true,
+      "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",
+      "preservation": "Only the idle QA CLI was paused for memory; session/worktree/source/evidence remain intact. No global configuration change, archive or deletion."
     },
     "coordination": "For this session, prioritize useful wall-clock throughput: run independent bounded implementation, review and read-only evidence concurrently when isolated or immutable; do not serialize safe work to conserve credits. Avoid redundant agents; serialize shared mutable files/input validation, Astra integration and the single publication."
   },
@@ -221,27 +230,57 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "S2 closes its finite data/model witness while independent UI/JEI and audio workers repair real-client feedback. QA uses immutable client checkpoints; quest-backend and audio-source research do not block immediate fixes. Keep T1 recipe-output investigation parked, preserve the original player save/ZIP, and retain genuine acceptance before the newly authorized future merge.",
+  "parallel_opportunity": "The exact debd S2 inventory/model checkpoint is closed. Finish dashboard projection and the selected quest adapter independently, with serialized JVM use on the constrained host; investigate current CI failures without weakening their assertions. Rebind affected sources when integrating the claim service and S3 seam. Keep T1 screenshots/ports held and real player/save acceptance separate.",
   "prepared_assignments": [
+    {
+      "id": "canonical-dashboard-data",
+      "task_id": "dashboard-integration",
+      "status": "local_projection_checkpoint_canonical_execution_pending",
+      "worker_session_id": "e2c2110f-b8f5-4d20-8e73-1a146e41c1a3",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "debd3ae3015126b5efa3dd63b19fbc55a6655016",
+      "local_checkpoints": ["90c6ba1c4f2f97e1d95a06d8e69ed573f4e5065a", "858ababf3ec4f8dae436c5083e492979389530d4"],
+      "owned_files": ["AuditReports.document/json seam", "canonical dashboard projection/export/local server", "paired dashboard tools and focused tests"],
+      "invariants": "Project Result, not prose; preserve exact quantities, unknowns and separate conditional/global verdicts. Output role comes only from an explicit route override; discharged and declared_side_stream_class stay separate. No private paths or synthetic fallback.",
+      "evidence": "PS5 root-binding repair is local; offline missing dependencies and Loom child-JVM crash preserved. No accepted canonical export/browser result yet.",
+      "stop_condition": "Return source-bound exhaustive projection evidence and a real-data browser result, or exact blockers; no remote publication or global build-file edits"
+    },
+    {
+      "id": "ci-smoke-recovery",
+      "task_id": "t0-integration",
+      "status": "read_only_diagnosis_in_progress_execution_capability_unavailable",
+      "worker_agent_id": "ff98bab0-0873-4cb4-bce0-fe71a92d35b6",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "debd3ae3015126b5efa3dd63b19fbc55a6655016",
+      "scope": "first-fluids/WATER-IN in PR run39125286533 and renewable-cycle/EXTERNAL-STARTUP-EXHAUSTED in push run39125284389",
+      "source_equivalence": "PR checkout7b72424 has the exact debd tree54d8d05bf402c4428ff9d522bc0b0970c67ac216; retain both actual checkout and reported head",
+      "capability_boundary": "The chosen specialist exposes read/search only. It cannot execute gh, edit or run Java; coordinator supplies exact CI artifacts and delegates any demonstrated fix to an implementation-capable worker.",
+      "invariants": "No removed marker, increased timeout, assumed flake, artificial combined green matrix or speculative runtime/ledger change",
+      "stop_condition": "Return verified causes or bounded missing evidence; no publication or ungranted JVM"
+    },
     {
       "id": "quest-backend-integration",
       "task_id": "resource-communication",
-      "status": "first_local_api_service_checkpoint_compiled_not_activated",
+      "status": "local_native_boot_passed_atomic_bundle_recheck_pending",
       "worker_session_id": "cc947b37-3c8f-4ec0-a495-f8d499c28378",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "740ec8492508d00c4980c85ada6209ecdb60a5e1",
-      "local_checkpoints": ["4c17fa2d291d1db6c45ddbc49cd1e03c5f95f57c"],
+      "local_checkpoints": ["4c17fa2d291d1db6c45ddbc49cd1e03c5f95f57c", "f106397d7a90e1120c4b28ee085a5d124b206af4", "4e81fb4a703e15504529410b06a70a23298690ca", "9e0a94ed86af4bb841de390a551997b57672f777"],
       "scope": "Heracles framework with one claim-task/widget adapter; task completion mirrors legacy claimed state, not sticky possession; catalogue/ledger and physical book are preserved",
       "owned_files": ["quest claim/projection service and book/menu compatibility", "Forge optional Heracles integration", "quest checks", "coordinated dependency/version/pack changes"],
       "invariants": "No native/autoclaim reward duplication, no team-sharing change, no foreign data overwrite or new recipe/tier gate; actual binary API and licence verified",
       "dispatch_boundary": "Existing quest UI/engine adaptation; new catalogue content or gameplay changes need a separate decision",
-      "evidence": "Actual Heracles/ResourcefulLib pins compile; Quest/QuestClaims124/Persistence pass. Backend activation, renderer/packet, owned generation and full validation remain."
+      "evidence": "f106 compile and254 pure contracts pass; one real boot loaded25 native quests with individual progress and no native rewards, then stopped cleanly. Earlier Bootstrap/malloc failures remain preserved. Atomic ZIP publication at4e81 and strengthened real-loader harness9e0 await execution/review.",
+      "migration_boundary": "No automatic adoption/conversion/deletion of unpublished loose f106 definitions; visible refusal and preservation of legacy/foreign collisions. Catalogue/book/claim ledger unchanged.",
+      "reuse_boundary": "Reuse the unchanged f106 binding/lifecycle boot only after actual published ZIP loader plus Quest.CODEC and real failure/retry checks pass; no client or human-save acceptance"
     },
     {
       "id": "t0-ui-jei-feedback",
       "task_id": "resource-communication",
-      "status": "integrated_engineering_qa_passed_production_probe_pending",
+      "status": "integrated_engineering_and_740_production_probe_passed_client_pending",
       "worker_session_id": "783b5107-d472-4600-a3c1-3e1f148ad172",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -275,13 +314,13 @@
         "audio_licences": "b9b5bc8d-510f-4dcb-9bae-158aa14c588e"
       },
       "scope": "Exact upstream UI/API patterns, compatible existing quest engines with safe per-player/claim migration, and verified audio-asset rights; no code/assets imported",
-      "decisions_reserved": "Astra selects backend and migration; QuestCatalogue/old claims/registered book identity and early item-free access are preserved"
+      "decisions_reserved": "Astra selects backend and migration; QuestCatalogue/old claims/registered book identity and actual physical-book access are preserved; no legacy item-free entrypoint was found"
     },
     {
       "id": "s2-canonical-closure",
       "task_id": "sustainability-model",
       "also_advances": ["production-inventory"],
-      "status": "reviewed_s2_integrated_composed_refresh_pending",
+      "status": "reviewed_s2_integrated_composed_refresh_passed",
       "worker_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -290,7 +329,17 @@
       "owned_files": ["common sustainability package", "VerifySustainability/Adapters/Registry and affected model checks", "common/build.gradle", "forge/build.gradle", "QuestCatalogue/VerifyQuest optional edge only", "minimal shared WorkshopStructure/ProcessMachineKind binding and related checks"],
       "local_checkpoints": ["cc3f11183da122e319341c81a1ba75aa8d656e69", "caa8095984ce0eed155ad0a88eee43555dba424d", "8ebd6343bf47b4f5c1c397eab58f3623a09295a2", "574488c6092ad13a755a59f0d9fe6804bda30862"],
       "current_scope": "Real pack/registry evidence, formed non-consumed requirements, existing-loop unit candidate, conditional entry and scoped manual work, nullable unknown route tiers, explicit automation/manual production goal, actual calibration and Hand Pump authorities",
-      "blocking_review": "Assigned registry/source/model/gate findings closed by their original reviewers throughdba3993. Integrated source still needs composed export/check refresh; no Tier acceptance.",
+      "blocking_review": "Assigned registry/source/model/gate findings closed by their original reviewers throughdba3993. Exact debd composed refresh passes; no Tier acceptance.",
+      "composed_evidence": {
+        "source_commit": "debd3ae3015126b5efa3dd63b19fbc55a6655016",
+        "assertions": {"model": 735, "adapters": 232, "registry": 1020, "t0_each_of_three_processes": 295},
+        "all_jvms_serial": true,
+        "json_sha256": "a501f60598abea3e5360f652d6cc4dc16679e7ff36468dfe55a61b22f84ac5cf",
+        "markdown_sha256": "663cade7fe2605ed719a1fb8ff25aecf1e526bc73149572bc658ff6d53fa8bf8",
+        "source_hash_entries_verified": 573,
+        "failures_preserved": "Earlier concurrent native-thread/jimage/G1 virtual-space failures and both crash reports",
+        "not_covered": "Pending ClaimService and S3 composition; native/client/Survival/retained-world/Tier acceptance"
+      },
       "annotation_scope": "Approved T0 source/workshop chains only; R0 claims must be proved, construction requires A, no roots inferred from registration. Slag has potential future use, explicit unknown first-use placement and ordinary disposal, not an invented T0 consumer/automated void sink. Actual environment/manual-labour facts do not grant availability or budgets.",
       "model_review": "dba3993 closes all five6c9counterexamples: simultaneous claim requirements, absent-ledger safety, executed objective scope, rule-specific tier context and first-use exception. Source/certificate reviews also closed; red attempts remain preserved.",
       "stop_condition": "Return coherent local source-bound increments and real closure findings; no invented kit, tier, terminal, waiver or public private-path leak; no remote publication or acceptance claims"
@@ -744,29 +793,31 @@
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {
-      "id": "production-inventory", "title": "Exporting the complete live inventory", "status": "in_progress", "depends_on": ["coordinator-receipt"],
+      "id": "production-inventory", "title": "Exporting the complete live inventory", "status": "done", "depends_on": ["coordinator-receipt"],
       "owner": "bounded extraction/export worker; Astra schema authority", "input_revision": "b012bc467df469522d1624e630f306cfd8d79842",
-      "next_action": "Pin agreed inputs and export real graph, crafts, supplies, tags and objectives; do not edit runtime quantities",
+      "result": "Reviewed canonical debd inventory:1384resources/474routes/259tags/25objectives/11terminals; exact-source deterministic three-process refresh and573 source-hash entries verified",
+      "next_action": "Reuse this source-bound inventory and refresh only affected authority/source bindings when integrating ClaimService and S3; never relabel old report identities",
       "validation_focus": ["static_data_authority_coverage_and_provenance", "reuse_S1_adapter_and_report_contracts", "one_representative_binding_proof_if_a_new_pack_adapter_requires_it"],
       "acceptance": ["Machine-readable output, not a summary", "ProcessGraph/SupplyCatalogue/local tags/BootstrapRecipes/T1Recipes/other authored JSON/quests covered", "Explicit environmental sources", "Source-bound counts and deterministic refresh after runtime changes"]
     },
     {
-      "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "in_progress", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
+      "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "done", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "design": "ADR-0135 accepted: typed loader-free annotations over live authorities, least-fixed-point availability/renewability, construction reserve, recycling rule, fingerprinted debt ratchet, generated reports",
-      "next_action": "Finish S2 under ADR0141: repair the canonical registry-binding findings, derive full formation and conditional entry/work budgets, author real T0 classifications/routes/handling and manual-exit semantics, then require the applicable active-scope model/ratchet to pass without invented facts. The optional quest edge is implemented; broader closure remains in progress.",
+      "result": "Reviewed ADR0141 conditional model/gate passes at exact debd with unchanged shared finite witness and zero blocking/unmet obligations. Global report remains false with explicit future unknowns; this closes model engineering, not Tier or human acceptance.",
+      "next_action": "Preserve the accepted model/proof and revalidate changed claim-service/source/projection seams during integration; do not waive future unknowns or existing manual/runtime gates",
       "validation_focus": ["static_data_classification_sources_tags_roots_budgets_handling", "shared_S1_contract_reuse", "affected_regressions_for_new_or_changed_invariants"],
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
     },
     {
-      "id": "resource-communication", "title": "Exposing canonical player guidance", "status": "pending", "depends_on": ["sustainability-model"],
+      "id": "resource-communication", "title": "Exposing canonical player guidance", "status": "in_progress", "depends_on": ["sustainability-model"],
       "owner": "bounded implementation/localization workers; Astra product review",
       "next_action": "Project classifications and handling into items, fluids/gases, JEI/Atlas, machines, quests and guide",
       "validation_focus": ["static_projection_localization_and_all_rows", "shared_UI_contracts", "representative_client_binding_not_each_content_instance"],
       "acceptance": "Consistent names/routes/handling/uncertainty; no duplicate quantities, fictional consumers or mandatory hoarding"
     },
     {
-      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "pending", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
+      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "in_progress", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
       "owner": "bounded integration workers; Astra schema and real-data review",
       "next_action": "Generate adjacent schema-1 data.json from canonical data/evidence; integrate local serving and PR CI artifact",
       "validation_focus": ["static_schema_provenance_and_data", "existing_renderer_contracts", "required_first_real_data_browser_integration"],

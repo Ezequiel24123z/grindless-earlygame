@@ -6476,8 +6476,8 @@ startup or acceptance on its own.
 
 ## ADR-0142 — T0 client feedback reuses native UI and existing quest infrastructure
 
-**Status.** Accepted direction, 2026-10-18; client checkpoints are under review and the quest
-backend is not selected merely by this record.
+**Status.** Accepted, 2026-10-18; client engineering is integrated and the selected quest
+adapter remains under integration review.
 
 **Context.** Real-player observations on the preparation client expose an invisible slot grid,
 overlapping Inventory/status text, textual JEI fluid lists and repetitive non-working-state
@@ -6509,7 +6509,7 @@ of the three T1 recipe-output screenshots and unconfirmed T1 crafting-complexity
   is independent: verify each asset's source/licence, not just the upstream code licence,
   before import. A compatible shortlist is not an import or an auditory acceptance result.
 - Evaluate an existing Forge 1.20.1 quest backend against the actual stable catalogue,
-  per-player claimed state, prerequisite/reward semantics and item-free early access.
+  per-player claimed state, prerequisite/reward semantics and actual physical-book access.
   Preserve existing book registration and old saved data; an item can bridge to a new UI.
   Generate definitions from `QuestCatalogue`, rather than hand-maintaining a second catalogue.
   No wholesale authority replacement, team-sharing behavior, raw save overwrite, duplicate
@@ -6536,6 +6536,22 @@ do not replace another pack's quests or raw progress file. Set individual progre
 retain the legacy fallback when the optional backend is absent. This is a narrow gameplay
 adapter to an existing framework, not a replacement custom quest engine. Dependency/API,
 projection and reward/migration checks precede activation and packaging.
+
+**Definition publication and recovery.** Publish generated definitions and their ownership
+proof as one owned archive through atomic replacement, not a sequence of loose JSON writes
+followed by a manifest. A failure before publication must leave either no published bundle
+or the prior complete bundle; retry must not adopt partial or foreign data. Refuse unsupported
+atomic replacement rather than silently falling back to a non-atomic move. Check collisions,
+member hashes and the real selected loader's filename/ZIP rules; temporary files are not quests.
+The loose25-JSON layout from unpublished local `f106397` exists only as development evidence:
+do not convert, adopt or delete it automatically. Preserve/refuse legacy collisions visibly,
+use fresh configuration for the new format and retain existing diagnostic files. This is not
+a user-save migration or permission to overwrite third-party quests.
+
+Under ADR-0140, the unchanged f106 registration/lifecycle boot may be reused only after the
+new format passes the published loader plus Quest.CODEC and real failure/retry tests.
+Codec-only serialization or file counts do not establish loader integration. Retained human
+worlds and client behavior remain independent gates.
 
 The selected artifact is Heracles 1.1.13, CurseForge845831/file5406935, with ResourcefulLib
 2.1.29/file5659871. Inspection of the actual jar establishes bundled Hermes1.6.0 and

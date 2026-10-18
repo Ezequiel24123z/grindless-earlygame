@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Composed S2 refresh closed on `debd3ae`.** Serial source-bound checks pass735 model,
+  232 adapter,1020 registry/source and295 conditional-T0 assertions; three independent
+  report processes produce identical bytes. New report identities are recorded without
+  relabeling the earlier worker exports. The native-thread/jimage/virtual-memory failures
+  remain preserved. Canonical inventory/model engineering is complete for that source,
+  not client, Survival, retained-world or Tier acceptance.
+- **Projection integration and CI recovery remain explicit.** The local Heracles adapter
+  `f106397` passes254 pure contracts and one real25-quest boot; its subsequent atomic-bundle
+  repair `4e81fb4` awaits execution/review. Unpublished loose definitions are never adopted
+  or deleted implicitly (ADR-0142). Dashboard `858abab` awaits canonical execution and
+  real-data browser review after preserved launch failures. Both CI runs for `debd3ae`
+  pass verification but fail distinct smoke scenarios; a bounded worker investigates them
+  without weakening markers or declaring them flakes.
 - **Reviewed S2 conditional model integrated through `dba3993`.** Real pack/registry and
   physical-source bindings, formation, finite shared custody, manual-first construction,
   executed-batch provenance and the active T0 gate now accompany the existing runtime.

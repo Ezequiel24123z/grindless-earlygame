@@ -74,12 +74,34 @@ invalidated assumption or a genuine new property.
 
 | Owner/session | Current checkpoint and boundary |
 | --- | --- |
-| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Integrated through `dba3993`; all assigned independent review findings are closed. The finite joint witness acquires the reusable Quest Book before claims. Worker model735/adapter232/T0295 and exact-source deterministic exports pass; composed-source refresh remains before closing this engineering task. Active conditional model is not Tier/player/global acceptance. |
-| UI/JEI / `783b5107-d472-4600-a3c1-3e1f148ad172` | Integrated through `d0b7256`: slot/catalyst fixes, complete layouts and native water. QA's long-text and loaded-lava counterexamples are repaired. Dev/QA1085 plus93 restoration assertions pass; production bridge/client rendering remain pending. Payload11 appends server-confirmed water identity; unknown nonempty contents remain visible. |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Integrated through `dba3993`; composed `debd3ae` refresh now passes735 model/232 adapter/1020 registry/295 T0 and three byte-identical report processes. All assigned reviews are closed. Canonical inventory/model engineering is complete for that source; pending claim-service/dashboard composition needs its affected regressions, not a Tier/player/global acceptance claim. |
+| UI/JEI / `783b5107-d472-4600-a3c1-3e1f148ad172` | Integrated through `d0b7256`: slot/catalyst fixes, complete layouts and native water. QA's long-text and loaded-lava counterexamples are repaired. Dev/QA1085 plus93 restoration assertions and the real740 production bridge/states pass; client rendering remains pending. Payload11 appends server-confirmed water identity; unknown nonempty contents remain visible. |
 | Audio / `b40a0c9d-0ed0-423c-a757-03a2297e7530` | Integrated `d42d0ba`/`ee6564c`: ordinary STARVED clicks/OUT_OF_BAND alarm removed, working effects and explicit pylon alert preserved. Common compile/source review pass; no imported sound or listening acceptance. |
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
 | Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Both original `26c8c2e`/`b982b10` and updated `740ec84` preparation ZIPs are preserved and delivered. Real740 production-bridge probe and one canonical states run945/945 pass. No new client rendering, no-command, update-compatibility or Tier acceptance is inferred. |
+| Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Local `f106397`: compile,254 pure contracts and one real25-quest boot pass. Atomic owned-bundle repair `4e81fb4`, with strengthened harness `9e0a94e`, awaits its real-loader/failure-recovery recheck and integration review. No automatic adoption/deletion of unpublished loose definitions; no client/save acceptance. |
+| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Local `90c6ba1`/`858abab` project Result through the reserved AuditReports seam; only explicit output-role overrides, with discharged and declared side-stream class separate. Canonical execution/export/browser still pending after preserved PS5/dependency/Loom failures. |
+| CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Investigates current `first-fluids` and `renewable-cycle` failures. The selected specialist exposes read/search only, so cannot edit or execute; no patch exists. An implementation-capable worker must handle a demonstrated fix. No speculative runtime change, weakened marker or ungranted JVM; Astra retains docs and Git integration. |
+
+The exact composed JSON is
+`a501f60598abea3e5360f652d6cc4dc16679e7ff36468dfe55a61b22f84ac5cf`;
+Markdown is `663cade7fe2605ed719a1fb8ff25aecf1e526bc73149572bc658ff6d53fa8bf8`.
+The active gate, finite witness and evaluated model identities are unchanged from dba;
+573 source-hash entries were verified. Preserve the eight previous exports and the initial
+native-thread/jimage/virtual-memory crashes. These new identities are not the old dba bytes.
+
+Both current CI runs remain red:39125286533 fails `first-fluids`/`WATER-IN`;
+39125284389 fails `renewable-cycle`/`RENEWABLE-EXTERNAL-STARTUP-EXHAUSTED`.
+Verification passes in both. The first is a PR merge checkout with a verified tree identical
+to debd, not an exact debd checkout. See the ledger for actual revisions and run links.
+Do not aggregate the two partial matrices into a pass or assume either failure is a flake.
+
+**Resource custody:** dashboard currently owns Gradle/JVM execution; the9e0 quest recheck
+is next. S2 has finished and left no validation JVM. QA's idle CLI was deliberately paused
+to release memory, not archived or deleted; its worktree/source/logs remain intact.
+No new server is reserved. Keep native runs/Gradle and game-edge logging serial on this host.
+The CI worker may inspect/code independently but must obtain a resource turn before Java.
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and
@@ -120,14 +142,16 @@ Read-only studies: GregTech UI `6a68e0e7-a078-4686-8824-3ec0abfd0889` confirms n
 patterns without a new widget framework; audio `b9b5bc8d-510f-4dcb-9bae-158aa14c588e`
 identifies CC0 candidates but no imported files; quest fit
 `81d20905-9f62-4a5a-b9be-f7f3f7cd1b0e` compares FTB/Heracles against actual per-player
-claims and early access. Heracles is a provisional better fit, not selected before its
-extension/migration and exact-version licence facts are verified.
+claims and early access. Heracles was selected only after its extension/migration and
+exact-version licence facts were checked; no item-free access was found in the legacy UI.
 Quest implementation is now assigned to `cc947b37-3c8f-4ec0-a495-f8d499c28378`.
 Selected adaptation: Heracles UI/task framework, with one Grindless task whose completion
 means the legacy per-player claim is recorded. Native reward minting is disabled for these
 generated quests; canonical catalogue and claim ledger remain authoritative. The published
-binary exposes a supported interactive widget API. First local checkpoint `4c17fa2` is
-not activated or independently accepted; build/dependency composition remains coordinated.
+binary exposes a supported interactive widget API. The f106 boot is real, but the later
+atomic publication repair and full build/dependency/source-binding composition remain
+coordinated work. Reuse unchanged lifecycle evidence only after the actual ZIP loader path
+passes. Never replace the physical book, catalogue or claim ledger with a native reward API.
 
 ## Publication and preservation
 

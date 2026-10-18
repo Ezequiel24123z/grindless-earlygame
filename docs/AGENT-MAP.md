@@ -272,15 +272,17 @@ canonical labels and explicit source-bound evidence. Fixtures are not progressio
 Astra owns canonical schema/annotations. A bounded worker extracts real `ProcessGraph`,
 `SupplyCatalogue`, local tags, `BootstrapRecipes`, `T1Recipes`, other authored JSON and quests
 from an agreed pinned revision. Existing catalogues retain quantity authority; serialize shared
-metadata/catalogue edits. Canonical inventory completion, annotations/live enforcement, real
-dashboard data, CI artifacts and production serving remain incomplete. Player communication
+metadata/catalogue edits. Canonical inventory and the active conditional T0 model are reviewed
+and verified on `debd3ae`; global future progression remains report-only. Real dashboard data
+binding, CI artifacts and production serving are still under integration. Player communication
 and dashboard views must project the same model.
 The [ADR-0135](DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
 S1 core is implemented and verified on `639881f`: loader-free `sustainability` model/auditor,
 `AuthorityAdapters`, `TagResolver`, `ConstructionReserve`, `DebtManifest` and `AuditReports`.
 `VerifySustainability` and `VerifySustainabilityAdapters` cover its proof/report seams;
 `tools/sustainability/debt.json` has no invented live exceptions. Generated
-`build/sustainability/` reports remain report-only until the live annotations and gate land.
+`build/sustainability/` reports keep the global report-only verdict separate from the landed
+`active_t0_conditional_gate`; neither is a human or Tier pass.
 Circulating finite inventory is not unlimited net supply. Construction and hazardous handling
 share one exact reserve witness; unresolved tag precedence stays unknown, never a sorted-hash
 guess. Source identities must cover normalized authorities and the executed implementation.
