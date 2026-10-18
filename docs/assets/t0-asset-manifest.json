@@ -10,6 +10,256 @@
     "gemini_key_configured": false,
     "generated_candidates": []
   },
+  "source_bound_readiness": {
+    "source_revision": "e0a72c609e0519a8a18ddf476c326b6906e813fa",
+    "scope": "Inventory projection only. Runtime catalogues and generator code remain the authorities; this manifest does not add gameplay, assets, visual acceptance, or a new runtime list.",
+    "status": "source_bound_inventory_only",
+    "schema_compatibility": "Additive fields only; schema_version remains 1. Existing VerifyT0Preparation dependencies on the seven legacy machine contracts, two parts, two multiblock records, and static-frame defaults remain intact, so no check change is required.",
+    "visual_readiness": "Generated functional art and source mappings are inventoried; production-quality art and player acceptance are not claimed.",
+    "provider_status_note": "The provider_status date is historical. No current key or credential availability was inspected for this inventory.",
+    "source_refs": [
+      "docs/AGENT-MAP.md",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/registry/BlockCatalogue.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/registry/ModBlocks.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/registry/ModItems.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/registry/ModMenus.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/material/SupplyCatalogue.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapRecipes.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapProcesses.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/HandCrankDynamoBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/CrudeExtractorBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ResearchTerminalBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ProcessMachineBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ThermalGeneratorBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/FacingLogisticsBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/fluid/HandPumpBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/fluid/ClayConduitBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/fluid/BasicTankBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/belt/BeltBlock.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/machine/MachineEffects.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/menu/MachineMenuKind.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/menu/ProcessMachineMenu.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/client/GrindlessClient.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/client/ProcessMachineScreen.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/client/ProcessAtlasScreen.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/client/QuestBookScreen.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/client/FieldGuideScreen.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/quest/QuestCatalogue.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/quest/GuideCatalogue.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BlockModels.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineTextures.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BootstrapArt.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/FormTextures.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/structure/WorkshopGeometry.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/WorkshopPreview.java",
+      "tools/checks/VerifyAssets.java",
+      "tools/checks/VerifyT0Preparation.java",
+      "tools/smoke/states.expect",
+      "docs/tiers/t0-production-graph.json",
+      "docs/assets/t0-settling-preview.png",
+      ".agent/handoff.md"
+    ],
+    "generator_ownership": {
+      "deterministic_workflow": "tools/generate-assets.ps1 and tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
+      "blocks": "BlockCatalogue -> MachineArt and BootstrapArt -> BlockModels -> GenerateAssets",
+      "standalone_items": "ModItems and SupplyCatalogue -> FormTextures -> GenerateAssets",
+      "blockstate_and_rotation": "BlockCatalogue -> BlockModels -> GenerateAssets",
+      "workshop_shape_and_preview": "WorkshopGeometry -> BlockModels and WorkshopPreview",
+      "gui_texture": "GenerateAssets.writeGui",
+      "do_not_edit_generated_files_by_hand": true,
+      "external_imports_in_this_inventory": 0
+    },
+    "coverage": {
+      "t0_player_facing_blocks": {"required": 19, "mapped": 19, "source_files_present": 19},
+      "state_specific_block_models": {"required": 65, "mapped": 65, "source_files_present": 65},
+      "rotated_blockstate_variants": {"required": 257, "mapped": 257, "containing_blockstate_files": 19},
+      "block_face_roles": {"required": 95, "mapped": 95, "texture_references_present": 95, "roles_per_block": ["front", "top", "side", "rear", "bottom"]},
+      "distinct_t0_block_texture_pngs": {"required": 89, "mapped": 89, "source_files_present": 89},
+      "active_inactive_front_pairs": {"required": 16, "mapped": 16, "referenced_front_pngs": 32},
+      "standalone_t0_item_icons": {"required": 13, "mapped": 13, "source_files_present": 13},
+      "block_item_models": {"required": 19, "mapped": 19, "source_files_present": 19},
+      "registered_animated_regions": {"required": 0, "mapped": 0, "source_files_present": 0},
+      "multiblock_shape_contracts": {"required": 2, "mapped": 2, "source_files_present": 2},
+      "assembled_multiblock_previews": {"existing": 1, "tracked_structures": 2, "not_present": ["firing_chamber"]},
+      "t0_gui_screen_classes": {"required": 4, "mapped": 4, "source_files_present": 4},
+      "texture_backed_gui_pngs": {"required": 1, "mapped": 1, "source_files_present": 1},
+      "procedural_status_effects": {
+        "stateful_t0_blocks": 16,
+        "blocks_with_geometry_specific_handler": 12,
+        "blocks_without_geometry_specific_handler": 4,
+        "blocks_with_generic_out_of_band_effect": 9,
+        "texture_assets_required_for_effects": 0
+      }
+    },
+    "block_texture_contract": {
+      "blockstate_pattern": "blockstates/{id}.json",
+      "model_pattern": "models/block/{id}_{state}.json",
+      "block_item_model_pattern": "models/item/{id}.json",
+      "front_pattern": "textures/block/{geometry}_front_{state}.png",
+      "top_pattern": "textures/block/{geometry}_top.png",
+      "default_model_texture_slots": {
+        "base": "textures/block/casing_side.png",
+        "cap": "textures/block/casing_top.png",
+        "front": "textures/block/{geometry}_front_{state}.png",
+        "top": "textures/block/{geometry}_top.png",
+        "side": "textures/block/casing_side.png",
+        "particle": "textures/block/casing_side.png"
+      },
+      "shared_face_mapping": "BlockModels assigns casing/geometry material slots to each model element; side and rear normally use casing_side, bottom normally uses casing_top. Geometry-specific overrides are recorded per block below.",
+      "facing_contract": {
+        "facing_blocks": 18,
+        "facing_values": ["north", "east", "south", "west"],
+        "y_rotations": [0, 90, 180, 270],
+        "non_facing_blocks": ["fibreboard"],
+        "visual_state_property_blocks": 16,
+        "single_idle_no_status_property": ["settling_channel", "settling_screen", "fibreboard"]
+      },
+      "state_counts": {
+        "idle": 19,
+        "running": 16,
+        "blocked": 11,
+        "starved": 10,
+        "out_of_band": 9
+      },
+      "state_visual_rules": {
+        "idle": "Existing inactive/rest front; no separate off variant is registered.",
+        "running": "Existing active front; a distinct static PNG, not an animation.",
+        "blocked": "Registered only on machines whose BlockCatalogue state list includes it.",
+        "starved": "Registered only on machines whose BlockCatalogue state list includes it.",
+        "out_of_band": "Registered only on consumer machines whose BlockCatalogue state list includes it.",
+        "error": "Not a registered state and has no asset requirement.",
+        "animation": "Every current image is a generated static frame; no animated region or .mcmeta is registered."
+      },
+      "geometry_overrides": {
+        "geological_collector": {"base": "textures/block/bootstrap_stone.png", "cap": "textures/block/bootstrap_stone.png", "side": "textures/block/bootstrap_timber.png", "stone": "textures/block/bootstrap_stone.png"},
+        "biocultivator": {"base": "textures/block/bootstrap_timber.png", "cap": "textures/block/bootstrap_timber.png", "side": "textures/block/bootstrap_timber.png", "stone": "textures/block/bootstrap_stone.png"},
+        "biomass_dynamo": {"base": "textures/block/bootstrap_stone.png", "cap": "textures/block/bootstrap_stone.png", "side": "textures/block/bootstrap_clay.png", "stone": "textures/block/bootstrap_stone.png"},
+        "assembly_bench": {"base": "textures/block/bootstrap_timber.png", "cap": "textures/block/bootstrap_timber.png", "side": "textures/block/bootstrap_timber.png", "stone": "textures/block/bootstrap_stone.png"},
+        "fibreboard": {"side": "textures/block/fibreboard_front_idle.png", "front": "textures/block/fibreboard_front_idle.png", "top": "textures/block/fibreboard_top.png"}
+      }
+    },
+    "blocks": [
+      {"id": "hand_crank_dynamo", "geometry": "dynamo", "states": ["idle", "running", "blocked"], "facing": true, "blockstate_variants": 12, "generator_mapped": true, "source_files_present": true},
+      {"id": "crude_extractor", "geometry": "extractor", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "research_terminal", "geometry": "terminal", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "quern", "geometry": "quern", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "clay_mixer", "geometry": "mixer", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "firing_chamber", "geometry": "firebox", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "settling_trough", "geometry": "settler", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "settling_channel", "geometry": "channel", "states": ["idle"], "facing": true, "blockstate_variants": 4, "generator_mapped": true, "source_files_present": true},
+      {"id": "settling_screen", "geometry": "screen", "states": ["idle"], "facing": true, "blockstate_variants": 4, "generator_mapped": true, "source_files_present": true},
+      {"id": "geological_collector", "geometry": "collector", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "biocultivator", "geometry": "culture", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "biomass_dynamo", "geometry": "biogen", "states": ["idle", "running", "blocked"], "facing": true, "blockstate_variants": 12, "generator_mapped": true, "source_files_present": true},
+      {"id": "assembly_bench", "geometry": "bench", "states": ["idle", "running", "blocked", "starved", "out_of_band"], "facing": true, "blockstate_variants": 20, "generator_mapped": true, "source_files_present": true},
+      {"id": "fibreboard", "geometry": "fibreboard", "states": ["idle"], "facing": false, "blockstate_variants": 1, "generator_mapped": true, "source_files_present": true},
+      {"id": "hand_pump", "geometry": "pump", "states": ["idle", "running", "starved"], "facing": true, "blockstate_variants": 12, "generator_mapped": true, "source_files_present": true},
+      {"id": "clay_conduit", "geometry": "conduit", "states": ["idle", "running"], "facing": true, "blockstate_variants": 8, "generator_mapped": true, "source_files_present": true},
+      {"id": "basic_tank", "geometry": "tank", "states": ["idle", "running"], "facing": true, "blockstate_variants": 8, "generator_mapped": true, "source_files_present": true},
+      {"id": "conveyor_belt", "geometry": "belt", "states": ["idle", "running"], "facing": true, "blockstate_variants": 8, "generator_mapped": true, "source_files_present": true},
+      {"id": "crude_manipulator", "geometry": "manipulator", "states": ["idle", "running"], "facing": true, "blockstate_variants": 8, "generator_mapped": true, "source_files_present": true}
+    ],
+    "standalone_items": [
+      {"id": "multitool", "category": "tool", "texture": "textures/item/multitool.png", "model": "models/item/multitool.json", "source_files_present": true},
+      {"id": "crank_handle", "category": "tool", "texture": "textures/item/crank_handle.png", "model": "models/item/crank_handle.json", "source_files_present": true},
+      {"id": "mineral_aggregate", "category": "material", "texture": "textures/item/mineral_aggregate.png", "model": "models/item/mineral_aggregate.json", "source_files_present": true},
+      {"id": "biomass", "category": "material", "texture": "textures/item/biomass.png", "model": "models/item/biomass.json", "source_files_present": true},
+      {"id": "ceramic_grog", "category": "material", "texture": "textures/item/ceramic_grog.png", "model": "models/item/ceramic_grog.json", "source_files_present": true},
+      {"id": "unfired_ceramic", "category": "material", "texture": "textures/item/unfired_ceramic.png", "model": "models/item/unfired_ceramic.json", "source_files_present": true},
+      {"id": "ceramic_insulator", "category": "material", "texture": "textures/item/ceramic_insulator.png", "model": "models/item/ceramic_insulator.json", "source_files_present": true},
+      {"id": "data_core", "category": "control_substrate", "texture": "textures/item/data_core.png", "model": "models/item/data_core.json", "source_files_present": true},
+      {"id": "calibrated_data_core", "category": "control_substrate", "texture": "textures/item/calibrated_data_core.png", "model": "models/item/calibrated_data_core.json", "source_files_present": true},
+      {"id": "relay_matrix", "category": "control", "texture": "textures/item/relay_matrix.png", "model": "models/item/relay_matrix.json", "source_files_present": true, "visual_state": "One icon; rating is text/NBT. No T0 Control Matrix or rating-specific icon is registered."},
+      {"id": "process_atlas", "category": "guide", "texture": "textures/item/process_atlas.png", "model": "models/item/process_atlas.json", "source_files_present": true},
+      {"id": "quest_book", "category": "guide", "texture": "textures/item/quest_book.png", "model": "models/item/quest_book.json", "source_files_present": true},
+      {"id": "field_guide", "category": "guide", "texture": "textures/item/field_guide.png", "model": "models/item/field_guide.json", "source_files_present": true}
+    ],
+    "non_local_material_inputs": "Vanilla Minecraft icons and pack-provided tag members used by T0 recipes remain externally owned; they are not missing Grindless PNGs. SupplyCatalogue is the registry authority for Grindless-supplied material forms, not a claim that every registered form is a T0 progression item.",
+    "multiblocks": [
+      {"id": "firing_chamber", "shape": "2x2x2 controller plus seven minecraft:bricks blocks", "orientations": ["north", "east", "south", "west"], "controller_visual": "firing_chamber block model and firebox state fronts", "assembled_preview": "not present", "readiness": "shape and state contract stable; deterministic preview can be prepared without changing gameplay"},
+      {"id": "settling_trough", "shape": "1x2x3 controller, channel, screen; air above channel and screen", "orientations": ["north", "east", "south", "west"], "controller_visual": "settler block model and status fronts; static channel/screen models", "assembled_preview": "docs/assets/t0-settling-preview.png (720x256; schematic geometry/texture preview, not a client screenshot)", "readiness": "shape, state, continuity and preview source are present"}
+    ],
+    "gui_contract": {
+      "process_machine": {
+        "screen": "ProcessMachineScreen",
+        "texture": "textures/gui/process_machine.png",
+        "texture_dimensions": [256, 256],
+        "visible_background_region": [0, 0, 176, 166],
+        "progress_arrow_source_region": [176, 0, 24, 17],
+        "code_rendered_elements": ["8x50 cyan energy fill", "progress-scaled arrow blit", "machine title", "player inventory title", "localized status/fault line and hover tooltip", "energy hover tooltip", "conditional water volume/output text"],
+        "vanilla_rendered_elements": ["machine and player inventory slot frames/items"],
+        "t0_menu_layouts": [
+          {"kind": "QUERN", "inputs": 1, "outputs": 2},
+          {"kind": "CLAY_MIXER", "inputs": 2, "outputs": 1},
+          {"kind": "FIRING_CHAMBER", "inputs": 2, "outputs": 2},
+          {"kind": "SETTLING_TROUGH", "inputs": 1, "outputs": 5},
+          {"kind": "GEOLOGICAL_COLLECTOR", "inputs": 0, "outputs": 2},
+          {"kind": "BIOCULTIVATOR", "inputs": 1, "outputs": 1},
+          {"kind": "ASSEMBLY_BENCH", "inputs": 4, "outputs": 1}
+        ],
+        "additional_texture_required": false
+      },
+      "item_screens": [
+        {"screen": "ProcessAtlasScreen", "item": "process_atlas", "background": "procedural fills and live recipe text; no GUI PNG"},
+        {"screen": "QuestBookScreen", "item": "quest_book", "background": "procedural fills, task state, objective/reward text and button; no GUI PNG"},
+        {"screen": "FieldGuideScreen", "item": "field_guide", "background": "procedural fills, translated paginated text and buttons; no GUI PNG"}
+      ],
+      "manual_interactions": "The hand-crank dynamo and research terminal retain their existing in-world/item interactions. The Crude Extractor uses its registered machine faces, status and recoverable output; this T0 set adds no replacement menu texture.",
+      "player_facing_readiness": "Current icons, screens and state text have source mappings. Further guide/quest/recipe metadata presentation depends on the pending S2/resource-communication content contract; do not treat existing placeholder icons or code panels as final visual acceptance."
+    },
+    "animation_and_visual_polish": {
+      "current_frame_count": 1,
+      "current_frame_time_ticks": 1,
+      "interpolate": false,
+      "mcmeta": null,
+      "animated_regions": [],
+      "emissive_layers": [],
+      "registered_status_values": ["idle", "running", "blocked", "starved", "out_of_band"],
+      "procedural_effects": {
+        "source": "common/src/main/java/io/github/ezequiel24123z/grindless/machine/MachineEffects.java",
+        "texture_animation": "None; generated texture frames remain static. MachineEffects.animate adds status-gated vanilla particles and sounds in code; these are not missing PNGs.",
+        "geometry_specific_handlers": [
+          {"block": "hand_crank_dynamo", "handler": "dynamo", "registered_state_cues": ["running: electric spark particle and relay click", "blocked: smoke particle"]},
+          {"block": "crude_extractor", "handler": "extractor", "registered_state_cues": ["running: campfire smoke particle and heavy hum", "blocked: large smoke particle", "starved: smoke particle and relay click"]},
+          {"block": "research_terminal", "handler": "terminal", "registered_state_cues": ["running: enchantment glyph particles and hum", "blocked: smoke particle", "starved: electric spark particle and relay click"]},
+          {"block": "quern", "handler": "mill", "registered_state_cues": ["running: crit particles and heavy hum", "blocked: smoke particle", "starved: relay click"]},
+          {"block": "hand_pump", "handler": "mill", "registered_state_cues": ["running: crit particles and heavy hum", "starved: relay click"]},
+          {"block": "clay_mixer", "handler": "washer", "registered_state_cues": ["running: splash particle and hum", "blocked: splash particle", "starved: smoke particle and relay click"]},
+          {"block": "settling_trough", "handler": "washer", "registered_state_cues": ["running: splash particle and hum", "blocked: splash particle", "starved: smoke particle and relay click"]},
+          {"block": "firing_chamber", "handler": "generator", "registered_state_cues": ["running: flame and campfire smoke particles with hum", "blocked: large smoke particle"]},
+          {"block": "basic_tank", "handler": "generator", "registered_state_cues": ["running: flame and campfire smoke particles with hum"]},
+          {"block": "crude_manipulator", "handler": "manipulator", "registered_state_cues": ["running: crit particles"]},
+          {"block": "clay_conduit", "handler": "belt", "registered_state_cues": ["running: crit particles"]},
+          {"block": "conveyor_belt", "handler": "belt", "registered_state_cues": ["running: crit particles"]}
+        ],
+        "registered_status_without_geometry_specific_handler": ["geological_collector", "biocultivator", "biomass_dynamo", "assembly_bench"],
+        "generic_out_of_band": "For the nine T0 blocks with registered out_of_band and an animateTick hook, MachineEffects.animate adds its shared probabilistic witch-particle cue and brownout alarm after any geometry handler; this is not a distinct texture animation.",
+        "idle_only_no_effect": ["settling_channel", "settling_screen", "fibreboard"]
+      },
+      "polish_pending": ["human review of silhouette/readability/continuity/originality", "any separately approved texture animation or emissive treatment", "geometry-specific procedural effect design for the four listed status-bearing blocks"],
+      "not_registered_and_not_invented": ["off as a separate state", "error as a universal state", "animated texture regions"]
+    },
+    "readiness_and_gaps": {
+      "stable_to_produce_now": ["Source-mapped 19 block silhouettes and registered state fronts", "18 four-way facing contracts and the fixed workshop geometry", "13 existing T0 standalone icon assets", "static firing-chamber preview from its stable shape contract"],
+      "blocked_or_deferred": ["Final guide/quest/Atlas metadata visuals until S2/resource-communication settles the player-facing content contract", "any new GUI chrome or slot art until an approved GUI contract calls for it", "new texture animation, emissive or hero-art polish until separately specified and reviewed", "geometry-specific procedural cues for geological_collector, biocultivator, biomass_dynamo and assembly_bench; their registered static state fronts remain mapped"],
+      "existing_coverage_is_not_acceptance": "Files and deterministic mappings establish inventory/readiness only, not production-quality art, in-game readability, accessibility, client acceptance, or saved-world acceptance."
+    },
+    "reusable_evidence": [
+      {"source": ".agent/handoff.md", "scope": "The prior static C3 assets/resources review at b08dee found no proven ID/resource-path defect; it did not review client visuals or approve the asset set."},
+      {"source": "tools/checks/VerifyAssets.java", "scope": "Static source contract checks BlockCatalogue against ModBlocks; registered states, four-way rotations, item models, names and model texture references."},
+      {"source": "tools/checks/VerifyT0Preparation.java", "scope": "Static T0 manifest/catalogue state mapping, workshop parts, PNG format, stable body references, and existing settling preview."},
+      {"source": "tools/smoke/states.expect", "scope": "Existing generated state scenario; not rerun per asset and not evidence of art quality."},
+      {"source": "docs/testing/latest-validation.md", "scope": "Historical revision-bound results only; cancelled asset-worker work remains unaccepted and no result is promoted by this inventory."}
+    ],
+    "proposed_deterministic_asset_batches": [
+      {"batch": "T0 state and icon coverage", "scope": "Keep all 19 block entries, 65 state models/fronts, and 13 standalone icons aligned with the live generator; no new runtime states or per-asset Minecraft runs.", "readiness": "stable now; existing generated outputs are not regenerated in this task"},
+      {"batch": "Firing Chamber schematic preview", "scope": "Render the already-registered controller-plus-seven-bricks geometry using WorkshopGeometry/WorkshopPreview; preserve the existing settling preview.", "readiness": "stable now; documentation visual gap only"},
+      {"batch": "Guide and player-facing metadata", "scope": "Revisit only after S2/resource-communication publishes stable classifications, route text and display metadata.", "readiness": "blocked by content contract"},
+      {"batch": "Animation/emissive or hero-art polish", "scope": "Add only after an explicit visual/state specification and human QC plan; preserve current static frames until then.", "readiness": "deferred; no asset is inferred"}
+    ]
+  },
   "defaults": {
     "texture_resolution": [16, 16],
     "format": "PNG",
@@ -28,7 +278,7 @@
     "item_icon": "Machine items render their existing models/item/{id}.json; standalone icons use textures/item/{id}.png",
     "gui": "Preserve current text/in-world interaction; no new GUI texture is introduced",
     "state_appearance": {
-      "off": "Not a separate registered state; reuse idle unless an accepted behavior requires more",
+      "off": "No separate registered state or texture; the idle front is the inactive appearance",
       "idle": "Mechanism at rest, low-emphasis indicator",
       "running": "Readable active indicator without changing the shared body maps",
       "blocked": "Distinct output/capacity feedback; not a universal error",
@@ -123,6 +373,7 @@
   ],
   "items": [
     {"id": "multitool", "accent": "#C9A227", "role": "rotation and relocation, not mining"},
+    {"id": "crank_handle", "accent": "#96724C", "role": "bounded manual F0 work"},
     {"id": "data_core", "accent": "#00E5FF", "role": "uncalibrated physical input"},
     {"id": "calibrated_data_core", "accent": "#66BB6A", "role": "calibration result"},
     {"id": "relay_matrix", "accent": "#EF6C00", "role": "physical controller; rating remains text/NBT, not a new item"},
@@ -131,7 +382,9 @@
     {"id": "field_guide", "accent": "#26A69A", "role": "readable route guidance"},
     {"id": "ceramic_grog", "accent": "#B37C56", "role": "three distinct fired fragments for reuse"},
     {"id": "unfired_ceramic", "accent": "#B8A183", "role": "stacked damp clay blanks"},
-    {"id": "ceramic_insulator", "accent": "#E6D6B2", "role": "ribbed fired spool with a visible bore"}
+    {"id": "ceramic_insulator", "accent": "#E6D6B2", "role": "ribbed fired spool with a visible bore"},
+    {"id": "mineral_aggregate", "accent": "#8F8774", "role": "geological source output"},
+    {"id": "biomass", "accent": "#638747", "role": "cultivated F0 fuel"}
   ],
   "candidate_atlas": {
     "status": "not_generated",
