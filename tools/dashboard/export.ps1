@@ -4,7 +4,8 @@ param(
     [string]$Output = 'build\dashboard\site',
     [ValidateSet('local', 'pr', 'stable')][string]$Mode = 'local',
     [switch]$CheckOnly,
-    [switch]$Offline
+    [switch]$Offline,
+    [ValidateSet('write', 'check')][string]$ResourceGuidance
 )
 
 $ErrorActionPreference = 'Stop'
@@ -38,7 +39,7 @@ try {
     New-Item -ItemType Directory -Path $out | Out-Null
     try {
         $sources = @('VerifySustainability.java', 'VerifySustainabilityAdapters.java',
-            'VerifySustainabilityRegistry.java', 'VerifySustainabilityT0.java') |
+            'VerifySustainabilityRegistry.java', 'VerifySustainabilityT0.java', 'VerifyResourceGuidance.java') |
             ForEach-Object { Join-Path $Root ('tools\checks\' + $_) }
         $sources += Join-Path $Root 'tools\dashboard\DashboardExport.java'
         $sources += Join-Path $Root 'tools\dashboard\tests\VerifyDashboardProjection.java'
@@ -50,6 +51,7 @@ try {
         & $javac -J-Xmx256m -J-XX:ActiveProcessorCount=2 -nowarn -encoding UTF-8 --release 17 "@$compile" -d $out @sources
         if ($LASTEXITCODE -ne 0) { throw 'Dashboard tools did not compile.' }
         $action = if ($CheckOnly) { 'check' } else { 'export' }
+        if ($ResourceGuidance) { $action = 'guidance-' + $ResourceGuidance }
         & $java -Xmx256m -XX:ActiveProcessorCount=2 --add-modules jdk.compiler "@$run" `
             io.github.ezequiel24123z.grindless.sustainability.DashboardExport $Root $Output $Mode $action
         if ($LASTEXITCODE -ne 0) { throw 'Dashboard export/check failed; no passing acceptance claim is implied.' }

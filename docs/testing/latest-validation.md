@@ -58,9 +58,22 @@ The newer local `8fc5f98` composition has a separate delegated build/check/expor
 Its first WinPS invocation promoted the informational JDK_JAVA_OPTIONS stderr note to
 `NativeCommandError` before a Gradle verdict; the empty redirected log and real tool
 diagnostic are preserved. Native cmd/process capture is authorized for a same-source retry,
-without suppressing stderr or removing limits. No combined build/export pass is recorded.
+without suppressing stderr or removing limits. The native-capture retry passed8fc
+build/remap/classpath tasks and15 pack checks. The official runner's own version probe
+then required a real fix, not a debugger hook: local4061 changes only the paired runners
+and paired guard harness. It passes32 WinPS cases with actual JAVA_TOOL_OPTIONS diagnostics,
+including invalid/missing/ambiguous/nonzero versions and pipe pressure. Bash is statically
+reviewed, not executed locally; the official suite/export now has the4061 tool revision.
+No suite/export verdict is yet recorded. Preserve the original capture and harness failures.
 ADR-0143 canonical runtime guidance is under
 implementation; no generated placeholder, native surface pass or Tier acceptance is implied.
+The first26-file implementation is a preservation checkpoint only. Astra's reader review
+removed mandatory technical hashes from guide/widget prose in favor of compact player
+context. A separate source review found an open P2: the guidance sidecar lists some helper
+hashes but omits executed implementation identities such as T0Sustainability,
+SustainabilityAudit and DashboardProjection. The declaration fingerprint may correctly stay
+stable when unrelated implementation changes; the execution provenance must still change.
+Generation, compilation, drift checks and the same reviewer's correction recheck are pending.
 
 [PR run39125286533](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39125286533)
 checks out temporary merge `7b72424a7d9793d1b22c4774e0bc9ed27db6b004`, not the reported PR

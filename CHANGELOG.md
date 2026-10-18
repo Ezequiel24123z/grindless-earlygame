@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Canonical guidance implementation preserved for review.** Typed projection, content
+  fingerprint, runtime cache and shared native presenters now connect items/fluids, JEI,
+  machines, Atlas and both books. The T0 guide uses current recipe rows and player-focused
+  context instead of duplicated quantities or mandatory vanilla farms. Real metadata has
+  not yet been generated and compilation is pending. Review found that guidance sidecar
+  provenance omits some executed implementation identities; that P2 remains open rather
+  than being hidden by a stable declaration fingerprint. No client/acceptance claim.
+- **T0 model texture-reference repair prepared.** The model generator now keeps bare
+  internal texture keys and adds one `#` when serializing a face. Shared workshop geometry
+  keeps its existing preview convention and is normalized only at that boundary. The
+  coupled asset checker covers missing/doubled/cyclic aliases and valid inheritance.
+  Regeneration and execution remain pending; existing broken JSON is not presented as
+  repaired yet, and no new pixels, geometry or visual acceptance is claimed.
 - **Exosuit registration smoke observes actual entities.** The fixture now waits on the
   loaded target chunk, summons each tagged test item once, and requires all four real IDs
   together before emitting the unchanged markers. Scheduling shares a160-poll bound under

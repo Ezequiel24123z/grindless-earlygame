@@ -7,6 +7,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidance;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceJson;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceProjection;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
+import io.github.ezequiel24123z.grindless.client.ResourceGuidanceClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,9 +44,13 @@ public final class DashboardExport {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 4) {
-            throw new IllegalArgumentException("Usage: DashboardExport <root> <build-output-directory> <local|pr|stable> <export|check>");
+            throw new IllegalArgumentException("Usage: DashboardExport <root> <build-output-directory> <local|pr|stable> <export|check|guidance-write|guidance-check>");
         }
         Path root = Path.of(args[0]).toRealPath();
+        if (args[3].equals("guidance-write") || args[3].equals("guidance-check")) {
+            resourceGuidance(root, args[3].equals("guidance-write"));
+            return;
+        }
         boolean checkOnly = args[3].equals("check");
         if (!checkOnly && !args[3].equals("export")) {
             throw new IllegalArgumentException("Choose export or check.");
@@ -141,6 +151,35 @@ public final class DashboardExport {
         return SustainabilityAudit.deriveEntryProfile(snapshot, annotations, debt, 0).replay();
     }
 
+    /** Reuses the exact game-edge binding; generation is intentionally not a dependency of classes. */
+    private static void resourceGuidance(Path root, boolean write) throws Exception {
+        SustainabilityAudit.Result result = canonicalResult(root);
+        var projection = ResourceGuidanceProjection.project(result);
+        int assertions = VerifyResourceGuidance.verifyProjection(result, projection);
+        Path resource = root.resolve(Path.of("common", "src", "main", "resources"))
+                .resolve(ResourceGuidance.ASSET);
+        if (write) {
+            VerifyResourceGuidance.verifyLocalization(root, result);
+            Files.createDirectories(resource.getParent());
+            Files.writeString(resource, ResourceGuidanceJson.write(projection), StandardCharsets.UTF_8);
+        }
+        assertions += VerifyResourceGuidance.verifyCanonical(root, result);
+        JsonObject provenance = JSON.toJsonTree(Map.of(
+                "schema_version", 1, "action", write ? "write" : "check",
+                "source_state", "Evaluated worktree sources; no clean-commit or acceptance claim.",
+                "declaration_content_sha256", projection.contentSha256(),
+                "authority_sha256", AuditReports.authorityHash(result.authorities()),
+                "tool_source_hashes", toolSources(root),
+                "tool_class_directory_hashes", toolClasses(root),
+                "guidance_source_hashes", guidanceSources(root),
+                "guidance_class_hashes", guidanceClasses())).getAsJsonObject();
+        Path evidence = output(root, Path.of("build", "resource-guidance"));
+        Files.writeString(evidence.resolve("provenance.json"), DashboardProjection.json(provenance), StandardCharsets.UTF_8);
+        System.out.println("CANONICAL RESOURCE GUIDANCE: " + projection.resources().size() + " declarations; "
+                + assertions + " comparisons; SHA-256 " + projection.contentSha256());
+        System.out.println("Prepared declarations only; not current-world, client, Survival or Tier acceptance.");
+    }
+
     static JsonObject assets(Path root) throws IOException {
         JsonObject source = read(root.resolve(ASSETS)).getAsJsonObject("source_bound_readiness");
         if (source == null) {
@@ -215,10 +254,50 @@ public final class DashboardExport {
         for (String file : List.of("tools/dashboard/DashboardExport.java", "tools/dashboard/DashboardServer.java",
                 "tools/dashboard/export.ps1", "tools/dashboard/export.sh", "tools/dashboard/serve.ps1",
                 "tools/dashboard/serve.sh", "tools/dashboard/tests/VerifyDashboardProjection.java",
-                "tools/dashboard/tests/real-data-check.js")) {
+                "tools/dashboard/tests/real-data-check.js", "tools/checks/VerifySustainability.java",
+                "tools/checks/VerifySustainabilityAdapters.java", "tools/checks/VerifySustainabilityRegistry.java",
+                "tools/checks/VerifySustainabilityT0.java", "tools/checks/VerifyResourceGuidance.java",
+                "tools/generate-resource-guidance.ps1", "tools/generate-resource-guidance.sh",
+                "tools/dashboard/tests/verify-export-root.ps1", "tools/dashboard/tests/verify-export-root.sh")) {
             hashes.put(file, AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(file))));
         }
         return hashes;
+    }
+
+    private static Map<String, String> guidanceSources(Path root) throws IOException {
+        Map<String, String> hashes = new TreeMap<>();
+        String base = "common/src/main/java/io/github/ezequiel24123z/grindless/";
+        for (String file : List.of("guidance/ResourceGuidance.java", "guidance/ResourceGuidanceJson.java",
+                "guidance/ResourceGuidanceProjection.java", "guidance/ResourceGuidanceRuntime.java",
+                "guidance/ResourceGuidanceContext.java", "client/ResourceGuidanceClient.java",
+                "sustainability/AuditReports.java")) {
+            hashes.put(base + file, AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(base + file))));
+        }
+        String language = "common/src/main/resources/assets/grindless/lang/en_us.json";
+        hashes.put(language, AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(language))));
+        return hashes;
+    }
+
+    private static Map<String, String> guidanceClasses() throws IOException {
+        Map<String, String> hashes = new TreeMap<>();
+        for (Class<?> type : List.of(ResourceGuidance.class, ResourceGuidanceJson.class, ResourceGuidanceProjection.class,
+                ResourceGuidanceRuntime.class, ResourceGuidanceContext.class, ResourceGuidanceClient.class, AuditReports.class)) {
+            guidanceClass(type, hashes);
+        }
+        return hashes;
+    }
+
+    private static void guidanceClass(Class<?> type, Map<String, String> hashes) throws IOException {
+        String name = type.getName().replace('.', '/') + ".class";
+        try (InputStream stream = type.getClassLoader().getResourceAsStream(name)) {
+            if (stream == null) {
+                throw new IOException("An executed guidance helper class is missing.");
+            }
+            hashes.put(name, AuthorityAdapters.sha256(stream.readAllBytes()));
+        }
+        for (Class<?> nested : type.getDeclaredClasses()) {
+            guidanceClass(nested, hashes);
+        }
     }
 
     private static Map<String, String> toolClasses(Path root) throws Exception {

@@ -14,6 +14,10 @@ import java.util.Locale;
  * a textured cube. All fronts face north (negative Z); the blockstate rotates the model for the
  * other facings, so the geometry is written once.
  *
+ * <p>Box faces use bare texture keys; JSON face references add exactly one leading {@code #}.
+ * Shared settling geometry keeps its {@code #key} convention for the preview and is normalized at
+ * the model boundary.
+ *
  * <p>Texture slots: {@code #front} (the status-dependent face), {@code #top}, {@code #side},
  * {@code #base} and {@code #cap} (the shared casing, which does not change with status).
  */
@@ -128,30 +132,30 @@ final class BlockModels {
 
     private static List<Box> quern() {
         return List.of(
-                box(1, 0, 1, 15, 3, 15, "#cap", "#base"),
-                box(3, 3, 2, 13, 6, 14, "#top", "#side"),
-                front(2, 6, 3, 14, 10, 13, "#top", "#side", "#front"),
-                box(6, 10, 6, 10, 13, 10, "#cap", "#base"),
-                box(8, 12, 7, 15, 14, 9, "#top", "#side"));
+                box(1, 0, 1, 15, 3, 15, "cap", "base"),
+                box(3, 3, 2, 13, 6, 14, "top", "side"),
+                front(2, 6, 3, 14, 10, 13, "top", "side", "front"),
+                box(6, 10, 6, 10, 13, 10, "cap", "base"),
+                box(8, 12, 7, 15, 14, 9, "top", "side"));
     }
 
     private static List<Box> clayMixer() {
         return List.of(
-                box(2, 0, 2, 14, 3, 14, "#cap", "#base"),
-                front(2, 3, 2, 14, 9, 4, "#top", "#side", "#front"),
-                box(2, 3, 12, 14, 9, 14, "#top", "#side"),
-                box(2, 3, 4, 4, 9, 12, "#top", "#side"),
-                box(12, 3, 4, 14, 9, 12, "#top", "#side"),
-                box(4, 3, 4, 12, 4, 12, "#top", "#base"),
-                box(1, 9, 7, 15, 11, 9, "#cap", "#base"),
-                box(7, 4, 6, 9, 13, 10, "#top", "#side"));
+                box(2, 0, 2, 14, 3, 14, "cap", "base"),
+                front(2, 3, 2, 14, 9, 4, "top", "side", "front"),
+                box(2, 3, 12, 14, 9, 14, "top", "side"),
+                box(2, 3, 4, 4, 9, 12, "top", "side"),
+                box(12, 3, 4, 14, 9, 12, "top", "side"),
+                box(4, 3, 4, 12, 4, 12, "top", "base"),
+                box(1, 9, 7, 15, 11, 9, "cap", "base"),
+                box(7, 4, 6, 9, 13, 10, "top", "side"));
     }
 
     private static List<Box> firebox() {
         return List.of(
-                front(0, 0, 0, 16, 16, 16, "#top", "#side", "#front"),
-                box(4, 3, -1, 12, 5, 0, "#cap", "#base"),
-                box(12, 6, -1, 14, 10, 0, "#cap", "#base"));
+                front(0, 0, 0, 16, 16, 16, "top", "side", "front"),
+                box(4, 3, -1, 12, 5, 0, "cap", "base"),
+                box(12, 6, -1, 14, 10, 0, "cap", "base"));
     }
 
     /** A wet sample tray and short probe above an exposed rock footing. */
@@ -224,8 +228,18 @@ final class BlockModels {
         return WorkshopGeometry.boxes(geometry).stream().map(box -> new Box(
                 new double[]{box.x0(), box.y0(), box.z0()},
                 new double[]{box.x1(), box.y1(), box.z1()},
-                box.top(), box.top(), box.front() == null ? box.side() : box.front(),
-                box.side(), box.side(), box.side(), box.front() != null, null)).toList();
+                textureKey(box.top()), textureKey(box.top()),
+                textureKey(box.front() == null ? box.side() : box.front()),
+                textureKey(box.side()), textureKey(box.side()), textureKey(box.side()),
+                box.front() != null, null)).toList();
+    }
+
+    private static String textureKey(String reference) {
+        if (reference == null || reference.length() < 2 || reference.charAt(0) != '#'
+                || reference.indexOf('#', 1) >= 0) {
+            throw new IllegalArgumentException("Workshop texture must be a single #key reference: " + reference);
+        }
+        return reference.substring(1);
     }
 
     /** The middle or top third of a pylon, as its own model sitting in 0–16. */
@@ -327,6 +341,9 @@ final class BlockModels {
     }
 
     private static String face(String direction, String slot, boolean fullUv) {
+        if (slot == null || slot.isBlank() || slot.indexOf('#') >= 0) {
+            throw new IllegalArgumentException("Block model faces require bare texture keys: " + slot);
+        }
         String uv = fullUv ? ", \"uv\": [0, 0, 16, 16]" : "";
         return "        \"" + direction + "\": { \"texture\": \"#" + slot + "\"" + uv + " }";
     }

@@ -15,6 +15,7 @@ relative_sources=(
   tools/checks/VerifySustainabilityAdapters.java
   tools/checks/VerifySustainabilityRegistry.java
   tools/checks/VerifySustainabilityT0.java
+  tools/checks/VerifyResourceGuidance.java
   tools/dashboard/DashboardExport.java
   tools/dashboard/tests/VerifyDashboardProjection.java
 )
@@ -56,6 +57,7 @@ for directory in "$caller" "$selected_root"; do
 done
 printf 'Caller A poison: this source must never be compiled for B.\n' > "$caller/tools/dashboard/DashboardExport.java"
 printf 'Caller A poison: this test must never be compiled for B.\n' > "$caller/tools/dashboard/tests/VerifyDashboardProjection.java"
+printf 'Caller A poison: the guidance helper must never be compiled for B.\n' > "$caller/tools/checks/VerifyResourceGuidance.java"
 for directory in "$caller" "$selected_root"; do
   fixture_git "$directory" init --quiet
   fixture_git "$directory" add --all
@@ -67,6 +69,7 @@ for state in divergent_clean_caller divergent_dirty_caller; do
   if [ "$state" = divergent_dirty_caller ]; then
     printf 'Dirty caller A must remain excluded.\n' >> "$caller/tools/dashboard/DashboardExport.java"
     printf 'Dirty caller A must remain excluded.\n' >> "$caller/tools/dashboard/tests/VerifyDashboardProjection.java"
+    printf 'Dirty caller A helper must remain excluded.\n' >> "$caller/tools/checks/VerifyResourceGuidance.java"
     assert_root "Caller A must be genuinely dirty." test -n "$(fixture_git "$caller" status --porcelain --untracked-files=normal)"
   else
     assert_root "Caller A must begin genuinely clean." test -z "$(fixture_git "$caller" status --porcelain --untracked-files=normal)"
@@ -82,7 +85,7 @@ for state in divergent_clean_caller divergent_dirty_caller; do
     assert_root "Compiler source did not come from selected B: ${relative_sources[$index]}" test "${sources[$index]}" = "$expected"
     assert_root "Selected source bytes differ from B." test "$(git hash-object -- "${sources[$index]}")" = "$(git hash-object -- "$expected")"
   done
-  for relative in tools/dashboard/DashboardExport.java tools/dashboard/tests/VerifyDashboardProjection.java; do
+  for relative in tools/dashboard/DashboardExport.java tools/dashboard/tests/VerifyDashboardProjection.java tools/checks/VerifyResourceGuidance.java; do
     assert_root "The cross-root fixture must actually contain divergent tools." \
       test "$(git hash-object -- "$caller/$relative")" != "$(git hash-object -- "$selected_root/$relative")"
   done

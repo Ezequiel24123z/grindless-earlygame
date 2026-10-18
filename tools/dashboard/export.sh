@@ -12,6 +12,9 @@ while [ "$#" -gt 0 ]; do
     --output) output="$2"; shift 2 ;;
     --mode) mode="$2"; shift 2 ;;
     --check-only) action=check; shift ;;
+    --resource-guidance)
+      case "$2" in write|check) action="guidance-$2" ;; *) echo "Choose write or check." >&2; exit 1 ;; esac
+      shift 2 ;;
     --offline) offline=(--offline); shift ;;
     *) echo "Unknown dashboard export argument." >&2; exit 1 ;;
   esac
@@ -28,10 +31,11 @@ JDK_JAVA_OPTIONS="${JDK_JAVA_OPTIONS:+$JDK_JAVA_OPTIONS }-Xmx256m -XX:ActiveProc
 classpath="$(<"$root/common/build/checks/runtime-classpath.txt")"
 if [ -z "$classpath" ]; then echo "Gradle exported an empty classpath." >&2; exit 1; fi
 mkdir -p "$root/build"
-out="$(mktemp -d "$root/build/dashboard-tools.XXXXXX")"
+out="$root/build/dashboard-tools.${BASHPID:-$$}.$RANDOM"
+(umask 077; mkdir -- "$out")
 trap 'rm -rf -- "$out"' EXIT
 sources=()
-for name in VerifySustainability VerifySustainabilityAdapters VerifySustainabilityRegistry VerifySustainabilityT0; do
+for name in VerifySustainability VerifySustainabilityAdapters VerifySustainabilityRegistry VerifySustainabilityT0 VerifyResourceGuidance; do
   sources+=("$root/tools/checks/$name.java")
 done
 sources+=("$root/tools/dashboard/DashboardExport.java" "$root/tools/dashboard/tests/VerifyDashboardProjection.java")

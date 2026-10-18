@@ -81,7 +81,7 @@
     },
     "resource_window": {
       "owner_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
-      "scope": "Frozen8fc combined build/check/export; initial WinPS stderr-capture invocation failed before a Gradle verdict and is being retried with native capture, no server",
+      "scope": "8fc build/remap+pack15 passed; runner-only4061 fixes JDK stderr detection and has32 WinPS regression passes. Official checks/export now run on4061, no server.",
       "next_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
       "next_scope": "Combined build/checks and canonical export after the coordinator freezes the integration commit",
       "native_blocker": "1909MiB free commit below canonical2GiB server plus overhead; no local boot. Managed cloud Sandbox returned403 and created no validation evidence.",
@@ -234,9 +234,21 @@
   "parallel_opportunity": "The exact debd S2 inventory/model checkpoint is closed. Finish dashboard projection and the selected quest adapter independently, with serialized JVM use on the constrained host; investigate current CI failures without weakening their assertions. Rebind affected sources when integrating the claim service and S3 seam. Keep T1 screenshots/ports held and real player/save acceptance separate.",
   "prepared_assignments": [
     {
+      "id": "t0-texture-aliases",
+      "task_id": "renewable-t0",
+      "status": "source_fix_and_regressions_prepared_generation_pending",
+      "worker_agent_id": "9d32dd27-39b9-41fc-8d49-6af58856f904",
+      "model": "gpt-6-luna",
+      "input_revision": "48e3ba1d84cd12348b60eb63e22d5dc7905dbe7f",
+      "owned_files": ["BlockModels.java generator", "VerifyAssets.java alias/inheritance regression", "only changed generated block-model JSON after staged regeneration"],
+      "invariants": "One # per reference, valid texture binding/inheritance, unchanged geometry/UVs/PNG/WAV/registry IDs and WorkshopPreview; no language/guidance asset overwrite or T1 screenshot investigation",
+      "evidence": "Actual T0 clay-mixer/firing/settling/quern faces contain double prefixes; source fix prepared, no JVM/regeneration/visual pass",
+      "stop_condition": "Frozen coherent source checkpoint, then explicitly granted staged generation and complete output comparison; no publication"
+    },
+    {
       "id": "canonical-resource-guidance",
       "task_id": "resource-communication",
-      "status": "implementation_in_progress",
+      "status": "implementation_checkpoint_pending_generation_compile_and_provenance_fix",
       "worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -245,6 +257,8 @@
       "owned_files": ["generated canonical declaration projection/resource and drift checks", "shared native resource formatter and item/fluid/JEI/Atlas/machine/quest-guide display adapters", "T0 guide localization and focused paired tooling/tests"],
       "invariants": "No runtime repository/JDK audit, second handwritten catalogue, copied recipe quantities, fake starter kit, inferred output role, invented consumer or acceptance verdict; preserve slots/payload/NBT and exact claim authority",
       "precedent": "GT Modern v1.4.6/MC1.20.1 aa41aba: registered definitions to presence-sensitive tooltips, actual recipe objects to guide views; pattern-only LGPL3 reference, no imports",
+      "review": "Open P2: guidance-write/check provenance omits executed T0Sustainability/SustainabilityAudit/DashboardProjection identities. Reuse normal implementation_* and projector_class_hashes separately from declaration content; no verdicts in runtime resource.",
+      "evidence": "Static-only26-file implementation; compact shared reader context and natural T0 copy adjusted after Astra review. Real asset deliberately absent until canonical generation; Java/drift/surface checks pending.",
       "stop_condition": "Coherent implementation for review with real generation pending if JVM-gated; no placeholder data, global docs edits, commits or publication"
     },
     {

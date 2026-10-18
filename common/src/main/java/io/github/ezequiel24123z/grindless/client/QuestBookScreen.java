@@ -1,6 +1,9 @@
 package io.github.ezequiel24123z.grindless.client;
 
 import io.github.ezequiel24123z.grindless.menu.QuestBookMenu;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
@@ -92,6 +95,22 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
+        if (selected >= 0 && selected < QuestCatalogue.tasks().size()
+                && mouseX >= leftPos + 8 && mouseX < leftPos + imageWidth - 8) {
+            QuestCatalogue.Task task = QuestCatalogue.tasks().get(selected);
+            int objectiveY = topPos + imageHeight - DETAIL_HEIGHT + 26;
+            boolean reward = mouseY >= objectiveY + 10 && mouseY < objectiveY + 20;
+            if (reward || mouseY >= objectiveY && mouseY < objectiveY + 10) {
+                Resource resource = reward ? new Resource(Kind.ITEM, task.reward().itemId())
+                        : ResourceGuidanceContext.questSubject(task).orElse(null);
+                if (resource != null) {
+                    List<Component> tooltip = new ArrayList<>();
+                    tooltip.add(Component.literal(reward ? reward(task) : objective(task)));
+                    ResourceGuidanceClient.append(tooltip, resource, true, hasShiftDown());
+                    ResourceGuidanceClient.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
+                }
+            }
+        }
     }
 
     @Override

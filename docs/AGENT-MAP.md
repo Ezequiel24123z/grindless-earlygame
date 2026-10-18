@@ -337,12 +337,23 @@ is its complete current inventory, while legacy arrays preserve candidate descri
 The worker inventoried existing source/state/model/icon/effect coverage, not approved art.
 The active section of `docs/testing/t0-survival-acceptance.md` controls client preparation;
 the predecessor checklist is not the post-S2 route or an instruction to advance into T2.
+`tools/assetgen/.../BlockModels.java` owns generated face references: internal boxes use bare
+keys, the JSON writer adds one `#`, and shared `WorkshopGeometry` references are normalized
+only at that boundary. `WorkshopPreview` retains its convention. `VerifyAssets` checks
+local face resolution/inherited aliases and cycles; a source fix without regenerated model
+JSON is not completed asset delivery. Generate in staging while other workers own assets/lang.
 
 Resource communication follows
 [ADR-0143](DECISIONS.md#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations).
-The active worker owns the generated declaration view, native shared formatter and display
-adapters; concrete files are added to this map with implementation. Canonical Result metadata
-is the only declaration authority. Installed-client hover must not call the source-root
+The `guidance` package owns the typed projection, JSON/fingerprint, context selection and
+runtime cache. `client/ResourceGuidanceClient` is the shared native formatter; Forge's
+`ResourceGuidanceTooltips` includes annotated vanilla items and real fluid containers.
+Field Guide, Atlas, machine and quest displays reuse those adapters.
+`tools/generate-resource-guidance.ps1`/`.sh` use the shared canonical exporter/bootstrap;
+`VerifyResourceGuidance` checks projection/runtime/drift boundaries. Real resource generation
+and compilation remain pending, as does complete executed-implementation provenance in its
+sidecar. Canonical Result metadata is the only declaration authority.
+Installed-client hover must not call the source-root
 `AuthorityAdapters` or invent an entry profile; generated fields are checked for drift.
 Actual recipe objects/amounts stay in the existing process/Atlas/JEI authorities. Guide
 prose must not make finite extraction or vanilla farms the permanent T0 source, or turn a

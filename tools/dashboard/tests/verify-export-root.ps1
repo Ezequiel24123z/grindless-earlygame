@@ -14,6 +14,7 @@ $relativeSources = @(
     'tools\checks\VerifySustainabilityAdapters.java',
     'tools\checks\VerifySustainabilityRegistry.java',
     'tools\checks\VerifySustainabilityT0.java',
+    'tools\checks\VerifyResourceGuidance.java',
     'tools\dashboard\DashboardExport.java',
     'tools\dashboard\tests\VerifyDashboardProjection.java'
 )
@@ -62,8 +63,10 @@ try {
     }
     $callerExport = Join-Path $caller 'tools\dashboard\DashboardExport.java'
     $callerTest = Join-Path $caller 'tools\dashboard\tests\VerifyDashboardProjection.java'
+    $callerGuidance = Join-Path $caller 'tools\checks\VerifyResourceGuidance.java'
     [IO.File]::WriteAllText($callerExport, 'Caller A poison: this source must never be compiled for B.')
     [IO.File]::WriteAllText($callerTest, 'Caller A poison: this test must never be compiled for B.')
+    [IO.File]::WriteAllText($callerGuidance, 'Caller A poison: the guidance helper must never be compiled for B.')
     foreach ($directory in @($caller, $selectedRoot)) {
         Invoke-FixtureGit $directory @('init', '--quiet') | Out-Null
         Invoke-FixtureGit $directory @('add', '--all') | Out-Null
@@ -76,6 +79,7 @@ try {
         if ($state -eq 'divergent_dirty_caller') {
             [IO.File]::AppendAllText($callerExport, "`nDirty caller A must remain excluded.")
             [IO.File]::AppendAllText($callerTest, "`nDirty caller A must remain excluded.")
+            [IO.File]::AppendAllText($callerGuidance, "`nDirty caller A helper must remain excluded.")
         }
         $callerStatus = Invoke-FixtureGit $caller @('status', '--porcelain', '--untracked-files=normal')
         Assert-RootSelection (($callerStatus.Length -gt 0) -eq ($state -eq 'divergent_dirty_caller')) `
@@ -91,7 +95,8 @@ try {
             Assert-RootSelection ((Get-FileHash -Algorithm SHA256 -LiteralPath $sources[$index]).Hash -eq
                 (Get-FileHash -Algorithm SHA256 -LiteralPath $expected).Hash) 'Selected source bytes differ from B.'
         }
-        foreach ($relative in @('tools\dashboard\DashboardExport.java', 'tools\dashboard\tests\VerifyDashboardProjection.java')) {
+        foreach ($relative in @('tools\dashboard\DashboardExport.java', 'tools\dashboard\tests\VerifyDashboardProjection.java',
+                'tools\checks\VerifyResourceGuidance.java')) {
             Assert-RootSelection ((Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $caller $relative)).Hash -ne
                 (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $selectedRoot $relative)).Hash) `
                 'The cross-root fixture must actually contain divergent tools.'

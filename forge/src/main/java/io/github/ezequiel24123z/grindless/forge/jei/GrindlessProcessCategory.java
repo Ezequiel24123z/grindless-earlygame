@@ -10,7 +10,12 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.source.SourceSite;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.client.ResourceGuidanceClient;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
 import mezz.jei.api.forge.ForgeTypes;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -24,6 +29,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -111,6 +117,7 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
                 var slot = builder.addOutputSlot(position.x(), position.y()).setSlotName("item_output_" + index);
                 if (index < outputs.size()) {
                     ProcessLookup.resolve(outputs.get(index)).ifPresent(slot::addItemStack);
+                    itemGuidance(slot);
                 }
             } else {
                 int index = position.index();
@@ -123,6 +130,7 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
                 }
                 if (index < inputs.size()) {
                     addInput(slot, inputs.get(index));
+                    itemGuidance(slot);
                 }
             }
         }
@@ -207,6 +215,16 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
             OutputSpec spec = outgoing.get(index);
             addFluidDiagnostic(tooltip, spec.id(), spec.count(), true, index, outputCount, mouseX, mouseY);
         }
+        if (mouseX >= 4 && mouseX < WIDTH - 4 && mouseY >= detailsY(inputCount, outputCount)
+                && mouseY < getHeight() - 4) {
+            for (OutputSpec spec : recipe.fluidOutputs()) {
+                if (spec.vented()) {
+                    tooltip.add(Component.translatable("jei.grindless.fluid_vent", spec.id(), spec.count()));
+                    ResourceGuidanceClient.lines(new Resource(Kind.FLUID, spec.id()), true, Screen.hasShiftDown())
+                            .forEach(tooltip::add);
+                }
+            }
+        }
     }
 
     private static void addFluidDiagnostic(ITooltipBuilder tooltip, String id, int amount,
@@ -220,6 +238,7 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
         tooltip.add(Component.translatable(output ? "jei.grindless.state_fluid_output"
                 : "jei.grindless.state_fluid_input", id, amount));
         tooltip.add(Component.translatable("jei.grindless.fluid_unavailable").withStyle(ChatFormatting.RED));
+        ResourceGuidanceClient.lines(new Resource(Kind.FLUID, id), true, Screen.hasShiftDown()).forEach(tooltip::add);
         if (!output && index > 0) {
             tooltip.add(Component.translatable("jei.grindless.adjacent_fluid"));
         }
@@ -255,6 +274,26 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
                                  boolean showCapacity) {
         fluid(id, amount).ifPresent(stack -> slot.setFluidRenderer(capacity, showCapacity, 16, FLUID_HEIGHT)
                 .addIngredient(ForgeTypes.FLUID_STACK, stack));
+        slot.addRichTooltipCallback((view, tooltip) -> view.getDisplayedIngredient(ForgeTypes.FLUID_STACK)
+                .ifPresent(actual -> {
+                    ResourceLocation actualId = ForgeRegistries.FLUIDS.getKey(actual.getFluid());
+                    Resource resource = actualId == null ? null : new Resource(Kind.FLUID, actualId.toString());
+                    ResourceGuidanceClient.lines(resource, true, Screen.hasShiftDown()).forEach(tooltip::add);
+                }));
+    }
+
+    private static void itemGuidance(IRecipeSlotBuilder slot) {
+        slot.addRichTooltipCallback((view, tooltip) -> view.getDisplayedIngredient(VanillaTypes.ITEM_STACK)
+                .ifPresent(actual -> {
+                    var loaded = ResourceGuidanceRuntime.current();
+                    var resource = ResourceGuidanceClient.item(actual);
+                    // Annotated stacks already receive the shared Forge ItemTooltipEvent presentation.
+                    if (loaded.available() && (resource.isEmpty()
+                            || !loaded.document().resources().containsKey(resource.get()))) {
+                        ResourceGuidanceClient.lines(resource.orElse(null), true, Screen.hasShiftDown())
+                                .forEach(tooltip::add);
+                    }
+                }));
     }
 
     private static List<OutputSpec> storedOutputs(ProcessRecipe recipe) {

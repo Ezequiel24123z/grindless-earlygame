@@ -7,6 +7,8 @@ import earth.terrarium.heracles.api.tasks.client.QuestTaskWidgetFactory;
 import earth.terrarium.heracles.api.tasks.client.QuestTaskWidgets;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
+import io.github.ezequiel24123z.grindless.client.ResourceGuidanceClient;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -113,6 +115,8 @@ public final class HeraclesQuestClient {
             text.add(Component.translatable("gui.grindless.quest.reward", itemName(task.reward().itemId()),
                     task.reward().count()));
             text.add(Component.translatable("gui.grindless.quest.claim_policy"));
+            ResourceGuidanceContext.questSubject(task).ifPresent(resource ->
+                    text.addAll(ResourceGuidanceClient.playerContext(resource)));
             List<FormattedCharSequence> result = new ArrayList<>();
             for (Component line : text) {
                 result.addAll(font.split(line, Math.max(1, width - 16)));

@@ -84,8 +84,9 @@ invalidated assumption or a genuine new property.
 | Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Reviewed through546c/01828 and composed. The same reviewer closed Root source-attribution P2;38 PS root-selection checks and a separate546c canonical export pass. cb0 retains its23 browser/16 HTTP scope. Combined export and new same-repository CI artifact step remain unexecuted; no retitled worker output. |
 | CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
 | Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
-| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` | ADR-0143 implementation from8fc: a checked generated declaration view and shared native display adapters, with T0 guide corrections. No runtime source-root audit, duplicate catalogue/quantities, fabricated starter kit or Tier verdict; generation/surface evidence remains pending. |
+| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` |26-file ADR-0143 implementation is preserved but uncompiled and ungenerated. Native readers now use compact player context. Open P2: sidecar provenance misses some executed implementation identities; the same reviewer must recheck the fix. No fake resource, catalogue/quantity copy or Tier verdict. |
 | Exosuit fixture / worker `2632f51f-8ae8-4e00-a5fb-694dca8c1987` | Reviewed source patch: one summon per tagged item, actual coherent observation and160 polls under the same120s runner. Retained diagnostics now use conditional say, not silent function data-get. Static25 contracts/12 mutations only; Java/native execution pending. No T1 gameplay expansion. |
+| T0 texture aliases / worker `9d32dd27-39b9-41fc-8d49-6af58856f904` | Root generator/asset-regression fix prepared for proven T0 double-prefix references. No JVM or regeneration yet; existing JSON remains broken until a staged, compared regeneration. Keep pixels/geometry/preview and the guidance worker's assets/lang untouched. |
 
 The exact composed JSON is
 `a501f60598abea3e5360f652d6cc4dc16679e7ff36468dfe55a61b22f84ac5cf`;
@@ -112,6 +113,9 @@ production and first-fluids passed in these runs; synthetic oracle cases remain 
 completed and released their JVMs. S2 now owns the frozen8fc combined build/check/export.
 The first invocation promoted a JDK stderr note to a WinPS exception before a Gradle
 verdict; that failure is preserved and native cmd/process capture is authorized for retry.
+The retry passed8fc build/remap and15 pack checks. Runner-only local4061 then fixed the
+actual version-probe stderr handling and passed32 WinPS guard cases; official checks/export
+continue on4061, not a relabeled8fc runner. No debugger hook was used.
 The native-fixture grant ended without a boot:
 only1909MiB commit margin was available.
 Managed cloud Sandbox provisioning also returned403, so neither path produced native evidence.

@@ -465,7 +465,8 @@ public final class AuditReports {
         return conditions;
     }
 
-    private static List<Map<String, Object>> relationships(Snapshot snapshot, Resource resource, boolean producers) {
+    /** Read-only provenance shared with prepared guidance; no quantities or tier verdicts are inferred. */
+    public static List<Map<String, Object>> relationships(Snapshot snapshot, Resource resource, boolean producers) {
         List<Map<String, Object>> relationships = new ArrayList<>();
         for (Route route : snapshot.routes().values()) {
             if (producers) {

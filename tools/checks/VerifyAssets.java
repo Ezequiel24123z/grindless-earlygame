@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.registry;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ public final class VerifyAssets {
         blocks();
         sounds();
         everyModelResolves();
+        textureReferenceRegressionCases();
         itemsAreNamedAndModelled();
         finish();
     }
@@ -167,7 +170,9 @@ public final class VerifyAssets {
     /** Every texture and parent a Grindless model names must exist, or the game draws a purple cube. */
     private static void everyModelResolves() throws IOException {
         List<String> missing = new ArrayList<>();
+        List<String> invalidFaceReferences = new ArrayList<>();
         int models = 0;
+        Path blockModels = ASSETS.resolve("models/block");
         try (Stream<Path> files = Files.walk(ASSETS.resolve("models"))) {
             for (Path file : (Iterable<Path>) files.filter(p -> p.toString().endsWith(".json"))::iterator) {
                 models++;
@@ -184,6 +189,9 @@ public final class VerifyAssets {
                         }
                     }
                 }
+                if (blockModels.equals(file.getParent())) {
+                    checkLocalBlockModelFaceReferences(file, json, invalidFaceReferences);
+                }
             }
         }
         yes("scanned " + models + " models", models > 100);
@@ -199,6 +207,158 @@ public final class VerifyAssets {
                         .contains("function grindless:states"));
         yes("every texture and parent a model names exists" + (missing.isEmpty() ? "" : " " + missing),
                 missing.isEmpty());
+        String faceExamples = invalidFaceReferences.isEmpty() ? ""
+                : " (" + invalidFaceReferences.size() + "): "
+                + invalidFaceReferences.stream().limit(8).toList()
+                + (invalidFaceReferences.size() > 8 ? " ..." : "");
+        yes("generated block model local faces use one # and a declared or inherited texture key" + faceExamples,
+                invalidFaceReferences.isEmpty());
+    }
+
+    private static void checkLocalBlockModelFaceReferences(Path file, JsonObject model, List<String> invalid)
+            throws IOException {
+        // Minecraft resolves inherited elements; this audit covers only faces declared here.
+        if (!model.has("elements")) {
+            return;
+        }
+        JsonArray elements = model.getAsJsonArray("elements");
+        if (elements.size() == 0) {
+            return;
+        }
+        Path modelRoot = ASSETS.resolve("models").normalize();
+        String modelId = modelRoot.relativize(file.normalize()).toString().replace('\\', '/');
+        modelId = modelId.substring(0, modelId.length() - ".json".length());
+        Map<String, String> textures = effectiveTextureBindings(modelId, model, parentId -> {
+            Path parentFile = modelRoot.resolve(parentId + ".json").normalize();
+            return parentFile.startsWith(modelRoot) ? read(parentFile) : null;
+        }, new HashSet<>(), invalid);
+        for (int elementIndex = 0; elementIndex < elements.size(); elementIndex++) {
+            JsonObject element = elements.get(elementIndex).getAsJsonObject();
+            if (!element.has("faces")) {
+                invalid.add(file.getFileName() + " element " + elementIndex + " has no faces");
+                continue;
+            }
+            for (Map.Entry<String, JsonElement> faceEntry
+                    : element.getAsJsonObject("faces").entrySet()) {
+                JsonObject face = faceEntry.getValue().getAsJsonObject();
+                if (!face.has("texture")) {
+                    invalid.add(file.getFileName() + " element " + elementIndex + " "
+                            + faceEntry.getKey() + " face has no texture");
+                    continue;
+                }
+                String reference = face.get("texture").getAsString();
+                if (!isSingleTextureKey(reference)) {
+                    invalid.add(file.getFileName() + " element " + elementIndex + " "
+                            + faceEntry.getKey() + " face uses " + reference);
+                } else if (!resolvesTextureKey(reference.substring(1), textures, new HashSet<>())) {
+                    invalid.add(file.getFileName() + " element " + elementIndex + " "
+                            + faceEntry.getKey() + " face has no binding for " + reference);
+                }
+            }
+        }
+    }
+
+    @FunctionalInterface
+    private interface ModelLookup {
+        JsonObject load(String modelId) throws IOException;
+    }
+
+    private static Map<String, String> effectiveTextureBindings(String modelId, JsonObject model,
+                                                                 ModelLookup lookup, Set<String> visiting,
+                                                                 List<String> invalid) throws IOException {
+        if (!visiting.add(modelId)) {
+            invalid.add(modelId + " has a cyclic model parent chain");
+            return Map.of();
+        }
+        Map<String, String> textures = new HashMap<>();
+        try {
+            if (model.has("parent")) {
+                String parent = model.get("parent").getAsString();
+                if (parent.startsWith("grindless:")) {
+                    String parentId = parent.substring("grindless:".length());
+                    JsonObject parentModel = lookup.load(parentId);
+                    if (parentModel != null) {
+                        textures.putAll(effectiveTextureBindings(parentId, parentModel, lookup, visiting, invalid));
+                    }
+                }
+            }
+            if (model.has("textures")) {
+                for (Map.Entry<String, JsonElement> texture : model.getAsJsonObject("textures").entrySet()) {
+                    textures.put(texture.getKey(), texture.getValue().getAsString());
+                }
+            }
+            return textures;
+        } finally {
+            visiting.remove(modelId);
+        }
+    }
+
+    private static JsonObject textureModel(String parentId, Map<String, String> bindings) {
+        JsonObject model = new JsonObject();
+        if (parentId != null) {
+            model.addProperty("parent", "grindless:" + parentId);
+        }
+        JsonObject textures = new JsonObject();
+        for (Map.Entry<String, String> binding : bindings.entrySet()) {
+            textures.addProperty(binding.getKey(), binding.getValue());
+        }
+        model.add("textures", textures);
+        return model;
+    }
+
+    private static void textureReferenceRegressionCases() throws IOException {
+        List<String> inheritedElementsErrors = new ArrayList<>();
+        checkLocalBlockModelFaceReferences(ASSETS.resolve("models/block/child.json"),
+                textureModel("block/parent", Map.of()), inheritedElementsErrors);
+        yes("a model without local elements is left to inherit its parent's faces",
+                inheritedElementsErrors.isEmpty());
+        yes("double-hash face references are rejected", !isSingleTextureKey("##cap"));
+        yes("unbound face texture keys are rejected",
+                !resolvesTextureKey("missing", Map.of(), new HashSet<>()));
+        yes("texture alias cycles are rejected",
+                !resolvesTextureKey("first", Map.of("first", "#second", "second", "#first"), new HashSet<>()));
+
+        Map<String, JsonObject> inheritedModels = Map.of(
+                "block/parent", textureModel(null, Map.of("base", "grindless:block/casing_side")),
+                "block/child", textureModel("block/parent", Map.of("front", "#base")));
+        List<String> inheritedErrors = new ArrayList<>();
+        Map<String, String> inheritedBindings = effectiveTextureBindings("block/child",
+                inheritedModels.get("block/child"), inheritedModels::get, new HashSet<>(), inheritedErrors);
+        yes("a face texture alias resolves through an inherited parent binding",
+                inheritedErrors.isEmpty()
+                        && resolvesTextureKey("front", inheritedBindings, new HashSet<>()));
+
+        Map<String, JsonObject> cyclicModels = Map.of(
+                "block/first", textureModel("block/second",
+                        Map.of("cap", "grindless:block/casing_side")),
+                "block/second", textureModel("block/first", Map.of()));
+        List<String> cycleErrors = new ArrayList<>();
+        Map<String, String> cyclicBindings = effectiveTextureBindings("block/first",
+                cyclicModels.get("block/first"), cyclicModels::get, new HashSet<>(), cycleErrors);
+        yes("a parent cycle is reported even when a local face key resolves",
+                cycleErrors.stream().anyMatch(error -> error.contains("cyclic model parent chain"))
+                        && isSingleTextureKey("#cap")
+                        && resolvesTextureKey("cap", cyclicBindings, new HashSet<>()));
+    }
+
+    private static boolean isSingleTextureKey(String reference) {
+        return reference != null && reference.length() > 1 && reference.charAt(0) == '#'
+                && reference.indexOf('#', 1) < 0;
+    }
+
+    private static boolean resolvesTextureKey(String key, Map<String, String> textures, Set<String> visited) {
+        if (!visited.add(key)) {
+            return false;
+        }
+        String reference = textures.get(key);
+        if (reference == null || reference.isBlank()) {
+            return false;
+        }
+        if (reference.startsWith("#")) {
+            return isSingleTextureKey(reference)
+                    && resolvesTextureKey(reference.substring(1), textures, visited);
+        }
+        return reference.indexOf('#') < 0;
     }
 
     private static int totalStates() {

@@ -7,6 +7,8 @@ import io.github.ezequiel24123z.grindless.menu.MachineMenuLayout;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
 import io.github.ezequiel24123z.grindless.source.SourceSite;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -16,7 +18,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 /**
  * One screen for every process machine.
@@ -162,7 +163,11 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
                                 Component.translatable("gui.grindless.fluid_unavailable", id)
                                         .withStyle(ChatFormatting.RED)));
                     }
-                    graphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
+                    if (fluid.amount() > 0) {
+                        ResourceGuidanceClient.append(tooltip, fluid.id()
+                                .map(id -> new Resource(Kind.FLUID, id)).orElse(null), true, hasShiftDown());
+                    }
+                    ResourceGuidanceClient.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
                 });
             }
         });

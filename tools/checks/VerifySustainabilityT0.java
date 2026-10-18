@@ -30,6 +30,7 @@ public final class VerifySustainabilityT0 {
         DebtManifest debt = DebtManifest.read(root.resolve(Path.of("tools", "sustainability", "debt.json")));
         var derivation = SustainabilityAudit.deriveEntryProfile(snapshot, annotations, debt, 0);
         var result = derivation.replay();
+        passed += VerifyResourceGuidance.verifyCanonical(root, result);
         var tier = result.tiers().get(0);
         T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
         Path report = root.resolve(Path.of("build", "sustainability", "t0-conditional"));
