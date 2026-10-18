@@ -15,6 +15,7 @@ dependencies {
 // version in a developer's cache. Gradle also handles mapped jar paths beyond Windows MAX_PATH.
 tasks.register("writeCheckClasspath") {
     dependsOn tasks.named("classes")
+    dependsOn ":forge:writeSustainabilityPackClasspath"
     def destination = layout.buildDirectory.file("checks/runtime-classpath.txt")
     inputs.files(sourceSets.main.runtimeClasspath)
     outputs.file(destination)

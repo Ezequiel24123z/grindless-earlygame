@@ -36,7 +36,7 @@ public final class AuditReports {
      * @param directory generated report directory
      * @param result audit facts and findings
      * @param revision source revision label, not an identity for uncommitted source or class bytes
-     * @param reportOnly whether this invocation is in the unannotated S1 report-only gate
+     * @param reportOnly whether this invocation is an unannotated inventory, not an enforced audit
      * @return hashes of the bytes written
      * @throws IOException if report output fails
      */
@@ -70,7 +70,11 @@ public final class AuditReports {
                 "implementation_source_sha256", sourceHash(sourceHashes(snapshot, true)),
                 "implementation_source_hashes", sourceHashes(snapshot, true),
                 "tag_resolution_scope", tagResolutionScope(snapshot),
-                "mode", reportOnly ? "report_only_s1_no_annotations" : "enforced",
+                "resolved_pack_hashes", packHashes(snapshot),
+                "registry_binding_hashes", registryHashes(snapshot),
+                "registry_binding_conditions", registryConditions(snapshot),
+                "mode", reportOnly ? canonicalPack(snapshot)
+                        ? "report_only_s2_canonical_inventory_no_annotations" : "report_only_s1_no_annotations" : "enforced",
                 "sustainability_pass", !reportOnly && result.sustainabilityPass(),
                 "ratchet_pass", result.findings().ratchetPass(),
                 "failure_visible_debt", result.findings().waivedDebt(),
@@ -170,15 +174,17 @@ public final class AuditReports {
     /** Returns a human report with explicit evidence boundaries and all failure-visible findings. */
     public static String markdown(SustainabilityAudit.Result result, String revision, boolean reportOnly) {
         StringBuilder text = new StringBuilder("# Sustainability audit\n\n");
+        Snapshot snapshot = result.authorities();
         if (reportOnly) {
-            text.append("**LIVE AUDIT REPORT-ONLY (S1, no annotations)**\n\n")
+            text.append(canonicalPack(snapshot)
+                            ? "**CANONICAL RESOURCE INVENTORY REPORT-ONLY (S2, no annotations)**\n\n"
+                            : "**LIVE AUDIT REPORT-ONLY (S1, no annotations)**\n\n")
                     .append("Synthetic rule checks are hard assertions, not live sustainability evidence. ")
                     .append("This invocation cannot certify a tier or make run-checks a sustainability pass.\n\n");
         } else {
             text.append("**Sustainability: ").append(result.sustainabilityPass() ? "PASS" : "NOT CERTIFIED")
                     .append("**\n\n");
         }
-        Snapshot snapshot = result.authorities();
         AuthorityAdapters.ImplementationIdentity implementation = AuthorityAdapters.implementationIdentity();
         text.append("Audit schema: 1. Source revision label: `").append(revision).append("`.\n")
                 .append("Authority content and source SHA-256: `").append(authorityHash(snapshot)).append("`.\n")
@@ -193,6 +199,14 @@ public final class AuditReports {
                 .append("Commit cleanliness and publication are unverified; a revision label never identifies uncommitted code.\n\n")
                 .append("Tag resolution scope: `").append(tagResolutionScope(snapshot)).append("`. ")
                 .append("Local-only discovery and unordered classpath fallback are not canonical vanilla/Forge runtime resolution. ")
+                .append(canonicalPack(snapshot)
+                        ? "The standalone pack adapter reads the Gradle-resolved vanilla/Forge resources and local Grindless data. "
+                                + "It evaluates referenced/local tags; other indexed definitions are not silently made progression roots. "
+                                + "Append-only overlaps prove set-membership commutativity, not runtime pack priority. "
+                                + "Every unresolved registry lookup or order-sensitive overlap remains incomplete. "
+                                + "Source registration declarations inventory prototypes, not observed runtime registry membership. "
+                                + "Registry binding conditions: " + registryConditions(snapshot) + ". "
+                        : "")
                 .append("Concrete producer lists expand only complete singleton outputs; multi-member or incomplete outputs ")
                 .append("retain tag-qualified candidate provenance and uncertainty in `audit.json`. Complete tag inputs ")
                 .append("accept their members. These relationships do not establish route availability or renewability.\n\n");
@@ -309,8 +323,44 @@ public final class AuditReports {
     }
 
     private static String tagResolutionScope(Snapshot snapshot) {
+        if (canonicalPack(snapshot)) {
+            return "standalone_gradle_resolved_resources_registry_evidence_per_tag";
+        }
         return snapshot.findings().stream().anyMatch(finding -> finding.rule().equals("canonical_tag_resolution_unknown"))
                 ? "local_only_noncanonical" : "snapshot_declared_resolutions_not_runtime_certification";
+    }
+
+    private static boolean canonicalPack(Snapshot snapshot) {
+        return snapshot.inputHashes().keySet().stream().anyMatch(key -> key.startsWith("standalone_pack_contract:"));
+    }
+
+    private static Map<String, String> packHashes(Snapshot snapshot) {
+        Map<String, String> hashes = new TreeMap<>();
+        snapshot.inputHashes().forEach((source, hash) -> {
+            if (source.startsWith("resolved_pack:") || source.startsWith("pack_binding:")
+                    || source.startsWith("standalone_pack_contract:")) {
+                hashes.put(source, hash);
+            }
+        });
+        return hashes;
+    }
+
+    private static Map<String, String> registryHashes(Snapshot snapshot) {
+        Map<String, String> hashes = new TreeMap<>();
+        snapshot.inputHashes().forEach((source, hash) -> {
+            if (source.startsWith("registry_membership:") || source.startsWith("registration_source:")
+                    || source.startsWith("registry_profile:") || source.startsWith("registry_condition:")) {
+                hashes.put(source, hash);
+            }
+        });
+        return hashes;
+    }
+
+    private static Set<String> registryConditions(Snapshot snapshot) {
+        Set<String> conditions = new TreeSet<>();
+        snapshot.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_condition:"))
+                .map(key -> key.substring("registry_condition:".length())).forEach(conditions::add);
+        return conditions;
     }
 
     private static List<Map<String, Object>> relationships(Snapshot snapshot, Resource resource, boolean producers) {

@@ -71,6 +71,26 @@ remapJar {
     archiveClassifier = "forge"
 }
 
+// The common checks inspect Forge's actual resolved resources without loading Forge classes.
+tasks.register("writeSustainabilityPackClasspath") {
+    def destination = layout.buildDirectory.file("checks/sustainability-pack-classpath.json")
+    inputs.files(configurations.compileClasspath)
+    inputs.property "minecraftVersion", rootProject.minecraft_version
+    inputs.property "forgeVersion", rootProject.forge_version
+    outputs.file(destination)
+    doLast {
+        def file = destination.get().asFile
+        file.parentFile.mkdirs()
+        file.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([
+                schema_version: 1,
+                gradle_configuration: "forge:compileClasspath",
+                minecraft_version: rootProject.minecraft_version,
+                forge_version: rootProject.forge_version,
+                classpath: configurations.compileClasspath.files.collect { it.absolutePath }
+        ])) + "\n", "UTF-8")
+    }
+}
+
 def smokeServer = layout.projectDirectory.dir("run/smoke-server")
 def smokeInventory = smokeServer.file("installation-files.txt")
 tasks.register("installSmokeServer", JavaExec) {

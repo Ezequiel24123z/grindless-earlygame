@@ -68,8 +68,33 @@ public final class AuthorityAdapters {
      * @throws IOException if an authority cannot be read
      */
     public static Snapshot live(Path root) throws IOException {
-        Builder builder = new Builder();
         TagResolver tags = new TagResolver(root, AuthorityAdapters.class.getClassLoader(), false);
+        Builder builder = inventory(root, tags);
+        builder.finding(unknown("canonical_tag_resolution_unknown", "local_only",
+                "S1 reads local tag JSON only, not the complete ordered vanilla/Forge runtime resource pack. "
+                        + "Observed local members are not evidence of canonical runtime tag completeness."));
+        pendingDeclarations(builder);
+        return builder.build();
+    }
+
+    /**
+     * Reads the canonical standalone resource inventory with an explicit registry binding.
+     * Neither Gradle enumeration nor a direct ID in tag JSON supplies registry membership.
+     */
+    public static Snapshot canonical(Path root, TagResolver.ElementLookup elements) throws IOException {
+        CanonicalPack pack = CanonicalPack.resolved(root);
+        TagResolver tags = new TagResolver(root, pack, elements);
+        Builder builder = inventory(root, tags);
+        pack.contribute(builder);
+        elements.inputHashes().forEach(builder::input);
+        readRegistrations(root, builder);
+        pendingDeclarations(builder);
+        return builder.build();
+    }
+
+    private static Builder inventory(Path root, TagResolver tags) throws IOException {
+        root = root.toAbsolutePath().normalize();
+        Builder builder = new Builder();
         for (Resource tag : tags.localTags()) {
             tags.resolve(tag);
         }
@@ -93,16 +118,43 @@ public final class AuthorityAdapters {
 
         authoritySourceHashes(root).forEach(builder::input);
         implementationSourceHashes(root).forEach((path, hash) -> builder.input(IMPLEMENTATION_SOURCE_PREFIX + path, hash));
-        builder.finding(unknown("canonical_tag_resolution_unknown", "local_only",
-                "S1 reads local tag JSON only, not the complete ordered vanilla/Forge runtime resource pack. "
-                        + "Observed local members are not evidence of canonical runtime tag completeness."));
+        return builder;
+    }
+
+    private static void pendingDeclarations(Builder builder) {
         builder.finding(unknown("generator_fuel_unknown", "furnace_fuel_table",
                 "The platform furnace-fuel registry is dynamic. Only live loader-free biomass/gas tables are projected."));
         builder.finding(unknown("bootstrap_sources_unknown", "manual_world_and_labour",
-                "No manual gathering, crank, collector or world terminal is declared in S1."));
+                "No manual gathering, crank, collector or world terminal is declared by this unannotated inventory."));
         builder.finding(unknown("vanilla_allowlist_unknown", "vanilla_transformations",
-                "No canonical vanilla transformation allowlist is authored in S1."));
-        return builder.build();
+                "No canonical vanilla transformation allowlist is authored by this unannotated inventory."));
+    }
+
+    private static void readRegistrations(Path root, Builder builder) throws IOException {
+        Pattern literal = Pattern.compile("(?<![\\w$.])register\\s*\\(\\s*\"([a-z0-9_]+)\"");
+        Pattern blockOnly = Pattern.compile("\\bBLOCKS\\.register\\s*\\(\\s*\"([a-z0-9_]+)\"");
+        for (String name : List.of("ModItems", "ModBlocks")) {
+            Path relative = JAVA_ROOT.resolve(Path.of("io", "github", "ezequiel24123z", "grindless",
+                    "registry", name + ".java"));
+            byte[] bytes = Files.readAllBytes(root.resolve(relative));
+            String source = relative.toString().replace('\\', '/');
+            builder.input(source, sha256(bytes));
+            String code = new String(bytes, StandardCharsets.UTF_8)
+                    .replaceAll("(?s)/\\*.*?\\*/|//[^\\r\\n]*", " ");
+            Matcher entries = literal.matcher(code);
+            while (entries.find()) {
+                builder.resource(item("grindless:" + entries.group(1)));
+                if (name.equals("ModBlocks")) {
+                    builder.resource(new Resource(Kind.ITEM, "grindless:" + entries.group(1), 0, "blocks"));
+                }
+            }
+            if (name.equals("ModBlocks")) {
+                Matcher blocks = blockOnly.matcher(code);
+                while (blocks.find()) {
+                    builder.resource(new Resource(Kind.ITEM, "grindless:" + blocks.group(1), 0, "blocks"));
+                }
+            }
+        }
     }
 
     /** Returns the standalone material view, never adding synthetic fixture materials to it. */
@@ -286,7 +338,7 @@ public final class AuthorityAdapters {
                 SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class)) {
             pending.add(type.getName().replace('.', '/') + ".class");
         }
-        for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters")) {
+        for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters", "VerifySustainabilityRegistry")) {
             String path = IMPLEMENTATION_PATH + check + ".class";
             if (loader.getResource(path) != null) {
                 pending.add(path);
@@ -327,7 +379,8 @@ public final class AuthorityAdapters {
                 hashes.put(repository.relativize(file).toString().replace('\\', '/'), sha256(Files.readAllBytes(file)));
             }
         }
-        for (String check : List.of("VerifySustainability.java", "VerifySustainabilityAdapters.java")) {
+        for (String check : List.of("VerifySustainability.java", "VerifySustainabilityAdapters.java",
+                "VerifySustainabilityRegistry.java")) {
             Path file = repository.resolve(Path.of("tools", "checks", check));
             if (Files.isRegularFile(file)) {
                 hashes.put(repository.relativize(file).toString().replace('\\', '/'), sha256(Files.readAllBytes(file)));
