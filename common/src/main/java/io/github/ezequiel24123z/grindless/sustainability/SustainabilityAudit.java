@@ -90,7 +90,7 @@ public final class SustainabilityAudit {
             }
             if (resource.kind() == Kind.TAG) {
                 TagResolution tag = snapshot.tags().get(resource);
-                if (tag == null || !tag.complete() || tag.members().isEmpty()) {
+                if (tag == null || !tag.complete()) {
                     add("unresolved_tag", resource.key(), "", UNKNOWN,
                             tag == null ? "Tag has no resolved JSON authority."
                                     : "Unresolved tag references: " + tag.unresolved());
@@ -818,7 +818,7 @@ public final class SustainabilityAudit {
     }
 
     /** Attempts an exact positive integer batch witness; failure is unproven, not infeasibility. */
-    private static Map<String, BigInteger> normalizedBatches(List<Route> routes, Resource carrier) {
+    static Map<String, BigInteger> normalizedBatches(List<Route> routes, Resource carrier) {
         if (routes.size() > 32) {
             return null;
         }
@@ -833,6 +833,10 @@ public final class SustainabilityAudit {
         Map<String, BigInteger> batches = new TreeMap<>();
         routes.forEach(route -> batches.put(route.id(), BigInteger.ONE));
         Map<Resource, BigInteger> unit = balance(routes, batches);
+        if (unit.getOrDefault(carrier, BigInteger.ZERO).signum() == 0
+                && inputs.stream().allMatch(resource -> unit.getOrDefault(resource, BigInteger.ZERO).signum() >= 0)) {
+            return batches;
+        }
         if (inputs.stream().allMatch(resource -> unit.getOrDefault(resource, BigInteger.ZERO).signum() == 0)) {
             return batches;
         }

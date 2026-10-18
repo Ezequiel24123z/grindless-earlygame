@@ -108,6 +108,7 @@ public final class AuditReports {
             routes.add(row("id", route.id(), "authority", lower(route.authority()), "source", route.source(),
                     "machine_family", route.family(), "inputs", quantitiesById(route.inputs()),
                     "net_consumption", quantitiesById(route.netInputs()), "catalysts", quantitiesById(route.catalysts()),
+                    "non_consumed_requirements", quantitiesById(route.catalysts()),
                     "outputs", quantitiesById(route.outputs()), "discharged", keys(route.discharged()),
                     "duration_ticks", route.durationTicks(), "fu_per_tick", route.fuPerTick(),
                     "conditions", route.conditions(), "prerequisites", route.prerequisites(),
@@ -210,6 +211,9 @@ public final class AuditReports {
                 .append("Concrete producer lists expand only complete singleton outputs; multi-member or incomplete outputs ")
                 .append("retain tag-qualified candidate provenance and uncertainty in `audit.json`. Complete tag inputs ")
                 .append("accept their members. These relationships do not establish route availability or renewability.\n\n");
+        text.append("`non_consumed_requirements` includes retained tools, chemical catalysts and installed structure parts. ")
+                .append("The compatibility field `catalysts` describes the same quantities; it does not chemically classify casings. ")
+                .append("A formed installation retains its parts once per family, separately from movable process seeds.\n\n");
         var findings = result.findings();
         text.append("Active errors: **").append(findings.activeErrors()).append("**; waived_debt: **")
                 .append(findings.waivedDebt()).append("**; warnings: **").append(findings.warnings())

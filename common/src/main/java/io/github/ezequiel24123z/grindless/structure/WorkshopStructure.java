@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.structure;
 
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
@@ -63,6 +65,15 @@ public enum WorkshopStructure {
     /** The immutable cells used by runtime formation and deterministic rotation checks. */
     public List<Cell> cells() {
         return cells;
+    }
+
+    /** The shared runtime/inventory binding; a family does not imply an accepted progression tier. */
+    public static WorkshopStructure forFamily(MachineFamily family) {
+        return switch (family) {
+            case FIRING_CHAMBER -> FIRING_CHAMBER;
+            case SETTLING_TROUGH -> SETTLING_TROUGH;
+            default -> NONE;
+        };
     }
 
     /**

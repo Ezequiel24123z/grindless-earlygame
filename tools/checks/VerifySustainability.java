@@ -6,15 +6,18 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
+import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -97,7 +100,8 @@ public final class VerifySustainability {
                 VerifySustainability::forkedStartup, VerifySustainability::optionalOnlyProduction,
                 VerifySustainability::sharedHandlingBudget, VerifySustainability::loopEnergy,
                 VerifySustainability::normalizedLoops, VerifySustainability::sequentialReturnedSeed,
-                VerifySustainability::convergedMakeUp)) {
+                VerifySustainability::convergedMakeUp, VerifySustainability::formedConstruction,
+                VerifySustainability::productiveZeroCarrier)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -105,6 +109,173 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void formedConstruction() {
+        group("R9 derived formed requirements and dedicated installations");
+        Route firing = AuthorityAdapters.process(BootstrapProcesses.recipes().stream()
+                .filter(recipe -> recipe.id().equals("bootstrap/insulators")).findFirst().orElseThrow());
+        Resource bricks = new Resource(Kind.ITEM, "minecraft:bricks");
+        eq("the formed route derives exactly seven real brick blocks", Map.of(bricks, 7L), firing.catalysts());
+        eq("the route references the definition rather than a copied assembly item", "FIRING_CHAMBER",
+                firing.conditions().get("workshop_structure"));
+        Route settling = AuthorityAdapters.process(BootstrapProcesses.recipes().stream()
+                .filter(recipe -> recipe.id().equals("bootstrap/settle_clay")).findFirst().orElseThrow());
+        eq("settling needs the real channel and screen but no air or duplicated controller",
+                Map.of(new Resource(Kind.ITEM, "grindless:settling_channel"), 1L,
+                        new Resource(Kind.ITEM, "grindless:settling_screen"), 1L), settling.catalysts());
+        no("the chamber cell list never includes the controller",
+                WorkshopStructure.FIRING_CHAMBER.cells().stream()
+                        .anyMatch(cell -> cell.offset().equals(new WorkshopStructure.Offset(0, 0, 0))));
+
+        Fixture controllerOnly = formedFixture(0, false, firing.catalysts());
+        var result = controllerOnly.audit();
+        no("a controller alone does not make formed output available", available(result, PRODUCT));
+        no("a controller alone cannot establish a formed renewable producer", renewable(result, PRODUCT));
+        result = formedFixture(6, false, firing.catalysts()).audit();
+        yes("qualitative availability cannot hide a one-brick formation deficit", hasRule(result, "bootstrap_starvation"));
+        result = formedFixture(7, false, firing.catalysts()).audit();
+        no("one fully paid formed installation has no invented deficit", hasRule(result, "bootstrap_starvation"));
+        eq("two recipes in one family do not recharge the same seven bricks", 7L,
+                result.tiers().get(0).reserves().stream().filter(reserve -> reserve.resource().equals(bricks))
+                        .findFirst().orElseThrow().required());
+        eq("the controller is paid once, separately from the surrounding cells", 1L,
+                result.tiers().get(0).reserves().stream().filter(reserve -> reserve.resource().equals(MACHINE))
+                        .findFirst().orElseThrow().required());
+        result = formedFixture(7, true, firing.catalysts()).audit();
+        yes("two installations cannot share the same physical seven blocks", hasRule(result, "bootstrap_starvation"));
+        eq("dedicated installations require fourteen blocks", 14L,
+                result.tiers().get(0).reserves().stream().filter(reserve -> reserve.resource().equals(bricks))
+                        .findFirst().orElseThrow().required());
+        result = formedFixture(14, true, firing.catalysts()).audit();
+        no("two fully paid installations need no duplicate per-recipe reserve", hasRule(result, "bootstrap_starvation"));
+        Map<Resource, Long> six = Map.of(bricks, 6L);
+        Route changed = new Route(firing.id(), firing.authority(), firing.source(), firing.family(), firing.inputs(),
+                six, firing.outputs(), firing.discharged(), firing.durationTicks(), firing.fuPerTick(),
+                firing.conditions(), firing.prerequisites(), firing.oneShot(), firing.modOwned());
+        no("authority fingerprints change with derived formation quantities",
+                AuditReports.snapshotHash(new Builder().route(firing).build())
+                        .equals(AuditReports.snapshotHash(new Builder().route(changed).build())));
+        try {
+            yes("the actual formation definition participates in the authority-source identity",
+                    AuthorityAdapters.authoritySourceHashes(Path.of("")).containsKey(
+                            "common/src/main/java/io/github/ezequiel24123z/grindless/structure/WorkshopStructure.java"));
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot inspect the live formation authority", failure);
+        }
+    }
+
+    private static Fixture formedFixture(long bricks, boolean secondInstallation, Map<Resource, Long> required) {
+        Fixture fixture = new Fixture().seed(MACHINE, 1);
+        if (bricks > 0) {
+            fixture.seed(new Resource(Kind.ITEM, "minecraft:bricks"), bricks);
+        }
+        fixture.machines.put("FORMED_A", new Machine("FORMED_A", MACHINE, 0));
+        fixture.environment(new Route("formed_first", Authority.PROCESS_GRAPH, "fixture:formed_first", "FORMED_A",
+                Map.of(), required, Map.of(PRODUCT, 1L), Set.of(), 1, 0,
+                Map.of("workshop_structure", "FIRING_CHAMBER"), Set.of(), false, true));
+        fixture.meta(PRODUCT, renewable("formed_first")).root(PRODUCT);
+        String family = "FORMED_A";
+        if (secondInstallation) {
+            Resource controller = item("second_formed_controller");
+            fixture.seed(controller, 1);
+            family = "FORMED_B";
+            fixture.machines.put(family, new Machine(family, controller, 0));
+        }
+        fixture.environment(new Route("formed_second", Authority.PROCESS_GRAPH, "fixture:formed_second", family,
+                Map.of(), required, Map.of(SIDE, 1L), Set.of(), 1, 0,
+                Map.of("workshop_structure", "FIRING_CHAMBER"), Set.of(), false, true));
+        return fixture.meta(SIDE, renewable("formed_second")).root(SIDE);
+    }
+
+    private static void productiveZeroCarrier() {
+        group("R10 unit conservative carrier with environmental productive surplus");
+        Snapshot live;
+        try {
+            live = AuthorityAdapters.live(Path.of(""));
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot inspect the actual production batches", failure);
+        }
+        Route geology = live.routes().get("source/geological_aggregate");
+        Route culture = live.routes().get("source/biomass");
+        Route fuel = live.routes().get("fuel/biomass_dynamo/biomass");
+        Resource aggregate = new Resource(Kind.ITEM, SourceLogic.AGGREGATE);
+        Resource biomass = new Resource(Kind.ITEM, SourceLogic.BIOMASS);
+        Resource water = new Resource(Kind.FLUID, "minecraft:water");
+        List<Route> routes = List.of(geology, culture, fuel);
+        eq("the productive system keeps the conservative unit vector",
+                Map.of(geology.id(), BigInteger.ONE, culture.id(), BigInteger.ONE, fuel.id(), BigInteger.ONE),
+                SustainabilityAudit.normalizedBatches(routes, aggregate));
+        Map<Resource, Long> net = new TreeMap<>();
+        routes.forEach(route -> {
+            route.inputs().forEach((resource, quantity) -> net.merge(resource, -quantity, Math::addExact));
+            route.retainedOutputs().forEach((resource, quantity) -> net.merge(resource, quantity, Math::addExact));
+        });
+        eq("the carrier is exactly conservative, not minted by its loop", 0L, net.get(aggregate));
+        eq("actual unit batches produce the confirmed biomass surplus", 3L, net.get(biomass));
+        eq("actual unit batches produce the confirmed FU surplus", 160L, net.get(ENERGY));
+        eq("actual unit batches still consume an external water feed", -500L, net.get(water));
+        long prefix = Math.addExact(geology.inputs().get(ENERGY), culture.inputs().get(ENERGY));
+        eq("the native prefix before the first fuel requires both actual machine costs", 1440L, prefix);
+        var result = productiveFixture(live, prefix, true).audit();
+        yes("quantity-sufficient production proves native renewable energy", renewable(result, ENERGY));
+        yes("the fixed point subsequently proves additional geological aggregate", renewable(result, aggregate));
+        yes("the environmental productive surplus is not discarded by over-normalization", renewable(result, biomass));
+        no("the conservative carrier is not rejected as a positive-carrier exploit", hasRule(result, "closed_loop_gain"));
+        result = productiveFixture(live, prefix - 1, true).audit();
+        no("one FU below the real executable prefix cannot seed renewable energy", renewable(result, ENERGY));
+        yes("the insufficient prefix remains a startup proof gap", hasRule(result, "loop_startup_unproven"));
+        result = productiveFixture(live, 0, true).audit();
+        no("qualitative cycles without a usable energy seed cannot establish supply", renewable(result, ENERGY));
+        result = productiveFixture(live, prefix, false).audit();
+        no("manual finite water cannot establish the productive renewable system", renewable(result, ENERGY));
+        yes("missing external renewable water stays a concrete net-draw failure",
+                hasRule(result, "loop_makeup_not_renewable"));
+
+        Fixture free = new Fixture().seed(RAW, 1).seed(ENERGY, 1);
+        free.add(route("free_forward", Map.of(RAW, 1L, ENERGY, 1L), Map.of(), Map.of(SIDE, 2L), null));
+        free.add(route("free_back", Map.of(SIDE, 1L), Map.of(),
+                Map.of(RAW, 1L, ENERGY, 2L, PRODUCT, 1L), null));
+        free.meta(RAW, metadata(ResourceClass.CLOSED_LOOP, null, "free_back", List.of(), null, null, null, null));
+        free.meta(PRODUCT, renewable("free_back")).root(PRODUCT);
+        free.loops.put("free", new ClosedLoop("free", RAW, Set.of("free_forward", "free_back"), null));
+        result = free.audit();
+        yes("the unit attempt cannot bless material gain without a real source or net feed",
+                hasRule(result, "loop_gain_unjustified"));
+        no("a free conservative-carrier surplus is not renewable", renewable(result, PRODUCT));
+    }
+
+    private static Fixture productiveFixture(Snapshot live, long entryFu, boolean renewableWater) {
+        Fixture fixture = new Fixture();
+        Resource aggregate = new Resource(Kind.ITEM, SourceLogic.AGGREGATE);
+        Resource biomass = new Resource(Kind.ITEM, SourceLogic.BIOMASS);
+        Resource water = new Resource(Kind.FLUID, "minecraft:water");
+        if (entryFu > 0) {
+            fixture.seed(ENERGY, entryFu);
+        }
+        if (renewableWater) {
+            fixture.environment("native_water", Map.of(water, (long) SourceLogic.SOURCE_WATER * 2), null)
+                    .meta(water, renewable("native_water"));
+        } else {
+            fixture.terminal("finite_water", water, TerminalKind.MANUAL_WORLD, false, true);
+        }
+        for (String id : List.of("source/geological_aggregate", "source/biomass", "fuel/biomass_dynamo/biomass")) {
+            Route route = live.routes().get(id);
+            Resource controller = new Resource(Kind.ITEM, "grindless:" + route.family().toLowerCase(java.util.Locale.ROOT));
+            fixture.seed(controller, 1);
+            fixture.machines.put(route.family(), new Machine(route.family(), controller, 0));
+            if (route.id().startsWith("source/")) {
+                fixture.environment(route);
+            } else {
+                fixture.add(route);
+            }
+        }
+        fixture.meta(aggregate, renewable("source/geological_aggregate"));
+        fixture.meta(biomass, renewable("source/biomass"));
+        fixture.meta(ENERGY, renewable("fuel/biomass_dynamo/biomass"));
+        fixture.loops.put("native_production", new ClosedLoop("native_production", aggregate,
+                Set.of("source/geological_aggregate", "source/biomass", "fuel/biomass_dynamo/biomass"), null));
+        return fixture.root(aggregate).root(biomass).root(ENERGY);
     }
 
     private static void protectedCirculation() {
@@ -642,6 +813,13 @@ public final class VerifySustainability {
         Fixture unknownOutput = new Fixture();
         unknownOutput.environment("unresolved_output", Map.of(tag, 1L), null).root(tag);
         no("a producer does not silently resolve its output tag", renewable(unknownOutput.audit(), tag));
+        Fixture knownEmpty = new Fixture();
+        knownEmpty.builder.tag(tag, new TagResolution(Set.of(), true, Set.of(), List.of("fixture:known_empty")));
+        knownEmpty.add(route("empty_required_feed", Map.of(tag, 1L), Map.of(), Map.of(PRODUCT, 1L), null)).root(PRODUCT);
+        result = knownEmpty.audit();
+        no("a completely resolved empty tag is not mislabeled unresolved", hasRule(result, "unresolved_tag"));
+        no("a known empty tag cannot supply a required input", available(result, PRODUCT));
+        no("known absence cannot be turned into renewable production", renewable(result, PRODUCT));
 
         group("environmental justification and automation");
         Fixture zero = new Fixture().add(route("free_matter", Map.of(), Map.of(), Map.of(PRODUCT, 1L), null))
@@ -1397,13 +1575,17 @@ public final class VerifySustainability {
 
         private Fixture environment(String id, Map<Resource, Long> inputs, Map<Resource, Long> catalysts,
                                     Map<Resource, Long> outputs, String family) {
-            Resource source = new Resource(Kind.ENVIRONMENT, "fixture:" + id);
-            builder.terminal(new Terminal("environment/" + id, source, TerminalKind.ENVIRONMENT,
+            return environment(route(id, inputs, catalysts, outputs, family));
+        }
+
+        private Fixture environment(Route route) {
+            Resource source = new Resource(Kind.ENVIRONMENT, "fixture:" + route.id());
+            builder.terminal(new Terminal("environment/" + route.id(), source, TerminalKind.ENVIRONMENT,
                     SourceSite.GEOLOGICAL_ROCK_BED, true, true, null, 0,
-                    "Synthetic environmental source, not live gameplay", "fixture:" + id));
+                    "Synthetic environmental source, not live gameplay", "fixture:" + route.id()));
             meta(source, renewable(null));
-            add(route(id, inputs, catalysts, outputs, family));
-            policies.put(id, new RoutePolicy(0, false, Set.of("environment/" + id)));
+            add(route);
+            policies.put(route.id(), new RoutePolicy(0, false, Set.of("environment/" + route.id())));
             return this;
         }
 

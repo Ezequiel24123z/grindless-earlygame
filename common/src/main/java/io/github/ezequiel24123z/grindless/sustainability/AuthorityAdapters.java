@@ -17,6 +17,7 @@ import io.github.ezequiel24123z.grindless.recipe.SolarLogic;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
 import io.github.ezequiel24123z.grindless.recipe.ThermalLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -204,6 +205,15 @@ public final class AuthorityAdapters {
         if (recipe.milestone() != null) {
             conditions.put("informational_milestone", recipe.milestone());
         }
+        WorkshopStructure structure = WorkshopStructure.forFamily(recipe.family());
+        if (structure != WorkshopStructure.NONE) {
+            conditions.put("workshop_structure", structure.name());
+            for (WorkshopStructure.Cell cell : structure.cells()) {
+                if (!Set.of("minecraft:air", "minecraft:cave_air", "minecraft:void_air").contains(cell.block())) {
+                    add(catalysts, item(cell.block()), 1);
+                }
+            }
+        }
         return new Route(recipe.id(), Authority.PROCESS_GRAPH, "ProcessGraph.generate",
                 recipe.family().name(), inputs, catalysts, outputs, discharged,
                 recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true);
@@ -266,7 +276,7 @@ public final class AuthorityAdapters {
         for (Class<?> entry : List.of(ProcessGraph.class, SupplyCatalogue.class, BootstrapRecipes.class,
                 T1Recipes.class, QuestCatalogue.class, FluidLogic.class, ThermalLogic.class, SolarLogic.class,
                 SourceLogic.class, MaterialForm.class, FluxTier.class, IngredientSpec.class,
-                OutputSpec.class, ProcessRecipe.class)) {
+                OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class)) {
             pending.add(entry.getName());
         }
         Set<String> visited = new TreeSet<>();

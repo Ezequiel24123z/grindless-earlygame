@@ -30,6 +30,7 @@ final class ConstructionReserve {
     private final Map<Resource, Long> shortages = new TreeMap<>();
     private final Map<Resource, Long> locked = new TreeMap<>();
     private final Set<Resource> installed = new TreeSet<>();
+    private final Map<String, Map<Resource, Long>> installationRequirements = new TreeMap<>();
     private final Set<Resource> pending = new HashSet<>();
     private final Set<String> claimed = new HashSet<>();
     private final Set<String> pendingRoutes = new HashSet<>();
@@ -94,9 +95,13 @@ final class ConstructionReserve {
             if (route == null || !audit.unlocked(route, tier)) {
                 continue;
             }
-            for (var catalyst : route.catalysts().entrySet()) {
-                if (!route.oneShot()) {
-                    lock(catalyst.getKey(), catalyst.getValue());
+            if (formed(route)) {
+                retainInstallationRequirements(route);
+            } else {
+                for (var catalyst : route.catalysts().entrySet()) {
+                    if (!route.oneShot()) {
+                        lock(catalyst.getKey(), catalyst.getValue());
+                    }
                 }
             }
             boolean loopMember = annotations.loops().values().stream().anyMatch(loop -> loop.memberRoutes().contains(id));
@@ -352,6 +357,26 @@ final class ConstructionReserve {
         return true;
     }
 
+    private boolean retainInstallationRequirements(Route route) {
+        Map<Resource, Long> retained = installationRequirements.computeIfAbsent(route.family(), ignored -> new TreeMap<>());
+        for (var requirement : route.catalysts().entrySet()) {
+            long held = retained.getOrDefault(requirement.getKey(), 0L);
+            long extra = requirement.getValue() - held;
+            if (extra > 0) {
+                if (!obtain(requirement.getKey(), extra)) {
+                    return false;
+                }
+                take(requirement.getKey(), extra);
+                retained.put(requirement.getKey(), requirement.getValue());
+            }
+        }
+        return true;
+    }
+
+    private static boolean formed(Route route) {
+        return route.family() != null && route.conditions().containsKey("workshop_structure");
+    }
+
     private boolean obtain(Resource resource, long amount) {
         if (free(resource) >= amount) {
             return true;
@@ -448,12 +473,18 @@ final class ConstructionReserve {
                 return false;
             }
         }
-        for (var catalyst : route.catalysts().entrySet()) {
-            boolean ready = route.oneShot() ? obtain(catalyst.getKey(), catalyst.getValue())
-                    || locked.getOrDefault(catalyst.getKey(), 0L) >= catalyst.getValue()
-                    : lock(catalyst.getKey(), catalyst.getValue());
-            if (!ready) {
+        if (formed(route)) {
+            if (!retainInstallationRequirements(route)) {
                 return false;
+            }
+        } else {
+            for (var catalyst : route.catalysts().entrySet()) {
+                boolean ready = route.oneShot() ? obtain(catalyst.getKey(), catalyst.getValue())
+                        || locked.getOrDefault(catalyst.getKey(), 0L) >= catalyst.getValue()
+                        : lock(catalyst.getKey(), catalyst.getValue());
+                if (!ready) {
+                    return false;
+                }
             }
         }
         for (Resource output : route.retainedOutputs().keySet()) {
