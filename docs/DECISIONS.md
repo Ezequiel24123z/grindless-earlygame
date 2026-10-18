@@ -6256,7 +6256,8 @@ the reference table is not a blanket permission to reuse third-party material.
 
 ## ADR-0139 — Long native smokes carry their own assertion budget
 
-**Status.** Accepted, 2026-10-18; runner support and the native-cycle fixture are in progress.
+**Status.** Accepted, 2026-10-18. Twin-runner support passes its native fake-boot harness;
+ordinary execution of the long native-cycle fixture is still pending.
 
 **Context.** The renewable T0 smoke executes real machine work. Even Bench fabrication and
 Terminal calibration together need 1,200 powered ticks, before source and downstream cycles.
@@ -6269,6 +6270,10 @@ override wins, then the scenario budget, then the unchanged 120-second boot-help
 Server-startup `SMOKE_TIMEOUT` is separate and unchanged. The PowerShell and Bash runners
 must forward identical values, reject malformed selected metadata before booting, and never
 leak one scenario's budget into another or into the caller's environment.
+Sidecars are BOM-free decimal digits with optional ASCII whitespace, bounded to
+1--2,147,483,647 seconds; leading zeroes normalize to decimal. Selected malformed metadata
+fails even when an environment override exists. Listing and unselected scenarios retain
+their existing behavior.
 
 Keep `scenarios.txt` as the single scenario list, with its existing syntax. No per-scenario
 CI step, global timeout increase, machine-speed override or skipped assertion is added.
@@ -6280,3 +6285,10 @@ runner with no environment override; a special invocation alone does not close i
 Changing recipe durations or injecting outputs would invalidate the production proof.
 Adding a second scenario list or bespoke runner would bypass the existing shard/selection
 contract. A small optional fixture file preserves that contract and local/CI parity.
+
+**Implementation boundary.** `run-smokes.ps1` and `run-smokes.sh`, including the CI shard
+path, are covered by 27 native fake-boot checks each. The legacy
+`run-smokes-batch.ps1` is an unchanged shared-world developer utility: it clears
+`SMOKE_DATAPACK` and already cannot execute the normal per-scenario datapack isolation.
+It is not an acceptance path for this fixture or its deadline contract. Use the canonical
+twin runners; extending or retiring that pre-existing batch utility is separate work.

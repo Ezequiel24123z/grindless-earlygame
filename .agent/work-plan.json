@@ -142,6 +142,20 @@
   "parallel_opportunity": "S1 and the reviewed native C3 correction pass the composed dcb8010 gate: 36 suites, production states and settling, source-bound reports. The native renewable-cycle fixture and its twin-runner assertion-budget support proceed independently. S2 and live closure remain pending.",
   "prepared_assignments": [
     {
+      "id": "smoke-assertion-budgets",
+      "task_id": "renewable-t0",
+      "status": "implemented_reviewed_targeted_checks_passed",
+      "agent_id": "524e0826-f077-4760-b665-745d85b22dd8",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "03b8d94b38a7d3bd6e8ad4f73d957247592a4af4",
+      "owned_files": ["tools/run-smokes.ps1", "tools/run-smokes.sh", "tools/checks/VerifySmokeHarness.java"],
+      "result": "27/27 native PowerShell and 27/27 native GNU Bash fake-boot checks; source hashes verified. No server run or global timeout change. Ordinary long-scenario execution remains part of the native-cycle assignment.",
+      "evidence": "build/validation/smoke-timeout/",
+      "scope_limit": "The unchanged legacy shared-world batch utility is not a datapack/isolation acceptance path",
+      "stop_condition": "Worker complete; integrate with the renewable-cycle sidecar and verify ordinary invocation without environment override"
+    },
+    {
       "id": "t0-native-renewable-cycle",
       "task_id": "renewable-t0",
       "status": "in_progress",

@@ -295,6 +295,11 @@ version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
 
+- `tools/run-smokes.ps1` / `.sh` read optional per-scenario `.timeout` files; an explicit
+  `SMOKE_EXPECT_TIMEOUT` wins over that assertion budget and the unchanged 120-second
+  default. Validate selected metadata before boot, retain startup `SMOKE_TIMEOUT`, and do
+  not leak one scenario's budget to the next or the caller (ADR-0139). CI uses these runners.
+  The legacy shared-world batch script is not a datapack/isolation acceptance path.
 - `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;
   opt into full smokes explicitly. Per-stage results live under `build/validation/<run-id>/`.
   See [the testing strategy](testing/test-strategy.md).
@@ -302,6 +307,8 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
   report variables must remain local (ADR-0127).
+  Assertion-budget cases run both native twins: defaults, override, LF/CRLF, bounds,
+  malformed selected metadata, consecutive scenarios and caller restoration.
   `-Only` / `--only` accepts comma-separated names through the actual CLI; unknown or empty
   selections fail before any boot, never silently shrinking or expanding the requested scope.
 - `tools/checks/VerifyT0Preparation.java` — verifies the active

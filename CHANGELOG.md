@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fixture-owned assertion budgets implemented (ADR-0139).** Both smoke runners validate
+  selected `.timeout` metadata before any boot, honor explicit environment overrides,
+  normalize decimal values and restore per-scenario environment state. Native fake-boot
+  checks pass 27/27 on PowerShell and 27/27 on GNU Bash, including malformed input,
+  override, sharding and nonleakage. Startup budgets and the ordinary 120-second default
+  are unchanged. The legacy shared-world batch utility is not the datapack acceptance path.
 - **Composed S1/native gate passed on `dcb8010`.** The unchanged integration passes all
   36 suites, including 285 fluid assertions, and production states 945/945 plus settling
   19/19 with identical built/deployed jar hashes. A separate live JVM reproduces the runner's
