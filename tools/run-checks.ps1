@@ -20,14 +20,41 @@ param([Parameter(Mandatory = $true)][string]$Root)
 $ErrorActionPreference = 'Stop'
 $Root = (Resolve-Path $Root).Path
 
+function Test-Javac17([string]$Javac) {
+    $probe = New-Object System.Diagnostics.Process
+    $probe.StartInfo.FileName = $Javac
+    $probe.StartInfo.Arguments = '-version'
+    $probe.StartInfo.UseShellExecute = $false
+    $probe.StartInfo.CreateNoWindow = $true
+    $probe.StartInfo.RedirectStandardOutput = $true
+    $probe.StartInfo.RedirectStandardError = $true
+    try {
+        if (-not $probe.Start()) { throw "Could not start the JDK version probe: $Javac" }
+        # Drain both pipes before waiting; either stream can contain launcher diagnostics.
+        $stdout = $probe.StandardOutput.ReadToEndAsync()
+        $stderr = $probe.StandardError.ReadToEndAsync()
+        $probe.WaitForExit()
+        $output = $stdout.GetAwaiter().GetResult()
+        $diagnostic = $stderr.GetAwaiter().GetResult()
+        if ($output) { Write-Host -NoNewline $output }
+        if ($diagnostic) { Write-Host -NoNewline $diagnostic }
+        if ($probe.ExitCode -ne 0) { Write-Host "javac -version exited with code $($probe.ExitCode)." }
+        $versions = @(($output + "`n" + $diagnostic) -split '\r?\n' |
+            Where-Object { $_ -cmatch '^javac ' })
+        return ($probe.ExitCode -eq 0 -and $versions.Count -eq 1 -and
+            $versions[0] -cmatch '^javac 17(\.[0-9]+)*([-+][0-9A-Za-z][0-9A-Za-z.+-]*)?$')
+    } finally {
+        $probe.Dispose()
+    }
+}
+
 # The project targets Java 17, but a Windows PATH commonly still resolves to an old Java 8
 # launcher.  Java 8 treats the argfile below as a class name, making every check look as though
 # it failed. Prefer an explicitly configured JDK 17; otherwise discover Temurin's standard JDK
 # 17 installation.
 $javaHome = $env:JAVA_HOME
 if ($javaHome -and (Test-Path -LiteralPath (Join-Path $javaHome 'bin\javac.exe'))) {
-    $configuredVersion = & (Join-Path $javaHome 'bin\javac.exe') -version 2>&1
-    if ($configuredVersion -notmatch '^javac 17(\.|$)') { $javaHome = $null }
+    if (-not (Test-Javac17 (Join-Path $javaHome 'bin\javac.exe'))) { $javaHome = $null }
 } else {
     $javaHome = $null
 }
@@ -38,7 +65,9 @@ if (-not $javaHome) {
         $candidate = Get-ChildItem -LiteralPath $adoptium -Directory -Filter 'jdk-17*' |
             Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'bin\javac.exe') } |
             Select-Object -First 1
-        if ($candidate) { $javaHome = $candidate.FullName }
+        if ($candidate -and (Test-Javac17 (Join-Path $candidate.FullName 'bin\javac.exe'))) {
+            $javaHome = $candidate.FullName
+        }
     }
 }
 
