@@ -5,6 +5,27 @@ separately; automation and headless evidence do not fill in these results.
 Record the exact mod jar hash, pack manifest revision, Java/Forge version, world seed,
 operator kind (human/agent), dates and evidence paths when this checklist is actually performed.
 
+## Current release and world policy
+
+[ADR-0144](../DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+supersedes the earlier ordering and default-world assumption below. `1389ebb` is only an
+engineering candidate. Do not start the longitudinal save yet. First deliver a technically
+verified and genuinely polished T0 Playable Release Candidate, including the curated pack
+and its versioned official Superflat preset. Human acceptance begins with that release.
+
+The primary no-command route uses that official **Superflat** profile. Normal Overworld
+remains compatible and supplies a separate compatibility/alternative-path observation,
+not a substitute for missing flat-world resources. The exact profile, initial acquisition
+route and new preset-bound proof are not selected or verified by this document change.
+Retain the earlier ordinary-Overworld preparations as history, not current instructions.
+
+After the owner starts the first playable release, preserve that world as the longitudinal
+reference for later tiers. New worlds are not the routine update path. Use a preserved copy
+for necessary migration checks; neither previous preparation worlds nor generated NBT
+fixtures are silently adopted as the owner's reference. The full player playthrough is
+not a prerequisite to receiving the RC or, after publication and actual play begins,
+to dependency-safe T1 work. Record every still-unobserved criterion honestly.
+
 ## Active closure preparation
 
 S2 inventory/model engineering is verified on debd and the quest/dashboard composition on

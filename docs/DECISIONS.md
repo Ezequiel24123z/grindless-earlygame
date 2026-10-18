@@ -155,6 +155,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0141](#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment) | Canonical T0 closure uses real authorities and conditional establishment | Accepted |
 | [0142](#adr-0142--t0-client-feedback-reuses-native-ui-and-existing-quest-infrastructure) | T0 client feedback reuses native UI and existing quest infrastructure | Accepted |
 | [0143](#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations) | Player resource guidance is a generated view of canonical declarations | Accepted |
+| [0144](#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity) | Ship Superflat-first playable tier releases with longitudinal save continuity | Accepted |
 
 ---
 
@@ -6647,3 +6648,153 @@ presentation without duplicating recipe amounts. Keep the new helper/model loade
 where required and use native UI checks for the changed surfaces. A generated resource,
 successful audit or source test is not real client, Survival, retained-world or Tier
 acceptance. Existing ADR-0129/0140 gates remain in force.
+
+---
+
+## ADR-0144 — Ship Superflat-first playable tier releases with longitudinal save continuity
+
+**Status.** Accepted owner-directed product and architecture policy, 2026-10-18.
+Implementation of the first Playable Release Candidate remains in progress.
+
+**Source.** The complete 549-line owner directive is preserved in the session Library.
+Its SHA-256 is `7a5a04b1f2709536f1187ecc70958829fb7383bf95135820735f352b91a1e317`.
+PA-0007 in the [reloadable plan](../.agent/work-plan.json) records the change in
+requirements and sequencing. Private attachment and storage paths are not project inputs.
+
+**Context.** `1389ebb` is a verified **T0 engineering candidate**, not the release on
+which the owner will start the longitudinal world. Its minimal preparation ZIP, model
+proofs, generated resources and repaired aliases do not establish a polished modpack,
+an accessible Superflat bootstrap, an adequate sound pass or human acceptance.
+The product must be playable during development, not only after T15.
+
+**Product and release lifecycle.**
+
+Grindless is a complete playable modpack centered on the Grindless mod. Every tier follows:
+design -> implementation -> integration -> technical verification -> polish -> modpack
+build -> Release Candidate -> real play -> feedback alongside the next tier.
+The product is **Superflat-first and Overworld-compatible**.
+
+Track `implemented`, `technically_verified`, `integrated`, `packaged`,
+`visually_reviewed`, `human_accepted` and `release_ready` separately, with source,
+artifact, observer and scope where applicable. A deterministic asset, successful
+server or large assertion count does not supply another state's evidence.
+
+The first T0 Playable Release Candidate must satisfy all of these conditions:
+
+- T0 implementation and mandatory progression have deliberate, reasonable routes in
+  the versioned official Superflat preset; normal Overworld play remains compatible.
+- The complete selected pack, Grindless version, dependency versions, configurations,
+  preset and required datapacks/resource packs/scripts are pinned and documented.
+- Questbook and guidance agree with the canonical progression and preserve actual
+  claim/reward authority.
+- T0 receives a real sprite/texture/visual pass and a real sound pass, not merely
+  inventory, alias validation or a change to fault-beep dispatch.
+- Every included external asset has traceable origin, credited author where required,
+  compatible redistribution/derivative rights, attribution and derived-file history.
+- QoL does not unintentionally bypass resources, processing, energy, transport,
+  storage, logistics, machines, quests, automation or progression restrictions.
+- Relevant CI, installation/import, startup, content/config/preset checks and
+  representative client, visual/audio and initial Superflat progression QA pass.
+- The distributable is reproducible and installable, its version lock and provenance
+  are sufficient, forward-compatibility strategy is explicit, and no known technical
+  blocker invalidates ordinary T0 play.
+- Remaining uncertainty is disclosed. No unobserved human result is marked passed.
+
+**Acceptance and tier sequencing.** Delivering this RC starts human acceptance.
+The owner's completed no-command playthrough is not a prerequisite to receiving it.
+After the T0 RC is technically ready, safely published and the owner has actually
+started its longitudinal save, T1 design/implementation may proceed alongside T0
+feedback without waiting for the player to finish T0, unless a concrete technical
+dependency prevents it. None of those conditions holds merely because `1389ebb`
+exists. **Do not start T1 now.** Do not start the held functional-port work merely
+because an existing model has a port-like texture.
+
+This supersedes the conflicting *ordering* in ADR-0108 and the earlier active
+ADR-0129/0140 acceptance checklists: full human acceptance is not the RC delivery
+gate or the only way to permit the next tier after real play begins. It does not
+erase unfinished observations, weaken technical tests or declare a tier human-accepted.
+Live PR state, required checks/reviews and branch protection still govern integration.
+The prior conditional merge authorization does not make the current draft merge-ready.
+
+**Superflat contract.** Select and version an explicit recommended preset and its
+installation/world-creation path. Trace every mandatory initial and recurring input,
+including stone/geology, wood/biomass, water/lava, farming, mobs/drops, structures,
+biomes, vanilla materials and relevant dimensions or external generation assumptions.
+Normal terrain, optional exploration, lucky structures and an unrecorded starter kit
+cannot conceal a missing official-flat route. The Factory World is not automatically
+the starting Superflat preset. Rebind the environmental assumptions of the existing
+conditional model; do not discard its unchanged execution/reserve mechanisms or
+claim its old finite bill proves accessibility in a different world profile.
+ADR-0131's mod-owned renewable permanence and ADR-0137's manual Matrix exit remain.
+
+**Longitudinal save contract.** No new longitudinal world is started from the engineering
+candidate by this policy. Once the owner begins the first playable release, that save
+is the longitudinal reference. Upgrades normally preserve the same world across tiers.
+Protect registry/block/item IDs, inventories, fluids, machine and multiblock state,
+NBT/components, placed/carried objects, quest progress/claims/rewards and persistent
+configuration. Internal refactoring alone does not justify incompatibility.
+Before a genuinely necessary incompatible update, detect it, design an explicit
+migration, test a preserved copy, keep the original and document the outcome. Never
+claim demonstrated compatibility without the applicable evidence or alter tests to
+hide a real incompatibility. Fresh fixtures are not an authentic save upgrade.
+
+**Questbook and pack composition.** Review current Heracles and the real identity,
+version/API support and experience of BetterQB before replacing anything. Preserve
+Grindless's single server-side authority, current evidence, physical-book requirements
+and unique rewards. A remembered item or native sticky completion must not become
+an unintended claim. Retain/polish Heracles if the evidence makes it the better fit;
+do not force a product name or introduce parallel progression truth.
+Select a small reasoned set of auxiliary/QoL/performance/UI/accessibility mods.
+For each material candidate record usefulness, overlap, maintenance, exact compatible
+version, dependencies, licence/distribution method, performance, progression/bypass
+impact and required configuration. Configure, integrate or exclude risky candidates.
+Version coordinates remain in `gradle.properties`, with locked publisher references
+in the existing pack metadata rather than floating `latest` selections.
+
+**Art and sound.** Preserve good incumbent work and the industrial/futuristic identity.
+Prioritize item/material/component/byproduct/Matrix sprites and textures, then machine
+family/state readability, casings, real interfaces, models, fluid presentation and
+feedback. Improve deterministic generation or adopt a maintainable source pipeline
+where it actually improves craft; do not substitute file count for visual review.
+Prefer believable mechanical, industrial, electrical, pneumatic, hydraulic or
+environmental recordings to generic synth sounds. Review loops, relevant starts/stops,
+liquids/actions/alerts, family distinction, volume, repetition and aggregate factory
+audibility. Metadata and waveform checks are not listening acceptance. Only assets
+with evidenced redistribution rights enter the release; record them in
+[the notices](../THIRD_PARTY_NOTICES.md) before import.
+
+**Distribution and storage.** Keep source, development environment, generated output,
+mod jar, modpack, dependency downloads, caches, logs, QA saves and personal saves
+distinct. The release includes required public configuration and content, never
+credentials, user data, personal worlds, caches or irrelevant development files.
+Use launcher-managed references when direct third-party jar redistribution is not
+permitted. Produce a versioned GitHub release/prerelease only when the actual workflow
+and verified artifact allow safe publication; do not relabel earlier preparation ZIPs.
+
+The new work disk is an operational resource, not a guessed path in committed data.
+Inspect ownership, sizes, persistent versus regenerable content, open users and
+absolute-path dependencies before relocating anything. Prefer supported per-process
+cache/output settings to breaking app-managed worktree identity. Any move needs a
+reversible plan, verified copy/content identity, preserved originals until verification,
+and checks that tooling/builds/workers use the intended storage. No broad cleanup,
+foreign-cache deletion, world move or OS repartitioning follows implicitly.
+
+**Execution and validation.** Astra owns product/architecture, integration and final
+review; bounded workers implement, research and validate. Ordinary reversible steps
+proceed autonomously. Stop for a genuinely irreversible/destructive operation,
+unresolvable licence question or subjective product choice requiring the owner.
+Reuse ADR-0140 proof within its assumptions; refresh only changed profile, data,
+mechanism or integration boundaries. Record failures and skipped/unexecuted work
+honestly. Keep compatibility-critical fixes distinct from polish and balance changes
+while the next tier is developed.
+
+**Rejected alternatives.** Waiting until T15 to package; relabeling `1389ebb` as polished;
+requiring a completed human playthrough before delivering the first RC; substituting
+ordinary Overworld resources for an incomplete flat route; changing worlds every tier;
+rebuilding working T0 engines without an invalidated assumption; forcing BetterQB
+without compatibility evidence; expanding QoL by mod count; importing unlicensed
+sounds; and moving app-managed repositories by an unverified filesystem operation.
+
+**Implementation.** The [T0 playable-release plan](../plan/process-t0-playable-release-1.md)
+contains the concrete gaps, ownership, dependencies and verification boundaries.
+Accepting this ADR starts that work; it does not claim any of those gaps is closed.

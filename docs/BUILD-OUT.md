@@ -8,7 +8,22 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap; risk-based validation and reusable source-bound proof (ADR-0140).**
+**Active product: T0 Playable Release Candidate (ADR-0144), Superflat-first and
+Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitudinal
+release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
+revision8/PA-0007 task graph now control the queue.
+
+Next: formalize and validate the new policy, close the source-based gaps, select a safe
+work-disk migration and then integrate deliberate flat-world access, curated pinned pack,
+questbook product experience, real sprite/art and recorded-sound passes. Initial discovery
+is running in five bounded lanes; no storage move or gameplay/asset import is implied.
+Reuse the existing mechanisms and proofs rather than rewrite them to change the product.
+Freeze and technically qualify the actual configured pack before publishing a playable RC.
+Human acceptance begins with that release; after publication and actual longitudinal play
+start, dependency-safe T1 can proceed alongside feedback. **T1 is not open now.**
+The earlier sequence below is preserved as engineering history, not a conflicting gate.
+
+**Preserved T0 engineering baseline; risk-based reusable proof (ADR-0140).**
 S1 core is verified on unchanged `639881f`: all 36 suites and twelve repaired requirements
 pass, with deterministic source-bound reports. The earlier failed launcher remains history.
 That S1 snapshot was report-only and unannotated. The later canonical S2 integration now
@@ -34,7 +49,7 @@ ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its R
 clarification does not require another server run. Downstream/core material evidence is
 not complete downstream power/autonomy or physical Matrix crafting acceptance.
 
-Next: close the remaining native-regression and real-host acceptance gaps on the frozen
+Previous next step before ADR-0144: close native-regression and real-host acceptance gaps on the frozen
 post-S2 candidate, without repeating already covered properties. Published `1389ebb`
 contains the real canonical guidance, corrected T0 model references and composed
 quest/dashboard integration; CheckOnly4,881,42 official suites and15 pack checks pass,
@@ -95,8 +110,10 @@ data are required implementation, not substitutes for renewable gameplay.
 Every mandatory resource must recursively reach an unlimited automatable mod-owned source;
 finite mining, vanilla farms, exploits, repeated loot and dimension drops cannot remain
 canonical supply. T0 must become self-sustaining; unaudited T0-T15 details remain unknown.
-Manual GUI/no-command survival/retained-world acceptance gates merge and Tier acceptance,
-not every further owner-authorized T0 feature. No unrelated T1/T2 work starts here.
+Human GUI/no-command/longitudinal observations remain unexecuted where recorded. Under
+ADR-0144 they follow playable-RC delivery rather than being prerequisites to receiving it;
+technical/product readiness, safe publication and compatibility still require evidence.
+No unrelated T1/T2 work starts before publication and actual owner play begin.
 
 Keep draft PR54 based on draft PR53, without a replacement PR or rewritten history. Old
 Agent merge is off. The new coordinator alone publishes reviewed fast-forward continuation,

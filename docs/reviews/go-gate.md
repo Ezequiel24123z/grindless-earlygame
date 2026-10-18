@@ -1,15 +1,27 @@
 # Development and merge gate
 
-**Current state: IMPLEMENTATION IN PROGRESS.** ADR-0129 and the 2026-10-17 owner-directed
-rework authorize further T0 implementation on the feature branch. Automatedly validated units
-may be committed, pushed and continued while manual acceptance is pending. T1/T2 expansion
-remains outside this authorization. The owner additionally authorized PR management and merging
-on 2026-10-17; that permission applies only once the required merge conditions below are satisfied.
+**Current state: T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS.**
+[ADR-0144](../DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+and PA-0007 are the current owner-directed delivery policy. `1389ebb` is not yet the
+longitudinal-play release. Reviewed technical units may be committed and integrated,
+but the current draft is not release-ready or merge-ready merely because its CI passes.
 
-**Merge conditions remain open:** observed client/JEI interaction, no-command survival through
-the expanded T0 route, retained-world restart/compatibility, current automated checks and the
-complete integration inventory. A future passing automated milestone must say
-**AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING**, not MERGE READY.
+**Playable-release conditions remain open:** explicit Superflat progression/preset,
+Overworld compatibility, curated locked/configured pack, coherent questbook, real art and
+sound passes with redistribution provenance, applicable installation/startup/client QA,
+forward-save strategy and no known ordinary-play blocker. Preserve required live PR
+checks/reviews and branch protection; do not publish or merge a known incomplete product.
+
+**Human acceptance is separate and begins with the RC.** The full no-command player route,
+physical five-Matrix craft and longitudinal observations are not fictional pre-release
+passes and are no longer prerequisites for the owner to receive that first playable RC.
+After the RC is ready/published and the owner has begun its reference save, T1 may proceed
+alongside feedback unless a concrete technical dependency blocks it. Neither event has
+happened. Later updates must prove applicable compatibility/migrations before publication.
+Do not infer `human_accepted` from `technically_verified`, `packaged` or `release_ready`.
+
+The foundation decision below remains historical; its old ordering does not override
+ADR-0144. Technical proof scopes, prior failures and genuine unobserved properties survive.
 
 ## Preserved foundation decision
 

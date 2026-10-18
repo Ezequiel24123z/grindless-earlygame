@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Playable modpack and longitudinal-release policy accepted (ADR-0144, PA-0007).**
+  Grindless is Superflat-first and Overworld-compatible. Keep1389 as an engineering
+  candidate; the first playable RC needs a curated locked/configured pack, deliberate
+  flat-world access, questbook product review, real sprite/art and sound passes, traced
+  redistribution rights and relevant package QA. Human acceptance begins with the
+  release; T1 stays held until publication and actual longitudinal play begin.
+  Record the reference-world continuity contract, safe storage-migration rules and
+  separate technical/visual/packaged/human/release states. The27-task graph preserves
+  the original16 identities and adds11 explicit product/release packages. Initial
+  storage, Superflat, pack/quest, visual and sound discovery is dispatched, not completed.
+  No data move, new gameplay, imported asset, playable release or human pass is claimed.
 - **Preserve a local restart checkpoint.** The owner requested a pause to restart the host
   with more disk space. Stop delegated work and pause the PR event wake-up without deleting
   sessions or evidence; defer publication/new CI and all resumption until explicit direction.

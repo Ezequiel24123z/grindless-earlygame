@@ -97,6 +97,27 @@ Preserve old worktrees and evidence; migration is not acceptance of unfinished c
 
 ## Session checklist
 
+### Playable releases and longitudinal worlds
+
+[ADR-0144](docs/DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+is the current product/release contract. Grindless is a **Superflat-first,
+Overworld-compatible playable modpack**, not just its core jar. Each tier ships a
+versioned, pinned, installable and sufficiently polished candidate, with real art/audio,
+bounded QoL and explicit forward-save compatibility.
+
+`1389ebb` is engineering evidence, not the first longitudinal-play release. Keep
+implementation, technical verification, integration, packaging, visual review,
+human acceptance and release readiness distinct. Human acceptance starts with the
+playable release. T1 may start only after the T0 RC is ready and published and the
+owner has begun its longitudinal save; finishing the player's entire T0 route is
+not an additional universal prerequisite. T1 and functional ports are not open now.
+Preserve all previous source-bound evidence and never invent a manual pass.
+
+Follow [the playable-release plan](plan/process-t0-playable-release-1.md) and the
+versioned task graph. Inspect ownership and path dependencies before moving heavy
+data; preserve originals and verify the new storage. A refactor is not permission
+to break a save, and a licence label without provenance is not permission to import.
+
 **Starting.** Read this file, then `CHANGELOG.md` (`[Unreleased]` — what the last session did),
 then `docs/BUILD-OUT.md` (the next slice), then `docs/DECISIONS.md` (what is already settled),
 then the README's *Implementation plan*. That is the full handoff; nothing else is needed. Do

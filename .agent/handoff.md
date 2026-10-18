@@ -1,17 +1,44 @@
 # Active orchestration handoff
 
-Updated: 2026-10-18. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
+Updated: 2026-10-18. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
-**Owner-requested pause for host restart and disk expansion.** Do not start workers,
-downloads, validation or publication until the owner explicitly resumes. The PR54 event
-subscription `235a6fbb-4e15-45f9-b8f1-7235de3bef66` is paused; Agent merge remains off.
-This documentation checkpoint is local only to avoid starting new CI during the pause;
-the published application and delivered ZIP remain1389. The pending CI artifact inspection
-was interrupted, so workflow success metadata is not a substitute for verified artifact
-contents or native markers. Preserve its partial ignored files and original failed attempts.
-The documentation integrity check passed534 links/143 ADR rows and unchanged16 tasks/
-20 dependencies/one completion requirement after explicitly selecting UTF-8; its first
-default-decoding comparison failed and is not counted as a pass.
+## Active product transition
+
+The owner's new 549-line directive resumes autonomous, bounded work toward the first
+**T0 Playable Release Candidate**, not T1 and not a relabeled1389 ZIP.
+[ADR-0144](../docs/DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+and [the playable-release plan](../plan/process-t0-playable-release-1.md) are authoritative.
+PA-0007 changes the world/delivery ordering explicitly: official Superflat first,
+Overworld-compatible, real art/audio and curated pack before RC; human acceptance begins
+when the owner receives/plays that release. T1 may follow publication and actual
+longitudinal-save start alongside T0 feedback, not before. No reference save has begun.
+
+The original directive is in Library, SHA-256
+`7a5a04b1f2709536f1187ecc70958829fb7383bf95135820735f352b91a1e317`.
+All16 sections are traced; the JSON graph now has27 tasks, preserving the original16
+identities/history and adding11 release/product packages with explicit dependencies.
+Do not let the historical acceptance sequencing below override this owner decision.
+
+Five bounded workers started from engineering1389 plus docs-only33b4af2:
+storage ownership/path audit, Superflat mandatory-resource/preset audit, curated pack
+and BetterQB/Heracles evidence, actual sprite/texture contact-sheet intake, and licensed
+industrial recording research. Their exact IDs/ownership are in `prepared_assignments`.
+These are discovery scopes, not permission to move data, rewrite gameplay, replace a
+backend, import assets or start JVMs. Astra alone chooses and publishes integration.
+
+The newly observed work volume is NTFS,190GiB with about189.9GiB free at intake.
+No data has moved. Keep app-managed worktrees, prior evidence/worlds and originals safe;
+prefer verified existing environment/cache controls and a reversible plan. The paused
+QA/Dashboard/S2 CLIs need not be woken for status. No native retry is active.
+
+The restart pause was preserved in local33b4af2; its source delta from published1389 is
+documentation only. The PR54 event subscription is still paused at policy intake and
+Agent merge remains off. Before any later event-driven continuation, update its old
+instructions to ADR-0144 rather than resuming the superseded delivery gate.
+The read-only retrospective confirmed all three1389 CI runs complete successfully and
+the retained artifact's seven internal file hashes match.42 behavior suites differ from
+44 smoke-log files, one of which is an auxiliary boot log. The two local fixtures remain
+NOT_RUN. None of this establishes the new official Superflat preset or product polish.
 
 ## Current coordinator and entry
 
@@ -24,8 +51,8 @@ or publishers. The retired session is quiescent; no further report to it is requ
 Start with `AGENTS.md`, [the work plan](work-plan.json), [pending checks](pending-checks.json),
 [risk-based validation](../docs/testing/test-strategy.md) and
 [revision-bound evidence](../docs/testing/latest-validation.md). The plan still has the same
-16 product tasks and dependencies; revision7/PA-0006 adds observed client-feedback execution
-and the owner's conditional future merge/portable-handoff directive.
+original16 product task identities; revision8/PA-0007 adds11 explicit playable-release
+packages and supersedes the conflicting delivery/world ordering.
 Read only relevant ADRs and task-map sections afterward.
 
 Receipt of `b012bc4` was verified and published as `33b077c`. All three original fingerprints
@@ -173,7 +200,8 @@ Do not wake either completed CLI merely for status or delete another worker's ca
 Any future oracle4061/exosuit48e result must retain its app4061 attribution, not the newer
 client/guide/models or acceptance of the delivered1389 candidate.
 
-The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
+The following pre-ADR-0144 narrative records earlier work and limits, not the new dispatch
+order. The owner's earlier priorities were canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and
 production-ready T0 assets. They are not a serial documentation waterfall: stable preparation
 can proceed independently, but final Survival uses the frozen post-S2 candidate and entry bill.
@@ -234,12 +262,12 @@ This app branch does not inherit PR identity: use explicit repo/number. Astra al
 reviewed checkpoints, verifies live PR/ref state and advances both branches by fast-forward.
 No replacement PR, force-push, retarget or old/main-checkout writes. Keep old Agent merge,
 automation and subscriptions disabled. Preserve child worktrees and their source-bound logs.
-The owner now authorizes an autonomous **future merge after genuine T0 completion** and a
-portable Git handoff for another device. It is not evidence that pending manual/CI/review
-gates passed. Keep the draft until those conditions hold, inspect the live PR stack before
-landing, and never bypass protection or surprise-retarget. Current coordinator subscription
-`235a6fbb-4e15-45f9-b8f1-7235de3bef66` watches PR54 checks/reviews only; it is not old-session
-Agent merge and does not merge by itself. QA removed its temporary app-idle subscription.
+The owner authorizes autonomous ordinary development and eventual safe publication under
+ADR-0144. Keep the draft until technical/product release readiness and live checks/review
+permit integration; full human acceptance starts with the RC and is never fabricated.
+Inspect the live PR stack before landing, without bypass or surprise-retarget.
+Subscription `235a6fbb-4e15-45f9-b8f1-7235de3bef66` is paused at this policy intake; it is
+not Agent merge. QA removed its temporary app-idle subscription.
 
 The prior bounded runtime workers finished and released their owned smoke ports; S2 and
 client preparation are current work, not stale tasks to archive. No further native replay is

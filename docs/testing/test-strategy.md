@@ -2,8 +2,37 @@
 
 Accepted for the active Grindless work under
 [ADR-0140](../DECISIONS.md#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions).
-Acceptance criteria, required CI checks and genuine player/migration gates are unchanged.
+Required technical checks and honest player/migration evidence remain. The delivery
+ordering is now [ADR-0144](../DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity):
+technical/product RC readiness precedes the owner's longitudinal human acceptance.
 The objective is coverage of relevant properties, not a native scenario per content instance.
+
+## Playable-release proof boundaries
+
+`1389ebb` remains engineering evidence. A policy, sprite or document change does not
+invalidate its unchanged mechanisms; changing the starting environment does invalidate
+any inference that its ordinary-world finite entry is accessible in the official Superflat
+preset. Version that preset and bind its deliberate terminal sources to the model, then
+exercise the smallest representative startup/progression path whose accessibility or
+generation semantics cannot be established statically. Keep Overworld compatibility.
+
+Before RC delivery, prove the chosen pack's clean import, pins/dependencies/configuration,
+startup, expected content/preset, representative questbook and visual/audio behavior,
+and absence of known ordinary-play blockers. A contact sheet is visual evidence, not an
+in-game render; waveform/licence checks are not listening. Preserve human versus agent
+observer identity and never relabel headless/server evidence as player acceptance.
+Do not rerun the whole native matrix for each artistic asset or guide sentence.
+
+The owner begins the longitudinal save after playable-RC publication. Its no-command
+playthrough and feedback then provide human acceptance, potentially alongside T1 work.
+The first release needs an explicit forward-compatibility strategy, not an invented
+pre-existing longitudinal save. Each subsequent update validates changed IDs/data/config
+and applicable migration on a preserved copy of the actual reference save; keep the
+original. Existing codec/transaction proofs are reusable, not a substitute for that
+upgrade observation when a compatibility boundary changes.
+
+The [playable-release plan](../../plan/process-t0-playable-release-1.md) names the new
+gaps, proof reuse and dependency order. No new unobserved run is supplied by this policy.
 
 ## Before an expensive validation
 

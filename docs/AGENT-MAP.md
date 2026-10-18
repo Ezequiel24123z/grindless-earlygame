@@ -22,7 +22,28 @@ capability event
 Coordination follows [AGENTS](../AGENTS.md) and
 [the durable plan](../.agent/work-plan.json). Astra owns design/final integration; workers
 own bounded implementation/check execution with explicit files and input revisions.
-Current C3 source/assets are preserved WIP, not accepted functionality or permission to start ports.
+The current engineering baseline is1389; product polish and official Superflat accessibility
+are new gaps, not permission to rewrite proven engines or start ports.
+
+## Playable releases, profiles and work storage
+
+- `plan/process-t0-playable-release-1.md` and `.agent/work-plan.json` — ADR-0144/PA-0007
+  requirement trace, bounded ownership, separate readiness states and actual dependencies.
+- `pack/profiles.json`, `pack/curseforge/manifest.json`, `pack/dependency-metadata.json`,
+  `gradle.properties`, root build and paired pack tools — curated version lock, public
+  configuration/content, distributable whitelist and provenance.
+- Existing source/recipe/world/sustainability authorities below — trace every mandatory
+  initial and recurrent resource before selecting/versioning the official flat preset.
+- Existing tool environment/cache/output controls — prefer supported redirection after
+  ownership and absolute-path audit; do not edit app session databases or move worktrees
+  blindly. Private storage paths belong in operational evidence, not public pack data.
+- `docs/reviews/go-gate.md` and `docs/testing/` — qualify technical/product RC readiness
+  before delivery, record human acceptance afterward and preserve real-save upgrade proof.
+
+Grindless is Superflat-first, Overworld-compatible and longitudinal across tier releases.
+The old conditional entry witness does not prove access in an unselected flat preset.
+Release readiness, visual review and human acceptance are not synonyms. No T1 until
+playable T0 publication and actual owner play; no new port implementation by implication.
 
 ## Machine
 

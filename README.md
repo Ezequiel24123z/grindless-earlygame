@@ -1,6 +1,7 @@
 # Grindless
 
-**Grindless** is a full modpack-scale progression for Minecraft. The early game already
+**Grindless** is a complete playable modpack for Minecraft, centered on the Grindless
+technology mod: **Superflat-first and Overworld-compatible**. The early game already
 built — a hand crank, the first factory, the contact process — is the foundation of an
 aligned **T0/F0-T15/F15** ladder carried by physical Control Matrices.
 
@@ -30,12 +31,12 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > prototype/test infrastructure, not an Industrial shortcut. The current revision-bound evidence
 > is in [the validation record](docs/testing/latest-validation.md).
 >
-> **Active development:** The T0 ceramic workshop, geological/biological source base, primitive
-> assembly and physical calibration/Matrix exit are implemented. S1 and bounded native C3/source
-> proofs exist within their stated limits; S2 canonical data and full closure, actual client and
-> no-command survival acceptance, and saved-world compatibility remain pending. T0 is the only
-> active tier. Astra owns product decisions and integration through the [active handoff](.agent/handoff.md);
-> historical passes do not certify changed code or complete T0 acceptance.
+> **Active development:** `1389ebb` is the T0 engineering candidate. The next deliverable is
+> the first **T0 Playable Release Candidate**: a curated, configured and versioned pack with
+> deliberate Superflat progression, real sprite/art and sound passes, coherent quests and
+> forward-save compatibility. Existing S2, runtime, UI and packaging proofs are reused within
+> their limits; they do not already establish that product. T0 is the only active tier.
+> Astra owns decisions and integration through the [active handoff](.agent/handoff.md).
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -49,8 +50,32 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 
 ---
 
+## Playable tier releases
+
+The lifecycle is **tier design -> implementation -> integration -> technical verification
+-> polish -> modpack build -> Release Candidate -> real play -> feedback alongside the
+next tier**. The owner starts the longitudinal reference world only from the first playable
+release, not the earlier preparation ZIPs. Later tier releases normally update that same
+world; incompatible changes require an explicit, tested migration on a preserved copy.
+
+Human acceptance starts with the release. After T0 is technically ready, polished,
+published and the owner has begun that save, T1 work may proceed alongside T0 feedback;
+there is no requirement to wait for the player to finish T0 absent a concrete dependency.
+**Those conditions are not met yet.** No current tier or save compatibility is accepted
+by this policy change.
+
+The official Superflat preset must be versioned and its mandatory resource routes
+deliberate. Normal Overworld generation and optional exploration cannot hide a flat-world
+gap. QoL reduces friction without bypassing the resource, processing, energy, logistics or
+quest systems. Visual/audio review and redistributable asset provenance are release work,
+not consequences inferred from deterministic generation.
+
+See [ADR-0144](docs/DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+and the [current gaps and execution plan](plan/process-t0-playable-release-1.md).
+
 ## Contents
 
+- [Playable tier releases](#playable-tier-releases)
 - [Environment setup](#environment-setup)
 - [The problem](#the-problem)
 - [Design principles](#design-principles)
@@ -2261,13 +2286,14 @@ to proceed together under Astra; integration and manual gates still control acce
 | 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, the connected workshop, geological/biological sources, physical calibration and manual five-unit exit are implemented; full canonical-data/source closure, client discovery and T0 acceptance remain pending |
 | 32 | **BQ — Physical T2 gate** | held behind BP acceptance — the F2 route exists as implementation inventory; T2 is not the active tier or accepted survival progression |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
-| 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **T0 workshop and renewable supply** | Candidate1389ebb is published and delivered: canonical guidance/assets,42 official suites and15 pack checks pass. The older4061 native installation is prepared but its two local fixtures are resource-blocked/NOT_RUN; current no-command/client/retained-world acceptance remains unexecuted |
+| 34 | **Mechanical tier acceptance** | active — ADR-0144 revises the ordering: T0 playable RC publication plus actual longitudinal play permits T1 alongside feedback; no human acceptance is inferred and T1 is not open now |
+| 35 | **T0 workshop and renewable supply** | Engineering candidate1389ebb is published:42 suites/pack15 and source-bound CI evidence. The new playable-RC gaps are Superflat accessibility, curated/configured pack, questbook product review, real art/audio passes and release/compatibility QA |
 | 35a | **Historical foundation verification** | historical **CONDITIONAL GO** — 33 suites/build/docs and 41 production scenarios; not current-WIP or Tier acceptance. Manual gates block merge, not authorized T0 development; [validation ledger](docs/testing/latest-validation.md) |
 | 36 | **Historical T0 preparation** | [Tier specification](docs/tiers/t0.md), [research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [manual checklist](docs/testing/t0-survival-acceptance.md) remain useful; the old no-expansion restriction is superseded |
 | 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md), exact Result export/serve and Root fix are integrated. Public4061 has actual same-repository hosted export/upload and three complete CI successes; later source continues through its own CI without relabeling cb0 browser evidence |
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
+| 40 | **Playable modpack and longitudinal releases** | active — ADR-0144/PA-0007 formalized; storage, Superflat, pack/quest fit, art and licensed sound discovery dispatched. No data migration, playable RC, reference save or release is yet claimed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
