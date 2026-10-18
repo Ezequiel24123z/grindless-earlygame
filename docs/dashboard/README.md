@@ -299,6 +299,43 @@ The four incumbent runtime files were unchanged. The attached server was stopped
 subsequent Gradle invocation. These observations bind the stated artifact, not later source
 commits, global sustainability or gameplay acceptance.
 
+### Final source-bound artifact and browser record
+
+Clean source **`cb0ff909f0ae041336b45e1bc18ef95b99b439e0`** generated the final observed
+eight-file artifact in ignored `build/dashboard/cb0ff909`. The earlier `build/dashboard/site`
+artifact remains preserved at its separate `1446cc3` source, not silently overwritten.
+The final production invocation repeated all **73,591** result comparisons; the actual browser
+canvas then completed the full **23/23** traversal on the new dataset. Its runner source
+SHA-256 is `8f8bd43fbefccdb3cab1ec327f17ce71f1f1ed73828fea92cfc06e9187631d07`.
+The observed counts, conditional gate, unknowns, exact input/output amounts, 48-node bound,
+omission counts and single refresh remained as recorded above. The full structured browser
+observation is retained in ignored `build/validation/dashboard/browser-cb0ff909.json`.
+
+| Observed identity | SHA-256 |
+| --- | --- |
+| `data.json` | `08c297bed36d33d93f8060bb7b2cd47ac18010f6361f67ff6c1174d71b86d292` |
+| `audit.json` | `2d8571ba84661a7d1a181467d9dabb3676673a4d9bc33e689ef6fb21c7cb2d1e` |
+| `audit.md` | `d8be2d93bc43a223a54945b0e269167870fba35e6c83c93ff12dae6b33e99ca5` |
+| `provenance.json` | `3782b0dc56b7b45f34eb8d9efa6779c5887b6c26ea36c0cf7174cebb0305cca1` |
+| Normalized authority snapshot | `0334beb8588f3d74e04ca708d7c1d60152c05b6fa4f12b49926d892774c0b184` |
+| T0 entry profile | `60ca28f6bee5b72654b47d9cbce3f7a3d8d157f942eedf9043dca4415c6c6fed` |
+| Authority content/source aggregate | `2d35d5cf487bfbf32d0add943bc2d0c17fa9a4768ac96dc6388ef0efbd833a34` |
+| Authority source manifest | `99f4488fd124729972b112fb84cdab8c5a4fdad39fcd84b272c73009a4bdc150` |
+| Observed S2 implementation class resources | `0c78dd3e9c6ee912d0e58f8cec481a8abd25a80406cac258f1da5b6328acaad7` |
+| Observed implementation source manifest | `ddbdfed8568d4bdfaacadddbc6720ccfccc508142d08aea31f4a9c7441b1d60d` |
+
+All seven non-self file digests in provenance were checked against actual bytes; the four
+runtime files also matched the incumbent source bytes. The reviewed `debd3ae` normalized
+snapshot and entry-profile identities match; complete report, source, package and implementation
+identities are **not** claimed equal to that older run. The `AuditReports` extraction legitimately
+changes its class/source identity. The artifact retains the actual newly observed pack and
+registry hashes instead of substituting historical proofs.
+
+The final attached server was stopped and absence of its listener confirmed. No server/client
+smoke, CI pass, unsafe-native-quantity browser case, global sustainability, Tier, survival,
+saved-world or merge acceptance is claimed. Documentation recording this evidence does not
+rebind it to a later documentation-only commit. Workflow/upload changes remain coordinator-owned.
+
 ## Historical renderer-only evidence and integration limits
 
 Observed on Windows, 2026-10-17. Initial implementation:
