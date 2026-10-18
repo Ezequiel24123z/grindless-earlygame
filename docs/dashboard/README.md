@@ -379,9 +379,39 @@ Observed PowerShell attempts are retained under ignored `build/validation/dashbo
 
 The paired Bash regression is supplied but has not been executed on this Windows host.
 The `cb0ff909` artifact and its browser observations above remain preserved at their original
-source and scope. They are not rebound to this script-only repair. A subsequent clean-source
-canonical re-export must record its own revision and file hashes; no browser/server rerun,
+source and scope. They are not rebound to this script-only repair; no browser/server rerun,
 native Minecraft run or broader acceptance is implied by the source-selection regression.
+
+#### Clean-source re-export after the root fix
+
+Clean source **`546c4ba5240323f922d485fcfe538d36f1766efa`** generated a separate eight-file
+artifact in ignored `build/dashboard/546c4ba-root-fix` at `2026-10-18T14:44:37.868853Z`.
+The bounded recheck used the fixed entrypoint's actual source-selection statements, freshly
+compiled their six selected-root sources and invoked the canonical Java exporter with the
+already prepared Gradle classpath. Compilation and export ran serially with 256 MiB heaps and
+two processors. This did **not** rerun Gradle or the full bootstrap CLI. No server was started;
+the JVM window was released after the exporter exited successfully.
+
+The actual result again passed **73,591 projection comparisons**, with 1,384 resources,
+474 routes, 259 tags and 25 objectives. All eight output names, seven non-self file digests,
+eight selected-root tool-source digests and four incumbent runtime files were verified.
+The 17 observed exporter/check class identities also matched their actual compiled bytes.
+An initial post-export verifier failed on a filename-order assumption; its corrected
+case-sensitive set comparison confirmed the exact eight-file inventory, not a data repair.
+
+| Observed identity | SHA-256 |
+| --- | --- |
+| `data.json` | `3880a5e1c622a3090f8aa2067faf708bc0e386b9accf4e26d29e326acc161986` |
+| `audit.json` | `529741d7f19178f2de5bd6d74dce02408326531adaf70643497d6bc1f54c8148` |
+| `audit.md` | `e520bb5eeba35956c8b7a38f7fd672b57e7e84df375c8db8774fb5d70653bfff` |
+| `provenance.json` | `7262554576cfa326bf22ea1ffa49bb604beb42200957370871a10f8b61f6a919` |
+
+The normalized authority snapshot, authority content/source identities and observed S2
+implementation class/source identities match the `cb0ff909` record above. The new report and
+tool-source identities are retained as actually emitted, not replaced with older hashes.
+All eight identities of the preserved `cb0ff909` files were independently rechecked unchanged.
+That earlier browser traversal remains bound to its original artifact; this shell-source
+repair does not claim a new browser run, CI result, global sustainability or Tier acceptance.
 
 ## Historical renderer-only evidence and integration limits
 
