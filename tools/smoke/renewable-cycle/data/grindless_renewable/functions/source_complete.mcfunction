@@ -20,3 +20,4 @@ say RENEWABLE-AUTOMATIC-WATER-AND-PRODUCED-BIOMASS-POWER
 data get storage grindless:renewable_check steady
 function grindless_renewable:report
 say RENEWABLE-SOURCE-COMPLETE
+function grindless_renewable:harvest_begin

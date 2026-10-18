@@ -1,0 +1,22 @@
+scoreboard players add downstream_tries renewable_check 1
+scoreboard players set gross_water renewable_check 0
+execute if data block 20 280 4 {Fluid:{Id:"minecraft:water"}} store result score gross_water renewable_check run data get block 20 280 4 Fluid.Amount
+execute if score wet_seen renewable_check matches 0 if score gross_water renewable_check matches 1000.. if data block 20 280 4 {WorkRecipe:"bootstrap/wet_aggregate",Items:[{Slot:0b,id:"grindless:mineral_aggregate",Count:2b}]} run say RENEWABLE-WET-AGGREGATE-GROSS-1000-MB-PRESENT
+execute if score wet_seen renewable_check matches 0 if score gross_water renewable_check matches 1000.. if data block 20 280 4 {WorkRecipe:"bootstrap/wet_aggregate",Items:[{Slot:0b,id:"grindless:mineral_aggregate",Count:2b}]} run scoreboard players set wet_seen renewable_check 1
+execute if score wet_products renewable_check matches 0 if data block 20 279 4 {Items:[{id:"minecraft:raw_iron",Count:2b},{id:"minecraft:raw_copper",Count:2b},{id:"minecraft:redstone",Count:4b}]} run say RENEWABLE-SETTLING-2-IRON-2-COPPER-4-REDSTONE
+execute if score wet_products renewable_check matches 0 if data block 20 279 4 {Items:[{id:"minecraft:raw_iron",Count:2b},{id:"minecraft:raw_copper",Count:2b},{id:"minecraft:redstone",Count:4b}]} run scoreboard players set wet_products renewable_check 1
+execute if score milling renewable_check matches 0 if data block 16 279 4 {Items:[{id:"minecraft:cobblestone",Count:8b},{id:"minecraft:gravel",Count:4b}]} run function grindless_renewable:load_sand
+execute if score carbon renewable_check matches 0 if data block 24 279 4 Items[{id:"minecraft:charcoal",Count:6b}] run say RENEWABLE-CARBON-12-BIOMASS-6-CHARCOAL
+execute if score carbon renewable_check matches 0 if data block 24 279 4 Items[{id:"minecraft:charcoal",Count:6b}] run scoreboard players set carbon renewable_check 1
+execute if score mixing renewable_check matches 0 if data block 16 279 4 Items[{id:"minecraft:sand",Count:3b}] run function grindless_renewable:load_mixer
+execute if score glass renewable_check matches 0 if score mixing renewable_check matches 1 if score carbon renewable_check matches 1 if data block 16 279 4 Items[{id:"minecraft:sand",Count:2b}] run function grindless_renewable:load_glass
+execute if score copper renewable_check matches 0 if score carbon renewable_check matches 1 if score wet_products renewable_check matches 1 run function grindless_renewable:load_copper
+execute if score ceramics renewable_check matches 0 if score carbon renewable_check matches 1 if data block 16 279 8 Items[{id:"grindless:unfired_ceramic",Count:3b}] run function grindless_renewable:load_ceramics
+execute if score ceramics renewable_check matches 1 if data block 20 279 10 {Items:[{id:"grindless:ceramic_insulator",Count:2b},{id:"grindless:ceramic_grog",Count:1b}]} run say RENEWABLE-FIRING-2-INSULATORS-1-GROG
+execute if score ceramics renewable_check matches 1 if data block 20 279 10 {Items:[{id:"grindless:ceramic_insulator",Count:2b},{id:"grindless:ceramic_grog",Count:1b}]} run scoreboard players set ceramics renewable_check 2
+execute if score bricks renewable_check matches 0 if score ceramics renewable_check matches 2 if score glass renewable_check matches 1 if score copper renewable_check matches 1 run function grindless_renewable:load_bricks
+execute if score core renewable_check matches 0 if score ceramics renewable_check matches 2 if score wet_products renewable_check matches 1 run function grindless_renewable:load_core
+execute if score core renewable_check matches 1 if data block 16 279 12 Items[{id:"grindless:data_core",Count:1b}] run function grindless_renewable:load_terminal
+execute if score phase renewable_check matches 6 if score wet_seen renewable_check matches 1 if score wet_products renewable_check matches 1 if data block 20 279 10 Items[{id:"minecraft:brick",Count:4b}] if data block 24 279 10 Items[{id:"minecraft:glass",Count:2b}] if data block 24 279 16 {Items:[{id:"minecraft:copper_ingot",Count:2b},{id:"grindless:slag",Count:2b}]} if data block 20 279 4 Items[{id:"minecraft:redstone",Count:3b}] if data block 16 278 16 Items[{id:"grindless:calibrated_data_core",Count:1b}] run function grindless_renewable:finish
+execute if score phase renewable_check matches 6 if score downstream_tries renewable_check matches ..1200 run schedule function grindless_renewable:downstream_poll 10t replace
+execute if score phase renewable_check matches 6 if score downstream_tries renewable_check matches 1201.. run function grindless_renewable:downstream_failed

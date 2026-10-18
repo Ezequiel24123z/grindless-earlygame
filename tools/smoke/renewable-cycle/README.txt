@@ -42,10 +42,48 @@ ambiguous inventory selector cannot silently satisfy the exact balance.
 The report/number/digit functions emit named five-digit decimal metrics through
 ordinary say commands, because Minecraft suppresses data-get feedback inside functions.
 
-This first checkpoint covers the source window only. Downstream ceramic, settling,
-carbon, glass, copper/redstone and physical core calibration are the next fixture
-stage. No crafting hook exists. The authored hand craft and its quantities belong
-to existing checks; physical crafting-table interaction and recovery of five Relay
-Matrices remain manual acceptance. Do not report a complete native Matrix exit,
-no-command survival, night-independent supply, a complete construction reserve,
-retained-world compatibility, crash recovery, client/GUI interaction or Tier acceptance.
+After that window, an empty chest collects 12 real biomass. Roofing the culture
+suspends it through its actual environmental requirement. An observed-empty first
+hopper is removed and a chest collects at least six aggregate and six clay from
+the collector; removing its geological bed then suspends it. At least 22 produced
+biomass remain in the original Dynamo before downstream work starts.
+
+Additional command-built, non-consumed equipment consists of an initially empty
+Mk1 pylon, Quern, Settling Trough with channel/screen, Clay Mixer, four seven-brick
+Firing Chamber assemblies, Assembly Bench, Research Terminal, empty chests/hoppers,
+two Hand Pumps, two more placed water blocks, a conduit and a tank. All new energy
+and fluid buffers start empty. There is no additional fuel or energy seed.
+
+Paired fixture hand-loads copy an observed produced stack to a machine INPUT and
+debit the original in the same function, with no game tick between the operations.
+They do not write any claimed machine output, set Progress, or substitute a product.
+These explicit test-controlled loads do not claim autonomous downstream item routing.
+The real machines, live recipes/tags, natural pumps, native power network and native
+output export must make all products:
+  two dry aggregate batches -> eight cobblestone + four gravel;
+  three of those gravel -> three sand;
+  two wet aggregate batches -> two raw iron + two raw copper + four redstone;
+  12 produced biomass -> six charcoal;
+  two clay + one sand + naturally pumped water -> three unfired ceramic;
+  that ceramic + one charcoal -> two insulators + one grog;
+  four clay + one charcoal -> four bricks;
+  two sand + two charcoal -> two glass;
+  two raw copper + two charcoal -> two copper ingots + two slag;
+  one insulator + one redstone -> one Data Core in the real Bench;
+  that actual Data Core -> calibrated core in the real Research Terminal.
+The wet route must be observed with at least 1,000 mB gross water while its first
+batch still has both aggregate inputs. The return tank is measured separately;
+ongoing pumping/reuse means its amount is not assumed to be exactly 1,500 mB.
+All transitions poll actual inventories/work state, with bounded failure markers,
+rather than declaring a timed delay or a RUNNING visual to be a production pass.
+
+The final simultaneous stock gate requires glass x2, copper x2, redstone x3
+(one spare beyond the hand recipe), brick x4 and a hopper-recovered calibrated core.
+Keep three acceptance boundaries separate: machine-produced materials and real core
+calibration are native smoke evidence; the authored hand recipe/quantities are
+existing-check evidence; physical crafting-table interaction and recovery of five
+Relay Matrices remain manual acceptance. No crafting hook is added, the Bench never
+crafts a Matrix, and ADR-0137's physical hand-craft requirement is not removed.
+Do not report a complete native Matrix exit, no-command survival, night-independent
+supply, a complete construction reserve, retained-world compatibility, crash recovery,
+client/GUI interaction or Tier acceptance.
