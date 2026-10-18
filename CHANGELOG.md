@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Reviewed S2 conditional model integrated through `dba3993`.** Real pack/registry and
+  physical-source bindings, formation, finite shared custody, manual-first construction,
+  executed-batch provenance and the active T0 gate now accompany the existing runtime.
+  The Quest Book is obtained before any claim as a reusable non-consumed tool. Independent
+  reviews closed the registry, cadence, goal/seed, simultaneous-custody and scope findings;
+  their red reproductions remain evidence. The active gate is not global/Tier or played
+  acceptance, and later unassessed tiers retain their diagnostics. Composed-source exports
+  and CI are refreshed separately rather than claiming the worker's hashes for this merge.
+- **Combined client artifact verified on `740ec84`.** The production bridge probe passes on
+  the actual remapped jar; the one canonical states run exits successfully with945/945
+  patterns and observed server initialization of the new read-only helper. This is not a
+  client rendering, no-command or retained-world pass. A new preparation ZIP was delivered
+  without overwriting the original; no raw private logs were published.
 - **Client-feedback engineering integrated through `d0b7256`.** Native machine/player slots,
   bounded status text, red non-consumed catalyst tooltips and complete JEI layouts now share
   the real physical schema. Current T0 water uses its native appearance. A loaded-lava

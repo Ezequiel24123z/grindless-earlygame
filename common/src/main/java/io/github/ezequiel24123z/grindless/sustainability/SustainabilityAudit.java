@@ -18,15 +18,31 @@ import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityMo
  * No reachability assumption, optional producer or unannotated tier can establish renewability.
  */
 public final class SustainabilityAudit {
-    /** Exact bootstrap draw before an established renewable operation, including seed reserves. */
-    public record Reserve(Resource resource, long guaranteed, long required, long margin, String status) {
+    /** Gifts, claimed rewards and conditional player custody remain separate budget axes. */
+    public record Reserve(Resource resource, long guaranteed, long playerProvided, long claimedRewards,
+                          long required, long margin, String status) {
+        /** Preserves the S1 exact-guarantee constructor without inventing player supplies. */
+        public Reserve(Resource resource, long guaranteed, long required, long margin, String status) {
+            this(resource, guaranteed, 0, 0, required, margin, status);
+        }
+    }
+
+    /** Local crank actions are not an ENERGY reserve and cannot establish R on their own. */
+    public record WorkReserve(String terminal, long budgetActions, long requiredActions,
+                              long marginActions, String status) {
+    }
+
+    /** Concrete exit production, not a promise that a manual goal is an automatic renewable root. */
+    public record GoalWitness(Resource resource, String route, long requiredCount, long batchOutput,
+                              long executedBatches, long produced, String status) {
     }
 
     /** Tier facts; renewable excludes finite circulating stock, and an unknown ledger is not a pass. */
     public record TierResult(int tier, Set<Resource> mandatory, Set<Resource> recurring,
                              Set<Resource> available, Set<Resource> renewable,
                              Set<String> availableRoutes, Set<String> renewableRoutes,
-                             List<Reserve> reserves, String unknown) {
+                             List<Reserve> reserves, Map<Resource, Long> retainedInventory, WorkReserve manualWork,
+                             GoalWitness exitProduction, Map<String, Long> establishmentBatches, String unknown) {
         public TierResult {
             mandatory = sortedSet(mandatory);
             recurring = sortedSet(recurring);
@@ -35,6 +51,27 @@ public final class SustainabilityAudit {
             availableRoutes = sortedSet(availableRoutes);
             renewableRoutes = sortedSet(renewableRoutes);
             reserves = List.copyOf(reserves);
+            retainedInventory = sortedMap(retainedInventory);
+            establishmentBatches = sortedMap(establishmentBatches);
+        }
+
+        /** Preserves the result constructor used before completed-batch provenance was exported. */
+        public TierResult(int tier, Set<Resource> mandatory, Set<Resource> recurring,
+                          Set<Resource> available, Set<Resource> renewable,
+                          Set<String> availableRoutes, Set<String> renewableRoutes,
+                          List<Reserve> reserves, Map<Resource, Long> retainedInventory, WorkReserve manualWork,
+                          GoalWitness exitProduction, String unknown) {
+            this(tier, mandatory, recurring, available, renewable, availableRoutes, renewableRoutes,
+                    reserves, retainedInventory, manualWork, exitProduction, Map.of(), unknown);
+        }
+
+        /** Preserves unprofiled S1 result construction. */
+        public TierResult(int tier, Set<Resource> mandatory, Set<Resource> recurring,
+                          Set<Resource> available, Set<Resource> renewable,
+                          Set<String> availableRoutes, Set<String> renewableRoutes,
+                          List<Reserve> reserves, String unknown) {
+            this(tier, mandatory, recurring, available, renewable, availableRoutes, renewableRoutes,
+                    reserves, Map.of(), null, null, unknown);
         }
     }
 
@@ -54,8 +91,10 @@ public final class SustainabilityAudit {
     private final Snapshot snapshot;
     private final SustainabilityAnnotations annotations;
     private final Map<String, AuditFinding> findings = new TreeMap<>();
+    private int derivingTier = -1;
+    private EntryProfile derivedEntry;
 
-    private SustainabilityAudit(Snapshot snapshot, SustainabilityAnnotations annotations) {
+    SustainabilityAudit(Snapshot snapshot, SustainabilityAnnotations annotations) {
         this.snapshot = snapshot;
         this.annotations = annotations;
         snapshot.findings().forEach(this::finding);
@@ -75,7 +114,104 @@ public final class SustainabilityAudit {
                 debt.apply(new ArrayList<>(audit.findings.values())));
     }
 
+    /** A candidate is useful only together with the fresh, finite replay, not the derivation run. */
+    public record EntryDerivation(EntryProfile profile, List<AuditFinding> derivationFindings, Result replay) {
+        public EntryDerivation {
+            derivationFindings = List.copyOf(derivationFindings);
+        }
+    }
+
+    /**
+     * Derives a sufficient, not globally minimal, bill from actual execution deficits.
+     * Only the returned replay executes with that finite bill; derivation cannot certify a tier.
+     */
+    public static EntryDerivation deriveEntryProfile(Snapshot snapshot, SustainabilityAnnotations annotations,
+                                                     DebtManifest debt, int tier) {
+        TierPlan plan = annotations.ledger().get(tier);
+        if (plan == null || plan.entryProfile() == null) {
+            throw new IllegalArgumentException("Entry derivation requires an explicitly conditional profile template");
+        }
+        SustainabilityAudit derivation = new SustainabilityAudit(snapshot, annotations);
+        derivation.derivingTier = tier;
+        derivation.validateDeclarations();
+        derivation.analyseTier(tier);
+        EntryProfile profile = derivation.derivedEntry;
+        if (profile == null) {
+            return new EntryDerivation(null, new ArrayList<>(derivation.findings.values()),
+                    run(snapshot, annotations, debt));
+        }
+        Map<Integer, TierPlan> ledger = new TreeMap<>(annotations.ledger());
+        ledger.put(tier, plan.withEntryProfile(profile));
+        SustainabilityAnnotations finite = new SustainabilityAnnotations(annotations.resources(), annotations.routes(),
+                annotations.machines(), annotations.loops(), annotations.plans(), ledger);
+        return new EntryDerivation(profile, new ArrayList<>(derivation.findings.values()), run(snapshot, finite, debt));
+    }
+
+    EntryProfile entryProfile(int tier) {
+        TierPlan plan = annotations.ledger().get(tier);
+        return plan == null ? null : plan.entryProfile();
+    }
+
+    boolean deriving(int tier) {
+        return derivingTier == tier;
+    }
+
+    private void includeEntryWitness(ConstructionReserve witness, int tier) {
+        if (!deriving(tier)) {
+            return;
+        }
+        EntryProfile bill = witness.derivedProfile();
+        if (bill == null) {
+            return;
+        }
+        Map<Resource, Long> provided = new TreeMap<>(bill.playerProvided());
+        if (derivedEntry != null) {
+            derivedEntry.playerProvided().forEach((resource, amount) -> provided.merge(resource, amount, Math::max));
+        }
+        // Independent proofs replay separately; they do not consume one another's finite custody.
+        derivedEntry = bill.withBill(provided, Math.max(bill.manualWorkActions(),
+                derivedEntry == null ? 0 : derivedEntry.manualWorkActions()));
+    }
+
+    boolean manualWorkReady(Route route, int tier, Set<Resource> available) {
+        EntryProfile profile = entryProfile(tier);
+        ManualWork work = profile == null ? null : profile.manualWork();
+        if (work == null || !work.applies(route) || !deriving(tier) && profile.manualWorkActions() == 0) {
+            return false;
+        }
+        Terminal source = snapshot.terminals().get(work.terminal());
+        return source != null && source.kind() == TerminalKind.MANUAL_LABOUR
+                && source.resource().kind() == Kind.ENVIRONMENT && source.unlockTier() <= tier
+                && validTerminal(source) && has(available, work.tool());
+    }
+
+    private boolean inputsAvailable(Route route, int tier, Set<Resource> available) {
+        return route.inputs().keySet().stream().allMatch(resource -> has(available, resource)
+                || resource.equals(ENERGY) && manualWorkReady(route, tier, available));
+    }
+
     private void validateDeclarations() {
+        for (TierPlan plan : annotations.ledger().values()) {
+            EntryProfile profile = plan.entryProfile();
+            if (profile == null) {
+                continue;
+            }
+            for (Resource resource : profile.playerProvided().keySet()) {
+                if (snapshot.terminals().values().stream().noneMatch(source ->
+                        source.resource().equals(resource) && source.kind() == TerminalKind.MANUAL_WORLD
+                                && source.unlockTier() <= plan.tier() && validTerminal(source))) {
+                    add("entry_profile_source_invalid", resource.key(), "T" + plan.tier(), ERROR,
+                            "Conditional custody must name an actual, justified manual acquisition authority.");
+                }
+            }
+            ManualWork work = profile.manualWork();
+            Terminal source = work == null ? null : snapshot.terminals().get(work.terminal());
+            if (work != null && (source == null || source.kind() != TerminalKind.MANUAL_LABOUR
+                    || source.resource().kind() != Kind.ENVIRONMENT || !validTerminal(source))) {
+                add("entry_work_source_invalid", profile.id(), "T" + plan.tier(), ERROR,
+                        "Manual work needs a real, scoped labour source, not a portable ENERGY terminal.");
+            }
+        }
         for (Resource resource : snapshot.resources()) {
             ResourceMetadata metadata = annotations.resources().get(resource);
             if (metadata == null || metadata.resourceClass() == null) {
@@ -90,7 +226,7 @@ public final class SustainabilityAudit {
             }
             if (resource.kind() == Kind.TAG) {
                 TagResolution tag = snapshot.tags().get(resource);
-                if (tag == null || !tag.complete() || tag.members().isEmpty()) {
+                if (tag == null || !tag.complete()) {
                     add("unresolved_tag", resource.key(), "", UNKNOWN,
                             tag == null ? "Tag has no resolved JSON authority."
                                     : "Unresolved tag references: " + tag.unresolved());
@@ -105,7 +241,7 @@ public final class SustainabilityAudit {
         }
         for (Route route : snapshot.routes().values()) {
             RoutePolicy policy = annotations.routes().get(route.id());
-            if (policy == null) {
+            if (policy == null || policy.unlockTier() == null) {
                 add("route_tier_unknown", route.id(), "", UNKNOWN, "Route unlock/optional policy is not authored.");
             }
             if (route.family() != null && !annotations.machines().containsKey(route.family())) {
@@ -204,7 +340,7 @@ public final class SustainabilityAudit {
             for (Route route : snapshot.routes().values()) {
                 if (unlocked(route, tier) && !zeroInputUnjustified(route)
                         && requirements(route, available, availableRoutes, tier)
-                        && contains(available, route.inputs().keySet())
+                        && inputsAvailable(route, tier, available)
                         && contains(available, route.catalysts().keySet())
                         && environmentReady(route, available)) {
                     changed |= availableRoutes.add(route.id());
@@ -268,11 +404,11 @@ public final class SustainabilityAudit {
                     renewableRoutes, List.of(), reason);
         }
         Set<Resource> roots = new TreeSet<>(plan.roots());
-        if (plan.exitObjective() != null) {
-            roots.add(plan.exitObjective());
-        }
         for (String id : plan.requiredQuests()) {
-            addObjectiveRoots(id, roots, new HashSet<>());
+            addObjectiveRoots(id, roots, new HashSet<>(), plan.exitObjective());
+        }
+        if (plan.exitObjective() != null) {
+            roots.remove(plan.exitObjective());
         }
         Set<Resource> mandatory = new TreeSet<>();
         Set<Resource> recurring = new TreeSet<>();
@@ -281,6 +417,19 @@ public final class SustainabilityAudit {
         Set<Resource> visitedRecurring = new TreeSet<>();
         for (Resource root : roots) {
             closure(root, true, tier, mandatory, recurring, closureRoutes, construction, visitedRecurring);
+        }
+        if (plan.exitObjective() != null) {
+            mandatory.add(plan.exitObjective());
+            Route exit = canonical(plan.exitObjective(), tier, true);
+            if (exit == null || outputAmount(exit, plan.exitObjective()) <= 0) {
+                add("exit_goal_route_missing", plan.exitObjective().key(), "T" + tier, ERROR,
+                        "An exit goal needs a concrete unlocked production route, not just stock or a gift.");
+            } else if (!exitProductionRoute(exit)) {
+                add("exit_goal_route_invalid", plan.exitObjective().key(), "T" + tier, ERROR,
+                        "A manufacturing goal cannot select a quest claim, gift or other one-shot supply.");
+            } else {
+                closureRoute(exit, true, tier, mandatory, recurring, closureRoutes, construction, visitedRecurring);
+            }
         }
         int previousClosure;
         do {
@@ -339,14 +488,35 @@ public final class SustainabilityAudit {
                         "The establishment closure cannot construct this producer from an available seed.");
             }
         }
+        Set<Resource> establishmentConstruction = new TreeSet<>(construction);
+        Set<String> establishmentRoutes = new TreeSet<>(closureRoutes);
+        Set<Resource> productionObligations = new TreeSet<>(roots);
+        if (plan.entryProfile() != null) {
+            Set<Resource> proofResources = new TreeSet<>(mandatory);
+            Set<Resource> proofRecurring = new TreeSet<>(recurring);
+            Set<Resource> proofVisited = new TreeSet<>(visitedRecurring);
+            for (var entry : annotations.resources().entrySet()) {
+                ResourceMetadata metadata = entry.getValue();
+                if (renewableClass(metadata.resourceClass()) && metadata.firstRenewableTier() != null
+                        && metadata.firstRenewableTier() <= tier) {
+                    productionObligations.add(entry.getKey());
+                    closure(entry.getKey(), true, tier, proofResources, proofRecurring, establishmentRoutes,
+                            establishmentConstruction, proofVisited);
+                }
+            }
+            handlingClosure(tier, proofResources, proofRecurring, establishmentRoutes,
+                    establishmentConstruction, proofVisited);
+        }
         ConstructionReserve reserve = new ConstructionReserve(snapshot, annotations, this, tier, available, renewable);
-        List<Reserve> reserves = reserve.analyse(construction, closureRoutes, roots);
+        List<Reserve> reserves = reserve.analyse(establishmentConstruction, establishmentRoutes, productionObligations);
+        includeEntryWitness(reserve, tier);
         reserve.findings().forEach(this::finding);
         return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes,
-                renewableRoutes, reserves, null);
+                renewableRoutes, reserves, reserve.retainedInventory(), reserve.manualWorkReserve(),
+                reserve.exitProduction(), reserve.establishmentBatches(), null);
     }
 
-    private void addObjectiveRoots(String id, Set<Resource> roots, Set<String> visited) {
+    private void addObjectiveRoots(String id, Set<Resource> roots, Set<String> visited, Resource exitGoal) {
         if (!visited.add(id)) {
             return;
         }
@@ -355,8 +525,10 @@ public final class SustainabilityAudit {
             add("mandatory_objective_unknown", id, "", ERROR, "Selected quest has no physical authority.");
             return;
         }
-        roots.add(objective.subject());
-        objective.requires().forEach(required -> addObjectiveRoots(required, roots, visited));
+        if (!objective.subject().equals(exitGoal)) {
+            roots.add(objective.subject());
+        }
+        objective.requires().forEach(required -> addObjectiveRoots(required, roots, visited, exitGoal));
     }
 
     private void closure(Resource resource, boolean operational, int tier, Set<Resource> mandatory,
@@ -422,6 +594,12 @@ public final class SustainabilityAudit {
         }
         for (Resource catalyst : route.catalysts().keySet()) {
             closure(catalyst, false, tier, mandatory, recurring, routes, construction, visitedRecurring);
+        }
+        EntryProfile profile = entryProfile(tier);
+        if (profile != null && profile.manualWork() != null && route.inputs().containsKey(ENERGY)
+                && profile.manualWork().applies(route) && (deriving(tier) || profile.manualWorkActions() > 0)) {
+            closure(profile.manualWork().tool(), false, tier, mandatory, recurring, routes,
+                    construction, visitedRecurring);
         }
         if (route.family() != null) {
             Machine machine = annotations.machines().get(route.family());
@@ -635,6 +813,13 @@ public final class SustainabilityAudit {
         Set<Resource> outputs = new TreeSet<>();
         members.forEach(route -> outputs.addAll(route.retainedOutputs().keySet()));
         for (Route route : members) {
+            if (!route.automatable()) {
+                if (diagnose) {
+                    add("loop_manual_route", loop.id(), route.id(), ERROR,
+                            "Manual execution cannot establish an automatic renewable circulation.");
+                }
+                return null;
+            }
             if (route.oneShot() || !route.modOwned() || !environmentReady(route, renewable)) {
                 return null;
             }
@@ -684,6 +869,7 @@ public final class SustainabilityAudit {
             }
             return null;
         }
+        includeEntryWitness(witness, tier);
         if (independentMakeUp) {
             unlimited.add(loop.carrier());
         }
@@ -758,31 +944,13 @@ public final class SustainabilityAudit {
                 }
             }
         }
-        Map<Resource, Set<Resource>> edges = new TreeMap<>();
-        for (Route route : routes) {
-            route.inputs().keySet().stream().filter(resource -> resource.kind() != Kind.ENERGY).forEach(input ->
-                    edges.computeIfAbsent(input, ignored -> new TreeSet<>()).addAll(route.retainedOutputs().keySet()));
-        }
-        Set<Resource> processed = new HashSet<>();
-        for (Resource start : edges.keySet()) {
-            if (processed.contains(start)) {
-                continue;
-            }
-            Set<Resource> reachable = reachable(start, edges);
-            Set<Resource> component = new TreeSet<>();
-            for (Resource other : reachable) {
-                if (reachable(other, edges).contains(start)) {
-                    component.add(other);
-                }
-            }
-            processed.addAll(component);
-            List<Route> members = routes.stream().filter(route -> route.inputs().keySet().stream().anyMatch(component::contains)
-                    && route.retainedOutputs().keySet().stream().anyMatch(component::contains)).toList();
+        for (CycleComponent component : cycleComponents(snapshot)) {
+            List<Route> members = component.routes();
             if (members.isEmpty() || members.stream().anyMatch(this::hasEnvironment)) {
                 continue;
             }
-            boolean unproven = members.size() > component.size();
-            for (Resource carrier : component) {
+            boolean unproven = members.size() > component.resources().size();
+            for (Resource carrier : component.resources()) {
                 Map<String, BigInteger> batches = normalizedBatches(members, carrier);
                 if (batches == null) {
                     unproven = true;
@@ -797,12 +965,58 @@ public final class SustainabilityAudit {
                             "Exact normalized positive-gain cycle needs review: " + batches);
                 }
             }
-            if (unproven) {
-                add("cycle_balance_unproven", start.key(), "", UNKNOWN,
+            if (unproven && !unitPotentialConservative(members)) {
+                add("cycle_balance_unproven", component.representative().key(), "", UNKNOWN,
                         "The bounded batch-vector review cannot exclude other cycles in this component: "
                                 + members.stream().map(Route::id).toList());
             }
         }
+    }
+
+    record CycleComponent(Resource representative, Set<Resource> resources, List<Route> routes) {
+        CycleComponent {
+            resources = sortedSet(resources);
+            routes = List.copyOf(routes);
+        }
+    }
+
+    static List<CycleComponent> cycleComponents(Snapshot snapshot) {
+        List<Route> routes = snapshot.routes().values().stream().filter(route -> !route.oneShot()).toList();
+        Map<Resource, Set<Resource>> edges = new TreeMap<>();
+        for (Route route : routes) {
+            route.inputs().keySet().stream().filter(resource -> resource.kind() != Kind.ENERGY).forEach(input ->
+                    edges.computeIfAbsent(input, ignored -> new TreeSet<>()).addAll(route.retainedOutputs().keySet()));
+        }
+        List<CycleComponent> components = new ArrayList<>();
+        Set<Resource> processed = new HashSet<>();
+        for (Resource start : edges.keySet()) {
+            if (processed.contains(start)) {
+                continue;
+            }
+            Set<Resource> component = new TreeSet<>();
+            for (Resource other : reachable(start, edges)) {
+                if (reachable(other, edges).contains(start)) {
+                    component.add(other);
+                }
+            }
+            processed.addAll(component);
+            List<Route> members = routes.stream().filter(route -> route.inputs().keySet().stream().anyMatch(component::contains)
+                    && route.retainedOutputs().keySet().stream().anyMatch(component::contains)).toList();
+            components.add(new CycleComponent(start, component, members));
+        }
+        return List.copyOf(components);
+    }
+
+    /** Sufficient for this audit's gain predicate, not a physical mass or renewability claim. */
+    static boolean unitPotentialConservative(List<Route> routes) {
+        return !routes.isEmpty() && routes.stream().allMatch(route -> {
+            Map<Resource, BigInteger> net = balance(List.of(route), Map.of(route.id(), BigInteger.ONE));
+            BigInteger material = net.entrySet().stream().filter(entry -> entry.getKey().kind() != Kind.ENERGY)
+                    .map(Map.Entry::getValue).reduce(BigInteger.ZERO, BigInteger::add);
+            return material.signum() <= 0 && net.entrySet().stream()
+                    .filter(entry -> entry.getKey().kind() == Kind.ENERGY)
+                    .allMatch(entry -> entry.getValue().signum() <= 0);
+        });
     }
 
     Map<String, BigInteger> loopBatches(ClosedLoop loop) {
@@ -818,7 +1032,7 @@ public final class SustainabilityAudit {
     }
 
     /** Attempts an exact positive integer batch witness; failure is unproven, not infeasibility. */
-    private static Map<String, BigInteger> normalizedBatches(List<Route> routes, Resource carrier) {
+    static Map<String, BigInteger> normalizedBatches(List<Route> routes, Resource carrier) {
         if (routes.size() > 32) {
             return null;
         }
@@ -833,6 +1047,10 @@ public final class SustainabilityAudit {
         Map<String, BigInteger> batches = new TreeMap<>();
         routes.forEach(route -> batches.put(route.id(), BigInteger.ONE));
         Map<Resource, BigInteger> unit = balance(routes, batches);
+        if (unit.getOrDefault(carrier, BigInteger.ZERO).signum() == 0
+                && inputs.stream().allMatch(resource -> unit.getOrDefault(resource, BigInteger.ZERO).signum() >= 0)) {
+            return batches;
+        }
         if (inputs.stream().allMatch(resource -> unit.getOrDefault(resource, BigInteger.ZERO).signum() == 0)) {
             return batches;
         }
@@ -956,9 +1174,13 @@ public final class SustainabilityAudit {
         return null;
     }
 
+    static boolean exitProductionRoute(Route route) {
+        return route.authority() != Authority.QUEST_REWARD && !route.oneShot();
+    }
+
     boolean unlocked(Route route, int tier) {
         RoutePolicy policy = annotations.routes().get(route.id());
-        if (policy == null || policy.unlockTier() > tier) {
+        if (policy == null || policy.unlockTier() == null || policy.unlockTier() > tier) {
             return false;
         }
         if (route.family() == null) {
@@ -1010,7 +1232,7 @@ public final class SustainabilityAudit {
 
     boolean canRenew(Route route, int tier, Set<Resource> available, Set<Resource> renewable,
                      Set<String> availableRoutes) {
-        return unlocked(route, tier) && !route.oneShot() && !optional(route)
+        return unlocked(route, tier) && route.automatable() && !route.oneShot() && !optional(route)
                 && (route.modOwned() || route.authority() == Authority.VANILLA_TRANSFORMATION)
                 && !zeroInputUnjustified(route) && requirements(route, available, availableRoutes, tier)
                 && contains(available, route.inputs().keySet()) && contains(available, route.catalysts().keySet())
@@ -1066,7 +1288,14 @@ public final class SustainabilityAudit {
                 output.getValue() > route.inputs().getOrDefault(output.getKey(), 0L));
         return !route.oneShot() && gain && route.netInputs().keySet().stream().noneMatch(resource ->
                 resource.kind() == Kind.ITEM || resource.kind() == Kind.FLUID || resource.kind() == Kind.TAG)
-                && !hasEnvironment(route);
+                && !hasEnvironment(route) && !hasManualInput(route);
+    }
+
+    private boolean hasManualInput(Route route) {
+        return !route.automatable() && route.netInputs().keySet().stream().anyMatch(resource ->
+                resource.kind() == Kind.ENVIRONMENT && snapshot.terminals().values().stream().anyMatch(source ->
+                        source.resource().equals(resource) && source.kind() == TerminalKind.MANUAL_LABOUR
+                                && !source.automatable() && source.guaranteed() == null && validTerminal(source)));
     }
 
     private boolean hasEnvironment(Route route) {
@@ -1151,7 +1380,8 @@ public final class SustainabilityAudit {
 
     private int firstProductionTier(Resource resource) {
         return snapshot.routes().values().stream().filter(route -> outputAmount(route, resource) > 0)
-                .map(route -> annotations.routes().get(route.id())).filter(java.util.Objects::nonNull)
+                .map(route -> annotations.routes().get(route.id()))
+                .filter(policy -> policy != null && policy.unlockTier() != null)
                 .mapToInt(RoutePolicy::unlockTier).min().orElse(16);
     }
 

@@ -6521,6 +6521,27 @@ the much larger external widget engine. The study is a pattern/API reference, no
 grant or proof that every target patch-build API is identical; compilation uses the project's
 resolved dependency. No upstream code, texture or sound is imported in these checkpoints.
 
+**Selected quest adaptation.** Use Heracles' compatible Forge 1.20.1 UI/task framework with
+one registered Grindless claim-task/widget adapter. The selected published binary exposes
+the required task/widget APIs; no mixin, fork or invented requirement registry is needed.
+Native task completion represents an already recorded legacy claim, not cached possession:
+the backend's completed-parent relation thereby preserves the catalogue's claimed-parent
+relation. Current evidence, the physical book, per-player idempotency and rewards remain
+server-validated through the shared Grindless claim service. Disable native/autoclaim
+reward delivery for these generated quests; reconstruction never grants items.
+
+Keep `QuestCatalogue` and `grindless_quest_progress` authoritative and preserve the registered
+book/menu. Generate stable, owned backend definitions and reconcile only their projection;
+do not replace another pack's quests or raw progress file. Set individual progress and
+retain the legacy fallback when the optional backend is absent. This is a narrow gameplay
+adapter to an existing framework, not a replacement custom quest engine. Dependency/API,
+projection and reward/migration checks precede activation and packaging.
+
+The selected artifact is Heracles 1.1.13, CurseForge845831/file5406935, with ResourcefulLib
+2.1.29/file5659871. Inspection of the actual jar establishes bundled Hermes1.6.0 and
+MixinExtras0.2.1; a moving source branch or `latest.release` is not the artifact pin.
+The provenance ledger distinguishes upstream-managed dependencies from imported material.
+
 **Validation and delivery.** Run focused geometry, role, capacity, tooltip, platform-bridge and
 audio-policy checks. Reuse unchanged item interaction, executor, native fluid and save-layout
 proofs. Keep source-scoped human evidence separate from global satisfaction or a prior version.

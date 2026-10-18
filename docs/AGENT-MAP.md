@@ -286,7 +286,7 @@ share one exact reserve witness; unresolved tag precedence stays unknown, never 
 guess. Source identities must cover normalized authorities and the executed implementation.
 S2 proceeds under
 [ADR-0141](DECISIONS.md#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment).
-Its local, not-yet-integrated pack binding owns `CanonicalPack`, `TagResolver`, adapter/report
+Its integrated pack binding owns `CanonicalPack`, `TagResolver`, adapter/report
 changes, the two Gradle classpath-export tasks and `VerifySustainabilityRegistry` in tools.
 Actual registry/bootstrap access and JDK declaration analysis must stay outside the pure
 model/auditor and runtime UI; partial syntax coverage cannot establish absence, and accepted
@@ -297,6 +297,11 @@ finite manual-exit changes extend existing model checks; unchanged native proofs
 The compatible `Route` constructor is not canonical automation evidence. Manual exit
 production is required, but its Matrix is not an automated recurring root or a Bench output.
 Follow the current validation ledger; a core test pass is not renewable-supply certification.
+`T0Sustainability` authors the active conditional profile and `T0ConditionalGate` attributes
+every finding's scope. `VerifySustainabilityT0` is a hard discovered check, not a global/Tier
+acceptance switch. `ConstructionReserve` must prove shared custody, simultaneous non-consumed
+requirements and real canonical exit production; the same Quest Book is held before claims.
+Refresh game-edge exports on composed source, serializing or isolating Minecraft log output.
 
 Stable asset readiness lives in `docs/assets/t0-asset-manifest.json`; `source_bound_readiness`
 is its complete current inventory, while legacy arrays preserve candidate descriptors.

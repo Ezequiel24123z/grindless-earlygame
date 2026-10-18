@@ -36,7 +36,7 @@ public final class AuditReports {
      * @param directory generated report directory
      * @param result audit facts and findings
      * @param revision source revision label, not an identity for uncommitted source or class bytes
-     * @param reportOnly whether this invocation is in the unannotated S1 report-only gate
+     * @param reportOnly whether this invocation is a report-only inventory, not an enforced audit
      * @return hashes of the bytes written
      * @throws IOException if report output fails
      */
@@ -70,13 +70,27 @@ public final class AuditReports {
                 "implementation_source_sha256", sourceHash(sourceHashes(snapshot, true)),
                 "implementation_source_hashes", sourceHashes(snapshot, true),
                 "tag_resolution_scope", tagResolutionScope(snapshot),
-                "mode", reportOnly ? "report_only_s1_no_annotations" : "enforced",
+                "resolved_pack_hashes", packHashes(snapshot),
+                "registry_binding_hashes", registryHashes(snapshot),
+                "registry_binding_conditions", registryConditions(snapshot),
+                "mode", reportOnly ? (canonicalPack(snapshot) ? "report_only_s2_canonical_inventory" : "report_only_s1")
+                        + (hasAnnotations(result) ? "_partial_annotations" : "_no_annotations") : "enforced",
                 "sustainability_pass", !reportOnly && result.sustainabilityPass(),
                 "ratchet_pass", result.findings().ratchetPass(),
                 "failure_visible_debt", result.findings().waivedDebt(),
                 "summary", summary(result),
                 "input_hashes", snapshot.inputHashes(),
                 "debt", debt(result.debt()));
+        document.put("active_t0_conditional_gate", conditionalGate(result));
+        document.put("cycle_balance_certificates", SustainabilityAudit.cycleComponents(snapshot).stream()
+                .filter(component -> SustainabilityAudit.unitPotentialConservative(component.routes()))
+                .map(component -> row("kind", "sufficient_strictly_positive_unit_potential",
+                        "component_resources", keys(component.resources()),
+                        "complete_member_routes", component.routes().stream().map(Route::id).toList(),
+                        "non_energy_weight", 1, "every_member_material_net_nonpositive", true,
+                        "every_member_energy_axis_nonpositive", true,
+                        "proves", "excludes_the_auditors_positive_gain_predicate_not_physical_mass_or_renewability"))
+                .toList());
         List<Object> resources = new ArrayList<>();
         for (Resource resource : snapshot.resources()) {
             List<Map<String, Object>> producerProvenance = relationships(snapshot, resource, true);
@@ -104,10 +118,11 @@ public final class AuditReports {
             routes.add(row("id", route.id(), "authority", lower(route.authority()), "source", route.source(),
                     "machine_family", route.family(), "inputs", quantitiesById(route.inputs()),
                     "net_consumption", quantitiesById(route.netInputs()), "catalysts", quantitiesById(route.catalysts()),
+                    "non_consumed_requirements", quantitiesById(route.catalysts()),
                     "outputs", quantitiesById(route.outputs()), "discharged", keys(route.discharged()),
                     "duration_ticks", route.durationTicks(), "fu_per_tick", route.fuPerTick(),
                     "conditions", route.conditions(), "prerequisites", route.prerequisites(),
-                    "one_shot", route.oneShot(), "mod_owned", route.modOwned(),
+                    "one_shot", route.oneShot(), "mod_owned", route.modOwned(), "automatable", route.automatable(),
                     "unlock_tier", policy == null ? null : policy.unlockTier(),
                     "optional", policy == null ? null : policy.optional(),
                     "environmental_sources", policy == null ? null : policy.environmentalSources(),
@@ -145,7 +160,12 @@ public final class AuditReports {
             TierPlan plan = result.annotations().ledger().get(tier.tier());
             List<Object> reserves = tier.reserves().stream().map(reserve -> (Object) row(
                     "resource", reserve.resource().key(), "guaranteed", reserve.guaranteed(),
+                    "player_provided", reserve.playerProvided(), "claimed_rewards", reserve.claimedRewards(),
                     "required", reserve.required(), "margin", reserve.margin(), "status", reserve.status())).toList();
+            Map<String, Object> entry = plan == null || plan.entryProfile() == null
+                    ? null : entryProfile(plan.entryProfile());
+            SustainabilityAudit.WorkReserve work = tier.manualWork();
+            SustainabilityAudit.GoalWitness goal = tier.exitProduction();
             tiers.add(row("tier", tier.tier(), "unknown", tier.unknown(),
                     "declared_roots", plan == null ? null : keys(plan.roots()),
                     "selected_quests", plan == null ? null : plan.requiredQuests(),
@@ -153,6 +173,16 @@ public final class AuditReports {
                     "mandatory", keys(tier.mandatory()), "recurring", keys(tier.recurring()),
                     "available", keys(tier.available()), "renewable", keys(tier.renewable()),
                     "available_routes", tier.availableRoutes(), "renewable_routes", tier.renewableRoutes(),
+                    "entry_profile", entry, "entry_profile_sha256", entry == null ? null : hash(entry),
+                    "manual_work_reserve", work == null ? null : row("terminal", work.terminal(),
+                            "budget_actions", work.budgetActions(), "required_actions", work.requiredActions(),
+                            "margin_actions", work.marginActions(), "status", work.status()),
+                    "exit_production", goal == null ? null : row("resource", goal.resource().key(),
+                            "route", goal.route(), "required_count", goal.requiredCount(),
+                            "batch_output", goal.batchOutput(), "executed_batches", goal.executedBatches(),
+                            "produced", goal.produced(), "status", goal.status()),
+                    "establishment_batches", tier.establishmentBatches(),
+                    "retained_process_and_circulation_inventory", quantitiesById(tier.retainedInventory()),
                     "construction_reserves", reserves));
         }
         document.put("tiers", tiers);
@@ -167,18 +197,60 @@ public final class AuditReports {
         return JSON.toJson(document) + "\n";
     }
 
+    private static Map<String, Object> entryProfile(EntryProfile profile) {
+        ManualWork work = profile.manualWork();
+        return row("id", profile.id(), "kind", "conditional_player_entry_not_a_world_or_quest_guarantee",
+                "player_provided", quantitiesById(profile.playerProvided()),
+                "manual_work_actions", profile.manualWorkActions(), "conditions", profile.conditions(),
+                "source", profile.source(), "minimality", "sufficient_witness_no_global_optimality_claim",
+                "manual_work", work == null ? null : row("terminal", work.terminal(), "tool", work.tool().key(),
+                        "fu_per_action", work.fuPerAction(), "eligible_process_families", work.processFamilies(),
+                        "scope", "eligible_batch_local_only_never_portable_energy_or_renewable_labour",
+                        "rounding", "each_batch_rounds_actions_up_unused_local_charge_is_not_credited",
+                        "source", work.source()));
+    }
+
+    private static Map<String, Object> conditionalGate(SustainabilityAudit.Result result) {
+        T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
+        T0ConditionalGate.Scope scope = gate.scope();
+        return row("pass", gate.pass(), "status", gate.status(), "enforcement", "hard_in_VerifySustainabilityT0",
+                "scope", "conditional_source_bound_model_only",
+                "tier_acceptance", false, "physical_observation", false,
+                "unmet_obligations", gate.unmetObligations(),
+                "resources", keys(scope.resources()), "routes", scope.routes(), "families", scope.families(),
+                "terminals", scope.terminals(), "objectives", scope.objectives(),
+                "finding_decisions", gate.decisions().stream().map(decision ->
+                        row("fingerprint", decision.fingerprint(), "blocking", decision.blocking(),
+                                "basis", decision.basis())).toList());
+    }
+
     /** Returns a human report with explicit evidence boundaries and all failure-visible findings. */
     public static String markdown(SustainabilityAudit.Result result, String revision, boolean reportOnly) {
         StringBuilder text = new StringBuilder("# Sustainability audit\n\n");
+        Snapshot snapshot = result.authorities();
         if (reportOnly) {
-            text.append("**LIVE AUDIT REPORT-ONLY (S1, no annotations)**\n\n")
+            text.append(canonicalPack(snapshot) ? "**CANONICAL RESOURCE INVENTORY REPORT-ONLY (S2, "
+                            : "**LIVE AUDIT REPORT-ONLY (S1, ")
+                    .append(hasAnnotations(result) ? "partial annotations)**\n\n" : "no annotations)**\n\n")
                     .append("Synthetic rule checks are hard assertions, not live sustainability evidence. ")
                     .append("This invocation cannot certify a tier or make run-checks a sustainability pass.\n\n");
         } else {
             text.append("**Sustainability: ").append(result.sustainabilityPass() ? "PASS" : "NOT CERTIFIED")
                     .append("**\n\n");
         }
-        Snapshot snapshot = result.authorities();
+        T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
+        text.append("**Active T0 conditional model gate: ").append(gate.pass() ? "PASS" : "BLOCKED")
+                .append("**. This hard gate covers the shared finite entry replay, all R0 obligations and relevant ")
+                .append("global/T0 findings, including unresolved positive-gain warnings. It is not the global ")
+                .append("sustainability result, Tier acceptance, a survival observation or a client craft.\n\n");
+        gate.unmetObligations().forEach((id, reason) -> text.append("- `").append(escape(id)).append("`: ")
+                .append(escape(reason)).append("\n"));
+        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking).forEach(decision ->
+                text.append("- `").append(escape(decision.fingerprint())).append("`: ")
+                        .append(escape(decision.basis())).append("\n"));
+        text.append("\nFindings outside the active proof remain visible with per-finding scope reasons in JSON. ")
+                .append("T1-T15 findings under missing ledgers or entry assumptions are not demonstrated failures ")
+                .append("of future gameplay, nor evidence that those tiers are accepted.\n\n");
         AuthorityAdapters.ImplementationIdentity implementation = AuthorityAdapters.implementationIdentity();
         text.append("Audit schema: 1. Source revision label: `").append(revision).append("`.\n")
                 .append("Authority content and source SHA-256: `").append(authorityHash(snapshot)).append("`.\n")
@@ -193,9 +265,28 @@ public final class AuditReports {
                 .append("Commit cleanliness and publication are unverified; a revision label never identifies uncommitted code.\n\n")
                 .append("Tag resolution scope: `").append(tagResolutionScope(snapshot)).append("`. ")
                 .append("Local-only discovery and unordered classpath fallback are not canonical vanilla/Forge runtime resolution. ")
+                .append(canonicalPack(snapshot)
+                        ? "The standalone pack adapter reads the Gradle-resolved vanilla/Forge resources and local Grindless data. "
+                                + "It evaluates referenced/local tags; other indexed definitions are not silently made progression roots. "
+                                + "Append-only overlaps prove set-membership commutativity, not runtime pack priority. "
+                                + "Every unresolved registry lookup or order-sensitive overlap remains incomplete. "
+                                + "Source registration declarations inventory prototypes, not observed runtime registry membership. "
+                                + "Registry binding conditions: " + registryConditions(snapshot) + ". "
+                        : "")
                 .append("Concrete producer lists expand only complete singleton outputs; multi-member or incomplete outputs ")
                 .append("retain tag-qualified candidate provenance and uncertainty in `audit.json`. Complete tag inputs ")
                 .append("accept their members. These relationships do not establish route availability or renewability.\n\n");
+        text.append("`non_consumed_requirements` includes retained tools, chemical catalysts and installed structure parts. ")
+                .append("The compatibility field `catalysts` describes the same quantities; it does not chemically classify casings. ")
+                .append("A formed installation retains its parts once per family, separately from movable process seeds.\n\n");
+        text.append("`automatable` is an explicit execution fact, independent of mod ownership. Manual crafts never ")
+                .append("establish automatic renewable production. An exit goal must execute real batches from renewable ")
+                .append("consumed supplies; goal stock or a gift does not replace that production witness.\n\n")
+                .append("Conditional entry profiles describe normally acquired player custody, not world/quest gifts. ")
+                .append("Their sufficient bill is derived, then replayed with finite material and local-work budgets; ")
+                .append("no globally minimal starting kit is claimed. Crank actions fund only an eligible ProcessMachine ")
+                .append("batch, require the actual tool and never become portable ENERGY or renewable labour. Native ")
+                .append("working FU is retained for recurrent circulation separately from the startup labour budget.\n\n");
         var findings = result.findings();
         text.append("Active errors: **").append(findings.activeErrors()).append("**; waived_debt: **")
                 .append(findings.waivedDebt()).append("**; warnings: **").append(findings.warnings())
@@ -208,7 +299,8 @@ public final class AuditReports {
             text.append("| T").append(tier.tier()).append(" | ").append(tier.unknown() == null ? "authored" : "unknown")
                     .append(" | ").append(tier.mandatory().size()).append(" | ").append(tier.available().size())
                     .append(" | ").append(tier.renewable().size()).append(" | ")
-                    .append(tier.reserves().stream().filter(reserve -> !reserve.status().equals("established")).count())
+                    .append(tier.reserves().stream().filter(reserve ->
+                            !Set.of("established", "conditional_established").contains(reserve.status())).count())
                     .append(" |\n");
         }
         text.append("\nCounts describe fixed-point facts only, not manual progression, client interaction, ")
@@ -224,14 +316,24 @@ public final class AuditReports {
             }
             text.append(" |\n");
         }
-        text.append("\n## Construction reserve\n\n| Tier | Resource | Exact guarantee | Establishment draw | Margin | Status |\n")
-                .append("| --- | --- | ---: | ---: | ---: | --- |\n");
+        text.append("\n## Construction reserve\n\n")
+                .append("| Tier | Resource | Guaranteed | Player-provided | Actually claimed rewards | Draw | Margin | Status |\n")
+                .append("| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |\n");
         for (var tier : result.tiers().values()) {
             for (var reserve : tier.reserves()) {
                 text.append("| T").append(tier.tier()).append(" | ").append(escape(reserve.resource().key()))
-                        .append(" | ").append(reserve.guaranteed()).append(" | ").append(reserve.required())
+                        .append(" | ").append(reserve.guaranteed()).append(" | ").append(reserve.playerProvided())
+                        .append(" | ").append(reserve.claimedRewards()).append(" | ").append(reserve.required())
                         .append(" | ").append(reserve.margin()).append(" | ").append(reserve.status()).append(" |\n");
             }
+        }
+        text.append("\n## Completed establishment batches\n\n")
+                .append("Only completed batches in the finite conditional replay are listed, including retained ")
+                .append("sub-batches. This is execution provenance, not a renewable-route selection or a Tier certificate.\n\n")
+                .append("| Tier | Actually executed route | Completed batches |\n| --- | --- | ---: |\n");
+        for (var tier : result.tiers().values()) {
+            tier.establishmentBatches().forEach((route, batches) -> text.append("| T").append(tier.tier())
+                    .append(" | ").append(escape(route)).append(" | ").append(batches).append(" |\n"));
         }
         text.append("\nManual-world bootstrap is never an exact guarantee. Recipe conditions and rates, ")
                 .append("source hashes, unresolved tag membership, objectives and all quantities are in `audit.json`.\n");
@@ -266,7 +368,8 @@ public final class AuditReports {
                     "catalysts", quantitiesById(route.catalysts()), "outputs", quantitiesById(route.outputs()),
                     "discharged", keys(route.discharged()), "duration_ticks", route.durationTicks(),
                     "fu_per_tick", route.fuPerTick(), "conditions", route.conditions(),
-                    "prerequisites", route.prerequisites(), "one_shot", route.oneShot(), "mod_owned", route.modOwned()));
+                    "prerequisites", route.prerequisites(), "one_shot", route.oneShot(), "mod_owned", route.modOwned(),
+                    "automatable", route.automatable()));
         }
         List<Object> terminals = new ArrayList<>();
         snapshot.terminals().values().forEach(terminal -> terminals.add(row("id", terminal.id(),
@@ -309,8 +412,51 @@ public final class AuditReports {
     }
 
     private static String tagResolutionScope(Snapshot snapshot) {
+        if (canonicalPack(snapshot)) {
+            return "standalone_gradle_resolved_resources_registry_evidence_per_tag";
+        }
         return snapshot.findings().stream().anyMatch(finding -> finding.rule().equals("canonical_tag_resolution_unknown"))
                 ? "local_only_noncanonical" : "snapshot_declared_resolutions_not_runtime_certification";
+    }
+
+    private static boolean canonicalPack(Snapshot snapshot) {
+        return snapshot.inputHashes().keySet().stream().anyMatch(key -> key.startsWith("standalone_pack_contract:"));
+    }
+
+    private static Map<String, String> packHashes(Snapshot snapshot) {
+        Map<String, String> hashes = new TreeMap<>();
+        snapshot.inputHashes().forEach((source, hash) -> {
+            if (source.startsWith("resolved_pack:") || source.startsWith("pack_binding:")
+                    || source.startsWith("standalone_pack_contract:")) {
+                hashes.put(source, hash);
+            }
+        });
+        return hashes;
+    }
+
+    private static Map<String, String> registryHashes(Snapshot snapshot) {
+        Map<String, String> hashes = new TreeMap<>();
+        snapshot.inputHashes().forEach((source, hash) -> {
+            if (source.startsWith("registry_membership:") || source.startsWith("registration_source:")
+                    || source.startsWith("registry_profile:") || source.startsWith("registry_condition:")
+                    || source.startsWith("registry_declaration:")) {
+                hashes.put(source, hash);
+            }
+        });
+        return hashes;
+    }
+
+    private static boolean hasAnnotations(SustainabilityAudit.Result result) {
+        SustainabilityAnnotations annotations = result.annotations();
+        return !annotations.resources().isEmpty() || !annotations.routes().isEmpty() || !annotations.machines().isEmpty()
+                || !annotations.loops().isEmpty() || !annotations.plans().isEmpty() || !annotations.ledger().isEmpty();
+    }
+
+    private static Set<String> registryConditions(Snapshot snapshot) {
+        Set<String> conditions = new TreeSet<>();
+        snapshot.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_condition:"))
+                .map(key -> key.substring("registry_condition:".length())).forEach(conditions::add);
+        return conditions;
     }
 
     private static List<Map<String, Object>> relationships(Snapshot snapshot, Resource resource, boolean producers) {

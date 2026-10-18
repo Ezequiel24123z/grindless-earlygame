@@ -110,6 +110,19 @@ public final class VerifyWorkshop {
     }
 
     private static void structures() {
+        for (MachineFamily family : MachineFamily.values()) {
+            WorkshopStructure expected = switch (family) {
+                case FIRING_CHAMBER -> WorkshopStructure.FIRING_CHAMBER;
+                case SETTLING_TROUGH -> WorkshopStructure.SETTLING_TROUGH;
+                default -> WorkshopStructure.NONE;
+            };
+            check(family + " has the unchanged authoritative formation binding",
+                    WorkshopStructure.forFamily(family) == expected);
+        }
+        for (ProcessMachineKind kind : ProcessMachineKind.values()) {
+            check(kind + " uses the same formation binding as the inventory",
+                    kind.structure() == WorkshopStructure.forFamily(kind.family()));
+        }
         WorkshopStructure structure = WorkshopStructure.FIRING_CHAMBER;
         check("the chamber needs exactly seven surrounding bricks", structure.cells().size() == 7);
         for (int turn = 0; turn < 4; turn++) {

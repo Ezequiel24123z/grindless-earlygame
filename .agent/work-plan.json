@@ -224,6 +224,21 @@
   "parallel_opportunity": "S2 closes its finite data/model witness while independent UI/JEI and audio workers repair real-client feedback. QA uses immutable client checkpoints; quest-backend and audio-source research do not block immediate fixes. Keep T1 recipe-output investigation parked, preserve the original player save/ZIP, and retain genuine acceptance before the newly authorized future merge.",
   "prepared_assignments": [
     {
+      "id": "quest-backend-integration",
+      "task_id": "resource-communication",
+      "status": "first_local_api_service_checkpoint_compiled_not_activated",
+      "worker_session_id": "cc947b37-3c8f-4ec0-a495-f8d499c28378",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "740ec8492508d00c4980c85ada6209ecdb60a5e1",
+      "local_checkpoints": ["4c17fa2d291d1db6c45ddbc49cd1e03c5f95f57c"],
+      "scope": "Heracles framework with one claim-task/widget adapter; task completion mirrors legacy claimed state, not sticky possession; catalogue/ledger and physical book are preserved",
+      "owned_files": ["quest claim/projection service and book/menu compatibility", "Forge optional Heracles integration", "quest checks", "coordinated dependency/version/pack changes"],
+      "invariants": "No native/autoclaim reward duplication, no team-sharing change, no foreign data overwrite or new recipe/tier gate; actual binary API and licence verified",
+      "dispatch_boundary": "Existing quest UI/engine adaptation; new catalogue content or gameplay changes need a separate decision",
+      "evidence": "Actual Heracles/ResourcefulLib pins compile; Quest/QuestClaims124/Persistence pass. Backend activation, renderer/packet, owned generation and full validation remain."
+    },
+    {
       "id": "t0-ui-jei-feedback",
       "task_id": "resource-communication",
       "status": "integrated_engineering_qa_passed_production_probe_pending",
@@ -266,7 +281,7 @@
       "id": "s2-canonical-closure",
       "task_id": "sustainability-model",
       "also_advances": ["production-inventory"],
-      "status": "in_progress_checkpointed_binding_under_review",
+      "status": "reviewed_s2_integrated_composed_refresh_pending",
       "worker_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -275,9 +290,9 @@
       "owned_files": ["common sustainability package", "VerifySustainability/Adapters/Registry and affected model checks", "common/build.gradle", "forge/build.gradle", "QuestCatalogue/VerifyQuest optional edge only", "minimal shared WorkshopStructure/ProcessMachineKind binding and related checks"],
       "local_checkpoints": ["cc3f11183da122e319341c81a1ba75aa8d656e69", "caa8095984ce0eed155ad0a88eee43555dba424d", "8ebd6343bf47b4f5c1c397eab58f3623a09295a2", "574488c6092ad13a755a59f0d9fe6804bda30862"],
       "current_scope": "Real pack/registry evidence, formed non-consumed requirements, existing-loop unit candidate, conditional entry and scoped manual work, nullable unknown route tiers, explicit automation/manual production goal, actual calibration and Hand Pump authorities",
-      "blocking_review": "Original binding findings closed by static recheck of308d2cb; local code still awaits integration. Model goal/seed corrections remain required.",
+      "blocking_review": "Assigned registry/source/model/gate findings closed by their original reviewers throughdba3993. Integrated source still needs composed export/check refresh; no Tier acceptance.",
       "annotation_scope": "Approved T0 source/workshop chains only; R0 claims must be proved, construction requires A, no roots inferred from registration. Slag has potential future use, explicit unknown first-use placement and ordinary disposal, not an invented T0 consumer/automated void sink. Actual environment/manual-labour facts do not grant availability or budgets.",
-      "model_review": "Original registry findings closed at308d2cb; goal/seed findings closed at8f5fcd1. Later manual-first/shared-custody/scope/potential and actual Quest Book access changes through6c9f2d7 remain local, pending delta review despite source-bound conditional-gate passes.",
+      "model_review": "dba3993 closes all five6c9counterexamples: simultaneous claim requirements, absent-ledger safety, executed objective scope, rule-specific tier context and first-use exception. Source/certificate reviews also closed; red attempts remain preserved.",
       "stop_condition": "Return coherent local source-bound increments and real closure findings; no invented kit, tier, terminal, waiver or public private-path leak; no remote publication or acceptance claims"
     },
     {

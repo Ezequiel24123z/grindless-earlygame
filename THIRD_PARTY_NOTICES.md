@@ -32,6 +32,23 @@ Their licences govern redistribution and modification of those files:
 These are distribution references, not permissions to adapt upstream material. Any future source,
 texture or asset import still needs its own full provenance entry below, before it enters Git.
 
+## Quest-backend dependency selection
+
+The following optional integration is being implemented under ADR-0142. It is not present
+in the previously delivered740ec84 preparation package. No upstream source, asset or jar
+is copied into Grindless's distribution by this selection; future pack references remain
+launcher-managed.
+
+| Component | Exact artifact/provenance | Licence evidence |
+| --- | --- | --- |
+| Heracles 1.1.13 Forge 1.20.1 | [project845831/file5406935](https://www.curseforge.com/projects/845831/files/5406935); SHA-256 `cd69e0f2619870bd1798792f5d37cb690b6061b29f55c9b7cb50af711b8f3bfb` | MIT in the selected mod metadata and the matching1.20 source lineage; a release/source commit identity is not assumed |
+| ResourcefulLib 2.1.29 | [project570073/file5659871](https://www.curseforge.com/projects/570073/files/5659871); SHA-256 `b13afb95231d88e1caea5a045967e0fc291b29020b0d26ad39e6f9e9a551fee8` | MIT in selected mod metadata; required by Heracles |
+| Bundled Hermes 1.6.0 | Inside the selected Heracles jar; SHA-256 `3e5a75fa73fe3fc9041859fb59c6971c25617a013af329898ef0fd811addf8af` | MIT in nested mod metadata; do not resolve the source build's floating version |
+| Bundled MixinExtras Forge 0.2.1 | Inside Heracles; SHA-256 `a4abbdb2692d923bcc99e146c3e75b4365dd2fad482fac4b2e869580c002a7a4` | Complete nested `LICENSE_MixinExtras`, MIT, matches the [0.2.1 source licence](https://raw.githubusercontent.com/LlamaLad7/MixinExtras/0.2.1/LICENSE) |
+
+ResourcefulLib's nested Yabn1.0.3/ByteCodecs1.0.2 remain upstream-managed; their exact notices
+must be recorded before any decision to copy those components. None is vendored here.
+
 ## Required entry for every future import
 
 Add an entry before committing the imported material. Include:

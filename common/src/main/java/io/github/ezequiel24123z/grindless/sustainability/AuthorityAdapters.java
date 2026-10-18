@@ -17,6 +17,7 @@ import io.github.ezequiel24123z.grindless.recipe.SolarLogic;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
 import io.github.ezequiel24123z.grindless.recipe.ThermalLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -68,8 +69,51 @@ public final class AuthorityAdapters {
      * @throws IOException if an authority cannot be read
      */
     public static Snapshot live(Path root) throws IOException {
-        Builder builder = new Builder();
         TagResolver tags = new TagResolver(root, AuthorityAdapters.class.getClassLoader(), false);
+        Builder builder = inventory(root, tags);
+        builder.finding(unknown("canonical_tag_resolution_unknown", "local_only",
+                "S1 reads local tag JSON only, not the complete ordered vanilla/Forge runtime resource pack. "
+                        + "Observed local members are not evidence of canonical runtime tag completeness."));
+        pendingDeclarations(builder);
+        return builder.build();
+    }
+
+    /**
+     * Reads the canonical standalone resource inventory with an explicit registry binding.
+     * Neither Gradle enumeration nor a direct ID in tag JSON supplies registry membership.
+     */
+    public static Snapshot canonical(Path root, TagResolver.ElementLookup elements) throws IOException {
+        return canonical(root, elements, Set.of());
+    }
+
+    /** Adds only explicitly allowlisted, unambiguous standalone vanilla crafting definitions. */
+    public static Snapshot canonical(Path root, TagResolver.ElementLookup elements,
+                                     Set<String> vanillaAllowlist) throws IOException {
+        CanonicalPack pack = CanonicalPack.resolved(root);
+        TagResolver tags = new TagResolver(root, pack, elements);
+        Builder builder = inventory(root, tags);
+        for (String id : new TreeSet<>(vanillaAllowlist)) {
+            Route route = canonicalVanillaTransformation(id, root, pack, builder);
+            if (route != null) {
+                builder.route(route);
+                for (Resource resource : referenced(route)) {
+                    if (resource.kind() == Kind.TAG) {
+                        tags.resolve(resource);
+                    }
+                }
+            }
+        }
+        tags.contribute(builder);
+        pack.contribute(builder);
+        elements.inputHashes().forEach(builder::input);
+        contributeCheckedDeclarations(builder, elements);
+        pendingDeclarations(builder, vanillaAllowlist.isEmpty());
+        return builder.build();
+    }
+
+    private static Builder inventory(Path root, TagResolver tags) throws IOException {
+        root = root.toAbsolutePath().normalize();
+        Builder builder = new Builder();
         for (Resource tag : tags.localTags()) {
             tags.resolve(tag);
         }
@@ -93,16 +137,36 @@ public final class AuthorityAdapters {
 
         authoritySourceHashes(root).forEach(builder::input);
         implementationSourceHashes(root).forEach((path, hash) -> builder.input(IMPLEMENTATION_SOURCE_PREFIX + path, hash));
-        builder.finding(unknown("canonical_tag_resolution_unknown", "local_only",
-                "S1 reads local tag JSON only, not the complete ordered vanilla/Forge runtime resource pack. "
-                        + "Observed local members are not evidence of canonical runtime tag completeness."));
+        return builder;
+    }
+
+    private static void pendingDeclarations(Builder builder) {
+        pendingDeclarations(builder, true);
+    }
+
+    private static void pendingDeclarations(Builder builder, boolean vanillaUnknown) {
         builder.finding(unknown("generator_fuel_unknown", "furnace_fuel_table",
                 "The platform furnace-fuel registry is dynamic. Only live loader-free biomass/gas tables are projected."));
         builder.finding(unknown("bootstrap_sources_unknown", "manual_world_and_labour",
-                "No manual gathering, crank, collector or world terminal is declared in S1."));
-        builder.finding(unknown("vanilla_allowlist_unknown", "vanilla_transformations",
-                "No canonical vanilla transformation allowlist is authored in S1."));
-        return builder.build();
+                "No manual gathering, crank, collector or world terminal is declared by this unannotated inventory."));
+        if (vanillaUnknown) {
+            builder.finding(unknown("vanilla_allowlist_unknown", "vanilla_transformations",
+                    "No canonical vanilla transformation allowlist is authored by this unannotated inventory."));
+        }
+    }
+
+    static void contributeCheckedDeclarations(Builder builder, TagResolver.ElementLookup elements) {
+        Map<Resource, String> declarations = elements.declarations();
+        if (declarations.isEmpty()) {
+            builder.finding(unknown("canonical_registration_inventory_unbound", "grindless",
+                    "No checked registration declaration inventory was supplied; source text and assets do not fill it."));
+        }
+        declarations.forEach((resource, source) -> {
+            SustainabilityModel.requireText(source, "registration declaration provenance");
+            builder.resource(resource);
+            String identity = resource.key() + "@" + source;
+            builder.input("registry_declaration:" + identity, sha256(identity.getBytes(StandardCharsets.UTF_8)));
+        });
     }
 
     /** Returns the standalone material view, never adding synthetic fixture materials to it. */
@@ -152,9 +216,18 @@ public final class AuthorityAdapters {
         if (recipe.milestone() != null) {
             conditions.put("informational_milestone", recipe.milestone());
         }
+        WorkshopStructure structure = WorkshopStructure.forFamily(recipe.family());
+        if (structure != WorkshopStructure.NONE) {
+            conditions.put("workshop_structure", structure.name());
+            for (WorkshopStructure.Cell cell : structure.cells()) {
+                if (!Set.of("minecraft:air", "minecraft:cave_air", "minecraft:void_air").contains(cell.block())) {
+                    add(catalysts, item(cell.block()), 1);
+                }
+            }
+        }
         return new Route(recipe.id(), Authority.PROCESS_GRAPH, "ProcessGraph.generate",
                 recipe.family().name(), inputs, catalysts, outputs, discharged,
-                recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true);
+                recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true, true);
     }
 
     /**
@@ -183,6 +256,64 @@ public final class AuthorityAdapters {
                 builder.route(route);
             }
         }
+    }
+
+    static Route canonicalVanillaTransformation(String id, Path root, TagResolver.OrderedClasspath pack,
+                                                Builder builder) throws IOException {
+        if (!id.startsWith("minecraft:")) {
+            throw new IllegalArgumentException("The vanilla allowlist must name vanilla recipes");
+        }
+        String path = "data/minecraft/recipes/" + id.substring("minecraft:".length()) + ".json";
+        List<JsonObject> definitions = new ArrayList<>();
+        Set<String> sources = new TreeSet<>();
+        List<java.net.URL> resources = pack.resources(path);
+        for (int index = 0; index < resources.size(); index++) {
+            byte[] bytes;
+            try (InputStream stream = resources.get(index).openStream()) {
+                bytes = stream.readAllBytes();
+            }
+            String hash = sha256(bytes);
+            String source = pack.source(path, index, hash);
+            builder.input("allowlisted_recipe:" + source, hash);
+            sources.add(source);
+            definitions.add(JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject());
+        }
+        Path directory = root.resolve(Path.of("common", "src", "main", "resources")).toAbsolutePath().normalize();
+        Path local = directory.resolve(Path.of("", path.split("/"))).normalize();
+        if (!local.startsWith(directory)) {
+            throw new IllegalArgumentException("A recipe path cannot escape the resource root");
+        }
+        if (Files.isRegularFile(local)) {
+            byte[] bytes = Files.readAllBytes(local);
+            String source = "project:" + path;
+            builder.input("allowlisted_recipe:" + source, sha256(bytes));
+            sources.add(source);
+            definitions.add(JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject());
+        }
+        if (definitions.isEmpty()) {
+            builder.finding(new AuditFinding("vanilla_recipe_missing", id, "canonical_allowlist",
+                    AuditFinding.Severity.ERROR, "Allowlisted recipe is absent from the resolved standalone packs.",
+                    List.of(path)));
+            return null;
+        }
+        JsonObject definition = definitions.get(0);
+        if (definitions.stream().anyMatch(candidate -> !candidate.equals(definition))) {
+            builder.finding(new AuditFinding("vanilla_recipe_priority_unproven", id, "canonical_allowlist",
+                    AuditFinding.Severity.UNKNOWN,
+                    "Different recipe definitions have no proved pack priority; no producer is projected.",
+                    new ArrayList<>(sources)));
+            return null;
+        }
+        if (definition.has("conditions") || definition.has("forge:conditions")) {
+            builder.finding(new AuditFinding("vanilla_recipe_conditions_unbound", id, "canonical_allowlist",
+                    AuditFinding.Severity.UNKNOWN,
+                    "A conditional recipe needs its actual condition binding before projection.",
+                    new ArrayList<>(sources)));
+            return null;
+        }
+        return crafting("vanilla/" + id, definition, String.join(" + ", sources)
+                        + "@recipe_contract=unique_or_identical_definitions",
+                Authority.VANILLA_TRANSFORMATION, builder);
     }
 
     /** Hashes actual input/report bytes without embedding timestamps or absolute paths. */
@@ -214,9 +345,12 @@ public final class AuthorityAdapters {
         for (Class<?> entry : List.of(ProcessGraph.class, SupplyCatalogue.class, BootstrapRecipes.class,
                 T1Recipes.class, QuestCatalogue.class, FluidLogic.class, ThermalLogic.class, SolarLogic.class,
                 SourceLogic.class, MaterialForm.class, FluxTier.class, IngredientSpec.class,
-                OutputSpec.class, ProcessRecipe.class)) {
+                OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class)) {
             pending.add(entry.getName());
         }
+        // Read the physical claim-access authority as source without loading game classes.
+        pending.add(PROJECT_PACKAGE + ".item.QuestBookItem");
+        pending.add(PROJECT_PACKAGE + ".menu.QuestBookMenu");
         Set<String> visited = new TreeSet<>();
         Map<String, String> hashes = new TreeMap<>();
         while (!pending.isEmpty()) {
@@ -286,7 +420,8 @@ public final class AuthorityAdapters {
                 SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class)) {
             pending.add(type.getName().replace('.', '/') + ".class");
         }
-        for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters")) {
+        for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters",
+                "VerifySustainabilityRegistry", "VerifySustainabilityT0")) {
             String path = IMPLEMENTATION_PATH + check + ".class";
             if (loader.getResource(path) != null) {
                 pending.add(path);
@@ -327,7 +462,8 @@ public final class AuthorityAdapters {
                 hashes.put(repository.relativize(file).toString().replace('\\', '/'), sha256(Files.readAllBytes(file)));
             }
         }
-        for (String check : List.of("VerifySustainability.java", "VerifySustainabilityAdapters.java")) {
+        for (String check : List.of("VerifySustainability.java", "VerifySustainabilityAdapters.java",
+                "VerifySustainabilityRegistry.java", "VerifySustainabilityT0.java")) {
             Path file = repository.resolve(Path.of("tools", "checks", check));
             if (Files.isRegularFile(file)) {
                 hashes.put(repository.relativize(file).toString().replace('\\', '/'), sha256(Files.readAllBytes(file)));
@@ -434,7 +570,7 @@ public final class AuthorityAdapters {
                     route = new Route(route.id(), expected.authority(), expected.source() + " + " + source,
                             route.family(), route.inputs(), route.catalysts(), route.outputs(), route.discharged(),
                             route.durationTicks(), route.fuPerTick(), route.conditions(), route.prerequisites(),
-                            route.oneShot(), route.modOwned());
+                            route.oneShot(), route.modOwned(), route.automatable());
                 }
                 builder.route(route);
                 for (Resource resource : referenced(route)) {
@@ -468,7 +604,7 @@ public final class AuthorityAdapters {
     private static Route craft(String name, Map<Resource, Long> inputs, String output, long count,
                                Authority authority, String source) {
         return new Route("craft/" + name, authority, source, null, inputs, Map.of(),
-                Map.of(item(output), count), Set.of(), 0, 0, Map.of(), Set.of(), false, true);
+                Map.of(item(output), count), Set.of(), 0, 0, Map.of(), Set.of(), false, true, false);
     }
 
     private static Route crafting(String id, JsonObject json, String source, Authority authority, Builder builder) {
@@ -506,7 +642,7 @@ public final class AuthorityAdapters {
         long count = result.has("count") ? result.get("count").getAsLong() : 1;
         return new Route(id, authority, source, family, inputs, Map.of(),
                 Map.of(item(result.get("item").getAsString()), count), Set.of(), 0, 0,
-                Map.of(), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION);
+                Map.of("crafting_type", type), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
     }
 
     private static Resource ingredient(JsonElement json, String id, Builder builder) {
@@ -534,6 +670,8 @@ public final class AuthorityAdapters {
     }
 
     private static void readQuests(Builder builder) {
+        Resource book = item(BootstrapRecipes.shaped().stream().filter(craft -> craft.name().equals("quest_book"))
+                .findFirst().orElseThrow(() -> new IllegalStateException("Missing authored quest-book craft")).result());
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION ? null
                     : new Resource(Kind.ITEM, task.subject(),
@@ -545,12 +683,16 @@ public final class AuthorityAdapters {
                 builder.finding(unknown("objective_unknown", task.id(), "Dimension evidence requires a world adapter."));
                 continue;
             }
-            builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id(),
-                    null, Map.of(), Map.of(subject, (long) task.count()),
+            Map<Resource, Long> requirements = new TreeMap<>();
+            requirements.put(subject, (long) task.count());
+            requirements.merge(book, 1L, Math::max);
+            builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id()
+                    + " + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+                    null, Map.of(), requirements,
                     Map.of(item(task.reward().itemId()), (long) task.reward().count()), Set.of(), 0, 0,
-                    Map.of("evidence", task.evidence().name()),
+                    Map.of("evidence", task.evidence().name(), "claim_access", "held_quest_book_menu"),
                     task.requires().stream().map(id -> "quest/" + id)
-                            .collect(java.util.stream.Collectors.toSet()), true, true));
+                            .collect(java.util.stream.Collectors.toSet()), true, true, false));
         }
     }
 
@@ -563,7 +705,7 @@ public final class AuthorityAdapters {
                     family, Map.of(item(SourceLogic.BIOMASS), 1L), Map.of(),
                     Map.of(ENERGY, Math.multiplyExact(power, SourceLogic.BIOMASS_BURN_TICKS)), Set.of(),
                     SourceLogic.BIOMASS_BURN_TICKS, 0, Map.of("generation_fu_per_tick", Long.toString(power)),
-                    Set.of(), false, true));
+                    Set.of(), false, true, true));
         }
         Set<String> fluids = new TreeSet<>(Set.of(FluidLogic.CARBON_MONOXIDE, FluidLogic.HYDROGEN));
         graph.forEach(recipe -> {
@@ -578,12 +720,12 @@ public final class AuthorityAdapters {
                         Map.of(new Resource(Kind.FLUID, fluid), (long) FluidLogic.BUCKET), Map.of(),
                         Map.of(ENERGY, Math.multiplyExact(ThermalLogic.FU_PER_TICK, ticks)), Set.of(),
                         ticks, 0, Map.of("generation_fu_per_tick", Long.toString(ThermalLogic.FU_PER_TICK)),
-                        Set.of(), false, true));
+                        Set.of(), false, true, true));
             }
         }
         builder.route(new Route("power/solar_array", Authority.GENERATOR_FUEL, "SolarLogic.generate",
                 "SOLAR_ARRAY", Map.of(), Map.of(), Map.of(ENERGY, SolarLogic.FU_PER_TICK), Set.of(), 1, 0,
-                Map.of("condition", "daylight"), Set.of(), false, true));
+                Map.of("condition", "daylight"), Set.of(), false, true, true));
     }
 
     private static Set<Resource> referenced(Route route) {

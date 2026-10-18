@@ -393,11 +393,6 @@ public enum ProcessMachineKind {
         }
 
         @Override
-        public WorkshopStructure structure() {
-            return WorkshopStructure.FIRING_CHAMBER;
-        }
-
-        @Override
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.FIRING_CHAMBER.get();
         }
@@ -413,11 +408,6 @@ public enum ProcessMachineKind {
         @Override
         public ConditionState heldConditions() {
             return ConditionState.AMBIENT;
-        }
-
-        @Override
-        public WorkshopStructure structure() {
-            return WorkshopStructure.SETTLING_TROUGH;
         }
 
         @Override
@@ -502,7 +492,7 @@ public enum ProcessMachineKind {
 
     /** A fixed workshop structure only when the process requires one. */
     public WorkshopStructure structure() {
-        return WorkshopStructure.NONE;
+        return WorkshopStructure.forFamily(family);
     }
 
     public SourceSite site() {

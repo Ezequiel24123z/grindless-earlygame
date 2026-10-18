@@ -79,7 +79,7 @@ public final class SustainabilityModel {
                         Map<Resource, Long> inputs, Map<Resource, Long> catalysts,
                         Map<Resource, Long> outputs, Set<Resource> discharged,
                         long durationTicks, long fuPerTick, Map<String, String> conditions,
-                        Set<String> prerequisites, boolean oneShot, boolean modOwned) {
+                        Set<String> prerequisites, boolean oneShot, boolean modOwned, boolean automatable) {
         public Route {
             requireText(id, "route id");
             Objects.requireNonNull(authority, "authority");
@@ -94,6 +94,16 @@ public final class SustainabilityModel {
                     || !outputs.keySet().containsAll(discharged)) {
                 throw new IllegalArgumentException("Invalid route batch: " + id);
             }
+        }
+
+        /** S1 fixture compatibility only; canonical adapters must explicitly bind execution semantics. */
+        public Route(String id, Authority authority, String source, String family,
+                     Map<Resource, Long> inputs, Map<Resource, Long> catalysts,
+                     Map<Resource, Long> outputs, Set<Resource> discharged,
+                     long durationTicks, long fuPerTick, Map<String, String> conditions,
+                     Set<String> prerequisites, boolean oneShot, boolean modOwned) {
+            this(id, authority, source, family, inputs, catalysts, outputs, discharged, durationTicks, fuPerTick,
+                    conditions, prerequisites, oneShot, modOwned, true);
         }
 
         /** Returns only consumption not returned by this same batch. */
@@ -117,7 +127,7 @@ public final class SustainabilityModel {
     }
 
     /** Only these sites can justify renewable environmental terminals. */
-    public enum SourceSite { GEOLOGICAL_ROCK_BED, SUNLIT_CULTURE, WATER_BODY, ATMOSPHERE }
+    public enum SourceSite { GEOLOGICAL_ROCK_BED, SUNLIT_CULTURE, WATER_BODY, ATMOSPHERE, OPEN_SKY_DAYLIGHT }
 
     /** Finite/manual/vanilla sources can establish availability but never renewability. */
     public enum TerminalKind {
@@ -151,6 +161,26 @@ public final class SustainabilityModel {
             return kind == TerminalKind.ENVIRONMENT && resource.kind() == Kind.ENVIRONMENT
                     && site != null && automatable && modOwned
                     && justification != null && !justification.isBlank();
+        }
+    }
+
+    /** A checked local-work binding; its charge and eligible families come from actual mechanics. */
+    public record ManualWork(String terminal, Resource tool, long fuPerAction,
+                             Set<String> processFamilies, String source) {
+        public ManualWork {
+            requireText(terminal, "manual-work terminal");
+            Objects.requireNonNull(tool, "manual-work tool");
+            requireText(source, "manual-work source");
+            processFamilies = sortedSet(processFamilies);
+            if (tool.kind() != Kind.ITEM || fuPerAction <= 0 || processFamilies.isEmpty()) {
+                throw new IllegalArgumentException("Invalid manual-work binding");
+            }
+        }
+
+        /** Research, generators and other F0 devices are not ProcessMachine recipients. */
+        public boolean applies(Route route) {
+            return route.authority() == Authority.PROCESS_GRAPH && route.family() != null
+                    && processFamilies.contains(route.family());
         }
     }
 
@@ -201,6 +231,20 @@ public final class SustainabilityModel {
         private final Map<String, Objective> objectives = new TreeMap<>();
         private final Map<String, String> hashes = new TreeMap<>();
         private final List<AuditFinding> findings = new ArrayList<>();
+
+        public Builder() {
+        }
+
+        /** Extends checked authorities without changing or omitting their existing evidence. */
+        public Builder(Snapshot snapshot) {
+            resources.addAll(snapshot.resources());
+            routes.putAll(snapshot.routes());
+            terminals.putAll(snapshot.terminals());
+            tags.putAll(snapshot.tags());
+            objectives.putAll(snapshot.objectives());
+            hashes.putAll(snapshot.inputHashes());
+            findings.addAll(snapshot.findings());
+        }
 
         /** Adds a resource even when no implemented producer exists. */
         public Builder resource(Resource resource) {

@@ -39,6 +39,11 @@ public final class VerifySustainabilityAdapters {
         try {
             debtCannotWaiveGeneratedDebt();
             tagComposition();
+            registryEntriesAndRemovals();
+            checkedDeclarationInventory();
+            questAccessPrerequisites();
+            canonicalInventory();
+            canonicalVanillaCrafts();
             reportRelationships();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
@@ -49,6 +54,34 @@ public final class VerifySustainabilityAdapters {
         if (failed != 0) {
             throw new AssertionError("Sustainability adapter counterexamples failed");
         }
+    }
+
+    private static void questAccessPrerequisites() throws IOException {
+        Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
+        Resource book = new Resource(Kind.ITEM, io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes.shaped()
+                .stream().filter(craft -> craft.name().equals("quest_book")).findFirst().orElseThrow().result());
+        for (Route route : snapshot.routes().values()) {
+            if (route.authority() == Authority.QUEST_REWARD) {
+                eq("actual claim access requires one reusable book: " + route.id(), 1L,
+                        route.catalysts().get(book));
+                eq("claiming never consumes the interface book: " + route.id(), false,
+                        route.inputs().containsKey(book));
+                eq("claim provenance identifies its actual handheld interface: " + route.id(),
+                        "held_quest_book_menu", route.conditions().get("claim_access"));
+            }
+        }
+        Route craft = snapshot.routes().get("craft/quest_book");
+        eq("the actual first-book craft keeps its authored paper cost", 1L,
+                craft.inputs().get(new Resource(Kind.ITEM, "minecraft:paper")));
+        eq("the actual first-book craft keeps its authored stick cost", 2L,
+                craft.inputs().get(new Resource(Kind.ITEM, "minecraft:stick")));
+        eq("the actual bootstrap book remains manually crafted", false, craft.automatable());
+        Map<String, String> sources = AuthorityAdapters.authoritySourceHashes(Path.of(""));
+        String prefix = "common/src/main/java/io/github/ezequiel24123z/grindless/";
+        eq("source provenance includes the actual book opener without loading it", true,
+                sources.containsKey(prefix + "item/QuestBookItem.java"));
+        eq("source provenance includes the actual held-book validity and claim handler", true,
+                sources.containsKey(prefix + "menu/QuestBookMenu.java"));
     }
 
     private static void debtCannotWaiveGeneratedDebt() {
@@ -263,6 +296,260 @@ public final class VerifySustainabilityAdapters {
                 relationship(iron, "producer_provenance", "unknown/output").get("unconditional").getAsBoolean());
         eq("incomplete input membership cannot prove acceptance", false,
                 relationship(iron, "consumer_provenance", "unknown/consumer").get("unconditional").getAsBoolean());
+    }
+
+    private static void canonicalVanillaCrafts() throws IOException {
+        Path fixture = Path.of("build", "check-fixtures", "sustainability-adapters", "canonical-recipes")
+                .toAbsolutePath().normalize();
+        String id = "minecraft:crafting_table";
+        String path = "data/minecraft/recipes/crafting_table.json";
+        String json = """
+                {"type":"minecraft:crafting_shaped","pattern":["PP","PP"],
+                 "key":{"P":{"item":"minecraft:oak_planks"}},"result":{"item":"minecraft:crafting_table"}}
+                """;
+        Map<String, List<URL>> packs = new TreeMap<>();
+        Builder builder = new Builder();
+        Route route = AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder);
+        eq("an absent allowlisted recipe is not a synthetic empty producer", null, route);
+        eq("missing resolved recipe evidence remains an explicit error", true,
+                builder.build().findings().stream().anyMatch(finding -> finding.rule().equals("vanilla_recipe_missing")));
+        packs.put(path, List.of(memory("vanilla-craft", json)));
+        builder = new Builder();
+        route = AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder);
+        eq("the canonical recipe uses actual ingredient counts", Map.of(new Resource(Kind.ITEM,
+                "minecraft:oak_planks"), 4L), route.inputs());
+        eq("the canonical manual craft is not automatic just because it has a vanilla authority", false,
+                route.automatable());
+        eq("vanilla bootstrap crafting is not a mod-owned renewable source", false, route.modOwned());
+        eq("a real two-by-two craft does not need the table it constructs", null, route.family());
+        eq("a resolved recipe records content provenance rather than a private URL", true,
+                builder.build().inputHashes().keySet().stream().anyMatch(source -> source.startsWith("allowlisted_recipe:")));
+        packs.put(path, List.of(memory("vanilla-craft", json),
+                memory("identical-definition", JsonParser.parseString(json).toString())));
+        builder = new Builder();
+        route = AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder);
+        eq("identical recipe definitions are safe without assuming a pack priority", 4L,
+                route.inputs().get(new Resource(Kind.ITEM, "minecraft:oak_planks")));
+        eq("both identical definitions retain their own source checksum", 2,
+                builder.build().inputHashes().size());
+        String other = json.replace("\"PP\",\"PP\"", "\"P\"");
+        packs.put(path, List.of(memory("vanilla-craft", json), memory("different-definition", other)));
+        builder = new Builder();
+        eq("different recipe definitions cannot be resolved by filename, index or hash", null,
+                AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder));
+        eq("recipe priority uncertainty is visible rather than a selected producer", true,
+                builder.build().findings().stream().anyMatch(finding ->
+                        finding.rule().equals("vanilla_recipe_priority_unproven")));
+        JsonObject conditional = JsonParser.parseString(json).getAsJsonObject();
+        conditional.add("conditions", new JsonArray());
+        packs.put(path, List.of(memory("conditional-definition", conditional.toString())));
+        builder = new Builder();
+        eq("unbound condition-bearing definitions are never assumed enabled", null,
+                AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder));
+        eq("conditions require their own source binding", true,
+                builder.build().findings().stream().anyMatch(finding ->
+                        finding.rule().equals("vanilla_recipe_conditions_unbound")));
+        packs.put(path, List.of(memory("vanilla-craft", json)));
+        Path local = fixture.resolve(Path.of("common", "src", "main", "resources",
+                "data", "minecraft", "recipes", "crafting_table.json"));
+        try {
+            Files.createDirectories(local.getParent());
+            Files.writeString(local, other, StandardCharsets.UTF_8);
+            builder = new Builder();
+            eq("a real local override is not silently ignored behind the vanilla artifact", null,
+                    AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder));
+            eq("the conflicting local definition has its own public provenance", true,
+                    builder.build().inputHashes().containsKey("allowlisted_recipe:project:" + path));
+        } finally {
+            Files.deleteIfExists(local);
+        }
+    }
+
+    private static void registryEntriesAndRemovals() throws IOException {
+        Path fixture = Path.of("build", "check-fixtures", "sustainability-adapters", "registry-entries")
+                .toAbsolutePath().normalize();
+        Path data = fixture.resolve(Path.of("common", "src", "main", "resources", "data"));
+        Map<String, List<URL>> packs = new TreeMap<>();
+        List<Path> authored = new ArrayList<>();
+        Files.createDirectories(data);
+        TagResolver.ElementLookup registry = resource -> switch (resource.id()) {
+            case "fixture:a", "fixture:b" -> TagResolver.ElementStatus.PRESENT;
+            case "fixture:unknown" -> TagResolver.ElementStatus.UNKNOWN;
+            default -> TagResolver.ElementStatus.ABSENT;
+        };
+        try {
+            Resource optional = tag("grindless:fixture/optional");
+            authored.add(local(data, optional, """
+                    {"values":["fixture:a",{"id":"fixture:absent","required":false},
+                    {"id":"#forge:fixture/absent","required":false}]}
+                    """));
+            TagResolution resolution = new TagResolver(fixture, ordered(packs), registry).resolve(optional);
+            eq("registry-proven absent optional elements/tags are not invented", Set.of(item("a")), resolution.members());
+            eq("absent optional entries do not invalidate a tag", true, resolution.complete());
+
+            Resource required = tag("grindless:fixture/required");
+            authored.add(local(data, required, "{\"values\":[\"fixture:a\",\"fixture:absent\"]}"));
+            resolution = new TagResolver(fixture, ordered(packs), registry).resolve(required);
+            eq("required absent elements never become members", Set.of(item("a")), resolution.members());
+            eq("a required missing registry element invalidates completeness", false, resolution.complete());
+            eq("a missing required element retains exact evidence", true,
+                    resolution.unresolved().contains("missing_element:item:fixture:absent"));
+
+            Resource unknown = tag("grindless:fixture/unknown");
+            authored.add(local(data, unknown,
+                    "{\"values\":[\"fixture:a\",{\"id\":\"fixture:unknown\",\"required\":false}]}"));
+            resolution = new TagResolver(fixture, ordered(packs), registry).resolve(unknown);
+            eq("unbound optional membership is not fabricated beside a real member", Set.of(item("a")), resolution.members());
+            eq("unknown optional membership cannot certify a falsely complete singleton", false, resolution.complete());
+            eq("the unbound registry element remains explicit", true,
+                    resolution.unresolved().contains("registry_membership_unknown:item:fixture:unknown"));
+
+            Resource removed = tag("forge:fixture/removed");
+            packs.put(resourcePath(removed), List.of(
+                    memory("remove-base", "{\"values\":[\"fixture:a\",\"fixture:b\"]}"),
+                    memory("remove-high", "{\"values\":[],\"remove\":[\"fixture:a\",\"fixture:absent\"]}")));
+            resolution = new TagResolver(fixture, ordered(packs), registry).resolve(removed);
+            eq("Forge remove is applied after the layer's additions", Set.of(item("b")), resolution.members());
+            eq("Forge treats missing removals as optional", true, resolution.complete());
+            packs.put(resourcePath(removed), List.of(
+                    memory("remove-low", "{\"values\":[\"fixture:a\"],\"remove\":[\"fixture:a\"]}"),
+                    memory("readd-high", "{\"values\":[\"fixture:a\"]}")));
+            resolution = new TagResolver(fixture, ordered(packs), registry).resolve(removed);
+            eq("later additions can reintroduce an earlier removed member", Set.of(item("a")), resolution.members());
+
+            Resource uncertain = tag("forge:fixture/uncertain_order");
+            TagResolver.OrderedClasspath unproved = new TagResolver.OrderedClasspath() {
+                @Override
+                public List<URL> resources(String path) throws IOException {
+                    return List.of(memory("unproved", "{\"replace\":true,\"values\":[\"fixture:a\"]}"));
+                }
+
+                @Override
+                public Set<String> uncertainties(String path) {
+                    return Set.of("fixture_pack_priority_unproven");
+                }
+            };
+            resolution = new TagResolver(fixture, unproved, registry).resolve(uncertain);
+            eq("replacement cannot erase caller-declared order uncertainty", false, resolution.complete());
+            eq("caller-declared order uncertainty remains attributable", true,
+                    resolution.unresolved().contains("fixture_pack_priority_unproven"));
+        } finally {
+            for (Path file : authored) {
+                Files.deleteIfExists(file);
+            }
+        }
+    }
+
+    private static void checkedDeclarationInventory() {
+        Resource declaredItem = item("checked_item");
+        Resource declaredBlock = new Resource(Kind.ITEM, "fixture:checked_block", 0, "blocks");
+        Map<Resource, String> declarations = Map.of(declaredItem, "fixture:checked_field",
+                declaredBlock, "fixture:provenance_is_not_code/register(\"ghost\")/\"base\"+suffix");
+        TagResolver.ElementLookup checked = new TagResolver.ElementLookup() {
+            @Override
+            public TagResolver.ElementStatus element(Resource resource) {
+                return TagResolver.ElementStatus.UNKNOWN;
+            }
+
+            @Override
+            public Map<Resource, String> declarations() {
+                return declarations;
+            }
+        };
+        Builder builder = new Builder().resource(item("catalogue_reference"));
+        AuthorityAdapters.contributeCheckedDeclarations(builder, checked);
+        Snapshot inventory = builder.build();
+        eq("checked inventory is exactly catalogue references plus verified declarations, without extras",
+                Set.of(item("catalogue_reference"), declaredItem, declaredBlock), inventory.resources());
+        eq("the inventory and tag lookup consume the same declaration set", declarations.keySet(),
+                checked.declarations().keySet());
+        eq("public declaration provenance is retained for every checked declaration", 2L,
+                inventory.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_declaration:")).count());
+        eq("an inventory reference is not a registry membership proof", TagResolver.ElementStatus.UNKNOWN,
+                checked.element(declaredItem));
+        eq("extending a snapshot starts with all of its authorities and evidence intact", inventory,
+                new Builder(inventory).build());
+        new Builder(inventory).resource(item("fixture:extra_checked_fact")).build();
+        eq("extending a snapshot cannot mutate the original inventory", false,
+                inventory.resources().contains(item("fixture:extra_checked_fact")));
+        Builder unbound = new Builder();
+        AuthorityAdapters.contributeCheckedDeclarations(unbound, ignored -> TagResolver.ElementStatus.UNKNOWN);
+        eq("unbound registration evidence does not invent prototype inventory", Set.of(), unbound.build().resources());
+        eq("unbound declaration inventory is an explicit finding, not a successful empty registry", true,
+                unbound.build().findings().stream()
+                        .anyMatch(finding -> finding.rule().equals("canonical_registration_inventory_unbound")));
+    }
+
+    private static void canonicalInventory() throws IOException, InterruptedException {
+        Path root = Path.of("").toAbsolutePath().normalize();
+        CanonicalPack pack = CanonicalPack.resolved(root);
+        Resource iron = new Resource(Kind.TAG, "forge:ingots/iron");
+        Resource copper = new Resource(Kind.TAG, "forge:ingots/copper");
+        Resource planks = new Resource(Kind.TAG, "minecraft:planks");
+        TagResolver resolver = new TagResolver(root, pack, ignored -> TagResolver.ElementStatus.UNKNOWN);
+        TagResolution resolution = resolver.resolve(iron);
+        eq("resolved Forge iron data contains its actual declared vanilla ingot", Set.of(
+                new Resource(Kind.ITEM, "minecraft:iron_ingot")), resolution.members());
+        eq("a real Forge JSON file is not registry-membership proof by itself", false, resolution.complete());
+        eq("Forge registry lookup remains bounded and explicit when not supplied", Set.of(
+                "registry_membership_unknown:item:minecraft:iron_ingot"), resolution.unresolved());
+        eq("Forge iron provenance identifies the actual resolved pack, not a local fiction", true,
+                resolution.sources().stream().anyMatch(source -> source.contains("@pack=forge@")));
+        resolution = resolver.resolve(copper);
+        eq("resolved Forge copper data retains its actual declaration", Set.of(
+                new Resource(Kind.ITEM, "minecraft:copper_ingot")), resolution.members());
+        resolution = resolver.resolve(planks);
+        eq("resolved vanilla planks are discovered without a cache scan", true, !resolution.members().isEmpty());
+        eq("vanilla pack provenance is separate from Forge", true,
+                resolution.sources().stream().anyMatch(source -> source.contains("@pack=vanilla@")));
+        eq("all registry-kind pack tag definitions are independently inventoried", true,
+                pack.tags().containsAll(Set.of(iron, copper, planks)));
+        Snapshot first = AuthorityAdapters.canonical(root, ignored -> TagResolver.ElementStatus.UNKNOWN);
+        Snapshot second = AuthorityAdapters.canonical(root, ignored -> TagResolver.ElementStatus.UNKNOWN);
+        eq("canonical authority content is deterministic", AuditReports.authorityHash(first),
+                AuditReports.authorityHash(second));
+        eq("unbound canonical tags do not supply registration declarations", 0L,
+                first.inputHashes().keySet().stream().filter(source -> source.startsWith("registry_declaration:")).count());
+        eq("a block-only registration never invents a registered item", false,
+                first.resources().contains(new Resource(Kind.ITEM, "grindless:horizon_shell")));
+        eq("a block reference remains inventoried without being promoted to a checked registration", true,
+                first.resources().contains(new Resource(Kind.ITEM, "grindless:horizon_shell", 0, "blocks")));
+        eq("unbound canonical registration inventory remains explicitly incomplete", true,
+                first.findings().stream().anyMatch(finding -> finding.rule().equals("canonical_registration_inventory_unbound")));
+        eq("resolved artifacts have real binary hashes", 2L, first.inputHashes().keySet().stream()
+                .filter(source -> source.startsWith("resolved_pack:")).count());
+        eq("public authority identities never expose the private classpath", false,
+                first.inputHashes().keySet().stream().anyMatch(source -> source.contains(root.toString())
+                        || source.contains(":\\") || source.startsWith("\\\\")));
+        eq("a missing local file is not reported as missing canonical Forge data", false,
+                first.findings().stream().anyMatch(finding -> finding.rule().equals("canonical_tag_resolution_unknown")
+                        || finding.rule().equals("unresolved_tag") && finding.subject().equals(iron.key())));
+        DebtManifest debt = DebtManifest.read(root.resolve(Path.of("tools", "sustainability", "debt.json")));
+        Process git = new ProcessBuilder("git", "--no-pager", "rev-parse", "HEAD").directory(root.toFile())
+                .redirectErrorStream(true).start();
+        String revision = new String(git.getInputStream().readAllBytes(), StandardCharsets.UTF_8).trim();
+        if (git.waitFor() != 0 || !revision.matches("[0-9a-f]{40}")) {
+            throw new IOException("Cannot label the canonical inventory with its actual source revision.");
+        }
+        Path reports = root.resolve(Path.of("build", "sustainability", "canonical-inventory-unbound"));
+        var audit = SustainabilityAudit.run(first, SustainabilityAnnotations.empty(), debt);
+        var repeatedAudit = SustainabilityAudit.run(second, SustainabilityAnnotations.empty(), debt);
+        AuditReports.Hashes written = AuditReports.write(reports, audit, revision, true);
+        AuditReports.Hashes repeated = AuditReports.write(reports, repeatedAudit, revision, true);
+        eq("canonical JSON exports are byte-deterministic", written.json(), repeated.json());
+        eq("canonical Markdown exports are byte-deterministic", written.markdown(), repeated.markdown());
+        JsonObject document = JsonParser.parseString(Files.readString(reports.resolve("audit.json"))).getAsJsonObject();
+        eq("an unannotated canonical inventory is not the old local-only S1 scope",
+                "report_only_s2_canonical_inventory_no_annotations", document.get("mode").getAsString());
+        eq("a canonical inventory cannot certify sustainability without an accepted scope", false,
+                document.get("sustainability_pass").getAsBoolean());
+        eq("the public report includes artifact/API checksums rather than private classpath URLs", true,
+                document.getAsJsonObject("resolved_pack_hashes").size() >= 7);
+        System.out.println("CANONICAL RESOURCE INVENTORY: " + first.resources().size() + " resources, "
+                + first.routes().size() + " routes, " + first.tags().size() + " referenced/local tags, "
+                + first.objectives().size() + " objectives; registry membership intentionally unbound in this fixture.");
+        System.out.println("CANONICAL JSON SHA-256 " + written.json());
+        System.out.println("CANONICAL MARKDOWN SHA-256 " + written.markdown());
     }
 
     private static void contentAndImplementationIdentity() throws IOException {

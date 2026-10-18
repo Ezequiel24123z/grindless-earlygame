@@ -1,5 +1,25 @@
 # Current T0 rework validation
 
+## Current reviewed integration
+
+S2 through `dba3993` is integrated after the original reviewers closed every assigned
+registry, cadence, physical-book, finite-custody and gate-scope finding. The original6c9
+counterexamples reproduced16 assertion failures including an NPE; the repair passes735
+model,232 adapter and295 T0 assertions with serial deterministic exact-source exports.
+Those worker identities are not relabeled as the new merge's identities: the composed
+source refresh is a separate pending step. The conditional gate still does not certify
+client/no-command/Tier or global future progression.
+
+On exact client source740ec84, the actual production jar passes the platform-bridge and
+payload probe. One canonical states invocation exits0 with945/945 patterns, no timeout
+override, and observed DedicatedServer initialization of `MachineFluidView`. This is
+initialization evidence plus the unchanged first-tick source path, not a per-BE method
+counter or client transport/render observation. Built, packaged and deployed jar SHA-256:
+`d3359eb67f1fc2af1300510c12a9c6f69c6f8e17b2b5004501953089281bc258`.
+The new preparation ZIP
+`b93bfc1c208df4006012b064e3c221074ff1f34863f3d30a2ae6b18bb19f2400`
+was delivered separately, preserving the original. No raw private evidence was published.
+
 ## Current player-feedback engineering, 2026-10-18
 
 The owner requests autonomous completion and a merge **only after T0 is genuinely ready**.

@@ -74,12 +74,12 @@ invalidated assumption or a genuine new property.
 
 | Owner/session | Current checkpoint and boundary |
 | --- | --- |
-| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | `cc3f111` integrated; later code remains local. Registry findings close at `308d2cb`, original goal/seed findings at `8f5fcd1`. Latest `6c9f2d7` reports a full conditional gate with the real Quest Book acquired before claims; shared custody, scope/certificate, fallback and book-access deltas still need independent review. No S2/Tier acceptance is inferred. |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Integrated through `dba3993`; all assigned independent review findings are closed. The finite joint witness acquires the reusable Quest Book before claims. Worker model735/adapter232/T0295 and exact-source deterministic exports pass; composed-source refresh remains before closing this engineering task. Active conditional model is not Tier/player/global acceptance. |
 | UI/JEI / `783b5107-d472-4600-a3c1-3e1f148ad172` | Integrated through `d0b7256`: slot/catalyst fixes, complete layouts and native water. QA's long-text and loaded-lava counterexamples are repaired. Dev/QA1085 plus93 restoration assertions pass; production bridge/client rendering remain pending. Payload11 appends server-confirmed water identity; unknown nonempty contents remain visible. |
 | Audio / `b40a0c9d-0ed0-423c-a757-03a2297e7530` | Integrated `d42d0ba`/`ee6564c`: ordinary STARVED clicks/OUT_OF_BAND alarm removed, working effects and explicit pylon alert preserved. Common compile/source review pass; no imported sound or listening acceptance. |
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
-| Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Reviewed package `26c8c2e` preserves runtime `b982b10`. The Prism preparation ZIP is attached in the user's conversation and may be used for exploratory manual tests on the real host. It contains the actual remapped jar and explicit Architectury/JEI pins, not a world or final S2/T0 acceptance. |
+| Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Both original `26c8c2e`/`b982b10` and updated `740ec84` preparation ZIPs are preserved and delivered. Real740 production-bridge probe and one canonical states run945/945 pass. No new client rendering, no-command, update-compatibility or Tier acceptance is inferred. |
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and
@@ -100,6 +100,12 @@ The shared `buildModpack`/`verifyModpack` tasks now live in root `build.gradle`;
 retain the expanded default. Both real PowerShell archives and eleven shared checks pass.
 The Bash wrapper is statically reviewed, not executed on this host. ZIP SHA-256 is
 `7f17568a7aa83512401e5270ba9d946d0d4d7135cac9aa8eda668d5ddc99a879`.
+Updated740 ZIP SHA-256:
+`b93bfc1c208df4006012b064e3c221074ff1f34863f3d30a2ae6b18bb19f2400`;
+its built/bundled/deployed jar is
+`d3359eb67f1fc2af1300510c12a9c6f69c6f8e17b2b5004501953089281bc258`.
+The states server released port25641. Private raw evidence stays in the QA session; do not
+publish its local paths or unredacted archive.
 The owner now reports being in a new Survival world on the real host. QA owns the
 progressive exploratory checklist and records actual observations; do not prohibit normal
 play/crafting until S2 or mistake that exploration for the final agreed whole-path run.
@@ -116,6 +122,12 @@ identifies CC0 candidates but no imported files; quest fit
 `81d20905-9f62-4a5a-b9be-f7f3f7cd1b0e` compares FTB/Heracles against actual per-player
 claims and early access. Heracles is a provisional better fit, not selected before its
 extension/migration and exact-version licence facts are verified.
+Quest implementation is now assigned to `cc947b37-3c8f-4ec0-a495-f8d499c28378`.
+Selected adaptation: Heracles UI/task framework, with one Grindless task whose completion
+means the legacy per-player claim is recorded. Native reward minting is disabled for these
+generated quests; canonical catalogue and claim ledger remain authoritative. The published
+binary exposes a supported interactive widget API. First local checkpoint `4c17fa2` is
+not activated or independently accepted; build/dependency composition remains coordinated.
 
 ## Publication and preservation
 
