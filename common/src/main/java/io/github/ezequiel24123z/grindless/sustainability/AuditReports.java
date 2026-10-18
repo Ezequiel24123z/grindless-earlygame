@@ -36,7 +36,7 @@ public final class AuditReports {
      * @param directory generated report directory
      * @param result audit facts and findings
      * @param revision source revision label, not an identity for uncommitted source or class bytes
-     * @param reportOnly whether this invocation is an unannotated inventory, not an enforced audit
+     * @param reportOnly whether this invocation is a report-only inventory, not an enforced audit
      * @return hashes of the bytes written
      * @throws IOException if report output fails
      */
@@ -73,8 +73,8 @@ public final class AuditReports {
                 "resolved_pack_hashes", packHashes(snapshot),
                 "registry_binding_hashes", registryHashes(snapshot),
                 "registry_binding_conditions", registryConditions(snapshot),
-                "mode", reportOnly ? canonicalPack(snapshot)
-                        ? "report_only_s2_canonical_inventory_no_annotations" : "report_only_s1_no_annotations" : "enforced",
+                "mode", reportOnly ? (canonicalPack(snapshot) ? "report_only_s2_canonical_inventory" : "report_only_s1")
+                        + (hasAnnotations(result) ? "_partial_annotations" : "_no_annotations") : "enforced",
                 "sustainability_pass", !reportOnly && result.sustainabilityPass(),
                 "ratchet_pass", result.findings().ratchetPass(),
                 "failure_visible_debt", result.findings().waivedDebt(),
@@ -204,9 +204,9 @@ public final class AuditReports {
         StringBuilder text = new StringBuilder("# Sustainability audit\n\n");
         Snapshot snapshot = result.authorities();
         if (reportOnly) {
-            text.append(canonicalPack(snapshot)
-                            ? "**CANONICAL RESOURCE INVENTORY REPORT-ONLY (S2, no annotations)**\n\n"
-                            : "**LIVE AUDIT REPORT-ONLY (S1, no annotations)**\n\n")
+            text.append(canonicalPack(snapshot) ? "**CANONICAL RESOURCE INVENTORY REPORT-ONLY (S2, "
+                            : "**LIVE AUDIT REPORT-ONLY (S1, ")
+                    .append(hasAnnotations(result) ? "partial annotations)**\n\n" : "no annotations)**\n\n")
                     .append("Synthetic rule checks are hard assertions, not live sustainability evidence. ")
                     .append("This invocation cannot certify a tier or make run-checks a sustainability pass.\n\n");
         } else {
@@ -261,7 +261,8 @@ public final class AuditReports {
             text.append("| T").append(tier.tier()).append(" | ").append(tier.unknown() == null ? "authored" : "unknown")
                     .append(" | ").append(tier.mandatory().size()).append(" | ").append(tier.available().size())
                     .append(" | ").append(tier.renewable().size()).append(" | ")
-                    .append(tier.reserves().stream().filter(reserve -> !reserve.status().equals("established")).count())
+                    .append(tier.reserves().stream().filter(reserve ->
+                            !Set.of("established", "conditional_established").contains(reserve.status())).count())
                     .append(" |\n");
         }
         text.append("\nCounts describe fixed-point facts only, not manual progression, client interaction, ")
@@ -397,6 +398,12 @@ public final class AuditReports {
             }
         });
         return hashes;
+    }
+
+    private static boolean hasAnnotations(SustainabilityAudit.Result result) {
+        SustainabilityAnnotations annotations = result.annotations();
+        return !annotations.resources().isEmpty() || !annotations.routes().isEmpty() || !annotations.machines().isEmpty()
+                || !annotations.loops().isEmpty() || !annotations.plans().isEmpty() || !annotations.ledger().isEmpty();
     }
 
     private static Set<String> registryConditions(Snapshot snapshot) {

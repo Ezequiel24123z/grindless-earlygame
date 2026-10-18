@@ -12,6 +12,12 @@ import com.sun.source.tree.Tree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.util.JavacTask;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.research.ResearchLogic;
+import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -35,6 +41,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.*;
+import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityAnnotations.*;
 import static io.github.ezequiel24123z.grindless.sustainability.TagResolver.ElementStatus.*;
 
 /**
@@ -83,7 +90,8 @@ public final class VerifySustainabilityRegistry {
         eq("every checked declaration has one public provenance identity", (long) declared.size(),
                 declarationsOnly.build().inputHashes().keySet().stream()
                         .filter(key -> key.startsWith("registry_declaration:")).count());
-        Snapshot snapshot = AuthorityAdapters.canonical(root, registry);
+        SourceBinding sources = sourceBinding(root, AuthorityAdapters.canonical(root, registry));
+        Snapshot snapshot = sources.snapshot();
         TagResolution iron = snapshot.tags().get(tag("forge:ingots/iron"));
         eq("the resolved real Forge iron tag is complete", true, iron.complete());
         eq("the resolved real Forge iron tag contains its actual registered vanilla member",
@@ -97,7 +105,7 @@ public final class VerifySustainabilityRegistry {
                     snapshot.resources().contains(resource));
         }
         DebtManifest debt = DebtManifest.read(root.resolve(Path.of("tools", "sustainability", "debt.json")));
-        var audit = SustainabilityAudit.run(snapshot, SustainabilityAnnotations.empty(), debt);
+        var audit = SustainabilityAudit.run(snapshot, sources.facts(), debt);
         Process git = new ProcessBuilder("git", "--no-pager", "rev-parse", "HEAD").directory(root.toFile())
                 .redirectErrorStream(true).start();
         String revision = new String(git.getInputStream().readAllBytes(), StandardCharsets.UTF_8).trim();
@@ -111,6 +119,26 @@ public final class VerifySustainabilityRegistry {
                 report.getAsJsonObject("input_hashes").has("registry_profile:standalone_unconditional_grindless"));
         eq("registry binding alone is not sustainability or Tier acceptance", false,
                 report.get("sustainability_pass").getAsBoolean());
+        eq("the partial source annotations are described honestly in the report mode",
+                "report_only_s2_canonical_inventory_partial_annotations", report.get("mode").getAsString());
+        eq("the inspected source facts remove the actual ungrounded-generator errors", false,
+                audit.findings().findings().stream().anyMatch(finding -> finding.rule().equals("zero_input_unjustified")));
+        for (String id : List.of("air/oxygen", "power/solar_array")) {
+            eq("source facts do not accept the unplaced prototype: " + id, null,
+                    sources.facts().routes().get(id).unlockTier());
+            eq("the prototype retains its honest route-tier unknown: " + id, true,
+                    audit.findings().findings().stream().anyMatch(finding ->
+                            finding.rule().equals("route_tier_unknown") && finding.subject().equals(id)));
+            eq("a physical source terminal does not activate the prototype machine: " + id, false,
+                    audit.tiers().get(0).availableRoutes().contains(id));
+        }
+        eq("the optional manual Dynamo has accepted T0 placement, not an invented future tier", 0,
+                sources.facts().routes().get("power/hand_crank_dynamo").unlockTier());
+        eq("the optional manual Dynamo has no invented environmental permission", Set.of(),
+                sources.facts().routes().get("power/hand_crank_dynamo").environmentalSources());
+        eq("physical manual action facts never become guaranteed initial gifts", true,
+                snapshot.terminals().values().stream().filter(terminal -> terminal.kind() == TerminalKind.MANUAL_LABOUR)
+                        .allMatch(terminal -> terminal.guaranteed() == null));
         System.out.println("CANONICAL REGISTRY INVENTORY: " + snapshot.resources().size() + " resources, "
                 + snapshot.routes().size() + " routes, " + snapshot.tags().size() + " tags, "
                 + snapshot.objectives().size() + " objectives; complete tags="
@@ -118,6 +146,275 @@ public final class VerifySustainabilityRegistry {
         System.out.println("CANONICAL JSON SHA-256 " + written.json());
         System.out.println("CANONICAL MARKDOWN SHA-256 " + written.markdown());
         System.out.println(passed + " passed, 0 failed");
+    }
+
+    private record SourceBinding(Snapshot snapshot, ManualWork localWork,
+                                 SustainabilityAnnotations facts) {
+    }
+
+    private static SourceBinding sourceBinding(Path root, Snapshot inventory) throws IOException {
+        Map<String, String> hashes = new TreeMap<>();
+        ClassTree crank = mechanicsSource(root, "item", "CrankHandleItem", hashes);
+        ClassTree process = mechanicsSource(root, "machine", "ProcessMachineBlockEntity", hashes);
+        ClassTree base = mechanicsSource(root, "machine", "MachineBlockEntity", hashes);
+        ClassTree pump = mechanicsSource(root, "fluid", "HandPumpBlockEntity", hashes);
+        ClassTree research = mechanicsSource(root, "machine", "ResearchTerminalBlockEntity", hashes);
+        ClassTree dynamo = mechanicsSource(root, "machine", "HandCrankDynamoBlockEntity", hashes);
+        ClassTree dynamoBlock = mechanicsSource(root, "machine", "HandCrankDynamoBlock", hashes);
+        ClassTree solar = mechanicsSource(root, "machine", "SolarArrayBlockEntity", hashes);
+        mechanicsSource(root, "machine", "ProcessMachineKind", hashes);
+        mechanicsSource(root, "source", "SourceLogic", hashes);
+        ClassTree worldSite = mechanicsSource(root, "source", "SourceSite", hashes);
+        mechanicsSource(root, "fluid", "FluidLogic", hashes);
+        mechanicsSource(root, "research", "ResearchLogic", hashes);
+
+        eq("the real tool accepts only ProcessMachine/F0 recipients and server-side cooldown-limited actions",
+                "{if(!(context.getLevel().getBlockEntity(context.getClickedPos())instanceofProcessMachineBlockEntitymachine)"
+                        + "||machine.kind().tier()!=FluxTier.F0||context.getPlayer()==null){returnInteractionResult.PASS;}"
+                        + "if(!context.getLevel().isClientSide()&&!context.getPlayer().getCooldowns().isOnCooldown(this)){"
+                        + "machine.crankByHand();context.getPlayer().getCooldowns().addCooldown(this,SourceLogic.MANUAL_COOLDOWN);}"
+                        + "returnInteractionResult.sidedSuccess(context.getLevel().isClientSide());}",
+                normalized(method(crank, "useOn", 1).getBody()));
+        eq("the real recipient stores the charge locally with its F0/server guard and capacity clamp",
+                "{if(kind.tier()!=FluxTier.F0||getLevel()==null||getLevel().isClientSide()){return;}"
+                        + "energy().setStored(Math.min(energy().getCapacity(),energy().getStored()+SourceLogic.MANUAL_CHARGE));}",
+                normalized(method(process, "crankByHand", 0).getBody()));
+        eq("the local process buffer cannot export crank energy",
+                "{returnnewSimpleFluxStorage(bufferCapacity(),powerTier().nominal(),0L,()->{setChanged();"
+                        + "if(getLevel()!=null&&!getLevel().isClientSide()){updateSubscriptions();}});}",
+                normalized(method(process, "createEnergyBuffer", 0).getBody()));
+        eq("the process buffer retains the real two-second sizing contract", "{return2;}",
+                normalized(method(base, "bufferSeconds", 0).getBody()));
+        eq("buffer capacity is actual rated throughput times its time window",
+                "{returnpowerTier().nominal()*20L*bufferSeconds();}",
+                normalized(method(base, "bufferCapacity", 0).getBody()));
+        eq("process machines do not silently override that buffer window", false,
+                process.getMembers().stream().filter(MethodTree.class::isInstance).map(MethodTree.class::cast)
+                        .anyMatch(method -> method.getName().contentEquals("bufferSeconds")));
+        eq("one full source-derived crank charge fits an empty F0 process buffer", true,
+                SourceLogic.MANUAL_CHARGE <= FluxTier.F0.nominal() * 20L * 2L);
+        Set<String> eligible = new TreeSet<>();
+        for (ProcessMachineKind kind : ProcessMachineKind.values()) {
+            if (kind.tier() == FluxTier.F0) {
+                eligible.add(kind.family().name());
+            }
+        }
+        ManualWork work = new ManualWork("manual/crank_handle", item("grindless:crank_handle"),
+                SourceLogic.MANUAL_CHARGE, eligible, "CrankHandleItem.useOn + ProcessMachineBlockEntity.crankByHand"
+                + " + ProcessMachineKind.values/tier/family + SourceLogic.MANUAL_CHARGE");
+        for (Route route : inventory.routes().values()) {
+            boolean recipient = route.authority() == Authority.PROCESS_GRAPH && java.util.Arrays.stream(ProcessMachineKind.values())
+                    .anyMatch(kind -> kind.family().name().equals(route.family()) && kind.tier() == FluxTier.F0);
+            eq("local work eligibility follows actual type/rating rather than namespace: " + route.id(),
+                    recipient, work.applies(route));
+        }
+        eq("ResearchTerminal is not a ProcessMachine recipient", "MachineBlockEntity",
+                normalized(research.getExtendsClause()));
+        eq("geological production uses its actual rock-bed site",
+                io.github.ezequiel24123z.grindless.source.SourceSite.GEOLOGICAL,
+                ProcessMachineKind.GEOLOGICAL_COLLECTOR.site());
+        eq("bioculture uses its actual terrestrial open-sky/daylight site",
+                io.github.ezequiel24123z.grindless.source.SourceSite.SUNLIT_CULTURE,
+                ProcessMachineKind.BIOCULTIVATOR.site());
+        eq("the current intake has no invented atmosphere/dimension guard",
+                io.github.ezequiel24123z.grindless.source.SourceSite.NONE,
+                ProcessMachineKind.ATMOSPHERIC_INTAKE.site());
+        eq("the actual shared site authority enforces the declared terrestrial/rock/sky/daylight conditions",
+                "{if(this==NONE){returnFault.NONE;}if(!terrestrial){returnFault.WRONG_DIMENSION;}"
+                        + "if(this==GEOLOGICAL){returnrockBed?Fault.NONE:Fault.NEEDS_ROCK_BED;}"
+                        + "if(!openSky){returnFault.NEEDS_OPEN_SKY;}returndaylight?Fault.NONE:Fault.NEEDS_DAYLIGHT;}",
+                normalized(method(worldSite, "evaluate", 4).getBody()));
+        eq("actual site eligibility checks the loaded world, geological tag and measured sky brightness",
+                "{if(kind.site()==SourceSite.NONE||getLevel()==null){returnSourceSite.Fault.NONE;}"
+                        + "Stringdimension=getLevel().dimension().location().toString();"
+                        + "booleanterrestrial=getLevel().dimension().equals(Level.OVERWORLD)||FactoryCatalogue.isFactory(dimension);"
+                        + "booleanrock=getLevel().getBlockState(getBlockPos().below()).is("
+                        + "TagKey.create(Registries.BLOCK,Grindless.id(\"geological_bed\")));"
+                        + "booleansky=getLevel().canSeeSky(getBlockPos().above());"
+                        + "booleandaylight=getLevel().getBrightness(LightLayer.SKY,getBlockPos().above())"
+                        + "-getLevel().getSkyDarken()>=9;returnkind.site().evaluate(terrestrial,rock,sky,daylight);}",
+                normalized(method(process, "checkSite", 0).getBody()));
+        eq("site and formation failures stop the actual work path before recipe execution", true,
+                normalized(method(process, "work", 2).getBody()).startsWith(
+                        "{if(lastWorkTick==tick){return;}lastWorkTick=tick;structureFault=checkStructure();siteFault=checkSite();"
+                                + "if(structureFault!=WorkshopStructure.Fault.NONE||siteFault!=SourceSite.Fault.NONE){"
+                                + "publishStatus(cached,false,false,false,false,ConditionReport.OPTIMAL);syncData();return;}"));
+
+        eq("the pump tests a real adjacent or below water source without consuming it",
+                "{if(level==null){returnfalse;}returnisSource(worldPosition.relative(facing()))"
+                        + "||isSource(worldPosition.below());}", normalized(method(pump, "hasWaterSource", 0).getBody()));
+        eq("the pump uses the actual WATER tag and source-state predicates",
+                "{net.minecraft.world.level.material.FluidStatefluid=level.getFluidState(pos);"
+                        + "returnfluid.is(FluidTags.WATER)&&fluid.isSource();}",
+                normalized(method(pump, "isSource", 1).getBody()));
+        eq("the automatic pump runs on the server without player work or FU",
+                "{if(level.isClientSide()){return;}pump.work();}", normalized(method(pump, "tick", 4).getBody()));
+        eq("the pump's physical source batch is bounded and never edits the world source",
+                "{booleansource=hasWaterSource();"
+                        + "booleanmoved=false;if(source&&buffer.space()>0){inttake=Math.min(FluidLogic.PUMP_MB_PER_TICK,"
+                        + "buffer.space());buffer.offer(FluidState.of(FluidLogic.WATER,take));moved=true;}"
+                        + "if(!buffer.isEmpty()){FluidStatepulse=buffer.extract(FluidLogic.WATER,FluidLogic.PUMP_MB_PER_TICK);"
+                        + "FluidStateleftover=FluidInsert.intoNeighbour(level,worldPosition,facing(),pulse);"
+                        + "if(!leftover.isEmpty()){buffer.offer(leftover);}else{moved=true;}}"
+                        + "MachineProperties.publish(level,worldPosition,FluidLogic.pumpStatus(source,moved));"
+                        + "if(moved){setChanged();sync();}}", normalized(method(pump, "work", 0).getBody()));
+        eq("the pump's buffer uses the shared actual capacity", "FluidBuffer.ambient(FluidLogic.BUCKET)",
+                normalized(field(pump, "buffer").getInitializer()));
+        eq("the shared pump pulse fits in the actual buffer", true,
+                FluidLogic.PUMP_MB_PER_TICK > 0 && FluidLogic.PUMP_MB_PER_TICK <= FluidLogic.BUCKET);
+
+        eq("the Terminal's full work cycle draws real FU and transforms one physical item, without a permission",
+                "{booleanhasCore=hasCore();if(!hasCore){publishStatus(false,hasOutput(),false,false);"
+                        + "updateSubscriptions();return;}requestPower(ResearchLogic.FU_PER_TICK);"
+                        + "longdrawn=drawPower(ResearchLogic.FU_PER_TICK);"
+                        + "if(drawn<=0L&&energy().getStored()>=ResearchLogic.FU_PER_TICK){"
+                        + "energy().setStored(energy().getStored()-ResearchLogic.FU_PER_TICK);drawn=ResearchLogic.FU_PER_TICK;}"
+                        + "booleanpowered=drawn>0L||hasPowerWaiting();doublegained=ResearchLogic.work(drawn,ResearchLogic.FU_PER_TICK);"
+                        + "if(gained>0.0){progress+=gained;setChanged();}if(progress>=ResearchLogic.CYCLE_TICKS){"
+                        + "progress=0.0;input.setItem(0,newItemStack(ModItems.CALIBRATED_DATA_CORE.get()));"
+                        + "setChanged();updateSubscriptions();return;}publishStatus(true,false,powered,gained>0.0);}",
+                normalized(method(research, "work", 0).getBody()));
+        eq("the physical core predicate reads its real registered item id",
+                "{return!stack.isEmpty()&&ResearchLogic.DATA_CORE.equals("
+                        + "BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());}",
+                normalized(method(research, "isDataCore", 1).getBody()));
+        eq("the Terminal allows only one core per slot", "{return1;}",
+                normalized(method(research, "getMaxStackSize", 0).getBody()));
+        eq("the physical input accepts only the actual uncalibrated core", "{returnisDataCore(stack)"
+                        + "&&input.getItem(0).isEmpty();}",
+                normalized(method(research, "canPlaceItem", 2).getBody()));
+        eq("hopper insertion delegates to that real input guard", "{returncanPlaceItem(slot,stack);}",
+                normalized(method(research, "canPlaceItemThroughFace", 3).getBody()));
+        eq("hopper extraction is available only after the physical transformation", "{return!isDataCore(stack);}",
+                normalized(method(research, "canTakeItemThroughFace", 3).getBody()));
+
+        eq("the optional physical Dynamo requires an actual server-side player click",
+                "{if(level.isClientSide()){returnInteractionResult.SUCCESS;}"
+                        + "if(level.getBlockEntity(pos)instanceofHandCrankDynamoBlockEntitydynamo){dynamo.crank();"
+                        + "returnInteractionResult.CONSUME;}returnInteractionResult.PASS;}",
+                normalized(method(dynamoBlock, "use", 6).getBody()));
+        eq("the physical Dynamo charge comes from its actual constant", true,
+                normalized(method(dynamo, "crank", 0).getBody())
+                        .startsWith("{energy().setStored(energy().getStored()+CHARGE_PER_CRANK);"));
+        eq("the physical Dynamo is rated at F0", "{returnFluxTier.F0;}",
+                normalized(method(dynamo, "ratedTier", 0).getBody()));
+        eq("the actual Dynamo output buffer exports its own rated physical charge",
+                "{returnnewSimpleFluxStorage(bufferCapacity(),0L,FluxTier.F0.nominal(),this::setChanged);}",
+                normalized(method(dynamo, "createEnergyBuffer", 0).getBody()));
+        eq("the physical output is bounded by its actual per-tick rating and period", true,
+                normalized(method(dynamo, "push", 0).getBody()).contains(
+                        "longallowance=Math.min(energy().getStored(),FluxTier.F0.nominal()*PUSH_PERIOD);"));
+        eq("the actual unobstructed push period is one tick", "1",
+                normalized(field(dynamo, "PUSH_PERIOD").getInitializer()));
+        eq("solar's real site is daylight and open sky, not a terrestrial culture predicate",
+                "{returngetLevel()!=null&&getLevel().isDay()&&getLevel().canSeeSky(getBlockPos().above());}",
+                normalized(method(solar, "daylight", 0).getBody()));
+        eq("solar actually gates generation on that site", true,
+                normalized(method(solar, "work", 0).getBody()).startsWith(
+                        "{booleanday=daylight();if(day){energy().setStored(energy().getStored()+SolarLogic.generate(true));}"));
+
+        Builder builder = new Builder(inventory);
+        hashes.forEach(builder::input);
+        builder.input("mechanics_binding:CrankHandle_ProcessMachine_F0",
+                AuthorityAdapters.sha256(work.toString().getBytes(StandardCharsets.UTF_8)));
+        builder.terminal(new Terminal(work.terminal(), new Resource(Kind.ENVIRONMENT, "grindless:local_crank_actions"),
+                TerminalKind.MANUAL_LABOUR, null, false, true, null, 0,
+                "A player with the constructed Crank Handle may charge only a server-side F0 ProcessMachine; "
+                        + "actions are finite conditional bootstrap work, not portable ENERGY or R.", work.source()));
+        builder.terminal(new Terminal("environment/water_source", new Resource(Kind.ENVIRONMENT,
+                "grindless:water_source_site"), TerminalKind.ENVIRONMENT, SourceSite.WATER_BODY,
+                true, true, null, 0, "HandPumpBlockEntity requires a WATER-tagged source in front or below; "
+                + "it offers water automatically without draining that world source or using FU.",
+                "HandPumpBlockEntity.hasWaterSource/isSource/work"));
+        builder.terminal(new Terminal("environment/geological_bed", new Resource(Kind.ENVIRONMENT,
+                "grindless:geological_rock_site"), TerminalKind.ENVIRONMENT, SourceSite.GEOLOGICAL_ROCK_BED,
+                true, true, null, 0, "Collector work requires Overworld or Factory and a geological_bed-tagged block "
+                + "below. The site is not mined; the recipe separately consumes real water and FU.",
+                "ProcessMachineKind.GEOLOGICAL_COLLECTOR.site + ProcessMachineBlockEntity.checkSite + SourceSite.evaluate"));
+        builder.terminal(new Terminal("environment/bioculture_sunlight", new Resource(Kind.ENVIRONMENT,
+                "grindless:bioculture_sunlit_site"), TerminalKind.ENVIRONMENT, SourceSite.SUNLIT_CULTURE,
+                true, true, null, 0, "Bioculture requires Overworld or Factory, open sky above and measured sky "
+                + "brightness minus sky darkening >=9. No night, restart or unconditional all-dimension claim.",
+                "ProcessMachineKind.BIOCULTIVATOR.site + ProcessMachineBlockEntity.checkSite + SourceSite.evaluate"));
+        builder.terminal(new Terminal("environment/intake_runtime", new Resource(Kind.ENVIRONMENT,
+                "grindless:unrestricted_intake_site"), TerminalKind.ENVIRONMENT, SourceSite.ATMOSPHERE,
+                true, true, null, 0, "The current Atmospheric Intake has SourceSite.NONE: no atmosphere, vacuum or "
+                + "dimension predicate is implemented. This describes that runtime limit, not physical realism or Tier acceptance.",
+                "ProcessMachineKind.ATMOSPHERIC_INTAKE.site + ProcessMachineBlockEntity.checkSite"));
+        builder.terminal(new Terminal("environment/solar_daylight", new Resource(Kind.ENVIRONMENT,
+                "grindless:solar_open_sky_daylight"), TerminalKind.ENVIRONMENT, SourceSite.OPEN_SKY_DAYLIGHT,
+                true, true, null, 0, "SolarArrayBlockEntity checks a live level, isDay() and canSeeSky(position.above()). "
+                + "It has no terrestrial dimension restriction; this conditional source fact does not unlock the panel.",
+                "SolarArrayBlockEntity.daylight/work + SolarLogic.generate"));
+        builder.terminal(new Terminal("manual/hand_crank_dynamo", new Resource(Kind.ENVIRONMENT,
+                "grindless:hand_crank_dynamo_actions"), TerminalKind.MANUAL_LABOUR, null,
+                false, true, null, 0, "A real optional Dynamo receives player clicks, stores a bounded charge "
+                + "and delivers it at F0. No initial gift, automatic labour or canonical steady supply is implied. "
+                + "A finite budget for these clicks is not provided by the separate local CrankHandle work profile.",
+                "HandCrankDynamoBlock.use + HandCrankDynamoBlockEntity.crank"));
+        builder.route(new Route("source/hand_pump", Authority.BOOTSTRAP_SOURCE,
+                "HandPumpBlockEntity.work/isSource + FluidLogic.PUMP_MB_PER_TICK/BUCKET", "HAND_PUMP",
+                Map.of(), Map.of(), Map.of(new Resource(Kind.FLUID, FluidLogic.WATER), (long) FluidLogic.BUCKET), Set.of(),
+                FluidLogic.BUCKET / FluidLogic.PUMP_MB_PER_TICK, 0,
+                Map.of("condition", "adjacent_or_below_WATER_tagged_source_not_drained",
+                        "pulse_mb_per_tick", Integer.toString(FluidLogic.PUMP_MB_PER_TICK),
+                        "batch", "one_buffer_of_aggregated_unobstructed_pulses"),
+                Set.of(), false, true, true));
+        builder.route(new Route("calibrate/data_core", Authority.BOOTSTRAP_SOURCE,
+                "ResearchLogic + ResearchTerminalBlockEntity.work/WorldlyContainer", "RESEARCH_TERMINAL",
+                Map.of(item(ResearchLogic.DATA_CORE), 1L, ENERGY,
+                        Math.multiplyExact((long) ResearchLogic.CYCLE_TICKS, ResearchLogic.FU_PER_TICK)),
+                Map.of(), Map.of(item(ResearchLogic.CALIBRATED_DATA_CORE), 1L), Set.of(),
+                ResearchLogic.CYCLE_TICKS, ResearchLogic.FU_PER_TICK,
+                Map.of("physical_item_transformation", "one_core_to_one_calibrated_core",
+                        "power", "native_buffer_or_network_not_CrankHandle"), Set.of(), false, true, true));
+        builder.route(new Route("power/hand_crank_dynamo", Authority.BOOTSTRAP_SOURCE,
+                "HandCrankDynamoBlockEntity.CHARGE_PER_CRANK/crank + HandCrankDynamoBlock.use", "HAND_CRANK_DYNAMO",
+                Map.of(new Resource(Kind.ENVIRONMENT, "grindless:hand_crank_dynamo_actions"), 1L), Map.of(),
+                Map.of(ENERGY, HandCrankDynamoBlockEntity.CHARGE_PER_CRANK), Set.of(),
+                HandCrankDynamoBlockEntity.CHARGE_PER_CRANK / FluxTier.F0.nominal(), 0,
+                Map.of("generation_fu_per_tick", Long.toString(FluxTier.F0.nominal()),
+                        "condition", "finite_player_clicks_with_a_constructed_physical_dynamo",
+                        "charge_headroom", Long.toString(HandCrankDynamoBlockEntity.CHARGE_PER_CRANK),
+                        "output", "rated_unobstructed_physical_export"), Set.of(), false, true, false));
+        Snapshot snapshot = builder.build();
+        eq("adding physical source facts preserves every existing inventory reference", true,
+                snapshot.resources().containsAll(inventory.resources()));
+        eq("actual calibration is automated but still cannot use local CrankHandle work", false,
+                work.applies(snapshot.routes().get("calibrate/data_core")));
+        eq("a physical hand-cranked producer is explicitly not automatic", false,
+                snapshot.routes().get("power/hand_crank_dynamo").automatable());
+        eq("the actual water source is explicitly automatic despite its name", true,
+                snapshot.routes().get("source/hand_pump").automatable());
+        eq("the source's aggregate water batch uses an exact whole number of actual pulses", 0,
+                FluidLogic.BUCKET % FluidLogic.PUMP_MB_PER_TICK);
+        eq("the source aggregate preserves every actual pulse rather than changing a recipe quantity",
+                (long) FluidLogic.BUCKET,
+                snapshot.routes().get("source/hand_pump").durationTicks() * FluidLogic.PUMP_MB_PER_TICK);
+        eq("the physical source water matches the process graph's actual fluid identity", true,
+                inventory.routes().get("source/geological_aggregate").inputs()
+                        .containsKey(new Resource(Kind.FLUID, FluidLogic.WATER)));
+        eq("the specific solar site remains distinguishable from the terrestrial culture site", false,
+                snapshot.terminals().get("environment/solar_daylight").site()
+                        .equals(snapshot.terminals().get("environment/bioculture_sunlight").site()));
+        Map<String, RoutePolicy> policies = Map.of(
+                "source/hand_pump", new RoutePolicy((Integer) null, false, Set.of("environment/water_source")),
+                "source/geological_aggregate", new RoutePolicy((Integer) null, false, Set.of("environment/geological_bed")),
+                "source/biomass", new RoutePolicy((Integer) null, false, Set.of("environment/bioculture_sunlight")),
+                "air/oxygen", new RoutePolicy((Integer) null, false, Set.of("environment/intake_runtime")),
+                "power/solar_array", new RoutePolicy((Integer) null, false, Set.of("environment/solar_daylight")),
+                "power/hand_crank_dynamo", new RoutePolicy(0, true, Set.of()));
+        return new SourceBinding(snapshot, work, new SustainabilityAnnotations(Map.of(), policies,
+                Map.of("HAND_CRANK_DYNAMO", new Machine("HAND_CRANK_DYNAMO",
+                        item("grindless:hand_crank_dynamo"), 0)), Map.of(), Map.of(), Map.of()));
+    }
+
+    private static ClassTree mechanicsSource(Path root, String folder, String name,
+                                             Map<String, String> hashes) throws IOException {
+        Path relative = JAVA.resolve(Path.of(folder, name + ".java"));
+        byte[] bytes = Files.readAllBytes(root.resolve(relative));
+        hashes.put("mechanics_source:" + relative.toString().replace('\\', '/'), AuthorityAdapters.sha256(bytes));
+        return parse(name, new String(bytes, StandardCharsets.UTF_8));
     }
 
     private static TagResolver.ElementLookup registry(Map<Resource, String> declared, Map<String, String> inputs) {

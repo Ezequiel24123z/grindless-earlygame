@@ -370,6 +370,11 @@ public final class VerifySustainabilityAdapters {
                 inventory.inputHashes().keySet().stream().filter(key -> key.startsWith("registry_declaration:")).count());
         eq("an inventory reference is not a registry membership proof", TagResolver.ElementStatus.UNKNOWN,
                 checked.element(declaredItem));
+        eq("extending a snapshot starts with all of its authorities and evidence intact", inventory,
+                new Builder(inventory).build());
+        new Builder(inventory).resource(item("fixture:extra_checked_fact")).build();
+        eq("extending a snapshot cannot mutate the original inventory", false,
+                inventory.resources().contains(item("fixture:extra_checked_fact")));
         Builder unbound = new Builder();
         AuthorityAdapters.contributeCheckedDeclarations(unbound, ignored -> TagResolver.ElementStatus.UNKNOWN);
         eq("unbound registration evidence does not invent prototype inventory", Set.of(), unbound.build().resources());

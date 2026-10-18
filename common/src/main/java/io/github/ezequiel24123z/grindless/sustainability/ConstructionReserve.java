@@ -197,7 +197,7 @@ final class ConstructionReserve {
         }
         Route route = audit.canonical(goal, tier, false);
         long batch = route == null ? 0 : audit.outputAmount(route, goal);
-        if (route == null || batch <= 0) {
+        if (route == null || batch <= 0 || !SustainabilityAudit.exitProductionRoute(route)) {
             return;
         }
         long required = batch;
@@ -287,25 +287,39 @@ final class ConstructionReserve {
                 merge(stock, resource, held);
             }
         }
-        Map<Resource, Long> initial = new TreeMap<>(stock);
-        Map<Resource, Long> minimum = new TreeMap<>(stock);
-        long energyBalance = stock.getOrDefault(ENERGY, 0L);
-        long minimumEnergy = energyBalance;
         Map<String, Long> remaining = new TreeMap<>();
         batches.forEach((id, count) -> remaining.put(id, count.longValueExact()));
         boolean completed = false;
         try {
             startupBound = false;
-            Map<Resource, Long> simulated = new TreeMap<>(stock);
-            if (profile != null && profile.manualWork() != null) {
-                simulated.put(WORK_ACTIONS, deriving ? Long.MAX_VALUE : profile.manualWorkActions() - manualActions);
-            }
-            List<String> order = startupOrder(new TreeMap<>(remaining), simulated, internal,
+            List<String> order = startupOrder(new TreeMap<>(remaining), startupInventory(), internal,
                     batches.keySet(), new ArrayList<>(), new HashSet<>(), new int[1]);
+            if (order == null && !startupBound && profile != null) {
+                for (Resource resource : internal) {
+                    if (manualMembers(resource).isEmpty()) {
+                        continue;
+                    }
+                    long gross = 0;
+                    for (var entry : remaining.entrySet()) {
+                        gross = Math.addExact(gross, Math.multiplyExact(entry.getValue(),
+                                snapshot.routes().get(entry.getKey()).inputs().getOrDefault(resource, 0L)));
+                    }
+                    // A conservative prefix bound, paid once from remaining custody, never from the same R.
+                    if (gross > free(resource)) {
+                        provideManual(resource, gross);
+                    }
+                }
+                order = startupOrder(new TreeMap<>(remaining), startupInventory(), internal,
+                        batches.keySet(), new ArrayList<>(), new HashSet<>(), new int[1]);
+            }
             if (order == null && startupBound) {
                 unknown(loop.carrier(), "Startup ordering exceeded its bounded search; no infeasibility is claimed.");
                 return false;
             }
+            Map<Resource, Long> initial = new TreeMap<>(stock);
+            Map<Resource, Long> minimum = new TreeMap<>(stock);
+            long energyBalance = stock.getOrDefault(ENERGY, 0L);
+            long minimumEnergy = energyBalance;
             int position = 0;
             while (remaining.values().stream().anyMatch(count -> count > 0)) {
                 boolean progressed = false;
@@ -402,6 +416,14 @@ final class ConstructionReserve {
                 });
             }
         }
+    }
+
+    private Map<Resource, Long> startupInventory() {
+        Map<Resource, Long> simulated = new TreeMap<>(stock);
+        if (profile != null && profile.manualWork() != null) {
+            simulated.put(WORK_ACTIONS, deriving ? Long.MAX_VALUE : profile.manualWorkActions() - manualActions);
+        }
+        return simulated;
     }
 
     private boolean circulationSupply(Resource resource, Set<Resource> internal, Set<String> members) {

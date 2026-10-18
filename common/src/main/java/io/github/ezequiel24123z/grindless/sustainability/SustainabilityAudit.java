@@ -396,6 +396,9 @@ public final class SustainabilityAudit {
             if (exit == null || outputAmount(exit, plan.exitObjective()) <= 0) {
                 add("exit_goal_route_missing", plan.exitObjective().key(), "T" + tier, ERROR,
                         "An exit goal needs a concrete unlocked production route, not just stock or a gift.");
+            } else if (!exitProductionRoute(exit)) {
+                add("exit_goal_route_invalid", plan.exitObjective().key(), "T" + tier, ERROR,
+                        "A manufacturing goal cannot select a quest claim, gift or other one-shot supply.");
             } else {
                 closureRoute(exit, true, tier, mandatory, recurring, closureRoutes, construction, visitedRecurring);
             }
@@ -1097,6 +1100,10 @@ public final class SustainabilityAudit {
         return null;
     }
 
+    static boolean exitProductionRoute(Route route) {
+        return route.authority() != Authority.QUEST_REWARD && !route.oneShot();
+    }
+
     boolean unlocked(Route route, int tier) {
         RoutePolicy policy = annotations.routes().get(route.id());
         if (policy == null || policy.unlockTier() == null || policy.unlockTier() > tier) {
@@ -1207,7 +1214,14 @@ public final class SustainabilityAudit {
                 output.getValue() > route.inputs().getOrDefault(output.getKey(), 0L));
         return !route.oneShot() && gain && route.netInputs().keySet().stream().noneMatch(resource ->
                 resource.kind() == Kind.ITEM || resource.kind() == Kind.FLUID || resource.kind() == Kind.TAG)
-                && !hasEnvironment(route);
+                && !hasEnvironment(route) && !hasManualInput(route);
+    }
+
+    private boolean hasManualInput(Route route) {
+        return !route.automatable() && route.netInputs().keySet().stream().anyMatch(resource ->
+                resource.kind() == Kind.ENVIRONMENT && snapshot.terminals().values().stream().anyMatch(source ->
+                        source.resource().equals(resource) && source.kind() == TerminalKind.MANUAL_LABOUR
+                                && !source.automatable() && source.guaranteed() == null && validTerminal(source)));
     }
 
     private boolean hasEnvironment(Route route) {
@@ -1292,7 +1306,8 @@ public final class SustainabilityAudit {
 
     private int firstProductionTier(Resource resource) {
         return snapshot.routes().values().stream().filter(route -> outputAmount(route, resource) > 0)
-                .map(route -> annotations.routes().get(route.id())).filter(java.util.Objects::nonNull)
+                .map(route -> annotations.routes().get(route.id()))
+                .filter(policy -> policy != null && policy.unlockTier() != null)
                 .mapToInt(RoutePolicy::unlockTier).min().orElse(16);
     }
 

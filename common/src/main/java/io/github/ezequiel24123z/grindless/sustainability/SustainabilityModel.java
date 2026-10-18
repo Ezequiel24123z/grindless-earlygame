@@ -127,7 +127,7 @@ public final class SustainabilityModel {
     }
 
     /** Only these sites can justify renewable environmental terminals. */
-    public enum SourceSite { GEOLOGICAL_ROCK_BED, SUNLIT_CULTURE, WATER_BODY, ATMOSPHERE }
+    public enum SourceSite { GEOLOGICAL_ROCK_BED, SUNLIT_CULTURE, WATER_BODY, ATMOSPHERE, OPEN_SKY_DAYLIGHT }
 
     /** Finite/manual/vanilla sources can establish availability but never renewability. */
     public enum TerminalKind {
@@ -231,6 +231,20 @@ public final class SustainabilityModel {
         private final Map<String, Objective> objectives = new TreeMap<>();
         private final Map<String, String> hashes = new TreeMap<>();
         private final List<AuditFinding> findings = new ArrayList<>();
+
+        public Builder() {
+        }
+
+        /** Extends checked authorities without changing or omitting their existing evidence. */
+        public Builder(Snapshot snapshot) {
+            resources.addAll(snapshot.resources());
+            routes.putAll(snapshot.routes());
+            terminals.putAll(snapshot.terminals());
+            tags.putAll(snapshot.tags());
+            objectives.putAll(snapshot.objectives());
+            hashes.putAll(snapshot.inputHashes());
+            findings.addAll(snapshot.findings());
+        }
 
         /** Adds a resource even when no implemented producer exists. */
         public Builder resource(Resource resource) {
