@@ -352,8 +352,10 @@ runtime cache. `client/ResourceGuidanceClient` is the shared native formatter; F
 `ResourceGuidanceTooltips` includes annotated vanilla items and real fluid containers.
 Field Guide, Atlas, machine and quest displays reuse those adapters.
 `tools/generate-resource-guidance.ps1`/`.sh` use the shared canonical exporter/bootstrap;
-`VerifyResourceGuidance` checks projection/runtime/drift boundaries. Real resource generation
-and compilation remain pending. Its sidecar reuses complete implementation identities and
+`VerifyResourceGuidance` checks projection/runtime/drift boundaries. The real resource at
+`assets/grindless/guidance/resources.json` is generated from the6d canonical Result; its
+generation/parity and common/Forge compile pass, while rated/default Matrix lookup checks
+are being corrected without changing the authority. Its sidecar reuses complete implementation identities and
 projector-class hashes separately from the stable declaration fingerprint; do not omit
 executed helpers or copy acceptance flags into the runtime resource.
 Canonical Result metadata is the only declaration authority.
@@ -362,6 +364,10 @@ Installed-client hover must not call the source-root
 Actual recipe objects/amounts stay in the existing process/Atlas/JEI authorities. Guide
 prose must not make finite extraction or vanilla farms the permanent T0 source, or turn a
 declaration into world/Tier acceptance.
+Keep a physical Matrix's validated identity separate from its declaration lookup. Exact
+rated metadata wins; only the same item's native default spec may use ordinary metadata
+as context. Ordinary ITEM quests stay unrated and non-default/invalid ratings never inherit
+the T0 declaration merely to fill a missing tooltip.
 
 The functional-port follow-up starts after current integration with an audit of Firing/Trough/
 Ground Array and all authored structures. It does not authorize starting the old kernel slice

@@ -6628,6 +6628,19 @@ property registry neither supplies those declarations nor makes the source-root 
 available inside an installed client. The generated view preserves that one authority
 while applying the proven prepared-definition/presentation boundary.
 
+**Ordinary and rated Matrix identity.** An `Evidence.ITEM` quest keeps its ordinary,
+unrated resource identity; rating0 there means unspecified, not a physical F0 Matrix.
+`Evidence.MATRIX` keeps the explicitly required rating. Never change those authorities or
+invent rated declarations to satisfy a presentation test.
+For a validated physical Matrix, retain its actual identity and prefer an exact rated
+declaration. Only when it is the same item's real native default specification may its
+ordinary declaration be used as presentation context. Derive that default through the
+existing `ControlMatrixItem`/`ControlMatrixNbt` and architecture-first-frontier semantics;
+do not flatten ratings or mutate NBT. Relay's untagged/default and explicit valid F1 can
+share that default context; F2+ and malformed/incompatible ratings cannot inherit the T0
+declaration by fallback. A non-default rating without its own declaration remains unknown.
+This is a lookup distinction, not a new recipe, quest requirement or sustainability policy.
+
 **Validation.** Exhaustively compare generated fields with the actual Result, including
 null/unknown and handling cases; test fingerprint/drift/error behavior and shared
 presentation without duplicating recipe amounts. Keep the new helper/model loader-free

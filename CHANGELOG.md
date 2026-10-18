@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Real canonical guidance resource generated.** The6d source produces68 declarations;
+  generation and CheckOnly each pass4,880 comparisons, common/Forge compile and the
+  actual44-case Root regression pass. The remaining suite exposed an incorrect test
+  assumption: relay is an unrated ITEM objective, while a physical default Matrix is F1.
+  ADR-0143 now distinguishes identity from default-item presentation lookup without
+  changing the catalogue or extending its T0 declaration to later/invalid ratings.
+  That correction and the remaining suites are pending; the failed assertion is retained.
 - **T0 model references regenerated and checked.** Two complete staged JDK generations
   produce1,521 byte-identical files. Only22 block-model JSON files are installed, correcting
   696 doubled texture prefixes; geometry/UVs and all PNG/WAV bytes are unchanged. Other

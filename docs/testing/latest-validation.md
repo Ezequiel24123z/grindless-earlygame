@@ -34,6 +34,23 @@ retained-world, physical craft, night/restart or Tier acceptance.
 
 ## Current CI and projection increments
 
+**Real guidance generation on6d.** The canonical writer and CheckOnly each pass4,880
+comparisons on `6d6610b4e3834a5a7881a2fef68e456e87ac5580`; common/Forge compile and the
+real44-case Root selection check also pass. The new68-declaration resource is551,840 bytes:
+file SHA-256 `c219a3d1da83a62c51a904cfdac0ae44fd7ca2b088d18861ec2c97c3d13d3c54`,
+declaration digest `396313f65f3cd8ee15235285aa24f92696fd3877fe6d640264ad95ba96726c22`.
+The processed resource equals the generated source bytes. Sidecar write/check authority
+and implementation identities agree with zero unresolved implementation entries.
+
+Suite09 then fails: its test assumes the relay quest subject has rating1, but the real
+catalogue uses `Evidence.ITEM`/ordinary rating0, while validated physical default Matrix
+hover has F1. No expectation or authority was silently altered; suites10-14 are not run.
+ADR-0143 now preserves ordinary ITEM versus exact MATRIX contexts and permits default-item
+declaration context only for the same item's validated native default, not later or invalid
+ratings. That lookup/test correction is pending. Earlier offline dependency/mapping failures
+and the failed suite remain in `build/guidance-validation/6d6610b-20261018T171000Z`.
+This is not a complete suite, clean-Git artifact, native client or Tier pass.
+
 On published `c760c4d219a35148b1d1fc5e5f4b6cc21eefb615`,
 [PR run39134798621](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134798621)
 and [push run39134794760](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134794760)
@@ -88,8 +105,9 @@ stable when unrelated implementation changes; the execution provenance must stil
 The same reviewer subsequently closed the P2 in the two-file correction: guidance provenance
 now shares complete `implementation_*` and `projector_class_hashes` with the normal export.
 Prepared counterexamples hold payload/hash stable while changing execution identities and
-reject omissions. That is a static closure, not execution. Generation, compilation and
-drift/Java checks remain pending; no runtime verdict was added to the declaration resource.
+reject omissions. That was a static closure; the later6d generation/drift/compile evidence
+and its separate identity-suite failure are recorded above. No runtime acceptance verdict
+was added to the declaration resource.
 
 [PR run39125286533](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39125286533)
 checks out temporary merge `7b72424a7d9793d1b22c4774e0bc9ed27db6b004`, not the reported PR

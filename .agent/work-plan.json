@@ -249,7 +249,7 @@
     {
       "id": "canonical-resource-guidance",
       "task_id": "resource-communication",
-      "status": "source_review_closed_generation_and_execution_pending",
+      "status": "canonical_resource_generated_matrix_identity_correction_pending",
       "worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -259,7 +259,8 @@
       "invariants": "No runtime repository/JDK audit, second handwritten catalogue, copied recipe quantities, fake starter kit, inferred output role, invented consumer or acceptance verdict; preserve slots/payload/NBT and exact claim authority",
       "precedent": "GT Modern v1.4.6/MC1.20.1 aa41aba: registered definitions to presence-sensitive tooltips, actual recipe objects to guide views; pattern-only LGPL3 reference, no imports",
       "review": "Same reviewer closed P2 after the shared sidecar seam retained complete implementation_* and projector_class_hashes separately from declaration content. Counterexamples prepared; real generation/compile/Java checks remain pending.",
-      "evidence": "Static-only26-file implementation; compact shared reader context and natural T0 copy adjusted after Astra review. Real asset deliberately absent until canonical generation; Java/drift/surface checks pending.",
+      "evidence": "Exact6d generation and CheckOnly each4880 comparisons, common/Forge compile and real Root44 pass. Real68-entry resource generated; suite09 failed an incorrect relay ITEM rating1 expectation. Remaining suites stopped; no authority altered.",
+      "identity_decision": "ADR0143: ITEM relay remains ordinary rating0; physical identity remains validated/rated. Prefer exact metadata; only same-item native default spec may use ordinary context, never later/invalid ratings. Tests and lookup fix pending.",
       "stop_condition": "Coherent implementation for review with real generation pending if JVM-gated; no placeholder data, global docs edits, commits or publication"
     },
     {
