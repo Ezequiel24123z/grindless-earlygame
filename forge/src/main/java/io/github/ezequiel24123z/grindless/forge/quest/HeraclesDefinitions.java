@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.forge.quest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import earth.terrarium.heracles.api.quests.GroupDisplay;
@@ -21,11 +22,14 @@ import net.minecraft.world.item.Items;
 import org.joml.Vector2i;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
@@ -35,13 +39,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 /** Catalogue-generated native definitions; a hash manifest protects existing user configuration. */
 public final class HeraclesDefinitions {
 
     public static final String GROUP = "Grindless";
     private static final Gson JSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final String MANIFEST = "grindless-manifest";
+    private static final int MAX_MEMBER_BYTES = 1024 * 1024;
 
     private HeraclesDefinitions() {
     }
@@ -117,58 +125,115 @@ public final class HeraclesDefinitions {
                 && !actual.settings().autoClaimRewards() && !actual.settings().repeatable();
     }
 
+    static Path bundle(Path config) {
+        return config.resolve("heracles").resolve("quests").resolve("grindless.zip");
+    }
+
+    @FunctionalInterface
+    interface StagingOutput {
+        OutputStream open(Path path) throws IOException;
+    }
+
     public static void synchronize(Path config, Map<String, String> definitions) throws IOException {
+        synchronize(config, definitions, Files::newOutputStream);
+    }
+
+    static void synchronize(Path config, Map<String, String> definitions, StagingOutput output) throws IOException {
         checkDirectories(config);
-        Path quests = config.resolve("heracles").resolve("quests");
-        Path owned = quests.resolve("grindless");
-        Path manifest = config.resolve("grindless").resolve("heracles-manifest.json");
-        Map<String, String> previous = readManifest(manifest);
-        checkFiles(quests, owned, previous, definitions.keySet());
-        Files.createDirectories(owned);
-        for (var entry : definitions.entrySet()) {
-            write(owned.resolve(entry.getKey() + ".json"), entry.getValue());
+        Path destination = bundle(config);
+        Map<String, String> previous = readBundle(destination);
+        if (!definitions.keySet().containsAll(previous.keySet())) {
+            throw new IOException("Removed owned quests require an explicit migration; no files were deleted");
         }
-        JsonObject hashes = new JsonObject();
-        definitions.forEach((id, contents) -> hashes.addProperty(id, hash(contents)));
-        JsonObject document = new JsonObject();
-        document.addProperty("owner", "grindless");
-        document.addProperty("schema", 1);
-        document.add("files", hashes);
-        Files.createDirectories(manifest.getParent());
-        write(manifest, JSON.toJson(document) + "\n");
+        checkCollisions(destination.getParent(), destination, definitions.keySet());
+        if (hashes(definitions).equals(previous)) {
+            return;
+        }
+        Files.createDirectories(destination.getParent());
+        Path temporary = Files.createTempFile(destination.getParent(), ".grindless-", ".tmp");
+        try {
+            writeBundle(output.open(temporary), definitions);
+            try (FileChannel file = FileChannel.open(temporary, StandardOpenOption.WRITE)) {
+                file.force(true);
+            }
+            // The archive and its ownership proof become visible in the same atomic replacement.
+            Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+        } finally {
+            Files.deleteIfExists(temporary);
+        }
     }
 
     public static void verifyFiles(Path config, Map<String, String> definitions) throws IOException {
         checkDirectories(config);
-        Path quests = config.resolve("heracles").resolve("quests");
-        Path owned = quests.resolve("grindless");
-        Map<String, String> manifest = readManifest(config.resolve("grindless").resolve("heracles-manifest.json"));
-        if (!manifest.keySet().equals(definitions.keySet())) {
-            throw new IOException("Grindless quest manifest does not match the current catalogue");
+        Path archive = bundle(config);
+        if (!hashes(definitions).equals(readBundle(archive))) {
+            throw new IOException("Grindless quest bundle does not match the current catalogue");
         }
-        checkFiles(quests, owned, manifest, definitions.keySet());
-        for (var entry : definitions.entrySet()) {
-            if (!hash(entry.getValue()).equals(manifest.get(entry.getKey()))) {
-                throw new IOException("Grindless quest definition changed since generation: " + entry.getKey());
+        checkCollisions(archive.getParent(), archive, definitions.keySet());
+    }
+
+    private static Map<String, String> readBundle(Path archive) throws IOException {
+        if (!Files.exists(archive, LinkOption.NOFOLLOW_LINKS)) {
+            return Map.of();
+        }
+        if (!Files.isRegularFile(archive) || Files.isSymbolicLink(archive)) {
+            throw new IOException("Grindless quest bundle must be a regular owned file: " + archive);
+        }
+        try (ZipFile zip = new ZipFile(archive.toFile(), StandardCharsets.UTF_8)) {
+            ZipEntry manifest = zip.getEntry(MANIFEST);
+            if (manifest == null) {
+                throw new IOException("Unowned quest archive was preserved: " + archive);
             }
+            Map<String, String> hashes = readManifest(new String(read(zip, manifest), StandardCharsets.UTF_8));
+            Set<String> expected = new LinkedHashSet<>();
+            expected.add(MANIFEST);
+            hashes.keySet().forEach(id -> expected.add(id + ".json"));
+            Set<String> seen = new LinkedHashSet<>();
+            var entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                String name = entry.getName();
+                if (!expected.contains(name) || !seen.add(name) || entry.isDirectory()) {
+                    throw new IOException("Unexpected or duplicated owned archive member was preserved: " + name);
+                }
+                if (!name.equals(MANIFEST) && !hash(read(zip, entry)).equals(hashes.get(nativeId(name)))) {
+                    throw new IOException("User-modified owned quest was preserved: " + name);
+                }
+            }
+            if (!seen.equals(expected)) {
+                throw new IOException("Incomplete owned quest archive was preserved: " + archive);
+            }
+            return hashes;
         }
     }
 
-    private static Map<String, String> readManifest(Path manifest) throws IOException {
-        if (!Files.exists(manifest)) {
-            return Map.of();
+    private static byte[] read(ZipFile zip, ZipEntry entry) throws IOException {
+        try (var input = zip.getInputStream(entry)) {
+            byte[] bytes = input.readNBytes(MAX_MEMBER_BYTES + 1);
+            if (bytes.length > MAX_MEMBER_BYTES) {
+                throw new IOException("Owned quest archive member exceeds its bound: " + entry.getName());
+            }
+            return bytes;
         }
-        var parsed = JsonParser.parseString(Files.readString(manifest));
+    }
+
+    private static Map<String, String> readManifest(String contents) throws IOException {
+        com.google.gson.JsonElement parsed;
+        try {
+            parsed = JsonParser.parseString(contents);
+        } catch (JsonParseException exception) {
+            throw new IOException("Invalid Grindless quest bundle manifest", exception);
+        }
         if (!parsed.isJsonObject()) {
-            throw new IOException("Grindless quest manifest must be an object: " + manifest);
+            throw new IOException("Grindless quest manifest must be an object");
         }
         JsonObject document = parsed.getAsJsonObject();
-        if (!document.has("owner") || !document.get("owner").isJsonPrimitive()
+        if (!document.keySet().equals(Set.of("owner", "schema", "files"))
+                || !document.get("owner").isJsonPrimitive() || !document.get("owner").getAsJsonPrimitive().isString()
                 || !"grindless".equals(document.get("owner").getAsString())
-                || !document.has("schema") || !document.get("schema").isJsonPrimitive()
-                || !"1".equals(document.get("schema").getAsString())
-                || !document.has("files") || !document.get("files").isJsonObject()) {
-            throw new IOException("Unrecognized Grindless quest ownership manifest: " + manifest);
+                || !document.get("schema").isJsonPrimitive() || !document.get("schema").getAsJsonPrimitive().isNumber()
+                || !"2".equals(document.get("schema").getAsString()) || !document.get("files").isJsonObject()) {
+            throw new IOException("Unrecognized Grindless quest bundle ownership manifest");
         }
         Map<String, String> result = new LinkedHashMap<>();
         for (var entry : document.getAsJsonObject("files").entrySet()) {
@@ -181,51 +246,35 @@ public final class HeraclesDefinitions {
             }
             result.put(entry.getKey(), value);
         }
+        if (result.isEmpty()) {
+            throw new IOException("Owned Grindless quest archive cannot be empty");
+        }
         return result;
     }
 
     private static void checkDirectories(Path config) throws IOException {
-        for (Path path : List.of(config.resolve("heracles"), config.resolve("heracles").resolve("quests"),
-                config.resolve("heracles").resolve("quests").resolve("grindless"),
-                config.resolve("grindless"), config.resolve("grindless").resolve("heracles-manifest.json"))) {
+        for (Path path : List.of(config, config.resolve("heracles"),
+                config.resolve("heracles").resolve("quests"), bundle(config))) {
             if (Files.isSymbolicLink(path)) {
                 throw new IOException("Grindless quest output cannot use symbolic links: " + path);
             }
         }
     }
 
-    private static void checkFiles(Path quests, Path owned, Map<String, String> previous, Set<String> ids)
+    private static void checkCollisions(Path quests, Path owned, Set<String> ids)
             throws IOException {
-        if (!ids.containsAll(previous.keySet())) {
-            throw new IOException("Removed owned quests require an explicit migration; no files were deleted");
-        }
-        for (String id : ids) {
-            Path destination = owned.resolve(id + ".json");
-            if (Files.exists(destination, java.nio.file.LinkOption.NOFOLLOW_LINKS) && !previous.containsKey(id)) {
-                throw new IOException("Unowned quest output already exists; refusing to overwrite: " + destination);
-            }
-        }
-        for (var entry : previous.entrySet()) {
-            Path file = owned.resolve(entry.getKey() + ".json");
-            if (!Files.isRegularFile(file) || Files.isSymbolicLink(file)
-                    || !entry.getValue().equals(hash(Files.readString(file)))) {
-                throw new IOException("Owned quest is missing or user-modified; refusing to overwrite: " + file);
-            }
-        }
         if (!Files.exists(quests)) {
             return;
         }
-        if (Files.isSymbolicLink(quests) || Files.isSymbolicLink(owned)) {
-            throw new IOException("Grindless quest output cannot use a symbolic-link directory");
-        }
         try (var paths = Files.walk(quests)) {
             for (Path path : paths.filter(Files::isRegularFile).toList()) {
+                if (path.equals(owned)) {
+                    continue;
+                }
                 String name = path.getFileName().toString();
                 String id = nativeId(name);
                 if (name.endsWith(".json") && ids.contains(id)) {
-                    if (!path.equals(owned.resolve(id + ".json")) || !previous.containsKey(id)) {
-                        throw new IOException("Quest id collision; existing file was preserved: " + path);
-                    }
+                    throw new IOException("Quest id collision, including legacy loose definitions; existing file was preserved: " + path);
                 } else if (name.endsWith(".zip")) {
                     try (ZipFile zip = new ZipFile(path.toFile())) {
                         var entries = zip.entries();
@@ -247,28 +296,48 @@ public final class HeraclesDefinitions {
     }
 
     private static String hash(String contents) {
+        return hash(contents.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private static String hash(byte[] contents) {
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                    .digest(contents.getBytes(StandardCharsets.UTF_8)));
+                    .digest(contents));
         } catch (NoSuchAlgorithmException exception) {
             throw new IllegalStateException("SHA-256 is required by the Java runtime", exception);
         }
     }
 
-    private static void write(Path destination, String contents) throws IOException {
-        if (Files.exists(destination) && contents.equals(Files.readString(destination))) {
-            return;
-        }
-        Path temporary = Files.createTempFile(destination.getParent(), ".grindless-", ".tmp");
-        try {
-            Files.writeString(temporary, contents, StandardCharsets.UTF_8);
-            try {
-                Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
-            } catch (AtomicMoveNotSupportedException exception) {
-                Files.move(temporary, destination, StandardCopyOption.REPLACE_EXISTING);
+    private static Map<String, String> hashes(Map<String, String> definitions) {
+        Map<String, String> hashes = new LinkedHashMap<>();
+        definitions.forEach((id, contents) -> hashes.put(id, hash(contents)));
+        return hashes;
+    }
+
+    static void writeBundle(OutputStream destination, Map<String, String> definitions) throws IOException {
+        JsonObject files = new JsonObject();
+        hashes(definitions).forEach(files::addProperty);
+        JsonObject manifest = new JsonObject();
+        manifest.addProperty("owner", "grindless");
+        manifest.addProperty("schema", 2);
+        manifest.add("files", files);
+        try (ZipOutputStream zip = new ZipOutputStream(destination, StandardCharsets.UTF_8)) {
+            writeMember(zip, MANIFEST, JSON.toJson(manifest) + "\n");
+            for (var entry : definitions.entrySet()) {
+                writeMember(zip, entry.getKey() + ".json", entry.getValue());
             }
-        } finally {
-            Files.deleteIfExists(temporary);
         }
+    }
+
+    private static void writeMember(ZipOutputStream zip, String name, String contents) throws IOException {
+        byte[] bytes = contents.getBytes(StandardCharsets.UTF_8);
+        if (bytes.length > MAX_MEMBER_BYTES) {
+            throw new IOException("Generated quest archive member exceeds its bound: " + name);
+        }
+        ZipEntry member = new ZipEntry(name);
+        member.setTime(0);
+        zip.putNextEntry(member);
+        zip.write(bytes);
+        zip.closeEntry();
     }
 }
