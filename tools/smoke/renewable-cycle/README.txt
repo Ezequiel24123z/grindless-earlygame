@@ -1,14 +1,15 @@
 Bounded native renewable-cycle fixture (ADR-0131, ADR-0133, ADR-0137)
 
 Run through the existing official production-jar runner:
-  SMOKE_PORT=25627
-  SMOKE_EXPECT_TIMEOUT=900
-  GRINDLESS_ACCEPT_EULA=true
+  $env:SMOKE_PORT='25627'
+  $env:GRINDLESS_ACCEPT_EULA='true'
+  Remove-Item Env:SMOKE_EXPECT_TIMEOUT -ErrorAction SilentlyContinue
   powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only renewable-cycle
 
 The renewable-cycle.timeout sidecar declares a 900-second scenario expectation budget.
-The coordinator owns the paired runner support: explicit environment override, then this
-sidecar, then the unchanged 120-second fallback. No runner/CI edit belongs to this fixture.
+The integrated paired runners select an explicit environment override, then this sidecar,
+then the unchanged 120-second fallback. No override or CI change is needed for this scenario.
+The shared runner implementation is coordinator-owned, not authored by this fixture.
 
 Finite setup is command-built equipment, hoppers, stone, two placed water blocks,
 daylight/open sky, and one explicitly supplied coal in the Biomass Dynamo. Its
