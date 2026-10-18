@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Recover the interrupted polish work without inventing results.** Published9d2b5a1,
+  Git connectivity, the1389 ZIP and the original contact sheet remain intact after the
+  app crash. Temporary workers were lost. Preserve their four sound-design/contract
+  drafts explicitly as incomplete: no runnable pipeline, generated candidates, QC
+  or artistic approval. The new Gradle home exists but has no verified execution result;
+  no world, old cache or worktree is moved or deleted.
+- **Bounded sound calibration and physical-item art direction accepted
+  (ADR-0145/0146, PA-0008).** Keep a small reusable T0 physical sound palette, use
+  ElevenLabs only as a secret-safe development tool and limit initial Quern calibration
+  to three candidates before owner selection. Preserve the placed machine identity;
+  improve item volume/materiality and reuse native block-model hierarchy for machine
+  items where verified applicable. No paid output, release licence or visual pass is
+  implied by the policy or preserved draft.
 - **Playable modpack and longitudinal-release policy accepted (ADR-0144, PA-0007).**
   Grindless is Superflat-first and Overworld-compatible. Keep1389 as an engineering
   candidate; the first playable RC needs a curated locked/configured pack, deliberate

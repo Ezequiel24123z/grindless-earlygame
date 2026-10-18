@@ -409,6 +409,13 @@ version/API-verified, never a fictional or mandatory core integration.
 - `MachineEffects` is silent for ordinary STARVED and generic OUT_OF_BAND audio while
   retaining visual feedback, working/generating effects and the pylon's explicit warning.
   Do not mute unrelated alert systems or infer an asset licence from the code licence.
+- `docs/assets/t0-sound-design.json` and `tools/sound-design/` define the bounded
+  development-only calibration (ADR-0145). The manifest/contract are initially drafts,
+  not a working runner or runtime integration. No credentials, approved local grants
+  or discarded candidates enter Git; never auto-resend an ambiguous provider request.
+- ADR-0146 preserves the placed machine identity and targets item materiality. Inspect
+  real item-model parents/transforms and reuse block geometry before adding sprites or
+  a renderer; an intake sheet of front textures does not establish flat item rendering.
 - Client packs use root `build.gradle` tasks `buildModpack` and `verifyModpack`, with thin
   `tools/build-modpack.ps1`/`.sh` twins. `pack/curseforge/manifest.json` owns pins;
   `profiles.json` selects project IDs and `dependency-metadata.json` verifies them.

@@ -31,6 +31,40 @@ No data has moved. Keep app-managed worktrees, prior evidence/worlds and origina
 prefer verified existing environment/cache controls and a reversible plan. The paused
 QA/Dashboard/S2 CLIs need not be woken for status. No native retry is active.
 
+**Crash recovery and owner refinements.** Published9d2b5a1 survived in both remote refs;
+the1389 ZIP and contact-sheet hashes match and Git connectivity passes. No JVM remained
+at inspection. Temporary workers7e7041c2/9387cad0/023f7f7b are no longer addressable;
+do not wait for their old notifications or assume their assignments completed.
+The selected new Gradle-home directory exists, but the promised execution/ownership
+receipt did not survive and the directory was empty when inspected. No migration or
+build-on-new-storage pass is claimed. Preserve and continue from observed state.
+
+Four untracked sound drafts survived: `docs/assets/t0-sound-design.json`,
+`tools/sound-design/request-contract.json`, `grant.example.json` and `.gitignore`.
+They contain no credential and no approved grant. Preserve them as incomplete work;
+the runner, postprocessing, technical QC and initial candidates have not been delivered.
+The434-line sound directive is in Library, SHA-256
+`ef79a5ccbfdbfb7dfabd242019451352a50ba29f9b08efc29f7fed1de72250b2`.
+ADR-0145 requires at most three Quern calibration candidates, owner artistic selection
+before expansion and no API dependency in the normal build/runtime. Provider secrets
+remain outside the repository; generation-time entitlement/rights belong to the
+private invocation and applicable asset provenance, not an account record in Git.
+
+ADR-0146 records the owner's art correction: preserve placed blocks/machines, improve
+item volume/materiality and the Data Core/Calibrated Core/Relay family, and inspect
+native BlockItem parents/transforms before changing machine inventory visuals.
+The contact sheet at `build/product-review/asset-intake-33b4af2` showed front textures,
+not proof of a flat BlockItem render. Its SHA-256 remains
+`1987c12795f6355547ff89602e48b8c39629ee8b75b2030fc9a83b0fc86c62f1`.
+
+Completed discovery survives in reports: ordinary flat lacks the current assumed
+wood/stone/water entry, while existing Collector/Biocultivator and a vanilla furnace
+may supply first clay/biomass/bricks once access is deliberate. The preset/quantities
+are not selected yet. Pack research recommends retaining Heracles rather than forcing
+unverified BetterQB4, flags Jade's published licence mismatch and backpack/teleport/
+chunk-loader bypass risks; candidate pins/configs remain to be integrated and checked.
+Do not relabel recommendations as accepted composition or source changes.
+
 The restart pause was preserved in local33b4af2; its source delta from published1389 is
 documentation only. The PR54 event subscription is still paused at policy intake and
 Agent merge remains off. Before any later event-driven continuation, update its old
@@ -52,7 +86,7 @@ Start with `AGENTS.md`, [the work plan](work-plan.json), [pending checks](pendin
 [risk-based validation](../docs/testing/test-strategy.md) and
 [revision-bound evidence](../docs/testing/latest-validation.md). The plan still has the same
 original16 product task identities; revision8/PA-0007 adds11 explicit playable-release
-packages and supersedes the conflicting delivery/world ordering.
+packages, and revision9/PA-0008 refines sound/art without adding task dependencies.
 Read only relevant ADRs and task-map sections afterward.
 
 Receipt of `b012bc4` was verified and published as `33b077c`. All three original fingerprints

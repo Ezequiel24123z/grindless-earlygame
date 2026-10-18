@@ -1,0 +1,176 @@
+{
+  "schema": "grindless.t0-sound-design/v1",
+  "source_revision": "9d2b5a1c2876d84c133de7c68f8566368212eca8",
+  "runtime_baseline": "1389ebbffbadbed33848cbfe0e8ced9a36b68a11",
+  "policy": "ADR-0144",
+  "scope": "T0 development-only internal calibration; no runtime or build dependency",
+  "status": "planned_unapproved",
+  "publication_approved": false,
+  "licence": {
+    "internal_calibration_only": true,
+    "asset_incorporation_and_extractability": "pending_Astra_terms_review",
+    "standalone_audio_distribution": "not_permitted",
+    "entitlement": "must_be_recorded_at_generation; free output cannot be relabelled paid",
+    "asset_import_approved": false
+  },
+  "audit": {
+    "authorities": [
+      "MachineEffects.animate/sound", "ModSounds", "sounds.json",
+      "FluxConduitItem.useOn", "BlockCatalogue", "ProcessMachineKind", "GeneratorKind",
+      "BootstrapProcesses", "RenewableProcesses", "BootstrapRecipes",
+      "SoundSynth", "GenerateAssets", "convert-audio.sh", "generate-assets.ps1"
+    ],
+    "current_playback": {
+      "mechanism": "animateTick -> chance gate -> playLocalSound; positional randomized one-shots, NOT persistent loops",
+      "category": "BLOCKS; FluxConduitItem actions use server playSound in PLAYERS",
+      "pitch_jitter": "base pitch +/- 0.05",
+      "distance": "variable-range SoundEvent, mono Ogg and Minecraft positional attenuation; no custom distance manager",
+      "start_stop": "new shots only while RUNNING, except explicit pylon STARVED warning; in-flight shots are not stopped",
+      "concurrency": "no voice cap, per-machine cooldown, lifecycle loop handle or factory mix budget",
+      "frequency": "probability per nearby animateTick opportunity, not a known events-per-second timer",
+      "factory_review": "pending: one machine, repeated joins, eight nearby machines, distance and stop latency; do not fix stacking with more assets"
+    },
+    "silence_invariants": [
+      "Ordinary STARVED has no sound; show state/visual feedback instead.",
+      "Generic OUT_OF_BAND has particles only, not an alarm.",
+      "IDLE returns before effects; BLOCKED does not emit ordinary machine audio.",
+      "Only pylon-like explicit STARVED alert callers retain brownout_alarm.",
+      "No per-machine start/stop/input/output/invalid-recipe/error palette."
+    ],
+    "t0_physical_families": [
+      {"family": "stone_grinding", "machines": ["quern"], "current": "QUERN -> mill -> machine_hum_heavy", "proposal": "calibrate one reusable grinding source"},
+      {"family": "primitive_extraction", "machines": ["crude_extractor"], "current": "EXTRACTOR -> extractor -> machine_hum_heavy", "proposal": "reuse only if the approved grinding texture fits; otherwise escalate mechanism, not automatic generation"},
+      {"family": "crank_switching", "machines": ["hand_crank_dynamo"], "current": "DYNAMO -> dynamo -> relay_click", "proposal": "retain shared short physical click; review repetitive RUNNING cadence"},
+      {"family": "wet_work", "machines": ["clay_mixer", "settling_trough"], "current": "MIXER/SETTLER -> washer -> machine_hum", "proposal": "one restrained shared wet-material bed, not separate logical-state sounds"},
+      {"family": "water_transfer", "machines": ["hand_pump"], "current": "PUMP -> mill -> machine_hum_heavy", "proposal": "reuse wet-work bed if justified, never stone-grinding identity"},
+      {"family": "fire_and_draft", "machines": ["firing_chamber"], "current": "FIREBOX -> generator -> machine_hum", "proposal": "one quiet shared combustion/draft texture if audible value is confirmed"},
+      {"family": "storage", "machines": ["basic_tank"], "current": "TANK -> generator -> machine_hum if RUNNING", "proposal": "remove unjustified tank hum in a later approved runtime pass; no new tank asset"},
+      {"family": "calibration_terminal", "machines": ["research_terminal"], "current": "TERMINAL -> terminal -> machine_hum", "proposal": "no new electronic hum or completion beep; prefer silence unless a physical event is justified"},
+      {"family": "passive_transport", "machines": ["conveyor_belt", "crude_manipulator", "clay_conduit", "settling_channel", "settling_screen"], "current": "belt/manipulator have visual effects only; CHANNEL/SCREEN have no sound", "proposal": "preserve silence"},
+      {"family": "source_and_assembly", "machines": ["geological_collector", "biocultivator", "biomass_dynamo", "assembly_bench"], "current": "COLLECTOR/CULTURE/BIOGEN/BENCH have no MachineEffects sound branch", "proposal": "preserve silence for now; no automatic new family per block"}
+    ],
+    "deduplication": [
+      "Five event IDs currently map one-to-one to five different synth sources; no duplicate file deletion is justified now.",
+      "machine_hum and machine_hum_heavy are redundant generic role beds, not interchangeable physical mechanisms.",
+      "Replace only approved T0 routing later; globally replacing shared hum IDs would also change later machines.",
+      "Reuse relay_click for a justified switching interaction instead of new per-machine clicks.",
+      "Keep pylon_link and brownout_alarm bindings intact outside the T0 generation budget.",
+      "Do not generate asset variants for recipe inputs, logical errors, passive transport or currently silent new geometries."
+    ],
+    "source_pipeline": "SoundSynth writes 44.1 kHz/16-bit mono WAV; GenerateAssets writes five sources; convert-audio.sh uses FFmpeg mono 44.1 kHz Vorbis q4. generate-assets.ps1 runs the JDK generator, not conversion; convert-audio.ps1 is absent at this revision. None is invoked or edited here."
+  },
+  "sounds": [
+    {
+      "sound_id": "grindless:machine_hum",
+      "purpose": "Existing generic light working bed; proposed T0 physical-family replacement or silence, not global overwrite",
+      "family": "legacy_generic_light",
+      "machines": ["clay_mixer", "settling_trough", "firing_chamber", "research_terminal", "basic_tank"],
+      "playback": "one_shot", "reusable": true, "priority": "audit",
+      "asset": "existing_synth", "generation": "none_in_calibration", "approval": "unapproved",
+      "callers": "MachineEffects flotation/washer/cell/well/induction/caster/intake/terminal/generator RUNNING",
+      "parameters": "T0 washer chance .04 vol .15 pitch 1.2; terminal .05/.2/1.4; generator .08/.3/.7",
+      "source": "SoundSynth.hum(1.0,60,.4), no fade; periodic-source intention does not change one-shot playback"
+    },
+    {
+      "sound_id": "grindless:machine_hum_heavy",
+      "purpose": "Existing heavy working bed; Quern calibration target, also shared by physically different machines",
+      "family": "legacy_generic_heavy",
+      "machines": ["quern", "crude_extractor", "hand_pump"],
+      "playback": "one_shot", "reusable": true, "priority": "calibration",
+      "asset": "existing_synth", "generation": "none_in_calibration", "approval": "unapproved",
+      "callers": "MachineEffects extractor/mill/furnace RUNNING",
+      "parameters": "extractor chance .08 vol .35 pitch .8; mill .1/.35/1.1; furnace .1/.4/.55",
+      "source": "SoundSynth.hum(1.0,42,.6), no fade; not a managed running loop"
+    },
+    {
+      "sound_id": "grindless:pylon_link",
+      "purpose": "Existing explicit grid activity and successful link action; retain, no T0 generation",
+      "family": "shared_grid_interaction",
+      "machines": ["pylon_like_callers", "flux_conduit_action"],
+      "playback": "one_shot", "reusable": true, "priority": "retain",
+      "asset": "existing_synth", "generation": "none", "approval": "unapproved",
+      "callers": "MachineEffects pylon RUNNING (PYLON/BANK/ARRAY); FluxConduitItem successful addManualLink",
+      "parameters": "pylon chance .05 vol .3 pitch 1.3-.2*tier; action vol .8 pitch 1.1",
+      "source": "SoundSynth.chirp(.45,420,1320), faded"
+    },
+    {
+      "sound_id": "grindless:relay_click",
+      "purpose": "Reuse one physical switching transient; do not restore ordinary STARVED clicks",
+      "family": "shared_mechanical_interaction",
+      "machines": ["hand_crank_dynamo", "existing_dynamo_like_callers", "flux_conduit_action"],
+      "playback": "one_shot", "reusable": true, "priority": "retain_and_listen",
+      "asset": "existing_synth", "generation": "none", "approval": "unapproved",
+      "callers": "MachineEffects dynamo RUNNING (DYNAMO/SOLAR/INTERFACE/TRANSFORMER); FluxConduitItem successful removeManualLink",
+      "parameters": "dynamo chance .12 vol .25 pitch .9; action vol .6 pitch .8",
+      "source": "SoundSynth.click(.08,.5), faded"
+    },
+    {
+      "sound_id": "grindless:brownout_alarm",
+      "purpose": "Retain only the informative explicit grid shortage alert; no new shared error asset",
+      "family": "shared_critical_grid_warning",
+      "machines": ["pylon_like_callers"],
+      "playback": "one_shot", "reusable": true, "priority": "retain",
+      "asset": "existing_synth", "generation": "none", "approval": "unapproved",
+      "callers": "MachineEffects pylon STARVED (PYLON/BANK/ARRAY), never generic OUT_OF_BAND",
+      "parameters": "chance .03 vol .4 pitch 1.0",
+      "source": "SoundSynth.alarm(.6,330,247), faded"
+    },
+    {
+      "sound_id": "grindless:t0_grinding",
+      "purpose": "Compact stone-disc abrasion and granular material processing; first calibration only",
+      "family": "stone_grinding", "machines": ["quern"],
+      "playback": "loop_source_candidate", "runtime_playback": "not_integrated; existing caller is a randomized one-shot",
+      "reusable": true, "priority": "calibration",
+      "asset": "new_generation_proposed", "generation": "at_most_three_internal_candidates_after_grant", "approval": "unapproved"
+    },
+    {
+      "sound_id": "grindless:t0_wet_work",
+      "purpose": "Minimal shared water/wet-material texture only where the mechanism warrants sound",
+      "family": "wet_work", "machines": ["clay_mixer", "settling_trough", "hand_pump"],
+      "playback": "one_shot", "reusable": true, "priority": "after_artistic_selection",
+      "asset": "new_generation_proposed", "generation": "blocked_no_expansion_grant", "approval": "unapproved"
+    },
+    {
+      "sound_id": "grindless:t0_fire_draft",
+      "purpose": "Low-fatigue physical fire/draft texture, not a generic electric hum",
+      "family": "fire_and_draft", "machines": ["firing_chamber"],
+      "playback": "one_shot", "reusable": true, "priority": "after_artistic_selection",
+      "asset": "new_generation_proposed", "generation": "blocked_no_expansion_grant", "approval": "unapproved"
+    }
+  ],
+  "calibration": {
+    "machine": "quern",
+    "sound_id": "grindless:t0_grinding",
+    "status": "planned_unapproved",
+    "generation_approval": "unapproved",
+    "artistic_approval": "unapproved",
+    "max_calls": 3,
+    "automatic_rerolls": false,
+    "contract_id": "elevenlabs-sfx-v2-internal-3s-mp3",
+    "mechanism_evidence": "BootstrapProcesses: gravel -> sand 100 ticks, brick/insulator -> grog 60 ticks. RenewableProcesses: mineral aggregate milling. BlockCatalogue describes stone milling discs; BootstrapRecipes uses stone and a stick. F0 power is not evidence of a specific electric or hand drive.",
+    "listening_segment_seconds": 3.0,
+    "candidates": [
+      {
+        "id": "quern-a", "label": "Dry / close granular",
+        "difference": "Material foreground; dry grains and close stone abrasion, little frame resonance.",
+        "prompt": "A compact primitive quern steadily grinds gravel and brittle ceramic fragments between stone discs. Dry, close granular crunch and fine stone-on-stone abrasion; subtle support-frame resonance. Even working texture, low fatigue, seamless repeat, no start or stop. No assumed electric or hand drive; no music, voice, cinematic effects, beeps or alarms.",
+        "approval": "unapproved"
+      },
+      {
+        "id": "quern-b", "label": "Lower / woody frame",
+        "difference": "Same grinding role; lower timber-frame resonance beneath restrained granular contact.",
+        "prompt": "A compact primitive quern steadily grinds gravel and brittle ceramic fragments between stone discs. Restrained granular friction over a lower, warm woody support-frame resonance, with sparse soft mechanical creaks. Even working texture, low fatigue, seamless repeat, no start or stop. No assumed electric or hand drive; no music, voice, cinematic effects, beeps or alarms.",
+        "approval": "unapproved"
+      },
+      {
+        "id": "quern-c", "label": "Quiet / damped abrasion",
+        "difference": "Same grinding role; softer, damped stone friction with reduced bright crunch and frame vibration.",
+        "prompt": "A compact primitive quern steadily grinds gravel and brittle ceramic fragments between stone discs. Quiet damped stone abrasion and soft granular movement; reduced bright crunch and restrained frame vibration, still physically tangible. Even working texture, low fatigue, seamless repeat, no start or stop. No assumed electric or hand drive; no music, voice, cinematic effects, beeps or alarms.",
+        "approval": "unapproved"
+      }
+    ],
+    "next_gate": "Astra reviews and commits the manifest, then explicitly grants at most three calls with checked API/licence and active entitlement. User listens and selects a direction before a style guide or any expansion.",
+    "technical_qc_is_artistic_approval": false,
+    "runtime_import_approved": false
+  }
+}

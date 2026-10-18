@@ -16,7 +16,10 @@ tags: [product, release, superflat, compatibility, art, audio]
 accepts the owner's new product policy. `1389ebbffbadbed33848cbfe0e8ced9a36b68a11`
 is the engineering baseline, not the playable release or the longitudinal save baseline.
 The [JSON task graph](../.agent/work-plan.json), revision8/PA-0007, is the execution
-authority; this document explains its work packages and evidence. The source directive's
+authority; this document explains its work packages and evidence. Revision9/PA-0008
+adds the owner's [sound calibration](../docs/DECISIONS.md#adr-0145--calibrate-a-small-shared-sound-palette-with-development-only-generation)
+and [item materiality](../docs/DECISIONS.md#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items)
+constraints without changing the27-task graph. The source directive's
 SHA-256 is `7a5a04b1f2709536f1187ecc70958829fb7383bf95135820735f352b91a1e317`.
 
 ## 1. Requirements & Constraints
@@ -67,11 +70,11 @@ Counts above describe preserved proofs, not a quality target or passes for new i
 | Task | Description | Completed | Date |
 | --- | --- | --- | --- |
 | TASK-001 | Record ADR-0144, PA-0007 and the stage distinction in AGENTS.md, README.md, BUILD-OUT, go-gate, test strategy and active handoff | Yes;560 links,144 ADRs and27-task/47-edge graph validated | 2026-10-18 |
-| TASK-002 | Inspect owned storage sizes/path coupling and recommend a reversible layout; no movement during audit | No; storage worker dispatched | |
-| TASK-003 | Trace mandatory T0 entry/environment sources through T0Sustainability, AuthorityAdapters, recipes and SourceSite against Superflat and Overworld | No; source audit dispatched | |
-| TASK-004 | Review current pack profiles/manifest and exact compatible QoL/quest candidates, including BetterQB versus Heracles | No; research dispatched | |
-| TASK-005 | Prepare a contact sheet from current actual sprites/textures and identify generator-preserving art scope | No; visual intake dispatched | |
-| TASK-006 | Find a bounded industrial recording shortlist with authoritative redistribution/licence evidence and family/use mapping | No; audio research dispatched | |
+| TASK-002 | Inspect owned storage sizes/path coupling and recommend a reversible layout; no movement during audit | Yes; approximate sizes with enumeration limits; new-write redirection selected, not verified | 2026-10-18 |
+| TASK-003 | Trace mandatory T0 entry/environment sources through T0Sustainability, AuthorityAdapters, recipes and SourceSite against Superflat and Overworld | Yes; initial wood/stone/water and acquisition/smelting proof gaps identified; preset not selected | 2026-10-18 |
+| TASK-004 | Review current pack profiles/manifest and exact compatible QoL/quest candidates, including BetterQB versus Heracles | Yes; shortlist and backend recommendation returned with explicit unverified locks/licence risks | 2026-10-18 |
+| TASK-005 | Prepare a contact sheet from current actual sprites/textures and identify generator-preserving art scope | Yes;36 current textures shown, owner clarified item-first direction; native item-model audit pending | 2026-10-18 |
+| TASK-006 | Find a bounded industrial recording shortlist with authoritative redistribution/licence evidence and family/use mapping | Yes; alternatives remain unimported; ElevenLabs now selected for initial calibration under ADR-0145 | 2026-10-18 |
 
 TASK-002 through TASK-006 are independent discovery lanes on engineering1389 plus the
 docs-only33b4af2 baseline. They may read while TASK-001 edits global documentation.
@@ -87,14 +90,16 @@ They do not receive permission to move data, alter gameplay or import assets.
 | TASK-008 | Select the versioned flat preset/bootstrap contract from TASK-003; implement only missing accessibility/profile bindings and paired validation, preserving Overworld behavior | No | |
 | TASK-009 | Pin the curated pack and public configurations from TASK-004 in existing metadata/build surfaces; document exclusions and bypass controls | No | |
 | TASK-010 | Retain/polish or replace the quest interface only after the actual version/API/save comparison; preserve QuestClaimService and current-evidence/unique-reward semantics | No | |
-| TASK-011 | Apply sprite-first art improvements to reviewed generator/source assets; preserve IDs, good geometry and consistent family/material/state distinctions | No | |
-| TASK-012 | Record notices before importing selected redistributable recordings; integrate derived audio/mixing/dispatch with controlled factory repetition | No | |
+| TASK-011 | Give items readable physical volume/materiality, prioritize the Core/Relay family and preserve placed machines; reuse verified native block-model hierarchy for machine items (ADR-0146) | No | |
+| TASK-012 | Complete minimal sound manifest/pipeline, generate at most3 Quern calibration candidates and wait for owner selection; then record rights/provenance and integrate a small shared palette (ADR-0145) | No; four draft files survived the crash, runner/QC/candidates incomplete | |
 | TASK-013 | Define release/save identity and compatibility manifest/checks; no automatic adoption of a personal or preparation world | No | |
 
 TASK-007 depends on TASK-002. TASK-008 depends on TASK-003. TASK-009 and TASK-010 depend
 on TASK-004 and share a serialized version/build/manifest owner. TASK-011 depends on
 TASK-005; final asset coverage also consumes TASK-008's frozen content. TASK-012 depends
-on TASK-006 and licence verification. TASK-013 consumes the selected pack and persistence
+on TASK-006, reviewed manifest/rights, a bounded generation grant and the owner's initial
+artistic choice before expansion. This is not a new per-step approval waterfall.
+TASK-013 consumes the selected pack and persistence
 surface inventory. No broad rebuild is required merely to accept these decisions.
 
 ### Implementation Phase 3
@@ -142,7 +147,7 @@ both publication and an actual owner-start signal, not completion of the whole p
 - FILE-005: common source/recipe/world/sustainability authorities and the selected pack preset resources own world accessibility; exact new files require the source-audit decision.
 - FILE-006: QuestClaimService, the existing Forge quest adapter and native guide/client seams own quest experience without a new authority.
 - FILE-007: tools/assetgen, existing T0 texture/model resources and docs/assets/t0-asset-manifest.json own maintainable art.
-- FILE-008: tools/audio, sound resources/dispatch and THIRD_PARTY_NOTICES.md own licensed derived audio and its provenance.
+- FILE-008: docs/assets/t0-sound-design.json, tools/sound-design, tools/audio, sound resources/dispatch and THIRD_PARTY_NOTICES.md own bounded development calibration and eventual approved derived audio/provenance. Secrets and actual invocation grants stay outside Git.
 - FILE-009: Existing tool environment/cache settings own storage redirection where sufficient; app session metadata and unrelated worktrees are not worker-editable.
 
 ## 6. Testing

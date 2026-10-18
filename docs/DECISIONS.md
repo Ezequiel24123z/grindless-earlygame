@@ -156,6 +156,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0142](#adr-0142--t0-client-feedback-reuses-native-ui-and-existing-quest-infrastructure) | T0 client feedback reuses native UI and existing quest infrastructure | Accepted |
 | [0143](#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations) | Player resource guidance is a generated view of canonical declarations | Accepted |
 | [0144](#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity) | Ship Superflat-first playable tier releases with longitudinal save continuity | Accepted |
+| [0145](#adr-0145--calibrate-a-small-shared-sound-palette-with-development-only-generation) | Calibrate a small shared sound palette with development-only generation | Accepted |
+| [0146](#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items) | Give items material volume and reuse block models for machine items | Accepted |
 
 ---
 
@@ -6798,3 +6800,92 @@ sounds; and moving app-managed repositories by an unverified filesystem operatio
 **Implementation.** The [T0 playable-release plan](../plan/process-t0-playable-release-1.md)
 contains the concrete gaps, ownership, dependencies and verification boundaries.
 Accepting this ADR starts that work; it does not claim any of those gaps is closed.
+
+---
+
+## ADR-0145 — Calibrate a small shared sound palette with development-only generation
+
+**Status.** Accepted owner direction, 2026-10-18; initial generation and artistic
+selection remain pending. The 434-line sound directive is preserved in Library with
+SHA-256 `ef79a5ccbfdbfb7dfabd242019451352a50ba29f9b08efc29f7fed1de72250b2`.
+
+**Decision.** Audit actual T0 callers before generation and record the minimal
+[sound design manifest](assets/t0-sound-design.json). Prefer a few physical family
+sounds and reusable interactions to one sound per machine or logical state. Ordinary
+idle, missing-input, blocked and invalid-condition states remain silent; retain only
+alerts with specific informational value. Preserve good existing behavior and current
+registered identities until a concrete integration need justifies changing them.
+
+ElevenLabs is an optional development tool, never a runtime or normal-build dependency.
+The first calibration represents the Quern's stone/granular grinding mechanism using
+at most three candidates with explicit prompts/parameters and no automatic rerolls.
+Do not assume an electric or manual drive from an F0 energy rating. Perform technical
+QC and present the candidates for the owner's initial artistic choice. Only after that
+choice derive the sound style guide and expand the pass. API retries after interruption
+must not spend credits twice: preserve request/outcome state and stop on ambiguous
+delivery rather than resending automatically.
+
+Keep credentials process-local and outside source, logs, manifests, candidates, build
+outputs and release artifacts. Read the selected secret programmatically only when a
+specifically authorized provider request needs it; never display its contents or copy it
+into the project. Generation provenance records prompt, model, date, parameters, output
+hashes, transformations, final use and applicable rights, not the credential or account.
+
+The [official API](https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert)
+returns binary audio. Use the reviewed request contract, not an invented format/seed or
+web-playground batch. Verify generation-time entitlement and
+[service-specific terms](https://elevenlabs.io/creative-terms) before release use.
+Those terms distinguish incorporation into games from isolated audio/library
+distribution; do not label outputs CC0, publish a standalone sound library or infer
+rights from a generic paid-plan label. Internal audition is not release approval.
+
+Current machine effects use randomized positional one-shots, not managed continuous
+loops. A loopable source does not change that runtime behavior. Review duration,
+stop latency, gain, distance, pitch, repetition and multiple nearby machines before
+integration. Reuse existing APIs and conversion tools; add infrastructure only for an
+observed behavior gap. Approved local assets must survive generation and build offline.
+
+**Rejected alternatives.** Per-state/per-machine error files, endgame synth identity
+for T0, unbounded generation, generic ambient tracks per block, overwriting generated
+WAVs without a maintained source path, and a new general audio framework.
+
+**Evidence boundary.** The initial manifest/request/example-grant survived an app
+crash as drafts. A runnable pipeline, paid generation, codec/QC results and listening
+approval are not established by preserving those files.
+
+---
+
+## ADR-0146 — Give items material volume and reuse block models for machine items
+
+**Status.** Accepted owner clarification, 2026-10-18; implementation and visual
+acceptance remain pending.
+
+**Context.** The owner reviewed the source contact sheet and explicitly likes the
+current placed machine/block identity. The remaining principal art gap is flat-looking
+items, not a mandate to redesign all blocks.
+
+**Decision.** Preserve the good block geometry, machine textures and family identity.
+Refine items as Minecraft-compatible pixel art with implied physical volume and
+material: meaningful silhouette, surfaces, depth, coherent lighting/shadows/highlights,
+appropriate irregularity and readable internal detail. Default to consistent upper-left
+lighting where the shape permits it. Do not merely add outlines, a flat fill and one
+highlight, or increase detail until inventory-scale readability is lost.
+
+Stone, ceramic, biomass, metal, residue and technological components must differ in
+surface and shape as well as hue. Give Data Core, Calibrated Data Core and Relay Matrix
+particular attention: preserve recognizable family/color semantics while making them
+physical, interesting progression objects. A Relay Matrix should feel like the earned
+T0 technology milestone. Preserve registry IDs, ratings, recipe identities and NBT.
+
+For machine items, first inspect the actual Minecraft/Forge1.20.1 BlockItem model chain.
+Prefer the same block model hierarchy and native item display transforms in inventory,
+JEI and quests. A contact sheet of front textures is not evidence that the current
+BlockItem is rendered flat. Fix only demonstrated model/transform gaps; do not maintain
+fake isometric PNGs or a second independent visual authority when the real model can
+be reused. Mature technical-mod implementations are source references, not copied art.
+
+Maintain the generator/source-of-truth path so regeneration cannot erase approved
+sprites. Review native-size items, enlarged pixels and representative game contexts
+separately. Existing alias/determinism checks remain reusable structural evidence,
+not the art pass. No image generation, new block design or completed visual review
+is implied by accepting this direction.

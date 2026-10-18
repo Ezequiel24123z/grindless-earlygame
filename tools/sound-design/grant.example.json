@@ -1,0 +1,18 @@
+{
+  "schema": "grindless.sound-calibration-grant/v1",
+  "id": "unapproved-example",
+  "generation_approved": false,
+  "approved_by": null,
+  "authorization_reference": null,
+  "approved_utc": null,
+  "expires_utc": null,
+  "manifest_commit": null,
+  "manifest_sha256": null,
+  "contract_sha256": null,
+  "active_entitlement_confirmed": false,
+  "entitlement_at_generation": "unconfirmed",
+  "licence_scope": "internal_calibration_only",
+  "public_distribution_approved": false,
+  "max_calls": 3,
+  "candidate_ids": ["quern-a", "quern-b", "quern-c"]
+}

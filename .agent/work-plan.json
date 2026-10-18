@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 8,
+  "plan_revision": 9,
   "updated": "2026-10-18",
   "phase": "t0_playable_release_candidate_product_and_polish",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
@@ -138,7 +138,8 @@
     {"id": "original_t0_charter", "file": "pasted-text-7bc75a7f-2014-4a1f-860a-a955e07f1a81.txt", "sha256": "17E7F5E31AB378A28182AEC5D11A37E2D57C8252C84AB2C505DAACC19854F1CB", "received_via": "authorized_legacy_local_reference_not_staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed", "note": "Latest orchestration request supersedes its primary-coder role"},
     {"id": "sustainability_communication_dashboard", "file": "pasted-text-ce219e39-f8b4-47d7-98bd-93f99a28f718.txt", "sha256": "760629032A3BDE601F9A7398095C46763B6EA755E38EDFF7AB7262BF4D5457A6", "received_via": "staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed"},
     {"id": "later_functional_ports", "file": "pasted-text-50bf95a6-b365-450d-b4e6-db75a39da104.txt", "sha256": "2A125EE17ACDB55C743CD3B6652AE1DCE04F76F1C4B4F4C8A28279B5A600AACA", "received_via": "staged_attachment", "receipt": "hash_matched_and_native_Library_entry_confirmed", "note": "Starts only after current T0 source/sustainability/communication/dashboard integration"},
-    {"id": "playable_longitudinal_release_policy", "file": "pasted-text-c93c80c7-9498-41c5-84e1-c733e757b477.txt", "sha256": "7A5A04B1F2709536F1187ECC70958829FB7383BF95135820735F352B91A1E317", "received_via": "user_attached_local_file", "receipt": "all549_lines_read_hash_verified_native_Library_confirmed", "note": "Durable project policy; supersedes conflicting prior delivery/world/tier sequencing without relabeling evidence"}
+    {"id": "playable_longitudinal_release_policy", "file": "pasted-text-c93c80c7-9498-41c5-84e1-c733e757b477.txt", "sha256": "7A5A04B1F2709536F1187ECC70958829FB7383BF95135820735F352B91A1E317", "received_via": "user_attached_local_file", "receipt": "all549_lines_read_hash_verified_native_Library_confirmed", "note": "Durable project policy; supersedes conflicting prior delivery/world/tier sequencing without relabeling evidence"},
+    {"id": "elevenlabs_sound_calibration", "file": "pasted-text-1c204fff-a442-4677-be9a-3a4f90eda8bf.txt", "sha256": "EF79A5CCBFDBFB7DFABD242019451352A50BA29F9B08EFC29F7FED1DE72250B2", "received_via": "user_attached_local_file", "receipt": "all434_lines_read_hash_verified_native_Library_confirmed", "note": "Development-only secret-safe minimal sound calibration; owner selects initial artistic direction before expansion"}
   ],
       "amendments": [
         {
@@ -246,6 +247,20 @@
           "new_approval_waterfall": false,
           "t1_opened": false,
           "longitudinal_save_started": false
+        },
+        {
+          "id": "PA-0008",
+          "plan_revision": 9,
+          "date": "2026-10-18",
+          "title": "Calibrate reusable T0 sound and preserve physical item/block visual authority",
+          "sources": ["elevenlabs_sound_calibration", "Owner direct item-art and native BlockItem clarification"],
+          "decisions": ["ADR-0145", "ADR-0146"],
+          "affected_tasks": ["t0-art-pass", "t0-sound-pass"],
+          "new_product_tasks": 0,
+          "dependencies_changed": false,
+          "technical_tests_weakened": false,
+          "method": "Retain27-task graph; add a three-candidate internal Quern calibration followed by initial owner choice, secret-safe development provenance, item volume/materiality and shared native machine-item models; preserve current placed machine identity",
+          "recovery": "Temporary workers lost after app crash; four audio drafts and empty new Gradle home preserved without claiming pipeline/generation/storage verification"
         }
       ],
   "references": {
@@ -259,6 +274,7 @@
     "validation_strategy": "docs/testing/test-strategy.md",
     "manual_acceptance": "docs/testing/t0-survival-acceptance.md",
     "playable_release": "plan/process-t0-playable-release-1.md",
+    "sound_design": "docs/assets/t0-sound-design.json",
     "dashboard": "docs/dashboard/README.md"
   },
   "status_semantics": {
@@ -273,43 +289,58 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "playable-release-policy",
-  "parallel_opportunity": "Five bounded discovery lanes now run from engineering1389/docs33b4: storage safety, Superflat accessibility, curated pack/quest fit, visual asset intake and redistributable industrial audio. Astra records policy and decides actual implementation scope; no old native replay, source move or asset import is implied.",
+  "parallel_opportunity": "Discovery results survive the app crash; temporary worker IDs may no longer resolve. Continue only from observed source/artifacts: new-write storage verification, native machine-item model audit and small sound-calibration tooling are independent. No paid retry, massive generation, old native replay, source move or asset import is implied.",
   "prepared_assignments": [
     {
-      "id": "playable-storage-audit", "task_id": "work-storage", "status": "read_only_audit_dispatched",
+      "id": "playable-storage-audit", "task_id": "work-storage", "status": "audit_returned_setup_interrupted_no_verified_execution",
       "worker_agent_id": "7e7041c2-5165-458e-a254-20c7737ee751", "model": "gpt-6-luna",
       "input_revision": "33b4af21d661bd6306fde270f25670278adf72ae",
       "owned_files": [], "scope": "Named owned storage metadata, supported environment variables and reversible migration options; no move/copy/delete/OS/app-metadata change",
-      "stop_condition": "Return measured inventory, path/ownership risks and selected recommendation for Astra before any migration"
+      "result": "Approximate size audit with enumeration limitations; Astra chose only new Gradle writes via process-local home. Target exists empty after crash; no successful execution/ownership receipt and no original data moved",
+      "stop_condition": "Recover existing target state, verify a bounded real Gradle task and preserve old paths; do not assume prior grant produced a pass"
     },
     {
-      "id": "playable-superflat-audit", "task_id": "superflat-t0", "status": "source_and_preset_research_dispatched",
+      "id": "playable-superflat-audit", "task_id": "superflat-t0", "status": "source_gap_report_returned_preset_unselected",
       "worker_agent_id": "c4a57e64-2302-407a-9e7d-3c6bc1eca276", "model": "gpt-6.1-sol", "reasoning_effort": "max",
       "input_revision": "33b4af21d661bd6306fde270f25670278adf72ae",
       "owned_files": [], "scope": "Trace mandatory initial/recurring T0 resources and site assumptions; compare deliberate versioned flat options with normal Overworld compatibility",
-      "stop_condition": "Return concrete inaccessible roots, supported preset seams/options and invalidated proof assumptions; no gameplay/preset edits or JVM"
+      "result": "Initial wood/stone/water assumed rather than guaranteed; own Collector/Biocultivator and existing vanilla furnace can potentially establish clay/biomass/bricks. Official resource/preset and acquisition/smelting proof remain undecided; no gameplay edits",
+      "stop_condition": "Astra selects deliberate flat bootstrap/preset before implementation; do not reuse ordinary-world availability as flat proof"
     },
     {
-      "id": "playable-pack-quest-research", "task_id": "playable-pack", "status": "source_api_licence_research_dispatched",
+      "id": "playable-pack-quest-research", "task_id": "playable-pack", "status": "recommendations_returned_locks_and_selection_pending",
       "worker_agent_id": "d2012137-13b0-47a8-b8a2-2e7edb52c5f2", "model": "gpt-6.1-sol", "reasoning_effort": "max",
       "input_revision": "33b4af21d661bd6306fde270f25670278adf72ae",
       "owned_files": [], "scope": "Current profiles plus restrained compatible QoL shortlist; actual BetterQB identity/API/save fit versus existing Heracles; no mod import or final selection",
-      "stop_condition": "Return exact publisher/licence/config/bypass evidence and recommendations; no manifests/build/source edits"
+      "result": "Recommend retain Heracles; BetterQB4 source/API/licence insufficiently verified. Curated QoL shortlist returned with unverified publisher locks, Jade licence mismatch and backpack/teleport/chunk-loader bypass risks. No pack modified",
+      "stop_condition": "Astra selects verified composition and bounded configuration changes before implementation"
     },
     {
-      "id": "playable-art-intake", "task_id": "t0-art-pass", "status": "visual_evidence_intake_dispatched",
+      "id": "playable-art-intake", "task_id": "t0-art-pass", "status": "contact_sheet_returned_followup_interrupted",
       "worker_agent_id": "9387cad0-caf5-46dc-a750-ff78e91464e9", "model": "gpt-6-luna",
       "input_revision": "33b4af21d661bd6306fde270f25670278adf72ae",
-      "owned_files": ["ignored build/product-review/art-intake-33b4af2 contact sheet and input manifest"],
-      "scope": "Actual incumbent sprites/textures and generator seams, readable nearest-neighbor contact sheet; no replacement art, source changes or JVM",
-      "stop_condition": "Return observed gaps, good assets to preserve and maintainable sprite-first scope for Astra"
+      "owned_files": ["ignored build/product-review/asset-intake-33b4af2 contact sheet and input manifest"],
+      "scope": "Actual36-source contact sheet returned; owner preserves placed machines and requires physical item materiality plus native BlockItem3D model reuse",
+      "result": "Contact-sheet hash1987c12795f6355547ff89602e48b8c39629ee8b75b2030fc9a83b0fc86c62f1 preserved; no sprite/model edits or completed native item-model audit",
+      "stop_condition": "Recover actual model-parent audit, then implement only demonstrated gaps and generator-preserving item art"
     },
     {
-      "id": "playable-audio-research", "task_id": "t0-sound-pass", "status": "industrial_recording_licence_research_dispatched",
+      "id": "playable-audio-research", "task_id": "t0-sound-pass", "status": "source_and_elevenlabs_api_research_returned_no_import",
       "worker_agent_id": "1ca4d5bd-672c-4535-ac7e-b15e9e4424a9", "model": "gpt-6-luna",
       "input_revision": "33b4af21d661bd6306fde270f25670278adf72ae",
       "owned_files": [], "scope": "Bounded recorded industrial sources with explicit derivative/redistribution rights, credited origin and T0 family mapping; no downloads/imports",
       "stop_condition": "Return usable shortlist, preview/licence evidence and listening/loop risks; no audio or engine change"
+    },
+    {
+      "id": "sound-calibration-tooling", "task_id": "t0-sound-pass", "status": "partial_drafts_preserved_after_crash",
+      "worker_agent_id": "023f7f7b-f1c2-422f-91e1-a43f1fc8b544", "model": "gpt-6.1-sol", "reasoning_effort": "max",
+      "input_revision": "9d2b5a1c2876d84c133de7c68f8566368212eca8",
+      "owned_files": ["docs/assets/t0-sound-design.json", "tools/sound-design development-only twins, contract, template and focused tests"],
+      "result": "Only manifest, request-contract, unapproved grant example and local-ignore drafts survived; no runner, QC execution or delivered candidates",
+      "generation_limit": 3,
+      "generation_approved": false,
+      "scope": "Complete small secret-safe bounded calibration with real binary response/provenance and technical QC; Quern stone grinding, three artistic variants, no runtime/build API dependency",
+      "stop_condition": "Review and commit manifest/tooling before generation; do not auto-resend ambiguous requests, expand before owner selection or publish isolated audio as a library"
     },
     {
       "id": "t0-texture-aliases",
@@ -1020,14 +1051,14 @@
     {
       "id": "t0-art-pass", "title": "Polishing actual T0 sprites and visuals", "status": "in_progress", "depends_on": ["playable-release-policy"], "completion_requires": ["superflat-t0"],
       "owner": "Astra art direction; bounded asset worker",
-      "next_action": "Inspect actual contact sheet, preserve good assets and implement a generator/source-backed sprite-first industrial/futuristic pass",
-      "acceptance": "Real craft/readability improvements across required T0 items/materials/byproducts/Matrices/machines/states/interfaces, coherent identities, maintained source pipeline, actual visual review and exhaustive resource checks; no reference-only pass"
+      "next_action": "Apply ADR0146: preserve placed blocks, audit native item-model parents and improve physical item volume/materiality with special Core/Relay attention; keep generator/source authority",
+      "acceptance": "Readable Minecraft pixel-art objects with coherent light/depth/materials, rewarding Core/Relay family, preserved good placed machines and native3D machine-item hierarchy where applicable; maintained source pipeline, actual visual review and exhaustive resource checks"
     },
     {
       "id": "t0-sound-pass", "title": "Giving T0 a convincing industrial sound pass", "status": "in_progress", "depends_on": ["playable-release-policy"],
       "owner": "Bounded recording/licence research and audio worker; Astra direction",
-      "next_action": "Select evidenced redistributable recordings, record notices before import, preserve quiet fault policy and integrate restrained process/family sound design",
-      "acceptance": "Origin/author/licence/attribution/derivation trace complete, believable appropriate sounds, sane loops/gain/repetition/aggregate factory mix and actual listening; no generic synth relabel or unlicensed asset"
+      "next_action": "Complete the draft minimal sound manifest and development-only ElevenLabs tooling, then generate at most3 technically checked Quern candidates for initial owner choice; no expansion before selection",
+      "acceptance": "ADR0145 small shared physical palette, no per-state alarms, secret-free provider/date/prompt/model/parameter/hash/transform/use/rights trace, approved local assets build without API, sane loops/gain/attenuation/concurrency and actual listening; no mass generation or synth relabel"
     },
     {
       "id": "longitudinal-compatibility", "title": "Establishing the longitudinal release contract", "status": "pending", "depends_on": ["playable-release-policy"], "completion_requires": ["playable-pack"],
