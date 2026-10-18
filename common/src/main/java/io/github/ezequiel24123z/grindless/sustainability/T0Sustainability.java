@@ -56,7 +56,19 @@ public final class T0Sustainability {
                             + "is an explicit entry assumption, not a renewable route or a promised spawn inventory.",
                     "ADR-0141 conditional entry + BootstrapRecipes/WorkshopStructure actual establishment draw"));
         }
-        return builder.build();
+        Snapshot bound = builder.build();
+        boolean sourcesBound = bound.inputHashes().containsKey("mechanics_binding:CrankHandle_ProcessMachine_F0")
+                && bound.terminals().values().stream().anyMatch(terminal ->
+                terminal.kind() == TerminalKind.MANUAL_LABOUR && terminal.guaranteed() == null)
+                && Set.of(SourceSite.WATER_BODY, SourceSite.GEOLOGICAL_ROCK_BED, SourceSite.SUNLIT_CULTURE).stream()
+                .allMatch(site -> bound.terminals().values().stream().anyMatch(terminal ->
+                        terminal.site() == site && terminal.unlockTier() == 0 && terminal.renewable()));
+        if (!sourcesBound) {
+            return bound;
+        }
+        return new Snapshot(bound.resources(), bound.routes(), bound.terminals(), bound.tags(), bound.objectives(),
+                bound.inputHashes(), bound.findings().stream().filter(finding ->
+                !finding.fingerprint().equals("bootstrap_sources_unknown:manual_world_and_labour")).toList());
     }
 
     public static EntryProfile entryTemplate(ManualWork work) {
@@ -172,6 +184,12 @@ public final class T0Sustainability {
         }
         metadata.put(work.tool(), new ResourceMetadata(ResourceClass.RENEWABLE, null, 0, 0,
                 "bench/crank_handle", List.of(), null, null, null, null));
+        Terminal labour = snapshot.terminals().get(work.terminal());
+        if (labour != null && labour.kind() == TerminalKind.MANUAL_LABOUR) {
+            metadata.put(labour.resource(), new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
+                    null, List.of(), null, null, null,
+                    "Finite eligible batch-local startup actions, never portable ENERGY or renewable labour."));
+        }
         Map<String, ClosedLoop> loops = Map.of("t0_geology_bioculture_biomass_power",
                 new ClosedLoop("t0_geology_bioculture_biomass_power", item(SourceLogic.AGGREGATE),
                         Set.of("source/geological_aggregate", "source/biomass", "fuel/biomass_dynamo/biomass"), null));

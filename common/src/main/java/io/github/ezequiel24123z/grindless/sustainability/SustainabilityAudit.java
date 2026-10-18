@@ -94,7 +94,7 @@ public final class SustainabilityAudit {
     private int derivingTier = -1;
     private EntryProfile derivedEntry;
 
-    private SustainabilityAudit(Snapshot snapshot, SustainabilityAnnotations annotations) {
+    SustainabilityAudit(Snapshot snapshot, SustainabilityAnnotations annotations) {
         this.snapshot = snapshot;
         this.annotations = annotations;
         snapshot.findings().forEach(this::finding);
@@ -488,8 +488,27 @@ public final class SustainabilityAudit {
                         "The establishment closure cannot construct this producer from an available seed.");
             }
         }
+        Set<Resource> establishmentConstruction = new TreeSet<>(construction);
+        Set<String> establishmentRoutes = new TreeSet<>(closureRoutes);
+        Set<Resource> productionObligations = new TreeSet<>(roots);
+        if (plan.entryProfile() != null) {
+            Set<Resource> proofResources = new TreeSet<>(mandatory);
+            Set<Resource> proofRecurring = new TreeSet<>(recurring);
+            Set<Resource> proofVisited = new TreeSet<>(visitedRecurring);
+            for (var entry : annotations.resources().entrySet()) {
+                ResourceMetadata metadata = entry.getValue();
+                if (renewableClass(metadata.resourceClass()) && metadata.firstRenewableTier() != null
+                        && metadata.firstRenewableTier() <= tier) {
+                    productionObligations.add(entry.getKey());
+                    closure(entry.getKey(), true, tier, proofResources, proofRecurring, establishmentRoutes,
+                            establishmentConstruction, proofVisited);
+                }
+            }
+            handlingClosure(tier, proofResources, proofRecurring, establishmentRoutes,
+                    establishmentConstruction, proofVisited);
+        }
         ConstructionReserve reserve = new ConstructionReserve(snapshot, annotations, this, tier, available, renewable);
-        List<Reserve> reserves = reserve.analyse(construction, closureRoutes, roots);
+        List<Reserve> reserves = reserve.analyse(establishmentConstruction, establishmentRoutes, productionObligations);
         includeEntryWitness(reserve, tier);
         reserve.findings().forEach(this::finding);
         return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes,

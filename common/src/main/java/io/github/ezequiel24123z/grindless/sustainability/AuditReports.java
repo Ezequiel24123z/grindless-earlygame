@@ -81,6 +81,16 @@ public final class AuditReports {
                 "summary", summary(result),
                 "input_hashes", snapshot.inputHashes(),
                 "debt", debt(result.debt()));
+        document.put("active_t0_conditional_gate", conditionalGate(result));
+        document.put("cycle_balance_certificates", SustainabilityAudit.cycleComponents(snapshot).stream()
+                .filter(component -> SustainabilityAudit.unitPotentialConservative(component.routes()))
+                .map(component -> row("kind", "sufficient_strictly_positive_unit_potential",
+                        "component_resources", keys(component.resources()),
+                        "complete_member_routes", component.routes().stream().map(Route::id).toList(),
+                        "non_energy_weight", 1, "every_member_material_net_nonpositive", true,
+                        "every_member_energy_axis_nonpositive", true,
+                        "proves", "excludes_the_auditors_positive_gain_predicate_not_physical_mass_or_renewability"))
+                .toList());
         List<Object> resources = new ArrayList<>();
         for (Resource resource : snapshot.resources()) {
             List<Map<String, Object>> producerProvenance = relationships(snapshot, resource, true);
@@ -200,6 +210,20 @@ public final class AuditReports {
                         "source", work.source()));
     }
 
+    private static Map<String, Object> conditionalGate(SustainabilityAudit.Result result) {
+        T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
+        T0ConditionalGate.Scope scope = gate.scope();
+        return row("pass", gate.pass(), "status", gate.status(), "enforcement", "hard_in_VerifySustainabilityT0",
+                "scope", "conditional_source_bound_model_only",
+                "tier_acceptance", false, "physical_observation", false,
+                "unmet_obligations", gate.unmetObligations(),
+                "resources", keys(scope.resources()), "routes", scope.routes(), "families", scope.families(),
+                "terminals", scope.terminals(), "objectives", scope.objectives(),
+                "finding_decisions", gate.decisions().stream().map(decision ->
+                        row("fingerprint", decision.fingerprint(), "blocking", decision.blocking(),
+                                "basis", decision.basis())).toList());
+    }
+
     /** Returns a human report with explicit evidence boundaries and all failure-visible findings. */
     public static String markdown(SustainabilityAudit.Result result, String revision, boolean reportOnly) {
         StringBuilder text = new StringBuilder("# Sustainability audit\n\n");
@@ -214,6 +238,19 @@ public final class AuditReports {
             text.append("**Sustainability: ").append(result.sustainabilityPass() ? "PASS" : "NOT CERTIFIED")
                     .append("**\n\n");
         }
+        T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
+        text.append("**Active T0 conditional model gate: ").append(gate.pass() ? "PASS" : "BLOCKED")
+                .append("**. This hard gate covers the shared finite entry replay, all R0 obligations and relevant ")
+                .append("global/T0 findings, including unresolved positive-gain warnings. It is not the global ")
+                .append("sustainability result, Tier acceptance, a survival observation or a client craft.\n\n");
+        gate.unmetObligations().forEach((id, reason) -> text.append("- `").append(escape(id)).append("`: ")
+                .append(escape(reason)).append("\n"));
+        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking).forEach(decision ->
+                text.append("- `").append(escape(decision.fingerprint())).append("`: ")
+                        .append(escape(decision.basis())).append("\n"));
+        text.append("\nFindings outside the active proof remain visible with per-finding scope reasons in JSON. ")
+                .append("T1-T15 findings under missing ledgers or entry assumptions are not demonstrated failures ")
+                .append("of future gameplay, nor evidence that those tiers are accepted.\n\n");
         AuthorityAdapters.ImplementationIdentity implementation = AuthorityAdapters.implementationIdentity();
         text.append("Audit schema: 1. Source revision label: `").append(revision).append("`.\n")
                 .append("Authority content and source SHA-256: `").append(authorityHash(snapshot)).append("`.\n")

@@ -104,7 +104,9 @@ public final class VerifySustainability {
                 VerifySustainability::productiveZeroCarrier, VerifySustainability::environmentWithoutTier,
                 VerifySustainability::conditionalEntry, VerifySustainability::manualExitGoal,
                 VerifySustainability::localWorkNativeProduction, VerifySustainability::manualEstablishment,
-                VerifySustainability::unitPotentialCertificates)) {
+                VerifySustainability::unitPotentialCertificates, VerifySustainability::conditionalGateScope,
+                VerifySustainability::jointConditionalObligations, VerifySustainability::storedNativeFeed,
+                VerifySustainability::singletonOutputCustody)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -112,6 +114,297 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void storedNativeFeed() {
+        group("R21 exact stored native feed precedes unnecessary full circulation");
+        Snapshot live;
+        try {
+            live = AuthorityAdapters.live(Path.of(""));
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot inspect native fuel batches", failure);
+        }
+        Resource biomass = new Resource(Kind.ITEM, SourceLogic.BIOMASS);
+        Resource terminal = item("large_native_consumer");
+        Fixture fixture = productiveFixture(live, 0, true).seed(TOOL, 1).seed(biomass, 100).seed(terminal, 1);
+        fixture.workProfile(Map.of(), 9, Set.of("GEOLOGICAL_COLLECTOR", "BIOCULTIVATOR"));
+        fixture.add(route("large_native_draw", Map.of(SAFE, 1L, ENERGY, 16_000L), Map.of(),
+                Map.of(PRODUCT, 1L), "NATIVE_CONSUMER"));
+        fixture.machines.put("NATIVE_CONSUMER", new Machine("NATIVE_CONSUMER", terminal, 0));
+        fixture.meta(PRODUCT, renewable("large_native_draw")).root(PRODUCT);
+        var result = fixture.audit();
+        eq("the exact large batch is completed with real native fuel", 1L, result.tiers().get(0)
+                .establishmentBatches().getOrDefault("large_native_draw", 0L));
+        yes("ready canonical fuel does not unnecessarily reproduce a hundred full material cycles",
+                result.tiers().get(0).establishmentBatches().getOrDefault("source/geological_aggregate", 0L) < 10);
+        yes("the native fuel was really spent through completed authority batches",
+                result.tiers().get(0).establishmentBatches().getOrDefault("fuel/biomass_dynamo/biomass", 0L) >= 10);
+        no("stored native fuel does not become portable manual work", hasRule(result, "entry_work_insufficient"));
+        eq("choosing a ready batch does not hide an unresolved finite reserve", List.of(),
+                result.findings().findings().stream().filter(finding ->
+                        finding.rule().equals("construction_reserve_unknown") && finding.detail().equals("T0"))
+                        .map(finding -> finding.fingerprint() + ": " + finding.message()).toList());
+    }
+
+    private static void singletonOutputCustody() {
+        group("R22 exact singleton tag output is one physical stock, not an alias duplicate");
+        Resource tag = new Resource(Kind.TAG, "fixture:resolved_output");
+        Resource member = item("resolved_output_member");
+        for (long quantity : List.of(1L, 2L)) {
+            Fixture fixture = new Fixture().seed(RAW, quantity);
+            fixture.builder.tag(tag, new TagResolution(Set.of(member), true, Set.of(), List.of("fixture:singleton")));
+            fixture.add(route("tag_batch", Map.of(RAW, 1L), Map.of(), Map.of(tag, 1L), null));
+            fixture.add(route("construct_from_member", Map.of(member, 1L), Map.of(), Map.of(MACHINE, 1L), null));
+            fixture.add(route("finish_from_tag", Map.of(tag, 1L), Map.of(), Map.of(PRODUCT, 1L), "WORK"));
+            fixture.machines.put("WORK", new Machine("WORK", MACHINE, 0));
+            fixture.meta(member, metadata(ResourceClass.BOOTSTRAP, null, "tag_batch",
+                    List.of(), null, null, null, null));
+            fixture.entryProfile = new EntryProfile("fixture:tag_custody", Map.of(), 0, null,
+                    Set.of("Finite synthetic authority batches only"), "fixture:tag_custody");
+            fixture.root(PRODUCT);
+            var result = fixture.audit();
+            eq("each accepted tagged output is spent once for construction or the actual product", quantity,
+                    result.tiers().get(0).establishmentBatches().getOrDefault("tag_batch", 0L));
+            eq("a concrete member and its tag share custody rather than duplicating one output", quantity - 1,
+                    result.tiers().get(0).establishmentBatches().getOrDefault("finish_from_tag", 0L));
+            eq("only the sufficient finite batch bill establishes both obligations", quantity == 2,
+                    result.tiers().get(0).reserves().stream().allMatch(reserve ->
+                            reserve.margin() >= 0 && reserve.status().equals("conditional_established")));
+        }
+        Fixture ambiguous = new Fixture().seed(RAW, 1);
+        ambiguous.builder.tag(tag, new TagResolution(Set.of(member, item("alternative_member")), true,
+                Set.of(), List.of("fixture:multi_member")));
+        ambiguous.add(route("tag_batch", Map.of(RAW, 1L), Map.of(), Map.of(tag, 1L), null));
+        ambiguous.meta(member, metadata(ResourceClass.BOOTSTRAP, null, "tag_batch",
+                List.of(), null, null, null, null)).root(member);
+        no("a complete multi-member tag never chooses a fictional exact output member",
+                available(ambiguous.audit(), member));
+    }
+
+    private static void conditionalGateScope() {
+        group("R19 hard T0 gate follows global proof scope and unresolved gain warnings");
+        Fixture fixture = gateFixture();
+        var result = fixture.audit();
+        yes("a real finite manual goal with renewable supplies passes its conditional model gate",
+                T0ConditionalGate.evaluate(result).pass());
+        no("that scoped pass is not a global sustainability certificate", result.sustainabilityPass());
+        JsonObject report = JsonParser.parseString(AuditReports.json(result, "fixture:conditional-gate", true))
+                .getAsJsonObject();
+        yes("the additive hard-gate result is exported separately",
+                report.getAsJsonObject("active_t0_conditional_gate").get("pass").getAsBoolean());
+        no("the additive hard gate never exports Tier acceptance",
+                report.getAsJsonObject("active_t0_conditional_gate").get("tier_acceptance").getAsBoolean());
+        eq("gate exports are deterministic", AuditReports.json(result, "fixture:conditional-gate", true),
+                AuditReports.json(fixture.audit(), "fixture:conditional-gate", true));
+
+        fixture.resources.remove(SAFE);
+        result = fixture.audit();
+        yes("a global classification gap on a real dependency is blocking",
+                gateBlocks(result, "classification_unknown:" + SAFE.key()));
+        fixture = gateFixture();
+        fixture.builder.resource(SIDE);
+        result = fixture.audit();
+        yes("an unrelated unaccepted inventory resource stays visible without becoming a T0 root",
+                hasRule(result, "classification_unknown") && T0ConditionalGate.evaluate(result).pass());
+        fixture.builder.finding(new AuditFinding("unmapped_authority_unknown", "unbound_source", "",
+                AuditFinding.Severity.UNKNOWN, "Its scope has not been established.", List.of()));
+        no("a global unknown with no demonstrated scope fails closed", T0ConditionalGate.evaluate(fixture.audit()).pass());
+        fixture = gateFixture();
+        fixture.builder.finding(new AuditFinding("integrity_failure", "outside_inventory", "",
+                AuditFinding.Severity.ERROR, "A global authority integrity defect.", List.of()));
+        yes("global integrity errors cannot be filtered away by resource scope",
+                gateBlocks(fixture.audit(), "integrity_failure:outside_inventory"));
+        fixture = gateFixture();
+        fixture.builder.finding(new AuditFinding("local_unknown", "outside_inventory", "T0",
+                AuditFinding.Severity.UNKNOWN, "Explicit unresolved T0 evidence.", List.of()));
+        yes("an explicit T0 unknown blocks even without a recognized entity",
+                gateBlocks(fixture.audit(), "local_unknown:outside_inventory:T0"));
+
+        fixture = gateFixture();
+        fixture.environment("side_supply", Map.of(SIDE, 1L), null).meta(SIDE, renewable("side_supply"));
+        fixture.builder.finding(new AuditFinding("authority_unknown", "side_supply", "",
+                AuditFinding.Severity.UNKNOWN, "A required source binding is missing.", List.of()));
+        result = fixture.audit();
+        no("an R0 output is not automatically made a progression root", result.tiers().get(0).mandatory().contains(SIDE));
+        yes("its globally unresolved canonical source still blocks the R0 gate",
+                gateBlocks(result, "authority_unknown:side_supply"));
+        fixture = gateFixture();
+        fixture.environment("side_supply", Map.of(SIDE, 1L), "UNBOUND_FAMILY").meta(SIDE, renewable("side_supply"));
+        yes("a missing canonical family binding is relevant even before the route can unlock",
+                gateBlocks(fixture.audit(), "machine_binding_unknown:UNBOUND_FAMILY"));
+        fixture = gateFixture();
+        Resource choice = new Resource(Kind.TAG, "fixture:choice");
+        fixture.builder.tag(choice, new TagResolution(Set.of(SAFE), false, Set.of("unbound_member"), List.of()));
+        fixture.meta(choice, renewable("base"));
+        yes("an incomplete tag used by an R0 claim is not hidden by an available concrete member",
+                gateBlocks(fixture.audit(), "unresolved_tag:" + choice.key()));
+
+        fixture = gateFixture();
+        Resource exactOutput = item("active_tag_output");
+        Resource outputTag = new Resource(Kind.TAG, "fixture:active_singleton_output");
+        fixture.builder.tag(outputTag, new TagResolution(Set.of(exactOutput), true, Set.of(),
+                List.of("fixture:active_singleton")));
+        fixture.add(route("active_co_product", Map.of(SAFE, 1L), Map.of(),
+                Map.of(SIDE, 1L, outputTag, 1L), null)).meta(SIDE, renewable("active_co_product"));
+        result = fixture.audit();
+        yes("the concrete singleton output belongs to proof scope even without a consumer",
+                T0ConditionalGate.evaluate(result).scope().resources().contains(exactOutput));
+        yes("tag metadata cannot hide the unknown classification of its actual produced member",
+                gateBlocks(result, "classification_unknown:" + exactOutput.key()));
+
+        fixture = optionalSideGate();
+        result = fixture.audit();
+        yes("nonmandatory output first use may stay unknown without a T0 consumer",
+                hasRule(result, "first_use_unknown") && T0ConditionalGate.evaluate(result).pass());
+        ResourceMetadata original = fixture.resources.get(SIDE);
+        fixture.meta(SIDE, new ResourceMetadata(original.resourceClass(), original.sideStreamClass(),
+                original.firstUseTier(), original.firstRenewableTier(), original.canonicalRoute(),
+                original.futureConsumers(), null, null, null, null));
+        yes("the first-use exception never exempts optional side handling",
+                gateBlocks(fixture.audit(), "handling_unknown:" + SIDE.key()));
+        fixture = optionalSideGate();
+        fixture.add(route("accepted_consumer", Map.of(SIDE, 1L), Map.of(), Map.of(RAW, 1L), null));
+        yes("an accepted T0 consumer prevents the output-only first-use exception",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + SIDE.key()));
+
+        fixture = gateFixture();
+        fixture.add(route("gain_a", Map.of(RAW, 1L), Map.of(), Map.of(SIDE, 2L), null));
+        fixture.add(route("gain_b", Map.of(SIDE, 2L), Map.of(), Map.of(SAFE, 1L), null));
+        fixture.add(route("gain_c", Map.of(SAFE, 1L), Map.of(), Map.of(RAW, 2L), null));
+        result = fixture.audit();
+        eq("the relevant gain counterexample has warnings, not invented integrity errors", 0,
+                result.findings().activeErrors());
+        no("a relevant resource_positive_cycle warning blocks despite its warning severity",
+                T0ConditionalGate.evaluate(result).pass());
+        yes("the representative resource is outside the initial active proof",
+                !T0ConditionalGate.evaluate(result).scope().resources().contains(RAW));
+        T0ConditionalGate.Gate gainGate = T0ConditionalGate.evaluate(result);
+        yes("whole-component relevance includes a warning whose representative is not a T0 root",
+                result.findings().findings().stream().filter(finding ->
+                        finding.rule().equals("resource_positive_cycle") && finding.subject().equals(RAW.key()))
+                        .anyMatch(finding -> gainGate.decisions().stream().anyMatch(decision ->
+                                decision.fingerprint().equals(finding.fingerprint()) && decision.blocking())));
+        fixture = gateFixture();
+        fixture.add(route("prototype_forward", Map.of(RAW, 1L), Map.of(), Map.of(SIDE, 2L), null));
+        fixture.add(route("prototype_reverse", Map.of(SIDE, 1L), Map.of(), Map.of(RAW, 1L), null));
+        fixture.policies.put("prototype_forward", new RoutePolicy((Integer) null, false, Set.of()));
+        fixture.policies.put("prototype_reverse", new RoutePolicy((Integer) null, false, Set.of()));
+        result = fixture.audit();
+        yes("a proven disjoint prototype gain remains visible", hasRule(result, "resource_positive_cycle"));
+        yes("a demonstrably disjoint unaccepted component does not certify or block T0",
+                T0ConditionalGate.evaluate(result).pass());
+        fixture.builder.finding(new AuditFinding("informational_source_note", SAFE.key(), "",
+                AuditFinding.Severity.WARNING, "A non-gain informational note.", List.of()));
+        yes("informational warnings are not silently converted into errors",
+                T0ConditionalGate.evaluate(fixture.audit()).pass());
+        fixture = gateFixture();
+        fixture.builder.finding(new AuditFinding("cycle_balance_unproven", "unmapped_component", "",
+                AuditFinding.Severity.UNKNOWN, "No complete component identity.", List.of()));
+        yes("an unmapped cycle component fails closed", gateBlocks(fixture.audit(),
+                "cycle_balance_unproven:unmapped_component"));
+
+        fixture = gateFixture();
+        fixture.builder.finding(new AuditFinding("generator_fuel_unknown", "furnace_fuel_table", "",
+                AuditFinding.Severity.UNKNOWN, "The dynamic furnace-fuel table is not bound.", List.of()));
+        yes("explicit graph batches without a dynamic furnace dependency do not need that external table",
+                T0ConditionalGate.evaluate(fixture.audit()).pass());
+        fixture.add(new Route("vanilla/dynamic_smelting", Authority.VANILLA_TRANSFORMATION,
+                "fixture:runtime_furnace", null, Map.of(SAFE, 1L), Map.of(), Map.of(SIDE, 1L), Set.of(),
+                200, 0, Map.of("crafting_type", "minecraft:smelting"), Set.of(), false, false, false));
+        fixture.meta(SIDE, metadata(ResourceClass.BOOTSTRAP, null, "vanilla/dynamic_smelting",
+                List.of(), null, null, null, null)).root(SIDE);
+        yes("the same furnace-table unknown blocks when a selected route really depends on it",
+                gateBlocks(fixture.audit(), "generator_fuel_unknown:furnace_fuel_table"));
+        fixture = gateFixture();
+        fixture.entryProfile = null;
+        no("unprofiled availability cannot be promoted to a finite conditional certificate",
+                T0ConditionalGate.evaluate(fixture.audit()).pass());
+    }
+
+    private static Fixture gateFixture() {
+        Fixture fixture = new Fixture();
+        fixture.add(new Route("manual_exit", Authority.CRAFTING_JSON, "fixture:manual-exit", null,
+                Map.of(SAFE, 1L), Map.of(), Map.of(PRODUCT, 5L), Set.of(), 0, 0, Map.of(),
+                Set.of(), false, true, false));
+        fixture.meta(PRODUCT, metadata(ResourceClass.BOOTSTRAP, null, "manual_exit",
+                List.of(), null, null, null, null));
+        fixture.builder.objective(new Objective("exit", PRODUCT, 5, Set.of(), null, "fixture:exit"));
+        fixture.requiredQuests.add("exit");
+        fixture.exitObjective = PRODUCT;
+        fixture.entryProfile = new EntryProfile("fixture:gate", Map.of(), 0, null,
+                Set.of("Conditional fixture authority facts, not live gameplay."), "fixture:gate");
+        return fixture;
+    }
+
+    private static Fixture optionalSideGate() {
+        Fixture fixture = gateFixture().environment("side_supply", Map.of(SIDE, 1L), null);
+        return fixture.meta(SIDE, new ResourceMetadata(ResourceClass.RENEWABLE, SideStreamClass.BYPRODUCT_OPTIONAL,
+                null, 0, "side_supply", List.of(), new Handling(Action.STORE, true, false, null, null),
+                null, null, null));
+    }
+
+    private static boolean gateBlocks(SustainabilityAudit.Result result, String fingerprint) {
+        return T0ConditionalGate.evaluate(result).decisions().stream()
+                .anyMatch(decision -> decision.fingerprint().equals(fingerprint) && decision.blocking());
+    }
+
+    private static void jointConditionalObligations() {
+        group("R20 independent seed proofs never replace shared finite establishment custody");
+        Fixture fixture = jointLoopFixture(2);
+        var result = fixture.audit();
+        Resource second = item("second_supply");
+        yes("both independently renewable producers also establish jointly", T0ConditionalGate.evaluate(result).pass());
+        no("the second R0 production claim is not made a mandatory progression root",
+                result.tiers().get(0).mandatory().contains(second));
+        eq("both installations consume the same real finite entry custody", 2L,
+                result.tiers().get(0).reserves().stream().filter(reserve -> reserve.resource().equals(RAW))
+                        .findFirst().orElseThrow().required());
+        eq("the nonmandatory R0 producer is actually installed once in the joint replay", 1L,
+                result.tiers().get(0).establishmentBatches().get("second_controller"));
+        yes("the nonmandatory R0 loop also executes in that same finite replay",
+                result.tiers().get(0).establishmentBatches().getOrDefault("second_loop", 0L) > 0);
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, 1L), 0);
+        result = fixture.audit();
+        yes("the deliberately insufficient profile still satisfies the two independent qualitative loop proofs",
+                renewable(result, SIDE) && renewable(result, second));
+        yes("shared custody exposes their actual joint deficit", hasRule(result, "entry_profile_insufficient"));
+        no("two worlds cannot spend the same finite construction resource to pass the gate",
+                T0ConditionalGate.evaluate(result).pass());
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(), 0);
+        var derived = SustainabilityAudit.deriveEntryProfile(fixture.builder.build(), fixture.annotations(),
+                DebtManifest.empty(), 0);
+        eq("the derived bill includes the joint replay, not only the one-unit independent maximum",
+                Map.of(RAW, 2L), derived.profile().playerProvided());
+        yes("that sufficient joint bill is separately replayed with finite shared custody",
+                T0ConditionalGate.evaluate(derived.replay()).pass());
+    }
+
+    private static Fixture jointLoopFixture(long entry) {
+        Fixture fixture = gateFixture().terminal("manual_raw", RAW, TerminalKind.MANUAL_WORLD, false, true)
+                .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        Resource firstCarrier = item("first_carrier");
+        Resource secondCarrier = item("second_carrier");
+        Resource firstMachine = item("first_machine");
+        Resource secondMachine = item("second_machine");
+        Resource second = item("second_supply");
+        fixture.seed(firstCarrier, 1).seed(secondCarrier, 1);
+        fixture.add(route("first_controller", Map.of(RAW, 1L), Map.of(), Map.of(firstMachine, 1L), null));
+        fixture.add(route("second_controller", Map.of(RAW, 1L), Map.of(), Map.of(secondMachine, 1L), null));
+        fixture.machines.put("FIRST", new Machine("FIRST", firstMachine, 0));
+        fixture.machines.put("SECOND", new Machine("SECOND", secondMachine, 0));
+        fixture.environment("first_loop", Map.of(firstCarrier, 1L), Map.of(),
+                Map.of(firstCarrier, 1L, SIDE, 1L), "FIRST");
+        fixture.environment("second_loop", Map.of(secondCarrier, 1L), Map.of(),
+                Map.of(secondCarrier, 1L, second, 1L), "SECOND");
+        fixture.meta(firstCarrier, metadata(ResourceClass.CLOSED_LOOP, null, "first_loop",
+                List.of(), null, null, null, null));
+        fixture.meta(secondCarrier, metadata(ResourceClass.CLOSED_LOOP, null, "second_loop",
+                List.of(), null, null, null, null));
+        fixture.meta(SIDE, renewable("first_loop")).meta(second, renewable("second_loop")).root(SIDE);
+        fixture.loops.put("first", new ClosedLoop("first", firstCarrier, Set.of("first_loop"), null));
+        fixture.loops.put("second", new ClosedLoop("second", secondCarrier, Set.of("second_loop"), null));
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(RAW, entry), 0);
+        return fixture;
     }
 
     private static void unitPotentialCertificates() {

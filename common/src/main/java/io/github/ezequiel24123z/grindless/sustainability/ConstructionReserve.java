@@ -484,7 +484,7 @@ final class ConstructionReserve {
             if (!ready) {
                 continue;
             }
-            route.retainedOutputs().forEach((resource, amount) -> merge(next, resource, amount));
+            producedOutputs(route).forEach((resource, amount) -> merge(next, resource, amount));
             entry.setValue(entry.getValue() - 1);
             prefix.add(entry.getKey());
             List<String> result = startupOrder(remaining, next, internal, members, prefix, visited, states);
@@ -592,6 +592,24 @@ final class ConstructionReserve {
                     }
                 }
             }
+            Route route = replenishing(resource);
+            Machine readyMachine = route == null || route.family() == null
+                    ? null : annotations.machines().get(route.family());
+            if (profile != null && audit.has(renewable, resource) && route != null && route.automatable()
+                    && audit.unlocked(route, tier) && (route.family() == null
+                    || readyMachine != null && installed.contains(readyMachine.construction()))
+                    && audit.outputAmount(route, resource) > route.inputs().getOrDefault(resource, 0L)) {
+                // Spend existing native feed before rebuilding an entire productive circulation.
+                while (free(resource) < amount && route.inputs().entrySet().stream().allMatch(input ->
+                        free(input.getKey()) >= input.getValue()) && execute(route, 1)) {
+                    if (steps > 4096) {
+                        break;
+                    }
+                }
+                if (free(resource) >= amount) {
+                    return true;
+                }
+            }
             if (profile != null && audit.has(renewable, resource)) {
                 for (ClosedLoop loop : annotations.loops().values()) {
                     if (circulating.contains(loop.id())) {
@@ -620,7 +638,6 @@ final class ConstructionReserve {
                     }
                 }
             }
-            Route route = replenishing(resource);
             if (route != null && audit.unlocked(route, tier)) {
                 Machine machine = route.family() == null ? null : annotations.machines().get(route.family());
                 if (machine != null && pending.contains(machine.construction()) && provideManual(resource, amount)) {
@@ -762,7 +779,9 @@ final class ConstructionReserve {
                 }
             }
         }
-        for (Resource output : route.retainedOutputs().keySet()) {
+        Set<Resource> outputs = new TreeSet<>(route.retainedOutputs().keySet());
+        outputs.addAll(producedOutputs(route).keySet());
+        for (Resource output : outputs) {
             ResourceMetadata metadata = annotations.resources().get(output);
             Handling handling = metadata == null ? null : metadata.handling();
             if (handling == null || !handling.hazardous()
@@ -836,12 +855,13 @@ final class ConstructionReserve {
                 }
                 take(input.getKey(), need, allocated);
             }
-            for (var output : route.retainedOutputs().entrySet()) {
+            Map<Resource, Long> outputs = producedOutputs(route);
+            for (var output : outputs.entrySet()) {
                 merge(stock, output.getKey(), output.getValue());
             }
             if (route.oneShot()) {
                 claimed.add(route.id());
-                route.retainedOutputs().forEach((resource, amount) -> {
+                outputs.forEach((resource, amount) -> {
                     merge(delivered, resource, amount);
                     merge(claimedRewards, resource, amount);
                 });
@@ -860,6 +880,17 @@ final class ConstructionReserve {
             });
             pendingRoutes.remove(route.id());
         }
+    }
+
+    private Map<Resource, Long> producedOutputs(Route route) {
+        Map<Resource, Long> outputs = new TreeMap<>();
+        route.retainedOutputs().forEach((resource, amount) -> {
+            TagResolution tag = snapshot.tags().get(resource);
+            Resource exact = tag != null && tag.complete() && tag.members().size() == 1
+                    ? tag.members().iterator().next() : resource;
+            merge(outputs, exact, amount);
+        });
+        return outputs;
     }
 
     private long free(Resource resource) {

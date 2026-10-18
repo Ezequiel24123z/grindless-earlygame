@@ -31,6 +31,7 @@ public final class VerifySustainabilityT0 {
         var derivation = SustainabilityAudit.deriveEntryProfile(snapshot, annotations, debt, 0);
         var result = derivation.replay();
         var tier = result.tiers().get(0);
+        T0ConditionalGate.Gate gate = T0ConditionalGate.evaluate(result);
         Path report = root.resolve(Path.of("build", "sustainability", "t0-conditional"));
         String revision = revision(root);
         AuditReports.Hashes hashes = AuditReports.write(report, result, revision, true);
@@ -54,6 +55,10 @@ public final class VerifySustainabilityT0 {
                 System.out.println("T0 " + finding.severity() + " " + finding.fingerprint() + ": " + finding.message());
             }
         }
+        gate.unmetObligations().forEach((id, reason) -> System.out.println("GATE BLOCKED " + id + ": " + reason));
+        gate.decisions().stream().filter(T0ConditionalGate.Decision::blocking)
+                .forEach(decision -> System.out.println("GATE BLOCKED " + decision.fingerprint() + ": " + decision.basis()));
+        eq("the hard gate covers relevant global evidence, not only detail T0", true, gate.pass());
         eq("a finite conditional entry is explicitly identified", template.id(), derivation.profile().id());
         eq("the entire prototype route inventory remains present", true,
                 snapshot.routes().keySet().containsAll(sources.snapshot().routes().keySet()));
@@ -61,6 +66,15 @@ public final class VerifySustainabilityT0 {
         eq("future unaccepted tiers remain unknown", true, result.tiers().get(1).unknown() != null);
         eq("future unknowns are not a global sustainability certificate", false, result.sustainabilityPass());
         eq("the active declaration cannot waive debt", 0, debt.entries().size());
+        eq("actual source/entry authorities resolve the provisional raw-inventory absence finding", 0L,
+                result.findings().findings().stream().filter(finding ->
+                        finding.rule().equals("bootstrap_sources_unknown")).count());
+        Snapshot unbound = new Builder().finding(new AuditFinding("bootstrap_sources_unknown",
+                "manual_world_and_labour", "", AuditFinding.Severity.UNKNOWN,
+                "No source binding has been supplied.", java.util.List.of())).build();
+        eq("conditional provisions alone cannot erase an unbound source fact", 1L,
+                T0Sustainability.withEntrySources(unbound).findings().stream().filter(finding ->
+                        finding.rule().equals("bootstrap_sources_unknown")).count());
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.MANUAL_WORLD || terminal.kind() == TerminalKind.MANUAL_LABOUR) {
                 eq("manual acquisition/work is never a guaranteed gift: " + terminal.id(), null, terminal.guaranteed());
