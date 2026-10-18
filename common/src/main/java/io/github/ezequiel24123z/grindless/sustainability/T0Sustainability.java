@@ -150,6 +150,11 @@ public final class T0Sustainability {
                 null, null, "The implemented ceramic/refractory_brick ARC_FURNACE consumer is a prototype with "
                 + "no accepted future use tier. Ordinary Item discard is allowed; no automatic disposal, recycling "
                 + "or numbered future plan is claimed."));
+        Resource flint = item("minecraft:flint");
+        metadata.put(flint, new ResourceMetadata(ResourceClass.RENEWABLE, SideStreamClass.BYPRODUCT_OPTIONAL,
+                null, 0, renewable.get(flint), List.of(), new Handling(Action.STORE, true, false, null, null),
+                null, null, "Optional T0 side stock with no accepted T0 consumer. The implemented pulverizer "
+                + "craft and vanilla compatibility do not establish a first-use tier or a mandatory root."));
         for (Resource resource : List.of(item("minecraft:oak_planks"), tag("minecraft:planks"))) {
             metadata.put(resource, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
                     null, List.of(), null, null, null, null));

@@ -103,7 +103,8 @@ public final class VerifySustainability {
                 VerifySustainability::convergedMakeUp, VerifySustainability::formedConstruction,
                 VerifySustainability::productiveZeroCarrier, VerifySustainability::environmentWithoutTier,
                 VerifySustainability::conditionalEntry, VerifySustainability::manualExitGoal,
-                VerifySustainability::localWorkNativeProduction, VerifySustainability::manualEstablishment)) {
+                VerifySustainability::localWorkNativeProduction, VerifySustainability::manualEstablishment,
+                VerifySustainability::unitPotentialCertificates)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -111,6 +112,70 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void unitPotentialCertificates() {
+        group("R18 sufficient positive unit potential covers the entire real component");
+        Snapshot live;
+        try {
+            live = AuthorityAdapters.live(Path.of(""));
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot inspect actual ceramic recycling batches", failure);
+        }
+        Resource grog = new Resource(Kind.ITEM, BootstrapProcesses.GROG);
+        var component = SustainabilityAudit.cycleComponents(live).stream()
+                .filter(candidate -> candidate.resources().contains(grog)).findFirst().orElseThrow();
+        eq("the certificate covers all seven live ceramic component members",
+                Set.of("bootstrap/brick_grog", "bootstrap/bricks", "bootstrap/grog_body",
+                        "bootstrap/insulator_grog", "bootstrap/insulators", "bootstrap/sand_body",
+                        "bootstrap/unfired_recovery"),
+                new TreeSet<>(component.routes().stream().map(Route::id).toList()));
+        yes("actual ceramic batches admit the sufficient nonincreasing unit potential",
+                SustainabilityAudit.unitPotentialConservative(component.routes()));
+        Fixture ceramics = new Fixture();
+        component.routes().forEach(ceramics::add);
+        no("a complete real ceramic certificate removes only its bounded-balance unknown",
+                hasRule(ceramics.audit(), "cycle_balance_unproven"));
+        no("the certificate does not itself produce renewable ceramics", renewable(ceramics.audit(), grog));
+
+        Fixture gain = new Fixture();
+        gain.add(route("gain_a", Map.of(RAW, 1L), Map.of(), Map.of(SIDE, 2L), null));
+        gain.add(route("gain_b", Map.of(SIDE, 2L), Map.of(), Map.of(PRODUCT, 1L), null));
+        gain.add(route("gain_c", Map.of(PRODUCT, 1L), Map.of(), Map.of(RAW, 2L), null));
+        yes("the exact 1:2:1 positive cycle retains its warning", hasRule(gain.audit(), "resource_positive_cycle"));
+        gain.add(route("losing_alternative", Map.of(RAW, 100L), Map.of(), Map.of(SIDE, 1L), null));
+        no("a losing alternative cannot cancel another member's gain certificate failure",
+                SustainabilityAudit.unitPotentialConservative(new ArrayList<>(gain.builder.build().routes().values())));
+        yes("an uncertified nonunique component retains its bounded-search unknown",
+                hasRule(gain.audit(), "cycle_balance_unproven"));
+        Fixture subcycle = new Fixture();
+        subcycle.add(route("pair_forward", Map.of(RAW, 2L), Map.of(), Map.of(SIDE, 3L), null));
+        subcycle.add(route("pair_reverse", Map.of(SIDE, 2L), Map.of(), Map.of(RAW, 2L), null));
+        subcycle.add(route("losing_alternative", Map.of(RAW, 100L), Map.of(), Map.of(SIDE, 1L), null));
+        yes("the detected positive subcycle remains a warning despite its losing alternative",
+                hasRule(subcycle.audit(), "resource_positive_cycle"));
+
+        Fixture energy = new Fixture();
+        energy.add(route("energy_forward", Map.of(WATER, 1L), Map.of(), Map.of(STEAM, 1L, ENERGY, 2L), null));
+        energy.add(route("energy_reverse", Map.of(STEAM, 1L, ENERGY, 1L), Map.of(), Map.of(WATER, 1L), null));
+        no("material conservation alone cannot certify a pure energy gain",
+                SustainabilityAudit.unitPotentialConservative(new ArrayList<>(energy.builder.build().routes().values())));
+        yes("a pure energy gain remains review-visible", hasRule(energy.audit(), "resource_positive_cycle"));
+
+        Route retained = route("retained_catalyst", Map.of(RAW, 1L), Map.of(SIDE, Long.MAX_VALUE),
+                Map.of(RAW, 2L), null);
+        no("a retained catalyst is never counted as consumed potential",
+                SustainabilityAudit.unitPotentialConservative(List.of(retained)));
+        yes("a retained catalyst cannot hide a genuine material gain",
+                hasRule(new Fixture().add(retained).audit(), "resource_positive_cycle"));
+        Route largeLoss = route("large_loss", Map.of(RAW, Long.MAX_VALUE, SIDE, Long.MAX_VALUE),
+                Map.of(), Map.of(PRODUCT, Long.MAX_VALUE), null);
+        yes("full-batch unit sums use exact arithmetic beyond long capacity",
+                SustainabilityAudit.unitPotentialConservative(List.of(largeLoss)));
+        Route largeGain = route("large_gain", Map.of(RAW, Long.MAX_VALUE),
+                Map.of(), Map.of(SIDE, Long.MAX_VALUE, PRODUCT, 1L), null);
+        no("overflow cannot hide a one-unit positive material delta",
+                SustainabilityAudit.unitPotentialConservative(List.of(largeGain)));
     }
 
     private static void manualEstablishment() {

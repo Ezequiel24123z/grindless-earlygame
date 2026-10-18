@@ -925,31 +925,13 @@ public final class SustainabilityAudit {
                 }
             }
         }
-        Map<Resource, Set<Resource>> edges = new TreeMap<>();
-        for (Route route : routes) {
-            route.inputs().keySet().stream().filter(resource -> resource.kind() != Kind.ENERGY).forEach(input ->
-                    edges.computeIfAbsent(input, ignored -> new TreeSet<>()).addAll(route.retainedOutputs().keySet()));
-        }
-        Set<Resource> processed = new HashSet<>();
-        for (Resource start : edges.keySet()) {
-            if (processed.contains(start)) {
-                continue;
-            }
-            Set<Resource> reachable = reachable(start, edges);
-            Set<Resource> component = new TreeSet<>();
-            for (Resource other : reachable) {
-                if (reachable(other, edges).contains(start)) {
-                    component.add(other);
-                }
-            }
-            processed.addAll(component);
-            List<Route> members = routes.stream().filter(route -> route.inputs().keySet().stream().anyMatch(component::contains)
-                    && route.retainedOutputs().keySet().stream().anyMatch(component::contains)).toList();
+        for (CycleComponent component : cycleComponents(snapshot)) {
+            List<Route> members = component.routes();
             if (members.isEmpty() || members.stream().anyMatch(this::hasEnvironment)) {
                 continue;
             }
-            boolean unproven = members.size() > component.size();
-            for (Resource carrier : component) {
+            boolean unproven = members.size() > component.resources().size();
+            for (Resource carrier : component.resources()) {
                 Map<String, BigInteger> batches = normalizedBatches(members, carrier);
                 if (batches == null) {
                     unproven = true;
@@ -964,12 +946,58 @@ public final class SustainabilityAudit {
                             "Exact normalized positive-gain cycle needs review: " + batches);
                 }
             }
-            if (unproven) {
-                add("cycle_balance_unproven", start.key(), "", UNKNOWN,
+            if (unproven && !unitPotentialConservative(members)) {
+                add("cycle_balance_unproven", component.representative().key(), "", UNKNOWN,
                         "The bounded batch-vector review cannot exclude other cycles in this component: "
                                 + members.stream().map(Route::id).toList());
             }
         }
+    }
+
+    record CycleComponent(Resource representative, Set<Resource> resources, List<Route> routes) {
+        CycleComponent {
+            resources = sortedSet(resources);
+            routes = List.copyOf(routes);
+        }
+    }
+
+    static List<CycleComponent> cycleComponents(Snapshot snapshot) {
+        List<Route> routes = snapshot.routes().values().stream().filter(route -> !route.oneShot()).toList();
+        Map<Resource, Set<Resource>> edges = new TreeMap<>();
+        for (Route route : routes) {
+            route.inputs().keySet().stream().filter(resource -> resource.kind() != Kind.ENERGY).forEach(input ->
+                    edges.computeIfAbsent(input, ignored -> new TreeSet<>()).addAll(route.retainedOutputs().keySet()));
+        }
+        List<CycleComponent> components = new ArrayList<>();
+        Set<Resource> processed = new HashSet<>();
+        for (Resource start : edges.keySet()) {
+            if (processed.contains(start)) {
+                continue;
+            }
+            Set<Resource> component = new TreeSet<>();
+            for (Resource other : reachable(start, edges)) {
+                if (reachable(other, edges).contains(start)) {
+                    component.add(other);
+                }
+            }
+            processed.addAll(component);
+            List<Route> members = routes.stream().filter(route -> route.inputs().keySet().stream().anyMatch(component::contains)
+                    && route.retainedOutputs().keySet().stream().anyMatch(component::contains)).toList();
+            components.add(new CycleComponent(start, component, members));
+        }
+        return List.copyOf(components);
+    }
+
+    /** Sufficient for this audit's gain predicate, not a physical mass or renewability claim. */
+    static boolean unitPotentialConservative(List<Route> routes) {
+        return !routes.isEmpty() && routes.stream().allMatch(route -> {
+            Map<Resource, BigInteger> net = balance(List.of(route), Map.of(route.id(), BigInteger.ONE));
+            BigInteger material = net.entrySet().stream().filter(entry -> entry.getKey().kind() != Kind.ENERGY)
+                    .map(Map.Entry::getValue).reduce(BigInteger.ZERO, BigInteger::add);
+            return material.signum() <= 0 && net.entrySet().stream()
+                    .filter(entry -> entry.getKey().kind() == Kind.ENERGY)
+                    .allMatch(entry -> entry.getValue().signum() <= 0);
+        });
     }
 
     Map<String, BigInteger> loopBatches(ClosedLoop loop) {

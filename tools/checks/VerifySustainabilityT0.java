@@ -81,6 +81,18 @@ public final class VerifySustainabilityT0 {
         eq("the Bench never manufactures Matrix", false, snapshot.routes().containsKey("bench/relay_matrix"));
         eq("slag first use is not a made-up T0 or future tier", null,
                 annotations.resources().get(new Resource(Kind.ITEM, "grindless:slag")).firstUseTier());
+        Resource flint = new Resource(Kind.ITEM, "minecraft:flint");
+        ResourceMetadata flintMetadata = annotations.resources().get(flint);
+        eq("flint stays an optional by-product rather than a forced T0 consumer", SideStreamClass.BYPRODUCT_OPTIONAL,
+                flintMetadata.sideStreamClass());
+        eq("flint has no invented first-use tier", null, flintMetadata.firstUseTier());
+        eq("optional flint stock is ordinarily discardable, not hazardous",
+                new Handling(Action.STORE, true, false, null, null), flintMetadata.handling());
+        eq("an optional side stock is not silently promoted to mandatory progression", false,
+                tier.mandatory().contains(flint));
+        eq("the real ceramic component has a complete no-gain certificate", 0L,
+                result.findings().findings().stream().filter(finding ->
+                        finding.rule().equals("cycle_balance_unproven")).count());
         for (var entry : annotations.resources().entrySet()) {
             ResourceMetadata metadata = entry.getValue();
             if (metadata.resourceClass() == ResourceClass.RENEWABLE
