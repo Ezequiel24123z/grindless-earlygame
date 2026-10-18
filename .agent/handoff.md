@@ -1,9 +1,90 @@
 # Active orchestration handoff
 
 Updated: 2026-10-18. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
-Preservation checkpoint `b012bc467df469522d1624e630f306cfd8d79842` was received in a fresh,
-isolated worktree, following `d292dab005c8f8a321061d9885dd12b8351dd69c`.
-This receipt changes coordination documentation only; it does not finish or validate C3.
+
+## Current coordinator and entry
+
+Astra (`gpt-6-astra`) owns architecture, product/Tiers, integration and final review in
+session `471f2731-3479-49e1-9d10-08eee32bbcbd`, branch
+`ezequiel24123z-direccion-orquestada-t0`. Sol 6.1 Max implements; Luna handles appropriate
+mechanical work. Use bounded ownership and parallel independent work, not competing editors
+or publishers. The retired session is quiescent; no further report to it is required.
+
+Start with `AGENTS.md`, [the work plan](work-plan.json), [pending checks](pending-checks.json),
+[risk-based validation](../docs/testing/test-strategy.md) and
+[revision-bound evidence](../docs/testing/latest-validation.md). The plan still has the same
+16 product tasks and dependencies. Read only relevant ADRs and task-map sections afterward.
+
+Receipt of `b012bc4` was verified and published as `33b077c`. All three original fingerprints
+match the plan: two staged attachments and the authorized legacy T0 reference, all captured
+in the receiving Library. Original quantities/design are not replaced by fixtures or reports.
+Private paths and old worlds/build outputs are not repository dependencies or fresh evidence.
+
+## Accepted reusable evidence
+
+| Scope | Source-bound result | Limit |
+| --- | --- | --- |
+| S1 kernel | `639881f`; all twelve repaired contracts, deterministic reports and verified provenance; included in composed `dcb8010` | Live has no annotations, 2 errors and 1,247 unknowns; not S2/T0 closure |
+| Native C3 completion | `dcb8010`: 36 suites, including 285 fluid assertions, production states 945/945 and settling 19/19 | Native synchronous owners only, not foreign/crash guarantees or retained-world acceptance |
+| Renewable cycle | `39baaa0`: ordinary no-override run, 24/24 markers, 419 s; integrated by `fdce60b`, whose only post-run delta is README clarification | Closed FU accounting only in the 800-tick daylight source window; downstream uses Mk1/command staging, and physical Matrix craft remains manual |
+| Runner budgets | `ab1f7ac`: 27 native checks per PowerShell/GNU Bash twin; real sidecar900 use in the cycle | Canonical isolated runners, not the legacy shared-world batch utility |
+| CI | Run `39081561476` completed successfully on `ab1f7ac` | Its source/inventory only; the later cycle has its own evidence |
+
+The native cycle observes geo 7->11, bio 6->10 and biomass 23->36, with exact stock/FU
+equations and catalogue-valued potential gain 20,064 FU. Real downstream products and a
+hopper-recovered calibrated core are observed. It does not prove downstream energy/autonomy,
+equipment construction, nighttime restart or independent water flow. Settling separately
+proves water recovery. Keep the failed console decoder and the ordered native log from the
+same successful run; never reconstruct reordered capture digits.
+
+## Current validation policy and next work
+
+**ADR-0140 / PA-0004 is active.** Before an expensive run, name the unproved property and
+ask whether an existing proof plus static evidence suffices. Reuse only within the same
+mechanism/domain/ownership/threading/lifecycle/loader assumptions. Unknown metadata is not
+automatically a native/manual scenario, and ordinary recipes do not each need a native run.
+Independent QA/architecture review found no blocker to this map; review coverage classes
+and invalid assumptions, not equivalent successful cases. No accepted proof was discarded,
+replayed or weakened merely because the policy changed.
+
+- **S2/inventory:** data/model validation first: canonical pack/tag resolution, T0 roots,
+  classifications, handling and source provenance, exact reserves and live ratchet. Two iron
+  is optional manual bootstrap, not a guaranteed reward; initial boards/bricks and the
+  optional crank/extractor quest chain still need explicit reconciliation.
+- **C3/T0:** reuse the executor, transaction, reload and native-source proofs. Assess remaining
+  factory power/routing/restart assumptions with models/static composition first; add only a
+  targeted missing behavioral class when that evidence is insufficient.
+- **Communication/dashboard:** validate every projection/data row; retain the first real-data
+  browser/client binding review. Synthetic renderer checks are not that integration proof.
+- **Manual/unique gates:** actual GUI/JEI, no-command progression/physical five-Matrix craft and
+  retained-world compatibility remain open. They are not implied by backend or fresh-world tests.
+- **Ports:** PA-0001 covers the full preserved request, but all three port tasks remain held
+  behind current source/sustainability/communication/dashboard integration. ADR-0120's AE2
+  frontier and actual optional APIs are decisions for that later audit, not current work.
+
+The [strategy matrix](../docs/testing/test-strategy.md#outstanding-work-classification)
+classifies each remaining area and names change-triggered proof sets. Acceptance criteria
+and required CI/release checks remain intact; do not reopen successful cases without an
+invalidated assumption or a genuine new property.
+
+## Publication and preservation
+
+Keep draft [PR54](https://github.com/Ezequiel24123z/grindless-earlygame/pull/54), head
+`ezequiel24123z-tier-0-rework`, base `ezequiel24123z-agent-ready-t0-foundation` /
+draft [PR53](https://github.com/Ezequiel24123z/grindless-earlygame/pull/53).
+This app branch does not inherit PR identity: use explicit repo/number. Astra alone publishes
+reviewed checkpoints, verifies live PR/ref state and advances both branches by fast-forward.
+No replacement PR, force-push, retarget or old/main-checkout writes. Keep old Agent merge,
+automation and subscriptions disabled. Preserve child worktrees and their source-bound logs.
+
+The bounded coding and runtime workers finished and released their owned smoke ports.
+No further native replay is queued for policy adoption or README-only changes. Resolve the
+latest documentation checkpoint through Git rather than inventing a self-referential SHA.
+
+## Archived orchestration narrative
+
+Everything below is historical. Old dispatch states, next actions and acceptance statements
+are superseded by the active handoff above; failures remain evidence of their own revisions.
 
 ## Verified coordinator receipt
 

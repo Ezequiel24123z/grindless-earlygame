@@ -8,7 +8,7 @@ replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap; parallel implementation and source-bound validation.**
+**Active tier: T0 Bootstrap; risk-based validation and reusable source-bound proof (ADR-0140).**
 S1 core is verified on unchanged `639881f`: all 36 suites and twelve repaired requirements
 pass, with deterministic source-bound reports. The earlier failed launcher remains history.
 The live audit is still report-only and unannotated, so this is not T0 sustainability closure.
@@ -27,9 +27,16 @@ allocation, initial boards/bricks need explicit bootstrap, and Astra must reconc
 crank/extractor progression with quest prerequisites before S2. Static resource review found
 no proven C3 mapping defect; client/visual acceptance remains pending.
 
-Next: finish the independent renewable-cycle proof and its ordinary-runner budget, then
-integrate serially; prepare S2 from the verified core and source evidence. Product
-dependencies, held ports and manual gates are unchanged.
+The bounded renewable-cycle proof is integrated in `fdce60b`: tested `39baaa0` passed its
+ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its README-only
+clarification does not require another server run. Downstream/core material evidence is
+not complete downstream power/autonomy or physical Matrix crafting acceptance.
+
+Next: S2 canonical data/pack resolution, classifications, bootstrap/progression and live
+model validation. Reuse the existing shared contracts; select new native/manual evidence
+only for an uncovered property or changed assumption, using
+[the classification matrix](testing/test-strategy.md#outstanding-work-classification).
+Product dependencies, held ports, required CI and genuine manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
@@ -40,12 +47,12 @@ Astra owns architecture/product/Tiers, sustainability/graphs, multiblocks, migra
 integration and final review. Sol 6.1 Max workers implement normal code; Luna handles
 mechanical tasks. Checks are delegated, shared files serialized and publication single-owned.
 
-Remaining C3 review: client/JEI/menu interaction, the native renewable cycle with exit-root
-evidence (the exit stays a hand craft, ADR-0137), delivery and validation of the bounded
-ADR-0138 implementation, client/visual asset acceptance and the full smoke set. The delivered
-source/bootstrap evidence does not author classifications or certify
-renewable closure. The static asset/resource review found no proven ID/resource defect but is
-not visual or gameplay acceptance. Do not duplicate recipe quantities or impose a
+Remaining C3/T0 evidence concerns actual player/client surfaces, complete bootstrap,
+factory power/routing/restart assumptions and retained worlds, not a new smoke for every
+ordinary recipe. First establish what existing proofs plus static/model data cover; preserve
+required CI/release evidence and target only remaining behavioral gaps. Source evidence does
+not author classifications or certify universal renewable closure. Static resource review
+is not visual/gameplay acceptance. Do not duplicate recipe quantities or impose a
 documentation-first waterfall. Sustainability, handling, player guidance and real dashboard
 data are required implementation, not substitutes for renewable gameplay.
 
@@ -53,13 +60,13 @@ data are required implementation, not substitutes for renewable gameplay.
 | --- | --- | --- |
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
-| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | native correction verified on composed `dcb8010`; renewable-cycle fixture and runner budget active; client/JEI, visual acceptance and full integration pending |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | composed native contract and bounded renewable cycle verified; reuse their scopes, assess only remaining distinct factory/player/persistence properties |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
 | sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified: 36 suites and deterministic reports; S2 annotations, canonical pack resolution and live closure pending |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
 | dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | incomplete; follows renderer/model |
-| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | pending sources/model/communication/dashboard |
+| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | pending model/communication/dashboard and genuine gaps; aggregate valid proof rather than replay equivalent content |
 | multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
 | multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |
 

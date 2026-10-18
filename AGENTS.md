@@ -135,6 +135,15 @@ cleanly; the smokes are the only thing that catches a mod which builds and canno
 terminal is already broken, say so plainly and tell the user to run `SETUP.ps1 -Commit`, which
 commits and pushes without the app.
 
+**Risk-based proof reuse (ADR-0140).** Before an expensive validation, name the unproved
+property and check whether an existing source-bound proof plus static evidence already
+covers it under the same assumptions. Ordinary recipes/data do not each need a native run.
+Classify work and select the affected proof set using
+[the validation strategy](docs/testing/test-strategy.md); retain required CI/release checks,
+registration boots for changed bindings and genuine manual/persistence/external gates.
+Independent reviewers assess uncovered behavior and invalid reuse, not duplicate successful
+instances. A policy or documentation change alone does not invalidate an existing proof.
+
 ### Where the work happens
 
 Slices are written away from this machine, in Cursor, as stacked pull requests. This Windows

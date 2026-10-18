@@ -15,6 +15,22 @@ entries below reference those records by id.
 
 ### Added
 
+- **Risk-based validation and reusable proof adopted (ADR-0140, PA-0004).** Remaining
+  T0/S1/S2/C3, UI/data and held-port work is classified as shared-contract, static/data,
+  representative integration, regression or unique behavior. Reuse requires matching
+  relevant assumptions and static membership in the proven domain; changed mechanisms
+  rerun their affected proof set, not every ordinary recipe. Independent QA/architecture
+  review found no blocker and clarified selection/bounds/save meaning, native threading/
+  re-entrancy/callbacks and first real dashboard binding. No existing acceptance criterion,
+  test, CI requirement or manual gate was weakened, and no successful proof was repeated
+  merely to adopt the policy. The active handoff now separates current state from history.
+- **Bounded renewable-cycle proof integrated.** Tested `39baaa0` passes the ordinary
+  no-override production invocation with sidecar900, 24 markers and an 800-tick source
+  window: four added cycles per source, biomass23->36 and catalogue-valued potential
+  gain20,064FU with exact stock/FU accounting. Native materials and a hopper-recovered core
+  are observed; downstream Mk1/command staging, water diagnostics and manual Matrix limits
+  remain explicit. `fdce60b` adds only post-run README clarification. Failed setup/launcher/
+  capture-decoder attempts remain preserved; ordered metrics came from the same native run.
 - **Fixture-owned assertion budgets implemented (ADR-0139).** Both smoke runners validate
   selected `.timeout` metadata before any boot, honor explicit environment overrides,
   normalize decimal values and restore per-scenario environment state. Native fake-boot

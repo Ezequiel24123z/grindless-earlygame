@@ -151,6 +151,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0137](#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it) | The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it | Accepted |
 | [0138](#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly) | A batch completes only after its fluid inputs are re-verified and drawn exactly | Accepted |
 | [0139](#adr-0139--long-native-smokes-carry-their-own-assertion-budget) | Long native smokes carry their own assertion budget | Accepted |
+| [0140](#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions) | Validate behavioral classes and reuse proof under explicit assumptions | Accepted |
 
 ---
 
@@ -6292,3 +6293,44 @@ path, are covered by 27 native fake-boot checks each. The legacy
 `SMOKE_DATAPACK` and already cannot execute the normal per-scenario datapack isolation.
 It is not an acceptance path for this fixture or its deadline contract. Use the canonical
 twin runners; extending or retiring that pre-existing batch utility is separate work.
+
+---
+
+## ADR-0140 — Validate behavioral classes and reuse proof under explicit assumptions
+
+**Status.** Accepted, 2026-10-18; owner-directed validation policy for active Grindless work.
+
+**Context.** S1's audit contracts, C3 native completion and its exceptional-abort repair,
+representative production bindings and the bounded renewable cycle now have source-bound
+evidence. Repeating expensive native runs for each ordinary content instance would add
+latency without necessarily covering a new behavior. Conversely, an unchanged class name
+does not prove unchanged ownership, conditions, persistence or external assumptions.
+
+**Decision.** Classify remaining validation as shared-contract, static/data, representative
+integration, regression or genuinely unique behavior. Before an expensive run, identify
+the specific unproved property and ask whether an existing proof plus static evidence
+already establishes it. Reuse when the mechanism and relevant assumptions match; otherwise
+run the smallest targeted proof and the affected regression set.
+
+Keep evidence bound to its actual revision/artifacts and limits. Data authored in Java is
+classified by its effect, not its extension. New data requires renewed data/model validation,
+not an automatic replay of the unchanged kernel or one native scenario per recipe. Missing
+metadata, tag resolution or an unproved model bound is not automatically a native/manual
+behavior gap, and it is never silently promoted to a pass.
+
+Changes to shared mechanisms invalidate only proofs depending on the changed assumptions.
+Independent QA and architecture review focus on uncovered behavioral classes and invalid
+reuse claims. ADR-0137/0138 boundaries, transaction failures, bootstrap, persistence,
+external integrations and genuinely different execution paths retain the proof they need.
+Existing CI requirements, thresholds, tests and real manual acceptance gates are not removed.
+
+**Current effect.** The successful S1/C3 composed gate and renewable-cycle evidence remain
+valid within their stated scopes. No runtime rerun is required merely to adopt this policy
+or to clarify the fixture README. Product task order, dependencies and held ports do not change.
+The [validation strategy](testing/test-strategy.md) records reusable proofs, remaining work
+classes and impact triggers; the execution plan and check ledger reference it.
+
+**Alternatives rejected.** A native scenario for every unknown or every recipe; treating
+all instances as equivalent despite different assumptions; discarding source-bound passes
+when only unrelated content changes; and using proof reuse to hide missing evidence or
+weaken acceptance. Coverage of behavioral classes, not executed-check count, is the objective.

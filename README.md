@@ -2243,7 +2243,7 @@ to proceed together under Astra; integration and manual gates still control acce
 | 24 | Orbital layer: launch, satellites, station | prototypes exist; survival implementation is rescheduled to T10 (ADR-0107) |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | planned for T11 (ADR-0068, ADR-0107) |
 | 26 | CI workflow | ✅ done — unified fast [validation entry](docs/testing/test-strategy.md) plus isolated production smoke shards; ADR-0049, ADR-0126, ADR-0128 |
-| 27 | **Autonomous build-out** | active — S1/native completion verified together; renewable-cycle proof and runner budget active; S2 and manual gates pending; ports held; see [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) |
+| 27 | **Autonomous build-out** | active — S1/native completion and bounded renewable cycle verified; risk-based proof reuse (ADR-0140); S2/data and genuine manual gaps pending, ports held; see [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) |
 | 28 | **Prototype expansion** | ✅ technically complete — worlds, travel and quests are validated prototypes; ADR-0107 withdraws their premature survival route |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |

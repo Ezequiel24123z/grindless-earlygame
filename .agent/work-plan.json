@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 4,
+  "plan_revision": 5,
   "updated": "2026-10-18",
-  "phase": "s1_native_c3_verified_native_cycle_and_smoke_budget_in_progress",
+  "phase": "verified_shared_proofs_s2_data_acceptance_next",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -48,6 +48,26 @@
       "scope": "current ADR-0138 research and the remainder of this session",
       "policy": "Use solved-problem-first exact-source/version/license evidence before novel infrastructure; the owner has recorded a bounded native mechanism in ADR-0138",
       "limits": ["Do not broaden or reselect the owner-approved mechanism", "External patterns were reference-only; no code was imported"]
+    },
+    "validation_policy": {
+      "decision": "ADR-0140",
+      "strategy": "docs/testing/test-strategy.md",
+      "before_expensive_validation": "What specific property remains unproven, and can an existing proof plus static evidence already establish it?",
+      "classes": ["shared_contract", "static_data", "representative_runtime", "regression", "unique_behavior"],
+      "reuse_requires": ["Same mechanism or reviewed equivalence", "Same relevant ownership, threading, callback, bounds, topology, loader/API and persistence assumptions", "Static/model evidence that new content remains in the proved domain", "Original revision, artifacts and limitations retained"],
+      "review_focus": "Uncovered behavioral classes and invalid reuse assumptions, not equivalent successful instances",
+      "unknown_policy": "Distinguish missing data/model facts from an unproved behavior; unknown never automatically means a manual/native scenario or a pass",
+      "invalidation": "A changed mechanism reruns its affected proof dependencies and appropriate regressions; data-only changes refresh applicable data/model evidence",
+      "proofs_invalidated_by_policy": [],
+      "acceptance_weakened": false,
+      "required_ci_or_manual_gates_removed": false,
+      "adoption_validation": {
+        "unproved_property": "Documentation, proof-reference and plan integrity after the policy update",
+        "reused": ["S1 kernel", "S1/native C3 composition", "Native renewable cycle", "Twin-runner budget contracts"],
+        "new_checks": ["Document links/ADR index", "JSON and unchanged product-task invariants", "Runtime/fixture delta classification"],
+        "new_coordinator_native_or_full_suite_runs": 0,
+        "existing_required_ci": "Unchanged; this admission avoids additional policy-driven replays"
+      }
     },
     "coordination": "For this session, prioritize useful wall-clock throughput: run independent bounded implementation, review and read-only evidence concurrently when isolated or immutable; do not serialize safe work to conserve credits. Avoid redundant agents; serialize shared mutable files/input validation, Astra integration and the single publication."
   },
@@ -114,6 +134,22 @@
           "task_statuses_changed": false,
           "new_tasks": 0,
           "new_approval_gates": 0
+        },
+        {
+          "id": "PA-0004",
+          "plan_revision": 5,
+          "date": "2026-10-18",
+          "title": "Classify validation by risk and reuse relevant shared proof",
+          "source": "Owner-directed risk-based validation and proof-reuse policy; ADR-0140",
+          "method": "Classify outstanding T0/S1/S2/C3, communication, dashboard and held-port validation in the shared strategy; record assumptions and impact triggers without repeating accepted evidence",
+          "affected_tasks": ["renewable-t0", "production-inventory", "sustainability-model", "resource-communication", "dashboard-integration", "t0-integration", "multiblock-ports-audit", "multiblock-ports", "ports-integration"],
+          "order_changed": false,
+          "dependencies_changed": false,
+          "product_task_acceptance_changed": false,
+          "product_task_statuses_changed": false,
+          "new_tasks": 0,
+          "new_approval_gates": 0,
+          "accepted_proofs_discarded_or_repeated": false
         }
       ],
   "references": {
@@ -124,6 +160,7 @@
     "decisions": "docs/DECISIONS.md",
     "seams": "docs/AGENT-MAP.md",
     "validation": "docs/testing/latest-validation.md",
+    "validation_strategy": "docs/testing/test-strategy.md",
     "manual_acceptance": "docs/testing/t0-survival-acceptance.md",
     "dashboard": "docs/dashboard/README.md"
   },
@@ -139,35 +176,40 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "S1 and the reviewed native C3 correction pass the composed dcb8010 gate: 36 suites, production states and settling, source-bound reports. The native renewable-cycle fixture and its twin-runner assertion-budget support proceed independently. S2 and live closure remain pending.",
+  "parallel_opportunity": "Reuse the accepted S1 kernel, composed native completion and bounded renewable-cycle proofs. Next author and validate S2 data/pack bindings, while independent communication/dashboard preparation stays within dependencies. Dispatch runtime only for a specific uncovered property or invalidated assumption, not each ordinary recipe or unknown.",
   "prepared_assignments": [
     {
       "id": "smoke-assertion-budgets",
       "task_id": "renewable-t0",
-      "status": "implemented_reviewed_targeted_checks_passed",
+      "status": "integrated_verified_including_ordinary_native_invocation",
       "agent_id": "524e0826-f077-4760-b665-745d85b22dd8",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "03b8d94b38a7d3bd6e8ad4f73d957247592a4af4",
       "owned_files": ["tools/run-smokes.ps1", "tools/run-smokes.sh", "tools/checks/VerifySmokeHarness.java"],
-      "result": "27/27 native PowerShell and 27/27 native GNU Bash fake-boot checks; source hashes verified. No server run or global timeout change. Ordinary long-scenario execution remains part of the native-cycle assignment.",
+      "result": "27/27 native PowerShell and 27/27 native GNU Bash fake-boot checks, plus ordinary renewable-cycle execution on 39baaa0 with sidecar900 and no override; startup/global defaults unchanged",
       "evidence": "build/validation/smoke-timeout/",
       "scope_limit": "The unchanged legacy shared-world batch utility is not a datapack/isolation acceptance path",
-      "stop_condition": "Worker complete; integrate with the renewable-cycle sidecar and verify ordinary invocation without environment override"
+      "stop_condition": "Complete within the canonical twin-runner scope; reuse unless dispatch/parsing/environment assumptions change"
     },
     {
       "id": "t0-native-renewable-cycle",
       "task_id": "renewable-t0",
-      "status": "in_progress",
+      "status": "integrated_verified_limited_scope",
       "worker_session_id": "6b1c9b59-c772-4031-a234-c8b0eaa33042",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "3c42333ff2890e27b2075ce714b5b3ffc11be514",
+      "tested_revision": "39baaa0f05d6973117913406ed9b59675c3957bc",
+      "integrated_revision": "fdce60b260eb0fe7625816a1aa183496b958fb0a",
+      "post_test_delta": "Only nine README lines clarifying limits; no fixture/runtime logic change",
+      "result": "Ordinary no-override production run exits0, 24/24markers,419s;800-tick source window adds4 geo and4 bio cycles, biomass23->36, exact stock/FU equations, catalogue-valued potential gain20064FU; native downstream products and hopper-recovered calibrated core",
+      "limits": ["Finite equipment and one-coal startup; no full construction reserve or no-command proof", "No pylon only in the source window; downstream Mk1 and command staging do not prove its full energy/autonomy closure", "Water cost is derived and return marker optional; settling separately proves recovery", "Physical five-Matrix craft, night/restart and retained-world acceptance remain unproved"],
       "worktree_scope": "isolated_application_worktree",
       "owned_files": ["new tools/smoke renewable-cycle fixture and expectation", "tools/smoke/scenarios.txt", "exact scenario enumeration checks only if required"],
       "outcome": "Prove actual native source, biomass power, downstream inputs and Research Terminal core after explicit finite setup; no fixture-injected claimed outputs",
       "acceptance": ["Source-derived cycle and stock/energy assertions", "Production-remapped-jar smoke with source and artifact identity", "Separate native core/input evidence, existing recipe assertions and still-manual physical Matrix craft"],
-      "stop_condition": "Return local fixture checkpoint and honest evidence; no new craft hook, gameplay changes, S1 edits, publication or manual acceptance claim"
+      "stop_condition": "Bounded proof complete and reusable; do not repeat it for this policy or README changes and do not broaden its limits"
     },
     {
       "id": "s1-persistent-execution-gate",
@@ -540,38 +582,44 @@
     {
       "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "in_progress", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
-      "next_action": "Bounded native completion is verified on dcb8010. Finish the independent renewable-cycle fixture and ordinary-runner timeout integration, then continue the existing client/JEI, source/exit, visual and full-integration gates without claiming manual acceptance.",
+      "next_action": "Reuse verified native completion, runner and bounded renewable-cycle evidence. Classify remaining factory, bootstrap, client and persistence properties; establish them with models/static composition where possible, and target only a genuinely uncovered behavior. No per-recipe native expansion or manual acceptance claim.",
+      "validation_focus": ["shared_contract_reuse", "static_data_for_ordinary_content", "representative_runtime_if_assumptions_are_unproved", "existing_unique_player_and_save_gates"],
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {
       "id": "production-inventory", "title": "Exporting the complete live inventory", "status": "in_progress", "depends_on": ["coordinator-receipt"],
       "owner": "bounded extraction/export worker; Astra schema authority", "input_revision": "b012bc467df469522d1624e630f306cfd8d79842",
       "next_action": "Pin agreed inputs and export real graph, crafts, supplies, tags and objectives; do not edit runtime quantities",
+      "validation_focus": ["static_data_authority_coverage_and_provenance", "reuse_S1_adapter_and_report_contracts", "one_representative_binding_proof_if_a_new_pack_adapter_requires_it"],
       "acceptance": ["Machine-readable output, not a summary", "ProcessGraph/SupplyCatalogue/local tags/BootstrapRecipes/T1Recipes/other authored JSON/quests covered", "Explicit environmental sources", "Source-bound counts and deterministic refresh after runtime changes"]
     },
     {
       "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "in_progress", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "design": "ADR-0135 accepted: typed loader-free annotations over live authorities, least-fixed-point availability/renewability, construction reserve, recycling rule, fingerprinted debt ratchet, generated reports",
-      "next_action": "S1 core is verified on 639881f. For S2, author canonical T0 annotations and pack resolution from source evidence, reconcile optional crank/extractor quest coupling and declare actual manual bootstrap without inventing guaranteed iron, boards or bricks. Live closure remains uncertified.",
+      "next_action": "For S2, author canonical T0 annotations and pack resolution, reconcile optional crank/extractor quest coupling and exact manual bootstrap. Run the complete applicable data/model audit while reusing S1's verified kernel; extend contract/regression proof only for a new domain or changed mechanism. Live closure remains uncertified.",
+      "validation_focus": ["static_data_classification_sources_tags_roots_budgets_handling", "shared_S1_contract_reuse", "affected_regressions_for_new_or_changed_invariants"],
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
     },
     {
       "id": "resource-communication", "title": "Exposing canonical player guidance", "status": "pending", "depends_on": ["sustainability-model"],
       "owner": "bounded implementation/localization workers; Astra product review",
       "next_action": "Project classifications and handling into items, fluids/gases, JEI/Atlas, machines, quests and guide",
+      "validation_focus": ["static_projection_localization_and_all_rows", "shared_UI_contracts", "representative_client_binding_not_each_content_instance"],
       "acceptance": "Consistent names/routes/handling/uncertainty; no duplicate quantities, fictional consumers or mandatory hoarding"
     },
     {
       "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "pending", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
       "owner": "bounded integration workers; Astra schema and real-data review",
       "next_action": "Generate adjacent schema-1 data.json from canonical data/evidence; integrate local serving and PR CI artifact",
+      "validation_focus": ["static_schema_provenance_and_data", "existing_renderer_contracts", "required_first_real_data_browser_integration"],
       "acceptance": ["Real source-bound data without sensitive paths/logs", "No synthetic fallback", "Canonical labels and explicit discard/unknown states", "Exact source_commit/context.commit deliverable rule", "Real-data/browser review", "Stable publication only from validated milestones through an approved mechanism"]
     },
     {
       "id": "t0-integration", "title": "Integrating the current T0 milestone", "status": "pending", "depends_on": ["t0-processing", "t0-structures", "renewable-t0", "resource-communication", "dashboard-integration"],
       "owner": "Astra integration/final review; delegated validation",
-      "next_action": "Serialize integration, refresh projections, run automated milestone gates through workers and record manual gaps",
+      "next_action": "Aggregate coverage and proof assumptions, refresh changed data/projections, run affected regression and representative proof sets through workers, and retain required CI/release and genuine manual gates. Do not replay unchanged equivalent cases solely because the policy or commit changed.",
+      "validation_focus": ["proof_coverage_review", "change_triggered_regression_and_representative_runtime", "existing_unique_manual_persistence_and_progression_gates"],
       "acceptance": "Automated milestone criteria met on integrated source; PR54 preserved; manual gates reported honestly, never assumed"
     },
     {

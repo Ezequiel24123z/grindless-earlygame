@@ -295,6 +295,13 @@ version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
 
+- [Risk-based proof reuse](testing/test-strategy.md) (ADR-0140) classifies remaining work
+  and lists reusable proofs/assumptions. Validate ordinary content structurally through the
+  proven mechanism; select native/manual checks only for an uncovered or invalidated behavior.
+  New data may still alter selection, bounds or save meaning; review the effect, not the extension.
+- `tools/smoke/renewable-cycle/`, its `.expect`/`.timeout` and manifest entry — verified
+  ordinary native source-window/material/core proof. Downstream command staging/Mk1, derived
+  water costs and the manual Matrix craft are explicit limits, not full factory acceptance.
 - `tools/run-smokes.ps1` / `.sh` read optional per-scenario `.timeout` files; an explicit
   `SMOKE_EXPECT_TIMEOUT` wins over that assertion budget and the unchanged 120-second
   default. Validate selected metadata before boot, retain startup `SMOKE_TIMEOUT`, and do

@@ -1,5 +1,43 @@
 # Current T0 rework validation
 
+## Reusable acceptance snapshot, 2026-10-18
+
+[ADR-0140](../DECISIONS.md#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions)
+changes validation selection, not the following evidence. The
+[strategy](test-strategy.md#reusable-proof-ledger) records assumptions and invalidation
+triggers. Independent QA/architecture review found no blocker to reuse within those scopes.
+No additional coordinator-dispatched Minecraft or contract-suite replay was needed for
+policy adoption; existing configured CI requirements are unchanged.
+
+The bounded renewable cycle is integrated by fast-forward at
+`fdce60b260eb0fe7625816a1aa183496b958fb0a`. The native-tested revision is
+`39baaa0f05d6973117913406ed9b59675c3957bc`; the only subsequent change is nine README
+lines clarifying scope. Fixture logic is unchanged from the independently reviewed
+`34ff26d` plus already-reviewed upstream runtime/runner integration.
+
+| Property | Observed evidence | Reuse boundary |
+| --- | --- | --- |
+| Ordinary long-scenario invocation | `run-smokes.ps1 -Only renewable-cycle`, no `SMOKE_EXPECT_TIMEOUT` override, sidecar900; natural exit0, 24/24 markers, 419s | Same canonical runner/fixture semantics; not a hosted CI run of this new scenario |
+| Source window | 800 ticks; geo7->11, bio6->10, biomass23->36; exact stock/FU equations; potential fuel gain20,064FU | Daylight, rock bed, placed water and finite one-coal startup; no pylon only in this window |
+| Material/core production | Native dry/wet recovery, carbon, ceramic/brick/glass/copper production, Bench core and hopper-recovered calibrated core | Downstream Mk1 and command staging do not establish its complete energy/autonomy or equipment construction |
+| Production artifact | Built/deployed SHA-256 `565A81C5051F8AE09D345364C588003BA79BC5DBA10681E4B599224FA82B9614`; natural shutdown, port25627 released | Actual tested application/fixture, not a dev jar or prior world's output |
+| Focused regression | Recipes, Bootstrap, Workshop and SmokeHarness recompiled and passed; 27 native PowerShell harness checks | Prior GNU Bash 27/27 and composed36-suite proofs retained for unchanged mechanisms |
+| CI baseline | [CI run39081561476](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39081561476) completed successfully on `ab1f7ac` | That source and inventory; new cycle is established by its separate ordinary native run |
+
+Worker session `6b1c9b59-c772-4031-a234-c8b0eaa33042` retains
+`files/renewable-cycle-evidence.txt` and `build/validation/renewable-cycle/` attempts.
+Two offline dependency attempts, the ambiguous initial source fixture and auxiliary
+launcher failures remain recorded. A strict decoder rejected reordered digits in the
+runner capture (exit1); the original ordered Minecraft log **from that same run** passed
+strict decoding of23 metrics/equations (exit0). Neither capture was repaired or substituted
+with an earlier run. A nonfatal vanilla world-generation error outside the fixture is
+retained, not represented as an error-free server.
+
+Water use is derived from completed cycles, and this fixture's water-return marker is
+optional. Reuse the separate settling proof for recovery. Physical crafting and recovery of
+five Relay Matrices, no-command survival, nighttime/restart sufficiency and retained-world
+compatibility remain unobserved. These limits are not new gates and are not silently waived.
+
 ## Orchestrated continuation, 2026-10-18
 
 **Implementation in progress; no Tier or merge acceptance.** The reviewed Bench-only
