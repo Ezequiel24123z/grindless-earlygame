@@ -38,6 +38,9 @@ Require at least four additional complete cycles of each source over at least
 800 elapsed game ticks, at least one actually burned produced biomass, 32 retained
 biomass and 15,000 FU of additional stored/fuel potential. This cannot pass by
 displaying RUNNING, by spending only startup energy or by injecting final outputs.
+The gain is catalogue-valued fuel potential plus observed burn/buffer stock, not
+a second downstream energy measurement. Water consumption is calculated from
+completed source cycles and their live recipe costs, not measured by a flow meter.
 Clay/aggregate totals remain below a stack in this bounded run; a missing or
 ambiguous inventory selector cannot silently satisfy the exact balance.
 The report/number/digit functions emit named five-digit decimal metrics through
@@ -75,8 +78,14 @@ output export must make all products:
 The wet route must be observed with at least 1,000 mB gross water while its first
 batch still has both aggregate inputs. The return tank is measured separately;
 ongoing pumping/reuse means its amount is not assumed to be exactly 1,500 mB.
+Its export/recovery marker is optional and is not in .expect: it is diagnostic,
+not this scenario's acceptance proof of water recovery. The settling scenario
+covers that contract separately.
 All transitions poll actual inventories/work state, with bounded failure markers,
 rather than declaring a timed delay or a RUNNING visual to be a production pass.
+The no-pylon boundary applies only to the measured source window. Downstream uses
+the placed Mk1 and command-directed loads; it does not prove a closed downstream
+energy balance or construction of any of the fixture equipment.
 
 The final simultaneous stock gate requires glass x2, copper x2, redstone x3
 (one spare beyond the hand recipe), brick x4 and a hopper-recovered calibrated core.
