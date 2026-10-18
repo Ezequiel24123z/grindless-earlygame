@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Matrix guidance keeps physical identity separate from lookup.** Ordinary ITEM quest
+  context stays unrated; exact MATRIX context stays rated. A validated native default
+  Matrix may use the same item's ordinary declaration only when no exact rated entry
+  exists; later/invalid ratings do not inherit that T0 context. The shared hover/JEI/guide
+  lookup preserves NBT and descriptor data. Expanded identity/non-mutation and CRLF drift
+  cases are prepared; execution is pending. The current no-command/retained-world checklist
+  is clarified without converting earlier exploration into final acceptance.
 - **Real canonical guidance resource generated.** The6d source produces68 declarations;
   generation and CheckOnly each pass4,880 comparisons, common/Forge compile and the
   actual44-case Root regression pass. The remaining suite exposed an incorrect test

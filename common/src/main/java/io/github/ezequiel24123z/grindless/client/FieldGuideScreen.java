@@ -123,10 +123,10 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
                 if (operand.role() != ResourceGuidanceContext.Role.OUTPUT) {
                     continue;
                 }
-                var declaration = loaded.available() ? loaded.document().resources().get(operand.resource()) : null;
+                var declaration = ResourceGuidanceClient.declaration(loaded, operand.resource());
                 if (entry.family() == MachineFamily.GEOLOGICAL_COLLECTOR
                         || entry.family() == MachineFamily.BIOCULTIVATOR || id.equals("relay")
-                        || declaration != null && declaration.metadata().sideStreamClass() != null) {
+                        || declaration.map(match -> match.entry().metadata().sideStreamClass() != null).orElse(false)) {
                     context.add(operand.resource());
                 }
             }

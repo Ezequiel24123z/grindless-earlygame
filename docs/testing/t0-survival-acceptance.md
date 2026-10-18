@@ -1,13 +1,16 @@
 # T0 survival and client acceptance
 
-**Status: NOT EXECUTED.** Automation and headless evidence do not fill in these results.
+**Final-candidate status: NOT EXECUTED.** Earlier exploratory preparation is recorded
+separately; automation and headless evidence do not fill in these results.
 Record the exact mod jar hash, pack manifest revision, Java/Forge version, world seed,
-operator, dates and evidence paths when this checklist is actually performed.
+operator kind (human/agent), dates and evidence paths when this checklist is actually performed.
 
 ## Active closure preparation
 
-The canonical candidate and entry requirements must be frozen from S2 before this becomes
-an executable acceptance route. The two-iron Dynamo/Extractor branch is optional; `quern`
+S2 inventory/model engineering is verified on debd and the quest/dashboard composition on
+4061. Final guidance, generated assets and their changed surfaces still need a frozen,
+validated candidate before this becomes an executed acceptance route.
+The two-iron Dynamo/Extractor branch is optional; `quern`
 now follows `multitool`. Normally acquired entry materials are requirements, not a gifted kit.
 The current Core recipe, workshop/source routes and manual five-Matrix exit are defined in
 [the T0 contract](../tiers/t0.md) and their live catalogues.
@@ -22,15 +25,16 @@ publishing account or private machine identifiers.
 
 **Portable preparation, not acceptance.** The current VM reaches Java 17/Forge startup but
 cannot create its OpenGL window. The owner chose a Prism-importable ZIP on the real host
-instead of VM graphics changes. Reviewed runtime `b982b10` may be packaged for preparation
-with its actual remapped jar, required Architectury and JEI; this is not a post-S2 candidate.
-Preserve the expanded utility pack separately. Include only an actually generated clean
-world if available; otherwise create fresh Survival with cheats off after import. No
-gameplay proof follows from an archive, launcher profile or generated world.
+instead of VM graphics changes. The delivered26c8/740 archives remain their original
+preparation versions. New candidate profiles include the pinned Heracles/ResourcefulLib
+interface as well as Architectury and JEI; the actual generated ZIP and jar must be named,
+not inferred from a source commit. Preserve the expanded utility pack separately.
+No world or personal configuration is bundled; create fresh Survival with cheats off
+after importing a newly authorized isolated candidate. An archive is not gameplay proof.
 
 The former route below is preserved as a predecessor checklist, not authorization to require
-its old entry bill or to bypass the current native source chain. Once S2 requirements are
-established, replace the executable route with the single source-bound candidate itinerary.
+its old entry bill or to bypass the current native source chain. The current itinerary below
+uses the actual candidate's guide/viewer recipes instead of a duplicated quantity table.
 The earlier F2 diagnostic section is reference coverage, not an instruction to advance T1/T2
 while T0 is being closed.
 
@@ -45,6 +49,39 @@ material entry, not a bare spawn; record acquisition time separately. No `/give`
 **Diagnostic world:** a separate disposable creative/commands-enabled world is allowed only
 for the client/NBT checks below. Its commands and screenshots do not count as survival evidence.
 Keep both worlds and their logs separate. Back up any existing world before migration testing.
+
+## Current candidate itinerary — not yet executed
+
+Fill the candidate identity before recording any row as PASS. Use one ordinary Survival
+path for these observations, without borrowed diagnostic stock or a source-code walkthrough.
+The sufficient S2 bill is a model assumption, not a minimum shopping list or supplied kit.
+
+| Phase | Action | Required observation |
+| --- | --- | --- |
+| Discovery and finite entry | Gather the finite supplies normally and use the actual book/guide/Atlas/JEI recipes to make tools and the first workshop. Treat iron/extraction as optional, not a required recurring farm. | The in-game route is understandable and does not demand an unavailable future machine, injected materials or a pre-supplied glass/copper/redstone kit. |
+| First source batches | Use the Crank Handle only where supported to establish real water, geological and biological processing, then feed produced biomass into the Dynamo and connect actual F0 power. | Real source outputs reach their consumers. Manual work is not portable energy; no hidden initial stock or repeated hand-mining substitutes for the mod-owned recurring route. |
+| Workshop and handling | Produce the ceramic/metal/glass/core inputs through the current recipes. Reuse grog and eligible recovered water; inspect slag/flint information in the surfaces used along the route. | Quantities come from actual recipes. Grog has its real use; optional stock can be discarded without an invented consumer/void system or mandatory hoarding. Blocked/invalid structures explain the problem and preserve work. |
+| Claims and display | Obtain and hold the actual Grindless book, then open the selected quest interface and claim completed steps normally. Move evidence away before another claim attempt when practical. | Current evidence/prerequisites are respected, evidence is not consumed, rewards are delivered once, and guide/JEI/machine/quest resource information agrees. Actual Matrix rating remains visible; ordinary metadata does not relabel later/invalid ratings as T0. |
+| Physical exit | Make and retrieve the calibrated core using real terminal power, then perform the manual five-Relay-Matrix craft from the actual recipe. | Five physical F1 Matrices are recovered. The Bench does not manufacture them and no quest flag/world permission replaces their items. Record the real inventory and elapsed route time; stop before advancing into T1 machinery. |
+| Continued operation | Observe the established base and preserve enough real stock for its conditions. Exercise save/quit/restart and the relevant daylight/night transition rather than assuming uninterrupted operation. | No lost/duplicated stock/work or fabricated power. Record any manual intervention, exhaustion or failure to restart; do not infer night/restart sufficiency from the earlier daylight-only native window. |
+
+During this path, inspect actual slot grids, fluid identity/amount, catalyst distinction,
+long resource text and quest actions at the GUI scales used by the player. Unknown data
+must remain understandable, not appear as an empty success or a false renewable claim.
+Screenshots are evidence of those observed surfaces, not a substitute for producing items.
+
+## Authentic retained-world compatibility — not yet executed
+
+Use an explicitly preserved copy of a real pre-candidate world with known provenance,
+never the original personal save or a generated NBT fixture. Record original and candidate
+jar/pack identities without account data or private machine paths. Compare inventories,
+partial machine work/fluids and actually claimed quests before the change, after loading,
+and after a full process exit/restart. Existing claims must reconstruct in the new interface
+without paying rewards again or overwriting unrelated quests. If ownership/configuration
+collides, record the visible refusal and preservation; do not delete files to force a pass.
+
+Fresh-world startup, a same-version reopen, source-only codecs and the f106 diagnostic
+world are not this migration result. Record FAIL or NOT RUN for any unobserved property.
 
 ## Preserved predecessor no-command route — not the current candidate
 
@@ -66,7 +103,7 @@ Output-blocking/automation stress beyond the initial material budget belongs in 
 world or later survival continuation. Do not quietly add command-spawned hoppers to the
 no-command route. Native hopper iron costs are recorded separately from the mod-machine budget.
 
-## Diagnostic client and F2 checks
+## Preserved predecessor diagnostic client and F2 checks — not a current dispatch
 
 Use these only in the separate diagnostic world:
 

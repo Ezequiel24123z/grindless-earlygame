@@ -288,8 +288,7 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
                     var loaded = ResourceGuidanceRuntime.current();
                     var resource = ResourceGuidanceClient.item(actual);
                     // Annotated stacks already receive the shared Forge ItemTooltipEvent presentation.
-                    if (loaded.available() && (resource.isEmpty()
-                            || !loaded.document().resources().containsKey(resource.get()))) {
+                    if (loaded.available() && ResourceGuidanceClient.declaration(loaded, resource.orElse(null)).isEmpty()) {
                         ResourceGuidanceClient.lines(resource.orElse(null), true, Screen.hasShiftDown())
                                 .forEach(tooltip::add);
                     }

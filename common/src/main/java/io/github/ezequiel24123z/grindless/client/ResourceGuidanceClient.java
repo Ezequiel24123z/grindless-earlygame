@@ -5,6 +5,9 @@ import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityAnnotations.SideStreamClass;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Function;
 
 /** One native, localized presenter over cached declarations for every player-facing surface. */
 public final class ResourceGuidanceClient {
@@ -30,6 +34,10 @@ public final class ResourceGuidanceClient {
     private ResourceGuidanceClient() {
     }
 
+    /** A matched declaration key is not a replacement for the physical stack/resource identity. */
+    public record DeclarationMatch(Resource declaration, ResourceGuidance.Entry entry) {
+    }
+
     /** Matrix NBT is read through its existing validator, never changed or silently downgraded. */
     public static Optional<Resource> item(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
@@ -37,9 +45,53 @@ public final class ResourceGuidanceClient {
         }
         String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
         if (stack.getItem() instanceof ControlMatrixItem matrix) {
-            return matrix.spec(stack).map(spec -> new Resource(Kind.ITEM, id, spec.rating().ordinal(), "items"));
+            return matrixItem(id, matrix.spec(stack));
         }
         return Optional.of(new Resource(Kind.ITEM, id));
+    }
+
+    /** Converts only an already validated spec; invalid explicit NBT never becomes an ordinary item. */
+    public static Optional<Resource> matrixItem(String id, Optional<ControlMatrixSpec> matrix) {
+        return matrix.map(spec -> new Resource(Kind.ITEM, id, spec.rating().ordinal(), "items"));
+    }
+
+    public static Optional<DeclarationMatch> declaration(ResourceGuidanceRuntime.Loaded loaded, Resource physical) {
+        return declaration(loaded, physical, ResourceGuidanceClient::matrixArchitecture);
+    }
+
+    /**
+     * Only the registry edge is supplied separately for checks. Default selection always uses the
+     * existing NBT contract; no new ratings, item aliases or declarations are generated.
+     */
+    public static Optional<DeclarationMatch> declaration(ResourceGuidanceRuntime.Loaded loaded, Resource physical,
+                                                         Function<String, Optional<MatrixArchitecture>> architectures) {
+        if (!loaded.available() || physical == null) {
+            return Optional.empty();
+        }
+        ResourceGuidance.Entry exact = loaded.document().resources().get(physical);
+        if (exact != null) {
+            return Optional.of(new DeclarationMatch(physical, exact));
+        }
+        if (physical.kind() != Kind.ITEM || !physical.registry().equals("items") || physical.rating() <= 0) {
+            return Optional.empty();
+        }
+        Optional<ControlMatrixSpec> defaultSpec = architectures.apply(physical.id())
+                .flatMap(architecture -> ControlMatrixNbt.load(architecture, null));
+        if (defaultSpec.isEmpty() || defaultSpec.get().rating().ordinal() != physical.rating()) {
+            return Optional.empty();
+        }
+        Resource ordinary = new Resource(Kind.ITEM, physical.id(), 0, physical.registry());
+        return Optional.ofNullable(loaded.document().resources().get(ordinary))
+                .map(entry -> new DeclarationMatch(ordinary, entry));
+    }
+
+    private static Optional<MatrixArchitecture> matrixArchitecture(String id) {
+        ResourceLocation location = ResourceLocation.tryParse(id);
+        if (location == null) {
+            return Optional.empty();
+        }
+        return BuiltInRegistries.ITEM.get(location) instanceof ControlMatrixItem matrix
+                ? Optional.of(matrix.architecture()) : Optional.empty();
     }
 
     /** Quiet ordinary hover: only annotated resources appear; explicit contexts use required=true. */
@@ -76,11 +128,12 @@ public final class ResourceGuidanceClient {
             return List.of(Component.translatable(PREFIX + (player ? "player_unavailable" : "unavailable"))
                     .withStyle(ChatFormatting.RED));
         }
-        ResourceGuidance.Entry entry = resource == null ? null : loaded.document().resources().get(resource);
-        if (entry == null) {
+        Optional<DeclarationMatch> match = declaration(loaded, resource);
+        if (match.isEmpty()) {
             return required ? List.of(Component.translatable(PREFIX + (player ? "player_unknown" : "unknown"))
                     .withStyle(ChatFormatting.GRAY)) : List.of();
         }
+        ResourceGuidance.Entry entry = match.get().entry();
         var metadata = entry.metadata();
         List<Component> lines = new ArrayList<>();
         lines.add(Component.translatable(PREFIX + (player ? "player_scope" : "declaration")).withStyle(ChatFormatting.DARK_GRAY));
@@ -101,7 +154,8 @@ public final class ResourceGuidanceClient {
             }
         }
         if (metadata.uncertainty() != null) {
-            String key = player ? playerUncertaintyKey(resource) : ResourceGuidance.uncertaintyKey(resource);
+            Resource declared = match.get().declaration();
+            String key = player ? playerUncertaintyKey(declared) : ResourceGuidance.uncertaintyKey(declared);
             lines.add(Language.getInstance().has(key) ? Component.translatable(PREFIX + "uncertainty", Component.translatable(key))
                     : Component.translatable(PREFIX + (player ? "player_uncertainty_unavailable" : "uncertainty_unavailable"))
                             .withStyle(ChatFormatting.RED));

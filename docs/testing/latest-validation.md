@@ -47,7 +47,10 @@ catalogue uses `Evidence.ITEM`/ordinary rating0, while validated physical defaul
 hover has F1. No expectation or authority was silently altered; suites10-14 are not run.
 ADR-0143 now preserves ordinary ITEM versus exact MATRIX contexts and permits default-item
 declaration context only for the same item's validated native default, not later or invalid
-ratings. That lookup/test correction is pending. Earlier offline dependency/mapping failures
+ratings. That lookup/test correction is now prepared and statically reviewed, including
+exact-rated priority, malformed/default/non-default and no-mutation cases. It also checks
+LF/CRLF loading and drift without conflating file-byte SHA with declaration identity.
+Execution on the next clean pin remains pending. Earlier offline dependency/mapping failures
 and the failed suite remain in `build/guidance-validation/6d6610b-20261018T171000Z`.
 This is not a complete suite, clean-Git artifact, native client or Tier pass.
 
