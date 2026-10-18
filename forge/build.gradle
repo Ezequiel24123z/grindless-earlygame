@@ -32,11 +32,22 @@ configurations {
     }
 }
 
+repositories {
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+}
+
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
     modCompileOnly "mezz.jei:jei-1.20.1-forge-api:${rootProject.jei_version}"
     modRuntimeOnly "mezz.jei:jei-1.20.1-forge:${rootProject.jei_version}"
+    modCompileOnly("curse.maven:heracles-845831:${rootProject.heracles_curse_file}") { transitive = false }
+    modCompileOnly("curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:heracles-845831:${rootProject.heracles_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}") { transitive = false }
     smokeInstaller "net.minecraftforge:forge:${rootProject.forge_version}:installer"
     smokeMods "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
 
