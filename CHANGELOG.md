@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Strict claim-source binding composed through `3a9a27b`.** The existing registry-edge
+  checker now follows the actual shared claim service and both legacy/Heracles entrypoints,
+  including physical-book, sender, evidence, prerequisites, reward and idempotency guards.
+  Source-only execution of checker3a9 against the exact12 Quest9e0 authority blobs passes
+  one positive and37 negative cases, without game bootstrap. Combined-source exports retain
+  their own identity; LF Git blobs are not relabeled as future worktree bytes.
 - **Catalogue-backed Heracles integration composed through `9e0a94e` (ADR-0142).** The
   registered book retains its fallback, while an existing framework displays the stable
   per-player claim projection. The shared server service preserves physical-book access,

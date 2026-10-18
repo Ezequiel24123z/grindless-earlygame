@@ -74,7 +74,7 @@ invalidated assumption or a genuine new property.
 
 | Owner/session | Current checkpoint and boundary |
 | --- | --- |
-| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Integrated through `dba3993`; composed `debd3ae` refresh now passes735 model/232 adapter/1020 registry/295 T0 and three byte-identical report processes. All assigned reviews are closed. Canonical inventory/model engineering is complete for that source; pending claim-service/dashboard composition needs its affected regressions, not a Tier/player/global acceptance claim. |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Exact debd refresh is closed. The new3a9 strict claim binder passes38 source-only cases against12 exact9e0 authority blobs and is composed without changing gameplay/model policy. Combined export/build and checkout-byte identity remain separate; no Tier/player/global acceptance. |
 | UI/JEI / `783b5107-d472-4600-a3c1-3e1f148ad172` | Integrated through `d0b7256`: slot/catalyst fixes, complete layouts and native water. QA's long-text and loaded-lava counterexamples are repaired. Dev/QA1085 plus93 restoration assertions and the real740 production bridge/states pass; client rendering remains pending. Payload11 appends server-confirmed water identity; unknown nonempty contents remain visible. |
 | Audio / `b40a0c9d-0ed0-423c-a757-03a2297e7530` | Integrated `d42d0ba`/`ee6564c`: ordinary STARVED clicks/OUT_OF_BAND alarm removed, working effects and explicit pylon alert preserved. Common compile/source review pass; no imported sound or listening acceptance. |
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
@@ -107,7 +107,7 @@ only1909MiB commit margin was available.
 Managed cloud Sandbox provisioning also returned403, so neither path produced native evidence.
 S2 has finished its debd refresh and left no validation JVM. QA's idle CLI was deliberately paused
 to release memory, not archived or deleted; its worktree/source/logs remain intact.
-S2's source-only binding check is next.
+S2's source-only binding check has passed and released its JVM; combined export/build is next.
 No new server is reserved. Keep native runs/Gradle and game-edge logging serial on this host.
 The implementation worker may inspect/code independently but must obtain a resource turn
 before Java. S2's exact debd refresh remains closed while its next bounded increment prepares

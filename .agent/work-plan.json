@@ -357,7 +357,15 @@
       },
       "annotation_scope": "Approved T0 source/workshop chains only; R0 claims must be proved, construction requires A, no roots inferred from registration. Slag has potential future use, explicit unknown first-use placement and ordinary disposal, not an invented T0 consumer/automated void sink. Actual environment/manual-labour facts do not grant availability or budgets.",
       "model_review": "dba3993 closes all five6c9counterexamples: simultaneous claim requirements, absent-ledger safety, executed objective scope, rule-specific tier context and first-use exception. Source/certificate reviews also closed; red attempts remain preserved.",
-      "next_increment": "Local3a9a27bdab2d93a715f5969d3e5823994fedc3a1 prepares the closed AST claim binding for12 actual Quest9e0 authorities/31 methods,37 negative mutations and1 positive. Source-only compile/execution pending; no model/AuditReports/catalogue/build change.",
+      "next_increment": "3a9a27bdab2d93a715f5969d3e5823994fedc3a1 strict AST binder passes38 source-only cases on12 exact9e0 authority blobs and is composed. No model/AuditReports/catalogue/build change; final combined export/build retains its own identity.",
+      "binding_evidence": {
+        "checker_revision": "3a9a27bdab2d93a715f5969d3e5823994fedc3a1",
+        "authority_revision": "9e0a94ed86af4bb841de390a551997b57672f777",
+        "assertions": 38,
+        "input_set_sha256": "29025f2fc934638b830dcee56d84e7c4f4ed3dd972a3dd080f19854b582b75a7",
+        "game_bootstrap": false,
+        "preserved_failure": "Initial archive converted to CRLF; rejected before execution, then exact LF blobs exported with transient Git options"
+      },
       "stop_condition": "Return coherent local source-bound increments and real closure findings; no invented kit, tier, terminal, waiver or public private-path leak; no remote publication or acceptance claims"
     },
     {

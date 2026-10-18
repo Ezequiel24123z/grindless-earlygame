@@ -90,9 +90,20 @@ are not another Forge boot, client or human-save test. Environment limits were t
 and restored; no source changed during the run and no JVM/server remained afterward.
 
 The coordinator composes this source while preserving S2's Forge classpath-export task.
-The current old quest-source binding does not recognize the extracted service; its prepared
-checker3a9 increment is next, not a waived guard. Combined build/projection evidence remains
-pending until that source and the dashboard are composed. An initial merge command stopped
+Checker `3a9a27bdab2d93a715f5969d3e5823994fedc3a1` now binds the extracted service and real
+entrypoints. Its source-only run against12 exact9e0 authority blobs passes38 cases
+(one positive,37 negatives), with compilation and execution each exit0 and no
+Gradle/explicit game bootstrap/native boot. Input-set SHA-256:
+`29025f2fc934638b830dcee56d84e7c4f4ed3dd972a3dd080f19854b582b75a7`;
+executed main class:
+`32d627c6c02765c6fa48cb60af1d41019e7ea1642f1e4086ef474affc2cbe193`;
+check log:
+`30f535fcd5d9a83331ad912b8282c0dba54aa073ccc10d3e5c3c99d63c118034`.
+The initial Git archive applied CRLF conversion and was rejected/preserved; a second
+archive with transient LF settings matched all12 raw blobs before execution. No global
+Git setting changed. Do not equate these LF bytes to future checkout bytes merely because
+their Git blobs match. Combined build/projection evidence remains pending.
+An initial merge command stopped
 before edits because Git lacked committer identity; retry used transient identity only.
 
 Dashboard checkpoints `90c6ba1`/`858abab` were initially unexecuted. The worker now reports
