@@ -12,6 +12,7 @@ public final class FluidBuffer {
     private final double maxC;
     private final double maxP;
     private FluidState state = FluidState.EMPTY;
+    private NativeFluidStore owner;
 
     public FluidBuffer(int capacity, double maxC, double maxP) {
         this.capacity = capacity;
@@ -21,6 +22,13 @@ public final class FluidBuffer {
 
     public static FluidBuffer ambient(int capacity) {
         return new FluidBuffer(capacity, FluidLogic.AMBIENT_MAX_C, FluidLogic.AMBIENT_MPA);
+    }
+
+    void bindOwner(NativeFluidStore next) {
+        if (owner != null) {
+            throw new IllegalStateException("a native fluid buffer has exactly one owner");
+        }
+        owner = next;
     }
 
     public FluidState state() {

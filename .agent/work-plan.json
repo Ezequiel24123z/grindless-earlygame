@@ -3,7 +3,7 @@
   "schema_version": 1,
   "plan_revision": 4,
   "updated": "2026-10-18",
-  "phase": "s1_persistent_execution_gate_c3_exception_remediation",
+  "phase": "s1_native_c3_verified_native_cycle_and_smoke_budget_in_progress",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -139,16 +139,49 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "S1's persistent isolated execution gate starts at published 639881f. C3's independent native unit at 9782853 has targeted passing evidence but a blocking exception-restoration review finding; the same child is correcting it. Both lanes remain active, with integration and publication serialized. No product dependencies changed.",
+  "parallel_opportunity": "S1 and the reviewed native C3 correction pass the composed dcb8010 gate: 36 suites, production states and settling, source-bound reports. The native renewable-cycle fixture and its twin-runner assertion-budget support proceed independently. S2 and live closure remain pending.",
   "prepared_assignments": [
+    {
+      "id": "smoke-assertion-budgets",
+      "task_id": "renewable-t0",
+      "status": "implemented_reviewed_targeted_checks_passed",
+      "agent_id": "524e0826-f077-4760-b665-745d85b22dd8",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "03b8d94b38a7d3bd6e8ad4f73d957247592a4af4",
+      "owned_files": ["tools/run-smokes.ps1", "tools/run-smokes.sh", "tools/checks/VerifySmokeHarness.java"],
+      "result": "27/27 native PowerShell and 27/27 native GNU Bash fake-boot checks; source hashes verified. No server run or global timeout change. Ordinary long-scenario execution remains part of the native-cycle assignment.",
+      "evidence": "build/validation/smoke-timeout/",
+      "scope_limit": "The unchanged legacy shared-world batch utility is not a datapack/isolation acceptance path",
+      "stop_condition": "Worker complete; integrate with the renewable-cycle sidecar and verify ordinary invocation without environment override"
+    },
+    {
+      "id": "t0-native-renewable-cycle",
+      "task_id": "renewable-t0",
+      "status": "in_progress",
+      "worker_session_id": "6b1c9b59-c772-4031-a234-c8b0eaa33042",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "3c42333ff2890e27b2075ce714b5b3ffc11be514",
+      "worktree_scope": "isolated_application_worktree",
+      "owned_files": ["new tools/smoke renewable-cycle fixture and expectation", "tools/smoke/scenarios.txt", "exact scenario enumeration checks only if required"],
+      "outcome": "Prove actual native source, biomass power, downstream inputs and Research Terminal core after explicit finite setup; no fixture-injected claimed outputs",
+      "acceptance": ["Source-derived cycle and stock/energy assertions", "Production-remapped-jar smoke with source and artifact identity", "Separate native core/input evidence, existing recipe assertions and still-manual physical Matrix craft"],
+      "stop_condition": "Return local fixture checkpoint and honest evidence; no new craft hook, gameplay changes, S1 edits, publication or manual acceptance claim"
+    },
     {
       "id": "s1-persistent-execution-gate",
       "task_id": "sustainability-model",
-      "status": "in_progress",
+      "status": "passed_reviewed_core_and_composed_scope",
       "worker_session_id": "fd99d2f6-c478-49b9-aaab-8c40e2dba154",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "639881f5985b2662059ca48981441c1fd38c31dc",
+      "composed_input_revision": "dcb801056566dcd728cb3023de16c56cc6009dbd",
+      "composed_scope": "Fast-forward the same clean isolated worktree, run official combined suites and production states,settling; execution/evidence only, no source edits",
+      "composed_result": "Unchanged source, 36 suites pass including 285 fluid assertions; states 945/945 and settling 19/19 pass on the production jar, with identical built/deployed SHA256 ef954dce5514d3737a01f2c4161563a29aa77e6b739d386ff2937a6a94e5cf03. A separate live JVM matches runner reports; live remains non-certifying.",
+      "result": "Unchanged source: 36 official suites, 1126 sustainability assertions and 95 adapter assertions pass; all twelve repaired requirements exercised; two independent live JVMs produce identical reports. Live has 2 errors, 1247 unknowns and no annotations; no T0 closure or S2 acceptance.",
+      "evidence": "build/validation/s1-execution-gate/execution-report.md in the worker session; SHA256 f2063f68c43101c6072aec6f6974e132fad7e7f243c5d4eeb7c5d60a70bccd7d",
       "worktree_scope": "isolated_application_worktree",
       "owned_files": ["common/src/main/java/io/github/ezequiel24123z/grindless/sustainability/", "tools/checks/VerifySustainability.java", "tools/checks/VerifySustainabilityAdapters.java"],
       "outcome": "Complete the interrupted execution gate on committed repairs; correct only reproduced S1 defects, prove the twelve targeted regressions and deterministic report identity",
@@ -222,9 +255,9 @@
     {
       "id": "sustainability-core",
       "task_id": "sustainability-model",
-      "status": "frozen_pending_combined_validation",
+      "status": "integrated_verified_core_only",
       "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
-      "delivery_status": "12_review_findings_addressed_by_workers_pending_validation_and_recheck",
+      "delivery_status": "13_files_preserved_in_639881f_then_verified_by_persistent_execution_gate",
       "worktree_scope": "current_worktree",
       "input_revision": "ba7ee7455383b3d214cde79a56672f76ccc97e97",
       "delivery_base_revision": "b08deeaa21842a90c82f975b88466d6fd5b98d08",
@@ -252,8 +285,8 @@
         }
       },
       "review_findings": {"algorithm": 8, "adapters": 4},
-      "review_status": "Both independent read-only reviews completed with findings; S1 is not accepted",
-      "combined_validation": "Recovered attempt on 092af299 plus source-hashed S1 files exited -196608 before tests because the PowerShell -File argument was malformed. No post-repair pass; preserve the exact repairs before completing the execution gate.",
+      "review_status": "Initial independent reviews found twelve issues; the persistent gate exercised their repaired contracts and the coordinator reviewed the core proof boundary. No independent final recheck was recovered from the interrupted workers.",
+      "combined_validation": "The failed launcher is retained. The persistent gate on unchanged 639881f passed all 36 suites and the twelve repaired contracts; independent-process reports were byte-identical. Coordinator reviewed proof boundaries and evidence. Only S1 core is accepted.",
       "acceptance": [
         "No Minecraft/Forge imports in the model or auditor; no recipe quantity copied into annotations",
         "Synthetic fixtures prove: unseeded cycle and self-constructing producer rejected; seeded closed loop and environmental loop accepted; finite/vanilla canonical dependency, unresolved tag, zero-input route without environmental justification, insufficient exact bootstrap guarantee and resource-positive recycling detected",
@@ -262,7 +295,7 @@
         "audit.json and audit.md written under build/sustainability; deterministic ordering",
         "Live T0 annotations are NOT authored in S1: the live run reports unknowns/findings honestly"
       ],
-      "stop_condition": "Preserve the frozen repairs as unaccepted WIP; execute and review the remaining source-bound gate before S1 acceptance."
+      "stop_condition": "S1 core complete; do not infer live T0 classification, canonical pack resolution or full sustainability completion. Continue S2 after Astra's source/ledger decisions."
     },
     {
       "id": "sustainability-core-algorithm-review",
@@ -297,7 +330,7 @@
     {
       "id": "sustainability-core-algorithm-remediation",
       "task_id": "sustainability-model",
-      "status": "frozen_ready_for_validation",
+      "status": "verified_by_persistent_execution_gate",
       "agent_id": "291ed9b1-b3d1-4dd0-873f-4db713937bee",
       "parallel_group": "s1-disjoint-remediation",
       "owned_files": [
@@ -312,7 +345,7 @@
     {
       "id": "sustainability-core-adapter-remediation",
       "task_id": "sustainability-model",
-      "status": "frozen_ready_for_validation",
+      "status": "verified_by_persistent_execution_gate",
       "agent_id": "7917e6cc-dfb1-4cd3-8c19-0dab4dc271b6",
       "parallel_group": "s1-disjoint-remediation",
       "owned_files": [
@@ -329,10 +362,12 @@
     {
       "id": "c3-completion-safety",
       "task_id": "renewable-t0",
-      "status": "exception_restoration_remediation_in_progress",
+      "status": "integrated_verified_bounded_unit_complete",
       "native_delivery_commit": "9782853f744d80cccc443b121864c4af07fd4826",
       "native_delivery_evidence": "34 suites and production states/first-fluids/first-contact passed on 9782853; first-contact is setup evidence, not a complete chemical cycle",
-      "blocking_review": "P1: synchronous exceptions in late participant validation or consumer settlement can escape without restoring native receipts and consumer state; correction and exact regressions assigned to the same child",
+      "blocking_review": "Original P1 reproduced with 15 red fluid assertions in b26ee8a, repaired in fa3e708 and closed by the same reviewer's targeted recheck",
+      "corrected_native_commit": "fa3e708214a8d5073d0818ecb451d0d1a9be24c0",
+      "coordinator_native_commit": "dcb801056566dcd728cb3023de16c56cc6009dbd",
       "worker_session_id": "b2ef80f6-6560-44b8-9f0b-53290f389c06",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -342,14 +377,14 @@
       "worktree_scope": "isolated_application_worktree",
       "delivery_commit": "092af29991db9f45731794a657996dcbe3925236",
       "dispatch_rule": "Dispatched on pinned b08deeaa21842a90c82f975b88466d6fd5b98d08 in an isolated application worktree. Isolation removes only the technical shared-worktree compile conflict that had made this wait for S1; it does not change product-task order, dependencies or acceptance. Keep all validation source-bound and serialize Astra integration and remote publication.",
-      "delivery_status": "reviewed_partial_092af_locally_integrated_native_implementation_in_progress",
-      "outcome": "The local partial contains exact-extraction/nonreversible-insert Javadoc and the family-wide Bench guard. The child is now implementing the owner-approved bounded native mechanism from ADR-0138; implementation and its validation are pending.",
+      "delivery_status": "reviewed_native_runtime_and_exception_correction_integrated_locally",
+      "outcome": "Native identity/face/state/quota plans and source/consumer compensation preserve inputs/work on boolean and exceptional aborts; reviewed and verified on composed dcb8010, not full C3 acceptance",
       "baseline_validation": {
         "scope": "Partial local commit 092af29991db9f45731794a657996dcbe3925236 only",
         "attempt_1": {"check": "run-checks wrapper/capture", "exit_code": 1, "failure": "NativeCommandError"},
         "attempt_2": {"check": "same run-checks runner with stdout/stderr separated", "exit_code": 0, "result": "PASS", "suites": 34},
         "states_smoke": "Not required for this Javadoc/test-only partial",
-        "coordinator_integration": "Not done"
+        "coordinator_integration": "Bench guard and reviewed native correction are integrated; composed-source evidence pending"
       },
       "implementation_scope": "External references were static patterns only and do not prove generic rollback; no code was imported. Follow owner-corrected ADR-0138 only: native-owned storage using existing FluidBuffer, exact snapshots/receipts, and internal restitution independent of insert; no tentative callbacks or external exposure; retain all native fluids. No cross-mod transaction, new saved keys or ports. Preserve zero loss/duplication, support extract-only secondary sources, and do not restrict ordinary tank/pump behavior.",
       "owned_files": ["machine/ProcessMachineBlockEntity.java", "container/FluidInsert.java", "fluid/FluidBuffer.java", "fluid/FluidEndpoint.java", "fluid/NativeFluidStore.java (bounded helper)", "fluid/BasicTankBlockEntity.java", "fluid/IndustrialTankBlockEntity.java", "fluid/ClayConduitBlockEntity.java", "fluid/PressurePipeBlockEntity.java", "fluid/ElectricPumpBlockEntity.java", "fluid/FluidWellBlockEntity.java", "fluid/HandPumpBlockEntity.java", "tools/checks/VerifyFluid.java", "tools/checks/VerifyRecipes.java"],
@@ -505,7 +540,7 @@
     {
       "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "in_progress", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
-      "next_action": "The Bench-only partial 092af299 is reviewed and locally integrated, with its 34-suite pass and initial capture failure retained. Receive the isolated native-store implementation and its own checks/states evidence. S1's frozen repairs are being validated separately. Integrate serially, then continue client/JEI, native renewable cycle with exit-root evidence, visual asset review and full smokes.",
+      "next_action": "Bounded native completion is verified on dcb8010. Finish the independent renewable-cycle fixture and ordinary-runner timeout integration, then continue the existing client/JEI, source/exit, visual and full-integration gates without claiming manual acceptance.",
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
     {
@@ -518,7 +553,7 @@
       "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "in_progress", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "design": "ADR-0135 accepted: typed loader-free annotations over live authorities, least-fixed-point availability/renewability, construction reserve, recycling rule, fingerprinted debt ratchet, generated reports",
-      "next_action": "Complete the interrupted S1 execution gate on its preservation checkpoint; recover only observed evidence, fix any reproduced errors and review the repaired proof boundaries. For S2, reconcile optional crank/extractor quest coupling and declare actual manual bootstrap without inventing guaranteed iron, boards or bricks.",
+      "next_action": "S1 core is verified on 639881f. For S2, author canonical T0 annotations and pack resolution from source evidence, reconcile optional crank/extractor quest coupling and declare actual manual bootstrap without inventing guaranteed iron, boards or bricks. Live closure remains uncertified.",
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
     },
     {

@@ -18,6 +18,10 @@ public final class IndustrialTankBlockEntity extends BlockEntity implements Flui
     private static final String KEY_FLUID = "Fluid";
 
     private final FluidBuffer buffer = PressureLogic.buffer(PressureLogic.TANK_CAPACITY);
+    private final NativeFluidStore nativeFluids = new NativeFluidStore(buffer, () -> {
+        setChanged();
+        sync();
+    });
 
     public IndustrialTankBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.INDUSTRIAL_TANK.get(), pos, state);
@@ -63,6 +67,11 @@ public final class IndustrialTankBlockEntity extends BlockEntity implements Flui
     @Override
     public FluidState contents() {
         return buffer.state();
+    }
+
+    @Override
+    public NativeFluidStore nativeStore() {
+        return nativeFluids;
     }
 
     @Override

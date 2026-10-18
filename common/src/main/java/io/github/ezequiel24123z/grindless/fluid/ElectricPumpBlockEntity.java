@@ -20,6 +20,7 @@ public final class ElectricPumpBlockEntity extends PoweredLogisticsBlockEntity i
     private static final String KEY_FLUID = "Fluid";
 
     private final FluidBuffer buffer = PressureLogic.buffer(FluidLogic.MACHINE_CAPACITY);
+    private final NativeFluidStore nativeFluids = new NativeFluidStore(buffer, this::setChanged);
     private final StatusDebounce display = new StatusDebounce();
     private TickSubscription working;
 
@@ -108,6 +109,11 @@ public final class ElectricPumpBlockEntity extends PoweredLogisticsBlockEntity i
     @Override
     public FluidState contents() {
         return buffer.state();
+    }
+
+    @Override
+    public NativeFluidStore nativeStore() {
+        return nativeFluids;
     }
 
     @Override

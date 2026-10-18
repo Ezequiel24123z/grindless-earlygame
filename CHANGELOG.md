@@ -15,6 +15,36 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fixture-owned assertion budgets implemented (ADR-0139).** Both smoke runners validate
+  selected `.timeout` metadata before any boot, honor explicit environment overrides,
+  normalize decimal values and restore per-scenario environment state. Native fake-boot
+  checks pass 27/27 on PowerShell and 27/27 on GNU Bash, including malformed input,
+  override, sharding and nonleakage. Startup budgets and the ordinary 120-second default
+  are unchanged. The legacy shared-world batch utility is not the datapack acceptance path.
+- **Composed S1/native gate passed on `dcb8010`.** The unchanged integration passes all
+  36 suites, including 285 fluid assertions, and production states 945/945 plus settling
+  19/19 with identical built/deployed jar hashes. A separate live JVM reproduces the runner's
+  reports; live sustainability remains false and unannotated. This verifies the bounded
+  native-completion unit, not renewable-cycle, full integration or manual acceptance.
+- **Per-scenario smoke budgets decided (ADR-0139).** Long real T0 cycles will declare a
+  positive assertion deadline in a sibling `.timeout` file, below an explicit environment
+  override and above the existing default. Twin-runner support and ordinary-invocation
+  validation are required; no global deadline, recipe speed or assertion is weakened.
+- **Native fluid completion integrated with exception compensation (ADR-0138).** Batches
+  revalidate native identity, face access, full fluid state and output quota before exact
+  withdrawal, deduplicate backing stores and defer notifications until settlement. Explicit
+  consumer compensation restores items, output, recipe/cache and paid work alongside native
+  receipts on boolean rejection or synchronous exceptions; public `insert` is never rollback.
+  Completed batches wait for fluids without more Flux and report starvation separately from
+  output blockage. The review's exception defect was reproduced red, repaired and rechecked.
+  Child checks and `states,settling` pass at `fa3e708`; validation of local integration
+  `dcb8010` with S1 is pending. No recipe, tier, NBT key or external integration changed.
+- **S1 core verified on unchanged `639881f` (ADR-0135).** The persistent execution gate
+  passed all 36 official suites, including 1,126 sustainability and 95 adapter assertions
+  and all twelve repaired requirements. Two independent live JVMs reproduced byte-identical
+  reports with checked source/binary identities. No further source fix was needed. The
+  live report remains non-certifying: 2 errors, 1,247 unknowns, no T0 annotations and no
+  live ratchet pass. The prior launcher failure and interrupted reviews remain recorded.
 - **Persistent S1 execution and C3 exception correction tracked.** The execution gate now
   runs from published `639881f` in an isolated session. Native C3 `9782853` has targeted
   passing checks, but review found that synchronous exceptions could bypass restoration;

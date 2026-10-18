@@ -46,6 +46,7 @@ foreach ($line in [System.IO.File]::ReadAllLines((Join-Path $smokeDir 'scenarios
         Proves  = if ($parts.Count -gt 1) { $parts[1].Trim() } else { '' }
         Status  = 'pending'
         Seconds = 0
+        ExpectTimeout = $null
     }
 }
 
@@ -76,6 +77,21 @@ if ($selected.Count -eq 0) {
 if ($List) {
     $selected | ForEach-Object { Write-Output $_.Name }
     exit 0
+}
+
+# Validate every selected sidecar before starting any server, including when an override is set.
+foreach ($item in $selected) {
+    $timeoutFile = Join-Path $smokeDir "$($item.Name).timeout"
+    if (-not (Test-Path -LiteralPath $timeoutFile)) { continue }
+    $value = $utf8.GetString([System.IO.File]::ReadAllBytes($timeoutFile))
+    $match = [regex]::Match($value, '\A[ \t\r\n\f\v]*([0-9]+)[ \t\r\n\f\v]*\z')
+    $seconds = 0
+    if (-not $match.Success -or
+            -not [int]::TryParse($match.Groups[1].Value, [System.Globalization.NumberStyles]::None,
+                    [System.Globalization.CultureInfo]::InvariantCulture, [ref]$seconds) -or $seconds -le 0) {
+        throw "Invalid smoke assertion timeout '$timeoutFile': expected one positive integer from 1 to 2147483647 seconds."
+    }
+    $item.ExpectTimeout = $seconds.ToString([System.Globalization.CultureInfo]::InvariantCulture)
 }
 
 $startedAt = Get-Date
@@ -216,10 +232,17 @@ foreach ($item in $selected) {
     }
     $env:SMOKE_LOG = Join-Path $runDir "smoke-$($item.Name).log"
 
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
+    $originalExpectTimeout = $env:SMOKE_EXPECT_TIMEOUT
+    try {
+        if (-not $originalExpectTimeout) { $env:SMOKE_EXPECT_TIMEOUT = $item.ExpectTimeout }
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
+        $bootExitCode = $LASTEXITCODE
+    } finally {
+        $env:SMOKE_EXPECT_TIMEOUT = $originalExpectTimeout
+    }
     $item.Seconds = ((Get-Date) - $scenarioStart).TotalSeconds
 
-    if ($LASTEXITCODE -eq 0) {
+    if ($bootExitCode -eq 0) {
         $item.Status = 'passed'
     } else {
         $item.Status = 'failed'

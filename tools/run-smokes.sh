@@ -88,6 +88,34 @@ if [ "$LIST" = "yes" ]; then
   exit 0
 fi
 
+# Validate every selected sidecar before starting any server, including when an override is set.
+EXPECT_TIMEOUTS=()
+for name in "${SELECTED[@]}"; do
+  timeout_file="$SMOKE_DIR/$name.timeout"
+  timeout=""
+  if [ -e "$timeout_file" ]; then
+    valid="yes"
+    # Read the whole file, preserving CRLF and rejecting embedded NULs rather than truncating.
+    if IFS= read -r -d '' timeout < "$timeout_file"; then valid="no"; fi
+    timeout="${timeout#"${timeout%%[!$' \t\r\n\f\v']*}"}"
+    timeout="${timeout%"${timeout##*[!$' \t\r\n\f\v']}"}"
+    if [[ "$timeout" =~ ^[0-9]+$ ]]; then
+      # Normalize leading zeroes before numeric comparisons or the boot's shell arithmetic.
+      timeout="${timeout#"${timeout%%[!0]*}"}"
+      if [ -z "$timeout" ] || [ "${#timeout}" -gt 10 ] || [ "$timeout" -gt 2147483647 ]; then
+        valid="no"
+      fi
+    else
+      valid="no"
+    fi
+    if [ "$valid" != "yes" ]; then
+      echo "Invalid smoke assertion timeout '$timeout_file': expected one positive integer from 1 to 2147483647 seconds." >&2
+      exit 1
+    fi
+  fi
+  EXPECT_TIMEOUTS+=("$timeout")
+done
+
 # STATUS[i] tracks each selected scenario so the report can be rewritten after every boot.
 # A long run is otherwise a silent terminal; CI keeps the page as an artifact beside the logs.
 STATUS=()
@@ -178,7 +206,12 @@ for name in "${SELECTED[@]}"; do
   fi
   export SMOKE_LOG="$ROOT/forge/run/smoke-$name.log"
 
-  if "$ROOT/tools/smoke-boot.sh" "$ROOT"; then
+  if (
+    if [ -z "${SMOKE_EXPECT_TIMEOUT:-}" ] && [ -n "${EXPECT_TIMEOUTS[$i]}" ]; then
+      export SMOKE_EXPECT_TIMEOUT="${EXPECT_TIMEOUTS[$i]}"
+    fi
+    "$ROOT/tools/smoke-boot.sh" "$ROOT"
+  ); then
     STATUS[$i]="passed"
   else
     STATUS[$i]="failed"

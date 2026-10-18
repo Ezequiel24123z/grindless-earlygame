@@ -25,6 +25,7 @@ public final class FluidWellBlockEntity extends MachineBlockEntity implements Fl
     private static final String KEY_FLUID = "Fluid";
 
     private final FluidBuffer buffer = FluidBuffer.ambient(FluidLogic.MACHINE_CAPACITY);
+    private final NativeFluidStore nativeFluids = new NativeFluidStore(buffer, this::setChanged);
     private final StatusDebounce display = new StatusDebounce();
     private TickSubscription working;
 
@@ -139,6 +140,11 @@ public final class FluidWellBlockEntity extends MachineBlockEntity implements Fl
     @Override
     public FluidState contents() {
         return buffer.state();
+    }
+
+    @Override
+    public NativeFluidStore nativeStore() {
+        return buffer.state().is(FluidLogic.WATER) ? nativeFluids : null;
     }
 
     @Override

@@ -150,6 +150,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched) | C3 integration keeps the two-iron budget and leaves vanilla tags untouched | Accepted |
 | [0137](#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it) | The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it | Accepted |
 | [0138](#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly) | A batch completes only after its fluid inputs are re-verified and drawn exactly | Accepted |
+| [0139](#adr-0139--long-native-smokes-carry-their-own-assertion-budget) | Long native smokes carry their own assertion budget | Accepted |
 
 ---
 
@@ -6131,7 +6132,8 @@ The settled design says it does not:
 ## ADR-0138 — A batch completes only after its fluid inputs are re-verified and drawn exactly
 
 **Status.** Correctness requirements accepted 2026-10-17; source-backed native-store design
-accepted 2026-10-18, with implementation and validation pending. This does not close the secondary-fluid C3 follow-up of
+accepted 2026-10-18. Native implementation and exception correction reviewed and verified
+on composed source `dcb8010`. This is not full C3 acceptance under
 [ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
 
 **Context.** A process recipe takes its first fluid input from the machine's own buffer. Any
@@ -6185,6 +6187,11 @@ The bounded implementation investigation established:
    changes out of the tentative mutation phase; notify only after the batch and the
    machine's own input/output commit are settled. An aborted operation leaves no committed
    item, primary-fluid, output or source-accounting mutation.
+   This includes synchronous exceptions during validation, withdrawal or consumer settlement,
+   not only boolean rejection. The consumer supplies explicit compensation even when it has
+   no fluid withdrawal. Restore attempted native receipts and deep consumer state before
+   propagating the original unexpected exception; retain compensation diagnostics without
+   skipping remaining restores. Fatal VM errors and world-crash atomicity remain excluded.
 6. Adapt every currently supported native source, including output-only pumps and wells;
    do not silently restrict recipes to refillable tanks. External sided capabilities retain
    their existing restrictions and cannot obtain internal restoration access. Unknown
@@ -6216,7 +6223,7 @@ adapted to Grindless's existing native buffer. None of the inspected implementat
 the stronger arbitrary-handler rollback guarantee, so their unchecked-result behavior is
 not copied. Adding eager multi-tank intake would change saved state and input custody, and
 introducing foreign storage libraries would widen this bounded repair unnecessarily.
-Implementation will reuse Grindless's existing storage primitives and independently apply
+The implementation reuses Grindless's existing storage primitives and independently applies
 the ownership pattern. No upstream code or assets have been imported. Any later direct
 reuse requires exact source, licence and notices in `THIRD_PARTY_NOTICES.md` before copying;
 the reference table is not a blanket permission to reuse third-party material.
@@ -6235,8 +6242,53 @@ the reference table is not a blanket permission to reuse third-party material.
 **Consequences.**
 - No recipe, quantity, saved key or tier change is authorized by this investigation.
 - The independent Bench boundary check and unrelated sustainability work may continue.
-  The transactional portion remains unimplemented; the accepted design is not validation.
-- Any eventual common-machine fix must preserve the two Chemical Reactor recipes without
-  opening new T1 or T2 content.
+  `NativeFluidStore`, `FluidInsert` and the private process `Completion` implement the
+  native-only contract. A first delivery handled boolean rejection but missed exceptions;
+  red fixtures in `b26ee8a` exposed 15 failures, and `fa3e708` repaired them before integration.
+  The same reviewer closed that P1. Composed S1/native source `dcb8010` subsequently
+  passed 36 suites plus production `states,settling`, with matching built/deployed hashes.
+- The common-machine fix preserves the two Chemical Reactor recipes without opening new
+  T1 or T2 content. A targeted process fixture is not a played-survival or retained-world pass.
 - The C3 acceptance on partial extraction now includes verified secondary completion
   (plan amendment PA-0002).
+
+---
+
+## ADR-0139 — Long native smokes carry their own assertion budget
+
+**Status.** Accepted, 2026-10-18. Twin-runner support passes its native fake-boot harness;
+ordinary execution of the long native-cycle fixture is still pending.
+
+**Context.** The renewable T0 smoke executes real machine work. Even Bench fabrication and
+Terminal calibration together need 1,200 powered ticks, before source and downstream cycles.
+The ordinary assertion deadline is 120 seconds. Passing only with a manually supplied
+`SMOKE_EXPECT_TIMEOUT` would leave the normal runner and CI broken for the same fixture.
+
+**Decision.** A scenario may add a sibling `tools/smoke/<name>.timeout` containing one
+positive integer assertion budget in seconds. The existing explicit `SMOKE_EXPECT_TIMEOUT`
+override wins, then the scenario budget, then the unchanged 120-second boot-helper default.
+Server-startup `SMOKE_TIMEOUT` is separate and unchanged. The PowerShell and Bash runners
+must forward identical values, reject malformed selected metadata before booting, and never
+leak one scenario's budget into another or into the caller's environment.
+Sidecars are BOM-free decimal digits with optional ASCII whitespace, bounded to
+1--2,147,483,647 seconds; leading zeroes normalize to decimal. Selected malformed metadata
+fails even when an environment override exists. Listing and unselected scenarios retain
+their existing behavior.
+
+Keep `scenarios.txt` as the single scenario list, with its existing syntax. No per-scenario
+CI step, global timeout increase, machine-speed override or skipped assertion is added.
+Fake-boot harness checks cover selection, invalid budgets, explicit override, consecutive
+scenarios and platform parity. The real long scenario must also pass through the ordinary
+runner with no environment override; a special invocation alone does not close integration.
+
+**Alternatives rejected.** Raising every scenario's deadline would delay unrelated failures.
+Changing recipe durations or injecting outputs would invalidate the production proof.
+Adding a second scenario list or bespoke runner would bypass the existing shard/selection
+contract. A small optional fixture file preserves that contract and local/CI parity.
+
+**Implementation boundary.** `run-smokes.ps1` and `run-smokes.sh`, including the CI shard
+path, are covered by 27 native fake-boot checks each. The legacy
+`run-smokes-batch.ps1` is an unchanged shared-world developer utility: it clears
+`SMOKE_DATAPACK` and already cannot execute the normal per-scenario datapack isolation.
+It is not an acceptance path for this fixture or its deadline contract. Use the canonical
+twin runners; extending or retiring that pre-existing batch utility is separate work.

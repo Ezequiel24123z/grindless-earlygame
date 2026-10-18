@@ -6,6 +6,19 @@
 checkpoint `092af29991db9f45731794a657996dcbe3925236` is integrated. The following
 preservation commit contains S1 repairs, not a successful post-repair validation.
 
+**Subsequent source-bound S1 gate:** isolated session
+`fd99d2f6-c478-49b9-aaab-8c40e2dba154` verified unchanged
+`639881f5985b2662059ca48981441c1fd38c31dc` with all 36 official suites passing.
+`VerifySustainability` passed 1,126 assertions and `VerifySustainabilityAdapters` passed 95;
+all twelve repaired contracts were exercised without changing their oracles. Two separate
+live JVMs passed 728 assertions each and produced byte-identical JSON/Markdown reports.
+The worker's `build/validation/s1-execution-gate/execution-report.md` has SHA-256
+`f2063f68c43101c6072aec6f6974e132fad7e7f243c5d4eeb7c5d60a70bccd7d`.
+The JSON SHA-256 is `4e129e9521562d53c5dd4049555ef0b547c1efb5fff28ff68a230f94b4ed76fc`.
+All 2,156 tracked inputs remained unchanged; reported source and binary identities were
+checked independently. S1 core is accepted, not T0 closure: live remains report-only with
+2 errors, 1,247 unknowns, no annotations and both ratchet/sustainability verdicts false.
+
 | Scope | Observed result | Evidence boundary |
 | --- | --- | --- |
 | C3 Forge integration at `ba7ee74` | Forge compile, 34 suites / 4,740 assertions and production states 945/945 passed | `build/validation/c3-forge-integration/`; not native renewable cycle, client or full smoke acceptance |
@@ -18,6 +31,31 @@ preservation commit contains S1 repairs, not a successful post-repair validation
 The live S1 report is deliberately report-only. T0 classifications, exact renewable closure,
 real dashboard integration, no-command survival, GUI/JEI and retained-world restart remain
 unaccepted. The sections below are historical evidence tied to their named revisions.
+
+### Native completion and its exceptional-abort correction
+
+Initial native delivery `9782853` passed 34 suites and three targeted production smokes,
+but review found an uncompensated synchronous exception path. Test-only `b26ee8a` reproduced
+15 fluid assertion failures before any runtime repair. Correction `fa3e708` then passed
+the 34-suite runner and production `states,settling` with identical built/deployed jar SHA-256
+`493413D96B2EF36C32639174F21225DDF37994C74B2ACA9B06A1A01C6462239B`.
+Full source/consumer state, quotas, caches, original exceptions, absent tentative callbacks
+and exact retries are exercised by `VerifyFluid`, not attributed to the production smoke.
+The same reviewer closed the P1. Child evidence is preserved in session
+`b2ef80f6-6560-44b8-9f0b-53290f389c06`, `files/c3-p1-completion-result.txt`.
+
+The four native commits were cherry-picked as `9e19d15`, `66b52aa`, `f933a96`, `dcb8010`
+without overlapping the S1 files. The persistent validator passed the official combined
+36 suites and `states,settling` on exact integration revision
+`dcb801056566dcd728cb3023de16c56cc6009dbd`, without source changes. `VerifyFluid` has
+285 explicit passing assertions; states matches 945/945 and settling 19/19. Built and
+deployed production jars share SHA-256
+`ef954dce5514d3737a01f2c4161563a29aa77e6b739d386ff2937a6a94e5cf03`.
+A separate `--live-only` JVM passes 728 assertions and produces the same report bytes as
+the runner (JSON `4bc05aa241fb004e5c806baaaac35ef16ec17f6f067147ae0c1d62fabfb4763a`).
+The worker's `build/validation/s1-execution-gate/composition-dcb8010/execution-report.md`
+has SHA-256 `c06cd68efc04b98bffe6e78ed5ba9475c7e20d5ffc9a9eaf9da3531b3a53c3e0`.
+This is composed-source evidence, not full native exit, survival or retained-world acceptance.
 
 ## C3 preservation and coordination transfer, 2026-10-17
 

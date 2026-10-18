@@ -83,8 +83,8 @@ unrated item lookup must still find the F2 route (ADR-0124).
   and site faults. Declare environmental inputs; do not relabel finite veins renewable.
 - `recipe/RenewableProcesses.java` — aggregate/biomass and downstream F0 routes.
 - `recipe/BootstrapAssembly.java` — Bench/Assembler projections of existing craft quantities.
-  The current Bench covers Bootstrap/four vanilla crafts, not necessarily the Relay Matrix
-  in `T1Recipes`; physical exit automation requires proof.
+  The Bench covers Bootstrap/four vanilla crafts, never a Relay Matrix. The family-wide
+  `VerifyRecipes` guard preserves the T0 hand-crafted exit (ADR-0137).
 - `item/CrankHandleItem.java` — bounded bootstrap/emergency F0 work, not perpetual manual power.
 - `machine/GeneratorKind.java` and the thermal generator implementation — shared F0/F1
   behavior; biomass registration follows supplier availability. Probe-before-drain alone does
@@ -124,12 +124,23 @@ policy ([ADR-0107](DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-con
 
 - `fluid/FluidState.java` and `fluid/FluidLogic.java` — volume, temperature, pressure.
   Ids are strings, not a Forge fluid type.
-- `fluid/FluidBuffer.java` and `container/FluidInsert.java`.
+- `fluid/FluidBuffer.java` — each buffer has one native owner.
+- `fluid/NativeFluidStore.java` — private snapshots/receipts and synchronous batch withdrawal,
+  with explicit consumer `Settlement.apply/restore`. Restoration never uses public insertion.
+- `container/FluidInsert.java` — source identity, backing-store deduplication and opposite-face
+  permissions shared by selection and commit. Unsupported handlers do not participate.
+- `fluid/FluidEndpoint.java` — native store bridge for the seven logistics endpoints and
+  `ProcessMachineBlockEntity`; external capability restrictions are unchanged.
 - `forge/.../fluid/forge/MachineFluidCapability.java` — the Forge `FLUID_HANDLER` map.
 
 `tools/checks/VerifyFluid.java` requires the ids in `FluidLogic` and `ProcessLogic`
 to be the same strings. Ambient gases do not travel the Clay Conduit; a tank holds
 them. The catalogue is [`PROCESSES.md`](PROCESSES.md#the-fluid-catalogue).
+The same suite exercises real native/process completion: split and extract-only sources,
+aliases, stale identity/state/quota/permissions, boolean and exceptional aborts, complete
+consumer/source restoration, deferred callbacks and exact retries. Source quota mutation is
+silent until settlement. Preserve original exceptions and all remaining compensations if
+one restoration reports an error; no VM/crash or external-handler guarantee is implied.
 
 ## Byproduct sink
 
@@ -237,8 +248,11 @@ enum. `VerifyT0Preparation` checks the static parts, exact texture-end continuit
 idle/active preview in addition to the ordinary controller models.
 
 `ProcessMachineBlockEntity` retains paid work under `WorkRecipe`, separately from the live
-`Recipe` selection (which is empty when inputs are invalid). Legacy saves derive the owner from
-`Recipe`. A different recipe resets work; quantity changes, starvation and structure repair do not.
+`Recipe` selection. An incomplete selection may clear when inputs become invalid, but a
+completed batch retains its selected recipe while primary/secondary fluids are unavailable.
+Legacy saves derive the owner from `Recipe`. A different recipe resets work; quantity changes,
+starvation and structure repair do not. Completed input waits poll without drawing more Flux;
+missing fluid is `STARVED`, not output `BLOCKED`. No new persistence keys are introduced.
 Outputs are reserved before any ingredient is consumed. Fluid arrival wakes work; pending output
 has its own bounded export subscription, including after a neighboring inventory is emptied.
 F0 kinds pass their rating into the base constructor before buffer creation, rather than reading
@@ -262,7 +276,7 @@ metadata/catalogue edits. Full inventory/exporter, recursive auditor, real data,
 artifacts and production serving remain incomplete; this section names ownership, not existing
 implementations. Player communication and dashboard views must project the same model.
 The [ADR-0135](DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
-S1 implementation is preserved but not accepted: loader-free `sustainability` model/auditor,
+S1 core is implemented and verified on `639881f`: loader-free `sustainability` model/auditor,
 `AuthorityAdapters`, `TagResolver`, `ConstructionReserve`, `DebtManifest` and `AuditReports`.
 `VerifySustainability` and `VerifySustainabilityAdapters` cover its proof/report seams;
 `tools/sustainability/debt.json` has no invented live exceptions. Generated
@@ -270,7 +284,8 @@ S1 implementation is preserved but not accepted: loader-free `sustainability` mo
 Circulating finite inventory is not unlimited net supply. Construction and hazardous handling
 share one exact reserve witness; unresolved tag precedence stays unknown, never a sorted-hash
 guess. Source identities must cover normalized authorities and the executed implementation.
-Follow the current validation ledger before treating any preserved source as verified.
+S2 annotations, canonical pack resolution and live enforcement remain pending. Follow the
+current validation ledger; a core test pass is not a renewable-supply certification.
 
 The functional-port follow-up starts after current integration with an audit of Firing/Trough/
 Ground Array and all authored structures. It does not authorize starting the old kernel slice
@@ -280,6 +295,11 @@ version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
 
+- `tools/run-smokes.ps1` / `.sh` read optional per-scenario `.timeout` files; an explicit
+  `SMOKE_EXPECT_TIMEOUT` wins over that assertion budget and the unchanged 120-second
+  default. Validate selected metadata before boot, retain startup `SMOKE_TIMEOUT`, and do
+  not leak one scenario's budget to the next or the caller (ADR-0139). CI uses these runners.
+  The legacy shared-world batch script is not a datapack/isolation acceptance path.
 - `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;
   opt into full smokes explicitly. Per-stage results live under `build/validation/<run-id>/`.
   See [the testing strategy](testing/test-strategy.md).
@@ -287,6 +307,8 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
   report variables must remain local (ADR-0127).
+  Assertion-budget cases run both native twins: defaults, override, LF/CRLF, bounds,
+  malformed selected metadata, consecutive scenarios and caller restoration.
   `-Only` / `--only` accepts comma-separated names through the actual CLI; unknown or empty
   selections fail before any boot, never silently shrinking or expanding the requested scope.
 - `tools/checks/VerifyT0Preparation.java` — verifies the active

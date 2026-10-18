@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.fluid;
 
+import io.github.ezequiel24123z.grindless.container.FluidInsert;
+import io.github.ezequiel24123z.grindless.container.SideMode;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
@@ -12,16 +14,24 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 /** Behaviour checks for T1 fluids. Not part of the mod. */
 public final class VerifyFluid {
@@ -40,6 +50,11 @@ public final class VerifyFluid {
         molten();
         pressure();
         processReservations();
+        nativeBatches();
+        completionRevalidation();
+        completedWorkRecovery();
+        nativeExceptions();
+        completionExceptions();
 
         System.out.println(failures == 0
                 ? "ALL FLUID CHECKS PASSED"
@@ -95,11 +110,7 @@ public final class VerifyFluid {
         eq("failed output reservation preserves all input", 3000, buffer.state().millibuckets());
         buffer.set(FluidState.of(FluidLogic.WATER, 2250));
         yes("output reserves against the exact post-consumption state", (boolean) canOutput.invoke(trough, batch));
-        Method consume = ProcessMachineBlockEntity.class.getDeclaredMethod("consumeFluid", ProcessRecipe.class);
-        consume.setAccessible(true);
-        consume.invoke(trough, batch);
-        yes("reserved non-vented output fits after consumption",
-                buffer.offer(FluidLogic.emitted(FluidLogic.WATER, 750)).isEmpty());
+        yes("the real completion commits its reserved non-vented output", complete(trough, batch, List.of()));
         eq("output commit preserves the exact reserved volume", 2000, buffer.state().millibuckets());
 
         FluidBuffer target = FluidBuffer.ambient(1000);
@@ -110,6 +121,629 @@ public final class VerifyFluid {
         yes("an in-mod partial insert returns a bounded same-id remainder",
                 remainder.is(offered.id()) && moved >= 0 && moved <= offered.millibuckets());
         eq("partial output acceptance leaves every unaccepted mB", 150, remainder.millibuckets());
+    }
+
+    private static void nativeBatches() {
+        NativeEndpoint primary = new NativeEndpoint(FluidState.of(ProcessLogic.HYDROGEN, 100), 70);
+        NativeEndpoint first = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 80, 47.0, 0.3), 60);
+        NativeEndpoint second = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 70, 29.0, 0.2), 40);
+        second.extractFace = Direction.SOUTH;
+        List<IngredientSpec> demand = List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
+                IngredientSpec.fluid(FluidLogic.WATER, 150));
+        List<FluidInsert.Source> split = List.of(source(first, Direction.NORTH), source(second, Direction.SOUTH));
+        boolean[] settled = {false};
+        primary.afterChanged = () -> yes("primary notification observes settled consumption", settled[0]);
+        first.afterChanged = () -> yes("split-source notification observes all withdrawals",
+                settled[0] && primary.contents().isEmpty() && second.contents().isEmpty());
+        no("extract-only sources reject ordinary insertion", first.canInsert(Direction.NORTH, first.contents()));
+        NativeFluidStore.Batch batch = FluidInsert.plan(primary.nativeStore(), demand, split).orElseThrow();
+        eq("planning does not withdraw from the primary", 100, primary.contents().millibuckets());
+        eq("planning does not withdraw from a secondary", 80, first.contents().millibuckets());
+        yes("split extract-only faces pay one exact native batch",
+                batch.commit(settlement(() -> settled[0] = true, () -> settled[0] = false)));
+        eq("primary withdrawal debits its quota", 0, primary.quota);
+        eq("first split receipt debits its quota", 0, first.quota);
+        eq("second split receipt debits its quota", 0, second.quota);
+        eq("a backing owner notifies once after commit", 1, first.notifications);
+        eq("native withdrawal never calls external extract", 0, first.extractCalls + second.extractCalls);
+        eq("native withdrawal never attempts rollback by insert", 0, first.insertCalls + second.insertCalls);
+
+        NativeEndpoint shared = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 100), 80);
+        NativeEndpoint alias = new NativeEndpoint(shared);
+        primary.buffer.set(FluidState.of(ProcessLogic.HYDROGEN, 1));
+        List<FluidInsert.Source> aliases = List.of(source(shared, Direction.NORTH), source(alias, Direction.NORTH));
+        eq("selection counts backing aliases only once", 1, FluidInsert.available(aliases).size());
+        no("backing aliases cannot manufacture a second payment",
+                FluidInsert.plan(primary.nativeStore(), List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 1),
+                        IngredientSpec.fluid(FluidLogic.WATER, 150)), aliases).isPresent());
+        eq("insufficient secondary stock leaves the planned primary untouched",
+                FluidState.of(ProcessLogic.HYDROGEN, 1), primary.contents());
+        no("the owner planner also rejects duplicate aliases across requests", NativeFluidStore.plan(List.of(
+                new NativeFluidStore.Request(FluidLogic.WATER, 80,
+                        List.of(new NativeFluidStore.Access(shared.nativeStore(), () -> true))),
+                new NativeFluidStore.Request(FluidLogic.WATER, 80,
+                        List.of(new NativeFluidStore.Access(alias.nativeStore(), () -> true))))).isPresent());
+        eq("a refused alias plan preserves all backing stock", 100, shared.contents().millibuckets());
+
+        NativeEndpoint unsupported = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 1000), 0);
+        unsupported.nativeEnabled = false;
+        List<FluidInsert.Source> filtered = List.of(source(shared, Direction.SOUTH),
+                source(unsupported, Direction.NORTH), source(shared, Direction.NORTH));
+        eq("selection applies the same native and face filter", List.of(shared.contents()),
+                FluidInsert.available(filtered));
+        List<IngredientSpec> filteredDemand = List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 1),
+                IngredientSpec.fluid(FluidLogic.WATER, 50));
+        no("an unsupported handler cannot enter the native withdrawal plan",
+                FluidInsert.plan(primary.nativeStore(), filteredDemand,
+                        List.of(source(unsupported, Direction.NORTH))).isPresent());
+        no("planning rejects the same face that selection rejects",
+                FluidInsert.plan(primary.nativeStore(), filteredDemand,
+                        List.of(source(shared, Direction.SOUTH))).isPresent());
+        eq("unsupported source handlers remain untouched", 0, unsupported.extractCalls + unsupported.insertCalls);
+
+        FluidEndpoint[] selected = {shared};
+        FluidInsert.Source replaceable = new FluidInsert.Source(Direction.NORTH, () -> selected[0]);
+        NativeFluidStore.Batch staleIdentity = FluidInsert.plan(shared.nativeStore(),
+                List.of(IngredientSpec.fluid(FluidLogic.WATER, 20),
+                        IngredientSpec.fluid(FluidLogic.WATER, 20)), List.of(replaceable)).orElseThrow();
+        selected[0] = alias;
+        no("a replaced endpoint identity aborts even with the same backing",
+                staleIdentity.commit(settlement(() -> fail("stale identity must not settle"), () -> { })));
+        eq("identity failure preserves source quota", 80, shared.quota);
+        eq("identity failure sends no tentative notification", 0, shared.notifications);
+
+        NativeFluidStore.Batch staleState = NativeFluidStore.plan(List.of(new NativeFluidStore.Request(
+                FluidLogic.WATER, 50, List.of(new NativeFluidStore.Access(shared.nativeStore(), () -> true)))))
+                .orElseThrow();
+        FluidState replacement = FluidState.of(FluidLogic.WATER, 100, 66.0, 0.4);
+        shared.buffer.set(replacement);
+        no("a changed temperature/pressure snapshot aborts before mutation",
+                staleState.commit(settlement(() -> fail("stale state must not settle"), () -> { })));
+        eq("a stale plan does not overwrite a newer full fluid state", replacement, shared.contents());
+        NativeFluidStore.Batch staleQuota = NativeFluidStore.plan(List.of(new NativeFluidStore.Request(
+                FluidLogic.WATER, 50, List.of(new NativeFluidStore.Access(shared.nativeStore(), () -> true)))))
+                .orElseThrow();
+        shared.quota = 31;
+        no("a changed owner quota also invalidates the snapshot",
+                staleQuota.commit(settlement(() -> fail("stale quota must not settle"), () -> { })));
+        eq("a stale plan preserves the newer owner quota", 31, shared.quota);
+        NativeFluidStore.Batch closedFace = FluidInsert.plan(shared.nativeStore(),
+                List.of(IngredientSpec.fluid(FluidLogic.WATER, 20),
+                        IngredientSpec.fluid(FluidLogic.WATER, 20)), List.of(source(shared, Direction.NORTH)))
+                .orElseThrow();
+        shared.allowed = () -> false;
+        no("a face closed after planning aborts before withdrawal",
+                closedFace.commit(settlement(() -> fail("closed face must not settle"), () -> { })));
+        eq("permission failure preserves full state", replacement, shared.contents());
+    }
+
+    private static void completionRevalidation() throws Exception {
+        ProcessRecipe fixture = new ProcessRecipe("check/native_completion", MachineFamily.CHEMICAL_REACTOR,
+                List.of(IngredientSpec.item("minecraft:dirt", 1),
+                        IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
+                        IngredientSpec.fluid(FluidLogic.WATER, 100),
+                        IngredientSpec.fluid(ProcessLogic.OXYGEN, 50)),
+                List.of(OutputSpec.item("minecraft:clay_ball", 2)), Double.NaN, null, 20, 4);
+        FluidState primary = FluidState.of(ProcessLogic.HYDROGEN, 100, 53.0, 0.4);
+        FluidState water = FluidState.of(FluidLogic.WATER, 500, 41.0, 0.3);
+        ProcessMachineBlockEntity consumer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+        loadFluid(consumer, primary, 70);
+        consumer.setItem(0, new ItemStack(Items.DIRT));
+        cacheCompleted(consumer, fixture);
+        ProcessMachineBlockEntity producer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+        loadFluid(producer, water, 350);
+        producer.containerConfig().setSideMode(Direction.NORTH, SideMode.EXTRACT);
+        cacheCompleted(producer, fixture);
+        no("a process output source need not permit return insertion",
+                producer.canInsert(Direction.NORTH, water.withAmount(100)));
+        NativeEndpoint late = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), 60);
+        List<FluidInsert.Source> sources = List.of(source(producer, Direction.NORTH), source(late, Direction.NORTH));
+        int[] probes = {0};
+        late.allowed = () -> ++probes[0] < 3;
+        no("a late participant contract change aborts actual completion", complete(consumer, fixture, sources));
+        eq("late abort restores the consumer's complete primary state", primary, consumer.contents());
+        eq("late abort restores the consumer's output quota", 70,
+                consumer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        eq("late abort restores an earlier process source's complete state", water, producer.contents());
+        eq("late abort restores the earlier process output quota", 350,
+                producer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        Field producerCache = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+        producerCache.setAccessible(true);
+        eq("late abort does not notify or invalidate an earlier source", fixture, producerCache.get(producer));
+        eq("late abort preserves the untouched participant state",
+                FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), late.contents());
+        eq("late abort leaves paid progress unchanged", 20.0,
+                consumer.saveWithoutMetadata().getDouble("Progress"));
+        eq("late abort retains the selected recipe", fixture.id(),
+                consumer.saveWithoutMetadata().getString("Recipe"));
+        eq("late abort does not consume items", 1, consumer.getItem(0).getCount());
+        yes("late abort does not create an item output",
+                consumer.getItem(consumer.menuKind().inputs()).isEmpty());
+        eq("late abort sends no source notification", 0, late.notifications);
+        eq("late abort leaves the untouched participant quota unchanged", 60, late.quota);
+        eq("late abort never calls an external extraction", 0, late.extractCalls);
+        eq("late abort never tries insertion-based restoration", 0, late.insertCalls);
+
+        late.allowed = () -> true;
+        consumer.removeItem(0, 1);
+        no("completion rechecks an item removed from a cached recipe", complete(consumer, fixture, sources));
+        eq("missing items preserve primary fluid", primary, consumer.contents());
+        eq("missing items preserve every secondary", water, producer.contents());
+        consumer.setItem(0, new ItemStack(Items.DIRT));
+        for (int slot = consumer.menuKind().inputs(); slot < consumer.getContainerSize(); slot++) {
+            consumer.setItem(slot, new ItemStack(Items.STONE, 64));
+        }
+        no("full item outputs reject completion before any withdrawal", complete(consumer, fixture, sources));
+        eq("full output preserves primary fluid", primary, consumer.contents());
+        eq("full output preserves secondary quota", 350,
+                producer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        for (int slot = consumer.menuKind().inputs(); slot < consumer.getContainerSize(); slot++) {
+            consumer.setItem(slot, ItemStack.EMPTY);
+        }
+        late.afterChanged = () -> {
+            eq("notification sees the consumer's settled item output", 2,
+                    consumer.getItem(consumer.menuKind().inputs()).getCount());
+            eq("notification sees the consumer's settled progress", 0.0,
+                    consumer.saveWithoutMetadata().getDouble("Progress"));
+            eq("notification sees the earlier producer's settled quota", 250,
+                    producer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        };
+        yes("completion can retry exactly after a participant recovers", complete(consumer, fixture, sources));
+        yes("successful completion consumes the primary exactly once", consumer.contents().isEmpty());
+        eq("successful completion retains exact source metadata", water.withAmount(400), producer.contents());
+        eq("successful completion takes only its late-source receipt", 30, late.contents().millibuckets());
+        eq("successful completion consumes the required item once", 0, consumer.getItem(0).getCount());
+
+        for (int amount : new int[] {0, 99}) {
+            ProcessMachineBlockEntity missingPrimary = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+            loadFluid(missingPrimary, primary.withAmount(amount), 0);
+            missingPrimary.setItem(0, new ItemStack(Items.DIRT));
+            cacheCompleted(missingPrimary, fixture);
+            NativeEndpoint fullWater = new NativeEndpoint(water, 0);
+            NativeEndpoint fullOxygen = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80), 0);
+            no("missing/short primary rejects actual completion at " + amount, complete(missingPrimary, fixture,
+                    List.of(source(fullWater, Direction.NORTH), source(fullOxygen, Direction.NORTH))));
+            eq("missing/short primary preserves the item at " + amount, 1,
+                    missingPrimary.getItem(0).getCount());
+            eq("missing/short primary preserves water at " + amount, water, fullWater.contents());
+            eq("missing/short primary preserves oxygen at " + amount, 80, fullOxygen.contents().millibuckets());
+        }
+    }
+
+    private static void completedWorkRecovery() throws Exception {
+        ProcessRecipe recipe = ProcessLookup.recipes().stream().filter(row -> row.id().equals("recombine/water"))
+                .findFirst().orElseThrow();
+        IngredientSpec primary = recipe.fluidInputs().get(0);
+        IngredientSpec secondary = recipe.fluidInputs().get(1);
+        ProcessMachineBlockEntity consumer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+        loadFluid(consumer, FluidState.of(primary.id(), primary.count()), 0);
+        cacheCompleted(consumer, recipe);
+        consumer.energy().setStored(Math.min(512L, consumer.energy().getCapacity()));
+        NativeEndpoint neighbour = new NativeEndpoint(FluidState.of(secondary.id(), secondary.count()), 0);
+        List<FluidInsert.Source> sources = List.of(source(neighbour, Direction.NORTH));
+        neighbour.buffer.set(FluidState.EMPTY);
+        long energy = consumer.energy().getStored();
+        for (long tick = 1; tick <= 4; tick++) {
+            work(consumer, tick, sources);
+        }
+        eq("a drained cached secondary freezes completed progress", (double) recipe.durationTicks(),
+                consumer.saveWithoutMetadata().getDouble("Progress"));
+        eq("a drained cached secondary consumes no additional energy", energy, consumer.energy().getStored());
+        eq("a drained cached secondary reports missing input, not full output", MachineStatus.STARVED,
+                consumer.menuStatus());
+        eq("a drained cached secondary retains its selected recipe", recipe.id(),
+                consumer.saveWithoutMetadata().getString("Recipe"));
+        eq("a drained cached secondary leaves the primary untouched", primary.count(),
+                consumer.contents().millibuckets());
+
+        CompoundTag waiting = consumer.saveWithoutMetadata();
+        ProcessMachineBlockEntity reloaded = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+        reloaded.load(waiting);
+        eq("waiting work round-trips without adding persistence keys", waiting.getAllKeys(),
+                reloaded.saveWithoutMetadata().getAllKeys());
+        work(reloaded, 5, sources);
+        eq("loaded completed work remains selected with no secondary", recipe.id(),
+                reloaded.saveWithoutMetadata().getString("WorkRecipe"));
+        eq("loaded completed work keeps its paid progress", (double) recipe.durationTicks(),
+                reloaded.saveWithoutMetadata().getDouble("Progress"));
+        neighbour.buffer.set(FluidState.of(secondary.id(), secondary.count()));
+        neighbour.afterChanged = () -> {
+            yes("source notification sees the consumer's final fluid output",
+                    reloaded.contents().is(recipe.fluidOutputs().get(0).id()));
+            eq("source notification sees settled output accounting", recipe.fluidOutputs().get(0).count(),
+                    reloaded.saveWithoutMetadata().getInt("FluidOutputQuota"));
+            eq("source notification sees the completed progress debit", 0.0,
+                    reloaded.saveWithoutMetadata().getDouble("Progress"));
+        };
+        work(reloaded, 6, sources);
+        eq("a replenished secondary completes without additional power", energy, reloaded.energy().getStored());
+        eq("a replenished secondary consumes the exact required volume", FluidState.EMPTY, neighbour.contents());
+        eq("a replenished secondary produces the original recipe output", recipe.fluidOutputs().get(0).count(),
+                reloaded.contents().millibuckets());
+        eq("completion never called the extract-only handler", 0, neighbour.extractCalls);
+
+        for (int amount : new int[] {0, primary.count() - 1}) {
+            ProcessMachineBlockEntity starved = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+            loadFluid(starved, FluidState.of(primary.id(), amount), 0);
+            cacheCompleted(starved, recipe);
+            starved.energy().setStored(Math.min(512L, starved.energy().getCapacity()));
+            NativeEndpoint available = new NativeEndpoint(FluidState.of(secondary.id(), secondary.count()), 0);
+            List<FluidInsert.Source> availableSources = List.of(source(available, Direction.NORTH));
+            long before = starved.energy().getStored();
+            work(starved, 10, availableSources);
+            eq("missing/short primary reports starvation at " + amount, MachineStatus.STARVED,
+                    starved.menuStatus());
+            eq("missing/short primary freezes energy at " + amount, before, starved.energy().getStored());
+            eq("missing/short primary freezes progress at " + amount, (double) recipe.durationTicks(),
+                    starved.saveWithoutMetadata().getDouble("Progress"));
+            eq("missing/short primary leaves the secondary at " + amount, secondary.count(),
+                    available.contents().millibuckets());
+            yes("primary replenishment fits its exact reservation at " + amount, starved.insert(null,
+                    FluidState.of(primary.id(), primary.count() - amount)).isEmpty());
+            work(starved, 11, availableSources);
+            eq("primary replenishment completes the retained recipe at " + amount,
+                    recipe.fluidOutputs().get(0).id(), starved.contents().id());
+            eq("primary recovery spends no additional energy at " + amount, before, starved.energy().getStored());
+        }
+
+        ProcessMachineBlockEntity blocked = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+        loadFluid(blocked, FluidState.of(primary.id(), primary.count() + 100), 0);
+        cacheCompleted(blocked, recipe);
+        NativeEndpoint untouched = new NativeEndpoint(FluidState.of(secondary.id(), secondary.count()), 0);
+        work(blocked, 20, List.of(source(untouched, Direction.NORTH)));
+        eq("a non-empty incompatible remainder is an output blockage", MachineStatus.BLOCKED, blocked.menuStatus());
+        eq("output blockage preserves every secondary", secondary.count(), untouched.contents().millibuckets());
+        eq("output blockage preserves completed work", (double) recipe.durationTicks(),
+                blocked.saveWithoutMetadata().getDouble("Progress"));
+    }
+
+    private static void nativeExceptions() throws Exception {
+        for (boolean duringSettlement : new boolean[] {false, true}) {
+            String stage = duringSettlement ? "settlement exception" : "late guard exception";
+            NativeEndpoint primary = new NativeEndpoint(FluidState.of(ProcessLogic.HYDROGEN, 100, 53.0, 0.4), 70);
+            NativeEndpoint water = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 500, 41.0, 0.3), 350);
+            NativeEndpoint late = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), 60);
+            List<FluidInsert.Source> sources = List.of(source(water, Direction.NORTH), source(late, Direction.NORTH));
+            List<IngredientSpec> inputs = List.of(IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
+                    IngredientSpec.fluid(FluidLogic.WATER, 100), IngredientSpec.fluid(ProcessLogic.OXYGEN, 50));
+            CompoundTag[] local = {new CompoundTag()};
+            local[0].put("Input", new ItemStack(Items.DIRT).save(new CompoundTag()));
+            local[0].put("Output", ItemStack.EMPTY.save(new CompoundTag()));
+            local[0].putString("Recipe", "check/native_exception");
+            local[0].putString("WorkRecipe", "check/native_exception");
+            local[0].putDouble("Progress", 20.0);
+            CompoundTag beforeLocal = local[0].copy();
+            List<CompoundTag> beforeStores = List.of(nativeState(primary), nativeState(water), nativeState(late));
+            RuntimeException failure = new IllegalStateException("check " + stage);
+            int[] probes = {0};
+            if (!duringSettlement) {
+                late.allowed = () -> {
+                    if (++probes[0] == 3) {
+                        throw failure;
+                    }
+                    return true;
+                };
+            }
+            NativeFluidStore.Batch batch = FluidInsert.plan(primary.nativeStore(), inputs, sources).orElseThrow();
+            originalFailure("native helper preserves the original " + stage, failure, () -> batch.commit(settlement(() -> {
+                local[0].put("Input", ItemStack.EMPTY.save(new CompoundTag()));
+                local[0].put("Output", new ItemStack(Items.CLAY_BALL, 2).save(new CompoundTag()));
+                local[0].putString("Recipe", "");
+                local[0].putString("WorkRecipe", "");
+                local[0].putDouble("Progress", 0.0);
+                primary.buffer.set(FluidState.of(FluidLogic.WATER, 125, 61.0, 0.5));
+                primary.quota = 125;
+                throw failure;
+            }, () -> local[0] = beforeLocal.copy())));
+            eq("native helper restores every full state and quota after " + stage, beforeStores,
+                    List.of(nativeState(primary), nativeState(water), nativeState(late)));
+            eq("native helper restores items/output/recipe/work/progress after " + stage, beforeLocal, local[0]);
+            eq("native helper sends no commit callbacks after " + stage, 0,
+                    primary.notifications + water.notifications + late.notifications);
+            late.allowed = () -> true;
+            Optional<NativeFluidStore.Batch> retry = FluidInsert.plan(primary.nativeStore(), inputs, sources);
+            yes("native helper retains a retryable exact batch after " + stage, retry.isPresent());
+            if (retry.isPresent()) {
+                yes("native helper retry completes after " + stage, retry.get().commit());
+                eq("native helper retry consumes each source exactly after " + stage,
+                        List.of(0, 400, 30), List.of(primary.contents().millibuckets(),
+                                water.contents().millibuckets(), late.contents().millibuckets()));
+            }
+        }
+        NativeEndpoint outputOnly = new NativeEndpoint(FluidState.of(FluidLogic.WATER, 50, 44.0, 0.2), 40);
+        CompoundTag beforeOutput = nativeState(outputOnly);
+        RuntimeException outputFailure = new IllegalStateException("check output-only settlement");
+        RuntimeException restoreFailure = new IllegalArgumentException("check compensation diagnostic");
+        int[] localOutput = {0};
+        NativeFluidStore.Batch outputBatch = FluidInsert.plan(outputOnly.nativeStore(), List.of(), List.of())
+                .orElseThrow();
+        originalFailure("an output-only consumer retains the original exception", outputFailure,
+                () -> outputBatch.commit(settlement(() -> {
+                    outputOnly.buffer.set(FluidState.of(FluidLogic.WATER, 150, 31.0, 0.1));
+                    outputOnly.quota = 140;
+                    localOutput[0] = 2;
+                    throw outputFailure;
+                }, () -> {
+                    localOutput[0] = 0;
+                    throw restoreFailure;
+                })));
+        eq("an output-only native participant restores its full state without a withdrawal",
+                beforeOutput, nativeState(outputOnly));
+        eq("an output-only consumer compensates its own output", 0, localOutput[0]);
+        eq("a compensation diagnostic is suppressed on the original exception",
+                List.of(restoreFailure), List.of(outputFailure.getSuppressed()));
+        eq("a compensation exception never emits a commit notification", 0, outputOnly.notifications);
+        yes("an output-only native batch can be retried", FluidInsert.plan(outputOnly.nativeStore(),
+                List.of(), List.of()).orElseThrow().commit());
+
+        FluidBuffer accountingBuffer = FluidBuffer.ambient(1000);
+        FluidState accountingBefore = FluidState.of(FluidLogic.WATER, 500, 35.0, 0.1);
+        accountingBuffer.set(accountingBefore);
+        int[] quota = {350};
+        int[] callbacks = {0};
+        RuntimeException accountingFailure = new IllegalStateException("check native quota assignment");
+        NativeFluidStore accounting = new NativeFluidStore(accountingBuffer, () -> quota[0], value -> {
+            quota[0] = value;
+            if (value == 250) {
+                throw accountingFailure;
+            }
+        }, () -> callbacks[0]++);
+        NativeFluidStore.Batch accountingBatch = NativeFluidStore.plan(List.of(new NativeFluidStore.Request(
+                FluidLogic.WATER, 100, List.of(new NativeFluidStore.Access(accounting, () -> true)))))
+                .orElseThrow();
+        originalFailure("a native accounting exception retains its diagnostic", accountingFailure, accountingBatch::commit);
+        eq("a partially mutated withdrawal restores its entire fluid state", accountingBefore, accounting.contents());
+        eq("a partially mutated withdrawal restores its quota", 350, quota[0]);
+        eq("a partially mutated withdrawal emits no commit callback", 0, callbacks[0]);
+    }
+
+    private static void completionExceptions() throws Exception {
+        for (boolean duringSettlement : new boolean[] {false, true}) {
+            String stage = duringSettlement ? "consumer mutation exception" : "late participant exception";
+            ProcessRecipe fixture = new ProcessRecipe("check/completion_exception", MachineFamily.CHEMICAL_REACTOR,
+                    List.of(IngredientSpec.item("minecraft:dirt", 1),
+                            IngredientSpec.fluid(ProcessLogic.HYDROGEN, 100),
+                            IngredientSpec.fluid(FluidLogic.WATER, 100),
+                            IngredientSpec.fluid(ProcessLogic.OXYGEN, 50)),
+                    List.of(OutputSpec.item("minecraft:clay_ball", 2)), Double.NaN, null, 20, 4);
+            ProcessMachineBlockEntity consumer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+            loadFluid(consumer, FluidState.of(ProcessLogic.HYDROGEN, 100, 53.0, 0.4), 70);
+            ItemStack taggedInput = new ItemStack(Items.DIRT);
+            taggedInput.getOrCreateTag().putString("Check", "completion-compensation");
+            consumer.setItem(0, taggedInput);
+            cacheCompleted(consumer, fixture);
+            ProcessMachineBlockEntity producer = machine(ProcessMachineKind.CHEMICAL_REACTOR);
+            loadFluid(producer, FluidState.of(FluidLogic.WATER, 500, 41.0, 0.3), 350);
+            producer.containerConfig().setSideMode(Direction.NORTH, SideMode.EXTRACT);
+            cacheCompleted(producer, fixture);
+            NativeEndpoint late = new NativeEndpoint(FluidState.of(ProcessLogic.OXYGEN, 80, 37.0, 0.2), 60);
+            List<FluidInsert.Source> sources = List.of(source(producer, Direction.NORTH), source(late, Direction.NORTH));
+            RuntimeException failure = new IllegalStateException("check " + stage);
+            int[] probes = {0};
+            if (duringSettlement) {
+                Field field = ProcessMachineBlockEntity.class.getDeclaredField("items");
+                field.setAccessible(true);
+                field.set(consumer, new FailingInventory((SimpleContainer) field.get(consumer),
+                        consumer.menuKind().inputs(), failure));
+            } else {
+                late.allowed = () -> {
+                    if (++probes[0] == 3) {
+                        throw failure;
+                    }
+                    return true;
+                };
+            }
+            CompoundTag beforeConsumer = consumer.saveWithoutMetadata();
+            CompoundTag beforeProducer = producer.saveWithoutMetadata();
+            CompoundTag beforeLate = nativeState(late);
+            originalFailure("real process preserves the original " + stage, failure,
+                    () -> complete(consumer, fixture, sources));
+            eq("real process restores COMPLETE consumer NBT after " + stage, beforeConsumer,
+                    consumer.saveWithoutMetadata());
+            eq("real process restores COMPLETE source NBT after " + stage, beforeProducer,
+                    producer.saveWithoutMetadata());
+            eq("real process restores COMPLETE late-source state after " + stage, beforeLate, nativeState(late));
+            Field cache = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+            cache.setAccessible(true);
+            eq("real process preserves consumer recipe cache after " + stage, fixture, cache.get(consumer));
+            eq("real process sends no source-cache notification after " + stage, fixture, cache.get(producer));
+            eq("real process sends no late-source commit callback after " + stage, 0, late.notifications);
+            Field loading = ProcessMachineBlockEntity.class.getDeclaredField("loadingInventory");
+            loading.setAccessible(true);
+            no("real process releases inventory suppression after " + stage, loading.getBoolean(consumer));
+            late.allowed = () -> true;
+            yes("real process retries its paid batch after " + stage, complete(consumer, fixture, sources));
+            eq("real process retry makes exactly one output after " + stage, 2,
+                    consumer.getItem(consumer.menuKind().inputs()).getCount());
+            eq("real process retry debits progress exactly once after " + stage, 0.0,
+                    consumer.saveWithoutMetadata().getDouble("Progress"));
+            eq("real process retry debits source quota exactly after " + stage, 250,
+                    producer.saveWithoutMetadata().getInt("FluidOutputQuota"));
+        }
+    }
+
+    private static CompoundTag nativeState(NativeEndpoint endpoint) {
+        CompoundTag state = new CompoundTag();
+        state.put("Fluid", FluidNbt.save(endpoint.contents()));
+        state.putInt("FluidOutputQuota", endpoint.quota);
+        return state;
+    }
+
+    private static NativeFluidStore.Settlement settlement(Runnable apply, Runnable restore) {
+        return new NativeFluidStore.Settlement() {
+            @Override
+            public void apply() {
+                apply.run();
+            }
+
+            @Override
+            public void restore() {
+                restore.run();
+            }
+        };
+    }
+
+    private static void originalFailure(String what, RuntimeException expected, FailingAction action) throws Exception {
+        try {
+            action.run();
+            fail(what + ": expected the synchronous exception");
+        } catch (RuntimeException actual) {
+            yes(what, actual == expected);
+        }
+    }
+
+    @FunctionalInterface
+    private interface FailingAction {
+        void run() throws Exception;
+    }
+
+    private static final class FailingInventory extends SimpleContainer {
+        private final SimpleContainer delegate;
+        private final int failedSlot;
+        private RuntimeException failure;
+
+        private FailingInventory(SimpleContainer delegate, int failedSlot, RuntimeException failure) {
+            super(delegate.getContainerSize());
+            this.delegate = delegate;
+            this.failedSlot = failedSlot;
+            this.failure = failure;
+        }
+
+        @Override
+        public ItemStack getItem(int slot) {
+            return delegate.getItem(slot);
+        }
+
+        @Override
+        public ItemStack removeItem(int slot, int count) {
+            return delegate.removeItem(slot, count);
+        }
+
+        @Override
+        public void setItem(int slot, ItemStack stack) {
+            delegate.setItem(slot, stack);
+            if (slot == failedSlot && failure != null) {
+                RuntimeException thrown = failure;
+                failure = null;
+                throw thrown;
+            }
+        }
+
+        @Override
+        public ListTag createTag() {
+            return delegate.createTag();
+        }
+    }
+
+    private static void loadFluid(ProcessMachineBlockEntity machine, FluidState state, int quota) {
+        CompoundTag saved = machine.saveWithoutMetadata();
+        saved.put("Fluid", FluidNbt.save(state));
+        saved.putInt("FluidOutputQuota", quota);
+        machine.load(saved);
+    }
+
+    private static void cacheCompleted(ProcessMachineBlockEntity machine, ProcessRecipe recipe) throws Exception {
+        for (String name : List.of("cachedRecipeId", "workRecipeId")) {
+            Field field = ProcessMachineBlockEntity.class.getDeclaredField(name);
+            field.setAccessible(true);
+            field.set(machine, recipe.id());
+        }
+        Field cached = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+        cached.setAccessible(true);
+        cached.set(machine, recipe);
+        Field progress = ProcessMachineBlockEntity.class.getDeclaredField("progress");
+        progress.setAccessible(true);
+        progress.setDouble(machine, recipe.durationTicks());
+    }
+
+    private static boolean complete(ProcessMachineBlockEntity machine, ProcessRecipe recipe,
+                                    List<FluidInsert.Source> sources) throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("complete", ProcessRecipe.class, List.class);
+        method.setAccessible(true);
+        try {
+            return (boolean) method.invoke(machine, recipe, sources);
+        } catch (InvocationTargetException exception) {
+            if (exception.getCause() instanceof RuntimeException failure) {
+                throw failure;
+            }
+            throw exception;
+        }
+    }
+
+    private static void work(ProcessMachineBlockEntity machine, long tick,
+                             List<FluidInsert.Source> sources) throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
+        method.setAccessible(true);
+        method.invoke(machine, tick, sources);
+    }
+
+    private static FluidInsert.Source source(FluidEndpoint endpoint, Direction face) {
+        return new FluidInsert.Source(face, () -> endpoint);
+    }
+
+    private static final class NativeEndpoint implements FluidEndpoint {
+        private final FluidBuffer buffer;
+        private final NativeFluidStore store;
+        private int quota;
+        private int notifications;
+        private int extractCalls;
+        private int insertCalls;
+        private boolean nativeEnabled = true;
+        private Direction extractFace = Direction.NORTH;
+        private BooleanSupplier allowed = () -> true;
+        private Runnable afterChanged = () -> { };
+
+        private NativeEndpoint(FluidState contents, int quota) {
+            buffer = new FluidBuffer(16_000, 2000.0, 5.0);
+            buffer.set(contents);
+            this.quota = quota;
+            store = new NativeFluidStore(buffer, () -> this.quota, value -> this.quota = value, () -> {
+                notifications++;
+                afterChanged.run();
+            });
+        }
+
+        private NativeEndpoint(NativeEndpoint backing) {
+            buffer = backing.buffer;
+            store = backing.store;
+        }
+
+        @Override
+        public boolean canInsert(Direction from, FluidState state) {
+            return false;
+        }
+
+        @Override
+        public FluidState insert(Direction from, FluidState state) {
+            insertCalls++;
+            throw new AssertionError("Native completion must not use insertion-based rollback");
+        }
+
+        @Override
+        public boolean canExtract(Direction from) {
+            return from == extractFace && allowed.getAsBoolean() && !buffer.isEmpty();
+        }
+
+        @Override
+        public FluidState extract(Direction from, int millibuckets) {
+            extractCalls++;
+            throw new AssertionError("Native completion must not call an external extraction handler");
+        }
+
+        @Override
+        public NativeFluidStore nativeStore() {
+            return nativeEnabled ? store : null;
+        }
+
+        @Override
+        public FluidState contents() {
+            return buffer.state();
+        }
+
+        @Override
+        public int capacity() {
+            return buffer.capacity();
+        }
     }
 
     private static ProcessMachineBlockEntity machine(ProcessMachineKind kind) throws Exception {
