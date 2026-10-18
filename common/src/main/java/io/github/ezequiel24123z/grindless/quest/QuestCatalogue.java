@@ -56,7 +56,7 @@ public final class QuestCatalogue {
             task("extractor", "bootstrap", Evidence.ITEM, "grindless:crude_extractor", 1,
                     List.of("crank"), reward("minecraft:gravel", 8)),
             task("quern", "workshop", Evidence.ITEM, "grindless:quern", 1,
-                    List.of("extractor"), reward("minecraft:brick", 4)),
+                    List.of("multitool"), reward("minecraft:brick", 4)),
             task("water", "workshop", Evidence.ITEM, "grindless:hand_pump", 1,
                     List.of("quern"), reward("minecraft:stick", 4)),
             task("clay_mixer", "workshop", Evidence.ITEM, "grindless:clay_mixer", 1,

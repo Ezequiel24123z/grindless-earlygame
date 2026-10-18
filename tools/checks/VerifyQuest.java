@@ -65,7 +65,12 @@ public final class VerifyQuest {
         eq("bootstrap starts at the multitool", "grindless:multitool", subject("multitool"));
         eq("then the crank", "grindless:hand_crank_dynamo", subject("crank"));
         eq("then the extractor", "grindless:crude_extractor", subject("extractor"));
-        eq("calibration follows the extractor", "grindless:calibrated_data_core", subject("calibrate"));
+        eq("the workshop starts after the multitool", List.of("multitool"), task("quern").requires());
+        eq("the optional crank follows the multitool", List.of("multitool"), task("crank").requires());
+        eq("the optional extractor keeps its crank prerequisite", List.of("crank"), task("extractor").requires());
+        no("the optional crank is not a prerequisite of the T0 exit", reaches("crank", "relay"));
+        no("the optional extractor is not a prerequisite of the T0 exit", reaches("extractor", "relay"));
+        eq("calibration needs a physical core", "grindless:calibrated_data_core", subject("calibrate"));
         eq("calibration now follows physical ceramics", List.of("ceramics"), task("calibrate").requires());
         eq("water supply precedes wet mixing", List.of("quern", "water"), task("clay_mixer").requires());
         for (QuestCatalogue.Task task : tasks) {
@@ -111,6 +116,24 @@ public final class VerifyQuest {
                 QuestLogic.consider(task("multitool"), empty, false));
         eq("the multitool is claimable when it is held", QuestLogic.Status.CLAIMABLE,
                 QuestLogic.consider(task("multitool"), empty, true));
+        eq("the quern reward is locked before the multitool claim", QuestLogic.Status.LOCKED,
+                QuestLogic.consider(task("quern"), empty, true));
+        eq("the workshop needs quern evidence, not an automatic starting reward", QuestLogic.Status.UNMET,
+                QuestLogic.consider(task("quern"), Set.of("multitool"), false));
+        eq("the quern can be claimed without either optional machine", QuestLogic.Status.CLAIMABLE,
+                QuestLogic.consider(task("quern"), Set.of("multitool"), true));
+        eq("the quern claim cannot be repeated", QuestLogic.Status.CLAIMED,
+                QuestLogic.consider(task("quern"), Set.of("multitool", "quern"), true));
+        eq("the optional extractor still needs the crank claim", QuestLogic.Status.LOCKED,
+                QuestLogic.consider(task("extractor"), Set.of("multitool", "quern"), true));
+        eq("the optional extractor remains claimable on its own branch", QuestLogic.Status.CLAIMABLE,
+                QuestLogic.consider(task("extractor"), Set.of("multitool", "crank"), true));
+        eq("the quern keeps its existing conditional four-brick reward",
+                new QuestCatalogue.Reward("minecraft:brick", 4), task("quern").reward());
+        eq("the optional crank keeps its existing four-coal reward",
+                new QuestCatalogue.Reward("minecraft:coal", 4), task("crank").reward());
+        eq("the optional extractor keeps its existing eight-gravel reward",
+                new QuestCatalogue.Reward("minecraft:gravel", 8), task("extractor").reward());
 
         Set<String> claimed = new HashSet<>();
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
