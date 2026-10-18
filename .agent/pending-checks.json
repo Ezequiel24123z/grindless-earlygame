@@ -43,7 +43,7 @@
     "quest_optional_branch": "cc3f111 integrated: quern follows multitool, optional crank/extractor rewards/IDs and calibrate/relay links unchanged; focused VerifyQuest passed",
     "canonical_documentation": "Four core docs reconciled and coordinator corrected Atlas coverage, firing bands, settling slots and implemented quest edge; no historical ADR rewritten",
     "asset_readiness": "Source-bound inventory mapped19blocks/65state models/257variants/14icons including slag; static checks only, visual/production phase pending",
-    "client_acceptance": "Prism preparation ZIP26c8c2e delivered with reviewed runtimeb982b10 and explicit Architectury/JEI. VM OpenGL remains blocked; exploratory host-side testing may proceed, but no world/client/T0 acceptance or driver workaround is claimed.",
+    "client_acceptance": "Prism preparation ZIP26c8c2e/runtimeb982b10 delivered. Owner reports entering a new Survival world on the real host; QA supplies progressive exploratory checks. VM OpenGL remains blocked; no final client/T0 or update-compatibility acceptance is claimed.",
     "foundation": "c62de724632cce158988ddce62d4669619398f13",
     "workshop": "AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING",
     "assembled_settling": "automatedly_validated_fluid_recovery_manual_pending",

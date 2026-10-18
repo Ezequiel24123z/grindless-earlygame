@@ -6350,6 +6350,17 @@ reused under ADR-0140; unclassified data is not a native scenario per entry.
 **Decision.**
 - Keep the full implemented inventory, separating active T0 facts from unknown/unaccepted later
   placement. Do not erase routes, invent tiers or waive mandatory findings to make the audit green.
+- Author renewable-at-T0 claims only for the approved source/workshop material chains and
+  actual automatic projections; the audit must prove those claims. Construction needs
+  availability, not an invented automated recipe for every registered block. Finite entry
+  supplies remain bootstrap assumptions, and first use is not inferred from registration.
+  Slag is a potential future-use side stream in the active T0 contract: its refractory-brick
+  prototype consumer exists, but an accepted later-use tier is not established here. Keep
+  that uncertainty and first-use tier explicit, with no fabricated future-consumer tier.
+  Its renewable-at-T0 claim may follow the real copper-reduction by-product route; it is
+  not a required T0 input. Ordinary item disposal is permitted under current non-hazardous
+  item behavior, but neither this advice nor `ContainerConfig` establishes an automated
+  Storage Crate/Overflow Gate sink. Do not force retention or invent a consumer.
 - Export actual Gradle-resolved Forge resource inputs through a small build-task seam. Verify
   `TagEntry`/`TagLoader` membership, required/optional, nested, removal and replacement semantics
   against the actual Minecraft/Forge implementation. Use demonstrated layer precedence or prove
@@ -6359,6 +6370,13 @@ reused under ADR-0140; unclassified data is not a native scenario per entry.
   A route may have real environmental evidence while its progression tier is unknown:
   nullable `RoutePolicy.unlockTier` means not unlocked and retains `route_tier_unknown`,
   never an implicit T0. Physical atmosphere/light terminals do not unlock a prototype.
+  `OPEN_SKY_DAYLIGHT` describes the solar producer's actual day/open-sky predicate without
+  importing the culture site's terrestrial restriction. The current intake's absent
+  site guard is reported as such, not as verified atmospheric simulation in every dimension.
+  A direct, positive, declared manual-labour input may justify a non-automatic physical
+  route without becoming an environmental source or renewable credit. That guard alone
+  supplies no budget, new profile or guarantee; the optional Hand Crank Dynamo's known T0
+  placement is separate from an unproved finite labour witness.
 - Give `Route` an explicit `automatable` fact, independent of ownership. Manual crafting
   provides availability but cannot enter renewable supply or a renewable `ClosedLoop`.
   Adapters must derive the fact from the actual mechanism: a physical producer is not
@@ -6411,6 +6429,11 @@ reused under ADR-0140; unclassified data is not a native scenario per entry.
   by Minecraft without fixtures, commands or injected stock; otherwise create a fresh
   Survival world on the capable host. Do not fabricate NBT or repair an unsupported VM
   graphics environment merely to avoid honest host-side observation.
+  Normal exploratory play and crafting in that new world need not wait for the auditor.
+  Preserve the real source/settings and observations without an imposed starter bill or
+  injected resources. A later unchanged-behavior proof may be reused; the formal whole-path
+  acceptance still needs its agreed candidate/requirements. Reopening this new save under
+  the same binary is continuity, not proof of compatibility across an update.
 
 **Validation and consequences.** Static/model checks cover the new authority/profile data and
 the affected normalizer, reserve, membership, formation, automation, exit and quest contracts. A genuinely new

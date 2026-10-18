@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **S2 classification and observation limits clarified (ADR-0141).** Approved T0 renewable
+  claims still require model proof; slag keeps an explicit unplaced future-use role rather
+  than an invented consumer tier. Actual solar/daylight and direct manual-labour facts do
+  not unlock prototypes or grant a work budget. README no longer presents universal
+  recovery or planned Storage Crate/Overflow Gate voiding as current verified T0 behavior.
+  The owner reports entering a new Survival world on the real host; exploratory play and
+  source-bound observations may proceed without claiming final S2/T0 acceptance.
 - **Portable reference client delivered.** Packaging checkpoint `26c8c2e` retains reviewed
   runtime `b982b10` and creates a Prism/CurseForge-importable preparation ZIP with the actual
   production-remapped Grindless jar, README, licence and source/hash provenance. Required

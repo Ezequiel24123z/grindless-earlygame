@@ -97,6 +97,11 @@ The shared `buildModpack`/`verifyModpack` tasks now live in root `build.gradle`;
 retain the expanded default. Both real PowerShell archives and eleven shared checks pass.
 The Bash wrapper is statically reviewed, not executed on this host. ZIP SHA-256 is
 `7f17568a7aa83512401e5270ba9d946d0d4d7135cac9aa8eda668d5ddc99a879`.
+The owner now reports being in a new Survival world on the real host. QA owns the
+progressive exploratory checklist and records actual observations; do not prohibit normal
+play/crafting until S2 or mistake that exploration for the final agreed whole-path run.
+The same-version reopen is continuity only. Slag's uncertain future-use tier and ordinary
+disposal are explicit; no current automated crate/void sink is inferred from policy code.
 
 ## Publication and preservation
 

@@ -1573,9 +1573,10 @@ This rule must never become the grind it exists to delete. The guard rails are d
 - **Assemblers are cheap and parallelise.** Building ten of them is a throughput decision, not a
   punishment. The answer to "this is slow" is always "build another one", which is the correct
   answer in a factory game.
-- **The bootstrap is always recoverable.** T0 stays ungated, and the first T1 Relay Matrix has a
-  small manual route, so a player who loses everything can rebuild the ladder from local
-  materials. There is no softlock, ever.
+- **The bootstrap must remain recoverable.** T0 stays ungated and the first F1 Relay Matrix
+  batch has a manual route. This is a design requirement: the conditional S2 entry witness
+  and played path still need to establish the actual supply and recovery margin, not a
+  universal guarantee for every possible world state.
 - **Pack authors can relax it.** The gate is datapack-driven, so a pack that wants hand-craftable
   T2 machines can have them without a mod patch.
 
@@ -1583,9 +1584,9 @@ This rule must never become the grind it exists to delete. The guard rails are d
 
 ## Containers: buffers, filters and voiding
 
-Every container in Grindless — item crates, fluid tanks, and the input and output buffers built
-into machines — obeys one shared contract. Learn the interface once and it is the same everywhere,
-on a T1 tank and on a T11 colony module alike.
+The planned storage and machine-buffer interface follows one shared contract. `ContainerConfig`
+encodes policy, but its existence alone is not a working in-world control or automated discard
+sink. Do not infer current T0 Storage Crate/Overflow Gate availability from this design section.
 
 | Control | Behaviour |
 | --- | --- |
@@ -1617,9 +1618,10 @@ wanted. Both things are true, so the feature is built defensively:
 
 This matters more here than in most mods. A system that generates its recipes from tags at runtime
 produces byproducts for materials the player has never heard of, and unwanted byproducts backing up
-a line are the characteristic failure mode of that design. Auto-void is the release valve, and
-`Overflow Gate` plus a voiding `Storage Crate` is the canonical answer to "what do I do with eleven
-thousand gravel".
+a line are the characteristic failure mode of that design. Auto-void is the intended release
+valve, with `Overflow Gate` and a voiding `Storage Crate` as planned components. They are not
+an established T0 disposal route. Current handling advice must name actions actually available,
+and discardable by-products must not force unlimited hoarding while that integration is pending.
 
 ---
 
