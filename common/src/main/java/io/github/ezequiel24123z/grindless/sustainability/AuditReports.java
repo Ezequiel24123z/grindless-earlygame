@@ -112,7 +112,7 @@ public final class AuditReports {
                     "outputs", quantitiesById(route.outputs()), "discharged", keys(route.discharged()),
                     "duration_ticks", route.durationTicks(), "fu_per_tick", route.fuPerTick(),
                     "conditions", route.conditions(), "prerequisites", route.prerequisites(),
-                    "one_shot", route.oneShot(), "mod_owned", route.modOwned(),
+                    "one_shot", route.oneShot(), "mod_owned", route.modOwned(), "automatable", route.automatable(),
                     "unlock_tier", policy == null ? null : policy.unlockTier(),
                     "optional", policy == null ? null : policy.optional(),
                     "environmental_sources", policy == null ? null : policy.environmentalSources(),
@@ -150,7 +150,12 @@ public final class AuditReports {
             TierPlan plan = result.annotations().ledger().get(tier.tier());
             List<Object> reserves = tier.reserves().stream().map(reserve -> (Object) row(
                     "resource", reserve.resource().key(), "guaranteed", reserve.guaranteed(),
+                    "player_provided", reserve.playerProvided(), "claimed_rewards", reserve.claimedRewards(),
                     "required", reserve.required(), "margin", reserve.margin(), "status", reserve.status())).toList();
+            Map<String, Object> entry = plan == null || plan.entryProfile() == null
+                    ? null : entryProfile(plan.entryProfile());
+            SustainabilityAudit.WorkReserve work = tier.manualWork();
+            SustainabilityAudit.GoalWitness goal = tier.exitProduction();
             tiers.add(row("tier", tier.tier(), "unknown", tier.unknown(),
                     "declared_roots", plan == null ? null : keys(plan.roots()),
                     "selected_quests", plan == null ? null : plan.requiredQuests(),
@@ -158,6 +163,15 @@ public final class AuditReports {
                     "mandatory", keys(tier.mandatory()), "recurring", keys(tier.recurring()),
                     "available", keys(tier.available()), "renewable", keys(tier.renewable()),
                     "available_routes", tier.availableRoutes(), "renewable_routes", tier.renewableRoutes(),
+                    "entry_profile", entry, "entry_profile_sha256", entry == null ? null : hash(entry),
+                    "manual_work_reserve", work == null ? null : row("terminal", work.terminal(),
+                            "budget_actions", work.budgetActions(), "required_actions", work.requiredActions(),
+                            "margin_actions", work.marginActions(), "status", work.status()),
+                    "exit_production", goal == null ? null : row("resource", goal.resource().key(),
+                            "route", goal.route(), "required_count", goal.requiredCount(),
+                            "batch_output", goal.batchOutput(), "executed_batches", goal.executedBatches(),
+                            "produced", goal.produced(), "status", goal.status()),
+                    "retained_process_and_circulation_inventory", quantitiesById(tier.retainedInventory()),
                     "construction_reserves", reserves));
         }
         document.put("tiers", tiers);
@@ -170,6 +184,19 @@ public final class AuditReports {
         }
         document.put("findings", findings);
         return JSON.toJson(document) + "\n";
+    }
+
+    private static Map<String, Object> entryProfile(EntryProfile profile) {
+        ManualWork work = profile.manualWork();
+        return row("id", profile.id(), "kind", "conditional_player_entry_not_a_world_or_quest_guarantee",
+                "player_provided", quantitiesById(profile.playerProvided()),
+                "manual_work_actions", profile.manualWorkActions(), "conditions", profile.conditions(),
+                "source", profile.source(), "minimality", "sufficient_witness_no_global_optimality_claim",
+                "manual_work", work == null ? null : row("terminal", work.terminal(), "tool", work.tool().key(),
+                        "fu_per_action", work.fuPerAction(), "eligible_process_families", work.processFamilies(),
+                        "scope", "eligible_batch_local_only_never_portable_energy_or_renewable_labour",
+                        "rounding", "each_batch_rounds_actions_up_unused_local_charge_is_not_credited",
+                        "source", work.source()));
     }
 
     /** Returns a human report with explicit evidence boundaries and all failure-visible findings. */
@@ -214,6 +241,14 @@ public final class AuditReports {
         text.append("`non_consumed_requirements` includes retained tools, chemical catalysts and installed structure parts. ")
                 .append("The compatibility field `catalysts` describes the same quantities; it does not chemically classify casings. ")
                 .append("A formed installation retains its parts once per family, separately from movable process seeds.\n\n");
+        text.append("`automatable` is an explicit execution fact, independent of mod ownership. Manual crafts never ")
+                .append("establish automatic renewable production. An exit goal must execute real batches from renewable ")
+                .append("consumed supplies; goal stock or a gift does not replace that production witness.\n\n")
+                .append("Conditional entry profiles describe normally acquired player custody, not world/quest gifts. ")
+                .append("Their sufficient bill is derived, then replayed with finite material and local-work budgets; ")
+                .append("no globally minimal starting kit is claimed. Crank actions fund only an eligible ProcessMachine ")
+                .append("batch, require the actual tool and never become portable ENERGY or renewable labour. Native ")
+                .append("working FU is retained for recurrent circulation separately from the startup labour budget.\n\n");
         var findings = result.findings();
         text.append("Active errors: **").append(findings.activeErrors()).append("**; waived_debt: **")
                 .append(findings.waivedDebt()).append("**; warnings: **").append(findings.warnings())
@@ -242,12 +277,14 @@ public final class AuditReports {
             }
             text.append(" |\n");
         }
-        text.append("\n## Construction reserve\n\n| Tier | Resource | Exact guarantee | Establishment draw | Margin | Status |\n")
-                .append("| --- | --- | ---: | ---: | ---: | --- |\n");
+        text.append("\n## Construction reserve\n\n")
+                .append("| Tier | Resource | Guaranteed | Player-provided | Actually claimed rewards | Draw | Margin | Status |\n")
+                .append("| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |\n");
         for (var tier : result.tiers().values()) {
             for (var reserve : tier.reserves()) {
                 text.append("| T").append(tier.tier()).append(" | ").append(escape(reserve.resource().key()))
-                        .append(" | ").append(reserve.guaranteed()).append(" | ").append(reserve.required())
+                        .append(" | ").append(reserve.guaranteed()).append(" | ").append(reserve.playerProvided())
+                        .append(" | ").append(reserve.claimedRewards()).append(" | ").append(reserve.required())
                         .append(" | ").append(reserve.margin()).append(" | ").append(reserve.status()).append(" |\n");
             }
         }
@@ -284,7 +321,8 @@ public final class AuditReports {
                     "catalysts", quantitiesById(route.catalysts()), "outputs", quantitiesById(route.outputs()),
                     "discharged", keys(route.discharged()), "duration_ticks", route.durationTicks(),
                     "fu_per_tick", route.fuPerTick(), "conditions", route.conditions(),
-                    "prerequisites", route.prerequisites(), "one_shot", route.oneShot(), "mod_owned", route.modOwned()));
+                    "prerequisites", route.prerequisites(), "one_shot", route.oneShot(), "mod_owned", route.modOwned(),
+                    "automatable", route.automatable()));
         }
         List<Object> terminals = new ArrayList<>();
         snapshot.terminals().values().forEach(terminal -> terminals.add(row("id", terminal.id(),

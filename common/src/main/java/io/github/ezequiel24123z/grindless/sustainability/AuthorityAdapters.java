@@ -216,7 +216,7 @@ public final class AuthorityAdapters {
         }
         return new Route(recipe.id(), Authority.PROCESS_GRAPH, "ProcessGraph.generate",
                 recipe.family().name(), inputs, catalysts, outputs, discharged,
-                recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true);
+                recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true, true);
     }
 
     /**
@@ -497,7 +497,7 @@ public final class AuthorityAdapters {
                     route = new Route(route.id(), expected.authority(), expected.source() + " + " + source,
                             route.family(), route.inputs(), route.catalysts(), route.outputs(), route.discharged(),
                             route.durationTicks(), route.fuPerTick(), route.conditions(), route.prerequisites(),
-                            route.oneShot(), route.modOwned());
+                            route.oneShot(), route.modOwned(), route.automatable());
                 }
                 builder.route(route);
                 for (Resource resource : referenced(route)) {
@@ -531,7 +531,7 @@ public final class AuthorityAdapters {
     private static Route craft(String name, Map<Resource, Long> inputs, String output, long count,
                                Authority authority, String source) {
         return new Route("craft/" + name, authority, source, null, inputs, Map.of(),
-                Map.of(item(output), count), Set.of(), 0, 0, Map.of(), Set.of(), false, true);
+                Map.of(item(output), count), Set.of(), 0, 0, Map.of(), Set.of(), false, true, false);
     }
 
     private static Route crafting(String id, JsonObject json, String source, Authority authority, Builder builder) {
@@ -569,7 +569,7 @@ public final class AuthorityAdapters {
         long count = result.has("count") ? result.get("count").getAsLong() : 1;
         return new Route(id, authority, source, family, inputs, Map.of(),
                 Map.of(item(result.get("item").getAsString()), count), Set.of(), 0, 0,
-                Map.of(), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION);
+                Map.of(), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
     }
 
     private static Resource ingredient(JsonElement json, String id, Builder builder) {
@@ -613,7 +613,7 @@ public final class AuthorityAdapters {
                     Map.of(item(task.reward().itemId()), (long) task.reward().count()), Set.of(), 0, 0,
                     Map.of("evidence", task.evidence().name()),
                     task.requires().stream().map(id -> "quest/" + id)
-                            .collect(java.util.stream.Collectors.toSet()), true, true));
+                            .collect(java.util.stream.Collectors.toSet()), true, true, false));
         }
     }
 
@@ -626,7 +626,7 @@ public final class AuthorityAdapters {
                     family, Map.of(item(SourceLogic.BIOMASS), 1L), Map.of(),
                     Map.of(ENERGY, Math.multiplyExact(power, SourceLogic.BIOMASS_BURN_TICKS)), Set.of(),
                     SourceLogic.BIOMASS_BURN_TICKS, 0, Map.of("generation_fu_per_tick", Long.toString(power)),
-                    Set.of(), false, true));
+                    Set.of(), false, true, true));
         }
         Set<String> fluids = new TreeSet<>(Set.of(FluidLogic.CARBON_MONOXIDE, FluidLogic.HYDROGEN));
         graph.forEach(recipe -> {
@@ -641,12 +641,12 @@ public final class AuthorityAdapters {
                         Map.of(new Resource(Kind.FLUID, fluid), (long) FluidLogic.BUCKET), Map.of(),
                         Map.of(ENERGY, Math.multiplyExact(ThermalLogic.FU_PER_TICK, ticks)), Set.of(),
                         ticks, 0, Map.of("generation_fu_per_tick", Long.toString(ThermalLogic.FU_PER_TICK)),
-                        Set.of(), false, true));
+                        Set.of(), false, true, true));
             }
         }
         builder.route(new Route("power/solar_array", Authority.GENERATOR_FUEL, "SolarLogic.generate",
                 "SOLAR_ARRAY", Map.of(), Map.of(), Map.of(ENERGY, SolarLogic.FU_PER_TICK), Set.of(), 1, 0,
-                Map.of("condition", "daylight"), Set.of(), false, true));
+                Map.of("condition", "daylight"), Set.of(), false, true, true));
     }
 
     private static Set<Resource> referenced(Route route) {

@@ -17,13 +17,19 @@ import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityMo
  * catalysts cannot be spent twice; conditional quest rewards cannot fund their own prerequisites.
  */
 final class ConstructionReserve {
+    private static final Resource WORK_ACTIONS = new Resource(Kind.ENVIRONMENT,
+            "witness:remaining_local_work_actions");
     private final Snapshot snapshot;
     private final SustainabilityAnnotations annotations;
     private final SustainabilityAudit audit;
     private final int tier;
     private final Set<Resource> available;
     private final Set<Resource> renewable;
+    private final EntryProfile profile;
+    private final boolean deriving;
     private final Map<Resource, Long> guaranteed = new TreeMap<>();
+    private final Map<Resource, Long> playerDelivered = new TreeMap<>();
+    private final Map<Resource, Long> claimedRewards = new TreeMap<>();
     private final Map<Resource, Long> delivered = new TreeMap<>();
     private final Map<Resource, Long> stock = new TreeMap<>();
     private final Map<Resource, Long> peak = new TreeMap<>();
@@ -35,10 +41,15 @@ final class ConstructionReserve {
     private final Set<String> claimed = new HashSet<>();
     private final Set<String> pendingRoutes = new HashSet<>();
     private final Set<String> preparing = new HashSet<>();
+    private final Set<String> circulating = new HashSet<>();
     private final List<AuditFinding> findings = new ArrayList<>();
     private boolean uncertain;
     private boolean startupBound;
     private int steps;
+    private long manualActions;
+    private long requiredManualActions;
+    private SustainabilityAudit.GoalWitness exitProduction;
+    private final Map<String, Long> executions = new TreeMap<>();
 
     ConstructionReserve(Snapshot snapshot, SustainabilityAnnotations annotations, SustainabilityAudit audit,
                         int tier, Set<Resource> available, Set<Resource> renewable) {
@@ -48,6 +59,8 @@ final class ConstructionReserve {
         this.tier = tier;
         this.available = available;
         this.renewable = renewable;
+        this.profile = audit.entryProfile(tier);
+        this.deriving = audit.deriving(tier);
         for (Terminal terminal : snapshot.terminals().values()) {
             if (terminal.kind() == TerminalKind.EXACT_BOOTSTRAP && terminal.unlockTier() <= tier
                     && terminal.justification() != null && !terminal.justification().isBlank()) {
@@ -56,16 +69,32 @@ final class ConstructionReserve {
                 merge(stock, terminal.resource(), terminal.guaranteed());
             }
         }
-        for (Route route : snapshot.routes().values()) {
-            if (route.oneShot() && audit.unlocked(route, tier)
-                    && route.catalysts().keySet().stream().allMatch(resource -> audit.has(available, resource))) {
-                route.retainedOutputs().forEach((resource, amount) -> merge(guaranteed, resource, amount));
-            }
-        }
     }
 
     List<AuditFinding> findings() {
         return List.copyOf(findings);
+    }
+
+    EntryProfile derivedProfile() {
+        return profile == null ? null : profile.withBill(playerDelivered, requiredManualActions);
+    }
+
+    SustainabilityAudit.WorkReserve manualWorkReserve() {
+        if (profile == null || profile.manualWork() == null) {
+            return null;
+        }
+        long budget = deriving ? requiredManualActions : profile.manualWorkActions();
+        long margin = Math.subtractExact(budget, requiredManualActions);
+        return new SustainabilityAudit.WorkReserve(profile.manualWork().terminal(), budget, requiredManualActions,
+                margin, margin < 0 ? "insufficient" : uncertain ? "unknown" : "conditional_established");
+    }
+
+    SustainabilityAudit.GoalWitness exitProduction() {
+        return exitProduction;
+    }
+
+    Map<Resource, Long> retainedInventory() {
+        return sortedMap(locked);
     }
 
     List<SustainabilityAudit.Reserve> analyse(Set<Resource> construction, Set<String> closureRoutes,
@@ -95,6 +124,11 @@ final class ConstructionReserve {
             if (route == null || !audit.unlocked(route, tier)) {
                 continue;
             }
+            TierPlan plan = annotations.ledger().get(tier);
+            Route exit = plan.exitObjective() == null ? null : audit.canonical(plan.exitObjective(), tier, false);
+            if (exit != null && exit.id().equals(id)) {
+                continue;
+            }
             if (formed(route)) {
                 retainInstallationRequirements(route);
             } else {
@@ -109,33 +143,125 @@ final class ConstructionReserve {
                 Route producer = audit.canonical(block, tier, false);
                 return producer != null && producer.id().equals(id);
             });
-            if (!loopMember && !constructionRoute
+            if (!loopMember && !constructionRoute && !route.oneShot()
                     && route.retainedOutputs().keySet().stream().anyMatch(resource -> audit.has(renewable, resource))) {
                 execute(route, 1);
             }
         }
+        if (profile != null) {
+            for (Resource root : roots) {
+                if (owned(root) < 1) {
+                    obtain(root, 1);
+                }
+            }
+            for (String id : annotations.ledger().get(tier).requiredQuests()) {
+                establishObjective(id, new HashSet<>());
+            }
+        }
+        establishExitGoal();
         List<SustainabilityAudit.Reserve> result = new ArrayList<>();
         Set<Resource> reserved = new TreeSet<>(guaranteed.keySet());
+        reserved.addAll(claimedRewards.keySet());
+        reserved.addAll(profile == null ? Set.of() : deriving ? playerDelivered.keySet() : profile.playerProvided().keySet());
         reserved.addAll(shortages.keySet());
         for (Resource resource : reserved) {
             long amount = guaranteed.getOrDefault(resource, 0L);
+            long provided = profile == null ? 0 : (deriving ? playerDelivered : profile.playerProvided())
+                    .getOrDefault(resource, 0L);
+            long rewards = claimedRewards.getOrDefault(resource, 0L);
+            long total = Math.addExact(Math.addExact(amount, provided), rewards);
             long missing = shortages.getOrDefault(resource, 0L);
-            long required = Math.max(peak.getOrDefault(resource, 0L), missing > 0 ? Math.addExact(amount, missing) : 0);
-            long margin = Math.subtractExact(amount, required);
-            String status = margin < 0 ? "insufficient" : uncertain ? "unknown" : "established";
-            result.add(new SustainabilityAudit.Reserve(resource, amount, required, margin, status));
+            long required = Math.max(peak.getOrDefault(resource, 0L), missing > 0 ? Math.addExact(total, missing) : 0);
+            long margin = Math.subtractExact(total, required);
+            String status = margin < 0 ? "insufficient" : uncertain ? "unknown"
+                    : profile == null ? "established" : "conditional_established";
+            result.add(new SustainabilityAudit.Reserve(resource, amount, provided, rewards, required, margin, status));
             if (margin < 0) {
-                findings.add(new AuditFinding("bootstrap_starvation", resource.key(), "T" + tier,
+                findings.add(new AuditFinding(profile == null ? "bootstrap_starvation" : "entry_profile_insufficient",
+                        resource.key(), "T" + tier,
                         AuditFinding.Severity.ERROR,
-                        "Exact guarantee " + amount + " cannot cover establishment draw " + required
-                                + " including construction and the recoverable seed; margin " + margin + ".",
+                        "Guaranteed " + amount + ", conditional player custody " + provided + " and actually claimed "
+                                + rewards + " cannot cover establishment draw " + required
+                                + " including construction and recoverable seed; margin " + margin + ".",
                         sourceReferences(resource)));
             }
         }
         return result;
     }
 
+    private void establishExitGoal() {
+        TierPlan plan = annotations.ledger().get(tier);
+        Resource goal = plan.exitObjective();
+        if (goal == null) {
+            return;
+        }
+        Route route = audit.canonical(goal, tier, false);
+        long batch = route == null ? 0 : audit.outputAmount(route, goal);
+        if (route == null || batch <= 0) {
+            return;
+        }
+        long required = batch;
+        Set<String> objectives = new TreeSet<>(plan.requiredQuests());
+        Set<String> visited = new HashSet<>();
+        while (!objectives.isEmpty()) {
+            String id = objectives.iterator().next();
+            objectives.remove(id);
+            if (!visited.add(id)) {
+                continue;
+            }
+            Objective objective = snapshot.objectives().get(id);
+            if (objective != null) {
+                if (goal.equals(objective.subject())) {
+                    required = Math.max(required, objective.count());
+                }
+                objectives.addAll(objective.requires());
+            }
+        }
+        long batches = 1 + (required - 1) / batch;
+        boolean supply = route.netInputs().keySet().stream().allMatch(resource -> audit.has(renewable, resource));
+        long before = executions.getOrDefault(route.id(), 0L);
+        boolean completed = supply && execute(route, batches);
+        long executed = executions.getOrDefault(route.id(), 0L) - before;
+        exitProduction = new SustainabilityAudit.GoalWitness(goal, route.id(), required, batch,
+                executed, Math.multiplyExact(batch, executed),
+                completed ? profile == null ? "established" : "conditional_established" : "unproved");
+        if (!supply || !completed) {
+            findings.add(new AuditFinding(supply ? "exit_goal_production_unproven" : "exit_goal_supply_not_renewable",
+                    goal.key(), "T" + tier, AuditFinding.Severity.ERROR,
+                    supply ? "The required real exit batch was not executed; existing goal stock cannot replace it."
+                            : "Every net-consumed exit input needs renewable supply even for a manual exit craft.",
+                    List.of(route.source())));
+        }
+    }
+
+    private void establishObjective(String id, Set<String> visited) {
+        if (!visited.add(id)) {
+            return;
+        }
+        Objective objective = snapshot.objectives().get(id);
+        if (objective == null || objective.subject() == null) {
+            return;
+        }
+        objective.requires().forEach(required -> establishObjective(required, visited));
+        if (!objective.subject().equals(annotations.ledger().get(tier).exitObjective())
+                && owned(objective.subject()) < objective.count()) {
+            obtain(objective.subject(), objective.count() - owned(objective.subject())
+                    + free(objective.subject()));
+        }
+    }
+
     boolean circulate(ClosedLoop loop, Map<String, BigInteger> batches) {
+        if (!circulating.add(loop.id())) {
+            return false;
+        }
+        try {
+            return circulateBatches(loop, batches);
+        } finally {
+            circulating.remove(loop.id());
+        }
+    }
+
+    private boolean circulateBatches(ClosedLoop loop, Map<String, BigInteger> batches) {
         BigInteger operations = batches.values().stream().reduce(BigInteger.ZERO, BigInteger::add);
         if (operations.compareTo(BigInteger.valueOf(4096)) > 0) {
             unknown(loop.carrier(), "Normalized circulation exceeds the executable witness bound.");
@@ -163,12 +289,18 @@ final class ConstructionReserve {
         }
         Map<Resource, Long> initial = new TreeMap<>(stock);
         Map<Resource, Long> minimum = new TreeMap<>(stock);
+        long energyBalance = stock.getOrDefault(ENERGY, 0L);
+        long minimumEnergy = energyBalance;
         Map<String, Long> remaining = new TreeMap<>();
         batches.forEach((id, count) -> remaining.put(id, count.longValueExact()));
         boolean completed = false;
         try {
             startupBound = false;
-            List<String> order = startupOrder(new TreeMap<>(remaining), new TreeMap<>(stock), internal,
+            Map<Resource, Long> simulated = new TreeMap<>(stock);
+            if (profile != null && profile.manualWork() != null) {
+                simulated.put(WORK_ACTIONS, deriving ? Long.MAX_VALUE : profile.manualWorkActions() - manualActions);
+            }
+            List<String> order = startupOrder(new TreeMap<>(remaining), simulated, internal,
                     batches.keySet(), new ArrayList<>(), new HashSet<>(), new int[1]);
             if (order == null && startupBound) {
                 unknown(loop.carrier(), "Startup ordering exceeded its bounded search; no infeasibility is claimed.");
@@ -185,6 +317,7 @@ final class ConstructionReserve {
                     boolean ready = true;
                     for (var input : route.inputs().entrySet()) {
                         if (free(input.getKey()) < input.getValue()
+                                && !(input.getKey().equals(ENERGY) && localWork(route))
                                 && (!circulationSupply(input.getKey(), internal, batches.keySet())
                                 || !obtain(input.getKey(), input.getValue()))) {
                             ready = false;
@@ -203,6 +336,9 @@ final class ConstructionReserve {
                     if (!execute(route, 1)) {
                         return false;
                     }
+                    energyBalance = Math.subtractExact(energyBalance, route.inputs().getOrDefault(ENERGY, 0L));
+                    minimumEnergy = Math.min(minimumEnergy, energyBalance);
+                    energyBalance = Math.addExact(energyBalance, route.retainedOutputs().getOrDefault(ENERGY, 0L));
                     for (Resource resource : initial.keySet()) {
                         minimum.merge(resource, stock.getOrDefault(resource, 0L), Math::min);
                     }
@@ -245,6 +381,13 @@ final class ConstructionReserve {
                 long seed = Math.max(borrowed.getOrDefault(resource, 0L),
                         before - minimum.getOrDefault(resource, before));
                 if (seed > 0 && !lock(resource, seed)) {
+                    return false;
+                }
+            }
+            if (profile != null && internal.contains(ENERGY)) {
+                // Startup labour may fill the first cycle, never the next one: retain real native FU.
+                long nativeSeed = Math.subtractExact(initial.getOrDefault(ENERGY, 0L), minimumEnergy);
+                if (nativeSeed > 0 && !lock(ENERGY, nativeSeed)) {
                     return false;
                 }
             }
@@ -295,8 +438,19 @@ final class ConstructionReserve {
             Map<Resource, Long> next = new TreeMap<>(inventory);
             boolean ready = true;
             for (var input : route.inputs().entrySet()) {
-                if (!circulationSupply(input.getKey(), internal, members)
-                        && !spendSimulated(next, input.getKey(), input.getValue())) {
+                if (circulationSupply(input.getKey(), internal, members)) {
+                    continue;
+                }
+                long shortage = input.getValue() - next.getOrDefault(input.getKey(), 0L);
+                if (input.getKey().equals(ENERGY) && shortage > 0 && localWork(route)) {
+                    long actions = actions(shortage);
+                    if (next.getOrDefault(WORK_ACTIONS, 0L) >= actions) {
+                        next.put(WORK_ACTIONS, next.get(WORK_ACTIONS) - actions);
+                        next.put(ENERGY, 0L);
+                        continue;
+                    }
+                }
+                if (!spendSimulated(next, input.getKey(), input.getValue())) {
                     ready = false;
                     break;
                 }
@@ -392,6 +546,9 @@ final class ConstructionReserve {
             return true;
         }
         if (!pending.add(resource)) {
+            if (provideManual(resource, amount)) {
+                return true;
+            }
             shortage(resource, amount - free(resource));
             return false;
         }
@@ -405,8 +562,40 @@ final class ConstructionReserve {
                     }
                 }
             }
+            if (profile != null && audit.has(renewable, resource)) {
+                for (ClosedLoop loop : annotations.loops().values()) {
+                    if (circulating.contains(loop.id())) {
+                        continue;
+                    }
+                    Map<String, BigInteger> batches = audit.loopBatches(loop);
+                    if (batches == null) {
+                        continue;
+                    }
+                    BigInteger gain = BigInteger.ZERO;
+                    for (var batch : batches.entrySet()) {
+                        Route member = snapshot.routes().get(batch.getKey());
+                        long net = Math.subtractExact(member.retainedOutputs().getOrDefault(resource, 0L),
+                                member.inputs().getOrDefault(resource, 0L));
+                        gain = gain.add(batch.getValue().multiply(BigInteger.valueOf(net)));
+                    }
+                    if (gain.signum() > 0) {
+                        while (free(resource) < amount && circulate(loop, batches)) {
+                            if (steps > 4096) {
+                                break;
+                            }
+                        }
+                        if (free(resource) >= amount) {
+                            return true;
+                        }
+                    }
+                }
+            }
             Route route = replenishing(resource);
             if (route != null && audit.unlocked(route, tier)) {
+                Machine machine = route.family() == null ? null : annotations.machines().get(route.family());
+                if (machine != null && pending.contains(machine.construction()) && provideManual(resource, amount)) {
+                    return true;
+                }
                 long yield = audit.outputAmount(route, resource) - route.inputs().getOrDefault(resource, 0L);
                 if (yield > 0) {
                     long missing = amount - free(resource);
@@ -415,6 +604,9 @@ final class ConstructionReserve {
                         return true;
                     }
                 }
+            }
+            if (provideManual(resource, amount)) {
+                return true;
             }
             shortage(resource, amount - free(resource));
             return false;
@@ -472,6 +664,10 @@ final class ConstructionReserve {
             if (machine == null || !install(machine.construction())) {
                 return false;
             }
+            if (route.inputs().containsKey(ENERGY) && localWork(route)
+                    && !lock(profile.manualWork().tool(), 1)) {
+                return false;
+            }
         }
         if (formed(route)) {
             if (!retainInstallationRequirements(route)) {
@@ -514,6 +710,7 @@ final class ConstructionReserve {
         }
         Map<Resource, Long> allocated = new TreeMap<>();
         Map<Resource, Long> borrowed = new TreeMap<>();
+        long batchWork = 0;
         boolean completed = false;
         try {
             for (String id : route.prerequisites()) {
@@ -527,6 +724,22 @@ final class ConstructionReserve {
             }
             for (var input : route.inputs().entrySet()) {
                 long need = input.getValue();
+                if (input.getKey().equals(ENERGY) && free(ENERGY) < need && localWork(route)
+                        && (!audit.has(renewable, ENERGY) || !circulating.isEmpty() || pending.contains(ENERGY))) {
+                    long held = Math.min(free(ENERGY), need);
+                    long requested = actions(need - held);
+                    requiredManualActions = Math.max(requiredManualActions, Math.addExact(manualActions, requested));
+                    if (!deriving && requested > profile.manualWorkActions() - manualActions) {
+                        findings.add(new AuditFinding("entry_work_insufficient", profile.id(), "T" + tier,
+                                AuditFinding.Severity.ERROR, "The finite local-work action budget cannot fund "
+                                + route.id() + "; no ENERGY stock is created.", List.of(profile.manualWork().source())));
+                        return false;
+                    }
+                    manualActions = Math.addExact(manualActions, requested);
+                    batchWork = Math.addExact(batchWork, requested);
+                    take(ENERGY, held, allocated);
+                    continue;
+                }
                 long held = locked.getOrDefault(input.getKey(), 0L);
                 if (held > 0 && free(input.getKey()) < need
                         && route.retainedOutputs().getOrDefault(input.getKey(), 0L) >= need) {
@@ -549,13 +762,18 @@ final class ConstructionReserve {
             }
             if (route.oneShot()) {
                 claimed.add(route.id());
-                route.retainedOutputs().forEach((resource, amount) -> merge(delivered, resource, amount));
+                route.retainedOutputs().forEach((resource, amount) -> {
+                    merge(delivered, resource, amount);
+                    merge(claimedRewards, resource, amount);
+                });
             }
             completed = true;
+            executions.merge(route.id(), 1L, Math::addExact);
             return true;
         } finally {
             if (!completed) {
                 allocated.forEach((resource, amount) -> merge(stock, resource, amount));
+                manualActions = Math.subtractExact(manualActions, batchWork);
             }
             borrowed.forEach((resource, amount) -> {
                 take(resource, amount);
@@ -571,6 +789,23 @@ final class ConstructionReserve {
         if (tag != null) {
             for (Resource member : tag.members()) {
                 amount = Math.addExact(amount, stock.getOrDefault(member, 0L));
+            }
+        }
+        return amount;
+    }
+
+    private long owned(Resource resource) {
+        long amount = free(resource);
+        TagResolution tag = snapshot.tags().get(resource);
+        Set<Resource> matches = new TreeSet<>(tag == null ? Set.of() : tag.members());
+        matches.add(resource);
+        for (Resource member : matches) {
+            amount = Math.addExact(amount, locked.getOrDefault(member, 0L));
+            if (installed.contains(member)) {
+                amount = Math.addExact(amount, 1L);
+            }
+            for (Map<Resource, Long> parts : installationRequirements.values()) {
+                amount = Math.addExact(amount, parts.getOrDefault(member, 0L));
             }
         }
         return amount;
@@ -612,7 +847,8 @@ final class ConstructionReserve {
         if (amount <= 0) {
             return;
         }
-        if (guaranteed.containsKey(resource)) {
+        if (guaranteed.containsKey(resource) || claimedRewards.containsKey(resource)
+                || profile != null && manualMembers(resource).size() > 0) {
             shortages.merge(resource, amount, Math::max);
             return;
         }
@@ -626,7 +862,7 @@ final class ConstructionReserve {
         if (amount <= 0) {
             return;
         }
-        boolean unquantified = snapshot.terminals().values().stream().anyMatch(source ->
+        boolean unquantified = profile == null && snapshot.terminals().values().stream().anyMatch(source ->
                 source.resource().equals(resource) && source.kind() != TerminalKind.EXACT_BOOTSTRAP
                         && !source.renewable());
         if (unquantified) {
@@ -634,6 +870,47 @@ final class ConstructionReserve {
         } else {
             shortages.merge(resource, amount, Math::max);
         }
+    }
+
+    private boolean localWork(Route route) {
+        return profile != null && audit.manualWorkReady(route, tier, available);
+    }
+
+    private long actions(long fu) {
+        return 1 + (fu - 1) / profile.manualWork().fuPerAction();
+    }
+
+    private List<Resource> manualMembers(Resource resource) {
+        if (resource.kind() == Kind.ENERGY || resource.kind() == Kind.ENVIRONMENT) {
+            return List.of();
+        }
+        TagResolution tag = snapshot.tags().get(resource);
+        Set<Resource> candidates = tag == null ? Set.of(resource) : tag.complete() ? tag.members() : Set.of();
+        return candidates.stream().filter(candidate -> snapshot.terminals().values().stream().anyMatch(source ->
+                source.resource().equals(candidate) && source.kind() == TerminalKind.MANUAL_WORLD
+                        && source.unlockTier() <= tier && source.justification() != null
+                        && !source.justification().isBlank())).sorted().toList();
+    }
+
+    private boolean provideManual(Resource resource, long amount) {
+        if (profile == null) {
+            return false;
+        }
+        for (Resource member : manualMembers(resource)) {
+            long missing = amount - free(resource);
+            if (missing <= 0) {
+                return true;
+            }
+            long remaining = deriving ? missing : profile.playerProvided().getOrDefault(member, 0L)
+                    - playerDelivered.getOrDefault(member, 0L);
+            long supplied = Math.min(missing, remaining);
+            if (supplied > 0) {
+                merge(playerDelivered, member, supplied);
+                merge(delivered, member, supplied);
+                merge(stock, member, supplied);
+            }
+        }
+        return free(resource) >= amount;
     }
 
     private void unknown(Resource resource, String message) {

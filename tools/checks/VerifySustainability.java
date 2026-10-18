@@ -101,7 +101,9 @@ public final class VerifySustainability {
                 VerifySustainability::sharedHandlingBudget, VerifySustainability::loopEnergy,
                 VerifySustainability::normalizedLoops, VerifySustainability::sequentialReturnedSeed,
                 VerifySustainability::convergedMakeUp, VerifySustainability::formedConstruction,
-                VerifySustainability::productiveZeroCarrier)) {
+                VerifySustainability::productiveZeroCarrier, VerifySustainability::environmentWithoutTier,
+                VerifySustainability::conditionalEntry, VerifySustainability::manualExitGoal,
+                VerifySustainability::localWorkNativeProduction)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -109,6 +111,246 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void environmentWithoutTier() {
+        group("R11 environmental facts do not authorize an unknown progression tier");
+        Fixture fixture = new Fixture().environment("unplaced_collector", Map.of(PRODUCT, 1L), null);
+        RoutePolicy original = fixture.policies.get("unplaced_collector");
+        fixture.policies.put("unplaced_collector", new RoutePolicy((Integer) null, false,
+                original.environmentalSources()));
+        var result = fixture.audit();
+        no("unknown tier does not erase a real environmental explanation",
+                hasRule(result, "zero_input_unjustified"));
+        yes("an authored explanation retains its unknown route tier", hasRule(result, "route_tier_unknown"));
+        for (int tier = 0; tier <= 15; tier++) {
+            no("the unplaced collector is not available at T" + tier,
+                    result.tiers().get(tier).available().contains(PRODUCT));
+            no("the unplaced collector is not renewable at T" + tier,
+                    result.tiers().get(tier).renewable().contains(PRODUCT));
+        }
+        String json = AuditReports.json(result, "fixture:unknown-tier", true);
+        JsonObject row = JsonParser.parseString(json).getAsJsonObject().getAsJsonArray("routes").asList().stream()
+                .map(element -> element.getAsJsonObject())
+                .filter(route -> route.get("id").getAsString().equals("unplaced_collector"))
+                .findFirst().orElseThrow();
+        yes("an unknown route tier is exported as JSON null, not T0", row.get("unlock_tier").isJsonNull());
+        eq("unknown-tier exports are deterministic", json, AuditReports.json(result, "fixture:unknown-tier", true));
+        fixture.policies.put("unplaced_collector", new RoutePolicy(0, false, original.environmentalSources()));
+        result = fixture.audit();
+        yes("only an explicit unlock makes the collector available", available(result, PRODUCT));
+        yes("explicit progression can then use its real environmental proof", renewable(result, PRODUCT));
+        no("explicit progression removes only the resolved route-tier unknown", hasRule(result, "route_tier_unknown"));
+        throwsArgument("present negative tiers remain invalid", () -> new RoutePolicy(-1, false, Set.of()));
+        throwsArgument("present tiers above F15 remain invalid", () -> new RoutePolicy(16, false, Set.of()));
+    }
+
+    private static void conditionalEntry() {
+        group("R12 finite conditional entry and non-portable local work");
+        Fixture fixture = conditionalWorkFixture();
+        var unprofiled = fixture.audit();
+        no("manual acquisition without a profile is not an ENERGY source", available(unprofiled, ENERGY));
+        no("an unfunded local-work recipe does not become available", available(unprofiled, PRODUCT));
+        yes("an absent conditional entry budget stays explicit uncertainty",
+                hasRule(unprofiled, "construction_reserve_unknown"));
+        fixture.workProfile(Map.of(), 0, Set.of("F0_PROCESS"));
+        var derived = SustainabilityAudit.deriveEntryProfile(fixture.builder.build(), fixture.annotations(),
+                DebtManifest.empty(), 0);
+        eq("the bill derives the controller and tool's exact source input draw", Map.of(RAW, 3L),
+                derived.profile().playerProvided());
+        eq("work actions derive from the actual batch cost and charge", 2L,
+                derived.profile().manualWorkActions());
+        var result = derived.replay();
+        yes("the returned finite replay uses the permitted ProcessMachine batch", available(result, PRODUCT));
+        no("bounded crank work never becomes portable ENERGY availability", available(result, ENERGY));
+        no("bounded local work never becomes renewable ENERGY", renewable(result, ENERGY));
+        no("manual-only power does not certify renewable process output", renewable(result, PRODUCT));
+        no("the derived finite materials replay without replenished manual stock",
+                hasRule(result, "entry_profile_insufficient"));
+        no("the derived finite action budget is sufficient", hasRule(result, "entry_work_insufficient"));
+        var reserve = result.tiers().get(0).reserves().stream().filter(row -> row.resource().equals(RAW))
+                .findFirst().orElseThrow();
+        eq("ordinary player-acquired goods never become guaranteed gifts", 0L, reserve.guaranteed());
+        eq("conditional player custody is reported separately", 3L, reserve.playerProvided());
+        eq("the sufficient bill reports its actual draw", 3L, reserve.required());
+        eq("the finite replay reports its real margin", 0L, reserve.margin());
+        eq("this proof is explicitly conditional", "conditional_established", reserve.status());
+        eq("the action reserve is independent of all ENERGY stock", 2L,
+                result.tiers().get(0).manualWork().requiredActions());
+        fixture.entryProfile = derived.profile().withBill(Map.of(RAW, 2L), 2);
+        result = fixture.audit();
+        yes("one missing ordinary entry unit fails the finite replay", hasRule(result, "entry_profile_insufficient"));
+        fixture.entryProfile = derived.profile().withBill(Map.of(RAW, 3L), 1);
+        result = fixture.audit();
+        yes("one missing local-work action fails the finite replay", hasRule(result, "entry_work_insufficient"));
+        eq("insufficient labour has a negative independent action margin", -1L,
+                result.tiers().get(0).manualWork().marginActions());
+
+        Fixture terminal = new Fixture().seed(MACHINE, 1).seed(RAW, 1).seed(TOOL, 1);
+        terminal.machines.put("RESEARCH_TERMINAL", new Machine("RESEARCH_TERMINAL", MACHINE, 0));
+        terminal.add(new Route("research", Authority.BOOTSTRAP_SOURCE, "fixture:research", "RESEARCH_TERMINAL",
+                Map.of(RAW, 1L, ENERGY, 320L), Map.of(), Map.of(PRODUCT, 1L), Set.of(),
+                40, 8, Map.of(), Set.of(), false, true, true)).root(PRODUCT);
+        terminal.workProfile(Map.of(), 1000, Set.of("F0_PROCESS"));
+        result = terminal.audit();
+        no("a physical core, Terminal and ample manual FU cannot calibrate without a producer",
+                available(result, PRODUCT));
+        no("F0 Terminal is not made a ProcessMachine by its rating", renewable(result, PRODUCT));
+        terminal.environment("native_fuel_feed", Map.of(SIDE, 1L), null).meta(SIDE, renewable("native_fuel_feed"));
+        Resource dynamo = item("native_dynamo");
+        terminal.seed(dynamo, 1);
+        terminal.machines.put("NATIVE_DYNAMO", new Machine("NATIVE_DYNAMO", dynamo, 0));
+        terminal.add(new Route("native_power", Authority.GENERATOR_FUEL, "fixture:native_power", "NATIVE_DYNAMO",
+                Map.of(SIDE, 1L), Map.of(), Map.of(ENERGY, 320L), Set.of(), 40, 0,
+                Map.of(), Set.of(), false, true, true)).meta(ENERGY, renewable("native_power"));
+        result = terminal.audit();
+        yes("constructible native power can actually supply the same Terminal", available(result, PRODUCT));
+        eq("calibration never debits the independent crank-work balance", 0L,
+                result.tiers().get(0).manualWork().requiredActions());
+        throwsArgument("conditional custody cannot carry abstract manual FU",
+                () -> new EntryProfile("invalid", Map.of(ENERGY, 1L), 0, null,
+                        Set.of("fixture:conditional"), "fixture:invalid"));
+        throwsArgument("an unscoped action budget is rejected",
+                () -> new EntryProfile("invalid", Map.of(), 1, null,
+                        Set.of("fixture:conditional"), "fixture:invalid"));
+        throwsArgument("a profile cannot omit its acquisition assumptions",
+                () -> new EntryProfile("invalid", Map.of(RAW, 1L), 0, null,
+                        Set.of(), "fixture:invalid"));
+        String json = AuditReports.json(derived.replay(), "fixture:finite-entry", true);
+        eq("conditional entry identity and output are deterministic", json,
+                AuditReports.json(derived.replay(), "fixture:finite-entry", true));
+        yes("the public report distinguishes player custody and profile identity",
+                json.contains("\"player_provided\"") && json.contains("\"entry_profile_sha256\""));
+        Resource part = item("nested_part");
+        Resource failed = item("a_failed_outer");
+        Resource success = item("b_later_outer");
+        Fixture nested = new Fixture().seed(MACHINE, 1).seed(TOOL, 1);
+        nested.machines.put("F0_PROCESS", new Machine("F0_PROCESS", MACHINE, 0));
+        nested.add(route("nested_part", Map.of(ENERGY, 160L, SAFE, 1L), Map.of(), Map.of(part, 1L), "F0_PROCESS"));
+        nested.add(route("failed_outer", Map.of(ENERGY, 160L, part, 1L, item("z_unavailable"), 1L),
+                Map.of(), Map.of(failed, 1L), "F0_PROCESS")).root(failed);
+        nested.add(route("later_outer", Map.of(ENERGY, 320L, part, 1L), Map.of(),
+                Map.of(success, 1L), "F0_PROCESS")).root(success);
+        nested.workProfile(Map.of(), 2, Set.of("F0_PROCESS"));
+        result = nested.audit();
+        yes("a failed outer batch does not refund completed prerequisite labour",
+                hasRule(result, "entry_work_insufficient"));
+        eq("successful nested work remains charged before a later batch", 3L,
+                result.tiers().get(0).manualWork().requiredActions());
+    }
+
+    private static Fixture conditionalWorkFixture() {
+        Fixture fixture = new Fixture().terminal("manual_raw", RAW, TerminalKind.MANUAL_WORLD, false, true);
+        fixture.add(route("make_controller", Map.of(RAW, 2L), Map.of(), Map.of(MACHINE, 1L), null));
+        fixture.add(route("make_tool", Map.of(RAW, 1L), Map.of(), Map.of(TOOL, 1L), null));
+        fixture.machines.put("F0_PROCESS", new Machine("F0_PROCESS", MACHINE, 0));
+        fixture.environment("local_work_process", Map.of(ENERGY, 320L, SAFE, 1L), Map.of(),
+                Map.of(PRODUCT, 1L), "F0_PROCESS").root(PRODUCT);
+        return fixture;
+    }
+
+    private static void manualExitGoal() {
+        group("R13 concrete manual exit is not an automatic renewable product");
+        Fixture fixture = exitFixture(false, 5);
+        var result = fixture.audit();
+        yes("a manually crafted goal can be available from renewable consumed supplies", available(result, PRODUCT));
+        no("manual crafting with renewable inputs is not automatable supply", renewable(result, PRODUCT));
+        no("the selected relay-like objective is duplicated as a recurring output root",
+                result.tiers().get(0).recurring().contains(PRODUCT));
+        yes("the manual goal's consumed feed remains recurring", result.tiers().get(0).recurring().contains(RAW));
+        eq("the witness executes the entire real five-unit batch", 5L,
+                result.tiers().get(0).exitProduction().produced());
+        eq("the objective uses its actual count", 5L, result.tiers().get(0).exitProduction().requiredCount());
+        eq("one real batch satisfies the five-unit objective", 1L,
+                result.tiers().get(0).exitProduction().executedBatches());
+        no("a proper manual goal is not reported as missing production", hasRule(result, "exit_goal_production_unproven"));
+        result = exitFixture(false, 7).audit();
+        eq("a larger actual objective count is not silently defaulted to one", 7L,
+                result.tiers().get(0).exitProduction().requiredCount());
+        eq("batch rounding satisfies the real larger goal", 10L, result.tiers().get(0).exitProduction().produced());
+        result = exitFixture(true, 5).audit();
+        yes("the same synthetic product is R when an actual automatic executor owns its route",
+                renewable(result, PRODUCT));
+        Fixture gift = new Fixture().seed(PRODUCT, 99);
+        gift.exitObjective = PRODUCT;
+        result = gift.audit();
+        yes("a gift can make goal stock available", available(result, PRODUCT));
+        yes("goal stock or gifts cannot replace an actual production route", hasRule(result, "exit_goal_route_missing"));
+        Fixture giftedCraft = exitFixture(false, 5).seed(PRODUCT, 99);
+        result = giftedCraft.audit();
+        eq("pre-existing goal stock never skips execution of the real manual batch", 5L,
+                result.tiers().get(0).exitProduction().produced());
+        Fixture finite = new Fixture().seed(RAW, 1);
+        finite.add(new Route("manual_goal", Authority.CRAFTING_JSON, "fixture:manual_goal", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(PRODUCT, 5L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, false));
+        finite.exitObjective = PRODUCT;
+        result = finite.audit();
+        yes("a finite input can never stand in for renewable exit supply",
+                hasRule(result, "exit_goal_supply_not_renewable"));
+        Route manual = fixture.builder.build().routes().get("manual_goal");
+        Route automatic = new Route(manual.id(), manual.authority(), manual.source(), manual.family(),
+                manual.inputs(), manual.catalysts(), manual.outputs(), manual.discharged(),
+                manual.durationTicks(), manual.fuPerTick(), manual.conditions(), manual.prerequisites(),
+                manual.oneShot(), manual.modOwned(), true);
+        no("executor semantics are part of the authority fingerprint",
+                AuditReports.snapshotHash(new Builder().route(manual).build())
+                        .equals(AuditReports.snapshotHash(new Builder().route(automatic).build())));
+        Fixture manualLoop = new Fixture().seed(RAW, 1);
+        manualLoop.add(new Route("manual_forward", Authority.CRAFTING_JSON, "fixture:manual_forward", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(SIDE, 1L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, false));
+        manualLoop.add(route("automatic_return", Map.of(SIDE, 1L), Map.of(), Map.of(RAW, 1L), null));
+        manualLoop.loops.put("manual_loop", new ClosedLoop("manual_loop", RAW,
+                Set.of("manual_forward", "automatic_return"), null));
+        manualLoop.meta(RAW, metadata(ResourceClass.CLOSED_LOOP, null, "automatic_return",
+                List.of(), null, null, null, null)).root(RAW);
+        yes("a manual member cannot establish automatic renewable circulation",
+                hasRule(manualLoop.audit(), "loop_manual_route"));
+    }
+
+    private static Fixture exitFixture(boolean automatic, long count) {
+        Fixture fixture = new Fixture().environment("native_feed", Map.of(RAW, 1L), null)
+                .meta(RAW, renewable("native_feed"));
+        fixture.add(new Route("manual_goal", Authority.CRAFTING_JSON, "fixture:manual_goal", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(PRODUCT, 5L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, automatic));
+        fixture.meta(PRODUCT, automatic ? renewable("manual_goal")
+                : metadata(ResourceClass.BOOTSTRAP, null, "manual_goal", List.of(), null, null, null, null));
+        fixture.builder.objective(new Objective("exit", PRODUCT, count, Set.of(), null, "fixture:exit_count"));
+        fixture.requiredQuests.add("exit");
+        fixture.exitObjective = PRODUCT;
+        return fixture;
+    }
+
+    private static void localWorkNativeProduction() {
+        group("R14 startup work retains a native recurrent FU seed");
+        Snapshot live;
+        try {
+            live = AuthorityAdapters.live(Path.of(""));
+        } catch (IOException failure) {
+            throw new IllegalStateException("Cannot inspect actual native production quantities", failure);
+        }
+        Fixture fixture = productiveFixture(live, 0, true).seed(TOOL, 1);
+        fixture.workProfile(Map.of(), 9, Set.of("GEOLOGICAL_COLLECTOR", "BIOCULTIVATOR"));
+        var result = fixture.audit();
+        yes("finite local startup work can establish actual renewable native FU", renewable(result, ENERGY));
+        no("manual work itself never enters R", renewable(result, new Resource(Kind.ENVIRONMENT, "fixture:local_work")));
+        eq("the native 800+640 prefix costs exactly nine 160-FU startup actions", 9L,
+                result.tiers().get(0).manualWork().requiredActions());
+        eq("the next circulation retains the real native 1440-FU seed, not another labour allowance",
+                1440L, result.tiers().get(0).retainedInventory().get(ENERGY));
+        no("later native withdrawals do not demand repeated manual actions", hasRule(result, "entry_work_insufficient"));
+        no("native-cycle replay neither loses the seed nor claims infinite manual custody",
+                hasRule(result, "construction_reserve_unknown"));
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(), 8);
+        result = fixture.audit();
+        no("eight real local actions cannot fund the native startup prefix", renewable(result, ENERGY));
+        yes("the insufficient startup remains proof-visible", hasRule(result, "loop_startup_unproven"));
+        fixture = productiveFixture(live, 0, false).seed(TOOL, 1);
+        fixture.workProfile(Map.of(), 100, Set.of("GEOLOGICAL_COLLECTOR", "BIOCULTIVATOR"));
+        no("ample manual work cannot turn finite water into the native renewable system",
+                renewable(fixture.audit(), ENERGY));
     }
 
     private static void formedConstruction() {
@@ -896,19 +1138,21 @@ public final class VerifySustainability {
         yes("manual gathering is explicit reserve uncertainty", hasRule(result, "construction_reserve_unknown"));
         eq("manual gathering is never added to exact guarantees", 0, result.tiers().get(0).reserves().size());
 
-        group("conditional one-shot quest guarantees");
+        group("conditional one-shot quest claims are not initial guarantees");
         Fixture oneReward = rewardProducer(1);
         result = oneReward.audit();
         yes("a one-shot reward cannot be reused to construct a two-unit machine",
                 hasRule(result, "bootstrap_starvation"));
         reserve = result.tiers().get(0).reserves().stream().filter(value -> value.resource().equals(RAW))
                 .findFirst().orElseThrow();
-        eq("quest guarantee comes from its actual authority output", 1L, reserve.guaranteed());
+        eq("a quest claim never becomes an initial guarantee", 0L, reserve.guaranteed());
+        eq("a claimed reward comes from its actual authority output", 1L, reserve.claimedRewards());
         result = rewardProducer(2).audit();
         no("a sufficient one-shot reward can establish the producer", hasRule(result, "bootstrap_starvation"));
         reserve = result.tiers().get(0).reserves().stream().filter(value -> value.resource().equals(RAW))
                 .findFirst().orElseThrow();
-        eq("a changed reward quantity is read, not copied into annotations", 2L, reserve.guaranteed());
+        eq("a changed reward is still conditional rather than initially guaranteed", 0L, reserve.guaranteed());
+        eq("a changed claimed quantity is read, not copied into annotations", 2L, reserve.claimedRewards());
 
         Fixture circularReward = producer(0, 1, 0);
         circularReward.add(new Route("quest/after_machine", Authority.QUEST_REWARD, "fixture:quest", null,
@@ -1260,6 +1504,15 @@ public final class VerifySustainability {
         for (ProcessRecipe recipe : ProcessGraph.generate(AuthorityAdapters.materialViews())) {
             eq("live process batch " + recipe.id(), AuthorityAdapters.process(recipe), authorities.routes().get(recipe.id()));
         }
+        for (Route route : authorities.routes().values()) {
+            boolean automatic = switch (route.authority()) {
+                case PROCESS_GRAPH, GENERATOR_FUEL -> true;
+                case BOOTSTRAP_RECIPES, T1_RECIPES, CRAFTING_JSON, QUEST_REWARD -> false;
+                default -> throw new AssertionError("An actual new authority needs an execution-semantics assertion: "
+                        + route.authority());
+            };
+            eq("the real execution binding is explicit for " + route.id(), automatic, route.automatable());
+        }
         for (SupplyCatalogue.Entry entry : SupplyCatalogue.entries()) {
             yes("live supply entry " + entry.itemName() + " is inventoried",
                     authorities.resources().contains(new Resource(Kind.ITEM, "grindless:" + entry.itemName())));
@@ -1335,6 +1588,8 @@ public final class VerifySustainability {
         AuthorityAdapters.vanillaTransformation("minecraft:crafting_table", VerifySustainability.class.getClassLoader(), vanilla);
         yes("an allowlisted real vanilla transformation is read from the resolved classpath",
                 vanilla.build().routes().containsKey("vanilla/minecraft:crafting_table"));
+        no("a vanilla crafting transformation is not automatic merely because it is allowlisted",
+                vanilla.build().routes().get("vanilla/minecraft:crafting_table").automatable());
 
         String revision = revision(root);
         Path output = root.resolve(Path.of("build", "sustainability"));
@@ -1554,6 +1809,8 @@ public final class VerifySustainability {
         private final Set<Resource> roots = new TreeSet<>(Set.of(SAFE));
         private final Set<String> requiredQuests = new TreeSet<>();
         private DebtManifest debt = DebtManifest.empty();
+        private EntryProfile entryProfile;
+        private Resource exitObjective;
         private int sources;
 
         private Fixture() {
@@ -1620,10 +1877,25 @@ public final class VerifySustainability {
             return this;
         }
 
+        private Fixture workProfile(Map<Resource, Long> provided, long actions, Set<String> families) {
+            Resource labour = new Resource(Kind.ENVIRONMENT, "fixture:local_work");
+            builder.terminal(new Terminal("manual_work", labour, TerminalKind.MANUAL_LABOUR, null,
+                    false, true, null, 0, "Synthetic local-only crank actions", "fixture:manual_work"));
+            meta(labour, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+            entryProfile = new EntryProfile("fixture:conditional_entry", provided, actions,
+                    new ManualWork("manual_work", TOOL, 160, families, "fixture:typed_process_F0_guard"),
+                    Set.of("Given ordinary physical entry materials and bounded player actions"),
+                    "fixture:conditional_entry_not_gameplay");
+            return this;
+        }
+
+        private SustainabilityAnnotations annotations() {
+            ledger.put(0, new TierPlan(0, roots, requiredQuests, exitObjective, null, entryProfile));
+            return new SustainabilityAnnotations(resources, policies, machines, loops, plans, ledger);
+        }
+
         private SustainabilityAudit.Result audit() {
-            ledger.put(0, new TierPlan(0, roots, requiredQuests, null, null));
-            return SustainabilityAudit.run(builder.build(), new SustainabilityAnnotations(resources, policies,
-                    machines, loops, plans, ledger), debt);
+            return SustainabilityAudit.run(builder.build(), annotations(), debt);
         }
     }
 }

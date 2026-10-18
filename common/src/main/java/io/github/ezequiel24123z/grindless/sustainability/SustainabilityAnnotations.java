@@ -96,17 +96,30 @@ public record SustainabilityAnnotations(Map<Resource, ResourceMetadata> resource
         }
     }
 
-    /** Environmental justifications reference actual terminals rather than inventing matter. */
-    public record RoutePolicy(int unlockTier, boolean optional, Set<String> environmentalSources,
+    /** Environmental evidence does not assign progression: a null tier remains unavailable. */
+    public record RoutePolicy(Integer unlockTier, boolean optional, Set<String> environmentalSources,
                               Map<Resource, OutputRole> outputRoles) {
         public RoutePolicy {
-            SustainabilityModel.tier(unlockTier);
+            if (unlockTier != null) {
+                SustainabilityModel.tier(unlockTier);
+            }
             environmentalSources = sortedSet(environmentalSources);
             outputRoles = sortedMap(outputRoles);
         }
 
+        /** Retains the original primitive-tier constructor. */
+        public RoutePolicy(int unlockTier, boolean optional, Set<String> environmentalSources,
+                           Map<Resource, OutputRole> outputRoles) {
+            this(Integer.valueOf(unlockTier), optional, environmentalSources, outputRoles);
+        }
+
         /** Declares a route without output-role overrides, the ordinary case. */
         public RoutePolicy(int unlockTier, boolean optional, Set<String> environmentalSources) {
+            this(Integer.valueOf(unlockTier), optional, environmentalSources, Map.of());
+        }
+
+        /** Declares environmental facts while leaving an unaccepted route's tier unknown. */
+        public RoutePolicy(Integer unlockTier, boolean optional, Set<String> environmentalSources) {
             this(unlockTier, optional, environmentalSources, Map.of());
         }
     }
@@ -129,13 +142,48 @@ public record SustainabilityAnnotations(Map<Resource, ResourceMetadata> resource
         }
     }
 
+    /**
+     * Conditional player custody and bounded work, never gifts or portable ENERGY.
+     * An empty bill can be a derivation template, but cannot certify an unfunded witness.
+     */
+    public record EntryProfile(String id, Map<Resource, Long> playerProvided, long manualWorkActions,
+                               ManualWork manualWork, Set<String> conditions, String source) {
+        public EntryProfile {
+            requireText(id, "entry profile id");
+            requireText(source, "entry profile source");
+            playerProvided = quantities(playerProvided);
+            conditions = sortedSet(conditions);
+            if (conditions.isEmpty() || manualWorkActions < 0 || manualWorkActions > 0 && manualWork == null
+                    || playerProvided.keySet().stream().anyMatch(resource ->
+                    resource.kind() != Kind.ITEM && resource.kind() != Kind.FLUID)) {
+                throw new IllegalArgumentException("An entry profile needs physical provisions and explicit conditions");
+            }
+        }
+
+        /** Uses a derived sufficient bill without changing its stated acquisition assumptions. */
+        public EntryProfile withBill(Map<Resource, Long> provided, long actions) {
+            return new EntryProfile(id, provided, actions, manualWork, conditions, source);
+        }
+    }
+
     /** Roots and selected non-optional quest ids; missing tiers remain explicit unknowns. */
     public record TierPlan(int tier, Set<Resource> roots, Set<String> requiredQuests,
-                           Resource exitObjective, String unknown) {
+                           Resource exitObjective, String unknown, EntryProfile entryProfile) {
         public TierPlan {
             SustainabilityModel.tier(tier);
             roots = sortedSet(roots);
             requiredQuests = sortedSet(requiredQuests);
+        }
+
+        /** Keeps S1 callers unprofiled rather than fabricating a sufficient entry kit. */
+        public TierPlan(int tier, Set<Resource> roots, Set<String> requiredQuests,
+                        Resource exitObjective, String unknown) {
+            this(tier, roots, requiredQuests, exitObjective, unknown, null);
+        }
+
+        /** Replaces only the conditional entry bill after a separate finite replay. */
+        public TierPlan withEntryProfile(EntryProfile profile) {
+            return new TierPlan(tier, roots, requiredQuests, exitObjective, unknown, profile);
         }
     }
 
