@@ -64,7 +64,19 @@ then required a real fix, not a debugger hook: local4061 changes only the paired
 and paired guard harness. It passes32 WinPS cases with actual JAVA_TOOL_OPTIONS diagnostics,
 including invalid/missing/ambiguous/nonzero versions and pipe pressure. Bash is statically
 reviewed, not executed locally; the official suite/export now has the4061 tool revision.
-No suite/export verdict is yet recorded. Preserve the original capture and harness failures.
+The official4061 runner subsequently exits0 with `ALL CHECK SUITES PASSED`; its canonical
+export also exits0 with73,591 productive comparisons. Data SHA-256:
+`d41e375598f293d797101c81aed133e9ef649ebbed47f5666e7aebb3cbccb369`;
+audit JSON `3ad7143dcfa98a23edf12fb8d5e8d63cbe352e1fbbc44a29e06d06423ed3076d`;
+Markdown `419a9ea9c039a14e0ecd635e2c2de535cc6ad69638f56b6685b66a5d1ad74e91`.
+Its gate passes and global verdict remains false, with1384/474/259/25 inventory counts,
+1739 unknowns,15 future errors under absent later ledgers,0 warnings and0 debt.
+The12 Quest blobs, publisher jars and81 external common-classpath jars retain the checked
+identities supporting reuse of307 contracts; they were not reexecuted or relabeled.
+An auxiliary Get-Content/ConvertTo-Json summary ran out of memory after the official results;
+that failed serialization is preserved separately and supplies no acceptance evidence.
+The original invocation/harness failures also remain. This4061 result does not cover the
+later guidance, asset or new exosuit fixture source in the coordinator worktree.
 ADR-0143 canonical runtime guidance is under
 implementation; no generated placeholder, native surface pass or Tier acceptance is implied.
 The first26-file implementation is a preservation checkpoint only. Astra's reader review

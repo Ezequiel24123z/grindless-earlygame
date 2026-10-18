@@ -113,9 +113,10 @@ production and first-fluids passed in these runs; synthetic oracle cases remain 
 completed and released their JVMs. S2 now owns the frozen8fc combined build/check/export.
 The first invocation promoted a JDK stderr note to a WinPS exception before a Gradle
 verdict; that failure is preserved and native cmd/process capture is authorized for retry.
-The retry passed8fc build/remap and15 pack checks. Runner-only local4061 then fixed the
-actual version-probe stderr handling and passed32 WinPS guard cases; official checks/export
-continue on4061, not a relabeled8fc runner. No debugger hook was used.
+The retry passed8fc build/remap and15 pack checks. Runner-only4061 then fixed the
+version-probe stderr handling and passed32 WinPS guard cases; its official suite and
+canonical export now pass, not as relabeled8fc executions. Later guidance/asset/exosuit
+work is outside that scope. No debugger hook was used; an auxiliary summary OOM is retained.
 The native-fixture grant ended without a boot:
 only1909MiB commit margin was available.
 Managed cloud Sandbox provisioning also returned403, so neither path produced native evidence.

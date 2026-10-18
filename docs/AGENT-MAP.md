@@ -408,6 +408,11 @@ version/API-verified, never a fictional or mandatory core integration.
   applies to upload; missing files fail rather than yield an empty successful artifact.
   Keep the six native smoke shards and their manifest/limits unchanged.
 - `tools/checks/Verify*.java`, via `tools/run-checks.sh .` after `:common:build`.
+- `tools/checks/verify-runner-jdk.ps1`/`.sh` test the actual JDK-probe helper with real
+  JAVA_TOOL_OPTIONS and rejected version/exit/stream cases. Native stderr is diagnostic
+  data, not a failed version by itself; a valid17 line never overrides a nonzero exit.
+  The Windows probe drains both pipes asynchronously. CI runs the Bash twin before the
+  official suite; do not substitute debugger hooks or silently remove JVM limits.
 - `tools/smoke/first-exosuit.commands` starts `first-exosuit-pack`: one summon per tagged
   item after actual chunk loading, bounded polling of all four IDs, then tagged cleanup.
   `VerifyExosuitFixture` checks the source contract, not native entity scheduling. Failure

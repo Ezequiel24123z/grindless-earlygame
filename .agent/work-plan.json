@@ -80,10 +80,11 @@
       "publisher": "Astra coordinator only; workers create local checkpoints"
     },
     "resource_window": {
-      "owner_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
-      "scope": "8fc build/remap+pack15 passed; runner-only4061 fixes JDK stderr detection and has32 WinPS regression passes. Official checks/export now run on4061, no server.",
-      "next_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
-      "next_scope": "Combined build/checks and canonical export after the coordinator freezes the integration commit",
+      "owner_session_id": null,
+      "owner_worker_agent_id": "9d32dd27-39b9-41fc-8d49-6af58856f904",
+      "scope": "Staged T0 asset generation/comparison with bounded JDK; S2 official4061 checks/export passed and released its JVMs, no server",
+      "next_worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
+      "next_scope": "Canonical guidance generation/compile after the provenance correction and source freeze",
       "native_blocker": "1909MiB free commit below canonical2GiB server plus overhead; no local boot. Managed cloud Sandbox returned403 and created no validation evidence.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

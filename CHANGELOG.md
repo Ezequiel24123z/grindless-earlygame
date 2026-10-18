@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Official check runner handles real JDK diagnostics.** The paired runners validate
+  exit0 and exactly one real JDK17 version while retaining both output streams; WinPS
+  no longer treats the JAVA_TOOL_OPTIONS banner as a fatal version-probe error. The32-case
+  Windows regression passes and CI invokes its Bash twin. The official4061 suite and
+  canonical export now pass separately from the8fc build/remap/15 pack checks; later
+  guidance/asset work is not covered by those identities.
 - **Canonical guidance implementation preserved for review.** Typed projection, content
   fingerprint, runtime cache and shared native presenters now connect items/fluids, JEI,
   machines, Atlas and both books. The T0 guide uses current recipe rows and player-focused
