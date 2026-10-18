@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.menu;
 
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -12,6 +13,8 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import java.util.Optional;
 
 /**
  * Shared machine menu: energy, slots, named fault (ADR-0058).
@@ -116,9 +119,19 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
         return Math.max(0, data.get(DATA_FLUID));
     }
 
-    /** The portion of stored fluid available to the automatic front output. */
+    /** Stored-fluid output quota, before active-recipe reservations are applied. */
     public int fluidOutputAmount() {
         return Math.max(0, data.get(DATA_FLUID_OUTPUT));
+    }
+
+    /**
+     * Bootstrap's four water-only families use the existing synchronized amount/quota and
+     * the same capacity constant as their native buffer. This does not infer other fluid IDs.
+     */
+    public Optional<MachineFluidView> waterView() {
+        return MachineMenuLayout.waterTank(kind()).map(tank ->
+                new MachineFluidView(FluidLogic.WATER, fluidAmount(), FluidLogic.MACHINE_CAPACITY,
+                        fluidOutputAmount()));
     }
 
     public io.github.ezequiel24123z.grindless.source.SourceSite.Fault siteFault() {

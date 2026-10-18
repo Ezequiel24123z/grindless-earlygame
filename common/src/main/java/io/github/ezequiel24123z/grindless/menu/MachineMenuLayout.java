@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.menu;
 
 import java.util.List;
+import java.util.Optional;
 
 /** Read-only menu geometry shared by the live menu and recipe-viewer projections. */
 public final class MachineMenuLayout {
@@ -20,8 +21,28 @@ public final class MachineMenuLayout {
     public record ItemSlot(int index, int x, int y, boolean output) {
     }
 
+    public record FluidTank(int x, int y, int width, int height) {
+    }
+
+    /** The four Bootstrap water machines share the existing single primary buffer. */
+    public static Optional<FluidTank> waterTank(MachineMenuKind kind) {
+        return switch (kind) {
+            case CLAY_MIXER, SETTLING_TROUGH, BIOCULTIVATOR ->
+                    Optional.of(new FluidTank(24, 26, 18, 36));
+            case GEOLOGICAL_COLLECTOR -> Optional.of(new FluidTank(44, 26, 18, 36));
+            default -> Optional.empty();
+        };
+    }
+
     public static int progressX(MachineMenuKind kind) {
         return kind == MachineMenuKind.GENERATOR ? 112 : 79;
+    }
+
+    public static int visibleStatusLines(int requested, int lineHeight) {
+        if (requested < 0 || lineHeight <= 0) {
+            throw new IllegalArgumentException("status dimensions must be nonnegative with a positive line height");
+        }
+        return Math.min(requested, (INVENTORY_LABEL_Y - 4 - STATUS_Y) / lineHeight);
     }
 
     public static List<ItemSlot> itemSlots(MachineMenuKind kind) {

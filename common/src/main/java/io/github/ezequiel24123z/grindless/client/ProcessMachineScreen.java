@@ -5,14 +5,18 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuLayout;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
-import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import io.github.ezequiel24123z.grindless.source.SourceSite;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * One screen for every process machine.
@@ -23,6 +27,7 @@ import net.minecraft.world.inventory.Slot;
 public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessMachineMenu> {
 
     private static final ResourceLocation TEXTURE = Grindless.id("textures/gui/process_machine.png");
+    private boolean fluidAppearanceUnavailable;
 
     public ProcessMachineScreen(ProcessMachineMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -35,6 +40,7 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = leftPos;
         int y = topPos;
+        fluidAppearanceUnavailable = false;
         graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xFF373737);
         graphics.fill(x + 1, y + 1, x + imageWidth - 1, y + imageHeight - 1, 0xFFFFFFFF);
         graphics.fill(x + 3, y + 3, x + imageWidth - 1, y + imageHeight - 1, 0xFF555555);
@@ -42,6 +48,17 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
         for (Slot slot : menu.slots) {
             drawSlot(graphics, x + slot.x - 1, y + slot.y - 1);
         }
+        MachineMenuLayout.waterTank(menu.kind()).ifPresent(tank -> {
+            drawRecessed(graphics, x + tank.x(), y + tank.y(), tank.width(), tank.height());
+            menu.waterView().ifPresent(fluid -> {
+                int fill = fluid.fillHeight(tank.height() - 2);
+                if (fill > 0 && !FluidClientPlatform.draw(graphics, fluid.id(), x + tank.x() + 1,
+                        y + tank.y() + tank.height() - 1 - fill, tank.width() - 2, fill)) {
+                    fluidAppearanceUnavailable = true;
+                    graphics.drawString(font, "?", x + tank.x() + 6, y + tank.y() + 13, 0xAA0000, false);
+                }
+            });
+        });
         graphics.fill(x + 8, y + 16, x + 20, y + 70, 0xFF373737);
         graphics.fill(x + 9, y + 17, x + 19, y + 69, 0xFF8B8B8B);
         int arrowX = MachineMenuLayout.progressX(menu.kind());
@@ -61,28 +78,33 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
     }
 
     private static void drawSlot(GuiGraphics graphics, int x, int y) {
-        graphics.fill(x, y, x + 18, y + 18, 0xFF373737);
-        graphics.fill(x + 1, y + 1, x + 18, y + 18, 0xFFFFFFFF);
-        graphics.fill(x + 1, y + 1, x + 17, y + 17, 0xFF8B8B8B);
+        drawRecessed(graphics, x, y, 18, 18);
+    }
+
+    private static void drawRecessed(GuiGraphics graphics, int x, int y, int width, int height) {
+        graphics.fill(x, y, x + width, y + height, 0xFF373737);
+        graphics.fill(x + 1, y + 1, x + width, y + height, 0xFFFFFFFF);
+        graphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, 0xFF8B8B8B);
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, titleLabelX, titleLabelY, 0x404040, false);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
-        int statusY = MachineMenuLayout.STATUS_Y;
-        for (var line : font.split(statusLine(), imageWidth - 16)) {
-            graphics.drawString(font, line, MachineMenuLayout.STATUS_X, statusY, 0x404040, false);
-            statusY += font.lineHeight;
+        var lines = font.split(statusLine(), imageWidth - 16);
+        int visible = MachineMenuLayout.visibleStatusLines(lines.size(), font.lineHeight);
+        for (int index = 0; index < visible; index++) {
+            int y = MachineMenuLayout.STATUS_Y + index * font.lineHeight;
+            if (index == visible - 1 && lines.size() > visible) {
+                graphics.drawString(font, Component.translatable("gui.grindless.status_more"),
+                        MachineMenuLayout.STATUS_X, y, 0x404040, false);
+            } else {
+                graphics.drawString(font, lines.get(index), MachineMenuLayout.STATUS_X, y, 0x404040, false);
+            }
         }
-        if (menu.kind() == MachineMenuKind.CLAY_MIXER || menu.kind() == MachineMenuKind.SETTLING_TROUGH
-                || menu.kind() == MachineMenuKind.GEOLOGICAL_COLLECTOR || menu.kind() == MachineMenuKind.BIOCULTIVATOR) {
-            Component water = menu.fluidOutputAmount() > 0
-                    ? Component.translatable("gui.grindless.workshop.water_output",
-                            menu.fluidAmount(), menu.fluidOutputAmount())
-                    : Component.translatable("gui.grindless.workshop.water", menu.fluidAmount());
-            graphics.drawString(font, water, 32, 16, 0x404040, false);
-        }
+        menu.waterView().ifPresent(fluid -> graphics.drawString(font,
+                Component.translatable("gui.grindless.fluid_amount", fluid.amount(), fluid.capacity()),
+                32, 16, 0x404040, false));
     }
 
     private Component statusLine() {
@@ -118,5 +140,24 @@ public final class ProcessMachineScreen extends AbstractContainerScreen<ProcessM
             graphics.renderTooltip(font, Component.translatable("gui.grindless.energy",
                     menu.energy(), menu.capacity()), mouseX, mouseY);
         }
+        MachineMenuLayout.waterTank(menu.kind()).ifPresent(tank -> {
+            if (mouseX >= leftPos + tank.x() && mouseX < leftPos + tank.x() + tank.width()
+                    && mouseY >= topPos + tank.y() && mouseY < topPos + tank.y() + tank.height()) {
+                menu.waterView().ifPresent(fluid -> {
+                    var tooltip = new ArrayList<Component>();
+                    tooltip.add(FluidClientPlatform.name(fluid.id()));
+                    tooltip.add(Component.translatable("gui.grindless.fluid_amount",
+                            fluid.amount(), fluid.capacity()));
+                    if (menu.kind() == MachineMenuKind.SETTLING_TROUGH) {
+                        tooltip.add(Component.translatable("gui.grindless.fluid_output_quota", fluid.outputQuota()));
+                    }
+                    if (fluidAppearanceUnavailable) {
+                        tooltip.add(Component.translatable("gui.grindless.fluid_unavailable", fluid.id())
+                                .withStyle(ChatFormatting.RED));
+                    }
+                    graphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
+                });
+            }
+        });
     }
 }
