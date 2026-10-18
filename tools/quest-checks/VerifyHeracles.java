@@ -129,7 +129,7 @@ public final class VerifyHeracles {
             }
             HeraclesDefinitions.synchronize(config, encoded);
             equal("repeated generation preserves bytes", true, java.util.Arrays.equals(original, Files.readAllBytes(bundle)));
-            QuestHandler.load(RegistryAccess.EMPTY, config);
+            loadNative(config);
             equal("real publisher loader accepts the ZIP without parse failures", false, QuestHandler.failedToLoad);
             for (var entry : definitions.entrySet()) {
                 equal("actual binary loads the ZIP member filename id " + entry.getKey(), true,
@@ -160,7 +160,7 @@ public final class VerifyHeracles {
             HeraclesDefinitions.synchronize(coexist, encoded);
             HeraclesDefinitions.verifyFiles(coexist, encoded);
             equal("unrelated native quest bytes are not replaced", externalJson, Files.readString(retained));
-            QuestHandler.load(RegistryAccess.EMPTY, coexist);
+            loadNative(coexist);
             equal("real loader retains an unrelated native quest alongside the bundle", true,
                     HeraclesDefinitions.matches(external, QuestHandler.get("external_retained")));
             equal("native coexistence does not drop owned definitions", definitions.size() + 1, QuestHandler.quests().size());
@@ -230,6 +230,12 @@ public final class VerifyHeracles {
         }
     }
 
+    private static void loadNative(Path config) {
+        QuestHandler.quests().clear();
+        QuestHandler.load(RegistryAccess.EMPTY, config);
+        equal("native load must succeed without a previously seeded quest map", false, QuestHandler.failedToLoad);
+    }
+
     private static void interruptedPublication(Path config, Map<String, String> encoded,
                                                Map<String, Quest> definitions) throws Exception {
         Path bundle = HeraclesDefinitions.bundle(config);
@@ -246,7 +252,7 @@ public final class VerifyHeracles {
         equal("failure before replacement preserves the complete previous bundle", true,
                 java.util.Arrays.equals(previous, Files.readAllBytes(bundle)));
         HeraclesDefinitions.verifyFiles(config, encoded);
-        QuestHandler.load(RegistryAccess.EMPTY, config);
+        loadNative(config);
         equal("the real loader still sees only the complete old catalogue", definitions.size(), QuestHandler.quests().size());
         HeraclesDefinitions.synchronize(config, updated);
         HeraclesDefinitions.verifyFiles(config, updated);
@@ -257,7 +263,7 @@ public final class VerifyHeracles {
                     java.nio.charset.StandardCharsets.UTF_8);
             equal("retry publishes the complete new definition bytes", updated.get("grindless_multitool"), contents);
         }
-        QuestHandler.load(RegistryAccess.EMPTY, config);
+        loadNative(config);
         equal("the real ZIP loader accepts the complete new catalogue", false, QuestHandler.failedToLoad);
         for (var entry : definitions.entrySet()) {
             equal("retry retains native id/dependencies/settings " + entry.getKey(), true,
@@ -276,7 +282,7 @@ public final class VerifyHeracles {
         equal("a failed first publication does not expose a partial archive", false, Files.exists(firstBundle));
         HeraclesDefinitions.synchronize(initial, encoded);
         HeraclesDefinitions.verifyFiles(initial, encoded);
-        QuestHandler.load(RegistryAccess.EMPTY, initial);
+        loadNative(initial);
         equal("first-publication retry loads every native definition", definitions.size(), QuestHandler.quests().size());
     }
 
