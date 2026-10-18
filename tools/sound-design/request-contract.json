@@ -24,6 +24,6 @@
     "One POST produces one file; no seed, batch or enable_logging field.",
     "Do not fall back to paid-tier PCM or alternate MP3 formats after an entitlement error.",
     "Generic non-sensitive prompts only. No account/billing requests.",
-    "Standalone audio distribution is prohibited; extractable mod-asset incorporation remains under Astra review."
+    "Official creative terms permit game incorporation subject to the applicable plan and prohibit standalone audio distribution. Astra reviews actual release use; extractability alone does not require inventing a new contract."
   ]
 }

@@ -91,7 +91,7 @@ They do not receive permission to move data, alter gameplay or import assets.
 | TASK-009 | Pin the curated pack and public configurations from TASK-004 in existing metadata/build surfaces; document exclusions and bypass controls | No | |
 | TASK-010 | Retain/polish or replace the quest interface only after the actual version/API/save comparison; preserve QuestClaimService and current-evidence/unique-reward semantics | No | |
 | TASK-011 | Give items readable physical volume/materiality, prioritize the Core/Relay family and preserve placed machines; reuse verified native block-model hierarchy for machine items (ADR-0146) | No | |
-| TASK-012 | Complete minimal sound manifest/pipeline, generate at most3 Quern calibration candidates and wait for owner selection; then record rights/provenance and integrate a small shared palette (ADR-0145) | No; four draft files survived the crash, runner/QC/candidates incomplete | |
+| TASK-012 | Complete minimal sound manifest/pipeline, generate at most3 Quern calibration candidates and wait for owner selection; then record rights/provenance and integrate a small shared palette (ADR-0145) | No; reviewed pipeline passes67 offline and27 real codec checks, provider generation/owner choice/runtime integration pending | |
 | TASK-013 | Define release/save identity and compatibility manifest/checks; no automatic adoption of a personal or preparation world | No | |
 
 TASK-007 depends on TASK-002. TASK-008 depends on TASK-003. TASK-009 and TASK-010 depend

@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bounded sound calibration tooling and actual codec checks are ready.** A shared
+  PowerShell/SH entry supports offline Plan/QC and an explicit three-request Generate
+  mode, with reviewed input/grant bindings, durable pre-request budget, no redirects
+  or automatic retries, and no secret/account data in outputs.67 offline guards and
+  27 real MP3/WAV/Vorbis checks pass with a hash-verified portable FFmpeg, after
+  preserving and fixing WinPS informational-stderr capture. CI runs only the
+  no-provider guard twin. No ElevenLabs candidate, artistic approval, runtime import
+  or release audio is supplied by the synthetic codec fixtures.
 - **External Gradle writes verified without relocating old data.** The selected
   compilation/classpath task exits0 on the new process-local home with unchanged
   build inputs and actual768MiB/CPU2 limits. All143 distinct referents exist, including

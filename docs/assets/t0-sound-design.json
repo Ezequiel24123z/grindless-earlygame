@@ -1,19 +1,22 @@
 {
   "schema": "grindless.t0-sound-design/v1",
   "source_revision": "9d2b5a1c2876d84c133de7c68f8566368212eca8",
+  "recovery_revision": "102d68f5af0374f84aa77633269c25b1dd365c06",
   "runtime_baseline": "1389ebbffbadbed33848cbfe0e8ced9a36b68a11",
-  "policy": "ADR-0144",
+  "policy": "ADR-0145",
+  "product_policy": "ADR-0144",
   "scope": "T0 development-only internal calibration; no runtime or build dependency",
   "status": "planned_unapproved",
   "publication_approved": false,
   "licence": {
     "internal_calibration_only": true,
-    "asset_incorporation_and_extractability": "pending_Astra_terms_review",
+    "asset_incorporation_and_extractability": "Official creative terms permit game incorporation subject to the applicable plan; Astra reviews the actual intended use before release. Technical extractability alone is not standalone-library distribution.",
     "standalone_audio_distribution": "not_permitted",
-    "entitlement": "must_be_recorded_at_generation; free output cannot be relabelled paid",
+    "entitlement": "Owner explicitly confirmed a paid subscription. Record generation-time confirmation in the private grant/provenance without requesting account or billing data; free output cannot be relabelled paid.",
     "asset_import_approved": false
   },
   "audit": {
+    "focused_recovery_check": "At recovery_revision, rechecked Quern recipes, stone-disc geometry, F0 binding and MachineEffects routing only. The broader original draft audit is preserved, not claimed as a new whole-mod audit. No prior runner, generation, technical QC or listening result survived.",
     "authorities": [
       "MachineEffects.animate/sound", "ModSounds", "sounds.json",
       "FluxConduitItem.useOn", "BlockCatalogue", "ProcessMachineKind", "GeneratorKind",
@@ -147,7 +150,7 @@
     "max_calls": 3,
     "automatic_rerolls": false,
     "contract_id": "elevenlabs-sfx-v2-internal-3s-mp3",
-    "mechanism_evidence": "BootstrapProcesses: gravel -> sand 100 ticks, brick/insulator -> grog 60 ticks. RenewableProcesses: mineral aggregate milling. BlockCatalogue describes stone milling discs; BootstrapRecipes uses stone and a stick. F0 power is not evidence of a specific electric or hand drive.",
+    "mechanism_evidence": "BootstrapProcesses: gravel -> sand 100 ticks, brick/insulator -> grog 60 ticks, unfired ceramic recovery 100 ticks. RenewableProcesses: mineral aggregate -> cobblestone/gravel 120 ticks; biomass -> paper and fibreboard -> sticks also use the Quern. BlockCatalogue describes stone milling discs; BootstrapRecipes uses stone and a stick, not a proven timber frame. Woody resonance is an artistic contrast, not a construction fact. F0 power is not evidence of a specific electric or hand drive.",
     "listening_segment_seconds": 3.0,
     "candidates": [
       {
@@ -169,7 +172,7 @@
         "approval": "unapproved"
       }
     ],
-    "next_gate": "Astra reviews and commits the manifest, then explicitly grants at most three calls with checked API/licence and active entitlement. User listens and selects a direction before a style guide or any expansion.",
+    "next_gate": "PHASE 1: offline tooling/manifest review and a Git checkpoint by Astra. No secret read or provider request is authorized by this draft. Only a NEW explicit grant from Astra, binding the reviewed commit, file hashes and one ignored/external output directory, may later authorize at most three calls. Preserve its receipt permanently; ambiguous delivery requires review, never a retry or a fresh folder. User listens and selects a direction before a style guide or any expansion.",
     "technical_qc_is_artistic_approval": false,
     "runtime_import_approved": false
   }

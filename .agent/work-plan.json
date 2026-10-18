@@ -336,13 +336,13 @@
       "stop_condition": "Return usable shortlist, preview/licence evidence and listening/loop risks; no audio or engine change"
     },
     {
-      "id": "sound-calibration-tooling", "task_id": "t0-sound-pass", "status": "partial_drafts_preserved_after_crash",
+      "id": "sound-calibration-tooling", "task_id": "t0-sound-pass", "status": "reviewed_offline_and_real_codec_checks_passed_generation_pending",
       "worker_agent_id": "023f7f7b-f1c2-422f-91e1-a43f1fc8b544", "model": "gpt-6.1-sol", "reasoning_effort": "max",
       "recovery_worker_agent_id": "1a21cc14-ff7b-440f-964d-eafc7a96b2be",
-      "recovery_state": "Standalone source reviewed and67 offline cases pass; actual codec verification follows the real missing-FFmpeg preflight. No provider grant, secret read or generation",
+      "recovery_state": "Standalone source reviewed;67 offline guards plus27 actual codec cases pass using pinned portable FFmpeg9.0.2. WinPS stderr capture corrected after reproduction. No provider grant, secret read or generation",
       "input_revision": "9d2b5a1c2876d84c133de7c68f8566368212eca8",
       "owned_files": ["docs/assets/t0-sound-design.json", "tools/sound-design development-only twins, contract, template and focused tests"],
-      "result": "Only manifest, request-contract, unapproved grant example and local-ignore drafts survived; no runner, QC execution or delivered candidates",
+      "result": "Four crash-surviving drafts are now a bounded development-only Plan/Generate/QC pipeline with paired tests, durable max3 budget and real codec evidence. No paid candidate or artistic/runtime approval; prior drafts/failures preserved",
       "generation_limit": 3,
       "generation_approved": false,
       "scope": "Complete small secret-safe bounded calibration with real binary response/provenance and technical QC; Quern stone grinding, three artistic variants, no runtime/build API dependency",

@@ -31,6 +31,9 @@ jobs:
       - name: Foundation validation
         run: bash tools/validate.sh .
 
+      - name: Check offline sound calibration guards
+        run: bash tools/sound-design/test-sound-design.sh
+
       - name: Verify and export canonical dashboard
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         run: |

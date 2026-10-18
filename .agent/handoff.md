@@ -68,6 +68,17 @@ before expansion and no API dependency in the normal build/runtime. Provider sec
 remain outside the repository; generation-time entitlement/rights belong to the
 private invocation and applicable asset provenance, not an account record in Git.
 
+The recovered sound implementation now has the real Plan/Generate/QC entrypoint and
+paired tests. Astra reviewed the source;67 offline guards plus27 real codec cases pass
+using the pinned portable FFmpeg9.0.2 installation outside the repository. The initial
+missing-codec preflight and reproduced WinPS stderr-capture/harness failures are
+preserved; both real streams and exit code are now collected. All retained fixtures
+are TEST/NOT ART, not ElevenLabs outputs. No provider request or secret read has
+occurred. A new private grant tied to the committed manifest/contract/runner and one
+candidate directory is still required; never replace an ambiguous spend ledger.
+The palette remains artistically unapproved until the owner chooses among the actual
+three Quern candidates. CI invokes the no-provider guard twin only, not generation.
+
 ADR-0146 records the owner's art correction: preserve placed blocks/machines, improve
 item volume/materiality and the Data Core/Calibrated Core/Relay family, and inspect
 native BlockItem parents/transforms before changing machine inventory visuals.
