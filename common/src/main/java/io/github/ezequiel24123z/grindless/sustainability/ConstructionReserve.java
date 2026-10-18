@@ -584,8 +584,8 @@ final class ConstructionReserve {
         try {
             for (Route source : snapshot.routes().values()) {
                 if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
-                        && audit.unlocked(source, tier) && selectedClaim(source) && !claimed.contains(source.id())
-                        && audit.outputAmount(source, resource) > 0) {
+                        && audit.outputAmount(source, resource) > 0 && audit.unlocked(source, tier)
+                        && selectedClaim(source) && !claimed.contains(source.id())) {
                     execute(source, 1);
                     if (free(resource) >= amount) {
                         return true;
@@ -706,7 +706,8 @@ final class ConstructionReserve {
         if (policy != null && !policy.optional()) {
             return true;
         }
-        return annotations.ledger().get(tier).requiredQuests().stream()
+        TierPlan plan = annotations.ledger().get(tier);
+        return plan != null && plan.requiredQuests().stream()
                 .map(snapshot.objectives()::get).filter(java.util.Objects::nonNull)
                 .anyMatch(objective -> route.id().equals(objective.rewardRoute()));
     }
@@ -771,8 +772,7 @@ final class ConstructionReserve {
             }
         } else {
             for (var catalyst : route.catalysts().entrySet()) {
-                boolean ready = route.oneShot() ? obtain(catalyst.getKey(), catalyst.getValue())
-                        || locked.getOrDefault(catalyst.getKey(), 0L) >= catalyst.getValue()
+                boolean ready = route.oneShot() ? obtainClaimRequirement(catalyst.getKey(), catalyst.getValue())
                         : lock(catalyst.getKey(), catalyst.getValue());
                 if (!ready) {
                     return false;
@@ -794,6 +794,27 @@ final class ConstructionReserve {
             Route treatment = handling.treatmentRoute() == null ? null
                     : snapshot.routes().get(handling.treatmentRoute());
             if (treatment != null && !treatment.id().equals(route.id()) && !prepare(treatment)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean obtainClaimRequirement(Resource resource, long amount) {
+        return obtain(resource, Math.max(0L, amount - locked.getOrDefault(resource, 0L)));
+    }
+
+    private boolean claimRequirementsCoexist(Route route) {
+        for (var requirement : route.catalysts().entrySet()) {
+            if (!obtainClaimRequirement(requirement.getKey(), requirement.getValue())) {
+                return false;
+            }
+        }
+        // Later preparation may consume an earlier requirement; only the final joint stock proves the claim.
+        for (var requirement : route.catalysts().entrySet()) {
+            if (free(requirement.getKey()) < requirement.getValue()
+                    - locked.getOrDefault(requirement.getKey(), 0L)) {
+                unknown(requirement.getKey(), "The claim's non-consumed requirements do not coexist after preparation.");
                 return false;
             }
         }
@@ -854,6 +875,9 @@ final class ConstructionReserve {
                     return false;
                 }
                 take(input.getKey(), need, allocated);
+            }
+            if (route.oneShot() && !claimRequirementsCoexist(route)) {
+                return false;
             }
             Map<Resource, Long> outputs = producedOutputs(route);
             for (var output : outputs.entrySet()) {

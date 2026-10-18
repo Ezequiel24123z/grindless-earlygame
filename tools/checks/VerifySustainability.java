@@ -106,7 +106,10 @@ public final class VerifySustainability {
                 VerifySustainability::localWorkNativeProduction, VerifySustainability::manualEstablishment,
                 VerifySustainability::unitPotentialCertificates, VerifySustainability::conditionalGateScope,
                 VerifySustainability::jointConditionalObligations, VerifySustainability::storedNativeFeed,
-                VerifySustainability::singletonOutputCustody, VerifySustainability::heldQuestAccess)) {
+                VerifySustainability::singletonOutputCustody, VerifySustainability::heldQuestAccess,
+                VerifySustainability::coexistingClaimRequirements, VerifySustainability::claimsWithoutLedger,
+                VerifySustainability::executedClaimObjectiveScope, VerifySustainability::typedFindingTierScope,
+                VerifySustainability::outputOnlyFirstUseException)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -114,6 +117,190 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void coexistingClaimRequirements() {
+        group("R24 non-consumed claim requirements coexist without refunding completed sub-batches");
+        Fixture fixture = coexistingClaimFixture(1);
+        var result = fixture.audit();
+        no("one finite RAW cannot fund a book and evidence that consumes that same book",
+                T0ConditionalGate.evaluate(result).pass());
+        eq("a claim cannot complete after producing its evidence destroyed the required book", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/claim", 0L));
+        eq("the failed claim does not invent its grant or exit batch", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("manual_exit", 0L));
+        eq("the legitimate first book batch remains completed after the claim fails", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("craft/book", 0L));
+        eq("the legitimate evidence sub-batch is retained rather than rolled back", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("craft/evidence", 0L));
+        yes("its spent finite material is not refunded with the failed outer claim",
+                result.tiers().get(0).reserves().stream().anyMatch(reserve ->
+                        reserve.resource().equals(RAW) && reserve.required() >= 1));
+        fixture.add(new Route("craft/book_from_evidence", Authority.CRAFTING_JSON, "fixture:reversible_evidence", null,
+                Map.of(item("z_evidence"), 1L), Map.of(), Map.of(item("a_book"), 1L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, false));
+        result = fixture.audit();
+        eq("successful individual acquisitions still cannot claim two mutually exclusive retained objects", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/claim", 0L));
+        yes("a final coexistence failure remains explicit rather than a success-shaped fallback",
+                findingAt(result, "construction_reserve_unknown", item("a_book").key(), "T0"));
+        fixture = coexistingClaimFixture(2);
+        result = fixture.audit();
+        yes("two finite RAW establish evidence and a concurrently held book",
+                T0ConditionalGate.evaluate(result).pass());
+        eq("the actual two-book construction cost is preserved", 2L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("craft/book", 0L));
+        eq("only one evidence batch is needed", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("craft/evidence", 0L));
+        eq("the claim completes exactly once when all requirements coexist", 1L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/claim", 0L));
+        fixture.entryProfile = fixture.entryProfile.withBill(Map.of(), 0);
+        var derived = SustainabilityAudit.deriveEntryProfile(fixture.builder.build(), fixture.annotations(),
+                DebtManifest.empty(), 0);
+        eq("derivation pays the actual additional book rather than reusing destroyed evidence custody",
+                Map.of(RAW, 2L), derived.profile().playerProvided());
+        yes("the rederived simultaneous-custody bill passes a separate finite replay",
+                T0ConditionalGate.evaluate(derived.replay()).pass());
+    }
+
+    private static Fixture coexistingClaimFixture(long entry) {
+        Resource book = item("a_book");
+        Resource evidence = item("z_evidence");
+        Resource grant = item("claim_grant");
+        Fixture fixture = new Fixture().terminal("entry_raw", RAW, TerminalKind.MANUAL_WORLD, false, false)
+                .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        fixture.add(new Route("craft/book", Authority.CRAFTING_JSON, "fixture:manual_book", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(book, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                false, true, false));
+        fixture.add(new Route("craft/evidence", Authority.CRAFTING_JSON, "fixture:book_consuming_evidence", null,
+                Map.of(book, 1L), Map.of(), Map.of(evidence, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                false, true, false));
+        fixture.add(new Route("quest/claim", Authority.QUEST_REWARD, "fixture:claim", null,
+                Map.of(), Map.of(book, 1L, evidence, 1L), Map.of(grant, 1L), Set.of(), 0, 0,
+                Map.of(), Set.of(), true, true, false));
+        fixture.add(new Route("manual_exit", Authority.CRAFTING_JSON, "fixture:manual_exit", null,
+                Map.of(SAFE, 1L), Map.of(grant, 1L), Map.of(PRODUCT, 5L), Set.of(), 0, 0,
+                Map.of(), Set.of(), false, true, false));
+        for (var entryRoute : Map.of(book, "craft/book", evidence, "craft/evidence",
+                grant, "quest/claim", PRODUCT, "manual_exit").entrySet()) {
+            fixture.meta(entryRoute.getKey(), metadata(ResourceClass.BOOTSTRAP, null, entryRoute.getValue(),
+                    List.of(), null, null, null, null));
+        }
+        fixture.builder.objective(new Objective("exit", PRODUCT, 5, Set.of(), null, "fixture:exit"));
+        fixture.requiredQuests.add("exit");
+        fixture.exitObjective = PRODUCT;
+        fixture.entryProfile = new EntryProfile("fixture:coexisting_claim", Map.of(RAW, entry), 0, null,
+                Set.of("Finite materials must establish concurrent book and evidence custody."),
+                "fixture:coexisting_claim");
+        return fixture;
+    }
+
+    private static void claimsWithoutLedger() {
+        group("R25 optional claims never invent or dereference an absent tier ledger");
+        for (boolean related : List.of(false, true)) {
+            Fixture fixture = conditionalSeedFixture(1, "WORK");
+            fixture.add(route("controller", Map.of(SAFE, 1L), Map.of(), Map.of(MACHINE, 1L), null));
+            fixture.machines.put("WORK", new Machine("WORK", MACHINE, 0));
+            fixture.add(new Route("quest/optional", Authority.QUEST_REWARD, "fixture:optional", null,
+                    Map.of(), Map.of(SAFE, 1L), Map.of(related ? MACHINE : item("unrelated_reward"), 1L),
+                    Set.of(), 0, 0, Map.of(), Set.of(), true, true, false));
+            fixture.policy("quest/optional", 0, true);
+            var result = fixture.audit();
+            yes("the authored finite T0 seed still establishes its producer; related=" + related,
+                    renewable(result, PRODUCT));
+            yes("the next tier remains uncertain without a ledger rather than crashing; related=" + related,
+                    result.tiers().get(1).unknown() != null);
+            no("the audit does not create a fictitious next-tier ledger; related=" + related,
+                    result.annotations().ledger().containsKey(1));
+            eq("an unselected optional reward is not executed; related=" + related, 0L,
+                    result.tiers().get(0).establishmentBatches().getOrDefault("quest/optional", 0L));
+        }
+    }
+
+    private static void executedClaimObjectiveScope() {
+        group("R26 necessary and completed claims bring their objective evidence into gate scope");
+        Fixture fixture = questAccessFixture(1);
+        fixture.builder.objective(new Objective("exit_direct", PRODUCT, 5, Set.of(), null, "fixture:direct_exit"));
+        fixture.builder.objective(new Objective("unrelated", SAFE, 1, Set.of(), null, "fixture:unrelated"));
+        fixture.requiredQuests.clear();
+        fixture.requiredQuests.add("exit_direct");
+        var result = fixture.audit();
+        yes("the indirect claims are real completed batches despite the direct exit objective",
+                result.tiers().get(0).establishmentBatches().getOrDefault("quest/first", 0L) == 1);
+        yes("their fully known authority still passes the finite gate", T0ConditionalGate.evaluate(result).pass());
+        yes("the first completed claim brings its own objective into proof scope",
+                T0ConditionalGate.evaluate(result).scope().objectives().contains("first"));
+        yes("the dependent completed claim also brings its objective into proof scope",
+                T0ConditionalGate.evaluate(result).scope().objectives().contains("second"));
+        no("a disjoint objective is not scoped merely because it exists",
+                T0ConditionalGate.evaluate(result).scope().objectives().contains("unrelated"));
+        fixture.builder.finding(new AuditFinding("objective_unknown", "first", "", AuditFinding.Severity.UNKNOWN,
+                "A completed claim's actual objective evidence is unresolved.", List.of()));
+        yes("an executed claim cannot hide unresolved evidence behind a different required objective",
+                gateBlocks(fixture.audit(), "objective_unknown:first"));
+    }
+
+    private static void typedFindingTierScope() {
+        group("R27 tier-looking entity identities never exempt global integrity or unmapped findings");
+        Fixture fixture = gateFixture();
+        fixture.policies.put("T1", new RoutePolicy(0, false, Set.of()));
+        yes("a missing route named T1 is still a global annotation integrity error",
+                gateBlocks(fixture.audit(), "annotation_route_missing:T1"));
+        fixture = gateFixture();
+        fixture.builder.finding(new AuditFinding("unmapped_authority_unknown", "T1", "",
+                AuditFinding.Severity.UNKNOWN, "No rule establishes a tier context.", List.of()));
+        yes("an unmapped unknown with a tier-looking subject fails closed",
+                gateBlocks(fixture.audit(), "unmapped_authority_unknown:T1"));
+        fixture = gateFixture();
+        fixture.builder.finding(new AuditFinding("integrity_failure", "outside_inventory", "T1",
+                AuditFinding.Severity.ERROR, "A tier-looking detail is not a typed local context.", List.of()));
+        yes("a tier-looking detail cannot demote an unknown global integrity rule",
+                gateBlocks(fixture.audit(), "integrity_failure:outside_inventory:T1"));
+        fixture = gateFixture().environment("T1", Map.of(SIDE, 1L), null).meta(SIDE, renewable("T1"));
+        fixture.policies.put("T1", new RoutePolicy((Integer) null, false, Set.of("environment/T1")));
+        yes("an active route called T1 retains its exact unlock-tier unknown fingerprint",
+                gateBlocks(fixture.audit(), "route_tier_unknown:T1"));
+        fixture = gateFixture();
+        yes("genuine future-tier unknowns remain visible and do not certify or block T0",
+                hasRule(fixture.audit(), "tier_unknown") && T0ConditionalGate.evaluate(fixture.audit()).pass());
+    }
+
+    private static void outputOnlyFirstUseException() {
+        group("R28 first-use uncertainty is exempt only for real outputs with no accepted T0 use");
+        Fixture fixture = optionalSideGate();
+        yes("the unused optional material output retains the narrow first-use exception",
+                T0ConditionalGate.evaluate(fixture.audit()).pass());
+        Resource site = new Resource(Kind.ENVIRONMENT, "fixture:side_supply");
+        fixture.meta(site, new ResourceMetadata(ResourceClass.RENEWABLE, null, null, 0, null,
+                List.of(), null, null, null, null));
+        yes("an actually required source environment is not an optional produced side stock",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + site.key()));
+        fixture.add(route("site_output", Map.of(SAFE, 1L), Map.of(), Map.of(site, 1L), null));
+        yes("producing a resource elsewhere does not erase its environmental-source use",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + site.key()));
+        fixture = optionalSideGate();
+        fixture.add(route("construction_consumer", Map.of(SAFE, 1L), Map.of(), Map.of(RAW, 1L), "SIDE_MACHINE"));
+        fixture.machines.put("SIDE_MACHINE", new Machine("SIDE_MACHINE", SIDE, 0));
+        yes("a controller construction is a real T0 use even without an industrial input entry",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + SIDE.key()));
+        fixture = optionalSideGate();
+        fixture.builder.objective(new Objective("side_evidence", SIDE, 1, Set.of(), null, "fixture:side_evidence"));
+        fixture.requiredQuests.add("side_evidence");
+        yes("selected objective evidence is a real T0 use without a consumed input",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + SIDE.key()));
+        fixture = optionalSideGate().workProfile(Map.of(), 1, Set.of("WORK"));
+        fixture.entryProfile = new EntryProfile("fixture:side_tool", Map.of(), 1,
+                new ManualWork("manual_work", SIDE, 160, Set.of("WORK"), "fixture:side_tool"),
+                Set.of("The existing optional output is also an actual eligible work tool."), "fixture:side_tool");
+        fixture.environment("work_power", Map.of(ENERGY, 1L), null).meta(ENERGY, renewable("work_power"));
+        fixture.add(route("work_use", Map.of(SAFE, 1L, ENERGY, 1L), Map.of(), Map.of(RAW, 1L), "WORK"));
+        fixture.machines.put("WORK", new Machine("WORK", SAFE, 0));
+        yes("an eligible local-work tool cannot be mistaken for an unused optional output",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + SIDE.key()));
+        fixture.meta(ENERGY, new ResourceMetadata(ResourceClass.RENEWABLE, null, null, 0, "work_power",
+                List.of(), null, null, null, null));
+        yes("the actual energy input also remains a T0 first-use obligation",
+                gateBlocks(fixture.audit(), "first_use_unknown:" + ENERGY.key()));
     }
 
     private static void heldQuestAccess() {

@@ -155,18 +155,18 @@ public final class T0ConditionalGate {
     private static Decision decide(AuditFinding finding, SustainabilityAudit.Result result, SustainabilityAudit audit,
                                    SustainabilityAudit.TierResult tier, Scope scope,
                                    List<SustainabilityAudit.CycleComponent> components) {
-        boolean t0 = tierContext(finding.detail(), 0) || finding.subject().equals("T0");
+        boolean t0 = tierContext(finding.detail(), 0) || tierContext(finding, 0);
         boolean otherTier = java.util.stream.IntStream.rangeClosed(1, 15).anyMatch(value ->
-                tierContext(finding.detail(), value) || finding.subject().equals("T" + value));
+                tierContext(finding, value));
         if (t0 && finding.severity() != AuditFinding.Severity.WARNING) {
             return decision(finding, true, "Explicit T0 evidence remains unresolved.");
+        }
+        if (finding.severity() == AuditFinding.Severity.ERROR && !otherTier) {
+            return decision(finding, true, "Global integrity errors, including waived debt, block this gate.");
         }
         if (otherTier) {
             return decision(finding, false, "Outside T0; retained under that tier's own ledger/profile assumptions, "
                     + "not a demonstrated failure or acceptance of future gameplay.");
-        }
-        if (finding.severity() == AuditFinding.Severity.ERROR) {
-            return decision(finding, true, "Global integrity errors, including waived debt, block this gate.");
         }
         if (finding.rule().equals("cycle_balance_unproven") || finding.rule().equals("resource_positive_cycle")) {
             var matching = components.stream().filter(component ->
@@ -196,7 +196,10 @@ public final class T0ConditionalGate {
         Resource resource = result.authorities().resources().stream()
                 .filter(candidate -> candidate.key().equals(finding.subject())).findFirst().orElse(null);
         if (finding.rule().equals("first_use_unknown") && resource != null && tier != null
-                && !tier.mandatory().contains(resource) && !hasT0Consumer(resource, result, audit)) {
+                && !tier.mandatory().contains(resource)
+                && result.authorities().routes().values().stream()
+                .anyMatch(route -> audit.outputAmount(route, resource) > 0)
+                && !hasT0Use(resource, result, audit, scope)) {
             return decision(finding, false, "A nonmandatory output has no accepted T0 consumer. First use remains "
                     + "unknown; its classification, R0 route/proof and handling are still separate obligations.");
         }
@@ -234,13 +237,48 @@ public final class T0ConditionalGate {
         return decision(finding, true, "Irrelevance to the complete T0/R0 proof has not been demonstrated.");
     }
 
-    private static boolean hasT0Consumer(Resource resource, SustainabilityAudit.Result result,
-                                         SustainabilityAudit audit) {
-        return result.authorities().routes().values().stream().filter(route -> {
+    private static boolean hasT0Use(Resource resource, SustainabilityAudit.Result result,
+                                   SustainabilityAudit audit, Scope scope) {
+        Set<Resource> supplied = Set.of(resource);
+        TierPlan plan = result.annotations().ledger().get(0);
+        EntryProfile profile = plan == null ? null : plan.entryProfile();
+        ManualWork work = profile == null || profile.manualWorkActions() == 0 ? null : profile.manualWork();
+        for (Route route : result.authorities().routes().values()) {
             RoutePolicy policy = result.annotations().routes().get(route.id());
-            return policy != null && policy.unlockTier() != null && policy.unlockTier() == 0;
-        }).anyMatch(route -> route.inputs().keySet().stream().anyMatch(input -> audit.has(Set.of(resource), input))
-                || route.catalysts().keySet().stream().anyMatch(input -> audit.has(Set.of(resource), input)));
+            if (policy == null || !Integer.valueOf(0).equals(policy.unlockTier())) {
+                continue;
+            }
+            if (route.inputs().keySet().stream().anyMatch(input -> audit.has(supplied, input))
+                    || route.catalysts().keySet().stream().anyMatch(input -> audit.has(supplied, input))) {
+                return true;
+            }
+            for (String id : policy.environmentalSources()) {
+                Terminal terminal = result.authorities().terminals().get(id);
+                if (terminal != null && audit.has(supplied, terminal.resource())) {
+                    return true;
+                }
+            }
+            Machine machine = route.family() == null ? null : result.annotations().machines().get(route.family());
+            if (machine != null && machine.unlockTier() == 0 && audit.has(supplied, machine.construction())) {
+                return true;
+            }
+            if (work != null && work.applies(route) && route.inputs().containsKey(ENERGY)) {
+                Terminal labour = result.authorities().terminals().get(work.terminal());
+                if (audit.has(supplied, work.tool()) || labour != null && audit.has(supplied, labour.resource())) {
+                    return true;
+                }
+            }
+            for (Resource output : route.outputs().keySet()) {
+                ResourceMetadata metadata = result.annotations().resources().get(output);
+                Handling handling = metadata == null ? null : metadata.handling();
+                if (handling != null && handling.containment() != null
+                        && audit.has(supplied, handling.containment())) {
+                    return true;
+                }
+            }
+        }
+        return scope.objectives().stream().map(result.authorities().objectives()::get)
+                .anyMatch(objective -> objective.subject() != null && audit.has(supplied, objective.subject()));
     }
 
     private static boolean primitiveCraft(Route route) {
@@ -252,6 +290,26 @@ public final class T0ConditionalGate {
 
     private static boolean tierContext(String value, int tier) {
         return value.equals("T" + tier) || value.startsWith("T" + tier + "/");
+    }
+
+    private static boolean tierContext(AuditFinding finding, int tier) {
+        // Only these rule fields carry a tier; an entity id or arbitrary detail that looks like T1 does not.
+        return switch (finding.rule()) {
+            case "tier_unknown" -> finding.detail().isEmpty() && finding.subject().equals("T" + tier);
+            case "loop_makeup_not_renewable" -> tierContext(finding.detail(), tier);
+            case "entry_profile_source_invalid", "entry_work_source_invalid", "exit_goal_route_missing",
+                    "exit_goal_route_invalid", "mandatory_unavailable", "finite_dependency", "vanilla_dependency",
+                    "protected_inventory_withdrawal", "renewable_claim", "self_constructing_producer",
+                    "canonical_route_missing", "finite_optional_required", "forbidden_dependency",
+                    "resource_used_before_tier", "catalyst_consumed", "loop_declaration_missing",
+                    "optional_side_stream_required", "inert_waste_required", "potential_use_required",
+                    "non_material_required", "future_required_early", "current_consumer_unavailable",
+                    "hazardous_handling", "loop_balance_unproven", "unseeded_loop", "loop_gain_unjustified",
+                    "loop_startup_unproven", "canonical_route_required", "bootstrap_starvation",
+                    "entry_profile_insufficient", "exit_goal_production_unproven", "exit_goal_supply_not_renewable",
+                    "entry_work_insufficient", "construction_reserve_unknown" -> finding.detail().equals("T" + tier);
+            default -> false;
+        };
     }
 
     private static Decision decision(AuditFinding finding, boolean blocking, String basis) {
@@ -336,6 +394,8 @@ public final class T0ConditionalGate {
                 }
                 while (!pendingRoutes.isEmpty()) {
                     Route route = pendingRoutes.removeFirst();
+                    snapshot.objectives().values().stream().filter(objective -> route.id().equals(objective.rewardRoute()))
+                            .forEach(objective -> objective(objective.id()));
                     route.inputs().keySet().forEach(this::need);
                     route.catalysts().keySet().forEach(this::need);
                     Set<Resource> outputs = new TreeSet<>(route.outputs().keySet());
