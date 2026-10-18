@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.source.tree.ClassTree;
+import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.LambdaExpressionTree;
 import com.sun.source.tree.LiteralTree;
 import com.sun.source.tree.MethodInvocationTree;
@@ -51,6 +52,25 @@ import static io.github.ezequiel24123z.grindless.sustainability.TagResolver.Elem
 public final class VerifySustainabilityRegistry {
     private static final Path JAVA = Path.of("common", "src", "main", "java", "io", "github",
             "ezequiel24123z", "grindless");
+    private static final Path FORGE_JAVA = Path.of("forge", "src", "main", "java", "io", "github",
+            "ezequiel24123z", "grindless");
+    private static final Map<String, Path> QUEST_SOURCES = Map.ofEntries(
+            Map.entry("QuestBookItem", JAVA.resolve(Path.of("item", "QuestBookItem.java"))),
+            Map.entry("QuestBookMenu", JAVA.resolve(Path.of("menu", "QuestBookMenu.java"))),
+            Map.entry("QuestClaimService", JAVA.resolve(Path.of("quest", "QuestClaimService.java"))),
+            Map.entry("QuestLogic", JAVA.resolve(Path.of("quest", "QuestLogic.java"))),
+            Map.entry("QuestEvidence", JAVA.resolve(Path.of("quest", "QuestEvidence.java"))),
+            Map.entry("QuestInventoryEvidence", JAVA.resolve(Path.of("quest", "QuestInventoryEvidence.java"))),
+            Map.entry("QuestProgress", JAVA.resolve(Path.of("quest", "QuestProgress.java"))),
+            Map.entry("QuestBackendPlatform", JAVA.resolve(Path.of("quest", "QuestBackendPlatform.java"))),
+            Map.entry("QuestBackendPlatformImpl",
+                    FORGE_JAVA.resolve(Path.of("quest", "forge", "QuestBackendPlatformImpl.java"))),
+            Map.entry("HeraclesQuestNetwork",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "HeraclesQuestNetwork.java"))),
+            Map.entry("HeraclesQuestIntegration",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "HeraclesQuestIntegration.java"))),
+            Map.entry("GrindlessClaimTask",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "GrindlessClaimTask.java"))));
     private static int passed;
 
     private VerifySustainabilityRegistry() {
@@ -58,6 +78,14 @@ public final class VerifySustainabilityRegistry {
 
     public static void main(String[] args) throws Exception {
         Path root = Path.of("").toAbsolutePath().normalize();
+        if (args.length == 1 && args[0].equals("--quest-binding-only")) {
+            questAccessCounterexamples(root);
+            System.out.println(passed + " passed, 0 failed; source-only quest binding, no game bootstrap.");
+            return;
+        }
+        if (args.length != 0) {
+            throw new IllegalArgumentException("Expected no arguments or --quest-binding-only.");
+        }
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         Map<String, String> hashes = new TreeMap<>();
@@ -172,8 +200,7 @@ public final class VerifySustainabilityRegistry {
         ClassTree dynamo = mechanicsSource(root, "machine", "HandCrankDynamoBlockEntity", hashes);
         ClassTree dynamoBlock = mechanicsSource(root, "machine", "HandCrankDynamoBlock", hashes);
         ClassTree solar = mechanicsSource(root, "machine", "SolarArrayBlockEntity", hashes);
-        ClassTree questItem = mechanicsSource(root, "item", "QuestBookItem", hashes);
-        ClassTree questMenu = mechanicsSource(root, "menu", "QuestBookMenu", hashes);
+        Map<String, ClassTree> quest = questSources(root, hashes);
         ClassTree items = mechanicsSource(root, "registry", "ModItems", hashes);
         mechanicsSource(root, "machine", "ProcessMachineKind", hashes);
         mechanicsSource(root, "source", "SourceLogic", hashes);
@@ -200,7 +227,7 @@ public final class VerifySustainabilityRegistry {
         }
         Resource questBook = registeredItem(items, "QUEST_BOOK", "QuestBookItem", null, declared);
         eq("the physical quest interface requires the held registered book and does not consume it", true,
-                questBookAccess(questItem, questMenu));
+                questBookAccess(quest));
         for (Route route : inventory.routes().values()) {
             if (route.authority() == Authority.QUEST_REWARD) {
                 eq("each real claim retains the actual held-book requirement: " + route.id(), 1L,
@@ -360,9 +387,8 @@ public final class VerifySustainabilityRegistry {
                 AuthorityAdapters.sha256(work.toString().getBytes(StandardCharsets.UTF_8)));
         builder.input("mechanics_binding:QuestBookItem_QuestBookMenu",
                 AuthorityAdapters.sha256((questBook.key() + "\n"
-                        + normalized(method(questItem, "use", 3).getBody()) + "\n"
-                        + normalized(method(questMenu, "stillValid", 1).getBody()) + "\n"
-                        + normalized(method(questMenu, "clickMenuButton", 2).getBody()))
+                        + quest.entrySet().stream().map(entry -> entry.getKey() + "\n" + questText(entry.getValue()))
+                        .reduce("", (left, right) -> left + right + "\n"))
                         .getBytes(StandardCharsets.UTF_8)));
         builder.terminal(new Terminal(work.terminal(), new Resource(Kind.ENVIRONMENT, "grindless:local_crank_actions"),
                 TerminalKind.MANUAL_LABOUR, null, false, true, null, 0,
@@ -479,40 +505,653 @@ public final class VerifySustainabilityRegistry {
         return resource;
     }
 
-    private static boolean questBookAccess(ClassTree item, ClassTree menu) throws IOException {
-        return normalized(method(item, "use", 3).getBody()).equals(
-                "{ItemStackstack=player.getItemInHand(hand);if(playerinstanceofServerPlayerserver){"
-                        + "MenuRegistry.openMenu(server,newSimpleMenuProvider((id,inventory,opener)->"
-                        + "newQuestBookMenu(id,inventory),Component.translatable(\"gui.grindless.quest.title\")));}"
-                        + "returnInteractionResultHolder.sidedSuccess(stack,level.isClientSide());}")
-                && normalized(method(menu, "stillValid", 1).getBody()).equals(
-                "{returnplayer.getMainHandItem().is(ModItems.QUEST_BOOK.get())"
-                        + "||player.getOffhandItem().is(ModItems.QUEST_BOOK.get());}")
-                && normalized(method(menu, "clickMenuButton", 2).getBody()).equals(
-                "{if(!(playerinstanceofServerPlayerserver)){returnfalse;}"
-                        + "List<QuestCatalogue.Task>tasks=QuestCatalogue.tasks();"
-                        + "if(id<0||id>=tasks.size()){returnfalse;}QuestCatalogue.Tasktask=tasks.get(id);"
-                        + "QuestProgressprogress=QuestProgress.get(server);Set<String>claimed=progress.claimed(server.getUUID());"
-                        + "if(QuestLogic.consider(task,claimed,evidenceMet(server,task))!=QuestLogic.Status.CLAIMABLE){returnfalse;}"
-                        + "if(!progress.claim(server.getUUID(),task.id())){returnfalse;}give(server,task.reward());"
-                        + "server.displayClientMessage(Component.translatable(\"chat.grindless.quest.claimed\","
-                        + "Component.translatable(\"gui.grindless.quest.task.\"+task.id())),false);refresh();returntrue;}");
+    private static Map<String, ClassTree> questSources(Path root, Map<String, String> hashes) throws IOException {
+        Map<String, ClassTree> sources = new TreeMap<>();
+        for (var entry : QUEST_SOURCES.entrySet()) {
+            byte[] bytes = Files.readAllBytes(root.resolve(entry.getValue()));
+            hashes.put("mechanics_source:" + entry.getValue().toString().replace('\\', '/'),
+                    AuthorityAdapters.sha256(bytes));
+            sources.put(entry.getKey(), parse(entry.getKey(), new String(bytes, StandardCharsets.UTF_8)));
+        }
+        return sources;
+    }
+
+    // Exact source profiles bind this call chain; unexamined Java forms are not equivalent proof.
+    private static boolean questBookAccess(Map<String, ClassTree> sources) throws IOException {
+        if (!sources.keySet().equals(QUEST_SOURCES.keySet())) {
+            throw new IOException("Incomplete quest claim authorities; claim binding not evaluated.");
+        }
+        for (ClassTree type : sources.values()) {
+            if (!questClassShape(type)) {
+                return false;
+            }
+        }
+        ClassTree progress = sources.get("QuestProgress");
+        VariableTree claimed = field(progress, "claimed");
+        return claimed.getModifiers().getFlags().equals(Set.of(Modifier.PRIVATE, Modifier.FINAL))
+                && normalized(claimed.getType()).equals("Map<UUID,Set<String>>")
+                && normalized(claimed.getInitializer()).equals("newHashMap<>()")
+                && questMethod(sources, "QuestBookItem", """
+                @Override
+                public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+                    ItemStack stack = player.getItemInHand(hand);
+                    if (player instanceof ServerPlayer server) {
+                        if (!QuestBackendPlatform.open(server)) {
+                            MenuRegistry.openMenu(server, new SimpleMenuProvider(
+                                    (id, inventory, opener) -> new QuestBookMenu(id, inventory),
+                                    Component.translatable("gui.grindless.quest.title")));
+                        }
+                    }
+                    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+                }
+                """)
+                && questMethod(sources, "QuestBookMenu", """
+                @Override
+                public boolean stillValid(Player player) {
+                    return QuestClaimService.holdingBook(player);
+                }
+                """)
+                && questMethod(sources, "QuestBookMenu", """
+                public QuestBookMenu(int id, Inventory inventory) {
+                    super(ModMenus.QUEST_BOOK.get(), id);
+                    this.player = inventory.player;
+                    this.state = new SimpleContainerData(QuestCatalogue.tasks().size() * 2);
+                    addDataSlots(state);
+                }
+                """)
+                && questMethod(sources, "QuestBookMenu", """
+                @Override
+                public boolean clickMenuButton(Player player, int id) {
+                    if (!(player instanceof ServerPlayer server)) {
+                        return false;
+                    }
+                    List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
+                    if (id < 0 || id >= tasks.size()) {
+                        return false;
+                    }
+                    QuestClaimService.Result result = QuestClaimService.claim(server, tasks.get(id).id());
+                    refresh();
+                    return result == QuestClaimService.Result.CLAIMED;
+                }
+                """)
+                && questMethod(sources, "QuestBookMenu", """
+                private void refresh() {
+                    if (!(player instanceof ServerPlayer server)) {
+                        return;
+                    }
+                    QuestProgress progress = QuestProgress.get(server);
+                    Set<String> claimed = progress.claimed(server.getUUID());
+                    List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
+                    for (int i = 0; i < tasks.size(); i++) {
+                        QuestCatalogue.Task task = tasks.get(i);
+                        int held = held(server, task);
+                        state.set(i, QuestLogic.consider(task, claimed, QuestEvidence.met(task, held,
+                                server.level().dimension().location().toString())).ordinal());
+                        state.set(tasks.size() + i, held);
+                    }
+                }
+                """)
+                && questMethod(sources, "QuestBookMenu", """
+                private static int held(ServerPlayer player, QuestCatalogue.Task task) {
+                    return QuestInventoryEvidence.count(player.getInventory(), task);
+                }
+                """)
+                && questMethod(sources, "QuestClaimService", """
+                public static boolean holdingBook(Player player) {
+                    return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())
+                            || player.getOffhandItem().is(ModItems.QUEST_BOOK.get());
+                }
+                """)
+                && questMethod(sources, "QuestClaimService", """
+                public static Result claim(ServerPlayer player, String taskId) {
+                    if (!player.server.isSameThread()) {
+                        throw new IllegalStateException("Quest claims must execute on the server thread");
+                    }
+                    Result result = claim(QuestProgress.get(player), player.getUUID(), taskId, holdingBook(player),
+                            task -> QuestEvidence.met(task, QuestInventoryEvidence.count(player.getInventory(), task),
+                                    player.level().dimension().location().toString()),
+                            QuestClaimService::rewardStack, stack -> {
+                                if (!player.getInventory().add(stack)) {
+                                    player.drop(stack, false);
+                                }
+                            });
+                    if (result == Result.INVALID_REWARD || result == Result.UNKNOWN_TASK) {
+                        Grindless.LOG.error("Rejected quest claim {} from {}: {}", taskId, player.getUUID(), result);
+                    }
+                    if (result == Result.CLAIMED) {
+                        player.displayClientMessage(Component.translatable("chat.grindless.quest.claimed",
+                                Component.translatable("gui.grindless.quest.task." + taskId)), false);
+                    } else {
+                        player.displayClientMessage(Component.translatable("chat.grindless.quest.rejected."
+                                + result.name().toLowerCase(java.util.Locale.ROOT)), false);
+                    }
+                    return result;
+                }
+                """)
+                && questMethod(sources, "QuestClaimService", """
+                static Result claim(QuestProgress progress, UUID player, String taskId, boolean holdingBook,
+                                    Predicate<QuestCatalogue.Task> evidence,
+                                    Function<QuestCatalogue.Reward, ItemStack> resolve, Consumer<ItemStack> give) {
+                    QuestCatalogue.Task task = QuestCatalogue.byId(taskId);
+                    if (task == null || player == null) {
+                        return Result.UNKNOWN_TASK;
+                    }
+                    Set<String> claimed = progress.claimed(player);
+                    if (claimed.contains(taskId)) {
+                        return Result.ALREADY_CLAIMED;
+                    }
+                    if (!holdingBook) {
+                        return Result.BOOK_REQUIRED;
+                    }
+                    QuestLogic.Status status = QuestLogic.consider(task, claimed, evidence.test(task));
+                    if (status == QuestLogic.Status.LOCKED) {
+                        return Result.LOCKED;
+                    }
+                    if (status != QuestLogic.Status.CLAIMABLE) {
+                        return Result.UNMET;
+                    }
+                    ItemStack reward = resolve.apply(task.reward());
+                    if (reward == null || reward.isEmpty() || reward.getCount() != task.reward().count()
+                            || reward.getCount() > reward.getMaxStackSize()) {
+                        return Result.INVALID_REWARD;
+                    }
+                    if (!progress.claim(player, taskId)) {
+                        return Result.ALREADY_CLAIMED;
+                    }
+                    give.accept(reward);
+                    return Result.CLAIMED;
+                }
+                """)
+                && questMethod(sources, "QuestClaimService", """
+                private static ItemStack rewardStack(QuestCatalogue.Reward reward) {
+                    ResourceLocation id = ResourceLocation.tryParse(reward.itemId());
+                    if (id == null || !BuiltInRegistries.ITEM.containsKey(id) || reward.count() < 1) {
+                        return ItemStack.EMPTY;
+                    }
+                    var item = BuiltInRegistries.ITEM.get(id);
+                    return item == Items.AIR ? ItemStack.EMPTY : new ItemStack(item, reward.count());
+                }
+                """)
+                && questMethod(sources, "QuestLogic", """
+                public static Status consider(QuestCatalogue.Task task, Set<String> claimed, boolean evidenceMet) {
+                    if (claimed.contains(task.id())) {
+                        return Status.CLAIMED;
+                    }
+                    for (String required : task.requires()) {
+                        if (!claimed.contains(required)) {
+                            return Status.LOCKED;
+                        }
+                    }
+                    return evidenceMet ? Status.CLAIMABLE : Status.UNMET;
+                }
+                """)
+                && questMethod(sources, "QuestEvidence", """
+                public static boolean met(QuestCatalogue.Task task, int held, String dimension) {
+                    return switch (task.evidence()) {
+                        case ITEM, MATRIX -> held >= task.count();
+                        case DIMENSION -> task.subject().equals(dimension);
+                    };
+                }
+                """)
+                && questMethod(sources, "QuestInventoryEvidence", """
+                public static int count(Container inventory, QuestCatalogue.Task task) {
+                    int count = 0;
+                    for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+                        ItemStack stack = inventory.getItem(slot);
+                        if (matches(task, stack)) {
+                            count += stack.getCount();
+                        }
+                    }
+                    return count;
+                }
+                """)
+                && questMethod(sources, "QuestInventoryEvidence", """
+                private static boolean matches(QuestCatalogue.Task task, ItemStack stack) {
+                    if (stack.isEmpty()
+                            || !task.subject().equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString())) {
+                        return false;
+                    }
+                    if (task.evidence() != QuestCatalogue.Evidence.MATRIX) {
+                        return true;
+                    }
+                    return stack.getItem() instanceof ControlMatrixItem matrix
+                            && matrix.spec(stack).map(value -> value.rating() == task.matrixRating()).orElse(false);
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public static QuestProgress get(ServerPlayer player) {
+                    return player.server.overworld().getDataStorage()
+                            .computeIfAbsent(QuestProgress::load, QuestProgress::new, KEY);
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public Set<String> claimed(UUID player) {
+                    return Set.copyOf(claimed.getOrDefault(player, Set.of()));
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public boolean claim(UUID player, String task) {
+                    if (player == null || QuestCatalogue.byId(task) == null) {
+                        return false;
+                    }
+                    Set<String> tasks = claimed.computeIfAbsent(player, id -> new HashSet<>());
+                    if (!tasks.add(task)) {
+                        return false;
+                    }
+                    setDirty();
+                    return true;
+                }
+                """)
+                && questMethod(sources, "QuestBackendPlatform", """
+                @ExpectPlatform
+                public static boolean open(ServerPlayer player) {
+                    throw new AssertionError("@ExpectPlatform stub was not transformed; check the platform impl");
+                }
+                """)
+                && questMethod(sources, "QuestBackendPlatformImpl", """
+                public static boolean open(ServerPlayer player) {
+                    return ModList.get().isLoaded("heracles") && HeraclesQuestIntegration.open(player);
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestIntegration", """
+                public static boolean open(ServerPlayer player) {
+                    if (!available) {
+                        diagnostic(player);
+                        return false;
+                    }
+                    refresh(player, true);
+                    player.closeContainer();
+                    ModUtils.openGroup(player, HeraclesDefinitions.GROUP);
+                    return true;
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestIntegration", """
+                public static void claim(ServerPlayer sender, String taskId) {
+                    if (!available) {
+                        diagnostic(sender);
+                    } else {
+                        QuestClaimService.claim(sender, taskId);
+                    }
+                    refresh(sender, true);
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestIntegration", """
+                private static void refresh(ServerPlayer player, boolean force) {
+                    Set<String> claimed = QuestProgress.get(player).claimed(player.getUUID());
+                    if (available) {
+                        var nativeProgress = QuestProgressHandler.getProgress(player.server, player.getUUID());
+                        List<String> changed = HeraclesClaimProjection.reconcile(nativeProgress, claimed, definitions);
+                        if (!changed.isEmpty()) {
+                            QuestProgressHandler.read(player.server).setDirty();
+                            QuestProgressHandler.sync(player, changed);
+                        }
+                    }
+                    HeraclesQuestNetwork.Snapshot snapshot = new HeraclesQuestNetwork.Snapshot(available,
+                            QuestClaimService.holdingBook(player), available ? QuestCatalogue.tasks().stream().map(task -> {
+                                int held = QuestInventoryEvidence.count(player.getInventory(), task);
+                                return new HeraclesQuestNetwork.State(task.id(), held, QuestLogic.consider(task, claimed,
+                                        QuestEvidence.met(task, held, player.level().dimension().location().toString())));
+                            }).toList() : List.of());
+                    if (force || !snapshot.equals(LAST_SENT.get(player.getUUID()))) {
+                        HeraclesQuestNetwork.send(player, snapshot);
+                        LAST_SENT.put(player.getUUID(), snapshot);
+                    }
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestIntegration", """
+                private static void diagnostic(ServerPlayer player) {
+                    player.displayClientMessage(Component.translatable("chat.grindless.quest.backend_unavailable"), false);
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestNetwork", """
+                public static void init() {
+                    Channel.INSTANCE.messageBuilder(ClaimRequest.class, 0, NetworkDirection.PLAY_TO_SERVER)
+                            .encoder((packet, buffer) -> buffer.writeUtf(packet.taskId(), 64))
+                            .decoder(buffer -> new ClaimRequest(buffer.readUtf(64)))
+                            .consumerMainThread((packet, context) -> {
+                                ServerPlayer sender = context.get().getSender();
+                                if (sender != null) {
+                                    HeraclesQuestIntegration.claim(sender, packet.taskId());
+                                }
+                            }).add();
+                    Channel.INSTANCE.messageBuilder(Snapshot.class, 1, NetworkDirection.PLAY_TO_CLIENT)
+                            .encoder(HeraclesQuestNetwork::encode)
+                            .decoder(HeraclesQuestNetwork::decode)
+                            .consumerMainThread((packet, context) -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                                    () -> () -> HeraclesQuestClient.receive(packet))).add();
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestNetwork", """
+                public static void claim(String taskId) {
+                    Channel.INSTANCE.sendToServer(new ClaimRequest(taskId));
+                }
+                """)
+                && questMethod(sources, "HeraclesQuestNetwork", """
+                public static void send(ServerPlayer player, Snapshot snapshot) {
+                    Channel.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), snapshot);
+                }
+                """)
+                && questMethod(sources, "GrindlessClaimTask", """
+                @Override
+                public NumericTag test(QuestTaskType<?> type, NumericTag progress, ServerPlayer player) {
+                    return storage().of(QuestProgress.get(player).claimed(player.getUUID()).contains(catalogueId));
+                }
+                """)
+                && questMethod(sources, "GrindlessClaimTask", """
+                @Override
+                public NumericTag init(QuestTaskType<?> type, NumericTag progress, ServerPlayer player) {
+                    return test(type, progress, player);
+                }
+                """)
+                && questMethod(sources, "GrindlessClaimTask", """
+                @Override
+                public BooleanTaskStorage storage() {
+                    return BooleanTaskStorage.INSTANCE;
+                }
+                """)
+                && questMethod(sources, "GrindlessClaimTask", """
+                @Override
+                public float getProgress(NumericTag progress) {
+                    return storage().readBoolean(progress) ? 1 : 0;
+                }
+                """)
+                && questMethod(sources, "GrindlessClaimTask", """
+                @Override
+                public QuestTaskType<GrindlessClaimTask> type() {
+                    return TYPE;
+                }
+                """);
+    }
+
+    private static boolean questMethod(Map<String, ClassTree> sources, String owner, String declaration)
+            throws IOException {
+        declaration = declaration.replace("public " + owner + "(", "public QuestBindingContract(");
+        ClassTree contract = parse("QuestBindingContract", "class QuestBindingContract {" + declaration + "}");
+        MethodTree expected = (MethodTree) contract.getMembers().get(0);
+        MethodTree actual = method(sources.get(owner), expected.getName().toString(), expected.getParameters().size());
+        return questText(expected.getModifiers()).equals(questText(actual.getModifiers()))
+                && questText(expected.getReturnType()).equals(questText(actual.getReturnType()))
+                && questText(expected.getReceiverParameter()).equals(questText(actual.getReceiverParameter()))
+                && expected.getTypeParameters().stream().map(VerifySustainabilityRegistry::questText).toList()
+                        .equals(actual.getTypeParameters().stream().map(VerifySustainabilityRegistry::questText).toList())
+                && expected.getParameters().stream().map(VerifySustainabilityRegistry::questText).toList()
+                        .equals(actual.getParameters().stream().map(VerifySustainabilityRegistry::questText).toList())
+                && expected.getThrows().stream().map(VerifySustainabilityRegistry::questText).toList()
+                        .equals(actual.getThrows().stream().map(VerifySustainabilityRegistry::questText).toList())
+                && questText(expected.getDefaultValue()).equals(questText(actual.getDefaultValue()))
+                && questText(expected.getBody()).equals(questText(actual.getBody()));
+    }
+
+    private static String questText(Tree tree) {
+        return tree == null ? "" : tree.toString();
+    }
+
+    private static boolean questField(ClassTree type, String declaration) throws IOException {
+        ClassTree contract = parse("QuestFieldContract", "class QuestFieldContract {" + declaration + "}");
+        VariableTree expected = (VariableTree) contract.getMembers().get(0);
+        return questText(expected).equals(questText(field(type, expected.getName().toString())));
+    }
+
+    private static boolean questClassShape(ClassTree type) throws IOException {
+        String name = type.getSimpleName().toString();
+        Set<String> expectedMethods = switch (name) {
+            case "QuestBookItem" -> Set.of("<init>#1", "use#3", "appendHoverText#4");
+            case "QuestBookMenu" -> Set.of("<init>#2", "status#1", "held#1", "quickMoveStack#2",
+                    "stillValid#1", "broadcastChanges#0", "clickMenuButton#2", "refresh#0", "held#2");
+            case "QuestClaimService" -> Set.of("<init>#0", "holdingBook#1", "claim#2", "claim#7", "rewardStack#1");
+            case "QuestLogic" -> Set.of("<init>#0", "consider#3", "byCode#1", "problems#1", "indexOf#2");
+            case "QuestEvidence" -> Set.of("<init>#0", "met#3");
+            case "QuestInventoryEvidence" -> Set.of("<init>#0", "count#2", "matches#2");
+            case "QuestProgress" -> Set.of("get#1", "claimed#1", "claim#2", "save#1", "load#1");
+            case "QuestBackendPlatform", "QuestBackendPlatformImpl" -> Set.of("<init>#0", "open#1");
+            case "HeraclesQuestNetwork" -> Set.of("<init>#0", "init#0", "claim#1", "send#2", "encode#2", "decode#1");
+            case "HeraclesQuestIntegration" -> Set.of("<init>#0", "init#1", "started#1", "reloaded#1", "verify#0",
+                    "unavailable#1", "open#1", "claim#2", "login#1", "logout#1", "tick#1", "refresh#2", "diagnostic#1");
+            case "GrindlessClaimTask" -> Set.of("test#3", "init#3", "getProgress#1", "storage#0", "type#0");
+            default -> Set.of();
+        };
+        Set<String> expectedFields = switch (name) {
+            case "QuestBookMenu" -> Set.of("player", "state");
+            case "QuestProgress" -> Set.of("KEY", "TAG_PLAYERS", "TAG_PLAYER", "TAG_TASKS", "claimed");
+            case "HeraclesQuestNetwork" -> Set.of("PROTOCOL");
+            case "HeraclesQuestIntegration" -> Set.of("definitions", "encoded", "LAST_SENT", "available", "failure");
+            case "GrindlessClaimTask" -> Set.of("id", "catalogueId", "TYPE");
+            default -> Set.of();
+        };
+        Set<String> expectedNested = switch (name) {
+            case "QuestClaimService" -> Set.of("Result");
+            case "QuestLogic" -> Set.of("Status");
+            case "HeraclesQuestNetwork" -> Set.of("Channel", "ClaimRequest", "State", "Snapshot");
+            default -> Set.of();
+        };
+        String parent = switch (name) {
+            case "QuestBookItem" -> "Item";
+            case "QuestBookMenu" -> "AbstractContainerMenu";
+            case "QuestProgress" -> "SavedData";
+            default -> "";
+        };
+        if (!normalized(type.getExtendsClause()).equals(parent) || !type.getTypeParameters().isEmpty()
+                || (name.equals("GrindlessClaimTask")
+                ? type.getKind() != Tree.Kind.RECORD || !type.getModifiers().getFlags().contains(Modifier.PUBLIC)
+                        || !type.getImplementsClause().stream()
+                        .map(VerifySustainabilityRegistry::normalized).toList()
+                        .equals(List.of("QuestTask<ServerPlayer,NumericTag,GrindlessClaimTask>"))
+                : type.getKind() != Tree.Kind.CLASS
+                        || !type.getModifiers().getFlags().containsAll(Set.of(Modifier.PUBLIC, Modifier.FINAL))
+                        || !type.getImplementsClause().isEmpty())) {
+            return false;
+        }
+        Set<String> methods = new TreeSet<>();
+        Set<String> fields = new TreeSet<>();
+        Set<String> nested = new TreeSet<>();
+        for (Tree member : type.getMembers()) {
+            if (member instanceof MethodTree method) {
+                if (!methods.add(method.getName() + "#" + method.getParameters().size())) {
+                    return false;
+                }
+            } else if (member instanceof VariableTree field) {
+                if (!fields.add(field.getName().toString()) || name.equals("GrindlessClaimTask")
+                        && !field.getName().contentEquals("TYPE")
+                        && (!normalized(field.getType()).equals("String") || field.getInitializer() != null)) {
+                    return false;
+                }
+            } else if (member instanceof ClassTree child) {
+                if (!nested.add(child.getSimpleName().toString())) {
+                    return false;
+                }
+                String declaration = switch (name + ":" + child.getSimpleName()) {
+                    case "QuestClaimService:Result" -> """
+                            public enum Result {
+                                CLAIMED, ALREADY_CLAIMED, LOCKED, UNMET, BOOK_REQUIRED, UNKNOWN_TASK, INVALID_REWARD
+                            }
+                            """;
+                    case "QuestLogic:Status" -> "public enum Status { CLAIMED, LOCKED, UNMET, CLAIMABLE }";
+                    case "HeraclesQuestNetwork:Channel" -> """
+                            private static final class Channel {
+                                private static final SimpleChannel INSTANCE =
+                                        NetworkRegistry.newSimpleChannel(Grindless.id("quest_projection"),
+                                                () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
+                            }
+                            """;
+                    case "HeraclesQuestNetwork:ClaimRequest" -> "public record ClaimRequest(String taskId) {}";
+                    case "HeraclesQuestNetwork:State" ->
+                            "public record State(String taskId, int held, QuestLogic.Status status) {}";
+                    case "HeraclesQuestNetwork:Snapshot" -> """
+                            public record Snapshot(boolean available, boolean holdingBook, List<State> tasks) {
+                                public Snapshot {
+                                    tasks = List.copyOf(tasks);
+                                }
+                            }
+                            """;
+                    default -> "";
+                };
+                if (declaration.isEmpty()) {
+                    return false;
+                }
+                ClassTree contract = parse("QuestNestedContract", "class QuestNestedContract {" + declaration + "}");
+                if (!questText(child).equals(questText(contract.getMembers().get(0)))) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        if (!methods.equals(expectedMethods) || !fields.equals(expectedFields) || !nested.equals(expectedNested)) {
+            return false;
+        }
+        List<String> declarations = switch (name) {
+            case "QuestBookMenu" -> List.of("private final Player player;",
+                    "private final SimpleContainerData state;");
+            case "QuestProgress" -> List.of("public static final String KEY = \"grindless_quest_progress\";",
+                    "private static final String TAG_PLAYERS = \"Players\";",
+                    "private static final String TAG_PLAYER = \"Player\";",
+                    "private static final String TAG_TASKS = \"Tasks\";",
+                    "private final Map<UUID, Set<String>> claimed = new HashMap<>();");
+            case "HeraclesQuestNetwork" -> List.of("private static final String PROTOCOL = \"1\";");
+            case "HeraclesQuestIntegration" -> List.of("private static Map<String, Quest> definitions = Map.of();",
+                    "private static Map<String, String> encoded = Map.of();",
+                    "private static final Map<UUID, HeraclesQuestNetwork.Snapshot> LAST_SENT = new HashMap<>();",
+                    "private static boolean available;", "private static String failure;");
+            case "GrindlessClaimTask" -> List.of("""
+                    public static final QuestTaskType<GrindlessClaimTask> TYPE = new QuestTaskType<>() {
+                        @Override
+                        public ResourceLocation id() {
+                            return Grindless.id("claim");
+                        }
+
+                        @Override
+                        public Codec<GrindlessClaimTask> codec(String taskId) {
+                            return Codec.STRING.comapFlatMap(value -> QuestCatalogue.byId(value) == null
+                                            ? DataResult.error(() -> "Unknown Grindless quest: " + value)
+                                            : DataResult.success(new GrindlessClaimTask(taskId, value)),
+                                    GrindlessClaimTask::catalogueId).fieldOf("quest").codec();
+                        }
+                    };
+                    """);
+            default -> List.of();
+        };
+        for (String declaration : declarations) {
+            if (!questField(type, declaration)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void questAccessCounterexamples(Path root) throws IOException {
-        String item = Files.readString(root.resolve(JAVA.resolve(Path.of("item", "QuestBookItem.java"))));
-        String menu = Files.readString(root.resolve(JAVA.resolve(Path.of("menu", "QuestBookMenu.java"))));
-        eq("the inspected physical book access contract is recognized", true,
-                questBookAccess(parse("QuestBookItem", item), parse("QuestBookMenu", menu)));
-        eq("an unheld menu cannot certify the current book prerequisite", false,
-                questBookAccess(parse("QuestBookItem", item), parse("QuestBookMenu", menu.replace(
-                        "player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "true"))));
-        eq("a different menu opener cannot certify this claim interface", false,
-                questBookAccess(parse("QuestBookItem", item.replace("new QuestBookMenu(id, inventory)",
-                        "new DifferentMenu(id, inventory)")), parse("QuestBookMenu", menu)));
-        eq("a consuming handler cannot certify a reusable non-consumed book", false,
-                questBookAccess(parse("QuestBookItem", item), parse("QuestBookMenu", menu.replace(
-                        "give(server, task.reward());", "player.getMainHandItem().shrink(1); give(server, task.reward());"))));
+        Map<String, ClassTree> sources = questSources(root, new TreeMap<>());
+        eq("the inspected common claim service and both real entrypoints are recognized", true,
+                questBookAccess(sources));
+        rejectQuest(root, sources, "the service cannot replace the physical book with permission",
+                "QuestClaimService", "return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "return true");
+        rejectQuest(root, sources, "another held item cannot establish the registered book prerequisite",
+                "QuestClaimService", "ModItems.QUEST_BOOK.get()", "Items.STICK");
+        rejectQuest(root, sources, "an unheld legacy menu cannot certify access",
+                "QuestBookMenu", "return QuestClaimService.holdingBook(player);", "return true;");
+        rejectQuest(root, sources, "a different menu opener cannot certify this claim interface",
+                "QuestBookItem", "new QuestBookMenu(id, inventory)", "new DifferentMenu(id, inventory)");
+        rejectQuest(root, sources, "the optional backend cannot suppress the legacy fallback",
+                "QuestBookItem", "if (!QuestBackendPlatform.open(server))", "if (false)");
+        rejectQuest(root, sources, "a live service call cannot pass a fabricated book fact",
+                "QuestClaimService", "taskId, holdingBook(player),", "taskId, true,");
+        rejectQuest(root, sources, "the common claim book guard cannot be removed",
+                "QuestClaimService", "if (!holdingBook)", "if (false)");
+        rejectQuest(root, sources, "client-thread claims cannot certify the server contract",
+                "QuestClaimService", "if (!player.server.isSameThread())", "if (false)");
+        rejectQuest(root, sources, "the ledger owner must be the actual server player",
+                "QuestClaimService", "player.getUUID(), taskId", "new UUID(0, 0), taskId");
+        rejectQuest(root, sources, "evidence must use the same player's current physical inventory",
+                "QuestClaimService", "QuestInventoryEvidence.count(player.getInventory(), task)",
+                "QuestInventoryEvidence.count(player.getEnderChestInventory(), task)");
+        rejectQuest(root, sources, "unknown tasks and missing player identities must be rejected",
+                "QuestClaimService", "if (task == null || player == null)", "if (task == null)");
+        rejectQuest(root, sources, "current evidence cannot become an unconditional predicate",
+                "QuestClaimService", "evidence.test(task)", "true");
+        rejectQuest(root, sources, "the requested task's prerequisites cannot be ignored",
+                "QuestLogic", "if (!claimed.contains(required))", "if (false)");
+        rejectQuest(root, sources, "physical evidence must meet the real task quantity",
+                "QuestEvidence", "held >= task.count()", "held >= 0");
+        rejectQuest(root, sources, "physical matrix evidence must have the exact rating",
+                "QuestInventoryEvidence", "value.rating() == task.matrixRating()", "true");
+        rejectQuest(root, sources, "reward quantity must be checked before claiming",
+                "QuestClaimService", "reward.getCount() != task.reward().count()", "reward.getCount() < 0");
+        rejectQuest(root, sources, "a missing reward id is not a real reward stack",
+                "QuestClaimService", "!BuiltInRegistries.ITEM.containsKey(id)", "false");
+        rejectQuest(root, sources, "rewards cannot precede the idempotent ledger transition",
+                "QuestClaimService", "if (!progress.claim(player, taskId))",
+                "give.accept(reward); if (!progress.claim(player, taskId))");
+        rejectQuest(root, sources, "a repeated common claim cannot deliver another reward",
+                "QuestClaimService", "if (claimed.contains(taskId))", "if (false)");
+        rejectQuest(root, sources, "the persistent claim must reject an existing task",
+                "QuestProgress", "if (!tasks.add(task))", "if (false)");
+        rejectQuest(root, sources, "literal whitespace cannot silently switch the persistent ledger key",
+                "QuestProgress", "\"grindless_quest_progress\"", "\"grindless_quest_ progress\"");
+        rejectQuest(root, sources, "a consuming service cannot certify a reusable book",
+                "QuestClaimService", "if (!player.getInventory().add(stack)) {",
+                "player.getMainHandItem().shrink(1); if (!player.getInventory().add(stack)) {");
+        rejectQuest(root, sources, "legacy refresh cannot consume the book after a successful service call",
+                "QuestBookMenu", "private void refresh() {",
+                "private void refresh() { player.getMainHandItem().shrink(1);");
+        rejectQuest(root, sources, "backend refresh cannot consume the book after a successful service call",
+                "HeraclesQuestIntegration", "private static void refresh(ServerPlayer player, boolean force) {",
+                "private static void refresh(ServerPlayer player, boolean force) { player.getMainHandItem().shrink(1);");
+        rejectQuest(root, sources, "legacy buttons cannot claim a different catalogue task",
+                "QuestBookMenu", "QuestClaimService.claim(server, tasks.get(id).id())",
+                "QuestClaimService.claim(server, tasks.get(0).id())");
+        rejectQuest(root, sources, "matching helper spelling cannot substitute another authority",
+                "QuestBookMenu", "import io.github.ezequiel24123z.grindless.quest.QuestClaimService;",
+                "import fixture.QuestClaimService;");
+        rejectQuest(root, sources, "a claim overload outside the checked profile is unproved",
+                "QuestClaimService", "private QuestClaimService() {",
+                "public static Result claim(Player player, String taskId) { return Result.CLAIMED; } "
+                        + "private QuestClaimService() {");
+        rejectQuest(root, sources, "unexamined class initialization cannot certify the claim service",
+                "QuestClaimService", "private QuestClaimService() {",
+                "static { System.setProperty(\"fixture\", \"unexamined\"); } private QuestClaimService() {");
+        rejectQuest(root, sources, "a claim packet must be server-bound",
+                "HeraclesQuestNetwork", "ClaimRequest.class, 0, NetworkDirection.PLAY_TO_SERVER",
+                "ClaimRequest.class, 0, NetworkDirection.PLAY_TO_CLIENT");
+        rejectQuest(root, sources, "a similarly named channel factory is not the inspected Forge channel",
+                "HeraclesQuestNetwork", "NetworkRegistry.newSimpleChannel", "UncheckedChannels.newSimpleChannel");
+        rejectQuest(root, sources, "network claim work must execute on the main thread",
+                "HeraclesQuestNetwork", ".consumerMainThread((packet, context) -> {",
+                ".consumerNetworkThread((packet, context) -> {");
+        rejectQuest(root, sources, "the network player must come from the real connection sender",
+                "HeraclesQuestNetwork", "ServerPlayer sender = context.get().getSender();",
+                "ServerPlayer sender = context.get().getSender().server.getPlayerList().getPlayers().get(0);");
+        rejectQuest(root, sources, "a null network sender cannot reach the claim authority",
+                "HeraclesQuestNetwork", "if (sender != null)", "if (true)");
+        rejectQuest(root, sources, "the integration must forward the same sender and task",
+                "HeraclesQuestIntegration", "QuestClaimService.claim(sender, taskId);",
+                "QuestClaimService.claim(sender.server.getPlayerList().getPlayers().get(0), taskId);");
+        rejectQuest(root, sources, "a packet cannot redefine its task accessor",
+                "HeraclesQuestNetwork", "public record ClaimRequest(String taskId) {",
+                "public record ClaimRequest(String taskId) { public String taskId() { return \"multitool\"; }");
+        rejectQuest(root, sources, "snapshot construction cannot hide a book-consuming callback",
+                "HeraclesQuestNetwork", "public Snapshot {",
+                "public Snapshot { net.minecraftforge.server.ServerLifecycleHooks.getCurrentServer()"
+                        + ".getPlayerList().getPlayers().get(0).getMainHandItem().shrink(1);");
+        rejectQuest(root, sources, "native completion must observe the same player's common ledger",
+                "GrindlessClaimTask", "claimed(player.getUUID())", "claimed(null)");
+    }
+
+    private static void rejectQuest(Path root, Map<String, ClassTree> sources, String message,
+                                    String owner, String before, String after) throws IOException {
+        String original = Files.readString(root.resolve(QUEST_SOURCES.get(owner)));
+        if (!original.contains(before)) {
+            throw new AssertionError("Quest counterexample no longer targets the source: " + message);
+        }
+        Map<String, ClassTree> altered = new TreeMap<>(sources);
+        try {
+            altered.put(owner, parse(owner, original.replace(before, after)));
+            eq(message, false, questBookAccess(altered));
+        } catch (IOException rejection) {
+            if (!rejection.getMessage().contains("claim binding not evaluated")
+                    && !rejection.getMessage().contains("Missing or ambiguous registration authority method")) {
+                throw rejection;
+            }
+            eq(message + " (explicit closed-profile rejection)", true, true);
+        }
     }
 
     private static ClassTree mechanicsSource(Path root, String folder, String name,
@@ -864,9 +1503,133 @@ public final class VerifySustainabilityRegistry {
                     }
                 }
             }
-            return parsed.getTypeDecls().stream().filter(ClassTree.class::isInstance).map(ClassTree.class::cast)
-                    .filter(type -> type.getSimpleName().contentEquals(name)).findFirst()
+            ClassTree type = parsed.getTypeDecls().stream().filter(ClassTree.class::isInstance).map(ClassTree.class::cast)
+                    .filter(candidate -> candidate.getSimpleName().contentEquals(name)).findFirst()
                     .orElseThrow(() -> new IOException("Missing registration authority class: " + name));
+            if (QUEST_SOURCES.containsKey(name)) {
+                questImports(parsed, name);
+            }
+            return type;
+        }
+    }
+
+    private static void questImports(CompilationUnitTree parsed, String name) throws IOException {
+        Map<String, String> bindings = new TreeMap<>(Map.ofEntries(
+                Map.entry("Grindless", "io.github.ezequiel24123z.grindless.Grindless"),
+                Map.entry("QuestCatalogue", "io.github.ezequiel24123z.grindless.quest.QuestCatalogue"),
+                Map.entry("ModItems", "io.github.ezequiel24123z.grindless.registry.ModItems"),
+                Map.entry("ModMenus", "io.github.ezequiel24123z.grindless.registry.ModMenus"),
+                Map.entry("ControlMatrixItem", "io.github.ezequiel24123z.grindless.item.ControlMatrixItem"),
+                Map.entry("HeraclesDefinitions", "io.github.ezequiel24123z.grindless.forge.quest.HeraclesDefinitions"),
+                Map.entry("HeraclesClaimProjection",
+                        "io.github.ezequiel24123z.grindless.forge.quest.HeraclesClaimProjection"),
+                Map.entry("HeraclesQuestClient", "io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestClient"),
+                Map.entry("Player", "net.minecraft.world.entity.player.Player"),
+                Map.entry("ServerPlayer", "net.minecraft.server.level.ServerPlayer"),
+                Map.entry("Item", "net.minecraft.world.item.Item"),
+                Map.entry("ItemStack", "net.minecraft.world.item.ItemStack"),
+                Map.entry("Items", "net.minecraft.world.item.Items"),
+                Map.entry("Level", "net.minecraft.world.level.Level"),
+                Map.entry("InteractionHand", "net.minecraft.world.InteractionHand"),
+                Map.entry("InteractionResultHolder", "net.minecraft.world.InteractionResultHolder"),
+                Map.entry("Inventory", "net.minecraft.world.entity.player.Inventory"),
+                Map.entry("AbstractContainerMenu", "net.minecraft.world.inventory.AbstractContainerMenu"),
+                Map.entry("SimpleContainerData", "net.minecraft.world.inventory.SimpleContainerData"),
+                Map.entry("SimpleMenuProvider", "net.minecraft.world.SimpleMenuProvider"),
+                Map.entry("Component", "net.minecraft.network.chat.Component"),
+                Map.entry("BuiltInRegistries", "net.minecraft.core.registries.BuiltInRegistries"),
+                Map.entry("ResourceLocation", "net.minecraft.resources.ResourceLocation"),
+                Map.entry("Container", "net.minecraft.world.Container"),
+                Map.entry("SavedData", "net.minecraft.world.level.saveddata.SavedData"),
+                Map.entry("NumericTag", "net.minecraft.nbt.NumericTag"),
+                Map.entry("MenuRegistry", "dev.architectury.registry.menu.MenuRegistry"),
+                Map.entry("ExpectPlatform", "dev.architectury.injectables.annotations.ExpectPlatform"),
+                Map.entry("ModList", "net.minecraftforge.fml.ModList"),
+                Map.entry("SimpleChannel", "net.minecraftforge.network.simple.SimpleChannel"),
+                Map.entry("NetworkRegistry", "net.minecraftforge.network.NetworkRegistry"),
+                Map.entry("NetworkDirection", "net.minecraftforge.network.NetworkDirection"),
+                Map.entry("PacketDistributor", "net.minecraftforge.network.PacketDistributor"),
+                Map.entry("DistExecutor", "net.minecraftforge.fml.DistExecutor"),
+                Map.entry("Dist", "net.minecraftforge.api.distmarker.Dist"),
+                Map.entry("QuestTask", "earth.terrarium.heracles.api.tasks.QuestTask"),
+                Map.entry("QuestTaskType", "earth.terrarium.heracles.api.tasks.QuestTaskType"),
+                Map.entry("BooleanTaskStorage", "earth.terrarium.heracles.api.tasks.storage.defaults.BooleanTaskStorage"),
+                Map.entry("QuestProgressHandler", "earth.terrarium.heracles.common.handlers.progress.QuestProgressHandler"),
+                Map.entry("ModUtils", "earth.terrarium.heracles.common.utils.ModUtils"),
+                Map.entry("Quest", "earth.terrarium.heracles.api.quests.Quest"),
+                Map.entry("Codec", "com.mojang.serialization.Codec"),
+                Map.entry("DataResult", "com.mojang.serialization.DataResult"),
+                Map.entry("Set", "java.util.Set"), Map.entry("List", "java.util.List"),
+                Map.entry("Map", "java.util.Map"), Map.entry("HashMap", "java.util.HashMap"),
+                Map.entry("HashSet", "java.util.HashSet"), Map.entry("UUID", "java.util.UUID"),
+                Map.entry("Consumer", "java.util.function.Consumer"),
+                Map.entry("Function", "java.util.function.Function"),
+                Map.entry("Predicate", "java.util.function.Predicate"),
+                Map.entry("String", "java.lang.String"),
+                Map.entry("IllegalStateException", "java.lang.IllegalStateException"),
+                Map.entry("AssertionError", "java.lang.AssertionError")));
+        QUEST_SOURCES.forEach((type, path) -> {
+            String relative = path.toString().replace('\\', '/');
+            bindings.put(type, relative.substring(relative.indexOf("/java/") + 6, relative.length() - 5)
+                    .replace('/', '.'));
+        });
+        String owner = bindings.get(name);
+        String packageName = owner.substring(0, owner.lastIndexOf('.'));
+        if (!normalized(parsed.getPackageName()).equals(packageName) || parsed.getTypeDecls().size() != 1) {
+            throw new IOException("Unexamined quest authority package/type; claim binding not evaluated.");
+        }
+        for (var statement : parsed.getImports()) {
+            String imported = statement.getQualifiedIdentifier().toString();
+            String simple = imported.substring(imported.lastIndexOf('.') + 1);
+            if (statement.isStatic() || simple.equals("*")
+                    || bindings.containsKey(simple) && !bindings.get(simple).equals(imported)) {
+                throw new IOException("Unexamined quest authority import " + imported + "; claim binding not evaluated.");
+            }
+        }
+        Set<String> required = switch (name) {
+            case "QuestBookItem" -> Set.of("Item", "Level", "Player", "InteractionHand", "InteractionResultHolder",
+                    "ItemStack", "ServerPlayer", "QuestBackendPlatform", "MenuRegistry", "SimpleMenuProvider",
+                    "QuestBookMenu", "Component");
+            case "QuestBookMenu" -> Set.of("AbstractContainerMenu", "Inventory", "SimpleContainerData", "ModMenus",
+                    "Player", "ServerPlayer", "QuestClaimService", "QuestCatalogue", "QuestProgress", "QuestLogic",
+                    "QuestEvidence", "QuestInventoryEvidence", "Set", "List");
+            case "QuestClaimService" -> Set.of("Player", "ServerPlayer", "ModItems", "QuestProgress", "QuestCatalogue",
+                    "QuestLogic", "QuestEvidence", "QuestInventoryEvidence", "UUID", "Consumer", "Function",
+                    "Predicate", "Set", "ItemStack", "Items", "BuiltInRegistries", "ResourceLocation", "Grindless",
+                    "Component", "IllegalStateException");
+            case "QuestLogic" -> Set.of("QuestCatalogue", "Set");
+            case "QuestEvidence" -> Set.of("QuestCatalogue");
+            case "QuestInventoryEvidence" -> Set.of("QuestCatalogue", "Container", "ItemStack",
+                    "ControlMatrixItem", "BuiltInRegistries");
+            case "QuestProgress" -> Set.of("ServerPlayer", "SavedData", "Map", "HashMap", "Set", "HashSet",
+                    "UUID", "QuestCatalogue");
+            case "QuestBackendPlatform" -> Set.of("ServerPlayer", "ExpectPlatform", "AssertionError");
+            case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "HeraclesQuestIntegration");
+            case "HeraclesQuestNetwork" -> Set.of("SimpleChannel", "NetworkRegistry", "NetworkDirection", "ServerPlayer",
+                    "Grindless", "DistExecutor", "Dist", "HeraclesQuestIntegration", "HeraclesQuestClient",
+                    "PacketDistributor", "List", "QuestLogic");
+            case "HeraclesQuestIntegration" -> Set.of("ServerPlayer", "QuestClaimService", "ModUtils",
+                    "HeraclesDefinitions", "QuestProgress", "QuestInventoryEvidence", "QuestEvidence", "QuestLogic",
+                    "QuestCatalogue", "QuestProgressHandler", "HeraclesClaimProjection", "HeraclesQuestNetwork",
+                    "Component", "Set", "List", "Map", "HashMap", "UUID", "Quest");
+            case "GrindlessClaimTask" -> Set.of("QuestTask", "QuestTaskType", "ServerPlayer", "NumericTag",
+                    "QuestProgress", "BooleanTaskStorage", "Codec", "DataResult", "ResourceLocation",
+                    "Grindless", "QuestCatalogue");
+            default -> throw new IOException("Unexamined quest authority; claim binding not evaluated.");
+        };
+        for (String simple : required) {
+            String qualified = bindings.get(simple);
+            String targetPackage = qualified.substring(0, qualified.lastIndexOf('.'));
+            List<String> imports = parsed.getImports().stream().map(statement ->
+                            statement.getQualifiedIdentifier().toString())
+                    .filter(imported -> imported.endsWith("." + simple)).toList();
+            if (targetPackage.equals(packageName) || targetPackage.equals("java.lang")) {
+                if (!imports.isEmpty() && !imports.equals(List.of(qualified))) {
+                    throw new IOException("Unexamined local quest type " + simple + "; claim binding not evaluated.");
+                }
+            } else if (!imports.equals(List.of(qualified))) {
+                throw new IOException("Unexamined quest API type " + simple + "; claim binding not evaluated.");
+            }
         }
     }
 
