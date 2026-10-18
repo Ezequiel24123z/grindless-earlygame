@@ -60,63 +60,22 @@ public final class ProcessMachineMenu extends AbstractContainerMenu {
     }
 
     private void addMachineSlots(Container container) {
-        switch (kind) {
-            case GENERATOR -> addSlot(new Slot(container, 0, 80, 36));
-            case PULVERIZER, KILN, WIRE_MILL, CHEMICAL_REACTOR, BIOCULTIVATOR -> {
-                addSlot(new Slot(container, 0, 52, 35));
-                addSlot(new OutputSlot(container, 1, 116, 35));
-            }
-            case CHEMICAL_WASHER, FLOTATION, QUERN -> {
-                addSlot(new Slot(container, 0, 44, 35));
-                addSlot(new OutputSlot(container, 1, 116, 26));
-                addSlot(new OutputSlot(container, 2, 116, 44));
-            }
-            case GEOLOGICAL_COLLECTOR -> {
-                addSlot(new OutputSlot(container, 0, 116, 26));
-                addSlot(new OutputSlot(container, 1, 116, 44));
-            }
-            case SETTLING_TROUGH -> {
-                addSlot(new Slot(container, 0, 44, 35));
-                for (int index = 0; index < 5; index++) {
-                    addSlot(new OutputSlot(container, index + 1, 107 + index % 3 * 18, 26 + index / 3 * 18));
-                }
-            }
-            case ELECTROLYSIS_CELL, ATMOSPHERIC_INTAKE, BOILER, CONDENSER -> {
-            }
-            case INDUCTION_FURNACE -> addSlot(new Slot(container, 0, 52, 35));
-            case CASTER -> {
-                addSlot(new Slot(container, 0, 52, 35));
-                addSlot(new OutputSlot(container, 1, 116, 35));
-            }
-            case ARC_FURNACE, FIRING_CHAMBER -> {
-                addSlot(new Slot(container, 0, 44, 26));
-                addSlot(new Slot(container, 1, 44, 44));
-                addSlot(new OutputSlot(container, 2, 116, 26));
-                addSlot(new OutputSlot(container, 3, 116, 44));
-            }
-            case PRESS, CLAY_MIXER -> {
-                addSlot(new Slot(container, 0, 44, 26));
-                addSlot(new Slot(container, 1, 44, 44));
-                addSlot(new OutputSlot(container, 2, 116, 35));
-            }
-            case ASSEMBLER, ASSEMBLY_BENCH -> {
-                addSlot(new Slot(container, 0, 35, 26));
-                addSlot(new Slot(container, 1, 53, 26));
-                addSlot(new Slot(container, 2, 35, 44));
-                addSlot(new Slot(container, 3, 53, 44));
-                addSlot(new OutputSlot(container, 4, 116, 35));
-            }
+        for (MachineMenuLayout.ItemSlot slot : MachineMenuLayout.itemSlots(kind)) {
+            addSlot(slot.output()
+                    ? new OutputSlot(container, slot.index(), slot.x(), slot.y())
+                    : new Slot(container, slot.index(), slot.x(), slot.y()));
         }
     }
 
     private void addPlayerSlots(Inventory inventory) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+                addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18,
+                        MachineMenuLayout.INVENTORY_Y + row * 18));
             }
         }
         for (int col = 0; col < 9; col++) {
-            addSlot(new Slot(inventory, col, 8 + col * 18, 142));
+            addSlot(new Slot(inventory, col, 8 + col * 18, MachineMenuLayout.HOTBAR_Y));
         }
     }
 

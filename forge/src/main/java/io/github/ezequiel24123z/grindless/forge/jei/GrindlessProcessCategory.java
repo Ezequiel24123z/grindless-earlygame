@@ -10,8 +10,10 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -72,10 +74,10 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
     public void setRecipe(IRecipeLayoutBuilder builder, ProcessRecipe recipe, IFocusGroup focuses) {
         int input = 0;
         for (IngredientSpec spec : recipe.itemInputs()) {
-            addInput(builder, spec, input++);
+            addInput(builder, spec, input++, RecipeIngredientRole.INPUT);
         }
         for (IngredientSpec catalyst : recipe.catalysts()) {
-            addInput(builder, catalyst, input++);
+            addInput(builder, catalyst, input++, RecipeIngredientRole.CATALYST);
         }
         int output = 0;
         for (OutputSpec spec : recipe.itemOutputs()) {
@@ -102,13 +104,18 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
         }
     }
 
-    private static void addInput(IRecipeLayoutBuilder builder, IngredientSpec spec, int index) {
+    private static void addInput(IRecipeLayoutBuilder builder, IngredientSpec spec, int index,
+                                 RecipeIngredientRole role) {
         int x = 4 + ((index % 4) * 20);
         int y = 4 + ((index / 4) * 20);
+        var slot = builder.addSlot(role, x, y).setStandardSlotBackground();
+        if (role == RecipeIngredientRole.CATALYST) {
+            slot.addTooltipCallback((view, tooltip) -> tooltip.add(
+                    Component.translatable("jei.grindless.not_consumed").withStyle(ChatFormatting.RED)));
+        }
         if (IngredientSpec.ITEM.equals(spec.kind())) {
             ProcessLookup.resolve(new OutputSpec(spec.kind(), spec.id(), spec.count(), false,
-                    spec.matrixRating())).ifPresent(stack ->
-                    builder.addInputSlot(x, y).setStandardSlotBackground().addItemStack(stack));
+                    spec.matrixRating())).ifPresent(slot::addItemStack);
             return;
         }
         if (IngredientSpec.TAG.equals(spec.kind())) {
@@ -120,7 +127,7 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
                 stacks.add(counted);
             }
             if (!stacks.isEmpty()) {
-                builder.addInputSlot(x, y).setStandardSlotBackground().addItemStacks(stacks);
+                slot.addItemStacks(stacks);
             }
         }
     }

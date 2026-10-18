@@ -209,6 +209,7 @@
 
   "jei.grindless.process": "%s Process",
   "jei.grindless.calibration": "Research Terminal Calibration",
+  "jei.grindless.not_consumed": "Not consumed",
   "jei.grindless.fluid_input": "In: %s (%s mB)",
   "jei.grindless.fluid_output": "Out: %s (%s mB)",
   "jei.grindless.fluid_vent": "Vents: %s (%s mB)",
