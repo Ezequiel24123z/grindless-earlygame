@@ -7,6 +7,7 @@ async function checkCanonicalDashboard() {
   const data = await response.json();
   const model = M.snapshot(data);
   const checks = [];
+  window.canonicalDashboardAssertions = checks;
   const check = (name, pass, observed) => {
     checks.push({ name, pass: Boolean(pass), observed });
     if (!pass) throw new Error(name + ": " + JSON.stringify(observed));
@@ -49,7 +50,8 @@ async function checkCanonicalDashboard() {
   check("side stream retains the declared class", M.classifications(slag, "byproduct").includes("potential_future_use")
     && detail.textContent.includes("Potential future use"), slag.byproduct_classes);
   check("unplaced slag use stays unreported", field("First use tier") === "Not reported", field("First use tier"));
-  check("declared handling is visible", field("Handling")?.includes("Discard allowed") && field("Handling")?.includes("Yes"), field("Handling"));
+  check("declared handling is visible", field("Handling")?.toLowerCase().includes("discard allowed")
+    && field("Handling")?.includes("Yes"), field("Handling"));
 
   const future = model.tiers.find(entry => entry.id > 0 && entry.unknown !== null);
   if (!future) throw new Error("The real dataset has no unassessed future-tier case.");
@@ -70,8 +72,28 @@ async function checkCanonicalDashboard() {
   { expectedShown: neighborhood.nodes.length, rendered: main.querySelectorAll(".network-stage .graph-node").length });
   check("actual batch amounts remain visible", route.outputs.every(output => field("Outputs (amount / role)")?.includes(String(output.amount))),
     route.outputs.map(output => ({ resource_id: output.resource_id, amount: output.amount, role: output.role })));
+  check("complete actual inputs and amounts remain visible", route.inputs.every(input =>
+    field("Inputs (amount / consumed)")?.includes(input.resource_id)
+      && field("Inputs (amount / consumed)")?.includes(String(input.amount))), route.inputs);
   check("undeclared output roles are not invented", route.outputs.every(output => output.declared_role !== null || output.role === null),
     route.outputs.map(output => output.role));
+  let dense = null;
+  for (const id of network.nodes.keys()) {
+    const slice = M.neighborhood(network, id, { depth: 3, limit: 48 });
+    if (slice.truncated) { dense = { id, slice }; break; }
+  }
+  if (dense) {
+    await view("production", { root: dense.id, depth: "3" }, "Production dependencies");
+    check("dense real graph preserves the display bound and warns about omissions",
+      main.querySelectorAll(".network-stage .graph-node").length === dense.slice.nodes.length
+        && dense.slice.nodes.length === 48 && main.textContent.includes("48-node display limit was reached"),
+      { root: dense.id, rendered: main.querySelectorAll(".network-stage .graph-node").length, truncated: dense.slice.truncated });
+    check("dense real graph retains truthful shown and total counts",
+      main.textContent.includes(dense.slice.nodes.length + " / " + dense.slice.totalNodes + " nodes; "
+        + dense.slice.edges.length + " / " + dense.slice.totalEdges + " edges"),
+      { shownNodes: dense.slice.nodes.length, totalNodes: dense.slice.totalNodes,
+        shownEdges: dense.slice.edges.length, totalEdges: dense.slice.totalEdges });
+  }
   const large = model.routes.find(entry => entry.inputs.concat(entry.outputs)
     .some(amount => typeof amount.amount === "string" && /^-?\d+$/.test(amount.amount)));
   if (large) {
@@ -109,6 +131,7 @@ async function checkCanonicalDashboard() {
       tiers: model.tiers.length, asset_entries: M.list(model.assets.entries).length },
     active_t0_conditional_gate: { pass: data.active_t0_conditional_gate.pass, status: data.active_t0_conditional_gate.status,
       scope: data.active_t0_conditional_gate.scope },
+    coverage: { dense_graph_root: dense?.id || null, unsafe_native_quantity_route: large?.id || null },
     assertions: checks,
     scope: "Real-data browser binding only; no gameplay, global sustainability, Tier or merge acceptance."
   };

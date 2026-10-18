@@ -279,6 +279,26 @@ value, invented-key and altered-hash cases. Both audit and provenance are constr
 privacy-checked in check mode as well as export mode. This remains engineering evidence;
 production export and browser results are recorded separately against their actual source.
 
+The first successful production artifact was generated from clean
+`1446cc39593bb3ef534369114957cd606729c89c`, with **73,591 real-result comparisons** and
+1,384 resources, 474 routes, 259 tags, 25 objectives, 12 declared machine families,
+1,754 findings, 16 tiers and 35 source-scoped asset entries. The eight allowed artifact files
+answered HTTP 200; seven fixture/arbitrary/traversal paths answered 404; POST answered 405.
+The observed listener was `127.0.0.1` only.
+
+The real browser traversal initially failed its own case-sensitive handling-label expectation,
+not the renderer: the supplied label was `discard allowed`, not `Discard allowed`. After
+repairing that expectation, **20/20** overview/resource/side-stream/future-tier/route/refresh
+checks passed. Three supplemental checks observed complete actual inputs, a dense real
+48/1,858-node neighborhood with its omission warning, and truthful 47/2,025-edge counts.
+The runner now preserves those checks and records whether the real dataset supplies an unsafe
+native-quantity route; none was present in this artifact. The Java boundary counterexamples
+remain distinct evidence, not fabricated large-quantity browser coverage.
+
+The four incumbent runtime files were unchanged. The attached server was stopped before any
+subsequent Gradle invocation. These observations bind the stated artifact, not later source
+commits, global sustainability or gameplay acceptance.
+
 ## Historical renderer-only evidence and integration limits
 
 Observed on Windows, 2026-10-17. Initial implementation:
