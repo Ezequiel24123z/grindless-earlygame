@@ -63,3 +63,168 @@ allprojects {
         }
     }
 }
+
+    // Application build inputs stay above this boundary for runtime-provenance comparison.
+    def packBoundary = "// Application build inputs stay above this boundary"
+    def readPackInputs = {
+        def parser = new groovy.json.JsonSlurper()
+        [manifest: parser.parse(file("pack/curseforge/manifest.json"), "UTF-8"),
+         profiles: parser.parse(file("pack/profiles.json"), "UTF-8"),
+         metadata: parser.parse(file("pack/dependency-metadata.json"), "UTF-8")]
+    }
+    def resolveClientPack = { String profile, Map inputs ->
+        if (!(profile in ["expanded", "preparation"])) {
+            throw new GradleException("Unknown pack profile: $profile")
+        }
+        def manifest = new groovy.json.JsonSlurper().parseText(groovy.json.JsonOutput.toJson(inputs.manifest))
+        if (manifest.version != rootProject.pack_version) {
+            throw new GradleException("Pack manifest root version differs from gradle.properties.")
+        }
+        def loaders = manifest.minecraft.modLoaders
+        if (manifest.minecraft.version != rootProject.minecraft_version || loaders.size() != 1 ||
+                !loaders[0].id.startsWith("forge-") || !loaders[0].primary ||
+                "${manifest.minecraft.version}-${loaders[0].id.substring(6)}" != rootProject.forge_version) {
+            throw new GradleException("Pack Minecraft/Forge versions differ from gradle.properties.")
+        }
+        def selected = inputs.profiles[profile]
+        if (profile == "preparation") {
+            manifest.name = selected.name
+            manifest.version += "-preparation"
+            manifest.files = manifest.files.findAll { it.projectID in selected.projectIDs }
+            if (manifest.files.size() != selected.projectIDs.size()) {
+                throw new GradleException("Preparation profile references missing or duplicate dependency pins.")
+            }
+        }
+        def ids = manifest.files.collect { it.projectID }
+        if (ids.toSet().size() != ids.size()) {
+            throw new GradleException("Duplicate dependency project pins.")
+        }
+        if (inputs.metadata.minecraft != rootProject.minecraft_version || inputs.metadata.loader != "Forge") {
+            throw new GradleException("Dependency verification metadata targets a different platform.")
+        }
+        def dependencies = manifest.files.collect { pin ->
+            def matches = inputs.metadata.files.findAll { it.projectID == pin.projectID && it.fileID == pin.fileID }
+            if (matches.size() != 1 || !(matches[0].sha1 ==~ /[0-9a-f]{40}/) || matches[0].bytes <= 0) {
+                throw new GradleException("Missing or invalid verification metadata for ${pin.projectID}/${pin.fileID}.")
+            }
+            if (!ids.containsAll(matches[0].requiredProjectIDs)) {
+                throw new GradleException("Missing required project for ${pin.projectID}.")
+            }
+            matches[0]
+        }
+        def architectury = dependencies.find { it.projectID == 419699 }
+        def jei = dependencies.find { it.projectID == 238222 }
+        if (architectury?.fileName != "architectury-${rootProject.architectury_api_version}-forge.jar" ||
+                jei?.fileName != "jei-${rootProject.minecraft_version}-forge-${rootProject.jei_version}.jar") {
+            throw new GradleException("Architectury/JEI pins do not match gradle.properties.")
+        }
+        [manifest: manifest, dependencies: dependencies, status: selected.status]
+    }
+
+    tasks.register("verifyModpack") {
+        group = "verification"
+        description = "Checks both client-pack profiles and rejects invalid platform/dependency metadata."
+        doLast {
+            def expanded = resolveClientPack("expanded", readPackInputs())
+            def preparation = resolveClientPack("preparation", readPackInputs())
+            assert expanded.manifest.files.size() == readPackInputs().manifest.files.size()
+            assert preparation.manifest.files.collect { it.projectID }.toSet() == [419699, 238222].toSet()
+            assert preparation.manifest.version == "${rootProject.pack_version}-preparation"
+            def cases = [
+                [change: { it.manifest.version = rootProject.minecraft_version }, message: "root version differs"],
+                [change: { it.manifest.minecraft.version = "invalid" }, message: "Minecraft/Forge versions differ"],
+                [change: { it.manifest.minecraft.modLoaders[0].id = "invalid" }, message: "Minecraft/Forge versions differ"],
+                [change: { it.manifest.files.find { f -> f.projectID == 419699 }.fileID = -1 }, message: "verification metadata"],
+                [change: { it.metadata.files.find { f -> f.projectID == 419699 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
+                [change: { it.metadata.files.find { f -> f.projectID == 238222 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
+                [change: { it.metadata.files.find { f -> f.projectID == 238222 }.requiredProjectIDs = [-1] }, message: "Missing required project"],
+                [change: { it.profiles.preparation.projectIDs += -1 }, message: "missing or duplicate dependency pins"]
+            ]
+            cases.each { test ->
+                def inputs = readPackInputs()
+                test.change(inputs)
+                def rejected = false
+                try {
+                    resolveClientPack("preparation", inputs)
+                } catch (GradleException expected) {
+                    if (!expected.message.contains(test.message)) { throw expected }
+                    rejected = true
+                }
+                assert rejected: "Invalid pack metadata was accepted: ${test.message}"
+            }
+            logger.lifecycle("Client-pack metadata/selector checks: ${3 + cases.size()} passed; no client or world started.")
+        }
+    }
+
+    tasks.register("buildModpack") {
+        group = "build"
+        description = "Builds a launcher-managed expanded or minimal preparation client pack."
+        dependsOn(":forge:remapJar")
+        doLast {
+            def profile = providers.gradleProperty("packProfile").getOrElse("expanded")
+            def pack = resolveClientPack(profile, readPackInputs())
+            def git = { List<String> arguments ->
+                def output = new ByteArrayOutputStream()
+                exec {
+                    workingDir(rootDir)
+                    commandLine(["git"] + arguments)
+                    standardOutput = output
+                }
+                output.toString("UTF-8").trim()
+            }
+            def source = git(["rev-parse", "HEAD"])
+            if (!git(["status", "--porcelain"]).isEmpty()) {
+                throw new GradleException("Commit the package source before building a distributable archive.")
+            }
+            def runtime = git(["rev-parse", "--verify",
+                               providers.gradleProperty("packRuntimeRevision").getOrElse(source) + "^{commit}"])
+            git(["merge-base", "--is-ancestor", runtime, source])
+            git(["diff", "--exit-code", runtime, source, "--",
+                 "common", "forge", "settings.gradle", "gradle.properties", "gradle", "gradlew", "gradlew.bat"])
+            def buildInputs = { String text -> text.replace("\r\n", "\n").split(java.util.regex.Pattern.quote(packBoundary), 2)[0].trim() }
+            if (buildInputs(git(["show", "${runtime}:build.gradle"])) != buildInputs(file("build.gradle").getText("UTF-8"))) {
+                throw new GradleException("Application build inputs differ from the requested runtime revision.")
+            }
+            def jar = project(":forge").tasks.named("remapJar").get().archiveFile.get().asFile
+            def sha256 = { File input ->
+                java.security.MessageDigest.getInstance("SHA-256").digest(input.bytes).encodeHex().toString()
+            }
+            def stage = new File(temporaryDir, profile)
+            delete(stage)
+            stage.mkdirs()
+            try {
+                copy {
+                    from(jar)
+                    into(new File(stage, "overrides/mods"))
+                }
+                copy {
+                    from(file("pack/README.md"), file("LICENSE"))
+                    into(stage)
+                }
+                def provenance = [
+                    sourceRevision: source, runtimeSourceRevision: runtime,
+                    profile: profile, status: pack.status,
+                    minecraft: rootProject.minecraft_version, forge: rootProject.forge_version,
+                    java: rootProject.java_version, grindlessJar: jar.name, grindlessSha256: sha256(jar),
+                    dependencies: pack.dependencies,
+                    dependencyMetadataEndpoint: readPackInputs().metadata.metadataEndpoint,
+                    dependencyPublisherEndpoint: readPackInputs().metadata.publisherEndpoint,
+                    worldsIncluded: false,
+                    configuration: "Mod defaults; no private launcher settings or gameplay overrides."
+                ]
+                [manifest: pack.manifest, provenance: provenance].each { name, value ->
+                    new File(stage, "${name}.json").setText(
+                        groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(value)) + "\n", "UTF-8")
+                }
+                def suffix = profile == "preparation" ? "-preparation-${source.take(7)}" : ""
+                def output = file("dist/Grindless-T0-${rootProject.pack_version}${suffix}.zip")
+                output.parentFile.mkdirs()
+                ant.zip(destfile: output, basedir: stage, encoding: "UTF-8",
+                        modificationtime: "1980-01-01T00:00:00Z", duplicate: "fail")
+                logger.lifecycle("Built $output")
+                logger.lifecycle("SHA256 ${sha256(output)}")
+            } finally {
+                delete(stage)
+            }
+        }
+    }
