@@ -1,5 +1,35 @@
 # Current T0 rework validation
 
+## External development-storage verification on 102d68f
+
+The coordinator's selected `:common:writeCheckClasspath` task finishes with actual exit0,
+including common compilation and the Forge pack-classpath task, using a process-local
+Gradle home on the new work volume. No repository, old cache, saved world or evidence
+tree was moved or deleted. Seven relevant build-input hashes are unchanged, no runtime
+source changed, and the delivered1389 ZIP retains its original hash.
+
+The actual daemon context records768MiB heap, CPU2 and SerialGC; helpers use256MiB.
+No JVM remains after completion. The two classpaths contain83/105 entries and143 unique
+referents; eight are only visible with extended Windows path syntax. The initial
+ordinary-path check incorrectly reported missing files; the extended-path check finds
+zero missing referents. This is filesystem/provenance validation, not another game test.
+
+Retain the failed coordinator invocation using read-only `$HOME`, the failed WinPS
+native-argument capture and missing-log follow-up, and the real offline dependency
+failure for the absent Architectury plugin. Only the dependency failure is followed by
+the permitted normal resolution attempt; it passes in7m11s. Its log SHA-256 is
+`4f20cd2747033152084761dd2a674ff06c93cd3136b5ec5af35d8e2b786fcb3d`.
+Loom reports one failed ForgeBiomeModifiers *source* remap; the compiled task still
+exits0. The prior worker attempts never launched Gradle and are not relabeled as passes.
+
+Common classpath SHA-256:
+`8049f58a67d5f147fcae07f652c87e7e4592d2b7192387e2851779cd0606d9bb`.
+Forge pack-classpath SHA-256:
+`886cc10aa4f88ad9483de59f333807a93e7ffdfb143065e3ee75807faae3bed9`.
+These identities contain new storage locations and do not replace old evidence or
+prove byte-identical environment/classpaths. No behavior suite, smoke, client, art,
+sound, Superflat or release acceptance was run by this storage check.
+
 ## Published candidate 1389ebb
 
 Exact clean `1389ebbffbadbed33848cbfe0e8ced9a36b68a11` passes canonical guidance

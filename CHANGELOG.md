@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **External Gradle writes verified without relocating old data.** The selected
+  compilation/classpath task exits0 on the new process-local home with unchanged
+  build inputs and actual768MiB/CPU2 limits. All143 distinct referents exist, including
+  eight requiring extended Windows path lookup. Preserve the initial invocation and
+  offline dependency failures plus the source-remap warning. Existing worktrees,
+  caches, worlds, evidence and the1389 ZIP remain intact; no full suite/native or
+  playable-release result is inferred.
 - **Recover the interrupted polish work without inventing results.** Published9d2b5a1,
   Git connectivity, the1389 ZIP and the original contact sheet remain intact after the
   app crash. Temporary workers were lost. Preserve their four sound-design/contract

@@ -31,13 +31,31 @@ No data has moved. Keep app-managed worktrees, prior evidence/worlds and origina
 prefer verified existing environment/cache controls and a reversible plan. The paused
 QA/Dashboard/S2 CLIs need not be woken for status. No native retry is active.
 
+**External Gradle home now verified.** After the crash-only state below, the selected
+`:common:writeCheckClasspath` invocation completed with exit0 using the external
+process-local Gradle home. Common compilation and the Forge pack-classpath task ran;
+all seven tracked build-input hashes stayed unchanged. The daemon log confirms768MiB,
+CPU2 and SerialGC; helpers were bounded to256MiB. No JVM remained. The1389 ZIP hash
+is unchanged. This proves new Gradle writes and a usable classpath on the new storage,
+not relocation of old data, reclaimed space, a full suite or a native server pass.
+The83 common/105 Forge entries resolve to143 unique referents; eight require extended
+Windows path lookup rather than the ordinary WinPS test. None is actually missing.
+Keep the two failed invocation captures and the offline missing-plugin attempt.
+The successful log SHA-256 is
+`4f20cd2747033152084761dd2a674ff06c93cd3136b5ec5af35d8e2b786fcb3d`.
+Loom's warning about one ForgeBiomeModifiers source remap remains in the log; it did
+not change the successful compiled-task exit. Paths and invocation receipts stay in
+private operational evidence. Each future worker must select the home explicitly;
+no global environment setting was changed.
+
 **Crash recovery and owner refinements.** Published9d2b5a1 survived in both remote refs;
 the1389 ZIP and contact-sheet hashes match and Git connectivity passes. No JVM remained
 at inspection. Temporary workers7e7041c2/9387cad0/023f7f7b are no longer addressable;
 do not wait for their old notifications or assume their assignments completed.
 The selected new Gradle-home directory exists, but the promised execution/ownership
 receipt did not survive and the directory was empty when inspected. No migration or
-build-on-new-storage pass is claimed. Preserve and continue from observed state.
+build-on-new-storage pass was claimed at that crash inspection. The later verification
+is separately recorded above, not a retroactive success for the interrupted worker.
 
 Four untracked sound drafts survived: `docs/assets/t0-sound-design.json`,
 `tools/sound-design/request-contract.json`, `grant.example.json` and `.gitignore`.

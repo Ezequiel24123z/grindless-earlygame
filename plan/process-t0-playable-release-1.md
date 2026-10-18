@@ -86,7 +86,7 @@ They do not receive permission to move data, alter gameplay or import assets.
 
 | Task | Description | Completed | Date |
 | --- | --- | --- | --- |
-| TASK-007 | Select safe storage using TASK-002, preserve originals, migrate only chosen roots and verify path/content/worker behavior before retiring any copy | No | |
+| TASK-007 | Select safe storage using TASK-002, preserve originals, migrate only chosen roots and verify path/content/worker behavior before retiring any copy | Yes; new process-local Gradle writes verified with compile/classpath task, old roots deliberately untouched | 2026-10-18 |
 | TASK-008 | Select the versioned flat preset/bootstrap contract from TASK-003; implement only missing accessibility/profile bindings and paired validation, preserving Overworld behavior | No | |
 | TASK-009 | Pin the curated pack and public configurations from TASK-004 in existing metadata/build surfaces; document exclusions and bypass controls | No | |
 | TASK-010 | Retain/polish or replace the quest interface only after the actual version/API/save comparison; preserve QuestClaimService and current-evidence/unique-reward semantics | No | |
