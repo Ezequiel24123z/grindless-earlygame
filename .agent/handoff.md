@@ -2,6 +2,17 @@
 
 Updated: 2026-10-18. Product gate: **IMPLEMENTATION IN PROGRESS, NOT MERGE-READY**.
 
+**Owner-requested pause for host restart and disk expansion.** Do not start workers,
+downloads, validation or publication until the owner explicitly resumes. The PR54 event
+subscription `235a6fbb-4e15-45f9-b8f1-7235de3bef66` is paused; Agent merge remains off.
+This documentation checkpoint is local only to avoid starting new CI during the pause;
+the published application and delivered ZIP remain1389. The pending CI artifact inspection
+was interrupted, so workflow success metadata is not a substitute for verified artifact
+contents or native markers. Preserve its partial ignored files and original failed attempts.
+The documentation integrity check passed534 links/143 ADR rows and unchanged16 tasks/
+20 dependencies/one completion requirement after explicitly selecting UTF-8; its first
+default-decoding comparison failed and is not counted as a pass.
+
 ## Current coordinator and entry
 
 Astra (`gpt-6-astra`) owns architecture, product/Tiers, integration and final review in
@@ -74,17 +85,17 @@ invalidated assumption or a genuine new property.
 
 | Owner/session | Current checkpoint and boundary |
 | --- | --- |
-| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Exact debd refresh is closed. The new3a9 strict claim binder passes38 source-only cases against12 exact9e0 authority blobs and is composed without changing gameplay/model policy. Combined export/build and checkout-byte identity remain separate; no Tier/player/global acceptance. |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | Exact debd refresh and3a9 claim binding are closed.8fc build/remap/pack15 and tools-only4061 official40 suites/export73,591 pass separately, with full semantic comparison and bounded307-contract reuse. Own4061 Forge runtime is now prepared; both local fixtures are NOT_RUN after resource guards. CLI paused, worktree/evidence preserved; no automatic retry or player/Tier acceptance. |
 | UI/JEI / `783b5107-d472-4600-a3c1-3e1f148ad172` | Integrated through `d0b7256`: slot/catalyst fixes, complete layouts and native water. QA's long-text and loaded-lava counterexamples are repaired. Dev/QA1085 plus93 restoration assertions and the real740 production bridge/states pass; client rendering remains pending. Payload11 appends server-confirmed water identity; unknown nonempty contents remain visible. |
 | Audio / `b40a0c9d-0ed0-423c-a757-03a2297e7530` | Integrated `d42d0ba`/`ee6564c`: ordinary STARVED clicks/OUT_OF_BAND alarm removed, working effects and explicit pylon alert preserved. Common compile/source review pass; no imported sound or listening acceptance. |
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
-| Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
+| Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers19 blocks,65 state models,257 variants and14 standalone icons. Later alias regeneration is recorded in the texture row below; neither inventory nor regeneration is visual acceptance. |
 | Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Both original `26c8c2e`/`b982b10` and updated `740ec84` preparation ZIPs are preserved and delivered. Real740 production-bridge probe and one canonical states run945/945 pass. No new client rendering, no-command, update-compatibility or Tier acceptance is inferred. |
-| Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Composed through `9e0a94e`:307 pure contracts and five real ZIP-loader calls from empty maps pass; unchanged binding/lifecycle reuses the real25-quest f106 boot. The S2 checker/composed build-export remain next steps. No automatic loose-definition adoption/deletion or client/save acceptance. |
-| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Reviewed through546c/01828 and composed. The same reviewer closed Root source-attribution P2;38 PS root-selection checks and a separate546c canonical export pass. cb0 retains its23 browser/16 HTTP scope. Combined export and new same-repository CI artifact step remain unexecuted; no retitled worker output. |
+| Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Composed through `9e0a94e`:307 contracts and five real ZIP-loader calls from empty maps pass; unchanged binding/lifecycle reuses the real25-quest f106 boot. Strict binder and composed build/export pass at their own revisions;4061 source/API/publisher checks support307 reuse without replay. No automatic loose-definition adoption/deletion or client/save acceptance. |
+| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Reviewed through546c/01828 and composed. Root source-attribution P2 is closed; cb0 retains its23 browser/16 HTTP scope. The4061 combined export and hosted same-repository export/upload pass, with artifact12143996897 retained. Later candidate CI remains separately attributed. CLI paused with source/evidence intact. |
 | CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
 | Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
-| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` | a009 compile/guidance25484/UI1085/Atlas pass. Quest found one missing canonical plural in guide prose; amended wording passes the unchanged check. Resource c219/digest3963 are unchanged. Final integration/CheckOnly/package remain pending; no client/Tier pass. |
+| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` |1389 passes CheckOnly4881, official four-stage validation/42suites and pack15/ZIP build. Candidate delivered with matching built/bundled jar and guidance bytes. Prior failures retained; no human/client/Tier acceptance. |
 | Exosuit fixture / worker `2632f51f-8ae8-4e00-a5fb-694dca8c1987` | Reviewed source patch: one summon per tagged item, actual coherent observation and160 polls under the same120s runner. Retained diagnostics now use conditional say, not silent function data-get. Static25 contracts/12 mutations only; Java/native execution pending. No T1 gameplay expansion. |
 | T0 texture aliases / worker `9d32dd27-39b9-41fc-8d49-6af58856f904` | Two complete staged generations are byte-identical across1521 files;22 installed model JSONs fix696 refs. VerifyAssets passes, geometry/UV/PNG/WAV and preview remain unchanged. EOL-normalized text is not raw-byte identity; no visual acceptance. JVM window released. |
 
@@ -109,8 +120,8 @@ runs do not erase that failure. Its log shows an accepted helmet summon without 
 one-shot selector marker, not a proven internal tracker/physics cause. Native renewable
 production and first-fluids passed in these runs; synthetic oracle cases remain unexecuted.
 
-**Resource custody:** dashboard Root recheck, Quest9e0 and the source-only3a9 binder have
-completed and released their JVMs. S2 now owns the frozen8fc combined build/check/export.
+**Resource custody history:** dashboard Root recheck, Quest9e0 and the source-only3a9 binder
+completed and released their JVMs before S2's frozen8fc combined build/check/export.
 The first invocation promoted a JDK stderr note to a WinPS exception before a Gradle
 verdict; that failure is preserved and native cmd/process capture is authorized for retry.
 The retry passed8fc build/remap and15 pack checks. Runner-only4061 then fixed the
@@ -123,16 +134,44 @@ Managed cloud Sandbox provisioning also returned403, so neither path produced na
 S2 has finished its debd refresh and left no validation JVM. QA's idle CLI was deliberately paused
 to release memory, not archived or deleted; its worktree/source/logs remain intact.
 No new server is reserved. Keep native runs/Gradle and game-edge logging serial on this host.
-The implementation worker may inspect/code independently but must obtain a resource turn
-before Java. S2's exact debd refresh remains closed; the reviewed claim binder is now
-composed and the combined export must establish its new identities.
+Any future Java work needs a new resource turn. S2's exact debd refresh remains closed;
+the composed4061 export establishes new identities without relabeling the older evidence.
 
 Local composition preserves the worker histories: quest merge `fe4e74e`, binder merge
 `91c10af`, then the dashboard tip `01828b9`. Resolve the containing dashboard integration
-commit from Git. Remote publication still requires the guarded normal fast-forward to both
-existing refs. The verified ancestor4061 was published to both refs, deliberately excluding
-later local unvalidated guidance/assets/exosuit work; local history still contains4061
+commit from Git. Every publication requires the guarded normal fast-forward to both
+existing refs. The verified ancestor4061 was first published to both refs, deliberately
+excluding then-unvalidated guidance/assets/exosuit work; local history still contains4061
 and was not rewritten. The delayed740 notification does not describe the current head.
+
+**Latest delivery:** clean candidate `1389ebbffbadbed33848cbfe0e8ced9a36b68a11` is now
+published to both refs and its real preparation ZIP was attached in the conversation.
+ZIP SHA-256 `4893be01a45b1c278817de1432bfef20e55399aba52fea21c3d53139e5ee401d`;
+jar `63eb0ae6d2bcf950b926ff2faaddde232481723c6fc1b0ba2f18fbc10a7f46e1`.
+The archive has no world, private config or third-party jars; old archives are untouched.
+The current acceptance checklist remains NOT EXECUTED. The user was unavailable when
+asked about broader cleanup, which is not a manual gameplay result or cleanup approval.
+
+After validation the host disk reached zero and two consolidated handoff writes failed.
+Successful stage records, ledgers, logs, provenance and `04-zip-verification.json` remain
+valid. The coordinator removed only its own reconstructible Gradle cache, not source,
+packages, JDKs, worlds/evidence or the other workers' caches, recovering about1GiB.
+It also paused the verified idle Dashboard CLI while preserving its01828 worktree/session.
+S2 then completed its official4061 runtime preparation: exit0,98 installation entries and
+built/deployed jar SHA-256
+`d564da089736d54a9ad97af65ffed88577a06ed7c05ef1eb38da0b6502cf7c66`.
+The next guard stopped before the first runner/JVM; both local fixtures remain NOT_RUN.
+Its instantaneous resource values were not persisted. The later2719.6MiB commit/
+599.7MiB disk reading is not a retrospective guard pass. Preparation and blocker receipts
+are preserved under the S2-owned `build/ns2-4061-48e`; no world was created.
+
+The coordinator subsequently paused the verified idle S2 CLI as well, preserving its
+clean4061 checkout, prepared runtime and evidence. Commit margin recovered to about3386MiB,
+but disk was only310,923,264 bytes, below the unchanged512MiB floor. No further runner,
+installation, resource-floor change or retry was attempted. No native grant remains active.
+Do not wake either completed CLI merely for status or delete another worker's caches.
+Any future oracle4061/exosuit48e result must retain its app4061 attribution, not the newer
+client/guide/models or acceptance of the delivered1389 candidate.
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and

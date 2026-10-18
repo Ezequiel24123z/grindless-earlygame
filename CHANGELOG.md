@@ -15,6 +15,22 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve a local restart checkpoint.** The owner requested a pause to restart the host
+  with more disk space. Stop delegated work and pause the PR event wake-up without deleting
+  sessions or evidence; defer publication/new CI and all resumption until explicit direction.
+- **Native runtime prepared; local scenarios remain blocked.** The official4061 Forge
+  preparation exits0 and records98 installation entries with matching built/deployed jar
+  hashes. The subsequent resource guard stops before either scenario starts; its missing
+  instantaneous measurements are not replaced by a later reading. Both local fixtures
+  remain NOT_RUN. Idle worker CLIs were paused without archiving or deleting their work;
+  a later disk reading is below the unchanged512MiB floor, so no retry was launched.
+- **Guidance candidate `1389ebb` validated and delivered.** Canonical CheckOnly passes4,881
+  comparisons without changing the68-declaration resource. The official four-stage
+  validation exits0 with42/42 suites;15 pack checks and the actual preparation ZIP build
+  pass. The built/bundled jar and packaged guidance hashes match their provenance.
+  A new isolated Prism candidate is delivered without replacing earlier archives or
+  claiming human/Tier acceptance. Disk exhaustion prevented two consolidated-handoff
+  writes after the successful stages; those failures remain recorded.
 - **Guidance Matrix identity checks pass on `a0097a8`.** Common/Forge compile,25,484 guidance
   cases,1,085 UI cases and Atlas pass. The unchanged Quest check then caught a missing
   canonical plural name in guide prose; the one-line wording correction preserves meaning

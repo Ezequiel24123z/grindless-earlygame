@@ -3,7 +3,7 @@
   "schema_version": 1,
   "plan_revision": 7,
   "updated": "2026-10-18",
-  "phase": "canonical_t0_projection_integration_and_ci_recovery",
+  "phase": "candidate_delivered_native_regression_and_human_acceptance_pending",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -249,7 +249,7 @@
     {
       "id": "canonical-resource-guidance",
       "task_id": "resource-communication",
-      "status": "matrix_guidance_checks_passed_final_integration_pending",
+      "status": "canonical_candidate_validated_and_delivered_human_pending",
       "worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -258,9 +258,16 @@
       "owned_files": ["generated canonical declaration projection/resource and drift checks", "shared native resource formatter and item/fluid/JEI/Atlas/machine/quest-guide display adapters", "T0 guide localization and focused paired tooling/tests"],
       "invariants": "No runtime repository/JDK audit, second handwritten catalogue, copied recipe quantities, fake starter kit, inferred output role, invented consumer or acceptance verdict; preserve slots/payload/NBT and exact claim authority",
       "precedent": "GT Modern v1.4.6/MC1.20.1 aa41aba: registered definitions to presence-sensitive tooltips, actual recipe objects to guide views; pattern-only LGPL3 reference, no imports",
-      "review": "Same reviewer closed P2 after the shared sidecar seam retained complete implementation_* and projector_class_hashes separately from declaration content. Counterexamples prepared; real generation/compile/Java checks remain pending.",
-      "evidence": "Exact6d generation and CheckOnly each4880 comparisons, common/Forge compile and real Root44 pass. Real68-entry resource generated; suite09 failed an incorrect relay ITEM rating1 expectation. Remaining suites stopped; no authority altered.",
-      "identity_decision": "ADR0143 lookup/identity/non-mutation/CRLF cases pass within25484 guidance checks on a009. UI1085/Atlas and compile pass; unchanged Quest check found a missing canonical plural in prose, corrected without expectation/authority/resource changes. Final integration/packaging pending.",
+      "review": "Same reviewer closed P2 after the shared sidecar seam retained complete implementation_* and projector_class_hashes separately from declaration content. Generation/compile and focused counterexamples subsequently passed on their recorded6d/a009/1389 revisions.",
+      "evidence": "Exact1389 candidate passes CheckOnly4881, official four-stage validation/42suites and pack15/ZIP build. Real68-entry resource and built/bundled jar identities verified. Earlier Matrix expectation and guide-wording failures remain separately recorded.",
+      "candidate": {
+        "source_revision": "1389ebbffbadbed33848cbfe0e8ced9a36b68a11",
+        "zip_sha256": "4893be01a45b1c278817de1432bfef20e55399aba52fea21c3d53139e5ee401d",
+        "jar_sha256": "63eb0ae6d2bcf950b926ff2faaddde232481723c6fc1b0ba2f18fbc10a7f46e1",
+        "delivered": true,
+        "manual_acceptance": false
+      },
+      "identity_decision": "ADR0143 lookup/identity/non-mutation/CRLF cases pass within25484 guidance checks on a009. UI1085/Atlas and compile pass; unchanged Quest check found a missing canonical plural in prose, corrected without expectation/authority/resource changes. Final1389 integration/packaging passes; human acceptance remains open.",
       "stop_condition": "Coherent implementation for review with real generation pending if JVM-gated; no placeholder data, global docs edits, commits or publication"
     },
     {
@@ -279,7 +286,7 @@
     {
       "id": "canonical-dashboard-data",
       "task_id": "dashboard-integration",
-      "status": "reviewed_composed_combined_export_and_ci_pending",
+      "status": "reviewed_composed_export_and_hosted_artifact_passed",
       "worker_session_id": "e2c2110f-b8f5-4d20-8e73-1a146e41c1a3",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -288,7 +295,7 @@
       "owned_files": ["AuditReports.document/json seam", "canonical dashboard projection/export/local server", "paired dashboard tools and focused tests"],
       "invariants": "Project Result, not prose; preserve exact quantities, unknowns and separate conditional/global verdicts. Output role comes only from an explicit route override; discharged and declared_side_stream_class stay separate. No private paths or synthetic fallback.",
       "evidence": "cb0 real export73591/browser23/HTTP16 remains source-bound. Root source-attribution P2 closed by the same reviewer at546c;38 PS selection/compile assertions and a separate73591 canonical re-export pass. Java/server/runtime unchanged; Bash still locally unexecuted. Earlier failures and cb0 bytes preserved.",
-      "combined_boundary": "Regenerate the artifact on the actual integration pin. Added same-repository-only CI root-selection/export/upload is not yet hosted evidence; no Pages or permission change.",
+      "combined_boundary": "Combined4061 export passes73591 assertions and complete semantic comparison with debd; three4061 hosted CI runs succeed. Artifact12143996897 is retained from the actual same-repository Bash export/upload. Later candidate evidence stays separately pinned; no Pages or permission change.",
       "stop_condition": "Return source-bound exhaustive projection evidence and a real-data browser result, or exact blockers; no remote publication or global build-file edits"
     },
     {
@@ -322,7 +329,7 @@
     {
       "id": "quest-backend-integration",
       "task_id": "resource-communication",
-      "status": "composed_307_contracts_passed_combined_source_checks_pending",
+      "status": "composed_source_checks_and_reused_contracts_passed_client_pending",
       "worker_session_id": "cc947b37-3c8f-4ec0-a495-f8d499c28378",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
@@ -334,7 +341,7 @@
       "dispatch_boundary": "Existing quest UI/engine adaptation; new catalogue content or gameplay changes need a separate decision",
       "evidence": "f106 compile/254 contracts and one real25-quest boot pass. Exact9e0 passes307 publisher-binary contracts including five loader calls from empty maps, ZIP/Quest.CODEC and failure/retry/collision coverage; no code changed during run. Earlier failures retained; no second Forge boot or human save/client claim.",
       "migration_boundary": "No automatic adoption/conversion/deletion of unpublished loose f106 definitions; visible refusal and preservation of legacy/foreign collisions. Catalogue/book/claim ledger unchanged.",
-      "reuse_boundary": "9e0 satisfies the condition for f106 binding/lifecycle reuse; combined source rebind/build/export remain separate and no client or human-save acceptance follows"
+      "reuse_boundary": "9e0 satisfies the condition for f106 binding/lifecycle reuse. Strict3a9 source binding,8fc build and4061 checks/export have their own passes;4061 source/API/publisher-pin evidence supports reuse of307 contracts without replay. No client or human-save acceptance follows"
     },
     {
       "id": "t0-ui-jei-feedback",
@@ -885,9 +892,10 @@
       "acceptance": "Consistent names/routes/handling/uncertainty; no duplicate quantities, fictional consumers or mandatory hoarding"
     },
     {
-      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "in_progress", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
+      "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "done", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
       "owner": "bounded integration workers; Astra schema and real-data review",
-      "next_action": "Regenerate the composed clean source into its own artifact and run the newly wired same-repository CI export/upload; preserve reviewed cb0/546c evidence without relabeling",
+      "result": "Public4061 canonical export, preserved real cb0 browser scope, Root correction and actual same-repository hosted Bash export/artifact upload pass; later changes require their own final revalidation",
+      "next_action": "Keep source-bound artifacts and revalidate later guidance/bootstrap changes in the final candidate CI; do not relabel cb0/4061 or infer player/Tier acceptance",
       "validation_focus": ["static_schema_provenance_and_data", "existing_renderer_contracts", "required_first_real_data_browser_integration"],
       "acceptance": ["Real source-bound data without sensitive paths/logs", "No synthetic fallback", "Canonical labels and explicit discard/unknown states", "Exact source_commit/context.commit deliverable rule", "Real-data/browser review", "Stable publication only from validated milestones through an approved mechanism"]
     },

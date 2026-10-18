@@ -34,28 +34,31 @@ ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its R
 clarification does not require another server run. Downstream/core material evidence is
 not complete downstream power/autonomy or physical Matrix crafting acceptance.
 
-Next: validate the composed T0 projections and finish canonical player guidance under
-ADR-0141/0142. Reviewed S2 real authorities,
-classifications, formation and finite conditional establishment pass the exact `debd3ae`
-refresh with deterministic reports; that engineering result is not a played manual exit.
-The real dashboard and existing-framework quest adapter are now composed with their strict
-source binding; generate their combined artifact and finish shared player guidance.
-Diagnose the two current CI failures without weakening their conditions. Current
-documentation, client-profile preparation and stable asset work proceed independently.
-Freeze the post-S2 candidate and canonical entry/path
-before the one full no-command Survival acceptance. Player-facing coherence and production
-asset work follow the trustworthy contracts and observed feedback, not new T1-T15 breadth.
+Next: close the remaining native-regression and real-host acceptance gaps on the frozen
+post-S2 candidate, without repeating already covered properties. Published `1389ebb`
+contains the real canonical guidance, corrected T0 model references and composed
+quest/dashboard integration; CheckOnly4,881,42 official suites and15 pack checks pass,
+and its isolated preparation ZIP is delivered. Exact4061 combined export and hosted
+artifact evidence remain separately pinned. Reviewed S2 authorities, classifications,
+formation and finite conditional establishment preserve the accepted conditional model;
+none of that engineering evidence is a played manual exit.
+The two bounded local fixtures remain NOT_RUN after resource guards, although their own
+official4061 Forge installation now passes. Do not repeat until resources genuinely permit,
+reduce the canonical2GiB heap or relabel the older app as the1389 client.
+Inspect current hosted evidence separately, then perform the one full no-command Survival
+route with physical five-Matrix craft, player-facing coherence and retained-world checks.
+No new T1-T15 breadth or deferred T1 screenshot investigation is authorized.
 Reuse the existing shared contracts; select new native/manual evidence
 only for an uncovered property or changed assumption, using
 [the classification matrix](testing/test-strategy.md#outstanding-work-classification).
 Product dependencies, held ports, required CI and genuine manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
 Real-client UI/JEI and audio repairs are integrated under ADR-0142, including the production
-bridge/states evidence on740. The Heracles adapter is composed through9e0 with307 pure
-contracts and reuse of the real25-quest f106 boot. Changed-source binding and complete
-composed build/export remain pending; the dashboard's cross-root provenance fix is under
-recheck after its real-data browser/export pass. Do not turn the deferred
-T1 output screenshots into the next scope. The owner authorizes merge only after genuine T0 completion, followed
+bridge/states evidence on740. The Heracles adapter is composed through9e0 with307 contracts
+and reuse of the real25-quest f106 boot. Strict binding, composed build/export and the
+dashboard's reviewed cross-root provenance correction now pass at their recorded revisions;
+native client rendering and genuine saved-world behavior are still unaccepted.
+The owner authorizes merge only after genuine T0 completion, followed
 by a portable Git handoff; existing acceptance and branch protection are unchanged.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
@@ -82,10 +85,10 @@ data are required implementation, not substitutes for renewable gameplay.
 | renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | composed native contract and bounded renewable cycle verified; reuse their scopes, assess only remaining distinct factory/player/persistence properties |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | complete on debd:1384 resources/474 routes/259 tags/25 objectives/11 terminals with source-bound deterministic refresh; later authority changes require affected rebinding |
 | sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | reviewed conditional T0 model/gate passes on debd; global future unknowns remain explicit, not Tier or played acceptance |
-| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | UI/JEI/audio and selected quest backend composed; shared canonical resource guidance and combined/client evidence still in progress |
+| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | real shared68-declaration guidance and quest/UI/audio integration verified and packaged on1389; actual client/Survival acceptance remains pending |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
-| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | reviewed Result projection/export/serve/Root fix and CI artifact wiring composed; worker browser/export evidence retained, combined-source regeneration/hosted execution pending |
-| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | real-host exploratory Survival reported and740 preparation delivered; final candidate, current CI recovery, physical exit, whole no-command route and retained-world acceptance remain pending |
+| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | reviewed Result export/serve/Root fix, combined4061 export and real hosted artifact pass; earlier browser evidence remains source-scoped, later candidate CI separately inspected |
+| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | frozen1389 candidate delivered with42 suites/pack15; local native fixtures remain resource-blocked, physical exit/whole no-command route/client/retained-world acceptance open |
 | multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
 | multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |
 

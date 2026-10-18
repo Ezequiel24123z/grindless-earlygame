@@ -1,5 +1,64 @@
 # Current T0 rework validation
 
+## Published candidate 1389ebb
+
+Exact clean `1389ebbffbadbed33848cbfe0e8ced9a36b68a11` passes canonical guidance
+CheckOnly4,881 comparisons without changing its resource, the official four-stage
+`tools/validate.ps1` run without smokes (all stages exit0,42/42 suites), and15 pack checks
+plus the actual preparation build. The ZIP was delivered in the conversation and source
+published by guarded normal fast-forward; no prior archive was overwritten.
+
+| Artifact | SHA-256 |
+| --- | --- |
+| ZIP,1,450,782 bytes | `4893be01a45b1c278817de1432bfef20e55399aba52fea21c3d53139e5ee401d` |
+| Built/bundled jar | `63eb0ae6d2bcf950b926ff2faaddde232481723c6fc1b0ba2f18fbc10a7f46e1` |
+| Packaged/source guidance | `c219a3d1da83a62c51a904cfdac0ae44fd7ca2b088d18861ec2c97c3d13d3c54` |
+| Declaration digest | `396313f65f3cd8ee15235285aa24f92696fd3877fe6d640264ad95ba96726c22` |
+
+The profile downloads its four pinned upstream dependencies through the launcher. The
+archive contains only LICENSE, README, manifest, Grindless jar and provenance; no world,
+private configuration or third-party jar is bundled. Real client/no-command/retained-world
+and Tier acceptance remain NOT EXECUTED, not supplied by these engineering checks.
+
+The host disk reached zero after successful stages, causing two failed consolidated
+handoff writes. Stage records, native output logs, official ledger, provenance and
+`build/guidance-validation/1389ebb-20261018T182315Z/04-zip-verification.json` remain valid.
+The coordinator recovered space by removing only its own reconstructible Gradle cache;
+no other worker cache, source, JDK, world or evidence was deleted. A subsequent native
+preflight still found only1972.5MiB commit margin, below the canonical2GiB heap, and
+started no JVM. Pausing the verified completed Dashboard CLI recovered additional margin
+without archiving its worktree/session.
+
+**Own native installation, not a scenario pass.** On clean4061, the official
+`:forge:prepareSmokeServer` task subsequently exits0 with98 installation entries.
+Built/deployed jar SHA-256 is
+`d564da089736d54a9ad97af65ffed88577a06ed7c05ef1eb38da0b6502cf7c66`;
+installation-inventory SHA-256 is
+`871128091cfbabfbcb3b8e6e64f8a44861c229ff01a10149c3e039af0b9b29b5`.
+The S2-owned `build/ns2-4061-48e/24-prepare-smoke-server-result.json` has SHA-256
+`540a887096d663b434c0a007c817856b58b4e9dd352cedc31033d949f8d63584`.
+No foreign runtime or world was copied.
+
+The following resource guard stops before the first official runner/JVM: at least2688MiB
+commit margin (2048MiB heap plus640MiB native/control allowance) and512MiB disk were required.
+The instantaneous failed values were not persisted. The separate later reading of2719.6MiB
+commit,1306MiB physical and599.7MiB disk is not retroactive evidence that the guard passed.
+`27-post-install-resource-blocker.json`, SHA-256
+`f9e97b8c5dccea9a6457b0ba1adb35d1ef55adfb2bbf9ab9c2c413f735b34fec`,
+records no scenario logs/world, no owned JVM/listener and both local fixtures **NOT_RUN**.
+
+The coordinator then paused the verified idle S2 CLI without archiving/deleting its clean
+checkout, installation or evidence. A later measurement has about3386MiB commit free but
+only310,923,264 bytes of disk, below the unchanged512MiB floor. No further runner, retry,
+heap/floor change or other worker-cache deletion followed. These are resource observations,
+not native verifications. No native grant remains active; a future run needs real resources
+and retains the original app4061/oracle4061/exosuit48e scope, never new-client1389 attribution.
+
+The earlier public4061 baseline has three independent complete hosted successes,
+runs39146682977/39146679792/39146679819. The last run's Bash dashboard export and upload
+were inspected, and real artifact12143996897 was retained. None is a1389 hosted or manual
+result. Preserve all earlier source-bound passes and failed attempts below.
+
 ## Current reviewed integration
 
 S2 through `dba3993` is integrated and its composed refresh is complete on exact
