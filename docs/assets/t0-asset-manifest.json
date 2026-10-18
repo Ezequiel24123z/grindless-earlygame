@@ -26,6 +26,8 @@
       "common/src/main/java/io/github/ezequiel24123z/grindless/material/SupplyCatalogue.java",
       "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapRecipes.java",
       "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapProcesses.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/RenewableProcesses.java",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/source/SourceLogic.java",
       "common/src/main/java/io/github/ezequiel24123z/grindless/machine/HandCrankDynamoBlock.java",
       "common/src/main/java/io/github/ezequiel24123z/grindless/machine/CrudeExtractorBlock.java",
       "common/src/main/java/io/github/ezequiel24123z/grindless/machine/ResearchTerminalBlock.java",
@@ -64,7 +66,7 @@
     "generator_ownership": {
       "deterministic_workflow": "tools/generate-assets.ps1 and tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
       "blocks": "BlockCatalogue -> MachineArt and BootstrapArt -> BlockModels -> GenerateAssets",
-      "standalone_items": "ModItems and SupplyCatalogue -> FormTextures -> GenerateAssets",
+      "standalone_items": "ModItems, SupplyCatalogue and registered placeholders -> FormTextures -> GenerateAssets",
       "blockstate_and_rotation": "BlockCatalogue -> BlockModels -> GenerateAssets",
       "workshop_shape_and_preview": "WorkshopGeometry -> BlockModels and WorkshopPreview",
       "gui_texture": "GenerateAssets.writeGui",
@@ -78,7 +80,8 @@
       "block_face_roles": {"required": 95, "mapped": 95, "texture_references_present": 95, "roles_per_block": ["front", "top", "side", "rear", "bottom"]},
       "distinct_t0_block_texture_pngs": {"required": 89, "mapped": 89, "source_files_present": 89},
       "active_inactive_front_pairs": {"required": 16, "mapped": 16, "referenced_front_pngs": 32},
-      "standalone_t0_item_icons": {"required": 13, "mapped": 13, "source_files_present": 13},
+      "standalone_t0_item_icons": {"required": 14, "mapped": 14, "source_files_present": 14},
+      "direct_t0_grindless_recipe_outputs": {"required": 7, "mapped": 7, "source_assets_present": 7, "standalone_icons": 6, "block_item_models": 1},
       "block_item_models": {"required": 19, "mapped": 19, "source_files_present": 19},
       "registered_animated_regions": {"required": 0, "mapped": 0, "source_files_present": 0},
       "multiblock_shape_contracts": {"required": 2, "mapped": 2, "source_files_present": 2},
@@ -166,6 +169,7 @@
       {"id": "crank_handle", "category": "tool", "texture": "textures/item/crank_handle.png", "model": "models/item/crank_handle.json", "source_files_present": true},
       {"id": "mineral_aggregate", "category": "material", "texture": "textures/item/mineral_aggregate.png", "model": "models/item/mineral_aggregate.json", "source_files_present": true},
       {"id": "biomass", "category": "material", "texture": "textures/item/biomass.png", "model": "models/item/biomass.json", "source_files_present": true},
+      {"id": "slag", "texture": "textures/item/slag.png", "model": "models/item/slag.json", "source_files_present": true, "t0_output_role": "Direct T0 iron/copper reduction output; no additional use or classification inferred."},
       {"id": "ceramic_grog", "category": "material", "texture": "textures/item/ceramic_grog.png", "model": "models/item/ceramic_grog.json", "source_files_present": true},
       {"id": "unfired_ceramic", "category": "material", "texture": "textures/item/unfired_ceramic.png", "model": "models/item/unfired_ceramic.json", "source_files_present": true},
       {"id": "ceramic_insulator", "category": "material", "texture": "textures/item/ceramic_insulator.png", "model": "models/item/ceramic_insulator.json", "source_files_present": true},
@@ -176,7 +180,21 @@
       {"id": "quest_book", "category": "guide", "texture": "textures/item/quest_book.png", "model": "models/item/quest_book.json", "source_files_present": true},
       {"id": "field_guide", "category": "guide", "texture": "textures/item/field_guide.png", "model": "models/item/field_guide.json", "source_files_present": true}
     ],
-    "non_local_material_inputs": "Vanilla Minecraft icons and pack-provided tag members used by T0 recipes remain externally owned; they are not missing Grindless PNGs. SupplyCatalogue is the registry authority for Grindless-supplied material forms, not a claim that every registered form is a T0 progression item.",
+    "non_local_material_inputs": "Vanilla Minecraft icons and pack-provided tag members used by T0 recipes remain externally owned; they are not missing Grindless PNGs. Grindless-owned direct T0 recipe outputs are inventoried separately below. SupplyCatalogue is the registry authority for Grindless-supplied material forms, not a claim that every registered form is a T0 progression item.",
+    "t0_recipe_output_inventory": {
+      "source_catalogues": ["BootstrapProcesses", "RenewableProcesses"],
+      "direct_grindless_item_or_block_outputs": [
+        {"id": "ceramic_grog", "source_catalogue": "BootstrapProcesses", "asset_inventory": "standalone_items"},
+        {"id": "unfired_ceramic", "source_catalogue": "BootstrapProcesses", "asset_inventory": "standalone_items"},
+        {"id": "ceramic_insulator", "source_catalogue": "BootstrapProcesses", "asset_inventory": "standalone_items"},
+        {"id": "mineral_aggregate", "source_catalogue": "RenewableProcesses", "asset_inventory": "standalone_items"},
+        {"id": "biomass", "source_catalogue": "RenewableProcesses", "asset_inventory": "standalone_items"},
+        {"id": "fibreboard", "source_catalogue": "RenewableProcesses", "asset_inventory": "blocks and block_item_models"},
+        {"id": "slag", "source_catalogue": "RenewableProcesses", "asset_inventory": "standalone_items"}
+      ],
+      "coverage": {"required": 7, "mapped": 7, "source_assets_present": 7, "standalone_icons": 6, "block_item_models": 1},
+      "excluded_outputs": "Vanilla item/fluid outputs and outputs declared only through tag contracts are not direct Grindless item or block registrations."
+    },
     "multiblocks": [
       {"id": "firing_chamber", "shape": "2x2x2 controller plus seven minecraft:bricks blocks", "orientations": ["north", "east", "south", "west"], "controller_visual": "firing_chamber block model and firebox state fronts", "assembled_preview": "not present", "readiness": "shape and state contract stable; deterministic preview can be prepared without changing gameplay"},
       {"id": "settling_trough", "shape": "1x2x3 controller, channel, screen; air above channel and screen", "orientations": ["north", "east", "south", "west"], "controller_visual": "settler block model and status fronts; static channel/screen models", "assembled_preview": "docs/assets/t0-settling-preview.png (720x256; schematic geometry/texture preview, not a client screenshot)", "readiness": "shape, state, continuity and preview source are present"}
@@ -242,7 +260,7 @@
       "not_registered_and_not_invented": ["off as a separate state", "error as a universal state", "animated texture regions"]
     },
     "readiness_and_gaps": {
-      "stable_to_produce_now": ["Source-mapped 19 block silhouettes and registered state fronts", "18 four-way facing contracts and the fixed workshop geometry", "13 existing T0 standalone icon assets", "static firing-chamber preview from its stable shape contract"],
+      "stable_to_produce_now": ["Source-mapped 19 block silhouettes and registered state fronts", "18 four-way facing contracts and the fixed workshop geometry", "14 existing T0 standalone icon assets", "static firing-chamber preview from its stable shape contract"],
       "blocked_or_deferred": ["Final guide/quest/Atlas metadata visuals until S2/resource-communication settles the player-facing content contract", "any new GUI chrome or slot art until an approved GUI contract calls for it", "new texture animation, emissive or hero-art polish until separately specified and reviewed", "geometry-specific procedural cues for geological_collector, biocultivator, biomass_dynamo and assembly_bench; their registered static state fronts remain mapped"],
       "existing_coverage_is_not_acceptance": "Files and deterministic mappings establish inventory/readiness only, not production-quality art, in-game readability, accessibility, client acceptance, or saved-world acceptance."
     },
@@ -254,7 +272,7 @@
       {"source": "docs/testing/latest-validation.md", "scope": "Historical revision-bound results only; cancelled asset-worker work remains unaccepted and no result is promoted by this inventory."}
     ],
     "proposed_deterministic_asset_batches": [
-      {"batch": "T0 state and icon coverage", "scope": "Keep all 19 block entries, 65 state models/fronts, and 13 standalone icons aligned with the live generator; no new runtime states or per-asset Minecraft runs.", "readiness": "stable now; existing generated outputs are not regenerated in this task"},
+      {"batch": "T0 state and icon coverage", "scope": "Keep all 19 block entries, 65 state models/fronts, and 14 standalone icons aligned with the live generator; no new runtime states or per-asset Minecraft runs.", "readiness": "stable now; existing generated outputs are not regenerated in this task"},
       {"batch": "Firing Chamber schematic preview", "scope": "Render the already-registered controller-plus-seven-bricks geometry using WorkshopGeometry/WorkshopPreview; preserve the existing settling preview.", "readiness": "stable now; documentation visual gap only"},
       {"batch": "Guide and player-facing metadata", "scope": "Revisit only after S2/resource-communication publishes stable classifications, route text and display metadata.", "readiness": "blocked by content contract"},
       {"batch": "Animation/emissive or hero-art polish", "scope": "Add only after an explicit visual/state specification and human QC plan; preserve current static frames until then.", "readiness": "deferred; no asset is inferred"}
@@ -384,7 +402,8 @@
     {"id": "unfired_ceramic", "accent": "#B8A183", "role": "stacked damp clay blanks"},
     {"id": "ceramic_insulator", "accent": "#E6D6B2", "role": "ribbed fired spool with a visible bore"},
     {"id": "mineral_aggregate", "accent": "#8F8774", "role": "geological source output"},
-    {"id": "biomass", "accent": "#638747", "role": "cultivated F0 fuel"}
+    {"id": "biomass", "accent": "#638747", "role": "cultivated F0 fuel"},
+    {"id": "slag", "accent": "#6B5B4B", "role": "Direct T0 iron/copper reduction output; no additional use or classification inferred."}
   ],
   "candidate_atlas": {
     "status": "not_generated",
