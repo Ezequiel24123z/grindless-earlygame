@@ -2,6 +2,7 @@
   "schema_version": 1,
   "status": "original_generated_workshop",
   "runtime_changes": true,
+  "inventory_authority": "source_bound_readiness is the complete current inventory; legacy machines/parts/items fields remain compatible candidate descriptors, not a separate runtime catalogue",
   "generator": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
   "sources": ["BlockCatalogue", "MachineTextures", "MachineArt", "FormTextures"],
   "provider_status": {
@@ -369,19 +370,19 @@
     {
       "id": "firing_chamber",
       "prefix": "firebox",
-      "component": "fuel-backed ceramic batch firing",
+      "component": "recipe-banded T0 ceramic, carbon, glass and basic reduction firing",
       "silhouette": "inset fire door at the front-left bottom of a two-by-two brick chamber",
       "states": ["idle", "running", "blocked", "starved", "out_of_band"],
-      "gui": "ceramic feed and carbon fuel inputs, insulator and grog outputs; synchronized structure fault",
+      "gui": "two recipe inputs and two output slots; recipe-specific feed/fuel, operating band and synchronized structure fault",
       "candidate_output": "build/assets/t0/candidates/firing_chamber-atlas.png"
     },
     {
       "id": "settling_trough",
       "prefix": "settler",
-      "component": "F0 dirt separation with partial water recovery",
+      "component": "F0 wet material separation with partial water recovery",
       "silhouette": "hopper-fed headbox joined to a full-length open channel and raised screen",
       "states": ["idle", "running", "blocked", "starved", "out_of_band"],
-      "gui": "one input, two outputs, synchronized water volume and specific structure fault",
+      "gui": "one input, five outputs, synchronized water volume and specific structure fault",
       "candidate_output": "build/assets/t0/candidates/settling_trough-atlas.png"
     }
   ],

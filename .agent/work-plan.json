@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 5,
+  "plan_revision": 6,
   "updated": "2026-10-18",
-  "phase": "verified_shared_proofs_s2_data_acceptance_next",
+  "phase": "canonical_t0_closure_s2_and_player_asset_preparation",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -68,6 +68,16 @@
         "new_coordinator_native_or_full_suite_runs": 0,
         "existing_required_ci": "Unchanged; this admission avoids additional policy-driven replays"
       }
+    },
+    "t0_closure_priorities": {
+      "source": "Owner T0-closure directive, 2026-10-18",
+      "order": ["Canonical S2 inventory/sustainability and establishment", "Retire current design contradictions", "Genuinely unique physical T0 exit", "One canonical no-command Survival path", "Player-facing coherence and real projections", "Stable T0 asset production readiness"],
+      "parallel_rule": "Priorities are dependency-aware workstreams, not a serial waterfall; docs, client readiness and stable asset inventory proceed alongside S2",
+      "guidance_rule": "Prepare the clarity needed to run the canonical route once its S2 contract is trusted; final player-facing coherence incorporates the actual path feedback",
+      "survival_rule": "Freeze the post-S2 candidate/profile/entry requirements before acceptance; no commands, injected stock or diagnostic carryover",
+      "portable_delivery": "Owner redirected blocked VM client work to a Prism-importable ZIP on the real host; b982b10 is authorized for preparation, not post-S2 acceptance",
+      "breadth_limit": "No T1-T15 implementation expansion or port-stage dispatch before the existing T0 acceptance/dependencies permit it",
+      "publisher": "Astra coordinator only; workers create local checkpoints"
     },
     "coordination": "For this session, prioritize useful wall-clock throughput: run independent bounded implementation, review and read-only evidence concurrently when isolated or immutable; do not serialize safe work to conserve credits. Avoid redundant agents; serialize shared mutable files/input validation, Astra integration and the single publication."
   },
@@ -150,6 +160,20 @@
           "new_tasks": 0,
           "new_approval_gates": 0,
           "accepted_proofs_discarded_or_repeated": false
+        },
+        {
+          "id": "PA-0005",
+          "plan_revision": 6,
+          "date": "2026-10-18",
+          "title": "Prioritize canonical T0 closure with independent workstreams",
+          "source": "Owner's six T0-closure priorities and explicit Minecraft/Computer Use authorization; ADR-0141",
+          "method": "Keep the sixteen product tasks and their acceptance/dependencies; dispatch bounded S2, current-doc reconciliation, client readiness and stable asset inventory, with actual player acceptance gated on the canonical candidate",
+          "affected_tasks": ["renewable-t0", "production-inventory", "sustainability-model", "resource-communication", "dashboard-integration", "t0-integration"],
+          "dispatch_priorities_updated": true,
+          "product_task_order_changed": false,
+          "dependencies_changed": false,
+          "acceptance_weakened": false,
+          "new_product_tasks": 0
         }
       ],
   "references": {
@@ -176,8 +200,63 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "Reuse the accepted S1 kernel, composed native completion and bounded renewable-cycle proofs. Next author and validate S2 data/pack bindings, while independent communication/dashboard preparation stays within dependencies. Dispatch runtime only for a specific uncovered property or invalidated assumption, not each ordinary recipe or unknown.",
+  "parallel_opportunity": "S2 implements canonical authorities and conditional establishment with affected model checks. Current-doc contradictions and the optional quest edge are reconciled; asset inventory is source-bound, not visual acceptance. The user made a Minecraft client available for isolated-profile preparation, but final Survival/exit acceptance waits the post-S2 candidate. Reuse unchanged shared/native proofs and keep later breadth held.",
   "prepared_assignments": [
+    {
+      "id": "s2-canonical-closure",
+      "task_id": "sustainability-model",
+      "also_advances": ["production-inventory"],
+      "status": "in_progress_checkpointed_binding_under_review",
+      "worker_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "e0a72c609e0519a8a18ddf476c326b6906e813fa",
+      "design": "ADR-0141; preserve ADR-0131/0135/0137/0140",
+      "owned_files": ["common sustainability package", "VerifySustainability/Adapters/Registry and affected model checks", "common/build.gradle", "forge/build.gradle", "QuestCatalogue/VerifyQuest optional edge only", "minimal shared WorkshopStructure/ProcessMachineKind binding and related checks"],
+      "local_checkpoints": ["cc3f11183da122e319341c81a1ba75aa8d656e69", "caa8095984ce0eed155ad0a88eee43555dba424d", "8ebd6343bf47b4f5c1c397eab58f3623a09295a2", "574488c6092ad13a755a59f0d9fe6804bda30862"],
+      "current_scope": "Real pack/registry evidence, formed non-consumed requirements, existing-loop unit candidate, conditional entry and scoped manual work, nullable unknown route tiers, explicit automation/manual production goal, actual calibration and Hand Pump authorities",
+      "blocking_review": "Binding caa needs conservative registry-absence proof, exact helper/overload matching and removal of independent regex inventory; targeted static fixtures assigned",
+      "model_review": "574488c preserves finite replay, scoped work and actual manual-goal batches; worker reports1731auditor/128adapter assertions. Independent changed-model review pending; not canonical T0 acceptance.",
+      "stop_condition": "Return coherent local source-bound increments and real closure findings; no invented kit, tier, terminal, waiver or public private-path leak; no remote publication or acceptance claims"
+    },
+    {
+      "id": "t0-canonical-documentation",
+      "task_id": "t0-integration",
+      "status": "reviewed_locally_integrated_with_source_corrections",
+      "worker_session_id": "a5b85ada-cbbc-4ae6-b166-a4e322750e1d",
+      "input_revision": "e0a72c609e0519a8a18ddf476c326b6906e813fa",
+      "delivery_commit": "0b9dae0c71e566a3bd754b209388a84efa98d52b",
+      "coordinator_commit": "0deb15132be1d0efd517679dc9931c6b267d9fc3",
+      "owned_files": ["README.md", "docs/tiers/t0.md", "T0 sections of docs/MACHINES.md and docs/PROCESSES.md"],
+      "review_corrections": "Atlas allEntries includes Bootstrap shaped/shapeless; current firing bands and five settling outputs; optional quest edge is now implemented; historical milestone text is not a new measurement",
+      "dispatch_boundary": "Independent documentation prerequisite, not dispatch of the final integration milestone",
+      "stop_condition": "Keep current truth distinct from preserved history and pending S2/player acceptance"
+    },
+    {
+      "id": "t0-asset-readiness",
+      "task_id": "renewable-t0",
+      "status": "reviewed_inventory_integrated_visual_acceptance_pending",
+      "worker_session_id": "703d615f-dfa6-4421-82a6-9bef5d4c979a",
+      "input_revision": "e0a72c609e0519a8a18ddf476c326b6906e813fa",
+      "local_checkpoints": ["44a7034e456746ecbb248e6621b454eba4f16b55", "6f6fa8fe6a255a432bff2a00391cb51afa100cde"],
+      "owned_files": ["docs/assets/t0-asset-manifest.json"],
+      "result": "19 blocks,65state models,257variants,14standalone icons; direct T0 outputs7/7 mapped, including slag. Static refs/JSON checked; no regeneration or visual pass.",
+      "remaining": "Firing schematic preview, four geometry-specific cues and production-quality review; metadata-dependent visuals wait stable S2/player-facing contracts"
+    },
+    {
+      "id": "t0-player-acceptance",
+      "task_id": "t0-integration",
+      "status": "preparing_portable_reference_pack_for_real_host",
+      "worker_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",
+      "input_revision": "e0a72c609e0519a8a18ddf476c326b6906e813fa",
+      "scope": "Produce a Prism-importable preparation ZIP with actual remapped Grindless, required Architectury, JEI, source provenance and instructions; preserve the expanded pack separately and do not change gameplay",
+      "authorized_runtime_revision": "b982b101a3e16182737d0f20f73827b8eb627f55",
+      "owned_files": ["pack/", "tools/build-modpack.ps1", "tools/build-modpack.sh", "directly related pack checks"],
+      "acceptance_gate": "Post-S2 candidate and entry/path frozen before the single no-command Survival acceptance; distinguish agent/client observation from human feedback",
+      "permission_boundary": "Use is authorized; protected install/auth/OS/legal actions retain their concrete confirmation/hand-off requirements. No credentials/account data in repo.",
+      "readiness_note": "Java17/Forge startup is observed but GLFW/WGL cannot create an OpenGL window in the VM. The user chose the real host, not driver workarounds. No game/world acceptance. Existing pack omitted required Architectury and carried stale entry/Matrix instructions; bounded fixes are part of delivery.",
+      "stop_condition": "Return source-bound importable ZIP and SHA256 with exact contents/limitations. Include a world only if actually generated cleanly by Minecraft; otherwise instruct fresh Survival creation on the host. Never fake acceptance or inject Survival resources."
+    },
     {
       "id": "smoke-assertion-budgets",
       "task_id": "renewable-t0",
@@ -582,7 +661,7 @@
     {
       "id": "renewable-t0", "title": "Completing C3 renewable runtime", "status": "in_progress", "depends_on": ["coordinator-receipt", "t0-processing", "t0-structures"],
       "owner": "bounded Sol 6.1 Max worker; Astra design and final review",
-      "next_action": "Reuse verified native completion, runner and bounded renewable-cycle evidence. Classify remaining factory, bootstrap, client and persistence properties; establish them with models/static composition where possible, and target only a genuinely uncovered behavior. No per-recipe native expansion or manual acceptance claim.",
+      "next_action": "Close canonical T0 alongside S2: reuse verified mechanisms, keep the optional quest edge/data and asset inventory consistent, and target only missing factory/player/persistence properties. No later-tier breadth or recipe-by-recipe native expansion.",
       "validation_focus": ["shared_contract_reuse", "static_data_for_ordinary_content", "representative_runtime_if_assumptions_are_unproved", "existing_unique_player_and_save_gates"],
       "acceptance": ["Correct heldConditions scope and Firing ceiling", "Safe partial gas extraction and backpressure, and re-verified exact secondary-fluid completion (ADR-0138, PA-0002)", "All Forge/JEI/client/menu/localization cases", "Exact recalculated recipe/test/ironBudget expectations", "Physical Matrix exit evidence: Research Terminal core, T0-route glass/copper/redstone and a recoverable five-unit batch; the exit stays a hand craft and no Bench route outputs a Relay Matrix (ADR-0137, PA-0002)", "Cancelled asset/state-fixture review", "Metal-free recovery and sustained mod-owned source/power cycles"]
     },
@@ -597,7 +676,7 @@
       "id": "sustainability-model", "title": "Implementing canonical sustainability validation", "status": "in_progress", "depends_on": ["coordinator-receipt"], "completion_requires": ["production-inventory"],
       "owner": "Astra architecture; bounded implementation workers",
       "design": "ADR-0135 accepted: typed loader-free annotations over live authorities, least-fixed-point availability/renewability, construction reserve, recycling rule, fingerprinted debt ratchet, generated reports",
-      "next_action": "For S2, author canonical T0 annotations and pack resolution, reconcile optional crank/extractor quest coupling and exact manual bootstrap. Run the complete applicable data/model audit while reusing S1's verified kernel; extend contract/regression proof only for a new domain or changed mechanism. Live closure remains uncertified.",
+      "next_action": "Finish S2 under ADR0141: repair the canonical registry-binding findings, derive full formation and conditional entry/work budgets, author real T0 classifications/routes/handling and manual-exit semantics, then require the applicable active-scope model/ratchet to pass without invented facts. The optional quest edge is implemented; broader closure remains in progress.",
       "validation_focus": ["static_data_classification_sources_tags_roots_budgets_handling", "shared_S1_contract_reuse", "affected_regressions_for_new_or_changed_invariants"],
       "acceptance": ["Seven resource and ten side-stream classes", "Complete tier/bootstrap/conditions/rates/recycling/handling metadata", "Recursive mandatory terminal-source proof", "Finite/vanilla/cycle/construction-reserve/recycling-exploit detection", "JSON and human reports", "CI ratchet with exact versioned visible debt", "Explicit T0-T15 unknowns instead of invented closure"]
     },

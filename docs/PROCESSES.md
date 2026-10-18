@@ -542,19 +542,18 @@ summary intentionally omits recipe bills and is not a second quantity catalogue.
 | Assembly Bench | Limited Bootstrap and four vanilla basic crafts; never the Relay Matrix exit. |
 
 The ceramic route has a real grog sink and a bounded non-amplifying solid-stock check. That check
-is not whole-mod sustainability closure. The native Atlas exposes generated processes,
-calibration and the T1 shaped catalogue, not exhaustive Bootstrap or vanilla crafting; actual
-client discovery remains an acceptance check.
+is not whole-mod sustainability closure. `AtlasLogic.allEntries` exposes generated processes,
+calibration, Bootstrap shaped/shapeless crafts and T1 shaped crafts. It is not an exhaustive
+vanilla viewer; actual client discovery remains an acceptance check.
 
 Quest objectives check item possession, not provenance or the construction of every intermediate;
 `calibrate.requires=[ceramics]` and `relay.requires=[calibrate]` remain intentional. The physical
-Core recipe and Research Terminal, explained by the canonical guide/exit, define how the calibrated
-core is made; a quest is neither a global permission nor a manufacturing certificate.
+Core recipe and Research Terminal define production; player guidance must explain that route.
+A quest is neither a global permission nor a manufacturing certificate.
 
-One quest edge is an approved correction: `quern` should require `multitool`, leaving `crank` and
-`extractor` as an optional branch with their existing IDs/rewards. At this pinned source,
-`QuestCatalogue` still requires `extractor` before `quern`; record this as pending until its code
-change lands. Do not add a quest barrier for the physical calibration intermediates.
+`quern` requires `multitool` after the checked `cc3f111` correction. `crank` and `extractor`
+remain an optional branch with unchanged IDs/rewards. No additional quest barrier is introduced
+for the physical calibration intermediates.
 
 ---
 

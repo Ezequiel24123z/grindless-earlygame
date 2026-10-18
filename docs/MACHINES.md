@@ -50,8 +50,8 @@ process roles on the shared machine engine, not recolored T1 ore processors.
 | --- | --- | --- | --- | --- |
 | Quern | Aggregate milling and recovery of fired/unfired ceramic stock | one input, two outputs | 4 FU/t; F0-rated 320 FU buffer; ambient | Single block; hopper input and automatic neighboring output |
 | Clay Mixer | Clay plus sand/grog and water become a ceramic body | two inputs, one output | 8 FU/t; F0-rated 320 FU buffer; ambient, stirred | Single block; a facing Hand Pump or adjacent water tank supplies its primary fluid |
-| Firing Chamber | Fuel-backed batch ceramics and brick firing | two inputs, two outputs | 8 FU/t control; 850 C held while fuel is a required recipe input | Controller plus seven brick blocks, fixed 2x2x2; all interfaces stay on the controller |
-| Settling Trough | Clay/aggregate separation with water recovery | one input, two outputs; 2000 mB buffer | 4 FU/t; F0-rated 320 FU buffer; ambient | Same-facing channel then screen behind the controller; air above the passive parts |
+| Firing Chamber | Recipe-banded ceramics, brick, biocarbon, glass and basic reduction | two inputs, two outputs | F0; recipe-specific held band within the 1450 C ceiling; the recipe declares its fuel/feed inputs | Controller plus seven brick blocks, fixed 2x2x2; all interfaces stay on the controller |
+| Settling Trough | Clay/aggregate/material separation with water recovery | one input, five outputs; shared fluid buffer | F0; ambient; live rates/capacity come from the process and fluid catalogues | Same-facing channel then screen behind the controller; air above the passive parts |
 | Geological Collector | Geological aggregate and clay source | process inputs/outputs | F0 process | Single block; requires a valid terrestrial rock bed and environmental conditions |
 | Biocultivator | Sunlit biomass source | process inputs/outputs | F0 process; daylight-dependent | Single block; no vanilla crop/tree farm dependency |
 | Biomass Dynamo | Biomass-fed F0 generation | generator buffer | F0 output | Single-block generator; complements rather than replaces the optional Hand Crank |

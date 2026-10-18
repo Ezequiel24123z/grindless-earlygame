@@ -15,6 +15,33 @@ entries below reference those records by id.
 
 ### Added
 
+- **T0 closure prioritized with concrete S2 boundaries (ADR-0141, PA-0005).** Canonical pack/tag and
+  registry evidence, live structure requirements, a conservative existing-loop normalizer
+  extension and a separate conditional manual-entry/work witness are the next data/model
+  work. Unknown progression tiers do not unlock prototypes; manual process work is not
+  transferable energy. Explicit automation separates the manual Matrix production goal from
+  recurring renewable supply. Existing shared/native proof is reused, not replayed per content
+  row. The plan retains sixteen tasks/dependencies and records independent workstream ownership,
+  binding-review findings and isolated client preparation without claiming a running game.
+- **Portable reference-client preparation selected.** The VM's observed OpenGL startup
+  failure is not hidden by a launcher-profile or Java-version claim. At the owner's request,
+  the worker prepares a Prism-importable production-jar ZIP for the real host, pinned to
+  reviewed pre-S2 runtime. Architectury completeness, current import instructions and a
+  minimal reference profile are required; the expanded pack and all acceptance gates remain
+  separate. No driver workaround, fabricated world or Survival result is claimed.
+- **The workshop no longer requires the optional extractor quest.** `quern` follows
+  `multitool`; crank/extractor IDs, rewards and branch remain unchanged. Focused quest
+  checks preserve evidence, one-shot claims and the intended calibration/Relay prerequisites.
+- **Active T0 documentation reconciled.** README, the T0 dossier and machine/process guides
+  retire obsolete stone-core, vanilla-farm, no-structure and mandatory-two-iron assumptions.
+  Atlas coverage now accurately includes Bootstrap shaped/shapeless routes; firing uses
+  recipe bands and settling has five outputs. Historical ADRs are preserved, and the old
+  survival checklist is clearly predecessor material pending the S2 candidate.
+- **Source-bound T0 asset readiness inventoried.** The manifest maps19blocks,65state models,
+  257rotated variants and14standalone item icons, including the previously omitted slag
+  output. It distinguishes code-rendered GUI/effects, static textures and still-unreviewed
+  visual quality. Firing preview and four geometry-specific effect cues remain gaps; no
+  texture regeneration, new animation or production-art acceptance is claimed.
 - **Risk-based validation and reusable proof adopted (ADR-0140, PA-0004).** Remaining
   T0/S1/S2/C3, UI/data and held-port work is classified as shared-contract, static/data,
   representative integration, regression or unique behavior. Reuse requires matching

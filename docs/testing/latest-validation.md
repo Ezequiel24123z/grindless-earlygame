@@ -1,5 +1,38 @@
 # Current T0 rework validation
 
+## Active S2 and player/asset preparation, 2026-10-18
+
+The prior source-bound proofs below remain reusable under ADR-0140. This checkpoint adds
+reviewed documentation/asset inventory and the tested optional quest edge, not canonical S2
+closure or a new native run. Local S2 source is preserved in the worker's Git history and is
+not yet integrated. Worker test results do not override outstanding review findings.
+
+| Increment | Evidence and state | Boundary |
+| --- | --- | --- |
+| Optional quest branch, `cc3f111` | Common compile and full `VerifyQuest` passed; quern follows multitool; IDs, optional branch rewards, calibration/Relay links and one-shot claims unchanged | One source-reviewed prerequisite change; no new runtime/client pass |
+| Pack/registry, `caa8095` | Worker reports 128 adapter, 402 registry and 1,127 auditor assertions plus deterministic two-JVM export; 1,377 resources, 468 routes, 259 tags, 25 objectives | Unannotated: 2 errors, 1,893 unknowns. Two P1s (partial scan/absence and helper overload binding) and one P2 (independent regex inventory) require correction/recheck |
+| Formation/normalizer, `8ebd634` | Worker reports 1,162 auditor, 128 adapter and 402 registry assertions plus Workshop; shared formation and conservative unit candidate | Pending review/integration; initial fixture hit an earlier guard and was replaced by a genuine two-leg counterexample, not concealed |
+| Conditional entry/manual goal, `574488c` | Worker reports 1,731 auditor and 128 adapter assertions: finite replay, scoped actions, retained native FU, null tiers and actual five-unit/count-aware goal batches | Pending independent model review/integration. A nested declaration initially failed compilation and was corrected; canonical binding/annotations and physical craft remain unaccepted |
+| Current documentation, `0b9dae0` -> `0deb151` | Four active docs reconciled; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest wording | Historical ADRs and old failures remain evidence of their own sources; old Survival checklist is predecessor material |
+| Asset inventory, `44a7034` + `6f6fa8f` | Static JSON/source/model checks cover 19 blocks, 65 state models, 257 variants, 14 standalone icons and 7 direct owned outputs; 44 references exist | Initial slag omission corrected separately. No generation, animation, visual acceptance or production-art pass |
+| Integrated selection, `b982b10` | Offline Gradle classpath export, compilation and `VerifyQuest` 374 / `VerifyAssets` 573 / `VerifyT0Preparation` 520 assertions pass; no tracked files changed | Three selected checks only. Documentation/plan continuation does not change these executable inputs; no full-suite or native replay |
+| Client preparation | Isolated Java 1.20.1 / Forge 47.4.23 profile; log confirms Java 17 and GLFW/WGL context failure before a game window | No world created/loaded; user redirected to Prism ZIP for the real host, not VM driver work. Actual game/mod UI, physical exit, Survival and retained-world acceptance remain open |
+
+The S2 raw inventory increased because previously omitted declarations were added. This is
+not a new successful closure result. Its old noncanonical empty-blacklist finding was fixed
+in the second local increment; do not interchange that report's counts with the canonical
+1,893-unknown export. Calibration and Hand Pump projection, conditional entry/work, explicit
+automation/manual-exit semantics, actual T0 annotations and live enforcement remain in progress.
+Private client paths, account data and generated inventory reports are not committed.
+The first documentation/JSON checkpoint check passed 529 links with all 141 ADR index rows;
+16 product IDs, 20 dependency edges and prior acceptance criteria were preserved. Its first
+generic reference scan mistakenly included a descriptive `status_semantics` field; the
+correct structural task-graph check passed without changing source or criteria. Selected
+check evidence is retained in `build/validation/t0-doc-assets-checkpoint/verification.txt`.
+Portable-pack preparation uses reviewed runtime `b982b10`, not an invented post-S2 freeze.
+The package still needs explicit Architectury, current instructions and a minimal reference
+profile distinct from the existing expanded client pack.
+
 ## Reusable acceptance snapshot, 2026-10-18
 
 [ADR-0140](../DECISIONS.md#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions)

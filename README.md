@@ -16,8 +16,9 @@ Kardashev scales. The goal is the black hole at the centre of the Milky Way. See
 The early hours of a typical pack are still the wrong way to start that ladder. Punch
 wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next
 tier: the foundation replaces that opening with automation, so the long game can begin.
-Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Their
-code and assets do not enter this repository (ADR-0088).
+Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Any actual
+code or asset reuse follows the current [third-party policy](AGENTS.md#conventions) and
+[notices](THIRD_PARTY_NOTICES.md); a design reference is not permission to copy its implementation.
 
 The arc runs from an optional hand-crank/two-iron quick start, through belts, reactors and a
 particle accelerator, out past orbit, and on to that black hole. Arriving is the victory.
@@ -168,7 +169,8 @@ These are the rules every feature is measured against.
 6. **Fail legibly.** When something is wrong the player must be able to see *what* and *why* —
    hence proportional brownouts instead of one randomly starved machine.
 7. **Never hard-block the player.** Under-powered machines slow down; they do not stop.
-8. **Original assets only.** Every texture and model is made for this project.
+8. **Original or properly licensed assets.** Prefer the project's deterministic assets;
+   compatible reuse requires exact provenance, licence review and distribution notices.
 9. **Everything is a chassis plus modules.** Machines take upgrades, conduits take cores, drones
    take pods, pylons take bay modules. One pattern learned once, applied everywhere, and capability
    always arrives by slotting something in rather than by crafting a replacement block.
@@ -2097,9 +2099,9 @@ The Forge 1.20.1 repository contains systems spanning T0–T2 and later travel/w
 Their implementation and historical smoke coverage are not acceptance of an Industrial or
 space-era survival campaign. **T0 is the only active tier; no tier is accepted.**
 
-**Historical prototype milestone:** an earlier build recorded automated iron in under fifteen
-minutes without hand-mining. That result predates the current T0 gate and is not current T0
-playtime or tier acceptance.
+**Historical prototype claim:** the earlier roadmap described automated iron in under fifteen
+minutes without hand-mining. That statement is not a current source-bound playtime measurement
+or T0 acceptance.
 
 ### Campaign restoration *(current)*
 
@@ -2238,7 +2240,7 @@ to proceed together under Astra; integration and manual gates still control acce
 | 24 | Orbital layer: launch, satellites, station | prototypes exist; survival implementation is rescheduled to T10 (ADR-0107) |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | planned for T11 (ADR-0068, ADR-0107) |
 | 26 | CI workflow | ✅ done — unified fast [validation entry](docs/testing/test-strategy.md) plus isolated production smoke shards; ADR-0049, ADR-0126, ADR-0128 |
-| 27 | **Autonomous build-out** | active — S1/native completion and bounded renewable cycle verified; risk-based proof reuse (ADR-0140); S2/data and genuine manual gaps pending, ports held; see [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) |
+| 27 | **Autonomous build-out** | active — reusable S1/native proofs; canonical T0 closure with parallel S2/docs/client/assets work (ADR-0140/0141); manual gaps and ports remain held; see [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) |
 | 28 | **Prototype expansion** | ✅ technically complete — worlds, travel and quests are validated prototypes; ADR-0107 withdraws their premature survival route |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
@@ -2258,10 +2260,10 @@ to proceed together under Astra; integration and manual gates still control acce
 | 32 | **BQ — Physical T2 gate** | held behind BP acceptance — the F2 route exists as implementation inventory; T2 is not the active tier or accepted survival progression |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **T0 workshop and renewable supply** | S1 core, C3 native restoration and bounded daylight source-cycle proofs exist within their stated scopes; S2 canonical annotations/full closure, client/no-command survival and saved-world acceptance remain pending |
+| 35 | **T0 workshop and renewable supply** | existing S1/C3/daylight proofs retained; optional quest edge corrected and current docs/assets inventoried; S2 authority/establishment increments under review, full closure and player/saved-world acceptance pending |
 | 35a | **Historical foundation verification** | historical **CONDITIONAL GO** — 33 suites/build/docs and 41 production scenarios; not current-WIP or Tier acceptance. Manual gates block merge, not authorized T0 development; [validation ledger](docs/testing/latest-validation.md) |
 | 36 | **Historical T0 preparation** | [Tier specification](docs/tiers/t0.md), [research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [manual checklist](docs/testing/t0-survival-acceptance.md) remain useful; the old no-expansion restriction is superseded |
-| 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md) integrated with 26 synthetic checks; complete inventory/exporter/auditor, real data, CI artifact and real-data review remain incomplete alongside gameplay |
+| 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md) integrated with 26 synthetic checks and S1 auditor implemented; canonical S2 export/annotations, real dashboard data, CI artifact and real-data review remain incomplete |
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
 
@@ -2318,8 +2320,9 @@ hand craft.
 The Firing Chamber is a controller plus seven brick blocks in a 2x2x2 volume. The Settling Trough
 uses a controller, channel and screen with open space above its passive parts. Machine I/O stays
 at controllers; general replaceable ports and ME integration are not implemented T0 capabilities.
-The native Atlas exposes generated processes, calibration and the T1 shaped catalogue, not every
-Bootstrap or vanilla craft.
+`AtlasLogic.allEntries` supplies the native Atlas with generated processes, calibration,
+Bootstrap shaped/shapeless crafts and the T1 shaped catalogue. It is not an exhaustive vanilla
+recipe viewer; actual client discovery remains a separate acceptance property.
 
 The [workshop specification](docs/tiers/t0.md) sets a 35–60 minute target from material entry;
 actual playtime is unmeasured. Existing S1/C3/source proofs are bounded: S2 canonical data and

@@ -4,6 +4,36 @@
 Record the exact mod jar hash, pack manifest revision, Java/Forge version, world seed,
 operator, dates and evidence paths when this checklist is actually performed.
 
+## Active closure preparation
+
+The canonical candidate and entry requirements must be frozen from S2 before this becomes
+an executable acceptance route. The two-iron Dynamo/Extractor branch is optional; `quern`
+now follows `multitool`. Normally acquired entry materials are requirements, not a gifted kit.
+The current Core recipe, workshop/source routes and manual five-Matrix exit are defined in
+[the T0 contract](../tiers/t0.md) and their live catalogues.
+
+Prepare one isolated production client/profile and one fresh ordinary-Overworld Survival
+path, cheats off, with no injected inventory or diagnostic carryover. The actual five-Matrix
+craft, recognition of the T0 exit and the player-facing guidance can be observed in that path;
+do not add separate native runs for ordinary recipes already covered by shared contracts.
+Retained-world compatibility uses an authentic separately preserved pre-candidate save/copy,
+not a fresh NBT fixture. Record agent-driven versus human observations accurately, without
+publishing account or private machine identifiers.
+
+**Portable preparation, not acceptance.** The current VM reaches Java 17/Forge startup but
+cannot create its OpenGL window. The owner chose a Prism-importable ZIP on the real host
+instead of VM graphics changes. Reviewed runtime `b982b10` may be packaged for preparation
+with its actual remapped jar, required Architectury and JEI; this is not a post-S2 candidate.
+Preserve the expanded utility pack separately. Include only an actually generated clean
+world if available; otherwise create fresh Survival with cheats off after import. No
+gameplay proof follows from an archive, launcher profile or generated world.
+
+The former route below is preserved as a predecessor checklist, not authorization to require
+its old entry bill or to bypass the current native source chain. Once S2 requirements are
+established, replace the executable route with the single source-bound candidate itinerary.
+The earlier F2 diagnostic section is reference coverage, not an instruction to advance T1/T2
+while T0 is being closed.
+
 ## Separate the two worlds
 
 **Survival world:** create a fresh ordinary Overworld, Survival, cheats off. Use the same jar
@@ -16,7 +46,7 @@ material entry, not a bare spawn; record acquisition time separately. No `/give`
 for the client/NBT checks below. Its commands and screenshots do not count as survival evidence.
 Keep both worlds and their logs separate. Back up any existing world before migration testing.
 
-## No-command route
+## Preserved predecessor no-command route — not the current candidate
 
 | Step | Action | Expected observation / failure indicator | Evidence to record |
 | --- | --- | --- | --- |

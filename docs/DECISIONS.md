@@ -152,6 +152,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0138](#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly) | A batch completes only after its fluid inputs are re-verified and drawn exactly | Accepted |
 | [0139](#adr-0139--long-native-smokes-carry-their-own-assertion-budget) | Long native smokes carry their own assertion budget | Accepted |
 | [0140](#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions) | Validate behavioral classes and reuse proof under explicit assumptions | Accepted |
+| [0141](#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment) | Canonical T0 closure uses real authorities and conditional establishment | Accepted |
 
 ---
 
@@ -6334,3 +6335,87 @@ classes and impact triggers; the execution plan and check ledger reference it.
 all instances as equivalent despite different assumptions; discarding source-bound passes
 when only unrelated content changes; and using proof reuse to hide missing evidence or
 weaken acceptance. Coverage of behavioral classes, not executed-check count, is the objective.
+
+---
+
+## ADR-0141 — Canonical T0 closure uses real authorities and conditional establishment
+
+**Status.** Accepted, 2026-10-18; S2 implementation and its source-bound closure are in progress.
+
+**Context.** The owner prioritizes coherent T0 acceptance over new tier breadth. S1 supplies a
+verified audit kernel, but canonical pack membership, real source annotations, full construction
+and an honest finite establishment witness are still needed. Existing shared/native proofs are
+reused under ADR-0140; unclassified data is not a native scenario per entry.
+
+**Decision.**
+- Keep the full implemented inventory, separating active T0 facts from unknown/unaccepted later
+  placement. Do not erase routes, invent tiers or waive mandatory findings to make the audit green.
+- Export actual Gradle-resolved Forge resource inputs through a small build-task seam. Verify
+  `TagEntry`/`TagLoader` membership, required/optional, nested, removal and replacement semantics
+  against the actual Minecraft/Forge implementation. Use demonstrated layer precedence or prove
+  that the concrete composition is order-independent; filenames, hashes and namespace guesses
+  are not registration or precedence evidence. Runtime registry access stays outside the pure
+  model/auditor, and absolute cache paths stay out of public projections.
+  A route may have real environmental evidence while its progression tier is unknown:
+  nullable `RoutePolicy.unlockTier` means not unlocked and retains `route_tier_unknown`,
+  never an implicit T0. Physical atmosphere/light terminals do not unlock a prototype.
+- Give `Route` an explicit `automatable` fact, independent of ownership. Manual crafting
+  provides availability but cannot enter renewable supply or a renewable `ClosedLoop`.
+  Adapters must derive the fact from the actual mechanism: a physical producer is not
+  automatically an automated producer. Preserve the old constructor for S1 compatibility,
+  not as evidence for canonical adapters; include automation in fingerprints and exports.
+- Treat `TierPlan.exitObjective` as a finite production/availability goal, not recurring
+  demand for the manual Matrix itself. Its canonical route must execute even when assumed
+  stock or a gift already contains the goal, with batch output and objective count derived
+  from the real authorities. Consumed exit ingredients still require renewable supply;
+  construction and non-consumed requirements retain their availability obligations.
+  Do not add the Relay quest's Matrix subject back as a recurring root, weaken unrelated
+  recurring roots, or make the Assembly Bench fabricate the five-unit manual batch.
+  This refines the audit meaning of ADR-0137's mandatory exit root without changing gameplay.
+- Reuse non-consumed route requirements for formation. Keep the controller in
+  `Machine.construction`, derive non-air pieces from `WorkshopStructure.cells`, and share the
+  existing family-to-structure link with the runtime instead of copying counts into annotations.
+  Current T0 cells exclude the controller. The witness covers one installation per family,
+  not simultaneous reuse of physical pieces across installations; structural pieces must not
+  be mislabeled as chemical catalysts. No fictitious registered assembly item is introduced.
+- The existing `ClosedLoop` representation can describe the source-production circuit with
+  aggregate as a zero-net carrier. Its normalizer needs a conservative unit-vector candidate
+  when that carrier closes exactly and other internal balances are nonnegative. Retain the
+  exact normalizer fallback and all environmental, loss, independent-feed and executable-startup
+  checks. A positive net output does not pay its own earlier prefix, and finite carrier stock
+  does not become unlimited supply. No new general solver or production-system API is required.
+- Represent manual entry requirements separately from real guarantees. A sufficient finite bill
+  is derived from real recipe/formation/order requirements and then checked by replaying the
+  witness with that finite budget, without unlimited manual replenishment. Report guaranteed,
+  player-provided, required and remaining amounts separately, together with the conditional
+  profile and its identity. Do not claim a globally minimal bill, a gifted kit or guaranteed
+  world loot. `MANUAL_WORLD` and `MANUAL_LABOUR` retain no guaranteed quantity.
+- Respect physical bootstrap interfaces. Account for the reusable tool, and do not let abstract
+  manual FU imply arbitrary transport: the portable Crank Handle applies to F0 process machines,
+  not the Research Terminal. Keep its conditional work allowance separate from transferable
+  `ENERGY` stock: it may pay only an eligible process batch and never enters renewability.
+  Eligibility is derived from the real interface/rating contract. Actual generator construction
+  and the canonical source route remain requirements rather than being bypassed by a generic
+  energy credit.
+- `quern` follows `multitool`; `crank` and `extractor` remain optional with existing IDs and
+  rewards. `calibrate` still follows `ceramics`, and `relay` follows `calibrate`. Quests check
+  possession/claim state, not provenance or the fabrication of every intermediate. The physical
+  recipe/Terminal route, not a redundant quest permission, defines production.
+- Deliver portable client preparation separately from acceptance. A source-pinned Prism-
+  importable ZIP may precede final S2 closure, but it must carry the actual production
+  remapped artifact and honest provenance, not a post-S2 label. The reference client uses
+  Grindless, its required Architectury dependency and JEI for recipe discovery. Preserve
+  the existing expanded client pack separately: its utilities, extra content and mixins
+  are not part of the standalone canonical audit assumption. Launcher-managed dependencies
+  retain verified upstream pins and licences. A supplied world must actually be generated
+  by Minecraft without fixtures, commands or injected stock; otherwise create a fresh
+  Survival world on the capable host. Do not fabricate NBT or repair an unsupported VM
+  graphics environment merely to avoid honest host-side observation.
+
+**Validation and consequences.** Static/model checks cover the new authority/profile data and
+the affected normalizer, reserve, membership, formation, automation, exit and quest contracts. A genuinely new
+runtime binding needs one appropriate proof, not one world per tag or recipe. Existing S1,
+native restoration and bounded daylight-cycle evidence remains valid within its assumptions.
+The conditional entry witness must later be confronted with an actually acquired survival
+inventory. Neither these decisions nor a diagnostic client/world accept T0, a retained world,
+the physical five-Matrix playthrough or any T1--T15 expansion.

@@ -272,9 +272,9 @@ canonical labels and explicit source-bound evidence. Fixtures are not progressio
 Astra owns canonical schema/annotations. A bounded worker extracts real `ProcessGraph`,
 `SupplyCatalogue`, local tags, `BootstrapRecipes`, `T1Recipes`, other authored JSON and quests
 from an agreed pinned revision. Existing catalogues retain quantity authority; serialize shared
-metadata/catalogue edits. Full inventory/exporter, recursive auditor, real data, CI reports/
-artifacts and production serving remain incomplete; this section names ownership, not existing
-implementations. Player communication and dashboard views must project the same model.
+metadata/catalogue edits. Canonical inventory completion, annotations/live enforcement, real
+dashboard data, CI artifacts and production serving remain incomplete. Player communication
+and dashboard views must project the same model.
 The [ADR-0135](DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
 S1 core is implemented and verified on `639881f`: loader-free `sustainability` model/auditor,
 `AuthorityAdapters`, `TagResolver`, `ConstructionReserve`, `DebtManifest` and `AuditReports`.
@@ -284,8 +284,25 @@ S1 core is implemented and verified on `639881f`: loader-free `sustainability` m
 Circulating finite inventory is not unlimited net supply. Construction and hazardous handling
 share one exact reserve witness; unresolved tag precedence stays unknown, never a sorted-hash
 guess. Source identities must cover normalized authorities and the executed implementation.
-S2 annotations, canonical pack resolution and live enforcement remain pending. Follow the
-current validation ledger; a core test pass is not a renewable-supply certification.
+S2 proceeds under
+[ADR-0141](DECISIONS.md#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment).
+Its local, not-yet-integrated pack binding owns `CanonicalPack`, `TagResolver`, adapter/report
+changes, the two Gradle classpath-export tasks and `VerifySustainabilityRegistry` in tools.
+Actual registry/bootstrap access and JDK declaration analysis must stay outside the pure
+model/auditor and runtime UI; partial syntax coverage cannot establish absence, and accepted
+helper calls must bind to the validated signature. Do not keep a second regex inventory.
+The shared `WorkshopStructure.forFamily` seam derives formation requirements rather than
+duplicating physical counts. Construction, unit-vector normalization, conditional work and
+finite manual-exit changes extend existing model checks; unchanged native proofs are reused.
+The compatible `Route` constructor is not canonical automation evidence. Manual exit
+production is required, but its Matrix is not an automated recurring root or a Bench output.
+Follow the current validation ledger; a core test pass is not renewable-supply certification.
+
+Stable asset readiness lives in `docs/assets/t0-asset-manifest.json`; `source_bound_readiness`
+is its complete current inventory, while legacy arrays preserve candidate descriptors.
+The worker inventoried existing source/state/model/icon/effect coverage, not approved art.
+The active section of `docs/testing/t0-survival-acceptance.md` controls client preparation;
+the predecessor checklist is not the post-S2 route or an instruction to advance into T2.
 
 The functional-port follow-up starts after current integration with an audit of Firing/Trough/
 Ground Array and all authored structures. It does not authorize starting the old kernel slice

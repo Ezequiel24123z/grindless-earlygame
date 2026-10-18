@@ -23,17 +23,24 @@ external rollback is claimed. The manual Matrix exit, existing native
 sources and external side restrictions are preserved.
 
 T0 source evidence is not classification: the two-iron quick start is an optional manual
-allocation, initial boards/bricks need explicit bootstrap, and Astra must reconcile optional
-crank/extractor progression with quest prerequisites before S2. Static resource review found
-no proven C3 mapping defect; client/visual acceptance remains pending.
+allocation, and initial boards/bricks need explicit bootstrap. `cc3f111` makes the quern quest
+follow the multitool rather than the optional extractor; branch rewards and calibration/Relay
+links remain unchanged. Current docs and the source-bound asset inventory are reconciled,
+not client/visual acceptance.
 
 The bounded renewable-cycle proof is integrated in `fdce60b`: tested `39baaa0` passed its
 ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its README-only
 clarification does not require another server run. Downstream/core material evidence is
 not complete downstream power/autonomy or physical Matrix crafting acceptance.
 
-Next: S2 canonical data/pack resolution, classifications, bootstrap/progression and live
-model validation. Reuse the existing shared contracts; select new native/manual evidence
+Next: close canonical T0 under ADR-0141 / PA-0005: S2 real authorities, classifications,
+formed construction, finite conditional establishment and the honest manual-exit witness.
+The local pack/registry checkpoint is under targeted review correction; it is not accepted
+canonical closure. Current documentation, client-profile preparation and stable asset
+inventory proceed independently. Freeze the post-S2 candidate and canonical entry/path
+before the one full no-command Survival acceptance. Player-facing coherence and production
+asset work follow the trustworthy contracts and observed feedback, not new T1-T15 breadth.
+Reuse the existing shared contracts; select new native/manual evidence
 only for an uncovered property or changed assumption, using
 [the classification matrix](testing/test-strategy.md#outstanding-work-classification).
 Product dependencies, held ports, required CI and genuine manual gates are unchanged.
@@ -61,12 +68,12 @@ data are required implementation, not substitutes for renewable gameplay.
 | T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
 | T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
 | renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | composed native contract and bounded renewable cycle verified; reuse their scopes, assess only remaining distinct factory/player/persistence properties |
-| production-inventory | Complete source-bound graph/craft/tag/objective export | pending; earlier extraction delivered partial research, not JSON |
-| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified: 36 suites and deterministic reports; S2 annotations, canonical pack resolution and live closure pending |
+| production-inventory | Complete source-bound graph/craft/tag/objective export | S2 exports actual pack inputs and a larger local inventory; conservative registry binding and omitted physical authorities still under correction, not accepted |
+| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | S1 core verified; S2 local formation/normalizer increments and conditional-entry/manual-exit implementation in progress; annotations/live closure pending |
 | resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | pending model integration |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
 | dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | incomplete; follows renderer/model |
-| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | pending model/communication/dashboard and genuine gaps; aggregate valid proof rather than replay equivalent content |
+| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | current docs reconciled and isolated launcher profile prepared; no observed game window/world yet. Final candidate, physical exit, single Survival route and retained-world acceptance remain pending |
 | multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
 | multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |
 

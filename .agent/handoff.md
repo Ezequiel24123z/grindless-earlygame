@@ -13,7 +13,8 @@ or publishers. The retired session is quiescent; no further report to it is requ
 Start with `AGENTS.md`, [the work plan](work-plan.json), [pending checks](pending-checks.json),
 [risk-based validation](../docs/testing/test-strategy.md) and
 [revision-bound evidence](../docs/testing/latest-validation.md). The plan still has the same
-16 product tasks and dependencies. Read only relevant ADRs and task-map sections afterward.
+16 product tasks and dependencies; revision6/PA-0005 records the owner's T0-closure priorities.
+Read only relevant ADRs and task-map sections afterward.
 
 Receipt of `b012bc4` was verified and published as `33b077c`. All three original fingerprints
 match the plan: two staged attachments and the authorized legacy T0 reference, all captured
@@ -47,10 +48,11 @@ Independent QA/architecture review found no blocker to this map; review coverage
 and invalid assumptions, not equivalent successful cases. No accepted proof was discarded,
 replayed or weakened merely because the policy changed.
 
-- **S2/inventory:** data/model validation first: canonical pack/tag resolution, T0 roots,
-  classifications, handling and source provenance, exact reserves and live ratchet. Two iron
-  is optional manual bootstrap, not a guaranteed reward; initial boards/bricks and the
-  optional crank/extractor quest chain still need explicit reconciliation.
+- **S2/inventory:** data/model validation first. ADR-0141 authorizes real pack/registry
+  binding, derived formation, a conservative existing-loop candidate, conditional finite
+  entry/scoped manual work, unknown tiers and an explicitly manual production exit.
+  Two iron remains optional, not guaranteed. `cc3f111` reconciles the quest edge:
+  `quern` follows `multitool`; calibration/Relay claims and optional branch rewards are unchanged.
 - **C3/T0:** reuse the executor, transaction, reload and native-source proofs. Assess remaining
   factory power/routing/restart assumptions with models/static composition first; add only a
   targeted missing behavioral class when that evidence is insufficient.
@@ -67,6 +69,31 @@ classifies each remaining area and names change-triggered proof sets. Acceptance
 and required CI/release checks remain intact; do not reopen successful cases without an
 invalidated assumption or a genuine new property.
 
+## Current bounded workstreams
+
+| Owner/session | Current checkpoint and boundary |
+| --- | --- |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | `cc3f111` integrated; local `caa8095` pack/registry, `8ebd634` formation/loop and `574488c` conditional-work/manual-goal increments are not yet integrated. Two P1 registry-conservatism findings and one P2 inventory-parser finding must be repaired and rechecked; changed-model review is pending. Real calibration/pump authorities, annotations and closure continue. |
+| Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
+| Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
+| Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Java 17 and Forge 47.4.23 reach native startup, but the VM cannot create an OpenGL window. The user redirected work to an importable Prism ZIP for the real host. Reviewed runtime `b982b10` is authorized for preparation only; minimal reference pack, actual remapped jar/provenance and import instructions are in progress. No world or client acceptance exists. |
+
+The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
+physical exit, one full no-command Survival route, coherent player-facing projections and
+production-ready T0 assets. They are not a serial documentation waterfall: stable preparation
+can proceed independently, but final Survival uses the frozen post-S2 candidate and entry bill.
+Guidance needed to exercise that route must be ready before the playthrough; its feedback then
+informs final communication. Later-tier breadth and ports remain held.
+
+S2's larger unannotated inventory is not a regression in closure or a certification. Counts
+and local worker results are in the validation ledger; the reviewed source-binding fixes and
+actual annotations are prerequisites for trusting its canonical verdict. No client/Survival
+or retained-world acceptance is recorded, and existing personal worlds remain untouched.
+The portable reference profile contains Grindless, required Architectury and optional JEI;
+the existing expanded pack remains separate. Do not repair VM drivers, invent a world/save
+or call this pre-S2 bundle the final acceptance candidate. Packaging owns only `pack/`,
+the paired build-modpack tools and related checks; source pins remain coordinator-controlled.
+
 ## Publication and preservation
 
 Keep draft [PR54](https://github.com/Ezequiel24123z/grindless-earlygame/pull/54), head
@@ -77,9 +104,12 @@ reviewed checkpoints, verifies live PR/ref state and advances both branches by f
 No replacement PR, force-push, retarget or old/main-checkout writes. Keep old Agent merge,
 automation and subscriptions disabled. Preserve child worktrees and their source-bound logs.
 
-The bounded coding and runtime workers finished and released their owned smoke ports.
-No further native replay is queued for policy adoption or README-only changes. Resolve the
+The prior bounded runtime workers finished and released their owned smoke ports; S2 and
+client preparation are current work, not stale tasks to archive. No further native replay is
+queued for policy adoption or README-only changes. Resolve the
 latest documentation checkpoint through Git rather than inventing a self-referential SHA.
+The selected integrated quest/assets/preparation checks passed on `b982b10`; later edits in
+this checkpoint are documentation/plan only. See the validation ledger for exact boundaries.
 
 ## Archived orchestration narrative
 
