@@ -42,7 +42,7 @@ public final class SustainabilityAudit {
                              Set<Resource> available, Set<Resource> renewable,
                              Set<String> availableRoutes, Set<String> renewableRoutes,
                              List<Reserve> reserves, Map<Resource, Long> retainedInventory, WorkReserve manualWork,
-                             GoalWitness exitProduction, String unknown) {
+                             GoalWitness exitProduction, Map<String, Long> establishmentBatches, String unknown) {
         public TierResult {
             mandatory = sortedSet(mandatory);
             recurring = sortedSet(recurring);
@@ -52,6 +52,17 @@ public final class SustainabilityAudit {
             renewableRoutes = sortedSet(renewableRoutes);
             reserves = List.copyOf(reserves);
             retainedInventory = sortedMap(retainedInventory);
+            establishmentBatches = sortedMap(establishmentBatches);
+        }
+
+        /** Preserves the result constructor used before completed-batch provenance was exported. */
+        public TierResult(int tier, Set<Resource> mandatory, Set<Resource> recurring,
+                          Set<Resource> available, Set<Resource> renewable,
+                          Set<String> availableRoutes, Set<String> renewableRoutes,
+                          List<Reserve> reserves, Map<Resource, Long> retainedInventory, WorkReserve manualWork,
+                          GoalWitness exitProduction, String unknown) {
+            this(tier, mandatory, recurring, available, renewable, availableRoutes, renewableRoutes,
+                    reserves, retainedInventory, manualWork, exitProduction, Map.of(), unknown);
         }
 
         /** Preserves unprofiled S1 result construction. */
@@ -468,7 +479,7 @@ public final class SustainabilityAudit {
         reserve.findings().forEach(this::finding);
         return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes,
                 renewableRoutes, reserves, reserve.retainedInventory(), reserve.manualWorkReserve(),
-                reserve.exitProduction(), null);
+                reserve.exitProduction(), reserve.establishmentBatches(), null);
     }
 
     private void addObjectiveRoots(String id, Set<Resource> roots, Set<String> visited, Resource exitGoal) {

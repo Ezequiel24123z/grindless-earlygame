@@ -93,6 +93,10 @@ final class ConstructionReserve {
         return exitProduction;
     }
 
+    Map<String, Long> establishmentBatches() {
+        return profile == null || deriving ? Map.of() : sortedMap(executions);
+    }
+
     Map<Resource, Long> retainedInventory() {
         return sortedMap(locked);
     }
@@ -574,9 +578,13 @@ final class ConstructionReserve {
             shortage(resource, amount - free(resource));
             return false;
         }
+        int previousFindings = findings.size();
+        Map<Resource, Long> previousShortages = new TreeMap<>(shortages);
+        boolean previouslyUncertain = uncertain;
         try {
             for (Route source : snapshot.routes().values()) {
-                if (source.oneShot() && audit.unlocked(source, tier) && !claimed.contains(source.id())
+                if (source.authority() == Authority.QUEST_REWARD && source.oneShot()
+                        && audit.unlocked(source, tier) && !claimed.contains(source.id())
                         && audit.outputAmount(source, resource) > 0) {
                     execute(source, 1);
                     if (free(resource) >= amount) {
@@ -622,8 +630,22 @@ final class ConstructionReserve {
                 if (yield > 0) {
                     long missing = amount - free(resource);
                     long batches = 1 + (missing - 1) / yield;
-                    if (execute(route, batches) && free(resource) >= amount) {
+                    execute(route, batches);
+                    if (free(resource) >= amount) {
                         return true;
+                    }
+                }
+            }
+            for (Route fallback : snapshot.routes().values()) {
+                if (manualCraft(fallback) && (route == null || !fallback.id().equals(route.id()))) {
+                    long yield = audit.outputAmount(fallback, resource)
+                            - fallback.inputs().getOrDefault(resource, 0L);
+                    if (yield > 0) {
+                        long missing = amount - free(resource);
+                        execute(fallback, 1 + (missing - 1) / yield);
+                        if (free(resource) >= amount) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -633,8 +655,33 @@ final class ConstructionReserve {
             shortage(resource, amount - free(resource));
             return false;
         } finally {
+            if (free(resource) >= amount) {
+                // Alternative branches are not obligations. Keep every completed sub-batch and its costs.
+                findings.subList(previousFindings, findings.size()).clear();
+                shortages.clear();
+                shortages.putAll(previousShortages);
+                uncertain = previouslyUncertain;
+            }
             pending.remove(resource);
         }
+    }
+
+    private boolean manualCraft(Route route) {
+        if (route.automatable() || route.oneShot() || !audit.unlocked(route, tier)) {
+            return false;
+        }
+        RoutePolicy policy = annotations.routes().get(route.id());
+        if (policy == null || policy.optional()) {
+            return false;
+        }
+        return switch (route.authority()) {
+            case CRAFTING_JSON, BOOTSTRAP_RECIPES, T1_RECIPES -> true;
+            case VANILLA_TRANSFORMATION -> route.durationTicks() == 0 && route.fuPerTick() == 0
+                    && (route.family() == null || route.family().equals("CRAFTING_TABLE"))
+                    && ("minecraft:crafting_shaped".equals(route.conditions().get("crafting_type"))
+                    || "minecraft:crafting_shapeless".equals(route.conditions().get("crafting_type")));
+            default -> false;
+        };
     }
 
     private Route replenishing(Resource resource) {

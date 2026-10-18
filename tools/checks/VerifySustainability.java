@@ -103,7 +103,7 @@ public final class VerifySustainability {
                 VerifySustainability::convergedMakeUp, VerifySustainability::formedConstruction,
                 VerifySustainability::productiveZeroCarrier, VerifySustainability::environmentWithoutTier,
                 VerifySustainability::conditionalEntry, VerifySustainability::manualExitGoal,
-                VerifySustainability::localWorkNativeProduction)) {
+                VerifySustainability::localWorkNativeProduction, VerifySustainability::manualEstablishment)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -111,6 +111,148 @@ public final class VerifySustainability {
                 failure.printStackTrace(System.out);
             }
         }
+    }
+
+    private static void manualEstablishment() {
+        group("R17 finite manual establishment does not replace canonical renewable production");
+        Fixture first = firstBench(Authority.CRAFTING_JSON, false, false);
+        var result = first.audit();
+        yes("the first Bench can be built manually from finite real custody", available(result, MACHINE));
+        yes("the established Bench supports its actual automatic renewable projection", renewable(result, MACHINE));
+        yes("the established Bench supports subsequent automatic products", renewable(result, PRODUCT));
+        eq("the finite witness attributes the first Bench to its real manual craft", 1L,
+                result.tiers().get(0).establishmentBatches().get("manual_bench"));
+        eq("the first Bench is not attributed to its unexecuted automatic projection", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("auto_bench", 0L));
+        no("an abandoned self-construction attempt is not a remaining reserve deficit",
+                hasRule(result, "construction_reserve_unknown"));
+        eq("manual construction actually consumes its finite input", 1L,
+                result.tiers().get(0).reserves().stream().filter(reserve -> reserve.resource().equals(RAW))
+                        .findFirst().orElseThrow().required());
+        try {
+            result.tiers().get(0).establishmentBatches().put("fabricated_execution", 1L);
+            fail("completed-batch provenance must be immutable");
+        } catch (UnsupportedOperationException expected) {
+            yes("completed-batch provenance is immutable", true);
+        }
+        JsonObject report = JsonParser.parseString(AuditReports.json(result, "fixture:first-bench", true))
+                .getAsJsonObject();
+        eq("public provenance exports actual completed manual batches separately", 1L,
+                report.getAsJsonArray("tiers").get(0).getAsJsonObject()
+                        .getAsJsonObject("establishment_batches").get("manual_bench").getAsLong());
+        for (Authority authority : List.of(Authority.BOOTSTRAP_RECIPES, Authority.T1_RECIPES,
+                Authority.VANILLA_TRANSFORMATION)) {
+            result = firstBench(authority, false, false).audit();
+            eq("verified manual authority supports the same bounded craft: " + authority, 1L,
+                    result.tiers().get(0).establishmentBatches().get("manual_bench"));
+        }
+        first = firstBench(Authority.CRAFTING_JSON, false, false);
+        first.entryProfile = first.entryProfile.withBill(Map.of(), 0);
+        result = first.audit();
+        yes("no initial budget means no fictitious first Bench", hasRule(result, "entry_profile_insufficient"));
+        eq("an unpaid manual craft never appears as executed", 0L,
+                result.tiers().get(0).establishmentBatches().getOrDefault("manual_bench", 0L));
+        for (String invalid : List.of("missing", "optional", "locked", "one_shot", "automatic", "not_crafting")) {
+            first = firstBench(invalid.equals("not_crafting") ? Authority.GENERATOR_FUEL : Authority.CRAFTING_JSON,
+                    invalid.equals("one_shot"), invalid.equals("automatic"));
+            switch (invalid) {
+                case "missing" -> first.policies.remove("manual_bench");
+                case "optional" -> first.policy("manual_bench", 0, true);
+                case "locked" -> first.policy("manual_bench", 1, false);
+                default -> { }
+            }
+            result = first.audit();
+            eq("an ineligible fallback cannot manufacture the first Bench: " + invalid, 0L,
+                    result.tiers().get(0).establishmentBatches().getOrDefault("manual_bench", 0L));
+            yes("an ineligible fallback leaves its real establishment gap visible: " + invalid,
+                    hasRule(result, "construction_reserve_unknown"));
+        }
+        first = firstBench(Authority.CRAFTING_JSON, false, false);
+        first.entryProfile = first.entryProfile.withBill(Map.of(), 0);
+        var derived = SustainabilityAudit.deriveEntryProfile(first.builder.build(), first.annotations(),
+                first.debt, 0);
+        eq("the sufficient bootstrap bill is derived from actual craft batches", Map.of(RAW, 1L),
+                derived.profile().playerProvided());
+        eq("the fresh finite replay, not the derivation, contains one completed manual Bench", 1L,
+                derived.replay().tiers().get(0).establishmentBatches().get("manual_bench"));
+        no("the derived finite replay really funds establishment", hasRule(derived.replay(), "entry_profile_insufficient"));
+        eq("completed finite replay exports are deterministic",
+                AuditReports.json(derived.replay(), "fixture:first-bench", true),
+                AuditReports.json(SustainabilityAudit.deriveEntryProfile(first.builder.build(), first.annotations(),
+                        first.debt, 0).replay(), "fixture:first-bench", true));
+
+        first = firstBench(Authority.CRAFTING_JSON, false, false).seed(PRODUCT, 5);
+        Resource unbuilt = item("unbuilt_goal_machine");
+        first.add(route("canonical_goal", Map.of(SAFE, 1L), Map.of(), Map.of(PRODUCT, 5L), "UNBUILT"));
+        first.machines.put("UNBUILT", new Machine("UNBUILT", unbuilt, 0));
+        first.meta(PRODUCT, renewable("canonical_goal"));
+        first.add(new Route("manual_goal", Authority.CRAFTING_JSON, "fixture:manual-goal", null,
+                Map.of(SAFE, 1L), Map.of(), Map.of(PRODUCT, 5L), Set.of(), 0, 0, Map.of(),
+                Set.of(), false, true, false));
+        first.requiredQuests.add("exit");
+        first.builder.objective(new Objective("exit", PRODUCT, 5, Set.of(), null, "fixture:exit"));
+        first.exitObjective = PRODUCT;
+        result = first.audit();
+        yes("manual availability and a gift cannot rescue an impossible canonical manufacturing goal",
+                hasRule(result, "exit_goal_production_unproven"));
+        eq("the impossible canonical exit has no completed batch", 0L,
+                result.tiers().get(0).exitProduction().executedBatches());
+
+        retainedFailedBranch();
+    }
+
+    private static Fixture firstBench(Authority authority, boolean oneShot, boolean automatable) {
+        Fixture fixture = new Fixture().terminal("manual_raw", RAW, TerminalKind.MANUAL_WORLD, false, true)
+                .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        fixture.add(new Route("manual_bench", authority, "fixture:manual-bench", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(MACHINE, 1L), Set.of(), 0, 0,
+                authority == Authority.VANILLA_TRANSFORMATION
+                        ? Map.of("crafting_type", "minecraft:crafting_shaped") : Map.of(),
+                Set.of(), oneShot, authority != Authority.VANILLA_TRANSFORMATION, automatable));
+        fixture.add(route("auto_bench", Map.of(SAFE, 1L), Map.of(), Map.of(MACHINE, 1L), "BENCH"));
+        fixture.add(route("auto_product", Map.of(SAFE, 1L), Map.of(), Map.of(PRODUCT, 1L), "BENCH"));
+        fixture.machines.put("BENCH", new Machine("BENCH", MACHINE, 0));
+        fixture.meta(MACHINE, renewable("auto_bench")).meta(PRODUCT, renewable("auto_product")).root(PRODUCT);
+        fixture.entryProfile = new EntryProfile("finite_first_bench", Map.of(RAW, 1L), 0, null,
+                Set.of("Conditional ordinary fixture material custody, not a gameplay kit."), "fixture:first-bench");
+        return fixture;
+    }
+
+    private static void retainedFailedBranch() {
+        Resource absent = item("zz_absent");
+        Resource worker = item("worker");
+        Fixture fixture = new Fixture().terminal("manual_raw", RAW, TerminalKind.MANUAL_WORLD, false, true)
+                .terminal("manual_absent", absent, TerminalKind.MANUAL_WORLD, false, true)
+                .seed(TOOL, 1).seed(worker, 1)
+                .meta(RAW, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null))
+                .meta(absent, metadata(ResourceClass.BOOTSTRAP, null, null, List.of(), null, null, null, null));
+        fixture.add(route("retained_sub_batch", Map.of(RAW, 2L, ENERGY, 160L), Map.of(), Map.of(SIDE, 1L), "WORK"));
+        fixture.add(route("failed_canonical", Map.of(SIDE, 1L, absent, 1L), Map.of(), Map.of(MACHINE, 1L), null));
+        fixture.add(new Route("manual_bench", Authority.CRAFTING_JSON, "fixture:manual-bench", null,
+                Map.of(RAW, 1L), Map.of(), Map.of(MACHINE, 1L), Set.of(), 0, 0, Map.of(),
+                Set.of(), false, true, false));
+        fixture.add(route("next_work", Map.of(SAFE, 1L, ENERGY, 160L), Map.of(), Map.of(PRODUCT, 1L), "WORK"));
+        fixture.machines.put("WORK", new Machine("WORK", worker, 0));
+        fixture.machines.put("BENCH", new Machine("BENCH", MACHINE, 0));
+        fixture.add(route("use_bench", Map.of(SAFE, 1L), Map.of(), Map.of(item("bench_use"), 1L), "BENCH"));
+        fixture.meta(MACHINE, metadata(ResourceClass.BOOTSTRAP, null, "failed_canonical",
+                List.of(), null, null, null, null));
+        fixture.root(item("bench_use")).root(PRODUCT).workProfile(Map.of(RAW, 3L), 1, Set.of("WORK"));
+        var result = fixture.audit();
+        Map<String, Long> batches = result.tiers().get(0).establishmentBatches();
+        eq("a legitimate retained sub-batch survives the failed outer attempt", 1L,
+                batches.get("retained_sub_batch"));
+        eq("a failed outer attempt never becomes a completed batch", 0L,
+                batches.getOrDefault("failed_canonical", 0L));
+        eq("the successful alternative is the craft actually executed", 1L, batches.get("manual_bench"));
+        var reserve = result.tiers().get(0).reserves().stream().filter(row -> row.resource().equals(RAW))
+                .findFirst().orElseThrow();
+        eq("retained sub-batch materials are not refunded with the failed parent", 3L, reserve.required());
+        eq("retained sub-batch materials are charged only once", 0L, reserve.margin());
+        yes("the retained sub-batch's spent local work cannot be spent again",
+                hasRule(result, "entry_work_insufficient"));
+        eq("no second work batch is fabricated from a refunded action", 0L,
+                batches.getOrDefault("next_work", 0L));
     }
 
     private static void environmentWithoutTier() {

@@ -42,6 +42,7 @@ public final class VerifySustainabilityAdapters {
             registryEntriesAndRemovals();
             checkedDeclarationInventory();
             canonicalInventory();
+            canonicalVanillaCrafts();
             reportRelationships();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
@@ -266,6 +267,73 @@ public final class VerifySustainabilityAdapters {
                 relationship(iron, "producer_provenance", "unknown/output").get("unconditional").getAsBoolean());
         eq("incomplete input membership cannot prove acceptance", false,
                 relationship(iron, "consumer_provenance", "unknown/consumer").get("unconditional").getAsBoolean());
+    }
+
+    private static void canonicalVanillaCrafts() throws IOException {
+        Path fixture = Path.of("build", "check-fixtures", "sustainability-adapters", "canonical-recipes")
+                .toAbsolutePath().normalize();
+        String id = "minecraft:crafting_table";
+        String path = "data/minecraft/recipes/crafting_table.json";
+        String json = """
+                {"type":"minecraft:crafting_shaped","pattern":["PP","PP"],
+                 "key":{"P":{"item":"minecraft:oak_planks"}},"result":{"item":"minecraft:crafting_table"}}
+                """;
+        Map<String, List<URL>> packs = new TreeMap<>();
+        Builder builder = new Builder();
+        Route route = AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder);
+        eq("an absent allowlisted recipe is not a synthetic empty producer", null, route);
+        eq("missing resolved recipe evidence remains an explicit error", true,
+                builder.build().findings().stream().anyMatch(finding -> finding.rule().equals("vanilla_recipe_missing")));
+        packs.put(path, List.of(memory("vanilla-craft", json)));
+        builder = new Builder();
+        route = AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder);
+        eq("the canonical recipe uses actual ingredient counts", Map.of(new Resource(Kind.ITEM,
+                "minecraft:oak_planks"), 4L), route.inputs());
+        eq("the canonical manual craft is not automatic just because it has a vanilla authority", false,
+                route.automatable());
+        eq("vanilla bootstrap crafting is not a mod-owned renewable source", false, route.modOwned());
+        eq("a real two-by-two craft does not need the table it constructs", null, route.family());
+        eq("a resolved recipe records content provenance rather than a private URL", true,
+                builder.build().inputHashes().keySet().stream().anyMatch(source -> source.startsWith("allowlisted_recipe:")));
+        packs.put(path, List.of(memory("vanilla-craft", json),
+                memory("identical-definition", JsonParser.parseString(json).toString())));
+        builder = new Builder();
+        route = AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder);
+        eq("identical recipe definitions are safe without assuming a pack priority", 4L,
+                route.inputs().get(new Resource(Kind.ITEM, "minecraft:oak_planks")));
+        eq("both identical definitions retain their own source checksum", 2,
+                builder.build().inputHashes().size());
+        String other = json.replace("\"PP\",\"PP\"", "\"P\"");
+        packs.put(path, List.of(memory("vanilla-craft", json), memory("different-definition", other)));
+        builder = new Builder();
+        eq("different recipe definitions cannot be resolved by filename, index or hash", null,
+                AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder));
+        eq("recipe priority uncertainty is visible rather than a selected producer", true,
+                builder.build().findings().stream().anyMatch(finding ->
+                        finding.rule().equals("vanilla_recipe_priority_unproven")));
+        JsonObject conditional = JsonParser.parseString(json).getAsJsonObject();
+        conditional.add("conditions", new JsonArray());
+        packs.put(path, List.of(memory("conditional-definition", conditional.toString())));
+        builder = new Builder();
+        eq("unbound condition-bearing definitions are never assumed enabled", null,
+                AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder));
+        eq("conditions require their own source binding", true,
+                builder.build().findings().stream().anyMatch(finding ->
+                        finding.rule().equals("vanilla_recipe_conditions_unbound")));
+        packs.put(path, List.of(memory("vanilla-craft", json)));
+        Path local = fixture.resolve(Path.of("common", "src", "main", "resources",
+                "data", "minecraft", "recipes", "crafting_table.json"));
+        try {
+            Files.createDirectories(local.getParent());
+            Files.writeString(local, other, StandardCharsets.UTF_8);
+            builder = new Builder();
+            eq("a real local override is not silently ignored behind the vanilla artifact", null,
+                    AuthorityAdapters.canonicalVanillaTransformation(id, fixture, ordered(packs), builder));
+            eq("the conflicting local definition has its own public provenance", true,
+                    builder.build().inputHashes().containsKey("allowlisted_recipe:project:" + path));
+        } finally {
+            Files.deleteIfExists(local);
+        }
     }
 
     private static void registryEntriesAndRemovals() throws IOException {

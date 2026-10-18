@@ -83,13 +83,31 @@ public final class AuthorityAdapters {
      * Neither Gradle enumeration nor a direct ID in tag JSON supplies registry membership.
      */
     public static Snapshot canonical(Path root, TagResolver.ElementLookup elements) throws IOException {
+        return canonical(root, elements, Set.of());
+    }
+
+    /** Adds only explicitly allowlisted, unambiguous standalone vanilla crafting definitions. */
+    public static Snapshot canonical(Path root, TagResolver.ElementLookup elements,
+                                     Set<String> vanillaAllowlist) throws IOException {
         CanonicalPack pack = CanonicalPack.resolved(root);
         TagResolver tags = new TagResolver(root, pack, elements);
         Builder builder = inventory(root, tags);
+        for (String id : new TreeSet<>(vanillaAllowlist)) {
+            Route route = canonicalVanillaTransformation(id, root, pack, builder);
+            if (route != null) {
+                builder.route(route);
+                for (Resource resource : referenced(route)) {
+                    if (resource.kind() == Kind.TAG) {
+                        tags.resolve(resource);
+                    }
+                }
+            }
+        }
+        tags.contribute(builder);
         pack.contribute(builder);
         elements.inputHashes().forEach(builder::input);
         contributeCheckedDeclarations(builder, elements);
-        pendingDeclarations(builder);
+        pendingDeclarations(builder, vanillaAllowlist.isEmpty());
         return builder.build();
     }
 
@@ -123,12 +141,18 @@ public final class AuthorityAdapters {
     }
 
     private static void pendingDeclarations(Builder builder) {
+        pendingDeclarations(builder, true);
+    }
+
+    private static void pendingDeclarations(Builder builder, boolean vanillaUnknown) {
         builder.finding(unknown("generator_fuel_unknown", "furnace_fuel_table",
                 "The platform furnace-fuel registry is dynamic. Only live loader-free biomass/gas tables are projected."));
         builder.finding(unknown("bootstrap_sources_unknown", "manual_world_and_labour",
                 "No manual gathering, crank, collector or world terminal is declared by this unannotated inventory."));
-        builder.finding(unknown("vanilla_allowlist_unknown", "vanilla_transformations",
-                "No canonical vanilla transformation allowlist is authored by this unannotated inventory."));
+        if (vanillaUnknown) {
+            builder.finding(unknown("vanilla_allowlist_unknown", "vanilla_transformations",
+                    "No canonical vanilla transformation allowlist is authored by this unannotated inventory."));
+        }
     }
 
     static void contributeCheckedDeclarations(Builder builder, TagResolver.ElementLookup elements) {
@@ -234,6 +258,64 @@ public final class AuthorityAdapters {
         }
     }
 
+    static Route canonicalVanillaTransformation(String id, Path root, TagResolver.OrderedClasspath pack,
+                                                Builder builder) throws IOException {
+        if (!id.startsWith("minecraft:")) {
+            throw new IllegalArgumentException("The vanilla allowlist must name vanilla recipes");
+        }
+        String path = "data/minecraft/recipes/" + id.substring("minecraft:".length()) + ".json";
+        List<JsonObject> definitions = new ArrayList<>();
+        Set<String> sources = new TreeSet<>();
+        List<java.net.URL> resources = pack.resources(path);
+        for (int index = 0; index < resources.size(); index++) {
+            byte[] bytes;
+            try (InputStream stream = resources.get(index).openStream()) {
+                bytes = stream.readAllBytes();
+            }
+            String hash = sha256(bytes);
+            String source = pack.source(path, index, hash);
+            builder.input("allowlisted_recipe:" + source, hash);
+            sources.add(source);
+            definitions.add(JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject());
+        }
+        Path directory = root.resolve(Path.of("common", "src", "main", "resources")).toAbsolutePath().normalize();
+        Path local = directory.resolve(Path.of("", path.split("/"))).normalize();
+        if (!local.startsWith(directory)) {
+            throw new IllegalArgumentException("A recipe path cannot escape the resource root");
+        }
+        if (Files.isRegularFile(local)) {
+            byte[] bytes = Files.readAllBytes(local);
+            String source = "project:" + path;
+            builder.input("allowlisted_recipe:" + source, sha256(bytes));
+            sources.add(source);
+            definitions.add(JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject());
+        }
+        if (definitions.isEmpty()) {
+            builder.finding(new AuditFinding("vanilla_recipe_missing", id, "canonical_allowlist",
+                    AuditFinding.Severity.ERROR, "Allowlisted recipe is absent from the resolved standalone packs.",
+                    List.of(path)));
+            return null;
+        }
+        JsonObject definition = definitions.get(0);
+        if (definitions.stream().anyMatch(candidate -> !candidate.equals(definition))) {
+            builder.finding(new AuditFinding("vanilla_recipe_priority_unproven", id, "canonical_allowlist",
+                    AuditFinding.Severity.UNKNOWN,
+                    "Different recipe definitions have no proved pack priority; no producer is projected.",
+                    new ArrayList<>(sources)));
+            return null;
+        }
+        if (definition.has("conditions") || definition.has("forge:conditions")) {
+            builder.finding(new AuditFinding("vanilla_recipe_conditions_unbound", id, "canonical_allowlist",
+                    AuditFinding.Severity.UNKNOWN,
+                    "A conditional recipe needs its actual condition binding before projection.",
+                    new ArrayList<>(sources)));
+            return null;
+        }
+        return crafting("vanilla/" + id, definition, String.join(" + ", sources)
+                        + "@recipe_contract=unique_or_identical_definitions",
+                Authority.VANILLA_TRANSFORMATION, builder);
+    }
+
     /** Hashes actual input/report bytes without embedding timestamps or absolute paths. */
     public static String sha256(byte[] bytes) {
         try {
@@ -335,7 +417,8 @@ public final class AuthorityAdapters {
                 SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class)) {
             pending.add(type.getName().replace('.', '/') + ".class");
         }
-        for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters", "VerifySustainabilityRegistry")) {
+        for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters",
+                "VerifySustainabilityRegistry", "VerifySustainabilityT0")) {
             String path = IMPLEMENTATION_PATH + check + ".class";
             if (loader.getResource(path) != null) {
                 pending.add(path);
@@ -377,7 +460,7 @@ public final class AuthorityAdapters {
             }
         }
         for (String check : List.of("VerifySustainability.java", "VerifySustainabilityAdapters.java",
-                "VerifySustainabilityRegistry.java")) {
+                "VerifySustainabilityRegistry.java", "VerifySustainabilityT0.java")) {
             Path file = repository.resolve(Path.of("tools", "checks", check));
             if (Files.isRegularFile(file)) {
                 hashes.put(repository.relativize(file).toString().replace('\\', '/'), sha256(Files.readAllBytes(file)));
@@ -556,7 +639,7 @@ public final class AuthorityAdapters {
         long count = result.has("count") ? result.get("count").getAsLong() : 1;
         return new Route(id, authority, source, family, inputs, Map.of(),
                 Map.of(item(result.get("item").getAsString()), count), Set.of(), 0, 0,
-                Map.of(), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
+                Map.of("crafting_type", type), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
     }
 
     private static Resource ingredient(JsonElement json, String id, Builder builder) {

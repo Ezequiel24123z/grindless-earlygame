@@ -82,6 +82,7 @@ public final class VerifySustainabilityRegistry {
         eq("unbound external registry conditions stay unknown", UNKNOWN,
                 registry.element(item("other_mod:conditional_member")));
         conditionalDeclarations(root);
+        physicalSourceCounterexamples(root);
 
         Builder declarationsOnly = new Builder();
         AuthorityAdapters.contributeCheckedDeclarations(declarationsOnly, registry);
@@ -90,7 +91,7 @@ public final class VerifySustainabilityRegistry {
         eq("every checked declaration has one public provenance identity", (long) declared.size(),
                 declarationsOnly.build().inputHashes().keySet().stream()
                         .filter(key -> key.startsWith("registry_declaration:")).count());
-        SourceBinding sources = sourceBinding(root, AuthorityAdapters.canonical(root, registry));
+        SourceBinding sources = sourceBinding(root, AuthorityAdapters.canonical(root, registry), declared);
         Snapshot snapshot = sources.snapshot();
         TagResolution iron = snapshot.tags().get(tag("forge:ingots/iron"));
         eq("the resolved real Forge iron tag is complete", true, iron.complete());
@@ -148,11 +149,19 @@ public final class VerifySustainabilityRegistry {
         System.out.println(passed + " passed, 0 failed");
     }
 
-    private record SourceBinding(Snapshot snapshot, ManualWork localWork,
-                                 SustainabilityAnnotations facts) {
+    record SourceBinding(Snapshot snapshot, ManualWork localWork, SustainabilityAnnotations facts) {
     }
 
-    private static SourceBinding sourceBinding(Path root, Snapshot inventory) throws IOException {
+    static SourceBinding canonicalSources(Path root, Set<String> vanillaAllowlist) throws IOException {
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+        Map<String, String> hashes = new TreeMap<>();
+        Map<Resource, String> declared = registrations(root, hashes);
+        return sourceBinding(root, AuthorityAdapters.canonical(root, registry(declared, hashes), vanillaAllowlist), declared);
+    }
+
+    private static SourceBinding sourceBinding(Path root, Snapshot inventory,
+                                               Map<Resource, String> declared) throws IOException {
         Map<String, String> hashes = new TreeMap<>();
         ClassTree crank = mechanicsSource(root, "item", "CrankHandleItem", hashes);
         ClassTree process = mechanicsSource(root, "machine", "ProcessMachineBlockEntity", hashes);
@@ -167,6 +176,24 @@ public final class VerifySustainabilityRegistry {
         ClassTree worldSite = mechanicsSource(root, "source", "SourceSite", hashes);
         mechanicsSource(root, "fluid", "FluidLogic", hashes);
         mechanicsSource(root, "research", "ResearchLogic", hashes);
+        ClassTree blocks = mechanicsSource(root, "registry", "ModBlocks", hashes);
+        Map<String, Machine> constructions = new TreeMap<>();
+        for (ProcessMachineKind kind : ProcessMachineKind.values()) {
+            if (T0Sustainability.processFamilies().contains(kind.family().name())) {
+                Resource controller = controller(blocks, kind.name(), "ProcessMachineBlock",
+                        "ProcessMachineKind." + kind.name(), declared);
+                constructions.put(kind.family().name(), new Machine(kind.family().name(), controller, 0));
+            }
+        }
+        for (String[] binding : List.of(
+                new String[]{"HAND_PUMP", "HandPumpBlock"},
+                new String[]{"RESEARCH_TERMINAL", "ResearchTerminalBlock"},
+                new String[]{"BIOMASS_DYNAMO", "ThermalGeneratorBlock", "GeneratorKind.BIOMASS"},
+                new String[]{"HAND_CRANK_DYNAMO", "HandCrankDynamoBlock"})) {
+            Resource controller = controller(blocks, binding[0], binding[1],
+                    binding.length > 2 ? binding[2] : null, declared);
+            constructions.put(binding[0], new Machine(binding[0], controller, 0));
+        }
 
         eq("the real tool accepts only ProcessMachine/F0 recipients and server-side cooldown-limited actions",
                 "{if(!(context.getLevel().getBlockEntity(context.getClickedPos())instanceofProcessMachineBlockEntitymachine)"
@@ -302,8 +329,7 @@ public final class VerifySustainabilityRegistry {
                 "{returnnewSimpleFluxStorage(bufferCapacity(),0L,FluxTier.F0.nominal(),this::setChanged);}",
                 normalized(method(dynamo, "createEnergyBuffer", 0).getBody()));
         eq("the physical output is bounded by its actual per-tick rating and period", true,
-                normalized(method(dynamo, "push", 0).getBody()).contains(
-                        "longallowance=Math.min(energy().getStored(),FluxTier.F0.nominal()*PUSH_PERIOD);"));
+                dynamoPushRate(dynamo));
         eq("the actual unobstructed push period is one tick", "1",
                 normalized(field(dynamo, "PUSH_PERIOD").getInitializer()));
         eq("solar's real site is daylight and open sky, not a terrestrial culture predicate",
@@ -405,8 +431,31 @@ public final class VerifySustainabilityRegistry {
                 "power/solar_array", new RoutePolicy((Integer) null, false, Set.of("environment/solar_daylight")),
                 "power/hand_crank_dynamo", new RoutePolicy(0, true, Set.of()));
         return new SourceBinding(snapshot, work, new SustainabilityAnnotations(Map.of(), policies,
-                Map.of("HAND_CRANK_DYNAMO", new Machine("HAND_CRANK_DYNAMO",
-                        item("grindless:hand_crank_dynamo"), 0)), Map.of(), Map.of(), Map.of()));
+                constructions, Map.of(), Map.of(), Map.of()));
+    }
+
+    private static Resource controller(ClassTree blocks, String fieldName, String constructor,
+                                       String kind, Map<Resource, String> declared) throws IOException {
+        VariableTree field = field(blocks, fieldName);
+        if (!(field.getInitializer() instanceof MethodInvocationTree register)
+                || !normalized(register.getMethodSelect()).equals("register") || register.getArguments().size() != 2
+                || !(register.getArguments().get(0) instanceof LiteralTree literal)
+                || !(literal.getValue() instanceof String name)
+                || !(register.getArguments().get(1) instanceof LambdaExpressionTree supplier)
+                || !supplier.getParameters().isEmpty()
+                || !(supplier.getBody() instanceof NewClassTree body)) {
+            throw new IOException("Unsupported checked controller binding: ModBlocks." + fieldName);
+        }
+        eq("a checked controller constructs the actual implementing block: " + fieldName, constructor,
+                normalized(body.getIdentifier()));
+        if (kind != null) {
+            eq("the registered block actually selects its declared process/generator kind: " + fieldName,
+                    kind, normalized(body.getArguments().get(0)));
+        }
+        Resource resource = item("grindless:" + name);
+        eq("a controller binding reuses the single verified declaration inventory: " + fieldName,
+                true, declared.containsKey(resource));
+        return resource;
     }
 
     private static ClassTree mechanicsSource(Path root, String folder, String name,
@@ -415,6 +464,32 @@ public final class VerifySustainabilityRegistry {
         byte[] bytes = Files.readAllBytes(root.resolve(relative));
         hashes.put("mechanics_source:" + relative.toString().replace('\\', '/'), AuthorityAdapters.sha256(bytes));
         return parse(name, new String(bytes, StandardCharsets.UTF_8));
+    }
+
+    private static boolean dynamoPushRate(ClassTree dynamo) throws IOException {
+        var statements = method(dynamo, "push", 0).getBody().getStatements();
+        return statements.size() >= 2 && normalized(statements.get(0)).equals(
+                "if(!isDue(PushBackoff.period(PUSH_PERIOD,fruitlessPushes))){return;}")
+                && statements.get(1) instanceof VariableTree allowance
+                && allowance.getName().contentEquals("allowance") && normalized(allowance.getType()).equals("long")
+                && normalized(allowance.getInitializer()).equals(
+                "Math.min(energy().getStored(),FluxTier.F0.nominal()*PUSH_PERIOD)")
+                && normalized(field(dynamo, "PUSH_PERIOD").getInitializer()).equals("1");
+    }
+
+    private static void physicalSourceCounterexamples(Path root) throws IOException {
+        String name = "HandCrankDynamoBlockEntity";
+        String source = Files.readString(root.resolve(JAVA.resolve(Path.of("machine", name + ".java"))));
+        String altered = source.replace("PushBackoff.period(PUSH_PERIOD, fruitlessPushes)",
+                "PushBackoff.period(PUSH_PERIOD * 2, fruitlessPushes)");
+        eq("the slower-push fixture actually changes the inspected guard", false, source.equals(altered));
+        eq("a mismatched due-period cannot certify the original physical delivery rate", false,
+                dynamoPushRate(parse(name, altered)));
+        altered = source.replace("FluxTier.F0.nominal() * PUSH_PERIOD",
+                "FluxTier.F0.nominal() * PUSH_PERIOD * 2");
+        eq("the oversized-allowance fixture actually changes the inspected statement", false, source.equals(altered));
+        eq("a mismatched allowance cannot certify the original physical delivery rate", false,
+                dynamoPushRate(parse(name, altered)));
     }
 
     private static TagResolver.ElementLookup registry(Map<Resource, String> declared, Map<String, String> inputs) {

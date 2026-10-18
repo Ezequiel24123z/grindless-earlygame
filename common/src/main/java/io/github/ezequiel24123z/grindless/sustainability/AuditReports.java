@@ -171,6 +171,7 @@ public final class AuditReports {
                             "route", goal.route(), "required_count", goal.requiredCount(),
                             "batch_output", goal.batchOutput(), "executed_batches", goal.executedBatches(),
                             "produced", goal.produced(), "status", goal.status()),
+                    "establishment_batches", tier.establishmentBatches(),
                     "retained_process_and_circulation_inventory", quantitiesById(tier.retainedInventory()),
                     "construction_reserves", reserves));
         }
@@ -288,6 +289,14 @@ public final class AuditReports {
                         .append(" | ").append(reserve.claimedRewards()).append(" | ").append(reserve.required())
                         .append(" | ").append(reserve.margin()).append(" | ").append(reserve.status()).append(" |\n");
             }
+        }
+        text.append("\n## Completed establishment batches\n\n")
+                .append("Only completed batches in the finite conditional replay are listed, including retained ")
+                .append("sub-batches. This is execution provenance, not a renewable-route selection or a Tier certificate.\n\n")
+                .append("| Tier | Actually executed route | Completed batches |\n| --- | --- | ---: |\n");
+        for (var tier : result.tiers().values()) {
+            tier.establishmentBatches().forEach((route, batches) -> text.append("| T").append(tier.tier())
+                    .append(" | ").append(escape(route)).append(" | ").append(batches).append(" |\n"));
         }
         text.append("\nManual-world bootstrap is never an exact guarantee. Recipe conditions and rates, ")
                 .append("source hashes, unresolved tag membership, objectives and all quantities are in `audit.json`.\n");
