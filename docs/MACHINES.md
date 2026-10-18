@@ -52,6 +52,10 @@ process roles on the shared machine engine, not recolored T1 ore processors.
 | Clay Mixer | Clay plus sand/grog and water become a ceramic body | two inputs, one output | 8 FU/t; F0-rated 320 FU buffer; ambient, stirred | Single block; a facing Hand Pump or adjacent water tank supplies its primary fluid |
 | Firing Chamber | Fuel-backed batch ceramics and brick firing | two inputs, two outputs | 8 FU/t control; 850 C held while fuel is a required recipe input | Controller plus seven brick blocks, fixed 2x2x2; all interfaces stay on the controller |
 | Settling Trough | Clay/aggregate separation with water recovery | one input, two outputs; 2000 mB buffer | 4 FU/t; F0-rated 320 FU buffer; ambient | Same-facing channel then screen behind the controller; air above the passive parts |
+| Geological Collector | Geological aggregate and clay source | process inputs/outputs | F0 process | Single block; requires a valid terrestrial rock bed and environmental conditions |
+| Biocultivator | Sunlit biomass source | process inputs/outputs | F0 process; daylight-dependent | Single block; no vanilla crop/tree farm dependency |
+| Biomass Dynamo | Biomass-fed F0 generation | generator buffer | F0 output | Single-block generator; complements rather than replaces the optional Hand Crank |
+| Assembly Bench | Limited Bootstrap and four vanilla basic crafts | process inputs/outputs | F0 process | Single block; projects the existing crafting catalogue and never fabricates a Relay Matrix |
 
 The Firing Chamber's front-left bottom block is the controller. Fill the other seven positions
 with `minecraft:bricks`, in any of four horizontal orientations. Its front/left faces remain
@@ -73,12 +77,16 @@ so supply water on another free side. `FluidOutputQuota` distinguishes produced 
 input and survives reconstruction; legacy unmarked fluid is kept intact rather than guessed
 to be output. A ready recipe reserves its primary batch against automatic export (ADR-0132).
 
+Workshop item, fluid and power I/O belongs to the machine controller. General replaceable
+ports/hatches and ME integration are not implemented T0 capabilities; do not infer them from
+the assembled structures or the shared machine engine.
+
 ![Schematic idle and active settling assemblies](assets/t0-settling-preview.png)
 
 The preview shares the authored geometry and texture functions. It is not a client screenshot
 or a substitute for manual lighting/UV/gameplay acceptance.
 
-See [the exact workshop routes](PROCESSES.md#bootstrap-ceramic-workshop) and
+See [the T0 workshop route summary](PROCESSES.md#t0-workshop-routes) and
 [the active specification](tiers/t0.md). The later parametric Arc Reactor kernel remains T3.
 
 ## The design target: complexity is not grind
@@ -447,7 +455,7 @@ craft and re-pipe.
 
 | Machine | First tier | Role |
 | --- | --- | --- |
-| **Crude Extractor** | T0 | The grind ends here. Slow, cheap, no infrastructure. |
+| **Crude Extractor** | T0 | Optional quick-start extraction from a finite chunk vein; not the canonical renewable source route. |
 | **Terrestrial Extractor** | T1 | The workhorse. Pulls from the chunk vein. |
 | **Fluid Well** | T2 | Chunk-level fluid extraction: water, brine, oil-equivalents, geothermal. |
 | **Atmospheric Intake** | T2 | Separates air into its gases. The nitrogen and oxygen source. |

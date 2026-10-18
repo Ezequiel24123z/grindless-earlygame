@@ -372,7 +372,7 @@ Matrix is where the four outputs converge again, not where they first meet.
 
 | Tier | Materials route | Chemical route | Control route | Energy route and scale |
 | --- | --- | --- | --- | --- |
-| **T0 Bootstrap** | raw iron/copper, stone and hand-formed parts | fired clay, carbon and basic glass | redstone contacts and a primitive relay | Hand Crank; a few adjacent blocks; first T1 Relay Matrix batch |
+| **T0 Bootstrap** | geological aggregate and recoverable metal fractions | connected ceramics, biomass and glass routes | redstone and physical Data Core calibration | F0 source base, workshop structures and the manual five-F1-Matrix exit |
 | **T1 Voltaic** | B1 milling, R1/R2 reduction, plates/rods/gears and renewable glass | water handling, roast gases and ceramic insulation | copper wire, coils, relays and the first Assembler | Thermal power and first pylon; one-room factory |
 | **T2 Industrial** | steel, B2/B3 wet beneficiation, clean melt and casting | sulfur loop, renewable redstone synthesis, electrolysis, air separation, brine and basic resin | motors, pumps, discrete control panels and wired logic | steam/solar F2; several closed loops across one or two buildings |
 | **T3 Arc** | refractory structures, hot-fluid routing and tougher alloys | first hydrocarbon fractions and the Arc Cell medium | industrial controllers, logistics crates and Construction Drones | fed Arc Reactor; first designed multiblock |
@@ -403,49 +403,21 @@ expansion is abstract and self-replicating. Complexity rises; chores do not.
 
 ### Renewable base-input contract
 
-A material may begin as an Overworld find, but no ingredient used continuously may remain a
-manual gathering chore. Every recurring base material therefore needs a visible **seed route**
-and a later automated, indefinitely renewable route with a real energy, machine or logistics
-cost. The renewable route is not a free creative source and does not erase geography; it is the
-factory reward for solving the relevant line.
+Mandatory recurring inputs ultimately need a mod-owned, automatable renewable route. Finite
+Overworld gathering and vanilla crafting can seed initial construction, but vanilla tree and
+cobblestone farms are not canonical ongoing supply. The implemented T0 source roles are:
 
-| Base input | Seed route | Renewable factory route | Status |
-| --- | --- | --- | --- |
-| stone | ordinary stone/cobblestone | vanilla cobblestone generator | available at Bootstrap |
-| wood and carbon | trees and charcoal | automatically replanted tree farm → furnace → charcoal/biochar | vanilla source; industrial handling expands later |
-| water | surface water | Hand Pump at 20 mB/t, then Fluid Well at 100 mB/t | implemented Voltaic/Industrial infrastructure |
-| silica and glass | sand or nether quartz, then a furnace | cobblestone → Pulverizer → sand/silica → Arc Furnace → glass | implemented Voltaic line |
-| copper and iron | chunk-vein extraction | mineral recovery route after the first closed fluid loops | planned; the existing extractor removes hand-mining first |
-| redstone | ordinary ore or pack equivalent | metallurgical silicon + 500 mB water → 4 redstone in the Chemical Reactor | implemented Industrial line |
-| clay and ceramics | surface clay | mineral dust plus water, then Kiln | planned with the ceramic expansion |
+| Source role | Live route authority | Boundary |
+| --- | --- | --- |
+| Geological aggregate and clay | `SourceLogic`, `RenewableProcesses` | Uses a terrestrial geological site; does not relabel finite chunk veins as renewable. |
+| Biomass and primitive products | `SourceLogic`, `RenewableProcesses` | Sunlit cultivation feeds the mod-owned biomass routes and F0 Biomass Dynamo. |
+| Ceramic and settling routes | `BootstrapProcesses` | Grog has an implemented sink; partial water recovery and solid-stock checks are game abstractions, not universal mass or economy proofs. |
 
-The order is deliberate. T0 has to escape manual mining and demonstrate physical control, not
-manufacture every future input for free. T1 starts converting the first recurring ingredients into
-continuous factory feeds; glass is first because the same renewable sand also supplies silica for
-the silicon route.
-
-### First renewable source stack
-
-The early factory is deliberately assembled from simple, inspectable sources rather than a magic
-resource block:
-
-```
-automatically replanted tree farm ──> logs ──> vanilla furnace ──> charcoal/carbon
-                                                               │
-cobblestone generator ──> Pulverizer ──> sand/silica ──> Arc Furnace ──> metallurgical silicon
-                                                               │
-surface water ──> Hand Pump (20 mB/t) ────────────────────────┤
-                                                               ▼
-                                      Chemical Reactor [F1] ──> 4 redstone
-```
-
-The Hand Crank starts individual F0 machines. Once charcoal is available, the Thermal Generator
-burns it at 32 FU/t (F1) and makes the first unattended source. A pylon distributes that source
-to the Pulverizer, Arc Furnace and Reactor. The Hand Pump's 20 mB/t is more than enough for the
-500 mB redstone batch; the Fluid Well is the later 100 mB/t upgrade that no longer needs a nearby
-surface source. Any vanilla or pack-provided tree farm that replants saplings satisfies the wood
-source; Grindless intentionally does not add a duplicate planter before biomass becomes its own
-industrial route.
+The T0 source cycle has bounded native daylight evidence. It does not establish nighttime restart,
+complete downstream power autonomy, full S2 canonical annotations/recursive closure or
+no-command survival acceptance. Recipe quantities remain in the Java catalogues; this section is
+an index, not a second source graph. The T1 cobblestone/thermal and Industrial redstone lines are
+later progression, not the current canonical T0 source base.
 
 ### Control Matrix routes
 
@@ -460,22 +432,14 @@ previous-rating matrix
   ──> frontier Control Matrix
 ```
 
-Those four components are real products used elsewhere, not matrix-only tokens, and each already
-depends on another domain. The T1 Relay Matrix is the only bootstrap exception: a small manual
-batch starts the first factory, after which the Assembler repeats the same five-unit recipe. The
-F0-powered terminal calibrates one Data Core in thirty seconds; `2 glass + 2 copper ingots +
-2 redstone + 1 Calibrated Data Core` make five Relay Matrices, by hand for the seed batch or in
-twenty seconds at F1 in the Assembler. The seed matrices are consumed one each by the Thermal
-Generator, Pulverizer, Arc Furnace, Press and Assembler. Thereafter every active T1 processing,
-generation or extraction machine consumes one Relay Matrix; passive grid, storage and transport
-blocks do not pretend to need a controller. Glass brings the primitive chemical route, copper the
-material route, and the calibrated core/redstone the control route. The physical output proves the
-manual-power route was used without consulting a world permission.
-
-T1 closes with the first F2 Relay Matrix: the Assembler consumes one F1 Matrix, one Machine
-Casing, four units of renewable glass and one Flux Cell in forty seconds at F1. The output is the
-same physical Matrix item with its `F2` rating written into the stack, ready for the first
-Industrial machine; it is not a quest permission or a separate controller item.
+Those four components are real products used elsewhere, not matrix-only tokens, and each depends
+on another domain. T0 ends with a physical Calibrated Data Core and one recoverable five-F1-Relay-
+Matrix batch crafted by hand. The exact recipe bill is owned by `T1Recipes.shaped(): relay_matrix`
+and summarized in the [T0 contract](tiers/t0.md); this prose is not a second quantity authority.
+The Assembly Bench never makes a Relay Matrix. T1's first batch funds the Thermal Generator,
+Pulverizer, Arc Furnace, Press and Assembler. T1's continuing fabrication and F2 frontier remain
+T1 progression; their implemented code does not itself certify tier acceptance. Calibration
+produces an ordinary physical item, not a quest or world permission.
 
 Five architectures overlap rather than replace one another:
 
@@ -543,79 +507,54 @@ and it is audited in the [multi-route index](#products-reachable-by-more-than-on
 
 ## Tier 0 and Tier 1: the bootstrap chain
 
-The only part of the graph that is hand-crafted. Slice D of the
-[implementation plan](../README.md#implementation-plan) ships Press, Machine Casing and
-Assembler ([ADR-0063](DECISIONS.md#adr-0063--the-factory-builds-the-factory-at-t1)). Everything past the
-Assembler is manufactured ([ADR-0017](DECISIONS.md#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted)).
+T0 is a connected F0 workshop, not a no-structure or T0-only-handcraft stage. Its implemented
+geological and biological source base feeds the ceramic workshop and primitive assembly. The
+current detailed contract is in [`tiers/t0.md`](tiers/t0.md); the README remains the high-level
+design authority. Recipe quantities belong to the live Java catalogues, not this prose.
 
-The bootstrap has exactly one job: **get the player to their first Assembler and then get out of
-the way.** It is short on purpose. A long hand-crafted opening is the grind this mod exists to
-delete.
+Normal gathering and a furnace may seed finite initial construction materials, including boards
+and bricks. Vanilla tree and cobblestone farms are not the canonical ongoing supply. The optional
+two-iron Hand Crank Dynamo/Crude Extractor quick start and its finite chunk vein are not required
+to establish the mod-owned source routes.
 
-```
-Hand Crank Dynamo ──> 8 FU/t  (F0)
-                        │
-Crude Extractor  [F0]  20 s  ──> 1 u raw <chunk material>
-                        │
-                        ▼
-Kiln             [T 400]        8 s   ──> dried / calcined feed
-Pulverizer       [F1]           6 s   ──> 2 u crushed
-Arc Furnace      [T 1500 · atm reducing · +1 u carbon]  12 s  ──> 1 u ingot per grade
-Pulverizer       [F1]           6 s   cobblestone ──> 1 u renewable sand/silica
-Arc Furnace      [F1 · T 1500] 10 s   sand ──> 1 u renewable glass
-Arc Furnace      [F1 · T 1900] 14 s   silica + 2 carbon ──> 1 u metallurgical silicon + 2 B CO
-Chemical Reactor [F1 · T 450 · atm O2 · agi stirred] 20 s
-                                 silicon + 500 mB water ──> 4 redstone
-Press            [cat plate die]   4 s  ──> 1 u plate
-                        │
-                        ▼
-              4 u plate + 2 u rod  ──>  1 Machine Casing   (crafting table, T1)
-              1 Machine Casing + 1 u coil + 2 u gear  ──>  Assembler  (crafting table, T1)
-                        │
-                        ▼
-2 glass + 2 copper + 2 redstone + 1 Calibrated Data Core ──> 5 Relay Matrices (Assembler, 20 s)
-                        │
-                        ▼
-                 the crafting table is finished
-```
+The physical T0 exit is a calibrated Data Core and a manually crafted five-F1-Relay-Matrix batch.
+The Assembly Bench projects the limited Bootstrap crafting catalogue and four vanilla basics; it
+does not fabricate a Relay Matrix. The exact shaped exit remains in `T1Recipes`, while Core,
+calibration, source and workshop quantities remain in `BootstrapRecipes`, `ResearchLogic`,
+`RenewableProcesses` and `BootstrapProcesses`.
 
-That last line is the point. The Assembler is the **last machine with a crafting-table recipe**;
-from there the factory builds the factory. ADR-0129 expands the prior minimal Bootstrap into
-the ceramic workshop below; its 35-60-minute material-entry target is not yet observed pacing.
+T1's first Matrix batch seeds its machine line; the T1 Assembler and its continuing route belong
+to the next tier, not T0 acceptance. T0's 35–60 minute target is measured from material entry in
+the design, but actual playtime is unmeasured. Client/JEI discovery, no-command survival and
+saved-world acceptance remain pending.
 
-**T0 power is a hand crank and that is deliberate.** Its 8 FU/t can feed one full-rate extractor,
-mixer, firing controller or calibration cycle, or a 4 FU/t Quern. Allocating the source and
-buffering material is a real workshop decision; it does not promise every consumer full power
-at once.
+### T0 workshop routes
 
----
+`BootstrapProcesses` and `RenewableProcesses` are the live authorities for these routes. This
+summary intentionally omits recipe bills and is not a second quantity catalogue.
 
-## Bootstrap ceramic workshop
+| Station or source | Role |
+| --- | --- |
+| Geological Collector and Biocultivator | Geological aggregate/clay and sunlit biomass sources. |
+| Biomass Dynamo | Biomass-fed F0 power; the Hand Crank is an optional quick-start/emergency source, not the only T0 generator. |
+| Quern, Clay Mixer and Firing Chamber | Aggregate/ceramic preparation, grog recovery, and fuel-backed ceramics/bricks. |
+| Settling Trough | Wet material recovery with partial water return; this remains a game abstraction, not a physical mass-balance claim. |
+| Assembly Bench | Limited Bootstrap and four vanilla basic crafts; never the Relay Matrix exit. |
 
-`BootstrapProcesses` owns these original game quantities (ADR-0129). They are not physical
-mass measurements or copied industrial recipes. Every row also appears in the native Atlas and JEI.
+The ceramic route has a real grog sink and a bounded non-amplifying solid-stock check. That check
+is not whole-mod sustainability closure. The native Atlas exposes generated processes,
+calibration and the T1 shaped catalogue, not exhaustive Bootstrap or vanilla crafting; actual
+client discovery remains an acceptance check.
 
-| Station | Inputs | Outputs | Full-power work |
-| --- | --- | --- | --- |
-| Quern | one gravel | one sand | 100 ticks, 4 FU/t |
-| Quern | one brick | one ceramic grog | 60 ticks, 4 FU/t |
-| Quern | one ceramic insulator | one ceramic grog | 60 ticks, 4 FU/t |
-| Quern | three unfired ceramic | two clay balls and one sand | 100 ticks, 4 FU/t |
-| Clay Mixer | two clay balls, one sand, 250 mB water | three unfired ceramic | 120 ticks, 8 FU/t |
-| Clay Mixer | two clay balls, one ceramic grog, 250 mB water | three unfired ceramic | 80 ticks, 8 FU/t |
-| Firing Chamber | three unfired ceramic, one tagged carbon fuel | two ceramic insulators and one ceramic grog | 200 ticks, 8 FU/t; formed, 850 C |
-| Firing Chamber | four clay balls, one tagged carbon fuel | four bricks | 200 ticks, 8 FU/t; formed, 850 C |
+Quest objectives check item possession, not provenance or the construction of every intermediate;
+`calibrate.requires=[ceramics]` and `relay.requires=[calibrate]` remain intentional. The physical
+Core recipe and Research Terminal, explained by the canonical guide/exit, define how the calibrated
+core is made; a quest is neither a global permission nor a manufacturing certificate.
 
-Grog's named sink is the second Mixer route; it replaces aggregate and reduces work time without
-increasing yield. Unfired recovery returns solids but never spent water. A positive unit potential
-on these ceramic solids proves no combination of these rows can amplify solid stock; this is
-a bounded economy check, not a proof about every installed mod.
-
-An insulator and redstone now make the Data Core. Insulators also supply the Basic Tank,
-Clay Conduit, Conveyor Belt and Crude Manipulator. The pump's copper/wood/stick recipe is available
-before ceramics, so water access is not circular. Bootstrap chamber bricks can be fired in a
-vanilla furnace; the batch brick route is a continuation, not its own prerequisite. Existing
-crafted cores and matrices remain valid; early quest rewards no longer skip their new route.
+One quest edge is an approved correction: `quern` should require `multitool`, leaving `crank` and
+`extractor` as an optional branch with their existing IDs/rewards. At this pinned source,
+`QuestCatalogue` still requires `extractor` before `quern`; record this as pending until its code
+change lands. Do not add a quest barrier for the physical calibration intermediates.
 
 ---
 

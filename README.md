@@ -19,26 +19,22 @@ tier: the foundation replaces that opening with automation, so the long game can
 Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Their
 code and assets do not enter this repository (ADR-0088).
 
-The arc runs from a hand crank and two iron, through belts, reactors and a particle
-accelerator, out past orbit, and on to that black hole. Arriving is the victory.
+The arc runs from an optional hand-crank/two-iron quick start, through belts, reactors and a
+particle accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 
-> **Status: pre-alpha.** The foundation through Industrial is playable and the consolidated
-> branch is locally validated on Forge 1.20.1. The Ground Array, Luna, Drift, rocket,
-> station and galactic-centre chamber are also implemented and smoke-tested, but ADR-0107
-> reclassifies them as prototype/test infrastructure rather than an Industrial survival
-> shortcut. BO removed their recipes and premature quest path while preserving the tested
-> systems; the survival guide now ends at electronic silicon. BP's first recoverable Relay Matrix
-> batch is in and uses a physical calibrated core; the Atlas now exposes that route and the T0
-> audit remains. The real campaign reaches orbit at T10, the Drift at T13 and
-> Sagittarius at T15.
+> **Status: pre-alpha; T0 implementation in progress, no tier accepted.** The repository contains
+> systems and prototype inventory extending through later tiers, but implementation, historical
+> smoke coverage or a prior validation report does not make Industrial or the space campaign an
+> accepted survival progression. ADR-0107 keeps the later travel and megastructure systems as
+> prototype/test infrastructure, not an Industrial shortcut. The current revision-bound evidence
+> is in [the validation record](docs/testing/latest-validation.md).
 >
-> **Active development:** W1 ceramics and W2 settling/real-water recovery have historical
-> targeted automated evidence. ADR-0133 renewable sources, primitive assembly and partial
-> assets are preserved C3 WIP, not accepted gameplay. A clean Astra coordinator resumes
-> through bounded workers from [the handoff](.agent/handoff.md) and
-> [durable plan](.agent/work-plan.json). Complete sources, sustainability, player guidance and
-> real dashboard data before the later functional-port audit. Manual acceptance still gates
-> merge, not further authorized T0 development; old passes do not certify changed code.
+> **Active development:** The T0 ceramic workshop, geological/biological source base, primitive
+> assembly and physical calibration/Matrix exit are implemented. S1 and bounded native C3/source
+> proofs exist within their stated limits; S2 canonical data and full closure, actual client and
+> no-command survival acceptance, and saved-world compatibility remain pending. T0 is the only
+> active tier. Astra owns product decisions and integration through the [active handoff](.agent/handoff.md);
+> historical passes do not certify changed code or complete T0 acceptance.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -1387,7 +1383,7 @@ but is rarely economical.
 
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
-| **T0 — Bootstrap** | Escape velocity | Assisted extraction, primitive material/chemical/control parts and manual power culminate in the first Relay Matrix batch. |
+| **T0 — Bootstrap** | Escape velocity | A connected workshop and mod-owned geological/biological source base culminate in physical calibration and the manual five-F1-Matrix exit. |
 | **T1 — Voltaic** | First factory | Milling, reduction, renewable glass/silica, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
 | **T2 — Industrial** | Closed loops | Steel and wet beneficiation feed sulfur, electrolysis and resin loops; motors, discrete control, steam and solar turn them into a multi-line factory. |
 | **T3 — Arc** | Powered construction | Refractories, hot metal, Arc Cells and industrial control feed the Arc Reactor and Construction Drones. |
@@ -1421,18 +1417,19 @@ manual expansion.
 
 ### Renewable inputs, not free resources
 
-The project treats automation as the alternative to grind. A base material may enter through
-normal exploration, but any material consumed continuously needs an automated and indefinitely
-renewable route before volume demand makes gathering it a chore. Those routes still consume power,
-space and intermediate products: they are factory problems, never invisible permissions or free
-item generation.
+Mandatory recurring inputs ultimately need a mod-owned, automatable renewable route. Finite
+Overworld gathering and vanilla crafting may seed initial construction, but vanilla tree and
+cobblestone farms are not the canonical ongoing supply. The T0 implementation now includes:
 
-The first implemented lines are **cobblestone → Pulverizer → sand/silica → Arc Furnace → glass**
-and **metallurgical silicon + 500 mB water → Chemical Reactor → 4 redstone**. A vanilla
-cobblestone generator makes the silica feed indefinite; an automatically replanted tree farm and
-furnace provide charcoal for carbon; the Hand Pump provides water; and a charcoal-fed Thermal
-Generator supplies the first unattended F1 power. Renewable metals and industrial ceramics follow
-the same contract, each with its own named process rather than one universal source block.
+| T0 source role | Implemented route | Evidence boundary |
+| --- | --- | --- |
+| Geological feed | Geological Collector supplies mineral aggregate and clay from a terrestrial geological site; aggregate routes recover stone/gravel and wet metal/redstone fractions. | Does not make finite chunk veins renewable. |
+| Biological feed and F0 fuel | Sunlit Biocultivator supplies biomass; biomass routes supply fibreboard and other primitive inputs, and the Biomass Dynamo supplies F0 power. | Daylight source-cycle proof is bounded; it does not establish nighttime restart or complete factory autonomy. |
+| Ceramic, glass and metal processing | The Quern, Mixer, Firing Chamber and Settling Trough connect recovery and material conversion to the workshop. | Exact recipes and quantities remain in the Java catalogues; S2 canonical annotations and full recursive closure remain pending. |
+
+These are implemented T0 source mechanisms, not a claim that the entire tier has passed its
+survival or sustainability gate. See the [T0 contract](docs/tiers/t0.md) and
+[ADR-0131](docs/DECISIONS.md#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified).
 
 ### Mechanical tier gate
 
@@ -1517,7 +1514,7 @@ The single most important structural rule in Grindless:
 
 | Tier | How you obtain the machine |
 | --- | --- |
-| **T0** | Crafting table. The bootstrap, and only the ungated bootstrap. |
+| **T0** | Crafting table and a limited Assembly Bench for Bootstrap/four vanilla basics. The Bench does not make a Relay Matrix. |
 | **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first five-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler, which then automates the same batch. |
 | **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
 | **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
@@ -2094,17 +2091,15 @@ and only happens once.
 
 ## Roadmap
 
-### Validated prototype foundation
+### Implemented prototype inventory—not tier acceptance
 
-The Forge 1.20.1 build already contains the playable T0–T2 factory foundation: extraction,
-tag-driven materials, dry and wet ore routes, belts, fluids, logic, fabricated machines, tools,
-matter scanning and the first two armour chassis. It also contains locally smoke-tested prototype
-worlds and travel systems through Sagittarius. Those prototypes prove the technical seams; they
-are not the survival campaign.
+The Forge 1.20.1 repository contains systems spanning T0–T2 and later travel/world prototypes.
+Their implementation and historical smoke coverage are not acceptance of an Industrial or
+space-era survival campaign. **T0 is the only active tier; no tier is accepted.**
 
-**Prototype-foundation milestone:** a player can go from an empty world to automated iron in under
-fifteen minutes without mining it by hand. This is met, but it predates the complete T0 mechanical
-gate and does not by itself accept Bootstrap.
+**Historical prototype milestone:** an earlier build recorded automated iron in under fifteen
+minutes without hand-mining. That result predates the current T0 gate and is not current T0
+playtime or tier acceptance.
 
 ### Campaign restoration *(current)*
 
@@ -2113,12 +2108,12 @@ playable slices under the mechanical gate in ADR-0108:
 
 1. **BO — survival shortcut withdrawn.** The eight prototype recipes are gone and the quest
    book and guide stop at electronic silicon. Registrations, worlds, commands and smokes remain.
-2. **BP — close T0 Bootstrap *(active)*.** The matrix rating/architecture data, F0–F15, physical
-   calibration, first recoverable T1 Relay Matrix batch, Atlas visibility and explicit
-   survival entry/exit are in. Accept T0 only after an end-to-end survival playthrough.
-3. **BQ — physical T2 gate *(in progress)*.** The consumed F2 Relay Matrix route is now made in
-   the Assembler from an F1 Matrix, casing, renewable glass and Flux Cell; attach its first T2
-   consumer and convert Advanced Data Cores into future pattern media.
+2. **BP — close T0 Bootstrap *(active)*.** The connected workshop, geological/biological source
+   base, F0–F15, physical calibration and five-Matrix exit are implemented. S2 canonical data
+   and full source closure, actual client discovery, no-command survival and saved-world
+   compatibility remain pending; none is implied by current native proofs.
+3. **BQ — physical T2 gate *(held behind T0 acceptance)*.** The F2 route and consumer code are
+   implementation inventory; T2 is not the active tier or accepted survival progression.
 4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
    its Control Matrix, its signature project and the automation that makes its larger scale
    manageable.
@@ -2259,11 +2254,11 @@ to proceed together under Astra; integration and manual gates still control acce
 | 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. The native book now tracks the live T0-to-T1 factory route without exposing future-tier prototypes. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the five-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
-| 32 | **BQ — Physical T2 gate** | partial — the F2 Matrix recipe exists (ADR-0123); consumer work remains held behind BP acceptance |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, the connected workshop, geological/biological sources, physical calibration and manual five-unit exit are implemented; full canonical-data/source closure, client discovery and T0 acceptance remain pending |
+| 32 | **BQ — Physical T2 gate** | held behind BP acceptance — the F2 route exists as implementation inventory; T2 is not the active tier or accepted survival progression |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
-| 35 | **T0 workshop and renewable supply** | W1/W2 historical targeted passes; ADR-0133 sources/primitive assembly and partial assets remain unaccepted C3 WIP, with a prior common compile observation only |
+| 35 | **T0 workshop and renewable supply** | S1 core, C3 native restoration and bounded daylight source-cycle proofs exist within their stated scopes; S2 canonical annotations/full closure, client/no-command survival and saved-world acceptance remain pending |
 | 35a | **Historical foundation verification** | historical **CONDITIONAL GO** — 33 suites/build/docs and 41 production scenarios; not current-WIP or Tier acceptance. Manual gates block merge, not authorized T0 development; [validation ledger](docs/testing/latest-validation.md) |
 | 36 | **Historical T0 preparation** | [Tier specification](docs/tiers/t0.md), [research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [manual checklist](docs/testing/t0-survival-acceptance.md) remain useful; the old no-expansion restriction is superseded |
 | 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md) integrated with 26 synthetic checks; complete inventory/exporter/auditor, real data, CI artifact and real-data review remain incomplete alongside gameplay |
@@ -2293,41 +2288,43 @@ the record.
 The earlier consolidated branch was recorded as locally validated, including build, behaviour
 checks, documentation and 39 smoke scenarios. That historical statement is not evidence for a
 new checkout; see the revision-bound [current validation](docs/testing/latest-validation.md).
-The implemented survival foundation reaches T2 and includes
-extraction, logistics, fluids, fabricated machines, tools and matter scanning. Electric-arc steel,
-refractory brick, metallurgical silicon and zone refining extend that foundation.
+The repository contains implementation inventory extending through T2, including extraction,
+logistics, fluids, fabricated machines, tools and matter scanning. Those systems and later
+prototypes are not accepted T1/T2 survival progression; T0 is the only active tier.
 
 Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and the original quest
-book are also implemented and tested. ADR-0107 reclassifies that vertical route as prototype
+book remain implemented in the repository; historical tests are not current campaign acceptance.
+ADR-0107 reclassifies that vertical route as prototype
 infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
 book and guide now describe the reachable T0-to-T1 factory instead of prototype travel. **BP** has introduced F0-F15, physical Control
 Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable five-unit
-survival batch. Its physical calibration route and Atlas visibility are in; the full T0 machine and
-playthrough audit is the active work. The first Voltaic renewable line now turns cobblestone into
-sand/silica and then glass, but this does not itself accept T1: **BQ** adds physical T2 fabrication
-after the Bootstrap gate. The Industrial Chemical Reactor can now turn that renewable
-metallurgical silicon and pumped water into redstone, completing the first renewable source stack
-without replacing the Bootstrap audit. The superseded Research Terminal permission system has been
-removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
-ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
+survival batch. Its physical calibration route is implemented; full T0 acceptance remains pending.
+The superseded Research Terminal permission system has been removed: its F0 cycle now produces a
+physical Calibrated Data Core, and old research save data is ignored. Later Voltaic/Industrial
+recipe code is implementation inventory, not evidence of canonical T0 closure or accepted T1/T2
+progression. See the active [build-out](docs/BUILD-OUT.md) and
+[validation record](docs/testing/latest-validation.md).
 
-T0 Bootstrap is the only mechanically active tier. It starts with ordinary Overworld sources of
-wood, stone, glass, redstone, copper, clay, gravel and carbon fuel. The Dynamo and Extractor
-still spend two iron in total; optional vanilla tools and hoppers are outside that budget.
-The Quern, water-fed Clay Mixer and formed Firing Chamber now braid milling, wet preparation,
-fuel-backed heat and grog recovery into ceramic insulators. Insulators supply Data Cores and
-primitive plumbing/handling. The physical five-Relay-Matrix exit is unchanged.
+T0 Bootstrap is the only mechanically active tier. Its connected F0 workshop and geological/
+biological source base include the Quern, Clay Mixer, Firing Chamber, Settling Trough, Geological
+Collector, Biocultivator, Biomass Dynamo and limited Assembly Bench. The entry is a requirements/
+budget acquired through ordinary survival, not a gifted kit or guaranteed iron. The two-iron
+Hand Crank Dynamo/Crude Extractor path is an optional quick start. Finite gathering and a furnace
+may seed initial boards/bricks, but vanilla farms are not canonical ongoing supply. Ceramic
+insulator and redstone make the physical Data Core; the physical five-F1-Matrix exit remains a
+hand craft.
 
-The chamber is a 2x2x2 volume with the controller at the front-left bottom and seven brick blocks
-around it. Breaking a corner pauses its work without consuming the batch; repair or indexed-NBT
-reconstruction resumes it. The shared machine engine wakes for arriving water and retries
-waiting outputs after a neighboring inventory is emptied. Every Bootstrap craft, including
-the guide/book and ceramic core, is now visible in the Atlas.
+The Firing Chamber is a controller plus seven brick blocks in a 2x2x2 volume. The Settling Trough
+uses a controller, channel and screen with open space above its passive parts. Machine I/O stays
+at controllers; general replaceable ports and ME integration are not implemented T0 capabilities.
+The native Atlas exposes generated processes, calibration and the T1 shaped catalogue, not every
+Bootstrap or vanilla craft.
 
-The [workshop specification](docs/tiers/t0.md) targets 35-60 minutes from the material entry,
-not an observed playtime. Its full no-command, graphical and retained-world acceptance is still
-pending. That prevents merge and acceptance of the next tier, not further T0 development.
+The [workshop specification](docs/tiers/t0.md) sets a 35–60 minute target from material entry;
+actual playtime is unmeasured. Existing S1/C3/source proofs are bounded: S2 canonical data and
+full closure, client discovery, no-command survival and saved-world compatibility remain
+pending. These gaps prevent T0 acceptance, not further authorized T0 implementation.
 
 The Flux Exosuit is in
 (ADR-0103): Assembler-manufactured from visible components. Four pieces with the
