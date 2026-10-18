@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Portable reference client delivered.** Packaging checkpoint `26c8c2e` retains reviewed
+  runtime `b982b10` and creates a Prism/CurseForge-importable preparation ZIP with the actual
+  production-remapped Grindless jar, README, licence and source/hash provenance. Required
+  Architectury is now explicit; the reference profile selects it and JEI from the single
+  pinned manifest, while the default expanded profile is preserved. Shared Gradle JSON/ZIP
+  logic replaces divergent shell packaging and the Bash nested-version bug without Python
+  or an external zip dependency. Eleven shared checks and actual PowerShell builds of both
+  profiles passed; the Bash wrapper is statically reviewed but not executed on this host.
+  The archive has no world, personal configuration or third-party jar redistribution.
+- **S2 review findings remain visible.** `574488c` has a production-goal reward bypass and
+  an unavailable funded loop seed under correction. The separate registry binding repair
+  `308d2cb` closes the original binding findings on static recheck. Neither is integrated
+  or accepted by the portable client delivery.
 - **T0 closure prioritized with concrete S2 boundaries (ADR-0141, PA-0005).** Canonical pack/tag and
   registry evidence, live structure requirements, a conservative existing-loop normalizer
   extension and a separate conditional manual-entry/work witness are the next data/model

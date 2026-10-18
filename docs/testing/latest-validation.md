@@ -1,5 +1,28 @@
 # Current T0 rework validation
 
+## Portable reference package, 2026-10-18
+
+Reviewed packaging `26c8c2e6bf866beea63f86db33467fd67a7a5e03` retains runtime
+`b982b101a3e16182737d0f20f73827b8eb627f55`. The actual preparation ZIP was attached to
+the user's conversation: SHA-256
+`7f17568a7aa83512401e5270ba9d946d0d4d7135cac9aa8eda668d5ddc99a879`.
+Its remapped jar hash is
+`79b5a02c0b1ed262e5439f1d66f6c20aebd5a8c9406bbcb8afc9421bd00ca376`,
+identical to the original b982 build. The shared Gradle verification passes eleven checks;
+PowerShell builds of preparation and expanded profiles pass, with actual ZIP structure,
+required dependencies and privacy whitelist inspected. No native Bash execution is claimed:
+the inspected Git installations have no Bash and WSL reports not installed (query exit1).
+
+Minecraft/Forge/Architectury/JEI are launcher-managed; only Grindless's own jar is bundled.
+No world was generated, no personal config or account data was included, and exploratory
+host-side tests are not final S2/T0 acceptance. The reference dependencies' publisher-CDN
+files were independently hashed; metadata does not authorize third-party redistribution.
+
+Separately, static recheck closes the original registry binding findings at local `308d2cb`.
+The model review of local `574488c` found a quest-reward production-goal bypass and an
+inaccessible funded loop seed. Their corrections remain assigned; no S2 integration/closure
+is implied by package delivery.
+
 ## Active S2 and player/asset preparation, 2026-10-18
 
 The prior source-bound proofs below remain reusable under ADR-0140. This checkpoint adds

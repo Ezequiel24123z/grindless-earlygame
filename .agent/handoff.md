@@ -73,10 +73,10 @@ invalidated assumption or a genuine new property.
 
 | Owner/session | Current checkpoint and boundary |
 | --- | --- |
-| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | `cc3f111` integrated; local `caa8095` pack/registry, `8ebd634` formation/loop and `574488c` conditional-work/manual-goal increments are not yet integrated. Two P1 registry-conservatism findings and one P2 inventory-parser finding must be repaired and rechecked; changed-model review is pending. Real calibration/pump authorities, annotations and closure continue. |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | `cc3f111` integrated; later model/binding increments remain local. Original binding findings are closed by static recheck of `308d2cb`. Model `574488c` still needs fixes for an explicit quest-reward exit bypass and an inaccessible funded loop seed. Physical bindings, annotations and closure continue. |
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
-| Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Java 17 and Forge 47.4.23 reach native startup, but the VM cannot create an OpenGL window. The user redirected work to an importable Prism ZIP for the real host. Reviewed runtime `b982b10` is authorized for preparation only; minimal reference pack, actual remapped jar/provenance and import instructions are in progress. No world or client acceptance exists. |
+| Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Reviewed package `26c8c2e` preserves runtime `b982b10`. The Prism preparation ZIP is attached in the user's conversation and may be used for exploratory manual tests on the real host. It contains the actual remapped jar and explicit Architectury/JEI pins, not a world or final S2/T0 acceptance. |
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and
@@ -93,6 +93,10 @@ The portable reference profile contains Grindless, required Architectury and opt
 the existing expanded pack remains separate. Do not repair VM drivers, invent a world/save
 or call this pre-S2 bundle the final acceptance candidate. Packaging owns only `pack/`,
 the paired build-modpack tools and related checks; source pins remain coordinator-controlled.
+The shared `buildModpack`/`verifyModpack` tasks now live in root `build.gradle`; wrappers
+retain the expanded default. Both real PowerShell archives and eleven shared checks pass.
+The Bash wrapper is statically reviewed, not executed on this host. ZIP SHA-256 is
+`7f17568a7aa83512401e5270ba9d946d0d4d7135cac9aa8eda668d5ddc99a879`.
 
 ## Publication and preservation
 

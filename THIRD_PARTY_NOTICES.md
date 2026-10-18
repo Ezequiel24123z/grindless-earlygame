@@ -13,11 +13,15 @@ its committed tools.
 
 The first local client-pack manifest names launcher-managed dependency files but does **not** copy
 their jars, code or assets into this repository. The user receives each file directly through the
-CurseForge launcher. Their licences govern redistribution and modification of those files:
+CurseForge or Prism launcher. The reference preparation profile selects Architectury and
+JEI; the expanded profile retains the other integrations. Verified file hashes and required
+project edges are recorded in `pack/dependency-metadata.json`, not a second version selector.
+Their licences govern redistribution and modification of those files:
 
 | Project | Pinned release location | Licence declared upstream | Pack role |
 | --- | --- | --- | --- |
-| JEI | CurseForge project 238222, file 9058038 | MIT | Recipe viewer |
+| Architectury API | [project 419699, file 5137938](https://www.curseforge.com/projects/419699/files/5137938), 9.2.14 Forge | LGPL-3.0-only | Required Grindless runtime; both profiles |
+| JEI | [project 238222, file 8292131](https://www.curseforge.com/projects/238222/files/8292131), 15.20.0.132 Forge | MIT | Recipe viewer; both profiles |
 | Jade | CurseForge project 324717, file 8479276 | LGPL-3.0 | In-world information |
 | Sophisticated Backpacks / Core | projects 422301/618298, files 9083935/9083873 | All Rights Reserved | Storage and dependency |
 | FTB Essentials / Chunks / Library / Teams | projects 410811/314906/404465/404468 | All Rights Reserved | Homes, claims and shared dependency |

@@ -312,6 +312,11 @@ version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
 
+- Client packs use root `build.gradle` tasks `buildModpack` and `verifyModpack`, with thin
+  `tools/build-modpack.ps1`/`.sh` twins. `pack/curseforge/manifest.json` owns pins;
+  `profiles.json` selects project IDs and `dependency-metadata.json` verifies them.
+  Preserve expanded defaults and the minimal preparation profile; production remapping,
+  clean source provenance and dependency completeness are not gameplay acceptance.
 - [Risk-based proof reuse](testing/test-strategy.md) (ADR-0140) classifies remaining work
   and lists reusable proofs/assumptions. Validate ordinary content structurally through the
   proven mechanism; select native/manual checks only for an uncovered or invalidated behavior.
