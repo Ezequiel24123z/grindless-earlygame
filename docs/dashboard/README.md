@@ -336,6 +336,53 @@ smoke, CI pass, unsafe-native-quantity browser case, global sustainability, Tier
 saved-world or merge acceptance is claimed. Documentation recording this evidence does not
 rebind it to a later documentation-only commit. Workflow/upload changes remain coordinator-owned.
 
+### Selected-root compiler-source provenance
+
+The review of the later tooling checkpoint found a P2 in both export entrypoints:
+calling the script from worktree A with `-Root` / `--root` B still selected
+`DashboardExport.java` and `VerifyDashboardProjection.java` from A. Git cleanliness,
+revision, source hashes and output were attributed to B. Hashing the resulting classes
+inside B's build directory did not establish that their sources came from B.
+
+Both entrypoints now resolve these two files from the explicitly selected root, just like
+the four canonical check sources. The explicit-root contract and all exporter cleanliness,
+identity and public-data guards remain unchanged. No auditor, authority, projection,
+renderer or server implementation changed.
+
+With JDK 17 and the existing Gradle-resolved classpath already prepared, run the focused twins:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\dashboard\tests\verify-export-root.ps1 -Compile
+```
+
+```bash
+bash tools/dashboard/tests/verify-export-root.sh --compile
+```
+
+The regression copies the actual source-selection statements into a script in A's original
+script directory. It executes them with B selected, preserving the real script-root behavior
+rather than mocking `$PSScriptRoot`. Separate disposable Git repositories first establish
+divergent clean A and then divergent dirty A, with deliberately non-compilable dashboard
+sources in A and clean real sources in B. It checks all six selected paths and bytes and can
+compile the selected B sources with the existing JDK, 256 MiB heap and two processors.
+Fixtures are confined to ignored build output and removed afterward. No Gradle, canonical
+audit, full cross-root export CLI or production artifact runs inside this focused test.
+
+Observed PowerShell attempts are retained under ignored `build/validation/dashboard`:
+
+| Attempt | Observed outcome |
+| --- | --- |
+| Initial harness | Failed: evaluating an anonymous block did not retain the script-root automatic variable; not defect-reproduction evidence |
+| Corrected harness before the fix | Failed as intended: actual selection returned A's `DashboardExport.java`, not B's |
+| First fixed compilation attempt | Failed during Windows PowerShell cleanup of a long generated class path; not a passing regression |
+| Compact fixture and literal long-path-safe cleanup | **38 assertions passed**, including native JDK 17 compilation of B's actual six sources and genuine clean B afterward |
+
+The paired Bash regression is supplied but has not been executed on this Windows host.
+The `cb0ff909` artifact and its browser observations above remain preserved at their original
+source and scope. They are not rebound to this script-only repair. A subsequent clean-source
+canonical re-export must record its own revision and file hashes; no browser/server rerun,
+native Minecraft run or broader acceptance is implied by the source-selection regression.
+
 ## Historical renderer-only evidence and integration limits
 
 Observed on Windows, 2026-10-17. Initial implementation:

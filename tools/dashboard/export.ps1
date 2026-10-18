@@ -40,8 +40,8 @@ try {
         $sources = @('VerifySustainability.java', 'VerifySustainabilityAdapters.java',
             'VerifySustainabilityRegistry.java', 'VerifySustainabilityT0.java') |
             ForEach-Object { Join-Path $Root ('tools\checks\' + $_) }
-        $sources += Join-Path $PSScriptRoot 'DashboardExport.java'
-        $sources += Join-Path $PSScriptRoot 'tests\VerifyDashboardProjection.java'
+        $sources += Join-Path $Root 'tools\dashboard\DashboardExport.java'
+        $sources += Join-Path $Root 'tools\dashboard\tests\VerifyDashboardProjection.java'
         $utf8 = New-Object Text.UTF8Encoding($false)
         $compile = Join-Path $out 'compile.txt'
         $run = Join-Path $out 'run.txt'

@@ -34,7 +34,7 @@ sources=()
 for name in VerifySustainability VerifySustainabilityAdapters VerifySustainabilityRegistry VerifySustainabilityT0; do
   sources+=("$root/tools/checks/$name.java")
 done
-sources+=("$here/DashboardExport.java" "$here/tests/VerifyDashboardProjection.java")
+sources+=("$root/tools/dashboard/DashboardExport.java" "$root/tools/dashboard/tests/VerifyDashboardProjection.java")
 "$javac" -J-Xmx256m -J-XX:ActiveProcessorCount=2 -nowarn -encoding UTF-8 --release 17 \
   -cp "$classpath" -d "$out" "${sources[@]}"
 "$java" -Xmx256m -XX:ActiveProcessorCount=2 --add-modules jdk.compiler -cp "$out:$classpath" \
