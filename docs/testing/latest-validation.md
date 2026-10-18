@@ -113,9 +113,32 @@ real export on `cb0ff909f0ae041336b45e1bc18ef95b99b439e0`:73,591 productive comp
 Source/artifact review and integration remain; new authority/resolved-pack identities are
 not relabeled as debd identities. PS5 root-binding, missing offline dependencies, Loom
 child-JVM allocation and privacy-filter false positives remain preserved attempts.
-The dashboard has released its JVMs/listener; the quest bundle recheck now owns the window.
+The dashboard and subsequent quest/binder rechecks have released their JVMs/listeners.
 QA's idle CLI was paused for memory while
 its session, worktree and evidence were retained; do not restart it merely for a status read.
+
+**Dashboard review and Root correction.** The same reviewer closed the concrete P2 in
+`546c4ba5240323f922d485fcfe538d36f1766efa`: both exporters now compile every source from
+the selected Root B, not tools from invoking worktree A while hashing B. The regression
+reproduces the real source-selection failure, then passes38 PowerShell assertions with
+divergent A (clean and dirty), genuinely clean B, six selected paths/bytes and real JDK17
+compilation. It tests the actual extracted selection statements, not the complete
+cross-worktree bootstrap CLI. Bash is supplied but not locally executed.
+
+The separate clean546c canonical export passes73,591 productive comparisons without a
+new browser/server run. Its data SHA-256 is
+`3880a5e1c622a3090f8aa2067faf708bc0e386b9accf4e26d29e326acc161986`;
+audit JSON `529741d7f19178f2de5bd6d74dce02408326531adaf70643497d6bc1f54c8148`;
+Markdown `e520bb5eeba35956c8b7a38f7fd672b57e7e84df375c8db8774fb5d70653bfff`;
+provenance `7262554576cfa326bf22ea1ffa49bb604beb42200957370871a10f8b61f6a919`.
+All eight cb0 artifact files remain unchanged; its23 browser checks and earlier16 HTTP
+checks are not relabeled as546c executions. The initial root-test context/long-path cleanup
+and inventory-order diagnostics remain preserved failures. Tip01828b9 only records evidence.
+
+The coordinator composes that reviewed tip and adds same-repository CI root-selection,
+export and artifact upload steps. The new workflow has not yet run on this composition;
+regenerate the combined artifact rather than retitling any worker output. No new native,
+client, human-save, Survival, Tier or merge pass is implied.
 
 ## Reusable client integration
 

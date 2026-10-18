@@ -34,10 +34,12 @@ ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its R
 clarification does not require another server run. Downstream/core material evidence is
 not complete downstream power/autonomy or physical Matrix crafting acceptance.
 
-Next: integrate canonical T0 projections under ADR-0141/0142. Reviewed S2 real authorities,
+Next: validate the composed T0 projections and finish canonical player guidance under
+ADR-0141/0142. Reviewed S2 real authorities,
 classifications, formation and finite conditional establishment pass the exact `debd3ae`
 refresh with deterministic reports; that engineering result is not a played manual exit.
-Finish the real dashboard, the existing-framework quest adapter and shared player guidance.
+The real dashboard and existing-framework quest adapter are now composed with their strict
+source binding; generate their combined artifact and finish shared player guidance.
 Diagnose the two current CI failures without weakening their conditions. Current
 documentation, client-profile preparation and stable asset work proceed independently.
 Freeze the post-S2 candidate and canonical entry/path
@@ -80,9 +82,9 @@ data are required implementation, not substitutes for renewable gameplay.
 | renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | composed native contract and bounded renewable cycle verified; reuse their scopes, assess only remaining distinct factory/player/persistence properties |
 | production-inventory | Complete source-bound graph/craft/tag/objective export | complete on debd:1384 resources/474 routes/259 tags/25 objectives/11 terminals with source-bound deterministic refresh; later authority changes require affected rebinding |
 | sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | reviewed conditional T0 model/gate passes on debd; global future unknowns remain explicit, not Tier or played acceptance |
-| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | UI/JEI/audio engineering integrated; selected quest backend and shared canonical guidance still in progress |
+| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | UI/JEI/audio and selected quest backend composed; shared canonical resource guidance and combined/client evidence still in progress |
 | dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
-| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | local Result projection/export/serve checkpoints exist; canonical execution, browser and CI artifact remain incomplete |
+| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | reviewed Result projection/export/serve/Root fix and CI artifact wiring composed; worker browser/export evidence retained, combined-source regeneration/hosted execution pending |
 | t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | real-host exploratory Survival reported and740 preparation delivered; final candidate, current CI recovery, physical exit, whole no-command route and retained-world acceptance remain pending |
 | multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
 | multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |

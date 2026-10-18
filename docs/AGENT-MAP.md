@@ -265,17 +265,26 @@ Process work runs at most once per world tick despite subscription changes (ADR-
 
 ## Sustainability export and dashboard ownership
 
-The four static runtime files under `tools/dashboard/` implement the renderer only.
+The four static runtime files under `tools/dashboard/` implement the renderer.
 See [its schema-1 contract](dashboard/README.md): adjacent `data.json`, no synthetic fallback,
-canonical labels and explicit source-bound evidence. Fixtures are not progression evidence.
+canonical labels and explicit source-bound evidence. `AuditReports.document` supplies the
+one canonical Result representation; common `DashboardProjection` derives schema-1 views,
+and game-edge `tools/dashboard/DashboardExport.java` binds actual source/binary provenance.
+`export.ps1`/`.sh` and `serve.ps1`/`.sh` generate and serve the eight-file ignored artifact;
+`DashboardServer.java` permits only its explicit file whitelist on loopback.
+Both exporters compile every tool source from the selected Root, not the script's worktree.
+`tests/VerifyDashboardProjection.java`, `real-data-check.js` and paired
+`verify-export-root` tests cover exact projections, real-data browser behavior and cross-root
+source selection. The GitHub workflow exports/uploads only same-repository PR/push artifacts,
+without a public deployment. Fixtures and artifact publication are not progression evidence.
 
 Astra owns canonical schema/annotations. A bounded worker extracts real `ProcessGraph`,
 `SupplyCatalogue`, local tags, `BootstrapRecipes`, `T1Recipes`, other authored JSON and quests
 from an agreed pinned revision. Existing catalogues retain quantity authority; serialize shared
 metadata/catalogue edits. Canonical inventory and the active conditional T0 model are reviewed
-and verified on `debd3ae`; global future progression remains report-only. Real dashboard data
-binding, CI artifacts and production serving are still under integration. Player communication
-and dashboard views must project the same model.
+and verified on `debd3ae`; global future progression remains report-only. Worker real-data
+and server evidence is source-bound; the composed source must generate its own artifact
+and CI result. Player communication and dashboard views must project the same model.
 The [ADR-0135](DECISIONS.md#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations)
 S1 core is implemented and verified on `639881f`: loader-free `sustainability` model/auditor,
 `AuthorityAdapters`, `TagResolver`, `ConstructionReserve`, `DebtManifest` and `AuditReports`.
@@ -373,6 +382,10 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;
   opt into full smokes explicitly. Per-stage results live under `build/validation/<run-id>/`.
   See [the testing strategy](testing/test-strategy.md).
+- CI's dashboard step follows successful foundation validation, checks the Bash root-selection
+  twin and invokes `tools/dashboard/export.sh --mode pr`. The same-repository guard also
+  applies to upload; missing files fail rather than yield an empty successful artifact.
+  Keep the six native smoke shards and their manifest/limits unchanged.
 - `tools/checks/Verify*.java`, via `tools/run-checks.sh .` after `:common:build`.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash

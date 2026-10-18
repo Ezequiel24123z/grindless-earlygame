@@ -28,6 +28,20 @@ jobs:
       - name: Foundation validation
         run: bash tools/validate.sh .
 
+      - name: Verify and export canonical dashboard
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          bash tools/dashboard/tests/verify-export-root.sh --compile
+          bash tools/dashboard/export.sh --mode pr
+
+      - name: Upload canonical dashboard
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-dashboard
+          path: build/dashboard/site
+          if-no-files-found: error
+
       - name: Upload validation evidence
         if: always()
         uses: actions/upload-artifact@v4

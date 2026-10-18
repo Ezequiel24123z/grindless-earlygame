@@ -81,7 +81,7 @@ invalidated assumption or a genuine new property.
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
 | Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Both original `26c8c2e`/`b982b10` and updated `740ec84` preparation ZIPs are preserved and delivered. Real740 production-bridge probe and one canonical states run945/945 pass. No new client rendering, no-command, update-compatibility or Tier acceptance is inferred. |
 | Quest backend / `cc947b37-3c8f-4ec0-a495-f8d499c28378` | Composed through `9e0a94e`:307 pure contracts and five real ZIP-loader calls from empty maps pass; unchanged binding/lifecycle reuses the real25-quest f106 boot. The S2 checker/composed build-export remain next steps. No automatic loose-definition adoption/deletion or client/save acceptance. |
-| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Worker reports real cb0 export:73,591 productive comparisons,23 browser checks and16 HTTP restrictions. Local source/artifact review and integration remain; earlier PS5/dependency/Loom/privacy-filter failures are preserved. Only explicit output-role overrides, with discharged and declared side-stream class separate. |
+| Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Reviewed through546c/01828 and composed. The same reviewer closed Root source-attribution P2;38 PS root-selection checks and a separate546c canonical export pass. cb0 retains its23 browser/16 HTTP scope. Combined export and new same-repository CI artifact step remain unexecuted; no retitled worker output. |
 | CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
 | Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
 
@@ -101,17 +101,23 @@ The revised renewable conservation equation accounts for the real remaining init
 Do not skip pre-ignition observations or credit synthetic oracle markers as production.
 The existing600/601 poll boundary still rejects a Dynamo that never ignites.
 
-**Resource custody:** dashboard owns only its small cross-root provenance recheck;
-Quest9e0 completed and released its window. The native-fixture grant ended without a boot:
+**Resource custody:** dashboard Root recheck, Quest9e0 and the source-only3a9 binder have
+completed and released their JVMs. The next window is for the frozen combined build/export.
+The native-fixture grant ended without a boot:
 only1909MiB commit margin was available.
 Managed cloud Sandbox provisioning also returned403, so neither path produced native evidence.
 S2 has finished its debd refresh and left no validation JVM. QA's idle CLI was deliberately paused
 to release memory, not archived or deleted; its worktree/source/logs remain intact.
-S2's source-only binding check has passed and released its JVM; combined export/build is next.
 No new server is reserved. Keep native runs/Gradle and game-edge logging serial on this host.
 The implementation worker may inspect/code independently but must obtain a resource turn
-before Java. S2's exact debd refresh remains closed while its next bounded increment prepares
-the changed claim-service source binding without touching AuditReports or gameplay.
+before Java. S2's exact debd refresh remains closed; the reviewed claim binder is now
+composed and the combined export must establish its new identities.
+
+Local composition preserves the worker histories: quest merge `fe4e74e`, binder merge
+`91c10af`, then the dashboard tip `01828b9`. Resolve the containing dashboard integration
+commit from Git. Remote publication still requires the guarded normal fast-forward to both
+existing refs. The current hosted c760 runs must finish or be recorded honestly if replaced;
+the delayed740 notification does not describe the current head.
 
 The owner's priorities are canonical S2 closure, current-document truth, the genuinely unique
 physical exit, one full no-command Survival route, coherent player-facing projections and

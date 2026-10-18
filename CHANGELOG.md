@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Canonical dashboard integration composed through `01828b9`.** Schema-1 exports now
+  project the same S2 Result/document with exact quantities, explicit unknowns and separate
+  global/conditional verdicts. Paired tools provide sanitized source/binary provenance and
+  loopback-only whitelisted serving; real-data browser evidence stays tied tocb0. The
+  reviewed cross-root defect is fixed in546c: sources and declared identities both come
+  from the selected Root, with38 PowerShell regression assertions and a separate canonical
+  re-export. Bash remains locally unexecuted. CI now runs its root-selection twin and
+  exports/uploads a same-repository-only artifact, without Pages or permission changes.
+  Combined-source build/export and hosted CI execution remain pending.
 - **Strict claim-source binding composed through `3a9a27b`.** The existing registry-edge
   checker now follows the actual shared claim service and both legacy/Heracles entrypoints,
   including physical-book, sender, evidence, prerequisites, reward and idempotency guards.

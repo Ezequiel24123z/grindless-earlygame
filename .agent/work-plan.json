@@ -80,10 +80,10 @@
       "publisher": "Astra coordinator only; workers create local checkpoints"
     },
     "resource_window": {
-      "owner_session_id": "e2c2110f-b8f5-4d20-8e73-1a146e41c1a3",
-      "scope": "Small cross-root dashboard provenance fix/recheck; no native server",
+      "owner_session_id": null,
+      "scope": "All prior small JVM turns released; next grant is frozen combined-source build/export, no native server",
       "next_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
-      "next_scope": "Source-only checker3a9 against pinned Quest9e0 authority inputs",
+      "next_scope": "Combined build/checks and canonical export after the coordinator freezes the integration commit",
       "native_blocker": "1909MiB free commit below canonical2GiB server plus overhead; no local boot. Managed cloud Sandbox returned403 and created no validation evidence.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",
@@ -236,15 +236,16 @@
     {
       "id": "canonical-dashboard-data",
       "task_id": "dashboard-integration",
-      "status": "worker_real_export_and_browser_passed_review_integration_pending",
+      "status": "reviewed_composed_combined_export_and_ci_pending",
       "worker_session_id": "e2c2110f-b8f5-4d20-8e73-1a146e41c1a3",
       "model": "gpt-6.1-sol",
       "reasoning_effort": "max",
       "input_revision": "debd3ae3015126b5efa3dd63b19fbc55a6655016",
-      "local_checkpoints": ["90c6ba1c4f2f97e1d95a06d8e69ed573f4e5065a", "858ababf3ec4f8dae436c5083e492979389530d4", "cb0ff909f0ae041336b45e1bc18ef95b99b439e0"],
+      "local_checkpoints": ["90c6ba1c4f2f97e1d95a06d8e69ed573f4e5065a", "858ababf3ec4f8dae436c5083e492979389530d4", "cb0ff909f0ae041336b45e1bc18ef95b99b439e0", "546c4ba5240323f922d485fcfe538d36f1766efa", "01828b9e600b019e84dc8602358aa377b626c3a1"],
       "owned_files": ["AuditReports.document/json seam", "canonical dashboard projection/export/local server", "paired dashboard tools and focused tests"],
       "invariants": "Project Result, not prose; preserve exact quantities, unknowns and separate conditional/global verdicts. Output role comes only from an explicit route override; discharged and declared_side_stream_class stay separate. No private paths or synthetic fallback.",
-      "evidence": "Worker reports real cb0 export:73591 productive comparisons,23 browser checks and16 HTTP restrictions; final data SHA08c297bed36d33d93f8060bb7b2cd47ac18010f6361f67ff6c1174d71b86d292. Source/arithmetic/provenance review and integration remain; earlier PS5/dependency/Loom/privacy-filter attempts are preserved.",
+      "evidence": "cb0 real export73591/browser23/HTTP16 remains source-bound. Root source-attribution P2 closed by the same reviewer at546c;38 PS selection/compile assertions and a separate73591 canonical re-export pass. Java/server/runtime unchanged; Bash still locally unexecuted. Earlier failures and cb0 bytes preserved.",
+      "combined_boundary": "Regenerate the artifact on the actual integration pin. Added same-repository-only CI root-selection/export/upload is not yet hosted evidence; no Pages or permission change.",
       "stop_condition": "Return source-bound exhaustive projection evidence and a real-data browser result, or exact blockers; no remote publication or global build-file edits"
     },
     {
@@ -843,7 +844,7 @@
     {
       "id": "dashboard-integration", "title": "Connecting real dashboard data", "status": "in_progress", "depends_on": ["dashboard-renderer", "sustainability-model", "production-inventory"],
       "owner": "bounded integration workers; Astra schema and real-data review",
-      "next_action": "Generate adjacent schema-1 data.json from canonical data/evidence; integrate local serving and PR CI artifact",
+      "next_action": "Regenerate the composed clean source into its own artifact and run the newly wired same-repository CI export/upload; preserve reviewed cb0/546c evidence without relabeling",
       "validation_focus": ["static_schema_provenance_and_data", "existing_renderer_contracts", "required_first_real_data_browser_integration"],
       "acceptance": ["Real source-bound data without sensitive paths/logs", "No synthetic fallback", "Canonical labels and explicit discard/unknown states", "Exact source_commit/context.commit deliverable rule", "Real-data/browser review", "Stable publication only from validated milestones through an approved mechanism"]
     },
