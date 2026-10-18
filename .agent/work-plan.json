@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 6,
+  "plan_revision": 7,
   "updated": "2026-10-18",
-  "phase": "canonical_t0_closure_s2_and_player_asset_preparation",
+  "phase": "canonical_t0_closure_and_player_feedback_implementation",
   "product_gate": "IMPLEMENTATION_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -94,6 +94,14 @@
     "rules": "Maintain PR54 explicitly by repo/number; verify live PR/head/base and ancestry; fast-forward-only reviewed publication to its existing head; publish own branch as appropriate; stop on unexpected remote movement",
     "prohibited": ["duplicate_or_replacement_PR", "retarget", "force_push", "history_rewrite", "old_or_main_checkout_writes", "independent_worker_push_to_PR54"],
     "keep_draft_until_accepted": true,
+    "conditional_merge_authorization": {
+      "source": "Owner directive, 2026-10-18: work autonomously, merge when T0 is fully ready, and leave a portable Git handoff for another session/device",
+      "authorized": true,
+      "condition": "T0 completion and actual required acceptance evidence, current checks/reviews and safe live PR state; permission is not evidence that these passed",
+      "scope": "Land the current T0 delivery through the existing PR stack as necessary for the intended continuation branch; inspect PR54/PR53 and their live bases before acting",
+      "not_authorized": ["premature merge", "invented manual passes", "bypassing branch protection", "worker publication", "history rewrite or surprise retarget"],
+      "handoff": "Publish coherent reviewed source and exact execution state, reproducible build/pack instructions and honest remaining gates; no dependency on private paths or vanished worktrees"
+    },
     "reactivate_old_automation": false
   },
   "input_documents": [
@@ -174,6 +182,19 @@
           "dependencies_changed": false,
           "acceptance_weakened": false,
           "new_product_tasks": 0
+        },
+        {
+          "id": "PA-0006",
+          "plan_revision": 7,
+          "date": "2026-10-18",
+          "title": "Implement observed client feedback and preserve conditional merge intent",
+          "source": "Owner's real-client feedback and later autonomous completion/merge directive; ADR-0142",
+          "method": "Parallel bounded UI/JEI and audio repairs, independent source/licence/quest-backend research and targeted QA, without waiting on unrelated S2 work",
+          "affected_tasks": ["resource-communication", "renewable-t0", "sustainability-model", "t0-integration"],
+          "dependencies_changed": false,
+          "acceptance_weakened": false,
+          "new_product_tasks": 0,
+          "merge_still_requires_completion": true
         }
       ],
   "references": {
@@ -200,8 +221,47 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "renewable-t0",
-  "parallel_opportunity": "S2 implements canonical authorities and conditional establishment with affected model checks. Current-doc contradictions and the optional quest edge are reconciled; asset inventory is source-bound, not visual acceptance. The user made a Minecraft client available for isolated-profile preparation, but final Survival/exit acceptance waits the post-S2 candidate. Reuse unchanged shared/native proofs and keep later breadth held.",
+  "parallel_opportunity": "S2 closes its finite data/model witness while independent UI/JEI and audio workers repair real-client feedback. QA uses immutable client checkpoints; quest-backend and audio-source research do not block immediate fixes. Keep T1 recipe-output investigation parked, preserve the original player save/ZIP, and retain genuine acceptance before the newly authorized future merge.",
   "prepared_assignments": [
+    {
+      "id": "t0-ui-jei-feedback",
+      "task_id": "resource-communication",
+      "status": "integrated_engineering_qa_passed_production_probe_pending",
+      "worker_session_id": "783b5107-d472-4600-a3c1-3e1f148ad172",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "4431b1ab5d090a35fe23e20dc816e2aab3883000",
+      "local_checkpoints": ["50473844637c6c3dd125735077e991c315101c2e", "3be2fca54a14f5e48ca40534a35edc648abed6bc", "d0b72566a3aa5175031141a0411a3cc7adb33d2f"],
+      "owned_files": ["ProcessMachineScreen and client fluid bridge", "MachineMenuLayout/MachineFluidView and related menu geometry", "forge/jei", "relevant localization and UI checks"],
+      "scope": "Visible real slots/inventory, non-overlapping bounded status, red Not consumed catalysts, native T0 water and complete machine-specific JEI I/O including empties",
+      "invariants": "No recipes, slot indices, ItemLayout3, execution or storage changes. Water identity is server-confirmed by appended data field10 (payload11); unconfirmed nonempty contents remain visible UNKNOWN. One real store/quota subset; matching client/server candidate required.",
+      "dispatch_boundary": "Independent observed presentation defects, not completion of canonical resource communication before its model dependency",
+      "qa_owner": "87354db2-9fcb-463c-b5c6-756c4729a6c9"
+    },
+    {
+      "id": "t0-inactive-machine-audio",
+      "task_id": "t0-integration",
+      "status": "integrated_source_review_and_compile_passed_listening_pending",
+      "worker_session_id": "b40a0c9d-0ed0-423c-a757-03a2297e7530",
+      "model": "gpt-6-luna",
+      "input_revision": "4431b1ab5d090a35fe23e20dc816e2aab3883000",
+      "local_checkpoints": ["d42d0baed134aaef832d009cebc4d9dad7a1f99a", "ee6564c991ac5d77a01febb23e5958d637db6fbc"],
+      "owned_files": ["MachineEffects.java", "MachineStatus.java Javadoc only"],
+      "scope": "Remove ordinary STARVED relay clicks and generic OUT_OF_BAND alarm; preserve visual cues, working/generating audio and explicit pylon brownout alert",
+      "dispatch_boundary": "Independent client-feedback repair; no sound imports, registrations or gameplay changes"
+    },
+    {
+      "id": "client-feedback-source-research",
+      "task_id": "resource-communication",
+      "status": "ui_and_audio_precedents_delivered_quest_fit_under_review",
+      "read_only_agents": {
+        "gt_ui": "6a68e0e7-a078-4686-8824-3ec0abfd0889",
+        "quest_backend": "81d20905-9f62-4a5a-b9be-f7f3f7cd1b0e",
+        "audio_licences": "b9b5bc8d-510f-4dcb-9bae-158aa14c588e"
+      },
+      "scope": "Exact upstream UI/API patterns, compatible existing quest engines with safe per-player/claim migration, and verified audio-asset rights; no code/assets imported",
+      "decisions_reserved": "Astra selects backend and migration; QuestCatalogue/old claims/registered book identity and early item-free access are preserved"
+    },
     {
       "id": "s2-canonical-closure",
       "task_id": "sustainability-model",
@@ -217,7 +277,7 @@
       "current_scope": "Real pack/registry evidence, formed non-consumed requirements, existing-loop unit candidate, conditional entry and scoped manual work, nullable unknown route tiers, explicit automation/manual production goal, actual calibration and Hand Pump authorities",
       "blocking_review": "Original binding findings closed by static recheck of308d2cb; local code still awaits integration. Model goal/seed corrections remain required.",
       "annotation_scope": "Approved T0 source/workshop chains only; R0 claims must be proved, construction requires A, no roots inferred from registration. Slag has potential future use, explicit unknown first-use placement and ordinary disposal, not an invented T0 consumer/automated void sink. Actual environment/manual-labour facts do not grant availability or budgets.",
-      "model_review": "574488c has a P1 explicit quest-reward production-goal bypass and P2 inaccessible funded loop seed, assigned for repair. Binding repair308d2cb closes the original2P1/1P2 by static recheck. Later S2 code remains local, not T0 acceptance.",
+      "model_review": "Original registry findings closed at308d2cb; goal/seed findings closed at8f5fcd1. Later manual-first/shared-custody/scope/potential and actual Quest Book access changes through6c9f2d7 remain local, pending delta review despite source-bound conditional-gate passes.",
       "stop_condition": "Return coherent local source-bound increments and real closure findings; no invented kit, tier, terminal, waiver or public private-path leak; no remote publication or acceptance claims"
     },
     {

@@ -312,6 +312,17 @@ version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
 
+- Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`
+  for the read-only primary-store projection. `FluidClientPlatform` delegates native water
+  rendering to `client/forge/FluidClientPlatformImpl` in the Forge module; loader types never
+  enter common. `ProcessMachineBlockEntity.syncData` appends water confirmation at menu
+  field10 (payload11) only on a known server. Fields0..9, item slots and save layout stay
+  unchanged. An unknown ID is not an absent tank; output quota is included in stored volume.
+  `VerifyMachineUi` covers layout, roles and restored/unconfirmed identities; production
+  transformation and client rendering retain their own bounded proof requirements.
+- `MachineEffects` is silent for ordinary STARVED and generic OUT_OF_BAND audio while
+  retaining visual feedback, working/generating effects and the pylon's explicit warning.
+  Do not mute unrelated alert systems or infer an asset licence from the code licence.
 - Client packs use root `build.gradle` tasks `buildModpack` and `verifyModpack`, with thin
   `tools/build-modpack.ps1`/`.sh` twins. `pack/curseforge/manifest.json` owns pins;
   `profiles.json` selects project IDs and `dependency-metadata.json` verifies them.

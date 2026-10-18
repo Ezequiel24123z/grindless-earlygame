@@ -15,7 +15,8 @@ import java.util.Optional;
  * and I do not know why" is the commonest failure in a complex pack, so a machine says <em>which
  * kind</em> of stopped it is. {@link #BLOCKED} (cannot output), {@link #STARVED} (cannot get
  * input or power) and {@link #OUT_OF_BAND} (conditions outside the envelope) are different faults
- * with different fixes, and each has its own look, sound and particle.
+ * with different fixes and distinct visible feedback. Sounds accompany operation where
+ * appropriate; the pylon's brownout alarm remains an explicit alert rather than a generic fault cue.
  *
  * <p>The status is a block state property rather than block entity data, because the model, the
  * light level and the client-side effects all key off it and a block entity is not available to

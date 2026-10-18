@@ -103,7 +103,7 @@ public final class MachineEffects {
         }
     }
 
-    /** Froth while the cell runs; a dry click when surfactant or feed is missing. */
+    /** Froth while the cell runs; smoke while it waits on surfactant or feed. */
     private static void flotation(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
         double x = pos.getX() + 0.5;
         double z = pos.getZ() + 0.5;
@@ -120,7 +120,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 1.0, z, 0.0, 0.01, 0.0);
                 }
             }
-            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.8F);
             case OUT_OF_BAND -> {
             }
             default -> {
@@ -128,7 +127,7 @@ public final class MachineEffects {
         }
     }
 
-    /** Spray off the sluice while it runs; a dry click when it is waiting on water or feed. */
+    /** Spray off the sluice while it runs; smoke while it waits on water or feed. */
     private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
         double x = pos.getX() + 0.5;
         double z = pos.getZ() + 0.5;
@@ -149,7 +148,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.15F) {
                     particle(level, ParticleTypes.SMOKE, x, pos.getY() + 0.9, z, 0.0, 0.02, 0.0);
                 }
-                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.7F);
             }
             case OUT_OF_BAND -> {
             }
@@ -179,7 +177,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.2F) {
                     particle(level, ParticleTypes.ELECTRIC_SPARK, x, pos.getY() + 0.7, z, 0.0, 0.0, 0.0);
                 }
-                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.15F, 1.4F);
             }
             case OUT_OF_BAND -> {
             }
@@ -188,7 +185,7 @@ public final class MachineEffects {
         }
     }
 
-    /** A splash at the wellhead while it pumps; a dry click when it has no power. */
+    /** A splash at the wellhead while it pumps. */
     private static void well(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
         double x = pos.getX() + 0.5;
         double z = pos.getZ() + 0.5;
@@ -205,7 +202,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.8, z, 0.0, 0.02, 0.0);
                 }
             }
-            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.5F);
             case OUT_OF_BAND -> {
             }
             default -> {
@@ -233,7 +229,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.2F) {
                     particle(level, ParticleTypes.ELECTRIC_SPARK, x, pos.getY() + 0.7, z, 0.0, 0.0, 0.0);
                 }
-                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.12F, 1.3F);
             }
             case OUT_OF_BAND -> {
             }
@@ -242,7 +237,7 @@ public final class MachineEffects {
         }
     }
 
-    /** A drip into the mould while casting; a click when the mould or the melt is missing. */
+    /** A drip into the mould while casting. */
     private static void caster(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
         double x = pos.getX() + 0.5;
         double z = pos.getZ() + 0.5;
@@ -258,7 +253,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.SMOKE, x, pos.getY() + 0.8, z, 0.0, 0.01, 0.0);
                 }
             }
-            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.7F);
             case OUT_OF_BAND -> {
             }
             default -> {
@@ -282,7 +276,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.CLOUD, x, pos.getY() + 1.1, z, 0.0, 0.01, 0.0);
                 }
             }
-            case STARVED -> sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.03F, 0.12F, 0.6F);
             case OUT_OF_BAND -> {
             }
             default -> {
@@ -328,7 +321,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.15F) {
                     particle(level, ParticleTypes.SMOKE, x, pos.getY() + 1.05, z, 0.0, 0.02, 0.0);
                 }
-                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.6F);
             }
             case OUT_OF_BAND -> {
             }
@@ -356,7 +348,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.2F) {
                     particle(level, ParticleTypes.ELECTRIC_SPARK, x, pos.getY() + 0.8, z, 0.0, 0.03, 0.0);
                 }
-                sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.05F, 0.2F, 0.7F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.2F) {
@@ -398,8 +389,6 @@ public final class MachineEffects {
                         (random.nextDouble() - 0.5) * 0.15, 0.02, (random.nextDouble() - 0.5) * 0.15);
             }
             sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.35F, 1.1F);
-        } else if (status == MachineStatus.STARVED) {
-            sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.65F);
         } else if (status == MachineStatus.BLOCKED) {
             if (random.nextFloat() < 0.3F) {
                 particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5,
@@ -423,7 +412,6 @@ public final class MachineEffects {
                 particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5,
                         0.0, 0.02, 0.0);
             }
-            sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.04F, 0.2F, 0.5F);
         } else if (status == MachineStatus.BLOCKED) {
             if (random.nextFloat() < 0.35F) {
                 particle(level, ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 1.0,
@@ -477,9 +465,8 @@ public final class MachineEffects {
     }
 
     /**
-     * Out-of-band is the same on every machine: purple motes and the brownout alarm at a higher
-     * pitch. Conditions being wrong is not a machine-specific failure, so it does not get a
-     * machine-specific effect.
+     * Out-of-band is the same on every machine: purple motes. Conditions being wrong is not a
+     * machine-specific failure, so it does not get a machine-specific effect.
      */
     private static void outOfBand(Level level, BlockPos pos, RandomSource random) {
         if (random.nextFloat() < 0.5F) {
@@ -489,7 +476,6 @@ public final class MachineEffects {
                     pos.getZ() + 0.2 + random.nextDouble() * 0.6,
                     0.0, 0.04, 0.0);
         }
-        sound(level, pos, ModSounds.BROWNOUT_ALARM.get(), random, 0.08F, 0.25F, 1.6F);
     }
 
     private static void particle(Level level, ParticleOptions type, double x, double y, double z,

@@ -13,7 +13,8 @@ or publishers. The retired session is quiescent; no further report to it is requ
 Start with `AGENTS.md`, [the work plan](work-plan.json), [pending checks](pending-checks.json),
 [risk-based validation](../docs/testing/test-strategy.md) and
 [revision-bound evidence](../docs/testing/latest-validation.md). The plan still has the same
-16 product tasks and dependencies; revision6/PA-0005 records the owner's T0-closure priorities.
+16 product tasks and dependencies; revision7/PA-0006 adds observed client-feedback execution
+and the owner's conditional future merge/portable-handoff directive.
 Read only relevant ADRs and task-map sections afterward.
 
 Receipt of `b012bc4` was verified and published as `33b077c`. All three original fingerprints
@@ -73,7 +74,9 @@ invalidated assumption or a genuine new property.
 
 | Owner/session | Current checkpoint and boundary |
 | --- | --- |
-| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | `cc3f111` integrated; later model/binding increments remain local. Original binding findings are closed by static recheck of `308d2cb`. Model `574488c` still needs fixes for an explicit quest-reward exit bypass and an inaccessible funded loop seed. Physical bindings, annotations and closure continue. |
+| S2 / `05b30944-5210-4584-a78c-bd78e6843742` | `cc3f111` integrated; later code remains local. Registry findings close at `308d2cb`, original goal/seed findings at `8f5fcd1`. Latest `6c9f2d7` reports a full conditional gate with the real Quest Book acquired before claims; shared custody, scope/certificate, fallback and book-access deltas still need independent review. No S2/Tier acceptance is inferred. |
+| UI/JEI / `783b5107-d472-4600-a3c1-3e1f148ad172` | Integrated through `d0b7256`: slot/catalyst fixes, complete layouts and native water. QA's long-text and loaded-lava counterexamples are repaired. Dev/QA1085 plus93 restoration assertions pass; production bridge/client rendering remain pending. Payload11 appends server-confirmed water identity; unknown nonempty contents remain visible. |
+| Audio / `b40a0c9d-0ed0-423c-a757-03a2297e7530` | Integrated `d42d0ba`/`ee6564c`: ordinary STARVED clicks/OUT_OF_BAND alarm removed, working effects and explicit pylon alert preserved. Common compile/source review pass; no imported sound or listening acceptance. |
 | Current docs / `a5b85ada-cbbc-4ae6-b166-a4e322750e1d` | `0b9dae0` integrated as `0deb151`; coordinator corrected Atlas Bootstrap coverage, firing bands, settling slots and current quest/provenance wording. Historical ADRs remain history. |
 | Assets / `703d615f-dfa6-4421-82a6-9bef5d4c979a` | `44a7034` and slag correction `6f6fa8f` integrated as `1a69343`/`b982b10`. Inventory covers 19 blocks, 65 state models, 257 variants and 14 standalone icons; not regenerated or visually accepted. |
 | Client/portable pack / `87354db2-9fcb-463c-b5c6-756c4729a6c9` | Reviewed package `26c8c2e` preserves runtime `b982b10`. The Prism preparation ZIP is attached in the user's conversation and may be used for exploratory manual tests on the real host. It contains the actual remapped jar and explicit Architectury/JEI pins, not a world or final S2/T0 acceptance. |
@@ -102,6 +105,17 @@ progressive exploratory checklist and records actual observations; do not prohib
 play/crafting until S2 or mistake that exploration for the final agreed whole-path run.
 The same-version reopen is continuity only. Slag's uncertain future-use tier and ordinary
 disposal are explicit; no current automated crate/void sink is inferred from policy code.
+The user's global satisfaction statement is not a per-gate pass. Their subsequent concrete
+feedback drives ADR-0142; the three T1 recipe-output screenshots/ID investigation are parked
+by explicit user direction. The alias diagnostic already collected is preserved, not a new
+T1 dispatch or proof that a PNG was missing.
+
+Read-only studies: GregTech UI `6a68e0e7-a078-4686-8824-3ec0abfd0889` confirms native API
+patterns without a new widget framework; audio `b9b5bc8d-510f-4dcb-9bae-158aa14c588e`
+identifies CC0 candidates but no imported files; quest fit
+`81d20905-9f62-4a5a-b9be-f7f3f7cd1b0e` compares FTB/Heracles against actual per-player
+claims and early access. Heracles is a provisional better fit, not selected before its
+extension/migration and exact-version licence facts are verified.
 
 ## Publication and preservation
 
@@ -112,6 +126,12 @@ This app branch does not inherit PR identity: use explicit repo/number. Astra al
 reviewed checkpoints, verifies live PR/ref state and advances both branches by fast-forward.
 No replacement PR, force-push, retarget or old/main-checkout writes. Keep old Agent merge,
 automation and subscriptions disabled. Preserve child worktrees and their source-bound logs.
+The owner now authorizes an autonomous **future merge after genuine T0 completion** and a
+portable Git handoff for another device. It is not evidence that pending manual/CI/review
+gates passed. Keep the draft until those conditions hold, inspect the live PR stack before
+landing, and never bypass protection or surprise-retarget. Current coordinator subscription
+`235a6fbb-4e15-45f9-b8f1-7235de3bef66` watches PR54 checks/reviews only; it is not old-session
+Agent merge and does not merge by itself. QA removed its temporary app-idle subscription.
 
 The prior bounded runtime workers finished and released their owned smoke ports; S2 and
 client preparation are current work, not stale tasks to archive. No further native replay is

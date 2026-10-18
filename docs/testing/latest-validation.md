@@ -1,5 +1,47 @@
 # Current T0 rework validation
 
+## Current player-feedback engineering, 2026-10-18
+
+The owner requests autonomous completion and a merge **only after T0 is genuinely ready**.
+Their broad positive feedback on the preparation build is not an individual result for every
+gate, nor evidence of the later source. Real screenshots establish the original slot/status,
+fluid-presentation and audio complaints; the user parks the three T1 output/ID investigation.
+
+The integrated UI source is now `d0b7256`; audio is `d42d0ba` plus comment-only `ee6564c`.
+The newer flag repair closes the loaded-identity counterexample at the source/view boundary:
+Dev and QA run1085 UI assertions, plus93 independent restoration assertions. Real codecs
+preserve water/lava/internal/empty contents; only server-confirmed flag1 and positive volume
+render water. Unknown identity preserves the nonempty store and quota. No BE/Forge world was
+instantiated by those fixtures, and no client appearance/transport pass is inferred.
+The eleven-field menu payload requires matching client/server candidates. The remapped
+production stub/implementation probe and updated client observations remain separate steps.
+
+Latest local S2 `6c9f2d7` reports695 model,232 adapter,1020 registry/source,295 conditional-T0
+and1200 live-projection assertions passing. The joint finite witness now obtains the actual
+handheld Quest Book before claims, not merely as a later R0 output. Its sufficient, non-minimal
+entry assumptions are33 bricks,41 cobblestone,21 oak planks and20 sticks, with741 local actions
+allowed,178 used and563 remaining; no book/paper or resources are gifted initially. These are
+model inputs, not a starter kit or a player walkthrough.
+
+The independent JVM JSON/Markdown outputs match at that source. An initial parallel run
+collided on Minecraft log rotation; subsequent serial runs are clean. Preserve both attempts
+and serialize or isolate logging for future game-edge JVMs. Source/gate changes since the
+previous reviews still need independent review; global future unknowns and unseeded errors
+under missing later ledgers are not hidden or interpreted as demonstrated future gameplay.
+
+| Local increment | Evidence | Remaining scope |
+| --- | --- | --- |
+| UI/JEI `5047384` | Dev/QA333 UI assertions plus23 independent exact slot-map checks; unchanged interaction/NBT suffix reused | QA found a five-line status overflow; the basic pass does not close that edge |
+| UI/JEI `3be2fca` | Dev975 UI assertions, common/Forge compile and focused Assets/Recipes/Workshop pass; bounded status, native water and complete JEI layout | Independent CP2 and production platform-bridge check pending; no new native visual pass |
+| Audio `d42d0ba` + Javadoc `ee6564c` | Source review and common compile; ordinary fault audio removed, working sounds/pylon warning retained | Listening pending; no new audio files imported |
+| S2 `8f5fcd1` | Static recheck closes the original goal-reward and funded-seed defects | Later fallback/budget/gate work is not covered by that recheck |
+| S2 `28f958d` / `0bdaa24` | Local finite-entry/manual-first/trace changes and reported focused checks; original cadence-binding counterexample repaired in source | Delta review and full active-scope gate remain open; global ceramic-cycle UNKNOWN cannot be excluded by a T0 detail filter |
+
+Earlier UI/audio offline dependency and memory/pagefile failures remain in worker evidence.
+Bounded JVM settings subsequently compile the exact source; they are execution settings, not
+changes to project versions or a claim that failed attempts passed. No additional C3/native
+replay is required merely for these source-equivalent interaction paths or client presentation.
+
 ## Portable reference package, 2026-10-18
 
 Reviewed packaging `26c8c2e6bf866beea63f86db33467fd67a7a5e03` retains runtime

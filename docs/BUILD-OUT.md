@@ -45,6 +45,11 @@ only for an uncovered property or changed assumption, using
 [the classification matrix](testing/test-strategy.md#outstanding-work-classification).
 Product dependencies, held ports, required CI and genuine manual gates are unchanged.
 The retired session remains quiescent; Astra alone integrates and publishes.
+Real-client feedback now has independent UI/JEI and audio implementation checkpoints under
+ADR-0142, with targeted QA and separate quest-backend/API/licence research. Do not wait for
+unrelated S2 work to repair presentation defects, or turn the deferred T1 output screenshots
+into the next scope. The owner authorizes merge only after genuine T0 completion, followed
+by a portable Git handoff; existing acceptance and branch protection are unchanged.
 The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
 [reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
 

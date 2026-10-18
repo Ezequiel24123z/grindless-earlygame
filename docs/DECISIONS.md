@@ -153,6 +153,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0139](#adr-0139--long-native-smokes-carry-their-own-assertion-budget) | Long native smokes carry their own assertion budget | Accepted |
 | [0140](#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions) | Validate behavioral classes and reuse proof under explicit assumptions | Accepted |
 | [0141](#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment) | Canonical T0 closure uses real authorities and conditional establishment | Accepted |
+| [0142](#adr-0142--t0-client-feedback-reuses-native-ui-and-existing-quest-infrastructure) | T0 client feedback reuses native UI and existing quest infrastructure | Accepted |
 
 ---
 
@@ -6442,3 +6443,88 @@ native restoration and bounded daylight-cycle evidence remains valid within its 
 The conditional entry witness must later be confronted with an actually acquired survival
 inventory. Neither these decisions nor a diagnostic client/world accept T0, a retained world,
 the physical five-Matrix playthrough or any T1--T15 expansion.
+
+**S2 refinements.** Canonical recurring production does not prohibit a real manual first
+construction. The finite availability witness may fall back to verified, unlocked,
+non-optional, non-automatic and non-one-shot crafting authorities, retaining actual input
+costs and completed sublots. It never substitutes that fallback for renewable production
+or the mandatory canonical exit batch. `establishmentBatches` exposes completed replay
+batches separately from the canonical route and goal result.
+The existing handheld quest UI is also a physical prerequisite: reward claims require one
+non-consumed Quest Book, acquired before the first claim. A later renewable book, a creative
+registration or a proposed future backend keybind cannot finance access retrospectively.
+The same book is reusable across claims; do not consume or reserve one copy per quest.
+
+The sufficient entry bill must fund the actual shared construction/claim witness and the
+required independently replayed startup proofs. Componentwise maxima between alternative
+proof bills are conservative allowances, not a sum of their execution steps, a minimal kit
+or a replacement for joint feasibility. Optional rewards require explicit selection.
+
+The active T0 conditional gate is separate from global sustainability and physical acceptance.
+It fails relevant global integrity/unknown/positive-cycle findings as well as T0-context
+findings; relevance is not just a string in the detail or an SCC's representative vertex.
+Unknown first use of a non-mandatory output does not waive its class, route, R0 or handling
+proof. Flint is optional in the active T0 contract, with ordinary storage/discard and
+unplaced first use, not an invented mandatory consumer.
+
+A unit-positive potential may certify the same no-positive-gain predicate checked by
+`positiveCycles` when every member's complete non-energy net sum and net energy are both
+nonpositive, using exact integer arithmetic. Non-consumed requirements contribute no spent
+input. This only removes a genuinely discharged uncertainty; it preserves warnings and
+existing searches, does not assert physical mass conservation and does not establish supply,
+startup or acceptance on its own.
+
+## ADR-0142 — T0 client feedback reuses native UI and existing quest infrastructure
+
+**Status.** Accepted direction, 2026-10-18; client checkpoints are under review and the quest
+backend is not selected merely by this record.
+
+**Context.** Real-player observations on the preparation client expose an invisible slot grid,
+overlapping Inventory/status text, textual JEI fluid lists and repetitive non-working-state
+audio. The owner wants a clearer native interface, red non-consumed catalyst text, real fluid
+visuals and an existing compatible quest system instead of more bespoke infrastructure.
+The placed machine models are positively received. The owner explicitly parks investigation
+of the three T1 recipe-output screenshots and unconfirmed T1 crafting-complexity changes.
+
+**Decision.**
+- Repair actual machine/player slots and bounded status layout immediately, independently of
+  S2 and backend research. Preserve physical slot indices, I/O restrictions and saved item layout.
+  Share a small physical layout description between the existing menu/screen and JEI; do not
+  create a general UI framework. Native Minecraft/JEI primitives already solve this problem.
+- Actual `recipe.catalysts` use the non-consumed ingredient role and a localized red
+  `Not consumed` tooltip. A machine recipe-catalyst icon is a different JEI concept; consumed
+  inputs and structural requirements must not be relabeled as chemical catalysts.
+- Render current T0 water with its real native texture/tint, amount and capacity. The output
+  quota is part of the same store, not extra volume or a second tank. JEI keeps complete
+  machine-specific I/O positions, including empty slots and all process conditions. Internal
+  fluid IDs without Forge registration retain a visible diagnostic cell/role/quantity, not
+  a fake FluidStack, guessed chemical color, hidden input or new fluid registration.
+- Recipe restrictions alone do not establish a restored buffer's identity. Preserve loaded
+  contents and append a server-confirmed water flag to the existing menu payload (old fields
+  unchanged). Unconfirmed nonempty data retains volume/capacity/quota with an unknown
+  diagnostic; it is not erased, treated as empty, or painted as water. This is derived
+  synchronization, not a save migration. Client and server must use the same candidate.
+- Ordinary non-working states retain visual feedback without repetitive relay/beep noise.
+  Keep legitimate working effects and the distinct pylon brownout alert. New sound selection
+  is independent: verify each asset's source/licence, not just the upstream code licence,
+  before import. A compatible shortlist is not an import or an auditory acceptance result.
+- Evaluate an existing Forge 1.20.1 quest backend against the actual stable catalogue,
+  per-player claimed state, prerequisite/reward semantics and item-free early access.
+  Preserve existing book registration and old saved data; an item can bridge to a new UI.
+  Generate definitions from `QuestCatalogue`, rather than hand-maintaining a second catalogue.
+  No wholesale authority replacement, team-sharing behavior, raw save overwrite, duplicate
+  reward or new recipe permission is authorized by a product name or research summary.
+
+The exact-source GregTech Modern/LDLib study confirms a shared widget tree and native
+Minecraft/Forge/JEI rendering underneath. Native APIs suffice here without copying or adopting
+the much larger external widget engine. The study is a pattern/API reference, not a licence
+grant or proof that every target patch-build API is identical; compilation uses the project's
+resolved dependency. No upstream code, texture or sound is imported in these checkpoints.
+
+**Validation and delivery.** Run focused geometry, role, capacity, tooltip, platform-bridge and
+audio-policy checks. Reuse unchanged item interaction, executor, native fluid and save-layout
+proofs. Keep source-scoped human evidence separate from global satisfaction or a prior version.
+The owner authorizes autonomous work and a future merge **after T0 is genuinely ready**.
+That does not certify missing checks, override branch protection or permit an early merge.
+Preserve the live PR stack, reviewed Git checkpoints and a portable, truthful handoff so a
+later session/device can continue without private paths, lost worktrees or invented passes.

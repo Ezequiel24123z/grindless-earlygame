@@ -15,6 +15,27 @@ entries below reference those records by id.
 
 ### Added
 
+- **Client-feedback engineering integrated through `d0b7256`.** Native machine/player slots,
+  bounded status text, red non-consumed catalyst tooltips and complete JEI layouts now share
+  the real physical schema. Current T0 water uses its native appearance. A loaded-lava
+  counterexample exposed that recipe restrictions alone do not prove stored identity;
+  payload field10 now confirms water only from a server snapshot. Nonempty unconfirmed
+  contents retain their volume/capacity/quota as explicit unknowns; no fluid is purged.
+  Ordinary starvation clicks and the generic out-of-band alarm are removed, while working
+  sounds and the pylon's explicit alert remain. Matching client/server candidates are required
+  for the eleven-field menu payload. Source/compile and focused QA pass; real production
+  bridge/client checks are still distinguished from engineering acceptance.
+- **Real-client feedback dispatched as implementation (ADR-0142, PA-0006).** Independent
+  UI/JEI and audio workers now have local engineering checkpoints for visible native slots,
+  red non-consumed catalysts, current water visuals, complete recipe layouts and quiet
+  ordinary fault states. QA found a long-status overflow in the first UI checkpoint and
+  rechecks its correction in the second; no client acceptance is inferred from compilation.
+  Existing quest-backend/API/licence research proceeds separately, without changing the
+  catalogue or player state by assumption. T1 recipe-output investigation remains parked.
+- **Conditional merge and portable continuation authorized.** The owner delegated continued
+  autonomous work, then merge only once T0 is fully ready. The plan records this permission
+  without weakening real acceptance, live PR checks or branch protection; the sixteen product
+  tasks and their dependencies remain intact.
 - **S2 classification and observation limits clarified (ADR-0141).** Approved T0 renewable
   claims still require model proof; slag keeps an explicit unplaced future-use role rather
   than an invented consumer tier. Actual solar/daylight and direct manual-labour facts do
