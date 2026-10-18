@@ -10,6 +10,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
@@ -119,7 +121,11 @@ public final class VerifyDashboardProjection {
                 JsonObject output = element.getAsJsonObject();
                 Resource resource = find(result, output.get("resource_id").getAsString());
                 OutputRole declared = policy == null ? null : policy.outputRoles().get(resource);
+                ResourceMetadata metadata = result.annotations().resources().get(resource);
                 eq("declared role " + route.id(), lower(declared), nullableString(output.get("declared_role")));
+                eq("resource classification stays separate " + route.id(),
+                        metadata == null ? null : lower(metadata.sideStreamClass()),
+                        nullableString(output.get("declared_side_stream_class")));
                 eq("no invented output role " + route.id(), declared == null, output.get("role").isJsonNull());
                 eq("actual discharge " + route.id(), route.discharged().contains(resource), output.get("discharged").getAsBoolean());
             }
@@ -176,6 +182,28 @@ public final class VerifyDashboardProjection {
         }
         eq("report top-level view is protected", true, protectedTree);
         JsonObject projected = DashboardProjection.document(result, context);
+        insulatorRoles(result, projected, "actual canonical outputs");
+        Route originalRoute = result.authorities().routes().get("bootstrap/insulators");
+        Map<Resource, Long> reversedOutputs = new LinkedHashMap<>();
+        List<Resource> reversed = originalRoute.outputs().keySet().stream()
+                .sorted(java.util.Comparator.reverseOrder()).toList();
+        reversed.forEach(resource -> reversedOutputs.put(resource, originalRoute.outputs().get(resource)));
+        Route reordered = new Route(originalRoute.id(), originalRoute.authority(), originalRoute.source(),
+                originalRoute.family(), originalRoute.inputs(), originalRoute.catalysts(), reversedOutputs,
+                originalRoute.discharged(), originalRoute.durationTicks(), originalRoute.fuPerTick(),
+                originalRoute.conditions(), originalRoute.prerequisites(), originalRoute.oneShot(),
+                originalRoute.modOwned(), originalRoute.automatable());
+        Map<String, Route> reorderedRoutes = new TreeMap<>(result.authorities().routes());
+        reorderedRoutes.put(reordered.id(), reordered);
+        Snapshot source = result.authorities();
+        var reorderedResult = new SustainabilityAudit.Result(new Snapshot(source.resources(), reorderedRoutes,
+                source.terminals(), source.tags(), source.objectives(), source.inputHashes(), source.findings()),
+                result.annotations(), result.tiers(), result.debt(), result.findings());
+        JsonObject reorderedProjection = DashboardProjection.document(reorderedResult, context);
+        insulatorRoles(reorderedResult, reorderedProjection, "reversed insertion-order counterexample");
+        eq("reordering cannot invent primary or change a quantity",
+                index(projected, "routes").get(originalRoute.id()).get("outputs"),
+                index(reorderedProjection, "routes").get(originalRoute.id()).get("outputs"));
         projected.getAsJsonArray("resources").get(0).getAsJsonObject().addProperty("id", "fixture:not_gameplay");
         projected.getAsJsonArray("routes").get(0).getAsJsonObject().getAsJsonArray("inputs").add("fixture:not_gameplay");
         eq("projection cannot mutate result/report", original, AuditReports.json(result, context.commit(), true));
@@ -205,6 +233,26 @@ public final class VerifyDashboardProjection {
             eq("private fixture rejected without publishing it", true, rejected);
         }
         return assertions - before;
+    }
+
+    private static void insulatorRoles(SustainabilityAudit.Result result, JsonObject data, String scenario) {
+        Route route = result.authorities().routes().get("bootstrap/insulators");
+        Resource grog = route.outputs().keySet().stream()
+                .filter(resource -> resource.id().equals("grindless:ceramic_grog")).findFirst().orElseThrow();
+        eq("grog really has the canonical resource class: " + scenario, SideStreamClass.BYPRODUCT_CURRENT,
+                result.annotations().resources().get(grog).sideStreamClass());
+        eq("the real route has no role override to invent: " + scenario, Map.of(),
+                result.annotations().routes().get(route.id()).outputRoles());
+        for (JsonElement element : index(data, "routes").get(route.id()).getAsJsonArray("outputs")) {
+            JsonObject output = element.getAsJsonObject();
+            eq("neither principal nor byproduct is inferred from map position: " + scenario,
+                    JsonNull.INSTANCE, output.get("role"));
+            Resource resource = find(result, output.get("resource_id").getAsString());
+            eq("actual insulator/grog quantities survive: " + scenario,
+                    route.outputs().get(resource), output.get("amount").getAsLong());
+            eq("classification never changes physical discharge: " + scenario,
+                    route.discharged().contains(resource), output.get("discharged").getAsBoolean());
+        }
     }
 
     private static Map<Resource, Long> amounts(JsonArray entries, Map<String, JsonObject> resources, Boolean consumed) {

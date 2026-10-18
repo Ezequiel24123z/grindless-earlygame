@@ -238,13 +238,16 @@ public final class DashboardProjection {
             JsonArray outputs = new JsonArray();
             route.outputs().forEach((resource, amount) -> {
                 OutputRole declared = policy == null ? null : policy.outputRoles().get(resource);
+                ResourceMetadata metadata = result.annotations().resources().get(resource);
                 String role = declared == null ? null : switch (declared) {
                     case PRIMARY -> "primary";
                     case SIDE_STREAM -> "byproduct";
                     case DISCHARGED -> "discharged";
                 };
                 outputs.add(row("resource_id", resource.key(), "amount", amount, "role", role,
-                        "declared_role", lower(declared), "discharged", route.discharged().contains(resource)));
+                        "declared_role", lower(declared),
+                        "declared_side_stream_class", metadata == null ? null : lower(metadata.sideStreamClass()),
+                        "discharged", route.discharged().contains(resource)));
             });
             boolean selected = result.annotations().resources().values().stream()
                     .anyMatch(metadata -> id.equals(metadata.canonicalRoute()));

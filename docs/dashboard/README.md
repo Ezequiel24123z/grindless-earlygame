@@ -112,6 +112,11 @@ conditions, producer/consumer certainty, quest counts/dependencies/rewards, decl
 families, ledger evidence and every finding retain their canonical values. Output roles are
 reported only when explicitly declared; a map's iteration order is not a primary/by-product
 authority. Resource side-stream classifications do not silently author per-route output roles.
+Every output retains its independent `declared_side_stream_class`, explicit `discharged`
+fact and amount. `PRIMARY`, `SIDE_STREAM` and `DISCHARGED` overrides map only to `primary`,
+`byproduct` and `discharged`; a discharge is not guessed to be an emission or loss, nor
+converted into input consumption. The real insulator/grog route and a reversed insertion-order
+counterexample check that missing overrides remain null even for classified grog.
 Missing machine kinds, names, localization keys, persistent-state claims and rates stay null.
 Classification labels/descriptions are presentation of the approved seven/ten-class taxonomy,
 not a new class or renewable assertion.
