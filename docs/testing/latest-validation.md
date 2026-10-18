@@ -34,6 +34,34 @@ retained-world, physical craft, night/restart or Tier acceptance.
 
 ## Current CI and projection increments
 
+On published `c760c4d219a35148b1d1fc5e5f4b6cc21eefb615`,
+[PR run39134798621](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134798621)
+and [push run39134794760](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134794760)
+each completed successfully, including verification and all six smoke shards. These are two
+independent complete runs, not a green matrix assembled from partial results.
+[Push run39134794704](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39134794704)
+failed only `first-exosuit`: the helmet summon succeeded, but the subsequent one-shot
+entity selector did not emit `EXO-HELMET-OK`. Other item markers passed. The log does not
+establish the exact tracker/physics cause, and the two successful runs do not erase it.
+The existing item-registration fixture is being changed to bounded actual observation;
+no T1 gameplay is being added. Synthetic renewable-oracle cases remain unexecuted.
+
+The revised exosuit fixture now requests/observes the chunk, summons each tagged item once,
+and waits for all four exact IDs together under a shared160-poll bound and unchanged120s
+runner. Cleanup only targets its test tag. Static25-contract/12-mutation checks pass;
+`VerifyExosuitFixture` and native scheduling are not yet executed. Review found that
+function data-get feedback would be silent and then lost with world cleanup; diagnostics
+now use real conditional `say` emitters for source/chunk/summon/entity/budget state.
+Retained-log behavior on a controlled native failure is still unproved.
+
+The newer local `8fc5f98` composition has a separate delegated build/check/export window.
+Its first WinPS invocation promoted the informational JDK_JAVA_OPTIONS stderr note to
+`NativeCommandError` before a Gradle verdict; the empty redirected log and real tool
+diagnostic are preserved. Native cmd/process capture is authorized for a same-source retry,
+without suppressing stderr or removing limits. No combined build/export pass is recorded.
+ADR-0143 canonical runtime guidance is under
+implementation; no generated placeholder, native surface pass or Tier acceptance is implied.
+
 [PR run39125286533](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39125286533)
 checks out temporary merge `7b72424a7d9793d1b22c4774e0bc9ed27db6b004`, not the reported PR
 head itself. GitHub's Git API and the local Git tree agree that its tree

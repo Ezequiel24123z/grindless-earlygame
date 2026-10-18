@@ -84,6 +84,8 @@ invalidated assumption or a genuine new property.
 | Dashboard / `e2c2110f-b8f5-4d20-8e73-1a146e41c1a3` | Reviewed through546c/01828 and composed. The same reviewer closed Root source-attribution P2;38 PS root-selection checks and a separate546c canonical export pass. cb0 retains its23 browser/16 HTTP scope. Combined export and new same-repository CI artifact step remain unexecuted; no retitled worker output. |
 | CI diagnosis / worker `ff98bab0-0873-4cb4-bce0-fe71a92d35b6` | Completed read-only diagnosis: the renewable oracle omitted actual unignited coal and failed with+12,800 FU; missing-water cause remains unknown. The specialist cannot edit/execute, so implementation is assigned separately. |
 | Native fixture repair / worker `7e914b91-7c56-47f8-9ce0-d531343e068a` | Seven-file fixture/test patch on a908, static arithmetic and unchanged-marker/budget checks only; ten synthetic native regressions await execution. Application code is untouched. Ignored first-fluids observer needs a console trace retained before canonical world cleanup; no inserted original-command timing change or fabricated pass. |
+| Canonical guidance / worker `ca28703d-4942-4e8e-b913-244d334a7e38` | ADR-0143 implementation from8fc: a checked generated declaration view and shared native display adapters, with T0 guide corrections. No runtime source-root audit, duplicate catalogue/quantities, fabricated starter kit or Tier verdict; generation/surface evidence remains pending. |
+| Exosuit fixture / worker `2632f51f-8ae8-4e00-a5fb-694dca8c1987` | Reviewed source patch: one summon per tagged item, actual coherent observation and160 polls under the same120s runner. Retained diagnostics now use conditional say, not silent function data-get. Static25 contracts/12 mutations only; Java/native execution pending. No T1 gameplay expansion. |
 
 The exact composed JSON is
 `a501f60598abea3e5360f652d6cc4dc16679e7ff36468dfe55a61b22f84ac5cf`;
@@ -92,7 +94,7 @@ The active gate, finite witness and evaluated model identities are unchanged fro
 573 source-hash entries were verified. Preserve the eight previous exports and the initial
 native-thread/jimage/virtual-memory crashes. These new identities are not the old dba bytes.
 
-Both current CI runs remain red:39125286533 fails `first-fluids`/`WATER-IN`;
+Both older debd CI runs remain red:39125286533 fails `first-fluids`/`WATER-IN`;
 39125284389 fails `renewable-cycle`/`RENEWABLE-EXTERNAL-STARTUP-EXHAUSTED`.
 Verification passes in both. The first is a PR merge checkout with a verified tree identical
 to debd, not an exact debd checkout. See the ledger for actual revisions and run links.
@@ -100,9 +102,16 @@ Do not aggregate the two partial matrices into a pass or assume either failure i
 The revised renewable conservation equation accounts for the real remaining initial coal.
 Do not skip pre-ignition observations or credit synthetic oracle markers as production.
 The existing600/601 poll boundary still rejects a Dynamo that never ignites.
+For published c760, PR run39134798621 and push39134794760 each independently completed
+successfully. Push39134794704 failed only `first-exosuit`/`EXO-HELMET-OK`; the two green
+runs do not erase that failure. Its log shows an accepted helmet summon without the
+one-shot selector marker, not a proven internal tracker/physics cause. Native renewable
+production and first-fluids passed in these runs; synthetic oracle cases remain unexecuted.
 
 **Resource custody:** dashboard Root recheck, Quest9e0 and the source-only3a9 binder have
-completed and released their JVMs. The next window is for the frozen combined build/export.
+completed and released their JVMs. S2 now owns the frozen8fc combined build/check/export.
+The first invocation promoted a JDK stderr note to a WinPS exception before a Gradle
+verdict; that failure is preserved and native cmd/process capture is authorized for retry.
 The native-fixture grant ended without a boot:
 only1909MiB commit margin was available.
 Managed cloud Sandbox provisioning also returned403, so neither path produced native evidence.

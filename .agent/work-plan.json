@@ -80,8 +80,8 @@
       "publisher": "Astra coordinator only; workers create local checkpoints"
     },
     "resource_window": {
-      "owner_session_id": null,
-      "scope": "All prior small JVM turns released; next grant is frozen combined-source build/export, no native server",
+      "owner_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
+      "scope": "Frozen8fc combined build/check/export; initial WinPS stderr-capture invocation failed before a Gradle verdict and is being retried with native capture, no server",
       "next_session_id": "05b30944-5210-4584-a78c-bd78e6843742",
       "next_scope": "Combined build/checks and canonical export after the coordinator freezes the integration commit",
       "native_blocker": "1909MiB free commit below canonical2GiB server plus overhead; no local boot. Managed cloud Sandbox returned403 and created no validation evidence.",
@@ -233,6 +233,33 @@
   "next_task_after_receipt": "renewable-t0",
   "parallel_opportunity": "The exact debd S2 inventory/model checkpoint is closed. Finish dashboard projection and the selected quest adapter independently, with serialized JVM use on the constrained host; investigate current CI failures without weakening their assertions. Rebind affected sources when integrating the claim service and S3 seam. Keep T1 screenshots/ports held and real player/save acceptance separate.",
   "prepared_assignments": [
+    {
+      "id": "canonical-resource-guidance",
+      "task_id": "resource-communication",
+      "status": "implementation_in_progress",
+      "worker_agent_id": "ca28703d-4942-4e8e-b913-244d334a7e38",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "8fc5f98cf51be9b4a21fab6e95b734ac2bfc8cc6",
+      "decision": "ADR-0143",
+      "owned_files": ["generated canonical declaration projection/resource and drift checks", "shared native resource formatter and item/fluid/JEI/Atlas/machine/quest-guide display adapters", "T0 guide localization and focused paired tooling/tests"],
+      "invariants": "No runtime repository/JDK audit, second handwritten catalogue, copied recipe quantities, fake starter kit, inferred output role, invented consumer or acceptance verdict; preserve slots/payload/NBT and exact claim authority",
+      "precedent": "GT Modern v1.4.6/MC1.20.1 aa41aba: registered definitions to presence-sensitive tooltips, actual recipe objects to guide views; pattern-only LGPL3 reference, no imports",
+      "stop_condition": "Coherent implementation for review with real generation pending if JVM-gated; no placeholder data, global docs edits, commits or publication"
+    },
+    {
+      "id": "exosuit-smoke-observability",
+      "task_id": "t0-integration",
+      "status": "reviewed_source_patch_java_and_native_pending",
+      "worker_agent_id": "2632f51f-8ae8-4e00-a5fb-694dca8c1987",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "input_revision": "8fc5f98cf51be9b4a21fab6e95b734ac2bfc8cc6",
+      "scope": "Existing first-exosuit registration/spawn fixture only: one summon per tagged item and actual coherent observation under unchanged runner budget",
+      "invariants": "No runtime/T1 gameplay change, repeated summon-until-green, fixed longer sleep or removed marker; failure diagnostics must actually reach retained logs, not suppressed function data-get output",
+      "evidence": "25 static source contracts and12 negative mutations; diagnostics corrected to real conditional say emitters. Java source-check and native scheduling remain unexecuted.",
+      "stop_condition": "Return reviewed fixture/source checks and specifically granted native result; preserve original c760 failure, no publication"
+    },
     {
       "id": "canonical-dashboard-data",
       "task_id": "dashboard-integration",
@@ -837,7 +864,7 @@
     {
       "id": "resource-communication", "title": "Exposing canonical player guidance", "status": "in_progress", "depends_on": ["sustainability-model"],
       "owner": "bounded implementation/localization workers; Astra product review",
-      "next_action": "Project classifications and handling into items, fluids/gases, JEI/Atlas, machines, quests and guide",
+      "next_action": "Implement ADR0143's checked generated declaration view and shared native presentation across items/fluids/JEI/Atlas/machines/quest-guide; correct T0 guidance without changing authorities or copying recipe quantities",
       "validation_focus": ["static_projection_localization_and_all_rows", "shared_UI_contracts", "representative_client_binding_not_each_content_instance"],
       "acceptance": "Consistent names/routes/handling/uncertainty; no duplicate quantities, fictional consumers or mandatory hoarding"
     },

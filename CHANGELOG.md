@@ -15,6 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
+- **Exosuit registration smoke observes actual entities.** The fixture now waits on the
+  loaded target chunk, summons each tagged test item once, and requires all four real IDs
+  together before emitting the unchanged markers. Scheduling shares a160-poll bound under
+  the unchanged120s runner budget, with only tagged cleanup and explicit retained failure
+  diagnostics. Static contracts/mutations pass; Java source-check and native scheduling
+  execution remain pending. No runtime armor/T1 gameplay or runner setting changes.
+- **Canonical runtime guidance boundary accepted (ADR-0143).** A bounded worker now
+  implements a generated, checked view of S2 declarations for native player surfaces.
+  Runtime hover must never run the repository audit or invent a second metadata catalogue;
+  recipe amounts remain live recipe data. Current T0 guide misdirection toward required
+  extraction/vanilla farms is in scope. The direction is not an implemented or accepted
+  client result, and no placeholder resource is authorized by a blocked generator.
 - **Canonical dashboard integration composed through `01828b9`.** Schema-1 exports now
   project the same S2 Result/document with exact quantities, explicit unknowns and separate
   global/conditional verdicts. Paired tools provide sanitized source/binary provenance and

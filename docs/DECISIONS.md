@@ -154,6 +154,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0140](#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions) | Validate behavioral classes and reuse proof under explicit assumptions | Accepted |
 | [0141](#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment) | Canonical T0 closure uses real authorities and conditional establishment | Accepted |
 | [0142](#adr-0142--t0-client-feedback-reuses-native-ui-and-existing-quest-infrastructure) | T0 client feedback reuses native UI and existing quest infrastructure | Accepted |
+| [0143](#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations) | Player resource guidance is a generated view of canonical declarations | Accepted |
 
 ---
 
@@ -6565,3 +6566,71 @@ The owner authorizes autonomous work and a future merge **after T0 is genuinely 
 That does not certify missing checks, override branch protection or permit an early merge.
 Preserve the live PR stack, reviewed Git checkpoints and a portable, truthful handoff so a
 later session/device can continue without private paths, lost worktrees or invented passes.
+
+---
+
+## ADR-0143 — Player resource guidance is a generated view of canonical declarations
+
+**Status.** Accepted direction, 2026-10-18; implementation and client acceptance are pending.
+
+**Context.** S2 now supplies canonical resource classes, side-stream roles, handling,
+source routes and explicit unknown tiers, but the installed client cannot run its
+repository/pack-source audit. `AuthorityAdapters.live/canonical` require a source-root path;
+calling them from hover or rendering would be both incorrect and expensive. Existing guide
+prose also sends the player toward the optional finite extractor and vanilla farms rather
+than the mod-owned recurring route. A second handwritten tooltip catalogue would drift
+from the same metadata the dashboard and validator use.
+
+**Prior art.** GregTech Modern v1.4.6 (Minecraft1.20.1), commit
+`aa41aba133f31dd3928bea816d6fd032cd1d90b6`, separates registered material definitions from
+thin presenters. Its
+[material builder](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/data/chemical/material/Material.java#L1212-L1234)
+registers typed properties; the
+[tooltip formatter](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/client/TooltipsHandler.java#L43-L110)
+checks property presence, and its
+[JEI adapter](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/core/mixins/jei/FluidHelperMixin.java#L18-L24)
+passes the actual fluid amount through. Its
+[guide recipe view](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/gui/compass/GTRecipeViewCreator.java#L19-L47)
+uses a runtime recipe, not a second quantity table. This LGPL-3.0 source is a pattern
+reference; no upstream code, assets, mixin or widget engine is imported. Its material
+property validation is not a sustainability proof or a universal guide-prose generator.
+
+**Decision.**
+- Retain S2's typed declarations as the authority. Generate a compact, versioned,
+  read-only runtime resource from the same canonical Result, with a declaration-content
+  fingerprint and exhaustive parity/drift checks. Treat it as a generated packaged asset,
+  not an independently edited catalogue. Do not generate a placeholder from fixtures when
+  the real audit cannot run.
+- Project classes, known/unknown tiers, canonical route, handling/recycling, uncertainty
+  and public source references. Exclude copied recipe quantities, private paths, the finite
+  entry bill, player state and global/conditional acceptance verdicts. Fingerprint the
+  projected content rather than introducing a self-referential commit/source hash.
+- Load/cache that prepared declaration in the installed mod without repository/JDK
+  inspection. Invalid or missing data is explicitly unavailable with normal diagnostics;
+  unknown is not an empty success, default class, renewable certification or Tier unlock.
+  The declaration describes authored policy, not live operating readiness in every world.
+- Reuse one native formatter across item/fluid hover, JEI, machine/Atlas details and
+  quest/guide context. Keep actual stack/fluid amounts and recipe I/O in their current
+  catalogues/views. Resource side-stream class does not determine an output's recipe role.
+  Preserve slots, packet fields, fluid identity, saved data and claim behavior.
+- Keep grog/water reuse, slag's unplaced potential future use and ordinary discard, and
+  flint's optional storage/discard honest. Do not invent a consumer, mandatory hoard,
+  containment system, automatic void or accepted future tier.
+- Correct the current T0 guide toward geological/biological supply, biomass power,
+  natural water and ceramic processing. The iron/extractor route is optional and finite;
+  vanilla farms are not the permanent canonical source. Use live recipe references rather
+  than duplicated fixed quantities. Preserve the calibrated-core/manual five-Matrix exit
+  and do not present the model's sufficient entry assumptions as a minimum player kit.
+
+**Why not adopt the upstream registry directly?** Grindless already has accepted typed
+sustainability declarations derived with its canonical source binding. GT's material
+property registry neither supplies those declarations nor makes the source-root audit
+available inside an installed client. The generated view preserves that one authority
+while applying the proven prepared-definition/presentation boundary.
+
+**Validation.** Exhaustively compare generated fields with the actual Result, including
+null/unknown and handling cases; test fingerprint/drift/error behavior and shared
+presentation without duplicating recipe amounts. Keep the new helper/model loader-free
+where required and use native UI checks for the changed surfaces. A generated resource,
+successful audit or source test is not real client, Survival, retained-world or Tier
+acceptance. Existing ADR-0129/0140 gates remain in force.

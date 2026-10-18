@@ -338,6 +338,16 @@ The worker inventoried existing source/state/model/icon/effect coverage, not app
 The active section of `docs/testing/t0-survival-acceptance.md` controls client preparation;
 the predecessor checklist is not the post-S2 route or an instruction to advance into T2.
 
+Resource communication follows
+[ADR-0143](DECISIONS.md#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations).
+The active worker owns the generated declaration view, native shared formatter and display
+adapters; concrete files are added to this map with implementation. Canonical Result metadata
+is the only declaration authority. Installed-client hover must not call the source-root
+`AuthorityAdapters` or invent an entry profile; generated fields are checked for drift.
+Actual recipe objects/amounts stay in the existing process/Atlas/JEI authorities. Guide
+prose must not make finite extraction or vanilla farms the permanent T0 source, or turn a
+declaration into world/Tier acceptance.
+
 The functional-port follow-up starts after current integration with an audit of Firing/Trough/
 Ground Array and all authored structures. It does not authorize starting the old kernel slice
 early. Astra decides roles, positions, ownership, aggregated capabilities and migration before
@@ -387,6 +397,10 @@ version/API-verified, never a fictional or mandatory core integration.
   applies to upload; missing files fail rather than yield an empty successful artifact.
   Keep the six native smoke shards and their manifest/limits unchanged.
 - `tools/checks/Verify*.java`, via `tools/run-checks.sh .` after `:common:build`.
+- `tools/smoke/first-exosuit.commands` starts `first-exosuit-pack`: one summon per tagged
+  item after actual chunk loading, bounded polling of all four IDs, then tagged cleanup.
+  `VerifyExosuitFixture` checks the source contract, not native entity scheduling. Failure
+  diagnostics use explicit retained `say` emitters, not silent function data-get feedback.
 - `tools/checks/VerifySmokeHarness.java` — executes the native runner with fake boots in a
   temporary fixture. Report labels, actual dispatch and failure propagation must agree; Bash
   report variables must remain local (ADR-0127).
