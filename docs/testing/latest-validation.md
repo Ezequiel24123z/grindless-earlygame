@@ -1,5 +1,45 @@
 # Current T0 rework validation
 
+## Frozen audio/pack increments and final takeover CI observation
+
+Quern worker-local3914978 contains the exact34364-byte approvedA Ogg and native
+loop implementation. Its resource/hash/mono44100/notice/binding guard passes.
+A separate JDK-only run passes67 tracker/source assertions, javac0/java0, with
+sequential256MiB tools and no Minecraft classpath/Gradle/cache. The initial PowerShell
+`$home` variable error occurred before JVM launch and was corrected without claiming
+a test pass for that attempt. Full compilation had not run under the earlier2048MiB
+commit guard; client start/stop/attenuation/mix and native rendering remain unobserved.
+
+Pack worker-local4b67ae0 passes static application-boundary/pin/JSON/PS-AST checks,
+590 relative links/149 ADR rows and5 PowerShell fake-Gradle wrapper contracts.
+Actual verifyModpack/Groovy/ZIP execution was NOT_RUN awaiting the shared reservation.
+The first SH harness failed because the assumed Bash path was absent; the current app
+Git is MinGit and no shell was found in known installed locations. No SH execution,
+installation or new runtime package is credited. Both features are under separate
+whole-feature read-only reviews and are not yet integrated on the coordinator.
+
+The independent frozen3914978 audio review subsequently found no significant issue.
+It inspected source/tests without executing them. This does not establish selected
+binary compatibility or actual async engine retirement, cancellation/replacement,
+pause/reload or listening; those boundaries remain explicitly unproved.
+
+The owner increased assigned RAM. Parent preflight then observes16286.9MiB total
+physical,6651.4MiB free physical,4838.3MiB free commit,188.13GiB free work disk and
+zero JVM. This passes the unchanged compilation guards and permits an exclusive
+audio compilation attempt, followed only after release by pack validation. It is a
+resource observation/grant, not a compile result, native pass or agent-made OS change.
+
+**Final17ae8b0 CI is not green.** PR39179748093 and push39179743788 were cancelled.
+Push39179743679 failed blocks/bootstrap at Forge preparation: NeoForged Maven returned
+HTTP502 for `org.apache.logging.log4j:log4j-api:2.11.+` metadata needed by Forge
+transformation tools. Their failure tails and exact cause were read, not inferred
+from a later green scenario; no gameplay assertion is identified by those failures.
+The bounded failure-log extraction's first piped command ended-1; the subsequent
+two job tails and precise preceding dependency errors were read successfully.
+Later d8dda9c runs39181657238/39181651473 each passed verify/five shards while shard3
+was still running at inspection;39181651047 was cancelled. No complete run is
+synthesized by combining those partial results or relabeling the old117 checks.
+
 ## Bounded pack/audio provenance closure
 
 The Jade investigation read the exact `forge-11.13.3` source licence at

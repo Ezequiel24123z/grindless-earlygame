@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve frozen audio/pack evidence and unblock bounded compilation after RAM
+  expansion.** Worker-local Quern tracker/source contracts pass67 JDK-only checks;
+  pack static/five PS-wrapper contracts pass, not actual Gradle/native qualification.
+  Both features await review/integration. New measured margin passes unchanged
+  guards; serialize audio then pack JVM ownership. Final17ae8b0 CI retains two
+  cancelled runs and one Forge-preparation failure caused by upstream Maven502,
+  not a claimed complete pass or identified gameplay defect.
 - **Preserve virtual deposits in Superflat without staging its terrain (ADR-0150).**
   Record the owner's requirement for chunk rock/resource data and extraction
   multiblocks, independent of physical ore layers. Reuse seeded veins and saved

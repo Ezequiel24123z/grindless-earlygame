@@ -16,6 +16,13 @@ PR run39179748093 and push runs39179743679/39179743788 each passed `verify`; all
 smoke shards per run were still in progress. This is not a full CI pass or new native
 Blueprint proof. No old automation/session/worker is resumed and no new PR is needed.
 
+Later final observation:39179748093/39179743788 were cancelled, and39179743679
+failed. Its blocks/bootstrap preparation could not resolve transitive log4j-api2.11.+
+metadata because the NeoForged Maven endpoint returned502. This is an observed
+preparation/dependency failure, not proof of a gameplay assertion defect or a full
+pass. d8dda9c later has two runs with verify/five shards passed and shard3 still
+running at inspection; its third run was cancelled. Do not combine their green pieces.
+
 Current next: implement the already-authorized minimal Quern loop, additive restricted
 playable profile (ADR-0149), and deliberate Superflat virtual-resource access (ADR-0150).
 The two provenance investigations below are complete, not another intake requirement.
@@ -63,6 +70,13 @@ has not authorized closing unrelated processes/sessions or OS/pagefile/cache cha
 CandidateA import and pause/mute handling are worker-reported work, not integrated
 or compiled evidence on this coordinator branch.
 
+The owner then increased assigned RAM. A new parent preflight passed the unchanged
+guards:6651.4MiB physical/4838.3MiB commit/188.13GiB work disk/zero JVM. Audio again
+owns the exclusive minimal compilation window; pack must wait for explicit release.
+No agent changes heap guards, OS settings or pagefile. Before this resumption the
+separate sequential256MiB JDK-only tracker/source contract passed67 checks, javac/java0.
+That is not selected-Minecraft API compilation or native client proof.
+
 ADR-0149 selects a new additive seven-dependency playable profile: existing four core/
 quest pins plus ModernFix/FerriteCore/Embeddium. Preserve both old profiles and their
 pins; no account/licence investigation is reopened. A bounded pack worker may edit
@@ -74,6 +88,18 @@ The restricted pack implementation is assigned to isolated Sol6.1 Max session
 `7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8`, based on435f3d0. It may implement/static-check
 its disjoint pack files now, but must wait for transfer of the shared JVM reservation
 before Gradle. Neither child publishes or edits parent .agent state.
+
+Frozen worker-local feature commits are audio3914978 and pack4b67ae0, not integrated
+here. Each has one independent read-only whole-feature review in progress. Pack's
+actual verifyModpack remains NOT_RUN until the shared window transfers; its5PS wrapper
+contracts/static checks do not establish Groovy/archive execution. The current app
+Git is MinGit and Bash/sh was not located in PATH/known installations; SH remains
+NOT_RUN without installing extra tools or repeating broad searches.
+
+Audio's frozen3914978 review has now completed with no significant issue found.
+It inspected the checks, not execution. Compilation and native asynchronous audio/
+Forge cancellation/reload/listening still need their own actual evidence. Pack review
+remains in progress; neither review result is a runtime pass or RC approval.
 
 **Latest owner world clarification supersedes earlier spawn suggestions.** Do not
 implement staged food, shelter, tree/pond/quarry terrain. Flat worlds must retain

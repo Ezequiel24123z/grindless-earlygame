@@ -21,7 +21,7 @@
     "event_subscription": "paused",
     "agent_merge": false,
     "session_automation": false,
-    "next_checkpoint_ci": "17ae8b0_three_verify_jobs_passed_all_six_smoke_shards_each_still_in_progress_not_a_complete_pass"
+    "next_checkpoint_ci": "17ae8b0_final_PR_and_one_push_cancelled_other_push_failed_502_Maven_metadata_during_Forge_preparation_not_a_complete_pass"
   },
   "playable_release": {
     "policy": "ADR-0144",
@@ -101,7 +101,7 @@
     "adr_0138_research": "Three exact-source/version/license investigations completed as static reference only; no runtime tests or code imports",
     "production_inventory": "Complete source-bound debd inventory1384/474/259/25/11 and deterministic reports; strict3a9/9e0 rebinding and combined4061 export preserve full semantics with separately recorded provenance identities.",
     "resource_communication": "UI/JEI/audio and Quest9e0 adapter composed; strict binding and combined4061 checks/export pass with bounded307-contract reuse. Candidate1389 contains verified real canonical guidance; actual client/Survival acceptance remains pending.",
-    "current_ci": "Received17ae8b0 runs39179748093/39179743679/39179743788 each pass verify; six native smoke shards per run remain in progress. No complete hosted pass or repaired-Blueprint native result is yet credited. Historical1ced sound-guard failures/skipped smokes, a2 PR39171615491 Blueprint failure and earlier1389/c760/debd results remain source-bound.",
+    "current_ci": "Final17ae8b0:39179748093/39179743788 cancelled;39179743679 failed, with blocks/bootstrap unable to prepare Forge because NeoForged Maven returned502 for transitive log4j-api2.11.+ metadata. No gameplay assertion caused those preparation failures and no full PASS is synthesized. Later d8dda9c runs39181657238/39181651473 pass verify and five shards at inspection, shard3 still in progress;39181651047 cancelled. Earlier failures/evidence remain source-bound.",
     "canonical_guidance": "Candidate1389 passes CheckOnly4881 and official42-suite/pack15 validation; real preparation ZIP delivered. Human/client/no-command/retained-world acceptance remains unexecuted.",
     "ci_fixture_repair": "Renewable pre-ignition oracle now accounts for actual unburnt coal in source, with invalid-input guards and separate synthetic regressions. Static-only evidence; native/CI recheck pending. Missing-water cause unknown.",
     "resource_custody": "External process-local Gradle-home verification on102d passes with actual768MiB/CPU2/SerialGC and no remaining JVM. Only new writes redirected; all old roots preserved. Official4061 installation and its two NOT_RUN native fixtures remain separate; no native grant or automatic retry.",
