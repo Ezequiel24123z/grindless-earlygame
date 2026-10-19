@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 11,
+  "plan_revision": 12,
   "updated": "2026-10-19",
   "phase": "paused_for_owner_requested_cloud_migration",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
@@ -27,6 +27,29 @@
     "next_tier_rule": "Ready and published T0 RC plus actual owner longitudinal-save start; no whole-playthrough requirement unless a concrete technical dependency prevents progress"
   },
   "session_sqlite_tasks_migrate": false,
+  "cloud_migration": {
+    "requested": "2026-10-19",
+    "status": "local_execution_frozen_source_and_worker_histories_consolidated_for_cloud_receipt",
+    "continuation_branch": "ezequiel24123z-t0-playable-release",
+    "source_consolidation_commit": "ab23ff5e17029ac750aa303b76a039ea6901d61a",
+    "entry": ".agent/cloud-migration-handoff.md",
+    "cloud_successor_created": false,
+    "local_coordinator_after_publication": "quiescent_no_new_tests_features_or_automatic_resume",
+    "worker_final_commits": ["e6d6df02c4b6e14826909c5d7270c5eb50979186", "dc719b3d5d87e50713ebcec72d8624dcacce27ab"],
+    "worker_histories_merged": true,
+    "worker_reservations_released": true,
+    "main_and_existing_draft_PRs": "Preserved, not merged or retargeted; owner's clarified objective is all local work available remotely on the continuation branch",
+    "secret": {
+      "application": "agents",
+      "name": "ELEVENLABS_API_KEY",
+      "repository": "Ezequiel24123z/grindless-earlygame",
+      "encrypted_storage_metadata_verified": true,
+      "plaintext_or_ciphertext_credential_committed": false,
+      "cloud_runtime_injection_tested": false,
+      "new_generation_authorized": false
+    },
+    "private_artifacts": "Original local worktrees/caches/worlds/raw evidence and unused calibration media retained, not mirrored as public build output or standalone sound libraries; portable receipts/hash boundaries are in Git"
+  },
   "sol_migration": {
     "decision": "ADR-0147",
     "requested_model": "gpt-6.1-sol",
@@ -86,7 +109,7 @@
     "coordinator": "Sol 6.1 (received clean session a9639825-dcf3-4bba-b760-a23268d89f3e)",
     "active_model": "gpt-6.1-sol",
     "next_coordinator_model": "gpt-6.1-sol",
-    "activation": "Received17ae8b0 in the clean isolated app worktree; this Sol session is the sole active continuation publisher",
+    "activation": "Local Sol received17ae8b0 and consolidated worker histories; owner now requests cloud freeze. The new cloud coordinator becomes sole publisher only after verifying the final remote branch/checkpoint",
     "historical_owner_labels": "Astra in existing tasks and completed assignments identifies the former role/author; active responsibilities transfer to this Sol coordinator under ADR-0147 without rewriting historical attribution",
     "previous_coordinator": "Astra; historical decisions, reviews and grants retain their actual author",
     "authority": ["architecture", "product_and_tiers", "sustainability_and_production_graphs", "machine_families_and_multiblocks", "migrations", "integration", "final_review"],
@@ -359,9 +382,22 @@
           "technical_tests_weakened": false,
           "evidence_relabelled": false,
           "method": "Fast-forward the clean older checkout to17ae8b0, activate the new coordinator, preserve all27 task identities/47 references and historical attribution, and resolve narrow audio-rights and pack-metadata gaps before implementation. Hosted verification is green but full CI is still pending; no costly historical proof is replayed."
+        },
+        {
+          "id": "PA-0011",
+          "plan_revision": 12,
+          "date": "2026-10-19",
+          "title": "Freeze local execution and consolidate original histories for cloud",
+          "source": "Owner requested all local work preserved remotely and local closure; clarified that remote availability, not adopting an incomplete RC as main, is the objective",
+          "new_product_tasks": 0,
+          "dependencies_changed": false,
+          "technical_tests_weakened": false,
+          "evidence_relabelled": false,
+          "method": "Merge and publish both frozen worker histories and actual evidence on the continuation branch, retain main/draft PRs, preserve27 tasks/47 references, store the requested key only in encrypted repository Agents secrets, and leave a portable cloud entry with honest remaining gates"
         }
       ],
   "references": {
+    "cloud_handoff": ".agent/cloud-migration-handoff.md",
     "handoff": ".agent/handoff.md",
     "clean_sol_handoff": ".agent/sol-migration-handoff.md",
     "details": ".agent/migration-handoff.md",

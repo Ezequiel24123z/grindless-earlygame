@@ -8,6 +8,17 @@
   "pr_management_and_merge_authorized_when_ready": true,
   "authorization": "Owner-directed playable modpack lifecycle, ADR-0144/PA-0007; technical/product RC readiness precedes longitudinal human acceptance, and T1 remains held until publication plus actual play",
   "work_plan": ".agent/work-plan.json",
+  "cloud_transfer": {
+    "status": "frozen_for_owner_cloud_receipt",
+    "entry": ".agent/cloud-migration-handoff.md",
+    "continuation_branch": "ezequiel24123z-t0-playable-release",
+    "source_consolidation_commit": "ab23ff5e17029ac750aa303b76a039ea6901d61a",
+    "original_worker_histories_merged": true,
+    "new_cloud_session_created": false,
+    "new_local_work_authorized": false,
+    "main_PR_merge_or_release": false,
+    "encrypted_agents_secret": "ELEVENLABS_API_KEY metadata verified; value never committed; actual cloud injection untested"
+  },
   "clean_session_transfer": {
     "decision": "ADR-0147",
     "next_coordinator_model": "gpt-6.1-sol",

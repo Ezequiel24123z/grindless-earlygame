@@ -38,6 +38,9 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > their limits; they do not already establish that product. T0 is the only active tier.
 > Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
+> Local execution is now frozen at the owner's request for cloud continuation:
+> use [the cloud handoff](.agent/cloud-migration-handoff.md) and the published
+> `ezequiel24123z-t0-playable-release` branch, not old `main`. This is not a release.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -2308,6 +2311,7 @@ is preserved and integration/release gates still control acceptance.
 | 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by clean fast-forward; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts. Its final CI has two cancelled runs and one Forge-preparation Maven502 failure, not a full pass; later source has separate evidence. Product gaps remain and historical proofs are reused, not replayed |
 | 42 | **Restricted playable profile** | ADR-0149 opt-in seven-pin core/quest/performance selector integrated; historical defaults/pins/filenames stay intact. Read-only review found no actionable issue and actual verifyModpack passes87 selector/mutation/real-synthetic-ZIP checks. Privileged Windows symlink/SH remain NOT_RUN; final package/preset/import/client proof remains pending |
 | 43 | **Superflat virtual resources** | ADR-0150 preserves chunk-data deposits independently of physical terrain; extraction multiblocks and deliberate renewable basic-resource access belong in flat worlds too. No staged spawn/food system is selected; detailed T0 generator and quest-shop economy remain design work |
+| 44 | **Cloud continuation checkpoint** | original Quern/pack worker histories and actual scoped proof consolidated atab23ff5e; local execution frozen. Use the published continuation branch and cloud handoff; main/draft PRs and unproved RC/client/resource gates remain unchanged |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

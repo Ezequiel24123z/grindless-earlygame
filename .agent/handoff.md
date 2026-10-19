@@ -4,6 +4,11 @@ Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PR
 
 ## Owner-requested cloud freeze
 
+Read [the compact cloud entry](cloud-migration-handoff.md) first. Source consolidation
+isab23ff5e; the final containing publication additionally preserves this handoff.
+Plan revision12/PA-0011 retains27 tasks/47 references. Original audioe6d6df0 and
+packdc719b3 histories are merged into the continuation branch, not left only local.
+
 The owner is moving continuation to cloud and asked to preserve/consolidate all
 local work. No new local feature, build, native smoke or media generation is authorized.
 Both workers are closing clean checkpoints and are quiescent; their shared JVM
@@ -22,6 +27,11 @@ The requested ElevenLabs key is stored encrypted in the repository **Agents** se
 screenshot or encrypted credential file enters Git/handoff. Actual cloud environment
 injection is not yet exercised. This transfer does not authorize new paid generation;
 the historical calibration grant remains exhausted3/3.
+
+The pack's immediate task-exit receipt observed one JVM; a subsequent snapshot found
+zero before its release, without termination. The final original worker checkpoints
+contain no code changes after their tested3914978/4b67ae0 implementations. Preserve
+raw ignored evidence locally; portable proof identity and limits are in this repository.
 
 ## Active Sol receipt
 

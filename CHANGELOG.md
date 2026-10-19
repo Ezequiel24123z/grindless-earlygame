@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Consolidate the complete engineering continuation for cloud (PA-0011).** Merge
+  original audio3914978/e6d6df0 and pack4b67ae0/dc719b3 histories, retain their scoped
+  compile/contracts/archive evidence and publish the continuation plus original
+  worker branches. Freeze local execution, preserve main/draft PRs and the27-task/
+  47-reference graph, and add the portable cloud handoff. The owner-requested key
+  is stored only in encrypted repository Agents secrets, never Git or handoff text.
+  No release, client/native pass or new paid-generation authorization is implied.
 - **Integrate the approved Quern A runtime loop (ADR-0148).** Import only the exact
   34,364-byte noticed Ogg and its public game-audio notice. A bounded loaded-chunk
   client owner manages one positional BLOCKS loop per RUNNING Quern, clears stale

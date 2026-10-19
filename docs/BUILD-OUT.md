@@ -2,6 +2,10 @@
 
 This file keeps the history of the slices already defined and names the next executable slice.
 
+**Local execution is frozen for cloud transfer.** Receive the published continuation
+branch using [the cloud handoff](../.agent/cloud-migration-handoff.md); do not resume
+retiring local workers or mistake the engineering consolidation for a release.
+
 **Coordinator receipt (ADR-0147, PA-0010):** the new isolated Sol 6.1 session
 received exact17ae8b0 by clean fast-forward. Sol now coordinates and publishes;
 the retiring session remains quiescent and historical attribution is preserved.

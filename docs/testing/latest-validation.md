@@ -14,7 +14,8 @@ process observation; actual log evidence supplies limits, not that empty observa
 No server/client/listening/codec/generation or historical suite was run.
 
 Frozen pack4b67ae0 then passed one actual `verifyModpack` invocation, exit0:
-87 checks including real synthetic ZIP writer/whitelist fixtures. Zero JVM remained.
+87 checks including real synthetic ZIP writer/whitelist fixtures. The immediate
+receipt observed one JVM; a later snapshot found zero before release, without killing it.
 The privileged Windows filesystem-symlink fixture was NOT_RUN; its escaped-realpath
 contract did pass. SH remains NOT_RUN. No remapJar/buildModpack, real distributable,
 client, preset, save-upgrade or RC result is inferred. Earlier resource guards and

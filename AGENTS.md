@@ -102,6 +102,13 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current cloud transfer:** the owner has frozen local execution and requested cloud
+continuation. Start with [the cloud handoff](.agent/cloud-migration-handoff.md) and the
+published `ezequiel24123z-t0-playable-release` branch, not old `main`. The source/
+worker history is consolidated without declaring a release or merging the draft PRs.
+The new coordinator verifies the actual remote checkpoint; retired local workers
+remain quiescent. Credentials are in repository Agents secrets, never this repository.
+
 ### Playable releases and longitudinal worlds
 
 [ADR-0144](docs/DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
