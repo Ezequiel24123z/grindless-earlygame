@@ -1,5 +1,37 @@
 # Current T0 rework validation
 
+## Actualf0b4 build/deploy and repeated-RPC framing failure
+
+Real corrected-text Sync and Build at
+`f0b4a798e7bc23a54d2e7a3da3a8e783f9d9cf65` exit0. Build takes38 seconds,
+passes88 pack contracts and reuses the unchanged production jar through ten up-to-date
+application tasks. The actual jar remains
+`5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7`;
+the new source-bound ZIP is
+`4d2d297bb6d3a00b52ec5490dcca8f609cc81e1dd48bbf608c45b1a45641f02f`.
+The private build capture hashes to
+`1046ddfe39cf46242080704a3e3eaba11db7748c01b7d0d361833bb85841feff`.
+
+Real Deploy then creates `Grindless-T0-Dev`, verifies/downloads the five missing official
+pins, reports no missing dependencies, and real Inspect returns `VerifiedStopped`
+with those exact source/jar/ZIP identities. Direct WinPS and Git Bash contract entrypoints
+also each pass322 assertions/31 isolated fixtures on the actual PC, exit0.
+No client, saved world, acceptance or new generation request is created.
+
+The following identical idempotent RPC hangs rather than returning. PC connectivity
+and a bounded CIM query still work; its positively identified workflow bootstrap has
+0.5s CPU and eight waiting threads. This is consistent with waiting for stdin EOF,
+not a demonstrated game/native installation defect. Only that owned helper is stopped
+after checking identity and absence of an installation journal; the interrupted
+aggregate exits-1 and is not reported as successful idempotence.
+
+The focused correction frames one compact UTF-8 JSON line, uses `ReadLine()` instead of
+EOF, bounds packets at256KiB before send/parse, and adds15s/three-miss SSH liveness
+checks without limiting build duration.330 isolated assertions pass. Repeated real
+RPC and idempotent deployment qualification remain next; the initial successful
+installation is preserved. An auxiliary process-name probe exits1 because requested
+Java/Git/SSH process names are absent; the subsequent bounded identity query exits0.
+
 ## First real transport and hosted Windows tooling checkpoint
 
 Published tooling `0b29ec2bd8f2f616d2abbc9c9a3aabdaf37b5ccf` executes the real local

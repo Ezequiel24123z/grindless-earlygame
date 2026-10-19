@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
+  Keep the original product graph and manual/release gates, define isolated technical,
+  visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,
+  and add the recoverable return handoff plus source-bound original-audit entry points.
+  Realf0b4 build/deployment/inspection are distinguished from the interrupted EOF-bound
+  idempotence attempt; its330-check framing correction still needs real qualification.
 - **Qualify real SSH synchronization and clean up Windows CLI reporting.** The actual
   first0b29 Sync and hosted Windows direct/Bash job pass. Suppress WinPS module-progress
   CLIXML with explicit text output, preserve real errors, and distinguish successfully

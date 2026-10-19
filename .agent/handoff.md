@@ -2,6 +2,22 @@
 
 Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
+## Current unattended programme
+
+The owner has left and explicitly delegated safe autonomous T0 stabilization, nonredundant
+regressions, creative quality and GREEN preparation (ADR-0152, PA-0013/revision14).
+Read [RETURN-HANDOFF](../RETURN-HANDOFF.md). The original27 product tasks/47 references
+and release/manual gates are preserved. Three independent technical/visual/SFX lanes
+will use isolated child worktrees; the coordinator alone integrates/publishes/deploys.
+No human acceptance, T0 freeze, T1 activation, guessed product choice or unbounded
+generation follows from this delegation.
+
+The realf0b4 package was built, deployed with five official missing pins and successfully
+inspected in the new owned instance. Its subsequent idempotent RPC hung in the bootstrap's
+EOF wait. Only that positively identified helper was terminated, with no pending install
+journal; no user process/save was changed. The330-check single-line framing/keepalive
+correction is ready for real repetition, not yet credited as a completed idempotence run.
+
 ## Active SSH-first receipt
 
 The owner now explicitly keeps coordination local and selects ordinary SSH to the

@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 13,
+  "plan_revision": 14,
   "updated": "2026-10-19",
-  "phase": "ssh_first_personal_pc_build_and_prism_development",
+  "phase": "autonomous_T0_stabilization_creative_and_GREEN_preparation",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -27,6 +27,18 @@
     "next_tier_rule": "Ready and published T0 RC plus actual owner longitudinal-save start; no whole-playthrough requirement unless a concrete technical dependency prevents progress"
   },
   "session_sqlite_tasks_migrate": false,
+  "autonomous_programme": {
+    "decision": "ADR-0152",
+    "amendment": "PA-0013",
+    "owner_available": false,
+    "return_handoff": "RETURN-HANDOFF.md",
+    "priorities": ["stable_traceable_PC_deployment", "verified_T0_blockers_and_regressions", "nonredundant_automated_validation", "independent_GREEN_foundations", "evidence_backed_architecture_cleanup", "parallel_T0_visual_and_SFX_quality"],
+    "lanes": {"T0_technical": "queued_isolated", "visual_assets": "queued_isolated", "SFX": "queued_isolated"},
+    "publisher_and_shared_PC_owner": "current_coordinator_only",
+    "product_gates": "No_T0_acceptance_or_freeze_No_T1_activation_No_RED_or_silently_selected_subjective_product_choices",
+    "generation": {"new_requests_maximum": 2, "purposes_maximum": 1, "requires": "selected_meaningful_T0_purpose_new_recorded_authorization_ledger_secure_existing_credential_rights_and_safe_tooling", "old_grants_reset": false, "requests_made": 0, "image_provider_keys_available": false, "local_ElevenLabs_environment_available": false},
+    "original_27_tasks_and_47_references": "preserved"
+  },
   "ssh_pc_execution": {
     "decision": "ADR-0151",
     "amendment": "PA-0012",
@@ -44,11 +56,11 @@
       "status": "frozen_reviewed_ready_for_actual_PC_workflow",
       "entrypoint": "tools/pc-workflow.ps1",
       "host_entrypoint": "tools/prism-dev.ps1",
-      "isolated_assertions": 322,
+      "isolated_assertions": 330,
       "isolated_fixtures": 31,
       "top_level_native_helpers": 45,
       "windows_ci_job": "prism-tooling-windows",
-      "actual_transport_download_deployment": "Sync0b29_passed_real_download_deployment_next_after_text_output_correction",
+      "actual_transport_download_deployment": "f0b4_Sync_Build_Deploy_five_official_downloads_and_Inspect_passed_next_idempotent_RPC_interrupted_EOF_wait_330_line_framing_fix_needs_real_qualification",
       "windows_ci_receipt": "0b29_run39293245073_job118199565252_direct_and_Bash_success_not_whole_workflow_or_later_source",
       "parallel_player_boundary": "Build_only_is_separate_and_resource_gated_Deploy_requires_stopped_owned_target"
     },
@@ -281,6 +293,17 @@
     {"id": "elevenlabs_sound_calibration", "file": "pasted-text-1c204fff-a442-4677-be9a-3a4f90eda8bf.txt", "sha256": "EF79A5CCBFDBFB7DFABD242019451352A50BA29F9B08EFC29F7FED1DE72250B2", "received_via": "user_attached_local_file", "receipt": "all434_lines_read_hash_verified_native_Library_confirmed", "note": "Development-only secret-safe minimal sound calibration; owner selects initial artistic direction before expansion"}
   ],
       "amendments": [
+        {
+          "id": "PA-0013",
+          "plan_revision": 14,
+          "date": "2026-10-19",
+          "title": "Continue bounded T0, creative and GREEN work while the owner is unavailable",
+          "source": "Owner autonomous work programme; ADR-0152",
+          "method": "Preserve the existing product graph and gates, coordinate isolated technical/visual/SFX lanes, reserve shared execution, and continuously update the return handoff",
+          "dependencies_changed": false,
+          "product_task_acceptance_changed": false,
+          "human_acceptance_claimed": false
+        },
         {
           "id": "PA-0012",
           "plan_revision": 13,

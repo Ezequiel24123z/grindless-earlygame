@@ -163,6 +163,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0149](#adr-0149--add-a-restricted-playable-profile-with-explicit-public-overrides) | Add a restricted playable profile with explicit public overrides | Accepted |
 | [0150](#adr-0150--superflat-retains-virtual-deposits-without-staging-the-terrain) | Superflat retains virtual deposits without staging the terrain | Accepted |
 | [0151](#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh) | Keep coordination local and execute through the existing personal-PC SSH | Accepted |
+| [0152](#adr-0152--run-bounded-autonomous-t0-and-creative-work-without-human-acceptance) | Run bounded autonomous T0 and creative work without human acceptance | Accepted |
 
 ---
 
@@ -7142,3 +7143,47 @@ that baseline. Do not rerun the audit or reopen already-proved mechanisms merely
 execution moved. The missing native sound binding, actual client rendering/listening,
 flat-world entry, final configured RC and longitudinal compatibility retain distinct
 proof obligations. See [the operating runbook](operations/ssh-prism-workflow.md).
+
+---
+
+## ADR-0152 — Run bounded autonomous T0 and creative work without human acceptance
+
+**Status.** Accepted owner-directed unattended programme, 2026-10-19.
+
+**Decision.** Continue local coordination and ordinary personal-PC SSH while the owner
+is unavailable. Prioritize stable traceable build/deployment, verified T0 defects and
+nonredundant regressions, then independent GREEN foundations. Run genuinely independent
+technical, deterministic visual and SFX work in isolated child worktrees. The coordinator
+owns architecture, integration, resource reservations, publication and final evidence.
+Do not leave useful safe work idle because a different lane needs human judgment.
+
+Keep T0 unaccepted/unfrozen and T1 inactive. GREEN preparation is not a new T1 frontier.
+Preserve the current product/flat-world decisions: no guessed starter kit, staged terrain,
+quest-shop economy, final balance or RED content. Reconcile the original audit's old
+baseline with current evidence instead of redoing its completed review or inventing defects.
+Human pacing, enjoyment, visual quality and listening remain explicit manual observations.
+
+All PC work is reversible and project-scoped. Existing player instances/saves, unrelated
+software, OS/security configuration and authentication remain untouched. Only the coordinator
+updates the shared execution worktree/development instance; children request a separate
+execution surface and a bounded JVM window before builds. Preserve every coherent contribution
+in Git and maintain [the return handoff](../RETURN-HANDOFF.md).
+
+**Creative scope.** Preserve the approved placed-machine identity and reviewed Core/Matrix
+family. Prefer the existing deterministic generator for confidently weak encountered T0
+sprites; no image-provider key is currently configured on the coordinator and no onboarding
+question blocks local art work. Static/pixel review is not an observed in-game art pass.
+
+The owner newly authorizes appropriate ElevenLabs work, not reuse of the exhausted original
+three-request grant. First locate an already configured secure credential without printing,
+copying, reconstructing or re-requesting it. Existing entitlement/account review stays closed.
+This programme permits **at most two new provider requests for one selected T0 sound purpose**,
+only after the coordinator records its purpose, prompts/parameters, new authorization/ledger
+and rights/provenance boundary. No automatic retry after an ambiguous charge, no reset of old
+receipts, no impersonation of their historical author, and no API dependency in normal builds.
+If the credential or honest authorization tooling is unavailable, record that blocker and
+continue source/offline validation or another GREEN lane. Do not expand the sound budget.
+
+**Alternatives rejected.** Waiting for the absent owner on ordinary engineering choices;
+silently deciding subjective/product questions; activating T1 because a jar deploys; exhaustive
+duplicate native tests; unconstrained paid generation; competing shared-worktree publishers.

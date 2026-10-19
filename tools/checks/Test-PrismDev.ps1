@@ -648,6 +648,7 @@ try {
     Assert-Test ($script:CapturedSshTarget -ceq 'fixture-user@fixture-pc') 'Existing configured SSH identity used'
     Assert-Test ($script:CapturedPacket.Command.Length -lt 7000) 'Fixed encoded command fits Windows SSH cap'
     Assert-Test ($script:CapturedPacket.Command.Contains(' -OutputFormat Text ')) 'Remote PowerShell emits text rather than CLIXML'
+    Assert-Test ($script:CapturedPacket.Json.IndexOfAny([char[]]"`r`n") -eq -1) 'Stdin packet is exactly one compact JSON line'
     Assert-Test (-not $script:CapturedPacket.Command.Contains($privateData.worktreePath)) 'Private paths absent from remote command line'
     $packet = $script:CapturedPacket.Json | ConvertFrom-Json
     Assert-Test ($packet.request.config.worktreePath -ceq $privateData.worktreePath) 'Spaces, quotes, metacharacters and Unicode survive JSON roundtrip'
@@ -656,6 +657,9 @@ try {
     Assert-Test (($script:CapturedPacket.Json | ConvertFrom-Json).request.action -ceq 'Build') 'Outer workflow exposes Build-only action'
     $bootstrap = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String(($script:CapturedPacket.Command -split ' ')[-1]))
     Assert-Test ($bootstrap.Contains("`$ProgressPreference='SilentlyContinue'")) 'Fixed bootstrap suppresses module-autoload progress'
+    Assert-Test ($bootstrap.Contains('[Console]::In.ReadLine()') -and
+        -not $bootstrap.Contains('[Console]::In.ReadToEnd()')) 'Bootstrap consumes one packet line without waiting for SSH EOF'
+    Assert-Test ($bootstrap.Contains('UTF8.GetByteCount($line) -gt 262144')) 'Bootstrap enforces the 256 KiB UTF-8 packet limit before JSON parsing'
     $tokens = $null; $errors = $null
     $null = [Management.Automation.Language.Parser]::ParseInput($bootstrap, [ref]$tokens, [ref]$errors)
     Assert-Test ($errors.Count -eq 0) 'Fixed bootstrap parses in WinPS 5.1'
@@ -663,6 +667,9 @@ try {
     Assert-Test ($decoded -ceq $script:PcWorkflowRemote.ToString()) 'Transport uses only the fixed reviewed workflow'
     $null = [Management.Automation.Language.Parser]::ParseInput($decoded, [ref]$tokens, [ref]$errors)
     Assert-Test ($errors.Count -eq 0) 'Fixed remote workflow parses in WinPS 5.1'
+    $oversizedConfig = (ConvertTo-Json $privateData -Depth 10) | ConvertFrom-Json
+    $oversizedConfig.worktreePath = 'C:\' + (([string][char]0xE9) * 131072)
+    Assert-Refused { New-PcWorkflowPacket $oversizedConfig 'Sync' ('1' * 40) '' } '256 KiB' 'Oversized UTF-8 stdin packet'
     Assert-Refused { Invoke-PcWorkflow -ConfigFile $private -Action Sync -Revision 'main' } 'full commit SHA' 'No branch name in Revision'
     Assert-Refused { Invoke-PcWorkflow -ConfigFile $private -Action Deploy -Revision ('1' * 40) } 'absolute' 'Deploy requires explicit remote PackZip'
     Assert-Refused { Invoke-PcWorkflow -ConfigFile $private -Action Sync -Revision ('1' * 40) -PackZip 'D:\pack.zip' } 'only accepted' 'No ignored PackZip'
@@ -689,7 +696,8 @@ try {
     $encodingBefore = $OutputEncoding
     $code = & $script:OriginalTransport 'fixture-pc' $script:CapturedPacket
     Assert-Test ($code -eq 37) 'Concrete transport propagates SSH executable exit'
-    foreach ($option in @('-T', 'BatchMode=yes', 'StrictHostKeyChecking=yes', 'ConnectTimeout=15', 'ConnectionAttempts=1')) {
+    foreach ($option in @('-T', 'BatchMode=yes', 'StrictHostKeyChecking=yes', 'ConnectTimeout=15', 'ConnectionAttempts=1',
+            'ServerAliveInterval=15', 'ServerAliveCountMax=3')) {
         Assert-Test ($option -cin $script:SshArgv) "SSH transport requires $option"
     }
     Assert-Test ($script:SshStdin.Trim() -ceq $script:CapturedPacket.Json) 'JSON travels on stdin, not a long remote argument'

@@ -272,7 +272,9 @@ $ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
 [Console]::InputEncoding=New-Object Text.UTF8Encoding($false)
 try {
- $p=[Console]::In.ReadToEnd()|ConvertFrom-Json
+ $line=[Console]::In.ReadLine()
+ if([string]::IsNullOrWhiteSpace($line) -or [Text.Encoding]::UTF8.GetByteCount($line) -gt 262144){throw 'Expected one JSON packet line of at most 256 KiB'}
+ $p=$line|ConvertFrom-Json
  if($p.protocol -cne 'grindless.pc-workflow/1'){throw 'Invalid workflow packet'}
  $b=[Convert]::FromBase64String($p.code)
  $h=[Security.Cryptography.SHA256]::Create()
@@ -290,7 +292,11 @@ try {
     $payload = [ordered]@{ protocol = 'grindless.pc-workflow/1'; code = [Convert]::ToBase64String($bytes)
         request = @{ protocol = 'grindless.pc-workflow/1'; action = $Action; revision = $Revision
             packZip = $PackZip; config = $Config } }
-    return [pscustomobject]@{ Command = $command; Json = (ConvertTo-Json $payload -Depth 10 -Compress) }
+    $json = ConvertTo-Json $payload -Depth 10 -Compress
+    if ($json.IndexOfAny([char[]]"`r`n") -ge 0 -or [Text.Encoding]::UTF8.GetByteCount($json) -gt 262144) {
+        throw 'Workflow packet must be one compact JSON line of at most 256 KiB.'
+    }
+    return [pscustomobject]@{ Command = $command; Json = $json }
 }
 
 function Invoke-PcWorkflowTransport([string]$Target, $Packet) {
@@ -300,7 +306,8 @@ function Invoke-PcWorkflowTransport([string]$Target, $Packet) {
     try {
         $OutputEncoding = New-Object Text.UTF8Encoding($false)
         $Packet.Json | & ssh -T -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15 `
-            -o ConnectionAttempts=1 $Target $Packet.Command | ForEach-Object { Write-Host $_ }
+            -o ConnectionAttempts=1 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 `
+            $Target $Packet.Command | ForEach-Object { Write-Host $_ }
         return [int]$LASTEXITCODE
     } finally { $OutputEncoding = $previousEncoding }
 }

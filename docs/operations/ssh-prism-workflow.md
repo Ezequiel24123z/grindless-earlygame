@@ -219,3 +219,10 @@ and suppresses progress without hiding errors. The current322-assertion contract
 distinguishes `Prepare`'s missing-source pins from `DownloadedDependencies` after success;
 `MissingLocalDependencies` is empty for a completed deployment. The initial0b29 hosted
 Windows job passed both direct and Bash steps; later-source CI has its own identity.
+
+A later repeated real RPC exposed an EOF wait after successful build/deploy/inspect.
+The current330-assertion transport sends one compact newline-terminated JSON packet
+and reads one line, with a256KiB UTF-8 bound, rather than waiting for SSH EOF.
+Fifteen-second/three-miss SSH liveness checks bound dead connections, not legitimate
+long builds. Preserve the installed instance and diagnose only the owned RPC helper;
+do not retry a possibly partial operation blindly or kill unrelated PowerShell/Java.

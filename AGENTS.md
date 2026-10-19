@@ -102,6 +102,15 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current unattended programme (ADR-0152):** the owner is unavailable. Continue bounded
+T0 stabilization, useful regressions, deterministic visual/SFX work and evidence-backed
+GREEN preparation. Read [RETURN-HANDOFF](RETURN-HANDOFF.md) and the active task graph.
+Use isolated child worktrees with explicit ownership; only the coordinator publishes/
+deploys the integrated candidate. Never equate unattended execution with human acceptance,
+T0 freeze, T1 activation, an invented product decision or an unlimited generation budget.
+Child sessions must not reuse the private default PC inventory as their own mutable
+execution surface: it addresses the coordinator's shared worktree/instance.
+
 **Current execution model (ADR-0151):** keep this conversation local and use ordinary
 SSH to the personal PC for heavy work. Read [the SSH/Prism runbook](docs/operations/ssh-prism-workflow.md)
 and the current handoff. The received continuation is `70901eca`, not old `main`;
