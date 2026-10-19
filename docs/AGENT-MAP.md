@@ -455,13 +455,16 @@ version/API-verified, never a fictional or mandatory core integration.
   diagnostic world; a leaf-only link check or logical/physical prefix comparison
   is insufficient. PS must choose one absolute FileSystem path from the PS
   provider/location, not .NET CurrentDirectory, and reuse it for checks and reads.
-  Inspect logical ancestors root-first before dot normalization, including ROOT.
+  Resolve `~` using that provider's Home anchor, not as a relative folder; do not
+  invent `~user` expansion. Inspect logical ancestors root-first before dot
+  normalization, including ROOT and Home tails.
   Publication wait has a separate bounded failure and never
   spends the confirmed wake budget; its reset must not reset paid-work samples.
   PS batch excludes reload/optional cases from its shared world.
   `verify-optional-datapack.ps1` / `.sh`, invoked by `VerifySmokeHarness`, exercise
   the real helper/dispatch plus phase-budget source contracts without a JVM/server;
-  PS passes75 including the c7 divergent-cwd regression and restored locations.
+  PS passes86 including c7 divergent-cwd and ae054 Home regressions, with locations
+  and provider Home restored. The earlier75 did not cover Home.
   Windows Git/MSYS syntax passes; its full optional check is blocked by missing
   `ln`, not a Linux/macOS pass. The full-buffer no-callback guard in `VerifyEnergy` is authored, not
   executed under the current JVM reservation.

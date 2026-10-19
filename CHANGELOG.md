@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the FileSystem provider's Home anchor in smoke paths.** The divergent-cwd
+  fixture reproduces ae054's missing Home case without writing to the real HOME.
+  Resolve only `~` through the provider, then retain the logical tail for ancestor
+  inspection; literal `~user`, PSDrives and relative controls keep provider semantics.
+  All86 focused PS checks pass with provider Home/cwd restored and sentinels intact.
+  This is a separate correction; the earlier75 did not cover Home.
 - **Unify relative smoke paths under the PowerShell FileSystem location.** A safe
   divergent-cwd regression fails on c7: .NET and PS previously inspected different
   relative inputs. Choose one absolute FileSystem path for source/world/ROOT,

@@ -189,6 +189,50 @@ try {
         $null = New-PSDrive -Name $temporaryDrive -PSProvider FileSystem -Root $relativeRoot
         $drivePlan = Get-SmokePackPlan ($temporaryDrive + ':\primary') ($temporaryDrive + ':\optional') 'new-world'
         Assert ($drivePlan.Primary.Path -ceq $relativePrimary -and $drivePlan.Optional.Path -ceq $relativeOptional) 'FileSystem PSDrive resolves to the same native paths'
+        $homePrimary = Pack 'home\primary'
+        $homeOptional = Pack 'home\optional'
+        $homeInside = Pack 'home\world\optional'
+        $homeRoot = Join-Path $fixture 'home'
+        $homeWorld = Join-Path $homeRoot 'world'
+        $homeSentinel = Join-Path $homeInside 'retained.txt'
+        [IO.File]::WriteAllText($homeSentinel, 'owned-home-world-must-survive', $utf8)
+        $homeProvider = @($ExecutionContext.SessionState.Provider.Get('FileSystem'))[0]
+        $previousHome = $homeProvider.Home
+        $homeAlias = $null
+        try {
+            $homeProvider.Home = $homeRoot
+            $providerInfo = $null; $providerDrive = $null
+            $providerHome = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('~', [ref]$providerInfo, [ref]$providerDrive)
+            Assert ((Get-SmokeFileSystemPath '~') -ceq $providerHome) 'Home ROOT selection matches the FileSystem provider under divergent cwd'
+            $homePlan = Get-SmokePackPlan '~\primary' '~\optional' '~\world-next'
+            Assert ($homePlan.Primary.Path -ceq $homePrimary -and $homePlan.Optional.Path -ceq $homeOptional) 'Home primary/optional resolve to owned native paths'
+            Assert ((Get-Item -LiteralPath '~\primary').FullName -ceq $homePlan.Primary.Path) 'Home selection matches existing literal resolution'
+            $homeLegacy = Get-SmokePackPlan '~\primary' '' '~\world-next'
+            Assert ($homeLegacy.Primary.Path -ceq $homePrimary) 'Home primary preserves no-optional behavior'
+            $homeAlias = Join-Path $homeRoot 'A'
+            $null = New-Item -ItemType Junction -Path $homeAlias -Target $homeWorld
+            Reject { Get-SmokePackPlan '~\primary' '~\A\optional' '~\world' } 'Home alias cannot hide a linked ancestor' 'reparse points'
+            $logicalHome = Get-SmokeFileSystemPath '~\A\..\optional'
+            Assert ($logicalHome.Contains('\A\..\optional')) 'Home expansion preserves logical components before inspection'
+            Reject { Assert-SmokePathAncestors $logicalHome } 'Home dot segments cannot hide the alias' 'reparse points'
+            Assert ([IO.File]::ReadAllText($homeSentinel) -ceq 'owned-home-world-must-survive') 'Home rejection preserves the sentinel'
+            $literalUser = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('~user\probe', [ref]$providerInfo, [ref]$providerDrive)
+            Assert ((Get-SmokeFileSystemPath '~user\probe') -ceq $literalUser) 'selector does not invent tilde-user semantics'
+            $homeCaller = '$ErrorActionPreference=''Stop''; Set-Location -LiteralPath ''' + $relativeRoot.Replace("'", "''") +
+                "'; [Environment]::CurrentDirectory='" + $dotNetRoot.Replace("'", "''") + "'; " +
+                '@($ExecutionContext.SessionState.Provider.Get(''FileSystem''))[0].Home=''' + $homeRoot.Replace("'", "''") +
+                "'; " + '$env:SMOKE_OPTIONAL_DATAPACK=$null; $env:CI=''false''; $env:GRINDLESS_ACCEPT_EULA=''false''; ' +
+                "try { & '" + $boot.Replace("'", "''") + "' -Root '~'; exit " +
+                '$LASTEXITCODE } catch { Write-Output $_.Exception.Message; exit 91 }'
+            $encodedHomeCaller = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($homeCaller))
+            $homeLog = Join-Path $fixture 'home-root.log'
+            & powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encodedHomeCaller *> $homeLog
+            Assert ($LASTEXITCODE -eq 2 -and [IO.File]::ReadAllText($homeLog).Contains('Refusing to write eula.txt')) 'actual Home ROOT resolves correctly before the non-native EULA guard'
+        } finally {
+            if ($homeAlias) { [IO.Directory]::Delete($homeAlias) }
+            $homeProvider.Home = $previousHome
+        }
+        Assert ($homeProvider.Home -ceq $previousHome) 'provider Home restored in finally'
         Reject { Get-SmokePackPlan $relativePrimary 'Env:\PATH' $relativeWorld } 'non-FileSystem provider is rejected' 'FileSystem'
     } finally {
         if ($temporaryDrive) { Remove-PSDrive -Name $temporaryDrive }

@@ -35,7 +35,10 @@ function Get-SmokeFileSystemPath([string]$path) {
     $prefix = ''
     if ($logical -match '^(.*::)(.*)$') { $prefix = $Matches[1]; $logical = $Matches[2] }
     $tail = $logical
-    if ($logical.StartsWith('\\')) {
+    if ($logical -eq '~' -or $logical.StartsWith('~\')) {
+        $anchor = $prefix + '~'
+        $tail = $logical.Substring(1).TrimStart('\')
+    } elseif ($logical.StartsWith('\\')) {
         $root = [IO.Path]::GetPathRoot($logical)
         $anchor = $prefix + $root
         $tail = $logical.Substring($root.Length)

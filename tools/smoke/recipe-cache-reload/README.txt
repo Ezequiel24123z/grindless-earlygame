@@ -102,6 +102,9 @@ anchor is resolved first; logical dot segments remain until root-first prefix
 inspection has ruled out links. ROOT receives the same selection and, in
 optional mode, inspection before Resolve-Path can erase logical components.
 The legacy single-pack relative input also receives the selected absolute path.
+Home-prefixed inputs use the provider's ~ anchor before the logical tail is
+appended. This preserves normal Home ROOT/primary/optional paths without
+inventing ~user semantics or erasing an unchecked Home alias.
 When present, also validate the primary; reject case-insensitive basename
 collisions. Existing no-optional behavior is preserved. Copy the sibling next
 to the primary and explicitly write initial-disabled-packs=file/<optional>.
@@ -216,6 +219,12 @@ hit an invalid-name attribute read on an unresolved dot component; root-first
 prefix inspection fixes that without swallowing the error or normalizing away
 an unchecked logical ancestor. SH guards and publication/wake functions do not
 change in this correction.
+The subsequent ae054 review found that its75-case scope omitted Home. The
+owned-provider-Home fixture reproduces that real failure before the correction;
+86 focused PS checks now pass Home ROOT/primary/optional, literal resolution,
+Home alias/dot guards and ~user/provider parity while cwd still diverges.
+Provider Home and both locations are restored in finally. Only an owned
+temporary Home is used: the real HOME's files are never modified.
 The initial SH search found no Bash on PATH/four bounded Git candidates. The
 coordinator later supplied an existing local Git/MSYS sh5.2.37: both SH scripts
 parse on Windows, but the optional check stops at its unavailable ln command.
