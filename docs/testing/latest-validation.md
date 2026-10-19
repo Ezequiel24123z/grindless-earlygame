@@ -1,5 +1,46 @@
 # Current T0 rework validation
 
+## Final A01 native/SavedData pass and actual qualified deployment
+
+On the SAME immutable559 root/JAR98aa already used by cache green, A01 completes
+`PASS_NATIVE_AND_REAL_SAVED_DATA`. Conditional classpath preparation only when
+missing takes8.429s; only `VerifyExtractor` javac takes1.601s. The real native run
+takes40.839s with all10 `[Server]` markers, including65 recovered/stable output,
+Drift127 transfer and exactly8FU in one world tick. Harness0 and natural shutdown
+precede the actual Luna oracle:0 in0.662s, four checks/two chunks/1each/total2.
+No59/full-build/package replay is performed.
+
+The binary is copied outside the world and hash-verified before that one verified
+world is removed. Final22:21:25Z owner check finds source559 clean, original clone/
+config preserved,0Java/port25629 free/world absent and releases explicitly.
+
+| A01 actual evidence | SHA-256 |
+| --- | --- |
+| Preserved real Luna SavedData | `91dd2a7307596ad386bed85e0c73c36e8d2d9a578016ddab7f513cdcbac9d3d6` |
+| Native/oracle receipt | `9a5601e284e1fbe96a6037e10ed9b84e66a861af4160d6449e5ccb3703a8b17f` |
+| Release check | `d4cb945e64e3e67cfef41aa61c41456dc5ad7a23b40ed7c7149b9bf4b569b565` |
+| Server log | `a79a245e845fa041bd999f3abdcd5c21c3fd8dd87458ffd82858583327345804` |
+| Native stdout | `26a8382a458c822c46c48d6a3ac2d552074088b3f8a33d27b08c743e9c257f70` |
+| Saved-data stdout | `03f69573aea77f2c3d5c56c4cbd271a9c2cfc81aaf33347c8f8d7933e5ef9cec` |
+
+Only after this pass is `extractor-backpressure` registered: the manifest now has46
+unique cases. Both batch twins already exclude this fresh-counter case. No CI step
+or production source changes are added; the stopped-world oracle remains a separate
+explicit qualification obligation, not a claim that ordinary CI item markers read disk.
+
+The coordinator then uses the committed workflow: Sync559=`VerifiedDetached`,
+Deploy=`Deployed`, Inspect=`VerifiedStopped`, repeat Deploy=`Unchanged`. No dependency
+downloads/changes occur. The actual owned `Grindless-T0-Dev` instance contains the
+same1926158-byte98aa jar and1510587-byte bff0fb ZIP provenance used by BOTH native
+greens; no later untested runtime is substituted. Final postcheck22:23:38Z verifies
+the installed hash,0Java and all SIX original-instance/save hashes unchanged.
+The old instance/save is neither updated nor copied.
+
+All bounded programme engineering work is complete. Artifact/input equivalence is
+checked across later documentation/manifest-only HEAD changes. Human client/visual/
+listening/no-command/longitudinal and unresolved Superflat/product gates remain open;
+no T0 acceptance/freeze, RC publication, new paid generation or T1 activation follows.
+
 ## Genuine cache GREEN and handoff to repaired A01 accounting
 
 The ONE exact559 production cache green passes: harness0, actual server0 and

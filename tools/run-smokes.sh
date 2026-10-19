@@ -5,7 +5,7 @@
 #     tools/run-smokes.sh . --only states,first-exosuit
 #     tools/run-smokes.sh . --shard 1 --of 6
 #
-# CI uses --shard/--of to spread 39 server boots across parallel jobs; one sequential job no
+# CI uses --shard/--of to spread the server boots across parallel jobs; one sequential job no
 # longer fits in the timeout (ADR-0105). Scenario conventions are documented in scenarios.txt.
 set -u
 

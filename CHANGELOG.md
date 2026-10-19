@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Complete the bounded engineering programme and install the qualified artifact.**
+  A01 repaired native has10 real markers and4 actual Luna saved-accounting checks;
+  preserve/hash the binary then clean only its diagnostic world. Deploy that same
+  immutable559 JAR/ZIP to the stopped owned Dev instance, inspect it, and prove a
+  repeated deploy is Unchanged. Final installed hash/0Java/six old-instance/save
+  hashes pass. Register A01 only after qualification; preserve manual/RC/T1 gates.
 - **Close A03's source-bound native obligation in its canonical disposition.**
   Keep the original red7/green938 evidence and the later exact444/559 Level
   counterexample/green separate, with conserved batch/FU and stable hold.

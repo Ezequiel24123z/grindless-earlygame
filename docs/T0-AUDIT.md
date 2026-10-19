@@ -21,7 +21,7 @@ Human gameplay remains unexecuted where recorded; green engineering is not accep
 
 | Finding | Current evidence / action |
 | --- | --- |
-| A01 direct chest backpressure | Reviewed repairc87 is source-integrated: independent pending export, changed-copy transfer and world-tick guard. Frozen red compiles then fails six source checks; focused green compiles and passes59, including24 binary-NBT assertions. Actual Level recovery, stopped-world accounting and deployment remain open, not inferred from process-fluid proofs. |
+| A01 direct chest backpressure | Qualified separately: focused red6/green59 plus real baseline native red, then integrated559 green10 markers (65 recovery,Drift127,8FU/tick) and4 actual Luna SavedData checks (2chunks/1each/total2). The same jar is deployed; no process-fluid analogy or authentic restart/player-save acceptance is inferred. |
 | A02 duplicate offhand evidence | Already corrected: `QuestInventoryEvidence` traverses the Container once; `VerifyPersistence` checks actual player Inventory size41, offhand3 and split5. Reuse that proof, not another arithmetic proxy. |
 | A03 generated-graph membership/idle wake | Qualified: red3643 fails7/fixedfd907 passes938/build, then genuine native red444/green559 prove initial idle, real publication, wake and1gravel→2sand/exact3840FU with40 stable ticks; harness/server0. Source/receipts remain distinct from states, helpers and human acceptance. |
 | A04 physical T2 consumers/rating policy | Later-frontier work, not a missing T0 craft. T1/T2 activation and unresolved consumer/ratio decisions remain held; the F2 implementation inventory is not tier acceptance. |

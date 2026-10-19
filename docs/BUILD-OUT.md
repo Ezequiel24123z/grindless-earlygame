@@ -26,17 +26,23 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: qualify the isolated PC build/package and dedicated engineering client deployment.
-The approved minimal Quern loop (ADR-0148) and additive restricted playable profile/
-public-override contract (ADR-0149) are already integrated in70901. Its complete hosted
-CI supplies reusable server-binding proof, not client rendering/listening. Continue
-deliberate flat-world resource access: ADR-0150 requires virtual chunk deposits,
+Next: owner client playtest and the explicitly held Superflat/product decisions.
+The bounded SSH-first build/package/regression/deployment programme is complete:
+qualified559 is installed in the separate owned development instance; A01/A03 native
+red/green and real Luna stopped-world accounting pass. Read
+[RETURN-HANDOFF](../RETURN-HANDOFF.md) before any new work; do not repeat those
+proofs or resume an old runtime owner without a changed assumption/new finding.
+The approved Quern loop (ADR-0148) and restricted playable profile/public-overrides
+(ADR-0149) remain engineering, not client rendering/listening acceptance. Continue
+deliberate flat-world resource access only through the held product decision:
+ADR-0150 requires virtual chunk deposits,
 not landscaped spawn resources/food or physical ore generation. The proposed T0
 generating multiblock and quest shop remain scoped design leads. Both provenance investigations are complete;
 do not reopen account verification. Questbook product QA remains on the Heracles
 authority. The source-pixel art batch is already installed; native rendering remains open.
 Old discovery workers are finished, not a resumable pool. No storage move or asset
-import follows from reception, and hosted smoke shards remain pending at receipt.
+import follows from reception. Earlier pending hosted-shard statements below are
+historical; exact444 subsequently completes all six existing native jobs.
 Reuse the existing mechanisms and proofs rather than rewrite them to change the product.
 Freeze and technically qualify the actual configured pack before publishing a playable RC.
 Human acceptance begins with that release; after publication and actual longitudinal play

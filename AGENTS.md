@@ -165,7 +165,7 @@ also boot the server after any change to registration, block entities or loader 
 ```powershell
 $env:GRINDLESS_ACCEPT_EULA='true'
 powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only states
-powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root .   # all 39, tens of minutes
+powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root .   # all manifest scenarios, tens of minutes
 ```
 
 `tools/run-smokes.sh .` is the same thing elsewhere. The scenario list is

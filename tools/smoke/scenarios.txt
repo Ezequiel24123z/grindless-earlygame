@@ -24,6 +24,7 @@ blocks               Every block is mineable with a pickaxe and drops itself, wi
 states               Every status and facing of every machine is a valid block state, placed as one datapack function (ADR-0061).
 loop                 The extractor has a block entity, and a pylon occupies the two blocks above it.
 bootstrap            The three T0 machines transfer power, extract a vein, calibrate a core and recover legacy output.
+extractor-backpressure Crude output recovers across paid-work reconstruction, no-vein partial transfer and one-tick Flux accounting.
 workshop             Full F0 ceramic cycles, finite-water wakeup, recipe identity, formation, NBT repair, blocked output and idle export.
 settling             Four real oriented assemblies separate dirt, preserve covered work and NBT, and recover exactly 750 mB through a conduit.
 renewable-cycle      Daylight source cycles conserve stock/FU after finite startup; produced surplus powers native ceramic, settling, carbon, glass, copper/redstone and core calibration, not the final hand craft.

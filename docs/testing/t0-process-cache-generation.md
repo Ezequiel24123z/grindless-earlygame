@@ -178,9 +178,10 @@ native completion/retry evidence apply to their process-machine/native-store pat
 The composed `dcb8010` fluid and states/settling proofs do not establish blocked-output
 recovery for the separate `CrudeExtractorBlockEntity`. The coordinator's current-source
 check identified its missing independent idle exporter and assigned that defect to
-another bounded child. That separate repair is now source-integrated with59 focused
-checks and an actual native baseline red; repaired native/SavedData is still its
-own obligation. This unit does not close Crude recovery by analogy.
+another bounded child. That separate repair now has59 focused checks, an actual
+native baseline red, integrated559 native green with10 markers and four real
+stopped-world Luna accounting checks. This unit does not close Crude by analogy;
+its independent proof and the same-artifact deployment are in the shared ledger.
 
 **A02 has current, distinct inventory-counting evidence.** `QuestInventoryEvidence`
 counts each actual inventory slot once. The real41-slot `Inventory` in

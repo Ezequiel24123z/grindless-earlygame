@@ -1,8 +1,35 @@
 # Active orchestration handoff
 
-Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
+Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC GATES HELD**.
 
-## Current unattended programme
+## Current completed engineering handoff
+
+The bounded SSH-first programme is complete. Read [RETURN-HANDOFF](../RETURN-HANDOFF.md)
+for the authoritative installed state and [the validation ledger](../docs/testing/latest-validation.md)
+for exact source/receipts. The owned `Grindless-T0-Dev` instance has the same
+native-qualified559 jar used by both green regressions:
+source/runtime `559bed5e8ea70ac52ff4b3fed3850ab05ab48256`,
+jar `98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061`,
+ZIP `bff0fb27434da5ecd49aaf69d0f6b6635b22679029a7b95c488a175b266e8a86`.
+Deploy/VerifyStopped/repeated-Unchanged pass; six pinned old-instance/save files
+remain unchanged and final postcheck finds0Java. No save is copied or adopted.
+
+A03's real loaded-idle reload red/green closes its distinct native obligation.
+A01's real repaired native has10 markers and the stopped-world Luna oracle has
+4 checks: two chunks,1 each,total2; its verified binary is preserved before scoped
+cleanup. Full build/pack88, actual archive inspection and the merged Java tooling
+gate pass. Both runtime owners explicitly release; no JVM/cache/world job is queued.
+The original27 product tasks/47 references and human/release gates remain intact.
+
+No T0 human acceptance, freeze, T1 activation or invented Superflat/shop/generator
+decision follows. Client/render/listening/no-command/longitudinal play and held
+product choices are the next owner work, not another historical smoke replay.
+No new paid generation occurred; approved Quern A and exhausted grants are intact.
+
+## Preserved unattended programme timeline
+
+The earlier states below are source-bound history, not the current deployed identity
+or permission to resume a retired worker. The completed state above takes precedence.
 
 The owner has left and explicitly delegated safe autonomous T0 stabilization, nonredundant
 regressions, creative quality and GREEN preparation (ADR-0152, PA-0013/revision14).

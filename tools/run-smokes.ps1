@@ -6,7 +6,7 @@
 # Run one scenario, or a few:
 #     ... -Root . -Only states,first-exosuit
 #
-# Run one slice of the list, which is how CI splits 39 server boots across parallel jobs:
+# Run one slice of the list, which is how CI splits the server boots across parallel jobs:
 #     ... -Root . -Shard 1 -Of 6
 #
 # Each scenario boots a full dedicated server, so the whole list takes tens of minutes. That is

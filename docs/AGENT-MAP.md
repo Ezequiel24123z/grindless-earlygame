@@ -479,7 +479,8 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/smoke/recipe-cache-reload/` and `recipe-cache-reload-optional/` author one
   ADR-0153 idle-miss/reload boundary with real tag predicates, immutable setup,
   exact batch/FU accounting and a tick-rate bound. Read its `README.txt` first:
-  native qualification is NOT_RUN. The paired runners now stage one
+  actual444 native red /559 green are qualified and the scenario is registered.
+  The paired runners stage one
   `SMOKE_OPTIONAL_DATAPACK` explicitly in `initial-disabled-packs`, validate
   optional-mode paths/basenames and restore its environment per scenario.
   Reject linked ancestors of both input and world paths before replacing the
@@ -496,11 +497,11 @@ version/API-verified, never a fictional or mandatory core integration.
   the real helper/dispatch plus phase-budget source contracts without a JVM/server;
   PS passes86 including c7 divergent-cwd and ae054 Home regressions, with locations
   and provider Home restored. The earlier75 did not cover Home.
-  Windows Git/MSYS syntax passes; its full optional check is blocked by missing
-  `ln`, not a Linux/macOS pass. The full-buffer no-callback guard in `VerifyEnergy` is authored, not
-  executed under the current JVM reservation.
-  Do not register the native fixture in `scenarios.txt`, invent a native pass or
-  let donor energy/inventory/neighbor mutation substitute for reload wakeup.
+  The limited local Git/MSYS bundle lacks `ln`, but exact444 Linux CI executes the
+  full optional helper and Energy no-callback assertions successfully. Combined559
+  PC Java tooling also executes OPTIONAL/RETENTION/BATCH once each. Register new
+  fixtures only after actual qualification; never let donor energy/inventory/
+  neighbor mutation substitute for reload wakeup.
 - `tools/smoke-boot.ps1` / `.sh` accept only absent/0/1 for `SMOKE_KEEP_WORLD`.
   Validate before preparation/mutation;1 skips only final world deletion, not
   startup reset, preflight, process cleanup, shutdown or exit-status checks.
@@ -508,8 +509,10 @@ version/API-verified, never a fictional or mandatory core integration.
   fixed smoke world, with no copying/path hook. Inspect it only after harness0
   and natural server0, then explicitly clean that exact world before another run.
   `verify-smoke-world-retention.ps1` / `.sh`, via `VerifySmokeHarness`, pass37 PS
-  and43 Windows Git/MSYS helper/entrypoint/EXIT contracts without a JVM. They
-  do not prove actual saved-data persistence or Linux/macOS behavior.
+  and43 Windows Git/MSYS helper/entrypoint/EXIT contracts without a JVM, plus the
+  exact444 Linux Java-wrapper proof. Those helper proofs alone do not establish
+  persistence. A01's separate559 native green and four actual stopped-world Luna
+  checks now qualify the saved-accounting boundary, not restart/crash/player saves.
 
 - Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`
   for the read-only primary-store projection. `FluidClientPlatform` delegates native water
