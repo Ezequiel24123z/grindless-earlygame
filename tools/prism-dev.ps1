@@ -1158,7 +1158,8 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
             return [pscustomobject]@{ Action = $Action; InstanceId = $InstanceId; Outcome = $outcome
                 SourceRevision = $source; RuntimeSourceRevision = $package.Provenance.runtimeSourceRevision
                 GrindlessSha256 = $package.JarSha256; PackSha256 = $package.Sha256; PackStatus = $script:PrismDevStatus
-                MissingLocalDependencies = $missing }
+                MissingLocalDependencies = @(if ($Action -eq 'Prepare') { $missing })
+                DownloadedDependencies = @(if ($outcome -eq 'Deployed') { $missing }) }
         }
 
 if ($MyInvocation.InvocationName -ne '.') { Invoke-PrismDev @PSBoundParameters }

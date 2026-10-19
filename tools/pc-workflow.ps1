@@ -269,6 +269,7 @@ function New-PcWorkflowPacket($Config, [string]$Action, [string]$Revision, [stri
     # ASCII-only, bounded bootstrap; private paths and action data are stdin JSON.
     $bootstrap = @'
 $ErrorActionPreference='Stop'
+$ProgressPreference='SilentlyContinue'
 [Console]::InputEncoding=New-Object Text.UTF8Encoding($false)
 try {
  $p=[Console]::In.ReadToEnd()|ConvertFrom-Json
@@ -284,7 +285,7 @@ try {
 '@
     $bootstrap = $bootstrap.Replace('CODE_DIGEST', $digest)
     $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($bootstrap))
-    $command = 'powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ' + $encoded
+    $command = 'powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -OutputFormat Text -EncodedCommand ' + $encoded
     if ($command.Length -gt 7000) { throw 'Fixed SSH bootstrap exceeds the Windows command-line budget.' }
     $payload = [ordered]@{ protocol = 'grindless.pc-workflow/1'; code = [Convert]::ToBase64String($bytes)
         request = @{ protocol = 'grindless.pc-workflow/1'; action = $Action; revision = $Revision

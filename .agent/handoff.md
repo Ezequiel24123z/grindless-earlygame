@@ -51,6 +51,13 @@ Next execute the published `pc-workflow` Sync -> Build -> Deploy -> Inspect with
 existing private inventory, then compare the preserved old-instance hashes. No real
 transport/CDN/deployment pass is inferred from the fixture results.
 
+Real Sync of published0b29 now succeeds, and its Windows job118199565252 in
+run39293245073 passes both direct/Bash checks (whole workflow still in progress at
+inspection). Its harmless module-progress CLIXML is corrected by explicit text/silent
+progress transport. The current322/31 contract also reports fetched IDs separately
+from missing preflight pins. Execute the corrected actual Build/Deploy/Inspect next;
+neither real downloads/installed target nor client acceptance is credited yet.
+
 ## Historical owner-requested cloud freeze
 
 Read [the compact cloud entry](cloud-migration-handoff.md) first. Source consolidation

@@ -353,6 +353,7 @@ try {
     Assert-Test ($script:DownloadCalls -eq 0) 'Prepare does not download'
     $result = Invoke-Fixture $f
     Assert-Test ($result.Outcome -ceq 'Deployed') 'Create deployment succeeds'
+    Assert-Test ($result.MissingLocalDependencies.Count -eq 0 -and $result.DownloadedDependencies.Count -eq 0) 'Cached create reports neither missing nor downloaded dependencies'
     Assert-Test ($script:StagesInsideScan -eq 0) 'No instance.cfg is ever staged inside the live Prism instances scan'
     Assert-Test ([IO.File]::Exists((Join-Path $f.Target 'minecraft/mods/grindless-0.1.0-forge.jar'))) 'New instance uses supported minecraft root'
     Assert-Test ((Get-ChildItem -LiteralPath (Join-Path $f.Target 'minecraft/mods') -Force).Count -eq 8) 'Exactly seven pins plus Grindless'
@@ -550,7 +551,11 @@ try {
     $f.AllowDownload = $true; $f.BadDownload = $true
     Assert-Refused { Invoke-Fixture $f } 'published SHA1' 'Downloaded wrong bytes'
     $f.BadDownload = $false
-    Assert-Test ((Invoke-Fixture $f).Outcome -ceq 'Deployed') 'Exact official-download fixture is independently size/hash checked'
+    $result = Invoke-Fixture $f
+    Assert-Test ($result.Outcome -ceq 'Deployed') 'Exact official-download fixture is independently size/hash checked'
+    Assert-Test ($result.MissingLocalDependencies.Count -eq 0) 'Successful download leaves no reported missing dependency'
+    Assert-Test ($result.DownloadedDependencies.Count -eq 1 -and
+        $result.DownloadedDependencies[0] -ceq "$($first.projectID)/$($first.fileID)") 'Successful download reports the exact fetched pin separately'
     $f = New-Fixture
     $first = (Get-PrismContract $f.Root).Dependencies[0]
     [IO.File]::Delete((Join-Path $f.Template ('.minecraft/mods/' + $first.fileName)))
@@ -642,6 +647,7 @@ try {
     Assert-Test ($code -eq 23) 'SSH nonzero exit code propagated unchanged'
     Assert-Test ($script:CapturedSshTarget -ceq 'fixture-user@fixture-pc') 'Existing configured SSH identity used'
     Assert-Test ($script:CapturedPacket.Command.Length -lt 7000) 'Fixed encoded command fits Windows SSH cap'
+    Assert-Test ($script:CapturedPacket.Command.Contains(' -OutputFormat Text ')) 'Remote PowerShell emits text rather than CLIXML'
     Assert-Test (-not $script:CapturedPacket.Command.Contains($privateData.worktreePath)) 'Private paths absent from remote command line'
     $packet = $script:CapturedPacket.Json | ConvertFrom-Json
     Assert-Test ($packet.request.config.worktreePath -ceq $privateData.worktreePath) 'Spaces, quotes, metacharacters and Unicode survive JSON roundtrip'
@@ -649,6 +655,7 @@ try {
     $code = Invoke-PcWorkflow -ConfigFile $private -Action Build -Revision ('2' * 40)
     Assert-Test (($script:CapturedPacket.Json | ConvertFrom-Json).request.action -ceq 'Build') 'Outer workflow exposes Build-only action'
     $bootstrap = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String(($script:CapturedPacket.Command -split ' ')[-1]))
+    Assert-Test ($bootstrap.Contains("`$ProgressPreference='SilentlyContinue'")) 'Fixed bootstrap suppresses module-autoload progress'
     $tokens = $null; $errors = $null
     $null = [Management.Automation.Language.Parser]::ParseInput($bootstrap, [ref]$tokens, [ref]$errors)
     Assert-Test ($errors.Count -eq 0) 'Fixed bootstrap parses in WinPS 5.1'

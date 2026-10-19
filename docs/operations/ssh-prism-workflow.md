@@ -201,7 +201,7 @@ as a later tool-source package or final RC.
 
 ## Tool contract evidence
 
-The frozen tooling passes317 assertions across31 isolated Windows PowerShell5.1 fixtures:
+The initial frozen tooling passes317 assertions across31 isolated Windows PowerShell5.1 fixtures:
 create/idempotence/update/rollback, owner/running/reparse/tamper/pin/provenance refusals,
 the actual installed template's `cachedVolatile` shape, `.index` preservation, out-of-scan
 staging, resource-gated Build while an attributable player game remains untouched,
@@ -213,3 +213,9 @@ The independent `prism-tooling-windows` CI job runs the direct WinPS5 entry and 
 Git Bash twin. Actual real-PC transport/CDN/installed-instance results must be recorded
 separately in [the validation ledger](../testing/latest-validation.md); the fixture
 count alone is not that integration proof or native client acceptance.
+
+The actual first Sync exposed WinPS `CLIXML` progress; the follow-up selects text output
+and suppresses progress without hiding errors. The current322-assertion contract also
+distinguishes `Prepare`'s missing-source pins from `DownloadedDependencies` after success;
+`MissingLocalDependencies` is empty for a completed deployment. The initial0b29 hosted
+Windows job passed both direct and Bash steps; later-source CI has its own identity.

@@ -1,5 +1,30 @@
 # Current T0 rework validation
 
+## First real transport and hosted Windows tooling checkpoint
+
+Published tooling `0b29ec2bd8f2f616d2abbc9c9a3aabdaf37b5ccf` executes the real local
+`pc-workflow -Action Sync` successfully, exit0, and reports `VerifiedDetached` at that
+exact SHA. The original clone's branch/HEAD are preserved by the checked postconditions.
+No instance deployment or client action occurs in Sync.
+
+[Run39293245073](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39293245073)
+at0b29 has a completed/success `prism-tooling-windows` job
+`118199565252`: direct WinPS5 and Git Bash twin steps both pass. The complete workflow
+was still in progress when inspected; this is not a synthesized all-job pass.
+
+The first real transport surfaces WinPS module-autoload `CLIXML` progress on stderr
+despite successful synchronization. A focused bootstrap/output-format correction
+is required before final CLI qualification; do not call that harmless progress a
+Git/authentication failure or hide a real nonzero exit. Final real build/deployment
+and installed hashes remain separate pending results at this checkpoint.
+
+The follow-up correction suppresses module-autoload progress in the fixed bootstrap
+and explicitly selects text output. Five additional focused assertions also separate
+preflight-missing pins from successfully downloaded pins: `Prepare` retains its missing
+report, while a successful deployment reports no missing dependencies and names the
+downloaded IDs separately. Actual local WinPS validation passes322 assertions/31
+fixtures; errors still propagate and no guards/install semantics are relaxed.
+
 ## Frozen SSH and Prism tool contracts
 
 The new paired `pc-workflow` / `prism-dev` tooling passes317 assertions across31

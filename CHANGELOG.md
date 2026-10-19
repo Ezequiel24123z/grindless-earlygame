@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify real SSH synchronization and clean up Windows CLI reporting.** The actual
+  first0b29 Sync and hosted Windows direct/Bash job pass. Suppress WinPS module-progress
+  CLIXML with explicit text output, preserve real errors, and distinguish successfully
+  fetched pins from preflight-missing dependencies.322 isolated assertions pass; real
+  package/deployment and client results remain separate.
 - **Script the isolated SSH build and owned Prism development loop (ADR-0151).**
   Paired `pc-workflow` / `prism-dev` entrypoints synchronize an exact detached source,
   keep Build separate from stopped-instance Deploy, enforce fresh resource/build-lock
