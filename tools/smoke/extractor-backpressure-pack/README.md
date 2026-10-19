@@ -65,17 +65,17 @@ counter or infer accounting from an item-only oracle.
 | Java baseline suite | EXPECTED RED | `4f1b30b`: classpath 0, javac 0, Java 1; 25 existing checks pass and exactly six source guards fail |
 | Java repaired suite | PASS | `c87dbc8`: classpath 0, javac 0, Java 0; 59 assertions pass, including 24 actual binary-NBT assertions |
 | Native baseline fixture | EXPECTED RED | One production boot on `4f1b30b`: valid setup/load/finish, four absent export/recovery markers, normal shutdown |
-| Native repaired fixture | NOT_RUN | Repaired loaded recovery/world-time behavior still needs its separate window |
-| Stopped-world SavedData oracle | NOT_RUN | Four authored exact accounting assertions |
+| Native repaired fixture | PASS | Integrated `559bed5`: harness 0, natural server exit 0, all ten real markers |
+| Stopped-world SavedData oracle | PASS | Four actual assertions on the stopped Luna file: two chunks, one extraction each, total two |
 | Compilation | SCOPED PASS | Common compilation on both sources; Forge/remapped baseline jar through native preparation only |
-| Full build, repaired packaging, client and deployment | NOT_RUN | Not authorized by this bounded execution lease |
+| Integrated build/package | NOT REPEATED | Coordinator-provided `559bed5` jar/ZIP remain byte-identical before and after the A01 window |
+| Client, deployment and retained-player-world migration | NOT_RUN BY THIS CHILD | Remain outside this diagnostic proof |
 
 Source checks do not execute Java, validate Minecraft command grammar or observe
-the game's subscription/transfer ordering. The baseline boot below establishes
-the real failure and fixture binding. Actual repaired `SimpleContainer`/
-`ItemInsert` mutation, first-tick recovery and re-added work within the live
-world's tick remain distinct uncertainties. The existing process-machine proof
-does not cover this class.
+the game's subscription/transfer ordering. The baseline and repaired boots below
+establish this class's real failure, recovery and fixture binding separately.
+They are not substituted process-machine proofs or claims about arbitrary
+foreign handlers, crashes or a player's retained world.
 
 ## Executed focused and baseline-native evidence
 
@@ -146,6 +146,74 @@ killing an unrelated process. A private hash-verified SCP helper plus short
 code, host settings and raw logs stay outside Git. javac deprecation notes and
 the baseline's two Forge warnings remain warnings, not failed compilation.
 
+## Executed repaired native and real SavedData proof
+
+After cache QA explicitly released the PC, the coordinator granted a separate
+A01-only lease on exact integrated
+`559bed5e8ea70ac52ff4b3fed3850ab05ab48256`. The reviewed retention harness and
+previously built/staged jar were reused without source edits, checkout, another
+full build, repack, default-suite replay, Prism or deployment. The initial guard
+finds 9.667 GiB physical, 33.701 GiB commit, 162.623 GiB work/cache and zero Java;
+each actual launch refreshes the same unchanged guards.
+
+The classpath export was absent, so the one authorized
+`:common:writeCheckClasspath` runs and exits 0 in 8.429 seconds. Only
+`VerifyExtractor` is compiled against that root's exported classpath, exit 0 in
+1.601 seconds. The 59-check default mode is not repeated. The existing direct
+harness then exits 0 in 40.839 seconds with natural server exit 0, saved-all
+shutdown and all ten real markers:
+
+- blocked paid work, reconstructed output retention and loaded blocked state;
+- independent partial export without a vein and complete Drift drain of 127
+  items (63 staged plus 64 already owned), retaining progress/Flux;
+- exactly 65 recovered Luna items, stable after a further wait;
+- exactly eight Flux in one world tick and one completion;
+- successful fixture finish.
+
+This observes the previously missing drain/wake path with the registered
+extractor, ordinary adjacent storage and no hopper/replacement/power rescue.
+The resumed paid cycle does not buy extra work. Source rates, yields, sides and
+the existing `Progress`/`Output` representation remain unchanged.
+
+With `SMOKE_KEEP_WORLD=1` scoped to that process, the closed diagnostic world is
+retained for the exact source's `VerifyExtractor --a01-vein-data` mode. That Java
+process exits 0 in 0.662 seconds: four real assertions require chunk `(0, 0)` = 1,
+chunk `(1, 0)` = 1, exactly two worked chunks and total two. It reads the actual
+compressed Luna `data.Extracted` chunk/amount records through `VeinData`, not an
+invented count key or item-only proxy.
+
+The original stopped file is unchanged during the oracle. A byte-identical
+`luna-grindless_veins.dat` copy is hash-verified in the ignored validation
+directory **outside the world**, with logs and receipt saved before cleanup.
+Only after oracle 0 and renewed zero-Java/source/link guards does the helper
+delete the exact owned diagnostic world. Failed oracles would retain it; no
+failure/replay path was needed.
+
+The final 22:21:25Z check confirms exact clean `559bed5`, unchanged original
+clone HEAD/config, unchanged jar and playable ZIP, zero Java, port 25629 free and
+the diagnostic world absent. The coordinator received the explicit lease
+release before its separate deployment work. A01 raw evidence remains under
+`build/validation/a01-repaired-native-559bed5e8ea70ac52ff4b3fed3850ab05ab48256/`
+of the integrated execution surface.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Actual source/runtime jar, 1,926,158 bytes | `98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061` |
+| Unchanged playable ZIP | `bff0fb27434da5ecd49aaf69d0f6b6635b22679029a7b95c488a175b266e8a86` |
+| Repaired native server log | `a79a245e845fa041bd999f3abdcd5c21c3fd8dd87458ffd82858583327345804` |
+| Repaired native stdout | `26a8382a458c822c46c48d6a3ac2d552074088b3f8a33d27b08c743e9c257f70` |
+| Real Luna oracle stdout | `03f69573aea77f2c3d5c56c4cbd271a9c2cfc81aaf33347c8f8d7933e5ef9cec` |
+| Preserved original/copied Luna binary | `91dd2a7307596ad386bed85e0c73c36e8d2d9a578016ddab7f513cdcbac9d3d6` |
+| Complete repaired-run receipt | `9a5601e284e1fbe96a6037e10ed9b84e66a861af4160d6449e5ccb3703a8b17f` |
+| Final source/artifact/zero-Java release check | `d4cb945e64e3e67cfef41aa61c41456dc5ad7a23b40ed7c7149b9bf4b569b565` |
+
+Native and oracle stderr are empty. The actual four stage exits are all 0;
+auxiliary transport exit 0 is not substituted for those results. This closes
+the bounded A01 recovery/conservation/single-tick/accounting proof. Native NBT
+reconstruction and cleanly saved counters are not a server-restart,
+chunk-unload/reload, crash-atomicity, retained-player-world upgrade or no-command
+Survival observation. No T0 acceptance/freeze or T1 activation follows.
+
 ## Native oracle
 
 - In Luna, a known direct helium-3 product avoids dependence on the pack's ore
@@ -182,9 +250,10 @@ foreign capability guarantee or retained-player-world migration.
 
 This fixture owns only its uniquely named commands/expect/pack. It intentionally
 does not edit `scenarios.txt`, the shared harness or CI; their owner/coordinator
-selects integration. The scoped execution above does not authorize a further
-run. Repaired-native, its stopped-world accounting, a full build, packaging and
-deployment remain **NOT_RUN** and require a separate coordinator-granted window.
+selects integration. The executed proof above does not authorize a further run.
+The baseline counterexample and repaired native/SavedData proofs are already
+source-bound; do not repeat them merely to copy the documentation. Further
+integration, full build, packaging or deployment work remains coordinator-owned.
 No `pc-workflow` command or default private inventory was used by this child.
 
 Use the coordinator's approved JDK, process-local Gradle/cache settings and fresh
@@ -240,8 +309,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smok
 Use the harness's ordinary assertion budget. The scenario lasts 65 world ticks
 after its bounded loaded-chunk barrier and needs no extended timeout, optional
 pack, new dependency or production diagnostic flag. Preserve the actual failing
-baseline log and exact source; do not repeat the already executed baseline run.
-After a successful repaired run and natural shutdown, use the same compiled
+baseline and successful repaired evidence; do not repeat either merely because
+another documentation revision contains this recipe. After a newly justified
+authorized run and natural shutdown, use the same compiled
 check/classpath and the **Luna**, not Overworld, data file:
 
 ```powershell
