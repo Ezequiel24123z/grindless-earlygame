@@ -49,9 +49,10 @@ be diagnosed again as absent without a current counterexample.
 
 | Lane | Owner / current evidence |
 | --- | --- |
-| T0 technical | Child `77a8c086-295d-48f6-98c4-d905eb833adc`: A03 counterexample on current source, red frozen at3643c6a; ADR-0153 authorizes the complete active/idle repair. Exclusive compile/red-check window active; final fix/green/native still pending. |
-| Visual | Child `91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f`: Atlas/Quest/Field Guide generation on6daf250 passes actual PC JDK checks, expected baseline negatives, two byte-identical stages and protected-source preservation. JVM released; transfer/pixel review/PNG commit pending. |
+| T0 technical | Child `77a8c086-295d-48f6-98c4-d905eb833adc`: frozen3643c6a compiles and actually fails seven cache/paid-work assertions on PC. Lease released with0Java. ADR-0153 complete active/idle fix source/green/native still pending; the auxiliary counter0 is a documented parser defect, not a pass. |
+| Visual | Child `91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f`: generation on6daf250 and transfer pass; coordinator reviewed the actual1x/8x PNG comparison and approved the three books for engineering integration. Protected nine remain unchanged. Final PNG commit pending; no native/human art acceptance. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
+| Native reload regression | Child `53b80aff-68cf-4544-b13f-be773bfd6678` prepares one loaded-idle-machine/tag-rebuild wakeup fixture independently of the app fix. No JVM/harness mutation yet; runtime needs a later separate diagnostic window. |
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.
@@ -59,6 +60,11 @@ This is not a claim of universal absence. The current Quern/3/Astra grant contra
 cannot honestly express the selected Clay Mixer `wet_work` /2/Sol purpose. Both blockers
 are separate; no new grant or request was created, and the original3/3 remains intact.
 Private host settings and credential paths/values remain outside Git.
+
+GREEN proof reuse also avoids a redundant new recipe-capacity suite: existing
+`VerifyMachineUi.recipeShapes` already checks physical item/catalyst/output slots,
+fluid shapes and water-store bounds, while `VerifyRecipes` checks unique IDs/material
+routes. No new uncovered capacity property was demonstrated by the bounded inspection.
 
 ## What still needs the owner
 

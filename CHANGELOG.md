@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
+  disabled optional fixture pack through the existing paired harness, retaining
+  legacy defaults, isolated-world behavior and the scenario-list integration.
+  The charged-idle/reload/input-output/total-Flux oracle is not replaced by a states
+  placement or item-only proxy; source implementation and native pass are pending.
+- **Reproduce current A03 before its fix.** Frozen3643c6a compiles on the PC and
+  VerifyMachine fails seven specific retired-cache/rebind/idle/Flux/input/output/
+  paid-progress/provider assertions. Retain exact stdout/receipt identities and the
+  auxiliary collector's incorrect0-prefix count without repeating or weakening the
+  test. The separate execution lease ends clean with0Java; green/native remain pending.
 - **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
   passes nine real RPCs, an11-second package build, owned update, inspection and two
   idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM

@@ -34,9 +34,10 @@
     "return_handoff": "RETURN-HANDOFF.md",
     "priorities": ["stable_traceable_PC_deployment", "verified_T0_blockers_and_regressions", "nonredundant_automated_validation", "independent_GREEN_foundations", "evidence_backed_architecture_cleanup", "parallel_T0_visual_and_SFX_quality"],
     "lanes": {
-      "T0_technical": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "branch": "ezequiel24123z-regresiones-tecnicas-t0", "status": "ADR0153_approved_exclusive_red_compile_Check_window_active", "red_commit": "3643c6a049e3beb39b28fe23f4b6d8a1f316db30", "partial_active_guard_commit_not_complete": "50adf82a69e23e5f2496d61bbf21e94d34e7a8cf"},
-      "visual_assets": {"session_id": "91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f", "branch": "ezequiel24123z-sprites-del-taller-t0", "status": "JDK_generation_checks_passed_two_identical_12PNG_stages_source_immutable_zero_Java_released_transfer_pixel_review_next", "source_commit": "6daf2506442368f7978e3d5ea41519cfca753ebc", "execution_receipt_sha256": "7d9875102d468607115648edea452cbd95e38fca53c67e03724694f7001582b8"},
-      "SFX": {"session_id": "7a4e652d-2ffd-453c-8c79-e5df2ce5b605", "branch": "ezequiel24123z-paleta-sonora-t0", "status": "reviewed_merge_candidate_parent_default_128_plus_200_checks_passed_no_provider_or_runtime_change", "commit": "584da087a037d44aa55a6d89322def53c4a05ce9"}
+      "T0_technical": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "branch": "ezequiel24123z-regresiones-tecnicas-t0", "status": "red_compile0_suite1_seven_concrete_failures_proved_zero_Java_released_final_fix_freeze_next", "red_commit": "3643c6a049e3beb39b28fe23f4b6d8a1f316db30", "red_stdout_sha256": "ebc209328f8799b5ef9a0ff67707d8ea92e33a6c3429dc27c12561d47e240e55", "red_collector_limitation": "receipt_aux_count0_missed_STDOUT_prefix_actual_log_and_summary7", "partial_active_guard_commit_not_complete": "50adf82a69e23e5f2496d61bbf21e94d34e7a8cf"},
+      "visual_assets": {"session_id": "91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f", "branch": "ezequiel24123z-sprites-del-taller-t0", "status": "JDK_proof_and_coordinator_real_PNG_pixel_review_approved_final_three_PNG_commit_pending_no_native_or_human_art_acceptance", "source_commit": "6daf2506442368f7978e3d5ea41519cfca753ebc", "execution_receipt_sha256": "7d9875102d468607115648edea452cbd95e38fca53c67e03724694f7001582b8", "after_contact_sheet_sha256": "fae4f7baa1e28abbe1f9cd5d211f976031f810994cda2db998c1733f82d5a962"},
+      "SFX": {"session_id": "7a4e652d-2ffd-453c-8c79-e5df2ce5b605", "branch": "ezequiel24123z-paleta-sonora-t0", "status": "reviewed_integrated_ab84905_parent_default_128_plus_200_passed_zero_provider_requests_no_new_audio", "commit": "584da087a037d44aa55a6d89322def53c4a05ce9"},
+      "native_reload_proof": {"session_id": "53b80aff-68cf-4544-b13f-be773bfd6678", "source_base": "ab8490545d2796fcfb79981cb2bb2bd9172f7113", "status": "authoring_one_blackbox_loaded_idle_reload_wakeup_fixture_no_JVM_or_shared_harness_change_without_approval"}
     },
     "publisher_and_shared_PC_owner": "current_coordinator_only",
     "product_gates": "No_T0_acceptance_or_freeze_No_T1_activation_No_RED_or_silently_selected_subjective_product_choices",
@@ -227,9 +228,9 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": "77a8c086-295d-48f6-98c4-d905eb833adc",
+      "owner_session_id": null,
       "owner_worker_agent_id": null,
-      "scope": "Exclusive PC red window on frozen3643c6a:common_compile_classpath_and_VerifyMachine_only_3GiB_Gradle_CPU2_one_worker_helpers_at_most1GiB_no_server_client_pack_or_deploy",
+      "scope": "Asset_JDK_and_cache_red_windows_released_zero_Java_no_current_JVM_owner_Final_ADR0153_green_source_needs_separate_published_freeze_and_grant",
       "current_preflight": {"physical_free_mib": 10911.8, "commit_free_mib": 34893.9, "work_free_gib": 166.67, "java_processes": 0},
       "queued_next": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "scope": "Green selected checks/build only after final ADR0153 source freeze is reviewed and published; separate lease required"},
       "compile_reservation": {

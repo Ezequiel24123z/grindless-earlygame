@@ -1,5 +1,47 @@
 # Current T0 rework validation
 
+## Executed A03 red on the frozen pre-fix source
+
+Separate immutable PC worktree source3643c6a049e3beb39b28fe23f4b6d8a1f316db30
+passes `:common:writeCheckClasspath` and compilation of the real `VerifyMachine`,
+both exit0. The suite exits1 with seven concrete generation failures: stale object
+rebind, empty-subscription invalidation, withdrawn-row Flux64->32, consumed input,
+emitted output, paid Progress119->0 and reconstruction/current provider. This is the
+intended current-code counterexample, not a setup/compiler exception.
+
+Suite stdout SHA-256:
+`ebc209328f8799b5ef9a0ff67707d8ea92e33a6c3429dc27c12561d47e240e55`;
+receipt SHA-256:
+`15b1bb48f35b1e098ed886a827be78dab9037c0cf510df5571c9b18696b9791d`.
+The receipt's auxiliary failure counter incorrectly reports0 because it missed the
+Minecraft runner's `[STDOUT]` prefix; actual log/summary and specific FAIL lines report7.
+Preserve the collector defect without rerunning the same red proof or calling it green.
+
+Fresh launch guard observed10552.9MiB physical/34794.7MiB commit and178566852608bytes
+work-disk free. Gradle3GiB/CPU2/one worker/no-parallel/no-daemon and1GiB helpers complete
+with clean unchanged source and zero Java, then release the lease. Evidence remains
+under `build/validation/a03-cache-red-3643c6a-20261019T185949857Z`.
+Final ADR-0153 source, selected green/build and the distinct native idle-wakeup proof
+remain pending; no old states/recipe smoke is substituted for them.
+
+## Guide-sprite pixel review and proof selection
+
+After the separate JDK proof, the coordinator viewed the real before/after sheets at
+1x and8x on both inventory/dark backgrounds. Atlas keeps cyan with map/paper/frame;
+Quest keeps gold with a physical spine/page block; Field Guide is an open folio with
+a bookmark. The three are approved for engineering integration without another retouch.
+After-sheet SHA-256:
+`fae4f7baa1e28abbe1f9cd5d211f976031f810994cda2db998c1733f82d5a962`.
+This is actual source-pixel review, not in-game rendering or the owner's art acceptance.
+The final three-PNG source commit and package/deploy proof are still pending.
+
+A bounded GREEN-capacity inspection found existing `VerifyMachineUi.recipeShapes`
+coverage for actual menu schemas, catalysts, all item outputs, fluid-input shape and
+water-store bounds, plus `VerifyRecipes` uniqueness/material routes. No new distinct
+property justified another equivalent suite; those tests/proofs are reused unchanged.
+The genuinely unproved loaded-idle/tag-reload boundary instead receives a separate
+native fixture workstream, without a native run before the final app source/window.
+
 ## Integrated offline generation-flow recovery
 
 Frozen child584da087 adds ten real `Invoke-Generate` orchestration fixtures with only

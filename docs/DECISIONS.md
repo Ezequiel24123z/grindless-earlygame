@@ -165,6 +165,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0151](#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh) | Keep coordination local and execute through the existing personal-PC SSH | Accepted |
 | [0152](#adr-0152--run-bounded-autonomous-t0-and-creative-work-without-human-acceptance) | Run bounded autonomous T0 and creative work without human acceptance | Accepted |
 | [0153](#adr-0153--rebind-generated-recipes-at-atomic-graph-boundaries) | Rebind generated recipes at atomic graph boundaries | Accepted |
+| [0154](#adr-0154--stage-one-disabled-optional-pack-for-reload-smokes) | Stage one disabled optional pack for reload smokes | Accepted |
 
 ---
 
@@ -7248,3 +7249,43 @@ BE/ticker seam needs representative native evidence, not another run for every m
 direct tag-event callbacks (unsafe client/server ownership); scan every loaded machine on
 reload; keep a separate mutable generation counter; clear paid progress on every rebuild;
 copy the upstream mutable lookup/cache behavior or replace the whole execution engine.
+
+---
+
+## ADR-0154 — Stage one disabled optional pack for reload smokes
+
+**Status.** Accepted narrow validation-tool extension, 2026-10-19. Native qualification
+is still pending.
+
+**Need.** ADR-0153's Java tests prove cache/paid-work behavior without a real Level.
+Its distinct native obligation is an already loaded, charged, unsubscribed process
+machine waking on a genuine tag/graph rebuild without another inventory/neighbor wake.
+The existing smoke harness stages only one initially enabled pack. A base pack can
+provide raw/crushed tags while one initially disabled ingot pack supplies the missing
+form only when the scenario enables it. An always-enabled fixture would be a false proxy.
+
+**Decision.** Extend the existing paired PS/SH harness, not create another server runner.
+Support at most one `SMOKE_OPTIONAL_DATAPACK`, copied using the same validated path/
+long-path rules as the principal pack. A selected scenario may discover its one explicitly
+named optional directory. Keep it out of the enabled selection and explicitly disabled
+at fresh-world creation using verified1.20.1 pack-selection semantics; the commands then
+enable that exact pack and exercise the real reload. If those semantics are unverified,
+fail the setup rather than assuming the pack starts disabled.
+
+No optional pack means byte/behavior-compatible existing defaults. Reject missing,
+ambiguous or colliding selected pack paths; reset/restore per-scenario environment.
+The reload case requires a fresh diagnostic world, not leakage into an ordinary shared
+batch. Inspect both batch twins and either route this case through isolation or reject/
+exclude it explicitly. Do not change other scenarios or add a bespoke CI step; add
+the scenario-list row only after actual native qualification.
+
+**Oracle.** Before reload, demonstrate a stable charged machine with valid I/O but no
+work/output. Then enable the ingot form without mutating its inventory/energy/neighbor.
+One normal B1 batch must consume one gravel, emit two sand and debit its actual3840FU
+across machine/source buffers once. A full receiver must not receive a positive transfer/
+callback before work begins. Use the actual production buffer/NBT/transfer contract;
+do not inject Progress or infer wakeup from placement or a final item alone.
+
+**Limits.** Test-only tags/world/source, no Prism or real saves. Preserve existing
+handshake/budgets/cleanup and paired platform parity. This is a specific reload fixture,
+not a generic datapack manager, content rewrite or human survival evidence.
