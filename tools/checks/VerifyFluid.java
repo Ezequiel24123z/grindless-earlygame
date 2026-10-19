@@ -322,6 +322,7 @@ public final class VerifyFluid {
         NativeEndpoint neighbour = new NativeEndpoint(FluidState.of(secondary.id(), secondary.count()), 0);
         List<FluidInsert.Source> sources = List.of(source(neighbour, Direction.NORTH));
         neighbour.buffer.set(FluidState.EMPTY);
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
         long energy = consumer.energy().getStored();
         for (long tick = 1; tick <= 4; tick++) {
             work(consumer, tick, sources);

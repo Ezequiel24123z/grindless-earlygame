@@ -1,5 +1,28 @@
 # Current T0 rework validation
 
+## Frozen A03 green and integration scope
+
+Exactfd9077ea397b28563bc301862a0753943b33527e passes common/Forge/classpath
+and check compilation, exit0. Five selected suites pass938 assertions: Machine273,
+Fluid285, Material72, Persistence42 and Workshop266, all exit0; build exits0.
+The actual1925530-byte jar hashes to
+`a4225cc3e77000df996ab16e7ea71a526922dce23db107704822252ae0833204`
+and contains the typed `ProcessLookup$Generation` publication.
+
+The outer RPC aggregate exits1 only in the post-build coordinate collector because
+its regex rejected CRLF. Original receipt
+`94c6ad8010766e9944379afaf2acaa282a619e6d9b79f35752553edb04cbe2bd`
+is retained; a later read-only source/JAR addendum hashes to
+`1ca17d5d02b13698617a8afbc9837f6e9249ffe0b135efcc72876ae3d18929c4`.
+No compile/test/build is repeated to repair the observer. Source stays clean/detached,
+zero Java releases the lease; no native/client/package/deploy is claimed.
+
+The coordinator merges the original fix history and combines shared docs while correcting
+an older disposition mistake: current Crude Extractor A01 is not proved by the
+process-fluid recovery mechanism. Its independent exporter is absent and a new bounded
+unit owns that actual bug. A02 reuses actual Inventory/offhand proof.
+Combined sprite+executor qualification and the genuine native reload fixture remain pending.
+
 ## Integrated three-guide source and resources
 
 The original6daf250 ->7366fab ->580ddce history is merged without squash. Generator/

@@ -49,11 +49,12 @@ be diagnosed again as absent without a current counterexample.
 
 | Lane | Owner / current evidence |
 | --- | --- |
-| T0 technical | Frozen3643c6a reproduces seven failures; complete active/idle fix fd9077e is source-reviewed/published and in an exclusive selected-green/build window. No green/native pass yet; auxiliary red counter0 remains a documented parser defect. |
+| T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build and is integrated in the containing checkpoint. Post-build CRLF collector error/addendum stays separate; native loaded-world and combined qualification remain pending. |
 | Visual | Original580ddce history is merged into the containing checkpoint: three exact generated PNGs, code equal to the JDK-proven6daf250;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; package/deploy and native/human art remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | Child `53b80aff-68cf-4544-b13f-be773bfd6678` prepares one loaded-idle-machine/tag-rebuild wakeup fixture independently of the app fix. No JVM/harness mutation yet; runtime needs a later separate diagnostic window. |
 | GREEN batch portability | Child `bbe1f15e-c098-454d-923e-830b25fdc282` owns the missing Bash batch twin and no-server contracts; native QA retains sole shared-PS/harness ownership. No new server framework or duplicate runtime batch. |
+| A01 Crude output recovery | Current code still has no independent pending exporter. Child `cbafe37b-ef12-402c-90d1-d152622abfcb` owns that specific fix/accounting regressions; ProcessMachine fluid proofs are not substituted. |
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.

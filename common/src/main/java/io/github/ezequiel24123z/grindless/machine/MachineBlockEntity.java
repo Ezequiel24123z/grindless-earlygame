@@ -300,6 +300,10 @@ public abstract class MachineBlockEntity extends BlockEntity {
     protected void updateSubscriptions() {
     }
 
+    /** Bounded server-thread invalidation only; ordinary work belongs in subscriptions. */
+    protected void beforeSubscriptions() {
+    }
+
     /** Runs this machine's subscribed work. Not for overriding — subscribe work instead. */
     public final void serverTick() {
         if (!initialised) {
@@ -314,6 +318,7 @@ public abstract class MachineBlockEntity extends BlockEntity {
         if (logisticsHold) {
             return;
         }
+        beforeSubscriptions();
         subscriptions.tick();
     }
 

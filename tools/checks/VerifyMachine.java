@@ -8,21 +8,34 @@ import io.github.ezequiel24123z.grindless.process.ConditionFault;
 import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.ProcessField;
+import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
+import io.github.ezequiel24123z.grindless.material.RegistryTagView;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** Throwaway check of the machine layer. Not part of the mod. */
 public final class VerifyMachine {
@@ -39,11 +52,133 @@ public final class VerifyMachine {
         persistence();
         statuses();
         regulation();
+        recipeGenerations();
 
         System.out.println(failures == 0
                 ? "ALL MACHINE CHECKS PASSED"
                 : failures + " MACHINE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void recipeGenerations() throws Exception {
+        generationIdentity();
+        Map<TagKey<Item>, List<Holder<Item>>> originalTags = new HashMap<>();
+        BuiltInRegistries.ITEM.getTags().forEach(tag ->
+                originalTags.put(tag.getFirst(), tag.getSecond().stream().toList()));
+        try {
+            rebuildCacheTags(true, Items.SAND);
+            ProcessMachineBlockEntity machine = machine(ProcessMachineKind.PULVERIZER);
+            machine.setItem(0, new ItemStack(Items.GRAVEL, 2));
+            ProcessRecipe original = selected(machine);
+            yes("the cache probe uses a real tag-generated recipe",
+                    original != null && original.id().equals("b1/cache_probe"));
+            if (original == null) {
+                return;
+            }
+            machine.energy().setStored(original.fuPerTick() * 2);
+            CompoundTag paid = machine.saveWithoutMetadata();
+            paid.putDouble("Progress", original.durationTicks() - 1.0);
+            machine.load(paid);
+            original = selected(machine);
+
+            rebuildCacheTags(true, Items.SAND);
+            ProcessRecipe current = selected(machine);
+            yes("an unchanged rebuild rebinds the cache to the published recipe object",
+                    current != original && ProcessLookup.recipes().stream().anyMatch(row -> row == current));
+            eq("an unchanged rebuild retains already paid work", paid.getDouble("Progress"),
+                    machine.saveWithoutMetadata().getDouble("Progress"));
+            yes("an unchanged rebuild retains the existing work owner",
+                    paid.getString("WorkRecipe").equals(machine.saveWithoutMetadata().getString("WorkRecipe")));
+            yes("generation invalidation does not add persistence keys",
+                    paid.getAllKeys().equals(machine.saveWithoutMetadata().getAllKeys()));
+            Field cached = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+            cached.setAccessible(true);
+            machine.serverTick();
+            yes("the empty subscription path retains a cache from the unchanged generation",
+                    machine.subscriptions().isIdle() && cached.get(machine) == current);
+
+            rebuildCacheTags(false, Items.SAND);
+            no("removing only the ingot form retires the generated recipe",
+                    ProcessLookup.recipes().stream().anyMatch(row -> row.id().equals("b1/cache_probe")));
+            yes("the retired recipe's input and output still resolve",
+                    ProcessLookup.matches(current, new ItemStack[] {machine.getItem(0)})
+                            && ProcessLookup.resolve(current.itemOutputs().get(0)).isPresent());
+            machine.serverTick();
+            yes("a generation change invalidates the cache even with no subscribed work",
+                    machine.subscriptions().isIdle() && cached.get(machine) == null);
+            Method work = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
+            work.setAccessible(true);
+            work.invoke(machine, 1L, List.of());
+            eq("a retired cached recipe cannot spend additional Flux", original.fuPerTick() * 2,
+                    machine.energy().getStored());
+            eq("a retired cached recipe cannot consume its input", 2, machine.getItem(0).getCount());
+            yes("a retired cached recipe cannot emit its still-resolvable output",
+                    machine.getItem(machine.menuKind().inputs()).isEmpty());
+            eq("a missing generation suspends rather than discards paid work", paid.getDouble("Progress"),
+                    machine.saveWithoutMetadata().getDouble("Progress"));
+            yes("a missing generation retains the persisted work owner",
+                    paid.getString("WorkRecipe").equals(machine.saveWithoutMetadata().getString("WorkRecipe")));
+
+            ProcessMachineBlockEntity restored = machine(ProcessMachineKind.PULVERIZER);
+            restored.load(machine.saveWithoutMetadata().copy());
+            rebuildCacheTags(true, Items.RED_SAND);
+            work.invoke(restored, 2L, List.of());
+            eq("restored work pays only its one remaining tick", original.fuPerTick(),
+                    restored.energy().getStored());
+            eq("restored work consumes its input exactly once", 1, restored.getItem(0).getCount());
+            ItemStack output = restored.getItem(restored.menuKind().inputs());
+            yes("restored work uses the current material provider and exact yield",
+                    output.is(Items.RED_SAND) && output.getCount() == 2);
+            eq("restored completion debits exactly one paid cycle", 0.0,
+                    restored.saveWithoutMetadata().getDouble("Progress"));
+            rebuildCacheTags(true, Items.RED_SAND);
+            restored.serverTick();
+            work.invoke(restored, 2L, List.of());
+            eq("a generation refresh cannot charge the same world tick twice", original.fuPerTick(),
+                    restored.energy().getStored());
+            eq("a generation refresh cannot advance the next queued batch in the same tick", 0.0,
+                    restored.saveWithoutMetadata().getDouble("Progress"));
+            eq("a generation refresh leaves the next queued input untouched", 1,
+                    restored.getItem(0).getCount());
+        } finally {
+            BuiltInRegistries.ITEM.bindTags(originalTags);
+            MaterialRegistry.rebuild(RegistryTagView.ofItems());
+        }
+    }
+
+    private static void generationIdentity() throws Exception {
+        ProcessLookup.Generation live = ProcessLookup.generation();
+        yes("reading the generation identity is stable", live == ProcessLookup.generation());
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Class<?> graphType = graph.get(null).getClass();
+        Method index = graphType.getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        Method identity = graphType.getDeclaredMethod("generation");
+        identity.setAccessible(true);
+        Object first = index.invoke(null, List.of());
+        Object second = index.invoke(null, List.of());
+        yes("equivalent empty indexes still receive distinct generation identities",
+                identity.invoke(first) != identity.invoke(second));
+        yes("preparing an index never publishes a partial generation", live == ProcessLookup.generation());
+    }
+
+    private static void rebuildCacheTags(boolean ingotPresent, Item crushed) {
+        Map<TagKey<Item>, List<Holder<Item>>> tags = Map.of(
+                TagKey.create(Registries.ITEM, new ResourceLocation("forge:raw_materials/cache_probe")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.GRAVEL)),
+                TagKey.create(Registries.ITEM, new ResourceLocation("grindless:crushed_materials/cache_probe")),
+                List.of(BuiltInRegistries.ITEM.wrapAsHolder(crushed)),
+                TagKey.create(Registries.ITEM, new ResourceLocation("forge:ingots/cache_probe")),
+                ingotPresent ? List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.IRON_INGOT)) : List.of());
+        BuiltInRegistries.ITEM.bindTags(tags);
+        MaterialRegistry.rebuild(RegistryTagView.ofItems());
+    }
+
+    private static ProcessRecipe selected(ProcessMachineBlockEntity machine) throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
+        method.setAccessible(true);
+        return (ProcessRecipe) method.invoke(machine, List.of());
     }
 
     private static void regulation() throws Exception {

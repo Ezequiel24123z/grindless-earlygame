@@ -56,6 +56,16 @@ entries below reference those records by id.
   not 578 additional files. Initial policy/helper-parse failures remain recorded. The coordinator
   approves the actual source pixels without retouches for the technical candidate,
   not native/human approval, full art/T0 acceptance or a release.
+- **Wire complete active/idle generation revalidation under ADR-0153.** Publish a fresh
+  opaque typed identity inside the complete immutable graph, including equivalent/empty
+  contents. Process machines compare it in the bounded base-server pre-subscription
+  hook and refresh only after change; explicit logistics hold remains held. No cross-thread
+  callback, world scan, saved epoch or reset of the existing once-per-tick work guard.
+  The coordinator accepted the policy at2b9218b; frozenfd9077e passes938 selected
+  checks and build, while native/combined/package qualification remain pending. Regressions cover typed
+  identity, retired I/O, retained work/current provider and same-tick queued work; reuse
+  completed-fluid recovery with a rebuild rather than duplicate its oracles.
+  There is no new NBT, paid-work identity, recipe/balance or T0 acceptance.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

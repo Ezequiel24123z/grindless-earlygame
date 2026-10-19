@@ -95,6 +95,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private String cachedRecipeId = "";
     private String workRecipeId = "";
     private ProcessRecipe cached;
+    private ProcessLookup.Generation recipeGeneration = ProcessLookup.generation();
     private TickSubscription working;
     private TickSubscription filling;
     private TickSubscription exporting;
@@ -172,6 +173,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     @Override
+    protected void beforeSubscriptions() {
+        if (refreshRecipeGeneration()) {
+            updateSubscriptions();
+        }
+    }
+
+    @Override
     public void setUpgrades(UpgradeSet newUpgrades) {
         cached = null;
         super.setUpgrades(newUpgrades);
@@ -244,9 +252,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         ProcessRecipe recipe = recipe(sources);
         if (recipe == null) {
-            progress = 0.0;
             cachedRecipeId = "";
-            workRecipeId = "";
             publishStatus(null, hasPartialInput(), false, false, false, ConditionReport.OPTIMAL);
             updateSubscriptions();
             return;
@@ -538,6 +544,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private ProcessRecipe recipe(List<FluidInsert.Source> sources) {
+        refreshRecipeGeneration();
         if (cached != null) {
             return cached;
         }
@@ -557,6 +564,16 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             workRecipeId = cached.id();
         }
         return cached;
+    }
+
+    private boolean refreshRecipeGeneration() {
+        ProcessLookup.Generation published = ProcessLookup.generation();
+        if (published == recipeGeneration) {
+            return false;
+        }
+        recipeGeneration = published;
+        cached = null;
+        return true;
     }
 
     private WorkshopStructure.Fault checkStructure() {

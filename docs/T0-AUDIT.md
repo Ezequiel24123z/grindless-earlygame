@@ -16,3 +16,14 @@ Use [the current validation ledger](testing/latest-validation.md),
 [task graph](../.agent/work-plan.json) and [return handoff](../RETURN-HANDOFF.md).
 Any new fix must cite a concrete current counterexample and affected proof assumptions.
 Human gameplay remains unexecuted where recorded; green engineering is not acceptance.
+
+## Narrow current disposition
+
+| Finding | Current evidence / action |
+| --- | --- |
+| A01 direct chest backpressure | Still open in the actual Crude Extractor: only the work subscription exists, and `pushOutput` runs only after successful `eject`. A separate bounded unit owns recovery/accounting tests and repair. Process-fluid output proofs do not certify this class. |
+| A02 duplicate offhand evidence | Already corrected: `QuestInventoryEvidence` traverses the Container once; `VerifyPersistence` checks actual player Inventory size41, offhand3 and split5. Reuse that proof, not another arithmetic proxy. |
+| A03 generated-graph membership/idle wake | Pre-fix3643c6a fails seven real assertions; completefd9077e passes938 selected checks/build. Atomic generation/server-hook code is integrated; native loaded-world proof is still pending. |
+
+These are source-bound reconciliations of existing finding IDs, not another whole-code
+audit or a declaration that all remaining human/tier criteria pass.
