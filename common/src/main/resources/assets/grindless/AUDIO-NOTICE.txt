@@ -1,0 +1,20 @@
+Grindless Quern working audio
+
+Runtime resource: assets/grindless/sounds/t0_grinding.ogg
+Sound event: grindless:t0_grinding
+SHA-256: 811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5
+
+Provider/model: ElevenLabs Sound Effects, eleven_text_to_sound_v2.
+Generated: 2026-10-18T22:34:19.7002834Z.
+Source tooling: 7dad69df7f5f7cba2eaf83fb1db1a50c0ad6338c.
+Candidate: quern-a, three-second loop request, influence 0.3.
+Existing derivation: fixed -3 dB mono 44.1 kHz Vorbis; imported without further changes.
+
+Game incorporation is covered by the reviewed generation-time entitlement and
+ElevenCreative Terms (updated 2026-10-09), Sound Effects exhibit:
+https://elevenlabs.io/creative-terms
+
+This sound is not relicensed under Grindless's MIT code licence. It is supplied
+only as incorporated game audio, not a standalone sample or sound library.
+Keep this notice with the game distribution. Full public provenance and the
+retained-artifact hashes are recorded in the source repository's THIRD_PARTY_NOTICES.md.

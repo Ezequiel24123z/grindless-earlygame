@@ -612,33 +612,32 @@ public final class GenerateAssets {
                 """.formatted(block);
     }
 
-    /**
-     * Records that everything here is generated, and by what.
-     *
-     * <p>The README's provenance claim — that no Minecraft asset is redistributed and no
-     * third-party art is vendored — is a promise, and a promise is worth more with a marker beside
-     * the files it covers.
-     */
+    /** Records generated output separately from explicitly noticed imports. */
     private static void writeProvenance(File root, int count) throws IOException {
         File readme = new File(assetRoot(root), "GENERATED.md");
         String text = """
                 # Generated assets
 
-                Every file under this directory is produced by `tools/assetgen` and written by
-                `tools/generate-assets.ps1`. **Do not edit them by hand** — the next run overwrites
-                them. Change the generator instead.
+                Script-produced textures and models are written by `tools/assetgen` through
+                `tools/generate-assets.ps1`. Change their generator rather than editing its output.
 
                 Generation is deterministic: the same generator always produces byte-identical
                 output, so regenerating never shows up as a spurious diff.
 
-                Nothing here is copied from Minecraft or from any third-party mod, which is what
-                lets the README state its provenance without qualification.
+                No Minecraft assets are redistributed. The approved `sounds/t0_grinding.ogg` is
+                an unchanged external game-audio import, not synthetic generator output.
+                Keep `AUDIO-NOTICE.txt` with it; the repository's `THIRD_PARTY_NOTICES.md` records
+                its exact provenance and distribution limits (ADR-0148).
+
+                Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`
+                or localization. The paired legacy audio converters allow only the five synthetic
+                sound names, so an extra WAV cannot overwrite the approved Quern import.
 
                 What is **not** generated, and is therefore missing rather than merely plain, is
                 listed in ADR-0048: hero item sprites, complex models, entity animation and music.
                 A future session should treat those as known gaps with no owner, not as oversights.
 
-                Current output: %d files.
+                Current generated output: %d files (imports excluded).
                 """.formatted(count);
         Files.writeString(readme.toPath(), text, StandardCharsets.UTF_8);
     }

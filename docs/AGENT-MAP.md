@@ -52,6 +52,18 @@ are new gaps, not permission to rewrite proven engines or start ports.
   and sound resources — bounded Quern-only client loop integration from approved candidate A.
   Import the exact noticed Ogg, not account/private generation evidence; preserve unrelated
   hum callers and gameplay/save authority. Native lifecycle/mix remains a distinct proof.
+- `client/audio/QuernAudio` and `QuernLoopTracker` — native tick/disconnect/reload adapter
+  and testable per-position ownership. Visit block-entity maps in at most nine loaded nearby
+  chunks, never blocks/worlds or force-loaded chunks; keys and weak identity scope cannot
+  retain an old world. Pause freezes admission time; MASTER/BLOCKS mute clears ownership
+  without consuming admission, allowing a still-running source to restart when unmuted.
+  Stop a retired native object before dropping it. A never-ticked/cancelled/replaced attempt
+  stays suppressed until eligibility/scope/resources change; admitted loss waits40 ticks.
+  Engine `isActive` and tick admission are not claims of audible playback.
+- `VerifyQuernAudio` and `VerifyAssets --sounds-only` — focused lifecycle and exact
+  hash/mono/event/notice/generation-boundary checks. `tools/assetgen/.../GenerateAssets`
+  preserves the import provenance; paired `convert-audio` tools convert only the five
+  synthetic legacy names, never a stray WAV over `t0_grinding.ogg`.
 
 Grindless is Superflat-first, Overworld-compatible and longitudinal across tier releases.
 The old conditional entry witness does not prove access in an unselected flat preset.

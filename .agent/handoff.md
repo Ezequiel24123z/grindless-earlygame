@@ -2,6 +2,27 @@
 
 Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
+## Owner-requested cloud freeze
+
+The owner is moving continuation to cloud and asked to preserve/consolidate all
+local work. No new local feature, build, native smoke or media generation is authorized.
+Both workers are closing clean checkpoints and are quiescent; their shared JVM
+reservations are released. Preserve main and existing draft PRs, and publish one
+consolidated continuation branch plus original worker branches. This is not RC or
+Tier acceptance. The cloud successor must receive that branch, not old main.
+
+The approvedA Ogg/native loop source3914978 has reviewed actual common/Forge
+compilation,67 tracker/source and34 sound-resource passes. Pack source4b67ae0
+now has actual verifyModpack87/real synthetic ZIP passes, not only static checks.
+Neither is native client/audio listening or the final installable pack. The Windows
+privileged symlink fixture and SH execution remain NOT_RUN. Preserve earlier failures.
+
+The requested ElevenLabs key is stored encrypted in the repository **Agents** secret
+`ELEVENLABS_API_KEY`, metadata verified2026-10-19. No key, credential hash, account
+screenshot or encrypted credential file enters Git/handoff. Actual cloud environment
+injection is not yet exercised. This transfer does not authorize new paid generation;
+the historical calibration grant remains exhausted3/3.
+
 ## Active Sol receipt
 
 Sol 6.1 is now the active coordinator in isolated session

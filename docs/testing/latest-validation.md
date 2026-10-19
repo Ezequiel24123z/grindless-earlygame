@@ -1,5 +1,25 @@
 # Current T0 rework validation
 
+## Cloud-freeze results after RAM expansion
+
+The owner requested consolidation/publication and cloud handoff before more local work.
+Frozen audio3914978 actually passes `:common:writeCheckClasspath`,
+`:forge:compileJava`, javac checks, VerifyQuernAudio67/0 and VerifyAssets
+`--sounds-only`34/0, all exit0. Processed Ogg and notice match the source bytes.
+The actual daemon log confirms768MiB/CPU2/SerialGC; result SHA-256 is
+`2aba8d849d252b36da3a28de60e420b1a58189156692d3fef46ff70b62a6f8f1`,
+daemon log `74d5a4f27b247172bff1d6220427bf28b4ba2e5d0952a04c2101bca14a878949`.
+Retain duplicate-JEI/two pre-existing deprecation warnings and the late already-exited
+process observation; actual log evidence supplies limits, not that empty observation.
+No server/client/listening/codec/generation or historical suite was run.
+
+Frozen pack4b67ae0 then passed one actual `verifyModpack` invocation, exit0:
+87 checks including real synthetic ZIP writer/whitelist fixtures. Zero JVM remained.
+The privileged Windows filesystem-symlink fixture was NOT_RUN; its escaped-realpath
+contract did pass. SH remains NOT_RUN. No remapJar/buildModpack, real distributable,
+client, preset, save-upgrade or RC result is inferred. Earlier resource guards and
+failed wrapper/identity attempts remain recorded rather than retroactively passed.
+
 ## Frozen audio/pack increments and final takeover CI observation
 
 Quern worker-local3914978 contains the exact34364-byte approvedA Ogg and native

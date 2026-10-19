@@ -2304,7 +2304,7 @@ is preserved and integration/release gates still control acceptance.
 | 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md), exact Result export/serve and Root fix are integrated. Public4061 has actual same-repository hosted export/upload and three complete CI successes; later source continues through its own CI without relabeling cb0 browser evidence |
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
-| 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; approved Quern A game import and minimal native-loop design recorded under ADR-0148, implementation/mix pending. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review. Jade source-licence metadata is corrected without changing historical profiles; final composition/use review, native client, Superflat/product QA and the playable release remain open |
+| 40 | **Playable modpack and longitudinal releases** | active — exact approved Quern A Ogg and Quern-only managed client loop integrated under ADR-0148; common/Forge compile,67 tracker/source and34 sound-resource checks pass on frozen3914978. Native server binding, client lifecycle/mix and the playable release remain open. Nine physical-item sprites/native display inheritance retain their814-check/source-pixel evidence; actual client, Superflat/resource and remaining product gates are not implied |
 | 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by clean fast-forward; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts. Its final CI has two cancelled runs and one Forge-preparation Maven502 failure, not a full pass; later source has separate evidence. Product gaps remain and historical proofs are reused, not replayed |
 | 42 | **Restricted playable profile** | ADR-0149 implemented as an opt-in seven-pin core/quest/performance selector below the application-build boundary. Historical defaults/pins/filenames stay intact; explicitly empty public overrides retain upstream defaults, with tracked-path guards, exact provenance, notices and shared archive-whitelist fixtures. Read-only review found no actionable issue; focused Gradle execution, actual package/preset/import/client proof remain pending |
 | 43 | **Superflat virtual resources** | ADR-0150 preserves chunk-data deposits independently of physical terrain; extraction multiblocks and deliberate renewable basic-resource access belong in flat worlds too. No staged spawn/food system is selected; detailed T0 generator and quest-shop economy remain design work |
@@ -2525,6 +2525,13 @@ by committed scripts in `tools/`. Code, textures, sounds and other material from
 may be copied or adapted when that project's licence permits the intended distribution. Every such
 import is recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) with its exact source,
 version, licence, scope and required notices; no Minecraft assets are redistributed.
+
+The approved Quern A Ogg is an unchanged, noticed exception to generated audio
+(ADR-0148): `grindless:t0_grinding` uses one client-managed positional working loop per
+nearby loaded RUNNING Quern. Its old heavy-hum bursts are replaced, not those of pumps,
+extractors or other machines. Pause, mute, range, source/world/player lifetime and bounded
+engine recovery are explicit; actual client onset/stop/reload and factory listening remain
+unverified. Generators and the paired legacy converters preserve the imported sound and notice.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of

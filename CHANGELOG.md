@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the approved Quern A runtime loop (ADR-0148).** Import only the exact
+  34,364-byte noticed Ogg and its public game-audio notice. A bounded loaded-chunk
+  client owner manages one positional BLOCKS loop per RUNNING Quern, clears stale
+  source/world/player ownership, respects pause/mute and limits engine recovery.
+  Preserve Quern particles and every unrelated heavy-hum caller; keep the imported
+  sound outside synthetic regeneration/conversion. Frozen3914978 received a read-only
+  review without a significant finding. After RAM expansion, actual common/Forge
+  compilation,67 tracker/source checks and34 sound-resource checks pass with bounded
+  JVMs and matching processed Ogg/notice bytes. Earlier resource/auxiliary harness
+  failures are retained. Dedicated-server binding and native client lifecycle/
+  one-eight-machine listening remain distinct pending proofs; SH remains NOT_RUN.
 - **Implement the restricted additive playable pack profile (ADR-0149).** Select the
   existing four runtime/quest pins and three performance pins without changing the
   expanded default, preparation selector, pin authorities or historical filenames.
