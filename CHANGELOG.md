@@ -25,8 +25,21 @@ entries below reference those records by id.
   compilation,67 tracker/source checks and34 sound-resource checks pass with bounded
   JVMs and matching processed Ogg/notice bytes. The source-bound runtime import
   record preserves exact evidence and all earlier resource/auxiliary harness
-  failures are retained. Dedicated-server binding and native client lifecycle/
+  failures. Dedicated-server binding and native client lifecycle/
   one-eight-machine listening remain distinct pending proofs; SH remains NOT_RUN.
+- **Verify the restricted pack contracts on frozen `4b67ae0` (ADR-0149).** The single
+  authorized `verifyModpack` invocation exits0 with87 selector, override and real
+  synthetic-ZIP contracts, using the shared archive writer. The original resource
+  guard passes; Gradle uses768MiB/CPU2/one worker, helpers256MiB, no parallel or
+  persistent daemon. The filesystem symlink fixture is explicitly NOT_RUN because
+  Windows lacks the required privilege; canonical-target escape checks pass.
+  SH remains NOT_RUN. Loom's configuration-time dependency remapping and duplicate
+  JEI-class diagnostics remain in the log, not a runtime/remapJar task or a clean
+  dependency diagnosis. The immediate receipt records one JVM after task exit;
+  a subsequent read-only snapshot finds zero, and the reservation is released.
+  No application correction, final pack, world preset, client/server or RC is claimed.
+  Evidence stays under `build/validation/pack-4b67ae0-20261019T011804815Z/`;
+  stdout SHA-256 is `c0d4571a64a19bf1f3ce44abb2b984110fccd7d4cbb617bcbaf724002d4d10b7`.
 - **Implement the restricted additive playable pack profile (ADR-0149).** Select the
   existing four runtime/quest pins and three performance pins without changing the
   expanded default, preparation selector, pin authorities or historical filenames.
@@ -37,7 +50,7 @@ entries below reference those records by id.
   pin/notice inputs, PowerShell syntax, five isolated wrapper contracts and590 links
   pass. The frozen implementation received a read-only review with no actionable
   high-confidence issue found and is integrated for focused validation, not qualified
-  as an RC. Actual Gradle selector/mutation/archive fixtures await the shared window;
+  as an RC. Actual Gradle selector/mutation/archive fixtures subsequently pass87 cases;
   final package/preset/import/client qualification remains pending. The initial
   twin harness stopped at its absent assumed Bash path; SH execution is not credited.
 - **Preserve frozen audio/pack evidence and unblock bounded compilation after RAM
