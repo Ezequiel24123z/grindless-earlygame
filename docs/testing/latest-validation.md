@@ -1,5 +1,26 @@
 # Current T0 rework validation
 
+## Bounded pack/audio provenance closure
+
+The Jade investigation read the exact `forge-11.13.3` source licence at
+`d7a9e1d3b782f2ea4c387c66e973cc46b9768270`: CC-BY-NC-SA-4.0, not LGPL.
+Three labels are corrected; the third-party file-metadata proxy matches the existing
+pin but is not a fresh binary/in-jar/source-build proof. All14 dependency records
+remain structurally identical except that one licence property. Profiles, manifest,
+versions and the27-task/47-reference graph are unchanged. Static link validation
+passed582 relative links/147 ADR rows before the subsequent audio-notice addition.
+The validator's final literal-wording assertion was overstrict and returned three
+false positives; its real metadata/diff/link assertions passed. No check was weakened
+or application data changed in response to those wording mismatches.
+
+Audio investigation independently matched the six retainedA media/provenance/receipt
+hashes recorded in the notices. Existing generation-time entitlement attestation and
+reviewed official Sound Effects terms support game import; account/subscription
+verification is closed, not a remaining gate. ADR-0148 records the bounded native
+Quern loop. This is import/design readiness, not implemented audio, observed native
+lifecycle, factory listening or release acceptance. No generation, codec, JVM or
+historical mechanism suite was run.
+
 ## Sol receipt of 17ae8b0
 
 The new isolated Sol session received exact

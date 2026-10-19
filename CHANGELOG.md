@@ -15,6 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
+- **Approve the existing Quern A game import and bounded native loop (ADR-0148).**
+  Retained media/provenance/receipt hashes and the existing entitlement attestation
+  support the game-incorporation notice. Account verification is closed; no private
+  screenshot, extra proof request or paid regeneration follows. Record the minimal
+  Quern-only lifecycle and preserve unrelated hums/gameplay. Implementation, actual
+  client lifecycle and one/eight-machine listening remain pending.
+- **Correct Jade's recorded source licence without changing the pack.** The exact
+  Forge11.13.3 source tag declares CC-BY-NC-SA-4.0, not LGPL-3.0. Synchronize dependency
+  metadata, pack guidance and notices, preserving every publisher pin, profile and
+  historical archive. Record the proxy-metadata versus binary/source evidence limits;
+  no final-profile, commercial-use, direct-redistribution or asset-import approval
+  follows from correcting the label.
 - **Receive the clean Sol coordinator checkpoint (ADR-0147, PA-0010).** Advance the
   initially older isolated checkout to exact17ae8b0 by fast-forward, verify both
   published heads and existing draft PR54/PR53, and activate Sol as the sole publisher.

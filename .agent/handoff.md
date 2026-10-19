@@ -28,6 +28,21 @@ Dispatched on frozen17ae8b0: audio-rights worker
 `25ae2b42-40da-459d-ae18-17037a98ae22`. Both own no files and may neither generate
 nor publish. Their ephemeral IDs are current dispatch state, not a future worker pool.
 
+The Jade investigation has returned. Its exact11.13.3 source licence is
+CC-BY-NC-SA-4.0; the three previous LGPL labels are corrected without changing any
+profile/pin. The existing third-party metadata proxy matches the recorded file identity,
+not a fresh binary hash or inspected in-jar licence. Notices retain that boundary and
+the unresolved final-profile/commercial/direct-distribution review.
+
+Audio investigation also returned: six retained candidateA/provenance/receipt hashes
+match and existing entitlement attestation plus reviewed Sound Effects terms support
+game incorporation. The owner correctly rejected redundant account verification;
+that question is closed. No account screenshot/private data enters Git. ADR-0148 and
+the committed notices authorize exactA Ogg import and the minimal Quern-only native
+client loop. No media is imported yet, no generation is authorized, and actual client
+lifecycle/one-eight-machine listening remains pending. Dispatch bounded implementation
+from this checkpoint; no need for another licensing/account investigation.
+
 Receipt resource inspection found about5.89GiB free on the system volume and188.13GiB
 on the work volume, with no Java process observed. Preserve old data and use the selected
 process-local external Gradle home; this observation is not a future JVM resource grant.

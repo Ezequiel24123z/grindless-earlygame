@@ -159,6 +159,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0145](#adr-0145--calibrate-a-small-shared-sound-palette-with-development-only-generation) | Calibrate a small shared sound palette with development-only generation | Accepted |
 | [0146](#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items) | Give items material volume and reuse block models for machine items | Accepted |
 | [0147](#adr-0147--transfer-clean-session-coordination-to-sol-61-without-replaying-evidence) | Transfer clean-session coordination to Sol 6.1 without replaying evidence | Accepted |
+| [0148](#adr-0148--integrate-the-approved-quern-sound-with-one-native-client-loop) | Integrate the approved Quern sound with one native client loop | Accepted |
 
 ---
 
@@ -6942,3 +6943,57 @@ or automatically resuming every former worker.
 **Handoff.** [Compact execution state](../.agent/sol-migration-handoff.md),
 [task graph](../.agent/work-plan.json) and
 [release plan](../plan/process-t0-playable-release-1.md).
+
+---
+
+## ADR-0148 — Integrate the approved Quern sound with one native client loop
+
+**Status.** Accepted coordinator integration decision, 2026-10-19; implementation
+and native listening remain pending.
+
+**Context and prior art.** ADR-0145 calibration is complete: the owner approved all
+three previews and A is the preserved first integration reference. Its exact source,
+preview, derived Ogg and provenance hashes match the retained files. Existing
+generation-time entitlement attestation and the reviewed
+[ElevenCreative terms](https://elevenlabs.io/creative-terms), Sound Effects exhibit,
+support incorporation into the game, not standalone sound-library distribution.
+Do not reopen account/subscription verification, request more proof or preserve account
+screenshots in Git. Runtime acceptance is still a separate unobserved property.
+
+The preserved source investigation of native Minecraft1.20.1 audio and
+[GT Modern AutoReleasedSound](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/sound/AutoReleasedSound.java)
+already establishes the relevant lifecycle pattern. Use native mechanisms rather than
+importing LGPL code or inventing a general audio framework. Random `animateTick`
+one-shots do not provide authoritative onset/ownership for a continuous working bed.
+
+**Decision.** Import only the existing candidate A Ogg as the `t0_grinding` family
+after the provenance notice is committed. Preserve raw/preview/receipt bytes and their
+historical hashes; never run generation or reset the exhausted grant. Use one
+client-owned `AbstractTickableSoundInstance` per eligible running Quern position,
+native `SoundManager`, BLOCKS category, mono and positional attenuation.
+
+Discover eligible machines from bounded, already-loaded nearby client chunks during
+the existing Architectury client tick lifecycle; do not force-load or scan every block
+or the whole world. Use immutable position keys and one current-world owner, not a
+static map retaining old worlds. Remove/stop ownership when state is no longer RUNNING,
+the block/chunk disappears, the world/player changes, or the source leaves audible range.
+Respect pause, reload/stopAll and cancelled/replaced sound-engine instances without
+duplicate voices or an every-tick restart storm. Verify the actual selected API/binary
+semantics where these details cannot be established from the recorded research.
+
+Remove only the Quern heavy-hum bursts replaced by this loop, preserving its particles
+and every unrelated consumer. Do not change pumps/extractors, gameplay, machine state
+synchronization, save layouts or ordinary-fault silence. Introduce no per-error sounds,
+mandatory variants or unique palette for each logical state.
+
+**Scope and proof.** Bounded workers implement the client lifecycle, event/resource
+binding and focused contracts. The coordinator alone integrates/publishes. Static asset
+and lifecycle tests plus compilation cover what they can actually observe. Registration
+changes need the representative server binding proof; the new client onset/stop/reload/
+distance behavior and one/eight-machine mix need actual client qualification. The
+headless environment cannot supply listening or native rendering by implication.
+Do not rerun unchanged S1/S2/executor/content proofs or the paid calibration.
+
+**Rejected alternatives.** Rechecking the owner's account, regenerating approved clips,
+shipping all candidates by default, random callbacks as continuous-loop authority,
+world-retaining caches, unbounded discovery and a new general audio subsystem.

@@ -55,7 +55,7 @@
     "original_product_tasks": 27,
     "dependency_and_completion_references": 47,
     "active_product_workers": 0,
-    "active_read_only_research_workers": 2,
+    "active_read_only_research_workers": 0,
     "active_jvms": 0,
     "event_subscription_paused": true,
     "session_automation_attached": false,
@@ -143,9 +143,9 @@
     "resource_window": {
       "owner_session_id": null,
       "owner_worker_agent_id": null,
-      "scope": "Two read-only provenance investigations; no application editor or JVM grant active; old paid-generation grant exhausted",
+      "scope": "Both bounded provenance investigations returned. Quern A game import is approved under ADR0148; Jade source-licence metadata corrected. No application editor or JVM grant active; old paid-generation grant exhausted",
       "next_worker_agent_id": null,
-      "next_scope": "Resolve audio game-incorporation rights and exact-pin Jade licence metadata, then dispatch affected bounded implementation",
+      "next_scope": "Dispatch Quern-only native client-loop implementation on the committed ADR0148 source; no more account/subscription checks or generation",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",
@@ -360,25 +360,27 @@
     "completion_requires": "Other deliverables needed to complete this task; work may begin alongside them"
   },
   "next_task_after_receipt": "t0-integration",
-  "parallel_opportunity": "Receipt is complete. Close only the outstanding audio-import rights and Jade exact-pin licence discrepancy through two bounded read-only investigations. Then dispatch affected implementation with explicit ownership; resolve the narrow Superflat preset identity/access seam, not the whole historic resource audit. Do not repeat integrated art generation or approved sound calibration.",
+  "parallel_opportunity": "Receipt/provenance investigations are complete. Implement ADR0148's Quern-only native loop from the exact noticed existing Ogg; close the narrow Superflat identity/access seam independently when no shared inputs or heavy JVM ownership conflict. No more account checks, old art generation or approved sound calibration.",
   "prepared_assignments": [
     {
       "id": "sol-audio-import-rights",
       "task_id": "t0-sound-pass",
-      "status": "running_read_only",
+      "status": "completed_game_import_approved_runtime_pending",
       "agent_id": "ba4c1fc7-1ea7-4b7b-a8fd-9ea015549ab1",
       "source_commit": "17ae8b03201915c71c9946a558753ed76703a840",
       "owned_files": [],
+      "result": "Six actual candidateA/provenance/receipt hashes match; retained generation-time entitlement attestation and official Sound Effects game-incorporation terms support import. Coordinator approves exact Ogg under ADR0148. No further account/subscription proof needed; no runtime/mix/release acceptance or new generation.",
       "acceptance": "Exact candidate A byte/provenance linkage and authoritative game-incorporation terms; state any missing generation-time entitlement without inferring runtime or release approval",
       "stop_condition": "Evidence report only; no key/grant/account access, generation, imports, implementation, JVM, publication or old-session contact"
     },
     {
       "id": "sol-jade-pin-rights",
       "task_id": "playable-pack",
-      "status": "running_read_only",
+      "status": "completed_static_research_metadata_correction_integrated",
       "agent_id": "25ae2b42-40da-459d-ae18-17037a98ae22",
       "source_commit": "17ae8b03201915c71c9946a558753ed76703a840",
       "owned_files": [],
+      "result": "Exact forge-11.13.3 source tag atd7a9e1d3 declares CC-BY-NC-SA-4.0; all three false LGPL labels corrected. Existing third-party proxy metadata matches recorded file pin; no new binary/in-jar/source-build proof. Historical profiles unchanged; final-profile and intended-use review remain open.",
       "acceptance": "Authoritative selected CurseForge-file/source/licence evidence and smallest safe metadata correction; distinguish launcher reference from import/direct redistribution",
       "stop_condition": "Evidence report only; no profile/mod selection, edits, installs, builds, publication, unsupported cross-distributor identity claim or old-session contact"
     },

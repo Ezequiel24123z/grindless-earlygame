@@ -41,6 +41,10 @@ are new gaps, not permission to rewrite proven engines or start ports.
   blindly. Private storage paths belong in operational evidence, not public pack data.
 - `docs/reviews/go-gate.md` and `docs/testing/` — qualify technical/product RC readiness
   before delivery, record human acceptance afterward and preserve real-save upgrade proof.
+- ADR-0148, `client/GrindlessClient`, `machine/MachineEffects`, `registry/ModSounds`
+  and sound resources — bounded Quern-only client loop integration from approved candidate A.
+  Import the exact noticed Ogg, not account/private generation evidence; preserve unrelated
+  hum callers and gameplay/save authority. Native lifecycle/mix remains a distinct proof.
 
 Grindless is Superflat-first, Overworld-compatible and longitudinal across tier releases.
 The old conditional entry witness does not prove access in an unselected flat preset.

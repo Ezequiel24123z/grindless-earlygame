@@ -115,6 +115,12 @@ attempting to repair a personal configuration by deleting files.
 The manifest makes the launcher download each upstream file; it does not vendor their jars in this
 repository. Exact CurseForge project/file identifiers are pinned in `curseforge/manifest.json`.
 Their licences remain theirs: Architectury API (LGPL-3.0-only), JEI (MIT),
-Heracles and ResourcefulLib (MIT), Jade (LGPL-3.0), Sophisticated Backpacks and Core (ARR),
+Heracles and ResourcefulLib (MIT), Jade (CC-BY-NC-SA-4.0), Sophisticated Backpacks and Core (ARR),
 FTB Essentials/Chunks/Teams/Library (ARR), ModernFix (LGPL-3.0), FerriteCore (MIT), and Embeddium
 (LGPL-3.0). See the upstream project pages before redistributing a modified dependency.
+
+Jade's corrected label comes from the exact11.13.3 source tag, not an inspected binary
+licence or a newly verified jar hash. Its existing expanded-profile pin is unchanged.
+Launcher references do not authorize importing/relicensing its code or assets; final
+playable-profile selection and any commercial/direct distribution require separate
+evaluation. See [the evidence and limits](../THIRD_PARTY_NOTICES.md#jade-licence-correction-and-evidence-boundary).
