@@ -10,18 +10,19 @@ It is separate from the old preparation instance and exploratory save.
 
 | Item | Observed identity / state |
 | --- | --- |
-| Deployed source and runtime | `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d` |
+| Deployed source and runtime | `fd5060a5dcd8c7f6f8c346a4a0031957321d6a59` |
 | Branch | `ezequiel24123z-entorno-t0-remoto`; resolve latest HEAD from Git |
-| Grindless jar SHA-256 | `5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7` |
-| Playable engineering ZIP SHA-256 | `88b857fc89c7b9605d6029e292cdfdfeb6f10daa08f2b10b3ccf8228929fdc7e` |
+| Grindless jar SHA-256 | `8614df2343d66393e0d185abee98c9ead76e56f6b514a3f4ccd5760910b2c7fa` |
+| Playable engineering ZIP SHA-256 | `f54ae707c887ac5c45c768a342e911f022d1a33772015b599d964a6e3c24db83` |
 | Components | Minecraft 1.20.1, Forge 47.4.23, existing template's LWJGL; explicit verified Java 17, instance-only 4 GiB maximum |
 | Dependencies | Architectury, JEI, Heracles, ResourcefulLib, ModernFix, FerriteCore, Embeddium; exact existing pins |
-| Actual deployment | Initial five official downloads, subsequent source-bound update, stopped inspection and two real idempotent `Unchanged` results pass |
+| Actual deployment | Combined executor/three-book candidate passes all44 fast suites, production-server preparation and real Forge states boot; update/inspection and installed entry bytes pass. Earlier d22 also proved two real idempotent no-ops. |
 | Client/gameplay | Not launched or accepted by the coordinator |
 
 The isolated PC full build,43 behavior suites,88 pack contracts and23 archive checks
-passed on70901. The framed d22 workflow built the same jar in11 seconds, updated the
-owned instance and completed nine consecutive real RPCs. Six pinned old-instance files,
+passed on70901. The framed d22 workflow completed nine consecutive RPCs; the later
+fd5060 combined build/all44 checks/production states boot and installed three-book/
+generation-class checks now pass. Six pinned old-instance files,
 including its exploratory save header, are unchanged; no save was copied and no JVM
 or pending installation journal remains. See [the exact validation ledger](docs/testing/latest-validation.md)
 and [executable SSH/Prism runbook](docs/operations/ssh-prism-workflow.md).
@@ -49,8 +50,8 @@ be diagnosed again as absent without a current counterexample.
 
 | Lane | Owner / current evidence |
 | --- | --- |
-| T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build and is integrated in the containing checkpoint. Post-build CRLF collector error/addendum stays separate; native loaded-world and combined qualification remain pending. |
-| Visual | Original580ddce history is merged into the containing checkpoint: three exact generated PNGs, code equal to the JDK-proven6daf250;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; package/deploy and native/human art remain separate. |
+| T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build, and combinedfd5060 passes all44 fast suites/states. The unique native loaded-idle/reload property remains pending, not replaced by states. |
+| Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | Child `53b80aff-68cf-4544-b13f-be773bfd6678` prepares one loaded-idle-machine/tag-rebuild wakeup fixture independently of the app fix. No JVM/harness mutation yet; runtime needs a later separate diagnostic window. |
 | GREEN batch portability | Child `bbe1f15e-c098-454d-923e-830b25fdc282` owns the missing Bash batch twin and no-server contracts; native QA retains sole shared-PS/harness ownership. No new server framework or duplicate runtime batch. |

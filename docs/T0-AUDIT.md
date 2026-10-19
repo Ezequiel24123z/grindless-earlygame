@@ -24,6 +24,12 @@ Human gameplay remains unexecuted where recorded; green engineering is not accep
 | A01 direct chest backpressure | Still open in the actual Crude Extractor: only the work subscription exists, and `pushOutput` runs only after successful `eject`. A separate bounded unit owns recovery/accounting tests and repair. Process-fluid output proofs do not certify this class. |
 | A02 duplicate offhand evidence | Already corrected: `QuestInventoryEvidence` traverses the Container once; `VerifyPersistence` checks actual player Inventory size41, offhand3 and split5. Reuse that proof, not another arithmetic proxy. |
 | A03 generated-graph membership/idle wake | Pre-fix3643c6a fails seven real assertions; completefd9077e passes938 selected checks/build. Atomic generation/server-hook code is integrated; native loaded-world proof is still pending. |
+| A04 physical T2 consumers/rating policy | Later-frontier work, not a missing T0 craft. T1/T2 activation and unresolved consumer/ratio decisions remain held; the F2 implementation inventory is not tier acceptance. |
+| A05 discoverability | Bootstrap Atlas coverage, full-detail/pagination and shared UI/guidance work have their recorded source/contract proofs. Actual client/GUI-scale/keyboard/required-information observations remain manual, not inferred from those proofs. |
+| A06 documentation | Current bridges, typed plan, exact-source ledger and return handoff supersede obsolete baseline counts. This is a scoped reconciliation, not certification of every historical paragraph. |
+| A07 assets/audio/portability | Three books now have proved deterministic/pixel-reviewed source. Quern A remains protected; new wet-work generation is explicitly blocked. The missing batch SH twin and real generator-recovery coverage have independent GREEN owners/proofs. Native art/listening remain manual. |
+| A08 configuration/prototypes | Do not advertise placeholder configuration or space prototypes as accepted survival. No broad config rewrite or prototype deletion is part of T0 closure. |
+| A09 seed-factory guidance | Later T1 handoff/order and human discoverability remain separate; do not silently change the five-Matrix budget or activate new factory progression to resolve an old guidance observation. |
 
 These are source-bound reconciliations of existing finding IDs, not another whole-code
 audit or a declaration that all remaining human/tier criteria pass.

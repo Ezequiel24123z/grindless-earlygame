@@ -1,5 +1,54 @@
 # Current T0 rework validation
 
+## Combined fd5060 fast gate, production boot and installed artifact
+
+Only the previously unexecuted stages resume after the stderr observer problem.
+All44 discovered `Verify*` suites, including the new guide42 checks and unchanged
+canonical/guidance/quest/UI contracts, complete `ALL CHECK SUITES PASSED`, exit0.
+`:forge:prepareSmokeServer` completes0 in34 seconds. Full capture SHA-256:
+`7ffd2c97f3240a51462510ea5e3adb9652c261d852446b1f36ee390761e62ea3`.
+The successful compilation/package step is not needlessly replayed.
+
+Specific new runtime uncertainty: the changed base ticker/pre-subscription hook and
+generation class must survive real Forge construction/first machine ticks across the
+registered block set. One production `states` smoke passes, exit0, with clean stop;
+log SHA-256:
+`bf5618c391d9e36327ea4012f8b23e22d93871ffcb6ed95a248d65e410ee25af`.
+This registration/first-tick proof is NOT the still-pending loaded-idle/tag-reload
+wakeup oracle and does not accept gameplay.
+
+The actual fd5060 engineering archive is then deployed and `Inspect` returns
+`VerifiedStopped`. Installed JAR SHA-256 is
+`8614df2343d66393e0d185abee98c9ead76e56f6b514a3f4ccd5760910b2c7fa`;
+ZIP is `f54ae707c887ac5c45c768a342e911f022d1a33772015b599d964a6e3c24db83`.
+Direct installed-JAR entry checks match all three guide PNGs to validated source,
+confirm `ProcessLookup$Generation.class`, and retain the34364-byte protected Quern
+resource. Postcheck finds0Java. No client or personal/diagnostic save is copied into
+Prism; original-instance preservation and d22 idempotence proofs retain their scope.
+
+## Combined fd5060 artifact and observer-only warning failure
+
+The first combined observer sets WinPS `ErrorActionPreference=Stop` while capturing
+native stderr and stops on javac's ordinary deprecation `Note`, exiting1 before its
+later check/preparation stages. This is an observer error, not a demonstrated compiler
+failure. A bounded read-only diagnosis finds no held build/cache locks or Java process,
+and the pinned fd5060 worktree is clean.
+
+The source-associated daemon26600 log explicitly records the actual
+`buildModpack` completion and `BUILD SUCCESSFUL in 28s`; its SHA-256 is
+`fcd18b9de46349320765299df5f4893899ddb7d3d4f6f831d3501e07ee052c0c`.
+The actual source-bound ZIP passes the host's read-only `Prepare` contract, exit0.
+Jar SHA-256:
+`8614df2343d66393e0d185abee98c9ead76e56f6b514a3f4ccd5760910b2c7fa`;
+ZIP SHA-256:
+`f54ae707c887ac5c45c768a342e911f022d1a33772015b599d964a6e3c24db83`.
+These are combined art/executor artifacts, not the earlier selected-core a422 jar.
+
+The successful build is not replayed merely to repair capture. Only the unexecuted
+combined fast checks and production-server preparation resume under warning-safe
+observation, preserving actual native exit codes. They remain in progress at this
+receipt; no native boot, deployment or manual acceptance is inferred.
+
 ## Frozen A03 green and integration scope
 
 Exactfd9077ea397b28563bc301862a0753943b33527e passes common/Forge/classpath

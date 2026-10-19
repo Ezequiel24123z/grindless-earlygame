@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Deploy the combined, production-booted executor/art candidate.** Actualfd5060
+  completes all44 fast suites, production-server preparation and one targeted states
+  boot for changed BE/ticker construction. Verify the three book PNGs and generation
+  class inside the installed8614df23 jar, with exact source/ZIP provenance and0Java.
+  Retain the benign-stderr observer failure separately; no repeat compile or false
+  loaded-idle/reload, client/artistic, survival or Tier acceptance follows.
 - **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
   disabled optional fixture pack through the existing paired harness, retaining
   legacy defaults, isolated-world behavior and the scenario-list integration.
