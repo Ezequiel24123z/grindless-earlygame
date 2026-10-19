@@ -102,6 +102,11 @@ T2 and above are manufactured, never a crafting table
 - `recipe/ProcessLogic.java` and `recipe/FabricationLogic.java` — durations, FU/t,
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
+- `tools/checks/VerifyMachine.java` — the A03 generation-boundary regression binds actual
+  item tags through `RegistryTagView` and `MaterialRegistry.rebuild`, including a retired
+  row whose old input/output still resolve. See the
+  [source-bound disposition](testing/t0-process-cache-generation.md) for actual versus
+  pending implementation/validation; a prepared oracle is not a passing proof.
 - `recipe/T1Recipes.java` and `common/src/main/resources/data/grindless/recipes/` —
   ordinary shaped crafting JSON, including the five-unit first Relay Matrix batch and its one-Matrix
   T1 processing-machine costs.

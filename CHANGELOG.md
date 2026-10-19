@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prepare the exact A03 process-cache generation regression.** On the received
+  d22a8ed continuation, a retired generated recipe can remain in a loaded machine's
+  cache even while its item input and output still resolve. Exercise live tag binding,
+  unchanged-identity work, retirement and provider-aware reconstruction in the existing
+  machine suite. Implementation, the coordinator's wakeup decision and JVM execution
+  remain pending; no new gameplay, persistence format or passing check is claimed.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,
