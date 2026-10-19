@@ -54,7 +54,7 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-ROOT="$(cd -- "$ROOT" && pwd)" || exit 1
+ROOT="$(CDPATH= cd -- "$ROOT" && pwd)" || exit 1
 SMOKE_DIR="$ROOT/tools/smoke"
 RUN_DIR="$ROOT/forge/run"
 mkdir -p "$RUN_DIR"

@@ -501,7 +501,9 @@ version/API-verified, never a fictional or mandatory core integration.
   mixed exclusions (ADR-0154). Clear both inherited pack selections for the boot.
   Do not substitute isolated loops, add a second server runner, or apply per-scenario
   `.timeout` metadata to this shared batch. Existing boot owns handshake, shutdown,
-  cleanup and the batch-wide environment budgets. `tools/checks/Test-SmokesBatch.ps1`
+  cleanup and the batch-wide environment budgets. Resolve relative Bash roots with
+  `CDPATH` neutralized only for `cd`; retain the caller's environment and visible errors.
+  `tools/checks/Test-SmokesBatch.ps1`
   / `.sh` exercise selection, aggregation, dispatch and failures with fake boots,
   not Forge or datapack reload acceptance.
 - `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;

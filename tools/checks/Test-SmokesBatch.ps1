@@ -35,7 +35,7 @@ $script:TestTemp = Join-Path ([IO.Path]::GetTempPath()) ('grindless-smokes-batch
 $script:EnvironmentNames = @(
     'SMOKE_COMMANDS', 'SMOKE_EXPECT_FILE', 'SMOKE_LOG', 'SMOKE_DATAPACK',
     'SMOKE_OPTIONAL_DATAPACK', 'SMOKE_TIMEOUT', 'SMOKE_EXPECT_TIMEOUT',
-    'SMOKE_PORT', 'GRINDLESS_ACCEPT_EULA', 'CI', 'JAVA_HOME', 'SMOKE_EXPECT'
+    'SMOKE_PORT', 'GRINDLESS_ACCEPT_EULA', 'CI', 'JAVA_HOME', 'SMOKE_EXPECT', 'CDPATH'
 )
 $script:CallerEnvironment = @{}
 foreach ($name in $script:EnvironmentNames) {
@@ -85,8 +85,7 @@ function Invoke-Child([string]$Executable, [string[]]$Arguments,
     $info.RedirectStandardError = $true
     $info.StandardOutputEncoding = $script:Utf8
     $info.StandardErrorEncoding = $script:Utf8
-    # Noninteractive Bash still reads BASH_ENV. Do not import personal hooks or
-    # exported functions into a supposedly isolated tooling check.
+    # Remove ambient shell hooks/search paths; explicit fixture overrides below still apply.
     foreach ($key in @($info.EnvironmentVariables.Keys)) {
         if ($key -in @('BASH_ENV', 'ENV', 'CDPATH', 'SHELLOPTS', 'BASHOPTS', 'GLOBIGNORE') -or
                 $key -like 'BASH_FUNC_*') {
@@ -176,6 +175,7 @@ record_environment() {
     record_env CI "${CI+x}" "${CI-}"
     record_env JAVA_HOME "${JAVA_HOME+x}" "${JAVA_HOME-}"
     record_env SMOKE_EXPECT "${SMOKE_EXPECT+x}" "${SMOKE_EXPECT-}"
+    record_env CDPATH "${CDPATH+x}" "${CDPATH-}"
 }
 '@
 $script:FakeBoot = "#!/bin/sh`nset -eu`n" + $script:EnvironmentRecorder + "`n" + @'
@@ -279,8 +279,8 @@ function Invoke-Batch($Fixture, [string[]]$Arguments, [hashtable]$Environment = 
         $script:DriverPath, $Fixture.Entry) + $Arguments) $WorkingDirectory $childEnvironment
 }
 
-function Read-CapturedEnvironment($Fixture) {
-    $parts = (Read-FixtureText (Join-Path $Fixture.Capture 'boot.environment')).Split([char]0)
+function Read-CapturedEnvironment($Fixture, [string]$CaptureFile = 'boot.environment') {
+    $parts = (Read-FixtureText (Join-Path $Fixture.Capture $CaptureFile)).Split([char]0)
     $result = @{}
     for ($i = 0; $i -lt $parts.Length - 1; $i += 3) {
         $result[$parts[$i]] = [pscustomobject]@{ Present = ($parts[$i + 1] -ceq 'x'); Value = $parts[$i + 2] }
@@ -554,6 +554,28 @@ done
         $f = New-Fixture
         $result = Invoke-Batch $f -Arguments @() -WorkingDirectory $f.Root
         Assert-Dispatch $f $result
+    }
+    Invoke-Case 'relative metacharacter root with effective CDPATH resolves once and preserves caller search path' {
+        $relativeRoot = 'relative root [literal] & spaces'
+        $f = New-Fixture -RootName $relativeRoot
+        try {
+            $result = Invoke-Batch $f -Arguments @($relativeRoot, '--only', 'alpha') `
+                -WorkingDirectory $f.Home -Environment @{ CDPATH = '.' }
+            $before = Read-CapturedEnvironment $f 'caller.before'
+            Assert-Test ($before['CDPATH'].Present -and $before['CDPATH'].Value -ceq '.') `
+                'CDPATH is effective before the actual batch CLI, not removed by fixture sanitization'
+            Assert-Dispatch $f $result
+            $environment = Read-CapturedEnvironment $f
+            Assert-Test ($environment['CDPATH'].Present -and $environment['CDPATH'].Value -ceq '.') `
+                'root resolution does not change the inherited CDPATH at the fake boot'
+            Assert-Aggregate $f "say BATCH-BEGIN alpha`nsay alpha`nsay BATCH-END alpha`n" "BATCH-END alpha`nPASS alpha`n"
+        } finally {
+            # The red path can create native newline/long-path components that WinPS cannot remove.
+            $cleanup = Invoke-Child $script:ResolvedBash @('--noprofile', '--norc', '-c',
+                'set -eu; [ "${1%/*}" = "$2" ]; [ "$(cat "$1/.batch-fixture-root")" = "$3" ]; rm -rf -- "$2"',
+                'owned-cdpath-case-cleanup', $f.NativeRoot, $f.NativeHome, $f.Token) $script:TestTemp
+            Assert-Test ($cleanup.ExitCode -eq 0) 'native cleanup removes only the token-verified CDPATH case'
+        }
     }
     Invoke-Case '-- accepts one literal root starting with a dash' {
         $f = New-Fixture -RootName '-literal root with spaces'

@@ -720,6 +720,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Resolve a relative batch root independently of `CDPATH`.** Neutralize the search
+  path only for the Bash `cd` used by root resolution, without suppressing errors
+  or changing the caller's environment. Retain literal spaces/metacharacters,
+  legacy selection and one fake-boot dispatch; add an effective-`CDPATH` CLI
+  regression and distinguish executed CRLF files from normalized LF Git blobs.
 - **C3 integrates with Forge and the check suites again (ADR-0136, unaccepted).** Forge
   compiles: JEI catalysts and category layout cover the Geological Collector, Biocultivator
   and Assembly Bench, and the new blocks, items, source faults and Crank Handle tooltip are

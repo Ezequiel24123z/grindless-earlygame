@@ -1,13 +1,65 @@
 # Current T0 rework validation
 
+## Shared-batch relative-root CDPATH regression (P2)
+
+This correction is a child of frozen `507ecfa`, not another portability unit. The
+reviewer's counterexample is real: with `CDPATH=.` and a relative root, `cd` prints
+the destination before `pwd`, so the captured root contains the same path twice,
+separated by a newline. Existing fixtures removed ambient `CDPATH` and missed it.
+
+The new real-CLI case explicitly restores `CDPATH=.` after fixture sanitization,
+records it in `caller.before`, and launches a relative root containing spaces,
+brackets and an ampersand. Before the production fix, the original37 cases pass
+and only that new case fails with the duplicated-root diagnostic, exit1. The red
+batch is the unchanged `507ecfa` subject; its test PS CRLF materialization is
+`e2beeec115a0667e354bf5bae3ef56aa1e018f15fbab73b006a176abbab0d41f`.
+The red run's WinPS `Remove-Item` also fails on the malformed native newline/long
+path. It prints neither aggregate assertion total nor successful cleanup; no
+assertion count is attributed to that failed run.
+
+The production delta is only `CDPATH= cd` inside root command substitution.
+It preserves errors and caller state rather than discarding `cd` diagnostics or
+unsetting `CDPATH` globally. The regression checks the single literal canonical
+root, positive fake-root token, exact aggregate and unchanged caller/boot `CDPATH`.
+Only this case uses native cleanup for its matched-parent, token-verified fixture
+directory, from outside that directory, including the failing branch.
+
+The already-inspected red fixture was removed separately after verifying its owner
+marker. A first manual cleanup attempt exits2 on native argument quoting before
+deletion; the retry using the suite's established argument-quoting mechanism exits0.
+No unverified, broad or real-world path is removed, and no failed cleanup is
+retroactively called a pass.
+
+One direct WinPS5.1.26100.9711/Desktop execution with Git/MSYS
+Bash5.2.37(1)-release now exits0:38 cases,856 assertions,38 actual Bash CLI launches
+and3 intercepted ordinary baseline-PS comparisons. The CDPATH case passes and the
+owned fixture subtree is removed. The WinPS test parser and batch `Bash -n` also
+pass. The unchanged SH test-selector proof from the original unit is reused, not
+claimed as another current execution.
+
+| Changed source | Executed Windows CRLF SHA-256 | Matching LF source SHA-256 |
+| --- | --- | --- |
+| `tools/run-smokes-batch.sh` | `7cbfcbb3b0b601cdc8b7571a739efd256ce399ab9f0abd5429b384edd826c08c` | `a14df2efbaf1ed966878ab81ecd9f03a3ea25e9bec9eb08641b46aefc6ebcf95` |
+| `tools/checks/Test-SmokesBatch.ps1` | `374449db173c0db9ce85d6c85fce354ddbea1b875a0087acf8820e808b2ca14f` | `ab902b1cae693c0dec12cb1b62b99c620e5729ae155dd07d16252cb6525ad83f` |
+
+The LF hashes are checked against raw staged Git blobs before committing; the
+executed materializations retain CRLF. Source hashes remain unchanged across the
+green execution. Production PS, shared harness, scenarios, CI and the separate
+optional-pack unit remain untouched. No JVM, Gradle, SSH, real server/client,
+Forge smoke, Core/Linux/macOS qualification or T0/T1 acceptance follows.
+
 ## Native Bash batch portability: no-server contracts only
 
 The bounded GREEN unit starts from `cc2fe71ae76752d13adabbc5169a23e5bbbecc2f`.
-Its new native batch SH has SHA-256
-`661c36f1570df7553d25f2d795a832df77dce4abedac5c453780086c2c27a3f5`.
-The new test PS/SH hashes are respectively
-`87af71895311eee4234c10262ab99dcf3c958bf88955ecc9c84c1ceedc7d35d2` and
-`c55c3ea7b415952b80ea5bb8f2125b768dfb4ee651a8a079021430a74f6889fe`.
+The original hashes below identify the executed Windows CRLF materializations, not
+the normalized LF Git blobs committed in `507ecfa`. Blob SHA-256 values are computed
+from `git cat-file`'s raw byte stream, without PowerShell text-pipeline conversion.
+
+| Source | Executed CRLF materialization SHA-256 | `507ecfa` LF blob SHA-256 |
+| --- | --- | --- |
+| `tools/run-smokes-batch.sh` | `661c36f1570df7553d25f2d795a832df77dce4abedac5c453780086c2c27a3f5` | `ac62ecc29a66dc5f96acd594aba24cd58c9a2d57154bc481bd3d897a47a13100` |
+| `tools/checks/Test-SmokesBatch.ps1` | `87af71895311eee4234c10262ab99dcf3c958bf88955ecc9c84c1ceedc7d35d2` | `8023acfb627a8c201c2e4f04f30566c1be0fb598e42c36e0a2e1d9465fbf90e9` |
+| `tools/checks/Test-SmokesBatch.sh` | `c55c3ea7b415952b80ea5bb8f2125b768dfb4ee651a8a079021430a74f6889fe` | `c5518ab20476584deadff22b06e31ffa29a33b97d2e35615a4bcdef6b87412ca` |
 
 Both the direct test PS entrypoint and its SH selector exit0, each executing37 cases,
 785 assertions,37 actual Bash CLI launches and3 intercepted ordinary PS comparisons.
