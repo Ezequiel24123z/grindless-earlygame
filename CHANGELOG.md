@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Author one pending native idle-cache reload regression (ADR-0153).** A controlled
+  base/optional-ingot datapack fixture observes an already loaded Pulverizer miss,
+  real reload wakeup, one conserved gravel-to-sand batch and no extra paid work.
+  Full finite buffers prevent donor callbacks from masking the initial wake.
+  Authored offline only: the existing runner cannot stage a second disabled pack;
+  its minimal extension is now coordinator-approved but not implemented/qualified.
+  No application/shared-harness edit, manifest registration or native pass is claimed.
 - **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
   passes nine real RPCs, an11-second package build, owned update, inspection and two
   idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM

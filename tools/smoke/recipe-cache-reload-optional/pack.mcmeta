@@ -1,0 +1,6 @@
+{
+  "pack": {
+    "pack_format": 15,
+    "description": "Initially disabled cache_probe ingot form; enable last only after the native idle baseline"
+  }
+}

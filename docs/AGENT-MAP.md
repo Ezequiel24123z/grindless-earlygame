@@ -445,6 +445,12 @@ version/API-verified, never a fictional or mandatory core integration.
   loaded-chunk/single-tagged-item observation pattern. The paired standalone
   `verify-blueprint-fixture` checks compare source contracts and mutate in memory;
   they are not a new Minecraft execution or a Blueprint gameplay proof.
+- `tools/smoke/recipe-cache-reload/` and `recipe-cache-reload-optional/` author one
+  ADR-0153 idle-miss/reload boundary with real tag predicates, immutable setup,
+  exact batch/FU accounting and a tick-rate bound. Read its `README.txt` first:
+  native qualification is NOT_RUN and stock runners cannot stage the disabled
+  sibling yet. Do not register it in `scenarios.txt`, invent a staging pass or
+  let donor energy/inventory/neighbor mutation substitute for reload wakeup.
 
 - Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`
   for the read-only primary-store projection. `FluidClientPlatform` delegates native water
