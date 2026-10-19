@@ -120,6 +120,40 @@ is authoring that separate GREEN twin, not this fixture. Do not mistake Windows
 Git Bash for a Linux run. CI and scenarios.txt remain untouched.
 No watcher, RCON, arbitrary shell hook, extra mod or new framework is introduced.
 
+Optional diagnostic-world retention (ADR-0155)
+--------------------------------------------
+The coordinator separately authorizes SMOKE_KEEP_WORLD=1 in the existing boot
+twins. Absent/0 keeps final cleanup; every other value is rejected before
+Gradle or filesystem mutation. No flag changes the selected world, copies it
+elsewhere, disables path preflight, alters heaps/budgets or skips process/exit
+checks. Startup still replaces the previous smoke world unconditionally.
+
+Opt-in finalization prints the exact existing path as SMOKE WORLD RETAINED,
+explicitly not PASS/clean shutdown; a missing world is SMOKE WORLD ABSENT and
+is not created. A failed or forced-stop run may retain diagnostics too, so the
+banner is never evidence of a healthy world. PS final-cleanup errors are now
+explicit failures, not silently ignored. The flag does not modify caller env.
+
+For the separate A01 saved-data oracle, the coordinator must first establish
+real harness exit0 and natural server exit0, then inspect the real
+forge\run\smoke-server\smoke-world\dimensions\grindless\luna\data\grindless_veins.dat
+before cleanup. VeinData uses the supplied ServerLevel's storage, not Overworld storage.
+File existence alone, these helper checks or a retained-world banner do not
+prove the expected saved data. Preserve source/jar/log and binary evidence,
+then explicitly remove only that exact owned diagnostic world. Do not launch
+another smoke before the postcheck: its normal startup reset will replace it.
+Never target a Prism/player world, and do not confuse diagnostics with a
+retained-world gameplay/upgrade acceptance pass.
+
+The paired verify-smoke-world-retention checks pass37 PS and43 local Windows
+Git/MSYS assertions using actual helpers, rejected entrypoints and synthetic
+0/23 process exits. They cover default/zero cleanup, opt-in bytes/path/state,
+absence without creation, strict invalid flags before mutation, unchanged
+caller env, preflight still enforced and explicit post-inspection cleanup.
+The existing VerifySmokeHarness invokes them without an extra CI step.
+This is not native server/shutdown, saved-data, Java compilation/execution or
+Linux/macOS qualification. No actual native world was retained by this work.
+
 Verified 1.20.1 source semantics (reference only, no imported code):
   https://github.com/themodderg/The-Digimod/tree/744e72e970ae33a77acd241221e917f6f3d5258a
   build.gradle selects net.neoforged:forge:1.20.1-47.1.79.

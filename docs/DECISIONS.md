@@ -7295,8 +7295,9 @@ not a generic datapack manager, content rewrite or human survival evidence.
 
 ## ADR-0155 — Retain a diagnostic smoke world only by explicit opt-in
 
-**Status.** Accepted bounded validation-tool extension, 2026-10-19. Implementation
-and native qualification remain pending.
+**Status.** Accepted bounded validation-tool extension, 2026-10-19. Source
+implementation `444409f` is independently reviewed with37 PS/43 Windows Git-MSYS
+contracts; native qualification remains pending.
 
 **Need.** A01's extractor regression must check the real, cleanly saved
 `VeinData` extraction counts, not infer them from exported items. Both existing

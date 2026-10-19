@@ -20,6 +20,7 @@
 #     SMOKE_PORT         server port (default 25599)
 #     SMOKE_DATAPACK     a datapack directory to enable in the new world (ADR-0061)
 #     SMOKE_OPTIONAL_DATAPACK one additional directory, staged but explicitly disabled
+#     SMOKE_KEEP_WORLD   absent/0 cleans up; 1 retains only the diagnostic world after shutdown
 #     SMOKE_COMMANDS     a file of console commands to run once the server is up
 #     SMOKE_EXPECT       extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
@@ -28,6 +29,14 @@
 param([Parameter(Mandatory = $true)][string]$Root)
 
 $ErrorActionPreference = 'Stop'
+
+function Get-SmokeKeepWorld([AllowNull()][object]$value) {
+    if ($null -eq $value -or $value -ceq '0') { return $false }
+    if ($value -ceq '1') { return $true }
+    throw 'Invalid SMOKE_KEEP_WORLD: expected an absent value, 0 or 1.'
+}
+
+$keepWorld = Get-SmokeKeepWorld ([Environment]::GetEnvironmentVariable('SMOKE_KEEP_WORLD'))
 
 function Get-SmokeFileSystemPath([string]$path) {
     if ([string]::IsNullOrWhiteSpace($path)) { throw 'Invalid smoke datapack: empty path.' }
@@ -130,6 +139,18 @@ function Remove-Tree([string]$path) {
     if ([System.IO.Directory]::Exists("\\?\$full")) {
         [System.IO.Directory]::Delete("\\?\$full", $true)
     }
+}
+
+function Complete-SmokeWorld([string]$path, [bool]$keep) {
+    if ($keep) {
+        if ([IO.Directory]::Exists("\\?\$path")) {
+            Write-Output "SMOKE WORLD RETAINED (diagnostic only; not PASS or clean shutdown): $path"
+        } else {
+            Write-Output "SMOKE WORLD ABSENT (SMOKE_KEEP_WORLD=1; nothing retained): $path"
+        }
+        return
+    }
+    Remove-Tree $path
 }
 
 function Resolve-SmokeDatapack([string]$path, [string]$worldPath) {
@@ -422,7 +443,10 @@ try {
     if (-not $proc.HasExited) { Stop-Tree $proc.Id }
     Unregister-Event -SourceIdentifier $stdoutEvent.Name -ErrorAction SilentlyContinue
     Unregister-Event -SourceIdentifier $stderrEvent.Name -ErrorAction SilentlyContinue
-    try { Remove-Tree $world } catch { }
+    try { Complete-SmokeWorld $world $keepWorld } catch {
+        Write-Output "SMOKE WORLD CLEANUP FAILED: $($_.Exception.Message)"
+        $exitCode = 1
+    }
 }
 
 exit $exitCode

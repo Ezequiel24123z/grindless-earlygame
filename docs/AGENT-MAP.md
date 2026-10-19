@@ -501,6 +501,15 @@ version/API-verified, never a fictional or mandatory core integration.
   executed under the current JVM reservation.
   Do not register the native fixture in `scenarios.txt`, invent a native pass or
   let donor energy/inventory/neighbor mutation substitute for reload wakeup.
+- `tools/smoke-boot.ps1` / `.sh` accept only absent/0/1 for `SMOKE_KEEP_WORLD`.
+  Validate before preparation/mutation;1 skips only final world deletion, not
+  startup reset, preflight, process cleanup, shutdown or exit-status checks.
+  Retained/absent diagnostics never certify a PASS. Preserve only the existing
+  fixed smoke world, with no copying/path hook. Inspect it only after harness0
+  and natural server0, then explicitly clean that exact world before another run.
+  `verify-smoke-world-retention.ps1` / `.sh`, via `VerifySmokeHarness`, pass37 PS
+  and43 Windows Git/MSYS helper/entrypoint/EXIT contracts without a JVM. They
+  do not prove actual saved-data persistence or Linux/macOS behavior.
 
 - Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`
   for the read-only primary-store projection. `FluidClientPlatform` delegates native water

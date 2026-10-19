@@ -23,8 +23,8 @@ The isolated PC full build,43 behavior suites,88 pack contracts and23 archive ch
 passed on70901. The framed d22 workflow completed nine consecutive RPCs; the later
 fd5060 combined build/all44 checks/production states boot and installed three-book/
 generation-class checks now pass. Six pinned old-instance files,
-including its exploratory save header, are unchanged; no save was copied and no JVM
-or pending installation journal remains. See [the exact validation ledger](docs/testing/latest-validation.md)
+including its exploratory save header, are unchanged; no save was copied and those
+postchecks found no JVM or pending installation journal. See [the exact validation ledger](docs/testing/latest-validation.md)
 and [executable SSH/Prism runbook](docs/operations/ssh-prism-workflow.md).
 
 ## Immediate technical work
@@ -54,12 +54,12 @@ be diagnosed again as absent without a current counterexample.
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | Source through `0fec76d` is integrated after independent closure of publication/wake, ancestor/provider and Home findings. 86 PS contracts pass; Windows Git-MSYS syntax passes, but optional tests cannot finish without `ln`. Genuine native publication/wakeup is still unrun and the scenario is not registered. |
-| GREEN batch portability | Original `507ecfa` -> `4b86dbb` history is source-integrated unchanged after independent closure of CDPATH. The real fake-boot CLI proof passes38 cases/856 assertions on WinPS5/Git-MSYS. No new server framework or duplicate native batch is needed; Linux/Core/macOS remain unexecuted. |
-| A01 Crude output recovery | Original red `4f1b30b`/repair `c87dbc8` history is source-integrated, not deployed or execution-qualified. Child `cbafe37b-ef12-402c-90d1-d152622abfcb` owns focused Java red/green and then one conditional pre-fix native counterexample. Initial SSH loss is resolved read-only: no surfaces/receipt or Git/SSH/Java remain, so preparation can retry safely. Repaired native/SavedData and full integrated build remain open. ProcessMachine fluid proofs are not substituted. |
+| GREEN batch portability | Original `507ecfa` -> `4b86dbb` history is source-integrated unchanged after independent closure of CDPATH.38 cases/856 assertions pass on WinPS5/Git-MSYS. The final coupled adapter excludes A01's fresh-counter case and connects this suite to the existing Java gate; no new server framework/CI step/native batch. |
+| A01 Crude output recovery | Red `4f1b30b` compiles then fails six source checks; repaired `c87dbc8` compiles and passes59/0, including24 binary-NBT assertions. Original history is integrated but not deployed. The same child owns one pre-fix native counterexample next; repaired native/SavedData and full integrated build remain open. Failed transport/collectors are preserved without JVM replay. |
 
-The current exclusive PC lease is A01 classpath preparation, compilation and
-`VerifyExtractor` on the two separate immutable source surfaces. After a successful
-focused green, it may run one pre-fix `4f1b30b` native counterexample with the existing
+The focused A01 red/green gates have finished, with zero Java observed at20:58:10Z
+and both exact sources clean. The same exclusive PC lease may now run one pre-fix
+`4f1b30b` native counterexample with the existing
 unmodified harness; that run does not need a saved-accounting postcheck or the
 unqualified retention feature. It is not a repaired-native or deployment grant.
 The recorded preflight observes zero Java processes, 10.07 GiB free
@@ -70,10 +70,10 @@ the coordinator grants the next runtime window. Private paths stay outside Git.
 A01 review finds no other high-confidence production blocker, but the harness
 currently deletes the world before its stopped-world accounting command can
 read SavedData. [ADR-0155](docs/DECISIONS.md#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in)
-authorizes a narrow paired retention opt-in, owned by the harness child. It is
-frozen separately at `444409f`, with37 PS/43 Git-MSYS checks reported; independent
-review/integration and native accounting remain pending. Repaired-native
-qualification cannot bypass that oracle.
+authorizes a narrow paired retention opt-in. Reviewed `444409f` is source-integrated,
+with37 PS/43 Git-MSYS checks, not native accounting. The correct file is Luna's
+`dimensions\grindless\luna\data\grindless_veins.dat`, not Overworld data; the
+handoff is corrected. Repaired-native qualification cannot bypass that oracle.
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.

@@ -47,8 +47,9 @@ The private typed constructor follows the existing process-machine test seam:
 ordinary registered construction delegates to it, while checks can instantiate
 the actual block entity without a loader. There is no gameplay bypass flag.
 Four binary-NBT reconstruction cases retain partial/completed/overshoot progress,
-owned item tags, Flux, the single output slot and extract-only policy. These are
-authored checks, not executed Java evidence.
+owned item tags, Flux, the single output slot and extract-only policy. Frozen
+`c87dbc8` now passes those24 assertions within its59-check focused PC gate;
+this is binary-NBT reconstruction, not a live Level or actual restart.
 
 `VerifyExtractor --a01-vein-data <path>` reads the real cleanly stopped Luna
 SavedData and requires exactly one extraction in each diagnostic chunk, exactly
@@ -61,10 +62,12 @@ counter or infer accounting from an item-only oracle.
 | No-JVM repaired-source checks | PASS | Ten source safeguards; thirteen unchanged behavior bodies and the unchanged Container implementation |
 | Native fixture structure | PASS | Nine functions, eleven resolved references, ten markers; executable fixture bytes unchanged from `4f1b30b` |
 | Documentation and whitespace | PASS | 640 relative links, 154 ADR section/index pairs, no whitespace errors |
-| Java baseline and repaired suite | NOT_RUN | Explicit coordinator reservation; includes 24 authored binary-NBT assertions, not 24 passes |
+| Java baseline | EXPECTED RED | Frozen `4f1b30b` classpath/javac exit0, then exactly six source-safeguard failures, not a Level counterexample |
+| Java repaired suite | PASS | Frozen `c87dbc8` classpath/javac exit0 and59/0 checks:25 prior,24 binary-NBT and10 source safeguards |
 | Native recovery/world-time fixture | NOT_RUN | Distinct loaded extractor path, no process-machine proof substitution |
 | Stopped-world SavedData oracle | NOT_RUN | Four authored exact accounting assertions |
-| Common/Forge compilation, full build and deployment | NOT_RUN | No JVM, Gradle, server, client or PC mutation by this child |
+| Common compilation | PASS | Both focused sources prepare their real runtime classpaths successfully |
+| Forge/full build and deployment | NOT_RUN | Separate integrated/native execution windows still required |
 
 Source checks do not execute Java, validate Minecraft command grammar or observe
 the game's subscription/transfer ordering. The smallest new native uncertainty
@@ -105,13 +108,12 @@ foreign capability guarantee or retained-player-world migration.
 
 ## Execution boundary
 
-**Repaired native/SavedData sequence is blocked in this standalone checkpoint.**
-Both received harness twins remove the diagnostic world before returning, so the
-post-stop file command below cannot yet run as written. ADR-0155 in the coordinator
-selects a paired explicit retention opt-in; use that sequence only after the
-reviewed harness is integrated and the coordinator grants a new execution lease.
-The original harness can still demonstrate the pre-fix native counterexample;
-that failed red run must not be followed by a claimed saved-accounting pass.
+The original standalone `c87dbc8` harness removes the world before a post-stop
+check. The coordinator now integrates the separately reviewed `444409f` retention
+under ADR-0155. The repaired sequence below requires that integrated harness and
+a new explicit execution lease; it is not a native pass. The old harness remains
+valid for the pre-fix counterexample, which must not be followed by a claimed
+saved-accounting pass.
 
 This fixture owns only its uniquely named commands/expect/pack. It intentionally
 does not edit `scenarios.txt`, the shared harness or CI; their owner/coordinator
@@ -148,22 +150,33 @@ seed/richness/yield derivation and `VeinData` storage arithmetic, not proof of
 the extractor's new completion call sites. Recovery, live tick ordering and
 one-time extraction accounting still require the native oracles below.
 
-After the coordinator stages the exact frozen source in a separately owned PC
-worktree and grants the execution window, the existing direct harness is enough:
+After the coordinator stages the exact integrated source in a separately owned PC
+worktree and grants the execution window, use the existing direct harness with
+explicit diagnostic retention:
 
 ```powershell
 $env:GRINDLESS_ACCEPT_EULA = 'true'
 $env:SMOKE_DATAPACK = (Resolve-Path .\tools\smoke\extractor-backpressure-pack).Path
 $env:SMOKE_COMMANDS = (Resolve-Path .\tools\smoke\extractor-backpressure.commands).Path
 $env:SMOKE_EXPECT_FILE = (Resolve-Path .\tools\smoke\extractor-backpressure.expect).Path
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\smoke-boot.ps1 -Root .
+$previousKeepWorld = $env:SMOKE_KEEP_WORLD
+try {
+    $env:SMOKE_KEEP_WORLD = '1'
+    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\smoke-boot.ps1 -Root .
+    if ($LASTEXITCODE -ne 0) { throw 'A01 native scenario/shutdown failed.' }
+} finally {
+    $env:SMOKE_KEEP_WORLD = $previousKeepWorld
+}
 ```
 
 Use the harness's ordinary assertion budget. The scenario lasts 65 world ticks
 after its bounded loaded-chunk barrier and needs no extended timeout, optional
 pack, new dependency or production diagnostic flag. Preserve the actual failing
 baseline log and exact source before running the repaired source; source review
-is not a RED run. After natural shutdown, use the same compiled check/classpath:
+is not a RED run. Require harness exit0 and natural server exit0 before the
+postcheck: a retained-world banner after failure/forced stop is not evidence.
+VeinData uses Luna's own ServerLevel storage, not the Overworld's root data.
+Then use the same compiled check/classpath:
 
 ```powershell
 & (Join-Path $env:JAVA_HOME 'bin\java.exe') -Xmx1G -XX:ActiveProcessorCount=2 `
@@ -173,6 +186,9 @@ if ($LASTEXITCODE -ne 0) { throw 'A01 native extraction accounting failed.' }
 ```
 
 The argument file is the exact one prepared above, not a new required script.
-A second ordinary smoke boot resets its diagnostic world, so retain the first
-stopped-world accounting before another run. This is not permission to restart
-or mutate a player's world.
+The compressed file has root compound `data`; `data.Extracted` entries hold
+long `Chunk`/`Amount`, and `DerivationVersion` is the version key. There is no
+persisted `ExtractionCount` key. Preserve the actual file/log/receipt, then
+explicitly remove only this verified owned diagnostic world. Another boot resets
+it, so complete accounting first. This is not permission to restart or mutate a
+player's world.

@@ -1,5 +1,34 @@
 # Current T0 rework validation
 
+## A01 focused PC red/green and reviewed retention integration
+
+Exact pre-fix `4f1b30b` completes `writeCheckClasspath` in51.625 seconds and
+`javac`, both exit0. `VerifyExtractor` exits1 with exactly six source safeguards
+failing; this is not a Level counterexample. Stdout SHA-256:
+`99b1f29f76cf929dfc2ff188a3a071a7f9ea537b25be277f6f336256d5bbab59`;
+receipt: `214c5aeee9daf1ab42987c08e97308b7791798260d7db7673a6be7d2e95e4d20`.
+
+Exact repaired `c87dbc8` completes classpath preparation in52.027 seconds,
+`javac` and `VerifyExtractor`, all exit0. Its59 checks comprise25 prior,
+24 binary-NBT and10 source checks, with zero failures. Stdout:
+`3b1f159094b8ad649b59bb9dc10445a7f8f5feb14e5f2493d8f96e82a8df47c8`;
+receipt: `c9981281a69c82e27b68d43491ef52fe9d8b80b99c9939bc56d7ee73d731c27a`.
+Separate collection
+`7102a53c4d9563b4b18798d2fd69c78fb3ceff7a053d44f958c57515bd3e6d6b`
+confirms both sources clean, original clone/config/origin intact and0Java at20:58:10Z.
+The failed collector transport does not trigger JVM replay. Only positively
+identified owned orphan17904, with no children, is stopped. A hash-pinned private
+ignored helper, SCP transfer and short non-stdin SSH resolve the observation path
+without changing source or the existing PC workflow.
+
+Separately merge reviewed retention `444409f` without changing its code/check
+bytes. Its37 PS/43 Windows Git-MSYS contracts remain synthetic, not natural-stop
+or saved-world evidence. Correct its sole handoff error: `VeinData.get` uses the
+supplied ServerLevel storage, so A01 must read Luna's dimension data, not the
+Overworld root. Actual keys are `data.Extracted` (`Chunk`/`Amount` longs) and
+`DerivationVersion`; no persisted `ExtractionCount` key exists. Native red/green,
+real saved totals and the integrated build still require their explicit windows.
+
 ## Reviewed optional-pack staging and reload-source integration
 
 Merge original fixture/staging history through `0fec76d` without changing its

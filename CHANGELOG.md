@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate reviewed diagnostic retention and real A01 focused proof.**
+  Preserve `444409f` under ADR-0155 and correct its handoff to Luna's actual
+  dimension SavedData path. A01 frozen red compiles then fails six source
+  safeguards; repairedc87 compiles and passes59 checks, including24 binary-NBT
+  assertions. Preserve observer failures separately without JVM replay.
+  Genuine loaded recovery, saved accounting and final deployment remain pending.
 - **Integrate the reviewed native reload fixture and path staging.** Preserve
   the original fixture and separate ancestor/provider/Home corrections through
   `0fec76d`. Independent review closes the publication/wake and path findings;
@@ -101,6 +107,14 @@ entries below reference those records by id.
   human acceptance, T0 freeze or T1 activation is implied.
   A01's separate Crude Extractor idle-export gap remains open under another child;
   process/native-fluid proofs do not close it by analogy.
+- **Retain one diagnostic smoke world only on explicit opt-in.** Coordinator-approved
+  ADR-0155 adds `SMOKE_KEEP_WORLD=1` to both existing boot twins; absent/0 still
+  cleans up and every other value fails before preparation/mutation. Keep path,
+  handshake, heap/budget and process-exit checks; announce retained/absent state,
+  never a clean-shutdown or persistence pass. PS cleanup errors now report/fail
+  explicitly. The37 PS and43 Windows Git/MSYS no-JVM contracts pass; native/Java
+  remain NOT_RUN. A01 must observe harness0 plus natural server0 before reading
+  the real saved data and explicitly cleaning the retained world.
 - **Preserve the FileSystem provider's Home anchor in smoke paths.** The divergent-cwd
   fixture reproduces ae054's missing Home case without writing to the real HOME.
   Resolve only `~` through the provider, then retain the logical tail for ancestor
