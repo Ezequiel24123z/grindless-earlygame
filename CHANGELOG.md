@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify bounded process-generation revalidation (ADR-0153).** Frozenfd9077e
+  passes common/Forge compilation, five focused suites/938 assertions and full build.
+  The opaque identity is published with the complete graph; the server pre-subscription
+  hook preserves explicit hold, paid-work ownership and single work per tick. Current
+  retired-I/O/provider/tick regressions pass; completed-fluid recovery reuses its
+  existing oracles with one rebuild. No NBT, recipe/balance or loader-type changes.
+  Preserve the post-build CRLF coordinate-collector failure separately from the
+  successful native commands; a no-JVM inspection verifies the actual JAR/new class
+  without replaying any stage. Source remains clean/detached and zero JVMs remain.
+  The unique native loaded-idle/reload proof belongs to coordinator QA; no deployment,
+  human acceptance, T0 freeze or T1 activation is implied.
+  A01's separate Crude Extractor idle-export gap remains open under another child;
+  process/native-fluid proofs do not close it by analogy.
 - **Reproduce the current A03 generation counterexample before repair.** Frozen3643c6a
   compiles common and the actual `VerifyMachine` suite, then fails seven exact
   assertions: stale rebind/idle cache, withdrawn-row Flux/input/output, paid work and
@@ -33,16 +46,6 @@ entries below reference those records by id.
   pre-subscription check so active caches and idle misses rebind without scans,
   lost paid work, cross-thread callbacks or new persistence. Red/green and native
   evidence remain to execute.
-- **Wire complete active/idle generation revalidation under ADR-0153.** Publish a fresh
-  opaque typed identity inside the complete immutable graph, including equivalent/empty
-  contents. Process machines compare it in the bounded base-server pre-subscription
-  hook and refresh only after change; explicit logistics hold remains held. No cross-thread
-  callback, world scan, saved epoch or reset of the existing once-per-tick work guard.
-  The coordinator accepted the policy at2b9218b; JVM/regression/build/native
-  qualification of this implementation remain pending. Focused regressions cover typed
-  identity, retired I/O, retained work/current provider and same-tick queued work; reuse
-  completed-fluid recovery with a rebuild rather than duplicate its oracles.
-  There is no new NBT, paid-work identity, recipe/balance or T0 acceptance.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,
