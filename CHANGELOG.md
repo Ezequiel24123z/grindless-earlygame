@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Recover the causal cache-native red without replay.** The run reaches real
+  ingot publication then only the intended missed-wake failure and shuts down0.
+  Correct the observer's jar-name assumption read-only, preserving original and
+  recovered receipts. Start the exact559 full build/playable package once; no
+  build, selected gate or repaired-native pass is claimed before its completion.
 - **Reuse actual Linux execution of the final batch gate.** Exact087 verify
   compiles/runs the new Java hook and full behavior suite at common/forge trees
   identical to green559. Preserve raw artifact hashes and distinguish that proof

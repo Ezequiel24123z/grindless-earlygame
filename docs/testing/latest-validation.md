@@ -1,5 +1,26 @@
 # Current T0 rework validation
 
+## Recovered cache-native red and started integrated build
+
+The exact444 PC run is now classified `ExpectedNativeRedRecoveredWithoutReplay`:
+preparation exits0 in1m23, initial idle and actual ingot publication precede only
+the expected idle-wake failure; wake/batch/final markers remain absent. Harness
+exit1, natural server exit0 and0Java are confirmed. The auxiliary observer alone
+failed because it assumed a versioned jar name; `forge/build.gradle` actually
+stages `grindless.jar`. Read-only recovery confirms1924560 bytes and SHA-256
+`bf43947364bbb3f180c2f7cb728f460f98eea45bc652d4493e0ae682fda7b984`,
+without `ProcessLookup$Generation.class`. Separate recovered receipt:
+`2728b1c4780265a21b874c74a6d1237a5e6b7d849242a14a45dbe76b1891950d`.
+The original receipt is retained; copied raw logs keep matching hashes. No JVM
+stage is repeated to fix jar-name observation.
+
+GREEN is materialized detached/clean at exact559 with the original clone70901
+unchanged. After the21:44:53Z guard0Java/9.855 GiB physical/33.888 GiB commit/
+163.236 GiB work free, the owner starts full build plus playable package once.
+The21:49:12Z snapshot records Build `Started`, no exit/error yet and owned Java
+PIDs19840/2760. Inspect, selected Java gate and native green have not yet run
+at that snapshot; build initiation is not a PASS.
+
 ## Exact087 Linux gate and application-tree proof reuse
 
 [CI39328673227](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39328673227)
