@@ -343,6 +343,15 @@ Because it is derived rather than stored, no world data is generated up front, t
 always produces the same map, and the system costs nothing in worlds where the player never
 builds an extractor.
 
+**Superflat uses the same virtual underground.** Resource deposits are chunk data,
+not ore/rock blocks hidden in terrain: flat Overworld generation must retain them even
+when no physical ore or stone layer exists. The player's extraction infrastructure,
+including the intended multiblocks, accesses those deposits. Do not add visible ore,
+landscaped starter quarries, ponds, trees or a food/refuge system to conceal resource
+access gaps. Existing seeded mineral identity and extraction history must survive updates.
+The current vein/extractor foundation is implemented; complete basic-rock/resource
+coverage and the proposed T0 generating multiblock are not implied by that fact.
+
 Each primary material also has a deterministic **trace secondary**: the next eligible mineable
 material in the runtime registry's stable name order. It is a property of the material's generated
 process route rather than stack NBT, so raw ore from different chunks remains freely stackable.
@@ -2298,6 +2307,7 @@ is preserved and integration/release gates still control acceptance.
 | 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; approved Quern A game import and minimal native-loop design recorded under ADR-0148, implementation/mix pending. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review. Jade source-licence metadata is corrected without changing historical profiles; final composition/use review, native client, Superflat/product QA and the playable release remain open |
 | 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by fast-forward in the clean isolated Sol session; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts; all three hosted verify jobs pass, native shards still running. Product gaps remain and historical proofs are reused, not replayed |
 | 42 | **Restricted playable profile** | ADR-0149 selects an additive seven-pin core/quest/performance profile with explicit public overrides; existing expanded/preparation profiles stay intact. Implementation, integrated package and actual import/client proof remain pending |
+| 43 | **Superflat virtual resources** | ADR-0150 preserves chunk-data deposits independently of physical terrain; extraction multiblocks and deliberate renewable basic-resource access belong in flat worlds too. No staged spawn/food system is selected; detailed T0 generator and quest-shop economy remain design work |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

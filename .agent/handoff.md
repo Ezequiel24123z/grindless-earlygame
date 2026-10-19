@@ -17,7 +17,7 @@ smoke shards per run were still in progress. This is not a full CI pass or new n
 Blueprint proof. No old automation/session/worker is resumed and no new PR is needed.
 
 Current next: implement the already-authorized minimal Quern loop, additive restricted
-playable profile (ADR-0149), and the narrow persisted Superflat identity/access seam.
+playable profile (ADR-0149), and deliberate Superflat virtual-resource access (ADR-0150).
 The two provenance investigations below are complete, not another intake requirement.
 Native art/JEI, runtime one/eight-machine listening, configured pack import/startup,
 forward-save contract and RC publication remain open. T1 and functional ports remain held.
@@ -56,12 +56,33 @@ approval. The parent stays read-only for JVM/cache inputs; the worker reports re
 and exits when done. Parent .agent files and unrelated
 pack/Superflat/sustainability/gameplay work remain outside its editing scope.
 
+The worker's later launch guard blocked at1683.8MiB free commit, despite3135MiB
+physical and zero JVM. No compilation began; limits were not lowered. Continue
+source/static work, then measure once when ready, rather than retry/poll. The owner
+has not authorized closing unrelated processes/sessions or OS/pagefile/cache changes.
+CandidateA import and pause/mute handling are worker-reported work, not integrated
+or compiled evidence on this coordinator branch.
+
 ADR-0149 selects a new additive seven-dependency playable profile: existing four core/
 quest pins plus ModernFix/FerriteCore/Embeddium. Preserve both old profiles and their
 pins; no account/licence investigation is reopened. A bounded pack worker may edit
 the existing resolver below its application-build boundary, paired build tools,
 profile/override data and focused pack checks. No JVM/cache mutation until the Quern
 worker releases its reservation; no actual RC, client pass or preset is implied.
+
+The restricted pack implementation is assigned to isolated Sol6.1 Max session
+`7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8`, based on435f3d0. It may implement/static-check
+its disjoint pack files now, but must wait for transfer of the shared JVM reservation
+before Gradle. Neither child publishes or edits parent .agent state.
+
+**Latest owner world clarification supersedes earlier spawn suggestions.** Do not
+implement staged food, shelter, tree/pond/quarry terrain. Flat worlds must retain
+virtual chunk rock/resource deposits extractable through infrastructure/multiblocks,
+without physical ore generation. Existing seed/coordinate veins and extractor reads
+already avoid terrain scans; basic-resource coverage and actual new multiblocks are
+still separate work. The proposed special T0 generator and quest-reward currency/shop
+are design leads, not implemented or a selected backend replacement. Preserve existing
+survey/vein/save identities and do not confuse shop purchases with renewable closure.
 
 Receipt resource inspection found about5.89GiB free on the system volume and188.13GiB
 on the work volume, with no Java process observed. Preserve old data and use the selected

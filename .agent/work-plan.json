@@ -54,7 +54,7 @@
     "mode": "new_isolated_worktree_not_chat_fork_or_main_checkout",
     "original_product_tasks": 27,
     "dependency_and_completion_references": 47,
-    "active_product_workers": 1,
+    "active_product_workers": 2,
     "active_read_only_research_workers": 0,
     "active_jvms": 0,
     "event_subscription_paused": true,
@@ -146,7 +146,7 @@
       "scope": "Exclusive shared-Gradle reservation granted to the isolated Quern worker for minimal common/Forge compilation, classpath and focused checks only. Refresh resource guards before launch; no native server/client/codec/generation or historical-suite grant",
       "compile_reservation": {
         "session_id": "d3e8ce5e-85a2-4676-96fb-2847af9c4fa8",
-        "status": "reserved_refresh_preflight_before_launch",
+        "status": "reserved_worker_guard_blocked_no_jvm_started",
         "minimum_physical_free_mib": 1536,
         "minimum_commit_free_mib": 2048,
         "minimum_work_disk_free_gib": 3,
@@ -154,6 +154,13 @@
         "observed_commit_free_mib": 2569.7,
         "observed_work_disk_free_gib": 188.13,
         "observed_jvms": 0,
+        "latest_worker_guard": {
+          "physical_free_mib": 3135,
+          "commit_free_mib": 1683.8,
+          "jvms": 0,
+          "result": "Blocked before launch; source/static work continues and a single fresh check is allowed when source is ready",
+          "not_authorized": "No lowering guards, OS/pagefile changes, cache deletion or closing unrelated processes/sessions"
+        },
         "limits": "Gradle768MiB/CPU2/one-worker/no-parallel/no-daemon/SerialGC; helpers256MiB; process-local selected external home",
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
@@ -378,7 +385,9 @@
     {
       "id": "restricted-playable-pack",
       "task_id": "playable-pack",
-      "status": "prepared_for_isolated_implementation",
+      "status": "implementation_dispatched_isolated",
+      "session_id": "7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8",
+      "source_commit": "435f3d0d08eb9bbc3a14a88db581ddd4ca1f99b3",
       "decision": "ADR-0149",
       "owned_files": ["root build.gradle pack resolver below application-build boundary", "pack profiles/public-override data and pack guidance", "paired build-modpack scripts", "focused pack checks and related implementation docs"],
       "acceptance": "Additive seven-pin playable profile, unchanged historical selectors/pins, explicit safe public-override whitelist/provenance and targeted selector/archive rejection cases",
@@ -1191,7 +1200,7 @@
     {
       "id": "superflat-t0", "title": "Establishing deliberate Superflat T0 access", "status": "in_progress", "depends_on": ["playable-release-policy", "production-inventory", "sustainability-model"],
       "owner": "Astra preset/product decision; bounded Sol implementation and QA",
-      "next_action": "Trace entry/site gaps, choose supported versioned preset and implement only missing deliberate access/profile bindings",
+      "next_action": "ADR0150 owner clarification: preserve virtual chunk rock/resource deposits in Superflat without physical ore or staged food/pond/tree/quarry terrain. Reuse existing seeded veins; settle the proposed T0 source multiblock and quest-currency shop against actual renewable/bootstrap/claim contracts before implementation.",
       "acceptance": "Official preset/configuration versioned and discoverable, every mandatory input deliberately accessible, Overworld preserved, changed assumptions statically/model checked plus representative new runtime behavior where necessary"
     },
     {

@@ -161,6 +161,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0147](#adr-0147--transfer-clean-session-coordination-to-sol-61-without-replaying-evidence) | Transfer clean-session coordination to Sol 6.1 without replaying evidence | Accepted |
 | [0148](#adr-0148--integrate-the-approved-quern-sound-with-one-native-client-loop) | Integrate the approved Quern sound with one native client loop | Accepted |
 | [0149](#adr-0149--add-a-restricted-playable-profile-with-explicit-public-overrides) | Add a restricted playable profile with explicit public overrides | Accepted |
+| [0150](#adr-0150--superflat-retains-virtual-deposits-without-staging-the-terrain) | Superflat retains virtual deposits without staging the terrain | Accepted |
 
 ---
 
@@ -7053,3 +7054,43 @@ installation/client QA before it can become the playable RC.
 **Rejected alternatives.** Mod-count expansion, changing historical profiles, treating
 unconfigured teleportation/storage/loading as neutral QoL, forcing BetterQB, switching
 publisher identity, guessing config keys and copying an arbitrary overrides directory.
+
+---
+
+## ADR-0150 — Superflat retains virtual deposits without staging the terrain
+
+**Status.** Accepted owner clarification,2026-10-19. The owner explicitly requires
+virtual underground rock/resource deposits in Superflat, extractable by multiblocks.
+
+**Decision.** Superflat terrain must retain the same concept of chunk-local deposits
+as ordinary worlds, without physically placing ore or rock blocks beneath its surface.
+Use the existing seeded Resource Genesis foundation; terrain generation is not the
+deposit authority. Preserve survey identity, richness, reserves, extraction history
+and versioned derivation across updates. Adding basic resource families must not
+silently remap existing surveyed mineral chunks.
+
+The coordinator's proposed landscaped spawn, pond, exposed quarry, planted trees and
+food/refuge provision were not selected and will not be implemented as a solution to
+Superflat resource access. Ordinary mobs are not the reported problem. The actual
+product gap is deliberate renewable acquisition of necessary materials, including
+sand/clay and other missing basic inputs, through the game's production systems.
+
+**Existing implementation boundary.** `VeinGenerator` derives the material/richness/
+reserve from seed and chunk coordinates. The current extractors use that data and
+`VeinData`, not physical ore scans; `PlanetCatalogue.veins` does not exclude flat
+Overworld generation. This source evidence supports reuse, not a new native flat
+execution or a claim that all basic rocks and multiblock routes are implemented.
+Do not change that established mechanism solely to adopt this clarification.
+
+The owner proposed a special T0 generating multiblock and a quest-reward currency/
+shop for basic or intermediate materials. Preserve both as concrete product-design
+leads, not delivered content or a forced quest-backend switch. Detailed machine/site/
+cost/renewability and currency/catalogue/bootstrap rules remain to be settled against
+the existing source, custody and quest authorities. The requirement for extraction
+multiblocks does not open unrelated held T1+ ports/framework work.
+
+**Proof.** Reuse seed/derivation, persistence, extraction and processing contracts
+within their existing assumptions. Verify the actual flat-world binding and each new
+source/resource behavior only when changed or unproved. A shop with finite quest
+rewards is not itself proof of unlimited automated supply. No native test, new
+terrain, machine, currency or manual playthrough is supplied by this decision.

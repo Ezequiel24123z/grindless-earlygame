@@ -22,7 +22,9 @@ revision8/PA-0007 task graph now control the queue.
 
 Next: retain verified storage/provenance and integrate the approved minimal Quern loop
 (ADR-0148), additive restricted playable profile/public-override contract (ADR-0149),
-and deliberate flat-world access. Both narrow provenance investigations are complete;
+and deliberate flat-world resource access. ADR-0150 requires virtual chunk deposits,
+not landscaped spawn resources/food or physical ore generation. The proposed T0
+generating multiblock and quest shop remain scoped design leads. Both provenance investigations are complete;
 do not reopen account verification. Questbook product QA remains on the Heracles
 authority. The source-pixel art batch is already installed; native rendering remains open.
 Old discovery workers are finished, not a resumable pool. No storage move or asset

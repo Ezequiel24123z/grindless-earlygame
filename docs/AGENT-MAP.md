@@ -38,6 +38,9 @@ are new gaps, not permission to rewrite proven engines or start ports.
   contract; preserve both historical profiles and the single dependency-pin authority.
 - Existing source/recipe/world/sustainability authorities below — trace every mandatory
   initial and recurrent resource before selecting/versioning the official flat preset.
+  ADR-0150 keeps deposits virtual in Superflat: `vein/VeinGenerator`, `VeinData`,
+  `PlanetCatalogue.veins` and extractor reads are the existing foundation, not terrain
+  ore placement. Preserve seeded/surveyed identity; no staged spawn-food/landscaping.
 - Existing tool environment/cache/output controls — prefer supported redirection after
   ownership and absolute-path audit; do not edit app session databases or move worktrees
   blindly. Private storage paths belong in operational evidence, not public pack data.

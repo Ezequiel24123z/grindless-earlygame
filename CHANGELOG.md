@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve virtual deposits in Superflat without staging its terrain (ADR-0150).**
+  Record the owner's requirement for chunk rock/resource data and extraction
+  multiblocks, independent of physical ore layers. Reuse seeded veins and saved
+  extraction identity; do not implement the coordinator's proposed food/pond/tree/
+  quarry setup. Basic-resource coverage, the proposed special T0 generator and
+  quest-reward shop economy remain explicit design work, not delivered content.
 - **Select a restricted additive playable pack profile (ADR-0149).** Reuse the four
   existing runtime/quest pins and three performance pins, preserve historical profiles
   and require explicit public override inputs/provenance. Do not silently enable the
