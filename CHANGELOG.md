@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prepare a bounded physical T0 guide-object batch (ADR-0146/0152).** Inspect actual
+  native/8x pixels and preserve all nine reviewed sprites; all six direct T0 materials
+  already belong to that protected batch. The coordinator authorizes only the Atlas,
+  Quest Book and Field Guide, retaining cyan/gold/teal semantics while adding shared
+  paper/binding, thickness and functional marks. Add three-PNG-only generation and
+  an automatically discovered JDK-only structural/mutation/protected-byte check.
+  Source is prepared, not generated or JDK-qualified; PC reservation, deterministic
+  output and after-pixel review remain next. No native/client or art/T0 acceptance.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

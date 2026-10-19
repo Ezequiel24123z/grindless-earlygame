@@ -58,12 +58,18 @@ public final class GenerateAssets {
             Palette.of("platinum", 0xBFC9D9));
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 1) {
-            System.err.println("usage: GenerateAssets <repository-root>");
+        if (args.length < 1 || args.length > 2
+                || args.length == 2 && !"--t0-guides-only".equals(args[1])) {
+            System.err.println("usage: GenerateAssets <repository-root> [--t0-guides-only]");
             System.exit(2);
         }
         File root = new File(args[0]);
         File items = resourceDir(root, "textures/item");
+        if (args.length == 2) {
+            int written = writeGuideItems(items);
+            System.out.println("Generated " + written + " T0 guide sprites only under " + items);
+            return;
+        }
         File blocks = resourceDir(root, "textures/block");
         File sounds = new File(root, "tools/audio");
 
@@ -118,12 +124,7 @@ public final class GenerateAssets {
                 FormTextures.electronicSilicon(Palette.of("electronic_silicon", 0xC5D8EA)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
-        written += write(items, "process_atlas",
-                FormTextures.atlas(Palette.of("process_atlas", 0x26C6DA)));
-        written += write(items, "quest_book",
-                FormTextures.questBook(Palette.of("quest_book", 0xC9A227)));
-        written += write(items, "field_guide",
-                FormTextures.fieldGuide(Palette.of("field_guide", 0x26A69A)));
+        written += writeGuideItems(items);
         written += write(items, "flux_conduit",
                 FormTextures.conduit(Palette.of("flux_conduit", 0x18FFFF)));
         written += write(items, "plate_die", FormTextures.die(Palette.of("plate_die", 0xB0BEC5)));
@@ -239,6 +240,15 @@ public final class GenerateAssets {
         writeProvenance(root, written);
         System.out.println("Generated " + written + " assets under "
                 + root.toPath().resolve("common/src/main/resources/assets/grindless"));
+    }
+
+    private static int writeGuideItems(File items) throws IOException {
+        return write(items, "process_atlas",
+                FormTextures.atlas(Palette.of("process_atlas", 0x26C6DA)))
+                + write(items, "quest_book",
+                FormTextures.questBook(Palette.of("quest_book", 0xC9A227)))
+                + write(items, "field_guide",
+                FormTextures.fieldGuide(Palette.of("field_guide", 0x26A69A)));
     }
 
     private static Palette paletteFor(String material) {
