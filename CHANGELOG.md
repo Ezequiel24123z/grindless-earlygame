@@ -28,6 +28,8 @@ entries below reference those records by id.
   graph before reusing a cached row. Keep the existing paid-work identity and save
   format; no independent epoch is introduced. Dormant-machine wakeup and JVM
   qualification remain pending, so this partial guard is not the completed A03 fix.
+  Preserve the already separate `WorkRecipe`/`Progress` when live selection disappears;
+  another selected ID still resets work under the existing rule.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

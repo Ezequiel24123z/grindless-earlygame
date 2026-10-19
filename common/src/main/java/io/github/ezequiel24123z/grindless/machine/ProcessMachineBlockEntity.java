@@ -245,9 +245,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         }
         ProcessRecipe recipe = recipe(sources);
         if (recipe == null) {
-            progress = 0.0;
             cachedRecipeId = "";
-            workRecipeId = "";
             publishStatus(null, hasPartialInput(), false, false, false, ConditionReport.OPTIMAL);
             updateSubscriptions();
             return;

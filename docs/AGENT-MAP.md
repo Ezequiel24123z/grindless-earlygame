@@ -308,7 +308,9 @@ idle/active preview in addition to the ordinary controller models.
 `Recipe` selection. An incomplete selection may clear when inputs become invalid, but a
 completed batch retains its selected recipe while primary/secondary fluids are unavailable.
 Legacy saves derive the owner from `Recipe`. A different recipe resets work; quantity changes,
-starvation and structure repair do not. Completed input waits poll without drawing more Flux;
+starvation and structure repair do not. A missing live selection, including a retired generated
+row, suspends its paid `WorkRecipe` rather than clearing or transferring that owner.
+Completed input waits poll without drawing more Flux;
 missing fluid is `STARVED`, not output `BLOCKED`. No new persistence keys are introduced.
 Outputs are reserved before any ingredient is consumed. Fluid arrival wakes work; pending output
 has its own bounded export subscription, including after a neighboring inventory is emptied.

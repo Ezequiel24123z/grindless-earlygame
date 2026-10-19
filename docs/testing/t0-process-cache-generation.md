@@ -9,6 +9,9 @@ not a repeat of the completed [T0 audit](../T0-AUDIT.md).
 **Active-cache guard implemented; wakeup and JVM execution pending.** Recipe selection
 now invalidates the cache against the identity of the immutable list already published
 inside `ProcessLookup.GRAPH`. No independent epoch or publication field is introduced.
+An empty live selection no longer clears its separate paid `WorkRecipe`/`Progress`;
+the existing selection rule still resets work when a different recipe ID takes ownership.
+This retains the documented paid-work separation without a new save key or identity.
 The coordinator is selecting the generation-wakeup seam under reserved ADR-0153.
 No native reproduction, build, deployment or human acceptance is claimed.
 
