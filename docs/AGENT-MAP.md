@@ -561,16 +561,19 @@ version/API-verified, never a fictional or mandatory core integration.
   not leak one scenario's budget to the next or the caller (ADR-0139). CI uses these runners.
 - `tools/run-smokes-batch.ps1` / `.sh` — the ADR-0111 development shortcut aggregates
   commands/expected markers in manifest order and invokes the existing native smoke boot
-  once. Keep `foreign-providers`, `states`, `recipe-cache-reload` and any selected
-  `<name>-optional` path out of that world; refuse isolated-only requests and announce
-  mixed exclusions (ADR-0154). Clear both inherited pack selections for the boot.
+  once. Keep `foreign-providers`, `states`, `recipe-cache-reload`,
+  `extractor-backpressure` and any selected `<name>-optional` path out of that world;
+  refuse isolated-only requests and announce mixed exclusions (ADR-0154/0155).
+  A01's post-stop VeinData oracle requires exactly two worked chunks/total two,
+  independent of optional-pack discovery. Clear both inherited pack selections for the boot.
   Do not substitute isolated loops, add a second server runner, or apply per-scenario
   `.timeout` metadata to this shared batch. Existing boot owns handshake, shutdown,
   cleanup and the batch-wide environment budgets. Resolve relative Bash roots with
   `CDPATH` neutralized only for `cd`; retain the caller's environment and visible errors.
-  `tools/checks/Test-SmokesBatch.ps1`
-  / `.sh` exercise selection, aggregation, dispatch and failures with fake boots,
-  not Forge or datapack reload acceptance.
+  `tools/checks/Test-SmokesBatch.ps1` / `.sh` exercise selection, aggregation,
+  dispatch and failures with fake boots. `VerifySmokeHarness` invokes the platform
+  twin once, alongside its existing optional-pack check, not a new CI entry.
+  This is not Forge, VeinData or datapack reload acceptance.
 - `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;
   opt into full smokes explicitly. Per-stage results live under `build/validation/<run-id>/`.
   See [the testing strategy](testing/test-strategy.md).

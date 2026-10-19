@@ -181,6 +181,18 @@ public final class VerifySmokeHarness {
             Path focusedOutput = root.resolve(name + ".log");
             passed &= check(run(focused, focusedOutput) == 0, name + " contracts", focusedOutput);
         }
+        List<String> batchChecks = new ArrayList<>(List.of(executable));
+        if (!bash) {
+            batchChecks.addAll(List.of("-NoProfile", "-ExecutionPolicy", "Bypass", "-File"));
+        }
+        batchChecks.add(Path.of("tools", "checks", "Test-SmokesBatch" + suffix).toAbsolutePath().toString());
+        if (!bash) {
+            batchChecks.add("-RepositoryRoot");
+        }
+        batchChecks.add(Path.of("").toAbsolutePath().toString());
+        Path batchOutput = root.resolve("shared-batch.log");
+        passed &= check(run(batchChecks, batchOutput) == 0,
+                "shared-world batch selection, fresh-world exclusions and one-boot dispatch", batchOutput);
         return passed;
     }
 

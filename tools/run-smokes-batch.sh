@@ -107,7 +107,10 @@ SKIPPED=()
 for name in "${SELECTED[@]}"; do
   normalized="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
   isolated="no"
-  case "$normalized" in foreign-providers|states|recipe-cache-reload) isolated="yes" ;; esac
+  # A01's post-stop VeinData oracle requires exactly two worked chunks/total two in a fresh world.
+  case "$normalized" in
+    foreign-providers|states|recipe-cache-reload|extractor-backpressure) isolated="yes" ;;
+  esac
   # Even an invalid optional-pack path must never be treated as an ordinary shared-world case.
   if [ "$isolated" = "yes" ] || [ -e "$SMOKE_DIR/$name-optional" ] ||
       [ -L "$SMOKE_DIR/$name-optional" ]; then

@@ -35,9 +35,9 @@ $onlyNames = @($Only | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Tr
 $selected = if ($onlyNames.Count -gt 0) { @($all | Where-Object { $onlyNames -contains $_ }) } else { $all }
 if ($selected.Count -eq 0) { throw 'No named smoke scenarios were found.' }
 
-# These scenarios need a pack enabled while a fresh world is created. Enabling both in one shared
-# world would hide the provider and function-isolation guarantees they are meant to prove.
-$isolated = @('foreign-providers', 'states', 'recipe-cache-reload')
+# These scenarios require a fresh world. Creation-time packs must not leak across cases;
+# extractor-backpressure's post-stop VeinData oracle requires exactly two worked chunks/total two.
+$isolated = @('foreign-providers', 'states', 'recipe-cache-reload', 'extractor-backpressure')
 $skipped = @($selected | Where-Object {
     $isolated -contains $_ -or (Test-Path -LiteralPath (Join-Path $smokeDir "$_-optional"))
 })

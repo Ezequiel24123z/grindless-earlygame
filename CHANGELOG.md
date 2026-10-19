@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Combine the final batch adapter with retained-world checks.** Preserve the
+  42-case/975-assertion087c1a6 PS/SH gate and fixed A01 fresh-world exclusion.
+  Merge the existing Java optional/retention loop with one batch invocation,
+  without duplicating optional checks or adding a CI step. Runtime app/build/
+  boot inputs remain byte-identical to the pinned855 baseline.
 - **Pin runtime inputs across the final tooling adapter.** Record855a1ed
   app/build/boot identities before the ready087c1a6 review/merge. Assign the green
   build/package source explicitly afterward and check the changed Java hook;
@@ -44,6 +49,13 @@ entries below reference those records by id.
   safeguards; repairedc87 compiles and passes59 checks, including24 binary-NBT
   assertions. Preserve observer failures separately without JVM replay.
   Genuine loaded recovery, saved accounting and final deployment remain pending.
+- **Complete integrated batch isolation and its existing tooling gate.**
+  Exclude `extractor-backpressure` in both batch twins even without an optional
+  sibling: its post-stop VeinData oracle requires a fresh two-chunk/total-two world.
+  Cover only/mixed/default-all/all-isolated selection against the integrated PS
+  and SH sources, and invoke the appropriate `Test-SmokesBatch` twin once from
+  `VerifySmokeHarness`, beside the existing optional-pack checks. No scenario/CI
+  registration, shared boot change or Java/native qualification is implied.
 - **Integrate the reviewed native reload fixture and path staging.** Preserve
   the original fixture and separate ancestor/provider/Home corrections through
   `0fec76d`. Independent review closes the publication/wake and path findings;
