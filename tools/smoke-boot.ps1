@@ -19,6 +19,7 @@
 #     SMOKE_EXPECT_TIMEOUT seconds to await scheduled scenario assertions (default 120)
 #     SMOKE_PORT         server port (default 25599)
 #     SMOKE_DATAPACK     a datapack directory to enable in the new world (ADR-0061)
+#     SMOKE_OPTIONAL_DATAPACK one additional directory, staged but explicitly disabled
 #     SMOKE_COMMANDS     a file of console commands to run once the server is up
 #     SMOKE_EXPECT       extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
@@ -36,6 +37,8 @@ $expectTimeout = if ($env:SMOKE_EXPECT_TIMEOUT) { [int]$env:SMOKE_EXPECT_TIMEOUT
 if ($timeout -le 0 -or $expectTimeout -le 0) { throw 'Smoke timeouts must be positive.' }
 $port = if ($env:SMOKE_PORT) { $env:SMOKE_PORT } else { '25599' }
 $datapack = $env:SMOKE_DATAPACK
+$optionalDatapack = $env:SMOKE_OPTIONAL_DATAPACK
+$world = Join-Path $runDir 'smoke-world'
 $commandsFile = $env:SMOKE_COMMANDS
 
 $expect = $env:SMOKE_EXPECT
@@ -72,6 +75,62 @@ function Remove-Tree([string]$path) {
     }
 }
 
+function Resolve-SmokeDatapack([string]$path, [string]$worldPath) {
+    if ([string]::IsNullOrWhiteSpace($path)) { throw 'Invalid smoke datapack: empty path.' }
+    $item = Get-Item -LiteralPath $path -Force -ErrorAction Stop
+    if (-not $item.PSIsContainer -or $item.PSProvider.Name -ne 'FileSystem' -or
+            -not (Test-Path -LiteralPath (Join-Path $item.FullName 'pack.mcmeta') -PathType Leaf)) {
+        throw "Invalid smoke datapack '$path': expected a directory with pack.mcmeta."
+    }
+    if ($item.Name -cnotmatch '^[A-Za-z0-9][A-Za-z0-9._-]*$') {
+        throw "Invalid smoke datapack name '$($item.Name)': use letters, digits, dot, underscore or hyphen."
+    }
+    $source = $item.FullName.TrimEnd('\')
+    $target = [IO.Path]::GetFullPath($worldPath).TrimEnd('\')
+    if ($source.Equals($target, [StringComparison]::OrdinalIgnoreCase) -or
+            $source.StartsWith($target + '\', [StringComparison]::OrdinalIgnoreCase) -or
+            $target.StartsWith($source + '\', [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Invalid smoke datapack '$path': overlaps the disposable smoke world."
+    }
+    $pending = New-Object 'System.Collections.Generic.Stack[string]'
+    $pending.Push("\\?\$source")
+    while ($pending.Count -gt 0) {
+        $entry = $pending.Pop()
+        $attributes = [IO.File]::GetAttributes($entry)
+        if (($attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw "Invalid smoke datapack '$path': reparse points are not supported."
+        }
+        if (($attributes -band [IO.FileAttributes]::Directory) -ne 0) {
+            foreach ($child in [IO.Directory]::GetFileSystemEntries($entry)) { $pending.Push($child) }
+        }
+    }
+    return [pscustomobject]@{ Path = $source; Name = $item.Name }
+}
+
+function Get-SmokePackPlan([string]$primary, [string]$optional, [string]$worldPath) {
+    $main = if ($primary) { [pscustomobject]@{ Path = $primary; Name = (Split-Path $primary -Leaf) } } else { $null }
+    $extra = $null
+    if ($optional) {
+        $extra = Resolve-SmokeDatapack $optional $worldPath
+        if ($primary) {
+            $main = Resolve-SmokeDatapack $primary $worldPath
+            if ($main.Name.Equals($extra.Name, [StringComparison]::OrdinalIgnoreCase)) {
+                throw 'Smoke datapack name collision: primary and optional names must differ, ignoring case.'
+            }
+        }
+    }
+    $properties = ''
+    if ($main) { $properties += "initial-enabled-packs=vanilla,file/$($main.Name)`n" }
+    if ($extra) {
+        if (-not $main) { $properties += "initial-enabled-packs=vanilla`n" }
+        # 1.20.1 auto-adds newly discovered packs unless they are explicitly disabled.
+        $properties += "initial-disabled-packs=file/$($extra.Name)`n"
+    }
+    return [pscustomobject]@{ Primary = $main; Optional = $extra; Properties = $properties }
+}
+
+$packPlan = Get-SmokePackPlan $datapack $optionalDatapack $world
+
 Push-Location $Root
 try {
     & (Join-Path $Root 'gradlew.bat') --no-daemon --console=plain :forge:prepareSmokeServer
@@ -94,14 +153,14 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText((Join-Path $runDir 'eula.txt'), "eula=true`n", $utf8)
 
 $properties = "online-mode=false`nserver-ip=127.0.0.1`nserver-port=$port`nlevel-name=smoke-world`nview-distance=2`nsimulation-distance=2`n"
-$world = Join-Path $runDir 'smoke-world'
 Remove-Tree $world
-if ($datapack) {
-    $packName = Split-Path $datapack -Leaf
-    Copy-Tree $datapack (Join-Path $world "datapacks\$packName")
-    # A new world only enables the packs named here; the others are found but left off.
-    $properties += "initial-enabled-packs=vanilla,file/$packName`n"
+if ($packPlan.Primary) {
+    Copy-Tree $packPlan.Primary.Path (Join-Path $world "datapacks\$($packPlan.Primary.Name)")
 }
+if ($packPlan.Optional) {
+    Copy-Tree $packPlan.Optional.Path (Join-Path $world "datapacks\$($packPlan.Optional.Name)")
+}
+$properties += $packPlan.Properties
 [System.IO.File]::WriteAllText((Join-Path $runDir 'server.properties'), $properties, $utf8)
 [System.IO.File]::WriteAllText($log, '', $utf8)
 

@@ -219,6 +219,7 @@ foreach ($item in $selected) {
     $expectFile = Join-Path $smokeDir "$($item.Name).expect"
     $packNamed = Join-Path $smokeDir "$($item.Name)-pack"
     $packBare = Join-Path $smokeDir $item.Name
+    $optionalPack = Join-Path $smokeDir "$($item.Name)-optional"
 
     $env:SMOKE_COMMANDS = if (Test-Path -LiteralPath $commands) { $commands } else { $null }
     $env:SMOKE_EXPECT_FILE = if (Test-Path -LiteralPath $expectFile) { $expectFile } else { $null }
@@ -233,12 +234,15 @@ foreach ($item in $selected) {
     $env:SMOKE_LOG = Join-Path $runDir "smoke-$($item.Name).log"
 
     $originalExpectTimeout = $env:SMOKE_EXPECT_TIMEOUT
+    $originalOptionalDatapack = $env:SMOKE_OPTIONAL_DATAPACK
     try {
+        $env:SMOKE_OPTIONAL_DATAPACK = if (Test-Path -LiteralPath $optionalPack) { $optionalPack } else { $null }
         if (-not $originalExpectTimeout) { $env:SMOKE_EXPECT_TIMEOUT = $item.ExpectTimeout }
         & powershell -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
         $bootExitCode = $LASTEXITCODE
     } finally {
         $env:SMOKE_EXPECT_TIMEOUT = $originalExpectTimeout
+        $env:SMOKE_OPTIONAL_DATAPACK = $originalOptionalDatapack
     }
     $item.Seconds = ((Get-Date) - $scenarioStart).TotalSeconds
 

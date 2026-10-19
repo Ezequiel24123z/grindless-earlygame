@@ -15,13 +15,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Stage one explicitly disabled optional smoke pack.** Under coordinator-approved
+  ADR-0154, extend both isolated runners with one validated optional directory,
+  1.20.1 `initial-disabled-packs`, portable collision guards and per-scenario
+  environment restoration. Exclude reload/optional scenarios from the PS batch.
+  The focused PS helper/real-fake-dispatch check passes37 cases; SH and the affected
+  Java contracts remain NOT_RUN. Preserve the first test-only command-quoting
+  failure and its corrected rerun. No native run, CI step or scenario registration.
 - **Author one pending native idle-cache reload regression (ADR-0153).** A controlled
   base/optional-ingot datapack fixture observes an already loaded Pulverizer miss,
   real reload wakeup, one conserved gravel-to-sand batch and no extra paid work.
   Full finite buffers prevent donor callbacks from masking the initial wake.
-  Authored offline only: the existing runner cannot stage a second disabled pack;
-  its minimal extension is now coordinator-approved but not implemented/qualified.
-  No application/shared-harness edit, manifest registration or native pass is claimed.
+  Authored offline only; the original single-pack limitation is closed by the
+  separately authorized staging extension above, not by a native qualification.
+  No application edit, manifest registration or native pass is claimed.
 - **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
   passes nine real RPCs, an11-second package build, owned update, inspection and two
   idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM

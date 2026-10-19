@@ -448,8 +448,15 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/smoke/recipe-cache-reload/` and `recipe-cache-reload-optional/` author one
   ADR-0153 idle-miss/reload boundary with real tag predicates, immutable setup,
   exact batch/FU accounting and a tick-rate bound. Read its `README.txt` first:
-  native qualification is NOT_RUN and stock runners cannot stage the disabled
-  sibling yet. Do not register it in `scenarios.txt`, invent a staging pass or
+  native qualification is NOT_RUN. The paired runners now stage one
+  `SMOKE_OPTIONAL_DATAPACK` explicitly in `initial-disabled-packs`, validate
+  optional-mode paths/basenames and restore its environment per scenario.
+  PS batch excludes reload/optional cases from its shared world.
+  `verify-optional-datapack.ps1` / `.sh`, invoked by `VerifySmokeHarness`, exercise
+  the real helper/dispatch contract without a JVM/server; PS passes37, SH remains
+  NOT_RUN. The full-buffer no-callback guard in `VerifyEnergy` is authored, not
+  executed under the current JVM reservation.
+  Do not register the native fixture in `scenarios.txt`, invent a native pass or
   let donor energy/inventory/neighbor mutation substitute for reload wakeup.
 
 - Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`

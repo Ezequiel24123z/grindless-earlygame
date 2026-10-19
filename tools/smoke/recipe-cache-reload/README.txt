@@ -74,42 +74,63 @@ The unused second-batch energy is intentional: an extra charge cannot hide
 behind exhaustion. All stock/energy are explicit diagnostic setup, not a
 Survival bootstrap, renewable-source claim or changed recipe balance.
 
-Concrete harness limit and minimal proposed integration
--------------------------------------------------------
-At the source parent, smoke-boot.ps1 and .sh accept ONE SMOKE_DATAPACK, copy it
-and enable it in initial-enabled-packs. There is no hook for staging a second
-disabled pack. Nested directories inside a datapack are not another world pack.
-An enable command cannot discover a pack that has never been copied.
-Therefore this fixture is deliberately NOT runnable through stock run-smokes
-yet, and it must not be registered or called a passing native regression.
+Minimal authorized harness integration
+-------------------------------------
+At the source parent, the runner could copy only ONE initially enabled pack.
+Fixture checkpoint 5bc4543bdf55754c12ade197bc67fbc876097b29 preserved that real
+limitation. The coordinator then authorized the narrow extension under ADR-0154
+(authored in the parent worktree; integrate that decision with this continuation).
 
-Reported before any shared-runner change and subsequently authorized by the
-coordinator under forthcoming ADR-0154; implementation is a separate checkpoint:
-  1. Optionally accept ONE SMOKE_OPTIONAL_DATAPACK in both smoke-boot twins.
-  2. Copy it alongside SMOKE_DATAPACK and explicitly list it in initial-disabled-
-     packs, never initial-enabled-packs. Keep normal single-pack behavior, handshake, cleanup, heap and
-     timeout semantics unchanged. Refuse ambiguous/colliding pack basenames.
-  3. For eventual manifest use, run-smokes twins may discover
-     tools/smoke/<name>-optional and scope/restore the new setting.
-This approved proposal is not yet an implemented environment variable.
-Shared runner code, CI and scenarios.txt are untouched at this fixture checkpoint.
-No watcher, RCON, arbitrary shell hook, extra mod or new test framework is needed.
+Both smoke-boot twins now optionally accept ONE SMOKE_OPTIONAL_DATAPACK.
+They preflight its directory/metadata, portable basename, reparse/symlink-free
+tree and separation from the disposable world before Gradle/world replacement.
+When present, also validate the primary; reject case-insensitive basename
+collisions. Existing no-optional behavior is preserved. Copy the sibling next
+to the primary and explicitly write initial-disabled-packs=file/<optional>.
+Omission from initial-enabled-packs alone is NOT sufficient on 1.20.1.
+
+Both isolated run-smokes twins discover tools/smoke/<name>-optional and scope
+the new environment setting per scenario; the caller is preserved on success
+and failure. The PS batch excludes recipe-cache-reload and every scenario with
+an optional sibling, announces mixed exclusions and rejects isolated-only
+selection. Its single boot clears/restores inherited optional state. There is
+no run-smokes-batch.sh at the received source; another coordinator-owned child
+is authoring that separate GREEN twin, not this fixture. Do not mistake Windows
+Git Bash for a Linux run. CI and scenarios.txt remain untouched.
+No watcher, RCON, arbitrary shell hook, extra mod or new framework is introduced.
+
+Verified 1.20.1 source semantics (reference only, no imported code):
+  https://github.com/themodderg/The-Digimod/tree/744e72e970ae33a77acd241221e917f6f3d5258a
+  build.gradle selects net.neoforged:forge:1.20.1-47.1.79.
+  Source root: build/tmp/.cache/expanded/zip_51348f0b239ab79c430d7ade20fd8068/
+  net/minecraft/server/dedicated/DedicatedServerProperties.java:
+    constructor/getDatapackConfig read BOTH initial-enabled/disabled-packs.
+  net/minecraft/server/MinecraftServer.java: configurePackRepository excludes
+    explicitly disabled IDs from its new-pack automatic-admission branch.
+  net/minecraft/server/packs/repository/ServerPacksSource.java uses WORLD for
+    the world folder, and PackSource.java sets WORLD.shouldAddAutomatically=true.
+  net/minecraft/server/commands/DataPackCommand.java: enable last appends to the
+    selected list and calls ReloadCommand.reloadPacks; permission level is 2.
+This pinned public 1.20.1-derived source mirror is static behavior evidence,
+not binary qualification of the selected Forge47.4.23 or another mod import.
+Current Forge1.20.x source has newer APIs and is not substituted for1.20.1.
 
 Smallest future execution, only after coordinator authorization
 ---------------------------------------------------------------
-Integrate/publish the final application fix and this fixture, approve/qualify
-the staging change, then grant one exclusive diagnostic-server window in a
+Integrate/publish the final application fix and this fixture/staging change,
+then grant one exclusive diagnostic-server qualification window in a
 separate exact-source PC worktree with fresh resource guards. Never use the
 default private pc.json or a Prism/player save as a child execution surface.
 Both base and optional packs must be present before boot; ONLY base is enabled.
 Do not stage optional into a running world using an unreviewed file watcher.
 
-After the PROPOSED staging contract actually exists, the direct PS invocation
-from that isolated source root is:
+The direct PS invocation from that isolated, exact-source root is:
   $env:SMOKE_DATAPACK=(Resolve-Path '.\tools\smoke\recipe-cache-reload').Path
   $env:SMOKE_OPTIONAL_DATAPACK=(Resolve-Path '.\tools\smoke\recipe-cache-reload-optional').Path
   $env:SMOKE_COMMANDS=(Resolve-Path '.\tools\smoke\recipe-cache-reload.commands').Path
   $env:SMOKE_EXPECT_FILE=(Resolve-Path '.\tools\smoke\recipe-cache-reload.expect').Path
+  $env:SMOKE_LOG=Join-Path (Get-Location).Path ('forge\run\recipe-cache-reload-'+(Get-Date -Format 'yyyyMMddTHHmmssfff')+'.log')
+  $env:SMOKE_TIMEOUT='900'
   $env:SMOKE_EXPECT_TIMEOUT='120'
   $env:SMOKE_PORT='25628'
   powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\smoke-boot.ps1 -Root .
@@ -146,7 +167,18 @@ scenario-list line through the existing mechanism, never a duplicate CI step.
 Minecraft function/predicate parsing, the real tag barrier, native donor
 delivery and complete red/green remain NOT_RUN at this offline checkpoint.
 Offline structure inspection passes ten JSON documents, 23 resolved function
-calls, five unique marker emitters and setup-only world mutations. The standard
-documentation check passes 639 links/153 ADRs; whitespace also passes.
+calls, five unique marker emitters and setup-only world mutations. Expectations
+require actual [Server] broadcasts, not marker text quoted in a parser error.
+The PS optional-pack helper/dispatch check passes37 cases, including real
+tree copies, collisions/invalid paths/reparse points, successive fake boots,
+same-process environment restoration and batch exclusion. Its first attempt
+failed in test-only nested -Command quoting; -EncodedCommand corrects that
+failure, and the final check passes. No Minecraft process was involved.
+The paired SH check is authored but NOT_RUN: Bash is absent from PATH and four
+bounded local Git candidates. VerifySmokeHarness calls these checks through its
+existing suite, not a new CI step. The four focused VerifyEnergy assertions use
+the actual SimpleFluxStorage type to cover full-buffer/no-callback and normal
+post-withdrawal refill; JVM execution/compilation is NOT_RUN under the reservation.
+The fixture checkpoint's standard documentation check passes639 links/153 ADRs.
 No client interaction, genuine restart/crash recovery, saved-world migration,
 human/T0 acceptance, freeze, release or T1 activation is implied.

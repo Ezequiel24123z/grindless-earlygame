@@ -20,6 +20,7 @@
 #     SMOKE_PORT      server port (default 25599)
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
 #                     or to hold a smoke function (ADR-0061)
+#     SMOKE_OPTIONAL_DATAPACK one additional directory, staged but explicitly disabled
 #     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line.
 #                     After Done, the script probes with `say SMOKE-READY` until the broadcast
 #                     appears; Gradle can swallow the first FIFO writes. Each scenario line is
@@ -42,9 +43,57 @@ if [ "$TIMEOUT" -le 0 ] || [ "$EXPECT_TIMEOUT" -le 0 ]; then
 fi
 PORT="${SMOKE_PORT:-25599}"
 DATAPACK="${SMOKE_DATAPACK:-}"
+OPTIONAL_DATAPACK="${SMOKE_OPTIONAL_DATAPACK:-}"
 EXPECT="${SMOKE_EXPECT:-}"
 COMMANDS="${SMOKE_COMMANDS:-}"
 if [ -n "${SMOKE_EXPECT_FILE:-}" ]; then EXPECT="$(cat "$SMOKE_EXPECT_FILE")"; fi
+
+resolve_smoke_datapack() {
+  local path="$1" world="$2" source name links
+  if [ ! -d "$path" ] || [ -L "$path" ]; then
+    echo "Invalid smoke datapack '$path': expected a non-symlink directory." >&2; return 1
+  fi
+  source="$(cd "$path" && pwd -P)" || return 1
+  name="$(basename "$source")"
+  if [ ! -f "$source/pack.mcmeta" ] || [[ ! "$name" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+    echo "Invalid smoke datapack '$path': require pack.mcmeta and a portable pack name." >&2; return 1
+  fi
+  case "$source/" in "$world/"*)
+    echo "Invalid smoke datapack '$path': overlaps the disposable smoke world." >&2; return 1;; esac
+  case "$world/" in "$source/"*)
+    echo "Invalid smoke datapack '$path': overlaps the disposable smoke world." >&2; return 1;; esac
+  links="$(find "$source" -type l -print -quit)" || return 1
+  if [ -n "$links" ]; then
+    echo "Invalid smoke datapack '$path': symlinks are not supported." >&2; return 1
+  fi
+  printf '%s\n' "$source"
+}
+
+smoke_pack_properties() {
+  local primary="$1" optional="$2"
+  if [ -n "$primary" ]; then printf 'initial-enabled-packs=vanilla,file/%s\n' "$primary"; fi
+  if [ -n "$optional" ]; then
+    if [ -z "$primary" ]; then printf 'initial-enabled-packs=vanilla\n'; fi
+    printf 'initial-disabled-packs=file/%s\n' "$optional"
+  fi
+}
+
+PACK_NAME=""
+OPTIONAL_PACK_NAME=""
+[ -n "$DATAPACK" ] && PACK_NAME="$(basename "$DATAPACK")"
+if [ -n "$OPTIONAL_DATAPACK" ]; then
+  OPTIONAL_DATAPACK="$(resolve_smoke_datapack "$OPTIONAL_DATAPACK" "$RUN_DIR/smoke-world")" || exit 1
+  OPTIONAL_PACK_NAME="$(basename "$OPTIONAL_DATAPACK")"
+  if [ -n "$DATAPACK" ]; then
+    DATAPACK="$(resolve_smoke_datapack "$DATAPACK" "$RUN_DIR/smoke-world")" || exit 1
+    PACK_NAME="$(basename "$DATAPACK")"
+    if [ "$(printf '%s' "$PACK_NAME" | tr '[:upper:]' '[:lower:]')" = \
+         "$(printf '%s' "$OPTIONAL_PACK_NAME" | tr '[:upper:]' '[:lower:]')" ]; then
+      echo "Smoke datapack name collision: primary and optional names must differ, ignoring case." >&2
+      exit 1
+    fi
+  fi
+fi
 
 if [ "${GRINDLESS_ACCEPT_EULA:-}" != "true" ] && [ "${CI:-}" != "true" ]; then
   echo "Refusing to write eula.txt on your behalf."
@@ -69,12 +118,14 @@ printf 'online-mode=false\nserver-ip=127.0.0.1\nserver-port=%s\nlevel-name=smoke
   "$PORT" > "$RUN_DIR/server.properties"
 rm -rf "$RUN_DIR/smoke-world"
 if [ -n "$DATAPACK" ]; then
-  PACK_NAME="$(basename "$DATAPACK")"
   mkdir -p "$RUN_DIR/smoke-world/datapacks"
-  cp -r "$DATAPACK" "$RUN_DIR/smoke-world/datapacks/$PACK_NAME"
-  # A new world only enables the packs named here; the others are found but left off.
-  printf 'initial-enabled-packs=vanilla,file/%s\n' "$PACK_NAME" >> "$RUN_DIR/server.properties"
+  cp -r "$DATAPACK" "$RUN_DIR/smoke-world/datapacks/$PACK_NAME" || exit 1
 fi
+if [ -n "$OPTIONAL_DATAPACK" ]; then
+  mkdir -p "$RUN_DIR/smoke-world/datapacks"
+  cp -r "$OPTIONAL_DATAPACK" "$RUN_DIR/smoke-world/datapacks/$OPTIONAL_PACK_NAME" || exit 1
+fi
+smoke_pack_properties "$PACK_NAME" "$OPTIONAL_PACK_NAME" >> "$RUN_DIR/server.properties"
 : > "$LOG"
 
 # The server reads commands from stdin; a FIFO lets this script send `stop` once it is up.

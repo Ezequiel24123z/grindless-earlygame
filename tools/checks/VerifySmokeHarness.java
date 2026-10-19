@@ -168,6 +168,18 @@ public final class VerifySmokeHarness {
         Files.writeString(scenarios.resolve("gamma.timeout"), "2147483648\n");
         passed &= checkInvalidTimeout(root, selected, "invalid-despite-override",
                 Map.of("SMOKE_EXPECT_TIMEOUT", "45"));
+        List<String> optionalChecks = new ArrayList<>(List.of(executable));
+        if (!bash) {
+            optionalChecks.addAll(List.of("-NoProfile", "-ExecutionPolicy", "Bypass", "-File"));
+        }
+        optionalChecks.add(Path.of("tools", "checks", "verify-optional-datapack" + suffix).toAbsolutePath().toString());
+        if (!bash) {
+            optionalChecks.add("-Root");
+        }
+        optionalChecks.add(Path.of("").toAbsolutePath().toString());
+        Path optionalOutput = root.resolve("optional-packs.log");
+        passed &= check(run(optionalChecks, optionalOutput) == 0,
+                "optional pack preflight, initial disablement and isolated dispatch", optionalOutput);
         return passed;
     }
 
