@@ -1,5 +1,30 @@
 # Current T0 rework validation
 
+## Sol receipt of 17ae8b0
+
+The new isolated Sol session received exact
+`17ae8b03201915c71c9946a558753ed76703a840`, parent
+`1ced812be0897c7d0222f72feaa1cc45fc0f7e4b`. Its clean older0d79860 checkout
+was corrected with `git merge --ff-only`; post-operation HEAD, ancestry and clean
+status were observed. Both published outgoing refs matched17ae8b0. PR54 remains
+an open draft on tier-0-rework against foundation; PR53 remains an open draft on
+foundation/c62de724 against main. No PR, base or historical worktree was changed.
+
+Live runs39179748093 (PR),39179743679 and39179743788 (push) each passed `verify`.
+Their six smoke shards each remained in progress. No complete CI, repaired-Blueprint
+native pass, player observation or product readiness is credited by this read.
+The27-task/47-reference plan is retained. Receipt changes documentation only;
+no JVM, native smoke, codec, generation or historical-mechanism suite was launched.
+
+Receipt documentation validation passes581 relative links across36 Markdown files
+and `git diff --check`; both JSON files parse. A dedicated Luna validator's first
+graph command exited1 because its PowerShell array collector/assertion harness was
+wrong; its count/endpoints/SHA failures are not product defects or passes. A corrected
+read-only coordinator assertion exits0:27 identical unique task IDs,47 identical typed
+dependency/completion references versus17ae8b0, all endpoints present, acyclic graph,
+revision11/PA-0010 and exact checkpoint/session/model match. No task acceptance,
+dependency or test threshold is changed to obtain that result.
+
 ## Clean Sol migration: two focused repairs, not new acceptance
 
 The owner requested a fresh Sol6.1 coordinator under ADR-0147. This preservation

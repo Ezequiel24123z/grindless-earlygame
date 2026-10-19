@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Receive the clean Sol coordinator checkpoint (ADR-0147, PA-0010).** Advance the
+  initially older isolated checkout to exact17ae8b0 by fast-forward, verify both
+  published heads and existing draft PR54/PR53, and activate Sol as the sole publisher.
+  Preserve27 tasks/47 references, historical attribution and all release holds.
+  Each of the three checkpoint `verify` jobs passes; native smoke shards remain
+  in progress, not a complete CI pass. Narrow audio-rights and Jade metadata checks
+  precede affected implementation; no game, codec, art or provider replay is implied.
 - **Prepare a clean Sol 6.1 coordinator handoff (ADR-0147, PA-0009).** Preserve all
   pending work and the27-task/47-edge plan, pause the retiring session, and transfer
   current authority to a new isolated Sol session rather than forking conversation

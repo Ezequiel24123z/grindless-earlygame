@@ -29,6 +29,11 @@ ownership and decision references to Astra below describe that role historically
 the received Sol coordinator assumes the same responsibilities. The compact
 [migration handoff](../.agent/sol-migration-handoff.md) is the new entry.
 
+Revision11/PA-0010 records actual receipt of17ae8b0 in the new isolated Sol session
+and activation of its sole-publisher role. The paragraph above describes the outgoing
+checkpoint, not current inactivity. Task identities/dependencies and historical proof
+scope are unchanged. Checkpoint verification jobs pass; full hosted CI is still running.
+
 ## 1. Requirements & Constraints
 
 | ID | Requirement | Owner directive sections |

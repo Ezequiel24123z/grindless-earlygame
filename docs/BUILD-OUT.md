@@ -2,8 +2,9 @@
 
 This file keeps the history of the slices already defined and names the next executable slice.
 
-**Coordinator transition (ADR-0147):** the owner requested a new isolated Sol 6.1
-session. The retiring session is preserving work, not continuing product execution.
+**Coordinator receipt (ADR-0147, PA-0010):** the new isolated Sol 6.1 session
+received exact17ae8b0 by clean fast-forward. Sol now coordinates and publishes;
+the retiring session remains quiescent and historical attribution is preserved.
 Read [the Sol handoff](../.agent/sol-migration-handoff.md) before resuming the queue.
 Historical Astra names below identify previous work, not a model restriction on
 the new coordinator. No T1, functional port or new release is opened by migration.
@@ -19,10 +20,12 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: formalize and validate the new policy, close the source-based gaps, select a safe
-work-disk migration and then integrate deliberate flat-world access, curated pinned pack,
-questbook product experience, real sprite/art and recorded-sound passes. Initial discovery
-is running in five bounded lanes; no storage move or gameplay/asset import is implied.
+Next: retain the verified new-write storage redirection and close the narrow remaining
+audio-import rights and Jade licence discrepancy. Then integrate deliberate flat-world
+access, curated pinned pack, questbook product experience and minimal approved runtime
+audio. The source-pixel art batch is already installed; native rendering remains open.
+Old discovery workers are finished, not a resumable pool. No storage move or asset
+import follows from reception, and hosted smoke shards remain pending at receipt.
 Reuse the existing mechanisms and proofs rather than rewrite them to change the product.
 Freeze and technically qualify the actual configured pack before publishing a playable RC.
 Human acceptance begins with that release; after publication and actual longitudinal play

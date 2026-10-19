@@ -2,7 +2,39 @@
 
 Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
-## Current migration boundary
+## Active Sol receipt
+
+Sol 6.1 is now the active coordinator in isolated session
+`a9639825-dcf3-4bba-b760-a23268d89f3e`, branch `ezequiel24123z-t0-playable-release`.
+The app initially checked out `0d79860`; the clean branch was advanced by fast-forward
+to the exact published `17ae8b03201915c71c9946a558753ed76703a840`, parent `1ced812`.
+Both outgoing remote heads matched that checkpoint. No old or main checkout was edited.
+Plan revision11/PA-0010 preserves all27 tasks/47 references and actual historical authors.
+
+Live PR54 and PR53 remain open drafts with their existing heads/bases. At receipt,
+PR run39179748093 and push runs39179743679/39179743788 each passed `verify`; all six
+smoke shards per run were still in progress. This is not a full CI pass or new native
+Blueprint proof. No old automation/session/worker is resumed and no new PR is needed.
+
+Next: two bounded read-only investigations close the actual audio-import rights and
+Jade pinned-licence gaps. Then implement only reviewed product seams, including the
+narrow persisted Superflat identity/access decision and minimal Quern runtime loop.
+Native art/JEI, runtime one/eight-machine listening, configured pack import/startup,
+forward-save contract and RC publication remain open. T1 and functional ports remain held.
+No Astra escalation is justified by a currently identified problem.
+
+Dispatched on frozen17ae8b0: audio-rights worker
+`ba4c1fc7-1ea7-4b7b-a8fd-9ea015549ab1` and Jade-pin worker
+`25ae2b42-40da-459d-ae18-17037a98ae22`. Both own no files and may neither generate
+nor publish. Their ephemeral IDs are current dispatch state, not a future worker pool.
+
+Receipt resource inspection found about5.89GiB free on the system volume and188.13GiB
+on the work volume, with no Java process observed. Preserve old data and use the selected
+process-local external Gradle home; this observation is not a future JVM resource grant.
+No historical executor/S1/S2/native matrix, asset generation, codecs or approved paid
+calibration is repeated for takeover. Documentation/task integrity alone is new evidence.
+
+## Retiring migration boundary (historical)
 
 The owner requested a genuinely new clean session with **Sol 6.1 as coordinator,
 replacing Astra**. ADR-0147 and PA-0009 are now authoritative for leadership.

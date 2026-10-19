@@ -4,6 +4,15 @@ Updated: 2026-10-19. This is the compact current entry; the longer handoff conta
 
 ## Authority and receipt
 
+**Received, 2026-10-19:** Sol session `a9639825-dcf3-4bba-b760-a23268d89f3e`
+is now the sole active coordinator/publisher on `ezequiel24123z-t0-playable-release`.
+Its initially older clean checkout was fast-forwarded to the exact preservation commit
+`17ae8b03201915c71c9946a558753ed76703a840`. Live remote heads matched; PR54/PR53
+remain open drafts. All three checkpoint runs passed `verify`, while their smoke shards
+were still running at receipt. Full CI remains pending, not inferred from focused tests.
+Revision11/PA-0010 retains27 tasks/47 references. The retiring record below is historical;
+no retired session is reactivated and no earlier evidence or grant is renamed.
+
 The owner explicitly chose a genuinely fresh **Sol 6.1 (`gpt-6.1-sol`) coordinator**
 instead of Astra. Follow ADR-0147. The retiring coordinator has not created a successor
 session, selected its branch or attached any new automation. Do not fork the old chat,

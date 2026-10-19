@@ -2,7 +2,7 @@
   "schema_version": 2,
   "source_baseline": "0d798607c66ff7e4b581d2786cfa32dc4a02ded7",
   "foundation_executable_revision": "e2dfc2c847dd220178572b83e7516a9949bb8b58",
-  "branch": "ezequiel24123z-direccion-orquestada-t0",
+  "branch": "ezequiel24123z-t0-playable-release",
   "gate": "T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS",
   "broad_t0_authorized": true,
   "pr_management_and_merge_authorized_when_ready": true,
@@ -11,15 +11,17 @@
   "clean_session_transfer": {
     "decision": "ADR-0147",
     "next_coordinator_model": "gpt-6.1-sol",
-    "next_session_created": false,
-    "status": "preservation_then_retiring_session_quiescent",
+    "next_session_created": true,
+    "successor_session_id": "a9639825-dcf3-4bba-b760-a23268d89f3e",
+    "received_checkpoint": "17ae8b03201915c71c9946a558753ed76703a840",
+    "status": "received_clean_isolated_Sol_coordinator_active_retiring_session_quiescent",
     "entry": ".agent/sol-migration-handoff.md",
     "active_product_workers": 0,
     "active_jvms": 0,
     "event_subscription": "paused",
     "agent_merge": false,
     "session_automation": false,
-    "next_checkpoint_ci": "unverified_not_a_pass"
+    "next_checkpoint_ci": "17ae8b0_three_verify_jobs_passed_all_six_smoke_shards_each_still_in_progress_not_a_complete_pass"
   },
   "playable_release": {
     "policy": "ADR-0144",
@@ -99,7 +101,7 @@
     "adr_0138_research": "Three exact-source/version/license investigations completed as static reference only; no runtime tests or code imports",
     "production_inventory": "Complete source-bound debd inventory1384/474/259/25/11 and deterministic reports; strict3a9/9e0 rebinding and combined4061 export preserve full semantics with separately recorded provenance identities.",
     "resource_communication": "UI/JEI/audio and Quest9e0 adapter composed; strict binding and combined4061 checks/export pass with bounded307-contract reuse. Candidate1389 contains verified real canonical guidance; actual client/Survival acceptance remains pending.",
-    "current_ci": "1ced runs39175468394/39175472294/39175468238 fail offline sound guards; foundation passes, smokes skipped. Focused parser repair is preserved with117 checks per host, new checkpoint CI pending. Separate a2 PR39171615491 failed Blueprint; repaired fixture has paired source checks, no new native pass. Earlier1389/c760/debd results remain source-bound.",
+    "current_ci": "Received17ae8b0 runs39179748093/39179743679/39179743788 each pass verify; six native smoke shards per run remain in progress. No complete hosted pass or repaired-Blueprint native result is yet credited. Historical1ced sound-guard failures/skipped smokes, a2 PR39171615491 Blueprint failure and earlier1389/c760/debd results remain source-bound.",
     "canonical_guidance": "Candidate1389 passes CheckOnly4881 and official42-suite/pack15 validation; real preparation ZIP delivered. Human/client/no-command/retained-world acceptance remains unexecuted.",
     "ci_fixture_repair": "Renewable pre-ignition oracle now accounts for actual unburnt coal in source, with invalid-input guards and separate synthetic regressions. Static-only evidence; native/CI recheck pending. Missing-water cause unknown.",
     "resource_custody": "External process-local Gradle-home verification on102d passes with actual768MiB/CPU2/SerialGC and no remaining JVM. Only new writes redirected; all old roots preserved. Official4061 installation and its two NOT_RUN native fixtures remain separate; no native grant or automatic retry.",

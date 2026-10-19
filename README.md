@@ -36,7 +36,7 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > deliberate Superflat progression, real sprite/art and sound passes, coherent quests and
 > forward-save compatibility. Existing S2, runtime, UI and packaging proofs are reused within
 > their limits; they do not already establish that product. T0 is the only active tier.
-> The owner selected Sol 6.1 as the next clean-session coordinator (ADR-0147);
+> Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
@@ -2212,7 +2212,8 @@ one.
 
 Historical completions below are source-scoped, not current-WIP acceptance. The active
 [work plan](.agent/work-plan.json) permits renewable implementation and production auditing
-to proceed together under Astra; integration and manual gates still control acceptance.
+to proceed together under the received Sol coordinator; historical Astra attribution
+is preserved and integration/release gates still control acceptance.
 
 | # | Step | Status |
 | --- | --- | --- |
@@ -2295,7 +2296,7 @@ to proceed together under Astra; integration and manual gates still control acce
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
 | 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; three real Quern previews delivered and owner-approved, runtime sound integration pending. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review; native client, remaining Superflat/pack/product QA and the playable release remain open |
-| 41 | **Clean Sol 6.1 continuation** | preservation checkpoint and compact handoff prepared under ADR-0147; UTC JSON and Blueprint fixture repairs retain focused evidence, hosted CI pending. The retiring coordinator stops; a new isolated Sol session has not yet been created |
+| 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by fast-forward in the clean isolated Sol session; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts; all three hosted verify jobs pass, native shards still running. Product gaps remain and historical proofs are reused, not replayed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
