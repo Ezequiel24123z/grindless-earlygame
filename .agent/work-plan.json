@@ -39,7 +39,7 @@
       "SFX": {"session_id": "7a4e652d-2ffd-453c-8c79-e5df2ce5b605", "branch": "ezequiel24123z-paleta-sonora-t0", "status": "reviewed_integrated_ab84905_parent_default_128_plus_200_passed_zero_provider_requests_no_new_audio", "commit": "584da087a037d44aa55a6d89322def53c4a05ce9"},
       "native_reload_proof": {"session_id": "53b80aff-68cf-4544-b13f-be773bfd6678", "source_base": "ab8490545d2796fcfb79981cb2bb2bd9172f7113", "status": "reviewed_path_retention_integrated_PS86_plus37_MSYS43_and_exact444_Linux_verify_helpers_Energy_passed_no_native_reload_yet", "reviewed_source": "444409ff58a897efac0902f099c0b0853220ce6f", "fix_commit": "0fec76d705a3a4960af17de7005ffe2d99eb14ab", "retention_commit": "444409ff58a897efac0902f099c0b0853220ce6f", "hosted_helper_run": 39323729055, "hosted_foundation_artifact": 12220548486, "hosted_behavior_sha256": "f5d3c4024a613929772b4f6f348f2e6d057ce070cbf3af519eea0d1c26365343"},
       "batch_portability": {"session_id": "bbe1f15e-c098-454d-923e-830b25fdc282", "source_base": "cc2fe71ae76752d13adabbc5169a23e5bbbecc2f", "status": "reviewed4b_source_integrated_38_cases856_assertions_final_coupling_adapter_fromf867_A01_isolation_and_existing_Java_gate_in_progress", "final_commit": "4b86dbb49c132ade7e3cefb656bc4b27b54efe00"},
-      "A01_crude_recovery": {"session_id": "cbafe37b-ef12-402c-90d1-d152622abfcb", "source_base": "48c9513f57a1a7391108c86b21bfcd386044651e", "status": "source_integrated_common_javac0_red6_source_failures_green59_passed_zero_Java205810_native_RED_next_separate_integrated_green_and_SavedData_pending", "red_commit": "4f1b30b7eb25912b2cfa9150a1a159bbf88bf60a", "fix_commit": "c87dbc8b4fa26bff517d3dedd0501baa9818c3ba", "red_stdout_sha256": "99b1f29f76cf929dfc2ff188a3a071a7f9ea537b25be277f6f336256d5bbab59", "red_receipt_sha256": "214c5aeee9daf1ab42987c08e97308b7791798260d7db7673a6be7d2e95e4d20", "green_stdout_sha256": "3b1f159094b8ad649b59bb9dc10445a7f8f5feb14e5f2493d8f96e82a8df47c8", "green_receipt_sha256": "c9981281a69c82e27b68d43491ef52fe9d8b80b99c9939bc56d7ee73d731c27a", "collection_sha256": "7102a53c4d9563b4b18798d2fd69c78fb3ceff7a053d44f958c57515bd3e6d6b"}
+      "A01_crude_recovery": {"session_id": "cbafe37b-ef12-402c-90d1-d152622abfcb", "source_base": "48c9513f57a1a7391108c86b21bfcd386044651e", "status": "source_integrated_focused_green59_and_real_native_RED_expected1_195114ms_confirmed_four_missing_exports_zero_Java211648_lease_released_repaired_native_SavedData_pending", "red_commit": "4f1b30b7eb25912b2cfa9150a1a159bbf88bf60a", "fix_commit": "c87dbc8b4fa26bff517d3dedd0501baa9818c3ba", "red_stdout_sha256": "99b1f29f76cf929dfc2ff188a3a071a7f9ea537b25be277f6f336256d5bbab59", "red_receipt_sha256": "214c5aeee9daf1ab42987c08e97308b7791798260d7db7673a6be7d2e95e4d20", "green_stdout_sha256": "3b1f159094b8ad649b59bb9dc10445a7f8f5feb14e5f2493d8f96e82a8df47c8", "green_receipt_sha256": "c9981281a69c82e27b68d43491ef52fe9d8b80b99c9939bc56d7ee73d731c27a", "collection_sha256": "7102a53c4d9563b4b18798d2fd69c78fb3ceff7a053d44f958c57515bd3e6d6b", "native_red_jar_sha256": "c4dfc0f92e2d2778bb02b977179949e6fef22926cd7271c7cf9c4171b9c630f4", "native_red_log_sha256": "e7ba12ed772e72d93a0b2e3e338a1bcac5191f11f381f09f40f1fdf098a359fe", "native_red_receipt_sha256": "bfa5117ba9048192bf8b9b9cf67b8f2508decede5cf86bbd4a7e6b3a8341806c"}
     },
     "publisher_and_shared_PC_owner": "current_coordinator_only",
     "product_gates": "No_T0_acceptance_or_freeze_No_T1_activation_No_RED_or_silently_selected_subjective_product_choices",
@@ -232,12 +232,12 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": "cbafe37b-ef12-402c-90d1-d152622abfcb",
+      "owner_session_id": "53b80aff-68cf-4544-b13f-be773bfd6678",
       "owner_worker_agent_id": null,
-      "scope": "Exclusive_A01_one4f1b30b_native_RED_after_actual_focused_GREEN59_with_fresh_guards_No_full_build_repaired_native_SavedData_or_deploy",
-      "current_preflight": {"at_utc": "2026-10-19T20:16:24.4605666Z", "physical_free_gib": 10.07, "commit_free_gib": 33.83, "work_free_gib": 164.54, "java_processes": 0},
+      "scope": "Exclusive_native_cache_RED_only_on_exact444409f_one_existing_production_smoke_with_fresh_guards_No_GREEN_full_build_pack_or_deploy_until_explicit_extension",
+      "current_preflight": {"at_utc": "2026-10-19T21:21:11.2717984Z", "physical_free_gib": 9.730, "commit_free_gib": 33.766, "work_free_gib": 163.561, "java_processes": 0},
       "focused_release_observation": {"at_utc": "2026-10-19T20:58:10Z", "java_processes": 0, "sources": "exact_clean4f1b30b_and_c87dbc8_original_clone_config_origin_preserved", "not_a_native_guard": true},
-      "queued_next": {"session_id": "58289e9c-3881-4349-8195-aa0d079597e6", "scope": "After_A01_zero_Java_release_reviewed_native_reload_red_green_then_integrated_extractor_runtime_and_SavedData_with_new_explicit_leases"},
+      "queued_next": {"session_id": "53b80aff-68cf-4544-b13f-be773bfd6678", "scope": "Cache_GREEN_on_final_integrated_freeze_after_batch_adapter_then_A01_repaired_native_and_SavedData_under_separate_explicit_lease"},
       "compile_reservation": {
         "historical": true,
         "session_id": "7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8",
@@ -270,7 +270,7 @@
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
       "next_worker_agent_id": null,
-      "next_scope": "A01_native_RED_may_follow_successful_focused_GREEN_on_unchanged4f1b30b_fixture_It_needs_no_retention_or_unqualified_harness_extension_Repaired_native_SavedData_waits_for_reviewed_ADR0155",
+      "next_scope": "A01_native_RED_released0Java_after_expected_failure_No_replay_now_Cache_RED_must_confirm_publication_then_specific_idle_wake_failure_not_setup_error",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

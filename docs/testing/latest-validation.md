@@ -1,5 +1,34 @@
 # Current T0 rework validation
 
+## Actual A01 native counterexample and explicit lease handoff
+
+Exact pre-fix `4f1b30b` runs ONE production Forge smoke, expected exit1 in195.114
+seconds. Its implicit preparation succeeds in41 seconds/12 tasks; startup and
+SMOKE-READY work. The log confirms blocked paid work, retained reconstructed output,
+continued blocking, both guard/completion markers and fixture completion. Four
+recovery/export markers, including EXACTLY-65, are absent; the harness first reports
+PARTIAL-EXPORT-WITHOUT-VEIN missing. There are no function grammar errors or
+launcher/shutdown failures. It closes naturally with `All dimensions are saved`.
+This is a real Level counterexample, not setup failure or repaired-native proof.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Actual source-bound runtime jar | `c4dfc0f92e2d2778bb02b977179949e6fef22926cd7271c7cf9c4171b9c630f4` |
+| Boot log | `e7ba12ed772e72d93a0b2e3e338a1bcac5191f11f381f09f40f1fdf098a359fe` |
+| Native stdout | `a229c832f87ffa09b25f3fd3198f4eadbe0b0b67df64a29a1d7fb8bb0d7cceec` |
+| Native receipt | `bfa5117ba9048192bf8b9b9cf67b8f2508decede5cf86bbd4a7e6b3a8341806c` |
+| Independent final observer | `51cb689bffd7de3363eb476e5a7cefa7c2b210fa5b7ff66a2cef73ece3b5e03a` |
+
+The old harness removes its diagnostic world normally; no SavedData read or racing
+copy is attempted. At21:16:48Z the owner explicitly releases with0Java, port25629
+free, both frozen surfaces exact/clean and original clone/config preserved.
+Full build, Prism and deployment are not performed.
+
+The next exact444 cache-native RED lease receives a fresh coordinator guard:
+21:21:11Z,0Java/9.730 GiB physical/33.766 GiB commit/163.561 GiB work free. It
+must prove the initial idle and real ingot publication before its specific
+idle-wake failure; no green/build/deploy permission follows from this red window.
+
 ## Reused exact444 Linux foundation evidence
 
 [CI39323729055](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39323729055)

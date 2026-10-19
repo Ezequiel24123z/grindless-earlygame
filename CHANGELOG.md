@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Reproduce A01 in a real loaded production world before the repair.** One
+  exact4f native red boots/parses/reconstructs normally but misses four expected
+  export/recovery markers, exits1 as expected and shuts down cleanly. Preserve
+  jar/log/receipt hashes and0Java lease release; hand off only the next guarded
+  cache-native red, not repaired/runtime/deployment acceptance.
 - **Document the source-bound custom SSH validation lane.** Keep ordinary
   deployment on the qualified RPC; use hash-pinned private ignored helpers and
   short non-stdin SSH for bounded checks outside that API. Record uncertain

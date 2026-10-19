@@ -55,17 +55,15 @@ be diagnosed again as absent without a current counterexample.
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | Source through `0fec76d` is integrated after independent closure of publication/wake, ancestor/provider and Home findings.86 PS contracts pass; exact444 Linux CI also executes the optional SH/retention helpers and new Energy assertions successfully. Local missing-`ln` does not invalidate that separate Linux proof. Genuine native publication/wakeup remains unrun and unregistered. |
 | GREEN batch portability | Original `507ecfa` -> `4b86dbb` history is source-integrated unchanged after independent closure of CDPATH.38 cases/856 assertions pass on WinPS5/Git-MSYS. The final coupled adapter excludes A01's fresh-counter case and connects this suite to the existing Java gate; no new server framework/CI step/native batch. |
-| A01 Crude output recovery | Red `4f1b30b` compiles then fails six source checks; repaired `c87dbc8` compiles and passes59/0, including24 binary-NBT assertions. Original history is integrated but not deployed. The same child owns one pre-fix native counterexample next; repaired native/SavedData and full integrated build remain open. Failed transport/collectors are preserved without JVM replay. |
+| A01 Crude output recovery | Focused red6/green59 and one real `4f1b30b` native RED are recorded. Production boot/setup/reconstruction succeeds; four recoveries are missing as predicted, not a parser failure. It stops naturally, leaves0Java and releases its lease. Repaired native/SavedData/full integrated build and deployment remain open. |
 
-The focused A01 red/green gates have finished, with zero Java observed at20:58:10Z
-and both exact sources clean. The same exclusive PC lease may now run one pre-fix
-`4f1b30b` native counterexample with the existing
-unmodified harness; that run does not need a saved-accounting postcheck or the
-unqualified retention feature. It is not a repaired-native or deployment grant.
-The recorded preflight observes zero Java processes, 10.07 GiB free
-physical memory, 33.83 GiB free commit and 164.54 GiB work-disk space. The worker
-must refresh the guards and report exact exits and zero remaining JVMs before
-the coordinator grants the next runtime window. Private paths stay outside Git.
+The A01 worker releases after its native red with zero Java/port25629 free and
+both source surfaces clean at21:16:48Z. The next exclusive lease is cache native
+RED only on exact444, not a repaired-native/build/package/deployment grant.
+Fresh coordinator preflight at21:21:11Z records0Java,9.730 GiB free physical
+memory,33.766 GiB free commit and163.561 GiB work space. The worker refreshes
+the guards and reports exact exit/markers and0Java; green waits for its separate
+integrated source/permission. Private paths stay outside Git.
 
 A01 review finds no other high-confidence production blocker, but the harness
 currently deletes the world before its stopped-world accounting command can
