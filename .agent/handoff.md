@@ -47,8 +47,14 @@ Quern runtime implementation is now assigned to isolated Sol6.1 Max session
 `d3e8ce5e-85a2-4676-96fb-2847af9c4fa8`, explicitly stacked fromd8dda9c. It owns
 only the client Quern loop/resource/check seams and related implementation docs.
 It commits locally and reports to this coordinator; no push, new PR or account check.
-No native/JVM resource window is granted yet. Parent .agent files and unrelated
-pack/Superflat/sustainability/gameplay work are outside its editing scope.
+The worker now has the exclusive shared-Gradle reservation for minimal common/Forge
+compilation, classpath export and focused checks, not any native/client/codec run.
+The parent preflight observed no JVM and sufficient margin. Refresh guards before
+launch: physical1536MiB, commit2048MiB and work-disk3GiB minimum, no competing JVM
+owner; preserve768MiB/CPU2/one-worker limits. A passing refresh needs no second
+approval. The parent stays read-only for JVM/cache inputs; the worker reports release
+and exits when done. Parent .agent files and unrelated
+pack/Superflat/sustainability/gameplay work remain outside its editing scope.
 
 Receipt resource inspection found about5.89GiB free on the system volume and188.13GiB
 on the work volume, with no Java process observed. Preserve old data and use the selected
