@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Select explicit diagnostic-world retention for A01 accounting (ADR-0155).**
+  Independent review finds no other high-confidence production blocker, but
+  the authored post-stop SavedData check cannot read a world the harness has
+  already deleted. Authorize one paired opt-in in the existing harness, with
+  unchanged default cleanup, early invalid-value refusal and no arbitrary
+  execution hook. Implementation/native accounting remain pending.
 - **Freeze the three remaining technical units and serialize qualification.**
   Publish the A01 red/repair, corrected native-reload harness and Bash batch
   checkpoints without merging or deploying unqualified changes. Preserve their

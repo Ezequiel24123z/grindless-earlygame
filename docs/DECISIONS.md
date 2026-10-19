@@ -166,6 +166,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0152](#adr-0152--run-bounded-autonomous-t0-and-creative-work-without-human-acceptance) | Run bounded autonomous T0 and creative work without human acceptance | Accepted |
 | [0153](#adr-0153--rebind-generated-recipes-at-atomic-graph-boundaries) | Rebind generated recipes at atomic graph boundaries | Accepted |
 | [0154](#adr-0154--stage-one-disabled-optional-pack-for-reload-smokes) | Stage one disabled optional pack for reload smokes | Accepted |
+| [0155](#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in) | Retain a diagnostic smoke world only by explicit opt-in | Accepted |
 
 ---
 
@@ -7289,3 +7290,43 @@ do not inject Progress or infer wakeup from placement or a final item alone.
 **Limits.** Test-only tags/world/source, no Prism or real saves. Preserve existing
 handshake/budgets/cleanup and paired platform parity. This is a specific reload fixture,
 not a generic datapack manager, content rewrite or human survival evidence.
+
+---
+
+## ADR-0155 — Retain a diagnostic smoke world only by explicit opt-in
+
+**Status.** Accepted bounded validation-tool extension, 2026-10-19. Implementation
+and native qualification remain pending.
+
+**Need.** A01's extractor regression must check the real, cleanly saved
+`VeinData` extraction counts, not infer them from exported items. Both existing
+smoke twins remove their diagnostic world on exit. The authored command that
+reads `grindless_veins.dat` after the harness returns therefore cannot work.
+The production recovery review found no other high-confidence blocker, but this
+missing accounting evidence still prevents qualification.
+
+**Decision.** Add the same minimal `SMOKE_KEEP_WORLD` opt-in to both existing
+smoke-boot twins. Absent or `0` retains their normal cleanup; `1` preserves only
+the existing isolated diagnostic world and reports that retention explicitly.
+Reject any other value before Gradle or filesystem mutation. All ordinary path,
+linked-ancestor, overlap, EULA, budget, assertion and shutdown guards still apply.
+Do not add an arbitrary post-stop command, another runner or a general export API.
+
+The caller must require successful scenario assertions and natural successful
+server shutdown before using the retained data as evidence. Retention itself is
+neither a PASS nor proof of a clean save. Run the source-bound SavedData oracle
+before another boot resets the world, preserve its receipt, then explicitly clean
+up that one owned diagnostic world. The caller scopes and restores the opt-in;
+the harness must not change the caller's environment. Normal CI and unrelated
+smokes do not opt in.
+
+**Alternatives rejected.** Copying the file from another process before cleanup
+is a race with shutdown and deletion. Reading live data does not prove the
+clean-stop persistence boundary. Item counts alone cannot prove vein accounting.
+An arbitrary shell callback or replacement server harness adds execution and
+quoting boundaries that this one evidence file does not need.
+
+**Limits.** No Prism/player save, migration, crash-atomicity, actual restart or
+longitudinal-play claim. Keep the canonical server heap and all existing timeouts.
+Offline contracts establish default/opt-in/invalid-value cleanup behavior and
+environment preservation; only the real native run can qualify saved accounting.

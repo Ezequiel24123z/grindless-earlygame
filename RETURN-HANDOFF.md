@@ -64,6 +64,12 @@ physical memory, 33.83 GiB free commit and 164.54 GiB work-disk space. The worke
 must refresh the guards and report exact exits and zero remaining JVMs before
 the coordinator grants the next runtime window. Private paths stay outside Git.
 
+A01 review finds no other high-confidence production blocker, but the harness
+currently deletes the world before its stopped-world accounting command can
+read SavedData. [ADR-0155](docs/DECISIONS.md#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in)
+authorizes a narrow paired retention opt-in, owned by the harness child; it is
+not implemented or qualified yet. No native lease bypasses that missing oracle.
+
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.
 This is not a claim of universal absence. The current Quern/3/Astra grant contract also
