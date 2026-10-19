@@ -21,11 +21,21 @@ entries below reference those records by id.
   source/world/player ownership, respects pause/mute and limits engine recovery.
   Preserve Quern particles and every unrelated heavy-hum caller. Keep the imported
   event/file out of synthetic conversion and correct the generator's provenance claim.
-  Focused lifecycle/resource checks are added; execution and compilation remain pending
-  after a preflight blocked before any JVM started (1,683.8MiB commit margin).
-  Documentation resolves586 links/148 ADR rows. Auxiliary static-check attempts retained
+  Static import/hash/mono44.1kHz/binding/notice/subtitle and PowerShell syntax guards pass.
+  The pure JDK tracker contract passes67 checks. After the owner's RAM expansion and
+  a newly authorized unchanged guard, common/Forge compilation and focused check compilation
+  exit0; the actual resolved-classpath lifecycle67/resource34 checks pass. Processed Ogg
+  and notice match source bytes; actual Gradle768MiB/CPU2/SerialGC limits are verified,
+  with zero JVM remaining. Preserve both earlier blocked guards (initial1,683.8MiB,
+  frozen-source1,971.3MiB commit margin versus2,048MiB required), not retroactive passes.
+  Auxiliary static-check attempts retained
   an overbroad notice-path guard rejecting HTTPS and an unavailable assumed Bash path;
   these are harness failures, not a private path in the asset or a converter pass.
+  SH syntax remains NOT_RUN. The source-bound runtime import record retains exact
+  checkpoint/working-byte hashes, guard results, corrected HOME-name/finished-process
+  inspection failures, compiler warnings and missing proofs. The shared build window
+  is released; no foreign process termination or cache/OS change is used.
+  Final documentation resolves587 links/148 ADR rows.
   Native binding/start-stop/reload, one/eight-machine listening and RC acceptance
   are not supplied by source checks.
 - **Approve the existing Quern A game import and bounded native loop (ADR-0148).**

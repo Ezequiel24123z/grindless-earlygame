@@ -2295,7 +2295,7 @@ is preserved and integration/release gates still control acceptance.
 | 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md), exact Result export/serve and Root fix are integrated. Public4061 has actual same-repository hosted export/upload and three complete CI successes; later source continues through its own CI without relabeling cb0 browser evidence |
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
-| 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; exact approved Quern A Ogg and Quern-only managed native client loop implemented under ADR-0148, focused checks/compilation pending. Native lifecycle and one/eight-machine mix are not established. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review. Jade source-licence metadata is corrected without changing historical profiles; final composition/use review, native client, Superflat/product QA and the playable release remain open |
+| 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; exact approved Quern A Ogg and Quern-only managed client loop implemented under ADR-0148. Common/Forge compile and focused lifecycle67/resource34 checks pass after an explicitly authorized post-RAM window; earlier resource blocks remain historical. Native registration/client lifecycle and one/eight-machine mix are not established. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review. Jade source-licence metadata is corrected without changing historical profiles; final composition/use review, native client, Superflat/product QA and the playable release remain open |
 | 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by fast-forward in the clean isolated Sol session; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts; all three hosted verify jobs pass, native shards still running. Product gaps remain and historical proofs are reused, not replayed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
@@ -2521,6 +2521,9 @@ nearby loaded RUNNING Quern. Its old heavy-hum bursts are replaced, not those of
 extractors or other machines. Pause, mute, range, source/world/player lifetime and bounded
 engine recovery are explicit; actual client onset/stop/reload and factory listening remain
 unverified. Generators and the paired legacy converters preserve the imported sound and notice.
+The [source-bound runtime import record](docs/assets/quern-runtime-import.json) preserves
+the exact implementation checkpoint, passed compile/contract/resource guards and unexecuted
+native registration/client/listening proofs, without erasing the earlier blocked attempts.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of
