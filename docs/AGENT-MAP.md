@@ -86,7 +86,11 @@ playable T0 publication and actual owner play; no new port implementation by imp
   `tools/smoke/extractor-backpressure-pack/` — A01 owned-output recovery and
   paid-work/Flux/accounting regression. Pending export must not depend on a
   runnable extraction or live vein; a re-added work callback may not debit twice
-  in one world tick. Native recovery and source contracts are distinct proofs.
+  in one world tick. Completed paid work settles before another power request;
+  export retries do not reset runnable status debounce. `Progress`/`Output`
+  retain their existing meaning. Native recovery, binary-NBT reconstruction and
+  source contracts are distinct proofs; `VerifyExtractor --a01-vein-data` checks
+  the diagnostic world's actual stopped Luna SavedData, not item-count proxies.
 - `process/MachineEnvelopes.java` — when the machine holds a band from
   [`MACHINES.md`](MACHINES.md#machines-are-condition-envelopes).
 - `registry/BlockCatalogue.java` — geometry and the asset list.

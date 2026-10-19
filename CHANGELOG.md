@@ -20,6 +20,15 @@ entries below reference those records by id.
   paid work, partial export without a vein and one-world-tick Flux accounting.
   The baseline has no independent exporter; Java/native RED execution is pending
   the coordinator's immutable-PC window, not inferred from source inspection.
+- **Repair the A01 owned-output path using the established machine policy.**
+  Retry pending export independently of vein/work, copy offered items and notify
+  only a changed remainder. Guard replacement work by world time, settle an
+  already-paid cycle before drawing more Flux, and leave runnable status
+  observations to work. Preserve rates, yields, sides, accounting and save keys.
+  Add actual binary-NBT reconstruction checks and an optional stopped-world
+  SavedData accounting oracle. Ten no-JVM source safeguards and thirteen
+  unchanged behavior bodies pass static comparison; Java/native/build remain
+  NOT_RUN, not accepted.
 - **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
   disabled optional fixture pack through the existing paired harness, retaining
   legacy defaults, isolated-world behavior and the scenario-list integration.
