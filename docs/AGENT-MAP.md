@@ -585,3 +585,21 @@ portal component and finite-field contract (ADR-0121).
 JEI is optional at runtime: the standalone Grindless jar must load without it. The T0 client pack
 does not include AE2; its T4 recipe/energy/material integration needs a complete frontier slice,
 not an unmodified early-game dependency (ADR-0120).
+
+## SSH-first PC and Prism development
+
+- `tools/pc-workflow.ps1` and `.sh` — local SSH transport and exact-revision synchronization
+  into the isolated PC worktree; private host paths come from the caller's non-Git inventory.
+- `tools/prism-dev.ps1` and `.sh` — host-side build/deployment into the separately owned
+  engineering instance, using the existing pack, pin and provenance authorities.
+- `tools/checks/Test-PrismDev.ps1` and `.sh` — isolated tooling fixtures, not game/client proof.
+- `.github/workflows/ci.yml` — the independent Windows tooling job exercises both entrypoints
+  without a JVM, SSH connection, download or real player data.
+- [Operating runbook](operations/ssh-prism-workflow.md) — current identity, execution and
+  player handoff contract.
+
+Never change the original clone's branch, authentication or existing player instance.
+Only a committed exact source and verified package may enter a stopped owned target.
+Do not copy accounts, saves or private configuration; refuse foreign/tampered files.
+Routine jar updates preserve launcher components and retain owned backups outside `mods/`.
+Deployment is engineering preparation, not RC, Superflat or human acceptance (ADR-0151).

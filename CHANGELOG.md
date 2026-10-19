@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Script the isolated SSH build and owned Prism development loop (ADR-0151).**
+  Paired `pc-workflow` / `prism-dev` entrypoints synchronize an exact detached source,
+  keep Build separate from stopped-instance Deploy, enforce fresh resource/build-lock
+  guards and validate the existing pack's source/pins/whitelist/hashes. Fresh staging
+  is outside Prism discovery; updates retain previous owned jars and preserve saves,
+  config, options and `.index`. Refuse unowned/running/tampered/ambiguous targets.
+  The actual11.0.2 template cache shape and WinPS replacement semantics are covered
+  by317 assertions/31 isolated fixtures. Add a focused Windows CI job for direct/Bash
+  entrypoints; actual PC transport/deployment and human client acceptance stay distinct.
 - **Build and package the received T0 source on the personal PC.** An isolated clean
   worktree and cold work-volume Gradle home produce the real70901 Forge jar and
   seven-pin playable-profile ZIP. Full build,88 pack contracts,43 behavior suites,

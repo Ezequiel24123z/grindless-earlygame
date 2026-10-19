@@ -47,8 +47,9 @@ The coordination machine's connection inventory is
 `%USERPROFILE%\.config\grindless\pc.json`, outside Git. Its schema is
 `grindless.pc-workflow`, version 1; fields are `sshTarget`, `clonePath`, `worktreePath`,
 `gradleUserHome`, `prismRoot`, `templateInstanceId`, `instanceId`, `javaHome` and
-`javaSha256` (the inspected Java 17 `javaw.exe`, not a credential).
-The inventory also records the existing personal Git alias and received source/branch;
+`javawSha256` (the inspected Java 17 `javaw.exe`, not a credential).
+The other required fields are `personalGitSshAlias`, `receivedSourceRevision` and
+`sourceBranch`, recording the existing personal Git alias and received source/branch;
 none of these settings contains a key or token. A successor reads this file rather
 than rediscovering or publishing personal addresses and paths. Do not replace it
 or the SSH configuration merely because a new session starts.
@@ -110,6 +111,52 @@ before every build; refuse an unexpected revision or dirty worktree instead of r
 5. Leave Prism and Minecraft launch to the player. Record the instance, deployed commit
    and hash with every finding. Stop Minecraft before the next deployment.
 
+Build and deployment are separate boundaries. While the owner plays the already
+deployed jar, source synchronization and a capacity-guarded **Build-only** action may
+use the separate execution worktree; neither writes the running instance. Serialize
+agent builds and refuse unknown/insufficient physical memory, commit or work-disk
+headroom. Do not switch source underneath a running Gradle task. **Deploy** waits
+for the player to stop that instance, verifies ownership, and only then replaces its
+managed jar. The combined **BuildAndDeploy** action is the stopped-instance convenience
+path, not a reason to kill the player's game or prohibit unrelated source work.
+
+### Commands from the local coordination worktree
+
+The PowerShell and Bash entrypoints share the same implementation. The local inventory
+is already configured on the coordination machine; there is no SSH or Git login step:
+
+```powershell
+$revision = git rev-parse HEAD
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\pc-workflow.ps1 -Action Sync -Revision $revision
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\pc-workflow.ps1 -Action Build -Revision $revision
+```
+
+Build prints the exact remote `PackZip`, source/runtime revision and hashes. While it
+runs, the player's previous jar/world is untouched. Once the player stops Minecraft:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\pc-workflow.ps1 -Action Deploy -Revision $revision -PackZip '<absolute-PC-ZIP-from-Build>'
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\pc-workflow.ps1 -Action Inspect -Revision $revision
+```
+
+For initial setup or any other stopped-instance iteration, replace the separate Build/
+Deploy pair with `-Action BuildAndDeploy`. On a Bash coordination shell, use
+`bash tools/pc-workflow.sh -Action Sync -Revision <full-SHA>` and the same parameters
+for the other actions. PowerShell must be available on the coordinator; the execution
+host and native deployment contract are Windows. A fixed digest-bound bootstrap and
+JSON stdin carry settings, not interpolated shell paths or long command-line payloads.
+
+The current3GiB Gradle heap requires at least6GiB free physical memory,8GiB free commit
+and8GiB on each distinct work/cache volume. These are fresh build preconditions, not
+a global machine change or permission to stop unrelated programs. Build/worktree/cache
+locks prevent overlapping agent execution and source switches. Unknown/stale locks
+are preserved and reported, not automatically removed.
+
+The deployment tool accepts the current explicitly empty public overrides and refuses
+nonempty overrides before mutation. Pin or Java migrations require a new isolated
+instance under this bounded tool; they are not silent modifications of an existing save.
+Do not bypass a refusal by deleting markers, mods, locks or player configuration.
+
 SSH commands must use `BatchMode=yes`, `StrictHostKeyChecking=yes` and a finite connection
 timeout. Windows' remote command shell has an approximately 8191-character command-line
 limit: do not place long base64 scripts on it. Prefer the committed entrypoints; for
@@ -141,8 +188,8 @@ at70901 completed successfully, including verify and all six native smoke shards
 The inspected shard1 checks out that SHA and proves eight production-server boots/
 scenario passes. This resolves the previously unrecorded sound-registration/server
 binding without repeating a server on the PC merely because execution moved.
-The PC still needs its actual isolated build/package/deployment proof. Hosted startup
-does not prove native client audio, visual quality, human play or a release-ready flat route.
+Hosted startup alone does not establish PC build/package/deployment, native client
+audio, visual quality, human play or a release-ready flat route.
 
 The isolated PC build/package has subsequently passed on frozen70901: full build,
 88 pack contracts,43 behavior suites and23 actual archive/resource checks, with zero
@@ -151,3 +198,18 @@ remaining JVMs. Its Forge jar SHA-256 is
 See [the source-bound receipt](../testing/latest-validation.md#personal-pc-qualification-of-frozen70901).
 Deployment/client observations remain separate; do not relabel this initial70901 archive
 as a later tool-source package or final RC.
+
+## Tool contract evidence
+
+The frozen tooling passes317 assertions across31 isolated Windows PowerShell5.1 fixtures:
+create/idempotence/update/rollback, owner/running/reparse/tamper/pin/provenance refusals,
+the actual installed template's `cachedVolatile` shape, `.index` preservation, out-of-scan
+staging, resource-gated Build while an attributable player game remains untouched,
+and fixed stdin transport/exact detached Sync. All45 native helpers and the sole entrypoint
+are top-level in the parsed AST. Fixtures use synthetic files and substituted OS/Git/
+download/transport boundaries; they launch no JVM, SSH, network or real launcher.
+
+The independent `prism-tooling-windows` CI job runs the direct WinPS5 entry and its
+Git Bash twin. Actual real-PC transport/CDN/installed-instance results must be recorded
+separately in [the validation ledger](../testing/latest-validation.md); the fixture
+count alone is not that integration proof or native client acceptance.

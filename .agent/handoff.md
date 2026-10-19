@@ -43,6 +43,14 @@ releases its JVM window with zero processes. No local native boot/EULA or client
 action occurred. The remaining immediate work is the new reviewed deployment tooling
 and its real dedicated-instance execution, not another historical build/smoke matrix.
 
+The tooling is now frozen and reviewed, with317 isolated WinPS5 assertions/31 fixtures
+and45 top-level native helpers. It includes separate Build/Deploy, fresh capacity
+checks, worktree/cache locks, actual Prism11.0.2 metadata, index preservation and
+out-of-scan staging. The new Windows CI job covers both direct and Git Bash entrypoints.
+Next execute the published `pc-workflow` Sync -> Build -> Deploy -> Inspect with the
+existing private inventory, then compare the preserved old-instance hashes. No real
+transport/CDN/deployment pass is inferred from the fixture results.
+
 ## Historical owner-requested cloud freeze
 
 Read [the compact cloud entry](cloud-migration-handoff.md) first. Source consolidation

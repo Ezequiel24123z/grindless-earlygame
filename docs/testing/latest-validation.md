@@ -1,5 +1,30 @@
 # Current T0 rework validation
 
+## Frozen SSH and Prism tool contracts
+
+The new paired `pc-workflow` / `prism-dev` tooling passes317 assertions across31
+isolated fixtures on actual Windows PowerShell5.1.26100.9711. This exercises source/
+transport dispatch, exact detached Sync, staged new creation, idempotence, reversible
+owned updates, data/index preservation and fail-closed owner/process/path/reparse/
+archive/pin/hash/version/resource boundaries. Standalone Build accepts an attributable
+player game only with measured headroom and never accesses its instance; Deploy remains
+stopped/owned. Both worktree and shared cache are locked for an agent build.
+
+The integrator's initial source review caught helpers/entrypoint placed inside package
+verification. The corrected parsed AST has45/45 helpers top-level and one top-level
+entrypoint. Real installed Prism metadata exposed `cachedVolatile`, missing from the
+initial researched field list; that standard boolean cache is now accepted, sanitized
+away and covered by positive/negative fixtures. The Windows `File.Replace` transient
+backup handles WinPS5.1's null-string binding; update/rollback fixtures actually pass.
+Stages are outside the live instances scan and `.index` is retained rather than
+mistaken for another mod.
+
+No provider/SSH/JVM/real Git write/cache/launcher/player data is used in these fixtures.
+The added independent Windows CI job runs the direct check and Git Bash twin; hosted
+execution is pending until published. Real transport, official downloads and installed
+instance verification follow separately. No current-source gameplay, client, Linux/macOS
+coordinator execution, listening, survival or RC result is inferred.
+
 ## Personal-PC qualification of frozen70901
 
 The bounded QA worker actually created one clean detached execution worktree and a
@@ -35,7 +60,7 @@ Observed physical free memory is9.1GiB before/9.67GiB after; work-volume free sp
 finishes at166.85GiB. Duplicate JEI classes, upstream ForgeBiomeModifiers source-remap
 and Java/Gradle deprecation warnings remain recorded; production compilation/remapping
 and checks exit0. No dependency/resource blocker or new local smoke/EULA change occurs.
-The exact70901 hosted registration proof above is reused.
+The separately recorded exact70901 hosted registration proof is reused.
 
 Private machine paths stay outside Git. Source-bound logs/receipts00-06 remain in the
 execution worktree at `build/validation/ssh-t0-20261019T163207Z`; final evidence receipt

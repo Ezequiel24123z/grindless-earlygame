@@ -10,6 +10,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  prism-tooling-windows:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check isolated Prism and SSH workflow contracts
+        shell: powershell
+        run: powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\tools\checks\Test-PrismDev.ps1
+
+      - name: Check the Git Bash tooling twin
+        shell: bash
+        run: bash tools/checks/Test-PrismDev.sh
+
   # Build and the offline behaviour checks. Neither instantiates Forge, which is why the smoke
   # jobs below exist at all (ADR-0049).
   verify:

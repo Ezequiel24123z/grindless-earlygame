@@ -20,6 +20,8 @@
     "pc_jar_sha256": "5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7",
     "pc_initial_zip_sha256": "ed504912a57f1c34be499735a89939b5ffe46a43636638e4b3b2b3a98067ab73",
     "pc_jvm_ownership": "released_after_zero_remaining_JVMs",
+    "tooling": "frozen_reviewed_317_assertions_31_fixtures_45_top_level_helpers_actual_PC_transport_deploy_next",
+    "windows_ci_job": "prism-tooling-windows_pending_publication",
     "client_render_listening": "NOT_RUN",
     "official_superflat_access": "NOT_IMPLEMENTED",
     "release_ready": false,

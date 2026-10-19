@@ -40,6 +40,17 @@
     "private_host_settings": "outside_Git_addresses_paths_and_launcher_accounts_never_committed",
     "preserve": ["original_clones", "app_worktrees", "existing_caches", "preparation_instance", "exploratory_world", "old_audit_and_source_bound_proofs"],
     "development_deployment": "new_owned_Prism_instance_not_RC_or_longitudinal_reference",
+    "tooling": {
+      "status": "frozen_reviewed_ready_for_actual_PC_workflow",
+      "entrypoint": "tools/pc-workflow.ps1",
+      "host_entrypoint": "tools/prism-dev.ps1",
+      "isolated_assertions": 317,
+      "isolated_fixtures": 31,
+      "top_level_native_helpers": 45,
+      "windows_ci_job": "prism-tooling-windows",
+      "actual_transport_download_deployment": "NOT_RUN_at_tooling_checkpoint",
+      "parallel_player_boundary": "Build_only_is_separate_and_resource_gated_Deploy_requires_stopped_owned_target"
+    },
     "original_audit": "Read_original_0d79860_audit_and_T0_T1_action_plan_not_rerun_later_integrated_contracts_take_precedence",
     "native_sound_binding": "Reused_exact70901_CI39185959767_success_verify_and_all_six_smoke_shards_exact_checkout_and_eight_production_boots_inspected",
     "additional_pc_smoke": "No_new_binding_uncertainty_after_exact_source_hosted_proof_no_duplicate_native_boot_needed",
