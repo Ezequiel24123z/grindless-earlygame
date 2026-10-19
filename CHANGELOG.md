@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Freeze the three remaining technical units and serialize qualification.**
+  Publish the A01 red/repair, corrected native-reload harness and Bash batch
+  checkpoints without merging or deploying unqualified changes. Preserve their
+  offline evidence and independent review boundaries. Grant only A01 focused
+  Java red/green checks after a fresh zero-JVM/headroom preflight; native/build/
+  SavedData and the final integrated deployment still require separate windows.
 - **Deploy the combined, production-booted executor/art candidate.** Actualfd5060
   completes all44 fast suites, production-server preparation and one targeted states
   boot for changed BE/ticker construction. Verify the three book PNGs and generation
