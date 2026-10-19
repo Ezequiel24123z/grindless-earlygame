@@ -1,5 +1,29 @@
 # Current T0 rework validation
 
+## Independent gates on the three frozen follow-up units
+
+The coordinator publishes the exact child freezes for qualification, not as merged
+or deployed changes. The deployed artifact remains fd5060/8614df23. Three bounded
+read-only reviews identify these remaining gates:
+
+| Unit / source | Review result and evidence limit |
+| --- | --- |
+| Reload harness `c7c947b` over `8a433cc` | Publication and wake budgets are now separated statically. PS still resolves relative ancestors through the .NET current directory while `Get-Item` uses the provider location. A read-only probe confirms different bases after `Set-Location`; a relative junction source can evade the ancestor check. No destructive reproduction or native run is claimed. |
+| Extractor `c87dbc8`, red `4f1b30b`, base `48c9513` | No other high-confidence production blocker in the reviewed recovery/accounting paths. The documented post-stop oracle is impossible because both harnesses delete the world before returning. ADR-0155 selects explicit paired diagnostic retention; implementation and real saved-accounting evidence are pending. |
+| Batch twin `507ecfa`, base `cc2fe71` | `ROOT="$(cd -- "$ROOT" && pwd)"` captures two lines with a relative root and nonempty `CDPATH`. The reviewer confirms this using Bash5.2.37 builtins only. Existing test children clear `CDPATH`, so their 37 cases/785 assertions do not cover it. A focused CLI regression and repair are assigned. |
+
+The A01 worker alone holds the next PC lease for frozen red/green classpath,
+`javac` and `VerifyExtractor`; no build, server or deployment is authorized by that
+lease. Its fresh guard records zero Java, 10.07 GiB free physical memory, 33.83 GiB
+free commit and 164.54 GiB free work space. Results remain pending, not implicit
+passes from source inspection.
+
+Batch offline evidence is WinPS5/Git-MSYS, not Linux/macOS/Core/Forge. The reviewed
+ledger's three hashes identify CRLF materializations, not the LF Git blobs. The
+existing bundled Git shell is also located for the harness child without installing
+software or repeating the batch suite. No review launches a JVM, server, SSH session
+or player environment.
+
 ## Combined fd5060 fast gate, production boot and installed artifact
 
 Only the previously unexecuted stages resume after the stderr observer problem.

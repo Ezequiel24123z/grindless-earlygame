@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve independent frozen-unit review gates.** Record the remaining PS
+  provider-relative ancestor mismatch, the batch twin's nonempty-CDPATH root
+  contamination and the deleted-world accounting boundary. Keep previous offline
+  passes source/platform-bound; none authorizes native execution or deployment.
 - **Select explicit diagnostic-world retention for A01 accounting (ADR-0155).**
   Independent review finds no other high-confidence production blocker, but
   the authored post-stop SavedData check cannot read a world the harness has
