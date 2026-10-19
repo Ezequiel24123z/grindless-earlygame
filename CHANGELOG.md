@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve A01's completed owner-authored proof record.** Merge documentation-only
+  3ba8b5b with actual559 native/SavedData receipts, binary conservation and scoped
+  cleanup; retain the existing explicit-root/retention instructions without
+  repeating either successful runtime. The already deployed artifact is unchanged.
 - **Complete the bounded engineering programme and install the qualified artifact.**
   A01 repaired native has10 real markers and4 actual Luna saved-accounting checks;
   preserve/hash the binary then clean only its diagnostic world. Deploy that same

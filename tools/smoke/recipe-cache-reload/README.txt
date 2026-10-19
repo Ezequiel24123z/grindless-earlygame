@@ -1,8 +1,16 @@
-Pending native idle-cache reload regression (ADR-0153)
+Qualified native idle-cache reload regression (ADR-0153)
 
-Status: AUTHORED OFFLINE / NOT_RUN. Not in scenarios.txt. No JVM, Gradle,
-server/client, PC execution, application fix, deployment or player save is part
-of this checkpoint. Source parent: ab8490545d2796fcfb79981cb2bb2bd9172f7113.
+Current status: ACTUAL NATIVE RED/GREEN QUALIFIED AND REGISTERED.
+The exact444 production baseline publishes the real ingot tag but misses wakeup;
+integrated559 passes all5 actual Server markers, one gravel -> two sand,
+exact3840FU and40 stable ticks with harness0/natural server0/0Java. The identical
+559 JAR98aa47dd and playable ZIP are now deployed to the separately owned Dev
+instance; no client/player-save/T0 acceptance follows. Original receipts and
+observer-error addenda are preserved without replay in the coordinator ledger.
+
+The original offline checkpoint and its limits below are historical, not the
+current qualification state. It was authored without JVM/Gradle/server/client/
+PC/deployment execution, on source parent ab8490545d2796fcfb79981cb2bb2bd9172f7113.
 The separate real-tag Java red fixture is frozen at
 3643c6a049e3beb39b28fe23f4b6d8a1f316db30; its results are not this native proof.
 
