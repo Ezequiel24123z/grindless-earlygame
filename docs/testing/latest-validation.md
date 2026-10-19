@@ -1,5 +1,21 @@
 # Current T0 rework validation
 
+## Final selected green source and review closure
+
+The final087 adapter delta is independently ready: both fixed A01 exclusions,
+platform arguments, failure propagation and four cases have no high-confidence
+blocker. The combined merge is
+`559bed5e8ea70ac52ff4b3fed3850ab05ab48256`; its batch/check bytes equal087,
+while its application/build/native-boot/fixture inputs equal855 exactly.
+The Java merge retains the optional/retention loop once plus the batch call once.
+
+After the one valid exact444 native red and fresh zero-Java/capacity guards, the
+same exclusive owner may full-build/package exact559, compile/run the new
+standalone `VerifySmokeHarness` gate and qualify the genuine cache green.
+Reuse already proved unchanged Energy/helper/app behavior; do not replay the
+historical matrix. A01 native/SavedData and owned Prism deployment follow only
+after separate lease transitions. No green exit or package hash is claimed yet.
+
 ## Combined final adapter and unchanged runtime input identity
 
 Integrate `087c1a6` unchanged in both batch scripts and the42-case/975-assertion

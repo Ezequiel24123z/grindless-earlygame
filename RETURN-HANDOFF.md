@@ -54,14 +54,14 @@ be diagnosed again as absent without a current counterexample.
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | Source through `0fec76d` is integrated after independent closure of publication/wake, ancestor/provider and Home findings.86 PS contracts pass; exact444 Linux CI also executes the optional SH/retention helpers and new Energy assertions successfully. Local missing-`ln` does not invalidate that separate Linux proof. Genuine native publication/wakeup remains unrun and unregistered. |
-| GREEN batch portability | Original history through final087c1a6 is integrated: CDPATH-safe roots, fixed A01 exclusion in both twins and one batch invocation alongside optional/retention in the Java gate.42 cases/975 assertions pass on WinPS5/Git-MSYS; final delta review/combined Java gate remain distinct pending checks. No new framework/CI step/native batch. |
+| GREEN batch portability | Final087c1a6 is reviewed and integrated at559bed5: CDPATH-safe roots, fixed A01 exclusion in both twins and one batch invocation alongside optional/retention.42 cases/975 assertions pass on WinPS5/Git-MSYS; the combined Java gate remains a selected PC check. No new framework/CI step/native batch. |
 | A01 Crude output recovery | Focused red6/green59 and one real `4f1b30b` native RED are recorded. Production boot/setup/reconstruction succeeds; four recoveries are missing as predicted, not a parser failure. It stops naturally, leaves0Java and releases its lease. Repaired native/SavedData/full integrated build and deployment remain open. |
 
 The A01 worker releases after its native red with zero Java/port25629 free and
 both source surfaces clean at21:16:48Z. The next exclusive lease starts with cache
-native RED on exact444. The final batch adapter `087c1a6` is now frozen and under
-delta review; the coordinator assigns the integrated green/build/package source
-explicitly after its merge, not a deployment or A01 grant.
+native RED on exact444. After its valid functional red and fresh guards, the same
+owner may build/package, execute the new Java gate and run cache GREEN on exact
+`559bed5e8ea70ac52ff4b3fed3850ab05ab48256`, not deploy or run A01 yet.
 Fresh coordinator preflight at21:21:11Z records0Java,9.730 GiB free physical
 memory,33.766 GiB free commit and163.561 GiB work space. The worker refreshes
 the guards and reports exact exits/markers and0Java. App/build/harness input

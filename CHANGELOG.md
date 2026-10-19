@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Assign the reviewed combined green source.** Final087 delta is ready and
+  integrated as559bed5 with runtime inputs unchanged. Only after the valid native
+  cache red and fresh guards, permit its full package build, selected Java tooling
+  gate and cache green. Keep A01 SavedData and Prism deployment separately gated.
 - **Combine the final batch adapter with retained-world checks.** Preserve the
   42-case/975-assertion087c1a6 PS/SH gate and fixed A01 fresh-world exclusion.
   Merge the existing Java optional/retention loop with one batch invocation,
