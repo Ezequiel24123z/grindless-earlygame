@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the extractor owner's final execution handoff.** Merge the
+  documentation-only e410 history with exact focused/native-red receipts, normal
+  shutdown and auxiliary transport limits. Keep explicit absolute-root invocation,
+  scoped retention and Luna accounting/cleanup without changing runtime inputs.
 - **Recover the causal cache-native red without replay.** The run reaches real
   ingot publication then only the intended missed-wake failure and shuts down0.
   Correct the observer's jar-name assumption read-only, preserving original and

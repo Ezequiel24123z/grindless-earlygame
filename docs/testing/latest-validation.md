@@ -1,5 +1,11 @@
 # Current T0 rework validation
 
+The extractor owner's documentation-only `e41054c` is also merged. Its actual
+focused/native-red identities are retained in the fixture README alongside the
+coordinator's later retention and absolute-root instructions. No application,
+checker or executable fixture bytes change; that merge does not invalidate the
+in-flight immutable559 build/native qualification.
+
 ## Recovered cache-native red and started integrated build
 
 The exact444 PC run is now classified `ExpectedNativeRedRecoveredWithoutReplay`:
