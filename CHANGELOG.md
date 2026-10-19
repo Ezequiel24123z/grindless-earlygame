@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the corrected shared-batch twin.** Preserve `507ecfa` and its
+  `4b86dbb` CDPATH regression repair unchanged after independent closure.
+  The real fake-boot CLI gate passes38 cases/856 assertions on WinPS5/Git-MSYS;
+  no repeat native batch, new server runner or Linux/Core pass is implied.
 - **Integrate the reviewed A01 source without claiming execution.** Preserve the
   original red/repair history and combine the independent exporter/tick guard
   with A03. Compilation and native evidence remain pending; the first PC source
@@ -62,6 +66,13 @@ entries below reference those records by id.
   SavedData accounting oracle. Ten no-JVM source safeguards and thirteen
   unchanged behavior bodies pass static comparison; Java/native/build remain
   NOT_RUN, not accepted.
+- **Add the native Bash shared-world smoke twin (ADR-0106/0111/0154).**
+  `run-smokes-batch.sh` aggregates the same ordered commands/markers and dispatches
+  once to the existing native smoke boot, preserving its handshake, budgets,
+  shutdown, cleanup and exit status rather than wrapping Windows PowerShell or
+  rebooting each scenario. Keep fixed/optional-pack cases isolated, clear inherited
+  packs at dispatch, and add focused fake-boot contracts. This is a development
+  shortcut, not a new server, client, integration or T0/T1 acceptance proof.
 - **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
   disabled optional fixture pack through the existing paired harness, retaining
   legacy defaults, isolated-world behavior and the scenario-list integration.
@@ -796,6 +807,11 @@ entries below reference those records by id.
 
 ### Fixed
 
+- **Resolve a relative batch root independently of `CDPATH`.** Neutralize the search
+  path only for the Bash `cd` used by root resolution, without suppressing errors
+  or changing the caller's environment. Retain literal spaces/metacharacters,
+  legacy selection and one fake-boot dispatch; add an effective-`CDPATH` CLI
+  regression and distinguish executed CRLF files from normalized LF Git blobs.
 - **C3 integrates with Forge and the check suites again (ADR-0136, unaccepted).** Forge
   compiles: JEI catalysts and category layout cover the Geological Collector, Biocultivator
   and Assembly Bench, and the new blocks, items, source faults and Crank Handle tooltip are
