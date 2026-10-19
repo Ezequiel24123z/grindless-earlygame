@@ -1,7 +1,7 @@
-# Usage: powershell -ExecutionPolicy Bypass -File .\tools\build-modpack.ps1 [-Root .] [-Profile preparation]
+# Usage: powershell -ExecutionPolicy Bypass -File .\tools\build-modpack.ps1 [-Root .] [-Profile expanded|preparation|playable]
 param(
     [string]$Root = (Split-Path -Parent $PSScriptRoot),
-    [ValidateSet('expanded', 'preparation')][string]$Profile = 'expanded',
+    [ValidateSet('expanded', 'preparation', 'playable')][string]$Profile = 'expanded',
     [string]$RuntimeRevision
 )
 

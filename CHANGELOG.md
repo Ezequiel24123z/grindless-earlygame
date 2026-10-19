@@ -15,11 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
-- **Select a restricted additive playable pack profile (ADR-0149).** Reuse the four
-  existing runtime/quest pins and three performance pins, preserve historical profiles
-  and require explicit public override inputs/provenance. Do not silently enable the
-  expanded storage/teleport/loading extras or invent configuration keys. Implementation,
-  actual configured package and clean import/client qualification remain pending.
+- **Implement the restricted additive playable pack profile (ADR-0149).** Select the
+  existing four runtime/quest pins and three performance pins without changing the
+  expanded default, preparation selector, pin authorities or historical filenames.
+  Add a committed, explicitly empty public-override manifest/source contract, strict
+  path/tracking/destination guards, exact configuration/profile provenance and a
+  source-bound non-RC archive identity. Include third-party notices and verify the
+  archive whitelist through the same writer used by the builder. Frozen application/
+  pin/notice inputs, PowerShell syntax, five isolated wrapper contracts and590 links
+  pass. Focused Gradle selector/mutation/archive fixtures await the shared resource
+  reservation; the final integrated package, official preset and actual import/client
+  qualification remain pending. The first twin-harness invocation stopped at its absent
+  assumed Git Bash path; Bash execution is not credited.
 - **Approve the existing Quern A game import and bounded native loop (ADR-0148).**
   Retained media/provenance/receipt hashes and the existing entitlement attestation
   support the game-incorporation notice. Account verification is closed; no private
