@@ -43,6 +43,17 @@
     "original_audit": "Read_original_0d79860_audit_and_T0_T1_action_plan_not_rerun_later_integrated_contracts_take_precedence",
     "native_sound_binding": "Reused_exact70901_CI39185959767_success_verify_and_all_six_smoke_shards_exact_checkout_and_eight_production_boots_inspected",
     "additional_pc_smoke": "No_new_binding_uncertainty_after_exact_source_hosted_proof_no_duplicate_native_boot_needed",
+    "pc_build": {
+      "source_revision": "70901eca2da386cd54fc769ba8a2a59be10eb76b",
+      "status": "full_build_and_playable_engineering_package_passed",
+      "pack_contracts": 88,
+      "behavior_suites": 43,
+      "actual_archive_checks": 23,
+      "jar_sha256": "5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7",
+      "zip_sha256": "ed504912a57f1c34be499735a89939b5ffe46a43636638e4b3b2b3a98067ab73",
+      "jvm_ownership": "released_zero_remaining",
+      "not_claimed": "Prism_or_client_or_byte_reproducibility_or_RC_acceptance"
+    },
     "release_ready": false,
     "human_accepted": false,
     "t1_allowed": false

@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Build and package the received T0 source on the personal PC.** An isolated clean
+  worktree and cold work-volume Gradle home produce the real70901 Forge jar and
+  seven-pin playable-profile ZIP. Full build,88 pack contracts,43 behavior suites,
+  documentation and23 real archive/resource checks pass. Retain exact hashes,
+  warnings and private evidence; release JVM ownership with zero processes. This
+  proves the new execution boundary, not Prism/client/Survival or RC acceptance.
 - **Reuse the complete70901 native CI proof before another PC smoke.** Live inspection
   finds run39185959767 successful at the exact received source, including verify and
   all six smoke shards. Shard1's checkout, eight real production-server boots and

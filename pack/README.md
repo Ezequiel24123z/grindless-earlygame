@@ -12,6 +12,12 @@ Minecraft, Forge, Java and third-party jars are not redistributed in the ZIP: th
 downloads the official pinned components. Internet access and a legitimate Minecraft account
 are required. Never include account files or personal launcher configuration in an export.
 
+For the owner's SSH-first personal-PC development loop, use
+[the operating runbook](../docs/operations/ssh-prism-workflow.md) and the dedicated
+ownership-marked engineering instance. Do not update the old preparation instance,
+copy its world, or invoke Prism's interactive Import dialog from SSH. Normal public
+ZIP import below remains available; development deployment is not an RC or save migration.
+
 ## Three profiles, one set of dependency pins
 
 The default **expanded** pack below keeps its existing convenience/performance role,

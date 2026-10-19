@@ -33,9 +33,9 @@ execution targets.
 | Identity / component | Observed state | Rule |
 | --- | --- | --- |
 | Coordination machine -> PC SSH | Existing key/login succeeds | Reuse it; never copy private keys or disable host-key checking. |
-| PC -> GitHub Git SSH | Existing personal alias reads the exact continuation head | Keep its origin and key configuration unchanged. |
+| PC -> GitHub Git SSH | Existing alias authenticates as `Ezequiel24123z` and reads the exact continuation head | Keep its origin and key configuration unchanged. |
 | PC `gh` API login | Stored personal token is invalid | Not a Git transport failure; no account switch or reauthentication is needed for this loop. |
-| Local GitHub API | Authenticated as `Ezequiel24123z` | Use for repository API/publication where needed. |
+| Local GitHub API | Authenticated as `Ezequiel24123z`; repository push/admin permissions verified | Use for repository API/publication where needed. |
 | PC clone commit identity | Existing repository-local author identity | Inspect, do not replace globally. |
 | Coordination worktree commit identity | No configured author at intake | Use command-scoped identity for checkpoint commits, not a persistent/global migration. |
 
@@ -46,7 +46,8 @@ not this repository. No GitHub credential is required on the SSH command line.
 The coordination machine's connection inventory is
 `%USERPROFILE%\.config\grindless\pc.json`, outside Git. Its schema is
 `grindless.pc-workflow`, version 1; fields are `sshTarget`, `clonePath`, `worktreePath`,
-`gradleUserHome`, `prismRoot`, `templateInstanceId`, `instanceId` and `javaHome`.
+`gradleUserHome`, `prismRoot`, `templateInstanceId`, `instanceId`, `javaHome` and
+`javaSha256` (the inspected Java 17 `javaw.exe`, not a credential).
 The inventory also records the existing personal Git alias and received source/branch;
 none of these settings contains a key or token. A successor reads this file rather
 than rediscovering or publishing personal addresses and paths. Do not replace it
@@ -70,6 +71,27 @@ path, and do not change that global setting to fix the new instance.
 The opt-in `playable` profile is seven pinned dependencies plus Grindless. Its provenance
 must still say `restricted-playable-profile-not-rc`. Upstream defaults and an explicitly
 empty public-override selection are intentional, not an official Superflat preset.
+
+### Why not automate Prism's Import dialog over SSH?
+
+The official [CLI reference](https://prismlauncher.org/wiki/getting-started/command-line-interface/)
+separates `--import` from `--launch`, but import still opens the GUI's modal creation
+dialog and can require publisher-specific manual downloads. It is not a headless
+installation command and must not unexpectedly activate the player's desktop.
+
+Prism's inspected source at `804e2a02e0ef299cac33fc7ec3ff8a43422afb4c` supports a simpler
+file-layout lane: [instance discovery](https://github.com/PrismLauncher/PrismLauncher/blob/804e2a02e0ef299cac33fc7ec3ff8a43422afb4c/launcher/InstanceList.cpp)
+finds folders containing `instance.cfg`; the standard type is `OneSix`.
+[Component serialization](https://github.com/PrismLauncher/PrismLauncher/blob/804e2a02e0ef299cac33fc7ec3ff8a43422afb4c/launcher/minecraft/PackProfile.cpp)
+uses `mmc-pack.json` format 1 and `net.minecraft` / `net.minecraftforge` components.
+[The game directory](https://github.com/PrismLauncher/PrismLauncher/blob/804e2a02e0ef299cac33fc7ec3ff8a43422afb4c/launcher/minecraft/MinecraftInstance.cpp)
+is `minecraft/` (or an already existing `.minecraft/`), with jars discovered under `mods/`.
+Routine Grindless updates do not require component/patch edits.
+
+This is static upstream evidence, not an exact-tag diff or observed new client launch.
+The actual installed template already supplies a working compatible component set.
+Create a fresh unmanaged, ownership-marked instance from sanitized metadata only;
+never invoke import, clone a private instance or replace its launcher-managed files.
 
 ## Repeatable execution contract
 
@@ -121,3 +143,11 @@ scenario passes. This resolves the previously unrecorded sound-registration/serv
 binding without repeating a server on the PC merely because execution moved.
 The PC still needs its actual isolated build/package/deployment proof. Hosted startup
 does not prove native client audio, visual quality, human play or a release-ready flat route.
+
+The isolated PC build/package has subsequently passed on frozen70901: full build,
+88 pack contracts,43 behavior suites and23 actual archive/resource checks, with zero
+remaining JVMs. Its Forge jar SHA-256 is
+`5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7`.
+See [the source-bound receipt](../testing/latest-validation.md#personal-pc-qualification-of-frozen70901).
+Deployment/client observations remain separate; do not relabel this initial70901 archive
+as a later tool-source package or final RC.

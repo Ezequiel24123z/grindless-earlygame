@@ -26,9 +26,11 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: retain verified storage/provenance and integrate the approved minimal Quern loop
-(ADR-0148), additive restricted playable profile/public-override contract (ADR-0149),
-and deliberate flat-world resource access. ADR-0150 requires virtual chunk deposits,
+Next: qualify the isolated PC build/package and dedicated engineering client deployment.
+The approved minimal Quern loop (ADR-0148) and additive restricted playable profile/
+public-override contract (ADR-0149) are already integrated in70901. Its complete hosted
+CI supplies reusable server-binding proof, not client rendering/listening. Continue
+deliberate flat-world resource access: ADR-0150 requires virtual chunk deposits,
 not landscaped spawn resources/food or physical ore generation. The proposed T0
 generating multiblock and quest shop remain scoped design leads. Both provenance investigations are complete;
 do not reopen account verification. Questbook product QA remains on the Heracles

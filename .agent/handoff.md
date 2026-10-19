@@ -32,6 +32,17 @@ binding proof; do not repeat a native server merely for host migration. It is no
 Windows-PC execution or client/listening result. The portable Quern record now separates
 that hosted proof from the original worker's NOT_RUN native boundary.
 
+The isolated personal-PC qualification of exact70901 has now passed: full build/
+remapJar/playable package,88 pack contracts,43 behavior suites,597 links and23 actual
+JAR/ZIP checks. The1924561-byte jar hashes to
+`5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7`;
+the initial70901 ZIP hashes to
+`ed504912a57f1c34be499735a89939b5ffe46a43636638e4b3b2b3a98067ab73`.
+Both original clone and isolated worktree remain clean at that source; the worker
+releases its JVM window with zero processes. No local native boot/EULA or client
+action occurred. The remaining immediate work is the new reviewed deployment tooling
+and its real dedicated-instance execution, not another historical build/smoke matrix.
+
 ## Historical owner-requested cloud freeze
 
 Read [the compact cloud entry](cloud-migration-handoff.md) first. Source consolidation

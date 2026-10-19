@@ -1,5 +1,49 @@
 # Current T0 rework validation
 
+## Personal-PC qualification of frozen70901
+
+The bounded QA worker actually created one clean detached execution worktree and a
+new process-local Gradle home on the personal PC's work volume. The original continuation
+clone remained clean at exact `70901eca2da386cd54fc769ba8a2a59be10eb76b`.
+No old cache, app worktree, launcher instance, account or save was moved or changed.
+
+The actual invocation, using Java17.0.20.1 and Gradle8.8, was:
+
+```powershell
+.\gradlew.bat --no-daemon --no-parallel --max-workers=2 --console=plain build verifyModpack buildModpack -PpackProfile=playable -PpackRuntimeRevision=70901eca2da386cd54fc769ba8a2a59be10eb76b
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\tools\check-links.ps1 -Root .
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .
+```
+
+All three exit0. Build/package takes6m21s; `verifyModpack` passes88 contracts and the
+behavior runner passes43 suites, including Quern67/0. Documentation passes597 links/
+150 ADRs on that frozen source, not the later tooling/documentation branch.
+Gradle `test NO-SOURCE` is not counted as a test suite.
+
+| Actual artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| `forge/build/libs/grindless-0.1.0-forge.jar` | 1924561 | `5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7` |
+| `dist/Grindless-T0-0.1.0-t0.1-playable-70901ec.zip` | 1508868 | `ed504912a57f1c34be499735a89939b5ffe46a43636638e4b3b2b3a98067ab73` |
+
+Twenty-three checks inspect the actual JAR/ZIP: bundled/remapped jar identity, source/
+runtime provenance, seven committed pins, exact six-file whitelist, no worlds/private
+configuration/third-party jars, and the unchanged34364-byte Quern Ogg/notice/binding.
+This is a real restricted playable-profile engineering package, not an RC.
+
+The cold build uses the unchanged3GiB Gradle heap, bounded1GiB helpers/two CPUs/workers.
+Observed physical free memory is9.1GiB before/9.67GiB after; work-volume free space
+finishes at166.85GiB. Duplicate JEI classes, upstream ForgeBiomeModifiers source-remap
+and Java/Gradle deprecation warnings remain recorded; production compilation/remapping
+and checks exit0. No dependency/resource blocker or new local smoke/EULA change occurs.
+The exact70901 hosted registration proof above is reused.
+
+Private machine paths stay outside Git. Source-bound logs/receipts00-06 remain in the
+execution worktree at `build/validation/ssh-t0-20261019T163207Z`; final evidence receipt
+SHA-256 is `cd8ab388e19783c80bff7a1bd16a746537508be4df7a9a96b84452706baa0c8d`.
+The worker releases ownership with zero remaining JVMs. This proves actual PC build/
+packaging, not byte-reproducibility, Prism installation/startup, client/listening,
+survival, forward-save or release acceptance.
+
 ## SSH-first receipt and source preservation
 
 The isolated local session received exact
