@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close A03's source-bound native obligation in its canonical disposition.**
+  Keep the original red7/green938 evidence and the later exact444/559 Level
+  counterexample/green separate, with conserved batch/FU and stable hold.
+  Update the audit bridge and implementation plan without accepting A01 by analogy.
 - **Qualify the genuine loaded-idle recipe reload and register it.** Exact559
   production green wakes after real publication, conserves1gravel→2sand/3840FU
   and40 stable ticks, with harness/server0. Preserve the stdout-self-read observer

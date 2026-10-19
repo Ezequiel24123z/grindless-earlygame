@@ -6,7 +6,8 @@ Received source: `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d`, not old main or
 the original audit's `0d79860`. This bounded unit concerns the current shared executor,
 not a repeat of the completed [T0 audit](../T0-AUDIT.md).
 
-**Implementation and focused JVM/build qualification passed; native QA remains separate.**
+**Implementation, focused JVM/build and subsequent genuine native reload qualification passed.**
+The original child-source proof and the later coordinator-native proof below remain distinct.
 Frozen implementation: `fd9077ea397b28563bc301862a0753943b33527e`.
 ADR-0153 was accepted
 on the coordinator's `2b9218b0bfa19b5b4989f95a2f6c801f8a75f0eb` checkpoint. A fresh
@@ -22,6 +23,30 @@ Explicit logistics hold defers the hook until release; `lastWorkTick` is untouch
 The frozen pre-fix counterexample actually failed seven exact assertions. The fixed
 source passes common/Forge compilation, five selected suites and full build. Native
 server/reload proof, deployment and human acceptance are not supplied by these checks.
+
+## Subsequent coordinator-native red/green
+
+The coordinator's separate exact444 production fixture first proves40 idle
+observations and actual ingot-tag publication, then only the expected missed-wake
+failure: harness1, natural server0. Read-only recovery corrects the observer's
+versioned-name assumption; the actual staged `grindless.jar` hashes to
+`bf43947364bbb3f180c2f7cb728f460f98eea45bc652d4493e0ae682fda7b984`.
+No JVM is replayed.
+
+Integrated559 then full-builds/packages and passes the selected Java tooling gate.
+Its real production reload green has all five `[Server]` markers: wake only after
+publication, one gravel consumed/two sand produced, exactly3840FU paid and40
+subsequent stable ticks without extra work. Harness0, natural server0 and0Java;
+runtime jar SHA-256:
+`98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061`.
+Closed-file recovery receipt
+`fdfa2485135c30626d0e7de077893c763331a852513a8f27d791c378e6538c1d`
+preserves the original observer self-read failure separately; again no replay.
+See [the complete integrated ledger](latest-validation.md) for all raw hashes.
+
+Only after this pass is `recipe-cache-reload` added to the existing scenario
+manifest. There is no new CI step. This closes loaded-idle/tag-reload wakeup,
+not client acceptance, an actual restart or a longitudinal player-save claim.
 
 ## Concrete source counterexample
 
@@ -152,9 +177,10 @@ no parallel Level fixture, scenario, server or client is authored/run by this ch
 native completion/retry evidence apply to their process-machine/native-store paths.
 The composed `dcb8010` fluid and states/settling proofs do not establish blocked-output
 recovery for the separate `CrudeExtractorBlockEntity`. The coordinator's current-source
-check identifies its missing independent idle exporter and assigns that defect to another
-bounded child. This unit neither changes nor executes the Crude Extractor; no closure
-by analogy is claimed.
+check identified its missing independent idle exporter and assigned that defect to
+another bounded child. That separate repair is now source-integrated with59 focused
+checks and an actual native baseline red; repaired native/SavedData is still its
+own obligation. This unit does not close Crude recovery by analogy.
 
 **A02 has current, distinct inventory-counting evidence.** `QuestInventoryEvidence`
 counts each actual inventory slot once. The real41-slot `Inventory` in
@@ -187,7 +213,7 @@ world scans or permanent idle lookup subscription are justified.
 | Fixedfd9077e common/Forge, selected `javac`, five suites and full build | Actual exits0;938 passing assertions |
 | Actual fixed distributable / new generation class | Inspected separately after preserved collector failure; exact hash above |
 | Active-cache generation guard and bounded idle refresh | Implemented under ADR-0153; common contracts pass |
-| Native loaded-world miss/wakeup observation | Coordinator-owned pending proof; no-level fixture is not that proof |
+| Native loaded-world miss/wakeup observation | Actual exact444 red / integrated559 green,5 real markers/conserved batch/40 stable ticks; no-level fixture is not substituted |
 | Native registration / deployment / client / retained world | Not run by this child; no acceptance inferred |
 
 The child must not use the coordinator's private default PC inventory as a mutable target,
