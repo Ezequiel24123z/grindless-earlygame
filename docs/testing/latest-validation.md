@@ -1,5 +1,45 @@
 # Current T0 rework validation
 
+## Clean Sol migration: two focused repairs, not new acceptance
+
+The owner requested a fresh Sol6.1 coordinator under ADR-0147. This preservation
+freezes existing work rather than starting another development or native-validation
+round. At inspection there were no active product workers/JVMs, no session automation
+and the coordinator event subscription remained paused. No new session is started here.
+
+**Sound JSON portability.** All three1ced812 runs39175468394/39175472294/39175468238
+failed `Check offline sound calibration guards`: foundation passed and smokes were
+skipped. Core7.6 locally reproduced the exact ISO-string-to-DateTime failure, exit1.
+The repair feature-detects `DateKind=String`, shares the parser with test cloning
+and retains strict original UTC string validation.117 focused JSON/contract/receipt
+checks each pass on WinPS5, portable Microsoft Core7.6 and the Git Bash twin.
+Runner working-byte hash:
+`29e1b073f14cfff9491d98e407aac110a9320f4d11759dfc9214de3519e85184`;
+tests:
+`2250986820ee9b9e66847f575bda912e01b91b677771c5f35e5bcdbfc0f79d87`.
+The source base is1ced plus this three-file delta. Full post-fix default/hosted CI,
+Linux, codec replay and provider execution are not claimed. The7dad calibration,
+manifest/contract/approval and all nine audio hashes remain unchanged; no new spend.
+Evidence: `build/validation/sound-json-portability-1ced-20261018T2322/final-summary.json`.
+
+**Blueprint observation.** PR run39171615491 failed only first-blueprint/BLUEPRINT-OK;
+its reported heada2aea87 is not a verified actual PR checkout. Separate pushes
+39171612279/39171612070 pass and do not erase that failure. The repaired fixture
+uses the existing loaded-chunk, single-tagged-item pattern with actual ID/Count,
+160 polls/5ticks, original marker/120s budget, scoped cleanup and console diagnostics.
+Both PS/Git Bash source twins pass12 positives and18 negative mutations, with32
+frozen inputs unchanged; manifest SHA-256
+`36bbe5fc9e1a56f28d4bb6da70c571c4d2e410a9514671decd8bde4d02b869ee`.
+The four-marker exosuit log from push39171612279 supports the reused behavior class,
+hash `0c35d89d51aac0c8cca2d6aebab364473138a3152db5a2160ac1d00ddcb982cf`.
+The original Blueprint red server/job logs remain at
+`build/validation/ci-a2-39171615491`. No new Blueprint native run, controlled failure
+path, physical cause or Blueprint gameplay acceptance is claimed.
+
+The new preservation checkpoint's CI is a separate pending result. Context migration
+does not justify redoing unchanged native mechanisms, all art generation, codec tests
+or the owner-approved audio calibration.
+
 ## Physical-item generation and Quern audition
 
 The first ADR-0146 item batch compiles14 generator/two checker sources into31 new

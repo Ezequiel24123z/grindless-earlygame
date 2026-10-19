@@ -36,7 +36,8 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > deliberate Superflat progression, real sprite/art and sound passes, coherent quests and
 > forward-save compatibility. Existing S2, runtime, UI and packaging proofs are reused within
 > their limits; they do not already establish that product. T0 is the only active tier.
-> Astra owns decisions and integration through the [active handoff](.agent/handoff.md).
+> The owner selected Sol 6.1 as the next clean-session coordinator (ADR-0147);
+> decisions and integration follow the [active handoff](.agent/handoff.md).
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -2294,6 +2295,7 @@ to proceed together under Astra; integration and manual gates still control acce
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
 | 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; three real Quern previews delivered and owner-approved, runtime sound integration pending. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review; native client, remaining Superflat/pack/product QA and the playable release remain open |
+| 41 | **Clean Sol 6.1 continuation** | preservation checkpoint and compact handoff prepared under ADR-0147; UTC JSON and Blueprint fixture repairs retain focused evidence, hosted CI pending. The retiring coordinator stops; a new isolated Sol session has not yet been created |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

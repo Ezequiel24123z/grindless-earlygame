@@ -73,10 +73,12 @@ legible to the wider Minecraft modding community.
 
 ## Orchestrated execution
 
-The project owner requires an Astra leader/orchestrator with bounded workers (ADR-0134).
+The project owner now requires **Sol 6.1 (`gpt-6.1-sol`) as the next clean-session
+leader/orchestrator**, with bounded workers (ADR-0147). This supersedes ADR-0134's
+choice of Astra for the leader, not its delegation, preservation or ownership rules.
 This is project policy, not a preference inferred for unrelated repositories.
 
-- **Astra owns** architecture, product and Tier progression, sustainability and production
+- **The current coordinator owns** architecture, product and Tier progression, sustainability and production
   graphs, machine-family and multiblock design, migrations, integration and final review.
 - Delegate application implementation and test execution. Prefer **Sol 6.1 Max** for normal
   coding and **Luna** for simple or repetitive work, including extraction, localization,
@@ -88,12 +90,15 @@ This is project policy, not a preference inferred for unrelated repositories.
   stop condition. Use the fewest useful workers. Serialize shared-file edits, validation
   against changing inputs, commits and publication; never have competing publishers.
 - Do not downgrade architectural or product-critical work merely to reduce latency. Workers
-  escalate decisions in those domains to Astra rather than inventing a second authority.
+  escalate decisions in those domains to the coordinator rather than inventing a second authority.
 
 For a clean-context migration, preserve a Git checkpoint and start a genuinely new isolated
 session, not a fork of the entire conversation or a branch session in the main checkout.
 Read [the active handoff](.agent/handoff.md) and [reloadable plan](.agent/work-plan.json).
 Preserve old worktrees and evidence; migration is not acceptance of unfinished code.
+For this migration, read [the compact Sol handoff](.agent/sol-migration-handoff.md).
+Historical references to Astra identify the previous authority and its actual reviews;
+do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 

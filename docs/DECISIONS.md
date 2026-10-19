@@ -158,6 +158,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0144](#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity) | Ship Superflat-first playable tier releases with longitudinal save continuity | Accepted |
 | [0145](#adr-0145--calibrate-a-small-shared-sound-palette-with-development-only-generation) | Calibrate a small shared sound palette with development-only generation | Accepted |
 | [0146](#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items) | Give items material volume and reuse block models for machine items | Accepted |
+| [0147](#adr-0147--transfer-clean-session-coordination-to-sol-61-without-replaying-evidence) | Transfer clean-session coordination to Sol 6.1 without replaying evidence | Accepted |
 
 ---
 
@@ -6889,3 +6890,55 @@ sprites. Review native-size items, enlarged pixels and representative game conte
 separately. Existing alias/determinism checks remain reusable structural evidence,
 not the art pass. No image generation, new block design or completed visual review
 is implied by accepting this direction.
+
+---
+
+## ADR-0147 — Transfer clean-session coordination to Sol 6.1 without replaying evidence
+
+**Status.** Accepted owner direction, 2026-10-19; the successor session has not been
+created or launched by the retiring coordinator.
+
+**Decision.** The next genuinely clean, isolated session uses **Sol 6.1
+(`gpt-6.1-sol`)** as leader and orchestrator instead of Astra. It inherits architecture,
+product/Tier, sustainability, migration, integration and final-review authority, plus
+the single-publisher responsibility after verifying the checkpoint and live refs.
+This supersedes the leader-model choice in ADR-0134, not bounded delegation, use of
+appropriate workers, proof reuse or preservation. No reasoning-effort override for
+the new leader is inferred beyond the owner's stated model.
+
+Preserve the current coherent work in Git before retirement. Transfer a compact
+source-bound handoff and detailed startup prompt, not the entire conversation via
+fork. The successor must use its own isolated worktree starting from the published
+preservation commit; no reuse of the main checkout or writes to retired worktrees.
+Do not create another PR for a context migration or silently reactivate old sessions,
+event subscriptions, automation or Agent merge.
+
+At this handoff no product worker/JVM remains active, the coordinator subscription is
+paused and no session automation is attached. The current visible session list no
+longer exposes most former children; an explicit app notification archived the C3
+completion-safety child. Do not assume a missing child's raw workspace is accessible.
+Use committed/captured evidence, and ask for restoration only if unavailable context
+is genuinely required. Historical agent IDs are not a resumable worker pool.
+
+The preservation includes two focused CI repairs: bounded Blueprint item observation
+and UTC JSON string preservation in the sound tool. Their recorded targeted tests
+remain separate from the new checkpoint's pending hosted CI. No game smoke, codec
+replay or charged generation is required just to migrate context. The successor
+names the new uncertainty before any expensive run and reuses valid proofs.
+
+Retain real approval accurately: the owner approved all three Quern preview WAVs,
+not the complete soundscape, a release or the art batch. The original three-request
+grant is exhausted and its receipts are immutable. Existing tooling encodes the
+historical `Astra` grant authority; before a different generation scope under Sol,
+review that authorization seam explicitly rather than forging the old name, changing
+spent receipts or resending approved sounds. No credential is transferred in Git or
+chat; local secret references remain private operational context.
+
+**Rejected alternatives.** Forking the long conversation, losing uncommitted worker
+fixes, treating migration as acceptance, forcing history, copying build/world evidence
+as a new proof, returning to an Astra-only leader requirement after the owner's change,
+or automatically resuming every former worker.
+
+**Handoff.** [Compact execution state](../.agent/sol-migration-handoff.md),
+[task graph](../.agent/work-plan.json) and
+[release plan](../plan/process-t0-playable-release-1.md).

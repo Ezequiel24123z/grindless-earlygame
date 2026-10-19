@@ -29,12 +29,20 @@ function Stop-Sound([string]$Code, [string]$Message) {
 function Require-Sound([bool]$Condition, [string]$Message) {
     if (-not $Condition) { Stop-Sound 'SD_VALIDATION' $Message }
 }
+function ConvertFrom-SoundJson([string]$Json) {
+    # Core 7.5+ otherwise coerces ISO strings to DateTime; WinPS5 keeps strings.
+    $options = @{}
+    if ((Get-Command ConvertFrom-Json -CommandType Cmdlet).Parameters.ContainsKey('DateKind')) {
+        $options['DateKind'] = 'String'
+    }
+    return (ConvertFrom-Json -InputObject $Json @options)
+}
 function Read-SoundJson([string]$Path) {
     try {
         $Path = Get-LocalPath $Path
         $item = Get-Item -LiteralPath $Path -Force
         Require-Sound (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0 -and $item.Length -le 262144) 'JSON must be a small regular local file, not a redirected path.'
-        return ([IO.File]::ReadAllText($Path) | ConvertFrom-Json)
+        return (ConvertFrom-SoundJson ([IO.File]::ReadAllText($Path)))
     } catch { Stop-Sound 'SD_JSON' 'Cannot read the required JSON object; check its path, size and syntax.' }
 }
 function Get-SoundHash([string]$Path) {
@@ -51,6 +59,12 @@ function Test-Number($Value, [double]$Expected) {
     return (($Value -is [int] -or $Value -is [long] -or $Value -is [double] -or $Value -is [decimal]) -and [double]$Value -eq $Expected)
 }
 function Test-Bool($Value, [bool]$Expected) { return ($Value -is [bool] -and $Value -eq $Expected) }
+function Test-UtcTimestamp($Value) {
+    if ($Value -isnot [string] -or $Value -cnotmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,7})?Z$') { return $false }
+    $parsed = [DateTimeOffset]::MinValue
+    return [DateTimeOffset]::TryParse($Value, [Globalization.CultureInfo]::InvariantCulture,
+        [Globalization.DateTimeStyles]::None, [ref]$parsed)
+}
 function Get-LocalPath([string]$Path) {
     $full = [IO.Path]::GetFullPath($Path)
     Require-Sound (-not $full.StartsWith('\\') -and -not $full.StartsWith('//')) 'Network/UNC filesystem paths are not supported.'
@@ -138,7 +152,7 @@ function Assert-Grant($Grant, $Inputs, [string]$Output, [string]$Head) {
     Require-Sound ((Test-Bool $Grant.active_entitlement_confirmed $true) -and $Grant.entitlement_at_generation -ceq 'owner_confirmed_paid_subscription') 'Record owner-confirmed paid entitlement at generation; never fetch billing/account data.'
     Require-Sound ($Grant.licence_scope -ceq 'internal_calibration_only' -and (Test-Bool $Grant.public_distribution_approved $false) -and (Test-Number $Grant.max_calls 3) -and $Grant.candidate_ids -is [array] -and $Grant.candidate_ids.Count -eq 3 -and ($Grant.candidate_ids -join ',') -ceq ($script:CandidateIds -join ',')) 'Grant cannot expand calibration or distribution.'
     try {
-        Require-Sound ($Grant.approved_utc -cmatch 'Z$' -and $Grant.expires_utc -cmatch 'Z$') 'Grant timestamps must be UTC.'
+        Require-Sound ((Test-UtcTimestamp $Grant.approved_utc) -and (Test-UtcTimestamp $Grant.expires_utc)) 'Grant timestamps must be original UTC strings.'
         $approved = [DateTimeOffset]::Parse($Grant.approved_utc, [Globalization.CultureInfo]::InvariantCulture)
         $expires = [DateTimeOffset]::Parse($Grant.expires_utc, [Globalization.CultureInfo]::InvariantCulture)
         Require-Sound ($approved -le [DateTimeOffset]::UtcNow -and $expires -gt [DateTimeOffset]::UtcNow -and $expires -gt $approved) 'Grant is not currently valid.'
@@ -190,7 +204,8 @@ function Assert-Receipt($Receipt, $Inputs, [string]$Output) {
         Require-Sound ((Test-Number $attempt.ordinal $ordinal) -and $script:CandidateIds -ccontains $attempt.candidate_id -and $seen -cnotcontains $attempt.candidate_id) 'Duplicate candidate or invalid attempt ordering.'
         $seen += $attempt.candidate_id
         Require-Sound (@('attempting','response_saved','needs_review','http_error') -ccontains $attempt.state) 'Unknown receipt state; review rather than retry.'
-        Require-Sound ($attempt.started_utc -is [string] -and $attempt.started_utc -cmatch 'Z$') 'Missing attempt timestamp.'
+        Require-Sound (Test-UtcTimestamp $attempt.started_utc) 'Missing or invalid UTC attempt timestamp.'
+        Require-Sound ($null -eq $attempt.completed_utc -or (Test-UtcTimestamp $attempt.completed_utc)) 'Invalid UTC completion timestamp.'
         Require-Sound ($null -eq $attempt.request_id -or ($attempt.request_id -is [string] -and $attempt.request_id -cmatch '^[A-Za-z0-9._-]{1,128}$')) 'Unsafe request identifier.'
         if ($attempt.state -ceq 'response_saved') {
             Require-Sound ($attempt.raw_file -ceq ($attempt.candidate_id + '.raw.mp3') -and $attempt.source_sha256 -cmatch '^[0-9a-f]{64}$' -and (Test-Number $attempt.http_status 200)) 'Invalid saved response.'

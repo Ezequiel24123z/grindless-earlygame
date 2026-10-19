@@ -2,6 +2,12 @@
 
 This file keeps the history of the slices already defined and names the next executable slice.
 
+**Coordinator transition (ADR-0147):** the owner requested a new isolated Sol 6.1
+session. The retiring session is preserving work, not continuing product execution.
+Read [the Sol handoff](../.agent/sol-migration-handoff.md) before resuming the queue.
+Historical Astra names below identify previous work, not a model restriction on
+the new coordinator. No T1, functional port or new release is opened by migration.
+
 The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013--the-readme-is-the-design-source-of-truth)).
 [ADR-0107](DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)
 replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The tables from G

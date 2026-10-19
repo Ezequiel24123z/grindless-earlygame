@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param()
+param([switch]$JsonOnly)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'sound-design.ps1')
 $script:Checks = 0
@@ -10,16 +10,32 @@ function Check([bool]$Condition, [string]$Label) {
     if (-not $Condition) { throw ('TEST failed: ' + $Label) }
     $script:Checks++
 }
-function Reject([scriptblock]$Action, [string]$Label) {
+function Reject([scriptblock]$Action, [string]$Label, [string]$ExpectedCode) {
     $rejected = $false
-    try { $null = & $Action } catch { $rejected = $_.Exception.Message -match '^SD_' }
+    try { $null = & $Action } catch {
+        $rejected = $_.Exception.Message -match '^SD_'
+        if ($ExpectedCode) { $rejected = $_.Exception.Message.StartsWith($ExpectedCode + ': ') }
+    }
     Check $rejected $Label
 }
-function Copy-Object($Value) { return ($Value | ConvertTo-Json -Depth 24 | ConvertFrom-Json) }
+function Copy-Object($Value) { return (ConvertFrom-SoundJson ($Value | ConvertTo-Json -Depth 24)) }
 
 $testRoot = Join-Path ([IO.Path]::GetTempPath()) ('GrindlessSound-TEST-not-art-' + [Guid]::NewGuid().ToString('N'))
 [void][IO.Directory]::CreateDirectory($testRoot)
 try {
+    $stamp = '2026-01-02T03:04:05.1234567Z'
+    $timeFixture = [pscustomobject]@{
+        started_utc = $stamp; completed_utc = '2026-01-02T03:04:06Z'
+        nested = @($stamp, '2026-01-02T03:04:05+00:00'); count = 3; enabled = $true; absent = $null
+    }
+    $timePath = Join-Path $testRoot 'TEST-UTC-roundtrip.json'
+    Write-SoundJson $timePath $timeFixture
+    $timeRead = Read-SoundJson $timePath
+    Check ($timeRead.started_utc -is [string] -and $timeRead.started_utc -ceq $stamp -and $timeRead.completed_utc -is [string] -and $timeRead.completed_utc -ceq $timeFixture.completed_utc) 'write/read preserves original UTC string type, precision and Z suffix'
+    Check ($timeRead.nested[0] -is [string] -and $timeRead.nested[0] -ceq $stamp -and $timeRead.nested[1] -is [string] -and $timeRead.nested[1] -ceq $timeFixture.nested[1]) 'nested JSON strings are not converted or timezone-normalized'
+    $timeClone = Copy-Object $timeFixture
+    Check ($timeClone.started_utc -is [string] -and $timeClone.started_utc -ceq $stamp -and $timeClone.completed_utc -is [string] -and $timeClone.completed_utc -ceq $timeFixture.completed_utc) 'test clone shares the string-preserving parser'
+    Check ((Test-Number $timeRead.count 3) -and (Test-Bool $timeRead.enabled $true) -and $null -eq $timeRead.absent) 'JSON numbers booleans and null retain their types'
     $inputs = Get-Inputs $ManifestPath $ContractPath
     Assert-Contract $inputs.Contract; Assert-Manifest $inputs.Manifest $inputs.Contract
     Check ($inputs.Manifest.calibration.candidates.Count -eq 3) 'preserved three-prompt manifest'
@@ -73,8 +89,16 @@ try {
     $grant.active_entitlement_confirmed = $true; $grant.entitlement_at_generation = 'owner_confirmed_paid_subscription'
     Assert-Grant $grant $inputs $output $head
     Check $true 'grant schema with three commit/hash bindings'
+    $grantPath = Join-Path $testRoot 'TEST-grant-roundtrip-not-authorization.json'
+    Write-SoundJson $grantPath $grant
+    $grantRead = Read-SoundJson $grantPath
+    Assert-Grant $grantRead $inputs $output $head
+    Check ($grantRead.approved_utc -is [string] -and $grantRead.approved_utc -ceq $grant.approved_utc -and $grantRead.expires_utc -is [string] -and $grantRead.expires_utc -ceq $grant.expires_utc) 'valid grant survives file roundtrip with exact UTC strings'
     foreach ($field in @('manifest_sha256','contract_sha256','tooling_sha256','manifest_commit','contract_commit','tooling_commit','output_directory','expires_utc','active_entitlement_confirmed','public_distribution_approved','candidate_ids')) {
         $g = Copy-Object $grant
+        # Prove the clone is valid BEFORE mutation, so date coercion cannot mask a negative.
+        Assert-Grant $g $inputs $output $head
+        Check ($g.approved_utc -is [string] -and $g.approved_utc -ceq $grant.approved_utc -and $g.expires_utc -is [string] -and $g.expires_utc -ceq $grant.expires_utc) ('valid cloned grant before negative ' + $field)
         switch ($field) {
             'expires_utc' { $g.$field = [DateTime]::UtcNow.AddMinutes(-2).ToString('o') }
             'active_entitlement_confirmed' { $g.$field = $false }
@@ -82,7 +106,19 @@ try {
             'candidate_ids' { $g.$field = @('quern-a','quern-b','quern-a') }
             default { $g.$field = 'TEST-mismatch' }
         }
-        Reject { Assert-Grant $g $inputs $output $head } ('grant rejects ' + $field)
+        $code = 'SD_VALIDATION'; if ($field -eq 'expires_utc') { $code = 'SD_GRANT_TIME' }
+        Reject { Assert-Grant $g $inputs $output $head } ('grant rejects ' + $field) $code
+    }
+    $invalidTimes = @($null, 42, $true, [DateTime]::UtcNow, [DateTimeOffset]::UtcNow,
+        'not-a-timestamp', 'not-a-timestampZ', '2026-02-30T00:00:00Z',
+        '2026-01-02T03:04:05+00:00', '2026-01-02T03:04:05z', '2026-01-02T03:04:05Zjunk')
+    foreach ($field in @('approved_utc','expires_utc')) {
+        foreach ($invalid in $invalidTimes) {
+            $g = Copy-Object $grant
+            Assert-Grant $g $inputs $output $head
+            $g.$field = $invalid
+            Reject { Assert-Grant $g $inputs $output $head } ('grant rejects non-string/invalid UTC ' + $field) 'SD_GRANT_TIME'
+        }
     }
     Reject { Assert-Checkpoint (Join-Path $testRoot 'TEST-manifest.json') $ContractPath } 'generation cannot select alternate inputs'
     Reject { Get-SoundTools (Join-Path $testRoot 'missing/ffmpeg.exe') (Join-Path $testRoot 'missing/ffprobe.exe') $true } 'missing codec preflight fails without installation'
@@ -95,6 +131,26 @@ try {
     try { Reject { Open-SoundLock $output } 'exclusive budget lock' } finally { $lock.Dispose() }
     $receipt = Reserve-Attempt $receiptPath $receipt $inputs $output 'quern-a'
     Check ((Read-SoundJson $receiptPath).attempts[0].state -ceq 'attempting') 'reservation is durable before any transport'
+    $receiptRead = Read-SoundJson $receiptPath
+    Assert-Receipt $receiptRead $inputs $output
+    $receiptClone = Copy-Object $receiptRead
+    Assert-Receipt $receiptClone $inputs $output
+    Check ($receiptRead.attempts[0].started_utc -is [string] -and $receiptRead.attempts[0].started_utc -ceq $receipt.attempts[0].started_utc -and $receiptClone.attempts[0].started_utc -is [string] -and $receiptClone.attempts[0].started_utc -ceq $receipt.attempts[0].started_utc) 'reserved receipt file/clone roundtrip preserves UTC string before budget validation'
+    foreach ($field in @('started_utc','completed_utc')) {
+        foreach ($invalid in $invalidTimes) {
+            if ($field -eq 'completed_utc' -and $null -eq $invalid) { continue }
+            $bad = Copy-Object $receiptRead
+            Assert-Receipt $bad $inputs $output
+            $bad.attempts[0].$field = $invalid
+            Reject { Assert-Receipt $bad $inputs $output } ('receipt rejects non-string/invalid UTC ' + $field) 'SD_VALIDATION'
+        }
+    }
+    $completed = Copy-Object $receiptRead
+    $completed.attempts[0].completed_utc = $completed.attempts[0].started_utc
+    Write-SoundJson (Join-Path $testRoot 'TEST-completed-roundtrip.json') $completed
+    $completedRead = Read-SoundJson (Join-Path $testRoot 'TEST-completed-roundtrip.json')
+    Assert-Receipt $completedRead $inputs $output
+    Check ($completedRead.attempts[0].completed_utc -is [string] -and $completedRead.attempts[0].completed_utc -ceq $completed.attempts[0].completed_utc) 'non-null completion remains an exact UTC string after write/read'
     Reject { Reserve-Attempt $receiptPath $receipt $inputs $output 'quern-a' } 'in-flight/duplicate cannot resend'
     Resolve-Interrupted $receiptPath $receipt
     $receipt = Read-SoundJson $receiptPath
@@ -140,6 +196,11 @@ try {
     [IO.File]::WriteAllText($receiptPath, '{ TEST corrupt receipt')
     Reject { Read-SoundJson $receiptPath } 'corrupt receipt fails closed'
 
+    if ($JsonOnly) {
+        Check ($script:NetworkCalls -eq 0) 'focused JSON/receipt guards never invoke transport'
+        Write-Output ('PASS: ' + $script:Checks + ' focused JSON/contract/receipt guards; no audio created, provider or secret access. Default CI still runs the complete suite.')
+        return
+    }
     Add-Type -TypeDefinition @'
 using System;
 using System.IO;

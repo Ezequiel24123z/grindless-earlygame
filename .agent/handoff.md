@@ -2,6 +2,21 @@
 
 Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
+## Current migration boundary
+
+The owner requested a genuinely new clean session with **Sol 6.1 as coordinator,
+replacing Astra**. ADR-0147 and PA-0009 are now authoritative for leadership.
+Read [the compact Sol migration handoff](sol-migration-handoff.md) first. This session
+only preserves the pending sound JSON/Blueprint fixes, documentation and receipt;
+it stops product work afterward. No successor has been created or started.
+
+At the final read no background worker or JVM remained, no session automation was
+attached, and the event subscription was paused. Most former child sessions are no
+longer visible; do not assume they or their ignored evidence can be accessed.
+All previous approval/source/CI boundaries survive. The new checkpoint's hosted CI
+is pending, not supplied by the workers' focused results. The older narrative below
+remains useful history and does not require Astra to lead the next session.
+
 ## Active product transition
 
 The owner's new 549-line directive resumes autonomous, bounded work toward the first
@@ -134,13 +149,15 @@ the retained artifact's seven internal file hashes match.42 behavior suites diff
 44 smoke-log files, one of which is an auxiliary boot log. The two local fixtures remain
 NOT_RUN. None of this establishes the new official Superflat preset or product polish.
 
-## Current coordinator and entry
+## Retiring coordinator and previous entry
 
 Astra (`gpt-6-astra`) owns architecture, product/Tiers, integration and final review in
 session `471f2731-3479-49e1-9d10-08eee32bbcbd`, branch
 `ezequiel24123z-direccion-orquestada-t0`. Sol 6.1 Max implements; Luna handles appropriate
 mechanical work. Use bounded ownership and parallel independent work, not competing editors
 or publishers. The retired session is quiescent; no further report to it is required.
+This identifies the retiring coordinator's historical role. The next leader is Sol6.1
+under ADR-0147, not a subordinate of this session.
 
 Start with `AGENTS.md`, [the work plan](work-plan.json), [pending checks](pending-checks.json),
 [risk-based validation](../docs/testing/test-strategy.md) and

@@ -15,6 +15,24 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prepare a clean Sol 6.1 coordinator handoff (ADR-0147, PA-0009).** Preserve all
+  pending work and the27-task/47-edge plan, pause the retiring session, and transfer
+  current authority to a new isolated Sol session rather than forking conversation
+  history. No successor is launched by this checkpoint. Historical Astra reviews,
+  archived-worker limits, charged sound receipts and actual human approval remain
+  unchanged. Context migration does not justify another expensive native run.
+- **Preserve the focused sound JSON portability repair.** Core7.6 coerced ISO UTC
+  strings into DateTime and the receipt correctly rejected them. Feature-detected
+  `DateKind=String` preserves the original JSON type/precision; WinPS5 retains its
+  fallback. Positive clone/roundtrip cases and exact negative errors prevent masked
+  failures.117 focused checks pass on WinPS5, portable Core and the Git Bash twin.
+  The earlier three1ced CI failures and skipped smoke jobs remain historical; full
+  post-fix CI, codec replay and provider generation are not claimed.
+- **Preserve bounded Blueprint smoke observation.** Replace the one-shot selector
+  and global item cleanup with the existing loaded-chunk, single-tagged-item pattern.
+  Keep BLUEPRINT-OK and the120s outer budget. Both source-check twins pass12 positives
+  and18 negative mutations. The original PR run39171615491 remains failed; its reported
+  head is not verified as its actual checkout. Changed-fixture native CI remains pending.
 - **Physical T0 item art and native machine-item presentation installed (ADR-0146).**
   Nine16x16 sprites now distinguish material depth and the Core/Calibrated/Relay family.
   The shared block-model builder adds vanilla presentation inheritance to261 existing

@@ -2,8 +2,17 @@
 
 Development-only Windows PowerShell 5.1/.NET tooling; no Gradle, JVM, generator,
 client, runtime change or new package ecosystem. The SH twins use the same script
-through `pwsh`, following `tools/check-links.sh`. Bash/pwsh are not installed on the
-recovery host, so the SH entrypoints require later platform execution.
+through `pwsh`, following `tools/check-links.sh`. The original recovery did not
+execute Bash/Core. The later portability qualification below uses a pinned
+external Core and the existing Git-bundled native shell, not WSL or a global install.
+
+**Current calibration state:** the three real previews were generated under
+`7dad69df7f5f7cba2eaf83fb1db1a50c0ad6338c` and are all owner-approved for initial
+listening; see the [separate approval record](../../docs/assets/t0-sound-approval.json)
+and [style guide](../../docs/assets/t0-sound-style.md). Calibration 01 is exhausted
+at **3/3**. No generation, old-source QC replay or new authorization is part of this
+portability repair. Historical "unspent", approval and host-execution statements
+below describe their original checkpoints, not the current budget.
 
 **Recovery is not a continuation pass.** The original four drafts survived the
 crash; no runnable pipeline, paid output, codec QC or listening pass survived.
@@ -34,6 +43,99 @@ candidates/receipts, read a key, call a provider or assert authorization.
 The tests create synthetic **TEST / NOT ART / NEVER SHIP** WAVs and fake MP3 text
 in a unique local temporary directory and remove them even on failure. They never
 invoke Generate; transport is replaced with a failing offline guard.
+
+### ISO JSON portability repair (source `1ced812`)
+
+The three reported CI runs `39175468394`, `39175472294` and `39175468238`
+remain historical **failures**, not retroactive passes. The preserved verify-job
+`117817109618` log from push `39175468394` stops at
+`SD_VALIDATION: Missing attempt timestamp.` Foundation passed; smokes were
+**SKIPPED**, not failed. No workflow/guard bypass was added.
+
+This is reproduced locally on Microsoft PowerShell **7.6.0**: plain
+`ConvertFrom-Json` converts an ISO UTC JSON string to `System.DateTime`, so the
+original `Read-SoundJson` receipt roundtrip fails its required string check.
+WinPS **5.1.26100.9711** preserves `System.String`. The test-only JSON clone had
+the same coercion problem, allowing negative grants to reject for the wrong reason.
+
+`ConvertFrom-SoundJson` now feature-detects the cmdlet's `DateKind` parameter and
+uses **`DateKind=String`** where supported, retaining the WinPS5 parser fallback.
+Both file reads and test cloning share it. The string requirement was not relaxed:
+grant/receipt timestamps reject non-strings, invalid calendar dates, non-UTC/
+noncanonical suffixes and malformed values. Optional completion timestamps remain
+null or valid original UTC strings. Limits, reservation-before-HTTP, hashes,
+duplicate detection and terminal ambiguous-state behavior are unchanged.
+
+Tests cover exact write/read and clone roundtrips (precision, Z suffix, nested
+strings, numbers/bools/null), valid grants/receipts after cloning, and non-string/
+invalid dates. Each negative grant starts from a positively validated clone and
+checks the expected diagnostic code, not just any failure.
+
+| Local test | Result |
+| --- | --- |
+| Unmodified CI guard entry on Core 7.6.0 | exit **1**, exact original timestamp failure reproduced |
+| Fixed focused guards, WinPS5 | **117 PASS**, exit **0** |
+| Fixed focused guards, Core 7.6.0 | **117 PASS**, exit **0** |
+| Actual SH twin via Git GNU Bash 5.2.37 and Core 7.6.0 | **117 PASS**, exit **0** |
+
+The focused `-JsonOnly` mode stops before synthetic WAV creation; no audio is
+created or decoded. It still checks JSON/contract/grant/receipt/budget failures.
+The **default CI invocation is unchanged** and continues into the complete
+existing audio/HTML/HTTP-object guards plus the new JSON cases. No post-fix full
+CI/Linux run, full audio-fixture suite or real codec replay is claimed here.
+Native Git Bash on Windows is not a Linux-host qualification. Core without
+`DateKind` support is not qualified by these results; use the supported modern
+Core path or the verified WinPS5 fallback.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/sound-design/test-sound-design.ps1 -JsonOnly
+& 'E:\grindless-earlygame-storage\tools\powershell-7.6.0-win-x64\package\pwsh.exe' `
+  -NoLogo -NoProfile -NonInteractive -File tools/sound-design/test-sound-design.ps1 -JsonOnly
+```
+
+The chosen Core test first failed to start because `pwsh` was absent. Only then
+the authorized portable **Microsoft PowerShell 7.6.0 win-x64** was installed at
+`E:\grindless-earlygame-storage\tools\powershell-7.6.0-win-x64`.
+The exact official [release](https://github.com/PowerShell/PowerShell/releases/tag/v7.6.0),
+`PowerShell-7.6.0-win-x64.zip` and `hashes.sha256` were verified before extraction/
+execution; all 986 ZIP paths and symlink/reparse attributes were checked, and
+`pwsh.exe` has a valid Microsoft Authenticode signature. Archive/source/licence
+material and `installation-receipt.json` remain with the portable. No MSI,
+registry, global PATH, C-drive installation or repository binary was introduced.
+
+- Archive: **117125973 bytes**, SHA-256
+  `9e725837af682b87bb212cd1efe3657c06c540404203810857ec2516ae2ca322`
+- Official checksum file SHA-256:
+  `386045028a303005b0f82544c3b47e768a443b279c29b6393399f3c4e75fa7fd`
+- `pwsh.exe` SHA-256:
+  `7851e9d67e141bcebc0cc37086579fde0b5f0a47297bd2d446eace5d4b8e75c1`
+
+The actual Git distribution resolved from `Get-Command git` supplies
+`usr/bin/sh.exe` (GNU Bash 5.2.37). The SH test adds Core and that shell's utility
+directory to the **child process PATH only**; it does not install Bash. Core test
+processes disable telemetry/update checks and load no profiles.
+
+All original CI/reproduction/focused-test logs and exits are retained in the new
+ignored `build/validation/sound-json-portability-1ced-20261018T2322` directory.
+Two inspection-harness failures are preserved too: the first shell lookup checked
+only `bin/sh.exe`, and a direct Git-blob/execution-file hash comparison initially
+overlooked line endings. The old Git object has 593 LF lines; its historical
+Windows CRLF form exactly matches the **unchanged** executed runner hash
+`48eda73793e417e58689c43cb4123556c46257a3a200a6023d22953b92adf0d0`.
+No historical file or binding was rewritten to hide either issue.
+
+This repair's tested working-file hashes (not a retag of `7dad`):
+
+- Runner: `29e1b073f14cfff9491d98e407aac110a9320f4d11759dfc9214de3519e85184`
+- Offline tests: `2250986820ee9b9e66847f575bda912e01b91b677771c5f35e5bcdbfc0f79d87`
+
+The frozen manifest/contract/approval, original spend receipt and all nine
+source/preview/Ogg media hashes were checked unchanged. No key/private grant or
+account was accessed; no provider/JVM/codec was invoked and no runtime, generator,
+asset or other worker's fixture was changed. Only byte-hash integrity checks
+read the approved audio. The original generation/codec evidence below keeps its own
+source/hash/host boundary. Astra must review/checkpoint this new tooling version
+and run normal CI; this unit neither publishes nor begins Quern-loop integration.
 
 **Initial tool blocker, now resolved by the authorized portable below:** neither
 `ffmpeg` nor `ffprobe` was in PATH or the bounded standard-installation checks.

@@ -36,6 +36,15 @@ gaps, proof reuse and dependency order. No new unobserved run is supplied by thi
 
 ## Before an expensive validation
 
+**Cost scales with novelty and risk, not project size or raw change count.** Before
+launching a native/client/server smoke, explicitly record what new uncertainty it
+resolves that existing evidence does not resolve. Without a concrete answer, do not
+run it. Prefer one representative mechanism proof plus broad cheap structural,
+contract and progression coverage. Reserve broad integration for actual release
+candidates, migrations that affect behavior, changed architecture/mechanisms,
+observed regressions or genuinely uncertain boundaries. A chat-context migration
+alone changes none of those assumptions.
+
 Ask internally: **What specific property remains unproven, and can an existing proof plus
 static evidence already establish it?** If yes, reuse that proof. If not, identify the
 smallest missing behavioral class and delegate a targeted check, independently when useful.

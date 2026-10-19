@@ -20,8 +20,10 @@ capability event
 ([ADR-0045](DECISIONS.md#adr-0045--capabilities-are-attached-by-event-not-overridden-on-the-block-entity)).
 
 Coordination follows [AGENTS](../AGENTS.md) and
-[the durable plan](../.agent/work-plan.json). Astra owns design/final integration; workers
+[the durable plan](../.agent/work-plan.json). The current coordinator owns design/final integration; workers
 own bounded implementation/check execution with explicit files and input revisions.
+ADR-0147 selects Sol 6.1 for the next isolated session; previous Astra reviews remain
+historical evidence, not a requirement to restore that leader.
 The current engineering baseline is1389; product polish and official Superflat accessibility
 are new gaps, not permission to rewrite proven engines or start ports.
 
@@ -403,6 +405,14 @@ workers implement actual buses/hatches and transaction/chunk/reform tests. AE2 i
 version/API-verified, never a fictional or mandatory core integration.
 
 ## Checks
+
+- `tools/sound-design/sound-design.ps1` preserves UTC JSON strings across modern Core
+  and WinPS5. Its grant/receipt checks must not accept coerced DateTime objects.
+  Focused `-JsonOnly` tests do not replace default CI or rewrite the spent calibration.
+- `tools/smoke/first-blueprint.commands` starts `first-blueprint-pack`, reusing the
+  loaded-chunk/single-tagged-item observation pattern. The paired standalone
+  `verify-blueprint-fixture` checks compare source contracts and mutate in memory;
+  they are not a new Minecraft execution or a Blueprint gameplay proof.
 
 - Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`
   for the read-only primary-store projection. `FluidClientPlatform` delegates native water

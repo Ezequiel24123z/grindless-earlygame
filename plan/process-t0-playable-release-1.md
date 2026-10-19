@@ -2,8 +2,8 @@
 goal: Turn the T0 engineering candidate into a Superflat-first playable modpack release candidate
 version: 1
 date_created: 2026-10-18
-last_updated: 2026-10-18
-owner: Astra coordinator
+last_updated: 2026-10-19
+owner: Sol 6.1 successor coordinator
 status: In progress
 tags: [product, release, superflat, compatibility, art, audio]
 ---
@@ -21,6 +21,13 @@ adds the owner's [sound calibration](../docs/DECISIONS.md#adr-0145--calibrate-a-
 and [item materiality](../docs/DECISIONS.md#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items)
 constraints without changing the27-task graph. The source directive's
 SHA-256 is `7a5a04b1f2709536f1187ecc70958829fb7383bf95135820735f352b91a1e317`.
+
+Revision10/PA-0009 and [ADR-0147](../docs/DECISIONS.md#adr-0147--transfer-clean-session-coordination-to-sol-61-without-replaying-evidence)
+transfer the next clean-session leadership to Sol6.1. The retiring session preserves
+the focused CI repairs and stops; no successor has been launched. Existing task,
+ownership and decision references to Astra below describe that role historically;
+the received Sol coordinator assumes the same responsibilities. The compact
+[migration handoff](../.agent/sol-migration-handoff.md) is the new entry.
 
 ## 1. Requirements & Constraints
 
