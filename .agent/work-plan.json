@@ -395,11 +395,12 @@
     {
       "id": "restricted-playable-pack",
       "task_id": "playable-pack",
-      "status": "local_implementation_frozen_review_pending_gradle_waits_for_audio",
+      "status": "reviewed_source_integrated_focused_gradle_waits_for_audio",
       "session_id": "7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8",
       "source_commit": "435f3d0d08eb9bbc3a14a88db581ddd4ca1f99b3",
       "implementation_commit": "4b67ae0fa5f2601085bda43793732ca50409ff88",
       "review_agent_id": "78cf6876-8854-4a68-b2e8-eeba29cb84a0",
+      "review": "Independent frozen-feature review found no high-confidence actionable bug; actual Groovy/Gradle/ZIP and client execution remain unverified",
       "evidence": "Worker static/boundary/JSON/PS-AST checks,590links/149ADRs and5PS fake-Gradle wrapper contracts pass. Real verifyModpack/Groovy/archive execution NOT_RUN pending shared window; SH unavailable under current MinGit. No application/pin changes",
       "decision": "ADR-0149",
       "owned_files": ["root build.gradle pack resolver below application-build boundary", "pack profiles/public-override data and pack guidance", "paired build-modpack scripts", "focused pack checks and related implementation docs"],

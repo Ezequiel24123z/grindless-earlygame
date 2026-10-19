@@ -32,10 +32,12 @@ are new gaps, not permission to rewrite proven engines or start ports.
 - `plan/process-t0-playable-release-1.md` and `.agent/work-plan.json` — ADR-0144/PA-0007
   requirement trace, bounded ownership, separate readiness states and actual dependencies.
 - `pack/profiles.json`, `pack/curseforge/manifest.json`, `pack/dependency-metadata.json`,
-  `gradle.properties`, root build and paired pack tools — curated version lock, public
-  configuration/content, distributable whitelist and provenance.
+  `pack/public-overrides.json`, `pack/public-overrides/`, `gradle.properties`, root build
+  and paired pack tools — curated version lock, explicit public configuration,
+  distributable whitelist and provenance.
   ADR-0149 adds only the restricted playable selector and explicit public-override
   contract; preserve both historical profiles and the single dependency-pin authority.
+  Empty overrides intentionally retain upstream defaults, not the pending official preset.
 - Existing source/recipe/world/sustainability authorities below — trace every mandatory
   initial and recurrent resource before selecting/versioning the official flat preset.
   ADR-0150 keeps deposits virtual in Superflat: `vein/VeinGenerator`, `VeinData`,
@@ -444,8 +446,15 @@ version/API-verified, never a fictional or mandatory core integration.
 - Client packs use root `build.gradle` tasks `buildModpack` and `verifyModpack`, with thin
   `tools/build-modpack.ps1`/`.sh` twins. `pack/curseforge/manifest.json` owns pins;
   `profiles.json` selects project IDs and `dependency-metadata.json` verifies them.
-  Preserve expanded defaults and the minimal preparation profile; production remapping,
-  clean source provenance and dependency completeness are not gameplay acceptance.
+  Preserve expanded defaults/archive identity and the minimal preparation profile.
+  The additive playable profile selects seven existing pins and has a source-bound,
+  explicitly non-RC identity. Only `public-overrides.json` entries from the committed
+  public source root may supply `config/` or `defaultconfigs/` files; reject path escapes,
+  untracked sources/targets and portable destination collisions. Provenance distinguishes
+  defaults from exact override destinations/hashes. The shared writer checks the full
+  archive whitelist, including notices; mutation/synthetic archive fixtures belong to
+  `verifyModpack`, not a second builder or a remapped-runtime/client acceptance claim.
+  Keep pack-only changes below the root application's provenance boundary.
 - [Risk-based proof reuse](testing/test-strategy.md) (ADR-0140) classifies remaining work
   and lists reusable proofs/assumptions. Validate ordinary content structurally through the
   proven mechanism; select native/manual checks only for an uncovered or invalidated behavior.

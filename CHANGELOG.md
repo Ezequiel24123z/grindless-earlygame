@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Implement the restricted additive playable pack profile (ADR-0149).** Select the
+  existing four runtime/quest pins and three performance pins without changing the
+  expanded default, preparation selector, pin authorities or historical filenames.
+  Add a committed, explicitly empty public-override manifest/source contract, strict
+  path/tracking/destination guards, exact configuration/profile provenance and a
+  source-bound non-RC archive identity. Include third-party notices and verify the
+  archive whitelist through the same writer used by the builder. Frozen application/
+  pin/notice inputs, PowerShell syntax, five isolated wrapper contracts and590 links
+  pass. The frozen implementation received a read-only review with no actionable
+  high-confidence issue found and is integrated for focused validation, not qualified
+  as an RC. Actual Gradle selector/mutation/archive fixtures await the shared window;
+  final package/preset/import/client qualification remains pending. The initial
+  twin harness stopped at its absent assumed Bash path; SH execution is not credited.
 - **Preserve frozen audio/pack evidence and unblock bounded compilation after RAM
   expansion.** Worker-local Quern tracker/source contracts pass67 JDK-only checks;
   pack static/five PS-wrapper contracts pass, not actual Gradle/native qualification.
