@@ -2,9 +2,11 @@
 
 This file keeps the history of the slices already defined and names the next executable slice.
 
-**Local execution is frozen for cloud transfer.** Receive the published continuation
-branch using [the cloud handoff](../.agent/cloud-migration-handoff.md); do not resume
-retiring local workers or mistake the engineering consolidation for a release.
+**Current execution is SSH-first (ADR-0151).** The conversation stays local; the personal
+PC executes heavy builds and dedicated Prism deployment through ordinary SSH. Read
+[the operating runbook](operations/ssh-prism-workflow.md). The owner superseded the cloud
+destination/freeze; its [handoff](../.agent/cloud-migration-handoff.md) remains preservation
+history. Do not resume retiring workers or mistake engineering deployment for a release.
 
 **Coordinator receipt (ADR-0147, PA-0010):** the new isolated Sol 6.1 session
 received exact17ae8b0 by clean fast-forward. Sol now coordinates and publishes;

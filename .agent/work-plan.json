@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 12,
+  "plan_revision": 13,
   "updated": "2026-10-19",
-  "phase": "paused_for_owner_requested_cloud_migration",
+  "phase": "ssh_first_personal_pc_build_and_prism_development",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -27,6 +27,25 @@
     "next_tier_rule": "Ready and published T0 RC plus actual owner longitudinal-save start; no whole-playthrough requirement unless a concrete technical dependency prevents progress"
   },
   "session_sqlite_tasks_migrate": false,
+  "ssh_pc_execution": {
+    "decision": "ADR-0151",
+    "amendment": "PA-0012",
+    "entry": "docs/operations/ssh-prism-workflow.md",
+    "received_source": "70901eca2da386cd54fc769ba8a2a59be10eb76b",
+    "coordinator_session_id": "58289e9c-3881-4349-8195-aa0d079597e6",
+    "conversation": "local_not_Remote_Host",
+    "execution": "ordinary_SSH_to_existing_personal_PC",
+    "source_sync": "GitHub_exact_committed_revision_into_isolated_PC_worktree",
+    "identity": "PC_login_SSH_and_personal_Git_SSH_verified_independently_remote_gh_invalid_no_identity_or_remote_changed",
+    "private_host_settings": "outside_Git_addresses_paths_and_launcher_accounts_never_committed",
+    "preserve": ["original_clones", "app_worktrees", "existing_caches", "preparation_instance", "exploratory_world", "old_audit_and_source_bound_proofs"],
+    "development_deployment": "new_owned_Prism_instance_not_RC_or_longitudinal_reference",
+    "original_audit": "Read_original_0d79860_audit_and_T0_T1_action_plan_not_rerun_later_integrated_contracts_take_precedence",
+    "new_native_property": "ADR0148_sound_registration_and_dedicated_server_client_class_isolation_still_unproved",
+    "release_ready": false,
+    "human_accepted": false,
+    "t1_allowed": false
+  },
   "cloud_migration": {
     "requested": "2026-10-19",
     "status": "local_execution_frozen_source_and_worker_histories_consolidated_for_cloud_receipt",
@@ -106,10 +125,10 @@
     "preserve": ["old_worktrees", "prior_sessions", "renderer_child", "ignored_toolchains_caches_and_evidence"]
   },
   "execution": {
-    "coordinator": "Sol 6.1 (received clean session a9639825-dcf3-4bba-b760-a23268d89f3e)",
+    "coordinator": "Sol 6.1 (SSH-first receipt session 58289e9c-3881-4349-8195-aa0d079597e6)",
     "active_model": "gpt-6.1-sol",
     "next_coordinator_model": "gpt-6.1-sol",
-    "activation": "Local Sol received17ae8b0 and consolidated worker histories; owner now requests cloud freeze. The new cloud coordinator becomes sole publisher only after verifying the final remote branch/checkpoint",
+    "activation": "Owner superseded cloud destination with local coordination and ordinary personal-PC SSH. This coordinator received exact70901eca; retired sessions remain quiescent and publication stays single-owned",
     "historical_owner_labels": "Astra in existing tasks and completed assignments identifies the former role/author; active responsibilities transfer to this Sol coordinator under ADR-0147 without rewriting historical attribution",
     "previous_coordinator": "Astra; historical decisions, reviews and grants retain their actual author",
     "authority": ["architecture", "product_and_tiers", "sustainability_and_production_graphs", "machine_families_and_multiblocks", "migrations", "integration", "final_review"],
@@ -237,6 +256,18 @@
     {"id": "elevenlabs_sound_calibration", "file": "pasted-text-1c204fff-a442-4677-be9a-3a4f90eda8bf.txt", "sha256": "EF79A5CCBFDBFB7DFABD242019451352A50BA29F9B08EFC29F7FED1DE72250B2", "received_via": "user_attached_local_file", "receipt": "all434_lines_read_hash_verified_native_Library_confirmed", "note": "Development-only secret-safe minimal sound calibration; owner selects initial artistic direction before expansion"}
   ],
       "amendments": [
+        {
+          "id": "PA-0012",
+          "plan_revision": 13,
+          "date": "2026-10-19",
+          "title": "Keep coordination local and use the existing personal PC through ordinary SSH",
+          "source": "Owner SSH-first execution directive; ADR-0151",
+          "method": "Receive70901eca, preserve authentication/source/evidence/worlds, delegate isolated PC qualification, and establish owned Prism development deployment",
+          "dependencies_changed": false,
+          "product_task_acceptance_changed": false,
+          "new_tasks": 0,
+          "release_or_human_pass_claimed": false
+        },
         {
           "id": "PA-0001",
           "plan_revision": 2,

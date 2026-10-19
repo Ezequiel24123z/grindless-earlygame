@@ -3,6 +3,11 @@
 Updated:2026-10-19. The owner requested local consolidation, publication and closure,
 then continuation in cloud. This is an engineering checkpoint, **not a T0 release**.
 
+**Subsequent owner direction:** [ADR-0151](../docs/DECISIONS.md#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh)
+now keeps the conversation local and uses ordinary SSH to the personal PC. This document
+remains the source-preservation receipt, not a current cloud/freeze instruction. Start
+with [the active handoff](handoff.md) and [SSH/Prism runbook](../docs/operations/ssh-prism-workflow.md).
+
 ## Receive the correct branch
 
 Repository: `Ezequiel24123z/grindless-earlygame`.

@@ -102,12 +102,14 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
-**Current cloud transfer:** the owner has frozen local execution and requested cloud
-continuation. Start with [the cloud handoff](.agent/cloud-migration-handoff.md) and the
-published `ezequiel24123z-t0-playable-release` branch, not old `main`. The source/
-worker history is consolidated without declaring a release or merging the draft PRs.
-The new coordinator verifies the actual remote checkpoint; retired local workers
-remain quiescent. Credentials are in repository Agents secrets, never this repository.
+**Current execution model (ADR-0151):** keep this conversation local and use ordinary
+SSH to the personal PC for heavy work. Read [the SSH/Prism runbook](docs/operations/ssh-prism-workflow.md)
+and the current handoff. The received continuation is `70901eca`, not old `main`;
+the historical [cloud handoff](.agent/cloud-migration-handoff.md) preserves its source
+and evidence but no longer selects the execution host. Do not bind this conversation
+to Remote Host, change working personal Git authentication or resume retired workers.
+Build in an isolated PC worktree, deploy only to the dedicated development instance,
+and preserve existing worlds. Credentials and private host settings never enter Git.
 
 ### Playable releases and longitudinal worlds
 

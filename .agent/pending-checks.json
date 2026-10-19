@@ -8,6 +8,19 @@
   "pr_management_and_merge_authorized_when_ready": true,
   "authorization": "Owner-directed playable modpack lifecycle, ADR-0144/PA-0007; technical/product RC readiness precedes longitudinal human acceptance, and T1 remains held until publication plus actual play",
   "work_plan": ".agent/work-plan.json",
+  "ssh_pc_execution": {
+    "decision": "ADR-0151",
+    "status": "SSH_and_personal_Git_verified_isolated_build_and_owned_Prism_workflow_in_progress",
+    "received_source": "70901eca2da386cd54fc769ba8a2a59be10eb76b",
+    "entry": "docs/operations/ssh-prism-workflow.md",
+    "supersedes": "cloud_transfer_execution_destination_and_local_freeze_only",
+    "existing_instance": "old_b982_runtime_and_exploratory_world_preserved_not_updated",
+    "native_sound_binding": "NOT_RUN",
+    "client_render_listening": "NOT_RUN",
+    "official_superflat_access": "NOT_IMPLEMENTED",
+    "release_ready": false,
+    "t1_allowed": false
+  },
   "cloud_transfer": {
     "status": "frozen_for_owner_cloud_receipt",
     "entry": ".agent/cloud-migration-handoff.md",

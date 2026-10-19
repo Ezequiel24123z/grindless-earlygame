@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Adopt the owner's SSH-first PC operating model (ADR-0151, PA-0012).** Receive the
+  complete70901 continuation rather than old main, verify PC-login SSH and existing
+  personal Git SSH separately, and preserve the invalid remote API login without
+  changing working credentials. Record isolated work-volume builds, owned Prism
+  development deployment and the current T0/RC gaps. Read the completed original audit
+  and action plan without repeating them or replacing later source-bound evidence.
+  Existing instances/worlds remain untouched; build, deployment and human acceptance
+  retain separate states.
 - **Consolidate the complete engineering continuation for cloud (PA-0011).** Merge
   original audio3914978/e6d6df0 and pack4b67ae0/dc719b3 histories, retain their scoped
   compile/contracts/archive evidence and publish the continuation plus original

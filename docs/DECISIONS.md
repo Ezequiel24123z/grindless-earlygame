@@ -162,6 +162,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0148](#adr-0148--integrate-the-approved-quern-sound-with-one-native-client-loop) | Integrate the approved Quern sound with one native client loop | Accepted |
 | [0149](#adr-0149--add-a-restricted-playable-profile-with-explicit-public-overrides) | Add a restricted playable profile with explicit public overrides | Accepted |
 | [0150](#adr-0150--superflat-retains-virtual-deposits-without-staging-the-terrain) | Superflat retains virtual deposits without staging the terrain | Accepted |
+| [0151](#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh) | Keep coordination local and execute through the existing personal-PC SSH | Accepted |
 
 ---
 
@@ -7094,3 +7095,50 @@ within their existing assumptions. Verify the actual flat-world binding and each
 source/resource behavior only when changed or unproved. A shop with finite quest
 rewards is not itself proof of unlimited automated supply. No native test, new
 terrain, machine, currency or manual playthrough is supplied by this decision.
+
+---
+
+## ADR-0151 — Keep coordination local and execute through the existing personal-PC SSH
+
+**Status.** Accepted owner-directed operating model, 2026-10-19. This supersedes the
+cloud-execution freeze as the current destination, not its preserved source/evidence.
+
+**Decision.** Keep the Copilot conversation local. Use ordinary SSH to the personal
+Windows PC for heavy builds, focused native checks, packaging and dedicated Prism
+development deployment. GitHub is the synchronization boundary. Do not convert or bind
+this conversation to a Remote Host, reactivate retired workers, or start from old main.
+The received source is `70901eca2da386cd54fc769ba8a2a59be10eb76b`, including the original
+Quern and restricted-pack histories.
+
+Inspect first and preserve the working authentication. PC-login SSH, personal-PC Git SSH,
+commit identity and GitHub API authentication are independent. The existing personal Git
+SSH alias successfully reads the continuation branch even though the PC's `gh` token is
+invalid. Use that Git alias for PC synchronization and the already verified personal
+GitHub account for local publication; do not change accounts, remotes, keys or global
+identity to repair an unrelated API login.
+
+Use an isolated detached execution worktree and process-local Gradle home on the
+high-capacity work volume. Preserve existing clones, caches, app worktrees and worlds.
+Serialize JVM ownership while allowing source/tooling/documentation work in parallel.
+Only committed source is built/deployed, with exact source/runtime and artifact hashes.
+Personal addresses, machine paths and launcher/account configuration stay outside Git.
+
+Deploy into a separately marked **engineering development instance**, not the existing
+preparation instance or a longitudinal save. Reuse verified launcher component metadata
+and hash-matched dependency files where available. Resolve missing selected dependencies
+from the publisher CDN against the existing pins; introduce no new version authority.
+Never clone saves, accounts or private configuration. Refuse unowned/running targets,
+retain replaced owned jars outside the loadable mods directory, and record deployment
+identity. Do not auto-launch Minecraft, log in, or claim human playtest results.
+
+**Alternatives rejected.** Rebinding the conversation to Remote Host/cloud (contrary
+to the explicit operating model); rebuilding on the smaller coordination machine;
+reauthenticating `gh` to fix already-working Git SSH; overwriting the player's old
+instance; treating a successful deployment as an RC or Superflat accessibility proof.
+
+**Evidence boundary.** The completed original T0 audit/action plan target `0d79860`.
+Read them, but use the later integrated T0 contract and ADR-0144/0150 where they supersede
+that baseline. Do not rerun the audit or reopen already-proved mechanisms merely because
+execution moved. The missing native sound binding, actual client rendering/listening,
+flat-world entry, final configured RC and longitudinal compatibility retain distinct
+proof obligations. See [the operating runbook](operations/ssh-prism-workflow.md).

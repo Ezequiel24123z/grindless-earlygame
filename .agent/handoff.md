@@ -2,7 +2,29 @@
 
 Updated: 2026-10-19. Product gate: **T0 ENGINEERING CANDIDATE; PLAYABLE RC IN PROGRESS**.
 
-## Owner-requested cloud freeze
+## Active SSH-first receipt
+
+The owner now explicitly keeps coordination local and selects ordinary SSH to the
+personal PC for heavy execution (ADR-0151). This supersedes the cloud destination/freeze
+below, not any preserved source, proof or release gate. Read
+[the SSH/Prism runbook](../docs/operations/ssh-prism-workflow.md).
+Session `58289e9c-3881-4349-8195-aa0d079597e6` received exact
+`70901eca2da386cd54fc769ba8a2a59be10eb76b` by clean fast-forward on its own branch.
+Main, previous worktrees, draft PRs and retired workers are unchanged.
+
+PC SSH and its existing personal Git SSH both succeed. Remote `gh` has an invalid token;
+that does not block Git and is not permission to migrate identities. Use an isolated
+work-volume execution worktree and process-local Gradle home. Preserve the existing
+old Grindless preparation instance and exploratory world; create a separately owned
+engineering development instance. No client, survival, listening, Superflat or RC pass
+is inferred from this receipt. Plan revision13/PA-0012 preserves27 tasks/47 references.
+
+The original completed `0d79860` audit and `T0-T1-ACTION-PLAN.md` were read from their
+published audit branch, not rerun or silently adopted over the later integrated T0 work.
+The current native sound binding/package/client gaps guide the next bounded execution;
+flat-source design and longitudinal release remain explicit product work.
+
+## Historical owner-requested cloud freeze
 
 Read [the compact cloud entry](cloud-migration-handoff.md) first. Source consolidation
 isab23ff5e; the final containing publication additionally preserves this handoff.
