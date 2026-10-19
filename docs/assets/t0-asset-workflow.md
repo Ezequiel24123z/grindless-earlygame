@@ -44,8 +44,8 @@ source WAVs are byte-preserved; source remains clean. The fresh zero-JVM postcon
 is recorded and the reservation was explicitly released before transfer/local review.
 
 Only the three generated outputs were installed, with exact stage/installed hash parity.
-All nine protected PNGs and the other 578 resource PNGs remain unchanged; the Grindless
-resource PNG count is 581, excluding the separate documentation preview. These native size,
+The other 578 resource PNGs remain unchanged, including all nine protected sprites.
+The Grindless resource PNG count is 581, excluding the separate documentation preview. These native size,
 hard alpha, margin, color-role, functional mark, distinct silhouette and byte contracts
 are structural evidence, not artistic approval. The child reviewed the actual before/
 after pixels once and made no subsequent generator changes. The coordinator then

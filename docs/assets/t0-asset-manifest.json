@@ -102,6 +102,7 @@
         "installed_hash_mismatches": 0,
         "protected_png_hash_mismatches": 0,
         "other_resource_pngs_byte_preserved": 578,
+        "other_resource_pngs_scope": "All resource PNGs outside the three guide targets; this unchanged set includes the nine protected sprites.",
         "total_resource_pngs": 581,
         "remaining_jvms_at_reservation_release": 0,
         "proof_reuse": "Installed target/protected PNGs match the twelve checked stage inputs exactly. No generator/check source changed after the freeze; unchanged model/registration bindings do not need another native boot."

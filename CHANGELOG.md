@@ -24,7 +24,8 @@ entries below reference those records by id.
   failures. Three invalid CLI forms refuse before output. All 1,589 common source
   resources/five WAVs and the protected sprites remain intact; only three hash-matched
   outputs are installed, with actual 1x/8x before/after sheets. The JVM window is released before
-  local review. Initial policy/helper-parse failures remain recorded. The coordinator
+  local review. The 578 unchanged resource PNGs include the nine protected sprites,
+  not 578 additional files. Initial policy/helper-parse failures remain recorded. The coordinator
   approves the actual source pixels without retouches for the technical candidate,
   not native/human approval, full art/T0 acceptance or a release.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
