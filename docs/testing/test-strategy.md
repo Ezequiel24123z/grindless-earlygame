@@ -164,7 +164,7 @@ GRINDLESS_ACCEPT_EULA=true bash tools/validate.sh . --smokes
 ```
 
 Prerequisites: Java 17 (`JAVA_HOME`), Git, network access on a cold Gradle/Forge cache, and
-PowerShell Core (`pwsh`) for the shared documentation validator on Linux/macOS. Missing tools
+PowerShell Core (`pwsh`) for the shared documentation validator and batch contracts on Linux/macOS. Missing tools
 fail explicitly. Versions remain in `gradle.properties`; neither script installs globally or
 changes credentials. `GRADLE_USER_HOME` may point inside the worktree.
 
@@ -191,9 +191,11 @@ isolated runner for strict unknown/empty selection validation, sharding and `.ti
 sidecars. The batch instead inherits `SMOKE_TIMEOUT`, `SMOKE_EXPECT_TIMEOUT`,
 `SMOKE_PORT` and the existing boot defaults without a new budget policy.
 
-`foreign-providers`, `states`, `recipe-cache-reload` and every selected scenario with
-a `<name>-optional` path require isolation. Mixed requests announce and skip those
-cases; isolated-only requests fail before launch. Neither inherited `SMOKE_DATAPACK`
+`foreign-providers`, `states`, `recipe-cache-reload`, `extractor-backpressure` and
+every selected scenario with a `<name>-optional` path require isolation. A01's
+post-stop VeinData oracle needs exactly two worked chunks/total two, so its fixed
+exclusion must not depend on an optional sibling. Mixed requests announce and skip
+those cases; isolated-only requests fail before launch. Neither inherited `SMOKE_DATAPACK`
 nor `SMOKE_OPTIONAL_DATAPACK` may contaminate the shared world. The native harness
 retains its EULA opt-in, `SMOKE-READY` handshake, assertion checks, shutdown and
 temporary-world cleanup. The Bash entrypoint needs no PowerShell and uses `exec`
@@ -205,6 +207,8 @@ runner contracts with temporary files and fake boots, without Java, Gradle, netw
 or real worlds. These tests share a PowerShell 5.1/Core implementation and require
 installed PowerShell plus Bash; `-BashPath` selects an existing Bash explicitly.
 The native batch itself does not acquire that test-only PowerShell requirement.
+The existing `VerifySmokeHarness` gate invokes the matching test twin once beside
+its optional-pack contracts; no additional CI entrypoint runs the same suite.
 Their runtime results establish dispatch, not a fresh native Forge pass or
 Linux/macOS execution merely because Bash syntax was accepted. They do not replace
 unchanged handshake/process-cleanup proofs or the separate real reload oracle.

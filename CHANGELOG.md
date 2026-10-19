@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Complete integrated batch isolation and its existing tooling gate.**
+  Exclude `extractor-backpressure` in both batch twins even without an optional
+  sibling: its post-stop VeinData oracle requires a fresh two-chunk/total-two world.
+  Cover only/mixed/default-all/all-isolated selection against the integrated PS
+  and SH sources, and invoke the appropriate `Test-SmokesBatch` twin once from
+  `VerifySmokeHarness`, beside the existing optional-pack checks. No scenario/CI
+  registration, shared boot change or Java/native qualification is implied.
 - **Integrate the reviewed native reload fixture and path staging.** Preserve
   the original fixture and separate ancestor/provider/Home corrections through
   `0fec76d`. Independent review closes the publication/wake and path findings;

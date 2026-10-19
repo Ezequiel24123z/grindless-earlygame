@@ -7,8 +7,8 @@ Usage: powershell -NoProfile -File tools/checks/Test-SmokesBatch.ps1 [-BashPath 
 Only the batch entrypoints are copied, byte-for-byte, into temporary fixtures.
 Every possible fixture launch target is a safe fake; the real smoke-boot, JVM,
 Gradle, SSH, network, saves and private PC configuration are never invoked.
-The PowerShell reference probes cover ordinary selection/aggregation/exit only:
-they do not depend on the separately owned fresh-world isolation changes.
+The current PowerShell reference is copied from the selected RepositoryRoot.
+Its probes cover ordinary selection/aggregation/exit and A01 fresh-world isolation.
 Handshake, process ownership and cleanup inside smoke-boot remain its contract,
 not server behavior proved by these fake launch-boundary tests.
 #>
@@ -336,9 +336,7 @@ function Assert-Refused($Fixture, $Result, [string]$Message = '') {
     Assert-CallerPreserved $Fixture
 }
 
-function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
-    $commands = Read-FixtureText (Join-Path $Fixture.Run 'smoke-batch.commands')
-    $expect = Read-FixtureText (Join-Path $Fixture.Run 'smoke-batch.expect')
+function Invoke-PowerShellReference($Fixture, [string]$Only) {
     $environment = @{}
     foreach ($key in $Fixture.Environment.Keys) { $environment[$key] = $Fixture.Environment[$key] }
     $environment['GRINDLESS_SMOKES_REFERENCE_SCRIPT'] = Join-Path $Fixture.EntryRoot 'tools/run-smokes-batch.ps1'
@@ -348,6 +346,21 @@ function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
     $result = Invoke-Child $script:PowerShellExecutable @('-NoLogo', '-NoProfile',
         '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', $script:ReferenceDriverPath) $Fixture.Cwd $environment
     $script:ReferenceRuns++
+    return $result
+}
+
+function Assert-ReferenceRefused($Fixture, [string]$Only) {
+    $result = Invoke-PowerShellReference $Fixture $Only
+    Assert-Test ($result.ExitCode -ne 0) 'current PS twin refuses an isolated selection'
+    Assert-Test (-not [IO.File]::Exists((Join-Path $Fixture.Capture 'reference.calls'))) 'isolated PS selection never reaches even the fake boot'
+    $diagnostic = Format-SafeEvidence ($result.Out + $result.Err)
+    Assert-Test ($diagnostic.Contains('fresh datapack world')) ("PS refusal identifies the fresh-world requirement; actual: " + $diagnostic)
+}
+
+function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
+    $commands = Read-FixtureText (Join-Path $Fixture.Run 'smoke-batch.commands')
+    $expect = Read-FixtureText (Join-Path $Fixture.Run 'smoke-batch.expect')
+    $result = Invoke-PowerShellReference $Fixture $Only
     Assert-Test ($result.ExitCode -eq $NativeResult.ExitCode) ("ordinary PS reference and Bash propagate the same fake exit; PS=" +
         $result.ExitCode + '; Bash=' + $NativeResult.ExitCode + '; PS stderr=' + (Format-SafeEvidence $result.Err))
     Assert-Test ((Read-FixtureText (Join-Path $Fixture.Capture 'reference.calls')) -ceq 'one safe intercepted launch') 'ordinary PS launch was intercepted exactly once'
@@ -414,7 +427,12 @@ function global:powershell {
     [IO.File]::WriteAllText($capture, 'one safe intercepted launch')
     $global:LASTEXITCODE = [int]$env:GRINDLESS_SMOKES_TEST_EXIT
 }
-& $env:GRINDLESS_SMOKES_REFERENCE_SCRIPT -Root $env:GRINDLESS_SMOKES_REFERENCE_ROOT -Only $env:GRINDLESS_SMOKES_REFERENCE_ONLY
+try {
+    & $env:GRINDLESS_SMOKES_REFERENCE_SCRIPT -Root $env:GRINDLESS_SMOKES_REFERENCE_ROOT -Only $env:GRINDLESS_SMOKES_REFERENCE_ONLY
+} catch {
+    [Console]::Error.WriteLine($_.Exception.Message)
+    exit 1
+}
 exit $LASTEXITCODE
 '@
     # On POSIX a newly written shell fake needs its executable bit. Git/MSYS
@@ -501,6 +519,39 @@ done
             $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $isolatedName.ToUpperInvariant())
             Assert-Refused $f $result 'fresh datapack world'
         }
+    }
+    Invoke-Case 'A01-only selection without an optional sibling is refused by both current twins' {
+        $f = New-Fixture "alpha`nextractor-backpressure`nbeta`n" 'selected A01 only root & spaces'
+        Assert-Test (-not (Test-Path -LiteralPath (Join-Path $f.Root 'tools/smoke/extractor-backpressure-optional'))) 'A01 isolation does not depend on an optional-pack sibling'
+        $only = ' EXTRACTOR-BACKPRESSURE,extractor-backpressure '
+        $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $only)
+        Assert-Refused $f $result 'fresh datapack world'
+        Assert-ReferenceRefused $f $only
+    }
+    foreach ($selection in @('named', 'default-all')) {
+        Invoke-Case "A01 $selection selection skips only the fresh-world oracle in both current twins" {
+            $f = New-Fixture "alpha`nextractor-backpressure`nbeta`n" 'selected A01 mixed root & spaces'
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/extractor-backpressure.commands') "say MUST-NOT-BATCH A01`n"
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/extractor-backpressure.expect') "MUST-NOT-EXPECT A01`n"
+            $only = ''
+            if ($selection -eq 'named') {
+                $only = 'BETA,EXTRACTOR-BACKPRESSURE,ALPHA,alpha,unknown'
+                $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $only)
+            } else {
+                $result = Invoke-Batch $f
+            }
+            Assert-Dispatch $f $result
+            Assert-Test ($result.Out.Contains('Skipped fresh-world datapack scenario(s): extractor-backpressure.')) 'A01 is explicitly announced as skipped'
+            Assert-Test ($result.Out.Contains('Running 2 shared-world')) 'only ordinary selected scenarios contribute to the boot count'
+            Assert-Aggregate $f "say BATCH-BEGIN alpha`nsay alpha`nsay BATCH-END alpha`nsay BATCH-BEGIN beta`nsay beta`nsay BATCH-END beta`n" "BATCH-END alpha`nPASS alpha`nBATCH-END beta`nPASS beta`n"
+            Invoke-OrdinaryReference $f $only $result
+        }
+    }
+    Invoke-Case 'default-all with only fixed isolated scenarios including A01 refuses both current twins' {
+        $f = New-Fixture "extractor-backpressure`nstates`nrecipe-cache-reload`nforeign-providers`n" 'selected A01 isolated root & spaces'
+        $result = Invoke-Batch $f
+        Assert-Refused $f $result 'fresh datapack world'
+        Assert-ReferenceRefused $f ''
     }
     foreach ($optionalKind in @('directory', 'file')) {
         Invoke-Case "dynamic optional $optionalKind requires isolation before any boot" {
@@ -667,6 +718,6 @@ done
 }
 Write-Output ("ALL SMOKES BATCH CONTRACTS PASSED: " + $script:Cases + ' cases; ' +
     $script:Assertions + ' assertions; ' + $script:NativeRuns + ' native Bash CLI runs; ' +
-    $script:ReferenceRuns + ' intercepted ordinary PowerShell comparisons.')
+    $script:ReferenceRuns + ' PowerShell reference CLI comparisons (safe intercepted launch boundary).')
 Write-Output 'No real smoke harness, JVM, Gradle, SSH, network, save or private PC configuration was used.'
 Write-Output 'Boundary: fake launch tests do not prove SMOKE-READY/handshake, server assertions or real harness process cleanup.'

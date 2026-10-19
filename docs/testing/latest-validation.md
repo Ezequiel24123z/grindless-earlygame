@@ -1,5 +1,65 @@
 # Current T0 rework validation
 
+## Final A01 batch exclusion and existing-gate seam
+
+This final adaptation fast-forwards the clean batch worker to exact
+`f867ffbe81082493f508e9ba9ceed073a2e608d7`, containing reviewed `4b86dbb`
+and the integrated `0fec76d` PS/harness source. It does not adopt the separate
+`444409f` retention changes. Both batch twins now fixed-exclude
+`extractor-backpressure` even without an optional sibling: A01's post-stop
+VeinData oracle requires exactly two worked chunks and total two in a fresh world.
+Scenario registration and native qualification remain coordinator-owned.
+
+Four no-server cases exercise A01-only refusal, named mixed selection,
+default-all mixed selection and an all-isolated default-all refusal against both
+current twins. The reference PS bytes come from this integrated RepositoryRoot,
+not the old `cc2fe71` reference. Legacy selection, inherited environment, one
+ordinary boot, fake-root guards and the CDPATH regression remain in the same suite.
+
+The first integrated invocation exits1:40/42 cases pass and975 assertions are
+attempted. Both new negative PS cases reach the expected nonzero/no-boot boundary
+but fail their refusal-message assertion; both mixed/default-all parity cases pass.
+The first test PS CRLF materialization is
+`73f92ce57f86b036c189786f4005fb50241a7d75e015d25b955dab9797fb5444`.
+Cleanup succeeds. Syntax is not credited for that failed attempt, and no production
+cause is inferred without the actual PS diagnostic.
+The diagnostic-only retry also exits1 at40/42 and975 attempted assertions; its
+actual stdout/stderr fields are empty, so it does not confirm a wrapping hypothesis.
+That test PS CRLF hash is
+`4bf2b8c4f7bfba5f9b25a742d4e797cca84840db9c3d45e2664d38dea66ae3e1`.
+The temporary reference driver is then made to forward a caught terminating
+exception's actual message to stderr and retain exit1; the strict refusal/no-boot
+assertions and all production inputs are preserved.
+
+The final direct invocation exits0:42 cases,975 assertions,42 actual Bash CLI
+launches and7 current-PS reference CLI comparisons. All four A01 cases pass,
+including both refusal-message assertions, and the owned temporary subtree is
+removed. WinPS parses both the batch and test PS; Bash syntax checks pass for the
+batch and unchanged test selector. The existing selector execution proof is reused,
+not repeated or relabeled as a new entrypoint run.
+
+Observed execution is WinPS5.1.26100.9711/Desktop with Git/MSYS
+Bash5.2.37(1)-release. Native Linux/macOS, Core and actual Java gate execution remain
+**NOT_RUN**. Before/after materialization hashes match throughout the successful
+suite; normalized LF identities are verified against staged raw Git blob bytes.
+
+| Source | Windows CRLF materialization SHA-256 | Matching LF source SHA-256 |
+| --- | --- | --- |
+| `tools/run-smokes-batch.ps1` | `e7ea9f341c4758098dff849abdaf8540b806ac1f3904d72873f61021fb1a1104` | `d6a899d18467bed06337490c3dd3937706853a37875a3b8f15baff507fa7ee6c` |
+| `tools/run-smokes-batch.sh` | `3b4930fd6cf4603782609496d806bf35f0daaa047e2cf56716ef606b9beaeb0d` | `7faa06ca25d5841255b10c381bcbd0d19a4803a2cad74296264ae064fabf53a0` |
+| `tools/checks/Test-SmokesBatch.ps1` | `587f3508da9fbfe7cd4e1e8fbd1e79c5f7a319ee3c403af8148f5a94e5464232` | `76c158e902c371373b586e728f9d7e9c669eff7732406df22efa98a06d0c9456` |
+| `tools/checks/VerifySmokeHarness.java` (source only) | `e2f4f48a65bbce1a66ac098b1a071bc3f503269c20b844c81ea1ed946c5ba475` | `03b2367226cb9e28012eedfb54a0ff26356ce2342c1a77ae0209f09baa884e46` |
+
+`VerifySmokeHarness` receives exactly one platform-twin invocation of
+`Test-SmokesBatch`, following its existing optional-pack pattern. No CI entry,
+new flag/framework or duplicate suite entrypoint is added. The existing optional
+call stays intact; the coordinator separately combines retention's independent
+call. Java compilation and actual gate execution are reserved to the final PC
+window, not performed or claimed by this no-JVM worker.
+No application/common/Forge, shared boot, scenario-list, CI, retention or private-PC
+surface is modified. These fake-boundary results do not qualify the A01 native
+oracle, clean-stop SavedData, real reload, client, T0 acceptance/freeze or T1.
+
 ## Reviewed optional-pack staging and reload-source integration
 
 Merge original fixture/staging history through `0fec76d` without changing its
