@@ -207,6 +207,10 @@ for name in "${SELECTED[@]}"; do
   export SMOKE_LOG="$ROOT/forge/run/smoke-$name.log"
 
   if (
+    unset SMOKE_OPTIONAL_DATAPACK
+    if [ -e "$SMOKE_DIR/$name-optional" ]; then
+      export SMOKE_OPTIONAL_DATAPACK="$SMOKE_DIR/$name-optional"
+    fi
     if [ -z "${SMOKE_EXPECT_TIMEOUT:-}" ] && [ -n "${EXPECT_TIMEOUTS[$i]}" ]; then
       export SMOKE_EXPECT_TIMEOUT="${EXPECT_TIMEOUTS[$i]}"
     fi

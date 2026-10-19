@@ -476,6 +476,31 @@ version/API-verified, never a fictional or mandatory core integration.
   loaded-chunk/single-tagged-item observation pattern. The paired standalone
   `verify-blueprint-fixture` checks compare source contracts and mutate in memory;
   they are not a new Minecraft execution or a Blueprint gameplay proof.
+- `tools/smoke/recipe-cache-reload/` and `recipe-cache-reload-optional/` author one
+  ADR-0153 idle-miss/reload boundary with real tag predicates, immutable setup,
+  exact batch/FU accounting and a tick-rate bound. Read its `README.txt` first:
+  native qualification is NOT_RUN. The paired runners now stage one
+  `SMOKE_OPTIONAL_DATAPACK` explicitly in `initial-disabled-packs`, validate
+  optional-mode paths/basenames and restore its environment per scenario.
+  Reject linked ancestors of both input and world paths before replacing the
+  diagnostic world; a leaf-only link check or logical/physical prefix comparison
+  is insufficient. PS must choose one absolute FileSystem path from the PS
+  provider/location, not .NET CurrentDirectory, and reuse it for checks and reads.
+  Resolve `~` using that provider's Home anchor, not as a relative folder; do not
+  invent `~user` expansion. Inspect logical ancestors root-first before dot
+  normalization, including ROOT and Home tails.
+  Publication wait has a separate bounded failure and never
+  spends the confirmed wake budget; its reset must not reset paid-work samples.
+  PS batch excludes reload/optional cases from its shared world.
+  `verify-optional-datapack.ps1` / `.sh`, invoked by `VerifySmokeHarness`, exercise
+  the real helper/dispatch plus phase-budget source contracts without a JVM/server;
+  PS passes86 including c7 divergent-cwd and ae054 Home regressions, with locations
+  and provider Home restored. The earlier75 did not cover Home.
+  Windows Git/MSYS syntax passes; its full optional check is blocked by missing
+  `ln`, not a Linux/macOS pass. The full-buffer no-callback guard in `VerifyEnergy` is authored, not
+  executed under the current JVM reservation.
+  Do not register the native fixture in `scenarios.txt`, invent a native pass or
+  let donor energy/inventory/neighbor mutation substitute for reload wakeup.
 
 - Process UI uses `MachineMenuLayout` for real item-slot geometry and `MachineFluidView`
   for the read-only primary-store projection. `FluidClientPlatform` delegates native water

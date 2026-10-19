@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the reviewed native reload fixture and path staging.** Preserve
+  the original fixture and separate ancestor/provider/Home corrections through
+  `0fec76d`. Independent review closes the publication/wake and path findings;
+  86 PS contracts remain offline evidence, not an executed reload. Keep the
+  scenario unregistered until native qualification; retention is separate.
 - **Integrate the corrected shared-batch twin.** Preserve `507ecfa` and its
   `4b86dbb` CDPATH regression repair unchanged after independent closure.
   The real fake-boot CLI gate passes38 cases/856 assertions on WinPS5/Git-MSYS;
@@ -96,6 +101,40 @@ entries below reference those records by id.
   human acceptance, T0 freeze or T1 activation is implied.
   A01's separate Crude Extractor idle-export gap remains open under another child;
   process/native-fluid proofs do not close it by analogy.
+- **Preserve the FileSystem provider's Home anchor in smoke paths.** The divergent-cwd
+  fixture reproduces ae054's missing Home case without writing to the real HOME.
+  Resolve only `~` through the provider, then retain the logical tail for ancestor
+  inspection; literal `~user`, PSDrives and relative controls keep provider semantics.
+  All86 focused PS checks pass with provider Home/cwd restored and sentinels intact.
+  This is a separate correction; the earlier75 did not cover Home.
+- **Unify relative smoke paths under the PowerShell FileSystem location.** A safe
+  divergent-cwd regression fails on c7: .NET and PS previously inspected different
+  relative inputs. Choose one absolute FileSystem path for source/world/ROOT,
+  inspect its logical ancestors root-first before normalizing dot segments, and
+  reuse it for metadata, overlap and staging.75 focused PS checks pass with restored
+  locations and intact sentinels. SH guards/phases are unchanged; local Windows
+  Git/MSYS syntax passes, but its optional check stops at missing `ln`. No JVM/PC run.
+- **Correct both P2 findings in the pending reload fixture.** Publication has its
+  own bounded counter/failure; only the confirmed load barrier starts a fresh wake
+  budget, without resetting paid-work observations. Optional-mode preflight rejects
+  linked ancestors of both source and world paths, including not-yet-created worlds.
+  Safe owned-junction and source-contract regressions fail on frozen8a433, then59
+  focused PS checks pass after the repair. Per-phase400-tick guards, outer120s budget
+  and2GiB server heap remain unchanged. SH/Java/native remain NOT_RUN; no PC writes.
+- **Stage one explicitly disabled optional smoke pack.** Under coordinator-approved
+  ADR-0154, extend both isolated runners with one validated optional directory,
+  1.20.1 `initial-disabled-packs`, portable collision guards and per-scenario
+  environment restoration. Exclude reload/optional scenarios from the PS batch.
+  The focused PS helper/real-fake-dispatch check passes37 cases; SH and the affected
+  Java contracts remain NOT_RUN. Preserve the first test-only command-quoting
+  failure and its corrected rerun. No native run, CI step or scenario registration.
+- **Author one pending native idle-cache reload regression (ADR-0153).** A controlled
+  base/optional-ingot datapack fixture observes an already loaded Pulverizer miss,
+  real reload wakeup, one conserved gravel-to-sand batch and no extra paid work.
+  Full finite buffers prevent donor callbacks from masking the initial wake.
+  Authored offline only; the original single-pack limitation is closed by the
+  separately authorized staging extension above, not by a native qualification.
+  No application edit, manifest registration or native pass is claimed.
 - **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
   passes nine real RPCs, an11-second package build, owned update, inspection and two
   idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM

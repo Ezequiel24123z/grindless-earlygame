@@ -354,6 +354,18 @@ public final class VerifyEnergy {
         eq("a real change notifies", 1, changes[0]);
         watched.receive(0L, false);
         eq("a no-op does not notify", 1, changes[0]);
+        SimpleFluxStorage fullProcess = new SimpleFluxStorage(1280L, FluxTier.F1.nominal(), 0L,
+                () -> changes[0]++);
+        fullProcess.setStored(1280L);
+        int fullNotifications = changes[0];
+        eq("the reload fixture's full F1 consumer accepts no donor energy", 0L,
+                fullProcess.receive(FluxTier.F1.nominal(), false));
+        eq("a positive donor offer to a full consumer cannot wake subscriptions",
+                fullNotifications, changes[0]);
+        fullProcess.setStored(1280L - FluxTier.F1.nominal());
+        eq("only after paid work may the donor refill one F1 tick", FluxTier.F1.nominal(),
+                fullProcess.receive(FluxTier.F1.nominal(), false));
+        eq("the real withdrawal and refill each notify once", fullNotifications + 2, changes[0]);
     }
 
     private static void rateLimits() {

@@ -53,7 +53,7 @@ be diagnosed again as absent without a current counterexample.
 | T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build, and combinedfd5060 passes all44 fast suites/states. The unique native loaded-idle/reload property remains pending, not replaced by states. |
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
-| Native reload regression | `ae054ad` passes 75 PS contracts and closes the provider/.NET relative-base mismatch. Delta review finds a new Home-anchor regression affecting `~` ROOT/pack paths; correction and separate ADR-0155 retention remain in progress. Windows Git-MSYS syntax passes, but optional tests cannot finish without `ln`; no Linux/native pass is inferred. |
+| Native reload regression | Source through `0fec76d` is integrated after independent closure of publication/wake, ancestor/provider and Home findings. 86 PS contracts pass; Windows Git-MSYS syntax passes, but optional tests cannot finish without `ln`. Genuine native publication/wakeup is still unrun and the scenario is not registered. |
 | GREEN batch portability | Original `507ecfa` -> `4b86dbb` history is source-integrated unchanged after independent closure of CDPATH. The real fake-boot CLI proof passes38 cases/856 assertions on WinPS5/Git-MSYS. No new server framework or duplicate native batch is needed; Linux/Core/macOS remain unexecuted. |
 | A01 Crude output recovery | Original red `4f1b30b`/repair `c87dbc8` history is source-integrated, not deployed or execution-qualified. Child `cbafe37b-ef12-402c-90d1-d152622abfcb` owns focused Java red/green and then one conditional pre-fix native counterexample. Initial SSH loss is resolved read-only: no surfaces/receipt or Git/SSH/Java remain, so preparation can retry safely. Repaired native/SavedData and full integrated build remain open. ProcessMachine fluid proofs are not substituted. |
 
@@ -70,8 +70,10 @@ the coordinator grants the next runtime window. Private paths stay outside Git.
 A01 review finds no other high-confidence production blocker, but the harness
 currently deletes the world before its stopped-world accounting command can
 read SavedData. [ADR-0155](docs/DECISIONS.md#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in)
-authorizes a narrow paired retention opt-in, owned by the harness child; it is
-not implemented or qualified yet. Repaired-native qualification cannot bypass that oracle.
+authorizes a narrow paired retention opt-in, owned by the harness child. It is
+frozen separately at `444409f`, with37 PS/43 Git-MSYS checks reported; independent
+review/integration and native accounting remain pending. Repaired-native
+qualification cannot bypass that oracle.
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.

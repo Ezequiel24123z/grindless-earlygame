@@ -1,5 +1,21 @@
 # Current T0 rework validation
 
+## Reviewed optional-pack staging and reload-source integration
+
+Merge original fixture/staging history through `0fec76d` without changing its
+harness/check/fixture bytes. Independent review closes the distinct publication
+budget, linked-ancestor, divergent provider/.NET base and Home-anchor findings.
+The author's86 PS contracts and negative runs retain their exact source scope;
+Windows Git-MSYS syntax is not the incomplete optional suite or Linux execution.
+Four actual SimpleFluxStorage assertions and the existing VerifySmokeHarness
+helper entry are authored but still await the selected JVM gate.
+
+The optional pack remains initially disabled explicitly, with isolated environment
+restoration and batch exclusion. No native scenario-list row is added before real
+qualification. The subsequent diagnostic retention `444409f` remains a separate
+review/integration gate; its37 PS/43 Windows Git-MSYS checks are not yet a native
+SavedData result.
+
 ## Corrected batch source integration
 
 Merge the original `507ecfa` -> `4b86dbb` history without changing the batch or
