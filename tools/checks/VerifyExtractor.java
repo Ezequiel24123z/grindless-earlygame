@@ -3,16 +3,20 @@ package io.github.ezequiel24123z.grindless.machine;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.network.PylonStructure;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /** Behaviour checks for the Crude Extractor and the pylon tower. Not part of the mod. */
 public final class VerifyExtractor {
 
     private static int failures = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         cycle();
         status();
         outputForm();
         tower();
+        recoverySourceContract();
 
         System.out.println(failures == 0
                 ? "ALL EXTRACTOR CHECKS PASSED"
@@ -97,6 +101,51 @@ public final class VerifyExtractor {
                         new net.minecraft.core.BlockPos(0, 65, 0)));
         eq("the base under a top shaft", 64,
                 PylonStructure.baseOf(new net.minecraft.core.BlockPos(8, 66, 8), 2).getY());
+    }
+
+    private static void recoverySourceContract() throws Exception {
+        String source = Files.readString(Path.of("common", "src", "main", "java", "io", "github",
+                "ezequiel24123z", "grindless", "machine", "CrudeExtractorBlockEntity.java"));
+        String subscriptions = method(source, "protected void updateSubscriptions()");
+        yes("owned output subscribes independently of work and vein",
+                subscriptions.contains("if (!output.isEmpty())")
+                && subscriptions.contains("subscribe(exporting, this::exportWaitingOutput)"));
+        yes("empty output releases its exporter",
+                subscriptions.contains("exporting.unsubscribe()") && subscriptions.contains("exporting = null"));
+        String exporting = method(source, "private void exportWaitingOutput()");
+        yes("pending export uses the existing eight-tick retry policy",
+                exporting.contains("isDue(8)") && exporting.contains("pushOutput()")
+                && exporting.contains("updateSubscriptions()"));
+        String work = method(source, "private void work()");
+        int guard = work.indexOf("lastWorkTick == tick");
+        int power = work.indexOf("requestPower(");
+        yes("the world-time guard precedes callbacks and power draw",
+                work.contains("getLevel().getGameTime()") && guard >= 0 && power > guard
+                && work.indexOf("lastWorkTick = tick") > guard
+                && work.indexOf("lastWorkTick = tick") < power);
+        String pushing = method(source, "private void pushOutput()");
+        yes("external insertion receives a copy of owned output",
+                pushing.contains("output.getItem(0).copy()"));
+        yes("only a changed confirmed remainder notifies the inventory",
+                pushing.contains("ItemStack.matches(output.getItem(0), stack)"));
+    }
+
+    private static String method(String source, String signature) {
+        int start = source.indexOf(signature);
+        if (start < 0) {
+            return "";
+        }
+        int body = source.indexOf('{', start);
+        int depth = 1;
+        for (int end = body + 1; end < source.length(); end++) {
+            char next = source.charAt(end);
+            if (next == '{') {
+                depth++;
+            } else if (next == '}' && --depth == 0) {
+                return source.substring(body + 1, end);
+            }
+        }
+        throw new IllegalStateException("Unclosed method: " + signature);
     }
 
     private static void eq(String what, double expected, double actual) {

@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Stage the current A01 extractor-recovery counterexample.** Add focused source
+  contracts and an isolated Luna/Drift diagnostic for full-output wakeup, loaded
+  paid work, partial export without a vein and one-world-tick Flux accounting.
+  The baseline has no independent exporter; Java/native RED execution is pending
+  the coordinator's immutable-PC window, not inferred from source inspection.
 - **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
   disabled optional fixture pack through the existing paired harness, retaining
   legacy defaults, isolated-world behavior and the scenario-list integration.

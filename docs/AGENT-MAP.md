@@ -82,6 +82,11 @@ playable T0 publication and actual owner play; no new port implementation by imp
   placement and persisted inventory layout; widening a menu must migrate any shifted saved slots.
 - `container/SlottedContainer.java` — indexed vanilla inventory NBT. Layout 3 keeps sparse slots;
   compact legacy lists retain their recorded order, not guessed historical positions (ADR-0125).
+- `machine/CrudeExtractorBlockEntity.java`, `VerifyExtractor` and
+  `tools/smoke/extractor-backpressure-pack/` — A01 owned-output recovery and
+  paid-work/Flux/accounting regression. Pending export must not depend on a
+  runnable extraction or live vein; a re-added work callback may not debit twice
+  in one world tick. Native recovery and source contracts are distinct proofs.
 - `process/MachineEnvelopes.java` — when the machine holds a band from
   [`MACHINES.md`](MACHINES.md#machines-are-condition-envelopes).
 - `registry/BlockCatalogue.java` — geometry and the asset list.
