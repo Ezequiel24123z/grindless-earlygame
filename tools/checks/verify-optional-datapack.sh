@@ -18,8 +18,17 @@ reject_message() {
   if ! grep -Fq "$expected" "$FIXTURE/rejected.log"; then cat "$FIXTURE/rejected.log" >&2; exit 1; fi
   COUNT=$((COUNT + 1))
 }
+RELOAD="$ROOT/tools/smoke/recipe-cache-reload/data/grindless_cache_reload/functions"
+assert grep -Fxq 'scoreboard players set publish_ticks cache_reload 0' "$RELOAD/begin.mcfunction"
+assert grep -Fxq 'execute if score phase cache_reload matches 2 run scoreboard players add publish_ticks cache_reload 1' "$RELOAD/observe.mcfunction"
+assert grep -Fxq 'execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 run scoreboard players add run_ticks cache_reload 1' "$RELOAD/observe.mcfunction"
+assert grep -Fxq 'execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 run scoreboard players set run_ticks cache_reload 0' "$RELOAD/after_reload.mcfunction"
+assert grep -Fxq 'execute if score phase cache_reload matches 2 if score publish_ticks cache_reload matches 400.. run scoreboard players set error cache_reload 8' "$RELOAD/observe.mcfunction"
+assert grep -Fxq 'execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 if score run_ticks cache_reload matches 400.. run scoreboard players set error cache_reload 6' "$RELOAD/observe.mcfunction"
+assert grep -Fxq 'execute if score error cache_reload matches 8 run say CACHE-RELOAD-FAIL-PUBLICATION-TIMEOUT' "$RELOAD/failed.mcfunction"
+reject grep -Eq '^scoreboard players add run_ticks ' "$RELOAD/observe.mcfunction"
 # Load only the real pure helper definitions, never the boot/Gradle entrypoint.
-eval "$(sed -n '/^resolve_smoke_datapack()/,/^}/p; /^smoke_pack_properties()/,/^}/p' "$BOOT")"
+eval "$(sed -n '/^assert_smoke_path_ancestors()/,/^}/p; /^resolve_smoke_datapack()/,/^}/p; /^smoke_pack_properties()/,/^}/p' "$BOOT")"
 mkdir -p "$ROOT/build"
 FIXTURE="$(mktemp -d "$ROOT/build/optional-pack-tests.XXXXXX")"
 trap 'rm -rf -- "$FIXTURE"' EXIT
@@ -51,6 +60,23 @@ reject resolve_smoke_datapack "$FIXTURE/alias" "$WORLD"
 ln -s "$OPTIONAL/pack.mcmeta" "$PRIMARY/linked"
 reject resolve_smoke_datapack "$PRIMARY" "$WORLD"
 rm "$PRIMARY/linked"
+INSIDE_OPTIONAL="$(pack forge/run/smoke-server/smoke-world/optional)"
+INSIDE_PRIMARY="$(pack forge/run/smoke-server/smoke-world/primary)"
+printf 'owned-fixture-source-must-survive\n' > "$INSIDE_OPTIONAL/retained.txt"
+ln -s "$WORLD" "$FIXTURE/ancestor-alias"
+reject_message 'ancestor symlinks' resolve_smoke_datapack "$FIXTURE/ancestor-alias/optional" "$WORLD"
+reject_message 'ancestor symlinks' resolve_smoke_datapack "$FIXTURE/ancestor-alias/primary" "$WORLD"
+assert test "$(cat "$INSIDE_OPTIONAL/retained.txt")" = owned-fixture-source-must-survive
+rm "$FIXTURE/ancestor-alias"
+PHYSICAL_WORLD="$(pack real-root/forge/run/smoke-server/smoke-world)"
+ln -s "$FIXTURE/real-root" "$FIXTURE/root-alias"
+LOGICAL_WORLD="$FIXTURE/root-alias/forge/run/smoke-server/smoke-world"
+reject_message 'ancestor symlinks' resolve_smoke_datapack "$OPTIONAL" "$LOGICAL_WORLD"
+reject_message 'ancestor symlinks' resolve_smoke_datapack "$OPTIONAL" "$LOGICAL_WORLD-next"
+assert test -f "$PHYSICAL_WORLD/pack.mcmeta"
+reject_message 'ancestor symlinks' env SMOKE_DATAPACK="$PRIMARY" SMOKE_OPTIONAL_DATAPACK="$OPTIONAL" bash "$BOOT" "$FIXTURE/root-alias"
+assert test -f "$PHYSICAL_WORLD/pack.mcmeta"
+rm "$FIXTURE/root-alias"
 
 # Invalid optional inputs must fail in the actual boot before EULA/Gradle/Java.
 reject_message 'name collision' env SMOKE_DATAPACK="$PRIMARY" SMOKE_OPTIONAL_DATAPACK="$PRIMARY" bash "$BOOT" "$FIXTURE"

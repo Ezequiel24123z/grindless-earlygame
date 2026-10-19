@@ -75,8 +75,27 @@ function Remove-Tree([string]$path) {
     }
 }
 
+function Assert-SmokePathAncestors([string]$path) {
+    $current = [IO.Path]::GetFullPath($path)
+    while ($current) {
+        $native = if ($current.StartsWith('\\')) { '\\?\UNC\' + $current.Substring(2) } else { "\\?\$current" }
+        $attributes = $null
+        try { $attributes = [IO.File]::GetAttributes($native) }
+        # A fresh world's suffix may not exist yet; its existing ancestors still must be checked.
+        catch [IO.FileNotFoundException] { }
+        catch [IO.DirectoryNotFoundException] { }
+        if ($null -ne $attributes -and ($attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw "Invalid smoke datapack path '$path': ancestor reparse points are not supported."
+        }
+        $parent = [IO.Directory]::GetParent($current)
+        $current = if ($null -eq $parent) { $null } else { $parent.FullName }
+    }
+}
+
 function Resolve-SmokeDatapack([string]$path, [string]$worldPath) {
     if ([string]::IsNullOrWhiteSpace($path)) { throw 'Invalid smoke datapack: empty path.' }
+    Assert-SmokePathAncestors $path
+    Assert-SmokePathAncestors $worldPath
     $item = Get-Item -LiteralPath $path -Force -ErrorAction Stop
     if (-not $item.PSIsContainer -or $item.PSProvider.Name -ne 'FileSystem' -or
             -not (Test-Path -LiteralPath (Join-Path $item.FullName 'pack.mcmeta') -PathType Leaf)) {

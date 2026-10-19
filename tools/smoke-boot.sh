@@ -48,8 +48,24 @@ EXPECT="${SMOKE_EXPECT:-}"
 COMMANDS="${SMOKE_COMMANDS:-}"
 if [ -n "${SMOKE_EXPECT_FILE:-}" ]; then EXPECT="$(cat "$SMOKE_EXPECT_FILE")"; fi
 
+assert_smoke_path_ancestors() {
+  local current="$1" parent
+  case "$current" in /*) ;; *) current="$PWD/$current";; esac
+  while [ "$current" != / ] && [[ "$current" == */ ]]; do current="${current%/}"; done
+  while :; do
+    if [ -L "$current" ]; then
+      echo "Invalid smoke datapack path '$1': ancestor symlinks are not supported." >&2; return 1
+    fi
+    parent="$(dirname "$current")" || return 1
+    [ "$parent" = "$current" ] && break
+    current="$parent"
+  done
+}
+
 resolve_smoke_datapack() {
   local path="$1" world="$2" source name links
+  assert_smoke_path_ancestors "$path" || return 1
+  assert_smoke_path_ancestors "$world" || return 1
   if [ ! -d "$path" ] || [ -L "$path" ]; then
     echo "Invalid smoke datapack '$path': expected a non-symlink directory." >&2; return 1
   fi

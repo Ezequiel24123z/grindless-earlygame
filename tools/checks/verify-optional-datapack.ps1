@@ -15,11 +15,54 @@ function Reject([scriptblock]$action, [string]$label, [string]$diagnostic = '') 
     Assert $rejected $label
 }
 
+$reloadFunctions = Join-Path $Root 'tools\smoke\recipe-cache-reload\data\grindless_cache_reload\functions'
+$budgetSource = @{}
+foreach ($name in @('begin', 'observe', 'after_reload', 'failed')) {
+    $budgetSource[$name] = [IO.File]::ReadAllText((Join-Path $reloadFunctions ($name + '.mcfunction'))).Replace("`r`n", "`n")
+}
+$publishIncrement = 'execute if score phase cache_reload matches 2 run scoreboard players add publish_ticks cache_reload 1'
+$wakeIncrement = 'execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 run scoreboard players add run_ticks cache_reload 1'
+$confirmedReset = 'execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 run scoreboard players set run_ticks cache_reload 0'
+function Test-ReloadBudgetContract([hashtable]$source) {
+    $writes = @($source.observe -split "`n" | Where-Object { $_ -match 'scoreboard players add (publish_ticks|run_ticks) ' })
+    if (($writes -join "`n") -cne ($publishIncrement + "`n" + $wakeIncrement)) { return $false }
+    foreach ($counter in @('publish_ticks', 'run_ticks')) {
+        if (-not $source.begin.Contains("scoreboard players set $counter cache_reload 0`n")) { return $false }
+    }
+    $confirmation = "execute if score tag_ok cache_reload matches 1 run scoreboard players set reload_seen cache_reload 1`n" +
+        "execute if score tag_ok cache_reload matches 1 run scoreboard players set phase cache_reload 3`n" + $confirmedReset + "`n"
+    if (-not $source.after_reload.Contains($confirmation)) { return $false }
+    if (@($source.after_reload -split "`n" | Where-Object { $_ -match 'scoreboard players set run_ticks ' }).Count -ne 1) { return $false }
+    foreach ($entry in @(@('2', '', 'publish_ticks', '8'), @('3', 'if score reload_seen cache_reload matches 1 ', 'run_ticks', '6'))) {
+        $gate = "execute if score phase cache_reload matches $($entry[0]) $($entry[1])if score $($entry[2]) cache_reload matches 400.. run "
+        if (-not $source.observe.Contains($gate + "scoreboard players set error cache_reload $($entry[3])`n") -or
+                -not $source.observe.Contains($gate + "function grindless_cache_reload:failed`n")) { return $false }
+    }
+    return $source.failed.Contains('execute if score error cache_reload matches 8 run say CACHE-RELOAD-FAIL-PUBLICATION-TIMEOUT') -and
+        $source.after_reload -notmatch 'scoreboard players (?:set|operation) (?:prev_paid|prev_time|paid) '
+}
+Assert (Test-ReloadBudgetContract $budgetSource) 'publication wait cannot consume or masquerade as confirmed wake budget'
+$budgetMutations = @(
+    @('observe', $wakeIncrement, 'scoreboard players add run_ticks cache_reload 1'),
+    @('observe', $wakeIncrement, $wakeIncrement.Replace('matches 3 ', 'matches 2 ')),
+    @('observe', $wakeIncrement, $wakeIncrement.Replace('if score reload_seen cache_reload matches 1 ', '')),
+    @('after_reload', $confirmedReset, ''),
+    @('observe', 'scoreboard players set error cache_reload 8', 'scoreboard players set error cache_reload 6'),
+    @('observe', 'if score publish_ticks cache_reload matches 400.. ', ''),
+    @('observe', 'if score run_ticks cache_reload matches 400.. ', 'if score run_ticks cache_reload matches 800.. ')
+)
+foreach ($mutation in $budgetMutations) {
+    Assert ($budgetSource[$mutation[0]].Contains($mutation[1])) 'budget mutation has an actual source target'
+    $changed = $budgetSource.Clone()
+    $changed[$mutation[0]] = $changed[$mutation[0]].Replace($mutation[1], $mutation[2])
+    Assert (-not (Test-ReloadBudgetContract $changed)) 'reject conflated, unconfirmed, absent-reset or relaxed budget'
+}
+
 $boot = Join-Path $Root 'tools\smoke-boot.ps1'
 $tokens = $null; $errors = $null
 $ast = [Management.Automation.Language.Parser]::ParseFile($boot, [ref]$tokens, [ref]$errors)
 Assert ($errors.Count -eq 0) 'production boot parses'
-foreach ($name in @('Resolve-SmokeDatapack', 'Get-SmokePackPlan', 'Copy-Tree')) {
+foreach ($name in @('Assert-SmokePathAncestors', 'Resolve-SmokeDatapack', 'Get-SmokePackPlan', 'Copy-Tree')) {
     $definition = @($ast.FindAll({
         param($node)
         $node -is [Management.Automation.Language.FunctionDefinitionAst]
@@ -77,6 +120,26 @@ try {
     $alias = Join-Path $primary 'linked'
     $null = New-Item -ItemType Junction -Path $alias -Target $optional
     try { Reject { Get-SmokePackPlan $primary $optional $world } 'nested reparse point' 'reparse points' } finally { [IO.Directory]::Delete($alias) }
+    $insideOptional = Pack 'forge\run\smoke-server\smoke-world\optional'
+    $insidePrimary = Pack 'forge\run\smoke-server\smoke-world\primary'
+    $sentinel = Join-Path $insideOptional 'retained.txt'
+    [IO.File]::WriteAllText($sentinel, 'owned-fixture-source-must-survive', $utf8)
+    $alias = Join-Path $fixture 'ancestor-alias'
+    $null = New-Item -ItemType Junction -Path $alias -Target $world
+    try {
+        Reject { Get-SmokePackPlan $primary (Join-Path $alias 'optional') $world } 'optional source through a junction ancestor' 'reparse points'
+        Reject { Get-SmokePackPlan (Join-Path $alias 'primary') $optional $world } 'primary source through a junction ancestor' 'reparse points'
+        Assert ([IO.File]::ReadAllText($sentinel) -ceq 'owned-fixture-source-must-survive') 'rejected ancestor aliases preserve the actual source'
+    } finally { [IO.Directory]::Delete($alias) }
+    $physicalWorld = Pack 'real-root\forge\run\smoke-server\smoke-world'
+    $alias = Join-Path $fixture 'root-alias'
+    $null = New-Item -ItemType Junction -Path $alias -Target (Join-Path $fixture 'real-root')
+    try {
+        $logicalWorld = Join-Path $alias 'forge\run\smoke-server\smoke-world'
+        Reject { Get-SmokePackPlan $primary $optional $logicalWorld } 'ROOT junction with an existing world' 'reparse points'
+        Reject { Get-SmokePackPlan $primary $optional ($logicalWorld + '-next') } 'ROOT junction with a not-yet-created world' 'reparse points'
+        Assert ([IO.File]::Exists((Join-Path $physicalWorld 'pack.mcmeta'))) 'rejected ROOT aliases preserve the actual world'
+    } finally { [IO.Directory]::Delete($alias) }
 
     $bootSource = [IO.File]::ReadAllText($boot)
     Assert ($bootSource.IndexOf('$packPlan = Get-SmokePackPlan') -lt $bootSource.IndexOf("') --no-daemon")) 'preflight precedes Gradle and world replacement'

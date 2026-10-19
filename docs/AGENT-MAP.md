@@ -451,9 +451,14 @@ version/API-verified, never a fictional or mandatory core integration.
   native qualification is NOT_RUN. The paired runners now stage one
   `SMOKE_OPTIONAL_DATAPACK` explicitly in `initial-disabled-packs`, validate
   optional-mode paths/basenames and restore its environment per scenario.
+  Reject linked ancestors of both input and world paths before replacing the
+  diagnostic world; a leaf-only link check or logical/physical prefix comparison
+  is insufficient. Publication wait has a separate bounded failure and never
+  spends the confirmed wake budget; its reset must not reset paid-work samples.
   PS batch excludes reload/optional cases from its shared world.
   `verify-optional-datapack.ps1` / `.sh`, invoked by `VerifySmokeHarness`, exercise
-  the real helper/dispatch contract without a JVM/server; PS passes37, SH remains
+  the real helper/dispatch plus phase-budget source contracts without a JVM/server;
+  PS passes59 after two expected pre-fix P2 regressions, SH remains
   NOT_RUN. The full-buffer no-callback guard in `VerifyEnergy` is authored, not
   executed under the current JVM reservation.
   Do not register the native fixture in `scenarios.txt`, invent a native pass or

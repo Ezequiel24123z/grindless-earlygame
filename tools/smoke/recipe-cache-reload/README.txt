@@ -46,6 +46,11 @@ storage-gated minecraft:load callback acknowledges the changed tag set; it does
 not reconstruct, touch or notify either machine. The scheduled base-pack
 observer continues across reload and never assumes one console sleep means
 reload completion. No production Java method is called by a test sidecar.
+Phase2 counts publication observations only. Its400-tick deadline emits
+CACHE-RELOAD-FAIL-PUBLICATION-TIMEOUT, never the native pre-fix wake marker.
+Only phase3 with reload_seen=1 resets and spends the separate400-tick wake/
+cycle allowance. A late publication cannot steal the normal120-tick batch's
+allowance. Paid-work/time samples continue across the barrier without reset.
 
 The command-built equipment is a Pulverizer at 8 280 8 with 1,280 FU and one
 gravel, plus an adjacent Thermal Generator at 7 280 8 precharged with 6,400 FU,
@@ -84,6 +89,12 @@ limitation. The coordinator then authorized the narrow extension under ADR-0154
 Both smoke-boot twins now optionally accept ONE SMOKE_OPTIONAL_DATAPACK.
 They preflight its directory/metadata, portable basename, reparse/symlink-free
 tree and separation from the disposable world before Gradle/world replacement.
+Both source and world paths reject linked ancestors before any physical-source
+canonicalization can hide them. This includes a logical ROOT alias and a fresh
+world whose suffix is not created yet; only expected missing path components
+are tolerated, while unreadable metadata still fails. Rejecting these aliases,
+rather than comparing a logical world against a physical input, prevents
+cleanup from deleting an aliased source.
 When present, also validate the primary; reject case-insensitive basename
 collisions. Existing no-optional behavior is preserved. Copy the sibling next
 to the primary and explicitly write initial-disabled-packs=file/<optional>.
@@ -144,8 +155,10 @@ separately with the repository's current bounded Gradle settings and no
 concurrent JVM owner. It then launches exactly ONE production Forge server at
 the unchanged -Xmx2G (never shrink the canonical heap). Assertion budget is the
 existing 120 seconds, startup 900, handshake 60, clean shutdown 60. The fixture
-needs at most 201 chunk-wait ticks, 40 idle observations, 400 work/reload
-observations and 40 extra settled ticks, normally under 35 game seconds.
+needs at most 201 chunk-wait ticks, 40 idle observations, 400 publication
+observations, 400 confirmed work observations and 40 extra settled ticks:
+under55 game seconds at20TPS. Each phase keeps its400-tick cap; the outer120s
+assertion deadline and all server heap/startup/shutdown limits are unchanged.
 Its own missing-pack, tag, read/balance and timeout failures are explicit.
 
 Expected pre-fix result, NOT an executed result
@@ -158,6 +171,8 @@ rescues its empty work subscription. The wake, batch and final markers remain
 absent and the existing expect runner must exit nonzero.
 Missing staging instead produces CACHE-RELOAD-FAIL-OPTIONAL-PACK-NOT-STAGED-OR-NOT-DISABLED;
 that is a harness/setup failure, not the intended red counterexample.
+An unconfirmed publication instead produces CACHE-RELOAD-FAIL-PUBLICATION-TIMEOUT;
+it is not evidence that the idle process missed a published graph.
 
 Retain exact source/application-fix/fixture revisions, jar hash, command,
 heap/budgets, raw native log, exit status and all five gated markers. Standard
@@ -166,14 +181,24 @@ before another run overwrites logs. Only after actual qualification add ONE
 scenario-list line through the existing mechanism, never a duplicate CI step.
 Minecraft function/predicate parsing, the real tag barrier, native donor
 delivery and complete red/green remain NOT_RUN at this offline checkpoint.
-Offline structure inspection passes ten JSON documents, 23 resolved function
+The initial fixture's offline structure inspection passes ten JSON documents, 23 resolved function
 calls, five unique marker emitters and setup-only world mutations. Expectations
 require actual [Server] broadcasts, not marker text quoted in a parser error.
-The PS optional-pack helper/dispatch check passes37 cases, including real
+The initial8a433 PS optional-pack helper/dispatch check passed37 cases, including real
 tree copies, collisions/invalid paths/reparse points, successive fake boots,
 same-process environment restoration and batch exclusion. Its first attempt
 failed in test-only nested -Command quoting; -EncodedCommand corrects that
 failure, and the final check passes. No Minecraft process was involved.
+An independent review then blocked8a433 on two P2 defects: conflated publication/
+wake accounting and unchecked path ancestors. Two new offline checks separately
+fail on that frozen source: "optional source through a junction ancestor" and
+"publication wait cannot consume or masquerade as confirmed wake budget".
+The repair passes59 focused PS checks, adding safe alias-to-world and ROOT-alias
+cases with retained-source/world sentinels, separate budget guards and seven
+in-memory source mutations. Junctions target only this check's own temporary
+trees and are unlinked before cleanup; no external tree or server is deleted.
+These are path/dispatch executions and source contracts, not a Minecraft
+reload-scheduler execution. Native qualification is still required.
 The paired SH check is authored but NOT_RUN: Bash is absent from PATH and four
 bounded local Git candidates. VerifySmokeHarness calls these checks through its
 existing suite, not a new CI step. The four focused VerifyEnergy assertions use

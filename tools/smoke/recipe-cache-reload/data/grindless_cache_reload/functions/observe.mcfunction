@@ -1,4 +1,5 @@
-scoreboard players add run_ticks cache_reload 1
+execute if score phase cache_reload matches 2 run scoreboard players add publish_ticks cache_reload 1
+execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 run scoreboard players add run_ticks cache_reload 1
 function grindless_cache_reload:sample
 execute unless data block 8 280 8 {Recipe:""} unless data block 8 280 8 {Recipe:"b1/cache_probe"} run scoreboard players set valid cache_reload 0
 execute unless data block 8 280 8 {WorkRecipe:""} unless data block 8 280 8 {WorkRecipe:"b1/cache_probe"} run scoreboard players set valid cache_reload 0
@@ -21,5 +22,7 @@ execute if score valid cache_reload matches 1 if score done cache_reload matches
 scoreboard players operation prev_paid cache_reload = paid cache_reload
 scoreboard players operation prev_time cache_reload = now cache_reload
 execute if score phase cache_reload matches 3 if score done cache_reload matches 1 if score woke cache_reload matches 1 if score reload_seen cache_reload matches 1 run function grindless_cache_reload:completed
-execute if score phase cache_reload matches 2..3 if score run_ticks cache_reload matches 400.. run scoreboard players set error cache_reload 6
-execute if score phase cache_reload matches 2..3 if score run_ticks cache_reload matches 400.. run function grindless_cache_reload:failed
+execute if score phase cache_reload matches 2 if score publish_ticks cache_reload matches 400.. run scoreboard players set error cache_reload 8
+execute if score phase cache_reload matches 2 if score publish_ticks cache_reload matches 400.. run function grindless_cache_reload:failed
+execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 if score run_ticks cache_reload matches 400.. run scoreboard players set error cache_reload 6
+execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 if score run_ticks cache_reload matches 400.. run function grindless_cache_reload:failed

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Correct both P2 findings in the pending reload fixture.** Publication has its
+  own bounded counter/failure; only the confirmed load barrier starts a fresh wake
+  budget, without resetting paid-work observations. Optional-mode preflight rejects
+  linked ancestors of both source and world paths, including not-yet-created worlds.
+  Safe owned-junction and source-contract regressions fail on frozen8a433, then59
+  focused PS checks pass after the repair. Per-phase400-tick guards, outer120s budget
+  and2GiB server heap remain unchanged. SH/Java/native remain NOT_RUN; no PC writes.
 - **Stage one explicitly disabled optional smoke pack.** Under coordinator-approved
   ADR-0154, extend both isolated runners with one validated optional directory,
   1.20.1 `initial-disabled-packs`, portable collision guards and per-scenario

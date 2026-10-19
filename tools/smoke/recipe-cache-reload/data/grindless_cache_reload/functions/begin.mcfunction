@@ -2,6 +2,7 @@ scoreboard objectives add cache_reload dummy
 scoreboard players set phase cache_reload 0
 scoreboard players set ready_tries cache_reload 0
 scoreboard players set idle_ticks cache_reload 0
+scoreboard players set publish_ticks cache_reload 0
 scoreboard players set run_ticks cache_reload 0
 scoreboard players set settled_ticks cache_reload 0
 scoreboard players set reload_seen cache_reload 0

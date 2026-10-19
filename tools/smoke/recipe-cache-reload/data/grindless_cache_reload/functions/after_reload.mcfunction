@@ -10,4 +10,5 @@ execute if score tag_ok cache_reload matches 0 run scoreboard players set error 
 execute if score tag_ok cache_reload matches 0 run function grindless_cache_reload:failed
 execute if score tag_ok cache_reload matches 1 run scoreboard players set reload_seen cache_reload 1
 execute if score tag_ok cache_reload matches 1 run scoreboard players set phase cache_reload 3
+execute if score phase cache_reload matches 3 if score reload_seen cache_reload matches 1 run scoreboard players set run_ticks cache_reload 0
 execute if score tag_ok cache_reload matches 1 run say CACHE-RELOAD-INGOT-TAG-PUBLISHED
