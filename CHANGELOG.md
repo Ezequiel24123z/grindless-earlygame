@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Keep the independent A01 counterexample moving.** After focused green,
+  permit one source-frozen pre-fix native run with the existing harness and fresh
+  capacity guards, while Home-path/retention fixes continue independently.
+  Repaired-native accounting and deployment stay held. Preserve the hosted c7
+  Minecraft-download setup failure and local missing-`ln` limit as failures/
+  incomplete evidence, never gameplay or Linux passes.
 - **Preserve independent frozen-unit review gates.** Record the remaining PS
   provider-relative ancestor mismatch, the batch twin's nonempty-CDPATH root
   contamination and the deleted-world accounting boundary. Keep previous offline

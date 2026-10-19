@@ -1,5 +1,30 @@
 # Current T0 rework validation
 
+## Follow-up path review and exact c7 hosted preparation failure
+
+The separate `ae054ad` correction passes 75 PS contracts and closes the demonstrated
+provider/.NET relative-base bypass. Its delta review finds a new regression: the
+custom selection treats the PowerShell `~` anchor as an ordinary relative tail.
+The author is correcting Home selection without losing logical-prefix inspection;
+the new preservation option remains a separate, not-yet-qualified change.
+
+Exact-source [CI39317931973](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39317931973)
+at `c7c947b` passes `prism-tooling-windows`, but `verify` fails in Foundation
+validation before behavior tests. `build` exits1 while Loom downloads the official
+Minecraft client jar and reports its download/progress-logger setup failure.
+Native smoke is skipped, not passed. This is not a demonstrated gameplay or
+optional-pack assertion failure, nor Linux qualification of the new helper.
+The local Git-MSYS parser succeeds; the optional helper then encounters missing
+`ln` during setup. Preserve that limitation rather than installing another tool
+or silently skipping the contracts.
+
+To keep independent work moving, the same A01 worker may follow a successful
+focused green with one native pre-fix run on unchanged `4f1b30b`. It answers the
+new question whether actual loaded extractor backpressure fails as predicted,
+not whether source patterns match. That red run uses the old reviewed harness,
+absolute diagnostic paths and unchanged canonical budgets. Repaired native
+accounting still waits for the explicit retention implementation and review.
+
 ## Independent gates on the three frozen follow-up units
 
 The coordinator publishes the exact child freezes for qualification, not as merged

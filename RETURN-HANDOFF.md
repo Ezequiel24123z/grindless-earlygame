@@ -53,13 +53,16 @@ be diagnosed again as absent without a current counterexample.
 | T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build, and combinedfd5060 passes all44 fast suites/states. The unique native loaded-idle/reload property remains pending, not replaced by states. |
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
-| Native reload regression | Frozen `c7c947b` passes 59 offline PS cases and closes the publication/wake budget finding statically. Review still blocks PS relative paths whose provider location differs from the .NET current directory; a bounded correction is assigned. SH and real publication/wakeup qualification remain pending. |
+| Native reload regression | `ae054ad` passes 75 PS contracts and closes the provider/.NET relative-base mismatch. Delta review finds a new Home-anchor regression affecting `~` ROOT/pack paths; correction and separate ADR-0155 retention remain in progress. Windows Git-MSYS syntax passes, but optional tests cannot finish without `ln`; no Linux/native pass is inferred. |
 | GREEN batch portability | Frozen `507ecfa` adds the missing Bash batch twin; 37 cases/785 assertions pass through each WinPS5/MSYS entry. Review finds a relative-root/nonempty-CDPATH resolution defect excluded by those fixtures; a focused repair is assigned before integration. No new server framework or duplicate runtime batch. |
-| A01 Crude output recovery | Frozen red `4f1b30b` and repair `c87dbc8` are published for isolated qualification. Child `cbafe37b-ef12-402c-90d1-d152622abfcb` receives only the focused Java red/green lease; independent review, build/native/SavedData and integration remain open. ProcessMachine fluid proofs are not substituted. |
+| A01 Crude output recovery | Frozen red `4f1b30b` and repair `c87dbc8` are published for isolated qualification. Child `cbafe37b-ef12-402c-90d1-d152622abfcb` owns focused Java red/green and then one conditional pre-fix native counterexample. Repaired native/SavedData, full integrated build and integration remain open. ProcessMachine fluid proofs are not substituted. |
 
 The current exclusive PC lease is A01 classpath preparation, compilation and
-`VerifyExtractor` on the two separate immutable source surfaces, not a deployment
-or server grant. The fresh preflight observes zero Java processes, 10.07 GiB free
+`VerifyExtractor` on the two separate immutable source surfaces. After a successful
+focused green, it may run one pre-fix `4f1b30b` native counterexample with the existing
+unmodified harness; that run does not need a saved-accounting postcheck or the
+unqualified retention feature. It is not a repaired-native or deployment grant.
+The recorded preflight observes zero Java processes, 10.07 GiB free
 physical memory, 33.83 GiB free commit and 164.54 GiB work-disk space. The worker
 must refresh the guards and report exact exits and zero remaining JVMs before
 the coordinator grants the next runtime window. Private paths stay outside Git.
@@ -68,7 +71,7 @@ A01 review finds no other high-confidence production blocker, but the harness
 currently deletes the world before its stopped-world accounting command can
 read SavedData. [ADR-0155](docs/DECISIONS.md#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in)
 authorizes a narrow paired retention opt-in, owned by the harness child; it is
-not implemented or qualified yet. No native lease bypasses that missing oracle.
+not implemented or qualified yet. Repaired-native qualification cannot bypass that oracle.
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.
