@@ -1,5 +1,26 @@
 # Current T0 rework validation
 
+## A01 source integration while the PC preparation outcome is inspected
+
+Merge the original `4f1b30b`/`c87dbc8` history without changing the application,
+checker or native-fixture bytes from that unit. Reconcile shared documentation
+with A03 and explicitly block the standalone post-stop command until the reviewed
+ADR-0155 retention implementation exists. Source integration is not compilation,
+native qualification or deployment.
+
+The A01 worker's initial guard observes 10.054 GiB free physical memory,
+33.866 GiB free commit, 164.413 GiB work space and zero Java; the original clone
+remains at70901. Its first fetch/worktree-preparation RPC then exits SSH255 on
+ServerAlive timeout before any classpath/`javac`/Java stage starts. The worker
+inspects surfaces, receipts and owned processes read-only before repeating any
+write. Preserve the initial process-policy refusal and process-only
+`-ExecutionPolicy Bypass` correction; no global policy or credential changes occur.
+The currently installed fd5060 candidate is unaffected.
+The bounded read-only RPC at20:39:16Z subsequently confirms that both requested
+surfaces and `prepare.json` do not exist and zero Git/SSH/Java processes remain.
+There is no unknown completed worktree/JVM phase to replay. The worker compares
+its transport with the already qualified framing before a bounded preparation retry.
+
 ## Follow-up path review and exact c7 hosted preparation failure
 
 The separate `ae054ad` correction passes 75 PS contracts and closes the demonstrated

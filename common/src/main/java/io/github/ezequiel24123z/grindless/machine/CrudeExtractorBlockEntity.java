@@ -21,6 +21,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.SimpleContainer;
@@ -45,9 +46,16 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
 
     private double progress;
     private TickSubscription working;
+    private TickSubscription exporting;
+    private long lastWorkTick = Long.MIN_VALUE;
 
     public CrudeExtractorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.CRUDE_EXTRACTOR.get(), pos, state);
+        this(ModBlockEntities.CRUDE_EXTRACTOR.get(), pos, state);
+    }
+
+    private CrudeExtractorBlockEntity(BlockEntityType<CrudeExtractorBlockEntity> type,
+                                      BlockPos pos, BlockState state) {
+        super(type, pos, state);
         output.addListener(container -> {
             setChanged();
             updateSubscriptions();
@@ -97,7 +105,15 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
             working.unsubscribe();
             working = null;
         }
-        publishStatus(vein, stuck, hasPowerWaiting(), false);
+        if (!output.isEmpty()) {
+            exporting = subscriptions().subscribe(exporting, this::exportWaitingOutput);
+        } else if (exporting != null) {
+            exporting.unsubscribe();
+            exporting = null;
+        }
+        if (vein == null || stuck) {
+            publishStatus(vein, stuck, hasPowerWaiting(), false);
+        }
     }
 
     public void onNeighbourChanged() {
@@ -105,11 +121,26 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
     }
 
     private void work() {
+        if (getLevel() == null) {
+            return;
+        }
+        long tick = getLevel().getGameTime();
+        // Inventory and energy listeners can append replacement work during the same pass.
+        if (lastWorkTick == tick) {
+            return;
+        }
+        lastWorkTick = tick;
         ChunkVein vein = vein();
         ItemStack product = productOf(vein);
         boolean stuck = progress >= ExtractorLogic.CYCLE_TICKS && !canAcceptProduct(product);
         if (vein == null || stuck) {
             publishStatus(vein, stuck, false, false);
+            updateSubscriptions();
+            return;
+        }
+
+        if (progress >= ExtractorLogic.CYCLE_TICKS) {
+            complete(product);
             updateSubscriptions();
             return;
         }
@@ -129,16 +160,18 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
             setChanged();
         }
         if (progress >= ExtractorLogic.CYCLE_TICKS) {
-            if (eject(product)) {
-                progress -= ExtractorLogic.CYCLE_TICKS;
-                recordExtraction();
-                setChanged();
-            }
+            complete(product);
         }
         stuck = progress >= ExtractorLogic.CYCLE_TICKS && !canAcceptProduct(product);
         publishStatus(vein, stuck, powered, gained > 0.0);
-        if (stuck) {
-            updateSubscriptions();
+        updateSubscriptions();
+    }
+
+    private void complete(ItemStack product) {
+        if (eject(product)) {
+            progress -= ExtractorLogic.CYCLE_TICKS;
+            recordExtraction();
+            setChanged();
         }
     }
 
@@ -208,8 +241,15 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
         return false;
     }
 
+    private void exportWaitingOutput() {
+        if (isDue(8)) {
+            pushOutput();
+            updateSubscriptions();
+        }
+    }
+
     private void pushOutput() {
-        ItemStack stack = output.getItem(0);
+        ItemStack stack = output.getItem(0).copy();
         if (stack.isEmpty() || getLevel() == null) {
             return;
         }
@@ -219,7 +259,9 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
             }
             stack = ItemInsert.intoNeighbour(getLevel(), getBlockPos(), side, stack);
         }
-        output.setItem(0, stack);
+        if (!ItemStack.matches(output.getItem(0), stack)) {
+            output.setItem(0, stack);
+        }
     }
 
     private void publishStatus(ChunkVein vein, boolean stuck, boolean powered, boolean workingNow) {

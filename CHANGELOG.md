@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the reviewed A01 source without claiming execution.** Preserve the
+  original red/repair history and combine the independent exporter/tick guard
+  with A03. Compilation and native evidence remain pending; the first PC source
+  preparation loses SSH before any JVM launch; read-only inspection confirms no
+  surfaces/receipt or remaining Git/SSH/Java before the bounded retry.
 - **Keep the independent A01 counterexample moving.** After focused green,
   permit one source-frozen pre-fix native run with the existing harness and fresh
   capacity guards, while Home-path/retention fixes continue independently.
@@ -43,6 +48,20 @@ entries below reference those records by id.
   class inside the installed8614df23 jar, with exact source/ZIP provenance and0Java.
   Retain the benign-stderr observer failure separately; no repeat compile or false
   loaded-idle/reload, client/artistic, survival or Tier acceptance follows.
+- **Stage the current A01 extractor-recovery counterexample.** Add focused source
+  contracts and an isolated Luna/Drift diagnostic for full-output wakeup, loaded
+  paid work, partial export without a vein and one-world-tick Flux accounting.
+  The baseline has no independent exporter; Java/native RED execution is pending
+  the coordinator's immutable-PC window, not inferred from source inspection.
+- **Repair the A01 owned-output path using the established machine policy.**
+  Retry pending export independently of vein/work, copy offered items and notify
+  only a changed remainder. Guard replacement work by world time, settle an
+  already-paid cycle before drawing more Flux, and leave runnable status
+  observations to work. Preserve rates, yields, sides, accounting and save keys.
+  Add actual binary-NBT reconstruction checks and an optional stopped-world
+  SavedData accounting oracle. Ten no-JVM source safeguards and thirteen
+  unchanged behavior bodies pass static comparison; Java/native/build remain
+  NOT_RUN, not accepted.
 - **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
   disabled optional fixture pack through the existing paired harness, retaining
   legacy defaults, isolated-world behavior and the scenario-list integration.
