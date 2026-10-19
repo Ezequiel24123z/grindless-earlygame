@@ -2250,9 +2250,10 @@ Tracked order of work. Each step must build green before the next begins.
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
 | 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the five-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
-| 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
+| 32 | **BQ — Physical T2 gate** | F2 Matrix output implemented; rated T2 consumers remain pending after BP acceptance |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
 | 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
+| 35 | **T0 closure audit and T1 preparation** | planning complete — [evidence](docs/T0-AUDIT.md), [manual campaign and action plan](docs/T0-T1-ACTION-PLAN.md); T0 remains unaccepted |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2273,6 +2274,11 @@ revived: a session that starts conduits or a multiblock framework before first i
 the record.
 
 ### Where the project actually is
+
+**Current acceptance status (2026-10-19):** T0 is implemented but not frozen. The
+[closure audit](docs/T0-AUDIT.md) pins the source baseline, current validation and known defects;
+the [action plan](docs/T0-T1-ACTION-PLAN.md) is the next PC session's queue. The older slice
+descriptions below preserve implementation history, not a substitute for tier acceptance.
 
 The consolidated branch is locally validated: build, all behaviour checks, documentation and
 39 smoke scenarios pass. The genuinely playable survival foundation reaches T2 and includes

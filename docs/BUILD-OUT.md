@@ -20,6 +20,11 @@ no-command survival playthrough remains. The optional Factory World is a post-Ma
 aid, not a new technology frontier or a resource shortcut. T1 stays locked until T0 passes
 the gate below.
 
+The 2026-10-19 [closure audit](T0-AUDIT.md) and [PC action plan](T0-T1-ACTION-PLAN.md)
+are the current BP handoff. Fix the identified recovery/accounting defects and collect the
+survival evidence before acceptance. Tests, tooling and documentation may prepare T1 in parallel
+without activating its content or changing the pinned manual-test candidate.
+
 ---
 
 ## Mechanical tier completion workflow
@@ -92,7 +97,7 @@ reconstruct the intended order, but it does not start them early.
 | ID | Slice | Player can | Ship | Preserve | Done when |
 | --- | --- | --- | --- | --- | --- |
 | **BO** | **Withdraw prototype survival shortcut** | Follow every currently implemented survival quest without being sent into future-tier test infrastructure | Remove the Industrial Assembler recipes for Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth and Supraluminal Station. End the quest/guide route at the last genuinely reachable T2 objective. Update graph counts and checks. | All block/item registrations, Luna, the Drift, Sagittarius, travel logic, commands and smoke scenarios. Existing worlds may still contain and exercise every prototype. | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or quest claim. |
-| **BP** | **T0 closure: Control Matrix foundation** | Complete Bootstrap by building and inspecting the first T1 Relay Matrix batch | Matrix item/data model, substitution rules, the recoverable five-unit T1 batch and its physical calibration are in. The book and guide carry its powered-factory continuation through the Factory Portal without declaring T1 accepted. Entry and exit are explicit; the Atlas shows the terminal and manual routes, and the Bootstrap smoke covers the three-machine seam. The end-to-end survival playthrough remains. | Existing worlds and the current two-iron extraction bootstrap. | T0 passes the mechanical gate; matrix checks cover rating and architecture; F0–F15 values match ADR-0107. |
+| **BP** | **T0 closure: Control Matrix foundation** | Complete Bootstrap by building and inspecting the first T1 Relay Matrix batch | Physical route is implemented, not accepted. The [audit queue](T0-T1-ACTION-PLAN.md#first-work-queue-for-the-pc-session) starts with extractor backpressure and quest inventory-count regressions, then recorded survival acceptance. | Existing worlds and the current two-iron extraction bootstrap. | T0 passes the mechanical gate and the candidate-specific manual campaign; no claim of completion from registration or CI alone. |
 | **BQ** | **Physical T2 gate** | Manufacture T2 machines from a T2 Relay Matrix | **In progress:** the T1 exit now manufactures an F2-rated Relay Matrix from the former F1 controller, casing, renewable glass and Flux Cell. Attach the first T2 consumer next; recast Advanced Data Cores as pattern media where useful. | Existing fabricated machines and player progress. | Every T2 machine consumes the physical rating; no ordinary recipe consults a global permission. |
 | **BR** | **T3 Arc frontier** | Build a larger factory with drones and fed Arc power | Refractory/Arc Cell routes, Construction Drones, the first parametric multiblock kernel, Arc Reactor and T3 Relay Matrix. | The existing T0–T2 lines as useful low-infrastructure routes. | The four lattice domains interact before the T3 matrix, and the Arc Reactor runs in a booted server. |
 

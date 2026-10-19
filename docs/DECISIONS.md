@@ -135,6 +135,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0121](#adr-0121--the-factory-world-is-clean-building-space-not-a-resource-shortcut) | The Factory World is clean building space, not a resource shortcut | Accepted |
 | [0122](#adr-0122--the-seed-matrix-batch-funds-the-forming-press) | The seed Matrix batch funds the forming Press | Accepted |
 | [0123](#adr-0123--the-voltaic-exit-is-a-rated-physical-f2-relay-matrix) | The Voltaic exit is a rated physical F2 Relay Matrix | Accepted |
+| [0124](#adr-0124--prepare-the-next-tier-without-accepting-the-current-one) | Prepare the next tier without accepting the current one | Accepted |
 
 ---
 
@@ -5399,3 +5400,34 @@ Quest Book counts only F2 stacks for its terminal task.
 
 **Consequences.** T1 now has a visible physical exit without unlocking an F2 machine early. The
 next slice can attach T2 consumers to this rating; it must not add a global permission.
+
+---
+
+## ADR-0124 — Prepare the next tier without accepting the current one
+
+*2026-10-19 · Accepted · Clarifies ADR-0108; does not accept T0 or activate T1*
+
+**Context.** A player can perform the required survival campaign while development prepares the
+next tier. Treating that parallelism as permission to finalize new content would invalidate the
+candidate under test. Blocking all engineering until the playthrough ends would instead waste
+time on work that does not depend on gameplay balance.
+
+**Decision.** Pin a candidate commit and pack for human evidence. Allow independent regression
+tests, semantic recipe/asset checks, cross-platform tooling and documentation to prepare the next
+tier while the current one remains active. Keep gameplay-changing fixes in identified replacement
+candidates and rerun affected campaign steps. Do not freeze shared executor, rating or viewer
+contracts with known unresolved defects, and do not treat CI, source inspection or an
+injected-state smoke as no-command survival acceptance.
+
+The [action plan](T0-T1-ACTION-PLAN.md) classifies immediate preparation, guarded changes and
+content that must wait. Its findings are an audit, not authority to change the five-Matrix
+Bootstrap balance. BP and the mechanical acceptance commit remain the gate to active T1 work.
+
+**Alternatives rejected.** Opening T1 because some of its code already exists (confuses
+implementation with acceptance); pausing all tests/tooling during the human campaign (creates
+unnecessary idle time); constantly updating the player's build without resetting evidence
+(makes regressions and timing impossible to attribute).
+
+**Consequences.** A fresh PC session can start the documented regression/tooling queue immediately.
+Acceptance records identify the tested candidate and preserve human findings; only the explicit
+gate-closing commit advances the active tier.

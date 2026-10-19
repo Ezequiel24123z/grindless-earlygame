@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Evidence-led T0 closure handoff.** The [audit](docs/T0-AUDIT.md),
+  [action plan](docs/T0-T1-ACTION-PLAN.md) and [executable queue](plan/process-t0-t1-1.md)
+  distinguish implemented mechanics from acceptance, identify output-recovery and quest-count
+  defects, and define the manual campaign, freeze boundary and parallel-safe T1 preparation.
+  ADR-0124 allows preparation while preserving the pinned gameplay candidate and ADR-0108 gate.
+  No gameplay implementation or tier acceptance is included.
+
 - **Physical T1 exit (ADR-0123).** The Assembler now turns an F1 Relay Matrix, Machine Casing,
   renewable glass and Flux Cell into one NBT-rated F2 Relay Matrix. The Quest Book tracks that
   exact rating as its Industrial hand-off rather than accepting a bootstrap Matrix.
