@@ -2295,7 +2295,7 @@ is preserved and integration/release gates still control acceptance.
 | 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md), exact Result export/serve and Root fix are integrated. Public4061 has actual same-repository hosted export/upload and three complete CI successes; later source continues through its own CI without relabeling cb0 browser evidence |
 | 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
-| 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; approved Quern A game import and minimal native-loop design recorded under ADR-0148, implementation/mix pending. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review. Jade source-licence metadata is corrected without changing historical profiles; final composition/use review, native client, Superflat/product QA and the playable release remain open |
+| 40 | **Playable modpack and longitudinal releases** | active — external Gradle writes verified; exact approved Quern A Ogg and Quern-only managed native client loop implemented under ADR-0148, focused checks/compilation pending. Native lifecycle and one/eight-machine mix are not established. Nine physical-item sprites and shared native display inheritance pass814 asset checks and source-pixel review. Jade source-licence metadata is corrected without changing historical profiles; final composition/use review, native client, Superflat/product QA and the playable release remain open |
 | 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by fast-forward in the clean isolated Sol session; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts; all three hosted verify jobs pass, native shards still running. Product gaps remain and historical proofs are reused, not replayed |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
@@ -2514,6 +2514,13 @@ by committed scripts in `tools/`. Code, textures, sounds and other material from
 may be copied or adapted when that project's licence permits the intended distribution. Every such
 import is recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) with its exact source,
 version, licence, scope and required notices; no Minecraft assets are redistributed.
+
+The approved Quern A Ogg is an unchanged, noticed exception to generated audio
+(ADR-0148): `grindless:t0_grinding` uses one client-managed positional working loop per
+nearby loaded RUNNING Quern. Its old heavy-hum bursts are replaced, not those of pumps,
+extractors or other machines. Pause, mute, range, source/world/player lifetime and bounded
+engine recovery are explicit; actual client onset/stop/reload and factory listening remain
+unverified. Generators and the paired legacy converters preserve the imported sound and notice.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of

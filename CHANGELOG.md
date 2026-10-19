@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Implement the approved Quern A runtime loop (ADR-0148).** Import only the exact
+  34,364-byte noticed Ogg and ship its public game-audio notice. A bounded loaded-chunk
+  client owner manages one positional BLOCKS loop per RUNNING Quern, clears stale
+  source/world/player ownership, respects pause/mute and limits engine recovery.
+  Preserve Quern particles and every unrelated heavy-hum caller. Keep the imported
+  event/file out of synthetic conversion and correct the generator's provenance claim.
+  Focused lifecycle/resource checks are added; execution and compilation remain pending
+  after a preflight blocked before any JVM started (1,683.8MiB commit margin).
+  Documentation resolves586 links/148 ADR rows. Auxiliary static-check attempts retained
+  an overbroad notice-path guard rejecting HTTPS and an unavailable assumed Bash path;
+  these are harness failures, not a private path in the asset or a converter pass.
+  Native binding/start-stop/reload, one/eight-machine listening and RC acceptance
+  are not supplied by source checks.
 - **Approve the existing Quern A game import and bounded native loop (ADR-0148).**
   Retained media/provenance/receipt hashes and the existing entitlement attestation
   support the game-incorporation notice. Account verification is closed; no private

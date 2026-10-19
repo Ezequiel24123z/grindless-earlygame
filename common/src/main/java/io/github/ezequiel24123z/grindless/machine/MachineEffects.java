@@ -92,7 +92,7 @@ public final class MachineEffects {
             case MARK -> { }
             case PAD -> { }
             case BERTH -> { }
-            case QUERN -> mill(status, level, pos, random);
+            case QUERN -> mill(status, level, pos, random, false);
             case MIXER -> washer(status, level, pos, random);
             case FIREBOX -> generator(status, level, pos, random);
             case SETTLER -> washer(status, level, pos, random);
@@ -383,12 +383,19 @@ public final class MachineEffects {
     }
 
     private static void mill(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        mill(status, level, pos, random, true);
+    }
+
+    private static void mill(MachineStatus status, Level level, BlockPos pos, RandomSource random,
+                             boolean hum) {
         if (status == MachineStatus.RUNNING) {
             if (random.nextFloat() < 0.35F) {
                 particle(level, ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 0.7, pos.getZ() + 0.5,
                         (random.nextDouble() - 0.5) * 0.15, 0.02, (random.nextDouble() - 0.5) * 0.15);
             }
-            sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.35F, 1.1F);
+            if (hum) {
+                sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.35F, 1.1F);
+            }
         } else if (status == MachineStatus.BLOCKED) {
             if (random.nextFloat() < 0.3F) {
                 particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5,

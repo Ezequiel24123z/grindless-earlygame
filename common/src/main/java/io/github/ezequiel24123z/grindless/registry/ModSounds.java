@@ -11,8 +11,9 @@ import net.minecraft.sounds.SoundEvent;
  * no direction and no distance falloff, which defeats the point of hearing a machine across a
  * room (ADR-0048).
  *
- * <p>The files are generated and converted by {@code tools/convert-audio.sh}; the event names here
- * must match {@code sounds.json}, which {@code VerifyAssets} checks.
+ * <p>Legacy files are generated and converted by {@code tools/convert-audio.sh}; the approved
+ * Quern Ogg is an unchanged import (ADR-0148). Event names must match {@code sounds.json},
+ * which {@code VerifyAssets} checks.
  */
 public final class ModSounds {
 
@@ -23,6 +24,8 @@ public final class ModSounds {
     public static final RegistrySupplier<SoundEvent> MACHINE_HUM = sound("machine_hum");
     /** A heavy machine at work. */
     public static final RegistrySupplier<SoundEvent> MACHINE_HUM_HEAVY = sound("machine_hum_heavy");
+    /** The approved stone/granular working bed, currently used only by the Quern. */
+    public static final RegistrySupplier<SoundEvent> T0_GRINDING = sound("t0_grinding");
     /** A pylon carrying load. */
     public static final RegistrySupplier<SoundEvent> PYLON_LINK = sound("pylon_link");
     /** A relay, for anything that switches. */

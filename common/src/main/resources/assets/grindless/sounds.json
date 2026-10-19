@@ -11,6 +11,16 @@
       "grindless:machine_hum_heavy"
     ]
   },
+  "t0_grinding": {
+    "subtitle": "subtitles.grindless.t0_grinding",
+    "sounds": [
+      {
+        "name": "grindless:t0_grinding",
+        "stream": false,
+        "attenuation_distance": 16
+      }
+    ]
+  },
   "pylon_link": {
     "subtitle": "subtitles.grindless.pylon_link",
     "sounds": [

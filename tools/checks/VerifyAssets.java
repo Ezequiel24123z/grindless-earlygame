@@ -41,6 +41,14 @@ public final class VerifyAssets {
             finish();
             return;
         }
+        if (args.length == 1 && "--sounds-only".equals(args[0])) {
+            sounds();
+            finish();
+            return;
+        }
+        if (args.length != 0) {
+            throw new IllegalArgumentException("usage: VerifyAssets [--sounds-only]");
+        }
         catalogueMatchesRegistry();
         blocks();
         blockItemPresentation();
@@ -289,7 +297,68 @@ public final class VerifyAssets {
             yes(name + " has an ogg file", exists(file));
             yes(name + " is mono, or Minecraft will not place it in 3D", exists(file) && vorbisChannels(file) == 1);
             yes(name + " has a subtitle", lang.has("subtitles.grindless." + name));
+            JsonArray sounds = events.getAsJsonObject(name).getAsJsonArray("sounds");
+            JsonElement sound = sounds.size() == 1 ? sounds.get(0) : null;
+            yes(name + " binds exactly its checked Ogg resource",
+                    sound != null && ("grindless:" + name).equals(sound.isJsonObject()
+                            ? sound.getAsJsonObject().get("name").getAsString() : sound.getAsString()));
         }
+        importedQuernAudio(events);
+    }
+
+    private static void importedQuernAudio(JsonObject events) throws IOException {
+        String expectedHash = "811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5";
+        Path ogg = ASSETS.resolve("sounds/t0_grinding.ogg");
+        yes("Quern retains exactly the approved candidate A bytes",
+                exists(ogg) && expectedHash.equals(sha256(Files.readAllBytes(ogg))));
+        JsonObject sound = events.getAsJsonObject("t0_grinding")
+                .getAsJsonArray("sounds").get(0).getAsJsonObject();
+        yes("Quern uses one non-streamed native buffer and the checked attenuation radius",
+                sound.has("stream") && !sound.get("stream").getAsBoolean()
+                        && sound.get("attenuation_distance").getAsInt() == 16
+                        && !sound.has("volume") && !sound.has("pitch"));
+        Path notice = ASSETS.resolve("AUDIO-NOTICE.txt");
+        String noticeText = exists(notice) ? Files.readString(notice) : "";
+        yes("the public audio notice ships beside the resource with its exact provenance",
+                noticeText.contains(expectedHash) && noticeText.contains("eleven_text_to_sound_v2")
+                        && noticeText.contains("https://elevenlabs.io/creative-terms")
+                        && noticeText.contains("not a standalone sample or sound library"));
+        try (Stream<Path> files = Files.walk(ASSETS.resolve("sounds"))) {
+            yes("runtime sounds contain no raw MP3/WAV or preview bundle",
+                    files.filter(Files::isRegularFile).allMatch(file -> file.toString().endsWith(".ogg")));
+        }
+        String generator = Files.readString(Path.of(
+                "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java"));
+        Set<String> legacy = Set.of("machine_hum", "machine_hum_heavy", "pylon_link",
+                "relay_click", "brownout_alarm");
+        Set<String> generated = new HashSet<>();
+        Matcher writes = Pattern.compile("SoundSynth\\.write\\(new File\\(sounds, \"([a-z0-9_]+)\\.wav\"\\)")
+                .matcher(generator);
+        while (writes.find()) {
+            generated.add(writes.group(1));
+        }
+        yes("the generator writes only the five legacy synthetic sounds", generated.equals(legacy));
+        yes("regeneration cannot reset the imported event, file or public provenance",
+                generator.contains("Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`")
+                        && !generator.contains("deleteTree(sounds)")
+                        && !generator.contains("resourceDir(root, \"sounds\")"));
+        String shell = Files.readString(Path.of("tools/convert-audio.sh"));
+        Matcher shellNames = Pattern.compile("for name in ([a-z_ ]+); do").matcher(shell);
+        yes("the shell converter cannot overwrite an imported sound from a stray WAV",
+                shellNames.find() && Set.of(shellNames.group(1).split(" +")).equals(legacy)
+                        && !shell.contains("\"$SRC\"/*.wav"));
+        String powershell = Files.readString(Path.of("tools/convert-audio.ps1"));
+        Matcher list = Pattern.compile("\\$names = @\\(([^)]*)\\)").matcher(powershell);
+        Set<String> powershellNames = new HashSet<>();
+        if (list.find()) {
+            Matcher name = Pattern.compile("'([a-z_]+)'").matcher(list.group(1));
+            while (name.find()) {
+                powershellNames.add(name.group(1));
+            }
+        }
+        yes("the Windows converter has the same closed synthetic-only import boundary",
+                powershellNames.equals(legacy) && powershell.contains("foreach ($name in $names)")
+                        && !powershell.contains("Get-ChildItem"));
     }
 
     /** Reads the channel count from the Vorbis identification header. */
