@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Verify the restricted pack contracts on frozen `4b67ae0` (ADR-0149).** The single
+  authorized `verifyModpack` invocation exits0 with87 selector, override and real
+  synthetic-ZIP contracts, using the shared archive writer. The original resource
+  guard passes; Gradle uses768MiB/CPU2/one worker, helpers256MiB, no parallel or
+  persistent daemon. The filesystem symlink fixture is explicitly NOT_RUN because
+  Windows lacks the required privilege; canonical-target escape checks pass.
+  SH remains NOT_RUN. Loom's configuration-time dependency remapping and duplicate
+  JEI-class diagnostics remain in the log, not a runtime/remapJar task or a clean
+  dependency diagnosis. The immediate receipt records one JVM after task exit;
+  a subsequent read-only snapshot finds zero, and the reservation is released.
+  No application correction, final pack, world preset, client/server or RC is claimed.
+  Evidence stays under `build/validation/pack-4b67ae0-20261019T011804815Z/`;
+  stdout SHA-256 is `c0d4571a64a19bf1f3ce44abb2b984110fccd7d4cbb617bcbaf724002d4d10b7`.
 - **Implement the restricted additive playable pack profile (ADR-0149).** Select the
   existing four runtime/quest pins and three performance pins without changing the
   expanded default, preparation selector, pin authorities or historical filenames.
