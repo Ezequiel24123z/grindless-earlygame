@@ -25,6 +25,19 @@ entries below reference those records by id.
   paid-progress/provider assertions. Retain exact stdout/receipt identities and the
   auxiliary collector's incorrect0-prefix count without repeating or weakening the
   test. The separate execution lease ends clean with0Java; green/native remain pending.
+- **Qualify bounded process-generation revalidation (ADR-0153).** Frozenfd9077e
+  passes common/Forge compilation, five focused suites/938 assertions and full build.
+  The opaque identity is published with the complete graph; the server pre-subscription
+  hook preserves explicit hold, paid-work ownership and single work per tick. Current
+  retired-I/O/provider/tick regressions pass; completed-fluid recovery reuses its
+  existing oracles with one rebuild. No NBT, recipe/balance or loader-type changes.
+  Preserve the post-build CRLF coordinate-collector failure separately from the
+  successful native commands; a no-JVM inspection verifies the actual JAR/new class
+  without replaying any stage. Source remains clean/detached and zero JVMs remain.
+  The unique native loaded-idle/reload proof belongs to coordinator QA; no deployment,
+  human acceptance, T0 freeze or T1 activation is implied.
+  A01's separate Crude Extractor idle-export gap remains open under another child;
+  process/native-fluid proofs do not close it by analogy.
 - **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
   passes nine real RPCs, an11-second package build, owned update, inspection and two
   idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM

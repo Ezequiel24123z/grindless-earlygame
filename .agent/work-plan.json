@@ -230,9 +230,9 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": null,
+      "owner_session_id": "58289e9c-3881-4349-8195-aa0d079597e6",
       "owner_worker_agent_id": null,
-      "scope": "A03_green_938_checks_and_build_completed_fd9077e_clean_zero_Java_lease_released_No_current_JVM_owner",
+      "scope": "Coordinator_exclusive_combined_fd5060a_build_all_fast_checks_and_production_prepareSmokeServer_active_No_client_or_deploy_until_native_gate_shared_worktree_pinned_do_not_Sync",
       "current_preflight": {"physical_free_mib": 10911.8, "commit_free_mib": 34893.9, "work_free_gib": 166.67, "java_processes": 0},
       "queued_next": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "scope": "Green selected checks/build only after final ADR0153 source freeze is reviewed and published; separate lease required"},
       "compile_reservation": {

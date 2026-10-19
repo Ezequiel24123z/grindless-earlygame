@@ -6,7 +6,9 @@ Received source: `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d`, not old main or
 the original audit's `0d79860`. This bounded unit concerns the current shared executor,
 not a repeat of the completed [T0 audit](../T0-AUDIT.md).
 
-**Implementation and selected JVM/build proof complete; native qualification pending.** ADR-0153 was accepted
+**Implementation and focused JVM/build qualification passed; native QA remains separate.**
+Frozen implementation: `fd9077ea397b28563bc301862a0753943b33527e`.
+ADR-0153 was accepted
 on the coordinator's `2b9218b0bfa19b5b4989f95a2f6c801f8a75f0eb` checkpoint. A fresh
 opaque typed `Generation` identity is published inside the complete immutable
 `ProcessLookup.GRAPH`, including equivalent/empty content. Reading it allocates nothing;
@@ -17,9 +19,9 @@ This retains the documented paid-work separation without a new save key or ident
 The bounded `beforeSubscriptions` base-server hook compares that identity only for
 process machines and refreshes subscriptions once after change, including empty lists.
 Explicit logistics hold defers the hook until release; `lastWorkTick` is untouched.
-The frozen pre-fix counterexample has actually run and failed its exact assertions;
-frozenfd9077e selected green/build are now recorded below. Native server, combined
-deployment and human acceptance remain unclaimed.
+The frozen pre-fix counterexample actually failed seven exact assertions. The fixed
+source passes common/Forge compilation, five selected suites and full build. Native
+server/reload proof, deployment and human acceptance are not supplied by these checks.
 
 ## Concrete source counterexample
 
@@ -30,7 +32,7 @@ non-null `cached` object before consulting that publication. The guard now check
 published generation identity first; unchanged-identity work still uses the existing
 `WorkRecipe` rule. Dormant machines observe the same publication before subscribed work.
 
-The existing `VerifyMachine` suite now prepares this exact counterexample using bound
+The existing `VerifyMachine` suite exercises this exact counterexample using bound
 vanilla item holders under diagnostic material tags:
 
 - `cache_probe` has RAW, CRUSHED and INGOT forms, generating `b1/cache_probe`.
@@ -47,6 +49,11 @@ vanilla item holders under diagnostic material tags:
 - A further generation publication in the same work tick must not charge or advance the
   next queued batch. This exercises the existing `lastWorkTick` protection across the
   new refresh boundary; scheduler-handle deduplication alone does not prove that case.
+
+The green fixture keeps two queued raw items so a same-tick retry cannot appear safe
+merely because the first batch left the machine empty. The original retirement
+oracles still reject any one-item consumption, Flux draw or output from a withdrawn row.
+Stable generation reads and distinct equivalent empty-index identities are also checked.
 
 The fixture is diagnostic, not an authored resource route or a gameplay recipe.
 It restores the prior registry tags afterward. No new registry IDs or NBT keys are added.
@@ -88,43 +95,79 @@ or rerun unchanged code to repair an observation counter. The local collector is
 corrected to recognize prefixed and unprefixed assertions. The outer CLI's duplicated
 CLIXML information stream is not another test run.
 
-## Actual frozen green
+## Actual frozen green and build
 
-Source `fd9077ea397b28563bc301862a0753943b33527e` remains clean/detached. Common/
-Forge/classpath and checker compilation exit0, followed by Machine273, Fluid285,
-Material72, Persistence42 and Workshop266 checks:938 PASS,0 FAIL. Full build exits0.
-The1925530-byte Forge jar hashes to
-`a4225cc3e77000df996ab16e7ea71a526922dce23db107704822252ae0833204`
-and includes `ProcessLookup$Generation.class`.
+Source: `fd9077ea397b28563bc301862a0753943b33527e`, clean/detached before and after
+the separately authorized PC lease. Commands compile common/Forge and export the actual
+classpath, compile only the five selected suites, run them, then execute full `build`.
+All those native exits are0. Gradle `test NO-SOURCE` is not counted as a passing suite.
 
-The outer aggregate exits1 only after build in an auxiliary coordinate collector
-whose regex did not accept CRLF. Keep original receipt
-`94c6ad8010766e9944379afaf2acaa282a619e6d9b79f35752553edb04cbe2bd`.
-A separate read-only source/JAR inspection produces addendum
-`1ca17d5d02b13698617a8afbc9837f6e9249ffe0b135efcc72876ae3d18929c4`.
-Do not repeat or relabel the successful compile/tests/build to repair that collector.
-The lease releases with zero Java; no server/client/pack/deployment runs.
-Evidence: `build/validation/a03-cache-green-fd9077e-20261019T192825474Z/`.
+| Selected suite | Passing assertions | Exit |
+| --- | --- | --- |
+| `VerifyMachine` | 273 | 0 |
+| `VerifyFluid` | 285 | 0 |
+| `VerifyMaterial` | 72 | 0 |
+| `VerifyPersistence` | 42 | 0 |
+| `VerifyWorkshop` | 266 | 0 |
+| Total | 938, zero failures | Five real suites |
+
+Fresh guards before every JVM stage remain above6GiB physical/8GiB commit/8GiB work/cache.
+Initial measured headroom is10590.2MiB physical,34727.9MiB commit and178094727168 disk
+bytes. Use the same3GiB/CPU2/one-worker/no-parallel/no-daemon Gradle and1GiB/CPU2 helpers;
+no guard is lowered and no unrelated process is stopped. Both final postchecks find
+zero Java processes. Compiler/dependency diagnostics remain in the preserved logs.
+
+Actual `forge/build/libs/grindless-0.1.0-forge.jar`:1925530 bytes,
+SHA-256 `a4225cc3e77000df996ab16e7ea71a526922dce23db107704822252ae0833204`.
+The archive contains the new `ProcessLookup$Generation.class`. No pack or deployment
+task is run. `VerifyRecipes` and UI suites are not rerun: process definitions/costs and
+client/layout code remain unchanged; selected machine/fluid checks cover changed assumptions.
+
+Ignored evidence: `build/validation/a03-cache-green-fd9077e-20261019T192825474Z/`.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Common/Forge compile stdout | `cfa3535a695f6b6e8079f2681b8e0906c1b52fbf69c6923eba80836f5d058fa4` |
+| Machine suite stdout | `36aed2f1c0525ac75c7682296ded97a191b3811035d41c28d01fd4c727ec411b` |
+| Fluid suite stdout | `95dab4c8768b1aaea94f4ccbe22266ef2613acede62c81645b58aef701cd5b4e` |
+| Full build stdout | `08db5c42915886e7e1f087e121572f9a0cadd59110ef3aa018c842570a43ceda` |
+| Original green receipt | `94c6ad8010766e9944379afaf2acaa282a619e6d9b79f35752553edb04cbe2bd` |
+| Separate JAR inspection receipt | `1ca17d5d02b13698617a8afbc9837f6e9249ffe0b135efcc72876ae3d18929c4` |
+
+The aggregate RPC exits1 **after** all successful native commands: its auxiliary JAR
+coordinate collector uses a multiline regex that rejects Windows CRLF line endings.
+The original receipt therefore retains `FAILED_OR_BLOCKED`, its explicit error, and
+all actual stage exits/counts. Do not relabel that RPC as exit0 or discard its receipt.
+A subsequent inspection uses the source properties' individual lines, confirms actual
+CRLF, verifies JAR bytes/hash/new class and unchanged source, and writes the separate
+inspection receipt. It launches no JVM and repeats no compile, suite or build. The
+two receipts together distinguish successful code qualification from collector failure.
+
+The native loaded-idle/tag-reload uncertainty is explicitly assigned to coordinator QA;
+no parallel Level fixture, scenario, server or client is authored/run by this child.
 
 ## Reused proof and remaining scope
 
-A01 is a separate current Crude Extractor defect, not a proven process-fluid property.
-Its class still lacks an independent pending-output exporter and calls `pushOutput`
-only after `eject`; a dedicated unit now owns its drain/wakeup/accounting regressions.
-ADR-0132/0138's process-fluid receipts and dcb8010 states/settling proof do not certify
-that distinct class. No analogy is used to mark A01 fixed.
+**A01 is not closed by this unit.** ADR-0132's owned fluid-output recovery and ADR-0138's
+native completion/retry evidence apply to their process-machine/native-store paths.
+The composed `dcb8010` fluid and states/settling proofs do not establish blocked-output
+recovery for the separate `CrudeExtractorBlockEntity`. The coordinator's current-source
+check identifies its missing independent idle exporter and assigns that defect to another
+bounded child. This unit neither changes nor executes the Crude Extractor; no closure
+by analogy is claimed.
 
-A02 is already corrected by `QuestInventoryEvidence.count`, which traverses each
-Container slot exactly once and does not add offhand again. `VerifyPersistence` checks
-the actual41-slot player Inventory, three offhand items and a split total of five.
-Other sparse-slot/ItemLayout/lifecycle proofs retain their own scope; they are not a
-substitute for that offhand test. The received70901 qualification passed all43 suites. These proofs do not
-establish recipe-generation invalidation, but their unchanged mechanisms remain reusable.
+**A02 has current, distinct inventory-counting evidence.** `QuestInventoryEvidence`
+counts each actual inventory slot once. The real41-slot `Inventory` in
+`VerifyPersistence` reports an offhand stack of3 once and main2 plus offhand3 as5,
+without consumption or duplication. That suite now passes42 assertions onfd9077e.
+Separately, `SlottedContainer`, `ItemLayout=3` and the existing Matrix lifecycle fixture
+cover sparse slots and legacy order. The received70901 qualification passed all43 suites;
+none of those proofs establishes recipe-generation invalidation or the Crude's export.
 An exact Git comparison with70901 confirms unchanged `NativeFluidStore`, `FluidInsert`,
 `SlottedContainer`, `ProcessGraph`, `ProcessLogic` and `VerifyPersistence`; no balance,
 transaction protocol or inventory migration is being redesigned. The affected fluid/
-machine regressions have the selected green execution above; the real Level/tag/ticker
-boundary is assigned to the separate native fixture.
+machine regressions have now passed on the frozen fixed source, including the changed
+cache assumption; that does not replace authentic retained-world compatibility.
 See [the validation ledger](latest-validation.md) and [proof-reuse strategy](test-strategy.md).
 
 The base server ticker remains callable with an empty subscription list:
@@ -141,11 +184,11 @@ world scans or permanent idle lookup subscription are justified.
 | Source trace and exact retired-row construction | Inspected on received d22a8ed |
 | Pre-fix3643c6a common/classpath and `javac VerifyMachine` | Actual exits0/0 |
 | Pre-fix3643c6a `VerifyMachine` | Expected red: exit1, seven explicit assertion failures |
-| New-implementation selected regressions | Actual frozenfd9077e938 PASS/0FAIL |
-| Active-cache generation guard and bounded idle refresh | Implemented under accepted ADR-0153; selected JVM proof passes |
-| Native loaded-world miss/wakeup observation | NOT_RUN; no-level fixture is not that proof |
-| Focused JVM checks / relevant regressions / build | Actual exits0; auxiliary post-build collector failure/addendum retained separately |
-| Native registration / deployment / client / retained world | NOT_RUN; no acceptance inferred |
+| Fixedfd9077e common/Forge, selected `javac`, five suites and full build | Actual exits0;938 passing assertions |
+| Actual fixed distributable / new generation class | Inspected separately after preserved collector failure; exact hash above |
+| Active-cache generation guard and bounded idle refresh | Implemented under ADR-0153; common contracts pass |
+| Native loaded-world miss/wakeup observation | Coordinator-owned pending proof; no-level fixture is not that proof |
+| Native registration / deployment / client / retained world | Not run by this child; no acceptance inferred |
 
 The child must not use the coordinator's private default PC inventory as a mutable target,
 push, open a PR or deploy. The coordinator owns publication and integrated qualification.
