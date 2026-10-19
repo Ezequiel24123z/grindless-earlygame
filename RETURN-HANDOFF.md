@@ -53,7 +53,7 @@ be diagnosed again as absent without a current counterexample.
 | T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build, and combinedfd5060 passes all44 fast suites/states. The unique native loaded-idle/reload property remains pending, not replaced by states. |
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
-| Native reload regression | Source through `0fec76d` is integrated after independent closure of publication/wake, ancestor/provider and Home findings. 86 PS contracts pass; Windows Git-MSYS syntax passes, but optional tests cannot finish without `ln`. Genuine native publication/wakeup is still unrun and the scenario is not registered. |
+| Native reload regression | Source through `0fec76d` is integrated after independent closure of publication/wake, ancestor/provider and Home findings.86 PS contracts pass; exact444 Linux CI also executes the optional SH/retention helpers and new Energy assertions successfully. Local missing-`ln` does not invalidate that separate Linux proof. Genuine native publication/wakeup remains unrun and unregistered. |
 | GREEN batch portability | Original `507ecfa` -> `4b86dbb` history is source-integrated unchanged after independent closure of CDPATH.38 cases/856 assertions pass on WinPS5/Git-MSYS. The final coupled adapter excludes A01's fresh-counter case and connects this suite to the existing Java gate; no new server framework/CI step/native batch. |
 | A01 Crude output recovery | Red `4f1b30b` compiles then fails six source checks; repaired `c87dbc8` compiles and passes59/0, including24 binary-NBT assertions. Original history is integrated but not deployed. The same child owns one pre-fix native counterexample next; repaired native/SavedData and full integrated build remain open. Failed transport/collectors are preserved without JVM replay. |
 
@@ -71,7 +71,8 @@ A01 review finds no other high-confidence production blocker, but the harness
 currently deletes the world before its stopped-world accounting command can
 read SavedData. [ADR-0155](docs/DECISIONS.md#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in)
 authorizes a narrow paired retention opt-in. Reviewed `444409f` is source-integrated,
-with37 PS/43 Git-MSYS checks, not native accounting. The correct file is Luna's
+with37 PS/43 Git-MSYS checks and an exact-source Linux helper pass, not native
+accounting. The correct file is Luna's
 `dimensions\grindless\luna\data\grindless_veins.dat`, not Overworld data; the
 handoff is corrected. Repaired-native qualification cannot bypass that oracle.
 

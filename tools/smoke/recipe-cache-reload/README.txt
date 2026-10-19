@@ -270,3 +270,12 @@ post-withdrawal refill; JVM execution/compilation is NOT_RUN under the reservati
 The fixture checkpoint's standard documentation check passes639 links/153 ADRs.
 No client interaction, genuine restart/crash recovery, saved-world migration,
 human/T0 acceptance, freeze, release or T1 activation is implied.
+
+Subsequent coordinator-hosted evidence, distinct from the offline checkpoint:
+exact444409ff58a897efac0902f099c0b0853220ce6f CI39323729055 completes its
+Linux verify job with environment/build/behavior/docs exit0. Its actual
+VerifySmokeHarness runs both optional-pack and world-retention SH contracts
+successfully, and VerifyEnergy executes all four added storage assertions.
+The source-pinned foundation artifact and hashes are in the coordinator ledger.
+This resolves Linux helper execution, not the real loaded-idle Forge reload,
+clean-stop saved accounting or any player/client acceptance.

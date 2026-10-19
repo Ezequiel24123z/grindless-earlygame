@@ -21,7 +21,7 @@ Human gameplay remains unexecuted where recorded; green engineering is not accep
 
 | Finding | Current evidence / action |
 | --- | --- |
-| A01 direct chest backpressure | Still open in the actual Crude Extractor: only the work subscription exists, and `pushOutput` runs only after successful `eject`. A separate bounded unit owns recovery/accounting tests and repair. Process-fluid output proofs do not certify this class. |
+| A01 direct chest backpressure | Reviewed repairc87 is source-integrated: independent pending export, changed-copy transfer and world-tick guard. Frozen red compiles then fails six source checks; focused green compiles and passes59, including24 binary-NBT assertions. Actual Level recovery, stopped-world accounting and deployment remain open, not inferred from process-fluid proofs. |
 | A02 duplicate offhand evidence | Already corrected: `QuestInventoryEvidence` traverses the Container once; `VerifyPersistence` checks actual player Inventory size41, offhand3 and split5. Reuse that proof, not another arithmetic proxy. |
 | A03 generated-graph membership/idle wake | Pre-fix3643c6a fails seven real assertions; completefd9077e passes938 selected checks/build. Atomic generation/server-hook code is integrated; native loaded-world proof is still pending. |
 | A04 physical T2 consumers/rating policy | Later-frontier work, not a missing T0 craft. T1/T2 activation and unresolved consumer/ratio decisions remain held; the F2 implementation inventory is not tier acceptance. |

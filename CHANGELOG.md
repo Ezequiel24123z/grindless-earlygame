@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Reuse completed Linux helper proof instead of repeating it on the PC.**
+  Exact444 CI verifies environment/build/behavior/docs and executes both optional
+  staging/retention helpers plus the four new Energy assertions. Preserve source/
+  status/log hashes and distinguish successful jobs from ongoing/cancelled native
+  shards. The local missing-`ln` limit does not mean SH is globally untested.
 - **Integrate reviewed diagnostic retention and real A01 focused proof.**
   Preserve `444409f` under ADR-0155 and correct its handoff to Luna's actual
   dimension SavedData path. A01 frozen red compiles then fails six source

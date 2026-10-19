@@ -1,5 +1,37 @@
 # Current T0 rework validation
 
+## Reused exact444 Linux foundation evidence
+
+[CI39323729055](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39323729055)
+at exact `444409ff58a897efac0902f099c0b0853220ce6f` completes its Linux `verify`
+job successfully. The downloaded `foundation-validation` artifact12220548486
+pins that HEAD and records environment/build/behavior/documentation all exit0.
+The behavior log explicitly contains successful `verify-optional-datapack` and
+`verify-smoke-world-retention` subprocess contracts under `VerifySmokeHarness`,
+`ALL SMOKE HARNESS CHECKS PASSED` and `ALL CHECK SUITES PASSED`. Thus the optional
+SH helper is executed successfully on Linux; the missing local MSYS `ln` remains
+only a local setup limitation, not a global untested-SH claim.
+
+The same log executes all four new real SimpleFluxStorage full-buffer/no-callback/
+withdrawal/refill assertions and ends `ALL ENERGY CHECKS PASSED`. Reuse these
+unchanged helper/storage proofs instead of replaying them merely on another host.
+This source does not contain the final combined app or batch adapter; its helper
+success is not the loaded-idle Minecraft reload or A01 saved-accounting proof.
+
+| Captured artifact member | SHA-256 |
+| --- | --- |
+| `source.txt` | `bcc19ad782a4c9ea622d5b9473f750b71dfd75fb9db0f468c6b5b3e8e897148b` |
+| `status.tsv` | `2cb79c745de610717e8fd171cb32a41b3d8d7c232d328d3be218031852003559` |
+| `behavior.log` | `f5d3c4024a613929772b4f6f348f2e6d057ce070cbf3af519eea0d1c26365343` |
+| `build.log` | `bac18e79d15b25b93c1155c077dce2422ec3b068ee9d37ae566e58cab6d968b9` |
+
+The Windows Prism-tooling job also succeeds. Six historical native shards are
+still in progress at inspection, not a full-run PASS; neither new fixture is
+registered yet. The earlier0fec run39322567604 has a successful `verify` job but
+cancelled native shards and overall conclusion, not a complete pass. `gh` cannot
+stream that ongoing run's job log, so its already-uploaded foundation artifact
+is inspected instead; no build/test is repeated to work around log availability.
+
 ## A01 focused PC red/green and reviewed retention integration
 
 Exact pre-fix `4f1b30b` completes `writeCheckClasspath` in51.625 seconds and
