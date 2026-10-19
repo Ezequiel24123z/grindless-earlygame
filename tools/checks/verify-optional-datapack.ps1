@@ -62,7 +62,7 @@ $boot = Join-Path $Root 'tools\smoke-boot.ps1'
 $tokens = $null; $errors = $null
 $ast = [Management.Automation.Language.Parser]::ParseFile($boot, [ref]$tokens, [ref]$errors)
 Assert ($errors.Count -eq 0) 'production boot parses'
-foreach ($name in @('Assert-SmokePathAncestors', 'Resolve-SmokeDatapack', 'Get-SmokePackPlan', 'Copy-Tree')) {
+foreach ($name in @('Get-SmokeFileSystemPath', 'Assert-SmokePathAncestors', 'Resolve-SmokeDatapack', 'Get-SmokePackPlan', 'Copy-Tree')) {
     $definition = @($ast.FindAll({
         param($node)
         $node -is [Management.Automation.Language.FunctionDefinitionAst]
@@ -140,6 +140,64 @@ try {
         Reject { Get-SmokePackPlan $primary $optional ($logicalWorld + '-next') } 'ROOT junction with a not-yet-created world' 'reparse points'
         Assert ([IO.File]::Exists((Join-Path $physicalWorld 'pack.mcmeta'))) 'rejected ROOT aliases preserve the actual world'
     } finally { [IO.Directory]::Delete($alias) }
+
+    $relativePrimary = Pack 'cwd-ps\primary'
+    $relativeOptional = Pack 'cwd-ps\optional'
+    $relativeInsideOptional = Pack 'cwd-ps\world\optional'
+    $relativeInsidePrimary = Pack 'cwd-ps\world\primary'
+    $relativeRoot = Join-Path $fixture 'cwd-ps'
+    $relativeWorld = Join-Path $relativeRoot 'world'
+    $dotNetRoot = Join-Path $fixture 'cwd-net'
+    [void][IO.Directory]::CreateDirectory($dotNetRoot)
+    $sentinel = Join-Path $relativeInsideOptional 'retained.txt'
+    [IO.File]::WriteAllText($sentinel, 'divergent-cwd-source-must-survive', $utf8)
+    $alias = Join-Path $relativeRoot 'A'
+    $null = New-Item -ItemType Junction -Path $alias -Target $relativeWorld
+    $previousLocation = Get-Location
+    $previousCurrentDirectory = [Environment]::CurrentDirectory
+    $temporaryDrive = $null
+    try {
+        Set-Location -LiteralPath $relativeRoot
+        [Environment]::CurrentDirectory = $dotNetRoot
+        Assert ((Get-Location).ProviderPath -ceq $relativeRoot -and [Environment]::CurrentDirectory -ceq $dotNetRoot) 'PowerShell and .NET cwd genuinely diverge'
+        Reject { Get-SmokePackPlan $relativePrimary 'A\optional' $relativeWorld } 'relative optional cannot bypass ancestor guards with divergent cwd' 'reparse points'
+        Reject { Get-SmokePackPlan 'A\primary' $relativeOptional $relativeWorld } 'relative primary cannot bypass ancestor guards with divergent cwd' 'reparse points'
+        Reject { Get-SmokePackPlan $relativePrimary $relativeOptional 'A\world-next' } 'relative world ROOT cannot bypass ancestor guards with divergent cwd' 'reparse points'
+        Assert ([IO.File]::ReadAllText($sentinel) -ceq 'divergent-cwd-source-must-survive') 'divergent cwd rejection preserves the actual source'
+        $relativePlan = Get-SmokePackPlan 'primary' '.\optional' 'new-world'
+        Assert ($relativePlan.Primary.Path -ceq $relativePrimary -and $relativePlan.Optional.Path -ceq $relativeOptional) 'valid relative sources use the PowerShell location'
+        $relativeLegacy = Get-SmokePackPlan 'primary' '' 'new-world'
+        Assert ($relativeLegacy.Primary.Path -ceq $relativePrimary) 'legacy relative primary has the same absolute authority'
+        $relativeRootChoice = Get-SmokeFileSystemPath '.'
+        Assert-SmokePathAncestors $relativeRootChoice
+        Assert ([IO.Path]::GetFullPath($relativeRootChoice) -ceq $relativeRoot) 'relative ROOT uses the PowerShell location'
+        $logical = Get-SmokeFileSystemPath 'A\..\optional'
+        Assert ($logical.Contains('\A\..\optional')) 'absolute selection retains logical ancestors until inspection'
+        Reject { Assert-SmokePathAncestors $logical } 'dot segments cannot hide the logical junction ancestor' 'reparse points'
+        $rootCaller = '$ErrorActionPreference=''Stop''; Set-Location -LiteralPath ''' +
+            $relativeRoot.Replace("'", "''") + "'; [Environment]::CurrentDirectory='" +
+            $dotNetRoot.Replace("'", "''") + "'; " +
+            '$env:CI=''false''; $env:GRINDLESS_ACCEPT_EULA=''false''; $env:SMOKE_OPTIONAL_DATAPACK=''' +
+            $relativeOptional.Replace("'", "''") + "'; try { & '" + $boot.Replace("'", "''") +
+            "' -Root 'A\..'; exit " + '$LASTEXITCODE } catch { Write-Output $_.Exception.Message; exit 91 }'
+        $encodedRootCaller = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($rootCaller))
+        $rootLog = Join-Path $fixture 'relative-root.log'
+        & powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encodedRootCaller *> $rootLog
+        Assert ($LASTEXITCODE -eq 91 -and [IO.File]::ReadAllText($rootLog).Contains('reparse points')) 'actual ROOT entrypoint checks logical ancestors before normalization'
+        Assert ([IO.File]::ReadAllText($sentinel) -ceq 'divergent-cwd-source-must-survive') 'ROOT rejection preserves the source sentinel'
+        $temporaryDrive = 'SmokePath' + [guid]::NewGuid().ToString('N').Substring(0, 8)
+        $null = New-PSDrive -Name $temporaryDrive -PSProvider FileSystem -Root $relativeRoot
+        $drivePlan = Get-SmokePackPlan ($temporaryDrive + ':\primary') ($temporaryDrive + ':\optional') 'new-world'
+        Assert ($drivePlan.Primary.Path -ceq $relativePrimary -and $drivePlan.Optional.Path -ceq $relativeOptional) 'FileSystem PSDrive resolves to the same native paths'
+        Reject { Get-SmokePackPlan $relativePrimary 'Env:\PATH' $relativeWorld } 'non-FileSystem provider is rejected' 'FileSystem'
+    } finally {
+        if ($temporaryDrive) { Remove-PSDrive -Name $temporaryDrive }
+        Set-Location -LiteralPath $previousLocation.Path
+        [Environment]::CurrentDirectory = $previousCurrentDirectory
+        [IO.Directory]::Delete($alias)
+    }
+    Assert ((Get-Location).Path -ceq $previousLocation.Path -and
+        [Environment]::CurrentDirectory -ceq $previousCurrentDirectory) 'both cwd values restored in finally'
 
     $bootSource = [IO.File]::ReadAllText($boot)
     Assert ($bootSource.IndexOf('$packPlan = Get-SmokePackPlan') -lt $bootSource.IndexOf("') --no-daemon")) 'preflight precedes Gradle and world replacement'

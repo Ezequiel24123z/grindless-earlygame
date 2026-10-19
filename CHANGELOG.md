@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Unify relative smoke paths under the PowerShell FileSystem location.** A safe
+  divergent-cwd regression fails on c7: .NET and PS previously inspected different
+  relative inputs. Choose one absolute FileSystem path for source/world/ROOT,
+  inspect its logical ancestors root-first before normalizing dot segments, and
+  reuse it for metadata, overlap and staging.75 focused PS checks pass with restored
+  locations and intact sentinels. SH guards/phases are unchanged; local Windows
+  Git/MSYS syntax passes, but its optional check stops at missing `ln`. No JVM/PC run.
 - **Correct both P2 findings in the pending reload fixture.** Publication has its
   own bounded counter/failure; only the confirmed load barrier starts a fresh wake
   budget, without resetting paid-work observations. Optional-mode preflight rejects

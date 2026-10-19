@@ -95,6 +95,13 @@ world whose suffix is not created yet; only expected missing path components
 are tolerated, while unreadable metadata still fails. Rejecting these aliases,
 rather than comparing a logical world against a physical input, prevents
 cleanup from deleting an aliased source.
+PS selects an absolute FileSystem path using the PowerShell provider/location,
+not the process-wide .NET CurrentDirectory. The same selected path reaches
+ancestor inspection, Get-Item, overlap and copying. Only the PS drive/root
+anchor is resolved first; logical dot segments remain until root-first prefix
+inspection has ruled out links. ROOT receives the same selection and, in
+optional mode, inspection before Resolve-Path can erase logical components.
+The legacy single-pack relative input also receives the selected absolute path.
 When present, also validate the primary; reject case-insensitive basename
 collisions. Existing no-optional behavior is preserved. Copy the sibling next
 to the primary and explicitly write initial-disabled-packs=file/<optional>.
@@ -199,8 +206,21 @@ in-memory source mutations. Junctions target only this check's own temporary
 trees and are unlinked before cleanup; no external tree or server is deleted.
 These are path/dispatch executions and source contracts, not a Minecraft
 reload-scheduler execution. Native qualification is still required.
-The paired SH check is authored but NOT_RUN: Bash is absent from PATH and four
-bounded local Git candidates. VerifySmokeHarness calls these checks through its
+The next review found a remaining c7 relative-path bypass: after Set-Location,
+.NET CurrentDirectory and PS location may differ. The real owned-junction test
+"relative optional cannot bypass ancestor guards with divergent cwd" fails on c7.
+The corrected PS check passes75 cases, including valid relative/PSDrive controls,
+primary/optional/world aliases, an actual ROOT entrypoint rejection, intact
+sentinels and restoration of both locations in finally. The first repair attempt
+hit an invalid-name attribute read on an unresolved dot component; root-first
+prefix inspection fixes that without swallowing the error or normalizing away
+an unchecked logical ancestor. SH guards and publication/wake functions do not
+change in this correction.
+The initial SH search found no Bash on PATH/four bounded Git candidates. The
+coordinator later supplied an existing local Git/MSYS sh5.2.37: both SH scripts
+parse on Windows, but the optional check stops at its unavailable ln command.
+No installation, Linux/macOS pass or complete SH contract pass is claimed.
+VerifySmokeHarness calls these checks through its
 existing suite, not a new CI step. The four focused VerifyEnergy assertions use
 the actual SimpleFluxStorage type to cover full-buffer/no-callback and normal
 post-withdrawal refill; JVM execution/compilation is NOT_RUN under the reservation.

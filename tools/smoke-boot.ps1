@@ -29,7 +29,61 @@ param([Parameter(Mandatory = $true)][string]$Root)
 
 $ErrorActionPreference = 'Stop'
 
-$Root = (Resolve-Path $Root).Path
+function Get-SmokeFileSystemPath([string]$path) {
+    if ([string]::IsNullOrWhiteSpace($path)) { throw 'Invalid smoke datapack: empty path.' }
+    $logical = $path.Replace('/', '\')
+    $prefix = ''
+    if ($logical -match '^(.*::)(.*)$') { $prefix = $Matches[1]; $logical = $Matches[2] }
+    $tail = $logical
+    if ($logical.StartsWith('\\')) {
+        $root = [IO.Path]::GetPathRoot($logical)
+        $anchor = $prefix + $root
+        $tail = $logical.Substring($root.Length)
+    } elseif ($logical -match '^([^\\:]+:)(.*)$') {
+        $driveName = $Matches[1]; $tail = $Matches[2]
+        $anchor = $prefix + $driveName + $(if ($tail.StartsWith('\')) { '\' } else { '.' })
+        $tail = $tail.TrimStart('\')
+    } elseif ($logical.StartsWith('\')) {
+        $anchor = $prefix + '\'
+        $tail = $logical.TrimStart('\')
+    } else {
+        $anchor = $prefix + '.'
+    }
+    $provider = $null; $drive = $null
+    # Resolve only the PS anchor; keep logical dot segments until ancestors have been checked.
+    $base = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($anchor, [ref]$provider, [ref]$drive)
+    if ($provider.Name -ne 'FileSystem') { throw "Invalid smoke path '$path': FileSystem provider required." }
+    return [IO.Path]::Combine($base, $tail)
+}
+
+function Assert-SmokePathAncestors([string]$path) {
+    $root = [IO.Path]::GetPathRoot($path)
+    if (-not $root) { throw 'Invalid smoke path: an absolute FileSystem path is required.' }
+    $current = $root
+    $parts = @('') + @($path.Substring($root.Length).Split('\', [StringSplitOptions]::RemoveEmptyEntries))
+    foreach ($part in $parts) {
+        if ($part -eq '.') { continue }
+        if ($part -eq '..') {
+            $parent = [IO.Path]::GetDirectoryName($current.TrimEnd('\'))
+            $current = if ($parent) { $parent } else { $root }
+        } elseif ($part) {
+            $current = [IO.Path]::Combine($current, $part)
+        }
+        $native = if ($current.StartsWith('\\')) { '\\?\UNC\' + $current.Substring(2) } else { "\\?\$current" }
+        $attributes = $null
+        try { $attributes = [IO.File]::GetAttributes($native) }
+        # A fresh world's suffix may not exist yet; its existing ancestors still must be checked.
+        catch [IO.FileNotFoundException] { }
+        catch [IO.DirectoryNotFoundException] { }
+        if ($null -ne $attributes -and ($attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw "Invalid smoke datapack path '$path': ancestor reparse points are not supported."
+        }
+    }
+}
+
+$Root = Get-SmokeFileSystemPath $Root
+if ($env:SMOKE_OPTIONAL_DATAPACK) { Assert-SmokePathAncestors $Root }
+$Root = (Resolve-Path -LiteralPath $Root).ProviderPath
 $runDir = Join-Path $Root 'forge\run\smoke-server'
 $log = if ($env:SMOKE_LOG) { $env:SMOKE_LOG } else { Join-Path $Root 'forge\run\smoke-boot.log' }
 $timeout = if ($env:SMOKE_TIMEOUT) { [int]$env:SMOKE_TIMEOUT } else { 900 }
@@ -75,28 +129,14 @@ function Remove-Tree([string]$path) {
     }
 }
 
-function Assert-SmokePathAncestors([string]$path) {
-    $current = [IO.Path]::GetFullPath($path)
-    while ($current) {
-        $native = if ($current.StartsWith('\\')) { '\\?\UNC\' + $current.Substring(2) } else { "\\?\$current" }
-        $attributes = $null
-        try { $attributes = [IO.File]::GetAttributes($native) }
-        # A fresh world's suffix may not exist yet; its existing ancestors still must be checked.
-        catch [IO.FileNotFoundException] { }
-        catch [IO.DirectoryNotFoundException] { }
-        if ($null -ne $attributes -and ($attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
-            throw "Invalid smoke datapack path '$path': ancestor reparse points are not supported."
-        }
-        $parent = [IO.Directory]::GetParent($current)
-        $current = if ($null -eq $parent) { $null } else { $parent.FullName }
-    }
-}
-
 function Resolve-SmokeDatapack([string]$path, [string]$worldPath) {
-    if ([string]::IsNullOrWhiteSpace($path)) { throw 'Invalid smoke datapack: empty path.' }
+    $path = Get-SmokeFileSystemPath $path
+    $worldPath = Get-SmokeFileSystemPath $worldPath
     Assert-SmokePathAncestors $path
     Assert-SmokePathAncestors $worldPath
-    $item = Get-Item -LiteralPath $path -Force -ErrorAction Stop
+    $source = [IO.Path]::GetFullPath($path).TrimEnd('\')
+    $target = [IO.Path]::GetFullPath($worldPath).TrimEnd('\')
+    $item = Get-Item -LiteralPath $source -Force -ErrorAction Stop
     if (-not $item.PSIsContainer -or $item.PSProvider.Name -ne 'FileSystem' -or
             -not (Test-Path -LiteralPath (Join-Path $item.FullName 'pack.mcmeta') -PathType Leaf)) {
         throw "Invalid smoke datapack '$path': expected a directory with pack.mcmeta."
@@ -104,8 +144,6 @@ function Resolve-SmokeDatapack([string]$path, [string]$worldPath) {
     if ($item.Name -cnotmatch '^[A-Za-z0-9][A-Za-z0-9._-]*$') {
         throw "Invalid smoke datapack name '$($item.Name)': use letters, digits, dot, underscore or hyphen."
     }
-    $source = $item.FullName.TrimEnd('\')
-    $target = [IO.Path]::GetFullPath($worldPath).TrimEnd('\')
     if ($source.Equals($target, [StringComparison]::OrdinalIgnoreCase) -or
             $source.StartsWith($target + '\', [StringComparison]::OrdinalIgnoreCase) -or
             $target.StartsWith($source + '\', [StringComparison]::OrdinalIgnoreCase)) {
@@ -127,12 +165,12 @@ function Resolve-SmokeDatapack([string]$path, [string]$worldPath) {
 }
 
 function Get-SmokePackPlan([string]$primary, [string]$optional, [string]$worldPath) {
-    $main = if ($primary) { [pscustomobject]@{ Path = $primary; Name = (Split-Path $primary -Leaf) } } else { $null }
+    $main = if ($primary) { [pscustomobject]@{ Path = (Get-SmokeFileSystemPath $primary); Name = (Split-Path $primary -Leaf) } } else { $null }
     $extra = $null
     if ($optional) {
         $extra = Resolve-SmokeDatapack $optional $worldPath
         if ($primary) {
-            $main = Resolve-SmokeDatapack $primary $worldPath
+            $main = Resolve-SmokeDatapack $main.Path $worldPath
             if ($main.Name.Equals($extra.Name, [StringComparison]::OrdinalIgnoreCase)) {
                 throw 'Smoke datapack name collision: primary and optional names must differ, ignoring case.'
             }
