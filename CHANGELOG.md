@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Reuse actual Linux execution of the final batch gate.** Exact087 verify
+  compiles/runs the new Java hook and full behavior suite at common/forge trees
+  identical to green559. Preserve raw artifact hashes and distinguish that proof
+  from the selected all-three-helper PC gate and genuine repaired-native results.
 - **Assign the reviewed combined green source.** Final087 delta is ready and
   integrated as559bed5 with runtime inputs unchanged. Only after the valid native
   cache red and fresh guards, permit its full package build, selected Java tooling

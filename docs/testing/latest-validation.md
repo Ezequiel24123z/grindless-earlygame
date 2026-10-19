@@ -1,5 +1,35 @@
 # Current T0 rework validation
 
+## Exact087 Linux gate and application-tree proof reuse
+
+[CI39328673227](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39328673227)
+at exact `087c1a6f7e97cd16a49238e2be908e002e038fe5` completes Linux `verify`
+and Windows tooling successfully. Artifact12223368837 pins that HEAD and
+environment/build/behavior/documentation exit0. The behavior log explicitly
+executes the new shared-world batch selection/exclusion/one-dispatch gate under
+`VerifySmokeHarness`, followed by `ALL SMOKE HARNESS CHECKS PASSED` and
+`ALL CHECK SUITES PASSED`. The actual extractor59 gate also passes.
+
+This is executed Linux Java/wrapper evidence, not merely the author's earlier
+WinPS/MSYS-only result. Exact common/forge trees match green559:
+`2353dc45464148f583c14ebeec418a844e45c0d1` /
+`a1a2ae9ac4b9465f997ad0be52fa428f3a6566da`. Its boot lacks the separate444
+retention merge, so the combined selected PC gate still validates all three
+entrypoints together. Do not rerun unrelated application suites to re-prove
+unchanged trees. Six existing native shards remain in progress at inspection;
+neither new fixture is registered and no new native pass follows.
+
+| Captured artifact member | SHA-256 |
+| --- | --- |
+| `source.txt` | `ae89829a84a7492aaecfbb9fd8e673716747af271a8df3f395ce83a41a8a2c91` |
+| `status.tsv` | `7acd32e617673cdddafef36d3dbfcd7f9a01bf88d75c47992640e044c4cd5178` |
+| `behavior.log` | `dc4ab511ba3609c3f58b7696ccc447f3ef34309f8402c05f32cb587e2bb29f64` |
+| `build.log` | `4f8dbf466f18213a918730bcb63ce33843d207b76adcc6fcd65547ec7c7384e1` |
+
+The first artifact-ID query fails only in local `jq` quoting; PowerShell-native
+JSON selection then identifies the same uploaded artifact without another test
+or build. Preserve observation errors separately from the successful gates.
+
 ## Final selected green source and review closure
 
 The final087 adapter delta is independently ready: both fixed A01 exclusions,
