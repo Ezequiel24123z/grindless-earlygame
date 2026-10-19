@@ -163,6 +163,34 @@ limit: do not place long base64 scripts on it. Prefer the committed entrypoints;
 bounded inspection, use short encoded PowerShell scripts or a fixed script over stdin.
 Never work around SSH failures by binding this conversation to Remote Host.
 
+### Bounded custom validation outside the deployment entrypoint
+
+Prefer the committed workflow for Sync/Build/Deploy. A focused regression that it
+does not expose still uses an explicitly leased, exact detached PC surface, never
+a child's reuse of the default private inventory or a Prism world.
+
+For a longer private validation helper, write it with file tools in session
+artifacts, transfer it through SCP to the leased surface's ignored
+`build/validation/<run-id>/`, and verify its complete SHA-256 on both ends. Invoke
+that fixed file through a short strict-host SSH command with `-n -T`, rather than
+putting a large script on Windows' command line or depending on an unqualified
+stdin collector. The helper calls the existing checks/harness; it is not another
+server runner. Keep credentials and private host settings out of its source.
+This complements, not replaces, the qualified single-line deployment RPC.
+
+Preserve per-stage exit codes, raw logs, exact source/JAR and a separate receipt.
+An SSH255 or collector failure does not establish whether the remote stage ran.
+Inspect receipts, worktree HEAD/cleanliness and positively identified owned
+processes read-only before retrying writes. Do not replay successful JVM stages
+just to repair their observer. Stop only an attributable orphan by its verified
+PID, never by process name or by clearing unknown locks. Restore process-local
+environment and report zero remaining owned JVMs before releasing the lease.
+
+The A01 focused gate exercised this pattern after a preparation transport loss
+and a post-red collector loss. The inspected first attempt created no surfaces;
+the later red/green JVM results were recovered without replay. Neither incident
+required changing SSH/Git identity, the working inventory or global policy.
+
 ## Playtest scope and remaining release gates
 
 This development deployment enables useful client feedback while unrelated development

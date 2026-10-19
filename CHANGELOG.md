@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Document the source-bound custom SSH validation lane.** Keep ordinary
+  deployment on the qualified RPC; use hash-pinned private ignored helpers and
+  short non-stdin SSH for bounded checks outside that API. Record uncertain
+  transport outcomes before retry, recover successful receipts without JVM
+  replay and clean only positively identified orphan PIDs.
 - **Reuse completed Linux helper proof instead of repeating it on the PC.**
   Exact444 CI verifies environment/build/behavior/docs and executes both optional
   staging/retention helpers plus the four new Energy assertions. Preserve source/
