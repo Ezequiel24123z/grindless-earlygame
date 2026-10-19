@@ -34,9 +34,9 @@
     "return_handoff": "RETURN-HANDOFF.md",
     "priorities": ["stable_traceable_PC_deployment", "verified_T0_blockers_and_regressions", "nonredundant_automated_validation", "independent_GREEN_foundations", "evidence_backed_architecture_cleanup", "parallel_T0_visual_and_SFX_quality"],
     "lanes": {
-      "T0_technical": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "branch": "ezequiel24123z-regresiones-tecnicas-t0", "status": "ADR0153_selected_red_source_frozen_JVM_window_queued", "red_commit": "3643c6a049e3beb39b28fe23f4b6d8a1f316db30", "partial_active_guard_commit_not_complete": "fdaa65172256b33ae6848cfad09c8433e0aa9abb"},
-      "visual_assets": {"session_id": "91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f", "branch": "ezequiel24123z-sprites-del-taller-t0", "status": "three_book_generator_source_frozen_before_PNG_generation_JDK_window_next", "source_commit": "6daf2506442368f7978e3d5ea41519cfca753ebc"},
-      "SFX": {"session_id": "7a4e652d-2ffd-453c-8c79-e5df2ce5b605", "branch": "ezequiel24123z-paleta-sonora-t0", "status": "offline_generation_flow_200_assertions_complete_independent_review_no_blocking_finding_ready_to_integrate", "commit": "584da087a037d44aa55a6d89322def53c4a05ce9"}
+      "T0_technical": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "branch": "ezequiel24123z-regresiones-tecnicas-t0", "status": "ADR0153_approved_exclusive_red_compile_Check_window_active", "red_commit": "3643c6a049e3beb39b28fe23f4b6d8a1f316db30", "partial_active_guard_commit_not_complete": "50adf82a69e23e5f2496d61bbf21e94d34e7a8cf"},
+      "visual_assets": {"session_id": "91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f", "branch": "ezequiel24123z-sprites-del-taller-t0", "status": "JDK_generation_checks_passed_two_identical_12PNG_stages_source_immutable_zero_Java_released_transfer_pixel_review_next", "source_commit": "6daf2506442368f7978e3d5ea41519cfca753ebc", "execution_receipt_sha256": "7d9875102d468607115648edea452cbd95e38fca53c67e03724694f7001582b8"},
+      "SFX": {"session_id": "7a4e652d-2ffd-453c-8c79-e5df2ce5b605", "branch": "ezequiel24123z-paleta-sonora-t0", "status": "reviewed_merge_candidate_parent_default_128_plus_200_checks_passed_no_provider_or_runtime_change", "commit": "584da087a037d44aa55a6d89322def53c4a05ce9"}
     },
     "publisher_and_shared_PC_owner": "current_coordinator_only",
     "product_gates": "No_T0_acceptance_or_freeze_No_T1_activation_No_RED_or_silently_selected_subjective_product_choices",
@@ -227,10 +227,13 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": null,
+      "owner_session_id": "77a8c086-295d-48f6-98c4-d905eb833adc",
       "owner_worker_agent_id": null,
-      "scope": "Local coordination remains lightweight; one bounded worker owns isolated personal-PC SSH build/qualification. Preserve the historical released VM reservations below; no overlapping PC JVM or new media generation",
+      "scope": "Exclusive PC red window on frozen3643c6a:common_compile_classpath_and_VerifyMachine_only_3GiB_Gradle_CPU2_one_worker_helpers_at_most1GiB_no_server_client_pack_or_deploy",
+      "current_preflight": {"physical_free_mib": 10911.8, "commit_free_mib": 34893.9, "work_free_gib": 166.67, "java_processes": 0},
+      "queued_next": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "scope": "Green selected checks/build only after final ADR0153 source freeze is reviewed and published; separate lease required"},
       "compile_reservation": {
+        "historical": true,
         "session_id": "7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8",
         "status": "released_after_pack_verifyModpack_87_passed_no_jvm",
         "minimum_physical_free_mib": 1536,
@@ -261,7 +264,7 @@
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
       "next_worker_agent_id": null,
-      "next_scope": "Finish isolated PC package, reuse the now-inspected exact70901 hosted sound/server proof, release JVM ownership, then deploy only to the owned Prism engineering instance; native client/mix and official flat-source/RC work retain separate gates",
+      "next_scope": "After short asset-JDK release, grant the frozen cache regression red compile/check window. Preserve coordinator execution/instance, serialize shared Gradle/cache ownership, then separately qualify the final ADR0153 fix",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

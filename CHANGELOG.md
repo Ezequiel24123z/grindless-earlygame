@@ -26,6 +26,13 @@ entries below reference those records by id.
   pre-subscription check so active caches and idle misses rebind without scans,
   lost paid work, cross-thread callbacks or new persistence. Red/green and native
   evidence remain to execute.
+- **Exercise real sound-generation recovery without provider access (ADR-0152).**
+  Add ten isolated TEST orchestration cases for durable reservations, partial/ambiguous
+  delivery, HTTP429, raw/provenance/receipt write failures and restart without another
+  charge. The default offline guard includes200 flow assertions alongside128 existing
+  checks on WinPS5/Core7.6; the new SH twin also passes. Record the separately blocked
+  secret configuration and legacy Quern/3/Astra contract. Clay Mixer wet work is only
+  the selected next purpose: zero new requests, no grant, runtime or protectedA change.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

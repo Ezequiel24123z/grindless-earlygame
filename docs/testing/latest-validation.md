@@ -1,5 +1,39 @@
 # Current T0 rework validation
 
+## Integrated offline generation-flow recovery
+
+Frozen child584da087 adds ten real `Invoke-Generate` orchestration fixtures with only
+authorization/checkpoint, transport and codec boundaries substituted. A separate
+read-only whole-unit review found no blocking high-confidence issue. Parent merged
+the original history, resolved only the overlapping changelog additions, and executed
+the composed default WinPS guard:200 flow assertions plus128 existing guards pass,
+exit0. Flow source SHA-256 matches
+`dda3d2d840ee78c91a3043a7de259ec703a0e9527b9fd0ddd577094a1339d476`.
+Documentation passes639 links/153 ADRs and whitespace.
+
+Cases reach specific reserve/raw/provenance/receipt fault points and check durable state
+plus simulated transport counts on reentry. Synthetic markers are explicitly unapproved
+and rejected by the real guard; no old grant, key, provider, codec, JVM or runtime media
+is used/changed. The production runner and approved Quern A retain their prior identities.
+This is not actual HTTP/TLS/charging, crash/power-loss or exhaustive retained-byte proof.
+Child Core/SH executions retain their own frozen-source scope; parent does not relabel
+static review as independent execution.
+
+## Bounded guide-sprite source execution
+
+The separate PC JDK window on6daf250 compiles/executions at256MiB/CPU2/SerialGC,
+with no Gradle or shared-cache mutation. Compilation exits0; old PNG check exits1 with
+the expected baseline findings. Each selective three-guide generation/check exits0.
+Two stages, each containing nine exact preseeded protected PNGs plus three new books,
+match all12 files byte-for-byte. Three invalid argument cases exit2 without output.
+All original source resources/audio remain unchanged and the final fresh check finds
+zero Java before releasing the window.
+
+Private-path receipt SHA-256:
+`7d9875102d468607115648edea452cbd95e38fca53c67e03724694f7001582b8`.
+This is generation/static proof, not installed final PNGs, in-game rendering or human
+art approval. Transfer, pixel review and the final source/resource commit remain pending.
+
 ## Framed d22 real workflow and preservation
 
 Source/runtime `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d` completes nine consecutive

@@ -14,6 +14,88 @@ at **3/3**. No generation, old-source QC replay or new authorization is part of 
 portability repair. Historical "unspent", approval and host-execution statements
 below describe their original checkpoints, not the current budget.
 
+## ADR-0152 continuation: offline recovery, no new generation
+
+At source base `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d`, the coordinator selected
+**Clay Mixer wet work** as the one next candidate purpose. `MachineEffects` routes
+`MIXER` through `washer`; its RUNNING sound is still the generic light hum
+(.04 chance, .15 volume, 1.2 pitch), not wet-material movement. The same method also
+serves `SETTLER`, which is not automatically included; Hand Pump is outside this unit.
+The approved stone/granular Quern A and the switching click do not represent mixing
+wet clay. Vanilla splash transients are a reuse option, not an established continuous
+mixing texture. This selection is not generated audio, a routing change or acceptance.
+
+Generation has **two independent blockers**:
+
+- **Explicit secret configuration not located.** Presence-only inspection on the
+  local child and personal PC (bounded read-only SSH) found no `ELEVENLABS_API_KEY`
+  in Process/User/Machine, no API-key-file environment references, and no service
+  configuration in the explicitly inspected configuration locations. This is not a
+  claim about uninspected storage. No secret-file contents, values, account data or
+  private paths were recorded or copied. Historical Agents-secret metadata does not
+  establish injection or reveal a value. A separately authorized metadata-only check
+  of the original session's artifacts and Eleven-named Downloads files found no explicit
+  `SecretFile`/`ApiKeyFile` reference; that bounded follow-up is closed. Do not broaden
+  the search or request the key.
+- **The current contract cannot authorize this purpose.** The preserved runner,
+  manifest and grant schema bind Quern/three requests/Astra and require an external
+  `-SecretFile`. They do not honestly represent Clay Mixer/two requests/Sol. The old
+  grant stays exhausted3/3 and immutable. Any later implementation requires a new
+  reviewed purpose-specific contract, coordinator authorization and ledger, an existing
+  secure credential and reserved verified codec tools; no POST is authorized now.
+  Existing entitlement/game-incorporation review stays closed, and standalone audio
+  library distribution remains prohibited.
+
+The completed fallback adds `test-generation-flow.ps1` and its SH twin. It calls the
+**real `Invoke-Generate`** and actual durable receipt/source/provenance helpers, while
+substituting only the checkpoint/authorization boundary, transport and codec QC.
+Each fixture uses a deliberately **unapproved** marker (`generation_approved=false`,
+`approved_by=null`) that the real authorization guard rejects; no test grant claims
+to be Astra or Sol. Transport receives an empty sentinel path, never reads a key,
+and returns conspicuous fake MP3 text, not audio. All fixtures are removed in `finally`.
+
+Ten isolated cases cover success/completed-ledger reentry, ambiguous delivery before
+and after one saved response, HTTP429, reservation failure before/after durable write,
+raw-file collision, provenance failure, final saved-receipt failure and refusal of a
+nonempty directory without a ledger. A persisted/uncertain attempt stays blocked on
+restart with no additional transport; only a never-persisted, never-sent reservation
+can continue. Existing raw/provenance artifacts survive failures for review. This
+proves orchestration under substituted boundaries, not live HTTP/TLS, a real crash or
+power-loss filesystem semantics, codec quality, sound rights or listening.
+
+| Executed local surface | Result |
+| --- | --- |
+| Focused flow, WinPS5 | 200 assertions / ten cases, exit0 |
+| Default offline guard, WinPS5 | 128 existing checks +200 flow assertions, exit0 |
+| Default offline guard, existing hash-verified Core7.6 portable | 128 existing checks +200 flow assertions, exit0 |
+| New flow SH twin, existing Git shell + same Core | 200 assertions / ten cases, exit0 |
+| Preserved `-JsonOnly` guard, WinPS5 | 117 checks, exit0 |
+
+Source identity for these executions is the base above plus the owned changes, not a
+claim to have run an unmodified base. The tested working-file SHA-256 values are:
+
+| Input | SHA-256 |
+| --- | --- |
+| `test-generation-flow.ps1` | `dda3d2d840ee78c91a3043a7de259ec703a0e9527b9fd0ddd577094a1339d476` |
+| `test-generation-flow.sh` | `6e0b289fef92f303f32f3c482225f60a715cd07c1ece2cff794f65d6a581cbdf` |
+| `test-sound-design.ps1` | `e0940260a3ed761439d2a50bf445fbb10de7639aad7526bb7e469bb818dc5bfe` |
+| Unchanged production runner | `29e1b073f14cfff9491d98e407aac110a9320f4d11759dfc9214de3519e85184` |
+
+The normal offline guard now includes the flow suite without a workflow edit.
+`-JsonOnly` retains its narrower existing boundary. To run only the new coverage:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\sound-design\test-generation-flow.ps1
+```
+
+Its `.sh` twin uses existing `pwsh`; no installation or new runtime/build dependency
+is introduced. New provider requests, credential-file reads, codec/JVM/client/server
+launches and deployments: **zero**. The exact34,364-byte Quern A retains SHA-256
+`811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5`;
+its runtime, notice, historical manifest/contract/receipts and all game resources stay
+unchanged. Native lifecycle, one/eight-machine listening and the full T0 sound pass
+remain separate pending observations.
+
 **Recovery is not a continuation pass.** The original four drafts survived the
 crash; no runnable pipeline, paid output, codec QC or listening pass survived.
 This phase implements and tests offline tooling only. Do not read a secret or

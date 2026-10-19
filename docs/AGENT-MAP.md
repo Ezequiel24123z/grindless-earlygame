@@ -435,6 +435,12 @@ version/API-verified, never a fictional or mandatory core integration.
 - `tools/sound-design/sound-design.ps1` preserves UTC JSON strings across modern Core
   and WinPS5. Its grant/receipt checks must not accept coerced DateTime objects.
   Focused `-JsonOnly` tests do not replace default CI or rewrite the spent calibration.
+- `tools/sound-design/test-generation-flow.ps1` / `.sh` exercise the real
+  `Invoke-Generate` reservation/storage/recovery sequence without a provider or codec.
+  Only test authorization/checkpoint, transport and QC boundaries are substituted;
+  deliberately unauthorized markers must fail the real grant guard. The default
+  `test-sound-design` suite invokes these ten isolated cases. Never substitute a real
+  credential, existing ledger or production output directory into this harness.
 - `tools/smoke/first-blueprint.commands` starts `first-blueprint-pack`, reusing the
   loaded-chunk/single-tagged-item observation pattern. The paired standalone
   `verify-blueprint-fixture` checks compare source contracts and mutate in memory;
@@ -452,9 +458,11 @@ version/API-verified, never a fictional or mandatory core integration.
   retaining visual feedback, working/generating effects and the pylon's explicit warning.
   Do not mute unrelated alert systems or infer an asset licence from the code licence.
 - `docs/assets/t0-sound-design.json` and `tools/sound-design/` define the bounded
-  development-only calibration (ADR-0145). The manifest/contract are initially drafts,
-  not a working runner or runtime integration. No credentials, approved local grants
-  or discarded candidates enter Git; never auto-resend an ambiguous provider request.
+  development-only calibration (ADR-0145). Preserve the historical manifest/contract,
+  exhausted three-request grant and attribution; later approval/import authority is
+  separate. ADR-0152's selected Clay Mixer wet-work purpose is not supported by that
+  Quern/3/Astra generation contract. No credentials, approved local grants or discarded
+  candidates enter Git; never auto-resend an ambiguous provider request.
 - ADR-0146 preserves the placed machine identity and targets item materiality. Inspect
   real item-model parents/transforms and reuse block geometry before adding sprites or
   a renderer; an intake sheet of front textures does not establish flat item rendering.

@@ -49,9 +49,9 @@ be diagnosed again as absent without a current counterexample.
 
 | Lane | Owner / current evidence |
 | --- | --- |
-| T0 technical | Child `77a8c086-295d-48f6-98c4-d905eb833adc`, branch `ezequiel24123z-regresiones-tecnicas-t0`: current A03 stale-graph counterexample found; regression prepared, bounded server-tick wakeup architecture under coordinator/prior-art review. No JVM yet. |
-| Visual | Child `91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f`, branch `ezequiel24123z-sprites-del-taller-t0`: approved scope is Atlas/Quest/Field Guide book sprites, not the nine protected material/Core/Matrix PNGs. Before-sheet exists; implementation in progress. |
-| SFX / GREEN validation | Child `7a4e652d-2ffd-453c-8c79-e5df2ce5b605`: local commit `584da087a037d44aa55a6d89322def53c4a05ce9` adds200 assertions/10 real-generator-flow fixtures, with no provider/codec/JVM. Independent review pending; not integrated yet. |
+| T0 technical | Child `77a8c086-295d-48f6-98c4-d905eb833adc`: A03 counterexample on current source, red frozen at3643c6a; ADR-0153 authorizes the complete active/idle repair. Exclusive compile/red-check window active; final fix/green/native still pending. |
+| Visual | Child `91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f`: Atlas/Quest/Field Guide generation on6daf250 passes actual PC JDK checks, expected baseline negatives, two byte-identical stages and protected-source preservation. JVM released; transfer/pixel review/PNG commit pending. |
+| SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.
