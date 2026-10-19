@@ -43,6 +43,13 @@ client loop. No media is imported yet, no generation is authorized, and actual c
 lifecycle/one-eight-machine listening remains pending. Dispatch bounded implementation
 from this checkpoint; no need for another licensing/account investigation.
 
+Quern runtime implementation is now assigned to isolated Sol6.1 Max session
+`d3e8ce5e-85a2-4676-96fb-2847af9c4fa8`, explicitly stacked fromd8dda9c. It owns
+only the client Quern loop/resource/check seams and related implementation docs.
+It commits locally and reports to this coordinator; no push, new PR or account check.
+No native/JVM resource window is granted yet. Parent .agent files and unrelated
+pack/Superflat/sustainability/gameplay work are outside its editing scope.
+
 Receipt resource inspection found about5.89GiB free on the system volume and188.13GiB
 on the work volume, with no Java process observed. Preserve old data and use the selected
 process-local external Gradle home; this observation is not a future JVM resource grant.

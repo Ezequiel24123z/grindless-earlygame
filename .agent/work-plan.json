@@ -54,7 +54,7 @@
     "mode": "new_isolated_worktree_not_chat_fork_or_main_checkout",
     "original_product_tasks": 27,
     "dependency_and_completion_references": 47,
-    "active_product_workers": 0,
+    "active_product_workers": 1,
     "active_read_only_research_workers": 0,
     "active_jvms": 0,
     "event_subscription_paused": true,
@@ -141,9 +141,9 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": null,
+      "owner_session_id": "d3e8ce5e-85a2-4676-96fb-2847af9c4fa8",
       "owner_worker_agent_id": null,
-      "scope": "Both bounded provenance investigations returned. Quern A game import is approved under ADR0148; Jade source-licence metadata corrected. No application editor or JVM grant active; old paid-generation grant exhausted",
+      "scope": "Isolated Quern-only ADR0148 implementation is active on frozend8dda9c. No JVM/native grant active; request resource window before shared Gradle use. Both provenance investigations returned; account verification closed and old paid-generation grant exhausted",
       "next_worker_agent_id": null,
       "next_scope": "Dispatch Quern-only native client-loop implementation on the committed ADR0148 source; no more account/subscription checks or generation",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
@@ -362,6 +362,19 @@
   "next_task_after_receipt": "t0-integration",
   "parallel_opportunity": "Receipt/provenance investigations are complete. Implement ADR0148's Quern-only native loop from the exact noticed existing Ogg; close the narrow Superflat identity/access seam independently when no shared inputs or heavy JVM ownership conflict. No more account checks, old art generation or approved sound calibration.",
   "prepared_assignments": [
+    {
+      "id": "quern-native-runtime",
+      "task_id": "t0-sound-pass",
+      "status": "implementation_dispatched_isolated",
+      "session_id": "d3e8ce5e-85a2-4676-96fb-2847af9c4fa8",
+      "source_commit": "d8dda9ced4c187c8abadcb78a6b12146e84229bd",
+      "decision": "ADR-0148",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "max",
+      "owned_files": ["common client audio and setup", "Quern-only MachineEffects path", "ModSounds and exact audio resources", "necessary sound-generation and focused-check inputs", "related implementation documentation and import notice"],
+      "acceptance": "Exact approvedA Ogg, bounded one-loop-per-running-Quern native ownership, lifecycle cleanup/restart suppression, unrelated sound/gameplay preservation, maintained resource pipeline and focused available evidence",
+      "stop_condition": "Local coherent commit and evidence handoff only; no push/new PR/publication, account checks, paid generation or ungranted native/JVM run"
+    },
     {
       "id": "sol-audio-import-rights",
       "task_id": "t0-sound-pass",

@@ -20,7 +20,9 @@ entries below reference those records by id.
   support the game-incorporation notice. Account verification is closed; no private
   screenshot, extra proof request or paid regeneration follows. Record the minimal
   Quern-only lifecycle and preserve unrelated hums/gameplay. Implementation, actual
-  client lifecycle and one/eight-machine listening remain pending.
+  client lifecycle and one/eight-machine listening remain pending. A bounded isolated
+  Sol6.1 Max implementation worker is dispatched fromd8dda9c; only the coordinator
+  publishes its eventual reviewed integration.
 - **Correct Jade's recorded source licence without changing the pack.** The exact
   Forge11.13.3 source tag declares CC-BY-NC-SA-4.0, not LGPL-3.0. Synchronize dependency
   metadata, pack guidance and notices, preserving every publisher pin, profile and
