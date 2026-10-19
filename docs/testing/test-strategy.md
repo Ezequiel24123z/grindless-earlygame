@@ -168,6 +168,47 @@ PowerShell Core (`pwsh`) for the shared documentation validator on Linux/macOS. 
 fail explicitly. Versions remain in `gradle.properties`; neither script installs globally or
 changes credentials. `GRADLE_USER_HOME` may point inside the worktree.
 
+### Shared-world development shortcut
+
+`tools/run-smokes-batch.ps1` and its native Bash twin provide the fast local loop from
+ADR-0111, not the isolated integration gate above:
+
+```powershell
+$env:GRINDLESS_ACCEPT_EULA = 'true'
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run-smokes-batch.ps1 -Root . -Only first-iron,first-factory
+```
+
+```bash
+GRINDLESS_ACCEPT_EULA=true bash tools/run-smokes-batch.sh . --only first-iron,first-factory
+```
+
+Both aggregate in `scenarios.txt` order, including each `BATCH-END` marker, and launch
+the existing platform `smoke-boot` exactly once. Commands, expectations and the retained
+log are `forge/run/smoke-batch.commands`, `.expect` and `.log`. The legacy batch's
+case-insensitive selector filters known names; duplicates do not repeat scenarios,
+an empty normalized selector means all, and no matching name is an error. Use the
+isolated runner for strict unknown/empty selection validation, sharding and `.timeout`
+sidecars. The batch instead inherits `SMOKE_TIMEOUT`, `SMOKE_EXPECT_TIMEOUT`,
+`SMOKE_PORT` and the existing boot defaults without a new budget policy.
+
+`foreign-providers`, `states`, `recipe-cache-reload` and every selected scenario with
+a `<name>-optional` path require isolation. Mixed requests announce and skip those
+cases; isolated-only requests fail before launch. Neither inherited `SMOKE_DATAPACK`
+nor `SMOKE_OPTIONAL_DATAPACK` may contaminate the shared world. The native harness
+retains its EULA opt-in, `SMOKE-READY` handshake, assertion checks, shutdown and
+temporary-world cleanup. The Bash entrypoint needs no PowerShell and uses `exec`
+to preserve that harness's process ownership and exit code; run it as a command,
+not by sourcing it.
+
+The paired `tools/checks/Test-SmokesBatch.ps1` / `.sh` entrypoints exercise these
+runner contracts with temporary files and fake boots, without Java, Gradle, network
+or real worlds. These tests share a PowerShell 5.1/Core implementation and require
+installed PowerShell plus Bash; `-BashPath` selects an existing Bash explicitly.
+The native batch itself does not acquire that test-only PowerShell requirement.
+Their runtime results establish dispatch, not a fresh native Forge pass or
+Linux/macOS execution merely because Bash syntax was accepted. They do not replace
+unchanged handshake/process-cleanup proofs or the separate real reload oracle.
+
 ## Scope and evidence
 
 | Layer | Real entry / authority | What it proves |

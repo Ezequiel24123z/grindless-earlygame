@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Add the native Bash shared-world smoke twin (ADR-0106/0111/0154).**
+  `run-smokes-batch.sh` aggregates the same ordered commands/markers and dispatches
+  once to the existing native smoke boot, preserving its handshake, budgets,
+  shutdown, cleanup and exit status rather than wrapping Windows PowerShell or
+  rebooting each scenario. Keep fixed/optional-pack cases isolated, clear inherited
+  packs at dispatch, and add focused fake-boot contracts. This is a development
+  shortcut, not a new server, client, integration or T0/T1 acceptance proof.
 - **Specify the genuine reload smoke boundary (ADR-0154).** Permit one explicitly
   disabled optional fixture pack through the existing paired harness, retaining
   legacy defaults, isolated-world behavior and the scenario-list integration.

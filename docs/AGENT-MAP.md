@@ -494,7 +494,16 @@ version/API-verified, never a fictional or mandatory core integration.
   `SMOKE_EXPECT_TIMEOUT` wins over that assertion budget and the unchanged 120-second
   default. Validate selected metadata before boot, retain startup `SMOKE_TIMEOUT`, and do
   not leak one scenario's budget to the next or the caller (ADR-0139). CI uses these runners.
-  The legacy shared-world batch script is not a datapack/isolation acceptance path.
+- `tools/run-smokes-batch.ps1` / `.sh` — the ADR-0111 development shortcut aggregates
+  commands/expected markers in manifest order and invokes the existing native smoke boot
+  once. Keep `foreign-providers`, `states`, `recipe-cache-reload` and any selected
+  `<name>-optional` path out of that world; refuse isolated-only requests and announce
+  mixed exclusions (ADR-0154). Clear both inherited pack selections for the boot.
+  Do not substitute isolated loops, add a second server runner, or apply per-scenario
+  `.timeout` metadata to this shared batch. Existing boot owns handshake, shutdown,
+  cleanup and the batch-wide environment budgets. `tools/checks/Test-SmokesBatch.ps1`
+  / `.sh` exercise selection, aggregation, dispatch and failures with fake boots,
+  not Forge or datapack reload acceptance.
 - `tools/validate.ps1` / `.sh` — the fast environment/build/behavior/documentation entry point;
   opt into full smokes explicitly. Per-stage results live under `build/validation/<run-id>/`.
   See [the testing strategy](testing/test-strategy.md).

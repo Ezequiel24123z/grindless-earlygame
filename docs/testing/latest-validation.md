@@ -1,5 +1,50 @@
 # Current T0 rework validation
 
+## Native Bash batch portability: no-server contracts only
+
+The bounded GREEN unit starts from `cc2fe71ae76752d13adabbc5169a23e5bbbecc2f`.
+Its new native batch SH has SHA-256
+`661c36f1570df7553d25f2d795a832df77dce4abedac5c453780086c2c27a3f5`.
+The new test PS/SH hashes are respectively
+`87af71895311eee4234c10262ab99dcf3c958bf88955ecc9c84c1ceedc7d35d2` and
+`c55c3ea7b415952b80ea5bb8f2125b768dfb4ee651a8a079021430a74f6889fe`.
+
+Both the direct test PS entrypoint and its SH selector exit0, each executing37 cases,
+785 assertions,37 actual Bash CLI launches and3 intercepted ordinary PS comparisons.
+Observed runtimes are Windows PowerShell5.1.26100.9711 Desktop and GNU
+Bash5.2.37(1)-release/MSYS through Git's installed `sh.exe`. Bash syntax for both SH
+files and the WinPS parser pass; PowerShell Core was not found in the inspected
+environment. Core, native Linux/macOS and Forge execution remain **NOT_RUN**.
+
+Fixtures copy the subject byte-for-byte, use literal spaced/metacharacter roots and
+verify a selected-root sentinel before the fake boot can succeed. Covered contracts
+include ordered/case-insensitive legacy selection, exact UTF8/BOM/CRLF/unterminated
+sidecars, fixed/dynamic optional isolation, one dispatch, cleared inherited packs,
+unchanged startup/assertion/port/consent overrides, exact exits0/2/47, retained
+artifacts, caller environment and CLI/input/output failures. Only the explicitly
+marked temporary fixture subtree is removed. No JVM, Gradle, SSH, network, real
+harness, private inventory or world is used.
+
+The executed PS reference is the ordinary batch on `cc2fe71`, not a claimed run of
+the separately owned optional-pack adaptation. Final PS source
+`8a433cc2eafb35011874abfcc08463ad7780e9ae` was read statically and matches the SH's
+three fixed exclusions plus `<name>-optional` isolation and cleared inherited optional
+pack. Integrate that source unit together with this twin; this worker does not edit
+the PS/harness/list/CI files. Handshake/SMOKE-READY, actual shutdown/cleanup and the
+new genuine reload oracle remain existing/separate native proof boundaries, not
+properties empirically established by the fake boot.
+
+The first suite attempt failed36/36 cases before any assertion because `$home`
+collided with PowerShell's reserved `$HOME`. The next failed1/36 after749 attempted
+assertions at the pre-existing PS wildcard-aware `Resolve-Path`: the fixture's
+`[literal]` root returns0 results, while `-LiteralPath` returns1. Ordinary PS
+comparisons therefore use spaces/ampersands and the SH retains bracket-path
+coverage; the PS issue is not silently fixed in this unit. The first SH-selector
+attempt also failed before cases because MSYS omitted the executable's `.exe`
+suffix. Both suite-only defects were corrected without changing production source.
+Documentation checking passes641 links/42 Markdown files and154 ADR sections/index
+rows. No new native gameplay, client, integration, T0 acceptance/freeze or T1 claim follows.
+
 ## Executed A03 red on the frozen pre-fix source
 
 Separate immutable PC worktree source3643c6a049e3beb39b28fe23f4b6d8a1f316db30
