@@ -21,6 +21,7 @@
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
 #                     or to hold a smoke function (ADR-0061)
 #     SMOKE_OPTIONAL_DATAPACK one additional directory, staged but explicitly disabled
+#     SMOKE_KEEP_WORLD absent/0 cleans up; 1 retains only the diagnostic world after shutdown
 #     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line.
 #                     After Done, the script probes with `say SMOKE-READY` until the broadcast
 #                     appears; Gradle can swallow the first FIFO writes. Each scenario line is
@@ -29,6 +30,16 @@
 #     SMOKE_EXPECT    extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
 set -u
+
+validate_smoke_keep_world() {
+  case "$1" in
+    0|1) ;;
+    *) echo "Invalid SMOKE_KEEP_WORLD: expected an absent value, 0 or 1." >&2; return 1;;
+  esac
+}
+
+KEEP_WORLD="${SMOKE_KEEP_WORLD-0}"
+validate_smoke_keep_world "$KEEP_WORLD" || exit 1
 
 ROOT="$(cd "${1:-.}" && pwd)"
 RUN_DIR="$ROOT/forge/run/smoke-server"
@@ -91,6 +102,19 @@ smoke_pack_properties() {
   if [ -n "$optional" ]; then
     if [ -z "$primary" ]; then printf 'initial-enabled-packs=vanilla\n'; fi
     printf 'initial-disabled-packs=file/%s\n' "$optional"
+  fi
+}
+
+cleanup_smoke_world() {
+  local world="$1"
+  if [ "$KEEP_WORLD" = 1 ]; then
+    if [ -d "$world" ]; then
+      printf 'SMOKE WORLD RETAINED (diagnostic only; not PASS or clean shutdown): %s\n' "$world"
+    else
+      printf 'SMOKE WORLD ABSENT (SMOKE_KEEP_WORLD=1; nothing retained): %s\n' "$world"
+    fi
+  else
+    rm -rf -- "$world"
   fi
 }
 
@@ -181,7 +205,7 @@ cleanup() {
     sleep 2
     kill -KILL -- "$KILL_TARGET" 2>/dev/null
   fi
-  rm -rf "$RUN_DIR/smoke-world"
+  cleanup_smoke_world "$RUN_DIR/smoke-world"
 }
 trap cleanup EXIT
 

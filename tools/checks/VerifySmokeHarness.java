@@ -168,18 +168,19 @@ public final class VerifySmokeHarness {
         Files.writeString(scenarios.resolve("gamma.timeout"), "2147483648\n");
         passed &= checkInvalidTimeout(root, selected, "invalid-despite-override",
                 Map.of("SMOKE_EXPECT_TIMEOUT", "45"));
-        List<String> optionalChecks = new ArrayList<>(List.of(executable));
-        if (!bash) {
-            optionalChecks.addAll(List.of("-NoProfile", "-ExecutionPolicy", "Bypass", "-File"));
+        for (String name : List.of("verify-optional-datapack", "verify-smoke-world-retention")) {
+            List<String> focused = new ArrayList<>(List.of(executable));
+            if (!bash) {
+                focused.addAll(List.of("-NoProfile", "-ExecutionPolicy", "Bypass", "-File"));
+            }
+            focused.add(Path.of("tools", "checks", name + suffix).toAbsolutePath().toString());
+            if (!bash) {
+                focused.add("-Root");
+            }
+            focused.add(Path.of("").toAbsolutePath().toString());
+            Path focusedOutput = root.resolve(name + ".log");
+            passed &= check(run(focused, focusedOutput) == 0, name + " contracts", focusedOutput);
         }
-        optionalChecks.add(Path.of("tools", "checks", "verify-optional-datapack" + suffix).toAbsolutePath().toString());
-        if (!bash) {
-            optionalChecks.add("-Root");
-        }
-        optionalChecks.add(Path.of("").toAbsolutePath().toString());
-        Path optionalOutput = root.resolve("optional-packs.log");
-        passed &= check(run(optionalChecks, optionalOutput) == 0,
-                "optional pack preflight, initial disablement and isolated dispatch", optionalOutput);
         return passed;
     }
 
