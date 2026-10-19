@@ -404,9 +404,10 @@ own assets/lang, and never call alias resolution a client visual pass.
 not a global lighting change. `GenerateAssets --t0-guides-only` selects the same three
 writers as normal generation and must never touch any other output. The JDK-only
 `VerifyT0GuideSprites` checks their pixel contracts and the exact nine reviewed PNG hashes;
-the normal behavior runner discovers it automatically. The bounded source checkpoint
-still needs staged generation/checks and actual before/after pixel review. Preserve
-cyan/gold/teal function cues, registry/model identities and all placed-machine art.
+the normal behavior runner discovers it automatically. Two identical selective stages
+and exact installed byte parity establish only the bounded generation/pixel contracts;
+child/coordinator source-pixel reviews are not native-client or human art acceptance.
+Preserve cyan/gold/teal function cues, registry/model identities and all placed-machine art.
 
 Resource communication follows
 [ADR-0143](DECISIONS.md#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations).

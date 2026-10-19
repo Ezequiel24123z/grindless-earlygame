@@ -15,14 +15,18 @@ entries below reference those records by id.
 
 ### Added
 
-- **Prepare a bounded physical T0 guide-object batch (ADR-0146/0152).** Inspect actual
-  native/8x pixels and preserve all nine reviewed sprites; all six direct T0 materials
-  already belong to that protected batch. The coordinator authorizes only the Atlas,
-  Quest Book and Field Guide, retaining cyan/gold/teal semantics while adding shared
-  paper/binding, thickness and functional marks. Add three-PNG-only generation and
-  an automatically discovered JDK-only structural/mutation/protected-byte check.
-  Source is prepared, not generated or JDK-qualified; PC reservation, deterministic
-  output and after-pixel review remain next. No native/client or art/T0 acceptance.
+- **Give the three T0 guide objects physical materials (ADR-0146/0152).** Preserve
+  all nine reviewed sprites; all six direct T0 materials already belong to that batch.
+  Refine only the coordinator-authorized Atlas, Quest Book and Field Guide with their
+  cyan/gold/teal semantics, shared paper/binding, thickness and functional marks.
+  Frozen `6daf250` compiles and produces two byte-identical 12-PNG stages through the
+  three-PNG-only writer; 42 focused contracts pass on each after nine expected old-PNG
+  failures. Three invalid CLI forms refuse before output. All 1,589 common source
+  resources/five WAVs and the protected sprites remain intact; only three hash-matched
+  outputs are installed, with actual 1x/8x before/after sheets. The JVM window is released before
+  local review. Initial policy/helper-parse failures remain recorded. The coordinator
+  approves the actual source pixels without retouches for the technical candidate,
+  not native/human approval, full art/T0 acceptance or a release.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,
