@@ -38,9 +38,10 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > their limits; they do not already establish that product. T0 is the only active tier.
 > Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
-> Local execution is now frozen at the owner's request for cloud continuation:
-> use [the cloud handoff](.agent/cloud-migration-handoff.md) and the published
-> `ezequiel24123z-t0-playable-release` branch, not old `main`. This is not a release.
+> **Execution is SSH-first (ADR-0151):** this conversation stays local; heavy work runs
+> on the personal PC through ordinary SSH. Use [the operating runbook](docs/operations/ssh-prism-workflow.md)
+> and the received `70901eca` continuation, not old `main`. Preserve working personal
+> authentication and existing Prism worlds; a dedicated engineering instance is not a release.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.

@@ -34,6 +34,14 @@ and activation of its sole-publisher role. The paragraph above describes the out
 checkpoint, not current inactivity. Task identities/dependencies and historical proof
 scope are unchanged. Checkpoint verification jobs pass; full hosted CI is still running.
 
+Revision13/PA-0012 records the owner's subsequent SSH-first operating model
+([ADR-0151](../docs/DECISIONS.md#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh)).
+The local coordinator received the complete70901 continuation and uses the personal PC
+through ordinary SSH, not a Remote Host/cloud conversion. Isolated work-volume builds
+and a separately owned Prism engineering instance implement the execution lane without
+changing this product graph or inventing RC, Superflat or human acceptance.
+See [the executable operating runbook](../docs/operations/ssh-prism-workflow.md).
+
 ## 1. Requirements & Constraints
 
 | ID | Requirement | Owner directive sections |

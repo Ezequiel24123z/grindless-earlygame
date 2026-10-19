@@ -22,7 +22,8 @@
     "t1_allowed": false
   },
   "cloud_transfer": {
-    "status": "frozen_for_owner_cloud_receipt",
+    "historical": true,
+    "status": "historical_freeze_superseded_by_ADR0151_SSH_first_execution",
     "entry": ".agent/cloud-migration-handoff.md",
     "continuation_branch": "ezequiel24123z-t0-playable-release",
     "source_consolidation_commit": "ab23ff5e17029ac750aa303b76a039ea6901d61a",

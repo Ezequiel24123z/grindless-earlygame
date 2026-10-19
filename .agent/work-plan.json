@@ -47,8 +47,9 @@
     "t1_allowed": false
   },
   "cloud_migration": {
+    "historical": true,
     "requested": "2026-10-19",
-    "status": "local_execution_frozen_source_and_worker_histories_consolidated_for_cloud_receipt",
+    "status": "historical_source_freeze_superseded_by_ADR0151_SSH_first_execution",
     "continuation_branch": "ezequiel24123z-t0-playable-release",
     "source_consolidation_commit": "ab23ff5e17029ac750aa303b76a039ea6901d61a",
     "entry": ".agent/cloud-migration-handoff.md",
@@ -185,7 +186,7 @@
     "resource_window": {
       "owner_session_id": null,
       "owner_worker_agent_id": null,
-      "scope": "Owner requested freeze/cloud migration. Audio compiled/checked and pack verifyModpack87 passed; both explicitly released with zero JVM. No further local build/native/generation grant",
+      "scope": "Local coordination remains lightweight; one bounded worker owns isolated personal-PC SSH build/qualification. Preserve the historical released VM reservations below; no overlapping PC JVM or new media generation",
       "compile_reservation": {
         "session_id": "7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8",
         "status": "released_after_pack_verifyModpack_87_passed_no_jvm",
@@ -217,7 +218,7 @@
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
       "next_worker_agent_id": null,
-      "next_scope": "No local resumption. Cloud successor receives the published consolidated branch and preserved evidence; targeted server binding/client/mix/resource work stays pending without a fabricated pass",
+      "next_scope": "Finish the isolated PC package and missing representative sound/server binding, release JVM ownership, then deploy only to the owned Prism engineering instance; native client/mix and official flat-source/RC work retain separate gates",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

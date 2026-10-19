@@ -1,5 +1,27 @@
 # Current T0 rework validation
 
+## SSH-first receipt and source preservation
+
+The isolated local session received exact
+`70901eca2da386cd54fc769ba8a2a59be10eb76b` by clean fast-forward, then published the
+ADR-0151/PA-0012 documentation checkpoint `83228bd`. Noninteractive strict-known-host
+PC SSH succeeds. The PC's existing personal Git SSH origin independently reads that
+same published continuation SHA; its invalid `gh` token was not changed. Existing
+clones, app worktrees, Prism preparation and exploratory save remain intact.
+
+Initial documentation validation passes612 relative links across39 Markdown files
+and151 ADR sections/index rows. A first auxiliary plan comparison failed because
+native Git output and file reads used different implicit text encodings. Repeating
+that comparison with explicit UTF-8 on both inputs passes: all27 product task objects,
+including their dependency/completion references, are unchanged. Both operational
+JSON files parse. No task/gate was changed to turn the failed harness into a pass.
+
+The original completed `0d79860` T0 audit and action plan were read, not repeated.
+The later integrated workshop/S1/S2/C3/guidance/pack/audio evidence retains its
+original scope. PC build/package, the unproved sound/server binding, new deployment,
+client/listening, official Superflat access and RC readiness are distinct pending
+results at this receipt, not implied by SSH or documentation validation.
+
 ## Cloud-freeze results after RAM expansion
 
 The owner requested consolidation/publication and cloud handoff before more local work.

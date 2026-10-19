@@ -43,6 +43,15 @@ Never print credential helpers' stored values, environment dumps, launcher accou
 Minecraft process arguments. Store addresses and paths in a private host configuration,
 not this repository. No GitHub credential is required on the SSH command line.
 
+The coordination machine's connection inventory is
+`%USERPROFILE%\.config\grindless\pc.json`, outside Git. Its schema is
+`grindless.pc-workflow`, version 1; fields are `sshTarget`, `clonePath`, `worktreePath`,
+`gradleUserHome`, `prismRoot`, `templateInstanceId`, `instanceId` and `javaHome`.
+The inventory also records the existing personal Git alias and received source/branch;
+none of these settings contains a key or token. A successor reads this file rather
+than rediscovering or publishing personal addresses and paths. Do not replace it
+or the SSH configuration merely because a new session starts.
+
 ## Preserve the existing player environment
 
 At intake the existing Grindless preparation instance has Minecraft 1.20.1 / Forge 47.4.23,
