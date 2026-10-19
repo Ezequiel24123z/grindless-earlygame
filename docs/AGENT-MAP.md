@@ -102,14 +102,17 @@ T2 and above are manufactured, never a crafting table
 - `recipe/ProcessLogic.java` and `recipe/FabricationLogic.java` — durations, FU/t,
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
-  Its immutable recipe-list identity is published inside the same graph/index object;
+  Its opaque typed `Generation` identity is published inside the same graph/index object;
   `ProcessMachineBlockEntity.recipe` checks that identity before reusing `cached`.
   It is transient cache state, never another persisted work owner or a separate epoch.
+  The base server ticker's bounded `beforeSubscriptions` hook refreshes process
+  subscriptions only after a publication change, even if they were empty. Explicit
+  logistics hold defers that hook until release; no machine callback runs on tag reload.
 - `tools/checks/VerifyMachine.java` — the A03 generation-boundary regression binds actual
   item tags through `RegistryTagView` and `MaterialRegistry.rebuild`, including a retired
   row whose old input/output still resolve. See the
   [source-bound disposition](testing/t0-process-cache-generation.md) for actual versus
-  pending implementation/validation; a prepared oracle is not a passing proof.
+  pending validation; a prepared oracle is not a passing proof.
 - `recipe/T1Recipes.java` and `common/src/main/resources/data/grindless/recipes/` —
   ordinary shaped crafting JSON, including the five-unit first Relay Matrix batch and its one-Matrix
   T1 processing-machine costs.

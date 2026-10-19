@@ -15,21 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
-- **Prepare the exact A03 process-cache generation regression.** On the received
-  d22a8ed continuation, a retired generated recipe can remain in a loaded machine's
-  cache even while its item input and output still resolve. Exercise live tag binding,
-  unchanged-identity work, retirement and provider-aware reconstruction in the existing
-  machine suite. Implementation, the coordinator's wakeup decision and JVM execution
-  remain pending; no new gameplay, persistence format or passing check is claimed.
-  Reuse the existing completed-fluid starvation/recovery scenario with a graph rebuild,
-  and check generation invalidation on the common empty-subscription tick path.
-- **Invalidate active process caches at the graph publication boundary.** Compare the
-  immutable recipe-list identity already published inside the complete `ProcessLookup`
-  graph before reusing a cached row. Keep the existing paid-work identity and save
-  format; no independent epoch is introduced. Dormant-machine wakeup and JVM
-  qualification remain pending, so this partial guard is not the completed A03 fix.
-  Preserve the already separate `WorkRecipe`/`Progress` when live selection disappears;
-  another selected ID still resets work under the existing rule.
+- **Reproduce the current A03 generation counterexample before repair.** Frozen3643c6a
+  compiles common and the actual `VerifyMachine` suite, then fails seven exact
+  assertions: stale rebind/idle cache, withdrawn-row Flux/input/output, paid work and
+  provider-aware reconstruction. The source remains clean/detached and the PC releases
+  its JVM lease with zero Java processes. Preserve raw logs and the auxiliary
+  collector's invalid zero count caused by Minecraft's stdout prefix; the real summary
+  and seven explicit failures are retained. This is expected red, not a passing fix.
 - **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
   passes nine real RPCs, an11-second package build, owned update, inspection and two
   idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM
@@ -41,6 +33,16 @@ entries below reference those records by id.
   pre-subscription check so active caches and idle misses rebind without scans,
   lost paid work, cross-thread callbacks or new persistence. Red/green and native
   evidence remain to execute.
+- **Wire complete active/idle generation revalidation under ADR-0153.** Publish a fresh
+  opaque typed identity inside the complete immutable graph, including equivalent/empty
+  contents. Process machines compare it in the bounded base-server pre-subscription
+  hook and refresh only after change; explicit logistics hold remains held. No cross-thread
+  callback, world scan, saved epoch or reset of the existing once-per-tick work guard.
+  The coordinator accepted the policy at2b9218b; JVM/regression/build/native
+  qualification of this implementation remain pending. Focused regressions cover typed
+  identity, retired I/O, retained work/current provider and same-tick queued work; reuse
+  completed-fluid recovery with a rebuild rather than duplicate its oracles.
+  There is no new NBT, paid-work identity, recipe/balance or T0 acceptance.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

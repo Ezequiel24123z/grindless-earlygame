@@ -95,7 +95,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private String cachedRecipeId = "";
     private String workRecipeId = "";
     private ProcessRecipe cached;
-    private List<ProcessRecipe> recipeGeneration = ProcessLookup.recipes();
+    private ProcessLookup.Generation recipeGeneration = ProcessLookup.generation();
     private TickSubscription working;
     private TickSubscription filling;
     private TickSubscription exporting;
@@ -169,6 +169,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     protected void onFirstTick() {
         if (!kind.heldConditions().equals(conditions())) {
             setConditions(kind.heldConditions());
+        }
+    }
+
+    @Override
+    protected void beforeSubscriptions() {
+        if (refreshRecipeGeneration()) {
+            updateSubscriptions();
         }
     }
 
@@ -541,7 +548,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (cached != null) {
             return cached;
         }
-        Optional<ProcessRecipe> found = recipeGeneration.stream()
+        Optional<ProcessRecipe> found = ProcessLookup.recipes().stream()
                 .filter(row -> row.id().equals(workRecipeId) && row.family() == kind.family()
                         && progress >= row.durationTicks() && ProcessLookup.matches(row, inputs()))
                 .findFirst();
@@ -560,7 +567,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private boolean refreshRecipeGeneration() {
-        List<ProcessRecipe> published = ProcessLookup.recipes();
+        ProcessLookup.Generation published = ProcessLookup.generation();
         if (published == recipeGeneration) {
             return false;
         }

@@ -61,13 +61,14 @@ public final class VerifyMachine {
     }
 
     private static void recipeGenerations() throws Exception {
+        generationIdentity();
         Map<TagKey<Item>, List<Holder<Item>>> originalTags = new HashMap<>();
         BuiltInRegistries.ITEM.getTags().forEach(tag ->
                 originalTags.put(tag.getFirst(), tag.getSecond().stream().toList()));
         try {
             rebuildCacheTags(true, Items.SAND);
             ProcessMachineBlockEntity machine = machine(ProcessMachineKind.PULVERIZER);
-            machine.setItem(0, new ItemStack(Items.GRAVEL));
+            machine.setItem(0, new ItemStack(Items.GRAVEL, 2));
             ProcessRecipe original = selected(machine);
             yes("the cache probe uses a real tag-generated recipe",
                     original != null && original.id().equals("b1/cache_probe"));
@@ -110,7 +111,7 @@ public final class VerifyMachine {
             work.invoke(machine, 1L, List.of());
             eq("a retired cached recipe cannot spend additional Flux", original.fuPerTick() * 2,
                     machine.energy().getStored());
-            eq("a retired cached recipe cannot consume its input", 1, machine.getItem(0).getCount());
+            eq("a retired cached recipe cannot consume its input", 2, machine.getItem(0).getCount());
             yes("a retired cached recipe cannot emit its still-resolvable output",
                     machine.getItem(machine.menuKind().inputs()).isEmpty());
             eq("a missing generation suspends rather than discards paid work", paid.getDouble("Progress"),
@@ -124,16 +125,42 @@ public final class VerifyMachine {
             work.invoke(restored, 2L, List.of());
             eq("restored work pays only its one remaining tick", original.fuPerTick(),
                     restored.energy().getStored());
-            yes("restored work consumes its input exactly once", restored.getItem(0).isEmpty());
+            eq("restored work consumes its input exactly once", 1, restored.getItem(0).getCount());
             ItemStack output = restored.getItem(restored.menuKind().inputs());
             yes("restored work uses the current material provider and exact yield",
                     output.is(Items.RED_SAND) && output.getCount() == 2);
             eq("restored completion debits exactly one paid cycle", 0.0,
                     restored.saveWithoutMetadata().getDouble("Progress"));
+            rebuildCacheTags(true, Items.RED_SAND);
+            restored.serverTick();
+            work.invoke(restored, 2L, List.of());
+            eq("a generation refresh cannot charge the same world tick twice", original.fuPerTick(),
+                    restored.energy().getStored());
+            eq("a generation refresh cannot advance the next queued batch in the same tick", 0.0,
+                    restored.saveWithoutMetadata().getDouble("Progress"));
+            eq("a generation refresh leaves the next queued input untouched", 1,
+                    restored.getItem(0).getCount());
         } finally {
             BuiltInRegistries.ITEM.bindTags(originalTags);
             MaterialRegistry.rebuild(RegistryTagView.ofItems());
         }
+    }
+
+    private static void generationIdentity() throws Exception {
+        ProcessLookup.Generation live = ProcessLookup.generation();
+        yes("reading the generation identity is stable", live == ProcessLookup.generation());
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Class<?> graphType = graph.get(null).getClass();
+        Method index = graphType.getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        Method identity = graphType.getDeclaredMethod("generation");
+        identity.setAccessible(true);
+        Object first = index.invoke(null, List.of());
+        Object second = index.invoke(null, List.of());
+        yes("equivalent empty indexes still receive distinct generation identities",
+                identity.invoke(first) != identity.invoke(second));
+        yes("preparing an index never publishes a partial generation", live == ProcessLookup.generation());
     }
 
     private static void rebuildCacheTags(boolean ingotPresent, Item crushed) {
