@@ -16,9 +16,9 @@ PR run39179748093 and push runs39179743679/39179743788 each passed `verify`; all
 smoke shards per run were still in progress. This is not a full CI pass or new native
 Blueprint proof. No old automation/session/worker is resumed and no new PR is needed.
 
-Next: two bounded read-only investigations close the actual audio-import rights and
-Jade pinned-licence gaps. Then implement only reviewed product seams, including the
-narrow persisted Superflat identity/access decision and minimal Quern runtime loop.
+Current next: implement the already-authorized minimal Quern loop, additive restricted
+playable profile (ADR-0149), and the narrow persisted Superflat identity/access seam.
+The two provenance investigations below are complete, not another intake requirement.
 Native art/JEI, runtime one/eight-machine listening, configured pack import/startup,
 forward-save contract and RC publication remain open. T1 and functional ports remain held.
 No Astra escalation is justified by a currently identified problem.
@@ -55,6 +55,13 @@ owner; preserve768MiB/CPU2/one-worker limits. A passing refresh needs no second
 approval. The parent stays read-only for JVM/cache inputs; the worker reports release
 and exits when done. Parent .agent files and unrelated
 pack/Superflat/sustainability/gameplay work remain outside its editing scope.
+
+ADR-0149 selects a new additive seven-dependency playable profile: existing four core/
+quest pins plus ModernFix/FerriteCore/Embeddium. Preserve both old profiles and their
+pins; no account/licence investigation is reopened. A bounded pack worker may edit
+the existing resolver below its application-build boundary, paired build tools,
+profile/override data and focused pack checks. No JVM/cache mutation until the Quern
+worker releases its reservation; no actual RC, client pass or preset is implied.
 
 Receipt resource inspection found about5.89GiB free on the system volume and188.13GiB
 on the work volume, with no Java process observed. Preserve old data and use the selected

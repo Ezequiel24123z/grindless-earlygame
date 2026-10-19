@@ -20,10 +20,11 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: retain the verified new-write storage redirection and close the narrow remaining
-audio-import rights and Jade licence discrepancy. Then integrate deliberate flat-world
-access, curated pinned pack, questbook product experience and minimal approved runtime
-audio. The source-pixel art batch is already installed; native rendering remains open.
+Next: retain verified storage/provenance and integrate the approved minimal Quern loop
+(ADR-0148), additive restricted playable profile/public-override contract (ADR-0149),
+and deliberate flat-world access. Both narrow provenance investigations are complete;
+do not reopen account verification. Questbook product QA remains on the Heracles
+authority. The source-pixel art batch is already installed; native rendering remains open.
 Old discovery workers are finished, not a resumable pool. No storage move or asset
 import follows from reception, and hosted smoke shards remain pending at receipt.
 Reuse the existing mechanisms and proofs rather than rewrite them to change the product.

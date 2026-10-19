@@ -160,6 +160,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0146](#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items) | Give items material volume and reuse block models for machine items | Accepted |
 | [0147](#adr-0147--transfer-clean-session-coordination-to-sol-61-without-replaying-evidence) | Transfer clean-session coordination to Sol 6.1 without replaying evidence | Accepted |
 | [0148](#adr-0148--integrate-the-approved-quern-sound-with-one-native-client-loop) | Integrate the approved Quern sound with one native client loop | Accepted |
+| [0149](#adr-0149--add-a-restricted-playable-profile-with-explicit-public-overrides) | Add a restricted playable profile with explicit public overrides | Accepted |
 
 ---
 
@@ -6997,3 +6998,58 @@ Do not rerun unchanged S1/S2/executor/content proofs or the paid calibration.
 **Rejected alternatives.** Rechecking the owner's account, regenerating approved clips,
 shipping all candidates by default, random callbacks as continuous-loop authority,
 world-retaining caches, unbounded discovery and a new general audio subsystem.
+
+---
+
+## ADR-0149 — Add a restricted playable profile with explicit public overrides
+
+**Status.** Accepted coordinator pack-composition decision,2026-10-19; configured
+package, import/startup and actual client qualification remain pending.
+
+**Decision.** Add an opt-in `playable` profile beside unchanged `expanded` and
+`preparation` profiles. Select the existing pinned Architectury, JEI, Heracles and
+ResourcefulLib, plus ModernFix, FerriteCore and client Embeddium: seven upstream files.
+Reuse the exact publisher IDs/hashes already in the single manifest/metadata authority;
+introduce no new or floating versions. Retain Heracles and its proved Grindless
+claim authority instead of replacing a working backend for its name.
+
+This is a deliberate small composition, not a claim of final interoperability:
+runtime/platform, recipe discovery and quests are essential; the three existing
+performance pins address memory/rendering pressure without adding progression items.
+Use their normal defaults until an actual defect requires a version-specific setting.
+Do not invent unverified config keys or ship personal options to demonstrate curation.
+Record that decision and distinguish explicit public overrides from upstream-generated
+defaults in provenance.
+
+Do not include Jade in this first restricted selection: JEI/native machine feedback
+cover essential discovery, and Jade's corrected noncommercial source terms should not
+be silently treated as LGPL. Do not include Backpacks, Essentials or Chunks/Teams/Library:
+their storage/processing, teleportation and loading behavior needs an intentional
+progression design. These omissions apply only to the new profile; never remove their
+content from an existing instance or save. Extra unpinned QoL is not required to close T0.
+
+**Packaging.** Extend the existing Gradle pack resolver, provenance and paired shell/
+PowerShell entry points rather than creating another builder or dependency list.
+Keep the old selectors and archive identities working. Give the new profile a
+distinct source-bound archive name/status; it is not a published RC merely because
+it builds. Include required third-party notices with the modpack.
+
+Support only explicitly enumerated public override files from a dedicated committed
+pack source root. Reject unknown profiles, traversal/absolute paths, escaping symlinks,
+duplicate destinations and missing/untracked inputs. No recursive copy of a launcher,
+home, dev config, cache, log or world directory. Record each included public override's
+relative destination/hash and preserve the exact input-profile selection in provenance.
+An explicit empty override list is valid for the default-config composition; do not
+claim that it supplies the still-unimplemented official preset or final public content.
+The preset itself belongs to versioned mod worldgen resources, not a private save.
+
+**Proof and limits.** Extend existing positive/negative metadata/selector and archive
+whitelist checks, including default-profile preservation and invalid override inputs.
+Serialize actual Gradle execution with the Quern worker. Source/pin/config selection,
+structural packaging and client import/startup are different properties. The new pack
+needs final integrated source, world-preset access, compatibility contract and actual
+installation/client QA before it can become the playable RC.
+
+**Rejected alternatives.** Mod-count expansion, changing historical profiles, treating
+unconfigured teleportation/storage/loading as neutral QoL, forcing BetterQB, switching
+publisher identity, guessing config keys and copying an arbitrary overrides directory.

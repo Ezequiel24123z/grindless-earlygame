@@ -34,6 +34,8 @@ are new gaps, not permission to rewrite proven engines or start ports.
 - `pack/profiles.json`, `pack/curseforge/manifest.json`, `pack/dependency-metadata.json`,
   `gradle.properties`, root build and paired pack tools — curated version lock, public
   configuration/content, distributable whitelist and provenance.
+  ADR-0149 adds only the restricted playable selector and explicit public-override
+  contract; preserve both historical profiles and the single dependency-pin authority.
 - Existing source/recipe/world/sustainability authorities below — trace every mandatory
   initial and recurrent resource before selecting/versioning the official flat preset.
 - Existing tool environment/cache/output controls — prefer supported redirection after

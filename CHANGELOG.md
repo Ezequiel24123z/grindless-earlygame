@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Select a restricted additive playable pack profile (ADR-0149).** Reuse the four
+  existing runtime/quest pins and three performance pins, preserve historical profiles
+  and require explicit public override inputs/provenance. Do not silently enable the
+  expanded storage/teleport/loading extras or invent configuration keys. Implementation,
+  actual configured package and clean import/client qualification remain pending.
 - **Approve the existing Quern A game import and bounded native loop (ADR-0148).**
   Retained media/provenance/receipt hashes and the existing entitlement attestation
   support the game-incorporation notice. Account verification is closed; no private

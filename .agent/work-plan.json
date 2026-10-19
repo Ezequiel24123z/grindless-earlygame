@@ -376,6 +376,15 @@
   "parallel_opportunity": "Receipt/provenance investigations are complete. Implement ADR0148's Quern-only native loop from the exact noticed existing Ogg; close the narrow Superflat identity/access seam independently when no shared inputs or heavy JVM ownership conflict. No more account checks, old art generation or approved sound calibration.",
   "prepared_assignments": [
     {
+      "id": "restricted-playable-pack",
+      "task_id": "playable-pack",
+      "status": "prepared_for_isolated_implementation",
+      "decision": "ADR-0149",
+      "owned_files": ["root build.gradle pack resolver below application-build boundary", "pack profiles/public-override data and pack guidance", "paired build-modpack scripts", "focused pack checks and related implementation docs"],
+      "acceptance": "Additive seven-pin playable profile, unchanged historical selectors/pins, explicit safe public-override whitelist/provenance and targeted selector/archive rejection cases",
+      "stop_condition": "Local committed implementation/evidence only; no push/new PR/RC or JVM/cache mutation before the exclusive Quern reservation is released"
+    },
+    {
       "id": "quern-native-runtime",
       "task_id": "t0-sound-pass",
       "status": "implementation_dispatched_isolated",
