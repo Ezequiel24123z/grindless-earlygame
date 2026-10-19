@@ -1,5 +1,33 @@
 # Current T0 rework validation
 
+## Integrated559 package, inspection and combined Java gate
+
+The one actual full build/playable invocation exits0 in1m33/20 tasks with88
+pack contracts. Its observer mistakenly collects two `VoidTaskResult` values
+beside the real scalar process exit0 and labels the stage unqualified; Inspect
+then refuses before running. Preserve that original receipt. Read-only raw
+BUILD/ZIP/source recovery produces separate receipt
+`19dc8541c6d9cc57da7d7575263b4e9c46fe0064cd49e44618c79b61f2b4e76e`;
+Gradle is not replayed. Future private helpers suppress those void return values.
+
+| Actual artifact | Identity |
+| --- | --- |
+| Source/runtime | `559bed5e8ea70ac52ff4b3fed3850ab05ab48256` |
+| Remapped jar | 1926158 bytes; SHA-256 `98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061` |
+| Playable ZIP | 1510587 bytes; SHA-256 `bff0fb27434da5ecd49aaf69d0f6b6635b22679029a7b95c488a175b266e8a86` |
+
+Resumed Inspect succeeds: source/runtime559, generation class present, all three
+guide entry bytes equal source, protected Quern A matches
+`811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5`
+and34364 bytes,0Java. The standalone combined `VerifySmokeHarness` compiles0
+in1.262 seconds and executes0 in47.728 seconds with
+`ALL SMOKE HARNESS CHECKS PASSED`: OPTIONAL, RETENTION and BATCH run once each
+using real installed Git Bash, not WSL. This completes the changed tooling gate
+without replaying the44/938/Energy matrices.
+
+One native cache GREEN is then in flight using the corrected private helper;
+no green result, A01 saved-accounting result or deployment is inferred yet.
+
 The extractor owner's documentation-only `e41054c` is also merged. Its actual
 focused/native-red identities are retained in the fixture README alongside the
 coordinator's later retention and absolute-root instructions. No application,

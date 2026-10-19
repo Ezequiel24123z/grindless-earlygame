@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Build and inspect the integrated559 candidate once.** Full build/playable88
+  contracts and artifact inspection pass with exact jar/ZIP identities. Recover
+  the observer's async-void array separately without Gradle replay. Combined
+  standalone Java gate compiles/runs0 with all three helper suites once; cache
+  native green is still in flight and the installed instance stays unchanged.
 - **Preserve the extractor owner's final execution handoff.** Merge the
   documentation-only e410 history with exact focused/native-red receipts, normal
   shutdown and auxiliary transport limits. Keep explicit absolute-root invocation,

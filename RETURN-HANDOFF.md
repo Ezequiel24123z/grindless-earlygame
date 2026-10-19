@@ -19,6 +19,14 @@ It is separate from the old preparation instance and exploratory save.
 | Actual deployment | Combined executor/three-book candidate passes all44 fast suites, production-server preparation and real Forge states boot; update/inspection and installed entry bytes pass. Earlier d22 also proved two real idempotent no-ops. |
 | Client/gameplay | Not launched or accepted by the coordinator |
 
+The newer559 candidate has now full-built/packaged and passed artifact inspection
+plus the combined Java tooling gate, but is **not deployed yet**. Its jar is
+`98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061`;
+playable ZIP is
+`bff0fb27434da5ecd49aaf69d0f6b6635b22679029a7b95c488a175b266e8a86`.
+Cache native green is in flight; A01 repaired native/SavedData remains next.
+The installed-source table above deliberately stays fd5060 until real deployment.
+
 The isolated PC full build,43 behavior suites,88 pack contracts and23 archive checks
 passed on70901. The framed d22 workflow completed nine consecutive RPCs; the later
 fd5060 combined build/all44 checks/production states boot and installed three-book/
@@ -54,7 +62,7 @@ be diagnosed again as absent without a current counterexample.
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | One real pre-fix PC run confirms initial idle plus actual ingot publication, then the specific idle-wake failure; server0/0Java, not setup failure. The source/helpers are reviewed and source-integrated; exact444 Linux helper/Energy gates pass. Repaired green and scenario registration remain pending. |
-| GREEN batch portability | Final087c1a6 is reviewed and integrated at559bed5.42 cases/975 assertions pass on WinPS5/Git-MSYS, and exact087 Linux CI also compiles/executes the new Java batch gate. The all-three-helper merge remains a selected PC check. No new framework/CI step/native batch. |
+| GREEN batch portability | Complete: reviewed087 integrated559,42/975 WinPS/Git-MSYS and exact087 Linux gates, plus actual combined PC javac0/JavaGate0 in47.728s with OPTIONAL+RETENTION+BATCH once each. No new framework/CI step/native batch. |
 | A01 Crude output recovery | Focused red6/green59 and one real `4f1b30b` native RED are recorded. Production boot/setup/reconstruction succeeds; four recoveries are missing as predicted, not a parser failure. It stops naturally, leaves0Java and releases its lease. Repaired native/SavedData/full integrated build and deployment remain open. |
 
 The A01 worker releases after its native red with zero Java/port25629 free and
