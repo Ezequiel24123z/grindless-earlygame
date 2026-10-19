@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify the genuine loaded-idle recipe reload and register it.** Exact559
+  production green wakes after real publication, conserves1gravel→2sand/3840FU
+  and40 stable ticks, with harness/server0. Preserve the stdout-self-read observer
+  failure and closed-file addendum without replay. Release0Java and transfer only
+  the same immutable artifact to A01 native/SavedData; no duplicate CI step.
 - **Build and inspect the integrated559 candidate once.** Full build/playable88
   contracts and artifact inspection pass with exact jar/ZIP identities. Recover
   the observer's async-void array separately without Gradle replay. Combined

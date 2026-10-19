@@ -14,6 +14,8 @@
 #                                   explicit SMOKE_EXPECT_TIMEOUT wins, otherwise default 120
 #     tools/smoke/<name>-pack/      a datapack to enable, or tools/smoke/<name>/ if that is
 #                                   a directory and no -pack exists
+#     tools/smoke/<name>-optional/ one sibling pack staged explicitly disabled; this
+#                                   scenario must run in its own fresh world (ADR-0154)
 # A scenario that names none of them is a plain boot.
 
 boot                 The mod loads at all. Nothing else runs until this passes (ADR-0049).
@@ -26,6 +28,7 @@ workshop             Full F0 ceramic cycles, finite-water wakeup, recipe identit
 settling             Four real oriented assemblies separate dirt, preserve covered work and NBT, and recover exactly 750 mB through a conduit.
 renewable-cycle      Daylight source cycles conserve stock/FU after finite startup; produced surplus powers native ceramic, settling, carbon, glass, copper/redstone and core calibration, not the final hand craft.
 first-iron           Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
+recipe-cache-reload  A loaded idle process wakes only after a real tag reload, conserving one B1 batch and 3840 FU.
 first-factory        Slice B: belts accept a hopper, items move as lane data, T1 factory blocks place.
 first-fluids         Slice C: pump water through clay into a tank; captured CO burns in the generator.
 first-assembler      Slice D: Press and Assembler place; a hopper cannot steal a die and can insert an ingot.

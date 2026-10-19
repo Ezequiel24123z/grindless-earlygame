@@ -24,7 +24,7 @@ plus the combined Java tooling gate, but is **not deployed yet**. Its jar is
 `98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061`;
 playable ZIP is
 `bff0fb27434da5ecd49aaf69d0f6b6635b22679029a7b95c488a175b266e8a86`.
-Cache native green is in flight; A01 repaired native/SavedData remains next.
+Cache native green now passes; A01 repaired native/SavedData remains next.
 The installed-source table above deliberately stays fd5060 until real deployment.
 
 The isolated PC full build,43 behavior suites,88 pack contracts and23 archive checks
@@ -61,18 +61,17 @@ be diagnosed again as absent without a current counterexample.
 | T0 technical | Frozen3643c6a reproduces seven failures; fd9077e passes938 selected checks/build, and combinedfd5060 passes all44 fast suites/states. The unique native loaded-idle/reload property remains pending, not replaced by states. |
 | Visual | Original580ddce history is integrated. The three exact PNG entries are verified inside the deployed8614 jar;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; client/native art and human judgment remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
-| Native reload regression | One real pre-fix PC run confirms initial idle plus actual ingot publication, then the specific idle-wake failure; server0/0Java, not setup failure. The source/helpers are reviewed and source-integrated; exact444 Linux helper/Energy gates pass. Repaired green and scenario registration remain pending. |
+| Native reload regression | Complete: native red444 and repaired green559 with all five real markers,1gravel→2sand/exact3840FU and40 stable ticks/no extra work; harness0/server0/0Java. Original observer self-read failure plus closed-file addendum are retained without replay. Scenario is registered only after this proof. |
 | GREEN batch portability | Complete: reviewed087 integrated559,42/975 WinPS/Git-MSYS and exact087 Linux gates, plus actual combined PC javac0/JavaGate0 in47.728s with OPTIONAL+RETENTION+BATCH once each. No new framework/CI step/native batch. |
 | A01 Crude output recovery | Focused red6/green59 and one real `4f1b30b` native RED are recorded. Production boot/setup/reconstruction succeeds; four recoveries are missing as predicted, not a parser failure. It stops naturally, leaves0Java and releases its lease. Repaired native/SavedData/full integrated build and deployment remain open. |
 
-The A01 worker releases after its native red with zero Java/port25629 free and
-both source surfaces clean at21:16:48Z. The next exclusive lease starts with cache
-native RED on exact444. After its valid functional red and fresh guards, the same
-owner may build/package, execute the new Java gate and run cache GREEN on exact
-`559bed5e8ea70ac52ff4b3fed3850ab05ab48256`, not deploy or run A01 yet.
-Fresh coordinator preflight at21:21:11Z records0Java,9.730 GiB free physical
-memory,33.766 GiB free commit and163.561 GiB work space. The worker refreshes
-the guards and reports exact exits/markers and0Java. App/build/harness input
+Cache QA explicitly releases JVM/cache/world at22:07:22Z after green,0Java,
+port25628 free, clean559/original clone and absent default-cleanup world.
+The next exclusive lease is A01 repaired native plus its real Luna SavedData
+on that same immutable559 root/JAR, not another build/package or deployment.
+Fresh coordinator preflight22:07:06Z records0Java,9.758 GiB physical,
+33.789 GiB commit and162.935 GiB work free. The reviewed private helperd31
+and transport9468 require another fresh guard before launch. App/build/harness input
 identities from855a1ed are pinned for proof reuse; the tooling adapter does not
 change them, while its new Java test hook receives its own selected check.
 Private paths stay outside Git.

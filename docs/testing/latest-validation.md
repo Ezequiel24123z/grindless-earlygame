@@ -1,5 +1,37 @@
 # Current T0 rework validation
 
+## Genuine cache GREEN and handoff to repaired A01 accounting
+
+The ONE exact559 production cache green passes: harness0, actual server0 and
+all five real markers. The already loaded idle process wakes after publication,
+consumes1gravel, produces2sand and pays exactly3840FU;40 further ticks retain
+the result with no extra work. The staged/built jar remains98aa47dd. Native
+guard22:01:51Z records0Java/9.759 GiB physical/33.770 GiB commit/163.128 GiB
+work free; server2GiB/port25628/900-120-60-60 budgets remain unchanged.
+
+The last observer hash alone attempts to read its own redirected stdout while
+still open. Preserve original NativeGreen receipt
+`93c8f002411966f53f0e232ac79edf4f6e9ef23875276c66a0034e5a9919ed5f`.
+After the stream closes, separate recovered receipt
+`fdfa2485135c30626d0e7de077893c763331a852513a8f27d791c378e6538c1d`
+links the actual exits, markers, jar and closed raw streams. No native replay.
+
+| Native evidence | SHA-256 |
+| --- | --- |
+| RED boot log | `ffb75cb5341e1424abe21539849275382ecc45dfd413c0ec3c234ff74fb8bbac` |
+| GREEN boot log | `2ac984a18f3e45e8da762583136a4464e90659280ae49d4446fd3eb26b4f77c0` |
+| GREEN stdout | `83ce0c8a79b08e341e0b3c18a6963c5f6461c0c2b151fe50474190d8c7242d80` |
+| GREEN empty stderr | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| Evidence manifest | `6ed0e3469f9166438fdf3de96f3c13df00fce6df3710a2723ce8823af88e09ad` |
+
+Final snapshot22:07:22Z explicitly releases0Java/port25628/locks, source559 and
+original clone clean, world absent under KEEP0. The cache scenario is added to
+the existing manifest only now, after native qualification; no CI step is added.
+The same jar/ZIP/source remains untouched for the separately leased A01 test.
+Fresh coordinator guard22:07:06Z is0Java/9.758 physical/33.789 commit/162.935
+GiB work free. Private helperd31/transport9468 are independently reviewed ready;
+only their actual execution and real saved accounting are still pending.
+
 ## Integrated559 package, inspection and combined Java gate
 
 The one actual full build/playable invocation exits0 in1m33/20 tasks with88
