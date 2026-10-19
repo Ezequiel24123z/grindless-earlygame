@@ -1,5 +1,34 @@
 # Current T0 rework validation
 
+## Framed d22 real workflow and preservation
+
+Source/runtime `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d` completes nine consecutive
+actual RPCs, exit0: Sync, three stopped inspections, Build, Deploy, Inspect and two
+idempotent Deploy calls returning `Unchanged`. Build takes11 seconds, passes88 pack
+contracts and reuses ten unchanged application tasks. The old EOF-dependent attempt
+is not counted or erased by this separate run.
+
+Jar SHA-256 remains
+`5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7`;
+the actual updated d22 ZIP hashes to
+`88b857fc89c7b9605d6029e292cdfdfeb6f10daa08f2b10b3ccf8228929fdc7e`.
+The captured framed-workflow log hashes to
+`9bad69027efd23813f5b9b51245f4364b1e806df610ced121a40d9a0b000ba48`.
+The existing f0b4 package/receipt remain previous evidence, not renamed d22 artifacts.
+
+A subsequent read-only check matches all six pre-deployment original-instance hashes:
+configuration, component manifest, exploratory save header and its three original jars.
+The new owned target has exactly eight mod jars, no copied saves and no pending journal;
+zero Java processes remain. The original continuation clone and detached execution
+worktree are clean. These are scoped preservation checks, not a full retained-world migration.
+
+[Run39299486534](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39299486534)
+at exactd22 has a successful Windows tooling job118220628155; its whole workflow was
+still in progress when observed. The previousf0b4 run39295041079 is completed/success.
+An auxiliary run-list filter initially passed two IDs to `gh run view` and failed;
+the explicit exact-run query exits0. No game/runtime failure or complete d22 CI pass
+is inferred from that harness error or the one successful Windows job.
+
 ## Actualf0b4 build/deploy and repeated-RPC framing failure
 
 Real corrected-text Sync and Build at
