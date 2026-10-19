@@ -23,6 +23,11 @@ entries below reference those records by id.
   remain pending; no new gameplay, persistence format or passing check is claimed.
   Reuse the existing completed-fluid starvation/recovery scenario with a graph rebuild,
   and check generation invalidation on the common empty-subscription tick path.
+- **Invalidate active process caches at the graph publication boundary.** Compare the
+  immutable recipe-list identity already published inside the complete `ProcessLookup`
+  graph before reusing a cached row. Keep the existing paid-work identity and save
+  format; no independent epoch is introduced. Dormant-machine wakeup and JVM
+  qualification remain pending, so this partial guard is not the completed A03 fix.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

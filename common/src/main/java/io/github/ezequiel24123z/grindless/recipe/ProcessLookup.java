@@ -30,7 +30,7 @@ import java.util.Optional;
  * The live process graph: generated from the current tag scan and indexed for lookup (ADR-0043).
  *
  * <p>Replaced wholesale on every material rebuild. A machine caches the recipe it is running and
- * drops that cache when inputs change; it never walks the whole list.
+ * drops that cache when inputs or the published generation change; it never walks the whole list.
  */
 public final class ProcessLookup {
 
@@ -61,6 +61,7 @@ public final class ProcessLookup {
                 Grindless.MOD_NAME, recipes.size());
     }
 
+    /** Immutable recipes; list identity changes atomically with their complete graph/index. */
     public static List<ProcessRecipe> recipes() {
         return GRAPH.recipes;
     }

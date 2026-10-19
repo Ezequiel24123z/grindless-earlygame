@@ -95,6 +95,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     private String cachedRecipeId = "";
     private String workRecipeId = "";
     private ProcessRecipe cached;
+    private List<ProcessRecipe> recipeGeneration = ProcessLookup.recipes();
     private TickSubscription working;
     private TickSubscription filling;
     private TickSubscription exporting;
@@ -538,10 +539,11 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     }
 
     private ProcessRecipe recipe(List<FluidInsert.Source> sources) {
+        refreshRecipeGeneration();
         if (cached != null) {
             return cached;
         }
-        Optional<ProcessRecipe> found = ProcessLookup.recipes().stream()
+        Optional<ProcessRecipe> found = recipeGeneration.stream()
                 .filter(row -> row.id().equals(workRecipeId) && row.family() == kind.family()
                         && progress >= row.durationTicks() && ProcessLookup.matches(row, inputs()))
                 .findFirst();
@@ -557,6 +559,16 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
             workRecipeId = cached.id();
         }
         return cached;
+    }
+
+    private boolean refreshRecipeGeneration() {
+        List<ProcessRecipe> published = ProcessLookup.recipes();
+        if (published == recipeGeneration) {
+            return false;
+        }
+        recipeGeneration = published;
+        cached = null;
+        return true;
     }
 
     private WorkshopStructure.Fault checkStructure() {

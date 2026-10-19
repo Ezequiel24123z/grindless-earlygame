@@ -6,16 +6,20 @@ Received source: `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d`, not old main or
 the original audit's `0d79860`. This bounded unit concerns the current shared executor,
 not a repeat of the completed [T0 audit](../T0-AUDIT.md).
 
-**Regression prepared; implementation and JVM execution pending.** The coordinator is
-selecting the generation-wakeup seam under reserved ADR-0153. No application change,
-native reproduction, build, deployment or human acceptance is claimed by this checkpoint.
+**Active-cache guard implemented; wakeup and JVM execution pending.** Recipe selection
+now invalidates the cache against the identity of the immutable list already published
+inside `ProcessLookup.GRAPH`. No independent epoch or publication field is introduced.
+The coordinator is selecting the generation-wakeup seam under reserved ADR-0153.
+No native reproduction, build, deployment or human acceptance is claimed.
 
 ## Concrete source counterexample
 
 `MaterialRegistry.rebuild` replaces the material snapshot and calls
 `ProcessLookup.rebuild`, which publishes a complete immutable graph/index. A loaded
-`ProcessMachineBlockEntity.recipe` nevertheless returns its non-null `cached` object
-before consulting that publication.
+`ProcessMachineBlockEntity.recipe` at the received source nevertheless returns its
+non-null `cached` object before consulting that publication. The guard now checks the
+published list identity first; unchanged-identity work still uses the existing
+`WorkRecipe` rule. Dormant machines do not yet receive the new-generation wakeup.
 
 The existing `VerifyMachine` suite now prepares this exact counterexample using bound
 vanilla item holders under diagnostic material tags:
@@ -63,7 +67,8 @@ world scans or permanent idle lookup subscription are justified.
 | --- | --- |
 | Source trace and exact retired-row construction | Inspected on received d22a8ed |
 | `VerifyMachine` regression | Prepared, NOT_RUN |
-| Application correction / idle-miss wakeup | Pending coordinator decision |
+| Active-cache generation guard | Implemented, NOT_RUN |
+| Idle-miss wakeup / complete regression unit | Pending coordinator decision |
 | Focused JVM checks / relevant regressions / build | NOT_RUN; exclusive PC window required |
 | Native registration / deployment / client / retained world | NOT_RUN; no acceptance inferred |
 

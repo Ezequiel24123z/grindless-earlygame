@@ -102,6 +102,9 @@ T2 and above are manufactured, never a crafting table
 - `recipe/ProcessLogic.java` and `recipe/FabricationLogic.java` — durations, FU/t,
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
+  Its immutable recipe-list identity is published inside the same graph/index object;
+  `ProcessMachineBlockEntity.recipe` checks that identity before reusing `cached`.
+  It is transient cache state, never another persisted work owner or a separate epoch.
 - `tools/checks/VerifyMachine.java` — the A03 generation-boundary regression binds actual
   item tags through `RegistryTagView` and `MaterialRegistry.rebuild`, including a retired
   row whose old input/output still resolve. See the
