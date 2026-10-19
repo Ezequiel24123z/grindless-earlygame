@@ -234,10 +234,12 @@
     "resource_window": {
       "owner_session_id": "53b80aff-68cf-4544-b13f-be773bfd6678",
       "owner_worker_agent_id": null,
-      "scope": "Exclusive_native_cache_RED_only_on_exact444409f_one_existing_production_smoke_with_fresh_guards_No_GREEN_full_build_pack_or_deploy_until_explicit_extension",
+      "scope": "Exclusive_cache_RED444409f_only_GREEN_build_pack_source_is_assigned_by_separate_message_after_final_ready_adapter_merge_No_Prism_or_A01_native_yet",
       "current_preflight": {"at_utc": "2026-10-19T21:21:11.2717984Z", "physical_free_gib": 9.730, "commit_free_gib": 33.766, "work_free_gib": 163.561, "java_processes": 0},
       "focused_release_observation": {"at_utc": "2026-10-19T20:58:10Z", "java_processes": 0, "sources": "exact_clean4f1b30b_and_c87dbc8_original_clone_config_origin_preserved", "not_a_native_guard": true},
-      "queued_next": {"session_id": "53b80aff-68cf-4544-b13f-be773bfd6678", "scope": "Cache_GREEN_on_final_integrated_freeze_after_batch_adapter_then_A01_repaired_native_and_SavedData_under_separate_explicit_lease"},
+      "application_input_baseline": "855a1ed898d8c5a24d004d45d651125fd5f29496",
+      "application_input_identities": {"common": "2353dc45464148f583c14ebeec418a844e45c0d1", "forge": "a1a2ae9ac4b9465f997ad0be52fa428f3a6566da", "build.gradle": "0e12a50c24167807c418fb505ec115d689e643c1", "settings.gradle": "f47aef5f8f88a38eed6fe4b1b0bf55c3d55edb80", "gradle.properties": "1131332c6aa7ee9371716de6f8425ed86f144045", "smoke-boot.ps1": "13bc1e09a0a2c0f0a5604b6e772eadae9abbc607", "smoke-boot.sh": "aa90a7e0e21216479129765513e14d66f107830d"},
+      "queued_next": {"session_id": "53b80aff-68cf-4544-b13f-be773bfd6678", "scope": "After_adapter_review_merge_assign_GREEN_source_fullbuild_pack_new_SmokeHarness_hook_and_native_cache_then_A01_under_separate_explicit_lease"},
       "compile_reservation": {
         "historical": true,
         "session_id": "7dd6027c-1ae2-4c5a-b6d4-104f966e5fc8",
@@ -270,7 +272,7 @@
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
       "next_worker_agent_id": null,
-      "next_scope": "A01_native_RED_released0Java_after_expected_failure_No_replay_now_Cache_RED_must_confirm_publication_then_specific_idle_wake_failure_not_setup_error",
+      "next_scope": "Do_not_block_unchanged_application_native_proof_on_batch_only_adapter_Reuse_frozen855_application_build_and_boot_identities_after_tooling_only_merges_Recheck_changed_new_Java_hook_separately",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

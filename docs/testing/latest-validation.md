@@ -1,5 +1,21 @@
 # Current T0 rework validation
 
+## Freeze independent application proof before the tooling-only adapter
+
+Pin the application input baseline at
+`855a1ed898d8c5a24d004d45d651125fd5f29496`. The completed tooling-only adapter
+`087c1a6` is now under its final delta review. Exact `common` tree
+`2353dc45464148f583c14ebeec418a844e45c0d1`, `forge` tree
+`a1a2ae9ac4b9465f997ad0be52fa428f3a6566da`, root build/version blobs and both
+boot-harness blobs are recorded in the resource-window contract.
+
+Only after the adapter review/merge, a functional exact444 cache red and fresh
+resource/zero-Java guards does the coordinator grant an explicit green source.
+The adapter changes batch selection/test wiring, not those application/native-boot
+inputs. Check its changed Java hook separately; do not replay successful app proofs
+merely because docs/tooling HEAD advances. Prism and A01 native/SavedData remain
+separate later leases.
+
 ## Actual A01 native counterexample and explicit lease handoff
 
 Exact pre-fix `4f1b30b` runs ONE production Forge smoke, expected exit1 in195.114

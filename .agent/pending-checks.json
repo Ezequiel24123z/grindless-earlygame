@@ -24,7 +24,7 @@
     "pc_build_package": "PASS_full_build_pack88_behavior43_actual_archive23_on_exact70901",
     "pc_jar_sha256": "5431d6ad410abc326893e68bf3e2b763b4e868410858ec1e370fc680427899f7",
     "pc_initial_zip_sha256": "ed504912a57f1c34be499735a89939b5ffe46a43636638e4b3b2b3a98067ab73",
-    "pc_jvm_ownership": "A01_native_RED_completed_expected1_zero_Java_released211648_then_exclusive_cache_RED444409f_with_fresh_guard_no_GREEN_build_pack_or_deploy_yet",
+    "pc_jvm_ownership": "exclusive_cache_RED444_only_GREEN_source_and_build_pack_permission_assigned_after_ready_adapter_merge_no_Prism_or_A01_native_yet",
     "tooling": "330_assertions_and_nine_real_d22_RPCs_passed_including_two_idempotent_Unchanged_results",
     "original_instance_preservation": "six_pinned_files_unchanged_no_save_copy_zero_JVM_no_pending_journal",
     "windows_ci_job": "0b29_run39293245073_job118199565252_direct_and_Bash_success_later_source_separate",

@@ -58,12 +58,16 @@ be diagnosed again as absent without a current counterexample.
 | A01 Crude output recovery | Focused red6/green59 and one real `4f1b30b` native RED are recorded. Production boot/setup/reconstruction succeeds; four recoveries are missing as predicted, not a parser failure. It stops naturally, leaves0Java and releases its lease. Repaired native/SavedData/full integrated build and deployment remain open. |
 
 The A01 worker releases after its native red with zero Java/port25629 free and
-both source surfaces clean at21:16:48Z. The next exclusive lease is cache native
-RED only on exact444, not a repaired-native/build/package/deployment grant.
+both source surfaces clean at21:16:48Z. The next exclusive lease starts with cache
+native RED on exact444. The final batch adapter `087c1a6` is now frozen and under
+delta review; the coordinator assigns the integrated green/build/package source
+explicitly after its merge, not a deployment or A01 grant.
 Fresh coordinator preflight at21:21:11Z records0Java,9.730 GiB free physical
 memory,33.766 GiB free commit and163.561 GiB work space. The worker refreshes
-the guards and reports exact exit/markers and0Java; green waits for its separate
-integrated source/permission. Private paths stay outside Git.
+the guards and reports exact exits/markers and0Java. App/build/harness input
+identities from855a1ed are pinned for proof reuse; the tooling adapter does not
+change them, while its new Java test hook receives its own selected check.
+Private paths stay outside Git.
 
 A01 review finds no other high-confidence production blocker, but the harness
 currently deletes the world before its stopped-world accounting command can

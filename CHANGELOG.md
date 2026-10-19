@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Pin runtime inputs across the final tooling adapter.** Record855a1ed
+  app/build/boot identities before the ready087c1a6 review/merge. Assign the green
+  build/package source explicitly afterward and check the changed Java hook;
+  unchanged app proofs need not repeat after documentation/tooling advances.
 - **Record the completed existing-scenario CI proof accurately.** Exact444
   completes all jobs, including six native shards; its actual manifest has44
   entries and neither new regression. Reuse that unchanged default-harness proof
