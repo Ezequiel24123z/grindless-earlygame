@@ -164,6 +164,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0150](#adr-0150--superflat-retains-virtual-deposits-without-staging-the-terrain) | Superflat retains virtual deposits without staging the terrain | Accepted |
 | [0151](#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh) | Keep coordination local and execute through the existing personal-PC SSH | Accepted |
 | [0152](#adr-0152--run-bounded-autonomous-t0-and-creative-work-without-human-acceptance) | Run bounded autonomous T0 and creative work without human acceptance | Accepted |
+| [0153](#adr-0153--rebind-generated-recipes-at-atomic-graph-boundaries) | Rebind generated recipes at atomic graph boundaries | Accepted |
 
 ---
 
@@ -7187,3 +7188,63 @@ continue source/offline validation or another GREEN lane. Do not expand the soun
 **Alternatives rejected.** Waiting for the absent owner on ordinary engineering choices;
 silently deciding subjective/product questions; activating T1 because a jar deploys; exhaustive
 duplicate native tests; unconstrained paid generation; competing shared-worktree publishers.
+
+---
+
+## ADR-0153 — Rebind generated recipes at atomic graph boundaries
+
+**Status.** Accepted bounded A03 remediation, 2026-10-19. The regression is prepared;
+red execution, implementation and its affected proofs are not credited by this decision.
+
+**Current counterexample.** `MaterialRegistry.rebuild` publishes a new generated lookup,
+but a loaded process machine can retain its previous cached recipe. Removing only an
+ingot form withdraws a generated row while its raw input/crushed output still resolve,
+so ingredient re-matching alone can still spend Flux and emit from a withdrawn definition.
+Existing paid-work ownership and fluid receipts solve other boundaries, not membership.
+An idle/miss machine also needs a wake path when a reload adds a usable recipe.
+
+**Prior art and limits.** Read-only source review at GregTech-Modern
+`aa41aba133f31dd3928bea816d6fd032cd1d90b6` inspected
+[RecipeLogic](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/machine/trait/RecipeLogic.java),
+[RecipeManagerMixin](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/core/mixins/RecipeManagerMixin.java)
+and [GTRecipeType](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/recipe/GTRecipeType.java).
+Those paths re-match cached recipes, rebuild a mutable index during synchronous reload,
+and unsubscribe idle work pending content notifications. They do not establish the
+graph-membership and reload-wakeup guarantees this generated, subscription-driven graph
+requires. Targeted negative searches are not proof that every upstream path is absent.
+No source is imported; LGPL-3.0 code remains reference-only. Vanilla caching was not
+source-verified in that investigation and is not used as supporting proof.
+
+**Decision.** Preserve the existing graph and scheduler. Publish the complete immutable
+recipe list and indexes together through the existing graph holder, with atomic/volatile
+visibility. Use one stable typed identity from that published snapshot, not an independently
+published epoch and graph. The identity is unchanged between rebuilds and fresh for a new
+publication, including equivalent/empty contents; reading it allocates nothing.
+
+Cached selection checks that identity before reuse. On change, discard only the transient
+selection and resolve against the current graph. Same `WorkRecipe` keeps paid `Progress`;
+different recipe IDs retain the existing reset policy. A withdrawn definition may wait
+with its paid work, but cannot consume another input/Flux or emit. Already committed
+output/receipt ownership is not discarded.
+
+Add one bounded pre-subscription hook to the already invoked base server ticker.
+Only process machines compare the identity, O(1), and refresh subscriptions once when
+it changes. The existing ticker runs even with empty subscription lists; explicit
+logistics hold stays held, and release revalidates before work. No world scan, global
+machine registry, forced chunk load, polling recipe lookup every tick or cross-thread
+tag callback may touch machines. Preserve the existing once-per-world-tick work guard.
+
+No NBT keys, paid-work identity, recipe balance, Matrix gate or player permission changes.
+A reload/unload reconstructs transient selection from current data; no saved epoch is trusted.
+
+**Validation.** First execute the real tag-binding/material/graph counterexample on the
+frozen pre-fix source. Then cover withdrawn active selection with still-resolvable I/O,
+same-identity paid progress, reconstruction/current provider, a previously idle miss
+gaining a row without neighbor mutation, and no double work/Flux on refresh. Reuse unaffected
+inventory/fluid/conservation proofs and run the affected selected checks/build. The changed
+BE/ticker seam needs representative native evidence, not another run for every material.
+
+**Alternatives rejected.** Guard only active `recipe()` calls (leaves idle misses asleep);
+direct tag-event callbacks (unsafe client/server ownership); scan every loaded machine on
+reload; keep a separate mutable generation counter; clear paid progress on every rebuild;
+copy the upstream mutable lookup/cache behavior or replace the whole execution engine.

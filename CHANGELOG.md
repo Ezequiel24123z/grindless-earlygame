@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify the framed PC workflow and preserve isolated next steps.** Exactd22
+  passes nine real RPCs, an11-second package build, owned update, inspection and two
+  idempotent no-ops. Six pinned original inputs remain unchanged; no save/journal/JVM
+  remains. Record active child ownership, blocked generation and the independent
+  nonblocking review of the offline SFX recovery unit without claiming integration.
+- **Choose bounded generated-recipe invalidation (ADR-0153).** A current A03
+  counterexample remains despite existing work/fluid ownership. After exact-source
+  upstream comparison, select atomically published graph identity and one server
+  pre-subscription check so active caches and idle misses rebind without scans,
+  lost paid work, cross-thread callbacks or new persistence. Red/green and native
+  evidence remain to execute.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

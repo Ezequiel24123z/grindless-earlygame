@@ -12,11 +12,20 @@ will use isolated child worktrees; the coordinator alone integrates/publishes/de
 No human acceptance, T0 freeze, T1 activation, guessed product choice or unbounded
 generation follows from this delegation.
 
-The realf0b4 package was built, deployed with five official missing pins and successfully
-inspected in the new owned instance. Its subsequent idempotent RPC hung in the bootstrap's
-EOF wait. Only that positively identified helper was terminated, with no pending install
-journal; no user process/save was changed. The330-check single-line framing/keepalive
-correction is ready for real repetition, not yet credited as a completed idempotence run.
+The initialf0b4 deployment/inspection succeeded; its later EOF-dependent idempotent RPC
+was interrupted and remains recorded. The corrected d22 workflow now passes nine actual
+RPCs including11s Build, owned update, inspection and two `Unchanged` idempotent calls.
+Deployed source/runtime is `d22a8ed5efb7bbc55866ba15f5c866dcfca9239d`, jar5431d6ad,
+ZIP88b857fc. Six pinned old-instance files are unchanged, no save is copied, no journal
+or Java process remains, and both original clone and detached worktree are clean.
+
+Active child ownership: technical77a8c086 (A03 current counterexample; frozen red
+efb1af9), visual91a8525d (three T0 books; frozen source6daf250 before generated PNGs),
+SFX7a4e652d (offline real-generation-flow tests584da08). The SFX unit has a read-only
+independent review with no blocking finding; its200/10 execution evidence is distinct
+from real HTTP/codec/power-loss proof. Explicit credential configuration was not located;
+the legacy Quern/3/Astra contract also cannot authorize wet_work/2/Sol. Zero new requests.
+The parent selects the Clay Mixer-only purpose and keeps the old grant/Quern A intact.
 
 ## Active SSH-first receipt
 

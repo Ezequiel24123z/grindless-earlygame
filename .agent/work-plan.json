@@ -33,10 +33,14 @@
     "owner_available": false,
     "return_handoff": "RETURN-HANDOFF.md",
     "priorities": ["stable_traceable_PC_deployment", "verified_T0_blockers_and_regressions", "nonredundant_automated_validation", "independent_GREEN_foundations", "evidence_backed_architecture_cleanup", "parallel_T0_visual_and_SFX_quality"],
-    "lanes": {"T0_technical": "queued_isolated", "visual_assets": "queued_isolated", "SFX": "queued_isolated"},
+    "lanes": {
+      "T0_technical": {"session_id": "77a8c086-295d-48f6-98c4-d905eb833adc", "branch": "ezequiel24123z-regresiones-tecnicas-t0", "status": "ADR0153_selected_red_source_frozen_JVM_window_queued", "red_commit": "3643c6a049e3beb39b28fe23f4b6d8a1f316db30", "partial_active_guard_commit_not_complete": "fdaa65172256b33ae6848cfad09c8433e0aa9abb"},
+      "visual_assets": {"session_id": "91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f", "branch": "ezequiel24123z-sprites-del-taller-t0", "status": "three_book_generator_source_frozen_before_PNG_generation_JDK_window_next", "source_commit": "6daf2506442368f7978e3d5ea41519cfca753ebc"},
+      "SFX": {"session_id": "7a4e652d-2ffd-453c-8c79-e5df2ce5b605", "branch": "ezequiel24123z-paleta-sonora-t0", "status": "offline_generation_flow_200_assertions_complete_independent_review_no_blocking_finding_ready_to_integrate", "commit": "584da087a037d44aa55a6d89322def53c4a05ce9"}
+    },
     "publisher_and_shared_PC_owner": "current_coordinator_only",
     "product_gates": "No_T0_acceptance_or_freeze_No_T1_activation_No_RED_or_silently_selected_subjective_product_choices",
-    "generation": {"new_requests_maximum": 2, "purposes_maximum": 1, "requires": "selected_meaningful_T0_purpose_new_recorded_authorization_ledger_secure_existing_credential_rights_and_safe_tooling", "old_grants_reset": false, "requests_made": 0, "image_provider_keys_available": false, "local_ElevenLabs_environment_available": false},
+    "generation": {"new_requests_maximum": 2, "purposes_maximum": 1, "selected_purpose": "wet_work_Clay_Mixer_only", "requires": "selected_meaningful_T0_purpose_new_recorded_authorization_ledger_secure_existing_credential_rights_and_safe_tooling", "old_grants_reset": false, "requests_made": 0, "image_provider_keys_available": false, "local_ElevenLabs_environment_available": false, "blockers": ["explicit_existing_secret_configuration_not_located_in_bounded_local_PC_and_historical_metadata_checks", "legacy_Quern_3_Astra_contract_does_not_authorize_wet_work_2_Sol"]},
     "original_27_tasks_and_47_references": "preserved"
   },
   "ssh_pc_execution": {
@@ -51,7 +55,9 @@
     "identity": "PC_login_SSH_and_personal_Git_SSH_verified_independently_remote_gh_invalid_no_identity_or_remote_changed",
     "private_host_settings": "outside_Git_addresses_paths_and_launcher_accounts_never_committed",
     "preserve": ["original_clones", "app_worktrees", "existing_caches", "preparation_instance", "exploratory_world", "old_audit_and_source_bound_proofs"],
-    "development_deployment": "new_owned_Prism_instance_not_RC_or_longitudinal_reference",
+    "development_deployment": "owned_Grindless_T0_Dev_real_d22_update_inspection_and_two_idempotent_calls_passed_not_RC_or_longitudinal_reference",
+    "deployed_source": "d22a8ed5efb7bbc55866ba15f5c866dcfca9239d",
+    "deployed_pack_sha256": "88b857fc89c7b9605d6029e292cdfdfeb6f10daa08f2b10b3ccf8228929fdc7e",
     "tooling": {
       "status": "frozen_reviewed_ready_for_actual_PC_workflow",
       "entrypoint": "tools/pc-workflow.ps1",
@@ -60,7 +66,8 @@
       "isolated_fixtures": 31,
       "top_level_native_helpers": 45,
       "windows_ci_job": "prism-tooling-windows",
-      "actual_transport_download_deployment": "f0b4_Sync_Build_Deploy_five_official_downloads_and_Inspect_passed_next_idempotent_RPC_interrupted_EOF_wait_330_line_framing_fix_needs_real_qualification",
+      "actual_transport_download_deployment": "d22_nine_real_RPCs_passed_including_Update_Inspect_and_two_Unchanged_idempotent_Deploys_original_interrupted_EOF_attempt_preserved",
+      "original_instance_preservation": "six_pinned_files_unchanged_no_saves_copied_no_journal_zero_Java_original_clone_and_execution_worktree_clean",
       "windows_ci_receipt": "0b29_run39293245073_job118199565252_direct_and_Bash_success_not_whole_workflow_or_later_source",
       "parallel_player_boundary": "Build_only_is_separate_and_resource_gated_Deploy_requires_stopped_owned_target"
     },
