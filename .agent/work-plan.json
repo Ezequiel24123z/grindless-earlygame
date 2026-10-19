@@ -41,7 +41,8 @@
     "preserve": ["original_clones", "app_worktrees", "existing_caches", "preparation_instance", "exploratory_world", "old_audit_and_source_bound_proofs"],
     "development_deployment": "new_owned_Prism_instance_not_RC_or_longitudinal_reference",
     "original_audit": "Read_original_0d79860_audit_and_T0_T1_action_plan_not_rerun_later_integrated_contracts_take_precedence",
-    "new_native_property": "ADR0148_sound_registration_and_dedicated_server_client_class_isolation_still_unproved",
+    "native_sound_binding": "Reused_exact70901_CI39185959767_success_verify_and_all_six_smoke_shards_exact_checkout_and_eight_production_boots_inspected",
+    "additional_pc_smoke": "No_new_binding_uncertainty_after_exact_source_hosted_proof_no_duplicate_native_boot_needed",
     "release_ready": false,
     "human_accepted": false,
     "t1_allowed": false
@@ -218,7 +219,7 @@
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
       "next_worker_agent_id": null,
-      "next_scope": "Finish the isolated PC package and missing representative sound/server binding, release JVM ownership, then deploy only to the owned Prism engineering instance; native client/mix and official flat-source/RC work retain separate gates",
+      "next_scope": "Finish isolated PC package, reuse the now-inspected exact70901 hosted sound/server proof, release JVM ownership, then deploy only to the owned Prism engineering instance; native client/mix and official flat-source/RC work retain separate gates",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

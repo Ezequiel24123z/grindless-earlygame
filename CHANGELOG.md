@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Reuse the complete70901 native CI proof before another PC smoke.** Live inspection
+  finds run39185959767 successful at the exact received source, including verify and
+  all six smoke shards. Shard1's checkout, eight real production-server boots and
+  final pass are inspected. Record the sound/server binding separately from original
+  worker-local NOT_RUN evidence; avoid a redundant server run without claiming a new
+  Windows/client, listening, save or playable-release pass.
 - **Adopt the owner's SSH-first PC operating model (ADR-0151, PA-0012).** Receive the
   complete70901 continuation rather than old main, verify PC-login SSH and existing
   personal Git SSH separately, and preserve the invalid remote API login without

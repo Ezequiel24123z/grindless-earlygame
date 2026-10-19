@@ -22,6 +22,25 @@ original scope. PC build/package, the unproved sound/server binding, new deploym
 client/listening, official Superflat access and RC readiness are distinct pending
 results at this receipt, not implied by SSH or documentation validation.
 
+## Exact70901 hosted proof reused before additional native execution
+
+[Actions39185959767](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39185959767)
+is completed/success at exact70901, with successful `verify` and all six native smoke
+jobs in the same run. This is newer evidence than the earlier handoff's final17ae
+failures, not a relabeling of those failed/cancelled runs.
+
+The actual shard1 log (job117849762113) checks out70901, reaches eight production
+`DedicatedServer: Done` starts, records eight `SMOKE BOOT PASSED` results and ends
+`ALL 8 SMOKE SCENARIOS PASSED`. This covers integrated sound registration and fatal
+dedicated-server/client-class isolation. The PC qualification therefore reuses that
+proof instead of adding another server boot. Client playback/lifecycle, one/eight-machine
+listening, rendering, flat-source access and longitudinal compatibility remain unobserved.
+
+An initial log filter terminated its native producer early and returned-1 after matching
+irrelevant mapping lines. Capturing the complete successful `gh` output before filtering
+exits0 and exposes the real startup/summary lines. Neither attempt is a game failure
+or a new Windows runtime test. The original worker's compilation/NOT_RUN receipts remain.
+
 ## Cloud-freeze results after RAM expansion
 
 The owner requested consolidation/publication and cloud handoff before more local work.

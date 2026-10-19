@@ -111,3 +111,13 @@ are not a replacement for the Superflat release requirement.
 T0 RC publication, actual client/visual/listening observations and authentic forward-save
 qualification remain separate. T1 stays held under ADR-0144. See
 [the player checklist](../testing/t0-survival-acceptance.md).
+
+## Reuse existing native proof before another server run
+
+Exact-source [CI39185959767](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39185959767)
+at70901 completed successfully, including verify and all six native smoke shards.
+The inspected shard1 checks out that SHA and proves eight production-server boots/
+scenario passes. This resolves the previously unrecorded sound-registration/server
+binding without repeating a server on the PC merely because execution moved.
+The PC still needs its actual isolated build/package/deployment proof. Hosted startup
+does not prove native client audio, visual quality, human play or a release-ready flat route.

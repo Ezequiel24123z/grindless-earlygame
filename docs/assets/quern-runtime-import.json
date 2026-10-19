@@ -1,7 +1,22 @@
 {
   "schema_version": 1,
-  "status": "implemented_compiled_focused_checks_passed_native_pending",
+  "status": "implemented_compiled_hosted_server_binding_verified_native_client_pending",
   "authority": "ADR-0148",
+  "hosted_server_binding_reuse": {
+    "observed": "2026-10-19",
+    "source_revision": "70901eca2da386cd54fc769ba8a2a59be10eb76b",
+    "run_id": 39185959767,
+    "url": "https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39185959767",
+    "conclusion": "success",
+    "jobs": "verify_and_all_six_native_smoke_shards_successful_in_the_same_run",
+    "inspected_job_id": 117849762113,
+    "exact_checkout_verified_in_log": true,
+    "inspected_shard_production_server_boots": 8,
+    "inspected_shard_result": "ALL 8 SMOKE SCENARIOS PASSED",
+    "proves": "Production dedicated-server startup with the integrated sound registration and no fatal client-class binding",
+    "not_claimed": "No new Windows-native execution, audio playback, listening, lifecycle, render, saved-world or release pass",
+    "extra_pc_native_boot": "Not required for this unchanged binding; reuse exact-source hosted evidence"
+  },
   "source_baseline": "d8dda9ced4c187c8abadcb78a6b12146e84229bd",
   "implementation_checkpoint": "3914978b626ddcb17ef6859dd4caff63cb4fe6eb",
   "resource": {
@@ -44,6 +59,7 @@
     "convert-audio.sh": "ac54b12df52ef8e724e4a30d87c8c199c19d0a7c9a21ed2d90c52b34e0a0d79c"
   },
   "validation": {
+    "scope": "Original frozen worker-local execution; later hosted server evidence is recorded separately above",
     "static_resource_guard": "PASS: exact hash, mono/44100 Vorbis identification header, event/radius/subtitle, public notice and runtime-only directory",
     "powershell_converter_ast": "PASS",
     "shell_converter_syntax": "NOT_RUN: assumed executable and Git-relative Bash candidates unavailable",
@@ -135,7 +151,6 @@
     "Successful compilation retained duplicate JEI input-class messages and two existing Forge deprecation warnings; these were not treated as errors or hidden."
   ],
   "unproved": [
-    "Representative native sound-event registration binding",
     "Native client onset, stop, range, pause, unload, disconnect, reload and engine-cancellation behavior",
     "One/eight-machine listening and factory mix",
     "Rendered-client, gameplay, saved-world, human or release-candidate acceptance"

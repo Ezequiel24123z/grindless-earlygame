@@ -15,7 +15,7 @@
     "entry": "docs/operations/ssh-prism-workflow.md",
     "supersedes": "cloud_transfer_execution_destination_and_local_freeze_only",
     "existing_instance": "old_b982_runtime_and_exploratory_world_preserved_not_updated",
-    "native_sound_binding": "NOT_RUN",
+    "native_sound_binding": "VERIFIED_REUSED_exact70901_CI39185959767_all_six_native_shards_successful_not_new_PC_or_client_execution",
     "client_render_listening": "NOT_RUN",
     "official_superflat_access": "NOT_IMPLEMENTED",
     "release_ready": false,

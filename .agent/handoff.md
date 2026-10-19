@@ -24,6 +24,14 @@ published audit branch, not rerun or silently adopted over the later integrated 
 The current native sound binding/package/client gaps guide the next bounded execution;
 flat-source design and longitudinal release remain explicit product work.
 
+Subsequent live inspection resolves the sound/server binding gap through existing
+exact-source evidence: [CI39185959767](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39185959767)
+at70901 is a complete success (verify plus all six smoke shards). Shard1's exact checkout,
+eight production-server starts and final eight-scenario pass were read. Reuse this
+binding proof; do not repeat a native server merely for host migration. It is not a
+Windows-PC execution or client/listening result. The portable Quern record now separates
+that hosted proof from the original worker's NOT_RUN native boundary.
+
 ## Historical owner-requested cloud freeze
 
 Read [the compact cloud entry](cloud-migration-handoff.md) first. Source consolidation
