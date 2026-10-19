@@ -21,6 +21,8 @@ entries below reference those records by id.
   unchanged-identity work, retirement and provider-aware reconstruction in the existing
   machine suite. Implementation, the coordinator's wakeup decision and JVM execution
   remain pending; no new gameplay, persistence format or passing check is claimed.
+  Reuse the existing completed-fluid starvation/recovery scenario with a graph rebuild,
+  and check generation invalidation on the common empty-subscription tick path.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

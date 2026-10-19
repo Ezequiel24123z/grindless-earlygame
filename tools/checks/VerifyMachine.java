@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +90,11 @@ public final class VerifyMachine {
                     paid.getString("WorkRecipe").equals(machine.saveWithoutMetadata().getString("WorkRecipe")));
             yes("generation invalidation does not add persistence keys",
                     paid.getAllKeys().equals(machine.saveWithoutMetadata().getAllKeys()));
+            Field cached = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+            cached.setAccessible(true);
+            machine.serverTick();
+            yes("the empty subscription path retains a cache from the unchanged generation",
+                    machine.subscriptions().isIdle() && cached.get(machine) == current);
 
             rebuildCacheTags(false, Items.SAND);
             no("removing only the ingot form retires the generated recipe",
@@ -96,6 +102,9 @@ public final class VerifyMachine {
             yes("the retired recipe's input and output still resolve",
                     ProcessLookup.matches(current, new ItemStack[] {machine.getItem(0)})
                             && ProcessLookup.resolve(current.itemOutputs().get(0)).isPresent());
+            machine.serverTick();
+            yes("a generation change invalidates the cache even with no subscribed work",
+                    machine.subscriptions().isIdle() && cached.get(machine) == null);
             Method work = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
             work.setAccessible(true);
             work.invoke(machine, 1L, List.of());

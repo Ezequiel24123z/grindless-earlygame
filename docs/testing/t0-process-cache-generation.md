@@ -28,9 +28,15 @@ vanilla item holders under diagnostic material tags:
   emit items for that retired row. Unchanged recipe identity must retain `WorkRecipe`
   and `Progress`; restoring the row must use the current material provider and charge
   only the remaining work.
+- The real common `serverTick` path is also exercised with an empty subscription list:
+  an unchanged generation must keep its cache, while a new generation must invalidate it.
+  This no-level contract fixture does not claim a native loaded-world wakeup.
 
 The fixture is diagnostic, not an authored resource route or a gameplay recipe.
 It restores the prior registry tags afterward. No new registry IDs or NBT keys are added.
+The existing `VerifyFluid.completedWorkRecovery` scenario now rebuilds the graph at its
+secondary-starvation boundary, reusing all its exact work, NBT, fluid and no-extra-Flux
+oracles rather than adding another equivalent completed-batch test.
 
 ## Reused proof and remaining scope
 
