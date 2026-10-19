@@ -23,7 +23,8 @@ entries below reference those records by id.
   sound outside synthetic regeneration/conversion. Frozen3914978 received a read-only
   review without a significant finding. After RAM expansion, actual common/Forge
   compilation,67 tracker/source checks and34 sound-resource checks pass with bounded
-  JVMs and matching processed Ogg/notice bytes. Earlier resource/auxiliary harness
+  JVMs and matching processed Ogg/notice bytes. The source-bound runtime import
+  record preserves exact evidence and all earlier resource/auxiliary harness
   failures are retained. Dedicated-server binding and native client lifecycle/
   one-eight-machine listening remain distinct pending proofs; SH remains NOT_RUN.
 - **Implement the restricted additive playable pack profile (ADR-0149).** Select the

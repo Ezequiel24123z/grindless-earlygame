@@ -2306,7 +2306,7 @@ is preserved and integration/release gates still control acceptance.
 | 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
 | 40 | **Playable modpack and longitudinal releases** | active — exact approved Quern A Ogg and Quern-only managed client loop integrated under ADR-0148; common/Forge compile,67 tracker/source and34 sound-resource checks pass on frozen3914978. Native server binding, client lifecycle/mix and the playable release remain open. Nine physical-item sprites/native display inheritance retain their814-check/source-pixel evidence; actual client, Superflat/resource and remaining product gates are not implied |
 | 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by clean fast-forward; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts. Its final CI has two cancelled runs and one Forge-preparation Maven502 failure, not a full pass; later source has separate evidence. Product gaps remain and historical proofs are reused, not replayed |
-| 42 | **Restricted playable profile** | ADR-0149 implemented as an opt-in seven-pin core/quest/performance selector below the application-build boundary. Historical defaults/pins/filenames stay intact; explicitly empty public overrides retain upstream defaults, with tracked-path guards, exact provenance, notices and shared archive-whitelist fixtures. Read-only review found no actionable issue; focused Gradle execution, actual package/preset/import/client proof remain pending |
+| 42 | **Restricted playable profile** | ADR-0149 opt-in seven-pin core/quest/performance selector integrated; historical defaults/pins/filenames stay intact. Read-only review found no actionable issue and actual verifyModpack passes87 selector/mutation/real-synthetic-ZIP checks. Privileged Windows symlink/SH remain NOT_RUN; final package/preset/import/client proof remains pending |
 | 43 | **Superflat virtual resources** | ADR-0150 preserves chunk-data deposits independently of physical terrain; extraction multiblocks and deliberate renewable basic-resource access belong in flat worlds too. No staged spawn/food system is selected; detailed T0 generator and quest-shop economy remain design work |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
@@ -2532,6 +2532,9 @@ nearby loaded RUNNING Quern. Its old heavy-hum bursts are replaced, not those of
 extractors or other machines. Pause, mute, range, source/world/player lifetime and bounded
 engine recovery are explicit; actual client onset/stop/reload and factory listening remain
 unverified. Generators and the paired legacy converters preserve the imported sound and notice.
+The [source-bound runtime import record](docs/assets/quern-runtime-import.json) preserves
+the exact implementation checkpoint, passed compile/contract/resource guards and unexecuted
+native registration/client/listening proofs, without erasing the earlier blocked attempts.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of

@@ -64,6 +64,9 @@ are new gaps, not permission to rewrite proven engines or start ports.
   hash/mono/event/notice/generation-boundary checks. `tools/assetgen/.../GenerateAssets`
   preserves the import provenance; paired `convert-audio` tools convert only the five
   synthetic legacy names, never a stray WAV over `t0_grinding.ogg`.
+  `docs/assets/quern-runtime-import.json` binds the source checkpoint, actual compile/
+  contract/resource results, preserved blocked attempts and native gaps. A tracker
+  contract or resource check does not establish a native binding or listening pass.
 
 Grindless is Superflat-first, Overworld-compatible and longitudinal across tier releases.
 The old conditional entry witness does not prove access in an unselected flat preset.
