@@ -28,6 +28,10 @@ public final class FormTextures {
             new Palette("core_ceramic", 0xB9A78A, 0xE2D5B8, 0x79674F);
     private static final Palette CORE_CONTACT =
             new Palette("core_contact", 0x967044, 0xD5B36D, 0x4E3C30);
+    private static final Palette GUIDE_PAPER =
+            new Palette("guide_paper", 0xD6C8A8, 0xF4E8CC, 0x988367);
+    private static final Palette GUIDE_BINDING =
+            new Palette("guide_binding", 0x66513A, 0xA28A61, 0x342B24);
 
     private FormTextures() {
     }
@@ -624,40 +628,110 @@ public final class FormTextures {
         return field.light(palette);
     }
 
-    /** Placeholder sprite for the quest book: a bound volume with a marked spine. See {@link #dataCore}. */
+    /** A gold-bound pocket volume, with an exposed page block and three bold list marks. */
     public static BufferedImage questBook(Palette palette) {
-        HeightField field = new HeightField();
-        field.rect(3, 2, 12, 13, 3.2);
-        field.rect(3, 2, 5, 13, 4.6);
-        field.rect(7, 4, 11, 5, 4.0);
-        field.rect(7, 7, 11, 8, 4.0);
-        field.rect(7, 10, 10, 11, 4.0);
-        field.bevel(0.35);
-        return field.light(palette);
+        BufferedImage image = boundGuide(palette, 3, 1, 10, 11);
+        for (int y : new int[]{3, 6, 9}) {
+            surfacePixel(image, 6, y, GUIDE_PAPER.highlight());
+            surfacePixel(image, 8, y, GUIDE_PAPER.base());
+            surfacePixel(image, 9, y, GUIDE_PAPER.base());
+        }
+        surfacePixel(image, 7, 4, GUIDE_PAPER.base());
+        return image;
     }
 
-    /** Placeholder sprite for the field guide: an open page with rules. See {@link #dataCore}. */
+    /** Open cream pages, a recessed gutter and a teal field bookmark, not another closed cover. */
     public static BufferedImage fieldGuide(Palette palette) {
-        HeightField field = new HeightField();
-        field.rect(2, 2, 13, 13, 3.0);
-        field.rect(4, 4, 11, 5, 4.2);
-        field.rect(4, 7, 11, 8, 3.8);
-        field.rect(4, 9, 11, 10, 3.8);
-        field.rect(4, 11, 9, 12, 3.8);
-        field.bevel(0.35);
-        return field.light(palette);
+        HeightField cover = new HeightField();
+        cover.rect(1, 3, 6, 12, 2.8);
+        cover.rect(8, 3, 14, 12, 2.8);
+        cover.rect(6, 5, 8, 13, 2.8);
+        cover.bevel(0.3);
+        BufferedImage image = cover.light(palette);
+
+        HeightField pages = new HeightField();
+        pages.rect(2, 3, 6, 11, 3.8);
+        pages.rect(8, 3, 13, 11, 3.8);
+        pages.rect(3, 2, 5, 2, 3.2);
+        pages.rect(9, 2, 12, 2, 3.2);
+        pages.rect(6, 4, 8, 12, 2.7);
+        for (int y = 3; y <= 11; y++) {
+            pages.set(6, y, 2.4);
+            pages.set(8, y, 2.4);
+        }
+        pages.bevel(0.25);
+        overlaySolid(image, pages.light(GUIDE_PAPER));
+        for (int y = 4; y <= 12; y++) {
+            surfacePixel(image, 7, y, GUIDE_BINDING.shadow());
+        }
+        for (int y : new int[]{5, 8}) {
+            for (int x = 3; x <= 5; x++) {
+                surfacePixel(image, x, y, GUIDE_PAPER.shadow());
+            }
+        }
+
+        HeightField bookmark = new HeightField();
+        bookmark.rect(10, 1, 12, 5, 4.6);
+        bookmark.set(11, 5, 0);
+        bookmark.bevel(0.25);
+        BufferedImage ribbon = bookmark.light(palette);
+        surfacePixel(ribbon, 10, 1, palette.highlight());
+        surfacePixel(ribbon, 11, 1, palette.highlight());
+        surfacePixel(ribbon, 11, 2, palette.base());
+        overlaySolid(image, ribbon);
+        return image;
     }
 
-    /** Placeholder sprite for the Process Atlas: a tablet with three graph nodes. See {@link #dataCore}. */
+    /** A cyan workshop atlas with a paper schematic, three connected nodes and a thick binding. */
     public static BufferedImage atlas(Palette palette) {
-        HeightField field = new HeightField();
-        field.rect(3, 2, 12, 13, 3.4);
-        field.rect(5, 4, 10, 10, 4.2);
-        field.disc(6.0, 6.0, 1.2, 5.2);
-        field.disc(10.0, 6.0, 1.2, 5.2);
-        field.disc(8.0, 9.0, 1.2, 5.2);
-        field.bevel(0.35);
-        return field.light(palette);
+        BufferedImage image = boundGuide(palette, 1, 3, 11, 10);
+        for (int y = 4; y <= 9; y++) {
+            for (int x = 5; x <= 10; x++) {
+                surfacePixel(image, x, y,
+                        y == 4 ? GUIDE_PAPER.highlight() : GUIDE_PAPER.base());
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            surfacePixel(image, x, 6, palette.shadow());
+        }
+        surfacePixel(image, 7, 7, palette.shadow());
+        surfacePixel(image, 7, 8, palette.shadow());
+        for (int[] node : new int[][]{{5, 5}, {9, 5}, {7, 8}}) {
+            for (int y = node[1]; y <= node[1] + 1; y++) {
+                for (int x = node[0]; x <= node[0] + 1; x++) {
+                    surfacePixel(image, x, y, palette.base());
+                }
+            }
+            surfacePixel(image, node[0], node[1], palette.shadow());
+        }
+        return image;
+    }
+
+    private static BufferedImage boundGuide(Palette palette, int left, int top, int right, int bottom) {
+        HeightField binding = new HeightField();
+        binding.rect(left + 1, top + 1, right + 2, bottom + 2, 2.0);
+        binding.bevel(0.25);
+        BufferedImage image = binding.light(palette);
+
+        HeightField pages = new HeightField();
+        pages.rect(left + 2, top + 1, right + 2, bottom + 1, 2.8);
+        pages.bevel(0.25);
+        overlaySolid(image, pages.light(GUIDE_PAPER));
+
+        HeightField cover = new HeightField();
+        cover.rect(left, top, right, bottom, 4.0);
+        cover.bevel(0.3);
+        overlaySolid(image, cover.light(palette));
+
+        HeightField spine = new HeightField();
+        spine.rect(left, top, left + 2, bottom, 4.8);
+        spine.bevel(0.25);
+        overlaySolid(image, spine.light(GUIDE_BINDING));
+        surfacePixel(image, right + 1, top + 2, GUIDE_PAPER.highlight());
+        for (int x = left + 3; x <= right + 1; x++) {
+            surfacePixel(image, x, bottom + 1, GUIDE_PAPER.shadow());
+        }
+        return image;
     }
 
     /** Placeholder sprite for the Flux Conduit: a wound cable on a grip. See {@link #dataCore}. */

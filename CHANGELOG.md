@@ -43,6 +43,19 @@ entries below reference those records by id.
   checks on WinPS5/Core7.6; the new SH twin also passes. Record the separately blocked
   secret configuration and legacy Quern/3/Astra contract. Clay Mixer wet work is only
   the selected next purpose: zero new requests, no grant, runtime or protectedA change.
+- **Give the three T0 guide objects physical materials (ADR-0146/0152).** Preserve
+  all nine reviewed sprites; all six direct T0 materials already belong to that batch.
+  Refine only the coordinator-authorized Atlas, Quest Book and Field Guide with their
+  cyan/gold/teal semantics, shared paper/binding, thickness and functional marks.
+  Frozen `6daf250` compiles and produces two byte-identical 12-PNG stages through the
+  three-PNG-only writer; 42 focused contracts pass on each after nine expected old-PNG
+  failures. Three invalid CLI forms refuse before output. All 1,589 common source
+  resources/five WAVs and the protected sprites remain intact; only three hash-matched
+  outputs are installed, with actual 1x/8x before/after sheets. The JVM window is released before
+  local review. The 578 unchanged resource PNGs include the nine protected sprites,
+  not 578 additional files. Initial policy/helper-parse failures remain recorded. The coordinator
+  approves the actual source pixels without retouches for the technical candidate,
+  not native/human approval, full art/T0 acceptance or a release.
 - **Preserve the owner's unattended T0/creative programme (ADR-0152, PA-0013).**
   Keep the original product graph and manual/release gates, define isolated technical,
   visual and SFX lanes, bound any new paid work to two requests/one recorded purpose,

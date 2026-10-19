@@ -400,6 +400,15 @@ from two byte-identical staged runs; geometry, UVs and PNG/WAV bytes are unchang
 Keep staging/raw-checkout EOL identities distinct. Generate in staging while other workers
 own assets/lang, and never call alias resolution a client visual pass.
 
+`FormTextures.atlas`, `questBook` and `fieldGuide` share local paper/binding materials,
+not a global lighting change. `GenerateAssets --t0-guides-only` selects the same three
+writers as normal generation and must never touch any other output. The JDK-only
+`VerifyT0GuideSprites` checks their pixel contracts and the exact nine reviewed PNG hashes;
+the normal behavior runner discovers it automatically. Two identical selective stages
+and exact installed byte parity establish only the bounded generation/pixel contracts;
+child/coordinator source-pixel reviews are not native-client or human art acceptance.
+Preserve cyan/gold/teal function cues, registry/model identities and all placed-machine art.
+
 Resource communication follows
 [ADR-0143](DECISIONS.md#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations).
 The `guidance` package owns the typed projection, JSON/fingerprint, context selection and

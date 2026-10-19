@@ -1,5 +1,19 @@
 # Current T0 rework validation
 
+## Integrated three-guide source and resources
+
+The original6daf250 ->7366fab ->580ddce history is merged without squash. Generator/
+checker source is byte-identical to the compiled/proved6daf freeze. Only
+`process_atlas.png`, `quest_book.png` and `field_guide.png` change under runtime textures;
+581 resource PNGs comprise those3 plus578 unchanged, including the9 protected sprites.
+Shared README/changelog statements are combined rather than dropping either the SFX
+recovery or art contribution.
+
+The coordinator reuses the actual two-stage42/0, expected old-PNG9-failure, CLI refusal,
+source-preservation and real1x/8x pixel proofs at unchanged inputs; no competing JDK
+is launched during the cache-fix Green lease. Packaging/client/JEI/native art remain
+unproved until their specifically scoped integration/manual observations.
+
 ## Executed A03 red on the frozen pre-fix source
 
 Separate immutable PC worktree source3643c6a049e3beb39b28fe23f4b6d8a1f316db30

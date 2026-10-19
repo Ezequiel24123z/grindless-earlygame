@@ -1,14 +1,77 @@
 # T0 asset workflow
 
-The [manifest](t0-asset-manifest.json) inventories six T0 machine families and ten
-standalone icons. Defaults are inherited by each entry; machine-specific fields override them.
-It is an audit/production contract, not a replacement source of runtime IDs, state enums or recipes.
+The [manifest](t0-asset-manifest.json)'s `source_bound_readiness` inventories the current
+19 T0 blocks and 14 standalone icons. Legacy descriptors and inherited defaults remain
+candidate contracts, not another runtime catalogue. Runtime IDs, state enums and recipes
+remain in their source catalogues.
 
 Both supported image-generation keys were absent when checked. No image API request or AI
-candidate is claimed. The original JDK generator now produces the workshop's three silhouettes,
-state faces and three distinct ceramic item shapes. The manifest check covers 46 distinct PNGs.
-These are functional original assets, not final hero-art acceptance; unrelated existing art stays
-unchanged. Absence of credentials does not block code, geometry or validation.
+candidate is claimed. The original JDK generator supplies the workshop's silhouettes,
+state faces and ceramic item shapes. The reviewed nine-item materiality batch under
+ADR-0146 stays protected, including slag and all six direct T0 material outputs.
+Structural checks and source-pixel review are not final hero-art acceptance.
+Absence of credentials does not block code, geometry or validation.
+
+## Bounded guide-object refinement
+
+The coordinator explicitly narrowed the unattended visual unit to `process_atlas`,
+`quest_book` and `field_guide` after the actual T0 inventory ruled out another unprotected
+material batch. Preserve the existing cyan/gold/teal accents and recognizable functions.
+Use shared cream paper, a warm binding, thickness and the existing upper-left lighting;
+the three readable marks are a connected schematic, a list and a field bookmark.
+Do not introduce tiny text, live progress, a second visual authority or an upstream import.
+
+`FormTextures.atlas`, `questBook` and `fieldGuide` own these pixels.
+`GenerateAssets <stage-root> --t0-guides-only` calls exactly the same three writers as
+normal generation and writes only their three item PNGs. It does not generate or remove
+blocks, models, tags, localization, provenance files or audio. Unknown extra arguments
+are rejected before creating the output tree. Do not run full generation for this batch.
+
+Frozen source `6daf250` was generated and checked in the coordinator-reserved, separate
+immutable PC worktree with 256 MiB/CPU2/SerialGC. Only the private SSH target and JDK
+path were read; no shared execution/deployment surface, Gradle, server, client,
+cache or instance was used. The existing asset-generator sources, four loader-independent
+catalogue/geometry inputs and `tools/checks/VerifyT0GuideSprites.java` compile with the
+JDK alone. The focused check is also automatically discovered by the normal behavior runner.
+
+Both isolated stages were seeded only with byte-copied versions of the nine protected
+PNGs. Each generates exactly three new PNGs; the complete 12-file stages are byte-identical.
+`VerifyT0GuideSprites <stage-root>` passes 42 checks on each, including nine negative
+pixel mutations and the exact protected-byte pins. The actual old PNG baseline fails
+nine expected contracts, exit 1, without an unexpected failure. Three invalid argument
+variants exit 2 before creating an output tree. The 1,589 common source resource files and five
+source WAVs are byte-preserved; source remains clean. The fresh zero-JVM postcondition
+is recorded and the reservation was explicitly released before transfer/local review.
+
+Only the three generated outputs were installed, with exact stage/installed hash parity.
+The other 578 resource PNGs remain unchanged, including all nine protected sprites.
+The Grindless resource PNG count is 581, excluding the separate documentation preview. These native size,
+hard alpha, margin, color-role, functional mark, distinct silhouette and byte contracts
+are structural evidence, not artistic approval. The child reviewed the actual before/
+after pixels once and made no subsequent generator changes. The coordinator then
+reviewed both actual 1x/8x sheets and approved the technical batch without retouches,
+not native rendering or human artistic acceptance. Do not infer live progress from
+the Quest Book's static list mark.
+
+The retained `t0-guides-before.png` sheet hashes to
+`98db04f7eb8c7142f12267cdb2cbe2e61c96de57dc96fca75466e08cecc2d263`.
+It shows actual base `d22a8ed` pixels at 1x/8x on light/dark backgrounds.
+The actual generated `t0-guides-after.png` sheet hashes to
+`fae4f7baa1e28abbe1f9cd5d211f976031f810994cda2db998c1733f82d5a962`.
+The original PC `receipt.json` hashes to
+`7d9875102d468607115648edea452cbd95e38fca53c67e03724694f7001582b8`
+and its nine logs and three transferred PNGs were each re-hashed after transfer during
+collection. Raw evidence remains under `build/guide-validation-20261019T184618Z`
+on the isolated execution surface and in the child's captured artifacts; the manifest
+retains the source/output identities and exact limits. Neither sheet is an in-game screenshot.
+
+The initial sheet invocation's execution-policy rejection and an auxiliary WinPS
+multiline-operator parse error are preserved; both were corrected before JDK execution.
+No unexpected JDK check failed or was skipped. No registration, block geometry/model,
+loader or runtime logic changed, so no new native boot resolves a changed binding.
+Native inventory/JEI rendering, human artistic approval and release
+qualification remain unobserved; the existing source-bound binding proofs are not
+relabelled as those passes.
 
 ## Bounded candidate round
 

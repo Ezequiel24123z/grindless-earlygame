@@ -49,10 +49,11 @@ be diagnosed again as absent without a current counterexample.
 
 | Lane | Owner / current evidence |
 | --- | --- |
-| T0 technical | Child `77a8c086-295d-48f6-98c4-d905eb833adc`: frozen3643c6a compiles and actually fails seven cache/paid-work assertions on PC. Lease released with0Java. ADR-0153 complete active/idle fix source/green/native still pending; the auxiliary counter0 is a documented parser defect, not a pass. |
-| Visual | Child `91a8525d-ec4a-4ae8-8d23-9a0fb57a8f5f`: generation on6daf250 and transfer pass; coordinator reviewed the actual1x/8x PNG comparison and approved the three books for engineering integration. Protected nine remain unchanged. Final PNG commit pending; no native/human art acceptance. |
+| T0 technical | Frozen3643c6a reproduces seven failures; complete active/idle fix fd9077e is source-reviewed/published and in an exclusive selected-green/build window. No green/native pass yet; auxiliary red counter0 remains a documented parser defect. |
+| Visual | Original580ddce history is merged into the containing checkpoint: three exact generated PNGs, code equal to the JDK-proven6daf250;578 unchanged resource PNGs include the protected nine. Actual1x/8x coordinator pixel approval; package/deploy and native/human art remain separate. |
 | SFX / GREEN validation | Original `584da087a037d44aa55a6d89322def53c4a05ce9` is reviewed with no blocking finding and merged into the containing checkpoint. Parent default guards pass128+200 assertions. No provider/codec/JVM or new audio/runtime change. |
 | Native reload regression | Child `53b80aff-68cf-4544-b13f-be773bfd6678` prepares one loaded-idle-machine/tag-rebuild wakeup fixture independently of the app fix. No JVM/harness mutation yet; runtime needs a later separate diagnostic window. |
+| GREEN batch portability | Child `bbe1f15e-c098-454d-923e-830b25fdc282` owns the missing Bash batch twin and no-server contracts; native QA retains sole shared-PS/harness ownership. No new server framework or duplicate runtime batch. |
 
 No ElevenLabs environment source or explicit existing SecretFile configuration was
 located through bounded local/PC checks and the named historical metadata lead.
