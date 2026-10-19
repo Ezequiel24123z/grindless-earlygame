@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the completed existing-scenario CI proof accurately.** Exact444
+  completes all jobs, including six native shards; its actual manifest has44
+  entries and neither new regression. Reuse that unchanged default-harness proof
+  without passing off existing scenarios as loaded-reload or repaired-A01 evidence.
 - **Reproduce A01 in a real loaded production world before the repair.** One
   exact4f native red boots/parses/reconstructs normally but misses four expected
   export/recovery markers, exits1 as expected and shuts down cleanly. Preserve

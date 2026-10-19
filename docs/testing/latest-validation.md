@@ -61,6 +61,13 @@ cancelled native shards and overall conclusion, not a complete pass. `gh` cannot
 stream that ongoing run's job log, so its already-uploaded foundation artifact
 is inspected instead; no build/test is repeated to work around log availability.
 
+Subsequent exact444 inspection confirms the whole run completes `success`:
+Windows tooling, Linux verify and all six existing native-shard jobs succeed.
+The source manifest actually has44 entries, not the older39 mentioned in some
+comments; neither `recipe-cache-reload` nor `extractor-backpressure` is present.
+This strengthens the unchanged harness/default-world proof, not either new
+fixture or the repaired integrated application.
+
 ## A01 focused PC red/green and reviewed retention integration
 
 Exact pre-fix `4f1b30b` completes `writeCheckClasspath` in51.625 seconds and
