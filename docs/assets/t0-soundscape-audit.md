@@ -36,7 +36,9 @@ for Quern and Mixer, suppresses only Mixer's replaced hum and preserves the
 independent passive-TANK fix. Source/resource checks and combined-qualification
 limits are recorded in the provenance. Native client listening, one/eight-machine
 mix, artistic quality, release acceptance and deployment are not supplied by QC.
-No PC JVM/GPU/Prism surface was used by this workstream.
+Generation/import used no PC JVM/GPU/Prism surface. The subsequent explicitly
+authorized PC qualification below compiles/checks source; GPU, Prism and worlds
+remain untouched.
 
 The completed adapter is
 [T0MachineAudio](../../common/src/main/java/io/github/ezequiel24123z/grindless/client/audio/T0MachineAudio.java).
@@ -51,8 +53,24 @@ actual native Windows SH. This covers exact seven Ogg identities, mono/44100/
 three-second extent, selected-family eligibility, no duplicate hum, preserved
 TANK/particles/legacy effects, notices and the unchanged synthetic generators.
 The generic tracker bytes remain unchanged. Java contracts now contain 84
-assertions but were not compiled/executed in this no-JVM window. The reviewed
-purpose guard passes default635/focused307 and actual SH307.
+assertions. On exact integrated `16d103a049689fd6dae1289cfa7e0297b5352816`,
+the later authorized Phase1 Gradle common/Forge/classpath invocation exits 0
+(106.751 seconds), the two-helper javac exits 0, **audio84/0 failures** and
+**Assets FULL846 ok/0 failures** both exit 0. Fresh guards and final zero-Java,
+clean detached source and protected sprite/wet/Quern/notices are recorded in
+the Mixer provenance; the original clone stays unchanged.
+Receipt SHA-256:
+`0ef1ad806c7ede6fc065725f974488cc99f59abdbb69581e666627f756e5e52e`.
+No successful JVM was repeated to repair an observer.
+
+The reviewed purpose guard passes Windows default635/focused307 and native SH307.
+The later real Linux CI failure on16d is a separate tools-only immutable-input
+pin defect. The test-only fix now verifies exact whole-file GitLF/WindowsCRLF
+pairs and raw Git fixtures, with seventeen intended mutation failures:
+focused349/default677 and actual native Windows SH349 pass. Historical files,
+receipts, ledgers and production raw-byte authorization hashing remain unchanged.
+Fresh Linux CI after parent publication is still required; Windows/Core is not
+a Linux-host qualification. No passing Java stage was replayed.
 
 Failures are preserved in the Mixer provenance: initial host policy and WinPS
 property-count test failures, missing-PATH Core qualification and the new SH
@@ -63,14 +81,14 @@ historical source reference now points to the actual audited Git revision.
 
 | Required category | Current executed handoff |
 | --- | --- |
-| COMPLETED | Genuine two-request generation, technical A selection, normalized encoded QC, noticed exact Ogg import, shared native Mixer routing/lifecycle source and focal source/resource/guard contracts. Original Quern A and independent TANK fix preserved. |
-| BLOCKED | None for this source unit; no further grant or routine approval is requested. Combined native/build qualification is the parent's scheduled execution boundary. |
-| NOT EXECUTED | Java compilation/execution, native registration/client playback, combined build/package/deployment and Linux-host qualification. |
+| COMPLETED | Genuine two-request generation, technical A selection, normalized encoded QC, noticed exact Ogg import and shared native routing. Exact16d PC common/Forge compile, Java audio84 and Assets FULL846 all exit0; original Quern/TANK preserved. |
+| BLOCKED | No routine approval/grant blocker. Linux guard pin fix is local-tested with real GitLF/CRLF fixtures; parent publication/fresh Linux CI and final integrated package source remain pending. |
+| NOT EXECUTED | Final-kit affected checks/package/representative registration boot, native client playback, deployment and corrected Linux CI pass. |
 | NEEDS HUMAN VALIDATION | Encoded in-game listening, one/eight-machine and mixed-factory gain/repetition/fatigue, native onset/stop/reload and artistic quality. No T0 acceptance/freeze or T1 activation. |
 | NEEDS MY DECISION | None for this bounded unit. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None. Existing credential was used only programmatically by the reviewed request tool, never displayed, hashed or copied. |
 | COST / BILLING RISK | Two actual HTTP200 requests of twelve allowed; no retries/ambiguities or billing activation. Selected-run estimate 240 credits, invoice/max-USD not claimed. Remaining ten are not a spending target. |
-| DEPLOYED STATE | Local Git source/resources only. No push, PR, package or Prism deployment; the parent's installed engineering candidate is unchanged by this workstream. |
+| DEPLOYED STATE | Integrated16d compiled/checked in the assigned detached PC root, with0Java and outputs retained. No package/Prism deployment or owner-world mutation by this workstream. |
 
 ## Preserved initial audit/tooling freeze
 
