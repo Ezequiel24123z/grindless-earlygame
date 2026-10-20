@@ -3,11 +3,14 @@ package io.github.ezequiel24123z.grindless.shop;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import io.github.ezequiel24123z.grindless.sustainability.AuthorityAdapters;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +48,9 @@ public final class EconomyGraph {
         List<Row> rows = new ArrayList<>();
         BootstrapProcesses.recipes().forEach(recipe -> rows.add(process(recipe, "BootstrapProcesses")));
         RenewableProcesses.recipes().forEach(recipe -> rows.add(process(recipe, "RenewableProcesses")));
+        ProcessGraph.generate(AuthorityAdapters.materialViews()).stream()
+                .filter(recipe -> recipe.family() == MachineFamily.ASSEMBLY_BENCH)
+                .forEach(recipe -> rows.add(process(recipe, "BootstrapAssembly")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
             rows.add(craft("craft/" + craft.name(), craft.pattern(), craft.key(), craft.result(),
                     craft.resultCount(), "BootstrapRecipes"));

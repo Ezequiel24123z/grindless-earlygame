@@ -240,6 +240,22 @@ public final class VerifyShop {
         EconomyCycleProof.Certificate proof = EconomyCycleProof.check();
         equal("all live T0 conversions, offers and finite rewards are covered", true, proof.conservative());
         equal("one checked row for every projected authority row", EconomyGraph.rows().size(), proof.checks().size());
+        var bench = io.github.ezequiel24123z.grindless.recipe.ProcessGraph.generate(
+                io.github.ezequiel24123z.grindless.sustainability.AuthorityAdapters.materialViews()).stream()
+                .filter(recipe -> recipe.family() == io.github.ezequiel24123z.grindless.recipe.MachineFamily.ASSEMBLY_BENCH)
+                .toList();
+        equal("every real Bench conversion is included, not just its manual counterpart", (long) bench.size(),
+                EconomyGraph.rows().stream().filter(route -> route.source().equals("BootstrapAssembly")).count());
+        for (var recipe : bench) {
+            EconomyGraph.Row row = EconomyGraph.rows().stream().filter(route -> route.id().equals(recipe.id()))
+                    .findFirst().orElseThrow();
+            for (var ingredient : recipe.inputs()) {
+                equal("Bench conversion uses its exact live input", (long) ingredient.count(), row.inputs().get(ingredient.qualified()));
+            }
+            for (var output : recipe.outputs()) {
+                equal("Bench conversion uses its exact live output", (long) output.count(), row.outputs().get(output.qualified()));
+            }
+        }
         equal("every quest is finite, never an unbounded grant edge", (long) QuestCatalogue.tasks().size(),
                 proof.checks().stream().filter(check -> check.disposition().equals("FINITE_ONE_CLAIM_NOT_REPEATABLE")).count());
         List<EconomyGraph.Row> triangle = List.of(row("a_b", "a", 1, "b", 1),

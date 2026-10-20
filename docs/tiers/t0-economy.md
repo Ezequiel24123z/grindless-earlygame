@@ -75,6 +75,10 @@ review, not a claim that T0 pacing has been validated.
 `EconomyGraph` projects complete T0 process and crafting batches directly from
 `BootstrapProcesses`, `RenewableProcesses`, `BootstrapRecipes`, the physical Relay
 recipe in `T1Recipes`, `ResearchLogic`, `ShopCatalogue` and all quest rewards.
+It also includes every actual Assembly Bench row from the canonical generated
+graph, not only its hand-crafting counterpart. This covers the Bench's additional
+basic crafts and admits their real completion IDs to local telemetry without
+inventing another copy of the Bench recipe parameters.
 It includes the relevant wood/brick/glass/fuel/container compatibility conversions.
 
 `EconomyCycleProof` checks an exact positive material-potential certificate over
