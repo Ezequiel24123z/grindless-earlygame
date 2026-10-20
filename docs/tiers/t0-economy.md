@@ -281,6 +281,23 @@ skipping either physical-mechanics assertion. Runtime and production remain
 unchanged by this test-edge correction; actual writer/helper requalification
 follows on the same retained root.
 
+The actual 7fd normal writer and semantic CheckOnly both exit 0 with 388 checks,
+17 offers, 131 graph rows, a conservative certificate and a passing conditional
+gate. Their closed logs hash to
+`d73c6af9a24e5996e2a503baa68268262b888e0dc787e9218b702b5d5d6e48ff`
+and `eb468615501502070b16d22f9edb544b671834a4260786040ade91ada505241e`.
+However, the generated 156593-byte file hashes to
+`15c18884a8975e54a49981ff95096d40c7f67e83063c42bb1050d320b1961b6e`
+while the next JVM's candidate prints
+`0c9495931da8169e753131d68d85d850f78a43f8786cbe62e9cac87807e9ae53`.
+Those results prove semantic equality, not byte reproducibility: nested immutable
+maps had JVM-dependent property order. The exporter now canonicalizes object keys
+recursively without reordering arrays, requires canonical LF text at CheckOnly
+(accepting checkout CRLF), and records the actual raw file hash separately.
+The original data and both receipts are retained; fresh independent writer/check
+JVMs must establish the stronger property before final delivery. The three focused
+main suites have not been executed at this checkpoint.
+
 ## Lane handoff categories
 
 - `COMPLETED`: source implementation of the core, native shop/menu/network, paid pre-producer recovery, canonical cost/export lane and local telemetry above; not executable qualification.

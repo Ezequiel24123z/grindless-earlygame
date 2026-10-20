@@ -50,10 +50,10 @@ public final class EconomyExport {
                     "source_equal", baseline.equals(current)));
         }
         projected.add("source_comparison", new com.google.gson.Gson().toJsonTree(comparison));
-        String json = new GsonBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting().create()
-                .toJson(projected) + "\n";
+        String json = EconomyProjection.canonicalJson(projected);
         if (args[2].equals("check")) {
-            if (!Files.isRegularFile(output) || !JsonParser.parseString(Files.readString(output)).equals(projected)) {
+            if (!Files.isRegularFile(output)
+                    || !Files.readString(output, StandardCharsets.UTF_8).replace("\r\n", "\n").equals(json)) {
                 throw new AssertionError("Generated economy/cost data is stale; run the existing writer, do not edit the JSON");
             }
         } else {
@@ -68,6 +68,8 @@ public final class EconomyExport {
         provenance.put("source_state", "Evaluated worktree and Gradle classpath; clean publication not asserted");
         provenance.put("action", args[2]);
         provenance.put("model_sha256", AuthorityAdapters.sha256(json.getBytes(StandardCharsets.UTF_8)));
+        provenance.put("raw_file_sha256", AuthorityAdapters.sha256(Files.readAllBytes(output)));
+        provenance.put("hash_scope", "model_sha256 is canonical LF; raw_file_sha256 preserves actual checkout bytes");
         provenance.put("authority_sha256", AuditReports.authorityHash(result.authorities()));
         provenance.put("checks", checks);
         provenance.put("native_client_campaign", "NOT_EXECUTED_BY_THIS_EXPORT");

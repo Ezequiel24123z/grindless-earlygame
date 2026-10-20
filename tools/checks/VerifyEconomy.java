@@ -47,6 +47,15 @@ public final class VerifyEconomy {
     }
 
     public static int verify(SustainabilityAudit.Result result) {
+        String unordered = "{\"z\":{\"b\":1,\"a\":2},\"a\":[{\"b\":1,\"a\":2},3]}";
+        String reordered = "{\"a\":[{\"a\":2,\"b\":1},3],\"z\":{\"a\":2,\"b\":1}}";
+        String differentArray = "{\"a\":[3,{\"a\":2,\"b\":1}],\"z\":{\"a\":2,\"b\":1}}";
+        String canonical = EconomyProjection.canonicalJson(JsonParser.parseString(unordered));
+        equal("nested object order is canonical rather than JVM Map.of iteration order", canonical,
+                EconomyProjection.canonicalJson(JsonParser.parseString(reordered)));
+        equal("array order is preserved, not normalized into different gameplay data", false,
+                canonical.equals(EconomyProjection.canonicalJson(JsonParser.parseString(differentArray))));
+        equal("canonical document text uses LF independently of the checkout", false, canonical.contains("\r"));
         var minimum = ProgressionCostModel.exitMinimum();
         var relay = EconomyGraph.relay();
         equal("exit goal comes from the actual quest", (long) QuestCatalogue.byId("relay").count(), minimum.required());
