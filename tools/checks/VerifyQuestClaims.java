@@ -343,9 +343,11 @@ public final class VerifyQuestClaims {
                 QuestClaimService.claim(ledger, player, "relay", true, evidence, VerifyQuestClaims::resolve, capture(rewards)));
         equal("rejected exit does not grant flint or unlock T1", 0, rewards.size());
         equal("rejected exit preserves all legacy claims", oldClaims, ledger.claimed(player));
-        inventory.setItem(5, matrix.stackFor(FluxTier.F1, 1));
+        inventory.setItem(5, new ItemStack(matrix));
         equal("exact valid F1 evidence can be split over real inventory slots", 5,
                 QuestInventoryEvidence.count(inventory, relay));
+        equal("an old untagged Relay uses the real native first-frontier F1 spec", FluxTier.F1,
+                matrix.spec(inventory.getItem(5)).orElseThrow().rating());
         equal("a ready physical exit still requires the book", QuestClaimService.Result.BOOK_REQUIRED,
                 QuestClaimService.claim(ledger, player, "relay", false, evidence, VerifyQuestClaims::resolve, capture(rewards)));
         equal("the valid physical exit is one authoritative claim", QuestClaimService.Result.CLAIMED,

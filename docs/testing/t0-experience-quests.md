@@ -5,6 +5,8 @@ Implementation scope: the containing Git checkpoint, not deployed runtime747.
 Checkpoint status: **INTERIM SOURCE; not integration-ready qualification**.
 Final source checks and in-flight paid legacy Guide assembly compatibility are
 still being closed; no JVM/backend pass is inferred.
+Preserved first feature checkpoint:
+`710a822766a64bd046b239147036da8cdec5e5ae`.
 This is the quest worker's bounded implementation/verification handoff. The
 coordinator owns root documentation, the ADR index, generated guidance,
 integrated JVM qualification, publication and deployment.
@@ -156,6 +158,36 @@ or core/Matrix, and never changes existing claims. The ordinary paper/stick craf
 also remains. Losing a core/Matrix is explained as production-based replacement,
 not permission to reset valuable rewards.
 
+### One already-paid legacy Guide assembly
+
+The old machine save retains recipe ID, paid progress and its still-unconsumed
+inputs, not a recipe snapshot. Removing the two discoverable Guide rows alone
+would suspend that work indefinitely; the previous retired-row suspension proof
+is not proof of a completed migration.
+
+The bounded compatibility helper is
+`recipe.LegacyGuideAssembly.resume(MachineFamily,String,double)`, returning
+`Optional<ProcessRecipe>`. It accepts only positive finite existing paid work
+owned by `bench/field_guide` on the Bench or
+`assemble/bootstrap/field_guide` on the Assembler. It reconstructs only the
+baseline's2paper+1stick ->1harmless legacy Guide, with the original station's
+cycle/FU constants. It is never included in `ProcessGraph`, a craft catalogue,
+JEI, the Atlas or ordinary fresh selection.
+
+The infrastructure owner wires the helper into its owned block entity, checking
+the current matching inputs before admission. Successful settlement must consume
+that one legacy permission by clearing owner/cache/progress. Existing settlement
+rollback restores the pre-transaction values on failure. Clearing progress is
+important even for fractional overshoot: subtracting a duration while retaining
+a positive remainder could otherwise fund repeated new legacy starts.
+Zero/unpaid work, another ID/family, invalid progress or cleared ownership never
+admits a new Guide job. Already produced Guide stacks remain ordinary preserved
+output and may export through unchanged handling.
+
+`VerifyRecipes` adds bounded helper/no-discoverability cases. The infrastructure
+owner supplies the actual pending-work/blocked-output/one-completion block-entity
+regression. No general retired-recipe framework or new NBT schema is introduced.
+
 ## Authority and integration seams
 
 | Surface | Owning source / invariant |
@@ -206,6 +238,14 @@ mismatch under Windows' default text decoding. The explicit UTF-8 baseline
 comparison subsequently passes every original localization value without
 rewriting those values. Preserve that failed observer separately from a valid
 source assertion; it is not a Java or gameplay failure.
+The next focused prose check correctly exposes an overbroad inherited substring
+guard: `station` matched ordinary `stationary` belt text. The prototype guard is
+now word-bounded and retains a positive detection case for every forbidden
+prototype phrase; ordinary stationary transport is an explicit negative case.
+No T0 lesson is relabeled as a spatial objective to work around the check.
+The lexical check of32 changed Java files and the repository link checker pass:
+160 ADR sections/index rows,728 relative links/51 Markdown files. These are not
+Java compilation or backend execution.
 
 The authored focused proof set is `VerifyQuest`, `VerifyQuestClaims`,
 `VerifyPersistence`, `VerifyBootstrap`, `VerifyRecipes`, `VerifyAtlas`,

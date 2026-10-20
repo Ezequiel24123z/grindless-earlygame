@@ -66,6 +66,7 @@ public final class VerifyRecipes {
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
                 187, recipes.size());
         c3Routes(recipes);
+        legacyGuideWork(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -937,6 +938,37 @@ public final class VerifyRecipes {
                 row.durationTicks());
         eq(id + " keeps its station's power", bench ? FluxTier.F0.nominal() : FluxTier.F1.nominal(),
                 row.fuPerTick());
+    }
+
+    private static void legacyGuideWork(List<ProcessRecipe> recipes) {
+        for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
+            String id = family == MachineFamily.ASSEMBLY_BENCH ? "bench/field_guide" : "assemble/bootstrap/field_guide";
+            no("the retired recipe is not a fresh selectable graph row " + id,
+                    recipes.stream().anyMatch(recipe -> recipe.id().equals(id)));
+            for (double unpaid : List.of(0.0, -1.0, Double.NaN, Double.POSITIVE_INFINITY)) {
+                yes("unpaid or invalid old work cannot start a Guide " + id + "/" + unpaid,
+                        LegacyGuideAssembly.resume(family, id, unpaid).isEmpty());
+            }
+            ProcessRecipe legacy = LegacyGuideAssembly.resume(family, id, 0.5).orElseThrow();
+            eq("pending old work keeps its exact recipe identity", id, legacy.id());
+            eq("pending old work keeps its exact station", family, legacy.family());
+            yes("legacy paper/stick inputs are preserved exactly", legacy.itemInputs().equals(List.of(
+                    IngredientSpec.item("minecraft:paper", 2), IngredientSpec.item("minecraft:stick", 1))));
+            yes("legacy work can produce only one harmless registered Guide", legacy.itemOutputs()
+                    .equals(List.of(OutputSpec.item("grindless:field_guide", 1))));
+            eq("legacy work keeps the station's original cycle",
+                    family == MachineFamily.ASSEMBLY_BENCH ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
+                    legacy.durationTicks());
+            eq("legacy work keeps the station's original FU draw",
+                    family == MachineFamily.ASSEMBLY_BENCH ? FluxTier.F0.nominal() : FluxTier.F1.nominal(),
+                    legacy.fuPerTick());
+            yes("a cleared owner cannot restart the legacy recipe", LegacyGuideAssembly.resume(family, "", 0.5).isEmpty());
+            yes("a settled legacy job cannot restart itself", LegacyGuideAssembly.resume(family, id, 0.0).isEmpty());
+            yes("a similarly named new recipe is not legacy work",
+                    LegacyGuideAssembly.resume(family, id + "_copy", 1.0).isEmpty());
+        }
+        yes("an unrelated family cannot resume legacy Guide work",
+                LegacyGuideAssembly.resume(MachineFamily.QUERN, "bench/field_guide", 1.0).isEmpty());
     }
 
     private static void logic() {

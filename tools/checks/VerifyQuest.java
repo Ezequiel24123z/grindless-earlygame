@@ -345,8 +345,13 @@ public final class VerifyQuest {
         for (String prototype : List.of(
                 "ground array", "luna", "helium-3", "rocket", "drift", "station",
                 "starward link", "sealed chamber", "arriving is the victory")) {
-            no("T0 teaching does not advertise " + prototype, text.toLowerCase().contains(prototype));
+            Pattern namedPrototype = Pattern.compile("\\b" + Pattern.quote(prototype) + "\\b", Pattern.CASE_INSENSITIVE);
+            no("T0 teaching does not advertise " + prototype, namedPrototype.matcher(text).find());
+            yes("the guard still detects the actual prototype " + prototype,
+                    namedPrototype.matcher("Visit the " + prototype + " now.").find());
         }
+        no("stationary item transport is not an orbital station advertisement",
+                Pattern.compile("\\bstation\\b").matcher("The stock is stationary.").find());
         no("the guide does not send the reader to an orb", text.toLowerCase().contains("orb"));
         no("the guide does not name a forbidden mod", containsForbidden(text.toLowerCase()));
     }
