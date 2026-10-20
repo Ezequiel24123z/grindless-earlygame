@@ -24,6 +24,12 @@ audio/assets on the combined source in an explicit isolated PC worktree, then
 the final integrated kit/build/package/registration boot. Only the coordinator
 publishes and deploys. Qualified559 remains installed until that artifact passes.
 
+Actual PC phase1 on16d passes common/Forge/classpath, two-helper javac, audio84
+and full assets. Coordinator verifies the closed receipt0ef1ad80 and raw outputs;
+there is no successful-stage replay. Kit039 qualification now uses the same
+isolated owner. ADR-0160 authorizes main integration and preserved old-PR cleanup
+only once the complete candidate is testing-ready; it does not accept/freeze T0.
+
 Combined-source CI39365776548 on16d103a fails the offline sound guard: after200
 legacy assertions pass, `test-purpose.ps1` rejects the three legacy byte pins.
 Owner9c12461c repairs it without changing historical receipts or replaying

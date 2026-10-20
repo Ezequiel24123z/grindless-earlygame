@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Authorize testing-ready main integration and preserved PR cleanup (ADR-0160).**
+  The owner requests the fully prepared testing candidate on `main` after
+  applicable technical/deployment/live checks, without inventing human acceptance.
+  Preserve exact old PR heads before closing superseded drafts; do not remove
+  branches/worktrees or bypass protection. Actual PC source16d common/Forge,
+  audio84 and full assets pass with a verified closed receipt; kit qualification
+  and the real sound tooling CI repair remain separate.
 - **Add the first free generous starter quest and immediate book access (ADR-0159).**
   Integrate source1529: stone/wood/food/basic materials/water in11 legal stacks,
   opt-in once through the existing per-player/world ledger, automatic utility-book

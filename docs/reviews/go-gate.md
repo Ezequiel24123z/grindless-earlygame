@@ -18,6 +18,13 @@ world. No separate village, shop, new world generator or food-policy choice is
 required to implement it. Qualification, actual interaction and human pacing remain
 distinct from that accepted decision; this is not T0 acceptance or an opened Tier.
 
+**Owner-authorized testing integration (ADR-0160):** after the complete candidate
+passes its applicable technical/package/deployment and live GitHub gates, merge
+the consolidated work into `main` and close only exactly preserved superseded PRs.
+Human client/campaign testing follows that delivery; it is not claimed completed
+and does not block this specifically authorized testing-ready merge. Product RC
+publication, T0 acceptance/freeze and T1 activation remain separate decisions.
+
 **Human acceptance is separate and begins with the RC.** The full no-command player route,
 physical five-Matrix craft and longitudinal observations are not fictional pre-release
 passes and are no longer prerequisites for the owner to receive that first playable RC.

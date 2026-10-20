@@ -171,6 +171,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0157](#adr-0157--prefer-the-existing-local-comfyui-as-a-supervised-asset-backend) | Prefer the existing local ComfyUI as a supervised asset backend | Accepted |
 | [0158](#adr-0158--delegate-end-to-end-outcomes-with-proportional-validation) | Delegate end-to-end outcomes with proportional validation | Accepted |
 | [0159](#adr-0159--start-t0-with-one-free-generous-starter-quest) | Start T0 with one free generous starter quest | Accepted |
+| [0160](#adr-0160--merge-the-testing-ready-t0-candidate-and-close-superseded-prs) | Merge the testing-ready T0 candidate and close superseded PRs | Accepted |
 
 ---
 
@@ -7525,3 +7526,29 @@ single-stack quests when full, replacing their previous remainder-drop behavior.
 The utility book alone is recoverable on login/respawn while the starter claim
 is still unused; an initially full inventory retries book delivery every 20 ticks.
 No new persistence schema, second ledger or Heracles-owned reward is introduced.
+
+---
+
+## ADR-0160 — Merge the testing-ready T0 candidate and close superseded PRs
+
+**Status.** Accepted owner instruction, 2026-10-20.
+
+**Decision.** Once the integrated T0 candidate is technically ready for testing,
+merge its consolidated pull request into `main` and clean up superseded open PRs.
+Readiness includes the implemented free starter path, applicable executable
+contracts, common/Forge build, source-bound package/registration verification,
+the same verified development deployment, and applicable live GitHub checks.
+Do not bypass required checks, reviews, branch protection or an unresolved defect.
+
+Human appearance/listening, real quest interaction, no-command campaign and
+longitudinal observations are the testing that follows this delivery, not fictional
+pre-merge passes. This instruction does not accept/freeze T0, declare the restricted
+engineering pack a release candidate, or activate T1.
+
+Preserve the complete checkpoint history with an allowed merge commit. Before
+closing an old PR, re-read its live state/head and establish that the exact head
+is included in merged `main`; preserve and report any unique or changed work.
+Keep existing branches/worktrees and their evidence. Closing superseded PRs is
+not permission to delete unknown work, rewrite owned branches or modify repository
+protection. The inspected older PR chains have no native stack metadata; do not
+invent or dissolve a stack to clean them up.

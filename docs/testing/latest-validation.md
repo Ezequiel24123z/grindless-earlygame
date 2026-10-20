@@ -1,5 +1,21 @@
 # Current T0 rework validation
 
+## Actual combined audio/visual PC compilation and focused Java proof
+
+Exact16d103a runs common/Forge compilation and `writeCheckClasspath` together:
+Gradle0 in106.751s, two-helper javac0 in2.797s, `VerifyQuernAudio`84 checks/
+0 failures in0.306s and full `VerifyAssets`0/`ALL ASSET CHECKS PASSED` in0.895s.
+The coordinator reads the closed receipt and verifies its SHA-256 plus the three
+raw outputs, not just the author's summary. Receipt:
+`0ef1ad806c7ede6fc065725f974488cc99f59abdbb69581e666627f756e5e52e`.
+No successful JVM stage is replayed; source/assets stay unchanged, original clone
+remains70901 and owner closes03:57:34Z with0Java.
+
+This proves neither native client playback nor the subsequent starter source.
+The kit is now integrated in published03970d7; its common/Forge/backend and
+affected contracts are assigned under the same isolated PC owner. The Linux
+sound guard red below remains a distinct repair obligation.
+
 ## Starter quest source integrated — executable qualification pending
 
 Source1529b93d12796165196bb80427b14cd07d9f9f41 implements the selected free

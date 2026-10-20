@@ -18,14 +18,20 @@ Only the coordinator publishes/deploys. Human art/listening/campaign remain sepa
 
 | Category | Current actual state |
 | --- | --- |
-| COMPLETED | Starter source1529, canonical free claim/11 legal stacks/recoverable book/both projections/native full-batch delivery and source regressions are integrated. Exact962 CI/PC full48 qualifies the observation repair. Comfy pipeline/F1/28 Python/12 JDK/two identical1602-file stages/127b sprite and real generated Mixer A/runtime/notices are integrated; Quern A is unchanged. |
+| COMPLETED | Starter source1529/11 legal stacks/book recovery/both projections/native full-batch delivery are integrated in039. Actual PC16d common/Forge, audio84 and full assets pass; the closed receipt and raw outputs are verified. Exact962 CI/PC full48, Comfy28 Python/12 JDK/two identical1602-file stages/127b and real generated Mixer A are preserved; Quern A is unchanged. |
 | BLOCKED | Combined-source CI39365776548 on16d103a fails the offline three-file legacy sound byte-identity guard after200 assertions pass. Same owner9c repairs it; cause is not assumed environmental. Kit implementation and completed PC stages continue; no full-green claim. |
-| NOT EXECUTED | Final integrated kit/build/package/registration boot/deploy and the current-wave graphical client/manual campaign are not yet complete. The84 authored Java audio checks are assigned, not credited before execution. |
+| NOT EXECUTED | Final kit executable qualification/build/package/registration boot/deploy and current-wave graphical client/manual campaign are not yet complete. Main merge and preserved PR cleanup are authorized only after the candidate is technically ready for testing. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
 | NEEDS MY DECISION | None. ADR-0159 selects the generous first free quest; implementation does not await another village/shop/food decision. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for this delivery. Manual client review uses the existing owner desktop; no new account/key or remote-control installation is assumed. |
 | COST / BILLING RISK | Two of12 allowed SFX requests were used, about240 estimated credits, not a guaranteedUSD quote. Two local Comfy jobs spent the original2/2 run; no extra inference/model download/external-image billing occurred. Allowances are ceilings, not targets; original ledgers remain immutable. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
+
+The owner now explicitly requests testing-ready `main` and PR cleanup (ADR-0160).
+Live inspection finds13 older drafts; every exact head is an ancestor of039,
+with no native stack metadata. Preserve/revalidate those heads, merge the qualified
+consolidated PR, then close superseded entries without deleting branches/worktrees.
+Human testing follows this delivery; it is not an invented acceptance/freeze/T1 pass.
 
 ## Preserved follow-up timeline
 
