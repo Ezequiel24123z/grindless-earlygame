@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Regenerate the canonical resource guidance for the free Superflat starter.**
+  The generated JSON now records the current `3d9abe5c03894c62f185796028b31cba5c9ab7f2b199300013ce9897c9239449`
+  content digest; the rebuilt classpath and affected `VerifyResourceGuidance`,
+  `VerifySustainabilityT0` and full `VerifyAssets` checks pass on the isolated PC.
 - **Recover the final execution lane without replaying completed qualification.**
   A stopped executor runtime/stale busy flag and read-only PC inspection show
   zero Java, clean039 and no subsequent generator output. Withdraw that lease

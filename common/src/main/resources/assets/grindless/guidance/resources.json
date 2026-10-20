@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "396313f65f3cd8ee15235285aa24f92696fd3877fe6d640264ad95ba96726c22",
+  "content_sha256": "3d9abe5c03894c62f185796028b31cba5c9ab7f2b199300013ce9897c9239449",
   "resources": [
     {
       "resource": {
@@ -8651,6 +8651,17 @@
           "unlock_tier": 0,
           "optional": false,
           "discharged": false
+        },
+        {
+          "route": "quest/starter_supplies",
+          "source": "QuestCatalogue.tasks/starter_supplies + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+          "via": "item:minecraft:brick",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": true,
+          "discharged": false
         }
       ],
       "consumers": [
@@ -8921,6 +8932,17 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "quest/starter_supplies",
+          "source": "QuestCatalogue.tasks/starter_supplies + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+          "via": "item:minecraft:charcoal",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": true,
           "discharged": false
         }
       ],
@@ -9952,6 +9974,17 @@
           "discharged": false
         },
         {
+          "route": "quest/starter_supplies",
+          "source": "QuestCatalogue.tasks/starter_supplies + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+          "via": "item:minecraft:clay_ball",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": true,
+          "discharged": false
+        },
+        {
           "route": "source/geological_aggregate",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:clay_ball",
@@ -10073,6 +10106,17 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "quest/starter_supplies",
+          "source": "QuestCatalogue.tasks/starter_supplies + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+          "via": "item:minecraft:cobblestone",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": true,
           "discharged": false
         }
       ],
@@ -11888,6 +11932,17 @@
           "discharged": false
         },
         {
+          "route": "quest/starter_supplies",
+          "source": "QuestCatalogue.tasks/starter_supplies + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+          "via": "item:minecraft:iron_ingot",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": true,
+          "discharged": false
+        },
+        {
           "route": "r2/iron",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
@@ -13354,6 +13409,17 @@
           "unconditional": true,
           "unlock_tier": 0,
           "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "quest/starter_supplies",
+          "source": "QuestCatalogue.tasks/starter_supplies + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
+          "via": "item:minecraft:sand",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": true,
           "discharged": false
         },
         {
