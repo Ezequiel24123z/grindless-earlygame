@@ -2,6 +2,9 @@ package io.github.ezequiel24123z.grindless.shop;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.github.ezequiel24123z.grindless.sustainability.AuditReports;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityAudit;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel;
@@ -91,7 +94,28 @@ public final class EconomyProjection {
     }
 
     public static String json(SustainabilityAudit.Result audit) {
-        return JSON.toJson(document(audit)) + "\n";
+        return canonicalJson(JSON.toJsonTree(document(audit)));
+    }
+
+    /** Canonical object order across JVMs; arrays retain their authoritative execution/display order. */
+    public static String canonicalJson(JsonElement document) {
+        return JSON.toJson(ordered(document)) + "\n";
+    }
+
+    private static JsonElement ordered(JsonElement value) {
+        if (value.isJsonObject()) {
+            JsonObject result = new JsonObject();
+            for (String key : new TreeSet<>(value.getAsJsonObject().keySet())) {
+                result.add(key, ordered(value.getAsJsonObject().get(key)));
+            }
+            return result;
+        }
+        if (value.isJsonArray()) {
+            JsonArray result = new JsonArray();
+            value.getAsJsonArray().forEach(element -> result.add(ordered(element)));
+            return result;
+        }
+        return value.deepCopy();
     }
 
     private static Map<String, Object> paymentStatus(SustainabilityAudit.Result audit, ShopCatalogue.Offer offer) {
