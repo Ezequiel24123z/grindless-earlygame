@@ -128,7 +128,9 @@ public final class FluidLogic {
      */
     public static int accepted(FluidState current, FluidState incoming, int capacity, double maxC,
                                double maxP) {
-        if (incoming == null || incoming.isEmpty() || incoming.temperatureC() > maxC + 1e-9
+        if (incoming == null || incoming.isEmpty() || !Double.isFinite(incoming.temperatureC())
+                || !Double.isFinite(incoming.pressureMPa()) || incoming.temperatureC() < -273.15
+                || incoming.pressureMPa() < 0 || incoming.temperatureC() > maxC + 1e-9
                 || incoming.pressureMPa() > maxP + 1e-9) {
             return 0;
         }
