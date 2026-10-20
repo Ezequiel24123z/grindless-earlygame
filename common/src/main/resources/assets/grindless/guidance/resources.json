@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "3d9abe5c03894c62f185796028b31cba5c9ab7f2b199300013ce9897c9239449",
+  "content_sha256": "d6949e94ec1592739f9e3ce250433d9bf7cf9a76306cc7429a0f1844f4d13619",
   "resources": [
     {
       "resource": {
@@ -298,17 +298,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -430,6 +419,50 @@
           "discharged": false
         },
         {
+          "route": "assemble/bootstrap/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/settling_screen",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -442,6 +475,28 @@
         },
         {
           "route": "assemble/bootstrap/settling_trough",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_output",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -2080,17 +2135,6 @@
           "discharged": false
         },
         {
-          "route": "bench/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "energy:FU",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -2212,6 +2256,50 @@
           "discharged": false
         },
         {
+          "route": "bench/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "bench/settling_screen",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -2224,6 +2312,28 @@
         },
         {
           "route": "bench/settling_trough",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_output",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -5452,6 +5562,50 @@
           "discharged": false
         },
         {
+          "route": "assemble/bootstrap/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/bootstrap/settling_screen",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:ceramic_insulator",
@@ -5464,6 +5618,28 @@
         },
         {
           "route": "assemble/bootstrap/settling_trough",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_output",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:ceramic_insulator",
           "kind": "consumed_input",
@@ -5540,6 +5716,50 @@
           "discharged": false
         },
         {
+          "route": "bench/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "bench/settling_screen",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:ceramic_insulator",
@@ -5552,6 +5772,28 @@
         },
         {
           "route": "bench/settling_trough",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_output",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:ceramic_insulator",
           "kind": "consumed_input",
@@ -5639,6 +5881,50 @@
           "discharged": false
         },
         {
+          "route": "craft/settling_fluid_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_input.json",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_output.json",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_input.json",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_output.json",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "craft/settling_screen",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_screen.json",
           "via": "item:grindless:ceramic_insulator",
@@ -5652,6 +5938,28 @@
         {
           "route": "craft/settling_trough",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_trough.json",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_input.json",
+          "via": "item:grindless:ceramic_insulator",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_output.json",
           "via": "item:grindless:ceramic_insulator",
           "kind": "consumed_input",
           "certainty": "exact_resource",
@@ -5674,7 +5982,7 @@
       },
       "resource_class": "renewable",
       "side_stream_class": null,
-      "first_use_tier": null,
+      "first_use_tier": 0,
       "first_renewable_tier": 0,
       "canonical_route": "bench/clay_conduit",
       "future_consumers": [],
@@ -5717,7 +6025,74 @@
           "discharged": false
         }
       ],
-      "consumers": [],
+      "consumers": [
+        {
+          "route": "assemble/bootstrap/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:clay_conduit",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:clay_conduit",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:clay_conduit",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:clay_conduit",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_input.json",
+          "via": "item:grindless:clay_conduit",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_output.json",
+          "via": "item:grindless:clay_conduit",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
       "sources": {
         "canonical:bench/clay_conduit": "ProcessGraph.generate"
       }
@@ -5788,7 +6163,7 @@
       },
       "resource_class": "renewable",
       "side_stream_class": null,
-      "first_use_tier": null,
+      "first_use_tier": 0,
       "first_renewable_tier": 0,
       "canonical_route": "bench/conveyor_belt",
       "future_consumers": [],
@@ -5833,6 +6208,94 @@
       ],
       "consumers": [
         {
+          "route": "assemble/bootstrap/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "craft/merger",
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/merger.json",
           "via": "item:grindless:conveyor_belt",
@@ -5852,6 +6315,28 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_input.json",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_output.json",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
           "discharged": false
         },
         {
@@ -5885,6 +6370,28 @@
           "unconditional": true,
           "unlock_tier": null,
           "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_input.json",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_output.json",
+          "via": "item:grindless:conveyor_belt",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
           "discharged": false
         }
       ],
@@ -6650,63 +7157,6 @@
       ],
       "sources": {
         "canonical:bootstrap/fibreboard": "ProcessGraph.generate"
-      }
-    },
-    {
-      "resource": {
-        "kind": "item",
-        "id": "grindless:field_guide",
-        "rating": 0,
-        "registry": "items"
-      },
-      "resource_class": "renewable",
-      "side_stream_class": null,
-      "first_use_tier": null,
-      "first_renewable_tier": 0,
-      "canonical_route": "bench/field_guide",
-      "future_consumers": [],
-      "handling": null,
-      "recycling": null,
-      "originating_catalyst": null,
-      "uncertainty": null,
-      "producers": [
-        {
-          "route": "assemble/bootstrap/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:field_guide",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
-          "route": "bench/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "item:grindless:field_guide",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "craft/field_guide",
-          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/field_guide.json",
-          "via": "item:grindless:field_guide",
-          "kind": "output",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        }
-      ],
-      "consumers": [],
-      "sources": {
-        "canonical:bench/field_guide": "ProcessGraph.generate"
       }
     },
     {
@@ -7491,6 +7941,50 @@
       ],
       "consumers": [
         {
+          "route": "assemble/bootstrap/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_channel",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_channel",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_channel",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_channel",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "bootstrap/flint_separation",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:settling_channel",
@@ -7522,10 +8016,260 @@
           "unlock_tier": 0,
           "optional": false,
           "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_input.json",
+          "via": "item:grindless:settling_channel",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_input.json",
+          "via": "item:grindless:settling_channel",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
         }
       ],
       "sources": {
         "canonical:bench/settling_channel": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
+        "id": "grindless:settling_fluid_input",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": "renewable",
+      "side_stream_class": null,
+      "first_use_tier": null,
+      "first_renewable_tier": 0,
+      "canonical_route": "bench/settling_fluid_input",
+      "future_consumers": [],
+      "handling": null,
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": null,
+      "producers": [
+        {
+          "route": "assemble/bootstrap/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_fluid_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_fluid_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_input.json",
+          "via": "item:grindless:settling_fluid_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
+      "consumers": [],
+      "sources": {
+        "canonical:bench/settling_fluid_input": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
+        "id": "grindless:settling_fluid_output",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": "renewable",
+      "side_stream_class": null,
+      "first_use_tier": null,
+      "first_renewable_tier": 0,
+      "canonical_route": "bench/settling_fluid_output",
+      "future_consumers": [],
+      "handling": null,
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": null,
+      "producers": [
+        {
+          "route": "assemble/bootstrap/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_fluid_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_fluid_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_output.json",
+          "via": "item:grindless:settling_fluid_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
+      "consumers": [],
+      "sources": {
+        "canonical:bench/settling_fluid_output": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
+        "id": "grindless:settling_item_input",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": "renewable",
+      "side_stream_class": null,
+      "first_use_tier": null,
+      "first_renewable_tier": 0,
+      "canonical_route": "bench/settling_item_input",
+      "future_consumers": [],
+      "handling": null,
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": null,
+      "producers": [
+        {
+          "route": "assemble/bootstrap/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_item_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_item_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_input.json",
+          "via": "item:grindless:settling_item_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
+      "consumers": [],
+      "sources": {
+        "canonical:bench/settling_item_input": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
+        "id": "grindless:settling_item_output",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": "renewable",
+      "side_stream_class": null,
+      "first_use_tier": null,
+      "first_renewable_tier": 0,
+      "canonical_route": "bench/settling_item_output",
+      "future_consumers": [],
+      "handling": null,
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": null,
+      "producers": [
+        {
+          "route": "assemble/bootstrap/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_item_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_item_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_output.json",
+          "via": "item:grindless:settling_item_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
+      "consumers": [],
+      "sources": {
+        "canonical:bench/settling_item_output": "ProcessGraph.generate"
       }
     },
     {
@@ -7582,6 +8326,50 @@
       ],
       "consumers": [
         {
+          "route": "assemble/bootstrap/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_screen",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_screen",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_fluid_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_screen",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/settling_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:settling_screen",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "bootstrap/flint_separation",
           "source": "ProcessGraph.generate",
           "via": "item:grindless:settling_screen",
@@ -7608,6 +8396,28 @@
           "source": "ProcessGraph.generate",
           "via": "item:grindless:settling_screen",
           "kind": "catalyst",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_fluid_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_fluid_output.json",
+          "via": "item:grindless:settling_screen",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/settling_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_item_output.json",
+          "via": "item:grindless:settling_screen",
+          "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
           "unlock_tier": 0,
@@ -8604,6 +9414,120 @@
     {
       "resource": {
         "kind": "item",
+        "id": "grindless:workshop_item_input",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": "renewable",
+      "side_stream_class": null,
+      "first_use_tier": null,
+      "first_renewable_tier": 0,
+      "canonical_route": "bench/workshop_item_input",
+      "future_consumers": [],
+      "handling": null,
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": null,
+      "producers": [
+        {
+          "route": "assemble/bootstrap/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:workshop_item_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:workshop_item_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_input.json",
+          "via": "item:grindless:workshop_item_input",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
+      "consumers": [],
+      "sources": {
+        "canonical:bench/workshop_item_input": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
+        "id": "grindless:workshop_item_output",
+        "rating": 0,
+        "registry": "items"
+      },
+      "resource_class": "renewable",
+      "side_stream_class": null,
+      "first_use_tier": null,
+      "first_renewable_tier": 0,
+      "canonical_route": "bench/workshop_item_output",
+      "future_consumers": [],
+      "handling": null,
+      "recycling": null,
+      "originating_catalyst": null,
+      "uncertainty": null,
+      "producers": [
+        {
+          "route": "assemble/bootstrap/workshop_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:workshop_item_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:grindless:workshop_item_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_output.json",
+          "via": "item:grindless:workshop_item_output",
+          "kind": "output",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        }
+      ],
+      "consumers": [],
+      "sources": {
+        "canonical:bench/workshop_item_output": "ProcessGraph.generate"
+      }
+    },
+    {
+      "resource": {
+        "kind": "item",
         "id": "minecraft:brick",
         "rating": 0,
         "registry": "items"
@@ -8813,6 +9737,50 @@
       ],
       "consumers": [
         {
+          "route": "assemble/bootstrap/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:bricks",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/bootstrap/workshop_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:bricks",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_input",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:bricks",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "bench/workshop_item_output",
+          "source": "ProcessGraph.generate",
+          "via": "item:minecraft:bricks",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
           "route": "bootstrap/biocarbon",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:bricks",
@@ -8872,6 +9840,28 @@
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:bricks",
           "kind": "catalyst",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_input",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_input.json",
+          "via": "item:minecraft:bricks",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": 0,
+          "optional": false,
+          "discharged": false
+        },
+        {
+          "route": "craft/workshop_item_output",
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/workshop_item_output.json",
+          "via": "item:minecraft:bricks",
+          "kind": "consumed_input",
           "certainty": "exact_resource",
           "unconditional": true,
           "unlock_tier": 0,
@@ -12885,17 +13875,6 @@
       ],
       "consumers": [
         {
-          "route": "assemble/bootstrap/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:paper",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/quest_book",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:paper",
@@ -12907,30 +13886,8 @@
           "discharged": false
         },
         {
-          "route": "bench/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:paper",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
           "route": "bench/quest_book",
           "source": "ProcessGraph.generate",
-          "via": "item:minecraft:paper",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "craft/field_guide",
-          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/field_guide.json",
           "via": "item:minecraft:paper",
           "kind": "consumed_input",
           "certainty": "exact_resource",
@@ -13593,17 +14550,6 @@
           "discharged": false
         },
         {
-          "route": "assemble/bootstrap/field_guide",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": null,
-          "optional": null,
-          "discharged": false
-        },
-        {
           "route": "assemble/bootstrap/firing_chamber",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
@@ -13737,17 +14683,6 @@
         },
         {
           "route": "bench/crude_manipulator",
-          "source": "ProcessGraph.generate",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "bench/field_guide",
           "source": "ProcessGraph.generate",
           "via": "item:minecraft:stick",
           "kind": "consumed_input",
@@ -13892,17 +14827,6 @@
         {
           "route": "craft/crude_manipulator",
           "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/crude_manipulator.json",
-          "via": "item:minecraft:stick",
-          "kind": "consumed_input",
-          "certainty": "exact_resource",
-          "unconditional": true,
-          "unlock_tier": 0,
-          "optional": false,
-          "discharged": false
-        },
-        {
-          "route": "craft/field_guide",
-          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/field_guide.json",
           "via": "item:minecraft:stick",
           "kind": "consumed_input",
           "certainty": "exact_resource",

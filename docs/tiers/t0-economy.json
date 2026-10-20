@@ -1,0 +1,6022 @@
+{
+  "authority_snapshot_sha256": "d1d41824c8db18b4c332b42b2405870f6b38f82aecfe9b634183ed8e1decec95",
+  "balance_ledger": [
+    {
+      "new": "Explicit paid recovery",
+      "old": "No implementation in baseline",
+      "problem": "Ordinary shortages and pre-producer losses had no exchange route",
+      "risk": "Usefulness and prices need human measurement",
+      "surface": "shop"
+    },
+    {
+      "new": "Manual dirt restart before industrial stock; only old starter claim required",
+      "old": "Surplus-only barter would require water and an established base",
+      "problem": "Loss of both water buckets or first construction stock could cut every normal payment route",
+      "risk": "Finite manual emergency compatibility, never the normal renewable factory",
+      "surface": "pre_producer_recovery"
+    },
+    {
+      "new": "Preserved",
+      "old": "Generous finite one-time canonical allocation",
+      "problem": "Review is not authorization to nerf or reset claims",
+      "risk": "Actual starter pacing remains unmeasured",
+      "surface": "starter_and_existing_rewards"
+    },
+    {
+      "new": "No production change by this lane; exporter compares baseline source blobs",
+      "old": "Existing live recipe/source/research definitions",
+      "problem": "No measured friction supports blanket inflation or arbitrary recipe changes",
+      "risk": "Observe causal counts and relative milestones before any production rebalance",
+      "surface": "production_rates_and_batches"
+    },
+    {
+      "new": "One costly paid charcoal at a time",
+      "old": "Native biomass/biocarbon route and finite starter fuel",
+      "problem": "A local fuel shortage should not force replacement of the whole production chain",
+      "risk": "Native biocarbon stays more efficient; paid food/fuel is not free recurring income",
+      "surface": "fuel_recovery"
+    }
+  ],
+  "baseline": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+  "canonical_conditional_witness": {
+    "batches": [
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 4,
+          "item:minecraft:glass": 3,
+          "tag:forge:ingots/copper": 1
+        },
+        "grossOutputs": {
+          "item:grindless:basic_tank": 1
+        },
+        "route": "bench/basic_tank",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 9600,
+        "grossInputs": {
+          "energy:FU": 9600,
+          "item:minecraft:brick": 8
+        },
+        "grossOutputs": {
+          "item:minecraft:bricks": 2
+        },
+        "route": "bench/brick_block",
+        "serialTicks": 1200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "tag:grindless:boards": 8
+        },
+        "grossOutputs": {
+          "item:minecraft:chest": 1
+        },
+        "route": "bench/chest",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 2,
+          "tag:minecraft:stone_crafting_materials": 3
+        },
+        "grossOutputs": {
+          "item:grindless:clay_conduit": 8
+        },
+        "route": "bench/clay_conduit",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:stick": 3,
+          "tag:grindless:boards": 4,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:clay_mixer": 1
+        },
+        "route": "bench/clay_mixer",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 2,
+          "tag:forge:ingots/copper": 1,
+          "tag:grindless:boards": 3
+        },
+        "grossOutputs": {
+          "item:grindless:conveyor_belt": 8
+        },
+        "route": "bench/conveyor_belt",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:stick": 2,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:crank_handle": 1
+        },
+        "route": "bench/crank_handle",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "tag:forge:ingots/iron": 1,
+          "tag:minecraft:stone_crafting_materials": 8
+        },
+        "grossOutputs": {
+          "item:grindless:crude_extractor": 1
+        },
+        "route": "bench/crude_extractor",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 9600,
+        "grossInputs": {
+          "energy:FU": 9600,
+          "item:grindless:ceramic_insulator": 4,
+          "item:minecraft:stick": 2,
+          "tag:forge:ingots/copper": 2,
+          "tag:grindless:boards": 2
+        },
+        "grossOutputs": {
+          "item:grindless:crude_manipulator": 2
+        },
+        "route": "bench/crude_manipulator",
+        "serialTicks": 1200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 9600,
+        "grossInputs": {
+          "energy:FU": 9600,
+          "item:grindless:ceramic_insulator": 2,
+          "item:minecraft:redstone": 2
+        },
+        "grossOutputs": {
+          "item:grindless:data_core": 2
+        },
+        "route": "bench/data_core",
+        "serialTicks": 1200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "tag:minecraft:stone_crafting_materials": 8
+        },
+        "grossOutputs": {
+          "item:minecraft:furnace": 1
+        },
+        "route": "bench/furnace",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:stick": 1,
+          "tag:forge:ingots/iron": 1,
+          "tag:minecraft:stone_crafting_materials": 7
+        },
+        "grossOutputs": {
+          "item:grindless:hand_crank_dynamo": 1
+        },
+        "route": "bench/hand_crank_dynamo",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:stick": 2,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:multitool": 1
+        },
+        "route": "bench/multitool",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:glass": 1,
+          "item:minecraft:stick": 1,
+          "tag:grindless:boards": 3
+        },
+        "grossOutputs": {
+          "item:grindless:process_atlas": 1
+        },
+        "route": "bench/process_atlas",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:paper": 1,
+          "item:minecraft:stick": 2
+        },
+        "grossOutputs": {
+          "item:grindless:quest_book": 1
+        },
+        "route": "bench/quest_book",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:minecraft:glass": 1,
+          "tag:grindless:boards": 7,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:research_terminal": 1
+        },
+        "route": "bench/research_terminal",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 9600,
+        "grossInputs": {
+          "energy:FU": 9600,
+          "item:grindless:ceramic_insulator": 2,
+          "tag:grindless:boards": 8
+        },
+        "grossOutputs": {
+          "item:grindless:settling_channel": 2
+        },
+        "route": "bench/settling_channel",
+        "serialTicks": 1200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 1,
+          "item:grindless:clay_conduit": 1,
+          "item:grindless:settling_channel": 1
+        },
+        "grossOutputs": {
+          "item:grindless:settling_fluid_input": 1
+        },
+        "route": "bench/settling_fluid_input",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 1,
+          "item:grindless:clay_conduit": 1,
+          "item:grindless:settling_screen": 1
+        },
+        "grossOutputs": {
+          "item:grindless:settling_fluid_output": 1
+        },
+        "route": "bench/settling_fluid_output",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 1,
+          "item:grindless:conveyor_belt": 1,
+          "item:grindless:settling_channel": 1
+        },
+        "grossOutputs": {
+          "item:grindless:settling_item_input": 1
+        },
+        "route": "bench/settling_item_input",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 1,
+          "item:grindless:conveyor_belt": 1,
+          "item:grindless:settling_screen": 1
+        },
+        "grossOutputs": {
+          "item:grindless:settling_item_output": 1
+        },
+        "route": "bench/settling_item_output",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 3,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 14400,
+        "grossInputs": {
+          "energy:FU": 14400,
+          "item:grindless:ceramic_insulator": 3,
+          "item:minecraft:stick": 12,
+          "tag:grindless:boards": 3
+        },
+        "grossOutputs": {
+          "item:grindless:settling_screen": 3
+        },
+        "route": "bench/settling_screen",
+        "serialTicks": 1800,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 1,
+          "item:grindless:conveyor_belt": 1,
+          "item:minecraft:bricks": 1
+        },
+        "grossOutputs": {
+          "item:grindless:workshop_item_input": 1
+        },
+        "route": "bench/workshop_item_input",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "ASSEMBLY_BENCH",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:ceramic_insulator": 1,
+          "item:grindless:conveyor_belt": 1,
+          "item:minecraft:bricks": 1
+        },
+        "grossOutputs": {
+          "item:grindless:workshop_item_output": 1
+        },
+        "route": "bench/workshop_item_output",
+        "serialTicks": 600,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 15,
+        "catalystsPerExecution": {
+          "item:minecraft:bricks": 7
+        },
+        "family": "FIRING_CHAMBER",
+        "fuDemand": 24000,
+        "grossInputs": {
+          "energy:FU": 24000,
+          "item:grindless:biomass": 60
+        },
+        "grossOutputs": {
+          "item:minecraft:charcoal": 30
+        },
+        "route": "bootstrap/biocarbon",
+        "serialTicks": 3000,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {
+          "item:minecraft:bricks": 7
+        },
+        "family": "FIRING_CHAMBER",
+        "fuDemand": 3200,
+        "grossInputs": {
+          "energy:FU": 3200,
+          "item:minecraft:clay_ball": 8,
+          "tag:grindless:carbon": 2
+        },
+        "grossOutputs": {
+          "item:minecraft:brick": 8
+        },
+        "route": "bootstrap/bricks",
+        "serialTicks": 400,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 13,
+        "catalystsPerExecution": {},
+        "family": "QUERN",
+        "fuDemand": 6240,
+        "grossInputs": {
+          "energy:FU": 6240,
+          "item:grindless:mineral_aggregate": 13
+        },
+        "grossOutputs": {
+          "item:minecraft:cobblestone": 52,
+          "item:minecraft:gravel": 26
+        },
+        "route": "bootstrap/dry_aggregate",
+        "serialTicks": 1560,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 15,
+        "catalystsPerExecution": {},
+        "family": "CLAY_MIXER",
+        "fuDemand": 24000,
+        "grossInputs": {
+          "energy:FU": 24000,
+          "fluid:minecraft:water": 3750,
+          "item:grindless:biomass": 30
+        },
+        "grossOutputs": {
+          "item:grindless:fibreboard": 60
+        },
+        "route": "bootstrap/fibreboard",
+        "serialTicks": 3000,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:settling_channel": 1,
+          "item:grindless:settling_screen": 1
+        },
+        "family": "SETTLING_TROUGH",
+        "fuDemand": 400,
+        "grossInputs": {
+          "energy:FU": 400,
+          "fluid:minecraft:water": 250,
+          "item:minecraft:gravel": 1
+        },
+        "grossOutputs": {
+          "item:minecraft:flint": 1,
+          "item:minecraft:sand": 1
+        },
+        "route": "bootstrap/flint_separation",
+        "serialTicks": 100,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 7,
+        "catalystsPerExecution": {
+          "item:minecraft:bricks": 7
+        },
+        "family": "FIRING_CHAMBER",
+        "fuDemand": 22400,
+        "grossInputs": {
+          "energy:FU": 22400,
+          "item:minecraft:sand": 7,
+          "tag:grindless:carbon": 7
+        },
+        "grossOutputs": {
+          "item:minecraft:glass": 7
+        },
+        "route": "bootstrap/glass",
+        "serialTicks": 2800,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 15,
+        "catalystsPerExecution": {
+          "item:minecraft:bricks": 7
+        },
+        "family": "FIRING_CHAMBER",
+        "fuDemand": 24000,
+        "grossInputs": {
+          "energy:FU": 24000,
+          "item:grindless:unfired_ceramic": 45,
+          "tag:grindless:carbon": 15
+        },
+        "grossOutputs": {
+          "item:grindless:ceramic_grog": 15,
+          "item:grindless:ceramic_insulator": 30
+        },
+        "route": "bootstrap/insulators",
+        "serialTicks": 3000,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "QUERN",
+        "fuDemand": 800,
+        "grossInputs": {
+          "energy:FU": 800,
+          "item:grindless:biomass": 2
+        },
+        "grossOutputs": {
+          "item:minecraft:paper": 4
+        },
+        "route": "bootstrap/paper",
+        "serialTicks": 200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 7,
+        "catalystsPerExecution": {
+          "item:minecraft:bricks": 7
+        },
+        "family": "FIRING_CHAMBER",
+        "fuDemand": 22400,
+        "grossInputs": {
+          "energy:FU": 22400,
+          "tag:forge:raw_materials/copper": 7,
+          "tag:grindless:carbon": 7
+        },
+        "grossOutputs": {
+          "item:grindless:slag": 7,
+          "tag:forge:ingots/copper": 7
+        },
+        "route": "bootstrap/reduce_copper",
+        "serialTicks": 2800,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 3,
+        "catalystsPerExecution": {
+          "item:minecraft:bricks": 7
+        },
+        "family": "FIRING_CHAMBER",
+        "fuDemand": 9600,
+        "grossInputs": {
+          "energy:FU": 9600,
+          "tag:forge:raw_materials/iron": 3,
+          "tag:grindless:carbon": 3
+        },
+        "grossOutputs": {
+          "item:grindless:slag": 3,
+          "tag:forge:ingots/iron": 3
+        },
+        "route": "bootstrap/reduce_iron",
+        "serialTicks": 1200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 22,
+        "catalystsPerExecution": {},
+        "family": "QUERN",
+        "fuDemand": 8800,
+        "grossInputs": {
+          "energy:FU": 8800,
+          "item:minecraft:gravel": 22
+        },
+        "grossOutputs": {
+          "item:minecraft:sand": 22
+        },
+        "route": "bootstrap/sand",
+        "serialTicks": 2200,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 16,
+        "catalystsPerExecution": {},
+        "family": "CLAY_MIXER",
+        "fuDemand": 15360,
+        "grossInputs": {
+          "energy:FU": 15360,
+          "fluid:minecraft:water": 4000,
+          "item:minecraft:clay_ball": 32,
+          "item:minecraft:sand": 16
+        },
+        "grossOutputs": {
+          "item:grindless:unfired_ceramic": 48
+        },
+        "route": "bootstrap/sand_body",
+        "serialTicks": 1920,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 5,
+        "catalystsPerExecution": {},
+        "family": "QUERN",
+        "fuDemand": 1600,
+        "grossInputs": {
+          "energy:FU": 1600,
+          "item:grindless:fibreboard": 5
+        },
+        "grossOutputs": {
+          "item:minecraft:stick": 20
+        },
+        "route": "bootstrap/sticks",
+        "serialTicks": 400,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 7,
+        "catalystsPerExecution": {
+          "item:grindless:settling_channel": 1,
+          "item:grindless:settling_screen": 1
+        },
+        "family": "SETTLING_TROUGH",
+        "fuDemand": 5600,
+        "grossInputs": {
+          "energy:FU": 5600,
+          "fluid:minecraft:water": 7000,
+          "item:grindless:mineral_aggregate": 7
+        },
+        "grossOutputs": {
+          "fluid:minecraft:water": 5250,
+          "item:minecraft:dirt": 14,
+          "item:minecraft:gravel": 14,
+          "item:minecraft:redstone": 14,
+          "tag:forge:raw_materials/copper": 7,
+          "tag:forge:raw_materials/iron": 7
+        },
+        "route": "bootstrap/wet_aggregate",
+        "serialTicks": 1400,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "RESEARCH_TERMINAL",
+        "fuDemand": 4800,
+        "grossInputs": {
+          "energy:FU": 4800,
+          "item:grindless:data_core": 1
+        },
+        "grossOutputs": {
+          "item:grindless:calibrated_data_core": 1
+        },
+        "route": "calibrate/data_core",
+        "serialTicks": 600,
+        "source": "ResearchLogic + ResearchTerminalBlockEntity.work/WorldlyContainer"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:stick": 1,
+          "tag:grindless:boards": 3,
+          "tag:minecraft:stone_crafting_materials": 4
+        },
+        "grossOutputs": {
+          "item:grindless:assembly_bench": 1
+        },
+        "route": "craft/assembly_bench",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/assembly_bench.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:clay_ball": 2,
+          "tag:grindless:boards": 4,
+          "tag:minecraft:stone_crafting_materials": 2
+        },
+        "grossOutputs": {
+          "item:grindless:biocultivator": 1
+        },
+        "route": "craft/biocultivator",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biocultivator.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:furnace": 1,
+          "item:minecraft:stick": 1,
+          "tag:forge:ingots/copper": 1,
+          "tag:minecraft:stone_crafting_materials": 6
+        },
+        "grossOutputs": {
+          "item:grindless:biomass_dynamo": 1
+        },
+        "route": "craft/biomass_dynamo",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/biomass_dynamo.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:stick": 3,
+          "tag:grindless:boards": 4,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:clay_mixer": 1
+        },
+        "route": "craft/clay_mixer",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/clay_mixer.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:stick": 2,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:crank_handle": 1
+        },
+        "route": "craft/crank_handle",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/crank_handle.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:brick": 5,
+          "item:minecraft:furnace": 1,
+          "item:minecraft:stick": 1,
+          "tag:minecraft:stone_crafting_materials": 2
+        },
+        "grossOutputs": {
+          "item:grindless:firing_chamber": 1
+        },
+        "route": "craft/firing_chamber",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/firing_chamber.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "tag:grindless:boards": 3,
+          "tag:minecraft:stone_crafting_materials": 5
+        },
+        "grossOutputs": {
+          "item:grindless:geological_collector": 1
+        },
+        "route": "craft/geological_collector",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/geological_collector.json"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:stick": 2,
+          "tag:grindless:boards": 6,
+          "tag:minecraft:stone_crafting_materials": 2
+        },
+        "grossOutputs": {
+          "item:grindless:hand_pump": 2
+        },
+        "route": "craft/hand_pump",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/hand_pump.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:stick": 2,
+          "tag:minecraft:stone_crafting_materials": 1
+        },
+        "grossOutputs": {
+          "item:grindless:multitool": 1
+        },
+        "route": "craft/multitool",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/multitool.json"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:stick": 2,
+          "tag:minecraft:stone_crafting_materials": 16
+        },
+        "grossOutputs": {
+          "item:grindless:quern": 2
+        },
+        "route": "craft/quern",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/quern.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:paper": 1,
+          "item:minecraft:stick": 2
+        },
+        "grossOutputs": {
+          "item:grindless:quest_book": 1
+        },
+        "route": "craft/quest_book",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/quest_book.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:grindless:calibrated_data_core": 1,
+          "item:minecraft:glass": 2,
+          "item:minecraft:redstone": 2,
+          "tag:forge:ingots/copper": 2
+        },
+        "grossOutputs": {
+          "item:grindless:relay_matrix": 5
+        },
+        "route": "craft/relay_matrix",
+        "serialTicks": 0,
+        "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/relay_matrix.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:grindless:ceramic_insulator": 1,
+          "tag:grindless:boards": 4
+        },
+        "grossOutputs": {
+          "item:grindless:settling_channel": 1
+        },
+        "route": "craft/settling_channel",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_channel.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:grindless:ceramic_insulator": 1,
+          "item:minecraft:stick": 4,
+          "tag:grindless:boards": 1
+        },
+        "grossOutputs": {
+          "item:grindless:settling_screen": 1
+        },
+        "route": "craft/settling_screen",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_screen.json"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:grindless:ceramic_insulator": 1,
+          "tag:grindless:boards": 5,
+          "tag:minecraft:stone_crafting_materials": 2
+        },
+        "grossOutputs": {
+          "item:grindless:settling_trough": 1
+        },
+        "route": "craft/settling_trough",
+        "serialTicks": 0,
+        "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/settling_trough.json"
+      },
+      {
+        "batches": 284,
+        "catalystsPerExecution": {},
+        "family": "BIOMASS_DYNAMO",
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:grindless:biomass": 284
+        },
+        "grossOutputs": {
+          "energy:FU": 454400
+        },
+        "route": "fuel/biomass_dynamo/biomass",
+        "serialTicks": 56800,
+        "source": "SourceLogic.BIOMASS_BURN_TICKS + BIOMASS_DYNAMO"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:ceramic_insulator": 2,
+          "item:grindless:quest_book": 1
+        },
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "item:minecraft:charcoal": 4
+        },
+        "route": "quest/ceramics",
+        "serialTicks": 0,
+        "source": "QuestCatalogue.tasks/ceramics + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:clay_mixer": 1,
+          "item:grindless:quest_book": 1
+        },
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "item:minecraft:clay_ball": 8
+        },
+        "route": "quest/clay_mixer",
+        "serialTicks": 0,
+        "source": "QuestCatalogue.tasks/clay_mixer + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:multitool": 1,
+          "item:grindless:quest_book": 1
+        },
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "item:minecraft:clay_ball": 4
+        },
+        "route": "quest/multitool",
+        "serialTicks": 0,
+        "source": "QuestCatalogue.tasks/multitool + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:quern": 1,
+          "item:grindless:quest_book": 1
+        },
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "item:minecraft:brick": 4
+        },
+        "route": "quest/quern",
+        "serialTicks": 0,
+        "source": "QuestCatalogue.tasks/quern + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:hand_pump": 1,
+          "item:grindless:quest_book": 1
+        },
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "item:minecraft:stick": 4
+        },
+        "route": "quest/water",
+        "serialTicks": 0,
+        "source": "QuestCatalogue.tasks/water + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {
+          "item:grindless:crude_manipulator": 1,
+          "item:grindless:quest_book": 1
+        },
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "item:minecraft:stick": 8
+        },
+        "route": "quest/workshop_flow",
+        "serialTicks": 0,
+        "source": "QuestCatalogue.tasks/workshop_flow + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton"
+      },
+      {
+        "batches": 103,
+        "catalystsPerExecution": {},
+        "family": "BIOCULTIVATOR",
+        "fuDemand": 65920,
+        "grossInputs": {
+          "energy:FU": 65920,
+          "fluid:minecraft:water": 25750,
+          "item:grindless:mineral_aggregate": 103
+        },
+        "grossOutputs": {
+          "item:grindless:biomass": 412
+        },
+        "route": "source/biomass",
+        "serialTicks": 16480,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 124,
+        "catalystsPerExecution": {},
+        "family": "GEOLOGICAL_COLLECTOR",
+        "fuDemand": 99200,
+        "grossInputs": {
+          "energy:FU": 99200,
+          "fluid:minecraft:water": 31000
+        },
+        "grossOutputs": {
+          "item:grindless:mineral_aggregate": 124,
+          "item:minecraft:clay_ball": 124
+        },
+        "route": "source/geological_aggregate",
+        "serialTicks": 24800,
+        "source": "ProcessGraph.generate"
+      },
+      {
+        "batches": 67,
+        "catalystsPerExecution": {},
+        "family": "HAND_PUMP",
+        "fuDemand": 0,
+        "grossInputs": {},
+        "grossOutputs": {
+          "fluid:minecraft:water": 67000
+        },
+        "route": "source/hand_pump",
+        "serialTicks": 3350,
+        "source": "HandPumpBlockEntity.work/isSource + FluidLogic.PUMP_MB_PER_TICK/BUCKET"
+      },
+      {
+        "batches": 7,
+        "catalystsPerExecution": {},
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {
+          "item:minecraft:brick": 28
+        },
+        "grossOutputs": {
+          "item:minecraft:bricks": 7
+        },
+        "route": "vanilla/minecraft:bricks",
+        "serialTicks": 0,
+        "source": "classpath:data/minecraft/recipes/bricks.json@pack=vanilla@1.20.1@composition=commutative_membership_or_explicit_unknown@sha256=7c1006d329cf2c8fdf534bf5b80296bbc1ed094ad112625145ea1d5a78c239dd@recipe_contract=unique_or_identical_definitions"
+      },
+      {
+        "batches": 1,
+        "catalystsPerExecution": {},
+        "family": null,
+        "fuDemand": 0,
+        "grossInputs": {
+          "tag:minecraft:planks": 4
+        },
+        "grossOutputs": {
+          "item:minecraft:crafting_table": 1
+        },
+        "route": "vanilla/minecraft:crafting_table",
+        "serialTicks": 0,
+        "source": "classpath:data/minecraft/recipes/crafting_table.json@pack=vanilla@1.20.1@composition=commutative_membership_or_explicit_unknown@sha256=419dd111c3baa4ef3af609c1a6924b6db85edf73341131f41ca946cd842c152a@recipe_contract=unique_or_identical_definitions"
+      },
+      {
+        "batches": 2,
+        "catalystsPerExecution": {},
+        "family": "CRAFTING_TABLE",
+        "fuDemand": 0,
+        "grossInputs": {
+          "tag:minecraft:stone_crafting_materials": 16
+        },
+        "grossOutputs": {
+          "item:minecraft:furnace": 2
+        },
+        "route": "vanilla/minecraft:furnace",
+        "serialTicks": 0,
+        "source": "classpath:data/minecraft/recipes/furnace.json@pack=vanilla@1.20.1@composition=commutative_membership_or_explicit_unknown@sha256=288dfc35a147f5bf8927fa1c17221ef56224624dd0a04b69f5116b84024c9082@recipe_contract=unique_or_identical_definitions"
+      }
+    ],
+    "conditionalGatePass": true,
+    "conditions": [
+      "The Hand Pump has an adjacent or below WATER-tagged source; geological and bioculture sites satisfy their actual terrestrial/rock/open-sky/light predicates while used.",
+      "The player normally acquired the finite starter materials in the derived bill; none are guaranteed gifts.",
+      "The real Crank Handle is constructed and only server-side eligible F0 ProcessMachines receive local work.",
+      "The witness is conditional material/work establishment, not observed survival, client crafting, night/restart behavior or saved-world compatibility."
+    ],
+    "exit": {
+      "batchOutput": 5,
+      "executedBatches": 1,
+      "produced": 5,
+      "requiredCount": 5,
+      "resource": {
+        "id": "grindless:relay_matrix",
+        "kind": "ITEM",
+        "rating": 0,
+        "registry": "items"
+      },
+      "route": "craft/relay_matrix",
+      "status": "conditional_established"
+    },
+    "finiteReserves": [
+      {
+        "claimedRewards": 4,
+        "guaranteed": 0,
+        "margin": 0,
+        "playerProvided": 33,
+        "required": 37,
+        "resource": {
+          "id": "minecraft:brick",
+          "kind": "ITEM",
+          "rating": 0,
+          "registry": "items"
+        },
+        "status": "conditional_established"
+      },
+      {
+        "claimedRewards": 4,
+        "guaranteed": 0,
+        "margin": 0,
+        "playerProvided": 0,
+        "required": 4,
+        "resource": {
+          "id": "minecraft:charcoal",
+          "kind": "ITEM",
+          "rating": 0,
+          "registry": "items"
+        },
+        "status": "conditional_established"
+      },
+      {
+        "claimedRewards": 12,
+        "guaranteed": 0,
+        "margin": 12,
+        "playerProvided": 0,
+        "required": 0,
+        "resource": {
+          "id": "minecraft:clay_ball",
+          "kind": "ITEM",
+          "rating": 0,
+          "registry": "items"
+        },
+        "status": "conditional_established"
+      },
+      {
+        "claimedRewards": 0,
+        "guaranteed": 0,
+        "margin": 0,
+        "playerProvided": 41,
+        "required": 41,
+        "resource": {
+          "id": "minecraft:cobblestone",
+          "kind": "ITEM",
+          "rating": 0,
+          "registry": "items"
+        },
+        "status": "conditional_established"
+      },
+      {
+        "claimedRewards": 0,
+        "guaranteed": 0,
+        "margin": 0,
+        "playerProvided": 21,
+        "required": 21,
+        "resource": {
+          "id": "minecraft:oak_planks",
+          "kind": "ITEM",
+          "rating": 0,
+          "registry": "items"
+        },
+        "status": "conditional_established"
+      },
+      {
+        "claimedRewards": 12,
+        "guaranteed": 0,
+        "margin": 1,
+        "playerProvided": 20,
+        "required": 31,
+        "resource": {
+          "id": "minecraft:stick",
+          "kind": "ITEM",
+          "rating": 0,
+          "registry": "items"
+        },
+        "status": "conditional_established"
+      }
+    ],
+    "fuDemand": 482320,
+    "grossInputs": {
+      "energy:FU": 482320,
+      "fluid:minecraft:water": 71750,
+      "item:grindless:biomass": 376,
+      "item:grindless:calibrated_data_core": 1,
+      "item:grindless:ceramic_insulator": 28,
+      "item:grindless:clay_conduit": 2,
+      "item:grindless:conveyor_belt": 4,
+      "item:grindless:data_core": 1,
+      "item:grindless:fibreboard": 5,
+      "item:grindless:mineral_aggregate": 123,
+      "item:grindless:settling_channel": 2,
+      "item:grindless:settling_screen": 2,
+      "item:grindless:unfired_ceramic": 45,
+      "item:minecraft:brick": 41,
+      "item:minecraft:bricks": 2,
+      "item:minecraft:clay_ball": 42,
+      "item:minecraft:furnace": 2,
+      "item:minecraft:glass": 7,
+      "item:minecraft:gravel": 23,
+      "item:minecraft:paper": 2,
+      "item:minecraft:redstone": 4,
+      "item:minecraft:sand": 23,
+      "item:minecraft:stick": 45,
+      "tag:forge:ingots/copper": 7,
+      "tag:forge:ingots/iron": 2,
+      "tag:forge:raw_materials/copper": 7,
+      "tag:forge:raw_materials/iron": 3,
+      "tag:grindless:boards": 68,
+      "tag:grindless:carbon": 34,
+      "tag:minecraft:planks": 4,
+      "tag:minecraft:stone_crafting_materials": 88
+    },
+    "grossOutputs": {
+      "energy:FU": 454400,
+      "fluid:minecraft:water": 72250,
+      "item:grindless:assembly_bench": 1,
+      "item:grindless:basic_tank": 1,
+      "item:grindless:biocultivator": 1,
+      "item:grindless:biomass": 412,
+      "item:grindless:biomass_dynamo": 1,
+      "item:grindless:calibrated_data_core": 1,
+      "item:grindless:ceramic_grog": 15,
+      "item:grindless:ceramic_insulator": 30,
+      "item:grindless:clay_conduit": 8,
+      "item:grindless:clay_mixer": 2,
+      "item:grindless:conveyor_belt": 8,
+      "item:grindless:crank_handle": 2,
+      "item:grindless:crude_extractor": 1,
+      "item:grindless:crude_manipulator": 2,
+      "item:grindless:data_core": 2,
+      "item:grindless:fibreboard": 60,
+      "item:grindless:firing_chamber": 1,
+      "item:grindless:geological_collector": 1,
+      "item:grindless:hand_crank_dynamo": 1,
+      "item:grindless:hand_pump": 2,
+      "item:grindless:mineral_aggregate": 124,
+      "item:grindless:multitool": 2,
+      "item:grindless:process_atlas": 1,
+      "item:grindless:quern": 2,
+      "item:grindless:quest_book": 2,
+      "item:grindless:relay_matrix": 5,
+      "item:grindless:research_terminal": 1,
+      "item:grindless:settling_channel": 3,
+      "item:grindless:settling_fluid_input": 1,
+      "item:grindless:settling_fluid_output": 1,
+      "item:grindless:settling_item_input": 1,
+      "item:grindless:settling_item_output": 1,
+      "item:grindless:settling_screen": 4,
+      "item:grindless:settling_trough": 1,
+      "item:grindless:slag": 10,
+      "item:grindless:unfired_ceramic": 48,
+      "item:grindless:workshop_item_input": 1,
+      "item:grindless:workshop_item_output": 1,
+      "item:minecraft:brick": 12,
+      "item:minecraft:bricks": 9,
+      "item:minecraft:charcoal": 34,
+      "item:minecraft:chest": 1,
+      "item:minecraft:clay_ball": 136,
+      "item:minecraft:cobblestone": 52,
+      "item:minecraft:crafting_table": 1,
+      "item:minecraft:dirt": 14,
+      "item:minecraft:flint": 1,
+      "item:minecraft:furnace": 3,
+      "item:minecraft:glass": 7,
+      "item:minecraft:gravel": 40,
+      "item:minecraft:paper": 4,
+      "item:minecraft:redstone": 14,
+      "item:minecraft:sand": 23,
+      "item:minecraft:stick": 32,
+      "tag:forge:ingots/copper": 7,
+      "tag:forge:ingots/iron": 3,
+      "tag:forge:raw_materials/copper": 7,
+      "tag:forge:raw_materials/iron": 7
+    },
+    "installedMachinesAndParts": {
+      "item:grindless:assembly_bench": 1,
+      "item:grindless:biocultivator": 1,
+      "item:grindless:biomass_dynamo": 1,
+      "item:grindless:ceramic_insulator": 2,
+      "item:grindless:clay_mixer": 1,
+      "item:grindless:crude_manipulator": 1,
+      "item:grindless:firing_chamber": 1,
+      "item:grindless:geological_collector": 1,
+      "item:grindless:hand_pump": 1,
+      "item:grindless:multitool": 1,
+      "item:grindless:quern": 1,
+      "item:grindless:quest_book": 1,
+      "item:grindless:research_terminal": 1,
+      "item:grindless:settling_channel": 1,
+      "item:grindless:settling_screen": 1,
+      "item:grindless:settling_trough": 1,
+      "item:minecraft:bricks": 7,
+      "item:minecraft:crafting_table": 1
+    },
+    "manualWork": {
+      "budgetActions": 741,
+      "marginActions": 563,
+      "requiredActions": 178,
+      "status": "conditional_established",
+      "terminal": "manual/crank_handle"
+    },
+    "retainedInventory": {
+      "item:grindless:biomass": 1,
+      "item:grindless:crank_handle": 1
+    },
+    "serialWorkTicks": 144010,
+    "status": "conditional_model_pass",
+    "unmetObligations": {},
+    "unresolvedInfrastructure": []
+  },
+  "claim_ledger": "Existing QuestProgress, read-only shop prerequisites; no shop claim ledger",
+  "cycle_certificate": {
+    "checks": [
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "8",
+        "outputPotential": "4",
+        "route": "bootstrap/sand"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "bootstrap/brick_grog"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "bootstrap/insulator_grog"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "12",
+        "outputPotential": "12",
+        "route": "bootstrap/unfired_recovery"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "12",
+        "outputPotential": "12",
+        "route": "bootstrap/sand_body"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "12",
+        "outputPotential": "12",
+        "route": "bootstrap/grog_body"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "12",
+        "route": "bootstrap/insulators"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "32",
+        "outputPotential": "16",
+        "route": "bootstrap/bricks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "bootstrap/settle_clay"
+      },
+      {
+        "disposition": "EXPLICIT_ENVIRONMENT_WATER_WORK_SOURCE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "source/geological_aggregate"
+      },
+      {
+        "disposition": "EXPLICIT_ENVIRONMENT_WATER_WORK_SOURCE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "source/biomass"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "64",
+        "outputPotential": "24",
+        "route": "bootstrap/dry_aggregate"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "64",
+        "outputPotential": "52",
+        "route": "bootstrap/wet_aggregate"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "8",
+        "outputPotential": "8",
+        "route": "bootstrap/flint_separation"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "bootstrap/fibreboard"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "8",
+        "outputPotential": "4",
+        "route": "bootstrap/paper"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "bootstrap/sticks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "32",
+        "outputPotential": "32",
+        "route": "bootstrap/biocarbon"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "20",
+        "outputPotential": "4",
+        "route": "bootstrap/glass"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "24",
+        "outputPotential": "10",
+        "route": "bootstrap/reduce_iron"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "24",
+        "outputPotential": "10",
+        "route": "bootstrap/reduce_copper"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "bench/multitool"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "23",
+        "outputPotential": "23",
+        "route": "bench/hand_crank_dynamo"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "24",
+        "outputPotential": "24",
+        "route": "bench/crude_extractor"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "34",
+        "outputPotential": "34",
+        "route": "bench/research_terminal"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "17",
+        "outputPotential": "17",
+        "route": "bench/quern"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "21",
+        "outputPotential": "21",
+        "route": "bench/clay_mixer"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "41",
+        "outputPotential": "41",
+        "route": "bench/firing_chamber"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "28",
+        "route": "bench/settling_trough"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "20",
+        "outputPotential": "20",
+        "route": "bench/settling_channel"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "12",
+        "outputPotential": "12",
+        "route": "bench/settling_screen"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "15",
+        "outputPotential": "15",
+        "route": "bench/hand_pump"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "36",
+        "outputPotential": "36",
+        "route": "bench/basic_tank"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "14",
+        "outputPotential": "8",
+        "route": "bench/clay_conduit"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "24",
+        "route": "bench/conveyor_belt"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "21",
+        "outputPotential": "21",
+        "route": "bench/crude_manipulator"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "17",
+        "outputPotential": "17",
+        "route": "bench/process_atlas"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "bench/quest_book"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "bench/crank_handle"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "22",
+        "outputPotential": "22",
+        "route": "bench/geological_collector"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "28",
+        "route": "bench/biocultivator"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "21",
+        "outputPotential": "21",
+        "route": "bench/assembly_bench"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "37",
+        "outputPotential": "37",
+        "route": "bench/biomass_dynamo"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "23",
+        "outputPotential": "23",
+        "route": "bench/workshop_item_input"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "23",
+        "outputPotential": "23",
+        "route": "bench/workshop_item_output"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "27",
+        "outputPotential": "27",
+        "route": "bench/settling_item_input"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "25",
+        "outputPotential": "25",
+        "route": "bench/settling_fluid_input"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "19",
+        "outputPotential": "19",
+        "route": "bench/settling_item_output"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "17",
+        "outputPotential": "17",
+        "route": "bench/settling_fluid_output"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "6",
+        "outputPotential": "6",
+        "route": "bench/data_core"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "32",
+        "outputPotential": "32",
+        "route": "bench/chest"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "bench/crafting_table"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "bench/furnace"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "bench/brick_block"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "craft/multitool"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "23",
+        "outputPotential": "23",
+        "route": "craft/hand_crank_dynamo"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "24",
+        "outputPotential": "24",
+        "route": "craft/crude_extractor"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "34",
+        "outputPotential": "34",
+        "route": "craft/research_terminal"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "17",
+        "outputPotential": "17",
+        "route": "craft/quern"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "21",
+        "outputPotential": "21",
+        "route": "craft/clay_mixer"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "41",
+        "outputPotential": "41",
+        "route": "craft/firing_chamber"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "28",
+        "route": "craft/settling_trough"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "20",
+        "outputPotential": "20",
+        "route": "craft/settling_channel"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "12",
+        "outputPotential": "12",
+        "route": "craft/settling_screen"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "15",
+        "outputPotential": "15",
+        "route": "craft/hand_pump"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "36",
+        "outputPotential": "36",
+        "route": "craft/basic_tank"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "14",
+        "outputPotential": "8",
+        "route": "craft/clay_conduit"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "24",
+        "route": "craft/conveyor_belt"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "21",
+        "outputPotential": "21",
+        "route": "craft/crude_manipulator"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "17",
+        "outputPotential": "17",
+        "route": "craft/process_atlas"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "craft/quest_book"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "4",
+        "outputPotential": "4",
+        "route": "craft/crank_handle"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "22",
+        "outputPotential": "22",
+        "route": "craft/geological_collector"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "28",
+        "outputPotential": "28",
+        "route": "craft/biocultivator"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "21",
+        "outputPotential": "21",
+        "route": "craft/assembly_bench"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "37",
+        "outputPotential": "37",
+        "route": "craft/biomass_dynamo"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "23",
+        "outputPotential": "23",
+        "route": "craft/workshop_item_input"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "23",
+        "outputPotential": "23",
+        "route": "craft/workshop_item_output"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "27",
+        "outputPotential": "27",
+        "route": "craft/settling_item_input"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "25",
+        "outputPotential": "25",
+        "route": "craft/settling_fluid_input"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "19",
+        "outputPotential": "19",
+        "route": "craft/settling_item_output"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "17",
+        "outputPotential": "17",
+        "route": "craft/settling_fluid_output"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "6",
+        "outputPotential": "6",
+        "route": "craft/data_core"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "34",
+        "outputPotential": "30",
+        "route": "craft/relay_matrix"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "6",
+        "outputPotential": "6",
+        "route": "calibrate/data_core"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "256",
+        "outputPotential": "16",
+        "route": "shop/bootstrap_stone"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "256",
+        "outputPotential": "64",
+        "route": "shop/bootstrap_wood"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "512",
+        "outputPotential": "24",
+        "route": "shop/bootstrap_water"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "256",
+        "outputPotential": "8",
+        "route": "shop/stone"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "256",
+        "outputPotential": "32",
+        "route": "shop/gravel"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "256",
+        "outputPotential": "16",
+        "route": "shop/sand"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "512",
+        "outputPotential": "16",
+        "route": "shop/clay"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "64",
+        "outputPotential": "32",
+        "route": "shop/wood"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "64",
+        "outputPotential": "16",
+        "route": "shop/food"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "288",
+        "outputPotential": "16",
+        "route": "shop/sapling"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "160",
+        "outputPotential": "8",
+        "route": "shop/seeds"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "536",
+        "outputPotential": "24",
+        "route": "shop/water"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "128",
+        "outputPotential": "16",
+        "route": "shop/fuel"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "288",
+        "outputPotential": "16",
+        "route": "shop/bricks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "512",
+        "outputPotential": "64",
+        "route": "shop/dirt"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "288",
+        "outputPotential": "32",
+        "route": "shop/grass"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "576",
+        "outputPotential": "16",
+        "route": "shop/glass"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/starter_supplies"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/quest_book_help"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/superflat"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/construction"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/multitool"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/manual_work"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/crank"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/extractor"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/quern"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/water"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/clay_mixer"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/grog"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/firing"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/ceramics"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/geological_collector"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/aggregate"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/settling"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/water_recovery"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/mineral_feed"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/biocultivator"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/biomass"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/fibreboard"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/biomass_dynamo"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/fluid_logistics"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/conveyors"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/workshop_flow"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/assembly_bench"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/research_terminal"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/data_core"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/calibrate"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/calibrated_core"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/relay"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/thermal"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/pylon"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/scanner"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/terrestrial"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/pulverizer"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/furnace"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/press"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/assembler"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/matrix_line"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/glass"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/logistics"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/kiln"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/factory_world"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/industrial_matrix"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "vanilla/oak_planks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "8",
+        "outputPotential": "4",
+        "route": "vanilla/sticks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "vanilla/crafting_table"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "vanilla/furnace"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "vanilla/bricks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "vanilla/clay"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "16",
+        "outputPotential": "16",
+        "route": "vanilla/break_clay"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "24",
+        "outputPotential": "24",
+        "route": "vanilla/bucket"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "24",
+        "outputPotential": "24",
+        "route": "vanilla/empty_bucket"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "8",
+        "outputPotential": "8",
+        "route": "vanilla/grass_to_dirt"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "48",
+        "outputPotential": "32",
+        "route": "vanilla/smelt_bricks"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "48",
+        "outputPotential": "32",
+        "route": "vanilla/smelt_glass"
+      },
+      {
+        "disposition": "NON_INCREASING",
+        "inputPotential": "144",
+        "outputPotential": "128",
+        "route": "vanilla/smelt_charcoal"
+      }
+    ],
+    "conservative": true,
+    "potential": {
+      "item:grindless:assembly_bench": 21,
+      "item:grindless:basic_tank": 36,
+      "item:grindless:biocultivator": 28,
+      "item:grindless:biomass": 8,
+      "item:grindless:biomass_dynamo": 37,
+      "item:grindless:calibrated_data_core": 6,
+      "item:grindless:ceramic_grog": 4,
+      "item:grindless:ceramic_insulator": 4,
+      "item:grindless:clay_conduit": 1,
+      "item:grindless:clay_mixer": 21,
+      "item:grindless:conveyor_belt": 3,
+      "item:grindless:crank_handle": 4,
+      "item:grindless:crude_extractor": 24,
+      "item:grindless:crude_manipulator": 21,
+      "item:grindless:data_core": 6,
+      "item:grindless:fibreboard": 4,
+      "item:grindless:firing_chamber": 41,
+      "item:grindless:geological_collector": 22,
+      "item:grindless:hand_crank_dynamo": 23,
+      "item:grindless:hand_pump": 15,
+      "item:grindless:mineral_aggregate": 64,
+      "item:grindless:multitool": 4,
+      "item:grindless:process_atlas": 17,
+      "item:grindless:quern": 17,
+      "item:grindless:quest_book": 4,
+      "item:grindless:relay_matrix": 6,
+      "item:grindless:research_terminal": 34,
+      "item:grindless:settling_channel": 20,
+      "item:grindless:settling_fluid_input": 25,
+      "item:grindless:settling_fluid_output": 17,
+      "item:grindless:settling_item_input": 27,
+      "item:grindless:settling_item_output": 19,
+      "item:grindless:settling_screen": 12,
+      "item:grindless:settling_trough": 28,
+      "item:grindless:slag": 2,
+      "item:grindless:unfired_ceramic": 4,
+      "item:grindless:workshop_item_input": 23,
+      "item:grindless:workshop_item_output": 23,
+      "item:minecraft:bread": 8,
+      "item:minecraft:brick": 4,
+      "item:minecraft:bricks": 16,
+      "item:minecraft:bucket": 24,
+      "item:minecraft:charcoal": 16,
+      "item:minecraft:chest": 32,
+      "item:minecraft:clay": 16,
+      "item:minecraft:clay_ball": 4,
+      "item:minecraft:coal": 16,
+      "item:minecraft:cobblestone": 2,
+      "item:minecraft:copper_ingot": 8,
+      "item:minecraft:crafting_table": 16,
+      "item:minecraft:dirt": 8,
+      "item:minecraft:flint": 4,
+      "item:minecraft:furnace": 16,
+      "item:minecraft:glass": 4,
+      "item:minecraft:grass_block": 8,
+      "item:minecraft:gravel": 8,
+      "item:minecraft:iron_ingot": 8,
+      "item:minecraft:oak_log": 16,
+      "item:minecraft:oak_planks": 4,
+      "item:minecraft:oak_sapling": 16,
+      "item:minecraft:paper": 2,
+      "item:minecraft:poppy": 2,
+      "item:minecraft:raw_copper": 8,
+      "item:minecraft:raw_iron": 8,
+      "item:minecraft:redstone": 2,
+      "item:minecraft:sand": 4,
+      "item:minecraft:stick": 1,
+      "item:minecraft:water_bucket": 24,
+      "item:minecraft:wheat_seeds": 2,
+      "tag:forge:ingots/copper": 8,
+      "tag:forge:ingots/iron": 8,
+      "tag:forge:raw_materials/copper": 8,
+      "tag:forge:raw_materials/iron": 8,
+      "tag:grindless:boards": 4,
+      "tag:grindless:carbon": 16,
+      "tag:minecraft:stone_crafting_materials": 2
+    },
+    "unresolved": []
+  },
+  "cycle_proof_scope": "Positive material-potential certificate over all projected T0 conversions, including shop, crafting, ceramic/wood/container returns and finite quest budgets; environmental sources are explicit boundaries. Not an energy, arbitrary datapack or whole-mod proof.",
+  "exploit_graph": [
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 100,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/sand",
+      "inputs": {
+        "item:minecraft:gravel": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:sand": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 60,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/brick_grog",
+      "inputs": {
+        "item:minecraft:brick": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:ceramic_grog": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 60,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/insulator_grog",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:ceramic_grog": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 100,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/unfired_recovery",
+      "inputs": {
+        "item:grindless:unfired_ceramic": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:clay_ball": 2,
+        "item:minecraft:sand": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 120,
+      "family": "CLAY_MIXER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/sand_body",
+      "inputs": {
+        "fluid:minecraft:water": 250,
+        "item:minecraft:clay_ball": 2,
+        "item:minecraft:sand": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:unfired_ceramic": 3
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 80,
+      "family": "CLAY_MIXER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/grog_body",
+      "inputs": {
+        "fluid:minecraft:water": 250,
+        "item:grindless:ceramic_grog": 1,
+        "item:minecraft:clay_ball": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:unfired_ceramic": 3
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 200,
+      "family": "FIRING_CHAMBER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/insulators",
+      "inputs": {
+        "item:grindless:unfired_ceramic": 3,
+        "tag:grindless:carbon": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:ceramic_grog": 1,
+        "item:grindless:ceramic_insulator": 2
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 200,
+      "family": "FIRING_CHAMBER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/bricks",
+      "inputs": {
+        "item:minecraft:clay_ball": 4,
+        "tag:grindless:carbon": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:brick": 4
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 160,
+      "family": "SETTLING_TROUGH",
+      "fu_per_tick": 4,
+      "id": "bootstrap/settle_clay",
+      "inputs": {
+        "fluid:minecraft:water": 1000,
+        "item:minecraft:dirt": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "fluid:minecraft:water": 750,
+        "item:minecraft:clay_ball": 2,
+        "item:minecraft:gravel": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapProcesses"
+    },
+    {
+      "boundary": "ENVIRONMENTAL_SOURCE",
+      "duration_ticks": 200,
+      "family": "GEOLOGICAL_COLLECTOR",
+      "fu_per_tick": 4,
+      "id": "source/geological_aggregate",
+      "inputs": {
+        "environment:eligible_rock_bed": 1,
+        "fluid:minecraft:water": 250
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:mineral_aggregate": 1,
+        "item:minecraft:clay_ball": 1
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "ENVIRONMENTAL_SOURCE",
+      "duration_ticks": 160,
+      "family": "BIOCULTIVATOR",
+      "fu_per_tick": 4,
+      "id": "source/biomass",
+      "inputs": {
+        "environment:eligible_sunlight": 1,
+        "fluid:minecraft:water": 250,
+        "item:grindless:mineral_aggregate": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:biomass": 4
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 120,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/dry_aggregate",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:cobblestone": 4,
+        "item:minecraft:gravel": 2
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 200,
+      "family": "SETTLING_TROUGH",
+      "fu_per_tick": 4,
+      "id": "bootstrap/wet_aggregate",
+      "inputs": {
+        "fluid:minecraft:water": 1000,
+        "item:grindless:mineral_aggregate": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "fluid:minecraft:water": 750,
+        "item:minecraft:dirt": 2,
+        "item:minecraft:gravel": 2,
+        "item:minecraft:redstone": 2,
+        "tag:forge:raw_materials/copper": 1,
+        "tag:forge:raw_materials/iron": 1
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 100,
+      "family": "SETTLING_TROUGH",
+      "fu_per_tick": 4,
+      "id": "bootstrap/flint_separation",
+      "inputs": {
+        "fluid:minecraft:water": 250,
+        "item:minecraft:gravel": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:flint": 1,
+        "item:minecraft:sand": 1
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 200,
+      "family": "CLAY_MIXER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/fibreboard",
+      "inputs": {
+        "fluid:minecraft:water": 250,
+        "item:grindless:biomass": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:fibreboard": 4
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 100,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/paper",
+      "inputs": {
+        "item:grindless:biomass": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:paper": 2
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 80,
+      "family": "QUERN",
+      "fu_per_tick": 4,
+      "id": "bootstrap/sticks",
+      "inputs": {
+        "item:grindless:fibreboard": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:stick": 4
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 200,
+      "family": "FIRING_CHAMBER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/biocarbon",
+      "inputs": {
+        "item:grindless:biomass": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:charcoal": 2
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 400,
+      "family": "FIRING_CHAMBER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/glass",
+      "inputs": {
+        "item:minecraft:sand": 1,
+        "tag:grindless:carbon": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:glass": 1
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 400,
+      "family": "FIRING_CHAMBER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/reduce_iron",
+      "inputs": {
+        "tag:forge:raw_materials/iron": 1,
+        "tag:grindless:carbon": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:slag": 1,
+        "tag:forge:ingots/iron": 1
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 400,
+      "family": "FIRING_CHAMBER",
+      "fu_per_tick": 8,
+      "id": "bootstrap/reduce_copper",
+      "inputs": {
+        "tag:forge:raw_materials/copper": 1,
+        "tag:grindless:carbon": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:slag": 1,
+        "tag:forge:ingots/copper": 1
+      },
+      "prerequisites": [],
+      "source": "RenewableProcesses"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/multitool",
+      "inputs": {
+        "item:minecraft:stick": 2,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:multitool": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/hand_crank_dynamo",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:forge:ingots/iron": 1,
+        "tag:minecraft:stone_crafting_materials": 7
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:hand_crank_dynamo": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/crude_extractor",
+      "inputs": {
+        "tag:forge:ingots/iron": 1,
+        "tag:minecraft:stone_crafting_materials": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:crude_extractor": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/research_terminal",
+      "inputs": {
+        "item:minecraft:glass": 1,
+        "tag:grindless:boards": 7,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:research_terminal": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/quern",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:minecraft:stone_crafting_materials": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:quern": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/clay_mixer",
+      "inputs": {
+        "item:minecraft:stick": 3,
+        "tag:grindless:boards": 4,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:clay_mixer": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/firing_chamber",
+      "inputs": {
+        "item:minecraft:brick": 5,
+        "item:minecraft:furnace": 1,
+        "item:minecraft:stick": 1,
+        "tag:minecraft:stone_crafting_materials": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:firing_chamber": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_trough",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "tag:grindless:boards": 5,
+        "tag:minecraft:stone_crafting_materials": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_trough": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_channel",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "tag:grindless:boards": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_channel": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_screen",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:minecraft:stick": 4,
+        "tag:grindless:boards": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_screen": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/hand_pump",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:grindless:boards": 3,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:hand_pump": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/basic_tank",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 4,
+        "item:minecraft:glass": 3,
+        "tag:forge:ingots/copper": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:basic_tank": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/clay_conduit",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 2,
+        "tag:minecraft:stone_crafting_materials": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:clay_conduit": 8
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/conveyor_belt",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 2,
+        "tag:forge:ingots/copper": 1,
+        "tag:grindless:boards": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:conveyor_belt": 8
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/crude_manipulator",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 2,
+        "item:minecraft:stick": 1,
+        "tag:forge:ingots/copper": 1,
+        "tag:grindless:boards": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:crude_manipulator": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/process_atlas",
+      "inputs": {
+        "item:minecraft:glass": 1,
+        "item:minecraft:stick": 1,
+        "tag:grindless:boards": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:process_atlas": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/quest_book",
+      "inputs": {
+        "item:minecraft:paper": 1,
+        "item:minecraft:stick": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:quest_book": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/crank_handle",
+      "inputs": {
+        "item:minecraft:stick": 2,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:crank_handle": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/geological_collector",
+      "inputs": {
+        "tag:grindless:boards": 3,
+        "tag:minecraft:stone_crafting_materials": 5
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:geological_collector": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/biocultivator",
+      "inputs": {
+        "item:minecraft:clay_ball": 2,
+        "tag:grindless:boards": 4,
+        "tag:minecraft:stone_crafting_materials": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:biocultivator": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/assembly_bench",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:grindless:boards": 3,
+        "tag:minecraft:stone_crafting_materials": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:assembly_bench": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/biomass_dynamo",
+      "inputs": {
+        "item:minecraft:furnace": 1,
+        "item:minecraft:stick": 1,
+        "tag:forge:ingots/copper": 1,
+        "tag:minecraft:stone_crafting_materials": 6
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:biomass_dynamo": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/workshop_item_input",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:minecraft:bricks": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:workshop_item_input": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/workshop_item_output",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:minecraft:bricks": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:workshop_item_output": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_item_input",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:grindless:settling_channel": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_item_input": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_fluid_input",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:clay_conduit": 1,
+        "item:grindless:settling_channel": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_fluid_input": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_item_output",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:grindless:settling_screen": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_item_output": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/settling_fluid_output",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:clay_conduit": 1,
+        "item:grindless:settling_screen": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_fluid_output": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/data_core",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:minecraft:redstone": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:data_core": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/chest",
+      "inputs": {
+        "tag:grindless:boards": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:chest": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/crafting_table",
+      "inputs": {
+        "tag:grindless:boards": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:crafting_table": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/furnace",
+      "inputs": {
+        "tag:minecraft:stone_crafting_materials": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:furnace": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "ASSEMBLY_BENCH",
+      "fu_per_tick": 8,
+      "id": "bench/brick_block",
+      "inputs": {
+        "item:minecraft:brick": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:bricks": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapAssembly"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/multitool",
+      "inputs": {
+        "item:minecraft:stick": 2,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:multitool": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/hand_crank_dynamo",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:forge:ingots/iron": 1,
+        "tag:minecraft:stone_crafting_materials": 7
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:hand_crank_dynamo": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/crude_extractor",
+      "inputs": {
+        "tag:forge:ingots/iron": 1,
+        "tag:minecraft:stone_crafting_materials": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:crude_extractor": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/research_terminal",
+      "inputs": {
+        "item:minecraft:glass": 1,
+        "tag:grindless:boards": 7,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:research_terminal": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/quern",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:minecraft:stone_crafting_materials": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:quern": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/clay_mixer",
+      "inputs": {
+        "item:minecraft:stick": 3,
+        "tag:grindless:boards": 4,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:clay_mixer": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/firing_chamber",
+      "inputs": {
+        "item:minecraft:brick": 5,
+        "item:minecraft:furnace": 1,
+        "item:minecraft:stick": 1,
+        "tag:minecraft:stone_crafting_materials": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:firing_chamber": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_trough",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "tag:grindless:boards": 5,
+        "tag:minecraft:stone_crafting_materials": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_trough": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_channel",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "tag:grindless:boards": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_channel": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_screen",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:minecraft:stick": 4,
+        "tag:grindless:boards": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_screen": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/hand_pump",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:grindless:boards": 3,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:hand_pump": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/basic_tank",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 4,
+        "item:minecraft:glass": 3,
+        "tag:forge:ingots/copper": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:basic_tank": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/clay_conduit",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 2,
+        "tag:minecraft:stone_crafting_materials": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:clay_conduit": 8
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/conveyor_belt",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 2,
+        "tag:forge:ingots/copper": 1,
+        "tag:grindless:boards": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:conveyor_belt": 8
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/crude_manipulator",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 2,
+        "item:minecraft:stick": 1,
+        "tag:forge:ingots/copper": 1,
+        "tag:grindless:boards": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:crude_manipulator": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/process_atlas",
+      "inputs": {
+        "item:minecraft:glass": 1,
+        "item:minecraft:stick": 1,
+        "tag:grindless:boards": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:process_atlas": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/quest_book",
+      "inputs": {
+        "item:minecraft:paper": 1,
+        "item:minecraft:stick": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:quest_book": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/crank_handle",
+      "inputs": {
+        "item:minecraft:stick": 2,
+        "tag:minecraft:stone_crafting_materials": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:crank_handle": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/geological_collector",
+      "inputs": {
+        "tag:grindless:boards": 3,
+        "tag:minecraft:stone_crafting_materials": 5
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:geological_collector": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/biocultivator",
+      "inputs": {
+        "item:minecraft:clay_ball": 2,
+        "tag:grindless:boards": 4,
+        "tag:minecraft:stone_crafting_materials": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:biocultivator": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/assembly_bench",
+      "inputs": {
+        "item:minecraft:stick": 1,
+        "tag:grindless:boards": 3,
+        "tag:minecraft:stone_crafting_materials": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:assembly_bench": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/biomass_dynamo",
+      "inputs": {
+        "item:minecraft:furnace": 1,
+        "item:minecraft:stick": 1,
+        "tag:forge:ingots/copper": 1,
+        "tag:minecraft:stone_crafting_materials": 6
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:biomass_dynamo": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/workshop_item_input",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:minecraft:bricks": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:workshop_item_input": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/workshop_item_output",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:minecraft:bricks": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:workshop_item_output": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_item_input",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:grindless:settling_channel": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_item_input": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_fluid_input",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:clay_conduit": 1,
+        "item:grindless:settling_channel": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_fluid_input": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_item_output",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:conveyor_belt": 1,
+        "item:grindless:settling_screen": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_item_output": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/settling_fluid_output",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:grindless:clay_conduit": 1,
+        "item:grindless:settling_screen": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:settling_fluid_output": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/data_core",
+      "inputs": {
+        "item:grindless:ceramic_insulator": 1,
+        "item:minecraft:redstone": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:data_core": 1
+      },
+      "prerequisites": [],
+      "source": "BootstrapRecipes.shapeless"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "CRAFTING_TABLE",
+      "fu_per_tick": 0,
+      "id": "craft/relay_matrix",
+      "inputs": {
+        "item:grindless:calibrated_data_core": 1,
+        "item:minecraft:glass": 2,
+        "item:minecraft:redstone": 2,
+        "tag:forge:ingots/copper": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:relay_matrix": 5
+      },
+      "prerequisites": [],
+      "source": "T1Recipes"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 600,
+      "family": "RESEARCH_TERMINAL",
+      "fu_per_tick": 8,
+      "id": "calibrate/data_core",
+      "inputs": {
+        "item:grindless:data_core": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:grindless:calibrated_data_core": 1
+      },
+      "prerequisites": [],
+      "source": "ResearchLogic"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/bootstrap_stone",
+      "inputs": {
+        "item:minecraft:dirt": 32
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:cobblestone": 8
+      },
+      "prerequisites": [
+        "starter_supplies"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/bootstrap_wood",
+      "inputs": {
+        "item:minecraft:dirt": 32
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:oak_log": 4
+      },
+      "prerequisites": [
+        "starter_supplies"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/bootstrap_water",
+      "inputs": {
+        "item:minecraft:dirt": 64
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:water_bucket": 1
+      },
+      "prerequisites": [
+        "starter_supplies"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/stone",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:cobblestone": 4
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/gravel",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:gravel": 4
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/sand",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:sand": 4
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/clay",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:clay_ball": 4
+      },
+      "prerequisites": [
+        "clay_mixer"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/wood",
+      "inputs": {
+        "item:grindless:fibreboard": 16
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:oak_log": 2
+      },
+      "prerequisites": [
+        "clay_mixer"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/food",
+      "inputs": {
+        "item:grindless:biomass": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:bread": 2
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/sapling",
+      "inputs": {
+        "item:grindless:fibreboard": 8,
+        "item:grindless:mineral_aggregate": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:oak_sapling": 1
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/seeds",
+      "inputs": {
+        "item:grindless:biomass": 4,
+        "item:grindless:mineral_aggregate": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:wheat_seeds": 4
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/water",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 8,
+        "item:minecraft:bucket": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:water_bucket": 1
+      },
+      "prerequisites": [
+        "water"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/fuel",
+      "inputs": {
+        "item:grindless:biomass": 16
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:charcoal": 1
+      },
+      "prerequisites": [
+        "clay_mixer"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/bricks",
+      "inputs": {
+        "item:grindless:ceramic_grog": 8,
+        "item:grindless:mineral_aggregate": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:brick": 4
+      },
+      "prerequisites": [
+        "ceramics"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/dirt",
+      "inputs": {
+        "item:grindless:mineral_aggregate": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:dirt": 8
+      },
+      "prerequisites": [
+        "settling"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/grass",
+      "inputs": {
+        "item:grindless:biomass": 4,
+        "item:grindless:mineral_aggregate": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:grass_block": 4
+      },
+      "prerequisites": [
+        "settling"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "RECOVERY_SHOP",
+      "fu_per_tick": 0,
+      "id": "shop/glass",
+      "inputs": {
+        "item:grindless:ceramic_grog": 16,
+        "item:grindless:mineral_aggregate": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:glass": 4
+      },
+      "prerequisites": [
+        "calibrate"
+      ],
+      "source": "ShopCatalogue"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/starter_supplies",
+      "inputs": {
+        "finite_claim:starter_supplies": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:bread": 64,
+        "item:minecraft:brick": 64,
+        "item:minecraft:charcoal": 32,
+        "item:minecraft:clay_ball": 64,
+        "item:minecraft:cobblestone": 128,
+        "item:minecraft:iron_ingot": 16,
+        "item:minecraft:oak_log": 64,
+        "item:minecraft:sand": 64,
+        "item:minecraft:water_bucket": 2
+      },
+      "prerequisites": [],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/quest_book_help",
+      "inputs": {
+        "finite_claim:quest_book_help": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/superflat",
+      "inputs": {
+        "finite_claim:superflat": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "quest_book_help"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/construction",
+      "inputs": {
+        "finite_claim:construction": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/multitool",
+      "inputs": {
+        "finite_claim:multitool": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:clay_ball": 4
+      },
+      "prerequisites": [],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/manual_work",
+      "inputs": {
+        "finite_claim:manual_work": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "multitool"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/crank",
+      "inputs": {
+        "finite_claim:crank": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:coal": 4
+      },
+      "prerequisites": [
+        "multitool"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/extractor",
+      "inputs": {
+        "finite_claim:extractor": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:gravel": 8
+      },
+      "prerequisites": [
+        "crank"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/quern",
+      "inputs": {
+        "finite_claim:quern": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:brick": 4
+      },
+      "prerequisites": [
+        "multitool"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/water",
+      "inputs": {
+        "finite_claim:water": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:stick": 4
+      },
+      "prerequisites": [
+        "quern"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/clay_mixer",
+      "inputs": {
+        "finite_claim:clay_mixer": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:clay_ball": 8
+      },
+      "prerequisites": [
+        "quern",
+        "water"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/grog",
+      "inputs": {
+        "finite_claim:grog": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "clay_mixer"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/firing",
+      "inputs": {
+        "finite_claim:firing": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "clay_mixer"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/ceramics",
+      "inputs": {
+        "finite_claim:ceramics": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:charcoal": 4
+      },
+      "prerequisites": [
+        "clay_mixer"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/geological_collector",
+      "inputs": {
+        "finite_claim:geological_collector": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "manual_work",
+        "water"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/aggregate",
+      "inputs": {
+        "finite_claim:aggregate": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "geological_collector"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/settling",
+      "inputs": {
+        "finite_claim:settling": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:dirt": 16
+      },
+      "prerequisites": [
+        "ceramics",
+        "water"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/water_recovery",
+      "inputs": {
+        "finite_claim:water_recovery": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "settling"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/mineral_feed",
+      "inputs": {
+        "finite_claim:mineral_feed": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "aggregate",
+        "settling"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/biocultivator",
+      "inputs": {
+        "finite_claim:biocultivator": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "aggregate"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/biomass",
+      "inputs": {
+        "finite_claim:biomass": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "biocultivator"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/fibreboard",
+      "inputs": {
+        "finite_claim:fibreboard": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "biomass",
+        "clay_mixer"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/biomass_dynamo",
+      "inputs": {
+        "finite_claim:biomass_dynamo": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "biomass",
+        "mineral_feed"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/fluid_logistics",
+      "inputs": {
+        "finite_claim:fluid_logistics": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "ceramics",
+        "mineral_feed"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/conveyors",
+      "inputs": {
+        "finite_claim:conveyors": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "ceramics"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/workshop_flow",
+      "inputs": {
+        "finite_claim:workshop_flow": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:stick": 8
+      },
+      "prerequisites": [
+        "ceramics"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/assembly_bench",
+      "inputs": {
+        "finite_claim:assembly_bench": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "fibreboard"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/research_terminal",
+      "inputs": {
+        "finite_claim:research_terminal": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "biomass_dynamo"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/data_core",
+      "inputs": {
+        "finite_claim:data_core": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "ceramics",
+        "mineral_feed"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/calibrate",
+      "inputs": {
+        "finite_claim:calibrate": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:grindless:process_atlas": 1
+      },
+      "prerequisites": [
+        "ceramics"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/calibrated_core",
+      "inputs": {
+        "finite_claim:calibrated_core": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "calibrate"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/relay",
+      "inputs": {
+        "finite_claim:relay": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:flint": 2
+      },
+      "prerequisites": [
+        "calibrate"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/thermal",
+      "inputs": {
+        "finite_claim:thermal": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:coal": 16
+      },
+      "prerequisites": [
+        "relay"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/pylon",
+      "inputs": {
+        "finite_claim:pylon": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:redstone": 4
+      },
+      "prerequisites": [
+        "thermal"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/scanner",
+      "inputs": {
+        "finite_claim:scanner": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:charcoal": 4
+      },
+      "prerequisites": [
+        "pylon"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/terrestrial",
+      "inputs": {
+        "finite_claim:terrestrial": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:grindless:data_core": 1
+      },
+      "prerequisites": [
+        "scanner",
+        "thermal"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/pulverizer",
+      "inputs": {
+        "finite_claim:pulverizer": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:cobblestone": 32
+      },
+      "prerequisites": [
+        "thermal"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/furnace",
+      "inputs": {
+        "finite_claim:furnace": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:coal": 8
+      },
+      "prerequisites": [
+        "pulverizer",
+        "thermal"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/press",
+      "inputs": {
+        "finite_claim:press": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:iron_ingot": 4
+      },
+      "prerequisites": [
+        "furnace"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/assembler",
+      "inputs": {
+        "finite_claim:assembler": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:grindless:data_core": 1
+      },
+      "prerequisites": [
+        "furnace",
+        "press"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/matrix_line",
+      "inputs": {
+        "finite_claim:matrix_line": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:redstone": 8
+      },
+      "prerequisites": [
+        "assembler"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/glass",
+      "inputs": {
+        "finite_claim:glass": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:clay_ball": 16
+      },
+      "prerequisites": [
+        "furnace",
+        "pulverizer"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/logistics",
+      "inputs": {
+        "finite_claim:logistics": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:hopper": 1
+      },
+      "prerequisites": [
+        "assembler"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/kiln",
+      "inputs": {
+        "finite_claim:kiln": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:brick": 8
+      },
+      "prerequisites": [
+        "matrix_line"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/factory_world",
+      "inputs": {
+        "finite_claim:factory_world": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:grass_block": 16
+      },
+      "prerequisites": [
+        "glass",
+        "matrix_line"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/industrial_matrix",
+      "inputs": {
+        "finite_claim:industrial_matrix": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {
+        "item:minecraft:iron_ingot": 8
+      },
+      "prerequisites": [
+        "factory_world",
+        "glass",
+        "matrix_line"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/oak_planks",
+      "inputs": {
+        "item:minecraft:oak_log": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:oak_planks": 4
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/sticks",
+      "inputs": {
+        "item:minecraft:oak_planks": 2
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:stick": 4
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/crafting_table",
+      "inputs": {
+        "item:minecraft:oak_planks": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:crafting_table": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/furnace",
+      "inputs": {
+        "item:minecraft:cobblestone": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:furnace": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/bricks",
+      "inputs": {
+        "item:minecraft:brick": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:bricks": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/clay",
+      "inputs": {
+        "item:minecraft:clay_ball": 4
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:clay": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/break_clay",
+      "inputs": {
+        "item:minecraft:clay": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:clay_ball": 4
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/bucket",
+      "inputs": {
+        "tag:forge:ingots/iron": 3
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:bucket": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/empty_bucket",
+      "inputs": {
+        "item:minecraft:water_bucket": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "fluid:minecraft:water": 1000,
+        "item:minecraft:bucket": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/grass_to_dirt",
+      "inputs": {
+        "item:minecraft:grass_block": 1
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:dirt": 1
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/smelt_bricks",
+      "inputs": {
+        "item:minecraft:charcoal": 1,
+        "item:minecraft:clay_ball": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:brick": 8
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/smelt_glass",
+      "inputs": {
+        "item:minecraft:charcoal": 1,
+        "item:minecraft:sand": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:glass": 8
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    },
+    {
+      "boundary": "CONVERSION",
+      "duration_ticks": 0,
+      "family": "VANILLA_COMPATIBILITY",
+      "fu_per_tick": 0,
+      "id": "vanilla/smelt_charcoal",
+      "inputs": {
+        "item:minecraft:charcoal": 1,
+        "item:minecraft:oak_log": 8
+      },
+      "max_executions_per_player_world": null,
+      "outputs": {
+        "item:minecraft:charcoal": 8
+      },
+      "prerequisites": [],
+      "source": "Minecraft 1.20.1 compatibility conversion; not a renewable source"
+    }
+  ],
+  "mechanism": "direct_in_kind_barter_no_currency_wallet_or_dependency",
+  "minimum_exit_boundary": {
+    "batches": 1,
+    "calibrationCycles": 1,
+    "calibrationFu": 4800,
+    "calibrationTicks": 600,
+    "finalCraftInputs": {
+      "item:grindless:calibrated_data_core": 1,
+      "item:minecraft:glass": 2,
+      "item:minecraft:redstone": 2,
+      "tag:forge:ingots/copper": 2
+    },
+    "immediateInfrastructure": [
+      "item:grindless:research_terminal",
+      "item:minecraft:crafting_table"
+    ],
+    "inputsAfterCoreExpansion": {
+      "item:grindless:ceramic_insulator": 1,
+      "item:minecraft:glass": 2,
+      "item:minecraft:redstone": 3,
+      "tag:forge:ingots/copper": 2
+    },
+    "output": "grindless:relay_matrix",
+    "outputPerBatch": 5,
+    "produced": 5,
+    "quest": "relay",
+    "required": 5
+  },
+  "minimum_scope": "Exact final craft and core/calibration material lower bound; construction, raw processing, energy generation and optional branches are not included in this lower bound.",
+  "offers": [
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 8,
+        "item": "minecraft:cobblestone"
+      },
+      "id": "bootstrap_stone",
+      "initial_acquisition_provenance": "Initially bare-hand Superflat dirt; later mod-owned wet_aggregate dirt is also accepted",
+      "initial_acquisition_source_class": "MANUAL_FINITE_COMPATIBILITY",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "minecraft:dirt": {
+          "canonical_route": "bootstrap/wet_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "MANUAL_FINITE_COMPATIBILITY",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "minecraft:dirt": 32
+      },
+      "production_alternative": "Preserved free starter; establish geological/biological production and native pumping",
+      "progression_risk": "Punitively priced manual restart; native dry aggregate is far more productive",
+      "renewable_scope": "Initially hand-gathered finite compatibility recovery. Dirt can later come from mod-owned wet_aggregate; the exchange stays optional and does not replace canonical production",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "starter_supplies"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:oak_log"
+      },
+      "id": "bootstrap_wood",
+      "initial_acquisition_provenance": "Initially bare-hand Superflat dirt; later mod-owned wet_aggregate dirt is also accepted",
+      "initial_acquisition_source_class": "MANUAL_FINITE_COMPATIBILITY",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "minecraft:dirt": {
+          "canonical_route": "bootstrap/wet_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "MANUAL_FINITE_COMPATIBILITY",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "minecraft:dirt": 32
+      },
+      "production_alternative": "Preserved free starter; establish geological/biological production and native pumping",
+      "progression_risk": "Initially hand-gathered dirt; later renewable dirt is accepted without replacing canonical fibreboard production",
+      "renewable_scope": "Initially hand-gathered finite compatibility recovery. Dirt can later come from mod-owned wet_aggregate; the exchange stays optional and does not replace canonical production",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "starter_supplies"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 1,
+        "item": "minecraft:water_bucket"
+      },
+      "id": "bootstrap_water",
+      "initial_acquisition_provenance": "Initially bare-hand Superflat dirt; later mod-owned wet_aggregate dirt is also accepted",
+      "initial_acquisition_source_class": "MANUAL_FINITE_COMPATIBILITY",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "minecraft:dirt": {
+          "canonical_route": "bootstrap/wet_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "MANUAL_FINITE_COMPATIBILITY",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "minecraft:dirt": 64
+      },
+      "production_alternative": "Preserved free starter; establish geological/biological production and native pumping",
+      "progression_risk": "One paid replacement container; no recurring free reward or reset of the starter claim",
+      "renewable_scope": "Initially hand-gathered finite compatibility recovery. Dirt can later come from mod-owned wet_aggregate; the exchange stays optional and does not replace canonical production",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "starter_supplies"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:cobblestone"
+      },
+      "id": "stone",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:mineral_aggregate": 4
+      },
+      "production_alternative": "bootstrap/dry_aggregate",
+      "progression_risk": "Costlier than direct Quern output; no machine sold",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "RECOVERY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "quern"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:gravel"
+      },
+      "id": "gravel",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:mineral_aggregate": 4
+      },
+      "production_alternative": "bootstrap/dry_aggregate",
+      "progression_risk": "Forfeits the dry route's cobblestone coproduct",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "RECOVERY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "quern"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:sand"
+      },
+      "id": "sand",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:mineral_aggregate": 4
+      },
+      "production_alternative": "bootstrap/dry_aggregate + bootstrap/sand",
+      "progression_risk": "Requires the Quern quest; forfeits coproducts",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "quern"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:clay_ball"
+      },
+      "id": "clay",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:mineral_aggregate": 8
+      },
+      "production_alternative": "source/geological_aggregate clay coproduct",
+      "progression_risk": "Does not sell unfired ceramics or insulators",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "clay_mixer"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 2,
+        "item": "minecraft:oak_log"
+      },
+      "id": "wood",
+      "initial_acquisition_provenance": "source/biomass; geological aggregate, water, sunlight and paid work required; bootstrap/fibreboard",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:fibreboard": {
+          "canonical_route": "bootstrap/fibreboard",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:fibreboard": 16
+      },
+      "production_alternative": "Use fibreboard directly through grindless:boards",
+      "progression_risk": "Optional vanilla wood; fewer equivalent boards than payment",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "RECOVERY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "clay_mixer"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 2,
+        "item": "minecraft:bread"
+      },
+      "id": "food",
+      "initial_acquisition_provenance": "source/biomass; geological aggregate, water, sunlight and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:biomass": {
+          "canonical_route": "source/biomass",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:biomass": 8
+      },
+      "production_alternative": "Existing finite starter food; optional vanilla food routes",
+      "progression_risk": "Small paid food recovery, not a free recurring kit",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "quern"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 1,
+        "item": "minecraft:oak_sapling"
+      },
+      "id": "sapling",
+      "initial_acquisition_provenance": "source/biomass; geological aggregate, water, sunlight and paid work required; bootstrap/fibreboard",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:fibreboard": {
+          "canonical_route": "bootstrap/fibreboard",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        },
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:fibreboard": 8,
+        "grindless:mineral_aggregate": 4
+      },
+      "production_alternative": "Optional vanilla tree growth",
+      "progression_risk": "Trees are optional; no canonical resource depends on farming them",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "CONVENIENCE",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "quern"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:wheat_seeds"
+      },
+      "id": "seeds",
+      "initial_acquisition_provenance": "source/biomass; geological aggregate, water, sunlight and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:biomass": {
+          "canonical_route": "source/biomass",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        },
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:biomass": 4,
+        "grindless:mineral_aggregate": 2
+      },
+      "production_alternative": "Optional vanilla wheat growth",
+      "progression_risk": "No crop, village, mob or structure becomes a mandatory dependency",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "CONVENIENCE",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "quern"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 1,
+        "item": "minecraft:water_bucket"
+      },
+      "id": "water",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required; existing empty bucket returned filled",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        },
+        "minecraft:bucket": {
+          "canonical_route": null,
+          "classification": "UNDECLARED",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": false,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:mineral_aggregate": 8,
+        "minecraft:bucket": 1
+      },
+      "production_alternative": "source/hand_pump",
+      "progression_risk": "Refill only: consumes one real empty bucket; never mints containers",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "RECOVERY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "water"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 1,
+        "item": "minecraft:charcoal"
+      },
+      "id": "fuel",
+      "initial_acquisition_provenance": "source/biomass; geological aggregate, water, sunlight and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:biomass": {
+          "canonical_route": "source/biomass",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:biomass": 16
+      },
+      "production_alternative": "bootstrap/biocarbon",
+      "progression_risk": "One fuel per exchange at eight times the native biomass cost",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "EMERGENCY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "clay_mixer"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:brick"
+      },
+      "id": "bricks",
+      "initial_acquisition_provenance": "bootstrap/insulators or ceramic recovery; fresh clay, water, fuel and work remain necessary",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:ceramic_grog": {
+          "canonical_route": "bootstrap/insulators",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        },
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:ceramic_grog": 8,
+        "grindless:mineral_aggregate": 4
+      },
+      "production_alternative": "bootstrap/bricks",
+      "progression_risk": "After ceramics only; grog-to-brick-to-grog loses payment, no insulator bypass",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "RECOVERY",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "ceramics"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 8,
+        "item": "minecraft:dirt"
+      },
+      "id": "dirt",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:mineral_aggregate": 8
+      },
+      "production_alternative": "bootstrap/wet_aggregate",
+      "progression_risk": "Half the native dirt yield per aggregate and no metal/redstone coproducts",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "DECORATION",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "settling"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:grass_block"
+      },
+      "id": "grass",
+      "initial_acquisition_provenance": "source/geological_aggregate; water, eligible bed and paid work required; source/biomass; geological aggregate, water, sunlight and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:biomass": {
+          "canonical_route": "source/biomass",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        },
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:biomass": 4,
+        "grindless:mineral_aggregate": 4
+      },
+      "production_alternative": "Optional terrain and vanilla spreading",
+      "progression_risk": "Landscaping only; not a source of canonical biomass",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "DECORATION",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "settling"
+      ]
+    },
+    {
+      "canonical_production_replacement": false,
+      "goods": {
+        "count": 4,
+        "item": "minecraft:glass"
+      },
+      "id": "glass",
+      "initial_acquisition_provenance": "bootstrap/insulators or ceramic recovery; fresh clay, water, fuel and work remain necessary; source/geological_aggregate; water, eligible bed and paid work required",
+      "initial_acquisition_source_class": "EXISTING_MOD_PRODUCTS",
+      "max_batches_per_request": 1,
+      "output_capacity_policy": "complete_native_main_inventory_settlement_or_no_change",
+      "paid_inputs_status": {
+        "grindless:ceramic_grog": {
+          "canonical_route": "bootstrap/insulators",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        },
+        "grindless:mineral_aggregate": {
+          "canonical_route": "source/geological_aggregate",
+          "classification": "RENEWABLE",
+          "initial_acquisition_scope": "EXISTING_MOD_PRODUCTS",
+          "proved_in_conditional_t0": true,
+          "resource_classification_overridden": false
+        }
+      },
+      "price": {
+        "grindless:ceramic_grog": 16,
+        "grindless:mineral_aggregate": 8
+      },
+      "production_alternative": "bootstrap/glass",
+      "progression_risk": "Only after physical calibration; first glass and the core must already be produced",
+      "renewable_scope": "Actual canonical classifications and conditional model membership are exported per payment; shop is optional",
+      "repeatable_exchange": true,
+      "role": "DECORATION",
+      "same_payment_accepts_later_production": true,
+      "unlock_claims": [
+        "calibrate"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "shop_required_for_t0": false,
+  "source_comparison": {
+    "common/src/main/java/io/github/ezequiel24123z/grindless/quest/QuestCatalogue.java": {
+      "baseline_blob": "7f2ca7be3141021ac24edb8dc56002f1399ad5d5",
+      "evaluated_blob": "f3fdbfdc8d3e238be5df083de463db32e33e3bcc",
+      "source_equal": false
+    },
+    "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapProcesses.java": {
+      "baseline_blob": "b8c0254bc3c0d6188b87050abad857e52a8ddead",
+      "evaluated_blob": "b8c0254bc3c0d6188b87050abad857e52a8ddead",
+      "source_equal": true
+    },
+    "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapRecipes.java": {
+      "baseline_blob": "5f9aff59914dcf75c915085c058c2151e939a19f",
+      "evaluated_blob": "b59fb6f384ab98466adb1eacb493dfdb7ebeee2c",
+      "source_equal": false
+    },
+    "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/RenewableProcesses.java": {
+      "baseline_blob": "740de440b6453d5033b547873d58dfe0ef93dc61",
+      "evaluated_blob": "740de440b6453d5033b547873d58dfe0ef93dc61",
+      "source_equal": true
+    },
+    "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/T1Recipes.java": {
+      "baseline_blob": "7d447b4d0187e85689ddd215293519c094572d98",
+      "evaluated_blob": "7d447b4d0187e85689ddd215293519c094572d98",
+      "source_equal": true
+    },
+    "common/src/main/java/io/github/ezequiel24123z/grindless/research/ResearchLogic.java": {
+      "baseline_blob": "656b4336fda4b1dac8b07b117c0028f82a241882",
+      "evaluated_blob": "656b4336fda4b1dac8b07b117c0028f82a241882",
+      "source_equal": true
+    },
+    "common/src/main/java/io/github/ezequiel24123z/grindless/source/SourceLogic.java": {
+      "baseline_blob": "70a31c103232050947f54a0cdc58ff35d6d2e28c",
+      "evaluated_blob": "70a31c103232050947f54a0cdc58ff35d6d2e28c",
+      "source_equal": true
+    }
+  },
+  "starter_allocation": {
+    "minecraft:bread": 64,
+    "minecraft:brick": 64,
+    "minecraft:charcoal": 32,
+    "minecraft:clay_ball": 64,
+    "minecraft:cobblestone": 128,
+    "minecraft:iron_ingot": 16,
+    "minecraft:oak_log": 64,
+    "minecraft:sand": 64,
+    "minecraft:water_bucket": 2
+  },
+  "telemetry": {
+    "automatic_restart": false,
+    "clock": "relative_game_ticks",
+    "control": "/grindless telemetry start|snapshot|stop",
+    "default": "off",
+    "destination": "local_game_log_only",
+    "identity": "none",
+    "scope": "server_aggregate_not_per_player"
+  },
+  "unmeasured": [
+    "prices_and_usefulness",
+    "human_milestone_times",
+    "overall_pacing",
+    "client_ergonomics",
+    "no_command_campaign",
+    "longitudinal_save_compatibility"
+  ],
+  "witness_scope": "Reuse of the existing finite canonical conditional-entry replay, not a new optimal planner, a globally minimum bill, an observed starter-kit route or an elapsed playtime."
+}

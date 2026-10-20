@@ -29,4 +29,4 @@ What is **not** generated, and is therefore missing rather than merely plain, is
 listed in ADR-0048: hero item sprites, complex models, entity animation and music.
 A future session should treat those as known gaps with no owner, not as oversights.
 
-Current generated output: 1520 files (imports excluded).
+Current generated output: 1548 files (imports excluded).

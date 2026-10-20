@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Import the actual composed T0 generators through verified raw bytes.**
+  Normal JDK generation writes1548 assets, including all six port states/models,
+  item models, loot, mining and state-smoke rows. Canonical guidance writer/check
+  agree on73 declarations/5179 comparisons; economy writer/check agree on416
+  checks/17 offers. Import44 allowlisted files with every raw SHA-256 matched;
+  all13 contact sheets remain byte-identical and the source manifest projects
+  25 blocks/71 models/281 variants. Protect canonical generated JSON's LF bytes
+  across Windows checkouts instead of weakening strict CheckOnly equality.
+  The one full post-repair gate and required native/client gates remain distinct.
 - **Bind the refreshed visual manifest to the actual composed presentation.**
   Record the live barter menu, harmless saved Guide redirect and shared
   native/Heracles six-port teaching sources instead of stale baseline-only

@@ -8,3 +8,9 @@ gradlew.bat  text eol=crlf
 *.jar  binary
 *.png  binary
 *.ogg  binary
+
+# Canonical generators and source-bound runtime manifests hash raw UTF-8/LF.
+# A Windows checkout must not turn a normal writer's bytes into a different artifact.
+common/src/main/resources/**/*.json text eol=lf
+docs/tiers/t0-economy.json text eol=lf
+docs/assets/t0-experience-visual.json text eol=lf
