@@ -1,0 +1,50 @@
+{
+  "schema": "grindless.visual-asset.v1",
+  "asset_id": "multitool",
+  "registry_id": "grindless:multitool",
+  "family": "item",
+  "tier": "T0",
+  "role": "Manual wrench for rotating and relocating Grindless blocks; not a mining tool.",
+  "source_revision": "7e58f92e846f7580968393be0a2e0a99ed883e2c",
+  "source_refs": [
+    "README.md#assets",
+    "docs/DECISIONS.md#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items",
+    "common/src/main/java/io/github/ezequiel24123z/grindless/item/MultitoolItem.java",
+    "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/FormTextures.java"
+  ],
+  "visual": {
+    "materials": ["worn warm brass", "dark brown grip"],
+    "silhouette": "One open-jaw wrench head above a short substantial handle, fully visible with a clear outer margin.",
+    "motif": "A practical manually operated workshop tool, recognizable before fine decoration.",
+    "wear": "Restrained edge wear; no rust field, grime noise or photoreal scratches.",
+    "state": "Static unpowered tool; no emission, live progress, rating or powered cyan indicator.",
+    "lighting": "upper-left",
+    "orientation": "head-up",
+    "tier_readability": "Primitive T0 hand work; no motor, battery, electronics or future-tier ornament.",
+    "palette": ["#322A24", "#59432A", "#82691A", "#96724C", "#C9A227", "#DBC278", "#E7D9B2"]
+  },
+  "positive_prompt": "pixel art game inventory icon, single compact brass open-end wrench, open C shaped jaw at the top, short thick handle pointing down, warm golden brass metal, dark brown grip, solid beveled edges, visible material thickness, coherent upper left lighting, simple readable silhouette, centered complete object, isolated on pure white background, generous white margin, no ground, no text",
+  "negative_prompt": "pickaxe, hammer, scythe, sword, weapon, electric drill, motor, battery, electronics, glowing, blue, cyan, hand, person, multiple objects, two tools, text, letters, numbers, watermark, logo, border frame, scene, ground plane, cast shadow, cropped, cut off, photograph, realistic photo, blurry",
+  "seeds": [21774205, 21774206],
+  "conditioning": {
+    "kind": "original-multitool-guide-v1",
+    "filename": "grindless-multitool-guide-v1.png",
+    "sha256": "ee974047fdd07ba2da2e84d510fa7e635e2932d9155fb488f9f9143eaf79ca15",
+    "denoise": 0.35
+  },
+  "transform": {
+    "size": 16,
+    "margin": 1,
+    "background": "#FFFFFF",
+    "key_tolerance": 44,
+    "minimum_foreground_fraction": 0.025,
+    "maximum_foreground_fraction": 0.75,
+    "maximum_dust_fraction": 0.015,
+    "resampling": "nearest",
+    "alpha": "binary",
+    "rotation": 0,
+    "mirror": false
+  },
+  "runtime_path": "common/src/main/resources/assets/grindless/textures/item/multitool.png",
+  "human_visual_approval": false
+}

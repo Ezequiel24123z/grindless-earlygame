@@ -1,0 +1,93 @@
+{
+  "allowed_slot": 2,
+  "base_identity": {
+    "asset_id": "multitool",
+    "human_visual_approval": false,
+    "maximum_candidates": 2,
+    "model_sha256": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+    "schema": "grindless.comfy-run.v1",
+    "spec_sha256": "c6337259f44b11db927a8365275d012c120ed39f4b460bf40402506fe4886190",
+    "template_sha256": "d95c12626785711348ceb9393c616114d133355df609edea21cbdff429152b14"
+  },
+  "first_request_sha256": "45d47bf9e15e782a92a7e64f25e2e8735746672378063b0eb5a7b504612d3d73",
+  "identity": {
+    "asset_id": "multitool",
+    "human_visual_approval": false,
+    "maximum_candidates": 2,
+    "model_sha256": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+    "schema": "grindless.comfy-run.v1",
+    "spec_sha256": "ddac72943097650f23821ac50f10d4260ad7c5d58c1876fc915a09f9b7c57021",
+    "template_sha256": "d95782c1103edf8a740efe78a8d0be2a7ac9380662c31fe66c7f88a85646c78b"
+  },
+  "ledger_sha256_before": "724edcd0276d2c196fee4e55f533dea8d13919b2f3b0083a5d4f8965d732eeba",
+  "maximum_total": 2,
+  "reason": "Coordinator-approved second and last Multitool source: original guide, denoise0.35, same model and total-two allowance.",
+  "remaining_after": 1,
+  "schema": "grindless.remaining-source-authorization.v1",
+  "specification": {
+    "asset_id": "multitool",
+    "conditioning": {
+      "denoise": 0.35,
+      "filename": "grindless-multitool-guide-v1.png",
+      "kind": "original-multitool-guide-v1",
+      "sha256": "ee974047fdd07ba2da2e84d510fa7e635e2932d9155fb488f9f9143eaf79ca15"
+    },
+    "family": "item",
+    "human_visual_approval": false,
+    "negative_prompt": "pickaxe, hammer, scythe, sword, weapon, electric drill, motor, battery, electronics, glowing, blue, cyan, hand, person, multiple objects, two tools, text, letters, numbers, watermark, logo, border frame, scene, ground plane, cast shadow, cropped, cut off, photograph, realistic photo, blurry",
+    "positive_prompt": "pixel art game inventory icon, single compact brass open-end wrench, open C shaped jaw at the top, short thick handle pointing down, warm golden brass metal, dark brown grip, solid beveled edges, visible material thickness, coherent upper left lighting, simple readable silhouette, centered complete object, isolated on pure white background, generous white margin, no ground, no text",
+    "registry_id": "grindless:multitool",
+    "role": "Manual wrench for rotating and relocating Grindless blocks; not a mining tool.",
+    "runtime_path": "common/src/main/resources/assets/grindless/textures/item/multitool.png",
+    "schema": "grindless.visual-asset.v1",
+    "seeds": [
+      21774205,
+      21774206
+    ],
+    "source_refs": [
+      "README.md#assets",
+      "docs/DECISIONS.md#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items",
+      "common/src/main/java/io/github/ezequiel24123z/grindless/item/MultitoolItem.java",
+      "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/FormTextures.java"
+    ],
+    "source_revision": "7e58f92e846f7580968393be0a2e0a99ed883e2c",
+    "tier": "T0",
+    "transform": {
+      "alpha": "binary",
+      "background": "#FFFFFF",
+      "key_tolerance": 44,
+      "margin": 1,
+      "maximum_dust_fraction": 0.015,
+      "maximum_foreground_fraction": 0.75,
+      "minimum_foreground_fraction": 0.025,
+      "mirror": false,
+      "resampling": "nearest",
+      "rotation": 0,
+      "size": 16
+    },
+    "visual": {
+      "lighting": "upper-left",
+      "materials": [
+        "worn warm brass",
+        "dark brown grip"
+      ],
+      "motif": "A practical manually operated workshop tool, recognizable before fine decoration.",
+      "orientation": "head-up",
+      "palette": [
+        "#322A24",
+        "#59432A",
+        "#82691A",
+        "#96724C",
+        "#C9A227",
+        "#DBC278",
+        "#E7D9B2"
+      ],
+      "silhouette": "One open-jaw wrench head above a short substantial handle, fully visible with a clear outer margin.",
+      "state": "Static unpowered tool; no emission, live progress, rating or powered cyan indicator.",
+      "tier_readability": "Primitive T0 hand work; no motor, battery, electronics or future-tier ornament.",
+      "wear": "Restrained edge wear; no rust field, grime noise or photoreal scratches."
+    }
+  },
+  "spent_before": 1,
+  "utc": "2026-10-20T02:27:47.568315+00:00"
+}

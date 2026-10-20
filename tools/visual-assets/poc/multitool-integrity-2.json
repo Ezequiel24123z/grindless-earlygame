@@ -1,0 +1,17 @@
+{
+  "audited_at": "2026-10-20T02:48:44.075870+00:00",
+  "canonical_prefix": "grindless/multitool/multitool-poc-20261020/candidate-2",
+  "evidence_source": "actual retained PNG prompt metadata, not a new history observation",
+  "model_sha256": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+  "network_requests": 0,
+  "new_inference": false,
+  "original_receipts_modified": false,
+  "png_prompt_metadata": "verified",
+  "png_prompt_sha256": "7940c2cbbf60fcd5e72854deb843debe268b458962fc6e2fc65e19717a806d41",
+  "prompt_id": "318be6d6-ca2a-41ea-8b1d-a3f70c20988e",
+  "schema": "grindless.retained-source-integrity.v1",
+  "slot": 2,
+  "source_sha256": "d083051c81c61d8d42158debd5afbb24b347bf77fa271ef41d10044a8f51f615",
+  "spec_sha256": "ddac72943097650f23821ac50f10d4260ad7c5d58c1876fc915a09f9b7c57021",
+  "workflow_sha256": "7940c2cbbf60fcd5e72854deb843debe268b458962fc6e2fc65e19717a806d41"
+}

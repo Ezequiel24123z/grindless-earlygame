@@ -42,6 +42,13 @@ second yields the selected127b native sprite. The old2/2 ledger is preserved.
 F1 retained-workflow integrity is fixed atc214 with offline regressions and real
 PNG-metadata addenda; independent review closes it without another inference.
 No final integrated build/deployment or human listening/visual acceptance is claimed.
+The full Comfy sourcec214 is now integrated with actual28 Python and12 JDK checks,
+two successful full1602-file stages with identical byte manifest3b9e22d1,581
+runtime PNGs matching the freeze and580 others unchanged (including9+3 protected).
+The stage observer initially omitted five normal side outputs; its separate
+read-only addendum aee17226 recovers comparison without replaying six successful
+JDK stages or installing side outputs. JDK/PC is released03:14:10Z with0Java/
+Python/8189 free. No Gradle/game build or Prism replacement occurred in this unit.
 
 The [Superflat choice](docs/tiers/t0-superflat-entry-options.md) is ready. The
 planning agent was read-only and lacked edit/Git/messaging; its complete analysis

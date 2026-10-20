@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the end-to-end local Multitool pipeline and real generator proof.**
+  Preservec214's licensed-model/core API workflow, original guide, two spent
+  candidates, rejected photo, selected127b source/runtime sprite, provenance and
+  retained-workflow integrity repair. Actual28 Python/12 JDK checks and two
+  byte-identical1602-file stages pass;580 other PNGs and protected9+3 are intact.
+  Ordinary generation is JDK-only; keep failed collector/addendum without replay
+  and require the combined build/deployment plus human visual review separately.
 - **Present the concrete Superflat decision instead of another planning loop.**
   Recover the read-only worker's completed analysis, materialize the proposal and
   source-check its initial stone/wood/water cuts, bedrock eligibility,27-charge

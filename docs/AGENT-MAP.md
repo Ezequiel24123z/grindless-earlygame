@@ -36,6 +36,15 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
   retirement is established by official sources, not a non-JSON catalogue body;
   Copilot vision/credits are not image-output entitlement. The actual local ComfyUI
   owner controls installation qualification, not this research fallback.
+- `tools/visual-assets/`, its approved Multitool PNG/provenance and
+  `docs/assets/comfyui-asset-workflow.md` — supervised local source generation,
+  retained workflow/spec/model/seed binding and deterministic Minecraft adaptation.
+  Canonical byte digests survive Git JSON transport; collection validates the
+  reserved graph before HTTP and actual own history/PNG metadata. Never reset a
+  spent/uncertain slot to repair observation. The regular JDK generator validates/
+  copies the16px PNG and needs no Comfy/Python/network. Guide-only mode stays
+  independent; preserve the other580 resource PNGs and all twelve reviewed sprites.
+  Technical selection is not human visual acceptance.
 - `docs/tiers/t0-superflat-entry-options.md` — source-checked initial material cuts
   and explicit product alternatives. Its counts are proposal/planning, not a new
   starter grant, world preset, food policy or survival pass. Bedrock is already a

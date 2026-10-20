@@ -1,5 +1,34 @@
 # Current T0 rework validation
 
+## Local Comfy source, canonical sprite and ordinary regeneration proof
+
+Integrate exactc214d437a652cb1bcd1c698694953be67331089a: existing licensed SD1.5/
+ROCm, controlled core workflows, real retained sources, original guide, immutable
+spent2/2 evidence, deterministic processor, native/canonical127b PNG and a single
+ordinary JDK-generator copy seam. No model/GPL implementation or runtime Python/
+Comfy dependency is introduced. Narrow independent review closes the actual F1
+retained-workflow defect; raw/canonical/source/history/metadata bindings and both
+real offline retrovalidation addenda are preserved.
+
+Actual PC qualification on that frozen archive:28 Python contracts0 in5.126s,
+javac0,12 JDK checks0 and two full generator runs0 in2.028/2.034s. Each stage has
+1602 files, byte-identical manifest SHA-256
+`3b9e22d1afe6f560dec85f3324146af9403adde343fb2ef1954f49ef11916dfb`.
+All581 resource PNGs equal source;580 non-target PNGs include the protected9+3.
+The223-byte native/canonical/runtime PNG SHA-256 is
+`127b662a124c30490c3d6737dc29ce8175d37b201e45bdad18bc1ea7360c7d38`.
+Normal guide-only CLI behavior and invalid/missing/hash/dimension/alpha refusals
+remain checked, not replaced with a Python or server call.
+
+The first stage collector omitted five normal side outputs and failed after all
+six native JDK exits0. Retain the failed observer separately; read-only addendum
+`aee17226076535ea37726033664377f72e572b9c6bb376f328774f4a8be30b69`
+resolves four text/EOL and the same-snapshot preview comparison with no JVM replay.
+No side output is installed. Owner releases03:14:10Z with0Java/Python/free8189,
+9.036GiB physical/27.174GiB commit/155.022GiB work space. Combined game build,
+resource registration/client rendering and deployment remain separate next work;
+this is neither an artistic pass nor T0 acceptance.
+
 ## Observation fixtures qualified by actual CI and PC Windows contracts
 
 Exact962cb37 [CI39357301892](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39357301892)

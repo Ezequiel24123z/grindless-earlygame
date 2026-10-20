@@ -11,6 +11,33 @@
     "gemini_key_configured": false,
     "generated_candidates": []
   },
+  "local_comfyui_candidate": {
+    "policy": "ADR-0157/ADR-0158",
+    "source_freeze": "c214d437a652cb1bcd1c698694953be67331089a",
+    "status": "technically_selected_integrated_source_JDK_stages_passed_human_visual_pending",
+    "asset": "multitool",
+    "provenance": "tools/visual-assets/approved/multitool.provenance.json",
+    "canonical_source": "tools/visual-assets/approved/multitool.png",
+    "native_sha256": "127b662a124c30490c3d6737dc29ce8175d37b201e45bdad18bc1ea7360c7d38",
+    "existing_model_reused": true,
+    "real_source_candidates": 2,
+    "first_candidate_rejected": true,
+    "new_models_or_provider_charges": 0,
+    "Python_contracts": 28,
+    "JDK_checks": 12,
+    "two_generated_stages_exit": [0, 0],
+    "files_each_stage": 1602,
+    "stages_byte_identical": true,
+    "stage_manifest_sha256": "3b9e22d1afe6f560dec85f3324146af9403adde343fb2ef1954f49ef11916dfb",
+    "runtime_resource_PNGs": 581,
+    "other_PNGs_unchanged": 580,
+    "protected_nine_and_three_included_in_unchanged": true,
+    "observer_addendum_no_JVM_replay": "aee17226076535ea37726033664377f72e572b9c6bb376f328774f4a8be30b69",
+    "ordinary_generator_requires_Comfy_Python_or_network": false,
+    "human_visual_approved": false,
+    "deployed": false,
+    "historical_provider_status_above_not_current_local_availability": true
+  },
   "source_bound_readiness": {
     "source_revision": "e0a72c609e0519a8a18ddf476c326b6906e813fa",
     "scope": "Inventory projection only. Runtime catalogues and generator code remain the authorities; this manifest does not add gameplay, assets, visual acceptance, or a new runtime list.",
@@ -187,7 +214,7 @@
     "generator_ownership": {
       "deterministic_workflow": "tools/generate-assets.ps1 and tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/GenerateAssets.java",
       "blocks": "BlockCatalogue -> MachineArt and BootstrapArt -> BlockModels -> GenerateAssets",
-      "standalone_items": "ModItems, SupplyCatalogue and registered placeholders -> FormTextures -> GenerateAssets",
+      "standalone_items": "ModItems, SupplyCatalogue and registered placeholders -> FormTextures -> GenerateAssets, except the technically selected Multitool copied from its hash-validated canonical source",
       "blockstate_and_rotation": "BlockCatalogue -> BlockModels -> GenerateAssets",
       "workshop_shape_and_preview": "WorkshopGeometry -> BlockModels and WorkshopPreview",
       "gui_texture": "GenerateAssets.writeGui",
@@ -286,7 +313,7 @@
       {"id": "crude_manipulator", "geometry": "manipulator", "states": ["idle", "running"], "facing": true, "blockstate_variants": 8, "generator_mapped": true, "source_files_present": true}
     ],
     "standalone_items": [
-      {"id": "multitool", "category": "tool", "texture": "textures/item/multitool.png", "model": "models/item/multitool.json", "source_files_present": true},
+      {"id": "multitool", "category": "tool", "texture": "textures/item/multitool.png", "model": "models/item/multitool.json", "source_files_present": true, "visual_source": "tools/visual-assets/approved/multitool.png", "human_visual_approval": false},
       {"id": "crank_handle", "category": "tool", "texture": "textures/item/crank_handle.png", "model": "models/item/crank_handle.json", "source_files_present": true},
       {"id": "mineral_aggregate", "category": "material", "texture": "textures/item/mineral_aggregate.png", "model": "models/item/mineral_aggregate.json", "source_files_present": true},
       {"id": "biomass", "category": "material", "texture": "textures/item/biomass.png", "model": "models/item/biomass.json", "source_files_present": true},

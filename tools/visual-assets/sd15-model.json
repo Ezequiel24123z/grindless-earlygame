@@ -1,0 +1,17 @@
+{
+  "schema": "grindless.comfy-model.v1",
+  "filename": "v1-5-pruned-emaonly-fp16.safetensors",
+  "bytes": 2132696762,
+  "sha256": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+  "source_url": "https://huggingface.co/Comfy-Org/stable-diffusion-v1-5-archive/resolve/4fddeb7f9096623f1b77f4708feb96126a08a0cf/v1-5-pruned-emaonly-fp16.safetensors",
+  "source_revision": "4fddeb7f9096623f1b77f4708feb96126a08a0cf",
+  "source_git_blob": "2b9f5265289c9cc66100187c4db39636dd376122",
+  "source_metadata_url": "https://huggingface.co/api/models/Comfy-Org/stable-diffusion-v1-5-archive/tree/4fddeb7f9096623f1b77f4708feb96126a08a0cf",
+  "license": "CreativeML OpenRAIL-M",
+  "license_url": "https://github.com/CompVis/stable-diffusion/blob/69ae4b35e0a0f6ee1af8bb9a5d0016ccb27e36dc/LICENSE",
+  "conversion": "Comfy-Org FP16 conversion of the pruned EMA-only SD1.5 checkpoint, with a metadata header; not byte-identical to the original FP32 release.",
+  "provenance_verified": true,
+  "verification": "The existing local file length and independently computed SHA256 equal the archive's exact git-LFS size/OID. No weights were downloaded or copied.",
+  "output_terms": "License section 6 claims no rights in generated output; output use must not contravene the license, including its use-based restrictions. No unrestricted-output or legal-assurance claim.",
+  "redistribution": "Development-only existing local model. No model weights or ComfyUI source are distributed by this pipeline."
+}
