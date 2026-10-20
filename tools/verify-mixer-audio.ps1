@@ -55,6 +55,10 @@ function Particles([string]$Text) {
     ([regex]::Matches((Code $Text), 'particle\(level, ParticleTypes\.[^;]+;') |
         ForEach-Object { $_.Value }) -join "`n"
 }
+function Port-Ids([string]$Text) {
+    @([regex]::Matches($Text, 'register\("([a-z0-9_]+)",\s*\(\)\s*->\s*new WorkshopPortBlock\(') |
+        ForEach-Object { $_.Groups[1].Value })
+}
 # Same complete-page Vorbis container check as the prior Mixer contract; no decoder/audibility claim.
 function Ogg-Info([byte[]]$Bytes) {
     $offset = 0; $pages = 0; $serial = 0; $eos = $false; $channels = 0; $rate = 0; $samples = 0L
@@ -88,6 +92,7 @@ $paths = [ordered]@{
     Effects = "$source/machine/MachineEffects.java"
     Registry = "$source/registry/ModSounds.java"
     Catalogue = "$source/registry/BlockCatalogue.java"
+    Blocks = "$source/registry/ModBlocks.java"
     Bootstrap = "$source/recipe/BootstrapRecipes.java"
     Sounds = "$assets/sounds.json"
     Lang = "$assets/lang/en_us.json"
@@ -101,6 +106,9 @@ $paths = [ordered]@{
 }
 $snapshot = @{}
 foreach ($entry in $paths.GetEnumerator()) { $snapshot[$entry.Key] = Read-Source $entry.Value }
+$portBlockPath = "$source/structure/WorkshopPortBlock.java"
+$snapshot.PortBlock = ''
+if (Test-Path -LiteralPath (Join-Path $Root $portBlockPath) -PathType Leaf) { $snapshot.PortBlock = Read-Source $portBlockPath }
 $oldTracker = Invoke-LocalGit "show ${baseline}:$source/client/audio/QuernLoopTracker.java"
 $oldEffects = Invoke-LocalGit "show ${baseline}:$source/machine/MachineEffects.java"
 $oldSounds = (Invoke-LocalGit "show ${baseline}:$assets/sounds.json") | ConvertFrom-Json
@@ -222,6 +230,23 @@ function Get-Contracts([hashtable]$Files, [bool]$Media) {
     $catalogue = @([regex]::Matches($Files.Catalogue, 'new Entry\("([a-z_]+)"') | ForEach-Object { $_.Groups[1].Value })
     $implemented = @([regex]::Matches($Files.Bootstrap, 'new Shaped\("([a-z_]+)"') | ForEach-Object { $_.Groups[1].Value } |
         Where-Object { $catalogue -ccontains $_ }) + @('fibreboard')
+    $ports = @(Port-Ids $Files.Blocks)
+    $partRows = @($record.machine_coverage | Where-Object { $_.structural_part -eq $true })
+    $activeRows = @($record.machine_coverage | Where-Object { $_.structural_part -ne $true -or $ports -ccontains $_.id })
+    $silentParts = @($partRows | Where-Object {
+        $_.family -cne 'intentional_silence' -or $_.playback -cne 'none' -or
+        $null -ne $_.event -or $null -ne $_.file -or $_.radius_blocks -ne 0 -or
+        $null -ne $_.cost_family -or $_.source_class -cne 'WorkshopPortBlock'
+    }).Count -eq 0
+    $registeredParts = $true
+    if ($ports.Count -gt 0) {
+        $portCode = Code $Files.PortBlock
+        $registeredParts = (($ports | Sort-Object) -join ',') -ceq (($partRows.id | Sort-Object) -join ',') -and
+            $portCode.Contains('class WorkshopPortBlock extends BaseEntityBlock') -and
+            -not [regex]::IsMatch($portCode, '\b(animateTick|MachineEffects|playSound|playLocalSound)\b')
+    }
+    $c['registered structural ports are silent parts not machine sources'] =
+        $silentParts -and $registeredParts -and -not $audio.Contains('WorkshopPort')
     $matrixBindings = $true
     foreach ($entry in $record.machine_coverage) {
         if ($entry.family -ceq 'intentional_silence') {
@@ -239,7 +264,7 @@ function Get-Contracts([hashtable]$Files, [bool]$Media) {
         }
     }
     $c['coverage exactly matches implemented T0 block crafts plus fibreboard'] =
-        ($implemented | Sort-Object) -join ',' -ceq (($record.machine_coverage.id | Sort-Object) -join ',') -and
+        ($implemented | Sort-Object) -join ',' -ceq (($activeRows.id | Sort-Object) -join ',') -and
         @($record.machine_coverage | Where-Object { -not $_.condition -or -not $_.human_approval }).Count -eq 0 -and $matrixBindings
     $c['actual finite six request ledger not reset or mistaken for approval'] =
         $record.generation.performed_posts -eq 6 -and $record.generation.successful_http_200 -eq 6 -and
@@ -278,6 +303,19 @@ function Reject-Mutation([string]$Label, [hashtable]$Mutated, [string]$Diagnosti
     }
 }
 if ($SelfTest) {
+    $composed = $snapshot.Clone()
+    if (@(Port-Ids $snapshot.Blocks).Count -eq 0) {
+        $composition = $snapshot.Record | ConvertFrom-Json
+        $revision = $composition.structural_part_composition.source_commit
+        if ($revision -cnotmatch '^[0-9a-f]{40}$') { throw 'A published exact port-composition source is required.' }
+        foreach ($key in @('Blocks','Catalogue','Bootstrap')) {
+            $composed[$key] = Invoke-LocalGit "show ${revision}:$($paths[$key])"
+        }
+        $composed.PortBlock = Invoke-LocalGit "show ${revision}:$portBlockPath"
+    }
+    $composedContracts = Get-Contracts $composed (-not $SourceOnly)
+    if (@($composedContracts.GetEnumerator() | Where-Object { -not $_.Value }).Count -ne 0) { throw 'Published structural-port composition must preserve the audio contracts.' }
+    Write-Output "PASS: published typed-port registration composes $(@(Port-Ids $composed.Blocks).Count) silent parts without machine-family resolution."
     $copy = $snapshot.Clone(); $language = $copy.Lang | ConvertFrom-Json
     $unrelated = @($language.PSObject.Properties | Where-Object { -not $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })[0].Name
     $language.$unrelated = 'TEST unrelated presentation change'
@@ -318,6 +356,15 @@ if ($SelfTest) {
         $copy = $snapshot.Clone(); $copy.Effects = $copy.Effects.Replace($emptyTank, $control.Value)
         Reject-Mutation $control.Key $copy 'passive tank and structural parts remain silent'
     }
+    $copy = $composed.Clone(); $record = $copy.Record | ConvertFrom-Json
+    $firstPort = @(Port-Ids $composed.Blocks)[0]
+    $record.machine_coverage = @($record.machine_coverage | Where-Object { $_.id -cne $firstPort })
+    $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'missing registered structural port' $copy 'registered structural ports are silent parts not machine sources'
+    $copy = $composed.Clone(); $record = $copy.Record | ConvertFrom-Json
+    ($record.machine_coverage | Where-Object { $_.id -ceq $firstPort }).playback = 'loop'
+    $copy.Record = $record | ConvertTo-Json -Depth 20
+    Reject-Mutation 'structural port given a working loop' $copy 'registered structural ports are silent parts not machine sources'
     $copy = $snapshot.Clone(); $copy.Retired = @('machine_hum.ogg')
     Reject-Mutation 'retired Ogg restored' $copy 'all five retired synthetic resources absent'
     $copy = $snapshot.Clone(); $record = $copy.Record | ConvertFrom-Json; $record.machine_coverage = @($record.machine_coverage | Where-Object { $_.id -cne 'biocultivator' })

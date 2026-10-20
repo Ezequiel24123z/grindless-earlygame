@@ -3,6 +3,22 @@
   "status": "runtime_imported_offline_source_resource_verified_java_native_client_pending",
   "audit_source": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
   "application_source_commit": "222450fe84681b586f716d7d6ea0c51d38bbc4a1",
+  "structural_part_composition": {
+    "source_commit": "164ee9aac3abf167cd6cb3bbde3ecf516990b12b",
+    "authority": "WorkshopPortContract.Kind literals and ModBlocks register/new WorkshopPortBlock projection",
+    "source_class": "WorkshopPortBlock",
+    "policy": "Family BRICK/CHANNEL/SCREEN is host geometry, never a processing/audio family. No own process, stock or custom SFX.",
+    "coverage": "Six source-verified composition rows; active only when registered in the inspected checkout. No new source import or gameplay claim in the sound-only branch.",
+    "validation": {
+      "winps_source_resource_contracts": 47,
+      "verified_core_source_resource_contracts": 47,
+      "negative_controls": 30,
+      "typed_registration_composition_positive_control": true,
+      "scope": "Current sound source plus the exact published port registration/catalogue/craft/block source read into memory; no composed build or runtime claim",
+      "new_provider_posts_codec_or_jvm_invocations": 0,
+      "tracker_sha256": "12dc61cf8cebc7acd08ca1c885940fa6b0cb69edeeaebc9cb1991c464e26c031"
+    }
+  },
   "human_listening_approved": false,
   "release_ready": false,
   "generation": {
@@ -209,7 +225,13 @@
     {"id": "biocultivator", "event": null, "file": null, "baseline": "silent", "family": "intentional_silence", "playback": "none", "condition": "daylight/moisture growth does not prove an aerator or boiling", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
     {"id": "assembly_bench", "event": null, "file": null, "baseline": "silent", "family": "intentional_silence", "playback": "none", "condition": "all states; no proven continuous moving mechanism", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
     {"id": "biomass_dynamo", "event": "grindless:t0_fire_draft", "file": null, "native_event": "minecraft:block.furnace.fire_crackle", "baseline": "silent, no BIOGEN sound branch", "family": "native_combustion", "playback": "sparse_one_shot", "condition": "RUNNING actual biomass fuel generator", "radius_blocks": 16, "cost_family": "fire_draft", "human_approval": "pending"},
-    {"id": "fibreboard", "event": "native material SoundType.WOOD", "file": null, "baseline": "inherited wood material interaction", "family": "native_wood_material", "playback": "inherited_interaction", "condition": "placement/break only, no machine", "radius_blocks": null, "range_policy": "native material interaction attenuation; not a working-loop radius", "cost_family": null, "human_approval": "pending"}
+    {"id": "fibreboard", "event": "native material SoundType.WOOD", "file": null, "baseline": "inherited wood material interaction", "family": "native_wood_material", "playback": "inherited_interaction", "condition": "placement/break only, no machine", "radius_blocks": null, "range_policy": "native material interaction attenuation; not a working-loop radius", "cost_family": null, "human_approval": "pending"},
+    {"id": "workshop_item_input", "structural_part": true, "source_class": "WorkshopPortBlock", "host_family": "BRICK", "port_role": "ITEM_INPUT", "event": null, "file": null, "baseline": "structural part introduced by port composition164ee9", "family": "intentional_silence", "playback": "none", "condition": "all states, bound/orphaned/transfer; delegates to the Firing Chamber owner, no own process or stock", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "workshop_item_output", "structural_part": true, "source_class": "WorkshopPortBlock", "host_family": "BRICK", "port_role": "ITEM_OUTPUT", "event": null, "file": null, "baseline": "structural part introduced by port composition164ee9", "family": "intentional_silence", "playback": "none", "condition": "all states, bound/orphaned/transfer; delegates to the Firing Chamber owner, no own process or stock", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "settling_item_input", "structural_part": true, "source_class": "WorkshopPortBlock", "host_family": "CHANNEL", "port_role": "ITEM_INPUT", "event": null, "file": null, "baseline": "structural part introduced by port composition164ee9", "family": "intentional_silence", "playback": "none", "condition": "all states, bound/orphaned/transfer; delegates to the Settling Trough owner, no own process or stock", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "settling_fluid_input", "structural_part": true, "source_class": "WorkshopPortBlock", "host_family": "CHANNEL", "port_role": "FLUID_INPUT", "event": null, "file": null, "baseline": "structural part introduced by port composition164ee9", "family": "intentional_silence", "playback": "none", "condition": "all states, bound/orphaned/transfer; delegates to the Settling Trough owner, no own process or stock", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "settling_item_output", "structural_part": true, "source_class": "WorkshopPortBlock", "host_family": "SCREEN", "port_role": "ITEM_OUTPUT", "event": null, "file": null, "baseline": "structural part introduced by port composition164ee9", "family": "intentional_silence", "playback": "none", "condition": "all states, bound/orphaned/transfer; delegates to the Settling Trough owner, no own process or stock", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "settling_fluid_output", "structural_part": true, "source_class": "WorkshopPortBlock", "host_family": "SCREEN", "port_role": "FLUID_OUTPUT", "event": null, "file": null, "baseline": "structural part introduced by port composition164ee9", "family": "intentional_silence", "playback": "none", "condition": "all states, bound/orphaned/transfer; delegates to the Settling Trough owner, no own process or stock", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"}
   ],
   "interaction_coverage": [
     {"id": "crank_handle", "event": null, "file": null, "physical_source": "intentional silence; actual manual/state feedback retained", "condition": "explicit manual work only; no loop per charge", "new_provider_cost": 0, "human_approval": "pending"},
