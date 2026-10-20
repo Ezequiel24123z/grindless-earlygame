@@ -1,0 +1,31 @@
+{
+  "schema": "grindless.workshop-port-visuals.v1",
+  "authority": "Visual integration contract only. Actual registrations/geometry/capabilities belong to the infrastructure lane.",
+  "writer": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/WorkshopPortTextures.java",
+  "overlays": {
+    "item_input": "grindless:block/port_item_input",
+    "item_output": "grindless:block/port_item_output",
+    "fluid_input": "grindless:block/port_fluid_input",
+    "fluid_output": "grindless:block/port_fluid_output"
+  },
+  "ports": [
+    {"id": "workshop_item_input", "family": "firing", "role": "item_input", "base": "minecraft:block/bricks"},
+    {"id": "workshop_item_output", "family": "firing", "role": "item_output", "base": "minecraft:block/bricks"},
+    {"id": "settling_item_input", "family": "settling", "role": "item_input", "base": "grindless:block/bootstrap_timber"},
+    {"id": "settling_fluid_input", "family": "settling", "role": "fluid_input", "base": "grindless:block/bootstrap_timber"},
+    {"id": "settling_item_output", "family": "settling", "role": "item_output", "base": "grindless:block/bootstrap_timber"},
+    {"id": "settling_fluid_output", "family": "settling", "role": "fluid_output", "base": "grindless:block/bootstrap_timber"}
+  ],
+  "model_contract": {
+    "uv": [0, 0, 16, 16],
+    "state": "horizontal facing only; no status",
+    "role_shape": "outlined square=item; droplet=fluid",
+    "direction_shape": "left arrow into role=input; right arrow away from role=output",
+    "palette": ["#29251F", "#F1DEB8"],
+    "alpha": "binary; transparent RGB zero; 1px outer margin",
+    "emission_animation_sound": false,
+    "casing_permutation_pngs": 0
+  },
+  "human_in_client_review": false,
+  "human_visual_approval": false
+}

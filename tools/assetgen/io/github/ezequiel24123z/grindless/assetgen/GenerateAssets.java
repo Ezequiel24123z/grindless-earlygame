@@ -64,12 +64,18 @@ public final class GenerateAssets {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 1 || args.length > 2
-                || args.length == 2 && !"--t0-guides-only".equals(args[1])) {
-            System.err.println("usage: GenerateAssets <repository-root> [--t0-guides-only]");
+                || args.length == 2 && !"--t0-guides-only".equals(args[1])
+                && !"--t0-visuals-only".equals(args[1])) {
+            System.err.println("usage: GenerateAssets <repository-root> [--t0-guides-only|--t0-visuals-only]");
             System.exit(2);
         }
         File root = new File(args[0]);
         if (args.length == 2) {
+            if ("--t0-visuals-only".equals(args[1])) {
+                int written = writeT0Visuals(resourceDir(root, "textures/block"));
+                System.out.println("Generated " + written + " T0 state/port textures only under " + root);
+                return;
+            }
             File items = resourceDir(root, "textures/item");
             int written = writeGuideItems(items);
             System.out.println("Generated " + written + " T0 guide sprites only under " + items);
@@ -227,6 +233,7 @@ public final class GenerateAssets {
                 written += write(blocks, lower + "_front_" + status, MachineArt.front(mass, status));
             }
         }
+        written += writePortOverlays(blocks);
         written += writeGui(root);
         written += WorkshopPreview.write(root);
 
@@ -248,6 +255,27 @@ public final class GenerateAssets {
         writeProvenance(root, written);
         System.out.println("Generated " + written + " assets under "
                 + root.toPath().resolve("common/src/main/resources/assets/grindless"));
+    }
+
+    private static int writeT0Visuals(File blocks) throws IOException {
+        int written = writePortOverlays(blocks);
+        for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
+            if (MachineArt.hasT0StateMark(block.geometry())) {
+                for (String status : block.statuses()) {
+                    written += write(blocks, block.lower() + "_front_" + status,
+                            MachineArt.front(block.geometry(), status));
+                }
+            }
+        }
+        return written;
+    }
+
+    private static int writePortOverlays(File blocks) throws IOException {
+        int written = 0;
+        for (String role : WorkshopPortTextures.ROLES) {
+            written += write(blocks, "port_" + role, WorkshopPortTextures.overlay(role));
+        }
+        return written;
     }
 
     private static int writeGuideItems(File items) throws IOException {
