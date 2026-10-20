@@ -92,9 +92,13 @@ public final class MachineEffects {
             case MARK -> { }
             case PAD -> { }
             case BERTH -> { }
-            case QUERN -> mill(status, level, pos, random, false);
-            case MIXER -> washer(status, level, pos, random, false);
-            case FIREBOX -> generator(status, level, pos, random);
+            case QUERN -> mill(status, level, pos, random);
+            case MIXER -> washer(status, level, pos, random);
+            case FIREBOX -> {
+                generator(status, level, pos, random);
+                combustion(status, level, pos, random);
+            }
+            case BIOGEN -> combustion(status, level, pos, random);
             case SETTLER -> washer(status, level, pos, random);
             case CHANNEL, SCREEN -> { }
         }
@@ -113,7 +117,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 0.95, z,
                             (random.nextDouble() - 0.5) * 0.15, 0.04, (random.nextDouble() - 0.5) * 0.15);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.14F, 0.9F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.2F) {
@@ -129,11 +132,6 @@ public final class MachineEffects {
 
     /** Spray off the sluice while it runs; smoke while it waits on water or feed. */
     private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
-        washer(status, level, pos, random, true);
-    }
-
-    private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random,
-                               boolean hum) {
         double x = pos.getX() + 0.5;
         double z = pos.getZ() + 0.5;
         switch (status) {
@@ -141,9 +139,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.7F) {
                     particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.85, z,
                             (random.nextDouble() - 0.5) * 0.2, 0.05, (random.nextDouble() - 0.5) * 0.2);
-                }
-                if (hum) {
-                    sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F);
                 }
             }
             case BLOCKED -> {
@@ -173,7 +168,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.BUBBLE_POP, x, pos.getY() + 0.9, z,
                             (random.nextDouble() - 0.5) * 0.05, 0.04, (random.nextDouble() - 0.5) * 0.05);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.05F, 0.12F, 1.6F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.2F) {
@@ -202,7 +196,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.7, z,
                             (random.nextDouble() - 0.5) * 0.1, 0.08, (random.nextDouble() - 0.5) * 0.1);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.2F, 0.7F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.15F) {
@@ -225,7 +218,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.45F) {
                     particle(level, ParticleTypes.FLAME, x, pos.getY() + 1.05, z, 0.0, 0.02, 0.0);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.05F, 0.16F, 1.2F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.2F) {
@@ -253,7 +245,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.4F) {
                     particle(level, ParticleTypes.LAVA, x, pos.getY() + 0.7, z, 0.0, 0.0, 0.0);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.14F, 0.9F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.15F) {
@@ -276,7 +267,6 @@ public final class MachineEffects {
                 if (random.nextFloat() < 0.4F) {
                     particle(level, ParticleTypes.CLOUD, x, pos.getY() + 1.05, z, 0.0, 0.02, 0.0);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.18F, 0.8F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.2F) {
@@ -299,7 +289,6 @@ public final class MachineEffects {
                 particle(level, ParticleTypes.ELECTRIC_SPARK, x, pos.getY() + 0.55 + random.nextDouble() * 0.3, z,
                         (random.nextDouble() - 0.5) * 0.1, 0.02, (random.nextDouble() - 0.5) * 0.1);
             }
-            sound(level, pos, ModSounds.RELAY_CLICK.get(), random, 0.12F, 0.25F, 0.9F);
         } else if (status == MachineStatus.BLOCKED) {
             if (random.nextFloat() < 0.3F) {
                 particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5,
@@ -317,7 +306,6 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.CAMPFIRE_COSY_SMOKE, x, pos.getY() + 1.05, z,
                             0.0, 0.06, 0.0);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.08F, 0.35F, 0.8F);
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.4F) {
@@ -349,7 +337,6 @@ public final class MachineEffects {
                             -0.6 + random.nextDouble() * 0.2,
                             -front.getStepZ() * 0.3 + (random.nextDouble() - 0.5) * 0.3);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.05F, 0.2F, 1.4F);
             }
             case STARVED -> {
                 if (random.nextFloat() < 0.2F) {
@@ -368,6 +355,12 @@ public final class MachineEffects {
         }
     }
 
+    private static void combustion(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        if (status == MachineStatus.RUNNING) {
+            sound(level, pos, ModSounds.T0_FIRE_DRAFT.get(), random, 0.04F, 0.2F, 1.0F);
+        }
+    }
+
     private static void generator(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
         double x = pos.getX() + 0.3;
         double z = pos.getZ() + 0.3;
@@ -380,7 +373,6 @@ public final class MachineEffects {
                 particle(level, ParticleTypes.CAMPFIRE_COSY_SMOKE, x + 0.4, pos.getY() + 1.15, z + 0.4,
                         0.0, 0.05, 0.0);
             }
-            sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.08F, 0.3F, 0.7F);
         } else if (status == MachineStatus.BLOCKED) {
             if (random.nextFloat() < 0.3F) {
                 particle(level, ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 1.0,
@@ -390,18 +382,10 @@ public final class MachineEffects {
     }
 
     private static void mill(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
-        mill(status, level, pos, random, true);
-    }
-
-    private static void mill(MachineStatus status, Level level, BlockPos pos, RandomSource random,
-                             boolean hum) {
         if (status == MachineStatus.RUNNING) {
             if (random.nextFloat() < 0.35F) {
                 particle(level, ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 0.7, pos.getZ() + 0.5,
                         (random.nextDouble() - 0.5) * 0.15, 0.02, (random.nextDouble() - 0.5) * 0.15);
-            }
-            if (hum) {
-                sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.35F, 1.1F);
             }
         } else if (status == MachineStatus.BLOCKED) {
             if (random.nextFloat() < 0.3F) {
@@ -420,7 +404,6 @@ public final class MachineEffects {
                         pos.getZ() + 0.3 + random.nextDouble() * 0.4,
                         0.0, 0.01, 0.0);
             }
-            sound(level, pos, ModSounds.MACHINE_HUM_HEAVY.get(), random, 0.1F, 0.4F, 0.55F);
         } else if (status == MachineStatus.STARVED) {
             if (random.nextFloat() < 0.15F) {
                 particle(level, ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5,
@@ -466,8 +449,6 @@ public final class MachineEffects {
                             z + (random.nextDouble() - 0.5) * 0.15, 0.0, 0.04 + 0.01 * tier, 0.0);
                 }
             }
-            // Higher tiers sit lower in pitch: a bigger pylon should sound bigger.
-            sound(level, pos, ModSounds.PYLON_LINK.get(), random, 0.05F, 0.3F, 1.3F - 0.2F * tier);
         } else if (status == MachineStatus.STARVED) {
             for (int i = 0; i < tier; i++) {
                 particle(level, ParticleTypes.ELECTRIC_SPARK, x + (random.nextDouble() - 0.5) * 0.5,

@@ -1,6 +1,6 @@
 {
   "schema": "grindless.t0-experience-audio/v1",
-  "status": "generated_selected_noticed_before_binary_import",
+  "status": "runtime_imported_offline_source_resource_verified_java_native_client_pending",
   "audit_source": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
   "human_listening_approved": false,
   "release_ready": false,
@@ -65,6 +65,7 @@
     "standalone_audio_distribution": "not_permitted",
     "cc0_or_mit_relicensing": false,
     "notice_recorded_before_import": true,
+    "notice_checkpoint": "fdec90019b21dc27f52435d1c3fcd4b009a3a793",
     "public_notice": "common/src/main/resources/assets/grindless/AUDIO-NOTICE.txt",
     "technical_selection_is_listening_approval": false
   },
@@ -100,7 +101,7 @@
       "sample_rate_hz": 44100,
       "duration_seconds": 3,
       "import_authorized": true,
-      "imported": false,
+      "imported": true,
       "human_approval": "pending",
       "decoded_qc": {
         "peak_linear": 0.3237338662147522,
@@ -133,7 +134,7 @@
       "sample_rate_hz": 44100,
       "duration_seconds": 3,
       "import_authorized": true,
-      "imported": false,
+      "imported": true,
       "human_approval": "pending",
       "decoded_qc": {
         "peak_linear": 0.33583620190620422,
@@ -156,6 +157,7 @@
   "runtime": {
     "adapter": "client/audio/T0MachineAudio.java",
     "ownership_tracker_unchanged": true,
+    "family_capture": "immutable source type/kind; mutable current block/status rechecked at native admission",
     "max_loaded_chunks_per_scan": 9,
     "max_working_loops": 8,
     "selection": "nearest eligible source, numeric-position tie break",
@@ -188,34 +190,61 @@
     {"event": "t0_mineral_extraction", "mode": "selected_import", "new_file": "t0_mineral_extraction.ogg"}
   ],
   "machine_coverage": [
-    {"id": "hand_crank_dynamo", "family": "native_latch", "playback": "one_shot_running_edge", "condition": "observed RUNNING current loaded hand dynamo", "radius_blocks": 16, "cost_family": null, "human_approval": "pending"},
-    {"id": "crude_extractor", "family": "mineral_extraction", "playback": "loop", "condition": "RUNNING current extractor", "radius_blocks": 12, "cost_family": "mineral_extraction", "human_approval": "pending"},
-    {"id": "research_terminal", "family": "intentional_silence", "playback": "none", "condition": "all states including physical core calibration; no proven noisy actuator", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "quern", "family": "stone_grinding", "playback": "preserved_loop", "condition": "RUNNING current Quern", "radius_blocks": 16, "cost_family": "historical_quern_not_reset", "human_approval": "prior_preview_only_native_mix_pending"},
-    {"id": "clay_mixer", "family": "wet_work", "playback": "preserved_loop", "condition": "RUNNING current Mixer", "radius_blocks": 16, "cost_family": "historical_mixer_not_reset", "human_approval": "pending"},
-    {"id": "firing_chamber", "family": "native_combustion", "playback": "sparse_one_shot", "condition": "RUNNING actual firebox controller", "radius_blocks": 16, "cost_family": "fire_draft_two_not_imported", "human_approval": "pending"},
-    {"id": "settling_trough", "family": "water_flow", "playback": "loop", "condition": "RUNNING current wet-separation controller", "radius_blocks": 10, "cost_family": "water_flow", "human_approval": "pending"},
-    {"id": "settling_channel", "family": "intentional_silence", "playback": "none", "condition": "stateless structural part; controller owns process voice", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "settling_screen", "family": "intentional_silence", "playback": "none", "condition": "stateless structural part; controller owns process voice", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "hand_pump", "family": "water_flow", "playback": "loop", "condition": "RUNNING current water mover, not merely stored water", "radius_blocks": 10, "cost_family": "water_flow", "human_approval": "pending"},
-    {"id": "basic_tank", "family": "intentional_silence", "playback": "none", "condition": "all states, including full passive RUNNING", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "clay_conduit", "family": "intentional_silence", "playback": "none", "condition": "passive transport; no per-segment ambient voice", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "conveyor_belt", "family": "intentional_silence", "playback": "none", "condition": "transport particles only, no assumed motor", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "crude_manipulator", "family": "intentional_silence", "playback": "none", "condition": "transport particles only, no repeated item notification", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "geological_collector", "family": "water_flow", "playback": "loop", "condition": "RUNNING eligible source; implemented recipe consumes water to gather aggregate/clay", "radius_blocks": 10, "cost_family": "water_flow", "human_approval": "pending"},
-    {"id": "biocultivator", "family": "intentional_silence", "playback": "none", "condition": "daylight/moisture growth does not prove an aerator or boiling", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "assembly_bench", "family": "intentional_silence", "playback": "none", "condition": "all states; no proven continuous moving mechanism", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
-    {"id": "biomass_dynamo", "family": "native_combustion", "playback": "sparse_one_shot", "condition": "RUNNING actual biomass fuel generator", "radius_blocks": 16, "cost_family": "fire_draft_two_not_imported", "human_approval": "pending"},
-    {"id": "fibreboard", "family": "native_wood_material", "playback": "inherited_interaction", "condition": "placement/break only, no machine", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"}
+    {"id": "hand_crank_dynamo", "event": "grindless:relay_click", "file": null, "native_event": "minecraft:block.lever.click", "baseline": "synthetic relay_click.ogg animateTick bursts", "family": "native_latch", "playback": "one_shot_running_edge", "condition": "observed RUNNING current loaded hand dynamo", "radius_blocks": 16, "cost_family": null, "human_approval": "pending"},
+    {"id": "crude_extractor", "event": "grindless:t0_mineral_extraction", "file": "t0_mineral_extraction.ogg", "baseline": "generic machine_hum_heavy.ogg", "family": "mineral_extraction", "playback": "loop", "condition": "RUNNING current extractor", "radius_blocks": 12, "cost_family": "mineral_extraction", "human_approval": "pending"},
+    {"id": "research_terminal", "event": null, "file": null, "baseline": "generic machine_hum.ogg", "family": "intentional_silence", "playback": "none", "condition": "all states including physical core calibration; no proven noisy actuator", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "quern", "event": "grindless:t0_grinding", "file": "t0_grinding.ogg", "baseline": "preserved imported Quern A", "family": "stone_grinding", "playback": "preserved_loop", "condition": "RUNNING current Quern", "radius_blocks": 16, "cost_family": "historical_quern_not_reset", "human_approval": "prior_preview_only_native_mix_pending"},
+    {"id": "clay_mixer", "event": "grindless:t0_wet_work", "file": "t0_wet_work.ogg", "baseline": "preserved normalized imported Mixer A", "family": "wet_work", "playback": "preserved_loop", "condition": "RUNNING current Mixer", "radius_blocks": 16, "cost_family": "historical_mixer_not_reset", "human_approval": "pending"},
+    {"id": "firing_chamber", "event": "grindless:t0_fire_draft", "file": null, "native_event": "minecraft:block.furnace.fire_crackle", "baseline": "generic machine_hum.ogg", "family": "native_combustion", "playback": "sparse_one_shot", "condition": "RUNNING actual firebox controller", "radius_blocks": 16, "cost_family": "fire_draft", "human_approval": "pending"},
+    {"id": "settling_trough", "event": "grindless:t0_water_flow", "file": "t0_water_flow.ogg", "baseline": "generic machine_hum.ogg", "family": "water_flow", "playback": "loop", "condition": "RUNNING current wet-separation controller", "radius_blocks": 10, "cost_family": "water_flow", "human_approval": "pending"},
+    {"id": "settling_channel", "event": null, "file": null, "baseline": "silent", "family": "intentional_silence", "playback": "none", "condition": "stateless structural part; controller owns process voice", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "settling_screen", "event": null, "file": null, "baseline": "silent", "family": "intentional_silence", "playback": "none", "condition": "stateless structural part; controller owns process voice", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "hand_pump", "event": "grindless:t0_water_flow", "file": "t0_water_flow.ogg", "baseline": "generic machine_hum_heavy.ogg", "family": "water_flow", "playback": "loop", "condition": "RUNNING current water mover, not merely stored water", "radius_blocks": 10, "cost_family": "water_flow", "human_approval": "pending"},
+    {"id": "basic_tank", "event": null, "file": null, "baseline": "already corrected silent passive TANK", "family": "intentional_silence", "playback": "none", "condition": "all states, including full passive RUNNING", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "clay_conduit", "event": null, "file": null, "baseline": "silent particles only", "family": "intentional_silence", "playback": "none", "condition": "passive transport; no per-segment ambient voice", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "conveyor_belt", "event": null, "file": null, "baseline": "silent particles only", "family": "intentional_silence", "playback": "none", "condition": "transport particles only, no assumed motor", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "crude_manipulator", "event": null, "file": null, "baseline": "silent particles only", "family": "intentional_silence", "playback": "none", "condition": "transport particles only, no repeated item notification", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "geological_collector", "event": "grindless:t0_water_flow", "file": "t0_water_flow.ogg", "baseline": "silent", "family": "water_flow", "playback": "loop", "condition": "RUNNING eligible source; implemented recipe consumes water to gather aggregate/clay", "radius_blocks": 10, "cost_family": "water_flow", "human_approval": "pending"},
+    {"id": "biocultivator", "event": null, "file": null, "baseline": "silent", "family": "intentional_silence", "playback": "none", "condition": "daylight/moisture growth does not prove an aerator or boiling", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "assembly_bench", "event": null, "file": null, "baseline": "silent", "family": "intentional_silence", "playback": "none", "condition": "all states; no proven continuous moving mechanism", "radius_blocks": 0, "cost_family": null, "human_approval": "pending"},
+    {"id": "biomass_dynamo", "event": "grindless:t0_fire_draft", "file": null, "native_event": "minecraft:block.furnace.fire_crackle", "baseline": "silent, no BIOGEN sound branch", "family": "native_combustion", "playback": "sparse_one_shot", "condition": "RUNNING actual biomass fuel generator", "radius_blocks": 16, "cost_family": "fire_draft", "human_approval": "pending"},
+    {"id": "fibreboard", "event": "native material SoundType.WOOD", "file": null, "baseline": "inherited wood material interaction", "family": "native_wood_material", "playback": "inherited_interaction", "condition": "placement/break only, no machine", "radius_blocks": null, "range_policy": "native material interaction attenuation; not a working-loop radius", "cost_family": null, "human_approval": "pending"}
+  ],
+  "interaction_coverage": [
+    {"id": "crank_handle", "event": null, "file": null, "physical_source": "intentional silence; actual manual/state feedback retained", "condition": "explicit manual work only; no loop per charge", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "multitool_rotation", "event": "affected block native place sound", "file": null, "physical_source": "material movement", "condition": "existing successful server rotation action", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "multitool_relocation", "event": "affected block native break sound", "file": null, "physical_source": "material pickup", "condition": "existing successful server relocation action", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "flux_conduit_link", "event": "grindless:pylon_link", "file": null, "physical_source": "native tripwire attachment", "condition": "existing successful manual link; no later-tier feature added", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "flux_conduit_unlink", "event": "grindless:relay_click", "file": null, "physical_source": "native lever latch", "condition": "existing successful manual unlink", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "pylon_shortage", "event": "grindless:brownout_alarm", "file": null, "physical_source": "native iron safety-trip clack", "condition": "retained existing explicit shortage exception, not ordinary machine faults", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "ordinary_errors_multiblock_feedback_and_ui", "event": null, "file": null, "physical_source": "intentional silence beyond existing visual/text feedback", "condition": "no invented formation/error/completion notification palette", "new_provider_cost": 0, "human_approval": "pending"},
+    {"id": "existing_armor_equip", "event": "minecraft:item.armor.equip_iron", "file": null, "physical_source": "existing native material equipment feedback", "condition": "unchanged armor material declarations; no later-tier implementation", "new_provider_cost": 0, "human_approval": "pending"}
   ],
   "validation": {
     "offline_preparation_assertions": 695,
+    "verified_core_offline_assertions": 695,
     "actual_provider_and_initial_codec_qc": "PASS_six_saved_HTTP200_sources",
     "selected_decoded_qc": "PASS_two_mono_44100_3s_Vorbis_files_zero_clipping_and_no_flags",
     "fire_adaptation": "FAIL_preserved_not_imported_native_combustion_selected",
-    "source_resource_contracts": "pending_before_binary_import",
+    "source_resource_contracts": {
+      "winps_assertions": 46,
+      "winps_negative_controls": 21,
+      "verified_core_assertions": 46,
+      "verified_core_negative_controls": 21,
+      "exit_code": 0,
+      "scope": "Complete T0 coverage, exact four runtime Oggs, five retired files, ten registered sound bindings, retained tracker/particles/notices, physical native references and source policies; not Java or native engine proof"
+    },
+    "documentation_links": "PASS_737_relative_links_51_Markdown_files_160_ADR_sections_and_index_rows",
+    "retired_windows_converter": "PASS_actual_legacy_root_invocation_fails_closed_before_writes",
+    "native_sh": "NOT_EXECUTED_no_Bash_in_current_bundled_Git_or_standard_install_no_install_attempted",
     "java_compilation_and_execution": "NOT_EXECUTED_no_PC_JVM_lease",
     "native_client_or_listening": "NOT_EXECUTED",
     "deployment": "NOT_EXECUTED_parent_only"
-  }
+  },
+  "preserved_failures": [
+    "Initial new negative fixture expected SD_VALIDATION rather than existing SD_PURPOSE_UNAPPROVED; test expectation corrected, no production guard weakened.",
+    "First dot-sourced QC read hit the host execution policy; the normal process-local Bypass invocation read the existing results without regeneration or OS setting changes.",
+    "Actual fire A periodic-window adaptation fails boundary QC and remains unimported; originals and failed processing receipt are retained.",
+    "The active app-bundled Git has no Bash; initial launcher lookup fails and the named standard-install check also finds none. No SH contract or Linux qualification is claimed."
+  ]
 }

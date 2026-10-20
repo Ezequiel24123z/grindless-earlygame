@@ -24,6 +24,7 @@ public final class VerifyQuernAudio {
         pauseAndVolume();
         scopeChanges();
         distances();
+        workshopMix();
         nativeBindings();
         System.out.println(checks + " QUERN AUDIO CHECKS, " + failures + " FAILED");
         if (failures != 0) {
@@ -349,6 +350,50 @@ public final class VerifyQuernAudio {
         check("returning inside range can start a fresh voice", f.engine.started.size() == 2);
     }
 
+    private static void workshopMix() {
+        Map<Long, Double> sources = new HashMap<>();
+        for (long i = 20; i >= 1; i--) {
+            sources.put(i, (double) i);
+        }
+        Map<Long, Double> selected = T0SoundscapePolicy.nearest(sources, Double::doubleValue);
+        check("a dense workshop admits at most eight nearest working loops",
+                selected.size() == 8 && new ArrayList<>(selected.keySet()).equals(
+                        List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L)));
+        check("mix selection does not mutate the eligibility snapshot", sources.size() == 20);
+        check("an empty workshop admits no loop", T0SoundscapePolicy.nearest(Map.<Long, Double>of(),
+                Double::doubleValue).isEmpty());
+        check("equal-distance selection is stable by numeric position",
+                new ArrayList<>(T0SoundscapePolicy.nearest(Map.of(9L, 1.0, -2L, 1.0, 4L, 1.0),
+                        Double::doubleValue).keySet()).equals(List.of(-2L, 4L, 9L)));
+        sources.remove(1L);
+        check("a departing nearest source admits the next eligible position",
+                !T0SoundscapePolicy.nearest(sources, Double::doubleValue).containsKey(1L)
+                        && T0SoundscapePolicy.nearest(sources, Double::doubleValue).containsKey(9L));
+        T0SoundscapePolicy<Object> edges = new T0SoundscapePolicy<>();
+        Object crank = new Object();
+        Map<Long, Object> running = new HashMap<>(Map.of(1L, crank));
+        check("an observed running edge emits one physical latch", edges.onsets(running).size() == 1);
+        boolean quiet = true;
+        for (int tick = 0; tick < 200; tick++) {
+            quiet &= edges.onsets(running).isEmpty();
+        }
+        check("sustained stored-charge output never repeats the latch", quiet);
+        check("a stopped source emits no exit notification", edges.onsets(Map.of()).isEmpty());
+        check("a later running edge can latch again", edges.onsets(running).size() == 1);
+        running.put(1L, new Object());
+        check("replacement at one position is a distinct observed source", edges.onsets(running).size() == 1);
+        edges.clear();
+        check("scope or reload cleanup permits one fresh observation", edges.onsets(running).size() == 1);
+        edges.clear();
+        running.clear();
+        for (long i = 1; i <= 12; i++) {
+            running.put(i, new Object());
+        }
+        check("loading many running dynamos caps one-shot admission at four",
+                edges.onsets(running).size() == T0SoundscapePolicy.MAX_ONSETS);
+        check("mix-suppressed onsets are observed, not queued into later bursts", edges.onsets(running).isEmpty());
+    }
+
     private static void nativeBindings() throws IOException {
         String audio = sourceCode("client/audio/T0MachineAudio.java").replaceAll("\\s+", " ");
         String client = sourceCode("client/GrindlessClient.java");
@@ -370,8 +415,8 @@ public final class VerifyQuernAudio {
                         && audio.contains("chunk.getBlockEntities().values()")
                         && !audio.contains("getAllInChunk") && !audio.contains("betweenClosed"));
         check("discovery uses detached numeric position identities",
-                audio.contains("eligible.put(machine.getBlockPos().asLong(), machine)"));
-        check("both families share one tracker and one bounded discovery scan",
+                audio.contains("eligible.put(blockEntity.getBlockPos().asLong(), blockEntity)"));
+        check("all physical families share one tracker and one bounded discovery scan",
                 Pattern.compile("new QuernLoopTracker<>").matcher(audio).results().count() == 1
                         && Pattern.compile("chunk\\.getBlockEntities\\(\\)\\.values\\(\\)")
                         .matcher(audio).results().count() == 1
@@ -380,22 +425,23 @@ public final class VerifyQuernAudio {
                         && audio.contains("QuernLoopTracker.minChunk(listener.z)")
                         && audio.contains("QuernLoopTracker.maxChunk(listener.z)"));
         check("native eligibility checks the current block, source identity and running status",
-                audio.contains("chunk.getBlockEntities().get(pos) != machine")
-                        && audio.contains("machine.isRemoved()") && audio.contains("machine.getLevel() != level")
+                audio.contains("chunk.getBlockEntities().get(pos) == machine")
+                        && audio.contains("!machine.isRemoved()") && audio.contains("machine.getLevel() == level")
                         && audio.contains("block.kind() == machine.kind()")
-                        && audio.contains("familyFor(block.kind()) == family")
                         && audio.contains("state.getValue(ProcessMachineBlock.STATUS) == MachineStatus.RUNNING"));
-        check("only Quern and Clay Mixer select a working family; every other process kind is excluded",
+        check("only the explicitly selected physical process kinds select a loop",
                 audio.contains("private static Family familyFor(ProcessMachineKind kind) { return switch (kind) { "
-                        + "case QUERN -> Family.GRINDING; case CLAY_MIXER -> Family.WET_WORK; default -> null; }; }"));
+                        + "case QUERN -> Family.GRINDING; case CLAY_MIXER -> Family.WET_WORK; "
+                        + "case SETTLING_TROUGH, GEOLOGICAL_COLLECTOR -> Family.WATER_FLOW; default -> null; }; }"));
         check("the final source kind and captured selected family remain authoritative at native admission",
                 sourceCode("machine/ProcessMachineBlockEntity.java").contains("private final ProcessMachineKind kind;")
-                        && audio.contains("family == null || familyFor(machine.kind()) != family")
-                        && audio.contains("new MachineSound(position, source, familyFor(source.kind()))")
+                        && audio.contains("familyFor(machine) == family")
+                        && audio.contains("runningBlock(machine, chunk.getBlockState(machine.getBlockPos()))")
+                        && audio.contains("new MachineSound(position, source, familyFor(source))")
                         && audio.contains("private final Family family;") && audio.contains("this.family = family;")
                         && audio.contains("client.gameRenderer.getMainCamera().getPosition(), family)"));
         check("source lifetime does not retain the block entity's old level",
-                audio.contains("WeakReference<ProcessMachineBlockEntity> source"));
+                audio.contains("WeakReference<BlockEntity> source"));
         check("native category disablement cannot consume admission grace",
                 audio.contains("getSoundSourceVolume(SoundSource.MASTER) > 0.0F")
                         && audio.contains("getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F")
@@ -413,35 +459,40 @@ public final class VerifyQuernAudio {
                         && audio.contains("volume = family.volume;") && audio.contains("pitch = 1.0F;")
                         && audio.contains("GRINDING(ModSounds.T0_GRINDING, 1.0F)"));
         check("Mixer uses only the wet-work bed at the initial technical volume, without changing Quern",
-                audio.contains("private enum Family { GRINDING(ModSounds.T0_GRINDING, 1.0F), "
-                        + "WET_WORK(ModSounds.T0_WET_WORK, 0.35F);"));
+                audio.contains("GRINDING(ModSounds.T0_GRINDING, 1.0F), WET_WORK(ModSounds.T0_WET_WORK, 0.35F),"));
+        check("new water and extraction families have restrained gains and shorter radii",
+                audio.contains("WATER_FLOW(ModSounds.T0_WATER_FLOW, 0.25F, 10)")
+                        && audio.contains("EXTRACTION(ModSounds.T0_MINERAL_EXTRACTION, 0.3F, 12)")
+                        && audio.contains("< family.radius * family.radius"));
+        check("native identity and status distinguish extractor and pump from passive parts",
+                audio.contains("source instanceof CrudeExtractorBlockEntity")
+                        && audio.contains("state.is(ModBlocks.CRUDE_EXTRACTOR.get())")
+                        && audio.contains("state.getValue(CrudeExtractorBlock.STATUS) == MachineStatus.RUNNING")
+                        && audio.contains("source instanceof HandPumpBlockEntity")
+                        && audio.contains("state.is(ModBlocks.HAND_PUMP.get())")
+                        && audio.contains("state.getValue(HandPumpBlock.STATUS) == MachineStatus.RUNNING"));
         check("retirement marks a late-admitted voice stopped before asking the sound manager",
                 audio.indexOf("sound.retire();") < audio.indexOf("getSoundManager().stop(sound)")
                         && audio.contains("if (isStopped() || machine == null"));
-        check("only Quern opts out of the old shared mill hum",
-                effects.contains("case QUERN -> mill(status, level, pos, random, false);")
-                        && effects.contains("mill(status, level, pos, random, true);")
+        check("all replaced generic heavy and light fallbacks are gone, not renamed",
+                !effects.contains("ModSounds.MACHINE_HUM") && !effects.contains("ModSounds.MACHINE_HUM_HEAVY")
+                        && effects.contains("case QUERN -> mill(status, level, pos, random);")
                         && effects.contains("case PUMP -> mill(status, level, pos, random);")
                         && effects.contains("case EPUMP -> mill(status, level, pos, random);")
                         && effects.contains("case MILL -> mill(status, level, pos, random);")
                         && effects.contains("case EXTRACTOR -> extractor(status, level, pos, random);"));
         check("Quern keeps shared running particles and blocked smoke",
                 effects.contains("ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 0.7")
-                        && effects.contains("ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9")
-                        && effects.contains("if (hum) {"));
-        check("only Mixer opts out of the washer hum, not Settler or Washer",
-                effects.contains("case MIXER -> washer(status, level, pos, random, false);")
-                        && effects.contains("washer(status, level, pos, random, true);")
+                        && effects.contains("ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9"));
+        check("Mixer, Settler and Washer preserve their shared particles without a sound fallback",
+                effects.contains("case MIXER -> washer(status, level, pos, random);")
                         && effects.contains("case SETTLER -> washer(status, level, pos, random);")
-                        && effects.contains("case WASHER -> washer(status, level, pos, random);")
-                        && Pattern.compile("washer\\(status, level, pos, random, false\\)")
-                        .matcher(effects).results().count() == 1);
+                        && effects.contains("case WASHER -> washer(status, level, pos, random);"));
         String washer = effects.substring(effects.indexOf("private static void washer("),
                 effects.indexOf("private static void cell(")).replaceAll("\\s+", " ");
         String washerFaults = washer.substring(washer.indexOf("case BLOCKED"));
         check("Mixer retains washer running/blocked splashes, starved smoke and ordinary-fault silence",
-                washer.contains("if (hum) { sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F); }")
-                        && washer.contains("ParticleTypes.SPLASH, x, pos.getY() + 0.85")
+                !washer.contains("sound(") && washer.contains("ParticleTypes.SPLASH, x, pos.getY() + 0.85")
                         && washerFaults.contains("ParticleTypes.SPLASH, x, pos.getY() + 1.0")
                         && washerFaults.contains("ParticleTypes.SMOKE, x, pos.getY() + 0.9")
                         && !washerFaults.contains("sound("));
@@ -454,15 +505,26 @@ public final class VerifyQuernAudio {
                 Pattern.compile("\\bTANK\\b").matcher(dispatch).results().count() == 1
                         && Pattern.compile("(?m)^\\s*case\\s+TANK\\s*->\\s*\\{\\s*}\\s*$")
                         .matcher(dispatch).find());
-        check("active combustion and industrial families retain generator feedback",
-                List.of("GENERATOR", "KILN", "BOILER", "FIREBOX", "INDUSTRIAL").stream()
+        check("existing generator particles remain independent of the retired hum",
+                List.of("GENERATOR", "KILN", "BOILER", "INDUSTRIAL").stream()
                         .allMatch(geometry -> dispatch.contains("case " + geometry
                                 + " -> generator(status, level, pos, random);")));
-        check("dynamo feedback and pylon warnings keep their own routes",
+        check("only actual T0 fuel roles receive sparse native combustion",
+                dispatch.contains("case FIREBOX -> {")
+                        && dispatch.contains("case BIOGEN -> combustion(status, level, pos, random);")
+                        && effects.contains("ModSounds.T0_FIRE_DRAFT.get()"));
+        check("dynamo particles and exceptional pylon warnings keep their routes without periodic chirps",
                 dispatch.contains("case DYNAMO -> dynamo(status, front, level, pos, random);")
                         && dispatch.contains("case PYLON -> pylon(tier, status, level, pos, random);")
-                        && effects.contains("ModSounds.RELAY_CLICK.get()")
+                        && !effects.contains("ModSounds.RELAY_CLICK.get()")
+                        && !effects.contains("ModSounds.PYLON_LINK.get()")
                         && effects.contains("ModSounds.BROWNOUT_ALARM.get()"));
+        check("one shared snapshot feeds the tested workshop mix and observed crank-edge policy",
+                audio.contains("T0SoundscapePolicy.nearest(eligible,")
+                        && audio.contains("feedback.onsets(cranks).forEach")
+                        && audio.contains("state.is(ModBlocks.HAND_CRANK_DYNAMO.get())")
+                        && audio.contains("state.getValue(HandCrankDynamoBlock.STATUS) == MachineStatus.RUNNING")
+                        && audio.contains("feedback.clear();"));
         check("IDLE still returns before any geometry feedback",
                 Pattern.compile("if \\(status == MachineStatus.IDLE\\) \\{\\s*return;\\s*}"
                         + "\\s*switch \\(geometry\\)").matcher(effects).find());

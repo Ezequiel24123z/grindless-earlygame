@@ -104,8 +104,12 @@ disconnect and resource reload ownership retirement.
 The nearest-eight stable-position mix caps working voices across all four
 loop families. The small source-independent policy also caps observed crank
 edges at four in one tick and observes suppressed edges without queuing a later
-burst. It is exercised by the existing Java audio check, not a second tracker.
+burst. Its mechanism cases are authored in the existing Java audio check, not a
+second tracker; Java execution remains separate below.
 This edge means observed RUNNING output, not proof of an individual crank input.
+Voice construction captures only the immutable source type/kind; admission
+separately rechecks mutable current block/status, avoiding a status-change/null
+profile between discovery and native admission.
 
 Keep all five old SoundEvent IDs registered to avoid registry/save churn.
 Empty hum bindings intentionally represent silence; physical interaction aliases
@@ -113,6 +117,14 @@ reference installed Minecraft events rather than redistributing vanilla audio.
 Remove the five old synthesized Ogg files. Normal generation may retain historical
 development-only WAV writers, but both legacy converters must reject runtime
 resurrection. No quest, fluid, structure, process execution or NBT change is needed.
+
+Actual imported output is exactly four Oggs: preserved `t0_grinding` /
+`t0_wet_work`, selected `t0_water_flow` / `t0_mineral_extraction`. All five old
+synthetic files are removed. All seven baseline event IDs remain, with three
+new event IDs; native combustion is an event reference, not a fifth runtime file.
+`MachineEffects` retains every original particle call and the explicit shortage
+exception, but no light/heavy hum, repeated dynamo click or pylon-running chirp.
+Sparse native combustion is limited to actual RUNNING FIREBOX/BIOGEN roles.
 
 Preparation validation: actual WinPS5 default guard passes **695 assertions**
 (128 legacy guards + 200 legacy flow + 171 purpose guards + 196 purpose flow).
@@ -122,6 +134,28 @@ existing `SD_PURPOSE_UNAPPROVED` code and failed; only that test expectation was
 corrected. No production guard, approval requirement or old receipt was weakened.
 Previously approved FFmpeg9.0.2/ffprobe and Core7.6 executables match their
 recorded SHA-256s; no installation or PC JVM/GPU/Prism lease was used.
+
+After import, the updated existing source/resource checker passes **46 contracts
+and21 negative controls** on actual WinPS5 and verified Core7.6, exit0. This includes exact mono44100/
+132300-frame containers, all five absent synth Oggs, ten event bindings, actual
+nineteen-block T0 coverage derived from the craft/catalogue intersection plus
+fibreboard, no generic fallback and retained particles/Quern/Mixer/tracker/notices.
+Verified Core also passes the default695 offline guard/flow assertions.
+Actual link validation passes737 relative links across51 Markdown files and
+160 ADR sections/index entries. The existing Java audio check now authors the
+mix/onset mechanism cases; Java/common/Forge/native execution is **NOT EXECUTED**
+in this lane because no JVM/PC lease was granted. Parent integration must run
+the affected compilation/Java audio/assets checks and one new-binding boot.
+Do not reuse old747 registration proof for three newly registered events.
+
+The actual retired Windows converter refuses the real legacy-source root before
+any writes. Native SH is **NOT EXECUTED**: the current app-bundled Git has no
+Bash, the initial locator fails before launching a script, and the named standard
+installation check also finds none. No dependency is installed. First QC-result
+inspection also hits the host's script policy; the existing process-local Bypass
+invocation reads retained results without repeating generation or changing OS policy.
+These host limits do not turn the successful Windows/Core checks into Linux/SH
+qualification or conceal the preserved generated-fire failure.
 
 ## In-client human review checklist
 
@@ -133,7 +167,7 @@ These are **NOT EXECUTED** by source or codec checks:
   and Mixer, distinguish mechanisms, check clipping, beating and speech/game masking.
 - Listen continuously for at least ten minutes; judge fatigue, harshness,
   periodicity, repeated seams and whether a quieter gain or silence is preferable.
-- Walk toward/away/across the 16-block boundary and chunk corners; verify smooth
+- Walk toward/away/across the10/12/16-block physical-family boundaries and chunk corners; verify smooth
   falloff and no remote/start-stop storm, including spectating/listener movement.
 - Disconnect/reconnect, respawn/dimension change, unload/reload a chunk and reload
   resources; confirm old voices stop, one new owner returns, no duplicate or ghost.
@@ -146,11 +180,11 @@ These are **NOT EXECUTED** by source or codec checks:
 
 ## Current handoff
 
-| Category | State at notice-first checkpoint |
+| Category | Current source-complete handoff |
 | --- | --- |
-| COMPLETED | Full coverage, six actual HTTP200 sources, two normalized/decoded-QC-selected imports and additive rights/notices; unsuitable fire sources retained, native physical combustion selected. |
-| BLOCKED | None. Previously approved codec/Core binaries found and hash-verified; no install or PC runtime lease needed. |
-| NOT EXECUTED | Binary import, final changed source/resource contracts, Java/common/Forge build and native client review at this checkpoint. |
+| COMPLETED | Full coverage; six HTTP200 sources; two noticed/normalized/imported physical files; all five synth Oggs retired; safe compatibility IDs, native combustion, one tracker/scan and bounded mix/onsets; WinPS/Core695 offline assertions and46+21 source/resource contracts plus737 links pass. |
+| BLOCKED | Native SH qualification: current bundled Git and named standard install have no Bash; no install attempted. No provider, credential or source/resource blocker. |
+| NOT EXECUTED | Native SH; Java/common/Forge compilation and authored mechanism/resource suites, one changed-event registration boot, native client playback/listening, deployment. No JVM/PC lease; parent owns combined qualification. |
 | NEEDS HUMAN VALIDATION | All new artistic selection, encoded listening, gain/falloff, seams and one/eight/mixed workshop fatigue. |
 | NEEDS MY DECISION | None for the bounded delegated sound unit. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None. Existing authorized credential was read only programmatically by the reviewed transport, never output, hashed, copied or committed. |

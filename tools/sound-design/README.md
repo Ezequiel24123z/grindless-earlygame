@@ -1,5 +1,45 @@
 # Purpose-bound sound tooling (ADR-0156)
 
+## Physical T0 replacement wave, 2026-10-20
+
+The new [physical purpose](t0-physical-purpose.json) /
+[separate contract](t0-physical-contract.json) is not a reset of either historical
+run below. Coordinator delegation permits at most8 new POSTs /4 families /2
+initial candidates each. The actual selection used **6 POSTs for3 families**:
+all six sources returned HTTP200, with no provider errors, ambiguity or retries.
+The selected private grant is exhausted6/6; conditional estimate720 credits,
+not an invoice or guaranteed USD maximum. No account query, credential relocation,
+installation, paid images or shared PC runtime lease was needed.
+
+Water B and mineral-extraction B were selected technically, normalized through
+[the paired processing tool](process-physical.ps1), and pass actual decoded mono
+44100Hz/3second Vorbis QC with no flags/clipping. Processing reuses the existing
+JSON/receipt/hash, codec and measurement helpers; it never invokes generation.
+Final hashes, full source/transform identities, coverage and rights are in
+[the public audio record](../../docs/assets/t0-experience-audio.json).
+Notices were committed in `fdec90019b21dc27f52435d1c3fcd4b009a3a793` before import.
+
+Both generated fire sources remain private/unimported. One bounded periodic
+adaptation of A still fails the unchanged boundary screen; B has a1.0399second
+quiet interval. Preserve those originals and failed derivation. Actual T0 fuel
+roles use sparse native furnace crackle, not a forced generated loop or reroll.
+
+All five synthesized runtime Oggs are retired; old event IDs stay registered as
+intentional silence or native physical event references. The original Quern A,
+Mixer A, tracker, source proofs and notices remain intact. Historical development
+WAV writers remain, but both legacy converters now **fail closed** rather than
+restore synthesis to runtime.
+
+The existing `tools/verify-mixer-audio.ps1 -Root . -SelfTest` command now covers
+the complete physical wave, not a permanent freeze of the old seven-file palette.
+Its authored contracts include exact resources, all implemented T0 block coverage,
+scope/native bindings, unchanged particles, retained imports and negative controls.
+The existing Java audio check adds nearest-eight mix and nonrepeating/bounded
+observed-crank edges while reusing the original tracker tests. Java/native/client
+execution is separate from source/codec checks; human listening is not approved.
+Use the [current review checklist and handoff](../../docs/assets/t0-experience-audio.md),
+not a historical two-source receipt as whole-wave acceptance.
+
 ## Actual Mixer generation and integration
 
 The owner/coordinator accepted the freeze and existing two prompts, delegated
