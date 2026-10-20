@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-20",
+  "status": "FROZEN_SOURCE_NATIVE_AND_AGGREGATE_TOOLING_QUALIFICATION_PENDING",
+  "base_revision": "3cd16bac9f0d06d166cec7abe82c54f3e21478c3",
+  "scope": [
+    "first-fluids observation fixture",
+    "first-harness observation fixture",
+    "their dedicated source-only contracts",
+    "their explicitly coordinated shared-batch isolation"
+  ],
+  "original_ci_failure": {
+    "run": 39336114196,
+    "url": "https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39336114196",
+    "source": "543598ac7dcb7a69b9bea62f7b3d00bfda8189fd",
+    "conclusion": "failure",
+    "verify_job": {
+      "id": 118346112701,
+      "conclusion": "success"
+    },
+    "windows_tooling_job": {
+      "id": 118346112719,
+      "conclusion": "success"
+    },
+    "other_native_shards": "1, 4, 5 and 6 succeeded; this does not erase the two failures",
+    "first_fluids": {
+      "job": 118348556626,
+      "artifact": 12227542311,
+      "artifact_name": "smoke-logs-shard-2",
+      "artifact_digest": "sha256:3bf5100e399151f8811c3ddfbf809b6739feec577e51632e5bb190c76c744507",
+      "log": "smoke-first-fluids.log",
+      "log_sha256": "e378e909eead0348007fe40c51eba0538fd44b7bf0f056bfb6f3a9bfd7946070",
+      "commands_blob": "929548ecbeb0d373dea1771a261af745f2fed2b2",
+      "observed": "SMOKE-READY, all three placed blocks, PUMP-OK, PIPE-OK, TANK-OK, WAIT-FLUID and CO-BURN",
+      "missing": "WATER-IN at the only query, 22:52:27 UTC",
+      "shutdown": "normal stop and world saves are present"
+    },
+    "first_harness": {
+      "job": 118348556736,
+      "artifact": 12228520542,
+      "artifact_name": "smoke-logs-shard-3",
+      "artifact_digest": "sha256:4c25a958acae895816acba461c31ac3c715274f1620599182304b96c80b497ff",
+      "log": "smoke-first-harness.log",
+      "log_sha256": "51d4bb754b9425223f95fbaaeb87d7517cef7b32f415dc4d9a41ee2b56922c88",
+      "commands_blob": "682314bd3b11bb29d29c60c29775901259617ae6",
+      "observed": "SMOKE-READY, accepted Voltaic Helmet summon at 22:55:45 UTC, the other four item markers",
+      "missing": "HELMET-OK at the only query, 22:55:46 UTC",
+      "cleanup": "the original global selector killed 46 item entities",
+      "shutdown": "normal stop and world saves are present"
+    }
+  },
+  "causal_boundary": {
+    "confirmed_source_defect": "Both fixtures observe asynchronous world state once after host-wall-clock delays, without an actual loaded-chunk barrier or controlled incidental terrain. The harness also uses unowned, unprotected item entities and global item cleanup.",
+    "native_precipitant": "UNKNOWN. The original logs contain neither the relevant source/tank NBT nor helmet/chunk visibility state, terrain or world seed. They do not prove a specific terrain, loading, scheduling or production failure.",
+    "not_claimed": [
+      "a flaky/setup diagnosis from missing markers alone",
+      "a production fix",
+      "native reproduction by source-contract rejection",
+      "current CI success by reusing older exact444 or unrelated A01/A03 passes"
+    ]
+  },
+  "repair_contract": {
+    "pattern": "Reuse the existing first-exosuit/first-blueprint begin, one-shot setup, bounded scheduled observation, diagnostic failure and scoped cleanup pattern.",
+    "first_fluids": "After actual chunk loading, construct one enclosed circuit atomically. Keep the original pump at 8,71,8, conduit at 8,71,9, empty destination tank at 8,71,10, vanilla water source below the pump and original 1000 mB ambient CO tank/generator topology. WATER-IN requires the actual destination's water ID and positive Amount. CO-BURN requires the actual generator's positive Burn. Latch the two real observations separately; never seed destination water or repair the circuit after setup.",
+    "first_harness": "Summon each of the original five IDs once, with one unique fixture tag, Count 1, no gravity, invulnerability and pickup isolation. Require observation of all five actual tagged item entities, including the original voltaic_helmet, not a summon-success score. Clean only that tag.",
+    "bound": "One shared 160-poll counter per fixture; first poll after 1 tick, then every 5 ticks, no more than 796 scheduled ticks.",
+    "failure_diagnostics": "Explicit retained say emitters bind to phase, actual chunk state, summon outcomes and exact item NBT predicates, or source/block/fluid NBT and actual generator Burn state. Failure never emits an original success marker.",
+    "original_expectation_blobs": {
+      "first-fluids.expect": "44d8482b9ae4ee697404380f9db0e7f2f57d3090",
+      "first-harness.expect": "faad994461df7b74501e8f1c06fe9824b49cff5b"
+    },
+    "unchanged": [
+      "production Java, resources, rates, quantities, saves and build coordinates",
+      "canonical boot and isolated runners",
+      "120-second assertion timeout and 2 GiB server heap",
+      "scenario manifest and CI steps",
+      "A01/A03, creative/client lanes and existing player worlds"
+    ],
+    "batch_adaptation": "Add only first-fluids and first-harness to both existing fixed isolation lists. Extend the existing fake-boot contracts for isolated-only rejection, explicit mixed/default-all skip and all-isolated rejection. Preserve legacy selectors, CDPATH, environment, one-boot dispatch and exit propagation.",
+    "automatic_contract_entry": "VerifyFirstObservationFixtures is discovered by the existing run-checks Java inventory and calls the paired source-only helper once. VerifySmokeHarness and CI are not edited."
+  },
+  "local_execution": {
+    "source_contract_red": {
+      "exit": 1,
+      "failed_contracts": 18,
+      "passed_contracts": 4,
+      "input": "Original unchanged commands and absent new packs at base3cd16, with the new checker only",
+      "log": "first-observation-source-red.log",
+      "sha256": "573ca9330f764243077572adba8923b93051447d491510581df649d65a28738b",
+      "boundary": "Source counterexample, not Minecraft reproduction"
+    },
+    "source_contract_green_ps": {
+      "exit": 0,
+      "positive": 23,
+      "negative_mutations_rejected": 28,
+      "log": "first-observation-source-green-1.log",
+      "sha256": "09b7715e75939b444f3db0abd68342299c87712c5f806810123a967f18f34c08"
+    },
+    "source_contract_sh_initial": {
+      "exit": 127,
+      "failure": "Explicit minimal Git sh.exe invocation lacked its installed utilities on PATH; dirname was unavailable",
+      "log": "first-observation-source-sh.log",
+      "sha256": "0333a078bc31fcc3ab1483bc41e50edd8a75eed90f8b30a33138e5286a2662ec"
+    },
+    "source_contract_sh_with_installed_utilities": {
+      "exit": 0,
+      "positive": 23,
+      "negative_mutations_rejected": 28,
+      "platform": "Windows Git/MSYS Bash calling PowerShell 5.1, not Linux or Minecraft",
+      "change": "Only the invocation's process-local PATH includes the already installed Bash utilities; no installation or script change",
+      "log": "first-observation-source-sh-with-path.log",
+      "sha256": "09b7715e75939b444f3db0abd68342299c87712c5f806810123a967f18f34c08"
+    },
+    "batch_contract_attempt_1": {
+      "exit": 1,
+      "cases_passed": 5,
+      "cases_failed": 43,
+      "total_cases": 48,
+      "assertions_attempted": 196,
+      "failure": "A pre-existing BOM/CRLF parity case and subsequent existing cases exceeded the unchanged 15-second child limit; the unchanged 120-second suite deadline then prevented the new cases from executing",
+      "cleanup": "Only the owned temporary fixture subtree was removed",
+      "log": "first-observation-batch-contracts.log",
+      "sha256": "297d6d13e149a3352af26fec8cf6bb52af704c5082c27dd4d41ec09447be0911"
+    },
+    "batch_contract_serial_retry": {
+      "exit": 1,
+      "cases_passed": 20,
+      "cases_failed": 28,
+      "total_cases": 48,
+      "assertions_attempted": 585,
+      "new_affected_cases": "All six new cases actually pass through the native Bash and current PowerShell subjects: first-fluids and first-harness isolated-only, named mixed selection and default-all skip. The expanded all-isolated rejection also passes.",
+      "failure": "The pre-existing dynamic optional-file case then exceeded the unchanged 15-second child limit; the unchanged 120-second suite deadline prevented the remaining cases from completing",
+      "qualification": "Partial affected-case evidence only. The aggregate gate still FAILS, with unknown timeout precipitant; no third local retry or timeout increase.",
+      "cleanup": "Only the owned temporary fixture subtree was removed",
+      "log": "first-observation-batch-contracts-serial-retry.log",
+      "sha256": "0deda5285634f7c9a1b18893f1c929c4cb40cf89a29799eae94bd696cff802f3"
+    },
+    "log_encoding": "Local Tee-Object captures are UTF-16LE; GitHub raw server log hashes refer to their unchanged downloaded bytes.",
+    "metadata_and_documentation": {
+      "exit": 0,
+      "receipt_and_pack_json": "parsed; both pack_format values are 15; six affected-case PASS labels and the aggregate failure summary were checked against the actual retry log",
+      "relative_links": 654,
+      "markdown_files": 44,
+      "adr_sections_and_index_rows": 156,
+      "result": "ALL LINKS AND ANCHORS RESOLVE"
+    },
+    "initial_git_commit": {
+      "exit": 128,
+      "failure": "No author identity was configured in this execution environment",
+      "resolution": "Retry with command-local Copilot App bot author name/email and both required co-author trailers; do not alter persistent Git configuration, authentication or remote state"
+    },
+    "production_equivalence": {
+      "common_tree": "2353dc45464148f583c14ebeec418a844e45c0d1",
+      "forge_src_tree": "94a9b1fe4b12958ea4b2f6fae697e72cc893841c",
+      "comparison": "No diff from exact3cd16 across common, forge and the build/version files; the original failing CI source also has identical relevant production/boot/fixture blobs."
+    }
+  },
+  "minimum_next_qualification": {
+    "authorization": "Coordinator owns the single PC lease; this receipt grants none",
+    "tooling_property": "Compile/run only the new standalone Java source-contract adapter and run the existing no-JVM Test-SmokesBatch gate once on the coordinator-selected qualified platform. Resolve or explicitly retain its aggregate timeout failure without weakening limits.",
+    "native_property": "Load each frozen datapack through the unchanged production harness and prove real pump-to-conduit-to-destination water transfer/CO ignition, and real observation of the five original Harness item entities, with natural successful shutdown.",
+    "selection": "Only first-fluids and first-harness, each in its own disposable isolated world, via the existing run-smokes selector",
+    "reuse": "Production/build inputs did not change. Reuse the coordinator's verified equivalent runtime artifact rather than inventing a production rebuild or replaying the historical matrix.",
+    "failure_action": "Preserve raw logs, exact fixture/source identities and explicit diagnostics; escalate a demonstrated production fault before modifying production.",
+    "still_not_proven": "An observation-fixture green cannot recover the unknown historical precipitant or establish whole-T0 gameplay, client, persistence, manual acceptance or release readiness.",
+    "integration_documentation_owner": "The coordinator updates the route map, changelog, README and durable root handoffs; these shared files are excluded from this worker's ownership."
+  },
+  "handoff": {
+    "COMPLETED": "Raw failed-CI identities preserved; scoped observation source repair frozen; PS and SH source contracts pass; six new batch cases and expanded all-isolated rejection actually pass in the serial retry; metadata and documentation links pass.",
+    "BLOCKED": "Original CI39336114196 is FAILED. Repaired native qualification and the complete batch gate remain incomplete; both local aggregate attempts exited1 under their unchanged deadlines.",
+    "NOT EXECUTED": "New Java adapter compilation/execution, JVM/Gradle, native smokes, SSH/PC writes, full CI replay, client, deployment and player-world operations.",
+    "NEEDS HUMAN VALIDATION": "Existing global client/render/listening/no-command/longitudinal campaign gates remain outside this source-fixture proof and unchanged.",
+    "NEEDS MY DECISION": "None",
+    "NEEDS CREDENTIAL / EXTERNAL RESOURCE": "None",
+    "COST / BILLING RISK": "None",
+    "DEPLOYED STATE": "Untouched by this worker. The received handoff identifies qualified559; no deployment, release, T0 acceptance/freeze or T1 activation is claimed."
+  }
+}

@@ -547,8 +547,37 @@ done
             Invoke-OrdinaryReference $f $only $result
         }
     }
+    foreach ($freshName in @('first-fluids', 'first-harness')) {
+        Invoke-Case "$freshName only selection refuses both current twins without an optional sibling" {
+            $f = New-Fixture ("alpha`n" + $freshName + "`nbeta`n") 'selected observation only root & spaces'
+            Assert-Test (-not (Test-Path -LiteralPath (Join-Path $f.Root "tools/smoke/$freshName-optional"))) 'observation isolation is fixed, not dependent on an optional sibling'
+            $only = $freshName.ToUpperInvariant() + ',' + $freshName
+            $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $only)
+            Assert-Refused $f $result 'fresh datapack world'
+            Assert-ReferenceRefused $f $only
+        }
+        foreach ($selection in @('named', 'default-all')) {
+            Invoke-Case "$freshName $selection selection explicitly skips its pack in both current twins" {
+                $f = New-Fixture ("alpha`n" + $freshName + "`nbeta`n") 'selected observation mixed root & spaces'
+                Write-FixtureText (Join-Path $f.Root "tools/smoke/$freshName.commands") "say MUST-NOT-BATCH $freshName`n"
+                Write-FixtureText (Join-Path $f.Root "tools/smoke/$freshName.expect") "MUST-NOT-EXPECT $freshName`n"
+                $only = ''
+                if ($selection -eq 'named') {
+                    $only = 'BETA,' + $freshName.ToUpperInvariant() + ',ALPHA,alpha,unknown'
+                    $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', $only)
+                } else {
+                    $result = Invoke-Batch $f
+                }
+                Assert-Dispatch $f $result
+                Assert-Test ($result.Out.Contains("Skipped fresh-world datapack scenario(s): $freshName.")) 'observation pack is explicitly announced as skipped'
+                Assert-Test ($result.Out.Contains('Running 2 shared-world')) 'only ordinary selected scenarios contribute to the boot count'
+                Assert-Aggregate $f "say BATCH-BEGIN alpha`nsay alpha`nsay BATCH-END alpha`nsay BATCH-BEGIN beta`nsay beta`nsay BATCH-END beta`n" "BATCH-END alpha`nPASS alpha`nBATCH-END beta`nPASS beta`n"
+                Invoke-OrdinaryReference $f $only $result
+            }
+        }
+    }
     Invoke-Case 'default-all with only fixed isolated scenarios including A01 refuses both current twins' {
-        $f = New-Fixture "extractor-backpressure`nstates`nrecipe-cache-reload`nforeign-providers`n" 'selected A01 isolated root & spaces'
+        $f = New-Fixture "extractor-backpressure`nstates`nrecipe-cache-reload`nforeign-providers`nfirst-fluids`nfirst-harness`n" 'selected A01 isolated root & spaces'
         $result = Invoke-Batch $f
         Assert-Refused $f $result 'fresh datapack world'
         Assert-ReferenceRefused $f ''
