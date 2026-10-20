@@ -1,14 +1,21 @@
 package io.github.ezequiel24123z.grindless.quest;
 
 import net.minecraft.SharedConstants;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,6 +31,11 @@ public final class VerifyQuestClaims {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         claims();
+        starterClaims();
+        fullInventory();
+        standardInventoryClaim();
+        stacking();
+        bookAccess();
         invalidRewards();
         projectionAndReload();
         System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions);
@@ -39,32 +51,221 @@ public final class VerifyQuestClaims {
         Function<QuestCatalogue.Reward, ItemStack> resolve = reward -> new ItemStack(Items.CLAY_BALL, reward.count());
 
         equal("no crafted book means no claim", QuestClaimService.Result.BOOK_REQUIRED,
-                QuestClaimService.claim(ledger, first, "multitool", false, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, first, "multitool", false, evidence, resolve, capture(rewards)));
         equal("child requires the parent's claim", QuestClaimService.Result.LOCKED,
-                QuestClaimService.claim(ledger, first, "quern", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, first, "quern", true, evidence, resolve, capture(rewards)));
         currentEvidence.set(false);
         equal("past possession cannot pay a stale claim", QuestClaimService.Result.UNMET,
-                QuestClaimService.claim(ledger, first, "multitool", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, first, "multitool", true, evidence, resolve, capture(rewards)));
         equal("rejections never write progress", Set.of(), ledger.claimed(first));
         equal("rejections never pay rewards", 0, rewards.size());
         currentEvidence.set(true);
         equal("first valid claim succeeds", QuestClaimService.Result.CLAIMED,
-                QuestClaimService.claim(ledger, first, "multitool", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, first, "multitool", true, evidence, resolve, capture(rewards)));
         equal("one exact reward stack", 4, rewards.get(0).getCount());
         equal("claim does not consume its evidence", true, currentEvidence.get());
         currentEvidence.set(false);
         equal("duplicate claim cannot pay again", QuestClaimService.Result.ALREADY_CLAIMED,
-                QuestClaimService.claim(ledger, first, "multitool", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, first, "multitool", true, evidence, resolve, capture(rewards)));
         equal("one reward after a duplicate request", 1, rewards.size());
         equal("second player does not inherit the claim", Set.of(), ledger.claimed(second));
         equal("second player still needs current evidence", QuestClaimService.Result.UNMET,
-                QuestClaimService.claim(ledger, second, "multitool", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, second, "multitool", true, evidence, resolve, capture(rewards)));
         currentEvidence.set(true);
         equal("second player has an independent claim", QuestClaimService.Result.CLAIMED,
-                QuestClaimService.claim(ledger, second, "multitool", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, second, "multitool", true, evidence, resolve, capture(rewards)));
         equal("two players receive only their own reward", 2, rewards.size());
         equal("unknown request is rejected", QuestClaimService.Result.UNKNOWN_TASK,
-                QuestClaimService.claim(ledger, first, "invented", true, evidence, resolve, rewards::add));
+                QuestClaimService.claim(ledger, first, "invented", true, evidence, resolve, capture(rewards)));
+    }
+
+    private static void starterClaims() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        List<ItemStack> rewards = new ArrayList<>();
+        equal("even a free claim requires the actual book", QuestClaimService.Result.BOOK_REQUIRED,
+                QuestClaimService.claim(ledger, player, QuestCatalogue.STARTER_SUPPLIES, false,
+                        task -> false, VerifyQuestClaims::resolve, capture(rewards)));
+        equal("a no-book request cannot record starter progress", Set.of(), ledger.claimed(player));
+        equal("a no-book request cannot create rewards", 0, rewards.size());
+        equal("free means no item or hidden evidence requirement", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, QuestCatalogue.STARTER_SUPPLIES, true,
+                        task -> false, VerifyQuestClaims::resolve, capture(rewards)));
+        equal("one free claim delivers all eleven stacks", 11, rewards.size());
+        equal("the ledger records only the explicit starter claim", Set.of(QuestCatalogue.STARTER_SUPPLIES),
+                ledger.claimed(player));
+        equal("the starter does not claim or unlock the multitool for the player", false,
+                QuestProjection.claimed(ledger.claimed(player)).get("grindless_multitool"));
+        equal("one full source-bound allocation is delivered", Map.of(
+                "minecraft:cobblestone", 128, "minecraft:oak_log", 64, "minecraft:bread", 64,
+                "minecraft:brick", 64, "minecraft:clay_ball", 64, "minecraft:sand", 64,
+                "minecraft:charcoal", 32, "minecraft:iron_ingot", 16, "minecraft:water_bucket", 2),
+                quantities(rewards));
+        for (ItemStack stack : rewards) {
+            equal("every delivered stack fits its real vanilla maximum", true,
+                    stack.getCount() > 0 && stack.getCount() <= stack.getMaxStackSize());
+        }
+        for (int reopen = 0; reopen < 3; reopen++) {
+            ledger = QuestProgress.load(ledger.save(new CompoundTag()));
+            equal("reopen/reconnect/reconstruction cannot reclaim starter supplies",
+                    QuestClaimService.Result.ALREADY_CLAIMED,
+                    QuestClaimService.claim(ledger, player, QuestCatalogue.STARTER_SUPPLIES, true,
+                            task -> true, VerifyQuestClaims::resolve, capture(rewards)));
+            equal("reconstruction never duplicates the kit", 11, rewards.size());
+        }
+        List<ItemStack> separate = new ArrayList<>();
+        equal("another player in the same world has a separate kit", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, UUID.randomUUID(), QuestCatalogue.STARTER_SUPPLIES, true,
+                        task -> false, VerifyQuestClaims::resolve, capture(separate)));
+        equal("the same player in a different world has a separate kit", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(new QuestProgress(), player, QuestCatalogue.STARTER_SUPPLIES, true,
+                        task -> false, VerifyQuestClaims::resolve, capture(new ArrayList<>())));
+        equal("all old result codes remain in place", 6, QuestClaimService.Result.INVALID_REWARD.ordinal());
+    }
+
+    private static void fullInventory() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        Inventory inventory = new Inventory(null);
+        inventory.setItem(0, new ItemStack(Items.BOOK));
+        for (int slot = 1; slot < inventory.items.size(); slot++) {
+            inventory.setItem(slot, new ItemStack(Items.BEDROCK, 64));
+        }
+        ListTag full = inventory.save(new ListTag());
+        equal("a full inventory defers the complete starter", QuestClaimService.Result.INVENTORY_FULL,
+                starterClaim(ledger, player, inventory));
+        equal("a full inventory receives no partial rewards", full, inventory.save(new ListTag()));
+        equal("a failed delivery leaves the claim available", Set.of(), ledger.claimed(player));
+        for (int slot = 26; slot < inventory.items.size(); slot++) {
+            inventory.setItem(slot, ItemStack.EMPTY);
+        }
+        ListTag tenSlots = inventory.save(new ListTag());
+        equal("ten empty slots cannot hold eleven legal starter stacks", QuestClaimService.Result.INVENTORY_FULL,
+                starterClaim(ledger, player, inventory));
+        equal("capacity simulation never mutates even a nearly sufficient inventory", tenSlots,
+                inventory.save(new ListTag()));
+        inventory.setItem(25, ItemStack.EMPTY);
+        equal("eleven empty slots accept the whole kit", QuestClaimService.Result.CLAIMED,
+                starterClaim(ledger, player, inventory));
+        equal("the nonconsumed utility book remains", true, inventory.getItem(0).is(Items.BOOK));
+        equal("the exact cobblestone amount is retained in inventory", 128, count(inventory, Items.COBBLESTONE));
+        equal("both unstackable buckets are retained in inventory", 2, count(inventory, Items.WATER_BUCKET));
+        equal("ordinary carried items are preserved", 24 * 64, count(inventory, Items.BEDROCK));
+        equal("no reward stack exceeds its vanilla limit", true, inventory.items.stream()
+                .allMatch(stack -> stack.isEmpty() || stack.getCount() <= stack.getMaxStackSize()));
+        ListTag complete = inventory.save(new ListTag());
+        equal("a repeated full-inventory claim is still already claimed", QuestClaimService.Result.ALREADY_CLAIMED,
+                starterClaim(ledger, player, inventory));
+        equal("a repeated claim cannot alter delivered inventory", complete, inventory.save(new ListTag()));
+    }
+
+    private static void stacking() {
+        Inventory inventory = new Inventory(null);
+        inventory.setItem(0, new ItemStack(Items.COBBLESTONE, 32));
+        inventory.getItem(0).getOrCreateTag().putString("Existing", "preserve");
+        List<ItemStack> rewards = List.of(new ItemStack(Items.COBBLESTONE, 64),
+                new ItemStack(Items.COBBLESTONE, 64), new ItemStack(Items.WATER_BUCKET),
+                new ItemStack(Items.WATER_BUCKET));
+        ListTag before = inventory.save(new ListTag());
+        Runnable commit = QuestRewardDelivery.prepare(inventory, rewards).orElseThrow();
+        equal("preparation makes no inventory writes", before, inventory.save(new ListTag()));
+        equal("preparation leaves every caller-owned stack unchanged", List.of(64, 64, 1, 1),
+                rewards.stream().map(ItemStack::getCount).toList());
+        commit.run();
+        equal("existing tagged stock is not merged with unrelated reward tags", true,
+                inventory.getItem(0).getCount() == 32 && inventory.getItem(0).hasTag());
+        equal("native stacking conserves old plus new cobblestone", 160, count(inventory, Items.COBBLESTONE));
+        equal("native stacking preserves separate water buckets", 2, count(inventory, Items.WATER_BUCKET));
+        equal("delivery does not consume the caller's reward declarations", List.of(64, 64, 1, 1),
+                rewards.stream().map(ItemStack::getCount).toList());
+
+        Inventory partial = new Inventory(null);
+        partial.setItem(0, new ItemStack(Items.COBBLESTONE, 32));
+        for (int slot = 2; slot < partial.items.size(); slot++) {
+            partial.setItem(slot, new ItemStack(Items.BEDROCK, 64));
+        }
+        equal("one partial and one empty slot cannot hold two full cobblestone stacks", true,
+                QuestRewardDelivery.prepare(partial, rewards.subList(0, 2)).isEmpty());
+        equal("failed partial-stack planning retains the original quantity", 32, count(partial, Items.COBBLESTONE));
+        QuestRewardDelivery.prepare(partial, List.of(new ItemStack(Items.COBBLESTONE, 64))).orElseThrow().run();
+        equal("ordinary partial-stack merging uses the real vanilla capacity", 96, count(partial, Items.COBBLESTONE));
+
+        Inventory retained = new Inventory(null);
+        ItemStack existing = new ItemStack(Items.BEDROCK, 100);
+        retained.setItem(0, existing);
+        QuestRewardDelivery.prepare(retained, List.of(new ItemStack(Items.COBBLESTONE, 1))).orElseThrow().run();
+        equal("staging never clamps an unrelated pre-existing saved stack", 100, count(retained, Items.BEDROCK));
+        equal("unchanged carried stacks retain their native object identity", true, retained.getItem(0) == existing);
+    }
+
+    private static void standardInventoryClaim() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        Inventory inventory = new Inventory(null);
+        inventory.setItem(0, new ItemStack(Items.BOOK));
+        inventory.setItem(1, new ItemStack(Items.CLAY_BALL, 63));
+        for (int slot = 2; slot < inventory.items.size(); slot++) {
+            inventory.setItem(slot, new ItemStack(Items.BEDROCK, 64));
+        }
+        ListTag before = inventory.save(new ListTag());
+        equal("an ordinary reward also refuses lossy overflow", QuestClaimService.Result.INVENTORY_FULL,
+                QuestClaimService.claim(ledger, player, "multitool", true, task -> true,
+                        VerifyQuestClaims::resolve, rewards -> QuestRewardDelivery.prepare(inventory, rewards)));
+        equal("an ordinary overflow cannot consume current evidence or a claim", Set.of(), ledger.claimed(player));
+        equal("an ordinary overflow cannot partially merge a reward", before, inventory.save(new ListTag()));
+        inventory.setItem(2, ItemStack.EMPTY);
+        equal("an ordinary quest keeps the same ready/claim flow", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "multitool", true, task -> true,
+                        VerifyQuestClaims::resolve, rewards -> QuestRewardDelivery.prepare(inventory, rewards)));
+        equal("the old four-clay reward remains exact", 67, count(inventory, Items.CLAY_BALL));
+        equal("the old task id alone is recorded", Set.of("multitool"), ledger.claimed(player));
+    }
+
+    private static void bookAccess() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        ledger.claim(player, "multitool");
+        Inventory inventory = new Inventory(null);
+        equal("first login can obtain the existing book without paper or resources", QuestBookAccess.Result.DELIVERED,
+                QuestBookAccess.ensure(ledger, player, inventory, Items.BOOK));
+        equal("utility delivery creates exactly one book", 1, count(inventory, Items.BOOK));
+        equal("utility delivery never creates starter or other new claims", Set.of("multitool"),
+                ledger.claimed(player));
+        for (int rejoin = 0; rejoin < 3; rejoin++) {
+            equal("rejoin never duplicates a book already in real inventory", QuestBookAccess.Result.PRESENT,
+                    QuestBookAccess.ensure(ledger, player, inventory, Items.BOOK));
+        }
+        equal("rejoin has still delivered only one book", 1, count(inventory, Items.BOOK));
+        Inventory offhand = new Inventory(null);
+        offhand.setItem(40, new ItemStack(Items.BOOK));
+        equal("an existing offhand book prevents a duplicate", QuestBookAccess.Result.PRESENT,
+                QuestBookAccess.ensure(ledger, player, offhand, Items.BOOK));
+        equal("offhand evidence is not copied into a new main slot", true, offhand.getItem(0).isEmpty());
+        Inventory respawn = new Inventory(null);
+        equal("a pre-claim death can recover the utility book", QuestBookAccess.Result.DELIVERED,
+                QuestBookAccess.ensure(ledger, player, respawn, Items.BOOK));
+        equal("respawn book recovery does not award the kit", 0, count(respawn, Items.COBBLESTONE));
+        equal("old progress is not reset by book recovery", Set.of("multitool"), ledger.claimed(player));
+
+        Inventory full = new Inventory(null);
+        for (int slot = 0; slot < full.items.size(); slot++) {
+            full.setItem(slot, new ItemStack(Items.BEDROCK, 64));
+        }
+        ListTag original = full.save(new ListTag());
+        equal("full inventory defers the utility book instead of dropping it", QuestBookAccess.Result.INVENTORY_FULL,
+                QuestBookAccess.ensure(ledger, player, full, Items.BOOK));
+        equal("book deferral cannot destroy or replace carried items", original, full.save(new ListTag()));
+        full.setItem(0, ItemStack.EMPTY);
+        equal("a deferred book is recoverable when one slot is freed", QuestBookAccess.Result.DELIVERED,
+                QuestBookAccess.ensure(ledger, player, full, Items.BOOK));
+        equal("a deferred retry creates only one book", QuestBookAccess.Result.PRESENT,
+                QuestBookAccess.ensure(ledger, player, full, Items.BOOK));
+        ledger.claim(player, QuestCatalogue.STARTER_SUPPLIES);
+        Inventory afterClaim = new Inventory(null);
+        equal("a post-claim respawn cannot automatically mint another kit or book",
+                QuestBookAccess.Result.STARTER_CLAIMED,
+                QuestBookAccess.ensure(ledger, player, afterClaim, Items.BOOK));
+        equal("post-claim automatic access leaves the new inventory empty", true, afterClaim.isEmpty());
     }
 
     private static void invalidRewards() {
@@ -77,10 +278,21 @@ public final class VerifyQuestClaims {
             AtomicInteger paid = new AtomicInteger();
             equal("invalid reward rejected before recording a claim", QuestClaimService.Result.INVALID_REWARD,
                     QuestClaimService.claim(ledger, player, "multitool", true, task -> true, invalid,
-                            stack -> paid.incrementAndGet()));
+                            batch -> Optional.of(paid::incrementAndGet)));
             equal("invalid reward leaves the ledger untouched", Set.of(), ledger.claimed(player));
             equal("invalid reward is never delivered", 0, paid.get());
         }
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        Inventory inventory = new Inventory(null);
+        AtomicInteger resolved = new AtomicInteger();
+        equal("an invalid final stack rejects the entire starter before capacity or progress",
+                QuestClaimService.Result.INVALID_REWARD,
+                QuestClaimService.claim(ledger, player, QuestCatalogue.STARTER_SUPPLIES, true, task -> false,
+                        reward -> resolved.incrementAndGet() == 11 ? ItemStack.EMPTY : resolve(reward),
+                        rewards -> QuestRewardDelivery.prepare(inventory, rewards)));
+        equal("earlier valid stacks cannot leak from a failed reward batch", true, inventory.isEmpty());
+        equal("a late invalid reward cannot consume the claim", Set.of(), ledger.claimed(player));
     }
 
     private static void projectionAndReload() {
@@ -91,7 +303,7 @@ public final class VerifyQuestClaims {
             equal("native parents are legacy claimed prerequisites " + entry.id(),
                     entry.task().requires().stream().map(QuestProjection::id).toList(), entry.dependencies());
             equal("projection keeps the exact existing reward " + entry.id(),
-                    QuestCatalogue.byId(entry.task().id()).reward(), entry.task().reward());
+                    QuestCatalogue.byId(entry.task().id()).rewards(), entry.task().rewards());
         }
         QuestProgress ledger = new QuestProgress();
         UUID first = UUID.randomUUID();
@@ -113,6 +325,37 @@ public final class VerifyQuestClaims {
             equal("projection never mutates legacy save", original, restored.save(new CompoundTag()));
             restored = QuestProgress.load(restored.save(new CompoundTag()));
         }
+    }
+
+    private static Function<List<ItemStack>, Optional<Runnable>> capture(List<ItemStack> target) {
+        return rewards -> Optional.of(() -> target.addAll(rewards));
+    }
+
+    private static ItemStack resolve(QuestCatalogue.Reward reward) {
+        return new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(reward.itemId())), reward.count());
+    }
+
+    private static QuestClaimService.Result starterClaim(QuestProgress ledger, UUID player, Inventory inventory) {
+        return QuestClaimService.claim(ledger, player, QuestCatalogue.STARTER_SUPPLIES, true, task -> false,
+                VerifyQuestClaims::resolve, rewards -> QuestRewardDelivery.prepare(inventory, rewards));
+    }
+
+    private static int count(Inventory inventory, net.minecraft.world.item.Item item) {
+        int result = 0;
+        for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+            ItemStack stack = inventory.getItem(slot);
+            if (stack.is(item)) {
+                result += stack.getCount();
+            }
+        }
+        return result;
+    }
+
+    private static Map<String, Integer> quantities(List<ItemStack> stacks) {
+        Map<String, Integer> result = new TreeMap<>();
+        stacks.forEach(stack -> result.merge(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(),
+                stack.getCount(), Integer::sum));
+        return result;
     }
 
     private static void equal(String description, Object expected, Object actual) {

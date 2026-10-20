@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.forge.quest;
 
 import com.mojang.serialization.JsonOps;
 import earth.terrarium.heracles.api.quests.Quest;
+import earth.terrarium.heracles.api.quests.QuestDisplayStatus;
 import earth.terrarium.heracles.api.tasks.QuestTasks;
 import earth.terrarium.heracles.common.handlers.progress.QuestProgress;
 import earth.terrarium.heracles.common.handlers.progress.QuestProgressHandler;
@@ -27,6 +28,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,13 +39,20 @@ import java.util.zip.ZipOutputStream;
 /** Pure publisher-binary contracts, not Forge lifecycle, graphics or retained-world acceptance. */
 public final class VerifyHeracles {
 
+    private static final String STARTER_ID = "grindless_starter_supplies";
+    private static final List<String> ORIGINAL_TASK_IDS = List.of(
+            "multitool", "crank", "extractor", "quern", "water", "clay_mixer", "ceramics", "workshop_flow",
+            "settling", "calibrate", "relay", "thermal", "pylon", "scanner", "terrestrial", "pulverizer",
+            "furnace", "press", "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
+            "industrial_matrix");
     private static int assertions;
 
     public static void main(String[] args) throws Exception {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         QuestTasks.register(GrindlessClaimTask.TYPE);
-        Map<String, Quest> definitions = HeraclesDefinitions.create(task -> Items.BOOK);
+        Map<String, Quest> definitions = HeraclesDefinitions.create(task ->
+                task.evidence() == QuestCatalogue.Evidence.FREE ? HeraclesDefinitions.icon(task) : Items.BOOK);
         definitions(definitions);
         projection(definitions);
         files(definitions);
@@ -52,7 +61,23 @@ public final class VerifyHeracles {
     }
 
     private static void definitions(Map<String, Quest> definitions) {
-        equal("one native quest per original catalogue task", QuestCatalogue.tasks().size(), definitions.size());
+        equal("one native quest per catalogue task", QuestCatalogue.tasks().size(), definitions.size());
+        equal("only the free starter is added to the 25-task catalogue", 26, definitions.size());
+        Set<String> expectedIds = new LinkedHashSet<>();
+        ORIGINAL_TASK_IDS.forEach(id -> expectedIds.add("grindless_" + id));
+        expectedIds.add(STARTER_ID);
+        equal("all 25 original generated ids are retained", expectedIds, definitions.keySet());
+        equal("the starter is the first generated entry", STARTER_ID, definitions.keySet().iterator().next());
+        var starter = QuestCatalogue.tasks().get(0);
+        equal("the first catalogue task is the starter", QuestCatalogue.STARTER_SUPPLIES, starter.id());
+        equal("the starter stays in the existing bootstrap line", "bootstrap", starter.line());
+        equal("the free objective has no item lookup", QuestCatalogue.Evidence.FREE, starter.evidence());
+        equal("the free objective subject is empty", "", starter.subject());
+        equal("the starter supplies all eleven legal display stacks", 11, starter.rewards().size());
+        equal("the default FREE icon is an existing book", Items.BOOK, HeraclesDefinitions.icon(starter));
+        equal("the first root needs no native unlock", Set.of(), definitions.get(STARTER_ID).dependencies());
+        equal("the first root is visible at the earliest native status", QuestDisplayStatus.LOCKED,
+                definitions.get(STARTER_ID).settings().hiddenUntil());
         Map<String, String> encoded = HeraclesDefinitions.encode(definitions);
         equal("native export is deterministic", encoded, HeraclesDefinitions.encode(definitions));
         for (QuestProjection.Entry entry : QuestProjection.entries()) {
@@ -68,6 +93,8 @@ public final class VerifyHeracles {
                     com.google.gson.JsonParser.parseString(encoded.get(entry.id()))).getOrThrow(false,
                     message -> { throw new AssertionError(message); });
             equal("actual binary codec round-trip " + entry.id(), true, HeraclesDefinitions.matches(quest, decoded));
+            equal("the codec preserves root visibility " + entry.id(), QuestDisplayStatus.LOCKED,
+                    decoded.settings().hiddenUntil());
         }
         var bad = com.google.gson.JsonParser.parseString("{\"type\":\"grindless:claim\",\"quest\":\"invented\"}");
         equal("task codec refuses unknown catalogue ids", true,
@@ -90,27 +117,57 @@ public final class VerifyHeracles {
                 HeraclesClaimProjection.reconcile(first, claims, definitions).size());
         equal("original claim is native complete", true, first.isComplete("grindless_multitool"));
         equal("possession is not native completion", false, first.isComplete("grindless_crank"));
+        equal("a ready FREE objective is not an automatic claim", false, first.isComplete(STARTER_ID));
         equal("unrelated native progress is preserved by identity", true,
                 first.progress().get("unrelated") == unrelated);
         equal("repeated open/projection is idempotent", List.of(),
                 HeraclesClaimProjection.reconcile(first, claims, definitions));
         HeraclesClaimProjection.reconcile(second, Set.of(), definitions);
         equal("second player does not inherit claims", false, second.isComplete("grindless_multitool"));
+        equal("the second player's starter remains unclaimed", false, second.isComplete(STARTER_ID));
 
         var copy = QuestProgressHandler.class.getDeclaredMethod("copyProgress", QuestsProgress.class, QuestsProgress.class);
         copy.setAccessible(true);
         copy.invoke(null, first, second);
         equal("actual binary party-copy path respects individualProgress", false, second.isComplete("grindless_multitool"));
         first.progress().get("grindless_crank").setComplete(true);
+        first.progress().get(STARTER_ID).setComplete(true);
         HeraclesClaimProjection.reconcile(first, claims, definitions);
         equal("sticky native completion cannot supersede the legacy ledger", false, first.isComplete("grindless_crank"));
+        equal("sticky native FREE completion cannot create a starter claim", false, first.isComplete(STARTER_ID));
+        first.progress().get(STARTER_ID).reset();
+        HeraclesClaimProjection.reconcile(first, claims, definitions);
+        equal("native FREE reset and reopen leave the starter pending", false, first.isComplete(STARTER_ID));
+        equal("native FREE reset and reopen record no rewards", true,
+                first.getProgress(STARTER_ID).claimedRewards().isEmpty());
         first.progress().get("grindless_multitool").reset();
         HeraclesClaimProjection.reconcile(first, claims, definitions);
         equal("native reset reconstructs the original claim without paying again", true, first.isComplete("grindless_multitool"));
         equal("legacy save is never rewritten by projection", before, legacy.save(new CompoundTag()));
+
+        // Model an already recorded authoritative claim, not a native completion or reward grant.
+        equal("the authoritative fixture can record the starter once", true,
+                legacy.claim(player, QuestCatalogue.STARTER_SUPPLIES));
+        CompoundTag afterClaim = legacy.save(new CompoundTag());
+        Set<String> starterClaims = legacy.claimed(player);
+        HeraclesClaimProjection.reconcile(first, starterClaims, definitions);
+        equal("only the authoritative starter claim becomes native complete", true, first.isComplete(STARTER_ID));
+        first.progress().get(STARTER_ID).reset();
+        HeraclesClaimProjection.reconcile(first, starterClaims, definitions);
+        equal("native FREE reset restores an existing claim", true, first.isComplete(STARTER_ID));
+        equal("reopening a restored FREE claim is idempotent", List.of(),
+                HeraclesClaimProjection.reconcile(first, starterClaims, definitions));
+        equal("restoring the FREE claim does not record native rewards", true,
+                first.getProgress(STARTER_ID).claimedRewards().isEmpty());
+        equal("restoring the FREE claim never rewrites the authoritative ledger", afterClaim,
+                legacy.save(new CompoundTag()));
+        copy.invoke(null, first, second);
+        equal("actual party copying cannot share a claimed starter kit", false, second.isComplete(STARTER_ID));
         for (var entry : definitions.entrySet()) {
             QuestProgress restored = new QuestProgress(entry.getValue(), first.getProgress(entry.getKey()).save());
             equal("native progress reload " + entry.getKey(), first.isComplete(entry.getKey()), restored.isComplete());
+            equal("native progress reload never reconstructs reward grants " + entry.getKey(), true,
+                    restored.claimedRewards().isEmpty());
         }
     }
 
@@ -135,6 +192,11 @@ public final class VerifyHeracles {
                 equal("actual binary loads the ZIP member filename id " + entry.getKey(), true,
                         HeraclesDefinitions.matches(entry.getValue(), QuestHandler.get(entry.getKey())));
             }
+            equal("the real loader leaves the FREE root visible", QuestDisplayStatus.LOCKED,
+                    QuestHandler.get(STARTER_ID).settings().hiddenUntil());
+            equal("the real loader leaves the FREE root unlocked", Set.of(),
+                    QuestHandler.get(STARTER_ID).dependencies());
+            catalogueUpgrade(root.resolve("catalogue-upgrade"), definitions, encoded);
             try (var zip = FileSystems.newFileSystem(bundle, Map.of())) {
                 Files.writeString(zip.getPath("grindless_multitool.json"), encoded.get("grindless_multitool") + " ");
             }
@@ -234,6 +296,40 @@ public final class VerifyHeracles {
         QuestHandler.quests().clear();
         QuestHandler.load(RegistryAccess.EMPTY, config);
         equal("native load must succeed without a previously seeded quest map", false, QuestHandler.failedToLoad);
+    }
+
+    private static void catalogueUpgrade(Path config, Map<String, Quest> definitions,
+                                         Map<String, String> encoded) throws IOException {
+        Map<String, String> oldCatalogue = new LinkedHashMap<>();
+        for (String task : ORIGINAL_TASK_IDS) {
+            String id = "grindless_" + task;
+            equal("the original stable id still has a definition " + id, true, encoded.containsKey(id));
+            oldCatalogue.put(id, encoded.get(id));
+        }
+        equal("the prior owned catalogue has exactly 25 stable ids", 25, oldCatalogue.size());
+        HeraclesDefinitions.synchronize(config, oldCatalogue);
+        HeraclesDefinitions.verifyFiles(config, oldCatalogue);
+        loadNative(config);
+        equal("the real loader accepts the prior 25-task owned bundle", 25, QuestHandler.quests().size());
+        equal("the prior catalogue contains no starter definition", false, QuestHandler.quests().containsKey(STARTER_ID));
+
+        HeraclesDefinitions.synchronize(config, encoded);
+        HeraclesDefinitions.verifyFiles(config, encoded);
+        loadNative(config);
+        equal("the real loader accepts the upgraded 26-task owned bundle", 26, QuestHandler.quests().size());
+        for (String id : oldCatalogue.keySet()) {
+            equal("bundle upgrade retains the original native id and claim contract " + id, true,
+                    HeraclesDefinitions.matches(definitions.get(id), QuestHandler.get(id)));
+        }
+        equal("bundle upgrade adds the FREE claim adapter", true,
+                HeraclesDefinitions.matches(definitions.get(STARTER_ID), QuestHandler.get(STARTER_ID)));
+        equal("the upgraded starter is visible without unlocking another quest", QuestDisplayStatus.LOCKED,
+                QuestHandler.get(STARTER_ID).settings().hiddenUntil());
+        equal("the upgraded starter has no native dependencies", Set.of(), QuestHandler.get(STARTER_ID).dependencies());
+        byte[] upgraded = Files.readAllBytes(HeraclesDefinitions.bundle(config));
+        HeraclesDefinitions.synchronize(config, encoded);
+        equal("reopening the upgraded 26-task bundle is byte-idempotent", true,
+                java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
     }
 
     private static void interruptedPublication(Path config, Map<String, String> encoded,

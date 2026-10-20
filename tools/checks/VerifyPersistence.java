@@ -7,11 +7,13 @@ import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestInventoryEvidence;
+import io.github.ezequiel24123z.grindless.quest.QuestProgress;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.SimpleContainer;
@@ -24,6 +26,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /** Executable vanilla NBT and inventory contracts; real registered Matrices also need a Forge smoke. */
@@ -40,6 +44,7 @@ public final class VerifyPersistence {
         matrixCodec();
         itemPacket();
         questInventory();
+        questProgress();
         System.out.println(failures == 0 ? "ALL PERSISTENCE CHECKS PASSED"
                 : failures + " PERSISTENCE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
@@ -185,6 +190,45 @@ public final class VerifyPersistence {
                 "minecraft:paper", 1, FluxTier.F2, List.of(), new QuestCatalogue.Reward("minecraft:paper", 1));
         check("a rating tag on a non-Matrix item cannot satisfy Matrix evidence",
                 QuestInventoryEvidence.count(inventory, fake) == 0);
+    }
+
+    private static void questProgress() throws Exception {
+        UUID player = UUID.randomUUID();
+        CompoundTag oldPlayer = new CompoundTag();
+        oldPlayer.putString("Player", player.toString());
+        ListTag oldTasks = new ListTag();
+        for (String id : List.of("multitool", "quern", "ceramics", "calibrate", "industrial_matrix")) {
+            oldTasks.add(StringTag.valueOf(id));
+        }
+        oldPlayer.put("Tasks", oldTasks);
+        ListTag players = new ListTag();
+        players.add(oldPlayer);
+        CompoundTag legacy = new CompoundTag();
+        legacy.put("Players", players);
+        QuestProgress restored = QuestProgress.load(roundTrip(legacy));
+        Set<String> previous = Set.of("multitool", "quern", "ceramics", "calibrate", "industrial_matrix");
+        check("binary loading of a pre-starter save preserves every old stable quest id",
+                restored.claimed(player).equals(previous));
+        check("upgrading an old save does not automatically claim the new starter",
+                !restored.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES));
+        check("the new explicit starter claim fits the existing ledger",
+                restored.claim(player, QuestCatalogue.STARTER_SUPPLIES));
+        for (int reload = 0; reload < 3; reload++) {
+            CompoundTag saved = restored.save(new CompoundTag());
+            check("quest progress keeps the original root and player/task schema",
+                    saved.getAllKeys().equals(Set.of("Players"))
+                            && saved.getList("Players", 10).getCompound(0).getAllKeys()
+                            .equals(Set.of("Player", "Tasks")));
+            restored = QuestProgress.load(roundTrip(saved));
+            check("binary save/reload retains old claims alongside starter supplies",
+                    restored.claimed(player).containsAll(previous)
+                            && restored.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES));
+            check("binary save/reload never resets the one-time starter claim",
+                    !restored.claim(player, QuestCatalogue.STARTER_SUPPLIES));
+            check("binary reconstruction never gives another player the starter claim",
+                    restored.claimed(UUID.randomUUID()).isEmpty());
+        }
+        check("the quest SavedData key has not migrated", QuestProgress.KEY.equals("grindless_quest_progress"));
     }
 
     private static void check(String label, boolean passed) {

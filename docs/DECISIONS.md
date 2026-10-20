@@ -7503,8 +7503,8 @@ with stable old quest IDs and one claim per player/world across rejoin/respawn.
 Make the existing quest book available from initial entry; do not create a new
 shop, world generator, primitive production framework or second reward ledger.
 
-The coordinator's ordinary allocation is128 cobblestone,64 oak logs,64 bread,
-64 brick items,64 clay balls,64 sand,32 charcoal,16 iron ingots and2 filled water
+The coordinator's ordinary allocation is 128 cobblestone, 64 oak logs, 64 bread,
+64 brick items, 64 clay balls, 64 sand, 32 charcoal, 16 iron ingots and 2 filled water
 buckets, delivered as legal stacks. This intentionally generous finite bootstrap
 is not a permanent resource farm. No finished machines, insulators, Data Cores,
 Calibrated Cores, Matrices or advanced components are given.
@@ -7515,3 +7515,13 @@ quest progress; never reset claims or silently grant the whole kit to existing
 inventories. Normal Superflat works without selected-village/terrain/loot reliance.
 Human first-quest interaction, pacing and the campaign remain validation, not
 another initial-kit design approval or a reason to defer implementation.
+
+**Delivery and capacity.** Reuse vanilla `SimpleContainer` stacking over copies
+of the 36 main inventory slots. Resolve and stage every legal reward before
+advancing the same claim ledger, then commit the prepared inventory once on the
+server thread. A full inventory rejects the whole claim with a localized message;
+nothing is dropped or partially granted. This intentionally also defers older
+single-stack quests when full, replacing their previous remainder-drop behavior.
+The utility book alone is recoverable on login/respawn while the starter claim
+is still unused; an initially full inventory retries book delivery every 20 ticks.
+No new persistence schema, second ledger or Heracles-owned reward is introduced.

@@ -1,5 +1,21 @@
 # Current T0 rework validation
 
+## Starter quest source integrated — executable qualification pending
+
+Source1529b93d12796165196bb80427b14cd07d9f9f41 implements the selected free
+first quest, exact generous allocation in11 legal stacks, recoverable book and
+both complete reward projections. Main-inventory staging reuses vanilla
+`SimpleContainer`; a full inventory consumes no claim and grants/drops nothing.
+The existing ledger/SavedData and old25 IDs/rewards/prerequisites remain intact.
+This full-inventory defer policy intentionally also applies to older quests.
+
+The author actually ran40 WinPS source contracts, six UI/JSON/geometry groups
+and the lexical source guard's50 profiles/10 nested cases/86 anchors. None is
+reported as Java, Forge, login/click, persistence-runtime or client evidence.
+The combined PC proof set is common/Forge, `:forge:verifyQuestBackend`, the
+affected quest/persistence/sustainability/guidance suites and a representative
+registration boot. The author remains available for concrete executable failures.
+
 ## Combined-source CI guard failure — explicit repair obligation
 
 [Run39365776548](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39365776548)

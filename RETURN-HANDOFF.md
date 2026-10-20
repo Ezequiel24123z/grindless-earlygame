@@ -10,13 +10,15 @@ and proportionate checks, not micro-approval queues. The complete generated Mixe
 unit ad71 is integrated in published16d103a alongside the qualified local Multitool
 pipeline. Final baf1 adds source-bound visual proof/provenance records without a
 successful-stage replay. ADR-0159 settles the first free generous starter quest;
-owner7dcd042e implements it end-to-end. Owner9c12461c now owns combined PC
+owner7dcd042e completed source1529 and its source checks; both complete book
+projections and native all-or-nothing inventory delivery are integrated.
+Owner9c12461c now owns combined PC
 compilation/selected checks, then final kit/package/registration qualification.
 Only the coordinator publishes/deploys. Human art/listening/campaign remain separate.
 
 | Category | Current actual state |
 | --- | --- |
-| COMPLETED | Exact962 CI/all native shards and PC full48 contracts qualify the observation repair. Comfy pipeline/F1/28 Python/12 JDK/two identical1602-file stages and the canonical127b sprite are integrated. Two real SFX HTTP200 outputs, normalized Mixer A/runtime/tooling/notices and unchanged Quern A are integrated. |
+| COMPLETED | Starter source1529, canonical free claim/11 legal stacks/recoverable book/both projections/native full-batch delivery and source regressions are integrated. Exact962 CI/PC full48 qualifies the observation repair. Comfy pipeline/F1/28 Python/12 JDK/two identical1602-file stages/127b sprite and real generated Mixer A/runtime/notices are integrated; Quern A is unchanged. |
 | BLOCKED | Combined-source CI39365776548 on16d103a fails the offline three-file legacy sound byte-identity guard after200 assertions pass. Same owner9c repairs it; cause is not assumed environmental. Kit implementation and completed PC stages continue; no full-green claim. |
 | NOT EXECUTED | Final integrated kit/build/package/registration boot/deploy and the current-wave graphical client/manual campaign are not yet complete. The84 authored Java audio checks are assigned, not credited before execution. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |

@@ -64,7 +64,8 @@ public final class ResourceGuidanceContext {
     }
 
     public static Optional<Resource> questSubject(QuestCatalogue.Task task) {
-        if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
+        if (task.evidence() == QuestCatalogue.Evidence.FREE
+                || task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
             return Optional.empty();
         }
         int rating = task.evidence() == QuestCatalogue.Evidence.MATRIX ? task.matrixRating().ordinal() : 0;

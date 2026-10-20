@@ -15,8 +15,11 @@ shards and PC full48 contracts pass.
 
 **The owner selected a generous kit in the first free quest (ADR-0159).** This
 is implementation, not an outstanding village/shop/primitive/food-policy choice.
-Owner7dcd042e implements quest/book access, canonical one-time rewards, both UI
-projections and regressions. Owner9c12461c now qualifies common/Forge and selected
+Owner7dcd042e completed source1529: free first quest, recoverable book, one-time
+ledger, native all-or-nothing main-inventory batch, both complete UI projections
+and regressions. Full inventory now defers older quests too instead of dropping
+remainder. Old25 IDs/rewards/prerequisites, evidence ordinals and SavedData remain
+intact. Source checks pass, not yet executable qualification. Owner9c12461c qualifies common/Forge and selected
 audio/assets on the combined source in an explicit isolated PC worktree, then
 the final integrated kit/build/package/registration boot. Only the coordinator
 publishes and deploys. Qualified559 remains installed until that artifact passes.

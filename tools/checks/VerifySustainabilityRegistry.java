@@ -57,7 +57,12 @@ public final class VerifySustainabilityRegistry {
     private static final Map<String, Path> QUEST_SOURCES = Map.ofEntries(
             Map.entry("QuestBookItem", JAVA.resolve(Path.of("item", "QuestBookItem.java"))),
             Map.entry("QuestBookMenu", JAVA.resolve(Path.of("menu", "QuestBookMenu.java"))),
+            Map.entry("QuestCatalogue", JAVA.resolve(Path.of("quest", "QuestCatalogue.java"))),
             Map.entry("QuestClaimService", JAVA.resolve(Path.of("quest", "QuestClaimService.java"))),
+            Map.entry("QuestRewardDelivery", JAVA.resolve(Path.of("quest", "QuestRewardDelivery.java"))),
+            Map.entry("QuestBookAccess", JAVA.resolve(Path.of("quest", "QuestBookAccess.java"))),
+            Map.entry("QuestBookAccessEvents",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "QuestBookAccessEvents.java"))),
             Map.entry("QuestLogic", JAVA.resolve(Path.of("quest", "QuestLogic.java"))),
             Map.entry("QuestEvidence", JAVA.resolve(Path.of("quest", "QuestEvidence.java"))),
             Map.entry("QuestInventoryEvidence", JAVA.resolve(Path.of("quest", "QuestInventoryEvidence.java"))),
@@ -531,6 +536,54 @@ public final class VerifySustainabilityRegistry {
         return claimed.getModifiers().getFlags().equals(Set.of(Modifier.PRIVATE, Modifier.FINAL))
                 && normalized(claimed.getType()).equals("Map<UUID,Set<String>>")
                 && normalized(claimed.getInitializer()).equals("newHashMap<>()")
+                && questCatalogueTasks(sources.get("QuestCatalogue"))
+                && questMethod(sources, "QuestCatalogue", """
+                private QuestCatalogue() {
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                public static List<Task> tasks() {
+                    return TASKS;
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                public static Task byId(String id) {
+                    for (Task task : TASKS) {
+                        if (task.id().equals(id)) {
+                            return task;
+                        }
+                    }
+                    return null;
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                public static List<String> lines() {
+                    List<String> lines = new ArrayList<>();
+                    for (Task task : TASKS) {
+                        if (!lines.contains(task.line())) {
+                            lines.add(task.line());
+                        }
+                    }
+                    return List.copyOf(lines);
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                private static Task task(String id, String line, Evidence evidence, String subject, int count,
+                                         List<String> requires, Reward reward) {
+                    return new Task(id, line, evidence, subject, count, null, List.copyOf(requires), reward);
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                private static Task matrixTask(String id, String line, String subject, FluxTier rating, int count,
+                                               List<String> requires, Reward reward) {
+                    return new Task(id, line, Evidence.MATRIX, subject, count, rating, List.copyOf(requires), reward);
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                private static Reward reward(String itemId, int count) {
+                    return new Reward(itemId, count);
+                }
+                """)
                 && questMethod(sources, "QuestBookItem", """
                 @Override
                 public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -610,15 +663,13 @@ public final class VerifySustainabilityRegistry {
                     Result result = claim(QuestProgress.get(player), player.getUUID(), taskId, holdingBook(player),
                             task -> QuestEvidence.met(task, QuestInventoryEvidence.count(player.getInventory(), task),
                                     player.level().dimension().location().toString()),
-                            QuestClaimService::rewardStack, stack -> {
-                                if (!player.getInventory().add(stack)) {
-                                    player.drop(stack, false);
-                                }
-                            });
+                            QuestClaimService::rewardStack,
+                            rewards -> QuestRewardDelivery.prepare(player.getInventory(), rewards));
                     if (result == Result.INVALID_REWARD || result == Result.UNKNOWN_TASK) {
                         Grindless.LOG.error("Rejected quest claim {} from {}: {}", taskId, player.getUUID(), result);
                     }
                     if (result == Result.CLAIMED) {
+                        player.inventoryMenu.broadcastChanges();
                         player.displayClientMessage(Component.translatable("chat.grindless.quest.claimed",
                                 Component.translatable("gui.grindless.quest.task." + taskId)), false);
                     } else {
@@ -630,8 +681,8 @@ public final class VerifySustainabilityRegistry {
                 """)
                 && questMethod(sources, "QuestClaimService", """
                 static Result claim(QuestProgress progress, UUID player, String taskId, boolean holdingBook,
-                                    Predicate<QuestCatalogue.Task> evidence,
-                                    Function<QuestCatalogue.Reward, ItemStack> resolve, Consumer<ItemStack> give) {
+                                    Predicate<QuestCatalogue.Task> evidence, Function<QuestCatalogue.Reward, ItemStack> resolve,
+                                    Function<List<ItemStack>, Optional<Runnable>> prepare) {
                     QuestCatalogue.Task task = QuestCatalogue.byId(taskId);
                     if (task == null || player == null) {
                         return Result.UNKNOWN_TASK;
@@ -650,15 +701,26 @@ public final class VerifySustainabilityRegistry {
                     if (status != QuestLogic.Status.CLAIMABLE) {
                         return Result.UNMET;
                     }
-                    ItemStack reward = resolve.apply(task.reward());
-                    if (reward == null || reward.isEmpty() || reward.getCount() != task.reward().count()
-                            || reward.getCount() > reward.getMaxStackSize()) {
+                    if (task.rewards().isEmpty()) {
                         return Result.INVALID_REWARD;
+                    }
+                    List<ItemStack> rewards = new ArrayList<>();
+                    for (QuestCatalogue.Reward declared : task.rewards()) {
+                        ItemStack reward = resolve.apply(declared);
+                        if (reward == null || reward.isEmpty() || reward.getCount() != declared.count()
+                                || reward.getCount() > reward.getMaxStackSize()) {
+                            return Result.INVALID_REWARD;
+                        }
+                        rewards.add(reward.copy());
+                    }
+                    Optional<Runnable> delivery = prepare.apply(List.copyOf(rewards));
+                    if (delivery.isEmpty()) {
+                        return Result.INVENTORY_FULL;
                     }
                     if (!progress.claim(player, taskId)) {
                         return Result.ALREADY_CLAIMED;
                     }
-                    give.accept(reward);
+                    delivery.get().run();
                     return Result.CLAIMED;
                 }
                 """)
@@ -672,6 +734,122 @@ public final class VerifySustainabilityRegistry {
                     return item == Items.AIR ? ItemStack.EMPTY : new ItemStack(item, reward.count());
                 }
                 """)
+                && questMethod(sources, "QuestRewardDelivery", """
+                private QuestRewardDelivery() {
+                }
+                """)
+                && questMethod(sources, "QuestRewardDelivery", """
+                static Optional<Runnable> prepare(Inventory inventory, List<ItemStack> rewards) {
+                    ItemStack[] contents = new ItemStack[inventory.items.size()];
+                    for (int slot = 0; slot < contents.length; slot++) {
+                        contents[slot] = inventory.getItem(slot).copy();
+                    }
+                    SimpleContainer staged = new SimpleContainer(contents);
+                    for (ItemStack reward : rewards) {
+                        if (!staged.addItem(reward.copy()).isEmpty()) {
+                            return Optional.empty();
+                        }
+                    }
+                    return Optional.of(() -> {
+                        for (int slot = 0; slot < staged.getContainerSize(); slot++) {
+                            if (!ItemStack.matches(inventory.getItem(slot), staged.getItem(slot))) {
+                                inventory.setItem(slot, staged.getItem(slot));
+                            }
+                        }
+                        inventory.setChanged();
+                    });
+                }
+                """)
+                && questMethod(sources, "QuestBookAccess", """
+                private QuestBookAccess() {
+                }
+                """)
+                && questMethod(sources, "QuestBookAccess", """
+                public static Result ensure(ServerPlayer player) {
+                    if (!player.server.isSameThread()) {
+                        throw new IllegalStateException("Quest book recovery must execute on the server thread");
+                    }
+                    Result result = ensure(QuestProgress.get(player), player.getUUID(), player.getInventory(),
+                            ModItems.QUEST_BOOK.get());
+                    if (result == Result.DELIVERED) {
+                        player.inventoryMenu.broadcastChanges();
+                        player.displayClientMessage(Component.translatable("chat.grindless.quest.book.received"), false);
+                    }
+                    return result;
+                }
+                """)
+                && questMethod(sources, "QuestBookAccess", """
+                static Result ensure(QuestProgress progress, UUID player, Inventory inventory, Item book) {
+                    if (progress.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES)) {
+                        return Result.STARTER_CLAIMED;
+                    }
+                    for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+                        if (inventory.getItem(slot).is(book)) {
+                            return Result.PRESENT;
+                        }
+                    }
+                    Optional<Runnable> delivery = QuestRewardDelivery.prepare(inventory, List.of(new ItemStack(book)));
+                    if (delivery.isEmpty()) {
+                        return Result.INVENTORY_FULL;
+                    }
+                    delivery.get().run();
+                    return Result.DELIVERED;
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                private QuestBookAccessEvents() {
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                @SubscribeEvent
+                public static void login(PlayerEvent.PlayerLoggedInEvent event) {
+                    if (event.getEntity() instanceof ServerPlayer player) {
+                        recover(player, true);
+                    }
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                @SubscribeEvent
+                public static void respawn(PlayerEvent.PlayerRespawnEvent event) {
+                    if (event.getEntity() instanceof ServerPlayer player) {
+                        recover(player, true);
+                    }
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                @SubscribeEvent
+                public static void tick(TickEvent.PlayerTickEvent event) {
+                    if (event.phase == TickEvent.Phase.END && event.player.tickCount % 20 == 0
+                            && event.player instanceof ServerPlayer player && WAITING_FOR_SPACE.contains(player.getUUID())) {
+                        recover(player, false);
+                    }
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                @SubscribeEvent
+                public static void logout(PlayerEvent.PlayerLoggedOutEvent event) {
+                    WAITING_FOR_SPACE.remove(event.getEntity().getUUID());
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                @SubscribeEvent
+                public static void stopped(ServerStoppedEvent event) {
+                    WAITING_FOR_SPACE.clear();
+                }
+                """)
+                && questMethod(sources, "QuestBookAccessEvents", """
+                private static void recover(ServerPlayer player, boolean notifyFull) {
+                    QuestBookAccess.Result result = QuestBookAccess.ensure(player);
+                    if (result == QuestBookAccess.Result.INVENTORY_FULL) {
+                        WAITING_FOR_SPACE.add(player.getUUID());
+                        if (notifyFull) {
+                            player.displayClientMessage(Component.translatable("chat.grindless.quest.book.inventory_full"), false);
+                        }
+                    } else {
+                        WAITING_FOR_SPACE.remove(player.getUUID());
+                    }
+                }
+                """)
                 && questMethod(sources, "QuestLogic", """
                 public static Status consider(QuestCatalogue.Task task, Set<String> claimed, boolean evidenceMet) {
                     if (claimed.contains(task.id())) {
@@ -682,7 +860,8 @@ public final class VerifySustainabilityRegistry {
                             return Status.LOCKED;
                         }
                     }
-                    return evidenceMet ? Status.CLAIMABLE : Status.UNMET;
+                    return task.evidence() == QuestCatalogue.Evidence.FREE || evidenceMet
+                            ? Status.CLAIMABLE : Status.UNMET;
                 }
                 """)
                 && questMethod(sources, "QuestEvidence", """
@@ -690,6 +869,7 @@ public final class VerifySustainabilityRegistry {
                     return switch (task.evidence()) {
                         case ITEM, MATRIX -> held >= task.count();
                         case DIMENSION -> task.subject().equals(dimension);
+                        case FREE -> true;
                     };
                 }
                 """)
@@ -863,9 +1043,69 @@ public final class VerifySustainabilityRegistry {
                 """);
     }
 
+    // The catalogue remains the quantity authority; only its closed, literal construction forms are accepted.
+    private static boolean questCatalogueTasks(ClassTree catalogue) throws IOException {
+        VariableTree tasks = field(catalogue, "TASKS");
+        if (!tasks.getModifiers().getFlags().equals(Set.of(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL))
+                || !tasks.getModifiers().getAnnotations().isEmpty()
+                || !questText(tasks.getType()).equals("List<Task>")
+                || !(tasks.getInitializer() instanceof MethodInvocationTree list)
+                || !questText(list.getMethodSelect()).equals("List.of") || !list.getTypeArguments().isEmpty()
+                || list.getArguments().isEmpty()
+                || !(list.getArguments().get(0) instanceof NewClassTree starter)
+                || !questText(starter.getIdentifier()).equals("Task") || starter.getEnclosingExpression() != null
+                || starter.getClassBody() != null || !starter.getTypeArguments().isEmpty()
+                || starter.getArguments().size() != 8
+                || !starter.getArguments().subList(0, 7).stream().map(VerifySustainabilityRegistry::questText).toList()
+                        .equals(List.of("STARTER_SUPPLIES", "\"bootstrap\"", "Evidence.FREE", "\"\"", "1",
+                                "null", "List.of()"))
+                || !(starter.getArguments().get(7) instanceof MethodInvocationTree rewards)
+                || !questText(rewards.getMethodSelect()).equals("List.of") || !rewards.getTypeArguments().isEmpty()
+                || rewards.getArguments().isEmpty() || !rewards.getArguments().stream()
+                        .allMatch(VerifySustainabilityRegistry::questReward)) {
+            return false;
+        }
+        for (Tree entry : list.getArguments().subList(1, list.getArguments().size())) {
+            if (!(entry instanceof MethodInvocationTree task) || !task.getTypeArguments().isEmpty()
+                    || task.getArguments().size() != 7) {
+                return false;
+            }
+            var args = task.getArguments();
+            boolean goal = switch (questText(task.getMethodSelect())) {
+                case "task" -> Set.of("Evidence.ITEM", "Evidence.DIMENSION").contains(questText(args.get(2)))
+                        && args.get(3) instanceof LiteralTree subject && subject.getValue() instanceof String;
+                case "matrixTask" -> args.get(2) instanceof LiteralTree subject
+                        && subject.getValue() instanceof String && questText(args.get(3)).equals("FluxTier.F2");
+                default -> false;
+            };
+            if (!goal || !(args.get(0) instanceof LiteralTree id) || !(id.getValue() instanceof String)
+                    || !(args.get(1) instanceof LiteralTree line) || !(line.getValue() instanceof String)
+                    || !(args.get(4) instanceof LiteralTree count) || !(count.getValue() instanceof Integer quantity)
+                    || quantity < 1 || !questStringList(args.get(5)) || !questReward(args.get(6))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean questStringList(Tree tree) {
+        return tree instanceof MethodInvocationTree list && questText(list.getMethodSelect()).equals("List.of")
+                && list.getTypeArguments().isEmpty() && list.getArguments().stream()
+                        .allMatch(value -> value instanceof LiteralTree literal && literal.getValue() instanceof String);
+    }
+
+    private static boolean questReward(Tree tree) {
+        return tree instanceof MethodInvocationTree reward && questText(reward.getMethodSelect()).equals("reward")
+                && reward.getTypeArguments().isEmpty() && reward.getArguments().size() == 2
+                && reward.getArguments().get(0) instanceof LiteralTree item && item.getValue() instanceof String id
+                && !id.isBlank() && reward.getArguments().get(1) instanceof LiteralTree count
+                && count.getValue() instanceof Integer quantity && quantity >= 1 && quantity <= 64;
+    }
+
     private static boolean questMethod(Map<String, ClassTree> sources, String owner, String declaration)
             throws IOException {
-        declaration = declaration.replace("public " + owner + "(", "public QuestBindingContract(");
+        declaration = declaration.replace("public " + owner + "(", "public QuestBindingContract(")
+                .replace("private " + owner + "(", "private QuestBindingContract(");
         ClassTree contract = parse("QuestBindingContract", "class QuestBindingContract {" + declaration + "}");
         MethodTree expected = (MethodTree) contract.getMembers().get(0);
         MethodTree actual = method(sources.get(owner), expected.getName().toString(), expected.getParameters().size());
@@ -898,7 +1138,13 @@ public final class VerifySustainabilityRegistry {
             case "QuestBookItem" -> Set.of("<init>#1", "use#3", "appendHoverText#4");
             case "QuestBookMenu" -> Set.of("<init>#2", "status#1", "held#1", "quickMoveStack#2",
                     "stillValid#1", "broadcastChanges#0", "clickMenuButton#2", "refresh#0", "held#2");
+            case "QuestCatalogue" -> Set.of("<init>#0", "tasks#0", "byId#1", "lines#0",
+                    "task#7", "matrixTask#7", "reward#2");
             case "QuestClaimService" -> Set.of("<init>#0", "holdingBook#1", "claim#2", "claim#7", "rewardStack#1");
+            case "QuestRewardDelivery" -> Set.of("<init>#0", "prepare#2");
+            case "QuestBookAccess" -> Set.of("<init>#0", "ensure#1", "ensure#4");
+            case "QuestBookAccessEvents" -> Set.of("<init>#0", "login#1", "respawn#1", "tick#1",
+                    "logout#1", "stopped#1", "recover#2");
             case "QuestLogic" -> Set.of("<init>#0", "consider#3", "byCode#1", "problems#1", "indexOf#2");
             case "QuestEvidence" -> Set.of("<init>#0", "met#3");
             case "QuestInventoryEvidence" -> Set.of("<init>#0", "count#2", "matches#2");
@@ -912,6 +1158,8 @@ public final class VerifySustainabilityRegistry {
         };
         Set<String> expectedFields = switch (name) {
             case "QuestBookMenu" -> Set.of("player", "state");
+            case "QuestCatalogue" -> Set.of("STARTER_SUPPLIES", "TASKS");
+            case "QuestBookAccessEvents" -> Set.of("WAITING_FOR_SPACE");
             case "QuestProgress" -> Set.of("KEY", "TAG_PLAYERS", "TAG_PLAYER", "TAG_TASKS", "claimed");
             case "HeraclesQuestNetwork" -> Set.of("PROTOCOL");
             case "HeraclesQuestIntegration" -> Set.of("definitions", "encoded", "LAST_SENT", "available", "failure");
@@ -919,7 +1167,8 @@ public final class VerifySustainabilityRegistry {
             default -> Set.of();
         };
         Set<String> expectedNested = switch (name) {
-            case "QuestClaimService" -> Set.of("Result");
+            case "QuestCatalogue" -> Set.of("Evidence", "Reward", "Task");
+            case "QuestClaimService", "QuestBookAccess" -> Set.of("Result");
             case "QuestLogic" -> Set.of("Status");
             case "HeraclesQuestNetwork" -> Set.of("Channel", "ClaimRequest", "State", "Snapshot");
             default -> Set.of();
@@ -941,6 +1190,17 @@ public final class VerifySustainabilityRegistry {
                         || !type.getImplementsClause().isEmpty())) {
             return false;
         }
+        if (name.equals("QuestBookAccessEvents")) {
+            ClassTree contract = parse("QuestEventsContract", """
+                    @Mod.EventBusSubscriber(modid = Grindless.MOD_ID)
+                    public final class QuestEventsContract {}
+                    """);
+            if (!questText(type.getModifiers()).equals(questText(contract.getModifiers()))) {
+                return false;
+            }
+        } else if (!type.getModifiers().getAnnotations().isEmpty()) {
+            return false;
+        }
         Set<String> methods = new TreeSet<>();
         Set<String> fields = new TreeSet<>();
         Set<String> nested = new TreeSet<>();
@@ -960,11 +1220,34 @@ public final class VerifySustainabilityRegistry {
                     return false;
                 }
                 String declaration = switch (name + ":" + child.getSimpleName()) {
-                    case "QuestClaimService:Result" -> """
-                            public enum Result {
-                                CLAIMED, ALREADY_CLAIMED, LOCKED, UNMET, BOOK_REQUIRED, UNKNOWN_TASK, INVALID_REWARD
+                    case "QuestCatalogue:Evidence" -> "public enum Evidence { ITEM, DIMENSION, MATRIX, FREE }";
+                    case "QuestCatalogue:Reward" -> "public record Reward(String itemId, int count) {}";
+                    case "QuestCatalogue:Task" -> """
+                            public record Task(String id, String line, Evidence evidence, String subject, int count,
+                                               FluxTier matrixRating, List<String> requires, List<Reward> rewards) {
+                                public Task {
+                                    requires = List.copyOf(requires);
+                                    rewards = List.copyOf(rewards);
+                                }
+
+                                public Task(String id, String line, Evidence evidence, String subject, int count,
+                                            FluxTier matrixRating, List<String> requires, Reward reward) {
+                                    this(id, line, evidence, subject, count, matrixRating, requires, List.of(reward));
+                                }
+
+                                public Reward reward() {
+                                    return rewards.get(0);
+                                }
                             }
                             """;
+                    case "QuestClaimService:Result" -> """
+                            public enum Result {
+                                CLAIMED, ALREADY_CLAIMED, LOCKED, UNMET, BOOK_REQUIRED, UNKNOWN_TASK, INVALID_REWARD,
+                                INVENTORY_FULL
+                            }
+                            """;
+                    case "QuestBookAccess:Result" ->
+                            "public enum Result { PRESENT, DELIVERED, INVENTORY_FULL, STARTER_CLAIMED }";
                     case "QuestLogic:Status" -> "public enum Status { CLAIMED, LOCKED, UNMET, CLAIMABLE }";
                     case "HeraclesQuestNetwork:Channel" -> """
                             private static final class Channel {
@@ -1002,6 +1285,9 @@ public final class VerifySustainabilityRegistry {
         List<String> declarations = switch (name) {
             case "QuestBookMenu" -> List.of("private final Player player;",
                     "private final SimpleContainerData state;");
+            case "QuestCatalogue" -> List.of("public static final String STARTER_SUPPLIES = \"starter_supplies\";");
+            case "QuestBookAccessEvents" -> List.of(
+                    "private static final Set<UUID> WAITING_FOR_SPACE = new HashSet<>();");
             case "QuestProgress" -> List.of("public static final String KEY = \"grindless_quest_progress\";",
                     "private static final String TAG_PLAYERS = \"Players\";",
                     "private static final String TAG_PLAYER = \"Player\";",
@@ -1040,7 +1326,7 @@ public final class VerifySustainabilityRegistry {
 
     private static void questAccessCounterexamples(Path root) throws IOException {
         Map<String, ClassTree> sources = questSources(root, new TreeMap<>());
-        eq("the inspected common claim service and both real entrypoints are recognized", true,
+        eq("the free starter, batch claim, book recovery and both real entrypoints are recognized", true,
                 questBookAccess(sources));
         rejectQuest(root, sources, "the service cannot replace the physical book with permission",
                 "QuestClaimService", "return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "return true");
@@ -1069,17 +1355,64 @@ public final class VerifySustainabilityRegistry {
                 "QuestClaimService", "evidence.test(task)", "true");
         rejectQuest(root, sources, "the requested task's prerequisites cannot be ignored",
                 "QuestLogic", "if (!claimed.contains(required))", "if (false)");
+        rejectQuest(root, sources, "FREE must be appended without changing the old evidence ordinals",
+                "QuestCatalogue",
+                "MATRIX,\n        /** An explicit free claim, with no item, location or payment objective. */\n        FREE",
+                "FREE, MATRIX");
+        rejectQuest(root, sources, "free evidence must be an explicit case, not a permissive default",
+                "QuestEvidence", "case FREE -> true;", "default -> true;");
+        rejectQuest(root, sources, "a free claim cannot acquire a physical evidence requirement",
+                "QuestEvidence", "case FREE -> true;", "case FREE -> held >= task.count();");
+        rejectQuest(root, sources, "free status cannot make ordinary item goals unconditional",
+                "QuestLogic", "task.evidence() == QuestCatalogue.Evidence.FREE || evidenceMet",
+                "task.evidence() != QuestCatalogue.Evidence.MATRIX || evidenceMet");
+        rejectQuest(root, sources, "the first starter task cannot require a prior claim",
+                "QuestCatalogue", "Evidence.FREE, \"\", 1, null, List.of(), List.of(",
+                "Evidence.FREE, \"\", 1, null, List.of(\"multitool\"), List.of(");
+        rejectQuest(root, sources, "the starter cannot silently become a physical item objective",
+                "QuestCatalogue", "Evidence.FREE, \"\", 1, null, List.of(), List.of(",
+                "Evidence.ITEM, \"minecraft:stone\", 1, null, List.of(), List.of(");
+        rejectQuest(root, sources, "catalogue lookup must return the requested task, not the starter",
+                "QuestCatalogue", "return task;", "return TASKS.get(0);");
+        rejectQuest(root, sources, "the task reward list must be an immutable snapshot",
+                "QuestCatalogue", "rewards = List.copyOf(rewards);", "rewards = rewards;");
+        rejectQuest(root, sources, "a record accessor cannot hide all but the first reward",
+                "QuestCatalogue", "public Reward reward() {",
+                "public List<Reward> rewards() { return List.of(reward()); } public Reward reward() {");
+        rejectQuest(root, sources, "catalogue initialization cannot hide an unexamined reward callback",
+                "QuestCatalogue", "reward(\"minecraft:bread\", 64)", "reward(System.getProperty(\"fixture\"), 64)");
         rejectQuest(root, sources, "physical evidence must meet the real task quantity",
                 "QuestEvidence", "held >= task.count()", "held >= 0");
         rejectQuest(root, sources, "physical matrix evidence must have the exact rating",
                 "QuestInventoryEvidence", "value.rating() == task.matrixRating()", "true");
         rejectQuest(root, sources, "reward quantity must be checked before claiming",
-                "QuestClaimService", "reward.getCount() != task.reward().count()", "reward.getCount() < 0");
+                "QuestClaimService", "reward.getCount() != declared.count()", "reward.getCount() < 0");
+        rejectQuest(root, sources, "a batch claim cannot silently validate only its first reward",
+                "QuestClaimService", "for (QuestCatalogue.Reward declared : task.rewards())",
+                "for (QuestCatalogue.Reward declared : List.of(task.reward()))");
+        rejectQuest(root, sources, "an empty declared batch cannot become a successful claim",
+                "QuestClaimService", "if (task.rewards().isEmpty())", "if (false)");
+        rejectQuest(root, sources, "every resolved reward must respect its actual item's stack limit",
+                "QuestClaimService", "reward.getCount() > reward.getMaxStackSize()", "false");
+        rejectQuest(root, sources, "resolved reward stacks must be copied before preparation",
+                "QuestClaimService", "rewards.add(reward.copy());", "rewards.add(reward);");
+        rejectQuest(root, sources, "the delivery preparer must receive an immutable complete batch",
+                "QuestClaimService", "prepare.apply(List.copyOf(rewards))", "prepare.apply(rewards)");
         rejectQuest(root, sources, "a missing reward id is not a real reward stack",
                 "QuestClaimService", "!BuiltInRegistries.ITEM.containsKey(id)", "false");
         rejectQuest(root, sources, "rewards cannot precede the idempotent ledger transition",
                 "QuestClaimService", "if (!progress.claim(player, taskId))",
-                "give.accept(reward); if (!progress.claim(player, taskId))");
+                "delivery.get().run(); if (!progress.claim(player, taskId))");
+        rejectQuest(root, sources, "the complete batch must fit before any ledger transition",
+                "QuestClaimService", "Optional<Runnable> delivery = prepare.apply(List.copyOf(rewards));",
+                "progress.claim(player, taskId); Optional<Runnable> delivery = prepare.apply(List.copyOf(rewards));");
+        rejectQuest(root, sources, "a full inventory must leave the claim unrecorded",
+                "QuestClaimService", "if (delivery.isEmpty())", "if (false)");
+        rejectQuest(root, sources, "prepared delivery must run only once after the claim",
+                "QuestClaimService", "delivery.get().run();", "delivery.get().run(); delivery.get().run();");
+        rejectQuest(root, sources, "live delivery must target the same player's actual inventory",
+                "QuestClaimService", "QuestRewardDelivery.prepare(player.getInventory(), rewards)",
+                "QuestRewardDelivery.prepare(new net.minecraft.world.entity.player.Inventory(player), rewards)");
         rejectQuest(root, sources, "a repeated common claim cannot deliver another reward",
                 "QuestClaimService", "if (claimed.contains(taskId))", "if (false)");
         rejectQuest(root, sources, "the persistent claim must reject an existing task",
@@ -1087,8 +1420,88 @@ public final class VerifySustainabilityRegistry {
         rejectQuest(root, sources, "literal whitespace cannot silently switch the persistent ledger key",
                 "QuestProgress", "\"grindless_quest_progress\"", "\"grindless_quest_ progress\"");
         rejectQuest(root, sources, "a consuming service cannot certify a reusable book",
-                "QuestClaimService", "if (!player.getInventory().add(stack)) {",
-                "player.getMainHandItem().shrink(1); if (!player.getInventory().add(stack)) {");
+                "QuestClaimService", "if (result == Result.CLAIMED) {",
+                "if (result == Result.CLAIMED) { player.getMainHandItem().shrink(1);");
+        rejectQuest(root, sources, "the staging capacity cannot count armor and offhand as delivery slots",
+                "QuestRewardDelivery", "new ItemStack[inventory.items.size()]",
+                "new ItemStack[inventory.getContainerSize()]");
+        rejectQuest(root, sources, "staging cannot alias and mutate the player's existing stacks",
+                "QuestRewardDelivery", "inventory.getItem(slot).copy()", "inventory.getItem(slot)");
+        rejectQuest(root, sources, "staging must preserve pre-existing oversized saved stacks without clamping",
+                "QuestRewardDelivery", "SimpleContainer staged = new SimpleContainer(contents);",
+                "SimpleContainer staged = new SimpleContainer(contents.length); "
+                        + "for (int slot = 0; slot < contents.length; slot++) { staged.setItem(slot, contents[slot]); }");
+        rejectQuest(root, sources, "native capacity checks must cover every reward in the batch",
+                "QuestRewardDelivery", "for (ItemStack reward : rewards)",
+                "for (ItemStack reward : rewards.subList(0, 1))");
+        rejectQuest(root, sources, "preparation cannot insert a partial batch into the live inventory",
+                "QuestRewardDelivery", "if (!staged.addItem(reward.copy()).isEmpty()) {",
+                "inventory.add(reward.copy()); if (!staged.addItem(reward.copy()).isEmpty()) {");
+        rejectQuest(root, sources, "an overflowing batch cannot fall back to world drops",
+                "QuestRewardDelivery", "return Optional.empty();",
+                "return Optional.of(() -> rewards.forEach(stack -> inventory.player.drop(stack, false)));");
+        rejectQuest(root, sources, "staged contents cannot be committed before the ledger accepts the claim",
+                "QuestRewardDelivery", "return Optional.of(() -> {",
+                "inventory.setItem(0, staged.getItem(0)); return Optional.of(() -> {");
+        rejectQuest(root, sources, "commit must preserve unchanged live item objects",
+                "QuestRewardDelivery", "if (!ItemStack.matches(inventory.getItem(slot), staged.getItem(slot)))",
+                "if (true)");
+        rejectQuest(root, sources, "a similarly named container cannot replace vanilla native stacking",
+                "QuestRewardDelivery", "import net.minecraft.world.SimpleContainer;", "import fixture.SimpleContainer;");
+        rejectQuest(root, sources, "an unexamined prepare overload cannot certify native batch delivery",
+                "QuestRewardDelivery", "private QuestRewardDelivery() {",
+                "static Optional<Runnable> prepare(Inventory inventory, ItemStack reward) "
+                        + "{ return Optional.of(() -> {}); } private QuestRewardDelivery() {");
+        rejectQuest(root, sources, "a same-spelled delivery helper cannot replace the checked authority",
+                "QuestClaimService", "import java.util.ArrayList;",
+                "import fixture.QuestRewardDelivery; import java.util.ArrayList;");
+        rejectQuest(root, sources, "book recovery must remain server-thread-only",
+                "QuestBookAccess", "if (!player.server.isSameThread())", "if (false)");
+        rejectQuest(root, sources, "book recovery must use the actual player's ledger identity",
+                "QuestBookAccess", "player.getUUID(), player.getInventory()", "new UUID(0, 0), player.getInventory()");
+        rejectQuest(root, sources, "book recovery cannot continue after the starter was claimed",
+                "QuestBookAccess", "if (progress.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES))", "if (false)");
+        rejectQuest(root, sources, "book detection must include every actual inventory slot, not only main slots",
+                "QuestBookAccess", "inventory.getContainerSize()", "inventory.items.size()");
+        rejectQuest(root, sources, "book detection must inspect each real slot exactly once",
+                "QuestBookAccess", "inventory.getItem(slot).is(book)", "inventory.getItem(0).is(book)");
+        rejectQuest(root, sources, "book recovery cannot mark the starter as already claimed",
+                "QuestBookAccess", "delivery.get().run();",
+                "progress.claim(player, QuestCatalogue.STARTER_SUPPLIES); delivery.get().run();");
+        rejectQuest(root, sources, "book recovery cannot grant the starter kit implicitly",
+                "QuestBookAccess", "List.of(new ItemStack(book))",
+                "List.of(new ItemStack(book), new ItemStack(net.minecraft.world.item.Items.COBBLESTONE, 64))");
+        rejectQuest(root, sources, "book recovery must deliver just one utility book",
+                "QuestBookAccess", "new ItemStack(book)", "new ItemStack(book, 2)");
+        rejectQuest(root, sources, "book recovery must defer without drops when the inventory is full",
+                "QuestBookAccess", "if (delivery.isEmpty())", "if (false)");
+        rejectQuest(root, sources, "book recovery events cannot be confined to a client-only subscriber",
+                "QuestBookAccessEvents", "@Mod.EventBusSubscriber(modid = Grindless.MOD_ID)",
+                "@Mod.EventBusSubscriber(modid = Grindless.MOD_ID, value = net.minecraftforge.api.distmarker.Dist.CLIENT)");
+        rejectQuest(root, sources, "both login and respawn must invoke recovery for the actual player",
+                "QuestBookAccessEvents", "recover(player, true);",
+                "recover(player.server.getPlayerList().getPlayers().get(0), true);");
+        rejectQuest(root, sources, "book recovery cannot depend on the optional renderer being loaded",
+                "QuestBookAccessEvents", "QuestBookAccess.Result result = QuestBookAccess.ensure(player);",
+                "if (!net.minecraftforge.fml.ModList.get().isLoaded(\"heracles\")) { return; } "
+                        + "QuestBookAccess.Result result = QuestBookAccess.ensure(player);");
+        rejectQuest(root, sources, "full-inventory recovery must retain the same UUID for deferred retry",
+                "QuestBookAccessEvents", "WAITING_FOR_SPACE.add(player.getUUID());",
+                "WAITING_FOR_SPACE.add(new UUID(0, 0));");
+        rejectQuest(root, sources, "deferred recovery must keep its bounded twenty-tick retry cadence",
+                "QuestBookAccessEvents", "event.player.tickCount % 20 == 0", "event.player.tickCount % 2000 == 0");
+        rejectQuest(root, sources, "deferred recovery cannot poll players who are not waiting for space",
+                "QuestBookAccessEvents", "WAITING_FOR_SPACE.contains(player.getUUID())", "true");
+        rejectQuest(root, sources, "deferred recovery must actually retry without repeated full-inventory chat",
+                "QuestBookAccessEvents", "recover(player, false);", "recover(player, true);");
+        rejectQuest(root, sources, "completed recovery must remove its waiting UUID",
+                "QuestBookAccessEvents", "WAITING_FOR_SPACE.remove(player.getUUID());",
+                "WAITING_FOR_SPACE.contains(player.getUUID());");
+        rejectQuest(root, sources, "logout must remove the disconnecting player's waiting UUID",
+                "QuestBookAccessEvents", "WAITING_FOR_SPACE.remove(event.getEntity().getUUID());",
+                "WAITING_FOR_SPACE.remove(new UUID(0, 0));");
+        rejectQuest(root, sources, "server stop must clear deferred recovery state",
+                "QuestBookAccessEvents", "WAITING_FOR_SPACE.clear();", "WAITING_FOR_SPACE.isEmpty();");
         rejectQuest(root, sources, "legacy refresh cannot consume the book after a successful service call",
                 "QuestBookMenu", "private void refresh() {",
                 "private void refresh() { player.getMainHandItem().shrink(1);");
@@ -1137,7 +1550,7 @@ public final class VerifySustainabilityRegistry {
 
     private static void rejectQuest(Path root, Map<String, ClassTree> sources, String message,
                                     String owner, String before, String after) throws IOException {
-        String original = Files.readString(root.resolve(QUEST_SOURCES.get(owner)));
+        String original = Files.readString(root.resolve(QUEST_SOURCES.get(owner))).replace("\r\n", "\n");
         if (!original.contains(before)) {
             throw new AssertionError("Quest counterexample no longer targets the source: " + message);
         }
@@ -1517,6 +1930,7 @@ public final class VerifySustainabilityRegistry {
         Map<String, String> bindings = new TreeMap<>(Map.ofEntries(
                 Map.entry("Grindless", "io.github.ezequiel24123z.grindless.Grindless"),
                 Map.entry("QuestCatalogue", "io.github.ezequiel24123z.grindless.quest.QuestCatalogue"),
+                Map.entry("FluxTier", "io.github.ezequiel24123z.grindless.energy.FluxTier"),
                 Map.entry("ModItems", "io.github.ezequiel24123z.grindless.registry.ModItems"),
                 Map.entry("ModMenus", "io.github.ezequiel24123z.grindless.registry.ModMenus"),
                 Map.entry("ControlMatrixItem", "io.github.ezequiel24123z.grindless.item.ControlMatrixItem"),
@@ -1535,6 +1949,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("Inventory", "net.minecraft.world.entity.player.Inventory"),
                 Map.entry("AbstractContainerMenu", "net.minecraft.world.inventory.AbstractContainerMenu"),
                 Map.entry("SimpleContainerData", "net.minecraft.world.inventory.SimpleContainerData"),
+                Map.entry("SimpleContainer", "net.minecraft.world.SimpleContainer"),
                 Map.entry("SimpleMenuProvider", "net.minecraft.world.SimpleMenuProvider"),
                 Map.entry("Component", "net.minecraft.network.chat.Component"),
                 Map.entry("BuiltInRegistries", "net.minecraft.core.registries.BuiltInRegistries"),
@@ -1545,6 +1960,11 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("MenuRegistry", "dev.architectury.registry.menu.MenuRegistry"),
                 Map.entry("ExpectPlatform", "dev.architectury.injectables.annotations.ExpectPlatform"),
                 Map.entry("ModList", "net.minecraftforge.fml.ModList"),
+                Map.entry("Mod", "net.minecraftforge.fml.common.Mod"),
+                Map.entry("SubscribeEvent", "net.minecraftforge.eventbus.api.SubscribeEvent"),
+                Map.entry("TickEvent", "net.minecraftforge.event.TickEvent"),
+                Map.entry("PlayerEvent", "net.minecraftforge.event.entity.player.PlayerEvent"),
+                Map.entry("ServerStoppedEvent", "net.minecraftforge.event.server.ServerStoppedEvent"),
                 Map.entry("SimpleChannel", "net.minecraftforge.network.simple.SimpleChannel"),
                 Map.entry("NetworkRegistry", "net.minecraftforge.network.NetworkRegistry"),
                 Map.entry("NetworkDirection", "net.minecraftforge.network.NetworkDirection"),
@@ -1560,11 +1980,12 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("Codec", "com.mojang.serialization.Codec"),
                 Map.entry("DataResult", "com.mojang.serialization.DataResult"),
                 Map.entry("Set", "java.util.Set"), Map.entry("List", "java.util.List"),
+                Map.entry("ArrayList", "java.util.ArrayList"), Map.entry("Optional", "java.util.Optional"),
                 Map.entry("Map", "java.util.Map"), Map.entry("HashMap", "java.util.HashMap"),
                 Map.entry("HashSet", "java.util.HashSet"), Map.entry("UUID", "java.util.UUID"),
-                Map.entry("Consumer", "java.util.function.Consumer"),
                 Map.entry("Function", "java.util.function.Function"),
                 Map.entry("Predicate", "java.util.function.Predicate"),
+                Map.entry("Runnable", "java.lang.Runnable"),
                 Map.entry("String", "java.lang.String"),
                 Map.entry("IllegalStateException", "java.lang.IllegalStateException"),
                 Map.entry("AssertionError", "java.lang.AssertionError")));
@@ -1593,10 +2014,18 @@ public final class VerifySustainabilityRegistry {
             case "QuestBookMenu" -> Set.of("AbstractContainerMenu", "Inventory", "SimpleContainerData", "ModMenus",
                     "Player", "ServerPlayer", "QuestClaimService", "QuestCatalogue", "QuestProgress", "QuestLogic",
                     "QuestEvidence", "QuestInventoryEvidence", "Set", "List");
+            case "QuestCatalogue" -> Set.of("FluxTier", "ArrayList", "List");
             case "QuestClaimService" -> Set.of("Player", "ServerPlayer", "ModItems", "QuestProgress", "QuestCatalogue",
-                    "QuestLogic", "QuestEvidence", "QuestInventoryEvidence", "UUID", "Consumer", "Function",
-                    "Predicate", "Set", "ItemStack", "Items", "BuiltInRegistries", "ResourceLocation", "Grindless",
-                    "Component", "IllegalStateException");
+                    "QuestLogic", "QuestEvidence", "QuestInventoryEvidence", "QuestRewardDelivery", "UUID", "Function",
+                    "Predicate", "Set", "List", "ArrayList", "Optional", "Runnable", "ItemStack", "Items",
+                    "BuiltInRegistries", "ResourceLocation", "Grindless", "Component", "IllegalStateException");
+            case "QuestRewardDelivery" -> Set.of("Inventory", "ItemStack", "SimpleContainer", "List", "Optional",
+                    "Runnable");
+            case "QuestBookAccess" -> Set.of("ServerPlayer", "QuestProgress", "QuestCatalogue", "QuestRewardDelivery",
+                    "ModItems", "Inventory", "Item", "ItemStack", "Component", "UUID", "List", "Optional", "Runnable",
+                    "IllegalStateException");
+            case "QuestBookAccessEvents" -> Set.of("Grindless", "QuestBookAccess", "ServerPlayer", "Component",
+                    "TickEvent", "PlayerEvent", "ServerStoppedEvent", "SubscribeEvent", "Mod", "Set", "HashSet", "UUID");
             case "QuestLogic" -> Set.of("QuestCatalogue", "Set");
             case "QuestEvidence" -> Set.of("QuestCatalogue");
             case "QuestInventoryEvidence" -> Set.of("QuestCatalogue", "Container", "ItemStack",

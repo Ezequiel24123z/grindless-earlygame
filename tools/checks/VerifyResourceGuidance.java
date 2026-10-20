@@ -484,6 +484,10 @@ public final class VerifyResourceGuidance {
                 List.of("item:fixture:tool"), Double.NaN, null, null, 1, 0);
         equal("recipe-list catalyst role is retained", ResourceGuidanceContext.Role.CATALYST,
                 ResourceGuidanceContext.operands(catalyst).get(1).role());
+        var starter = QuestCatalogue.byId(QuestCatalogue.STARTER_SUPPLIES);
+        equal("the starter is FREE evidence", QuestCatalogue.Evidence.FREE, starter.evidence());
+        equal("FREE evidence has no item or resource subject", true,
+                ResourceGuidanceContext.questSubject(starter).isEmpty());
         var relay = QuestCatalogue.byId("relay");
         equal("the relay quest is ordinary ITEM evidence, not a specified physical rating", QuestCatalogue.Evidence.ITEM,
                 relay.evidence());

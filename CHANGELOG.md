@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Add the first free generous starter quest and immediate book access (ADR-0159).**
+  Integrate source1529: stone/wood/food/basic materials/water in11 legal stacks,
+  opt-in once through the existing per-player/world ledger, automatic utility-book
+  recovery, complete legacy/Heracles projections and affected regressions.
+  Stage the whole reward with native stacking; full inventories now defer all
+  quests without drops, partial delivery or a consumed claim. Preserve old quest
+  IDs/rewards/prerequisites, evidence ordinals and SavedData schema. Executable
+  common/Forge/backend/contracts/boot qualification is separate from source checks.
 - **Apply the selected starter path to the canonical design and execution queue.**
   Replace the superseded no-gift/village-choice prose with ADR-0159's free
   one-time starter quest, without making a survival/client acceptance claim.

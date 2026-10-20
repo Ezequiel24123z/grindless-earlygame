@@ -1,10 +1,10 @@
 package io.github.ezequiel24123z.grindless.quest;
 
 /**
- * The three facts a task is allowed to watch (ADR-0100).
+ * Explicit free claims and the physical facts a task is allowed to watch (ADR-0100).
  *
  * <p>Holding an item, a physical rated Matrix, or standing in a dimension. Nothing
- * else counts, and nothing here is consumed.
+ * else counts. A FREE goal needs none of those facts, and nothing here is consumed.
  */
 public final class QuestEvidence {
 
@@ -15,6 +15,7 @@ public final class QuestEvidence {
         return switch (task.evidence()) {
             case ITEM, MATRIX -> held >= task.count();
             case DIMENSION -> task.subject().equals(dimension);
+            case FREE -> true;
         };
     }
 }
