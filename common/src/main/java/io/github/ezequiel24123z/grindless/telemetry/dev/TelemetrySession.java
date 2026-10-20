@@ -9,7 +9,8 @@ import java.util.TreeMap;
 /** Bounded anonymous counters. Definitions come from catalogues, never player-supplied labels. */
 public final class TelemetrySession {
     public enum Event {
-        PROCESS_COMPLETED, MANUAL_ACTION, MANUAL_FU, SHOP_TRADED, SHOP_REJECTED, RECOVERY, BLOCKED_TRANSITION
+        PROCESS_COMPLETED, MANUAL_ACTION, MANUAL_FU, SHOP_TRADED, SHOP_REJECTED, RECOVERY, BLOCKED_TRANSITION,
+        MACHINE_PLACEMENT_EVENT
     }
 
     public record Snapshot(int schemaVersion, long elapsedTicks, Map<String, Long> counters,

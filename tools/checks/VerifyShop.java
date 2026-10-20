@@ -105,6 +105,15 @@ public final class VerifyShop {
                 ShopCatalogue.PaymentSource.EXISTING_MOD_PRODUCTS, "source", "route", "risk");
         equal("invalid registry outputs are explicit errors", ShopResult.INVALID_OFFER,
                 ShopInventory.prepare(new Inventory(null), invalid, Set.of(), id -> Items.AIR).result());
+        ShopCatalogue.Offer oversized = new ShopCatalogue.Offer("oversized", Map.of(SourceLogic.AGGREGATE, 1),
+                new ShopCatalogue.Goods("minecraft:water_bucket", 2), Set.of(), ShopCatalogue.Role.RECOVERY,
+                ShopCatalogue.PaymentSource.EXISTING_MOD_PRODUCTS, "source", "route", "risk");
+        Inventory funded = new Inventory(null);
+        funded.setItem(0, new ItemStack(ITEMS.apply(SourceLogic.AGGREGATE)));
+        ListTag fundedBefore = funded.save(new ListTag());
+        equal("declared goods must fit the actual native stack limit", ShopResult.INVALID_OFFER,
+                ShopInventory.prepare(funded, oversized, Set.of(), ITEMS).result());
+        equal("invalid native output cannot consume a valid payment", fundedBefore, funded.save(new ListTag()));
     }
 
     private static void capacity() {
@@ -191,6 +200,15 @@ public final class VerifyShop {
         }
         equal("sequence cannot wrap into a reusable request", ShopResult.CLOSED,
                 exhausted.exchange(1, 1, ShopSession.MAX_SEQUENCE, 0, Long.MAX_VALUE, settle));
+        ShopSession interrupted = new ShopSession(2, 9);
+        try {
+            interrupted.exchange(2, 9, 0, 0, 0, () -> { throw new IllegalStateException("expected settlement failure"); });
+            throw new AssertionError("A real settlement exception must not become a success-shaped result");
+        } catch (IllegalStateException expected) {
+            equal("original settlement exception is preserved", "expected settlement failure", expected.getMessage());
+        }
+        equal("failure cannot leave the transient reentrancy guard stuck", ShopResult.TRADED,
+                interrupted.exchange(2, 9, 1, 0, 5, settle));
     }
 
     private static void bootstrapRecovery() {
@@ -237,6 +255,10 @@ public final class VerifyShop {
         equal("large quantity arithmetic is exact rather than wrapping", false,
                 EconomyCycleProof.check(List.of(row("overflow", "a", 1, "b", Long.MAX_VALUE)),
                         Map.of("a", 1L, "b", Long.MAX_VALUE)).conservative());
+        EconomyGraph.Row reading = new EconomyGraph.Row("quest/reading", Map.of("finite_claim:reading", 1L), Map.of(),
+                EconomyGraph.Boundary.FINITE_QUEST, Set.of(), "read-only tutorial", 0, 0, "ONE_CLAIM_PER_PLAYER_WORLD");
+        equal("new tutorial claims with no material reward remain finite and cannot mint",
+                true, EconomyCycleProof.check(List.of(reading), Map.of()).conservative());
         List<EconomyGraph.Row> mutated = new java.util.ArrayList<>(EconomyGraph.rows());
         mutated.add(row("paid_material_from_nothing", "item:minecraft:bucket", 1,
                 "item:" + SourceLogic.AGGREGATE, 64));

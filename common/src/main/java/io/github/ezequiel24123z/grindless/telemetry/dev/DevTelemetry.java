@@ -101,6 +101,13 @@ public final class DevTelemetry {
         }
     }
 
+    public static void machinePlaced(Level level, String machine) {
+        TelemetrySession target = session(level);
+        if (target != null) {
+            target.record(MACHINE_PLACEMENT_EVENT, machineName(machine), 1);
+        }
+    }
+
     public static void manualWork(Level level, String machine, long acceptedFu) {
         TelemetrySession target = session(level);
         if (target != null) {
@@ -172,6 +179,7 @@ public final class DevTelemetry {
         definitions.put(SHOP_REJECTED, rejections);
         definitions.put(RECOVERY, offers);
         definitions.put(BLOCKED_TRANSITION, blocked);
+        definitions.put(MACHINE_PLACEMENT_EVENT, machines);
         return definitions;
     }
 

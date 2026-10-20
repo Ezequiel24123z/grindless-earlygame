@@ -118,7 +118,12 @@ the telemetry payload itself contains only relative game ticks and catalogue IDs
 
 The counters distinguish successful process completion, manual actions and
 accepted FU, paid shop transactions, rejected exchanges, recovery purchases and
-published blocked-state transitions. First quest-claim milestone times are
+published blocked-state transitions. A Forge-only event adapter also counts
+uncancelled catalogued machine/part placement events at lowest event priority,
+without reading the actor or position. These are placement observations, not a
+unique-machine/world census: replacement/rebuilding counts again and a later
+external cancellation/rollback is not claimed as a committed placement.
+First quest-claim milestone times are
 server-aggregate observations, not a per-player profile or evidence that item
 possession proves operation. Unknown labels are never logged or retained; only a
 numeric rejected-record count is incremented. Counter overflow is explicit.
@@ -131,13 +136,89 @@ accepted manual FU and the status publication hook. `inspectionProgress()` on th
 Research Terminal exposes its existing raw `progress` read-only; it changes no
 NBT, work, recipe, energy or completion behavior.
 
+## Live progression-cost export
+
+`ProgressionCostModel` reads the real Relay craft, Data Core craft and calibration
+definitions. At the unchanged final manufacturing boundary, one five-Matrix batch
+requires two glass, two copper ingots, three redstone and one ceramic insulator,
+including its one physical core/calibration. Calibration is 600 rated work ticks
+and 4800 FU from `ResearchLogic`, not an elapsed-time target. These are a material
+lower bound at that boundary, **not** a complete raw-material or machine bill.
+
+The complete machine/material/cycle view reuses the existing
+`SustainabilityAudit.deriveEntryProfile(...).replay()` result and
+`T0ConditionalGate`, rather than constructing another planner. It exports every
+executed establishment batch, gross consumed/returned materials and water,
+serial work ticks, FU demand, finite reserves/margins, retained circulation
+inventory, actual machines/structural catalysts and entry assumptions.
+Serial work is not wall-clock playtime; the conditional sufficient witness is
+not a globally optimal bill or an observed route from the generous starter.
+The current starter allocation is exported separately, without silently treating
+all finite gifts as permanent renewable stock.
+
+The paired exporter uses the existing Gradle-resolved check classpath and canonical
+registry/source adapter:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\economy\export.ps1 -Root .
+powershell -ExecutionPolicy Bypass -File .\tools\economy\export.ps1 -Root . -CheckOnly
+```
+
+`tools/economy/export.sh --root .` and `--check-only` are the POSIX twin.
+The output is `docs/tiers/t0-economy.json`; generation must execute on the parent's
+serialized JDK lease before the integrated `VerifyEconomy` gate. Do not hand-author
+the JSON to satisfy equality. The current worker has not run this writer or
+invented a generated output. Actual invocation/source/model hashes go to
+`build/economy/provenance.json`, never a fabricated clean-publication receipt.
+
+The document includes every offer's unlock, exact price, role, input classification,
+canonical conditional renewable evidence, progression risk, quantity/capacity policy,
+all projected exploit-graph edges, the full potential certificate, final-craft
+minimum, complete existing conditional cost witness, old/new balance decisions,
+and a Git-blob comparison against the exact baseline authorities. Unchanged
+recipe/rate blobs are factual evidence; changed sources remain explicitly changed
+rather than relabelled as an old/new measured balance result.
+
+## Focused qualification and human protocol
+
+The existing behavior runner discovers `VerifyShop`, `VerifyDevTelemetry` and
+`VerifyEconomy` automatically. The first covers every offer, partial/missing
+payments, output capacity after payment, native stack limits, preserved legacy
+stacks, tagged-item protection, changed snapshots, duplicate commits, reentrancy,
+menu/token/sequence replay, sequence exhaustion, fixed packet framing, manual
+pre-producer recovery and composed conversion counterexamples. It also checks
+the source-side C2S/thread/book/ledger boundaries and localization. Those source
+checks are not an observed live network or client proof.
+
+Telemetry tests cover default opt-out/NOP hooks, exact anonymous aggregates,
+relative first milestones, immutable snapshots, bounded unknown labels, overflow
+and absence of personal-data fields. Cost tests compare every cost row with the
+actual canonical replay and require generated-data equality.
+
+After combined compilation and a representative registration/command boot,
+use an isolated controlled client to check the Quest Book action, all payment/
+output details, keyboard navigation, a successful paid exchange, partial/full
+inventory rejection, bucket replacement/refill, rapid repeated clicks, reopening/
+reconnection and old claims. This does not prove the no-command campaign.
+
+For the owner's longitudinal measurement, explicitly start telemetry immediately
+before the first quest claim, note the tested source/artifact independently, and
+record observed confusion, digging/recovery burden, manual repetition and workshop
+downtime. Use snapshots at meaningful milestones, then stop. Interpret counters
+as server aggregates and first observed claim times, not individualized sessions,
+real-time durations, machine-operation certificates or human approval. Review
+prices/batches only against that evidence; no starter nerf or time inflation is
+part of this implementation.
+
 ## Implementation and evidence
 
 The first checkpoint contains the offer authority, native all-or-nothing
 settlement, transient menu sequencing and complete-batch cycle certificate.
 The second adds the native menu, bounded C2S intent, client screen, commands,
 manual pre-producer restart and anonymous opt-in telemetry with focused regressions.
-Live cost export is the next implementation unit in this same lane.
+The final source checkpoint adds live cost/economy projection, the paired canonical
+exporter and its focused regression. New empty-material tutorial claims remain
+finite graph rows and cannot break the projection or acquire a reward mint.
 
 No PC/JVM lease is assigned to this worker. Java regressions and compilation are
 prepared, **NOT EXECUTED**; the parent qualifies the frozen combined source with
@@ -146,9 +227,9 @@ prices, recovery usefulness and pacing need their distinct proofs.
 
 ## Lane handoff categories
 
-- `COMPLETED`: source implementation of the core, native shop/menu/network, paid pre-producer recovery and local telemetry above; not executable qualification.
-- `BLOCKED`: None for source implementation; PC/JVM qualification awaits the coordinator's serialized lease.
-- `NOT EXECUTED`: Java compilation/regressions, server boot, native packets, client and campaign.
+- `COMPLETED`: source implementation of the core, native shop/menu/network, paid pre-producer recovery, canonical cost/export lane and local telemetry above; not executable qualification.
+- `BLOCKED`: source is ready for the coordinator's serialized PC/JVM lease; no worker permission to run that host or JVM was assigned.
+- `NOT EXECUTED`: Java compilation/regressions, actual economy JSON generation/check, server boot, native packets, client and campaign. Parent integrates the separately owned Quest Book and process/quest telemetry hooks before combined qualification.
 - `NEEDS HUMAN VALIDATION`: prices, usefulness, pacing, clarity and interaction comfort.
 - `NEEDS MY DECISION`: None; direct barter and preserving the generous starter are assigned decisions.
 - `NEEDS CREDENTIAL / EXTERNAL RESOURCE`: None.
