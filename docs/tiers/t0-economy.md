@@ -253,6 +253,19 @@ bundle; checking the exact frozen HEAD and advertising that ref corrected the
 transport without changing source. Assignment and successful bundle verification
 are not a Java or generated-data pass. The worker starts no competing JVM.
 
+The actual exact00 common compilation then failed at `ShopScreen.java:68`:
+an extra closing parenthesis on the exchange button produced `';' expected`.
+Its closed `daemon-29228.out.log` is 40700 bytes with SHA-256
+`1b770e5a3f1213140a9d22987f61c4a9b7dbea8fda8671f281b77d8717bb31eb`.
+A separate malformed native Gradle-property invocation remains preserved in
+`daemon-29644.out.log`, 310782 bytes, SHA-256
+`e6c899f8a9f381b62b7f303e99e77a01e56ab70e94e414177345bac73ac3d579`;
+it never established a compiler/test pass. The syntax is corrected in this
+source. The coordinator explicitly transferred the retained isolated worktree
+and exclusive JVM/cache lease to this lane after observing zero Java processes.
+Requalification includes the precise d916 tests; no old root, cache, failed log,
+world or development instance is removed.
+
 ## Lane handoff categories
 
 - `COMPLETED`: source implementation of the core, native shop/menu/network, paid pre-producer recovery, canonical cost/export lane and local telemetry above; not executable qualification.
