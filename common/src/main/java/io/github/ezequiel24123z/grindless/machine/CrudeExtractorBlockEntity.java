@@ -120,6 +120,10 @@ public final class CrudeExtractorBlockEntity extends MachineBlockEntity implemen
         updateSubscriptions();
     }
 
+    public double inspectionProgress() {
+        return progress;
+    }
+
     private void work() {
         if (getLevel() == null) {
             return;
