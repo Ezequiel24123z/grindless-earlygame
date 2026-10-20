@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Disclose and isolate two concrete prior-final CI failures.** Exact543598a
+  verify/Windows jobs pass, but first-fluids misses WATER-IN and first-harness
+  misses HELMET-OK. Retain run/artifact identities, report the failure visibly
+  and assign a bounded fifth regression lane without assuming flakiness,
+  weakening assertions or replaying unrelated native cases.
 - **Bind the four follow-up owners and keep runtime access serialized.**
   Record exact269965b child scopes and a read-only zero-Java PC observation,
   not a build/client lease. The optional memory service cannot store the rule,

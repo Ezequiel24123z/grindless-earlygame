@@ -8,7 +8,7 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 | Category | Actual state at follow-up intake |
 | --- | --- |
 | COMPLETED | Previous A01/A03/build/deployment proof is preserved. The owner-supplied external ElevenLabs credential is now readable and authenticated via HTTP200 without exposing/copying it or generating audio. |
-| BLOCKED | Paid/image routes and materially different Superflat choices cannot be selected silently. Generation still awaits reviewed new purpose-specific tooling/grants; this is implementation work, not a missing owner credential. |
+| BLOCKED | Prior-final CI39336114196 fails first-fluids/WATER-IN and first-harness/HELMET-OK despite successful verify/Windows jobs; d4302f81 investigates actual logs, not an assumed flake. Materially different Superflat choices and new image billing cannot be selected silently. Audio generation awaits its new tooling/grant, not a missing credential. |
 | NOT EXECUTED | New SFX generation, image proof, current-wave client run and a fresh no-command campaign have not occurred. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
 | NEEDS MY DECISION | Superflat alternatives and any new image billing/resource activation will be presented before implementation/spend. |
@@ -18,7 +18,9 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 
 The four new nested owners are visual discovery5afc449c, sound families9c12461c,
 Superflat proposal800431b7 and objective client preparation0f59d046, all based on
-published269965b. No child currently owns a PC JVM/Gradle/Prism-write window.
+published269965b. Concrete prior-final CI failures add a fifth narrowly owned
+regression lane d4302f81 on3cd16ba; this is not another whole-T0 audit.
+No child currently owns a PC JVM/Gradle/Prism-write window.
 Read-only01:27:07Z observation finds0Java,9.260 GiB free physical memory,
 30.766 GiB commit and161.808 GiB work space; a later runtime must refresh this.
 The optional repository-memory service is unavailable; the reporting agreement

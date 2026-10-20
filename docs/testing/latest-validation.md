@@ -1,5 +1,17 @@
 # Current T0 rework validation
 
+## Subsequent final-source CI failure, disclosed at follow-up intake
+
+The later [CI39336114196](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39336114196)
+on exact543598a finishes `failure`: Linux verify and Windows tooling succeed;
+four native shards succeed but shard2/first-fluids misses `WATER-IN`, and
+shard3/first-harness misses `HELMET-OK`. Raw artifacts are12227542311 and12228520542.
+Successful native A01/A03 PC evidence is not invalidated by implication, but it
+does not erase these distinct failed cases or justify an all-green final CI claim.
+The follow-up explicitly reports this in chat and delegates their source/log
+trace to a new isolated owner before any rerun or tolerance change. Do not call
+the failures flaky, setup-only or gameplay defects without concrete evidence.
+
 ## Final A01 native/SavedData pass and actual qualified deployment
 
 On the SAME immutable559 root/JAR98aa already used by cache green, A01 completes

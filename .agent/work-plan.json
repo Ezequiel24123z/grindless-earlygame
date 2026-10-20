@@ -40,6 +40,8 @@
       "superflat_proposal": {"id": "800431b7-e036-4a78-a5e4-d9ac6ebf9afc", "owned": "source-supported minimal alternatives and recommendation only", "status": "active_no_gameplay_change"},
       "client_preparation": {"id": "0f59d046-8239-4fb2-b0df-fdbf6e0776bb", "owned": "objective nonredundant client-review preparation and isolated contracts", "status": "active_no_PC_JVM_or_Prism_write_lease"}
     },
+    "discovered_regression_owner": {"id": "d4302f81-688c-4b40-be0e-bdafec98055f", "owned": "concrete first-fluids and first-harness CI failure trace", "source": "3cd16bac9f0d06d166cec7abe82c54f3e21478c3", "status": "active_source_and_raw_log_investigation_no_runtime_lease"},
+    "prior_final_CI": {"source": "543598ac7dcb7a69b9bea62f7b3d00bfda8189fd", "run": 39336114196, "conclusion": "failure", "verify": "success", "windows_tooling": "success", "failed_native": ["first-fluids_missing_WATER-IN", "first-harness_missing_HELMET-OK"], "not_assumed_flaky": true, "chat_disclosed": true},
     "execution_source": "269965b1b0b8c1becda74459a853f245105649ee",
     "PC_readonly_observation": {"at_utc": "2026-10-20T01:27:07.2205969Z", "physical_free_gib": 9.260, "commit_free_gib": 30.766, "work_free_gib": 161.808, "java_processes": 0, "not_a_runtime_lease": true},
     "reporting_persistence": "AGENTS_and_Git_authoritative_repository_memory_API_unavailable_no_memory_store_claim",
