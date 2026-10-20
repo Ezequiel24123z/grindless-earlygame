@@ -39,6 +39,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -384,7 +385,7 @@ public final class VerifyMachineInspection {
 
     private static void targetingAndRate() {
         Position block = new Position(0, 0, 0);
-        check("a block face exactly six blocks away is inspectable",
+        check("the preliminary bound admits a block face exactly six blocks away",
                 MachineInspectionProtocol.withinDistance(block, 0.5, 0.5, -6));
         check("the target centre is not a false reach proxy",
                 MachineInspectionProtocol.withinDistance(block, 7, 0.5, 0.5));
@@ -396,6 +397,20 @@ public final class VerifyMachineInspection {
                 MachineInspectionProtocol.withinDistance(block, 0.5, 0.5, 0.5));
         check("nonfinite coordinates are invalid", !MachineInspectionProtocol.withinDistance(block,
                 Double.NaN, 0.5, 0.5));
+        Vec3 eye = Vec3.ZERO;
+        check("the actual native hit point exactly at the cap is allowed",
+                MachineInspectionProtocol.withinHitDistance(eye.distanceToSqr(
+                        new Vec3(MachineInspectionProtocol.MAX_DISTANCE, 0, 0))));
+        check("the very next representable point beyond the cap is rejected",
+                !MachineInspectionProtocol.withinHitDistance(eye.distanceToSqr(
+                        new Vec3(Math.nextUp(MachineInspectionProtocol.MAX_DISTANCE), 0, 0))));
+        check("a near block cannot authorize an over-range hit on its far face",
+                MachineInspectionProtocol.withinDistance(new Position(5, 0, 0), 0, 0, 0)
+                        && !MachineInspectionProtocol.withinHitDistance(eye.distanceToSqr(new Vec3(6, 1, 0))));
+        check("nonfinite actual hit distance is rejected",
+                !MachineInspectionProtocol.withinHitDistance(Double.NaN)
+                        && !MachineInspectionProtocol.withinHitDistance(Double.POSITIVE_INFINITY));
+        check("negative hit distance is invalid", !MachineInspectionProtocol.withinHitDistance(-1));
         RequestLimiter limiter = new RequestLimiter();
         check("the first request is admitted", limiter.admit(0));
         check("same-time replay cannot inspect again", !limiter.admit(0));
@@ -461,6 +476,9 @@ public final class VerifyMachineInspection {
                 query.indexOf("if (!level.hasChunkAt(position))") >= 0
                         && query.indexOf("if (!level.hasChunkAt(position))") < query.indexOf("level.getBlockState(position)")
                         && query.indexOf("if (!level.hasChunkAt(position))") < query.indexOf("level.getBlockEntity(position)"));
+        check("a removed or wrong-type entity cannot masquerade as the replaced target",
+                query.contains("entity.isRemoved() || !entity.getType().isValid(block)")
+                        && query.indexOf("!entity.getType().isValid(block)") < query.indexOf("MachineStatus.of(block)"));
         check("inspection does not select recipes, wake machines or serialize their private state",
                 !query.contains("ProcessLookup.find(") && !query.contains("updateSubscriptions(")
                         && !query.contains("saveWithoutMetadata(") && !query.contains("drawPower(")
@@ -495,6 +513,10 @@ public final class VerifyMachineInspection {
                         && network.indexOf("MachineInspectionProtocol.withinDistance(") < network.indexOf("level.clip("));
         check("the authoritative ray must hit the requested block before querying it",
                 network.indexOf("!hit.getBlockPos().equals(position)") < network.indexOf("MachineInspection.query("));
+        check("the server measures the actual ray hit, not only the nearby block or look-vector length",
+                network.contains("withinHitDistance(hit.getLocation().distanceToSqr(eye))")
+                        && network.indexOf("withinHitDistance(") < network.indexOf("MachineInspection.query("));
+        check("the client shares the actual-hit cap with the server", client.contains("withinHitDistance("));
         check("the ray cannot read an unloaded intermediate chunk",
                 network.contains("!rayChunksLoaded(level, eye, end)")
                         && network.contains("ClipContext.Block.OUTLINE") && network.contains("ClipContext.Fluid.NONE"));

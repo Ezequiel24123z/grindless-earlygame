@@ -136,6 +136,11 @@ public final class MachineInspectionProtocol {
         return dx * dx + dy * dy + dz * dz <= MAX_DISTANCE * MAX_DISTANCE;
     }
 
+    public static boolean withinHitDistance(double squaredDistance) {
+        return Double.isFinite(squaredDistance) && squaredDistance >= 0
+                && squaredDistance <= MAX_DISTANCE * MAX_DISTANCE;
+    }
+
     private static void consumed(FriendlyByteBuf buffer) {
         if (buffer.isReadable()) {
             throw new IllegalArgumentException("unexpected machine inspection packet bytes");

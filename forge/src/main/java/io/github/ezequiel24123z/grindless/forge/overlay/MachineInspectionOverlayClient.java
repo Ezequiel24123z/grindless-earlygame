@@ -133,8 +133,8 @@ public final class MachineInspectionOverlayClient {
     private static Target aimed(Minecraft client) {
         if (client.level == null || client.player == null || !(client.hitResult instanceof BlockHitResult hit)
                 || hit.getType() != HitResult.Type.BLOCK
-                || hit.getLocation().distanceToSqr(client.player.getEyePosition())
-                > MachineInspectionProtocol.MAX_DISTANCE * MachineInspectionProtocol.MAX_DISTANCE) {
+                || !MachineInspectionProtocol.withinHitDistance(
+                hit.getLocation().distanceToSqr(client.player.getEyePosition()))) {
             return null;
         }
         BlockPos position = hit.getBlockPos();
