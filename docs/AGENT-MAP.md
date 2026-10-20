@@ -24,9 +24,11 @@ Coordination follows [AGENTS](../AGENTS.md) and
 own bounded implementation/check execution with explicit files and input revisions.
 ADR-0147 selects Sol 6.1 for the next isolated session; previous Astra reviews remain
 historical evidence, not a requirement to restore that leader.
-The currently deployed qualified engineering baseline is559bed5;1389 remains historical.
-ADR-0156's image capabilities, sound families, client preparation and Superflat proposal
-are explicit follow-up gaps, not permission to rewrite proven engines or start ports.
+The currently deployed qualified engineering baseline is747ebca/c08;1389/559 remain historical.
+The new [experience plan](../plan/feature-t0-experience-1.md) under ADR-0161
+explicitly opens bounded T0 quest/Guide/recovery economy/tank/interface/inspection/
+physical sound/visual work. It does not authorize a generic engine rewrite or
+unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
 
 ## Playable releases, profiles and work storage
