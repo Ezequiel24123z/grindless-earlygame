@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Continue experience fixes into the composed qualification boundary.**
+  Preserve source3564's callback fence, single-owner port operations and truthful
+  recovered-water view with authored real-world probes; these are not native
+  passes yet. Record the actual economic compile repair, observational contract
+  repair and independent-JVM canonical JSON ordering fix as separate evidence.
+  Mark delivered source units separately from still-pending executable/client gates.
 - **Record the physical sound and color-independent art strategies (ADR-0166–0167).**
   Retire five synthesized distributed files without losing event IDs; preserve
   Quern/Mixer and selected physical water/extraction sources, with native fire
