@@ -4,6 +4,13 @@ Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC
 
 ## Active owner-directed follow-up
 
+**Current final PC owner is7dcd042e.** At04:41:39Z the former executor's app
+runtime is not running (stale busy flag); read-only SSH finds0Java, clean039,
+and no later generator/stage output. Its lease is explicitly withdrawn before
+transfer. Preserve all successful16d/039 receipts/cache; the starter author now
+finishes canonical regeneration, affected reruns, package and boot on the same
+isolated surface. The coordinator alone deploys/publishes/main-merges.
+
 ADR-0158 requires end-to-end delivery without routine micro-approval stops.
 Audio source ad71 is integrated in published16d103a: two real ElevenLabs200
 outputs, selected/normalized Mixer A, unchanged Quern A, shared tracker and

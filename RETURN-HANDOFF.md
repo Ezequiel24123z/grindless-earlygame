@@ -5,6 +5,12 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 
 ## Current wave disclosure
 
+**Final execution transfer:**7dcd042e now owns the isolated PC generator/build/
+boot lane. The old executor's runtime is not running despite a stale busy flag;
+04:41:39Z read-only inspection confirms0Java/clean039/no phase2B output. Its lease
+is withdrawn, not silently shared. All prior successful and failed receipts remain
+valid/preserved; no historical JVM stage is replayed to replace the observer.
+
 **Execution correction (ADR-0158):** the owner requires broader end-to-end delivery
 and proportionate checks, not micro-approval queues. The complete generated Mixer
 unit ad71 is integrated in published16d103a alongside the qualified local Multitool

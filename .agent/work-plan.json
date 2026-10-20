@@ -285,10 +285,11 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": "9c12461c-7aa8-4101-8f21-a935a7d9841a",
+      "owner_session_id": "7dcd042e-ab2e-411f-b767-1fbd83f800a7",
       "owner_worker_agent_id": null,
       "scope": "combined_visual_audio_common_Forge_compile_classpath_targeted_QuernAudio_Assets_tests_then_final_kit_source_build_pack_registration_boot_same_owner_no_Prism_deploy",
       "phase1_frozen_source": "16d103a049689fd6dae1289cfa7e0297b5352816",
+      "final_execution_transfer": {"from": "9c12461c-7aa8-4101-8f21-a935a7d9841a", "to": "7dcd042e-ab2e-411f-b767-1fbd83f800a7", "at_utc": "2026-10-20T04:41:39Z", "observed": "old_runtime_not_running_stale_busy_flag_PC_zero_Java_clean039_no_phase2b_or_generator_output", "old_lease_explicitly_withdrawn": true, "preserve_all_previous_receipts_and_cache": true},
       "current_preflight": {"at_utc": "2026-10-20T01:52:56.1475914Z", "physical_free_gib": 12.441, "commit_free_gib": 31.121, "work_free_gib": 158.357, "java_python_processes": 0, "Comfy_listeners_8188_8189": 0, "GPU_free_memory_not_yet_proved": true},
       "focused_release_observation": {"at_utc": "2026-10-19T20:58:10Z", "java_processes": 0, "sources": "exact_clean4f1b30b_and_c87dbc8_original_clone_config_origin_preserved", "not_a_native_guard": true},
       "application_input_baseline": "855a1ed898d8c5a24d004d45d651125fd5f29496",

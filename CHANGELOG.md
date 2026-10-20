@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Recover the final execution lane without replaying completed qualification.**
+  A stopped executor runtime/stale busy flag and read-only PC inspection show
+  zero Java, clean039 and no subsequent generator output. Withdraw that lease
+  and transfer only remaining regeneration/affected checks/package/boot to the
+  active starter author, preserving all previous code, receipts and caches.
 - **Replace the obsolete no-kit assertion with the actual free-entry contract.**
   Integrate34407fb: check the first FREE/no-prerequisite/one-time quest and honest
   finite-kit guidance while keeping canonical generated-data equality unchanged.
