@@ -31,6 +31,11 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
 
 ## Playable releases, profiles and work storage
 
+- `docs/assets/image-generation-discovery.md` — verified external capability/
+  billing/licensing boundaries and concrete deterministic pipeline. GitHub Models
+  retirement is established by official sources, not a non-JSON catalogue body;
+  Copilot vision/credits are not image-output entitlement. The actual local ComfyUI
+  owner controls installation qualification, not this research fallback.
 - `plan/process-t0-playable-release-1.md` and `.agent/work-plan.json` — ADR-0144/PA-0007
   requirement trace, bounded ownership, separate readiness states and actual dependencies.
 - `pack/profiles.json`, `pack/curseforge/manifest.json`, `pack/dependency-metadata.json`,

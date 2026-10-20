@@ -25,6 +25,25 @@ ComfyUI publicly or confuse candidate generation with Minecraft/human correctnes
 An additional specialized asset owner handles this route; the provider researcher
 continues comparative research without duplicating installation work.
 
+External image research is complete at7795f966: official GitHub documentation
+and its changelog independently confirm Models retired2026-07-30, including
+catalogue/inference/BYOK; Copilot is separate. A catalogue GET returning text/plain
+OK is not model inventory or permission. No external image route/free quota or
+generation is claimed verified. [The decision](docs/assets/image-generation-discovery.md)
+records actual64-bit12GiB-class AMD memory and the deterministic fallback without
+mistaking hardware/PATH checks for an absent ComfyUI installation.
+The specialized owner now finds portable AMD and ROCm installations, no Python/
+Comfy/Java process and no8188/8189 listener. Model/licence/runtime qualification
+and actual inference remain pending. The first approved target is the explicitly
+placeholder Multitool, not the protected9+3 sprites or a mining tool.
+Fresh01:52:56Z admission observes12.441 GiB free physical memory,31.121 GiB
+commit,158.357 GiB work space and no Java/Python or8188/8189 listeners. Grant
+only the existing core-only Comfy runtime/API on loopback8189 and CPU contracts,
+then at most two Multitool candidates after exact existing-model provenance/
+licence verification. Reuse the2GiB SD1.5 fp16 checkpoint/CLIP/VAE; no new weights,
+driver/global environment change, user-process interruption, reboot or simultaneous
+JVM/Prism work. Actual runtime and free GPU memory are still unproved at admission.
+
 The four new nested owners are visual discovery5afc449c, sound families9c12461c,
 Superflat proposal800431b7 and objective client preparation0f59d046, all based on
 published269965b. Concrete prior-final CI failures add a fifth narrowly owned

@@ -35,11 +35,11 @@
     "required_reporting": ["COMPLETED", "BLOCKED", "NOT EXECUTED", "NEEDS HUMAN VALIDATION", "NEEDS MY DECISION", "NEEDS CREDENTIAL / EXTERNAL RESOURCE", "COST / BILLING RISK", "DEPLOYED STATE"],
     "lanes": ["actual_image_capability_and_pipeline", "purpose_bound_T0_sound_families", "minimal_fresh_Superflat_proposal", "objective_client_review_preparation"],
     "sessions": {
-      "visual_discovery": {"id": "5afc449c-b22c-4409-a5c3-91899c627eab", "owned": "image capability decision and isolated proof artifacts", "status": "active_no_paid_activation"},
+      "visual_discovery": {"id": "5afc449c-b22c-4409-a5c3-91899c627eab", "owned": "external capability research and comparison only", "status": "complete7795_document_Models_retired_officially_verified_no_external_image_or_spend_Comfy_implementation_separate", "commit": "7795f9663ffd6a1d1a24c00e4d6af96a09ecd8c0"},
       "sound_families": {"id": "9c12461c-7aa8-4101-8f21-a935a7d9841a", "owned": "sound-family audit and purpose-bound tooling before reviewed generation grants", "status": "active_no_generation_yet"},
       "superflat_proposal": {"id": "800431b7-e036-4a78-a5e4-d9ac6ebf9afc", "owned": "source-supported minimal alternatives and recommendation only", "status": "active_no_gameplay_change"},
       "client_preparation": {"id": "0f59d046-8239-4fb2-b0df-fdbf6e0776bb", "owned": "objective nonredundant client-review preparation and isolated contracts", "status": "offline0178_ready_integrated_readonly_target_Inspect_and_graphical_metadata_authorized_no_client_JVM_lease"},
-      "comfyui_assets": {"id": "a3c3fa99-547b-479e-b68b-15c02d36b40b", "owned": "existing_ComfyUI_installation_workflow_API_and_project_visual_pipeline", "source": "7e58f92e846f7580968393be0a2e0a99ed883e2c", "status": "inspection_and_safe_isolated_preparation_authorized_GPU_inference_awaits_actual_inventory_resource_lease"}
+      "comfyui_assets": {"id": "a3c3fa99-547b-479e-b68b-15c02d36b40b", "owned": "existing_ComfyUI_installation_workflow_API_and_project_visual_pipeline", "source": "7e58f92e846f7580968393be0a2e0a99ed883e2c", "status": "existing_portable_AMD_and_ROCm_found_no_process_or8188_8189_listener_model_license_inventory_before_GPU_lease", "approved_PoC_target": "multitool_explicit_FormTextures_placeholder_manual_rotate_pickup_not_mining_unprotected", "normal_build_must_not_depend_on_Comfy_or_Python": true}
     },
     "discovered_regression_owner": {"id": "d4302f81-688c-4b40-be0e-bdafec98055f", "owned": "concrete first-fluids and first-harness CI failure trace", "source": "3cd16bac9f0d06d166cec7abe82c54f3e21478c3", "status": "active_source_and_raw_log_investigation_no_runtime_lease"},
     "prior_final_CI": {"source": "543598ac7dcb7a69b9bea62f7b3d00bfda8189fd", "run": 39336114196, "conclusion": "failure", "verify": "success", "windows_tooling": "success", "failed_native": ["first-fluids_missing_WATER-IN", "first-harness_missing_HELMET-OK"], "not_assumed_flaky": true, "chat_disclosed": true},
@@ -50,6 +50,7 @@
     "audio_wave_budget": {"max_families": 2, "max_candidates_per_family": 2, "max_requests": 4, "first_purpose": "Clay_Mixer_wet_work", "generation_requests_made": 0, "needs_new_reviewed_run_grant": true, "historical_receipts_immutable": true, "not_a_permanent_project_ceiling": true},
     "image_cost_boundary": "metadata_discovery_only_no_paid_activation_or_generation_without_explicit_authorization_one_small_PoC_only_if_verified_no_cost_or_already_authorized",
     "local_visual_backend": {"decision": "ADR-0157", "owner_identified_existing_installation": true, "status": "specialized_nested_implementation_authorized_inspect_first", "modification_scope": "necessary_reversible_configuration_nodes_tools_licensed_models_prefer_existing_no_mass_downloads", "never": ["reboot_PC", "public_API_exposure", "weaken_security", "destroy_existing_workflows_or_jobs", "copy_unrelated_personal_prompts_to_Git"], "proof": "one_justified_T0_asset_at_most_two_source_candidates_then_deterministic_validation_build_deploy_human_review", "external_provider_role": "comparative_research_not_default_implementation"},
+    "comfy_initial_inventory": {"portable_revision": "c2bcbecd", "ROCm_revision": "a52921417", "version_each": "0.32.0", "existing_model": "SD1.5_fp16_with_built_in_CLIP_VAE", "model_bytes": 2132696762, "model_sha256": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916", "no_new_model_selected": true, "unrelated_model_families_unused": true, "runtime_not_yet_proved": true},
     "product_boundary": "Superflat_alternatives_and_recommendation_before_material_choice_no_T0_acceptance_freeze_or_T1"
   },
   "autonomous_programme": {
@@ -276,15 +277,15 @@
       "publisher": "Received Sol coordinator only; retiring Astra becomes quiescent and workers do not publish independently"
     },
     "resource_window": {
-      "owner_session_id": null,
+      "owner_session_id": "a3c3fa99-547b-479e-b68b-15c02d36b40b",
       "owner_worker_agent_id": null,
-      "scope": "all_current_engineering_execution_complete_A01_cache_released_same559_artifact_deployed_no_active_JVM_cache_world_owner",
-      "current_preflight": {"at_utc": "2026-10-19T22:07:06.5534286Z", "physical_free_gib": 9.758, "commit_free_gib": 33.789, "work_free_gib": 162.935, "java_processes": 0},
+      "scope": "Comfy_existing_core_only_runtime_import_API_loopback8189_CPU_contracts_then_at_most2_Multitool512_candidates_only_after_exact_existing_model_rights_verified_No_JVM_build_Prism_reboot_download_or_existing_user_process_change",
+      "current_preflight": {"at_utc": "2026-10-20T01:52:56.1475914Z", "physical_free_gib": 12.441, "commit_free_gib": 31.121, "work_free_gib": 158.357, "java_python_processes": 0, "Comfy_listeners_8188_8189": 0, "GPU_free_memory_not_yet_proved": true},
       "focused_release_observation": {"at_utc": "2026-10-19T20:58:10Z", "java_processes": 0, "sources": "exact_clean4f1b30b_and_c87dbc8_original_clone_config_origin_preserved", "not_a_native_guard": true},
       "application_input_baseline": "855a1ed898d8c5a24d004d45d651125fd5f29496",
       "green_source": "559bed5e8ea70ac52ff4b3fed3850ab05ab48256",
       "application_input_identities": {"common": "2353dc45464148f583c14ebeec418a844e45c0d1", "forge": "a1a2ae9ac4b9465f997ad0be52fa428f3a6566da", "build.gradle": "0e12a50c24167807c418fb505ec115d689e643c1", "settings.gradle": "f47aef5f8f88a38eed6fe4b1b0bf55c3d55edb80", "gradle.properties": "1131332c6aa7ee9371716de6f8425ed86f144045", "smoke-boot.ps1": "13bc1e09a0a2c0f0a5604b6e772eadae9abbc607", "smoke-boot.sh": "aa90a7e0e21216479129765513e14d66f107830d"},
-      "queued_next": null,
+      "queued_next": {"session_id": "d4302f81-688c-4b40-be0e-bdafec98055f", "scope": "after_reviewed_CI_fixture_freeze_and_Comfy_GPU_release_two_targeted_native_scenarios_new_explicit_lease"},
       "final_postcheck": {"at_utc": "2026-10-19T22:23:38.9775014Z", "java_processes": 0, "original_pinned_files_unchanged": 6, "instance": "Grindless-T0-Dev", "outcome": "VerifiedStopped_and_Unchanged", "installed_jar_sha256": "98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061"},
       "compile_reservation": {
         "historical": true,
@@ -318,7 +319,7 @@
         "release": "Worker reports actual exits and remaining owned JVMs when complete; failed guard blocks launch without lowering limits or deleting caches"
       },
       "next_worker_agent_id": null,
-      "next_scope": "manual_client_playtest_and_explicit_product_decisions_held_No_automatic_resume_new_JVM_work_T0_freeze_or_T1_activation",
+      "next_scope": "independent_audio_generation_remains_local_and_grant_gated_readonly_client_inspection_can_continue_heavy_PC_JVM_and_GPU_jobs_are_serialized_only_for_actual_headroom",
       "native_blocker": "Historical local fixtures remain NOT_RUN. New Gradle writes on the work volume are verified; each native run still needs its own current resource/purpose check. Sandbox403 remains history.",
       "s2_validation_finished": true,
       "qa_runtime_paused_session_id": "87354db2-9fcb-463c-b5c6-756c4729a6c9",

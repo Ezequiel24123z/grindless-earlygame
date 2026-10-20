@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Reserve a bounded existing-Comfy proof window after real inventory.**
+  Fresh guards show no Java/Python/listeners and sufficient host headroom.
+  Permit only an owned core-only loopback API/CPU checks, then two Multitool
+  source candidates after the existing model's exact rights are verified.
+  Reuse SD1.5/CLIP/VAE rather than download weights; no build/Prism/reboot.
+- **Finish verified image-provider discovery without inventing access.**
+  Preserve7795's research and independently confirm GitHub Models retirement
+  in official documentation, distinct from its non-JSON catalogue response.
+  No external image generation/spend occurred. Clarify that the standalone
+  fallback is not selected; actual existing-Comfy qualification has its own
+  owner and an approved unprotected Multitool PoC target.
 - **Prepare source-bound T0 client review without inventing a native pass.**
   Preserve C2's original042b/0178 history, executed literal-key/texture checks,
   unchanged559 inputs and isolated manual probes under ADR-0140/0156. Existing
