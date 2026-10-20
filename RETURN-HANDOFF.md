@@ -19,7 +19,7 @@ Only the coordinator publishes/deploys. Human art/listening/campaign remain sepa
 | Category | Current actual state |
 | --- | --- |
 | COMPLETED | Starter source1529/11 legal stacks/book recovery/both projections/native full-batch delivery are integrated in039. Actual PC16d common/Forge, audio84 and full assets pass; the closed receipt and raw outputs are verified. Exact962 CI/PC full48, Comfy28 Python/12 JDK/two identical1602-file stages/127b and real generated Mixer A are preserved; Quern A is unchanged. |
-| BLOCKED | Combined-source CI39365776548 on16d103a fails the offline three-file legacy sound byte-identity guard after200 assertions pass. Same owner9c repairs it; cause is not assumed environmental. Kit implementation and completed PC stages continue; no full-green claim. |
+| BLOCKED |039 CI39367863670 fails the stale no-free-kit guidance assertion and unregenerated runtime guidance asset;7d repairs the source contract and9c generates the canonical output. Earlier16d sound byte-pin red is fixed in697 with exact LF/CRLF pairs; fresh Linux proof is pending. No full-green/package/merge claim. |
 | NOT EXECUTED | Final kit executable qualification/build/package/registration boot/deploy and current-wave graphical client/manual campaign are not yet complete. Main merge and preserved PR cleanup are authorized only after the candidate is technically ready for testing. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
 | NEEDS MY DECISION | None. ADR-0159 selects the generous first free quest; implementation does not await another village/shop/food decision. |

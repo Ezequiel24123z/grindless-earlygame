@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Repair the actual Linux sound byte-pin mismatch without weakening hashing.**
+  Integrate697: test-only complete LF/CRLF SHA-256 pairs for the three frozen
+  legacy files, real raw-Git fixtures and17 negative mutations. Keep original
+  authorization hashes, receipts, ledgers, providers and runtime untouched.
+  WinPS/Core/SH focused349 and default677 pass; fresh hosted Linux proof remains
+  required. Preserve the separate039 guidance-test/generated-asset failures.
 - **Authorize testing-ready main integration and preserved PR cleanup (ADR-0160).**
   The owner requests the fully prepared testing candidate on `main` after
   applicable technical/deployment/live checks, without inventing human acceptance.

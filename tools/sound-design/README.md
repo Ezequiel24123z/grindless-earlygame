@@ -39,6 +39,38 @@ false/null: no fake Sol grant is created. Actual WinPS focused **307**, default
 offline **635** and Windows native-shell/Core focused **307** pass, exit0.
 These are guard/ledger tests, not additional paid runs or native client evidence.
 
+### Exact legacy bytes on Git/Linux and Windows
+
+The real Linux `16d103a` CI run `39365776548`, job `118442257167`, passed
+Foundation and the legacy flow but failed the new legacy-input pin assertion.
+The assertion used only the historical Windows **CRLF** SHA-256s; checkout on
+Linux supplies the exact frozen Git **LF** bytes. This is a test portability
+defect, not a flaky/ambiental pass and not a reason to replay successful JVM work.
+
+The test-only immutable-input guard now accepts exactly two complete known
+byte forms per frozen file, **LF or its exact CRLF equivalent**:
+
+| Frozen input | Canonical Git LF SHA-256 | Preserved historical Windows CRLF SHA-256 |
+| --- | --- | --- |
+| `t0-sound-design.json` | `4a716239ac2fd5fcfb307e54a619f7c17875f20f25e5ea37fced689f651d7f60` | `c39e76c88e4755d51b3d3ce76c4d819cdf985c6d5977fd614ce3115dc155732e` |
+| `request-contract.json` | `ac65888bc2ed2065941fbc5b32997d853b6355f6dfe7de1aae0c0c1c2c4ac0d6` | `2a986693cb3a919a573da5de0739c0486dde3c2d462004a7d64eae3607829a43` |
+| `grant.example.json` | `384313eccc7886358612fc38c06d0ced59af9e94713eb2de0bf632c0cfb2fe0e` | `f84bd409fa3c9d6a36b7abf8a091ffceb1197c7a564ce7c52363841d08be3f90` |
+
+Raw `git cat-file` output is read through `StandardOutput.BaseStream`, never
+a text pipeline. The three blobs at executed `7dad69df` match the current Git
+blobs byte-for-byte; only exact LF-to-CRLF fixture construction reproduces the
+old Windows files. No BOM, mixed EOL, stray CR, whitespace or content change is
+accepted. Production `Get-SoundHash`, reviewed-grant hashes and spend ledgers
+remain **exact raw-byte** checks, not normalized authorization.
+
+Actual raw-Git-LF fixtures and exact CRLF fixtures pass on WinPS5 and the existing
+verified Core/native Windows shell. Seventeen negatives, each with a valid
+baseline, reject prompt/parameter/budget/whitespace/mixed-EOL/CR/BOM mutations.
+Focused **349** (153+196), default **677** (128+200+153+196) and native SH
+focused **349** pass, exit0. This proves real Git/Linux byte representation,
+**not a Linux host execution**; fresh Linux CI after parent publication remains
+the independent platform gate. The original red is preserved, not retroactively green.
+
 ## Initial v2 tooling freeze (historical)
 
 The preparation evidence below records `19b4584`/`2bc200d`, before the owner's

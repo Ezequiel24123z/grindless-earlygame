@@ -28,6 +28,71 @@ function Get-FixtureHash($Value) {
     try { return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(($Value | ConvertTo-Json -Depth 24 -Compress))))).Replace('-','').ToLowerInvariant() }
     finally { $sha.Dispose() }
 }
+function Assert-LegacyImmutable([string]$Path, $Pin) {
+    # Test-only whole-file pairs. Never normalize bytes or change authorization hashing.
+    Require-Sound (@($Pin.Lf, $Pin.Crlf) -ccontains (Get-SoundHash $Path)) 'Frozen legacy input must match its exact whole-file LF or CRLF hash.'
+}
+function Read-LegacyGitBytes([string]$Blob) {
+    # These frozen blobs are still referenced by HEAD, including in shallow CI.
+    # BaseStream is essential: a PowerShell text pipeline would alter the proof.
+    $start = [Diagnostics.ProcessStartInfo]::new()
+    $start.FileName = (Get-Command git -CommandType Application | Select-Object -First 1).Source
+    $start.Arguments = 'cat-file blob ' + $Blob; $start.WorkingDirectory = $script:SoundRoot
+    $start.UseShellExecute = $false; $start.CreateNoWindow = $true
+    $start.RedirectStandardOutput = $true; $start.RedirectStandardError = $true
+    $process = [Diagnostics.Process]::new(); $process.StartInfo = $start
+    $bytes = [IO.MemoryStream]::new()
+    try {
+        [void]$process.Start(); $stderr = $process.StandardError.ReadToEndAsync()
+        $process.StandardOutput.BaseStream.CopyTo($bytes); $process.WaitForExit()
+        Require-Sound ($process.ExitCode -eq 0) 'Cannot read the frozen public Git blob.'
+        return ,($bytes.ToArray())
+    } finally { $bytes.Dispose(); $process.Dispose() }
+}
+function Test-LegacyImmutableBytes($Pin) {
+    $actual = Join-Path $script:SoundRoot $Pin.Path
+    Assert-LegacyImmutable $actual $Pin
+    Check-Purpose $true ('real frozen checkout matches an exact LF/CRLF pin: ' + $Pin.Path)
+    $raw = Read-LegacyGitBytes $Pin.Blob
+    $utf8 = [Text.UTF8Encoding]::new($false, $true)
+    $text = $utf8.GetString($raw)
+    $lf = Join-Path $script:PurposeRoot ('TEST-LF-' + [IO.Path]::GetFileName($Pin.Path))
+    $crlf = Join-Path $script:PurposeRoot ('TEST-CRLF-' + [IO.Path]::GetFileName($Pin.Path))
+    [IO.File]::WriteAllBytes($lf, $raw) # Actual raw Git bytes, not reserialized JSON.
+    Assert-LegacyImmutable $lf $Pin
+    Check-Purpose ($raw.Length -eq $Pin.Size -and ($text.Split([char]10).Length - 1) -eq $Pin.Lines -and
+        $text.IndexOf([char]13) -eq -1 -and $text[0] -ne [char]0xfeff) 'canonical Git fixture has the measured size/LF count, no CR and no BOM'
+    # Conversion is fixture construction only, from the verified CR-free Git blob.
+    $windows = $utf8.GetBytes($text.Replace("`n", "`r`n"))
+    [IO.File]::WriteAllBytes($crlf, $windows)
+    Assert-LegacyImmutable $crlf $Pin
+    Check-Purpose ((Get-SoundHash $lf) -ceq $Pin.Lf -and (Get-SoundHash $crlf) -ceq $Pin.Crlf -and
+        $Pin.Lf -cne $Pin.Crlf -and $windows.Length -eq $Pin.Size + $Pin.Lines) 'raw LF reproduces the old CRLF-only mismatch; Get-SoundHash still distinguishes both exact byte forms'
+
+    $firstLf = $text.IndexOf("`n")
+    $mutations = @(
+        @{ Name = 'budget'; Bytes = $utf8.GetBytes($text.Replace('"max_calls": 3', '"max_calls": 4')) },
+        @{ Name = 'whitespace'; Bytes = $utf8.GetBytes($text + ' ') },
+        @{ Name = 'mixed-lines'; Bytes = $utf8.GetBytes($text.Insert($firstLf, "`r")) },
+        @{ Name = 'stray-CR'; Bytes = [byte[]](@(13) + $raw) },
+        @{ Name = 'BOM'; Bytes = [byte[]](@(239,187,191) + $raw) }
+    )
+    if ($Pin.Path -ceq 'docs/assets/t0-sound-design.json') {
+        $mutations += @{ Name = 'prompt'; Bytes = $utf8.GetBytes($text.Replace('Dry, close granular crunch', 'Dry, close granular scrape')) }
+    }
+    if ($Pin.Path -ceq 'tools/sound-design/request-contract.json') {
+        $mutations += @{ Name = 'parameter'; Bytes = $utf8.GetBytes($text.Replace('"duration_seconds": 3.0', '"duration_seconds": 3.1')) }
+    }
+    $path = Join-Path $script:PurposeRoot ('TEST-mutation-' + [IO.Path]::GetFileName($Pin.Path))
+    foreach ($mutation in $mutations) {
+        [IO.File]::WriteAllBytes($path, $raw)
+        Assert-LegacyImmutable $path $Pin
+        Check-Purpose ((Get-SoundHash $path) -ceq $Pin.Lf -and
+            [Convert]::ToBase64String($raw) -cne [Convert]::ToBase64String($mutation.Bytes)) ('valid raw LF baseline before ' + $mutation.Name)
+        [IO.File]::WriteAllBytes($path, $mutation.Bytes)
+        Reject-Purpose { Assert-LegacyImmutable $path $Pin } 'SD_VALIDATION' 'Frozen legacy input must match its exact whole-file LF or CRLF hash.'
+    }
+}
 function New-FixtureInputs($Manifest) {
     return [pscustomobject]@{ Manifest = $Manifest; Contract = $script:PurposeInputs.Contract
         ManifestHash = (Get-FixtureHash $Manifest); ContractHash = $script:PurposeInputs.ContractHash
@@ -119,9 +184,20 @@ try {
     Check-Purpose ($inputs.Manifest.source_revision -ceq '269965b1b0b8c1becda74459a853f245105649ee') 'proposal retains exact runtime audit source'
     Check-Purpose ($inputs.Manifest.families.Count -eq 1 -and $inputs.Manifest.families[0].id -ceq 'wet_work' -and
         (Test-OrderedIds $inputs.Manifest.families[0].machines @('clay_mixer')) -and (Get-CallLimit $inputs) -eq 2) 'actual scope is Clay Mixer only, with two calls'
-    Check-Purpose ((Get-SoundHash $ManifestPath) -ceq 'c39e76c88e4755d51b3d3ce76c4d819cdf985c6d5977fd614ce3115dc155732e' -and
-        (Get-SoundHash $ContractPath) -ceq '2a986693cb3a919a573da5de0739c0486dde3c2d462004a7d64eae3607829a43' -and
-        (Get-SoundHash (Join-Path $PSScriptRoot 'grant.example.json')) -ceq 'f84bd409fa3c9d6a36b7abf8a091ffceb1197c7a564ce7c52363841d08be3f90') 'legacy manifest, contract and example remain byte-identical'
+    # Exact LF blobs from 7dad69df7f5f7cba2eaf83fb1db1a50c0ad6338c,
+    # byte-verified equal to HEAD's blobs. Keep the historical Windows CRLF pins.
+    $legacyPins = @(
+        [pscustomobject]@{ Path = 'docs/assets/t0-sound-design.json'; Blob = 'cfdc8c1a183b7eed587ddd0005d1f9cb3ddd5c18'
+            Lf = '4a716239ac2fd5fcfb307e54a619f7c17875f20f25e5ea37fced689f651d7f60'
+            Crlf = 'c39e76c88e4755d51b3d3ce76c4d819cdf985c6d5977fd614ce3115dc155732e'; Size = 14568; Lines = 179 },
+        [pscustomobject]@{ Path = 'tools/sound-design/request-contract.json'; Blob = 'b175242ca04b540cbb7f0ee78882ae5d4a174528'
+            Lf = 'ac65888bc2ed2065941fbc5b32997d853b6355f6dfe7de1aae0c0c1c2c4ac0d6'
+            Crlf = '2a986693cb3a919a573da5de0739c0486dde3c2d462004a7d64eae3607829a43'; Size = 1312; Lines = 29 },
+        [pscustomobject]@{ Path = 'tools/sound-design/grant.example.json'; Blob = 'fb1aee404031dfff2f30eeaa4b2d625f87f7aaf0'
+            Lf = '384313eccc7886358612fc38c06d0ced59af9e94713eb2de0bf632c0cfb2fe0e'
+            Crlf = 'f84bd409fa3c9d6a36b7abf8a091ffceb1197c7a564ce7c52363841d08be3f90'; Size = 658; Lines = 22 }
+    )
+    foreach ($pin in $legacyPins) { Test-LegacyImmutableBytes $pin }
     $output = Join-Path $script:PurposeRoot 'TEST-must-not-be-created'
     $g = New-BindingFixture $inputs $output
     Assert-PurposeBindings $g $inputs $output $head

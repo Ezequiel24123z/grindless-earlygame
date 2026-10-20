@@ -1,5 +1,23 @@
 # Current T0 rework validation
 
+## Real039 contract failures and portable sound guard repair
+
+Run39367863670 on039 fails two Foundation suites, not just the earlier sound
+guard. Artifact12240248670 retains the complete behavior log:
+`VerifyResourceGuidance:708` still requires `No starter kit is provided`, while
+`VerifySustainabilityT0` reaches `checkedAsset:160` and rejects the unregenerated
+runtime guidance projection after the starter/reward adapter changed. The full
+registry itself passes1106 assertions with26 objectives. These are real incomplete
+integration obligations; do not restore the old false player instructions or
+relax generated-data equality. The original source and logs remain preserved.
+
+Sound fix697068be3bc5383f90d49e081989d51697fc406f identifies the earlier16d
+failure: the test pinned Windows CRLF while Git/Linux retains LF. Accept only the
+two frozen complete hashes per file; generic authorization hashing remains raw.
+Real raw-Git LF/equivalent CRLF fixtures and17 rejection mutations pass in
+WinPS/Core/SH, focused349/default677. This is not yet a fresh Linux-host pass.
+No historical blob, receipt, grant or successful JVM stage is rewritten/replayed.
+
 ## Actual combined audio/visual PC compilation and focused Java proof
 
 Exact16d103a runs common/Forge compilation and `writeCheckClasspath` together:

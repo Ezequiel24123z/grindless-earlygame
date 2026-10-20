@@ -36,6 +36,14 @@ Owner9c12461c repairs it without changing historical receipts or replaying
 successful JVM stages. The cause is under investigation, not assumed flaky;
 this failure is disclosed in chat and the validation ledger.
 
+The sound guard cause is now proven: Windows-only CRLF pins differed from the
+frozen Git LF blobs. Fix697 accepts only the two complete hashes and adds real
+Git-byte/mutation fixtures; generic authorization hashes stay raw. Fresh Linux
+green remains pending. Separately039 CI fails the stale no-free-kit assertion
+and old generated runtime guidance document. Author7d repairs the source test;
+current PC owner9c regenerates through the existing writer, with no manual JSON
+edit or weakened equality. Preserve the full downloaded artifact12240248670.
+
 ADR-0156/PA-0014 reopened objective work in isolated lanes. Provider discovery,
 client preparation and the historical Superflat proposal are complete. Existing
 audio access produced the two real requests above; no secret was output/copied.
