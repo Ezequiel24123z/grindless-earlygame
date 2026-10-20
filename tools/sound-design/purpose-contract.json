@@ -1,7 +1,7 @@
 {
   "schema": "grindless.sound-purpose-contract/v2",
   "id": "adr0156-elevenlabs-internal-purpose-3s-mp3",
-  "review_status": "unapproved",
+  "review_status": "reviewed",
   "authorization_authority": "Sol",
   "reference": "https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert",
   "method": "POST",
