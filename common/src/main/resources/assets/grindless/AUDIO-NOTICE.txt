@@ -18,3 +18,34 @@ This sound is not relicensed under Grindless's MIT code licence. It is supplied
 only as incorporated game audio, not a standalone sample or sound library.
 Keep this notice with the game distribution. Full public provenance and the
 retained-artifact hashes are recorded in the source repository's THIRD_PARTY_NOTICES.md.
+
+---
+
+Grindless Clay Mixer wet-work audio
+
+Runtime resource: assets/grindless/sounds/t0_wet_work.ogg
+Sound event: grindless:t0_wet_work
+SHA-256: 2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45
+Size: 33374 bytes.
+
+Provider/model: ElevenLabs Sound Effects, eleven_text_to_sound_v2.
+Generated: 2026-10-20T02:47:32.5409418Z.
+Source tooling: cbd318abf1a7533df575764000384543a2dec15c.
+Candidate: wet-work-a, three-second loop request, influence 0.3.
+Derivation: fixed -3 dB mono preview, then constant gain 8.2287799525212062
+from min(0.03/source_RMS, 0.35/source_peak), mono 44.1 kHz Vorbis q4.
+No trimming, fades, seam repair, time stretch or regeneration.
+
+Game incorporation is authorized by the owner's 2026-10-20 direction and Sol6.1
+delegation, using the recorded generation-time owner-confirmed paid entitlement
+and already reviewed ElevenCreative Terms, Sound Effects exhibit:
+https://elevenlabs.io/creative-terms
+
+This sound is not CC0 or relicensed under Grindless's MIT code licence.
+It is supplied only as incorporated game audio, not a standalone sample or
+sound library. Keep this notice with the game distribution. Full source,
+processing, receipt and output hashes are in THIRD_PARTY_NOTICES.md and
+docs/assets/mixer-runtime-import.json in the source repository.
+
+Selection is technical only. Owner in-game listening, one/eight-machine mix,
+fatigue, native lifecycle and release acceptance remain pending.
