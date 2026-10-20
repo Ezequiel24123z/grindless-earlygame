@@ -334,6 +334,24 @@ belongs to the parent; the containing Git commit identifies this audit/tooling f
 The parent coordinator owns global changelog/ADR/map/README/handoff integration,
 publication, builds and deployment.
 
+Post-freeze read-only qualification ran on clean
+`19b4584552cea763c467328ac21fc6c1ef5451d5`: actual v2 Plan reports the exact
+purpose/run, two candidates (338/359 prompt characters), `max_posts=2`, retries 0
+and authorization/network/secret false. The **real** committed/tracked/clean
+`Assert-Checkpoint` also passes, without the test suite's Git-observation fixture.
+The explicit missing-codec paths create no directory and start no codec.
+All executable/input hashes remain the values above.
+
+Two initial observer failures are retained separately: the host rejected
+dot-sourcing under its execution policy after the first read-only Plan had
+already succeeded (exit 1); the next child `-Command` lost quotes in native
+argument passing and failed parsing before running the check (exit 1).
+An encoded child command with process-scoped `-ExecutionPolicy Bypass`
+completed the actual Plan/checkpoint observation (exit 0). No persistent policy
+change, source repair, approved grant, credential read, HTTP, codec or JVM
+was involved, and none of the successful guard suites was replayed.
+This final receipt changes documentation only, not the qualified tooling/runtime inputs.
+
 | Required category | State of this bounded workstream |
 | --- | --- |
 | COMPLETED | Source-bound inventory of eighteen T0 catalogue blocks plus fibreboard; six actual event routes and explicit interactions; Mixer-only two-candidate recommendation and reuse/silence alternatives. Passive TANK source correction with actual red/green and Windows Core/SH source proof. Backward-compatible finite v2 tooling with 633 default offline assertions and distinct Core/SH evidence, reviewed exact hashes. |
