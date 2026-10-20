@@ -9,6 +9,10 @@ import io.github.ezequiel24123z.grindless.menu.LandingMapMenu;
 import io.github.ezequiel24123z.grindless.menu.ProcessAtlasMenu;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
 import io.github.ezequiel24123z.grindless.menu.QuestBookMenu;
+import io.github.ezequiel24123z.grindless.shop.ShopCommands;
+import io.github.ezequiel24123z.grindless.shop.ShopMenu;
+import io.github.ezequiel24123z.grindless.shop.ShopNetwork;
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -44,10 +48,16 @@ public final class ModMenus {
             MENUS.register("field_guide",
                     () -> new MenuType<>(FieldGuideMenu::new, FeatureFlags.VANILLA_SET));
 
+    public static final RegistrySupplier<MenuType<ShopMenu>> RECOVERY_SHOP =
+            MENUS.register("recovery_shop", () -> MenuRegistry.ofExtended(ShopMenu::new));
+
     private ModMenus() {
     }
 
     public static void register() {
         MENUS.register();
+        ShopNetwork.register();
+        ShopCommands.register();
+        DevTelemetry.register();
     }
 }
