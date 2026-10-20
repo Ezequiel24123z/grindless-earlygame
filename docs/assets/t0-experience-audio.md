@@ -41,6 +41,12 @@ All loop admissions require the current loaded block/entity identity and
 | Crude Manipulator | Silent, particles only | Intentional silence; no repeating automation notification | All states | Preserve |
 | Settling Channel | Silent stateless part | Intentional silence; controller owns any real process voice | All states | Preserve |
 | Settling Screen | Silent stateless part | Intentional silence; controller owns any real process voice | All states | Preserve |
+| `workshop_item_input` | New typed WorkshopPortBlock, BRICK / ITEM_INPUT | Intentional silence; owner-delegating structural part, no own process/stock | All states; no sound radius or new provider cost | Port composition164ee9; human review pending |
+| `workshop_item_output` | New typed WorkshopPortBlock, BRICK / ITEM_OUTPUT | Intentional silence; owner-delegating structural part, no own process/stock | All states; no sound radius or new provider cost | Port composition164ee9; human review pending |
+| `settling_item_input` | New typed WorkshopPortBlock, CHANNEL / ITEM_INPUT | Intentional silence; owner-delegating structural part, no own process/stock | All states; no sound radius or new provider cost | Port composition164ee9; human review pending |
+| `settling_fluid_input` | New typed WorkshopPortBlock, CHANNEL / FLUID_INPUT | Intentional silence; owner-delegating structural part, no own process/stock | All states; no sound radius or new provider cost | Port composition164ee9; human review pending |
+| `settling_item_output` | New typed WorkshopPortBlock, SCREEN / ITEM_OUTPUT | Intentional silence; owner-delegating structural part, no own process/stock | All states; no sound radius or new provider cost | Port composition164ee9; human review pending |
+| `settling_fluid_output` | New typed WorkshopPortBlock, SCREEN / FLUID_OUTPUT | Intentional silence; owner-delegating structural part, no own process/stock | All states; no sound radius or new provider cost | Port composition164ee9; human review pending |
 | Fibreboard | Native wood material sounds, no machine event | Inherited material placement/break feedback, not a working bed | Explicit interaction only | Preserve; no copied vanilla files |
 | Multitool rotation / relocation | Native affected block place/break events | Existing material interaction one-shots | Successful existing server action | Preserve; no extra notification |
 | Flux Conduit link / unlink | `pylon_link` / `relay_click`, synthesized files | Preserve IDs; reference native tripwire attach / lever latch events | Existing successful server action, native attenuation | Replace resource only; not T1 implementation |
@@ -48,6 +54,24 @@ All loop admissions require the current loaded block/entity identity and
 | Pylon-like RUNNING | Random `pylon_link` chirp | Intentional silence; a successful-link event is not continual work ambience | All sustained work | Remove periodic chirp; no future machine implementation |
 | Other existing later-machine hum callers | `machine_hum` / `machine_hum_heavy` synth | Remove inappropriate generic fallback; preserve particles/gameplay and compatibility IDs | No new later-tier audio work | Silence, explicitly not a completed T1 sound design |
 | Multiblock formation / invalidity, routine errors and UI | No dedicated T0 event | Preserve restraint; do not invent repeated validation/completion/error notifications | Existing visual/text feedback | No paid event family or new gameplay hook |
+
+## Structural-part composition follow-up
+
+The six structural composition rows above use the exact `WorkshopPortContract.Kind`
+identities verified at `164ee9aac3abf167cd6cb3bbde3ecf516990b12b`, not guessed
+controller-family names. BRICK/CHANNEL/SCREEN chooses host geometry, never a
+MachineSource or working sound. The checker derives active part IDs from typed
+`register` / `new WorkshopPortBlock` source, so the composed craft/catalogue grows
+from nineteen to twenty-five covered blocks without a fixed nineteen-block gate.
+The sound-only checkout still has nineteen implemented blocks: six additional
+rows explicitly describe the published composition, not locally imported gameplay.
+The focused self-test reads that exact published registration/catalogue/craft/part
+source into memory and checks the composition without changing application files.
+This follow-up adds zero POSTs, codecs, JVMs, source sounds or tracker changes.
+Actual WinPS/Core source/resource checks pass47 contracts and30 negative controls,
+including the real six-part composition, a removed registered-part row and an
+incorrectly looped part. Tracker bytes remain exactly `12dc61cf`. This is source
+composition evidence, not a new gameplay, kernel, native or listening pass.
 
 ## Finite production plan
 
@@ -194,8 +218,8 @@ These are **NOT EXECUTED** by source or codec checks:
 
 | Category | Current source-complete handoff |
 | --- | --- |
-| COMPLETED | Full coverage; six HTTP200 sources; two noticed/normalized/imported physical files; all five synth Oggs retired; safe compatibility IDs, native combustion, one tracker/scan and bounded mix/onsets; WinPS/Core695 offline assertions and46+28 source/resource contracts plus737 links pass. |
-| BLOCKED | Native SH qualification: current bundled Git and named standard install have no Bash; no install attempted. No provider, credential or source/resource blocker. |
+| COMPLETED | Original wave and its WinPS/Core695,46+28 and737-link proofs preserved. Follow-up adds six source-verified silent structural rows; WinPS/Core47+30 and real published part-composition source checks pass, without a fixed nineteen-block gate or controller-family resolution. |
+| BLOCKED | None for this composition patch. Native SH is intentionally deferred to the parent's composed Linux CI; no local Bash installation. |
 | NOT EXECUTED | Native SH; Java/common/Forge compilation and authored mechanism/resource suites, one changed-event registration boot, native client playback/listening, deployment. No JVM/PC lease; parent owns combined qualification. |
 | NEEDS HUMAN VALIDATION | All new artistic selection, encoded listening, gain/falloff, seams and one/eight/mixed workshop fatigue. |
 | NEEDS MY DECISION | None for the bounded delegated sound unit. |
