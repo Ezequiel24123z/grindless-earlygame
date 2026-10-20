@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve final Comfy proof records without replaying successful generation.**
+  Integrate baf1's c214-bound JDK receipt, provenance and workflow closeout; keep
+  the original observer failure and read-only recovery. Reconcile generated
+  Markdown with both imported sound beds, and refresh execution handoffs so
+  the settled starter-kit decision and combined qualification are not stale.
 - **Implement the owner's straightforward Superflat decision (ADR-0159).**
   First quest is free and gives a generous finite stone/wood/food/basic-material
   kit with initial book access and one server-authoritative claim. Reuse existing

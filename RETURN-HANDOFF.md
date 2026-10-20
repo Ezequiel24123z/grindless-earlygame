@@ -6,25 +6,29 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 ## Current wave disclosure
 
 **Execution correction (ADR-0158):** the owner requires broader end-to-end delivery
-and proportionate checks, not micro-approval queues. The sound owner is authorized
-to finalize its reviewed markers/new private grant and generate the accepted Mixer
-pair now, then process/integrate without another permission per operation. Up to12
-small justified SFX requests and8 additional useful local candidates are permitted
-this wave, not targets to exhaust or resets of old ledgers. The technically selected
-Multitool127b sprite may be imported with its provenance while tool integrity and
-normal-generator proof are completed. Human art/listening and final shared deployment
-remain separate. PC handoffs coordinate resources only, not routine design approval.
+and proportionate checks, not micro-approval queues. The complete generated Mixer
+unit ad71 is integrated in published16d103a alongside the qualified local Multitool
+pipeline. Final baf1 adds source-bound visual proof/provenance records without a
+successful-stage replay. ADR-0159 settles the first free generous starter quest;
+owner7dcd042e implements it end-to-end. Owner9c12461c now owns combined PC
+compilation/selected checks, then final kit/package/registration qualification.
+Only the coordinator publishes/deploys. Human art/listening/campaign remain separate.
 
-| Category | Actual state at follow-up intake |
+| Category | Current actual state |
 | --- | --- |
-| COMPLETED | Previous A01/A03/build/deployment proof is preserved. The owner-supplied external ElevenLabs credential is now readable and authenticated via HTTP200 without exposing/copying it or generating audio. |
-| BLOCKED | Original CI39336114196 remains failed history, but repaired962 qualifies in full CI and PC Windows contracts. Comfy F1 is fixed/revalidated and its narrow review is closed. Superflat material choices and actual owner-desktop review remain the decision/human gates; final build/deploy is pending integration, not missing credentials. |
-| NOT EXECUTED | Final integrated build/deploy, current-wave graphical client run and fresh no-command campaign remain unexecuted. Two real SFX HTTP200 requests and two real local image jobs have now occurred; neither implies human acceptance. |
+| COMPLETED | Exact962 CI/all native shards and PC full48 contracts qualify the observation repair. Comfy pipeline/F1/28 Python/12 JDK/two identical1602-file stages and the canonical127b sprite are integrated. Two real SFX HTTP200 outputs, normalized Mixer A/runtime/tooling/notices and unchanged Quern A are integrated. |
+| BLOCKED | None for assigned implementation. Combined qualification is active, not yet a pass; original CI and observer failures remain preserved history. |
+| NOT EXECUTED | Final integrated kit/build/package/registration boot/deploy and the current-wave graphical client/manual campaign are not yet complete. The84 authored Java audio checks are assigned, not credited before execution. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
-| NEEDS MY DECISION | Superflat entry is DECIDED: generous kit in the first free quest, implemented under ADR-0159 without another choice loop. No current kit/product approval is awaited. Human campaign/visual/listening and any future unrelated paid-image activation remain separate. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for current audio/local generation: real ElevenLabs200 outputs and local GPU diffusion succeeded. Actual visible client review needs the existing owner desktop; no new account/key or remote-control installation is assumed. |
-| COST / BILLING RISK | Audio delivery allowance is now up to12 justified small-candidate requests with delegated finite run grants; accepted Mixer pair is ~240credits estimated, not a guaranteedUSD quote. Local Comfy may iterate if useful without external-image billing. Old run receipts remain immutable. |
+| NEEDS MY DECISION | None. ADR-0159 selects the generous first free quest; implementation does not await another village/shop/food decision. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for this delivery. Manual client review uses the existing owner desktop; no new account/key or remote-control installation is assumed. |
+| COST / BILLING RISK | Two of12 allowed SFX requests were used, about240 estimated credits, not a guaranteedUSD quote. Two local Comfy jobs spent the original2/2 run; no extra inference/model download/external-image billing occurred. Allowances are ceilings, not targets; original ledgers remain immutable. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
+
+## Preserved follow-up timeline
+
+The snapshots below retain their original source/time boundaries. The current
+disclosure above supersedes their old pending choices, leases and generation state.
 
 The owner subsequently identifies an existing local ComfyUI and authorizes
 ADR-0157's reversible project-isolated production pipeline. This supersedes the

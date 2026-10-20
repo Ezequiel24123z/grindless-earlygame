@@ -4,24 +4,32 @@ Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC
 
 ## Active owner-directed follow-up
 
-ADR-0158 now requires end-to-end delivery without routine micro-approval stops.
-Two real ElevenLabs outputs exist and Mixer integration is active. Two real local
-Comfy jobs produced a rejected photo and the selected guided Multitool127b sprite;
-workflow integrityF1 is fixed/independently closed and deterministic JDK proof is
-active. Exact962 CI/all native shards and PC full48 contracts pass. Superflat
-alternatives are materialized; only the product choice is held, not all engineering.
-Qualified559 remains installed until the combined new artifact is built/deployed.
+ADR-0158 requires end-to-end delivery without routine micro-approval stops.
+Audio source ad71 is integrated in published16d103a: two real ElevenLabs200
+outputs, selected/normalized Mixer A, unchanged Quern A, shared tracker and
+passive-TANK feedback fix. The local Comfy pipeline and technically selected
+Multitool127b are integrated; F1 and the actual deterministic JDK proof are closed.
+Final baf1 proof/provenance records preserve the original failed observer and
+read-only recovery without a successful-stage replay. Exact962 CI/all native
+shards and PC full48 contracts pass.
 
-ADR-0156/PA-0014 reopens bounded objective work in four isolated lanes: image
-capability discovery, sound families, fresh-Superflat proposal and client-review
-preparation. Existing audio access is now authenticated through the owner-supplied
-external location; no secret was output/copied and no generation has occurred.
+**The owner selected a generous kit in the first free quest (ADR-0159).** This
+is implementation, not an outstanding village/shop/primitive/food-policy choice.
+Owner7dcd042e implements quest/book access, canonical one-time rewards, both UI
+projections and regressions. Owner9c12461c now qualifies common/Forge and selected
+audio/assets on the combined source in an explicit isolated PC worktree, then
+the final integrated kit/build/package/registration boot. Only the coordinator
+publishes and deploys. Qualified559 remains installed until that artifact passes.
+
+ADR-0156/PA-0014 reopened objective work in isolated lanes. Provider discovery,
+client preparation and the historical Superflat proposal are complete. Existing
+audio access produced the two real requests above; no secret was output/copied.
 Read the eight explicit categories in [RETURN-HANDOFF](../RETURN-HANDOFF.md).
 Historical request allowances are per-run, not permanent project-wide limits.
 Do not activate image billing or make a major progression choice silently.
 The qualified559 deployment below remains the real installed artifact.
 
-## Current completed engineering handoff
+## Previous completed engineering handoff — installed559
 
 The bounded SSH-first programme is complete. Read [RETURN-HANDOFF](../RETURN-HANDOFF.md)
 for the authoritative installed state and [the validation ledger](../docs/testing/latest-validation.md)

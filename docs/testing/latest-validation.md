@@ -1,5 +1,22 @@
 # Current T0 rework validation
 
+## Combined audio/visual source and owner-selected starter path
+
+Published16d103a integrates the complete ad71 Mixer unit with the c214 Multitool
+generator seam and both notices. The imported Mixer Ogg is33374 bytes/SHA-256
+`2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45`;
+Quern A remains34364 bytes/811b2947 and Multitool223 bytes/127b662a. Sound
+source/offline contracts are real, but the84 authored Java audio assertions,
+combined full asset check, common/Forge compilation and new registration boot
+are not credited until the assigned PC owner executes them.
+
+The final visual record baf1 adds only proof/provenance and generated Markdown,
+not a different renderer/template/PNG. Its c214 execution identities below remain
+source-bound; audio prose is reconciled with the merged ordinary generator.
+ADR-0159 selects the first free generous kit, now under implementation. Headless
+registration will not prove first-login UI, listening or the manual campaign.
+Installed559 remains unchanged until the final combined artifact is qualified.
+
 ## Local Comfy source, canonical sprite and ordinary regeneration proof
 
 Integrate exactc214d437a652cb1bcd1c698694953be67331089a: existing licensed SD1.5/

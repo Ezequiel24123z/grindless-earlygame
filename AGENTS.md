@@ -141,8 +141,11 @@ Use a specialized nested owner; external-provider research is comparative, not
 the default implementation. Keep private host paths/configuration out of Git.
 
 **Current follow-up wave (ADR-0156, PA-0014):** run image-provider discovery,
-purpose-bound SFX work, minimal Superflat proposal and objective client preparation
-in independent nested sessions. The former Quern/three-request grant and the
+purpose-bound SFX work and objective client preparation in independent nested
+sessions, then integrate and qualify the candidate. The local visual pipeline
+and Mixer audio source are complete. ADR-0159 settles the Superflat entry:
+implement the generous free first-quest kit, not another proposal gate.
+The former Quern/three-request grant and the
 previous wave's two-request ceiling are not permanent project-wide budgets.
 Historical receipts remain immutable; each new generation run still requires an
 explicit finite purpose, request allowance and durable spend ledger. Image discovery
@@ -150,8 +153,8 @@ must not enable paid usage or spend on an image proof without explicit approval.
 The owner supplied an existing external audio credential location; a non-generating
 authenticated check succeeded without exposing or copying it. Read the current
 handoff for what is actually available, not the older absent-credential assumption.
-Do not make a major Superflat progression choice silently; present alternatives
-and a recommendation while the other safe work continues.
+Do not invent a different Superflat progression choice or reopen the settled kit
+decision. New unrelated material product decisions still require the owner.
 
 **Previous unattended programme (ADR-0152):** while the owner was unavailable, continue bounded
 T0 stabilization, useful regressions, deterministic visual/SFX work and evidence-backed

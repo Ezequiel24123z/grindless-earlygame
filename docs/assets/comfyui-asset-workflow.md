@@ -372,9 +372,8 @@ historical source, not a second active authority.
 
 `VerifyApprovedMultitool.java` exercises the real JDK reader, tamper/format/
 dimension/alpha/missing-source refusals, failure-before-output and guides-only
-behavior. Source-frozen full-stage repeatability/protected-resource proof follows
-under the separate preauthorized256MiB/CPU2 JDK lease; this is not a Gradle,
-server/client or deployment run.
+behavior. Its actual exact-source qualification is recorded below; it is not a
+Gradle, server/client or deployment run.
 
 The PowerShell and actual Windows Git-Bash entrypoints both execute an offline
 conditioned `plan`, exit0, with identical raw JSON SHA-256
@@ -382,13 +381,57 @@ conditioned `plan`, exit0, with identical raw JSON SHA-256
 The default plan uses seed21774205 with0.35 denoise; it submits nothing.
 This is Windows entrypoint parity, not a claim of Linux execution.
 
+## Exact-source normal-generator qualification
+
+The separate JDK lease validates immutable
+`c214d437a652cb1bcd1c698694953be67331089a`, source archive
+`cfcf877e812ee0fd80bb260735f86b53946695f1d7fba95abe13355c696e5385`
+(3,329,002 bytes). Existing JDK17 is headless, capped256MiB/CPU2/SerialGC.
+The standalone classpath compiles only assetgen, SupplyCatalogue, MaterialForm,
+BlockCatalogue, WorkshopGeometry and the focused verifier; no Minecraft/Forge
+classpath, Gradle, server, world, Prism or shared/default PC surface is used.
+
+The [portable proof](../../tools/visual-assets/poc/multitool-jdk-validation.json)
+retains actual exits/times/log identities:28 Python contracts pass in5.126s,
+javac exits0,12 actual JDK checks exit0, and two full normal generations exit0
+in2.028s/2.034s. The raw normal generator reports1520 outputs each; the complete
+seeded stage trees contain1602 files each and are byte-identical, with sorted
+manifest SHA-256
+`3b9e22d1afe6f560dec85f3324146af9403adde343fb2ef1954f49ef11916dfb`.
+The selected PNG stays exactly127b...; all581 resource PNGs match the integrated
+source, including580 other PNGs and all nine material/core plus three guide sprites.
+
+Normal-generation text differs from source only in933 CRLF/LF serializations
+and the intentional generated provenance paragraph. Those staged text files,
+smoke fixtures and preview are not copied into source/runtime. The existing
+settling preview is byte-identical; four standard states side texts differ only
+by EOL. The common generated provenance document alone is synchronized with the
+qualified renderer so normal regeneration does not reintroduce stale guidance.
+
+The first private observer failed after **all six process steps exited0**:
+its staged input omitted five existing normal side-output files and it treated
+their creation as unexpected. Preserve original receipt
+`e7fb57653d7ac2d9d40a88c2e881d4110a6628a29109ce478286f72f7d8f0a5f`.
+Read-only recovery compares both already closed stages and their exact source
+baselines, with no JVM/stage replay. The recovered addendum hashes to
+`aee17226076535ea37726033664377f72e572b9c6bb376f328774f4a8be30b69`;
+the original stays unchanged. A local WinPS helper line-continuation parse refusal
+was corrected before that read-only helper was transferred or executed.
+
+At03:14:10Z the JDK lease is explicitly released:0Java/0Python/0owned listeners,
+9.036GiB physical,27.174GiB commit and155.022GiB work free. The full owned
+source/stage/evidence surface is17,595,638 bytes, about16.8MiB, with no model copy.
+Subsequent proof/documentation/provenance synchronization does not change the
+validated renderer, template, processor or selected PNG assumptions; do not rerun
+successful stages merely to advance the handoff commit.
+
 ## Checkpoint disclosure
 
-| Category | Actual state at integration-source freeze |
+| Category | Actual final bounded handoff |
 | --- | --- |
-| COMPLETED | Existing-backend proof; two real sources, first rejected/second technically selected; deterministic16px integration; original workflows/spec/guide/provenance; F1 repair and actual offline PNG audits;580 other PNGs preserved; GPU released. |
-| BLOCKED | None. Exact-source JDK staging is authorized next, not a missing tool or an inference failure. |
-| NOT EXECUTED | Final integration-source JDK staging/negative gate, parent build/package/deployment and native client rendering. |
+| COMPLETED | Reusable bounded local pipeline; two real sources, first rejected/second technically selected; native source/runtime integration; F1 repair and actual PNG audits;28 Python/12 JDK checks; two byte-identical full stages;580 other PNGs and9+3 protected; GPU/JDK released. |
+| BLOCKED | None. Original preflight/collection/archive/observer failures are retained with bounded fixes/addenda. |
+| NOT EXECUTED | Parent build/package/deployment, native client/JEI rendering and human campaign; no new Linux run is claimed. |
 | NEEDS HUMAN VALIDATION | All appearance, readability and actual client contexts. |
 | NEEDS MY DECISION | None; the coordinator selected native127b and the source seam. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None; existing SSH and local runtime are available. |
@@ -403,9 +446,9 @@ This is Windows entrypoint parity, not a claim of Linux execution.
 | MODEL/WORKFLOW SELECTED | Exact Comfy-Org SD1.5 FP16; txt2img source1 rejected, core eight-node guide-conditioned source2 selected. |
 | AUTOMATION METHOD | Loopback prompt/history/view; original deterministic offline processor. |
 | POC ASSETS GENERATED | Two retained real source candidates for one logical asset; only source2 passes technical selection. |
-| ASSETS INTEGRATED | One16px Multitool source/runtime PNG with regeneration preservation; no protected art replaced. |
+| ASSETS INTEGRATED | One16px Multitool source/runtime PNG and coherent generated provenance; normal JDK regeneration preserves it byte-identically. |
 | NEEDS HUMAN VISUAL VALIDATION | Actual appearance/native inventory/JEI; source-pixel technical selection is not human approval. |
-| BLOCKERS | None; JDK exact-source staging remains next at this freeze. |
-| DISK/COMPUTE IMPACT | Zero model downloads/copies; existing weights are about 1.99 GiB. Owned evidence expected below 32 MiB. |
+| BLOCKERS | None. Parent publication/build/deployment and human appearance remain distinct downstream work. |
+| DISK/COMPUTE IMPACT | Zero model downloads/copies; two bounded prompts,17.6MB owned snapshots/evidence,256MiB/CPU2 JDK gate; zero remaining processes/listeners. |
 | LICENSING/PROVENANCE NOTES | Model/guide/source/settings/native provenance and notices precede import; no weights or GPL code distributed. |
 | RECOMMENDED NEXT ASSET WAVE | Reuse the proven guide-conditioned item/material mechanism only for a demonstrated weak asset; no mass replacement or invented future-tier content. |
