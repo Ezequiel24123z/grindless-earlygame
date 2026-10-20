@@ -34,6 +34,7 @@ import io.github.ezequiel24123z.grindless.machine.SolarArrayBlockEntity;
 import io.github.ezequiel24123z.grindless.planet.LunarLinkBlockEntity;
 import io.github.ezequiel24123z.grindless.star.StarwardLinkBlockEntity;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlockEntity;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
@@ -102,6 +103,14 @@ public final class ModBlockEntities {
                     () -> BlockEntityType.Builder.of((pos, state) ->
                             new ProcessMachineBlockEntity(ProcessMachineKind.SETTLING_TROUGH, pos, state),
                             ModBlocks.SETTLING_TROUGH.get()).build(null));
+
+    public static final RegistrySupplier<BlockEntityType<WorkshopPortBlockEntity>> WORKSHOP_PORT =
+            BLOCK_ENTITIES.register("workshop_port", () -> BlockEntityType.Builder.of(
+                    WorkshopPortBlockEntity::new, ModBlocks.WORKSHOP_ITEM_INPUT.get(),
+                    ModBlocks.WORKSHOP_ITEM_OUTPUT.get(), ModBlocks.SETTLING_ITEM_INPUT.get(),
+                    ModBlocks.SETTLING_FLUID_INPUT.get(), ModBlocks.SETTLING_ITEM_OUTPUT.get(),
+                    ModBlocks.SETTLING_FLUID_OUTPUT.get()).build(null));
+
     public static final RegistrySupplier<BlockEntityType<ProcessMachineBlockEntity>> GEOLOGICAL_COLLECTOR =
             BLOCK_ENTITIES.register("geological_collector", () -> BlockEntityType.Builder.of(
                     (pos, state) -> new ProcessMachineBlockEntity(ProcessMachineKind.GEOLOGICAL_COLLECTOR, pos, state),

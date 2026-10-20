@@ -27,6 +27,7 @@ bootstrap            The three T0 machines transfer power, extract a vein, calib
 extractor-backpressure Crude output recovers across paid-work reconstruction, no-vein partial transfer and one-tick Flux accounting.
 workshop             Full F0 ceramic cycles, finite-water wakeup, recipe identity, formation, NBT repair, blocked output and idle export.
 settling             Four real oriented assemblies separate dirt, preserve covered work and NBT, and recover exactly 750 mB through a conduit.
+workshop-ports       Functional item and fluid proxies use the existing owners; invalid formation holds stock, native output reaches a conduit and a filled tank drops once with metadata.
 renewable-cycle      Daylight source cycles conserve stock/FU after finite startup; produced surplus powers native ceramic, settling, carbon, glass, copper/redstone and core calibration, not the final hand craft.
 first-iron           Slice A: Thermal Generator, Pulverizer and Arc Furnace have block entities; hoppers feed fuel.
 recipe-cache-reload  A loaded idle process wakes only after a real tag reload, conserving one B1 batch and 3840 FU.

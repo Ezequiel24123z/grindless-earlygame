@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.assetgen;
 
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.structure.WorkshopGeometry;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,10 @@ final class BlockModels {
     }
 
     static String model(BlockCatalogue.Entry block, String status) {
+        var port = WorkshopPortContract.kind("grindless:" + block.name());
+        if (port.isPresent()) {
+            return workshopPort(block, port.get());
+        }
         List<Box> boxes = switch (block.geometry()) {
             case DYNAMO -> dynamo();
             case EXTRACTOR -> extractor();
@@ -131,6 +136,34 @@ final class BlockModels {
         }
         out.append("  ]\n}\n");
         return out.toString();
+    }
+
+    private static String workshopPort(BlockCatalogue.Entry block, WorkshopPortContract.Kind kind) {
+        boolean brick = kind.family() == WorkshopPortContract.Family.BRICK;
+        List<Box> base = brick ? List.of(box(0, 0, 0, 16, 16, 16, "brick", "brick"))
+                : workshop(kind.geometry());
+        String bindings = brick
+                ? "    \"brick\": \"minecraft:block/bricks\",\n    \"particle\": \"minecraft:block/bricks\""
+                : textures(block, "idle").stripTrailing();
+        List<String> elements = new ArrayList<>(base.stream().map(BlockModels::element).toList());
+        if (brick) {
+            elements.add(portMark(new double[]{3, 3, -0.01}, new double[]{13, 13, -0.01}, "north"));
+            elements.add(portMark(new double[]{16.01, 3, 3}, new double[]{16.01, 13, 13}, "east"));
+        } else {
+            elements.add(portMark(new double[]{0.99, 3, 4}, new double[]{0.99, 10, 12}, "west"));
+            elements.add(portMark(new double[]{15.01, 3, 4}, new double[]{15.01, 10, 12}, "east"));
+            if (kind.family() == WorkshopPortContract.Family.SCREEN) {
+                elements.add(portMark(new double[]{4, 2, 16.01}, new double[]{12, 4, 16.01}, "south"));
+            }
+        }
+        return "{\n  \"parent\": \"minecraft:block/block\",\n  \"render_type\": \"minecraft:cutout\",\n"
+                + "  \"textures\": {\n" + bindings + ",\n" + slot("port", kind.role().texture())
+                + "\n  },\n  \"elements\": [\n" + String.join(",\n", elements) + "\n  ]\n}\n";
+    }
+
+    private static String portMark(double[] from, double[] to, String face) {
+        return "    {\n      \"from\": " + vec(from) + ",\n      \"to\": " + vec(to)
+                + ",\n      \"faces\": {\n" + face(face, "port", true) + "\n      }\n    }";
     }
 
     private static List<Box> quern() {

@@ -62,9 +62,9 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        // ADR-0133 adds 12 RenewableProcesses rows and 28 BootstrapAssembly rows per station.
+        // Six T0 port crafts add six construction projections per station.
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                189, recipes.size());
+                201, recipes.size());
         c3Routes(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
@@ -876,20 +876,22 @@ public final class VerifyRecipes {
             yes(row.id() + " reaches the graph unchanged from RenewableProcesses", recipes.contains(row));
         }
 
-        // BootstrapAssembly projects 23 shaped crafts, the shapeless core and four vanilla basics.
+        // BootstrapAssembly projects 29 shaped crafts, the shapeless core and four vanilla basics.
         List<String> primitiveCrafts = List.of(
                 "multitool", "hand_crank_dynamo", "crude_extractor", "research_terminal",
                 "quern", "clay_mixer", "firing_chamber", "settling_trough", "settling_channel",
                 "settling_screen", "hand_pump", "basic_tank", "clay_conduit", "conveyor_belt",
                 "crude_manipulator", "process_atlas", "quest_book", "field_guide", "crank_handle",
                 "geological_collector", "biocultivator", "assembly_bench", "biomass_dynamo",
+                "workshop_item_input", "workshop_item_output", "settling_item_input", "settling_fluid_input",
+                "settling_item_output", "settling_fluid_output",
                 "data_core", "chest", "crafting_table", "furnace", "brick_block");
         for (MachineFamily family : List.of(MachineFamily.ASSEMBLY_BENCH, MachineFamily.ASSEMBLER)) {
             boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
             String prefix = bench ? "bench/" : "assemble/bootstrap/";
             List<String> projectedIds = recipes.stream().map(ProcessRecipe::id)
                     .filter(id -> id.startsWith(prefix)).map(id -> id.substring(prefix.length())).toList();
-            yes(family + " has exactly the twenty-eight primitive construction projections",
+            yes(family + " has exactly the thirty-four primitive construction projections",
                     projectedIds.equals(primitiveCrafts));
             for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
                 Map<String, Integer> inputs = new LinkedHashMap<>();

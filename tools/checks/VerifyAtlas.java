@@ -18,18 +18,18 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        // ADR-0133 adds 12 RenewableProcesses rows and 28 BootstrapAssembly rows per station.
-        eq("atlas lists every generated recipe", 189, rows.size());
+        // Six port crafts add six BootstrapAssembly rows per station.
+        eq("atlas lists every generated recipe", 201, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 28 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
-        eq("sixty-nine reachable assembler crafts in this set", 69,
+        // The 34 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
+        eq("seventy-five reachable assembler crafts in this set", 75,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        // The 68 generated additions plus five new BootstrapRecipes crafts extend the old 167.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 240, allRows.size());
+        // Six new physical crafts and their two construction projections add eighteen routes.
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 258, allRows.size());
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
             AtlasLogic.Entry row = route(allRows, "craft/" + craft.name());
             eq(craft.name() + " exposes its complete output batch", craft.resultCount(), row.outputs().size());

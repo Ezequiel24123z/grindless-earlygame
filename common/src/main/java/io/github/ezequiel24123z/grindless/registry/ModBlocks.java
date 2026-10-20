@@ -51,6 +51,8 @@ import io.github.ezequiel24123z.grindless.station.StationBerthBlock;
 import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPartBlock;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlock;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
@@ -112,6 +114,21 @@ public final class ModBlocks {
 
     public static final RegistrySupplier<WorkshopPartBlock> SETTLING_SCREEN = register("settling_screen",
             () -> new WorkshopPartBlock(BlockCatalogue.Geometry.SCREEN, machine().strength(1.5F)));
+
+    public static final RegistrySupplier<WorkshopPortBlock> WORKSHOP_ITEM_INPUT = register("workshop_item_input",
+            () -> new WorkshopPortBlock(WorkshopPortContract.Kind.WORKSHOP_ITEM_INPUT,
+                    machine().strength(2.0F).sound(SoundType.STONE)));
+    public static final RegistrySupplier<WorkshopPortBlock> WORKSHOP_ITEM_OUTPUT = register("workshop_item_output",
+            () -> new WorkshopPortBlock(WorkshopPortContract.Kind.WORKSHOP_ITEM_OUTPUT,
+                    machine().strength(2.0F).sound(SoundType.STONE)));
+    public static final RegistrySupplier<WorkshopPortBlock> SETTLING_ITEM_INPUT = register("settling_item_input",
+            () -> new WorkshopPortBlock(WorkshopPortContract.Kind.SETTLING_ITEM_INPUT, machine().strength(1.5F)));
+    public static final RegistrySupplier<WorkshopPortBlock> SETTLING_FLUID_INPUT = register("settling_fluid_input",
+            () -> new WorkshopPortBlock(WorkshopPortContract.Kind.SETTLING_FLUID_INPUT, machine().strength(1.5F)));
+    public static final RegistrySupplier<WorkshopPortBlock> SETTLING_ITEM_OUTPUT = register("settling_item_output",
+            () -> new WorkshopPortBlock(WorkshopPortContract.Kind.SETTLING_ITEM_OUTPUT, machine().strength(1.5F)));
+    public static final RegistrySupplier<WorkshopPortBlock> SETTLING_FLUID_OUTPUT = register("settling_fluid_output",
+            () -> new WorkshopPortBlock(WorkshopPortContract.Kind.SETTLING_FLUID_OUTPUT, machine().strength(1.5F)));
 
     public static final RegistrySupplier<ProcessMachineBlock> GEOLOGICAL_COLLECTOR = register("geological_collector",
             () -> new ProcessMachineBlock(ProcessMachineKind.GEOLOGICAL_COLLECTOR, machine().strength(2.5F)));

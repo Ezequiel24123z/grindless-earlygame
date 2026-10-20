@@ -117,6 +117,7 @@ public class BasicTankBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock()) && !level.isClientSide() && !Relocation.active()
                 && level.getBlockEntity(pos) instanceof BasicTankBlockEntity tank && tank.hasStoredFluid()) {
+            tank.setRemoved();
             Block.popResource(level, pos, tank.preservedDrop());
         }
         super.onRemove(state, level, pos, replacement, moving);

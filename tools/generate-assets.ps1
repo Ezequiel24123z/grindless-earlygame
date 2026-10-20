@@ -34,6 +34,10 @@ try {
     $sources += (Join-Path $material 'MaterialForm.java')
     $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\registry\BlockCatalogue.java')
     $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\structure\WorkshopGeometry.java')
+    $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\structure\WorkshopPortRole.java')
+    $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\structure\WorkshopPortContract.java')
+    $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\structure\WorkshopStructure.java')
+    $sources += (Join-Path $Root 'common\src\main\java\io\github\ezequiel24123z\grindless\recipe\MachineFamily.java')
     # -encoding UTF-8 is not optional. Windows javac defaults to the console codepage, reads the
     # em dash in GenerateAssets' provenance text as cp1252, and writes mojibake into GENERATED.md.
     & javac -nowarn -encoding UTF-8 -d $out $sources

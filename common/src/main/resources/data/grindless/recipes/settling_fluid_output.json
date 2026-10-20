@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["I", "B", "C"],
+  "key": {
+    "C": { "item": "grindless:clay_conduit" },
+    "B": { "item": "grindless:settling_screen" },
+    "I": { "item": "grindless:ceramic_insulator" }
+  },
+  "result": { "item": "grindless:settling_fluid_output" }
+}
