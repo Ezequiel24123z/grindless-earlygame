@@ -1,5 +1,16 @@
 # Current T0 rework validation
 
+## Combined-source CI guard failure — explicit repair obligation
+
+[Run39365776548](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39365776548)
+on exact16d103a fails the `verify` step `Check offline sound calibration guards`.
+The200 legacy generation-flow assertions pass first, then `test-purpose.ps1`
+rejects `legacy manifest, contract and example remain byte-identical`.
+This is an observed Linux PowerShell failure, not an established environmental
+cause, a runtime diagnosis or a pass. The same sound owner repairs the portable
+immutability check while preserving original ledgers/receipts and completed PC
+stages. Final integrated qualification cannot call this source fully green.
+
 ## Combined audio/visual source and owner-selected starter path
 
 Published16d103a integrates the complete ad71 Mixer unit with the c214 Multitool

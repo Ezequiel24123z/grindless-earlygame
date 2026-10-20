@@ -6,11 +6,17 @@ and PA-0007 are the current owner-directed delivery policy. `1389ebb` is not yet
 longitudinal-play release. Reviewed technical units may be committed and integrated,
 but the current draft is not release-ready or merge-ready merely because its CI passes.
 
-**Playable-release conditions remain open:** explicit Superflat progression/preset,
+**Playable-release conditions remain open:** implemented and qualified Superflat entry,
 Overworld compatibility, curated locked/configured pack, coherent questbook, real art and
 sound passes with redistribution provenance, applicable installation/startup/client QA,
 forward-save strategy and no known ordinary-play blocker. Preserve required live PR
 checks/reviews and branch protection; do not publish or merge a known incomplete product.
+
+The entry design is now settled by ADR-0159: a generous finite kit in the first
+free quest, accessible through the initial quest book and claimed once per player/
+world. No separate village, shop, new world generator or food-policy choice is
+required to implement it. Qualification, actual interaction and human pacing remain
+distinct from that accepted decision; this is not T0 acceptance or an opened Tier.
 
 **Human acceptance is separate and begins with the RC.** The full no-command player route,
 physical five-Matrix craft and longitudinal observations are not fictional pre-release

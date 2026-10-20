@@ -26,24 +26,28 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: owner client playtest and the explicitly held Superflat/product decisions.
-The owner has now authorized ADR-0156's parallel follow-up before that campaign:
-verify actual image-generation options and costs, improve justified T0 sound
-families using the supplied existing audio access, propose the smallest coherent
-fresh-Superflat entry and automate objective client preparation. Report all eight
-handoff categories in chat, not only in Git. Product alternatives and new image
-billing stay human decisions; use free/safe discovery while other lanes proceed.
-The bounded SSH-first build/package/regression/deployment programme is complete:
+Next: finish and qualify the owner's first free generous starter quest
+(ADR-0159), combine it with the integrated local Multitool/Mixer units, and deploy
+the same verified package to the stopped development instance. Initial quest-book
+access and one complete server-authoritative claim replace the earlier village/
+shop/primitive alternatives; no further entry-design approval is pending.
+ADR-0158 requires end-to-end delivery, not routine micro-approval queues. Complete
+source-bound checks, affected common/Forge compilation, package verification and
+one new-registration boot; reuse unchanged mechanism proofs. The current sound
+tooling CI guard failure is explicit in the validation ledger and must be repaired,
+not called flaky. Report all eight handoff categories in chat and Git.
+The previous bounded SSH-first build/package/regression/deployment programme is complete:
 qualified559 is installed in the separate owned development instance; A01/A03 native
 red/green and real Luna stopped-world accounting pass. Read
 [RETURN-HANDOFF](../RETURN-HANDOFF.md) before any new work; do not repeat those
 proofs or resume an old runtime owner without a changed assumption/new finding.
 The approved Quern loop (ADR-0148) and restricted playable profile/public-overrides
 (ADR-0149) remain engineering, not client rendering/listening acceptance. Continue
-deliberate flat-world resource access only through the held product decision:
+deliberate flat-world resource access through the accepted product decisions:
 ADR-0150 requires virtual chunk deposits,
 not landscaped spawn resources/food or physical ore generation. The proposed T0
-generating multiblock and quest shop remain scoped design leads. Both provenance investigations are complete;
+generating multiblock remains a scoped design lead; the starter quest does not
+require a shop. Both provenance investigations are complete;
 do not reopen account verification. Questbook product QA remains on the Heracles
 authority. The source-pixel art batch is already installed; native rendering remains open.
 Old discovery workers are finished, not a resumable pool. No storage move or asset

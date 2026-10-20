@@ -17,7 +17,7 @@ Only the coordinator publishes/deploys. Human art/listening/campaign remain sepa
 | Category | Current actual state |
 | --- | --- |
 | COMPLETED | Exact962 CI/all native shards and PC full48 contracts qualify the observation repair. Comfy pipeline/F1/28 Python/12 JDK/two identical1602-file stages and the canonical127b sprite are integrated. Two real SFX HTTP200 outputs, normalized Mixer A/runtime/tooling/notices and unchanged Quern A are integrated. |
-| BLOCKED | None for assigned implementation. Combined qualification is active, not yet a pass; original CI and observer failures remain preserved history. |
+| BLOCKED | Combined-source CI39365776548 on16d103a fails the offline three-file legacy sound byte-identity guard after200 assertions pass. Same owner9c repairs it; cause is not assumed environmental. Kit implementation and completed PC stages continue; no full-green claim. |
 | NOT EXECUTED | Final integrated kit/build/package/registration boot/deploy and the current-wave graphical client/manual campaign are not yet complete. The84 authored Java audio checks are assigned, not credited before execution. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
 | NEEDS MY DECISION | None. ADR-0159 selects the generous first free quest; implementation does not await another village/shop/food decision. |

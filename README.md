@@ -2371,9 +2371,12 @@ progression. See the active [build-out](docs/BUILD-OUT.md) and
 T0 Bootstrap is the only mechanically active tier. Its connected F0 workshop and geological/
 biological source base include the Quern, Clay Mixer, Firing Chamber, Settling Trough, Geological
 Collector, Biocultivator, Biomass Dynamo and limited Assembly Bench. The entry is a requirements/
-budget acquired through ordinary survival, not a gifted kit or guaranteed iron. The two-iron
-Hand Crank Dynamo/Crude Extractor path is an optional quick start. Finite gathering and a furnace
-may seed initial boards/bricks, but vanilla farms are not canonical ongoing supply. Ceramic
+budget bridged by a generous finite kit in the first free quest (ADR-0159), with
+initial book access and one server-authoritative claim per player/world. No paper,
+commands, village or new shop/worldgen route is needed to reach it; the live quest
+catalogue owns the allocation. The two-iron Hand Crank Dynamo/Crude Extractor path
+remains optional. Finite gathering and a furnace may also seed initial boards/bricks,
+but vanilla farms are not canonical ongoing supply. Ceramic
 insulator and redstone make the physical Data Core; the physical five-F1-Matrix exit remains a
 hand craft.
 

@@ -17,6 +17,7 @@
     "superflat": "ADR0159_owner_decided_generous_free_first_quest_initial_book_access_one_time_rewards_implementation_7dcd042e_no_more_choice_gate",
     "client": "objective_preparation_and_readonly_inspect_complete_human_visual_audio_campaign_pending",
     "prior_final_CI": "543598a_failures_preserved_repaired_exact962_run39357301892_all_jobs_native_pass_and_PC_Windows_full48_contracts_pass_historical_precipitant_not_invented",
+    "combined_source_CI": {"source": "16d103a049689fd6dae1289cfa7e0297b5352816", "run": 39365776548, "conclusion": "failure", "job": "verify_Check_offline_sound_calibration_guards", "failure": "test-purpose.ps1_legacy_manifest_contract_example_byte_identity_after200_legacy_assertions_pass", "owner": "9c12461c-7aa8-4101-8f21-a935a7d9841a", "cause": "under_investigation_not_assumed_environmental", "chat_disclosed": true},
     "runtime_lease_owner": "9c12461c-7aa8-4101-8f21-a935a7d9841a",
     "deployed_source_unchanged": "559bed5e8ea70ac52ff4b3fed3850ab05ab48256"
   },

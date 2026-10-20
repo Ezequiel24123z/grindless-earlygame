@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Apply the selected starter path to the canonical design and execution queue.**
+  Replace the superseded no-gift/village-choice prose with ADR-0159's free
+  one-time starter quest, without making a survival/client acceptance claim.
+  Disclose the actual16d CI sound byte-pin guard failure and keep its repair
+  separate from unchanged runtime proofs and ongoing kit implementation.
 - **Preserve final Comfy proof records without replaying successful generation.**
   Integrate baf1's c214-bound JDK receipt, provenance and workflow closeout; keep
   the original observer failure and read-only recovery. Reconcile generated

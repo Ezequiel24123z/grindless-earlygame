@@ -512,10 +512,12 @@ geological and biological source base feeds the ceramic workshop and primitive a
 current detailed contract is in [`tiers/t0.md`](tiers/t0.md); the README remains the high-level
 design authority. Recipe quantities belong to the live Java catalogues, not this prose.
 
-Normal gathering and a furnace may seed finite initial construction materials, including boards
-and bricks. Vanilla tree and cobblestone farms are not the canonical ongoing supply. The optional
-two-iron Hand Crank Dynamo/Crude Extractor quick start and its finite chunk vein are not required
-to establish the mod-owned source routes.
+ADR-0159 supplies a generous finite construction/food/basic-material bridge in the
+first free quest, with initial book access and one server-authoritative claim.
+The live quest catalogue owns its allocation. Normal gathering and a furnace may
+also seed initial materials; vanilla tree and cobblestone farms are not canonical
+ongoing supply. The optional two-iron Hand Crank Dynamo/Crude Extractor quick start
+and its finite chunk vein are not required to establish the mod-owned source routes.
 
 The physical T0 exit is a calibrated Data Core and a manually crafted five-F1-Relay-Matrix batch.
 The Assembly Bench projects the limited Bootstrap crafting catalogue and four vanilla basics; it

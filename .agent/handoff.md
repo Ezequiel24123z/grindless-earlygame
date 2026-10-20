@@ -21,6 +21,12 @@ audio/assets on the combined source in an explicit isolated PC worktree, then
 the final integrated kit/build/package/registration boot. Only the coordinator
 publishes and deploys. Qualified559 remains installed until that artifact passes.
 
+Combined-source CI39365776548 on16d103a fails the offline sound guard: after200
+legacy assertions pass, `test-purpose.ps1` rejects the three legacy byte pins.
+Owner9c12461c repairs it without changing historical receipts or replaying
+successful JVM stages. The cause is under investigation, not assumed flaky;
+this failure is disclosed in chat and the validation ledger.
+
 ADR-0156/PA-0014 reopened objective work in isolated lanes. Provider discovery,
 client preparation and the historical Superflat proposal are complete. Existing
 audio access produced the two real requests above; no secret was output/copied.
