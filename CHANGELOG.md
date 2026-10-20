@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Present the concrete Superflat decision instead of another planning loop.**
+  Recover the read-only worker's completed analysis, materialize the proposal and
+  source-check its initial stone/wood/water cuts, bedrock eligibility,27-charge
+  prefix and physical exit. Recommend a finite seed-independent bridge, distinguish
+  a verified village start and leave food/difficulty/custody choices explicit.
+  No proposed kit/profile/shop becomes implemented gameplay.
 - **Replace micro-approval stops with end-to-end ownership (ADR-0158).**
   The owner explicitly prioritizes delivery and use of existing subscriptions/
   local compute. Delegate normal review markers/private grants, generation,

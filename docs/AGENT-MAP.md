@@ -36,6 +36,10 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
   retirement is established by official sources, not a non-JSON catalogue body;
   Copilot vision/credits are not image-output entitlement. The actual local ComfyUI
   owner controls installation qualification, not this research fallback.
+- `docs/tiers/t0-superflat-entry-options.md` — source-checked initial material cuts
+  and explicit product alternatives. Its counts are proposal/planning, not a new
+  starter grant, world preset, food policy or survival pass. Bedrock is already a
+  valid Collector bed; do not invent physical ore/terrain as an assumed prerequisite.
 - `plan/process-t0-playable-release-1.md` and `.agent/work-plan.json` — ADR-0144/PA-0007
   requirement trace, bounded ownership, separate readiness states and actual dependencies.
 - `pack/profiles.json`, `pack/curseforge/manifest.json`, `pack/dependency-metadata.json`,

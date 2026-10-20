@@ -4,6 +4,14 @@ Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC
 
 ## Active owner-directed follow-up
 
+ADR-0158 now requires end-to-end delivery without routine micro-approval stops.
+Two real ElevenLabs outputs exist and Mixer integration is active. Two real local
+Comfy jobs produced a rejected photo and the selected guided Multitool127b sprite;
+workflow integrityF1 is fixed/independently closed and deterministic JDK proof is
+active. Exact962 CI/all native shards and PC full48 contracts pass. Superflat
+alternatives are materialized; only the product choice is held, not all engineering.
+Qualified559 remains installed until the combined new artifact is built/deployed.
+
 ADR-0156/PA-0014 reopens bounded objective work in four isolated lanes: image
 capability discovery, sound families, fresh-Superflat proposal and client-review
 preparation. Existing audio access is now authenticated through the owner-supplied

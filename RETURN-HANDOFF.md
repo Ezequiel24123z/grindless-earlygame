@@ -18,11 +18,11 @@ remain separate. PC handoffs coordinate resources only, not routine design appro
 | Category | Actual state at follow-up intake |
 | --- | --- |
 | COMPLETED | Previous A01/A03/build/deployment proof is preserved. The owner-supplied external ElevenLabs credential is now readable and authenticated via HTTP200 without exposing/copying it or generating audio. |
-| BLOCKED | Original CI39336114196 remains failed history, but repaired962 qualifies in full CI and PC Windows contracts; it is no longer a current unresolved gate. Superflat material choices and human visual/listening/campaign remain held; tooling provenance F1 is being repaired without new diffusion. |
+| BLOCKED | Original CI39336114196 remains failed history, but repaired962 qualifies in full CI and PC Windows contracts. Comfy F1 is fixed/revalidated and its narrow review is closed. Superflat material choices and actual owner-desktop review remain the decision/human gates; final build/deploy is pending integration, not missing credentials. |
 | NOT EXECUTED | Final integrated build/deploy, current-wave graphical client run and fresh no-command campaign remain unexecuted. Two real SFX HTTP200 requests and two real local image jobs have now occurred; neither implies human acceptance. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
-| NEEDS MY DECISION | Superflat alternatives and any new image billing/resource activation will be presented before implementation/spend. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing audio access is resolved. Actual image-account/free-quota/local-GPU availability is under bounded discovery, not assumed absent or usable. |
+| NEEDS MY DECISION | The concrete Superflat A/D/B/C alternatives are now documented; choose the starting experience before gameplay/delivery changes. New external paid-image billing still needs explicit approval; local Comfy is already authorized. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for current audio/local generation: real ElevenLabs200 outputs and local GPU diffusion succeeded. Actual visible client review needs the existing owner desktop; no new account/key or remote-control installation is assumed. |
 | COST / BILLING RISK | Audio delivery allowance is now up to12 justified small-candidate requests with delegated finite run grants; accepted Mixer pair is ~240credits estimated, not a guaranteedUSD quote. Local Comfy may iterate if useful without external-image billing. Old run receipts remain immutable. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
 
@@ -34,6 +34,22 @@ qualification remain pending. Never reboot the PC, interrupt user jobs, expose
 ComfyUI publicly or confuse candidate generation with Minecraft/human correctness.
 An additional specialized asset owner handles this route; the provider researcher
 continues comparative research without duplicating installation work.
+
+Actual delivery now includes two real ElevenLabs HTTP200 responses with saved
+sources/codec QC, technicalA selection and Mixer integration in progress. Local
+Comfy ran two real jobs: the photographic first source was rejected; the guided
+second yields the selected127b native sprite. The old2/2 ledger is preserved.
+F1 retained-workflow integrity is fixed atc214 with offline regressions and real
+PNG-metadata addenda; independent review closes it without another inference.
+No final integrated build/deployment or human listening/visual acceptance is claimed.
+
+The [Superflat choice](docs/tiers/t0-superflat-entry-options.md) is ready. The
+planning agent was read-only and lacked edit/Git/messaging; its complete analysis
+was recovered through session history and materialized by the coordinator rather
+than wasting another delegation. Critical stone/wood/site/water/energy/exit facts
+were checked in source. RecommendationA is a finite seed-independent construction
+bridge; D is less code if a fixed village start is accepted. No kit/profile/shop/
+primitive or food/difficulty policy is implemented. Other delivery proceeds.
 
 External image research is complete at7795f966: official GitHub documentation
 and its changelog independently confirm Models retired2026-07-30, including
