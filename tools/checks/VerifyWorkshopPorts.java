@@ -3,6 +3,11 @@ package io.github.ezequiel24123z.grindless.structure;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.sun.source.tree.MethodInvocationTree;
+import com.sun.source.tree.MethodTree;
+import com.sun.source.util.JavacTask;
+import com.sun.source.util.TreeScanner;
+import io.github.ezequiel24123z.grindless.client.QuestTeachingClient;
 import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
@@ -15,15 +20,20 @@ import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
+import io.github.ezequiel24123z.grindless.quest.QuestTeaching;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.ItemStack;
@@ -38,14 +48,22 @@ import net.minecraft.world.phys.shapes.Shapes;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.imageio.ImageIO;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+import javax.tools.ToolProvider;
 
 /** Rotated role contracts and real process/native-store quota boundaries; not a loaded-world Forge proof. */
 public final class VerifyWorkshopPorts {
@@ -69,6 +87,7 @@ public final class VerifyWorkshopPorts {
         readOnlyInspection();
         manifest();
         models();
+        teaching();
         System.out.println("ALL WORKSHOP PORT CHECKS PASSED (" + checks + ")");
     }
 
@@ -519,6 +538,158 @@ public final class VerifyWorkshopPorts {
         eq(label + " X", x, actual.get(0).getAsDouble());
         eq(label + " Y", y, actual.get(1).getAsDouble());
         eq(label + " Z", z, actual.get(2).getAsDouble());
+    }
+
+    /** Execute the real component projector, not a GUI or a substitute port/cost authority. */
+    private static void teaching() throws Exception {
+        JsonObject language = JsonParser.parseString(Files.readString(Path.of(
+                "common/src/main/resources/assets/grindless/lang/en_us.json"))).getAsJsonObject();
+        Method append = QuestTeachingClient.class.getDeclaredMethod("appendPorts", List.class, WorkshopStructure.class);
+        append.setAccessible(true);
+        List<AtlasLogic.Entry> crafts = AtlasLogic.allEntries(List.of());
+        for (String id : List.of("firing", "settling")) {
+            var lesson = QuestCatalogue.byId(id);
+            WorkshopStructure structure = QuestTeaching.structure(lesson);
+            List<Component> actual = new ArrayList<>();
+            append.invoke(null, actual, structure);
+            for (Component component : actual) {
+                for (String key : translationKeys(component)) {
+                    check("every projected port instruction resolves localization: " + key,
+                            language.has(key) && !language.get(key).getAsString().isBlank());
+                }
+            }
+            List<TranslatableContents> limits = translated(actual, "ports_limit");
+            eq("the actual lesson states exactly one structure-wide cap", 1, limits.size());
+            eq("the lesson cap comes from the runtime contract", WorkshopPortContract.maximumPorts(structure),
+                    limits.get(0).getArgs()[0]);
+            List<TranslatableContents> bricks = translated(actual, "ports_bricks");
+            eq("only the brick family projects an ordinary-brick reserve",
+                    WorkshopPortContract.minimumBricks(structure) > 0 ? 1 : 0, bricks.size());
+            if (!bricks.isEmpty()) {
+                eq("the lesson retains the exact ordinary-brick minimum",
+                        WorkshopPortContract.minimumBricks(structure), bricks.get(0).getArgs()[0]);
+            }
+            List<TranslatableContents> roles = translated(actual, "ports_role_limit");
+            int roleIndex = 0;
+            for (WorkshopPortRole role : WorkshopPortRole.values()) {
+                int maximum = WorkshopPortContract.maximum(structure, role);
+                if (maximum > 0) {
+                    eq("role limit names the actual role", List.of(roleKey(role)),
+                            translationKeys((Component) roles.get(roleIndex).getArgs()[0]));
+                    eq("role limit retains the actual maximum", maximum, roles.get(roleIndex++).getArgs()[1]);
+                }
+            }
+            eq("the lesson invents no extra roles or energy hatches", roleIndex, roles.size());
+            List<TranslatableContents> cells = translated(actual, "port_slot");
+            List<WorkshopPortContract.Slot> slots = WorkshopPortContract.slots(structure);
+            eq("every and only actual replacement cells are taught", slots.size(), cells.size());
+            for (int i = 0; i < slots.size(); i++) {
+                var slot = slots.get(i);
+                Object[] args = cells.get(i).getArgs();
+                eq("slot template has exactly its real offset, roles and faces", 5, args.length);
+                eq("local X is the actual runtime cell", slot.offset().x(), args[0]);
+                eq("local Y is the actual runtime cell", slot.offset().y(), args[1]);
+                eq("local Z is the actual runtime cell", slot.offset().z(), args[2]);
+                eq("cell roles retain their full exact set", slot.roles().stream().sorted()
+                        .map(VerifyWorkshopPorts::roleKey).toList(), translationKeys((Component) args[3]));
+                List<String> names = List.of("north", "east", "south", "west");
+                eq("cell exterior faces retain their exact rotated-local contract", slot.faces().stream().sorted()
+                        .map(face -> "gui.grindless.quest.port_face." + names.get(face)).toList(),
+                        translationKeys((Component) args[4]));
+            }
+            eq("legacy controller/rotation/no-local-stock help is present exactly once",
+                    1, translated(actual, "ports_notes").size());
+            eq("the last instruction retains the compatibility warning", "gui.grindless.quest.ports_notes",
+                    ((TranslatableContents) actual.get(actual.size() - 1).getContents()).getKey());
+            for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+                AtlasLogic.Entry craft = crafts.stream().filter(entry ->
+                        entry.id().equals("craft/" + kind.blockName())).findFirst().orElseThrow();
+                List<AtlasLogic.Entry> projected = QuestTeaching.recipes(lesson, crafts);
+                eq("the actual recipe is taught only by its own structure: " + kind.id(),
+                        kind.structure() == structure, projected.stream().anyMatch(entry -> entry == craft));
+                eq("port output is the real six-variant ID, not another bill", List.of("item:" + kind.id()), craft.outputs());
+                check("all six port display names are localized", language.has("block.grindless." + kind.blockName()));
+                for (String resource : List.of("blockstates/" + kind.blockName() + ".json",
+                        "models/block/" + kind.blockName() + "_idle.json", "models/item/" + kind.blockName() + ".json")) {
+                    check("the taught port has its normal generated resource: " + resource,
+                            Files.isRegularFile(Path.of("common/src/main/resources/assets/grindless/" + resource)));
+                }
+            }
+        }
+        List<Component> none = new ArrayList<>();
+        append.invoke(null, none, WorkshopStructure.NONE);
+        eq("ordinary machines gain no invented port lesson", List.of(), none);
+        String client = "common/src/main/java/io/github/ezequiel24123z/grindless/client/";
+        eq("native help calls the real shared projector for the selected catalogue task",
+                List.of("showHelp:QuestCatalogue.tasks().get(selected)"),
+                calls(Path.of(client + "QuestBookScreen.java"), "QuestTeachingClient.content"));
+        eq("Heracles calls the same real projector for its catalogue-bound claim task",
+                List.of("<init>:task"), calls(Path.of(
+                        "forge/src/main/java/io/github/ezequiel24123z/grindless/forge/quest/HeraclesQuestClient.java"),
+                        "QuestTeachingClient.content"));
+        eq("the shared live lesson actually appends the inspected port instructions",
+                List.of("content:text,structure"), calls(Path.of(client + "QuestTeachingClient.java"), "appendPorts"));
+        check("the live lesson explicitly rejects possession as formation/operation proof",
+                calls(Path.of(client + "QuestTeachingClient.java"), "Component.translatable").contains(
+                        "content:\"gui.grindless.quest.inventory_not_operation\""));
+        check("the localized notes retain plain/controller compatibility and closed unsided access",
+                language.get("gui.grindless.quest.ports_notes").getAsString().contains(
+                        "original plain structure and direct controller interfaces remain valid")
+                        && language.get("gui.grindless.quest.ports_notes").getAsString().contains(
+                        "vertical and unsided port access is closed"));
+    }
+
+    private static String roleKey(WorkshopPortRole role) {
+        return "gui.grindless.quest.port_role." + role.name().toLowerCase(Locale.ROOT);
+    }
+
+    private static List<TranslatableContents> translated(List<Component> lines, String suffix) {
+        return lines.stream().map(Component::getContents).filter(TranslatableContents.class::isInstance)
+                .map(TranslatableContents.class::cast)
+                .filter(content -> content.getKey().equals("gui.grindless.quest." + suffix)).toList();
+    }
+
+    private static List<String> translationKeys(Component component) {
+        List<String> keys = new ArrayList<>();
+        if (component.getContents() instanceof TranslatableContents content) {
+            keys.add(content.getKey());
+            for (Object arg : content.getArgs()) {
+                if (arg instanceof Component nested) keys.addAll(translationKeys(nested));
+            }
+        }
+        for (Component sibling : component.getSiblings()) keys.addAll(translationKeys(sibling));
+        return List.copyOf(keys);
+    }
+
+    /** Parse actual invocation nodes, so comments or a dormant string cannot satisfy a renderer hook. */
+    private static List<String> calls(Path source, String target) throws Exception {
+        var compiler = ToolProvider.getSystemJavaCompiler();
+        var diagnostics = new DiagnosticCollector<JavaFileObject>();
+        List<String> calls = new ArrayList<>();
+        try (var files = compiler.getStandardFileManager(diagnostics, Locale.ROOT, StandardCharsets.UTF_8)) {
+            var parser = (JavacTask) compiler.getTask(null, files, diagnostics, List.of("-proc:none"), null,
+                    files.getJavaFileObjectsFromPaths(List.of(source)));
+            for (var tree : parser.parse()) {
+                new TreeScanner<Void, String>() {
+                    @Override
+                    public Void visitMethod(MethodTree method, String enclosing) {
+                        return super.visitMethod(method, method.getName().toString());
+                    }
+
+                    @Override
+                    public Void visitMethodInvocation(MethodInvocationTree call, String enclosing) {
+                        if (call.getMethodSelect().toString().equals(target)) {
+                            calls.add(enclosing + ":" + call.getArguments().stream().map(Object::toString)
+                                    .map(value -> value.replaceAll("\\s+", "")).collect(java.util.stream.Collectors.joining(",")));
+                        }
+                        return super.visitMethodInvocation(call, enclosing);
+                    }
+                }.scan(tree, "");
+            }
+        }
+        check("actual renderer source parses: " + source, diagnostics.getDiagnostics().stream()
+                .noneMatch(diagnostic -> diagnostic.getKind() == Diagnostic.Kind.ERROR));
+        return List.copyOf(calls);
     }
 
     private static Map<WorkshopStructure.Offset, WorkshopStructure.Present> legacy(WorkshopStructure structure, int turn) {

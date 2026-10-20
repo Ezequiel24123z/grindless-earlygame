@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Execute the shared six-port teaching contract rather than author another tutorial authority.**
+  Exercise the actual component projector against runtime slots, faces, role caps,
+  ordinary-brick reserve and legacy-controller notes; bind all six live Atlas
+  crafts, localized block names and generated resources. Inspect actual AST call
+  nodes from both native and Heracles renderers to the same catalogue teaching
+  path, without launching or simulating a graphical client.
 - **Repair composed qualification fixtures without weakening the runtime contracts.**
   Bind the exact ProcessMachine manual-work AST including F0/server guards,
   capacity clamp and positive actual-delta telemetry, with ten source mutations
