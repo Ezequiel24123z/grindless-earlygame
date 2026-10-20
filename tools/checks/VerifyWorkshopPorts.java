@@ -79,6 +79,7 @@ public final class VerifyWorkshopPorts {
         manifest();
         models();
         teaching();
+        dropFixture();
         System.out.println("ALL WORKSHOP PORT CHECKS PASSED (" + checks
                 + "); registered block collision/Forge binding remains required in workshop-ports native probe.");
     }
@@ -523,6 +524,26 @@ public final class VerifyWorkshopPorts {
         eq(label + " X", x, actual.get(0).getAsDouble());
         eq(label + " Y", y, actual.get(1).getAsDouble());
         eq(label + " Z", z, actual.get(2).getAsDouble());
+    }
+
+    private static void dropFixture() throws Exception {
+        Path functions = Path.of("tools/smoke/workshop-ports-pack/data/grindless_ports/functions");
+        String observe = Files.readString(functions.resolve("observe.mcfunction"));
+        String finish = Files.readString(functions.resolve("finish.mcfunction"));
+        int floor = observe.indexOf("fill 3 279 4 5 279 6 minecraft:stone");
+        int breaking = observe.indexOf("setblock 4 280 5 minecraft:stone destroy");
+        check("a normal owned landing floor precedes the real port drop", floor >= 0 && breaking > floor);
+        check("the original delayed controller stability window remains",
+                observe.contains("schedule function grindless_ports:finish 20t replace"));
+        check("custody still requires the actual one-item port entity",
+                finish.contains("if entity @e[type=minecraft:item,distance=..2,nbt={Item:{id:\"grindless:settling_fluid_output\",Count:1b}}]"));
+        check("custody still rejects any copied controller water metadata",
+                finish.contains("unless entity @e[type=minecraft:item,distance=..2,nbt={Item:{tag:{BlockEntityTag:{Fluid:{Id:\"minecraft:water\"}}}}}]"));
+        check("the fixture never suspends or teleports its item instead of supplying a floor",
+                !observe.contains("NoGravity") && !observe.contains("tp @e") && !observe.contains("teleport @e"));
+        eq("the exact original native marker set remains required", 26,
+                (int) Files.readAllLines(Path.of("tools/smoke/workshop-ports.expect")).stream()
+                        .filter(line -> !line.isBlank()).count());
     }
 
     /** Execute the real component projector, not a GUI or a substitute port/cost authority. */

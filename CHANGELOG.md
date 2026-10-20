@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the real Phase B native red and repair the drop fixture's missing floor.**
+  Exact G builds the playable package with88 checks and matching JAR/ZIP
+  provenance, then the real isolated server passes25/26 markers, including
+  registered Guide/F1/geometry, callback rebinding and produced750. Preserve its
+  stopped world/logs and immutable artifacts. Supply a normal landing pad before
+  the delayed port-drop assertion; keep both actual entity/NBT predicates, all26
+  expectations and every deadline unchanged. No runtime engine or permission
+  bypass is introduced; the corrected source must be packaged and run anew.
 - **Close the actual integrated T0 Phase A qualification without claiming a client pass.**
   One complete post-repair runner passes52 suites; the final clean-source
   common/Forge/resources/classpath/Heracles gate exits0 with776 contracts.
