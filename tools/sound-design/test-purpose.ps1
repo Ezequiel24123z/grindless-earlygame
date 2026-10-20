@@ -413,6 +413,35 @@ try {
     $crossInputs = New-FixtureInputs $cross
     Reject-Purpose { Assert-Receipt $done.Receipt $crossInputs $done.Output } 'SD_VALIDATION' 'Receipt purpose/run/selected candidate binding mismatch.'
 
+    $physical = Get-Inputs (Join-Path $PSScriptRoot 't0-physical-purpose.json') (Join-Path $PSScriptRoot 't0-physical-contract.json')
+    Check-Purpose ($physical.Contract.wave_limits.max_families -eq 4 -and
+        $physical.Contract.wave_limits.max_calls -eq 8 -and
+        $physical.Manifest.families.Count -eq 3 -and (Get-CallLimit $physical) -eq 6 -and
+        @(Get-Candidates $physical).Count -eq 6) 'new physical wave selects six of eight without changing the legacy four-call ceiling'
+    Reject-Purpose { Assert-Manifest $physical.Manifest $inputs.Contract } 'SD_VALIDATION' 'Purpose requires its v2 contract'
+    Reject-Purpose { Assert-Manifest $inputs.Manifest $physical.Contract } 'SD_VALIDATION' 'Purpose requires its v2 contract'
+    $physicalGrant = New-BindingFixture $physical $output
+    Assert-PurposeBindings $physicalGrant $physical $output $head
+    Reject-Purpose { Assert-PurposeGrant $physicalGrant $physical $output $head } 'SD_PURPOSE_UNAPPROVED' 'grant.generation_approved'
+    foreach ($change in @('families','calls','per_family')) {
+        $bad = Copy-Purpose $physical.Contract; Assert-Contract $bad
+        switch ($change) {
+            'families' { $bad.wave_limits.max_families = 5 }
+            'calls' { $bad.wave_limits.max_calls = 9 }
+            'per_family' { $bad.wave_limits.max_candidates_per_family = 3 }
+        }
+        Reject-Purpose { Assert-Contract $bad } 'SD_VALIDATION' 'ADR-0156 ceilings'
+    }
+    $bad = Copy-Purpose $physical.Manifest; $bad.max_calls = 8
+    Reject-Purpose { Assert-Manifest $bad $physical.Contract } 'SD_VALIDATION' 'Effective max_calls must equal'
+    $six = New-TestLedger 'physical-six-one-ledger' $physical; Complete-TestLedger $six $physical
+    Check-Purpose ($six.Receipt.attempts.Count -eq 6 -and $six.Receipt.family_ids.Count -eq 3) 'all six physical candidates reserve the same durable receipt'
+    Reject-Purpose { Assert-CanAttempt $six.Receipt } 'SD_VALIDATION' 'All selected purpose attempts are consumed.'
+    Reject-Purpose { Assert-Receipt $done.Receipt $physical $done.Output } 'SD_VALIDATION' 'Receipt identity, path or budget mismatch.'
+    $physicalPlan = Get-SoundPlan $physical $null
+    Check-Purpose ($physicalPlan.max_posts -eq 6 -and $physicalPlan.wave_ceiling_not_granted.max_calls -eq 8 -and
+        -not $physicalPlan.generation_authorized -and -not $physicalPlan.secret_read) 'physical Plan distinguishes finite requests from unused ceiling without authorization'
+
     $candidate = @(Get-Candidates $inputs)[0]
     $provenance = New-SoundProvenance $inputs $done.Grant $done.Receipt.attempts[0] $candidate
     Check-Purpose ($provenance.purpose_id -ceq $inputs.Manifest.purpose_id -and $provenance.family_id -ceq 'wet_work' -and

@@ -111,10 +111,13 @@ function Assert-Contract($Contract) {
     Require-Sound (@('grindless.sound-calibration-contract/v1','grindless.sound-purpose-contract/v2') -ccontains $Contract.schema) 'Wrong contract schema.'
     if ($Contract.schema -ceq 'grindless.sound-purpose-contract/v2') {
         Assert-Keys $Contract @('schema','id','review_status','authorization_authority','reference','method','endpoint','authentication_header','content_type','text_max_characters','body_parameters','response','wave_limits','automatic_retries','alternate_formats','licence_scope','publication_approved','notes')
-        Require-Sound ($Contract.id -is [string] -and $Contract.authorization_authority -is [string] -and $Contract.id -ceq 'adr0156-elevenlabs-internal-purpose-3s-mp3' -and $Contract.authorization_authority -ceq 'Sol' -and @('unapproved','reviewed') -ccontains $Contract.review_status) 'Wrong purpose contract identity, authority or review status.'
+        $physicalWave = $Contract.id -ceq 't0-physical-20261020-elevenlabs-purpose-3s-mp3'
+        Require-Sound ($Contract.id -is [string] -and $Contract.authorization_authority -is [string] -and ($physicalWave -or $Contract.id -ceq 'adr0156-elevenlabs-internal-purpose-3s-mp3') -and $Contract.authorization_authority -ceq 'Sol' -and @('unapproved','reviewed') -ccontains $Contract.review_status) 'Wrong purpose contract identity, authority or review status.'
         Assert-ProviderContract $Contract
         Assert-Keys $Contract.wave_limits @('max_families','max_candidates_per_family','max_calls')
-        Require-Sound ((Test-Number $Contract.wave_limits.max_families 2) -and (Test-Number $Contract.wave_limits.max_candidates_per_family 2) -and (Test-Number $Contract.wave_limits.max_calls 4)) 'ADR-0156 ceilings are exactly two families, two candidates each and four total calls.'
+        $families = 2; $calls = 4
+        if ($physicalWave) { $families = 4; $calls = 8 }
+        Require-Sound ((Test-Number $Contract.wave_limits.max_families $families) -and (Test-Number $Contract.wave_limits.max_candidates_per_family 2) -and (Test-Number $Contract.wave_limits.max_calls $calls)) 'ADR-0156 ceilings remain fixed to the selected contract identity: legacy 2/2/4, new physical wave 4/2/8.'
         Require-Sound ($Contract.licence_scope -ceq 'internal_audition_only') 'Purpose output is internal audition only.'
         return
     }
@@ -130,7 +133,7 @@ function Assert-PurposeManifest($Manifest, $Contract) {
     Require-Sound ($Manifest.source_revision -is [string] -and $Manifest.source_revision -cmatch '^[0-9a-f]{40}$' -and $Manifest.purpose_id -is [string] -and $Manifest.purpose_id -cmatch '^[a-z0-9][a-z0-9-]{2,63}$' -and $Manifest.run_id -is [string] -and $Manifest.run_id -cmatch '^[a-z0-9][a-z0-9-]{2,63}$') 'Invalid purpose, run or source identity.'
     Require-Sound ((Test-SoundText $Manifest.label 120) -and (Test-SoundText $Manifest.mechanism_evidence 1600) -and (Test-SoundText $Manifest.cost_note 1600) -and (Test-SoundText $Manifest.next_gate 1600) -and @('unapproved','reviewed') -ccontains $Manifest.review_status) 'Missing bounded purpose evidence or review status.'
     Require-Sound ($Manifest.licence_scope -ceq 'internal_audition_only' -and (Test-Bool $Manifest.automatic_rerolls $false) -and (Test-Bool $Manifest.runtime_import_approved $false) -and (Test-Bool $Manifest.publication_approved $false) -and (Test-Bool $Manifest.technical_qc_is_artistic_approval $false)) 'Purpose cannot authorize rerolls, import, publication or a listening pass.'
-    Require-Sound ($Manifest.families -is [array] -and $Manifest.families.Count -ge 1 -and $Manifest.families.Count -le 2) 'Select one or two families, never more.'
+    Require-Sound ($Manifest.families -is [array] -and $Manifest.families.Count -ge 1 -and $Manifest.families.Count -le $Contract.wave_limits.max_families) 'Select one or two families under the legacy contract, or at most four under the new physical-wave contract.'
     $familyIds = @(); $candidateIds = @()
     foreach ($family in $Manifest.families) {
         Assert-Keys $family @('id','machines','candidates')
@@ -151,7 +154,7 @@ function Assert-PurposeManifest($Manifest, $Contract) {
             Require-Sound ($candidate.artistic_approval -ceq 'unapproved') 'Technical tooling cannot claim artistic approval.'
         }
     }
-    Require-Sound ((Test-Number $Manifest.max_calls $candidateIds.Count) -and $candidateIds.Count -le 4) 'Effective max_calls must equal the finite selected candidate count, never the unused wave ceiling.'
+    Require-Sound ((Test-Number $Manifest.max_calls $candidateIds.Count) -and $candidateIds.Count -le $Contract.wave_limits.max_calls) 'Effective max_calls must equal the finite selected candidate count, never the unused wave ceiling.'
 }
 function Assert-Manifest($Manifest, $Contract) {
     Require-Sound ($null -ne $Manifest -and $Manifest.PSObject.Properties.Name -ccontains 'schema') 'Missing manifest schema.'
@@ -282,9 +285,13 @@ function Assert-Checkpoint([string]$Manifest, [string]$Contract) {
     $m = Read-SoundJson $Manifest
     if ($m.schema -ceq 'grindless.sound-purpose-manifest/v2') {
         $manifestFull = Get-LocalPath $Manifest; $contractFull = Get-LocalPath $Contract
-        Require-Sound ((Test-Within $manifestFull $script:SoundHome) -and [IO.Path]::GetExtension($manifestFull) -ceq '.json' -and $contractFull -ceq [IO.Path]::GetFullPath((Join-Path $script:SoundHome 'purpose-contract.json'))) 'Purpose generation inputs must be inside the reviewed sound-design subtree with its exact v2 contract.'
+        $c = Read-SoundJson $Contract; Assert-Contract $c
+        $contractName = 'purpose-contract.json'
+        if ($c.id -ceq 't0-physical-20261020-elevenlabs-purpose-3s-mp3') { $contractName = 't0-physical-contract.json' }
+        Require-Sound ((Test-Within $manifestFull $script:SoundHome) -and [IO.Path]::GetExtension($manifestFull) -ceq '.json' -and $contractFull -ceq [IO.Path]::GetFullPath((Join-Path $script:SoundHome $contractName))) 'Purpose generation inputs must be inside the reviewed sound-design subtree with its exact v2 contract.'
         $relative = $manifestFull.Substring($script:SoundRoot.Length + 1).Replace('\','/')
-        & git -C $script:SoundRoot ls-files --error-unmatch -- $relative tools/sound-design/purpose-contract.json tools/sound-design/sound-design.ps1 1>$null 2>$null
+        $contractRelative = $contractFull.Substring($script:SoundRoot.Length + 1).Replace('\','/')
+        & git -C $script:SoundRoot ls-files --error-unmatch -- $relative $contractRelative tools/sound-design/sound-design.ps1 1>$null 2>$null
         $tracked = ($LASTEXITCODE -eq 0)
         $status = @(& git -C $script:SoundRoot status --porcelain --untracked-files=all -- tools/sound-design 2>$null)
         Assert-PurposeCheckpointState $tracked ($LASTEXITCODE -eq 0 -and $status.Count -eq 0)

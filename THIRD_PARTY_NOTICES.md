@@ -220,6 +220,51 @@ Technical codec/level/boundary screens pass for the selected encoded file.
 Actual client lifecycle, one/eight-machine and mixed-factory listening remain
 unobserved. The owner, not the waveform screen, judges artistic quality.
 
+## Physical T0 water and extraction game-audio imports
+
+The owner's 2026-10-20 master directive and current Sol6.1 delegation authorize
+technical game incorporation of the two selected resources below, after source
+rights and actual codec QC. These notices precede binary import. Earlier Quern,
+Mixer and visual-model notices/evidence above remain unchanged.
+
+- Provider/model: ElevenLabs Sound Effects, `eleven_text_to_sound_v2`.
+- Purpose/run: `t0-physical-soundscape-replacement` /
+  `t0-physical-20261020-01`, generated from reviewed checkpoint
+  `1789ce9098d444a6f7dd70f37695c3b1dd1525aa`.
+- Request: original non-imitative prompts in
+  [the physical manifest](tools/sound-design/t0-physical-purpose.json),
+  specified3-second loop, influence0.3, `mp3_44100_128`.
+  Six actual HTTP200 sources; no retries or ambiguous requests. Three families
+  were compared, but the two unsuitable generated combustion candidates are
+  not imported. Native furnace crackle is referenced instead.
+- Processing: existing fixed-3dB mono44.1kHz PCM16 preview, then constant
+  `min(0.03/RMS, 0.35/peak)` normalization and bitexact Vorbis q4 with metadata
+  removed. Neither selected file is trimmed, faded, crossfaded or time-stretched.
+  All source/preview/provenance/processing/QC hashes and preserved rejections are in
+  [the public sound record](docs/assets/t0-experience-audio.json).
+- Rights basis: existing owner-confirmed paid entitlement at generation and
+  already reviewed [ElevenCreative Terms](https://elevenlabs.io/creative-terms),
+  Sound Effects exhibit. No new account/subscription inquiry is performed.
+  The grant permits internal generation; the separate owner/coordinator direction
+  permits technical game incorporation, not public release acceptance.
+- Distribution: incorporated game audio only, **not** standalone/isolated samples
+  or a sound library; no CC0/MIT relicensing of the audio. Keep
+  `assets/grindless/AUDIO-NOTICE.txt` in the game. Raw/unselected media, grants,
+  private receipts and credentials/access locations are not distributed.
+- Technical selection is not artistic listening, factory-mix, fatigue, native
+  playback or human/T0/release approval. Those checks remain explicit.
+
+| Selected resource | Source / generation time | SHA-256 of distributed Ogg |
+| --- | --- | --- |
+| `sounds/t0_water_flow.ogg`,33,490B | `water-flow-b`,2026-10-20T16:46:29.3653447Z | `5fbfa5c1906fcc98ac310f3feaa9959fd7838ef5f4f6143dc293d37eadc6aeb1` |
+| `sounds/t0_mineral_extraction.ogg`,29,241B | `mineral-extraction-b`,2026-10-20T16:46:43.7253653Z | `a634f9a17c5f5c71e7fd20da8f79ec5453715d125b1084c557de54bb380ba9fb` |
+
+No Minecraft audio is copied: the retained legacy interaction IDs reference native
+tripwire-attachment, lever-latch and iron-trapdoor safety-trip events; combustion
+references native furnace crackle. The two old hum IDs remain registered but
+intentionally silent. All five synthesized runtime Oggs are retired, not relabelled
+as these physical sources. Historical development WAV writers are not runtime media.
+
 ## Pack dependencies (not imports)
 
 The first local client-pack manifest names launcher-managed dependency files but does **not** copy

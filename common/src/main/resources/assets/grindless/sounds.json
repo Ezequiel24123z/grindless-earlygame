@@ -1,15 +1,11 @@
 {
   "machine_hum": {
     "subtitle": "subtitles.grindless.machine_hum",
-    "sounds": [
-      "grindless:machine_hum"
-    ]
+    "sounds": []
   },
   "machine_hum_heavy": {
     "subtitle": "subtitles.grindless.machine_hum_heavy",
-    "sounds": [
-      "grindless:machine_hum_heavy"
-    ]
+    "sounds": []
   },
   "t0_grinding": {
     "subtitle": "subtitles.grindless.t0_grinding",
@@ -34,19 +30,57 @@
   "pylon_link": {
     "subtitle": "subtitles.grindless.pylon_link",
     "sounds": [
-      "grindless:pylon_link"
+      {
+        "name": "minecraft:block.tripwire.attach",
+        "type": "event"
+      }
     ]
   },
   "relay_click": {
     "subtitle": "subtitles.grindless.relay_click",
     "sounds": [
-      "grindless:relay_click"
+      {
+        "name": "minecraft:block.lever.click",
+        "type": "event"
+      }
     ]
   },
   "brownout_alarm": {
     "subtitle": "subtitles.grindless.brownout_alarm",
     "sounds": [
-      "grindless:brownout_alarm"
+      {
+        "name": "minecraft:block.iron_trapdoor.close",
+        "type": "event"
+      }
+    ]
+  },
+  "t0_fire_draft": {
+    "subtitle": "subtitles.grindless.t0_fire_draft",
+    "sounds": [
+      {
+        "name": "minecraft:block.furnace.fire_crackle",
+        "type": "event"
+      }
+    ]
+  },
+  "t0_water_flow": {
+    "subtitle": "subtitles.grindless.t0_water_flow",
+    "sounds": [
+      {
+        "name": "grindless:t0_water_flow",
+        "stream": false,
+        "attenuation_distance": 10
+      }
+    ]
+  },
+  "t0_mineral_extraction": {
+    "subtitle": "subtitles.grindless.t0_mineral_extraction",
+    "sounds": [
+      {
+        "name": "grindless:t0_mineral_extraction",
+        "stream": false,
+        "attenuation_distance": 12
+      }
     ]
   }
 }

@@ -1,0 +1,81 @@
+{
+  "schema": "grindless.sound-purpose-manifest/v2",
+  "source_revision": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+  "policy": "ADR-0156",
+  "purpose_id": "t0-physical-soundscape-replacement",
+  "run_id": "t0-physical-20261020-01",
+  "label": "Physical T0 workshop soundscape",
+  "review_status": "reviewed",
+  "contract_id": "t0-physical-20261020-elevenlabs-purpose-3s-mp3",
+  "max_calls": 6,
+  "automatic_rerolls": false,
+  "licence_scope": "internal_audition_only",
+  "runtime_import_approved": false,
+  "publication_approved": false,
+  "technical_qc_is_artistic_approval": false,
+  "mechanism_evidence": "Full b8bd5e T0 audit: Firing Chamber has carbon-backed hot processing and Biomass Dynamo burns fuel; share a quiet combustion/draft bed. Hand Pump moves water only while RUNNING; Settling Trough separates wet feed; Geological Collector consumes source water to gather aggregate/clay; share restrained narrow water movement, not the thick Mixer paddle sound. Crude Extractor performs powered mineral extraction, not stone-disc milling; use a compact granular extraction texture without an invented electric drone. Preserve exact Quern A and Mixer A. Biocultivator has daylight/moisture culture, not a proven aerator; Bench and physical Data Core calibration have no proven continuous moving mechanism. These and passive tanks/parts/logistics stay intentionally quiet. Native physical interaction events need no paid generation.",
+  "cost_note": "New wave ceiling eight POSTs, at most four new families and two initial candidates per family; actual finite selection is three families/six POSTs. At the existing conditional public estimate of 40 credits/second, six specified 3-second requests estimate 720 credits. This is not an invoice or guaranteed USD price. Existing paid subscription attestation is reused without account/billing queries. No paid images, automatic retries, unused-slot rerolls or historical-budget reset.",
+  "families": [
+    {
+      "id": "fire_draft",
+      "machines": ["firing_chamber", "biomass_dynamo"],
+      "candidates": [
+        {
+          "id": "fire-draft-a",
+          "label": "A - Quiet charcoal / enclosed draft",
+          "difference": "Small enclosed carbon fire, restrained dry crackle beneath a soft air draw.",
+          "prompt": "A small enclosed charcoal fire steadily heats a primitive ceramic chamber. Quiet dry ember crackle and a soft natural air draw through a narrow opening, close and contained, no large flames. Even low-fatigue working texture, seamless three-second repeat, no start or stop. No electric hum, tonal drone, machinery motor, music, voices, beeps, alarms or cinematic rumble.",
+          "artistic_approval": "unapproved"
+        },
+        {
+          "id": "fire-draft-b",
+          "label": "B - Damped embers / softer draft",
+          "difference": "Same combustion role with finer, less bright crackle and a gentler breath of air.",
+          "prompt": "Close, subdued embers burning steadily inside a small brick and ceramic firebox. Fine muted fuel crackle under a gentle breath of naturally drawn air; smaller and softer than a campfire. Uniform unobtrusive texture, seamless three-second repeat, no ignition or shutdown. No electric hum, sustained musical tone, motor, music, voice, alarm, metallic impacts or dramatic fire roar.",
+          "artistic_approval": "unapproved"
+        }
+      ]
+    },
+    {
+      "id": "water_flow",
+      "machines": ["hand_pump", "settling_trough", "geological_collector"],
+      "candidates": [
+        {
+          "id": "water-flow-a",
+          "label": "A - Narrow clay-channel flow",
+          "difference": "Small continuous water movement and restrained fine sediment, no thick paddle friction.",
+          "prompt": "A small steady stream of water moves through a narrow clay channel and across fine mineral sediment. Close soft trickling, delicate low gurgles and tiny wet grains; restrained and compact, not a river. Even low-fatigue working texture, seamless three-second repeat, no start or stop. No paddle, electric motor, hum, tonal drone, music, voices, large splashes, bubbling tank or cinematic effects.",
+          "artistic_approval": "unapproved"
+        },
+        {
+          "id": "water-flow-b",
+          "label": "B - Softer contained water draw",
+          "difference": "Same small moving-water role with smoother draw and fewer bright droplets.",
+          "prompt": "Quiet contained water movement in a small primitive clay water-transfer channel. A gentle continuous draw with soft liquid folds, occasional tiny gurgles and muted droplets over fine sediment. Close, smooth and low fatigue, seamless three-second working repeat, no start or stop. No motor, grinding stone, paddle, electronic hum, music, voice, large splashes, boiling or dramatic rushing.",
+          "artistic_approval": "unapproved"
+        }
+      ]
+    },
+    {
+      "id": "mineral_extraction",
+      "machines": ["crude_extractor"],
+      "candidates": [
+        {
+          "id": "mineral-extraction-a",
+          "label": "A - Compact mineral scrape",
+          "difference": "Restrained mineral-working head and granular extraction, not a quern disc or electric engine.",
+          "prompt": "A compact primitive mineral-extraction head steadily scrapes and loosens coarse stone. Restrained irregular mechanical rasp, dry grit falling and small dull contact knocks; close and contained, no large drill engine. Even low-fatigue working texture, seamless three-second repeat, no start or stop. No stone milling discs, electronic hum, tonal drone, music, voices, alarms or cinematic impacts.",
+          "artistic_approval": "unapproved"
+        },
+        {
+          "id": "mineral-extraction-b",
+          "label": "B - Damped granular contact",
+          "difference": "Same extraction mechanism with softer contact and less high-frequency rasp.",
+          "prompt": "Close small-scale mineral extraction: a damped mechanical head works against stone with soft gritty scraping, loose grains shifting and sparse low dull contact sounds. Compact, steady and restrained, less bright rasp, seamless three-second repeat, no start or stop. No electric engine or synthesized drone, quern milling discs, rhythmic hammering, music, speech, beeps or exaggerated rockfalls.",
+          "artistic_approval": "unapproved"
+        }
+      ]
+    }
+  ],
+  "next_gate": "Use the coordinator-delegated finite purpose to bind one new private grant to the clean reviewed checkpoint, exact manifest/contract/runner hashes and one ignored output directory. Generate these six candidates once through the reviewed runner; preserve every receipt/source. Compare actual decoded QC and normalize selected files reproducibly, retain source rights and commit notices before binary import. Stop on a missing credential, HTTP failure or ambiguous delivery, never retry or reset. Complete runtime/resource contracts and return source for coordinated build/integration. Owner listening and mixed-workshop fatigue remain pending."
+}

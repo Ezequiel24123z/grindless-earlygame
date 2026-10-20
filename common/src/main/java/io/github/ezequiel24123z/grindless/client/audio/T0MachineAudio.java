@@ -6,10 +6,17 @@ import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.fluid.HandPumpBlock;
+import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlock;
+import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlock;
+import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlock;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import io.github.ezequiel24123z.grindless.registry.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -20,6 +27,8 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
@@ -28,14 +37,18 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-/** One native positional working loop per eligible Quern or Clay Mixer, owned by the current client. */
+/** Physical working beds and sparse state-edge feedback, owned by the current client. */
 public final class T0MachineAudio {
 
-    private final QuernLoopTracker<ProcessMachineBlockEntity, MachineSound> loops =
+    private final T0SoundscapePolicy<BlockEntity> feedback = new T0SoundscapePolicy<>();
+    private WeakReference<Object> onsetWorld = new WeakReference<>(null);
+    private WeakReference<Object> onsetPlayer = new WeakReference<>(null);
+    private final QuernLoopTracker<BlockEntity, MachineSound> loops =
             new QuernLoopTracker<>(new QuernLoopTracker.Playback<>() {
                 @Override
-                public MachineSound start(long position, ProcessMachineBlockEntity source) {
-                    MachineSound sound = new MachineSound(position, source, familyFor(source.kind()));
+                public MachineSound start(long position, BlockEntity source) {
+                    // Admission rechecks mutable status; constructing a voice captures only its stable mechanism.
+                    MachineSound sound = new MachineSound(position, source, familyFor(source));
                     Minecraft.getInstance().getSoundManager().play(sound);
                     return sound;
                 }
@@ -64,24 +77,37 @@ public final class T0MachineAudio {
     public static void register() {
         T0MachineAudio audio = new T0MachineAudio();
         ClientTickEvent.CLIENT_POST.register(audio::tick);
-        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> audio.loops.clear());
-        ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> audio.loops.clear());
-        ClientLifecycleEvent.CLIENT_STOPPING.register(client -> audio.loops.clear());
+        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(player -> audio.clear());
+        ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register((oldPlayer, newPlayer) -> audio.clear());
+        ClientLifecycleEvent.CLIENT_STOPPING.register(client -> audio.clear());
         ReloadListenerRegistry.register(PackType.CLIENT_RESOURCES,
-                (ResourceManagerReloadListener) resources -> audio.loops.clear(),
+                (ResourceManagerReloadListener) resources -> audio.clear(),
                 Grindless.id("t0_machine_audio"));
+    }
+
+    private void clear() {
+        loops.clear();
+        feedback.clear();
+        onsetWorld.clear();
+        onsetPlayer.clear();
     }
 
     private void tick(Minecraft client) {
         ClientLevel level = client.level;
         boolean paused = client.isPaused() || client.getOverlay() != null;
         boolean enabled = enabled(client);
+        if (onsetWorld.get() != level || onsetPlayer.get() != client.player || !enabled) {
+            feedback.clear();
+            onsetWorld = new WeakReference<>(level);
+            onsetPlayer = new WeakReference<>(client.player);
+        }
         if (level == null || client.player == null || !enabled || paused) {
             loops.tick(level, client.player, Map.of(), paused, enabled);
             return;
         }
         Vec3 listener = client.gameRenderer.getMainCamera().getPosition();
-        Map<Long, ProcessMachineBlockEntity> eligible = new HashMap<>();
+        Map<Long, BlockEntity> eligible = new HashMap<>();
+        Map<Long, BlockEntity> cranks = new HashMap<>();
         for (int x = QuernLoopTracker.minChunk(listener.x); x <= QuernLoopTracker.maxChunk(listener.x); x++) {
             for (int z = QuernLoopTracker.minChunk(listener.z); z <= QuernLoopTracker.maxChunk(listener.z); z++) {
                 LevelChunk chunk = level.getChunkSource().getChunk(x, z, ChunkStatus.FULL, false);
@@ -89,14 +115,30 @@ public final class T0MachineAudio {
                     continue;
                 }
                 for (var blockEntity : chunk.getBlockEntities().values()) {
-                    if (blockEntity instanceof ProcessMachineBlockEntity machine
-                            && eligible(level, chunk, machine, listener, familyFor(machine.kind()))) {
-                        eligible.put(machine.getBlockPos().asLong(), machine);
+                    if (!present(level, chunk, blockEntity, listener)) {
+                        continue;
+                    }
+                    var state = chunk.getBlockState(blockEntity.getBlockPos());
+                    Family family = familyFor(blockEntity);
+                    if (eligible(level, chunk, blockEntity, listener, family)) {
+                        eligible.put(blockEntity.getBlockPos().asLong(), blockEntity);
+                    }
+                    if (blockEntity instanceof HandCrankDynamoBlockEntity
+                            && state.is(ModBlocks.HAND_CRANK_DYNAMO.get())
+                            && state.getValue(HandCrankDynamoBlock.STATUS) == MachineStatus.RUNNING) {
+                        cranks.put(blockEntity.getBlockPos().asLong(), blockEntity);
                     }
                 }
             }
         }
-        loops.tick(level, client.player, eligible, false, true);
+        Map<Long, BlockEntity> audible = T0SoundscapePolicy.nearest(eligible,
+                machine -> machine.getBlockPos().distToCenterSqr(listener.x, listener.y, listener.z));
+        loops.tick(level, client.player, audible, false, true);
+        feedback.onsets(cranks).forEach((position, source) -> {
+            BlockPos pos = source.getBlockPos();
+            level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    ModSounds.RELAY_CLICK.get(), SoundSource.BLOCKS, 0.18F, 1.0F, false);
+        });
     }
 
     private static boolean enabled(Minecraft client) {
@@ -104,49 +146,82 @@ public final class T0MachineAudio {
                 && client.options.getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F;
     }
 
-    private static boolean eligible(ClientLevel level, LevelChunk chunk,
-                                    ProcessMachineBlockEntity machine, Vec3 listener, Family family) {
+    private static boolean present(ClientLevel level, LevelChunk chunk,
+                                   BlockEntity machine, Vec3 listener) {
         BlockPos pos = machine.getBlockPos();
-        if (family == null || familyFor(machine.kind()) != family
-                || machine.isRemoved() || machine.getLevel() != level
-                || chunk.getBlockEntities().get(pos) != machine
-                || !QuernLoopTracker.inRange(pos.getX() + 0.5 - listener.x,
-                        pos.getY() + 0.5 - listener.y, pos.getZ() + 0.5 - listener.z)) {
-            return false;
+        return !machine.isRemoved() && machine.getLevel() == level
+                && chunk.getBlockEntities().get(pos) == machine
+                && QuernLoopTracker.inRange(pos.getX() + 0.5 - listener.x,
+                        pos.getY() + 0.5 - listener.y, pos.getZ() + 0.5 - listener.z);
+    }
+
+    private static boolean eligible(ClientLevel level, LevelChunk chunk,
+                                    BlockEntity machine, Vec3 listener, Family family) {
+        return family != null && present(level, chunk, machine, listener)
+                && familyFor(machine) == family
+                && runningBlock(machine, chunk.getBlockState(machine.getBlockPos()))
+                && machine.getBlockPos().distToCenterSqr(listener.x, listener.y, listener.z)
+                        < family.radius * family.radius;
+    }
+
+    private static boolean runningBlock(BlockEntity source, BlockState state) {
+        if (source instanceof ProcessMachineBlockEntity machine
+                && state.getBlock() instanceof ProcessMachineBlock block
+                && block.kind() == machine.kind()) {
+            return state.getValue(ProcessMachineBlock.STATUS) == MachineStatus.RUNNING;
         }
-        var state = chunk.getBlockState(pos);
-        return state.getBlock() instanceof ProcessMachineBlock block && block.kind() == machine.kind()
-                && familyFor(block.kind()) == family
-                && state.getValue(ProcessMachineBlock.STATUS) == MachineStatus.RUNNING;
+        return (source instanceof CrudeExtractorBlockEntity && state.is(ModBlocks.CRUDE_EXTRACTOR.get())
+                && state.getValue(CrudeExtractorBlock.STATUS) == MachineStatus.RUNNING)
+                || (source instanceof HandPumpBlockEntity && state.is(ModBlocks.HAND_PUMP.get())
+                && state.getValue(HandPumpBlock.STATUS) == MachineStatus.RUNNING);
+    }
+
+    private static Family familyFor(BlockEntity source) {
+        if (source instanceof ProcessMachineBlockEntity machine) {
+            return familyFor(machine.kind());
+        }
+        if (source instanceof CrudeExtractorBlockEntity) {
+            return Family.EXTRACTION;
+        }
+        return source instanceof HandPumpBlockEntity ? Family.WATER_FLOW : null;
     }
 
     private static Family familyFor(ProcessMachineKind kind) {
         return switch (kind) {
             case QUERN -> Family.GRINDING;
             case CLAY_MIXER -> Family.WET_WORK;
+            case SETTLING_TROUGH, GEOLOGICAL_COLLECTOR -> Family.WATER_FLOW;
             default -> null;
         };
     }
 
     private enum Family {
         GRINDING(ModSounds.T0_GRINDING, 1.0F),
-        WET_WORK(ModSounds.T0_WET_WORK, 0.35F);
+        WET_WORK(ModSounds.T0_WET_WORK, 0.35F),
+        WATER_FLOW(ModSounds.T0_WATER_FLOW, 0.25F, 10),
+        EXTRACTION(ModSounds.T0_MINERAL_EXTRACTION, 0.3F, 12);
 
         private final RegistrySupplier<SoundEvent> event;
         private final float volume;
+        private final int radius;
 
         Family(RegistrySupplier<SoundEvent> event, float volume) {
+            this(event, volume, QuernLoopTracker.RANGE);
+        }
+
+        Family(RegistrySupplier<SoundEvent> event, float volume, int radius) {
             this.event = event;
             this.volume = volume;
+            this.radius = radius;
         }
     }
 
     private static final class MachineSound extends AbstractTickableSoundInstance implements QuernLoopTracker.Voice {
-        private final WeakReference<ProcessMachineBlockEntity> source;
+        private final WeakReference<BlockEntity> source;
         private final Family family;
         private long heartbeat;
 
-        private MachineSound(long position, ProcessMachineBlockEntity source, Family family) {
+        private MachineSound(long position, BlockEntity source, Family family) {
             super(family.event.get(), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
             this.source = new WeakReference<>(source);
             this.family = family;
@@ -165,7 +240,7 @@ public final class T0MachineAudio {
         @Override
         public boolean canPlaySound() {
             Minecraft client = Minecraft.getInstance();
-            ProcessMachineBlockEntity machine = source.get();
+            BlockEntity machine = source.get();
             if (isStopped() || machine == null || client.level == null || client.player == null
                     || !enabled(client)) {
                 return false;
