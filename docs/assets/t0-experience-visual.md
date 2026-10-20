@@ -216,6 +216,28 @@ legacy 19/65/257 remain separately reported. No new PNG permutation is needed.
 The SCREEN rear plate is only two model units high in `164ee9a`; its role/arrow
 legibility needs an explicit native-client check, not a source-sheet approval.
 
+### Approved forebed UP readability exception
+
+The coordinator subsequently requires a real source correction, not only that
+observation. Both CHANNEL and SCREEN port models reuse their existing `port_*`
+overlay on one UP plane from `[3.01,4.01,0.01]` to `[12.99,4.01,6.99]`,
+UV `[2,3,14,10]`, rotation 0 and `minecraft:cutout`. This sits above the existing
+bed at y4, between the rails and before the SCREEN bars at z7..9. The crop
+removes only transparency: all four glyphs' alpha is inside x2..13/y3..9.
+The original horizontal facings, base boxes and collision stay unchanged; the
+rear strip is secondary and UP remains closed to automation.
+
+This is an additive exception to the default full-face UV, recorded in
+[`port-assets.json`](../../tools/visual-assets/port-assets.json), not a new
+texture, family permutation or implicit top-transfer interface. The infrastructure
+owner supplies the model follow-up and checks actual generated JSON against
+`WorkshopGeometry`, free-plane placement, no lost alpha and a five-source-pixel
+mark at least four model units high. Those checks are expected obligations;
+their execution/result has not been reported to this visual unit. No JDK/GPU,
+PNG regeneration or new native/client/artistic pass is performed here.
+The source-bound inventory and prior receipts above keep their original revisions;
+refresh only the composed coordinator snapshot after its actual model generation.
+
 The coordinator owns root changelog/map/README/ADR/handoff reconciliation,
 combined build/package/registration/client qualification and deployment.
 Rebind any quest/Guide/shop presentation changes to their composed sources;
@@ -229,7 +251,7 @@ there is no need to repeat the old full 1,602-file proof just for more counters.
 
 | Category | Current entry |
 | --- | --- |
-| COMPLETED | Complete global source/pixel inventory and 13 deterministic final sheets plus two baseline comparisons; reusable presets; 62 checked T0 state fronts/four shared overlays; actual 45 Python cases plus nine affected final projection checks, two equal 66-file JDK stages and existing Multitool/guide regressions. |
+| COMPLETED | Complete global source/pixel inventory and 13 deterministic final sheets plus two baseline comparisons; reusable presets; 62 checked T0 state fronts/four shared overlays; actual 45 Python cases plus nine affected final projection checks, two equal 66-file JDK stages and existing Multitool/guide regressions. The owner-approved forebed UP UV exception is durably recorded without changing PNGs. |
 | BLOCKED | None. |
 | NOT EXECUTED | Comfy/GPU inference (unnecessary), native client, port registration/integration in this branch, combined build/package/deployment. |
 | NEEDS HUMAN VALIDATION | In-client lighting/placement/state/rotations, hotbar/JEI/quests, GUI comfort and artistic quality. |

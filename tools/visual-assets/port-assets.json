@@ -18,6 +18,23 @@
   ],
   "model_contract": {
     "uv": [0, 0, 16, 16],
+    "uv_scope": "Default side/rear/firing plates. The owner-approved forebed UP plate has the transparent-margin-only crop below.",
+    "forebed_up": {
+      "applies_to_port_ids": ["settling_item_input", "settling_fluid_input", "settling_item_output", "settling_fluid_output"],
+      "face": "up",
+      "from": [3.01, 4.01, 0.01],
+      "to": [12.99, 4.01, 6.99],
+      "uv": [2, 3, 14, 10],
+      "rotation": 0,
+      "render_type": "minecraft:cutout",
+      "texture": "same port_* role overlay; no new PNG",
+      "crop_boundary": "All existing alpha lies within source x2..13/y3..9 inclusive; discard only transparent margins.",
+      "placement_boundary": "Just above bed y4, between rails x3..13 and before SCREEN bars z7..9; no collision/base-box change.",
+      "rear_mark": "Retained as a secondary cue, not the only readable role/direction mark.",
+      "capability_boundary": "UP remains closed to transfer; this is presentation only.",
+      "approval": "Coordinator-approved technical follow-up; infrastructure source and executable receipt reported separately.",
+      "human_visual_approval": false
+    },
     "state": "horizontal facing only; no status",
     "role_shape": "outlined square=item; droplet=fluid",
     "direction_shape": "left arrow into role=input; right arrow away from role=output",
