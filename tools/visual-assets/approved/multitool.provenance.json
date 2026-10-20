@@ -53,6 +53,8 @@
   "integrity_addendum1_sha256": "7baaa13d2a996c5cea9f8835eb97341c62c7b45ba6e80df417ee74c8289c0b0f",
   "integrity_addendum2_sha256": "0936883c8ac58afe8bfbf85b5d86aa0d03450ec4ab746b9ca914fac851565890",
   "comparison_sha256": "bfc4487955ec8678db9e397e9d7a1f531b0039dc10404d465e268d0c210b7f45",
+  "jdk_validation": "tools/visual-assets/poc/multitool-jdk-validation.json",
+  "jdk_validated_source_revision": "c214d437a652cb1bcd1c698694953be67331089a",
   "license_notice": "THIRD_PARTY_NOTICES.md#supervised-local-multitool-visual-candidate",
   "not_claimed": ["human art approval", "native client/JEI rendering", "T0 acceptance", "RC readiness", "new deployment"]
 }
