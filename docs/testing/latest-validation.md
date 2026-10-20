@@ -34,6 +34,14 @@ All new controlled graphical checks remain blocked by the unavailable authorized
 remote desktop path. Owner unavailability is not an exemption. Never promote a
 headless/server/source check to that required longitudinal-readiness gate.
 
+Independent read-only composition QA onb54 adds no new high-confidence quest/
+barter caller defect, but finds a real P2 in WorkshopPort: a synchronous invalidator
+can replace controllerA withB after `current()` capturesA; a later face check
+validatesB while insertion/extraction still mutatesA. This is distinct from
+`setRemoved` ordering and requires a real formed-port callback regression, not
+only a fake quota view. The infrastructure author owns the fix; no summary alone
+closes it. The two QA reports are source traces, not new JVM/native passes.
+
 ## Qualified747 package, production boot and exact development deployment
 
 Frozen `747ebcacdb063f6faa3c69c7eb9b45c407f32bdd` passes the existing

@@ -177,6 +177,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0163](#adr-0163--use-physical-barter-and-local-evidence-before-economic-rebalancing) | Use physical barter and local evidence before economic rebalancing | Accepted |
 | [0164](#adr-0164--extend-native-tank-custody-and-bounded-controller-backed-t0-ports) | Extend native tank custody and bounded controller-backed T0 ports | Accepted |
 | [0165](#adr-0165--provide-original-optional-inspection-without-a-new-pack-dependency) | Provide original optional inspection without a new pack dependency | Accepted |
+| [0166](#adr-0166--retire-synthesized-distribution-with-physical-families-and-intentional-silence) | Retire synthesized distribution with physical families and intentional silence | Accepted |
+| [0167](#adr-0167--make-state-and-port-art-readable-without-color-or-normal-build-generation-services) | Make state and port art readable without color or normal-build generation services | Accepted |
 
 ---
 
@@ -7716,3 +7718,72 @@ an unreviewed mandatory dependency or a silently changed playable pack. Deliver
 the original native equivalent first; no Jade jar/API class/implementation is
 copied or shaded. Owner-approved integration or alternative overlay selection can
 extend the neutral snapshot later without replacing machine execution.
+
+---
+
+## ADR-0166 — Retire synthesized distribution with physical families and intentional silence
+
+**Status.** Accepted T0 experience strategy; implementation/runtime/client
+qualification and human listening remain separate.
+
+**Decision.** Remove the five legacy synthesized Oggs from distribution and their
+periodic hum/click/chirp fallback callers. Preserve their seven existing registered
+event identities: unused hums are deliberately silent, legitimate interaction
+events resolve to native physical game sounds. Do not copy vanilla sound assets.
+Keep Quern A and Mixer A byte-identical; add only justified physical families.
+
+The new finite six-request purpose produces six HTTP200 sources without retries
+or ambiguity. Water B and extraction B pass technical decoding/normalization and
+are selected. Neither generated fire candidate is suitable; preserve the actual
+failed adaptation and use native furnace crackle rather than reroll for sunk cost.
+About720 credits is an estimate, not an account charge or guaranteed USD quote.
+The spent6/6 ledger and rejected sources remain immutable/private as appropriate.
+
+Use one existing tracker and one loaded-nearby-chunk scan, with at most eight
+nearest managed sources and short process-appropriate new-family ranges/gains.
+Retain identity/kind/family separation, clean retirement, pause/mute/reload/
+dimension/removal handling and bounded observation of late-start sources.
+No independent second loop manager or unbounded queue is introduced.
+
+Biology, Bench, calibration, storage, structure parts and ordinary logistics can
+be intentionally quiet; a material or block does not require a permanent sound.
+New ports are six structural silence rows, not aliases of their controller's
+working family. Ten event definitions/aliases must resolve or explicitly represent
+unused silence, with no synthesized runtime resurrection by normal conversion.
+
+Source/codec/lifecycle and one/eight/mixed-workshop listening are different proofs.
+No artistic approval, audible native lifecycle, fatigue or final mix follows from
+technical selection. Preserve the raw generation/audition worktree until its
+private evidence has been retained; never archive it merely because source is clean.
+
+---
+
+## ADR-0167 — Make state and port art readable without color or normal-build generation services
+
+**Status.** Accepted deterministic visual direction under ADR-0161.
+
+**Decision.** Preserve the incumbent original T0 material/geometry world. Fix the
+observed shared blocked/out-of-band mask by giving the five machine states distinct
+shape marks, not just different colors. Apply the justified change to62 T0 fronts;
+retain the other519 baseline PNGs, protected nine material/core sprites, three
+books and canonical Multitool. Four original role overlays serve six port variants
+without a duplicated texture set per orientation/casing.
+
+A rear surface only two model units high cannot carry an entire16px role glyph
+legibly. Retain it as a secondary cue and add the same role texture on the existing
+open bed's readable top area before the screen bars. The approved planar bounds/
+UV crop preserve base/collision geometry and do not open an automation face.
+Human in-world distance/light/readability still requires real client review.
+
+Comfy source generation remains optional development-only work. Extend reusable
+item/face/family/palette/mask/contact-sheet presets and their reservation/model/spec
+bindings, but do not spend diffusion to fix a deterministic mark defect. This
+wave needs no new inference/model download/paid image service. The old Multitool
+2/2 generation record remains untouched.
+
+Normal runtime artwork generation stays JDK-only and deterministic; approved
+source bytes are validated/copied before output. Python/Pillow tools inventory
+and process candidates, not the normal mod build. Contact sheets explicitly show
+actual source pixels/native1x/nearest8x/light-dark, not Minecraft screenshots.
+Refresh the manifest only after composed models exist; do not relabel an old
+19-block projection as the new25-block/port model result.

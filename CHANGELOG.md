@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the physical sound and color-independent art strategies (ADR-0166–0167).**
+  Retire five synthesized distributed files without losing event IDs; preserve
+  Quern/Mixer and selected physical water/extraction sources, with native fire
+  after rejected generation. Keep one bounded tracker and intentional structural
+  silence. Fix62 T0 state fronts and reuse four role overlays without diffusion,
+  changing collision or claiming Minecraft/human visual approval.
 - **Preserve actual early experience qualification and repair obligations.**
   Exact265/Tank759 passes common/Forge,120 Tank and285 Fluid checks; closed raw
   outputs are retained after an unrequested execution-root cleanup. Economy00
