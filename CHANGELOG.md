@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve actual early experience qualification and repair obligations.**
+  Exact265/Tank759 passes common/Forge,120 Tank and285 Fluid checks; closed raw
+  outputs are retained after an unrequested execution-root cleanup. Economy00
+  fails common compilation at ShopScreen68, so its writer/tests/JSON are not
+  called passed; the author owns the bounded repair loop. The issue form passes
+  real existing-PyYAML parsing. Required graphical validation remains blocked,
+  not replaced by these automatic results.
 - **Fix the experience architecture against actual mature-source precedents.**
   ADR-0164 limits hatches to existing T0 shapes/controller stores, including
   reform identity retirement and native output-quota admission. ADR-0165 chooses

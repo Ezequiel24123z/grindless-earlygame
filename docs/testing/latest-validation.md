@@ -1,5 +1,39 @@
 # Current T0 rework validation
 
+## New experience programme — actual early proof and open executable red
+
+The old747/main proof below is not a pass for the new experience scope.
+Exact integration265275c (Tank759 application inputs equal) passes actual
+common/Forge/classpath Gradle0 in84.7s, BasicTank120/0 and Fluid285/0. The parent
+hash-verifies and preserves the two closed raw tool receipts:
+`3e3184a7c65fe84de03ae381ef77517f92aadb0cbbddb7f27bea4602076acb73`
+and `b2591e314150c872be439d872ef820a16bf6e5037fbfda694f37e6ce42ee3f5c`.
+No successful JVM step is replayed to improve its observer.
+
+Operational limitations remain explicit: an incorrect first working directory
+runs no qualification task; the executor then removes the new owned worktree
+without being asked, losing its classpath/build artifacts. Closed tool receipts
+outside it survive, are copied verbatim and are not reconstructed. Subsequent
+execution roots must be retained. This early proof does not cover the later164
+port/quota/creative changes or actual Forge bucket capability interaction.
+
+Economy source00b377b has a real compile red:
+`ShopScreen.java:68`, extra closing parenthesis/`; expected`. The prior malformed
+Gradle flag is a separate wrapper red. The writer, CheckOnly and Shop/Telemetry/
+Economy Java checks have **not executed**, not exit0. The original author now
+owns the explicit retained PC root and ordinary repair/retest loop. No cost JSON
+is fabricated. Both native tasks release0Java and preserve original clone70901.
+
+The issue form does receive an actual existing-PyYAML parse and shape check:
+exit0/16 unique field IDs, no package installation or form submission. A first
+read-only Dev preservation probe fails PowerShell syntax before observation; its
+corrected probe returns0Java and no existing saves/options/config/screenshots
+under the current managed Dev game directory. No instance file is mutated.
+
+All new controlled graphical checks remain blocked by the unavailable authorized
+remote desktop path. Owner unavailability is not an exemption. Never promote a
+headless/server/source check to that required longitudinal-readiness gate.
+
 ## Qualified747 package, production boot and exact development deployment
 
 Frozen `747ebcacdb063f6faa3c69c7eb9b45c407f32bdd` passes the existing
