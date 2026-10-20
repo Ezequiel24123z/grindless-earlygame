@@ -40,10 +40,16 @@ public final class NativeFluidStore {
     }
 
     /** A native store reached through one still-valid endpoint identity and face; the check is read-only. */
-    public record Access(NativeFluidStore store, BooleanSupplier allowed) {
+    public record Access(NativeFluidStore store, BooleanSupplier allowed, IntSupplier limit) {
         public Access {
             Objects.requireNonNull(store);
             Objects.requireNonNull(allowed);
+            Objects.requireNonNull(limit);
+        }
+
+        /** Existing full-store endpoints keep their original unbounded-by-role access. */
+        public Access(NativeFluidStore store, BooleanSupplier allowed) {
+            this(store, allowed, () -> store.contents().millibuckets());
         }
     }
 
@@ -54,6 +60,32 @@ public final class NativeFluidStore {
             }
             sources = List.copyOf(sources);
         }
+    }
+
+    /** Moves an exact native amount with the same receipt/compensation and deferred notifications. */
+    public static boolean transfer(Access source, NativeFluidStore destination, FluidState state,
+                                   BooleanSupplier accepts) {
+        if (source.store() == destination || state == null || state.isEmpty() || !accepts.getAsBoolean()
+                || !source.store().contents().equals(state.withAmount(source.store().contents().millibuckets()))) {
+            return false;
+        }
+        Access guarded = new Access(source.store(),
+                () -> source.allowed().getAsBoolean() && accepts.getAsBoolean(), source.limit());
+        Optional<Batch> plan = plan(destination, List.of(
+                new Request(state.id(), state.millibuckets(), List.of(guarded))));
+        return plan.isPresent() && plan.get().commit(new Settlement() {
+            @Override
+            public void apply() {
+                if (!accepts.getAsBoolean() || !destination.buffer.offer(state).isEmpty()) {
+                    throw new IllegalStateException("Reserved native fluid transfer no longer fits its destination");
+                }
+            }
+
+            @Override
+            public void restore() {
+                // Both stores and their quotas are already owned by the native receipts.
+            }
+        });
     }
 
     /** Consumer-owned mutations and their silent, complete compensation. */
@@ -106,7 +138,8 @@ public final class NativeFluidStore {
                     return Optional.empty();
                 }
                 int reserved = receipt == null ? 0 : receipt.amount;
-                int amount = Math.min(remaining, snapshot.state().millibuckets() - reserved);
+                int accessible = Math.min(snapshot.state().millibuckets(), Math.max(0, access.limit().getAsInt()));
+                int amount = Math.min(remaining, accessible - reserved);
                 if (amount <= 0) {
                     continue;
                 }
@@ -150,12 +183,14 @@ public final class NativeFluidStore {
         }
 
         private boolean valid() {
+            int accessible = 0;
             for (Access access : accesses) {
                 if (!access.allowed().getAsBoolean()) {
                     return false;
                 }
+                accessible = Math.max(accessible, Math.max(0, access.limit().getAsInt()));
             }
-            return before.equals(store.snapshot());
+            return amount <= accessible && before.equals(store.snapshot());
         }
 
         private boolean withdraw() {

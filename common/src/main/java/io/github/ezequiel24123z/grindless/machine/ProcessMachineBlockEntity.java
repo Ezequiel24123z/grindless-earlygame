@@ -22,11 +22,14 @@ import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.process.ConditionFault;
 import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.LegacyGuideAssembly;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlockEntity;
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.github.ezequiel24123z.grindless.source.SourceSite;
 import io.github.ezequiel24123z.grindless.factory.FactoryCatalogue;
@@ -138,6 +141,33 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
 
     public ProcessMachineKind kind() {
         return kind;
+    }
+
+    public double inspectionProgress() {
+        return progress;
+    }
+
+    /** Inspection never resolves a recipe, changes subscriptions or resurrects a retired generation. */
+    public Optional<ProcessRecipe> inspectionRecipe() {
+        return recipeGeneration == ProcessLookup.generation() ? Optional.ofNullable(cached) : Optional.empty();
+    }
+
+    public ConditionFault inspectionConditionFault() {
+        return lastFault;
+    }
+
+    public WorkshopStructure.Fault inspectionStructureFault() {
+        return structureFault;
+    }
+
+    public SourceSite.Fault inspectionSiteFault() {
+        return getLevel() != null && !getLevel().isClientSide() && !isRemoved()
+                && getLevel().hasChunkAt(getBlockPos()) && getLevel().getBlockEntity(getBlockPos()) == this
+                ? checkSite() : siteFault;
+    }
+
+    public int inspectionFluidOutput() {
+        return fluidOutput;
     }
 
     @Override
@@ -344,6 +374,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                     + "tentative withdrawals were restored", recipe.id(), getBlockPos());
             return false;
         }
+        if (getLevel() != null) {
+            DevTelemetry.processCompleted(getLevel(), recipe.id());
+        }
         captureOrVent(recipe);
         pushOutputs();
         setChanged();
@@ -376,7 +409,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                 items.setItem(kind.menuKind().inputs() + i, outputs[i]);
             }
             storeFluidOutputs(recipe);
-            progress = Math.max(0.0, progress - recipe.durationTicks());
+            if (LegacyGuideAssembly.retired(kind.family(), recipe.id())) {
+                progress = 0.0;
+                workRecipeId = "";
+                cachedRecipeId = "";
+            } else {
+                progress = Math.max(0.0, progress - recipe.durationTicks());
+            }
             cached = null;
         }
 
@@ -553,6 +592,10 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                         && progress >= row.durationTicks() && ProcessLookup.matches(row, inputs()))
                 .findFirst();
         if (found.isEmpty()) {
+            found = LegacyGuideAssembly.resume(kind.family(), workRecipeId, progress)
+                    .filter(row -> ProcessLookup.matches(row, inputs()));
+        }
+        if (found.isEmpty()) {
             found = ProcessLookup.find(kind.family(), inputs(), fluid.state(), FluidInsert.available(sources));
         }
         cached = found.orElse(null);
@@ -580,8 +623,24 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (kind.structure() == WorkshopStructure.NONE || getLevel() == null) {
             return WorkshopStructure.Fault.NONE;
         }
+        return inspectionStructure().fault();
+    }
+
+    /** Fresh geometric evidence only; port owner resolution uses this to avoid recursive formation. */
+    public WorkshopStructure.Inspection inspectionStructureGeometry() {
+        if (kind.structure() == WorkshopStructure.NONE) {
+            return new WorkshopStructure.Inspection(WorkshopStructure.Fault.NONE, null, List.of());
+        }
+        if (getLevel() == null || !getLevel().hasChunkAt(getBlockPos())) {
+            return new WorkshopStructure.Inspection(WorkshopStructure.Fault.UNLOADED,
+                    new WorkshopStructure.Offset(0, 0, 0), List.of());
+        }
+        if (isRemoved() || getLevel().getBlockEntity(getBlockPos()) != this) {
+            return new WorkshopStructure.Inspection(WorkshopStructure.Fault.STALE_OWNER,
+                    new WorkshopStructure.Offset(0, 0, 0), List.of());
+        }
         int turns = horizontalTurns(getBlockState());
-        return kind.structure().check(turns, offset -> {
+        return kind.structure().inspect(turns, offset -> {
             BlockPos cell = getBlockPos().offset(offset.x(), offset.y(), offset.z());
             if (!getLevel().hasChunkAt(cell)) {
                 return null;
@@ -591,6 +650,28 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
                     : BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString(),
                     state.hasProperty(MachineProperties.FACING) ? horizontalTurns(state) : -1);
         });
+    }
+
+    /** Final formation also requires every recognised port to have this one current owner. */
+    public WorkshopStructure.Inspection inspectionStructure() {
+        WorkshopStructure.Inspection geometric = inspectionStructureGeometry();
+        if (!geometric.formed()) {
+            return geometric;
+        }
+        for (WorkshopStructure.Port port : geometric.ports()) {
+            WorkshopStructure.Offset offset = port.offset();
+            BlockPos position = getBlockPos().offset(offset.x(), offset.y(), offset.z());
+            if (!(getLevel().getBlockEntity(position) instanceof WorkshopPortBlockEntity entity)) {
+                return new WorkshopStructure.Inspection(WorkshopStructure.Fault.ORPHANED_PORT,
+                        offset, geometric.ports());
+            }
+            WorkshopPortBlockEntity.Inspection ownership = entity.inspection();
+            if (!ownership.formed() || !getBlockPos().equals(ownership.ownerPos())) {
+                return new WorkshopStructure.Inspection(ownership.fault() == WorkshopStructure.Fault.NONE
+                        ? WorkshopStructure.Fault.STALE_OWNER : ownership.fault(), offset, geometric.ports());
+            }
+        }
+        return geometric;
     }
 
     private static int horizontalTurns(BlockState state) {
@@ -622,7 +703,13 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (kind.tier() != FluxTier.F0 || getLevel() == null || getLevel().isClientSide()) {
             return;
         }
-        energy().setStored(Math.min(energy().getCapacity(), energy().getStored() + SourceLogic.MANUAL_CHARGE));
+        long before = energy().getStored();
+        energy().setStored(Math.min(energy().getCapacity(), before + SourceLogic.MANUAL_CHARGE));
+        long accepted = energy().getStored() - before;
+        if (accepted > 0) {
+            DevTelemetry.manualWork(getLevel(),
+                    BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()).toString(), accepted);
+        }
     }
 
     private ItemStack[] inputs() {
@@ -759,6 +846,16 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
     @Override
     public int capacity() {
         return fluid.capacity();
+    }
+
+    /** Produced-only output view, preserving the same primary-batch reservation as legacy export. */
+    public FluidState workshopProducedFluid() {
+        if (fluidOutput <= 0 || fluid.isEmpty()) {
+            return FluidState.EMPTY;
+        }
+        int reserved = ProcessLookup.primaryFluidTarget(kind.family(), inputs(), fluid.state().id());
+        return fluid.state().withAmount(Math.min(fluidOutput,
+                Math.max(0, fluid.state().millibuckets() - reserved)));
     }
 
     private boolean hasPartialInput() {

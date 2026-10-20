@@ -6,6 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -30,6 +32,7 @@ public final class VerifyBasicTank {
         sidesAndLimits();
         persistence();
         containerSettlement();
+        inventoryAndCreativeDelivery();
         removedEndpoints();
         System.out.println("ALL BASIC TANK CHECKS PASSED (" + checks + ")");
     }
@@ -172,6 +175,62 @@ public final class VerifyBasicTank {
         check("a plan from before removal must abort", !pending.commit());
         eq("removal keeps the saved stock for the one break/relocation carrier", stock,
                 FluidNbt.load(tank.saveWithoutMetadata().getCompound("Fluid")));
+    }
+
+    private static void inventoryAndCreativeDelivery() throws Exception {
+        for (boolean creative : List.of(false, true)) {
+            for (InteractionHand hand : InteractionHand.values()) {
+                Inventory inventory = new Inventory(null);
+                int slot = hand == InteractionHand.MAIN_HAND ? inventory.selected
+                        : inventory.items.size() + inventory.armor.size();
+                inventory.setItem(slot, new ItemStack(Items.BUCKET));
+                BasicTankBlockEntity tank = tank();
+                tank.insert(null, FluidState.of(FluidLogic.WATER, 1000));
+                TankContainerDelivery.Prepared fill = TankContainerDelivery.prepare(inventory, hand,
+                        inventory.getItem(slot).copy(), creative, false, new ItemStack(Items.WATER_BUCKET)).orElseThrow();
+                check("inventory staging does not consume the empty container", inventory.getItem(slot).is(Items.BUCKET));
+                eq("inventory staging does not consume real tank fluid", 1000, tank.contents().millibuckets());
+                check("both game modes settle a real filled container in either hand",
+                        tank.exchangeContainer(Direction.NORTH, tank.contents(), false, fill::unchanged, fill));
+                check("creative extraction cannot silently discard the filled result",
+                        inventory.getItem(slot).is(Items.WATER_BUCKET));
+                eq("the filled item is paid for by exactly one native bucket", FluidState.EMPTY, tank.contents());
+                TankContainerDelivery.Prepared empty = TankContainerDelivery.prepare(inventory, hand,
+                        inventory.getItem(slot).copy(), creative, true, new ItemStack(Items.BUCKET)).orElseThrow();
+                check("both game modes refill the native store",
+                        tank.exchangeContainer(Direction.SOUTH, FluidState.of(FluidLogic.WATER, 1000),
+                                true, empty::unchanged, empty));
+                eq("refill owns exactly one bucket", 1000, tank.contents().millibuckets());
+                check("only creative input retains its source bucket",
+                        inventory.getItem(slot).is(creative ? Items.WATER_BUCKET : Items.BUCKET));
+            }
+        }
+        for (boolean creative : List.of(false, true)) {
+            Inventory inventory = new Inventory(null);
+            for (int slot = 0; slot < inventory.items.size(); slot++) {
+                inventory.setItem(slot, new ItemStack(Items.STONE, 64));
+            }
+            inventory.setItem(0, new ItemStack(Items.BUCKET, 16));
+            check("full inventory defers stacked-container extraction in both game modes",
+                    TankContainerDelivery.prepare(inventory, InteractionHand.MAIN_HAND,
+                            inventory.getItem(0).copy(), creative, false, new ItemStack(Items.WATER_BUCKET)).isEmpty());
+            eq("deferred extraction retains all sixteen empty buckets", 16, inventory.getItem(0).getCount());
+            inventory.setItem(10, ItemStack.EMPTY);
+            TankContainerDelivery.Prepared stacked = TankContainerDelivery.prepare(inventory,
+                    InteractionHand.MAIN_HAND, inventory.getItem(0).copy(), creative, false,
+                    new ItemStack(Items.WATER_BUCKET)).orElseThrow();
+            stacked.apply();
+            eq("stacked extraction consumes one empty container only", 15, inventory.getItem(0).getCount());
+            check("stacked extraction keeps its filled product", inventory.getItem(10).is(Items.WATER_BUCKET));
+            stacked.restore();
+            eq("inventory compensation restores the original hand stack", 16, inventory.getItem(0).getCount());
+            check("inventory compensation removes only its tentative product", inventory.getItem(10).isEmpty());
+            TankContainerDelivery.Prepared stale = TankContainerDelivery.prepare(inventory,
+                    InteractionHand.MAIN_HAND, inventory.getItem(0).copy(), creative, false,
+                    new ItemStack(Items.WATER_BUCKET)).orElseThrow();
+            inventory.setItem(10, new ItemStack(Items.GLASS));
+            check("a changed inventory cannot be overwritten by a prepared exchange", !stale.unchanged());
+        }
     }
 
     private static NativeFluidStore.Settlement replace(ItemStack[] hand, ItemStack result) {

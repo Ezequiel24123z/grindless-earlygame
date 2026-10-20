@@ -45,7 +45,8 @@ public final class VerifyBootstrap {
     }
 
     private static void recipes() throws IOException {
-        eq("exactly twenty-two current shaped Bootstrap crafts remain", 22, BootstrapRecipes.shaped().size());
+        eq("exactly twenty-eight current shaped Bootstrap crafts include the six T0 ports", 28,
+                BootstrapRecipes.shaped().size());
         no("the retired Guide is not a catalogue craft", BootstrapRecipes.shaped().stream()
                 .anyMatch(recipe -> recipe.result().equals("grindless:field_guide")));
         no("the retired Guide has no shipped crafting JSON", Files.exists(RECIPES.resolve("field_guide.json")));

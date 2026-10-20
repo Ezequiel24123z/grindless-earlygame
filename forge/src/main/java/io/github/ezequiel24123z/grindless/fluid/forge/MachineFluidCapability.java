@@ -4,6 +4,7 @@ import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -44,7 +45,8 @@ public final class MachineFluidCapability {
     @SubscribeEvent
     public static void onAttachCapabilities(AttachCapabilitiesEvent<BlockEntity> event) {
         BlockEntity blockEntity = event.getObject();
-        if (!(blockEntity instanceof FluidEndpoint endpoint)) {
+        if (!(blockEntity instanceof FluidEndpoint endpoint)
+                || blockEntity instanceof WorkshopPortBlockEntity) {
             return;
         }
         Provider provider = new Provider(endpoint);

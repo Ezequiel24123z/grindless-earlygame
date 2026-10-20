@@ -18,17 +18,18 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        // The Guide no longer has either primitive assembly projection.
-        eq("atlas lists every generated recipe", 187, rows.size());
+        // Six port crafts add twelve construction projections; retiring the Guide removes two.
+        eq("atlas lists every generated recipe", 199, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 27 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
-        eq("sixty-eight reachable assembler crafts in this set", 68,
+        // The 33 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
+        eq("seventy-four reachable assembler crafts in this set", 74,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 237, allRows.size());
+        // Six crafts plus twelve projections, less the Guide's three retired routes.
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 255, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {

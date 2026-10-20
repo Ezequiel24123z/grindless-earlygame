@@ -135,7 +135,31 @@ public final class BootstrapRecipes {
                 new Shaped("biomass_dynamo",
                         List.of("CFC", "CIC", "CSC"),
                         Map.of("C", COBBLE, "F", "item:minecraft:furnace", "I", COPPER, "S", STICK),
-                        "grindless:biomass_dynamo", 0));
+                        "grindless:biomass_dynamo", 0),
+                new Shaped("workshop_item_input",
+                        List.of("C", "B", "I"),
+                        Map.of("C", "item:grindless:conveyor_belt", "B", "item:minecraft:bricks", "I", INSULATOR),
+                        "grindless:workshop_item_input", 0),
+                new Shaped("workshop_item_output",
+                        List.of("I", "B", "C"),
+                        Map.of("C", "item:grindless:conveyor_belt", "B", "item:minecraft:bricks", "I", INSULATOR),
+                        "grindless:workshop_item_output", 0),
+                new Shaped("settling_item_input",
+                        List.of("C", "B", "I"),
+                        Map.of("C", "item:grindless:conveyor_belt", "B", "item:grindless:settling_channel", "I", INSULATOR),
+                        "grindless:settling_item_input", 0),
+                new Shaped("settling_fluid_input",
+                        List.of("C", "B", "I"),
+                        Map.of("C", "item:grindless:clay_conduit", "B", "item:grindless:settling_channel", "I", INSULATOR),
+                        "grindless:settling_fluid_input", 0),
+                new Shaped("settling_item_output",
+                        List.of("I", "B", "C"),
+                        Map.of("C", "item:grindless:conveyor_belt", "B", "item:grindless:settling_screen", "I", INSULATOR),
+                        "grindless:settling_item_output", 0),
+                new Shaped("settling_fluid_output",
+                        List.of("I", "B", "C"),
+                        Map.of("C", "item:grindless:clay_conduit", "B", "item:grindless:settling_screen", "I", INSULATOR),
+                        "grindless:settling_fluid_output", 0));
     }
 
     public static List<Shapeless> shapeless() {
