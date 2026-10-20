@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /** Exercises the actual ownership policy with a fake engine, not a native/client listening pass. */
 public final class VerifyQuernAudio {
@@ -306,7 +307,14 @@ public final class VerifyQuernAudio {
     private static void nativeBindings() throws IOException {
         String audio = Files.readString(SOURCE.resolve("client/audio/QuernAudio.java")).replaceAll("\\s+", " ");
         String client = Files.readString(SOURCE.resolve("client/GrindlessClient.java"));
-        String effects = Files.readString(SOURCE.resolve("machine/MachineEffects.java"));
+        String effects = sourceCode("machine/MachineEffects.java");
+        String tank = sourceCode("fluid/BasicTankBlock.java");
+        String tankEntity = sourceCode("fluid/BasicTankBlockEntity.java");
+        String fluids = sourceCode("fluid/FluidLogic.java").replaceAll("\\s+", " ");
+        int dispatchStart = effects.indexOf("switch (geometry) {");
+        int dispatchEnd = effects.indexOf("if (status == MachineStatus.OUT_OF_BAND)", dispatchStart);
+        String dispatch = dispatchStart >= 0 && dispatchEnd > dispatchStart
+                ? effects.substring(dispatchStart, dispatchEnd) : "";
         check("only client initialization binds the manager", client.contains("QuernAudio.register();"));
         check("discovery visits only already-loaded chunk block entities",
                 audio.contains("getChunk(x, z, ChunkStatus.FULL, false)")
@@ -350,8 +358,34 @@ public final class VerifyQuernAudio {
                 effects.contains("ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 0.7")
                         && effects.contains("ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9")
                         && effects.contains("if (hum) {"));
+        check("a stationary full Basic Tank reports stored fluid, not operation",
+                fluids.contains("public static MachineStatus tankStatus(boolean holding) { "
+                        + "return holding ? MachineStatus.RUNNING : MachineStatus.IDLE; }")
+                        && tankEntity.contains("FluidLogic.tankStatus(!tank.buffer.isEmpty())")
+                        && tank.contains("MachineEffects.animate(BlockCatalogue.Geometry.TANK, 1,"));
+        check("passive TANK has one independent empty effects arm, not generator feedback",
+                Pattern.compile("\\bTANK\\b").matcher(dispatch).results().count() == 1
+                        && Pattern.compile("(?m)^\\s*case\\s+TANK\\s*->\\s*\\{\\s*}\\s*$")
+                        .matcher(dispatch).find());
+        check("active combustion and industrial families retain generator feedback",
+                List.of("GENERATOR", "KILN", "BOILER", "FIREBOX", "INDUSTRIAL").stream()
+                        .allMatch(geometry -> dispatch.contains("case " + geometry
+                                + " -> generator(status, level, pos, random);")));
+        check("dynamo feedback and pylon warnings keep their own routes",
+                dispatch.contains("case DYNAMO -> dynamo(status, front, level, pos, random);")
+                        && dispatch.contains("case PYLON -> pylon(tier, status, level, pos, random);")
+                        && effects.contains("ModSounds.RELAY_CLICK.get()")
+                        && effects.contains("ModSounds.BROWNOUT_ALARM.get()"));
+        check("IDLE still returns before any geometry feedback",
+                Pattern.compile("if \\(status == MachineStatus.IDLE\\) \\{\\s*return;\\s*}"
+                        + "\\s*switch \\(geometry\\)").matcher(effects).find());
         check("the common audio helper has no loader-specific imports",
                 !audio.contains("net.minecraftforge") && !audio.contains("net.fabricmc"));
+    }
+
+    private static String sourceCode(String path) throws IOException {
+        return Files.readString(SOURCE.resolve(path)).replaceAll(
+                "(?s)/\\*.*?\\*/|//[^\\r\\n]*|\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'", " ");
     }
 
     private static void check(String description, boolean passed) {
