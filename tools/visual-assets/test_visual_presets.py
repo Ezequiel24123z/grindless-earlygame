@@ -286,6 +286,25 @@ class InventoryContracts(unittest.TestCase):
         self.assertEqual(report["files_sha256"][audit.ASSETS + "textures/item/multitool.png"],
                          "127b662a124c30490c3d6737dc29ce8175d37b201e45bdad18bc1ea7360c7d38")
 
+    def test_composed_shop_guide_and_shared_teaching_bind_actual_sources(self):
+        report = audit.inventory(audit.ROOT, "b"*40)
+        surfaces = {row["surface"]: row for row in report["presentation"]}
+        shop = surfaces["shop icons"]
+        self.assertIsNotNone(shop["runtime"])
+        self.assertIn(audit.JAVA + "client/ShopScreen.java", shop["source"])
+        self.assertIn(audit.JAVA + "menu/ShopMenu.java", shop["source"])
+        self.assertIn(audit.JAVA + "item/FieldGuideItem.java", surfaces["legacy Guide"]["source"])
+        self.assertIn("redirects", surfaces["legacy Guide"]["runtime"])
+        self.assertIn(audit.JAVA + "client/QuestTeachingClient.java",
+                      surfaces["legacy/Heracles quest entry"]["source"])
+        self.assertTrue(any(path.endswith("/HeraclesQuestClient.java")
+                            for path in surfaces["legacy/Heracles quest entry"]["source"]))
+        for surface in ("shop icons", "legacy Guide", "legacy/Heracles quest entry"):
+            for path in surfaces[surface]["source"]:
+                self.assertEqual(report["files_sha256"][path], core.file_sha256(audit.ROOT / path))
+        self.assertFalse(report["human_in_client_review"])
+        self.assertFalse(report["human_art_approval"])
+
     def test_actual_model_projection_is_deterministic_and_rotates(self):
         model = audit.ASSETS + "models/block/quern_idle.json"
         first = audit.render_model(audit.ROOT, model)

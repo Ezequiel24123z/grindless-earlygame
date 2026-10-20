@@ -55,7 +55,7 @@ ROLES = {
     "relay_matrix": "Physical F1 exit component; rating remains NBT/text, not another PNG.",
     "process_atlas": "Live process/recipe reference; cyan connected schematic.",
     "quest_book": "Quest entry point; static gold list, not live progress.",
-    "field_guide": "Existing legacy guide item; teal bookmark; migration is a separate lane.",
+    "field_guide": "Retained deprecated compatibility item; teal bookmark; use redirects to current quest instruction.",
 }
 SCREEN_REFS = [
     JAVA + "client/ProcessMachineScreen.java",
@@ -67,6 +67,11 @@ SCREEN_REFS = [
     "forge/src/main/java/io/github/ezequiel24123z/grindless/forge/jei/GrindlessJeiPlugin.java",
     "forge/src/main/java/io/github/ezequiel24123z/grindless/forge/quest/HeraclesDefinitions.java",
     "forge/src/main/java/io/github/ezequiel24123z/grindless/client/forge/FluidClientPlatformImpl.java",
+    JAVA + "client/ShopScreen.java",
+    JAVA + "menu/ShopMenu.java",
+    JAVA + "item/FieldGuideItem.java",
+    JAVA + "client/QuestTeachingClient.java",
+    "forge/src/main/java/io/github/ezequiel24123z/grindless/forge/quest/HeraclesQuestClient.java",
 ]
 
 
@@ -332,17 +337,20 @@ def inventory(root, revision):
             {"surface": "Atlas / JEI", "source": [SCREEN_REFS[1], SCREEN_REFS[6]],
              "runtime": "existing item/block icons and native fluid rendering, not a second icon set",
              "review": "Check 16px machine silhouette, ingredient/output identity, water and recipe text."},
-            {"surface": "legacy/Heracles quest entry", "source": [SCREEN_REFS[2], SCREEN_REFS[5], SCREEN_REFS[7]],
-             "runtime": "quest subjects/rewards reuse registered item icons; FREE starter uses existing fallback icon",
-             "review": "No possession/appearance claim proves operation; T1 separation and Guide migration are other lanes."},
-            {"surface": "legacy Guide", "source": SCREEN_REFS[3],
-             "runtime": "procedural text/buttons with protected field_guide inventory icon",
-             "review": "Preserve sprite bytes; separate quest lane owns deprecation behavior."},
-            {"surface": "shop icons", "source": SCREEN_REFS[5], "runtime": None,
-             "review": "No baseline shop registry/GUI exists; use registered item icons if the product lane implements it."},
+            {"surface": "legacy/Heracles quest entry",
+             "source": [SCREEN_REFS[2], SCREEN_REFS[5], SCREEN_REFS[7], SCREEN_REFS[12], SCREEN_REFS[13]],
+             "runtime": "both actual renderers share live recipe/port teaching and separate T0/T1 chapters; registered item icons",
+             "review": "Check six port names, real role/face/slot help and paging. Possession is not formation/operation; the physical F1 claim remains server-owned."},
+            {"surface": "legacy Guide", "source": [SCREEN_REFS[3], SCREEN_REFS[11]],
+             "runtime": "retained saved item redirects to current quest instruction; protected field_guide inventory icon",
+             "review": "Preserve sprite bytes and review the actual harmless redirect, not an obsolete required Guide route."},
+            {"surface": "shop icons", "source": [SCREEN_REFS[9], SCREEN_REFS[10]],
+             "runtime": "actual material barter menu reuses registered vanilla item/block icons; no minted currency or second icon set",
+             "review": "Check real costs, stock, recovery limits, capacity/rejection text and quest-entry navigation at native GUI scale."},
         ],
         "port_hooks": {
-            "baseline_registered_ports": [], "status": "infrastructure lane owns registrations, state and direction contracts",
+            "baseline_registered_ports": [],
+            "status": "actual composed catalogue/models projected; native formation, interaction and appearance remain unproved here",
             "ports": port_rows, "available_overlays": available_overlays,
             "visual_contract": "one transparent original role overlay per function/direction over shared family casing, not copied per-machine PNGs",
             "family_sources": {

@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bind the refreshed visual manifest to the actual composed presentation.**
+  Record the live barter menu, harmless saved Guide redirect and shared
+  native/Heracles six-port teaching sources instead of stale baseline-only
+  placeholders. Keep all protected pixels and native/human review flags intact.
+  The executed orphan fixture also exposed its missing horizontal-facing
+  property; use the existing registered vanilla Furnace state, not a fake port.
 - **Keep registered-object proof in the existing real Forge workshop probe.**
   The executed order-only fixture repair correctly fails `Not bootstrapped`;
   preserve it and the original frozen-holder reds. Keep pure paid-owner selection,

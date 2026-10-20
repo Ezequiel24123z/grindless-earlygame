@@ -299,7 +299,7 @@ public final class VerifyWorkshopPorts {
         for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
             // The orphan BE contract needs an existing native state, not a newly registered block.
             // Actual six-block construction/state/collision assertions live in WorkshopInterfaceChecks.
-            BlockState state = Blocks.STONE.defaultBlockState();
+            BlockState state = Blocks.FURNACE.defaultBlockState().setValue(MachineProperties.FACING, Direction.NORTH);
             Constructor<WorkshopPortBlockEntity> constructor = WorkshopPortBlockEntity.class.getDeclaredConstructor(
                     BlockEntityType.class, WorkshopPortContract.Kind.class, BlockPos.class, BlockState.class);
             constructor.setAccessible(true);
