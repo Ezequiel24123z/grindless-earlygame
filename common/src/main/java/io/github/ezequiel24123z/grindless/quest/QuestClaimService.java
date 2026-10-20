@@ -10,9 +10,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -26,7 +28,8 @@ public final class QuestClaimService {
         UNMET,
         BOOK_REQUIRED,
         UNKNOWN_TASK,
-        INVALID_REWARD
+        INVALID_REWARD,
+        INVENTORY_FULL
     }
 
     private QuestClaimService() {
@@ -44,15 +47,13 @@ public final class QuestClaimService {
         Result result = claim(QuestProgress.get(player), player.getUUID(), taskId, holdingBook(player),
                 task -> QuestEvidence.met(task, QuestInventoryEvidence.count(player.getInventory(), task),
                         player.level().dimension().location().toString()),
-                QuestClaimService::rewardStack, stack -> {
-                    if (!player.getInventory().add(stack)) {
-                        player.drop(stack, false);
-                    }
-                });
+                QuestClaimService::rewardStack,
+                rewards -> QuestRewardDelivery.prepare(player.getInventory(), rewards));
         if (result == Result.INVALID_REWARD || result == Result.UNKNOWN_TASK) {
             Grindless.LOG.error("Rejected quest claim {} from {}: {}", taskId, player.getUUID(), result);
         }
         if (result == Result.CLAIMED) {
+            player.inventoryMenu.broadcastChanges();
             player.displayClientMessage(Component.translatable("chat.grindless.quest.claimed",
                     Component.translatable("gui.grindless.quest.task." + taskId)), false);
         } else {
@@ -64,7 +65,7 @@ public final class QuestClaimService {
 
     static Result claim(QuestProgress progress, UUID player, String taskId, boolean holdingBook,
                         Predicate<QuestCatalogue.Task> evidence, Function<QuestCatalogue.Reward, ItemStack> resolve,
-                        Consumer<ItemStack> give) {
+                        Function<List<ItemStack>, Optional<Runnable>> prepare) {
         QuestCatalogue.Task task = QuestCatalogue.byId(taskId);
         if (task == null || player == null) {
             return Result.UNKNOWN_TASK;
@@ -83,15 +84,26 @@ public final class QuestClaimService {
         if (status != QuestLogic.Status.CLAIMABLE) {
             return Result.UNMET;
         }
-        ItemStack reward = resolve.apply(task.reward());
-        if (reward == null || reward.isEmpty() || reward.getCount() != task.reward().count()
-                || reward.getCount() > reward.getMaxStackSize()) {
+        if (task.rewards().isEmpty()) {
             return Result.INVALID_REWARD;
+        }
+        List<ItemStack> rewards = new ArrayList<>();
+        for (QuestCatalogue.Reward declared : task.rewards()) {
+            ItemStack reward = resolve.apply(declared);
+            if (reward == null || reward.isEmpty() || reward.getCount() != declared.count()
+                    || reward.getCount() > reward.getMaxStackSize()) {
+                return Result.INVALID_REWARD;
+            }
+            rewards.add(reward.copy());
+        }
+        Optional<Runnable> delivery = prepare.apply(List.copyOf(rewards));
+        if (delivery.isEmpty()) {
+            return Result.INVENTORY_FULL;
         }
         if (!progress.claim(player, taskId)) {
             return Result.ALREADY_CLAIMED;
         }
-        give.accept(reward);
+        delivery.get().run();
         return Result.CLAIMED;
     }
 

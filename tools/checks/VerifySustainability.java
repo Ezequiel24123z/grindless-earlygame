@@ -2520,12 +2520,25 @@ public final class VerifySustainability {
                 QuestCatalogue.tasks().size(), authorities.objectives().size());
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Route route = authorities.routes().get("quest/" + task.id());
-            eq("exact quest reward " + task.id() + " stays live", task.reward().count(),
-                    route.outputs().get(new Resource(Kind.ITEM, task.reward().itemId())));
+            Map<Resource, Long> rewards = new TreeMap<>();
+            task.rewards().forEach(reward -> rewards.merge(new Resource(Kind.ITEM, reward.itemId()),
+                    (long) reward.count(), Math::addExact));
+            eq("every exact quest reward " + task.id() + " stays live", rewards, route.outputs());
             yes("quest reward " + task.id() + " stays one-shot", route.oneShot());
             eq("quest evidence count " + task.id() + " stays live", task.count(),
                     authorities.objectives().get(task.id()).count());
         }
+        Route starter = authorities.routes().get("quest/" + QuestCatalogue.STARTER_SUPPLIES);
+        eq("the starter has no physical objective", null,
+                authorities.objectives().get(QuestCatalogue.STARTER_SUPPLIES).subject());
+        eq("the starter still needs the held book without consuming it",
+                Map.of(new Resource(Kind.ITEM, "grindless:quest_book"), 1L), starter.catalysts());
+        eq("the starter is explicitly free rather than an invalid item goal", "FREE",
+                starter.conditions().get("evidence"));
+        eq("two legal cobblestone stacks project as the complete allocation", 128L,
+                starter.outputs().get(new Resource(Kind.ITEM, "minecraft:cobblestone")));
+        eq("both unstackable source-water buckets remain in the projection", 2L,
+                starter.outputs().get(new Resource(Kind.ITEM, "minecraft:water_bucket")));
         yes("biomass fuel authority is adapted", authorities.routes().values().stream()
                 .anyMatch(route -> route.id().equals("fuel/biomass_dynamo/biomass")
                         && route.durationTicks() == SourceLogic.BIOMASS_BURN_TICKS));

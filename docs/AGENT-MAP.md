@@ -301,6 +301,9 @@ The first four checks also pin that the prototype transport has no generated sur
 ## Quests and the guide
 
 - `quest/QuestCatalogue.java` and `quest/GuideCatalogue.java` — the lines and the pages.
+- `QuestCatalogue.STARTER_SUPPLIES` — the first, explicitly `FREE` task, not an item
+  objective with a zero count. `Task.rewards()` owns the complete finite allocation;
+  the singular accessor is only compatibility for existing single-stack tasks.
 - `client/FieldGuideScreen.java` — wraps each topic into physical pages; `GuideCatalogue.paginate`
   must retain every wrapped line rather than silently clipping a long topic or translation.
 - `quest/QuestLogic.java`, `quest/QuestEvidence.java`, `quest/QuestProgress.java` — what
@@ -308,6 +311,15 @@ The first four checks also pin that the prototype transport has no generated sur
   live item count alongside its claim status for the client screen.
 - `quest/QuestInventoryEvidence.java` — counts each inventory slot once; vanilla's inventory
   already includes the offhand. Matrix evidence checks both the item and exact valid rating.
+- `quest/QuestRewardDelivery.java` — stages the complete batch with vanilla
+  `SimpleContainer` stacking over copied main-inventory slots. Insufficient capacity
+  records no claim, changes no inventory and drops nothing; record the existing
+  one-time ledger only after a delivery can be committed on the server thread.
+- `quest/QuestBookAccess.java` and Forge's `quest/QuestBookAccessEvents` — recover
+  one existing utility book on login/respawn while starter supplies are unclaimed,
+  checking the real inventory including offhand first. A full inventory defers
+  delivery and retries when space becomes available. Recovery never grants supplies
+  or changes claims, and does not depend on the optional renderer.
 - `recipe/IngredientSpec.java` and `recipe/OutputSpec.java` — process inputs and outputs; their
   optional Matrix rating makes the T1-to-T2 hand-off physical rather than a global unlock.
 
@@ -316,10 +328,13 @@ The first four checks also pin that the prototype transport has no generated sur
 The Field Guide states the ceramic-workshop Bootstrap contract and points from its five-Matrix
 exit through the complete Voltaic factory; it remains readable independently of quest claims.
 The Dynamo/Extractor still spend two iron; optional vanilla equipment is outside that budget.
-The active route has twenty-five tasks in eleven lines, with ceramics before calibration and the physical Relay Matrix between
+The active route has twenty-six tasks in eleven lines, starting with a free finite
+starter allocation, with ceramics before calibration and the physical Relay Matrix between
 calibration and the first powered machines; it ends at the F2 Relay Matrix, contains no dimension
 evidence and does not advertise spatial campaign prototypes.
 Early quest rewards must never supply a core, insulator or Matrix that bypasses the workshop.
+See [the starter-kit contract](testing/t0-starter-kit.md) for exact allocation,
+inventory deferral, compatibility and the still-pending native/client observations.
 
 ## Multiblock
 
@@ -430,8 +445,8 @@ modified content and unpublished loose files are preserved/refused, never silent
 `VerifyQuestClaims` covers the service; `tools/quest-checks/VerifyHeracles.java`, through
 `:forge:verifyQuestBackend`, checks the actual selected codecs/loader, recovery and packets.
 Those pure contracts are not a Forge boot or human save/client acceptance.
-`VerifySustainabilityRegistry --quest-binding-only` parses the12 pinned common/Forge
-authorities without explicit game bootstrap. Its closed AST profiles cover31 methods and
+`VerifySustainabilityRegistry --quest-binding-only` parses the pinned common/Forge
+authorities without explicit game bootstrap. Its closed AST profiles cover the claim/access methods and
 reject alternate imports/overloads/callbacks or removed book/sender/evidence/reward guards.
 The same `mechanics_binding:QuestBookItem_QuestBookMenu` key keeps the expanded source
 fingerprint. Source-only inputs and the combined live export must retain separate identities.

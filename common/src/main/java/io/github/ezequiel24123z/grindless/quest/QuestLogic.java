@@ -36,7 +36,8 @@ public final class QuestLogic {
                 return Status.LOCKED;
             }
         }
-        return evidenceMet ? Status.CLAIMABLE : Status.UNMET;
+        return task.evidence() == QuestCatalogue.Evidence.FREE || evidenceMet
+                ? Status.CLAIMABLE : Status.UNMET;
     }
 
     public static Status byCode(int code) {
@@ -49,7 +50,7 @@ public final class QuestLogic {
 
     /**
      * Structural problems in a catalogue. Empty means the graph is a book: unique ids,
-     * dependencies that exist and come earlier, and a reward that fits one stack.
+     * dependencies that exist and come earlier, explicit goals and legal reward declarations.
      */
     public static List<String> problems(List<QuestCatalogue.Task> tasks) {
         List<String> problems = new ArrayList<>();
@@ -62,15 +63,24 @@ public final class QuestLogic {
             if (task.line().isBlank()) {
                 problems.add(task.id() + " has no line");
             }
-            if (task.subject().isBlank()) {
+            if (task.evidence() != QuestCatalogue.Evidence.FREE && task.subject().isBlank()) {
                 problems.add(task.id() + " has no subject");
             }
-            if (task.evidence() == QuestCatalogue.Evidence.ITEM && task.count() < 1) {
+            if (task.evidence() == QuestCatalogue.Evidence.FREE
+                    && (!task.subject().isEmpty() || task.count() != 1 || task.matrixRating() != null)) {
+                problems.add(task.id() + " has a physical objective on a free claim");
+            }
+            if ((task.evidence() == QuestCatalogue.Evidence.ITEM
+                    || task.evidence() == QuestCatalogue.Evidence.MATRIX) && task.count() < 1) {
                 problems.add(task.id() + " asks for no items");
             }
-            QuestCatalogue.Reward reward = task.reward();
-            if (reward == null || reward.count() < 1 || reward.count() > 64 || reward.itemId().isBlank()) {
-                problems.add(task.id() + " reward is not one stack of an item");
+            if (task.rewards().isEmpty()) {
+                problems.add(task.id() + " has no rewards");
+            }
+            for (QuestCatalogue.Reward reward : task.rewards()) {
+                if (reward.count() < 1 || reward.count() > 64 || reward.itemId().isBlank()) {
+                    problems.add(task.id() + " reward is not one stack of an item");
+                }
             }
             for (String required : task.requires()) {
                 int at = indexOf(tasks, required);

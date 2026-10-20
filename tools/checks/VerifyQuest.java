@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +36,7 @@ public final class VerifyQuest {
 
     public static void main(String[] args) throws IOException {
         graph();
+        starter();
         route();
         claims();
         evidence();
@@ -52,12 +55,86 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("twenty-five tasks, including the assembled settling line", 25, tasks.size());
+        eq("twenty-six tasks, including free starter supplies and the assembled settling line", 26, tasks.size());
         eq("eleven T0-to-T1 lines", LINES, QuestCatalogue.lines());
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
         eq("the last task is the physical Industrial hand-off", "industrial_matrix", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
                 (int) tasks.stream().map(QuestCatalogue.Task::id).distinct().count());
+        eq("all prior task ids retain their order and identity", List.of(
+                "multitool", "crank", "extractor", "quern", "water", "clay_mixer", "ceramics",
+                "workshop_flow", "settling", "calibrate", "relay", "thermal", "pylon", "scanner",
+                "terrestrial", "pulverizer", "furnace", "press", "assembler", "matrix_line", "glass",
+                "logistics", "kiln", "factory_world", "industrial_matrix"),
+                tasks.subList(1, tasks.size()).stream().map(QuestCatalogue.Task::id).toList());
+        eq("old evidence ordinals do not move", List.of(0, 1, 2), List.of(
+                QuestCatalogue.Evidence.ITEM.ordinal(), QuestCatalogue.Evidence.DIMENSION.ordinal(),
+                QuestCatalogue.Evidence.MATRIX.ordinal()));
+        eq("status wire meanings do not move", List.of(0, 1, 2, 3),
+                java.util.Arrays.stream(QuestLogic.Status.values()).map(Enum::ordinal).toList());
+        eq("all old prerequisites and rewards retain their exact values", List.of(
+                "multitool||minecraft:clay_ball/4",
+                "crank|multitool|minecraft:coal/4",
+                "extractor|crank|minecraft:gravel/8",
+                "quern|multitool|minecraft:brick/4",
+                "water|quern|minecraft:stick/4",
+                "clay_mixer|quern,water|minecraft:clay_ball/8",
+                "ceramics|clay_mixer|minecraft:charcoal/4",
+                "workshop_flow|ceramics|minecraft:stick/8",
+                "settling|ceramics,water|minecraft:dirt/16",
+                "calibrate|ceramics|grindless:process_atlas/1",
+                "relay|calibrate|minecraft:flint/2",
+                "thermal|relay|minecraft:coal/16",
+                "pylon|thermal|minecraft:redstone/4",
+                "scanner|pylon|minecraft:charcoal/4",
+                "terrestrial|scanner,thermal|grindless:data_core/1",
+                "pulverizer|thermal|minecraft:cobblestone/32",
+                "furnace|thermal,pulverizer|minecraft:coal/8",
+                "press|furnace|minecraft:iron_ingot/4",
+                "assembler|press,furnace|grindless:data_core/1",
+                "matrix_line|assembler|minecraft:redstone/8",
+                "glass|pulverizer,furnace|minecraft:clay_ball/16",
+                "logistics|assembler|minecraft:hopper/1",
+                "kiln|matrix_line|minecraft:brick/8",
+                "factory_world|matrix_line,glass|minecraft:grass_block/16",
+                "industrial_matrix|matrix_line,glass,factory_world|minecraft:iron_ingot/8"),
+                tasks.subList(1, tasks.size()).stream().map(task -> task.id() + "|"
+                        + String.join(",", task.requires()) + "|" + task.rewards().stream()
+                        .map(reward -> reward.itemId() + "/" + reward.count())
+                        .collect(java.util.stream.Collectors.joining(","))).toList());
+    }
+
+    private static void starter() {
+        QuestCatalogue.Task starter = QuestCatalogue.tasks().get(0);
+        eq("the welcome task is the first visible task", QuestCatalogue.STARTER_SUPPLIES, starter.id());
+        eq("the starter belongs to the existing first line", "bootstrap", starter.line());
+        eq("the starter has an explicit free goal", QuestCatalogue.Evidence.FREE, starter.evidence());
+        yes("the starter has no prerequisite", starter.requires().isEmpty());
+        yes("the starter has no hidden resource subject", starter.subject().isEmpty());
+        eq("free means ready without evidence", QuestLogic.Status.CLAIMABLE,
+                QuestLogic.consider(starter, Set.of(), false));
+        yes("free evidence needs no items or dimension", QuestEvidence.met(starter, 0, ""));
+        eq("a claimed starter remains claimed", QuestLogic.Status.CLAIMED,
+                QuestLogic.consider(starter, Set.of(QuestCatalogue.STARTER_SUPPLIES), false));
+        eq("the generous allocation consists of eleven legal stacks", 11, starter.rewards().size());
+        Map<String, Integer> actual = new TreeMap<>();
+        starter.rewards().forEach(reward -> actual.merge(reward.itemId(), reward.count(), Integer::sum));
+        eq("the owner-decided finite kit is exact", Map.of(
+                "minecraft:cobblestone", 128, "minecraft:oak_log", 64, "minecraft:bread", 64,
+                "minecraft:brick", 64, "minecraft:clay_ball", 64, "minecraft:sand", 64,
+                "minecraft:charcoal", 32, "minecraft:iron_ingot", 16, "minecraft:water_bucket", 2), actual);
+        yes("no machine, core, insulator or Matrix is granted",
+                starter.rewards().stream().allMatch(reward -> reward.itemId().startsWith("minecraft:")));
+        eq("water buckets remain separate legal stacks", List.of(1, 1), starter.rewards().stream()
+                .filter(reward -> reward.itemId().equals("minecraft:water_bucket"))
+                .map(QuestCatalogue.Reward::count).toList());
+        QuestCatalogue.Reward reward = new QuestCatalogue.Reward("minecraft:bread", 1);
+        no("an item objective cannot fake free by asking for zero", QuestLogic.problems(List.of(
+                new QuestCatalogue.Task("fake", "bootstrap", QuestCatalogue.Evidence.ITEM,
+                        "minecraft:bread", 0, null, List.of(), reward))).isEmpty());
+        no("a free goal cannot hide a physical subject", QuestLogic.problems(List.of(
+                new QuestCatalogue.Task("fake", "bootstrap", QuestCatalogue.Evidence.FREE,
+                        "minecraft:bread", 1, null, List.of(), reward))).isEmpty());
     }
 
     private static void route() {
@@ -78,7 +155,8 @@ public final class VerifyQuest {
                 no(task.id() + " cannot reward a bypass around ceramic manufacture",
                         Set.of("grindless:data_core", "grindless:calibrated_data_core",
                                 "grindless:relay_matrix", "grindless:ceramic_insulator")
-                                .contains(task.reward().itemId()));
+                                .stream().anyMatch(item -> task.rewards().stream()
+                                        .anyMatch(reward -> reward.itemId().equals(item))));
             }
         }
         eq("the physical Bootstrap exit is five Relay Matrices", "grindless:relay_matrix", subject("relay"));
@@ -139,7 +217,8 @@ public final class VerifyQuest {
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             boolean ready = task.requires().stream().allMatch(claimed::contains);
             yes(task.id() + " becomes ready in book order", ready);
-            eq(task.id() + " stays unmet without evidence", QuestLogic.Status.UNMET,
+            eq(task.id() + " respects its explicit evidence kind", task.evidence() == QuestCatalogue.Evidence.FREE
+                            ? QuestLogic.Status.CLAIMABLE : QuestLogic.Status.UNMET,
                     QuestLogic.consider(task, claimed, false));
             eq(task.id() + " is claimable with evidence", QuestLogic.Status.CLAIMABLE,
                     QuestLogic.consider(task, claimed, true));
@@ -175,12 +254,14 @@ public final class VerifyQuest {
                 yes(task.id() + " names a registered or vanilla item", known.contains(path)
                         || task.subject().startsWith("minecraft:"));
             }
-            String reward = task.reward().itemId();
-            no(task.id() + " reward is not some task's evidence", itemSubjects.contains(reward)
-                    || QuestCatalogue.tasks().stream().anyMatch(other ->
-                    other.evidence() == QuestCatalogue.Evidence.ITEM && other.subject().equals(reward)));
-            yes(task.id() + " reward is a vanilla or Grindless item",
-                    reward.startsWith("minecraft:") || known.contains(path(reward)));
+            for (QuestCatalogue.Reward entry : task.rewards()) {
+                String reward = entry.itemId();
+                no(task.id() + " reward is not some task's evidence", itemSubjects.contains(reward)
+                        || QuestCatalogue.tasks().stream().anyMatch(other ->
+                        other.evidence() == QuestCatalogue.Evidence.ITEM && other.subject().equals(reward)));
+                yes(task.id() + " reward is a vanilla or Grindless item",
+                        reward.startsWith("minecraft:") || known.contains(path(reward)));
+            }
         }
     }
 

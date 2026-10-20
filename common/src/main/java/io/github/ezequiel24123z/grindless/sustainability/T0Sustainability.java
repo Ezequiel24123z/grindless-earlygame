@@ -24,7 +24,7 @@ import static io.github.ezequiel24123z.grindless.sustainability.SustainabilityMo
 public final class T0Sustainability {
     private static final Set<String> REQUIRED_QUESTS = Set.of("multitool", "quern", "water", "clay_mixer",
             "ceramics", "workshop_flow", "settling", "calibrate", "relay");
-    private static final Set<String> OPTIONAL_QUESTS = Set.of("crank", "extractor");
+    private static final Set<String> OPTIONAL_QUESTS = Set.of(QuestCatalogue.STARTER_SUPPLIES, "crank", "extractor");
     private static final Set<Resource> ACQUIRED_ENTRY = Set.of(item("minecraft:cobblestone"),
             item("minecraft:oak_planks"), item("minecraft:stick"), item("minecraft:brick"));
     private static final String PROFILE = "t0_native_sources_conditional_entry_v1";

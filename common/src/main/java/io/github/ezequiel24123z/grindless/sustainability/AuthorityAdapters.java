@@ -673,23 +673,28 @@ public final class AuthorityAdapters {
         Resource book = item(BootstrapRecipes.shaped().stream().filter(craft -> craft.name().equals("quest_book"))
                 .findFirst().orElseThrow(() -> new IllegalStateException("Missing authored quest-book craft")).result());
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
-            Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION ? null
+            Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION
+                    || task.evidence() == QuestCatalogue.Evidence.FREE ? null
                     : new Resource(Kind.ITEM, task.subject(),
                     task.matrixRating() == null ? 0 : task.matrixRating().ordinal(), "items");
             String routeId = "quest/" + task.id();
             builder.objective(new Objective(task.id(), subject, task.count(), Set.copyOf(task.requires()),
                     routeId, "QuestCatalogue.tasks"));
-            if (subject == null) {
+            if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
                 builder.finding(unknown("objective_unknown", task.id(), "Dimension evidence requires a world adapter."));
                 continue;
             }
             Map<Resource, Long> requirements = new TreeMap<>();
-            requirements.put(subject, (long) task.count());
+            if (subject != null) {
+                requirements.put(subject, (long) task.count());
+            }
             requirements.merge(book, 1L, Math::max);
+            Map<Resource, Long> rewards = new TreeMap<>();
+            task.rewards().forEach(reward -> rewards.merge(item(reward.itemId()), (long) reward.count(), Math::addExact));
             builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id()
                     + " + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
                     null, Map.of(), requirements,
-                    Map.of(item(task.reward().itemId()), (long) task.reward().count()), Set.of(), 0, 0,
+                    rewards, Set.of(), 0, 0,
                     Map.of("evidence", task.evidence().name(), "claim_access", "held_quest_book_menu"),
                     task.requires().stream().map(id -> "quest/" + id)
                             .collect(java.util.stream.Collectors.toSet()), true, true, false));
