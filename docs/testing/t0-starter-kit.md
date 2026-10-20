@@ -149,3 +149,73 @@ there when integrating. This child neither publishes nor deploys.
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | No new credential or provider; coordinator-controlled existing PC/JDK qualification is required. |
 | COST / BILLING RISK | None. No generation, network provider, paid activation or new dependency. |
 | DEPLOYED STATE | Unchanged by this child; source implementation is not an installed or accepted release. |
+
+## Integrated03970 executable red
+
+The coordinator reports real executable failures on integrated source
+`03970d7efe9b127c6e1d3a71e1b3d109e75c5aaa` in
+[CI39367863670](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39367863670),
+Foundation artifact `12240248670`. Its closed behavior log retains the two
+failures at lines 4585 and 6777. `VerifyResourceGuidance.surfaces` still required
+the obsolete no-kit prose, contradicting ADR-0159 and the actual updated guide.
+`VerifySustainabilityT0` reaches `VerifyResourceGuidance.checkedAsset`, which
+correctly rejects the old committed guidance document against the changed quest
+authority. The coordinator separately reports Registry 1106/0; that is not an
+all-Foundation pass.
+
+The focused test repair binds the actual first `FREE` quest, no prerequisites,
+ready-without-evidence and already-claimed states, a nonempty basic-supplies-only
+reward, the actual translated quest/action names and explicit finite per-player
+copy. It retains the machine-owned renewable-supply, night/restart and physical
+Matrix protections. `checkedAsset` and its full-document/fingerprint equality
+remain unchanged. No gameplay quantity, route, classification or historical
+proof is altered to make the check pass.
+
+### Existing regeneration path
+
+The sole PC owner executes the already existing command in the latest integrated
+owned root with its selected JDK 17 and process-local Gradle home:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\generate-resource-guidance.ps1 -Root .
+powershell -ExecutionPolicy Bypass -File .\tools\generate-resource-guidance.ps1 -Root . -CheckOnly
+```
+
+The existing SH twin has the same `--root` / `--check-only` actions. Both use
+`tools/dashboard/export` with the resource-guidance action, which invokes
+`DashboardExport.resourceGuidance` over `canonicalResult(root)` and
+`ResourceGuidanceProjection.project(result)`. The writer owns exactly the runtime
+asset `common/src/main/resources/assets/grindless/guidance/resources.json` plus
+the ignored execution sidecar `build/resource-guidance/provenance.json`.
+Do not edit the JSON, declaration fingerprint or authority/class hashes by hand.
+Rebuild resources/JAR after writing: classpath preparation may have processed the
+old asset before generation. Then rerun the affected guidance/T0 checks on that
+actual generated candidate.
+
+Directly related derivatives remain under their existing owners: the Heracles
+archive is generated from the catalogue at setup under
+`config/heracles/quests/grindless.zip`, not a second checked-in quest catalogue.
+Normal dashboard/audit outputs are build-directory artifacts from the canonical
+exporter; the guidance action returns before normal dashboard publication.
+No other committed quest/guidance derivative is introduced by these seams.
+Neither historical reports nor their hashes are refreshed to disguise this red.
+
+The coordinator requested native regeneration within the existing sole PC owner's
+phase 2039; this child has communicated the exact command/output and starts no
+JVM, third worker or competing publisher.
+Executed repair checks: 23 focused PowerShell source/prose/writer assertions
+reproduce the obsolete predicate against the actual guide, match the replacement
+contracts and prove `checkedAsset` plus the stale JSON remain unchanged. The
+existing link checker passes 726 relative links and 159 ADR sections/index rows.
+These are not rerun Java suites or a canonical-generation pass.
+
+| Required category | Repair disposition |
+| --- | --- |
+| COMPLETED | Obsolete contract repaired on exact integrated03970; existing native writer/output identified and handed to the sole PC owner. |
+| BLOCKED | Canonical asset remains stale until that owner's real generation; equality is intentionally still strict. |
+| NOT EXECUTED | This child does not execute Java, native regeneration, package or deployment. Source checks are not executable-suite greens. |
+| NEEDS HUMAN VALIDATION | Existing real quest/client/no-command and retained-world observations remain pending. |
+| NEEDS MY DECISION | None. ADR-0159 and the generous counts remain decided. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing coordinator-owned PC/JDK window only; no new credential or provider. |
+| COST / BILLING RISK | None. |
+| DEPLOYED STATE | Unchanged by this child; the failed integrated run is not a qualified deployment. |
