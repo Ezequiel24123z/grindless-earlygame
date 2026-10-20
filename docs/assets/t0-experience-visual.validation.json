@@ -1,0 +1,62 @@
+{
+  "schema": "grindless.t0-visual-validation.v1",
+  "baseline": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+  "jdk_source_freeze": "1969138a3bca424ed87f69966d8cd9b6d657db24",
+  "execution": "isolated owner-leased PC worktree; JDK only; 256MiB, CPU2, SerialGC; no Gradle/server/client/GPU",
+  "raw_receipt_sha256": "08fb5a66b24964bc2a40ba810e09489f7e02a2560991d0f14a72c8cebe5d60fb",
+  "closed_utc": "2026-10-20T16:57:55.0908693Z",
+  "javac_exit": 0,
+  "baseline_expected_red": {
+    "exit": 1,
+    "reason": "Actual baseline dynamo_front_idle fails the neutral high-contrast glyph contract.",
+    "log_sha256": "8ae80db339f51bd79d8262cb626642268e42f5334796a305fc16266b6dbc5377"
+  },
+  "selective_stages": {
+    "generation_exit": [0, 0],
+    "pixel_check_exit": [0, 0],
+    "pixel_checks_each": 32773,
+    "files_each": 66,
+    "changed_existing_state_fronts": 62,
+    "new_shared_overlays": 4,
+    "byte_identical": true,
+    "stage_manifest_sha256": "76c4db9574d71574452879e817864dd06a3d57d8127c2053f6987beaeafe56d3",
+    "pixel_log_sha256_each": "f133d6a05b9ef5b6eddd00be53440078990cbfef9b3b64261fe5328572473af1",
+    "body_preservation": "Every pixel outside x3..12/y12..14 equals the actual baseline face; only T0 state-marked geometries are generated.",
+    "normal_writer_equivalence": "Normal GenerateAssets and --t0-visuals-only call the same MachineArt.front and WorkshopPortTextures.overlay routines.",
+    "not_claimed": "No full 1602-file replay, new block geometry, Forge/client boot or art approval."
+  },
+  "existing_source_boundary": {
+    "resource_files_preserved_during_execution": 1590,
+    "resource_pngs_preserved_during_execution": 581,
+    "source_clean_at_close": true,
+    "java_processes_at_release": 0,
+    "approved_multitool_checks": 12,
+    "approved_multitool_exit": 0,
+    "guide_only_writes": 3,
+    "invalid_cli_exit": [2, 2],
+    "invalid_cli_output_trees": 0
+  },
+  "new_original_overlay_sha256": {
+    "port_item_input.png": "f44ea2716c7ec0002e3864653cf76bc0a72c3f294a5335c8e69b2f72b40d4b53",
+    "port_item_output.png": "b9cdfb982799fe569cc6b9d6b82265016014ed05f5a02f110bd700d49945dc00",
+    "port_fluid_input.png": "9cb7fa5247c83a96ff17c16c69c2ad12b45faf7e910b8dc33f6ecf41417ef8c4",
+    "port_fluid_output.png": "4a0d8af5127b12fbafb792c88954c58d3f4dd72369b278be5066c8bd08142f84"
+  },
+  "python_initial_freeze": {
+    "source": "1969138a3bca424ed87f69966d8cd9b6d657db24",
+    "existing_pipeline_tests": 28,
+    "new_preset_inventory_tests": 16,
+    "total_tests": 44,
+    "exit": 0,
+    "seconds": 8.805,
+    "log_sha256": "8c8b37f2c194e93a47e4a931ef6d61ee7d350cb183ea4a472b7b106775e68054",
+    "scope": "Synthetic images, fake/loopback API and actual catalogue/PNG inventory; not real diffusion.",
+    "preserved_observer_failure": "The first WinPS capture stopped on native stderr before a result; read-only recovery found zero Python and an empty original log. Corrected process-local capture completed the tests without changing the runtime."
+  },
+  "later_python_model_binding_and_port_projection": "Pending execution on its own source freeze; do not relabel the 44-test receipt.",
+  "local_diffusion_candidates": 0,
+  "external_paid_image_requests": 0,
+  "human_in_client_review": false,
+  "human_art_approval": false,
+  "deployed_by_this_unit": false
+}

@@ -110,18 +110,32 @@ it without moving the original clone. Initial embedded-Python import failed
 because its `_pth` excludes the script directory; a process-local import path
 resolved it without changing/installing Python. Both failures remain history.
 
-At this source checkpoint, the new Python contracts and JDK selective stages
-are **NOT EXECUTED**. The coordinator granted only CPU/Pillow and a separate
-bounded 256MiB/CPU2/SerialGC JDK window on this unit's isolated surface; no
-Gradle, native server, Prism or GPU launch is authorized here. Exact executed
-results and native resource identities will be added after the frozen source
-is exercised, not inferred from compilation or a prior Multitool pass.
+Exact source `1969138a3bca424ed87f69966d8cd9b6d657db24` now has actual javac 0,
+two selective stages 0 and **32,773 pixel/writer checks on each**. Both 66-file
+stages are byte-identical; the real baseline fails the intended glyph contract.
+All 1,590 source resources/581 PNGs remain untouched during that proof. The
+existing 12 Multitool/guide checks pass, and two invalid invocations exit 2
+without output. Only those 62 generated fronts and four new overlays are
+installed, not an unrelated full regeneration. The JDK lease is released with
+clean source and zero Java before the next lane executes.
+
+The same freeze passes the actual existing 28 Python contracts plus 16 new
+preset/inventory cases, 44 total in 8.805s. A WinPS stderr-capture failure before
+the first result remains recorded; read-only recovery found no Python process
+and an empty log before the corrected capture. No success is inferred from that
+observer failure. Later model-lock/spec binding and optional port-inventory
+projection changes have their own still-pending Python execution, not a relabelled
+44-case pass. See the [portable result record](t0-experience-visual.validation.json).
+
+No Gradle, native server, Prism, GPU or new inference is used. The regular
+generator remains JDK-only and calls the same checked face/overlay writers;
+there is no need to repeat the old full 1,602-file proof just for more counters.
 
 | Category | Current entry |
 | --- | --- |
-| COMPLETED | Baseline global source/pixel inventory and first native-scale contact sheets; reusable source tooling and deterministic writer prepared. |
+| COMPLETED | Global source/pixel inventory, reusable presets, 62 checked T0 state fronts and four original overlays; actual 44 Python cases, two equal 66-file JDK stages and existing Multitool/guide regressions. |
 | BLOCKED | None. |
-| NOT EXECUTED | New Python/JDK contracts, generated integration, native client, combined build/package/deployment. |
+| NOT EXECUTED | Later Python binding/projection rerun, final refreshed inventory/sheets, native client, combined build/package/deployment. |
 | NEEDS HUMAN VALIDATION | In-client lighting/placement/state/rotations, hotbar/JEI/quests, GUI comfort and artistic quality. |
 | NEEDS MY DECISION | None. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None; reuse the existing local tools/model only if needed. |

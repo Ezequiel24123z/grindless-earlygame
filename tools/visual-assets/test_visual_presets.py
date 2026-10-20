@@ -152,6 +152,7 @@ class PresetContracts(unittest.TestCase):
             lambda value: value.update(human_visual_approval=True),
             lambda value: value.update(tier="T1"),
             lambda value: value.update(preset_sha256="0"*64),
+            lambda value: value.update(model_sha256="0"*64),
             lambda value: value.update(seeds=[1, True]),
             lambda value: value.update(seeds=[1, 1]),
             lambda value: value.update(runtime_path="../escape.png"),
@@ -173,6 +174,7 @@ class PresetContracts(unittest.TestCase):
         checkpoint.write_bytes(b"synthetic, not a model")
         model = {"filename": checkpoint.name, "bytes": checkpoint.stat().st_size,
                  "sha256": core.file_sha256(checkpoint)}
+        spec["model_sha256"] = model["sha256"]
         run = self.root / "new-target-purpose"
         api = FakeApi(fail_submission=True)
         with self.assertRaises(core.ContractError):
@@ -188,6 +190,13 @@ class PresetContracts(unittest.TestCase):
         self.assertEqual(graph["5"]["inputs"]["seed"], spec["seeds"][0])
         self.assertEqual(ledger["requests"][0]["workflow_sha256"], core.sha256(core.json_bytes(graph)))
 
+    def test_changed_model_is_refused_before_reservation_or_http(self):
+        spec = self.prepare()
+        model = core.load_model(core.HERE / "sd15-model.json")
+        model["sha256"] = "0"*64
+        with self.assertRaises(core.ContractError):
+            core.workflow(spec, model, 1, "grindless/test/run/candidate-1")
+
 
 class InventoryContracts(unittest.TestCase):
     def test_complete_baseline_scope_and_all_distributed_pngs(self):
@@ -196,7 +205,7 @@ class InventoryContracts(unittest.TestCase):
         self.assertEqual(report["counts"]["state_models"], 65)
         self.assertEqual(report["counts"]["blockstate_variants"], 257)
         self.assertEqual(report["counts"]["standalone_items_including_books"], 14)
-        self.assertEqual(report["counts"]["resolved_t0_pngs"], 104)
+        self.assertEqual(report["counts"]["resolved_t0_pngs"], 104 + len(report["port_hooks"]["available_overlays"]))
         paths = {path.relative_to(audit.ROOT).as_posix()
                  for path in (audit.ROOT / audit.ASSETS / "textures").rglob("*.png")}
         self.assertEqual(set(report["all_texture_index"]), paths)

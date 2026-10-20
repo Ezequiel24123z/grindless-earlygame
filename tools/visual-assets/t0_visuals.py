@@ -146,13 +146,18 @@ def model_data(root, relative, seen=()):
 
 
 def texture_reference(textures, value):
+    value = texture_value(textures, value)
+    core.require(value.startswith("grindless:"), "External texture is not a Grindless source image.")
+    return ASSETS + "textures/" + value.split(":", 1)[1] + ".png"
+
+
+def texture_value(textures, value):
     seen = set()
     while value.startswith("#"):
         core.require(value not in seen and value[1:] in textures, "Missing/cyclic model texture alias.")
         seen.add(value)
         value = textures[value[1:]]
-    core.require(value.startswith("grindless:"), "External texture is not a Grindless source image.")
-    return ASSETS + "textures/" + value.split(":", 1)[1] + ".png"
+    return value
 
 
 def indicator_mask(image):
@@ -225,6 +230,8 @@ def inventory(root, revision):
         asset(runtime, ROLES[name], name, ART + "FormTextures.java")
         bind(ASSETS + f"models/item/{name}.json")
         records[-1]["protected"] = name in PROTECTED
+        records[-1]["source_pixel_audit"] = "keep existing sprite: no new source-scale defect demonstrated"
+        records[-1]["review_status"] = "protected prior technical selection; human client pending" if name in PROTECTED else "source sheet reviewed; human client pending"
         if name == "multitool":
             records[-1].update(
                 source=bind("tools/visual-assets/approved/multitool.png"),
@@ -233,11 +240,48 @@ def inventory(root, revision):
             core.require(hashes[runtime] == hashes[records[-1]["source"]], "Canonical Multitool differs.")
     asset(ASSETS + "textures/gui/process_machine.png", "Only the progress arrow UV [176,0,200,17] is blitted by the current screen.",
           "process_machine", ART + "GenerateAssets.java")
+    records[-1]["source_pixel_audit"] = "Existing left-pointing triangular arrow; retain pending in-client flow/contrast review. Background pixels are not the live GUI."
     for relative in [JAVA + "registry/BlockCatalogue.java", JAVA + "registry/ModItems.java",
                      JAVA + "source/SourceLogic.java", JAVA + "recipe/BootstrapRecipes.java",
                      JAVA + "recipe/BootstrapProcesses.java", JAVA + "recipe/RenewableProcesses.java",
-                     ART + "BlockModels.java", JAVA + "structure/WorkshopGeometry.java"] + SCREEN_REFS:
+                     JAVA + "fluid/FluidLogic.java", ART + "BlockModels.java",
+                     JAVA + "structure/WorkshopGeometry.java"] + SCREEN_REFS:
         bind(relative)
+    port_contract = core.read_json(local(root, "tools/visual-assets/port-assets.json"))
+    bind("tools/visual-assets/port-assets.json")
+    available_overlays = {}
+    for role, resource in port_contract["overlays"].items():
+        relative = ASSETS + "textures/" + resource.split(":", 1)[1] + ".png"
+        if (root / relative).is_file():
+            asset(relative, "shared original " + role + " marking; no casing pixels, glow or animation",
+                  "port_" + role, port_contract["writer"])
+            available_overlays[role] = {"runtime": relative, "sha256": hashes[relative]}
+    port_rows = []
+    catalogue_source = text(root, JAVA + "registry/BlockCatalogue.java")
+    for contract in port_contract["ports"]:
+        name = contract["id"]
+        present = bool(re.search(r'new Entry\("' + re.escape(name) + r'"', catalogue_source))
+        row = {**contract, "source_catalogue_entry": present, "human_in_client_review": False}
+        if present:
+            state_path = bind(ASSETS + f"blockstates/{name}.json")
+            variants = core.read_json(root / state_path)["variants"]
+            core.require(set(variants) == {"facing=" + facing for facing in FACINGS},
+                         "Port visual states must be the actual four facings, without invented status.")
+            models = {}
+            for variant in variants.values():
+                core.require(isinstance(variant, dict), "Unexpected port model alternative; review the model contract.")
+                model_path = bind(ASSETS + "models/" + variant["model"].split(":", 1)[1] + ".json")
+                model = model_data(root, model_path)
+                slots = {key: texture_value(model["textures"], value) for key, value in model["textures"].items()}
+                for resource in slots.values():
+                    if resource.startswith("grindless:"):
+                        bind(texture_reference({}, resource))
+                models[model_path] = {"texture_resources": slots, "elements": len(model.get("elements", []))}
+            row.update(blockstate=state_path, models=models, item_model=bind(ASSETS + f"models/item/{name}.json"),
+                       review_status="actual source models present; native formation/appearance remains unproved here")
+        else:
+            row["review_status"] = "awaiting infrastructure integration; no runtime port claimed from this visual contract"
+        port_rows.append(row)
     all_pngs = {}
     for path in sorted((root / ASSETS / "textures").rglob("*.png")):
         relative = path.relative_to(root).as_posix()
@@ -271,6 +315,7 @@ def inventory(root, revision):
             "state_models": sum(len(block["states"]) for block in blocks),
             "blockstate_variants": sum(block["blockstate_variants"] for block in block_rows),
             "resolved_t0_pngs": len(used), "all_distributed_texture_pngs": len(all_pngs),
+            "source_catalogued_ports": sum(row["source_catalogue_entry"] for row in port_rows),
         },
         "blocks": block_rows, "textures": records, "fluids": fluids,
         "presentation": [
@@ -290,7 +335,8 @@ def inventory(root, revision):
              "review": "No baseline shop registry/GUI exists; use registered item icons if the product lane implements it."},
         ],
         "port_hooks": {
-            "baseline_registered_ports": [], "status": "infrastructure lane owns new IDs, state and direction contracts",
+            "baseline_registered_ports": [], "status": "infrastructure lane owns registrations, state and direction contracts",
+            "ports": port_rows, "available_overlays": available_overlays,
             "visual_contract": "one transparent original role overlay per function/direction over shared family casing, not copied per-machine PNGs",
             "family_sources": {
                 "firing": "minecraft:bricks supplied by Minecraft, never copied into Grindless",
@@ -423,6 +469,18 @@ def sheets(root, report, directory, prefix):
     first = [row for row in face_rows if row[0].startswith(("quern_front_", "mixer_front_", "settler_front_"))]
     page("critical-states", first)
     page("critical-monochrome", [(label, image.convert("L").convert("RGBA")) for label, image in first])
+    overlays = report["port_hooks"]["available_overlays"]
+    if overlays:
+        rows = []
+        Image = core.image_module()
+        for role, data in overlays.items():
+            overlay = image_bytes(local(root, data["runtime"]).read_bytes())
+            rows.append((role + " / transparent original overlay", overlay))
+            for name in ("bootstrap_timber", "bootstrap_stone", "firebox_top"):
+                body = image_bytes(local(root, ASSETS + "textures/block/" + name + ".png").read_bytes()).copy()
+                body.alpha_composite(overlay)
+                rows.append((role + " / ORIGINAL " + name + " sample", body))
+        page("port-overlays", rows)
     projections = []
     for block in report["blocks"]:
         model = block["state_models"][0]["model"]

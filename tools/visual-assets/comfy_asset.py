@@ -157,6 +157,8 @@ def load_model(path):
 
 def workflow(spec, model, slot, prefix):
     require(type(slot) is int and 1 <= slot <= len(spec["seeds"]), "Candidate slot exceeds its allowance.")
+    if spec.get("schema") == "grindless.visual-asset.v2":
+        require(model["sha256"] == spec["model_sha256"], "Preset graph/model differs from the frozen specification.")
     replacements = {
         "@checkpoint": model["filename"], "@positive": spec["positive_prompt"],
         "@negative": spec["negative_prompt"], "@seed": spec["seeds"][slot - 1], "@prefix": prefix,

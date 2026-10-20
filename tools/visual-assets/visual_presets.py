@@ -56,6 +56,16 @@ def validate_spec(spec):
     core.require(spec.get("source_refs") and isinstance(spec["source_refs"], list), "Source references are required.")
     core.require(spec.get("human_visual_approval") is False, "Technical specs cannot grant human approval.")
     catalogue = core.read_json(PRESETS)
+    generation = catalogue.get("generation", {})
+    for key, expected in {
+        "model_lock": "sd15-model.json", "size": 512, "steps": 20, "cfg": 7,
+        "sampler": "euler", "scheduler": "normal", "batch_size": 1, "candidates_per_target": 2,
+    }.items():
+        core.require(generation.get(key) == expected, "Preset settings differ from the qualified graph: " + key)
+    model = core.load_model(core.HERE / "sd15-model.json")
+    core.require(spec.get("model_sha256") == model["sha256"]
+                 and spec.get("model_lock_sha256") == core.sha256(core.json_bytes(model)),
+                 "Preset specification/model identity differs.")
     preset_id = spec.get("preset_id")
     core.require(preset_id in catalogue["presets"], "Unknown visual preset.")
     preset = catalogue["presets"][preset_id]
@@ -213,6 +223,8 @@ def prepare(preset_id, asset_id, registry_id, revision, source, output, mask=Non
         "role": "Source concept only; the existing registered role and accepted art remain authoritative.",
         "source_revision": revision, "source_refs": ["tools/visual-assets/presets.json"],
         "preset_id": preset_id, "preset_sha256": core.sha256(core.json_bytes(catalogue)),
+        "model_sha256": core.load_model(core.HERE / "sd15-model.json")["sha256"],
+        "model_lock_sha256": core.sha256(core.json_bytes(core.load_model(core.HERE / "sd15-model.json"))),
         "visual": {"palette": palette, "lighting": "upper-left"},
         "positive_prompt": preset["prompt"], "negative_prompt": catalogue["negative_prompt"],
         "seeds": catalogue["generation"]["seeds"], "guide": {"source_sha256": core.sha256(source_bytes), "rows": rows},
