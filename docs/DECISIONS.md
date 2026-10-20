@@ -175,6 +175,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0161](#adr-0161--prepare-the-t0-experience-before-longitudinal-human-play) | Prepare the T0 experience before longitudinal human play | Accepted |
 | [0162](#adr-0162--quests-own-t0-teaching-and-the-per-player-f1-transition) | Quests own T0 teaching and the per-player F1 transition | Accepted |
 | [0163](#adr-0163--use-physical-barter-and-local-evidence-before-economic-rebalancing) | Use physical barter and local evidence before economic rebalancing | Accepted |
+| [0164](#adr-0164--extend-native-tank-custody-and-bounded-controller-backed-t0-ports) | Extend native tank custody and bounded controller-backed T0 ports | Accepted |
+| [0165](#adr-0165--provide-original-optional-inspection-without-a-new-pack-dependency) | Provide original optional inspection without a new pack dependency | Accepted |
 
 ---
 
@@ -7648,3 +7650,69 @@ only aggregate causal process/manual/claim/shop/recovery/state events and relati
 times. It is off by default and records no names, UUIDs, coordinates, credentials
 or external analytics. Manual accepted work and committed processes count, not
 attempts or repeated polling.
+
+---
+
+## ADR-0164 — Extend native tank custody and bounded controller-backed T0 ports
+
+**Status.** Accepted under the owner's explicit ADR-0161 infrastructure scope.
+
+**Decision.** Extend the existing Basic Tank, `FluidEndpoint` and
+`NativeFluidStore` authority rather than replace their16B/`Fluid` save contract.
+Stage real container handlers on copies and settle the whole native fluid/item
+exchange with owner-controlled compensation. Preserve fluid custody through
+breaking/rotation/relocation; reject hot/unrepresentable/tagged/invalid/stale
+Forge operations rather than silently treating them as cold valid input.
+
+Implement only justified item/fluid roles in the two existing T0 shapes:
+Firing candidate cells(1,0,0)/(1,1,0) accept at most one item input/output each
+while at least five ordinary bricks remain. Trough channel(0,0,1) accepts one
+item/fluid input variant; screen(0,0,2) accepts one item/fluid output variant.
+Keep original geometry, rotation and open-air requirements, with exposed relative
+sides and understandable role/fault markings. Default old builds remain valid
+and direct controller interfaces remain available.
+
+Ports own zero independent contents. Every operation validates loaded world,
+current formed shape, compatible role/face and unique controller block-entity
+identity; captured accesses to an old controller/store must fail after replacement
+at the same position. Rebind on each reform, invalidate on every retirement path,
+and never force-load chunks or create cross-dimensional links.
+
+Output quota is a real visibility/withdrawal bound, not just a displayed amount.
+Native reservations must respect that bound across aliases and recheck it at
+commit. Reuse the same backing store identity; do not manufacture a second store
+or copied tank to hide reserved input stock. Limit any shared API extension to
+this boundary and rerun its affected transaction/rollback proofs.
+
+[Pinned mature-source research](design/t0-external-references.md) supports
+role/count predicates, zero-storage primitive proxies, relative sides and identity
+retirement. Their generic kernels solve variable-scale systems unnecessary for
+seven known cells/two known parts; no GT/Mekanism implementation is copied.
+Controller ownership is structural, not a new player UUID/security system.
+
+---
+
+## ADR-0165 — Provide original optional inspection without a new pack dependency
+
+**Status.** Accepted under ADR-0161; Jade pack inclusion remains deferred.
+
+**Decision.** Add immutable bounded loaded-target inspection snapshots that read
+the real current process/progress/energy/fluid/environment/structure authorities.
+Use descriptive display reasons without reordering serialized machine-state
+enums. Show unknown/absent when a native fact is unavailable; do not invent a
+specific starvation cause from an ambiguous status.
+
+Present those snapshots through a small original optional native aimed-machine
+overlay using existing networking/client-rendering patterns. Keep client-only
+render classes out of dedicated-server initialization. Validate target, distance,
+rate and payload bounds on the server; no world scans, forced chunks, retained
+world references or personal logging. Text/shape must accompany color cues.
+Offer a clear client control and avoid duplicate overlays when another provider
+is present.
+
+Exact Jade11.13.3 API research establishes a compatibility target, not distribution
+permission. Its pinned CC-BY-NC-SA licence and ADR-0149 omission must not become
+an unreviewed mandatory dependency or a silently changed playable pack. Deliver
+the original native equivalent first; no Jade jar/API class/implementation is
+copied or shaded. Owner-approved integration or alternative overlay selection can
+extend the neutral snapshot later without replacing machine execution.

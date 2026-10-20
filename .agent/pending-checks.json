@@ -9,7 +9,7 @@
   "authorization": "Owner-directed playable modpack lifecycle, ADR-0144/PA-0007; technical/product RC readiness precedes longitudinal human acceptance, and T1 remains held until publication plus actual play",
   "work_plan": ".agent/work-plan.json",
   "experience_programme": {
-    "policy": ["ADR-0161", "ADR-0162", "ADR-0163"],
+    "policy": ["ADR-0161", "ADR-0162", "ADR-0163", "ADR-0164", "ADR-0165"],
     "plan": "plan/feature-t0-experience-1.md",
     "status": "implementation_active_not_longitudinal_ready",
     "baseline_main": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
@@ -18,7 +18,12 @@
     "human_approval_or_campaign": "NOT_EXECUTED",
     "longitudinal_started": false,
     "new_currency_mandatory_dependency_or_paid_images": false,
-    "client_access": "coordination_window_inventory_has_no_target_client_remote_graphical_path_not_yet_verified"
+    "client_access": "BLOCKED_no_authorized_remote_graphical_path_owner_question_unavailable_not_approval_to_waive_gate",
+    "early_Tank759": "native_task879ba2ba_assigned_compile_common_Forge_and_focused_real_tank_checks_no_claimed_pass_yet",
+    "visual_selective_JDK": "actual1969_javac_two_identical_stages_negatives_protected_art_pass_receipt08fb5a66_Java0_no_diffusion",
+    "sound_real_requests": "6POST_6HTTP200_0retry_0ambiguity_estimated720credits_two_selected_families_fire_candidates_rejected_native_furnace_event_no_reroll",
+    "Jade": "native_equivalent_selected_no_new_dependency_no_shaded_API_or_Jade_distribution_CC_BY_NC_SA_pack_inclusion_DEFERRED",
+    "normal_longitudinal_or_T1_started": false
   },
   "creative_client_followup": {
     "decision": "ADR-0156",

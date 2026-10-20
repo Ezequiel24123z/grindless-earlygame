@@ -10,12 +10,12 @@ inspection and audiovisual coherence before the first longitudinal run.
 | Category | Current new-wave state |
 | --- | --- |
 | COMPLETED | Verified clean mainb8bd5e8, personal remote and actual stopped747/c08/9cee installation; source-based inventory, shared contracts and isolated feature ownership established. |
-| BLOCKED | None for current code work. The real graphical path to the personal-PC client is not yet verified and cannot be replaced by a server pass. |
+| BLOCKED | Actual required graphical client/world smoke: coordination UI does not expose the remote PC client. Owner was asked for the authorized path and is unavailable; that response does not waive the gate. Safe code work continues. |
 | NOT EXECUTED | New integrated build/package/deployment, controlled client/world smoke and normal longitudinal campaign. The campaign must not start yet. |
 | NEEDS HUMAN VALIDATION | Final art/audio/fatigue, quest clarity, exact pacing/prices, ergonomics and enjoyment; no automatic pass is claimed. |
 | NEEDS MY DECISION | None for assigned reversible scope. No new currency or starter nerf is selected; material dependency/license/migration changes remain gated. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing secure sound access and local visual runtime are reused; actual authorized graphical client access remains to be established. No credential change/value is requested or committed. |
-| COST / BILLING RISK | New sound ceiling8POSTs/4families, initially6/3; local visual ceiling6candidates/3demonstrated targets. No paid images, new models or reset of old ledgers. |
+| COST / BILLING RISK | Six actual sound POSTs/HTTP200/no retry or ambiguity, about720 estimated credits. Two families selected, both fire candidates rejected in favor of native furnace feedback without reroll. New visual inference0; demonstrated state-mask issue is fixed deterministically. No paid images/new models/reset of old ledgers. |
 | DEPLOYED STATE | Previous747/c08/9cee remains stopped and unchanged at intake. No experience-branch code is claimed installed. |
 
 ## Previous testing delivery

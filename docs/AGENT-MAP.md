@@ -31,6 +31,20 @@ physical sound/visual work. It does not authorize a generic engine rewrite or
 unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
 
+Current experience seams (ADR-0162–0165):
+
+- `quest/` owns typed teaching/reward claims and the existing per-player F1 exit;
+  Guide registry compatibility is retained, not a new instruction authority.
+- New `shop/` owns the single client/server entry and physical barter; no wallet.
+  `telemetry/dev/` records opt-in causal aggregate events, not personal analytics.
+- `fluid/`, `structure/` and capability adapters retain tank/controller store
+  ownership; hatch aliases must not bypass produced-output quotas or old identity
+  retirement after controller replacement.
+- New inspection/optional native overlay packages consume bounded read-only facts;
+  old machine-state ordinals and unknown facts are not reinterpreted as certainty.
+- [External references](design/t0-external-references.md) record actual pinned
+  principles/licences, not permission to import implementations or a Jade jar.
+
 ## Playable releases, profiles and work storage
 
 - `docs/assets/image-generation-discovery.md` — verified external capability/
