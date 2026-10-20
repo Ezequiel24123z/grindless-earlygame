@@ -56,6 +56,40 @@ The normal generator never writes this Ogg, event or notice; both legacy convert
 are restricted to their five synthetic names. No regeneration, gain change or codec
 replay is part of the import.
 
+## Local visual-model provenance before asset import
+
+ADR-0157 authorizes reuse of an existing local checkpoint for an original
+Grindless Multitool source candidate. **No new visual asset is imported by this
+entry yet.** The model and ComfyUI code are not distributed with the mod or copied
+into this MIT repository.
+
+- Model: Stable Diffusion v1.5, Comfy-Org's FP16/header conversion, not a claim
+  that these are the original FP32 bytes.
+- Exact source: [Comfy-Org archive upload](https://huggingface.co/Comfy-Org/stable-diffusion-v1-5-archive/tree/4fddeb7f9096623f1b77f4708feb96126a08a0cf),
+  `v1-5-pruned-emaonly-fp16.safetensors`; Git LFS pointer blob
+  `2b9f5265289c9cc66100187c4db39636dd376122`.
+- Existing file and upstream LFS object agree: 2,132,696,762 bytes,
+  SHA-256 `e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916`.
+  No new weights download is part of this reuse.
+- Licence: CreativeML OpenRAIL-M, dated 2022-08-22; exact
+  [CompVis licence text](https://github.com/CompVis/stable-diffusion/blob/69ae4b35e0a0f6ee1af8bb9a5d0016ccb27e36dc/LICENSE),
+  including its use restrictions. Section 6 states the licensor claims no rights
+  in generated output except as set out there, while subsequent output use must
+  not contravene the licence. This is not MIT relicensing of weights or a
+  warranty that arbitrary generated content is cleared for use.
+- Intended scope: an original, non-branded industrial hand-tool icon, using
+  Grindless's own palette/specification, with no artist imitation, third-party
+  character/logo reference, training/fine-tuning or redistribution of the model.
+  Retain actual prompt/seed/workflow/output/transformation provenance and inspect
+  the candidate before any source/runtime asset import.
+- Execution software: existing ComfyUI remains an external GPLv3 development
+  tool. Original workflow JSON/API tooling and deterministic asset processing
+  do not vendor its implementation into common or a game dependency.
+- Review: the asset owner verifies primary model/LFS identities; the coordinator
+  independently reads the pinned licence and restrictions on 2026-10-20.
+  Actual source generation, final candidate hashes and human visual judgment
+  remain separate, not granted by this provenance entry.
+
 ## Pack dependencies (not imports)
 
 The first local client-pack manifest names launcher-managed dependency files but does **not** copy

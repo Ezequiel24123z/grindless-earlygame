@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Confirm actual client readiness and existing GPU execution separately.**
+  Preserve27d732's real read-only559 Inspect and owner-desktop CLI/log procedure,
+  without claiming graphical launch or authentication. Record the existing
+  Comfy ROCm/gfx1031 real-kernel probe as backend proof, not diffusion.
+  Pin exact model/LFS/OpenRAIL-M provenance before any visual source import.
 - **Reserve a bounded existing-Comfy proof window after real inventory.**
   Fresh guards show no Java/Python/listeners and sufficient host headroom.
   Permit only an owned core-only loopback API/CPU checks, then two Multitool

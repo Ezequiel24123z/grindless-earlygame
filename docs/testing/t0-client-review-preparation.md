@@ -6,6 +6,10 @@ entry or T0 acceptance. Follow [ADR-0156](../DECISIONS.md#adr-0156--disclose-blo
 and the [proof-reuse strategy](test-strategy.md). No application, audio, launcher,
 world, dependency or deployment files were changed by this workstream.
 
+The [read-only PC addendum](#read-only-pc-addendum-2026-10-20) supersedes the initial
+offline checkpoint's unexecuted-Inspect/unspecified-target statements only.
+Client launch, rendering, interaction and listening remain NOT EXECUTED.
+
 ## Identity and actual evidence
 
 Source inspected and checked: `269965b1b0b8c1becda74459a853f245105649ee`.
@@ -225,7 +229,10 @@ bounded agent launch. No credential search, new account, build, deploy, paid ser
 or protected-save access is required by this preparation. Clean import and authentic
 forward-save compatibility remain separate unexecuted release properties.
 
-## C2 handoff disclosure
+## Initial offline C2 handoff disclosure
+
+This is the preserved0178 checkpoint. The later read-only addendum below is the
+current environment result; it does not erase the earlier execution boundary.
 
 | Category | Actual C2 outcome |
 | --- | --- |
@@ -242,3 +249,125 @@ Current release ordering and the later no-command/longitudinal criteria remain i
 [the survival checklist's current policy](t0-survival-acceptance.md#current-release-and-world-policy)
 and [the development/release gate](../reviews/go-gate.md). This document does not
 promote its diagnostic review to either campaign completion or release readiness.
+
+## Read-only PC addendum, 2026-10-20
+
+**Ready for owner-driven client review after the coordinator assigns the JVM
+window.** Objective QA and the exact stopped-instance inspection are authorized;
+the remaining requirement is a real interactive desktop launch/observation, not
+an invented absence of QA authorization. No client/JVM lease was exercised.
+
+The coordinator explicitly assigned the existing private inventory, execution
+worktree, Java installation and `Grindless-T0-Dev` target for **Inspect and
+metadata only**. C2 used the existing RPC with explicit `ConfigFile` and exact
+Revision559. Private addresses, user paths and inventory contents are not copied
+here. No Sync, Build, Deploy, import, scheduled-task execution or GUI action ran.
+
+### Executed result
+
+Inspect exited0 with this actual receipt, independently confirming the earlier
+coordinator-recorded deployment:
+
+```json
+{
+  "Action": "Inspect",
+  "InstanceId": "Grindless-T0-Dev",
+  "Outcome": "VerifiedStopped",
+  "SourceRevision": "559bed5e8ea70ac52ff4b3fed3850ab05ab48256",
+  "RuntimeSourceRevision": "559bed5e8ea70ac52ff4b3fed3850ab05ab48256",
+  "GrindlessSha256": "98aa47dd18a555bf8a7e69989fd075e161fceaf6b2c799727c949ef5792cb061",
+  "PackSha256": "bff0fb27434da5ecd49aaf69d0f6b6635b22679029a7b95c488a175b266e8a86",
+  "PackStatus": "restricted-playable-profile-not-rc"
+}
+```
+
+Two strict-host, noninteractive SSH metadata reads exited0 at
+`2026-10-20T01:50:07.9376983Z` and `2026-10-20T01:52:29.1678645Z`.
+They used bounded CIM process/service/display queries, named launcher executable
+candidates, relevant scheduled-task names and owned-folder/log metadata only.
+No account file, credential, process command line, old save or client log content
+was read. No Comfy/model-directory investigation or another worker's CI trace was
+performed.
+
+| Observed property | Actual result and boundary |
+| --- | --- |
+| Java | Zero `java.exe`/`javaw.exe` processes in both snapshots; C2 started none |
+| Sessions | SSH process session0; owner console session present; Explorer and existing Prism process in session1 |
+| Display | Active video-controller metadata reports2560x1440; this is not an OpenGL/window-creation test |
+| Launcher | Existing per-user Prism executable, PE version11.0.2.0; executable/root/owned instance metadata exist |
+| Window observation | `MainWindowHandle` was0 from SSH; cross-session/minimized/visible-window state is not established by that value |
+| Existing remote bridge | `sshd` running; Remote Desktop disabled and `TermService` stopped. No Sunshine/AnyDesk/RustDesk/TeamViewer/VNC/Parsec match in the bounded process/service queries; no relevant Prism/Grindless/Minecraft/remote-tool scheduled task found |
+| Game/log path | Exactly the owned `minecraft` folder exists; no `.minecraft` alternate, `logs\latest.log` or crash-report directory exists yet |
+| Owner command paths | The assigned Prism root matches the owner's APPDATA root; the executable exists under LOCALAPPDATA's `Programs\PrismLauncher` |
+| Authentication | NOT VERIFIED. A launcher process, interactive session or account-file existence is not a valid Minecraft login |
+
+An existing **launcher CLI and prospective log surface** are available. There is
+no ready agent graphical observation/input bridge identified in these bounded
+checks. This is not a claim that all remote-control software is absent. Ordinary
+SSH is session0; neither its process exit nor the existing session1 Prism process
+proves cross-session CLI forwarding, a visible game window or authenticated play.
+No forwarding/launch experiment was run. Do not enable RDP, install remote control,
+create a desktop task or change a login/OS setting to turn this into a pass.
+
+### Exact owner launch and log observation
+
+After the coordinator grants the client window and checks fresh headroom/identity,
+the owner runs this **in the PC's existing interactive desktop PowerShell**, not
+through the session0 SSH shell. These commands are prepared, **NOT EXECUTED**.
+The paths use owner environment variables, not published private configuration.
+The installed executable location was confirmed above.
+
+```powershell
+$ErrorActionPreference = 'Stop'
+$prismExe = Join-Path $env:LOCALAPPDATA 'Programs\PrismLauncher\prismlauncher.exe'
+$prismData = Join-Path $env:APPDATA 'PrismLauncher'
+if (-not (Test-Path -LiteralPath $prismExe -PathType Leaf)) { throw 'Assigned Prism executable is missing.' }
+if (-not (Test-Path -LiteralPath (Join-Path $prismData 'instances\Grindless-T0-Dev\instance.cfg') -PathType Leaf)) { throw 'Assigned engineering instance is missing.' }
+$reviewStartedUtc = [DateTime]::UtcNow
+& $prismExe --dir $prismData --launch 'Grindless-T0-Dev'
+```
+
+The official [Prism CLI reference](https://prismlauncher.org/wiki/getting-started/command-line-interface/)
+confirms `--dir` selects the application root and `--launch` takes the instance
+folder ID. No `--import`, `--profile`, `--alive`, account selection or authentication
+change is requested. If Prism requests login/account selection, the owner handles
+it locally; C2 has not asserted that the existing login is valid. A launcher exit0
+is not a Minecraft/title-screen or resource-loading pass.
+
+In the **same owner PowerShell session**, after the launch attempt:
+
+```powershell
+$game = Join-Path $prismData 'instances\Grindless-T0-Dev\minecraft'
+$log = Join-Path $game 'logs\latest.log'
+if (-not (Test-Path -LiteralPath $log -PathType Leaf)) { throw 'This client attempt has not produced an owned latest.log.' }
+if ((Get-Item -LiteralPath $log).LastWriteTimeUtc -lt $reviewStartedUtc) { throw 'Owned latest.log predates this launch attempt.' }
+Get-Content -LiteralPath $log -Encoding UTF8 -Tail 120
+```
+
+The authorized QA observer can later read this same owned log over the existing
+SSH lane. This is bounded log observation, not a new collector or GUI runner.
+No log is available to inspect now; do not substitute another instance's log.
+Retain/redact the actual startup/resource/OpenGL/audio errors and launch interval
+before sharing, using the evidence rules above. A fresh timestamp or clean log
+alone cannot establish visible title, menu reachability, click alignment or sound.
+
+The owner confirms the visible game/title and uses only the new disposable
+diagnostic world/probes above; never the protected preparation save. The smallest
+remaining runtime property remains title/world startup plus native Atlas, guide,
+machine and Heracles opening on this exact candidate. Stop at a real failure and
+preserve its logs. Rendering/UX/listening quality and the no-command manual campaign
+remain separate human observations. A new integrated SFX candidate needs its own
+recorded artifact identity before it can be included.
+
+### Current C2 disclosure after read-only preparation
+
+| Category | Actual current result |
+| --- | --- |
+| COMPLETED | Real existing-RPC Inspect=`VerifiedStopped`, exact559/JAR98aa/ZIPbff0 confirmed; two metadata snapshots with0Java; actual launcher/display/session/log-path readiness and an exact existing-CLI owner launch/log procedure. Earlier offline proofs are retained, not replayed. |
+| BLOCKED | None for this read-only step. No ready automated graphical observation/input bridge was identified within the bounded metadata checks; use the owner's existing interactive desktop rather than invent one. |
+| NOT EXECUTED | JVM/client launch, cross-session CLI forwarding, native OpenGL/render/input/JEI/Heracles, new world, audio/listening, clean import, saved-world compatibility and campaign. No PC/Prism writes, provider call or CI/harness replay. The next client/JVM window is still coordinator-controlled. |
+| NEEDS HUMAN VALIDATION | Actual visible startup and diagnostic interactions, appearance/UX, listening/mix and manual T0 campaign. No T0 acceptance/freeze or T1 activation. |
+| NEEDS MY DECISION | None within C2; next runtime scheduling and integrated candidate identity stay with the coordinator. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | No new credential requested or declared missing. Existing Prism/Minecraft authentication remains unverified; any account/login prompt is an owner-only desktop action. Actual review needs that desktop and a freshly assigned JVM/headroom window. |
+| COST / BILLING RISK | None: no provider/download/generation requests, new service, billing activation or JVM/client launch. |
+| DEPLOYED STATE | Fresh Inspect confirms unchanged559/JAR98aa/ZIPbff0, stopped and restricted-playable-not-RC. Existing Prism process was not started by C2. No protected instance/save or deployment was modified. |

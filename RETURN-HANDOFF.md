@@ -63,6 +63,20 @@ Its child is authorized only to inspect the explicit PC target/read-only graphic
 metadata next, not launch a JVM or mutate Prism. The additional local-Comfy owner
 is a3c3fa99 on7e58f92; only inspection/safe isolated preparation is active there.
 
+Subsequent C2 addendum27d732 completes that read-only step: actual existing-RPC
+Inspect confirms559/98aa/bff0/VerifiedStopped. Owner console/Prism exists in an
+interactive session while SSH is session0; no ready cross-session graphical
+observation/input bridge is established, no client/latest.log exists yet and no
+client is launched. The document provides the exact existing owner-desktop
+Prism CLI plus fresh-log observation; no new remote-control/OS/login changes.
+
+The existing Comfy ROCm backend now passes an actual gfx1031 GPU kernel under
+Python3.12.9/torch2.12.0 ROCm7.15 with12GiB-class VRAM, synchronized and freed;
+this is not diffusion or a generated image. Exact model/LFS provenance and the
+pinned OpenRAIL-M text/restrictions are checked before candidate import and
+recorded in THIRD_PARTY_NOTICES. No weights/GPL code are distributed; API/source
+generation and candidate evaluation are still pending at this checkpoint.
+
 ## What is already on the personal PC
 
 Prism instance ID: `Grindless-T0-Dev`.
