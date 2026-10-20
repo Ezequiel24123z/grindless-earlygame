@@ -22,12 +22,12 @@ All loop admissions require the current loaded block/entity identity and
 | --- | --- | --- | --- | --- |
 | Quern | `t0_grinding` / `t0_grinding.ogg`, imported A | Preserve exact stone/granular loop, gain 1 | RUNNING, 16 | Preserve; prior preview approval is not native mix approval |
 | Clay Mixer | `t0_wet_work` / `t0_wet_work.ogg`, normalized imported A | Preserve exact viscous paddle loop, gain .35 | RUNNING, 16 | Preserve; listening pending |
-| Firing Chamber | `machine_hum` / `machine_hum.ogg`, generic synth bursts | New quiet enclosed combustion/draft loop | RUNNING controller only, 16 | Replace; listening pending |
-| Biomass Dynamo | No MachineEffects sound branch, silent | Share the same physical combustion bed, not an electric drone | RUNNING biomass block only, 16 | Add justified fuel voice; listening pending |
-| Crude Extractor | `machine_hum_heavy` / matching Ogg, generic synth bursts | New compact mineral-working/grit loop, not Quern discs | RUNNING actual extractor, 16 | Replace; listening pending |
-| Hand Pump | `machine_hum_heavy` / matching Ogg, generic synth bursts | New quiet contained water-flow loop | RUNNING water movement, 16 | Replace; no invented hand-crank/motor sound |
-| Settling Trough | `machine_hum` / matching Ogg, generic synth bursts | Share narrow water/sediment flow, not thick Mixer friction | RUNNING controller only, 16 | Replace; listening pending |
-| Geological Collector | Silent | Share water/sediment flow: actual recipe consumes water to collect aggregate/clay | RUNNING eligible source process, 16 | Add justified washing voice; listening pending |
+| Firing Chamber | `machine_hum` / `machine_hum.ogg`, generic synth bursts | Quiet native furnace crackle one-shots; generated candidates failed loop QC | RUNNING controller only, 16 | Replace; listening pending |
+| Biomass Dynamo | No MachineEffects sound branch, silent | Share the native physical fuel crackle, not an electric drone | RUNNING biomass block only, 16 | Add justified fuel voice; listening pending |
+| Crude Extractor | `machine_hum_heavy` / matching Ogg, generic synth bursts | Selected compact mineral-working/grit loop, not Quern discs | RUNNING actual extractor, 12; gain .3 | Replace; listening pending |
+| Hand Pump | `machine_hum_heavy` / matching Ogg, generic synth bursts | Selected quiet contained water-flow loop | RUNNING water movement, 10; gain .25 | Replace; no invented hand-crank/motor sound |
+| Settling Trough | `machine_hum` / matching Ogg, generic synth bursts | Share narrow water/sediment flow, not thick Mixer friction | RUNNING controller only, 10; gain .25 | Replace; listening pending |
+| Geological Collector | Silent | Share water/sediment flow: actual recipe consumes water to collect aggregate/clay | RUNNING eligible source process, 10; gain .25 | Add justified washing voice; listening pending |
 | Biocultivator | Silent | Intentional silence: light/moisture growth is not an aerated bubbling tank | All states | Preserve; no paid family |
 | Assembly Bench | Silent | Intentional silence: no proven continuously moving mechanism; inventory/GUI feedback remains | All states | Preserve; no invented powered hammer |
 | Research Terminal / calibration | `machine_hum` / matching Ogg, generic tonal bursts | Intentional silence: physical core calibration does not prove a noisy motor or electronic drone | All states | Remove hum; no progress/completion beep |
@@ -62,6 +62,30 @@ missing access, HTTP errors, storage ambiguity or unexpected charging.
 The conditional estimate is 120 credits per three-second request, **720 for six**;
 no invoice or guaranteed USD maximum is claimed.
 
+**Actual generation:** six POSTs, six HTTP200 saved sources, no provider failure,
+ambiguity or retry, at the exact reviewed checkpoint `1789ce9`. The one receipt
+is closed/exhausted6/6, SHA-256
+`546b2dbfcfc6c500523b1989de436e5ac8efa5312bca9fd06c6a9ad8318528f2`.
+Do not replay Generate or treat the unused two ceiling slots as a new grant.
+All actual dates/source hashes and original QC identities are in
+[the machine-readable record](t0-experience-audio.json).
+
+Water B has a lower original encoded seam slope than A. Mineral B has a low
+level recoverable by normalization; A has a0.386-second quiet interval.
+Their normalized final decoded files have no flags or clipping:
+water `5fbfa5c1`,33,490B,gain2.5929911824553469; extraction
+`a634f9a1`,29,241B,gain5.3096296296296295. Both are mono44100/3seconds and
+remain technically selected, not artistically approved.
+
+Neither generated fire candidate is forced into the game. A has original
+boundary warnings; one bounded2.63-second window/40ms periodic crossfade still
+fails after normalization with0.1915s leading silence. A100ms energy scan also
+shows a sparse transient dominates the purported bed. B has a1.0399s quiet
+interval and boundary warning. Preserve both originals and the failed derivation
+(`3b07d076` receipt), without reroll or weakened thresholds. Actual fuel roles
+use existing native furnace crackle as sparse one-shots instead, not another
+generic drone or a cosmetic "QC pass" on an unsuitable source.
+
 Select on actual decoded codec/clipping/silence/boundary evidence. Normalize
 with constant gain bounded by RMS .03 / peak .35, preserve source/derived hashes,
 and use only justified deterministic seam repair when actual QC requires it.
@@ -77,6 +101,11 @@ No forced chunks, block-volume/world scan, strong old-world retention, duplicate
 MachineEffects fallback or loop on tanks/parts. Preserve pause, mute/unmute,
 admission suppression, retry backoff, unload/removal, dimension/player change,
 disconnect and resource reload ownership retirement.
+The nearest-eight stable-position mix caps working voices across all four
+loop families. The small source-independent policy also caps observed crank
+edges at four in one tick and observes suppressed edges without queuing a later
+burst. It is exercised by the existing Java audio check, not a second tracker.
+This edge means observed RUNNING output, not proof of an individual crank input.
 
 Keep all five old SoundEvent IDs registered to avoid registry/save churn.
 Empty hum bindings intentionally represent silence; physical interaction aliases
@@ -117,13 +146,13 @@ These are **NOT EXECUTED** by source or codec checks:
 
 ## Current handoff
 
-| Category | State at preparation checkpoint |
+| Category | State at notice-first checkpoint |
 | --- | --- |
-| COMPLETED | Full source coverage, physical/silence decisions and finite six-request purpose prepared; existing reviewed runner/ledger reused. |
+| COMPLETED | Full coverage, six actual HTTP200 sources, two normalized/decoded-QC-selected imports and additive rights/notices; unsuitable fire sources retained, native physical combustion selected. |
 | BLOCKED | None. Previously approved codec/Core binaries found and hash-verified; no install or PC runtime lease needed. |
-| NOT EXECUTED | Generation, selected encoding/import, changed source contracts/build and native client review at this checkpoint. |
+| NOT EXECUTED | Binary import, final changed source/resource contracts, Java/common/Forge build and native client review at this checkpoint. |
 | NEEDS HUMAN VALIDATION | All new artistic selection, encoded listening, gain/falloff, seams and one/eight/mixed workshop fatigue. |
 | NEEDS MY DECISION | None for the bounded delegated sound unit. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing authorized mechanism only; not read at preparation. |
-| COST / BILLING RISK | Actual new POSTs 0; planned 6 of new maximum8, conditional estimate720 credits. No retries or paid images. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None. Existing authorized credential was read only programmatically by the reviewed transport, never output, hashed, copied or committed. |
+| COST / BILLING RISK | Actual new POSTs6 of maximum8, all HTTP200, closed selected6/6 grant, conditional estimate720 credits. No retries, billing change, paid images or historical-ledger reset. |
 | DEPLOYED STATE | No build, Prism, save, JVM/GPU or installed-instance mutation by this lane. |
