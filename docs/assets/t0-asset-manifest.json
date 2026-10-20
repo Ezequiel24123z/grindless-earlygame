@@ -35,7 +35,9 @@
     "observer_addendum_no_JVM_replay": "aee17226076535ea37726033664377f72e572b9c6bb376f328774f4a8be30b69",
     "ordinary_generator_requires_Comfy_Python_or_network": false,
     "human_visual_approved": false,
-    "deployed": false,
+    "deployed": true,
+    "deployed_source": "747ebcacdb063f6faa3c69c7eb9b45c407f32bdd",
+    "deployed_jar_sha256": "c08a02fec8e648f77c511df3318c9f00fee62779e8b398ff53ce8f4b88ed0a78",
     "historical_provider_status_above_not_current_local_availability": true
   },
   "source_bound_readiness": {

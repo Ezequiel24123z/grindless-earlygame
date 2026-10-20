@@ -1,48 +1,68 @@
 # Return handoff
 
-**Follow-up wave active (ADR-0156). Prior engineering deployment remains qualified;
-creative/client/product readiness is not complete. No T0 acceptance/freeze or T1.**
+**T0 engineering testing candidate747 is qualified, deployed and stopped.**
+Human appearance/listening, first-quest interaction and the campaign remain the
+owner's testing. This is not T0 acceptance/freeze, a product RC or T1 activation.
 
 ## Current wave disclosure
 
-**Final execution transfer:**7dcd042e now owns the isolated PC generator/build/
-boot lane. The old executor's runtime is not running despite a stale busy flag;
-04:41:39Z read-only inspection confirms0Java/clean039/no phase2B output. Its lease
-is withdrawn, not silently shared. All prior successful and failed receipts remain
-valid/preserved; no historical JVM stage is replayed to replace the observer.
-
-**Execution correction (ADR-0158):** the owner requires broader end-to-end delivery
-and proportionate checks, not micro-approval queues. The complete generated Mixer
-unit ad71 is integrated in published16d103a alongside the qualified local Multitool
-pipeline. Final baf1 adds source-bound visual proof/provenance records without a
-successful-stage replay. ADR-0159 settles the first free generous starter quest;
-owner7dcd042e completed source1529 and its source checks; both complete book
-projections and native all-or-nothing inventory delivery are integrated.
-Owner9c12461c now owns combined PC
-compilation/selected checks, then final kit/package/registration qualification.
-Only the coordinator publishes/deploys. Human art/listening/campaign remain separate.
+Installed source/runtime is `747ebcacdb063f6faa3c69c7eb9b45c407f32bdd`.
+JAR1971538 bytes/SHA-256
+`c08a02fec8e648f77c511df3318c9f00fee62779e8b398ff53ce8f4b88ed0a78`;
+playable ZIP1558861 bytes/SHA-256
+`9cee1df833c2e19bf886fe353c6669c5af47227c3a242c6a9f52763264e91267`.
+The same JAR is verified in the ZIP, native staging and owned development instance.
+Deploy=`Deployed`, Inspect=`VerifiedStopped`, repeat Deploy=`Unchanged`.
+Final05:10:49Z postcheck confirms0Java and all six original-instance/save hashes
+unchanged. No old save is opened/copied/adopted and no dependency is downloaded.
 
 | Category | Current actual state |
 | --- | --- |
-| COMPLETED | Starter source1529/11 legal stacks/book recovery/both projections/native full-batch delivery are integrated in039. Actual PC16d common/Forge, audio84 and full assets pass; the closed receipt and raw outputs are verified. Exact962 CI/PC full48, Comfy28 Python/12 JDK/two identical1602-file stages/127b and real generated Mixer A are preserved; Quern A is unchanged. |
-| BLOCKED |039 CI39367863670 fails the stale no-free-kit guidance assertion and unregenerated runtime guidance asset;7d repairs the source contract and9c generates the canonical output. Earlier16d sound byte-pin red is fixed in697 with exact LF/CRLF pairs; fresh Linux proof is pending. No full-green/package/merge claim. |
-| NOT EXECUTED | Final kit executable qualification/build/package/registration boot/deploy and current-wave graphical client/manual campaign are not yet complete. Main merge and preserved PR cleanup are authorized only after the candidate is technically ready for testing. |
+| COMPLETED | Free first quest/11 legal stacks/book recovery/both projections and one native inventory transaction; actual common/Forge/Heracles454/Quest421/Claims206/persistence/sustainability/registry/guidance checks; generated resource parity; build/package88, exact archive entries, representative production boot0 and same-artifact deployment/idempotency. Generated Mixer and Multitool are included; Quern A and protected sprites remain intact. |
+| BLOCKED | None. Fresh747 push/PR workflows pass all16 jobs: verify, Windows tooling and all six native shards each. Final main/cleanup identity is recorded by live PR55, not inferred from an old or cancelled run. |
+| NOT EXECUTED | Graphical client/input, real login/claim/respawn/reconnect/save-reload interaction, listening/mixed-machine balance and no-command/longitudinal campaign. No final human or product acceptance is claimed. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
 | NEEDS MY DECISION | None. ADR-0159 selects the generous first free quest; implementation does not await another village/shop/food decision. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for this delivery. Manual client review uses the existing owner desktop; no new account/key or remote-control installation is assumed. |
 | COST / BILLING RISK | Two of12 allowed SFX requests were used, about240 estimated credits, not a guaranteedUSD quote. Two local Comfy jobs spent the original2/2 run; no extra inference/model download/external-image billing occurred. Allowances are ceilings, not targets; original ledgers remain immutable. |
-| DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
+| DEPLOYED STATE | Owned Grindless-T0-Dev is stopped on source/runtime747, JARc08a02fe and ZIP9cee1df8 above. Six original-instance/save files remain unchanged;0Java and0build locks remain. |
 
 The owner now explicitly requests testing-ready `main` and PR cleanup (ADR-0160).
-Live inspection finds13 older drafts; every exact head is an ancestor of039,
+Live inspection finds13 older drafts; every exact head is an ancestor of747,
 with no native stack metadata. Preserve/revalidate those heads, merge the qualified
 consolidated PR, then close superseded entries without deleting branches/worktrees.
 Human testing follows this delivery; it is not an invented acceptance/freeze/T1 pass.
+The live [consolidation PR](https://github.com/Ezequiel24123z/grindless-earlygame/pull/55)
+is the GitHub integration/cleanup record; preserve the exact head map in pending
+checks and re-read its live state rather than treating this frozen artifact source
+as a claim about a later merge SHA.
+
+## Local Comfy closeout
+
+| Category | Actual state |
+| --- | --- |
+| COMFYUI ENVIRONMENT FOUND | Existing ROCm0.32/RX6700XT gfx1031 qualified with a real kernel and diffusion; own loopback endpoint is stopped. |
+| REUSED COMPONENTS | Existing SD1.5 FP16/CLIP/VAE/Python/Pillow; no model copied or downloaded. |
+| INSTALLED/CHANGED COMPONENTS | Project tooling, one sprite and provenance only; no installer/driver/firewall/global account change or reboot. |
+| MODEL/WORKFLOW SELECTED | Pinned OpenRAIL-M SD1.5, core guided img2img, original guide, seed21774206/20 Euler/CFG7/denoise0.35. |
+| AUTOMATION METHOD | Bounded local API plus raw/canonical workflow validation, retained source/metadata and deterministic processing; ordinary regeneration is JDK-only. |
+| POC ASSETS GENERATED | Two sources for one target: first rejected photographic output, second selected technically. No extra inference. |
+| ASSETS INTEGRATED | One16px Multitool127b sprite;580 other PNGs including protected9+3 unchanged; actual747 JAR/ZIP/development deployment verified. |
+| NEEDS HUMAN VISUAL VALIDATION | Actual inventory/JEI rendering and artistic/UX judgment remain pending. |
+| BLOCKERS | None in the implementation; human testing is not a fabricated automated pass. |
+| DISK/COMPUTE IMPACT | About16.8MiB owned evidence, two bounded diffusion jobs; own GPU/server/JDK processes released. No user data relocated. |
+| LICENSING/PROVENANCE NOTES | Exact model/OpenRAIL-M/guide/workflow/seed/source/transform recorded before import; no weights or Comfy GPL implementation redistributed. |
+| RECOMMENDED NEXT ASSET WAVE | Reuse the guided method for another demonstrated weak T0 item; no mass replacement or new progression. |
 
 ## Preserved follow-up timeline
 
 The snapshots below retain their original source/time boundaries. The current
 disclosure above supersedes their old pending choices, leases and generation state.
+
+Execution recovered from a stale/non-running persistent executor at04:41 and
+withdrew both former PC leases. Native CLI tasks completed canonical generation
+and final packaging/boot without replaying previous greens; all successful and
+failed receipts/cache/source branches remain preserved.
 
 The owner subsequently identifies an existing local ComfyUI and authorizes
 ADR-0157's reversible project-isolated production pipeline. This supersedes the

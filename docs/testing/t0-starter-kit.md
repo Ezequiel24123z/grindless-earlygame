@@ -4,6 +4,17 @@ Implementation base: `b29439bf0112a12ee79baa155fd21231f0ddebd7`.
 This is the owner-decided generous finite entry, not a new world preset, village
 requirement, shop, recipe permission or renewable-resource claim.
 
+## Current executable qualification
+
+The integrated source039 passes actual common/Forge compilation, Heracles454,
+Quest421, Claims206, persistence, Sustainability1945 and Registry87/1106 on the
+isolated PC. Its stale no-kit assertion and generated guidance both fail honestly.
+Fix344 and the normal canonical writer close those defects: actual Guidance25495,
+T02686 and full Assets pass; the regenerated payload is published in747ebca.
+Earlier source checks below retain their original bounds, not a second JVM pass.
+Final package/registration/deployment and live GitHub qualification remain separate
+until their receipts close. Real login/click/rendering/campaign remain human.
+
 ## Player contract
 
 `starter_supplies` is the first task in the existing Bootstrap line. Its goal is

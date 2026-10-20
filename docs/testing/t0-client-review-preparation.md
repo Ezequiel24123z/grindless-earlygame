@@ -10,6 +10,23 @@ The [read-only PC addendum](#read-only-pc-addendum-2026-10-20) supersedes the in
 offline checkpoint's unexecuted-Inspect/unspecified-target statements only.
 Client launch, rendering, interaction and listening remain NOT EXECUTED.
 
+## Current testing target — qualified747
+
+The coordinator subsequently deploys source/runtime
+`747ebcacdb063f6faa3c69c7eb9b45c407f32bdd` to the same owned stopped instance:
+JAR SHA-256 `c08a02fec8e648f77c511df3318c9f00fee62779e8b398ff53ce8f4b88ed0a78`,
+playable ZIP SHA-256 `9cee1df833c2e19bf886fe353c6669c5af47227c3a242c6a9f52763264e91267`.
+The older559 identities and input-equivalence scan below remain historical C2
+evidence, not equality with the new quest/sound/sprite source.
+
+Use the existing owner-desktop launch procedure below. In a new normal Superflat
+or Overworld, verify the automatic utility book, first **Claim free kit** action,
+all eleven legal reward stacks and a single claim. Include full-inventory/retry,
+reopen/rejoin/respawn and ordinary save/reload without resetting the claim.
+Then inspect the new Multitool and listen to Quern/Mixer separately and mixed.
+These are requested human checks, not an already played no-command campaign or
+permission to overwrite/adopt an existing exploratory save.
+
 ## Identity and actual evidence
 
 Source inspected and checked: `269965b1b0b8c1becda74459a853f245105649ee`.

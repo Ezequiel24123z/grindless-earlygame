@@ -1,5 +1,68 @@
 # Current T0 rework validation
 
+## Qualified747 package, production boot and exact development deployment
+
+Frozen `747ebcacdb063f6faa3c69c7eb9b45c407f32bdd` passes the existing
+`prism-dev Build`: verifyModpack88/0 and buildModpack playable in one19.644s
+invocation. Source/runtime provenance both name747 and retain
+`restricted-playable-profile-not-rc`. Seven pins remain unchanged.
+
+| Exact artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Remapped/staged/archived/installed JAR | 1971538 | `c08a02fec8e648f77c511df3318c9f00fee62779e8b398ff53ce8f4b88ed0a78` |
+| Playable ZIP | 1558861 | `9cee1df833c2e19bf886fe353c6669c5af47227c3a242c6a9f52763264e91267` |
+| Production boot log | 15293 | `63043942172b4e332105b8cda95f5e471b75b312219a19eb71163d35af88bd54` |
+| Native report | 2285 | `1c7786d4b6feee26eab2fb3a41790476a1c299a90e552535e0a2d8448f10c168` |
+
+Actual archive checks compare the exact wet Ogg2c052/33374B, unchanged
+Quern811b/34364B, Multitool127b/223B, generated guidancec053/554371B, both
+sound/subtitle bindings, AUDIO-NOTICE, new Forge book-subscriber class and exact
+public notices. No replacement artifact is inferred from matching file names.
+
+The concrete changed binding is the seventh SoundEvent/new Forge subscriber.
+One canonical production `boot` passes,2GiB/900-120-60-60: preparation0,
+server `Done (31.665s)!`, harness0 in79.169s, `SMOKE BOOT PASSED` and all one
+scenario passed. `Stopping server`/`All dimensions are saved` precede natural
+shutdown; the disposable world is removed normally. Exact staged `grindless.jar`
+equals the built/ZIP JAR. No states/old regression/full matrix replay is performed.
+An oversized first read-only archive inspection is refused before remote execution,
+then smaller archive queries succeed; no build/package/boot is replayed for it.
+
+Coordinator Sync747=`VerifiedDetached`, Deploy=`Deployed`,
+Inspect=`VerifiedStopped`, repeat Deploy=`Unchanged`. No dependency is downloaded
+or changed. Final05:10:49.4856835Z postcheck independently verifies the installed
+c08 JAR,0Java and all SIX original-instance/save hashes unchanged. Original clone
+stays70901; no old world is opened/copied/adopted. The full generated/runtime and
+human proof boundaries remain distinct.
+
+Fresh747 push/PR runs39372344685 and39372349695 both finish success: verify,
+Windows tooling and all SIX native shards each. All16 actual jobs pass, including
+the repaired offline sound guard. Historical failed/cancelled runs are not
+reclassified. This final ledger/handoff successor changes no common/Forge/tools/
+build/pack executable input; documentation links/JSON receive their direct cheap
+check and reuse747 runtime proof under ADR-0140, not another matrix replay.
+
+## Canonical starter guidance regenerated and both guidance reds closed
+
+The native CLI executor uses the existing writer and CheckOnly on59e26b8:
+both exit0, with68 declarations/4893 comparisons and document content digest
+`3d9abe5c03894c62f185796028b31cba5c9ab7f2b199300013ce9897c9239449`.
+The normal output is imported by SCP, byte-verified and published in747ebca.
+Raw554371-byte SHA-256:
+`c053b94129cc642d730edbff74718779901050325c82ac8f0662a215ce004004`.
+Resource/classpath bytes match after processResources. Actual affected reruns:
+Guidance25495/0, T02686/0 and full Assets0. No earlier green suite is replayed.
+The original two red outputs and strict generated equality remain preserved.
+
+Observer/tool preparation errors are explicit: the first encoded SSH invocation
+exceeds Windows argv and runs no stage; JAVA_TOOL_OPTIONS contaminates the existing
+javac-version guard, then JDK_JAVA_OPTIONS permits the normal writer; an incomplete
+helper source set fails javac before the corrected six-helper compile passes.
+None is called an unobserved green or used to replay a successful stage.
+The executor releases0Java/0locks and preserves the original clone. The known
+generated-only PC delta is advanced to exact747 for final package/boot by a new
+bounded native task; the previous persistent leases remain withdrawn.
+
 ## Actual039 PC contracts and the source fix for its two guidance reds
 
 The same isolated PC owner runs039 once: common/Forge/backend/classpath and

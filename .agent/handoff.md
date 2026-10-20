@@ -4,6 +4,34 @@ Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC
 
 ## Active owner-directed follow-up
 
+**Engineering testing candidate747 is qualified, deployed and stopped.**
+Read [RETURN-HANDOFF](../RETURN-HANDOFF.md) for the eight disclosure categories,
+Comfy closeout and exact installed identities. Source/runtime747, JARc08a02fe
+and playable ZIP9cee1df8 are identical across built archive/native staging/Prism.
+The free first quest has11 legal stacks, initial utility-book recovery, one
+ledger and no partial/drop behavior. Both UI projections and old IDs/save schema
+are preserved.
+
+Actual source-bound common/Forge/backend, audio84, Heracles454, Quest421,
+Claims206, persistence, sustainability/registry, Guidance25495/T02686 and full
+Assets pass. Normal build/package88 and one representative production boot0 pass;
+the server stops naturally. Deploy/Inspect/repeat=`Deployed/VerifiedStopped/
+Unchanged`;05:10:49Z postcheck confirms all six old-instance/save hashes and0Java.
+Both persistent PC leases and the final native task's locks/processes are released.
+No human client/listening/campaign or Tier acceptance is inferred.
+
+ADR-0160 governs main integration/cleanup through the live
+[consolidation PR](https://github.com/Ezequiel24123z/grindless-earlygame/pull/55).
+Fresh747 push/PR workflows pass all16 jobs, including verify/Windows and all six
+native shards each. The proof-only successor keeps executable inputs unchanged;
+do not repeat runtime merely to document a pass. Resolve the actual merge identity separately from the
+frozen deployed source, and close only exactly preserved superseded heads.
+
+## Preserved follow-up execution timeline
+
+The snapshots below retain their original source/time bounds. They do not
+reassign a released lease or override the current qualified747 deployment.
+
 **Current final PC owner is7dcd042e.** At04:41:39Z the former executor's app
 runtime is not running (stale busy flag); read-only SSH finds0Java, clean039,
 and no later generator/stage output. Its lease is explicitly withdrawn before

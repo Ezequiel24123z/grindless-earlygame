@@ -26,7 +26,16 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: finish and qualify the owner's first free generous starter quest
+Next: owner client testing on the qualified/deployed747 candidate and
+ADR-0160's final live-GitHub main integration/PR cleanup. The first free starter
+quest, canonical guidance, real Mixer/Multitool assets, applicable executable
+contracts, package88 and representative production boot are complete. The exact
+native-qualified JAR is installed in the stopped owned development instance;
+all six original-instance/save hashes and0Java are independently verified.
+Use the current return handoff, not the historical559 installed identity below.
+No new implementation, entry-choice debate or unchanged smoke replay is needed.
+
+The completed current slice was: finish and qualify the owner's first free generous starter quest
 (ADR-0159), combine it with the integrated local Multitool/Mixer units, and deploy
 the same verified package to the stopped development instance. Initial quest-book
 access and one complete server-authoritative claim replace the earlier village/

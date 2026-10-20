@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify and deploy the complete T0 engineering testing candidate747.**
+  Actual canonical guidance25495/T02686/full Assets close the preserved reds;
+  build/package88 and one production boot pass. Exact c08 JAR/9cee playable ZIP
+  include the free starter quest, Mixer Ogg and Multitool sprite. Dedicated
+  development Deploy/Inspect/repeat pass with six original files unchanged and
+  zero Java. Fresh hosted verify/Windows pass; main integration tracks live
+  native/review state without claiming human appearance/listening/campaign.
 - **Regenerate the canonical resource guidance for the free Superflat starter.**
   The generated JSON now records the current `3d9abe5c03894c62f185796028b31cba5c9ab7f2b199300013ce9897c9239449`
   content digest; the rebuilt classpath and affected `VerifyResourceGuidance`,
