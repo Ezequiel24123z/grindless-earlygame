@@ -2,7 +2,10 @@
 
 import copy
 import io
+import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -199,6 +202,23 @@ class PresetContracts(unittest.TestCase):
 
 
 class InventoryContracts(unittest.TestCase):
+    def test_inventory_and_contact_sheet_are_independent_of_process_hash_seed(self):
+        code = (
+            "import sys,io;sys.path.insert(0,sys.argv[1]);import t0_visuals as a;import comfy_asset as c;"
+            "r=a.inventory(a.ROOT,'b'*40);"
+            "rows=[(p['owner'],a.image_bytes((a.ROOT/p['runtime']).read_bytes())) "
+            "for p in r['textures'] if '/textures/block/' in p['runtime']];"
+            "b=io.BytesIO();a.contact_sheet(rows[:24],'Determinism fixture, not gameplay').save(b,format='PNG');"
+            "print(c.sha256(c.json_bytes(r)));print(c.sha256(b.getvalue()))"
+        )
+        results = []
+        for seed in ("1", "2"):
+            result = subprocess.run([sys.executable, "-B", "-c", code, str(core.HERE)],
+                                    env={**os.environ, "PYTHONHASHSEED": seed}, capture_output=True,
+                                    text=True, check=True, timeout=30)
+            results.append(result.stdout)
+        self.assertEqual(results[0], results[1])
+
     def test_complete_baseline_scope_and_all_distributed_pngs(self):
         report = audit.inventory(audit.ROOT, "b"*40)
         self.assertEqual(report["counts"]["blocks"], 19)

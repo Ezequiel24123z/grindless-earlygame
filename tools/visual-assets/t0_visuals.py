@@ -200,7 +200,7 @@ def inventory(root, revision):
             model_path = bind(ASSETS + f"models/block/{name}_{state}.json")
             model = model_data(root, model_path)
             slots = {key: texture_reference(model["textures"], value) for key, value in model["textures"].items()}
-            for relative in set(slots.values()):
+            for relative in sorted(set(slots.values())):
                 if relative not in used:
                     writer = "BootstrapArt.java" if "bootstrap_" in relative or name == "fibreboard" else "MachineArt.java"
                     if "/casing_" in relative:

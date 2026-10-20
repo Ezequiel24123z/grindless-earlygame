@@ -163,7 +163,24 @@ named-only while preserving the positional Python argument. The explicit
 `-Tool t0_visuals` inventory invocation above really passed; it did not cover
 this backward-compatible default. The initial inline Bash observer also failed
 in nested quoting before reaching the script; preserve both logs. The fixed
-default PowerShell/Bash smoke is pending at this documentation checkpoint.
+default and explicit-tool PowerShell/Bash invocations now all exit 0 on exact
+`0b05aa2` and produce four byte-identical resolved graphs. They submit nothing.
+The final link checker also passes all 749 links across 51 Markdown files and
+the 160-row ADR index.
+
+The exported manifest is canonical ASCII/LF JSON. Windows Git checkout yields
+different raw CRLF bytes; both raw digests are retained, and parsing then using
+the existing canonical JSON writer reproduces the exact original
+`8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577`
+digest. This is an explicit JSON transport boundary, never normalized PNG
+hashing or a changed source/proof.
+
+Final sheet inspection also exposed process-dependent ordering in the
+inventory's set of resolved texture aliases. Sort that projection before
+authoring pages, so Python hash randomization cannot reshuffle the manifest or
+gallery. The regression runs separate processes with two different hash seeds;
+fresh deterministic export evidence is pending at this source checkpoint.
+No runtime texture or previously checked JDK input changes for this repair.
 
 No Gradle, native server, Prism, GPU or new inference is used. The regular
 generator remains JDK-only and calls the same checked face/overlay writers;

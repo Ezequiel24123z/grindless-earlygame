@@ -66,7 +66,11 @@
   "final_inventory": {
     "source": "981552b9709dac4d083a418b69636e4bb1491710",
     "manifest": "docs/assets/t0-experience-visual.json",
-    "manifest_sha256": "8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577",
+    "exported_manifest_raw_sha256": "8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577",
+    "manifest_canonical_json_sha256": "8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577",
+    "canonical_json_algorithm": "comfy_asset.json_bytes: sorted keys, indent2, ASCII, LF and one final newline",
+    "windows_git_checkout_raw_sha256": "d26a09998b82f157ba99f4ab279d39d9176be9ea45f9114c3002a30081f8e730",
+    "transport_boundary": "Actual raw LF export and CRLF Windows checkout have distinct recorded hashes; canonical JSON matches exactly. No PNG hashing is normalized.",
     "blocks": 19,
     "state_models": 65,
     "facing_state_variants": 257,
@@ -86,6 +90,27 @@
     "source_clean_after_export": true,
     "python_processes_at_export_close": 0,
     "review_boundary": "All T0 source faces/items and model projections inspected. Actual client rendering, light, adjacency, hotbar, JEI, quests, GUI comfort and artistic acceptance remain false."
+  },
+  "paired_entrypoints": {
+    "source": "0b05aa222e8049e829abc860a611dd359f24e0c1",
+    "powershell_default_exit": 0,
+    "powershell_explicit_tool_exit": 0,
+    "git_bash_default_exit": 0,
+    "git_bash_explicit_tool_exit": 0,
+    "all_four_resolved_graphs_byte_identical": true,
+    "closed_plan_log_sha256_each": "40d8e0e2a9f4aee7e217c123cb7e2b5d1e5ee00d6199410b723e62639f3db52d",
+    "network_or_inference_requests": 0,
+    "source_clean_at_close": true,
+    "preserved_failures": [
+      "Initial default PowerShell action bound positionally to new Tool and exited1; fixed by named-only Tool and explicit positional Python.",
+      "Initial inline Bash observer failed nested quoting and exited2 before entering the script; a transferred bounded shell file removed that observer ambiguity."
+    ]
+  },
+  "documentation_links": {
+    "relative_links": 749,
+    "markdown_files": 51,
+    "decision_sections_and_index_rows": 160,
+    "exit": 0
   },
   "local_diffusion_candidates": 0,
   "external_paid_image_requests": 0,
