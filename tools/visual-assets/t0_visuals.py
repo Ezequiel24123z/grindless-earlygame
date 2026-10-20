@@ -101,12 +101,14 @@ def catalogues(root):
     board = re.search(r'FIBREBOARD\s*=\s*"grindless:([a-z_]+)"', source_logic)
     core.require(board is not None, "No canonical fibreboard source.")
     ids.add(board[1])
-    blocks = [entries[name] for name in entries if name in ids]
+    port_ids = {row["id"] for row in core.read_json(local(root, "tools/visual-assets/port-assets.json"))["ports"]}
+    blocks = [entries[name] for name in entries if name in ids and name not in port_ids]
     items_source = text(root, JAVA + "registry/ModItems.java")
     registered = set(re.findall(r'register\("([a-z_]+)"', items_source))
     # These component outputs are authored outside the shaped crafting catalogue.
     ids.update(("calibrated_data_core", "relay_matrix", "mineral_aggregate", "biomass",
-                "ceramic_grog", "unfired_ceramic", "ceramic_insulator", "slag"))
+                "ceramic_grog", "unfired_ceramic", "ceramic_insulator", "slag",
+                "process_atlas", "quest_book", "field_guide"))
     items = sorted(ids & registered)
     core.require(set(ROLES) == {block["id"] for block in blocks} | set(items),
                  "The T0 projection changed; reconcile roles with actual catalogues, never silently omit it.")
@@ -200,7 +202,7 @@ def inventory(root, revision):
             model_path = bind(ASSETS + f"models/block/{name}_{state}.json")
             model = model_data(root, model_path)
             slots = {key: texture_reference(model["textures"], value) for key, value in model["textures"].items()}
-            for relative in set(slots.values()):
+            for relative in sorted(set(slots.values())):
                 if relative not in used:
                     writer = "BootstrapArt.java" if "bootstrap_" in relative or name == "fibreboard" else "MachineArt.java"
                     if "/casing_" in relative:
@@ -316,6 +318,11 @@ def inventory(root, revision):
             "blockstate_variants": sum(block["blockstate_variants"] for block in block_rows),
             "resolved_t0_pngs": len(used), "all_distributed_texture_pngs": len(all_pngs),
             "source_catalogued_ports": sum(row["source_catalogue_entry"] for row in port_rows),
+            "blocks_including_catalogued_ports": len(block_rows) + sum(row["source_catalogue_entry"] for row in port_rows),
+            "state_models_including_ports": sum(len(block["states"]) for block in blocks)
+            + sum(len(row.get("models", {})) for row in port_rows),
+            "facing_state_variants_including_ports": sum(block["blockstate_variants"] for block in block_rows)
+            + 4 * sum(row["source_catalogue_entry"] for row in port_rows),
         },
         "blocks": block_rows, "textures": records, "fluids": fluids,
         "presentation": [

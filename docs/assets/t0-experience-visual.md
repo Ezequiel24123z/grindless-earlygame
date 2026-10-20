@@ -19,7 +19,7 @@ The first real light/dark 1x/nearest-8x sheet proves that `blocked` and
 changed. Quern, Mixer and Settler expose it particularly clearly. This is a
 shared readability defect, not a reason to regenerate 14 working item sprites
 or request AI concepts. T0 alone receives distinct neutral high-contrast marks:
-idle dash, running arrow, blocked pause, starved empty box and out-of-band cross.
+idle dash, running activity mark, blocked pause, starved empty box and out-of-band cross.
 The existing color vocabulary remains a secondary side cue. Only the 10x3
 indicator region changes; existing mechanisms, materials, geometry and UVs stay
 unchanged. A tank's state is not a dynamic fill measurement or a new animation.
@@ -34,6 +34,31 @@ rotations, but do not simulate Minecraft's inventory display transforms,
 ambient occlusion, resource-pack overrides, tint, lighting or GUI scale.
 Actual placement, adjacent machines, hotbar, JEI, quests and lighting still
 require a client review.
+
+The final [machine-readable projection](t0-experience-visual.json) is bound to
+`18b58230c9516d80411e55c18fbd1326d694237b`: 108 T0-resolved PNGs including four
+new shared overlays, all 585 texture PNGs indexed, and exact source/runtime
+hashes. Six port IDs are declared by the infrastructure contract but **zero are
+registered in this branch**; their actual models/capabilities belong to the
+other lane. Re-run the same projection on the coordinator's merged source to
+bind the real port models; never infer gameplay from this contract.
+
+| Source-pixel review surface | Actual sheets |
+| --- | --- |
+| All 14 item/book sprites, 1x/8x light/dark | [Items](t0-experience-visual.items-1.png) |
+| Every T0 face/material/state plus four markings | [1](t0-experience-visual.faces-1.png), [2](t0-experience-visual.faces-2.png), [3](t0-experience-visual.faces-3.png), [4](t0-experience-visual.faces-4.png) |
+| Real state ambiguity before/after | [Before](t0-experience-visual.before.critical-states-1.png), [after](t0-experience-visual.critical-states-1.png) |
+| State review without hue | [Before](t0-experience-visual.before.critical-monochrome-1.png), [after](t0-experience-visual.critical-monochrome-1.png) |
+| Actual cuboid/UV projections at four rotations | [1](t0-experience-visual.rotations-1.png), [2](t0-experience-visual.rotations-2.png), [3](t0-experience-visual.rotations-3.png), [4](t0-experience-visual.rotations-4.png) |
+| Shared markings alone and on original sample materials | [Ports](t0-experience-visual.port-overlays-1.png) |
+| Only the GUI arrow UV used by the live screen | [Arrow](t0-experience-visual.gui-arrow.png) |
+
+All sheets were actually inspected. The existing GUI arrow is a left-pointing
+triangle, and generic dark casing remains on several primitive mechanisms;
+record these for in-client flow/contrast/identity review rather than silently
+redesigning working machines from a software projection. No extra regeneration
+or subjective pass follows. The port samples use only Grindless's original
+timber/stone/firebox art, **not** copied Minecraft brick pixels.
 
 ## Reusable workflows
 
@@ -124,8 +149,79 @@ preset/inventory cases, 44 total in 8.805s. A WinPS stderr-capture failure befor
 the first result remains recorded; read-only recovery found no Python process
 and an empty log before the corrected capture. No success is inferred from that
 observer failure. Later model-lock/spec binding and optional port-inventory
-projection changes have their own still-pending Python execution, not a relabelled
-44-case pass. See the [portable result record](t0-experience-visual.validation.json).
+projection changes have a distinct receipt, not a relabelled 44-case pass.
+The later exact `981552b` run passes **45 cases**, 28 existing
+and 17 new, in 12.165s. The actual PowerShell entrypoint exports the final
+manifest and 13 native-scale contact sheets with clean source and zero Python;
+all exported hashes and all 66 installed stage PNG hashes match after transfer.
+All 519 other baseline PNGs, including the 13 protected sprites, remain unchanged.
+See the [portable result record](t0-experience-visual.validation.json).
+
+The final default-entrypoint probe found a new PowerShell positional-binding
+regression: bare `plan` bound to the newly added `Tool` parameter. Make `Tool`
+named-only while preserving the positional Python argument. The explicit
+`-Tool t0_visuals` inventory invocation above really passed; it did not cover
+this backward-compatible default. The initial inline Bash observer also failed
+in nested quoting before reaching the script; preserve both logs. The fixed
+default and explicit-tool PowerShell/Bash invocations now all exit 0 on exact
+`0b05aa2` and produce four byte-identical resolved graphs. They submit nothing.
+The final link checker also passes all 749 links across 51 Markdown files and
+the 160-row ADR index.
+
+The initial `981552b` exported manifest is canonical ASCII/LF JSON. Windows Git checkout yields
+different raw CRLF bytes; both raw digests are retained, and parsing then using
+the existing canonical JSON writer reproduces the exact original
+`8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577`
+digest. This is an explicit JSON transport boundary, never normalized PNG
+hashing or a changed source/proof.
+
+Final sheet inspection also exposed process-dependent ordering in the
+inventory's set of resolved texture aliases. Sort that projection before
+authoring pages, so Python hash randomization cannot reshuffle the manifest or
+gallery. The regression runs separate processes with two different hash seeds;
+the first six-case/sort-only proof passes on `38064aa`. Exact `18b5823` then
+passes all nine affected inventory/port/retained-Guide cases in 6.208s, including
+that cross-process regression. Two independent full exports, with hash seeds
+1 and 2, are byte-identical across the manifest and all 13 sheets. The selected
+raw/canonical JSON digest is
+`f955aaeaad94105a4e9f9256dd229a0cba3cc1df2b671c2805079f5e28fd1e0f`.
+Every transferred sheet matches and no T0 indicator-shape collision remains.
+No runtime texture or previously checked JDK/preset/wrapper input changes for
+these projection-only repairs, so those source-scoped proofs are reused.
+
+The infrastructure owner's actual `164ee9a` adds six port crafts to
+`BootstrapRecipes`. The projection explicitly separates those declared port
+IDs from legacy machine roles, then requires their actual generated
+blockstates/models/item models before recording source readiness. It reports
+both legacy and combined block/model/variant totals. No source declaration
+alone becomes a passing rendered port. The final coordinator must generate the
+composed models before refreshing this inventory.
+
+## Coordinator integration boundary
+
+Integrate this branch's complete source/output/proof history, not only the
+initial `981552b`: later commits repair the default PowerShell route, stabilize
+ordering and reconcile the actual port crafts. The only shared
+`GenerateAssets` changes are the selective visual mode, its two small writer
+helpers and the four-overlay call in normal generation. No audio hunk is
+changed. The infrastructure owner provides `BlockModels`, registration,
+capabilities and the additional pure generator inputs.
+
+After composing the real port/source authorities, generate normal models
+through the existing JDK pipeline, then run the inventory entrypoint once on
+that exact source with a new output directory. It must see six real port
+blockstates/item models, not infer them from this contract; expected combined
+totals are 25 blocks, 71 state models and 281 facing/state variants while the
+legacy 19/65/257 remain separately reported. No new PNG permutation is needed.
+The SCREEN rear plate is only two model units high in `164ee9a`; its role/arrow
+legibility needs an explicit native-client check, not a source-sheet approval.
+
+The coordinator owns root changelog/map/README/ADR/handoff reconciliation,
+combined build/package/registration/client qualification and deployment.
+Rebind any quest/Guide/shop presentation changes to their composed sources;
+retained sprites are not proof that an obsolete menu remains reachable.
+This unit's JDK lease was released at its recorded zero-Java close; its final
+CPU export leaves clean source and zero Python. No GPU lease was needed.
 
 No Gradle, native server, Prism, GPU or new inference is used. The regular
 generator remains JDK-only and calls the same checked face/overlay writers;
@@ -133,9 +229,9 @@ there is no need to repeat the old full 1,602-file proof just for more counters.
 
 | Category | Current entry |
 | --- | --- |
-| COMPLETED | Global source/pixel inventory, reusable presets, 62 checked T0 state fronts and four original overlays; actual 44 Python cases, two equal 66-file JDK stages and existing Multitool/guide regressions. |
+| COMPLETED | Complete global source/pixel inventory and 13 deterministic final sheets plus two baseline comparisons; reusable presets; 62 checked T0 state fronts/four shared overlays; actual 45 Python cases plus nine affected final projection checks, two equal 66-file JDK stages and existing Multitool/guide regressions. |
 | BLOCKED | None. |
-| NOT EXECUTED | Later Python binding/projection rerun, final refreshed inventory/sheets, native client, combined build/package/deployment. |
+| NOT EXECUTED | Comfy/GPU inference (unnecessary), native client, port registration/integration in this branch, combined build/package/deployment. |
 | NEEDS HUMAN VALIDATION | In-client lighting/placement/state/rotations, hotbar/JEI/quests, GUI comfort and artistic quality. |
 | NEEDS MY DECISION | None. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None; reuse the existing local tools/model only if needed. |

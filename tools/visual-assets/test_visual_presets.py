@@ -2,9 +2,13 @@
 
 import copy
 import io
+import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import comfy_asset as core
 import t0_visuals as audit
@@ -199,6 +203,68 @@ class PresetContracts(unittest.TestCase):
 
 
 class InventoryContracts(unittest.TestCase):
+    def port_catalogue_fixture(self, root, relative):
+        value = self.original_text(root, relative)
+        names = [row["id"] for row in core.read_json(core.HERE / "port-assets.json")["ports"]]
+        if relative == audit.JAVA + "registry/BlockCatalogue.java":
+            value += "\n".join('new Entry("' + name + '", Geometry.FIREBOX, 1, true, List.of("idle"), MiningTool.PICKAXE)'
+                               for name in names)
+        if relative == audit.JAVA + "recipe/BootstrapRecipes.java":
+            value += "\n".join('"grindless:' + name + '"' for name in names)
+        return value
+
+    def test_new_port_recipes_are_separate_from_legacy_block_roles(self):
+        self.original_text = audit.text
+        with patch.object(audit, "text", side_effect=self.port_catalogue_fixture):
+            blocks, items = audit.catalogues(audit.ROOT)
+        self.assertEqual(len(blocks), 19)
+        self.assertEqual(len(items), 14)
+        self.assertTrue(all(not block["id"].startswith(("workshop_item_", "settling_item_", "settling_fluid_"))
+                            for block in blocks))
+
+    def test_source_declared_ports_require_actual_generated_models(self):
+        self.original_text = audit.text
+        original_is_file = Path.is_file
+
+        def missing_port_state(path):
+            if path.name == "workshop_item_input.json" and path.parent.name == "blockstates":
+                return False
+            return original_is_file(path)
+
+        with patch.object(audit, "text", side_effect=self.port_catalogue_fixture), \
+                patch.object(Path, "is_file", new=missing_port_state):
+            with self.assertRaisesRegex(core.ContractError, "Missing source/runtime reference"):
+                audit.inventory(audit.ROOT, "b"*40)
+
+    def test_retained_guide_sprite_remains_in_scope_when_its_craft_is_removed(self):
+        original_text = audit.text
+
+        def removed_craft(root, relative):
+            value = original_text(root, relative)
+            return value.replace('"grindless:field_guide"', '"legacy:deprecated_field_guide"') \
+                if relative == audit.JAVA + "recipe/BootstrapRecipes.java" else value
+
+        with patch.object(audit, "text", side_effect=removed_craft):
+            _, items = audit.catalogues(audit.ROOT)
+        self.assertIn("field_guide", items)
+
+    def test_inventory_and_contact_sheet_are_independent_of_process_hash_seed(self):
+        code = (
+            "import sys,io;sys.path.insert(0,sys.argv[1]);import t0_visuals as a;import comfy_asset as c;"
+            "r=a.inventory(a.ROOT,'b'*40);"
+            "rows=[(p['owner'],a.image_bytes((a.ROOT/p['runtime']).read_bytes())) "
+            "for p in r['textures'] if '/textures/block/' in p['runtime']];"
+            "b=io.BytesIO();a.contact_sheet(rows[:24],'Determinism fixture, not gameplay').save(b,format='PNG');"
+            "print(c.sha256(c.json_bytes(r)));print(c.sha256(b.getvalue()))"
+        )
+        results = []
+        for seed in ("1", "2"):
+            result = subprocess.run([sys.executable, "-B", "-c", code, str(core.HERE)],
+                                    env={**os.environ, "PYTHONHASHSEED": seed}, capture_output=True,
+                                    text=True, check=True, timeout=30)
+            results.append(result.stdout)
+        self.assertEqual(results[0], results[1])
+
     def test_complete_baseline_scope_and_all_distributed_pngs(self):
         report = audit.inventory(audit.ROOT, "b"*40)
         self.assertEqual(report["counts"]["blocks"], 19)
