@@ -587,6 +587,19 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (cached != null) {
             return cached;
         }
+        cached = matchingRecipe(sources).orElse(null);
+        cachedRecipeId = cached == null ? "" : cached.id();
+        if (cached != null) {
+            if (!workRecipeId.isEmpty() && !workRecipeId.equals(cached.id())) {
+                progress = 0.0;
+            }
+            workRecipeId = cached.id();
+        }
+        return cached;
+    }
+
+    /** Shared read-only selection; inspection of produced volume never publishes a cached recipe. */
+    private Optional<ProcessRecipe> matchingRecipe(List<FluidInsert.Source> sources) {
         Optional<ProcessRecipe> found = ProcessLookup.recipes().stream()
                 .filter(row -> row.id().equals(workRecipeId) && row.family() == kind.family()
                         && progress >= row.durationTicks() && ProcessLookup.matches(row, inputs()))
@@ -598,15 +611,7 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (found.isEmpty()) {
             found = ProcessLookup.find(kind.family(), inputs(), fluid.state(), FluidInsert.available(sources));
         }
-        cached = found.orElse(null);
-        cachedRecipeId = cached == null ? "" : cached.id();
-        if (cached != null) {
-            if (!workRecipeId.isEmpty() && !workRecipeId.equals(cached.id())) {
-                progress = 0.0;
-            }
-            workRecipeId = cached.id();
-        }
-        return cached;
+        return found;
     }
 
     private boolean refreshRecipeGeneration() {
@@ -853,7 +858,9 @@ public final class ProcessMachineBlockEntity extends MachineBlockEntity
         if (fluidOutput <= 0 || fluid.isEmpty()) {
             return FluidState.EMPTY;
         }
-        int reserved = ProcessLookup.primaryFluidTarget(kind.family(), inputs(), fluid.state().id());
+        ProcessRecipe active = inspectionRecipe().orElseGet(() -> matchingRecipe(List.of()).orElse(null));
+        int reserved = active == null || active.fluidInputs().isEmpty()
+                ? 0 : active.fluidInputs().get(0).count();
         return fluid.state().withAmount(Math.min(fluidOutput,
                 Math.max(0, fluid.state().millibuckets() - reserved)));
     }

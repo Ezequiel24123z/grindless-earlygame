@@ -102,8 +102,27 @@ fresh face validation, so replacing a controller at the same coordinates cannot
 rebind an old handler. New requests can acquire a new view after repair.
 Old native plans also capture `nativeAccessRevision()` and actual store identity.
 
+Independent source review found a synchronous invalidation race in source164:
+`current()` could capture owner A, invoke a callback that replaced it with B,
+then return A while a second face query validated B. The follow-up fences
+reentrant access closed, resolves identity again after callbacks, rejects that
+operation if its binding/revision changed, and uses one validated binding/face
+for each item/fluid permission or mutation. All invalidators are attempted, with
+the original unexpected exception retained. A callback cannot write the retired
+controller or make a conduit debit fluid that the live controller never received.
+The real native probe injects same-position replacement during both input and
+output invalidation, checks a real Clay Conduit keeps its 50 mB pulse on rejection,
+then verifies fresh access moves only the new owner's stock. This is an authored
+regression until the coordinator executes the combined jar.
+
 Fluid input follows the existing controller acceptance/batch limit. Fluid output
 exposes only `FluidOutputQuota` that is not reserved for the primary recipe.
+The same pure recipe selection as the native process is used, not the family's
+preload allowance. A completed batch with no items must expose its 750 mB.
+Putting the next dirt input in a Trough with only that recovered output must not
+hide it forever while waiting for another 250 mB. A genuinely selected ready or
+already-paid owner still reserves its primary volume. This read-only selection
+never mutates the recipe cache, saved work or subscriptions.
 Its `nativeStore()` is the actual controller store. The existing
 `NativeFluidStore.Access` gains a rechecked role-visible limit while preserving its
 two-argument constructor. A single backing store is counted once across faces or
@@ -136,8 +155,18 @@ facing, fault and formation; an unconfirmed candidate is never presented as owne
 Six recipe entries reuse the existing shaped-craft, Bench and Assembler projections.
 They are optional infrastructure, not mandatory progression bypasses or T1 work.
 Models retain brick/channel/screen material and collision families, share four
-original role overlays, use full overlay UVs and rotate through four facing-only
+original role overlays and rotate through four facing-only
 states. No port has status, emitted light, particles or a working sound.
+Side markings retain full UVs. The original two-unit-high rear bed edge is only
+a secondary marker, not the primary role explanation. Each channel/screen also
+has one UP label on the existing bed, from `(3.01,4.01,0.01)` to
+`(12.99,4.01,6.99)`, before the screen bars and inside the rails. Its approved
+`[2,3,14,10]` UV crop removes only the four original PNGs' transparent margin,
+retaining every glyph/arrow pixel. The five-pixel glyph projects to at least four
+native model units instead of below one on the rear strip. This adds no solid
+geometry, collision, raised bulk, new texture or upward automation face.
+Actual direction/role recognition, especially from behind, remains human visual
+review; the technical label-geometry proof is not artistic approval.
 The ordinary paired asset generators include the pure role contract dependencies.
 The visual lane supplies the four noticed source PNGs separately; the integrated
 ordinary generation and final resource equality still require execution.
@@ -184,6 +213,43 @@ power generation, paid-work earning, player bucket clicks, Multitool clicks,
 cross-chunk retained handlers or the human campaign. The two completed-work
 setups are explicit fixture inputs, never accepted gameplay.
 
+The same existing smoke carrier also invokes the console/permission-4-only
+`grindless_workshop_checks 2 280 13` after setup. Its one Forge
+`WorkshopInterfaceChecks` class uses a dedicated non-OP `FakePlayer`, actual
+registered tank/controller/port entities and actual item/fluid capabilities.
+Bucket actions cross `BlockState.use` and the packaged `@ExpectPlatform` binder.
+Only passed predicates log the nine `WORKSHOP-INTERFACES-*` markers: whole
+fill/empty, 500 mB refusal, simulation/indices/hot/tag/native-gas handling,
+creative and full-inventory delivery, actual filled drop and `BlockItem.useOn`
+replacement, native quota/alias bounds, same-position controller replacement,
+retired handler/access/batch rejection, synchronous callback/conduit refund and
+fresh rebinding.
+
+The probe refuses nonempty/unloaded/out-of-border reserved cells, foreign item
+entities in its drop area, OP/online-player profile reuse, disabled tile drops or
+denied normal `mayInteract`. It never grants permissions, force-loads chunks or
+edits a real player inventory. Its profile is exclusively this probe; failure
+logs and rethrows, leaves owned blocks as evidence, and clears only its owned
+fake inventory. Repetition requires resetting the disposable region, not
+reusing a successful marker. `setRemoved` is tested with live produced quota,
+but a real chunk unload/reload is **not** claimed. No second runner or GameTest
+framework is introduced, and the native command has not been executed here.
+The existing paired batch runners explicitly exclude `workshop-ports`: foreign
+item drops and overlapping scheduled old fixtures must not contaminate its
+preflight/custody predicates. Use the ordinary isolated runner for this one boot;
+the no-server batch contracts cover that refusal/skip behavior in both twins.
+The first full tooling invocation actually failed: 18 cases passed, the first
+new port case hit its 15-second child limit, and the unchanged 120-second suite
+deadline left 33/51 cases failed with 565 assertions attempted. That result is
+not called flaky, environmental or green. The existing runner now accepts a
+case filter without changing either deadline or the default full selection.
+The targeted `-CaseFilter 'workshop-ports*'` invocation passes all three new
+cases and 98 assertions, three real Bash CLI runs and three PowerShell reference
+comparisons with safe fake boot targets. It is not a fresh full-suite pass.
+The old 48-case source-bound proof plus unchanged old cases/runner branches is
+reused under the coordinator's risk-based policy. No JVM, server or PC was used
+by these tooling probes; both owned temporary fixture roots were cleaned.
+
 Actual cheap checks on the port source: `git diff --check`, language/manifest/six
 recipe JSON parsing, and 730 relative links / 160 ADR sections and index rows.
 The first tank commit attempt failed because Git had no author configured; the
@@ -194,15 +260,16 @@ The coordinator separately reports the actual early source759 proof on its
 isolated integration265: common/Forge/classpath exit0, `VerifyBasicTank`120/0 and
 `VerifyFluid`285/0. That worker later removed its newly owned validation root;
 do not assume it remains available or resume it as a retained execution surface.
-The original clone remains clean and no Java process is running. Those results
+At that receipt's close the original clone was clean and Java count was zero;
+this is not an observation of later PC activity. Those results
 precede the creative-delivery correction and all port/native-limit changes:
 they are not passing evidence for this later source or actual Forge container use.
 
 | Category | Current bounded checkpoint |
 | --- | --- |
-| COMPLETED | Compatible tank source checkpoint7594608; fixed T0 role/geometry contract, controller-backed proxies, narrow native quota bound, Forge role/revision adapters, recipes, generator hooks, telemetry getters/hooks and focused executable checks authored. |
+| COMPLETED | Tank7594608 and ports164ee9a; follow-up source fixes for callback rebinding and produced-only selection; real-API native probe and UP-label/model contracts authored; 730 links/160 ADR rows, JSON, whitespace, 23 marker bindings and three new batch contracts/98 assertions pass. |
 | BLOCKED | This worker has no JVM/PC execution lease. Causal telemetry and retired paid Guide hooks require the coordinator's real shop/DevTelemetry and quest/LegacyGuideAssembly integrations, not shims. |
-| NOT EXECUTED | Common/Forge compilation, executable Java checks, integrated ordinary asset generation, loaded-world ownership/retained-capability regressions and the changed native bindings on this source. |
+| NOT EXECUTED | Common/Forge compilation, Java/model checks, integrated ordinary asset generation, actual workshop-ports smoke and retained-capability/bucket binder predicates on this source; a real chunk unload/reload remains separate. |
 | NEEDS HUMAN VALIDATION | Actual client container use, readability and retained-world interaction. |
 | NEEDS MY DECISION | None; fixed port positions/caps are approved by the coordinator. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None. |

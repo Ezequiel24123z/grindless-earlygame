@@ -152,6 +152,8 @@ final class BlockModels {
         } else {
             elements.add(portMark(new double[]{0.99, 3, 4}, new double[]{0.99, 10, 12}, "west"));
             elements.add(portMark(new double[]{15.01, 3, 4}, new double[]{15.01, 10, 12}, "east"));
+            elements.add(portMark(new double[]{3.01, 4.01, 0.01}, new double[]{12.99, 4.01, 6.99},
+                    "up", 2, 3, 14, 10));
             if (kind.family() == WorkshopPortContract.Family.SCREEN) {
                 elements.add(portMark(new double[]{4, 2, 16.01}, new double[]{12, 4, 16.01}, "south"));
             }
@@ -162,8 +164,13 @@ final class BlockModels {
     }
 
     private static String portMark(double[] from, double[] to, String face) {
+        return portMark(from, to, face, 0, 0, 16, 16);
+    }
+
+    private static String portMark(double[] from, double[] to, String face, int u0, int v0, int u1, int v1) {
         return "    {\n      \"from\": " + vec(from) + ",\n      \"to\": " + vec(to)
-                + ",\n      \"faces\": {\n" + face(face, "port", true) + "\n      }\n    }";
+                + ",\n      \"faces\": {\n        \"" + face + "\": { \"texture\": \"#port\", \"uv\": ["
+                + u0 + ", " + v0 + ", " + u1 + ", " + v1 + "], \"rotation\": 0 }\n      }\n    }";
     }
 
     private static List<Box> quern() {

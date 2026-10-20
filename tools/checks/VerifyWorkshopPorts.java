@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.structure;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlockEntity;
@@ -41,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.imageio.ImageIO;
 
 /** Rotated role contracts and real process/native-store quota boundaries; not a loaded-world Forge proof. */
 public final class VerifyWorkshopPorts {
@@ -58,6 +60,7 @@ public final class VerifyWorkshopPorts {
         noPortStorage();
         readOnlyInspection();
         manifest();
+        models();
         System.out.println("ALL WORKSHOP PORT CHECKS PASSED (" + checks + ")");
     }
 
@@ -225,6 +228,15 @@ public final class VerifyWorkshopPorts {
         ProcessMachineBlockEntity bounded = owner(1000, 750);
         bounded.setItem(0, new ItemStack(Items.DIRT, 2));
         eq("a ready primary batch is not output-port stock", FluidState.EMPTY, bounded.workshopProducedFluid());
+        ProcessMachineBlockEntity shortInput = owner(750, 750);
+        eq("a completed batch exposes its real 750 mB with no remaining input items", 750,
+                shortInput.workshopProducedFluid().millibuckets());
+        shortInput.setItem(0, new ItemStack(Items.DIRT, 2));
+        eq("an incomplete future primary batch cannot indefinitely hide recovered output", 750,
+                shortInput.workshopProducedFluid().millibuckets());
+        ProcessMachineBlockEntity noItems = owner(1000, 750);
+        eq("a family's preload target is not an actual primary reservation", 750,
+                noItems.workshopProducedFluid().millibuckets());
     }
 
     private static void nativeTransfer() throws Exception {
@@ -324,6 +336,7 @@ public final class VerifyWorkshopPorts {
         machine.inspectionStructureFault();
         machine.inspectionSiteFault();
         machine.inspectionFluidOutput();
+        machine.workshopProducedFluid();
         eq("inspection does not mutate saved state", before, machine.saveWithoutMetadata());
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
         check("inspection hides stale recipe generations", machine.inspectionRecipe().isEmpty());
@@ -335,6 +348,19 @@ public final class VerifyWorkshopPorts {
                 "docs", "tiers", "t0-workshop-interfaces.json"))).getAsJsonObject();
         eq("manifest capacity derives from the current authority", FluidLogic.TANK_CAPACITY,
                 manifest.getAsJsonObject("tank").get("capacity_mB").getAsInt());
+        eq("manifest temperature rating derives from the current authority", FluidLogic.AMBIENT_MAX_C,
+                manifest.getAsJsonObject("tank").get("maximum_temperature_C").getAsDouble());
+        eq("manifest pressure rating derives from the current authority", FluidLogic.AMBIENT_MPA,
+                manifest.getAsJsonObject("tank").get("maximum_pressure_MPa").getAsDouble());
+        JsonObject presentation = manifest.getAsJsonObject("presentation");
+        eq("readability manifest retains the four shared textures", 4,
+                presentation.get("shared_original_role_textures").getAsInt());
+        eq("readability manifest retains the measured minimum, not an artistic approval", 4,
+                presentation.get("settling_role_label_minimum_glyph_model_units").getAsInt());
+        check("readability labels change neither collision nor automation policy",
+                !presentation.get("collision_changed").getAsBoolean()
+                        && !presentation.get("upward_automation_enabled_by_label").getAsBoolean()
+                        && !presentation.get("human_appearance_accepted").getAsBoolean());
         Set<String> variants = new HashSet<>();
         for (var value : manifest.getAsJsonArray("variants")) {
             JsonObject row = value.getAsJsonObject();
@@ -360,6 +386,12 @@ public final class VerifyWorkshopPorts {
             eq("manifest enumerates every slot", slots.size(), row.getAsJsonArray("slots").size());
             for (int i = 0; i < slots.size(); i++) {
                 JsonObject projected = row.getAsJsonArray("slots").get(i).getAsJsonObject();
+                eq("manifest slot family matches runtime", slots.get(i).family().name(),
+                        projected.get("family").getAsString());
+                Set<WorkshopPortRole> roles = new HashSet<>();
+                projected.getAsJsonArray("roles").forEach(role ->
+                        roles.add(WorkshopPortRole.valueOf(role.getAsString())));
+                eq("manifest slot roles match runtime", slots.get(i).roles(), roles);
                 var offset = projected.getAsJsonArray("offset");
                 eq("manifest position is exact", slots.get(i).offset(),
                         new WorkshopStructure.Offset(offset.get(0).getAsInt(), offset.get(1).getAsInt(), offset.get(2).getAsInt()));
@@ -368,6 +400,117 @@ public final class VerifyWorkshopPorts {
                 eq("manifest exterior faces match the role contract", slots.get(i).faces(), faces);
             }
         }
+    }
+
+    private static void models() throws Exception {
+        for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+            JsonObject model = JsonParser.parseString(Files.readString(Path.of("common", "src", "main",
+                    "resources", "assets", "grindless", "models", "block",
+                    kind.blockName() + "_idle.json"))).getAsJsonObject();
+            eq("port models inherit ordinary native block presentation", "minecraft:block/block",
+                    model.get("parent").getAsString());
+            eq("transparent role markings use the actual cutout render layer", "minecraft:cutout",
+                    model.get("render_type").getAsString());
+            eq("all six variants share the four original role overlays", "grindless:block/" + kind.role().texture(),
+                    model.getAsJsonObject("textures").get("port").getAsString());
+            boolean brick = kind.family() == WorkshopPortContract.Family.BRICK;
+            JsonArray elements = model.getAsJsonArray("elements");
+            int baseCount = brick ? 1 : WorkshopGeometry.boxes(kind.geometry()).size();
+            eq("models keep the complete base plus the side markings and settling readability label",
+                    baseCount + (brick ? 2 : kind.family() == WorkshopPortContract.Family.SCREEN ? 4 : 3),
+                    elements.size());
+            if (brick) {
+                eq("brick ports reference vanilla brick rather than importing another asset", "minecraft:block/bricks",
+                        model.getAsJsonObject("textures").get("brick").getAsString());
+                vector("brick casing starts at the original cube boundary",
+                        elements.get(0).getAsJsonObject().getAsJsonArray("from"), 0, 0, 0);
+                vector("brick casing ends at the original cube boundary",
+                        elements.get(0).getAsJsonObject().getAsJsonArray("to"), 16, 16, 16);
+            } else {
+                List<WorkshopGeometry.Box> boxes = WorkshopGeometry.boxes(kind.geometry());
+                for (int i = 0; i < boxes.size(); i++) {
+                    WorkshopGeometry.Box box = boxes.get(i);
+                    JsonObject actual = elements.get(i).getAsJsonObject();
+                    vector("a settling port retains every original working/support box",
+                            actual.getAsJsonArray("from"), box.x0(), box.y0(), box.z0());
+                    vector("a settling port never replaces narrow rails/screens with a full cube",
+                            actual.getAsJsonArray("to"), box.x1(), box.y1(), box.z1());
+                }
+            }
+            Set<Integer> markedFaces = new HashSet<>();
+            int readableLabels = 0;
+            for (int i = baseCount; i < elements.size(); i++) {
+                JsonObject mark = elements.get(i).getAsJsonObject();
+                JsonArray from = mark.getAsJsonArray("from");
+                JsonArray to = mark.getAsJsonArray("to");
+                int flatAxes = 0;
+                for (int axis = 0; axis < 3; axis++) {
+                    flatAxes += from.get(axis).getAsDouble() == to.get(axis).getAsDouble() ? 1 : 0;
+                }
+                eq("role markings add a face, not another solid casing", 1, flatAxes);
+                JsonObject faces = mark.getAsJsonObject("faces");
+                eq("each marking lies on exactly one model face", 1, faces.size());
+                for (var face : faces.entrySet()) {
+                    JsonObject definition = face.getValue().getAsJsonObject();
+                    eq("the marking resolves through the shared role slot", "#port", definition.get("texture").getAsString());
+                    JsonArray uv = definition.getAsJsonArray("uv");
+                    eq("overlay UVs have four components", 4, uv.size());
+                    if (face.getKey().equals("up")) {
+                        check("only narrow settling parts need the existing-bed readability label", !brick);
+                        vector("the top label lies just above the existing bed and inside the rails",
+                                from, 3.01, 4.01, 0.01);
+                        vector("the top label ends before the screen bars, never under them",
+                                to, 12.99, 4.01, 6.99);
+                        eq("readability label crops only transparent U0 margin", 2, uv.get(0).getAsInt());
+                        eq("readability label crops only transparent V0 margin", 3, uv.get(1).getAsInt());
+                        eq("readability label retains the full glyph width", 14, uv.get(2).getAsInt());
+                        eq("readability label retains the full glyph height", 10, uv.get(3).getAsInt());
+                        eq("readability label keeps the supplied glyph orientation", 0, definition.get("rotation").getAsInt());
+                        check("the visible five-pixel glyph spans at least four native model units",
+                                (to.get(2).getAsDouble() - from.get(2).getAsDouble()) * 5.0
+                                        / (uv.get(3).getAsDouble() - uv.get(1).getAsDouble()) >= 4.0);
+                        readableLabels++;
+                        continue;
+                    }
+                    int turns = switch (face.getKey()) {
+                        case "north" -> 0;
+                        case "east" -> 1;
+                        case "south" -> 2;
+                        case "west" -> 3;
+                        default -> throw new AssertionError("unexpected marked face " + face.getKey());
+                    };
+                    markedFaces.add(turns);
+                    eq("full overlay U0", 0, uv.get(0).getAsInt());
+                    eq("full overlay V0", 0, uv.get(1).getAsInt());
+                    eq("full overlay U1", 16, uv.get(2).getAsInt());
+                    eq("full overlay V1", 16, uv.get(3).getAsInt());
+                }
+            }
+            Set<Integer> permitted = WorkshopPortContract.slots(kind.structure()).stream()
+                    .filter(slot -> slot.accepts(kind)).findFirst().orElseThrow().faces();
+            eq("markings identify the same faces that actually transfer", permitted, markedFaces);
+            eq("each settling port has exactly one broad unoccluded role label", brick ? 0 : 1, readableLabels);
+            if (!brick) {
+                var image = ImageIO.read(Path.of("common", "src", "main", "resources", "assets", "grindless",
+                        "textures", "block", kind.role().texture() + ".png").toFile());
+                check("the existing original role overlay is a 16px image",
+                        image != null && image.getWidth() == 16 && image.getHeight() == 16);
+                for (int y = 0; y < 16; y++) {
+                    for (int x = 0; x < 16; x++) {
+                        if ((image.getRGB(x, y) >>> 24) != 0) {
+                            check("the approved top-label crop never removes actual glyph or arrow pixels",
+                                    x >= 2 && x < 14 && y >= 3 && y < 10);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void vector(String label, JsonArray actual, double x, double y, double z) {
+        eq(label + " X", x, actual.get(0).getAsDouble());
+        eq(label + " Y", y, actual.get(1).getAsDouble());
+        eq(label + " Z", z, actual.get(2).getAsDouble());
     }
 
     private static Map<WorkshopStructure.Offset, WorkshopStructure.Present> legacy(WorkshopStructure structure, int turn) {

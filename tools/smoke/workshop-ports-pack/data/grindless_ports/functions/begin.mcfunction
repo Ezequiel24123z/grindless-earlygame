@@ -1,4 +1,5 @@
 scoreboard objectives add ports_check dummy
+gamerule doTileDrops true
 fill 1 277 0 14 283 14 minecraft:air
 setblock 4 280 3 grindless:settling_trough[facing=north,status=idle]{ItemLayout:3,Items:[{Slot:0b,id:"minecraft:dirt",Count:2b}],Progress:160.0d,Recipe:"bootstrap/settle_clay",WorkRecipe:"bootstrap/settle_clay"}
 setblock 4 280 4 grindless:settling_fluid_input[facing=north]
@@ -18,7 +19,8 @@ setblock 11 281 2 grindless:crude_manipulator[facing=north,status=idle]
 setblock 2 280 10 grindless:basic_tank[facing=north,status=idle]{Fluid:{Id:"minecraft:water",Amount:1234,Temp:31.5d,Pressure:0.1d}}
 setblock 2 280 10 grindless:basic_tank[facing=east,status=idle]
 execute if data block 2 280 10 {Fluid:{Id:"minecraft:water",Amount:1234,Temp:31.5d,Pressure:0.1d}} run say TANK-ROTATION-KEPT
-setblock 2 280 10 minecraft:air destroy
+setblock 2 280 10 minecraft:stone destroy
+setblock 2 280 10 minecraft:air
 scoreboard players set tank_drops ports_check 0
 execute positioned 2 280 10 as @e[type=minecraft:item,distance=..2,nbt={Item:{id:"grindless:basic_tank"}}] run scoreboard players add tank_drops ports_check 1
 execute if score tank_drops ports_check matches 1 run say TANK-ONE-FILLED-DROP

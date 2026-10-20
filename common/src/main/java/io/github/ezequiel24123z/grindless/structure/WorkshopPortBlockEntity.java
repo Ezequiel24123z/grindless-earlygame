@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** A transient, unique-controller access view. All items, fluid and saved work remain in the controller. */
 public final class WorkshopPortBlockEntity extends BlockEntity implements WorldlyContainer, FluidEndpoint {
@@ -40,6 +41,7 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
     private WorkshopStructure.Fault lastFault = WorkshopStructure.Fault.ORPHANED_PORT;
     private Direction lastFacing;
     private long capabilityRevision;
+    private boolean invalidating;
 
     public WorkshopPortBlockEntity(BlockPos pos, BlockState state) {
         this(ModBlockEntities.WORKSHOP_PORT.get(), ((WorkshopPortBlock) state.getBlock()).kind(), pos, state);
@@ -67,10 +69,18 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
     }
 
     public boolean permitsFace(Direction side) {
-        Binding binding = current();
+        return permits(current(), side);
+    }
+
+    private boolean permits(Binding binding, Direction side) {
         return side != null && level != null && !level.isClientSide()
                 && binding.owner() != null && binding.slot() != null
                 && binding.slot().permitsFace(turns(facing()), turns(side));
+    }
+
+    private Binding access(Direction side) {
+        Binding binding = current();
+        return permits(binding, side) ? binding : closed();
     }
 
     public void revalidate() {
@@ -84,16 +94,36 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
     }
 
     private Binding current() {
+        if (invalidating) {
+            return closed();
+        }
         Binding binding = resolve();
         Direction facing = facing();
         if (lastOwner.get() != binding.owner() || lastFault != binding.fault() || lastFacing != facing) {
-            lastOwner = new WeakReference<>(binding.owner());
-            lastFault = binding.fault();
-            lastFacing = facing;
-            capabilityRevision++;
+            remember(binding, facing);
+            long revision = ++capabilityRevision;
             invalidateViews();
+            Binding after = resolve();
+            Direction afterFacing = facing();
+            if (capabilityRevision != revision || after.owner() != binding.owner()
+                    || after.fault() != binding.fault() || !Objects.equals(after.slot(), binding.slot())
+                    || afterFacing != facing) {
+                remember(after, afterFacing);
+                capabilityRevision++;
+                return closed();
+            }
         }
         return binding;
+    }
+
+    private void remember(Binding binding, Direction facing) {
+        lastOwner = new WeakReference<>(binding.owner());
+        lastFault = binding.fault();
+        lastFacing = facing;
+    }
+
+    private static Binding closed() {
+        return new Binding(null, WorkshopStructure.Fault.STALE_OWNER, null);
     }
 
     private Binding resolve() {
@@ -184,18 +214,38 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
     }
 
     private void invalidateViews() {
-        for (Runnable invalidator : List.copyOf(invalidators)) {
-            invalidator.run();
+        if (invalidating) {
+            return;
+        }
+        RuntimeException failure = null;
+        invalidating = true;
+        try {
+            for (Runnable invalidator : List.copyOf(invalidators)) {
+                try {
+                    invalidator.run();
+                } catch (RuntimeException thrown) {
+                    if (failure == null) {
+                        failure = thrown;
+                    } else if (failure != thrown) {
+                        failure.addSuppressed(thrown);
+                    }
+                }
+            }
+        } finally {
+            invalidating = false;
+        }
+        if (failure != null) {
+            throw failure;
         }
     }
 
     @Override
     public void setRemoved() {
+        super.setRemoved();
         lastOwner.clear();
         lastFault = WorkshopStructure.Fault.STALE_OWNER;
         capabilityRevision++;
         invalidateViews();
-        super.setRemoved();
     }
 
     @Override
@@ -280,7 +330,7 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
     @Override
     public ItemStack removeItem(int slot, int amount) {
         ProcessMachineBlockEntity owner = itemOwner();
-        return level != null && !level.isClientSide() && !role().input() && visibleSlot(owner, slot)
+        return amount > 0 && level != null && !level.isClientSide() && !role().input() && visibleSlot(owner, slot)
                 ? owner.removeItem(slot, amount) : ItemStack.EMPTY;
     }
 
@@ -306,8 +356,9 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
 
     @Override
     public int[] getSlotsForFace(Direction side) {
-        ProcessMachineBlockEntity owner = itemOwner();
-        if (!permitsFace(side) || owner == null) {
+        Binding binding = access(side);
+        ProcessMachineBlockEntity owner = role().item() ? binding.owner() : null;
+        if (owner == null) {
             return new int[0];
         }
         return role().input() ? owner.getSlotsForFace(Direction.UP).clone()
@@ -316,12 +367,15 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) {
-        return permitsFace(side) && canPlaceItem(slot, stack);
+        Binding binding = access(side);
+        return role().item() && role().input() && visibleSlot(binding.owner(), slot)
+                && binding.owner().canPlaceItem(slot, stack);
     }
 
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
-        return permitsFace(side) && !role().input() && visibleSlot(itemOwner(), slot);
+        Binding binding = access(side);
+        return role().item() && !role().input() && visibleSlot(binding.owner(), slot);
     }
 
     @Override
@@ -353,30 +407,33 @@ public final class WorkshopPortBlockEntity extends BlockEntity implements Worldl
 
     @Override
     public int acceptedAmount(Direction from, FluidState state) {
-        Binding binding = current();
-        return role() == WorkshopPortRole.FLUID_INPUT && permitsFace(from) && binding.owner() != null
+        Binding binding = access(from);
+        return role() == WorkshopPortRole.FLUID_INPUT && binding.owner() != null
                 ? binding.owner().acceptedAmount(null, state) : 0;
     }
 
     @Override
     public FluidState insert(Direction from, FluidState state) {
-        Binding binding = current();
-        return role() == WorkshopPortRole.FLUID_INPUT && permitsFace(from) && binding.owner() != null
+        Binding binding = access(from);
+        return role() == WorkshopPortRole.FLUID_INPUT && binding.owner() != null
                 ? binding.owner().insert(null, state) : state == null ? FluidState.EMPTY : state;
     }
 
     @Override
     public boolean canExtract(Direction from) {
-        return role() == WorkshopPortRole.FLUID_OUTPUT && permitsFace(from) && !contents().isEmpty();
+        Binding binding = access(from);
+        return role() == WorkshopPortRole.FLUID_OUTPUT && binding.owner() != null
+                && !binding.owner().workshopProducedFluid().isEmpty();
     }
 
     @Override
     public FluidState extract(Direction from, int millibuckets) {
-        Binding binding = current();
-        if (binding.owner() == null || !canExtract(from)) {
+        Binding binding = access(from);
+        if (role() != WorkshopPortRole.FLUID_OUTPUT || binding.owner() == null || millibuckets <= 0) {
             return FluidState.EMPTY;
         }
-        return binding.owner().extract(null, Math.min(Math.max(0, millibuckets), contents().millibuckets()));
+        return binding.owner().extract(null,
+                Math.min(millibuckets, binding.owner().workshopProducedFluid().millibuckets()));
     }
 
     @Override
