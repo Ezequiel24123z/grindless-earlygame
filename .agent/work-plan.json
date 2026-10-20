@@ -48,6 +48,7 @@
     "audio_access": "owner_supplied_existing_external_location_authenticated_HTTP200_no_generation_no_secret_output_copy_or_commit",
     "audio_wave_budget": {"max_families": 2, "max_candidates_per_family": 2, "max_requests": 4, "first_purpose": "Clay_Mixer_wet_work", "generation_requests_made": 0, "needs_new_reviewed_run_grant": true, "historical_receipts_immutable": true, "not_a_permanent_project_ceiling": true},
     "image_cost_boundary": "metadata_discovery_only_no_paid_activation_or_generation_without_explicit_authorization_one_small_PoC_only_if_verified_no_cost_or_already_authorized",
+    "local_visual_backend": {"decision": "ADR-0157", "owner_identified_existing_installation": true, "status": "specialized_nested_implementation_authorized_inspect_first", "modification_scope": "necessary_reversible_configuration_nodes_tools_licensed_models_prefer_existing_no_mass_downloads", "never": ["reboot_PC", "public_API_exposure", "weaken_security", "destroy_existing_workflows_or_jobs", "copy_unrelated_personal_prompts_to_Git"], "proof": "one_justified_T0_asset_at_most_two_source_candidates_then_deterministic_validation_build_deploy_human_review", "external_provider_role": "comparative_research_not_default_implementation"},
     "product_boundary": "Superflat_alternatives_and_recommendation_before_material_choice_no_T0_acceptance_freeze_or_T1"
   },
   "autonomous_programme": {

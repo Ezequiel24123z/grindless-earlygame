@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Adopt the owner-identified local ComfyUI route (ADR-0157).** Authorize a
+  specialized nested asset pipeline, inspection-first reuse and necessary reversible
+  licensed additions without rebooting the PC, exposing a public API or destroying
+  existing workflows/jobs. Separate structured generation from deterministic
+  Minecraft validation and human visual approval; keep provider research and the
+  other T0 workstreams moving independently.
 - **Disclose and isolate two concrete prior-final CI failures.** Exact543598a
   verify/Windows jobs pass, but first-fluids misses WATER-IN and first-harness
   misses HELMET-OK. Retain run/artifact identities, report the failure visibly

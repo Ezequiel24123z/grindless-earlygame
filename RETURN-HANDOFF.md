@@ -16,6 +16,15 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 | COST / BILLING RISK | Audio initially capped to2 candidates/family,2 justified families/4 requests this wave after reviewed grants. No image paid activation/spend. Old receipts are immutable, not permanent project budgets. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
 
+The owner subsequently identifies an existing local ComfyUI and authorizes
+ADR-0157's reversible project-isolated production pipeline. This supersedes the
+earlier discovery-only/no-install boundary for that local installation, not the
+prohibition on paid external image activation. Inspection and actual generation
+qualification remain pending. Never reboot the PC, interrupt user jobs, expose
+ComfyUI publicly or confuse candidate generation with Minecraft/human correctness.
+An additional specialized asset owner handles this route; the provider researcher
+continues comparative research without duplicating installation work.
+
 The four new nested owners are visual discovery5afc449c, sound families9c12461c,
 Superflat proposal800431b7 and objective client preparation0f59d046, all based on
 published269965b. Concrete prior-final CI failures add a fifth narrowly owned

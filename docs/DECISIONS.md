@@ -168,6 +168,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0154](#adr-0154--stage-one-disabled-optional-pack-for-reload-smokes) | Stage one disabled optional pack for reload smokes | Accepted |
 | [0155](#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in) | Retain a diagnostic smoke world only by explicit opt-in | Accepted |
 | [0156](#adr-0156--disclose-blockers-and-separate-creative-capability-from-product-acceptance) | Disclose blockers and separate creative capability from product acceptance | Accepted |
+| [0157](#adr-0157--prefer-the-existing-local-comfyui-as-a-supervised-asset-backend) | Prefer the existing local ComfyUI as a supervised asset backend | Accepted |
 
 ---
 
@@ -7389,3 +7390,58 @@ without naming the searched scope; reset an old spend ledger; turn Copilot credi
 into assumed image credits; generate one sound for every trivial event; stall
 independent branches on a subjective choice; silently implement a starter kit,
 world landscape or quest shop to make a diagnostic route appear playable.
+
+---
+
+## ADR-0157 — Prefer the existing local ComfyUI as a supervised asset backend
+
+**Status.** Accepted owner-directed execution route, 2026-10-20. The owner identifies
+an existing personal-PC ComfyUI installation and authorizes necessary reversible
+configuration, extensions and appropriately licensed additions. Qualification and
+the first end-to-end proof are still pending.
+
+**Decision.** Use a specialized nested asset worker for this local route while
+external-provider research, audio, CI regressions, Superflat proposals and client
+preparation continue independently. Inspect the real installation, launch/runtime,
+models/checkpoints/VAEs/LoRAs/conditioning, custom nodes, workflows, input/output
+locations, hardware and API before changing anything. Hardware alone never proves
+that a model/backend runs. Keep host paths in private operational configuration.
+
+Never reboot the PC. Preserve existing workflows, models, outputs and queued user
+jobs; do not restructure the installation unnecessarily. Prefer a logically isolated
+Grindless profile/workflow/output prefix and existing compatible resources. Do not
+expose ComfyUI to the Internet, weaken firewall/security or create new cloud billing.
+A necessary node/tool/model addition requires a concrete role, pinned provenance,
+licence check, bounded disk/compute estimate and rollback. Avoid duplicate or multiple
+large model families. Serialize heavy GPU/RAM execution against other PC leases
+when actual headroom requires it, not all metadata/configuration work.
+
+The public project contract is structured asset specification -> versioned ComfyUI
+workflow/seed/model settings -> retained source candidate -> deterministic crop/
+background/palette/pixel adaptation -> Minecraft technical validation -> reviewed
+integration -> owned stopped Prism deployment -> human in-game visual review.
+ComfyUI supplies source material, not Minecraft correctness or artistic acceptance.
+Keep generation and deterministic transformation identities separate; a fixed seed
+does not promise cross-driver bitwise output. Never mistake a cache hit for a second
+independent inference.
+
+Derive shared palette, silhouette, material, mechanical and tier/family rules from
+existing Grindless design/assets. Prefer reusable item/material, machine concept/
+texture, state variant, book and UI/icon templates rather than unrelated graphs.
+Begin with one justified weak T0 asset, at most two source candidates unless a
+concrete defect requires a reviewed adjustment. Preserve its predecessor, integrate
+only a technically valid scoped candidate and mark NEEDS HUMAN VISUAL VALIDATION.
+No mass replacement or T0 acceptance/freeze follows from this proof.
+
+Record model and workflow versions/hashes, original structured prompt/specification,
+seed/settings, own source output, deterministic transforms and resulting asset.
+Do not copy unrelated personal workflows/prompts into Git. External image options
+remain comparative research and require explicit paid authorization before use.
+
+**Reporting.** In addition to ADR-0156's eight categories, the useful ComfyUI
+checkpoint explicitly reports COMFYUI ENVIRONMENT FOUND, REUSED COMPONENTS,
+INSTALLED/CHANGED COMPONENTS, MODEL/WORKFLOW SELECTED, AUTOMATION METHOD,
+POC ASSETS GENERATED, ASSETS INTEGRATED, NEEDS HUMAN VISUAL VALIDATION, BLOCKERS,
+DISK/COMPUTE IMPACT, LICENSING/PROVENANCE NOTES and RECOMMENDED NEXT ASSET WAVE.
+Do not bury failed nodes, missing models, unsupported execution or absent images
+inside the decision document.

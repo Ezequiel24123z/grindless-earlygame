@@ -123,6 +123,16 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Preferred local visual backend (ADR-0157):** the owner identifies an existing
+ComfyUI installation on the personal PC and authorizes necessary reversible
+configuration/extensions/licensed models for a supervised Grindless pipeline.
+Inspect before modifying; preserve user workflows/queues and isolate project
+templates/outputs. Never reboot the PC, expose the service publicly or weaken
+security. ComfyUI generates source candidates; deterministic transformations and
+Minecraft validation remain project-controlled, with artistic approval pending.
+Use a specialized nested owner; external-provider research is comparative, not
+the default implementation. Keep private host paths/configuration out of Git.
+
 **Current follow-up wave (ADR-0156, PA-0014):** run image-provider discovery,
 purpose-bound SFX work, minimal Superflat proposal and objective client preparation
 in independent nested sessions. The former Quern/three-request grant and the
