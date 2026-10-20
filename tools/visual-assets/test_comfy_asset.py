@@ -451,6 +451,17 @@ class Contracts(unittest.TestCase):
         graph = pipeline.read_json(pipeline.HERE / "poc" / "multitool-workflow-2.json")
         proof = pipeline.png_graph_proof(source, graph, require_metadata=True)
         self.assertEqual(proof["png_prompt_sha256"], provenance["resolved_workflow_sha256"])
+        for path, expected_hash in (
+            ("multitool-processing.json", provenance["processing_receipt_sha256"]),
+            ("multitool-run.json", provenance["run_ledger_sha256"]),
+            ("multitool-integrity-1.json", provenance["integrity_addendum1_sha256"]),
+            ("multitool-integrity-2.json", provenance["integrity_addendum2_sha256"]),
+        ):
+            self.assertEqual(pipeline.file_sha256(pipeline.HERE / "poc" / path), expected_hash)
+        ledger = pipeline.read_json(pipeline.HERE / "poc" / "multitool-run.json")
+        for row in ledger["requests"]:
+            path = pipeline.HERE / "poc" / f"multitool-workflow-{row['slot']}.json"
+            self.assertEqual(pipeline.file_sha256(path), row["workflow_sha256"])
 
     def test_multiple_objects_and_nonwhite_edge_are_refused(self):
         Image = pipeline.image_module()

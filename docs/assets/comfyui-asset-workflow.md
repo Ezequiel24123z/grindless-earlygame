@@ -331,6 +331,18 @@ hashes to `0936883c8ac58afe8bfbf85b5d86aa0d03450ec4ab746b9ca914fac851565890`.
 Original receipts, failed observations, request allowance and rejected-source
 disposition are not overwritten to close F1.
 
+The first integration archive exposed Git's Windows text conversion changing
+the raw retained JSON identities even though parsed graphs stayed equal.
+That archive's SHA-256 is
+`97a7aa4f65eb4a7ee6d121b05941ea4fc23fa6ef1bc39f5c3666c6b9e4393729`;
+it was inspected before any JDK run, not accepted as byte-preserving evidence.
+The scoped `.gitattributes` now preserves exact JSON bytes across checkouts and
+archives, and the committed-source contract checks raw workflow, run, processing
+and audit-addendum hashes in addition to graph/content identities.
+The first raw-byte staging attempt flagged the recorded CRLF terminators as
+trailing whitespace. The scoped attribute now recognizes CR-at-EOL while keeping
+blank-at-EOL/EOF and space-before-tab checks; no receipt bytes are edited to pass.
+
 ## Deterministic transformation and integration boundary
 
 The pipeline accepts only the graph's single-frame 512px PNG. It removes only
