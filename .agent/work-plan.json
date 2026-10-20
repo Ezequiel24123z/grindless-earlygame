@@ -9,7 +9,7 @@
   "merge_ready": false,
   "merge_ready_scope": "prior_b8bd5e8_main_and747_runtime_qualified_new_experience_scope_not_yet_integrated_or_client_verified",
   "experience_programme": {
-    "policy": ["ADR-0161", "ADR-0162", "ADR-0163", "ADR-0164", "ADR-0165"],
+    "policy": ["ADR-0161", "ADR-0162", "ADR-0163", "ADR-0164", "ADR-0165", "ADR-0166", "ADR-0167"],
     "plan": "plan/feature-t0-experience-1.md",
     "inventory": "docs/reviews/t0-experience-inventory.md",
     "external_references": "docs/design/t0-external-references.md",
@@ -40,7 +40,15 @@
     },
     "sound_allowance": {"new_max_POSTs": 8, "max_new_families": 4, "initial_planned_POSTs": 6, "initial_planned_families": 3, "historical_ledgers_reset": false, "paid_images": false},
     "visual_allowance": {"new_max_local_candidates": 6, "max_demonstrated_targets": 3, "historical_two_of_two_reset": false, "current_defect": "blocked_and_out_of_band_state_masks_rely_on_color_only", "diffusion_needed_for_that_defect": false},
-    "PC_leases": {"JVM_cache_deploy": "native_task_879ba2ba_Tank759_or_equivalent265", "CPU_Pillow_only": "9ff8a930-c8e2-4206-8b6b-34d36efb53bf", "GPU": null, "private_targets_not_committed": true},
+    "PC_leases": {"JVM_cache_deploy": "d29f53ac-a590-4183-84f9-d4ad4b9a0081_economy_compile_repair_writer_and_tests", "CPU_Pillow_only": null, "GPU": null, "private_targets_not_committed": true},
+    "qualification": {
+      "tank_early": {"source": "265275c53d3d474b22c8e171b86e1a261157c27f", "Tank_commit": "759460885638262e644a388cf6122b15adf00dc6", "common_Forge_classpath_exit": 0, "Gradle_seconds": 84.7, "BasicTank_checks": 120, "BasicTank_exit": 0, "Fluid_assertions": 285, "Fluid_exit": 0, "Java_at_release": 0, "build_raw_sha256": "3e3184a7c65fe84de03ae381ef77517f92aadb0cbbddb7f27bea4602076acb73", "checks_raw_sha256": "b2591e314150c872be439d872ef820a16bf6e5037fbfda694f37e6ce42ee3f5c", "closed_raws_copied_and_hash_verified_by_parent": true, "cleanup_limitation": "executor_removed_new_worktree_unrequested_build_artifacts_lost_two_exact_tool_raw_receipts_survive_no_success_replay", "new_164_creative_ports_quota_changes_not_covered": true},
+      "economy_early": {"source": "00b377bb2ec1eabaec7490089f7cf3b02e3027b5", "status": "RED_common_compile_ShopScreen_line68_extra_parenthesis_author_owns_repair_loop", "Gradle_exit": 1, "writer_executed": false, "focused_tests_executed": false, "JSON_generated": false, "original_clone_unchanged": true, "previous_task_released_Java0": true},
+      "issue_form": {"source": "6bbb90b1f27a7c20deee6e7e8e65e9dbea7972f8", "actual_PyYAML_parse_exit": 0, "unique_field_ids": 16, "form_submitted": false, "new_dependency_installed": false},
+      "current_cross_lane_QA": {"interface_ownership": "4b6b1223-c496-4d6f-8f52-b4938ea423d1", "quest_barter": "bd30594b-67ef-43f8-8946-0f17d2f9de62", "scope": "read_only_uncovered_composition_not_duplicate_successful_runtime"}
+    },
+    "QA_findings": {"snapshot": "b54b395734f25884e930594db62d26f488655d2a", "quest_barter_callers": "no_new_high_confidence_source_defect_no_runtime_inference", "interface_P2": "WorkshopPort_current_returns_A_after_sync_invalidator_replaces_with_B_then_face_rechecks_B_but_insert_extract_mutate_A", "interface_fix_owner": "e56d6ca6-77f7-412f-b29b-1f44da69c252", "real_formed_port_callback_regression_required": true},
+    "latest_source_tips": {"integration_published": "bbdb7c4959961dd56620367db28c9f1f80c7cd12", "quest": "131fb08b9c66bbb0c2b4fe12601fe1b944e040d8", "infrastructure": "164ee9aac3abf167cd6cb3bbde3ecf516990b12b", "overlay": "e00ba34827035f88ff5a79f1788bbbb49b4daee5", "audio": "15952106459f89fd66ef3a2bc6f17d90812becbd", "visual": "709307aa7bfb6cf0ed7aa01ad54a8ea684717dbb", "barter_runtime": "00b377bb2ec1eabaec7490089f7cf3b02e3027b5", "barter_test_only": "d916ff4d677b389e1b24ef6da328a8f30f06289b", "not_all_tips_integrated_or_executable_qualified": true},
     "early_checkpoints": {"integration_published": "265275c53d3d474b22c8e171b86e1a261157c27f", "tank_source": "759460885638262e644a388cf6122b15adf00dc6", "barter_core": "51612e339362ba428782ccfa06a3e6d73b2dae8b", "barter_menu_recovery": "6286dc32fdbde485013500d6d932a3ac7c8c3ae5", "visual_executed_source": "1969138a3bca424ed87f69966d8cd9b6d657db24"},
     "visual_early_proof": {"JDK_heap_mib": 256, "javac_exit": 0, "baseline_rejected_expected": true, "two_selective_stages_exit": [0, 0], "stages_byte_identical": true, "target_fronts": 62, "new_role_overlays": 4, "invalid_modes_rejected": 2, "receipt_sha256": "08fb5a66b24964bc2a40ba810e09489f7e02a2560991d0f14a72c8cebe5d60fb", "Java_at_release": 0, "new_diffusion": 0, "human_visual": false},
     "sound_actual_early": {"POSTs": 6, "HTTP200": 6, "retries_or_ambiguous": 0, "new_grant_spent": "6/6_immutable", "estimated_credits": 720, "selected": ["water_B", "extraction_B"], "fire": "both_candidates_unsuitable_one_adaptation_red_preserved_native_furnace_event_selected_no_reroll", "runtime_proof": "in_progress_not_yet_JVM_or_client"},
