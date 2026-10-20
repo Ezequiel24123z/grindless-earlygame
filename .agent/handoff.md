@@ -24,6 +24,24 @@ The earlier16:39:44Z visual snapshot (0Java/Python,6.095GiB physical/29.020GiB
 commit free) is historical, never a later execution guard. Sound ceiling8POSTs
 (initial6/3 families) and local visual6 candidates/3 targets do not reset ledgers.
 
+**Latest: Phase B package/native is actually qualified on exact F298988d.**
+Read [the complete result](../docs/testing/t0-experience-package-native.md).
+Source/runtime `298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4 and
+ZIP3e5ad1fb pass playable88/88, common/Forge0, affected ports2088 and the real
+26-marker isolated scenario, harness0/natural server0 in70.932seconds.
+Preserve the original25/26 G red and subsequent16/26 fixture-observer red;
+both exact worlds/JARs/ZIPs/logs remain, with all16 receipts/32 rawlogs.
+Actual copied-world NBT disproves tank loss; ordinary landing support and
+real entity-ready admission repair the fixture without weakening assertions.
+
+**Do not retarget the package to this evidence-only documentation commit.**
+The retained PC stays clean on tested F, with the exact F ZIP for the parent's
+DevDeploy/Inspect/Unchanged/old-six-file and new-user-config preservation.
+Do not rebuild or swap its JAR after proof. No Prism/push/PR/main action is
+performed by the executor. Fresh hosted F CI remains the publication gate.
+Graphical launch/world/interaction/save remains BLOCKED, not waived;
+no longitudinal campaign or T0/RC acceptance follows.
+
 The new client/world/interaction/save smoke is required and unobserved; local
 Computer Use window discovery exposes no target Minecraft/Prism window. Continue
 safe implementation while finding an authorized real graphical path. Do not

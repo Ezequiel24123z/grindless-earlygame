@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify the exact repaired F package and real26-marker native workshop.**
+  Source/runtime298988d builds playable88/88, preserves seven pins and passes
+  raw JAR/ZIP inspection. Actual common/Forge0 and targeted ports2088 precede
+  that new package. Its same remapped/inside-ZIP/staged JAR passes all26 real
+  predicates, harness0/natural server0 in70.93seconds. Preserve both prior
+  native reds, worlds, artifacts and32 rawlogs/16 receipts. The evidence-only
+  handoff does not retarget the tested F package; Prism deployment remains
+  parent-owned and the graphical gate remains BLOCKED.
 - **Admit the existing native fixture only when real entity sections are ready.**
   The grounded port assertion passes on F1, but immediate tank queries really
   observe zero entities in the newly forced chunk. Preserve that red too:

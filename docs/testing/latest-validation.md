@@ -1,5 +1,20 @@
 # Current T0 rework validation
 
+## Exact-F Phase B — real package and native26 pass
+
+[Complete package/native evidence](t0-experience-package-native.md) identifies
+the tested source/runtime **298988d500dccf0823fb2eab52fbe57bff8fe831**, exact
+JAR95bf47c4/ZIP3e5ad1fb, package88/88, common/Forge0, targeted ports2088 and
+actual26/26/harness0/natural server0 in70.932seconds. All inside-ZIP/remapped/
+staged/snapshot JAR hashes match. Both real prior fixture reds and stopped-world
+archives remain; loaded-and-ticking admission and a normal landing pad repair
+observation without changing any fluid engine, guard, marker or deadline.
+
+This containing proof-only commit is not a replacement artifact source. Keep
+the retained PC clean at tested F and give the parent that exact ZIP for DevDeploy/
+Inspect/Unchanged and preservation checks. Fresh F hosted CI and the required
+BLOCKED graphical gate remain separate; no Prism action or campaign is performed.
+
 ## Integrated experience Phase A — executed source gate, not client readiness
 
 The [complete source qualification](t0-experience-source-qualification.md)
