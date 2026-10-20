@@ -202,6 +202,10 @@ menu/token/sequence replay, sequence exhaustion, fixed packet framing, manual
 pre-producer recovery and composed conversion counterexamples. It also checks
 the source-side C2S/thread/book/ledger boundaries and localization. Those source
 checks are not an observed live network or client proof.
+The missing-second-payment regression explicitly binds the sorted payment order:
+the first cost is fully staged before the second one fails. Invalid-output tests
+likewise fund and stage a valid payment before rejecting the output registry or
+native stack limit; they do not accidentally stop at an earlier invalid-input guard.
 
 Telemetry tests cover default opt-out/NOP hooks, exact anonymous aggregates,
 relative first milestones, immutable snapshots, bounded unknown labels, overflow
@@ -238,10 +242,21 @@ prepared, **NOT EXECUTED**; the parent qualifies the frozen combined source with
 the existing runtime wrapper. Native packet delivery, client ergonomics, actual
 prices, recovery usefulness and pacing need their distinct proofs.
 
+The coordinator has assigned a separate native executor (`0a0c3364`) to exact
+`00b377bb2ec1eabaec7490089f7cf3b02e3027b5`: common/Forge compilation, the normal
+economy writer/CheckOnly and the three focused Java suites, with no unrelated
+suite replay. The verified incremental source bundle has 64617 bytes,
+SHA-256 `0a4d9c41cba2c09ee3578ef59c338e174040c7513ec0adbbab976b566bfb372e`,
+and only baseline `b8bd5e885aef598bf888d7e390b297a34cbb7d52` as a prerequisite.
+A first raw-OID bundle command was refused as empty before producing a usable
+bundle; checking the exact frozen HEAD and advertising that ref corrected the
+transport without changing source. Assignment and successful bundle verification
+are not a Java or generated-data pass. The worker starts no competing JVM.
+
 ## Lane handoff categories
 
 - `COMPLETED`: source implementation of the core, native shop/menu/network, paid pre-producer recovery, canonical cost/export lane and local telemetry above; not executable qualification.
-- `BLOCKED`: source is ready for the coordinator's serialized PC/JVM lease; no worker permission to run that host or JVM was assigned.
+- `BLOCKED`: no fundamental source/product blocker; actual qualification is pending the coordinator's assigned native executor. This worker has no competing host/JVM lease.
 - `NOT EXECUTED`: Java compilation/regressions, actual economy JSON generation/check, server boot, native packets, client and campaign. Parent integrates the separately owned Quest Book and process/quest telemetry hooks before combined qualification.
 - `NEEDS HUMAN VALIDATION`: prices, usefulness, pacing, clarity and interaction comfort.
 - `NEEDS MY DECISION`: None; direct barter and preserving the generous starter are assigned decisions.
