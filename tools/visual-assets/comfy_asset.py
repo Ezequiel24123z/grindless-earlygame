@@ -85,6 +85,9 @@ def rgb(value):
 
 def load_spec(path):
     spec = read_json(path)
+    if spec.get("schema") == "grindless.visual-asset.v2":
+        from visual_presets import validate_spec
+        return validate_spec(spec)
     require(spec.get("schema") == "grindless.visual-asset.v1", "Unsupported asset specification.")
     require(re.fullmatch(r"[a-z][a-z0-9_]{0,63}", spec.get("asset_id", "")), "Invalid asset id.")
     require(spec.get("registry_id") == "grindless:" + spec["asset_id"], "Registry identity mismatch.")
@@ -154,6 +157,8 @@ def load_model(path):
 
 def workflow(spec, model, slot, prefix):
     require(type(slot) is int and 1 <= slot <= len(spec["seeds"]), "Candidate slot exceeds its allowance.")
+    if spec.get("schema") == "grindless.visual-asset.v2":
+        require(model["sha256"] == spec["model_sha256"], "Preset graph/model differs from the frozen specification.")
     replacements = {
         "@checkpoint": model["filename"], "@positive": spec["positive_prompt"],
         "@negative": spec["negative_prompt"], "@seed": spec["seeds"][slot - 1], "@prefix": prefix,
@@ -507,7 +512,10 @@ def image_module():
     return Image
 
 
-def guide_image():
+def guide_image(spec=None):
+    if spec and spec.get("schema") == "grindless.visual-asset.v2":
+        from visual_presets import guide_image as preset_guide
+        return preset_guide(spec)
     Image = image_module()
     from PIL import ImageDraw
     image = Image.new("RGB", (32, 32), "white")
@@ -550,6 +558,9 @@ def components(mask, width, height):
 
 
 def process_image(source, spec):
+    if spec.get("schema") == "grindless.visual-asset.v2":
+        from visual_presets import process_image as preset_process
+        return preset_process(source, spec)
     Image = image_module()
     with Image.open(io.BytesIO(source)) as opened:
         require(opened.format == "PNG" and not getattr(opened, "is_animated", False), "Use a single-frame source PNG.")
@@ -623,6 +634,9 @@ def process_image(source, spec):
 
 
 def verify_sprite(image, spec):
+    if spec.get("schema") == "grindless.visual-asset.v2":
+        from visual_presets import verify_sprite as preset_verify
+        return preset_verify(image, spec)
     require(image.size == (16, 16) and image.mode == "RGBA", "Runtime image must be 16x16 RGBA.")
     pixels = list(image.get_flattened_data())
     palette = {rgb(value) for value in spec["visual"]["palette"]}
@@ -699,8 +713,9 @@ def main(argv=None):
                 stream.write(data)
             print(json_bytes({"comparison_sha256": sha256(data), "bytes": len(data)}).decode("ascii"), end="")
         elif args.action == "guide":
-            require(spec["asset_id"] == "multitool" and args.output, "Only an original Multitool guide is supported.")
-            data = guide_image()
+            require(args.output and (spec["asset_id"] == "multitool" or spec.get("schema") == "grindless.visual-asset.v2"),
+                    "An original source-bound guide and a new output path are required.")
+            data = guide_image(spec)
             with args.output.open("xb") as stream:
                 stream.write(data)
             print(json_bytes({"guide_sha256": sha256(data), "bytes": len(data)}).decode("ascii"), end="")
