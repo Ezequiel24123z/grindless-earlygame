@@ -102,6 +102,14 @@ Java assertion count. Its initial source-footprint helper exits 1 with
 `ReadAllBytes` argument; corrected enumeration passes. No codec/loader/widget
 Java or graphical renderer is executed by these source checks.
 
+The existing closed source-binding check is extended from twelve to sixteen
+authorities, including the catalogue and utility-book/reward/event path.
+Its bounded worker executes a PowerShell lexical check of 50 exact method profiles,
+10 nested declarations and 86 negative-mutation anchors, package/import/delimiter
+checks and `git diff --check`. This is source-profile consistency evidence, not an
+execution of the Java AST gate or its counterexamples. Existing sender, thread,
+physical-book, current-evidence and single-ledger guards remain bound.
+
 The focused existing checks cover the exact allocation and old catalogue
 compatibility (`VerifyQuest`), no-book rejection/free claim/idempotence/complete
 inventory delivery/deferred book recovery (`VerifyQuestClaims`), binary legacy and

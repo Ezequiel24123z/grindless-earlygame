@@ -445,8 +445,8 @@ modified content and unpublished loose files are preserved/refused, never silent
 `VerifyQuestClaims` covers the service; `tools/quest-checks/VerifyHeracles.java`, through
 `:forge:verifyQuestBackend`, checks the actual selected codecs/loader, recovery and packets.
 Those pure contracts are not a Forge boot or human save/client acceptance.
-`VerifySustainabilityRegistry --quest-binding-only` parses the pinned common/Forge
-authorities without explicit game bootstrap. Its closed AST profiles cover the claim/access methods and
+`VerifySustainabilityRegistry --quest-binding-only` parses the16 pinned common/Forge
+authorities without explicit game bootstrap. Its50 closed AST profiles cover the claim/access methods and
 reject alternate imports/overloads/callbacks or removed book/sender/evidence/reward guards.
 The same `mechanics_binding:QuestBookItem_QuestBookMenu` key keeps the expanded source
 fingerprint. Source-only inputs and the combined live export must retain separate identities.
