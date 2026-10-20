@@ -291,8 +291,8 @@ class InventoryContracts(unittest.TestCase):
         surfaces = {row["surface"]: row for row in report["presentation"]}
         shop = surfaces["shop icons"]
         self.assertIsNotNone(shop["runtime"])
-        self.assertIn(audit.JAVA + "client/ShopScreen.java", shop["source"])
-        self.assertIn(audit.JAVA + "menu/ShopMenu.java", shop["source"])
+        self.assertIn(audit.JAVA + "shop/client/ShopScreen.java", shop["source"])
+        self.assertIn(audit.JAVA + "shop/ShopMenu.java", shop["source"])
         self.assertIn(audit.JAVA + "item/FieldGuideItem.java", surfaces["legacy Guide"]["source"])
         self.assertIn("redirects", surfaces["legacy Guide"]["runtime"])
         self.assertIn(audit.JAVA + "client/QuestTeachingClient.java",

@@ -19,6 +19,8 @@ entries below reference those records by id.
   Record the live barter menu, harmless saved Guide redirect and shared
   native/Heracles six-port teaching sources instead of stale baseline-only
   placeholders. Keep all protected pixels and native/human review flags intact.
+  Retain the first projection's missing-path red and bind the actual existing
+  `shop/client/ShopScreen` and `shop/ShopMenu` package paths.
   The executed orphan fixture also exposed its missing horizontal-facing
   property; use the existing registered vanilla Furnace state, not a fake port.
 - **Keep registered-object proof in the existing real Forge workshop probe.**
