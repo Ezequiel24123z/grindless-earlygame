@@ -5,15 +5,25 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 
 ## Current wave disclosure
 
+**Execution correction (ADR-0158):** the owner requires broader end-to-end delivery
+and proportionate checks, not micro-approval queues. The sound owner is authorized
+to finalize its reviewed markers/new private grant and generate the accepted Mixer
+pair now, then process/integrate without another permission per operation. Up to12
+small justified SFX requests and8 additional useful local candidates are permitted
+this wave, not targets to exhaust or resets of old ledgers. The technically selected
+Multitool127b sprite may be imported with its provenance while tool integrity and
+normal-generator proof are completed. Human art/listening and final shared deployment
+remain separate. PC handoffs coordinate resources only, not routine design approval.
+
 | Category | Actual state at follow-up intake |
 | --- | --- |
 | COMPLETED | Previous A01/A03/build/deployment proof is preserved. The owner-supplied external ElevenLabs credential is now readable and authenticated via HTTP200 without exposing/copying it or generating audio. |
-| BLOCKED | Prior-final CI39336114196 fails first-fluids/WATER-IN and first-harness/HELMET-OK despite successful verify/Windows jobs; d4302f81 investigates actual logs, not an assumed flake. Materially different Superflat choices and new image billing cannot be selected silently. Audio generation awaits its new tooling/grant, not a missing credential. |
-| NOT EXECUTED | New SFX generation, image proof, current-wave client run and a fresh no-command campaign have not occurred. |
+| BLOCKED | Original CI39336114196 remains failed history, but repaired962 qualifies in full CI and PC Windows contracts; it is no longer a current unresolved gate. Superflat material choices and human visual/listening/campaign remain held; tooling provenance F1 is being repaired without new diffusion. |
+| NOT EXECUTED | Final integrated build/deploy, current-wave graphical client run and fresh no-command campaign remain unexecuted. Two real SFX HTTP200 requests and two real local image jobs have now occurred; neither implies human acceptance. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
 | NEEDS MY DECISION | Superflat alternatives and any new image billing/resource activation will be presented before implementation/spend. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing audio access is resolved. Actual image-account/free-quota/local-GPU availability is under bounded discovery, not assumed absent or usable. |
-| COST / BILLING RISK | Audio initially capped to2 candidates/family,2 justified families/4 requests this wave after reviewed grants. No image paid activation/spend. Old receipts are immutable, not permanent project budgets. |
+| COST / BILLING RISK | Audio delivery allowance is now up to12 justified small-candidate requests with delegated finite run grants; accepted Mixer pair is ~240credits estimated, not a guaranteedUSD quote. Local Comfy may iterate if useful without external-image billing. Old run receipts remain immutable. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
 
 The owner subsequently identifies an existing local ComfyUI and authorizes
@@ -49,6 +59,8 @@ Superflat proposal800431b7 and objective client preparation0f59d046, all based o
 published269965b. Concrete prior-final CI failures add a fifth narrowly owned
 regression lane d4302f81 on3cd16ba; this is not another whole-T0 audit.
 No child currently owns a PC JVM/Gradle/Prism-write window.
+The later Comfy-only resource lease below supersedes that intake snapshot; no
+Java/Gradle/Prism operation has been granted alongside it.
 Read-only01:27:07Z observation finds0Java,9.260 GiB free physical memory,
 30.766 GiB commit and161.808 GiB work space; a later runtime must refresh this.
 The optional repository-memory service is unavailable; the reporting agreement
@@ -76,6 +88,23 @@ this is not diffusion or a generated image. Exact model/LFS provenance and the
 pinned OpenRAIL-M text/restrictions are checked before candidate import and
 recorded in THIRD_PARTY_NOTICES. No weights/GPL code are distributed; API/source
 generation and candidate evaluation are still pending at this checkpoint.
+
+The CI observer962 source is independently reviewed/integrated, not qualified:
+one controlled setup and bounded polls retain real water/Burn or exact5 item
+existence. Its23/28 source contracts pass and all6 added batch cases execute, but
+the full48 gate still fails locally under its unchanged limits. A new automatic
+exact962 run39357301892 proceeds separately; native successes are not assumed.
+The original trigger remains UNKNOWN; these fixtures cannot prove quantitative
+flow balance, item survival or global gameplay. No third local full retry or
+timeout increase is used to disguise the failed aggregate.
+Later qualification closes this gate honestly: exact962 CI39357301892 succeeds
+in verify/Windows/all six native shards. Raw Server broadcasts prove WATER-IN/
+CO-BURN and all five Harness IDs with normal saves. On the PC, standalone javac
+and23/28 adapter pass; canonical harness passes30/0 including the complete48-case
+batch once in55.640s. No budget changes, third local retry or duplicate native
+run is used. The prior failures and unknown historical trigger stay preserved.
+JDK is explicitly released02:47:52Z,0Java/root clean, handing the preauthorized
+small generator stage to Comfy without another approval roundtrip.
 
 ## What is already on the personal PC
 

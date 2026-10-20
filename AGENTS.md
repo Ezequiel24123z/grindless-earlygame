@@ -107,6 +107,13 @@ This is project policy, not a preference inferred for unrelated repositories.
 - The coordinator may investigate, make design decisions, review code/evidence, maintain the
   handoff and perform Git integration. It must not quietly become the application coder.
   Report unavailable worker capabilities instead of silently changing that division of work.
+- **Deliver outcomes, not micro-approval queues (ADR-0158).** Delegate coherent
+  end-to-end features: generate, compare, process, integrate and validate within
+  the assigned lane. Workers make ordinary technical choices and repair their
+  own failures without stopping after each checkpoint for another approval.
+  Use existing commands and proportional checks; do not spend more effort
+  building validation carriers than delivering the feature. Escalate material
+  product/cost/security/world changes, not routine iterations.
 - Give each worker a bounded outcome, source revision, owned files, acceptance criteria and
   stop condition. Use the fewest useful workers. Serialize shared-file edits, validation
   against changing inputs, commits and publication; never have competing publishers.

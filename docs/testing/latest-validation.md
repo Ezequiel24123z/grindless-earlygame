@@ -1,5 +1,59 @@
 # Current T0 rework validation
 
+## Observation fixtures qualified by actual CI and PC Windows contracts
+
+Exact962cb37 [CI39357301892](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39357301892)
+finishes success: verify, Windows tooling and all six native shards. Captured
+raw logs contain actual Server WATER-IN/CO-BURN and all five original Harness
+markers, then normal stop/All dimensions are saved. The source adapter23/28 and
+canonical batch wrapper pass in the uploaded foundation log. This is not marker
+text quoted from a parse failure.
+
+The PC independently runs only the two standalone Java contracts: javac0
+in1.011s, new adapter0 in0.960s/23 positives/28 negatives, canonical harness0
+in55.640s/30PASS0FAIL with full48 batch cases once. The original60/120/15
+budgets are unchanged. Receipt SHA-256:
+`780d290a1dd88b623016a56c4066abc92e895da418a1c71cb448dc5f4bba49cb`.
+Owner releases02:47:52Z with0Java/clean source; no Gradle/native replay/client.
+
+| Captured exact962 evidence | SHA-256 |
+| --- | --- |
+| Foundation source | `1dcbc3f15a9630352653cbea00e98392c72eb13bb5597f8296d7e7a55bada21c` |
+| Foundation status | `9500a03ce15e5b4254f784a8c50052e66a8e1f02d4df5e9c9aef1b3498e1df6f` |
+| Behavior | `44e63899ef74ccc1ea01b771a4361efd24c1a0032eaec9389ac87bbe8ce6cf07` |
+| Fluids native | `d04a01839c67ffbe5a35380595b9591fb53fe0a27c717fd87859d588acf884da` |
+| Harness native | `938c840812842d2f7d9ba23df39913050c623fb305e9699d745b209acfdbe4c3` |
+
+Earlier local aggregate failures and original failed CI remain recorded, not
+retroactively reclassified as passes or proven environmental effects. The
+historical precipitant, quantitative flow balance and item survival remain
+outside this fixture proof.
+
+## Source-reviewed first-observation repair, qualification still open
+
+The follow-up integrates original962cb37 fixture history after bounded independent
+review. Production/build/boot/expectations/manifest/CI stay unchanged; the two new
+packs use loaded setup, controlled incidental terrain, scheduled observation and
+explicit diagnostic failure. Batch isolation adds only these fresh-pack cases.
+The authored Java adapter is discovered by the existing check runner.
+
+Actual source-only red rejects18 safeguards; PS and SH green pass23 positives
+and28 negative mutations. Full batch qualification is NOT a pass: first local
+attempt5/48/196 assertions and serial retry20/48/585 assertions both exit1.
+All6 new cases execute successfully in the retry, but the pre-existing optional-file
+case/remaining deadlines do not finish. No third retry or timeout increase follows.
+The dedicated [receipt](t0-first-observation-fixtures.json) retains raw identities
+and all attempts. Independent review finds no new high-confidence source defect
+but cannot establish that the aggregate timeout is exclusively environmental.
+
+Important bounds: fluid polls latch real positive water and Burn, not full flow/
+mass balance; harness existence may pass in the spawn invocation, not after-tick
+survival. The canonical Java harness also has a60-second outer limit, distinct
+from the script's120-second aggregate and15-second case limits. New adapter
+compilation, complete batch and actual native qualification remain open at
+integration. Exact962 CI39357301892 is already running in parallel to local Comfy;
+reuse its actual evidence where applicable instead of assuming or duplicating it.
+
 ## Subsequent final-source CI failure, disclosed at follow-up intake
 
 The later [CI39336114196](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39336114196)

@@ -60,6 +60,14 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
   old-source equality do not prove graphical launch, input, audio playback or human
   quality. Use explicit target/revision with the existing read-only Inspect, never
   silently Sync or update a save to bypass a mismatch.
+- `tools/smoke/first-fluids-pack/`, `first-harness-pack/` and
+  `VerifyFirstObservationFixtures` — one controlled setup, real chunk barrier and
+  bounded scheduled observation of the original destination water/CO burn or five
+  exact item IDs. Do not inject destination fluid or repair setup after observation
+  begins. Source contracts are not native proof, and item existence is not
+  post-tick survival. `docs/testing/t0-first-observation-fixtures.json` preserves
+  failed CI, raw hashes and incomplete aggregate-tooling qualification. Both
+  fresh-pack cases are excluded from the shared-world batch.
 - ADR-0148, `client/GrindlessClient`, `machine/MachineEffects`, `registry/ModSounds`
   and sound resources — bounded Quern-only client loop integration from approved candidate A.
   Import the exact noticed Ogg, not account/private generation evidence; preserve unrelated

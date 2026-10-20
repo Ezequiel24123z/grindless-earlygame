@@ -169,6 +169,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0155](#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in) | Retain a diagnostic smoke world only by explicit opt-in | Accepted |
 | [0156](#adr-0156--disclose-blockers-and-separate-creative-capability-from-product-acceptance) | Disclose blockers and separate creative capability from product acceptance | Accepted |
 | [0157](#adr-0157--prefer-the-existing-local-comfyui-as-a-supervised-asset-backend) | Prefer the existing local ComfyUI as a supervised asset backend | Accepted |
+| [0158](#adr-0158--delegate-end-to-end-outcomes-with-proportional-validation) | Delegate end-to-end outcomes with proportional validation | Accepted |
 
 ---
 
@@ -7340,6 +7341,9 @@ environment preservation; only the real native run can qualify saved accounting.
 
 **Status.** Accepted owner-directed follow-up, 2026-10-20; PA-0014. The previous
 qualified559 deployment is preserved, not relabelled as a finished T0 campaign.
+ADR-0158 subsequently replaces the initial micro-approval/cap execution model
+with broader end-to-end authority; the historical budgets below are not current
+permanent project restrictions.
 
 **Need.** The engineering handoff did not prominently disclose that new SFX
 generation had not occurred. Documentation alone is insufficient disclosure.
@@ -7445,3 +7449,40 @@ POC ASSETS GENERATED, ASSETS INTEGRATED, NEEDS HUMAN VISUAL VALIDATION, BLOCKERS
 DISK/COMPUTE IMPACT, LICENSING/PROVENANCE NOTES and RECOMMENDED NEXT ASSET WAVE.
 Do not bury failed nodes, missing models, unsupported execution or absent images
 inside the decision document.
+
+---
+
+## ADR-0158 — Delegate end-to-end outcomes with proportional validation
+
+**Status.** Accepted owner correction, 2026-10-20. Excessively narrow assignments
+and approval stops delayed real generation despite available access and subscriptions.
+
+**Decision.** Give each existing worker a broad, coherent outcome through ordinary
+implementation, generation, technical selection, processing, integration and tests.
+Routine iteration, review-marker/grant preparation under delegated authority and
+repair of concrete defects do not require a new coordinator permission at each step.
+Prefer a real bounded execution and relevant checks over another custom carrier,
+full replay or preparation-only handoff. Use independent review at meaningful risk
+boundaries, not as an automatic gate for every file or invocation.
+
+The sound owner may now mark the delivered real wet-work contract/manifest reviewed,
+commit it, issue its fresh private source-bound grant and execute the accepted two
+Mixer requests immediately. Small justified iterations/families may use up to12
+SFX requests in this wave, without exhausting that ceiling merely for activity.
+The Comfy owner may finish the selected Multitool pipeline and use up to8 additional
+local candidates only if useful. Each run still has a finite recorded budget; old
+spent receipts are never reset and uncertain delivery is not blindly resubmitted.
+These are operating allowances for delivery, not permanent project limits.
+
+Keep meaningful safeguards: secrets never exposed/copied, exact source/output
+provenance, no PC reboot/public Comfy exposure or player-world damage, and honest
+human visual/listening/campaign gates. Ordinary transformations, codec QC and
+source preservation are worker-owned. Coordinator publication and shared final
+build/deploy remain serialized; actual PC resource handoffs are scheduling, not
+another design-approval ceremony. Independent lightweight work continues.
+
+Material progression alternatives, new external paid-image billing and genuine
+security/account/OS changes still need the appropriate owner decision. Existing
+subscriptions and the expressly authorized local route are for use, not perpetual
+access/entitlement rediscovery. Record actual costs and material failures visibly
+under ADR-0156. Neither this acceleration nor a technical pass accepts/freezes T0.

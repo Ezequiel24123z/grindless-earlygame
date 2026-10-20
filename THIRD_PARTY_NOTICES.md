@@ -59,8 +59,9 @@ replay is part of the import.
 ## Local visual-model provenance before asset import
 
 ADR-0157 authorizes reuse of an existing local checkpoint for an original
-Grindless Multitool source candidate. **No new visual asset is imported by this
-entry yet.** The model and ComfyUI code are not distributed with the mod or copied
+Grindless Multitool source candidate. The technically selected candidate below
+is authorized for its scoped source/runtime import; human visual acceptance is
+still pending. The model and ComfyUI code are not distributed with the mod or copied
 into this MIT repository.
 
 - Model: Stable Diffusion v1.5, Comfy-Org's FP16/header conversion, not a claim
@@ -89,6 +90,35 @@ into this MIT repository.
   independently reads the pinned licence and restrictions on 2026-10-20.
   Actual source generation, final candidate hashes and human visual judgment
   remain separate, not granted by this provenance entry.
+
+### Selected Multitool proof-of-concept derivative
+
+The first text-only inference is retained as a rejected experiment: it produced a
+photographic hexagonal component on fabric and failed the unchanged background QC.
+Its source SHA-256 is
+`e77dca20fb9b0c57a735b2fddc37070730e239458e689d12d880ad735faf0924`.
+It is not a runtime asset or a reason to weaken validation.
+
+The second inference uses an original project-authored wrench guide, nearest-scaled
+from32 to512 pixels, with the same verified SD1.5 checkpoint. Seed21774206,
+Euler/normal20 steps, CFG7, denoise0.35 and batch1 are fixed. No LoRA, new model,
+paid provider, copied artwork or GPL implementation enters the game assets.
+
+| Retained derivative | Verified SHA-256 |
+| --- | --- |
+| Original conditioning PNG | `ee974047fdd07ba2da2e84d510fa7e635e2932d9155fb488f9f9143eaf79ca15` |
+| Generated512 source,86605 bytes | `d083051c81c61d8d42158debd5afbb24b347bf77fa271ef41d10044a8f51f615` |
+| Deterministic16px PNG,223 bytes | `127b662a124c30490c3d6737dc29ce8175d37b201e45bdad18bc1ea7360c7d38` |
+
+Deterministic processing removes the validated white background, crops
+`[80,32,400,480]`, nearest-fits within14 pixels, quantizes to7 palette colours and
+requires hard alpha, connectivity and a1px margin without rotation/mirroring.
+The coordinator independently views actual source/native/predecessor and the
+1x/8x light/dark comparison and verifies these three hashes before selecting it
+technically. Keep the original structured spec, prompt, graph, seed, guide and
+transformation metadata with the source tooling. Retained-workflow integrity must
+also be enforced by the tool; a seed alone is not a reproducibility claim.
+The resulting game sprite remains **NEEDS HUMAN VISUAL VALIDATION**.
 
 ## Pack dependencies (not imports)
 

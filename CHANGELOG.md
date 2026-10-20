@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Replace micro-approval stops with end-to-end ownership (ADR-0158).**
+  The owner explicitly prioritizes delivery and use of existing subscriptions/
+  local compute. Delegate normal review markers/private grants, generation,
+  iteration, processing and integration with proportionate checks, retaining
+  finite ledgers, secrets/world/no-reboot safeguards and human acceptance.
+  Select the actual guided Multitool127b candidate technically and record its
+  source/transform hashes before import; final shared publication stays coordinated.
+- **Integrate reviewed first-observation fixtures without hiding failed gates.**
+  Preserve962cb37's original topology/quantities/item IDs, controlled setup,
+  bounded real observations and scoped diagnostics plus the two batch exclusions.
+  Source23/28 contracts and six new cases pass, but full48 local gates still fail;
+  Java/native qualification stays open with original attempts and independent
+  review limits recorded. No production change or global CI-green claim.
 - **Confirm actual client readiness and existing GPU execution separately.**
   Preserve27d732's real read-only559 Inspect and owner-desktop CLI/log procedure,
   without claiming graphical launch or authentication. Record the existing
