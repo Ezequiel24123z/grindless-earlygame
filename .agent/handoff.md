@@ -17,11 +17,12 @@ physical audio and visual presets. New integration owner6c714156 owns its fresh
 surface; parent owns architecture/contracts and final deployment. Root documents
 and publication are serialized. Old sessions are not resumed.
 
-CPU/Pillow processing alone is leased to visual9ff8a930 in its explicit private
-root. JVM/cache/deploy and GPU are not leased. Fresh16:39:44Z observation finds
-0Java/Python,6.095GiB physical/29.020GiB commit free. Never reuse these numbers
-as a later heavy-execution guard. New sound ceiling8POSTs (initial6/3 families)
-and local visual6 candidates/3 targets do not reset historical ledgers.
+Source-wave compute leases are released; the executed Phase A closeout below
+observes0Java/0Python/no build-cache locks. Phase B must take the exclusive lease
+and make fresh guards before heavy work; no old source lane may self-resume.
+The earlier16:39:44Z visual snapshot (0Java/Python,6.095GiB physical/29.020GiB
+commit free) is historical, never a later execution guard. Sound ceiling8POSTs
+(initial6/3 families) and local visual6 candidates/3 targets do not reset ledgers.
 
 The new client/world/interaction/save smoke is required and unobserved; local
 Computer Use window discovery exposes no target Minecraft/Prism window. Continue
@@ -44,20 +45,34 @@ optional native inspection. Jade's CC-BY-NC-SA profile inclusion remains deferre
 The owner is unavailable after the graphical-access question; this does not approve
 waiving the required client gate. Continue implementation, not the campaign.
 
-**Continuation checkpoint:** source3564fe7 now fixes the actual stale-binding P2
-with a callback fence, post-callback live binding/revision check and single-binding
-face operations. It also fixes raw750/quota750 visibility through the same pure
-recipe selector. Real formed-port/FakePlayer/conduit assertions are authored in
-the existing disposable smoke, not executed yet. Targeted three new batch-tool
-cases pass98 assertions; the earlier33/51 timeout failure remains a failure.
+**Executed Phase A:** read [the exact source qualification](../docs/testing/t0-experience-source-qualification.md).
+Published26ac is actually compiled/generated/repaired. Full52 suites exit0 in
+526seconds; final clean-source common/Forge/resources/classpath/Heracles776 exit0.
+Complete generated checkpointdb5a8e9 contains45 raw-hash-verified normal outputs,
+including six real model/state/loot sets,73 guidance declarations, the fresh
+canonical economy and25/71/281 visual inventory. Thirteen protected sprites and
+four Oggs remain exact. Source/build/classes and23 receipts/46 rawlogs are retained;
+actual closeout observes0Java/0Python/no root-cache locks and original clean70901.
+The final containing handoff commit is proof/context-only, not another runtime run.
 
-Economy sourceb523 passes common/Forge;7fd fixes the explicit source observer
-contract after telemetry. Source5002 fixes a separate real nested-Map byte-order
-drift using recursive JSON object ordering and strict canonical text checks.
-The author is completing writer/CheckOnly/three Java suites in the retained root
-under the only JVM/cache lease. Do not claim5002 results from the prior semantic
-checks or disturb that root. Final integration receives3564/cf575/5002 before the
-single composed generation/verification turn; no new per-file approval is needed.
+The real AST/manual-work repair and ten negatives pass, as do both renderer
+teaching hooks and2075 port/model/component contracts. The standalone intrusive
+fixture attempts really fail; do not force registry flags or fake items.
+Positive registered Guide settlement, public physical-F1 claim and port
+state/collision assertions now remain required in the existing Forge probe:
+original23 markers plus3 additions =26, **NOT EXECUTED until Phase B on the same G**.
+The original356 P2 callback fence and raw750/quota750 predicates remain there,
+not proved by old Tank120. Same-G package/native/Prism/Inspect/idempotency and
+fresh full hosted/SH CI are the next publication/deployment boundary.
+Required graphical launch/world/interaction/save gate is still BLOCKED, not waived;
+do not start longitudinal play or claim the full readiness status.
+
+Offline695 proof is reused only after17 exact input-blob comparisons; actual
+current Windows47+30 and Java audio101 pass. Batch3cases/98 and unchanged old48
+proof remain source-bound; historical full33/51 timeout FAIL is preserved.
+The independent economy author's retained surface/private proof is untouched.
+Its released source5002 proof is not copied as the final composed JSON: fresh
+canonical writer/check416/17 and full Economy417/Shop33230 are the new evidence.
 
 ## Previous qualified testing handoff
 

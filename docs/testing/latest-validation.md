@@ -1,5 +1,26 @@
 # Current T0 rework validation
 
+## Integrated experience Phase A — executed source gate, not client readiness
+
+The [complete source qualification](t0-experience-source-qualification.md)
+records actual26ac intake, repaired1101313 plus normal generated outputs and
+complete checkpointdb5a8e9. One full52-suite runner exits0 in526seconds;
+final clean common/Forge/resources/classpath/Heracles776 exits0. Guidance
+writer/check73/5179, economy416/17, full Shop33230/Economy417/Tank166/
+ports-and-teaching2075/inspection409/guidance25500/registry1164/T02834 and
+dashboard76991/root44 pass. Actual Python inventory10 and Windows physical
+audio47+30 pass;13 sprites/four Oggs remain exact.
+
+All45 normal output hashes and23 closed command receipts/46 rawlogs are
+verified, including the normal JDK diagram. Source/build/class roots remain;
+closeout observes0Java/0Python/no build-cache locks and original clean70901.
+The original hosted seven-suite red, failed standalone registration orders,
+focal orphan/projection reds and observer failures are preserved. The actual
+registered Guide/Matrix/port assertions are required in the existing26-marker
+native probe, NOT EXECUTED here; no fake holder or waived property supplies a pass.
+Same-G native/package/Prism/Inspect and fresh hosted CI remain Phase B.
+The required graphical gate stays BLOCKED, not replaced by these results.
+
 ## New experience programme — actual early proof and open executable red
 
 The old747/main proof below is not a pass for the new experience scope.

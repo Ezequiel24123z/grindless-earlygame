@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the actual integrated T0 Phase A qualification without claiming a client pass.**
+  One complete post-repair runner passes52 suites; the final clean-source
+  common/Forge/resources/classpath/Heracles gate exits0 with776 contracts.
+  Record real Shop33230, Economy417, Tank166, ports/teaching2075, inspection409,
+  guidance25500, registry1164 and conditionalT02834, plus the actual writer,
+  dashboard, Python and sound checks. Preserve23 closed receipts/46 rawlogs,
+  all original reds, protected bytes and retained source/build/class roots.
+  Same-G26-marker native/Prism work and the BLOCKED graphical gate remain
+  separate in [the source qualification](docs/testing/t0-experience-source-qualification.md).
 - **Import the actual composed T0 generators through verified raw bytes.**
   Normal JDK generation writes1548 assets, including all six port states/models,
   item models, loot, mining and state-smoke rows. Canonical guidance writer/check
