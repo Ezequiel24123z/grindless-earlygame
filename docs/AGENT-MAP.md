@@ -50,6 +50,11 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
   blindly. Private storage paths belong in operational evidence, not public pack data.
 - `docs/reviews/go-gate.md` and `docs/testing/` — qualify technical/product RC readiness
   before delivery, record human acceptance afterward and preserve real-save upgrade proof.
+- `docs/testing/t0-client-review-preparation.md` — source-bound objective literal-key/
+  texture checks and exact isolated client-review probes. Its offline passes and
+  old-source equality do not prove graphical launch, input, audio playback or human
+  quality. Use explicit target/revision with the existing read-only Inspect, never
+  silently Sync or update a save to bypass a mismatch.
 - ADR-0148, `client/GrindlessClient`, `machine/MachineEffects`, `registry/ModSounds`
   and sound resources — bounded Quern-only client loop integration from approved candidate A.
   Import the exact noticed Ogg, not account/private generation evidence; preserve unrelated

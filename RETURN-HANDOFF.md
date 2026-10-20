@@ -35,6 +35,15 @@ Read-only01:27:07Z observation finds0Java,9.260 GiB free physical memory,
 The optional repository-memory service is unavailable; the reporting agreement
 is committed in AGENTS/Git, not falsely claimed stored in that service.
 
+C2's0178 document is integrated:28 client/menu/JEI/widget sources,67 literals/
+48 English keys, four missing-key controls and three PNG signature/dimension
+checks pass offline with deployed559 input equality. It is not rendered UI,
+audio playback or authentication proof. The owner now has an exact bounded
+[client-review procedure](docs/testing/t0-client-review-preparation.md).
+Its child is authorized only to inspect the explicit PC target/read-only graphical
+metadata next, not launch a JVM or mutate Prism. The additional local-Comfy owner
+is a3c3fa99 on7e58f92; only inspection/safe isolated preparation is active there.
+
 ## What is already on the personal PC
 
 Prism instance ID: `Grindless-T0-Dev`.

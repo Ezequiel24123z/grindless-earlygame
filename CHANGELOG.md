@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prepare source-bound T0 client review without inventing a native pass.**
+  Preserve C2's original042b/0178 history, executed literal-key/texture checks,
+  unchanged559 inputs and isolated manual probes under ADR-0140/0156. Existing
+  tools already cover identity/deployment; no redundant launcher is added.
+  Read-only target inspection is a later distinct step, not client/render/listening.
 - **Adopt the owner-identified local ComfyUI route (ADR-0157).** Authorize a
   specialized nested asset pipeline, inspection-first reuse and necessary reversible
   licensed additions without rebooting the PC, exposing a public API or destroying
