@@ -46,7 +46,7 @@ class FakeApi:
     def idle(self):
         pass
 
-    def qualify(self, model):
+    def qualify(self, model, expected_nodes=pipeline.NODES):
         return {"comfyui_version": "synthetic", "devices": []}
 
     def request(self, path, value=None, binary=False):
@@ -180,6 +180,76 @@ class Contracts(unittest.TestCase):
             pipeline.generate(api, self.run, self.spec, self.model, self.checkpoint, 1, 0)
         self.assertEqual(api.posts, 0)
         self.assertFalse(self.run.exists())
+
+    def conditioned_spec(self):
+        spec = copy.deepcopy(self.spec)
+        spec["conditioning"] = {
+            "kind": "original-multitool-guide-v1", "filename": "grindless-multitool-guide-v1.png",
+            "sha256": pipeline.sha256(pipeline.guide_image()), "denoise": 0.35,
+        }
+        return spec
+
+    def test_conditioned_guide_and_graph_are_deterministic_and_pinned(self):
+        Image = pipeline.image_module()
+        guide = pipeline.guide_image()
+        self.assertEqual(guide, pipeline.guide_image())
+        with Image.open(io.BytesIO(guide)) as image:
+            self.assertEqual(image.size, (512, 512))
+        spec = self.conditioned_spec()
+        committed = pipeline.load_spec(pipeline.HERE / "specs" / "multitool-conditioned.json")
+        self.assertEqual(committed, spec)
+        graph = pipeline.workflow(spec, self.model, 2, "owned")
+        self.assertEqual(graph["5"]["inputs"]["denoise"], 0.35)
+        self.assertEqual(graph["5"]["inputs"]["seed"], self.spec["seeds"][1])
+        self.assertEqual(graph["4"]["class_type"], "LoadImage")
+        self.assertEqual(graph["8"]["class_type"], "VAEEncode")
+        self.assertEqual(graph["5"]["inputs"]["latent_image"], ["8", 0])
+        with self.assertRaisesRegex(pipeline.ContractError, "input directory"):
+            pipeline.generate(FakeApi(), self.run, spec, self.model, self.checkpoint, 2, 0)
+        self.assertFalse(self.run.exists())
+
+    def test_explicit_revision_preserves_the_spent_source_and_budget(self):
+        api = FakeApi()
+        pipeline.generate(api, self.run, self.spec, self.model, self.checkpoint, 1, 0)
+        old_ledger = pipeline.read_json(self.run / "run.json")
+        source = (self.run / "source-1.png").read_bytes()
+        spec = self.conditioned_spec()
+        expected = pipeline.file_sha256(self.run / "run.json")
+        with self.assertRaisesRegex(pipeline.ContractError, "Ledger changed"):
+            pipeline.revise_run(self.run, spec, self.model, "0" * 64, "test exact revision")
+        pipeline.revise_run(self.run, spec, self.model, expected, "test purpose-preserving conditioning")
+        revised = pipeline.read_json(self.run / "run.json")
+        self.assertEqual(pipeline.file_sha256(self.run / "run.json"), expected)
+        self.assertEqual(revised["requests"][0], old_ledger["requests"][0])
+        self.assertEqual(revised["maximum_candidates"], 2)
+        authorization = pipeline.read_json(self.run / "authorization-2.json")
+        self.assertEqual(authorization["remaining_after"], 1)
+        self.assertEqual(authorization["maximum_total"], 2)
+        self.assertEqual((self.run / "source-1.png").read_bytes(), source)
+        self.assertEqual(pipeline.read_json(self.run / "spec.json"), self.spec)
+        input_dir = self.root / "input"
+        input_dir.mkdir()
+        (input_dir / spec["conditioning"]["filename"]).write_bytes(pipeline.guide_image())
+        with self.assertRaisesRegex(pipeline.ContractError, "Duplicate source"):
+            pipeline.generate(api, self.run, spec, self.model, self.checkpoint, 2, 0, input_dir)
+        self.assertEqual(api.posts, 2)
+        with self.assertRaisesRegex(pipeline.ContractError, "exhausted"):
+            pipeline.generate(api, self.run, spec, self.model, self.checkpoint, 2, 0, input_dir)
+        self.assertEqual(api.posts, 2)
+
+    def test_revision_refuses_unresolved_sources_or_changed_purpose(self):
+        graph = pipeline.workflow(self.spec, self.model, 1, "owned")
+        pipeline.reserve(self.run, self.spec, self.model, 1, graph)
+        with self.assertRaisesRegex(pipeline.ContractError, "resolved"):
+            pipeline.revise_run(self.run, self.conditioned_spec(), self.model,
+                                pipeline.file_sha256(self.run / "run.json"), "test")
+        pipeline.update_request(self.run, 1, state="collected")
+        changed = self.conditioned_spec()
+        changed["role"] = "different gameplay purpose"
+        with self.assertRaisesRegex(pipeline.ContractError, "purpose"):
+            pipeline.revise_run(self.run, changed, self.model,
+                                pipeline.file_sha256(self.run / "run.json"), "test")
+        self.assertFalse((self.run / "authorization-2.json").exists())
 
     def test_collect_never_submits_and_timeout_can_resume(self):
         api = FakeApi(completed=False)

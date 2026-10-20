@@ -125,7 +125,19 @@ def load_spec(path):
     expected = f"common/src/main/resources/assets/grindless/textures/item/{spec['asset_id']}.png"
     require(spec.get("runtime_path") == expected, "Runtime path must match the asset identity.")
     require(spec.get("human_visual_approval") is False, "A technical specification cannot grant human approval.")
+    if "conditioning" in spec:
+        conditioning = spec["conditioning"]
+        require(conditioning.get("kind") == "original-multitool-guide-v1" and spec["asset_id"] == "multitool",
+                "Only the original Multitool guide is qualified.")
+        require(conditioning.get("filename") == "grindless-multitool-guide-v1.png",
+                "Use the isolated guide basename.")
+        require(re.fullmatch(r"[0-9a-f]{64}", conditioning.get("sha256", "")), "Guide hash is required.")
+        require(conditioning.get("denoise") == 0.35, "The conditioned prototype uses the approved 0.35 denoise.")
     return spec
+
+
+def template_path(spec):
+    return HERE / ("item-conditioned-workflow.json" if "conditioning" in spec else "item-workflow.json")
 
 
 def load_model(path):
@@ -146,6 +158,8 @@ def workflow(spec, model, slot, prefix):
         "@checkpoint": model["filename"], "@positive": spec["positive_prompt"],
         "@negative": spec["negative_prompt"], "@seed": spec["seeds"][slot - 1], "@prefix": prefix,
     }
+    if "conditioning" in spec:
+        replacements.update({"@guide": spec["conditioning"]["filename"], "@denoise": spec["conditioning"]["denoise"]})
 
     def replace(value):
         if isinstance(value, str) and value.startswith("@"):
@@ -157,9 +171,11 @@ def workflow(spec, model, slot, prefix):
             return [replace(item) for item in value]
         return value
 
-    graph = replace(read_json(HERE / "item-workflow.json"))
-    require({node["class_type"] for node in graph.values()} == NODES, "Unexpected workflow node.")
-    require(graph["4"]["inputs"] == {"width": 512, "height": 512, "batch_size": 1}, "Unbounded image batch.")
+    graph = replace(read_json(template_path(spec)))
+    expected = (NODES - {"EmptyLatentImage"}) | {"LoadImage", "VAEEncode"} if "conditioning" in spec else NODES
+    require({node["class_type"] for node in graph.values()} == expected, "Unexpected workflow node.")
+    if "conditioning" not in spec:
+        require(graph["4"]["inputs"] == {"width": 512, "height": 512, "batch_size": 1}, "Unbounded image batch.")
     require(graph["5"]["inputs"]["steps"] == 20, "Unreviewed inference budget.")
     return graph
 
@@ -196,9 +212,9 @@ class ComfyApi:
         require(not queue["queue_running"] and not queue["queue_pending"],
                 "ComfyUI has queued work. Preserve it; do not submit or cancel anything.")
 
-    def qualify(self, model):
+    def qualify(self, model, expected_nodes=NODES):
         self.idle()
-        for name in sorted(NODES):
+        for name in sorted(expected_nodes):
             info = self.request("/object_info/" + name)
             require(name in info, "Missing core node: " + name)
             if name == "CheckpointLoaderSimple":
@@ -233,7 +249,7 @@ def ledger_identity(spec, model):
     return {
         "schema": "grindless.comfy-run.v1", "asset_id": spec["asset_id"],
         "spec_sha256": sha256(json_bytes(spec)), "model_sha256": model["sha256"],
-        "template_sha256": file_sha256(HERE / "item-workflow.json"),
+        "template_sha256": file_sha256(template_path(spec)),
         "maximum_candidates": len(spec["seeds"]), "human_visual_approval": False,
     }
 
@@ -242,7 +258,19 @@ def read_ledger(directory, spec, model):
     expected = ledger_identity(spec, model)
     path = directory / "run.json"
     ledger = read_json(path) if path.exists() else dict(expected, requests=[])
-    require(all(ledger.get(key) == value for key, value in expected.items()), "Run identity has changed.")
+    if not all(ledger.get(key) == value for key, value in expected.items()):
+        authorization_path = directory / "authorization-2.json"
+        require(authorization_path.exists(), "Run identity has changed.")
+        authorization = read_json(authorization_path)
+        base = {key: ledger.get(key) for key in expected}
+        require(authorization.get("schema") == "grindless.remaining-source-authorization.v1"
+                and authorization.get("identity") == expected
+                and authorization.get("base_identity") == base
+                and authorization.get("allowed_slot") == 2 and authorization.get("maximum_total") == 2
+                and authorization.get("specification") == spec
+                and len(ledger["requests"]) >= 1
+                and sha256(json_bytes(ledger["requests"][0])) == authorization.get("first_request_sha256"),
+                "Remaining-candidate authorization does not match the immutable first source.")
     return ledger
 
 
@@ -258,12 +286,44 @@ def reserve(directory, spec, model, slot, graph):
             "slot": slot, "seed": spec["seeds"][slot - 1], "state": "reserved",
             "reserved_at": datetime.now(timezone.utc).isoformat(),
             "workflow_sha256": sha256(json_bytes(graph)), "prompt_id": None,
+            "spec_sha256": sha256(json_bytes(spec)), "template_sha256": file_sha256(template_path(spec)),
         }
         ledger["requests"].append(row)
         atomic_json(directory / f"workflow-{slot}.json", graph)
-        atomic_json(directory / "spec.json", spec)
+        atomic_json(directory / f"spec-{slot}.json", spec)
+        if not (directory / "spec.json").exists():
+            atomic_json(directory / "spec.json", spec)
         atomic_json(directory / "run.json", ledger)
     return row
+
+
+def revise_run(directory, spec, model, expected_hash, reason):
+    require(reason and len(reason) <= 500, "A bounded explicit revision reason is required.")
+    with run_lock(directory):
+        path = directory / "run.json"
+        require(file_sha256(path) == expected_hash, "Ledger changed; revision is not authorized for these bytes.")
+        ledger = read_json(path)
+        require(not (directory / "authorization-2.json").exists() and len(ledger["requests"]) == 1
+                and ledger["requests"][0]["state"] == "collected",
+                "Only one resolved first source may precede the one remaining-candidate revision.")
+        old = read_json(directory / "spec.json")
+        for key in ("asset_id", "registry_id", "family", "tier", "role", "source_revision", "visual", "transform", "seeds"):
+            require(old.get(key) == spec.get(key), "Revision cannot change purpose, identity, visual contract or seeds.")
+        require(ledger["model_sha256"] == model["sha256"] and ledger["maximum_candidates"] == len(spec["seeds"]) == 2,
+                "Revision cannot reset or increase the allowance or change the model.")
+        require("conditioning" in spec and "conditioning" not in old, "Only the explicit original-guide revision is supported.")
+        authorization = {
+            "schema": "grindless.remaining-source-authorization.v1",
+            "reason": reason, "base_identity": {key: ledger[key] for key in ledger_identity(old, model)},
+            "identity": ledger_identity(spec, model), "specification": spec,
+            "allowed_slot": 2, "maximum_total": 2, "ledger_sha256_before": expected_hash,
+            "first_request_sha256": sha256(json_bytes(ledger["requests"][0])),
+            "utc": datetime.now(timezone.utc).isoformat(), "spent_before": 1, "remaining_after": 1,
+        }
+        with (directory / "authorization-2.json").open("xb") as stream:
+            stream.write(json_bytes(authorization))
+            stream.flush()
+            os.fsync(stream.fileno())
 
 
 def update_request(directory, slot, **changes):
@@ -274,14 +334,22 @@ def update_request(directory, slot, **changes):
         atomic_json(directory / "run.json", ledger)
 
 
-def generate(api, directory, spec, model, checkpoint, slot, wait_seconds):
+def generate(api, directory, spec, model, checkpoint, slot, wait_seconds, input_directory=None):
     checkpoint = Path(checkpoint)
     require(checkpoint.name == model["filename"] and checkpoint.stat().st_size == model["bytes"],
             "Checkpoint filename or size differs from its lock.")
     require(file_sha256(checkpoint) == model["sha256"], "Checkpoint hash differs from its lock.")
-    runtime = api.qualify(model)
     prefix = f"grindless/{spec['asset_id']}/{directory.name}/candidate-{slot}"
     graph = workflow(spec, model, slot, prefix)
+    if "conditioning" in spec:
+        require(input_directory is not None, "Conditioning needs the isolated server input directory.")
+        guide = Path(input_directory) / spec["conditioning"]["filename"]
+        require(file_sha256(guide) == spec["conditioning"]["sha256"], "Conditioning guide hash differs.")
+        Image = image_module()
+        with Image.open(guide) as image:
+            require(image.format == "PNG" and image.size == (512, 512) and not getattr(image, "is_animated", False),
+                    "Conditioning must be the single 512px original guide.")
+    runtime = api.qualify(model, {node["class_type"] for node in graph.values()})
     reserve(directory, spec, model, slot, graph)
     atomic_json(directory / f"runtime-{slot}.json", runtime)
     api.idle()
@@ -367,6 +435,28 @@ def image_module():
     return Image
 
 
+def guide_image():
+    Image = image_module()
+    from PIL import ImageDraw
+    image = Image.new("RGB", (32, 32), "white")
+    draw = ImageDraw.Draw(image)
+    outline = [(7, 3), (11, 2), (11, 7), (14, 9), (17, 7), (17, 2), (21, 3),
+               (24, 8), (22, 12), (18, 15), (18, 27), (16, 29), (13, 29), (11, 27),
+               (11, 15), (7, 12), (5, 8)]
+    draw.polygon(outline, fill="#322A24")
+    body = [(8, 4), (10, 3), (10, 8), (14, 11), (18, 8), (18, 3), (20, 4),
+            (22, 8), (21, 11), (16, 14), (16, 26), (15, 27), (13, 26),
+            (13, 14), (8, 11), (7, 8)]
+    draw.polygon(body, fill="#C9A227")
+    draw.line([(8, 5), (7, 8), (9, 11), (14, 13), (14, 25)], fill="#DBC278", width=1)
+    draw.line([(20, 5), (21, 8), (20, 10), (17, 12)], fill="#82691A", width=1)
+    draw.rectangle((13, 19, 16, 24), fill="#59432A")
+    draw.line([(13, 19), (13, 24)], fill="#96724C", width=1)
+    output = io.BytesIO()
+    image.resize((512, 512), Image.Resampling.NEAREST).save(output, format="PNG", compress_level=9)
+    return output.getvalue()
+
+
 def components(mask, width, height):
     remaining = set(mask)
     result = []
@@ -450,7 +540,7 @@ def process_image(source, spec):
     import PIL
     report = {
         "transform": TRANSFORM, "source_sha256": sha256(source), "spec_sha256": sha256(json_bytes(spec)),
-        "template_sha256": file_sha256(HERE / "item-workflow.json"),
+        "template_sha256": file_sha256(template_path(spec)),
         "source_crop_xyxy": box, "removed_dust_pixels": dust, "source_foreground_fraction": fraction,
         "runtime_rgba_sha256": sha256(sprite.tobytes()), "runtime_png_sha256": sha256(output.getvalue()),
         "pillow_version": PIL.__version__, "python_version": sys.version.split()[0],
@@ -481,7 +571,7 @@ def verify_sprite(image, spec):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("plan", "generate", "collect", "process", "verify"))
+    parser.add_argument("action", choices=("plan", "generate", "collect", "process", "verify", "guide", "revise"))
     parser.add_argument("--spec", type=Path, required=True)
     parser.add_argument("--model-lock", type=Path, default=HERE / "sd15-model.json")
     parser.add_argument("--endpoint", default="http://127.0.0.1:8189")
@@ -493,10 +583,19 @@ def main(argv=None):
     parser.add_argument("--source-sha256")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--allow-generation", action="store_true")
+    parser.add_argument("--input-directory", type=Path)
+    parser.add_argument("--expected-ledger-sha256")
+    parser.add_argument("--revision-reason")
     args = parser.parse_args(argv)
     try:
         spec = load_spec(args.spec)
-        if args.action in ("plan", "generate", "collect"):
+        if args.action == "guide":
+            require(spec["asset_id"] == "multitool" and args.output, "Only an original Multitool guide is supported.")
+            data = guide_image()
+            with args.output.open("xb") as stream:
+                stream.write(data)
+            print(json_bytes({"guide_sha256": sha256(data), "bytes": len(data)}).decode("ascii"), end="")
+        elif args.action in ("plan", "generate", "collect", "revise"):
             model = load_model(args.model_lock)
             require(1 <= args.slot <= len(spec["seeds"]), "Candidate slot is outside its allowance.")
             require(0 <= args.wait_seconds <= 1800, "Inference wait is bounded to 30 minutes.")
@@ -505,10 +604,15 @@ def main(argv=None):
                 print(json_bytes(graph).decode("ascii"), end="")
                 return 0
             require(args.run_dir is not None, "--run-dir is required.")
+            if args.action == "revise":
+                revise_run(args.run_dir, spec, model, args.expected_ledger_sha256, args.revision_reason)
+                print("Revised the remaining candidate; one prior source and the total allowance remain unchanged.")
+                return 0
             api = ComfyApi(args.endpoint)
             if args.action == "generate":
                 require(args.allow_generation and args.checkpoint, "Generation needs --allow-generation, a pinned checkpoint and an external resource lease.")
-                result = generate(api, args.run_dir, spec, model, args.checkpoint, args.slot, args.wait_seconds)
+                result = generate(api, args.run_dir, spec, model, args.checkpoint, args.slot,
+                                  args.wait_seconds, args.input_directory)
             else:
                 result = collect(api, args.run_dir, spec, model, args.slot, args.wait_seconds)
             print(json_bytes({"source": result.name, "sha256": file_sha256(result)}).decode("ascii"), end="")

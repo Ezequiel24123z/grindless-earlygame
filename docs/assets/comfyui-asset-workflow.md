@@ -187,6 +187,53 @@ same owned output remain accepted. The18-case suite passes in3.116s, with log
 The second reservation remains unused. A purpose-preserving conditioned workflow
 for that remaining candidate is proposed rather than another blind source request.
 
+### Approved remaining-source conditioning
+
+The coordinator explicitly approved the second and **last** source with an
+original geometric guide, the same model/seed21774206,20Euler/normal steps,
+CFG7/batch1 and denoise0.35. The
+[conditioned spec](../../tools/visual-assets/specs/multitool-conditioned.json)
+retains the original gameplay/visual/transform contract and adds only the guide.
+The [eight-node graph](../../tools/visual-assets/item-conditioned-workflow.json)
+reuses the core pipeline, replacing the empty latent with LoadImage/VAEEncode.
+No LoRA, custom node, new checkpoint or unrestricted generation is introduced.
+
+`guide` draws the project-original32px open-jaw wrench with brass bevels, dark
+grip and upper-left highlights, then enlarges it to512 with nearest sampling.
+Its1948-byte PNG hashes to
+`ee974047fdd07ba2da2e84d510fa7e635e2932d9155fb488f9f9143eaf79ca15`.
+The input lives only in the isolated owned input directory; generation verifies
+its hash and exact frame/dimensions before any reservation or POST.
+
+`revise --expected-ledger-sha256 <exact-before> --revision-reason <approval>`
+creates one new exclusive `authorization-2.json`, not a replacement ledger.
+It binds the original run identity and first request hash, the new spec/template/
+guide, allowed slot2, spent1, remaining1 and unchanged maximum2. The before-ledger
+hash is `724edcd0276d2c196fee4e55f533dea8d13919b2f3b0083a5d4f8965d732eeba`.
+The operation does **not write** `run.json`, `spec.json`, source1 or receipt1.
+Only the ordinary second reservation appends its own row and new spec/workflow2.
+No unresolved first delivery, changed purpose/model/seeds/contract, stale ledger,
+second amendment or increased allowance is accepted. A21-case offline run
+passes4.099s, including byte-identical first ledger/spec/source through revision
+and total-two exhaustion; a final spec-bound freeze precedes the real second POST.
+That final21-case run passes3.674s, exit0, log SHA-256
+`7e8a8e7e78059bcdd78e06376bb3ae116c2263a0d4ea15e499106d540220ffb0`.
+Its client hashes to
+`1b88c1029c3cdfb054f10a843ff600113faf3b16071c95571482de8b09e193e0`,
+conditioned template to
+`d95782c1103edf8a740efe78a8d0be2a7ac9380662c31fe66c7f88a85646c78b`,
+and raw conditioned spec to
+`18d9eba67b6f40723975e5f5da6594c57d04738d03343f9e6cb9c17b0f696d35`.
+Actual guide pixels were inspected separately: the open jaw, narrow manual grip,
+warm metal, light/dark faces and clean white border match the input contract.
+This is guide/source preparation, not human approval or a second inference.
+
+The app's temporary error notification did not establish a GPU failure. A fresh
+read-only recovery confirmed the same PID/executable/startUTC, loopback listener,
+zero queues and exactly one collected request. No authorization2 or candidate2
+execution output existed. The owner later reported a brief restored Internet
+outage. No new session, server restart, request replay or quota was created.
+
 ## Deterministic transformation and integration boundary
 
 The pipeline accepts only the graph's single-frame 512px PNG. It removes only
