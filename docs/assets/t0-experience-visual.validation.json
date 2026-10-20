@@ -147,6 +147,20 @@
     "decision_sections_and_index_rows": 160,
     "exit": 0
   },
+  "owner_approved_forebed_up_followup": {
+    "status": "technical_contract_recorded_infrastructure_model_receipt_pending",
+    "contract": "tools/visual-assets/port-assets.json#model_contract.forebed_up",
+    "from": [3.01, 4.01, 0.01],
+    "to": [12.99, 4.01, 6.99],
+    "uv": [2, 3, 14, 10],
+    "rotation": 0,
+    "base_geometry_collision_and_transfer_sides_unchanged": true,
+    "up_transfer_remains_closed": true,
+    "new_or_regenerated_pngs_in_this_followup": 0,
+    "jdk_gpu_native_commands_in_this_followup": 0,
+    "infrastructure_model_checks_reported_here": false,
+    "human_visual_approval": false
+  },
   "local_diffusion_candidates": 0,
   "external_paid_image_requests": 0,
   "human_in_client_review": false,
