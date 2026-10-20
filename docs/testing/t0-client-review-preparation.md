@@ -142,11 +142,14 @@ is introduced.
    Build or Deploy. A child must not fall back to the default private inventory.
 
    ```powershell
-   powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\pc-workflow.ps1 -Action Inspect -ConfigFile '<coordinator-approved-private-inventory>'
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\pc-workflow.ps1 -Action Inspect -Revision 559bed5e8ea70ac52ff4b3fed3850ab05ab48256 -ConfigFile '<coordinator-approved-private-inventory>'
    ```
 
    Require `VerifiedStopped`, the expected instance, source/runtime, JAR/ZIP hashes
-   and pack status above. Inspect the instance-only Java 17 / memory settings.
+   and pack status above. The RPC requires that exact clean execution-worktree
+   revision even for Inspect. If a later lease assigns another source, confirm its
+   explicit revision and runtime equivalence first; never Sync just to bypass an
+   inspection refusal. Inspect the instance-only Java 17 / memory settings.
    This is readiness, not an authentication, graphics or startup test. If anything
    differs, record it and stop; do not repair ownership, delete locks, rebuild or
    substitute another instance silently.
