@@ -34,6 +34,15 @@
     "source_base": "543598ac7dcb7a69b9bea62f7b3d00bfda8189fd",
     "required_reporting": ["COMPLETED", "BLOCKED", "NOT EXECUTED", "NEEDS HUMAN VALIDATION", "NEEDS MY DECISION", "NEEDS CREDENTIAL / EXTERNAL RESOURCE", "COST / BILLING RISK", "DEPLOYED STATE"],
     "lanes": ["actual_image_capability_and_pipeline", "purpose_bound_T0_sound_families", "minimal_fresh_Superflat_proposal", "objective_client_review_preparation"],
+    "sessions": {
+      "visual_discovery": {"id": "5afc449c-b22c-4409-a5c3-91899c627eab", "owned": "image capability decision and isolated proof artifacts", "status": "active_no_paid_activation"},
+      "sound_families": {"id": "9c12461c-7aa8-4101-8f21-a935a7d9841a", "owned": "sound-family audit and purpose-bound tooling before reviewed generation grants", "status": "active_no_generation_yet"},
+      "superflat_proposal": {"id": "800431b7-e036-4a78-a5e4-d9ac6ebf9afc", "owned": "source-supported minimal alternatives and recommendation only", "status": "active_no_gameplay_change"},
+      "client_preparation": {"id": "0f59d046-8239-4fb2-b0df-fdbf6e0776bb", "owned": "objective nonredundant client-review preparation and isolated contracts", "status": "active_no_PC_JVM_or_Prism_write_lease"}
+    },
+    "execution_source": "269965b1b0b8c1becda74459a853f245105649ee",
+    "PC_readonly_observation": {"at_utc": "2026-10-20T01:27:07.2205969Z", "physical_free_gib": 9.260, "commit_free_gib": 30.766, "work_free_gib": 161.808, "java_processes": 0, "not_a_runtime_lease": true},
+    "reporting_persistence": "AGENTS_and_Git_authoritative_repository_memory_API_unavailable_no_memory_store_claim",
     "audio_access": "owner_supplied_existing_external_location_authenticated_HTTP200_no_generation_no_secret_output_copy_or_commit",
     "audio_wave_budget": {"max_families": 2, "max_candidates_per_family": 2, "max_requests": 4, "first_purpose": "Clay_Mixer_wet_work", "generation_requests_made": 0, "needs_new_reviewed_run_grant": true, "historical_receipts_immutable": true, "not_a_permanent_project_ceiling": true},
     "image_cost_boundary": "metadata_discovery_only_no_paid_activation_or_generation_without_explicit_authorization_one_small_PoC_only_if_verified_no_cost_or_already_authorized",

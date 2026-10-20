@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Bind the four follow-up owners and keep runtime access serialized.**
+  Record exact269965b child scopes and a read-only zero-Java PC observation,
+  not a build/client lease. The optional memory service cannot store the rule,
+  so AGENTS/Git remains its actual authority; audio access is resolved and no
+  current-wave paid generation or deployment is implied.
 - **Start the explicitly disclosed creative/client closure wave (ADR-0156).**
   Require all eight status categories in chat and durable handoffs. Verify the
   owner-supplied existing audio credential with a body-suppressed authenticated

@@ -16,6 +16,14 @@ creative/client/product readiness is not complete. No T0 acceptance/freeze or T1
 | COST / BILLING RISK | Audio initially capped to2 candidates/family,2 justified families/4 requests this wave after reviewed grants. No image paid activation/spend. Old receipts are immutable, not permanent project budgets. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
 
+The four new nested owners are visual discovery5afc449c, sound families9c12461c,
+Superflat proposal800431b7 and objective client preparation0f59d046, all based on
+published269965b. No child currently owns a PC JVM/Gradle/Prism-write window.
+Read-only01:27:07Z observation finds0Java,9.260 GiB free physical memory,
+30.766 GiB commit and161.808 GiB work space; a later runtime must refresh this.
+The optional repository-memory service is unavailable; the reporting agreement
+is committed in AGENTS/Git, not falsely claimed stored in that service.
+
 ## What is already on the personal PC
 
 Prism instance ID: `Grindless-T0-Dev`.

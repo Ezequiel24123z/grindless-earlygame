@@ -8,6 +8,17 @@
   "pr_management_and_merge_authorized_when_ready": true,
   "authorization": "Owner-directed playable modpack lifecycle, ADR-0144/PA-0007; technical/product RC readiness precedes longitudinal human acceptance, and T1 remains held until publication plus actual play",
   "work_plan": ".agent/work-plan.json",
+  "creative_client_followup": {
+    "decision": "ADR-0156",
+    "status": "four_isolated_lanes_active_after_prior_engineering_deployment",
+    "reporting": "all_eight_categories_in_chat_and_durable_handoff",
+    "audio_access": "resolved_owner_supplied_existing_external_location_readonly_authenticated_HTTP200_zero_generation_no_secret_output_copy_or_commit",
+    "image_capability": "actual_access_cost_and_no_cost_PoC_under_discovery_no_paid_activation",
+    "superflat": "proposal_only_material_alternatives_need_owner_choice",
+    "client": "objective_preparation_active_human_visual_audio_campaign_pending",
+    "runtime_lease_owner": null,
+    "deployed_source_unchanged": "559bed5e8ea70ac52ff4b3fed3850ab05ab48256"
+  },
   "ssh_pc_execution": {
     "decision": "ADR-0151",
     "status": "qualified559_A01_A03_and_real_saved_accounting_passed_deployed_verified_stopped_repeat_unchanged_no_active_engineering_lease",
