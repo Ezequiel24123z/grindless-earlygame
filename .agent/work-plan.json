@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 14,
+  "plan_revision": 15,
   "updated": "2026-10-20",
-  "phase": "bounded_engineering_programme_complete_manual_product_gates_held",
+  "phase": "disclosed_creative_capability_soundscape_and_objective_client_followup",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
@@ -27,6 +27,18 @@
     "next_tier_rule": "Ready and published T0 RC plus actual owner longitudinal-save start; no whole-playthrough requirement unless a concrete technical dependency prevents progress"
   },
   "session_sqlite_tasks_migrate": false,
+  "followup_wave": {
+    "decision": "ADR-0156",
+    "amendment": "PA-0014",
+    "status": "active_four_isolated_workstreams",
+    "source_base": "543598ac7dcb7a69b9bea62f7b3d00bfda8189fd",
+    "required_reporting": ["COMPLETED", "BLOCKED", "NOT EXECUTED", "NEEDS HUMAN VALIDATION", "NEEDS MY DECISION", "NEEDS CREDENTIAL / EXTERNAL RESOURCE", "COST / BILLING RISK", "DEPLOYED STATE"],
+    "lanes": ["actual_image_capability_and_pipeline", "purpose_bound_T0_sound_families", "minimal_fresh_Superflat_proposal", "objective_client_review_preparation"],
+    "audio_access": "owner_supplied_existing_external_location_authenticated_HTTP200_no_generation_no_secret_output_copy_or_commit",
+    "audio_wave_budget": {"max_families": 2, "max_candidates_per_family": 2, "max_requests": 4, "first_purpose": "Clay_Mixer_wet_work", "generation_requests_made": 0, "needs_new_reviewed_run_grant": true, "historical_receipts_immutable": true, "not_a_permanent_project_ceiling": true},
+    "image_cost_boundary": "metadata_discovery_only_no_paid_activation_or_generation_without_explicit_authorization_one_small_PoC_only_if_verified_no_cost_or_already_authorized",
+    "product_boundary": "Superflat_alternatives_and_recommendation_before_material_choice_no_T0_acceptance_freeze_or_T1"
+  },
   "autonomous_programme": {
     "decision": "ADR-0152",
     "amendment": "PA-0013",

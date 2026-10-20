@@ -69,6 +69,27 @@ Everything committed to the repository is in **English**: code, identifiers, com
 documentation, ADRs, changelog entries and commit messages. No exceptions, so the project stays
 legible to the wider Minecraft modding community.
 
+### Mandatory wave and handoff disclosure
+
+Every completed work wave and every handback to the owner reports these exact
+categories in the chat as well as the durable handoff:
+
+- `COMPLETED`
+- `BLOCKED`
+- `NOT EXECUTED`
+- `NEEDS HUMAN VALIDATION`
+- `NEEDS MY DECISION`
+- `NEEDS CREDENTIAL / EXTERNAL RESOURCE`
+- `COST / BILLING RISK`
+- `DEPLOYED STATE`
+
+Write `None` when a category genuinely has no entry. Name the exact failed
+prerequisite, unexecuted work and owner action; do not bury material blockers only
+in repository documents or label a bounded engineering completion as whole-T0
+readiness. Keep credential values and private access references out of Git.
+Artistic listening, appearance, UX quality and the manual campaign remain human
+judgments. Do not declare T0 accepted or frozen before that campaign.
+
 ---
 
 ## Orchestrated execution
@@ -102,7 +123,20 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
-**Current unattended programme (ADR-0152):** the owner is unavailable. Continue bounded
+**Current follow-up wave (ADR-0156, PA-0014):** run image-provider discovery,
+purpose-bound SFX work, minimal Superflat proposal and objective client preparation
+in independent nested sessions. The former Quern/three-request grant and the
+previous wave's two-request ceiling are not permanent project-wide budgets.
+Historical receipts remain immutable; each new generation run still requires an
+explicit finite purpose, request allowance and durable spend ledger. Image discovery
+must not enable paid usage or spend on an image proof without explicit approval.
+The owner supplied an existing external audio credential location; a non-generating
+authenticated check succeeded without exposing or copying it. Read the current
+handoff for what is actually available, not the older absent-credential assumption.
+Do not make a major Superflat progression choice silently; present alternatives
+and a recommendation while the other safe work continues.
+
+**Previous unattended programme (ADR-0152):** while the owner was unavailable, continue bounded
 T0 stabilization, useful regressions, deterministic visual/SFX work and evidence-backed
 GREEN preparation. Read [RETURN-HANDOFF](RETURN-HANDOFF.md) and the active task graph.
 Use isolated child worktrees with explicit ownership; only the coordinator publishes/

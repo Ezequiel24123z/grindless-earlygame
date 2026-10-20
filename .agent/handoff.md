@@ -2,6 +2,17 @@
 
 Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC GATES HELD**.
 
+## Active owner-directed follow-up
+
+ADR-0156/PA-0014 reopens bounded objective work in four isolated lanes: image
+capability discovery, sound families, fresh-Superflat proposal and client-review
+preparation. Existing audio access is now authenticated through the owner-supplied
+external location; no secret was output/copied and no generation has occurred.
+Read the eight explicit categories in [RETURN-HANDOFF](../RETURN-HANDOFF.md).
+Historical request allowances are per-run, not permanent project-wide limits.
+Do not activate image billing or make a major progression choice silently.
+The qualified559 deployment below remains the real installed artifact.
+
 ## Current completed engineering handoff
 
 The bounded SSH-first programme is complete. Read [RETURN-HANDOFF](../RETURN-HANDOFF.md)

@@ -167,6 +167,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0153](#adr-0153--rebind-generated-recipes-at-atomic-graph-boundaries) | Rebind generated recipes at atomic graph boundaries | Accepted |
 | [0154](#adr-0154--stage-one-disabled-optional-pack-for-reload-smokes) | Stage one disabled optional pack for reload smokes | Accepted |
 | [0155](#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in) | Retain a diagnostic smoke world only by explicit opt-in | Accepted |
+| [0156](#adr-0156--disclose-blockers-and-separate-creative-capability-from-product-acceptance) | Disclose blockers and separate creative capability from product acceptance | Accepted |
 
 ---
 
@@ -7331,3 +7332,60 @@ quoting boundaries that this one evidence file does not need.
 longitudinal-play claim. Keep the canonical server heap and all existing timeouts.
 Offline contracts establish default/opt-in/invalid-value cleanup behavior and
 environment preservation; only the real native run can qualify saved accounting.
+
+---
+
+## ADR-0156 — Disclose blockers and separate creative capability from product acceptance
+
+**Status.** Accepted owner-directed follow-up, 2026-10-20; PA-0014. The previous
+qualified559 deployment is preserved, not relabelled as a finished T0 campaign.
+
+**Need.** The engineering handoff did not prominently disclose that new SFX
+generation had not occurred. Documentation alone is insufficient disclosure.
+The owner supplies the existing audio credential location, requires visible
+blocker reporting and requests parallel visual-capability discovery, coherent
+SFX families, objective client preparation and a minimal fresh-Superflat proposal.
+
+**Decision.** Every wave completion and handback explicitly reports COMPLETED,
+BLOCKED, NOT EXECUTED, NEEDS HUMAN VALIDATION, NEEDS MY DECISION, NEEDS CREDENTIAL /
+EXTERNAL RESOURCE, COST / BILLING RISK and DEPLOYED STATE, both in chat and durable
+handoff. A zero-entry category says None. Partial engineering completion does not
+erase unexecuted creative/product work or claim manual acceptance.
+
+Use four isolated workstreams with the coordinator owning product, integration,
+publication and the single PC execution lease. Image discovery must distinguish
+Copilot usage, GitHub Models image input versus actual image output, actual account
+access, included/free usage, separate billing and local feasibility. No paid
+activation, new subscription, broad secret search or costly model download is
+authorized. At most one small visual proof may use a verified no-cost or already
+authorized route without replacing the accepted asset.
+
+For SFX, preserve the approved Quern resource and original spent receipts.
+Historical Quern/three and prior-wave/two request limits apply to their runs, not
+all future audio. This wave initially budgets at most two candidates per selected
+family, at most two justified families/four provider requests in total, beginning
+with Clay Mixer wet work. This is a coordinator-selected finite execution cap,
+not a new permanent project limit. Before any generation, review the actual
+machine audit, prompts, parameters, rights, new purpose-specific authorization
+and reservation-before-HTTP ledger. Reuse existing sounds/families where adequate.
+Ambiguous delivery consumes its reservation and is not retried automatically.
+No new account/entitlement review is needed.
+
+The supplied external credential is verified by one body-suppressed authenticated
+read, HTTP200, with no generation or secret output/copy. It remains at the existing
+private location; values and access paths never enter Git, manifests or logs.
+Objective audio processing, format/path/registration/lifecycle validation and
+technical selection may proceed; perceptual quality stays pending owner listening.
+
+Trace fresh-Superflat entry and all consumed dependencies against the real
+catalogues. Present viable alternatives and a minimal recommendation before any
+material progression/preset/economy choice. Diagnostic stock is not survival.
+Automate objective client/resource checks and prepare a separate review surface
+without touching player worlds. No T0 acceptance/freeze before the owner's manual
+campaign; no T1 activation by implication.
+
+**Rejected alternatives.** Treat a missing credential as a universal absence
+without naming the searched scope; reset an old spend ledger; turn Copilot credits
+into assumed image credits; generate one sound for every trivial event; stall
+independent branches on a subjective choice; silently implement a starter kit,
+world landscape or quest shop to make a diagnostic route appear playable.

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Start the explicitly disclosed creative/client closure wave (ADR-0156).**
+  Require all eight status categories in chat and durable handoffs. Verify the
+  owner-supplied existing audio credential with a body-suppressed authenticated
+  read, without generation or secret output/copy. Separate four nested lanes for
+  actual image capabilities, bounded SFX families, a Superflat recommendation and
+  objective client preparation. Preserve deployed559, old spend receipts, human
+  campaign authority and the original product-task graph.
 - **Preserve A01's completed owner-authored proof record.** Merge documentation-only
   3ba8b5b with actual559 native/SavedData receipts, binary conservation and scoped
   cleanup; retain the existing explicit-root/retention instructions without

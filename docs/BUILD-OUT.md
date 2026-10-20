@@ -27,6 +27,12 @@ release. The [playable-release plan](../plan/process-t0-playable-release-1.md) a
 revision8/PA-0007 task graph now control the queue.
 
 Next: owner client playtest and the explicitly held Superflat/product decisions.
+The owner has now authorized ADR-0156's parallel follow-up before that campaign:
+verify actual image-generation options and costs, improve justified T0 sound
+families using the supplied existing audio access, propose the smallest coherent
+fresh-Superflat entry and automate objective client preparation. Report all eight
+handoff categories in chat, not only in Git. Product alternatives and new image
+billing stay human decisions; use free/safe discovery while other lanes proceed.
 The bounded SSH-first build/package/regression/deployment programme is complete:
 qualified559 is installed in the separate owned development instance; A01/A03 native
 red/green and real Luna stopped-world accounting pass. Read

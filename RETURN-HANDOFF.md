@@ -1,6 +1,20 @@
 # Return handoff
 
-**Engineering handoff complete. No human T0 acceptance, T0 freeze or T1 activation.**
+**Follow-up wave active (ADR-0156). Prior engineering deployment remains qualified;
+creative/client/product readiness is not complete. No T0 acceptance/freeze or T1.**
+
+## Current wave disclosure
+
+| Category | Actual state at follow-up intake |
+| --- | --- |
+| COMPLETED | Previous A01/A03/build/deployment proof is preserved. The owner-supplied external ElevenLabs credential is now readable and authenticated via HTTP200 without exposing/copying it or generating audio. |
+| BLOCKED | Paid/image routes and materially different Superflat choices cannot be selected silently. Generation still awaits reviewed new purpose-specific tooling/grants; this is implementation work, not a missing owner credential. |
+| NOT EXECUTED | New SFX generation, image proof, current-wave client run and a fresh no-command campaign have not occurred. |
+| NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
+| NEEDS MY DECISION | Superflat alternatives and any new image billing/resource activation will be presented before implementation/spend. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing audio access is resolved. Actual image-account/free-quota/local-GPU availability is under bounded discovery, not assumed absent or usable. |
+| COST / BILLING RISK | Audio initially capped to2 candidates/family,2 justified families/4 requests this wave after reviewed grants. No image paid activation/spend. Old receipts are immutable, not permanent project budgets. |
+| DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
 
 ## What is already on the personal PC
 
@@ -71,12 +85,12 @@ actual restart/crash/migration or longitudinal-player-world evidence.
 
 ## Deliberately held work
 
-No ElevenLabs environment source or explicit existing SecretFile configuration was
-located through bounded local/PC checks and the named historical metadata lead.
-This is not a claim of universal absence. The current Quern/3/Astra grant contract also
-cannot honestly express the selected Clay Mixer `wet_work` /2/Sol purpose. Both blockers
-are separate; no new grant or request was created, and the original3/3 remains intact.
-Private host settings and credential paths/values remain outside Git.
+At the end of the previous wave, bounded checks had not located an explicit audio
+secret reference. The owner has now supplied its location and authentication
+succeeds; that former access blocker is resolved. The legacy Quern grant contract
+still needs a new reviewed purpose-specific path, which is implementation work
+assigned in the current wave, not a permanent project-wide request ceiling.
+Original3/3 receipts remain intact. Private credential paths/values stay outside Git.
 
 Actual client startup/rendering/listening and the no-command campaign; pacing,
 enjoyment, visual/artistic judgment and the authentic longitudinal-save observations.
