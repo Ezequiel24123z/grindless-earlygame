@@ -65,7 +65,7 @@ public final class ShopScreen extends AbstractContainerScreen<ShopMenu> {
                 ShopNetwork.requestExchange(menu, selected);
                 update();
             }
-        }).bounds(leftPos + DETAIL_X, topPos + 206, 124, 20).build()));
+        }).bounds(leftPos + DETAIL_X, topPos + 206, 124, 20).build());
         trade.setTooltip(Tooltip.create(Component.translatable("gui.grindless.shop.atomic_policy")));
         update();
     }

@@ -84,13 +84,15 @@ public final class VerifyShop {
 
     private static void atomicPayment() {
         ShopCatalogue.Offer offer = ShopCatalogue.byId("bricks");
+        equal("the missing payment is genuinely second in native staging order",
+                List.of(BootstrapProcesses.GROG, SourceLogic.AGGREGATE), List.copyOf(offer.payment().keySet()));
         Inventory inventory = new Inventory(null);
-        inventory.setItem(0, new ItemStack(ITEMS.apply(SourceLogic.AGGREGATE), 4));
-        inventory.setItem(1, new ItemStack(ITEMS.apply(BootstrapProcesses.GROG), 7));
+        inventory.setItem(0, new ItemStack(ITEMS.apply(SourceLogic.AGGREGATE), 3));
+        inventory.setItem(1, new ItemStack(ITEMS.apply(BootstrapProcesses.GROG), 8));
         ListTag before = inventory.save(new ListTag());
         equal("the last missing cost rejects the entire exchange", ShopResult.MISSING_PAYMENT, prepare(inventory, offer).result());
         equal("no first-input debit on a missing second input", before, inventory.save(new ListTag()));
-        inventory.getItem(1).setCount(8);
+        inventory.getItem(0).setCount(4);
         inventory.getItem(1).getOrCreateTag().putString("display", "preserve");
         equal("named/tagged products are not silently spent", ShopResult.MISSING_PAYMENT, prepare(inventory, offer).result());
         inventory.getItem(1).setTag(null);
@@ -103,8 +105,15 @@ public final class VerifyShop {
         ShopCatalogue.Offer invalid = new ShopCatalogue.Offer("invalid", Map.of(SourceLogic.AGGREGATE, 1),
                 new ShopCatalogue.Goods("minecraft:air", 1), Set.of(), ShopCatalogue.Role.RECOVERY,
                 ShopCatalogue.PaymentSource.EXISTING_MOD_PRODUCTS, "source", "route", "risk");
+        Inventory invalidStock = new Inventory(null);
+        invalidStock.setItem(0, new ItemStack(ITEMS.apply(SourceLogic.AGGREGATE)));
+        ListTag invalidBefore = invalidStock.save(new ListTag());
         equal("invalid registry outputs are explicit errors", ShopResult.INVALID_OFFER,
-                ShopInventory.prepare(new Inventory(null), invalid, Set.of(), id -> Items.AIR).result());
+                ShopInventory.prepare(invalidStock, invalid, Set.of(), ITEMS).result());
+        equal("invalid output resolution cannot debit a valid physical payment", invalidBefore,
+                invalidStock.save(new ListTag()));
+        equal("invalid payment resolution is also an explicit error", ShopResult.INVALID_OFFER,
+                ShopInventory.prepare(invalidStock, invalid, Set.of(), id -> Items.AIR).result());
         ShopCatalogue.Offer oversized = new ShopCatalogue.Offer("oversized", Map.of(SourceLogic.AGGREGATE, 1),
                 new ShopCatalogue.Goods("minecraft:water_bucket", 2), Set.of(), ShopCatalogue.Role.RECOVERY,
                 ShopCatalogue.PaymentSource.EXISTING_MOD_PRODUCTS, "source", "route", "risk");
@@ -237,17 +246,18 @@ public final class VerifyShop {
     }
 
     private static void cycles() {
+        List<EconomyGraph.Row> graph = EconomyGraph.rows();
         EconomyCycleProof.Certificate proof = EconomyCycleProof.check();
         equal("all live T0 conversions, offers and finite rewards are covered", true, proof.conservative());
-        equal("one checked row for every projected authority row", EconomyGraph.rows().size(), proof.checks().size());
+        equal("one checked row for every projected authority row", graph.size(), proof.checks().size());
         var bench = io.github.ezequiel24123z.grindless.recipe.ProcessGraph.generate(
                 io.github.ezequiel24123z.grindless.sustainability.AuthorityAdapters.materialViews()).stream()
                 .filter(recipe -> recipe.family() == io.github.ezequiel24123z.grindless.recipe.MachineFamily.ASSEMBLY_BENCH)
                 .toList();
         equal("every real Bench conversion is included, not just its manual counterpart", (long) bench.size(),
-                EconomyGraph.rows().stream().filter(route -> route.source().equals("BootstrapAssembly")).count());
+                graph.stream().filter(route -> route.source().equals("BootstrapAssembly")).count());
         for (var recipe : bench) {
-            EconomyGraph.Row row = EconomyGraph.rows().stream().filter(route -> route.id().equals(recipe.id()))
+            EconomyGraph.Row row = graph.stream().filter(route -> route.id().equals(recipe.id()))
                     .findFirst().orElseThrow();
             for (var ingredient : recipe.inputs()) {
                 equal("Bench conversion uses its exact live input", (long) ingredient.count(), row.inputs().get(ingredient.qualified()));
@@ -275,7 +285,7 @@ public final class VerifyShop {
                 EconomyGraph.Boundary.FINITE_QUEST, Set.of(), "read-only tutorial", 0, 0, "ONE_CLAIM_PER_PLAYER_WORLD");
         equal("new tutorial claims with no material reward remain finite and cannot mint",
                 true, EconomyCycleProof.check(List.of(reading), Map.of()).conservative());
-        List<EconomyGraph.Row> mutated = new java.util.ArrayList<>(EconomyGraph.rows());
+        List<EconomyGraph.Row> mutated = new java.util.ArrayList<>(graph);
         mutated.add(row("paid_material_from_nothing", "item:minecraft:bucket", 1,
                 "item:" + SourceLogic.AGGREGATE, 64));
         equal("a conversion added outside a buy/sell pair invalidates the proof", false,
