@@ -2,6 +2,7 @@
   "schema": "grindless.t0-experience-audio/v1",
   "status": "runtime_imported_offline_source_resource_verified_java_native_client_pending",
   "audit_source": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+  "application_source_commit": "222450fe84681b586f716d7d6ea0c51d38bbc4a1",
   "human_listening_approved": false,
   "release_ready": false,
   "generation": {
@@ -228,14 +229,16 @@
     "fire_adaptation": "FAIL_preserved_not_imported_native_combustion_selected",
     "source_resource_contracts": {
       "winps_assertions": 46,
-      "winps_negative_controls": 21,
+      "winps_negative_controls": 28,
       "verified_core_assertions": 46,
-      "verified_core_negative_controls": 21,
+      "verified_core_negative_controls": 28,
+      "unrelated_localization_isolation_positive_control": true,
       "exit_code": 0,
       "scope": "Complete T0 coverage, exact four runtime Oggs, five retired files, ten registered sound bindings, retained tracker/particles/notices, physical native references and source policies; not Java or native engine proof"
     },
     "documentation_links": "PASS_737_relative_links_51_Markdown_files_160_ADR_sections_and_index_rows",
     "retired_windows_converter": "PASS_actual_legacy_root_invocation_fails_closed_before_writes",
+    "tank_command": "Current entrypoint forwards to the complete audio contract, retaining strict TANK-arm and comment/string/duplicate/grouped negatives; historical one-arm checkpoint remains in Git",
     "native_sh": "NOT_EXECUTED_no_Bash_in_current_bundled_Git_or_standard_install_no_install_attempted",
     "java_compilation_and_execution": "NOT_EXECUTED_no_PC_JVM_lease",
     "native_client_or_listening": "NOT_EXECUTED",
@@ -245,6 +248,7 @@
     "Initial new negative fixture expected SD_VALIDATION rather than existing SD_PURPOSE_UNAPPROVED; test expectation corrected, no production guard weakened.",
     "First dot-sourced QC read hit the host execution policy; the normal process-local Bypass invocation read the existing results without regeneration or OS setting changes.",
     "Actual fire A periodic-window adaptation fails boundary QC and remains unimported; originals and failed processing receipt are retained.",
-    "The active app-bundled Git has no Bash; initial launcher lookup fails and the named standard-install check also finds none. No SH contract or Linux qualification is claimed."
+    "The active app-bundled Git has no Bash; initial launcher lookup fails and the named standard-install check also finds none. No SH contract or Linux qualification is claimed.",
+    "Actual old verify-tank-feedback reports29 checks/7 failures because it requires preserving retired hums, the old Quern signature and a TANK-only whole-tree diff. Its8 negatives pass. Replace that obsolete current-entry contract with the shared physical checker, preserving old source/proofs in Git rather than restoring synthesis."
   ]
 }

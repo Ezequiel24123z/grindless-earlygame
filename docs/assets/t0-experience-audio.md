@@ -1,6 +1,8 @@
 # Physical T0 soundscape
 
 Source audit: `b8bd5e885aef598bf888d7e390b297a34cbb7d52`, 2026-10-20.
+Runtime implementation: `222450fe84681b586f716d7d6ea0c51d38bbc4a1`;
+the later checker-isolation update does not change application/resources.
 This is the complete replacement wave requested after the earlier Quern/Mixer
 imports, not a reinterpretation of that two-source audit or a reset of spent
 grants. Human listening is **NOT APPROVED** for this new wave.
@@ -136,7 +138,7 @@ Previously approved FFmpeg9.0.2/ffprobe and Core7.6 executables match their
 recorded SHA-256s; no installation or PC JVM/GPU/Prism lease was used.
 
 After import, the updated existing source/resource checker passes **46 contracts
-and21 negative controls** on actual WinPS5 and verified Core7.6, exit0. This includes exact mono44100/
+and28 negative controls** on actual WinPS5 and verified Core7.6, exit0. This includes exact mono44100/
 132300-frame containers, all five absent synth Oggs, ten event bindings, actual
 nineteen-block T0 coverage derived from the craft/catalogue intersection plus
 fibreboard, no generic fallback and retained particles/Quern/Mixer/tracker/notices.
@@ -147,6 +149,16 @@ mix/onset mechanism cases; Java/common/Forge/native execution is **NOT EXECUTED*
 in this lane because no JVM/PC lease was granted. Parent integration must run
 the affected compilation/Java audio/assets checks and one new-binding boot.
 Do not reuse old747 registration proof for three newly registered events.
+The audio checker freezes only audio subtitles, not the whole localization file:
+an in-memory positive control permits unrelated quest/UI text changes so other
+workstreams can integrate without weakening the old/new sound bindings.
+The old `verify-tank-feedback` entrypoint actually reports29 checks/7 failures:
+it insists on retained generic hums, the old Quern signature and an exact
+TANK-only whole-tree diff; its eight negatives still pass. Those are obsolete
+checkpoint requirements, not a reason to restore synthesis or freeze peer work.
+The command now forwards to the complete current audio checker, which retains
+strict one-empty-TANK-arm scope and comment/string/missing/nonempty/duplicate/
+grouped mutation coverage. Original checkpoint source/proofs remain in Git.
 
 The actual retired Windows converter refuses the real legacy-source root before
 any writes. Native SH is **NOT EXECUTED**: the current app-bundled Git has no
@@ -182,11 +194,11 @@ These are **NOT EXECUTED** by source or codec checks:
 
 | Category | Current source-complete handoff |
 | --- | --- |
-| COMPLETED | Full coverage; six HTTP200 sources; two noticed/normalized/imported physical files; all five synth Oggs retired; safe compatibility IDs, native combustion, one tracker/scan and bounded mix/onsets; WinPS/Core695 offline assertions and46+21 source/resource contracts plus737 links pass. |
+| COMPLETED | Full coverage; six HTTP200 sources; two noticed/normalized/imported physical files; all five synth Oggs retired; safe compatibility IDs, native combustion, one tracker/scan and bounded mix/onsets; WinPS/Core695 offline assertions and46+28 source/resource contracts plus737 links pass. |
 | BLOCKED | Native SH qualification: current bundled Git and named standard install have no Bash; no install attempted. No provider, credential or source/resource blocker. |
 | NOT EXECUTED | Native SH; Java/common/Forge compilation and authored mechanism/resource suites, one changed-event registration boot, native client playback/listening, deployment. No JVM/PC lease; parent owns combined qualification. |
 | NEEDS HUMAN VALIDATION | All new artistic selection, encoded listening, gain/falloff, seams and one/eight/mixed workshop fatigue. |
 | NEEDS MY DECISION | None for the bounded delegated sound unit. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None. Existing authorized credential was read only programmatically by the reviewed transport, never output, hashed, copied or committed. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | No provider credential is missing; the reviewed transport alone read the existing key, never output/hashed/copied/committed. SH proof needs an existing Bash-capable host/CI; parent owns the JVM/native execution window. |
 | COST / BILLING RISK | Actual new POSTs6 of maximum8, all HTTP200, closed selected6/6 grant, conditional estimate720 credits. No retries, billing change, paid images or historical-ledger reset. |
 | DEPLOYED STATE | No build, Prism, save, JVM/GPU or installed-instance mutation by this lane. |

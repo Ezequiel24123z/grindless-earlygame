@@ -114,6 +114,10 @@ if (-not $SourceOnly) {
 }
 function Get-Contracts([hashtable]$Files, [bool]$Media) {
     $audio = Code $Files.Audio; $effects = Code $Files.Effects; $policy = Code $Files.Policy
+    $start = $effects.IndexOf('switch (geometry) {', [StringComparison]::Ordinal)
+    $end = $effects.IndexOf('if (status == MachineStatus.OUT_OF_BAND)', [Math]::Max(0, $start), [StringComparison]::Ordinal)
+    $dispatch = ''
+    if ($start -ge 0 -and $end -gt $start) { $dispatch = $effects.Substring($start, $end - $start) }
     $events = $Files.Sounds | ConvertFrom-Json; $lang = $Files.Lang | ConvertFrom-Json
     $record = $Files.Record | ConvertFrom-Json
     $c = [ordered]@{}
@@ -173,7 +177,8 @@ function Get-Contracts([hashtable]$Files, [bool]$Media) {
         -not $effects.Contains('ModSounds.MACHINE_HUM') -and
         -not $effects.Contains('ModSounds.MACHINE_HUM_HEAVY') -and -not $effects.Contains('ModSounds.PYLON_LINK')
     $c['passive tank and structural parts remain silent'] =
-        $effects.Contains('case TANK -> { }') -and $effects.Contains('case CHANNEL, SCREEN -> { }')
+        [regex]::Matches($dispatch, '\bTANK\b').Count -eq 1 -and
+        $dispatch.Contains('case TANK -> { }') -and $dispatch.Contains('case CHANNEL, SCREEN -> { }')
     $c['all original particle calls preserved'] = (Particles $Files.Effects) -ceq (Particles $oldEffects)
     $c['physical combustion only on actual T0 fuel roles'] =
         $effects.Contains('case BIOGEN -> combustion(status, level, pos, random);') -and
@@ -199,9 +204,11 @@ function Get-Contracts([hashtable]$Files, [bool]$Media) {
     $c['Quern and Mixer event definitions unchanged'] =
         (ConvertTo-Json $events.t0_grinding -Depth 5 -Compress) -ceq (ConvertTo-Json $oldSounds.t0_grinding -Depth 5 -Compress) -and
         (ConvertTo-Json $events.t0_wet_work -Depth 5 -Compress) -ceq (ConvertTo-Json $oldSounds.t0_wet_work -Depth 5 -Compress)
-    $preserved = @($lang.PSObject.Properties).Count -eq @($oldLang.PSObject.Properties).Count + 3
-    foreach ($property in $oldLang.PSObject.Properties) { $preserved = $preserved -and $lang.($property.Name) -ceq $property.Value }
-    $c['existing localization preserved with three new subtitles'] = $preserved -and
+    $oldSubtitles = @($oldLang.PSObject.Properties | Where-Object { $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })
+    $currentSubtitles = @($lang.PSObject.Properties | Where-Object { $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })
+    $preserved = $currentSubtitles.Count -eq $oldSubtitles.Count + 3
+    foreach ($property in $oldSubtitles) { $preserved = $preserved -and $lang.($property.Name) -ceq $property.Value }
+    $c['existing audio subtitles preserved with three additions'] = $preserved -and
         $lang.'subtitles.grindless.t0_wet_work' -ceq 'Clay mixer stirs'
     $c['old public audio notice retained additively'] = (Normalize-Lines $Files.Notice).StartsWith((Normalize-Lines $oldNotice).TrimEnd())
     $c['all five retired synthetic resources absent'] = @($Files.Retired).Count -eq 0
@@ -271,6 +278,14 @@ function Reject-Mutation([string]$Label, [hashtable]$Mutated, [string]$Diagnosti
     }
 }
 if ($SelfTest) {
+    $copy = $snapshot.Clone(); $language = $copy.Lang | ConvertFrom-Json
+    $unrelated = @($language.PSObject.Properties | Where-Object { -not $_.Name.StartsWith('subtitles.grindless.', [StringComparison]::Ordinal) })[0].Name
+    $language.$unrelated = 'TEST unrelated presentation change'
+    $language | Add-Member NoteProperty 'test.unrelated.quest.text' 'TEST new non-audio localization'
+    $copy.Lang = $language | ConvertTo-Json -Depth 10
+    $isolated = Get-Contracts $copy (-not $SourceOnly)
+    if (@($isolated.GetEnumerator() | Where-Object { -not $_.Value }).Count -ne 0) { throw 'Audio checks must not freeze unrelated localization.' }
+    Write-Output 'PASS: unrelated localization changes remain outside the audio contract.'
     $mutations = @(
         @('force load','Audio','getChunk(x, z, ChunkStatus.FULL, false)','getChunk(x, z, ChunkStatus.FULL, true)','one loaded-only discovery and tracker'),
         @('stale source','Audio','chunk.getBlockEntities().get(pos) == machine','true','current entity world block and running identity required'),
@@ -288,6 +303,20 @@ if ($SelfTest) {
         if (-not $snapshot[$mutation[1]].Contains($mutation[2])) { throw "Negative control no longer matches: $($mutation[0])" }
         $copy = $snapshot.Clone(); $copy[$mutation[1]] = $copy[$mutation[1]].Replace($mutation[2], $mutation[3])
         Reject-Mutation $mutation[0] $copy $mutation[4]
+    }
+    $emptyTank = 'case TANK -> { }'; $activeTank = 'case TANK -> generator(status, level, pos, random);'
+    $tankControls = [ordered]@{
+        'line-comment tank decoy' = "$activeTank // $emptyTank"
+        'block-comment tank decoy' = "$activeTank /* $emptyTank */"
+        'missing tank arm' = ''
+        'nonempty tank block' = 'case TANK -> { generator(status, level, pos, random); }'
+        'string-literal tank decoy' = 'case TANK -> { String decoy = "case TANK -> { }"; generator(status, level, pos, random); }'
+        'duplicate tank arms' = "$emptyTank`n$emptyTank"
+        'grouped tank arm' = 'case TANK, CHANNEL -> { }'
+    }
+    foreach ($control in $tankControls.GetEnumerator()) {
+        $copy = $snapshot.Clone(); $copy.Effects = $copy.Effects.Replace($emptyTank, $control.Value)
+        Reject-Mutation $control.Key $copy 'passive tank and structural parts remain silent'
     }
     $copy = $snapshot.Clone(); $copy.Retired = @('machine_hum.ogg')
     Reject-Mutation 'retired Ogg restored' $copy 'all five retired synthetic resources absent'
