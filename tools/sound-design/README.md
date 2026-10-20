@@ -1,6 +1,51 @@
-# Purpose-bound sound tooling (ADR-0156) — UNAPPROVED
+# Purpose-bound sound tooling (ADR-0156)
 
-**Current stop: audit and offline-reviewed tooling, not generation.** The v2 proposal
+## Actual Mixer generation and integration
+
+The owner/coordinator accepted the freeze and existing two prompts, delegated
+the real purpose grant and directed end-to-end execution on 2026-10-20.
+The real contract/manifest review markers were committed as `reviewed` at
+`cbd318abf1a7533df575764000384543a2dec15c`; both tracked grant examples remain
+**false/null and unauthorized**. No private grant or credential was committed.
+
+The actual run produced **two HTTP200 responses and saved sources**, with
+zero retries/ambiguous deliveries, then real FFmpeg/ffprobe QC. Candidate A is
+selected technically; B retains its loop-boundary energy warning and is not
+imported. A's low-level PCM preview was normalized using
+`min(0.03/source_RMS, 0.35/source_peak)`, gain `8.2287799525212062`, then mono
+44.1 kHz Vorbis q4. The exact normalized Ogg is 33,374 bytes, SHA-256
+`2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45`.
+Decoded technical flags are empty; this is not human listening.
+
+The new two-request grant is **exhausted2/2**. The owner's broader operating
+allowance is at most twelve SFX requests this wave, of which two were used,
+not a target. The original v2 four-call envelope still bounds this smaller
+run; it is not the expanded whole-wave or permanent project budget.
+No extra family/candidate was generated merely to use headroom.
+Original Quern3/3 evidence and exact A resource remain separate and unchanged.
+Do not rerun Generate, reset a ledger or rewrite the original generated QC.
+
+Rights/notices were committed before binary import. The
+[public Mixer record](../../docs/assets/mixer-runtime-import.json) preserves
+source/receipt/output hashes, request settings, normalization and current
+validation boundaries; raw audio, private receipt/grant and derivation evidence
+remain ignored. Generation/FFmpeg are development tools only, never runtime
+or normal-build dependencies. The owner still judges encoded in-game sound,
+one/eight-machine mix, fatigue and artistic quality.
+
+The guard regression now tests legitimately `reviewed` real metadata separately
+from explicitly unapproved in-memory metadata clones. Tracked examples remain
+false/null: no fake Sol grant is created. Actual WinPS focused **307**, default
+offline **635** and Windows native-shell/Core focused **307** pass, exit0.
+These are guard/ledger tests, not additional paid runs or native client evidence.
+
+## Initial v2 tooling freeze (historical)
+
+The preparation evidence below records `19b4584`/`2bc200d`, before the owner's
+later authorization. Its unapproved markers, stop/grant instructions and
+unexecuted generation statements are historical, not the current work queue.
+
+**Stop at that checkpoint: audit and offline-reviewed tooling, not generation.** The v2 proposal
 selects only **wet_work / Clay Mixer**, `wet-work-a` and `wet-work-b`, with an
 effective **max_posts=2**. The source audit revision is
 `269965b1b0b8c1becda74459a853f245105649ee`. Sol owns final audit/prompt review,

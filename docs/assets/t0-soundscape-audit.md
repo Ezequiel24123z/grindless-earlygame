@@ -1,6 +1,51 @@
-# T0 soundscape audit and bounded wet-work proposal
+# T0 soundscape audit and Mixer integration
 
-**State:** source-bound audit, passive-tank correction and tooling preparation, not
+## Executed continuation after owner authorization
+
+On 2026-10-20 the owner/coordinator accepted the audit, tooling and both prompts,
+delegated the actual private grant and directed generation through integration
+without further micro-phase approvals. The finite operating allowance expanded
+to twelve SFX requests, not a spending target or a reset of historical grants.
+Only the selected two-request Mixer run was needed: **two actual HTTP200
+responses, two saved sources, zero failures, ambiguities or retries**, generated
+at source `cbd318abf1a7533df575764000384543a2dec15c`.
+
+Candidate A passes the objective boundary/clipping/silence screen after mono
+conversion. Candidate B retains its source and encoded head/tail energy warning
+(6.354/6.124 dB against a 6 dB screen), stays private and is not imported. This is
+technical selection, not a claim that an agent listened or rejected B artistically.
+No extra generation was performed merely to use the allowance.
+
+A's quiet PCM preview was normalized with constant gain
+`min(0.03/source_RMS, 0.35/source_peak) = 8.2287799525212062`, then encoded mono
+44.1 kHz Vorbis q4. The actual decoded Ogg has peak 0.328290, RMS 0.029307,
+zero clipped samples, seam jump 0.015779 and window-energy delta -0.482616 dB;
+all technical flags are empty. There was no trimming, fade, seam repair or
+regeneration. The exact 33,374-byte Ogg SHA-256 is
+`2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45`.
+
+Rights/notices/public provenance were committed at
+`31020c2e2ce0b9fcb0bbfeed80dd00c4a844a540` **before** binary import.
+[The Mixer provenance](mixer-runtime-import.json) records actual source,
+receipt/output hashes, parameters, transforms and qualification state without
+credential values/access paths or raw private evidence. Two of twelve requests
+were used; the initial two-request grant is exhausted, not reusable.
+
+Runtime integration uses one bounded adapter and the existing generic tracker
+for Quern and Mixer, suppresses only Mixer's replaced hum and preserves the
+independent passive-TANK fix. Source/resource checks and combined-qualification
+limits are recorded in the provenance. Native client listening, one/eight-machine
+mix, artistic quality, release acceptance and deployment are not supplied by QC.
+No PC JVM/GPU/Prism surface was used by this workstream.
+
+## Preserved initial audit/tooling freeze
+
+The remainder records the earlier `2bc200d` preparation checkpoint and its actual
+source-bound findings. Its old stop/grant statements are historical and are
+superseded by the executed owner-authorized continuation above, not instructions
+to halt integration or reopen account/entitlement discovery.
+
+**State at that checkpoint:** source-bound audit, passive-tank correction and tooling preparation, not
 generated audio or a listening pass.
 Audited source: `269965b1b0b8c1becda74459a853f245105649ee`, 2026-10-20.
 [ADR-0156](../DECISIONS.md#adr-0156--disclose-blockers-and-separate-creative-capability-from-product-acceptance)
@@ -30,7 +75,7 @@ field. The sources are:
 - [MachineEffects](../../common/src/main/java/io/github/ezequiel24123z/grindless/machine/MachineEffects.java):
   geometry dispatch at lines 29-102, working effects at lines 128-504.
   Block `animateTick` delegates here; `sound()` calls positional `playLocalSound`.
-- [QuernAudio](../../common/src/main/java/io/github/ezequiel24123z/grindless/client/audio/QuernAudio.java),
+- [QuernAudio at the audited revision](https://github.com/Ezequiel24123z/grindless-earlygame/blob/269965b1b0b8c1becda74459a853f245105649ee/common/src/main/java/io/github/ezequiel24123z/grindless/client/audio/QuernAudio.java),
   [QuernLoopTracker](../../common/src/main/java/io/github/ezequiel24123z/grindless/client/audio/QuernLoopTracker.java),
   [ModSounds](../../common/src/main/java/io/github/ezequiel24123z/grindless/registry/ModSounds.java)
   and [sounds.json](../../common/src/main/resources/assets/grindless/sounds.json):

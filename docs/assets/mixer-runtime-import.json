@@ -100,10 +100,11 @@
     "channels": 1,
     "sample_rate_hz": 44100,
     "duration_seconds": 3.0,
-    "imported": false,
+    "imported": true,
     "import_authorized": true,
     "authority": "Current owner/Sol6.1 delegation for technically selected game incorporation, separate from the internal-only generation grant",
     "notice_recorded_before_import": true,
+    "notice_checkpoint": "31020c2e2ce0b9fcb0bbfeed80dd00c4a844a540",
     "public_notice": "common/src/main/resources/assets/grindless/AUDIO-NOTICE.txt",
     "rights_basis": "Existing generation-time owner-confirmed paid entitlement and already reviewed ElevenCreative Terms, Sound Effects exhibit",
     "terms": "https://elevenlabs.io/creative-terms",
@@ -140,10 +141,19 @@
   "validation": {
     "provider_and_initial_codec_qc": "PASS_two_real_HTTP200_sources_saved_initial_QC_exit0",
     "normalized_encoded_file_qc": "PASS_actual_ffmpeg_ffprobe_and_decoded_metrics_exit0",
+    "reviewed_purpose_guards": {
+      "winps_focused_assertions": 307,
+      "winps_default_assertions": 635,
+      "windows_native_shell_core_focused_assertions": 307,
+      "exit_codes": 0,
+      "tested_purpose_script_sha256": "cec23f392b8f32de68e4fedc56df7d553a1bb2b568461d208861baba899b7b68",
+      "scope": "Real reviewed inputs still reject false/null example grants; explicit in-memory unapproved metadata negatives and durable fake-transport cases; no fake Sol approvals or new provider calls"
+    },
     "runtime_resource_contracts": "IN_PROGRESS",
     "java_compilation_or_execution": "NOT_RUN_no_JVM_lease",
     "native_registration_and_client_lifecycle": "NOT_RUN_reserved_for_combined_coordinator_qualification",
     "one_eight_machine_or_mixed_factory_listening": "NOT_RUN_owner_required",
-    "build_package_or_deployment": "NOT_RUN_parent_owned_combined_window"
+    "build_package_or_deployment": "NOT_RUN_parent_owned_combined_window",
+    "preserved_pre_final_failure": "Documentation link preflight detected the retired local QuernAudio.java link during the adapter rename; historical audit link repinned to the exact audited Git revision before final link validation"
   }
 }

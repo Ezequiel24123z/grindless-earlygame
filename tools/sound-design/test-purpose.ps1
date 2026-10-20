@@ -115,6 +115,7 @@ $script:PurposeRoot = Join-Path ([IO.Path]::GetTempPath()) ('GrindlessPurpose-TE
 [void][IO.Directory]::CreateDirectory($script:PurposeRoot)
 try {
     $inputs = $script:PurposeInputs; $head = $script:PurposeHead
+    Check-Purpose ($inputs.Contract.review_status -ceq 'reviewed' -and $inputs.Manifest.review_status -ceq 'reviewed') 'real contract and manifest retain their legitimate reviewed status'
     Check-Purpose ($inputs.Manifest.source_revision -ceq '269965b1b0b8c1becda74459a853f245105649ee') 'proposal retains exact runtime audit source'
     Check-Purpose ($inputs.Manifest.families.Count -eq 1 -and $inputs.Manifest.families[0].id -ceq 'wet_work' -and
         (Test-OrderedIds $inputs.Manifest.families[0].machines @('clay_mixer')) -and (Get-CallLimit $inputs) -eq 2) 'actual scope is Clay Mixer only, with two calls'
@@ -126,8 +127,23 @@ try {
     Assert-PurposeBindings $g $inputs $output $head
     Check-Purpose (-not $g.generation_approved -and $null -eq $g.approved_by -and $null -eq $g.approved_utc -and $null -eq $g.expires_utc) 'positive binding fixture makes no authority claim'
     Reject-Purpose { Assert-Grant $g $inputs $output $head } 'SD_PURPOSE_UNAPPROVED' 'Unapproved generation markers:'
-    foreach ($marker in @('contract.review_status','manifest.review_status','grant.generation_approved','grant.approved_by')) {
-        Check-Purpose ($script:LastPurposeRejection.Contains($marker) -and @(Get-PurposeApprovalFailures $g $inputs) -ccontains $marker) ('real guard explicitly rejects ' + $marker)
+    $grantMarkers = @('grant.generation_approved','grant.approved_by')
+    Check-Purpose ((Test-OrderedIds @(Get-PurposeApprovalFailures $g $inputs) $grantMarkers) -and
+        $script:LastPurposeRejection.Contains($grantMarkers[0]) -and $script:LastPurposeRejection.Contains($grantMarkers[1]) -and
+        -not $script:LastPurposeRejection.Contains('contract.review_status') -and
+        -not $script:LastPurposeRejection.Contains('manifest.review_status')) 'reviewed real inputs fail only the false/null example grant markers'
+    # Negative metadata is explicit in-memory TEST data, never a change to the
+    # reviewed files or a forged Sol approval. Each clone keeps the grant false/null.
+    foreach ($section in @('Contract','Manifest')) {
+        $unapproved = Copy-Purpose $inputs; $unapproved.$section.review_status = 'unapproved'
+        $unapproved.ManifestHash = Get-FixtureHash $unapproved.Manifest
+        $unapproved.ContractHash = Get-FixtureHash $unapproved.Contract
+        $unapprovedGrant = New-BindingFixture $unapproved $output
+        Assert-PurposeBindings $unapprovedGrant $unapproved $output $head
+        $marker = $section.ToLowerInvariant() + '.review_status'
+        Reject-Purpose { Assert-Grant $unapprovedGrant $unapproved $output $head } 'SD_PURPOSE_UNAPPROVED' $marker
+        Check-Purpose ((Test-OrderedIds @(Get-PurposeApprovalFailures $unapprovedGrant $unapproved) (@($marker) + $grantMarkers)) -and
+            $script:LastPurposeRejection.Contains($grantMarkers[0]) -and $script:LastPurposeRejection.Contains($grantMarkers[1])) ('real guard rejects only the unapproved ' + $section + ' clone and example grant markers')
     }
     Reject-Purpose { Invoke-Generate $inputs $purposeManifest $purposeContract $purposeExample $output 'TEST-NOT-A-SECRET-PATH' $null } 'SD_PURPOSE_UNAPPROVED' 'Unapproved generation markers:'
     $legacyInputs = Get-Inputs $ManifestPath $ContractPath
@@ -156,6 +172,8 @@ try {
     }
     $cli = Invoke-PurposeCli (@('-Mode','Generate','-SecretFile','TEST-NOT-A-SECRET-PATH') + $cliArgs) 'unapproved v2 Generate'
     Check-Purpose ($cli.ExitCode -eq 1 -and $cli.Stdout.Length -eq 0 -and $cli.Stderr.StartsWith('SD_PURPOSE_UNAPPROVED: ') -and
+        $cli.Stderr.Contains($grantMarkers[0]) -and $cli.Stderr.Contains($grantMarkers[1]) -and
+        -not $cli.Stderr.Contains('contract.review_status') -and -not $cli.Stderr.Contains('manifest.review_status') -and
         -not $cli.Stderr.Contains('TEST-NOT-A-SECRET-PATH') -and -not [IO.Directory]::Exists($output)) 'actual unapproved Generate CLI fails the real guard before missing tools or secret path, with safe diagnostics'
     # Default legacy manifest/contract, but no PATH/tool discovery in this focused
     # offline harness. Missing explicit paths cannot start or discover a codec.
@@ -167,7 +185,7 @@ try {
         ($legacyPlan.requests.id -join ',') -ceq 'quern-a,quern-b,quern-c' -and -not $legacyPlan.generation_authorized) 'default legacy Plan keeps Quern/three'
 
     foreach ($change in @('endpoint','model','duration','loop','influence','seed','logging','text','retry','format','families','per_family','global','schema','unknown')) {
-        $c = Copy-Purpose $inputs.Contract; Assert-Contract $c
+        $c = Copy-Purpose $inputs.Contract; $c.review_status = 'unapproved'; Assert-Contract $c
         $fragment = 'Unexpected'; $code = 'SD_VALIDATION'
         switch ($change) {
             'endpoint' { $c.endpoint += '&seed=1'; $fragment = 'exact official HTTPS POST' }
@@ -188,7 +206,7 @@ try {
         }
         Reject-Purpose { Assert-Contract $c } $code $fragment
     }
-    $two = Copy-Purpose $inputs.Manifest
+    $two = Copy-Purpose $inputs.Manifest; $two.review_status = 'unapproved'
     $family = Copy-Purpose $two.families[0]; $family.id = 'test_family_two'; $family.machines = @('test_machine_two')
     $family.candidates[0].id = 'test-family-two-a'; $family.candidates[1].id = 'test-family-two-b'
     $two.families = @($two.families) + $family; $two.max_calls = 4
@@ -199,7 +217,7 @@ try {
     Assert-PurposeBindings $twoGrant $twoInputs $output $head
     Check-Purpose ($twoGrant.max_calls -eq 4 -and $twoGrant.family_ids.Count -eq 2 -and -not $twoGrant.generation_approved) 'two-family/four fixture is finite and remains unapproved'
     foreach ($change in @('three_families','three_per_family','unused_four','duplicate_candidate','duplicate_family','duplicate_machine','long_prompt','unknown_candidate','unknown_manifest','schema')) {
-        $m = Copy-Purpose $inputs.Manifest; Assert-Manifest $m $inputs.Contract
+        $m = Copy-Purpose $inputs.Manifest; $m.review_status = 'unapproved'; Assert-Manifest $m $inputs.Contract
         $fragment = 'Unexpected or missing object fields.'
         switch ($change) {
             'three_families' {
@@ -247,7 +265,7 @@ try {
     }
     Reject-Purpose { Assert-PurposeBindings $g $twoInputs $output $head } 'SD_VALIDATION' 'Purpose/run binding mismatch.'
     Reject-Purpose { Assert-PurposeBindings $twoGrant $inputs $output $head } 'SD_VALIDATION' 'Purpose/run binding mismatch.'
-    $changed = Copy-Purpose $inputs.Manifest; $changed.families[0].candidates[0].prompt += ' Changed.'
+    $changed = Copy-Purpose $inputs.Manifest; $changed.review_status = 'unapproved'; $changed.families[0].candidates[0].prompt += ' Changed.'
     $changedInputs = New-FixtureInputs $changed
     Reject-Purpose { Assert-PurposeBindings $g $changedInputs $output $head } 'SD_VALIDATION' 'input/tooling hash mismatch.'
     Reject-Purpose { Assert-PurposeBindings $g $inputs $output ('e' * 40) } 'SD_VALIDATION' 'current reviewed Git checkpoint'
@@ -315,7 +333,7 @@ try {
     $bad = Copy-Purpose $four.Receipt; $bad.attempts += $bad.attempts[0]
     Reject-Purpose { Assert-Receipt $bad $twoInputs $four.Output } 'SD_VALIDATION' 'Receipt budget is invalid.'
     Reject-Purpose { Assert-Receipt $done.Receipt $twoInputs $done.Output } 'SD_VALIDATION' 'Receipt identity, path or budget mismatch.'
-    $cross = Copy-Purpose $inputs.Manifest; $cross.purpose_id = 'test-other-purpose'
+    $cross = Copy-Purpose $inputs.Manifest; $cross.review_status = 'unapproved'; $cross.purpose_id = 'test-other-purpose'
     $crossInputs = New-FixtureInputs $cross
     Reject-Purpose { Assert-Receipt $done.Receipt $crossInputs $done.Output } 'SD_VALIDATION' 'Receipt purpose/run/selected candidate binding mismatch.'
 
