@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Boots a headless Forge dedicated server with the mod loaded and fails if it does not come up.
+# Boots the remapped distributable on an isolated production Forge server (ADR-0126).
+# Requires boot, scenario assertions and a clean successful process exit.
 #
 #     tools/smoke-boot.sh [project-root]
 #
@@ -15,9 +16,12 @@
 #
 # Environment:
 #     SMOKE_TIMEOUT   seconds to wait for the server to finish starting (default 900)
+#     SMOKE_EXPECT_TIMEOUT  seconds to await scheduled scenario assertions (default 120)
 #     SMOKE_PORT      server port (default 25599)
 #     SMOKE_DATAPACK  a datapack directory to enable in the new world, to simulate other mods
 #                     or to hold a smoke function (ADR-0061)
+#     SMOKE_OPTIONAL_DATAPACK one additional directory, staged but explicitly disabled
+#     SMOKE_KEEP_WORLD absent/0 cleans up; 1 retains only the diagnostic world after shutdown
 #     SMOKE_COMMANDS  a file of console commands to run once the server is up, one per line.
 #                     After Done, the script probes with `say SMOKE-READY` until the broadcast
 #                     appears; Gradle can swallow the first FIFO writes. Each scenario line is
@@ -27,15 +31,109 @@
 #     SMOKE_EXPECT_FILE  the same, read from a file
 set -u
 
+validate_smoke_keep_world() {
+  case "$1" in
+    0|1) ;;
+    *) echo "Invalid SMOKE_KEEP_WORLD: expected an absent value, 0 or 1." >&2; return 1;;
+  esac
+}
+
+KEEP_WORLD="${SMOKE_KEEP_WORLD-0}"
+validate_smoke_keep_world "$KEEP_WORLD" || exit 1
+
 ROOT="$(cd "${1:-.}" && pwd)"
-RUN_DIR="$ROOT/forge/run"
+RUN_DIR="$ROOT/forge/run/smoke-server"
 LOG="${SMOKE_LOG:-$ROOT/forge/run/smoke-boot.log}"
 TIMEOUT="${SMOKE_TIMEOUT:-900}"
+EXPECT_TIMEOUT="${SMOKE_EXPECT_TIMEOUT:-120}"
+case "$TIMEOUT:$EXPECT_TIMEOUT" in
+  *[!0-9:]*|:*|*:) echo "Smoke timeouts must be positive integers."; exit 1 ;;
+esac
+if [ "$TIMEOUT" -le 0 ] || [ "$EXPECT_TIMEOUT" -le 0 ]; then
+  echo "Smoke timeouts must be positive."; exit 1
+fi
 PORT="${SMOKE_PORT:-25599}"
 DATAPACK="${SMOKE_DATAPACK:-}"
+OPTIONAL_DATAPACK="${SMOKE_OPTIONAL_DATAPACK:-}"
 EXPECT="${SMOKE_EXPECT:-}"
 COMMANDS="${SMOKE_COMMANDS:-}"
 if [ -n "${SMOKE_EXPECT_FILE:-}" ]; then EXPECT="$(cat "$SMOKE_EXPECT_FILE")"; fi
+
+assert_smoke_path_ancestors() {
+  local current="$1" parent
+  case "$current" in /*) ;; *) current="$PWD/$current";; esac
+  while [ "$current" != / ] && [[ "$current" == */ ]]; do current="${current%/}"; done
+  while :; do
+    if [ -L "$current" ]; then
+      echo "Invalid smoke datapack path '$1': ancestor symlinks are not supported." >&2; return 1
+    fi
+    parent="$(dirname "$current")" || return 1
+    [ "$parent" = "$current" ] && break
+    current="$parent"
+  done
+}
+
+resolve_smoke_datapack() {
+  local path="$1" world="$2" source name links
+  assert_smoke_path_ancestors "$path" || return 1
+  assert_smoke_path_ancestors "$world" || return 1
+  if [ ! -d "$path" ] || [ -L "$path" ]; then
+    echo "Invalid smoke datapack '$path': expected a non-symlink directory." >&2; return 1
+  fi
+  source="$(cd "$path" && pwd -P)" || return 1
+  name="$(basename "$source")"
+  if [ ! -f "$source/pack.mcmeta" ] || [[ ! "$name" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+    echo "Invalid smoke datapack '$path': require pack.mcmeta and a portable pack name." >&2; return 1
+  fi
+  case "$source/" in "$world/"*)
+    echo "Invalid smoke datapack '$path': overlaps the disposable smoke world." >&2; return 1;; esac
+  case "$world/" in "$source/"*)
+    echo "Invalid smoke datapack '$path': overlaps the disposable smoke world." >&2; return 1;; esac
+  links="$(find "$source" -type l -print -quit)" || return 1
+  if [ -n "$links" ]; then
+    echo "Invalid smoke datapack '$path': symlinks are not supported." >&2; return 1
+  fi
+  printf '%s\n' "$source"
+}
+
+smoke_pack_properties() {
+  local primary="$1" optional="$2"
+  if [ -n "$primary" ]; then printf 'initial-enabled-packs=vanilla,file/%s\n' "$primary"; fi
+  if [ -n "$optional" ]; then
+    if [ -z "$primary" ]; then printf 'initial-enabled-packs=vanilla\n'; fi
+    printf 'initial-disabled-packs=file/%s\n' "$optional"
+  fi
+}
+
+cleanup_smoke_world() {
+  local world="$1"
+  if [ "$KEEP_WORLD" = 1 ]; then
+    if [ -d "$world" ]; then
+      printf 'SMOKE WORLD RETAINED (diagnostic only; not PASS or clean shutdown): %s\n' "$world"
+    else
+      printf 'SMOKE WORLD ABSENT (SMOKE_KEEP_WORLD=1; nothing retained): %s\n' "$world"
+    fi
+  else
+    rm -rf -- "$world"
+  fi
+}
+
+PACK_NAME=""
+OPTIONAL_PACK_NAME=""
+[ -n "$DATAPACK" ] && PACK_NAME="$(basename "$DATAPACK")"
+if [ -n "$OPTIONAL_DATAPACK" ]; then
+  OPTIONAL_DATAPACK="$(resolve_smoke_datapack "$OPTIONAL_DATAPACK" "$RUN_DIR/smoke-world")" || exit 1
+  OPTIONAL_PACK_NAME="$(basename "$OPTIONAL_DATAPACK")"
+  if [ -n "$DATAPACK" ]; then
+    DATAPACK="$(resolve_smoke_datapack "$DATAPACK" "$RUN_DIR/smoke-world")" || exit 1
+    PACK_NAME="$(basename "$DATAPACK")"
+    if [ "$(printf '%s' "$PACK_NAME" | tr '[:upper:]' '[:lower:]')" = \
+         "$(printf '%s' "$OPTIONAL_PACK_NAME" | tr '[:upper:]' '[:lower:]')" ]; then
+      echo "Smoke datapack name collision: primary and optional names must differ, ignoring case." >&2
+      exit 1
+    fi
+  fi
+fi
 
 if [ "${GRINDLESS_ACCEPT_EULA:-}" != "true" ] && [ "${CI:-}" != "true" ]; then
   echo "Refusing to write eula.txt on your behalf."
@@ -43,36 +141,50 @@ if [ "${GRINDLESS_ACCEPT_EULA:-}" != "true" ] && [ "${CI:-}" != "true" ]; then
   exit 2
 fi
 
+cd "$ROOT" || exit 1
+./gradlew --no-daemon --console=plain :forge:prepareSmokeServer ||
+  { echo "SMOKE BOOT FAILED: could not prepare the production Forge server."; exit 1; }
+FORGE_VERSION="$(sed -n 's/^forge_version=//p' "$ROOT/gradle.properties" | tail -1 | tr -d '\r')"
+case "$FORGE_VERSION" in
+  ""|*[!0-9A-Za-z._+-]*) echo "Invalid or missing forge_version."; exit 1 ;;
+esac
+LAUNCH_ARGS="$RUN_DIR/libraries/net/minecraftforge/forge/$FORGE_VERSION/unix_args.txt"
+if [ ! -f "$LAUNCH_ARGS" ]; then echo "Forge did not produce $LAUNCH_ARGS"; exit 1; fi
+JAVA="${JAVA_HOME:+$JAVA_HOME/bin/}java"
+
 mkdir -p "$RUN_DIR"
 printf 'eula=true\n' > "$RUN_DIR/eula.txt"
-printf 'online-mode=false\nserver-port=%s\nlevel-name=smoke-world\nview-distance=2\nsimulation-distance=2\n' \
+printf 'online-mode=false\nserver-ip=127.0.0.1\nserver-port=%s\nlevel-name=smoke-world\nview-distance=2\nsimulation-distance=2\n' \
   "$PORT" > "$RUN_DIR/server.properties"
 rm -rf "$RUN_DIR/smoke-world"
 if [ -n "$DATAPACK" ]; then
-  PACK_NAME="$(basename "$DATAPACK")"
   mkdir -p "$RUN_DIR/smoke-world/datapacks"
-  cp -r "$DATAPACK" "$RUN_DIR/smoke-world/datapacks/$PACK_NAME"
-  # A new world only enables the packs named here; the others are found but left off.
-  printf 'initial-enabled-packs=vanilla,file/%s\n' "$PACK_NAME" >> "$RUN_DIR/server.properties"
+  cp -r "$DATAPACK" "$RUN_DIR/smoke-world/datapacks/$PACK_NAME" || exit 1
 fi
+if [ -n "$OPTIONAL_DATAPACK" ]; then
+  mkdir -p "$RUN_DIR/smoke-world/datapacks"
+  cp -r "$OPTIONAL_DATAPACK" "$RUN_DIR/smoke-world/datapacks/$OPTIONAL_PACK_NAME" || exit 1
+fi
+smoke_pack_properties "$PACK_NAME" "$OPTIONAL_PACK_NAME" >> "$RUN_DIR/server.properties"
 : > "$LOG"
 
 # The server reads commands from stdin; a FIFO lets this script send `stop` once it is up.
 FIFO="$(mktemp -u /tmp/grindless-smoke.XXXXXX)"
 mkfifo "$FIFO"
 exec 3<>"$FIFO"
+CONSOLE_OPEN=1
 
-cd "$ROOT" || exit 1
-# setsid puts Gradle and the server it forks in their own process group, so cleanup can signal
+cd "$RUN_DIR" || exit 1
+# setsid puts the server in its own process group, so cleanup can signal
 # the whole tree at once. Git Bash on Windows has no setsid, and refusing to run there would
 # make this script CI-only -- which is the opposite of what it is for, since a developer who
 # can boot locally finds a loading crash before pushing. Fall back to signalling the launcher.
 if command -v setsid >/dev/null 2>&1; then
-  setsid ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
+  setsid "$JAVA" -Xmx2G "@$LAUNCH_ARGS" nogui < "$FIFO" 3>&- > "$LOG" 2>&1 &
   SERVER_PID=$!
   KILL_TARGET="-$SERVER_PID"
 else
-  ./gradlew --no-daemon :forge:runServer < "$FIFO" > "$LOG" 2>&1 &
+  "$JAVA" -Xmx2G "@$LAUNCH_ARGS" nogui < "$FIFO" 3>&- > "$LOG" 2>&1 &
   SERVER_PID=$!
   KILL_TARGET="$SERVER_PID"
 fi
@@ -80,7 +192,7 @@ fi
 cleanup() {
   # The happy path has already sent `stop` and waited; this is the abort path.
   if kill -0 "$SERVER_PID" 2>/dev/null; then
-    echo "stop" >&3 2>/dev/null
+    if [ "$CONSOLE_OPEN" -eq 1 ]; then echo "stop" >&3 2>/dev/null; fi
     for _ in $(seq 1 15); do
       kill -0 "$SERVER_PID" 2>/dev/null || break
       sleep 1
@@ -93,7 +205,7 @@ cleanup() {
     sleep 2
     kill -KILL -- "$KILL_TARGET" 2>/dev/null
   fi
-  rm -rf "$RUN_DIR/smoke-world"
+  cleanup_smoke_world "$RUN_DIR/smoke-world"
 }
 trap cleanup EXIT
 
@@ -121,6 +233,8 @@ while [ "$SECONDS" -lt "$deadline" ]; do
     if ! grep -E -q '\[Server\] SMOKE-READY' "$LOG"; then
       echo "SMOKE BOOT FAILED: the server started but never echoed SMOKE-READY"
       echo "stop" >&3
+      exec 3>&-
+      CONSOLE_OPEN=0
       exit 1
     fi
     if [ -n "$COMMANDS" ]; then
@@ -133,6 +247,18 @@ while [ "$SECONDS" -lt "$deadline" ]; do
       sleep 2
     fi
     if [ -n "$EXPECT" ]; then
+      expect_deadline=$((SECONDS + EXPECT_TIMEOUT))
+      while [ "$SECONDS" -lt "$expect_deadline" ]; do
+        missing=0
+        while IFS= read -r pattern; do
+          [ -z "$pattern" ] && continue
+          grep -Eq "$pattern" "$LOG" || missing=1
+        done <<< "$EXPECT"
+        [ "$missing" -eq 0 ] && break
+        kill -0 "$SERVER_PID" 2>/dev/null || break
+        grep -Eq "$FAIL_PATTERN" "$LOG" && break
+        sleep 1
+      done
       while IFS= read -r pattern; do
         [ -z "$pattern" ] && continue
         if grep -Eq "$pattern" "$LOG"; then
@@ -144,11 +270,27 @@ while [ "$SECONDS" -lt "$deadline" ]; do
         fi
       done <<< "$EXPECT"
     fi
+    if grep -Eq "$FAIL_PATTERN" "$LOG"; then
+      echo "SMOKE BOOT FAILED: the server hit a fatal error during the scenario."
+      exit 1
+    fi
     echo "stop" >&3
     for _ in $(seq 1 60); do
       kill -0 "$SERVER_PID" 2>/dev/null || break
       sleep 1
     done
+    if kill -0 "$SERVER_PID" 2>/dev/null; then
+      echo "SMOKE BOOT FAILED: the server did not stop within 60 seconds."
+      exit 1
+    fi
+    if ! wait "$SERVER_PID"; then
+      echo "SMOKE BOOT FAILED: the server launcher exited unsuccessfully."
+      exit 1
+    fi
+    if grep -Eq "$FAIL_PATTERN" "$LOG"; then
+      echo "SMOKE BOOT FAILED: the server hit a fatal error before shutdown completed."
+      exit 1
+    fi
     echo "SMOKE BOOT PASSED"
     exit 0
   fi

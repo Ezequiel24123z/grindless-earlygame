@@ -30,7 +30,7 @@ import java.util.Optional;
  * The live process graph: generated from the current tag scan and indexed for lookup (ADR-0043).
  *
  * <p>Replaced wholesale on every material rebuild. A machine caches the recipe it is running and
- * drops that cache when inputs change; it never walks the whole list.
+ * drops that cache when inputs or the published generation change; it never walks the whole list.
  */
 public final class ProcessLookup {
 
@@ -61,8 +61,19 @@ public final class ProcessLookup {
                 Grindless.MOD_NAME, recipes.size());
     }
 
+    /** Identity of the complete indexed publication; stable until the next rebuild. */
+    public static Generation generation() {
+        return GRAPH.generation;
+    }
+
     public static List<ProcessRecipe> recipes() {
         return GRAPH.recipes;
+    }
+
+    /** Transient identity only; never persisted or constructed outside a complete graph. */
+    public static final class Generation {
+        private Generation() {
+        }
     }
 
     /**
@@ -165,6 +176,38 @@ public final class ProcessLookup {
         return false;
     }
 
+    /** Whether complete item inputs are waiting for their primary fluid, including fluid-only work. */
+    public static boolean needsPrimaryFluid(MachineFamily family, ItemStack[] inputs, FluidState fluid) {
+        for (ProcessRecipe recipe : GRAPH.byFamily.getOrDefault(family, List.of())) {
+            if (!matches(recipe, inputs) || recipe.fluidInputs().isEmpty()) {
+                continue;
+            }
+            IngredientSpec primary = recipe.fluidInputs().get(0);
+            if (fluid.isEmpty() || fluid.is(primary.id())
+                    && fluid.millibuckets() < primaryFluidTarget(family, inputs, primary.id())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Batch-sized intake; preloading without complete items uses the family's largest matching batch. */
+    public static int primaryFluidTarget(MachineFamily family, ItemStack[] inputs, String id) {
+        int matched = Integer.MAX_VALUE;
+        int preload = 0;
+        for (ProcessRecipe recipe : GRAPH.byFamily.getOrDefault(family, List.of())) {
+            if (recipe.fluidInputs().isEmpty() || !recipe.fluidInputs().get(0).id().equals(id)) {
+                continue;
+            }
+            int amount = recipe.fluidInputs().get(0).count();
+            preload = Math.max(preload, amount);
+            if (matches(recipe, inputs)) {
+                matched = Math.min(matched, amount);
+            }
+        }
+        return matched == Integer.MAX_VALUE ? preload : matched;
+    }
+
     /**
      * Whether {@code stack} is a legal insert for this family's input {@code slot}.
      *
@@ -226,7 +269,8 @@ public final class ProcessLookup {
             return false;
         }
         if (spec.matrixRating() > 0) {
-            if (!(stack.getItem() instanceof ControlMatrixItem matrix)) {
+            if (!(stack.getItem() instanceof ControlMatrixItem matrix)
+                    || !BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id())) {
                 return false;
             }
             return matrix.spec(stack).map(value -> value.rating().ordinal() == spec.matrixRating())
@@ -294,11 +338,12 @@ public final class ProcessLookup {
     }
 
     private record Graph(
+            Generation generation,
             List<ProcessRecipe> recipes,
             Map<MachineFamily, List<ProcessRecipe>> byFamily,
             Map<String, List<ProcessRecipe>> byTag) {
 
-        static final Graph EMPTY = new Graph(List.of(), Map.of(), Map.of());
+        static final Graph EMPTY = new Graph(new Generation(), List.of(), Map.of(), Map.of());
 
         static Graph index(List<ProcessRecipe> recipes) {
             Map<MachineFamily, List<ProcessRecipe>> byFamily = new EnumMap<>(MachineFamily.class);
@@ -320,7 +365,8 @@ public final class ProcessLookup {
             byFamily.forEach((family, list) -> frozenFamily.put(family, List.copyOf(list)));
             Map<String, List<ProcessRecipe>> frozenTags = new HashMap<>();
             byTag.forEach((key, list) -> frozenTags.put(key, List.copyOf(list)));
-            return new Graph(List.copyOf(recipes), Map.copyOf(frozenFamily), Map.copyOf(frozenTags));
+            return new Graph(new Generation(), List.copyOf(recipes), Map.copyOf(frozenFamily),
+                    Map.copyOf(frozenTags));
         }
 
         private static void index(Map<String, List<ProcessRecipe>> byTag, ProcessRecipe recipe,

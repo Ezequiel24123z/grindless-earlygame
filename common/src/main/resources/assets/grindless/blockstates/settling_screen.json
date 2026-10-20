@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "grindless:block/settling_screen_idle" },
+    "facing=east": { "model": "grindless:block/settling_screen_idle", "y": 90 },
+    "facing=south": { "model": "grindless:block/settling_screen_idle", "y": 180 },
+    "facing=west": { "model": "grindless:block/settling_screen_idle", "y": 270 }
+  }
+}

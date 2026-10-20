@@ -134,7 +134,33 @@ public final class BlockCatalogue {
         /** A low cradle. A rocket stands on it. Not a link and not a deck cube. */
         PAD,
         /** Two rails and a ring. A station stands on it. Not the rocket's cradle. */
-        BERTH
+        BERTH,
+        /** A pair of stone milling discs and a small feed mouth. */
+        QUERN,
+        /** An open clay bowl with a horizontal mixing paddle. */
+        MIXER,
+        /** A low fire door and draft indicator in a formed brick chamber. */
+        FIREBOX,
+        /** A hopper-fed headbox and outlet for an assembled settling line. */
+        SETTLER,
+        /** A continuous open bed with two side rails; no block entity. */
+        CHANNEL,
+        /** A raised grate across the working channel; no block entity. */
+        SCREEN,
+        COLLECTOR,
+        CULTURE,
+        BIOGEN,
+        BENCH,
+        FIBREBOARD
+    }
+
+    /** The vanilla mining tag a block declares, independently of its visual geometry. */
+    public enum MiningTool {
+        PICKAXE, AXE;
+
+        public String tagPath() {
+            return "mineable/" + name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /** Belts and arms: they carry items or they do not. */
@@ -158,12 +184,23 @@ public final class BlockCatalogue {
      * @param tier     1 to 3 for pylons, whose height and detail grow with it; 1 otherwise
      * @param facing   whether the block has a front and so a {@code facing} property
      * @param statuses the values of its {@code status} property, in {@code MachineStatus} names
+     * @param miningTool the tool named by the block's additive vanilla mining tag
      */
-    public record Entry(String name, Geometry geometry, int tier, boolean facing, List<String> statuses) {
+    public record Entry(String name, Geometry geometry, int tier, boolean facing, List<String> statuses,
+                        MiningTool miningTool) {
 
         /** The blockstate variant key for one state, such as {@code facing=north,status=idle}. */
         public String variantKey(String facingValue, String status) {
-            return facing ? "facing=" + facingValue + ",status=" + status : "status=" + status;
+            String properties = facing ? "facing=" + facingValue : "";
+            if (hasStatus()) {
+                properties += (properties.isEmpty() ? "" : ",") + "status=" + status;
+            }
+            return properties;
+        }
+
+        /** A single visual variant does not invent a one-valued Minecraft state property. */
+        public boolean hasStatus() {
+            return statuses.size() > 1;
         }
 
         /** The model name for one status, shared by every facing. */
@@ -181,65 +218,76 @@ public final class BlockCatalogue {
     public static final List<Integer> FACING_ROTATIONS = List.of(0, 90, 180, 270);
 
     private static final List<Entry> BLOCKS = List.of(
-            new Entry("hand_crank_dynamo", Geometry.DYNAMO, 1, true, GENERATOR),
-            new Entry("crude_extractor", Geometry.EXTRACTOR, 1, true, CONSUMER),
-            new Entry("research_terminal", Geometry.TERMINAL, 1, true, CONSUMER),
-            new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR),
-            new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER),
-            new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER),
-            new Entry("press", Geometry.PRESS, 1, true, CONSUMER),
-            new Entry("assembler", Geometry.ASSEMBLER, 1, true, CONSUMER),
-            new Entry("kiln", Geometry.KILN, 1, true, CONSUMER),
-            new Entry("wire_mill", Geometry.WIRE_MILL, 1, true, CONSUMER),
-            new Entry("chemical_reactor", Geometry.REACTOR, 1, true, CONSUMER),
-            new Entry("chemical_washer", Geometry.WASHER, 1, true, CONSUMER),
-            new Entry("electrolysis_cell", Geometry.CELL, 1, true, CONSUMER),
-            new Entry("atmospheric_intake", Geometry.INTAKE, 1, true, CONSUMER),
-            new Entry("fluid_well", Geometry.WELL, 1, true, CONSUMER),
-            new Entry("induction_furnace", Geometry.INDUCTION, 1, true, CONSUMER),
-            new Entry("caster", Geometry.CASTER, 1, true, CONSUMER),
-            new Entry("flotation_cell", Geometry.FLOTATION, 1, true, CONSUMER),
-            new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID),
-            new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID),
-            new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID),
-            new Entry("conveyor_belt", Geometry.BELT, 1, true, BELT),
-            new Entry("splitter", Geometry.SPLITTER, 1, true, BELT),
-            new Entry("merger", Geometry.MERGER, 1, true, BELT),
-            new Entry("tunnel_belt", Geometry.TUNNEL, 1, true, BELT),
-            new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT),
-            new Entry("sorter", Geometry.SORTER, 1, true, BELT),
-            new Entry("magnetic_separator", Geometry.MAGNET, 1, true, BELT),
-            new Entry("solar_array", Geometry.SOLAR, 1, true, GENERATOR),
-            new Entry("boiler", Geometry.BOILER, 1, true, CONSUMER),
-            new Entry("condenser", Geometry.CONDENSER, 1, true, CONSUMER),
-            new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT),
-            new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER),
-            new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT),
-            new Entry("pressure_pipe", Geometry.PRESSURE, 1, true, BELT),
-            new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP),
-            new Entry("electric_pump", Geometry.EPUMP, 1, true, CONSUMER),
-            new Entry("basic_tank", Geometry.TANK, 1, true, BELT),
-            new Entry("industrial_tank", Geometry.INDUSTRIAL, 1, true, BELT),
-            new Entry("fluid_manipulator", Geometry.FLUID_ARM, 1, true, CONSUMER),
-            new Entry("flux_belt", Geometry.FLUX_BELT, 1, true, CONSUMER),
-            new Entry("stack_manipulator", Geometry.STACK_ARM, 1, true, CONSUMER),
-            new Entry("filter_manipulator", Geometry.FILTER_ARM, 1, true, CONSUMER),
-            new Entry("signal_cable", Geometry.SIGNAL, 1, true, BELT),
-            new Entry("logic_controller", Geometry.LOGIC, 1, true, BELT),
-            new Entry("redstone_interface", Geometry.INTERFACE, 1, true, BELT),
-            new Entry("pattern_scanner", Geometry.SCANNER, 1, true, CONSUMER),
-            new Entry("deconstructor", Geometry.DECONSTRUCTOR, 1, true, CONSUMER),
-            new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID),
-            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID),
-            new Entry("ground_array", Geometry.ARRAY, 1, true, GRID),
-            new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID),
-            new Entry("factory_portal", Geometry.LINK, 1, true, GRID),
-            new Entry("launch_pad", Geometry.PAD, 1, false, GRID),
-            new Entry("station_berth", Geometry.BERTH, 1, false, GRID),
-            new Entry("lunar_link", Geometry.LINK, 1, true, GRID),
-            new Entry("lunar_regolith", Geometry.REGOLITH, 1, false, GRID),
-            new Entry("starward_link", Geometry.SPAN, 1, true, GRID),
-            new Entry("drift_deck", Geometry.DECK, 1, false, GRID));
+            new Entry("hand_crank_dynamo", Geometry.DYNAMO, 1, true, GENERATOR, MiningTool.PICKAXE),
+            new Entry("crude_extractor", Geometry.EXTRACTOR, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("research_terminal", Geometry.TERMINAL, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("quern", Geometry.QUERN, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("clay_mixer", Geometry.MIXER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("firing_chamber", Geometry.FIREBOX, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("settling_trough", Geometry.SETTLER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("settling_channel", Geometry.CHANNEL, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("settling_screen", Geometry.SCREEN, 1, true, List.of("idle"), MiningTool.PICKAXE),
+            new Entry("geological_collector", Geometry.COLLECTOR, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("biocultivator", Geometry.CULTURE, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("biomass_dynamo", Geometry.BIOGEN, 1, true, GENERATOR, MiningTool.PICKAXE),
+            new Entry("assembly_bench", Geometry.BENCH, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("fibreboard", Geometry.FIBREBOARD, 1, false, List.of("idle"), MiningTool.AXE),
+            new Entry("thermal_generator", Geometry.GENERATOR, 1, true, GENERATOR, MiningTool.PICKAXE),
+            new Entry("pulverizer", Geometry.MILL, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("arc_furnace", Geometry.FURNACE, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("press", Geometry.PRESS, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("assembler", Geometry.ASSEMBLER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("kiln", Geometry.KILN, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("wire_mill", Geometry.WIRE_MILL, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("chemical_reactor", Geometry.REACTOR, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("chemical_washer", Geometry.WASHER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("electrolysis_cell", Geometry.CELL, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("atmospheric_intake", Geometry.INTAKE, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("fluid_well", Geometry.WELL, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("induction_furnace", Geometry.INDUCTION, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("caster", Geometry.CASTER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("flotation_cell", Geometry.FLOTATION, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("flux_pylon_mk1", Geometry.PYLON, 1, false, GRID, MiningTool.PICKAXE),
+            new Entry("flux_pylon_mk2", Geometry.PYLON, 2, false, GRID, MiningTool.PICKAXE),
+            new Entry("flux_pylon_mk3", Geometry.PYLON, 3, false, GRID, MiningTool.PICKAXE),
+            new Entry("conveyor_belt", Geometry.BELT, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("splitter", Geometry.SPLITTER, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("merger", Geometry.MERGER, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("tunnel_belt", Geometry.TUNNEL, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("overflow_gate", Geometry.OVERFLOW, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("sorter", Geometry.SORTER, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("magnetic_separator", Geometry.MAGNET, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("solar_array", Geometry.SOLAR, 1, true, GENERATOR, MiningTool.PICKAXE),
+            new Entry("boiler", Geometry.BOILER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("condenser", Geometry.CONDENSER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("crude_manipulator", Geometry.MANIPULATOR, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("terrestrial_extractor", Geometry.DRILL, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("clay_conduit", Geometry.CONDUIT, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("pressure_pipe", Geometry.PRESSURE, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("hand_pump", Geometry.PUMP, 1, true, PUMP, MiningTool.PICKAXE),
+            new Entry("electric_pump", Geometry.EPUMP, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("basic_tank", Geometry.TANK, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("industrial_tank", Geometry.INDUSTRIAL, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("fluid_manipulator", Geometry.FLUID_ARM, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("flux_belt", Geometry.FLUX_BELT, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("stack_manipulator", Geometry.STACK_ARM, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("filter_manipulator", Geometry.FILTER_ARM, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("signal_cable", Geometry.SIGNAL, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("logic_controller", Geometry.LOGIC, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("redstone_interface", Geometry.INTERFACE, 1, true, BELT, MiningTool.PICKAXE),
+            new Entry("pattern_scanner", Geometry.SCANNER, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("deconstructor", Geometry.DECONSTRUCTOR, 1, true, CONSUMER, MiningTool.PICKAXE),
+            new Entry("capacitor_bank", Geometry.BANK, 1, true, GRID, MiningTool.PICKAXE),
+            new Entry("flux_transformer", Geometry.TRANSFORMER, 1, true, GRID, MiningTool.PICKAXE),
+            new Entry("ground_array", Geometry.ARRAY, 1, true, GRID, MiningTool.PICKAXE),
+            new Entry("array_casing", Geometry.ARRAY_CASING, 1, false, GRID, MiningTool.PICKAXE),
+            new Entry("factory_portal", Geometry.LINK, 1, true, GRID, MiningTool.PICKAXE),
+            new Entry("launch_pad", Geometry.PAD, 1, false, GRID, MiningTool.PICKAXE),
+            new Entry("station_berth", Geometry.BERTH, 1, false, GRID, MiningTool.PICKAXE),
+            new Entry("lunar_link", Geometry.LINK, 1, true, GRID, MiningTool.PICKAXE),
+            new Entry("lunar_regolith", Geometry.REGOLITH, 1, false, GRID, MiningTool.PICKAXE),
+            new Entry("starward_link", Geometry.SPAN, 1, true, GRID, MiningTool.PICKAXE),
+            new Entry("drift_deck", Geometry.DECK, 1, false, GRID, MiningTool.PICKAXE));
 
     /** Items that are not blocks and not material forms, which need a hand-drawn sprite. */
     private static final List<String> PLACEHOLDER_SPRITES = List.of("multitool", "relay_matrix", "data_core", "calibrated_data_core", "advanced_data_core", "slag",
@@ -250,7 +298,9 @@ public final class BlockCatalogue {
             "matter", "voltaic_helmet", "voltaic_chestplate", "voltaic_leggings", "voltaic_boots",
             "flux_cell", "flux_exosuit_helmet", "flux_exosuit_chestplate", "flux_exosuit_leggings",
             "flux_exosuit_boots", "network_tap", "exoskeleton_legs",
-            "helium_3", "survey_rocket", "supraluminal_station", "quest_book", "field_guide");
+            "helium_3", "survey_rocket", "supraluminal_station", "quest_book", "field_guide",
+            "ceramic_grog", "unfired_ceramic", "ceramic_insulator",
+            "mineral_aggregate", "biomass", "crank_handle");
 
     /** The item that renders as the bare casing cube. */
     public static final String CASING_ITEM = "machine_casing";

@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "G G",
-    "GIG",
-    " C "
+    " P ",
+    "PGP",
+    " S "
   ],
   "key": {
     "G": { "item": "minecraft:glass" },
-    "I": { "tag": "forge:ingots/iron" },
-    "C": { "tag": "minecraft:stone_crafting_materials" }
+    "P": { "tag": "grindless:boards" },
+    "S": { "item": "minecraft:stick" }
   },
   "result": { "item": "grindless:process_atlas" }
 }

@@ -1,0 +1,45 @@
+{
+  "asset_id": "multitool",
+  "human_visual_approval": false,
+  "maximum_candidates": 2,
+  "model_sha256": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+  "requests": [
+    {
+      "completed_at": "2026-10-20T02:11:34.533142+00:00",
+      "output_reference": {
+        "filename": "candidate-1_00001_.png",
+        "subfolder": "grindless/multitool/multitool-poc-20261020",
+        "type": "output"
+      },
+      "prompt_id": "4ed2fadf-5cf1-4840-92bb-0bc16ed2644b",
+      "reserved_at": "2026-10-20T02:07:51.474797+00:00",
+      "seed": 21774205,
+      "slot": 1,
+      "source_bytes": 537133,
+      "source_sha256": "e77dca20fb9b0c57a735b2fddc37070730e239458e689d12d880ad735faf0924",
+      "state": "collected",
+      "workflow_sha256": "6d102bfbf69237a4eed7d537852cc3a44d7be5389ab717cfc5b398c87b1b8b08"
+    },
+    {
+      "completed_at": "2026-10-20T02:28:47.146295+00:00",
+      "output_reference": {
+        "filename": "candidate-2_00001_.png",
+        "subfolder": "grindless/multitool/multitool-poc-20261020",
+        "type": "output"
+      },
+      "prompt_id": "318be6d6-ca2a-41ea-8b1d-a3f70c20988e",
+      "reserved_at": "2026-10-20T02:28:24.946375+00:00",
+      "seed": 21774206,
+      "slot": 2,
+      "source_bytes": 86605,
+      "source_sha256": "d083051c81c61d8d42158debd5afbb24b347bf77fa271ef41d10044a8f51f615",
+      "spec_sha256": "ddac72943097650f23821ac50f10d4260ad7c5d58c1876fc915a09f9b7c57021",
+      "state": "collected",
+      "template_sha256": "d95782c1103edf8a740efe78a8d0be2a7ac9380662c31fe66c7f88a85646c78b",
+      "workflow_sha256": "7940c2cbbf60fcd5e72854deb843debe268b458962fc6e2fc65e19717a806d41"
+    }
+  ],
+  "schema": "grindless.comfy-run.v1",
+  "spec_sha256": "c6337259f44b11db927a8365275d012c120ed39f4b460bf40402506fe4886190",
+  "template_sha256": "d95c12626785711348ceb9393c616114d133355df609edea21cbdff429152b14"
+}

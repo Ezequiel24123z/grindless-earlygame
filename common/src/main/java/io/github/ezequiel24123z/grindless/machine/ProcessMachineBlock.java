@@ -2,7 +2,10 @@ package io.github.ezequiel24123z.grindless.machine;
 
 import dev.architectury.registry.menu.MenuRegistry;
 import io.github.ezequiel24123z.grindless.item.Relocation;
+import io.github.ezequiel24123z.grindless.item.CrankHandleItem;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPartBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,6 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -25,6 +29,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * Process consumer. One block class, kind on the instance.
@@ -46,6 +52,13 @@ public class ProcessMachineBlock extends BaseEntityBlock {
 
     public ProcessMachineKind kind() {
         return kind;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return kind == ProcessMachineKind.SETTLING_TROUGH
+                ? WorkshopPartBlock.shape(kind.geometry(), state.getValue(MachineProperties.FACING))
+                : super.getShape(state, level, pos, context);
     }
 
     @Override
@@ -89,11 +102,15 @@ public class ProcessMachineBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
                                  InteractionHand hand, BlockHitResult hit) {
+        if (kind.tier() == FluxTier.F0 && player.getItemInHand(hand).getItem() instanceof CrankHandleItem) {
+            return InteractionResult.PASS;
+        }
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (player instanceof ServerPlayer server
                 && level.getBlockEntity(pos) instanceof ProcessMachineBlockEntity machine) {
+            machine.onNeighbourChanged();
             MenuRegistry.openExtendedMenu(server, machine);
             return InteractionResult.CONSUME;
         }

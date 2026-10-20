@@ -1,8 +1,8 @@
 forceload add 0 0
 say WAIT-CHUNK
-summon minecraft:item 8 100 8 {Item:{id:"grindless:quest_book",Count:1b}}
-execute if entity @e[type=item,nbt={Item:{id:"grindless:quest_book"}}] run say BOOK-OK
-kill @e[type=item]
-summon minecraft:item 8 100 8 {Item:{id:"grindless:field_guide",Count:1b}}
-execute if entity @e[type=item,nbt={Item:{id:"grindless:field_guide"}}] run say GUIDE-OK
-kill @e[type=item]
+setblock 8 300 8 minecraft:chest
+item replace block 8 300 8 container.0 with grindless:quest_book
+item replace block 8 300 8 container.1 with grindless:field_guide
+execute if data block 8 300 8 Items[{Slot:0b,id:"grindless:quest_book",Count:1b}] run say BOOK-OK
+execute if data block 8 300 8 Items[{Slot:1b,id:"grindless:field_guide",Count:1b}] run say GUIDE-OK
+setblock 8 300 8 minecraft:air

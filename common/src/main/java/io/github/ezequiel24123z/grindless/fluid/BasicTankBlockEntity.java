@@ -19,6 +19,10 @@ public final class BasicTankBlockEntity extends BlockEntity implements FluidEndp
     private static final String KEY_FLUID = "Fluid";
 
     private final FluidBuffer buffer = FluidBuffer.ambient(FluidLogic.TANK_CAPACITY);
+    private final NativeFluidStore nativeFluids = new NativeFluidStore(buffer, () -> {
+        setChanged();
+        sync();
+    });
 
     public BasicTankBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BASIC_TANK.get(), pos, state);
@@ -64,6 +68,11 @@ public final class BasicTankBlockEntity extends BlockEntity implements FluidEndp
     @Override
     public FluidState contents() {
         return buffer.state();
+    }
+
+    @Override
+    public NativeFluidStore nativeStore() {
+        return nativeFluids;
     }
 
     @Override

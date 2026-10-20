@@ -6,12 +6,17 @@ import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -58,11 +63,19 @@ public final class GenerateAssets {
             Palette.of("platinum", 0xBFC9D9));
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 1) {
-            System.err.println("usage: GenerateAssets <repository-root>");
+        if (args.length < 1 || args.length > 2
+                || args.length == 2 && !"--t0-guides-only".equals(args[1])) {
+            System.err.println("usage: GenerateAssets <repository-root> [--t0-guides-only]");
             System.exit(2);
         }
         File root = new File(args[0]);
+        if (args.length == 2) {
+            File items = resourceDir(root, "textures/item");
+            int written = writeGuideItems(items);
+            System.out.println("Generated " + written + " T0 guide sprites only under " + items);
+            return;
+        }
+        byte[] approvedMultitool = approvedMultitool(root);
         File items = resourceDir(root, "textures/item");
         File blocks = resourceDir(root, "textures/block");
         File sounds = new File(root, "tools/audio");
@@ -88,15 +101,29 @@ public final class GenerateAssets {
         written += writeReagentTags(root);
 
         // ---- placeholder sprites, blocks, loot and mining tags ----
-        written += write(items, "data_core", FormTextures.dataCore(Palette.of("data_core", MachineTextures.ACCENT)));
+        written += write(items, "data_core",
+                FormTextures.bootstrapDataCore(Palette.of("data_core", MachineTextures.ACCENT)));
         written += write(items, "calibrated_data_core",
-                FormTextures.dataCore(Palette.of("calibrated_data_core", 0x66BB6A)));
+                FormTextures.calibratedDataCore(Palette.of("calibrated_data_core", 0x66BB6A)));
         written += write(items, "advanced_data_core",
                 FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "relay_matrix",
-                FormTextures.dataCore(Palette.of("relay_matrix", 0xEF6C00)));
-        written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
+                FormTextures.relayMatrix(Palette.of("relay_matrix", 0xEF6C00)));
+        Files.write(new File(items, "multitool.png").toPath(), approvedMultitool);
+        written++;
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
+        written += write(items, "ceramic_grog",
+                FormTextures.ceramicGrog(Palette.of("ceramic_grog", 0xB37C56)));
+        written += write(items, "unfired_ceramic",
+                FormTextures.unfiredCeramic(Palette.of("unfired_ceramic", 0xB8A183)));
+        written += write(items, "ceramic_insulator",
+                FormTextures.ceramicInsulator(Palette.of("ceramic_insulator", 0xE6D6B2)));
+        written += write(items, "mineral_aggregate",
+                FormTextures.mineralAggregate(Palette.of("mineral_aggregate", BootstrapArt.STONE)));
+        written += write(items, "biomass",
+                FormTextures.biomass(Palette.of("biomass", BootstrapArt.BIOMASS)));
+        written += write(items, "crank_handle",
+                FormTextures.crankHandle(Palette.of("crank_handle", BootstrapArt.TIMBER)));
         written += write(items, "refractory_brick",
                 FormTextures.brick(Palette.of("refractory_brick", 0xC46A3A)));
         written += write(items, "metallurgical_silicon",
@@ -105,12 +132,7 @@ public final class GenerateAssets {
                 FormTextures.electronicSilicon(Palette.of("electronic_silicon", 0xC5D8EA)));
         written += write(items, "prospectors_scanner",
                 FormTextures.scanner(Palette.of("prospectors_scanner", 0x40C4FF)));
-        written += write(items, "process_atlas",
-                FormTextures.atlas(Palette.of("process_atlas", 0x26C6DA)));
-        written += write(items, "quest_book",
-                FormTextures.questBook(Palette.of("quest_book", 0xC9A227)));
-        written += write(items, "field_guide",
-                FormTextures.fieldGuide(Palette.of("field_guide", 0x26A69A)));
+        written += writeGuideItems(items);
         written += write(items, "flux_conduit",
                 FormTextures.conduit(Palette.of("flux_conduit", 0x18FFFF)));
         written += write(items, "plate_die", FormTextures.die(Palette.of("plate_die", 0xB0BEC5)));
@@ -175,6 +197,9 @@ public final class GenerateAssets {
         blocks = resourceDir(root, "textures/block");
         written += write(blocks, "casing_side", MachineTextures.side(MachineTextures.CASING));
         written += write(blocks, "casing_top", MachineTextures.top(MachineTextures.CASING));
+        written += write(blocks, "bootstrap_stone", BootstrapArt.stone());
+        written += write(blocks, "bootstrap_timber", BootstrapArt.timber());
+        written += write(blocks, "bootstrap_clay", BootstrapArt.clay());
         java.util.Set<io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry> tops =
                 new java.util.HashSet<>();
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
@@ -203,6 +228,7 @@ public final class GenerateAssets {
             }
         }
         written += writeGui(root);
+        written += WorkshopPreview.write(root);
 
         // ---- sounds ----
         // Loops are built from harmonics of their own loop frequency and must not be faded, or
@@ -222,6 +248,50 @@ public final class GenerateAssets {
         writeProvenance(root, written);
         System.out.println("Generated " + written + " assets under "
                 + root.toPath().resolve("common/src/main/resources/assets/grindless"));
+    }
+
+    private static int writeGuideItems(File items) throws IOException {
+        return write(items, "process_atlas",
+                FormTextures.atlas(Palette.of("process_atlas", 0x26C6DA)))
+                + write(items, "quest_book",
+                FormTextures.questBook(Palette.of("quest_book", 0xC9A227)))
+                + write(items, "field_guide",
+                FormTextures.fieldGuide(Palette.of("field_guide", 0x26A69A)));
+    }
+
+    private static byte[] approvedMultitool(File root) throws IOException {
+        File source = new File(root, "tools/visual-assets/approved/multitool.png");
+        File metadata = new File(root, "tools/visual-assets/approved/multitool.sha256");
+        String expected = Files.readString(metadata.toPath(), StandardCharsets.US_ASCII).strip();
+        if (!expected.matches("[0-9a-f]{64}")) {
+            throw new IOException("Invalid approved Multitool SHA-256 metadata");
+        }
+        byte[] bytes = Files.readAllBytes(source.toPath());
+        String actual;
+        try {
+            actual = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("The required JDK SHA-256 implementation is unavailable", e);
+        }
+        if (!expected.equals(actual)) {
+            throw new IOException("Approved Multitool source does not match its SHA-256 metadata");
+        }
+        if (bytes.length < 8 || ByteBuffer.wrap(bytes).getLong() != 0x89504e470d0a1a0aL) {
+            throw new IOException("Approved Multitool source is not a PNG");
+        }
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+        if (image == null || image.getWidth() != 16 || image.getHeight() != 16) {
+            throw new IOException("Approved Multitool source must be 16x16");
+        }
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                int alpha = image.getRGB(x, y) >>> 24;
+                if (alpha != 0 && alpha != 255) {
+                    throw new IOException("Approved Multitool source must have binary alpha");
+                }
+            }
+        }
+        return bytes;
     }
 
     private static Palette paletteFor(String material) {
@@ -301,6 +371,7 @@ public final class GenerateAssets {
         written += writeText(new File(dir, "silica.json"),
                 tagJson("minecraft:sand", "minecraft:quartz"));
         written += writeText(new File(dir, "helium_3.json"), tagJson("grindless:helium_3"));
+        written += writeText(new File(dir, "boards.json"), tagJson("#minecraft:planks", "grindless:fibreboard"));
         return written;
     }
 
@@ -412,12 +483,12 @@ public final class GenerateAssets {
     }
 
     /**
-     * Blockstates, models, loot tables and the pickaxe tag for every block in the catalogue, and
+     * Blockstates, models, loot tables and the declared mining tag for every catalogue block, and
      * the server-side scenario that proves each state is one the game accepts.
      *
      * <p>Without these a block renders as the missing-texture cube and, because machines require
-     * the correct tool, breaks into nothing. The loot table is a plain self-drop; the pickaxe tag
-     * is additive and is the one place Grindless writes into {@code minecraft:} (ADR-0051).
+     * the correct tool, breaks into nothing. Loot tables are plain self-drops; mining tags are
+     * additive and the only files Grindless writes into {@code minecraft:} (ADR-0051, ADR-0136).
      */
     private static int writeBlocks(File root) throws IOException {
         File assets = assetRoot(root);
@@ -425,11 +496,15 @@ public final class GenerateAssets {
         deleteTree(new File(assets, "models/block"));
         int written = 0;
         List<String> names = new ArrayList<>();
+        List<String> axe = new ArrayList<>();
         List<String> commands = new ArrayList<>();
         List<String> expect = new ArrayList<>();
         for (BlockCatalogue.Entry block : BlockCatalogue.blocks()) {
             String n = block.name();
-            names.add("grindless:" + n);
+            switch (block.miningTool()) {
+                case AXE -> axe.add("grindless:" + n);
+                case PICKAXE -> names.add("grindless:" + n);
+            }
             StringBuilder variants = new StringBuilder();
             for (String status : block.statuses()) {
                 written += writeText(new File(assets, "models/block/" + block.modelName(status) + ".json"),
@@ -446,9 +521,8 @@ public final class GenerateAssets {
                         variants.append(", \"y\": ").append(rotation);
                     }
                     variants.append(" }");
-                    String state = block.facing()
-                            ? "[facing=" + facings.get(i) + ",status=" + status + "]"
-                            : "[status=" + status + "]";
+                    String properties = block.variantKey(facings.get(i), status);
+                    String state = properties.isEmpty() ? "" : "[" + properties + "]";
                     commands.add("setblock 8 100 8 grindless:" + n + state);
                     commands.add("execute if block 8 100 8 grindless:" + n + state
                             + " run say STATE-OK " + n + state);
@@ -481,6 +555,8 @@ public final class GenerateAssets {
                         + "    \"side\": \"grindless:block/casing_side\"\n  }\n}\n");
         written += writeText(new File(data, "minecraft/tags/blocks/mineable/pickaxe.json"),
                 tagJson(names.toArray(new String[0])));
+        written += writeText(new File(data, "minecraft/tags/blocks/mineable/axe.json"),
+                tagJson(axe.toArray(new String[0])));
         File smoke = new File(root, "tools/smoke");
         // One function, one tick: a belt that is empty publishes idle, and an extractor over a
         // vein publishes starved, so a 1s gap between setblock and execute-if misses STATE-OK
@@ -531,9 +607,11 @@ public final class GenerateAssets {
      */
     private static int writeMass(File assets, File data, List<String> pickaxe) throws IOException {
         int written = writeMassBlock(assets, data, new BlockCatalogue.Entry(
-                "horizon_shell", BlockCatalogue.Geometry.SHELL, 1, false, BlockCatalogue.GRID));
+                "horizon_shell", BlockCatalogue.Geometry.SHELL, 1, false, BlockCatalogue.GRID,
+                BlockCatalogue.MiningTool.PICKAXE));
         written += writeMassBlock(assets, data, new BlockCatalogue.Entry(
-                "arrival_mark", BlockCatalogue.Geometry.MARK, 1, false, BlockCatalogue.GRID));
+                "arrival_mark", BlockCatalogue.Geometry.MARK, 1, false, BlockCatalogue.GRID,
+                BlockCatalogue.MiningTool.PICKAXE));
         pickaxe.add("grindless:horizon_shell");
         pickaxe.add("grindless:arrival_mark");
         return written;
@@ -587,33 +665,39 @@ public final class GenerateAssets {
                 """.formatted(block);
     }
 
-    /**
-     * Records that everything here is generated, and by what.
-     *
-     * <p>The README's provenance claim — that no Minecraft asset is redistributed and no
-     * third-party art is vendored — is a promise, and a promise is worth more with a marker beside
-     * the files it covers.
-     */
+    /** Records generated output separately from explicitly noticed imports. */
     private static void writeProvenance(File root, int count) throws IOException {
         File readme = new File(assetRoot(root), "GENERATED.md");
         String text = """
                 # Generated assets
 
-                Every file under this directory is produced by `tools/assetgen` and written by
-                `tools/generate-assets.ps1`. **Do not edit them by hand** — the next run overwrites
-                them. Change the generator instead.
+                Script-produced textures and models are written by `tools/assetgen` through
+                `tools/generate-assets.ps1`. Change their generator rather than editing its output.
 
                 Generation is deterministic: the same generator always produces byte-identical
                 output, so regenerating never shows up as a spurious diff.
 
-                Nothing here is copied from Minecraft or from any third-party mod, which is what
-                lets the README state its provenance without qualification.
+                No Minecraft assets are redistributed. The imported `sounds/t0_grinding.ogg` and
+                `sounds/t0_wet_work.ogg` are noticed external game audio, not synthetic generator output.
+                The approved Quern A import remains byte-identical (ADR-0148); the Mixer working bed
+                uses its separately recorded technical normalization.
+                Keep `AUDIO-NOTICE.txt` with them; the repository's `THIRD_PARTY_NOTICES.md` records
+                their exact provenance and distribution limits.
+
+                Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`
+                or localization. The paired legacy audio converters allow only the five synthetic
+                sound names, so an extra WAV cannot overwrite either imported working bed.
+
+                The Multitool PNG is copied byte-for-byte from `tools/visual-assets/approved/`
+                after native JDK hash, PNG, dimensions and hard-alpha validation. Its retained
+                source, generation and transform provenance is separate from normal generation.
+                No ComfyUI, Python, model or network dependency is needed to preserve it.
 
                 What is **not** generated, and is therefore missing rather than merely plain, is
                 listed in ADR-0048: hero item sprites, complex models, entity animation and music.
                 A future session should treat those as known gaps with no owner, not as oversights.
 
-                Current output: %d files.
+                Current generated output: %d files (imports excluded).
                 """.formatted(count);
         Files.writeString(readme.toPath(), text, StandardCharsets.UTF_8);
     }

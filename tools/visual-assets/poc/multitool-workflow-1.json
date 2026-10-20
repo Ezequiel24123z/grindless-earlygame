@@ -1,0 +1,86 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "v1-5-pruned-emaonly-fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "pixel art game inventory icon, single compact brass open-end wrench, open C shaped jaw at the top, short thick handle pointing down, warm golden brass metal, dark brown grip, solid beveled edges, visible material thickness, coherent upper left lighting, simple readable silhouette, centered complete object, isolated on pure white background, generous white margin, no ground, no text"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "pickaxe, hammer, scythe, sword, weapon, electric drill, motor, battery, electronics, glowing, blue, cyan, hand, person, multiple objects, two tools, text, letters, numbers, watermark, logo, border frame, scene, ground plane, cast shadow, cropped, cut off, photograph, realistic photo, blurry"
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "batch_size": 1,
+      "height": 512,
+      "width": 512
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 7.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "4",
+        0
+      ],
+      "model": [
+        "1",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "seed": 21774205,
+      "steps": 20
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "5",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "grindless/multitool/multitool-poc-20261020/candidate-1",
+      "images": [
+        "6",
+        0
+      ]
+    }
+  }
+}

@@ -18,7 +18,9 @@ public final class QuestCatalogue {
         /** The player is standing in the named dimension. */
         DIMENSION,
         /** A named Control Matrix item carries the required physical rating. */
-        MATRIX
+        MATRIX,
+        /** An explicit free claim, with no item, location or payment objective. */
+        FREE
     }
 
     /** An existing item, given once. Not a new material. */
@@ -31,11 +33,11 @@ public final class QuestCatalogue {
      * @param id       stable id, saved on the player
      * @param line     the quest line it belongs to
      * @param evidence what the game already knows how to see
-     * @param subject  an item id or a dimension id
-     * @param count    how many of an item; ignored for dimension evidence
+     * @param subject  an item id or a dimension id; empty for a free claim
+     * @param count    how many of an item; ignored for dimension and free evidence
      * @param matrixRating required physical rating for Matrix evidence; null otherwise
      * @param requires tasks that must already be claimed
-     * @param reward   given on the first successful claim, and not consumed from the evidence
+     * @param rewards  legal item stacks given together on the first successful claim
      */
     public record Task(
             String id,
@@ -45,18 +47,58 @@ public final class QuestCatalogue {
             int count,
             FluxTier matrixRating,
             List<String> requires,
-            Reward reward) {
+            List<Reward> rewards) {
+        public Task {
+            requires = List.copyOf(requires);
+            rewards = List.copyOf(rewards);
+        }
+
+        public Task(String id, String line, Evidence evidence, String subject, int count,
+                    FluxTier matrixRating, List<String> requires, Reward reward) {
+            this(id, line, evidence, subject, count, matrixRating, requires, List.of(reward));
+        }
+
+        /** Compatibility for existing single-stack task consumers. Use rewards() for delivery. */
+        public Reward reward() {
+            return rewards.get(0);
+        }
     }
 
+    public static final String STARTER_SUPPLIES = "starter_supplies";
+
     private static final List<Task> TASKS = List.of(
+            new Task(STARTER_SUPPLIES, "bootstrap", Evidence.FREE, "", 1, null, List.of(), List.of(
+                    reward("minecraft:cobblestone", 64),
+                    reward("minecraft:cobblestone", 64),
+                    reward("minecraft:oak_log", 64),
+                    reward("minecraft:bread", 64),
+                    reward("minecraft:brick", 64),
+                    reward("minecraft:clay_ball", 64),
+                    reward("minecraft:sand", 64),
+                    reward("minecraft:charcoal", 32),
+                    reward("minecraft:iron_ingot", 16),
+                    reward("minecraft:water_bucket", 1),
+                    reward("minecraft:water_bucket", 1))),
             task("multitool", "bootstrap", Evidence.ITEM, "grindless:multitool", 1,
-                    List.of(), reward("grindless:data_core", 1)),
+                    List.of(), reward("minecraft:clay_ball", 4)),
             task("crank", "bootstrap", Evidence.ITEM, "grindless:hand_crank_dynamo", 1,
                     List.of("multitool"), reward("minecraft:coal", 4)),
             task("extractor", "bootstrap", Evidence.ITEM, "grindless:crude_extractor", 1,
-                    List.of("crank"), reward("grindless:data_core", 1)),
+                    List.of("crank"), reward("minecraft:gravel", 8)),
+            task("quern", "workshop", Evidence.ITEM, "grindless:quern", 1,
+                    List.of("multitool"), reward("minecraft:brick", 4)),
+            task("water", "workshop", Evidence.ITEM, "grindless:hand_pump", 1,
+                    List.of("quern"), reward("minecraft:stick", 4)),
+            task("clay_mixer", "workshop", Evidence.ITEM, "grindless:clay_mixer", 1,
+                    List.of("quern", "water"), reward("minecraft:clay_ball", 8)),
+            task("ceramics", "workshop", Evidence.ITEM, "grindless:ceramic_insulator", 2,
+                    List.of("clay_mixer"), reward("minecraft:charcoal", 4)),
+            task("workshop_flow", "workshop", Evidence.ITEM, "grindless:crude_manipulator", 1,
+                    List.of("ceramics"), reward("minecraft:stick", 8)),
+            task("settling", "settling", Evidence.ITEM, "grindless:settling_trough", 1,
+                    List.of("ceramics", "water"), reward("minecraft:dirt", 16)),
             task("calibrate", "relay", Evidence.ITEM, "grindless:calibrated_data_core", 1,
-                    List.of("extractor"), reward("grindless:process_atlas", 1)),
+                    List.of("ceramics"), reward("grindless:process_atlas", 1)),
             task("relay", "relay", Evidence.ITEM, "grindless:relay_matrix", 5,
                     List.of("calibrate"), reward("minecraft:flint", 2)),
             task("thermal", "power", Evidence.ITEM, "grindless:thermal_generator", 1,
@@ -79,8 +121,6 @@ public final class QuestCatalogue {
                     List.of("assembler"), reward("minecraft:redstone", 8)),
             task("glass", "renewables", Evidence.ITEM, "minecraft:glass", 8,
                     List.of("pulverizer", "furnace"), reward("minecraft:clay_ball", 16)),
-            task("water", "renewables", Evidence.ITEM, "grindless:hand_pump", 1,
-                    List.of("thermal"), reward("minecraft:bucket", 1)),
             task("logistics", "logistics", Evidence.ITEM, "grindless:conveyor_belt", 8,
                     List.of("assembler"), reward("minecraft:hopper", 1)),
             task("kiln", "logistics", Evidence.ITEM, "grindless:kiln", 1,

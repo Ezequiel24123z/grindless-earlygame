@@ -2,23 +2,172 @@
 
 This file keeps the history of the slices already defined and names the next executable slice.
 
+**Current execution is SSH-first (ADR-0151).** The conversation stays local; the personal
+PC executes heavy builds and dedicated Prism deployment through ordinary SSH. Read
+[the operating runbook](operations/ssh-prism-workflow.md). The owner superseded the cloud
+destination/freeze; its [handoff](../.agent/cloud-migration-handoff.md) remains preservation
+history. Do not resume retiring workers or mistake engineering deployment for a release.
+
+**Coordinator receipt (ADR-0147, PA-0010):** the new isolated Sol 6.1 session
+received exact17ae8b0 by clean fast-forward. Sol now coordinates and publishes;
+the retiring session remains quiescent and historical attribution is preserved.
+Read [the Sol handoff](../.agent/sol-migration-handoff.md) before resuming the queue.
+Historical Astra names below identify previous work, not a model restriction on
+the new coordinator. No T1, functional port or new release is opened by migration.
+
 The README is still the design source of truth ([ADR-0013](DECISIONS.md#adr-0013--the-readme-is-the-design-source-of-truth)).
 [ADR-0107](DECISIONS.md#adr-0107--sixteen-aligned-tiers-grow-through-control-matrices)
 replaces the old six-tier calendar with an aligned T0/F0–T15/F15 campaign. The tables from G
 through BN remain below as implementation history; their old tier placement is not an active
 queue.
 
-**Active tier: T0 Bootstrap. Next slice: BP — complete the first Relay Matrix route.** BO is
-shipped: the Ground Array, placeholder links, rocket and supraluminal station remain registered
-and smoke-tested, but have no generated or crafting-table survival recipes. F0-F15 and the physical
-matrix rating/architecture model are now in code, including a registered T1 Relay Matrix with
-functional generated art and its recoverable five-unit manual batch. The former global research
-state is removed and ignored in existing saves; the Atlas exposes the physical route and the
-remaining T0 machine audit is still active. A first local client-pack candidate now packages the
-current route and its utility integrations, but it is not T0 acceptance evidence: the required
-no-command survival playthrough remains. The optional Factory World is a post-Matrix construction
-aid, not a new technology frontier or a resource shortcut. T1 stays locked until T0 passes
-the gate below.
+**Active product: T0 Playable Release Candidate (ADR-0144), Superflat-first and
+Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitudinal
+release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
+revision8/PA-0007 task graph now control the queue.
+
+Next: owner client testing on the qualified/deployed747 candidate and
+ADR-0160's final live-GitHub main integration/PR cleanup. The first free starter
+quest, canonical guidance, real Mixer/Multitool assets, applicable executable
+contracts, package88 and representative production boot are complete. The exact
+native-qualified JAR is installed in the stopped owned development instance;
+all six original-instance/save hashes and0Java are independently verified.
+Use the current return handoff, not the historical559 installed identity below.
+No new implementation, entry-choice debate or unchanged smoke replay is needed.
+
+The completed current slice was: finish and qualify the owner's first free generous starter quest
+(ADR-0159), combine it with the integrated local Multitool/Mixer units, and deploy
+the same verified package to the stopped development instance. Initial quest-book
+access and one complete server-authoritative claim replace the earlier village/
+shop/primitive alternatives; no further entry-design approval is pending.
+ADR-0158 requires end-to-end delivery, not routine micro-approval queues. Complete
+source-bound checks, affected common/Forge compilation, package verification and
+one new-registration boot; reuse unchanged mechanism proofs. The current sound
+tooling CI guard failure is explicit in the validation ledger and must be repaired,
+not called flaky. Report all eight handoff categories in chat and Git.
+The previous bounded SSH-first build/package/regression/deployment programme is complete:
+qualified559 is installed in the separate owned development instance; A01/A03 native
+red/green and real Luna stopped-world accounting pass. Read
+[RETURN-HANDOFF](../RETURN-HANDOFF.md) before any new work; do not repeat those
+proofs or resume an old runtime owner without a changed assumption/new finding.
+The approved Quern loop (ADR-0148) and restricted playable profile/public-overrides
+(ADR-0149) remain engineering, not client rendering/listening acceptance. Continue
+deliberate flat-world resource access through the accepted product decisions:
+ADR-0150 requires virtual chunk deposits,
+not landscaped spawn resources/food or physical ore generation. The proposed T0
+generating multiblock remains a scoped design lead; the starter quest does not
+require a shop. Both provenance investigations are complete;
+do not reopen account verification. Questbook product QA remains on the Heracles
+authority. The source-pixel art batch is already installed; native rendering remains open.
+Old discovery workers are finished, not a resumable pool. No storage move or asset
+import follows from reception. Earlier pending hosted-shard statements below are
+historical; exact444 subsequently completes all six existing native jobs.
+Reuse the existing mechanisms and proofs rather than rewrite them to change the product.
+Freeze and technically qualify the actual configured pack before publishing a playable RC.
+Human acceptance begins with that release; after publication and actual longitudinal play
+start, dependency-safe T1 can proceed alongside feedback. **T1 is not open now.**
+The earlier sequence below is preserved as engineering history, not a conflicting gate.
+
+**Preserved T0 engineering baseline; risk-based reusable proof (ADR-0140).**
+S1 core is verified on unchanged `639881f`: all 36 suites and twelve repaired requirements
+pass, with deterministic source-bound reports. The earlier failed launcher remains history.
+That S1 snapshot was report-only and unannotated. The later canonical S2 integration now
+passes its active conditional gate on `debd3ae`; global future progression remains unaccepted.
+The reviewed Bench-only checkpoint `092af299` is locally integrated with its
+34-suite pass; its initial capture failure is retained in the check ledger.
+
+ADR-0138's native-store implementation and exception correction are reviewed and locally
+integrated and verified at `dcb8010`: 36 suites and production states/settling passed.
+The ADR records three
+pinned upstream investigations and licence boundaries; no code was imported and no generic
+external rollback is claimed. The manual Matrix exit, existing native
+sources and external side restrictions are preserved.
+
+T0 source evidence is not classification: the two-iron quick start is an optional manual
+allocation, and initial boards/bricks need explicit bootstrap. `cc3f111` makes the quern quest
+follow the multitool rather than the optional extractor; branch rewards and calibration/Relay
+links remain unchanged. Current docs and the source-bound asset inventory are reconciled,
+not client/visual acceptance.
+
+The bounded renewable-cycle proof is integrated in `fdce60b`: tested `39baaa0` passed its
+ordinary sidecar900 invocation, 24 markers and the 800-tick source window. Its README-only
+clarification does not require another server run. Downstream/core material evidence is
+not complete downstream power/autonomy or physical Matrix crafting acceptance.
+
+Previous next step before ADR-0144: close native-regression and real-host acceptance gaps on the frozen
+post-S2 candidate, without repeating already covered properties. Published `1389ebb`
+contains the real canonical guidance, corrected T0 model references and composed
+quest/dashboard integration; CheckOnly4,881,42 official suites and15 pack checks pass,
+and its isolated preparation ZIP is delivered. Exact4061 combined export and hosted
+artifact evidence remain separately pinned. Reviewed S2 authorities, classifications,
+formation and finite conditional establishment preserve the accepted conditional model;
+none of that engineering evidence is a played manual exit.
+The two bounded local fixtures remain NOT_RUN after resource guards, although their own
+official4061 Forge installation now passes. Do not repeat until resources genuinely permit,
+reduce the canonical2GiB heap or relabel the older app as the1389 client.
+Inspect current hosted evidence separately, then perform the one full no-command Survival
+route with physical five-Matrix craft, player-facing coherence and retained-world checks.
+No new T1-T15 breadth or deferred T1 screenshot investigation is authorized.
+Reuse the existing shared contracts; select new native/manual evidence
+only for an uncovered property or changed assumption, using
+[the classification matrix](testing/test-strategy.md#outstanding-work-classification).
+Product dependencies, held ports, required CI and genuine manual gates are unchanged.
+The retired session remains quiescent; Astra alone integrates and publishes.
+Real-client UI/JEI and audio repairs are integrated under ADR-0142, including the production
+bridge/states evidence on740. The Heracles adapter is composed through9e0 with307 contracts
+and reuse of the real25-quest f106 boot. Strict binding, composed build/export and the
+dashboard's reviewed cross-root provenance correction now pass at their recorded revisions;
+native client rendering and genuine saved-world behavior are still unaccepted.
+The owner authorizes merge only after genuine T0 completion, followed
+by a portable Git handoff; existing acceptance and branch protection are unchanged.
+The [handoff](../.agent/handoff.md), [detailed transfer](../.agent/migration-handoff.md) and
+[reloadable plan](../.agent/work-plan.json) carry exact scope, risks, ownership and evidence.
+
+Foundation `c62de72`, W1 ceramics and W2 settling/actual water recovery are preserved.
+Their passing historical checks do not certify the C3 runtime and cancelled-worker assets.
+Astra owns architecture/product/Tiers, sustainability/graphs, multiblocks, migrations,
+integration and final review. Sol 6.1 Max workers implement normal code; Luna handles
+mechanical tasks. Checks are delegated, shared files serialized and publication single-owned.
+
+Remaining C3/T0 evidence concerns actual player/client surfaces, complete bootstrap,
+factory power/routing/restart assumptions and retained worlds, not a new smoke for every
+ordinary recipe. First establish what existing proofs plus static/model data cover; preserve
+required CI/release evidence and target only remaining behavioral gaps. Source evidence does
+not author classifications or certify universal renewable closure. Static resource review
+is not visual/gameplay acceptance. Do not duplicate recipe quantities or impose a
+documentation-first waterfall. Sustainability, handling, player guidance and real dashboard
+data are required implementation, not substitutes for renewable gameplay.
+
+| Unit | Outcome | Status |
+| --- | --- | --- |
+| T0-W1 | Ceramics, formed firing, cores and primitive logistics | historical automated pass; manual acceptance pending |
+| T0-W2 | Oriented settling and real fluid recovery | historical targeted pass after ADR-0132; initial failure retained |
+| renewable-t0 / C3 | Geological/biological supply, biomass power and primitive assembly | composed native contract and bounded renewable cycle verified; reuse their scopes, assess only remaining distinct factory/player/persistence properties |
+| production-inventory | Complete source-bound graph/craft/tag/objective export | complete on debd:1384 resources/474 routes/259 tags/25 objectives/11 terminals with source-bound deterministic refresh; later authority changes require affected rebinding |
+| sustainability-model | Canonical classifications, recursive validator, bootstrap/recycling checks and reports | reviewed conditional T0 model/gate passes on debd; global future unknowns remain explicit, not Tier or played acceptance |
+| resource-communication | Shared tooltips, Atlas/JEI, machines, quests and guide | real shared68-declaration guidance and quest/UI/audio integration verified and packaged on1389; actual client/Survival acceptance remains pending |
+| dashboard-renderer | Static schema-1 viewer | integrated; synthetic renderer evidence only |
+| dashboard-integration | Real canonical data, local serving, PR artifact and real-data review | reviewed Result export/serve/Root fix, combined4061 export and real hosted artifact pass; earlier browser evidence remains source-scoped, later candidate CI separately inspected |
+| t0-integration / W3 | Integrated build/check/native evidence, source closure, reviewed draft and explicit manual gaps | frozen1389 candidate delivered with42 suites/pack15; local native fixtures remain resource-blocked, physical exit/whole no-command route/client/retained-world acceptance open |
+| multiblock-ports-audit | All authored structures: current/target architecture, migrations, risks and files | held until current integration milestone |
+| multiblock-ports / ports-integration | Functional buses/hatches, aggregated capabilities and transactional lifecycle | held until audit |
+
+Every mandatory resource must recursively reach an unlimited automatable mod-owned source;
+finite mining, vanilla farms, exploits, repeated loot and dimension drops cannot remain
+canonical supply. T0 must become self-sustaining; unaudited T0-T15 details remain unknown.
+Human GUI/no-command/longitudinal observations remain unexecuted where recorded. Under
+ADR-0144 they follow playable-RC delivery rather than being prerequisites to receiving it;
+technical/product readiness, safe publication and compatibility still require evidence.
+No unrelated T1/T2 work starts before publication and actual owner play begin.
+
+Keep draft PR54 based on draft PR53, without a replacement PR or rewritten history. Old
+Agent merge is off. The new coordinator alone publishes reviewed fast-forward continuation,
+checking live remote state/ancestry without writing the old or main checkout.
+
+The historical schedule and standing rules below do not override current owner authority,
+ADR-0131 side-stream semantics or ADR-0134 orchestration. Fixed workshop structures are the
+ADR-0129 exception. The later functional-port request starts with its own audit, not an
+automatic jump to an old campaign row.
 
 ---
 
@@ -93,7 +242,7 @@ reconstruct the intended order, but it does not start them early.
 | --- | --- | --- | --- | --- | --- |
 | **BO** | **Withdraw prototype survival shortcut** | Follow every currently implemented survival quest without being sent into future-tier test infrastructure | Remove the Industrial Assembler recipes for Array Casing, Ground Array, Lunar Link, Starward Link, Launch Pad, Survey Rocket, Station Berth and Supraluminal Station. End the quest/guide route at the last genuinely reachable T2 objective. Update graph counts and checks. | All block/item registrations, Luna, the Drift, Sagittarius, travel logic, commands and smoke scenarios. Existing worlds may still contain and exercise every prototype. | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or quest claim. |
 | **BP** | **T0 closure: Control Matrix foundation** | Complete Bootstrap by building and inspecting the first T1 Relay Matrix batch | Matrix item/data model, substitution rules, the recoverable five-unit T1 batch and its physical calibration are in. The book and guide carry its powered-factory continuation through the Factory Portal without declaring T1 accepted. Entry and exit are explicit; the Atlas shows the terminal and manual routes, and the Bootstrap smoke covers the three-machine seam. The end-to-end survival playthrough remains. | Existing worlds and the current two-iron extraction bootstrap. | T0 passes the mechanical gate; matrix checks cover rating and architecture; F0–F15 values match ADR-0107. |
-| **BQ** | **Physical T2 gate** | Manufacture T2 machines from a T2 Relay Matrix | **In progress:** the T1 exit now manufactures an F2-rated Relay Matrix from the former F1 controller, casing, renewable glass and Flux Cell. Attach the first T2 consumer next; recast Advanced Data Cores as pattern media where useful. | Existing fabricated machines and player progress. | Every T2 machine consumes the physical rating; no ordinary recipe consults a global permission. |
+| **BQ** | **Physical T2 gate** | Manufacture T2 machines from a T2 Relay Matrix | **Partial, held behind BP:** the T1 exit already manufactures an F2-rated Relay Matrix from the former F1 controller, casing, renewable glass and Flux Cell. Its Atlas now retains the physical ratings. Do not attach T2 consumers until BP is accepted; recast Advanced Data Cores as pattern media only in their named slice. | Existing fabricated machines and player progress. | Every T2 machine consumes the physical rating; no ordinary recipe consults a global permission. |
 | **BR** | **T3 Arc frontier** | Build a larger factory with drones and fed Arc power | Refractory/Arc Cell routes, Construction Drones, the first parametric multiblock kernel, Arc Reactor and T3 Relay Matrix. | The existing T0–T2 lines as useful low-infrastructure routes. | The four lattice domains interact before the T3 matrix, and the Arc Reactor runs in a booted server. |
 
 T4–T15 follow the lattice in

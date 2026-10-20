@@ -2,17 +2,49 @@ package io.github.ezequiel24123z.grindless.machine;
 
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.network.PylonStructure;
+import io.github.ezequiel24123z.grindless.vein.VeinData;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.lang.reflect.Constructor;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /** Behaviour checks for the Crude Extractor and the pylon tower. Not part of the mod. */
 public final class VerifyExtractor {
 
     private static int failures = 0;
 
-    public static void main(String[] args) {
-        cycle();
-        status();
-        outputForm();
-        tower();
+    public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            SharedConstants.tryDetectVersion();
+            Bootstrap.bootStrap();
+            cycle();
+            status();
+            outputForm();
+            tower();
+            pendingPersistence();
+            recoverySourceContract();
+        } else if (args.length == 2 && args[0].equals("--a01-vein-data")) {
+            savedVeinAccounting(Path.of(args[1]));
+        } else {
+            throw new IllegalArgumentException("Usage: VerifyExtractor [--a01-vein-data <Luna grindless_veins.dat>]");
+        }
 
         System.out.println(failures == 0
                 ? "ALL EXTRACTOR CHECKS PASSED"
@@ -97,6 +129,138 @@ public final class VerifyExtractor {
                         new net.minecraft.core.BlockPos(0, 65, 0)));
         eq("the base under a top shaft", 64,
                 PylonStructure.baseOf(new net.minecraft.core.BlockPos(8, 66, 8), 2).getY());
+    }
+
+    private static void recoverySourceContract() throws Exception {
+        String source = Files.readString(Path.of("common", "src", "main", "java", "io", "github",
+                "ezequiel24123z", "grindless", "machine", "CrudeExtractorBlockEntity.java"));
+        String subscriptions = method(source, "protected void updateSubscriptions()");
+        yes("owned output subscribes independently of work and vein",
+                subscriptions.contains("if (!output.isEmpty())")
+                && subscriptions.contains("subscribe(exporting, this::exportWaitingOutput)"));
+        yes("empty output releases its exporter",
+                subscriptions.contains("exporting.unsubscribe()") && subscriptions.contains("exporting = null"));
+        String exporting = method(source, "private void exportWaitingOutput()");
+        yes("pending export uses the existing eight-tick retry policy",
+                exporting.contains("isDue(8)") && exporting.contains("pushOutput()")
+                && exporting.contains("updateSubscriptions()"));
+        String work = method(source, "private void work()");
+        int guard = work.indexOf("lastWorkTick == tick");
+        int power = work.indexOf("requestPower(");
+        yes("the world-time guard precedes callbacks and power draw",
+                work.contains("getLevel().getGameTime()") && guard >= 0 && power > guard
+                && work.indexOf("lastWorkTick = tick") > guard
+                && work.indexOf("lastWorkTick = tick") < power);
+        int paid = work.indexOf("if (progress >= ExtractorLogic.CYCLE_TICKS)");
+        yes("completed paid work is settled before requesting additional power",
+                paid > guard && paid < power
+                && work.substring(paid, power).contains("complete(product)")
+                && work.substring(paid, power).contains("return;"));
+        String completion = method(source, "private void complete(ItemStack product)");
+        yes("one successful eject debits one cycle and records one extraction",
+                completion.contains("if (eject(product))")
+                && completion.contains("progress -= ExtractorLogic.CYCLE_TICKS")
+                && occurrences(source, "recordExtraction();") == 1
+                && occurrences(completion, "recordExtraction();") == 1);
+        String pushing = method(source, "private void pushOutput()");
+        yes("external insertion receives a copy of owned output",
+                pushing.contains("output.getItem(0).copy()"));
+        yes("only a changed confirmed remainder notifies the inventory",
+                pushing.contains("ItemStack.matches(output.getItem(0), stack)"));
+        no("export does not buy work or alter extraction accounting",
+                (exporting + pushing).contains("requestPower(")
+                        || (exporting + pushing).contains("progress ")
+                        || (exporting + pushing).contains("recordExtraction("));
+        yes("subscription refresh leaves runnable status observations to work",
+                subscriptions.contains("if (vein == null || stuck)"));
+    }
+
+    private static void pendingPersistence() throws Exception {
+        for (double paid : new double[] {0.0, 123.5, 400.0, 400.5}) {
+            CrudeExtractorBlockEntity first = extractor();
+            ItemStack owned = new ItemStack(Items.RAW_IRON, 64);
+            owned.getOrCreateTag().putString("a01_probe", "owned-output");
+            SimpleContainer inventory = new SimpleContainer(1);
+            inventory.setItem(0, owned.copy());
+            CompoundTag saved = first.saveWithoutMetadata();
+            saved.putDouble("Progress", paid);
+            saved.put("Output", inventory.createTag());
+            saved.getCompound("Energy").putLong("FluxStored", 16L);
+            first.load(binaryRoundTrip(saved));
+
+            CompoundTag waiting = first.saveWithoutMetadata();
+            CrudeExtractorBlockEntity reconstructed = extractor();
+            reconstructed.load(binaryRoundTrip(waiting));
+            CompoundTag after = reconstructed.saveWithoutMetadata();
+            yes(paid + " paid work retains the existing persistence keys",
+                    saved.getAllKeys().equals(after.getAllKeys()));
+            eq(paid + " paid work survives binary NBT and reconstruction", paid,
+                    after.getDouble("Progress"));
+            eq(paid + " pending output preserves stored Flux", 16L, reconstructed.energy().getStored());
+            yes(paid + " owned stack and tags survive reconstruction",
+                    ItemStack.matches(owned, reconstructed.getItem(0)));
+            eq(paid + " pending output remains one slot", 1, reconstructed.getContainerSize());
+            no(paid + " output remains extract-only",
+                    reconstructed.canPlaceItem(0, new ItemStack(Items.RAW_IRON)));
+        }
+    }
+
+    private static CrudeExtractorBlockEntity extractor() throws Exception {
+        Constructor<CrudeExtractorBlockEntity> constructor =
+                CrudeExtractorBlockEntity.class.getDeclaredConstructor(
+                        BlockEntityType.class, BlockPos.class, BlockState.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance(null, BlockPos.ZERO, Blocks.STONE.defaultBlockState());
+    }
+
+    private static CompoundTag binaryRoundTrip(CompoundTag tag) throws Exception {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (DataOutputStream output = new DataOutputStream(bytes)) {
+            NbtIo.write(tag, output);
+        }
+        try (DataInputStream input = new DataInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+            return NbtIo.read(input);
+        }
+    }
+
+    private static void savedVeinAccounting(Path path) throws Exception {
+        if (!Files.isRegularFile(path)) {
+            throw new IllegalArgumentException("The cleanly stopped A01 world's Luna vein data is required: " + path);
+        }
+        CompoundTag root = NbtIo.readCompressed(path.toFile());
+        if (root == null || !root.contains("data", Tag.TAG_COMPOUND)) {
+            throw new IllegalArgumentException("Expected a vanilla SavedData compound: " + path);
+        }
+        VeinData saved = VeinData.load(root.getCompound("data"));
+        eq("recovered paid cycle records exactly one extraction", 1L,
+                saved.extractedFrom(new ChunkPos(0, 0)));
+        eq("same-tick guard case records exactly one extraction", 1L,
+                saved.extractedFrom(new ChunkPos(1, 0)));
+        eq("no other diagnostic chunk was charged an extraction", 2, saved.workedChunkCount());
+        eq("completed extraction accounting totals exactly two", 2L,
+                saved.worked().values().stream().mapToLong(Long::longValue).sum());
+    }
+
+    private static int occurrences(String text, String needle) {
+        return (text.length() - text.replace(needle, "").length()) / needle.length();
+    }
+
+    private static String method(String source, String signature) {
+        int start = source.indexOf(signature);
+        if (start < 0) {
+            return "";
+        }
+        int body = source.indexOf('{', start);
+        int depth = 1;
+        for (int end = body + 1; end < source.length(); end++) {
+            char next = source.charAt(end);
+            if (next == '{') {
+                depth++;
+            } else if (next == '}' && --depth == 0) {
+                return source.substring(body + 1, end);
+            }
+        }
+        throw new IllegalStateException("Unclosed method: " + signature);
     }
 
     private static void eq(String what, double expected, double actual) {

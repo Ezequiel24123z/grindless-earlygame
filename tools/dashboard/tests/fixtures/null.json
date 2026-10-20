@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "context": {
+    "repository": "SYNTHETIC NULL TEST DATA",
+    "mode": "pr",
+    "commit": null,
+    "active_tier": null,
+    "status": "unrecognized_future_state"
+  },
+  "classifications": null,
+  "tiers": null,
+  "resources": null,
+  "routes": null,
+  "machines": null,
+  "quests": null,
+  "assets": null,
+  "validation": null,
+  "findings": null
+}

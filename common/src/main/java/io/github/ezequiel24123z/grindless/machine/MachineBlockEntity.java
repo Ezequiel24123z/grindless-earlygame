@@ -55,6 +55,7 @@ public abstract class MachineBlockEntity extends BlockEntity {
     private final TickSubscriptions subscriptions = new TickSubscriptions();
     private final ContainerConfig containerConfig = new ContainerConfig();
     private final int tickOffset;
+    private final FluxTier configuredTier;
 
     /**
      * Never replaced after construction.
@@ -74,7 +75,13 @@ public abstract class MachineBlockEntity extends BlockEntity {
     private boolean logisticsHold;
 
     protected MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        this(type, pos, state, null);
+    }
+
+    /** Supplies a catalogue rating before buffer construction, without reading subclass fields. */
+    protected MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, FluxTier tier) {
         super(type, pos, state);
+        this.configuredTier = tier;
         this.tickOffset = TickOffset.forPosition(pos);
         this.energy = createEnergyBuffer();
         // Configuration is a subscription input as much as contents are, so a face being
@@ -98,13 +105,19 @@ public abstract class MachineBlockEntity extends BlockEntity {
     /**
      * The Flux tier this machine is rated for. Under-volting slows it rather than stalling it.
      *
-     * <p><b>Must return a constant.</b> This is called from the constructor to size the energy
+     * <p><b>The legacy constructor requires a constant override.</b> This is called to size the energy
      * buffer, which means it runs <em>before</em> the subclass constructor body — so an
      * implementation that reads a subclass field will see that field's default value, not the
      * one it was about to be assigned. Returning an enum constant is always safe; returning
-     * anything derived from instance state is not.
+     * anything derived from uninitialized subclass state is not. Catalogue-driven machines use
+     * the explicit-tier constructor instead, then may return {@link #powerTier()} safely.
      */
     protected abstract FluxTier ratedTier();
+
+    /** Uses an explicit constructor rating, or the existing constant subclass contract. */
+    protected final FluxTier powerTier() {
+        return configuredTier == null ? ratedTier() : configuredTier;
+    }
 
     /** Seconds of rated throughput the buffer holds. Two is enough to ride out a brief shortfall
      * without turning every machine into a battery. */
@@ -287,6 +300,10 @@ public abstract class MachineBlockEntity extends BlockEntity {
     protected void updateSubscriptions() {
     }
 
+    /** Bounded server-thread invalidation only; ordinary work belongs in subscriptions. */
+    protected void beforeSubscriptions() {
+    }
+
     /** Runs this machine's subscribed work. Not for overriding — subscribe work instead. */
     public final void serverTick() {
         if (!initialised) {
@@ -301,6 +318,7 @@ public abstract class MachineBlockEntity extends BlockEntity {
         if (logisticsHold) {
             return;
         }
+        beforeSubscriptions();
         subscriptions.tick();
     }
 
@@ -370,12 +388,12 @@ public abstract class MachineBlockEntity extends BlockEntity {
      * <p>Called from the constructor, so it must not read subclass fields. See {@link #ratedTier}.
      */
     protected SimpleFluxStorage createEnergyBuffer() {
-        FluxTier tier = ratedTier();
+        FluxTier tier = powerTier();
         return new SimpleFluxStorage(bufferCapacity(), tier.nominal(), 0L, this::setChanged);
     }
 
     /** Buffer size in FU, from the rated tier and {@link #bufferSeconds()}. */
     protected final long bufferCapacity() {
-        return ratedTier().nominal() * 20L * bufferSeconds();
+        return powerTier().nominal() * 20L * bufferSeconds();
     }
 }

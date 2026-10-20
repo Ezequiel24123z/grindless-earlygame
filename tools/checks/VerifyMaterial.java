@@ -227,19 +227,34 @@ public final class VerifyMaterial {
         yes("no texture exists for an item that is not registered (e.g. vanilla's)", noStray);
 
         boolean onlyMiningTags = true;
+        boolean miningAdditive = true;
+        boolean miningForeignFree = true;
         Path vanilla = RESOURCES.resolve("data/minecraft");
         if (Files.exists(vanilla)) {
             try (Stream<Path> files = Files.walk(vanilla)) {
                 for (Path file : (Iterable<Path>) files.filter(Files::isRegularFile)::iterator) {
                     // Windows relativizes with backslashes, so compare on a normalised separator.
                     // Without this the assertion is false on every Windows run of run-checks.ps1.
-                    onlyMiningTags &= vanilla.relativize(file).toString().replace('\\', '/')
-                            .startsWith("tags/blocks/mineable/");
+                    String relative = vanilla.relativize(file).toString().replace('\\', '/');
+                    boolean mining = Set.of("tags/blocks/mineable/pickaxe.json", "tags/blocks/mineable/axe.json")
+                            .contains(relative);
+                    onlyMiningTags &= mining;
+                    if (mining) {
+                        JsonObject json = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+                        miningAdditive &= json.has("replace") && !json.get("replace").getAsBoolean();
+                        for (JsonElement value : json.getAsJsonArray("values")) {
+                            String id = value.getAsString();
+                            miningForeignFree &= id.startsWith("grindless:") || id.startsWith("#grindless:")
+                                    || id.startsWith("#minecraft:mineable/");
+                        }
+                    }
                 }
             }
         }
         yes("the only thing shipped into minecraft's namespace is a mining tag (ADR-0051)",
                 onlyMiningTags);
+        yes("vanilla mining tags remain additive", miningAdditive);
+        yes("vanilla mining tags name only Grindless blocks or sibling mining tags", miningForeignFree);
 
         boolean additive = true;
         boolean foreignFree = true;
@@ -256,22 +271,31 @@ public final class VerifyMaterial {
                     additive &= json.has("replace") && !json.get("replace").getAsBoolean();
                     for (JsonElement value : json.getAsJsonArray("values")) {
                         String id = value.getAsString();
-                        // A vanilla tag include (#minecraft:coals in grindless:carbon) is not a
-                        // rival item. Sand and nether quartz are item ids because #minecraft:sand
-                        // also contains red sand, and quartz has no vanilla item tag (ADR-0092).
-                        // Hard-wiring another mod's item id still fails this check.
-                        foreignFree &= id.startsWith("grindless:")
-                                || id.startsWith("#" + namespace + ":")
-                                || id.startsWith("#minecraft:")
-                                || id.equals("minecraft:sand")
-                                || id.equals("minecraft:quartz");
+                        String relative = root.relativize(file).toString().replace('\\', '/');
+                        foreignFree &= allowedTagValue(namespace, relative, id);
                     }
                 }
             }
         }
         yes("scanned a meaningful number of tag files (" + tags + ")", tags > 100);
         yes("every shipped tag is additive and so can never remove another mod's entry", additive);
-        yes("and lists only Grindless items or sibling tags, never another mod's items", foreignFree);
+        yes("and lists only Grindless entries, tag includes or explicit vanilla inputs, never another mod's entries",
+                foreignFree);
+        yes("the geological block tag may name its vanilla rock bed",
+                allowedTagValue("grindless", "blocks/geological_bed.json", "minecraft:stone"));
+        no("the geological exception never allows another mod's block",
+                allowedTagValue("grindless", "blocks/geological_bed.json", "othermod:stone"));
+        no("the geological exception never allows a vanilla block in an item tag",
+                allowedTagValue("grindless", "items/geological_bed.json", "minecraft:stone"));
+    }
+
+    private static boolean allowedTagValue(String namespace, String path, String id) {
+        // Carbon/boards include vanilla tags; silica explicitly accepts sand/quartz (ADR-0092).
+        // The ADR-0133 geological bed is a world-block eligibility tag, not an item supply tag.
+        return id.startsWith("grindless:") || id.startsWith("#" + namespace + ":")
+                || id.startsWith("#minecraft:") || id.equals("minecraft:sand") || id.equals("minecraft:quartz")
+                || namespace.equals("grindless") && path.equals("blocks/geological_bed.json")
+                && id.startsWith("minecraft:");
     }
 
     // ---- recipes -----------------------------------------------------------------------------

@@ -10,6 +10,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  prism-tooling-windows:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check isolated Prism and SSH workflow contracts
+        shell: powershell
+        run: powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\tools\checks\Test-PrismDev.ps1
+
+      - name: Check the Git Bash tooling twin
+        shell: bash
+        run: bash tools/checks/Test-PrismDev.sh
+
   # Build and the offline behaviour checks. Neither instantiates Forge, which is why the smoke
   # jobs below exist at all (ADR-0049).
   verify:
@@ -25,11 +39,36 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build
-        run: ./gradlew build
+      - name: Check JDK runner diagnostics
+        run: bash tools/checks/verify-runner-jdk.sh .
 
-      - name: Behaviour checks
-        run: tools/run-checks.sh .
+      - name: Foundation validation
+        run: bash tools/validate.sh .
+
+      - name: Check offline sound calibration guards
+        run: bash tools/sound-design/test-sound-design.sh
+
+      - name: Verify and export canonical dashboard
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          bash tools/dashboard/tests/verify-export-root.sh --compile
+          bash tools/dashboard/export.sh --mode pr
+
+      - name: Upload canonical dashboard
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-dashboard
+          path: build/dashboard/site
+          if-no-files-found: error
+
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: foundation-validation
+          path: build/validation/
+          if-no-files-found: warn
 
   # Every scenario in tools/smoke/scenarios.txt, spread across parallel shards.
   #

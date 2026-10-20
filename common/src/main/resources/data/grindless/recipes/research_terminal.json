@@ -6,7 +6,7 @@
     "PCP"
   ],
   "key": {
-    "P": { "tag": "minecraft:planks" },
+    "P": { "tag": "grindless:boards" },
     "G": { "item": "minecraft:glass" },
     "C": { "tag": "minecraft:stone_crafting_materials" }
   },

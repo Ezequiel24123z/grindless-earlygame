@@ -1,0 +1,9 @@
+forceload add 0 0
+function grindless_workshop:begin
+say WAIT-WORKSHOP-CHECKPOINT
+say WAIT-WORKSHOP-CHECKPOINT
+say WAIT-WORKSHOP-CHECKPOINT
+say WAIT-WORKSHOP-CHECKPOINT
+say WAIT-WORKSHOP-CHECKPOINT
+say WAIT-WORKSHOP-CHECKPOINT
+execute if data storage grindless:workshop_check blocked run data get storage grindless:workshop_check blocked

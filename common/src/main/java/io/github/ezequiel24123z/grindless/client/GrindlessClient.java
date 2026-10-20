@@ -4,6 +4,9 @@ import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
+import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.client.audio.T0MachineAudio;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import io.github.ezequiel24123z.grindless.registry.ModEntities;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
@@ -19,6 +22,8 @@ public final class GrindlessClient {
     }
 
     public static void init() {
+        ResourceGuidanceRuntime.initialize(GrindlessClient.class.getClassLoader(), Grindless.LOG::warn);
+        T0MachineAudio.register();
         SurveySync.register();
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_MACHINE.get(), ProcessMachineScreen::new);
         MenuRegistry.registerScreenFactory(ModMenus.PROCESS_ATLAS.get(), ProcessAtlasScreen::new);

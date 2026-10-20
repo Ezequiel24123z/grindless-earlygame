@@ -135,6 +135,43 @@ history — the reasoning that was wrong is itself useful information.
 | [0121](#adr-0121--the-factory-world-is-clean-building-space-not-a-resource-shortcut) | The Factory World is clean building space, not a resource shortcut | Accepted |
 | [0122](#adr-0122--the-seed-matrix-batch-funds-the-forming-press) | The seed Matrix batch funds the forming Press | Accepted |
 | [0123](#adr-0123--the-voltaic-exit-is-a-rated-physical-f2-relay-matrix) | The Voltaic exit is a rated physical F2 Relay Matrix | Accepted |
+| [0124](#adr-0124--atlas-rating-labels-do-not-change-recipe-identity) | Atlas rating labels do not change recipe identity | Accepted |
+| [0125](#adr-0125--machine-inventories-persist-slots-with-explicit-legacy-migration) | Machine inventories persist slots with explicit legacy migration | Accepted |
+| [0126](#adr-0126--integration-smokes-boot-the-distributable-forge-jar) | Integration smokes boot the distributable Forge jar | Accepted |
+| [0127](#adr-0127--smoke-runner-dispatch-is-tested-independently-of-minecraft) | Smoke-runner dispatch is tested independently of Minecraft | Accepted |
+| [0128](#adr-0128--validation-records-its-scope-and-repairs-incomplete-server-installations) | Validation records its scope and repairs incomplete server installations | Accepted |
+| [0129](#adr-0129--bootstrap-grows-through-a-connected-ceramic-workshop) | Bootstrap grows through a connected ceramic workshop | Accepted |
+| [0130](#adr-0130--settling-uses-an-open-oriented-assembly-with-stateless-parts) | Settling uses an open oriented assembly with stateless parts | Accepted |
+| [0131](#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified) | Mandatory supply is mod-owned, renewable and explicitly classified | Accepted |
+| [0132](#adr-0132--fluid-output-is-owned-volume-not-an-unmarked-input-buffer) | Fluid output is owned volume, not an unmarked input buffer | Accepted |
+| [0133](#adr-0133--bootstrap-closes-on-geology-biomass-and-primitive-assembly) | Bootstrap closes on geology, biomass and primitive assembly | Accepted |
+| [0134](#adr-0134--astra-orchestrates-bounded-workers-after-an-isolated-cold-start) | Astra orchestrates bounded workers after an isolated cold start | Accepted |
+| [0135](#adr-0135--sustainability-is-a-fixed-point-audit-over-live-authorities-and-typed-annotations) | Sustainability is a fixed-point audit over live authorities and typed annotations | Accepted |
+| [0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched) | C3 integration keeps the two-iron budget and leaves vanilla tags untouched | Accepted |
+| [0137](#adr-0137--the-t0-relay-matrix-exit-stays-a-hand-craft-the-bench-does-not-fabricate-it) | The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it | Accepted |
+| [0138](#adr-0138--a-batch-completes-only-after-its-fluid-inputs-are-re-verified-and-drawn-exactly) | A batch completes only after its fluid inputs are re-verified and drawn exactly | Accepted |
+| [0139](#adr-0139--long-native-smokes-carry-their-own-assertion-budget) | Long native smokes carry their own assertion budget | Accepted |
+| [0140](#adr-0140--validate-behavioral-classes-and-reuse-proof-under-explicit-assumptions) | Validate behavioral classes and reuse proof under explicit assumptions | Accepted |
+| [0141](#adr-0141--canonical-t0-closure-uses-real-authorities-and-conditional-establishment) | Canonical T0 closure uses real authorities and conditional establishment | Accepted |
+| [0142](#adr-0142--t0-client-feedback-reuses-native-ui-and-existing-quest-infrastructure) | T0 client feedback reuses native UI and existing quest infrastructure | Accepted |
+| [0143](#adr-0143--player-resource-guidance-is-a-generated-view-of-canonical-declarations) | Player resource guidance is a generated view of canonical declarations | Accepted |
+| [0144](#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity) | Ship Superflat-first playable tier releases with longitudinal save continuity | Accepted |
+| [0145](#adr-0145--calibrate-a-small-shared-sound-palette-with-development-only-generation) | Calibrate a small shared sound palette with development-only generation | Accepted |
+| [0146](#adr-0146--give-items-material-volume-and-reuse-block-models-for-machine-items) | Give items material volume and reuse block models for machine items | Accepted |
+| [0147](#adr-0147--transfer-clean-session-coordination-to-sol-61-without-replaying-evidence) | Transfer clean-session coordination to Sol 6.1 without replaying evidence | Accepted |
+| [0148](#adr-0148--integrate-the-approved-quern-sound-with-one-native-client-loop) | Integrate the approved Quern sound with one native client loop | Accepted |
+| [0149](#adr-0149--add-a-restricted-playable-profile-with-explicit-public-overrides) | Add a restricted playable profile with explicit public overrides | Accepted |
+| [0150](#adr-0150--superflat-retains-virtual-deposits-without-staging-the-terrain) | Superflat retains virtual deposits without staging the terrain | Accepted |
+| [0151](#adr-0151--keep-coordination-local-and-execute-through-the-existing-personal-pc-ssh) | Keep coordination local and execute through the existing personal-PC SSH | Accepted |
+| [0152](#adr-0152--run-bounded-autonomous-t0-and-creative-work-without-human-acceptance) | Run bounded autonomous T0 and creative work without human acceptance | Accepted |
+| [0153](#adr-0153--rebind-generated-recipes-at-atomic-graph-boundaries) | Rebind generated recipes at atomic graph boundaries | Accepted |
+| [0154](#adr-0154--stage-one-disabled-optional-pack-for-reload-smokes) | Stage one disabled optional pack for reload smokes | Accepted |
+| [0155](#adr-0155--retain-a-diagnostic-smoke-world-only-by-explicit-opt-in) | Retain a diagnostic smoke world only by explicit opt-in | Accepted |
+| [0156](#adr-0156--disclose-blockers-and-separate-creative-capability-from-product-acceptance) | Disclose blockers and separate creative capability from product acceptance | Accepted |
+| [0157](#adr-0157--prefer-the-existing-local-comfyui-as-a-supervised-asset-backend) | Prefer the existing local ComfyUI as a supervised asset backend | Accepted |
+| [0158](#adr-0158--delegate-end-to-end-outcomes-with-proportional-validation) | Delegate end-to-end outcomes with proportional validation | Accepted |
+| [0159](#adr-0159--start-t0-with-one-free-generous-starter-quest) | Start T0 with one free generous starter quest | Accepted |
+| [0160](#adr-0160--merge-the-testing-ready-t0-candidate-and-close-superseded-prs) | Merge the testing-ready T0 candidate and close superseded PRs | Accepted |
 
 ---
 
@@ -5399,3 +5436,2119 @@ Quest Book counts only F2 stacks for its terminal task.
 
 **Consequences.** T1 now has a visible physical exit without unlocking an F2 machine early. The
 next slice can attach T2 consumers to this rating; it must not add a global permission.
+
+---
+
+## ADR-0124 — Atlas rating labels do not change recipe identity
+
+*2026-10-16 · Accepted*
+
+**Context.** ADR-0123 records an exact F1-to-F2 conversion, but the Atlas prints only the item
+identifier. The same Relay item therefore appears on both sides without its different rating.
+`qualified()` is also used as stable recipe identity by other consumers; decorating that shared
+value would mix presentation with graph identity.
+
+**Decision.** Decorate explicitly rated Atlas inputs, outputs and catalysts with `[F<n>]` only
+inside `AtlasLogic`. Preserve the unqualified registry and recipe identifiers, ordinary item
+labels, quantities and the existing menu protocol. Bare item lookup still finds every rating;
+an explicitly rated lookup must match that rating. JEI resolves rated item ingredients through
+the same stack resolver used for rated outputs, rather than reconstructing an untagged stack.
+
+The F2 manufacturing recipe continues to consume exactly F1. This is not the more permissive
+`canControl` rule for installing a stronger controller: accepting F2 as its own upgrade feed
+would spend a finished controller for no progress. No T2 consumer is introduced.
+
+**Alternatives rejected.** Changing `qualified()` everywhere (unnecessary identity/API churn);
+adding separate F1 and F2 registry items (saved-world migration for a display defect); displaying
+only the recipe suffix (hides the physical input distinction); treating ordinary unqualified
+ingredients as exactly F1 (they do not currently enforce a rating).
+
+**Consequences.** The handheld's existing input/output detail lines carry the distinction in text,
+not color alone. Existing untagged bootstrap stacks remain F1 under the existing item contract.
+No NBT format, packet, registry identifier, recipe balance or survival gate changes here.
+
+---
+
+## ADR-0125 — Machine inventories persist slots with explicit legacy migration
+
+*2026-10-16 · Accepted*
+
+**Context.** F2 lifecycle characterization reproduced five failures with the vanilla
+`SimpleContainer.createTag/fromTag` methods used by process machines. They save compact item
+lists, then merge items into the first available slots. A lone output in Assembler slot 4
+therefore reloads into input 0. The previous output-slot migration edited `Slot`, but the
+vanilla compact reader ignored that field. A build or completed recipe cannot prove persistence.
+
+**Decision.** Process machines use a slot-preserving container built on vanilla
+`ContainerHelper` NBT serialization. `Items` remains the list key; `ItemLayout = 3` identifies
+new slot-indexed saves. All item IDs, rating tags, counts, menu slots and automation sides stay
+unchanged. Loading does not publish intermediate partially restored inventories.
+
+Migration is explicit and non-speculative:
+
+- Slot-indexed saves retain their exact positions. An Assembler layout older than 2 moves
+  its explicit former output slot 3 to current output slot 4, once.
+- Legacy compact lists have no record of empty slots. Retain their item order and payload,
+  logging that original positions are unavailable. For an old three-input Assembler, a fourth
+  compact entry necessarily occupied its old output and moves to slot 4.
+- Do not infer missing historical positions from item type or the last recipe. A player can
+  recover an ambiguous legacy stack through the ordinary menu; no item or rating is fabricated.
+
+The Matrix codec retains `Rating` and the untagged architecture-frontier default. Existing
+lossless integral numeric tags remain readable; fractional, wrapped, non-finite, wrong-type
+or unsupported ratings are invalid rather than silently becoming an F1/F2 controller. The
+existing invalid-Matrix name/tooltip remains the recovery feedback.
+
+**Alternatives rejected.** Keeping compact saves and changing only tests (leaves output
+reconstruction broken); renaming the Matrix item or deleting old data (breaks worlds);
+guessing an old output from its type (a player may have placed that item in an input);
+claiming a paper carrier's packet check proves a registered Matrix's whole lifecycle (the
+dedicated Forge smoke must also produce, consume, block, recover and reconstruct that item).
+
+**Consequences.** A new save keeps sparse inputs and output ratings through binary NBT and
+reconstruction. Valid old stacks are retained, but missing historical slot information cannot be
+recreated honestly. Back up a world before testing a downgrade: an older jar will once again
+compact inventories. Player UI, quest interaction and no-command survival acceptance remain
+separate evidence from headless NBT checks.
+
+---
+
+## ADR-0126 — Integration smokes boot the distributable Forge jar
+
+*2026-10-16 · Accepted*
+
+**Context.** Enforcing clean shutdown exposed a hang after every dimension had saved. It
+reproduced on a plain `:forge:runServer` boot as well as the new Matrix scenario. Thread dumps
+of the probe's own processes showed the game main/server threads gone and eight non-daemon
+executor workers still waiting. Closing stdin did not fix it. The precise upstream worker
+owner was not proven, and killing the process must not be labelled a successful exit.
+
+The development launch also tests transformed development classes, not the remapped jar a
+player installs. That is a weaker integration boundary than the artifact the build produces.
+
+**Decision.** `:forge:prepareSmokeServer` installs the official Forge server matching
+`forge_version` into ignored `forge/run/smoke-server`, then stages the actual `remapJar`
+artifact and the pinned Architectury runtime dependency. All coordinates remain in
+`gradle.properties`. Both smoke boot scripts launch Java using Forge's generated platform
+argument file, with a fresh scenario world and loopback-only binding. The existing scenario
+manifest and assertion protocol remain authoritative.
+
+Installer libraries and jars are generated development outputs, never committed or added to a
+distribution notice as newly copied source. Stable staged filenames prevent old Grindless
+versions from accumulating. Optional JEI is absent in this minimal server, which also verifies
+that the standalone jar does not require the viewer.
+
+**Alternatives rejected.** Forced `System.exit`, reflective executor shutdown or suppressing the
+new exit failure (hides a broken lifecycle); speculative Forge/Loom version upgrades (no verified
+fix and unnecessary dependency churn); treating a development-class boot as proof of the packaged
+jar (misses packaging/remapping failures).
+
+**Consequences.** A plain production boot and the full Matrix lifecycle both exit 0 without
+forced cleanup. The loaded and built mod jars have identical SHA-256. The upstream dev-launch
+hang remains a documented limitation of the optional development path, not a claimed upstream
+repair. First preparation needs official Forge/Mojang artifact access; subsequent runs reuse the
+installed libraries. The full isolated inventory still runs before integration acceptance.
+
+---
+
+## ADR-0127 — Smoke-runner dispatch is tested independently of Minecraft
+
+*2026-10-17 · Accepted*
+
+**Context.** Linux CI run `38968479378` printed `ATLAS-OK` while nominally running blocks,
+fluids and other scenarios. `write_report` in `run-smokes.sh` iterated the global `name`
+variable, leaving it set to the final selected scenario before the caller chose its command,
+expectation, datapack and log files. A green report could therefore represent repeated runs
+of the last scenario instead of the stated inventory.
+
+**Decision.** Reporting loop variables are function-local. `VerifySmokeHarness` exercises the
+actual platform runner in a disposable fixture with three fake boots, one deliberately failing.
+It asserts exact dispatch order, nonzero failure propagation and the report's two-pass/one-fail
+result. It does not launch Minecraft or replace any real smoke. Windows runs the PowerShell
+twin; Linux/macOS run Bash. An explicit `--bash <executable>` also tests Bash on Windows.
+
+The pre-fix Bash fixture executed `gamma, gamma, gamma`, missed the failing `beta`, and reported
+all three passed. With the fix, Bash and PowerShell execute `alpha, beta, gamma` and report the
+failure correctly. These are actual process results, not source-pattern assertions.
+
+**Alternatives rejected.** Trusting a report's labels or aggregate exit alone (both lied
+together); removing the failing Atlas scenario (would conceal the dispatch error); adding a
+second scenario list in CI (duplicates the source of truth).
+
+**Consequences.** Historical Linux aggregate smoke successes are not full-inventory evidence.
+The Windows production inventory remains independent. New Linux integration evidence must come
+from the corrected runner. This changes no game data or runtime behavior.
+
+---
+
+## ADR-0128 — Validation records its scope and repairs incomplete server installations
+
+*2026-10-17 · Accepted*
+
+**Context.** Independent review of supplied source excerpts identified that two generated Forge
+argument files do not establish a complete installed runtime. A removed library can coexist with
+an up-to-date preparation task. A local deletion/recovery regression confirmed the weakness;
+declaring the libraries directory alone did not repair the already-recorded installation.
+The full Windows run was also interrupted after 23 scenarios, reinforcing that start/finish,
+exit status and scope must be recorded instead of inferred.
+
+**Decision.** The installer owns its libraries and writes an explicit inventory of runtime jar
+and argument-file paths and sizes. Preparation is up to date only while every recorded file
+exists at its recorded size. A missing/truncated file reruns the official installer. This is a
+completeness check, not a cryptographic corruption audit. Mutable worlds and staged mod jars
+remain outside the installer's ownership.
+
+`tools/validate.ps1` and `.sh` provide one fast foundation entry point: environment, compile/
+full build, all behavior/resource checks and documentation. `-Smokes` / `--smokes` adds the
+complete isolated inventory. Every stage records UTC times, its actual exit code and log in
+ignored `build/validation/<run-id>/status.tsv`; the source snapshot records HEAD and dirty
+paths. Failure stops the sequence, and an unrequested smoke stage is explicitly not acceptance.
+CI uses the same fast entry point and retains its logs; the existing six smoke shards remain.
+
+The Bash documentation entry calls the same PowerShell implementation through PowerShell Core
+(`pwsh`), a documented prerequisite available on the CI runner. No second anchor algorithm is
+maintained. The shared checker includes non-ignored new Markdown as well as tracked files.
+
+**Alternatives rejected.** Assuming argument files imply intact libraries (the reviewed
+counterexample reproduced); silently falling back to another installation; installing globally;
+duplicating every check in CI; treating a cancelled run or an omitted smoke stage as green;
+reimplementing the established Markdown anchor rules independently on another platform.
+
+**Consequences.** The deletion regression restores the official Forge jar with the same SHA-256.
+Fast validation passes all 33 current suites and links. PowerShell Core is required for local
+Linux/macOS documentation validation; absence is a failure, not a skipped check. The existing
+Shadow version moves to `gradle.properties` without a version change. None of these tooling
+changes authorizes a new gameplay tier.
+
+---
+
+## ADR-0129 — Bootstrap grows through a connected ceramic workshop
+
+*2026-10-17 · Accepted*
+
+**Context.** The current owner-directed rework explicitly authorizes continued T0 implementation,
+including useful primitive processes, automation and formed machinery. The foundation at
+`c62de72` preserves the inventory, Matrix, viewer and production-smoke corrections above main.
+Its earlier conditional gate was written for a narrower assignment; it must not silently veto
+the new one. Nor may new authorization be mistaken for an observed survival or client pass.
+
+**Decision.** Keep T0/F0 as the only active frontier and the five-F1-Relay-Matrix exit. Expand
+the material route into a small ceramic workshop, with quantities owned by the live Java
+recipe catalogues:
+
+- A Quern mills gravel into sand and fired ceramic into reusable grog. It never doubles ores.
+- A Clay Mixer combines two clay balls, one sand or grog, and 250 mB water into three unfired
+  ceramic pieces. Grog reduces processing time, not material cost or yield.
+- A Firing Chamber consumes three unfired pieces and one carbon fuel to make two ceramic
+  insulators and one grog. Fuel supplies the process heat; F0 powers handling/control.
+  A controller and seven ordinary brick blocks form its fixed 2x2x2 chamber. The controller is
+  the front-left bottom corner; all item/fluid/power interfaces remain on the controller.
+- Ceramic insulators replace stone in newly crafted Data Cores and supply primitive plumbing
+  and item handling. Remove early quest rewards that would bypass their manufacture.
+  Existing cores, matrices, machines, registry IDs, saved quest IDs and rating data remain valid.
+- A later Settling Trough separates two dirt and 1000 mB water into two clay balls, one gravel
+  and 750 mB recovered water. Its controller, channel and screen form a three-block-long open
+  assembly, with clear space above and matching orientations. The gravel feeds the Quern;
+  clay feeds the Mixer. This is a deliberately simplified game resource route, not a scientific
+  mass-balance claim.
+
+Every mandatory transformation has a visible Atlas/JEI/guide route. Every new intermediate
+has a process or construction sink. Recovering grog requires fresh clay, water, fuel and power;
+no cycle manufactures its own net solid input. Quests guide and reward but never grant machine
+permissions. Copper/wood/ceramic recipes bring existing unpowered plumbing and handling into
+T0 without new transport engines or a second energy system. The Dynamo/Extractor still require
+two iron in total; optional vanilla hoppers, tools and later infrastructure are not included
+in that narrow budget.
+
+The fixed workshop structures share only the bounded local-cell validation needed by these
+two concrete consumers. A broken, obstructed, misoriented or unloaded cell pauses work before
+energy/input consumption. Formation is derived from the world, not trusted from saved NBT.
+Progress and indexed inventories survive repair/reload. This is not the future parametric
+Arc Reactor kernel, does not move that reactor out of T3, and never force-loads chunks.
+
+**Scope and gates.** This supersedes the twenty-minute minimal material route of ADR-0116 and
+the T0 structure exclusion of ADR-0108/ADR-0067 only for these process-driven workshop machines.
+The working target is 35-60 minutes from the stated material entry, not an observed playtime
+or a timer requirement. Manual graphical, no-command survival and retained-world acceptance
+are **merge conditions**, not blockers to further validated feature-branch development.
+Use IMPLEMENTATION IN PROGRESS, AUTOMATEDLY VALIDATED, MANUAL ACCEPTANCE PENDING, MERGE READY,
+or BLOCKED precisely. No merge or unrelated T1/T2 expansion is authorized here.
+
+**Research and alternatives.** The pinned mod screening remains conceptual only. Digitalfire's
+[grog reference](https://digitalfire.com/material/grog), inspected 2026-10-17, supports reusing
+crushed fired ceramic as a body aggregate and its drying/shrinkage role; its text/images are
+not imported. Exact game counts and timings are original balancing choices. A second ore
+doubler, cosmetic recolored furnaces, fuel-free heat, mandatory repeated handcrafting, and a
+general multiblock framework without consumers are rejected. So is preserving the old
+stone-to-core bypass while calling ceramics a meaningful progression rework.
+
+**Consequences.** Changes ship as separately committed playable units on the dedicated T0
+branch, based on the preserved foundation. Automated checks cover live graph quantities,
+resource loops, inventory/recipe changes, fluid wakeup, structure rotation/invalidation and
+the packaged Forge lifecycle. Old validation is historical evidence, never proof of a new jar.
+Assets remain original deterministic geometry/textures unless a configured image provider
+produces candidates that pass both technical and visual review.
+
+---
+
+## ADR-0130 — Settling uses an open oriented assembly with stateless parts
+
+*2026-10-17 · Accepted*
+
+**Context.** The ceramic workshop is now implemented and headlessly validated. Its clay and
+aggregate inputs need a useful supplied route, and ADR-0129 calls for an assembled 3D T0 process
+rather than a concept image or a decorative large machine.
+
+**Decision.** Add a Settling Trough controller, one channel behind it and one screen behind
+the channel. All three face the same horizontal direction. The channel and screen each require
+air above; the controller's top deliberately remains available to an input hopper. This
+clarifies ADR-0129's open-space rule without obstructing automation. The footprint is 1x3 blocks
+with one block of overhead clearance over the working channel.
+
+Two dirt and 1000 mB water yield two clay balls, one gravel and 750 mB recovered water in
+160 ticks at 4 FU/t. The Quern consumes gravel; the Mixer consumes clay and water. The controller
+owns all item, fluid, power, progress and NBT interfaces. Existing process side behavior remains
+unchanged. Missing parts, wrong orientation, overhead obstruction or an unloaded cell stop work
+before consumption; repair resumes the retained cycle.
+
+The two structure parts have only horizontal facing, no inventory, ticking block entity,
+artificial machine status or saved owner. A single visual state in `BlockCatalogue` therefore
+means no `status` property; model generation, blockstate keys and the state smoke use that same
+rule. `WorkshopGeometry` supplies the same original boxes to collision, model generation and
+the assembled preview; controller/channel/screen segments share continuous bed/rail boundaries.
+The controller supplies the active-state indication and process effects.
+
+Extend only the existing bounded `WorkshopStructure` cell checker with observed block identity
+and facing. Do not create a graph of hatches, ownership services or a generic multiblock kernel.
+The layout's roles and orientation prevent another overlapping controller from treating the
+same part sequence as its own.
+
+**Research and balance.** The
+[USGS sediment reference](https://www.usgs.gov/water-science-school/science/sediment-and-suspended-sediment),
+inspected 2026-10-17, supports the general role of slower water allowing suspended solids to
+settle. The game counts and times are original abstractions, not measured physical yields.
+No source text, diagram, image or code is imported. The bounded economy check assigns two
+potential units to dirt and one to each ceramic/aggregate item; every F0 process is
+non-increasing under that potential. This is neither physical mass nor a whole-mod economy proof.
+
+**Alternatives rejected.** Three independent processing block entities (duplicated inventory and
+ambiguous ownership); an oversized cube with no process role; a single-state Minecraft enum
+property (invalid/useless state); requiring air above the input controller (blocks its hopper);
+copying another mod's model or asset; and storing a trusted formation flag across world changes.
+
+**Consequences.** New registry IDs are additive. The menu kind and fault values append to their
+existing ordinals. Deterministic checks exercise all four rotations, every required part,
+clearance and orientation. A production Forge scenario must prove real separation, water
+recovery, input preservation, reconstruction and repair before this unit is considered validated.
+
+---
+
+## ADR-0131 — Mandatory supply is mod-owned, renewable and explicitly classified
+
+*2026-10-17 · Accepted*
+
+**Context.** The owner established a project-wide invariant: every mandatory basic material and
+consumable must ultimately have an unlimited, automatable, mod-owned supply. The existing
+cobblestone-generator/tree-charcoal assumptions do not satisfy it. Nor does a repeating final
+recipe whose upstream ingredients remain finite. The owner also rejects forced usefulness for
+every residue and requires canonical classifications across gameplay and a factual dashboard.
+
+**Decision.** Audit the complete authored production/progression graph recursively, including
+machine construction, tools, fuels, fluids, catalysts, physical objectives and side streams.
+Keep recipes and quantities in their existing live Java catalogues; canonical annotation data
+adds source provenance, resource/by-product classes, handling, tier roles and bootstrap guarantees.
+Generated audit and dashboard outputs are projections of those authorities, not parallel recipes.
+
+Resource classes are `bootstrap`, `renewable`, `closed_loop`, `catalytic`, `lossy_loop`,
+`finite_optional` and `forbidden_dependency`. A renewable claim needs a validated internal route
+whose consumables recursively close. Bootstrap quantities must cover producer construction and
+recovery without an unseeded cycle. Optional vanilla inputs or emergency shortcuts may remain,
+but never the permanent canonical farm, exploit, loot or manual-mining dependency.
+
+By-product classes are `byproduct_current`, `byproduct_future`, `byproduct_optional`,
+`waste_recoverable`, `waste_hazardous`, `waste_inert`, `process_loss`, `emission`,
+`catalyst_spent` and `potential_future_use`. Validate their compatibility and evidence:
+current consumers exist; future consumers name a real plan; spent catalysts name their origin;
+hazards have implemented handling; inert waste is not mandatory; potential use is not promised.
+This supersedes ADR-0036 only where it implied every side stream must gain a material consumer.
+A truthful disposal, emission or loss policy is a valid handling destination.
+
+The same metadata supplies human-readable classifications, localization, handling advice,
+tooltips, supported recipe-viewer/quest integration and the repository-driven dashboard.
+Missing or unresolved metadata stays visible. Planned tiers and unobserved manual acceptance
+must not acquire invented progress percentages or passing status.
+
+CI rejects new unresolved mandatory violations, unseeded circular dependencies, finite/vanilla
+canonical dependencies, contradictory classifications, unsafe handling, bootstrap starvation,
+resource-positive recycling and stale generated projections. Pre-existing exceptions, if needed,
+are exact versioned findings with concrete remediation; they remain reported failures/debt,
+never a blanket waiver for new resources or a claim that a tier is sustainable.
+
+**First implementation direction.** Preserve and repair the current ceramic/settling machinery,
+then close foundational supply with original geological collection, biological biomass and
+automatic low-tier power. Model environmental energy/material inputs explicitly; do not invent
+matter without an industrial, biological, geological or other coherent source. Vanilla farms
+are not the fallback implementation. Later tiers improve these routes rather than undoing them.
+
+**Alternatives rejected.** Renaming finite extraction "renewable"; assuming tree/cobblestone
+farms are internal machines; treating recycling as a source without a seed or replacement for
+losses; making every waste valuable; hard-coding different tag meanings in each UI; and drawing
+a dashboard from hand-maintained completion claims.
+
+**Consequences.** T0 self-sustaining supply, audit/metadata and the first dashboard increment
+are active implementation, not documentation-only work. The owner permits PR management and
+merging when ready, but automated and manual acceptance requirements remain.
+
+---
+
+## ADR-0132 — Fluid output is owned volume, not an unmarked input buffer
+
+*2026-10-17 · Accepted*
+
+**Context.** The settling smoke produced the correct 750 mB, but it remained in the controller.
+Clay Conduits forward what a source pushes; they do not pull from a machine. Simply pumping
+every stored fluid would drain the incoming water before the process could run, and could
+return it to its source tank instead of the intended output line.
+
+**Decision.** Retain the existing single `Fluid` buffer and add `FluidOutputQuota`, the volume
+known to have been produced by completed non-vented outputs. A bounded subscription pushes only
+that quota through the controller's front, respecting extraction configuration. Consumption or
+external extraction debits produced volume first. Incoming water never increases the quota.
+The menu reports the output-ready portion separately from total stored volume. A ready recipe
+reserves its primary batch against automatic export, and a process claims at most one work
+callback per world tick so subscription changes cannot overclock it.
+
+Intake is limited to the applicable primary-fluid batch instead of topping up continuously
+during work. Pulls reserve actual acceptance before extracting from a neighbor; Forge fill
+simulation uses the endpoint's same acceptance contract. Secondary-fluid availability counts
+only neighbors that really permit extraction from that face. Vented gas handling is unchanged.
+
+**Migration.** Existing `Fluid`, inventory layout and recipe keys are unchanged. Missing quota
+means legacy unmarked stock, kept intact and not automatically exported. It may be reused in
+a later batch or extracted through the existing capability. Do not guess whether an old buffer
+contained input or output. Invalid explicit quotas are logged and ignored, never converted into
+permission to drain unproven input.
+
+**Alternatives rejected.** Teaching every gravity pipe to steal its upstream machine's input;
+exporting the whole buffer; discarding excess/legacy fluid; silently moving an ambiguous saved
+buffer into a new tank; or treating a 750 mB readout as proof of actual fluid logistics.
+
+**Consequences.** Put process fluid outputs at the front and supply input on another free face.
+The settling fixture must preserve input while unformed, reconstruct both fluid and output
+ownership, then recover exactly 750 mB through a real conduit. Existing input/output quantities
+and manual extraction remain valid.
+
+---
+
+## ADR-0133 — Bootstrap closes on geology, biomass and primitive assembly
+
+*2026-10-17 · Accepted*
+
+**Context.** ADR-0131 forbids treating vanilla tree/cobblestone farms and finite veins as the
+canonical industrial base. The ceramic workshop needs renewable aggregate, clay, construction
+wood, carbon, basic metals, redstone, glass and power before T0 can be called self-sustaining.
+
+**Decision.** Add four concrete F0 roles on existing machine contracts:
+
+- A Geological Collector consumes 250 mB water and 200 ticks at 4 FU/t to collect one mineral
+  aggregate and one clay ball. It taps an explicitly abstracted terrestrial geological reservoir
+  through a valid rock bed; it does not label the existing finite chunk vein renewable or operate
+  in an airless/spatial prototype dimension.
+- A sunlit Biocultivator consumes one aggregate and 250 mB water over 160 ticks at 4 FU/t to grow
+  four biomass. Ambient carbon, water, mineral nutrients and sunlight explain the source.
+  No vanilla tree/crop growth, mob drops or consumable seed is required.
+- A Biomass Dynamo burns the registered 200-tick biomass fuel at 8 FU/t. The existing Thermal
+  Generator remains the stronger F1 conversion. Stored energy still exports after fuel runs out;
+  a full buffer does not consume more fuel. Gas probes validate fuel identity/volume before
+  extracting rather than discarding an unsuccessful refund.
+- An Assembly Bench automates the limited primitive construction catalogue at F0. The T1
+  Assembler retains the advanced fabrication domain and faster repeat routes. Recipes are
+  projected from the existing crafting catalogues, not independently duplicated quantities.
+
+The aggregate has three real uses: dry stone/gravel recovery, wet recovery of basic iron/copper/
+redstone fractions, and biological nutrients. Biomass supplies fuel, charcoal, paper and
+fibreboard. Fibreboard is an original placeable plank-compatible material, not a vanilla tree
+farm. Settling's expanded output slots append after its old outputs, preserving indexed saves.
+
+Remove unnecessary metal/redstone bottlenecks from primitive pump, mixing, grinding, settling
+and firing-control crafts. The existing two-iron Dynamo/Extractor remains an optional quicker
+bootstrap, not the only way to recover. A reusable wood/stone Crank Handle can supply bounded
+manual work to F0 process machines when a metal bootstrap was lost. It is a bootstrap/emergency
+action, never the canonical automated energy route.
+
+Firing recipes name their controlled fuel-backed operating band: ceramics, biomass
+carbonization, glass and low-grade iron/copper reduction. The chamber holds the selected band
+within its declared ceiling; inputs supply the thermal fuel. Initial chamber bricks may use
+the ordinary furnace as finite bootstrap fabrication, but repeated industrial bricks/fuel/glass
+have mod-owned routes. Later machines improve throughput, yield, conditions and conversion.
+
+**Audit boundary.** Environmental geological/biological inputs are declared and checked,
+not hidden zero-input recipes. Exact counts are original game abstractions, not measured
+chemical mass yields. The audit must distinguish an energy-producing loop fed by sunlight/
+geology from a resource-positive recycling exploit, prove a metal-free bootstrap path and
+show any unresolved later-tier sources rather than claiming universal closure.
+
+**Alternatives rejected.** Renaming depleted veins renewable; farming vanilla trees by another
+name; requiring a one-off seed or the producer's own metal before recovery is possible;
+free material recipes with no physical source; and moving basic supply beyond the active tier.
+
+**Consequences.** Existing registry IDs remain. New source, material and bench IDs are additive.
+F0 recipe/field state, output reservations, persistence, tooltips, audit and native full-cycle
+checks accompany the sources. T0 acceptance remains pending until its complete source closure
+and required observed playthrough are established.
+
+---
+
+## ADR-0134 — Astra orchestrates bounded workers after an isolated cold start
+
+*2026-10-17 · Accepted*
+
+**Context.** The owner stopped the loaded conversation and requested a new clean session,
+carrying all work/planning, with Astra leading orchestration and implementation performed
+through subagents. C3 source/assets are incomplete and must survive the transition without
+being mislabeled as a validated product.
+
+**Decision.** Preserve all WIP and an explicit handoff/JSON plan in Git. Start a genuinely new
+isolated-worktree Astra coordinator at the published preservation checkpoint, not a fork of
+the chat or a branch session in the main checkout. Transfer original requests as attachments
+and private environment hints separately. Verify receipt before resuming bounded work.
+
+Astra owns architecture, product/Tiers, sustainability/production graphs, machine families,
+standard and assembled multiblocks, migrations, integration and final review. Delegate
+application implementation and test execution; prefer Sol 6.1 Max for normal coding and
+Luna for simple/repetitive work. Keep architectural decisions with Astra rather than
+downgrading them for latency. Each worker has an input revision, outcome, owned files,
+acceptance criteria and stop condition. Use few workers and serialize shared-file edits.
+
+The coordinator may investigate, design, review code/evidence, maintain handoffs and integrate
+Git; it must not quietly resume solo application coding. Report missing worker capabilities.
+This is repository execution policy, not a rule inferred for unrelated projects.
+
+Preserve draft PR54 and its base PR53. The new app branch does not inherit PR identity:
+maintain the existing PR explicitly, with a single new-coordinator publisher and reviewed
+fast-forward continuation after live-state/ancestry checks. No duplicate PR, retarget or history
+rewrite is part of migration. The retiring session stops product writes and its merger remains
+off; preserve its worktree/evidence. Conditional merge authority never substitutes for
+automated or observed manual acceptance.
+
+**Alternatives rejected.** Copying the entire overloaded chat; switching the main checkout;
+discarding incomplete code/assets; replacing the review with another PR; coordinator solo
+coding; unbounded worker pools; and claiming old checks validate a new revision.
+
+**Consequences.** The [handoff](../.agent/handoff.md) and [plan](../.agent/work-plan.json)
+are reloadable without session history. C3/audit work resumes first; functional ports follow
+the current integration milestone. Migration neither accepts a Tier nor creates a new manual
+approval gate before authorized feature development.
+
+---
+
+## ADR-0135 — Sustainability is a fixed-point audit over live authorities and typed annotations
+
+*2026-10-17 · Accepted*
+
+**Context.** ADR-0131 requires recursive proof that mandatory supply is renewable, mod-owned and
+honestly classified, shared by validation, tooltips, recipe viewers, the quest book and the
+dashboard. The live authorities are scattered: `ProcessGraph.generate` over a material view
+(including `RenewableProcesses`, `BootstrapProcesses` and `BootstrapAssembly`), the shipped
+crafting JSON checked against `BootstrapRecipes`/`T1Recipes`, generator fuel tables, quest
+rewards and local tags. No classification code exists, and a parallel metadata file that copies
+quantities would drift. Graph reachability alone would certify unseeded cycles as renewable.
+
+**Decision.** *Authority.* Canonical metadata is typed Java data in a new loader-free package,
+`io.github.ezequiel24123z.grindless.sustainability`, with no Minecraft or Forge imports in its
+model or auditor. The game UI, checks and exporters share it. Annotations never copy a recipe
+quantity; adapters read the live authorities. The canonical audit pack is standalone
+Grindless + vanilla + Forge: the graph generated over `SupplyCatalogue`'s materials. Other packs
+may add optional routes, never canonical ones.
+
+*Graph.* Resource nodes are items, tags, fluids, the `energy` pseudo-resource in FU, and
+environmental terminals. Route nodes come from `ProcessGraph`, shipped crafting JSON, generator
+fuel tables, one-shot quest rewards, declared bootstrap sources and an explicit allowlist of
+vanilla transformation recipes that must exist on the resolved classpath. A route has consumed
+inputs, non-consumed catalysts, a machine requirement (family to constructible block or
+multiblock), energy demand and outputs. An input that the same route returns counts only as its
+net consumption. Tags resolve through local tag JSON, then through vanilla/Forge tag resources
+on the classpath; an unresolved tag is a finding, never silently satisfied.
+
+*Annotations, declared.* Each resource can declare:
+- resource and side-stream classes, and first-use and first-renewable tiers;
+- a canonical route, required when several non-optional producers exist;
+- future consumers {tier, system, plan reference};
+- handling {action, discard allowed, hazardous, containment, treatment route};
+- recycling {route, planned tier} and, for spent catalysts, the originating catalyst.
+
+Declarations outside a single resource:
+- closed loops {carrier, member routes, make-up source};
+- the environmental justification of each route whose matter or energy has no item input;
+- optional per-route output-role overrides;
+- each machine family's unlock tier;
+- a T0-T15 ledger with roots and explicit unknowns.
+
+*Annotations, derived and never declared.* Current consumers, the mandatory flag, producers,
+vanilla/finite dependency and the conventional description key.
+
+*Terminals.* Environmental sources are geology at a rock bed, sunlight or culture, a world water
+body through a collector and atmosphere through an intake, each with its `SourceSite` and whether
+the collector is automatable. Bootstrap sources are:
+- quest rewards, with exact quantities derived from `QuestCatalogue`;
+- manual world gathering, declared per resource with a justification;
+- manual labour such as the crank.
+
+World generation, mob drops, loot, tree/crop growth, block generators and trading are never
+renewable terminals.
+
+*Analysis.* Mandatory roots are the ledger's tier roots (for T0, the non-optional quest subjects
+and the exit objective). Their closure follows canonical routes: consumed inputs, catalysts,
+energy and machine-construction ingredients.
+- **Availability** A(t) is the least fixed point over all terminals and the routes/machines
+  unlocked at or below tier t.
+- **Renewability** R(t) is the least fixed point over automatable environmental terminals only.
+  Consumed inputs and energy must be R; catalysts and machines need A; manual sources never
+  qualify. A declared closed loop must net its carrier to zero or less across its member routes
+  and replace losses from R.
+- Least fixed points reject unseeded cycles and self-constructing producers by construction.
+- **Construction reserve.** For every exact bootstrap guarantee, the establishment set (the
+  machines first needed to reach R for the closure) must not exceed it, and the margin is
+  reported. Manual-world bootstrap is reported as manual dependence and never counts as
+  guaranteed.
+- **Recycling.** A declared recycling route may not return more of any resource than its
+  canonical forward route consumed. Other positive-gain cycles without an environmental input
+  are reported for review.
+- The ADR-0131 compatibility and handling rules hold per tier: hazardous output needs handling
+  available at its first production tier, future feedstock is never required before its tier,
+  and potential future use is never required.
+
+*Findings and ratchet.* A finding has a stable fingerprint `rule:subject[:detail]` and a
+severity of error, warning or unknown.
+- `tools/sustainability/debt.json` holds exact versioned fingerprints, each with its origin,
+  concrete remediation and owning task.
+- An unlisted error fails the check. A listed one is reported as `waived_debt`, which is still
+  a failure in every report and never a pass.
+- A stale entry that matches nothing also fails, so debt only shrinks.
+- Unauthored T1-T15 detail is reported as unknown, not as failure or closure.
+
+*Outputs.* `tools/checks/VerifySustainability.java` runs through `run-checks` and CI. It writes
+`build/sustainability/audit.json` (audit schema 1) and a human `audit.md`. The dashboard
+`data.json` (schema 1) is a generated, commit-bound projection, never committed. UIs render
+projections and never reclassify.
+
+**Implementation order.**
+- S1: model, adapters, fixed points, rules, ratchet and synthetic rule fixtures.
+- S2: T0 annotations and the debt baseline. Classification is Astra's decision; drafting may be
+  delegated.
+- S3: the dashboard projection.
+- Player communication follows. Checks compile together, so S1 starts only after the
+  concurrent C3 validation finishes.
+
+**Alternatives rejected.**
+- Runtime-parsed YAML/JSON metadata, which is untyped and off-convention.
+- Copying quantities into metadata.
+- Renewability by reachability.
+- Per-route roles as the default.
+- Treating every quest as mandatory.
+- Committing generated dashboard data.
+- Blanket or open-ended waivers.
+
+**Consequences.** Until S2 lands, the report shows unknowns rather than classifications. The
+pinned inventory extraction checks adapter coverage but is not the auditor. ADR-0120's AE2 scope
+is unaffected.
+
+## ADR-0136 — C3 integration keeps the two-iron budget and leaves vanilla tags untouched
+
+**Status.** Accepted, 2026-10-17. Refines the C3 integration under ADR-0129 and ADR-0131.
+
+**Context.** The preserved C3 work-in-progress fails 15 behaviour assertions, and Forge does
+not compile. The JEI catalyst switch does not cover the new machine families. Three failures
+are product questions, not stale numbers:
+- The Biomass Dynamo spends an iron ingot, raising `ironBudget` to three. The two-iron
+  contract is settled in [ADR-0056](#adr-0056--t0-bootstrap-recipes-are-authored-json-using-tags)
+  and [`docs/tiers/t0.md`](tiers/t0.md).
+- `data/minecraft/tags/items/planks.json` adds Fibreboard to the vanilla planks tag. That makes
+  Fibreboard a substitute in every vanilla and third-party planks recipe. It also breaks
+  [ADR-0051](#adr-0051--every-block-ships-a-floor-of-assets-generated-from-one-list), under
+  which the only thing in the `minecraft` namespace is a mining tag.
+- Fibreboard is axe-mineable, but the asset check expects every block to take a pickaxe.
+
+**Decision.**
+1. **Two iron.** The iron budget stays at two: the Hand Crank Dynamo and the Crude Extractor.
+   The Biomass Dynamo uses one tagged copper ingot in place of iron. Copper is already a
+   declared T0 entry input.
+2. **No vanilla tag inject.** Grindless recipes that accept boards use a Grindless-owned item
+   tag containing `#minecraft:planks` and `grindless:fibreboard`.
+   - `BootstrapRecipes.PLANKS` and the authored JSON reference that tag.
+   - The vanilla planks file is deleted.
+   - The renewable Fibreboard route therefore satisfies Grindless construction without
+     changing vanilla crafting.
+3. **Declared tool.** Each block's harvest tool comes from the single asset list and is
+   checked against it. Fibreboard is the axe exception; stone-like machines stay on the
+   pickaxe.
+4. **Counts with attribution.** Changed Atlas and recipe counts are accepted only when every
+   added route is attributed to a live `RenewableProcesses`, `BootstrapAssembly` or crafting
+   source. An unexplained route is a defect, not a new expectation. Each assertion keeps its
+   semantic intent; renaming a "one route" assertion to a larger number needs a stated reason.
+
+**Alternatives rejected.**
+- Accepting a third iron because it is small. It silently breaks a documented entry contract
+  and the sustainability construction reserve.
+- Keeping the vanilla tag inject because it makes boards renewable everywhere. It changes other
+  mods' and vanilla recipes behind the player's back.
+- Weakening the asset check to "pickaxe or axe" for every block.
+- Updating expected counts to whatever the code now produces.
+
+**Consequences.** One crafting recipe and one catalogue entry change, and seven Grindless
+recipe files move to the owned board tag. The Bench's physical Relay Matrix exit, the asset
+quality review and the secondary-fluid reservation for foreign rate-limited endpoints remain
+separate, visible C3 follow-ups.
+
+---
+
+## ADR-0137 — The T0 Relay Matrix exit stays a hand craft; the Bench does not fabricate it
+
+**Status.** Accepted, 2026-10-17. Resolves the "Bench physical Matrix exit" C3 follow-up of
+[ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
+
+**Context.** The Assembly Bench projects the Bootstrap crafting catalogue and four vanilla
+basics. The T0 exit, one five-unit F1 Relay Matrix batch, is the `T1Recipes` shaped craft.
+The integration review asked for proof of "automated physical exit fabrication" rather than
+assumed coverage. The ambiguity is whether T0 must automate that craft.
+
+The settled design says it does not:
+- [`docs/tiers/t0.md`](tiers/t0.md) defines the exit as physically calibrating a core and
+  recovering one five-Matrix batch through the shaped craft.
+- The README's T1 row says that the first batch builds the T1 machines, and that the Assembler
+  then automates the same batch.
+- The T1 acceptance objective in the build-out is that the factory "no longer depends on hand
+  fabrication".
+- [ADR-0133](#adr-0133--bootstrap-closes-on-geology-biomass-and-primitive-assembly) gives the
+  Bench only the limited primitive construction catalogue and keeps advanced fabrication in
+  the T1 Assembler.
+
+**Decision.**
+1. The T0 exit stays a hand craft at a crafting table. The Bench must not project
+   `T1Recipes` or any Relay Matrix route.
+2. "Physical exit" means three things:
+   - the calibrated core is produced by the physical Research Terminal;
+   - the core's glass, copper and redstone inputs come from T0 machine routes;
+   - the five-unit batch is recoverable.
+   It does not mean automated fabrication.
+3. The follow-up becomes one evidence requirement for the C3 native renewable cycle and the
+   sustainability audit: the exit objective is a T0 mandatory root, and its consumed inputs
+   reach mod-owned renewable sources. The no-command played route to the exit remains a
+   manual acceptance gate.
+
+**Alternatives rejected.**
+- *Letting the Bench project the Matrix craft.* That moves T1's defining milestone (removing
+  hand fabrication) into T0 and blurs the tier boundary.
+- *A Bench-only Matrix recipe.* It is a second quantity authority for the same item.
+- *Dropping the requirement.* The exit inputs still need recursive supply proof.
+
+**Consequences.**
+- No recipe, machine or count changes.
+- A check guards the boundary: Bench routes never output a Relay Matrix.
+- The work plan's renewable acceptance criterion changes from "automated physical Matrix
+  exit" to the exit-root supply evidence above (plan amendment PA-0002).
+
+---
+
+## ADR-0138 — A batch completes only after its fluid inputs are re-verified and drawn exactly
+
+**Status.** Correctness requirements accepted 2026-10-17; source-backed native-store design
+accepted 2026-10-18. Native implementation and exception correction reviewed and verified
+on composed source `dcb8010`. This is not full C3 acceptance under
+[ADR-0136](#adr-0136--c3-integration-keeps-the-two-iron-budget-and-leaves-vanilla-tags-untouched).
+
+**Context.** A process recipe takes its first fluid input from the machine's own buffer. Any
+further fluid input is a *secondary*, drawn from neighbours when the batch completes. Today
+only two Chemical Reactor recipes have one: `contact/acid` (sulfur trioxide plus water) and
+`recombine/water` (hydrogen plus oxygen).
+
+The initial review attributed a possible partial payment to a stale cached match, claiming
+that completion did not re-check fluid availability. Reinspection of `b08deeaa` corrected
+that claim: `finish()` calls `canOutput()`, which already calls `ProcessLookup.matchesFluid`.
+The claimed stale-neighbour duplication is therefore withdrawn, not treated as a reproduced
+bug. Missing inputs are nevertheless conflated with full outputs, and the returned amount
+from `FluidInsert.takeFromNeighbours` is not checked at consumption.
+
+The bounded implementation investigation established:
+- Every in-mod `FluidEndpoint` extracts exactly `min(requested, contents)` from a face that
+  permits extraction in the inspected buffer implementations.
+- `takeFromNeighbours` only draws from in-mod endpoints; a foreign Forge handler is never a
+  secondary source.
+- An exact drain does not imply a reversible drain. `HandPumpBlockEntity` and
+  `FluidWellBlockEntity` reject insertion, while a process machine can expose an extract-only
+  face or reject the drained fluid as a new input.
+- If an earlier source delivers 100 mB and a later source violates its drain contract,
+  ordinary `insert` cannot guarantee returning the earlier volume. Logging that rejection
+  is not loss prevention. No observed in-mod rate limit establishes such a violation; this
+  is a counterexample to the proposed rollback guarantee.
+
+**Decision.**
+1. Completion verifies before it mutates. In the completion tick, before any item, fluid or
+   output changes, the machine checks:
+   - the primary fluid against its own buffer;
+   - every secondary against the extractable neighbour volume, computed with exactly the same
+     face and identity filter that will draw it.
+2. A short input means no mutation. The batch keeps its recipe and completed progress and
+   waits at completion. While waiting it draws no power, gains no progress and reports the
+   missing input. It completes once the input returns. Changes to the machine's own inventory
+   still re-resolve the recipe as they do today.
+3. A batch must not produce unpaid outputs or lose already drawn fluid on a failed take.
+   The original proposal to restore every source through ordinary `insert` is withdrawn.
+   Simulation is not a reservation, and insertion permissions are not a restoration
+   contract.
+4. Use the existing native `FluidBuffer` as the owned storage boundary. A bounded internal
+   batch operation plans exact withdrawals from identified native stores, checks identities,
+   current contents and face permissions again, and commits against those stores without
+   calling arbitrary external extraction handlers. Duplicate backing stores cannot be
+   counted twice. Native participants own any snapshot/receipt and restoration operation;
+   callers must not gain an unrestricted buffer setter.
+5. All participating native stores must support exact abort/restoration independently of
+   their external insertion rules. Preserve complete `FluidState` metadata and output-volume
+   accounting, not only an amount. Keep notifications, synchronization and subscription
+   changes out of the tentative mutation phase; notify only after the batch and the
+   machine's own input/output commit are settled. An aborted operation leaves no committed
+   item, primary-fluid, output or source-accounting mutation.
+   This includes synchronous exceptions during validation, withdrawal or consumer settlement,
+   not only boolean rejection. The consumer supplies explicit compensation even when it has
+   no fluid withdrawal. Restore attempted native receipts and deep consumer state before
+   propagating the original unexpected exception; retain compensation diagnostics without
+   skipping remaining restores. Fatal VM errors and world-crash atomicity remain excluded.
+6. Adapt every currently supported native source, including output-only pumps and wells;
+   do not silently restrict recipes to refillable tanks. External sided capabilities retain
+   their existing restrictions and cannot obtain internal restoration access. Unknown
+   implementations do not receive an optimistic contents-based transaction fallback.
+7. This is a synchronous server-thread, native-store guarantee, not an arbitrary-handler,
+   cross-thread or crash-atomic world transaction. No new persistent escrow, saved key,
+   port or Forge/AE2 integration is authorized. If the bounded contract cannot preserve
+   existing native sources without such changes, escalate before implementation.
+8. `FluidEndpoint` documents its actual exact-extraction and non-reversible-insertion
+   contract. Behavioural evidence must cover missing input, split sources, extract-only
+   sources, partial execution and restoration before a stronger guarantee is accepted.
+9. A general reserve-and-commit model for foreign, rate-limited or port-backed sources is
+   *not* built here. That includes Forge handlers, hatches and AE2. It belongs to the held
+   `multiblock-ports` task's PA-0001 criterion that recipes simulate, reserve, process and
+   commit atomically. Until that exists, secondary sources stay restricted to in-mod
+   endpoints.
+
+**Solved-problem-first evidence.** Three parallel read-only investigations inspected these
+exact upstream implementations; no runtime failure-injection result is claimed:
+
+| Reference and pin | Verified semantics relevant here | Reuse boundary |
+| --- | --- | --- |
+| [GregTech CEu 2.8.10](https://github.com/GregTechCEu/GregTech/blob/9fe140febe8747bbe2f06dfd570421331ec06f4b/src/main/java/gregtech/api/util/GTTransferUtils.java#L34-L98), Minecraft 1.12.2 | Simulated drain/fill followed by sequential execution; the ordinary transfer ignores final acceptance. [Recipe input execution](https://github.com/GregTechCEu/GregTech/blob/9fe140febe8747bbe2f06dfd570421331ec06f4b/src/main/java/gregtech/api/recipes/Recipe.java#L192-L242) is not a general reversible batch. | [LGPLv3](https://github.com/GregTechCEu/GregTech/blob/9fe140febe8747bbe2f06dfd570421331ec06f4b/LICENSE); different loader/API generation, not MIT-only copyable code. |
+| [GregTech Modern 7.5.3-1.20.1](https://github.com/GregTechCEu/GregTech-Modern/blob/91a79b8a7a2b62ec6277423e6c0ded4af89a831e/src/main/java/com/gregtechceu/gtceu/common/machine/multiblock/part/FluidHatchPartMachine.java#L200-L223), Forge 47.3.0 | Hatches eagerly stage inputs in owned tanks. [Recipe allocation](https://github.com/GregTechCEu/GregTech-Modern/blob/91a79b8a7a2b62ec6277423e6c0ded4af89a831e/src/main/java/com/gregtechceu/gtceu/api/recipe/RecipeRunner.java#L174-L239) simulates then executes; no general source rollback is established. | [LGPLv3](https://github.com/GregTechCEu/GregTech-Modern/blob/91a79b8a7a2b62ec6277423e6c0ded4af89a831e/LICENSE); direct reuse also brings its Forge/LDLib storage contracts. |
+| [Mekanism 10.4.16.80](https://github.com/mekanism/Mekanism/blob/95b03e838aa94128596db42154a1527048372999/src/main/java/mekanism/common/capabilities/fluid/BasicFluidTank.java#L155-L228), Minecraft 1.20.1, Forge build 47.1.76, API 10.4.0 | Separates external insertion policy from owner-controlled storage access. [Multi-input processing](https://github.com/mekanism/Mekanism/blob/95b03e838aa94128596db42154a1527048372999/src/api/java/mekanism/api/recipes/cache/PressurizedReactionCachedRecipe.java#L54-L120) still relies on owned-handler behavior, not arbitrary-source compensation. | [MIT](https://github.com/mekanism/Mekanism/blob/95b03e838aa94128596db42154a1527048372999/LICENSE), with its copyright/permission notice required for copied portions; Forge-specific code is not a loader-free drop-in. |
+
+The selected precedent is **owner-controlled storage separated from public access policy**,
+adapted to Grindless's existing native buffer. None of the inspected implementations proves
+the stronger arbitrary-handler rollback guarantee, so their unchecked-result behavior is
+not copied. Adding eager multi-tank intake would change saved state and input custody, and
+introducing foreign storage libraries would widen this bounded repair unnecessarily.
+The implementation reuses Grindless's existing storage primitives and independently applies
+the ownership pattern. No upstream code or assets have been imported. Any later direct
+reuse requires exact source, licence and notices in `THIRD_PARTY_NOTICES.md` before copying;
+the reference table is not a blanket permission to reuse third-party material.
+
+**Alternatives not authorized.**
+- *Ordinary insertion as rollback.* An extract-only source is a concrete counterexample.
+- *Rejecting buffering or restoration contracts before inspecting existing solutions.*
+  The initial dismissal of escrow was premature. After comparison, transient native-store
+  operations preserve the existing storage layout; persistent staging remains outside this fix.
+- *Invalidating the cache on every neighbour change as a transaction guarantee.*
+  Notification alone does not define exact execution or restoration.
+- *Building the generic transaction seam now.* It is ports work, and the port audit must
+  design it first.
+- *Throwing on underpayment.* That crashes the server tick over a recoverable condition.
+
+**Consequences.**
+- No recipe, quantity, saved key or tier change is authorized by this investigation.
+- The independent Bench boundary check and unrelated sustainability work may continue.
+  `NativeFluidStore`, `FluidInsert` and the private process `Completion` implement the
+  native-only contract. A first delivery handled boolean rejection but missed exceptions;
+  red fixtures in `b26ee8a` exposed 15 failures, and `fa3e708` repaired them before integration.
+  The same reviewer closed that P1. Composed S1/native source `dcb8010` subsequently
+  passed 36 suites plus production `states,settling`, with matching built/deployed hashes.
+- The common-machine fix preserves the two Chemical Reactor recipes without opening new
+  T1 or T2 content. A targeted process fixture is not a played-survival or retained-world pass.
+- The C3 acceptance on partial extraction now includes verified secondary completion
+  (plan amendment PA-0002).
+
+---
+
+## ADR-0139 — Long native smokes carry their own assertion budget
+
+**Status.** Accepted, 2026-10-18. Twin-runner support passes its native fake-boot harness;
+ordinary execution of the long native-cycle fixture is still pending.
+
+**Context.** The renewable T0 smoke executes real machine work. Even Bench fabrication and
+Terminal calibration together need 1,200 powered ticks, before source and downstream cycles.
+The ordinary assertion deadline is 120 seconds. Passing only with a manually supplied
+`SMOKE_EXPECT_TIMEOUT` would leave the normal runner and CI broken for the same fixture.
+
+**Decision.** A scenario may add a sibling `tools/smoke/<name>.timeout` containing one
+positive integer assertion budget in seconds. The existing explicit `SMOKE_EXPECT_TIMEOUT`
+override wins, then the scenario budget, then the unchanged 120-second boot-helper default.
+Server-startup `SMOKE_TIMEOUT` is separate and unchanged. The PowerShell and Bash runners
+must forward identical values, reject malformed selected metadata before booting, and never
+leak one scenario's budget into another or into the caller's environment.
+Sidecars are BOM-free decimal digits with optional ASCII whitespace, bounded to
+1--2,147,483,647 seconds; leading zeroes normalize to decimal. Selected malformed metadata
+fails even when an environment override exists. Listing and unselected scenarios retain
+their existing behavior.
+
+Keep `scenarios.txt` as the single scenario list, with its existing syntax. No per-scenario
+CI step, global timeout increase, machine-speed override or skipped assertion is added.
+Fake-boot harness checks cover selection, invalid budgets, explicit override, consecutive
+scenarios and platform parity. The real long scenario must also pass through the ordinary
+runner with no environment override; a special invocation alone does not close integration.
+
+**Alternatives rejected.** Raising every scenario's deadline would delay unrelated failures.
+Changing recipe durations or injecting outputs would invalidate the production proof.
+Adding a second scenario list or bespoke runner would bypass the existing shard/selection
+contract. A small optional fixture file preserves that contract and local/CI parity.
+
+**Implementation boundary.** `run-smokes.ps1` and `run-smokes.sh`, including the CI shard
+path, are covered by 27 native fake-boot checks each. The legacy
+`run-smokes-batch.ps1` is an unchanged shared-world developer utility: it clears
+`SMOKE_DATAPACK` and already cannot execute the normal per-scenario datapack isolation.
+It is not an acceptance path for this fixture or its deadline contract. Use the canonical
+twin runners; extending or retiring that pre-existing batch utility is separate work.
+
+---
+
+## ADR-0140 — Validate behavioral classes and reuse proof under explicit assumptions
+
+**Status.** Accepted, 2026-10-18; owner-directed validation policy for active Grindless work.
+
+**Context.** S1's audit contracts, C3 native completion and its exceptional-abort repair,
+representative production bindings and the bounded renewable cycle now have source-bound
+evidence. Repeating expensive native runs for each ordinary content instance would add
+latency without necessarily covering a new behavior. Conversely, an unchanged class name
+does not prove unchanged ownership, conditions, persistence or external assumptions.
+
+**Decision.** Classify remaining validation as shared-contract, static/data, representative
+integration, regression or genuinely unique behavior. Before an expensive run, identify
+the specific unproved property and ask whether an existing proof plus static evidence
+already establishes it. Reuse when the mechanism and relevant assumptions match; otherwise
+run the smallest targeted proof and the affected regression set.
+
+Keep evidence bound to its actual revision/artifacts and limits. Data authored in Java is
+classified by its effect, not its extension. New data requires renewed data/model validation,
+not an automatic replay of the unchanged kernel or one native scenario per recipe. Missing
+metadata, tag resolution or an unproved model bound is not automatically a native/manual
+behavior gap, and it is never silently promoted to a pass.
+
+Changes to shared mechanisms invalidate only proofs depending on the changed assumptions.
+Independent QA and architecture review focus on uncovered behavioral classes and invalid
+reuse claims. ADR-0137/0138 boundaries, transaction failures, bootstrap, persistence,
+external integrations and genuinely different execution paths retain the proof they need.
+Existing CI requirements, thresholds, tests and real manual acceptance gates are not removed.
+
+**Current effect.** The successful S1/C3 composed gate and renewable-cycle evidence remain
+valid within their stated scopes. No runtime rerun is required merely to adopt this policy
+or to clarify the fixture README. Product task order, dependencies and held ports do not change.
+The [validation strategy](testing/test-strategy.md) records reusable proofs, remaining work
+classes and impact triggers; the execution plan and check ledger reference it.
+
+**Alternatives rejected.** A native scenario for every unknown or every recipe; treating
+all instances as equivalent despite different assumptions; discarding source-bound passes
+when only unrelated content changes; and using proof reuse to hide missing evidence or
+weaken acceptance. Coverage of behavioral classes, not executed-check count, is the objective.
+
+---
+
+## ADR-0141 — Canonical T0 closure uses real authorities and conditional establishment
+
+**Status.** Accepted, 2026-10-18; S2 implementation and its source-bound closure are in progress.
+
+**Context.** The owner prioritizes coherent T0 acceptance over new tier breadth. S1 supplies a
+verified audit kernel, but canonical pack membership, real source annotations, full construction
+and an honest finite establishment witness are still needed. Existing shared/native proofs are
+reused under ADR-0140; unclassified data is not a native scenario per entry.
+
+**Decision.**
+- Keep the full implemented inventory, separating active T0 facts from unknown/unaccepted later
+  placement. Do not erase routes, invent tiers or waive mandatory findings to make the audit green.
+- Author renewable-at-T0 claims only for the approved source/workshop material chains and
+  actual automatic projections; the audit must prove those claims. Construction needs
+  availability, not an invented automated recipe for every registered block. Finite entry
+  supplies remain bootstrap assumptions, and first use is not inferred from registration.
+  Slag is a potential future-use side stream in the active T0 contract: its refractory-brick
+  prototype consumer exists, but an accepted later-use tier is not established here. Keep
+  that uncertainty and first-use tier explicit, with no fabricated future-consumer tier.
+  Its renewable-at-T0 claim may follow the real copper-reduction by-product route; it is
+  not a required T0 input. Ordinary item disposal is permitted under current non-hazardous
+  item behavior, but neither this advice nor `ContainerConfig` establishes an automated
+  Storage Crate/Overflow Gate sink. Do not force retention or invent a consumer.
+- Export actual Gradle-resolved Forge resource inputs through a small build-task seam. Verify
+  `TagEntry`/`TagLoader` membership, required/optional, nested, removal and replacement semantics
+  against the actual Minecraft/Forge implementation. Use demonstrated layer precedence or prove
+  that the concrete composition is order-independent; filenames, hashes and namespace guesses
+  are not registration or precedence evidence. Runtime registry access stays outside the pure
+  model/auditor, and absolute cache paths stay out of public projections.
+  A route may have real environmental evidence while its progression tier is unknown:
+  nullable `RoutePolicy.unlockTier` means not unlocked and retains `route_tier_unknown`,
+  never an implicit T0. Physical atmosphere/light terminals do not unlock a prototype.
+  `OPEN_SKY_DAYLIGHT` describes the solar producer's actual day/open-sky predicate without
+  importing the culture site's terrestrial restriction. The current intake's absent
+  site guard is reported as such, not as verified atmospheric simulation in every dimension.
+  A direct, positive, declared manual-labour input may justify a non-automatic physical
+  route without becoming an environmental source or renewable credit. That guard alone
+  supplies no budget, new profile or guarantee; the optional Hand Crank Dynamo's known T0
+  placement is separate from an unproved finite labour witness.
+- Give `Route` an explicit `automatable` fact, independent of ownership. Manual crafting
+  provides availability but cannot enter renewable supply or a renewable `ClosedLoop`.
+  Adapters must derive the fact from the actual mechanism: a physical producer is not
+  automatically an automated producer. Preserve the old constructor for S1 compatibility,
+  not as evidence for canonical adapters; include automation in fingerprints and exports.
+- Treat `TierPlan.exitObjective` as a finite production/availability goal, not recurring
+  demand for the manual Matrix itself. Its canonical route must execute even when assumed
+  stock or a gift already contains the goal, with batch output and objective count derived
+  from the real authorities. Consumed exit ingredients still require renewable supply;
+  construction and non-consumed requirements retain their availability obligations.
+  Do not add the Relay quest's Matrix subject back as a recurring root, weaken unrelated
+  recurring roots, or make the Assembly Bench fabricate the five-unit manual batch.
+  This refines the audit meaning of ADR-0137's mandatory exit root without changing gameplay.
+- Reuse non-consumed route requirements for formation. Keep the controller in
+  `Machine.construction`, derive non-air pieces from `WorkshopStructure.cells`, and share the
+  existing family-to-structure link with the runtime instead of copying counts into annotations.
+  Current T0 cells exclude the controller. The witness covers one installation per family,
+  not simultaneous reuse of physical pieces across installations; structural pieces must not
+  be mislabeled as chemical catalysts. No fictitious registered assembly item is introduced.
+- The existing `ClosedLoop` representation can describe the source-production circuit with
+  aggregate as a zero-net carrier. Its normalizer needs a conservative unit-vector candidate
+  when that carrier closes exactly and other internal balances are nonnegative. Retain the
+  exact normalizer fallback and all environmental, loss, independent-feed and executable-startup
+  checks. A positive net output does not pay its own earlier prefix, and finite carrier stock
+  does not become unlimited supply. No new general solver or production-system API is required.
+- Represent manual entry requirements separately from real guarantees. A sufficient finite bill
+  is derived from real recipe/formation/order requirements and then checked by replaying the
+  witness with that finite budget, without unlimited manual replenishment. Report guaranteed,
+  player-provided, required and remaining amounts separately, together with the conditional
+  profile and its identity. Do not claim a globally minimal bill, a gifted kit or guaranteed
+  world loot. `MANUAL_WORLD` and `MANUAL_LABOUR` retain no guaranteed quantity.
+- Respect physical bootstrap interfaces. Account for the reusable tool, and do not let abstract
+  manual FU imply arbitrary transport: the portable Crank Handle applies to F0 process machines,
+  not the Research Terminal. Keep its conditional work allowance separate from transferable
+  `ENERGY` stock: it may pay only an eligible process batch and never enters renewability.
+  Eligibility is derived from the real interface/rating contract. Actual generator construction
+  and the canonical source route remain requirements rather than being bypassed by a generic
+  energy credit.
+- `quern` follows `multitool`; `crank` and `extractor` remain optional with existing IDs and
+  rewards. `calibrate` still follows `ceramics`, and `relay` follows `calibrate`. Quests check
+  possession/claim state, not provenance or the fabrication of every intermediate. The physical
+  recipe/Terminal route, not a redundant quest permission, defines production.
+- Deliver portable client preparation separately from acceptance. A source-pinned Prism-
+  importable ZIP may precede final S2 closure, but it must carry the actual production
+  remapped artifact and honest provenance, not a post-S2 label. The reference client uses
+  Grindless, its required Architectury dependency and JEI for recipe discovery. Preserve
+  the existing expanded client pack separately: its utilities, extra content and mixins
+  are not part of the standalone canonical audit assumption. Launcher-managed dependencies
+  retain verified upstream pins and licences. A supplied world must actually be generated
+  by Minecraft without fixtures, commands or injected stock; otherwise create a fresh
+  Survival world on the capable host. Do not fabricate NBT or repair an unsupported VM
+  graphics environment merely to avoid honest host-side observation.
+  Normal exploratory play and crafting in that new world need not wait for the auditor.
+  Preserve the real source/settings and observations without an imposed starter bill or
+  injected resources. A later unchanged-behavior proof may be reused; the formal whole-path
+  acceptance still needs its agreed candidate/requirements. Reopening this new save under
+  the same binary is continuity, not proof of compatibility across an update.
+
+**Validation and consequences.** Static/model checks cover the new authority/profile data and
+the affected normalizer, reserve, membership, formation, automation, exit and quest contracts. A genuinely new
+runtime binding needs one appropriate proof, not one world per tag or recipe. Existing S1,
+native restoration and bounded daylight-cycle evidence remains valid within its assumptions.
+The conditional entry witness must later be confronted with an actually acquired survival
+inventory. Neither these decisions nor a diagnostic client/world accept T0, a retained world,
+the physical five-Matrix playthrough or any T1--T15 expansion.
+
+**S2 refinements.** Canonical recurring production does not prohibit a real manual first
+construction. The finite availability witness may fall back to verified, unlocked,
+non-optional, non-automatic and non-one-shot crafting authorities, retaining actual input
+costs and completed sublots. It never substitutes that fallback for renewable production
+or the mandatory canonical exit batch. `establishmentBatches` exposes completed replay
+batches separately from the canonical route and goal result.
+The existing handheld quest UI is also a physical prerequisite: reward claims require one
+non-consumed Quest Book, acquired before the first claim. A later renewable book, a creative
+registration or a proposed future backend keybind cannot finance access retrospectively.
+The same book is reusable across claims; do not consume or reserve one copy per quest.
+
+The sufficient entry bill must fund the actual shared construction/claim witness and the
+required independently replayed startup proofs. Componentwise maxima between alternative
+proof bills are conservative allowances, not a sum of their execution steps, a minimal kit
+or a replacement for joint feasibility. Optional rewards require explicit selection.
+
+The active T0 conditional gate is separate from global sustainability and physical acceptance.
+It fails relevant global integrity/unknown/positive-cycle findings as well as T0-context
+findings; relevance is not just a string in the detail or an SCC's representative vertex.
+Unknown first use of a non-mandatory output does not waive its class, route, R0 or handling
+proof. Flint is optional in the active T0 contract, with ordinary storage/discard and
+unplaced first use, not an invented mandatory consumer.
+
+A unit-positive potential may certify the same no-positive-gain predicate checked by
+`positiveCycles` when every member's complete non-energy net sum and net energy are both
+nonpositive, using exact integer arithmetic. Non-consumed requirements contribute no spent
+input. This only removes a genuinely discharged uncertainty; it preserves warnings and
+existing searches, does not assert physical mass conservation and does not establish supply,
+startup or acceptance on its own.
+
+## ADR-0142 — T0 client feedback reuses native UI and existing quest infrastructure
+
+**Status.** Accepted, 2026-10-18; client engineering is integrated and the selected quest
+adapter remains under integration review.
+
+**Context.** Real-player observations on the preparation client expose an invisible slot grid,
+overlapping Inventory/status text, textual JEI fluid lists and repetitive non-working-state
+audio. The owner wants a clearer native interface, red non-consumed catalyst text, real fluid
+visuals and an existing compatible quest system instead of more bespoke infrastructure.
+The placed machine models are positively received. The owner explicitly parks investigation
+of the three T1 recipe-output screenshots and unconfirmed T1 crafting-complexity changes.
+
+**Decision.**
+- Repair actual machine/player slots and bounded status layout immediately, independently of
+  S2 and backend research. Preserve physical slot indices, I/O restrictions and saved item layout.
+  Share a small physical layout description between the existing menu/screen and JEI; do not
+  create a general UI framework. Native Minecraft/JEI primitives already solve this problem.
+- Actual `recipe.catalysts` use the non-consumed ingredient role and a localized red
+  `Not consumed` tooltip. A machine recipe-catalyst icon is a different JEI concept; consumed
+  inputs and structural requirements must not be relabeled as chemical catalysts.
+- Render current T0 water with its real native texture/tint, amount and capacity. The output
+  quota is part of the same store, not extra volume or a second tank. JEI keeps complete
+  machine-specific I/O positions, including empty slots and all process conditions. Internal
+  fluid IDs without Forge registration retain a visible diagnostic cell/role/quantity, not
+  a fake FluidStack, guessed chemical color, hidden input or new fluid registration.
+- Recipe restrictions alone do not establish a restored buffer's identity. Preserve loaded
+  contents and append a server-confirmed water flag to the existing menu payload (old fields
+  unchanged). Unconfirmed nonempty data retains volume/capacity/quota with an unknown
+  diagnostic; it is not erased, treated as empty, or painted as water. This is derived
+  synchronization, not a save migration. Client and server must use the same candidate.
+- Ordinary non-working states retain visual feedback without repetitive relay/beep noise.
+  Keep legitimate working effects and the distinct pylon brownout alert. New sound selection
+  is independent: verify each asset's source/licence, not just the upstream code licence,
+  before import. A compatible shortlist is not an import or an auditory acceptance result.
+- Evaluate an existing Forge 1.20.1 quest backend against the actual stable catalogue,
+  per-player claimed state, prerequisite/reward semantics and actual physical-book access.
+  Preserve existing book registration and old saved data; an item can bridge to a new UI.
+  Generate definitions from `QuestCatalogue`, rather than hand-maintaining a second catalogue.
+  No wholesale authority replacement, team-sharing behavior, raw save overwrite, duplicate
+  reward or new recipe permission is authorized by a product name or research summary.
+
+The exact-source GregTech Modern/LDLib study confirms a shared widget tree and native
+Minecraft/Forge/JEI rendering underneath. Native APIs suffice here without copying or adopting
+the much larger external widget engine. The study is a pattern/API reference, not a licence
+grant or proof that every target patch-build API is identical; compilation uses the project's
+resolved dependency. No upstream code, texture or sound is imported in these checkpoints.
+
+**Selected quest adaptation.** Use Heracles' compatible Forge 1.20.1 UI/task framework with
+one registered Grindless claim-task/widget adapter. The selected published binary exposes
+the required task/widget APIs; no mixin, fork or invented requirement registry is needed.
+Native task completion represents an already recorded legacy claim, not cached possession:
+the backend's completed-parent relation thereby preserves the catalogue's claimed-parent
+relation. Current evidence, the physical book, per-player idempotency and rewards remain
+server-validated through the shared Grindless claim service. Disable native/autoclaim
+reward delivery for these generated quests; reconstruction never grants items.
+
+Keep `QuestCatalogue` and `grindless_quest_progress` authoritative and preserve the registered
+book/menu. Generate stable, owned backend definitions and reconcile only their projection;
+do not replace another pack's quests or raw progress file. Set individual progress and
+retain the legacy fallback when the optional backend is absent. This is a narrow gameplay
+adapter to an existing framework, not a replacement custom quest engine. Dependency/API,
+projection and reward/migration checks precede activation and packaging.
+
+**Definition publication and recovery.** Publish generated definitions and their ownership
+proof as one owned archive through atomic replacement, not a sequence of loose JSON writes
+followed by a manifest. A failure before publication must leave either no published bundle
+or the prior complete bundle; retry must not adopt partial or foreign data. Refuse unsupported
+atomic replacement rather than silently falling back to a non-atomic move. Check collisions,
+member hashes and the real selected loader's filename/ZIP rules; temporary files are not quests.
+The loose25-JSON layout from unpublished local `f106397` exists only as development evidence:
+do not convert, adopt or delete it automatically. Preserve/refuse legacy collisions visibly,
+use fresh configuration for the new format and retain existing diagnostic files. This is not
+a user-save migration or permission to overwrite third-party quests.
+
+Under ADR-0140, the unchanged f106 registration/lifecycle boot may be reused only after the
+new format passes the published loader plus Quest.CODEC and real failure/retry tests.
+Codec-only serialization or file counts do not establish loader integration. Retained human
+worlds and client behavior remain independent gates.
+
+The selected artifact is Heracles 1.1.13, CurseForge845831/file5406935, with ResourcefulLib
+2.1.29/file5659871. Inspection of the actual jar establishes bundled Hermes1.6.0 and
+MixinExtras0.2.1; a moving source branch or `latest.release` is not the artifact pin.
+The provenance ledger distinguishes upstream-managed dependencies from imported material.
+
+**Validation and delivery.** Run focused geometry, role, capacity, tooltip, platform-bridge and
+audio-policy checks. Reuse unchanged item interaction, executor, native fluid and save-layout
+proofs. Keep source-scoped human evidence separate from global satisfaction or a prior version.
+The owner authorizes autonomous work and a future merge **after T0 is genuinely ready**.
+That does not certify missing checks, override branch protection or permit an early merge.
+Preserve the live PR stack, reviewed Git checkpoints and a portable, truthful handoff so a
+later session/device can continue without private paths, lost worktrees or invented passes.
+
+---
+
+## ADR-0143 — Player resource guidance is a generated view of canonical declarations
+
+**Status.** Accepted direction, 2026-10-18; implementation and client acceptance are pending.
+
+**Context.** S2 now supplies canonical resource classes, side-stream roles, handling,
+source routes and explicit unknown tiers, but the installed client cannot run its
+repository/pack-source audit. `AuthorityAdapters.live/canonical` require a source-root path;
+calling them from hover or rendering would be both incorrect and expensive. Existing guide
+prose also sends the player toward the optional finite extractor and vanilla farms rather
+than the mod-owned recurring route. A second handwritten tooltip catalogue would drift
+from the same metadata the dashboard and validator use.
+
+**Prior art.** GregTech Modern v1.4.6 (Minecraft1.20.1), commit
+`aa41aba133f31dd3928bea816d6fd032cd1d90b6`, separates registered material definitions from
+thin presenters. Its
+[material builder](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/data/chemical/material/Material.java#L1212-L1234)
+registers typed properties; the
+[tooltip formatter](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/client/TooltipsHandler.java#L43-L110)
+checks property presence, and its
+[JEI adapter](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/core/mixins/jei/FluidHelperMixin.java#L18-L24)
+passes the actual fluid amount through. Its
+[guide recipe view](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/gui/compass/GTRecipeViewCreator.java#L19-L47)
+uses a runtime recipe, not a second quantity table. This LGPL-3.0 source is a pattern
+reference; no upstream code, assets, mixin or widget engine is imported. Its material
+property validation is not a sustainability proof or a universal guide-prose generator.
+
+**Decision.**
+- Retain S2's typed declarations as the authority. Generate a compact, versioned,
+  read-only runtime resource from the same canonical Result, with a declaration-content
+  fingerprint and exhaustive parity/drift checks. Treat it as a generated packaged asset,
+  not an independently edited catalogue. Do not generate a placeholder from fixtures when
+  the real audit cannot run.
+- Project classes, known/unknown tiers, canonical route, handling/recycling, uncertainty
+  and public source references. Exclude copied recipe quantities, private paths, the finite
+  entry bill, player state and global/conditional acceptance verdicts. Fingerprint the
+  projected content rather than introducing a self-referential commit/source hash.
+- Load/cache that prepared declaration in the installed mod without repository/JDK
+  inspection. Invalid or missing data is explicitly unavailable with normal diagnostics;
+  unknown is not an empty success, default class, renewable certification or Tier unlock.
+  The declaration describes authored policy, not live operating readiness in every world.
+- Reuse one native formatter across item/fluid hover, JEI, machine/Atlas details and
+  quest/guide context. Keep actual stack/fluid amounts and recipe I/O in their current
+  catalogues/views. Resource side-stream class does not determine an output's recipe role.
+  Preserve slots, packet fields, fluid identity, saved data and claim behavior.
+- Keep grog/water reuse, slag's unplaced potential future use and ordinary discard, and
+  flint's optional storage/discard honest. Do not invent a consumer, mandatory hoard,
+  containment system, automatic void or accepted future tier.
+- Correct the current T0 guide toward geological/biological supply, biomass power,
+  natural water and ceramic processing. The iron/extractor route is optional and finite;
+  vanilla farms are not the permanent canonical source. Use live recipe references rather
+  than duplicated fixed quantities. Preserve the calibrated-core/manual five-Matrix exit
+  and do not present the model's sufficient entry assumptions as a minimum player kit.
+
+**Why not adopt the upstream registry directly?** Grindless already has accepted typed
+sustainability declarations derived with its canonical source binding. GT's material
+property registry neither supplies those declarations nor makes the source-root audit
+available inside an installed client. The generated view preserves that one authority
+while applying the proven prepared-definition/presentation boundary.
+
+**Ordinary and rated Matrix identity.** An `Evidence.ITEM` quest keeps its ordinary,
+unrated resource identity; rating0 there means unspecified, not a physical F0 Matrix.
+`Evidence.MATRIX` keeps the explicitly required rating. Never change those authorities or
+invent rated declarations to satisfy a presentation test.
+For a validated physical Matrix, retain its actual identity and prefer an exact rated
+declaration. Only when it is the same item's real native default specification may its
+ordinary declaration be used as presentation context. Derive that default through the
+existing `ControlMatrixItem`/`ControlMatrixNbt` and architecture-first-frontier semantics;
+do not flatten ratings or mutate NBT. Relay's untagged/default and explicit valid F1 can
+share that default context; F2+ and malformed/incompatible ratings cannot inherit the T0
+declaration by fallback. A non-default rating without its own declaration remains unknown.
+This is a lookup distinction, not a new recipe, quest requirement or sustainability policy.
+
+**Validation.** Exhaustively compare generated fields with the actual Result, including
+null/unknown and handling cases; test fingerprint/drift/error behavior and shared
+presentation without duplicating recipe amounts. Keep the new helper/model loader-free
+where required and use native UI checks for the changed surfaces. A generated resource,
+successful audit or source test is not real client, Survival, retained-world or Tier
+acceptance. Existing ADR-0129/0140 gates remain in force.
+
+---
+
+## ADR-0144 — Ship Superflat-first playable tier releases with longitudinal save continuity
+
+**Status.** Accepted owner-directed product and architecture policy, 2026-10-18.
+Implementation of the first Playable Release Candidate remains in progress.
+
+**Source.** The complete 549-line owner directive is preserved in the session Library.
+Its SHA-256 is `7a5a04b1f2709536f1187ecc70958829fb7383bf95135820735f352b91a1e317`.
+PA-0007 in the [reloadable plan](../.agent/work-plan.json) records the change in
+requirements and sequencing. Private attachment and storage paths are not project inputs.
+
+**Context.** `1389ebb` is a verified **T0 engineering candidate**, not the release on
+which the owner will start the longitudinal world. Its minimal preparation ZIP, model
+proofs, generated resources and repaired aliases do not establish a polished modpack,
+an accessible Superflat bootstrap, an adequate sound pass or human acceptance.
+The product must be playable during development, not only after T15.
+
+**Product and release lifecycle.**
+
+Grindless is a complete playable modpack centered on the Grindless mod. Every tier follows:
+design -> implementation -> integration -> technical verification -> polish -> modpack
+build -> Release Candidate -> real play -> feedback alongside the next tier.
+The product is **Superflat-first and Overworld-compatible**.
+
+Track `implemented`, `technically_verified`, `integrated`, `packaged`,
+`visually_reviewed`, `human_accepted` and `release_ready` separately, with source,
+artifact, observer and scope where applicable. A deterministic asset, successful
+server or large assertion count does not supply another state's evidence.
+
+The first T0 Playable Release Candidate must satisfy all of these conditions:
+
+- T0 implementation and mandatory progression have deliberate, reasonable routes in
+  the versioned official Superflat preset; normal Overworld play remains compatible.
+- The complete selected pack, Grindless version, dependency versions, configurations,
+  preset and required datapacks/resource packs/scripts are pinned and documented.
+- Questbook and guidance agree with the canonical progression and preserve actual
+  claim/reward authority.
+- T0 receives a real sprite/texture/visual pass and a real sound pass, not merely
+  inventory, alias validation or a change to fault-beep dispatch.
+- Every included external asset has traceable origin, credited author where required,
+  compatible redistribution/derivative rights, attribution and derived-file history.
+- QoL does not unintentionally bypass resources, processing, energy, transport,
+  storage, logistics, machines, quests, automation or progression restrictions.
+- Relevant CI, installation/import, startup, content/config/preset checks and
+  representative client, visual/audio and initial Superflat progression QA pass.
+- The distributable is reproducible and installable, its version lock and provenance
+  are sufficient, forward-compatibility strategy is explicit, and no known technical
+  blocker invalidates ordinary T0 play.
+- Remaining uncertainty is disclosed. No unobserved human result is marked passed.
+
+**Acceptance and tier sequencing.** Delivering this RC starts human acceptance.
+The owner's completed no-command playthrough is not a prerequisite to receiving it.
+After the T0 RC is technically ready, safely published and the owner has actually
+started its longitudinal save, T1 design/implementation may proceed alongside T0
+feedback without waiting for the player to finish T0, unless a concrete technical
+dependency prevents it. None of those conditions holds merely because `1389ebb`
+exists. **Do not start T1 now.** Do not start the held functional-port work merely
+because an existing model has a port-like texture.
+
+This supersedes the conflicting *ordering* in ADR-0108 and the earlier active
+ADR-0129/0140 acceptance checklists: full human acceptance is not the RC delivery
+gate or the only way to permit the next tier after real play begins. It does not
+erase unfinished observations, weaken technical tests or declare a tier human-accepted.
+Live PR state, required checks/reviews and branch protection still govern integration.
+The prior conditional merge authorization does not make the current draft merge-ready.
+
+**Superflat contract.** Select and version an explicit recommended preset and its
+installation/world-creation path. Trace every mandatory initial and recurring input,
+including stone/geology, wood/biomass, water/lava, farming, mobs/drops, structures,
+biomes, vanilla materials and relevant dimensions or external generation assumptions.
+Normal terrain, optional exploration, lucky structures and an unrecorded starter kit
+cannot conceal a missing official-flat route. The Factory World is not automatically
+the starting Superflat preset. Rebind the environmental assumptions of the existing
+conditional model; do not discard its unchanged execution/reserve mechanisms or
+claim its old finite bill proves accessibility in a different world profile.
+ADR-0131's mod-owned renewable permanence and ADR-0137's manual Matrix exit remain.
+
+**Longitudinal save contract.** No new longitudinal world is started from the engineering
+candidate by this policy. Once the owner begins the first playable release, that save
+is the longitudinal reference. Upgrades normally preserve the same world across tiers.
+Protect registry/block/item IDs, inventories, fluids, machine and multiblock state,
+NBT/components, placed/carried objects, quest progress/claims/rewards and persistent
+configuration. Internal refactoring alone does not justify incompatibility.
+Before a genuinely necessary incompatible update, detect it, design an explicit
+migration, test a preserved copy, keep the original and document the outcome. Never
+claim demonstrated compatibility without the applicable evidence or alter tests to
+hide a real incompatibility. Fresh fixtures are not an authentic save upgrade.
+
+**Questbook and pack composition.** Review current Heracles and the real identity,
+version/API support and experience of BetterQB before replacing anything. Preserve
+Grindless's single server-side authority, current evidence, physical-book requirements
+and unique rewards. A remembered item or native sticky completion must not become
+an unintended claim. Retain/polish Heracles if the evidence makes it the better fit;
+do not force a product name or introduce parallel progression truth.
+Select a small reasoned set of auxiliary/QoL/performance/UI/accessibility mods.
+For each material candidate record usefulness, overlap, maintenance, exact compatible
+version, dependencies, licence/distribution method, performance, progression/bypass
+impact and required configuration. Configure, integrate or exclude risky candidates.
+Version coordinates remain in `gradle.properties`, with locked publisher references
+in the existing pack metadata rather than floating `latest` selections.
+
+**Art and sound.** Preserve good incumbent work and the industrial/futuristic identity.
+Prioritize item/material/component/byproduct/Matrix sprites and textures, then machine
+family/state readability, casings, real interfaces, models, fluid presentation and
+feedback. Improve deterministic generation or adopt a maintainable source pipeline
+where it actually improves craft; do not substitute file count for visual review.
+Prefer believable mechanical, industrial, electrical, pneumatic, hydraulic or
+environmental recordings to generic synth sounds. Review loops, relevant starts/stops,
+liquids/actions/alerts, family distinction, volume, repetition and aggregate factory
+audibility. Metadata and waveform checks are not listening acceptance. Only assets
+with evidenced redistribution rights enter the release; record them in
+[the notices](../THIRD_PARTY_NOTICES.md) before import.
+
+**Distribution and storage.** Keep source, development environment, generated output,
+mod jar, modpack, dependency downloads, caches, logs, QA saves and personal saves
+distinct. The release includes required public configuration and content, never
+credentials, user data, personal worlds, caches or irrelevant development files.
+Use launcher-managed references when direct third-party jar redistribution is not
+permitted. Produce a versioned GitHub release/prerelease only when the actual workflow
+and verified artifact allow safe publication; do not relabel earlier preparation ZIPs.
+
+The new work disk is an operational resource, not a guessed path in committed data.
+Inspect ownership, sizes, persistent versus regenerable content, open users and
+absolute-path dependencies before relocating anything. Prefer supported per-process
+cache/output settings to breaking app-managed worktree identity. Any move needs a
+reversible plan, verified copy/content identity, preserved originals until verification,
+and checks that tooling/builds/workers use the intended storage. No broad cleanup,
+foreign-cache deletion, world move or OS repartitioning follows implicitly.
+
+**Execution and validation.** Astra owns product/architecture, integration and final
+review; bounded workers implement, research and validate. Ordinary reversible steps
+proceed autonomously. Stop for a genuinely irreversible/destructive operation,
+unresolvable licence question or subjective product choice requiring the owner.
+Reuse ADR-0140 proof within its assumptions; refresh only changed profile, data,
+mechanism or integration boundaries. Record failures and skipped/unexecuted work
+honestly. Keep compatibility-critical fixes distinct from polish and balance changes
+while the next tier is developed.
+
+**Rejected alternatives.** Waiting until T15 to package; relabeling `1389ebb` as polished;
+requiring a completed human playthrough before delivering the first RC; substituting
+ordinary Overworld resources for an incomplete flat route; changing worlds every tier;
+rebuilding working T0 engines without an invalidated assumption; forcing BetterQB
+without compatibility evidence; expanding QoL by mod count; importing unlicensed
+sounds; and moving app-managed repositories by an unverified filesystem operation.
+
+**Implementation.** The [T0 playable-release plan](../plan/process-t0-playable-release-1.md)
+contains the concrete gaps, ownership, dependencies and verification boundaries.
+Accepting this ADR starts that work; it does not claim any of those gaps is closed.
+
+---
+
+## ADR-0145 — Calibrate a small shared sound palette with development-only generation
+
+**Status.** Accepted owner direction, 2026-10-18; initial generation and artistic
+selection remain pending. The 434-line sound directive is preserved in Library with
+SHA-256 `ef79a5ccbfdbfb7dfabd242019451352a50ba29f9b08efc29f7fed1de72250b2`.
+
+**Decision.** Audit actual T0 callers before generation and record the minimal
+[sound design manifest](assets/t0-sound-design.json). Prefer a few physical family
+sounds and reusable interactions to one sound per machine or logical state. Ordinary
+idle, missing-input, blocked and invalid-condition states remain silent; retain only
+alerts with specific informational value. Preserve good existing behavior and current
+registered identities until a concrete integration need justifies changing them.
+
+ElevenLabs is an optional development tool, never a runtime or normal-build dependency.
+The first calibration represents the Quern's stone/granular grinding mechanism using
+at most three candidates with explicit prompts/parameters and no automatic rerolls.
+Do not assume an electric or manual drive from an F0 energy rating. Perform technical
+QC and present the candidates for the owner's initial artistic choice. Only after that
+choice derive the sound style guide and expand the pass. API retries after interruption
+must not spend credits twice: preserve request/outcome state and stop on ambiguous
+delivery rather than resending automatically.
+
+Keep credentials process-local and outside source, logs, manifests, candidates, build
+outputs and release artifacts. Read the selected secret programmatically only when a
+specifically authorized provider request needs it; never display its contents or copy it
+into the project. Generation provenance records prompt, model, date, parameters, output
+hashes, transformations, final use and applicable rights, not the credential or account.
+
+The [official API](https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert)
+returns binary audio. Use the reviewed request contract, not an invented format/seed or
+web-playground batch. Verify generation-time entitlement and
+[service-specific terms](https://elevenlabs.io/creative-terms) before release use.
+Those terms distinguish incorporation into games from isolated audio/library
+distribution; do not label outputs CC0, publish a standalone sound library or infer
+rights from a generic paid-plan label. Internal audition is not release approval.
+
+Current machine effects use randomized positional one-shots, not managed continuous
+loops. A loopable source does not change that runtime behavior. Review duration,
+stop latency, gain, distance, pitch, repetition and multiple nearby machines before
+integration. Reuse existing APIs and conversion tools; add infrastructure only for an
+observed behavior gap. Approved local assets must survive generation and build offline.
+
+**Rejected alternatives.** Per-state/per-machine error files, endgame synth identity
+for T0, unbounded generation, generic ambient tracks per block, overwriting generated
+WAVs without a maintained source path, and a new general audio framework.
+
+**Evidence boundary.** The initial manifest/request/example-grant survived an app
+crash as drafts. A runnable pipeline, paid generation, codec/QC results and listening
+approval are not established by preserving those files.
+
+---
+
+## ADR-0146 — Give items material volume and reuse block models for machine items
+
+**Status.** Accepted owner clarification, 2026-10-18; implementation and visual
+acceptance remain pending.
+
+**Context.** The owner reviewed the source contact sheet and explicitly likes the
+current placed machine/block identity. The remaining principal art gap is flat-looking
+items, not a mandate to redesign all blocks.
+
+**Decision.** Preserve the good block geometry, machine textures and family identity.
+Refine items as Minecraft-compatible pixel art with implied physical volume and
+material: meaningful silhouette, surfaces, depth, coherent lighting/shadows/highlights,
+appropriate irregularity and readable internal detail. Default to consistent upper-left
+lighting where the shape permits it. Do not merely add outlines, a flat fill and one
+highlight, or increase detail until inventory-scale readability is lost.
+
+Stone, ceramic, biomass, metal, residue and technological components must differ in
+surface and shape as well as hue. Give Data Core, Calibrated Data Core and Relay Matrix
+particular attention: preserve recognizable family/color semantics while making them
+physical, interesting progression objects. A Relay Matrix should feel like the earned
+T0 technology milestone. Preserve registry IDs, ratings, recipe identities and NBT.
+
+For machine items, first inspect the actual Minecraft/Forge1.20.1 BlockItem model chain.
+Prefer the same block model hierarchy and native item display transforms in inventory,
+JEI and quests. A contact sheet of front textures is not evidence that the current
+BlockItem is rendered flat. Fix only demonstrated model/transform gaps; do not maintain
+fake isometric PNGs or a second independent visual authority when the real model can
+be reused. Mature technical-mod implementations are source references, not copied art.
+
+Maintain the generator/source-of-truth path so regeneration cannot erase approved
+sprites. Review native-size items, enlarged pixels and representative game contexts
+separately. Existing alias/determinism checks remain reusable structural evidence,
+not the art pass. No image generation, new block design or completed visual review
+is implied by accepting this direction.
+
+---
+
+## ADR-0147 — Transfer clean-session coordination to Sol 6.1 without replaying evidence
+
+**Status.** Accepted owner direction, 2026-10-19; the successor session has not been
+created or launched by the retiring coordinator.
+
+**Decision.** The next genuinely clean, isolated session uses **Sol 6.1
+(`gpt-6.1-sol`)** as leader and orchestrator instead of Astra. It inherits architecture,
+product/Tier, sustainability, migration, integration and final-review authority, plus
+the single-publisher responsibility after verifying the checkpoint and live refs.
+This supersedes the leader-model choice in ADR-0134, not bounded delegation, use of
+appropriate workers, proof reuse or preservation. No reasoning-effort override for
+the new leader is inferred beyond the owner's stated model.
+
+Preserve the current coherent work in Git before retirement. Transfer a compact
+source-bound handoff and detailed startup prompt, not the entire conversation via
+fork. The successor must use its own isolated worktree starting from the published
+preservation commit; no reuse of the main checkout or writes to retired worktrees.
+Do not create another PR for a context migration or silently reactivate old sessions,
+event subscriptions, automation or Agent merge.
+
+At this handoff no product worker/JVM remains active, the coordinator subscription is
+paused and no session automation is attached. The current visible session list no
+longer exposes most former children; an explicit app notification archived the C3
+completion-safety child. Do not assume a missing child's raw workspace is accessible.
+Use committed/captured evidence, and ask for restoration only if unavailable context
+is genuinely required. Historical agent IDs are not a resumable worker pool.
+
+The preservation includes two focused CI repairs: bounded Blueprint item observation
+and UTC JSON string preservation in the sound tool. Their recorded targeted tests
+remain separate from the new checkpoint's pending hosted CI. No game smoke, codec
+replay or charged generation is required just to migrate context. The successor
+names the new uncertainty before any expensive run and reuses valid proofs.
+
+Retain real approval accurately: the owner approved all three Quern preview WAVs,
+not the complete soundscape, a release or the art batch. The original three-request
+grant is exhausted and its receipts are immutable. Existing tooling encodes the
+historical `Astra` grant authority; before a different generation scope under Sol,
+review that authorization seam explicitly rather than forging the old name, changing
+spent receipts or resending approved sounds. No credential is transferred in Git or
+chat; local secret references remain private operational context.
+
+**Rejected alternatives.** Forking the long conversation, losing uncommitted worker
+fixes, treating migration as acceptance, forcing history, copying build/world evidence
+as a new proof, returning to an Astra-only leader requirement after the owner's change,
+or automatically resuming every former worker.
+
+**Handoff.** [Compact execution state](../.agent/sol-migration-handoff.md),
+[task graph](../.agent/work-plan.json) and
+[release plan](../plan/process-t0-playable-release-1.md).
+
+---
+
+## ADR-0148 — Integrate the approved Quern sound with one native client loop
+
+**Status.** Accepted coordinator integration decision, 2026-10-19; implementation
+and native listening remain pending.
+
+**Context and prior art.** ADR-0145 calibration is complete: the owner approved all
+three previews and A is the preserved first integration reference. Its exact source,
+preview, derived Ogg and provenance hashes match the retained files. Existing
+generation-time entitlement attestation and the reviewed
+[ElevenCreative terms](https://elevenlabs.io/creative-terms), Sound Effects exhibit,
+support incorporation into the game, not standalone sound-library distribution.
+Do not reopen account/subscription verification, request more proof or preserve account
+screenshots in Git. Runtime acceptance is still a separate unobserved property.
+
+The preserved source investigation of native Minecraft1.20.1 audio and
+[GT Modern AutoReleasedSound](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/sound/AutoReleasedSound.java)
+already establishes the relevant lifecycle pattern. Use native mechanisms rather than
+importing LGPL code or inventing a general audio framework. Random `animateTick`
+one-shots do not provide authoritative onset/ownership for a continuous working bed.
+
+**Decision.** Import only the existing candidate A Ogg as the `t0_grinding` family
+after the provenance notice is committed. Preserve raw/preview/receipt bytes and their
+historical hashes; never run generation or reset the exhausted grant. Use one
+client-owned `AbstractTickableSoundInstance` per eligible running Quern position,
+native `SoundManager`, BLOCKS category, mono and positional attenuation.
+
+Discover eligible machines from bounded, already-loaded nearby client chunks during
+the existing Architectury client tick lifecycle; do not force-load or scan every block
+or the whole world. Use immutable position keys and one current-world owner, not a
+static map retaining old worlds. Remove/stop ownership when state is no longer RUNNING,
+the block/chunk disappears, the world/player changes, or the source leaves audible range.
+Respect pause, reload/stopAll and cancelled/replaced sound-engine instances without
+duplicate voices or an every-tick restart storm. Verify the actual selected API/binary
+semantics where these details cannot be established from the recorded research.
+
+Remove only the Quern heavy-hum bursts replaced by this loop, preserving its particles
+and every unrelated consumer. Do not change pumps/extractors, gameplay, machine state
+synchronization, save layouts or ordinary-fault silence. Introduce no per-error sounds,
+mandatory variants or unique palette for each logical state.
+
+**Scope and proof.** Bounded workers implement the client lifecycle, event/resource
+binding and focused contracts. The coordinator alone integrates/publishes. Static asset
+and lifecycle tests plus compilation cover what they can actually observe. Registration
+changes need the representative server binding proof; the new client onset/stop/reload/
+distance behavior and one/eight-machine mix need actual client qualification. The
+headless environment cannot supply listening or native rendering by implication.
+Do not rerun unchanged S1/S2/executor/content proofs or the paid calibration.
+
+**Rejected alternatives.** Rechecking the owner's account, regenerating approved clips,
+shipping all candidates by default, random callbacks as continuous-loop authority,
+world-retaining caches, unbounded discovery and a new general audio subsystem.
+
+---
+
+## ADR-0149 — Add a restricted playable profile with explicit public overrides
+
+**Status.** Accepted coordinator pack-composition decision,2026-10-19; configured
+package, import/startup and actual client qualification remain pending.
+
+**Decision.** Add an opt-in `playable` profile beside unchanged `expanded` and
+`preparation` profiles. Select the existing pinned Architectury, JEI, Heracles and
+ResourcefulLib, plus ModernFix, FerriteCore and client Embeddium: seven upstream files.
+Reuse the exact publisher IDs/hashes already in the single manifest/metadata authority;
+introduce no new or floating versions. Retain Heracles and its proved Grindless
+claim authority instead of replacing a working backend for its name.
+
+This is a deliberate small composition, not a claim of final interoperability:
+runtime/platform, recipe discovery and quests are essential; the three existing
+performance pins address memory/rendering pressure without adding progression items.
+Use their normal defaults until an actual defect requires a version-specific setting.
+Do not invent unverified config keys or ship personal options to demonstrate curation.
+Record that decision and distinguish explicit public overrides from upstream-generated
+defaults in provenance.
+
+Do not include Jade in this first restricted selection: JEI/native machine feedback
+cover essential discovery, and Jade's corrected noncommercial source terms should not
+be silently treated as LGPL. Do not include Backpacks, Essentials or Chunks/Teams/Library:
+their storage/processing, teleportation and loading behavior needs an intentional
+progression design. These omissions apply only to the new profile; never remove their
+content from an existing instance or save. Extra unpinned QoL is not required to close T0.
+
+**Packaging.** Extend the existing Gradle pack resolver, provenance and paired shell/
+PowerShell entry points rather than creating another builder or dependency list.
+Keep the old selectors and archive identities working. Give the new profile a
+distinct source-bound archive name/status; it is not a published RC merely because
+it builds. Include required third-party notices with the modpack.
+
+Support only explicitly enumerated public override files from a dedicated committed
+pack source root. Reject unknown profiles, traversal/absolute paths, escaping symlinks,
+duplicate destinations and missing/untracked inputs. No recursive copy of a launcher,
+home, dev config, cache, log or world directory. Record each included public override's
+relative destination/hash and preserve the exact input-profile selection in provenance.
+An explicit empty override list is valid for the default-config composition; do not
+claim that it supplies the still-unimplemented official preset or final public content.
+The preset itself belongs to versioned mod worldgen resources, not a private save.
+
+**Proof and limits.** Extend existing positive/negative metadata/selector and archive
+whitelist checks, including default-profile preservation and invalid override inputs.
+Serialize actual Gradle execution with the Quern worker. Source/pin/config selection,
+structural packaging and client import/startup are different properties. The new pack
+needs final integrated source, world-preset access, compatibility contract and actual
+installation/client QA before it can become the playable RC.
+
+**Rejected alternatives.** Mod-count expansion, changing historical profiles, treating
+unconfigured teleportation/storage/loading as neutral QoL, forcing BetterQB, switching
+publisher identity, guessing config keys and copying an arbitrary overrides directory.
+
+---
+
+## ADR-0150 — Superflat retains virtual deposits without staging the terrain
+
+**Status.** Accepted owner clarification,2026-10-19. The owner explicitly requires
+virtual underground rock/resource deposits in Superflat, extractable by multiblocks.
+
+**Decision.** Superflat terrain must retain the same concept of chunk-local deposits
+as ordinary worlds, without physically placing ore or rock blocks beneath its surface.
+Use the existing seeded Resource Genesis foundation; terrain generation is not the
+deposit authority. Preserve survey identity, richness, reserves, extraction history
+and versioned derivation across updates. Adding basic resource families must not
+silently remap existing surveyed mineral chunks.
+
+The coordinator's proposed landscaped spawn, pond, exposed quarry, planted trees and
+food/refuge provision were not selected and will not be implemented as a solution to
+Superflat resource access. Ordinary mobs are not the reported problem. The actual
+product gap is deliberate renewable acquisition of necessary materials, including
+sand/clay and other missing basic inputs, through the game's production systems.
+
+**Existing implementation boundary.** `VeinGenerator` derives the material/richness/
+reserve from seed and chunk coordinates. The current extractors use that data and
+`VeinData`, not physical ore scans; `PlanetCatalogue.veins` does not exclude flat
+Overworld generation. This source evidence supports reuse, not a new native flat
+execution or a claim that all basic rocks and multiblock routes are implemented.
+Do not change that established mechanism solely to adopt this clarification.
+
+The owner proposed a special T0 generating multiblock and a quest-reward currency/
+shop for basic or intermediate materials. Preserve both as concrete product-design
+leads, not delivered content or a forced quest-backend switch. Detailed machine/site/
+cost/renewability and currency/catalogue/bootstrap rules remain to be settled against
+the existing source, custody and quest authorities. The requirement for extraction
+multiblocks does not open unrelated held T1+ ports/framework work.
+
+**Proof.** Reuse seed/derivation, persistence, extraction and processing contracts
+within their existing assumptions. Verify the actual flat-world binding and each new
+source/resource behavior only when changed or unproved. A shop with finite quest
+rewards is not itself proof of unlimited automated supply. No native test, new
+terrain, machine, currency or manual playthrough is supplied by this decision.
+
+---
+
+## ADR-0151 — Keep coordination local and execute through the existing personal-PC SSH
+
+**Status.** Accepted owner-directed operating model, 2026-10-19. This supersedes the
+cloud-execution freeze as the current destination, not its preserved source/evidence.
+
+**Decision.** Keep the Copilot conversation local. Use ordinary SSH to the personal
+Windows PC for heavy builds, focused native checks, packaging and dedicated Prism
+development deployment. GitHub is the synchronization boundary. Do not convert or bind
+this conversation to a Remote Host, reactivate retired workers, or start from old main.
+The received source is `70901eca2da386cd54fc769ba8a2a59be10eb76b`, including the original
+Quern and restricted-pack histories.
+
+Inspect first and preserve the working authentication. PC-login SSH, personal-PC Git SSH,
+commit identity and GitHub API authentication are independent. The existing personal Git
+SSH alias successfully reads the continuation branch even though the PC's `gh` token is
+invalid. Use that Git alias for PC synchronization and the already verified personal
+GitHub account for local publication; do not change accounts, remotes, keys or global
+identity to repair an unrelated API login.
+
+Use an isolated detached execution worktree and process-local Gradle home on the
+high-capacity work volume. Preserve existing clones, caches, app worktrees and worlds.
+Serialize JVM ownership while allowing source/tooling/documentation work in parallel.
+Only committed source is built/deployed, with exact source/runtime and artifact hashes.
+Personal addresses, machine paths and launcher/account configuration stay outside Git.
+
+Deploy into a separately marked **engineering development instance**, not the existing
+preparation instance or a longitudinal save. Reuse verified launcher component metadata
+and hash-matched dependency files where available. Resolve missing selected dependencies
+from the publisher CDN against the existing pins; introduce no new version authority.
+Never clone saves, accounts or private configuration. Refuse unowned/running targets,
+retain replaced owned jars outside the loadable mods directory, and record deployment
+identity. Do not auto-launch Minecraft, log in, or claim human playtest results.
+
+**Alternatives rejected.** Rebinding the conversation to Remote Host/cloud (contrary
+to the explicit operating model); rebuilding on the smaller coordination machine;
+reauthenticating `gh` to fix already-working Git SSH; overwriting the player's old
+instance; treating a successful deployment as an RC or Superflat accessibility proof.
+
+**Evidence boundary.** The completed original T0 audit/action plan target `0d79860`.
+Read them, but use the later integrated T0 contract and ADR-0144/0150 where they supersede
+that baseline. Do not rerun the audit or reopen already-proved mechanisms merely because
+execution moved. The missing native sound binding, actual client rendering/listening,
+flat-world entry, final configured RC and longitudinal compatibility retain distinct
+proof obligations. See [the operating runbook](operations/ssh-prism-workflow.md).
+
+---
+
+## ADR-0152 — Run bounded autonomous T0 and creative work without human acceptance
+
+**Status.** Accepted owner-directed unattended programme, 2026-10-19.
+
+**Decision.** Continue local coordination and ordinary personal-PC SSH while the owner
+is unavailable. Prioritize stable traceable build/deployment, verified T0 defects and
+nonredundant regressions, then independent GREEN foundations. Run genuinely independent
+technical, deterministic visual and SFX work in isolated child worktrees. The coordinator
+owns architecture, integration, resource reservations, publication and final evidence.
+Do not leave useful safe work idle because a different lane needs human judgment.
+
+Keep T0 unaccepted/unfrozen and T1 inactive. GREEN preparation is not a new T1 frontier.
+Preserve the current product/flat-world decisions: no guessed starter kit, staged terrain,
+quest-shop economy, final balance or RED content. Reconcile the original audit's old
+baseline with current evidence instead of redoing its completed review or inventing defects.
+Human pacing, enjoyment, visual quality and listening remain explicit manual observations.
+
+All PC work is reversible and project-scoped. Existing player instances/saves, unrelated
+software, OS/security configuration and authentication remain untouched. Only the coordinator
+updates the shared execution worktree/development instance; children request a separate
+execution surface and a bounded JVM window before builds. Preserve every coherent contribution
+in Git and maintain [the return handoff](../RETURN-HANDOFF.md).
+
+**Creative scope.** Preserve the approved placed-machine identity and reviewed Core/Matrix
+family. Prefer the existing deterministic generator for confidently weak encountered T0
+sprites; no image-provider key is currently configured on the coordinator and no onboarding
+question blocks local art work. Static/pixel review is not an observed in-game art pass.
+
+The owner newly authorizes appropriate ElevenLabs work, not reuse of the exhausted original
+three-request grant. First locate an already configured secure credential without printing,
+copying, reconstructing or re-requesting it. Existing entitlement/account review stays closed.
+This programme permits **at most two new provider requests for one selected T0 sound purpose**,
+only after the coordinator records its purpose, prompts/parameters, new authorization/ledger
+and rights/provenance boundary. No automatic retry after an ambiguous charge, no reset of old
+receipts, no impersonation of their historical author, and no API dependency in normal builds.
+If the credential or honest authorization tooling is unavailable, record that blocker and
+continue source/offline validation or another GREEN lane. Do not expand the sound budget.
+
+**Alternatives rejected.** Waiting for the absent owner on ordinary engineering choices;
+silently deciding subjective/product questions; activating T1 because a jar deploys; exhaustive
+duplicate native tests; unconstrained paid generation; competing shared-worktree publishers.
+
+---
+
+## ADR-0153 — Rebind generated recipes at atomic graph boundaries
+
+**Status.** Accepted bounded A03 remediation, 2026-10-19. The regression is prepared;
+red execution, implementation and its affected proofs are not credited by this decision.
+
+**Current counterexample.** `MaterialRegistry.rebuild` publishes a new generated lookup,
+but a loaded process machine can retain its previous cached recipe. Removing only an
+ingot form withdraws a generated row while its raw input/crushed output still resolve,
+so ingredient re-matching alone can still spend Flux and emit from a withdrawn definition.
+Existing paid-work ownership and fluid receipts solve other boundaries, not membership.
+An idle/miss machine also needs a wake path when a reload adds a usable recipe.
+
+**Prior art and limits.** Read-only source review at GregTech-Modern
+`aa41aba133f31dd3928bea816d6fd032cd1d90b6` inspected
+[RecipeLogic](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/machine/trait/RecipeLogic.java),
+[RecipeManagerMixin](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/core/mixins/RecipeManagerMixin.java)
+and [GTRecipeType](https://github.com/GregTechCEu/GregTech-Modern/blob/aa41aba133f31dd3928bea816d6fd032cd1d90b6/src/main/java/com/gregtechceu/gtceu/api/recipe/GTRecipeType.java).
+Those paths re-match cached recipes, rebuild a mutable index during synchronous reload,
+and unsubscribe idle work pending content notifications. They do not establish the
+graph-membership and reload-wakeup guarantees this generated, subscription-driven graph
+requires. Targeted negative searches are not proof that every upstream path is absent.
+No source is imported; LGPL-3.0 code remains reference-only. Vanilla caching was not
+source-verified in that investigation and is not used as supporting proof.
+
+**Decision.** Preserve the existing graph and scheduler. Publish the complete immutable
+recipe list and indexes together through the existing graph holder, with atomic/volatile
+visibility. Use one stable typed identity from that published snapshot, not an independently
+published epoch and graph. The identity is unchanged between rebuilds and fresh for a new
+publication, including equivalent/empty contents; reading it allocates nothing.
+
+Cached selection checks that identity before reuse. On change, discard only the transient
+selection and resolve against the current graph. Same `WorkRecipe` keeps paid `Progress`;
+different recipe IDs retain the existing reset policy. A withdrawn definition may wait
+with its paid work, but cannot consume another input/Flux or emit. Already committed
+output/receipt ownership is not discarded.
+
+Add one bounded pre-subscription hook to the already invoked base server ticker.
+Only process machines compare the identity, O(1), and refresh subscriptions once when
+it changes. The existing ticker runs even with empty subscription lists; explicit
+logistics hold stays held, and release revalidates before work. No world scan, global
+machine registry, forced chunk load, polling recipe lookup every tick or cross-thread
+tag callback may touch machines. Preserve the existing once-per-world-tick work guard.
+
+No NBT keys, paid-work identity, recipe balance, Matrix gate or player permission changes.
+A reload/unload reconstructs transient selection from current data; no saved epoch is trusted.
+
+**Validation.** First execute the real tag-binding/material/graph counterexample on the
+frozen pre-fix source. Then cover withdrawn active selection with still-resolvable I/O,
+same-identity paid progress, reconstruction/current provider, a previously idle miss
+gaining a row without neighbor mutation, and no double work/Flux on refresh. Reuse unaffected
+inventory/fluid/conservation proofs and run the affected selected checks/build. The changed
+BE/ticker seam needs representative native evidence, not another run for every material.
+
+**Alternatives rejected.** Guard only active `recipe()` calls (leaves idle misses asleep);
+direct tag-event callbacks (unsafe client/server ownership); scan every loaded machine on
+reload; keep a separate mutable generation counter; clear paid progress on every rebuild;
+copy the upstream mutable lookup/cache behavior or replace the whole execution engine.
+
+---
+
+## ADR-0154 — Stage one disabled optional pack for reload smokes
+
+**Status.** Accepted narrow validation-tool extension, 2026-10-19. Native qualification
+is still pending.
+
+**Need.** ADR-0153's Java tests prove cache/paid-work behavior without a real Level.
+Its distinct native obligation is an already loaded, charged, unsubscribed process
+machine waking on a genuine tag/graph rebuild without another inventory/neighbor wake.
+The existing smoke harness stages only one initially enabled pack. A base pack can
+provide raw/crushed tags while one initially disabled ingot pack supplies the missing
+form only when the scenario enables it. An always-enabled fixture would be a false proxy.
+
+**Decision.** Extend the existing paired PS/SH harness, not create another server runner.
+Support at most one `SMOKE_OPTIONAL_DATAPACK`, copied using the same validated path/
+long-path rules as the principal pack. A selected scenario may discover its one explicitly
+named optional directory. Keep it out of the enabled selection and explicitly disabled
+at fresh-world creation using verified1.20.1 pack-selection semantics; the commands then
+enable that exact pack and exercise the real reload. If those semantics are unverified,
+fail the setup rather than assuming the pack starts disabled.
+
+No optional pack means byte/behavior-compatible existing defaults. Reject missing,
+ambiguous or colliding selected pack paths; reset/restore per-scenario environment.
+The reload case requires a fresh diagnostic world, not leakage into an ordinary shared
+batch. Inspect both batch twins and either route this case through isolation or reject/
+exclude it explicitly. Do not change other scenarios or add a bespoke CI step; add
+the scenario-list row only after actual native qualification.
+
+**Oracle.** Before reload, demonstrate a stable charged machine with valid I/O but no
+work/output. Then enable the ingot form without mutating its inventory/energy/neighbor.
+One normal B1 batch must consume one gravel, emit two sand and debit its actual3840FU
+across machine/source buffers once. A full receiver must not receive a positive transfer/
+callback before work begins. Use the actual production buffer/NBT/transfer contract;
+do not inject Progress or infer wakeup from placement or a final item alone.
+
+**Limits.** Test-only tags/world/source, no Prism or real saves. Preserve existing
+handshake/budgets/cleanup and paired platform parity. This is a specific reload fixture,
+not a generic datapack manager, content rewrite or human survival evidence.
+
+---
+
+## ADR-0155 — Retain a diagnostic smoke world only by explicit opt-in
+
+**Status.** Accepted bounded validation-tool extension, 2026-10-19. Source
+implementation `444409f` is independently reviewed with37 PS/43 Windows Git-MSYS
+contracts; native qualification remains pending.
+
+**Need.** A01's extractor regression must check the real, cleanly saved
+`VeinData` extraction counts, not infer them from exported items. Both existing
+smoke twins remove their diagnostic world on exit. The authored command that
+reads `grindless_veins.dat` after the harness returns therefore cannot work.
+The production recovery review found no other high-confidence blocker, but this
+missing accounting evidence still prevents qualification.
+
+**Decision.** Add the same minimal `SMOKE_KEEP_WORLD` opt-in to both existing
+smoke-boot twins. Absent or `0` retains their normal cleanup; `1` preserves only
+the existing isolated diagnostic world and reports that retention explicitly.
+Reject any other value before Gradle or filesystem mutation. All ordinary path,
+linked-ancestor, overlap, EULA, budget, assertion and shutdown guards still apply.
+Do not add an arbitrary post-stop command, another runner or a general export API.
+
+The caller must require successful scenario assertions and natural successful
+server shutdown before using the retained data as evidence. Retention itself is
+neither a PASS nor proof of a clean save. Run the source-bound SavedData oracle
+before another boot resets the world, preserve its receipt, then explicitly clean
+up that one owned diagnostic world. The caller scopes and restores the opt-in;
+the harness must not change the caller's environment. Normal CI and unrelated
+smokes do not opt in.
+
+**Alternatives rejected.** Copying the file from another process before cleanup
+is a race with shutdown and deletion. Reading live data does not prove the
+clean-stop persistence boundary. Item counts alone cannot prove vein accounting.
+An arbitrary shell callback or replacement server harness adds execution and
+quoting boundaries that this one evidence file does not need.
+
+**Limits.** No Prism/player save, migration, crash-atomicity, actual restart or
+longitudinal-play claim. Keep the canonical server heap and all existing timeouts.
+Offline contracts establish default/opt-in/invalid-value cleanup behavior and
+environment preservation; only the real native run can qualify saved accounting.
+
+---
+
+## ADR-0156 — Disclose blockers and separate creative capability from product acceptance
+
+**Status.** Accepted owner-directed follow-up, 2026-10-20; PA-0014. The previous
+qualified559 deployment is preserved, not relabelled as a finished T0 campaign.
+ADR-0158 subsequently replaces the initial micro-approval/cap execution model
+with broader end-to-end authority; the historical budgets below are not current
+permanent project restrictions.
+
+**Need.** The engineering handoff did not prominently disclose that new SFX
+generation had not occurred. Documentation alone is insufficient disclosure.
+The owner supplies the existing audio credential location, requires visible
+blocker reporting and requests parallel visual-capability discovery, coherent
+SFX families, objective client preparation and a minimal fresh-Superflat proposal.
+
+**Decision.** Every wave completion and handback explicitly reports COMPLETED,
+BLOCKED, NOT EXECUTED, NEEDS HUMAN VALIDATION, NEEDS MY DECISION, NEEDS CREDENTIAL /
+EXTERNAL RESOURCE, COST / BILLING RISK and DEPLOYED STATE, both in chat and durable
+handoff. A zero-entry category says None. Partial engineering completion does not
+erase unexecuted creative/product work or claim manual acceptance.
+
+Use four isolated workstreams with the coordinator owning product, integration,
+publication and the single PC execution lease. Image discovery must distinguish
+Copilot usage, GitHub Models image input versus actual image output, actual account
+access, included/free usage, separate billing and local feasibility. No paid
+activation, new subscription, broad secret search or costly model download is
+authorized. At most one small visual proof may use a verified no-cost or already
+authorized route without replacing the accepted asset.
+
+For SFX, preserve the approved Quern resource and original spent receipts.
+Historical Quern/three and prior-wave/two request limits apply to their runs, not
+all future audio. This wave initially budgets at most two candidates per selected
+family, at most two justified families/four provider requests in total, beginning
+with Clay Mixer wet work. This is a coordinator-selected finite execution cap,
+not a new permanent project limit. Before any generation, review the actual
+machine audit, prompts, parameters, rights, new purpose-specific authorization
+and reservation-before-HTTP ledger. Reuse existing sounds/families where adequate.
+Ambiguous delivery consumes its reservation and is not retried automatically.
+No new account/entitlement review is needed.
+
+The supplied external credential is verified by one body-suppressed authenticated
+read, HTTP200, with no generation or secret output/copy. It remains at the existing
+private location; values and access paths never enter Git, manifests or logs.
+Objective audio processing, format/path/registration/lifecycle validation and
+technical selection may proceed; perceptual quality stays pending owner listening.
+
+Trace fresh-Superflat entry and all consumed dependencies against the real
+catalogues. Present viable alternatives and a minimal recommendation before any
+material progression/preset/economy choice. Diagnostic stock is not survival.
+Automate objective client/resource checks and prepare a separate review surface
+without touching player worlds. No T0 acceptance/freeze before the owner's manual
+campaign; no T1 activation by implication.
+
+**Rejected alternatives.** Treat a missing credential as a universal absence
+without naming the searched scope; reset an old spend ledger; turn Copilot credits
+into assumed image credits; generate one sound for every trivial event; stall
+independent branches on a subjective choice; silently implement a starter kit,
+world landscape or quest shop to make a diagnostic route appear playable.
+
+---
+
+## ADR-0157 — Prefer the existing local ComfyUI as a supervised asset backend
+
+**Status.** Accepted owner-directed execution route, 2026-10-20. The owner identifies
+an existing personal-PC ComfyUI installation and authorizes necessary reversible
+configuration, extensions and appropriately licensed additions. Qualification and
+the first end-to-end proof are still pending.
+
+**Decision.** Use a specialized nested asset worker for this local route while
+external-provider research, audio, CI regressions, Superflat proposals and client
+preparation continue independently. Inspect the real installation, launch/runtime,
+models/checkpoints/VAEs/LoRAs/conditioning, custom nodes, workflows, input/output
+locations, hardware and API before changing anything. Hardware alone never proves
+that a model/backend runs. Keep host paths in private operational configuration.
+
+Never reboot the PC. Preserve existing workflows, models, outputs and queued user
+jobs; do not restructure the installation unnecessarily. Prefer a logically isolated
+Grindless profile/workflow/output prefix and existing compatible resources. Do not
+expose ComfyUI to the Internet, weaken firewall/security or create new cloud billing.
+A necessary node/tool/model addition requires a concrete role, pinned provenance,
+licence check, bounded disk/compute estimate and rollback. Avoid duplicate or multiple
+large model families. Serialize heavy GPU/RAM execution against other PC leases
+when actual headroom requires it, not all metadata/configuration work.
+
+The public project contract is structured asset specification -> versioned ComfyUI
+workflow/seed/model settings -> retained source candidate -> deterministic crop/
+background/palette/pixel adaptation -> Minecraft technical validation -> reviewed
+integration -> owned stopped Prism deployment -> human in-game visual review.
+ComfyUI supplies source material, not Minecraft correctness or artistic acceptance.
+Keep generation and deterministic transformation identities separate; a fixed seed
+does not promise cross-driver bitwise output. Never mistake a cache hit for a second
+independent inference.
+
+Derive shared palette, silhouette, material, mechanical and tier/family rules from
+existing Grindless design/assets. Prefer reusable item/material, machine concept/
+texture, state variant, book and UI/icon templates rather than unrelated graphs.
+Begin with one justified weak T0 asset, at most two source candidates unless a
+concrete defect requires a reviewed adjustment. Preserve its predecessor, integrate
+only a technically valid scoped candidate and mark NEEDS HUMAN VISUAL VALIDATION.
+No mass replacement or T0 acceptance/freeze follows from this proof.
+
+Record model and workflow versions/hashes, original structured prompt/specification,
+seed/settings, own source output, deterministic transforms and resulting asset.
+Do not copy unrelated personal workflows/prompts into Git. External image options
+remain comparative research and require explicit paid authorization before use.
+
+**Reporting.** In addition to ADR-0156's eight categories, the useful ComfyUI
+checkpoint explicitly reports COMFYUI ENVIRONMENT FOUND, REUSED COMPONENTS,
+INSTALLED/CHANGED COMPONENTS, MODEL/WORKFLOW SELECTED, AUTOMATION METHOD,
+POC ASSETS GENERATED, ASSETS INTEGRATED, NEEDS HUMAN VISUAL VALIDATION, BLOCKERS,
+DISK/COMPUTE IMPACT, LICENSING/PROVENANCE NOTES and RECOMMENDED NEXT ASSET WAVE.
+Do not bury failed nodes, missing models, unsupported execution or absent images
+inside the decision document.
+
+---
+
+## ADR-0158 — Delegate end-to-end outcomes with proportional validation
+
+**Status.** Accepted owner correction, 2026-10-20. Excessively narrow assignments
+and approval stops delayed real generation despite available access and subscriptions.
+
+**Decision.** Give each existing worker a broad, coherent outcome through ordinary
+implementation, generation, technical selection, processing, integration and tests.
+Routine iteration, review-marker/grant preparation under delegated authority and
+repair of concrete defects do not require a new coordinator permission at each step.
+Prefer a real bounded execution and relevant checks over another custom carrier,
+full replay or preparation-only handoff. Use independent review at meaningful risk
+boundaries, not as an automatic gate for every file or invocation.
+
+The sound owner may now mark the delivered real wet-work contract/manifest reviewed,
+commit it, issue its fresh private source-bound grant and execute the accepted two
+Mixer requests immediately. Small justified iterations/families may use up to12
+SFX requests in this wave, without exhausting that ceiling merely for activity.
+The Comfy owner may finish the selected Multitool pipeline and use up to8 additional
+local candidates only if useful. Each run still has a finite recorded budget; old
+spent receipts are never reset and uncertain delivery is not blindly resubmitted.
+These are operating allowances for delivery, not permanent project limits.
+
+Keep meaningful safeguards: secrets never exposed/copied, exact source/output
+provenance, no PC reboot/public Comfy exposure or player-world damage, and honest
+human visual/listening/campaign gates. Ordinary transformations, codec QC and
+source preservation are worker-owned. Coordinator publication and shared final
+build/deploy remain serialized; actual PC resource handoffs are scheduling, not
+another design-approval ceremony. Independent lightweight work continues.
+
+Material progression alternatives, new external paid-image billing and genuine
+security/account/OS changes still need the appropriate owner decision. Existing
+subscriptions and the expressly authorized local route are for use, not perpetual
+access/entitlement rediscovery. Record actual costs and material failures visibly
+under ADR-0156. Neither this acceleration nor a technical pass accepts/freezes T0.
+
+---
+
+## ADR-0159 — Start T0 with one free generous starter quest
+
+**Status.** Accepted owner decision, 2026-10-20. Implement directly; the earlier
+Superflat alternatives are historical proposal, not an outstanding choice.
+
+**Decision.** The first quest is immediately available and free, providing a
+generous finite construction/food/basic-material bridge. Do not require paper,
+a pre-existing tool, currency, a village or diagnostic commands to reach it.
+Use the existing server-authoritative quest claim/reward/persistence mechanisms,
+with stable old quest IDs and one claim per player/world across rejoin/respawn.
+Make the existing quest book available from initial entry; do not create a new
+shop, world generator, primitive production framework or second reward ledger.
+
+The coordinator's ordinary allocation is 128 cobblestone, 64 oak logs, 64 bread,
+64 brick items, 64 clay balls, 64 sand, 32 charcoal, 16 iron ingots and 2 filled water
+buckets, delivered as legal stacks. This intentionally generous finite bootstrap
+is not a permanent resource farm. No finished machines, insulators, Data Cores,
+Calibrated Cores, Matrices or advanced components are given.
+
+Expose the complete reward and free/ready state through the legacy book and
+Heracles projection. Preserve explicit player claim, safe overflow and old save/
+quest progress; never reset claims or silently grant the whole kit to existing
+inventories. Normal Superflat works without selected-village/terrain/loot reliance.
+Human first-quest interaction, pacing and the campaign remain validation, not
+another initial-kit design approval or a reason to defer implementation.
+
+**Delivery and capacity.** Reuse vanilla `SimpleContainer` stacking over copies
+of the 36 main inventory slots. Resolve and stage every legal reward before
+advancing the same claim ledger, then commit the prepared inventory once on the
+server thread. A full inventory rejects the whole claim with a localized message;
+nothing is dropped or partially granted. This intentionally also defers older
+single-stack quests when full, replacing their previous remainder-drop behavior.
+The utility book alone is recoverable on login/respawn while the starter claim
+is still unused; an initially full inventory retries book delivery every 20 ticks.
+No new persistence schema, second ledger or Heracles-owned reward is introduced.
+
+---
+
+## ADR-0160 — Merge the testing-ready T0 candidate and close superseded PRs
+
+**Status.** Accepted owner instruction, 2026-10-20.
+
+**Decision.** Once the integrated T0 candidate is technically ready for testing,
+merge its consolidated pull request into `main` and clean up superseded open PRs.
+Readiness includes the implemented free starter path, applicable executable
+contracts, common/Forge build, source-bound package/registration verification,
+the same verified development deployment, and applicable live GitHub checks.
+Do not bypass required checks, reviews, branch protection or an unresolved defect.
+
+Human appearance/listening, real quest interaction, no-command campaign and
+longitudinal observations are the testing that follows this delivery, not fictional
+pre-merge passes. This instruction does not accept/freeze T0, declare the restricted
+engineering pack a release candidate, or activate T1.
+
+Preserve the complete checkpoint history with an allowed merge commit. Before
+closing an old PR, re-read its live state/head and establish that the exact head
+is included in merged `main`; preserve and report any unique or changed work.
+Keep existing branches/worktrees and their evidence. Closing superseded PRs is
+not permission to delete unknown work, rewrite owned branches or modify repository
+protection. The inspected older PR chains have no native stack metadata; do not
+invent or dissolve a stack to clean them up.

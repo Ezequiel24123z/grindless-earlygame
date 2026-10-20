@@ -1,0 +1,289 @@
+Qualified native idle-cache reload regression (ADR-0153)
+
+Current status: ACTUAL NATIVE RED/GREEN QUALIFIED AND REGISTERED.
+The exact444 production baseline publishes the real ingot tag but misses wakeup;
+integrated559 passes all5 actual Server markers, one gravel -> two sand,
+exact3840FU and40 stable ticks with harness0/natural server0/0Java. The identical
+559 JAR98aa47dd and playable ZIP are now deployed to the separately owned Dev
+instance; no client/player-save/T0 acceptance follows. Original receipts and
+observer-error addenda are preserved without replay in the coordinator ledger.
+
+The original offline checkpoint and its limits below are historical, not the
+current qualification state. It was authored without JVM/Gradle/server/client/
+PC/deployment execution, on source parent ab8490545d2796fcfb79981cb2bb2bd9172f7113.
+The separate real-tag Java red fixture is frozen at
+3643c6a049e3beb39b28fe23f4b6d8a1f316db30; its results are not this native proof.
+
+The uncovered property
+----------------------
+A real Level-ticked Pulverizer, already holding valid input and a full energy
+buffer but no matching generated row/work subscription, must wake after a real
+tag publication without an inventory edit, neighbor update, energy delivery or
+unload/reconstruction being the cause. One ordinary, unupgraded B1 batch must
+consume one gravel, produce two sand and spend exactly 3,840 FU. The observer
+also bounds paid work by elapsed game ticks and retains the result for 40 more
+ticks without a second batch, extra output or unexplained Flux loss.
+
+Reflection/pure Java checks can prove selection and subscription methods in
+isolation, not the registered ticker -> tags/reload -> loaded Level boundary.
+States-only placement never exercises this transition. Existing workshop,
+Matrix, fluid, persistence and renewable-cycle proofs are reused unchanged;
+this scenario does not repeat those matrices or test every generated material.
+
+One controlled case, not new gameplay
+------------------------------------
+The enabled base pack replaces exactly these cache_probe item tags:
+  forge:raw_materials/cache_probe = [minecraft:gravel]
+  grindless:crushed_materials/cache_probe = [minecraft:sand]
+  forge:ingots/cache_probe = []
+The initially disabled sibling recipe-cache-reload-optional contains ONLY the
+ingot override [minecraft:iron_ingot]. Enabling it LAST changes only that form;
+it neither removes nor replaces the still-valid raw/crushed providers.
+ProcessGraph generates dry b1/cache_probe only when the ingot form exists.
+
+Three isolated marker armor stands witness actual item-tag membership through
+ordinary predicates. For 40 consecutive observations, require both I/O tags,
+no ingot member, Recipe="", WorkRecipe="", Progress=0, one gravel, no product
+and unchanged full buffers. A competing existing recipe cannot satisfy this
+baseline; after reload, actual paid work must name b1/cache_probe, not just emit
+an otherwise plausible sand output.
+
+The fixture then issues `datapack enable "file/recipe-cache-reload-optional" last`.
+This command performs Minecraft's real asynchronous resource/tag reload. A
+storage-gated minecraft:load callback acknowledges the changed tag set; it does
+not reconstruct, touch or notify either machine. The scheduled base-pack
+observer continues across reload and never assumes one console sleep means
+reload completion. No production Java method is called by a test sidecar.
+Phase2 counts publication observations only. Its400-tick deadline emits
+CACHE-RELOAD-FAIL-PUBLICATION-TIMEOUT, never the native pre-fix wake marker.
+Only phase3 with reload_seen=1 resets and spends the separate400-tick wake/
+cycle allowance. A late publication cannot steal the normal120-tick batch's
+allowance. Paid-work/time samples continue across the barrier without reset.
+
+The command-built equipment is a Pulverizer at 8 280 8 with 1,280 FU and one
+gravel, plus an adjacent Thermal Generator at 7 280 8 precharged with 6,400 FU,
+with zero Burn/Duration and no fuel. There is no pylon, hopper, other inventory
+or fluid supply. The buffer sizes come from MachineBlockEntity.bufferCapacity,
+ThermalGeneratorBlockEntity.bufferSeconds and FluxTier.F1, not invented NBT.
+The ordinary B1 needs 120 ticks at 32 FU/t, more than the consumer's 40-tick
+buffer: pretending that 1,280 FU alone finishes the batch would be a false test.
+
+While the consumer is full and unsubscribed, receive() accepts zero and invokes
+no onChanged callback (SimpleFluxStorage). The donor cannot independently wake
+the miss. Only after reload-triggered work spends its first 32 FU may natural
+delivery refill it. Ordinary status publication uses UPDATE_CLIENTS, not a
+neighbor notification. No command changes any block, machine NBT, input, output,
+fuel, charge, Progress, conditions or config after setup. Tag witnesses never
+touch the machines. The donor rejects sand as fuel, keeping the output visible.
+
+Read-only sampling requires one inventory stack: either slot0 gravel x1 before
+completion or slot1 sand x2 afterward. It checks successful NBT reads and:
+  consumer_FU + donor_FU + Progress * 32 + completed_batches * 3840 = 7680
+Here completed_batches can only be zero or one, derived from the real inventory.
+It never defaults a failed read to zero. With unchanged optimal conditions and
+no upgrades, the increase in paid work cannot exceed elapsed_game_ticks * 32.
+Final stock is sand x2, zero input/progress and exactly 3,840 FU remaining.
+The unused second-batch energy is intentional: an extra charge cannot hide
+behind exhaustion. All stock/energy are explicit diagnostic setup, not a
+Survival bootstrap, renewable-source claim or changed recipe balance.
+
+Minimal authorized harness integration
+-------------------------------------
+At the source parent, the runner could copy only ONE initially enabled pack.
+Fixture checkpoint 5bc4543bdf55754c12ade197bc67fbc876097b29 preserved that real
+limitation. The coordinator then authorized the narrow extension under ADR-0154
+(authored in the parent worktree; integrate that decision with this continuation).
+
+Both smoke-boot twins now optionally accept ONE SMOKE_OPTIONAL_DATAPACK.
+They preflight its directory/metadata, portable basename, reparse/symlink-free
+tree and separation from the disposable world before Gradle/world replacement.
+Both source and world paths reject linked ancestors before any physical-source
+canonicalization can hide them. This includes a logical ROOT alias and a fresh
+world whose suffix is not created yet; only expected missing path components
+are tolerated, while unreadable metadata still fails. Rejecting these aliases,
+rather than comparing a logical world against a physical input, prevents
+cleanup from deleting an aliased source.
+PS selects an absolute FileSystem path using the PowerShell provider/location,
+not the process-wide .NET CurrentDirectory. The same selected path reaches
+ancestor inspection, Get-Item, overlap and copying. Only the PS drive/root
+anchor is resolved first; logical dot segments remain until root-first prefix
+inspection has ruled out links. ROOT receives the same selection and, in
+optional mode, inspection before Resolve-Path can erase logical components.
+The legacy single-pack relative input also receives the selected absolute path.
+Home-prefixed inputs use the provider's ~ anchor before the logical tail is
+appended. This preserves normal Home ROOT/primary/optional paths without
+inventing ~user semantics or erasing an unchecked Home alias.
+When present, also validate the primary; reject case-insensitive basename
+collisions. Existing no-optional behavior is preserved. Copy the sibling next
+to the primary and explicitly write initial-disabled-packs=file/<optional>.
+Omission from initial-enabled-packs alone is NOT sufficient on 1.20.1.
+
+Both isolated run-smokes twins discover tools/smoke/<name>-optional and scope
+the new environment setting per scenario; the caller is preserved on success
+and failure. The PS batch excludes recipe-cache-reload and every scenario with
+an optional sibling, announces mixed exclusions and rejects isolated-only
+selection. Its single boot clears/restores inherited optional state. There is
+no run-smokes-batch.sh at the received source; another coordinator-owned child
+is authoring that separate GREEN twin, not this fixture. Do not mistake Windows
+Git Bash for a Linux run. CI and scenarios.txt remain untouched.
+No watcher, RCON, arbitrary shell hook, extra mod or new framework is introduced.
+
+Optional diagnostic-world retention (ADR-0155)
+--------------------------------------------
+The coordinator separately authorizes SMOKE_KEEP_WORLD=1 in the existing boot
+twins. Absent/0 keeps final cleanup; every other value is rejected before
+Gradle or filesystem mutation. No flag changes the selected world, copies it
+elsewhere, disables path preflight, alters heaps/budgets or skips process/exit
+checks. Startup still replaces the previous smoke world unconditionally.
+
+Opt-in finalization prints the exact existing path as SMOKE WORLD RETAINED,
+explicitly not PASS/clean shutdown; a missing world is SMOKE WORLD ABSENT and
+is not created. A failed or forced-stop run may retain diagnostics too, so the
+banner is never evidence of a healthy world. PS final-cleanup errors are now
+explicit failures, not silently ignored. The flag does not modify caller env.
+
+For the separate A01 saved-data oracle, the coordinator must first establish
+real harness exit0 and natural server exit0, then inspect the real
+forge\run\smoke-server\smoke-world\dimensions\grindless\luna\data\grindless_veins.dat
+before cleanup. VeinData uses the supplied ServerLevel's storage, not Overworld storage.
+File existence alone, these helper checks or a retained-world banner do not
+prove the expected saved data. Preserve source/jar/log and binary evidence,
+then explicitly remove only that exact owned diagnostic world. Do not launch
+another smoke before the postcheck: its normal startup reset will replace it.
+Never target a Prism/player world, and do not confuse diagnostics with a
+retained-world gameplay/upgrade acceptance pass.
+
+The paired verify-smoke-world-retention checks pass37 PS and43 local Windows
+Git/MSYS assertions using actual helpers, rejected entrypoints and synthetic
+0/23 process exits. They cover default/zero cleanup, opt-in bytes/path/state,
+absence without creation, strict invalid flags before mutation, unchanged
+caller env, preflight still enforced and explicit post-inspection cleanup.
+The existing VerifySmokeHarness invokes them without an extra CI step.
+This is not native server/shutdown, saved-data, Java compilation/execution or
+Linux/macOS qualification. No actual native world was retained by this work.
+
+Verified 1.20.1 source semantics (reference only, no imported code):
+  https://github.com/themodderg/The-Digimod/tree/744e72e970ae33a77acd241221e917f6f3d5258a
+  build.gradle selects net.neoforged:forge:1.20.1-47.1.79.
+  Source root: build/tmp/.cache/expanded/zip_51348f0b239ab79c430d7ade20fd8068/
+  net/minecraft/server/dedicated/DedicatedServerProperties.java:
+    constructor/getDatapackConfig read BOTH initial-enabled/disabled-packs.
+  net/minecraft/server/MinecraftServer.java: configurePackRepository excludes
+    explicitly disabled IDs from its new-pack automatic-admission branch.
+  net/minecraft/server/packs/repository/ServerPacksSource.java uses WORLD for
+    the world folder, and PackSource.java sets WORLD.shouldAddAutomatically=true.
+  net/minecraft/server/commands/DataPackCommand.java: enable last appends to the
+    selected list and calls ReloadCommand.reloadPacks; permission level is 2.
+This pinned public 1.20.1-derived source mirror is static behavior evidence,
+not binary qualification of the selected Forge47.4.23 or another mod import.
+Current Forge1.20.x source has newer APIs and is not substituted for1.20.1.
+
+Smallest future execution, only after coordinator authorization
+---------------------------------------------------------------
+Integrate/publish the final application fix and this fixture/staging change,
+then grant one exclusive diagnostic-server qualification window in a
+separate exact-source PC worktree with fresh resource guards. Never use the
+default private pc.json or a Prism/player save as a child execution surface.
+Both base and optional packs must be present before boot; ONLY base is enabled.
+Do not stage optional into a running world using an unreviewed file watcher.
+
+The direct PS invocation from that isolated, exact-source root is:
+  $env:SMOKE_DATAPACK=(Resolve-Path '.\tools\smoke\recipe-cache-reload').Path
+  $env:SMOKE_OPTIONAL_DATAPACK=(Resolve-Path '.\tools\smoke\recipe-cache-reload-optional').Path
+  $env:SMOKE_COMMANDS=(Resolve-Path '.\tools\smoke\recipe-cache-reload.commands').Path
+  $env:SMOKE_EXPECT_FILE=(Resolve-Path '.\tools\smoke\recipe-cache-reload.expect').Path
+  $env:SMOKE_LOG=Join-Path (Get-Location).Path ('forge\run\recipe-cache-reload-'+(Get-Date -Format 'yyyyMMddTHHmmssfff')+'.log')
+  $env:SMOKE_TIMEOUT='900'
+  $env:SMOKE_EXPECT_TIMEOUT='120'
+  $env:SMOKE_PORT='25628'
+  powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\smoke-boot.ps1 -Root .
+EULA opt-in must come from existing coordinator/owner authorization; this
+document is not consent. The corresponding .sh entry uses the identical four
+SMOKE paths and the same expectation budget. Use only one native runner, not
+both native boots merely to repeat this mechanism proof.
+
+The existing runner first executes :forge:prepareSmokeServer; budget that
+separately with the repository's current bounded Gradle settings and no
+concurrent JVM owner. It then launches exactly ONE production Forge server at
+the unchanged -Xmx2G (never shrink the canonical heap). Assertion budget is the
+existing 120 seconds, startup 900, handshake 60, clean shutdown 60. The fixture
+needs at most 201 chunk-wait ticks, 40 idle observations, 400 publication
+observations, 400 confirmed work observations and 40 extra settled ticks:
+under55 game seconds at20TPS. Each phase keeps its400-tick cap; the outer120s
+assertion deadline and all server heap/startup/shutdown limits are unchanged.
+Its own missing-pack, tag, read/balance and timeout failures are explicit.
+
+Expected pre-fix result, NOT an executed result
+----------------------------------------------
+With both packs correctly staged and only the base enabled, ab8490545d2796f /
+the unchanged application at frozen3643c6a should emit the idle and published-
+ingot markers, then CACHE-RELOAD-FAIL-IDLE-WAKE-OR-CYCLE-TIMEOUT. The full
+consumer cannot receive a donor callback; no neighbor or inventory mutation
+rescues its empty work subscription. The wake, batch and final markers remain
+absent and the existing expect runner must exit nonzero.
+Missing staging instead produces CACHE-RELOAD-FAIL-OPTIONAL-PACK-NOT-STAGED-OR-NOT-DISABLED;
+that is a harness/setup failure, not the intended red counterexample.
+An unconfirmed publication instead produces CACHE-RELOAD-FAIL-PUBLICATION-TIMEOUT;
+it is not evidence that the idle process missed a published graph.
+
+Retain exact source/application-fix/fixture revisions, jar hash, command,
+heap/budgets, raw native log, exit status and all five gated markers. Standard
+cleanup removes the diagnostic world, so preserve useful failure evidence
+before another run overwrites logs. Only after actual qualification add ONE
+scenario-list line through the existing mechanism, never a duplicate CI step.
+Minecraft function/predicate parsing, the real tag barrier, native donor
+delivery and complete red/green remain NOT_RUN at this offline checkpoint.
+The initial fixture's offline structure inspection passes ten JSON documents, 23 resolved function
+calls, five unique marker emitters and setup-only world mutations. Expectations
+require actual [Server] broadcasts, not marker text quoted in a parser error.
+The initial8a433 PS optional-pack helper/dispatch check passed37 cases, including real
+tree copies, collisions/invalid paths/reparse points, successive fake boots,
+same-process environment restoration and batch exclusion. Its first attempt
+failed in test-only nested -Command quoting; -EncodedCommand corrects that
+failure, and the final check passes. No Minecraft process was involved.
+An independent review then blocked8a433 on two P2 defects: conflated publication/
+wake accounting and unchecked path ancestors. Two new offline checks separately
+fail on that frozen source: "optional source through a junction ancestor" and
+"publication wait cannot consume or masquerade as confirmed wake budget".
+The repair passes59 focused PS checks, adding safe alias-to-world and ROOT-alias
+cases with retained-source/world sentinels, separate budget guards and seven
+in-memory source mutations. Junctions target only this check's own temporary
+trees and are unlinked before cleanup; no external tree or server is deleted.
+These are path/dispatch executions and source contracts, not a Minecraft
+reload-scheduler execution. Native qualification is still required.
+The next review found a remaining c7 relative-path bypass: after Set-Location,
+.NET CurrentDirectory and PS location may differ. The real owned-junction test
+"relative optional cannot bypass ancestor guards with divergent cwd" fails on c7.
+The corrected PS check passes75 cases, including valid relative/PSDrive controls,
+primary/optional/world aliases, an actual ROOT entrypoint rejection, intact
+sentinels and restoration of both locations in finally. The first repair attempt
+hit an invalid-name attribute read on an unresolved dot component; root-first
+prefix inspection fixes that without swallowing the error or normalizing away
+an unchecked logical ancestor. SH guards and publication/wake functions do not
+change in this correction.
+The subsequent ae054 review found that its75-case scope omitted Home. The
+owned-provider-Home fixture reproduces that real failure before the correction;
+86 focused PS checks now pass Home ROOT/primary/optional, literal resolution,
+Home alias/dot guards and ~user/provider parity while cwd still diverges.
+Provider Home and both locations are restored in finally. Only an owned
+temporary Home is used: the real HOME's files are never modified.
+The initial SH search found no Bash on PATH/four bounded Git candidates. The
+coordinator later supplied an existing local Git/MSYS sh5.2.37: both SH scripts
+parse on Windows, but the optional check stops at its unavailable ln command.
+No installation, Linux/macOS pass or complete SH contract pass is claimed.
+VerifySmokeHarness calls these checks through its
+existing suite, not a new CI step. The four focused VerifyEnergy assertions use
+the actual SimpleFluxStorage type to cover full-buffer/no-callback and normal
+post-withdrawal refill; JVM execution/compilation is NOT_RUN under the reservation.
+The fixture checkpoint's standard documentation check passes639 links/153 ADRs.
+No client interaction, genuine restart/crash recovery, saved-world migration,
+human/T0 acceptance, freeze, release or T1 activation is implied.
+
+Subsequent coordinator-hosted evidence, distinct from the offline checkpoint:
+exact444409ff58a897efac0902f099c0b0853220ce6f CI39323729055 completes its
+Linux verify job with environment/build/behavior/docs exit0. Its actual
+VerifySmokeHarness runs both optional-pack and world-retention SH contracts
+successfully, and VerifyEnergy executes all four added storage assertions.
+The source-pinned foundation artifact and hashes are in the coordinator ledger.
+This resolves Linux helper execution, not the real loaded-idle Forge reload,
+clean-stop saved accounting or any player/client acceptance.

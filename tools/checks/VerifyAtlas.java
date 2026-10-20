@@ -18,15 +18,26 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        eq("atlas lists every generated recipe", 112, rows.size());
+        // ADR-0133 adds 12 RenewableProcesses rows and 28 BootstrapAssembly rows per station.
+        eq("atlas lists every generated recipe", 189, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        eq("forty-one reachable assembler crafts in this set", 41,
+        // The 28 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
+        eq("sixty-nine reachable assembler crafts in this set", 69,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        eq("atlas includes every machine, hand craft and calibration route", 145, allRows.size());
+        // The 68 generated additions plus five new BootstrapRecipes crafts extend the old 167.
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 240, allRows.size());
+        for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
+            AtlasLogic.Entry row = route(allRows, "craft/" + craft.name());
+            eq(craft.name() + " exposes its complete output batch", craft.resultCount(), row.outputs().size());
+        }
+        AtlasLogic.Entry core = route(allRows, "craft/data_core");
+        yes("the Atlas exposes the ceramic core rather than the retired stone bypass",
+                core.inputs().equals(List.of("item:grindless:ceramic_insulator", "item:minecraft:redstone")));
+        eq("the grog sink is visible", 1, AtlasLogic.consuming(recipes, BootstrapProcesses.GROG).size());
         AtlasLogic.Entry calibration = route(allRows, "calibrate/data_core");
         eq("calibration names its physical station", "RESEARCH_TERMINAL", calibration.station());
         yes("calibration has no generated machine family", calibration.family() == null);
@@ -52,17 +63,39 @@ public final class VerifyAtlas {
         AtlasLogic.Entry industrialRelay = route(allRows, "assemble/relay_matrix_f2");
         eq("the Industrial Matrix names the Assembler", "ASSEMBLER", industrialRelay.station());
         eq("the Industrial Matrix retains all seven physical input units", 7, industrialRelay.inputs().size());
-        eq("the Industrial Matrix carries a physical Matrix forward", "item:grindless:relay_matrix",
+        eq("the Industrial Matrix requires an explicit F1 input", "item:grindless:relay_matrix [F1]",
                 industrialRelay.inputs().get(0));
-        eq("the Industrial Matrix shows its physical output", "relay_matrix",
+        eq("the Industrial Matrix shows its F2 output", "relay_matrix [F2]",
                 AtlasLogic.describe(industrialRelay.outputs()));
+        yes("the compact line retains both physical ratings",
+                AtlasLogic.line(industrialRelay).contains("relay_matrix [F1]")
+                        && AtlasLogic.line(industrialRelay).contains("relay_matrix [F2]"));
+        yes("the detail pane distinguishes the bootstrap and Industrial outputs",
+                !AtlasLogic.describe(assembledRelay.outputs())
+                        .equals(AtlasLogic.describe(industrialRelay.outputs())));
+        eq("bare Matrix lookup still finds both generated production routes", 2,
+                AtlasLogic.producing(recipes, "grindless:relay_matrix").size());
+        eq("kind-qualified Matrix lookup still finds both generated production routes", 2,
+                AtlasLogic.producing(recipes, "item:grindless:relay_matrix").size());
+        yes("an explicit F2 lookup finds only the upgrade",
+                ids(AtlasLogic.producing(recipes, "grindless:relay_matrix [F2]"))
+                        .equals(List.of("assemble/relay_matrix_f2")));
+        yes("bare Matrix consumption still finds the upgrade",
+                ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix"))
+                        .contains("assemble/relay_matrix_f2"));
+        no("an F1 query never matches an F2 output",
+                AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:relay_matrix [F1]"));
+        no("rating display does not turn another item into a Matrix",
+                AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:flux_cell"));
+        no("blank lookup still matches nothing", AtlasLogic.names(industrialRelay.outputs().get(0), ""));
         AtlasLogic.Entry factoryPortal = route(allRows, "craft/factory_portal");
         eq("factory portal is a crafting-table route", "CRAFTING_TABLE", factoryPortal.station());
         yes("factory portal consumes its physical Matrix",
                 factoryPortal.inputs().contains("item:grindless:relay_matrix"));
 
         List<AtlasLogic.Entry> ironIngot = AtlasLogic.producing(recipes, "forge:ingots/iron");
-        eq("seven routes make an iron ingot", 7, ironIngot.size());
+        // RenewableProcesses bootstrap/reduce_iron adds primitive reduction to the seven old routes.
+        eq("eight routes make an iron ingot", 8, ironIngot.size());
         yes("B0 makes iron", ids(ironIngot).contains("b0_r1/iron"));
         yes("crushed R1 makes iron", ids(ironIngot).contains("b1_r1/iron"));
         yes("washed R1 makes iron", ids(ironIngot).contains("b2_r1/iron"));
@@ -70,8 +103,9 @@ public final class VerifyAtlas {
         yes("the caster makes iron", ids(ironIngot).contains("cast/ingot/iron"));
         yes("concentrate makes iron", ids(ironIngot).contains("b3_r1/iron"));
         yes("tailings make a trace of iron", ids(ironIngot).contains("tailings/r1/iron"));
+        yes("primitive firing makes iron", ids(ironIngot).contains("bootstrap/reduce_iron"));
         yes("qualified kind also matches",
-                AtlasLogic.producing(recipes, "tag:forge:ingots/iron").size() == 7);
+                ids(AtlasLogic.producing(recipes, "tag:forge:ingots/iron")).equals(ids(ironIngot)));
 
         List<AtlasLogic.Entry> oxide = AtlasLogic.producing(recipes, "grindless:oxides/iron");
         eq("three roast routes make iron oxide", 3, oxide.size());
@@ -163,8 +197,11 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:hydrogen").size());
         eq("oxygen has the cell and the intake", 2,
                 AtlasLogic.producing(recipes, "grindless:oxygen").size());
-        eq("recombination and the condenser make water", 2,
+        // RenewableProcesses bootstrap/wet_aggregate adds a second settling water-recovery route.
+        eq("recombination, condensation and both settling recoveries make water", 4,
                 AtlasLogic.producing(recipes, "minecraft:water").size());
+        yes("aggregate settling exposes its recovered water",
+                ids(AtlasLogic.producing(recipes, "minecraft:water")).contains("bootstrap/wet_aggregate"));
         eq("SO3 has one contact route", 1,
                 AtlasLogic.producing(recipes, "grindless:sulfur_trioxide").size());
         eq("acid has one contact route", 1,
@@ -232,16 +269,27 @@ public final class VerifyAtlas {
                         .contains("silicon/zone_refining"));
         yes("silica reduces to that silicon",
                 ids(AtlasLogic.consuming(recipes, "grindless:silica")).contains("silicon/metallurgical"));
-        eq("renewable cobblestone milling makes sand", 1,
-                AtlasLogic.producing(recipes, "minecraft:sand").size());
-        eq("renewable sand vitrification makes glass", 1,
+        // RenewableProcesses bootstrap/flint_separation adds wet gravel separation, not milling.
+        yes("sand exposes industrial milling, primitive milling, unfired recovery and flint separation",
+                new java.util.HashSet<>(ids(AtlasLogic.producing(recipes, "minecraft:sand")))
+                        .equals(java.util.Set.of("renew/sand", "bootstrap/sand", "bootstrap/unfired_recovery",
+                                "bootstrap/flint_separation")));
+        // RenewableProcesses bootstrap/glass supplies primitive firing alongside renew/glass.
+        eq("primitive firing and industrial vitrification make glass", 2,
                 AtlasLogic.producing(recipes, "minecraft:glass").size());
+        yes("glass exposes exactly the primitive and industrial routes",
+                new java.util.HashSet<>(ids(AtlasLogic.producing(recipes, "minecraft:glass")))
+                        .equals(java.util.Set.of("bootstrap/glass", "renew/glass")));
         yes("the renewable glass chain begins at the pulverizer",
                 ids(AtlasLogic.consuming(recipes, "minecraft:cobblestone")).contains("renew/sand"));
         yes("the renewable glass chain ends at the arc furnace",
                 ids(AtlasLogic.consuming(recipes, "minecraft:sand")).contains("renew/glass"));
-        eq("renewable redstone has one synthesis route", 1,
+        // RenewableProcesses bootstrap/wet_aggregate recovers redstone; it is not another synthesis.
+        eq("redstone has one synthesis and one aggregate recovery route", 2,
                 AtlasLogic.producing(recipes, "minecraft:redstone").size());
+        yes("redstone exposes exactly synthesis and aggregate recovery",
+                new java.util.HashSet<>(ids(AtlasLogic.producing(recipes, "minecraft:redstone")))
+                        .equals(java.util.Set.of("synthesise/redstone", "bootstrap/wet_aggregate")));
         yes("renewable redstone consumes metallurgical silicon",
                 ids(AtlasLogic.consuming(recipes, "grindless:metallurgical_silicon"))
                         .contains("synthesise/redstone"));

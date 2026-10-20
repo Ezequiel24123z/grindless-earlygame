@@ -2,9 +2,8 @@ package io.github.ezequiel24123z.grindless.item;
 
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,9 +16,7 @@ import java.util.Optional;
 /** One Control Matrix architecture; NBT carries its aligned T1-T15 rating. */
 public final class ControlMatrixItem extends Item {
 
-    public static final String TAG_RATING = "Rating";
-
-    private static final FluxTier[] TIERS = FluxTier.values();
+    public static final String TAG_RATING = ControlMatrixNbt.RATING;
 
     private final MatrixArchitecture architecture;
 
@@ -42,28 +39,13 @@ public final class ControlMatrixItem extends Item {
         if (stack == null || stack.isEmpty() || stack.getItem() != this) {
             return Optional.empty();
         }
-        CompoundTag tag = stack.getTag();
-        int ordinal = architecture.firstFrontier().ordinal();
-        if (tag != null && tag.contains(TAG_RATING)) {
-            if (!tag.contains(TAG_RATING, Tag.TAG_ANY_NUMERIC)) {
-                return Optional.empty();
-            }
-            ordinal = tag.getInt(TAG_RATING);
-        }
-        if (ordinal <= FluxTier.F0.ordinal() || ordinal >= TIERS.length) {
-            return Optional.empty();
-        }
-        try {
-            return Optional.of(new ControlMatrixSpec(architecture, TIERS[ordinal]));
-        } catch (IllegalArgumentException invalid) {
-            return Optional.empty();
-        }
+        return ControlMatrixNbt.load(architecture, stack.getTag());
     }
 
     public ItemStack stackFor(FluxTier rating, int count) {
         ControlMatrixSpec requested = new ControlMatrixSpec(architecture, rating);
         ItemStack stack = new ItemStack(this, count);
-        stack.getOrCreateTag().putInt(TAG_RATING, requested.rating().ordinal());
+        stack.setTag(ControlMatrixNbt.save(requested));
         return stack;
     }
 

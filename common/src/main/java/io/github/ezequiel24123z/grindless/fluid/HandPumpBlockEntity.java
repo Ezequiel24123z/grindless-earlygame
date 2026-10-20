@@ -22,6 +22,10 @@ public final class HandPumpBlockEntity extends BlockEntity implements FluidEndpo
     private static final String KEY_FLUID = "Fluid";
 
     private final FluidBuffer buffer = FluidBuffer.ambient(FluidLogic.BUCKET);
+    private final NativeFluidStore nativeFluids = new NativeFluidStore(buffer, () -> {
+        setChanged();
+        sync();
+    });
 
     public HandPumpBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HAND_PUMP.get(), pos, state);
@@ -103,6 +107,11 @@ public final class HandPumpBlockEntity extends BlockEntity implements FluidEndpo
     @Override
     public FluidState contents() {
         return buffer.state();
+    }
+
+    @Override
+    public NativeFluidStore nativeStore() {
+        return buffer.state().is(FluidLogic.WATER) ? nativeFluids : null;
     }
 
     @Override

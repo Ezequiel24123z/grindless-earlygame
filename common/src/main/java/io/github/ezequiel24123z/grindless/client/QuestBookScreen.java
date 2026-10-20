@@ -1,17 +1,22 @@
 package io.github.ezequiel24123z.grindless.client;
 
 import io.github.ezequiel24123z.grindless.menu.QuestBookMenu;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ import java.util.List;
  * The quest lines, drawn with fills (ADR-0100).
  *
  * <p>A row is a line header or a task. Selecting a task and pressing Claim asks the server
- * to pay the reward once. Locked rows stay visible so the route can be read ahead.
+ * to pay the complete reward batch once. Locked rows stay visible so the route can be read ahead.
  */
 public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu> {
 
@@ -34,7 +39,8 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
     private static final int DONE = 0xFF546E7A;
     private static final int ROW_HEIGHT = 10;
     private static final int LIST_TOP = 18;
-    private static final int DETAIL_HEIGHT = 68;
+    private static final int DETAIL_HEIGHT = 90;
+    private static final int REWARD_STEP = 20;
 
     private final List<Integer> rows = new ArrayList<>();
     private int scroll;
@@ -70,28 +76,73 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
                         minecraft.gameMode.handleInventoryButtonClick(menu.containerId, selected);
                     }
                 }).bounds(leftPos + 8, topPos + imageHeight - 22, 120, 16).build());
+        selectTask(selected);
     }
 
     @Override
     protected void containerTick() {
         super.containerTick();
-        if (claim == null || selected < 0) {
+        updateClaim();
+    }
+
+    private void updateClaim() {
+        if (claim == null || selected < 0 || selected >= QuestCatalogue.tasks().size()) {
             return;
         }
+        QuestCatalogue.Task task = QuestCatalogue.tasks().get(selected);
         QuestLogic.Status status = menu.status(selected);
         claim.active = status == QuestLogic.Status.CLAIMABLE;
         claim.setMessage(Component.translatable(switch (status) {
-            case CLAIMABLE -> "gui.grindless.quest.claim";
+            case CLAIMABLE -> task.evidence() == QuestCatalogue.Evidence.FREE
+                    ? "gui.grindless.quest.claim_free" : "gui.grindless.quest.claim";
             case CLAIMED -> "gui.grindless.quest.claimed";
             case LOCKED -> "gui.grindless.quest.locked";
             case UNMET -> "gui.grindless.quest.unmet";
         }));
     }
 
+    private void selectTask(int index) {
+        selected = index;
+        if (selected >= 0 && selected < QuestCatalogue.tasks().size()) {
+            QuestCatalogue.Task task = QuestCatalogue.tasks().get(selected);
+            claim.setTooltip(Tooltip.create(Component.translatable(task.evidence() == QuestCatalogue.Evidence.FREE
+                    ? "gui.grindless.quest.starter_policy" : "gui.grindless.quest.claim_policy")));
+        }
+        updateClaim();
+    }
+
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
+        if (selected >= 0 && selected < QuestCatalogue.tasks().size()
+                && mouseX >= leftPos + 8 && mouseX < leftPos + imageWidth - 8) {
+            QuestCatalogue.Task task = QuestCatalogue.tasks().get(selected);
+            for (int i = 0; i < task.rewards().size(); i++) {
+                int rewardX = leftPos + 8 + i * REWARD_STEP;
+                int rewardY = topPos + imageHeight - 42;
+                if (mouseX >= rewardX - 1 && mouseX < rewardX + 17
+                        && mouseY >= rewardY - 1 && mouseY < rewardY + 17) {
+                    QuestCatalogue.Reward reward = task.rewards().get(i);
+                    List<Component> tooltip = new ArrayList<>();
+                    tooltip.add(reward(reward));
+                    ResourceGuidanceClient.append(tooltip, new Resource(Kind.ITEM, reward.itemId()), true, hasShiftDown());
+                    ResourceGuidanceClient.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
+                    return;
+                }
+            }
+            int objectiveY = topPos + imageHeight - DETAIL_HEIGHT + 26;
+            if (mouseY >= objectiveY && mouseY < objectiveY + 10) {
+                List<Component> tooltip = new ArrayList<>();
+                tooltip.add(Component.literal(objective(task)));
+                if (task.evidence() == QuestCatalogue.Evidence.FREE) {
+                    tooltip.add(Component.translatable("gui.grindless.quest.starter_policy"));
+                }
+                ResourceGuidanceContext.questSubject(task).ifPresent(resource ->
+                        ResourceGuidanceClient.append(tooltip, resource, true, hasShiftDown()));
+                ResourceGuidanceClient.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
+            }
+        }
     }
 
     @Override
@@ -101,7 +152,7 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         graphics.fill(x, y, x + imageWidth, y + imageHeight, PANEL);
         graphics.fill(x + 1, y + 1, x + imageWidth - 1, y + imageHeight - 1, PANEL_INNER);
         int detailTop = y + imageHeight - DETAIL_HEIGHT;
-        graphics.fill(x + 4, detailTop, x + imageWidth - 4, y + imageHeight - 26, 0xFF1A1A22);
+        graphics.fill(x + 4, detailTop, x + imageWidth - 4, y + imageHeight - 24, PANEL);
     }
 
     @Override
@@ -154,7 +205,7 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
             if (relX >= 8 && relX < imageWidth - 8 && relY >= LIST_TOP && relY < listBottom) {
                 int index = scroll + (relY - LIST_TOP) / ROW_HEIGHT;
                 if (index >= 0 && index < rows.size() && rows.get(index) >= 0) {
-                    selected = rows.get(index);
+                    selectTask(rows.get(index));
                     return true;
                 }
             }
@@ -170,12 +221,23 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         int y = imageHeight - DETAIL_HEIGHT + 4;
         graphics.drawString(font, Component.translatable("gui.grindless.quest.task." + task.id()),
                 8, y, HEADER, false);
-        String needs = needs(task);
+        String needs = task.evidence() == QuestCatalogue.Evidence.FREE
+                ? Component.translatable("gui.grindless.quest.starter_once").getString() : needs(task);
         if (!needs.isEmpty()) {
             graphics.drawString(font, font.plainSubstrByWidth(needs, imageWidth - 16), 8, y + 12, MUTED, false);
         }
         graphics.drawString(font, font.plainSubstrByWidth(objective(task), imageWidth - 16), 8, y + 22, ROW, false);
-        graphics.drawString(font, font.plainSubstrByWidth(reward(task), imageWidth - 16), 8, y + 32, ROW, false);
+        graphics.drawString(font, Component.translatable("gui.grindless.quest.reward_stacks", task.rewards().size()),
+                8, y + 34, MUTED, false);
+        // All eleven legal starter stacks fit without aggregation, clipping or a hidden second row.
+        for (int i = 0; i < task.rewards().size(); i++) {
+            int rewardX = 8 + i * REWARD_STEP;
+            int rewardY = imageHeight - 42;
+            ItemStack stack = rewardStack(task.rewards().get(i));
+            graphics.fill(rewardX - 1, rewardY - 1, rewardX + 17, rewardY + 17, PANEL_INNER);
+            graphics.renderItem(stack, rewardX, rewardY);
+            graphics.renderItemDecorations(font, stack, rewardX, rewardY);
+        }
     }
 
     private String needs(QuestCatalogue.Task task) {
@@ -192,15 +254,22 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         return text.toString();
     }
 
-    private String reward(QuestCatalogue.Task task) {
-        QuestCatalogue.Reward reward = task.reward();
+    private static ItemStack rewardStack(QuestCatalogue.Reward reward) {
         ResourceLocation id = ResourceLocation.tryParse(reward.itemId());
         Item item = id == null ? Items.AIR : BuiltInRegistries.ITEM.get(id);
-        String name = item == null || item == Items.AIR ? reward.itemId() : item.getDescription().getString();
-        return Component.translatable("gui.grindless.quest.reward", name, reward.count()).getString();
+        return new ItemStack(item == null ? Items.AIR : item, reward.count());
+    }
+
+    private static Component reward(QuestCatalogue.Reward reward) {
+        ItemStack stack = rewardStack(reward);
+        Component name = stack.isEmpty() ? Component.literal(reward.itemId()) : stack.getHoverName();
+        return Component.translatable("gui.grindless.quest.reward", name, reward.count());
     }
 
     private String objective(QuestCatalogue.Task task) {
+        if (task.evidence() == QuestCatalogue.Evidence.FREE) {
+            return Component.translatable("gui.grindless.quest.objective.free").getString();
+        }
         if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
             return Component.translatable("gui.grindless.quest.objective.dimension", task.subject()).getString();
         }

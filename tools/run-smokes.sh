@@ -5,19 +5,20 @@
 #     tools/run-smokes.sh . --only states,first-exosuit
 #     tools/run-smokes.sh . --shard 1 --of 6
 #
-# CI uses --shard/--of to spread 39 server boots across parallel jobs; one sequential job no
+# CI uses --shard/--of to spread the server boots across parallel jobs; one sequential job no
 # longer fits in the timeout (ADR-0105). Scenario conventions are documented in scenarios.txt.
 set -u
 
 ROOT="."
 ONLY=""
+ONLY_SET="no"
 SHARD=0
 OF=0
 LIST="no"
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --only) ONLY="$2"; shift 2 ;;
+    --only) ONLY="$2"; ONLY_SET="yes"; shift 2 ;;
     --shard) SHARD="$2"; shift 2 ;;
     --of) OF="$2"; shift 2 ;;
     --list) LIST="yes"; shift ;;
@@ -41,6 +42,26 @@ while IFS= read -r line; do
   ALL+=("$(printf '%s' "$line" | awk '{print $1}')")
   DESCRIPTIONS+=("$(printf '%s' "$line" | sed -E 's/^[^[:space:]]+[[:space:]]+//')")
 done < "$SMOKE_DIR/scenarios.txt"
+
+if [ "$ONLY_SET" = "yes" ]; then
+  IFS=',' read -r -a REQUESTED <<< "$ONLY"
+  NORMALIZED=()
+  for requested in "${REQUESTED[@]}"; do
+    requested="$(printf '%s' "$requested" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+    [ -z "$requested" ] && continue
+    known="no"
+    for name in "${ALL[@]}"; do
+      if [ "$name" = "$requested" ]; then known="yes"; break; fi
+    done
+    if [ "$known" = "no" ]; then echo "Unknown smoke scenario: $requested" >&2; exit 1; fi
+    NORMALIZED+=("$requested")
+  done
+  if [ "${#NORMALIZED[@]}" -eq 0 ]; then
+    echo "At least one smoke scenario must be named with --only." >&2
+    exit 1
+  fi
+  ONLY="$(IFS=','; printf '%s' "${NORMALIZED[*]}")"
+fi
 
 SELECTED=()
 index=0
@@ -67,6 +88,34 @@ if [ "$LIST" = "yes" ]; then
   exit 0
 fi
 
+# Validate every selected sidecar before starting any server, including when an override is set.
+EXPECT_TIMEOUTS=()
+for name in "${SELECTED[@]}"; do
+  timeout_file="$SMOKE_DIR/$name.timeout"
+  timeout=""
+  if [ -e "$timeout_file" ]; then
+    valid="yes"
+    # Read the whole file, preserving CRLF and rejecting embedded NULs rather than truncating.
+    if IFS= read -r -d '' timeout < "$timeout_file"; then valid="no"; fi
+    timeout="${timeout#"${timeout%%[!$' \t\r\n\f\v']*}"}"
+    timeout="${timeout%"${timeout##*[!$' \t\r\n\f\v']}"}"
+    if [[ "$timeout" =~ ^[0-9]+$ ]]; then
+      # Normalize leading zeroes before numeric comparisons or the boot's shell arithmetic.
+      timeout="${timeout#"${timeout%%[!0]*}"}"
+      if [ -z "$timeout" ] || [ "${#timeout}" -gt 10 ] || [ "$timeout" -gt 2147483647 ]; then
+        valid="no"
+      fi
+    else
+      valid="no"
+    fi
+    if [ "$valid" != "yes" ]; then
+      echo "Invalid smoke assertion timeout '$timeout_file': expected one positive integer from 1 to 2147483647 seconds." >&2
+      exit 1
+    fi
+  fi
+  EXPECT_TIMEOUTS+=("$timeout")
+done
+
 # STATUS[i] tracks each selected scenario so the report can be rewritten after every boot.
 # A long run is otherwise a silent terminal; CI keeps the page as an artifact beside the logs.
 STATUS=()
@@ -75,6 +124,7 @@ for _ in "${SELECTED[@]}"; do STATUS+=("pending"); SECS+=("0"); done
 
 write_report() {
   local done_count=0 passed=0 failed=0 active="no" rows="" idx=0 pct=0
+  local name s
   for s in "${STATUS[@]}"; do
     case "$s" in
       passed) done_count=$((done_count + 1)); passed=$((passed + 1)) ;;
@@ -156,7 +206,16 @@ for name in "${SELECTED[@]}"; do
   fi
   export SMOKE_LOG="$ROOT/forge/run/smoke-$name.log"
 
-  if "$ROOT/tools/smoke-boot.sh" "$ROOT"; then
+  if (
+    unset SMOKE_OPTIONAL_DATAPACK
+    if [ -e "$SMOKE_DIR/$name-optional" ]; then
+      export SMOKE_OPTIONAL_DATAPACK="$SMOKE_DIR/$name-optional"
+    fi
+    if [ -z "${SMOKE_EXPECT_TIMEOUT:-}" ] && [ -n "${EXPECT_TIMEOUTS[$i]}" ]; then
+      export SMOKE_EXPECT_TIMEOUT="${EXPECT_TIMEOUTS[$i]}"
+    fi
+    "$ROOT/tools/smoke-boot.sh" "$ROOT"
+  ); then
     STATUS[$i]="passed"
   else
     STATUS[$i]="failed"

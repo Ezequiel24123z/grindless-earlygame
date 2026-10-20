@@ -23,6 +23,7 @@ public final class VerifyBootstrap {
     public static void main(String[] args) throws IOException {
         budget();
         recipes();
+        boards();
         research();
         exit();
 
@@ -38,6 +39,9 @@ public final class VerifyBootstrap {
         eq("the dynamo spends one", 1, shaped("hand_crank_dynamo").iron());
         eq("the extractor spends one", 1, shaped("crude_extractor").iron());
         eq("the terminal spends none", 0, shaped("research_terminal").iron());
+        eq("the biomass dynamo spends none", 0, shaped("biomass_dynamo").iron());
+        eq("the biomass dynamo uses tagged copper", BootstrapRecipes.COPPER,
+                shaped("biomass_dynamo").key().get("I"));
     }
 
     private static void recipes() throws IOException {
@@ -47,6 +51,9 @@ public final class VerifyBootstrap {
                     json.get("type").getAsString());
             eq(recipe.name() + " result", recipe.result(),
                     json.getAsJsonObject("result").get("item").getAsString());
+            int count = json.getAsJsonObject("result").has("count")
+                    ? json.getAsJsonObject("result").get("count").getAsInt() : 1;
+            eq(recipe.name() + " batch count", recipe.resultCount(), count);
             List<String> pattern = strings(json.getAsJsonArray("pattern"));
             yes(recipe.name() + " pattern matches the catalogue", pattern.equals(recipe.pattern()));
             JsonObject key = json.getAsJsonObject("key");
@@ -71,6 +78,20 @@ public final class VerifyBootstrap {
             }
             no(recipe.name() + " names no material item", namesMaterialItem(json));
         }
+    }
+
+    private static void boards() throws IOException {
+        eq("Bootstrap boards use the Grindless-owned tag", "tag:grindless:boards", BootstrapRecipes.PLANKS);
+        Path data = RECIPES.getParent();
+        Path file = data.resolve("tags/items/boards.json");
+        yes("the boards tag exists", Files.isRegularFile(file));
+        JsonObject tag = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+        yes("the boards tag is additive", tag.has("replace") && !tag.get("replace").getAsBoolean());
+        // Vanilla membership comes from the loaded pack, not invented local planks contents.
+        yes("boards retain the vanilla tag include and the locally known Fibreboard",
+                strings(tag.getAsJsonArray("values")).equals(List.of("#minecraft:planks", "grindless:fibreboard")));
+        no("Fibreboard never extends the vanilla planks tag",
+                Files.exists(data.getParent().resolve("minecraft/tags/items/planks.json")));
     }
 
     private static void research() {

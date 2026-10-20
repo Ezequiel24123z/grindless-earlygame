@@ -1,7 +1,7 @@
 plugins {
     id "architectury-plugin" version "${architectury_plugin_version}"
     id "dev.architectury.loom" version "${architectury_loom_version}" apply false
-    id "com.github.johnrengelman.shadow" version "8.1.1" apply false
+    id "com.github.johnrengelman.shadow" version "${shadow_plugin_version}" apply false
 }
 
 architectury {
@@ -63,3 +63,554 @@ allprojects {
         }
     }
 }
+
+    // Application build inputs stay above this boundary for runtime-provenance comparison.
+    def packBoundary = "// Application build inputs stay above this boundary"
+    def defaultPackProfile = "expanded"
+    def packProfileNames = ["expanded", "preparation", "playable"]
+    def publicOverrideRoot = "pack/public-overrides"
+    def sha256Bytes = { byte[] bytes ->
+        java.security.MessageDigest.getInstance("SHA-256").digest(bytes).encodeHex().toString()
+    }
+    def sha256File = { File input -> sha256Bytes(input.bytes) }
+    def clonePackData = { value ->
+        new groovy.json.JsonSlurper().parseText(groovy.json.JsonOutput.toJson(value))
+    }
+    def packGit = { List<String> arguments ->
+        def output = new ByteArrayOutputStream()
+        exec {
+            workingDir(rootDir)
+            commandLine(["git"] + arguments)
+            standardOutput = output
+        }
+        output.toString("UTF-8").trim()
+    }
+    def trackedPackPaths = { packGit(["ls-files", "-z"]).tokenize("\u0000").toSet() }
+    def requireTrackedPackFile = { File checkout, String relative, Set tracked ->
+        def root = checkout.toPath().toRealPath()
+        def input = root.resolve(relative)
+        if (!java.nio.file.Files.isRegularFile(input)) {
+            throw new GradleException("Missing pack input: $relative")
+        }
+        def real = input.toRealPath()
+        if (!real.startsWith(root) || !tracked.contains(relative) ||
+                !tracked.contains(root.relativize(real).toString().replace("\\", "/"))) {
+            throw new GradleException("Untracked or escaping pack input: $relative")
+        }
+        real.toFile()
+    }
+    def requirePackInputs = { Set tracked ->
+        ["pack/curseforge/manifest.json", "pack/profiles.json", "pack/dependency-metadata.json",
+         "pack/public-overrides.json", "pack/public-overrides/README.md",
+         "pack/README.md", "LICENSE", "THIRD_PARTY_NOTICES.md"].each {
+            requireTrackedPackFile(rootDir, it, tracked)
+        }
+    }
+    def readPackInputs = {
+        def parser = new groovy.json.JsonSlurper()
+        [manifest: parser.parse(file("pack/curseforge/manifest.json"), "UTF-8"),
+         profiles: parser.parse(file("pack/profiles.json"), "UTF-8"),
+         metadata: parser.parse(file("pack/dependency-metadata.json"), "UTF-8"),
+         publicOverrides: parser.parse(file("pack/public-overrides.json"), "UTF-8")]
+    }
+    def positivePackInteger = { value ->
+        (value instanceof Integer || value instanceof Long || value instanceof BigInteger) && value > 0
+    }
+    def publicOverridePath = { value, String kind ->
+        if (!(value instanceof String) || value.isEmpty() ||
+                !value.split("/", -1).every { segment ->
+                    segment ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/ &&
+                            !segment.endsWith(".") &&
+                            !(segment.split("\\.", 2)[0].toUpperCase(java.util.Locale.ROOT) ==~
+                                    /CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9]/)
+                }) {
+            throw new GradleException("Invalid public override $kind path: $value")
+        }
+        value
+    }
+    def requirePublicTarget = { java.nio.file.Path root, java.nio.file.Path target ->
+        if (!target.startsWith(root)) {
+            throw new GradleException("Public override escapes its source root.")
+        }
+    }
+    def resolvePublicOverrides = { data, File checkout, Set tracked ->
+        if (!(data instanceof Map) || data.keySet() != ["schemaVersion", "files"].toSet() ||
+                !(data.schemaVersion instanceof Integer) || data.schemaVersion != 1 ||
+                !(data.files instanceof List)) {
+            throw new GradleException("Invalid public override manifest.")
+        }
+        def root = checkout.toPath().toRealPath()
+        def sourceRoot = root.resolve(publicOverrideRoot)
+        if (!java.nio.file.Files.isDirectory(sourceRoot)) {
+            throw new GradleException("Missing public override source root.")
+        }
+        requirePublicTarget(sourceRoot, sourceRoot.toRealPath())
+        def destinations = []
+        data.files.collect { entry ->
+            if (!(entry instanceof Map) || entry.keySet() != ["source", "destination"].toSet()) {
+                throw new GradleException("Invalid public override entry.")
+            }
+            def source = publicOverridePath(entry.source, "source")
+            def destination = publicOverridePath(entry.destination, "destination")
+            if (!(destination.split("/")[0] in ["config", "defaultconfigs"]) || !destination.contains("/")) {
+                throw new GradleException("Unsupported public override destination: $destination")
+            }
+            def portableDestination = destination.toLowerCase(java.util.Locale.ROOT)
+            if (destinations.any { it == portableDestination || it.startsWith("$portableDestination/") ||
+                    portableDestination.startsWith("$it/") }) {
+                throw new GradleException("Duplicate or conflicting public override destination: $destination")
+            }
+            destinations += portableDestination
+            def relative = "$publicOverrideRoot/$source".toString()
+            def candidate = root.resolve(relative)
+            if (!java.nio.file.Files.isRegularFile(candidate)) {
+                throw new GradleException("Missing public override file: $relative")
+            }
+            def real = candidate.toRealPath()
+            requirePublicTarget(sourceRoot, real)
+            def input = requireTrackedPackFile(checkout, relative, tracked)
+            [source: relative, destination: destination, sha256: sha256File(input), file: input]
+        }
+    }
+    def resolveClientPack = { String profile, Map inputs ->
+        if (!(profile in packProfileNames)) {
+            throw new GradleException("Unknown pack profile: $profile")
+        }
+        if (!(inputs.profiles instanceof Map) || inputs.profiles.keySet() != packProfileNames.toSet()) {
+            throw new GradleException("Invalid pack profile catalogue.")
+        }
+        inputs.profiles.each { name, selection ->
+            def keys = name == "expanded" ? ["status"] : ["name", "status", "projectIDs"]
+            if (!(selection instanceof Map) || selection.keySet() != keys.toSet() ||
+                    !(selection.status instanceof String) || selection.status.trim().isEmpty() ||
+                    (name != "expanded" && (!(selection.name instanceof String) || selection.name.trim().isEmpty()))) {
+                throw new GradleException("Invalid pack profile data: $name")
+            }
+            if (name != "expanded" && (!(selection.projectIDs instanceof List) || selection.projectIDs.isEmpty() ||
+                    !selection.projectIDs.every { positivePackInteger(it) } ||
+                    selection.projectIDs.toSet().size() != selection.projectIDs.size())) {
+                throw new GradleException("Invalid dependency selection for $name.")
+            }
+        }
+        def manifest = clonePackData(inputs.manifest)
+        if (!(manifest instanceof Map) || manifest.manifestType != "minecraftModpack" ||
+                manifest.manifestVersion != 1 || manifest.overrides != "overrides" ||
+                !(manifest.files instanceof List) || manifest.files.isEmpty() ||
+                !manifest.files.every { pin -> pin instanceof Map && positivePackInteger(pin.projectID) &&
+                        positivePackInteger(pin.fileID) && pin.required == true }) {
+            throw new GradleException("Invalid pack manifest data.")
+        }
+        if (manifest.version != rootProject.pack_version) {
+            throw new GradleException("Pack manifest root version differs from gradle.properties.")
+        }
+        if (!(manifest.minecraft instanceof Map)) {
+            throw new GradleException("Pack Minecraft/Forge versions differ from gradle.properties.")
+        }
+        def loaders = manifest.minecraft.modLoaders
+        if (manifest.minecraft.version != rootProject.minecraft_version || !(loaders instanceof List) ||
+                loaders.size() != 1 || !(loaders[0] instanceof Map) || !(loaders[0].id instanceof String) ||
+                !loaders[0].id.startsWith("forge-") || loaders[0].primary != true ||
+                "${manifest.minecraft.version}-${loaders[0].id.substring(6)}" != rootProject.forge_version) {
+            throw new GradleException("Pack Minecraft/Forge versions differ from gradle.properties.")
+        }
+        if (manifest.files.collect { it.projectID }.toSet().size() != manifest.files.size()) {
+            throw new GradleException("Duplicate dependency project pins.")
+        }
+        def selected = inputs.profiles[profile]
+        if (profile != "expanded") {
+            manifest.name = selected.name
+            manifest.version += "-$profile"
+            manifest.files = manifest.files.findAll { it.projectID in selected.projectIDs }
+            if (manifest.files.size() != selected.projectIDs.size()) {
+                throw new GradleException("Selected profile references missing or duplicate dependency pins.")
+            }
+        }
+        def ids = manifest.files.collect { it.projectID }
+        if (!(inputs.metadata instanceof Map) || inputs.metadata.minecraft != rootProject.minecraft_version ||
+                inputs.metadata.loader != "Forge" || !(inputs.metadata.files instanceof List)) {
+            throw new GradleException("Dependency verification metadata targets a different platform.")
+        }
+        def dependencies = manifest.files.collect { pin ->
+            def matches = inputs.metadata.files.findAll {
+                it instanceof Map && it.projectID == pin.projectID && it.fileID == pin.fileID
+            }
+            if (matches.size() != 1 || !(matches[0].sha1 instanceof String) ||
+                    !(matches[0].sha1 ==~ /[0-9a-f]{40}/) || !positivePackInteger(matches[0].bytes) ||
+                    !(matches[0].requiredProjectIDs instanceof List) ||
+                    !matches[0].requiredProjectIDs.every { positivePackInteger(it) }) {
+                throw new GradleException("Missing or invalid verification metadata for ${pin.projectID}/${pin.fileID}.")
+            }
+            if (!ids.containsAll(matches[0].requiredProjectIDs)) {
+                throw new GradleException("Missing required project for ${pin.projectID}.")
+            }
+            matches[0]
+        }
+        def architectury = dependencies.find { it.projectID == 419699 }
+        def jei = dependencies.find { it.projectID == 238222 }
+        if (architectury?.fileName != "architectury-${rootProject.architectury_api_version}-forge.jar" ||
+                jei?.fileName != "jei-${rootProject.minecraft_version}-forge-${rootProject.jei_version}.jar") {
+            throw new GradleException("Architectury/JEI pins do not match gradle.properties.")
+        }
+        def heracles = dependencies.find { it.projectID == 845831 }
+        def resourceful = dependencies.find { it.projectID == 570073 }
+        if (heracles?.fileName != "Heracles-forge-${rootProject.minecraft_version}-${rootProject.heracles_version}.jar" ||
+                heracles?.fileID?.toString() != rootProject.heracles_curse_file ||
+                resourceful?.fileName != "resourcefullib-forge-${rootProject.minecraft_version}-${rootProject.resourcefullib_version}.jar" ||
+                resourceful?.fileID?.toString() != rootProject.resourcefullib_curse_file) {
+            throw new GradleException("Quest backend pins do not match gradle.properties.")
+        }
+        [manifest: manifest, dependencies: dependencies, status: selected.status, selection: clonePackData(selected)]
+    }
+    def packArchiveName = { String profile, String source ->
+        def suffix = profile == "expanded" ? "" : "-${profile}-${source.take(7)}"
+        "Grindless-T0-${rootProject.pack_version}${suffix}.zip".toString()
+    }
+    def packProvenance = { String profile, Map pack, Map inputs, String source, String runtime,
+                           File jar, List publicFiles ->
+        [sourceRevision: source, runtimeSourceRevision: runtime,
+         profile: profile, status: pack.status, inputProfile: pack.selection,
+         pinAuthority: "pack/curseforge/manifest.json",
+         minecraft: rootProject.minecraft_version, forge: rootProject.forge_version,
+         java: rootProject.java_version, grindlessJar: jar.name, grindlessSha256: sha256File(jar),
+         dependencies: pack.dependencies,
+         dependencyMetadataEndpoint: inputs.metadata.metadataEndpoint,
+         dependencyPublisherEndpoint: inputs.metadata.publisherEndpoint,
+         worldsIncluded: false,
+         configuration: publicFiles.isEmpty() ? "Mod defaults; no private launcher settings or gameplay overrides." :
+                 "Upstream defaults except the explicitly listed public overrides.",
+         configurationPolicy: [base: "upstream-defaults", overriddenDestinations: publicFiles.collect { it.destination }],
+         publicOverrides: [manifest: profile == "playable" ? "pack/public-overrides.json" : null,
+                           sourceRoot: profile == "playable" ? publicOverrideRoot : null,
+                           files: publicFiles.collect { [source: it.source, destination: it.destination, sha256: it.sha256] }]]
+    }
+    def verifyPackArchive = { File archive, Map expectedHashes ->
+        new java.util.zip.ZipFile(archive).withCloseable { zip ->
+            def entries = zip.entries().toList()
+            def names = entries.findAll { !it.directory }.collect { it.name }
+            def directories = expectedHashes.keySet().collectMany { name ->
+                def parts = name.split("/")
+                (1..<parts.length).collect { parts.take(it).join("/") + "/" }
+            }.toSet()
+            if (names.size() != expectedHashes.size() || names.toSet() != expectedHashes.keySet() ||
+                    entries.collect { it.name.toLowerCase(java.util.Locale.ROOT) }.toSet().size() != entries.size() ||
+                    entries.any { it.directory && !directories.contains(it.name) }) {
+                throw new GradleException("Pack archive violates the explicit file whitelist.")
+            }
+            entries.findAll { !it.directory }.each { entry ->
+                def actual = zip.getInputStream(entry).withCloseable { sha256Bytes(it.bytes) }
+                if (actual != expectedHashes[entry.name]) {
+                    throw new GradleException("Pack archive hash mismatch: ${entry.name}")
+                }
+            }
+        }
+    }
+    def writePackArchive = { Map pack, Map provenance, File jar, List publicFiles, File output, File stage ->
+        delete(stage)
+        java.nio.file.Files.createDirectories(stage.toPath())
+        try {
+            def expected = [:]
+            def stageFile = { File input, String destination, String expectedHash ->
+                def target = new File(stage, destination)
+                java.nio.file.Files.createDirectories(target.parentFile.toPath())
+                java.nio.file.Files.copy(input.toPath(), target.toPath())
+                if (sha256File(target) != expectedHash) {
+                    throw new GradleException("Pack input changed during staging: $destination")
+                }
+                expected[destination] = expectedHash
+            }
+            stageFile(jar, "overrides/mods/${jar.name}".toString(), provenance.grindlessSha256)
+            ["pack/README.md", "LICENSE", "THIRD_PARTY_NOTICES.md"].each { relative ->
+                def input = file(relative)
+                stageFile(input, input.name, sha256File(input))
+            }
+            publicFiles.each { stageFile(it.file, "overrides/${it.destination}".toString(), it.sha256) }
+            [manifest: pack.manifest, provenance: provenance].each { name, value ->
+                def target = new File(stage, "${name}.json")
+                target.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(value)) + "\n", "UTF-8")
+                expected[target.name] = sha256File(target)
+            }
+            delete(output)
+            ant.zip(destfile: output, basedir: stage, encoding: "UTF-8",
+                    modificationtime: "1980-01-01T00:00:00Z", duplicate: "fail")
+            verifyPackArchive(output, expected)
+            expected
+        } finally {
+            delete(stage)
+        }
+    }
+
+    tasks.register("verifyModpack") {
+        group = "verification"
+        description = "Checks client-pack selectors, public overrides and the exact archive whitelist without building a runtime."
+        doLast {
+            def tracked = trackedPackPaths()
+            requirePackInputs(tracked)
+            def inputs = readPackInputs()
+            def passed = 0
+            def check = { boolean condition, String message ->
+                assert condition: message
+                passed++
+            }
+            def reject = { String message, Closure action ->
+                def rejected = false
+                try {
+                    action()
+                } catch (GradleException expected) {
+                    if (!expected.message.contains(message)) { throw expected }
+                    rejected = true
+                }
+                check(rejected, "Invalid pack input was accepted: $message")
+            }
+            def expanded = resolveClientPack(defaultPackProfile, inputs)
+            def preparation = resolveClientPack("preparation", inputs)
+            def playable = resolveClientPack("playable", inputs)
+            check(defaultPackProfile == "expanded", "The default profile changed.")
+            check(expanded.manifest == inputs.manifest, "Expanded manifest/pins changed.")
+            check(expanded.status == "playable-pack-candidate-not-acceptance", "Expanded status changed.")
+            check(preparation.manifest.files == inputs.manifest.files.findAll {
+                it.projectID in [419699, 238222, 845831, 570073]
+            }, "Preparation pins changed.")
+            check(preparation.manifest.name == "Grindless T0 Preparation - integration preview",
+                    "Preparation name changed.")
+            check(preparation.manifest.version == "${rootProject.pack_version}-preparation", "Preparation version changed.")
+            check(preparation.status == "preparation-only-not-acceptance", "Preparation status changed.")
+            check(playable.manifest.files == inputs.manifest.files.findAll {
+                it.projectID in [419699, 238222, 845831, 570073, 790626, 429235, 908741]
+            } && playable.manifest.files.size() == 7, "Playable selection differs from ADR-0149.")
+            check(playable.dependencies == inputs.metadata.files.findAll {
+                it.projectID in playable.manifest.files.collect { pin -> pin.projectID }
+            }, "Playable verification metadata differs from the existing authority.")
+            check(playable.manifest.version == "${rootProject.pack_version}-playable" &&
+                    playable.status == "restricted-playable-profile-not-rc", "Playable identity claims an RC.")
+            check(playable.selection == inputs.profiles.playable, "The exact profile selection was lost.")
+            check(packArchiveName("expanded", "1234567890") == "Grindless-T0-${rootProject.pack_version}.zip",
+                    "Expanded archive identity changed.")
+            check(packArchiveName("preparation", "1234567890") == "Grindless-T0-${rootProject.pack_version}-preparation-1234567.zip",
+                    "Preparation archive identity changed.")
+            check(packArchiveName("playable", "1234567890") == "Grindless-T0-${rootProject.pack_version}-playable-1234567.zip",
+                    "Playable archive is not source-bound.")
+            check(resolvePublicOverrides(inputs.publicOverrides, rootDir, tracked).isEmpty(),
+                    "The current default-config composition must have explicitly empty overrides.")
+            reject("Unknown pack profile") { resolveClientPack("unknown", inputs) }
+            def cases = [
+                [change: { it.manifest.version = rootProject.minecraft_version }, message: "root version differs"],
+                [change: { it.manifest.minecraft.version = "invalid" }, message: "Minecraft/Forge versions differ"],
+                [change: { it.manifest.minecraft.modLoaders[0].id = "invalid" }, message: "Minecraft/Forge versions differ"],
+                [change: { it.manifest.files.find { f -> f.projectID == 419699 }.fileID = 1 }, message: "verification metadata"],
+                [change: { it.metadata.files.find { f -> f.projectID == 419699 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
+                [change: { it.metadata.files.find { f -> f.projectID == 238222 }.fileName = "invalid" }, message: "Architectury/JEI pins"],
+                [change: { it.manifest.files.find { f -> f.projectID == 845831 }.fileID = 1 }, message: "verification metadata"],
+                [change: { it.metadata.files.find { f -> f.projectID == 845831 }.fileName = "invalid" }, message: "Quest backend pins"],
+                [change: { it.metadata.files.find { f -> f.projectID == 570073 }.fileName = "invalid" }, message: "Quest backend pins"],
+                [change: { it.profiles.preparation.projectIDs = it.profiles.preparation.projectIDs.findAll { id -> id != 570073 } }, message: "Missing required project"],
+                [change: { it.metadata.files.find { f -> f.projectID == 238222 }.requiredProjectIDs = [1] }, message: "Missing required project"],
+                [change: { it.profiles.preparation.projectIDs += 1 }, message: "missing or duplicate dependency pins"],
+                [change: { it.profiles.playable.projectIDs += 1 }, message: "missing or duplicate dependency pins", profile: "playable"],
+                [change: { it.profiles.playable.projectIDs += 419699 }, message: "Invalid dependency selection"],
+                [change: { it.profiles.playable.projectIDs += -1 }, message: "Invalid dependency selection"],
+                [change: { it.profiles.playable.status = "" }, message: "Invalid pack profile data"],
+                [change: { it.profiles.playable.extra = true }, message: "Invalid pack profile data"],
+                [change: { it.profiles.remove("playable") }, message: "Invalid pack profile catalogue"],
+                [change: { it.profiles.unknown = [:] }, message: "Invalid pack profile catalogue"],
+                [change: { it.manifest.files += it.manifest.files[0] }, message: "Duplicate dependency project pins"],
+                [change: { it.manifest.overrides = "../private" }, message: "Invalid pack manifest data"],
+                [change: { it.metadata.files.find { f -> f.projectID == 790626 }.sha1 = "invalid" },
+                 message: "verification metadata", profile: "playable"]
+            ]
+            cases.each { test ->
+                def changed = clonePackData(inputs)
+                test.change(changed)
+                reject(test.message) { resolveClientPack(test.profile ?: "preparation", changed) }
+            }
+            def fixture = new File(temporaryDir, "pack-contract")
+            delete(fixture)
+            java.nio.file.Files.createDirectories(new File(fixture, publicOverrideRoot).toPath())
+            try {
+                def sample = new File(fixture, "$publicOverrideRoot/sample.txt")
+                sample.setText("Synthetic packaging contract fixture; not a distributed configuration.\n", "UTF-8")
+                def fixtureTracked = ["$publicOverrideRoot/sample.txt".toString()].toSet()
+                def overrideData = [schemaVersion: 1, files: [[source: "sample.txt", destination: "config/contract.txt"]]]
+                def publicFiles = resolvePublicOverrides(overrideData, fixture, fixtureTracked)
+                check(publicFiles.size() == 1 && publicFiles[0].sha256 == sha256File(sample) &&
+                        publicFiles[0].destination == "config/contract.txt", "Explicit public override was not resolved faithfully.")
+                def defaultConfig = clonePackData(overrideData)
+                defaultConfig.files[0].destination = "defaultconfigs/contract.txt"
+                check(resolvePublicOverrides(defaultConfig, fixture, fixtureTracked)[0].destination ==
+                        "defaultconfigs/contract.txt", "Explicit default configuration was rejected.")
+                [
+                    [change: { it.schemaVersion = 2 }, message: "Invalid public override manifest"],
+                    [change: { it.files = null }, message: "Invalid public override manifest"],
+                    [change: { it.extra = true }, message: "Invalid public override manifest"],
+                    [change: { it.files = [null] }, message: "Invalid public override entry"],
+                    [change: { it.files[0].extra = true }, message: "Invalid public override entry"],
+                    [change: { it.files[0].source = "missing.txt" }, message: "Missing public override file"],
+                    [change: { it.files[0].source = null }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "." }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "../sample.txt" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "/sample.txt" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "C:/sample.txt" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "\\\\host\\sample.txt" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "config\\sample.txt" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "sample.txt:private" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].source = "NUL.txt" }, message: "Invalid public override source path"],
+                    [change: { it.files[0].destination = "../config/contract.txt" }, message: "Invalid public override destination path"],
+                    [change: { it.files[0].destination = "/config/contract.txt" }, message: "Invalid public override destination path"],
+                    [change: { it.files[0].destination = "C:/config/contract.txt" }, message: "Invalid public override destination path"],
+                    [change: { it.files[0].destination = "config\\contract.txt" }, message: "Invalid public override destination path"],
+                    [change: { it.files[0].destination = "config/../contract.txt" }, message: "Invalid public override destination path"],
+                    [change: { it.files[0].destination = "config//contract.txt" }, message: "Invalid public override destination path"],
+                    [change: { it.files[0].destination = "options.txt" }, message: "Unsupported public override destination"],
+                    [change: { it.files[0].destination = "saves/world.dat" }, message: "Unsupported public override destination"],
+                    [change: { it.files[0].destination = "mods/unpinned.jar" }, message: "Unsupported public override destination"],
+                    [change: { it.files += [source: "sample.txt", destination: "config/contract.txt"] },
+                     message: "Duplicate or conflicting public override destination"],
+                    [change: { it.files += [source: "sample.txt", destination: "config/Contract.txt"] },
+                     message: "Duplicate or conflicting public override destination"],
+                    [change: { it.files += [source: "sample.txt", destination: "config/contract.txt/child"] },
+                     message: "Duplicate or conflicting public override destination"],
+                    [change: { it.files[0].destination = "config/contract.txt/child"
+                               it.files += [source: "sample.txt", destination: "config/contract.txt"] },
+                     message: "Duplicate or conflicting public override destination"]
+                ].each { test ->
+                    def changed = clonePackData(overrideData)
+                    test.change(changed)
+                    reject(test.message) { resolvePublicOverrides(changed, fixture, fixtureTracked) }
+                }
+                reject("Untracked or escaping pack input") {
+                    resolvePublicOverrides(overrideData, fixture, [] as Set)
+                }
+                reject("Untracked or escaping pack input") {
+                    requireTrackedPackFile(rootDir, "pack/profiles.json", tracked - "pack/profiles.json")
+                }
+                reject("Missing pack input") { requireTrackedPackFile(fixture, "absent.json", fixtureTracked) }
+                def outside = new File(fixture, "outside.txt")
+                outside.setText("Escaping target fixture.\n", "UTF-8")
+                reject("escapes its source root") {
+                    requirePublicTarget(new File(fixture, publicOverrideRoot).toPath().toRealPath(), outside.toPath().toRealPath())
+                }
+                def link = new File(fixture, "$publicOverrideRoot/link.txt")
+                try {
+                    java.nio.file.Files.createSymbolicLink(link.toPath(), outside.toPath())
+                    reject("escapes its source root") {
+                        resolvePublicOverrides([schemaVersion: 1,
+                                                files: [[source: "link.txt", destination: "config/link.txt"]]],
+                                fixture, fixtureTracked + "$publicOverrideRoot/link.txt".toString())
+                    }
+                } catch (java.nio.file.FileSystemException unavailable) {
+                    if (!System.getProperty("os.name").startsWith("Windows") ||
+                            !(unavailable.reason ?: "").toLowerCase(java.util.Locale.ROOT).contains("privileg")) {
+                        throw unavailable
+                    }
+                    logger.warn("Filesystem symlink fixture NOT_RUN: ${unavailable.message}; canonical-target escape contract was checked.")
+                }
+                def jar = new File(fixture, "grindless-contract.jar")
+                jar.setText("Synthetic archive fixture; not a Grindless runtime.\n", "UTF-8")
+                def archive = new File(fixture, "contract.zip")
+                def stage = new File(fixture, "stage")
+                def mutateArchive = { String name, byte[] replacement ->
+                    def content = [:]
+                    new java.util.zip.ZipFile(archive).withCloseable { zip ->
+                        zip.entries().toList().findAll { !it.directory }.each { entry ->
+                            content[entry.name] = zip.getInputStream(entry).withCloseable { it.bytes }
+                        }
+                    }
+                    if (replacement == null) { content.remove(name) } else { content[name] = replacement }
+                    new java.util.zip.ZipOutputStream(new FileOutputStream(archive)).withCloseable { zip ->
+                        content.each { path, bytes ->
+                            zip.putNextEntry(new java.util.zip.ZipEntry(path))
+                            zip.write(bytes)
+                            zip.closeEntry()
+                        }
+                    }
+                }
+                [expanded: expanded, preparation: preparation, playable: playable].each { profile, pack ->
+                    def provenance = packProvenance(profile, pack, inputs, "contract-fixture", "contract-fixture", jar, [])
+                    def expected = writePackArchive(pack, provenance, jar, [], archive, stage)
+                    check(expected.keySet() == ["manifest.json", "provenance.json", "README.md", "LICENSE",
+                                               "THIRD_PARTY_NOTICES.md", "overrides/mods/${jar.name}".toString()].toSet(),
+                            "Unexpected default archive entries for $profile.")
+                    new java.util.zip.ZipFile(archive).withCloseable { zip ->
+                        def readJson = { String path -> zip.getInputStream(zip.getEntry(path)).withCloseable {
+                            new groovy.json.JsonSlurper().parse(it, "UTF-8")
+                        } }
+                        check(readJson("manifest.json") == pack.manifest, "Archived $profile pins changed.")
+                        def recorded = readJson("provenance.json")
+                        check(recorded.inputProfile == inputs.profiles[profile] && recorded.publicOverrides.files == [] &&
+                                recorded.configurationPolicy == [base: "upstream-defaults", overriddenDestinations: []],
+                                "Default configuration/profile provenance changed for $profile.")
+                    }
+                }
+                def provenance = packProvenance("playable", playable, inputs, "contract-fixture", "contract-fixture", jar, publicFiles)
+                def expected = writePackArchive(playable, provenance, jar, publicFiles, archive, stage)
+                check(expected["overrides/config/contract.txt"] == sha256File(sample) &&
+                        provenance.publicOverrides.files == [[source: "$publicOverrideRoot/sample.txt".toString(),
+                                                              destination: "config/contract.txt", sha256: sha256File(sample)]] &&
+                        provenance.configurationPolicy.overriddenDestinations == ["config/contract.txt"],
+                        "Public destination/hash/policy provenance changed.")
+                new java.util.zip.ZipFile(archive).withCloseable { zip ->
+                    def recorded = zip.getInputStream(zip.getEntry("provenance.json")).withCloseable {
+                        new groovy.json.JsonSlurper().parse(it, "UTF-8")
+                    }
+                    check(recorded.publicOverrides == provenance.publicOverrides &&
+                            recorded.configurationPolicy == provenance.configurationPolicy,
+                            "Archived public override provenance differs from the selected files.")
+                }
+                mutateArchive("overrides/options.txt", "Private settings must not be packaged.".getBytes("UTF-8"))
+                reject("explicit file whitelist") { verifyPackArchive(archive, expected) }
+                expected = writePackArchive(playable, provenance, jar, publicFiles, archive, stage)
+                mutateArchive("THIRD_PARTY_NOTICES.md", null)
+                reject("explicit file whitelist") { verifyPackArchive(archive, expected) }
+                expected = writePackArchive(playable, provenance, jar, publicFiles, archive, stage)
+                mutateArchive("THIRD_PARTY_NOTICES.md", "Changed notice fixture.".getBytes("UTF-8"))
+                reject("hash mismatch") { verifyPackArchive(archive, expected) }
+                sample.append("Changed after resolution.\n", "UTF-8")
+                reject("changed during staging") { writePackArchive(playable, provenance, jar, publicFiles, archive, stage) }
+            } finally {
+                delete(fixture)
+            }
+            logger.lifecycle("Client-pack selector/override/archive checks: $passed passed; synthetic archive fixtures only, no runtime/client/world built or started.")
+        }
+    }
+
+    tasks.register("buildModpack") {
+        group = "build"
+        description = "Builds a launcher-managed expanded, preparation or restricted playable client pack."
+        dependsOn(":forge:remapJar")
+        doLast {
+            def tracked = trackedPackPaths()
+            requirePackInputs(tracked)
+            def inputs = readPackInputs()
+            def profile = providers.gradleProperty("packProfile").getOrElse(defaultPackProfile)
+            def pack = resolveClientPack(profile, inputs)
+            def publicFiles = profile == "playable" ? resolvePublicOverrides(inputs.publicOverrides, rootDir, tracked) : []
+            def source = packGit(["rev-parse", "HEAD"])
+            if (!packGit(["status", "--porcelain"]).isEmpty()) {
+                throw new GradleException("Commit the package source before building a distributable archive.")
+            }
+            def runtime = packGit(["rev-parse", "--verify",
+                               providers.gradleProperty("packRuntimeRevision").getOrElse(source) + "^{commit}"])
+            packGit(["merge-base", "--is-ancestor", runtime, source])
+            packGit(["diff", "--exit-code", runtime, source, "--",
+                 "common", "forge", "settings.gradle", "gradle.properties", "gradle", "gradlew", "gradlew.bat"])
+            def buildInputs = { String text -> text.replace("\r\n", "\n").split(java.util.regex.Pattern.quote(packBoundary), 2)[0].trim() }
+            if (buildInputs(packGit(["show", "${runtime}:build.gradle"])) != buildInputs(file("build.gradle").getText("UTF-8"))) {
+                throw new GradleException("Application build inputs differ from the requested runtime revision.")
+            }
+            def jar = project(":forge").tasks.named("remapJar").get().archiveFile.get().asFile
+            def provenance = packProvenance(profile, pack, inputs, source, runtime, jar, publicFiles)
+            def archive = new File(temporaryDir, packArchiveName(profile, source))
+            try {
+                writePackArchive(pack, provenance, jar, publicFiles, archive, new File(temporaryDir, profile))
+                def output = file("dist/${archive.name}")
+                copy {
+                    from(archive)
+                    into(output.parentFile)
+                }
+                logger.lifecycle("Built $output")
+                logger.lifecycle("Profile $profile; status ${pack.status}; not an accepted/published RC.")
+                logger.lifecycle("SHA256 ${sha256File(output)}")
+            } finally {
+                delete(archive)
+            }
+        }
+    }

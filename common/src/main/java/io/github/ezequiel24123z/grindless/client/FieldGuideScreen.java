@@ -2,6 +2,12 @@ package io.github.ezequiel24123z.grindless.client;
 
 import io.github.ezequiel24123z.grindless.menu.FieldGuideMenu;
 import io.github.ezequiel24123z.grindless.quest.GuideCatalogue;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
+import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
+import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,7 +15,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * One page of the route at a time, drawn with fills (ADR-0100).
@@ -26,6 +35,10 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
     private static final int TEXT_BOTTOM = 168;
 
     private int page;
+    private List<GuidePage> pages = List.of();
+
+    private record GuidePage(String id, List<FormattedCharSequence> lines) {
+    }
 
     public FieldGuideScreen(FieldGuideMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -37,6 +50,19 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
     @Override
     protected void init() {
         super.init();
+        List<GuidePage> wrapped = new ArrayList<>();
+        int linesPerPage = Math.max(1, (TEXT_BOTTOM - TEXT_TOP) / font.lineHeight);
+        List<AtlasLogic.Entry> recipes = AtlasLogic.allEntries(ProcessLookup.recipes());
+        for (String id : GuideCatalogue.pages()) {
+            List<FormattedCharSequence> lines = new ArrayList<>();
+            for (Component paragraph : topic(id, recipes)) {
+                lines.addAll(font.split(paragraph, imageWidth - 16));
+            }
+            for (List<FormattedCharSequence> part : GuideCatalogue.paginate(lines, linesPerPage)) {
+                wrapped.add(new GuidePage(id, part));
+            }
+        }
+        pages = List.copyOf(wrapped);
         addRenderableWidget(Button.builder(Component.translatable("gui.grindless.guide.prev"),
                 button -> turn(-1)).bounds(leftPos + 8, topPos + imageHeight - 22, 72, 16).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.grindless.guide.next"),
@@ -57,21 +83,15 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        List<String> pages = GuideCatalogue.pages();
         if (pages.isEmpty()) {
             return;
         }
         page = Math.max(0, Math.min(pages.size() - 1, page));
-        String id = pages.get(page);
+        GuidePage current = pages.get(page);
         graphics.drawString(font, title, 8, 6, HEADER, false);
-        graphics.drawString(font, Component.translatable(GuideCatalogue.titleKey(id)), 8, 18, HEADER, false);
-        List<FormattedCharSequence> lines = font.split(
-                Component.translatable(GuideCatalogue.bodyKey(id)), imageWidth - 16);
+        graphics.drawString(font, Component.translatable(GuideCatalogue.titleKey(current.id())), 8, 18, HEADER, false);
         int y = TEXT_TOP;
-        for (FormattedCharSequence line : lines) {
-            if (y + font.lineHeight > TEXT_BOTTOM) {
-                break;
-            }
+        for (FormattedCharSequence line : current.lines()) {
             graphics.drawString(font, line, 8, y, BODY, false);
             y += font.lineHeight;
         }
@@ -80,10 +100,45 @@ public final class FieldGuideScreen extends AbstractContainerScreen<FieldGuideMe
     }
 
     private void turn(int delta) {
-        int size = GuideCatalogue.pages().size();
+        int size = pages.size();
         if (size == 0) {
             return;
         }
         page = Math.max(0, Math.min(size - 1, page + delta));
+    }
+
+    private List<Component> topic(String id, List<AtlasLogic.Entry> recipes) {
+        List<Component> text = new ArrayList<>();
+        text.add(Component.translatable(GuideCatalogue.bodyKey(id)));
+        List<AtlasLogic.Entry> selected = ResourceGuidanceContext.guideRecipes(id, recipes);
+        if (selected.isEmpty()) {
+            return text;
+        }
+        text.add(Component.translatable("gui.grindless.guide.live_recipes"));
+        Set<Resource> context = new LinkedHashSet<>();
+        var loaded = ResourceGuidanceRuntime.current();
+        for (AtlasLogic.Entry entry : selected) {
+            text.add(Component.literal(AtlasLogic.line(entry)));
+            for (var operand : ResourceGuidanceContext.operands(entry)) {
+                if (operand.role() != ResourceGuidanceContext.Role.OUTPUT) {
+                    continue;
+                }
+                var declaration = ResourceGuidanceClient.declaration(loaded, operand.resource());
+                if (entry.family() == MachineFamily.GEOLOGICAL_COLLECTOR
+                        || entry.family() == MachineFamily.BIOCULTIVATOR || id.equals("relay")
+                        || declaration.map(match -> match.entry().metadata().sideStreamClass() != null).orElse(false)) {
+                    context.add(operand.resource());
+                }
+            }
+        }
+        if (!loaded.available()) {
+            text.addAll(ResourceGuidanceClient.playerContext(null));
+        } else {
+            for (Resource resource : context) {
+                text.add(Component.translatable("gui.grindless.guide.resource_context", ResourceGuidanceClient.name(resource)));
+                text.addAll(ResourceGuidanceClient.playerContext(resource));
+            }
+        }
+        return text;
     }
 }

@@ -56,5 +56,20 @@ public enum MachineFamily {
     BOILER,
 
     /** 1 B steam → 1 B water. The steam sink until the turbine. T2. */
-    CONDENSER
+    CONDENSER,
+
+    /** F0 aggregate milling and ceramic recovery, never ore multiplication. */
+    QUERN,
+
+    /** F0 wet clay-body preparation. */
+    CLAY_MIXER,
+
+    /** F0 fuel-backed batch firing in a formed brick chamber. */
+    FIRING_CHAMBER,
+
+    /** F0 clay/aggregate separation with partial water recovery in an open assembled channel. */
+    SETTLING_TROUGH,
+    GEOLOGICAL_COLLECTOR,
+    BIOCULTIVATOR,
+    ASSEMBLY_BENCH
 }

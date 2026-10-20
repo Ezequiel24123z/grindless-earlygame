@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
+import io.github.ezequiel24123z.grindless.item.CrankHandleItem;
 import io.github.ezequiel24123z.grindless.item.ExosuitItem;
 import io.github.ezequiel24123z.grindless.item.ExosuitLogic;
 import io.github.ezequiel24123z.grindless.item.FluxCellItem;
@@ -63,6 +64,24 @@ public final class ModItems {
     /** Raw T0 data substrate. The Research Terminal calibrates it into a physical component. */
     public static final RegistrySupplier<Item> DATA_CORE = register("data_core",
             () -> new Item(new Item.Properties()));
+
+    /** Fired aggregate recovered from bricks and the ceramic process. */
+    public static final RegistrySupplier<Item> CERAMIC_GROG = register("ceramic_grog",
+            () -> new Item(new Item.Properties()));
+
+    /** A wet-formed ceramic body, recoverable before firing. */
+    public static final RegistrySupplier<Item> UNFIRED_CERAMIC = register("unfired_ceramic",
+            () -> new Item(new Item.Properties()));
+
+    /** Fired substrate for physical cores, plumbing and primitive handling. */
+    public static final RegistrySupplier<Item> CERAMIC_INSULATOR = register("ceramic_insulator",
+            () -> new Item(new Item.Properties()));
+    public static final RegistrySupplier<Item> MINERAL_AGGREGATE = register("mineral_aggregate",
+            () -> new Item(new Item.Properties()));
+    public static final RegistrySupplier<Item> BIOMASS = register("biomass",
+            () -> new Item(new Item.Properties()));
+    public static final RegistrySupplier<Item> CRANK_HANDLE = register("crank_handle",
+            () -> new CrankHandleItem(new Item.Properties().stacksTo(1)));
 
     /** Physical T0 component made by the Research Terminal and consumed by the first matrix. */
     public static final RegistrySupplier<Item> CALIBRATED_DATA_CORE = register("calibrated_data_core",

@@ -1,13 +1,16 @@
 package io.github.ezequiel24123z.grindless.client;
 
 import io.github.ezequiel24123z.grindless.menu.ProcessAtlasMenu;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +33,7 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
     private List<AtlasLogic.Entry> rows = List.of();
     private int scroll;
     private int selected = -1;
+    private int resourceSelection;
 
     public ProcessAtlasScreen(ProcessAtlasMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -44,6 +48,7 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
         rows = AtlasLogic.allEntries(ProcessLookup.recipes());
         scroll = 0;
         selected = rows.isEmpty() ? -1 : 0;
+        resourceSelection = 0;
     }
 
     @Override
@@ -89,10 +94,36 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
+        if (overDetail(mouseX, mouseY) && selected >= 0 && selected < rows.size()) {
+            var operands = ResourceGuidanceContext.operands(rows.get(selected));
+            if (!operands.isEmpty()) {
+                resourceSelection = Math.floorMod(resourceSelection, operands.size());
+                var operand = operands.get(resourceSelection);
+                List<Component> tooltip = new ArrayList<>();
+                tooltip.add(Component.translatable("gui.grindless.atlas.resource_context",
+                        resourceSelection + 1, operands.size()));
+                tooltip.add(Component.translatable("gui.grindless.resource.operand",
+                        Component.translatable("gui.grindless.resource.role." + operand.role().name().toLowerCase(java.util.Locale.ROOT)),
+                        operand.amount(), ResourceGuidanceClient.name(operand.resource())));
+                tooltip.add(Component.literal(operand.resource().key()).withStyle(ChatFormatting.DARK_GRAY));
+                if (operand.role() == ResourceGuidanceContext.Role.CATALYST) {
+                    tooltip.add(Component.translatable("jei.grindless.not_consumed").withStyle(ChatFormatting.RED));
+                }
+                ResourceGuidanceClient.append(tooltip, operand.resource(), true, hasShiftDown());
+                ResourceGuidanceClient.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
+            }
+        }
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (overDetail(mouseX, mouseY) && selected >= 0 && selected < rows.size()) {
+            int count = ResourceGuidanceContext.operands(rows.get(selected)).size();
+            if (count > 0) {
+                resourceSelection = Math.floorMod(resourceSelection - (int) Math.signum(delta), count);
+            }
+            return true;
+        }
         int max = Math.max(0, rows.size() - visibleRows());
         scroll = (int) Math.max(0, Math.min(max, scroll - Math.signum(delta)));
         return true;
@@ -108,6 +139,7 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
                 int index = scroll + (relY - LIST_TOP) / ROW_HEIGHT;
                 if (index >= 0 && index < rows.size()) {
                     selected = index;
+                    resourceSelection = 0;
                     return true;
                 }
             }
@@ -121,7 +153,8 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
         }
         AtlasLogic.Entry row = rows.get(selected);
         int y = imageHeight - DETAIL_HEIGHT + 6;
-        graphics.drawString(font, row.station() + "  " + row.id(), 8, y, HEADER, false);
+        graphics.drawString(font, font.plainSubstrByWidth(row.station() + "  " + row.id(), imageWidth - 16),
+                8, y, HEADER, false);
         graphics.drawString(font, font.plainSubstrByWidth(
                 "in  " + AtlasLogic.describe(row.inputs()), imageWidth - 16), 8, y + 10, ROW, false);
         if (!row.catalysts().isEmpty()) {
@@ -138,5 +171,10 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
     private int visibleRows() {
         int listHeight = imageHeight - DETAIL_HEIGHT - LIST_TOP - 4;
         return Math.max(1, listHeight / ROW_HEIGHT);
+    }
+
+    private boolean overDetail(double mouseX, double mouseY) {
+        return mouseX >= leftPos + 4 && mouseX < leftPos + imageWidth - 4
+                && mouseY >= topPos + imageHeight - DETAIL_HEIGHT && mouseY < topPos + imageHeight - 4;
     }
 }

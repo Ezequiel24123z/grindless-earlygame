@@ -1,6 +1,8 @@
 package io.github.ezequiel24123z.grindless;
 
 import dev.architectury.event.events.common.TickEvent;
+import dev.architectury.registry.fuel.FuelRegistry;
+import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.item.ExosuitTick;
@@ -52,6 +54,7 @@ public final class Grindless {
         ModMenus.register();
         ModSounds.register();
         ModCreativeTabs.register();
+        ModItems.BIOMASS.listen(item -> FuelRegistry.register(SourceLogic.BIOMASS_BURN_TICKS, item));
 
         MaterialRegistry.bootstrap();
         registerNetworkTick();

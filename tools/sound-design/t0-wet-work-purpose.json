@@ -1,0 +1,41 @@
+{
+  "schema": "grindless.sound-purpose-manifest/v2",
+  "source_revision": "269965b1b0b8c1becda74459a853f245105649ee",
+  "policy": "ADR-0156",
+  "purpose_id": "t0-wet-work-clay-mixer",
+  "run_id": "adr0156-wet-work-20261020-01",
+  "label": "Clay Mixer wet-work audition",
+  "review_status": "reviewed",
+  "contract_id": "adr0156-elevenlabs-internal-purpose-3s-mp3",
+  "max_calls": 2,
+  "automatic_rerolls": false,
+  "licence_scope": "internal_audition_only",
+  "runtime_import_approved": false,
+  "publication_approved": false,
+  "technical_qc_is_artistic_approval": false,
+  "mechanism_evidence": "Source audit at source_revision: BootstrapProcesses mixes 2 clay + 1 sand or grog + 250 mB water under STIRRED for 80/120 ticks. RenewableProcesses also mixes 2 biomass + 250 mB water into 4 fibreboard in 200 ticks. MIXER geometry is a clay bowl with a horizontal paddle; no motor or manual-drive assumption follows. Only Clay Mixer is selected. Settling Trough and Hand Pump have different flow/suction roles; neither is automatically included. No sound per trivial state or event.",
+  "cost_note": "Conditional public estimate, not an account quote: 40 credits/second with explicit 3.0-second duration suggests 120 credits/request and 240 for these two selected candidates. Official pricing/API advertises USD 0.12/minute while its FAQ also describes Sound Effects per generation. Do not infer a guaranteed USD maximum or an unknown plan price; no account/billing request is needed.",
+  "families": [
+    {
+      "id": "wet_work",
+      "machines": ["clay_mixer"],
+      "candidates": [
+        {
+          "id": "wet-work-a",
+          "label": "A - Close viscous movement / fine grit",
+          "difference": "Material-forward clay, water and fine grit, with restrained horizontal-paddle rubbing against the clay bowl.",
+          "prompt": "Close, steady mixing of viscous clay, water and fine grit in a clay bowl. A horizontal paddle rubs the bowl with soft wet friction and restrained granular movement. Compact, even, low-fatigue texture; seamless repeat, no start or stop. No assumed motor or manual drive; no music, voices, beeps, alarms, large splashes or dramatic impacts.",
+          "artistic_approval": "unapproved"
+        },
+        {
+          "id": "wet-work-b",
+          "label": "B - Softer / wetter / damped rubbing",
+          "difference": "The same physical role, with softer wet folds, less bright grit and quieter bowl rubbing for lower fatigue.",
+          "prompt": "The same close, steady wet-material mixing in a clay bowl with a horizontal paddle, softer and wetter: gentle viscous folds, muted bowl rubbing and very fine grit, less bright abrasion. Compact, even, low-fatigue texture; seamless repeat, no start or stop. No assumed motor or manual drive; no music, voices, beeps, alarms, large splashes or dramatic impacts.",
+          "artistic_approval": "unapproved"
+        }
+      ]
+    }
+  ],
+  "next_gate": "UNAPPROVED. Stop at audit and offline-reviewed tooling: Sol source-checks the machine audit and final prompts, reviews exact inputs, and checkpoints the combined freeze. Only a later NEW private Sol grant may bind that reviewed commit, exact hashes, these two candidates, max_calls=2 and one absolute ignored/external output directory with a durable ledger. No credential access or generation in this deliverable. A second family requires a newly reviewed manifest/grant, never automatic expansion. Technical QC is not listening; owner audition and one/eight-machine in-game review remain open."
+}

@@ -1,6 +1,7 @@
 # Grindless
 
-**Grindless** is a full modpack-scale progression for Minecraft. The early game already
+**Grindless** is a complete playable modpack for Minecraft, centered on the Grindless
+technology mod: **Superflat-first and Overworld-compatible**. The early game already
 built — a hand crank, the first factory, the contact process — is the foundation of an
 aligned **T0/F0-T15/F15** ladder carried by physical Control Matrices.
 
@@ -16,21 +17,31 @@ Kardashev scales. The goal is the black hole at the centre of the Milky Way. See
 The early hours of a typical pack are still the wrong way to start that ladder. Punch
 wood, make a pick, dig a staircase, strip-mine for iron, strip-mine again for the next
 tier: the foundation replaces that opening with automation, so the long game can begin.
-Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Their
-code and assets do not enter this repository (ADR-0088).
+Ideas from Factorio, GregTech, Ad Astra and BetterQuesting may inform the design. Any actual
+code or asset reuse follows the current [third-party policy](AGENTS.md#conventions) and
+[notices](THIRD_PARTY_NOTICES.md); a design reference is not permission to copy its implementation.
 
-The arc runs from a hand crank and two iron, through belts, reactors and a particle
-accelerator, out past orbit, and on to that black hole. Arriving is the victory.
+The arc runs from an optional hand-crank/two-iron quick start, through belts, reactors and a
+particle accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 
-> **Status: pre-alpha.** The foundation through Industrial is playable and the consolidated
-> branch is locally validated on Forge 1.20.1. The Ground Array, Luna, Drift, rocket,
-> station and galactic-centre chamber are also implemented and smoke-tested, but ADR-0107
-> reclassifies them as prototype/test infrastructure rather than an Industrial survival
-> shortcut. BO removed their recipes and premature quest path while preserving the tested
-> systems; the survival guide now ends at electronic silicon. BP's first recoverable Relay Matrix
-> batch is in and uses a physical calibrated core; the Atlas now exposes that route and the T0
-> audit remains. The real campaign reaches orbit at T10, the Drift at T13 and
-> Sagittarius at T15.
+> **Status: pre-alpha; T0 implementation in progress, no tier accepted.** The repository contains
+> systems and prototype inventory extending through later tiers, but implementation, historical
+> smoke coverage or a prior validation report does not make Industrial or the space campaign an
+> accepted survival progression. ADR-0107 keeps the later travel and megastructure systems as
+> prototype/test infrastructure, not an Industrial shortcut. The current revision-bound evidence
+> is in [the validation record](docs/testing/latest-validation.md).
+>
+> **Active development:** `1389ebb` is the T0 engineering candidate. The next deliverable is
+> the first **T0 Playable Release Candidate**: a curated, configured and versioned pack with
+> deliberate Superflat progression, real sprite/art and sound passes, coherent quests and
+> forward-save compatibility. Existing S2, runtime, UI and packaging proofs are reused within
+> their limits; they do not already establish that product. T0 is the only active tier.
+> Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
+> decisions and integration follow the [active handoff](.agent/handoff.md).
+> **Execution is SSH-first (ADR-0151):** this conversation stays local; heavy work runs
+> on the personal PC through ordinary SSH. Use [the operating runbook](docs/operations/ssh-prism-workflow.md)
+> and the received `70901eca` continuation, not old `main`. Preserve working personal
+> authentication and existing Prism worlds; a dedicated engineering instance is not a release.
 >
 > **Forge 1.20.1 is the only build target** (ADR-0039). The same jar also loads on NeoForge 1.20.1
 > unchanged (ADR-0002). Fabric was dropped so the work stays focused on one loader.
@@ -44,8 +55,32 @@ accelerator, out past orbit, and on to that black hole. Arriving is the victory.
 
 ---
 
+## Playable tier releases
+
+The lifecycle is **tier design -> implementation -> integration -> technical verification
+-> polish -> modpack build -> Release Candidate -> real play -> feedback alongside the
+next tier**. The owner starts the longitudinal reference world only from the first playable
+release, not the earlier preparation ZIPs. Later tier releases normally update that same
+world; incompatible changes require an explicit, tested migration on a preserved copy.
+
+Human acceptance starts with the release. After T0 is technically ready, polished,
+published and the owner has begun that save, T1 work may proceed alongside T0 feedback;
+there is no requirement to wait for the player to finish T0 absent a concrete dependency.
+**Those conditions are not met yet.** No current tier or save compatibility is accepted
+by this policy change.
+
+The official Superflat preset must be versioned and its mandatory resource routes
+deliberate. Normal Overworld generation and optional exploration cannot hide a flat-world
+gap. QoL reduces friction without bypassing the resource, processing, energy, logistics or
+quest systems. Visual/audio review and redistributable asset provenance are release work,
+not consequences inferred from deterministic generation.
+
+See [ADR-0144](docs/DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+and the [current gaps and execution plan](plan/process-t0-playable-release-1.md).
+
 ## Contents
 
+- [Playable tier releases](#playable-tier-releases)
 - [Environment setup](#environment-setup)
 - [The problem](#the-problem)
 - [Design principles](#design-principles)
@@ -164,7 +199,8 @@ These are the rules every feature is measured against.
 6. **Fail legibly.** When something is wrong the player must be able to see *what* and *why* —
    hence proportional brownouts instead of one randomly starved machine.
 7. **Never hard-block the player.** Under-powered machines slow down; they do not stop.
-8. **Original assets only.** Every texture and model is made for this project.
+8. **Original or properly licensed assets.** Prefer the project's deterministic assets;
+   compatible reuse requires exact provenance, licence review and distribution notices.
 9. **Everything is a chassis plus modules.** Machines take upgrades, conduits take cores, drones
    take pods, pylons take bay modules. One pattern learned once, applied everywhere, and capability
    always arrives by slotting something in rather than by crafting a replacement block.
@@ -310,6 +346,15 @@ seed together with the chunk coordinates. A vein has three properties:
 Because it is derived rather than stored, no world data is generated up front, the same seed
 always produces the same map, and the system costs nothing in worlds where the player never
 builds an extractor.
+
+**Superflat uses the same virtual underground.** Resource deposits are chunk data,
+not ore/rock blocks hidden in terrain: flat Overworld generation must retain them even
+when no physical ore or stone layer exists. The player's extraction infrastructure,
+including the intended multiblocks, accesses those deposits. Do not add visible ore,
+landscaped starter quarries, ponds, trees or a food/refuge system to conceal resource
+access gaps. Existing seeded mineral identity and extraction history must survive updates.
+The current vein/extractor foundation is implemented; complete basic-rock/resource
+coverage and the proposed T0 generating multiblock are not implied by that fact.
 
 Each primary material also has a deterministic **trace secondary**: the next eligible mineable
 material in the runtime registry's stable name order. It is a property of the material's generated
@@ -1379,7 +1424,7 @@ but is rarely economical.
 
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
-| **T0 — Bootstrap** | Escape velocity | Assisted extraction, primitive material/chemical/control parts and manual power culminate in the first Relay Matrix batch. |
+| **T0 — Bootstrap** | Escape velocity | A connected workshop and mod-owned geological/biological source base culminate in physical calibration and the manual five-F1-Matrix exit. |
 | **T1 — Voltaic** | First factory | Milling, reduction, renewable glass/silica, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
 | **T2 — Industrial** | Closed loops | Steel and wet beneficiation feed sulfur, electrolysis and resin loops; motors, discrete control, steam and solar turn them into a multi-line factory. |
 | **T3 — Arc** | Powered construction | Refractories, hot metal, Arc Cells and industrial control feed the Arc Reactor and Construction Drones. |
@@ -1413,18 +1458,19 @@ manual expansion.
 
 ### Renewable inputs, not free resources
 
-The project treats automation as the alternative to grind. A base material may enter through
-normal exploration, but any material consumed continuously needs an automated and indefinitely
-renewable route before volume demand makes gathering it a chore. Those routes still consume power,
-space and intermediate products: they are factory problems, never invisible permissions or free
-item generation.
+Mandatory recurring inputs ultimately need a mod-owned, automatable renewable route. Finite
+Overworld gathering and vanilla crafting may seed initial construction, but vanilla tree and
+cobblestone farms are not the canonical ongoing supply. The T0 implementation now includes:
 
-The first implemented lines are **cobblestone → Pulverizer → sand/silica → Arc Furnace → glass**
-and **metallurgical silicon + 500 mB water → Chemical Reactor → 4 redstone**. A vanilla
-cobblestone generator makes the silica feed indefinite; an automatically replanted tree farm and
-furnace provide charcoal for carbon; the Hand Pump provides water; and a charcoal-fed Thermal
-Generator supplies the first unattended F1 power. Renewable metals and industrial ceramics follow
-the same contract, each with its own named process rather than one universal source block.
+| T0 source role | Implemented route | Evidence boundary |
+| --- | --- | --- |
+| Geological feed | Geological Collector supplies mineral aggregate and clay from a terrestrial geological site; aggregate routes recover stone/gravel and wet metal/redstone fractions. | Does not make finite chunk veins renewable. |
+| Biological feed and F0 fuel | Sunlit Biocultivator supplies biomass; biomass routes supply fibreboard and other primitive inputs, and the Biomass Dynamo supplies F0 power. | Daylight source-cycle proof is bounded; it does not establish nighttime restart or complete factory autonomy. |
+| Ceramic, glass and metal processing | The Quern, Mixer, Firing Chamber and Settling Trough connect recovery and material conversion to the workshop. | Exact recipes and quantities remain in the Java catalogues; S2 canonical annotations and full recursive closure remain pending. |
+
+These are implemented T0 source mechanisms, not a claim that the entire tier has passed its
+survival or sustainability gate. See the [T0 contract](docs/tiers/t0.md) and
+[ADR-0131](docs/DECISIONS.md#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified).
 
 ### Mechanical tier gate
 
@@ -1509,7 +1555,7 @@ The single most important structural rule in Grindless:
 
 | Tier | How you obtain the machine |
 | --- | --- |
-| **T0** | Crafting table. The bootstrap, and only the ungated bootstrap. |
+| **T0** | Crafting table and a limited Assembly Bench for Bootstrap/four vanilla basics. The Bench does not make a Relay Matrix. |
 | **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first five-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler, which then automates the same batch. |
 | **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
 | **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
@@ -1566,9 +1612,10 @@ This rule must never become the grind it exists to delete. The guard rails are d
 - **Assemblers are cheap and parallelise.** Building ten of them is a throughput decision, not a
   punishment. The answer to "this is slow" is always "build another one", which is the correct
   answer in a factory game.
-- **The bootstrap is always recoverable.** T0 stays ungated, and the first T1 Relay Matrix has a
-  small manual route, so a player who loses everything can rebuild the ladder from local
-  materials. There is no softlock, ever.
+- **The bootstrap must remain recoverable.** T0 stays ungated and the first F1 Relay Matrix
+  batch has a manual route. This is a design requirement: the conditional S2 entry witness
+  and played path still need to establish the actual supply and recovery margin, not a
+  universal guarantee for every possible world state.
 - **Pack authors can relax it.** The gate is datapack-driven, so a pack that wants hand-craftable
   T2 machines can have them without a mod patch.
 
@@ -1576,9 +1623,9 @@ This rule must never become the grind it exists to delete. The guard rails are d
 
 ## Containers: buffers, filters and voiding
 
-Every container in Grindless — item crates, fluid tanks, and the input and output buffers built
-into machines — obeys one shared contract. Learn the interface once and it is the same everywhere,
-on a T1 tank and on a T11 colony module alike.
+The planned storage and machine-buffer interface follows one shared contract. `ContainerConfig`
+encodes policy, but its existence alone is not a working in-world control or automated discard
+sink. Do not infer current T0 Storage Crate/Overflow Gate availability from this design section.
 
 | Control | Behaviour |
 | --- | --- |
@@ -1610,9 +1657,10 @@ wanted. Both things are true, so the feature is built defensively:
 
 This matters more here than in most mods. A system that generates its recipes from tags at runtime
 produces byproducts for materials the player has never heard of, and unwanted byproducts backing up
-a line are the characteristic failure mode of that design. Auto-void is the release valve, and
-`Overflow Gate` plus a voiding `Storage Crate` is the canonical answer to "what do I do with eleven
-thousand gravel".
+a line are the characteristic failure mode of that design. Auto-void is the intended release
+valve, with `Overflow Gate` and a voiding `Storage Crate` as planned components. They are not
+an established T0 disposal route. Current handling advice must name actions actually available,
+and discardable by-products must not force unlimited hoarding while that integration is pending.
 
 ---
 
@@ -2086,17 +2134,15 @@ and only happens once.
 
 ## Roadmap
 
-### Validated prototype foundation
+### Implemented prototype inventory—not tier acceptance
 
-The Forge 1.20.1 build already contains the playable T0–T2 factory foundation: extraction,
-tag-driven materials, dry and wet ore routes, belts, fluids, logic, fabricated machines, tools,
-matter scanning and the first two armour chassis. It also contains locally smoke-tested prototype
-worlds and travel systems through Sagittarius. Those prototypes prove the technical seams; they
-are not the survival campaign.
+The Forge 1.20.1 repository contains systems spanning T0–T2 and later travel/world prototypes.
+Their implementation and historical smoke coverage are not acceptance of an Industrial or
+space-era survival campaign. **T0 is the only active tier; no tier is accepted.**
 
-**Prototype-foundation milestone:** a player can go from an empty world to automated iron in under
-fifteen minutes without mining it by hand. This is met, but it predates the complete T0 mechanical
-gate and does not by itself accept Bootstrap.
+**Historical prototype claim:** the earlier roadmap described automated iron in under fifteen
+minutes without hand-mining. That statement is not a current source-bound playtime measurement
+or T0 acceptance.
 
 ### Campaign restoration *(current)*
 
@@ -2105,12 +2151,12 @@ playable slices under the mechanical gate in ADR-0108:
 
 1. **BO — survival shortcut withdrawn.** The eight prototype recipes are gone and the quest
    book and guide stop at electronic silicon. Registrations, worlds, commands and smokes remain.
-2. **BP — close T0 Bootstrap *(active)*.** The matrix rating/architecture data, F0–F15, physical
-   calibration, first recoverable T1 Relay Matrix batch, Atlas visibility and explicit
-   survival entry/exit are in. Accept T0 only after an end-to-end survival playthrough.
-3. **BQ — physical T2 gate *(in progress)*.** The consumed F2 Relay Matrix route is now made in
-   the Assembler from an F1 Matrix, casing, renewable glass and Flux Cell; attach its first T2
-   consumer and convert Advanced Data Cores into future pattern media.
+2. **BP — close T0 Bootstrap *(active)*.** The connected workshop, geological/biological source
+   base, F0–F15, physical calibration and five-Matrix exit are implemented. S2 canonical data
+   and full source closure, actual client discovery, no-command survival and saved-world
+   compatibility remain pending; none is implied by current native proofs.
+3. **BQ — physical T2 gate *(held behind T0 acceptance)*.** The F2 route and consumer code are
+   implementation inventory; T2 is not the active tier or accepted survival progression.
 4. **BR onward — grow the campaign tier by tier.** Each frontier ships its four interacting routes,
    its Control Matrix, its signature project and the automation that makes its larger scale
    manageable.
@@ -2177,7 +2223,10 @@ one.
 
 ## Implementation plan
 
-Tracked order of work. Each step must build green before the next begins.
+Historical completions below are source-scoped, not current-WIP acceptance. The active
+[work plan](.agent/work-plan.json) permits renewable implementation and production auditing
+to proceed together under the received Sol coordinator; historical Astra attribution
+is preserved and integration/release gates still control acceptance.
 
 | # | Step | Status |
 | --- | --- | --- |
@@ -2232,8 +2281,8 @@ Tracked order of work. Each step must build green before the next begins.
 | 23 | Tools and matter: scanner, deconstructor, replicator, construction drones | partly done — scanner/deconstructor and tools are in; drones move to T3, replication to T4/T9 |
 | 24 | Orbital layer: launch, satellites, station | prototypes exist; survival implementation is rescheduled to T10 (ADR-0107) |
 | 25 | Planetary layer: colonies, telepresence, planet registry, Horizon Gates | planned for T11 (ADR-0068, ADR-0107) |
-| 26 | CI workflow | ✅ done — `ci.yml` + `tools/smoke-boot.sh`, ADR-0049 |
-| 27 | **Autonomous build-out** | active — [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) preserves the shipped calendars and names BP as next |
+| 26 | CI workflow | ✅ done — unified fast [validation entry](docs/testing/test-strategy.md) plus isolated production smoke shards; ADR-0049, ADR-0126, ADR-0128 |
+| 27 | **Autonomous build-out** | active — reusable S1/native proofs; canonical T0 closure with parallel S2/docs/client/assets work (ADR-0140/0141); manual gaps and ports remain held; see [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md) |
 | 28 | **Prototype expansion** | ✅ technically complete — worlds, travel and quests are validated prototypes; ADR-0107 withdraws their premature survival route |
 | 28b | **BD — Electric-arc steel** | ✅ done — ADR-0090. 10 iron + 1 carbon → 10 steel in 140 s on the Arc Furnace. |
 | 28c | **BE — Refractory brick** | ✅ done — ADR-0091. 1 slag → 1 refractory brick in 20 s at 1400 °C on the Arc Furnace. |
@@ -2246,13 +2295,38 @@ Tracked order of work. Each step must build green before the next begins.
 | 28j | **BL — Rocket ascent** | ✅ done — ADR-0097. A survey rocket climbs to the ceiling. The landing map offers the home world and Luna. Leaving home spends 102,400 FU; leaving Luna does not. |
 | 28k | **BM — Supraluminal station** | ✅ done — ADR-0098. A station climbs to the ceiling. That ceiling is the Drift on the way out. Leaving home spends 6,553,600 FU; leaving the Drift does not. ADR-0099 sends that free ride to the centre. The Starward Link stays and no longer moves a player. |
 | 28l | **BN — Arrival at the galactic centre** | ✅ done — ADR-0099. Riding the station from the Drift arrives in a sealed chamber. Leaving the Drift and leaving the chamber draw nothing. Leaving the chamber returns to the berth saved on the way to the Drift. No new link. |
-| 28m | **BC — Original quest book and in-game guide** | ✅ done — ADR-0100. The native book now tracks the live T0-to-T1 factory route without exposing future-tier prototypes. |
+| 28m | **BC — Quest book and in-game guide** | original route retained; ADR-0142 adds the optional Heracles interface over the same catalogue/individual claim ledger, with legacy-menu fallback and no duplicate native rewards. Combined-source engineering and canonical guidance pass on their recorded pins; actual client/save acceptance remains pending. |
 | 29 | **T0–T15 progression design** | ✅ done — ADR-0107; four braided routes, five matrix architectures and the F0–F15 ladder |
 | 30 | **BO — Withdraw prototype survival shortcut** | ✅ done — 107 graph rows, 39 Assembler rows and no prototype recipe or dimension quest |
-| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, rating/architecture model, physical calibration, the five-unit survival batch and Atlas visibility are in; the Bootstrap smoke covers the three-machine seam, while the full T0 playthrough audit remains |
-| 32 | **BQ — Physical T2 gate** | pending after BP — introduce the consumed T2 matrix route |
+| 31 | **BP — Close T0 Bootstrap / Control Matrix foundation** | **active** — F0-F15, the connected workshop, geological/biological sources, physical calibration and manual five-unit exit are implemented; full canonical-data/source closure, client discovery and T0 acceptance remain pending |
+| 32 | **BQ — Physical T2 gate** | held behind BP acceptance — the F2 route exists as implementation inventory; T2 is not the active tier or accepted survival progression |
 | 33 | **T3–T15 campaign** | pending — ship each frontier as playable slices following the lattice in `PROCESSES.md` |
-| 34 | **Mechanical tier acceptance** | active — ADR-0108; T1 remains locked until T0 passes the shared completion gate |
+| 34 | **Mechanical tier acceptance** | active — ADR-0144 revises the ordering: T0 playable RC publication plus actual longitudinal play permits T1 alongside feedback; no human acceptance is inferred and T1 is not open now |
+| 35 | **T0 workshop and renewable supply** | Engineering candidate1389ebb is published:42 suites/pack15 and source-bound CI evidence. The new playable-RC gaps are Superflat accessibility, curated/configured pack, questbook product review, real art/audio passes and release/compatibility QA |
+| 35a | **Historical foundation verification** | historical **CONDITIONAL GO** — 33 suites/build/docs and 41 production scenarios; not current-WIP or Tier acceptance. Manual gates block merge, not authorized T0 development; [validation ledger](docs/testing/latest-validation.md) |
+| 36 | **Historical T0 preparation** | [Tier specification](docs/tiers/t0.md), [research](docs/research/tiers/t0-research.md), [asset workflow](docs/assets/t0-asset-workflow.md) and [manual checklist](docs/testing/t0-survival-acceptance.md) remain useful; the old no-expansion restriction is superseded |
+| 37 | **Repository sustainability dashboard** | [renderer/contract](docs/dashboard/README.md), exact Result export/serve and Root fix are integrated. Public4061 has actual same-repository hosted export/upload and three complete CI successes; later source continues through its own CI without relabeling cb0 browser evidence |
+| 38 | **Clean-context orchestration** | `b012bc4` received in the independent Astra worktree; originals verified in their actual transfer modalities and added to Library, all 16 [tasks](.agent/work-plan.json) reconstructed. C3/extraction assignments prepared, not dispatched; Astra owns design/integration/review (ADR-0134) |
+| 39 | **Functional multiblock ports** | held until current source/sustainability/communication/dashboard integration; audit all authored multiblocks before implementation and dedicated validation |
+| 40 | **Playable modpack and longitudinal releases** | active — exact approved Quern A Ogg and Quern-only managed client loop integrated under ADR-0148; common/Forge compile,67 tracker/source and34 sound-resource checks pass on frozen3914978. Exact70901 CI39185959767 now supplies the reused production-server binding; client lifecycle/mix and the playable release remain open. Nine physical-item sprites/native display inheritance retain their814-check/source-pixel evidence; actual client, Superflat/resource and remaining product gates are not implied |
+| 41 | **Clean Sol 6.1 continuation** | checkpoint17ae8b0 received by clean fast-forward; revision11/PA-0010 retains27 tasks/47 references. Both PRs remain drafts. Its final CI has two cancelled runs and one Forge-preparation Maven502 failure, not a full pass; later source has separate evidence. Product gaps remain and historical proofs are reused, not replayed |
+| 42 | **Restricted playable profile** | ADR-0149 opt-in seven-pin core/quest/performance selector integrated; historical defaults/pins/filenames stay intact. Read-only review found no actionable issue and actual verifyModpack passes87 selector/mutation/real-synthetic-ZIP checks. Privileged Windows symlink/SH remain NOT_RUN; final package/preset/import/client proof remains pending |
+| 43 | **Superflat virtual resources** | ADR-0150 preserves chunk-data deposits independently of physical terrain; extraction multiblocks and deliberate renewable basic-resource access belong in flat worlds too. No staged spawn/food system is selected; detailed T0 generator and quest-shop economy remain design work |
+| 44 | **Cloud continuation checkpoint** | original Quern/pack worker histories and actual scoped proof consolidated atab23ff5e; local execution frozen. Use the published continuation branch and cloud handoff; main/draft PRs and unproved RC/client/resource gates remain unchanged |
+| 45 | **SSH-first PC and Prism development** | active — ADR-0151 supersedes the cloud destination: local coordination, verified personal-PC SSH/Git, isolated work-volume build and separately owned development instance. Existing preparation/worlds and T0 proof boundaries remain intact; [operating runbook](docs/operations/ssh-prism-workflow.md) |
+| 46 | **Autonomous T0 and creative programme** | bounded engineering complete — reviewed A01/A03 source, real native red/green and Luna saved accounting are qualified on559; full build/pack88/combined Java gate pass and the same jar is deployed/VerifiedStopped/idempotent. Three guide PNGs match the deployed artifact; protected resources and old save remain intact. SFX adds200 offline recovery assertions, zero paid requests/new audio. Client/human/product RC gates remain open; no T0 freeze/T1 activation; [RETURN-HANDOFF](RETURN-HANDOFF.md) owns exact hashes and manual work |
+| 47 | **A03 recipe generation boundary** | qualified — ADR-0153 typed generation/server hook retains paid work/hold/tick deduplication. Red3643 fails7; fixedfd907 passes938/build; genuine native red444/green559 now prove loaded-idle reload wakeup with conserved3840FU batch and40 stable ticks. A01 remains a distinct native/SavedData gate, not inferred from process-fluid proofs; [disposition](docs/testing/t0-process-cache-generation.md) |
+| 48 | **GREEN shared-world tooling parity** | Complete: reviewed087 integrated559, CDPATH-safe roots/A01 exclusion,42/975 WinPS-Git-MSYS and exact087 Linux proof, plus actual combined PC javac0/JavaGate0 with OPTIONAL+RETENTION+BATCH once each. [Usage and proof boundary](docs/testing/test-strategy.md#shared-world-development-shortcut); no new framework/CI step/native batch or Tier acceptance |
+| 49 | **Native idle-cache reload regression** | qualified and registered only after real red444/green559:5 real markers,1gravel→2sand/exact3840FU/40 stable ticks, harness/server0. Provider/Home/ancestor/phase guards retain86 PS and exact444 Linux proof. Observer failures/addenda do not trigger JVM replay; no client/retained-world acceptance |
+| 50 | **Diagnostic smoke-world retention** | Reviewed444409f source integrated under ADR-0155: `SMOKE_KEEP_WORLD=1` preserves only the final diagnostic world; default/0 cleanup and safety/exit checks stay active.37 PS/43 Windows Git-MSYS contracts and exact444 Linux Java-wrapped helper pass, not native persistence or clean-shutdown evidence. Read Luna's dimension data only after harness0/natural server0 and explicitly clean afterward; no new runner/CI step |
+| 51 | **Disclosed visual/SFX and client closure** | active — ADR-0156/PA-0014: provider research, bounded sound families, minimal Superflat alternatives and objective client preparation proceed independently. C2's executed literal-key/texture/source-equivalence checks and [review preparation](docs/testing/t0-client-review-preparation.md) are ready; actual client/render/input/listening are not executed. Audio access is authenticated, historical budgets remain per-run, no image billing or silent product choice; current CI failures remain explicit |
+| 52 | **Local ComfyUI asset production** | implemented/qualified sourcec214, final proof records baf1 integrated — existing ROCm/SD1.5 generates2 real candidates; rejected photo, selected guided Multitool127b. Core-only loopback workflow, finite ledger and deterministic pixel processing pass28 Python/12 JDK checks;2 full1602-file stages are byte-identical and580 other PNGs unchanged. Ordinary generator copies canonical16px without Python/Comfy/network; [workflow](docs/assets/comfyui-asset-workflow.md). Original observer failure/read-only recovery preserved without a JVM replay. No reboot/download/model copies; combined deployment and human in-game appearance remain separate |
+| 53 | **Image-provider capability decision** | research complete — [verified discovery](docs/assets/image-generation-discovery.md) separates Copilot from the officially retired GitHub Models service and unqualified external image access. No image-provider request/billing activation or false free-quota claim. Existing local ComfyUI qualification is now the independent implementation route; a hypothetical standalone fallback is not its selected configuration |
+| 54 | **First-observation CI fixtures** | qualified962cb37 — exact CI succeeds in verify/Windows/all6native shards, including actual WATER-IN/CO-BURN and all5Harness markers with clean stops. PC Java contracts also pass23/28 and full48 batch under original budgets. [Original failures/attempts](docs/testing/t0-first-observation-fixtures.json) remain preserved; quantitative flow, item liveness and the unknown historical trigger are not newly claimed |
+| 55 | **End-to-end worker delivery** | active — ADR-0158 removes routine micro-approval queues. Audio and local visuals own generation/technical selection/processing/integration/tests with finite run records; material product/security/shared deployment decisions stay coordinated. Existing subscriptions/compute are for useful work, not repeated entitlement/preparation loops |
+| 56 | **Fresh-Superflat starter quest** | implemented/qualified/deployed747 under ADR-0159 — first quest FREE with generous finite supplies in11 legal stacks, initial book recovery, one ledger and complete native delivery; full inventory defers without drops/partial claim. Both projections preserve old25 IDs/progress. Actual common/Forge/Heracles454/Quest421/Claims206/persistence/sustainability/guidance, canonical parity, package88, production boot and same-JAR deployment pass. [Proof boundaries](docs/testing/t0-starter-kit.md); real player interaction remains human, no village/shop/new worldgen debate |
+| 57 | **Clay Mixer wet-work integration** | qualified/deployed747:2 real ElevenLabs200 candidates, technicalA normalized mono44100/3s, exact Ogg2c052c; Quern811b unchanged. One tracker/one loaded9-chunk scan, passive TANK feedback corrected. Offline sound and actual PC audio84/full-assets, exact archive, production registry boot and same-artifact deployment pass. Human listening/1–8-machine mix remains pending |
+| 58 | **Testing-ready main and PR cleanup** | ADR-0160 delivery —747 is technically qualified/deployed and all16 hosted jobs pass. The [consolidation PR](https://github.com/Ezequiel24123z/grindless-earlygame/pull/55) records live main/cleanup state; all13 old heads are preserved, branches/worktrees retained. Proof-only documentation reuses unchanged runtime inputs. No forced merge, invented RC, T0 acceptance/freeze or T1 activation |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2274,32 +2348,50 @@ the record.
 
 ### Where the project actually is
 
-The consolidated branch is locally validated: build, all behaviour checks, documentation and
-39 smoke scenarios pass. The genuinely playable survival foundation reaches T2 and includes
-extraction, logistics, fluids, fabricated machines, tools and matter scanning. Electric-arc steel,
-refractory brick, metallurgical silicon and zone refining extend that foundation.
+The earlier consolidated branch was recorded as locally validated, including build, behaviour
+checks, documentation and 39 smoke scenarios. That historical statement is not evidence for a
+new checkout; see the revision-bound [current validation](docs/testing/latest-validation.md).
+The repository contains implementation inventory extending through T2, including extraction,
+logistics, fluids, fabricated machines, tools and matter scanning. Those systems and later
+prototypes are not accepted T1/T2 survival progression; T0 is the only active tier.
 
 Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and the original quest
-book are also implemented and tested. ADR-0107 reclassifies that vertical route as prototype
+book remain implemented in the repository; historical tests are not current campaign acceptance.
+ADR-0107 reclassifies that vertical route as prototype
 infrastructure because its Industrial recipes bypass T3–T15. The destination code, registrations
 and smoke coverage stay; their survival recipes and premature quest claims left in **BO**. The
 book and guide now describe the reachable T0-to-T1 factory instead of prototype travel. **BP** has introduced F0-F15, physical Control
 Matrix rating/architecture data, the registered T1 Relay Matrix item and its recoverable five-unit
-survival batch. Its physical calibration route and Atlas visibility are in; the full T0 machine and
-playthrough audit is the active work. The first Voltaic renewable line now turns cobblestone into
-sand/silica and then glass, but this does not itself accept T1: **BQ** adds physical T2 fabrication
-after the Bootstrap gate. The Industrial Chemical Reactor can now turn that renewable
-metallurgical silicon and pumped water into redstone, completing the first renewable source stack
-without replacing the Bootstrap audit. The superseded Research Terminal permission system has been
-removed: its F0 cycle now produces a physical Calibrated Data Core, and old research save data is
-ignored. See [`docs/BUILD-OUT.md`](docs/BUILD-OUT.md).
+survival batch. Its physical calibration route is implemented; full T0 acceptance remains pending.
+The superseded Research Terminal permission system has been removed: its F0 cycle now produces a
+physical Calibrated Data Core, and old research save data is ignored. Later Voltaic/Industrial
+recipe code is implementation inventory, not evidence of canonical T0 closure or accepted T1/T2
+progression. See the active [build-out](docs/BUILD-OUT.md) and
+[validation record](docs/testing/latest-validation.md).
 
-T0 Bootstrap is the only mechanically active tier. It starts with ordinary Overworld sources of
-wood, stone, glass, redstone and copper plus two iron for Grindless machinery, then exits with a
-recoverable five-Relay-Matrix batch. Its audit covers the complete survival route, not just
-registration: the Multitool, Hand Crank, Crude Extractor, primitive material, chemical and control
-parts, discoverability, persistence and automation. T1 stays locked until that route passes the
-shared gate in ADR-0108.
+T0 Bootstrap is the only mechanically active tier. Its connected F0 workshop and geological/
+biological source base include the Quern, Clay Mixer, Firing Chamber, Settling Trough, Geological
+Collector, Biocultivator, Biomass Dynamo and limited Assembly Bench. The entry is a requirements/
+budget bridged by a generous finite kit in the first free quest (ADR-0159), with
+initial book access and one server-authoritative claim per player/world. No paper,
+commands, village or new shop/worldgen route is needed to reach it; the live quest
+catalogue owns the allocation. The two-iron Hand Crank Dynamo/Crude Extractor path
+remains optional. Finite gathering and a furnace may also seed initial boards/bricks,
+but vanilla farms are not canonical ongoing supply. Ceramic
+insulator and redstone make the physical Data Core; the physical five-F1-Matrix exit remains a
+hand craft.
+
+The Firing Chamber is a controller plus seven brick blocks in a 2x2x2 volume. The Settling Trough
+uses a controller, channel and screen with open space above its passive parts. Machine I/O stays
+at controllers; general replaceable ports and ME integration are not implemented T0 capabilities.
+`AtlasLogic.allEntries` supplies the native Atlas with generated processes, calibration,
+Bootstrap shaped/shapeless crafts and the T1 shaped catalogue. It is not an exhaustive vanilla
+recipe viewer; actual client discovery remains a separate acceptance property.
+
+The [workshop specification](docs/tiers/t0.md) sets a 35–60 minute target from material entry;
+actual playtime is unmeasured. Existing S1/C3/source proofs are bounded: S2 canonical data and
+full closure, client discovery, no-command survival and saved-world compatibility remain
+pending. These gaps prevent T0 acceptance, not further authorized T0 implementation.
 
 The Flux Exosuit is in
 (ADR-0103): Assembler-manufactured from visible components. Four pieces with the
@@ -2455,6 +2547,16 @@ by committed scripts in `tools/`. Code, textures, sounds and other material from
 may be copied or adapted when that project's licence permits the intended distribution. Every such
 import is recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) with its exact source,
 version, licence, scope and required notices; no Minecraft assets are redistributed.
+
+The approved Quern A Ogg is an unchanged, noticed exception to generated audio
+(ADR-0148): `grindless:t0_grinding` uses one client-managed positional working loop per
+nearby loaded RUNNING Quern. Its old heavy-hum bursts are replaced, not those of pumps,
+extractors or other machines. Pause, mute, range, source/world/player lifetime and bounded
+engine recovery are explicit; actual client onset/stop/reload and factory listening remain
+unverified. Generators and the paired legacy converters preserve the imported sound and notice.
+The [source-bound runtime import record](docs/assets/quern-runtime-import.json) preserves
+the exact implementation checkpoint, passed compile/contract/resource guards and unexecuted
+native registration/client/listening proofs, without erasing the earlier blocked attempts.
 
 Generating art programmatically is a deliberate choice: it keeps the visual language consistent
 across a hundred-plus blocks, makes a palette change a one-line edit rather than a week of

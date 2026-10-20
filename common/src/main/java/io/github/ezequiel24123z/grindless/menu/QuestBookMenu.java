@@ -1,23 +1,18 @@
 package io.github.ezequiel24123z.grindless.menu;
 
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
+import io.github.ezequiel24123z.grindless.quest.QuestClaimService;
 import io.github.ezequiel24123z.grindless.quest.QuestEvidence;
+import io.github.ezequiel24123z.grindless.quest.QuestInventoryEvidence;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
-import io.github.ezequiel24123z.grindless.registry.ModItems;
 import io.github.ezequiel24123z.grindless.registry.ModMenus;
-import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import java.util.List;
 import java.util.Set;
@@ -64,8 +59,7 @@ public final class QuestBookMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())
-                || player.getOffhandItem().is(ModItems.QUEST_BOOK.get());
+        return QuestClaimService.holdingBook(player);
     }
 
     @Override
@@ -83,20 +77,9 @@ public final class QuestBookMenu extends AbstractContainerMenu {
         if (id < 0 || id >= tasks.size()) {
             return false;
         }
-        QuestCatalogue.Task task = tasks.get(id);
-        QuestProgress progress = QuestProgress.get(server);
-        Set<String> claimed = progress.claimed(server.getUUID());
-        if (QuestLogic.consider(task, claimed, evidenceMet(server, task)) != QuestLogic.Status.CLAIMABLE) {
-            return false;
-        }
-        if (!progress.claim(server.getUUID(), task.id())) {
-            return false;
-        }
-        give(server, task.reward());
-        server.displayClientMessage(Component.translatable("chat.grindless.quest.claimed",
-                Component.translatable("gui.grindless.quest.task." + task.id())), false);
+        QuestClaimService.Result result = QuestClaimService.claim(server, tasks.get(id).id());
         refresh();
-        return true;
+        return result == QuestClaimService.Result.CLAIMED;
     }
 
     private void refresh() {
@@ -115,50 +98,8 @@ public final class QuestBookMenu extends AbstractContainerMenu {
         }
     }
 
-    private static boolean evidenceMet(ServerPlayer player, QuestCatalogue.Task task) {
-        return QuestEvidence.met(task, held(player, task),
-                player.level().dimension().location().toString());
-    }
-
     private static int held(ServerPlayer player, QuestCatalogue.Task task) {
-        int count = 0;
-        Inventory inventory = player.getInventory();
-        for (int i = 0; i < inventory.getContainerSize(); i++) {
-            ItemStack stack = inventory.getItem(i);
-            if (matches(task, stack)) {
-                count += stack.getCount();
-            }
-        }
-        ItemStack offhand = player.getOffhandItem();
-        if (matches(task, offhand)) {
-            count += offhand.getCount();
-        }
-        return count;
+        return QuestInventoryEvidence.count(player.getInventory(), task);
     }
 
-    private static boolean matches(QuestCatalogue.Task task, ItemStack stack) {
-        if (stack.isEmpty() || !task.subject().equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString())) {
-            return false;
-        }
-        if (task.evidence() != QuestCatalogue.Evidence.MATRIX) {
-            return true;
-        }
-        return stack.getItem() instanceof ControlMatrixItem matrix
-                && matrix.spec(stack).map(value -> value.rating() == task.matrixRating()).orElse(false);
-    }
-
-    private static void give(ServerPlayer player, QuestCatalogue.Reward reward) {
-        ResourceLocation id = ResourceLocation.tryParse(reward.itemId());
-        if (id == null) {
-            return;
-        }
-        Item item = BuiltInRegistries.ITEM.get(id);
-        if (item == null || item == Items.AIR) {
-            return;
-        }
-        ItemStack stack = new ItemStack(item, reward.count());
-        if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
-        }
-    }
 }

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["C C", "LPL", "PPP"],
+  "key": {
+    "C": { "tag": "minecraft:stone_crafting_materials" },
+    "L": { "item": "minecraft:clay_ball" },
+    "P": { "tag": "grindless:boards" }
+  },
+  "result": { "item": "grindless:biocultivator" }
+}

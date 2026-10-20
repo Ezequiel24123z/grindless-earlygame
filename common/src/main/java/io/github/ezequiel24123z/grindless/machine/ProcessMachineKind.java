@@ -1,17 +1,24 @@
 package io.github.ezequiel24123z.grindless.machine;
 
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
+import io.github.ezequiel24123z.grindless.process.ConditionDimension;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
+import io.github.ezequiel24123z.grindless.process.ConditionReport;
 import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.process.ProcessField;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
 import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.source.SourceSite;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
@@ -328,19 +335,132 @@ public enum ProcessMachineKind {
         public BlockEntityType<ProcessMachineBlockEntity> type() {
             return ModBlockEntities.CONDENSER.get();
         }
+    },
+
+    QUERN(MachineFamily.QUERN, MachineMenuKind.QUERN,
+            BlockCatalogue.Geometry.QUERN, "quern", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.QUERN.get();
+        }
+    },
+
+    CLAY_MIXER(MachineFamily.CLAY_MIXER, MachineMenuKind.CLAY_MIXER,
+            BlockCatalogue.Geometry.MIXER, "clay_mixer", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return MachineEnvelopes.CHEMICAL_WASHER;
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withAgitation(Agitation.STIRRED);
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.CLAY_MIXER.get();
+        }
+    },
+
+    FIRING_CHAMBER(MachineFamily.FIRING_CHAMBER, MachineMenuKind.FIRING_CHAMBER,
+            BlockCatalogue.Geometry.FIREBOX, "firing_chamber", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().temperature(20, 1450)
+                    .atmospheres(Atmosphere.OXIDISING, Atmosphere.REDUCING).build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT.withTemperature(BootstrapProcesses.FIRING_C)
+                    .withAtmosphere(Atmosphere.OXIDISING);
+        }
+
+        @Override
+        public boolean regulatesConditions() {
+            return true;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.FIRING_CHAMBER.get();
+        }
+    },
+
+    SETTLING_TROUGH(MachineFamily.SETTLING_TROUGH, MachineMenuKind.SETTLING_TROUGH,
+            BlockCatalogue.Geometry.SETTLER, "settling_trough", FluxTier.F0) {
+        @Override
+        public ConditionEnvelope envelope() {
+            return ConditionEnvelope.builder().build();
+        }
+
+        @Override
+        public ConditionState heldConditions() {
+            return ConditionState.AMBIENT;
+        }
+
+        @Override
+        public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.SETTLING_TROUGH.get();
+        }
+    },
+
+    GEOLOGICAL_COLLECTOR(MachineFamily.GEOLOGICAL_COLLECTOR, MachineMenuKind.GEOLOGICAL_COLLECTOR,
+            BlockCatalogue.Geometry.COLLECTOR, "geological_collector", FluxTier.F0) {
+        @Override public ConditionEnvelope envelope() { return ConditionEnvelope.builder().build(); }
+        @Override public ConditionState heldConditions() { return ConditionState.AMBIENT; }
+        @Override public SourceSite site() { return SourceSite.GEOLOGICAL; }
+        @Override public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.GEOLOGICAL_COLLECTOR.get();
+        }
+    },
+    BIOCULTIVATOR(MachineFamily.BIOCULTIVATOR, MachineMenuKind.BIOCULTIVATOR,
+            BlockCatalogue.Geometry.CULTURE, "biocultivator", FluxTier.F0) {
+        @Override public ConditionEnvelope envelope() { return ConditionEnvelope.builder().build(); }
+        @Override public ConditionState heldConditions() { return ConditionState.AMBIENT; }
+        @Override public SourceSite site() { return SourceSite.SUNLIT_CULTURE; }
+        @Override public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.BIOCULTIVATOR.get();
+        }
+    },
+    ASSEMBLY_BENCH(MachineFamily.ASSEMBLY_BENCH, MachineMenuKind.ASSEMBLY_BENCH,
+            BlockCatalogue.Geometry.BENCH, "assembly_bench", FluxTier.F0) {
+        @Override public ConditionEnvelope envelope() { return ConditionEnvelope.builder().build(); }
+        @Override public ConditionState heldConditions() { return ConditionState.AMBIENT; }
+        @Override public BlockEntityType<ProcessMachineBlockEntity> type() {
+            return ModBlockEntities.ASSEMBLY_BENCH.get();
+        }
     };
 
     private final MachineFamily family;
     private final MachineMenuKind menuKind;
     private final BlockCatalogue.Geometry geometry;
     private final String translation;
+    private final FluxTier tier;
 
     ProcessMachineKind(MachineFamily family, MachineMenuKind menuKind,
                        BlockCatalogue.Geometry geometry, String translation) {
+        this(family, menuKind, geometry, translation, FluxTier.F1);
+    }
+
+    ProcessMachineKind(MachineFamily family, MachineMenuKind menuKind,
+                       BlockCatalogue.Geometry geometry, String translation, FluxTier tier) {
         this.family = family;
         this.menuKind = menuKind;
         this.geometry = geometry;
         this.translation = translation;
+        this.tier = tier;
     }
 
     public MachineFamily family() {
@@ -364,6 +484,63 @@ public enum ProcessMachineKind {
     public abstract ConditionState heldConditions();
 
     public abstract BlockEntityType<ProcessMachineBlockEntity> type();
+
+    /** Rated input and buffer sizing, independent of the selected recipe's instantaneous draw. */
+    public FluxTier tier() {
+        return tier;
+    }
+
+    /** A fixed workshop structure only when the process requires one. */
+    public WorkshopStructure structure() {
+        return WorkshopStructure.forFamily(family);
+    }
+
+    public SourceSite site() {
+        return SourceSite.NONE;
+    }
+
+    /** Only a declared regulator may change its held state with the selected recipe. */
+    public boolean regulatesConditions() {
+        return false;
+    }
+
+    /** Admission precedes recipe condition parsing, including malformed atmosphere names. */
+    public ConditionReport regulationReport(ProcessRecipe recipe) {
+        if (!regulatesConditions() || recipe == null) {
+            return ConditionReport.OPTIMAL;
+        }
+        ConditionEnvelope band = envelope();
+        double temperature = recipe.namesTemperature()
+                ? recipe.temperatureC() : heldConditions().temperature();
+        if (!Double.isFinite(temperature) || temperature < band.minTemperature()
+                || temperature > band.maxTemperature()) {
+            return ConditionReport.outsideEnvelope(ConditionDimension.TEMPERATURE);
+        }
+        Atmosphere atmosphere = regulatedAtmosphere(recipe);
+        if (atmosphere == null || !band.supportsAtmosphere(atmosphere)) {
+            return ConditionReport.outsideEnvelope(ConditionDimension.ATMOSPHERE);
+        }
+        return ConditionReport.OPTIMAL;
+    }
+
+    /** The primitive chamber holds only a valid fuel-backed band, never a clamped substitute. */
+    public ConditionState heldConditions(ProcessRecipe recipe) {
+        if (!regulatesConditions() || recipe == null || !regulationReport(recipe).canRun()) {
+            return heldConditions();
+        }
+        ConditionState held = heldConditions();
+        return held.withTemperature(recipe.namesTemperature() ? recipe.temperatureC() : held.temperature())
+                .withAtmosphere(regulatedAtmosphere(recipe));
+    }
+
+    private static Atmosphere regulatedAtmosphere(ProcessRecipe recipe) {
+        for (Atmosphere value : Atmosphere.values()) {
+            if (value.name().equals(recipe.atmosphere())) {
+                return value;
+            }
+        }
+        return null;
+    }
 
     /** Whether the fluid buffer may hold melt. The tank and the clay pipe still refuse it. */
     public boolean hotFluid() {

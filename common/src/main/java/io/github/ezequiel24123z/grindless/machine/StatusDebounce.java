@@ -29,6 +29,18 @@ public final class StatusDebounce {
         return shown;
     }
 
+    /** Publishes a known stable stop when the owner is unsubscribing and will not tick again. */
+    public boolean settle(MachineStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("a stable machine status is required");
+        }
+        boolean changed = shown != status;
+        shown = status;
+        candidate = status;
+        streak = 0;
+        return changed;
+    }
+
     /**
      * Feeds one tick's observation.
      *

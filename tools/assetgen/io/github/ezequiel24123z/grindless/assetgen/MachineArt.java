@@ -157,6 +157,14 @@ public final class MachineArt {
             case PAD -> padFront(status);
             case BERTH -> berthFront(status);
             case PYLON -> pylonSide(1, status);
+            case QUERN -> quernFront(status);
+            case MIXER -> mixerFront(status);
+            case FIREBOX -> fireboxFront(status);
+            case SETTLER -> settlingFront(status);
+            case CHANNEL -> channelFront(false);
+            case SCREEN -> channelFront(true);
+            case COLLECTOR, CULTURE, BIOGEN, BENCH -> bootstrapFront(geometry, status);
+            case FIBREBOARD -> BootstrapArt.fibreboard(false);
         };
     }
 
@@ -220,7 +228,149 @@ public final class MachineArt {
             case PAD -> padTop();
             case BERTH -> berthTop();
             case PYLON -> pylonTop(1, "idle");
+            case QUERN -> quernTop();
+            case MIXER -> mixerTop();
+            case FIREBOX -> fireboxTop();
+            case SETTLER -> settlingTop(0);
+            case CHANNEL -> settlingTop(1);
+            case SCREEN -> settlingTop(2);
+            case COLLECTOR, CULTURE, BIOGEN, BENCH -> BootstrapArt.top(geometry);
+            case FIBREBOARD -> BootstrapArt.fibreboard(true);
         };
+    }
+
+    private static BufferedImage bootstrapFront(
+            io.github.ezequiel24123z.grindless.registry.BlockCatalogue.Geometry geometry, String status) {
+        BufferedImage image = BootstrapArt.front(geometry, status);
+        strip(image, status);
+        return image;
+    }
+
+    /** Parallel stone courses and a distinct grain feed, not the powered mill's rollers. */
+    public static BufferedImage quernFront(String status) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 4; y <= 10; y++) {
+            for (int x = 2; x <= 13; x++) {
+                set(image, x, y, y == 7 ? 0x272A29 : ((x + y) % 3 == 0 ? 0xB5AD96 : 0x8F8774));
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            set(image, x, 3, 0xDFC9A0);
+        }
+        strip(image, status);
+        return image;
+    }
+
+    public static BufferedImage quernTop() {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 2; y <= 13; y++) {
+            for (int x = 2; x <= 13; x++) {
+                double radius = Math.hypot(x - 7.5, y - 7.5);
+                if (radius <= 6.0) {
+                    set(image, x, y, radius < 2.0 ? 0x292C29 : ((x + y) % 4 == 0 ? 0xB5AD96 : 0x8F8774));
+                }
+            }
+        }
+        return image;
+    }
+
+    /** Copper binding around a clay bowl; the paddle remains readable without state color. */
+    public static BufferedImage mixerFront(String status) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 4; y <= 10; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(image, x, y, x == 3 || x == 12 ? 0xB87333 : (y % 3 == 0 ? 0x5D4739 : 0x8E6950));
+            }
+        }
+        for (int x = 2; x <= 13; x++) {
+            set(image, x, 3, 0xD1B99C);
+        }
+        strip(image, status);
+        return image;
+    }
+
+    public static BufferedImage mixerTop() {
+        BufferedImage image = casingBase(0x795C48);
+        for (int y = 3; y <= 12; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(image, x, y, x == 7 || x == 8 ? 0xB87333 : 0xB8A183);
+            }
+        }
+        return image;
+    }
+
+    /** An inset fire door; only the door and common indicator respond to process state. */
+    public static BufferedImage fireboxFront(String status) {
+        BufferedImage image = fireboxTop();
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                int color = x == 3 || x == 12 || y == 4 || y == 11 ? 0x23272A : 0x3A2B24;
+                if (status.equals("running") && x >= 5 && x <= 10 && y >= 6 && y <= 9) {
+                    color = (x + y) % 3 == 0 ? 0xFFDB83 : 0xDF7D34;
+                }
+                set(image, x, y, color);
+            }
+        }
+        strip(image, status);
+        return image;
+    }
+
+    public static BufferedImage fireboxTop() {
+        BufferedImage image = casingBase(0x985F48);
+        for (int y = 1; y <= 14; y++) {
+            for (int x = 1; x <= 14; x++) {
+                boolean mortar = y % 4 == 0 || (x + (y / 4 % 2) * 4) % 8 == 0;
+                set(image, x, y, mortar ? 0x594A40 : ((x + y) % 3 == 0 ? 0xB87A58 : 0x985F48));
+            }
+        }
+        return image;
+    }
+
+    /** The controller's feed gate and active indicator are distinct from its passive channel. */
+    public static BufferedImage settlingFront(String status) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 3; y <= 10; y++) {
+            for (int x = 4; x <= 11; x++) {
+                set(image, x, y, y == 4 || x == 4 || x == 11 ? 0xD3B98E : 0x365564);
+            }
+        }
+        for (int x = 6; x <= 9; x++) {
+            set(image, x, 7, status.equals("running") ? RUNNING : 0x987655);
+        }
+        strip(image, status);
+        return image;
+    }
+
+    private static BufferedImage channelFront(boolean screen) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 4; y <= 11; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(image, x, y, screen && x % 2 == 0 ? 0xC7B79A : 0x365564);
+            }
+        }
+        return image;
+    }
+
+    /** All segment ends share identical pixels; only the middle carries role-specific detail. */
+    private static BufferedImage settlingTop(int part) {
+        BufferedImage image = casingBase(CASING);
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 3; x <= 12; x++) {
+                set(image, x, y, x == 3 || x == 12 ? 0xA18B6F : 0x486878);
+            }
+        }
+        for (int y = 6; y <= 9; y++) {
+            for (int x = 4; x <= 11; x++) {
+                if (part == 0 && y == 7) {
+                    set(image, x, y, 0x96724C);
+                } else if (part == 1 && (x + y) % 5 == 0) {
+                    set(image, x, y, 0x7297A1);
+                } else if (part == 2 && x % 2 == 0) {
+                    set(image, x, y, 0xC7B79A);
+                }
+            }
+        }
+        return image;
     }
 
     /** The colour a status paints with, or {@code -1} for idle. */

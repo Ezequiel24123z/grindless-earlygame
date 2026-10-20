@@ -1,0 +1,29 @@
+{
+  "schema": "grindless.sound-calibration-contract/v1",
+  "id": "elevenlabs-sfx-v2-internal-3s-mp3",
+  "review": "authoritative_API_findings_forwarded_by_Astra_2026-10-18",
+  "reference": "https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert",
+  "method": "POST",
+  "endpoint": "https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128",
+  "authentication_header": "xi-api-key",
+  "content_type": "application/json",
+  "text_max_characters": 450,
+  "body_parameters": {
+    "model_id": "eleven_text_to_sound_v2",
+    "duration_seconds": 3.0,
+    "loop": true,
+    "prompt_influence": 0.3
+  },
+  "response": "binary_audio_not_JSON",
+  "max_calls": 3,
+  "automatic_retries": 0,
+  "alternate_formats": false,
+  "licence_scope": "internal_calibration_only",
+  "publication_approved": false,
+  "notes": [
+    "One POST produces one file; no seed, batch or enable_logging field.",
+    "Do not fall back to paid-tier PCM or alternate MP3 formats after an entitlement error.",
+    "Generic non-sensitive prompts only. No account/billing requests.",
+    "Official creative terms permit game incorporation subject to the applicable plan and prohibit standalone audio distribution. Astra reviews actual release use; extractability alone does not require inventing a new contract."
+  ]
+}

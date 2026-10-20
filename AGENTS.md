@@ -69,9 +69,131 @@ Everything committed to the repository is in **English**: code, identifiers, com
 documentation, ADRs, changelog entries and commit messages. No exceptions, so the project stays
 legible to the wider Minecraft modding community.
 
+### Mandatory wave and handoff disclosure
+
+Every completed work wave and every handback to the owner reports these exact
+categories in the chat as well as the durable handoff:
+
+- `COMPLETED`
+- `BLOCKED`
+- `NOT EXECUTED`
+- `NEEDS HUMAN VALIDATION`
+- `NEEDS MY DECISION`
+- `NEEDS CREDENTIAL / EXTERNAL RESOURCE`
+- `COST / BILLING RISK`
+- `DEPLOYED STATE`
+
+Write `None` when a category genuinely has no entry. Name the exact failed
+prerequisite, unexecuted work and owner action; do not bury material blockers only
+in repository documents or label a bounded engineering completion as whole-T0
+readiness. Keep credential values and private access references out of Git.
+Artistic listening, appearance, UX quality and the manual campaign remain human
+judgments. Do not declare T0 accepted or frozen before that campaign.
+
 ---
 
+## Orchestrated execution
+
+The project owner now requires **Sol 6.1 (`gpt-6.1-sol`) as the next clean-session
+leader/orchestrator**, with bounded workers (ADR-0147). This supersedes ADR-0134's
+choice of Astra for the leader, not its delegation, preservation or ownership rules.
+This is project policy, not a preference inferred for unrelated repositories.
+
+- **The current coordinator owns** architecture, product and Tier progression, sustainability and production
+  graphs, machine-family and multiblock design, migrations, integration and final review.
+- Delegate application implementation and test execution. Prefer **Sol 6.1 Max** for normal
+  coding and **Luna** for simple or repetitive work, including extraction, localization,
+  deterministic assets, straightforward checks and documentation synchronization.
+- The coordinator may investigate, make design decisions, review code/evidence, maintain the
+  handoff and perform Git integration. It must not quietly become the application coder.
+  Report unavailable worker capabilities instead of silently changing that division of work.
+- **Deliver outcomes, not micro-approval queues (ADR-0158).** Delegate coherent
+  end-to-end features: generate, compare, process, integrate and validate within
+  the assigned lane. Workers make ordinary technical choices and repair their
+  own failures without stopping after each checkpoint for another approval.
+  Use existing commands and proportional checks; do not spend more effort
+  building validation carriers than delivering the feature. Escalate material
+  product/cost/security/world changes, not routine iterations.
+- Give each worker a bounded outcome, source revision, owned files, acceptance criteria and
+  stop condition. Use the fewest useful workers. Serialize shared-file edits, validation
+  against changing inputs, commits and publication; never have competing publishers.
+- Do not downgrade architectural or product-critical work merely to reduce latency. Workers
+  escalate decisions in those domains to the coordinator rather than inventing a second authority.
+
+For a clean-context migration, preserve a Git checkpoint and start a genuinely new isolated
+session, not a fork of the entire conversation or a branch session in the main checkout.
+Read [the active handoff](.agent/handoff.md) and [reloadable plan](.agent/work-plan.json).
+Preserve old worktrees and evidence; migration is not acceptance of unfinished code.
+For this migration, read [the compact Sol handoff](.agent/sol-migration-handoff.md).
+Historical references to Astra identify the previous authority and its actual reviews;
+do not rewrite old evidence or spent sound grants to rename their author.
+
 ## Session checklist
+
+**Preferred local visual backend (ADR-0157):** the owner identifies an existing
+ComfyUI installation on the personal PC and authorizes necessary reversible
+configuration/extensions/licensed models for a supervised Grindless pipeline.
+Inspect before modifying; preserve user workflows/queues and isolate project
+templates/outputs. Never reboot the PC, expose the service publicly or weaken
+security. ComfyUI generates source candidates; deterministic transformations and
+Minecraft validation remain project-controlled, with artistic approval pending.
+Use a specialized nested owner; external-provider research is comparative, not
+the default implementation. Keep private host paths/configuration out of Git.
+
+**Current follow-up wave (ADR-0156, PA-0014):** run image-provider discovery,
+purpose-bound SFX work and objective client preparation in independent nested
+sessions, then integrate and qualify the candidate. The local visual pipeline
+and Mixer audio source are complete. ADR-0159 settles the Superflat entry:
+implement the generous free first-quest kit, not another proposal gate.
+The former Quern/three-request grant and the
+previous wave's two-request ceiling are not permanent project-wide budgets.
+Historical receipts remain immutable; each new generation run still requires an
+explicit finite purpose, request allowance and durable spend ledger. Image discovery
+must not enable paid usage or spend on an image proof without explicit approval.
+The owner supplied an existing external audio credential location; a non-generating
+authenticated check succeeded without exposing or copying it. Read the current
+handoff for what is actually available, not the older absent-credential assumption.
+Do not invent a different Superflat progression choice or reopen the settled kit
+decision. New unrelated material product decisions still require the owner.
+
+**Previous unattended programme (ADR-0152):** while the owner was unavailable, continue bounded
+T0 stabilization, useful regressions, deterministic visual/SFX work and evidence-backed
+GREEN preparation. Read [RETURN-HANDOFF](RETURN-HANDOFF.md) and the active task graph.
+Use isolated child worktrees with explicit ownership; only the coordinator publishes/
+deploys the integrated candidate. Never equate unattended execution with human acceptance,
+T0 freeze, T1 activation, an invented product decision or an unlimited generation budget.
+Child sessions must not reuse the private default PC inventory as their own mutable
+execution surface: it addresses the coordinator's shared worktree/instance.
+
+**Current execution model (ADR-0151):** keep this conversation local and use ordinary
+SSH to the personal PC for heavy work. Read [the SSH/Prism runbook](docs/operations/ssh-prism-workflow.md)
+and the current handoff. The received continuation is `70901eca`, not old `main`;
+the historical [cloud handoff](.agent/cloud-migration-handoff.md) preserves its source
+and evidence but no longer selects the execution host. Do not bind this conversation
+to Remote Host, change working personal Git authentication or resume retired workers.
+Build in an isolated PC worktree, deploy only to the dedicated development instance,
+and preserve existing worlds. Credentials and private host settings never enter Git.
+
+### Playable releases and longitudinal worlds
+
+[ADR-0144](docs/DECISIONS.md#adr-0144--ship-superflat-first-playable-tier-releases-with-longitudinal-save-continuity)
+is the current product/release contract. Grindless is a **Superflat-first,
+Overworld-compatible playable modpack**, not just its core jar. Each tier ships a
+versioned, pinned, installable and sufficiently polished candidate, with real art/audio,
+bounded QoL and explicit forward-save compatibility.
+
+`1389ebb` is engineering evidence, not the first longitudinal-play release. Keep
+implementation, technical verification, integration, packaging, visual review,
+human acceptance and release readiness distinct. Human acceptance starts with the
+playable release. T1 may start only after the T0 RC is ready and published and the
+owner has begun its longitudinal save; finishing the player's entire T0 route is
+not an additional universal prerequisite. T1 and functional ports are not open now.
+Preserve all previous source-bound evidence and never invent a manual pass.
+
+Follow [the playable-release plan](plan/process-t0-playable-release-1.md) and the
+versioned task graph. Inspect ownership and path dependencies before moving heavy
+data; preserve originals and verify the new storage. A refactor is not permission
+to break a save, and a licence label without provenance is not permission to import.
 
 **Starting.** Read this file, then `CHANGELOG.md` (`[Unreleased]` — what the last session did),
 then `docs/BUILD-OUT.md` (the next slice), then `docs/DECISIONS.md` (what is already settled),
@@ -97,7 +219,7 @@ also boot the server after any change to registration, block entities or loader 
 ```powershell
 $env:GRINDLESS_ACCEPT_EULA='true'
 powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root . -Only states
-powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root .   # all 39, tens of minutes
+powershell -ExecutionPolicy Bypass -File .\tools\run-smokes.ps1 -Root .   # all manifest scenarios, tens of minutes
 ```
 
 `tools/run-smokes.sh .` is the same thing elsewhere. The scenario list is
@@ -110,6 +232,15 @@ drifted ADR index more than once; the behaviour checks have caught real bugs tha
 cleanly; the smokes are the only thing that catches a mod which builds and cannot start. If the
 terminal is already broken, say so plainly and tell the user to run `SETUP.ps1 -Commit`, which
 commits and pushes without the app.
+
+**Risk-based proof reuse (ADR-0140).** Before an expensive validation, name the unproved
+property and check whether an existing source-bound proof plus static evidence already
+covers it under the same assumptions. Ordinary recipes/data do not each need a native run.
+Classify work and select the affected proof set using
+[the validation strategy](docs/testing/test-strategy.md); retain required CI/release checks,
+registration boots for changed bindings and genuine manual/persistence/external gates.
+Independent reviewers assess uncovered behavior and invalid reuse, not duplicate successful
+instances. A policy or documentation change alone does not invalidate an existing proof.
 
 ### Where the work happens
 
@@ -154,6 +285,31 @@ forge/               Forge entrypoint and bridges only (this jar also loads on N
 ---
 
 ## Conventions
+
+**Resource sustainability.** Every basic material or consumable required by mandatory
+progression must ultimately have an unlimited, automatable, mod-owned renewable route.
+Trace every consumable dependency to its terminal source. Vanilla inputs are allowed as
+optional compatibility routes, finite bootstrap supplies or emergency alternatives, never as
+the permanent canonical farm, exploit, loot or manual-mining solution.
+
+Finite bootstrap is valid only when its quantities and recovery margin can establish the
+renewable producer without a circular dependency or consuming its only construction supply.
+T0 must establish the first internally self-sustaining base. Later tiers improve those routes
+rather than restoring a dependency on vanilla farms.
+
+**Resource and by-product metadata.** Classifications, handling advice, first-use/renewable
+tiers and source provenance are canonical machine-readable data shared by validation,
+tooltips, recipe viewers, the quest book and the dashboard. Never mark a repeatable recipe
+renewable while an upstream consumed input is finite. New unresolved mandatory dependencies
+fail CI. Existing exceptions must be explicit, versioned and have a concrete remediation plan;
+an exception is visible debt, not a passing sustainability claim.
+
+By-products need honest classification and handling, not an invented consumer. A current
+by-product needs an implemented consumer; a future feedstock needs a named committed plan.
+Uncertain future usefulness must say so. Inert waste is optional and discardable; hazardous
+waste needs actual handling/containment rules. Losses and emissions need not become item stacks.
+Do not force unlimited hoarding or artificial recipes merely to make waste appear valuable.
+See [ADR-0131](docs/DECISIONS.md#adr-0131--mandatory-supply-is-mod-owned-renewable-and-explicitly-classified).
 
 **Versions.** Every version lives in `gradle.properties` and is referenced as
 `rootProject.<name>`. Never hardcode a version in a build script.

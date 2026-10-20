@@ -2,8 +2,8 @@
 #
 #     powershell -ExecutionPolicy Bypass -File .\tools\run-checks.ps1 -Root .
 #
-# Run `gradlew :common:build` first; this checks the classes Gradle produced rather than
-# recompiling them, so what is verified is what would ship.
+# Gradle compiles common and exports its resolved runtime classpath before these checks run.
+# The checks therefore use the classes and dependencies that would ship, not a cache scan.
 #
 # Why this is not a JUnit suite: the project has no test infrastructure yet, and adding one is
 # step 26's job. These checks exist because the alternative was trusting that arithmetic and
@@ -11,22 +11,42 @@
 # bugs — an EnumMap constructor that throws on an empty source map, and a band efficiency
 # expectation that was simply wrong.
 #
-# Expect noise on stderr. The classpath is the whole Gradle module cache, which contains several
-# slf4j versions, so anything touching a class with a logger prints an "Unexpected problem occured
-# during version sanity check" stack trace. slf4j catches it and carries on; the suites still run
-# and still report correctly. The process exit code is the authoritative result, not the output.
-#
-# Two Windows details are load-bearing:
-#   1. The classpath needs the whole Gradle module cache. `Direction.<clinit>` drags in most of
-#      Minecraft's bootstrap - DataFixerUpper, brigadier, joml - so a minimal classpath fails at
-#      runtime with a cascade of NoClassDefFoundError that says nothing useful.
-#   2. That classpath is far past the Windows command-line limit, so it goes in an argfile. Inside
+# The classpath goes in an argfile to avoid the Windows command-line limit. Inside
 #      an argfile a backslash is an escape character, so the paths are rewritten with forward
 #      slashes; without that, javac reports every package as missing.
 
 param([Parameter(Mandatory = $true)][string]$Root)
 
 $ErrorActionPreference = 'Stop'
+$Root = (Resolve-Path $Root).Path
+
+function Test-Javac17([string]$Javac) {
+    $probe = New-Object System.Diagnostics.Process
+    $probe.StartInfo.FileName = $Javac
+    $probe.StartInfo.Arguments = '-version'
+    $probe.StartInfo.UseShellExecute = $false
+    $probe.StartInfo.CreateNoWindow = $true
+    $probe.StartInfo.RedirectStandardOutput = $true
+    $probe.StartInfo.RedirectStandardError = $true
+    try {
+        if (-not $probe.Start()) { throw "Could not start the JDK version probe: $Javac" }
+        # Drain both pipes before waiting; either stream can contain launcher diagnostics.
+        $stdout = $probe.StandardOutput.ReadToEndAsync()
+        $stderr = $probe.StandardError.ReadToEndAsync()
+        $probe.WaitForExit()
+        $output = $stdout.GetAwaiter().GetResult()
+        $diagnostic = $stderr.GetAwaiter().GetResult()
+        if ($output) { Write-Host -NoNewline $output }
+        if ($diagnostic) { Write-Host -NoNewline $diagnostic }
+        if ($probe.ExitCode -ne 0) { Write-Host "javac -version exited with code $($probe.ExitCode)." }
+        $versions = @(($output + "`n" + $diagnostic) -split '\r?\n' |
+            Where-Object { $_ -cmatch '^javac ' })
+        return ($probe.ExitCode -eq 0 -and $versions.Count -eq 1 -and
+            $versions[0] -cmatch '^javac 17(\.[0-9]+)*([-+][0-9A-Za-z][0-9A-Za-z.+-]*)?$')
+    } finally {
+        $probe.Dispose()
+    }
+}
 
 # The project targets Java 17, but a Windows PATH commonly still resolves to an old Java 8
 # launcher.  Java 8 treats the argfile below as a class name, making every check look as though
@@ -34,8 +54,7 @@ $ErrorActionPreference = 'Stop'
 # 17 installation.
 $javaHome = $env:JAVA_HOME
 if ($javaHome -and (Test-Path -LiteralPath (Join-Path $javaHome 'bin\javac.exe'))) {
-    $configuredVersion = & (Join-Path $javaHome 'bin\javac.exe') -version 2>&1
-    if ($configuredVersion -notmatch '^javac 17(\.|$)') { $javaHome = $null }
+    if (-not (Test-Javac17 (Join-Path $javaHome 'bin\javac.exe'))) { $javaHome = $null }
 } else {
     $javaHome = $null
 }
@@ -46,7 +65,9 @@ if (-not $javaHome) {
         $candidate = Get-ChildItem -LiteralPath $adoptium -Directory -Filter 'jdk-17*' |
             Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'bin\javac.exe') } |
             Select-Object -First 1
-        if ($candidate) { $javaHome = $candidate.FullName }
+        if ($candidate -and (Test-Javac17 (Join-Path $candidate.FullName 'bin\javac.exe'))) {
+            $javaHome = $candidate.FullName
+        }
     }
 }
 
@@ -58,12 +79,6 @@ if (-not $javaHome -or -not (Test-Path -LiteralPath (Join-Path $javaHome 'bin\ja
 $java = Join-Path $javaHome 'bin\java.exe'
 $javac = Join-Path $javaHome 'bin\javac.exe'
 
-$classes = Join-Path $Root 'common\build\classes\java\main'
-if (-not (Test-Path -LiteralPath $classes)) {
-    Write-Output "No compiled classes at $classes - run gradlew :common:build first."
-    exit 1
-}
-
 $checkDir = Join-Path $Root 'tools\checks'
 $sources = @(Get-ChildItem -Path $checkDir -Filter '*.java' -File | ForEach-Object { $_.FullName })
 if ($sources.Count -eq 0) {
@@ -71,42 +86,32 @@ if ($sources.Count -eq 0) {
     exit 1
 }
 
-# The mapped Minecraft jar Loom produced, identified by actually containing a Mojang-named class
-# rather than by guessing at the filename, which encodes a mappings hash.
-$mcJar = $null
-$loom = Join-Path $env:USERPROFILE '.gradle\caches\fabric-loom\minecraftMaven'
-if (Test-Path -LiteralPath $loom) {
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    foreach ($candidate in Get-ChildItem -Path $loom -Filter '*.jar' -Recurse -ErrorAction SilentlyContinue) {
-        if ($candidate.Length -lt 5MB) { continue }
-        try {
-            $zip = [System.IO.Compression.ZipFile]::OpenRead($candidate.FullName)
-            $hit = $zip.Entries | Where-Object { $_.FullName -eq 'net/minecraft/core/Direction.class' } | Select-Object -First 1
-            $zip.Dispose()
-            if ($hit) { $mcJar = $candidate.FullName; break }
-        } catch { }
+$env:JAVA_HOME = $javaHome
+Push-Location $Root
+try {
+    & (Join-Path $Root 'gradlew.bat') --no-daemon --quiet --console=plain :common:writeCheckClasspath
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output 'COULD NOT PREPARE CHECK CLASSPATH'
+        exit 1
     }
+} finally {
+    Pop-Location
 }
-if (-not $mcJar) {
-    Write-Output 'Could not locate a mapped Minecraft jar - run a build first.'
-    exit 1
-}
+$classpathFile = Join-Path $Root 'common\build\checks\runtime-classpath.txt'
+$classpath = [System.IO.File]::ReadAllText($classpathFile, [System.Text.Encoding]::UTF8)
+if ([string]::IsNullOrWhiteSpace($classpath)) { throw 'Gradle exported an empty check classpath.' }
 
-$deps = @(Get-ChildItem -Path (Join-Path $env:USERPROFILE '.gradle\caches\modules-2\files-2.1') `
-        -Filter '*.jar' -Recurse -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -notmatch 'sources|javadoc' } |
-    ForEach-Object { $_.FullName })
-
-$out = Join-Path ([System.IO.Path]::GetTempPath()) ("grindless-checks-" + [guid]::NewGuid().ToString('N'))
+$out = Join-Path $Root ("build\checks-" + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 
 try {
-    $compileCp = ((@($classes, $mcJar) + $deps) -join ';').Replace('\', '/')
-    $runCp = ((@($out, $classes, $mcJar) + $deps) -join ';').Replace('\', '/')
+    $compileCp = $classpath.Replace('\', '/')
+    $runCp = ("$out;$classpath").Replace('\', '/')
     $compileArgs = Join-Path $out 'compile.txt'
     $runArgs = Join-Path $out 'run.txt'
-    Set-Content -Path $compileArgs -Value "-cp `"$compileCp`"" -Encoding ASCII
-    Set-Content -Path $runArgs -Value "-cp `"$runCp`"" -Encoding ASCII
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($compileArgs, "-cp `"$compileCp`"", $utf8)
+    [System.IO.File]::WriteAllText($runArgs, "-cp `"$runCp`"", $utf8)
 
     & $javac -nowarn -encoding UTF-8 "@$compileArgs" -d $out $sources
     if ($LASTEXITCODE -ne 0) {
@@ -119,7 +124,12 @@ try {
         $name = [System.IO.Path]::GetFileNameWithoutExtension($source)
         $package = (Select-String -Path $source -Pattern '^package\s+([\w.]+);' | Select-Object -First 1).Matches[0].Groups[1].Value
         Write-Output "--- $name ---"
-        & $java "@$runArgs" "$package.$name"
+        Push-Location $Root
+        try {
+            & $java "@$runArgs" "$package.$name"
+        } finally {
+            Pop-Location
+        }
         if ($LASTEXITCODE -ne 0) { $failed++ }
     }
 

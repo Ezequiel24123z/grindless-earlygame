@@ -87,6 +87,13 @@ public final class GrindlessJeiPlugin implements IModPlugin {
             case FLOTATION -> ModBlocks.FLOTATION_CELL.get();
             case BOILER -> ModBlocks.BOILER.get();
             case CONDENSER -> ModBlocks.CONDENSER.get();
+            case QUERN -> ModBlocks.QUERN.get();
+            case CLAY_MIXER -> ModBlocks.CLAY_MIXER.get();
+            case FIRING_CHAMBER -> ModBlocks.FIRING_CHAMBER.get();
+            case SETTLING_TROUGH -> ModBlocks.SETTLING_TROUGH.get();
+            case GEOLOGICAL_COLLECTOR -> ModBlocks.GEOLOGICAL_COLLECTOR.get();
+            case BIOCULTIVATOR -> ModBlocks.BIOCULTIVATOR.get();
+            case ASSEMBLY_BENCH -> ModBlocks.ASSEMBLY_BENCH.get();
         };
     }
 }

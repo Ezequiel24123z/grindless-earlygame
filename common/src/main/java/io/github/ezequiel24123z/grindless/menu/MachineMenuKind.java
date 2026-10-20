@@ -25,7 +25,14 @@ public enum MachineMenuKind {
     CASTER(1, 1),
     FLOTATION(1, 2),
     BOILER(0, 0),
-    CONDENSER(0, 0);
+    CONDENSER(0, 0),
+    QUERN(1, 2),
+    CLAY_MIXER(2, 1),
+    FIRING_CHAMBER(2, 2),
+    SETTLING_TROUGH(1, 5),
+    GEOLOGICAL_COLLECTOR(0, 2),
+    BIOCULTIVATOR(1, 1),
+    ASSEMBLY_BENCH(4, 1);
 
     private final int inputs;
     private final int outputs;

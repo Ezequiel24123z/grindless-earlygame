@@ -6,7 +6,7 @@
 # Run one scenario, or a few:
 #     ... -Root . -Only states,first-exosuit
 #
-# Run one slice of the list, which is how CI splits 39 server boots across parallel jobs:
+# Run one slice of the list, which is how CI splits the server boots across parallel jobs:
 #     ... -Root . -Shard 1 -Of 6
 #
 # Each scenario boots a full dedicated server, so the whole list takes tens of minutes. That is
@@ -46,11 +46,20 @@ foreach ($line in [System.IO.File]::ReadAllLines((Join-Path $smokeDir 'scenarios
         Proves  = if ($parts.Count -gt 1) { $parts[1].Trim() } else { '' }
         Status  = 'pending'
         Seconds = 0
+        ExpectTimeout = $null
     }
 }
 
 $selected = $all
-if ($Only) { $selected = @($all | Where-Object { $Only -contains $_.Name }) }
+if ($PSBoundParameters.ContainsKey('Only')) {
+    $names = @($Only | ForEach-Object { $_ -split ',' } |
+            ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
+    if ($names.Count -eq 0) { throw 'At least one smoke scenario must be named with -Only.' }
+    $known = @($all | ForEach-Object { $_.Name })
+    $unknown = @($names | Where-Object { $known -notcontains $_ })
+    if ($unknown.Count -gt 0) { throw "Unknown smoke scenario(s): $($unknown -join ', ')" }
+    $selected = @($all | Where-Object { $names -contains $_.Name })
+}
 
 if ($Of -gt 0) {
     if ($Shard -lt 1 -or $Shard -gt $Of) { throw "Shard must be between 1 and $Of" }
@@ -68,6 +77,21 @@ if ($selected.Count -eq 0) {
 if ($List) {
     $selected | ForEach-Object { Write-Output $_.Name }
     exit 0
+}
+
+# Validate every selected sidecar before starting any server, including when an override is set.
+foreach ($item in $selected) {
+    $timeoutFile = Join-Path $smokeDir "$($item.Name).timeout"
+    if (-not (Test-Path -LiteralPath $timeoutFile)) { continue }
+    $value = $utf8.GetString([System.IO.File]::ReadAllBytes($timeoutFile))
+    $match = [regex]::Match($value, '\A[ \t\r\n\f\v]*([0-9]+)[ \t\r\n\f\v]*\z')
+    $seconds = 0
+    if (-not $match.Success -or
+            -not [int]::TryParse($match.Groups[1].Value, [System.Globalization.NumberStyles]::None,
+                    [System.Globalization.CultureInfo]::InvariantCulture, [ref]$seconds) -or $seconds -le 0) {
+        throw "Invalid smoke assertion timeout '$timeoutFile': expected one positive integer from 1 to 2147483647 seconds."
+    }
+    $item.ExpectTimeout = $seconds.ToString([System.Globalization.CultureInfo]::InvariantCulture)
 }
 
 $startedAt = Get-Date
@@ -195,6 +219,7 @@ foreach ($item in $selected) {
     $expectFile = Join-Path $smokeDir "$($item.Name).expect"
     $packNamed = Join-Path $smokeDir "$($item.Name)-pack"
     $packBare = Join-Path $smokeDir $item.Name
+    $optionalPack = Join-Path $smokeDir "$($item.Name)-optional"
 
     $env:SMOKE_COMMANDS = if (Test-Path -LiteralPath $commands) { $commands } else { $null }
     $env:SMOKE_EXPECT_FILE = if (Test-Path -LiteralPath $expectFile) { $expectFile } else { $null }
@@ -208,10 +233,20 @@ foreach ($item in $selected) {
     }
     $env:SMOKE_LOG = Join-Path $runDir "smoke-$($item.Name).log"
 
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
+    $originalExpectTimeout = $env:SMOKE_EXPECT_TIMEOUT
+    $originalOptionalDatapack = $env:SMOKE_OPTIONAL_DATAPACK
+    try {
+        $env:SMOKE_OPTIONAL_DATAPACK = if (Test-Path -LiteralPath $optionalPack) { $optionalPack } else { $null }
+        if (-not $originalExpectTimeout) { $env:SMOKE_EXPECT_TIMEOUT = $item.ExpectTimeout }
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
+        $bootExitCode = $LASTEXITCODE
+    } finally {
+        $env:SMOKE_EXPECT_TIMEOUT = $originalExpectTimeout
+        $env:SMOKE_OPTIONAL_DATAPACK = $originalOptionalDatapack
+    }
     $item.Seconds = ((Get-Date) - $scenarioStart).TotalSeconds
 
-    if ($LASTEXITCODE -eq 0) {
+    if ($bootExitCode -eq 0) {
         $item.Status = 'passed'
     } else {
         $item.Status = 'failed'

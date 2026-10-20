@@ -8,6 +8,21 @@ architectury {
 }
 
 configurations {
+    smokeInstaller {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
+    smokeMods {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
+    questSmokeMods {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
     common {
         canBeResolved = true
         canBeConsumed = false
@@ -22,11 +37,26 @@ configurations {
     }
 }
 
+repositories {
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+}
+
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
     modCompileOnly "mezz.jei:jei-1.20.1-forge-api:${rootProject.jei_version}"
     modRuntimeOnly "mezz.jei:jei-1.20.1-forge:${rootProject.jei_version}"
+    modCompileOnly("curse.maven:heracles-845831:${rootProject.heracles_curse_file}") { transitive = false }
+    modCompileOnly("curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:heracles-845831:${rootProject.heracles_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}") { transitive = false }
+    smokeInstaller "net.minecraftforge:forge:${rootProject.forge_version}:installer"
+    smokeMods "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
+    questSmokeMods "curse.maven:heracles-845831:${rootProject.heracles_curse_file}"
+    questSmokeMods "curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive = false }
     shadowBundle project(path: ":common", configuration: "transformProductionForge")
@@ -36,12 +66,14 @@ processResources {
     inputs.property "version", project.version
     inputs.property "minecraft_version", rootProject.minecraft_version
     inputs.property "neoforge_loader_range", rootProject.neoforge_loader_range
+    inputs.property "heracles_version", rootProject.heracles_version
 
     filesMatching("META-INF/mods.toml") {
         expand([
                 "version"              : project.version,
                 "minecraft_version"    : rootProject.minecraft_version,
-                "neoforge_loader_range": rootProject.neoforge_loader_range
+                "neoforge_loader_range": rootProject.neoforge_loader_range,
+                "heracles_version"     : rootProject.heracles_version
         ])
     }
 }
@@ -57,4 +89,114 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     archiveClassifier = "forge"
+}
+
+// The common checks inspect Forge's actual resolved resources without loading Forge classes.
+tasks.register("writeSustainabilityPackClasspath") {
+    def destination = layout.buildDirectory.file("checks/sustainability-pack-classpath.json")
+    inputs.files(configurations.compileClasspath)
+    inputs.property "minecraftVersion", rootProject.minecraft_version
+    inputs.property "forgeVersion", rootProject.forge_version
+    outputs.file(destination)
+    doLast {
+        def file = destination.get().asFile
+        file.parentFile.mkdirs()
+        file.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([
+                schema_version: 1,
+                gradle_configuration: "forge:compileClasspath",
+                minecraft_version: rootProject.minecraft_version,
+                forge_version: rootProject.forge_version,
+                classpath: configurations.compileClasspath.files.collect { it.absolutePath }
+        ])) + "\n", "UTF-8")
+    }
+}
+
+def smokeServer = layout.projectDirectory.dir("run/smoke-server")
+def smokeInventory = smokeServer.file("installation-files.txt")
+tasks.register("installSmokeServer", JavaExec) {
+    classpath = configurations.smokeInstaller
+    mainClass.set("net.minecraftforge.installer.SimpleInstaller")
+    workingDir smokeServer.asFile
+    args "--installServer", smokeServer.asFile.absolutePath
+    inputs.property "forgeVersion", rootProject.forge_version
+    outputs.dir(smokeServer.dir("libraries"))
+    outputs.files(
+            smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/win_args.txt"),
+            smokeServer.file("libraries/net/minecraftforge/forge/${rootProject.forge_version}/unix_args.txt"),
+            smokeInventory)
+    outputs.upToDateWhen {
+        def inventory = smokeInventory.asFile
+        if (!inventory.isFile()) {
+            return false
+        }
+        def entries = inventory.readLines("UTF-8")
+        !entries.isEmpty() && entries.every { line ->
+            def entry = line.split("\t", 2)
+            def installed = new File(smokeServer.asFile, entry[0])
+            entry.length == 2 && installed.isFile() && installed.length().toString() == entry[1]
+        }
+    }
+    doFirst {
+        smokeServer.asFile.mkdirs()
+    }
+    doLast {
+        def libraries = fileTree(smokeServer.dir("libraries")).matching {
+            include "**/*.jar", "**/*_args.txt"
+        }.files.sort()
+        if (libraries.isEmpty()) {
+            throw new GradleException("Forge installation did not produce runtime libraries")
+        }
+        smokeInventory.asFile.setText(libraries.collect { file ->
+            "${smokeServer.asFile.toPath().relativize(file.toPath())}\t${file.length()}"
+        }.join("\n") + "\n", "UTF-8")
+    }
+}
+
+// Test the distributable jars without the development transformer's persistent worker pools.
+tasks.register("prepareSmokeServer", Copy) {
+    dependsOn tasks.named("installSmokeServer"), tasks.named("remapJar")
+    from(tasks.named("remapJar").flatMap { it.archiveFile }) {
+        rename { "grindless.jar" }
+    }
+    from(configurations.smokeMods) {
+        rename { "architectury.jar" }
+    }
+    into smokeServer.dir("mods")
+}
+
+tasks.register("prepareQuestSmokeServer", Copy) {
+    dependsOn tasks.named("prepareSmokeServer")
+    from(configurations.questSmokeMods)
+    into smokeServer.dir("mods")
+}
+
+sourceSets {
+    questBackendChecks {
+        java.srcDir rootProject.file("tools/quest-checks")
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += output + compileClasspath + fileTree(layout.buildDirectory.dir("quest-checks/libraries")) {
+            include "*.jar"
+        }
+    }
+}
+
+tasks.register("extractQuestCheckLibraries", Sync) {
+    from({ configurations.modCompileOnly.collect { zipTree(it) } }) {
+        include "META-INF/jars/bytecodecs-*.jar", "META-INF/jars/yabn-*.jar"
+        eachFile { path = name }
+        includeEmptyDirs = false
+    }
+    into layout.buildDirectory.dir("quest-checks/libraries")
+}
+
+tasks.register("verifyQuestBackend", JavaExec) {
+    group = "verification"
+    description = "Checks the pinned native quest codec, claim projection, owned files and packet contract."
+    dependsOn tasks.named("questBackendChecksClasses"), tasks.named("extractQuestCheckLibraries")
+    // This standalone contract check needs vanilla Bootstrap, not Forge's untransformed event bus.
+    classpath = files(project(":common").sourceSets.main.runtimeClasspath, sourceSets.questBackendChecks.runtimeClasspath)
+    mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.VerifyHeracles")
+    workingDir rootProject.projectDir
+    maxHeapSize = "512m"
+    jvmArgs "-XX:ActiveProcessorCount=2"
 }

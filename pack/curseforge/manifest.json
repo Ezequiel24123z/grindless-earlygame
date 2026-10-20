@@ -14,7 +14,10 @@
   "version": "0.1.0-t0.1",
   "author": "Ezequiel24123z",
   "files": [
+    { "projectID": 419699, "fileID": 5137938, "required": true },
     { "projectID": 238222, "fileID": 8292131, "required": true },
+    { "projectID": 845831, "fileID": 5406935, "required": true },
+    { "projectID": 570073, "fileID": 5659871, "required": true },
     { "projectID": 324717, "fileID": 8479276, "required": true },
     { "projectID": 422301, "fileID": 9083935, "required": true },
     { "projectID": 618298, "fileID": 9083873, "required": true },

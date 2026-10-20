@@ -38,6 +38,7 @@ import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlock;
 import io.github.ezequiel24123z.grindless.machine.SolarArrayBlock;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlock;
 import io.github.ezequiel24123z.grindless.machine.TerrestrialExtractorBlock;
 import io.github.ezequiel24123z.grindless.machine.ThermalGeneratorBlock;
@@ -49,6 +50,7 @@ import io.github.ezequiel24123z.grindless.star.StarwardLinkBlock;
 import io.github.ezequiel24123z.grindless.station.StationBerthBlock;
 import io.github.ezequiel24123z.grindless.structure.ArrayCasingBlock;
 import io.github.ezequiel24123z.grindless.structure.GroundArrayBlock;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPartBlock;
 import io.github.ezequiel24123z.grindless.network.FluxTransformerBlock;
 import io.github.ezequiel24123z.grindless.network.PylonBlock;
 import io.github.ezequiel24123z.grindless.network.PylonShaftBlock;
@@ -88,6 +90,39 @@ public final class ModBlocks {
     public static final RegistrySupplier<ResearchTerminalBlock> RESEARCH_TERMINAL =
             register("research_terminal",
                     () -> new ResearchTerminalBlock(machine().strength(3.0F)));
+
+    /** F0 milling and recovery; no ore-beneficiation recipes. */
+    public static final RegistrySupplier<ProcessMachineBlock> QUERN = register("quern",
+            () -> new ProcessMachineBlock(ProcessMachineKind.QUERN, machine().strength(2.0F)));
+
+    /** F0 clay-body mixing with a real water input. */
+    public static final RegistrySupplier<ProcessMachineBlock> CLAY_MIXER = register("clay_mixer",
+            () -> new ProcessMachineBlock(ProcessMachineKind.CLAY_MIXER, machine().strength(2.0F)));
+
+    /** F0 ceramic firing, only while the seven-brick chamber stands. */
+    public static final RegistrySupplier<ProcessMachineBlock> FIRING_CHAMBER = register("firing_chamber",
+            () -> new ProcessMachineBlock(ProcessMachineKind.FIRING_CHAMBER, machine().strength(3.0F)));
+
+    /** F0 open-channel separation; only the controller owns process state. */
+    public static final RegistrySupplier<ProcessMachineBlock> SETTLING_TROUGH = register("settling_trough",
+            () -> new ProcessMachineBlock(ProcessMachineKind.SETTLING_TROUGH, machine().strength(2.0F)));
+
+    public static final RegistrySupplier<WorkshopPartBlock> SETTLING_CHANNEL = register("settling_channel",
+            () -> new WorkshopPartBlock(BlockCatalogue.Geometry.CHANNEL, machine().strength(1.5F)));
+
+    public static final RegistrySupplier<WorkshopPartBlock> SETTLING_SCREEN = register("settling_screen",
+            () -> new WorkshopPartBlock(BlockCatalogue.Geometry.SCREEN, machine().strength(1.5F)));
+
+    public static final RegistrySupplier<ProcessMachineBlock> GEOLOGICAL_COLLECTOR = register("geological_collector",
+            () -> new ProcessMachineBlock(ProcessMachineKind.GEOLOGICAL_COLLECTOR, machine().strength(2.5F)));
+    public static final RegistrySupplier<ProcessMachineBlock> BIOCULTIVATOR = register("biocultivator",
+            () -> new ProcessMachineBlock(ProcessMachineKind.BIOCULTIVATOR, machine().strength(2.0F)));
+    public static final RegistrySupplier<ProcessMachineBlock> ASSEMBLY_BENCH = register("assembly_bench",
+            () -> new ProcessMachineBlock(ProcessMachineKind.ASSEMBLY_BENCH, machine().strength(2.0F)));
+    public static final RegistrySupplier<ThermalGeneratorBlock> BIOMASS_DYNAMO = register("biomass_dynamo",
+            () -> new ThermalGeneratorBlock(GeneratorKind.BIOMASS, machine().strength(2.5F)));
+    public static final RegistrySupplier<Block> FIBREBOARD = register("fibreboard",
+            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD)));
 
     /** T1 walk-away power: furnace fuel at F1. */
     public static final RegistrySupplier<ThermalGeneratorBlock> THERMAL_GENERATOR =
