@@ -47,6 +47,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,6 +63,8 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -85,6 +88,9 @@ public final class WorkshopInterfaceChecks {
     // Private to this probe, not Forge's shared Minecraft fake player or an owner's profile.
     private static final GameProfile PROFILE = new GameProfile(
             UUID.fromString("00000000-0000-0000-0000-4752494e444c"), "[WorkshopChecks]");
+    private record Pending(CommandSourceStack source, BlockPos origin) {
+    }
+    private static Pending pending;
 
     private WorkshopInterfaceChecks() {
     }
@@ -93,9 +99,53 @@ public final class WorkshopInterfaceChecks {
     public static void registerCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("grindless_workshop_checks")
                 .requires(source -> source.getEntity() == null && source.hasPermission(4))
+                .then(Commands.literal("start")
+                        .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                .executes(context -> start(context.getSource(),
+                                        BlockPosArgument.getLoadedBlockPos(context, "pos")))))
                 .then(Commands.argument("pos", BlockPosArgument.blockPos())
                         .executes(context -> run(context.getSource(),
                                 BlockPosArgument.getLoadedBlockPos(context, "pos")))));
+    }
+
+    private static int start(CommandSourceStack source, BlockPos origin) {
+        require(source.getEntity() == null && source.hasPermission(4), "Console permission 4 required");
+        require(origin.equals(new BlockPos(2, 280, 13)), "Start is limited to the existing disposable scenario");
+        require(pending == null, "A workshop probe is already awaiting entity-ready admission");
+        pending = new Pending(source, origin.immutable());
+        return 1;
+    }
+
+    /** Block availability alone does not make newly force-loaded entity sections queryable. */
+    @SubscribeEvent
+    public static void tick(TickEvent.ServerTickEvent event) {
+        Pending request = pending;
+        if (event.phase != TickEvent.Phase.END || request == null
+                || request.source().getServer() != event.getServer()) {
+            return;
+        }
+        ServerLevel level = request.source().getLevel();
+        if (!level.hasChunkAt(request.origin())
+                || !level.areEntitiesLoaded(ChunkPos.asLong(request.origin()))
+                || !level.isPositionEntityTicking(request.origin())) {
+            return;
+        }
+        pending = null; // One actual setup/probe only; failure is never retried over its owned blocks.
+        try {
+            int setup = event.getServer().getCommands().performPrefixedCommand(
+                    request.source(), "function grindless_ports:begin");
+            require(setup > 0, "The existing workshop setup function did not execute");
+            run(request.source(), request.origin());
+        } catch (RuntimeException failure) {
+            Grindless.LOG.error("Entity-ready workshop probe failed", failure);
+        }
+    }
+
+    @SubscribeEvent
+    public static void stopped(ServerStoppedEvent event) {
+        if (pending != null && pending.source().getServer() == event.getServer()) {
+            pending = null;
+        }
     }
 
     private static int run(CommandSourceStack source, BlockPos origin) {
@@ -142,6 +192,8 @@ public final class WorkshopInterfaceChecks {
     }
 
     private static void preflight(ServerLevel level, BlockPos origin, BlockPos controllerPos) {
+        require(level.areEntitiesLoaded(ChunkPos.asLong(origin)) && level.isPositionEntityTicking(origin),
+                "Real entity sections must be loaded and ticking before immediate drop observations");
         for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-1, -1, -1), origin.offset(1, 1, 1))) {
             emptyLoaded(level, pos);
         }

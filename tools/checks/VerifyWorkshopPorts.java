@@ -544,6 +544,20 @@ public final class VerifyWorkshopPorts {
         eq("the exact original native marker set remains required", 26,
                 (int) Files.readAllLines(Path.of("tools/smoke/workshop-ports.expect")).stream()
                         .filter(line -> !line.isBlank()).count());
+        String commands = Files.readString(Path.of("tools/smoke/workshop-ports.commands"));
+        check("the real console probe admits setup only after entity-ready chunk state",
+                commands.contains("grindless_workshop_checks start 2 280 13")
+                        && !commands.contains("function grindless_ports:begin"));
+        Path nativeProbe = Path.of(
+                "forge/src/main/java/io/github/ezequiel24123z/grindless/fluid/forge/WorkshopInterfaceChecks.java");
+        check("admission observes actual loaded entity sections",
+                calls(nativeProbe, "level.areEntitiesLoaded").contains(
+                        "tick:ChunkPos.asLong(request.origin())"));
+        check("admission observes actual native entity ticking",
+                calls(nativeProbe, "level.isPositionEntityTicking").contains("tick:request.origin()"));
+        check("admission runs the original function through the real server dispatcher",
+                calls(nativeProbe, "event.getServer().getCommands().performPrefixedCommand").contains(
+                        "tick:request.source(),\"functiongrindless_ports:begin\""));
     }
 
     /** Execute the real component projector, not a GUI or a substitute port/cost authority. */

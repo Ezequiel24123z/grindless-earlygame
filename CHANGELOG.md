@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Admit the existing native fixture only when real entity sections are ready.**
+  The grounded port assertion passes on F1, but immediate tank queries really
+  observe zero entities in the newly forced chunk. Preserve that red too:
+  the actual stopped-world Minecraft NBT reader finds both one-item tanks with
+  exact1234mB/temperature/pressure metadata. Use loaded-and-ticking entity
+  admission on the existing console-only probe before its original setup and
+  one execution. Keep drop/NBT assertions, permission4 and all26 markers/deadlines;
+  no fluid engine, holder flags, retries over partial work or synthetic markers.
 - **Preserve the real Phase B native red and repair the drop fixture's missing floor.**
   Exact G builds the playable package with88 checks and matching JAR/ZIP
   provenance, then the real isolated server passes25/26 markers, including
