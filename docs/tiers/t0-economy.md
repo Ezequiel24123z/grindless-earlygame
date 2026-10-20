@@ -266,6 +266,21 @@ and exclusive JVM/cache lease to this lane after observing zero Java processes.
 Requalification includes the precise d916 tests; no old root, cache, failed log,
 world or development instance is removed.
 
+The corrected source `b523d2cc` compiles common, Forge and the check classpath
+successfully in one 27358 ms invocation; its closed 1829-byte log hashes to
+`28a91fe63b0ea3ec9b9ff7ae4145754f851cc35994474bdf38978d2df2a5f910`
+and closes with zero Java. An oversized encoded writer transport exits 2 before
+any writer log, data file or Java process exists; a read-only observation
+confirms that no generation ran. The shortened normal writer then reaches the
+real source-binding assertion and exits 1: its old exact Terminal body omitted
+the new post-transformation telemetry call. The closed 3011-byte log hashes to
+`82f50a397ba3e7764e23e2ae9b53436442d3de413d9dd00b5f3381c83d6f6a14`.
+The binding now includes that exact observer after physical completion and
+checks the entire Dynamo charge/accepted-work body, rather than weakening or
+skipping either physical-mechanics assertion. Runtime and production remain
+unchanged by this test-edge correction; actual writer/helper requalification
+follows on the same retained root.
+
 ## Lane handoff categories
 
 - `COMPLETED`: source implementation of the core, native shop/menu/network, paid pre-producer recovery, canonical cost/export lane and local telemetry above; not executable qualification.

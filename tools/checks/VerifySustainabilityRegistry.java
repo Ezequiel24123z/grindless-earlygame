@@ -346,7 +346,8 @@ public final class VerifySustainabilityRegistry {
                         + "booleanpowered=drawn>0L||hasPowerWaiting();doublegained=ResearchLogic.work(drawn,ResearchLogic.FU_PER_TICK);"
                         + "if(gained>0.0){progress+=gained;setChanged();}if(progress>=ResearchLogic.CYCLE_TICKS){"
                         + "progress=0.0;input.setItem(0,newItemStack(ModItems.CALIBRATED_DATA_CORE.get()));"
-                        + "setChanged();updateSubscriptions();return;}publishStatus(true,false,powered,gained>0.0);}",
+                        + "setChanged();updateSubscriptions();DevTelemetry.processCompleted(getLevel(),"
+                        + "\"calibrate/data_core\");return;}publishStatus(true,false,powered,gained>0.0);}",
                 normalized(method(research, "work", 0).getBody()));
         eq("the physical core predicate reads its real registered item id",
                 "{return!stack.isEmpty()&&ResearchLogic.DATA_CORE.equals("
@@ -367,9 +368,11 @@ public final class VerifySustainabilityRegistry {
                         + "if(level.getBlockEntity(pos)instanceofHandCrankDynamoBlockEntitydynamo){dynamo.crank();"
                         + "returnInteractionResult.CONSUME;}returnInteractionResult.PASS;}",
                 normalized(method(dynamoBlock, "use", 6).getBody()));
-        eq("the physical Dynamo charge comes from its actual constant", true,
-                normalized(method(dynamo, "crank", 0).getBody())
-                        .startsWith("{energy().setStored(energy().getStored()+CHARGE_PER_CRANK);"));
+        eq("the physical Dynamo charge retains its actual constant and observes only accepted work",
+                "{longbefore=energy().getStored();energy().setStored(energy().getStored()+CHARGE_PER_CRANK);"
+                        + "DevTelemetry.manualWork(getLevel(),\"hand_crank_dynamo\",energy().getStored()-before);"
+                        + "fruitlessPushes=0;updateSubscriptions();publishStatus();}",
+                normalized(method(dynamo, "crank", 0).getBody()));
         eq("the physical Dynamo is rated at F0", "{returnFluxTier.F0;}",
                 normalized(method(dynamo, "ratedTier", 0).getBody()));
         eq("the actual Dynamo output buffer exports its own rated physical charge",
