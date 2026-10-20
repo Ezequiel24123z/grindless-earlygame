@@ -136,6 +136,39 @@ The client never cancels a job. Stop only its positively identified server PID,
 then report the free port, zero remaining owned processes and released resources.
 Never reboot the PC.
 
+### First real inference and observation repairs
+
+Source tooling was committed as `9ee1af396243f83bff5d0d85502672ec322dcccc`
+before the first real source request. The first private helper stopped before
+any reservation/POST because WinPS parsed an ISO-Z time as Local and subtraction
+against UTC produced a false -7200s identity mismatch. Read-only recovery proved
+the same PID, executable and creation instant, zero queues and no run directory.
+The corrected helper compares `DateTimeOffset.UtcDateTime`; no identity guard
+was weakened, no server restarted and no request allowance was consumed.
+
+The first actual prompt is `4ed2fadf-5cf1-4840-92bb-0bc16ed2644b`, seed21774205.
+Its own history records success, no cached nodes, execution start1792462071512
+and success1792462150158; the server reports78.65s. The frozen original client
+then fails collection with `Unsafe output subfolder`: native Windows ComfyUI
+returns a backslash-delimited subfolder. The original exit1 receipt remains,
+with stderr hash
+`df84ee0e076df22b935353dfb0a46082599b10418219151b52140f68e894e0e3`.
+This is a collector portability defect, not a model/GPU failure.
+
+The targeted repair normalizes native separators before the same exact
+run/candidate/path-traversal checks; it does not broaden output ownership.
+The revised17-case contract suite, including Windows normalization and traversal
+refusal, passes in4.600s. Client SHA-256 is
+`e1327f44a2378459ae0aed4389afda4fe9f231b4024b26eaebf7399d340a1cee`,
+test SHA-256 is
+`d35440259d6d455f34fc5d4aa70546011c3c183ca1a4c43f6a7ee24d46ac43de`
+and log SHA-256 is
+`2b108e5c20e383a6cc8e4477af133394e1f4daff3e9566f9aaa66fe878d6c7cb`.
+Collect the existing prompt; do not submit again to repair its observer.
+Before that inference the refreshed guard had11.480GiB physical/26.998GiB commit,
+157.252GiB disk, zero Java/other Python and12,720,144,384 free VRAM bytes.
+Afterward both queue counts were zero and12,439,257,088 VRAM bytes were free.
+
 ## Deterministic transformation and integration boundary
 
 The pipeline accepts only the graph's single-frame 512px PNG. It removes only

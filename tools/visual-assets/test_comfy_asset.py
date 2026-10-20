@@ -208,10 +208,13 @@ class Contracts(unittest.TestCase):
         prefix = "grindless/multitool/owned-run/candidate-1"
         valid = {"filename": "candidate-1_00001_.png", "subfolder": "grindless/multitool/owned-run", "type": "output"}
         self.assertEqual(pipeline.output_reference([valid], prefix), valid)
+        windows = dict(valid, subfolder=valid["subfolder"].replace("/", "\\"))
+        self.assertEqual(pipeline.output_reference([windows], prefix), valid)
         for change in (
             {"filename": "../private.png"}, {"filename": "other_00001_.png"},
             {"subfolder": "grindless/multitool/another-run"},
             {"subfolder": "../private"}, {"subfolder": "grindless\\private"}, {"type": "input"},
+            {"subfolder": "grindless\\multitool\\..\\private"},
         ):
             with self.subTest(change=change), self.assertRaises(pipeline.ContractError):
                 pipeline.output_reference([dict(valid, **change)], prefix)
