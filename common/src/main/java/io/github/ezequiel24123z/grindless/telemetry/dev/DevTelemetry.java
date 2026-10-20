@@ -160,7 +160,8 @@ public final class DevTelemetry {
 
     private static Map<TelemetrySession.Event, Set<String>> definitions() {
         Set<String> processes = EconomyGraph.rows().stream()
-                .filter(row -> Set.of("BootstrapProcesses", "RenewableProcesses", "ResearchLogic").contains(row.source()))
+                .filter(row -> Set.of("BootstrapProcesses", "RenewableProcesses", "BootstrapAssembly", "ResearchLogic")
+                        .contains(row.source()))
                 .map(EconomyGraph.Row::id).collect(Collectors.toSet());
         Set<String> machines = BlockCatalogue.blocks().stream()
                 .map(BlockCatalogue.Entry::name).collect(Collectors.toSet());

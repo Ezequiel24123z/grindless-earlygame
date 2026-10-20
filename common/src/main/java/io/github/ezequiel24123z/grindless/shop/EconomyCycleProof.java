@@ -100,7 +100,8 @@ public final class EconomyCycleProof {
             boolean changed = false;
             for (EconomyGraph.Row row : rows) {
                 if (row.boundary() != EconomyGraph.Boundary.CONVERSION || row.outputs().size() != 1
-                        || !(row.id().startsWith("craft/") || row.id().startsWith("calibrate/"))) {
+                        || !(row.id().startsWith("craft/") || row.id().startsWith("calibrate/")
+                        || row.id().startsWith("bench/"))) {
                     continue;
                 }
                 var output = row.outputs().entrySet().iterator().next();

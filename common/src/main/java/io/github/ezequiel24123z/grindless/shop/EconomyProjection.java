@@ -38,16 +38,19 @@ public final class EconomyProjection {
             row.put("price", offer.payment());
             row.put("goods", offer.goods());
             row.put("role", offer.role());
-            row.put("payment_source_class", offer.paymentSource());
-            row.put("surplus_provenance", offer.surplusSource());
+            row.put("initial_acquisition_source_class", offer.paymentSource());
+            row.put("initial_acquisition_provenance", offer.surplusSource());
+            row.put("repeatable_exchange", true);
+            row.put("same_payment_accepts_later_production", true);
             row.put("production_alternative", offer.productionAlternative());
             row.put("progression_risk", offer.progressionRisk());
             row.put("max_batches_per_request", 1);
             row.put("output_capacity_policy", "complete_native_main_inventory_settlement_or_no_change");
             row.put("paid_inputs_status", paymentStatus(audit, offer));
-            row.put("canonical_renewable_route", false);
+            row.put("canonical_production_replacement", false);
             row.put("renewable_scope", offer.paymentSource() == ShopCatalogue.PaymentSource.MANUAL_FINITE_COMPATIBILITY
-                    ? "Manual finite terrain compatibility only; never canonical mod-owned renewable supply"
+                    ? "Initially hand-gathered finite compatibility recovery. Dirt can later come from mod-owned "
+                    + "wet_aggregate; the exchange stays optional and does not replace canonical production"
                     : "Actual canonical classifications and conditional model membership are exported per payment; shop is optional");
             offers.add(row);
         }
@@ -101,8 +104,8 @@ public final class EconomyProjection {
             item.put("classification", declaration == null ? "UNDECLARED" : declaration.resourceClass().name());
             item.put("canonical_route", declaration == null ? null : declaration.canonicalRoute());
             item.put("proved_in_conditional_t0", tier != null && tier.renewable().contains(resource));
-            item.put("shop_source_override", offer.paymentSource() == ShopCatalogue.PaymentSource.MANUAL_FINITE_COMPATIBILITY
-                    ? "MANUAL_FINITE_COMPATIBILITY_NOT_A_RENEWABLE_DECLARATION" : "NONE");
+            item.put("initial_acquisition_scope", offer.paymentSource());
+            item.put("resource_classification_overridden", false);
             status.put(payment, item);
         }
         return status;

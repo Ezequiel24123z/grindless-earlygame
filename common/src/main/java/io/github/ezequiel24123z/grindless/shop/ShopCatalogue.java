@@ -15,6 +15,7 @@ public final class ShopCatalogue {
     private static final Pattern OFFER_ID = Pattern.compile("[a-z0-9_]+");
 
     public enum Role { EMERGENCY, RECOVERY, CONVENIENCE, DECORATION }
+    /** Initial acquisition provenance, never an intrinsic limit on the payment item's later supply. */
     public enum PaymentSource { EXISTING_MOD_PRODUCTS, MANUAL_FINITE_COMPATIBILITY }
 
     public record Goods(String item, int count) {
@@ -58,7 +59,7 @@ public final class ShopCatalogue {
             emergency("bootstrap_stone", 32, "minecraft:cobblestone", 8,
                     "Punitively priced manual restart; native dry aggregate is far more productive"),
             emergency("bootstrap_wood", 32, "minecraft:oak_log", 4,
-                    "Finite manually dug terrain, not the canonical fibreboard producer"),
+                    "Initially hand-gathered dirt; later renewable dirt is accepted without replacing canonical fibreboard production"),
             emergency("bootstrap_water", 64, "minecraft:water_bucket", 1,
                     "One paid replacement container; no recurring free reward or reset of the starter claim"),
             offer("stone", Map.of(AGGREGATE, 4), "minecraft:cobblestone", 4, Set.of("quern"),
@@ -120,7 +121,7 @@ public final class ShopCatalogue {
     private static Offer emergency(String id, int dirt, String item, int count, String risk) {
         return new Offer(id, Map.of("minecraft:dirt", dirt), new Goods(item, count), Set.of("starter_supplies"),
                 Role.EMERGENCY, PaymentSource.MANUAL_FINITE_COMPATIBILITY,
-                "Bare-hand Superflat dirt; finite manual compatibility recovery, not mod-owned renewable supply",
+                "Initially bare-hand Superflat dirt; later mod-owned wet_aggregate dirt is also accepted",
                 "Preserved free starter; establish geological/biological production and native pumping", risk);
     }
 }
