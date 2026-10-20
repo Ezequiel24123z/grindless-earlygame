@@ -5,6 +5,7 @@ import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
@@ -32,28 +33,33 @@ public final class VerifyShop {
     private VerifyShop() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         catalogue();
         atomicPayment();
         capacity();
         staleInventory();
+        bootstrapRecovery();
         session();
+        packets();
         cycles();
+        sourceContracts();
         System.out.println("ALL SHOP CHECKS PASSED: " + assertions);
     }
 
     private static void catalogue() {
         Set<String> ids = new HashSet<>();
         Set<String> allowedPayments = Set.of(SourceLogic.AGGREGATE, SourceLogic.BIOMASS,
-                SourceLogic.FIBREBOARD, BootstrapProcesses.GROG, "minecraft:bucket");
+                SourceLogic.FIBREBOARD, BootstrapProcesses.GROG, "minecraft:bucket", "minecraft:dirt");
         for (ShopCatalogue.Offer offer : ShopCatalogue.offers()) {
             check("unique offer", ids.add(offer.id()));
             equal("stable lookup", offer, ShopCatalogue.byId(offer.id()));
             check("physical native goods only, never machines/cores/matrices", offer.goods().item().startsWith("minecraft:"));
             check("no abstract balance, currency or imported token", allowedPayments.containsAll(offer.payment().keySet()));
-            check("surplus payment is actually required", offer.payment().keySet().stream().anyMatch(id -> id.startsWith("grindless:")));
+            check("manual recovery is explicit, otherwise real mod surplus is required",
+                    offer.paymentSource() == ShopCatalogue.PaymentSource.MANUAL_FINITE_COMPATIBILITY
+                            || offer.payment().keySet().stream().anyMatch(id -> id.startsWith("grindless:")));
             check("prerequisite ids exist in the single ledger", offer.requires().stream().allMatch(id -> QuestCatalogue.byId(id) != null));
             Inventory inventory = new Inventory(null);
             int slot = 0;
@@ -95,7 +101,8 @@ public final class VerifyShop {
         equal("all grog paid", 0, count(inventory, ITEMS.apply(BootstrapProcesses.GROG)));
         equal("only declared goods received", 4, count(inventory, Items.BRICK));
         ShopCatalogue.Offer invalid = new ShopCatalogue.Offer("invalid", Map.of(SourceLogic.AGGREGATE, 1),
-                new ShopCatalogue.Goods("minecraft:air", 1), Set.of(), ShopCatalogue.Role.RECOVERY, "source", "route", "risk");
+                new ShopCatalogue.Goods("minecraft:air", 1), Set.of(), ShopCatalogue.Role.RECOVERY,
+                ShopCatalogue.PaymentSource.EXISTING_MOD_PRODUCTS, "source", "route", "risk");
         equal("invalid registry outputs are explicit errors", ShopResult.INVALID_OFFER,
                 ShopInventory.prepare(new Inventory(null), invalid, Set.of(), id -> Items.AIR).result());
     }
@@ -186,6 +193,31 @@ public final class VerifyShop {
                 exhausted.exchange(1, 1, ShopSession.MAX_SEQUENCE, 0, Long.MAX_VALUE, settle));
     }
 
+    private static void bootstrapRecovery() {
+        Inventory inventory = new Inventory(null);
+        inventory.setItem(0, new ItemStack(Items.DIRT, 64));
+        inventory.setItem(1, new ItemStack(Items.DIRT, 64));
+        inventory.setItem(2, new ItemStack(Items.DIRT, 32));
+        Set<String> oldClaims = Set.of(QuestCatalogue.STARTER_SUPPLIES);
+        for (String id : List.of("bootstrap_wood", "bootstrap_stone", "bootstrap_stone", "bootstrap_water")) {
+            ShopCatalogue.Offer offer = ShopCatalogue.byId(id);
+            equal("pre-producer recovery is a declared manual compatibility path",
+                    ShopCatalogue.PaymentSource.MANUAL_FINITE_COMPATIBILITY, offer.paymentSource());
+            equal("no machine, water, deposit, industrial stock or unrelated quest is required",
+                    oldClaims, offer.requires());
+            ShopInventory.Prepared plan = ShopInventory.prepare(inventory, offer, oldClaims, ITEMS);
+            equal("old claimed starter plus bare-hand dirt admits restart", ShopResult.READY, plan.result());
+            equal("every restart batch still consumes physical payment", ShopResult.TRADED, plan.transaction().commit());
+        }
+        equal("manual restart pays the entire 160 dirt, not an arbitrary grant", 0, count(inventory, Items.DIRT));
+        equal("basic construction wood is recoverable", 4, count(inventory, Items.OAK_LOG));
+        equal("basic construction stone is recoverable", 16, count(inventory, Items.COBBLESTONE));
+        equal("lost water and its container are recoverable before a pump quest", 1, count(inventory, Items.WATER_BUCKET));
+        equal("existing claim records are untouched", Set.of(QuestCatalogue.STARTER_SUPPLIES), oldClaims);
+        equal("an empty inventory cannot mint another paid restart", ShopResult.MISSING_PAYMENT,
+                ShopInventory.prepare(new Inventory(null), ShopCatalogue.byId("bootstrap_water"), oldClaims, ITEMS).result());
+    }
+
     private static void cycles() {
         EconomyCycleProof.Certificate proof = EconomyCycleProof.check();
         equal("all live T0 conversions, offers and finite rewards are covered", true, proof.conservative());
@@ -212,9 +244,63 @@ public final class VerifyShop {
                 EconomyCycleProof.check(mutated, proof.potential()).conservative());
     }
 
+    private static void packets() {
+        ShopNetwork.Request request = new ShopNetwork.Request(4, 123L, 7, 2);
+        FriendlyByteBuf data = ShopNetwork.encode(request);
+        try {
+            equal("exchange packet carries only fixed bounded intent", 20, data.readableBytes());
+            equal("menu identity, token, sequence and offer round-trip", request, ShopNetwork.decode(data));
+        } finally {
+            data.release();
+        }
+        for (int length = 0; length < 20; length++) {
+            FriendlyByteBuf truncated = new FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+            try {
+                truncated.writeZero(length);
+                equal("truncated packet is refused before decoding", null, ShopNetwork.decode(truncated));
+            } finally {
+                truncated.release();
+            }
+        }
+        FriendlyByteBuf extra = ShopNetwork.encode(request);
+        try {
+            extra.writeByte(0);
+            equal("appended payload cannot supply a price, reward or stack", null, ShopNetwork.decode(extra));
+        } finally {
+            extra.release();
+        }
+    }
+
     private static EconomyGraph.Row row(String id, String input, long consumed, String output, long produced) {
         return new EconomyGraph.Row(id, Map.of(input, consumed), Map.of(output, produced),
                 EconomyGraph.Boundary.CONVERSION, Set.of(), "counterexample", 0, 0, "TEST");
+    }
+
+    private static void sourceContracts() throws Exception {
+        java.nio.file.Path root = java.nio.file.Path.of("common", "src", "main");
+        java.nio.file.Path javaRoot = root.resolve(java.nio.file.Path.of("java", "io", "github", "ezequiel24123z", "grindless"));
+        String network = java.nio.file.Files.readString(javaRoot.resolve(java.nio.file.Path.of("shop", "ShopNetwork.java")));
+        String menu = java.nio.file.Files.readString(javaRoot.resolve(java.nio.file.Path.of("shop", "ShopMenu.java")));
+        String access = java.nio.file.Files.readString(javaRoot.resolve(java.nio.file.Path.of("shop", "ShopAccess.java")));
+        check("intent handlers are registered only on C2S", network.contains("NetworkManager.Side.C2S")
+                && !network.contains("NetworkManager.Side.S2C"));
+        check("network mutation is queued to the server", network.contains("context.queue(() ->")
+                && network.contains("instanceof ServerPlayer"));
+        check("settlement checks the live native menu and server thread", menu.contains("player.containerMenu != this")
+                && menu.contains("player.server.isSameThread()") && menu.contains("!stillValid(player)"));
+        check("client projection never authorizes book access", access.contains("QuestClaimService.holdingBook(player)")
+                && access.contains("player.server.isSameThread()"));
+        check("shop uses quest ledger only as prerequisite reads", menu.contains("QuestProgress.get(player).claimed(")
+                && !menu.contains(".claim(") && !menu.contains("setDirty("));
+        var lang = com.google.gson.JsonParser.parseString(java.nio.file.Files.readString(root.resolve(
+                java.nio.file.Path.of("resources", "assets", "grindless", "lang", "en_us.json")))).getAsJsonObject();
+        for (ShopResult result : ShopResult.values()) {
+            check("every status is localized", lang.has(result.translationKey()));
+        }
+        for (ShopCatalogue.Offer offer : ShopCatalogue.offers()) {
+            check("every offer is named", lang.has("gui.grindless.shop.offer." + offer.id()));
+            check("every offer has a recovery explanation", lang.has("gui.grindless.shop.detail." + offer.id()));
+        }
     }
 
     private static ShopInventory.Prepared prepare(Inventory inventory, ShopCatalogue.Offer offer) {

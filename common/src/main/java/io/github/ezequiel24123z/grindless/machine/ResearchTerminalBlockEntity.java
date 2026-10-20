@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -90,6 +91,10 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
         updateSubscriptions();
     }
 
+    public double inspectionProgress() {
+        return progress;
+    }
+
     /**
      * Inserts a Data Core or extracts the stored input/output. Returns whether the click was
      * this machine's.
@@ -143,6 +148,7 @@ public final class ResearchTerminalBlockEntity extends MachineBlockEntity implem
             input.setItem(0, new ItemStack(ModItems.CALIBRATED_DATA_CORE.get()));
             setChanged();
             updateSubscriptions();
+            DevTelemetry.processCompleted(getLevel(), "calibrate/data_core");
             return;
         }
         publishStatus(true, false, powered, gained > 0.0);

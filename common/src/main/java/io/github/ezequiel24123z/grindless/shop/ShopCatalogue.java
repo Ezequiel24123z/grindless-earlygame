@@ -15,6 +15,7 @@ public final class ShopCatalogue {
     private static final Pattern OFFER_ID = Pattern.compile("[a-z0-9_]+");
 
     public enum Role { EMERGENCY, RECOVERY, CONVENIENCE, DECORATION }
+    public enum PaymentSource { EXISTING_MOD_PRODUCTS, MANUAL_FINITE_COMPATIBILITY }
 
     public record Goods(String item, int count) {
         public Goods {
@@ -25,10 +26,11 @@ public final class ShopCatalogue {
     }
 
     public record Offer(String id, Map<String, Integer> payment, Goods goods, Set<String> requires,
-                        Role role, String surplusSource, String productionAlternative, String progressionRisk) {
+                        Role role, PaymentSource paymentSource, String surplusSource,
+                        String productionAlternative, String progressionRisk) {
         public Offer {
             if (id == null || !OFFER_ID.matcher(id).matches() || payment == null || payment.isEmpty()
-                    || goods == null || role == null || requires == null
+                    || goods == null || role == null || paymentSource == null || requires == null
                     || surplusSource == null || surplusSource.isBlank()
                     || productionAlternative == null || productionAlternative.isBlank()
                     || progressionRisk == null || progressionRisk.isBlank()) {
@@ -53,6 +55,12 @@ public final class ShopCatalogue {
     private static final String CERAMICS = "bootstrap/insulators or ceramic recovery; fresh clay, water, fuel and work remain necessary";
 
     private static final List<Offer> OFFERS = List.of(
+            emergency("bootstrap_stone", 32, "minecraft:cobblestone", 8,
+                    "Punitively priced manual restart; native dry aggregate is far more productive"),
+            emergency("bootstrap_wood", 32, "minecraft:oak_log", 4,
+                    "Finite manually dug terrain, not the canonical fibreboard producer"),
+            emergency("bootstrap_water", 64, "minecraft:water_bucket", 1,
+                    "One paid replacement container; no recurring free reward or reset of the starter claim"),
             offer("stone", Map.of(AGGREGATE, 4), "minecraft:cobblestone", 4, Set.of("quern"),
                     Role.RECOVERY, GEOLOGY, "bootstrap/dry_aggregate", "Costlier than direct Quern output; no machine sold"),
             offer("gravel", Map.of(AGGREGATE, 4), "minecraft:gravel", 4, Set.of("quern"),
@@ -105,6 +113,14 @@ public final class ShopCatalogue {
 
     private static Offer offer(String id, Map<String, Integer> payment, String item, int count,
                                Set<String> requires, Role role, String source, String alternative, String risk) {
-        return new Offer(id, payment, new Goods(item, count), requires, role, source, alternative, risk);
+        return new Offer(id, payment, new Goods(item, count), requires, role,
+                PaymentSource.EXISTING_MOD_PRODUCTS, source, alternative, risk);
+    }
+
+    private static Offer emergency(String id, int dirt, String item, int count, String risk) {
+        return new Offer(id, Map.of("minecraft:dirt", dirt), new Goods(item, count), Set.of("starter_supplies"),
+                Role.EMERGENCY, PaymentSource.MANUAL_FINITE_COMPATIBILITY,
+                "Bare-hand Superflat dirt; finite manual compatibility recovery, not mod-owned renewable supply",
+                "Preserved free starter; establish geological/biological production and native pumping", risk);
     }
 }

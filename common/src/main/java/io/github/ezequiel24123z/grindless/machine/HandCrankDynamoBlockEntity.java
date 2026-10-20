@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.energy.SimpleFluxStorage;
 import io.github.ezequiel24123z.grindless.network.FluxNetwork;
 import io.github.ezequiel24123z.grindless.process.ConditionEnvelope;
 import io.github.ezequiel24123z.grindless.registry.ModBlockEntities;
+import io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -103,7 +104,9 @@ public final class HandCrankDynamoBlockEntity extends MachineBlockEntity {
      * external insertion by design.
      */
     public void crank() {
+        long before = energy().getStored();
         energy().setStored(energy().getStored() + CHARGE_PER_CRANK);
+        DevTelemetry.manualWork(getLevel(), "hand_crank_dynamo", energy().getStored() - before);
         // The crank is exactly the kind of state change the subscription model needs told about:
         // it is what makes pushing worth doing, and nothing else would notice it.
         fruitlessPushes = 0;
