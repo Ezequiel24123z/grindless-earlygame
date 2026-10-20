@@ -147,7 +147,10 @@ public final class VerifyDashboardProjection {
             eq("physical quest subject", objective.subject() == null ? null : objective.subject().key(), nullableString(entry.get("subject")));
             eq("actual quest count", objective.count(), entry.get("count").getAsLong());
             eq("all quest dependencies", JSON.toJsonTree(objective.requires()), entry.get("requires"));
-            Route reward = result.authorities().routes().get(objective.rewardRoute());
+            eq("actual optional reward route " + objective.id(), objective.rewardRoute(),
+                    nullableString(entry.get("reward_route")));
+            Route reward = objective.rewardRoute() == null ? null
+                    : result.authorities().routes().get(objective.rewardRoute());
             if (reward != null) {
                 eq("exact actual rewards", reward.outputs(), amounts(entry.getAsJsonArray("reward"), resources, null));
             } else {

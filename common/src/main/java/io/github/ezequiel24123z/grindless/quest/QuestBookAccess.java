@@ -18,6 +18,7 @@ public final class QuestBookAccess {
         PRESENT,
         DELIVERED,
         INVENTORY_FULL,
+        /** Reserved legacy code; post-starter recovery no longer emits it. */
         STARTER_CLAIMED
     }
 

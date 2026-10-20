@@ -46,7 +46,8 @@ public final class QuestCatalogue {
      * @param count    how many of an item; ignored for dimension and free evidence
      * @param matrixRating required physical rating for Matrix evidence; null otherwise
      * @param requires tasks that must already be claimed
-     * @param rewards  legal item stacks given together on the first successful claim
+     * @param rewards  legal item stacks given together; empty for a lesson
+     * @param type     material reward claim or explicitly rewardless teaching checklist
      */
     public record Task(
             String id,
@@ -75,6 +76,9 @@ public final class QuestCatalogue {
 
         /** Compatibility for existing single-stack task consumers. Use rewards() for delivery. */
         public Reward reward() {
+            if (rewards.isEmpty()) {
+                throw new IllegalStateException("This lesson has no material reward: " + id);
+            }
             return rewards.get(0);
         }
     }
@@ -125,7 +129,7 @@ public final class QuestCatalogue {
             task("settling", "settling", Evidence.ITEM, "grindless:settling_trough", 1,
                     List.of("ceramics", "water"), reward("minecraft:dirt", 16)),
             lesson("water_recovery", "settling", Evidence.FREE, "", 1, List.of("settling")),
-            lesson("mineral_feed", "settling", Evidence.ITEM, "minecraft:copper_ingot", 1,
+            lesson("mineral_feed", "settling", Evidence.FREE, "", 1,
                     List.of("aggregate", "settling")),
             lesson("biocultivator", "bioculture", Evidence.ITEM, "grindless:biocultivator", 1,
                     List.of("aggregate")),

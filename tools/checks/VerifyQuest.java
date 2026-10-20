@@ -3,6 +3,9 @@ package io.github.ezequiel24123z.grindless.quest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortRole;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -78,6 +81,12 @@ public final class VerifyQuest {
                         .map(QuestCatalogue.Task::id).collect(java.util.stream.Collectors.toSet()));
         eq("every added task has an explicit rewardless lesson type", 20L, tasks.stream()
                 .filter(task -> task.type() == QuestCatalogue.Type.LESSON && task.rewards().isEmpty()).count());
+        try {
+            task("quest_book_help").reward();
+            fail("the compatibility accessor cannot invent a lesson reward");
+        } catch (IllegalStateException expected) {
+            yes("requesting a material reward from a lesson fails explicitly", expected.getMessage().contains("no material reward"));
+        }
         eq("old evidence ordinals do not move", List.of(0, 1, 2), List.of(
                 QuestCatalogue.Evidence.ITEM.ordinal(), QuestCatalogue.Evidence.DIMENSION.ordinal(),
                 QuestCatalogue.Evidence.MATRIX.ordinal()));
@@ -193,6 +202,8 @@ public final class VerifyQuest {
                 QuestCatalogue.Evidence.MATRIX, task("relay").evidence());
         eq("the T0 gate requires the exact F1 rating", io.github.ezequiel24123z.grindless.energy.FluxTier.F1,
                 task("relay").matrixRating());
+        eq("tag-resolved mineral products do not force a vanilla-only inventory checklist",
+                QuestCatalogue.Evidence.FREE, task("mineral_feed").evidence());
         no("opening the book or reaching calibration cannot unlock T1",
                 QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, Set.of("calibrate")));
         no("an old T1 claim does not unlock T1", QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1,
@@ -342,6 +353,19 @@ public final class VerifyQuest {
                 QuestTeaching.structure(task("firing")));
         eq("Settling help uses runtime formation cells", io.github.ezequiel24123z.grindless.structure.WorkshopStructure.SETTLING_TROUGH,
                 QuestTeaching.structure(task("settling")));
+        List<AtlasLogic.Entry> crafts = AtlasLogic.allEntries(List.of());
+        for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+            String topic = kind.structure() == io.github.ezequiel24123z.grindless.structure.WorkshopStructure.FIRING_CHAMBER
+                    ? "firing" : "settling";
+            AtlasLogic.Entry actualCraft = crafts.stream().filter(entry ->
+                    entry.id().equals("craft/" + kind.blockName())).findFirst().orElseThrow();
+            yes("optional port recipe is projected from its actual craft " + kind.id(),
+                    QuestTeaching.recipes(task(topic), crafts).contains(actualCraft));
+        }
+        for (WorkshopPortRole role : WorkshopPortRole.values()) {
+            yes("actual port role is localized " + role,
+                    lang.has("gui.grindless.quest.port_role." + role.name().toLowerCase(java.util.Locale.ROOT)));
+        }
         for (String prototype : List.of(
                 "ground array", "luna", "helium-3", "rocket", "drift", "station",
                 "starward link", "sealed chamber", "arriving is the victory")) {

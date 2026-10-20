@@ -13,6 +13,7 @@ import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
+import io.github.ezequiel24123z.grindless.quest.QuestTeaching;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
@@ -694,6 +695,13 @@ public final class VerifyResourceGuidance {
                 teaching.contains("ResourceGuidanceContext.operands(entry)")
                         && teaching.contains("ResourceGuidanceContext.Role.OUTPUT")
                         && teaching.contains("ResourceGuidanceClient.playerContext(output)"));
+        equal("port teaching projects the actual shared role/position/count authority", true,
+                teaching.contains("WorkshopPortContract.slots(structure)")
+                        && teaching.contains("WorkshopPortContract.maximumPorts(structure)")
+                        && teaching.contains("WorkshopPortContract.minimumBricks(structure)")
+                        && teaching.contains("WorkshopPortContract.maximum(structure, role)"));
+        equal("tank teaching reads capacity from the existing fluid authority", true,
+                teaching.contains("FluidLogic.TANK_CAPACITY"));
         equal("teaching never opts mandatory reading into technical detail", false,
                 teaching.contains("ResourceGuidanceClient.lines("));
         equal("the compatibility Guide contains no parallel route manual", true,
@@ -750,7 +758,7 @@ public final class VerifyResourceGuidance {
         equal("natural instructions retain night and restart limits", true,
                 renewables.contains("Do not assume overnight or restart autonomy"));
         for (String page : List.of("starter_supplies", "clay_mixer", "settling", "relay", "biomass")) {
-            String body = lang.get("gui.grindless.quest.lesson." + page).getAsString();
+            String body = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId(page))).getAsString();
             equal("T0 prose does not duplicate recipe numbers or witness bill: " + page, false,
                     body.matches("(?s).*\\b(?:250|750|1000|33|41|21|20)\\b.*"));
             for (String jargon : List.of("a model's sufficient stock", "Tier-accepted", "Declarations do not certify")) {

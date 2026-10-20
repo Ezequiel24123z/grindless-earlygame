@@ -7,9 +7,14 @@ import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortRole;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Kind;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel.Resource;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -33,6 +38,9 @@ public final class QuestTeachingClient {
                 ? Component.translatable(QuestTeaching.bodyKey(task), SourceLogic.MANUAL_CHARGE, SourceLogic.MANUAL_COOLDOWN)
                 : Component.translatable(QuestTeaching.bodyKey(task)));
         text.add(Component.translatable("gui.grindless.quest.inventory_not_operation"));
+        if (task.id().equals("fluid_logistics")) {
+            text.add(Component.translatable("gui.grindless.quest.tank_containers", FluidLogic.TANK_CAPACITY));
+        }
         var structure = QuestTeaching.structure(task);
         if (!structure.cells().isEmpty()) {
             text.add(Component.translatable("gui.grindless.quest.structure_axes"));
@@ -42,6 +50,7 @@ public final class QuestTeachingClient {
                         ResourceGuidanceClient.name(new Resource(Kind.ITEM, cell.block())),
                         cell.oriented() ? Component.translatable("gui.grindless.quest.same_facing") : Component.empty()));
             }
+            appendPorts(text, structure);
         }
         List<AtlasLogic.Entry> recipes = QuestTeaching.recipes(task, AtlasLogic.allEntries(ProcessLookup.recipes()));
         if (!recipes.isEmpty()) {
@@ -63,5 +72,48 @@ public final class QuestTeachingClient {
             }
         }
         return List.copyOf(text);
+    }
+
+    private static void appendPorts(List<Component> text, WorkshopStructure structure) {
+        List<WorkshopPortContract.Slot> slots = WorkshopPortContract.slots(structure);
+        if (slots.isEmpty()) {
+            return;
+        }
+        text.add(Component.translatable("gui.grindless.quest.ports_limit", WorkshopPortContract.maximumPorts(structure)));
+        int bricks = WorkshopPortContract.minimumBricks(structure);
+        if (bricks > 0) {
+            text.add(Component.translatable("gui.grindless.quest.ports_bricks", bricks));
+        }
+        for (WorkshopPortRole role : WorkshopPortRole.values()) {
+            int maximum = WorkshopPortContract.maximum(structure, role);
+            if (maximum > 0) {
+                text.add(Component.translatable("gui.grindless.quest.ports_role_limit",
+                        portRole(role), maximum));
+            }
+        }
+        List<String> faceNames = List.of("north", "east", "south", "west");
+        for (WorkshopPortContract.Slot slot : slots) {
+            MutableComponent roles = Component.empty();
+            for (WorkshopPortRole role : slot.roles().stream().sorted().toList()) {
+                if (!roles.getString().isEmpty()) {
+                    roles.append(" / ");
+                }
+                roles.append(portRole(role));
+            }
+            MutableComponent faces = Component.empty();
+            for (int face : slot.faces().stream().sorted().toList()) {
+                if (!faces.getString().isEmpty()) {
+                    faces.append(" / ");
+                }
+                faces.append(Component.translatable("gui.grindless.quest.port_face." + faceNames.get(face)));
+            }
+            text.add(Component.translatable("gui.grindless.quest.port_slot", slot.offset().x(), slot.offset().y(),
+                    slot.offset().z(), roles, faces));
+        }
+        text.add(Component.translatable("gui.grindless.quest.ports_notes"));
+    }
+
+    private static Component portRole(WorkshopPortRole role) {
+        return Component.translatable("gui.grindless.quest.port_role." + role.name().toLowerCase(Locale.ROOT));
     }
 }

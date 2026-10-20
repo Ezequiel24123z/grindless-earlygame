@@ -2,11 +2,15 @@
 
 Source baseline: `b8bd5e885aef598bf888d7e390b297a34cbb7d52`.
 Implementation scope: the containing Git checkpoint, not deployed runtime747.
-Checkpoint status: **INTERIM SOURCE; not integration-ready qualification**.
-Final source checks and in-flight paid legacy Guide assembly compatibility are
-still being closed; no JVM/backend pass is inferred.
+Checkpoint status: **QUEST SOURCE READY FOR COORDINATED INTEGRATION; NOT JVM/
+CLIENT QUALIFICATION**. The first interim checkpoint is preserved below.
+Paid legacy Guide lookup/one-settlement wiring is preserved by its actual
+infrastructure owner in companion
+`164ee9aac3abf167cd6cb3bbde3ecf516990b12b`; compose the real units before compiling.
 Preserved first feature checkpoint:
 `710a822766a64bd046b239147036da8cdec5e5ae`.
+Preserved compatibility helper checkpoint:
+`07ff3972eeec197a77014bd9580daaf4a3e5381d`.
 This is the quest worker's bounded implementation/verification handoff. The
 coordinator owns root documentation, the ADR index, generated guidance,
 integrated JVM qualification, publication and deployment.
@@ -25,6 +29,8 @@ acknowledgement or current inventory checklist after prerequisites and the held
 Quest Book check. `Type.REWARD` retains complete, nonempty, legal-batch validation,
 capacity staging and the existing idempotent claim/delivery path. No lesson
 claims successful operation, certification, renewable uptime or human acceptance.
+The mineral-feed lesson is read-only: live metal outputs resolve pack tags, so
+it does not incorrectly require one particular vanilla copper item as proof.
 
 T0 ends at the existing `relay` ID. A **new** claim requires five physical
 `grindless:relay_matrix` items with exactly valid F1 specifications, using the
@@ -185,8 +191,37 @@ admits a new Guide job. Already produced Guide stacks remain ordinary preserved
 output and may export through unchanged handling.
 
 `VerifyRecipes` adds bounded helper/no-discoverability cases. The infrastructure
-owner supplies the actual pending-work/blocked-output/one-completion block-entity
-regression. No general retired-recipe framework or new NBT schema is introduced.
+owner preserves the actual lookup/clear wiring and
+`VerifyLegacyGuideMachine` in164ee9. Its real block-entity fixture covers partial
+paid work, blocked output, one delivery, cleared overpaid work, unpaid/foreign IDs
+and missing input. This is source implementation reported by that owner, not an
+executed Java/native pass. No general retired-recipe framework or new NBT schema
+is introduced.
+
+### Teaching the actual optional ports and tank interaction
+
+The active Settling lesson no longer says that every interface must be on the
+controller. Its new body distinguishes the controller's batch/store, ordinary
+structural parts and compatible fitted ports; the previous translation key is
+retained dormant. Firing/Settling help projects positions, allowed roles/faces,
+maximum ports/each role and minimum ordinary bricks directly from the
+infrastructure unit's pure `WorkshopPortContract`. It also selects their actual
+craft rows from `WorkshopPortContract.Kind`, so recipe costs remain in the
+same catalogue/Atlas authority. No second port-position table or handwritten
+cost graph is introduced.
+
+The actual164ee9 contract was read from its committed Java authority and checked
+JSON/Markdown: two front-right Firing replacement cells, one of each item role,
+minimum five ordinary bricks; channel input/screen output variants for Trough;
+rotated horizontal faces, no unsided/vertical port automation, passive original
+parts and direct controller access preserved. These are optional four-role/six-
+variant interfaces, not energy/maintenance hatches or a new multiblock kernel.
+
+The tank lesson reads capacity from `FluidLogic.TANK_CAPACITY`, explains native
+container/stack-result space and fill feedback, and distinguishes ordinary
+fluid-bearing drops, rotation and Multitool relocation. It does not substitute
+a displayed item or quest claim for an observed actual exchange/persistence run.
+The real Forge/client container and saved-world checks remain separate.
 
 ## Authority and integration seams
 
@@ -220,6 +255,18 @@ The live server claim method invokes it only after a real `CLAIMED` result,
 including LESSON, never on opening, polling, rejection or duplicate requests.
 No second shop protocol, wallet, reflection fallback or telemetry engine is added.
 These imports require integration of that worker before combined compilation.
+Shared port help additionally requires the real164ee9
+`WorkshopPortContract`/`WorkshopPortRole` types. The paid Guide helper must be
+composed with that unit's actual block-entity caller; neither side copies a fake
+substitute of the other.
+
+The isolated retirement fixture counts are187 generated recipes,68 Assembler
+rows and237 Atlas rows. Composing the infrastructure unit's six new shaped
+port crafts adds12 machine projections and six craft rows, so the expected
+combined pins are199/74/255 before any other independently authorized content
+change. Merge both exhaustive ID lists and the exact derived counts; do not
+overwrite the six real port crafts or retain a retired Guide row to satisfy
+an old pin. These arithmetic source expectations are not execution evidence.
 
 The coordinator must update AGENT-MAP's Quests/Guide, resource-authority and
 Heracles entries, record the owner-directed chapter/migration decision, and
@@ -246,15 +293,29 @@ No T0 lesson is relabeled as a spatial objective to work around the check.
 The lexical check of32 changed Java files and the repository link checker pass:
 160 ADR sections/index rows,728 relative links/51 Markdown files. These are not
 Java compilation or backend execution.
+The finishing source receipt additionally passes35 changed-Java delimiter
+checks,56 exact closed-method literal/source alignments, active lesson-key and
+length checks, duplicate-free JSON, unchanged original UTF-8 translations, the
+real peer role API/localization projection and protected-asset conservation.
+The link checker again passes728/51 and160 matching ADR/index entries.
+Literal alignment is only a preparation check: the JDK AST/source-binding
+counterexamples and behavior suites remain NOT EXECUTED here.
 
 The authored focused proof set is `VerifyQuest`, `VerifyQuestClaims`,
 `VerifyPersistence`, `VerifyBootstrap`, `VerifyRecipes`, `VerifyAtlas`,
 `VerifySustainability`, `VerifySustainabilityAdapters`,
 `VerifySustainabilityRegistry --quest-binding-only`, `VerifyResourceGuidance`,
-`VerifySustainabilityT0` and `:forge:verifyQuestBackend`. It covers old reward/
+`VerifySustainabilityT0`, the affected `VerifyDashboardProjection` and
+`:forge:verifyQuestBackend`. It covers old reward/
 prerequisite pins, reading without delivery, exact F1/malformed/mixed evidence,
 individual save/reload, retained T1 claims, actual native visibility, safe
 publication and complete current recipe projections.
+The production dashboard already guards an absent material reward route. Its
+existing projection check now does likewise and asserts the actual nullable
+route, instead of dereferencing a null key in the sorted authority map. No
+renderer behavior or dashboard framework is changed.
+The companion164ee9 `VerifyLegacyGuideMachine` and `VerifyWorkshopPorts` cover
+the actual infrastructure-side migration/port contract when the units are composed.
 
 Required coordinated preparation uses the existing commands, after integrating
 the shop/telemetry API:
@@ -290,10 +351,10 @@ save acceptance.
 | Category | State |
 | --- | --- |
 | COMPLETED | Source implementation, targeted regression source and this31-topic/content/seam map; non-JVM data/whitespace checks as described |
-| BLOCKED | Standalone combined compilation needs the coordinated shop/telemetry imports and the parent's assigned execution lane; no local JVM authorization |
+| BLOCKED | Executable qualification awaits real shop/telemetry/port-contract composition and the parent's assigned runner; no local JVM authorization or unresolved quest-design decision |
 | NOT EXECUTED | Common/Forge/backend Java execution, canonical regeneration, native/client/world/save probes, publication and deployment |
 | NEEDS HUMAN VALIDATION | Actual UI/readability, lessons, ergonomics, recovery and multiplayer observations, no-command progression and retained worlds |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
 | COST / BILLING RISK | None; no generation, billing activation or paid request |
-| DEPLOYED STATE | Unchanged by this worker; runtime747 remains the prior installed candidate, not this source |
+| DEPLOYED STATE | No instance inspection/update/deployment by this worker; the received installed reference is runtime747, not this source |
