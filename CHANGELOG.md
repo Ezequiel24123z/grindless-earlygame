@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Keep registered-object proof in the existing real Forge workshop probe.**
+  The executed order-only fixture repair correctly fails `Not bootstrapped`;
+  preserve it and the original frozen-holder reds. Keep pure paid-owner selection,
+  vanilla inventory/NBT and orphan-BE checks in common. Move every positive
+  registered Guide settlement, physical F1 server claim and six-port block
+  collision assertion into the existing console-only disposable-world probe.
+  Its original 23 markers remain and three new required markers bring it to 26;
+  their native execution is explicitly pending, not a headless pass.
 - **Execute the shared six-port teaching contract rather than author another tutorial authority.**
   Exercise the actual component projector against runtime slots, faces, role caps,
   ordinary-brick reserve and legacy-controller notes; bind all six live Atlas
@@ -24,8 +32,9 @@ entries below reference those records by id.
 - **Repair composed qualification fixtures without weakening the runtime contracts.**
   Bind the exact ProcessMachine manual-work AST including F0/server guards,
   capacity clamp and positive actual-delta telemetry, with ten source mutations
-  rejecting changed admission/observation. Register the real isolated Guide,
-  Relay and workshop-port fixtures before vanilla freezes intrusive holders.
+  rejecting changed admission/observation. The initial registration-order
+  attempt is retained as a real failed observer/fixture boundary, not a safe
+  standalone registration API.
   Preserve the original hosted seven-suite red and the separate PC guidance red;
   generated resources and executable repair results are qualified separately.
 - **Continue experience fixes into the composed qualification boundary.**

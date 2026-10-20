@@ -355,6 +355,15 @@ Early quest rewards must never supply a core, insulator or Matrix that bypasses 
 See [the starter-kit contract](testing/t0-starter-kit.md) for exact allocation,
 inventory deferral, compatibility and the still-pending native/client observations.
 
+The integrated experience catalogue/teaching supersedes the historical26-task
+description above:46 IDs,32 T0/14 T1, retained old claims and a harmless Guide
+redirect. `VerifyWorkshopPorts` exercises the actual shared port component
+projector and both renderer call sites. Standalone checks use vanilla inputs,
+not newly allocated intrusive registry fixtures. Positive registered Matrix
+server claims and exact paid Guide settlement belong to the existing Forge
+`fluid/forge/WorkshopInterfaceChecks` command and its isolated26-marker
+`workshop-ports` smoke; common green is not that native proof.
+
 ## Multiblock
 
 There is no parametric kernel. The Ground Array is a fixed shape, not one. Do not add a kernel

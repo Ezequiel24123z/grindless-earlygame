@@ -276,6 +276,36 @@ deprecated safe Guide, utility-only recovery and shared live-recipe help.
 
 ## Verification and remaining execution
 
+### Integrated pure/native fixture boundary
+
+The actual composed CI seven-suite red and later PC `Not bootstrapped` attempt
+are retained. Vanilla standalone checks cannot construct new intrusive Items
+before or after its closed bootstrap lifecycle. Pure common checks continue to
+exercise claims, lessons, NBT, old schema and paid Guide owner/input selection
+with already registered vanilla inputs; they do not impersonate a ControlMatrix
+or a registered Guide.
+
+The positive physical F1/server-claim and exact paid legacy Guide settlement
+assertions now live in the existing Forge `WorkshopInterfaceChecks` probe, after
+normal deferred registration, using `ModItems.RELAY_MATRIX`, `FIELD_GUIDE` and
+`QUEST_BOOK`. Both real Bench/Assembler fallback jobs must block without loss,
+settle one actual Guide only once, clear oversized progress/owners and refuse
+another retired start. The real public server claim must reject four F1 and
+wrong/malformed stock, require the held book, accept five exact physical F1,
+retain evidence, pay two flint once and preserve historical/per-player chapter
+and ledger behavior. No alternate reward resolver or item substitute is used.
+The existing isolated `workshop-ports` scenario has three new required markers,
+including registered port geometry, for26 total. Their execution is pending
+Phase B on the same generated checkpoint; no native/client pass follows from
+source compilation or the common checks.
+
+The composed `VerifyWorkshopPorts` additionally invokes the actual shared port
+component projector and checks its slots, role/structure caps, faces, brick
+reserve and plain-controller notes against `WorkshopPortContract`. It binds all
+six real Atlas craft rows, localized block names and generated resources and
+inspects actual AST invocations in native and Heracles help. This is real
+component/source qualification, never a simulated GUI or human appearance pass.
+
 Actually executed on this source lane: one non-JVM PowerShell check confirms
 46 unique IDs,32 T0/14 T1,20 explicit new lessons, all localized quest/body keys,
 body length bounds, no duplicate JSON keys and no obsolete Guide recipe.

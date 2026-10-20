@@ -2,6 +2,8 @@ package io.github.ezequiel24123z.grindless.fluid.forge;
 
 import com.mojang.authlib.GameProfile;
 import io.github.ezequiel24123z.grindless.Grindless;
+import io.github.ezequiel24123z.grindless.container.FluidInsert;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.BasicTankBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.ClayConduitBlockEntity;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
@@ -9,16 +11,31 @@ import io.github.ezequiel24123z.grindless.fluid.FluidNbt;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.fluid.NativeFluidStore;
 import io.github.ezequiel24123z.grindless.item.Relocation;
+import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
+import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
+import io.github.ezequiel24123z.grindless.quest.QuestClaimService;
+import io.github.ezequiel24123z.grindless.quest.QuestInventoryEvidence;
+import io.github.ezequiel24123z.grindless.quest.QuestProgress;
+import io.github.ezequiel24123z.grindless.quest.QuestProjection;
+import io.github.ezequiel24123z.grindless.recipe.LegacyGuideAssembly;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.registry.ModBlocks;
+import io.github.ezequiel24123z.grindless.registry.ModItems;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlock;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlockEntity;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPartBlock;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,6 +54,9 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -51,6 +71,8 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
+import java.lang.reflect.Method;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -91,6 +113,8 @@ public final class WorkshopInterfaceChecks {
             player.setYRot(0.0F);
             require(player.mayInteract(level, origin) && player.mayInteract(level, origin.below()),
                     "Real prerequisite denied: non-OP probe mayInteract (check disposable-server protection)");
+            require(QuestProgress.get(player).claimed(PROFILE.getId()).isEmpty(),
+                    "Probe profile already has claims; use the fresh disposable world, never reset an existing ledger");
 
             place(level, origin.below(), Blocks.STONE.defaultBlockState());
             place(level, origin, ModBlocks.BASIC_TANK.get().defaultBlockState());
@@ -101,6 +125,9 @@ public final class WorkshopInterfaceChecks {
             creativeAndFullInventory(level, player, tank);
             dropAndReplace(level, player, tank);
             ports(level, controllerPos);
+            registeredGeometry(level, origin);
+            legacyGuideJobs(level, origin.offset(6, 0, -6), origin.offset(10, 0, -6));
+            registeredMatrixClaims(player);
             Grindless.LOG.info("WORKSHOP-INTERFACES-COMPLETE");
             return 1;
         } catch (RuntimeException failure) {
@@ -123,6 +150,12 @@ public final class WorkshopInterfaceChecks {
             emptyLoaded(level, controllerPos.offset(0, 1, behind));
         }
         emptyLoaded(level, controllerPos.south().east());
+        for (BlockPos machine : List.of(origin.offset(6, 0, -6), origin.offset(10, 0, -6))) {
+            emptyLoaded(level, machine);
+            for (Direction side : Direction.values()) {
+                emptyLoaded(level, machine.relative(side));
+            }
+        }
         require(level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS),
                 "Real prerequisite denied: doTileDrops must already be true");
         require(level.getEntitiesOfClass(ItemEntity.class, dropBox(origin)).isEmpty(),
@@ -581,6 +614,172 @@ public final class WorkshopInterfaceChecks {
         require(previous.isRemoved() && next != previous && next.nativeStore() != previous.nativeStore(),
                 "Callback replacement did not acquire a distinct native owner");
         return next;
+    }
+
+    /** These real intrusive block objects exist only after Forge's normal deferred registration. */
+    private static void registeredGeometry(ServerLevel level, BlockPos origin) {
+        for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+            var registered = BuiltInRegistries.BLOCK.get(new ResourceLocation(kind.id()));
+            require(registered instanceof WorkshopPortBlock, "Actual registered port block is missing: " + kind.id());
+            WorkshopPortBlock block = (WorkshopPortBlock) registered;
+            require(block.kind() == kind, "Registered port has the wrong variant: " + kind.id());
+            BlockState state = block.defaultBlockState();
+            require(state.getProperties().size() == 1 && state.hasProperty(MachineProperties.FACING),
+                    "A registered port must have facing only, never a fake status: " + kind.id());
+            for (Direction facing : List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)) {
+                var expected = kind.family() == WorkshopPortContract.Family.BRICK ? Shapes.block()
+                        : WorkshopPartBlock.shape(kind.geometry(), facing);
+                require(!Shapes.joinIsNotEmpty(expected, block.getShape(
+                                state.setValue(MachineProperties.FACING, facing), level, origin, CollisionContext.empty()),
+                        BooleanOp.NOT_SAME), "Registered port collision changed at " + kind.id() + "/" + facing);
+            }
+        }
+        Grindless.LOG.info("WORKSHOP-INTERFACES-PORT-GEOMETRY-OK");
+    }
+
+    /**
+     * Preserve the original exact fallback/settlement assertions on real registered process entities
+     * and the actual Guide item. Direct calls exercise the same private selection/settlement methods
+     * as the former standalone check; the controlled paid progress is not earned gameplay or a tick test.
+     */
+    private static void legacyGuideJobs(ServerLevel level, BlockPos benchPos, BlockPos assemblerPos) {
+        require(BuiltInRegistries.ITEM.get(new ResourceLocation("grindless:field_guide")) == ModItems.FIELD_GUIDE.get(),
+                "Legacy Guide must retain its actual stable registered identity");
+        try {
+            Method select = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
+            Method complete = ProcessMachineBlockEntity.class.getDeclaredMethod("complete", ProcessRecipe.class, List.class);
+            select.setAccessible(true);
+            complete.setAccessible(true);
+            for (ProcessMachineKind kind : List.of(ProcessMachineKind.ASSEMBLY_BENCH, ProcessMachineKind.ASSEMBLER)) {
+                BlockPos pos = kind == ProcessMachineKind.ASSEMBLY_BENCH ? benchPos : assemblerPos;
+                place(level, pos, (kind == ProcessMachineKind.ASSEMBLY_BENCH
+                        ? ModBlocks.ASSEMBLY_BENCH.get() : ModBlocks.ASSEMBLER.get()).defaultBlockState());
+                ProcessMachineBlockEntity machine = entity(level, pos, ProcessMachineBlockEntity.class);
+                require(machine.kind() == kind, "Actual registered legacy work recipient has the wrong kind");
+                String owner = kind == ProcessMachineKind.ASSEMBLY_BENCH
+                        ? "bench/field_guide" : "assemble/bootstrap/field_guide";
+                ProcessRecipe legacy = LegacyGuideAssembly.resume(kind.family(), owner, 1).orElseThrow();
+                double paid = legacy.durationTicks() * 3.0 + 0.5;
+                machine.setItem(0, new ItemStack(Items.PAPER, 4));
+                machine.setItem(1, new ItemStack(Items.STICK, 2));
+                int output = kind.menuKind().inputs();
+                for (int slot = output; slot < machine.getContainerSize(); slot++) {
+                    machine.setItem(slot, new ItemStack(Items.STONE, 64));
+                }
+                CompoundTag old = machine.saveWithoutMetadata();
+                old.putString("Recipe", owner);
+                old.putString("WorkRecipe", owner);
+                old.putDouble("Progress", paid);
+                machine.load(old);
+                ProcessRecipe resumed = (ProcessRecipe) select.invoke(machine, List.<FluidInsert.Source>of());
+                require(resumed != null && resumed.id().equals(owner),
+                        "The actual paid legacy machine lost its exact fallback owner");
+                require(!(boolean) complete.invoke(machine, resumed, List.<FluidInsert.Source>of()),
+                        "Full output must block the actual old Guide batch");
+                require(machine.getItem(0).getCount() == 4 && machine.getItem(1).getCount() == 2
+                                && machine.inspectionProgress() == paid,
+                        "Blocked legacy settlement consumed inputs or paid progress");
+                for (int slot = output; slot < machine.getContainerSize(); slot++) {
+                    machine.setItem(slot, ItemStack.EMPTY);
+                }
+                require((boolean) complete.invoke(machine, resumed, List.<FluidInsert.Source>of()),
+                        "The actual paid legacy Guide job did not settle");
+                require(machine.getItem(output).is(ModItems.FIELD_GUIDE.get())
+                                && machine.getItem(output).getCount() == 1,
+                        "Legacy settlement must deliver exactly one actual registered Guide, never a proxy");
+                require(machine.getItem(0).getCount() == 2 && machine.getItem(1).getCount() == 1,
+                        "One legacy batch must spend exactly two paper and one stick");
+                require(machine.inspectionProgress() == 0.0,
+                        "One legacy settlement must clear even oversized paid progress");
+                CompoundTag saved = machine.saveWithoutMetadata();
+                require(saved.getString("WorkRecipe").isEmpty() && saved.getString("Recipe").isEmpty(),
+                        "Successful legacy settlement must clear both saved work/selection owners");
+                ProcessRecipe next = (ProcessRecipe) select.invoke(machine, List.<FluidInsert.Source>of());
+                require(next == null || !LegacyGuideAssembly.retired(kind.family(), next.id()),
+                        "Remaining physical inputs started another retired Guide batch");
+                require(machine.getItem(output).getCount() == 1,
+                        "Reconsidering the retired selection duplicated the registered Guide");
+            }
+        } catch (ReflectiveOperationException failure) {
+            throw new IllegalStateException("Actual legacy selection/settlement invocation failed", failure);
+        }
+        Grindless.LOG.info("WORKSHOP-INTERFACES-LEGACY-GUIDE-OK");
+    }
+
+    /** Real registered physical evidence and the public server-thread claim path, without a reward resolver substitute. */
+    private static void registeredMatrixClaims(FakePlayer player) {
+        require(ModItems.RELAY_MATRIX.get() instanceof ControlMatrixItem,
+                "Actual Relay registry item must have the native Matrix validator");
+        ControlMatrixItem matrix = (ControlMatrixItem) ModItems.RELAY_MATRIX.get();
+        require(BuiltInRegistries.ITEM.get(new ResourceLocation("grindless:relay_matrix")) == matrix,
+                "Relay physical evidence must retain its actual registered identity");
+        prepare(player, ItemStack.EMPTY, false);
+        var inventory = player.getInventory();
+        var relay = QuestCatalogue.byId("relay");
+        inventory.setItem(0, matrix.stackFor(FluxTier.F1, 4));
+        inventory.setItem(1, matrix.stackFor(FluxTier.F2, 64));
+        ItemStack invalid = matrix.stackFor(FluxTier.F1, 64);
+        invalid.getOrCreateTag().putString("Rating", "1");
+        inventory.setItem(2, invalid);
+        ItemStack fractional = matrix.stackFor(FluxTier.F1, 64);
+        fractional.getOrCreateTag().putDouble("Rating", 1.5);
+        inventory.setItem(3, fractional);
+        inventory.setItem(4, new ItemStack(Items.FLINT, 64));
+        player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(ModItems.QUEST_BOOK.get()));
+        require(QuestInventoryEvidence.count(inventory, relay) == 4,
+                "Wrong, fractional, malformed or unrelated physical stock made up the fifth F1");
+        QuestProgress ledger = QuestProgress.get(player);
+        UUID id = player.getUUID();
+        require(ledger.claimed(id).isEmpty(), "Native F1 fixture refuses an existing player ledger");
+        require(ledger.claim(id, "calibrate") && ledger.claim(id, "thermal") && ledger.claim(id, "industrial_matrix"),
+                "Could not stage the explicit historical-claim fixture");
+        Set<String> oldClaims = ledger.claimed(id);
+        require(!QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, oldClaims)
+                        && !QuestProjection.claimed(oldClaims).get("grindless_thermal"),
+                "Retained T1 claims alone unlocked or exposed the separate chapter");
+        require(QuestClaimService.claim(player, "relay") == QuestClaimService.Result.UNMET,
+                "Four actual F1 Matrices must reject the real server claim");
+        require(flints(player) == 64 && ledger.claimed(id).equals(oldClaims),
+                "Rejected real F1 claim changed rewards or the historical ledger");
+        inventory.setItem(5, new ItemStack(matrix));
+        require(QuestInventoryEvidence.count(inventory, relay) == 5
+                        && matrix.spec(inventory.getItem(5)).orElseThrow().rating() == FluxTier.F1,
+                "Split physical stock/legacy untagged Relay did not resolve the exact native F1");
+        player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
+        require(QuestClaimService.claim(player, "relay") == QuestClaimService.Result.BOOK_REQUIRED,
+                "Even a ready physical exit must require the actual held Quest Book");
+        require(flints(player) == 64 && ledger.claimed(id).equals(oldClaims),
+                "Book rejection changed rewards or old claims");
+        player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(ModItems.QUEST_BOOK.get()));
+        require(QuestClaimService.claim(player, "relay") == QuestClaimService.Result.CLAIMED,
+                "The public server claim did not accept five real F1 Matrices");
+        require(QuestInventoryEvidence.count(inventory, relay) == 5 && flints(player) == 66,
+                "Real F1 claim consumed physical evidence or changed the existing two-flint reward");
+        require(QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, ledger.claimed(id))
+                        && QuestProjection.claimed(ledger.claimed(id)).get("grindless_thermal"),
+                "Only the successful individual claim must reveal retained T1 progress");
+        require(QuestClaimService.claim(player, "thermal") == QuestClaimService.Result.ALREADY_CLAIMED
+                        && flints(player) == 66,
+                "Chapter migration paid a retained T1 claim twice");
+        require(!QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, ledger.claimed(UUID.randomUUID())),
+                "Another player inherited this native F1 chapter");
+        QuestProgress restored = QuestProgress.load(ledger.save(new CompoundTag()));
+        require(restored.claimed(id).equals(ledger.claimed(id))
+                        && QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, restored.claimed(id)),
+                "Native ledger serialization lost the physical exit or historical progress");
+        require(QuestClaimService.claim(player, "relay") == QuestClaimService.Result.ALREADY_CLAIMED
+                        && flints(player) == 66 && QuestInventoryEvidence.count(inventory, relay) == 5,
+                "Repeated native claims duplicated rewards or consumed Matrix evidence");
+        Grindless.LOG.info("WORKSHOP-INTERFACES-QUEST-F1-OK");
+    }
+
+    private static int flints(FakePlayer player) {
+        int count = 0;
+        for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
+            ItemStack stack = player.getInventory().getItem(slot);
+            if (stack.is(Items.FLINT)) count += stack.getCount();
+        }
+        return count;
     }
 
     private static void require(boolean condition, String failure) {

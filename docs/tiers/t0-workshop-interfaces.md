@@ -218,12 +218,37 @@ The same existing smoke carrier also invokes the console/permission-4-only
 `WorkshopInterfaceChecks` class uses a dedicated non-OP `FakePlayer`, actual
 registered tank/controller/port entities and actual item/fluid capabilities.
 Bucket actions cross `BlockState.use` and the packaged `@ExpectPlatform` binder.
-Only passed predicates log the nine `WORKSHOP-INTERFACES-*` markers: whole
+Only passed predicates log the twelve `WORKSHOP-INTERFACES-*` markers: whole
 fill/empty, 500 mB refusal, simulation/indices/hot/tag/native-gas handling,
 creative and full-inventory delivery, actual filled drop and `BlockItem.useOn`
 replacement, native quota/alias bounds, same-position controller replacement,
 retired handler/access/batch rejection, synchronous callback/conduit refund and
 fresh rebinding.
+
+Integrated qualification preserves the real standalone fixture failures:
+constructing new intrusive block/item holders after vanilla bootstrap is frozen,
+and doing so before bootstrap is rejected as `Not bootstrapped`. No registry flag,
+Unsafe allocation, fake item or production bypass is used to make that green.
+The existing probe now also checks the **actual six registered port blocks**'
+facing-only states and every rotated collision, both actual paid legacy Guide
+recipients' blocked/exactly-once settlement and cleared owners, and the **public
+server claim** with registered F1/F2/malformed/untagged Matrices, the real held
+Quest Book, unchanged evidence, exact reward and per-player chapter/ledger.
+All original assertions are retained across the proper pure/native boundaries.
+The Guide check invokes the same actual selection/settlement methods as the
+original standalone check; staged paid progress is not a claim about earning work.
+The claim check round-trips the real ledger format in memory, not a server restart.
+
+These add `WORKSHOP-INTERFACES-PORT-GEOMETRY-OK`,
+`WORKSHOP-INTERFACES-LEGACY-GUIDE-OK` and
+`WORKSHOP-INTERFACES-QUEST-F1-OK` to the original23-marker isolated scenario,
+for **26 required markers** with unchanged timeout and the same single runner.
+Two extra process cells and all their adjacent cells must already be empty,
+loaded and in bounds. The dedicated non-OP profile must have no prior claims;
+the probe refuses an existing ledger instead of clearing or restoring it.
+These registered-object predicates remain **NOT EXECUTED until Phase B runs the
+ordinary isolated `workshop-ports` smoke on the exact generated checkpoint**.
+A green common/component gate does not discharge them or the graphical gate.
 
 The probe refuses nonempty/unloaded/out-of-border reserved cells, foreign item
 entities in its drop area, OP/online-player profile reuse, disabled tile drops or

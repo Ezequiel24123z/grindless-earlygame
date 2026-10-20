@@ -7,12 +7,8 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -23,18 +19,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-/** Real process completion using an isolated item-ID fixture; not a claim about the Guide's client behavior. */
+/** Paid-owner selection with native vanilla inputs; registered Guide settlement belongs to WorkshopInterfaceChecks. */
 public final class VerifyLegacyGuideMachine {
 
     private static int checks;
-    private static Item guide;
 
     public static void main(String[] args) throws Exception {
         SharedConstants.tryDetectVersion();
-        ResourceLocation id = new ResourceLocation("grindless", "field_guide");
-        guide = BuiltInRegistries.ITEM.containsKey(id) ? BuiltInRegistries.ITEM.get(id)
-                : Registry.register(BuiltInRegistries.ITEM, id, new Item(new Item.Properties()));
-        // Register the isolated native fixture before vanilla freezes intrusive holders.
         Bootstrap.bootStrap();
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
         for (ProcessMachineKind kind : List.of(ProcessMachineKind.ASSEMBLY_BENCH, ProcessMachineKind.ASSEMBLER)) {
@@ -46,33 +37,9 @@ public final class VerifyLegacyGuideMachine {
             eq("partial paid legacy work still resolves its exact old row", owner, recipe(partial).id());
             eq("partial paid work retains its existing progress", legacy.durationTicks() / 2.0,
                     partial.inspectionProgress());
-
-            ProcessMachineBlockEntity completed = machine(kind, owner, legacy.durationTicks() * 3.0 + 0.5);
-            supply(completed, 4);
-            ProcessRecipe resumed = recipe(completed);
-            int output = kind.menuKind().inputs();
-            for (int slot = output; slot < completed.getContainerSize(); slot++) {
-                completed.setItem(slot, new ItemStack(Items.STONE, 64));
-            }
-            check("full output blocks the real old batch", !complete(completed, resumed));
-            eq("blocked output does not consume paper", 4, completed.getItem(0).getCount());
-            eq("blocked output retains all paid work", legacy.durationTicks() * 3.0 + 0.5,
-                    completed.inspectionProgress());
-            for (int slot = output; slot < completed.getContainerSize(); slot++) {
-                completed.setItem(slot, ItemStack.EMPTY);
-            }
-            check("the repaired old job settles exactly once", complete(completed, resumed));
-            eq("exactly one actual legacy item is delivered", 1, completed.getItem(output).getCount());
-            check("the delivered item resolves the old stable ID", completed.getItem(output).is(guide));
-            eq("one batch spends exactly two paper", 2, completed.getItem(0).getCount());
-            eq("one batch spends exactly one stick", 1, completed.getItem(1).getCount());
-            eq("successful migration clears even oversized paid progress", 0.0, completed.inspectionProgress());
-            CompoundTag saved = completed.saveWithoutMetadata();
-            eq("successful migration clears the saved work owner", "", saved.getString("WorkRecipe"));
-            eq("successful migration clears the cached saved selection", "", saved.getString("Recipe"));
-            ProcessRecipe next = recipe(completed);
-            check("remaining ingredients cannot start another retired Guide",
-                    next == null || !LegacyGuideAssembly.retired(kind.family(), next.id()));
+            eq("the fallback retains the exact registered output ID", "grindless:field_guide",
+                    legacy.itemOutputs().get(0).id());
+            eq("the fallback declares one Guide, never a substitute item", 1, legacy.itemOutputs().get(0).count());
 
             ProcessMachineBlockEntity fresh = machine(kind, owner, 0);
             supply(fresh, 2);
@@ -88,7 +55,8 @@ public final class VerifyLegacyGuideMachine {
             missing.setItem(0, new ItemStack(Items.PAPER, 2));
             check("paid work never substitutes for missing physical inputs", recipe(missing) == null);
         }
-        System.out.println("ALL LEGACY GUIDE MACHINE CHECKS PASSED (" + checks + ")");
+        System.out.println("ALL LEGACY GUIDE SELECTION CHECKS PASSED (" + checks
+                + "); actual registered one-time settlement remains required in workshop-ports native probe.");
     }
 
     private static void supply(ProcessMachineBlockEntity machine, int paper) {
@@ -114,12 +82,6 @@ public final class VerifyLegacyGuideMachine {
         Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
         method.setAccessible(true);
         return (ProcessRecipe) method.invoke(machine, List.<FluidInsert.Source>of());
-    }
-
-    private static boolean complete(ProcessMachineBlockEntity machine, ProcessRecipe recipe) throws Exception {
-        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("complete", ProcessRecipe.class, List.class);
-        method.setAccessible(true);
-        return (boolean) method.invoke(machine, recipe, List.<FluidInsert.Source>of());
     }
 
     private static void check(String label, boolean passed) {
