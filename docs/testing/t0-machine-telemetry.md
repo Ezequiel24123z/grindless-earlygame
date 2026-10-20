@@ -110,6 +110,24 @@ mutate its files. The coordinator composes these exact dependencies before the
 one final build and focused test execution. Recipe generation, NBT layouts,
 formation, transfer and execution remain owned by their original authorities.
 
+### Produced-fluid qualification blocker found in the consumed API
+
+Direct source reading of `164ee9a` finds a distinct native issue, reported to
+the infrastructure author and coordinator before qualification.
+`workshopProducedFluid()` unconditionally reserves
+`ProcessLookup.primaryFluidTarget(...)`. Without complete item inputs that
+lookup returns the family preload target, not zero. For a completed Settling
+batch with empty input slots, 750 mB actual water and 750 mB produced quota, the
+1000 mB preload target makes the exposed output slice empty. The existing
+`pushProducedFluid()` path instead reserves zero when no recipe is selected.
+
+This is a source-bound inconsistency, **not an executed native failure**.
+Infrastructure must repair/verify the no-input 750/750 case in its native
+getter/probe before certifying the output hatch. The overlay continues to use
+the actual getter rather than duplicating or hiding its reservation policy.
+No API signature change is required; its later repair can be composed without
+inventing a different overlay-only output amount.
+
 ## Native equivalent and enable method
 
 This is **Grindless native inspection**, not a Jade plugin. It is off by
@@ -226,7 +244,7 @@ multiplayer or retained-world acceptance.
 | Category | Final source handoff |
 | --- | --- |
 | COMPLETED | Baseline/native-authority inventory; immutable DTO/query/codec; original opt-in native channel and font/paged HUD; actual unified-structure/failing-cell/port/shared-store adapter; localized text and authored synthetic/range/rate/lifecycle/rotated-port/binding cases; cheap documentation/JSON/source-key checks |
-| BLOCKED | Executable qualification is intentionally centralized on the coordinator's composed freeze; this worker has no JVM lease. No remaining API guess or missing implementation dependency is hidden as a pass |
+| BLOCKED | The consumed `164ee9a` produced-fluid no-input reservation inconsistency needs the infrastructure follow-up/probe. Executable qualification is centralized on the coordinator's composed freeze; this worker has no JVM lease. Neither gap is a pass |
 | NOT EXECUTED | Java/Forge build, executable Java cases, new native-binding production boot without Jade, real rendering |
 | NEEDS HUMAN VALIDATION | In-world readability, useful amount of detail, actual client interaction and the existing manual campaign |
 | NEEDS MY DECISION | None in this worker lane; the parent owns dependency/licence selection |
