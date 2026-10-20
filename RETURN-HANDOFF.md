@@ -2,23 +2,55 @@
 
 ## New T0 experience programme
 
-ADR-0161–0163 and the [new executable plan](plan/feature-t0-experience-1.md)
-now supersede the previous next-work queue, not its proof. The owner requires
-expanded teaching quests/Guide migration, physical barter, tanks/hatches,
-inspection and audiovisual coherence before the first longitudinal run.
+**Implemented, automatically/native qualified and installed; graphical gate
+BLOCKED.** The [executable plan](plan/feature-t0-experience-1.md) is not a claim
+that the first longitudinal run can start. Current source/runtime is exact
+F `298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4/2305405 bytes,
+ZIP3e5ad1fb/1869976 bytes. Read the
+[Prism delivery and first smoke actions](docs/testing/t0-experience-prism-deployment.md).
 
 | Category | Current new-wave state |
 | --- | --- |
-| COMPLETED | Verified clean mainb8bd5e8, personal remote and actual stopped747/c08/9cee installation; source-based inventory, shared contracts and isolated feature ownership established. |
-| BLOCKED | Actual required graphical client/world smoke: coordination UI does not expose the remote PC client. Owner was asked for the authorized path and is unavailable; that response does not waive the gate. Safe code work continues. |
-| NOT EXECUTED | New integrated build/package/deployment, controlled client/world smoke and normal longitudinal campaign. The campaign must not start yet. |
+| COMPLETED | Implemented46 quests/32 T0/14 gated T1,20 lessons/shared six-port instruction, Guide migration,17 barter offers/cost ledger, tank/four-role six-variant hatches, optional F8 inspection, physical sound and deterministic visuals. Actual full52/backend776, affected2088/package88/native26 pass. Exact F DevDeploy/Inspect/idempotency and preservation pass. These are scoped engineering results, not whole-T0/human completion. |
+| BLOCKED | Required actual graphical new/backed-up existing-world, input, HUD, audible lifecycle and save/reconnect smoke. RDP is disabled/no authorized graphical service was found; owner unavailability does not waive the gate. No code/automated/native/hosted failure remains open in this delivered candidate. |
+| NOT EXECUTED | Controlled graphical smoke, multiplayer/client interaction, human review and normal longitudinal campaign; no release/tag, new main merge, T0 acceptance/freeze or T1 chain. |
 | NEEDS HUMAN VALIDATION | Final art/audio/fatigue, quest clarity, exact pacing/prices, ergonomics and enjoyment; no automatic pass is claimed. |
 | NEEDS MY DECISION | None for assigned reversible scope. No new currency or starter nerf is selected; material dependency/license/migration changes remain gated. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing secure sound access and local visual runtime are reused; actual authorized graphical client access remains to be established. No credential change/value is requested or committed. |
 | COST / BILLING RISK | Six actual sound POSTs/HTTP200/no retry or ambiguity, about720 estimated credits. Two families selected, both fire candidates rejected in favor of native furnace feedback without reroll. New visual inference0; demonstrated state-mask issue is fixed deterministically. No paid images/new models/reset of old ledgers. |
-| DEPLOYED STATE | Previous747/c08/9cee remains stopped and unchanged at intake. No experience-branch code is claimed installed. |
+| DEPLOYED STATE | Owned Grindless-T0-Dev is left stopped on exact F/95bf47c4/3e5ad1fb. Deploy/Inspect/repeat are Deployed/VerifiedStopped/Unchanged, zero downloads. At21:39:19Z six original files/two Dev metadata hashes are unchanged;21:44:11Z confirms no protected Dev game paths before/after and0Java/Python. Old player world remains unopened/uncopied. |
+
+The coordinator independently hash-verifies the closed52-suite receipt and both
+raw streams, all26 primary-log predicates exactly once, normal natural save/stop
+and the exact deployed ZIP. Source-bound
+[Phase A](docs/testing/t0-experience-source-qualification.md) and
+[Phase B](docs/testing/t0-experience-package-native.md) preserve every earlier
+red, including failed fixture setup/observation, intrusive standalone attempts,
+economic byte-order drift and the full batch timeout. No budgets or expectations
+are relaxed.
+Fresh exact-F push39501647923 and PR39501654467 both finish SUCCESS:
+verify, Windows tooling and all six native shards each,16 actual green jobs.
+Redundant evidence-only parent CI39501816859 is cancel-requested only after
+executable equality; its cancellation and all historical reds stay distinct.
+
+The new [PR56](https://github.com/Ezequiel24123z/grindless-earlygame/pull/56)
+is **draft**, with no auto-merge. Mainb8bd5e8 is the previous delivery; installed F
+and the draft's exact head are separate identities. The historical PR55 remains
+merged and is not edited or retargeted. No source lane or QA may self-resume a
+PC/deployment lease; all workers, models and build locks are released.
+
+Before any longitudinal start, the owner must perform the controlled smoke in
+the existing instance: recover/open the Quest Book, inspect the Firing/Settling
+six-port help in both renderers, exercise Shop/buckets/valid and invalid ports,
+enable F8 inspection, check actual audio/reload and save/reconnect. Use a separate
+diagnostic world/backed-up upgrade copy, not the original player world. Subjective
+pacing, exact prices/time, fatigue, clarity, ergonomics and fun remain human
+judgments; no final-readiness phrase is substituted for the missing gate.
 
 ## Previous testing delivery
+
+Everything below retains the previous747 source/time boundary. It is historical
+evidence, not the currently installed runtime or a re-opened work queue.
 
 **T0 engineering testing candidate747 is qualified, deployed and stopped.**
 Human appearance/listening, first-quest interaction and the campaign remain the

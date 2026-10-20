@@ -24,7 +24,10 @@ Coordination follows [AGENTS](../AGENTS.md) and
 own bounded implementation/check execution with explicit files and input revisions.
 ADR-0147 selects Sol 6.1 for the next isolated session; previous Astra reviews remain
 historical evidence, not a requirement to restore that leader.
-The currently deployed qualified engineering baseline is747ebca/c08;1389/559 remain historical.
+The current installed qualified experience runtime is298988d/95bf47c4;
+747/c08 and1389/559 are historical. Read the
+[exact Prism handoff](testing/t0-experience-prism-deployment.md); it is still not
+a graphical/client or human longitudinal pass.
 The new [experience plan](../plan/feature-t0-experience-1.md) under ADR-0161
 explicitly opens bounded T0 quest/Guide/recovery economy/tank/interface/inspection/
 physical sound/visual work. It does not authorize a generic engine rewrite or

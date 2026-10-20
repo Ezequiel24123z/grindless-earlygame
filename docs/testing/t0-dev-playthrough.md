@@ -1,15 +1,13 @@
 # T0 development playthrough protocol
 
-**PREPARATION ONLY. No client smoke or longitudinal playthrough has been executed
-by this checkpoint, and starting the longitudinal save is not authorized.**
-This protocol implements the reporting portion of the owner's 2026-10-20 T0
-experience directive, not its gameplay features or acceptance gate.
-
-Documentation baseline: `b8bd5e885aef598bf888d7e390b297a34cbb7d52` on `main`.
-The [validation ledger](latest-validation.md) records the older qualified runtime
-`747ebcacdb063f6faa3c69c7eb9b45c407f32bdd` and its installed artifacts. That receipt
-is historical, source-bound evidence, not an inspection of the upcoming integrated
-experience candidate. No future feature, installed revision or human pass is inferred.
+**Technical/native candidate installed; required graphical smoke BLOCKED.**
+No client smoke or longitudinal playthrough has been executed, and starting the
+longitudinal save is not authorized. Exact F is documented in the
+[Prism delivery](t0-experience-prism-deployment.md),
+[source qualification](t0-experience-source-qualification.md) and
+[native package qualification](t0-experience-package-native.md).
+The original documentation baseline was mainb8bd5e8/installed747; its checkpoint
+disclosure below remains historical rather than a current missing-feature list.
 
 ## Authorities and boundaries
 
@@ -22,17 +20,17 @@ start; this document neither waives a required gate nor opens T1 implementation.
 The [README](../../README.md), [process definitions](../PROCESSES.md),
 [machine definitions](../MACHINES.md) and live catalogues remain authoritative.
 In particular, [QuestCatalogue](../../common/src/main/java/io/github/ezequiel24123z/grindless/quest/QuestCatalogue.java)
-has 26 tasks on this baseline, including later-tier tasks. The 31 milestones below
-are the requested observation route, **not 31 already implemented quests, event IDs
-or accepted unlock rules**. Bind actual quest/process IDs after the feature streams
-are integrated. Item possession alone does not prove a machine operated.
+now has46 tasks:32 T0 and14 separately gated T1, including20 reward-free lessons
+and all26 preserved original IDs. The31 milestones below are the human observation
+route, not another runtime catalogue or proof that a machine operated.
 
 [ADR-0159](../DECISIONS.md#adr-0159--start-t0-with-one-free-generous-starter-quest)
 settles the free finite starter. Older no-kit entry prose in the
 [survival checklist](t0-survival-acceptance.md) is historical, not the current entry
 requirement. Its retained-world precautions remain useful. Likewise, the requested
-Guide deprecation, expanded chapters, shop, hatches and overlay must be demonstrated
-on the final source; this protocol does not declare them implemented.
+Guide migration, expanded chapters, barter and hatches have actual source/contract/
+native evidence on F; the optional overlay has its stated source/codec/loader scope.
+Actual client rendering and interaction still require the controlled smoke.
 
 The T0 exit remains the physical five-F1-Relay-Matrix batch, followed by the final
 T0 quest and a separate T1 chapter/tab. Viewing that transition does not authorize
@@ -56,20 +54,20 @@ not describe the assisted segment as no-command proof.
 
 ## Candidate identity and required gate
 
-Fill these fields before execution. `MISSING` means no applicable evidence is
-recorded; `PARTIAL` means only the explicitly named subset has evidence. Neither
-means PASS. The table below starts with baseline context only.
+Fill the remaining human-run fields before execution. `MISSING` means no applicable
+observation, not necessarily missing implementation; `PARTIAL` names the verified
+subset and the still-required boundary. Neither is promoted to PASS.
 
 | Identity field | Current record |
 | --- | --- |
-| Integrated candidate source and separate runtime revision, if different | MISSING |
-| Mod/pack versions, selected profile and pinned manifest/configuration revision | MISSING |
-| Built and installed JAR SHA-256; pack ZIP SHA-256 | MISSING |
-| Actual Minecraft, loader, Java and relevant optional-mod versions | MISSING; use [version authority](../../gradle.properties), not copied assumptions |
-| Non-identifying run ID, UTC observation time and observer kind (human/agent/automated) | MISSING |
+| Integrated candidate source and separate runtime revision, if different | Exact F `298988d500dccf0823fb2eab52fbe57bff8fe831`; documentation successors do not retarget the artifact |
+| Mod/pack versions, selected profile and pinned manifest/configuration revision | Mod0.1.0/pack0.1.0-t0.1, seven-pin playable/restricted-not-RC, exact F; [version authority](../../gradle.properties) |
+| Built and installed JAR SHA-256; pack ZIP SHA-256 | JAR `95bf47c4e5d08a0788095555ed38078431e8f74d8d491389b56b7539d7c91621`; ZIP `3e5ad1fbbc23d19232a589bce4430ff2bdc344d0c6776bbf71400579aab607a1` |
+| Actual Minecraft, loader, Java and relevant optional-mod versions | Forge1.20.1/47.4.23, Java17; seven pins unchanged. Client-only dependencies/rendering not launched by server proof |
+| Non-identifying run ID, UTC observation time and observer kind (human/agent/automated) | Automated F/native/deployment receipts exist; human controlled-run ID/time MISSING |
 | World kind/preset, new/existing/copied-upgrade origin and prior artifact identity | MISSING |
-| Verified backup/preservation receipt and safe rollback scope | MISSING |
-| Coordinator's source-bound gate decision and start authorization | MISSING |
+| Verified backup/preservation receipt and safe rollback scope | Six old-instance files/two Dev metadata hashes unchanged; no protected Dev game paths existed before/after. Test an old-world upgrade only on a verified copy; no downgrade compatibility is inferred |
+| Coordinator's source-bound gate decision and start authorization | Graphical gate BLOCKED; controlled smoke only, no normal longitudinal start |
 
 Forge is the baseline build target; compatible NeoForge loading is not a separate
 compiled platform or an observed pass. Record the actual supported matrix and any
@@ -77,26 +75,26 @@ compatibility claim. Never silently substitute another loader, pack or installed
 
 | Gate | Required property | Status | Evidence available / still required |
 | --- | --- | --- | --- |
-| G01 | Clean supported-loader builds, generated resources and package | PARTIAL | Baseline747 has recorded technical proof; final experience source/artifacts and applicable checks MISSING |
-| G02 | Intended revision installed in the owned development instance | PARTIAL | Historical747 deployment receipt exists; final exact JAR/ZIP and fresh read-only identity/preservation receipt MISSING |
+| G01 | Clean supported-loader builds, generated resources and package | PASS | Actual common/Forge/full52/backend776/normal generation and exact-F package88; hosted F checks have their own live result |
+| G02 | Intended revision installed in the owned development instance | PASS | Exact F/95bf/3e5a Deployed/VerifiedStopped/Unchanged and fresh preservation |
 | G03 | Client launch, new Superflat and Overworld creation/load, existing-world copy load | MISSING | BLOCKED / NOT EXECUTED: approved graphical access to the execution host is unavailable; source-bound graphical observations still required |
-| G04 | Quest Book immediately available and recoverable; starter safely claimable once | PARTIAL | Baseline starter contracts exist; final client full-inventory/retry/rejoin/respawn/per-player observations MISSING |
-| G05 | Standalone Guide no longer required; old Guide items harmless and progress retained | MISSING | Migration/deprecation, removed references and new/existing-world interaction required |
-| G06 | Expanded T0 route, optional branches and essential explanations in quests | MISSING | Actual chapter/quest mapping, dependency checks, discoverability and representative client reading required |
-| G07 | T1 chapter locked early and unlocked only by valid definitive T0 completion | MISSING | Negative early/wrong-rating cases and controlled physical exit/final-quest transition required |
-| G08 | Shop usable, progression-gated and without known trivial infinite profit | MISSING | Offer/balance checks, representative transactions, currency accounting and recovery required |
-| G09 | Recovery avoids permanent soft locks without resetting one-time claims | MISSING | Books/tools/containers/currency/core/Matrix and finite-bootstrap recovery evidence required |
-| G10 | Mandatory route avoids structures/mob farms and establishes mod-owned renewables | PARTIAL | Earlier bounded source proofs exist; final graph/bootstrap reserves and changed-assumption coverage MISSING |
-| G11 | Tanks store, transfer, expose side rules and persist safely | MISSING | Final capacity/container/side/invalid-operation checks, representative unload/reload and relocation required |
-| G12 | Intended multiblocks accept approved functional ports/hatches | MISSING | Final default/substituted structures, direction/count/orientation, ownership and transfer proof required |
-| G13 | Invalid/excess/orphan interfaces rejected without lost or duplicate work | MISSING | Negative cases, invalidation/repair and lifecycle proof required |
-| G14 | Accurate basic overlay state; optional integration safe when absent | MISSING | Final provider/optional-boundary checks and client comparison with machine/contents required |
-| G15 | Every distributed sound resolves; no inappropriate generic synth remains | PARTIAL | Baseline Quern/Mixer resources have proof; final full sound/user coverage and intentional-silence audit MISSING |
-| G16 | Audio loops obey state, removal, unload, dimension, disconnect and reload lifecycle | MISSING | Applicable contract reuse/delta and representative final-client observations required |
-| G17 | Essential assets/models/localization and redistribution provenance valid | PARTIAL | Baseline asset/provenance evidence exists; final source/package checks and representative native rendering MISSING |
-| G18 | Save/reconnect preserves inventories, work, quests, tanks and structures | MISSING | Final same-version restart and authentic preserved-copy upgrade observations required; fixtures alone insufficient |
-| G19 | No credentials, account data or private host paths in source/package/evidence | MISSING | Final sanitized diff/package/evidence review required |
-| G20 | Repository/installed identities, applicable checks, failures and deferrals recorded | MISSING | Final source-bound ledger and coordinator disposition required |
+| G04 | Quest Book immediately available and recoverable; starter safely claimable once | PARTIAL | Actual contract/registered-item claim proof; client login/full-inventory/retry/rejoin/respawn MISSING |
+| G05 | Standalone Guide no longer required; old Guide items harmless and progress retained | PARTIAL | Old ID/redirect retained, recipe removed, real registered paid jobs settle once; actual legacy-item client use MISSING |
+| G06 | Expanded T0 route, optional branches and essential explanations in quests | PARTIAL |46/32/14/20 catalogue, live six-port help in both projectors and backend776 pass; client reading/input MISSING |
+| G07 | T1 chapter locked early and unlocked only by valid definitive T0 completion | PARTIAL | Actual native wrong/malformed/four/five F1, ledger/player/once-only gate pass; actual UI transition MISSING |
+| G08 | Shop usable, progression-gated and without known trivial infinite profit | PARTIAL |17 offers, physical staging/menu protocol/cycle tests and canonical ledger pass; real client menu transactions MISSING, prices remain unmeasured |
+| G09 | Recovery avoids permanent soft locks without resetting one-time claims | PARTIAL | Utility-book/claim contracts and pre-producer dirt recovery pass; actual user recovery/pacing MISSING |
+| G10 | Mandatory route avoids structures/mob farms and establishes mod-owned renewables | PARTIAL | Final canonical graph/conditional construction witness and unchanged source proofs pass; not a no-command played route or all-condition autonomy |
+| G11 | Tanks store, transfer, expose side rules and persist safely | PARTIAL | Actual native containers/side/invalid/metadata drop-replace and166 Tank checks pass; actual player-world unload/reopen/upgrade MISSING |
+| G12 | Intended multiblocks accept approved functional ports/hatches | PASS | Six real variants/four roles, rotations/collision/default contracts and actual item/fluid750 transport verified |
+| G13 | Invalid/excess/orphan interfaces rejected without lost or duplicate work | PASS | Source/JDK negatives plus real retired handler/quota/alias/controller replacement/callback-conduit compensation pass |
+| G14 | Accurate basic overlay state; optional integration safe when absent | PARTIAL |409 DTO/codec/query/absence checks and real Forge binding pass, no Jade dependency; client HUD/network comparison MISSING |
+| G15 | Every distributed sound resolves; no inappropriate generic synth remains | PASS | Four exact physical Oggs/ten events, five synth files absent, intentional silence and native aliases verified |
+| G16 | Audio loops obey state, removal, unload, dimension, disconnect and reload lifecycle | PARTIAL |101 mechanism and47+30 source/resource controls plus registration pass; audible final-client lifecycle MISSING |
+| G17 | Essential assets/models/localization and redistribution provenance valid | PARTIAL | Normal generation,25/71/281 projection, references/rights/preserved sprites pass; representative actual rendering MISSING |
+| G18 | Save/reconnect preserves inventories, work, quests, tanks and structures | MISSING | Controlled NBT/native save evidence exists, but final player save/reconnect and authentic copy-upgrade smoke NOT EXECUTED |
+| G19 | No credentials, account data or private host paths in source/package/evidence | PASS | Sanitized tracked diff, provenance whitelist and exact package checked; private logs/inventories remain outside Git |
+| G20 | Repository/installed identities, applicable checks, failures and deferrals recorded | PASS | Phase A/B/Prism handoffs bind exact F and raw proofs; all reds/cancellations/graphical gaps remain explicit |
 
 For each gate evidence entry record source, artifacts, observation time, mode,
 property, actual result, sanitized reference and limits. Reused proof keeps its
@@ -197,9 +195,10 @@ possession, quest completion and reward claim.
 
 ## Local telemetry and observation record
 
-Manual local notes are sufficient until the integrated candidate's actual dev-only
-telemetry exists and is verified. This document adds no collector, event hook,
-external analytics, gameplay reward or persistence schema. Keep raw records in
+Optional local aggregate telemetry is implemented and automatically checked.
+It is **off by default**: an operator can use `/grindless telemetry start`,
+`snapshot` and `stop` in a diagnostic run; this is not authorization to use
+commands in the later no-command campaign. Manual notes remain valid. Keep raw records in
 ignored local evidence storage; publish only reviewed, sanitized summaries/references.
 
 Use a non-identifying run ID. Bind each record to the candidate/artifacts and
@@ -214,8 +213,8 @@ for operations that are not observable; label estimates and MISSING measurements
 | Manual repetition/downtime | Crank/use actions, crafting/carry trips, work supplied where visible, forced waiting, repeated low-value actions and manual recovery. Do not sum overlapping time categories twice. |
 | Confusion/readability | Milestone, exact in-game text/state, what was misunderstood, first attempted action, resolution and whether external docs/source were needed. Note icons, native inventory/hotbar/JEI scale, lighting, rotation and color-independent cues. |
 | Blocked conditions/shortages | First occurrence, machine/process state, limiting resource/environment/output, duration, diagnostic surface, intervention and stock after recovery. Record night/restart behavior rather than assuming autonomy. |
-| Shop transactions | Actual offer/unlock, quantity, currency source, price, before/after balances, intended emergency/convenience/decorative role and suspected loop. Never use a discovered exploit to supply the accepted critical route. |
-| Recovery events | Lost book/tool/container/core/currency, depleted supplies or full inventory; safe recovery attempted, time/cost, remaining stock and whether progress/claims were preserved. No silent claim reset or diagnostic rescue. |
+| Shop transactions | Actual offer/unlock, physical payment items, price, before/after inventory, intended emergency/convenience/decorative role and suspected loop. No wallet/currency is implemented. Never use an exploit to supply the accepted critical route. |
+| Recovery events | Lost book/tool/container/core/Matrix, depleted supplies or full inventory; safe recovery attempted, time/cost, stock and progress/claim preservation. No silent claim reset or diagnostic rescue. |
 | Audio/visual comfort | One machine, identical group and mixed workshop; start/stop/falloff, seams/clipping, extended-listening fatigue, GUI contrast, state/port readability and actual display settings without device identifiers. Human judgments stay attributed as human. |
 | Save/reconnect | Before/after inventory, fluids, partial work, structure/port ownership and quest/claim state; clean stop/reopen result and upgrade-copy provenance. A same-version reopen is not upgrade proof. |
 | Final summary | Wall/active/paused totals, milestone times, optional-branch time, bottlenecks, repetition, shop use, recovery, unresolved bugs and observed T1 transition. Exact duration, balance, fun and acceptance remain human conclusions. |
@@ -248,6 +247,12 @@ Quest Book/free starter. **These are future start instructions, not permission t
 perform them now.** The initial engineering handback below changes no deployment.
 
 ### Documentation checkpoint handoff
+
+The table below is the original baseline-only documentation checkpoint, not the
+current implementation/qualification state above. Its then-unavailable YAML parser
+is subsequently replaced by an actual existing-PyYAML parse/16-field check with
+no package installation; GitHub form rendering and all graphical checks remain
+separate. Preserve those original tool failures rather than rewriting their source.
 
 | Required disclosure | This bounded checkpoint |
 | --- | --- |

@@ -4,16 +4,21 @@ version: 1
 date_created: 2026-10-20
 last_updated: 2026-10-20
 owner: Sol coordinator
-status: 'In progress'
+status: 'On Hold'
 tags: [feature, t0, quests, recovery, fluids, multiblocks, telemetry, assets, audio]
 ---
 
 # Introduction
 
-![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
+![Status: On Hold](https://img.shields.io/badge/status-On%20Hold-orange)
 
 Execute the owner's T0 experience master prompt from verified mainb8bd5e8,
-while the installed747 candidate remains untouched until a replacement qualifies.
+from the installed747 baseline. Its exact qualified replacement F is now installed;
+required graphical smoke remains blocked, not waived.
+The safe implementation, normal generation, complete automated/native/hosted
+qualification and exact Prism installation are finished. Only the explicitly
+required graphical gate prevents the longitudinal start; no new scope is invented
+to work around unavailable access.
 This plan does not initiate a normal longitudinal playthrough, release or T1 chain.
 The [starting inventory](../docs/reviews/t0-experience-inventory.md) records actual
 source evidence and missing/client-only boundaries.
@@ -60,7 +65,7 @@ source evidence and missing/client-only boundaries.
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
 | TASK-004 | Quest owner21829880 delivers source131fb08:46 tasks/32 T0/20 lessons, retained26 old IDs, exact F1/5 gate, shared teaching, both chapters, Guide migration and paid-job fallback helper. Source checks pass; executable proof is TASK-012, not implied here. Depends on TASK-001, uses TASK-005 shop client API. | Yes | 2026-10-20 |
-| TASK-005 | Economy ownerd29f53ac implements `shop/ShopNetwork.requestOpen`, `ShopAccess.open`, offers, atomic barter/menu, cycle checks, source-derived budget export and opt-in `telemetry/dev/DevTelemetry`. No wallet/mint or critical machine sale. Depends on TASK-001. | No | |
+| TASK-005 | Economy lane delivers17 native physical barter offers, pre-producer recovery, atomic menu protocol/cycle checks, canonical budget export and local aggregate telemetry. Actual5002 and integrated full-suite results pass; no wallet/mint or critical machine sale. Depends on TASK-001. | Yes | 2026-10-20 |
 | TASK-006 | Infrastructure source3564fe7 extends Basic Tank and zero-storage fixed-shape hatches, then fixes the actual reentrant stale-binding P2 and produced-water visibility. Firing slots(1,0,0)/(1,1,0), one item input/output each/min5 bricks; Trough input channel/output screen. Includes real disposable native assertions and readable UP role labels. Early Tank759 proves only its prior boundary; new executable proof is TASK-012/013. Depends on TASK-003. | Yes | 2026-10-20 |
 | TASK-007 | Inspection sourcecf57581 delivers bounded loaded-target snapshots, native optional F8 overlay, truthful faults/roles, finite exact-hit/rate/TTL/codec guards and absence safety without a Jade dependency. No global world scan. Actual Java/Forge/render qualification remains TASK-012/015. Depends on TASK-003 and TASK-006 getters. | Yes | 2026-10-20 |
 | TASK-008 | Audio source2d0e0bc preserves all physical-generation history and25-block coverage: six real HTTP200 sources, selected water/extraction, rejected fire/native furnace, five synthetic Oggs retired and old IDs retained. PS/Core guards and codec proof are real; native/Java/listening remain separate gates. Depends on TASK-001 and CON-003. | Yes | 2026-10-20 |
@@ -73,9 +78,9 @@ source evidence and missing/client-only boundaries.
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-011 | Merge preserved unit checkpoints into the new isolated integration branch. Serialize `en_us.json`, shared registration/client hooks, `GenerateAssets.java`, recipe/datagen and root docs. Preserve old keys/IDs and source/payload provenance. Depends on TASK-004 through TASK-010. | No | |
-| TASK-012 | On an explicitly owned PC root run selected quest/Heracles/Guide/economy/tank/interface/overlay/audio/asset contracts, production graph/cycle/data parity and normal generation. Fix real failures in author lanes; preserve every red/skip/cancelled attempt. Depends on TASK-011. | No | |
-| TASK-013 | Freeze the integrated revision and run supported compilation, normal generation/resource checks, package verification and the applicable native/optional-mod absence/presence mechanism smokes. Reuse unchanged prior proofs; execute the existing complete CI at this meaningful integration gate. Depends on TASK-012. | No | |
+| TASK-011 | All preserved lane histories compose into26ac/G/F, with unioned localization and shared generator/registry seams. Exact-F source and normal outputs are committed; PR56 remains draft. Depends on TASK-004 through TASK-010. | Yes | 2026-10-20 |
+| TASK-012 | Actual normal generation/full52/backend776 and affected2088 pass; native26 additionally covers registered Guide/F1/collision/P2/quota, after preserving the real headless and fixture reds. No registry flags, fake items or duplicate quantity authority. Depends on TASK-011. | Yes | 2026-10-20 |
+| TASK-013 | Exact F passes common/Forge/affected2088/package88/native26 with normal boot/stop. Fresh push39501647923 and PR39501654467 both pass verify/Windows/all six native shards,16/16. Prior unchanged mechanisms reuse their scoped proofs; no additional loader/dependency is silently claimed tested. Depends on TASK-012. | Yes | 2026-10-20 |
 
 ### Implementation Phase 4
 
@@ -83,9 +88,9 @@ source evidence and missing/client-only boundaries.
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-014 | Preserve existing Dev/save/options/keybindings/config; deploy only the exact qualified artifact, inspect/idempotency/hash-check original protected files and leave stopped. Record source/artifact/time. Depends on TASK-013. | No | |
+| TASK-014 | Exact native-qualified F ZIP is deployed/VerifiedStopped/Unchanged with six original files/two metadata hashes preserved and0Java. No protected Dev game paths existed before/after; no old world was opened/copied. PC/package/native prerequisites of TASK-013 pass; hosted CI is a separate publication gate, not a claimed pre-deploy pass. | Yes | 2026-10-20 |
 | TASK-015 | Perform controlled actual client launch and new/backed-up existing-world smoke: book, chapters/locked gate, shop, tank transfers/persistence, legacy/default and hatch shapes, invalid ports, overlay, sound transitions/reload, reconnect and controlled valid T0 gate. Commands are smoke only. Depends on TASK-014 and a real authorized graphical access path. | No | |
-| TASK-016 | Record every required gate as passed or explicitly blocked; report the requested categories, exact installed state, spend and first human actions. Do not start the longitudinal run or label unobserved requirements deferred without owner approval. Depends on TASK-015. | No | |
+| TASK-016 | Record all20 gate dispositions, exact installed F/95bf/3e5a, actual failures/passes, costs and first controlled actions in the protocol/Prism/return handoffs. TASK-015 is explicitly BLOCKED, not waived or called passed; report that disposition rather than starting the campaign or self-approving a deferral. | Yes | 2026-10-20 |
 
 ## 3. Alternatives
 

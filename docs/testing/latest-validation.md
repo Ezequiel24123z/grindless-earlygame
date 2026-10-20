@@ -1,5 +1,39 @@
 # Current T0 rework validation
 
+## Exact-F engineering delivery and actual hosted completion
+
+[Phase A](t0-experience-source-qualification.md) and
+[Phase B](t0-experience-package-native.md) qualify the full experience candidate.
+The coordinator independently verifies closed receipts/raw hashes, the52 suite
+headers and pass marker, and all26 native predicates exactly once with natural
+save/stop. Both fixtures' prior native reds and all previous observer/tooling
+failures remain; no receipt or deadline is rewritten.
+
+Exact source/runtime `298988d500dccf0823fb2eab52fbe57bff8fe831`:
+JAR2305405 bytes/SHA-256
+`95bf47c4e5d08a0788095555ed38078431e8f74d8d491389b56b7539d7c91621`,
+ZIP1869976 bytes/SHA-256
+`3e5ad1fbbc23d19232a589bce4430ff2bdc344d0c6776bbf71400579aab607a1`.
+Actual Sync/DevDeploy/Inspect/repeat of that same native-qualified ZIP pass;
+six original-instance/save files and two Dev metadata hashes are unchanged.
+No protected Dev game paths existed before/after;0Java/Python remains, original
+clone70901 untouched, no old world opened/copied. Read
+[the exact Prism evidence](t0-experience-prism-deployment.md); preservation is not
+client migration acceptance.
+
+Fresh exact-F [push39501647923](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39501647923)
+and [PR39501654467](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39501654467)
+both finish success: verify, Windows tooling and all six native shards each,
+16 actual green jobs, including the current Linux/SH gate. The redundant parent
+documentation run39501816859 is cancel-requested after executable equality;
+its cancellation is not a pass. Proof-only documentation successors reuse F's
+unchanged executable/data inputs under ADR-0140 and receive direct links/JSON checks.
+
+PR56 remains draft. Required actual graphical new/old-copy world, menu/input,
+HUD, audible lifecycle and save/reconnect smoke remains BLOCKED/no waiver.
+No `TECHNICALLY PREPARED FOR LONGITUDINAL HUMAN VALIDATION`, normal campaign,
+release, acceptance/freeze or T1 development follows from these engineering passes.
+
 ## Exact-F Phase B — real package and native26 pass
 
 [Complete package/native evidence](t0-experience-package-native.md) identifies

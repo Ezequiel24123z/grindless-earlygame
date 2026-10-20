@@ -1,8 +1,41 @@
 # Active orchestration handoff
 
-Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC GATES HELD**.
+Updated: 2026-10-20. Product gate: **EXPERIENCE CANDIDATE DEPLOYED; REQUIRED GRAPHICAL GATE BLOCKED**.
 
 ## Active owner-directed follow-up
+
+**Current delivery is exact F, not the old747 or a rebuilt documentation JAR.**
+`298988d500dccf0823fb2eab52fbe57bff8fe831`, JAR95bf47c4/2305405 bytes and
+ZIP3e5ad1fb/1869976 bytes are now installed in `Grindless-T0-Dev`.
+Coordinator Sync/Deploy/Inspect/repeat return `VerifiedDetached/Deployed/
+VerifiedStopped/Unchanged`, with no downloads or new pins.
+Postcheck21:39:19Z confirms six original-instance/save files and two Dev metadata
+files unchanged, exact installed hash and0Java/Python. The21:44:11Z addendum
+confirms no protected Dev game paths existed before or after. This is preservation,
+not an old-world/client migration pass.
+
+Read [the exact Prism handoff](../docs/testing/t0-experience-prism-deployment.md),
+[Phase A](../docs/testing/t0-experience-source-qualification.md) and
+[Phase B](../docs/testing/t0-experience-package-native.md).
+Actual full52/backend776 and affected2088/package88/native26 pass. The parent
+independently verifies the closed raw outputs and all26 primary-log predicates
+exactly once with natural save/stop; original reds remain preserved.
+Both quest renderers use the same six-port roles/positions/faces/limits/Atlas
+teaching. New PR56 remains draft; no release, ready promotion or main merge is
+implied by installation. Fresh exact-F workflows39501647923/39501654467
+both finish SUCCESS: all16 actual verify/Windows/six-native-shard jobs pass.
+The redundant documentation-branch cancellation is not promoted to pass.
+
+**Do not start the longitudinal game.** Actual graphical launch/new and backed-up
+old-world/input/HUD/audio/save-reconnect checks remain required and blocked by
+unavailable authorized graphical access. No service/security/login workaround
+was enabled. Owner unavailability is not a waiver. All execution leases are
+released; no worker may restart old GOs or redeploy using a default inventory.
+
+## Preserved experience execution timeline
+
+The source/time-bound snapshots below retain their original pending state.
+They do not override the current deployed F or reassign a released lease.
 
 **New master scope active: T0 experience before longitudinal play (ADR-0161–0163).**
 Use [the executable plan](../plan/feature-t0-experience-1.md) and

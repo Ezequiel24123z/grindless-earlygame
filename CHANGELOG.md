@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Deploy the exact native-qualified experience candidate F to Prism Dev.**
+  Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
+  Deploy/Inspect/repeat pass with zero downloads. Verify six original files,
+  both Dev launcher metadata hashes and zero Java/Python; no existing Dev game
+  data was present or erased. Publish the shared six-port quest verification
+  and exact first smoke actions without claiming a graphical, migration,
+  longitudinal, art/audio or release pass.
 - **Qualify the exact repaired F package and real26-marker native workshop.**
   Source/runtime298988d builds playable88/88, preserves seven pins and passes
   raw JAR/ZIP inspection. Actual common/Forge0 and targeted ports2088 precede

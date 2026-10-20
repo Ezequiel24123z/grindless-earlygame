@@ -5,6 +5,28 @@ The new owner master prompt supersedes the previous engineering-only queue, not
 the save, licensing, privacy or human-acceptance boundaries. This inventory records
 the starting evidence; implementation status belongs to the active plan and handoff.
 
+## Current outcome after implementation
+
+The deployed runtime is exact F `298988d500dccf0823fb2eab52fbe57bff8fe831`,
+not the747 intake below. See the
+[Prism delivery](../testing/t0-experience-prism-deployment.md) for identity,
+preservation and the still-blocked graphical gate.
+
+| Area | Implemented and automatically observed | Remaining boundary |
+| --- | --- | --- |
+| Quests/Guide |46 stable tasks,32 T0/14 gated T1,20 lessons; six-port teaching shared by native/Heracles; harmless old Guide and paid-job compatibility. Full contracts/backend776 and actual registered F1/Guide native predicates pass | Actual rendered reading/input, multiplayer and player save/reconnect |
+| Economy/recovery |17 physical barter offers, pre-producer dirt recovery, complete inventory settlement/cycle checks, canonical ledger and opt-in aggregate telemetry; no wallet/advanced machine sale or arbitrary starter/rate change | Prices/pacing, actual menu packets/input and user recovery ergonomics |
+| Tank/interfaces | Existing16B tank, real containers/metadata custody; six zero-storage variants/four roles, same-owner quota/rebind/fault contracts. Native26 includes invalid roles,750 recovery, actual callback/conduit compensation and filled-item replacement | Graphical placement/clarity and real player-world reopen/upgrade |
+| Inspection | Original optional F8 snapshot/codec/query/HUD with no Jade dependency;409 automatic checks and dedicated-server binding | Actual HUD rendering, network interaction and comfort |
+| Audio | Five synth files removed, old IDs retained, noticed Quern/Mixer/water/extraction plus native fire/interaction aliases;101 mechanism and47+30 resource/control checks | Audible lifecycle, falloff, seams, mixed factory and fatigue |
+| Visuals |62 non-color-only state fronts, four shared role overlays; real25-block/71-model/281-variant projection, deterministic generation,13 protected sprites and source contact sheets | Actual Minecraft inventory/JEI/world/light/port-label quality |
+| Build/deploy | Normal generation, complete52 suites, package88, one real required26-marker scenario and exact-ZIP DevDeploy/Inspect/idempotency; old six files/two metadata hashes unchanged | Required graphical gate BLOCKED, no final longitudinal-readiness claim |
+| Licensing/loaders | Original adaptation, no copied engine/Jade jar/new mandatory mod; Forge1.20.1/Java17 compiled and booted | Historical NeoForge soft compatibility is not a newly executed loader pass |
+
+This is not proof that T0 is balanced, fun, artistically final, economically
+proven, longitudinally stable or release-ready. The inventory below remains the
+starting record, not a list of still-missing implementations.
+
 ## Baseline and observation limits
 
 | Boundary | Evidence | Classification |
