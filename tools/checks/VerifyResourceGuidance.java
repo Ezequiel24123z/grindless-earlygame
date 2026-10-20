@@ -12,6 +12,7 @@ import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
+import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
@@ -700,12 +701,35 @@ public final class VerifyResourceGuidance {
         equal("JEI does not invent registered fluids", false, jei.contains("DeferredRegister") || jei.contains("new ForgeFlowingFluid"));
         String bootstrap = lang.get("gui.grindless.guide.bootstrap.body").getAsString();
         String renewables = lang.get("gui.grindless.guide.renewables.body").getAsString();
+        QuestCatalogue.Task starter = QuestCatalogue.byId(QuestCatalogue.STARTER_SUPPLIES);
+        equal("the guide's starter is the first canonical quest", starter.id(), QuestCatalogue.tasks().get(0).id());
+        equal("the starter has an explicit free goal", QuestCatalogue.Evidence.FREE, starter.evidence());
+        equal("the starter has no hidden quest prerequisite", List.of(), starter.requires());
+        equal("the first quest is ready without physical evidence", QuestLogic.Status.CLAIMABLE,
+                QuestLogic.consider(starter, Set.of(), false));
+        equal("a recorded starter claim cannot become ready again", QuestLogic.Status.CLAIMED,
+                QuestLogic.consider(starter, Set.of(starter.id()), false));
+        Set<String> basicSupplies = Set.of("minecraft:cobblestone", "minecraft:oak_log", "minecraft:bread",
+                "minecraft:brick", "minecraft:clay_ball", "minecraft:sand", "minecraft:charcoal",
+                "minecraft:iron_ingot", "minecraft:water_bucket");
+        equal("the advertised starter kit has actual rewards", false, starter.rewards().isEmpty());
+        equal("starter rewards remain basic supplies, not machines, cores, insulators or Matrices", true,
+                starter.rewards().stream().allMatch(reward -> basicSupplies.contains(reward.itemId())));
+        equal("the guide names the actual free task and explicit claim action", true,
+                bootstrap.contains(lang.get("gui.grindless.quest.task." + starter.id()).getAsString())
+                        && bootstrap.contains(lang.get("gui.grindless.quest.claim_free").getAsString()));
+        equal("the guide describes one finite, explicitly claimed kit per player", true,
+                bootstrap.contains("each player can explicitly claim one finite kit")
+                        && lang.get("gui.grindless.quest.starter_policy").getAsString()
+                        .contains("One finite starter kit per player, claimed explicitly"));
+        equal("the finite kit does not replace construction or the renewable machine loop", true,
+                bootstrap.contains("Construct the Crank Handle, Hand Pump and ceramic workshop")
+                        && bootstrap.contains("establish geological collection, bioculture and biomass power"));
         equal("guide does not prescribe an initial glass/copper/redstone kit", false, bootstrap.startsWith("Bring"));
         equal("guide leads with mod-owned recurring sources", true, renewables.contains("Geological Collector")
                 && renewables.contains("Biocultivator") && renewables.contains("Biomass Dynamo")
                 && renewables.contains("Hand Pump")
                 && renewables.contains("Use this machine loop for continuing supply instead of depending on vanilla cobblestone generators or tree farms"));
-        equal("natural instructions still provide no free kit", true, bootstrap.contains("No starter kit is provided"));
         equal("natural instructions retain night and restart limits", true,
                 renewables.contains("Do not assume the line will keep running at night or resume on its own after restarting"));
         for (String page : List.of("bootstrap", "workshop", "settling", "relay", "renewables")) {

@@ -1,5 +1,23 @@
 # Current T0 rework validation
 
+## Actual039 PC contracts and the source fix for its two guidance reds
+
+The same isolated PC owner runs039 once: common/Forge/backend/classpath and
+eight-source javac pass; Heracles454, Quest421, Claims206, required
+`VerifyPersistence`, Sustainability1945, Registry87 focal/1106 full and full
+Assets pass. Quern84 is reused from16d after18 relevant input identities and the
+classpath match, not executed again. T0 and Guidance reproduce the two exact
+failures below; receipt:
+`4d268e352c2d7287952903c46d6a11fde05e3452de5e088ddf2d55f64119a54a`.
+Owner closes04:23:44Z with0Java/clean039 and preserved original clone/assets.
+
+Fix34407fb replaces the obsolete no-kit assumption with ten explicit free/
+finite/one-time/renewable-loop contracts. `checkedAsset` remains byte-identical.
+Only `assets/grindless/guidance/resources.json` requires normal regeneration via
+`tools/generate-resource-guidance.ps1`, then `-CheckOnly`, resource rebuild and
+the affected reruns. The new expected document content digest3d9abe5c is not
+a raw-file SHA and must never be pasted into an old evidence record.
+
 ## Real039 contract failures and portable sound guard repair
 
 Run39367863670 on039 fails two Foundation suites, not just the earlier sound

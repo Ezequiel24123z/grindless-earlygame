@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Replace the obsolete no-kit assertion with the actual free-entry contract.**
+  Integrate34407fb: check the first FREE/no-prerequisite/one-time quest and honest
+  finite-kit guidance while keeping canonical generated-data equality unchanged.
+  Actual039 PC compilation/Heracles454/Quest421/Claims206/persistence/
+  sustainability1945/registry87+1106/full-assets pass; the two guidance reds are
+  retained. Regenerate only the affected runtime guidance through the existing
+  writer before final package/boot, with no replay of unrelated successful suites.
 - **Repair the actual Linux sound byte-pin mismatch without weakening hashing.**
   Integrate697: test-only complete LF/CRLF SHA-256 pairs for the three frozen
   legacy files, real raw-Git fixtures and17 negative mutations. Keep original

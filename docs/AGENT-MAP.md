@@ -490,9 +490,12 @@ runtime cache. `client/ResourceGuidanceClient` is the shared native formatter; F
 Field Guide, Atlas, machine and quest displays reuse those adapters.
 `tools/generate-resource-guidance.ps1`/`.sh` use the shared canonical exporter/bootstrap;
 `VerifyResourceGuidance` checks projection/runtime/drift boundaries. The real resource at
-`assets/grindless/guidance/resources.json` is generated from the6d canonical Result; its
-generation/parity and common/Forge compile pass, while rated/default Matrix lookup checks
-are being corrected without changing the authority. Its sidecar reuses complete implementation identities and
+`common/src/main/resources/assets/grindless/guidance/resources.json` must be regenerated
+from the current canonical Result after quest reward/access edges change; run the existing
+writer, then its `-CheckOnly` mode, never repair the fingerprint by hand or relax equality.
+The integrated03970 CI exposes the stale asset separately from the obsolete no-kit prose
+assertion; [the starter repair record](testing/t0-starter-kit.md#integrated03970-executable-red)
+retains the exact failures and execution ownership. Its sidecar reuses complete implementation identities and
 projector-class hashes separately from the stable declaration fingerprint; do not omit
 executed helpers or copy acceptance flags into the runtime resource.
 Canonical Result metadata is the only declaration authority.
