@@ -79,6 +79,11 @@
     "batch_adaptation": "Add only first-fluids and first-harness to both existing fixed isolation lists. Extend the existing fake-boot contracts for isolated-only rejection, explicit mixed/default-all skip and all-isolated rejection. Preserve legacy selectors, CDPATH, environment, one-boot dispatch and exit propagation.",
     "automatic_contract_entry": "VerifyFirstObservationFixtures is discovered by the existing run-checks Java inventory and calls the paired source-only helper once. VerifySmokeHarness and CI are not edited."
   },
+  "oracle_limits": {
+    "first_fluids": "The oracle latches actual destination Amount greater than zero with the water ID, and actual generator Burn greater than zero. It does not measure flow rate, total transfer, conservation balance or sustained operation.",
+    "first_harness": "The five actual tagged IDs/Count values may be observed in the same poll as their one-shot spawn. This is an existence/registration oracle, not a proof of survival across ticks or entity liveness.",
+    "scope": "Preserve the existing intended oracle; do not add unrelated rate, balance or liveness acceptance requirements."
+  },
   "local_execution": {
     "source_contract_red": {
       "exit": 1,
@@ -117,7 +122,7 @@
       "cases_failed": 43,
       "total_cases": 48,
       "assertions_attempted": 196,
-      "failure": "A pre-existing BOM/CRLF parity case and subsequent existing cases exceeded the unchanged 15-second child limit; the unchanged 120-second suite deadline then prevented the new cases from executing",
+      "failure": "A pre-existing BOM/CRLF parity case and subsequent existing cases reported the unchanged 15-second-limit diagnostic; the actual wait is min(15 seconds, remaining helper budget). The unchanged 120-second helper deadline then prevented the new cases from executing. Neither actual elapsed time per case nor an environmental cause is established.",
       "cleanup": "Only the owned temporary fixture subtree was removed",
       "log": "first-observation-batch-contracts.log",
       "sha256": "297d6d13e149a3352af26fec8cf6bb52af704c5082c27dd4d41ec09447be0911"
@@ -129,11 +134,19 @@
       "total_cases": 48,
       "assertions_attempted": 585,
       "new_affected_cases": "All six new cases actually pass through the native Bash and current PowerShell subjects: first-fluids and first-harness isolated-only, named mixed selection and default-all skip. The expanded all-isolated rejection also passes.",
-      "failure": "The pre-existing dynamic optional-file case then exceeded the unchanged 15-second child limit; the unchanged 120-second suite deadline prevented the remaining cases from completing",
+      "failure": "The pre-existing dynamic optional-file case then reported the unchanged 15-second-limit diagnostic; the actual wait is min(15 seconds, remaining helper budget). The unchanged 120-second helper deadline prevented the remaining cases from completing. The message alone does not identify which budget was reached or establish an environmental cause.",
       "qualification": "Partial affected-case evidence only. The aggregate gate still FAILS, with unknown timeout precipitant; no third local retry or timeout increase.",
       "cleanup": "Only the owned temporary fixture subtree was removed",
       "log": "first-observation-batch-contracts-serial-retry.log",
       "sha256": "0deda5285634f7c9a1b18893f1c929c4cb40cf89a29799eae94bd696cff802f3"
+    },
+    "batch_timing_contract": {
+      "VerifySmokeHarness_external_child_cap_seconds": 60,
+      "Test_SmokesBatch_total_deadline_seconds": 120,
+      "Test_SmokesBatch_per_child_wait": "min(15000 milliseconds, 120000 milliseconds minus elapsed suite time)",
+      "diagnostic_limit": "The 15-second-limit message is not a measurement of actual elapsed time or proof of an environmental cause.",
+      "local_attempts": "Both recorded attempts invoked the PowerShell helper directly, not through Java; they did not exercise the additional VerifySmokeHarness 60-second cap.",
+      "next_proof": "The integrated Java path must pass within its unchanged child cap. No third local batch attempt, timeout increase or skipped case is authorized."
     },
     "log_encoding": "Local Tee-Object captures are UTF-16LE; GitHub raw server log hashes refer to their unchanged downloaded bytes.",
     "metadata_and_documentation": {
@@ -157,18 +170,36 @@
   },
   "minimum_next_qualification": {
     "authorization": "Coordinator owns the single PC lease; this receipt grants none",
-    "tooling_property": "Compile/run only the new standalone Java source-contract adapter and run the existing no-JVM Test-SmokesBatch gate once on the coordinator-selected qualified platform. Resolve or explicitly retain its aggregate timeout failure without weakening limits.",
-    "native_property": "Load each frozen datapack through the unchanged production harness and prove real pump-to-conduit-to-destination water transfer/CO ignition, and real observation of the five original Harness item entities, with natural successful shutdown.",
+    "tooling_property": "After an explicit PC lease, compile only VerifyFirstObservationFixtures and VerifySmokeHarness together, then run those two standalone Java mains once each. The existing VerifySmokeHarness invokes Test-SmokesBatch once under its unchanged 60-second child cap; do not duplicate that helper by running it directly as well.",
+    "native_property": "First inspect the coordinator-owned exact962 CI evidence. Only if a concrete native property remains unproved, load each frozen datapack through the unchanged isolated production harness and observe nonzero destination water/CO Burn and the five original Harness item IDs, with natural successful shutdown. These are the explicitly bounded oracles above, not rate/balance/liveness proofs.",
     "selection": "Only first-fluids and first-harness, each in its own disposable isolated world, via the existing run-smokes selector",
     "reuse": "Production/build inputs did not change. Reuse the coordinator's verified equivalent runtime artifact rather than inventing a production rebuild or replaying the historical matrix.",
     "failure_action": "Preserve raw logs, exact fixture/source identities and explicit diagnostics; escalate a demonstrated production fault before modifying production.",
     "still_not_proven": "An observation-fixture green cannot recover the unknown historical precipitant or establish whole-T0 gameplay, client, persistence, manual acceptance or release readiness.",
     "integration_documentation_owner": "The coordinator updates the route map, changelog, README and durable root handoffs; these shared files are excluded from this worker's ownership."
   },
+  "coordinator_review_followup": {
+    "frozen_source": "962cb37fac407d6c08aede6d4ab9510a1a37844a",
+    "independent_review_reference": "80079a37, reported by the coordinator",
+    "source_review": "No new high-confidence source defect blocking the frozen repair; full batch, Java and native closure are still unproved.",
+    "published_branch": "ezequiel24123z-regresiones-ci-t0, published by the coordinator",
+    "qualification_ci_run": 39357301892,
+    "ci_observation": "The coordinator is inspecting the exact-source run. This worker has not rerun, polled or claimed its results.",
+    "proof_reuse": "If exact962 CI verifies Java and both selected native scenarios, reuse that native evidence and select only the still-missing Windows contracts for the PC window. A host change alone is not a reason to repeat native smokes.",
+    "private_helper_preparation": {
+      "artifact": "qualify-first-observation.ps1, private local session artifact; not repository code",
+      "sha256": "5ddf0a3028dfce065dd55d368e42e286b9cd71eab44a659ad0584dda28c23761",
+      "bytes": 21840,
+      "binding": "Requires an explicit exact execution revision, clean isolated worktree and unchanged qualification inputs from962; execution additionally requires the transferred helper digest, non-secret lease reference and installed JDK17. Native is separate opt-in with an uncovered-property explanation and the actual staged jar digest.",
+      "preparation_validation": "PowerShell5 AST parser reports zero errors; default stage is read-only Plan; exact962 binding and the single two-scenario selector are present; no SSH/SCP/GitHub invocation exists. The helper body has NOT executed and its runtime behavior is unqualified.",
+      "authority": "No SSH, PC write, JVM, batch rerun or native execution is authorized. Another lane currently owns the exclusive PC lease. Helper parameters do not grant or release that lease.",
+      "evidence_safety": "Separate closed stage logs/receipts, unchanged nested gate budgets, fail-before-replay output ownership, explicit source/artifact guards and no automatic release by the observer. Private target paths/credentials are not embedded."
+    }
+  },
   "handoff": {
-    "COMPLETED": "Raw failed-CI identities preserved; scoped observation source repair frozen; PS and SH source contracts pass; six new batch cases and expanded all-isolated rejection actually pass in the serial retry; metadata and documentation links pass.",
+    "COMPLETED": "Raw failed-CI identities preserved; scoped observation source repair frozen; PS and SH source contracts pass; six new batch cases and expanded all-isolated rejection actually pass in the serial retry; metadata and documentation links pass. Follow-up records the independent review's exact oracle and nested-budget limits, and prepares only a private local future-PC helper with static parser checks.",
     "BLOCKED": "Original CI39336114196 is FAILED. Repaired native qualification and the complete batch gate remain incomplete; both local aggregate attempts exited1 under their unchanged deadlines.",
-    "NOT EXECUTED": "New Java adapter compilation/execution, JVM/Gradle, native smokes, SSH/PC writes, full CI replay, client, deployment and player-world operations.",
+    "NOT EXECUTED": "By this worker: new Java adapter compilation/execution, JVM/Gradle, native smokes, SSH/PC writes, full CI replay, client, deployment, player-world operations and the private helper body. No third local batch attempt or duplicate of coordinator-owned CI39357301892.",
     "NEEDS HUMAN VALIDATION": "Existing global client/render/listening/no-command/longitudinal campaign gates remain outside this source-fixture proof and unchanged.",
     "NEEDS MY DECISION": "None",
     "NEEDS CREDENTIAL / EXTERNAL RESOURCE": "None",
