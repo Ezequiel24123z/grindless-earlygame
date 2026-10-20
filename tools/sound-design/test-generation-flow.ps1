@@ -1,21 +1,27 @@
 [CmdletBinding()]
-param()
+param([switch]$Purpose)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'sound-design.ps1')
 $script:FlowChecks = 0
 $script:ProductionWriteJson = ${function:Write-SoundJson}
 $script:ProductionAssertGrant = ${function:Assert-Grant}
+if ($Purpose) {
+    $ManifestPath = Join-Path $PSScriptRoot 't0-wet-work-purpose.json'
+    $ContractPath = Join-Path $PSScriptRoot 'purpose-contract.json'
+}
 $script:FlowInputs = Get-Inputs $ManifestPath $ContractPath
 $script:FlowHead = Get-GitHead
+$script:FlowIds = @(Get-Candidates $script:FlowInputs | ForEach-Object { $_.id })
+$script:FlowLimit = Get-CallLimit $script:FlowInputs
 
 function Check-Flow([bool]$Condition, [string]$Label) {
     if (-not $Condition) { throw ('TEST flow failed: ' + $Label) }
     $script:FlowChecks++
 }
-function Reject-Flow([scriptblock]$Action, [string]$Code, [string]$Label) {
+function Reject-Flow([scriptblock]$Action, [string]$Code, [string]$Label, [string]$Fragment = '') {
     $message = $null
     try { $null = & $Action } catch { $message = $_.Exception.Message }
-    Check-Flow ($null -ne $message -and $message.StartsWith($Code + ': ')) $Label
+    Check-Flow ($null -ne $message -and $message.StartsWith($Code + ': ') -and $message.Contains($Fragment)) $Label
 }
 
 # Only the orchestration is under test; real grant/checkpoint guards have their own suite.
@@ -28,13 +34,14 @@ function Assert-Grant($Grant, $Inputs, [string]$Output, [string]$Head) {
         $Grant.authorization_reference -ceq 'TEST OFFLINE FLOW - NOT AUTHORIZATION') 'substitute accepts only an explicitly unauthorized TEST marker'
     Check-Flow ($Grant.output_directory -ceq $script:FlowOutput -and $Output -ceq $script:FlowOutput -and
         $Head -ceq $script:FlowHead -and $Grant.tooling_sha256 -ceq $Inputs.ToolingHash) 'TEST marker stays bound to this fixture/source'
+    if ($Purpose) { Assert-PurposeBindings $Grant $Inputs $Output $Head }
 }
 function Send-ProviderAudio([string]$SecretPath, [string]$Payload) {
     $receipt = Read-SoundJson $script:FlowReceiptPath
     Assert-Receipt $receipt $script:FlowInputs $script:FlowOutput
     $attempt = $receipt.attempts[-1]
     $body = ConvertFrom-SoundJson $Payload
-    $candidate = $script:FlowInputs.Manifest.calibration.candidates[$attempt.ordinal - 1]
+    $candidate = @(Get-Candidates $script:FlowInputs)[$attempt.ordinal - 1]
     Check-Flow ($attempt.state -ceq 'attempting' -and $attempt.candidate_id -ceq $candidate.id) 'transport sees the exact durable reservation before delivery'
     Check-Flow ($body.text -ceq $candidate.prompt) 'reserved candidate matches the submitted payload'
     Check-Flow ($SecretPath -ceq $script:FlowSentinel -and (Get-Item -LiteralPath $SecretPath).Length -eq 0) 'transport receives only the empty TEST path, never reads a key'
@@ -54,7 +61,7 @@ function Send-ProviderAudio([string]$SecretPath, [string]$Payload) {
 function Invoke-Qc($Inputs, [string]$Output, $Tools) {
     $receipt = Read-SoundJson (Join-Path $Output 'receipt.json')
     Assert-Receipt $receipt $Inputs $Output
-    Check-Flow (@($receipt.attempts).Count -eq 3 -and
+    Check-Flow (@($receipt.attempts).Count -eq $script:FlowLimit -and
         @($receipt.attempts | Where-Object { $_.state -cne 'response_saved' }).Count -eq 0) 'codec substitute is reached only after all TEST responses are saved'
     $script:SimulatedQcCalls++
 }
@@ -63,12 +70,16 @@ function Write-SoundJson([string]$Path, $Value) {
     if ($script:StorageFaultArmed) {
         if ($Path -ceq $script:FlowReceiptPath -and @($Value.attempts).Count -eq $script:FlowFaultOrdinal) {
             $state = $Value.attempts[-1].state
-            $fault = (($script:FlowFault -in @('reservation_before_write','reservation_after_write') -and $state -ceq 'attempting') -or
+            $fault = (($script:FlowFault -in @('reservation_before_write','reservation_after_write','reservation_not_durable') -and $state -ceq 'attempting') -or
                 ($script:FlowFault -ceq 'saved_receipt' -and $state -ceq 'response_saved'))
         } elseif ($script:FlowFault -ceq 'provenance' -and
-            $Path -ceq (Join-Path $script:FlowOutput ($script:CandidateIds[$script:FlowFaultOrdinal - 1] + '.provenance.json'))) {
+            $Path -ceq (Join-Path $script:FlowOutput ($script:FlowIds[$script:FlowFaultOrdinal - 1] + '.provenance.json'))) {
             $fault = $true
         }
+    }
+    if ($fault -and $script:FlowFault -ceq 'reservation_not_durable') {
+        $script:StorageFaultArmed = $false
+        return # Deliberately drop this TEST write: the real reread must catch it.
     }
     if ($fault -and $script:FlowFault -cne 'reservation_after_write') {
         $script:StorageFaultArmed = $false
@@ -86,15 +97,19 @@ function New-FlowCase([string]$Name, [string]$Fault = 'none', [int]$Ordinal = 1)
     $script:FlowReceiptPath = Join-Path $script:FlowOutput 'receipt.json'
     $script:FlowGrantPath = Join-Path $script:FlowRoot ('TEST-' + $Name + '-NOT-AUTHORIZATION.json')
     $script:FlowFault = $Fault; $script:FlowFaultOrdinal = $Ordinal
-    $script:StorageFaultArmed = $Fault -in @('reservation_before_write','reservation_after_write','provenance','saved_receipt')
+    $script:StorageFaultArmed = $Fault -in @('reservation_before_write','reservation_after_write','reservation_not_durable','provenance','saved_receipt')
     $script:SimulatedCalls = 0; $script:SimulatedQcCalls = 0
-    $grant = Read-SoundJson (Join-Path $PSScriptRoot 'grant.example.json')
+    $example = 'grant.example.json'; if ($Purpose) { $example = 'purpose-grant.example.json' }
+    $grant = Read-SoundJson (Join-Path $PSScriptRoot $example)
     $grant.id = 'test-flow-not-authorization'
     $grant.authorization_reference = 'TEST OFFLINE FLOW - NOT AUTHORIZATION'
-    $grant.manifest_commit = $script:FlowHead; $grant.contract_commit = $script:FlowHead; $grant.tooling_commit = $script:FlowHead
+    if ($Purpose) { $grant.reviewed_commit = $script:FlowHead } else {
+        $grant.manifest_commit = $script:FlowHead; $grant.contract_commit = $script:FlowHead; $grant.tooling_commit = $script:FlowHead
+    }
     $grant.manifest_sha256 = $script:FlowInputs.ManifestHash; $grant.contract_sha256 = $script:FlowInputs.ContractHash
     $grant.tooling_sha256 = $script:FlowInputs.ToolingHash; $grant.output_directory = $script:FlowOutput
-    Reject-Flow { & $script:ProductionAssertGrant $grant $script:FlowInputs $script:FlowOutput $script:FlowHead } 'SD_VALIDATION' 'TEST marker is rejected by the real authorization guard'
+    $code = 'SD_VALIDATION'; if ($Purpose) { $code = 'SD_PURPOSE_UNAPPROVED' }
+    Reject-Flow { & $script:ProductionAssertGrant $grant $script:FlowInputs $script:FlowOutput $script:FlowHead } $code 'TEST marker is rejected by the real authorization guard'
     & $script:ProductionWriteJson $script:FlowGrantPath $grant
 }
 function Invoke-TestFlow {
@@ -109,16 +124,16 @@ try {
     New-FlowCase 'success'
     Invoke-TestFlow
     $receipt = Read-SoundJson $script:FlowReceiptPath
-    Check-Flow ($script:SimulatedCalls -eq 3 -and $script:SimulatedQcCalls -eq 1) 'three simulated responses reach the codec substitute once'
-    Check-Flow (($receipt.attempts.candidate_id -join ',') -ceq ($script:CandidateIds -join ',') -and
-        ($receipt.attempts.state -join ',') -ceq 'response_saved,response_saved,response_saved') 'actual orchestration saves ordered response states'
+    Check-Flow ($script:SimulatedCalls -eq $script:FlowLimit -and $script:SimulatedQcCalls -eq 1) 'finite simulated responses reach the codec substitute once'
+    Check-Flow (($receipt.attempts.candidate_id -join ',') -ceq ($script:FlowIds -join ',') -and
+        @($receipt.attempts | Where-Object { $_.state -cne 'response_saved' }).Count -eq 0) 'actual orchestration saves ordered response states'
     foreach ($attempt in $receipt.attempts) {
         $provenance = Read-SoundJson (Join-Path $script:FlowOutput ($attempt.candidate_id + '.provenance.json'))
         Check-Flow ($provenance.source_sha256 -ceq $attempt.source_sha256 -and $provenance.source_commit -ceq $script:FlowHead -and
             $provenance.grant_id -ceq $receipt.grant_id -and -not $provenance.import_approved -and -not $provenance.publication_approved) 'flow binds saved TEST response to non-import provenance'
     }
     Invoke-TestFlow
-    Check-Flow ($script:SimulatedCalls -eq 3 -and $script:SimulatedQcCalls -eq 2) 'reentry into a completed ledger never repeats transport'
+    Check-Flow ($script:SimulatedCalls -eq $script:FlowLimit -and $script:SimulatedQcCalls -eq 2) 'reentry into a completed ledger never repeats transport'
 
     $failures = @(
         @{ Name = 'ambiguous-first'; Fault = 'ambiguous'; Ordinal = 1; Code = 'SD_DELIVERY_UNKNOWN'; Calls = 1; States = 'needs_review' },
@@ -152,16 +167,16 @@ try {
             @($recovered.attempts).Count -eq $beforeCount -and $script:SimulatedCalls -eq $case.Calls -and
             $script:SimulatedQcCalls -eq 0) ($case.Name + ' restart preserves budget and stops before transport')
         if ($case.Fault -in @('provenance','saved_receipt','raw_collision')) {
-            Check-Flow ([IO.File]::Exists((Join-Path $script:FlowOutput 'quern-a.raw.mp3'))) ($case.Name + ' retains the response/collision artifact for review')
+            Check-Flow ([IO.File]::Exists((Join-Path $script:FlowOutput ($script:FlowIds[0] + '.raw.mp3')))) ($case.Name + ' retains the response/collision artifact for review')
         }
         if ($case.Fault -ceq 'saved_receipt') {
-            Check-Flow ([IO.File]::Exists((Join-Path $script:FlowOutput 'quern-a.provenance.json'))) 'receipt failure does not delete already written provenance'
+            Check-Flow ([IO.File]::Exists((Join-Path $script:FlowOutput ($script:FlowIds[0] + '.provenance.json')))) 'receipt failure does not delete already written provenance'
         }
         if ($case.Fault -ceq 'http429') {
             Check-Flow ($recovered.attempts[0].http_status -eq 429 -and $recovered.attempts[0].failure_code -ceq 'http_status_429') 'HTTP failure keeps its exact status without response-body disclosure'
         }
         if ($case.Fault -ceq 'raw_collision') {
-            Check-Flow ([IO.File]::ReadAllText((Join-Path $script:FlowOutput 'quern-a.raw.mp3')) -ceq 'TEST preexisting raw; do not overwrite') 'raw collision never overwrites the preexisting artifact'
+            Check-Flow ([IO.File]::ReadAllText((Join-Path $script:FlowOutput ($script:FlowIds[0] + '.raw.mp3'))) -ceq 'TEST preexisting raw; do not overwrite') 'raw collision never overwrites the preexisting artifact'
         }
     }
 
@@ -171,14 +186,22 @@ try {
     Check-Flow (@($receipt.attempts).Count -eq 0 -and $script:SimulatedCalls -eq 0) 'failed uncommitted reservation has no provider delivery'
     $script:FlowFault = 'none'
     Invoke-TestFlow
-    Check-Flow ($script:SimulatedCalls -eq 3 -and $script:SimulatedQcCalls -eq 1) 'only a never-persisted never-sent reservation can continue'
+    Check-Flow ($script:SimulatedCalls -eq $script:FlowLimit -and $script:SimulatedQcCalls -eq 1) 'only a never-persisted never-sent reservation can continue'
 
+    if ($Purpose) {
+        New-FlowCase 'reservation-not-durable' 'reservation_not_durable'
+        Reject-Flow { Invoke-TestFlow } 'SD_VALIDATION' 'v2 requires a verified durable reservation, not just a successful writer return' 'Reservation was not durably verified; no HTTP is allowed.'
+        Check-Flow (@((Read-SoundJson $script:FlowReceiptPath).attempts).Count -eq 0 -and
+            $script:SimulatedCalls -eq 0 -and $script:SimulatedQcCalls -eq 0) 'dropped reservation write is detected before any transport or QC'
+    }
     New-FlowCase 'missing-ledger'
     [IO.File]::WriteAllText((Join-Path $script:FlowOutput 'TEST-existing-artifact.txt'), 'TEST preserve this directory')
     Reject-Flow { Invoke-TestFlow } 'SD_VALIDATION' 'nonempty folder cannot start a replacement ledger'
     Check-Flow ($script:SimulatedCalls -eq 0 -and -not [IO.File]::Exists($script:FlowReceiptPath)) 'missing-ledger refusal spends nothing and does not reset evidence'
     Check-Flow ((Get-Item -LiteralPath $script:FlowSentinel).Length -eq 0) 'TEST sentinel remains empty; no credential was supplied'
-    Write-Output ('PASS: ' + $script:FlowChecks + ' offline generation-flow assertions across 10 isolated TEST cases; zero provider requests, credential reads, codecs or JVMs.')
+    $version = 'legacy v1'; $caseCount = 10
+    if ($Purpose) { $version = 'purpose v2'; $caseCount = 11 }
+    Write-Output ('PASS: ' + $script:FlowChecks + ' offline generation-flow assertions across ' + $caseCount + ' isolated ' + $version + ' TEST cases; zero provider requests, credential reads, codecs or JVMs.')
 } finally {
     if ([IO.Directory]::Exists($script:FlowRoot)) { Remove-Item -LiteralPath $script:FlowRoot -Recurse -Force }
 }

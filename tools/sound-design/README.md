@@ -1,4 +1,240 @@
-# Bounded Quern calibration (ADR-0145)
+# Purpose-bound sound tooling (ADR-0156) — UNAPPROVED
+
+**Current stop: audit and offline-reviewed tooling, not generation.** The v2 proposal
+selects only **wet_work / Clay Mixer**, `wet-work-a` and `wet-work-b`, with an
+effective **max_posts=2**. The source audit revision is
+`269965b1b0b8c1becda74459a853f245105649ee`. Sol owns final audit/prompt review,
+the combined checkpoint and any later private authorization. No grant, provider
+request, credential access, runtime import, listening pass or publication is
+authorized by these files.
+
+The coordinator's now-verified existing audio access **supersedes the historical
+missing-secret statements below**. Do not repeat credential discovery, inspect a
+secret location or perform account/entitlement checks. Existing owner-confirmed
+paid entitlement is recorded as an attestation, not a new API check. No private
+credential location belongs in Git.
+
+The legacy Quern manifest, request contract, example, historic authors, exhausted
+**3/3** receipts and all media are unchanged. Astra remains the historical v1
+authority; **Sol is the v2 authority**, not a renaming of earlier evidence.
+
+## Small v2 contract and finite selection
+
+| File | Schema / role | Current authorization state |
+| --- | --- | --- |
+| `purpose-contract.json` | `grindless.sound-purpose-contract/v2`; fixed ADR-0156 wave ceilings and reviewed provider request shape | `review_status=unapproved` |
+| `t0-wet-work-purpose.json` | `grindless.sound-purpose-manifest/v2`; exact purpose/run, source, machines, candidates, labels, differences and full prompts | `review_status=unapproved`; artistic approval also unapproved |
+| `purpose-grant.example.json` | `grindless.sound-purpose-grant/v2`; private-grant template, never permission | `generation_approved=false`, `approved_by=null`, no commit/hash/output bindings |
+
+The wave ceiling is **at most two families, at most two candidates per family,
+at most four POSTs total**, not four per family and not a permanent project budget.
+The effective limit must equal the entire finite selected candidate list. Here
+it is **two**, in the manifest, grant and single ledger. The unused ceiling is
+not spendable. A two-family/four-candidate manifest is covered only by an
+explicitly unapproved offline fixture, not by the actual proposal.
+
+Clay Mixer processes wet clay plus sand/grog and also wet biomass into fibreboard.
+The proposed physical role is close, steady viscous material movement and a
+horizontal paddle rubbing a clay bowl: A emphasizes fine grit; B is softer/wetter
+and lower-fatigue. Neither assumes motor or manual drive. No music, voices,
+beeps, alarms, start/stop, large splashes or sound per trivial state/event.
+Settling Trough, Hand Pump and combustion are **not selected**. Prefer later
+native fire reuse where appropriate; no second generated family is requested.
+
+The exact request remains:
+
+- `POST https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128`
+- body fields only: `text` (1..450 characters), `model_id=eleven_text_to_sound_v2`,
+  `duration_seconds=3.0`, `loop=true`, `prompt_influence=0.3`;
+- one binary MP3 response; no seed, batch, logging option, format/model fallback
+  or automatic retry (`0`);
+- internal audition only; no import, publication or standalone audio distribution.
+
+**Cost is conditional, not an account quote.** The public capability rate of
+40 credits/second with explicit 3 seconds suggests 120 credits/request, or
+**240 estimated credits for the selected two**. Official pricing/API advertises
+USD 0.12/minute while its FAQ also describes Sound Effects per generation.
+Do not infer a guaranteed USD maximum or an unknown plan price from this
+discrepancy. No account/billing request is needed; actual generation is not part
+of this deliverable and current provider spend is zero.
+
+## Read-only Plan and offline tests
+
+From the repository root:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/sound-design/sound-design.ps1 `
+  -Mode Plan -ManifestPath tools/sound-design/t0-wet-work-purpose.json `
+  -ContractPath tools/sound-design/purpose-contract.json `
+  -GrantFile tools/sound-design/purpose-grant.example.json
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/sound-design/test-purpose.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/sound-design/test-sound-design.ps1
+```
+
+The SH twins forward to the same implementation through existing `pwsh`:
+
+```sh
+bash tools/sound-design/sound-design.sh -Mode Plan \
+  -ManifestPath tools/sound-design/t0-wet-work-purpose.json \
+  -ContractPath tools/sound-design/purpose-contract.json \
+  -GrantFile tools/sound-design/purpose-grant.example.json
+bash tools/sound-design/test-purpose.sh
+```
+
+Both v2 input paths are explicit. Omitting them retains the legacy Quern/v1
+Plan and QC behavior. Plan reports the selected purpose, run, families, machines,
+candidate IDs, exact requests and **max_posts=2**, with the four-call wave ceiling
+separately labelled **not granted**. It hashes non-secret inputs and always returns
+`generation_authorized=false`, `network=false`, `secret_read=false`. It creates no
+output directory or receipt, runs no codec, reads no secret and makes no HTTP call.
+An optional example grant is shape-checked, never treated as authorization.
+
+The default offline suite invokes v1 flow and new purpose coverage **once each**;
+the purpose suite invokes the v2 flow variant once. `-JsonOnly` retains its
+existing narrow v1 boundary. No CI edit or package install is needed.
+
+## Authorization, bindings and one durable ledger
+
+Only after Sol finalizes the audit/prompts, reviews these exact files and
+checkpoints the combined freeze may a later private v2 grant be considered.
+The real guard requires both contract and manifest generation-review statuses
+to be `reviewed`, and a NEW explicit Sol grant. **All shipped examples remain
+UNAPPROVED.** Candidate `artistic_approval=unapproved` is intentionally separate:
+technical generation permission never grants listening, import or release approval.
+
+The grant binds:
+
+- one current `reviewed_commit` and exact manifest, contract and runner SHA-256s;
+  this is the later tooling checkpoint, not a requirement to reuse the older
+  runtime audit revision as HEAD;
+- exact `purpose_id`, `run_id`, ordered family IDs and candidate IDs;
+- the exact effective `max_calls` (two here, never the unused four);
+- one exact canonical **absolute local ignored/external output directory**,
+  never one folder/budget per family;
+- bounded authorization reference/identity and original UTC approval/expiry strings;
+- existing owner entitlement attestation and internal-audition-only rights.
+
+Unknown schema/fields, legacy-grant swaps, changed purpose/candidates/budget,
+duplicates, excess family/per-family/global limits, dirty/untracked owned inputs,
+changed commit/hashes/path and unapproved generation markers fail closed.
+`Assert-PurposeBindings` is a pure object/binding validator called by the real
+guard. Positive tests use it with **false approval, null authority and null
+approval timestamps**; they never manufacture or write approved Sol grants.
+The real guard names every unapproved generation marker, and real Generate/CLI
+rejection probes stop before even secret-path inspection, codec preflight,
+output creation or transport.
+
+The existing `Write-SoundJson`, `Open-SoundLock`, `Reserve-Attempt`,
+`Resolve-Interrupted` and provider transport are reused, not replaced by a
+second runner. `receipt.json` v2 binds the whole purpose/run, finite selection,
+grant hash/ID, checkpoint, input hashes and single output directory. Atomic
+write/flush and a complete reread/equality check verify the durable reservation
+**before HTTP**. An interrupted/ambiguous or HTTP-error attempt consumes its
+reservation and blocks every remaining candidate; there is no retry or reset.
+Reentry preserves spend and existing raw/provenance files.
+
+A later second family requires a newly reviewed manifest/grant and explicit
+review of prior spend. There is **no automatic expansion, migration or replacement
+ledger**; a changed manifest/grant cannot reuse an incompatible ledger. Never
+discard an old ledger or create a new purpose/output folder to evade a spent or
+uncertain attempt. This is not a remote billing ledger or protection against an
+operator deliberately deleting all evidence.
+
+New provenance/audition/QC use the actual purpose rather than Quern/Astra labels.
+They retain exact model/prompt/settings, terms, entitlement attestation, input/
+source/derived hashes and existing fixed-gain mono/Vorbis transform details.
+Diagnostics contain no credential, secret path, raw HTTP headers/body or exception.
+QC capabilities are reused; **no codec replay or generated audio is a proof in
+this freeze**. Technical screening does not replace owner listening, repeated
+joins, one/eight-machine fatigue, distance, gain, stop latency or in-game review.
+
+## Current offline evidence and next gate
+
+Execution identity is the exact base above **plus the tested owned changes before
+the parent's local freeze**, not an execution of an unchanged base or independent
+QA. Parent review matched the hashes below without changing executable tooling.
+The containing Git checkpoint supplies the portable source identity; examples
+remain unapproved and no generation follows from a local commit.
+
+| Executed surface | Result |
+| --- | --- |
+| WinPS 5.1.26100.9711 default `test-sound-design.ps1` | 128 v1 checks +200 v1 flow +109 v2 guards +196 v2 flow = **633**, exit0 |
+| WinPS5 focused `test-purpose.ps1` (invoked once by default) | **109 +196**, exit0 |
+| Documented hash-verified portable Core 7.6 `test-purpose.ps1` | **109 +196**, exit0 |
+| Same Core `test-sound-design.ps1 -JsonOnly` | **117**, exit0 |
+| Actual `test-purpose.sh`, existing native Git shell + same Core | **109 +196**, exit0 |
+| Actual `sound-design.sh` explicit-path v2 Plan, same shell/Core | **max_posts=2**, two candidates, authorization/network/secret all false, exit0 |
+
+Only the already documented portable Core and Git-bundled shell were inspected
+and used; nothing was searched for or installed elsewhere. The Core executable
+retains its documented SHA-256
+`7851e9d67e141bcebc0cc37086579fde0b5f0a47297bd2d446eace5d4b8e75c1`.
+This is native-shell **Windows** qualification, not a Linux-host test.
+
+Tested working-file SHA-256s (not approved grant bindings; recompute Plan after
+review/checkpoint, including any line-ending changes):
+
+| Input | SHA-256 |
+| --- | --- |
+| Runner | `6739f5371c2d4754e2ab909a4e92d96d62ec17acc6b9a7dc48564585be5e1c54` |
+| Purpose contract | `483ad1cd9c83f222f627bcfaa575c342586b6363e181cddd08650e4b3a91830a` |
+| Wet-work manifest | `8edd220775a4c69bada9d63ccfd7917409da8e12c4ccb7d701520326c68b12b5` |
+| Focused purpose tests | `467905e5ce07a0dff3a3b3e5d33cc0572f8903d8004feef98506b859040841b6` |
+
+The v2 flow has eleven isolated TEST cases, including a dropped reservation
+write that returns successfully but must fail the real durable-reread check
+before transport. It also covers ambiguous delivery before/after a saved response,
+HTTP429, before/after reservation-write failures, raw collision, provenance/final
+receipt failures, completed-ledger reentry and nonempty-folder ledger refusal.
+Orchestration alone substitutes checkpoint/test authorization, transport and QC.
+Storage-fault injection wraps the real JSON writer; ordinary successful writes
+still use its actual flush/atomic replacement. The dropped-write case is
+deliberately not persisted, so the real reservation verifier must detect it.
+Every deliberately unapproved TEST grant still fails the real authorization guard;
+v2 positive orchestration also uses the real pure binding validator. Checkpoint
+negative fixtures exercise the real path/checkpoint guard with scoped synthetic
+Git observations, never a fake commit or approval.
+
+An initial Core qualification attempt failed with a test-child CLI timeout
+(exit1). The focused harness now supplies explicit nonexistent codec paths for
+its default-manifest Plan probe, avoiding environment-dependent PATH discovery;
+production discovery is unchanged. The failure is not retroactively a pass.
+A separate initial in-process final-invariant probe was blocked by the host's
+script execution policy (exit1), before dot-sourcing the runner. Repeating it in
+the documented `-NoProfile -ExecutionPolicy Bypass` child process passed (exit0);
+no machine or persistent execution policy was changed.
+No Core implicit-PATH codec discovery, Linux-host, real approved-grant execution,
+HTTP/TLS, codec quality, genuine process/power-loss crash or listening qualification
+is inferred from these tests. TEST MP3s are conspicuous
+text, never audio; fixtures use unique temporary directories and normal completion
+removes them in `finally`. The existing default v1 suite also uses synthetic WAVs,
+not generated art or a codec.
+
+**Handoff / next gate:**
+
+| Category | Status |
+| --- | --- |
+| COMPLETED | Bounded v2 tooling, unapproved Clay Mixer proposal and offline WinPS5 evidence; legacy identities/hashes retained. |
+| BLOCKED | Generation deliberately blocked by unapproved review/grant markers and the missing reviewed checkpoint/private authorization, not by credential discovery. |
+| NOT EXECUTED | Real generation, credential/account reads, codec replay, runtime import/build/deploy, push or PR. |
+| NEEDS HUMAN VALIDATION | Owner audition and one/eight-machine in-game review; no T0 acceptance or freeze. |
+| NEEDS MY DECISION | Coordinator accepts the audit/prompts and tooling, records both generation-review markers as reviewed in a later checkpoint, then decides a new finite private grant bound to that exact checkpoint and hashes. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for this deliverable. Later generation uses the privately resolved existing access and verified codec tools; do not reopen account/entitlement checks. |
+| COST / BILLING RISK | Zero provider requests/spend here. Later selected-two estimate is conditionally 240 credits, not a guaranteed USD limit. |
+| DEPLOYED STATE | Unchanged; no runtime source, assets, historic media, receipts or deployment touched. |
+
+Implementation-worker edits stop for parent review; only the parent performs the
+local freeze. The independently authorized passive TANK runtime correction is a
+separate checkpoint, not a hidden part of this tools-only proof. Publication,
+new generation and runtime audio import remain with the coordinator.
+
+---
+
+## Historical Quern calibration evidence (ADR-0145)
+
+**Everything below describes earlier checkpoints and their actual authors.**
+Old absent-secret/budget/authorization statements are superseded by the current
+section above, not fresh instructions or permission to rerun exhausted Quern work.
 
 Development-only Windows PowerShell 5.1/.NET tooling; no Gradle, JVM, generator,
 client, runtime change or new package ecosystem. The SH twins use the same script

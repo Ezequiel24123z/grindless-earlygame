@@ -1,0 +1,35 @@
+{
+  "schema": "grindless.sound-purpose-contract/v2",
+  "id": "adr0156-elevenlabs-internal-purpose-3s-mp3",
+  "review_status": "unapproved",
+  "authorization_authority": "Sol",
+  "reference": "https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert",
+  "method": "POST",
+  "endpoint": "https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128",
+  "authentication_header": "xi-api-key",
+  "content_type": "application/json",
+  "text_max_characters": 450,
+  "body_parameters": {
+    "model_id": "eleven_text_to_sound_v2",
+    "duration_seconds": 3.0,
+    "loop": true,
+    "prompt_influence": 0.3
+  },
+  "response": "binary_audio_not_JSON",
+  "wave_limits": {
+    "max_families": 2,
+    "max_candidates_per_family": 2,
+    "max_calls": 4
+  },
+  "automatic_retries": 0,
+  "alternate_formats": false,
+  "licence_scope": "internal_audition_only",
+  "publication_approved": false,
+  "notes": [
+    "UNAPPROVED tooling proposal, not a generation grant. Sol must review and checkpoint the exact contract, manifest and runner before a private grant.",
+    "ADR-0156 wave ceiling only: the finite selected manifest, grant and single ledger impose the smaller effective limit. No per-family grant or budget reset.",
+    "One POST produces one binary MP3; no seed, batch, enable_logging or format fallback. Interrupted, ambiguous and failed attempts consume reservations and halt continuation.",
+    "Existing owner-confirmed paid entitlement is an attestation, not permission to fetch account or billing data. No new entitlement check.",
+    "Internal audition only; no runtime import or publication. Game incorporation is plan-dependent and standalone audio distribution is not permitted."
+  ]
+}
