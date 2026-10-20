@@ -182,6 +182,14 @@ gallery. The regression runs separate processes with two different hash seeds;
 fresh deterministic export evidence is pending at this source checkpoint.
 No runtime texture or previously checked JDK input changes for this repair.
 
+The infrastructure owner's actual `164ee9a` adds six port crafts to
+`BootstrapRecipes`. The projection explicitly separates those declared port
+IDs from legacy machine roles, then requires their actual generated
+blockstates/models/item models before recording source readiness. It reports
+both legacy and combined block/model/variant totals. No source declaration
+alone becomes a passing rendered port. The final coordinator must generate the
+composed models before refreshing this inventory.
+
 No Gradle, native server, Prism, GPU or new inference is used. The regular
 generator remains JDK-only and calls the same checked face/overlay writers;
 there is no need to repeat the old full 1,602-file proof just for more counters.
