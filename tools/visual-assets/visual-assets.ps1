@@ -1,5 +1,6 @@
+[CmdletBinding(PositionalBinding = $false)]
 param(
-    [Parameter(Mandatory = $true)][string]$Python,
+    [Parameter(Mandatory = $true, Position = 0)][string]$Python,
     [ValidateSet('comfy_asset', 'visual_presets', 't0_visuals')][string]$Tool = 'comfy_asset',
     [Parameter(ValueFromRemainingArguments = $true)][string[]]$PipelineArgs
 )
