@@ -490,11 +490,14 @@ public final class VerifyResourceGuidance {
         equal("FREE evidence has no item or resource subject", true,
                 ResourceGuidanceContext.questSubject(starter).isEmpty());
         var relay = QuestCatalogue.byId("relay");
-        equal("the relay quest is ordinary ITEM evidence, not a specified physical rating", QuestCatalogue.Evidence.ITEM,
+        equal("the final relay quest is strict physical Matrix evidence", QuestCatalogue.Evidence.MATRIX,
                 relay.evidence());
-        equal("ordinary relay evidence has no specified Matrix rating", null, relay.matrixRating());
-        equal("ordinary ITEM evidence keeps rating0, which does not mean F0", 0,
+        equal("the final relay requires exact F1", io.github.ezequiel24123z.grindless.energy.FluxTier.F1,
+                relay.matrixRating());
+        equal("physical F1 quest context keeps that exact rating", 1,
                 ResourceGuidanceContext.questSubject(relay).orElseThrow().rating());
+        equal("the retained ordinary factory-stock objective still keeps unspecified rating0", 0,
+                ResourceGuidanceContext.questSubject(QuestCatalogue.byId("matrix_line")).orElseThrow().rating());
         var industrial = QuestCatalogue.byId("industrial_matrix");
         equal("industrial evidence really requires a physical Matrix", QuestCatalogue.Evidence.MATRIX, industrial.evidence());
         equal("industrial Matrix evidence keeps exact F2", 2,
@@ -679,13 +682,23 @@ public final class VerifyResourceGuidance {
         equal("Atlas context uses current recipe operands and shared guidance", true,
                 atlas.contains("ResourceGuidanceContext.operands(rows.get(selected))") && atlas.contains("ResourceGuidanceClient.append("));
         String guide = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "FieldGuideScreen.java"))));
-        equal("guide uses live Atlas quantities and lossless native pagination", true, guide.contains("AtlasLogic.line(entry)")
-                && guide.contains("GuideCatalogue.paginate(lines, linesPerPage)") && guide.contains("ResourceGuidanceClient.playerContext("));
-        equal("guide never opts mandatory reading into technical detail", false, guide.contains("ResourceGuidanceClient.lines("));
-        equal("guide selection uses the same declaration lookup as hover", true,
-                guide.contains("ResourceGuidanceClient.declaration(loaded, operand.resource())"));
+        String teaching = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestTeachingClient.java"))));
         String legacy = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestBookScreen.java"))));
         String heracles = Files.readString(root.resolve(FORGE.resolve(Path.of("quest", "HeraclesQuestClient.java"))));
+        equal("quest help uses live Atlas quantities and lossless native pagination", true,
+                teaching.contains("AtlasLogic.line(entry)") && legacy.contains("QuestTeaching.paginate(")
+                        && teaching.contains("ResourceGuidanceClient.playerContext("));
+        equal("both renderers consume the same lesson projection", true,
+                legacy.contains("QuestTeachingClient.content(") && heracles.contains("QuestTeachingClient.content("));
+        equal("quest teaching keeps real output roles and the shared declaration formatter", true,
+                teaching.contains("ResourceGuidanceContext.operands(entry)")
+                        && teaching.contains("ResourceGuidanceContext.Role.OUTPUT")
+                        && teaching.contains("ResourceGuidanceClient.playerContext(output)"));
+        equal("teaching never opts mandatory reading into technical detail", false,
+                teaching.contains("ResourceGuidanceClient.lines("));
+        equal("the compatibility Guide contains no parallel route manual", true,
+                guide.contains("gui.grindless.quest.guide_migration")
+                        && !guide.contains("GuideCatalogue.bodyKey") && !guide.contains("ProcessLookup"));
         equal("both book displays share canonical resource context", true,
                 legacy.contains("ResourceGuidanceContext.questSubject(task)") && legacy.contains("ResourceGuidanceClient.append(")
                         && heracles.contains("ResourceGuidanceContext.questSubject(task)") && heracles.contains("ResourceGuidanceClient.playerContext("));
@@ -699,10 +712,12 @@ public final class VerifyResourceGuidance {
         equal("JEI does not add contradictory unknown text to a default Matrix declaration", true,
                 jei.contains("ResourceGuidanceClient.declaration(loaded, resource.orElse(null)).isEmpty()"));
         equal("JEI does not invent registered fluids", false, jei.contains("DeferredRegister") || jei.contains("new ForgeFlowingFluid"));
-        String bootstrap = lang.get("gui.grindless.guide.bootstrap.body").getAsString();
-        String renewables = lang.get("gui.grindless.guide.renewables.body").getAsString();
+        String bootstrap = lang.get("gui.grindless.quest.lesson.starter_supplies").getAsString();
+        String renewables = List.of("geological_collector", "biocultivator", "biomass_dynamo", "water", "biomass").stream()
+                .map(id -> lang.get("gui.grindless.quest.lesson." + id).getAsString())
+                .collect(java.util.stream.Collectors.joining("\n"));
         QuestCatalogue.Task starter = QuestCatalogue.byId(QuestCatalogue.STARTER_SUPPLIES);
-        equal("the guide's starter is the first canonical quest", starter.id(), QuestCatalogue.tasks().get(0).id());
+        equal("the teaching starter is the first canonical quest", starter.id(), QuestCatalogue.tasks().get(0).id());
         equal("the starter has an explicit free goal", QuestCatalogue.Evidence.FREE, starter.evidence());
         equal("the starter has no hidden quest prerequisite", List.of(), starter.requires());
         equal("the first quest is ready without physical evidence", QuestLogic.Status.CLAIMABLE,
@@ -715,25 +730,27 @@ public final class VerifyResourceGuidance {
         equal("the advertised starter kit has actual rewards", false, starter.rewards().isEmpty());
         equal("starter rewards remain basic supplies, not machines, cores, insulators or Matrices", true,
                 starter.rewards().stream().allMatch(reward -> basicSupplies.contains(reward.itemId())));
-        equal("the guide names the actual free task and explicit claim action", true,
+        equal("the starter lesson names the actual free task and explicit claim action", true,
                 bootstrap.contains(lang.get("gui.grindless.quest.task." + starter.id()).getAsString())
                         && bootstrap.contains(lang.get("gui.grindless.quest.claim_free").getAsString()));
-        equal("the guide describes one finite, explicitly claimed kit per player", true,
-                bootstrap.contains("each player can explicitly claim one finite kit")
+        equal("the lesson describes one finite, explicitly claimed kit per player", true,
+                bootstrap.toLowerCase(Locale.ROOT).contains("each player can explicitly claim one finite kit")
                         && lang.get("gui.grindless.quest.starter_policy").getAsString()
                         .contains("One finite starter kit per player, claimed explicitly"));
         equal("the finite kit does not replace construction or the renewable machine loop", true,
-                bootstrap.contains("Construct the Crank Handle, Hand Pump and ceramic workshop")
-                        && bootstrap.contains("establish geological collection, bioculture and biomass power"));
-        equal("guide does not prescribe an initial glass/copper/redstone kit", false, bootstrap.startsWith("Bring"));
-        equal("guide leads with mod-owned recurring sources", true, renewables.contains("Geological Collector")
+                bootstrap.contains("establish geological collection, bioculture and biomass power")
+                        && lang.has("gui.grindless.quest.lesson.manual_work")
+                        && lang.has("gui.grindless.quest.lesson.firing"));
+        equal("teaching does not prescribe an initial glass/copper/redstone kit", false, bootstrap.startsWith("Bring"));
+        equal("quests lead with mod-owned recurring sources", true, renewables.contains("Geological Collector")
                 && renewables.contains("Biocultivator") && renewables.contains("Biomass Dynamo")
                 && renewables.contains("Hand Pump")
-                && renewables.contains("Use this machine loop for continuing supply instead of depending on vanilla cobblestone generators or tree farms"));
+                && lang.get("gui.grindless.quest.lesson.superflat").getAsString()
+                .contains("permanent critical route"));
         equal("natural instructions retain night and restart limits", true,
-                renewables.contains("Do not assume the line will keep running at night or resume on its own after restarting"));
-        for (String page : List.of("bootstrap", "workshop", "settling", "relay", "renewables")) {
-            String body = lang.get("gui.grindless.guide." + page + ".body").getAsString();
+                renewables.contains("Do not assume overnight or restart autonomy"));
+        for (String page : List.of("starter_supplies", "clay_mixer", "settling", "relay", "biomass")) {
+            String body = lang.get("gui.grindless.quest.lesson." + page).getAsString();
             equal("T0 prose does not duplicate recipe numbers or witness bill: " + page, false,
                     body.matches("(?s).*\\b(?:250|750|1000|33|41|21|20)\\b.*"));
             for (String jargon : List.of("a model's sufficient stock", "Tier-accepted", "Declarations do not certify")) {
@@ -741,8 +758,8 @@ public final class VerifyResourceGuidance {
             }
         }
         equal("manual five-Matrix/calibrated exit is explicit without a Bench shortcut", true,
-                lang.get("gui.grindless.guide.relay.body").getAsString().contains("manual five-Relay-Matrix")
-                        && lang.get("gui.grindless.guide.relay.body").getAsString().contains("Assembly Bench does not fabricate a Matrix"));
+                lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("manual five-Relay-Matrix")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Assembly Bench does not fabricate a Matrix"));
         String exporter = Files.readString(root.resolve(Path.of("tools", "dashboard", "DashboardExport.java")));
         for (String source : List.of("VerifySustainability", "VerifySustainabilityAdapters",
                 "VerifySustainabilityRegistry", "VerifySustainabilityT0", "VerifyResourceGuidance")) {

@@ -2520,6 +2520,14 @@ public final class VerifySustainability {
                 QuestCatalogue.tasks().size(), authorities.objectives().size());
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Route route = authorities.routes().get("quest/" + task.id());
+            if (task.type() == QuestCatalogue.Type.LESSON) {
+                eq("a teaching checklist never invents a material route " + task.id(), null, route);
+                eq("a teaching checklist declares no reward route " + task.id(), null,
+                        authorities.objectives().get(task.id()).rewardRoute());
+                eq("lesson evidence stays explicit " + task.id(), task.count(),
+                        authorities.objectives().get(task.id()).count());
+                continue;
+            }
             Map<Resource, Long> rewards = new TreeMap<>();
             task.rewards().forEach(reward -> rewards.merge(new Resource(Kind.ITEM, reward.itemId()),
                     (long) reward.count(), Math::addExact));
@@ -2529,6 +2537,13 @@ public final class VerifySustainability {
                     authorities.objectives().get(task.id()).count());
         }
         Route starter = authorities.routes().get("quest/" + QuestCatalogue.STARTER_SUPPLIES);
+        eq("the final Relay route declares its strict physical rating", "F1",
+                authorities.routes().get("quest/relay").conditions().get("matrix_rating"));
+        eq("the native first-frontier declaration keeps the authored untagged production identity",
+                new Resource(Kind.ITEM, "grindless:relay_matrix"), authorities.objectives().get("relay").subject());
+        eq("a non-default F2 objective cannot inherit that untagged identity",
+                new Resource(Kind.ITEM, "grindless:relay_matrix", 2, "items"),
+                authorities.objectives().get("industrial_matrix").subject());
         eq("the starter has no physical objective", null,
                 authorities.objectives().get(QuestCatalogue.STARTER_SUPPLIES).subject());
         eq("the starter still needs the held book without consuming it",

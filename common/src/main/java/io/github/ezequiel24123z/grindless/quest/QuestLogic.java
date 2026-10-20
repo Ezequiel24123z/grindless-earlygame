@@ -28,6 +28,9 @@ public final class QuestLogic {
     }
 
     public static Status consider(QuestCatalogue.Task task, Set<String> claimed, boolean evidenceMet) {
+        if (!QuestCatalogue.unlocked(QuestCatalogue.chapter(task), claimed)) {
+            return Status.LOCKED;
+        }
         if (claimed.contains(task.id())) {
             return Status.CLAIMED;
         }
@@ -74,8 +77,12 @@ public final class QuestLogic {
                     || task.evidence() == QuestCatalogue.Evidence.MATRIX) && task.count() < 1) {
                 problems.add(task.id() + " asks for no items");
             }
-            if (task.rewards().isEmpty()) {
-                problems.add(task.id() + " has no rewards");
+            if ((task.evidence() == QuestCatalogue.Evidence.MATRIX) != (task.matrixRating() != null)) {
+                problems.add(task.id() + " has an inconsistent Matrix rating");
+            }
+            if (task.type() == null || task.type() == QuestCatalogue.Type.REWARD && task.rewards().isEmpty()
+                    || task.type() == QuestCatalogue.Type.LESSON && !task.rewards().isEmpty()) {
+                problems.add(task.id() + " has rewards inconsistent with its explicit task type");
             }
             for (QuestCatalogue.Reward reward : task.rewards()) {
                 if (reward.count() < 1 || reward.count() > 64 || reward.itemId().isBlank()) {

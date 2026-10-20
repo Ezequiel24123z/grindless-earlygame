@@ -30,7 +30,8 @@ public final class QuestProjection {
             throw new IllegalStateException("Cannot project an invalid quest catalogue: " + problems);
         }
         return QuestCatalogue.tasks().stream()
-                .map(task -> new Entry(id(task.id()), task, task.requires().stream().map(QuestProjection::id).toList()))
+                .map(task -> new Entry(id(task.id()), task,
+                        QuestCatalogue.requirements(task).stream().map(QuestProjection::id).toList()))
                 .toList();
     }
 
@@ -38,7 +39,8 @@ public final class QuestProjection {
     public static Map<String, Boolean> claimed(Set<String> legacyClaims) {
         Map<String, Boolean> result = new LinkedHashMap<>();
         for (Entry entry : entries()) {
-            result.put(entry.id(), legacyClaims.contains(entry.task().id()));
+            result.put(entry.id(), QuestCatalogue.unlocked(QuestCatalogue.chapter(entry.task()), legacyClaims)
+                    && legacyClaims.contains(entry.task().id()));
         }
         return java.util.Collections.unmodifiableMap(result);
     }

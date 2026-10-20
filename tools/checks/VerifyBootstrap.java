@@ -45,6 +45,10 @@ public final class VerifyBootstrap {
     }
 
     private static void recipes() throws IOException {
+        eq("exactly twenty-two current shaped Bootstrap crafts remain", 22, BootstrapRecipes.shaped().size());
+        no("the retired Guide is not a catalogue craft", BootstrapRecipes.shaped().stream()
+                .anyMatch(recipe -> recipe.result().equals("grindless:field_guide")));
+        no("the retired Guide has no shipped crafting JSON", Files.exists(RECIPES.resolve("field_guide.json")));
         for (BootstrapRecipes.Shaped recipe : BootstrapRecipes.shaped()) {
             JsonObject json = read(recipe.name());
             eq(recipe.name() + " is shaped", "minecraft:crafting_shaped",

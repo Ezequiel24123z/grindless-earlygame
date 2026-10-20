@@ -16,7 +16,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Behaviour checks for the reachable quest route and field guide (ADR-0100). Not part of the mod. */
+/** Quest teaching, chapter boundaries and legacy identity checks. Not part of the mod. */
 public final class VerifyQuest {
 
     private static final Path ROOT = Path.of(".");
@@ -25,8 +25,14 @@ public final class VerifyQuest {
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
-            "bootstrap", "workshop", "settling", "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
+            "bootstrap", "workshop", "renewable_supply", "settling", "bioculture", "workshop_logistics",
+            "relay", "power", "extraction", "factory", "renewables", "logistics", "factory_world",
             "industrial");
+    private static final List<String> LEGACY_IDS = List.of(
+            "multitool", "crank", "extractor", "quern", "water", "clay_mixer", "ceramics",
+            "workshop_flow", "settling", "calibrate", "relay", "thermal", "pylon", "scanner",
+            "terrestrial", "pulverizer", "furnace", "press", "assembler", "matrix_line", "glass",
+            "logistics", "kiln", "factory_world", "industrial_matrix");
 
     private static final List<String> FORBIDDEN = List.of(
             "betterquesting", "patchouli", "funwayguy", "draconic", "galacticraft",
@@ -55,18 +61,23 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("twenty-six tasks, including free starter supplies and the assembled settling line", 26, tasks.size());
-        eq("eleven T0-to-T1 lines", LINES, QuestCatalogue.lines());
+        eq("thirty-two T0 tasks and fourteen preserved T1 objectives", 46, tasks.size());
+        eq("all source-defined lines remain explicit", LINES, QuestCatalogue.lines());
+        eq("the T0 chapter has its own seven lines", LINES.subList(0, 7),
+                QuestCatalogue.lines(QuestCatalogue.Chapter.T0));
+        eq("the T1 chapter has its own seven lines", LINES.subList(7, 14),
+                QuestCatalogue.lines(QuestCatalogue.Chapter.T1));
         yes("the first task has no dependency", tasks.get(0).requires().isEmpty());
         eq("the last task is the physical Industrial hand-off", "industrial_matrix", tasks.get(tasks.size() - 1).id());
         eq("one task per id", tasks.size(),
                 (int) tasks.stream().map(QuestCatalogue.Task::id).distinct().count());
-        eq("all prior task ids retain their order and identity", List.of(
-                "multitool", "crank", "extractor", "quern", "water", "clay_mixer", "ceramics",
-                "workshop_flow", "settling", "calibrate", "relay", "thermal", "pylon", "scanner",
-                "terrestrial", "pulverizer", "furnace", "press", "assembler", "matrix_line", "glass",
-                "logistics", "kiln", "factory_world", "industrial_matrix"),
-                tasks.subList(1, tasks.size()).stream().map(QuestCatalogue.Task::id).toList());
+        Set<String> old = new HashSet<>(LEGACY_IDS);
+        old.add(QuestCatalogue.STARTER_SUPPLIES);
+        eq("all 26 original rewarded IDs remain; new teaching never mints a material reward", old,
+                tasks.stream().filter(task -> task.type() == QuestCatalogue.Type.REWARD)
+                        .map(QuestCatalogue.Task::id).collect(java.util.stream.Collectors.toSet()));
+        eq("every added task has an explicit rewardless lesson type", 20L, tasks.stream()
+                .filter(task -> task.type() == QuestCatalogue.Type.LESSON && task.rewards().isEmpty()).count());
         eq("old evidence ordinals do not move", List.of(0, 1, 2), List.of(
                 QuestCatalogue.Evidence.ITEM.ordinal(), QuestCatalogue.Evidence.DIMENSION.ordinal(),
                 QuestCatalogue.Evidence.MATRIX.ordinal()));
@@ -98,7 +109,7 @@ public final class VerifyQuest {
                 "kiln|matrix_line|minecraft:brick/8",
                 "factory_world|matrix_line,glass|minecraft:grass_block/16",
                 "industrial_matrix|matrix_line,glass,factory_world|minecraft:iron_ingot/8"),
-                tasks.subList(1, tasks.size()).stream().map(task -> task.id() + "|"
+                LEGACY_IDS.stream().map(QuestCatalogue::byId).map(task -> task.id() + "|"
                         + String.join(",", task.requires()) + "|" + task.rewards().stream()
                         .map(reward -> reward.itemId() + "/" + reward.count())
                         .collect(java.util.stream.Collectors.joining(","))).toList());
@@ -175,6 +186,26 @@ public final class VerifyQuest {
         yes("a walk from the multitool reaches the F2 Matrix", reaches("multitool", "industrial_matrix"));
         no("the survival route has no dimension objectives",
                 tasks.stream().anyMatch(task -> task.evidence() == QuestCatalogue.Evidence.DIMENSION));
+        eq("relay is the final T0 task", "relay", tasks.stream()
+                .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0)
+                .reduce((first, second) -> second).orElseThrow().id());
+        eq("the T0 gate checks the physical Matrix, not ordinary possession",
+                QuestCatalogue.Evidence.MATRIX, task("relay").evidence());
+        eq("the T0 gate requires the exact F1 rating", io.github.ezequiel24123z.grindless.energy.FluxTier.F1,
+                task("relay").matrixRating());
+        no("opening the book or reaching calibration cannot unlock T1",
+                QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, Set.of("calibrate")));
+        no("an old T1 claim does not unlock T1", QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1,
+                Set.of("thermal", "industrial_matrix")));
+        yes("only the final T0 claim unlocks T1", QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, Set.of("relay")));
+        for (QuestCatalogue.Task task : tasks) {
+            if (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1) {
+                yes(task.id() + " has an explicit projected Relay dependency",
+                        QuestCatalogue.requirements(task).contains("relay"));
+                eq(task.id() + " cannot expose a retained T1 claim prematurely", QuestLogic.Status.LOCKED,
+                        QuestLogic.consider(task, Set.of(task.id()), true));
+            }
+        }
         for (QuestCatalogue.Task task : tasks) {
             String blob = (task.id() + " " + task.subject() + " " + task.line()).toLowerCase();
             no(task.id() + " is not a spatial prototype or an unbuilt world",
@@ -256,9 +287,10 @@ public final class VerifyQuest {
             }
             for (QuestCatalogue.Reward entry : task.rewards()) {
                 String reward = entry.itemId();
-                no(task.id() + " reward is not some task's evidence", itemSubjects.contains(reward)
+                no(task.id() + " T0 reward cannot bypass a physical T0 checklist",
+                        QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0 && (itemSubjects.contains(reward)
                         || QuestCatalogue.tasks().stream().anyMatch(other ->
-                        other.evidence() == QuestCatalogue.Evidence.ITEM && other.subject().equals(reward)));
+                        other.evidence() == QuestCatalogue.Evidence.ITEM && other.subject().equals(reward))));
                 yes(task.id() + " reward is a vanilla or Grindless item",
                         reward.startsWith("minecraft:") || known.contains(path(reward)));
             }
@@ -267,8 +299,8 @@ public final class VerifyQuest {
 
     private static void guide() throws IOException {
         List<Integer> longText = java.util.stream.IntStream.range(0, 31).boxed().toList();
-        List<List<Integer>> parts = GuideCatalogue.paginate(longText, 15);
-        eq("long guide content uses three physical pages", 3, parts.size());
+        List<List<Integer>> parts = QuestTeaching.paginate(longText, 15);
+        eq("long quest help uses three physical pages", 3, parts.size());
         eq("pagination never drops or duplicates a wrapped line", longText,
                 parts.stream().flatMap(List::stream).toList());
         yes("each guide page fits the body area", parts.stream().allMatch(part -> part.size() <= 15));
@@ -279,37 +311,54 @@ public final class VerifyQuest {
         } catch (IllegalArgumentException expected) {
             yes("a zero-line page is rejected explicitly", true);
         }
-        List<String> pages = GuideCatalogue.pages();
-        eq("the guide follows the reachable quest lines", QuestCatalogue.lines(), pages);
         JsonObject lang = JsonParser.parseString(Files.readString(LANG)).getAsJsonObject();
         StringBuilder all = new StringBuilder();
-        for (String page : pages) {
-            String title = GuideCatalogue.titleKey(page);
-            String body = GuideCatalogue.bodyKey(page);
-            yes(page + " has a title", lang.has(title) && !lang.get(title).getAsString().isBlank());
-            yes(page + " has a body", lang.has(body) && !lang.get(body).getAsString().isBlank());
-            all.append(lang.get(body).getAsString()).append('\n');
+        for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+            String body = QuestTeaching.bodyKey(task);
+            yes(task.id() + " has concise in-quest teaching", lang.has(body)
+                    && !lang.get(body).getAsString().isBlank() && lang.get(body).getAsString().length() <= 1400);
+            yes(task.id() + " has a localized route classification",
+                    lang.has("gui.grindless.quest.path." + QuestTeaching.path(task).name().toLowerCase(java.util.Locale.ROOT)));
+            if (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0) {
+                all.append(lang.get(body).getAsString()).append('\n');
+            }
         }
         String text = all.toString();
         for (String mark : List.of(
-                "Multitool", "Hand Crank", "Crude Extractor", "Relay Matrices", "Thermal Generator", "Flux Pylon",
-                "Prospector", "Terrestrial Extractor", "Pulverizer", "Arc Furnace", "Press", "Assembler", "cobblestone",
-                "Conveyor Belts", "Factory Portal", "Quern", "Clay Mixer", "Firing Chamber", "grog",
-                "Settling Trough", "Settling Channel", "Settling Screen")) {
-            yes("the guide mentions " + mark, text.contains(mark));
+                "starter", "Quest Book", "Superflat", "construction", "Multitool", "Crank Handle",
+                "Hand Pump", "Quern", "Clay Mixer", "grog", "Firing Chamber", "insulators", "Crude Extractor",
+                "Geological Collector", "aggregate", "Settling", "Settling Channel", "Settling Screen",
+                "water", "iron", "copper", "redstone", "Slag", "Biocultivator", "daylight", "biomass",
+                "fibreboard", "paper", "sticks", "charcoal", "Biomass Dynamo", "Basic Tank", "Clay Conduit",
+                "Conveyor Belts", "Crude Manipulator", "Assembly Bench", "Research Terminal", "Data Core",
+                "Calibrated Data Core", "F1", "T1")) {
+            yes("the T0 quests teach " + mark, text.contains(mark));
         }
+        no("T0 does not present the Thermal Generator as its next required machine", text.contains("Thermal Generator"));
+        yes("optional extraction is classified explicitly", QuestTeaching.path(task("extractor")) == QuestTeaching.Path.OPTIONAL);
+        yes("the first core is replaceable through production, not reset claims",
+                lang.get(QuestTeaching.bodyKey(task("calibrated_core"))).getAsString().contains("not a reward reset"));
+        eq("Firing help uses runtime formation cells", io.github.ezequiel24123z.grindless.structure.WorkshopStructure.FIRING_CHAMBER,
+                QuestTeaching.structure(task("firing")));
+        eq("Settling help uses runtime formation cells", io.github.ezequiel24123z.grindless.structure.WorkshopStructure.SETTLING_TROUGH,
+                QuestTeaching.structure(task("settling")));
         for (String prototype : List.of(
                 "ground array", "luna", "helium-3", "rocket", "drift", "station",
                 "starward link", "sealed chamber", "arriving is the victory")) {
-            no("the guide does not advertise " + prototype, text.toLowerCase().contains(prototype));
+            Pattern namedPrototype = Pattern.compile("\\b" + Pattern.quote(prototype) + "\\b", Pattern.CASE_INSENSITIVE);
+            no("T0 teaching does not advertise " + prototype, namedPrototype.matcher(text).find());
+            yes("the guard still detects the actual prototype " + prototype,
+                    namedPrototype.matcher("Visit the " + prototype + " now.").find());
         }
+        no("stationary item transport is not an orbital station advertisement",
+                Pattern.compile("\\bstation\\b").matcher("The stock is stationary.").find());
         no("the guide does not send the reader to an orb", text.toLowerCase().contains("orb"));
         no("the guide does not name a forbidden mod", containsForbidden(text.toLowerCase()));
     }
 
     private static void items() throws IOException {
         JsonObject lang = JsonParser.parseString(Files.readString(LANG)).getAsJsonObject();
-        for (String item : List.of("quest_book", "field_guide")) {
+        for (String item : List.of("quest_book")) {
             yes(item + " is named", lang.has("item.grindless." + item));
             yes(item + " has a tooltip", lang.has("tooltip.grindless." + item));
             JsonObject recipe = JsonParser.parseString(Files.readString(RECIPES.resolve(item + ".json")))
@@ -319,14 +368,16 @@ public final class VerifyQuest {
                     recipe.getAsJsonObject("result").get("item").getAsString());
             no(item + " is not research gated", recipe.toString().contains("blueprint"));
         }
+        no("the deprecated Guide cannot be crafted normally", Files.exists(RECIPES.resolve("field_guide.json")));
+        yes("the old Guide has a distinct deprecation tooltip", lang.has("tooltip.grindless.field_guide.legacy"));
         String items = Files.readString(SOURCES.resolve("registry/ModItems.java"));
         String tabs = Files.readString(SOURCES.resolve("registry/ModCreativeTabs.java"));
         String menus = Files.readString(SOURCES.resolve("registry/ModMenus.java"));
         String client = Files.readString(SOURCES.resolve("client/GrindlessClient.java"));
         yes("both handhelds are registered",
                 items.contains("register(\"quest_book\"") && items.contains("register(\"field_guide\""));
-        yes("both sit on the creative tab",
-                tabs.contains("QUEST_BOOK") && tabs.contains("FIELD_GUIDE"));
+        yes("the Quest Book remains on the normal creative tab", tabs.contains("QUEST_BOOK"));
+        no("the retired Guide is no longer offered on the creative tab", tabs.contains("FIELD_GUIDE"));
         yes("both menus are registered",
                 menus.contains("register(\"quest_book\"") && menus.contains("register(\"field_guide\""));
         yes("both screens are bound",
@@ -337,6 +388,13 @@ public final class VerifyQuest {
                 && questMenu.contains("tasks.size() + i"));
         yes("the screen shows the synchronized objective", questScreen.contains("menu.held(selected)")
                 && lang.has("gui.grindless.quest.objective.item"));
+        yes("native help pages all lesson lines without truncating them", questScreen.contains("QuestTeaching.paginate(")
+                && questScreen.contains("QuestTeachingClient.content("));
+        yes("native T1 navigation is server-gated", questScreen.contains("menu.chapterUnlocked(")
+                && questMenu.contains("QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, claimed)"));
+        String legacy = Files.readString(SOURCES.resolve("item/FieldGuideItem.java"));
+        yes("old Guide use routes to quests without rewriting item NBT", legacy.contains("new QuestBookMenu(")
+                && legacy.contains("QuestBackendPlatform.open(server)") && !legacy.contains("setItemInHand"));
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             yes(task.id() + " has a row label", lang.has("gui.grindless.quest.task." + task.id()));
         }

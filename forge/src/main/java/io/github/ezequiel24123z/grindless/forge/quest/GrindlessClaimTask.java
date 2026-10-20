@@ -11,6 +11,7 @@ import io.github.ezequiel24123z.grindless.quest.QuestProgress;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import java.util.Set;
 
 /** Heracles 1.1.13 adapter: native completion means a recorded Grindless claim, not past possession. */
 public record GrindlessClaimTask(String id, String catalogueId)
@@ -33,7 +34,9 @@ public record GrindlessClaimTask(String id, String catalogueId)
 
     @Override
     public NumericTag test(QuestTaskType<?> type, NumericTag progress, ServerPlayer player) {
-        return storage().of(QuestProgress.get(player).claimed(player.getUUID()).contains(catalogueId));
+        Set<String> claimed = QuestProgress.get(player).claimed(player.getUUID());
+        return storage().of(QuestCatalogue.unlocked(QuestCatalogue.chapter(QuestCatalogue.byId(catalogueId)), claimed)
+                && claimed.contains(catalogueId));
     }
 
     @Override

@@ -45,6 +45,11 @@ public final class VerifyHeracles {
             "settling", "calibrate", "relay", "thermal", "pylon", "scanner", "terrestrial", "pulverizer",
             "furnace", "press", "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
             "industrial_matrix");
+    private static final List<String> LESSON_IDS = List.of(
+            "quest_book_help", "superflat", "construction", "manual_work", "grog", "firing",
+            "geological_collector", "aggregate", "water_recovery", "mineral_feed", "biocultivator",
+            "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors", "assembly_bench",
+            "research_terminal", "data_core", "calibrated_core");
     private static int assertions;
 
     public static void main(String[] args) throws Exception {
@@ -55,6 +60,7 @@ public final class VerifyHeracles {
                 task.evidence() == QuestCatalogue.Evidence.FREE ? HeraclesDefinitions.icon(task) : Items.BOOK);
         definitions(definitions);
         projection(definitions);
+        chapterVisibility(definitions);
         files(definitions);
         packets();
         System.out.println("ALL HERACLES CONTRACT CHECKS PASSED: " + assertions);
@@ -62,11 +68,12 @@ public final class VerifyHeracles {
 
     private static void definitions(Map<String, Quest> definitions) {
         equal("one native quest per catalogue task", QuestCatalogue.tasks().size(), definitions.size());
-        equal("only the free starter is added to the 25-task catalogue", 26, definitions.size());
+        equal("the complete book has 32 T0 nodes and 14 retained T1 objectives", 46, definitions.size());
         Set<String> expectedIds = new LinkedHashSet<>();
         ORIGINAL_TASK_IDS.forEach(id -> expectedIds.add("grindless_" + id));
         expectedIds.add(STARTER_ID);
-        equal("all 25 original generated ids are retained", expectedIds, definitions.keySet());
+        LESSON_IDS.forEach(id -> expectedIds.add("grindless_" + id));
+        equal("all 26 original generated ids and exactly 20 typed lessons are retained", expectedIds, definitions.keySet());
         equal("the starter is the first generated entry", STARTER_ID, definitions.keySet().iterator().next());
         var starter = QuestCatalogue.tasks().get(0);
         equal("the first catalogue task is the starter", QuestCatalogue.STARTER_SUPPLIES, starter.id());
@@ -93,12 +100,78 @@ public final class VerifyHeracles {
                     com.google.gson.JsonParser.parseString(encoded.get(entry.id()))).getOrThrow(false,
                     message -> { throw new AssertionError(message); });
             equal("actual binary codec round-trip " + entry.id(), true, HeraclesDefinitions.matches(quest, decoded));
-            equal("the codec preserves root visibility " + entry.id(), QuestDisplayStatus.LOCKED,
+            equal("the codec preserves the chapter's real hidden policy " + entry.id(),
+                    QuestCatalogue.chapter(entry.task()) == QuestCatalogue.Chapter.T0
+                            ? QuestDisplayStatus.LOCKED : QuestDisplayStatus.IN_PROGRESS,
                     decoded.settings().hiddenUntil());
+            Set<String> groups = entry.task().id().equals(QuestCatalogue.T0_COMPLETION)
+                    ? Set.of(HeraclesDefinitions.GROUP, HeraclesDefinitions.T1_GROUP)
+                    : Set.of(QuestCatalogue.chapter(entry.task()) == QuestCatalogue.Chapter.T0
+                            ? HeraclesDefinitions.GROUP : HeraclesDefinitions.T1_GROUP);
+            equal("the codec retains actual separate chapter membership " + entry.id(), groups,
+                    decoded.display().groups().keySet());
+            if (QuestCatalogue.chapter(entry.task()) == QuestCatalogue.Chapter.T1) {
+                equal("every T1 node has the actual individual T0 gate " + entry.id(), true,
+                        decoded.dependencies().contains("grindless_relay"));
+            }
         }
         var bad = com.google.gson.JsonParser.parseString("{\"type\":\"grindless:claim\",\"quest\":\"invented\"}");
         equal("task codec refuses unknown catalogue ids", true,
                 GrindlessClaimTask.TYPE.codec("claim").parse(JsonOps.INSTANCE, bad).error().isPresent());
+    }
+
+    /** Exercise the selected binary's visibility function, including its absent-parent default. */
+    private static void chapterVisibility(Map<String, Quest> definitions) throws Exception {
+        earth.terrarium.heracles.client.handlers.ClientQuests.sync(definitions,
+                List.of(HeraclesDefinitions.GROUP, HeraclesDefinitions.T1_GROUP));
+        var widgets = Class.forName("earth.terrarium.heracles.client.screens.quests.QuestsWidget");
+        var hide = widgets.getDeclaredMethod("shouldHide", String.class,
+                it.unimi.dsi.fastutil.objects.Object2BooleanMap.class,
+                earth.terrarium.heracles.client.handlers.ClientQuests.QuestEntry.class);
+        hide.setAccessible(true);
+        var statuses = new it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap<String>();
+        statuses.defaultReturnValue(true);
+        var projected = QuestProjection.claimed(Set.of("thermal", "industrial_matrix"));
+        definitions.forEach((id, quest) -> {
+            if (quest.display().groups().containsKey(HeraclesDefinitions.T1_GROUP)) {
+                statuses.put(id, projected.get(id).booleanValue());
+            }
+        });
+        equal("the final T0 ID is a real same-ledger gate anchor in the T1 group", true,
+                statuses.containsKey("grindless_relay"));
+        for (var entry : QuestProjection.entries()) {
+            if (QuestCatalogue.chapter(entry.task()) != QuestCatalogue.Chapter.T1) {
+                continue;
+            }
+            var nativeEntry = earth.terrarium.heracles.client.handlers.ClientQuests.get(entry.id()).orElseThrow();
+            equal("the actual binary hides premature T1 content " + entry.id(), true,
+                    hide.invoke(null, HeraclesDefinitions.T1_GROUP, statuses, nativeEntry));
+        }
+        var thermal = earth.terrarium.heracles.client.handlers.ClientQuests.get("grindless_thermal").orElseThrow();
+        statuses.removeBoolean("grindless_relay");
+        equal("counterexample: an absent cross-group parent defaults to visible in the actual binary", false,
+                hide.invoke(null, HeraclesDefinitions.T1_GROUP, statuses, thermal));
+        statuses.put("grindless_relay", false);
+        equal("restoring the explicit incomplete gate hides T1", true,
+                hide.invoke(null, HeraclesDefinitions.T1_GROUP, statuses, thermal));
+        statuses.put("grindless_relay", true);
+        equal("the actual binary exposes the first T1 objective after the final T0 claim", false,
+                hide.invoke(null, HeraclesDefinitions.T1_GROUP, statuses, thermal));
+
+        var old = new io.github.ezequiel24123z.grindless.quest.QuestProgress();
+        var player = java.util.UUID.randomUUID();
+        old.claim(player, "thermal");
+        old.claim(player, "industrial_matrix");
+        var before = old.save(new CompoundTag());
+        var nativeProgress = new QuestsProgress(new HashMap<>());
+        HeraclesClaimProjection.reconcile(nativeProgress, old.claimed(player), definitions);
+        equal("a retained T1 claim is not a premature native completion", false, nativeProgress.isComplete("grindless_thermal"));
+        equal("hiding a retained claim does not rewrite or reset its ledger", before, old.save(new CompoundTag()));
+        old.claim(player, "relay");
+        HeraclesClaimProjection.reconcile(nativeProgress, old.claimed(player), definitions);
+        equal("the same retained claim reappears after the individual gate", true, nativeProgress.isComplete("grindless_thermal"));
+        equal("restoration does not invent a native reward", true,
+                nativeProgress.getProgress("grindless_thermal").claimedRewards().isEmpty());
     }
 
     private static void projection(Map<String, Quest> definitions) throws Exception {
@@ -316,7 +389,7 @@ public final class VerifyHeracles {
         HeraclesDefinitions.synchronize(config, encoded);
         HeraclesDefinitions.verifyFiles(config, encoded);
         loadNative(config);
-        equal("the real loader accepts the upgraded 26-task owned bundle", 26, QuestHandler.quests().size());
+        equal("the real loader accepts the expanded 46-task owned bundle", 46, QuestHandler.quests().size());
         for (String id : oldCatalogue.keySet()) {
             equal("bundle upgrade retains the original native id and claim contract " + id, true,
                     HeraclesDefinitions.matches(definitions.get(id), QuestHandler.get(id)));
@@ -328,7 +401,7 @@ public final class VerifyHeracles {
         equal("the upgraded starter has no native dependencies", Set.of(), QuestHandler.get(STARTER_ID).dependencies());
         byte[] upgraded = Files.readAllBytes(HeraclesDefinitions.bundle(config));
         HeraclesDefinitions.synchronize(config, encoded);
-        equal("reopening the upgraded 26-task bundle is byte-idempotent", true,
+        equal("reopening the expanded 46-task bundle is byte-idempotent", true,
                 java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
     }
 
