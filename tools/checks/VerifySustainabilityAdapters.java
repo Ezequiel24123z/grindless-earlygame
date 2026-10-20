@@ -58,6 +58,21 @@ public final class VerifySustainabilityAdapters {
 
     private static void questAccessPrerequisites() throws IOException {
         Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
+        eq("all physical and teaching objectives remain inventoried", 46, snapshot.objectives().size());
+        eq("only the original material-reward quests create reward routes", 26L,
+                snapshot.routes().values().stream().filter(route -> route.authority() == Authority.QUEST_REWARD).count());
+        for (var task : io.github.ezequiel24123z.grindless.quest.QuestCatalogue.tasks()) {
+            if (task.type() == io.github.ezequiel24123z.grindless.quest.QuestCatalogue.Type.LESSON) {
+                eq("a reading/checklist objective does not invent supply " + task.id(), null,
+                        snapshot.objectives().get(task.id()).rewardRoute());
+                eq("a reading/checklist has no material reward route " + task.id(), false,
+                        snapshot.routes().containsKey("quest/" + task.id()));
+            }
+        }
+        eq("the retired Guide has no canonical craft", false, snapshot.routes().containsKey("craft/field_guide"));
+        eq("the retired Guide has no primitive Bench projection", false, snapshot.routes().containsKey("bench/field_guide"));
+        eq("the retired Guide has no Assembler projection", false,
+                snapshot.routes().containsKey("assemble/bootstrap/field_guide"));
         Resource book = new Resource(Kind.ITEM, io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes.shaped()
                 .stream().filter(craft -> craft.name().equals("quest_book")).findFirst().orElseThrow().result());
         for (Route route : snapshot.routes().values()) {

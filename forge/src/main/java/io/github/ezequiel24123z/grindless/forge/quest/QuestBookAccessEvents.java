@@ -60,7 +60,7 @@ public final class QuestBookAccessEvents {
         if (result == QuestBookAccess.Result.INVENTORY_FULL) {
             WAITING_FOR_SPACE.add(player.getUUID());
             if (notifyFull) {
-                player.displayClientMessage(Component.translatable("chat.grindless.quest.book.inventory_full"), false);
+                player.displayClientMessage(Component.translatable("chat.grindless.quest.book.space"), false);
             }
         } else {
             WAITING_FOR_SPACE.remove(player.getUUID());

@@ -557,6 +557,36 @@ public final class VerifySustainabilityRegistry {
                 }
                 """)
                 && questMethod(sources, "QuestCatalogue", """
+                public static Chapter chapter(Task task) {
+                    return switch (task.id()) {
+                        case "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
+                                "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
+                                "industrial_matrix" -> Chapter.T1;
+                        default -> Chapter.T0;
+                    };
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                public static boolean unlocked(Chapter chapter, Set<String> claimed) {
+                    return chapter == Chapter.T0 || claimed.contains(T0_COMPLETION);
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                public static List<String> requirements(Task task) {
+                    if (chapter(task) != Chapter.T1 || task.requires().contains(T0_COMPLETION)) {
+                        return task.requires();
+                    }
+                    List<String> required = new ArrayList<>(task.requires());
+                    required.add(T0_COMPLETION);
+                    return List.copyOf(required);
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                public static List<String> lines(Chapter chapter) {
+                    return TASKS.stream().filter(task -> chapter(task) == chapter).map(Task::line).distinct().toList();
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
                 public static List<String> lines() {
                     List<String> lines = new ArrayList<>();
                     for (Task task : TASKS) {
@@ -571,6 +601,12 @@ public final class VerifySustainabilityRegistry {
                 private static Task task(String id, String line, Evidence evidence, String subject, int count,
                                          List<String> requires, Reward reward) {
                     return new Task(id, line, evidence, subject, count, null, List.copyOf(requires), reward);
+                }
+                """)
+                && questMethod(sources, "QuestCatalogue", """
+                private static Task lesson(String id, String line, Evidence evidence, String subject, int count,
+                                           List<String> requires) {
+                    return new Task(id, line, evidence, subject, count, null, List.copyOf(requires), List.of(), Type.LESSON);
                 }
                 """)
                 && questMethod(sources, "QuestCatalogue", """
@@ -601,15 +637,25 @@ public final class VerifySustainabilityRegistry {
                 && questMethod(sources, "QuestBookMenu", """
                 @Override
                 public boolean stillValid(Player player) {
-                    return QuestClaimService.holdingBook(player);
+                    return QuestClaimService.holdingBook(player)
+                            || player.getMainHandItem().is(ModItems.FIELD_GUIDE.get())
+                            || player.getOffhandItem().is(ModItems.FIELD_GUIDE.get());
                 }
                 """)
                 && questMethod(sources, "QuestBookMenu", """
                 public QuestBookMenu(int id, Inventory inventory) {
                     super(ModMenus.QUEST_BOOK.get(), id);
                     this.player = inventory.player;
-                    this.state = new SimpleContainerData(QuestCatalogue.tasks().size() * 2);
+                    this.state = new SimpleContainerData(QuestCatalogue.tasks().size() * 2 + 1);
+                    for (int task = 0; task < QuestCatalogue.tasks().size(); task++) {
+                        state.set(task, QuestLogic.Status.UNMET.ordinal());
+                    }
                     addDataSlots(state);
+                }
+                """)
+                && questMethod(sources, "QuestBookMenu", """
+                public boolean chapterUnlocked(QuestCatalogue.Chapter chapter) {
+                    return chapter == QuestCatalogue.Chapter.T0 || state.get(QuestCatalogue.tasks().size() * 2) == 1;
                 }
                 """)
                 && questMethod(sources, "QuestBookMenu", """
@@ -635,6 +681,7 @@ public final class VerifySustainabilityRegistry {
                     QuestProgress progress = QuestProgress.get(server);
                     Set<String> claimed = progress.claimed(server.getUUID());
                     List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
+                    state.set(tasks.size() * 2, QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, claimed) ? 1 : 0);
                     for (int i = 0; i < tasks.size(); i++) {
                         QuestCatalogue.Task task = tasks.get(i);
                         int held = held(server, task);
@@ -669,6 +716,7 @@ public final class VerifySustainabilityRegistry {
                         Grindless.LOG.error("Rejected quest claim {} from {}: {}", taskId, player.getUUID(), result);
                     }
                     if (result == Result.CLAIMED) {
+                        DevTelemetry.milestone(player.level(), taskId);
                         player.inventoryMenu.broadcastChanges();
                         player.displayClientMessage(Component.translatable("chat.grindless.quest.claimed",
                                 Component.translatable("gui.grindless.quest.task." + taskId)), false);
@@ -700,6 +748,12 @@ public final class VerifySustainabilityRegistry {
                     }
                     if (status != QuestLogic.Status.CLAIMABLE) {
                         return Result.UNMET;
+                    }
+                    if (task.type() == QuestCatalogue.Type.LESSON) {
+                        if (!task.rewards().isEmpty()) {
+                            return Result.INVALID_REWARD;
+                        }
+                        return progress.claim(player, taskId) ? Result.CLAIMED : Result.ALREADY_CLAIMED;
                     }
                     if (task.rewards().isEmpty()) {
                         return Result.INVALID_REWARD;
@@ -773,16 +827,13 @@ public final class VerifySustainabilityRegistry {
                             ModItems.QUEST_BOOK.get());
                     if (result == Result.DELIVERED) {
                         player.inventoryMenu.broadcastChanges();
-                        player.displayClientMessage(Component.translatable("chat.grindless.quest.book.received"), false);
+                        player.displayClientMessage(Component.translatable("chat.grindless.quest.book.restored"), false);
                     }
                     return result;
                 }
                 """)
                 && questMethod(sources, "QuestBookAccess", """
                 static Result ensure(QuestProgress progress, UUID player, Inventory inventory, Item book) {
-                    if (progress.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES)) {
-                        return Result.STARTER_CLAIMED;
-                    }
                     for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
                         if (inventory.getItem(slot).is(book)) {
                             return Result.PRESENT;
@@ -843,7 +894,7 @@ public final class VerifySustainabilityRegistry {
                     if (result == QuestBookAccess.Result.INVENTORY_FULL) {
                         WAITING_FOR_SPACE.add(player.getUUID());
                         if (notifyFull) {
-                            player.displayClientMessage(Component.translatable("chat.grindless.quest.book.inventory_full"), false);
+                            player.displayClientMessage(Component.translatable("chat.grindless.quest.book.space"), false);
                         }
                     } else {
                         WAITING_FOR_SPACE.remove(player.getUUID());
@@ -852,6 +903,9 @@ public final class VerifySustainabilityRegistry {
                 """)
                 && questMethod(sources, "QuestLogic", """
                 public static Status consider(QuestCatalogue.Task task, Set<String> claimed, boolean evidenceMet) {
+                    if (!QuestCatalogue.unlocked(QuestCatalogue.chapter(task), claimed)) {
+                        return Status.LOCKED;
+                    }
                     if (claimed.contains(task.id())) {
                         return Status.CLAIMED;
                     }
@@ -1014,7 +1068,9 @@ public final class VerifySustainabilityRegistry {
                 && questMethod(sources, "GrindlessClaimTask", """
                 @Override
                 public NumericTag test(QuestTaskType<?> type, NumericTag progress, ServerPlayer player) {
-                    return storage().of(QuestProgress.get(player).claimed(player.getUUID()).contains(catalogueId));
+                    Set<String> claimed = QuestProgress.get(player).claimed(player.getUUID());
+                    return storage().of(QuestCatalogue.unlocked(QuestCatalogue.chapter(QuestCatalogue.byId(catalogueId)), claimed)
+                            && claimed.contains(catalogueId));
                 }
                 """)
                 && questMethod(sources, "GrindlessClaimTask", """
@@ -1066,22 +1122,28 @@ public final class VerifySustainabilityRegistry {
             return false;
         }
         for (Tree entry : list.getArguments().subList(1, list.getArguments().size())) {
-            if (!(entry instanceof MethodInvocationTree task) || !task.getTypeArguments().isEmpty()
-                    || task.getArguments().size() != 7) {
+            if (!(entry instanceof MethodInvocationTree task) || !task.getTypeArguments().isEmpty()) {
                 return false;
             }
             var args = task.getArguments();
+            boolean lesson = questText(task.getMethodSelect()).equals("lesson");
+            if (args.size() != (lesson ? 6 : 7)) {
+                return false;
+            }
             boolean goal = switch (questText(task.getMethodSelect())) {
                 case "task" -> Set.of("Evidence.ITEM", "Evidence.DIMENSION").contains(questText(args.get(2)))
                         && args.get(3) instanceof LiteralTree subject && subject.getValue() instanceof String;
+                case "lesson" -> Set.of("Evidence.ITEM", "Evidence.FREE").contains(questText(args.get(2)))
+                        && args.get(3) instanceof LiteralTree subject && subject.getValue() instanceof String;
                 case "matrixTask" -> args.get(2) instanceof LiteralTree subject
-                        && subject.getValue() instanceof String && questText(args.get(3)).equals("FluxTier.F2");
+                        && subject.getValue() instanceof String
+                        && Set.of("FluxTier.F1", "FluxTier.F2").contains(questText(args.get(3)));
                 default -> false;
             };
             if (!goal || !(args.get(0) instanceof LiteralTree id) || !(id.getValue() instanceof String)
                     || !(args.get(1) instanceof LiteralTree line) || !(line.getValue() instanceof String)
                     || !(args.get(4) instanceof LiteralTree count) || !(count.getValue() instanceof Integer quantity)
-                    || quantity < 1 || !questStringList(args.get(5)) || !questReward(args.get(6))) {
+                    || quantity < 1 || !questStringList(args.get(5)) || !lesson && !questReward(args.get(6))) {
                 return false;
             }
         }
@@ -1137,9 +1199,11 @@ public final class VerifySustainabilityRegistry {
         Set<String> expectedMethods = switch (name) {
             case "QuestBookItem" -> Set.of("<init>#1", "use#3", "appendHoverText#4");
             case "QuestBookMenu" -> Set.of("<init>#2", "status#1", "held#1", "quickMoveStack#2",
-                    "stillValid#1", "broadcastChanges#0", "clickMenuButton#2", "refresh#0", "held#2");
+                    "stillValid#1", "broadcastChanges#0", "clickMenuButton#2", "refresh#0", "held#2",
+                    "chapterUnlocked#1");
             case "QuestCatalogue" -> Set.of("<init>#0", "tasks#0", "byId#1", "lines#0",
-                    "task#7", "matrixTask#7", "reward#2");
+                    "task#7", "matrixTask#7", "reward#2", "lesson#6", "chapter#1", "unlocked#2",
+                    "requirements#1", "lines#1");
             case "QuestClaimService" -> Set.of("<init>#0", "holdingBook#1", "claim#2", "claim#7", "rewardStack#1");
             case "QuestRewardDelivery" -> Set.of("<init>#0", "prepare#2");
             case "QuestBookAccess" -> Set.of("<init>#0", "ensure#1", "ensure#4");
@@ -1158,7 +1222,7 @@ public final class VerifySustainabilityRegistry {
         };
         Set<String> expectedFields = switch (name) {
             case "QuestBookMenu" -> Set.of("player", "state");
-            case "QuestCatalogue" -> Set.of("STARTER_SUPPLIES", "TASKS");
+            case "QuestCatalogue" -> Set.of("STARTER_SUPPLIES", "T0_COMPLETION", "TASKS");
             case "QuestBookAccessEvents" -> Set.of("WAITING_FOR_SPACE");
             case "QuestProgress" -> Set.of("KEY", "TAG_PLAYERS", "TAG_PLAYER", "TAG_TASKS", "claimed");
             case "HeraclesQuestNetwork" -> Set.of("PROTOCOL");
@@ -1167,7 +1231,7 @@ public final class VerifySustainabilityRegistry {
             default -> Set.of();
         };
         Set<String> expectedNested = switch (name) {
-            case "QuestCatalogue" -> Set.of("Evidence", "Reward", "Task");
+            case "QuestCatalogue" -> Set.of("Evidence", "Reward", "Task", "Chapter", "Type");
             case "QuestClaimService", "QuestBookAccess" -> Set.of("Result");
             case "QuestLogic" -> Set.of("Status");
             case "HeraclesQuestNetwork" -> Set.of("Channel", "ClaimRequest", "State", "Snapshot");
@@ -1221,13 +1285,20 @@ public final class VerifySustainabilityRegistry {
                 }
                 String declaration = switch (name + ":" + child.getSimpleName()) {
                     case "QuestCatalogue:Evidence" -> "public enum Evidence { ITEM, DIMENSION, MATRIX, FREE }";
+                    case "QuestCatalogue:Chapter" -> "public enum Chapter { T0, T1 }";
+                    case "QuestCatalogue:Type" -> "public enum Type { REWARD, LESSON }";
                     case "QuestCatalogue:Reward" -> "public record Reward(String itemId, int count) {}";
                     case "QuestCatalogue:Task" -> """
                             public record Task(String id, String line, Evidence evidence, String subject, int count,
-                                               FluxTier matrixRating, List<String> requires, List<Reward> rewards) {
+                                               FluxTier matrixRating, List<String> requires, List<Reward> rewards, Type type) {
                                 public Task {
                                     requires = List.copyOf(requires);
                                     rewards = List.copyOf(rewards);
+                                }
+
+                                public Task(String id, String line, Evidence evidence, String subject, int count,
+                                            FluxTier matrixRating, List<String> requires, List<Reward> rewards) {
+                                    this(id, line, evidence, subject, count, matrixRating, requires, rewards, Type.REWARD);
                                 }
 
                                 public Task(String id, String line, Evidence evidence, String subject, int count,
@@ -1285,7 +1356,8 @@ public final class VerifySustainabilityRegistry {
         List<String> declarations = switch (name) {
             case "QuestBookMenu" -> List.of("private final Player player;",
                     "private final SimpleContainerData state;");
-            case "QuestCatalogue" -> List.of("public static final String STARTER_SUPPLIES = \"starter_supplies\";");
+            case "QuestCatalogue" -> List.of("public static final String STARTER_SUPPLIES = \"starter_supplies\";",
+                    "public static final String T0_COMPLETION = \"relay\";");
             case "QuestBookAccessEvents" -> List.of(
                     "private static final Set<UUID> WAITING_FOR_SPACE = new HashSet<>();");
             case "QuestProgress" -> List.of("public static final String KEY = \"grindless_quest_progress\";",
@@ -1333,7 +1405,7 @@ public final class VerifySustainabilityRegistry {
         rejectQuest(root, sources, "another held item cannot establish the registered book prerequisite",
                 "QuestClaimService", "ModItems.QUEST_BOOK.get()", "Items.STICK");
         rejectQuest(root, sources, "an unheld legacy menu cannot certify access",
-                "QuestBookMenu", "return QuestClaimService.holdingBook(player);", "return true;");
+                "QuestBookMenu", "return QuestClaimService.holdingBook(player)", "return true");
         rejectQuest(root, sources, "a different menu opener cannot certify this claim interface",
                 "QuestBookItem", "new QuestBookMenu(id, inventory)", "new DifferentMenu(id, inventory)");
         rejectQuest(root, sources, "the optional backend cannot suppress the legacy fallback",
@@ -1355,6 +1427,29 @@ public final class VerifySustainabilityRegistry {
                 "QuestClaimService", "evidence.test(task)", "true");
         rejectQuest(root, sources, "the requested task's prerequisites cannot be ignored",
                 "QuestLogic", "if (!claimed.contains(required))", "if (false)");
+        rejectQuest(root, sources, "retained T1 claims cannot bypass the final T0 chapter gate",
+                "QuestLogic", "if (!QuestCatalogue.unlocked(QuestCatalogue.chapter(task), claimed))", "if (false)");
+        rejectQuest(root, sources, "the chapter gate cannot be rebound to an unrelated item claim",
+                "QuestCatalogue", "T0_COMPLETION = \"relay\"", "T0_COMPLETION = \"multitool\"");
+        rejectQuest(root, sources, "T1 cannot be unlocked merely by opening a menu",
+                "QuestCatalogue", "chapter == Chapter.T0 || claimed.contains(T0_COMPLETION)", "true");
+        rejectQuest(root, sources, "projected T1 prerequisites must retain the actual T0 anchor",
+                "QuestCatalogue", "required.add(T0_COMPLETION);", "required.add(STARTER_SUPPLIES);");
+        rejectQuest(root, sources, "the chapter payload cannot claim an unconditional server unlock",
+                "QuestBookMenu", "QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, claimed) ? 1 : 0", "1");
+        rejectQuest(root, sources, "lesson construction cannot mint an unexamined material reward",
+                "QuestCatalogue", "List.of(), Type.LESSON", "List.of(reward(\"minecraft:iron_ingot\", 64)), Type.LESSON");
+        rejectQuest(root, sources, "an explicit lesson cannot enter ordinary material delivery",
+                "QuestClaimService", "if (task.type() == QuestCatalogue.Type.LESSON)", "if (false)");
+        rejectQuest(root, sources, "a lesson cannot ignore an invalid declared reward",
+                "QuestClaimService", "if (!task.rewards().isEmpty())", "if (false)");
+        rejectQuest(root, sources, "native task tests cannot expose retained T1 completion before Relay",
+                "GrindlessClaimTask",
+                "QuestCatalogue.unlocked(QuestCatalogue.chapter(QuestCatalogue.byId(catalogueId)), claimed)",
+                "true");
+        rejectQuest(root, sources, "milestone telemetry cannot observe rejected or duplicate requests",
+                "QuestClaimService", "if (result == Result.CLAIMED) {",
+                "DevTelemetry.milestone(player.level(), taskId); if (result == Result.CLAIMED) {");
         rejectQuest(root, sources, "FREE must be appended without changing the old evidence ordinals",
                 "QuestCatalogue",
                 "MATRIX,\n        /** An explicit free claim, with no item, location or payment objective. */\n        FREE",
@@ -1459,8 +1554,10 @@ public final class VerifySustainabilityRegistry {
                 "QuestBookAccess", "if (!player.server.isSameThread())", "if (false)");
         rejectQuest(root, sources, "book recovery must use the actual player's ledger identity",
                 "QuestBookAccess", "player.getUUID(), player.getInventory()", "new UUID(0, 0), player.getInventory()");
-        rejectQuest(root, sources, "book recovery cannot continue after the starter was claimed",
-                "QuestBookAccess", "if (progress.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES))", "if (false)");
+        rejectQuest(root, sources, "post-starter book recovery cannot be disabled",
+                "QuestBookAccess", "for (int slot = 0; slot < inventory.getContainerSize(); slot++)",
+                "if (progress.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES)) { return Result.STARTER_CLAIMED; }"
+                        + " for (int slot = 0; slot < inventory.getContainerSize(); slot++)");
         rejectQuest(root, sources, "book detection must include every actual inventory slot, not only main slots",
                 "QuestBookAccess", "inventory.getContainerSize()", "inventory.items.size()");
         rejectQuest(root, sources, "book detection must inspect each real slot exactly once",
@@ -1933,6 +2030,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("FluxTier", "io.github.ezequiel24123z.grindless.energy.FluxTier"),
                 Map.entry("ModItems", "io.github.ezequiel24123z.grindless.registry.ModItems"),
                 Map.entry("ModMenus", "io.github.ezequiel24123z.grindless.registry.ModMenus"),
+                Map.entry("DevTelemetry", "io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry"),
                 Map.entry("ControlMatrixItem", "io.github.ezequiel24123z.grindless.item.ControlMatrixItem"),
                 Map.entry("HeraclesDefinitions", "io.github.ezequiel24123z.grindless.forge.quest.HeraclesDefinitions"),
                 Map.entry("HeraclesClaimProjection",
@@ -2012,13 +2110,14 @@ public final class VerifySustainabilityRegistry {
                     "ItemStack", "ServerPlayer", "QuestBackendPlatform", "MenuRegistry", "SimpleMenuProvider",
                     "QuestBookMenu", "Component");
             case "QuestBookMenu" -> Set.of("AbstractContainerMenu", "Inventory", "SimpleContainerData", "ModMenus",
+                    "ModItems",
                     "Player", "ServerPlayer", "QuestClaimService", "QuestCatalogue", "QuestProgress", "QuestLogic",
                     "QuestEvidence", "QuestInventoryEvidence", "Set", "List");
-            case "QuestCatalogue" -> Set.of("FluxTier", "ArrayList", "List");
+            case "QuestCatalogue" -> Set.of("FluxTier", "ArrayList", "List", "Set");
             case "QuestClaimService" -> Set.of("Player", "ServerPlayer", "ModItems", "QuestProgress", "QuestCatalogue",
                     "QuestLogic", "QuestEvidence", "QuestInventoryEvidence", "QuestRewardDelivery", "UUID", "Function",
                     "Predicate", "Set", "List", "ArrayList", "Optional", "Runnable", "ItemStack", "Items",
-                    "BuiltInRegistries", "ResourceLocation", "Grindless", "Component", "IllegalStateException");
+                    "BuiltInRegistries", "ResourceLocation", "Grindless", "Component", "IllegalStateException", "DevTelemetry");
             case "QuestRewardDelivery" -> Set.of("Inventory", "ItemStack", "SimpleContainer", "List", "Optional",
                     "Runnable");
             case "QuestBookAccess" -> Set.of("ServerPlayer", "QuestProgress", "QuestCatalogue", "QuestRewardDelivery",
@@ -2043,7 +2142,7 @@ public final class VerifySustainabilityRegistry {
                     "Component", "Set", "List", "Map", "HashMap", "UUID", "Quest");
             case "GrindlessClaimTask" -> Set.of("QuestTask", "QuestTaskType", "ServerPlayer", "NumericTag",
                     "QuestProgress", "BooleanTaskStorage", "Codec", "DataResult", "ResourceLocation",
-                    "Grindless", "QuestCatalogue");
+                    "Grindless", "QuestCatalogue", "Set");
             default -> throw new IOException("Unexamined quest authority; claim binding not evaluated.");
         };
         for (String simple : required) {

@@ -32,15 +32,12 @@ public final class QuestBookAccess {
                 ModItems.QUEST_BOOK.get());
         if (result == Result.DELIVERED) {
             player.inventoryMenu.broadcastChanges();
-            player.displayClientMessage(Component.translatable("chat.grindless.quest.book.received"), false);
+            player.displayClientMessage(Component.translatable("chat.grindless.quest.book.restored"), false);
         }
         return result;
     }
 
     static Result ensure(QuestProgress progress, UUID player, Inventory inventory, Item book) {
-        if (progress.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES)) {
-            return Result.STARTER_CLAIMED;
-        }
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
             if (inventory.getItem(slot).is(book)) {
                 return Result.PRESENT;

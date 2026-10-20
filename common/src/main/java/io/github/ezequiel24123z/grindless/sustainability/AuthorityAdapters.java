@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
@@ -675,11 +676,14 @@ public final class AuthorityAdapters {
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             Resource subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION
                     || task.evidence() == QuestCatalogue.Evidence.FREE ? null
-                    : new Resource(Kind.ITEM, task.subject(),
-                    task.matrixRating() == null ? 0 : task.matrixRating().ordinal(), "items");
+                    : new Resource(Kind.ITEM, task.subject(), questResourceRating(task), "items");
             String routeId = "quest/" + task.id();
-            builder.objective(new Objective(task.id(), subject, task.count(), Set.copyOf(task.requires()),
-                    routeId, "QuestCatalogue.tasks"));
+            Set<String> prerequisites = Set.copyOf(QuestCatalogue.requirements(task));
+            builder.objective(new Objective(task.id(), subject, task.count(), prerequisites,
+                    task.type() == QuestCatalogue.Type.LESSON ? null : routeId, "QuestCatalogue.tasks"));
+            if (task.type() == QuestCatalogue.Type.LESSON) {
+                continue;
+            }
             if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
                 builder.finding(unknown("objective_unknown", task.id(), "Dimension evidence requires a world adapter."));
                 continue;
@@ -691,14 +695,31 @@ public final class AuthorityAdapters {
             requirements.merge(book, 1L, Math::max);
             Map<Resource, Long> rewards = new TreeMap<>();
             task.rewards().forEach(reward -> rewards.merge(item(reward.itemId()), (long) reward.count(), Math::addExact));
+            Map<String, String> conditions = new TreeMap<>(Map.of("evidence", task.evidence().name(),
+                    "claim_access", "held_quest_book_menu"));
+            if (task.matrixRating() != null) {
+                conditions.put("matrix_rating", task.matrixRating().name());
+            }
             builder.route(new Route(routeId, Authority.QUEST_REWARD, "QuestCatalogue.tasks/" + task.id()
                     + " + QuestBookItem.use + QuestBookMenu.stillValid/clickMenuButton",
                     null, Map.of(), requirements,
                     rewards, Set.of(), 0, 0,
-                    Map.of("evidence", task.evidence().name(), "claim_access", "held_quest_book_menu"),
-                    task.requires().stream().map(id -> "quest/" + id)
+                    conditions,
+                    prerequisites.stream().map(id -> "quest/" + id)
                             .collect(java.util.stream.Collectors.toSet()), true, true, false));
         }
+    }
+
+    private static int questResourceRating(QuestCatalogue.Task task) {
+        if (task.matrixRating() == null) {
+            return 0;
+        }
+        // Authored untagged Relay output has this native default; the exact physical check stays in conditions.
+        if (task.subject().equals("grindless:relay_matrix")
+                && task.matrixRating() == MatrixArchitecture.RELAY.firstFrontier()) {
+            return 0;
+        }
+        return task.matrixRating().ordinal();
     }
 
     private static void readGenerators(List<ProcessRecipe> graph, Builder builder) {

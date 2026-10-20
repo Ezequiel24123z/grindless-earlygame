@@ -2,6 +2,10 @@ package io.github.ezequiel24123z.grindless.quest;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
+import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +40,8 @@ public final class VerifyQuestClaims {
         standardInventoryClaim();
         stacking();
         bookAccess();
+        lessons();
+        finalGate();
         invalidRewards();
         projectionAndReload();
         System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions);
@@ -262,10 +268,105 @@ public final class VerifyQuestClaims {
                 QuestBookAccess.ensure(ledger, player, full, Items.BOOK));
         ledger.claim(player, QuestCatalogue.STARTER_SUPPLIES);
         Inventory afterClaim = new Inventory(null);
-        equal("a post-claim respawn cannot automatically mint another kit or book",
-                QuestBookAccess.Result.STARTER_CLAIMED,
+        equal("a post-claim respawn recovers only the utility book",
+                QuestBookAccess.Result.DELIVERED,
                 QuestBookAccess.ensure(ledger, player, afterClaim, Items.BOOK));
-        equal("post-claim automatic access leaves the new inventory empty", true, afterClaim.isEmpty());
+        equal("post-claim recovery creates exactly one utility book", 1, count(afterClaim, Items.BOOK));
+        equal("post-claim recovery cannot repeat the kit", 0, count(afterClaim, Items.COBBLESTONE));
+        equal("post-claim recovery cannot repeat old rewards", 0, count(afterClaim, Items.CLAY_BALL));
+        equal("post-claim recovery retains every saved claim", Set.of("multitool", QuestCatalogue.STARTER_SUPPLIES),
+                ledger.claimed(player));
+        equal("repeated post-claim recovery is idempotent", QuestBookAccess.Result.PRESENT,
+                QuestBookAccess.ensure(ledger, player, afterClaim, Items.BOOK));
+    }
+
+    private static void lessons() {
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        Function<QuestCatalogue.Reward, ItemStack> noReward = reward -> {
+            throw new AssertionError("A lesson cannot resolve a material reward");
+        };
+        Function<List<ItemStack>, Optional<Runnable>> noDelivery = rewards -> {
+            throw new AssertionError("A lesson cannot enter inventory delivery");
+        };
+        equal("a read-only lesson has an explicit type", QuestCatalogue.Type.LESSON,
+                QuestCatalogue.byId("quest_book_help").type());
+        equal("reading still requires the actual book", QuestClaimService.Result.BOOK_REQUIRED,
+                QuestClaimService.claim(ledger, player, "quest_book_help", false, task -> false, noReward, noDelivery));
+        equal("an explicit reading claim needs no stock or inventory capacity", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "quest_book_help", true, task -> false, noReward, noDelivery));
+        equal("reopening reading cannot create a reward", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "quest_book_help", true, task -> false, noReward, noDelivery));
+        equal("a lesson does not silently complete the starter or T0", Set.of("quest_book_help"), ledger.claimed(player));
+        ledger.claim(player, "multitool");
+        equal("an inventory lesson still needs current physical evidence", QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "manual_work", true, task -> false, noReward, noDelivery));
+        equal("an inventory checklist can be recorded without material delivery", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "manual_work", true, task -> true, noReward, noDelivery));
+        equal("saved reading and checklist claims survive reload", ledger.claimed(player),
+                QuestProgress.load(ledger.save(new CompoundTag())).claimed(player));
+        equal("another player does not inherit a recorded lesson", Set.of(), ledger.claimed(UUID.randomUUID()));
+    }
+
+    private static void finalGate() {
+        ControlMatrixItem matrix = new ControlMatrixItem(MatrixArchitecture.RELAY,
+                new net.minecraft.world.item.Item.Properties());
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("grindless:relay_matrix"), matrix);
+        Inventory inventory = new Inventory(null);
+        var relay = QuestCatalogue.byId("relay");
+        inventory.setItem(0, matrix.stackFor(FluxTier.F1, 4));
+        inventory.setItem(1, matrix.stackFor(FluxTier.F2, 64));
+        ItemStack invalid = matrix.stackFor(FluxTier.F1, 64);
+        invalid.getOrCreateTag().putString("Rating", "1");
+        inventory.setItem(2, invalid);
+        ItemStack fractional = matrix.stackFor(FluxTier.F1, 64);
+        fractional.getOrCreateTag().putDouble("Rating", 1.5);
+        inventory.setItem(3, fractional);
+        inventory.setItem(4, new ItemStack(Items.FLINT, 64));
+        equal("wrong, fractional, malformed and unrelated items cannot make up the fifth F1", 4,
+                QuestInventoryEvidence.count(inventory, relay));
+
+        QuestProgress ledger = new QuestProgress();
+        UUID player = UUID.randomUUID();
+        ledger.claim(player, "calibrate");
+        ledger.claim(player, "thermal");
+        ledger.claim(player, "industrial_matrix");
+        Set<String> oldClaims = ledger.claimed(player);
+        equal("retained T1 claims alone do not unlock the chapter", false,
+                QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, oldClaims));
+        equal("retained T1 completion is hidden until the individual T0 gate", false,
+                QuestProjection.claimed(oldClaims).get("grindless_thermal"));
+        List<ItemStack> rewards = new ArrayList<>();
+        Predicate<QuestCatalogue.Task> evidence = task -> QuestEvidence.met(task,
+                QuestInventoryEvidence.count(inventory, task), "minecraft:overworld");
+        equal("four real F1 Matrices reject the final claim", QuestClaimService.Result.UNMET,
+                QuestClaimService.claim(ledger, player, "relay", true, evidence, VerifyQuestClaims::resolve, capture(rewards)));
+        equal("rejected exit does not grant flint or unlock T1", 0, rewards.size());
+        equal("rejected exit preserves all legacy claims", oldClaims, ledger.claimed(player));
+        inventory.setItem(5, matrix.stackFor(FluxTier.F1, 1));
+        equal("exact valid F1 evidence can be split over real inventory slots", 5,
+                QuestInventoryEvidence.count(inventory, relay));
+        equal("a ready physical exit still requires the book", QuestClaimService.Result.BOOK_REQUIRED,
+                QuestClaimService.claim(ledger, player, "relay", false, evidence, VerifyQuestClaims::resolve, capture(rewards)));
+        equal("the valid physical exit is one authoritative claim", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, player, "relay", true, evidence, VerifyQuestClaims::resolve, capture(rewards)));
+        equal("the final claim does not consume Matrix evidence", 5, QuestInventoryEvidence.count(inventory, relay));
+        equal("the existing final reward is unchanged", 2, rewards.get(0).getCount());
+        equal("only the successful final ledger claim opens T1", true,
+                QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, ledger.claimed(player)));
+        equal("old T1 claims become visible without being paid again", true,
+                QuestProjection.claimed(ledger.claimed(player)).get("grindless_thermal"));
+        equal("an old T1 reward cannot be claimed twice after chapter migration", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "thermal", true, task -> true,
+                        VerifyQuestClaims::resolve, capture(rewards)));
+        equal("another player does not inherit the T1 chapter", false,
+                QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, ledger.claimed(UUID.randomUUID())));
+        ledger = QuestProgress.load(ledger.save(new CompoundTag()));
+        equal("the gate survives save/reload", true,
+                QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, ledger.claimed(player)));
+        equal("reconnect cannot pay the final quest twice", QuestClaimService.Result.ALREADY_CLAIMED,
+                QuestClaimService.claim(ledger, player, "relay", true, evidence, VerifyQuestClaims::resolve, capture(rewards)));
+        equal("recovery and migration retain a single final reward stack", 1, rewards.size());
     }
 
     private static void invalidRewards() {
@@ -301,7 +402,7 @@ public final class VerifyQuestClaims {
         for (QuestProjection.Entry entry : QuestProjection.entries()) {
             equal("stable owned id " + entry.task().id(), "grindless_" + entry.task().id(), entry.id());
             equal("native parents are legacy claimed prerequisites " + entry.id(),
-                    entry.task().requires().stream().map(QuestProjection::id).toList(), entry.dependencies());
+                    QuestCatalogue.requirements(entry.task()).stream().map(QuestProjection::id).toList(), entry.dependencies());
             equal("projection keeps the exact existing reward " + entry.id(),
                     QuestCatalogue.byId(entry.task().id()).rewards(), entry.task().rewards());
         }
