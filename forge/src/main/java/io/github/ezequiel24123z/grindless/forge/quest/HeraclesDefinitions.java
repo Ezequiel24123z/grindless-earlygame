@@ -83,41 +83,41 @@ public final class HeraclesDefinitions {
         for (QuestCatalogue.Chapter chapter : QuestCatalogue.Chapter.values()) {
             int lineTop = 0;
             for (String line : QuestCatalogue.lines(chapter)) {
-            Map<Integer, Integer> rows = new LinkedHashMap<>();
-            for (QuestProjection.Entry entry : entries) {
-                QuestCatalogue.Task task = entry.task();
-                if (!line.equals(task.line()) || QuestCatalogue.chapter(task) != chapter) {
-                    continue;
-                  }
-                int depth = depths.get(task.id());
-                int row = rows.getOrDefault(depth, 0);
-                rows.put(depth, row + 1);
-                QuestDisplay display = QuestDisplay.createDefault(
-                        new GroupDisplay(chapter == QuestCatalogue.Chapter.T0 ? GROUP : T1_GROUP,
-                                new Vector2i(depth * 96, lineTop + row * 56)));
-                display.setIcon(new ItemQuestIcon(icons.apply(task)));
-                display.setTitle(Component.translatable("gui.grindless.quest.task." + task.id()));
-                display.setSubtitle(Component.translatable("gui.grindless.quest.line." + task.line()));
-                display.setDescription(List.of());
-                if (task.id().equals(QuestCatalogue.T0_COMPLETION)) {
-                    // Heracles visibility assumes absent cross-group dependencies are complete.
-                    display.groups().put(T1_GROUP, new GroupDisplay(T1_GROUP, new Vector2i(-96, 0)));
+                Map<Integer, Integer> rows = new LinkedHashMap<>();
+                for (QuestProjection.Entry entry : entries) {
+                    QuestCatalogue.Task task = entry.task();
+                    if (!line.equals(task.line()) || QuestCatalogue.chapter(task) != chapter) {
+                        continue;
+                    }
+                    int depth = depths.get(task.id());
+                    int row = rows.getOrDefault(depth, 0);
+                    rows.put(depth, row + 1);
+                    QuestDisplay display = QuestDisplay.createDefault(
+                            new GroupDisplay(chapter == QuestCatalogue.Chapter.T0 ? GROUP : T1_GROUP,
+                                    new Vector2i(depth * 96, lineTop + row * 56)));
+                    display.setIcon(new ItemQuestIcon(icons.apply(task)));
+                    display.setTitle(Component.translatable("gui.grindless.quest.task." + task.id()));
+                    display.setSubtitle(Component.translatable("gui.grindless.quest.line." + task.line()));
+                    display.setDescription(List.of());
+                    if (task.id().equals(QuestCatalogue.T0_COMPLETION)) {
+                        // Heracles visibility assumes absent cross-group dependencies are complete.
+                        display.groups().put(T1_GROUP, new GroupDisplay(T1_GROUP, new Vector2i(-96, 0)));
+                    }
+                    QuestSettings settings = QuestSettings.createDefault();
+                    settings.setIndividualProgress(true);
+                    settings.setRepeatable(false);
+                    settings.setAutoClaimRewards(false);
+                    settings.setUnlockNotification(false);
+                    settings.setShowDependencyArrow(true);
+                    settings.setHiddenUntil(chapter == QuestCatalogue.Chapter.T0
+                            ? QuestDisplayStatus.LOCKED : QuestDisplayStatus.IN_PROGRESS);
+                    result.put(entry.id(), new Quest(display, settings, new LinkedHashSet<>(entry.dependencies()),
+                            new LinkedHashMap<>(Map.of(QuestProjection.CLAIM_TASK,
+                                    new GrindlessClaimTask(QuestProjection.CLAIM_TASK, task.id()))),
+                            new LinkedHashMap<>()));
                 }
-                QuestSettings settings = QuestSettings.createDefault();
-                settings.setIndividualProgress(true);
-                settings.setRepeatable(false);
-                settings.setAutoClaimRewards(false);
-                settings.setUnlockNotification(false);
-                settings.setShowDependencyArrow(true);
-                settings.setHiddenUntil(chapter == QuestCatalogue.Chapter.T0
-                        ? QuestDisplayStatus.LOCKED : QuestDisplayStatus.IN_PROGRESS);
-                result.put(entry.id(), new Quest(display, settings, new LinkedHashSet<>(entry.dependencies()),
-                        new LinkedHashMap<>(Map.of(QuestProjection.CLAIM_TASK,
-                                new GrindlessClaimTask(QuestProjection.CLAIM_TASK, task.id()))),
-                        new LinkedHashMap<>()));
+                lineTop += rows.values().stream().mapToInt(Integer::intValue).max().orElse(1) * 56 + 40;
             }
-            lineTop += rows.values().stream().mapToInt(Integer::intValue).max().orElse(1) * 56 + 40;
-          }
         }
         return java.util.Collections.unmodifiableMap(result);
     }

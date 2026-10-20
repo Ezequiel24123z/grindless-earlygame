@@ -3,9 +3,11 @@ package io.github.ezequiel24123z.grindless.quest;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 /** Lesson selection only; recipe quantities, conditions and outputs belong to the live Atlas. */
 public final class QuestTeaching {
@@ -19,7 +21,8 @@ public final class QuestTeaching {
 
     public static String bodyKey(QuestCatalogue.Task task) {
         return "gui.grindless.quest.lesson."
-                + (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1 ? "t1_preview" : task.id());
+                + (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1 ? "t1_preview"
+                : task.id().equals("settling") ? "settling_ports" : task.id());
     }
 
     public static WorkshopStructure structure(QuestCatalogue.Task task) {
@@ -85,7 +88,13 @@ public final class QuestTeaching {
             case "relay" -> Set.of("craft/relay_matrix", "calibrate/data_core");
             default -> Set.of();
         };
-        return entries.stream().filter(entry -> ids.contains(entry.id())
+        Set<String> portCrafts = new HashSet<>();
+        for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+            if (kind.structure() == structure(task)) {
+                portCrafts.add("craft/" + kind.blockName());
+            }
+        }
+        return entries.stream().filter(entry -> ids.contains(entry.id()) || portCrafts.contains(entry.id())
                 || task.id().equals("firing") && entry.family() == MachineFamily.FIRING_CHAMBER).toList();
     }
 

@@ -814,5 +814,20 @@
   "inspection.grindless.ports_partial": "Ports observed before the fault: %s",
   "inspection.grindless.access": "Contract transfer faces: %s",
   "inspection.grindless.access_unconfirmed": "Transfer faces inactive or unconfirmed until formation",
-  "inspection.grindless.state.interface": "Formed controller interface"
+  "inspection.grindless.state.interface": "Formed controller interface",
+  "gui.grindless.quest.lesson.settling_ports": "Place a Settling Channel directly behind the Trough controller and a Settling Screen behind the channel. Face all three the same way and keep air above the channel and screen. The controller may accept a hopper above. The plain cells and optional port replacements are listed below in the controller's local frame.\n\nThe controller owns the batch; ordinary channel/screen parts are structural. A valid fitted port accesses that same controller storage, not a second inventory or tank. Feed a complete wet batch and F0 work; inspect missing, wrong-facing, covered, ambiguous-owner or unloaded-cell faults. Repairing the line preserves paid work. Use the water-recovery lesson for actual products and eligible output water.",
+  "gui.grindless.quest.tank_containers": "The current Basic Tank capacity is %s mB. Use a compatible fluid container on it to exchange fluid; use an empty hand for a server-confirmed readout. A stacked container needs inventory room for the result, or nothing transfers. Wrong fluid, insufficient capacity or an incomplete indivisible bucket is rejected without losing its contents.\n\nOrdinary breaking and Multitool relocation preserve the tank's fluid metadata in the returned tank item. Collect that actual item and verify contents after placement. Rotation keeps the same storage. Conduits and containers use the real tank, not a separate quest buffer; hot or incompatible fluid remains unsuitable for ambient infrastructure.",
+  "gui.grindless.quest.ports_limit": "Optional substitutions: at most %s ports in this structure.",
+  "gui.grindless.quest.ports_bricks": "Keep at least %s ordinary brick cells.",
+  "gui.grindless.quest.ports_role_limit": "Maximum %s: %s.",
+  "gui.grindless.quest.port_slot": "Port at (%s, %s, %s): %s; faces for a north-facing controller: %s.",
+  "gui.grindless.quest.port_role.item_input": "item input",
+  "gui.grindless.quest.port_role.item_output": "item output",
+  "gui.grindless.quest.port_role.fluid_input": "fluid input",
+  "gui.grindless.quest.port_role.fluid_output": "produced-fluid output",
+  "gui.grindless.quest.port_face.north": "north",
+  "gui.grindless.quest.port_face.east": "east",
+  "gui.grindless.quest.port_face.south": "south",
+  "gui.grindless.quest.port_face.west": "west",
+  "gui.grindless.quest.ports_notes": "The original plain structure and direct controller interfaces remain valid. Rotate these allowed port faces with the controller; vertical and unsided port access is closed. Use sided conduits or T0 manipulators where appropriate. Wrong roles, facing, missing or ambiguous ownership stop transfer. Ports hold no separate stock and cannot copy or drop the controller's contents. Power still enters through the controller; these are not energy hatches."
 }

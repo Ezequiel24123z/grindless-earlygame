@@ -194,7 +194,7 @@ public final class SustainabilityModel {
         }
     }
 
-    /** Physical quest evidence and exact one-shot rewards, without declaring the quest mandatory. */
+    /** Quest/checklist evidence without an implicit Tier mandate; null reward route means no material reward. */
     public record Objective(String id, Resource subject, long count, Set<String> requires,
                             String rewardRoute, String source) {
         public Objective {

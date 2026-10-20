@@ -1307,6 +1307,9 @@ public final class VerifySustainabilityRegistry {
                                 }
 
                                 public Reward reward() {
+                                    if (rewards.isEmpty()) {
+                                        throw new IllegalStateException("This lesson has no material reward: " + id);
+                                    }
                                     return rewards.get(0);
                                 }
                             }
