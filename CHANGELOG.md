@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Repair composed qualification fixtures without weakening the runtime contracts.**
+  Bind the exact ProcessMachine manual-work AST including F0/server guards,
+  capacity clamp and positive actual-delta telemetry, with ten source mutations
+  rejecting changed admission/observation. Register the real isolated Guide,
+  Relay and workshop-port fixtures before vanilla freezes intrusive holders.
+  Preserve the original hosted seven-suite red and the separate PC guidance red;
+  generated resources and executable repair results are qualified separately.
 - **Continue experience fixes into the composed qualification boundary.**
   Preserve source3564's callback fence, single-owner port operations and truthful
   recovered-water view with authored real-world probes; these are not native

@@ -31,10 +31,11 @@ public final class VerifyLegacyGuideMachine {
 
     public static void main(String[] args) throws Exception {
         SharedConstants.tryDetectVersion();
-        Bootstrap.bootStrap();
         ResourceLocation id = new ResourceLocation("grindless", "field_guide");
         guide = BuiltInRegistries.ITEM.containsKey(id) ? BuiltInRegistries.ITEM.get(id)
                 : Registry.register(BuiltInRegistries.ITEM, id, new Item(new Item.Properties()));
+        // Register the isolated native fixture before vanilla freezes intrusive holders.
+        Bootstrap.bootStrap();
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
         for (ProcessMachineKind kind : List.of(ProcessMachineKind.ASSEMBLY_BENCH, ProcessMachineKind.ASSEMBLER)) {
             String owner = kind == ProcessMachineKind.ASSEMBLY_BENCH

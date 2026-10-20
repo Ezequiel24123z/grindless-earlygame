@@ -30,9 +30,13 @@ import java.util.function.Predicate;
 public final class VerifyQuestClaims {
 
     private static int assertions;
+    private static ControlMatrixItem matrix;
 
     public static void main(String[] args) {
         SharedConstants.tryDetectVersion();
+        // The real item and stable ID must exist before bootstrap freezes the item registry.
+        matrix = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("grindless:relay_matrix"),
+                new ControlMatrixItem(MatrixArchitecture.RELAY, new net.minecraft.world.item.Item.Properties()));
         Bootstrap.bootStrap();
         claims();
         starterClaims();
@@ -309,9 +313,6 @@ public final class VerifyQuestClaims {
     }
 
     private static void finalGate() {
-        ControlMatrixItem matrix = new ControlMatrixItem(MatrixArchitecture.RELAY,
-                new net.minecraft.world.item.Item.Properties());
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("grindless:relay_matrix"), matrix);
         Inventory inventory = new Inventory(null);
         var relay = QuestCatalogue.byId("relay");
         inventory.setItem(0, matrix.stackFor(FluxTier.F1, 4));

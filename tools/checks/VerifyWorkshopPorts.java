@@ -21,7 +21,10 @@ import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -51,6 +54,11 @@ public final class VerifyWorkshopPorts {
 
     public static void main(String[] args) throws Exception {
         SharedConstants.tryDetectVersion();
+        // Exercise real registered blocks without trying to add intrusive holders after freeze.
+        for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+            Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(kind.id()),
+                    new WorkshopPortBlock(kind, BlockBehaviour.Properties.of()));
+        }
         Bootstrap.bootStrap();
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
         contracts();
@@ -278,7 +286,7 @@ public final class VerifyWorkshopPorts {
 
     private static void noPortStorage() throws Exception {
         for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
-            WorkshopPortBlock block = new WorkshopPortBlock(kind, BlockBehaviour.Properties.of());
+            WorkshopPortBlock block = (WorkshopPortBlock) BuiltInRegistries.BLOCK.get(new ResourceLocation(kind.id()));
             BlockState state = block.defaultBlockState();
             eq("ports have facing only, never a fake one-valued status", 1, state.getProperties().size());
             for (Direction facing : List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)) {

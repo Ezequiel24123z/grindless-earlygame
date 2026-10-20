@@ -249,9 +249,8 @@ public final class VerifySustainabilityRegistry {
                         + "machine.crankByHand();context.getPlayer().getCooldowns().addCooldown(this,SourceLogic.MANUAL_COOLDOWN);}"
                         + "returnInteractionResult.sidedSuccess(context.getLevel().isClientSide());}",
                 normalized(method(crank, "useOn", 1).getBody()));
-        eq("the real recipient stores the charge locally with its F0/server guard and capacity clamp",
-                "{if(kind.tier()!=FluxTier.F0||getLevel()==null||getLevel().isClientSide()){return;}"
-                        + "energy().setStored(Math.min(energy().getCapacity(),energy().getStored()+SourceLogic.MANUAL_CHARGE));}",
+        eq("the real recipient clamps local F0/server work and observes only the actual positive delta afterwards",
+                PROCESS_CRANK_BODY,
                 normalized(method(process, "crankByHand", 0).getBody()));
         eq("the local process buffer cannot export crank energy",
                 "{returnnewSimpleFluxStorage(bufferCapacity(),powerTier().nominal(),0L,()->{setChanged();"
@@ -1689,6 +1688,14 @@ public final class VerifySustainabilityRegistry {
                 && normalized(field(dynamo, "PUSH_PERIOD").getInitializer()).equals("1");
     }
 
+    private static final String PROCESS_CRANK_BODY =
+            "{if(kind.tier()!=FluxTier.F0||getLevel()==null||getLevel().isClientSide()){return;}"
+                    + "longbefore=energy().getStored();"
+                    + "energy().setStored(Math.min(energy().getCapacity(),before+SourceLogic.MANUAL_CHARGE));"
+                    + "longaccepted=energy().getStored()-before;"
+                    + "if(accepted>0){DevTelemetry.manualWork(getLevel(),"
+                    + "BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()).toString(),accepted);}}";
+
     private static void physicalSourceCounterexamples(Path root) throws IOException {
         String name = "HandCrankDynamoBlockEntity";
         String source = Files.readString(root.resolve(JAVA.resolve(Path.of("machine", name + ".java"))));
@@ -1702,6 +1709,34 @@ public final class VerifySustainabilityRegistry {
         eq("the oversized-allowance fixture actually changes the inspected statement", false, source.equals(altered));
         eq("a mismatched allowance cannot certify the original physical delivery rate", false,
                 dynamoPushRate(parse(name, altered)));
+
+        String process = "ProcessMachineBlockEntity";
+        String original = Files.readString(root.resolve(JAVA.resolve(Path.of("machine", process + ".java"))));
+        eq("the actual process manual-work profile includes post-settlement telemetry", PROCESS_CRANK_BODY,
+                normalized(method(parse(process, original), "crankByHand", 0).getBody()));
+        for (String[] mutation : List.of(
+                new String[]{"non-F0 recipients", "kind.tier() != FluxTier.F0 || ", ""},
+                new String[]{"missing world guard", "getLevel() == null || ", ""},
+                new String[]{"client-side work", " || getLevel().isClientSide()", ""},
+                new String[]{"unclamped energy", "Math.min(energy().getCapacity(), before + SourceLogic.MANUAL_CHARGE)",
+                        "before + SourceLogic.MANUAL_CHARGE"},
+                new String[]{"inflated charge", "before + SourceLogic.MANUAL_CHARGE",
+                        "before + SourceLogic.MANUAL_CHARGE * 2"},
+                new String[]{"requested rather than accepted work", "long accepted = energy().getStored() - before;",
+                        "long accepted = SourceLogic.MANUAL_CHARGE;"},
+                new String[]{"zero-delta notifications", "if (accepted > 0)", "if (accepted >= 0)"},
+                new String[]{"requested rather than actual notification", "toString(), accepted);",
+                        "toString(), SourceLogic.MANUAL_CHARGE);"},
+                new String[]{"notification before energy admission", "long before = energy().getStored();",
+                        "long before = energy().getStored();"
+                                + "DevTelemetry.manualWork(getLevel(), \"premature\", SourceLogic.MANUAL_CHARGE);"},
+                new String[]{"wrong machine identity", "BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()).toString(), accepted",
+                        "\"hand_crank_dynamo\", accepted"})) {
+            String changed = original.replace(mutation[1], mutation[2]);
+            eq("manual-work counterexample actually changes source: " + mutation[0], false, original.equals(changed));
+            eq("manual-work source binding rejects " + mutation[0], false,
+                    PROCESS_CRANK_BODY.equals(normalized(method(parse(process, changed), "crankByHand", 0).getBody())));
+        }
     }
 
     private static TagResolver.ElementLookup registry(Map<Resource, String> declared, Map<String, String> inputs) {
