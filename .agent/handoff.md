@@ -28,6 +28,22 @@ Computer Use window discovery exposes no target Minecraft/Prism window. Continue
 safe implementation while finding an authorized real graphical path. Do not
 start the normal longitudinal campaign or silently waive the gate.
 
+Actual early progress: visual source1969 passes256MiB javac/two identical
+selective stages/negative modes/protected art and releases0Java; only Python CPU
+continues there. Tank759 is published via integration265 and assigned to native
+task879ba2ba for focused common/Forge/JDK qualification. Sound actually spends
+six new requests, allHTTP200/no retries; selects water/extraction, rejects both
+fire sources and uses native furnace feedback without reroll (about720credits).
+No new visual inference is needed for the proven color-only state-mask defect.
+Barter628 adds a real menu and dirt-priced pre-producer recovery so the shop
+does not assume the water/base it must help recover.
+
+ADR-0164/0165 and [external references](../docs/design/t0-external-references.md)
+record bounded controller proxies/identity retirement/quota admission and original
+optional native inspection. Jade's CC-BY-NC-SA profile inclusion remains deferred.
+The owner is unavailable after the graphical-access question; this does not approve
+waiving the required client gate. Continue implementation, not the campaign.
+
 ## Previous qualified testing handoff
 
 **Engineering testing candidate747 is qualified, deployed and stopped.**

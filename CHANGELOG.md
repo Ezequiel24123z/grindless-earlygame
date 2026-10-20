@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Fix the experience architecture against actual mature-source precedents.**
+  ADR-0164 limits hatches to existing T0 shapes/controller stores, including
+  reform identity retirement and native output-quota admission. ADR-0165 chooses
+  original optional inspection without silently adding Jade's noncommercial
+  distribution to the pack. Record pinned GTCEu/Mekanism/Jade sources, licences,
+  adopted principles and material not copied. Keep the required graphical gate
+  blocked while the owner is unavailable; code work and focused proof continue.
 - **Start the owner-requested T0 experience programme (ADR-0161–0163).**
   Reconcile actual mainb8bd5e8 and installed747/c08 before the new scope.
   Preserve the evidence-based inventory and executable plan; assign independent

@@ -51,7 +51,7 @@ source evidence and missing/client-only boundaries.
 |------|-------------|-----------|------|
 | TASK-001 | Verify b8bd5e8 source/main/cleanliness and actual `pc-workflow Inspect` installed747/c08/9cee; read master, AGENTS, route map and existing evidence. | Yes | 2026-10-20 |
 | TASK-002 | Preserve the starting classifications in `docs/reviews/t0-experience-inventory.md`, this plan and the active `.agent` state without rewriting old evidence. | Yes | 2026-10-20 |
-| TASK-003 | Research pinned actual GTCEu/contrasting source for interface ownership and Jade1.20.1 API/license; record accepted principles and non-copied material before interface/API integration. | No | |
+| TASK-003 | Research pinned actual GTCEu/contrasting source for interface ownership and Jade1.20.1 API/license; record accepted principles and non-copied material before interface/API integration. | Yes | 2026-10-20 |
 
 ### Implementation Phase 2
 
@@ -65,7 +65,7 @@ source evidence and missing/client-only boundaries.
 | TASK-007 | Telemetry ownerb02021dc adds immutable bounded loaded-target snapshots, readable state/reasons and optional overlay providers. Depends on TASK-003 API evidence and TASK-006 read-only inspection getters. No speculative state inference or global world scan. | No | |
 | TASK-008 | Audio owner1f5ef586 completes coverage, purpose-bound production/codec/QC/notices and lifecycle routing, retiring all five synthesized legacy Oggs or replacing their legitimate uses without registry-ID loss. Depends on TASK-001; initially three families/six requests under CON-003. | No | |
 | TASK-009 | Visual owner9ff8a930 creates exhaustive T0 manifest/contact sheets and deterministic item/face/family/mask/palette presets; coordinates original hatch overlays with TASK-006. Existing Python/Pillow CPU lease is isolated; GPU generation requires fresh admission and CON-003. | No | |
-| TASK-010 | Integration owner6c714156 adds `.github/ISSUE_TEMPLATE` reproducible bug form and `docs/testing/t0-dev-playthrough.md` with timing, recovery, usability and final gate evidence fields. Depends on TASK-001, not the other implementation units. | No | |
+| TASK-010 | Integration owner6c714156 adds `.github/ISSUE_TEMPLATE` reproducible bug form and `docs/testing/t0-dev-playthrough.md` with timing, recovery, usability and final gate evidence fields. Published6bbb90b/integration265; textual contracts pass, full YAML/render proof remains explicit. Depends on TASK-001, not the other implementation units. | Yes | 2026-10-20 |
 
 ### Implementation Phase 3
 
@@ -145,3 +145,4 @@ source evidence and missing/client-only boundaries.
 - [SSH/Prism workflow](../docs/operations/ssh-prism-workflow.md)
 - [Current validation](../docs/testing/latest-validation.md)
 - [Return handoff](../RETURN-HANDOFF.md)
+- [Pinned external design references](../docs/design/t0-external-references.md)
