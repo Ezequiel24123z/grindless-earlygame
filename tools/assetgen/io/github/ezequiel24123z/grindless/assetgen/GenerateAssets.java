@@ -677,14 +677,16 @@ public final class GenerateAssets {
                 Generation is deterministic: the same generator always produces byte-identical
                 output, so regenerating never shows up as a spurious diff.
 
-                No Minecraft assets are redistributed. The approved `sounds/t0_grinding.ogg` is
-                an unchanged external game-audio import, not synthetic generator output.
-                Keep `AUDIO-NOTICE.txt` with it; the repository's `THIRD_PARTY_NOTICES.md` records
-                its exact provenance and distribution limits (ADR-0148).
+                No Minecraft assets are redistributed. The imported `sounds/t0_grinding.ogg` and
+                `sounds/t0_wet_work.ogg` are noticed external game audio, not synthetic generator output.
+                The approved Quern A import remains byte-identical (ADR-0148); the Mixer working bed
+                uses its separately recorded technical normalization.
+                Keep `AUDIO-NOTICE.txt` with them; the repository's `THIRD_PARTY_NOTICES.md` records
+                their exact provenance and distribution limits.
 
                 Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`
                 or localization. The paired legacy audio converters allow only the five synthetic
-                sound names, so an extra WAV cannot overwrite the approved Quern import.
+                sound names, so an extra WAV cannot overwrite either imported working bed.
 
                 The Multitool PNG is copied byte-for-byte from `tools/visual-assets/approved/`
                 after native JDK hash, PNG, dimensions and hard-alpha validation. Its retained

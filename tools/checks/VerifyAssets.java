@@ -304,13 +304,15 @@ public final class VerifyAssets {
                             ? sound.getAsJsonObject().get("name").getAsString() : sound.getAsString()));
         }
         importedQuernAudio(events);
+        importedMixerAudio(events);
+        preservedLegacyAudio(events);
     }
 
     private static void importedQuernAudio(JsonObject events) throws IOException {
         String expectedHash = "811b29471e3fa6a51ce76db2241259d02adfc64e244eadc096ef376d1d1970d5";
         Path ogg = ASSETS.resolve("sounds/t0_grinding.ogg");
         yes("Quern retains exactly the approved candidate A bytes",
-                exists(ogg) && expectedHash.equals(sha256(Files.readAllBytes(ogg))));
+                exists(ogg) && Files.size(ogg) == 34364 && expectedHash.equals(sha256(Files.readAllBytes(ogg))));
         JsonObject sound = events.getAsJsonObject("t0_grinding")
                 .getAsJsonArray("sounds").get(0).getAsJsonObject();
         yes("Quern uses one non-streamed native buffer and the checked attenuation radius",
@@ -342,6 +344,12 @@ public final class VerifyAssets {
                 generator.contains("Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`")
                         && !generator.contains("deleteTree(sounds)")
                         && !generator.contains("resourceDir(root, \"sounds\")"));
+        yes("generated audio prose distinguishes both imports from the five synthetic sources",
+                generator.contains("`sounds/t0_grinding.ogg` and")
+                        && generator.contains("`sounds/t0_wet_work.ogg`")
+                        && generator.contains("Quern A import remains byte-identical")
+                        && generator.contains("separately recorded technical normalization")
+                        && generator.contains("an extra WAV cannot overwrite either imported working bed"));
         String shell = Files.readString(Path.of("tools/convert-audio.sh"));
         Matcher shellNames = Pattern.compile("for name in ([a-z_ ]+); do").matcher(shell);
         yes("the shell converter cannot overwrite an imported sound from a stray WAV",
@@ -359,6 +367,75 @@ public final class VerifyAssets {
         yes("the Windows converter has the same closed synthetic-only import boundary",
                 powershellNames.equals(legacy) && powershell.contains("foreach ($name in $names)")
                         && !powershell.contains("Get-ChildItem"));
+    }
+
+    private static void importedMixerAudio(JsonObject events) throws IOException {
+        String expectedHash = "2c052cd678775f237fbf1a939037006ed26d05588e99a4ff29bbffcd66599f45";
+        Path ogg = ASSETS.resolve("sounds/t0_wet_work.ogg");
+        yes("Mixer ships only the technically selected, normalized A Ogg with its exact identity",
+                exists(ogg) && Files.size(ogg) == 33374 && expectedHash.equals(sha256(Files.readAllBytes(ogg))));
+        JsonObject event = events.getAsJsonObject("t0_wet_work");
+        JsonObject sound = event.getAsJsonArray("sounds").get(0).getAsJsonObject();
+        yes("Mixer uses exactly one non-streamed positional buffer with range sixteen and no mix overrides",
+                event.keySet().equals(Set.of("subtitle", "sounds"))
+                        && event.get("subtitle").getAsString().equals("subtitles.grindless.t0_wet_work")
+                        && event.getAsJsonArray("sounds").size() == 1
+                        && sound.keySet().equals(Set.of("name", "stream", "attenuation_distance"))
+                        && sound.get("name").getAsString().equals("grindless:t0_wet_work")
+                        && !sound.get("stream").getAsBoolean()
+                        && sound.get("attenuation_distance").getAsInt() == 16);
+        yes("Mixer subtitle describes the working loop, not a new start/stop/error palette",
+                read(ASSETS.resolve("lang/en_us.json")).get("subtitles.grindless.t0_wet_work")
+                        .getAsString().equals("Clay mixer stirs"));
+        String notice = Files.readString(ASSETS.resolve("AUDIO-NOTICE.txt"));
+        String provenance = Files.readString(Path.of("THIRD_PARTY_NOTICES.md"));
+        int mixerNoticeStart = notice.indexOf("Grindless Clay Mixer wet-work audio");
+        String mixerNotice = mixerNoticeStart < 0 ? "" : notice.substring(mixerNoticeStart).replaceAll("\\s+", " ");
+        yes("Mixer's shipped notice and public provenance bind the same final game-audio import",
+                Stream.of(mixerNotice, provenance).allMatch(text -> text.contains("t0_wet_work.ogg")
+                        && text.contains(expectedHash) && text.contains("eleven_text_to_sound_v2")
+                        && text.contains("https://elevenlabs.io/creative-terms"))
+                        && mixerNotice.contains("not a standalone sample or sound library"));
+        JsonObject record = read(Path.of("docs/assets/mixer-runtime-import.json"));
+        JsonObject resource = record.getAsJsonObject("resource");
+        JsonObject runtime = record.getAsJsonObject("runtime_contract");
+        yes("Mixer's source-bound provenance declares the actual normalized import and runtime mix",
+                resource.get("sha256").getAsString().equals(expectedHash)
+                        && resource.get("bytes").getAsInt() == 33374
+                        && resource.get("event").getAsString().equals("grindless:t0_wet_work")
+                        && resource.get("path").getAsString().equals(ogg.toString().replace('\\', '/'))
+                        && resource.get("imported").getAsBoolean() && resource.get("import_authorized").getAsBoolean()
+                        && resource.get("notice_recorded_before_import").getAsBoolean()
+                        && !resource.get("cc0_or_mit_relicensing").getAsBoolean()
+                        && resource.get("standalone_audio_distribution").getAsString().equals("not_permitted")
+                        && record.getAsJsonObject("selection").get("selected_candidate").getAsString().equals("wet-work-a")
+                        && record.getAsJsonObject("normalization").get("source_preview").getAsString().equals("wet-work-a.preview.wav")
+                        && runtime.get("volume").getAsDouble() == 0.35 && runtime.get("pitch").getAsDouble() == 1.0
+                        && runtime.get("radius_blocks").getAsInt() == 16
+                        && runtime.get("category").getAsString().equals("BLOCKS")
+                        && runtime.get("attenuation").getAsString().equals("LINEAR")
+                        && !runtime.get("ordinary_error_sounds").getAsBoolean());
+    }
+
+    private static void preservedLegacyAudio(JsonObject events) throws IOException {
+        Map<String, String> hashes = Map.of(
+                "machine_hum", "1a4444847bcd7b65fa245688b40538e713c857bc0595f7d86dab4e84d1bbe194",
+                "machine_hum_heavy", "3614968863fb10953acf429ac990ab92c3a1d196d23ec1e289f85714da7d98f3",
+                "pylon_link", "07e5624bfb2eaced8df7219419de6ad214967842db9af16f3f4a050f9ddccd24",
+                "relay_click", "c5446171b5d6194057b2cfc860ffd1d5bf25a6b99004b7cda8c04e85d83a786e",
+                "brownout_alarm", "c6222b817b90ca76c8b95e53df000c8d6cb7b4ddfa21117cd59b09767c2fffc5");
+        for (var entry : hashes.entrySet()) {
+            String name = entry.getKey();
+            Path ogg = ASSETS.resolve("sounds/" + name + ".ogg");
+            JsonObject event = events.getAsJsonObject(name);
+            JsonArray sounds = event.getAsJsonArray("sounds");
+            yes(name + " retains its original synthetic bytes and unmodified legacy event",
+                    exists(ogg) && entry.getValue().equals(sha256(Files.readAllBytes(ogg)))
+                            && event.keySet().equals(Set.of("subtitle", "sounds"))
+                            && event.get("subtitle").getAsString().equals("subtitles.grindless." + name)
+                            && sounds.size() == 1 && sounds.get(0).isJsonPrimitive()
+                            && sounds.get(0).getAsString().equals("grindless:" + name));
+        }
     }
 
     /** Reads the channel count from the Vorbis identification header. */

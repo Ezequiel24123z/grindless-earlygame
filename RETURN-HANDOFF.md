@@ -21,7 +21,7 @@ remain separate. PC handoffs coordinate resources only, not routine design appro
 | BLOCKED | Original CI39336114196 remains failed history, but repaired962 qualifies in full CI and PC Windows contracts. Comfy F1 is fixed/revalidated and its narrow review is closed. Superflat material choices and actual owner-desktop review remain the decision/human gates; final build/deploy is pending integration, not missing credentials. |
 | NOT EXECUTED | Final integrated build/deploy, current-wave graphical client run and fresh no-command campaign remain unexecuted. Two real SFX HTTP200 requests and two real local image jobs have now occurred; neither implies human acceptance. |
 | NEEDS HUMAN VALIDATION | Listening, appearance, UX quality and actual manual T0 campaign, regardless of objective checks. |
-| NEEDS MY DECISION | The concrete Superflat A/D/B/C alternatives are now documented; choose the starting experience before gameplay/delivery changes. New external paid-image billing still needs explicit approval; local Comfy is already authorized. |
+| NEEDS MY DECISION | Superflat entry is DECIDED: generous kit in the first free quest, implemented under ADR-0159 without another choice loop. No current kit/product approval is awaited. Human campaign/visual/listening and any future unrelated paid-image activation remain separate. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for current audio/local generation: real ElevenLabs200 outputs and local GPU diffusion succeeded. Actual visible client review needs the existing owner desktop; no new account/key or remote-control installation is assumed. |
 | COST / BILLING RISK | Audio delivery allowance is now up to12 justified small-candidate requests with delegated finite run grants; accepted Mixer pair is ~240credits estimated, not a guaranteedUSD quote. Local Comfy may iterate if useful without external-image billing. Old run receipts remain immutable. |
 | DEPLOYED STATE | Qualified source/runtime559 and hashes below remain installed; no current-wave replacement is claimed. |
@@ -57,6 +57,12 @@ than wasting another delegation. Critical stone/wood/site/water/energy/exit fact
 were checked in source. RecommendationA is a finite seed-independent construction
 bridge; D is less code if a fixed village start is accepted. No kit/profile/shop/
 primitive or food/difficulty policy is implemented. Other delivery proceeds.
+The owner's subsequent direct decision supersedes that proposal: add a generous
+one-time starter kit to the first free quest, including stone/wood/food/water/
+basic materials and initial quest-book access. New full-capability owner7dcd042e
+implements canonical claims/rewards/UI/projection/tests end-to-end; no further
+village/shop/primitive/food-kit debate is pending. No automatic valuable-kit
+delivery to old inventories or quest-progress reset is authorized.
 
 External image research is complete at7795f966: official GitHub documentation
 and its changelog independently confirm Models retired2026-07-30, including

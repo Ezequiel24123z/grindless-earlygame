@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Implement the owner's straightforward Superflat decision (ADR-0159).**
+  First quest is free and gives a generous finite stone/wood/food/basic-material
+  kit with initial book access and one server-authoritative claim. Reuse existing
+  quest/projection/persistence, preserve old IDs/worlds, and stop alternative/
+  food-policy approval loops. No shop, village or new primitive framework needed.
+- **Integrate the generated Mixer audio unit alongside local visual production.**
+  Preserve actual2HTTP200 sources, selected normalizedA Ogg2c052c, exact QuernA,
+  one unchanged tracker/one scan with two closed families, silent passive TANK
+  feedback and generation-independent build. Offline635/307 and38+18 checks pass;
+  combined compilation/resource/registration/deployment qualification follows.
 - **Preserve the final Windows observation-fixture receipt history.**
   Merge777651a/27e6e71 documentation-only preparation/result records alongside
   coordinator-observed native CI proof, retaining all initial failures and the

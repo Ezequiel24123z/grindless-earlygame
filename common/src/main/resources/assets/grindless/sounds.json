@@ -21,6 +21,16 @@
       }
     ]
   },
+  "t0_wet_work": {
+    "subtitle": "subtitles.grindless.t0_wet_work",
+    "sounds": [
+      {
+        "name": "grindless:t0_wet_work",
+        "stream": false,
+        "attenuation_distance": 16
+      }
+    ]
+  },
   "pylon_link": {
     "subtitle": "subtitles.grindless.pylon_link",
     "sounds": [

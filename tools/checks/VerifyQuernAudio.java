@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /** Exercises the actual ownership policy with a fake engine, not a native/client listening pass. */
 public final class VerifyQuernAudio {
@@ -17,6 +18,7 @@ public final class VerifyQuernAudio {
 
     public static void main(String[] args) throws IOException, ReflectiveOperationException {
         ownership();
+        familyReplacement();
         recovery();
         admission();
         pauseAndVolume();
@@ -127,6 +129,47 @@ public final class VerifyQuernAudio {
         check("pause does not consume the admitted-loss backoff", f.engine.started.size() == 1);
         f.step();
         check("recovery resumes after the remaining unpaused backoff", f.engine.started.size() == 2);
+    }
+
+    /** Family tokens are immutable source metadata, not another tracker or persisted epoch. */
+    private static void familyReplacement() {
+        Fixture f = new Fixture();
+        FamilySource quern = new FamilySource("QUERN");
+        FamilySource mixer = new FamilySource("CLAY_MIXER");
+        f.sources.put(11L, quern);
+        f.sources.put(12L, mixer);
+        f.step();
+        FakeVoice old = f.engine.lastAt(11L);
+        FakeVoice neighbor = f.engine.lastAt(12L);
+        check("one tracker owns both family tokens independently in the same snapshot",
+                f.engine.started.size() == 2 && old.source == quern && neighbor.source == mixer);
+        f.engine.engineTick();
+        f.step();
+        old.active = false;
+        f.step();
+        FamilySource replacement = new FamilySource("CLAY_MIXER");
+        f.sources.put(11L, replacement);
+        f.step();
+        check("a new family/source cannot inherit the retired source's recovery backoff",
+                old.stopped && f.engine.started.size() == 3
+                        && f.engine.lastAt(11L).source == replacement && f.engine.maxSamePosition == 1);
+        check("replacing one family leaves its other-family neighbor's ownership intact",
+                !neighbor.stopped && f.engine.lastAt(12L) == neighbor);
+
+        f = new Fixture();
+        f.engine.accept = false;
+        f.sources.put(3L, quern);
+        f.step();
+        for (int tick = 0; tick < QuernLoopTracker.ADMISSION_TICKS; tick++) {
+            f.step();
+        }
+        old = f.engine.last();
+        f.engine.accept = true;
+        f.sources.put(3L, mixer);
+        f.step();
+        check("family replacement releases cancelled-source suppression without reload or an eligibility gap",
+                old.stopped && f.engine.rejections == 1 && f.engine.started.size() == 2
+                        && f.engine.last().source == mixer && f.engine.maxSamePosition == 1);
     }
 
     private static void admission() {
@@ -271,6 +314,9 @@ public final class VerifyQuernAudio {
     }
 
     private static void distances() {
+        check("the shared policy retains the original range, admission grace and recovery bound",
+                QuernLoopTracker.RANGE == 16 && QuernLoopTracker.ADMISSION_TICKS == 5
+                        && QuernLoopTracker.RETRY_TICKS == 40);
         check("a centered source is eligible", QuernLoopTracker.inRange(0, 0, 0));
         check("the near side of attenuation is eligible", QuernLoopTracker.inRange(15.999, 0, 0));
         check("the exact inaudible boundary is excluded", !QuernLoopTracker.inRange(16, 0, 0));
@@ -304,21 +350,50 @@ public final class VerifyQuernAudio {
     }
 
     private static void nativeBindings() throws IOException {
-        String audio = Files.readString(SOURCE.resolve("client/audio/QuernAudio.java")).replaceAll("\\s+", " ");
-        String client = Files.readString(SOURCE.resolve("client/GrindlessClient.java"));
-        String effects = Files.readString(SOURCE.resolve("machine/MachineEffects.java"));
-        check("only client initialization binds the manager", client.contains("QuernAudio.register();"));
+        String audio = sourceCode("client/audio/T0MachineAudio.java").replaceAll("\\s+", " ");
+        String client = sourceCode("client/GrindlessClient.java");
+        String effects = sourceCode("machine/MachineEffects.java");
+        String tank = sourceCode("fluid/BasicTankBlock.java");
+        String tankEntity = sourceCode("fluid/BasicTankBlockEntity.java");
+        String fluids = sourceCode("fluid/FluidLogic.java").replaceAll("\\s+", " ");
+        int dispatchStart = effects.indexOf("switch (geometry) {");
+        int dispatchEnd = effects.indexOf("if (status == MachineStatus.OUT_OF_BAND)", dispatchStart);
+        String dispatch = dispatchStart >= 0 && dispatchEnd > dispatchStart
+                ? effects.substring(dispatchStart, dispatchEnd) : "";
+        check("only client initialization binds the manager", client.contains("T0MachineAudio.register();"));
+        check("the renamed adapter replaces rather than duplicates the old client binding",
+                Files.notExists(SOURCE.resolve("client/audio/QuernAudio.java"))
+                        && !client.contains("QuernAudio")
+                        && Pattern.compile("T0MachineAudio\\.register\\(\\)").matcher(client).results().count() == 1);
         check("discovery visits only already-loaded chunk block entities",
                 audio.contains("getChunk(x, z, ChunkStatus.FULL, false)")
                         && audio.contains("chunk.getBlockEntities().values()")
                         && !audio.contains("getAllInChunk") && !audio.contains("betweenClosed"));
         check("discovery uses detached numeric position identities",
                 audio.contains("eligible.put(machine.getBlockPos().asLong(), machine)"));
+        check("both families share one tracker and one bounded discovery scan",
+                Pattern.compile("new QuernLoopTracker<>").matcher(audio).results().count() == 1
+                        && Pattern.compile("chunk\\.getBlockEntities\\(\\)\\.values\\(\\)")
+                        .matcher(audio).results().count() == 1
+                        && audio.contains("QuernLoopTracker.minChunk(listener.x)")
+                        && audio.contains("QuernLoopTracker.maxChunk(listener.x)")
+                        && audio.contains("QuernLoopTracker.minChunk(listener.z)")
+                        && audio.contains("QuernLoopTracker.maxChunk(listener.z)"));
         check("native eligibility checks the current block, source identity and running status",
                 audio.contains("chunk.getBlockEntities().get(pos) != machine")
                         && audio.contains("machine.isRemoved()") && audio.contains("machine.getLevel() != level")
-                        && audio.contains("block.kind() == ProcessMachineKind.QUERN")
+                        && audio.contains("block.kind() == machine.kind()")
+                        && audio.contains("familyFor(block.kind()) == family")
                         && audio.contains("state.getValue(ProcessMachineBlock.STATUS) == MachineStatus.RUNNING"));
+        check("only Quern and Clay Mixer select a working family; every other process kind is excluded",
+                audio.contains("private static Family familyFor(ProcessMachineKind kind) { return switch (kind) { "
+                        + "case QUERN -> Family.GRINDING; case CLAY_MIXER -> Family.WET_WORK; default -> null; }; }"));
+        check("the final source kind and captured selected family remain authoritative at native admission",
+                sourceCode("machine/ProcessMachineBlockEntity.java").contains("private final ProcessMachineKind kind;")
+                        && audio.contains("family == null || familyFor(machine.kind()) != family")
+                        && audio.contains("new MachineSound(position, source, familyFor(source.kind()))")
+                        && audio.contains("private final Family family;") && audio.contains("this.family = family;")
+                        && audio.contains("client.gameRenderer.getMainCamera().getPosition(), family)"));
         check("source lifetime does not retain the block entity's old level",
                 audio.contains("WeakReference<ProcessMachineBlockEntity> source"));
         check("native category disablement cannot consume admission grace",
@@ -331,15 +406,19 @@ public final class VerifyQuernAudio {
                 audio.contains("CLIENT_PLAYER_QUIT.register") && audio.contains("CLIENT_PLAYER_RESPAWN.register")
                         && audio.contains("CLIENT_STOPPING.register") && audio.contains("PackType.CLIENT_RESOURCES")
                         && audio.contains("ResourceManagerReloadListener"));
-        check("the native voice uses the exact event and positional BLOCKS loop",
-                audio.contains("super(ModSounds.T0_GRINDING.get(), SoundSource.BLOCKS,")
+        check("the native voice uses the selected event and positional BLOCKS loop",
+                audio.contains("super(family.event.get(), SoundSource.BLOCKS,")
                         && audio.contains("looping = true;") && audio.contains("delay = 0;")
                         && audio.contains("relative = false;") && audio.contains("SoundInstance.Attenuation.LINEAR")
-                        && audio.contains("volume = 1.0F;") && audio.contains("pitch = 1.0F;"));
+                        && audio.contains("volume = family.volume;") && audio.contains("pitch = 1.0F;")
+                        && audio.contains("GRINDING(ModSounds.T0_GRINDING, 1.0F)"));
+        check("Mixer uses only the wet-work bed at the initial technical volume, without changing Quern",
+                audio.contains("private enum Family { GRINDING(ModSounds.T0_GRINDING, 1.0F), "
+                        + "WET_WORK(ModSounds.T0_WET_WORK, 0.35F);"));
         check("retirement marks a late-admitted voice stopped before asking the sound manager",
                 audio.indexOf("sound.retire();") < audio.indexOf("getSoundManager().stop(sound)")
                         && audio.contains("if (isStopped() || machine == null"));
-        check("only Quern opts out of the old shared hum",
+        check("only Quern opts out of the old shared mill hum",
                 effects.contains("case QUERN -> mill(status, level, pos, random, false);")
                         && effects.contains("mill(status, level, pos, random, true);")
                         && effects.contains("case PUMP -> mill(status, level, pos, random);")
@@ -350,8 +429,50 @@ public final class VerifyQuernAudio {
                 effects.contains("ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 0.7")
                         && effects.contains("ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.9")
                         && effects.contains("if (hum) {"));
+        check("only Mixer opts out of the washer hum, not Settler or Washer",
+                effects.contains("case MIXER -> washer(status, level, pos, random, false);")
+                        && effects.contains("washer(status, level, pos, random, true);")
+                        && effects.contains("case SETTLER -> washer(status, level, pos, random);")
+                        && effects.contains("case WASHER -> washer(status, level, pos, random);")
+                        && Pattern.compile("washer\\(status, level, pos, random, false\\)")
+                        .matcher(effects).results().count() == 1);
+        String washer = effects.substring(effects.indexOf("private static void washer("),
+                effects.indexOf("private static void cell(")).replaceAll("\\s+", " ");
+        String washerFaults = washer.substring(washer.indexOf("case BLOCKED"));
+        check("Mixer retains washer running/blocked splashes, starved smoke and ordinary-fault silence",
+                washer.contains("if (hum) { sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F); }")
+                        && washer.contains("ParticleTypes.SPLASH, x, pos.getY() + 0.85")
+                        && washerFaults.contains("ParticleTypes.SPLASH, x, pos.getY() + 1.0")
+                        && washerFaults.contains("ParticleTypes.SMOKE, x, pos.getY() + 0.9")
+                        && !washerFaults.contains("sound("));
+        check("a stationary full Basic Tank reports stored fluid, not operation",
+                fluids.contains("public static MachineStatus tankStatus(boolean holding) { "
+                        + "return holding ? MachineStatus.RUNNING : MachineStatus.IDLE; }")
+                        && tankEntity.contains("FluidLogic.tankStatus(!tank.buffer.isEmpty())")
+                        && tank.contains("MachineEffects.animate(BlockCatalogue.Geometry.TANK, 1,"));
+        check("passive TANK has one independent empty effects arm, not generator feedback",
+                Pattern.compile("\\bTANK\\b").matcher(dispatch).results().count() == 1
+                        && Pattern.compile("(?m)^\\s*case\\s+TANK\\s*->\\s*\\{\\s*}\\s*$")
+                        .matcher(dispatch).find());
+        check("active combustion and industrial families retain generator feedback",
+                List.of("GENERATOR", "KILN", "BOILER", "FIREBOX", "INDUSTRIAL").stream()
+                        .allMatch(geometry -> dispatch.contains("case " + geometry
+                                + " -> generator(status, level, pos, random);")));
+        check("dynamo feedback and pylon warnings keep their own routes",
+                dispatch.contains("case DYNAMO -> dynamo(status, front, level, pos, random);")
+                        && dispatch.contains("case PYLON -> pylon(tier, status, level, pos, random);")
+                        && effects.contains("ModSounds.RELAY_CLICK.get()")
+                        && effects.contains("ModSounds.BROWNOUT_ALARM.get()"));
+        check("IDLE still returns before any geometry feedback",
+                Pattern.compile("if \\(status == MachineStatus.IDLE\\) \\{\\s*return;\\s*}"
+                        + "\\s*switch \\(geometry\\)").matcher(effects).find());
         check("the common audio helper has no loader-specific imports",
                 !audio.contains("net.minecraftforge") && !audio.contains("net.fabricmc"));
+    }
+
+    private static String sourceCode(String path) throws IOException {
+        return Files.readString(SOURCE.resolve(path)).replaceAll(
+                "(?s)/\\*.*?\\*/|//[^\\r\\n]*|\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'", " ");
     }
 
     private static void check(String description, boolean passed) {
@@ -385,14 +506,19 @@ public final class VerifyQuernAudio {
         }
     }
 
+    private record FamilySource(String kind) {
+    }
+
     private static final class FakeVoice implements QuernLoopTracker.Voice {
         private final long position;
+        private final Object source;
         private long heartbeat;
         private boolean active;
         private boolean stopped;
 
-        private FakeVoice(long position, boolean active) {
+        private FakeVoice(long position, Object source, boolean active) {
             this.position = position;
+            this.source = source;
             this.active = active;
         }
 
@@ -418,7 +544,7 @@ public final class VerifyQuernAudio {
 
         @Override
         public FakeVoice start(long position, Object source) {
-            FakeVoice voice = new FakeVoice(position, accept && !replace);
+            FakeVoice voice = new FakeVoice(position, source, accept && !replace);
             if (replace) {
                 substitutions++;
             }
@@ -447,6 +573,11 @@ public final class VerifyQuernAudio {
 
         private FakeVoice last() {
             return started.get(started.size() - 1);
+        }
+
+        private FakeVoice lastAt(long position) {
+            return started.stream().filter(voice -> voice.position == position)
+                    .reduce((first, second) -> second).orElseThrow();
         }
 
         private void engineTick() {

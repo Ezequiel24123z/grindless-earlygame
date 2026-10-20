@@ -1,8 +1,16 @@
 # Fresh-Superflat T0: entry options
 
-**Proposal only. No starter allocation, preset, shop, recipe or progression
-change is selected or implemented.** The engineering candidate is not yet a
-verified no-command Superflat campaign, and T0 is not accepted/frozen.
+**Decision now made: ADR-0159 selects a generous one-time kit in the first free
+quest.** The owner explicitly rejected more rounds of entry alternatives.
+Implementation is active; no village, shop or new primitive/worldgen route is
+needed. The alternatives below are preserved analysis, not current blockers.
+The campaign and T0 human acceptance/freeze are still unexecuted.
+
+The implementation allocation is128 cobblestone,64 oak logs,64 bread,64 bricks,
+64 clay balls,64 sand,32 charcoal,16 iron and2 water buckets, with initial book
+access and one server-authoritative claim. The earlier smaller planning allocation,
+food/difficulty questions and optional33-brick proposal below do not restrict that
+owner decision or require further approval before coding.
 
 The read-only planning worker inspected source269965b. It could not edit files,
 commit or send a session handoff; the coordinator recovered its completed

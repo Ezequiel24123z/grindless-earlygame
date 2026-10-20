@@ -46,9 +46,11 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
   independent; preserve the other580 resource PNGs and all twelve reviewed sprites.
   Technical selection is not human visual acceptance.
 - `docs/tiers/t0-superflat-entry-options.md` — source-checked initial material cuts
-  and explicit product alternatives. Its counts are proposal/planning, not a new
-  starter grant, world preset, food policy or survival pass. Bedrock is already a
-  valid Collector bed; do not invent physical ore/terrain as an assumed prerequisite.
+  and historical alternatives. ADR-0159 now selects the first free generous kit;
+  do not keep that choice blocked or invent a shop/village/worldgen requirement.
+  Use canonical quest/claim/projection authority, stable IDs, initial book access
+  and safe one-time rewards; source math is not a survival pass. Bedrock is already
+  a valid Collector bed.
 - `plan/process-t0-playable-release-1.md` and `.agent/work-plan.json` — ADR-0144/PA-0007
   requirement trace, bounded ownership, separate readiness states and actual dependencies.
 - `pack/profiles.json`, `pack/curseforge/manifest.json`, `pack/dependency-metadata.json`,
@@ -81,11 +83,12 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
   post-tick survival. `docs/testing/t0-first-observation-fixtures.json` preserves
   failed CI, raw hashes and incomplete aggregate-tooling qualification. Both
   fresh-pack cases are excluded from the shared-world batch.
-- ADR-0148, `client/GrindlessClient`, `machine/MachineEffects`, `registry/ModSounds`
-  and sound resources — bounded Quern-only client loop integration from approved candidate A.
-  Import the exact noticed Ogg, not account/private generation evidence; preserve unrelated
-  hum callers and gameplay/save authority. Native lifecycle/mix remains a distinct proof.
-- `client/audio/QuernAudio` and `QuernLoopTracker` — native tick/disconnect/reload adapter
+- ADR-0148/0156/0158, `client/GrindlessClient`, `machine/MachineEffects`, `registry/ModSounds`
+  and sound resources — closed Quern/grinding and Clay Mixer/wet-work families.
+  Preserve exact Quern A, import only the noticed Mixer candidate and retain
+  unrelated hum callers/particles/gameplay. Passive TANK storage has no generator
+  hum/flames; do not alter its fluid state/NBT. Native mix remains a human proof.
+- `client/audio/T0MachineAudio` and the unchanged `QuernLoopTracker` — native tick/disconnect/reload adapter
   and testable per-position ownership. Visit block-entity maps in at most nine loaded nearby
   chunks, never blocks/worlds or force-loaded chunks; keys and weak identity scope cannot
   retain an old world. Pause freezes admission time; MASTER/BLOCKS mute clears ownership

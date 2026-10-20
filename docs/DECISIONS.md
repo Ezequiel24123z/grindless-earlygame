@@ -170,6 +170,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0156](#adr-0156--disclose-blockers-and-separate-creative-capability-from-product-acceptance) | Disclose blockers and separate creative capability from product acceptance | Accepted |
 | [0157](#adr-0157--prefer-the-existing-local-comfyui-as-a-supervised-asset-backend) | Prefer the existing local ComfyUI as a supervised asset backend | Accepted |
 | [0158](#adr-0158--delegate-end-to-end-outcomes-with-proportional-validation) | Delegate end-to-end outcomes with proportional validation | Accepted |
+| [0159](#adr-0159--start-t0-with-one-free-generous-starter-quest) | Start T0 with one free generous starter quest | Accepted |
 
 ---
 
@@ -7486,3 +7487,31 @@ security/account/OS changes still need the appropriate owner decision. Existing
 subscriptions and the expressly authorized local route are for use, not perpetual
 access/entitlement rediscovery. Record actual costs and material failures visibly
 under ADR-0156. Neither this acceleration nor a technical pass accepts/freezes T0.
+
+---
+
+## ADR-0159 — Start T0 with one free generous starter quest
+
+**Status.** Accepted owner decision, 2026-10-20. Implement directly; the earlier
+Superflat alternatives are historical proposal, not an outstanding choice.
+
+**Decision.** The first quest is immediately available and free, providing a
+generous finite construction/food/basic-material bridge. Do not require paper,
+a pre-existing tool, currency, a village or diagnostic commands to reach it.
+Use the existing server-authoritative quest claim/reward/persistence mechanisms,
+with stable old quest IDs and one claim per player/world across rejoin/respawn.
+Make the existing quest book available from initial entry; do not create a new
+shop, world generator, primitive production framework or second reward ledger.
+
+The coordinator's ordinary allocation is128 cobblestone,64 oak logs,64 bread,
+64 brick items,64 clay balls,64 sand,32 charcoal,16 iron ingots and2 filled water
+buckets, delivered as legal stacks. This intentionally generous finite bootstrap
+is not a permanent resource farm. No finished machines, insulators, Data Cores,
+Calibrated Cores, Matrices or advanced components are given.
+
+Expose the complete reward and free/ready state through the legacy book and
+Heracles projection. Preserve explicit player claim, safe overflow and old save/
+quest progress; never reset claims or silently grant the whole kit to existing
+inventories. Normal Superflat works without selected-village/terrain/loot reliance.
+Human first-quest interaction, pacing and the campaign remain validation, not
+another initial-kit design approval or a reason to defer implementation.

@@ -264,6 +264,7 @@ public static class GrindlessTestWave {
     Check ([regex]::Matches($source, "'-protocol_whitelist','file'").Count -eq 5) 'every media probe/decode/transform restricts FFmpeg to local file protocol'
     Check ($script:NetworkCalls -eq 0) 'zero transport calls and no secret invocation'
     & (Join-Path $PSScriptRoot 'test-generation-flow.ps1')
+    & (Join-Path $PSScriptRoot 'test-purpose.ps1')
     Write-Output ('PASS: ' + $script:Checks + ' offline checks. TEST fixtures removed; no provider, secret, JVM or package install used.')
 } finally {
     # Delete only this invocation's unique TEST directory, never candidate receipts.
