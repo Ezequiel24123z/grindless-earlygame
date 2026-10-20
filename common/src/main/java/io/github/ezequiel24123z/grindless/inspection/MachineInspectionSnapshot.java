@@ -30,6 +30,7 @@ public record MachineInspectionSnapshot(
     public static final int MAX_TANKS = 4;
     public static final int MAX_RESOURCES = 8;
     public static final int MAX_PORTS = 8;
+    public static final int MAX_FACES = 6;
     public static final int MAX_REQUIREMENTS = 4;
     public static final int MAX_TEXT = 160;
     private static final Pattern ID = Pattern.compile("[a-z0-9_.-]+:[a-z0-9/._-]+");
@@ -60,7 +61,7 @@ public record MachineInspectionSnapshot(
     /** Display semantics only. These values never replace MachineStatus or its saved ordinals. */
     public enum State {
         IDLE, WORKING, BLOCKED, MISSING_INPUT, OUTPUT_FULL, NO_ENERGY, NO_FLUID,
-        INVALID_STRUCTURE, INVALID_ENVIRONMENT, STORAGE, UNKNOWN;
+        INVALID_STRUCTURE, INVALID_ENVIRONMENT, STORAGE, INTERFACE, UNKNOWN;
 
         public String translationKey() {
             return "inspection.grindless.state." + name().toLowerCase(Locale.ROOT);
@@ -69,7 +70,7 @@ public record MachineInspectionSnapshot(
         public String symbol() {
             return switch (this) {
                 case WORKING -> "[>]";
-                case IDLE, STORAGE -> "[-]";
+                case IDLE, STORAGE, INTERFACE -> "[-]";
                 case UNKNOWN -> "[?]";
                 default -> "[!]";
             };
@@ -240,10 +241,15 @@ public record MachineInspectionSnapshot(
         }
     }
 
-    public record PortSummary(PortRole role, Face face) {
+    public record PortSummary(PortRole role, Face face, List<Face> accessFaces) {
+        public PortSummary(PortRole role, Face face) {
+            this(role, face, List.of());
+        }
+
         public PortSummary {
             Objects.requireNonNull(role, "role");
             Objects.requireNonNull(face, "face");
+            accessFaces = faces(accessFaces);
         }
     }
 
@@ -266,16 +272,30 @@ public record MachineInspectionSnapshot(
     }
 
     /** A candidate is explicitly not a confirmed controller owner. */
-    public record Port(PortRole role, Face face, Ownership ownership, Optional<Position> owner) {
+    public record Port(PortRole role, Face face, Ownership ownership, Optional<Position> owner,
+                       List<Face> accessFaces) {
+        public Port(PortRole role, Face face, Ownership ownership, Optional<Position> owner) {
+            this(role, face, ownership, owner, List.of());
+        }
+
         public Port {
             Objects.requireNonNull(role, "role");
             Objects.requireNonNull(face, "face");
             Objects.requireNonNull(ownership, "ownership");
             owner = Objects.requireNonNull(owner, "owner");
+            accessFaces = faces(accessFaces);
             if ((ownership == Ownership.CONFIRMED || ownership == Ownership.CANDIDATE) != owner.isPresent()) {
                 throw new IllegalArgumentException("invalid inspected port ownership");
             }
         }
+    }
+
+    private static List<Face> faces(List<Face> values) {
+        List<Face> result = bounded(values, MAX_FACES);
+        if (result.stream().distinct().count() != result.size()) {
+            throw new IllegalArgumentException("duplicate inspected access face");
+        }
+        return result;
     }
 
     static String text(String value) {

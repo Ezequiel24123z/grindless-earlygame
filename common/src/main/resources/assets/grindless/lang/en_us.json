@@ -573,7 +573,7 @@
   "inspection.grindless.validity.invalid": "invalid",
   "inspection.grindless.validity.unknown": "not confirmed",
   "inspection.grindless.ports": "Recognised ports: %s",
-  "inspection.grindless.port": "Port: %s; outward face: %s",
+  "inspection.grindless.port": "Port: %s; structure orientation: %s",
   "inspection.grindless.port_role.item_input": "item input",
   "inspection.grindless.port_role.item_output": "item output",
   "inspection.grindless.port_role.fluid_input": "fluid input",
@@ -626,5 +626,14 @@
   "inspection.grindless.problem_position": "Structure fault at: %s, %s, %s",
   "inspection.grindless.calibration": "Process: Data Core calibration",
   "inspection.grindless.extraction": "Process: chunk extraction; product not yet confirmed",
-  "inspection.grindless.fuel_cycle": "Last native fuel cycle (not a recipe)"
+  "inspection.grindless.fuel_cycle": "Last native fuel cycle (not a recipe)",
+  "inspection.grindless.reason.reported_fault": "The last machine status reports a fault; its current cause is not confirmed.",
+  "inspection.grindless.reason.owner_unavailable": "A current unique controller owner is not confirmed.",
+  "inspection.grindless.shared_owner": "Contents belong to the controller; the port stores no copy.",
+  "inspection.grindless.port_fluid": "Accessible fluid: %s; %s mB (controller capacity %s mB)",
+  "inspection.grindless.port_fluid_empty": "Accessible fluid: empty (controller capacity %s mB)",
+  "inspection.grindless.ports_partial": "Ports observed before the fault: %s",
+  "inspection.grindless.access": "Contract transfer faces: %s",
+  "inspection.grindless.access_unconfirmed": "Transfer faces inactive or unconfirmed until formation",
+  "inspection.grindless.state.interface": "Formed controller interface"
 }

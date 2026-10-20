@@ -25,12 +25,15 @@ import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.T
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Validity;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.process.ConditionFault;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionProtocol.ClientState;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionProtocol.Reply;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionProtocol.ReplyKind;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionProtocol.Request;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionProtocol.RequestLimiter;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
@@ -64,6 +67,7 @@ public final class VerifyMachineInspection {
         packets();
         clientLifecycle();
         targetingAndRate();
+        portProjection();
         bindings();
         check("persisted MachineStatus order is untouched", List.of(MachineStatus.values()).stream()
                 .map(Enum::name).toList().equals(List.of("IDLE", "RUNNING", "BLOCKED", "STARVED", "OUT_OF_BAND")));
@@ -121,6 +125,14 @@ public final class VerifyMachineInspection {
                 Ownership.CONFIRMED, Optional.empty()));
         rejects("an orphan cannot invent an owner", () -> new Port(PortRole.FLUID_OUTPUT, Face.NORTH,
                 Ownership.ORPHAN, Optional.of(new Position(0, 0, 0))));
+        List<Face> faces = new ArrayList<>(List.of(Face.NORTH, Face.EAST));
+        Port port = new Port(PortRole.ITEM_INPUT, Face.NORTH, Ownership.CONFIRMED,
+                Optional.of(new Position(0, 64, 0)), faces);
+        faces.clear();
+        check("port access directions do not retain mutable input lists", port.accessFaces().size() == 2);
+        rejectsMutation("port access directions are immutable", () -> port.accessFaces().clear());
+        rejects("duplicate transfer directions are invalid", () ->
+                new PortSummary(PortRole.ITEM_INPUT, Face.NORTH, List.of(Face.NORTH, Face.NORTH)));
         rejects("formatting/control text cannot enter the DTO", () ->
                 new Process("synthetic/\u00a7cspoof", List.of(), List.of(), List.of(), 1, 0, Optional.empty()));
         rejects("registry identities are not arbitrary prose", () ->
@@ -218,6 +230,14 @@ public final class VerifyMachineInspection {
         mutation("nonfinite fluid temperature is rejected", tag -> tag.getList("tanks", 10).getCompound(0)
                 .putDouble("temperature", Double.NEGATIVE_INFINITY));
         mutation("unknown port roles are rejected", tag -> tag.getCompound("port").putString("role", "FAKE"));
+        mutation("port access directions cannot silently disappear", tag -> tag.getCompound("port").remove("access"));
+        mutation("unknown access directions are rejected", tag -> {
+            ListTag faces = new ListTag();
+            CompoundTag face = new CompoundTag();
+            face.putString("face", "SIDEWAYS");
+            faces.add(face);
+            tag.getCompound("port").put("access", faces);
+        });
         mutation("a confirmed owner cannot omit its position", tag -> {
             tag.getCompound("port").putString("ownership", "CONFIRMED");
             tag.getCompound("port").remove("owner");
@@ -390,6 +410,44 @@ public final class VerifyMachineInspection {
                 && negativeClock.admit(-1_000_000_000L + MachineInspectionProtocol.SERVER_INTERVAL_NANOS));
     }
 
+    private static void portProjection() {
+        for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
+            for (WorkshopPortContract.Slot slot : WorkshopPortContract.slots(kind.structure())) {
+                if (!slot.accepts(kind)) {
+                    continue;
+                }
+                List<Direction> orientations = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+                for (int turns = 0; turns < orientations.size(); turns++) {
+                    List<Face> faces = MachineInspection.portFaces(kind.structure(), slot.offset().rotate(turns),
+                            kind, orientations.get(turns));
+                    check(kind + " orientation " + turns + " exposes only declared horizontal contract faces",
+                            !faces.isEmpty() && !faces.contains(Face.UP) && !faces.contains(Face.DOWN)
+                                    && faces.size() == slot.faces().size());
+                    for (int face = 0; face < orientations.size(); face++) {
+                        check(kind + " face " + face + " matches native permission at rotation " + turns,
+                                faces.contains(Face.valueOf(orientations.get(face).name()))
+                                        == slot.permitsFace(turns, face));
+                    }
+                }
+            }
+        }
+        check("a north-facing firing port can transfer north and east, not just its facing",
+                MachineInspection.portFaces(WorkshopStructure.FIRING_CHAMBER,
+                        new WorkshopStructure.Offset(1, 0, 0), WorkshopPortContract.Kind.WORKSHOP_ITEM_INPUT,
+                        Direction.NORTH).equals(List.of(Face.NORTH, Face.EAST)));
+        check("a settling channel uses side faces, not its north orientation",
+                MachineInspection.portFaces(WorkshopStructure.SETTLING_TROUGH,
+                        new WorkshopStructure.Offset(0, 0, 1), WorkshopPortContract.Kind.SETTLING_FLUID_INPUT,
+                        Direction.NORTH).equals(List.of(Face.EAST, Face.WEST)));
+        rejects("an arbitrary cell cannot invent a contract face", () -> MachineInspection.portFaces(
+                WorkshopStructure.FIRING_CHAMBER, new WorkshopStructure.Offset(99, 0, 0),
+                WorkshopPortContract.Kind.WORKSHOP_ITEM_INPUT, Direction.NORTH));
+        for (WorkshopStructure structure : WorkshopStructure.values()) {
+            check(structure + " port cardinality fits the inspection bound",
+                    WorkshopPortContract.maximumPorts(structure) <= MachineInspectionSnapshot.MAX_PORTS);
+        }
+    }
+
     private static void bindings() throws Exception {
         Path common = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
         Path forge = Path.of("forge/src/main/java/io/github/ezequiel24123z/grindless/forge");
@@ -410,6 +468,26 @@ public final class VerifyMachineInspection {
         check("native recipe getters, not menu progress proxies, supply process and calibration work",
                 query.contains("machine.inspectionProgress()") && query.contains("terminal.inspectionProgress()")
                         && query.contains("extractor.inspectionProgress()"));
+        check("one fresh formation observation is reused for header and details",
+                query.contains("Optional<Structure> formation = structure(entity)")
+                        && query.contains("display(entity, reported, formation)")
+                        && !query.contains("process.inspectionStructureFault()"));
+        check("port handling precedes generic mutable capability/storage access",
+                query.indexOf("return Optional.of(port(level, position, blockId, port))") < query.indexOf("items(entity)")
+                        && query.contains("WorkshopPortBlockEntity.Inspection inspection = entity.inspection()")
+                        && !query.contains("entity.permitsFace(") && !query.contains("entity.contents(")
+                        && !query.contains("entity.getItem("));
+        check("port stores are read only from an actual loaded confirmed controller",
+                query.contains("level.hasChunkAt(inspection.ownerPos())")
+                        && query.contains("level.getBlockEntity(inspection.ownerPos()) instanceof ProcessMachineBlockEntity")
+                        && query.contains("owner.workshopProducedFluid()")
+                        && query.contains("owner.getItem(slot)"));
+        check("the first native failing offset is not rotated twice",
+                query.contains("Optional.ofNullable(inspection.offset())")
+                        && query.contains("process.getBlockPos().getX() + offset.x()"));
+        check("multiple access faces derive from the native geometry/role contract",
+                query.contains("slot.permitsFace(turns, turns(direction))")
+                        && query.contains("candidate.offset().rotate(turns).equals(rotatedOffset)"));
         check("the server rate guard precedes its world reads", network.indexOf(".admit(System.nanoTime())")
                 < network.indexOf("sender.serverLevel()"));
         check("loaded target and bounded distance are checked before the authoritative ray",
@@ -485,9 +563,10 @@ public final class VerifyMachineInspection {
                         "inspection.grindless.condition." + value.name().toLowerCase(java.util.Locale.ROOT)));
             }
         }
-        for (var group : List.of(List.of(ItemRole.values()), List.of(PortRole.values()),
+        List<List<? extends Enum<?>>> groups = List.of(List.of(ItemRole.values()), List.of(PortRole.values()),
                 List.of(Face.values()), List.of(Ownership.values()), List.of(ManualKind.values()),
-                List.of(Validity.values()))) {
+                List.of(Validity.values()));
+        for (List<? extends Enum<?>> group : groups) {
             String domain = group.get(0) instanceof ItemRole ? "stored"
                     : group.get(0) instanceof PortRole ? "port_role"
                     : group.get(0) instanceof Face ? "face"
@@ -522,10 +601,11 @@ public final class VerifyMachineInspection {
                 Optional.of(new Manual(ManualKind.CRANK_HANDLE, Long.MAX_VALUE)),
                 Optional.of(new Structure("a".repeat(MachineInspectionSnapshot.MAX_TEXT), Validity.INVALID,
                         "a".repeat(MachineInspectionSnapshot.MAX_TEXT), Collections.nCopies(
-                        MachineInspectionSnapshot.MAX_PORTS, new PortSummary(PortRole.FLUID_OUTPUT, Face.SOUTH)),
+                        MachineInspectionSnapshot.MAX_PORTS, new PortSummary(PortRole.FLUID_OUTPUT, Face.SOUTH,
+                                List.of(Face.values()))),
                         Optional.of(new Position(Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE)))),
                 Optional.of(new Port(PortRole.FLUID_OUTPUT, Face.SOUTH, Ownership.CONFIRMED,
-                        Optional.of(new Position(1, 64, 2)))),
+                        Optional.of(new Position(1, 64, 2)), List.of(Face.values()))),
                 List.of(SiteRequirement.TERRESTRIAL, SiteRequirement.ROCK_BED, SiteRequirement.OPEN_SKY,
                         SiteRequirement.DAYLIGHT), true);
     }

@@ -9,9 +9,14 @@ import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Energy;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Conditions;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ItemRole;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Face;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Manual;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ManualKind;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Position;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Ownership;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Port;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.PortRole;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.PortSummary;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Process;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Progress;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Resource;
@@ -28,6 +33,7 @@ import io.github.ezequiel24123z.grindless.machine.CrudeExtractorBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ExtractorLogic;
 import io.github.ezequiel24123z.grindless.machine.HandCrankDynamoBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.MachineBlockEntity;
+import io.github.ezequiel24123z.grindless.machine.MachineProperties;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.ResearchTerminalBlockEntity;
@@ -41,7 +47,11 @@ import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.github.ezequiel24123z.grindless.source.SourceSite;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortBlockEntity;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
+import io.github.ezequiel24123z.grindless.structure.WorkshopPortRole;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
@@ -74,8 +84,12 @@ public final class MachineInspection {
                 || !(entity instanceof MachineBlockEntity) && !(entity instanceof FluidEndpoint)) {
             return Optional.empty();
         }
+        if (entity instanceof WorkshopPortBlockEntity port) {
+            return Optional.of(port(level, position, blockId, port));
+        }
         MachineStatus reported = MachineStatus.of(block).orElse(null);
-        Display display = display(entity, reported);
+        Optional<Structure> formation = structure(entity);
+        Display display = display(entity, reported, formation);
         boolean held = entity instanceof MachineBlockEntity machine && machine.logisticsHold();
         Optional<Process> process = process(entity, reported);
         List<StoredItem> items = items(entity);
@@ -98,25 +112,26 @@ public final class MachineInspection {
                 new Target(level.dimension().location().toString(),
                         new Position(position.getX(), position.getY(), position.getZ()), level.getGameTime()),
                 blockId, held ? State.IDLE : display.state(), held ? "inspection.grindless.reason.held" : display.reason(),
-                held, process, items, energy, tanks(entity), manual, structure(entity), Optional.empty(),
+                held, process, items, energy, tanks(entity), manual, formation, Optional.empty(),
                 requirements(entity), truncated));
     }
 
     /** STARVED is deliberately not split for process machines: its authority merges input and power. */
-    private static Display display(BlockEntity entity, MachineStatus reported) {
+    private static Display display(BlockEntity entity, MachineStatus reported, Optional<Structure> formation) {
+        if (formation.isPresent() && formation.get().validity() != Validity.FORMED) {
+            return new Display(formation.get().validity() == Validity.UNKNOWN ? State.UNKNOWN
+                    : State.INVALID_STRUCTURE, formation.get().reasonKey());
+        }
         if (entity instanceof BasicTankBlockEntity || entity instanceof ClayConduitBlockEntity) {
             return new Display(State.STORAGE, "");
         }
         if (entity instanceof ProcessMachineBlockEntity process) {
-            WorkshopStructure.Fault structure = process.inspectionStructureFault();
-            if (structure != WorkshopStructure.Fault.NONE) {
-                return new Display(State.INVALID_STRUCTURE, structure.translationKey());
-            }
             SourceSite.Fault site = process.inspectionSiteFault();
             if (site != SourceSite.Fault.NONE) {
                 return new Display(State.INVALID_ENVIRONMENT, site.translationKey());
             }
-            if (process.inspectionRecipe().isEmpty() && reported == MachineStatus.RUNNING) {
+            if (process.inspectionRecipe().isEmpty()
+                    && (reported == MachineStatus.RUNNING || reported == MachineStatus.OUT_OF_BAND)) {
                 return new Display(State.UNKNOWN, "inspection.grindless.reason.process_unavailable");
             }
             ConditionFault condition = process.inspectionConditionFault();
@@ -141,7 +156,9 @@ public final class MachineInspection {
             case RUNNING -> new Display(State.WORKING, "");
             case BLOCKED -> new Display(State.BLOCKED, "inspection.grindless.reason.output_blocked");
             case STARVED -> new Display(State.BLOCKED, "inspection.grindless.reason.input_or_power");
-            case OUT_OF_BAND -> new Display(State.INVALID_ENVIRONMENT, "inspection.grindless.reason.conditions");
+            case OUT_OF_BAND -> new Display(entity instanceof ProcessMachineBlockEntity ? State.UNKNOWN
+                    : State.INVALID_ENVIRONMENT, entity instanceof ProcessMachineBlockEntity
+                    ? "inspection.grindless.reason.reported_fault" : "inspection.grindless.reason.conditions");
         };
     }
 
@@ -206,10 +223,7 @@ public final class MachineInspection {
                         ? slot < process.kind().menuKind().inputs() ? ItemRole.INPUT : ItemRole.OUTPUT
                         : entity instanceof CrudeExtractorBlockEntity ? ItemRole.OUTPUT
                         : entity instanceof ThermalGeneratorBlockEntity ? ItemRole.FUEL : ItemRole.SHARED;
-                int rating = stack.getItem() instanceof ControlMatrixItem matrix
-                        ? matrix.spec(stack).map(spec -> spec.technologyRating()).orElse(-1) : 0;
-                result.add(new StoredItem(slot, role, BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(),
-                        stack.getCount(), rating));
+                result.add(item(slot, role, stack));
             }
         }
         return List.copyOf(result);
@@ -230,10 +244,118 @@ public final class MachineInspection {
         if (!(entity instanceof ProcessMachineBlockEntity process) || process.kind().structure() == WorkshopStructure.NONE) {
             return Optional.empty();
         }
-        WorkshopStructure.Fault fault = process.inspectionStructure().fault();
+        WorkshopStructure.Inspection inspection = process.inspectionStructure();
+        if (inspection.ports().size() > MachineInspectionSnapshot.MAX_PORTS) {
+            throw new IllegalArgumentException("native structure exceeds the inspection port bound");
+        }
+        WorkshopStructure.Fault fault = inspection.fault();
+        Direction orientation = process.getBlockState().getValue(MachineProperties.FACING);
+        List<PortSummary> ports = inspection.ports().stream().map(port -> new PortSummary(
+                role(port.kind().role()), Face.valueOf(orientation.name()),
+                portFaces(process.kind().structure(), port.offset(), port.kind(), orientation))).toList();
         return Optional.of(new Structure(process.kind().structure().name().toLowerCase(Locale.ROOT),
-                fault == WorkshopStructure.Fault.NONE ? Validity.FORMED : Validity.INVALID,
-                fault == WorkshopStructure.Fault.NONE ? "" : fault.translationKey(), List.of()));
+                fault == WorkshopStructure.Fault.NONE ? Validity.FORMED
+                        : fault == WorkshopStructure.Fault.UNLOADED ? Validity.UNKNOWN : Validity.INVALID,
+                fault == WorkshopStructure.Fault.NONE ? "" : fault.translationKey(), ports,
+                Optional.ofNullable(inspection.offset()).map(offset -> new Position(
+                        process.getBlockPos().getX() + offset.x(), process.getBlockPos().getY() + offset.y(),
+                        process.getBlockPos().getZ() + offset.z()))));
+    }
+
+    private static MachineInspectionSnapshot port(ServerLevel level, BlockPos position, String blockId,
+                                                   WorkshopPortBlockEntity entity) {
+        WorkshopPortBlockEntity.Inspection inspection = entity.inspection();
+        ProcessMachineBlockEntity owner = null;
+        if (inspection.formed() && inspection.ownerPos() != null && level.hasChunkAt(inspection.ownerPos())
+                && level.getBlockEntity(inspection.ownerPos()) instanceof ProcessMachineBlockEntity controller
+                && !controller.isRemoved()) {
+            owner = controller;
+        }
+        boolean confirmed = owner != null;
+        WorkshopStructure.Fault fault = inspection.fault();
+        Ownership ownership = confirmed ? Ownership.CONFIRMED
+                : inspection.ownerPos() != null ? Ownership.CANDIDATE
+                : fault == WorkshopStructure.Fault.ORPHANED_PORT ? Ownership.ORPHAN : Ownership.UNKNOWN;
+        List<Face> faces = List.of();
+        List<StoredItem> items = List.of();
+        List<Tank> tanks = List.of();
+        boolean truncated = false;
+        if (confirmed) {
+            WorkshopPortContract.Kind kind = WorkshopPortContract.kind(blockId).orElseThrow(() ->
+                    new IllegalArgumentException("inspected port has no native kind"));
+            faces = portFaces(owner.kind().structure(), new WorkshopStructure.Offset(
+                    position.getX() - owner.getBlockPos().getX(), position.getY() - owner.getBlockPos().getY(),
+                    position.getZ() - owner.getBlockPos().getZ()), kind, inspection.facing());
+            // Port storage getters refresh capabilities. Read only the confirmed controller's native stores instead.
+            if (inspection.role().item()) {
+                int from = inspection.role().input() ? 0 : owner.kind().menuKind().inputs();
+                int to = inspection.role().input() ? owner.kind().menuKind().inputs() : owner.getContainerSize();
+                List<StoredItem> captured = new ArrayList<>();
+                for (int slot = from; slot < Math.min(to, MachineInspectionSnapshot.MAX_ITEMS); slot++) {
+                    ItemStack stack = owner.getItem(slot);
+                    if (!stack.isEmpty()) {
+                        captured.add(item(slot, inspection.role().input() ? ItemRole.INPUT : ItemRole.OUTPUT, stack));
+                    }
+                }
+                items = List.copyOf(captured);
+                truncated = to > MachineInspectionSnapshot.MAX_ITEMS;
+            } else {
+                FluidState contents = inspection.role() == WorkshopPortRole.FLUID_OUTPUT
+                        ? owner.workshopProducedFluid() : owner.contents();
+                tanks = List.of(new Tank(contents.id(), contents.millibuckets(), owner.capacity(), Optional.empty(),
+                        contents.temperatureC(), contents.pressureMPa()));
+            }
+        }
+        Optional<Position> ownerPosition = Optional.ofNullable(inspection.ownerPos())
+                .map(pos -> new Position(pos.getX(), pos.getY(), pos.getZ()));
+        State state = confirmed ? State.INTERFACE
+                : fault == WorkshopStructure.Fault.UNLOADED || fault == WorkshopStructure.Fault.NONE
+                || inspection.formed() ? State.UNKNOWN : State.INVALID_STRUCTURE;
+        String reason = confirmed ? "" : fault == WorkshopStructure.Fault.NONE
+                ? "inspection.grindless.reason.owner_unavailable" : fault.translationKey();
+        return new MachineInspectionSnapshot(new Target(level.dimension().location().toString(),
+                new Position(position.getX(), position.getY(), position.getZ()), level.getGameTime()),
+                blockId, state, reason, false, Optional.empty(), items, Optional.empty(), tanks, Optional.empty(),
+                Optional.empty(), Optional.of(new Port(role(inspection.role()), Face.valueOf(inspection.facing().name()),
+                ownership, ownerPosition, faces)), List.of(), truncated);
+    }
+
+    /** Facing is structural orientation; actual contract access may be on several different faces. */
+    static List<Face> portFaces(WorkshopStructure structure, WorkshopStructure.Offset rotatedOffset,
+                                WorkshopPortContract.Kind kind, Direction orientation) {
+        int turns = turns(orientation);
+        WorkshopPortContract.Slot slot = WorkshopPortContract.slots(structure).stream()
+                .filter(candidate -> candidate.offset().rotate(turns).equals(rotatedOffset) && candidate.accepts(kind))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("inspected port has no native contract slot"));
+        return List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST).stream()
+                .filter(direction -> slot.permitsFace(turns, turns(direction)))
+                .map(direction -> Face.valueOf(direction.name())).toList();
+    }
+
+    private static int turns(Direction direction) {
+        return switch (direction) {
+            case NORTH -> 0;
+            case EAST -> 1;
+            case SOUTH -> 2;
+            case WEST -> 3;
+            default -> throw new IllegalArgumentException("inspected workshop orientation must be horizontal");
+        };
+    }
+
+    private static PortRole role(WorkshopPortRole role) {
+        return switch (role) {
+            case ITEM_INPUT -> PortRole.ITEM_INPUT;
+            case ITEM_OUTPUT -> PortRole.ITEM_OUTPUT;
+            case FLUID_INPUT -> PortRole.FLUID_INPUT;
+            case FLUID_OUTPUT -> PortRole.FLUID_OUTPUT;
+        };
+    }
+
+    private static StoredItem item(int slot, ItemRole role, ItemStack stack) {
+        int rating = stack.getItem() instanceof ControlMatrixItem matrix
+                ? matrix.spec(stack).map(spec -> spec.technologyRating()).orElse(-1) : 0;
+        return new StoredItem(slot, role, BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(),
+                stack.getCount(), rating);
     }
 
     private static List<SiteRequirement> requirements(BlockEntity entity) {

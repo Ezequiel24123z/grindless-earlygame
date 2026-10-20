@@ -110,6 +110,7 @@ public final class MachineInspectionCodec {
                 CompoundTag entry = new CompoundTag();
                 entry.putString("role", port.role().name());
                 entry.putString("face", port.face().name());
+                entry.put("access", faces(port.accessFaces()));
                 return entry;
             }));
             structure.problem().ifPresent(problem -> value.put("problem", position(problem)));
@@ -120,6 +121,7 @@ public final class MachineInspectionCodec {
             value.putString("role", port.role().name());
             value.putString("face", port.face().name());
             value.putString("ownership", port.ownership().name());
+            value.put("access", faces(port.accessFaces()));
             port.owner().ifPresent(owner -> value.put("owner", position(owner)));
             tag.put("port", value);
         });
@@ -165,22 +167,22 @@ public final class MachineInspectionCodec {
                     return new Structure(string(value, "kind"), enumeration(value, "validity", Validity.class),
                             string(value, "reason"),
                             readList(value, "ports", MachineInspectionSnapshot.MAX_PORTS, entry -> {
-                                fields(entry, Set.of("role", "face"), Set.of());
+                                fields(entry, Set.of("role", "face", "access"), Set.of());
                                 return new PortSummary(enumeration(entry, "role", PortRole.class),
-                                        enumeration(entry, "face", Face.class));
+                                        enumeration(entry, "face", Face.class), readFaces(entry));
                             }), optional(value, "problem", problem -> {
                                 fields(problem, Set.of("x", "y", "z"), Set.of());
                                 return readPosition(problem);
                             }));
                 }),
                 optional(tag, "port", value -> {
-                    fields(value, Set.of("role", "face", "ownership"), Set.of("owner"));
+                    fields(value, Set.of("role", "face", "ownership", "access"), Set.of("owner"));
                     return new Port(enumeration(value, "role", PortRole.class),
                             enumeration(value, "face", Face.class), enumeration(value, "ownership", Ownership.class),
                             optional(value, "owner", owner -> {
                                 fields(owner, Set.of("x", "y", "z"), Set.of());
                                 return readPosition(owner);
-                            }));
+                            }), readFaces(value));
                 }),
                 readList(tag, "requirements", MachineInspectionSnapshot.MAX_REQUIREMENTS, value -> {
                     fields(value, Set.of("kind"), Set.of());
@@ -237,6 +239,21 @@ public final class MachineInspectionCodec {
         tag.putInt("rating", resource.matrixRating());
         tag.putBoolean("vented", resource.vented());
         return tag;
+    }
+
+    private static ListTag faces(List<Face> faces) {
+        return list(faces, face -> {
+            CompoundTag value = new CompoundTag();
+            value.putString("face", face.name());
+            return value;
+        });
+    }
+
+    private static List<Face> readFaces(CompoundTag value) {
+        return readList(value, "access", MachineInspectionSnapshot.MAX_FACES, face -> {
+            fields(face, Set.of("face"), Set.of());
+            return enumeration(face, "face", Face.class);
+        });
     }
 
     private static CompoundTag position(Position position) {

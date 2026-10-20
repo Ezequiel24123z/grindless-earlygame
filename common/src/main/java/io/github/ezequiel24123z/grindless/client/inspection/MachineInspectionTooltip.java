@@ -54,10 +54,15 @@ public final class MachineInspectionTooltip {
         }
         snapshot.energy().ifPresent(energy -> lines.add(Component.translatable(
                 "inspection.grindless.energy", energy.stored(), energy.capacity())));
+        if (snapshot.port().isPresent()) {
+            lines.add(Component.translatable("inspection.grindless.shared_owner"));
+        }
         for (var tank : snapshot.tanks()) {
             lines.add(tank.amount() == 0
-                    ? Component.translatable("inspection.grindless.tank_empty", tank.capacity())
-                    : Component.translatable("inspection.grindless.tank",
+                    ? Component.translatable(snapshot.port().isPresent()
+                    ? "inspection.grindless.port_fluid_empty" : "inspection.grindless.tank_empty", tank.capacity())
+                    : Component.translatable(snapshot.port().isPresent()
+                    ? "inspection.grindless.port_fluid" : "inspection.grindless.tank",
                     ResourceGuidanceClient.name(new SustainabilityModel.Resource(SustainabilityModel.Kind.FLUID,
                             tank.id())), tank.amount(), tank.capacity()));
             tank.outputQuota().filter(quota -> quota > 0).ifPresent(quota -> lines.add(
@@ -84,12 +89,16 @@ public final class MachineInspectionTooltip {
             }
             structure.problem().ifPresent(position -> lines.add(Component.translatable(
                     "inspection.grindless.problem_position", position.x(), position.y(), position.z())));
-            if (!structure.ports().isEmpty()) {
-                lines.add(Component.translatable("inspection.grindless.ports", structure.ports().size()));
+            if (!structure.ports().isEmpty() || structure.validity() == MachineInspectionSnapshot.Validity.FORMED) {
+                lines.add(Component.translatable(structure.validity() == MachineInspectionSnapshot.Validity.FORMED
+                        ? "inspection.grindless.ports" : "inspection.grindless.ports_partial", structure.ports().size()));
                 if (expanded) {
                     for (var port : structure.ports()) {
                         lines.add(Component.translatable("inspection.grindless.port",
                                 label("port_role", port.role()), label("face", port.face())));
+                        if (!port.accessFaces().isEmpty()) {
+                            lines.add(access(port.accessFaces()));
+                        }
                     }
                 }
             }
@@ -97,6 +106,8 @@ public final class MachineInspectionTooltip {
         snapshot.port().ifPresent(port -> {
             lines.add(Component.translatable("inspection.grindless.port",
                     label("port_role", port.role()), label("face", port.face())));
+            lines.add(port.accessFaces().isEmpty() ? Component.translatable("inspection.grindless.access_unconfirmed")
+                    : access(port.accessFaces()));
             lines.add(label("ownership", port.ownership()));
             port.owner().ifPresent(owner -> lines.add(Component.translatable("inspection.grindless.owner_position",
                     owner.x(), owner.y(), owner.z())));
@@ -202,6 +213,17 @@ public final class MachineInspectionTooltip {
 
     private static Component label(String domain, Enum<?> value) {
         return Component.translatable("inspection.grindless." + domain + "." + lower(value));
+    }
+
+    private static Component access(List<MachineInspectionSnapshot.Face> faces) {
+        MutableComponent joined = Component.empty();
+        for (var face : faces) {
+            if (!joined.getString().isEmpty()) {
+                joined.append(", ");
+            }
+            joined.append(label("face", face));
+        }
+        return Component.translatable("inspection.grindless.access", joined);
     }
 
     private static String lower(Enum<?> value) {
