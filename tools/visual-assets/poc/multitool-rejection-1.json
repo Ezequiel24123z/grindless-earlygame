@@ -1,0 +1,21 @@
+{
+  "schema": "grindless.visual-candidate-rejection.v1",
+  "asset_id": "grindless:multitool",
+  "slot": 1,
+  "seed": 21774205,
+  "prompt_id": "4ed2fadf-5cf1-4840-92bb-0bc16ed2644b",
+  "source_sha256": "e77dca20fb9b0c57a735b2fddc37070730e239458e689d12d880ad735faf0924",
+  "source_bytes": 537133,
+  "disposition": "rejected_not_imported_as_source_art_or_runtime",
+  "reason": "The actual pixels show a photographic hexagonal brass part on fabric rather than a manual open-jaw wrench on a clean white background.",
+  "objective_failure": "Foreground/background touches the source edge.",
+  "quality_thresholds_relaxed": false,
+  "inference_succeeded": true,
+  "workflow_sha256": "6d102bfbf69237a4eed7d537852cc3a44d7be5389ab717cfc5b398c87b1b8b08",
+  "original_collection_exit": 1,
+  "original_collection_error": "Unsafe output subfolder.",
+  "collection_recovered_without_post": true,
+  "original_execution_receipt_sha256": "e30998636012508b196c1dfa349474bb20ec8021bd14c169936a8c7c2e5cdfa0",
+  "source_retention": "The original rejected PNG remains in the owned private execution/session evidence, not a runtime or approved source-art import.",
+  "human_visual_approval": false
+}

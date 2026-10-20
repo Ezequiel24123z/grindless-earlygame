@@ -5,6 +5,13 @@ Minecraft asset authority. No model, ComfyUI dependency, external image account,
 Python dependency or network operation is added to the normal mod build.
 Private host paths, personal workflows and generation endpoints stay outside Git.
 
+**Current source candidate:** Multitool source2 is technically selected and its
+223-byte native PNG is integrated through a hash-validated JDK-only source seam.
+All580 other resource PNGs are byte-preserved. Both real source graphs are
+retrospectively verified from their actual retained PNG prompt metadata after
+the collector-integrity repair below. Human art/client acceptance and deployment
+are not claimed. The first rejected source and original spent2/2 run remain history.
+
 ## Current bounded target and visual contract
 
 The coordinator selected `grindless:multitool` after inspection of the actual
@@ -234,6 +241,96 @@ zero queues and exactly one collected request. No authorization2 or candidate2
 execution output existed. The owner later reported a brief restored Internet
 outage. No new session, server restart, request replay or quota was created.
 
+### Actual second source and deterministic result
+
+Source2 prompt `318be6d6-ca2a-41ea-8b1d-a3f70c20988e` completes successfully
+with no cached nodes in21.710s of recorded prompt execution,25.399s including
+the client/model-hash boundary. Its86605-byte source hashes to
+`d083051c81c61d8d42158debd5afbb24b347bf77fa271ef41d10044a8f51f615`.
+The reserved resolved graph hashes to
+`7940c2cbbf60fcd5e72854deb843debe268b458962fc6e2fc65e19717a806d41`.
+Its immutable seed21774206,0.35 denoise,20Euler/normal steps,CFG7 and single
+512-square image are recorded in the
+[public provenance](../../tools/visual-assets/approved/multitool.provenance.json).
+
+The unchanged processor passes: crop[80,32,400,480], foreground fraction
+0.27965545654296875, zero dust, no rotation/mirroring, fixed seven-color palette,
+nearest14px envelope and binary alpha. The16px PNG is223 bytes and hashes to
+`127b662a124c30490c3d6737dc29ce8175d37b201e45bdad18bc1ea7360c7d38`;
+RGBA bytes hash to
+`e5a5e6ebf7260b3d2e0f61224447a99197a1e08eb7028da01edab3fa4627c5ba`.
+The coordinator inspected the actual comparison and selected this technical
+candidate without further pixel edits. The predecessor, guide, source2, resolved
+graphs, processing, spent ledger and append-only authorization are retained under
+`tools/visual-assets/poc/`. The rejected fabric photo is not imported as source
+art or runtime; its original remains private and its rejection/integrity is public.
+
+![Actual before/source/native comparison, not an in-game screenshot](../../tools/visual-assets/poc/multitool-comparison.png)
+
+`compare` renders the real predecessor/native16px at1x/nearest8x on light/dark,
+beside the untouched512px source. It writes only a new review image, never resource
+pixels. The actual comparison SHA-256 is
+`bfc4487955ec8678db9e397e9d7a1f531b0039dc10404d465e268d0c210b7f45`.
+Its font/raster presentation is a review aid, not Minecraft rendering evidence.
+
+The owned server is explicitly stopped after both queues are empty and both
+owned prompt histories report success. At02:32:21Z its verified PID11548 is gone,
+8189 has no listener and Python/Java counts are zero. Free physical/commit/work
+space is11.370/35.225/155.970GiB. Rehashing proves installed main/nodes/model bytes
+equal their intake identities. The stopped-server launcher returns0. No user
+process is stopped, no install/model download occurs and no PC reboot occurs.
+The initial owned evidence is63 files/1,390,353 bytes; later CPU/source snapshots
+are separate tooling data, not a model download. Private receipt paths stay private.
+
+### F1 collector-integrity correction and actual retrospective proof
+
+Independent review of the earlier client correctly found that collection trusted
+a retained workflow's prefix without checking its reserved digest or historical
+graph. The successful GPU jobs do not excuse that tooling defect.
+
+`reserved_workflow` now validates exact retained file bytes against the reserved
+SHA-256, the reserved spec/template/typed seed, and a reconstructed approved graph
+with a prefix derived independently from asset/run/slot **before any HTTP request**.
+Changing local seed, prompt, prefix, model or digest fails with zero API calls,
+including a rewritten digest accompanying a changed graph.
+
+Live collection additionally verifies ComfyUI0.32's owned history tuple:
+`prompt[1]` must be the recorded prompt ID and `prompt[2]` must hash to the reserved
+approved graph before `/view` or collection. An actual owned history proof is saved
+for future collections. If a returned PNG has `prompt` metadata, that graph must
+also match. Absent PNG metadata is permitted only with that real verified live
+history; offline retrospective auditing never invents it.
+
+Only JSON object-key order/serialization whitespace are ignored when comparing
+parsed history/PNG graphs. No fields, values or numeric/string/boolean types are
+dropped or coerced; retained workflow file bytes themselves must match exactly.
+Windows/POSIX references to the same canonical output remain valid; raw
+root/drive/UNC/empty/dot/mixed traversal and foreign outputs remain rejected.
+
+The repaired client
+`1dfabafb970614a4726e60a2937d7e7f9d270bc55533b3d22e4838180368d8d4`
+and tests
+`b2e63c182cb41a24e3f46a35ad582a6f33fe19fc2f1b5fe381cf8e9d11c3ce8d`
+pass27 contracts in4.961s; log SHA-256
+`1a35fdcb8767e710a9adea317c20e8fdd304a0f715320e3f670211df51faaafd`.
+Positive collection resumes GET-only, URI-encodes its query, checks real PNG
+metadata and preserves ownership. History/PNG mismatches cannot become collected.
+
+The original live history graph was not archived before stopping the server.
+The separate `audit` action therefore uses the actual retained, hash-pinned PNG
+`prompt` metadata, not a fabricated later history observation. It verifies exact
+graph6d102b... for source1 and7940c2... for source2, including model, typed seeds
+and canonical prefixes. Both real audits pass with zero network requests or new
+inference; the original ledger remains
+`2bbcfbc970b5a1164c15ba330670096b52e884f68cb61634339039c1ef700624`.
+The new exclusive
+[source1 addendum](../../tools/visual-assets/poc/multitool-integrity-1.json)
+hashes to `7baaa13d2a996c5cea9f8835eb97341c62c7b45ba6e80df417ee74c8289c0b0f`;
+the [source2 addendum](../../tools/visual-assets/poc/multitool-integrity-2.json)
+hashes to `0936883c8ac58afe8bfbf85b5d86aa0d03450ec4ab746b9ca914fac851565890`.
+Original receipts, failed observations, request allowance and rejected-source
+disposition are not overwritten to close F1.
+
 ## Deterministic transformation and integration boundary
 
 The pipeline accepts only the graph's single-frame 512px PNG. It removes only
@@ -251,38 +348,52 @@ upper-left lighting, originality or actual inventory/JEI rendering.
 The processing receipt records Python/Pillow versions, source/spec/template
 hashes, crop, dust, transform identity and both RGBA/PNG hashes.
 
-The coordinator approved a narrow normal-generator seam: after technical
-selection and simultaneous parent-owned notices, an approved 16px source under
-`tools/visual-assets/approved/` is copied with native JDK validation to the one
-existing runtime path. ComfyUI and Python are not normal-generation dependencies.
-Until that seam and selected PNG actually exist, the current placeholder remains
-the only integrated asset. Keep predecessor/source/provenance and demonstrate
-stage repeatability plus preservation of all other assets.
+The approved16px source now exists at `tools/visual-assets/approved/multitool.png`,
+with a plain SHA-256 sidecar linked to full provenance. `GenerateAssets` verifies
+the sidecar, source hash, PNG signature,16px dimensions and binary alpha before
+normal output mutation; it copies those exact bytes instead of the placeholder.
+There is no fallback to a stale generated tool. Guides-only remains independent
+of this source and preserves its original three-output mode.
+The normal generator needs only its existing JDK, never ComfyUI, Python, weights
+or network. The original `FormTextures.multitool` and retained predecessor remain
+historical source, not a second active authority.
+
+`VerifyApprovedMultitool.java` exercises the real JDK reader, tamper/format/
+dimension/alpha/missing-source refusals, failure-before-output and guides-only
+behavior. Source-frozen full-stage repeatability/protected-resource proof follows
+under the separate preauthorized256MiB/CPU2 JDK lease; this is not a Gradle,
+server/client or deployment run.
+
+The PowerShell and actual Windows Git-Bash entrypoints both execute an offline
+conditioned `plan`, exit0, with identical raw JSON SHA-256
+`e937dca9a5326b582dfe7c92b934a6f955e7f4a5140ef248fe5d78e24f1c09e6`.
+The default plan uses seed21774205 with0.35 denoise; it submits nothing.
+This is Windows entrypoint parity, not a claim of Linux execution.
 
 ## Checkpoint disclosure
 
-| Category | Actual state at source preparation |
+| Category | Actual state at integration-source freeze |
 | --- | --- |
-| COMPLETED | Safe inventory, source-role review, exact model provenance, actual GPU kernel, isolated API readiness and17 offline pipeline contracts. |
-| BLOCKED | None at this source checkpoint; the leased real-inference phase is next. |
-| NOT EXECUTED | Source generation, native source selection/integration, normal-generator replay, build/deployment. |
+| COMPLETED | Existing-backend proof; two real sources, first rejected/second technically selected; deterministic16px integration; original workflows/spec/guide/provenance; F1 repair and actual offline PNG audits;580 other PNGs preserved; GPU released. |
+| BLOCKED | None. Exact-source JDK staging is authorized next, not a missing tool or an inference failure. |
+| NOT EXECUTED | Final integration-source JDK staging/negative gate, parent build/package/deployment and native client rendering. |
 | NEEDS HUMAN VALIDATION | All appearance, readability and actual client contexts. |
-| NEEDS MY DECISION | None; coordinator selected Multitool and approved the narrow generator seam. |
+| NEEDS MY DECISION | None; the coordinator selected native127b and the source seam. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None; existing SSH and local runtime are available. |
-| COST / BILLING RISK | No paid service or download; bounded local energy/RAM/VRAM, at most two sources. |
-| DEPLOYED STATE | Qualified559 remains unchanged; this source preparation is not deployed. |
+| COST / BILLING RISK | No paid service/model download. Original run is spent2/2; no extra inference is needed or performed. |
+| DEPLOYED STATE | Qualified559 remains unchanged; the new sprite is source-integrated, not deployed. |
 
 | ComfyUI category | Actual state |
 | --- | --- |
 | COMFYUI ENVIRONMENT FOUND | Two installations; no API initially, then an isolated owned loopback API qualified separately. |
 | REUSED COMPONENTS | Existing SD1.5 fp16, incorporated CLIP/VAE and existing Python/Pillow; no model copy. |
-| INSTALLED/CHANGED COMPONENTS | Original project tooling only; no user-installation change. |
-| MODEL/WORKFLOW SELECTED | Exact hash-qualified Comfy-Org SD1.5 FP16 plus original seven-node item/material workflow. |
+| INSTALLED/CHANGED COMPONENTS | Original project tooling/source/one runtime sprite; owned temporary server stopped. No installer, driver, model/config/workflow rewrite or public service. |
+| MODEL/WORKFLOW SELECTED | Exact Comfy-Org SD1.5 FP16; txt2img source1 rejected, core eight-node guide-conditioned source2 selected. |
 | AUTOMATION METHOD | Loopback prompt/history/view; original deterministic offline processor. |
-| POC ASSETS GENERATED | 0 at this checkpoint. |
-| ASSETS INTEGRATED | 0 at this checkpoint. |
-| NEEDS HUMAN VISUAL VALIDATION | All future source/native candidates. |
-| BLOCKERS | None; real inference remains unexecuted, not a capability failure or pass. |
+| POC ASSETS GENERATED | Two retained real source candidates for one logical asset; only source2 passes technical selection. |
+| ASSETS INTEGRATED | One16px Multitool source/runtime PNG with regeneration preservation; no protected art replaced. |
+| NEEDS HUMAN VISUAL VALIDATION | Actual appearance/native inventory/JEI; source-pixel technical selection is not human approval. |
+| BLOCKERS | None; JDK exact-source staging remains next at this freeze. |
 | DISK/COMPUTE IMPACT | Zero model downloads/copies; existing weights are about 1.99 GiB. Owned evidence expected below 32 MiB. |
-| LICENSING/PROVENANCE NOTES | Comfy-Org FP16 hash matches; CreativeML OpenRAIL-M is recorded in the model lock. No third-party implementation copied. Parent notices precede asset import. |
-| RECOMMENDED NEXT ASSET WAVE | Finish only this Multitool proof before proposing further families. |
+| LICENSING/PROVENANCE NOTES | Model/guide/source/settings/native provenance and notices precede import; no weights or GPL code distributed. |
+| RECOMMENDED NEXT ASSET WAVE | Reuse the proven guide-conditioned item/material mechanism only for a demonstrated weak asset; no mass replacement or invented future-tier content. |

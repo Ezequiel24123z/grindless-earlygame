@@ -1,0 +1,22 @@
+{
+  "human_visual_approval": false,
+  "mirror": false,
+  "orientation_claim": "Preserved without transforms; semantics require source-pixel/human review.",
+  "pillow_version": "12.2.0",
+  "python_version": "3.12.9",
+  "removed_dust_pixels": 0,
+  "rotation": 0,
+  "runtime_png_sha256": "127b662a124c30490c3d6737dc29ce8175d37b201e45bdad18bc1ea7360c7d38",
+  "runtime_rgba_sha256": "e5a5e6ebf7260b3d2e0f61224447a99197a1e08eb7028da01edab3fa4627c5ba",
+  "source_crop_xyxy": [
+    80,
+    32,
+    400,
+    480
+  ],
+  "source_foreground_fraction": 0.27965545654296875,
+  "source_sha256": "d083051c81c61d8d42158debd5afbb24b347bf77fa271ef41d10044a8f51f615",
+  "spec_sha256": "ddac72943097650f23821ac50f10d4260ad7c5d58c1876fc915a09f9b7c57021",
+  "template_sha256": "d95782c1103edf8a740efe78a8d0be2a7ac9380662c31fe66c7f88a85646c78b",
+  "transform": "edge-key-largest-component-nearest-palette-v1"
+}

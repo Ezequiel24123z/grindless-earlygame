@@ -334,12 +334,72 @@ def update_request(directory, slot, **changes):
         atomic_json(directory / "run.json", ledger)
 
 
+def canonical_prefix(directory, spec, slot):
+    require(re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}", directory.name), "Invalid owned run name.")
+    return f"grindless/{spec['asset_id']}/{directory.name}/candidate-{slot}"
+
+
+def reserved_workflow(directory, ledger, row, spec, model, slot):
+    require(row["slot"] == slot and type(row["seed"]) is int and row["seed"] == spec["seeds"][slot - 1],
+            "Reserved slot/seed differs from the approved specification.")
+    require(row.get("spec_sha256", ledger["spec_sha256"]) == sha256(json_bytes(spec))
+            and row.get("template_sha256", ledger["template_sha256"]) == file_sha256(template_path(spec)),
+            "Reserved specification/template identity differs.")
+    data = (directory / f"workflow-{slot}.json").read_bytes()
+    require(sha256(data) == row["workflow_sha256"], "Retained workflow bytes differ from the reserved digest.")
+    graph = json.loads(data)
+    approved = workflow(spec, model, slot, canonical_prefix(directory, spec, slot))
+    require(sha256(json_bytes(graph)) == row["workflow_sha256"]
+            and sha256(json_bytes(approved)) == row["workflow_sha256"],
+            "Retained workflow does not equal the approved typed graph and canonical run/slot prefix.")
+    return graph
+
+
+def png_graph_proof(data, graph, require_metadata=False):
+    Image = image_module()
+    with Image.open(io.BytesIO(data)) as image:
+        require(image.format == "PNG" and image.size == (512, 512)
+                and not getattr(image, "is_animated", False), "Expected the owned single-frame 512px source PNG.")
+        raw = image.info.get("prompt")
+        if raw is None:
+            require(not require_metadata, "Retained PNG has no prompt metadata; do not invent historical evidence.")
+            proof = {"png_prompt_metadata": "absent"}
+        else:
+            require(isinstance(raw, str), "PNG prompt metadata is not JSON text.")
+            observed = json.loads(raw)
+            require(isinstance(observed, dict) and sha256(json_bytes(observed)) == sha256(json_bytes(graph)),
+                    "PNG prompt graph differs from the reserved approved graph.")
+            proof = {"png_prompt_metadata": "verified", "png_prompt_sha256": sha256(json_bytes(observed))}
+        image.verify()
+    return proof
+
+
+def audit_retained(directory, spec, model, slot):
+    ledger = read_ledger(directory, spec, model)
+    rows = [row for row in ledger["requests"] if row["slot"] == slot]
+    require(len(rows) == 1 and rows[0]["state"] == "collected", "Only a retained collected source can be audited.")
+    row = rows[0]
+    graph = reserved_workflow(directory, ledger, row, spec, model, slot)
+    data = (directory / f"source-{slot}.png").read_bytes()
+    require(sha256(data) == row["source_sha256"], "Retained source bytes differ from the original collection receipt.")
+    proof = png_graph_proof(data, graph, require_metadata=True)
+    return {
+        "schema": "grindless.retained-source-integrity.v1", "slot": slot, "prompt_id": row["prompt_id"],
+        "source_sha256": sha256(data), "workflow_sha256": row["workflow_sha256"],
+        "spec_sha256": sha256(json_bytes(spec)), "model_sha256": model["sha256"],
+        "canonical_prefix": canonical_prefix(directory, spec, slot), **proof,
+        "evidence_source": "actual retained PNG prompt metadata, not a new history observation",
+        "audited_at": datetime.now(timezone.utc).isoformat(),
+        "network_requests": 0, "new_inference": False, "original_receipts_modified": False,
+    }
+
+
 def generate(api, directory, spec, model, checkpoint, slot, wait_seconds, input_directory=None):
     checkpoint = Path(checkpoint)
     require(checkpoint.name == model["filename"] and checkpoint.stat().st_size == model["bytes"],
             "Checkpoint filename or size differs from its lock.")
     require(file_sha256(checkpoint) == model["sha256"], "Checkpoint hash differs from its lock.")
-    prefix = f"grindless/{spec['asset_id']}/{directory.name}/candidate-{slot}"
+    prefix = canonical_prefix(directory, spec, slot)
     graph = workflow(spec, model, slot, prefix)
     if "conditioning" in spec:
         require(input_directory is not None, "Conditioning needs the isolated server input directory.")
@@ -391,11 +451,17 @@ def collect(api, directory, spec, model, slot, wait_seconds):
     require(isinstance(prompt_id, str) and re.fullmatch(r"[0-9a-fA-F-]{36}", prompt_id),
             "No known prompt id. Inspect only this owned server's evidence; do not submit again.")
     require(row["state"] != "collected", "Source already collected; process its retained bytes.")
+    graph = reserved_workflow(directory, ledger, row, spec, model, slot)
     deadline = time.monotonic() + wait_seconds
     while True:
         history = api.request("/history/" + quote(prompt_id, safe=""))
         own = history.get(prompt_id)
         if own:
+            historical_prompt = own.get("prompt")
+            require(isinstance(historical_prompt, list) and len(historical_prompt) >= 3
+                    and historical_prompt[1] == prompt_id and isinstance(historical_prompt[2], dict)
+                    and sha256(json_bytes(historical_prompt[2])) == row["workflow_sha256"],
+                    "Owned history graph/id differs from the reserved approved graph.")
             status = own.get("status", {})
             if status.get("status_str") == "error":
                 update_request(directory, slot, state="execution_failed")
@@ -407,11 +473,11 @@ def collect(api, directory, spec, model, slot, wait_seconds):
             update_request(directory, slot, state="wait_timeout")
             raise ContractError("Inference wait expired; collect this prompt later. No cancellation or resubmission.")
         time.sleep(min(1, max(0, deadline - time.monotonic())))
-    graph = read_json(directory / f"workflow-{slot}.json")
     reference = output_reference(own.get("outputs", {}).get("7", {}).get("images"),
-                                 graph["7"]["inputs"]["filename_prefix"])
+                                 canonical_prefix(directory, spec, slot))
     data = api.request("/view?" + urlencode(reference), binary=True)
     require(data.startswith(b"\x89PNG\r\n\x1a\n"), "ComfyUI did not return a PNG.")
+    png_proof = png_graph_proof(data, graph)
     source_hash = sha256(data)
     duplicate = next((previous for previous in ledger["requests"]
                       if previous.get("source_sha256") == source_hash), None)
@@ -421,6 +487,12 @@ def collect(api, directory, spec, model, slot, wait_seconds):
     destination = directory / f"source-{slot}.png"
     with destination.open("xb") as stream:
         stream.write(data)
+    history_proof = {
+        "prompt_id": prompt_id, "workflow_sha256": row["workflow_sha256"], "graph": historical_prompt[2],
+        "evidence_source": "actual owned history GET during collection", **png_proof,
+    }
+    with (directory / f"history-proof-{slot}.json").open("xb") as stream:
+        stream.write(json_bytes(history_proof))
     update_request(directory, slot, state="collected", source_sha256=source_hash,
                    source_bytes=len(data), output_reference=reference,
                    completed_at=datetime.now(timezone.utc).isoformat())
@@ -569,9 +641,38 @@ def verify_sprite(image, spec):
     require(len(components(set(opaque), 16, 16)) == 1, "Runtime silhouette must remain connected.")
 
 
+def comparison_image(source, baseline, candidate, spec):
+    Image = image_module()
+    from PIL import ImageDraw
+    images = []
+    for data, size in ((source, (512, 512)), (baseline, (16, 16)), (candidate, (16, 16))):
+        with Image.open(io.BytesIO(data)) as image:
+            require(image.format == "PNG" and image.size == size, "Comparison needs the actual source and native PNGs.")
+            images.append(image.convert("RGBA"))
+    verify_sprite(images[2], spec)
+    sheet = Image.new("RGBA", (1024, 600), "white")
+    draw = ImageDraw.Draw(sheet)
+    draw.text((16, 12), "Multitool: actual source pixels, not an in-game screenshot", fill="black")
+    for column, image, title in ((16, images[1], "Predecessor"), (240, images[2], "Candidate 2")):
+        draw.text((column, 52), title + " / native 16px + nearest 8x", fill="black")
+        for top, background, foreground in ((78, "#E0E8F0", "black"), (296, "#20252B", "white")):
+            draw.rectangle((column, top, column + 200, top + 190), fill=background)
+            sheet.paste(image, (column + 12, top + 20), image)
+            draw.text((column + 40, top + 20), "1x", fill=foreground)
+            enlarged = image.resize((128, 128), Image.Resampling.NEAREST)
+            sheet.paste(enlarged, (column + 36, top + 48), enlarged)
+    draw.text((496, 32), "Retained generated source, actual 512px", fill="black")
+    sheet.paste(images[0], (496, 52), images[0])
+    draw.text((16, 530), "Light/dark backgrounds are review aids; no resource pixels are edited.", fill="black")
+    draw.text((496, 578), "Source " + sha256(source)[:16] + " / native " + sha256(candidate)[:16], fill="black")
+    output = io.BytesIO()
+    sheet.save(output, format="PNG", compress_level=9)
+    return output.getvalue()
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("plan", "generate", "collect", "process", "verify", "guide", "revise"))
+    parser.add_argument("action", choices=("plan", "generate", "collect", "process", "verify", "guide", "revise", "compare", "audit"))
     parser.add_argument("--spec", type=Path, required=True)
     parser.add_argument("--model-lock", type=Path, default=HERE / "sd15-model.json")
     parser.add_argument("--endpoint", default="http://127.0.0.1:8189")
@@ -586,16 +687,24 @@ def main(argv=None):
     parser.add_argument("--input-directory", type=Path)
     parser.add_argument("--expected-ledger-sha256")
     parser.add_argument("--revision-reason")
+    parser.add_argument("--baseline", type=Path)
+    parser.add_argument("--candidate", type=Path)
     args = parser.parse_args(argv)
     try:
         spec = load_spec(args.spec)
-        if args.action == "guide":
+        if args.action == "compare":
+            require(args.source and args.baseline and args.candidate and args.output, "Comparison needs actual source, predecessor, native candidate and a new output PNG.")
+            data = comparison_image(args.source.read_bytes(), args.baseline.read_bytes(), args.candidate.read_bytes(), spec)
+            with args.output.open("xb") as stream:
+                stream.write(data)
+            print(json_bytes({"comparison_sha256": sha256(data), "bytes": len(data)}).decode("ascii"), end="")
+        elif args.action == "guide":
             require(spec["asset_id"] == "multitool" and args.output, "Only an original Multitool guide is supported.")
             data = guide_image()
             with args.output.open("xb") as stream:
                 stream.write(data)
             print(json_bytes({"guide_sha256": sha256(data), "bytes": len(data)}).decode("ascii"), end="")
-        elif args.action in ("plan", "generate", "collect", "revise"):
+        elif args.action in ("plan", "generate", "collect", "revise", "audit"):
             model = load_model(args.model_lock)
             require(1 <= args.slot <= len(spec["seeds"]), "Candidate slot is outside its allowance.")
             require(0 <= args.wait_seconds <= 1800, "Inference wait is bounded to 30 minutes.")
@@ -604,6 +713,13 @@ def main(argv=None):
                 print(json_bytes(graph).decode("ascii"), end="")
                 return 0
             require(args.run_dir is not None, "--run-dir is required.")
+            if args.action == "audit":
+                require(args.output is not None, "Retrospective integrity needs a new addendum output, never an overwritten receipt.")
+                report = audit_retained(args.run_dir, spec, model, args.slot)
+                with args.output.open("xb") as stream:
+                    stream.write(json_bytes(report))
+                print(json_bytes(report).decode("ascii"), end="")
+                return 0
             if args.action == "revise":
                 revise_run(args.run_dir, spec, model, args.expected_ledger_sha256, args.revision_reason)
                 print("Revised the remaining candidate; one prior source and the total allowance remain unchanged.")

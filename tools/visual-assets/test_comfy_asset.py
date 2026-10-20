@@ -16,7 +16,7 @@ import comfy_asset as pipeline
 SPEC_PATH = pipeline.HERE / "specs" / "multitool.json"
 
 
-def source_image():
+def source_image(prompt_graph=None):
     Image = pipeline.image_module()
     from PIL import ImageDraw
     image = Image.new("RGBA", (512, 512), "white")
@@ -30,7 +30,11 @@ def source_image():
     # Enclosed highlights must not be erased by a global color-key replacement.
     draw.rectangle((175, 145, 190, 160), fill="white")
     data = io.BytesIO()
-    image.save(data, format="PNG")
+    from PIL.PngImagePlugin import PngInfo
+    metadata = PngInfo()
+    if prompt_graph is not None:
+        metadata.add_text("prompt", json.dumps(prompt_graph))
+    image.save(data, format="PNG", pnginfo=metadata)
     return data.getvalue()
 
 
@@ -42,6 +46,9 @@ class FakeApi:
         self.prompt_id = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
         self.graph = None
         self.requested_paths = []
+        self.history_graph = None
+        self.png_graph = None
+        self.windows_subfolder = False
 
     def idle(self):
         pass
@@ -62,14 +69,17 @@ class FakeApi:
                 return {}
             prefix = self.graph["7"]["inputs"]["filename_prefix"]
             subfolder, filename = prefix.rsplit("/", 1)
+            if self.windows_subfolder:
+                subfolder = subfolder.replace("/", "\\")
             return {self.prompt_id: {
+                "prompt": [0, self.prompt_id, self.graph if self.history_graph is None else self.history_graph, {}, ["7"]],
                 "status": {"completed": True, "status_str": "success"},
                 "outputs": {"7": {"images": [
                     {"filename": filename + "_00001_.png", "subfolder": subfolder, "type": "output"}
                 ]}},
             }}
         if path.startswith("/view?"):
-            return source_image()
+            return source_image(self.png_graph)
         raise AssertionError("Unexpected fake API access: " + path)
 
 
@@ -264,6 +274,99 @@ class Contracts(unittest.TestCase):
         with self.assertRaisesRegex(pipeline.ContractError, "already collected"):
             pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
 
+    def pending_source(self):
+        api = FakeApi(completed=False)
+        with self.assertRaisesRegex(pipeline.ContractError, "expired"):
+            pipeline.generate(api, self.run, self.spec, self.model, self.checkpoint, 1, 0)
+        api.completed = True
+        api.requested_paths.clear()
+        return api
+
+    def test_workflow_seed_prompt_prefix_model_and_digest_tamper_have_zero_http(self):
+        api = self.pending_source()
+        graph_path = self.run / "workflow-1.json"
+        ledger_path = self.run / "run.json"
+        original_graph, original_ledger = graph_path.read_bytes(), ledger_path.read_bytes()
+        mutations = (
+            lambda graph: graph["5"]["inputs"].update(seed=123),
+            lambda graph: graph["2"]["inputs"].update(text="changed prompt"),
+            lambda graph: graph["7"]["inputs"].update(filename_prefix="grindless/foreign/run/candidate-1"),
+            lambda graph: graph["1"]["inputs"].update(ckpt_name="other.safetensors"),
+        )
+        for mutation in mutations:
+            for rewrite_digest in (False, True):
+                with self.subTest(mutation=mutation, rewrite_digest=rewrite_digest):
+                    graph = json.loads(original_graph)
+                    mutation(graph)
+                    changed = pipeline.json_bytes(graph)
+                    graph_path.write_bytes(changed)
+                    ledger = json.loads(original_ledger)
+                    if rewrite_digest:
+                        ledger["requests"][0]["workflow_sha256"] = pipeline.sha256(changed)
+                    ledger_path.write_bytes(pipeline.json_bytes(ledger))
+                    with self.assertRaises(pipeline.ContractError):
+                        pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
+                    self.assertEqual(api.requested_paths, [])
+        graph_path.write_bytes(original_graph)
+        ledger = json.loads(original_ledger)
+        ledger["requests"][0]["workflow_sha256"] = "0" * 64
+        ledger_path.write_bytes(pipeline.json_bytes(ledger))
+        with self.assertRaises(pipeline.ContractError):
+            pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
+        self.assertEqual(api.requested_paths, [])
+        self.assertEqual(api.posts, 1)
+
+    def test_history_graph_tamper_is_refused_before_view_or_collection(self):
+        api = self.pending_source()
+        for node, field, value in (
+            ("5", "seed", 123), ("2", "text", "changed historical prompt"),
+            ("7", "filename_prefix", "foreign"), ("1", "ckpt_name", "other.safetensors"),
+        ):
+            with self.subTest(node=node, field=field):
+                api.history_graph = copy.deepcopy(api.graph)
+                api.history_graph[node]["inputs"][field] = value
+                api.requested_paths.clear()
+                with self.assertRaisesRegex(pipeline.ContractError, "history graph"):
+                    pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
+                self.assertTrue(all(path.startswith("/history/") for path in api.requested_paths))
+                self.assertFalse((self.run / "source-1.png").exists())
+        self.assertEqual(api.posts, 1)
+
+    def test_valid_windows_collection_is_get_only_and_png_metadata_bound(self):
+        api = self.pending_source()
+        api.windows_subfolder = True
+        api.png_graph = copy.deepcopy(api.graph)
+        source = pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
+        self.assertEqual(api.posts, 1)
+        self.assertEqual(source.read_bytes(), source_image(api.graph))
+        self.assertTrue(all(path.startswith(("/history/", "/view?")) for path in api.requested_paths))
+        self.assertTrue(any("subfolder=grindless%2Fmultitool%2Fowned-run" in path for path in api.requested_paths))
+        proof = pipeline.read_json(self.run / "history-proof-1.json")
+        self.assertEqual(proof["png_prompt_metadata"], "verified")
+        self.assertEqual(proof["workflow_sha256"], pipeline.sha256(pipeline.json_bytes(api.graph)))
+
+    def test_conflicting_png_prompt_metadata_cannot_be_collected(self):
+        api = self.pending_source()
+        api.png_graph = copy.deepcopy(api.graph)
+        api.png_graph["5"]["inputs"]["seed"] = 123
+        with self.assertRaisesRegex(pipeline.ContractError, "PNG prompt graph"):
+            pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
+        self.assertFalse((self.run / "source-1.png").exists())
+        self.assertNotEqual(pipeline.read_json(self.run / "run.json")["requests"][0]["state"], "collected")
+        self.assertEqual(api.posts, 1)
+
+    def test_retained_png_audit_is_offline_append_only_evidence(self):
+        api = self.pending_source()
+        api.png_graph = copy.deepcopy(api.graph)
+        pipeline.collect(api, self.run, self.spec, self.model, 1, 0)
+        before = {path.name: path.read_bytes() for path in self.run.iterdir()}
+        with patch.object(pipeline.ComfyApi, "request", side_effect=AssertionError("Audit must be offline")):
+            proof = pipeline.audit_retained(self.run, self.spec, self.model, 1)
+        self.assertEqual(proof["network_requests"], 0)
+        self.assertEqual(proof["png_prompt_sha256"], pipeline.sha256(pipeline.json_bytes(api.graph)))
+        self.assertFalse(proof["original_receipts_modified"])
+        self.assertEqual(before, {path.name: path.read_bytes() for path in self.run.iterdir()})
+
     def test_duplicate_sources_do_not_count_as_second_inference(self):
         api = FakeApi()
         pipeline.generate(api, self.run, self.spec, self.model, self.checkpoint, 1, 0)
@@ -319,6 +422,35 @@ class Contracts(unittest.TestCase):
         with Image.open(io.BytesIO(first)) as image:
             pipeline.verify_sprite(image, self.spec)
             self.assertEqual(image.mode, "RGBA")
+
+    def test_comparison_uses_actual_native_pixels_and_is_not_a_resource(self):
+        source = source_image()
+        native, _ = pipeline.process_image(source, self.spec)
+        sheet = pipeline.comparison_image(source, native, native, self.spec)
+        self.assertEqual(sheet, pipeline.comparison_image(source, native, native, self.spec))
+        Image = pipeline.image_module()
+        with Image.open(io.BytesIO(sheet)) as image:
+            self.assertEqual(image.size, (1024, 600))
+        with self.assertRaises(pipeline.ContractError):
+            pipeline.process_image(sheet, self.spec)
+
+    def test_committed_selected_source_reprocesses_to_exact_native_and_runtime_bytes(self):
+        root = pipeline.HERE.parent.parent
+        provenance = pipeline.read_json(pipeline.HERE / "approved" / "multitool.provenance.json")
+        selected = pipeline.HERE / "approved" / "multitool.png"
+        expected = (pipeline.HERE / "approved" / "multitool.sha256").read_text(encoding="ascii").strip()
+        self.assertEqual(pipeline.file_sha256(selected), expected)
+        self.assertEqual(provenance["native_png_sha256"], expected)
+        source = (root / provenance["retained_source"]).read_bytes()
+        self.assertEqual(pipeline.sha256(source), provenance["source_png_sha256"])
+        spec = pipeline.load_spec(pipeline.HERE / "specs" / "multitool-conditioned.json")
+        native, report = pipeline.process_image(source, spec)
+        self.assertEqual(native, selected.read_bytes())
+        self.assertEqual((root / provenance["runtime_png"]).read_bytes(), native)
+        self.assertEqual(report["runtime_rgba_sha256"], provenance["native_rgba_sha256"])
+        graph = pipeline.read_json(pipeline.HERE / "poc" / "multitool-workflow-2.json")
+        proof = pipeline.png_graph_proof(source, graph, require_metadata=True)
+        self.assertEqual(proof["png_prompt_sha256"], provenance["resolved_workflow_sha256"])
 
     def test_multiple_objects_and_nonwhite_edge_are_refused(self):
         Image = pipeline.image_module()

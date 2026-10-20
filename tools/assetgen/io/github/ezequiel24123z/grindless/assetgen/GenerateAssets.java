@@ -6,12 +6,17 @@ import io.github.ezequiel24123z.grindless.registry.BlockCatalogue;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -64,12 +69,14 @@ public final class GenerateAssets {
             System.exit(2);
         }
         File root = new File(args[0]);
-        File items = resourceDir(root, "textures/item");
         if (args.length == 2) {
+            File items = resourceDir(root, "textures/item");
             int written = writeGuideItems(items);
             System.out.println("Generated " + written + " T0 guide sprites only under " + items);
             return;
         }
+        byte[] approvedMultitool = approvedMultitool(root);
+        File items = resourceDir(root, "textures/item");
         File blocks = resourceDir(root, "textures/block");
         File sounds = new File(root, "tools/audio");
 
@@ -102,7 +109,8 @@ public final class GenerateAssets {
                 FormTextures.dataCore(Palette.of("advanced_data_core", 0x26C6DA)));
         written += write(items, "relay_matrix",
                 FormTextures.relayMatrix(Palette.of("relay_matrix", 0xEF6C00)));
-        written += write(items, "multitool", FormTextures.multitool(Palette.of("multitool", 0xC9A227)));
+        Files.write(new File(items, "multitool.png").toPath(), approvedMultitool);
+        written++;
         written += write(items, "slag", FormTextures.slag(Palette.of("slag", 0x6B5B4B)));
         written += write(items, "ceramic_grog",
                 FormTextures.ceramicGrog(Palette.of("ceramic_grog", 0xB37C56)));
@@ -249,6 +257,41 @@ public final class GenerateAssets {
                 FormTextures.questBook(Palette.of("quest_book", 0xC9A227)))
                 + write(items, "field_guide",
                 FormTextures.fieldGuide(Palette.of("field_guide", 0x26A69A)));
+    }
+
+    private static byte[] approvedMultitool(File root) throws IOException {
+        File source = new File(root, "tools/visual-assets/approved/multitool.png");
+        File metadata = new File(root, "tools/visual-assets/approved/multitool.sha256");
+        String expected = Files.readString(metadata.toPath(), StandardCharsets.US_ASCII).strip();
+        if (!expected.matches("[0-9a-f]{64}")) {
+            throw new IOException("Invalid approved Multitool SHA-256 metadata");
+        }
+        byte[] bytes = Files.readAllBytes(source.toPath());
+        String actual;
+        try {
+            actual = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("The required JDK SHA-256 implementation is unavailable", e);
+        }
+        if (!expected.equals(actual)) {
+            throw new IOException("Approved Multitool source does not match its SHA-256 metadata");
+        }
+        if (bytes.length < 8 || ByteBuffer.wrap(bytes).getLong() != 0x89504e470d0a1a0aL) {
+            throw new IOException("Approved Multitool source is not a PNG");
+        }
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+        if (image == null || image.getWidth() != 16 || image.getHeight() != 16) {
+            throw new IOException("Approved Multitool source must be 16x16");
+        }
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                int alpha = image.getRGB(x, y) >>> 24;
+                if (alpha != 0 && alpha != 255) {
+                    throw new IOException("Approved Multitool source must have binary alpha");
+                }
+            }
+        }
+        return bytes;
     }
 
     private static Palette paletteFor(String material) {
@@ -642,6 +685,11 @@ public final class GenerateAssets {
                 Generation does not write imported Ogg files, `sounds.json`, `AUDIO-NOTICE.txt`
                 or localization. The paired legacy audio converters allow only the five synthetic
                 sound names, so an extra WAV cannot overwrite the approved Quern import.
+
+                The Multitool PNG is copied byte-for-byte from `tools/visual-assets/approved/`
+                after native JDK hash, PNG, dimensions and hard-alpha validation. Its retained
+                source, generation and transform provenance is separate from normal generation.
+                No ComfyUI, Python, model or network dependency is needed to preserve it.
 
                 What is **not** generated, and is therefore missing rather than merely plain, is
                 listed in ADR-0048: hero item sprites, complex models, entity animation and music.
