@@ -80,7 +80,7 @@ public final class MachineInspection {
             return Optional.empty();
         }
         BlockEntity entity = level.getBlockEntity(position);
-        if (entity == null || entity.isRemoved()
+        if (entity == null || entity.isRemoved() || !entity.getType().isValid(block)
                 || !(entity instanceof MachineBlockEntity) && !(entity instanceof FluidEndpoint)) {
             return Optional.empty();
         }

@@ -91,7 +91,8 @@ public final class MachineInspectionNetwork {
         }
         BlockHitResult hit = level.clip(new ClipContext(eye, end, ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE, sender));
-        if (hit.getType() != HitResult.Type.BLOCK || !hit.getBlockPos().equals(position)) {
+        if (hit.getType() != HitResult.Type.BLOCK || !hit.getBlockPos().equals(position)
+                || !MachineInspectionProtocol.withinHitDistance(hit.getLocation().distanceToSqr(eye))) {
             send(sender, new Reply(request.sequence(), ReplyKind.UNAVAILABLE, Optional.empty()));
             return;
         }

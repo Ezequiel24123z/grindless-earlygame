@@ -42,6 +42,8 @@ entity, `ItemStack`, mutable NBT, capability or execution callback.
 `MachineInspection.query(ServerLevel, BlockPos)` admits only a loaded aimed
 target in the Grindless namespace. It has no persistent world references,
 global scan, ticking registration or chunk-loading fallback.
+Removed entities and entities whose registered type does not accept the
+current target block are unavailable, not snapshots attributed to a replacement.
 
 The bounds are 16 actual item slots, four fluid stores, eight resources per
 process side and eight recognised ports. The producer marks truncation; the
@@ -152,7 +154,10 @@ one aimed-target request per ten client ticks, keeps at most one request in
 flight and expires observations/requests after 40 ticks. The server admits at
 most one query per sender per 100 ms before any world query. It checks loaded
 target, exact six-block distance to the target's nearest point and a server-side
-outline ray whose hit must equal the requested block. Four bounded load
+outline ray whose hit must equal the requested block. Both sides also validate
+the actual native hit-point distance, rejecting nonfinite distances and the
+next representable point beyond the cap; neither a nearby block centre/face
+nor a nearly-unit look vector substitutes for that measurement. Four bounded load
 predicates cover that ray before clipping: no chunk retrieval, enumeration or
 loading is used. Replies go only to the sender.
 
