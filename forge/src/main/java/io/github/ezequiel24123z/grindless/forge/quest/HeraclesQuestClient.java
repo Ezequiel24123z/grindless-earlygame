@@ -57,7 +57,8 @@ public final class HeraclesQuestClient {
 
         private ClaimWidget(GrindlessClaimTask adapter) {
             task = QuestCatalogue.byId(adapter.catalogueId());
-            button = Button.builder(Component.translatable("gui.grindless.quest.claim"), ignored -> {
+            button = Button.builder(Component.translatable(task.evidence() == QuestCatalogue.Evidence.FREE
+                    ? "gui.grindless.quest.claim_free" : "gui.grindless.quest.claim"), ignored -> {
                 HeraclesQuestNetwork.claim(task.id());
                 pendingRevision = revision;
                 pendingUntil = net.minecraft.Util.getMillis() + 2000;
@@ -84,7 +85,8 @@ public final class HeraclesQuestClient {
                 return Component.translatable("gui.grindless.quest.book_required");
             }
             return Component.translatable(state == null ? "gui.grindless.quest.waiting" : switch (state.status()) {
-                case CLAIMABLE -> "gui.grindless.quest.claim";
+                case CLAIMABLE -> task.evidence() == QuestCatalogue.Evidence.FREE
+                        ? "gui.grindless.quest.claim_free" : "gui.grindless.quest.claim";
                 case CLAIMED -> "gui.grindless.quest.claimed";
                 case LOCKED -> "gui.grindless.quest.locked";
                 case UNMET -> "gui.grindless.quest.unmet";
@@ -104,17 +106,23 @@ public final class HeraclesQuestClient {
             HeraclesQuestNetwork.State state = state();
             int held = state == null ? 0 : state.held();
             text.add(Component.translatable("gui.grindless.quest.task." + task.id()));
-            Component subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION
-                    ? Component.literal(task.subject()) : itemName(task.subject());
-            text.add(task.evidence() == QuestCatalogue.Evidence.DIMENSION
-                    ? Component.translatable("gui.grindless.quest.objective.dimension", subject)
-                    : task.evidence() == QuestCatalogue.Evidence.MATRIX
-                    ? Component.translatable("gui.grindless.quest.objective.matrix", subject,
-                            task.matrixRating().name(), held, task.count())
-                    : Component.translatable("gui.grindless.quest.objective.item", subject, held, task.count()));
-            text.add(Component.translatable("gui.grindless.quest.reward", itemName(task.reward().itemId()),
-                    task.reward().count()));
-            text.add(Component.translatable("gui.grindless.quest.claim_policy"));
+            if (task.evidence() == QuestCatalogue.Evidence.FREE) {
+                text.add(Component.translatable("gui.grindless.quest.objective.free"));
+            } else {
+                Component subject = task.evidence() == QuestCatalogue.Evidence.DIMENSION
+                        ? Component.literal(task.subject()) : itemName(task.subject());
+                text.add(task.evidence() == QuestCatalogue.Evidence.DIMENSION
+                        ? Component.translatable("gui.grindless.quest.objective.dimension", subject)
+                        : task.evidence() == QuestCatalogue.Evidence.MATRIX
+                        ? Component.translatable("gui.grindless.quest.objective.matrix", subject,
+                                task.matrixRating().name(), held, task.count())
+                        : Component.translatable("gui.grindless.quest.objective.item", subject, held, task.count()));
+            }
+            for (QuestCatalogue.Reward reward : task.rewards()) {
+                text.add(Component.translatable("gui.grindless.quest.reward", itemName(reward.itemId()), reward.count()));
+            }
+            text.add(Component.translatable(task.evidence() == QuestCatalogue.Evidence.FREE
+                    ? "gui.grindless.quest.starter_policy" : "gui.grindless.quest.claim_policy"));
             ResourceGuidanceContext.questSubject(task).ifPresent(resource ->
                     text.addAll(ResourceGuidanceClient.playerContext(resource)));
             List<FormattedCharSequence> result = new ArrayList<>();

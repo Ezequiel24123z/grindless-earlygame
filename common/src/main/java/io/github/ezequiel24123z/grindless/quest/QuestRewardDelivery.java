@@ -26,7 +26,9 @@ public final class QuestRewardDelivery {
         }
         return Optional.of(() -> {
             for (int slot = 0; slot < staged.getContainerSize(); slot++) {
-                inventory.setItem(slot, staged.getItem(slot));
+                if (!ItemStack.matches(inventory.getItem(slot), staged.getItem(slot))) {
+                    inventory.setItem(slot, staged.getItem(slot));
+                }
             }
             inventory.setChanged();
         });

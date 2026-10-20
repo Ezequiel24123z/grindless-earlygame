@@ -191,9 +191,11 @@ public final class VerifyQuestClaims {
         equal("ordinary partial-stack merging uses the real vanilla capacity", 96, count(partial, Items.COBBLESTONE));
 
         Inventory retained = new Inventory(null);
-        retained.setItem(0, new ItemStack(Items.BEDROCK, 100));
+        ItemStack existing = new ItemStack(Items.BEDROCK, 100);
+        retained.setItem(0, existing);
         QuestRewardDelivery.prepare(retained, List.of(new ItemStack(Items.COBBLESTONE, 1))).orElseThrow().run();
         equal("staging never clamps an unrelated pre-existing saved stack", 100, count(retained, Items.BEDROCK));
+        equal("unchanged carried stacks retain their native object identity", true, retained.getItem(0) == existing);
     }
 
     private static void standardInventoryClaim() {

@@ -55,16 +55,19 @@ public final class HeraclesDefinitions {
     }
 
     public static Map<String, Quest> create() {
-        return create(task -> {
-            ResourceLocation id = ResourceLocation.tryParse(task.subject());
-            if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
-                return Items.BOOK;
-            }
-            if (id == null || !BuiltInRegistries.ITEM.containsKey(id) || BuiltInRegistries.ITEM.get(id) == Items.AIR) {
-                throw new IllegalStateException("Quest subject is not registered: " + task.subject());
-            }
-            return BuiltInRegistries.ITEM.get(id);
-        });
+        return create(HeraclesDefinitions::icon);
+    }
+
+    static Item icon(QuestCatalogue.Task task) {
+        if (task.evidence() == QuestCatalogue.Evidence.FREE
+                || task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
+            return Items.BOOK;
+        }
+        ResourceLocation id = ResourceLocation.tryParse(task.subject());
+        if (id == null || !BuiltInRegistries.ITEM.containsKey(id) || BuiltInRegistries.ITEM.get(id) == Items.AIR) {
+            throw new IllegalStateException("Quest subject is not registered: " + task.subject());
+        }
+        return BuiltInRegistries.ITEM.get(id);
     }
 
     static Map<String, Quest> create(Function<QuestCatalogue.Task, Item> icons) {

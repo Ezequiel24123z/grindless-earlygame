@@ -93,6 +93,15 @@ The first local checkpoint commit is refused because no Git author is configured
 checkpointing uses a transient Copilot App identity rather than changing global or
 personal Git configuration.
 
+The bounded UI worker also executes PowerShell/.NET source checks of JSON/key
+scope, both explicit-free render branches, complete reward iteration, the static
+eleven-icon geometry and unchanged historical IDs, plus `git diff --check`;
+the final invocation exits 0 with six source-check PASS groups, not a numbered
+Java assertion count. Its initial source-footprint helper exits 1 with
+`DirectoryNotFoundException` because seven paths were joined into one
+`ReadAllBytes` argument; corrected enumeration passes. No codec/loader/widget
+Java or graphical renderer is executed by these source checks.
+
 The focused existing checks cover the exact allocation and old catalogue
 compatibility (`VerifyQuest`), no-book rejection/free claim/idempotence/complete
 inventory delivery/deferred book recovery (`VerifyQuestClaims`), binary legacy and
