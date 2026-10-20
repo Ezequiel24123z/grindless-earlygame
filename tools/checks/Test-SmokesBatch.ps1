@@ -15,7 +15,8 @@ not server behavior proved by these fake launch-boundary tests.
 [CmdletBinding()]
 param(
     [string]$RepositoryRoot,
-    [string]$BashPath
+    [string]$BashPath,
+    [string]$CaseFilter
 )
 
 $ErrorActionPreference = 'Stop'
@@ -373,6 +374,9 @@ function Invoke-OrdinaryReference($Fixture, [string]$Only, $NativeResult) {
 }
 
 function Invoke-Case([string]$Label, [scriptblock]$Body) {
+    if ($CaseFilter -and $Label -notlike $CaseFilter) {
+        return
+    }
     $script:Cases++
     try {
         & $Body
@@ -547,7 +551,7 @@ done
             Invoke-OrdinaryReference $f $only $result
         }
     }
-    foreach ($freshName in @('first-fluids', 'first-harness')) {
+    foreach ($freshName in @('first-fluids', 'first-harness', 'workshop-ports')) {
         Invoke-Case "$freshName only selection refuses both current twins without an optional sibling" {
             $f = New-Fixture ("alpha`n" + $freshName + "`nbeta`n") 'selected observation only root & spaces'
             Assert-Test (-not (Test-Path -LiteralPath (Join-Path $f.Root "tools/smoke/$freshName-optional"))) 'observation isolation is fixed, not dependent on an optional sibling'
@@ -730,6 +734,9 @@ done
             Assert-Refused $f $result
         }
     }
+    if ($script:Cases -eq 0) {
+        throw "No contract cases matched the requested filter: $CaseFilter"
+    }
     if ($script:Failures.Count -gt 0) {
         throw ("FAILED: " + $script:Failures.Count + '/' + $script:Cases + ' cases; ' +
             $script:Assertions + " assertions attempted.`n" + ($script:Failures -join "`n"))
@@ -748,5 +755,6 @@ done
 Write-Output ("ALL SMOKES BATCH CONTRACTS PASSED: " + $script:Cases + ' cases; ' +
     $script:Assertions + ' assertions; ' + $script:NativeRuns + ' native Bash CLI runs; ' +
     $script:ReferenceRuns + ' PowerShell reference CLI comparisons (safe intercepted launch boundary).')
+if ($CaseFilter) { Write-Output ("Scope: selected case filter '" + $CaseFilter + "'; not the full suite.") }
 Write-Output 'No real smoke harness, JVM, Gradle, SSH, network, save or private PC configuration was used.'
 Write-Output 'Boundary: fake launch tests do not prove SMOKE-READY/handshake, server assertions or real harness process cleanup.'

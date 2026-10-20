@@ -74,6 +74,17 @@
     "fluid_output_push_mB_per_four_ticks": 50,
     "item_output": "existing-vanilla-sided-inventory-and-T0-manipulator"
   },
+  "presentation": {
+    "shared_original_role_textures": 4,
+    "functional_side_labels": "full-UV-on-the-approved-exposed-horizontal-faces",
+    "settling_primary_role_label": "zero-volume-UP-plane-on-existing-bed-before-screen-bars",
+    "settling_role_label_uv": [2,3,14,10],
+    "settling_role_label_minimum_glyph_model_units": 4,
+    "collision_changed": false,
+    "upward_automation_enabled_by_label": false,
+    "rear_screen_strip": "secondary-marker-not-primary-role-explanation",
+    "human_appearance_accepted": false
+  },
   "world_compatibility": {
     "existing_ids_or_schemas_removed": false,
     "trusted_formed_NBT": false,
@@ -85,6 +96,10 @@
     "source_contracts": "authored",
     "java_execution": "pending-coordinator-runner",
     "forge_native_binding_and_lifecycle": "pending-coordinator-runner",
+    "native_probe": "grindless_workshop_checks 2 280 13 within the single workshop-ports smoke",
+    "native_probe_mode": "console-only-permission4-loaded-empty-owned-region-and-dedicated-non-OP-FakePlayer",
+    "native_probe_markers": "logged-only-after-real-registered-BE-bucket-capability-and-ownership-predicates",
+    "actual_chunk_unload_reload": "not-executed-by-this-probe",
     "client_container_and_art_quality": "needs-human-validation"
   }
 }

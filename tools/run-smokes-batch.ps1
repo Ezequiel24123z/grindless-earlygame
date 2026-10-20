@@ -37,8 +37,9 @@ if ($selected.Count -eq 0) { throw 'No named smoke scenarios were found.' }
 
 # These scenarios require a fresh world. Creation-time packs must not leak across cases;
 # extractor-backpressure's post-stop VeinData oracle requires exactly two worked chunks/total two.
+# workshop-ports needs an empty probe/drop region, not earlier scheduled fixture effects.
 $isolated = @('foreign-providers', 'states', 'recipe-cache-reload', 'extractor-backpressure',
-    'first-fluids', 'first-harness')
+    'first-fluids', 'first-harness', 'workshop-ports')
 $skipped = @($selected | Where-Object {
     $isolated -contains $_ -or (Test-Path -LiteralPath (Join-Path $smokeDir "$_-optional"))
 })
