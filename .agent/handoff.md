@@ -44,6 +44,21 @@ optional native inspection. Jade's CC-BY-NC-SA profile inclusion remains deferre
 The owner is unavailable after the graphical-access question; this does not approve
 waiving the required client gate. Continue implementation, not the campaign.
 
+**Continuation checkpoint:** source3564fe7 now fixes the actual stale-binding P2
+with a callback fence, post-callback live binding/revision check and single-binding
+face operations. It also fixes raw750/quota750 visibility through the same pure
+recipe selector. Real formed-port/FakePlayer/conduit assertions are authored in
+the existing disposable smoke, not executed yet. Targeted three new batch-tool
+cases pass98 assertions; the earlier33/51 timeout failure remains a failure.
+
+Economy sourceb523 passes common/Forge;7fd fixes the explicit source observer
+contract after telemetry. Source5002 fixes a separate real nested-Map byte-order
+drift using recursive JSON object ordering and strict canonical text checks.
+The author is completing writer/CheckOnly/three Java suites in the retained root
+under the only JVM/cache lease. Do not claim5002 results from the prior semantic
+checks or disturb that root. Final integration receives3564/cf575/5002 before the
+single composed generation/verification turn; no new per-file approval is needed.
+
 ## Previous qualified testing handoff
 
 **Engineering testing candidate747 is qualified, deployed and stopped.**
