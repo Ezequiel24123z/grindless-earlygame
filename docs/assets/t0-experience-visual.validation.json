@@ -63,7 +63,7 @@
     "log_sha256": "fd2b5b75acf1803d4e4eec056503c1c6dd37adf4f40cfd440688fc7d8ebc1f57",
     "scope": "Includes exact model/spec refusal before graph reservation/HTTP, all four reusable graphs, hard alpha, full-frame UVs, masks, original legacy source reprocessing and the complete actual inventory."
   },
-  "final_inventory": {
+  "initial_981552b_inventory": {
     "source": "981552b9709dac4d083a418b69636e4bb1491710",
     "manifest": "docs/assets/t0-experience-visual.json",
     "exported_manifest_raw_sha256": "8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577",
@@ -105,6 +105,41 @@
       "Initial default PowerShell action bound positionally to new Tool and exited1; fixed by named-only Tool and explicit positional Python.",
       "Initial inline Bash observer failed nested quoting and exited2 before entering the script; a transferred bounded shell file removed that observer ambiguity."
     ]
+  },
+  "final_deterministic_inventory": {
+    "source": "18b58230c9516d80411e55c18fbd1326d694237b",
+    "affected_inventory_tests": 9,
+    "test_exit": 0,
+    "test_seconds": 6.208,
+    "test_log_sha256": "bbe8fcd6773a9d4a900c6e87b0ea1667177e08a75152508b911d541f2973c7b5",
+    "scope": "Actual complete baseline assets, separate-process hash seeds, original contact pixels, retained Guide, actual port-craft scope and missing generated-port-model refusal. Projection fixtures are not gameplay/loader proofs.",
+    "manifest": "docs/assets/t0-experience-visual.json",
+    "exported_raw_and_canonical_json_sha256": "f955aaeaad94105a4e9f9256dd229a0cba3cc1df2b671c2805079f5e28fd1e0f",
+    "independent_export_processes": 2,
+    "python_hash_seeds": [1, 2],
+    "whole_export_manifests_byte_identical": true,
+    "contact_sheet_files_each": 13,
+    "all_sheet_hashes_identical_and_verified_after_transfer": true,
+    "blocks": 19,
+    "state_models": 65,
+    "facing_state_variants": 257,
+    "standalone_icons_including_books": 14,
+    "t0_resolved_pngs": 108,
+    "all_distributed_texture_pngs": 585,
+    "registered_ports_in_this_source": 0,
+    "shared_port_overlays": 4,
+    "declared_port_hooks": 6,
+    "remaining_t0_indicator_shape_collisions": 0,
+    "source_clean_at_close": true,
+    "python_processes_at_close": 0,
+    "proof_reuse": "JDK writer/resource inputs are unchanged from1969138; preset/legacy processing inputs are unchanged from981552b; paired wrapper inputs are unchanged from0b05aa2.",
+    "prior_sort_only_snapshot": {
+      "source": "38064aa76e9f8cbb83044626509f24a03745afc3",
+      "inventory_tests": 6,
+      "exit": 0,
+      "test_log_sha256": "f2f59754d3bc1fe2dd5c96bf70c88ee533f8cf6a573bce2ee285bfa7f088e943",
+      "two_identical_export_sha256": "5833eb106736af471bb5298b7fb8ae2d571f1e4e5c585834673e9ffec3b6ffbd"
+    }
   },
   "documentation_links": {
     "relative_links": 749,

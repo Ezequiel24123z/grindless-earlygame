@@ -3942,10 +3942,10 @@
   "contact_sheets_sha256": {
     "t0-experience-visual.critical-monochrome-1.png": "4735310bd19b51144cf1fe97039634ab12793e56bdf39a021fb3415167f6b74e",
     "t0-experience-visual.critical-states-1.png": "756a994e18be02f92cd4c9e3c1c8a32b45c3486446e51678574e8c6c7a9b28f9",
-    "t0-experience-visual.faces-1.png": "8099ead6174915c606f781f7c5ef398ac0e45d751b7c72b27f4d06710d0a3630",
-    "t0-experience-visual.faces-2.png": "af082d3b3a4b67a5f1f8e047b2b050b139ba4f8c1d25431d0b966b0045e04438",
-    "t0-experience-visual.faces-3.png": "3fdaf427e0047c9e13dca106d88d98422aac90404e3952a463b626d10cf61953",
-    "t0-experience-visual.faces-4.png": "3fca4ed8d029874e57f56365acf75d43eeeffaa2529d98f2b2a08e20f9c2538c",
+    "t0-experience-visual.faces-1.png": "12596e626b6ef0e458d98ec0a4051c6776cc50194da949062fe88369004520b3",
+    "t0-experience-visual.faces-2.png": "07ea6f7dd21af874070ae6e6e37a578cbdbda2ffced72b1a489da620c3c2f1d9",
+    "t0-experience-visual.faces-3.png": "20ba6fcb668cddf47323ecf35e808e7e59502bde6fe56ba1eb27f0dd6d6a7a4e",
+    "t0-experience-visual.faces-4.png": "4b00d8c91dd97771f7c76fff7d38bcbab9de657b2cb733ab1435489f975a4f28",
     "t0-experience-visual.gui-arrow.png": "61d9ed526ca016c0f03df33e376435385974b843891f4c0392f0f46e3ef8b33f",
     "t0-experience-visual.items-1.png": "c7e2dce925fdd71f8dd321f5bce1cea789de013fa1a94c4601aedafcd8ef1e06",
     "t0-experience-visual.port-overlays-1.png": "b7cc6e9bcb5d3c6dd5a2d0cafe13c4d003e0d027a46b8b34e9fb486b556b9bcd",
@@ -3957,11 +3957,14 @@
   "counts": {
     "all_distributed_texture_pngs": 585,
     "blocks": 19,
+    "blocks_including_catalogued_ports": 19,
     "blockstate_variants": 257,
+    "facing_state_variants_including_ports": 257,
     "resolved_t0_pngs": 108,
     "source_catalogued_ports": 0,
     "standalone_items_including_books": 14,
-    "state_models": 65
+    "state_models": 65,
+    "state_models_including_ports": 65
   },
   "files_sha256": {
     "common/src/main/java/io/github/ezequiel24123z/grindless/client/FieldGuideScreen.java": "b722631131483255b79ccafdd2b14f404f6da05831a3d53e6cd66f1777f31f9d",
@@ -4364,7 +4367,7 @@
   ],
   "schema": "grindless.t0-experience-visual.v1",
   "sheet_boundary": "Actual native pixels and CPU model projections, NOT Minecraft screenshots or native render proof.",
-  "source_revision": "981552b9709dac4d083a418b69636e4bb1491710",
+  "source_revision": "18b58230c9516d80411e55c18fbd1326d694237b",
   "textures": [
     {
       "binary_alpha": true,
@@ -4398,11 +4401,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/dynamo_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/casing_top.png",
       "single_frame": true,
-      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
+      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineTextures.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 6
+      "visible_colors": 3
     },
     {
       "binary_alpha": true,
@@ -4436,11 +4439,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/casing_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/dynamo_top.png",
       "single_frame": true,
-      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineTextures.java",
+      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 3
+      "visible_colors": 6
     },
     {
       "binary_alpha": true,
@@ -4607,11 +4610,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/terminal_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/terminal_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 4
+      "visible_colors": 11
     },
     {
       "binary_alpha": true,
@@ -4626,11 +4629,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/terminal_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/terminal_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 11
+      "visible_colors": 4
     },
     {
       "binary_alpha": true,
@@ -5063,11 +5066,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/settler_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/settler_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 6
+      "visible_colors": 10
     },
     {
       "binary_alpha": true,
@@ -5082,11 +5085,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/settler_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/settler_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 10
+      "visible_colors": 6
     },
     {
       "binary_alpha": true,
@@ -5215,7 +5218,7 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/screen_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/screen_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
@@ -5234,49 +5237,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/screen_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/screen_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
       "visible_colors": 6
-    },
-    {
-      "binary_alpha": true,
-      "dimensions": [
-        16,
-        16
-      ],
-      "human_visual_approved": false,
-      "opaque": true,
-      "opaque_pixels": 256,
-      "owner": "geological_collector",
-      "provenance": "project-original deterministic JDK writer",
-      "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
-      "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/collector_front_idle.png",
-      "single_frame": true,
-      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
-      "transparent_rgb_zero": true,
-      "visible_colors": 10
-    },
-    {
-      "binary_alpha": true,
-      "dimensions": [
-        16,
-        16
-      ],
-      "human_visual_approved": false,
-      "opaque": true,
-      "opaque_pixels": 256,
-      "owner": "geological_collector",
-      "provenance": "project-original deterministic JDK writer",
-      "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
-      "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/collector_top.png",
-      "single_frame": true,
-      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
-      "transparent_rgb_zero": true,
-      "visible_colors": 7
     },
     {
       "binary_alpha": true,
@@ -5315,6 +5280,44 @@
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BootstrapArt.java",
       "transparent_rgb_zero": true,
       "visible_colors": 4
+    },
+    {
+      "binary_alpha": true,
+      "dimensions": [
+        16,
+        16
+      ],
+      "human_visual_approved": false,
+      "opaque": true,
+      "opaque_pixels": 256,
+      "owner": "geological_collector",
+      "provenance": "project-original deterministic JDK writer",
+      "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
+      "role": "block face/material shared by resolved model slots",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/collector_front_idle.png",
+      "single_frame": true,
+      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
+      "transparent_rgb_zero": true,
+      "visible_colors": 10
+    },
+    {
+      "binary_alpha": true,
+      "dimensions": [
+        16,
+        16
+      ],
+      "human_visual_approved": false,
+      "opaque": true,
+      "opaque_pixels": 256,
+      "owner": "geological_collector",
+      "provenance": "project-original deterministic JDK writer",
+      "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
+      "role": "block face/material shared by resolved model slots",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/collector_top.png",
+      "single_frame": true,
+      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
+      "transparent_rgb_zero": true,
+      "visible_colors": 7
     },
     {
       "binary_alpha": true,
@@ -5405,11 +5408,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/culture_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/culture_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 8
+      "visible_colors": 12
     },
     {
       "binary_alpha": true,
@@ -5424,11 +5427,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/culture_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/culture_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 12
+      "visible_colors": 8
     },
     {
       "binary_alpha": true,
@@ -5519,11 +5522,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/bootstrap_clay.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/biogen_front_idle.png",
       "single_frame": true,
-      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BootstrapArt.java",
+      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 3
+      "visible_colors": 9
     },
     {
       "binary_alpha": true,
@@ -5557,11 +5560,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/biogen_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/bootstrap_clay.png",
       "single_frame": true,
-      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
+      "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BootstrapArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 9
+      "visible_colors": 3
     },
     {
       "binary_alpha": true,
@@ -5728,11 +5731,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/fibreboard_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/fibreboard_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BootstrapArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 4
+      "visible_colors": 5
     },
     {
       "binary_alpha": true,
@@ -5747,11 +5750,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/fibreboard_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/fibreboard_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/BootstrapArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 5
+      "visible_colors": 4
     },
     {
       "binary_alpha": true,
@@ -5880,11 +5883,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/conduit_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/conduit_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 5
+      "visible_colors": 9
     },
     {
       "binary_alpha": true,
@@ -5899,11 +5902,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/conduit_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/conduit_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 9
+      "visible_colors": 5
     },
     {
       "binary_alpha": true,
@@ -6013,11 +6016,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/tank_top.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/tank_front_idle.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 6
+      "visible_colors": 9
     },
     {
       "binary_alpha": true,
@@ -6032,11 +6035,11 @@
       "provenance": "project-original deterministic JDK writer",
       "readability_review": "source pixels/contact sheets only; native client lighting/scale still pending",
       "role": "block face/material shared by resolved model slots",
-      "runtime": "common/src/main/resources/assets/grindless/textures/block/tank_front_idle.png",
+      "runtime": "common/src/main/resources/assets/grindless/textures/block/tank_top.png",
       "single_frame": true,
       "source": "tools/assetgen/io/github/ezequiel24123z/grindless/assetgen/MachineArt.java",
       "transparent_rgb_zero": true,
-      "visible_colors": 9
+      "visible_colors": 6
     },
     {
       "binary_alpha": true,

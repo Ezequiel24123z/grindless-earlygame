@@ -36,7 +36,7 @@ Actual placement, adjacent machines, hotbar, JEI, quests and lighting still
 require a client review.
 
 The final [machine-readable projection](t0-experience-visual.json) is bound to
-`981552b9709dac4d083a418b69636e4bb1491710`: 108 T0-resolved PNGs including four
+`18b58230c9516d80411e55c18fbd1326d694237b`: 108 T0-resolved PNGs including four
 new shared overlays, all 585 texture PNGs indexed, and exact source/runtime
 hashes. Six port IDs are declared by the infrastructure contract but **zero are
 registered in this branch**; their actual models/capabilities belong to the
@@ -168,7 +168,7 @@ default and explicit-tool PowerShell/Bash invocations now all exit 0 on exact
 The final link checker also passes all 749 links across 51 Markdown files and
 the 160-row ADR index.
 
-The exported manifest is canonical ASCII/LF JSON. Windows Git checkout yields
+The initial `981552b` exported manifest is canonical ASCII/LF JSON. Windows Git checkout yields
 different raw CRLF bytes; both raw digests are retained, and parsing then using
 the existing canonical JSON writer reproduces the exact original
 `8cc00f7c498ea51e8b4e546a31e4d34107a6407d1b4852f823aac3139496a577`
@@ -179,8 +179,15 @@ Final sheet inspection also exposed process-dependent ordering in the
 inventory's set of resolved texture aliases. Sort that projection before
 authoring pages, so Python hash randomization cannot reshuffle the manifest or
 gallery. The regression runs separate processes with two different hash seeds;
-fresh deterministic export evidence is pending at this source checkpoint.
-No runtime texture or previously checked JDK input changes for this repair.
+the first six-case/sort-only proof passes on `38064aa`. Exact `18b5823` then
+passes all nine affected inventory/port/retained-Guide cases in 6.208s, including
+that cross-process regression. Two independent full exports, with hash seeds
+1 and 2, are byte-identical across the manifest and all 13 sheets. The selected
+raw/canonical JSON digest is
+`f955aaeaad94105a4e9f9256dd229a0cba3cc1df2b671c2805079f5e28fd1e0f`.
+Every transferred sheet matches and no T0 indicator-shape collision remains.
+No runtime texture or previously checked JDK/preset/wrapper input changes for
+these projection-only repairs, so those source-scoped proofs are reused.
 
 The infrastructure owner's actual `164ee9a` adds six port crafts to
 `BootstrapRecipes`. The projection explicitly separates those declared port
@@ -190,13 +197,39 @@ both legacy and combined block/model/variant totals. No source declaration
 alone becomes a passing rendered port. The final coordinator must generate the
 composed models before refreshing this inventory.
 
+## Coordinator integration boundary
+
+Integrate this branch's complete source/output/proof history, not only the
+initial `981552b`: later commits repair the default PowerShell route, stabilize
+ordering and reconcile the actual port crafts. The only shared
+`GenerateAssets` changes are the selective visual mode, its two small writer
+helpers and the four-overlay call in normal generation. No audio hunk is
+changed. The infrastructure owner provides `BlockModels`, registration,
+capabilities and the additional pure generator inputs.
+
+After composing the real port/source authorities, generate normal models
+through the existing JDK pipeline, then run the inventory entrypoint once on
+that exact source with a new output directory. It must see six real port
+blockstates/item models, not infer them from this contract; expected combined
+totals are 25 blocks, 71 state models and 281 facing/state variants while the
+legacy 19/65/257 remain separately reported. No new PNG permutation is needed.
+The SCREEN rear plate is only two model units high in `164ee9a`; its role/arrow
+legibility needs an explicit native-client check, not a source-sheet approval.
+
+The coordinator owns root changelog/map/README/ADR/handoff reconciliation,
+combined build/package/registration/client qualification and deployment.
+Rebind any quest/Guide/shop presentation changes to their composed sources;
+retained sprites are not proof that an obsolete menu remains reachable.
+This unit's JDK lease was released at its recorded zero-Java close; its final
+CPU export leaves clean source and zero Python. No GPU lease was needed.
+
 No Gradle, native server, Prism, GPU or new inference is used. The regular
 generator remains JDK-only and calls the same checked face/overlay writers;
 there is no need to repeat the old full 1,602-file proof just for more counters.
 
 | Category | Current entry |
 | --- | --- |
-| COMPLETED | Complete global source/pixel inventory and 13 final sheets plus two baseline comparisons; reusable presets; 62 checked T0 state fronts/four shared overlays; actual 45 Python cases, two equal 66-file JDK stages and existing Multitool/guide regressions. |
+| COMPLETED | Complete global source/pixel inventory and 13 deterministic final sheets plus two baseline comparisons; reusable presets; 62 checked T0 state fronts/four shared overlays; actual 45 Python cases plus nine affected final projection checks, two equal 66-file JDK stages and existing Multitool/guide regressions. |
 | BLOCKED | None. |
 | NOT EXECUTED | Comfy/GPU inference (unnecessary), native client, port registration/integration in this branch, combined build/package/deployment. |
 | NEEDS HUMAN VALIDATION | In-client lighting/placement/state/rotations, hotbar/JEI/quests, GUI comfort and artistic quality. |
