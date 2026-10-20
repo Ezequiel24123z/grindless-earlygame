@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.inspection;
 
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Energy;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Conditions;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Face;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ItemRole;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Manual;
@@ -15,6 +16,7 @@ import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.P
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Resource;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ResourceKind;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.State;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.SiteRequirement;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.StoredItem;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Structure;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Tank;
@@ -51,6 +53,11 @@ public final class MachineInspectionCodec {
         tag.putString("reason", snapshot.reasonKey());
         tag.putBoolean("held", snapshot.held());
         tag.putBoolean("truncated", snapshot.truncated());
+        tag.put("requirements", list(snapshot.requirements(), requirement -> {
+            CompoundTag value = new CompoundTag();
+            value.putString("kind", requirement.name());
+            return value;
+        }));
         tag.put("items", list(snapshot.items(), item -> {
             CompoundTag value = new CompoundTag();
             value.putInt("slot", item.slot());
@@ -79,6 +86,7 @@ public final class MachineInspectionCodec {
             value.put("outputs", list(process.outputs(), MachineInspectionCodec::resource));
             value.put("catalysts", list(process.catalysts(), MachineInspectionCodec::resource));
             process.progress().ifPresent(progress -> value.putDouble("work", progress.completedWork()));
+            process.conditions().ifPresent(conditions -> value.put("conditions", conditions(conditions)));
             tag.put("process", value);
         });
         snapshot.energy().ifPresent(energy -> {
@@ -104,6 +112,7 @@ public final class MachineInspectionCodec {
                 entry.putString("face", port.face().name());
                 return entry;
             }));
+            structure.problem().ifPresent(problem -> value.put("problem", position(problem)));
             tag.put("structure", value);
         });
         snapshot.port().ifPresent(port -> {
@@ -119,7 +128,8 @@ public final class MachineInspectionCodec {
 
     /** Invalid or newer data is rejected explicitly rather than becoming an idle, empty machine. */
     public static MachineInspectionSnapshot decode(CompoundTag tag) {
-        fields(tag, Set.of("schema", "target", "block", "state", "reason", "held", "truncated", "items", "tanks"),
+        fields(tag, Set.of("schema", "target", "block", "state", "reason", "held", "truncated", "items", "tanks",
+                        "requirements"),
                 Set.of("process", "energy", "manual", "structure", "port"));
         if (integer(tag, "schema") != VERSION) {
             throw new IllegalArgumentException("unsupported machine inspection schema");
@@ -151,13 +161,16 @@ public final class MachineInspectionCodec {
                     return new Manual(enumeration(value, "kind", ManualKind.class), number(value, "charge"));
                 }),
                 optional(tag, "structure", value -> {
-                    fields(value, Set.of("kind", "validity", "reason", "ports"), Set.of());
+                    fields(value, Set.of("kind", "validity", "reason", "ports"), Set.of("problem"));
                     return new Structure(string(value, "kind"), enumeration(value, "validity", Validity.class),
                             string(value, "reason"),
                             readList(value, "ports", MachineInspectionSnapshot.MAX_PORTS, entry -> {
                                 fields(entry, Set.of("role", "face"), Set.of());
                                 return new PortSummary(enumeration(entry, "role", PortRole.class),
                                         enumeration(entry, "face", Face.class));
+                            }), optional(value, "problem", problem -> {
+                                fields(problem, Set.of("x", "y", "z"), Set.of());
+                                return readPosition(problem);
                             }));
                 }),
                 optional(tag, "port", value -> {
@@ -168,18 +181,46 @@ public final class MachineInspectionCodec {
                                 fields(owner, Set.of("x", "y", "z"), Set.of());
                                 return readPosition(owner);
                             }));
+                }),
+                readList(tag, "requirements", MachineInspectionSnapshot.MAX_REQUIREMENTS, value -> {
+                    fields(value, Set.of("kind"), Set.of());
+                    return enumeration(value, "kind", SiteRequirement.class);
                 }), bool(tag, "truncated"));
     }
 
     private static Process readProcess(CompoundTag value) {
-        fields(value, Set.of("id", "duration", "draw", "inputs", "outputs", "catalysts"), Set.of("work"));
+        fields(value, Set.of("id", "duration", "draw", "inputs", "outputs", "catalysts"), Set.of("work", "conditions"));
         int duration = integer(value, "duration");
         return new Process(string(value, "id"),
                 readList(value, "inputs", MachineInspectionSnapshot.MAX_RESOURCES, MachineInspectionCodec::readResource),
                 readList(value, "outputs", MachineInspectionSnapshot.MAX_RESOURCES, MachineInspectionCodec::readResource),
                 readList(value, "catalysts", MachineInspectionSnapshot.MAX_RESOURCES, MachineInspectionCodec::readResource),
                 duration, number(value, "draw"),
-                value.contains("work") ? Optional.of(new Progress(decimal(value, "work"), duration)) : Optional.empty());
+                value.contains("work") ? Optional.of(new Progress(decimal(value, "work"), duration)) : Optional.empty(),
+                optional(value, "conditions", conditions -> {
+                    fields(conditions, Set.of("temperature", "pressure", "atmosphere", "agitation"),
+                            Set.of("required_temperature", "required_atmosphere", "required_agitation"));
+                    return new Conditions(decimal(conditions, "temperature"), decimal(conditions, "pressure"),
+                            string(conditions, "atmosphere"), string(conditions, "agitation"),
+                            conditions.contains("required_temperature")
+                                    ? Optional.of(decimal(conditions, "required_temperature")) : Optional.empty(),
+                            conditions.contains("required_atmosphere")
+                                    ? Optional.of(string(conditions, "required_atmosphere")) : Optional.empty(),
+                            conditions.contains("required_agitation")
+                                    ? Optional.of(string(conditions, "required_agitation")) : Optional.empty());
+                }));
+    }
+
+    private static CompoundTag conditions(Conditions conditions) {
+        CompoundTag value = new CompoundTag();
+        value.putDouble("temperature", conditions.temperatureC());
+        value.putDouble("pressure", conditions.pressureMPa());
+        value.putString("atmosphere", conditions.atmosphere());
+        value.putString("agitation", conditions.agitation());
+        conditions.requiredTemperatureC().ifPresent(temperature -> value.putDouble("required_temperature", temperature));
+        conditions.requiredAtmosphere().ifPresent(atmosphere -> value.putString("required_atmosphere", atmosphere));
+        conditions.requiredAgitation().ifPresent(agitation -> value.putString("required_agitation", agitation));
+        return value;
     }
 
     private static Resource readResource(CompoundTag value) {

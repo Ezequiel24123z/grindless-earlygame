@@ -30,7 +30,13 @@ public final class MachineInspectionTooltip {
             lines.add(Component.translatable(snapshot.reasonKey()));
         }
         snapshot.process().ifPresent(process -> {
-            if (!process.outputs().isEmpty()) {
+            if (process.id().equals("research/calibration")) {
+                lines.add(Component.translatable("inspection.grindless.calibration"));
+            } else if (process.id().equals("crude_extraction")) {
+                lines.add(Component.translatable("inspection.grindless.extraction"));
+            } else if (process.id().equals("fuel_burn")) {
+                lines.add(Component.translatable("inspection.grindless.fuel_cycle"));
+            } else if (!process.outputs().isEmpty()) {
                 lines.add(Component.translatable("inspection.grindless.process",
                         resources(process.outputs(), expanded ? 4 : 2)));
             } else {
@@ -76,6 +82,8 @@ public final class MachineInspectionTooltip {
             if (!structure.reasonKey().isEmpty() && !structure.reasonKey().equals(snapshot.reasonKey())) {
                 lines.add(Component.translatable(structure.reasonKey()));
             }
+            structure.problem().ifPresent(position -> lines.add(Component.translatable(
+                    "inspection.grindless.problem_position", position.x(), position.y(), position.z())));
             if (!structure.ports().isEmpty()) {
                 lines.add(Component.translatable("inspection.grindless.ports", structure.ports().size()));
                 if (expanded) {
@@ -94,12 +102,26 @@ public final class MachineInspectionTooltip {
                     owner.x(), owner.y(), owner.z())));
         });
         if (expanded) {
+            for (var requirement : snapshot.requirements()) {
+                lines.add(label("site", requirement));
+            }
             snapshot.process().ifPresent(process -> {
                 appendResources(lines, "needs", process.inputs());
                 appendResources(lines, "makes", process.outputs());
                 appendResources(lines, "catalyst", process.catalysts());
                 process.progress().ifPresent(progress -> lines.add(Component.translatable(
                         "inspection.grindless.remaining", seconds(progress.nominalSecondsRemaining()))));
+                process.conditions().ifPresent(conditions -> {
+                    lines.add(Component.translatable("inspection.grindless.conditions",
+                            decimal(conditions.temperatureC()), decimal(conditions.pressureMPa()),
+                            conditions.atmosphere(), conditions.agitation()));
+                    conditions.requiredTemperatureC().ifPresent(temperature -> lines.add(
+                            Component.translatable("inspection.grindless.required_temperature", decimal(temperature))));
+                    conditions.requiredAtmosphere().ifPresent(atmosphere -> lines.add(
+                            Component.translatable("inspection.grindless.required_atmosphere", atmosphere)));
+                    conditions.requiredAgitation().ifPresent(agitation -> lines.add(
+                            Component.translatable("inspection.grindless.required_agitation", agitation)));
+                });
             });
         } else {
             lines.add(Component.translatable("inspection.grindless.more"));

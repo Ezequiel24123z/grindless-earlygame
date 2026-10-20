@@ -7,6 +7,7 @@ import io.github.ezequiel24123z.grindless.fluid.FluidEndpoint;
 import io.github.ezequiel24123z.grindless.fluid.FluidState;
 import io.github.ezequiel24123z.grindless.fluid.HandPumpBlockEntity;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Energy;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Conditions;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ItemRole;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Manual;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ManualKind;
@@ -16,6 +17,7 @@ import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.P
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Resource;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ResourceKind;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.State;
+import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.SiteRequirement;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.StoredItem;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Structure;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Tank;
@@ -96,7 +98,8 @@ public final class MachineInspection {
                 new Target(level.dimension().location().toString(),
                         new Position(position.getX(), position.getY(), position.getZ()), level.getGameTime()),
                 blockId, held ? State.IDLE : display.state(), held ? "inspection.grindless.reason.held" : display.reason(),
-                held, process, items, energy, tanks(entity), manual, structure(entity), Optional.empty(), truncated));
+                held, process, items, energy, tanks(entity), manual, structure(entity), Optional.empty(),
+                requirements(entity), truncated));
     }
 
     /** STARVED is deliberately not split for process machines: its authority merges input and power. */
@@ -152,7 +155,12 @@ public final class MachineInspection {
                     recipe.catalysts().stream().limit(MachineInspectionSnapshot.MAX_RESOURCES)
                             .map(MachineInspection::resource).toList(),
                     recipe.durationTicks(), recipe.fuPerTick(),
-                    Optional.of(work(machine.inspectionProgress(), recipe.durationTicks()))));
+                    Optional.of(work(machine.inspectionProgress(), recipe.durationTicks())),
+                    Optional.of(new Conditions(machine.conditions().temperature(), machine.conditions().pressure(),
+                            machine.conditions().atmosphere().name(), machine.conditions().agitation().name(),
+                            recipe.namesTemperature() ? Optional.of(recipe.temperatureC()) : Optional.empty(),
+                            recipe.namesAtmosphere() ? Optional.of(recipe.atmosphere()) : Optional.empty(),
+                            recipe.namesAgitation() ? Optional.of(recipe.agitation()) : Optional.empty()))));
         }
         if (entity instanceof ResearchTerminalBlockEntity terminal
                 && !terminal.getItem(0).isEmpty()
@@ -226,6 +234,21 @@ public final class MachineInspection {
         return Optional.of(new Structure(process.kind().structure().name().toLowerCase(Locale.ROOT),
                 fault == WorkshopStructure.Fault.NONE ? Validity.FORMED : Validity.INVALID,
                 fault == WorkshopStructure.Fault.NONE ? "" : fault.translationKey(), List.of()));
+    }
+
+    private static List<SiteRequirement> requirements(BlockEntity entity) {
+        if (entity instanceof HandPumpBlockEntity) {
+            return List.of(SiteRequirement.WATER_SOURCE);
+        }
+        if (entity instanceof ProcessMachineBlockEntity process) {
+            return switch (process.kind().site()) {
+                case NONE -> List.of();
+                case GEOLOGICAL -> List.of(SiteRequirement.TERRESTRIAL, SiteRequirement.ROCK_BED);
+                case SUNLIT_CULTURE -> List.of(SiteRequirement.TERRESTRIAL,
+                        SiteRequirement.OPEN_SKY, SiteRequirement.DAYLIGHT);
+            };
+        }
+        return List.of();
     }
 
     private static Resource resource(IngredientSpec ingredient) {

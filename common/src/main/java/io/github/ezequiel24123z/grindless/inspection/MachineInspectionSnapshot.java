@@ -23,12 +23,14 @@ public record MachineInspectionSnapshot(
         Optional<Manual> manual,
         Optional<Structure> structure,
         Optional<Port> port,
+        List<SiteRequirement> requirements,
         boolean truncated) {
 
     public static final int MAX_ITEMS = 16;
     public static final int MAX_TANKS = 4;
     public static final int MAX_RESOURCES = 8;
     public static final int MAX_PORTS = 8;
+    public static final int MAX_REQUIREMENTS = 4;
     public static final int MAX_TEXT = 160;
     private static final Pattern ID = Pattern.compile("[a-z0-9_.-]+:[a-z0-9/._-]+");
     private static final Pattern KEY = Pattern.compile("[a-z0-9_.]+");
@@ -48,6 +50,7 @@ public record MachineInspectionSnapshot(
         manual = Objects.requireNonNull(manual, "manual");
         structure = Objects.requireNonNull(structure, "structure");
         port = Objects.requireNonNull(port, "port");
+        requirements = bounded(requirements, MAX_REQUIREMENTS);
     }
 
     public boolean describes(String dimension, Position position, String block) {
@@ -99,6 +102,10 @@ public record MachineInspectionSnapshot(
 
     public enum ManualKind {
         CRANK_HANDLE, HAND_DYNAMO
+    }
+
+    public enum SiteRequirement {
+        TERRESTRIAL, ROCK_BED, OPEN_SKY, DAYLIGHT, WATER_SOURCE
     }
 
     public record Position(int x, int y, int z) {
@@ -157,7 +164,12 @@ public record MachineInspectionSnapshot(
 
     public record Process(String id, List<Resource> inputs, List<Resource> outputs,
                           List<Resource> catalysts, int durationTicks, long fuPerTick,
-                          Optional<Progress> progress) {
+                          Optional<Progress> progress, Optional<Conditions> conditions) {
+        public Process(String id, List<Resource> inputs, List<Resource> outputs, List<Resource> catalysts,
+                       int durationTicks, long fuPerTick, Optional<Progress> progress) {
+            this(id, inputs, outputs, catalysts, durationTicks, fuPerTick, progress, Optional.empty());
+        }
+
         public Process {
             id = text(id);
             inputs = bounded(inputs, MAX_RESOURCES);
@@ -166,10 +178,34 @@ public record MachineInspectionSnapshot(
             if (durationTicks <= 0 || fuPerTick < 0) {
                 throw new IllegalArgumentException("invalid inspected process");
             }
+            if (inputs.stream().anyMatch(Resource::vented) || catalysts.stream().anyMatch(Resource::vented)) {
+                throw new IllegalArgumentException("an inspected input cannot be discharged output");
+            }
             progress = Objects.requireNonNull(progress, "progress");
+            conditions = Objects.requireNonNull(conditions, "conditions");
             if (progress.isPresent() && progress.get().requiredWork() != durationTicks) {
                 throw new IllegalArgumentException("progress must belong to the inspected process");
             }
+        }
+    }
+
+    public record Conditions(double temperatureC, double pressureMPa, String atmosphere, String agitation,
+                             Optional<Double> requiredTemperatureC, Optional<String> requiredAtmosphere,
+                             Optional<String> requiredAgitation) {
+        public Conditions {
+            if (!Double.isFinite(temperatureC) || !Double.isFinite(pressureMPa) || pressureMPa < 0) {
+                throw new IllegalArgumentException("invalid inspected conditions");
+            }
+            atmosphere = text(atmosphere);
+            agitation = text(agitation);
+            requiredTemperatureC = Objects.requireNonNull(requiredTemperatureC, "requiredTemperatureC");
+            if (requiredTemperatureC.isPresent() && !Double.isFinite(requiredTemperatureC.get())) {
+                throw new IllegalArgumentException("invalid required inspection temperature");
+            }
+            requiredAtmosphere = Objects.requireNonNull(requiredAtmosphere, "requiredAtmosphere").map(
+                    MachineInspectionSnapshot::text);
+            requiredAgitation = Objects.requireNonNull(requiredAgitation, "requiredAgitation").map(
+                    MachineInspectionSnapshot::text);
         }
     }
 
@@ -211,12 +247,21 @@ public record MachineInspectionSnapshot(
         }
     }
 
-    public record Structure(String kind, Validity validity, String reasonKey, List<PortSummary> ports) {
+    public record Structure(String kind, Validity validity, String reasonKey, List<PortSummary> ports,
+                            Optional<Position> problem) {
+        public Structure(String kind, Validity validity, String reasonKey, List<PortSummary> ports) {
+            this(kind, validity, reasonKey, ports, Optional.empty());
+        }
+
         public Structure {
             kind = text(kind);
             Objects.requireNonNull(validity, "validity");
             reasonKey = key(reasonKey);
             ports = bounded(ports, MAX_PORTS);
+            problem = Objects.requireNonNull(problem, "problem");
+            if (validity == Validity.FORMED && problem.isPresent()) {
+                throw new IllegalArgumentException("a formed inspection cannot name a failing cell");
+            }
         }
     }
 

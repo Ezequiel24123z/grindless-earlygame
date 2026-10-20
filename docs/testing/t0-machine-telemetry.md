@@ -63,9 +63,46 @@ the overlay never repairs, supplies, forms or wakes it. Shift expands useful
 recipe details. Developer-only identities and source ticks require a separate
 opt-in setting, not merely Shift.
 
+## Native equivalent and enable method
+
+This is **Grindless native inspection**, not a Jade plugin. It is off by
+default. In a client, use **Controls -> Grindless -> Toggle native machine
+inspection** (default **F8**) or set `machineInspection.enabled = true` in
+`config\grindless-inspection-client.toml`. The key persists that client setting.
+Look at a loaded Grindless block within the ordinary aim range, capped at six
+blocks. Hold Shift for requirements/conditions. When details need another page,
+hold Shift and press the same configured toggle key; without Shift it toggles
+the panel. Native text is drawn with Minecraft's current font, explicit
+`[>]`/`[!]`/`[?]` symbols and labels, not colour-only feedback.
+
+`machineInspection.developer` separately opts in to internal recipe IDs and
+observation ticks. `allowWithOtherOverlays` defaults false: Jade, WAILA/WTHIT
+and The One Probe suppress this panel to avoid a duplicate HUD. No classes or
+APIs from those mods are referenced. This does not install/configure an overlay
+mod or make deferred Jade redistribution part of the gate.
+
+The Forge channel uses the existing `SimpleChannel` pattern. Missing peers are
+accepted; the client checks channel presence before sending. It sends at most
+one aimed-target request per ten client ticks, keeps at most one request in
+flight and expires observations/requests after 40 ticks. The server admits at
+most one query per sender per 100 ms before any world query. It checks loaded
+target, exact six-block distance to the target's nearest point and a server-side
+outline ray whose hit must equal the requested block. Four bounded load
+predicates cover that ray before clipping: no chunk retrieval, enumeration or
+loading is used. Replies go only to the sender.
+
+Requests are at most 13 bytes; replies at most 32 KiB, with independent
+schema/list/text/type bounds. Malformed structured observations become an
+explicit unavailable/error presentation, never idle or old successful data.
+Raw malformed framing is rejected by the normal network decoder. Nonces,
+dimension/position/block identity and a weak client-world scope reject stale
+or wrong-target responses. Disconnect/respawn/shutdown clear state. Server
+rate ownership has weak sender keys and is cleared on server stop; no player
+identifiers, analytics, world references or history are retained in a DTO.
+
 ## Execution record
 
-At the initial source checkpoint:
+At the initial source checkpoint `a7ef36d`:
 
 - DTO, strict versioned native-NBT codec and synthetic contract cases are
   authored. Cases cover immutability, boundaries, native fractional work,
@@ -88,12 +125,24 @@ At the initial source checkpoint:
   The native query/reply will follow the existing Forge `SimpleChannel` pattern
   and use the incumbent Architectury client HUD/tick events and Minecraft font.
 
+The native presentation/network checkpoint additionally authors fixed packet
+budgets, all-maxima transport, exact range/rate boundaries, no-prediction cache
+and expiry/reset/wrong-target tests. Source binding guards cover the real
+loaded-before-read checks, main-thread dispatch, explicit constructor hook,
+client-only registration, optional absence, font/pagination and default-off
+developer/mutual-exclusion behavior. These Java cases are **NOT EXECUTED** until
+an assigned compilation surface is supplied.
+Its existing documentation check again passes all 728 links/160 ADR pairs;
+diff integrity passes, and native PowerShell parses all 101 inspection locale
+keys and resolves all 43 exact UI key references. No Java is started for these
+checks. The enum-derived locale closure remains in the unexecuted Java suite.
+
 The smallest subsequent executable proof is common/Forge compilation plus
-`VerifyMachineInspection` and its optional-provider binding checks on the
-combined source. The new optional loader binding needs one representative
-production boot with the provider absent and one with the approved provider
-present. Existing machine execution/persistence proofs remain applicable to
-unchanged engines; they do not prove this new transport/registration.
+`VerifyMachineInspection` on the combined source. The new native loader/channel
+binding needs one representative production boot **without Jade installed**.
+There is no Jade-present build/install gate. Existing machine
+execution/persistence proofs remain applicable to unchanged engines; they do
+not prove this new transport/registration.
 
 ## Client proof still required
 
@@ -111,11 +160,11 @@ multiplayer or retained-world acceptance.
 
 ## Handoff categories
 
-| Category | Initial checkpoint |
+| Category | Native presentation checkpoint |
 | --- | --- |
-| COMPLETED | Baseline/native-authority inventory; immutable DTO, bounded query, strict codec, localized text and authored synthetic cases |
+| COMPLETED | Baseline/native-authority inventory; immutable DTO/query/codec; original opt-in native channel and font/paged HUD; localized text and authored synthetic/range/rate/lifecycle/binding cases; cheap documentation/JSON/source-key checks |
 | BLOCKED | The independently owned process getters/port checkpoint and a permitted compilation surface are not yet received; Research Terminal getter is preserved in shop source `6286dc3` |
-| NOT EXECUTED | Java/Forge build, executable Java cases, optional-mod present/absent production boots, real rendering |
+| NOT EXECUTED | Java/Forge build, executable Java cases, new native-binding production boot without Jade, real rendering |
 | NEEDS HUMAN VALIDATION | In-world readability, useful amount of detail, actual client interaction and the existing manual campaign |
 | NEEDS MY DECISION | None in this worker lane; the parent owns dependency/licence selection |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | No credential is required; an explicit execution root/lease or parent-run build is required before PC/JVM validation |
