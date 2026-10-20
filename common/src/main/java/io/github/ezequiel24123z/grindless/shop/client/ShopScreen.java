@@ -26,6 +26,8 @@ public final class ShopScreen extends AbstractContainerScreen<ShopMenu> {
     private static final int PAGE_SIZE = 8;
     private static final int DETAIL_X = 168;
     private final List<Button> offers = new ArrayList<>();
+    private final int[] describedOffer = new int[PAGE_SIZE];
+    private final int[] describedStatus = new int[PAGE_SIZE];
     private int selected;
     private int page;
     private int sentSequence = -1;
@@ -44,6 +46,8 @@ public final class ShopScreen extends AbstractContainerScreen<ShopMenu> {
     protected void init() {
         super.init();
         offers.clear();
+        java.util.Arrays.fill(describedOffer, -1);
+        java.util.Arrays.fill(describedStatus, -1);
         for (int row = 0; row < PAGE_SIZE; row++) {
             int offset = row;
             offers.add(addRenderableWidget(Button.builder(Component.empty(), button -> {
@@ -62,6 +66,7 @@ public final class ShopScreen extends AbstractContainerScreen<ShopMenu> {
                 update();
             }
         }).bounds(leftPos + DETAIL_X, topPos + 206, 124, 20).build()));
+        trade.setTooltip(Tooltip.create(Component.translatable("gui.grindless.shop.atomic_policy")));
         update();
     }
 
@@ -87,16 +92,19 @@ public final class ShopScreen extends AbstractContainerScreen<ShopMenu> {
                 Component label = Component.translatable("gui.grindless.shop.offer." + offer.id());
                 button.setMessage(Component.literal((index == selected ? "> " : "")
                         + font.plainSubstrByWidth(label.getString(), 132)));
-                button.setTooltip(Tooltip.create(Component.translatable("gui.grindless.shop.offer_tooltip",
-                        label, Component.translatable(menu.availability(index).translationKey()),
-                        Component.translatable("gui.grindless.shop.detail." + offer.id()))));
+                if (describedOffer[row] != index || describedStatus[row] != menu.availability(index).ordinal()) {
+                    button.setTooltip(Tooltip.create(Component.translatable("gui.grindless.shop.offer_tooltip",
+                            label, Component.translatable(menu.availability(index).translationKey()),
+                            Component.translatable("gui.grindless.shop.detail." + offer.id()))));
+                    describedOffer[row] = index;
+                    describedStatus[row] = menu.availability(index).ordinal();
+                }
             }
         }
         previous.active = page > 0;
         next.active = (page + 1) * PAGE_SIZE < ShopCatalogue.offers().size();
         trade.active = sentSequence < 0 && menu.availability(selected) == ShopResult.READY;
         trade.setMessage(Component.translatable(sentSequence < 0 ? "gui.grindless.shop.trade" : "gui.grindless.shop.waiting"));
-        trade.setTooltip(Tooltip.create(Component.translatable("gui.grindless.shop.atomic_policy")));
     }
 
     private void changePage(int delta) {

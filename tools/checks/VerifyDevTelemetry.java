@@ -15,19 +15,26 @@ public final class VerifyDevTelemetry {
     }
 
     public static void main(String[] args) {
+        equal("telemetry is disabled until an explicit server/operator start", false, DevTelemetry.active(null));
+        DevTelemetry.processCompleted(null, "not-a-definition");
+        DevTelemetry.manualWork(null, null, -1);
+        DevTelemetry.milestone(null, "not-a-definition");
+        equal("disabled hooks neither start nor retain a session", false, DevTelemetry.active(null));
         TelemetrySession session = new TelemetrySession(100, Map.of(
                 PROCESS_COMPLETED, Set.of("bootstrap/sand"),
                 MANUAL_ACTION, Set.of("quern"),
                 MANUAL_FU, Set.of("quern"),
                 SHOP_TRADED, Set.of("stone"),
                 RECOVERY, Set.of("stone"),
-                BLOCKED_TRANSITION, Set.of("quern/blocked")), Set.of("relay"));
+                BLOCKED_TRANSITION, Set.of("quern/blocked"),
+                MACHINE_PLACEMENT_EVENT, Set.of("quern")), Set.of("relay"));
         session.record(PROCESS_COMPLETED, "bootstrap/sand", 2);
         session.record(MANUAL_ACTION, "quern", 1);
         session.record(MANUAL_FU, "quern", 160);
         session.record(SHOP_TRADED, "stone", 1);
         session.record(RECOVERY, "stone", 1);
         session.record(BLOCKED_TRANSITION, "quern/blocked", 1);
+        session.record(MACHINE_PLACEMENT_EVENT, "quern", 1);
         session.milestone("relay", 350);
         session.milestone("relay", 450);
         TelemetrySession.Snapshot snapshot = session.snapshot(500);
@@ -35,6 +42,8 @@ public final class VerifyDevTelemetry {
         equal("first milestone is stable across players/repeated observations", Map.of("relay", 250L), snapshot.firstMilestoneTicks());
         equal("completed processes are exact aggregate counts", 2L, snapshot.counters().get("process_completed:bootstrap/sand"));
         equal("accepted manual FU is distinct from action count", 160L, snapshot.counters().get("manual_fu:quern"));
+        equal("placement observations are explicit, not unique-world machine claims", 1L,
+                snapshot.counters().get("machine_placement_event:quern"));
         equal("reporting never resets ongoing counts", snapshot, session.snapshot(500));
         session.record(PROCESS_COMPLETED, "personal-name-or-coordinate", 1);
         session.milestone("arbitrary-private-text", 600);
@@ -59,7 +68,7 @@ public final class VerifyDevTelemetry {
         for (int i = 0; i < 1000; i++) {
             session.record(PROCESS_COMPLETED, "invalid-" + i, 1);
         }
-        equal("unknown labels cannot grow the counter map", 6, session.snapshot(600).counters().size());
+        equal("unknown labels cannot grow the counter map", 7, session.snapshot(600).counters().size());
         System.out.println("ALL DEV TELEMETRY CHECKS PASSED: " + assertions);
     }
 

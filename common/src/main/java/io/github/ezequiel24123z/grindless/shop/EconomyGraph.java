@@ -24,7 +24,8 @@ public final class EconomyGraph {
                       Boundary boundary, Set<String> requires, String source,
                       long ticks, long fuPerTick, String family) {
         public Row {
-            if (id == null || id.isBlank() || inputs == null || outputs == null || outputs.isEmpty()
+            if (id == null || id.isBlank() || inputs == null || outputs == null
+                    || outputs.isEmpty() && boundary != Boundary.FINITE_QUEST
                     || boundary == null || requires == null || source == null || source.isBlank()
                     || ticks < 0 || fuPerTick < 0) {
                 throw new IllegalArgumentException("Invalid economy conversion");
