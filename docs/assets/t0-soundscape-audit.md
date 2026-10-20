@@ -38,6 +38,40 @@ limits are recorded in the provenance. Native client listening, one/eight-machin
 mix, artistic quality, release acceptance and deployment are not supplied by QC.
 No PC JVM/GPU/Prism surface was used by this workstream.
 
+The completed adapter is
+[T0MachineAudio](../../common/src/main/java/io/github/ezequiel24123z/grindless/client/audio/T0MachineAudio.java).
+It shares one unchanged tracker/discovery pass, admits only Quern and Mixer with
+matching current source/block/family identities, and keeps Quern gain/pitch 1/1.
+Mixer uses 0.35/1 with the normalized file; only its replaced `washer` hum is
+suppressed. Settler/Pump and all other callers retain their existing routes.
+
+The paired [source/resource contract](../../tools/verify-mixer-audio.ps1) passes
+**38 checks and 18 negative controls** on WinPS5, verified portable Core and
+actual native Windows SH. This covers exact seven Ogg identities, mono/44100/
+three-second extent, selected-family eligibility, no duplicate hum, preserved
+TANK/particles/legacy effects, notices and the unchanged synthetic generators.
+The generic tracker bytes remain unchanged. Java contracts now contain 84
+assertions but were not compiled/executed in this no-JVM window. The reviewed
+purpose guard passes default635/focused307 and actual SH307.
+
+Failures are preserved in the Mixer provenance: initial host policy and WinPS
+property-count test failures, missing-PATH Core qualification and the new SH
+wrapper's Windows-absolute path defect. Reusing the existing `dirname` pattern
+fixes that exact SH invocation; no failed check was relabelled as a pass.
+The first link preflight also caught the retired local QuernAudio link; this
+historical source reference now points to the actual audited Git revision.
+
+| Required category | Current executed handoff |
+| --- | --- |
+| COMPLETED | Genuine two-request generation, technical A selection, normalized encoded QC, noticed exact Ogg import, shared native Mixer routing/lifecycle source and focal source/resource/guard contracts. Original Quern A and independent TANK fix preserved. |
+| BLOCKED | None for this source unit; no further grant or routine approval is requested. Combined native/build qualification is the parent's scheduled execution boundary. |
+| NOT EXECUTED | Java compilation/execution, native registration/client playback, combined build/package/deployment and Linux-host qualification. |
+| NEEDS HUMAN VALIDATION | Encoded in-game listening, one/eight-machine and mixed-factory gain/repetition/fatigue, native onset/stop/reload and artistic quality. No T0 acceptance/freeze or T1 activation. |
+| NEEDS MY DECISION | None for this bounded unit. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None. Existing credential was used only programmatically by the reviewed request tool, never displayed, hashed or copied. |
+| COST / BILLING RISK | Two actual HTTP200 requests of twelve allowed; no retries/ambiguities or billing activation. Selected-run estimate 240 credits, invoice/max-USD not claimed. Remaining ten are not a spending target. |
+| DEPLOYED STATE | Local Git source/resources only. No push, PR, package or Prism deployment; the parent's installed engineering candidate is unchanged by this workstream. |
+
 ## Preserved initial audit/tooling freeze
 
 The remainder records the earlier `2bc200d` preparation checkpoint and its actual

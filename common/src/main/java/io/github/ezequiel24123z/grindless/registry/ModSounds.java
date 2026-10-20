@@ -12,7 +12,7 @@ import net.minecraft.sounds.SoundEvent;
  * room (ADR-0048).
  *
  * <p>Legacy files are generated and converted by {@code tools/convert-audio.sh}; the approved
- * Quern Ogg is an unchanged import (ADR-0148). Event names must match {@code sounds.json},
+ * working beds are noticed imports; Quern A is unchanged (ADR-0148). Event names must match {@code sounds.json},
  * which {@code VerifyAssets} checks.
  */
 public final class ModSounds {
@@ -26,6 +26,8 @@ public final class ModSounds {
     public static final RegistrySupplier<SoundEvent> MACHINE_HUM_HEAVY = sound("machine_hum_heavy");
     /** The approved stone/granular working bed, currently used only by the Quern. */
     public static final RegistrySupplier<SoundEvent> T0_GRINDING = sound("t0_grinding");
+    /** The wet working bed, currently used only by the Clay Mixer. */
+    public static final RegistrySupplier<SoundEvent> T0_WET_WORK = sound("t0_wet_work");
     /** A pylon carrying load. */
     public static final RegistrySupplier<SoundEvent> PYLON_LINK = sound("pylon_link");
     /** A relay, for anything that switches. */

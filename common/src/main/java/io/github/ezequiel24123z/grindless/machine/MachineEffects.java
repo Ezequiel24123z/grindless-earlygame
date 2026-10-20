@@ -93,7 +93,7 @@ public final class MachineEffects {
             case PAD -> { }
             case BERTH -> { }
             case QUERN -> mill(status, level, pos, random, false);
-            case MIXER -> washer(status, level, pos, random);
+            case MIXER -> washer(status, level, pos, random, false);
             case FIREBOX -> generator(status, level, pos, random);
             case SETTLER -> washer(status, level, pos, random);
             case CHANNEL, SCREEN -> { }
@@ -129,6 +129,11 @@ public final class MachineEffects {
 
     /** Spray off the sluice while it runs; smoke while it waits on water or feed. */
     private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random) {
+        washer(status, level, pos, random, true);
+    }
+
+    private static void washer(MachineStatus status, Level level, BlockPos pos, RandomSource random,
+                               boolean hum) {
         double x = pos.getX() + 0.5;
         double z = pos.getZ() + 0.5;
         switch (status) {
@@ -137,7 +142,9 @@ public final class MachineEffects {
                     particle(level, ParticleTypes.SPLASH, x, pos.getY() + 0.85, z,
                             (random.nextDouble() - 0.5) * 0.2, 0.05, (random.nextDouble() - 0.5) * 0.2);
                 }
-                sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F);
+                if (hum) {
+                    sound(level, pos, ModSounds.MACHINE_HUM.get(), random, 0.04F, 0.15F, 1.2F);
+                }
             }
             case BLOCKED -> {
                 if (random.nextFloat() < 0.25F) {
