@@ -169,6 +169,24 @@ Before that inference the refreshed guard had11.480GiB physical/26.998GiB commit
 157.252GiB disk, zero Java/other Python and12,720,144,384 free VRAM bytes.
 Afterward both queue counts were zero and12,439,257,088 VRAM bytes were free.
 
+Collection of that same prompt succeeds without another POST. The retained
+512px source is537,133 bytes, SHA-256
+`e77dca20fb9b0c57a735b2fddc37070730e239458e689d12d880ad735faf0924`;
+its resolved graph hashes to
+`6d102bfbf69237a4eed7d537852cc3a44d7be5389ab717cfc5b398c87b1b8b08`.
+Source-pixel inspection finds a photographic hexagonal brass part on fabric,
+not the specified open-jaw hand wrench on white. The deterministic processor
+correctly refuses its non-background source edge. No native candidate is written,
+no threshold is weakened and no resource is replaced. Diffusion success is not
+useful-art success.
+
+Raw rooted/drive/UNC/empty/dot/traversal components are now rejected **before**
+native separator normalization; valid Windows and POSIX references to the exact
+same owned output remain accepted. The18-case suite passes in3.116s, with log
+`e22de55859727dd7c43776e89655ff1c11bd3412ddf5f2e423d084bdc3fcd556`.
+The second reservation remains unused. A purpose-preserving conditioned workflow
+for that remaining candidate is proposed rather than another blind source request.
+
 ## Deterministic transformation and integration boundary
 
 The pipeline accepts only the graph's single-frame 512px PNG. It removes only

@@ -303,6 +303,9 @@ def output_reference(images, prefix):
     filename, subfolder = image.get("filename", ""), image.get("subfolder", "")
     require(re.fullmatch(r"[A-Za-z0-9_.-]+\.png", filename) and ".." not in filename, "Unsafe image filename.")
     require(isinstance(subfolder, str), "Unsafe output subfolder.")
+    raw_parts = re.split(r"[/\\]", subfolder)
+    require(":" not in subfolder and all(part not in ("", ".", "..") for part in raw_parts),
+            "Rooted, drive, UNC, empty or traversal output components are forbidden.")
     subfolder = subfolder.replace("\\", "/")
     require(".." not in PurePosixPath(subfolder).parts, "Unsafe output subfolder.")
     require(subfolder == prefix.rsplit("/", 1)[0] and filename.startswith(prefix.rsplit("/", 1)[1] + "_"),

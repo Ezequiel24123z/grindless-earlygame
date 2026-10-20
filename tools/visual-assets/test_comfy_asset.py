@@ -221,6 +221,20 @@ class Contracts(unittest.TestCase):
         with self.assertRaises(pipeline.ContractError):
             pipeline.output_reference([valid, valid], prefix)
 
+    def test_windows_raw_escape_forms_are_rejected_before_normalization(self):
+        prefix = "grindless/multitool/owned-run/candidate-1"
+        for subfolder in (
+            "/grindless/multitool/owned-run", "\\grindless\\multitool\\owned-run",
+            "C:\\grindless\\multitool\\owned-run", "C:grindless/multitool/owned-run",
+            "\\\\server\\share\\grindless\\multitool\\owned-run",
+            "grindless//multitool/owned-run", "grindless/./multitool/owned-run",
+            "grindless/multitool/../owned-run", "grindless\\multitool/..\\owned-run",
+        ):
+            image = {"filename": "candidate-1_00001_.png", "subfolder": subfolder, "type": "output"}
+            with self.subTest(subfolder=subfolder), self.assertRaisesRegex(
+                    pipeline.ContractError, "Rooted, drive, UNC, empty or traversal"):
+                pipeline.output_reference([image], prefix)
+
     def test_deterministic_transform_and_no_source_mutation(self):
         source = source_image()
         before = pipeline.sha256(source)
