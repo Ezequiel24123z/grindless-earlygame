@@ -26,9 +26,13 @@ it is not the refill offer and is fully paid, not a new free claim. Repeating it
 costs the complete dirt batch each time. This prevents the pre-producer water/
 wood/stone cut from depending circularly on an already-working factory.
 
-Manual terrain digging is finite, laborious emergency compatibility, **not**
-canonical unlimited mod-owned renewable supply. Native aggregate/fibreboard
-production is far more efficient. The potential check includes the returned
+Manual terrain digging is the finite, laborious **initial acquisition** fallback,
+not the canonical unlimited mod-owned supply. Dirt itself also has the implemented
+mod-owned renewable `bootstrap/wet_aggregate` route; these same repeatable paid
+offers accept that dirt after the factory is established. Initial provenance
+does not make all dirt or offer repeatability intrinsically finite forever.
+They remain optional recovery, not a canonical replacement for production.
+Native aggregate/fibreboard production is far more efficient. The potential check includes the returned
 empty bucket, its iron crafting cost, wood/plank/stick and other relevant returns;
 no T0 bucket-to-iron reverse recipe is invented.
 
@@ -182,6 +186,11 @@ minimum, complete existing conditional cost witness, old/new balance decisions,
 and a Git-blob comparison against the exact baseline authorities. Unchanged
 recipe/rate blobs are factual evidence; changed sources remain explicitly changed
 rather than relabelled as an old/new measured balance result.
+
+Each offer exports initial acquisition provenance separately from repeatability
+and the actual canonical backing-input metadata. The manual restart classification
+does not override dirt's later renewable declaration or declare this optional
+exchange a newly accepted T0 production route.
 
 ## Focused qualification and human protocol
 

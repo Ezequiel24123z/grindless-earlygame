@@ -98,6 +98,24 @@ public final class VerifyEconomy {
         var json = JsonParser.parseString(EconomyProjection.json(result)).getAsJsonObject();
         equal("projection is deterministic", EconomyProjection.json(result), EconomyProjection.json(result));
         equal("every declared offer is exported", ShopCatalogue.offers().size(), json.getAsJsonArray("offers").size());
+        for (var element : json.getAsJsonArray("offers")) {
+            var offer = element.getAsJsonObject();
+            equal("initial acquisition never invents a permanent finite exchange cap",
+                    true, offer.get("repeatable_exchange").getAsBoolean());
+            equal("the same physical payment can be renewed later",
+                    true, offer.get("same_payment_accepts_later_production").getAsBoolean());
+            if (offer.get("id").getAsString().startsWith("bootstrap_")) {
+                var dirt = offer.getAsJsonObject("paid_inputs_status").getAsJsonObject("minecraft:dirt");
+                var resource = new SustainabilityModel.Resource(SustainabilityModel.Kind.ITEM, "minecraft:dirt");
+                var declared = result.annotations().resources().get(resource);
+                equal("restart provenance preserves actual dirt classification",
+                        declared.resourceClass().name(), dirt.get("classification").getAsString());
+                equal("restart provenance preserves the actual later renewable dirt route",
+                        declared.canonicalRoute(), dirt.get("canonical_route").getAsString());
+                equal("shop never overrides canonical renewable metadata",
+                        false, dirt.get("resource_classification_overridden").getAsBoolean());
+            }
+        }
         equal("all conversion/quest/offer edges are exported", EconomyGraph.rows().size(), json.getAsJsonArray("exploit_graph").size());
         equal("no shop dependency is added to canonical recipes", false, document.get("shop_required_for_t0"));
         equal("scope keeps human pacing unmeasured", true, json.getAsJsonArray("unmeasured").toString().contains("overall_pacing"));
