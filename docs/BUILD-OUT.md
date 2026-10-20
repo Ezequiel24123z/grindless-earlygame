@@ -26,7 +26,15 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: owner client testing on the qualified/deployed747 candidate and
+Next: execute the owner's new [T0 experience plan](../plan/feature-t0-experience-1.md)
+under ADR-0161–0163. Mainb8bd5e8 and installed747/c08 remain the source/runtime
+baseline, not a pass of the new longitudinal-readiness requirements. Quests/Guide
+migration, physical barter, usable tanks/T0 interfaces, optional inspection and
+audiovisual coherence proceed in independent owned branches; integrate and prove
+changed mechanisms before the required controlled client gate. Do not start the
+longitudinal campaign or unrestricted T1. The older completed queue follows.
+
+Previous next step: owner client testing on the qualified/deployed747 candidate and
 ADR-0160's final live-GitHub main integration/PR cleanup. The first free starter
 quest, canonical guidance, real Mixer/Multitool assets, applicable executable
 contracts, package88 and representative production boot are complete. The exact

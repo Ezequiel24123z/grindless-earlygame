@@ -1,5 +1,25 @@
 # Return handoff
 
+## New T0 experience programme
+
+ADR-0161–0163 and the [new executable plan](plan/feature-t0-experience-1.md)
+now supersede the previous next-work queue, not its proof. The owner requires
+expanded teaching quests/Guide migration, physical barter, tanks/hatches,
+inspection and audiovisual coherence before the first longitudinal run.
+
+| Category | Current new-wave state |
+| --- | --- |
+| COMPLETED | Verified clean mainb8bd5e8, personal remote and actual stopped747/c08/9cee installation; source-based inventory, shared contracts and isolated feature ownership established. |
+| BLOCKED | None for current code work. The real graphical path to the personal-PC client is not yet verified and cannot be replaced by a server pass. |
+| NOT EXECUTED | New integrated build/package/deployment, controlled client/world smoke and normal longitudinal campaign. The campaign must not start yet. |
+| NEEDS HUMAN VALIDATION | Final art/audio/fatigue, quest clarity, exact pacing/prices, ergonomics and enjoyment; no automatic pass is claimed. |
+| NEEDS MY DECISION | None for assigned reversible scope. No new currency or starter nerf is selected; material dependency/license/migration changes remain gated. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Existing secure sound access and local visual runtime are reused; actual authorized graphical client access remains to be established. No credential change/value is requested or committed. |
+| COST / BILLING RISK | New sound ceiling8POSTs/4families, initially6/3; local visual ceiling6candidates/3demonstrated targets. No paid images, new models or reset of old ledgers. |
+| DEPLOYED STATE | Previous747/c08/9cee remains stopped and unchanged at intake. No experience-branch code is claimed installed. |
+
+## Previous testing delivery
+
 **T0 engineering testing candidate747 is qualified, deployed and stopped.**
 Human appearance/listening, first-quest interaction and the campaign remain the
 owner's testing. This is not T0 acceptance/freeze, a product RC or T1 activation.

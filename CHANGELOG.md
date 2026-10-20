@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Start the owner-requested T0 experience programme (ADR-0161–0163).**
+  Reconcile actual mainb8bd5e8 and installed747/c08 before the new scope.
+  Preserve the evidence-based inventory and executable plan; assign independent
+  quest/Guide, physical audio, visual presets, barter/pacing, tanks/interfaces
+  and optional inspection lanes with one integration owner. Keep the full
+  client gate, old saves/claims and finite generation budgets explicit; no
+  longitudinal playthrough, arbitrary starter nerf, minted currency or T1 chain.
 - **Qualify and deploy the complete T0 engineering testing candidate747.**
   Actual canonical guidance25495/T02686/full Assets close the preserved reds;
   build/package88 and one production boot pass. Exact c08 JAR/9cee playable ZIP

@@ -172,6 +172,9 @@ history — the reasoning that was wrong is itself useful information.
 | [0158](#adr-0158--delegate-end-to-end-outcomes-with-proportional-validation) | Delegate end-to-end outcomes with proportional validation | Accepted |
 | [0159](#adr-0159--start-t0-with-one-free-generous-starter-quest) | Start T0 with one free generous starter quest | Accepted |
 | [0160](#adr-0160--merge-the-testing-ready-t0-candidate-and-close-superseded-prs) | Merge the testing-ready T0 candidate and close superseded PRs | Accepted |
+| [0161](#adr-0161--prepare-the-t0-experience-before-longitudinal-human-play) | Prepare the T0 experience before longitudinal human play | Accepted |
+| [0162](#adr-0162--quests-own-t0-teaching-and-the-per-player-f1-transition) | Quests own T0 teaching and the per-player F1 transition | Accepted |
+| [0163](#adr-0163--use-physical-barter-and-local-evidence-before-economic-rebalancing) | Use physical barter and local evidence before economic rebalancing | Accepted |
 
 ---
 
@@ -7552,3 +7555,96 @@ Keep existing branches/worktrees and their evidence. Closing superseded PRs is
 not permission to delete unknown work, rewrite owned branches or modify repository
 protection. The inspected older PR chains have no native stack metadata; do not
 invent or dissolve a stack to clean them up.
+
+---
+
+## ADR-0161 — Prepare the T0 experience before longitudinal human play
+
+**Status.** Accepted owner master prompt, 2026-10-20.
+
+**Decision.** The next work is the explicit T0 experience programme in
+[the executable plan](../plan/feature-t0-experience-1.md), not another claim that
+engineering testing readiness already satisfies the longitudinal gate. It includes
+quest-led instruction, harmless Guide migration, recovery barter, balance evidence,
+usable tanks, functional interfaces for the two actual T0 structures, optional
+inspection, physical audio and reusable visual production.
+
+This scope explicitly opens bounded T0 ports/shop work previously held in the
+route map. It does not open unrestricted T1 production or replace the physical
+five-F1-Matrix exit. Preserve old IDs/claims/contents/default builds and provenance.
+Keep independent feature ownership, one new integration surface and one shared
+mutating PC execution owner. Do not reuse retired workers as an unbounded pool.
+
+The new sound purpose permits at most8 new POSTs across at most4 justified
+families, initially6 requests/3 families. The new local visual purpose permits
+at most6 candidates/3 demonstrated weak targets. These are ceilings, not targets
+or resets of historical ledgers. Existing selected Quern/Mixer/Multitool sources
+remain preserved; paid images, account changes and model downloads are not selected.
+
+Required client launch/world/interaction/save smoke is distinct from headless
+server/fixture proof. The status `TECHNICALLY PREPARED FOR LONGITUDINAL HUMAN
+VALIDATION` requires the owner's complete gate, not just successful compilation.
+No normal longitudinal campaign, final T0/RC release/tag, acceptance/freeze or
+unrestricted T1 development follows from this authorization. A coherent bounded
+slice may be preserved if blocked, but required gate items are not silently deferred.
+
+---
+
+## ADR-0162 — Quests own T0 teaching and the per-player F1 transition
+
+**Status.** Accepted implementation direction under ADR-0161.
+
+**Decision.** Extend the canonical quest catalogue with typed reward-free teaching
+lessons and concise machine/process/placement/troubleshooting content. Preserve
+all26 old IDs and rewards; old claims remain in the same player/Overworld ledger.
+An explicit lesson can record acknowledgment without pretending item possession
+proves successful operation or inventing material reward fallbacks.
+
+New `relay` claims require five valid physical Relay Matrices rated F1 through
+the existing rated-item evidence. The claim unlocks a distinct actual T1 chapter
+in both native and Heracles presentation, not an unrelated menu/item or global
+machine permission. Historical relay claims remain authoritative: their past
+rating evidence was not stored and cannot honestly be reconstructed or reset.
+Keep later prototype IDs/progress, but never label them completed T0 content.
+
+Retain `field_guide` as a registered harmless deprecated compatibility item whose
+use routes to current quest instruction. Remove its normal recipe/required role,
+not the saved ID. Process Atlas remains the authoritative recipe viewer.
+Recover only the utility Quest Book on normal entry/respawn when absent, including
+after the starter was used; never duplicate the valuable starter or other claims.
+
+Both quest renderers request the one shop network entry. The shop service owns
+server validation and barter; do not create a second hook/packet/economy ledger.
+Shared recipe details must derive from canonical definitions; text is instruction,
+not another quantity catalogue.
+
+---
+
+## ADR-0163 — Use physical barter and local evidence before economic rebalancing
+
+**Status.** Accepted reversible direction under ADR-0161.
+
+**Decision.** The recovery shop uses direct in-kind exchanges of existing items.
+Do not add a currency item, mint, wallet, rare-structure dependency or mandatory
+economy mod. This meets the requested production-surplus/recovery role without
+the fundamentally new currency that would require an owner decision.
+
+One machine-readable offer catalogue owns input/output quantities, prerequisite
+claims, role and risk metadata. Server-side native inventory staging must prove
+the complete input withdrawal and complete output capacity before a single commit.
+Reject stale/replayed menu actions; never debit partially, drop valuable remainder
+or trust a client-selected price. Include process conversions in cycle/arbitrage
+checks rather than considering only a buy/sell pair.
+
+Emergency/convenience/terrain/food/container/fuel offers are optional. No shop
+offer sells a machine, Core, Calibrated Core, Relay Matrix or advanced critical
+component. The production route must work without the shop. Preserve the generous
+existing starter until measured evidence justifies a separate balance change.
+
+Export live recipe bills, sufficient construction witness and assumptions
+separately; do not call a sufficient witness a globally minimal route or turn
+configured ticks into observed playtime. Opt-in local developer telemetry records
+only aggregate causal process/manual/claim/shop/recovery/state events and relative
+times. It is off by default and records no names, UUIDs, coordinates, credentials
+or external analytics. Manual accepted work and committed processes count, not
+attempts or repeated polling.

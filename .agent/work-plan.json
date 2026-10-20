@@ -1,13 +1,52 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 17,
+  "plan_revision": 18,
   "updated": "2026-10-20",
-  "phase": "qualified747_testing_candidate_deployed_main_integration_record_PR55_human_campaign_pending",
+  "phase": "owner_T0_experience_programme_implementation_before_longitudinal_client_gate",
   "product_gate": "T0_ENGINEERING_CANDIDATE_PLAYABLE_RC_IN_PROGRESS",
   "tier_accepted": false,
-  "merge_ready": true,
-  "merge_ready_scope": "ADR0160_testing_integration_all747_PC_and16_hosted_checks_pass_human_acceptance_and_product_RC_still_false",
+  "merge_ready": false,
+  "merge_ready_scope": "prior_b8bd5e8_main_and747_runtime_qualified_new_experience_scope_not_yet_integrated_or_client_verified",
+  "experience_programme": {
+    "policy": ["ADR-0161", "ADR-0162", "ADR-0163"],
+    "plan": "plan/feature-t0-experience-1.md",
+    "inventory": "docs/reviews/t0-experience-inventory.md",
+    "baseline_main": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+    "installed_baseline": "747ebcacdb063f6faa3c69c7eb9b45c407f32bdd",
+    "status": "six_feature_lanes_active_one_new_integration_owner",
+    "sessions": {
+      "quests": "21829880-b4d4-4cc8-a50f-bfad90a0f23a",
+      "economy_pacing": "d29f53ac-a590-4183-84f9-d4ad4b9a0081",
+      "tank_interfaces": "e56d6ca6-77f7-412f-b29b-1f44da69c252",
+      "inspection": "b02021dc-9650-4190-8f57-46c2da14ff90",
+      "audio": "1f5ef586-7522-4c73-9ce1-dad1449a6ee5",
+      "visual": "9ff8a930-c8e2-4206-8b6b-34d36efb53bf",
+      "integration": "6c714156-d5af-44cd-a612-1c1f1a5bf2b4"
+    },
+    "external_research": {
+      "interfaces": "de12f66f-f272-43f1-926f-41a942e6dc2c",
+      "overlay": "e1e65cd3-4a8e-4162-9f31-b52eec58def2"
+    },
+    "shared_contracts": {
+      "shop_client": "ShopNetwork.requestOpen",
+      "shop_server": "ShopAccess.open_server_thread_real_book_and_authoritative_claim_prerequisites",
+      "economy": "physical_in_kind_existing_items_no_currency_wallet_mint",
+      "T0_gate": "new_relay_claim_requires_five_valid_F1_matrices_historical_claims_preserved",
+      "Guide": "keep_registered_field_guide_ID_deprecated_to_quest_instruction_remove_normal_recipe",
+      "hatches": "controller_backed_zero_storage_validated_loaded_identity_each_access_Firing2optional_item_positions_Troughchannel_input_screen_output",
+      "telemetry": "causal_commits_accepted_manual_work_and_claims_optin_relative_aggregate_noPII"
+    },
+    "sound_allowance": {"new_max_POSTs": 8, "max_new_families": 4, "initial_planned_POSTs": 6, "initial_planned_families": 3, "historical_ledgers_reset": false, "paid_images": false},
+    "visual_allowance": {"new_max_local_candidates": 6, "max_demonstrated_targets": 3, "historical_two_of_two_reset": false, "current_defect": "blocked_and_out_of_band_state_masks_rely_on_color_only", "diffusion_needed_for_that_defect": false},
+    "PC_leases": {"JVM_cache_deploy": null, "CPU_Pillow_only": "9ff8a930-c8e2-4206-8b6b-34d36efb53bf", "GPU": null, "private_targets_not_committed": true},
+    "observed_PC_utc": "2026-10-20T16:39:44Z",
+    "observed_PC": {"free_physical_gib": 6.095, "free_commit_gib": 29.020, "JavaPython": 0},
+    "client_gate": "required_not_yet_observed_coordination_UI_exposes_no_target_client",
+    "longitudinal_playthrough_started": false,
+    "T0_accepted_or_frozen": false,
+    "T1_chain_implementation": false
+  },
   "release": {
     "policy": "ADR-0144",
     "engineering_candidate": "747ebcacdb063f6faa3c69c7eb9b45c407f32bdd",

@@ -4,6 +4,32 @@ Updated: 2026-10-20. Product gate: **T0 ENGINEERING CANDIDATE; MANUAL/PRODUCT RC
 
 ## Active owner-directed follow-up
 
+**New master scope active: T0 experience before longitudinal play (ADR-0161–0163).**
+Use [the executable plan](../plan/feature-t0-experience-1.md) and
+[source-bound starting inventory](../docs/reviews/t0-experience-inventory.md).
+Mainb8bd5e8 is verified; actual Inspect still finds stopped747/c08/9cee.
+The previous engineering completion below is preserved baseline evidence, not
+completion of the new required gate.
+
+Six isolated feature lanes own quests/Guide/T1 presentation, in-kind barter/
+pacing/aggregate telemetry, tank/T0 interfaces, optional machine inspection,
+physical audio and visual presets. New integration owner6c714156 owns its fresh
+surface; parent owns architecture/contracts and final deployment. Root documents
+and publication are serialized. Old sessions are not resumed.
+
+CPU/Pillow processing alone is leased to visual9ff8a930 in its explicit private
+root. JVM/cache/deploy and GPU are not leased. Fresh16:39:44Z observation finds
+0Java/Python,6.095GiB physical/29.020GiB commit free. Never reuse these numbers
+as a later heavy-execution guard. New sound ceiling8POSTs (initial6/3 families)
+and local visual6 candidates/3 targets do not reset historical ledgers.
+
+The new client/world/interaction/save smoke is required and unobserved; local
+Computer Use window discovery exposes no target Minecraft/Prism window. Continue
+safe implementation while finding an authorized real graphical path. Do not
+start the normal longitudinal campaign or silently waive the gate.
+
+## Previous qualified testing handoff
+
 **Engineering testing candidate747 is qualified, deployed and stopped.**
 Read [RETURN-HANDOFF](../RETURN-HANDOFF.md) for the eight disclosure categories,
 Comfy closeout and exact installed identities. Source/runtime747, JARc08a02fe

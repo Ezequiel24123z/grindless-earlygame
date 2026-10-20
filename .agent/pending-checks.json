@@ -8,6 +8,18 @@
   "pr_management_and_merge_authorized_when_ready": true,
   "authorization": "Owner-directed playable modpack lifecycle, ADR-0144/PA-0007; technical/product RC readiness precedes longitudinal human acceptance, and T1 remains held until publication plus actual play",
   "work_plan": ".agent/work-plan.json",
+  "experience_programme": {
+    "policy": ["ADR-0161", "ADR-0162", "ADR-0163"],
+    "plan": "plan/feature-t0-experience-1.md",
+    "status": "implementation_active_not_longitudinal_ready",
+    "baseline_main": "b8bd5e885aef598bf888d7e390b297a34cbb7d52",
+    "installed_observed": "747ebcacdb063f6faa3c69c7eb9b45c407f32bdd_VerifiedStopped_c08_9cee",
+    "required_gate_items_not_deferred": ["actual_client_launch", "new_and_backed_up_existing_world_smoke", "expanded_quest_Guide_migration_and_F1_T1_gate", "physical_barter_no_known_trivial_cycle", "tank_container_transfer_retention", "functional_and_invalid_hatches", "optional_truthful_overlay", "sound_lifecycle", "save_reconnect"],
+    "human_approval_or_campaign": "NOT_EXECUTED",
+    "longitudinal_started": false,
+    "new_currency_mandatory_dependency_or_paid_images": false,
+    "client_access": "coordination_window_inventory_has_no_target_client_remote_graphical_path_not_yet_verified"
+  },
   "creative_client_followup": {
     "decision": "ADR-0156",
     "status": "complete_implemented_qualified747_and_deployed_testing_candidate_human_campaign_pending",
