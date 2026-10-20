@@ -109,6 +109,11 @@
     "batch_adaptation": "Add only first-fluids and first-harness to both existing fixed isolation lists. Extend the existing fake-boot contracts for isolated-only rejection, explicit mixed/default-all skip and all-isolated rejection. Preserve legacy selectors, CDPATH, environment, one-boot dispatch and exit propagation.",
     "automatic_contract_entry": "VerifyFirstObservationFixtures is discovered by the existing run-checks Java inventory and calls the paired source-only helper once. VerifySmokeHarness and CI are not edited."
   },
+  "oracle_limits": {
+    "first_fluids": "The oracle latches actual destination Amount greater than zero with the water ID, and actual generator Burn greater than zero. It does not measure flow rate, total transfer, conservation balance or sustained operation.",
+    "first_harness": "The five actual tagged IDs/Count values may be observed in the same poll as their one-shot spawn. This is an existence/registration oracle, not a proof of survival across ticks or entity liveness.",
+    "scope": "Preserve the existing intended oracle; do not add unrelated rate, balance or liveness acceptance requirements."
+  },
   "local_execution": {
     "source_contract_red": {
       "exit": 1,
@@ -147,7 +152,7 @@
       "cases_failed": 43,
       "total_cases": 48,
       "assertions_attempted": 196,
-      "failure": "A pre-existing BOM/CRLF parity case and subsequent existing cases exceeded the unchanged 15-second child limit; the unchanged 120-second suite deadline then prevented the new cases from executing",
+      "failure": "A pre-existing BOM/CRLF parity case and subsequent existing cases reported the unchanged 15-second-limit diagnostic; the actual wait is min(15 seconds, remaining helper budget). The unchanged 120-second helper deadline then prevented the new cases from executing. Neither actual elapsed time per case nor an environmental cause is established.",
       "cleanup": "Only the owned temporary fixture subtree was removed",
       "log": "first-observation-batch-contracts.log",
       "sha256": "297d6d13e149a3352af26fec8cf6bb52af704c5082c27dd4d41ec09447be0911"
@@ -159,11 +164,19 @@
       "total_cases": 48,
       "assertions_attempted": 585,
       "new_affected_cases": "All six new cases actually pass through the native Bash and current PowerShell subjects: first-fluids and first-harness isolated-only, named mixed selection and default-all skip. The expanded all-isolated rejection also passes.",
-      "failure": "The pre-existing dynamic optional-file case then exceeded the unchanged 15-second child limit; the unchanged 120-second suite deadline prevented the remaining cases from completing",
+      "failure": "The pre-existing dynamic optional-file case then reported the unchanged 15-second-limit diagnostic; the actual wait is min(15 seconds, remaining helper budget). The unchanged 120-second helper deadline prevented the remaining cases from completing. The message alone does not identify which budget was reached or establish an environmental cause.",
       "qualification": "Partial affected-case evidence only. The aggregate gate still FAILS, with unknown timeout precipitant; no third local retry or timeout increase.",
       "cleanup": "Only the owned temporary fixture subtree was removed",
       "log": "first-observation-batch-contracts-serial-retry.log",
       "sha256": "0deda5285634f7c9a1b18893f1c929c4cb40cf89a29799eae94bd696cff802f3"
+    },
+    "batch_timing_contract": {
+      "VerifySmokeHarness_external_child_cap_seconds": 60,
+      "Test_SmokesBatch_total_deadline_seconds": 120,
+      "Test_SmokesBatch_per_child_wait": "min(15000 milliseconds, 120000 milliseconds minus elapsed suite time)",
+      "diagnostic_limit": "The 15-second-limit message is not a measurement of actual elapsed time or proof of an environmental cause.",
+      "local_attempts": "Both recorded attempts invoked the PowerShell helper directly, not through Java; they did not exercise the additional VerifySmokeHarness 60-second cap.",
+      "next_proof": "Fulfilled by windows_qualification_962: the actual integrated Java path passes with every original cap unchanged. The two earlier failed attempts stay failed; no third local direct-batch retry or skipped case occurred."
     },
     "log_encoding": "Local Tee-Object captures are UTF-16LE; GitHub raw server log hashes refer to their unchanged downloaded bytes.",
     "metadata_and_documentation": {
@@ -185,20 +198,125 @@
       "comparison": "No diff from exact3cd16 across common, forge and the build/version files; the original failing CI source also has identical relevant production/boot/fixture blobs."
     }
   },
+  "windows_qualification_962": {
+    "status": "PASS_SELECTED_SCOPE_ONLY",
+    "source": "962cb37fac407d6c08aede6d4ab9510a1a37844a",
+    "execution_surface": "Coordinator-assigned new detached personal-PC worktree; no default inventory, Prism or shared cache",
+    "admission": {
+      "utc": "2026-10-20T02:44:30.2507801Z",
+      "java_count": 0,
+      "source_clean": true,
+      "clone_head_unchanged": true,
+      "log_sha256": "f670954816837612851f8d0e3f8335b8e8318c8dcb05fad26e177742d7ffd5ed"
+    },
+    "constraints": {
+      "jdk": "17",
+      "JAVA_TOOL_OPTIONS": "-Xmx1G -XX:ActiveProcessorCount=2",
+      "actual_options_evidence": "All three closed stderr streams contain only the matching Picked up JAVA_TOOL_OPTIONS line",
+      "compile_scope": "Only VerifyFirstObservationFixtures and VerifySmokeHarness; standard library, no Minecraft classpath",
+      "not_used": "Gradle, server, native smoke, client, GPU, Prism, deployment or player worlds"
+    },
+    "execution": {
+      "started_utc": "2026-10-20T02:45:51.3110454Z",
+      "finished_utc": "2026-10-20T02:46:51.1961942Z",
+      "javac": {
+        "exit": 0,
+        "elapsed_seconds": 1.0105995,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e67dd1093e4e6617ab83f6536da361a5f1ac6ed9ae68fb4b3b7afaf9651d3421"
+      },
+      "VerifyFirstObservationFixtures": {
+        "exit": 0,
+        "elapsed_seconds": 0.9596545,
+        "positive": 23,
+        "negative_mutations_rejected": 28,
+        "stdout_sha256": "536a79c8f0045720ca62e41783b05c03a0388422ff9fc15983ff6fc2a674a9f7",
+        "stderr_sha256": "e67dd1093e4e6617ab83f6536da361a5f1ac6ed9ae68fb4b3b7afaf9651d3421"
+      },
+      "VerifySmokeHarness": {
+        "exit": 0,
+        "elapsed_seconds": 55.6398479,
+        "java_gate_pass_labels": 30,
+        "java_gate_fail_labels": 0,
+        "result": "ALL SMOKE HARNESS CHECKS PASSED",
+        "included": "Existing optional-datapack, world-retention and shared-batch gates, once each",
+        "batch_execution": "Test-SmokesBatch invoked once by the existing Java gate; never duplicated directly",
+        "batch_cases": 48,
+        "batch_count_evidence": "The read-only child-log observer saw all 48 PASS labels before the existing Java finally-cleanup. The completed enclosing gate then confirms the child's successful exit. The prefix observer is not independent final-pass evidence.",
+        "batch_assertion_total": "NOT_CAPTURED: the existing wrapper deletes its child-log fixture; no total is invented and no suite is repeated to recover it",
+        "stdout_sha256": "f0443534e4e484cecb21ff4d671643ee6f0e0e304051a0f7f90b81676a9257a8",
+        "stderr_sha256": "e67dd1093e4e6617ab83f6536da361a5f1ac6ed9ae68fb4b3b7afaf9651d3421"
+      },
+      "all_streams": "Closed before hashing; raw receipt and streams recovered unchanged into this worker's private session artifacts",
+      "raw_receipt_sha256": "780d290a1dd88b623016a56c4066abc92e895da418a1c71cb448dc5f4bba49cb",
+      "local_execution_capture_sha256": "7b7f75d36506bb025a92b39b900be4eed389446e3ee002feb6ebae85c4725ce7",
+      "child_prefix_observer_sha256": "96a5cac484849abdd8da0eb2cddd1d88204d910175d45ef41ee5d952039c1448"
+    },
+    "disposition": {
+      "first_pc_execution": "PASS; no reproduced defect requiring a source repair",
+      "budget_changes": "None: Java child60, helper120 and min(15, remaining) child waits all unchanged; native assertion120/server2GiB untouched",
+      "previous_failures": "Both earlier local aggregate failures remain recorded at their original source/platform/attempt. This PC pass does not identify their precipitant or justify calling them environmental.",
+      "runtime_reuse": "No PC native duplicate: reuse the coordinator-verified exact962 CI below for Linux Java and both native scenarios",
+      "code_change": "None after frozen962; subsequent worker commits change only this receipt"
+    },
+    "release": {
+      "utc": "2026-10-20T02:47:52.1562111Z",
+      "source_clean": true,
+      "java_count": 0,
+      "parent_and_next_owner_notified": true,
+      "next_owner_scope": "Coordinator-preauthorized JDK-only generator work in the other owner's separate surface",
+      "release_log_sha256": "d7994f8e5bd43c6db58821b890b8df941489ea047f6721bf387a0fa0750c92bc",
+      "after_release": "Only closed-file recovery and local documentation; no further JVM or source/cache mutator"
+    }
+  },
+  "exact962_ci_reuse": {
+    "source": "962cb37fac407d6c08aede6d4ab9510a1a37844a",
+    "run": 39357301892,
+    "url": "https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39357301892",
+    "conclusion": "success",
+    "verify_job": 118414940775,
+    "other_jobs": "Windows tooling and all six native shards SUCCESS",
+    "covered_native": [
+      "first-fluids",
+      "first-harness"
+    ],
+    "evidence_owner": "Coordinator explicitly verified the completed exact-source run and retains its raw artifacts; this worker does not redownload them or repeat those successful jobs",
+    "reuse_boundary": "The frozen executable inputs remain identical through the worker's later receipt-only commits. This resolves their native and Linux-Java obligations, not rate/balance/liveness, whole-T0 gameplay or human acceptance."
+  },
   "minimum_next_qualification": {
+    "status": "FULFILLED_BY_WINDOWS_CONTRACTS_AND_EXACT962_CI_REUSE_NOT_A_RERUN_INSTRUCTION",
     "authorization": "Coordinator owns the single PC lease; this receipt grants none",
-    "tooling_property": "Compile/run only the new standalone Java source-contract adapter and run the existing no-JVM Test-SmokesBatch gate once on the coordinator-selected qualified platform. Resolve or explicitly retain its aggregate timeout failure without weakening limits.",
-    "native_property": "Load each frozen datapack through the unchanged production harness and prove real pump-to-conduit-to-destination water transfer/CO ignition, and real observation of the five original Harness item entities, with natural successful shutdown.",
+    "tooling_property": "After an explicit PC lease, compile only VerifyFirstObservationFixtures and VerifySmokeHarness together, then run those two standalone Java mains once each. The existing VerifySmokeHarness invokes Test-SmokesBatch once under its unchanged 60-second child cap; do not duplicate that helper by running it directly as well.",
+    "native_property": "First inspect the coordinator-owned exact962 CI evidence. Only if a concrete native property remains unproved, load each frozen datapack through the unchanged isolated production harness and observe nonzero destination water/CO Burn and the five original Harness item IDs, with natural successful shutdown. These are the explicitly bounded oracles above, not rate/balance/liveness proofs.",
     "selection": "Only first-fluids and first-harness, each in its own disposable isolated world, via the existing run-smokes selector",
     "reuse": "Production/build inputs did not change. Reuse the coordinator's verified equivalent runtime artifact rather than inventing a production rebuild or replaying the historical matrix.",
     "failure_action": "Preserve raw logs, exact fixture/source identities and explicit diagnostics; escalate a demonstrated production fault before modifying production.",
     "still_not_proven": "An observation-fixture green cannot recover the unknown historical precipitant or establish whole-T0 gameplay, client, persistence, manual acceptance or release readiness.",
     "integration_documentation_owner": "The coordinator updates the route map, changelog, README and durable root handoffs; these shared files are excluded from this worker's ownership."
   },
+  "coordinator_review_followup": {
+    "frozen_source": "962cb37fac407d6c08aede6d4ab9510a1a37844a",
+    "independent_review_reference": "80079a37, reported by the coordinator",
+    "source_review": "No new high-confidence source defect blocking the frozen repair; full batch, Java and native closure are still unproved.",
+    "published_branch": "ezequiel24123z-regresiones-ci-t0, published by the coordinator",
+    "qualification_ci_run": 39357301892,
+    "ci_observation": "The coordinator subsequently verified completed SUCCESS for verify, Windows tooling and all six native shards. exact962_ci_reuse records that provenance; this worker did not poll or rerun CI.",
+    "proof_reuse": "If exact962 CI verifies Java and both selected native scenarios, reuse that native evidence and select only the still-missing Windows contracts for the PC window. A host change alone is not a reason to repeat native smokes.",
+    "private_helper_preparation": {
+      "phase": "Historical preparation, subsequently executed once in Contracts under the explicit coordinator lease; see windows_qualification_962",
+      "artifact": "qualify-first-observation.ps1, private local session artifact; not repository code",
+      "sha256": "5ddf0a3028dfce065dd55d368e42e286b9cd71eab44a659ad0584dda28c23761",
+      "bytes": 21840,
+      "binding": "Requires an explicit exact execution revision, clean isolated worktree and unchanged qualification inputs from962; execution additionally requires the transferred helper digest, non-secret lease reference and installed JDK17. Native is separate opt-in with an uncovered-property explanation and the actual staged jar digest.",
+      "preparation_validation": "At preparation, PowerShell5 AST parser reported zero errors and the helper body had not executed. The unchanged pinned helper later completed Contracts once with actual closed logs. Its optional Native and failure-cleanup branches were not executed or qualified.",
+      "authority": "Preparation granted no execution. The coordinator later explicitly leased the exact isolated PC surface for Contracts only; the worker released it after verified0Java and notified both the coordinator and next owner. Helper parameters never grant or release a lease.",
+      "evidence_safety": "Separate closed stage logs/receipts, unchanged nested gate budgets, fail-before-replay output ownership, explicit source/artifact guards and no automatic release by the observer. Private target paths/credentials are not embedded."
+    }
+  },
   "handoff": {
-    "COMPLETED": "Raw failed-CI identities preserved; scoped observation source repair frozen; PS and SH source contracts pass; six new batch cases and expanded all-isolated rejection actually pass in the serial retry; metadata and documentation links pass.",
-    "BLOCKED": "Original CI39336114196 is FAILED. Repaired native qualification and the complete batch gate remain incomplete; both local aggregate attempts exited1 under their unchanged deadlines.",
-    "NOT EXECUTED": "New Java adapter compilation/execution, JVM/Gradle, native smokes, SSH/PC writes, full CI replay, client, deployment and player-world operations.",
+    "COMPLETED": "Exact962 Windows javac and both standalone Java gates PASS: source contracts23/28, Java harness30PASS/0FAIL including the shared-batch gate once/all48cases. Original failures and oracle limits preserved; no source or budget change was needed. Reuse coordinator-verified exact962 successful CI for Linux Java and both native fixtures. Source clean and0Java at explicit resource release.",
+    "BLOCKED": "None for this bounded technical unit. The original failed CI and two failed local aggregate attempts remain immutable history with unknown precipitants, not hidden or reclassified as passes. Global product/human gates remain separate.",
+    "NOT EXECUTED": "No PC native duplicate, Gradle, Minecraft server/client, GPU, Prism, deployment, player-world operation or CI rerun. No direct duplicate Test-SmokesBatch invocation and no third local direct-batch retry.",
     "NEEDS HUMAN VALIDATION": "Existing global client/render/listening/no-command/longitudinal campaign gates remain outside this source-fixture proof and unchanged.",
     "NEEDS MY DECISION": "None",
     "NEEDS CREDENTIAL / EXTERNAL RESOURCE": "None",

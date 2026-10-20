@@ -15,6 +15,10 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the final Windows observation-fixture receipt history.**
+  Merge777651a/27e6e71 documentation-only preparation/result records alongside
+  coordinator-observed native CI proof, retaining all initial failures and the
+  one actual full48 Windows pass without replaying it for more counters.
 - **Integrate the end-to-end local Multitool pipeline and real generator proof.**
   Preservec214's licensed-model/core API workflow, original guide, two spent
   candidates, rejected photo, selected127b source/runtime sprite, provenance and
