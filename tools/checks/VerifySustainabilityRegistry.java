@@ -737,6 +737,9 @@ public final class VerifySustainabilityRegistry {
                     if (task == null || player == null) {
                         return Result.UNKNOWN_TASK;
                     }
+                    if (progress.usesNativeClaims(player)) {
+                        return Result.NATIVE_BACKEND;
+                    }
                     Set<String> claimed = progress.claimed(player);
                     if (claimed.contains(taskId)) {
                         return Result.ALREADY_CLAIMED;
@@ -962,12 +965,42 @@ public final class VerifySustainabilityRegistry {
                 """)
                 && questMethod(sources, "QuestProgress", """
                 public Set<String> claimed(UUID player) {
+                    Set<String> result = new HashSet<>(legacyClaims(player));
+                    result.addAll(nativeCompleted.getOrDefault(player, Set.of()));
+                    return Set.copyOf(result);
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public Set<String> legacyClaims(UUID player) {
                     return Set.copyOf(claimed.getOrDefault(player, Set.of()));
                 }
                 """)
                 && questMethod(sources, "QuestProgress", """
+                public void updateNativeCompleted(UUID player, Set<String> completed) {
+                    if (!usesNativeClaims(player) || completed.stream().anyMatch(id -> QuestCatalogue.byId(id) == null)) {
+                        throw new IllegalArgumentException("Native completion requires migrated authority and known quest ids");
+                    }
+                    nativeCompleted.put(player, Set.copyOf(completed));
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public boolean usesNativeClaims(UUID player) {
+                    return nativeClaims.contains(player);
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public void useNativeClaims(UUID player) {
+                    if (player == null) {
+                        throw new IllegalArgumentException("Native claim authority requires a player");
+                    }
+                    if (nativeClaims.add(player)) {
+                        setDirty();
+                    }
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
                 public boolean claim(UUID player, String task) {
-                    if (player == null || QuestCatalogue.byId(task) == null) {
+                    if (player == null || usesNativeClaims(player) || QuestCatalogue.byId(task) == null) {
                         return false;
                     }
                     Set<String> tasks = claimed.computeIfAbsent(player, id -> new HashSet<>());
@@ -976,6 +1009,69 @@ public final class VerifySustainabilityRegistry {
                     }
                     setDirty();
                     return true;
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                @Override
+                public CompoundTag save(CompoundTag tag) {
+                    ListTag players = new ListTag();
+                    for (Map.Entry<UUID, Set<String>> entry : claimed.entrySet()) {
+                        CompoundTag one = new CompoundTag();
+                        one.putString(TAG_PLAYER, entry.getKey().toString());
+                        ListTag tasks = new ListTag();
+                        for (String id : entry.getValue()) {
+                            tasks.add(StringTag.valueOf(id));
+                        }
+                        one.put(TAG_TASKS, tasks);
+                        players.add(one);
+                    }
+                    tag.put(TAG_PLAYERS, players);
+                    ListTag nativePlayers = new ListTag();
+                    for (UUID player : nativeClaims) {
+                        nativePlayers.add(StringTag.valueOf(player.toString()));
+                    }
+                    tag.put(TAG_NATIVE_CLAIMS, nativePlayers);
+                    return tag;
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                public static QuestProgress load(CompoundTag tag) {
+                    QuestProgress progress = new QuestProgress();
+                    ListTag players = tag.getList(TAG_PLAYERS, Tag.TAG_COMPOUND);
+                    for (int i = 0; i < players.size(); i++) {
+                        CompoundTag one = players.getCompound(i);
+                        UUID player;
+                        try {
+                            player = UUID.fromString(one.getString(TAG_PLAYER));
+                        } catch (IllegalArgumentException ex) {
+                            continue;
+                        }
+                        Set<String> tasks = new HashSet<>();
+                        ListTag list = one.getList(TAG_TASKS, Tag.TAG_STRING);
+                        for (int t = 0; t < list.size(); t++) {
+                            String id = list.getString(t);
+                            if (QuestCatalogue.byId(id) != null) {
+                                tasks.add(id);
+                            }
+                        }
+                        if (!tasks.isEmpty()) {
+                            progress.claimed.put(player, tasks);
+                        }
+                    }
+                    if (tag.contains(TAG_NATIVE_CLAIMS)) {
+                        if (!(tag.get(TAG_NATIVE_CLAIMS) instanceof ListTag nativePlayers)
+                                || !nativePlayers.isEmpty() && nativePlayers.getElementType() != Tag.TAG_STRING) {
+                            throw new IllegalArgumentException("Invalid native quest claim authority list in saved progress");
+                        }
+                        for (int i = 0; i < nativePlayers.size(); i++) {
+                            try {
+                                progress.nativeClaims.add(UUID.fromString(nativePlayers.getString(i)));
+                            } catch (IllegalArgumentException exception) {
+                                throw new IllegalArgumentException("Invalid native quest claim authority in saved progress", exception);
+                            }
+                        }
+                    }
+                    return progress;
                 }
                 """)
                 && questMethod(sources, "QuestBackendPlatform", """
@@ -1214,7 +1310,8 @@ public final class VerifySustainabilityRegistry {
             case "QuestLogic" -> Set.of("<init>#0", "consider#3", "byCode#1", "problems#1", "indexOf#2");
             case "QuestEvidence" -> Set.of("<init>#0", "met#3");
             case "QuestInventoryEvidence" -> Set.of("<init>#0", "count#2", "matches#2");
-            case "QuestProgress" -> Set.of("get#1", "claimed#1", "claim#2", "save#1", "load#1");
+            case "QuestProgress" -> Set.of("get#1", "claimed#1", "legacyClaims#1", "updateNativeCompleted#2",
+                    "usesNativeClaims#1", "useNativeClaims#1", "claim#2", "save#1", "load#1");
             case "QuestBackendPlatform", "QuestBackendPlatformImpl" -> Set.of("<init>#0", "open#1");
             case "HeraclesQuestNetwork" -> Set.of("<init>#0", "init#0", "claim#1", "send#2", "encode#2", "decode#1");
             case "HeraclesQuestIntegration" -> Set.of("<init>#0", "init#1", "started#1", "reloaded#1", "verify#0",
@@ -1226,7 +1323,8 @@ public final class VerifySustainabilityRegistry {
             case "QuestBookMenu" -> Set.of("player", "state");
             case "QuestCatalogue" -> Set.of("STARTER_SUPPLIES", "T0_COMPLETION", "TASKS");
             case "QuestBookAccessEvents" -> Set.of("WAITING_FOR_SPACE");
-            case "QuestProgress" -> Set.of("KEY", "TAG_PLAYERS", "TAG_PLAYER", "TAG_TASKS", "claimed");
+            case "QuestProgress" -> Set.of("KEY", "TAG_PLAYERS", "TAG_PLAYER", "TAG_TASKS", "TAG_NATIVE_CLAIMS",
+                    "claimed", "nativeClaims", "nativeCompleted");
             case "HeraclesQuestNetwork" -> Set.of("PROTOCOL");
             case "HeraclesQuestIntegration" -> Set.of("definitions", "encoded", "LAST_SENT", "available", "failure");
             case "GrindlessClaimTask" -> Set.of("id", "catalogueId", "TYPE");
@@ -1319,7 +1417,7 @@ public final class VerifySustainabilityRegistry {
                     case "QuestClaimService:Result" -> """
                             public enum Result {
                                 CLAIMED, ALREADY_CLAIMED, LOCKED, UNMET, BOOK_REQUIRED, UNKNOWN_TASK, INVALID_REWARD,
-                                INVENTORY_FULL
+                                INVENTORY_FULL, NATIVE_BACKEND
                             }
                             """;
                     case "QuestBookAccess:Result" ->
@@ -1369,7 +1467,10 @@ public final class VerifySustainabilityRegistry {
                     "private static final String TAG_PLAYERS = \"Players\";",
                     "private static final String TAG_PLAYER = \"Player\";",
                     "private static final String TAG_TASKS = \"Tasks\";",
-                    "private final Map<UUID, Set<String>> claimed = new HashMap<>();");
+                    "private static final String TAG_NATIVE_CLAIMS = \"NativeClaims\";",
+                    "private final Map<UUID, Set<String>> claimed = new HashMap<>();",
+                    "private final Set<UUID> nativeClaims = new HashSet<>();",
+                    "private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();");
             case "HeraclesQuestNetwork" -> List.of("private static final String PROTOCOL = \"1\";");
             case "HeraclesQuestIntegration" -> List.of("private static Map<String, Quest> definitions = Map.of();",
                     "private static Map<String, String> encoded = Map.of();",
@@ -1403,7 +1504,7 @@ public final class VerifySustainabilityRegistry {
 
     private static void questAccessCounterexamples(Path root) throws IOException {
         Map<String, ClassTree> sources = questSources(root, new TreeMap<>());
-        eq("the free starter, batch claim, book recovery and both real entrypoints are recognized", true,
+        eq("the free starter, batch claim, book recovery, native claim fences and both real entrypoints are recognized", true,
                 questBookAccess(sources));
         rejectQuest(root, sources, "the service cannot replace the physical book with permission",
                 "QuestClaimService", "return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "return true");
@@ -1428,6 +1529,16 @@ public final class VerifySustainabilityRegistry {
                 "QuestInventoryEvidence.count(player.getEnderChestInventory(), task)");
         rejectQuest(root, sources, "unknown tasks and missing player identities must be rejected",
                 "QuestClaimService", "if (task == null || player == null)", "if (task == null)");
+        rejectQuest(root, sources, "the service cannot remove the native claim authority fence",
+                "QuestClaimService", "        if (progress.usesNativeClaims(player)) {\n"
+                        + "            return Result.NATIVE_BACKEND;\n        }\n", "");
+        rejectQuest(root, sources, "the native claim service fence must inspect the actual player",
+                "QuestClaimService", "progress.usesNativeClaims(player)", "progress.usesNativeClaims(new UUID(0, 0))");
+        rejectQuest(root, sources, "a retired legacy claim cannot report successful reward delivery",
+                "QuestClaimService", "return Result.NATIVE_BACKEND;", "return Result.CLAIMED;");
+        rejectQuest(root, sources, "the native backend result must append without changing old result ordinals",
+                "QuestClaimService", "INVENTORY_FULL,\n        NATIVE_BACKEND",
+                "NATIVE_BACKEND,\n        INVENTORY_FULL");
         rejectQuest(root, sources, "current evidence cannot become an unconditional predicate",
                 "QuestClaimService", "evidence.test(task)", "true");
         rejectQuest(root, sources, "the requested task's prerequisites cannot be ignored",
@@ -1517,6 +1628,114 @@ public final class VerifySustainabilityRegistry {
                 "QuestClaimService", "if (claimed.contains(taskId))", "if (false)");
         rejectQuest(root, sources, "the persistent claim must reject an existing task",
                 "QuestProgress", "if (!tasks.add(task))", "if (false)");
+        rejectQuest(root, sources, "the gate view must retain historical paid claims",
+                "QuestProgress", "new HashSet<>(legacyClaims(player))", "new HashSet<>()");
+        rejectQuest(root, sources, "native completion cannot be omitted from compatibility gates",
+                "QuestProgress", "result.addAll(nativeCompleted.getOrDefault(player, Set.of()));", "");
+        rejectQuest(root, sources, "the gate view must observe the same player's native completion",
+                "QuestProgress", "nativeCompleted.getOrDefault(player, Set.of())",
+                "nativeCompleted.getOrDefault(new UUID(0, 0), Set.of())");
+        rejectQuest(root, sources, "the combined gate view must remain an immutable snapshot",
+                "QuestProgress", "return Set.copyOf(result);", "return result;");
+        rejectQuest(root, sources, "native completion cannot be exposed as a historical paid import receipt",
+                "QuestProgress", "return Set.copyOf(claimed.getOrDefault(player, Set.of()));",
+                "Set<String> paid = new HashSet<>(claimed.getOrDefault(player, Set.of())); "
+                        + "paid.addAll(nativeCompleted.getOrDefault(player, Set.of())); return Set.copyOf(paid);");
+        rejectQuest(root, sources, "callers cannot mutate the historical paid receipt set",
+                "QuestProgress", "return Set.copyOf(claimed.getOrDefault(player, Set.of()));",
+                "return claimed.getOrDefault(player, Set.of());");
+        rejectQuest(root, sources, "native completion observations require native claim authority",
+                "QuestProgress", "!usesNativeClaims(player) || ", "");
+        rejectQuest(root, sources, "native completion observations must reject every unknown task id",
+                "QuestProgress", "completed.stream().anyMatch(id -> QuestCatalogue.byId(id) == null)", "false");
+        rejectQuest(root, sources, "native completion observations cannot enter the paid receipt map",
+                "QuestProgress", "nativeCompleted.put(player, Set.copyOf(completed));",
+                "claimed.put(player, Set.copyOf(completed));");
+        rejectQuest(root, sources, "native completion observations must not alias the caller's set",
+                "QuestProgress", "nativeCompleted.put(player, Set.copyOf(completed));",
+                "nativeCompleted.put(player, completed);");
+        rejectQuest(root, sources, "native completion observations must replace rather than accumulate stale gates",
+                "QuestProgress", "nativeCompleted.put(player, Set.copyOf(completed));",
+                "Set<String> retained = new HashSet<>(nativeCompleted.getOrDefault(player, Set.of())); "
+                        + "retained.addAll(completed); nativeCompleted.put(player, Set.copyOf(retained));");
+        rejectQuest(root, sources, "native completion observations must update the requested player",
+                "QuestProgress", "nativeCompleted.put(player, Set.copyOf(completed));",
+                "nativeCompleted.put(new UUID(0, 0), Set.copyOf(completed));");
+        rejectQuest(root, sources, "native engine observations cannot dirty the legacy SavedData authority",
+                "QuestProgress", "nativeCompleted.put(player, Set.copyOf(completed));",
+                "nativeCompleted.put(player, Set.copyOf(completed)); setDirty();");
+        rejectQuest(root, sources, "native completion observations cannot leak between SavedData instances",
+                "QuestProgress", "private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();",
+                "private static final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();");
+        rejectQuest(root, sources, "native observations cannot replace persisted paid receipts",
+                "QuestProgress", "for (Map.Entry<UUID, Set<String>> entry : claimed.entrySet())",
+                "for (Map.Entry<UUID, Set<String>> entry : nativeCompleted.entrySet())");
+        rejectQuest(root, sources, "saving paid receipts cannot fold in the native gate view",
+                "QuestProgress", "for (String id : entry.getValue())", "for (String id : claimed(entry.getKey()))");
+        rejectQuest(root, sources, "native claim authority cannot leak between SavedData instances",
+                "QuestProgress", "private final Set<UUID> nativeClaims = new HashSet<>();",
+                "private static final Set<UUID> nativeClaims = new HashSet<>();");
+        rejectQuest(root, sources, "one player's native authority cannot retire every player's legacy mint",
+                "QuestProgress", "return nativeClaims.contains(player);", "return !nativeClaims.isEmpty();");
+        rejectQuest(root, sources, "native authority must reject a missing player identity",
+                "QuestProgress", "if (player == null)", "if (false)");
+        rejectQuest(root, sources, "native authority must mark the requested UUID, not a fabricated player",
+                "QuestProgress", "nativeClaims.add(player)", "nativeClaims.add(new UUID(0, 0))");
+        rejectQuest(root, sources, "the first native authority transition must dirty SavedData",
+                "QuestProgress", "if (nativeClaims.add(player)) {\n            setDirty();\n        }",
+                "nativeClaims.add(player);");
+        rejectQuest(root, sources, "retiring legacy rewards cannot erase retained import receipts",
+                "QuestProgress", "if (nativeClaims.add(player)) {",
+                "if (nativeClaims.add(player)) { claimed.remove(player);");
+        rejectQuest(root, sources, "direct ledger claims cannot bypass the native authority fence",
+                "QuestProgress", "player == null || usesNativeClaims(player) || QuestCatalogue.byId(task) == null",
+                "player == null || QuestCatalogue.byId(task) == null");
+        rejectQuest(root, sources, "the native marker key cannot overwrite the retained legacy receipts",
+                "QuestProgress", "TAG_NATIVE_CLAIMS = \"NativeClaims\"", "TAG_NATIVE_CLAIMS = \"Players\"");
+        rejectQuest(root, sources, "saving native authority must preserve the old player receipts",
+                "QuestProgress", "tag.put(TAG_PLAYERS, players);", "");
+        rejectQuest(root, sources, "native markers must save independently of legacy receipt ownership",
+                "QuestProgress", "for (UUID player : nativeClaims)", "for (UUID player : claimed.keySet())");
+        rejectQuest(root, sources, "a saved native marker cannot disappear and reopen the legacy mint",
+                "QuestProgress", "tag.put(TAG_NATIVE_CLAIMS, nativePlayers);", "");
+        rejectQuest(root, sources, "loading must retain legacy receipts under their original player UUID",
+                "QuestProgress", "progress.claimed.put(player, tasks);",
+                "progress.claimed.put(new UUID(0, 0), tasks);");
+        rejectQuest(root, sources, "loading cannot validate a native UUID without restoring its authority",
+                "QuestProgress", "progress.nativeClaims.add(UUID.fromString(nativePlayers.getString(i)));",
+                "UUID.fromString(nativePlayers.getString(i));");
+        rejectQuest(root, sources, "native-first players need their fence even without legacy receipts",
+                "QuestProgress", "if (tag.contains(TAG_NATIVE_CLAIMS))",
+                "if (!progress.claimed.isEmpty() && tag.contains(TAG_NATIVE_CLAIMS))");
+        rejectQuest(root, sources, "legacy saves without a native marker must remain loadable",
+                "QuestProgress", "if (tag.contains(TAG_NATIVE_CLAIMS))", "if (true)");
+        rejectQuest(root, sources, "native authority cannot use the lenient NBT list reader on corrupt markers",
+                "QuestProgress", "if (!(tag.get(TAG_NATIVE_CLAIMS) instanceof ListTag nativePlayers)\n"
+                        + "                    || !nativePlayers.isEmpty() && nativePlayers.getElementType() != Tag.TAG_STRING) {\n"
+                        + "                throw new IllegalArgumentException(\"Invalid native quest claim authority list in saved progress\");\n"
+                        + "            }",
+                "ListTag nativePlayers = tag.getList(TAG_NATIVE_CLAIMS, Tag.TAG_STRING);");
+        rejectQuest(root, sources, "a present non-list native marker cannot be silently treated as absent",
+                "QuestProgress", "tag.contains(TAG_NATIVE_CLAIMS)", "tag.contains(TAG_NATIVE_CLAIMS, Tag.TAG_LIST)");
+        rejectQuest(root, sources, "a nonempty native marker list must contain string elements",
+                "QuestProgress", "nativePlayers.getElementType() != Tag.TAG_STRING", "false");
+        rejectQuest(root, sources, "an empty native marker list must not require a string element type",
+                "QuestProgress", "!nativePlayers.isEmpty() && ", "");
+        rejectQuest(root, sources, "a corrupt native marker list cannot return an unfenced legacy ledger",
+                "QuestProgress",
+                "throw new IllegalArgumentException(\"Invalid native quest claim authority list in saved progress\");",
+                "return progress;");
+        rejectQuest(root, sources, "a corrupt native UUID cannot be skipped and reopen the legacy mint",
+                "QuestProgress",
+                "throw new IllegalArgumentException(\"Invalid native quest claim authority in saved progress\", exception);",
+                "continue;");
+        for (String type : List.of("CompoundTag", "ListTag", "StringTag", "Tag")) {
+            rejectQuest(root, sources, "quest persistence must retain the vanilla NBT binding: " + type,
+                    "QuestProgress", "import net.minecraft.nbt." + type + ";", "import fixture." + type + ";");
+        }
+        rejectQuest(root, sources, "native marker corruption must throw the real Java rejection type",
+                "QuestProgress", "import java.util.HashMap;",
+                "import fixture.IllegalArgumentException; import java.util.HashMap;");
         rejectQuest(root, sources, "literal whitespace cannot silently switch the persistent ledger key",
                 "QuestProgress", "\"grindless_quest_progress\"", "\"grindless_quest_ progress\"");
         rejectQuest(root, sources, "a consuming service cannot certify a reusable book",
@@ -2095,6 +2314,10 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("ResourceLocation", "net.minecraft.resources.ResourceLocation"),
                 Map.entry("Container", "net.minecraft.world.Container"),
                 Map.entry("SavedData", "net.minecraft.world.level.saveddata.SavedData"),
+                Map.entry("CompoundTag", "net.minecraft.nbt.CompoundTag"),
+                Map.entry("ListTag", "net.minecraft.nbt.ListTag"),
+                Map.entry("StringTag", "net.minecraft.nbt.StringTag"),
+                Map.entry("Tag", "net.minecraft.nbt.Tag"),
                 Map.entry("NumericTag", "net.minecraft.nbt.NumericTag"),
                 Map.entry("MenuRegistry", "dev.architectury.registry.menu.MenuRegistry"),
                 Map.entry("ExpectPlatform", "dev.architectury.injectables.annotations.ExpectPlatform"),
@@ -2126,6 +2349,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("Predicate", "java.util.function.Predicate"),
                 Map.entry("Runnable", "java.lang.Runnable"),
                 Map.entry("String", "java.lang.String"),
+                Map.entry("IllegalArgumentException", "java.lang.IllegalArgumentException"),
                 Map.entry("IllegalStateException", "java.lang.IllegalStateException"),
                 Map.entry("AssertionError", "java.lang.AssertionError")));
         QUEST_SOURCES.forEach((type, path) -> {
@@ -2171,7 +2395,7 @@ public final class VerifySustainabilityRegistry {
             case "QuestInventoryEvidence" -> Set.of("QuestCatalogue", "Container", "ItemStack",
                     "ControlMatrixItem", "BuiltInRegistries");
             case "QuestProgress" -> Set.of("ServerPlayer", "SavedData", "Map", "HashMap", "Set", "HashSet",
-                    "UUID", "QuestCatalogue");
+                    "UUID", "QuestCatalogue", "CompoundTag", "ListTag", "StringTag", "Tag", "IllegalArgumentException");
             case "QuestBackendPlatform" -> Set.of("ServerPlayer", "ExpectPlatform", "AssertionError");
             case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "HeraclesQuestIntegration");
             case "HeraclesQuestNetwork" -> Set.of("SimpleChannel", "NetworkRegistry", "NetworkDirection", "ServerPlayer",
