@@ -18,7 +18,7 @@ public final class GrindlessForgeClient {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         GrindlessClient.init();
-        if (ModList.get().isLoaded("heracles")) {
+        if (!ModList.get().isLoaded("ftbquests") && ModList.get().isLoaded("heracles")) {
             event.enqueueWork(HeraclesQuestClient::init);
         }
     }

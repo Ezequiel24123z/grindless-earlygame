@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.forge.quest;
 
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestProjection;
 import io.github.ezequiel24123z.grindless.quest.QuestTeaching;
@@ -131,22 +132,29 @@ public final class FtbQuestDefinitions {
         CompoundTag evidence = new CompoundTag();
         evidence.putString("id", unique(ids, taskId(task.id())));
         evidence.putString("type", switch (task.evidence()) {
-            case ITEM -> "ftbquests:item";
-            case MATRIX -> "grindless:matrix";
+            case ITEM, MATRIX -> "ftbquests:item";
             case FREE -> "ftbquests:checkmark";
             case DIMENSION -> "ftbquests:dimension";
         });
         if (task.evidence() == QuestCatalogue.Evidence.ITEM || task.evidence() == QuestCatalogue.Evidence.MATRIX) {
-            evidence.putString("item", task.subject());
+            if (task.evidence() == QuestCatalogue.Evidence.MATRIX) {
+                CompoundTag item = new CompoundTag();
+                item.putString("id", task.subject());
+                item.putByte("Count", (byte) 1);
+                CompoundTag physical = new CompoundTag();
+                physical.putInt(ControlMatrixNbt.RATING, task.matrixRating().ordinal());
+                physical.putString(FtbMatrixFilter.BINDING, task.id());
+                item.put("tag", physical);
+                evidence.put("item", item);
+            } else {
+                evidence.putString("item", task.subject());
+            }
             evidence.putLong("count", task.count());
             evidence.putBoolean("consume_items", false);
             evidence.putBoolean("only_from_crafting", false);
             evidence.putBoolean("match_nbt", false);
         } else if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
             evidence.putString("dimension", task.subject());
-        }
-        if (task.evidence() == QuestCatalogue.Evidence.MATRIX) {
-            evidence.putString("grindless_task", task.id());
         }
         tasks.add(evidence);
         quest.put("tasks", tasks);

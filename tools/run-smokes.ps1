@@ -235,7 +235,9 @@ foreach ($item in $selected) {
 
     $originalExpectTimeout = $env:SMOKE_EXPECT_TIMEOUT
     $originalOptionalDatapack = $env:SMOKE_OPTIONAL_DATAPACK
+    $originalQuestBackend = $env:SMOKE_QUEST_BACKEND
     try {
+        $env:SMOKE_QUEST_BACKEND = if ($item.Name -ceq 'native-quests') { 'ftb' } else { $null }
         $env:SMOKE_OPTIONAL_DATAPACK = if (Test-Path -LiteralPath $optionalPack) { $optionalPack } else { $null }
         if (-not $originalExpectTimeout) { $env:SMOKE_EXPECT_TIMEOUT = $item.ExpectTimeout }
         & powershell -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
@@ -243,6 +245,7 @@ foreach ($item in $selected) {
     } finally {
         $env:SMOKE_EXPECT_TIMEOUT = $originalExpectTimeout
         $env:SMOKE_OPTIONAL_DATAPACK = $originalOptionalDatapack
+        $env:SMOKE_QUEST_BACKEND = $originalQuestBackend
     }
     $item.Seconds = ((Get-Date) - $scenarioStart).TotalSeconds
 

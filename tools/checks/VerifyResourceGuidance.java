@@ -686,11 +686,18 @@ public final class VerifyResourceGuidance {
         String teaching = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestTeachingClient.java"))));
         String legacy = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestBookScreen.java"))));
         String heracles = Files.readString(root.resolve(FORGE.resolve(Path.of("quest", "HeraclesQuestClient.java"))));
+        String ftb = Files.readString(root.resolve(FORGE.resolve(Path.of("quest", "FtbQuestDefinitions.java"))));
         equal("quest help uses live Atlas quantities and lossless native pagination", true,
                 teaching.contains("AtlasLogic.line(entry)") && legacy.contains("QuestTeaching.paginate(")
                         && teaching.contains("ResourceGuidanceClient.playerContext("));
-        equal("both renderers consume the same lesson projection", true,
+        equal("optional legacy renderers consume the same lesson projection", true,
                 legacy.contains("QuestTeachingClient.content(") && heracles.contains("QuestTeachingClient.content("));
+        equal("the official FTB data uses concise translated notes and native item tasks", true,
+                ftb.contains("QuestTeaching.bodyKey(task)") && ftb.contains("\"ftbquests:item\"")
+                        && ftb.contains("\"ftbquests:checkmark\""));
+        equal("FTB does not embed the retired custom guide, recipe panels or widgets", false,
+                ftb.contains("QuestTeachingClient") || ftb.contains("AtlasLogic.line(")
+                        || ftb.contains("ResourceGuidanceClient") || ftb.contains("DisplayWidget"));
         equal("quest teaching keeps real output roles and the shared declaration formatter", true,
                 teaching.contains("ResourceGuidanceContext.operands(entry)")
                         && teaching.contains("ResourceGuidanceContext.Role.OUTPUT")
@@ -738,14 +745,16 @@ public final class VerifyResourceGuidance {
         equal("the advertised starter kit has actual rewards", false, starter.rewards().isEmpty());
         equal("starter rewards remain basic supplies, not machines, cores, insulators or Matrices", true,
                 starter.rewards().stream().allMatch(reward -> basicSupplies.contains(reward.itemId())));
-        equal("the starter note offers a free explicit claim without repeating the native title", true,
-                bootstrap.contains("claim your free, one-time kit"));
-        equal("the starter note retains the full-batch recovery boundary", true,
+        equal("the starter note offers free native framework rewards", true,
+                bootstrap.contains("free rewards in FTB Quests"));
+        equal("the starter note describes eleven native rewards without promising legacy atomic delivery", true,
                 bootstrap.contains("all eleven stacks")
                         && starter.rewards().size() == 11
-                        && bootstrap.contains("nothing is claimed or dropped")
+                        && bootstrap.contains("rewards are claimed separately")
+                        && bootstrap.contains("may drop on the ground")
+                        && !bootstrap.contains("nothing is claimed or dropped")
                         && lang.get("gui.grindless.quest.starter_policy").getAsString()
-                        .contains("You can claim it once"));
+                        .contains("FTB Quests"));
         equal("the finite kit leads to a lasting workshop supply", true,
                 lang.get("gui.grindless.quest.lesson.superflat").getAsString().contains("lasting supply")
                         && lang.has("gui.grindless.quest.lesson.manual_work")
@@ -780,7 +789,7 @@ public final class VerifyResourceGuidance {
                 lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Craft five Relay Matrices by hand")
                         && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Calibrated Data Core")
                         && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("five valid F1 Matrices")
-                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("claim this quest")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("complete this milestone")
                         && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("does not consume them")
                         && lang.get("gui.grindless.quest.lesson.relay").getAsString()
                         .contains("Assembly Bench cannot make this batch"));
