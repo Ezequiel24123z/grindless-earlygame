@@ -20,6 +20,8 @@
     "quest_owner": "ac4962d5-deb2-4d89-bc7b-f4ecf8149a4b",
     "documentation_owner": "current_coordinator",
     "documentation_worker_limitation": "0ad28462_read_only_rg_glob_no_editor_view_shell_or_Git_no_changes_or_SHA_assignment_withdrawn_not_relaunched",
+    "documentation_outputs": ["docs/architecture/reusable-systems.md", "docs/tiers/t1-development-map.md"],
+    "documentation_status": "coordinator_written_source_based_link_integrity_only_not_executable_proof",
     "shared_contract": "T1Progression_Requirement_Line_id_routeIds_requires_consumed_by_runtime_teaching_and_export",
     "mandatory_lines": ["power", "milling", "reduction", "glass", "forming", "assembly", "relay_f2"],
     "optional_lines": ["extraction", "logistics", "storage", "kiln", "factory_space"],
