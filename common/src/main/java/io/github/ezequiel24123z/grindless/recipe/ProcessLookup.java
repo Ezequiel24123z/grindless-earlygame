@@ -323,6 +323,9 @@ public final class ProcessLookup {
         if (recipe.namesTemperature()) {
             builder.temperature(recipe.temperatureC());
         }
+        if (recipe.namesPressure()) {
+            builder.pressure(recipe.pressureMPa(), recipe.pressureHalfWidthMPa());
+        }
         if (recipe.namesAtmosphere()) {
             Atmosphere atmosphere = Atmosphere.valueOf(recipe.atmosphere());
             builder.atmosphere(atmosphere);

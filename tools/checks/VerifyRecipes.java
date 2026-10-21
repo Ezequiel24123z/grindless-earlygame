@@ -47,6 +47,7 @@ public final class VerifyRecipes {
 
     public static void main(String[] args) throws IOException {
         graph();
+        pressure();
         logic();
         crafts();
 
@@ -64,6 +65,8 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
+        yes("no existing production recipe acquires a pressure requirement",
+                recipes.stream().noneMatch(ProcessRecipe::namesPressure));
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
                 201, recipes.size());
         c3Routes(recipes);
@@ -889,7 +892,7 @@ public final class VerifyRecipes {
             eq(id + " uses exactly two grouped item inputs", 2, automatic.itemInputs().size());
             yes(id + " has no fluid input, output or hidden material", automatic.fluidInputs().isEmpty()
                     && automatic.fluidOutputs().isEmpty());
-            no(id + " adds no physical condition or permission", automatic.namesTemperature()
+            no(id + " adds no physical condition or permission", automatic.namesTemperature() || automatic.namesPressure()
                     || automatic.namesAtmosphere() || automatic.namesAgitation() || automatic.milestone() != null);
             yes(id + " requires no charged or rated component",
                     automatic.inputs().stream().allMatch(input -> input.matrixRating() == 0));
@@ -1230,6 +1233,57 @@ public final class VerifyRecipes {
 
     private static ProcessRecipe recipe(List<ProcessRecipe> recipes, String id) {
         return recipes.stream().filter(recipe -> recipe.id().equals(id)).findFirst().orElseThrow();
+    }
+
+    private static void pressure() {
+        List<IngredientSpec> inputs = List.of(IngredientSpec.item("fixture:feed", 2));
+        List<OutputSpec> outputs = List.of(OutputSpec.item("fixture:product", 3));
+        List<IngredientSpec> catalysts = List.of(IngredientSpec.item("fixture:die", 1));
+        for (ProcessRecipe legacy : List.of(
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", 80, 4),
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", 80, 4, catalysts),
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", 80, 4,
+                        catalysts, "fixture_only"),
+                new ProcessRecipe("fixture/legacy", MachineFamily.PRESS, inputs, outputs, 20, "AIR", "STATIC",
+                        80, 4, catalysts, "fixture_only"))) {
+            no("every old constructor leaves pressure unnamed", legacy.namesPressure());
+            yes("unnamed pressure has no implicit ambient optimum or band",
+                    Double.isNaN(legacy.pressureMPa()) && Double.isNaN(legacy.pressureHalfWidthMPa()));
+        }
+        ProcessRecipe explicit = new ProcessRecipe("fixture/pressure", MachineFamily.PRESS, inputs, outputs,
+                20, 1.0, 0.125, "AIR", "STATIC", 80, 4, catalysts, "fixture_only");
+        yes("a physical pressure is named", explicit.namesPressure());
+        eq("the optimum uses absolute MPa", 1.0, explicit.pressureMPa());
+        eq("the explicit optimal half-width also uses MPa", 0.125, explicit.pressureHalfWidthMPa());
+        yes("adding pressure changes no material quantity", explicit.inputs().equals(inputs)
+                && explicit.outputs().equals(outputs) && explicit.catalysts().equals(catalysts));
+        ProcessRecipe vacuum = pressure(0.0, 0.001);
+        yes("zero absolute pressure is a requirement, never absence", vacuum.namesPressure());
+        eq("zero has a real explicit band", 0.001, vacuum.pressureHalfWidthMPa());
+        for (double optimum : new double[] {-0.001, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY}) {
+            rejects("invalid absolute pressure " + optimum, () -> pressure(optimum, 0.001));
+        }
+        for (double width : new double[] {0, -0.001, Double.NaN, Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY}) {
+            rejects("invalid pressure half-width " + width, () -> pressure(1, width));
+        }
+        rejects("a pressure band cannot be orphaned", () -> pressure(Double.NaN, 0.001));
+        rejects("overflowed pressure bounds are rejected", () -> pressure(Double.MAX_VALUE, Double.MAX_VALUE));
+        no("an explicitly absent pressure pair is still unnamed", pressure(Double.NaN, Double.NaN).namesPressure());
+    }
+
+    private static ProcessRecipe pressure(double optimum, double halfWidth) {
+        return new ProcessRecipe("fixture/pressure", MachineFamily.PULVERIZER, List.of(), List.of(),
+                Double.NaN, optimum, halfWidth, null, null, 80, 4, List.of(), null);
+    }
+
+    private static void rejects(String what, Runnable operation) {
+        try {
+            operation.run();
+            fail(what + ": expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            yes(what, true);
+        }
     }
 
     private static boolean namesMaterialItem(ProcessRecipe recipe) {

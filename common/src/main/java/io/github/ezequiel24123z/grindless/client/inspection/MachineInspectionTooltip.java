@@ -124,10 +124,13 @@ public final class MachineInspectionTooltip {
                         "inspection.grindless.remaining", seconds(progress.nominalSecondsRemaining()))));
                 process.conditions().ifPresent(conditions -> {
                     lines.add(Component.translatable("inspection.grindless.conditions",
-                            decimal(conditions.temperatureC()), decimal(conditions.pressureMPa()),
+                            decimal(conditions.temperatureC()), Double.toString(conditions.pressureMPa()),
                             conditions.atmosphere(), conditions.agitation()));
                     conditions.requiredTemperatureC().ifPresent(temperature -> lines.add(
                             Component.translatable("inspection.grindless.required_temperature", decimal(temperature))));
+                    conditions.requiredPressureMPa().ifPresent(pressure -> lines.add(
+                            Component.translatable("inspection.grindless.required_pressure", Double.toString(pressure),
+                                    Double.toString(conditions.requiredPressureHalfWidthMPa().orElseThrow()))));
                     conditions.requiredAtmosphere().ifPresent(atmosphere -> lines.add(
                             Component.translatable("inspection.grindless.required_atmosphere", atmosphere)));
                     conditions.requiredAgitation().ifPresent(agitation -> lines.add(

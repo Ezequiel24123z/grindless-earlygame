@@ -63,6 +63,7 @@ public final class VerifyMachineInspection {
         immutableData();
         progress();
         codec();
+        pressure();
         malformed();
         targetIdentity();
         packets();
@@ -190,7 +191,8 @@ public final class VerifyMachineInspection {
 
     private static void malformed() {
         mutation("a missing schema is rejected", tag -> tag.remove("schema"));
-        mutation("an unknown schema is rejected", tag -> tag.putInt("schema", 2));
+        mutation("an unknown schema is rejected", tag -> tag.putInt("schema", MachineInspectionCodec.VERSION + 1));
+        mutation("an older unsupported schema is rejected", tag -> tag.putInt("schema", 0));
         mutation("a schema with the wrong numeric type is rejected", tag -> tag.putLong("schema", 1));
         mutation("a missing target is rejected", tag -> tag.remove("target"));
         mutation("target coordinates cannot be defaulted to zero", tag -> tag.getCompound("target").remove("x"));
@@ -224,6 +226,22 @@ public final class VerifyMachineInspection {
                 .putString("conditions", "wrong"));
         mutation("partial held conditions cannot become ambient defaults", tag -> tag.getCompound("process")
                 .getCompound("conditions").remove("temperature"));
+        mutation("a required pressure cannot omit its band", tag -> tag.getCompound("process")
+                .getCompound("conditions").putDouble("required_pressure", 0.0));
+        mutation("a pressure band cannot omit its required optimum", tag -> tag.getCompound("process")
+                .getCompound("conditions").putDouble("required_pressure_half_width", 0.001));
+        mutation("a pressure requirement has an exact double wire type", tag -> {
+            pressureFields(tag, 0.0, 0.001);
+            tag.getCompound("process").getCompound("conditions").putInt("required_pressure", 0);
+        });
+        mutation("a pressure half-width has an exact double wire type", tag -> {
+            pressureFields(tag, 0.0, 0.001);
+            tag.getCompound("process").getCompound("conditions").putString("required_pressure_half_width", "0.001");
+        });
+        mutation("an inspection cannot use v1 to hide or strip a new pressure requirement", tag -> {
+            pressureFields(tag, 0.0, 0.001);
+            tag.putInt("schema", 1);
+        });
         mutation("a wrong-type optional process is rejected", tag -> tag.putString("process", "wrong"));
         mutation("a wrong-type optional energy is rejected", tag -> tag.putInt("energy", 0));
         mutation("negative stored energy is rejected", tag -> tag.getCompound("energy").putLong("stored", -1));
@@ -266,6 +284,103 @@ public final class VerifyMachineInspection {
                 "minecraft:the_nether", new Position(1, 64, 2), "grindless:clay_mixer"));
         check("a replaced block cannot inherit an old reply", !snapshot.describes(
                 "minecraft:overworld", new Position(1, 64, 2), "grindless:quern"));
+    }
+
+    private static void pressure() throws Exception {
+        Conditions legacy = new Conditions(20, 0.1, "AIR", "STATIC",
+                Optional.empty(), Optional.empty(), Optional.empty());
+        check("the old conditions constructor invents no ambient requirement",
+                legacy.requiredPressureMPa().isEmpty() && legacy.requiredPressureHalfWidthMPa().isEmpty());
+        CompoundTag old = MachineInspectionCodec.encode(fullSnapshot());
+        check("new writers explicitly identify schema v2", old.getInt("schema") == 2);
+        check("an unnamed requirement has no pressure wire fields",
+                !old.getCompound("process").getCompound("conditions").contains("required_pressure")
+                        && !old.getCompound("process").getCompound("conditions").contains("required_pressure_half_width"));
+        old.putInt("schema", 1);
+        check("strict legacy payloads remain readable without inventing pressure",
+                MachineInspectionCodec.decode(old).equals(fullSnapshot()));
+        check("legacy observations are written back only as the current version",
+                MachineInspectionCodec.encode(MachineInspectionCodec.decode(old)).getInt("schema")
+                        == MachineInspectionCodec.VERSION);
+        Conditions absent = MachineInspectionCodec.decode(old).process().orElseThrow().conditions().orElseThrow();
+        check("a legacy payload's held pressure never becomes a required pressure",
+                absent.pressureMPa() == 0.1 && absent.requiredPressureMPa().isEmpty()
+                        && absent.requiredPressureHalfWidthMPa().isEmpty());
+        CompoundTag oldAbsent = MachineInspectionCodec.encode(
+                snapshot(List.of(), Optional.empty(), List.of(), Optional.empty()));
+        oldAbsent.putInt("schema", 1);
+        check("legacy absence of process authority remains absent",
+                MachineInspectionCodec.decode(oldAbsent).process().isEmpty());
+        for (double optimum : new double[] {0.0, 1.25, 0.000001}) {
+            MachineInspectionSnapshot named = pressureSnapshot(optimum, 0.0000001);
+            CompoundTag encoded = MachineInspectionCodec.encode(named);
+            check("a named pressure and explicit band round-trip " + optimum,
+                    MachineInspectionCodec.decode(encoded).equals(named));
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            NbtIo.write(encoded, new DataOutputStream(bytes));
+            CompoundTag binary = NbtIo.read(new DataInputStream(new ByteArrayInputStream(bytes.toByteArray())));
+            check("binary NBT retains exact pressure units and precision " + optimum,
+                    MachineInspectionCodec.decode(binary).equals(named));
+            Conditions conditions = named.process().orElseThrow().conditions().orElseThrow();
+            check("held and required pressure remain distinct " + optimum, conditions.pressureMPa() == 0.1
+                    && conditions.requiredPressureMPa().orElseThrow() == optimum
+                    && conditions.requiredPressureHalfWidthMPa().orElseThrow() == 0.0000001);
+        }
+        for (double optimum : new double[] {-1, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY}) {
+            rejects("invalid inspected pressure optimum " + optimum, () -> pressureSnapshot(optimum, 0.001));
+        }
+        for (double width : new double[] {0, -1, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY}) {
+            rejects("invalid inspected pressure width " + width, () -> pressureSnapshot(0.0, width));
+        }
+        rejects("overflowed inspected pressure bands are rejected",
+                () -> pressureSnapshot(Double.MAX_VALUE, Double.MAX_VALUE));
+        rejects("partial pressure requirements cannot enter a snapshot",
+                () -> new Conditions(20, 0.1, "AIR", "STATIC", Optional.empty(),
+                        Optional.of(0.0), Optional.empty(), Optional.empty(), Optional.empty()));
+        rejects("orphaned pressure bands cannot enter a snapshot",
+                () -> new Conditions(20, 0.1, "AIR", "STATIC", Optional.empty(),
+                        Optional.empty(), Optional.of(0.001), Optional.empty(), Optional.empty()));
+
+        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            Reply reply = new Reply(1, ReplyKind.AVAILABLE, Optional.of(pressureSnapshot(0.0, 0.001)));
+            MachineInspectionProtocol.encodeReply(reply, buffer);
+            check("pressure survives the existing bounded reply envelope",
+                    MachineInspectionProtocol.decodeReply(buffer).equals(reply));
+            buffer.clear();
+            buffer.writeVarInt(2);
+            buffer.writeByte(0);
+            buffer.writeNbt(old);
+            check("the existing reply protocol accepts strict legacy pressure absence",
+                    MachineInspectionProtocol.decodeReply(buffer).snapshot().orElseThrow().equals(fullSnapshot()));
+            for (int version : new int[] {1, MachineInspectionCodec.VERSION + 1}) {
+                buffer.clear();
+                buffer.writeVarInt(3);
+                buffer.writeByte(0);
+                CompoundTag incompatible = MachineInspectionCodec.encode(pressureSnapshot(0.0, 0.001));
+                incompatible.putInt("schema", version);
+                buffer.writeNbt(incompatible);
+                Reply rejected = MachineInspectionProtocol.decodeReply(buffer);
+                check("incompatible pressure payloads are explicitly MALFORMED, never success " + version,
+                        rejected.kind() == ReplyKind.MALFORMED && rejected.snapshot().isEmpty());
+            }
+        } finally {
+            buffer.release();
+        }
+    }
+
+    private static MachineInspectionSnapshot pressureSnapshot(double optimum, double halfWidth) {
+        Process process = new Process("synthetic/pressure", List.of(), List.of(), List.of(), 40, 8,
+                Optional.of(new Progress(0.5, 40)),
+                Optional.of(new Conditions(20, 0.1, "AIR", "STATIC", Optional.empty(),
+                        Optional.of(optimum), Optional.of(halfWidth), Optional.empty(), Optional.empty())));
+        return snapshot(List.of(), Optional.of(process), List.of(), Optional.empty());
+    }
+
+    private static void pressureFields(CompoundTag tag, double optimum, double halfWidth) {
+        CompoundTag conditions = tag.getCompound("process").getCompound("conditions");
+        conditions.putDouble("required_pressure", optimum);
+        conditions.putDouble("required_pressure_half_width", halfWidth);
     }
 
     private static void packets() {
@@ -486,6 +601,15 @@ public final class VerifyMachineInspection {
         check("native recipe getters, not menu progress proxies, supply process and calibration work",
                 query.contains("machine.inspectionProgress()") && query.contains("terminal.inspectionProgress()")
                         && query.contains("extractor.inspectionProgress()"));
+        check("inspection names pressure only when the selected recipe names it",
+                query.contains("recipe.namesPressure() ? Optional.of(recipe.pressureMPa()) : Optional.empty()")
+                        && query.contains("recipe.namesPressure() ? Optional.of(recipe.pressureHalfWidthMPa())"
+                        + " : Optional.empty()"));
+        check("the tooltip preserves precise required and held pressure rather than rounding to ambient or zero",
+                tooltip.contains("conditions.requiredPressureMPa().ifPresent(pressure")
+                        && tooltip.contains("\"inspection.grindless.required_pressure\", Double.toString(pressure)")
+                        && tooltip.contains("Double.toString(conditions.requiredPressureHalfWidthMPa().orElseThrow())")
+                        && tooltip.contains("Double.toString(conditions.pressureMPa())"));
         check("one fresh formation observation is reused for header and details",
                 query.contains("Optional<Structure> formation = structure(entity)")
                         && query.contains("display(entity, reported, formation)")
@@ -571,6 +695,9 @@ public final class VerifyMachineInspection {
         }
         var lang = JsonParser.parseString(Files.readString(Path.of(
                 "common/src/main/resources/assets/grindless/lang/en_us.json"))).getAsJsonObject();
+        check("inspection labels absolute MPa and the optimal rather than hard-cutoff band",
+                lang.get("inspection.grindless.required_pressure").getAsString()
+                        .equals("Process pressure: %s MPa absolute (optimal +/- %s MPa)"));
         for (Enum<?> value : State.values()) {
             check("state " + value + " has localized text", lang.has(
                     "inspection.grindless.state." + value.name().toLowerCase(java.util.Locale.ROOT)));
@@ -614,7 +741,8 @@ public final class VerifyMachineInspection {
         Process process = new Process("a".repeat(MachineInspectionSnapshot.MAX_TEXT), resources, outputs, resources,
                 Integer.MAX_VALUE, Long.MAX_VALUE, Optional.of(new Progress(Integer.MAX_VALUE, Integer.MAX_VALUE)),
                 Optional.of(new Conditions(Double.MAX_VALUE, Double.MAX_VALUE, "a".repeat(160), "a".repeat(160),
-                        Optional.of(Double.MAX_VALUE), Optional.of("a".repeat(160)), Optional.of("a".repeat(160)))));
+                        Optional.of(Double.MAX_VALUE), Optional.of(Double.MAX_VALUE / 4),
+                        Optional.of(Double.MAX_VALUE / 4), Optional.of("a".repeat(160)), Optional.of("a".repeat(160)))));
         return new MachineInspectionSnapshot(new Target(id, new Position(1, 64, 2), Long.MAX_VALUE), id,
                 State.INVALID_STRUCTURE, "a".repeat(MachineInspectionSnapshot.MAX_TEXT), true, Optional.of(process),
                 items, Optional.of(new Energy(Long.MAX_VALUE, Long.MAX_VALUE)),

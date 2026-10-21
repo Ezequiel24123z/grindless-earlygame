@@ -208,6 +208,10 @@ public final class AuthorityAdapters {
         if (recipe.namesTemperature()) {
             conditions.put("temperature_c", Double.toString(recipe.temperatureC()));
         }
+        if (recipe.namesPressure()) {
+            conditions.put("pressure_mpa", Double.toString(recipe.pressureMPa()));
+            conditions.put("pressure_optimal_half_width_mpa", Double.toString(recipe.pressureHalfWidthMPa()));
+        }
         if (recipe.namesAtmosphere()) {
             conditions.put("atmosphere", recipe.atmosphere());
         }

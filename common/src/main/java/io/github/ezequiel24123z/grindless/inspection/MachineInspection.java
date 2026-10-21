@@ -176,6 +176,8 @@ public final class MachineInspection {
                     Optional.of(new Conditions(machine.conditions().temperature(), machine.conditions().pressure(),
                             machine.conditions().atmosphere().name(), machine.conditions().agitation().name(),
                             recipe.namesTemperature() ? Optional.of(recipe.temperatureC()) : Optional.empty(),
+                            recipe.namesPressure() ? Optional.of(recipe.pressureMPa()) : Optional.empty(),
+                            recipe.namesPressure() ? Optional.of(recipe.pressureHalfWidthMPa()) : Optional.empty(),
                             recipe.namesAtmosphere() ? Optional.of(recipe.atmosphere()) : Optional.empty(),
                             recipe.namesAgitation() ? Optional.of(recipe.agitation()) : Optional.empty()))));
         }

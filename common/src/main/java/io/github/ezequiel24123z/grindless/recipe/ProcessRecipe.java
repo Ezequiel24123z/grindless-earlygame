@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import io.github.ezequiel24123z.grindless.process.ConditionBand;
+
 import java.util.List;
 
 /**
@@ -15,6 +17,9 @@ import java.util.List;
  * @param inputs         item and (later) fluid inputs; materials are tags
  * @param outputs        item outputs plus vented fluids
  * @param temperatureC   required temperature, or {@code NaN} when unnamed
+ * @param pressureMPa    required absolute pressure in MPa, or {@code NaN} when unnamed
+ * @param pressureHalfWidthMPa optimal pressure half-width in MPa, also {@code NaN} when unnamed;
+ *                            explicit so a zero-pressure optimum never needs a relative band
  * @param atmosphere     required atmosphere name, or {@code null} when unnamed
  * @param agitation      required agitation name, or {@code null} when unnamed
  * @param durationTicks  cycle length at full power and optimal conditions
@@ -29,12 +34,22 @@ public record ProcessRecipe(
         List<IngredientSpec> inputs,
         List<OutputSpec> outputs,
         double temperatureC,
+        double pressureMPa,
+        double pressureHalfWidthMPa,
         String atmosphere,
         String agitation,
         int durationTicks,
         long fuPerTick,
         List<IngredientSpec> catalysts,
         String milestone) {
+
+    public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
+                         List<OutputSpec> outputs, double temperatureC, String atmosphere,
+                         String agitation, int durationTicks, long fuPerTick,
+                         List<IngredientSpec> catalysts, String milestone) {
+        this(id, family, inputs, outputs, temperatureC, Double.NaN, Double.NaN, atmosphere,
+                agitation, durationTicks, fuPerTick, catalysts, milestone);
+    }
 
     public ProcessRecipe(String id, MachineFamily family, List<IngredientSpec> inputs,
                          List<OutputSpec> outputs, double temperatureC, String atmosphere,
@@ -74,10 +89,28 @@ public record ProcessRecipe(
         if (fuPerTick < 0L) {
             throw new IllegalArgumentException("draw cannot be negative");
         }
+        if (Double.isNaN(pressureMPa)) {
+            if (!Double.isNaN(pressureHalfWidthMPa)) {
+                throw new IllegalArgumentException("an unnamed pressure cannot have a band");
+            }
+        } else {
+            if (!Double.isFinite(pressureMPa) || pressureMPa < 0
+                    || !Double.isFinite(pressureHalfWidthMPa) || pressureHalfWidthMPa <= 0) {
+                throw new IllegalArgumentException("pressure needs a nonnegative optimum and a positive finite half-width");
+            }
+            ConditionBand pressure = ConditionBand.absolute(pressureMPa, pressureHalfWidthMPa);
+            if (!Double.isFinite(pressure.toleranceMin()) || !Double.isFinite(pressure.toleranceMax())) {
+                throw new IllegalArgumentException("pressure band must have finite bounds");
+            }
+        }
     }
 
     public boolean namesTemperature() {
         return !Double.isNaN(temperatureC);
+    }
+
+    public boolean namesPressure() {
+        return !Double.isNaN(pressureMPa);
     }
 
     public boolean namesAtmosphere() {
