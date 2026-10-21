@@ -26,14 +26,19 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: close the owner's [longitudinal-start investigation](testing/t0-longitudinal-readiness.md).
-The intended game is a lasting reference save, not merely a disposable test.
-Fresh read-only Inspect confirms exact installed F unchanged. Client/start/save-
-reopen observation and explicit baseline/update handover remain distinct from
-the real unused vein-version pin that must be addressed before a conflicting
-update. Do not invent a client pass or require the owner to complete T0 first.
-The T1 executor returned its PC lease; no worker may reuse it while this priority
-is active. No launcher/world/deployment action was performed by the investigation.
+Next: continue T1 under the owner's explicit longitudinal-play / feedback loop
+(ADR-0170). The owner chooses to start T0 while routes, machines, components,
+processing lines and reusable-system work proceed independently. Close the normal
+T1/Guidance/Economy outputs and affected canonical checks in the existing
+first-factory lane, then select the next implementation slice from source-backed
+inventory and mature-mod research. Reported T0 play blockers preempt new work;
+final T0 conclusions drive remaining polish.
+
+The [readiness investigation](testing/t0-longitudinal-readiness.md) is complete.
+Its actual client/save/update gaps remain visible, not a disposable-only stop
+instruction or an invented pass. The old PC lease was returned; only the new
+explicit owner-play lease may execute with fresh guards and gameplay priority.
+No launcher/world/deployment action was performed by the investigation.
 
 The separately authorized queue remains: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)
 under ADR-0168/0169 while the owner tests the T0 dev build. This later instruction

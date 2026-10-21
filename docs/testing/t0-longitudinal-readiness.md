@@ -7,6 +7,13 @@ missing delivery work and stale wording. It does not redo the completed T0 audit
 
 ## Finding
 
+**Later owner decision (ADR-0170):** after this investigation the owner explicitly
+chooses to begin the installed T0 game as the intended longitudinal run while T1
+development continues. This supersedes the temporary execution pause and old
+disposable-only start restriction, not the observed facts or unresolved technical
+properties in this report. Player blockers take priority; final T0 feedback drives
+polish. No completed launch, save/reopen or campaign is inferred from intent.
+
 **The installed candidate is not yet qualified as the longitudinal baseline.**
 That is not evidence that its new worlds corrupt, and it does not mean the owner
 must complete T0 before receiving a playable candidate. Human campaign acceptance

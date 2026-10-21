@@ -1,8 +1,10 @@
 # T0 development playthrough protocol
 
-**Technical/native candidate installed; required graphical smoke BLOCKED.**
-No client smoke or longitudinal playthrough has been executed, and starting the
-longitudinal save is not authorized. Exact F is documented in the
+**Technical/native candidate installed; owner-authorized longitudinal play
+(ADR-0170), actual client/save observations pending.**
+The owner explicitly chooses to begin the lasting T0 game while T1 develops.
+Intent/permission is not an observed launch, completed smoke or finished
+playthrough. Exact F is documented in the
 [Prism delivery](t0-experience-prism-deployment.md),
 [source qualification](t0-experience-source-qualification.md) and
 [native package qualification](t0-experience-package-native.md).
@@ -14,8 +16,9 @@ disclosure below remains historical rather than a current missing-feature list.
 Use the [current gate](../reviews/go-gate.md), [active handoff](../../.agent/handoff.md),
 [pending checks](../../.agent/pending-checks.json), [proof-reuse strategy](test-strategy.md)
 and [playable-release plan](../../plan/process-t0-playable-release-1.md) together.
-The parent coordinator owns product decisions, final qualification and permission to
-start; this document neither waives a required gate nor opens T1 implementation.
+The parent coordinator owns product decisions, final qualification and safe
+integration. ADR-0170 authorizes the owner's start and parallel T1 work; this
+document records evidence without relabeling any unobserved property as passed.
 
 The [README](../../README.md), [process definitions](../PROCESSES.md),
 [machine definitions](../MACHINES.md) and live catalogues remain authoritative.
@@ -67,7 +70,7 @@ subset and the still-required boundary. Neither is promoted to PASS.
 | Non-identifying run ID, UTC observation time and observer kind (human/agent/automated) | Automated F/native/deployment receipts exist; human controlled-run ID/time MISSING |
 | World kind/preset, new/existing/copied-upgrade origin and prior artifact identity | MISSING |
 | Verified backup/preservation receipt and safe rollback scope | Six old-instance files/two Dev metadata hashes unchanged; no protected Dev game paths existed before/after. Test an old-world upgrade only on a verified copy; no downgrade compatibility is inferred |
-| Coordinator's source-bound gate decision and start authorization | Graphical gate BLOCKED; controlled smoke only, no normal longitudinal start |
+| Coordinator's source-bound gate decision and start authorization | Owner explicitly authorizes intended longitudinal T0 start under ADR-0170; actual graphical/save/campaign observations still pending, not PASS |
 
 Forge is the baseline build target; compatible NeoForge loading is not a separate
 compiled platform or an observed pass. Record the actual supported matrix and any
@@ -102,11 +105,11 @@ original source and requires an explicit unchanged-assumptions/delta justificati
 under ADR-0140. Failed, cancelled, skipped and NOT EXECUTED remain visible.
 Do not rerun unchanged mechanisms once per recipe or texture.
 
-**Overall gate: BLOCKED; required evidence MISSING, not technically prepared for
-longitudinal human validation.** Approved graphical access to the execution host
-is unavailable; local UI access does not reach that host. The owner/coordinator
-must establish an approved graphical route before G03 can be observed. No gate
-exemption or new access grant is authorized by this protocol.
+**Technical evidence gate: required observations remain MISSING; no new technical
+or human pass is inferred.** The owner separately authorizes the intended
+longitudinal start under ADR-0170 and supplies actual play feedback. Current
+local UI access does not reach that PC; agent-side graphical observation would
+still require an approved route. No new access grant is created by this protocol.
 Only the coordinator may record `TECHNICALLY PREPARED FOR LONGITUDINAL HUMAN VALIDATION`
 after every required property has applicable evidence or an explicit owner-approved
 reclassification. Subjective final art/audio, exact duration/prices, factory mix,

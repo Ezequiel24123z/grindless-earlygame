@@ -181,6 +181,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0167](#adr-0167--make-state-and-port-art-readable-without-color-or-normal-build-generation-services) | Make state and port art readable without color or normal-build generation services | Accepted |
 | [0168](#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game) | Develop T1 in parallel with owner T0 testing without changing the dev game | Accepted |
 | [0169](#adr-0169--make-the-first-t1-factory-a-live-source-contract-not-another-execution-engine) | Make the first T1 factory a live source contract, not another execution engine | Accepted |
+| [0170](#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers) | Develop the next tier alongside longitudinal play and prioritize player blockers | Accepted |
 
 ---
 
@@ -7859,3 +7860,57 @@ mechanisms with actual authority/invariant/extension seams. The project's
 already-proven infrastructure is the solved-problem-first choice; there is no
 new need for a generic processor, transfer rollback engine, multiblock kernel,
 quest ledger, currency or content-copying dependency in this first increment.
+
+---
+
+## ADR-0170 — Develop the next tier alongside longitudinal play and prioritize player blockers
+
+**Status.** Accepted direct owner instruction, 2026-10-21.
+
+**Context.** The owner clarifies that the installed T0 game is intended to be
+longitudinal, not an indefinitely disposable test. After the source-bound
+[readiness investigation](testing/t0-longitudinal-readiness.md), the owner
+explicitly chooses to begin that game and asks the agent to continue T1 research,
+brainstorming and development while play proceeds.
+
+**Decision.** Adopt this continuing project loop:
+
+1. The owner plays the current T0 candidate as the intended reference game.
+   Record actual observations/feedback when supplied; the statement of intent
+   is not a completed launch, save/reopen, campaign or human-acceptance pass.
+2. Develop the next authorized tier, currently T1, on isolated dependent branches.
+   Cover actual routes, machines, components, processing lines, renewable inputs,
+   automation and reusable systems. Inspect mature implementations before new
+   infrastructure design. Research and brainstorm proposals are not automatically
+   accepted gameplay, quantities or additional tiers.
+3. A reported issue that interrupts play has priority over new T1 work. Reproduce
+   the actual defect, make a coherent fix and run its affected proof set. Preserve
+   the original save and previous artifact. Use the existing stopped-instance
+   deployment/update contract; no agent may stop or restart the player's game.
+4. When the owner reaches the end of T0, incorporate the reported conclusions to
+   fix and finish T0 polish. Do not equate development progress or an agent's
+   judgement with the owner's acceptance. Continue the same feedback/development
+   pattern for later tiers when their development is authorized.
+
+This instruction supersedes the temporary T1 investigation pause and earlier
+disposable-only start restriction for the owner's manual play. It does not
+relabel unobserved client/retained-world checks as passed, publish an RC, merge
+main, deploy T1, open T2 or guarantee an untested future migration.
+
+T0's installed F artifact and the owner's running instance/worlds remain stable
+during T1 work. Build-only execution has one explicit owner, fresh headroom and
+worktree/cache locks, and yields to gameplay. A legitimate client JVM is not a
+reason to terminate it or falsify a global-zero-Java requirement. Source, docs
+and useful research continue if heavy execution must wait.
+
+Before an update, compare changed IDs, persisted meanings, world derivation,
+recipes/configuration and dependencies; test applicable compatibility on a
+verified copy while preserving the reference original. The identified unused
+vein-version pin remains explicit work before a conflicting resource-generation
+update, not a claimed repair or reason to remap old surveys silently.
+
+**Alternatives rejected.** Waiting for the owner to finish T0 before useful T1
+work contradicts the instruction. Repeatedly demanding a disposable playthrough
+or invented prior human acceptance defeats longitudinal play. Updating the live
+instance continuously, skipping copy-based compatibility, inventing completed
+passes, or spending an unlimited generation allowance is not authorized.

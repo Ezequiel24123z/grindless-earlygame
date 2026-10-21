@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Establish the longitudinal-play / next-tier development loop (ADR-0170).**
+  The owner explicitly begins the intended T0 longitudinal game while T1
+  research, brainstorming, route/component/machine development and documentation
+  continue independently. Resume the bounded first-factory canonical-output work,
+  preserve the installed game/world, prioritize reported play-blocking fixes and
+  incorporate the owner's final T0 conclusions into polish. No unobserved client
+  pass, T0 acceptance, T1 deployment, release or generation budget is inferred.
 - **Investigate the intended longitudinal start instead of treating the game as disposable.**
   Reverify exact installed F through read-only Inspect and inventory: stopped
   candidate, no observed client log/options/reference world, unchanged launcher

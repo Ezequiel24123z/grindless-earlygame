@@ -1,5 +1,14 @@
 # Current T0/T1 validation
 
+## Current owner loop — permission and observation remain distinct
+
+ADR-0170 records the owner's explicit intended longitudinal T0 start, active T1
+research/development, priority fixes for reported blockers and final T0 feedback/
+polish. The old T1 lease was returned; a new explicit guarded owner-play outcome
+assignment resumes normal canonical outputs and checks. The records below retain
+their exact observed results. No client launch/save-reopen/campaign pass, new
+deployment or release is inferred from the owner's instruction.
+
 ## Owner-requested longitudinal readiness — fresh read-only installed F
 
 The [investigation](t0-longitudinal-readiness.md) records production Inspect of

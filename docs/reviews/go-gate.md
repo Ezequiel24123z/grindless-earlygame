@@ -6,6 +6,14 @@ and PA-0007 are the current owner-directed delivery policy. `1389ebb` is not yet
 longitudinal-play release. Reviewed technical units may be committed and integrated,
 but the current draft is not release-ready or merge-ready merely because its CI passes.
 
+**Current owner play/development loop (ADR-0170):** the owner explicitly chooses
+to start the installed T0 dev candidate as the intended longitudinal game while
+T1 development/research proceeds. That supersedes the old disposable-only
+restriction for the owner's manual play, not the actual evidence below.
+Record client/save/campaign observations when they arrive; do not fabricate a
+pass, RC release or T0 acceptance. Prioritize reported play-blocking fixes and
+apply updates only through the stopped-instance/backup/copy-validation boundary.
+
 **Later owner direction — parallel T1 development (ADR-0168/0169):** on2026-10-21
 the owner explicitly requests T1 code and reusable-system/line documentation while
 testing the T0 dev build. [The first-factory plan](../../plan/feature-t1-first-factory-1.md)

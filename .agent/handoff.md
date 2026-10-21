@@ -1,8 +1,50 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **OWNER REQUESTS A LONGITUDINAL BASELINE; F INSTALLED, CLIENT QUALIFICATION OPEN**.
+Updated: 2026-10-21. Product gate: **OWNER LONGITUDINAL T0 PLAY; ACTIVE T1 DEVELOPMENT; PLAYER BLOCKERS FIRST**.
 
-## Current priority — longitudinal start, not disposable-only testing
+## Current owner loop — play T0 while developing T1
+
+The owner explicitly chooses to start the installed T0 game as the intended
+longitudinal run and directs ongoing T1 research, brainstorming and development
+of routes, machines, components and processing lines (ADR-0170). This is the
+continuing project loop, not a request for another permission queue or disposable
+campaign. Record actual play observations when supplied, not invented passes.
+
+Reported bugs that stop play preempt new T1 work. Implement and qualify the
+bounded fix, preserve the world/previous artifact and use the stopped-instance/
+backup/update contract; never stop/restart the player's game. When the owner
+reports reaching the T0 end, incorporate final conclusions and finish T0 polish.
+The earlier readiness diagnosis remains visible debt, not a continuing start veto.
+
+Corea94 resumes the preserved20c88ff/ef9 first-factory outcome under the **new**
+exclusive `t1-owner-play-loop-20261021` assignment, not the returned old lease.
+Finish normal T1/Guidance/Economy generation, protected-fact comparison and
+canonical rechecks, reusing unchanged successful compilation/backend/affected
+proof. Use fresh resource/ownership locks and yield to gameplay. Parent/other
+workers must not run concurrent PC/cache/JVM operations. No Prism/Deploy/world/
+launcher/server/package/native/generation/config/auth action belongs to this lane.
+
+Read-only parallel research owns actual T1 route/component gaps (b0973eb7),
+mature factory patterns (d85f88fe) and longitudinal deposit patterns (f6e8e015).
+Reports are evidence/proposals, not new gameplay authority or licence to import.
+Root decisions/docs/handoff stay coordinated and shared edits/publication serialize.
+
+| Category | Current resumed wave |
+| --- | --- |
+| COMPLETED | Owner's durable play/development/feedback loop recorded; existing T1 source and bounded proof preserved; new scoped execution/research ownership assigned |
+| BLOCKED | None for T1 source/research; each new heavy stage still needs actual fresh headroom/ownership |
+| NOT EXECUTED | Final normal canonical output gate at this checkpoint, new client/save observations, T1 deployment/release or T0 acceptance |
+| NEEDS HUMAN VALIDATION | Owner's real T0 play feedback, blocking-bug reports and final conclusions; no completed run inferred |
+| NEEDS MY DECISION | None within the assigned outcomes; architecture/product proposals remain coordinator decisions |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No new generation/provider/model allowance or paid activation |
+| DEPLOYED STATE | F298988d/95bf/3e5a remains the last verified installed artifact; owner may now be playing, so old stopped/0Java observations are historical, not live assertions |
+
+## Preserved readiness investigation — completed before the owner start instruction
+
+The following investigation/pause snapshots precede ADR-0170. Their actual
+observations survive; their temporary execution/start restrictions do not override
+the new owner instruction above.
 
 The owner clarifies that the intended game is longitudinal and asks whether the
 installed build is prepared, why not if it is not, and how the gaps will be fixed.

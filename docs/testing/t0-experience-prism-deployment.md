@@ -1,8 +1,11 @@
 # T0 experience development-instance delivery
 
-**Engineering package installed and stopped; required graphical smoke BLOCKED.**
+**Historical deployment receipt: engineering package installed and stopped;
+graphical smoke was BLOCKED at delivery.**
 This is not `TECHNICALLY PREPARED FOR LONGITUDINAL HUMAN VALIDATION`, a released
-RC, human approval, T0 acceptance/freeze or permission to begin T1.
+RC, human approval or T0 acceptance/freeze. The owner's later ADR-0170 explicitly
+authorizes intended longitudinal T0 play and parallel T1 development; it does
+not change the artifact or invent observations for this receipt.
 
 ## Exact installed candidate
 
@@ -67,9 +70,12 @@ input/output transport,750mB recovery, invalidation/rebinding/compensation, tank
 container/drop behavior, one-time paid legacy Guide settlement and the physical
 five-F1 claim. This is not a clicked/rendered book or human clarity judgment.
 
-## Exact next owner actions
+## Controlled checks recorded at deployment
 
-Do **only the controlled smoke**, not the longitudinal campaign:
+At that deployment checkpoint, the instruction was controlled smoke only.
+ADR-0170 later supersedes that start restriction for the owner's game. The
+following diagnostic checklist remains useful for actual technical observations;
+do not adopt a command-staged diagnostic save as the reference world.
 
 1. Open the existing `Grindless-T0-Dev` instance in the personal-PC Prism launcher.
    Bind any report to source F and the installed JAR hash above.

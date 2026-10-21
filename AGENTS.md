@@ -130,6 +130,23 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current operating loop — longitudinal T0 play and active T1 development
+(2026-10-21, ADR-0170):** the owner explicitly chooses to start the installed T0
+game as the intended longitudinal run. Develop/research/brainstorm T1 routes,
+machines, components and processing lines in parallel on isolated source/build
+surfaces. This supersedes the investigation pause and the old disposable-only
+start restriction for the owner's play; it does not invent a client/save pass,
+completed playthrough, T0 acceptance/freeze or a release.
+
+Reported bugs that interrupt play take priority: reproduce, implement the bounded
+fix, validate affected behavior and preserve the actual world. Deploy only into
+the owned instance after the owner has stopped it and applicable backup/update
+guards pass; never stop/restart the player's game to make an agent task convenient.
+After the owner reaches the T0 end and reports conclusions, integrate that
+feedback and finish T0 polish without discarding the reference save.
+Keep research/proposals distinct from accepted gameplay and preserve forward-save
+compatibility before updates. No new generation/provider budget is implied.
+
 **Current owner direction — parallel T1 development (2026-10-21, ADR-0168):**
 the owner explicitly opens T1 development and reusable-system/production-line
 documentation while personally testing the installed T0 candidate. This overrides

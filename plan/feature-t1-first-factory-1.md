@@ -1,6 +1,6 @@
 ---
 goal: Begin T1 with canonical first-factory lines, live teaching and a reusable-system handbook
-version: 1
+version: 2
 date_created: 2026-10-21
 last_updated: 2026-10-21
 owner: Sol coordinator
@@ -12,7 +12,9 @@ tags: [feature, t1, progression, documentation, reuse, compatibility]
 
 ![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
 
-The owner explicitly requests T1 development while testing the T0 dev build.
+The owner explicitly requests T1 development while playing the T0 dev build
+as the intended longitudinal game (ADR-0170). Resume after the bounded readiness
+investigation; preserve its actual gaps rather than treating intent as a pass.
 Start from `a64d44f9ee6da1fe00ed9215eb05b4aad4132f64`, the preserved T0 experience
 branch, not older main. Keep installed runtime F298988d/JAR95bf47c4 unchanged.
 This first development increment integrates the already implemented first-factory
@@ -28,8 +30,9 @@ the entire tier finished or introduce a replacement processing engine.
 - **REQ-005**: Differentiate T1 teaching from the old generic preview using live Atlas recipes and the shared line contract, without duplicating bills or claiming successful operation from possession.
 - **REQ-006**: Document reusable authorities, invariants, safe extension seams, proof boundaries and concrete T1 uses with verified source references.
 - **REQ-007**: Trace recurring required inputs to the existing mod-owned T0 base or declare an explicit unresolved dependency; repeatable finite extraction is not renewable.
+- **REQ-008**: Follow ADR-0170: research/brainstorm/develop T1 during owner play, prioritize reported T0 blockers and integrate final T0 feedback/polish without discarding the reference world.
 - **SEC-001**: No credential/provider/account changes, private paths in Git, new generation charges or third-party implementation imports.
-- **CON-001**: Do not modify, redeploy or restart the owner's installed Prism T0 instance or touch player worlds/configuration.
+- **CON-001**: T1 work must not modify, redeploy or restart the owner's installed Prism T0 instance/worlds/configuration. A separately coordinated reported T0 fix uses the existing stopped-instance/backup/update contract, never an agent-initiated game interruption.
 - **CON-002**: T1 development authorization is not T0 acceptance, a graphical pass, a T1 release or permission to start T2 production.
 - **CON-003**: All versions stay in `gradle.properties`; common remains loader-neutral; existing processing, transaction, storage, grid and quest engines remain the authorities.
 - **CON-004**: Use isolated dependent branches and one integrated build/cache owner. Player gameplay has resource priority; no user process is stopped.
@@ -69,7 +72,11 @@ the entire tier finished or introduce a replacement processing engine.
 | TASK-009 | Commit/publish the coherent code/docs/proof checkpoint and a separate in-development draft PR against its actual T0 parent when appropriate. Report first-factory progress, reusable systems, unresolved gaps and next T1 increment; leave T0 installed untouched and do not merge either release branch. Depends on TASK-008. | No | |
 
 Source integration is published as `c7278940d4b42999f1f128e560095fe3fb1329dc`.
-TASK-007 is in progress under one guarded build-only lease to the core owner,
+The later sourceef9d670 and local evidence handoff20c88ff preserve bounded
+common/Forge/backend/affected checks and ignored-output writer/twin results.
+Normal canonical T1/Guidance/Economy output generation, protected-fact comparison
+and canonical rechecks remain TASK-007 work. The old PC lease was returned.
+ADR-0170 now authorizes a **new** outcome-bound guarded lease to the same core owner,
 not a new Prism/package/server/native permission. Independent static QA found
 one verifier defect: physical-component comparisons include the ENERGY input.
 The correction74ccb36 is closed by narrow static recheck, with separate authoritative
@@ -77,6 +84,16 @@ FU assertions and all route/report energy retained. Gradle/backend exit0 is repo
 then a private observer fails before selectors; preserve raws and continue remaining
 stages without replay. No final executable qualification is inferred before exact
 receipts; model normalization/raw sidecar separation is statically reviewed.
+
+### Implementation Phase 4
+
+- **GOAL-004**: Extend the first-factory increment into a source-checked T1 development map while preserving the feedback loop.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-010 | Read-only inventory of immutable sourceef9d670: `T1Recipes`, `ProcessGraph`, `FabricationLogic`, `ProcessMachineKind`, live crafting JSON and `T1Progression`/`T1Sustainability`. Update `docs/tiers/t1-development-map.md` with implemented/optional/proposed machine/route/component boundaries, automation gaps and authority references, not copied bills. Depends on TASK-006. | No | |
+| TASK-011 | Verify mature external first-factory/component and persistent-vein patterns from immutable source/licence references; record conceptual fit and rejected approaches in `docs/design/t1-external-references.md`. No code/assets/dependency imports. This task is independent of the mutable writer/check execution. | No | |
+| TASK-012 | Integrate TASK-010/TASK-011 findings into the same tier map: rank at most three next coherent implementation slices, name exact authority files, reusable engine/proof and real unresolved decisions. Preserve runtime/recipe/model/renewable-establishment distinctions. Depends on TASK-010 and TASK-011. | No | |
 
 ## 3. Alternatives
 
@@ -100,6 +117,7 @@ receipts; model normalization/raw sidecar separation is statically reviewed.
 - **FILE-003**: New paired T1 exporter entrypoints under `tools/t1/`, the source-bound T1 line graph and `docs/tiers/t1.md`.
 - **FILE-004**: `docs/architecture/reusable-systems.md`, `docs/tiers/t1-development-map.md` and `docs/tiers/t1-quests.md`.
 - **FILE-005**: AGENTS/README/changelog/build-out/ADRs/route-map and active handoffs, serialized by the coordinator.
+- **FILE-006**: `docs/design/t1-external-references.md` stores source/licence-pinned conceptual precedent, not accepted recipe quantities or imported implementation.
 
 ## 6. Testing
 
@@ -118,6 +136,7 @@ receipts; model normalization/raw sidecar separation is statically reviewed.
 - **RISK-004**: The T0 parent remains under review; preserve isolated ancestry and source identity rather than silently basing on old main or overwriting the parent.
 - **ASSUMPTION-001**: The latest instruction authorizes T1 development now, not a completed T0 campaign, accepted graphical gate or public release.
 - **ASSUMPTION-002**: Existing recipe quantities and the installed T0 candidate remain stable unless a concrete tightly coupled defect requires a documented decision.
+- **ASSUMPTION-003**: The owner-authorized longitudinal start is an intent/permission record until actual observations arrive; no client, save-copy or completed-campaign result is invented.
 
 ## 8. Related Specifications / Further Reading
 

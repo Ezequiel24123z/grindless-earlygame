@@ -1,6 +1,24 @@
 # Return handoff
 
-## Current owner priority — prepare a lasting longitudinal world
+## Current owner loop — longitudinal T0 play and ongoing T1 development
+
+ADR-0170 records the direct owner instruction: begin the intended T0 game,
+develop/research/brainstorm T1 routes/machines/components/lines in parallel,
+fix reported play blockers first and polish T0 from the final conclusions.
+Intent is not a completed client/save/campaign or human-acceptance pass.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Durable loop/ownership established; preserved T1 source/bounded proof resumed under a new outcome assignment; source/reference research dispatched |
+| BLOCKED | None for source/research; actual heavy execution remains guarded and yields to gameplay |
+| NOT EXECUTED | Final normal canonical output qualification at this checkpoint, new observed owner play/save results, T1 deployment/release or T0 acceptance |
+| NEEDS HUMAN VALIDATION | Owner's T0 feedback and final conclusions; real player observations are not inferred from intent |
+| NEEDS MY DECISION | None for assigned outcomes |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No new generation or paid-service allowance |
+| DEPLOYED STATE | Last verified installed F unchanged; no live stopped-state claim once the owner may be playing; no T1 deployment or world mutation |
+
+## Preserved readiness investigation — before ADR-0170
 
 The owner asks for [an evidence-based readiness diagnosis and corrective path](docs/testing/t0-longitudinal-readiness.md).
 The intended world is not merely disposable testing. Human acceptance is produced

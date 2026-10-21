@@ -42,6 +42,13 @@ and a separately owned Prism engineering instance implement the execution lane w
 changing this product graph or inventing RC, Superflat or human acceptance.
 See [the executable operating runbook](../docs/operations/ssh-prism-workflow.md).
 
+Later owner instruction2026-10-21 ([ADR-0170](../docs/DECISIONS.md#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers))
+explicitly authorizes intended longitudinal T0 dev play and parallel T1
+research/development. It supersedes the old development/start holds in the
+preserved requirements/checkpoints below, not their unobserved evidence or
+release/acceptance criteria. Reported play blockers are fixed first; final T0
+conclusions drive polish. Existing worlds and active gameplay are protected.
+
 ## 1. Requirements & Constraints
 
 | ID | Requirement | Owner directive sections |
