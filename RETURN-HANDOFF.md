@@ -18,20 +18,42 @@ Do not advance the old and new copies in parallel.
 | COST / BILLING RISK | None new |
 | DEPLOYED STATE | New FTB instance dd0/29bc/79ce with same-world copy; original/backup preserved, later-tier source not deployed |
 
-All FTB leases are returned. The parent publishes source42654eb, which normally
-merges pressure541, Blueprint4550 and corrected F1 Wire Mill3a79. The NEW active
-`integrated-family-qualification-20261021` PC/cache lease belongs only to2a93 on
-fixed426; parent/other workers have no PC access and execution results are pending.
-Localab4d7bc merges final root104de7b; its documentation stays unpublished and
-does not Sync or mutate the frozen execution surface. These sources are not
-updates to the T0 instance or full-T1 acceptance. The parent
-delegates only the bounded documentation synchronization; proposed ADR-0175 is
-an unqualified engineering record, not a new product decision.
+## Closed integrated development wave
+
+Published **M0a676fe2e76f5209233ce99ca6616b42e2b3f3c0** normally merges e260 and
+A85069, preserving all four normal generated outputs and the complete source
+ancestry. Actual426 writers/independent CheckOnly and three former red suites
+pass; their provenance stays426. Accepted engineering ADR-0175 adds no production
+pressure recipe. Component automation and baseline F1 Wire Mill remain partial
+T1 content, not a real MK2 or completed tier.
+
+One canonical PC `blueprint-interaction` on exactM closes the new world/inventory
+boundary:1,182 assertions, PASS1/FAIL0, harness/server0 and natural saved-world
+stop. Parent verifies the receipt and all ten original evidence files.
+Tested/staged/remapped JARc70e08e9 is identical. Exact-M CI39681018324 passes all
+eight jobs; duplicate39681008933 remains FAILURE at the missing DRILL-OK
+observation, with its unknown trigger preserved and no manual replay.
+
+| Category | Bounded development outcome |
+| --- | --- |
+| COMPLETED | Published M source/normal outputs, affected contracts/models, real Blueprint interaction1,182, verified native custody and independent full exact-M CI success |
+| BLOCKED | None within this engineering wave |
+| NOT EXECUTED | Client/GUI/JEI/campaign, Blueprint save/reopen, managed46-to50 migration, T1 package/deploy, PR/main/release or green-proof replays |
+| NEEDS HUMAN VALIDATION | Native player/reward/JEI experience, Blueprint feedback, pressure presentation and longitudinal compatibility; no tier accepted/frozen |
+| NEEDS MY DECISION | None for this closure |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Last verified T0 dd0/29bc/79ce delivery above is not re-inspected or modified by this wave; original/backup preserved. M only runs in the diagnostic server |
+
+All PC/cache leases are explicitly returned at21:56:31.4465559Z:
+cleanM, owned/all-observed Java0, work/cache locks0, no owner-world access or
+client command-line inspection. No automatic next PC grant exists.
 Read [the active handoff](.agent/handoff.md#integrated-development-source) and
-[pending source qualification](docs/testing/latest-validation.md#integrated-development-source)
-for evidence and next ownership. Blueprint missing/blocked preflight spends
+[closed source qualification](docs/testing/latest-validation.md#integrated-development-source)
+for exact evidence. Blueprint missing/blocked preflight spends
 nothing, but later throwing placement callbacks do not have a global rollback
-guarantee. The old item-existence smoke is not capture/stamp interaction proof.
+guarantee. Future managed46-to50 definitions, broader basic families, real
+upgrades and longitudinal feedback remain separate work under ADR-0173/0174.
 The historical snapshots below retain their original results, not current holds.
 
 **Latest:** ADR-0174 fixes basic families fromT1 and exponential meaningful

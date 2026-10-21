@@ -4,10 +4,11 @@ This is the implementation/extension map for parallel T1 development under
 ADR-0168/0169, not a new engine specification or a tier-acceptance certificate.
 The original reviewed baseline is a64/F298988d. The current installed player
 build is dd0/JAR29bc/ZIP79ce with the pristine existing-game copy; original F and
-backup remain intact. Separate development426 integrates native b38, pressure,
-Blueprint and corrected F1 Wire Mill source. Only2a93 owns its new fixed-source
-qualification window; results are pending, not passes, and documentation never
-Syncs underneath active stages/locks.
+backup remain intact. Published development M0a676fe preserves native b38,
+component automation, pressure, corrected F1 Wire Mill and Blueprint4550+d073.
+Actual426 contracts/normal models, new e260 Blueprint/Planner regressions and one
+real M Blueprint interaction close the bounded wave. All PC/cache leases are
+returned; documentation does not retarget those proofs or authorize new execution.
 
 Java paths below are relative to
 `common/src/main/java/io/github/ezequiel24123z/grindless/` unless stated otherwise.
@@ -55,8 +56,9 @@ Source541cf6c adds optional absolute `ProcessRecipe.pressureMPa` and explicit
 meaningful optimum, not ambient/absence. `ProcessLookup.conditionsOf` converts
 through the existing builder/absolute band, shared by Atlas/audit/inspection/JEI.
 No existing production pressure recipe or machine capability changes.
-[Proposed ADR-0175](../DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)
-records the unqualified engineering rationale; its affected results remain pending.
+[Accepted engineering ADR-0175](../DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)
+records the rationale. Exact426 affected contracts and normal models pass;
+no production recipe, pressure client observation or tier acceptance is added.
 
 `matrix/ControlMatrixSpec.java`, `MatrixArchitecture.java` and
 `ControlMatrixNbt.load()` are the physical control authority. Architecture and rating
@@ -141,9 +143,15 @@ placement restores that attempted payment; already placed cells remain and
 unattempted materials are refunded. A throwing callback is ambiguous and its
 attempt stays paid while unattempted resources return and the error propagates.
 This is not global rollback, crash atomicity or universal zero loss.
-`VerifyBlueprint` / affected `VerifyPlanner` results and representative actual
-capture/stamp/load evidence remain pending. The old native item-existence smoke
-does not prove interaction; the author-owned representative Forge probe is unready.
+Follow-upd073 uses one `eligibleMaterial` predicate to exclude any
+`BlockEntityTag` stock from both counting and reservation, preserving relocated
+machine stores/upgrades. Every target intersects Level/player/item permissions.
+New `VerifyBlueprint`/`VerifyPlanner` contracts pass on e260; one actual canonical
+M `blueprint-interaction` passes1,182 assertions through registered item-use,
+real ServerLevel and an official non-OP FakePlayer, with natural harness/server0.
+The [source-bound ledger](../testing/latest-validation.md#integrated-development-source)
+retains exact runtime/custody and both CI outcomes. This closes interaction,
+not Blueprint save/reopen, actual player feedback, drones or the whole T3 tier.
 
 ## Structures and controller-backed interfaces
 

@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the integrated engineering wave with actual Blueprint interaction.**
+  Published M0a676fe normally merges e260 and normal-output checkpointA85069.
+  One canonical Forge `blueprint-interaction` run passes1,182 assertions with
+  one PASS/no FAIL, harness/server0 and natural save/stop; parent verifies the
+  receipt and all ten raw/runtime files. Tested/staged/remapped JARc70e08e9 is
+  identical. Actual426 writer provenance remains426; no successful proof is
+  replayed or retargeted. Exact-M automatic CI39681018324 succeeds in all eight
+  jobs; duplicate39681008933 remains FAILURE at the missing DRILL-OK observation,
+  not relabeled or manually rerun. All PC/cache leases are returned. Synchronize
+  the existing plan/handoffs and accepted ADR-0175, preserving installed
+  dd0/JAR29bc/ZIP79ce, original/backup and all client/campaign/release gates.
 - **Close the three canonical gates through normal writers and exact Git ancestry.**
   Actual426 Guidance/Economy/T1 writes and independent CheckOnly, three previously
   red suites and FTB50/pack contracts pass. Preserve13 zero stages, the earlier

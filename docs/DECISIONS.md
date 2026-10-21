@@ -8252,12 +8252,14 @@ schema1 reading needlessly loses old pressure-absent observations. None requires
 foreign code, a dependency import or another persisted machine schema.
 
 **Qualification boundary.** Source541cf6c9 is normally integrated in42654eb and
-the later root mergeab4d7bc. Exact CI39674226306 compiles and runs the affected
-contracts, failing only the three stale canonical projections. Only2a93 owns
-the fixed426 PC window for required writer classpath and NORMAL generation/
-independent CheckOnly, not a duplicate of those green suites. New Blueprint
-eligibility/probe source invalidates its affected evidence, not unchanged pressure
-contracts. The [validation ledger](testing/latest-validation.md#integrated-development-source)
-separates those obligations from static composition and old T0 native evidence.
-Native/client presentation, actual save compatibility and human acceptance are
-not inferred from this record or its authored regression cases.
+published M0a676fe. Exact CI39674226306 compiles/runs the affected contracts,
+retaining three then-stale canonical failures. Actual426 NORMAL writers and
+independent CheckOnly subsequently close those projections; A85069 carries only
+the four generated outputs into M without retargeting writer provenance.
+The separate Blueprint eligibility/probe change passes its new contracts at
+e260 and one real native interaction at M; unchanged pressure proofs are reused.
+The [validation ledger](testing/latest-validation.md#integrated-development-source)
+records those distinct sources, exact-M full CI success and the duplicate
+DRILL-OK observation failure without concealing it. All PC/cache leases are
+returned. No production pressure recipe, native/client pressure presentation,
+actual save compatibility or human acceptance is inferred from this contract.

@@ -37,9 +37,10 @@ per-player quest IDs, Matrix rating meaning and stopped-game copy-based updates.
 `VeinData.DerivationVersion` is currently not consumed by scanner/extractor
 generation; do not claim forward surveyed-vein stability if algorithm/material
 inputs change. Old T1 owner-play and temporary FTB leases are returned.
-The NEW `integrated-family-qualification-20261021` grant belongs only to2a93
-on fixed published42654eb with fresh guards; all other workers/parent have no PC
-access. Documentation stays local and never Syncs during active stages/locks.
+The integrated-family426 and Blueprint-nativeM execution leases are returned;
+last custody21:56:31Z reports cleanM/ownedJava0/work-cache locks0. No worker or
+parent has an active PC grant. Reuse the closed source-bound proofs; future
+execution needs a new explicit guarded assignment.
 Gameplay blockers take priority; never stop/restart the player's game or deploy
 T1 as part of independent development.
 The new [experience plan](../plan/feature-t0-experience-1.md) under ADR-0161
@@ -72,7 +73,8 @@ ADR-0172's independent T1 source2f4eee1 owns only ordinary Assembler component
 data, T1 selection/provenance and affected recipe/Atlas/progression contracts.
 Manual casing seeds the first Assembler; automatic output follows it, not a
 forming-cycle dependency. No new engine/NBT/slots/T2 part is authorized.
-Its baseline523b proof is distinct from the new unexecuted two-route data.
+Its baseline523b proof remains distinct from the later executed426 component/
+model qualification and normal A85069 output merge into M.
 
 ADR-0173 now opens isolated development through T15, not survival acceptance or
 deployment. Native-baseline b38 retains the factory/component source. The
@@ -98,12 +100,13 @@ The broad8210 dossier could not use `send_session_message` or write an artifact.
 Parent subsequently recovers its13-tier dossier and bounded slice proposals from
 the actual `session.task_complete` summary, not empty assistant messages or idle
 notifications. This is read-only evidence, not an executable tier acceptance.
-Source4550b97 owns Blueprint preflight and541cf6c optional recipe pressure;
-42654eb normally integrates both plus3a79a1f, and ab4d7bc adds final root104de7b.
-The parent publishes42654eb and grants only2a93 its qualification; results remain
-pending, not passes. Final-root mergeab4d7bc and this documentation stay local,
-not another execution engine or a PC grant to other workers. The parent explicitly delegates this bounded
-root-document synchronization; product/final review and publication stay there.
+Published M0a676fe normally preserves Blueprint4550+d073, pressure541, corrected
+F1 Wire Mill3a79, final-root ancestry and the four normal outputs via A85069.
+Actual426 contracts/models, new e260 Blueprint/Planner regressions and one
+real M Blueprint interaction1,182 close this bounded wave. Read
+[the source-bound ledger](testing/latest-validation.md#integrated-development-source),
+including exact-M CI success and the duplicate failed DRILL-OK observation.
+No complete tier, new execution engine, client pass or PC grant follows.
 Compatible external reuse is allowed after exact provenance/licence/notices;
 neither visible source nor a pattern report authorizes a code import.
 
@@ -326,10 +329,11 @@ unrated item lookup must still find the F2 route (ADR-0124).
   Unknown versions, partial bands and required-pressure fields under schema1
   fail through `MALFORMED`; existing observed/tank pressure is not removed.
 
-Source541cf6c is integrated but unqualified. [Proposed ADR-0175](DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)
-records the rationale, not accepted gameplay. Recipe/Band/Machine/Atlas/
-MachineInspection/MachineUi/SustainabilityAdapters/Sustainability results await
-the sole2a93 execution owner; machine work/item/fluid save ownership is unchanged.
+Source541cf6c is integrated and technically qualified in M through exact426
+contracts and normal model generation. [Accepted engineering ADR-0175](DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)
+records the rationale, not a new production recipe or accepted gameplay.
+Machine work/item/fluid save ownership is unchanged; client presentation remains
+unobserved and no new native run is required for this documentation closure.
 
 ## Blueprint construction preflight
 
@@ -343,25 +347,26 @@ the sole2a93 execution owner; machine work/item/fluid save ownership is unchange
   permissions at every destination, not only the original clicked anchor.
 - `item/BlueprintToolItem.java` — capture uses the same diagnosis; retain the
   32-block edge/512-piece bounds and never clone block-entity contents.
-- `tools/checks/VerifyBlueprint.java` / `VerifyPlanner.java` — affected contract
-  results are pending, not supplied by their source or the old native
-  `first-blueprint` item-existence observation.
+- `tools/checks/VerifyBlueprint.java` / `VerifyPlanner.java` — new d073 regressions
+  pass on exact e260 and are reused in M, not inferred from old426 contracts or
+  the `first-blueprint` item-existence observation.
 - Forge-only `item/BlueprintInteractionChecks.java` and the isolated
   `blueprint-interaction` manifest/commands/expect — actual ServerLevel item-use
   probe with a private non-OP FakePlayer, real inventory/world/refund behavior.
-  Both shared-batch twins exclude its fresh fixture. Authoring/mock dispatch is
-  not an observed native marker; run once through the canonical harness.
+  Both shared-batch twins exclude its fresh fixture. One actual exact-M canonical
+  run passes1,182 assertions/PASS1/FAIL0 and natural harness/server0; preserve its
+  ten-file evidence rather than repeating it.
 
 Source4550b97 preserves ordinary missing/blocked preflight refusal before
 spending. An explicit false placement restores that attempted payment;
 unattempted resources are refunded and already placed cells remain. A throwing
 callback is ambiguous: keep that attempt paid, refund unattempted resources and
 propagate the error. This is not global world rollback or universal zero loss.
-Require a representative real capture/stamp/load proof for the changed world/
-inventory boundary; no drone/network-builder framework or new payload is added.
-Owner51366 is authoring the representative Forge probe/manifest/paired harness;
-it is not ready or integrated. Do not ingest partial source or repeat unchanged
-common compilation merely for a later probe-only Forge change.
+The representative real capture/stamp/refusal/refund proof closes this changed
+world/inventory boundary. It does not prove a later Blueprint save/reopen,
+client/UX acceptance or whole T3. No drone/network-builder framework or new
+payload is added. Further runtime work needs a newly changed assumption, not
+the old unready-probe status or a documentation-only descendant.
 
 ## C3 sources, primitive assembly and generation
 

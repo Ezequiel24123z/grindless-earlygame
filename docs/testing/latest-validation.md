@@ -25,6 +25,13 @@ clone/audit/copy snapshots below are historical, not current blockers.
 
 ## Integrated development source
 
+**Closed bounded engineering wave, not a tier acceptance.** Published candidate
+M is `0a676fe2e76f5209233ce99ca6616b42e2b3f3c0`, a normal merge of
+e260d4750cbbb26841f1b4309d7dc651b2345fc8 and
+85069e71dabfe4da819ed49fe5329a2b396c0692 (A). It preserves426 and all component,
+F1 Wire Mill, pressure, Blueprint4550+d073 and final T0 delivery ancestry.
+This documentation-only closure does not change the tested runtime.
+
 The normal model boundary is now closed by **actual source426 execution**,
 not by rewriting canonical files. Guidance write/independentCheckOnly pass73
 declarations/5,191 comparisons; Economy416/17 and T1622 pass both modes.
@@ -45,19 +52,17 @@ Normal merge with e260 preservesA as an ancestor for a clean forward Sync.
 Source inputs for the actual generators are unchanged by d073: verified11 T1,
 17 tool,8 guidance and19 implementation source paths plus economy/shop/recipe/
 progression authorities. All share authority4b0f9b3d; no writer proof is relabeled
-as an execution on the later containing commit. The remaining new mechanism
-boundary is the actual Blueprint native item interaction on the published
-descendant, with exact runtime/jar and natural shutdown. The owner returns the
-writer lease at21:33:42Z, cleanA/JVM0/locks0; a new explicit GO is required.
+as an execution on the later containing commit. The writer lease returns at
+21:33:42Z, cleanA/JVM0/locks0, before a new exact-M GO and canonical Sync.
 
-Local42654eb53985bd50ecbd37a48a4a25e727e51fb7 normally integrates source541cf6c9
-(pressure),4550b975 (Blueprint) and3a79a1f3 (baseline F1 Wire Mill); ab4d7bc
-normally merges final T0 root104de7bb afterward. No application source changes
-are made by the subsequent documentation synchronization. These revisions are
-not the installed dd0/JAR29bc/ZIP79ce artifact. The parent publishes426 and grants
-only2a93 the NEW `integrated-family-qualification-20261021` isolated build/cache
-lease on that fixed source. Parent/other workers have no PC/T0 access; the local
-documentation merge does not Sync or change active execution inputs.
+The four normal outputs in A/M have these byte identities:
+
+| Output | Bytes | SHA-256 |
+| --- | --- | --- |
+| `common/src/main/resources/assets/grindless/guidance/resources.json` | 588230 | `c2b85cb56e688b96eec292aef616b7c32c605e7de799a600fb8ad526d18b962a` |
+| `docs/tiers/t0-economy.json` | 181137 | `9ee56afa56af27e2faec3b165381c81f0c94ec5b09f8b4a4d68271aca3f0515e` |
+| `docs/tiers/t1-production-graph.json` | 67277 | `48033942d0fe908f55ed6fa0d0d7ac3454a9f9591164cb9ffe2cd234e7d6e51a` |
+| `docs/tiers/t1-production-graph.md` | 13081 | `e9c323d596785b923b6a458272550f8b9d572eeaff78e5d5bfa76fe2babe4acc` |
 
 Actual static integration checks preserve the exact non-overlapping source
 files and both authored deltas in `VerifyAtlas` / `VerifyRecipes`. Locale861
@@ -74,58 +79,113 @@ behavior SHA-256 is `bd53f227b2ebec555c4e746bdb342c598ce1fa9fff0bf5e0ed0124c31a5
 Actual affected passes include Blueprint1592, Band1201, Machine3108, inspection450/
 UI1135, Persistence3476, Planner3535, Recipes5806, Atlas1163 and Quest/Claims379.
 These successful pure contracts are reused, not rerun on the PC for appearance.
-The workflow remains FAILURE until normal canonical outputs close; it is not a
-native/client proof.
+That original workflow remains FAILURE; later normal output generation does
+not rewrite its conclusion. Two initial local pre-SSH policy/quoting failures,
+the joined-argument writer invoker red and original observer failure remain
+preserved alongside the successful resumed stages.
 
-Fresh actual Sync to the new isolated root returns VerifiedDetached426 with
-owned JVM/locks0 and sufficient resource admission. The executor explicitly
-reports no PC JVM stage yet at that checkpoint: reading APIs/guards, CI triage
-and local invoker preparation are not a compiler running. Two local pre-SSH
-policy/quoting failures are retained. Only writer-required classpath/compilation,
-normal writers and independent canonical rechecks proceed there. New Blueprint
-stateful-stock/protection fixes and its registered interaction probe remain
-authoring work and invalidate only their affected proof after integration.
+Follow-upd073 excludes all `BlockEntityTag` stock through a single counting/
+reservation predicate and checks Level/player/item permission per destination.
+Exact-e260 CI39678586777/39678578651 compiles Forge and passes the new Blueprint/
+Planner contracts, retaining only the same three then-stale canonical failures.
+Those successful contracts are reused, not replayed on the PC.
 
-| Changed boundary | Required next proof on the fixed integrated source | Current result |
+| Changed boundary | Actual proof | Scope limit |
 | --- | --- | --- |
-| Optional absolute pressure and inspection schema2/strict schema1 | Common/Forge; recipes/band/machine/Atlas/inspection/UI/sustainability contracts; normal model boundary | Exact426 compilation/contracts pass; writer/model gates remain; engineering ADR-0175 accepted, no production recipe or client pass |
-| Blueprint preflight, legacy codec and native material settlement | Blueprint/Planner, stateful-stock/protection regression, then representative actual capture/stamp/load | Exact426 pure contracts pass; newly identified BE-stock/protection fixes and native probe are not integrated/proven; old `first-blueprint` observes an item only |
-| Baseline F1 Wire Mill and optional four-route branch | Recipes/Atlas/Persistence/T1 teaching/progression and normal T1/guidance/economy writers/CheckOnly | Exact426 noncanonical contracts pass; the first-factory equality remains stale until normal writer; no first-F2 prerequisite or MK2 claim |
+| Optional absolute pressure and inspection schema2/strict schema1 | Exact426 compilation/affected contracts and normal model gates pass; ADR-0175 accepted as engineering | No production recipe requires pressure; client presentation not observed |
+| Blueprint preflight, legacy codec, protected stock and permissions | New e260 Blueprint/Planner/Forge compile pass; exact-M real native interaction1,182 passes | No global callback rollback, crash atomicity, Blueprint save/reopen or client acceptance |
+| Component automation, baseline F1 Wire Mill and optional four-route branch | Recipe/Atlas/Persistence/T1 contracts and actual426 normal writers/independent CheckOnly pass; outputs preserved through A/M | Unchanged executor/storage proofs reused; not a first-F2 prerequisite, MK2 or whole-T1 establishment |
 
-Deduplicate overlapping selectors in that one authorized build-only window; preserve
-existing runner deadlines and all failures/receipts. Reuse unchanged recipe
-executor, registration and storage proofs for the ordinary Wire Mill data change,
-not one new native run per recipe. The Blueprint world/inventory boundary is
-different and needs real interaction evidence; a throwing placement callback may
-already have changed the world, so no global rollback or universal zero-loss proof
-is claimed. No production pressure recipe is added by541.
+### Actual registered Blueprint interaction
 
-The earlier stale canonical boundary below is superseded by the actual normal
-writer/check results and exactA output merge above. Installed native46-to-source50 managed-definition migration and stronger
-Matrix manufacturing substitution remain separate unfinished mechanisms.
-Client presentation, actual saved-world compatibility, publication and tier
-acceptance are not supplied by a static or surrogate check. The owner may play;
-the active execution must satisfy fresh ownership/resource guards and yield.
+The only PC native run uses the existing canonical
+`tools/run-smokes.ps1 -Only blueprint-interaction` on exactM, from
+**2026-10-21T21:49:21.5617966Z to21:51:21.1790129Z**. Fresh admission and
+VerifiedDetachedM precede it; no source switch occurs under active JVM/locks.
+Original budgets, loopback2GiB server and CPU2/Serial/one worker/noParallel/
+noDaemon limits remain. `SMOKE_KEEP_WORLD=1` retains only the diagnostic world.
 
-Follow-upd073 repairs the direct-review issue: any `BlockEntityTag` stock is
-excluded by the same count/reservation predicate, so relocated stores/MK/upgrades
-cannot be silently consumed into a default blueprint block. Each destination
-intersects platform Level protection with player/item permissions. New unit
-regressions and an isolated actual Forge item-use probe are authored; six
-mock dispatch cases/135 assertions and four Bash/PowerShell CLI comparisons
-are tooling evidence only. This new common/Forge delta invalidates Blueprint's
-affected proof, not the unchanged pressure/F1/catalogue contracts.
+Registered Blueprint item capture/stamp through actual `Item.useOn`/
+`UseOnContext`, real `ServerLevel` and official non-OP FakePlayer passes:
 
-The native `blueprint-interaction` fixture uses registered Blueprint items, real
-ServerLevel blocks and a private non-OP FakePlayer. Its explicit false-placement
-case uses real replaceable grass already matching the requested state, not a
-fake placement callback. No marker/harness/server0 is recorded yet. Keep the
-running426 writer stage fixed, collect generated outputs, then qualify only the
-changed classes/fixture on an explicitly admitted descendant. It must not load
-the owner world or replace the qualified dd0 installation.
-Keep426 frozen while its stages/locks are active. Owner51366's representative
-Forge probe is not yet integrated; a later probe-only change can reuse successful
-unchanged common compilation, not fabricate a native interaction pass.
+```text
+GRINDLESS_BLUEPRINT_NATIVE_PASS blocks=2 capture=1 stamp=1 known_false=1 blocked=1 unloaded=1 permissions=1 codec=1 limits=1 assertions=1182
+```
+
+The primary log has exactly one PASS and zero FAIL. It exercises real furnace
+source contents without cloning them, facing/default idle placement, item-NBT
+roundtrip, read-only preflight, main/offhand costs and excluded armor/BE stock.
+Missing/blocked/unloaded and asymmetric per-target Adventure permission refuse
+correctly. A real replaceable grass cell already matching the requested state
+makes native `setBlock` return false after the first paid stone placement;
+grass NBT is refunded exactly without refunding that placed stone.
+Malformed/33-edge/513-part payloads refuse without writes.
+
+Harness exit0 includes the canonical `smoke-boot.ps1` check rejecting a nonzero
+server exit. Server log23:51:18 records stopping/saving worlds and23:51:19
+records all dimensions saved. Server0 is based on that real canonical check,
+not an invented separate process receipt. This is an interaction mechanism
+proof, not a Blueprint second-process save/reopen, player login or campaign.
+
+Tested snapshot = staged `mods/grindless.jar` = remapped
+`grindless-0.1.0-forge.jar`: **2,416,319 bytes**, SHA-256
+`c70e08e97a21c6f60f18126f7adf75c364993686d1a1fd8372480f6d86991be2`.
+Actual base inventory has only that Grindless JAR and Architectury599,211 bytes,
+SHA-256 `47d5eca3d83aae1ac1d4a70116727715bd7ef4c077d228fee873065cbca94687`.
+FTB is not required by this case; no second FTB boot is claimed.
+
+Parent verifies receipt SHA-256
+`ae24b613ca916ddc103a2687bca53428b07161e92a88ee278c74c34fe645c8a5`
+and every original file below by byte size/hash after SCP. Private host/session
+paths and raw build/JAR/world files stay out of Git.
+
+| Native evidence file | SHA-256 |
+| --- | --- |
+| `blueprint-interaction.commands` | `1eb48de5ff1b48320c1ca6a020fa58571c19368e6957e30523278899d0d6fb3e` |
+| `blueprint-interaction.expect` | `25b48a383a5df0a0bffaa4709931e7986eae53ae7f467f4d3a04bcb4dca1a45c` |
+| `blueprint-interaction.stderr.log` | `ad1c5cd2f181fbac41a871b1ab86e3a75b60b529aa8870545bd58e4793084b7b` |
+| `blueprint-interaction.stdout.log` | `e29a405cb2718e9e60576d3f589c6f9e12352311be79147f117a435ab87694e9` |
+| `closed.json` | `ccf642cba8464e6ff8852657f3207e9f083f5ec9ebb869eb9ef67ea06d800665` |
+| `grindless-tested.jar` | `c70e08e97a21c6f60f18126f7adf75c364993686d1a1fd8372480f6d86991be2` |
+| `resources.jsonl` | `5a9eda989b3015ed09112b0d49f4d12fd332f838d9368566e11c49d6169ab321` |
+| `server.log` | `7c1eba82c8717b5569c9f355f7845c51478e5062b5fd29ef3fd3e1739e34ba53` |
+| `source.txt` | `e79e7c10fc2b7edeb75c3267b9a1abd1736838a07533418f2a091b1c83702c32` |
+| `status.tsv` | `4a17b0355a28ca3d894ad0114e0627709fa775324a27f3a788b843b368c59548` |
+
+Final fresh leaseback at21:56:31.4465559Z: clean exactM, owned/all-observed
+Java0, work/cache locksfalse, no client command lines read or owner-world access.
+No game is killed and no successful native/JVM boundary is replayed.
+All leases are returned; further PC work needs a new explicit guarded assignment.
+
+### Automatic exact-M CI and remaining limits
+
+[Run39681018324](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39681018324)
+is **SUCCESS** on exactM: verify, Windows Prism tooling and all six smoke shards.
+The independent duplicate automatic
+[run39681008933](https://github.com/Ezequiel24123z/grindless-earlygame/actions/runs/39681008933)
+remains **FAILURE**: smoke6 starts a server but does not observe DRILL-OK;
+the other seven jobs succeed. Its trigger is not established or relabeled
+flaky. The separate automatic exact-source success includes smoke6; no manual
+dispatch/rerun or Drill repair is performed. Earlier failed/cancelled attempts
+retain their actual conclusions.
+
+Managed native46-to50 definition migration, stronger-Matrix manufacturing
+substitution, real family upgrades and broader tier content remain separate
+future work. Actual client/GUI/JEI, Blueprint save/reopen, longitudinal play,
+T1 packaging/deployment and acceptance/main/release are not executed here.
+The last verified dd0/JAR29bc/ZIP79ce player installation, original and backup
+are neither re-inspected nor modified by this diagnostic wave.
+Older pending snapshots below are historical, not new execution grants.
+
+Documentation closure: the existing link checker passes946 relative links/
+73 Markdown files/175 ADR sections and index entries. Static guards verify all
+13 changed paths are documentation/state only, both state JSON roots preserve
+every unrelated branch, all ten native hashes/four canonical payloads are exact,
+the plan retains15 unique task IDs/eight sections and both handoffs expose all
+eight categories. The first state comparison fails on unchanged `tasks` text
+because PowerShell's default file decoding differs from Git UTF-8; explicit
+UTF-8 comparison passes without changing that branch or relaxing the allowlist.
+No Gradle, Java, native or deployment proof is replayed for this document change.
 
 ## Actual existing-save clone load, not yet accepted lossless migration
 
