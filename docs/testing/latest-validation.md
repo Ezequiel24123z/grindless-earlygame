@@ -25,6 +25,31 @@ clone/audit/copy snapshots below are historical, not current blockers.
 
 ## Integrated development source
 
+The normal model boundary is now closed by **actual source426 execution**,
+not by rewriting canonical files. Guidance write/independentCheckOnly pass73
+declarations/5,191 comparisons; Economy416/17 and T1622 pass both modes.
+CheckOnly changes none of the four output bytes. The three previously red suites
+then pass Economy417, SustainabilityT02840 and T1Progression624. Backend native
+definition data964 / standalone synthetic mechanism2605 and pack152 also pass;
+these are not registered real-player/client results.
+
+The parent verifies receipt/status/manifest hashes, all four generated payload
+hashes and the presence of14 raw pairs:13stage exits0 plus the retained guidance
+CLI exit1 before writer main. The original empty-process observer failure
+remains; no successful classpath/tool compilation is replayed. Actual output
+checkpointA85069e7 has only four normal files and parent426. Its verified
+3,071-byte bundle is SHA-256
+`77c47288cf793cf4b17fab4f6070f5804e3198a3b10b4e0f5bd1ec575644a353`.
+Normal merge with e260 preservesA as an ancestor for a clean forward Sync.
+
+Source inputs for the actual generators are unchanged by d073: verified11 T1,
+17 tool,8 guidance and19 implementation source paths plus economy/shop/recipe/
+progression authorities. All share authority4b0f9b3d; no writer proof is relabeled
+as an execution on the later containing commit. The remaining new mechanism
+boundary is the actual Blueprint native item interaction on the published
+descendant, with exact runtime/jar and natural shutdown. The owner returns the
+writer lease at21:33:42Z, cleanA/JVM0/locks0; a new explicit GO is required.
+
 Local42654eb53985bd50ecbd37a48a4a25e727e51fb7 normally integrates source541cf6c9
 (pressure),4550b975 (Blueprint) and3a79a1f3 (baseline F1 Wire Mill); ab4d7bc
 normally merges final T0 root104de7bb afterward. No application source changes
@@ -75,9 +100,8 @@ different and needs real interaction evidence; a throwing placement callback may
 already have changed the world, so no global rollback or universal zero-loss proof
 is claimed. No production pressure recipe is added by541.
 
-Canonical outputs remain unchanged and stale. Only the named execution owner's NORMAL writers and
-CheckOnly can close the model boundary; never edit generated JSON to imitate a
-pass. Installed native46-to-source50 managed-definition migration and stronger
+The earlier stale canonical boundary below is superseded by the actual normal
+writer/check results and exactA output merge above. Installed native46-to-source50 managed-definition migration and stronger
 Matrix manufacturing substitution remain separate unfinished mechanisms.
 Client presentation, actual saved-world compatibility, publication and tier
 acceptance are not supplied by a static or surrogate check. The owner may play;

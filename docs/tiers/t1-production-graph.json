@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "c00e5995b92d531f440433916e444e132fe9f69b5d26506a2f81b24b11955bd7",
+  "authority_snapshot_sha256": "8ce11ced6b8e4f524c6a50809d0a6816fb19452751dfd67058211b55270d2482",
   "entry_route": "craft/relay_matrix",
   "exit_route": "assemble/relay_matrix_f2",
   "global_optimum_claimed": false,
@@ -609,6 +609,29 @@
           "discharged": [],
           "duration_ticks": 400,
           "fu_per_tick": 32,
+          "id": "assemble/machine_casing",
+          "inputs": {
+            "energy:FU": 12800,
+            "tag:forge:plates/iron": 4,
+            "tag:forge:rods/iron": 2
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:machine_casing": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
           "id": "assemble/relay_matrix",
           "inputs": {
             "energy:FU": 12800,
@@ -623,6 +646,108 @@
           "one_shot": false,
           "outputs": {
             "item:grindless:relay_matrix": 5
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "wire_forming",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "assembly"
+      ],
+      "routes": [
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "informational_milestone": "industrial"
+          },
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/wire_mill",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:copper_coil": 2,
+            "item:grindless:machine_casing": 1,
+            "item:grindless:relay_matrix [F1]": 1,
+            "tag:forge:plates/iron": 4
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:wire_mill": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 160,
+          "fu_per_tick": 32,
+          "id": "mill/wire/iron",
+          "inputs": {
+            "energy:FU": 5120,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "WIRE_MILL",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 5120,
+          "one_shot": false,
+          "outputs": {
+            "tag:grindless:wires/iron": 2
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 160,
+          "fu_per_tick": 32,
+          "id": "mill/wire/copper",
+          "inputs": {
+            "energy:FU": 5120,
+            "tag:forge:ingots/copper": 1
+          },
+          "machine_family": "WIRE_MILL",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 5120,
+          "one_shot": false,
+          "outputs": {
+            "tag:grindless:wires/copper": 2
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 160,
+          "fu_per_tick": 32,
+          "id": "mill/coil/copper",
+          "inputs": {
+            "energy:FU": 5120,
+            "tag:grindless:wires/copper": 2
+          },
+          "machine_family": "WIRE_MILL",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 5120,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:copper_coil": 1
           },
           "source": "ProcessGraph.generate"
         }
@@ -658,6 +783,29 @@
             "item:grindless:flux_cell": 1
           },
           "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_cell.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/flux_cell",
+          "inputs": {
+            "energy:FU": 12800,
+            "tag:forge:ingots/copper": 8,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:flux_cell": 1
+          },
+          "source": "ProcessGraph.generate"
         },
         {
           "authority": "PROCESS_GRAPH",
@@ -1174,6 +1322,66 @@
         "fuel/thermal_generator/biomass"
       ],
       "resource": "energy:FU",
+      "route": "assemble/flux_cell",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 8,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_copper"
+      ],
+      "resource": "tag:forge:ingots/copper",
+      "route": "assemble/flux_cell",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "assemble/flux_cell",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 12800,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "assemble/machine_casing",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "press/plate/iron"
+      ],
+      "resource": "tag:forge:plates/iron",
+      "route": "assemble/machine_casing",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "press/rod/iron"
+      ],
+      "resource": "tag:forge:rods/iron",
+      "route": "assemble/machine_casing",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 12800,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
       "route": "assemble/relay_matrix",
       "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
     },
@@ -1231,21 +1439,21 @@
       "amount": 1,
       "catalyst_retained": false,
       "producers": [
-        "craft/flux_cell"
+        "assemble/flux_cell"
       ],
       "resource": "item:grindless:flux_cell",
       "route": "assemble/relay_matrix_f2",
-      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+      "status": "IMPLEMENTED_AUTOMATIC_RECURRENT_INPUT_NOT_RENEWABILITY_PROOF"
     },
     {
       "amount": 1,
       "catalyst_retained": false,
       "producers": [
-        "craft/machine_casing"
+        "assemble/machine_casing"
       ],
       "resource": "item:grindless:machine_casing",
       "route": "assemble/relay_matrix_f2",
-      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+      "status": "IMPLEMENTED_AUTOMATIC_RECURRENT_INPUT_NOT_RENEWABILITY_PROOF"
     },
     {
       "amount": 1,
@@ -1426,7 +1634,7 @@
       ],
       "resource": "item:grindless:machine_casing",
       "route": "craft/assembler",
-      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+      "status": "MANUAL_FINITE_FIRST_ASSEMBLER_SEED"
     },
     {
       "amount": 1,
@@ -2090,7 +2298,7 @@
   "unproved": [
     "The existing auditor does not normalize untagged default-F1 outputs into the explicit F1 input identity.",
     "Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
-    "Manual casing and Flux Cell crafts are not automatic recurring production routes.",
+    "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
     "Continuous factory power, nighttime recovery, routing throughput and captured-gas handling need separate evidence.",
     "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."
   ]

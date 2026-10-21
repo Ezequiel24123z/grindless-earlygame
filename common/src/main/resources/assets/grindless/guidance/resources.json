@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "014115a116674b65ffd6d19656fcfa1e70cd7d1c586b73b84de6816b842cdf25",
+  "content_sha256": "f92b927fed8ec6d4dcb3bc8ea9ef9e7a812c36e6cee866ad9a73dcc4b45facd1",
   "resources": [
     {
       "resource": {
@@ -672,6 +672,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/flux_cell",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/flux_drill",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
@@ -761,6 +772,17 @@
         },
         {
           "route": "assemble/logic_controller",
+          "source": "ProcessGraph.generate",
+          "via": "energy:FU",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/machine_casing",
           "source": "ProcessGraph.generate",
           "via": "energy:FU",
           "kind": "consumed_input",
@@ -11974,6 +11996,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/flux_cell",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/copper",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/relay_matrix",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/copper",
@@ -12980,6 +13013,17 @@
         },
         {
           "route": "assemble/bootstrap/hand_crank_dynamo",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "complete_tag_member",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/flux_cell",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
           "kind": "consumed_input",
@@ -15093,6 +15137,17 @@
           "discharged": false
         },
         {
+          "route": "assemble/flux_cell",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/copper",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
           "route": "assemble/relay_matrix",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/copper",
@@ -15438,6 +15493,17 @@
         },
         {
           "route": "assemble/bootstrap/hand_crank_dynamo",
+          "source": "ProcessGraph.generate",
+          "via": "tag:forge:ingots/iron",
+          "kind": "consumed_input",
+          "certainty": "exact_resource",
+          "unconditional": true,
+          "unlock_tier": null,
+          "optional": null,
+          "discharged": false
+        },
+        {
+          "route": "assemble/flux_cell",
           "source": "ProcessGraph.generate",
           "via": "tag:forge:ingots/iron",
           "kind": "consumed_input",

@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the three canonical gates through normal writers and exact Git ancestry.**
+  Actual426 Guidance/Economy/T1 writes and independent CheckOnly, three previously
+  red suites and FTB50/pack contracts pass. Preserve13 zero stages, the earlier
+  invoker red and observer failure without replaying successful preparation.
+  Verify the four output hashes and thin bundle, then normally mergeA85069 with
+  the Blueprint fix/probe source so the retained PC checkpoint advances cleanly.
+  Reuse unchanged authority proofs; only registered Blueprint interaction remains.
 - **Protect Blueprint construction stock and add a real interaction proof.**
   Exclude any BlockEntityTag material in both inventory counting and reservation;
   default-state stamping must not burn relocated machine contents/upgrades.
