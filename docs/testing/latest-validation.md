@@ -1,5 +1,28 @@
 # Current T0/T1 validation
 
+## Final native FTB Prism and existing-game delivery
+
+Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
+pristine36-file/10,885,681-byte world and exact options copy from the verified
+backup. Original F, backup, protected metadata and launcher settings remain
+unchanged; the booted clone is not the final reference.
+
+The retired-ID question is resolved by actual Minecraft NBT/region parsing:
+2,608 chunk roots/141,859 strings,0 actual item/block/entity/block-entity
+references,0 unknowns/read errors; Heracles occurs only in historical registry/
+datapack/mod-list metadata. Earlier PowerShell binding/File.Open failures are
+preserved before JVM; final direct javac/scanner both0, with no successful replay
+to create missing silent-compiler stdout. Final Copy0 and production Inspect0
+are independent closed boundaries. No world rewrite or global ignore is applied.
+The first final-custody SCP request fails on that absent stdout file; retrieving
+the real audit/closure artifacts completes custody without a JVM or deployment
+replay. That observer failure does not relabel the successful boundaries.
+
+All temporary PC leases/owned JVMs/locks are released. The owner can continue the
+new instance's existing-world copy. Actual native login/import/rewards, GUI/JEI
+and longitudinal acceptance remain unobserved human results. Prior pending
+clone/audit/copy snapshots below are historical, not current blockers.
+
 ## Actual existing-save clone load, not yet accepted lossless migration
 
 On exactdd0 the admitted backup-derived F clone reaches Done and naturally

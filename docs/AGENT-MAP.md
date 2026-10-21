@@ -58,6 +58,13 @@ The [native integration reference](design/ftb-questbook-integration.md) records
 exact official binary hashes, receipt APIs, Matrix adapter semantics and the
 required XMod Compat JEI provider. Source research is not a loader/client pass.
 
+The bounded fix is now installed atdd0/29bc/79ce in Grindless-T0-FTB-Dev with
+the pristine36-file original-game/options copy, not the tested clone. Actual
+clone load/save and a Minecraft NBT/region audit resolve retired Heracles IDs as
+metadata-only; original/backup remain unchanged. Native player login, GUI/JEI/
+physical reward delivery are not inferred. All temporary PC leases are returned;
+new source owners need a new guarded window and may not update this T0 instance.
+
 ADR-0172's independent T1 source2f4eee1 owns only ordinary Assembler component
 data, T1 selection/provenance and affected recipe/Atlas/progression contracts.
 Manual casing seeds the first Assembler; automatic output follows it, not a

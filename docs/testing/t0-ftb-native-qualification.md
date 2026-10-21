@@ -5,6 +5,44 @@ tasks/rewards and the client screen, not the old custom guide widget. This recor
 does not declare client rendering, actual recipe clicks, owner-world upgrade,
 manual play or T0 acceptance passed.
 
+## Final protected player handover
+
+**Grindless-T0-FTB-Dev** now contains the exact dd0 package/JAR recorded below
+and the pristine copy of the owner's existing game/options. Production Inspect
+returns VerifiedStopped after copy. All36 world files/10,885,681bytes, options
+and source/protected metadata are verified; the original F instance and backup
+remain unchanged. The final player world comes from the untouched backup,
+never the booted diagnostic clone.
+
+The separate actual-save clone reaches Done and naturally saves/stops with
+harness/server0. Forge reports retired Heracles barrier block/item and quest-book
+registry entries. A subsequent existing-Minecraft NbtIo/RegionFile visitor scans
+a verified disposable copy:19 GZIP dat,2dat_old,1extraNBT,8regions/2,608 parsed
+chunk roots,141,859 string tags. Actual item/block/entity/block-entity references,
+unknown references and read errors are all0. Matches are only registry6,
+datapack2 and mod-list2 historical metadata. The coordinator accepts removing
+those unused registrations; no blanket ignore, compatibility item rewrite or raw
+quest/player data migration is used.
+
+The worker's PowerShell argument binding and parent's first File.Open overload
+fail before compiler launch; their UNKNOWN/nonpass receipts remain. Direct
+invocation with canonical resource/source locks and FileStream then gives actual
+javac0/scanner0. Silent javac/Tee has no stdout file; the actual exit and scanner
+result are retained, not replayed for a nicer log. The backup stays identical.
+All temporary leases/JVMs/locks are released; source development needs a new
+explicit guarded execution window.
+
+To continue: select this exact new instance in Prism, open the existing same-name
+world copy and use the existing Quest Book for native FTB. Ordinary recipes use
+JEI. Make room before claiming native rewards; stock overflow semantics are not
+the retired atomic no-drop behavior. Continue only the new copy, not both
+independent saves. The old instance/backup remain rollback evidence.
+
+Actual owner login/receipt import, GUI/JEI clicks, physical rewards, readability
+and campaign remain human observations. No release, T0 acceptance/freeze or
+later-tier deployment follows from this handover. Earlier pending states below
+preserve the qualification sequence, not current incomplete delivery.
+
 ## Source and actual execution
 
 | Boundary | Source / observed result |
@@ -110,11 +148,14 @@ The reviewed helper verifies an original-world/options backup:36 world files,
 10,885,681 bytes, all hashes and protected source metadata unchanged.
 Private paths/identities/receipts are not committed.
 
-Before final handover: load a separately admitted verified F-world clone to
+The earlier final-handover boundary was: load a separately admitted verified F-world clone to
 establish the changed-mod registry/load boundary, then copy the untouched backup
 to the fresh target. The synthetic diagnostic origin is not an owner-clone
 origin and must never be loosened/relabelled. The tested clone is not the final
 reference save.
+
+That boundary is now closed by the actual clone/NBT disposition and pristine
+copy above; it still supplies no real-player/client pass.
 
 The actual DevF world, old preparation world and global launcher settings remain
 unmodified; the new owned target is separate. Real GUI/JEI clicks, player inventory submission/delivery,

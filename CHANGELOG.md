@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Deliver the native FTB correction with the existing game preserved.**
+  Minecraft's NBT/region APIs inspect the verified copy:36 files/2,608 chunk roots,
+  no actual or unknown Heracles reference/read error; retired IDs occur only in
+  historical metadata. After preserving the pre-JVM invoker/lock-overload failures,
+  direct compiler/scanner pass without replaying successful stages. The pristine
+  backup world/options copy now passes production Inspect in the new owned
+  Grindless-T0-FTB-Dev instance atdd0/JAR29bc/ZIP79ce. Original/backup remain intact;
+  actual owner login/GUI/JEI/rewards and campaign acceptance are not invented.
 - **Align the next Wire Mill increment with its actual baseline capability.**
   The source trace confirms an unchanged F1/MKI product, so authorize its T1
   F1 construction operand and optional post-Assembler forming route, preserving
