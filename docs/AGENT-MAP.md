@@ -28,6 +28,13 @@ The current installed qualified experience runtime is298988d/95bf47c4;
 747/c08 and1389/559 are historical. Read the
 [exact Prism handoff](testing/t0-experience-prism-deployment.md); it is still not
 a graphical/client or human longitudinal pass.
+The owner's current priority is [longitudinal-start readiness](testing/t0-longitudinal-readiness.md),
+not an indefinitely disposable dev world. Read the actual installed F evidence
+before inferring playability from a gate label. Preserve indexed inventories,
+per-player quest IDs, Matrix rating meaning and stopped-game copy-based updates.
+`VeinData.DerivationVersion` is currently not consumed by scanner/extractor
+generation; do not claim forward surveyed-vein stability if algorithm/material
+inputs change. The T1 PC lease is returned and must not be reused implicitly.
 The new [experience plan](../plan/feature-t0-experience-1.md) under ADR-0161
 explicitly opens bounded T0 quest/Guide/recovery economy/tank/interface/inspection/
 physical sound/visual work. It does not authorize a generic engine rewrite or

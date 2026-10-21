@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Investigate the intended longitudinal start instead of treating the game as disposable.**
+  Reverify exact installed F through read-only Inspect and inventory: stopped
+  candidate, no observed client log/options/reference world, unchanged launcher
+  metadata and no instance/world mutation. Document the missing bounded client/
+  save-reopen proof and baseline/update handover separately from a real future
+  vein-derivation defect: saved `DerivationVersion` is not consumed by scanner/
+  extractors. Preserve existing persistence safeguards and distinguish that
+  update risk from new-world corruption. Pause T1 execution with its lease returned;
+  human campaign acceptance must not be required before the campaign begins.
 - **Open owner-directed T1 development alongside unchanged T0 testing (ADR-0168/0169).**
   Create isolated first-factory, quest and reusable-system documentation lanes from
   the actual a64 experience baseline. Bind live F1 power/material/forms/assembly/

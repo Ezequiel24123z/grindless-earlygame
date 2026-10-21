@@ -31,11 +31,16 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > prototype/test infrastructure, not an Industrial shortcut. The current revision-bound evidence
 > is in [the validation record](docs/testing/latest-validation.md).
 >
-> **Active development:** `1389ebb` is the T0 engineering candidate. The next deliverable is
+> **Active development:** `1389ebb` is historical engineering evidence; the installed
+> T0 experience candidate is exact F (`298988d`). The next deliverable is
 > the first **T0 Playable Release Candidate**: a curated, configured and versioned pack with
 > deliberate Superflat progression, real sprite/art and sound passes, coherent quests and
 > forward-save compatibility. Existing S2, runtime, UI and packaging proofs are reused within
-> their limits; they do not already establish that product. T0 is the only active tier.
+> their limits; they do not already establish that product. The owner's
+> [longitudinal-readiness investigation](docs/testing/t0-longitudinal-readiness.md)
+> distinguishes actual save/update gaps from missing client observations. Campaign
+> acceptance is an outcome of real play, not a prerequisite to beginning it.
+> ADR-0168 separately opens isolated T1 development; it is not a T1 deployment.
 > Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
 > **Execution is SSH-first (ADR-0151):** this conversation stays local; heavy work runs
@@ -2138,7 +2143,8 @@ and only happens once.
 
 The Forge 1.20.1 repository contains systems spanning T0–T2 and later travel/world prototypes.
 Their implementation and historical smoke coverage are not acceptance of an Industrial or
-space-era survival campaign. **T0 is the only active tier; no tier is accepted.**
+space-era survival campaign. **T0 is the installed playable candidate; isolated T1
+development is owner-authorized, and no tier is accepted.**
 
 **Historical prototype claim:** the earlier roadmap described automated iron in under fifteen
 minutes without hand-mining. That statement is not a current source-bound playtime measurement
@@ -2328,7 +2334,8 @@ is preserved and integration/release gates still control acceptance.
 | 57 | **Clay Mixer wet-work integration** | qualified/deployed747:2 real ElevenLabs200 candidates, technicalA normalized mono44100/3s, exact Ogg2c052c; Quern811b unchanged. One tracker/one loaded9-chunk scan, passive TANK feedback corrected. Offline sound and actual PC audio84/full-assets, exact archive, production registry boot and same-artifact deployment pass. Human listening/1–8-machine mix remains pending |
 | 58 | **Testing-ready main and PR cleanup** | ADR-0160 delivery —747 is technically qualified/deployed and all16 hosted jobs pass. The [consolidation PR](https://github.com/Ezequiel24123z/grindless-earlygame/pull/55) records live main/cleanup state; all13 old heads are preserved, branches/worktrees retained. Proof-only documentation reuses unchanged runtime inputs. No forced merge, invented RC, T0 acceptance/freeze or T1 activation |
 | 59 | **T0 experience before longitudinal play** | implemented and [deployed exact F](docs/testing/t0-experience-prism-deployment.md):46 quests/32 T0/14 gated T1, shared six-port teaching, Guide migration,17 barter offers, tank/hatches, optional F8 inspection, physical sound and deterministic visual presets. [Phase A](docs/testing/t0-experience-source-qualification.md) full52/Heracles776 and [Phase B](docs/testing/t0-experience-package-native.md) ports2088/package88/native26 pass. DevDeploy/Inspect/idempotency and six old files/two launcher metadata hashes pass. Hosted F CI is recorded separately. Required graphical gate BLOCKED; no longitudinal campaign, T0 acceptance/freeze, RC or T1 activation |
-| 60 | **Parallel T1 first-factory development** | source integratedc727894, guarded validation in progress — [plan](plan/feature-t1-first-factory-1.md), [line map](docs/tiers/t1-development-map.md), [reusable-system handbook](docs/architecture/reusable-systems.md). Live lines/export,18 T1 teachings/four reward-free lessons reuse existing engines;32 T0 tasks/all46 old IDs/26 rewards remain. Physical F2 exit, Factory World optional. Exact execution/QA evidence pending; no Prism update, T0 acceptance or T1 release implied |
+| 60 | **Parallel T1 first-factory development** | sourceef9d670 preserved, execution paused for owner-requested T0 longitudinal investigation — [plan](plan/feature-t1-first-factory-1.md), [line map](docs/tiers/t1-development-map.md), [reusable-system handbook](docs/architecture/reusable-systems.md). Common/Forge/backend1058, affected checks and ignored-output writer/twins have bounded evidence; normal canonical outputs/rechecks remain open. Not deployed |
+| 61 | **Longitudinal-start readiness** | [source-bound investigation](docs/testing/t0-longitudinal-readiness.md): fresh read-only Inspect confirms installed F/95bf/3e5a; no client log/options/world observed. Separate missing client save/reopen proof and baseline/update delivery from a real unused vein-version pin. Do not demand a completed T0 campaign before its first reference world or claim an unobserved client pass |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2355,7 +2362,8 @@ checks, documentation and 39 smoke scenarios. That historical statement is not e
 new checkout; see the revision-bound [current validation](docs/testing/latest-validation.md).
 The repository contains implementation inventory extending through T2, including extraction,
 logistics, fluids, fabricated machines, tools and matter scanning. Those systems and later
-prototypes are not accepted T1/T2 survival progression; T0 is the only active tier.
+prototypes are not accepted T1/T2 survival progression. T0 remains the installed
+candidate; parallel T1 source development is separately authorized by ADR-0168.
 
 Luna, the Drift, the survey rocket, the supraluminal station, Sagittarius and the original quest
 book remain implemented in the repository; historical tests are not current campaign acceptance.

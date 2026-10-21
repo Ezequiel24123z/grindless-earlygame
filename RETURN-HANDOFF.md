@@ -1,6 +1,26 @@
 # Return handoff
 
-## Current owner-directed T1 development
+## Current owner priority — prepare a lasting longitudinal world
+
+The owner asks for [an evidence-based readiness diagnosis and corrective path](docs/testing/t0-longitudinal-readiness.md).
+The intended world is not merely disposable testing. Human acceptance is produced
+by the campaign, not demanded before it begins.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Fresh read-only installed F/95bf/3e5a confirmed; independent entry/pin QA finds real free-kit route/no initial functional blocker; save review finds unused vein-version pin and delivery review finds stale instructions |
+| BLOCKED | Actual client/start/save-reopen unobserved; no personal-PC Prism GUI exposed to the current local tools |
+| NOT EXECUTED | Client/world actions, copy-upgrade, code repair, RC publication or new deployment; T1 normal canonical output gates remain open |
+| NEEDS HUMAN VALIDATION | Controlled graphical observation, then real longitudinal feedback/acceptance |
+| NEEDS MY DECISION | None for the investigation; no required gate is silently waived |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Approved graphical route or owner's controlled result; no credential value |
+| COST / BILLING RISK | No new generation, paid service or installation |
+| DEPLOYED STATE | F unchanged and stopped at16:30:22Z,0worlds/no client log/options observed; no instance/save mutation; T1 executor returned lease and is suspended |
+
+## Preserved owner-directed T1 development
+
+This earlier checkpoint is superseded operationally by the priority/lease return
+above, not relabeled as a completed T1 qualification.
 
 On2026-10-21 the owner explicitly opens T1 development while testing T0.
 [ADR-0168/0169](docs/DECISIONS.md#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game)

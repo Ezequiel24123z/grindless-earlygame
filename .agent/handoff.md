@@ -1,8 +1,56 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **T0 TESTING UNAFFECTED; PARALLEL T1 DEVELOPMENT AUTHORIZED**.
+Updated: 2026-10-21. Product gate: **OWNER REQUESTS A LONGITUDINAL BASELINE; F INSTALLED, CLIENT QUALIFICATION OPEN**.
 
-## Current owner direction — parallel T1
+## Current priority — longitudinal start, not disposable-only testing
+
+The owner clarifies that the intended game is longitudinal and asks whether the
+installed build is prepared, why not if it is not, and how the gaps will be fixed.
+Read [the investigation](../docs/testing/t0-longitudinal-readiness.md).
+Campaign human acceptance follows the game; it is not a prerequisite to begin it.
+Do not confuse a missing observation with a demonstrated corrupting bug.
+
+The T1 core owner explicitly returned its exclusive PC lease at16:28:20Z:
+sourceef9d670 clean,0Java/owned/unknown/focused helpers and no worktree/cache locks.
+T1 stays suspended; do not reuse that lease. Its evidence handoff20c88ff is a
+local preserved object, not a published/qualified/deployed T1 completion.
+Normal canonical T1/Guidance/Economy outputs and their rechecks remain open.
+
+The coordinator then performs read-only Inspect of F and bounded state observation
+at16:30:22Z: exact298988d/95bf47c4/3e5ad1fb, `VerifiedStopped`, no Prism/Java,
+0worlds with `level.dat`, no client log/options and unchanged launcher metadata.
+No launch, deployment, world/configuration change or new credential/access occurs.
+The current local UI tools do not expose the personal-PC Prism desktop.
+
+Independent read-only pack QA99cb8106 confirms the actual Survival login/book/
+free eleven-stack starter route and consistent seven selected pins. No initial
+functional blocker is demonstrated. The delivered guide still describes old
+Overworld preparation, the official world-selection contract is not closed,
+and client-prep/starter-recovery prose contains stale statements. Correct the
+delivery/instructions without inventing missing trees/villages or another kit.
+
+Save/registry/claim contracts provide useful evidence, but no actual client
+save/reopen is supplied by those tests. A real forward-update gap is identified:
+`VeinData` saves `DerivationVersion`, while scanner/extractors regenerate from
+the current version and live materials, ignoring that saved pin. This is not a
+demonstrated new-F-world corruption; it must be addressed before a conflicting
+generation/catalogue update and verified on a preserved reference-save copy.
+
+| Category | Current investigation |
+| --- | --- |
+| COMPLETED | Fresh exact-F installation/state, independent pack/entry/pin review and source-bound save safeguards checked; real vein-version gap and stale distributed instructions identified; no new-world corruption demonstrated |
+| BLOCKED | Objective client start/save-reopen remains unobserved; no exposed approved personal-PC GUI target |
+| NOT EXECUTED | Client/world creation/reload, real copy-upgrade, compatibility-code repair, RC publication, T1 normal-output completion or deployment |
+| NEEDS HUMAN VALIDATION | Controlled client observations, then actual longitudinal campaign quality/acceptance |
+| NEEDS MY DECISION | None for the investigation; no gate waiver or automatic world adoption |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Approved graphical execution route or owner's controlled observations; no credential value requested |
+| COST / BILLING RISK | No generation, paid services, model installation or new access |
+| DEPLOYED STATE | Exact F/95bf/3e5a unchanged and stopped,0worlds observed; T1 remains separate and undeployed |
+
+## Preserved owner direction — parallel T1
+
+The following source/lease snapshots precede the priority/lease return above.
+They preserve what was assigned then and do not reauthorize a resumed PC worker.
 
 The owner explicitly requests T1 development and documentation of reusable
 systems/production lines while testing the T0 dev build (ADR-0168/0169).

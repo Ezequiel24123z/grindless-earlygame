@@ -1,5 +1,25 @@
 # Current T0/T1 validation
 
+## Owner-requested longitudinal readiness — fresh read-only installed F
+
+The [investigation](t0-longitudinal-readiness.md) records production Inspect of
+exact F/95bf47c4/3e5ad1fb and bounded state at2026-10-21T16:30:22Z:
+`VerifiedStopped`, expected Minecraft/Forge components,0Java/Prism,0 worlds with
+`level.dat`, no options or client log, unchanged launcher metadata. No world,
+configuration, artifact or process was changed/launched.
+
+This confirms installation, not graphical play or save/reopen. Source review
+identifies an actual forward-update gap: the persisted vein derivation version
+is unused by scanner/extractor generation. It does not demonstrate corruption
+of a new F world with unchanged version/materials. Existing codec/native proof
+is retained; no full audit, native run or application check is replayed.
+Campaign human acceptance follows the playable handover, not before first play.
+
+T1 sourceef9 is paused and undeployed, its PC lease returned. Bounded compile/
+backend/affected/export-twin evidence is preserved separately; normal canonical
+T1/Guidance/Economy outputs and their rechecks remain open. Its hosted failures
+must not be attributed to installed F or described as full qualification.
+
 ## T1 first-factory — source74, execution in progress
 
 ADR-0168/0169 open development while preserving installed T0 F. Integrated

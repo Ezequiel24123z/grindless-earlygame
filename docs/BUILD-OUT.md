@@ -26,7 +26,16 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)
+Next: close the owner's [longitudinal-start investigation](testing/t0-longitudinal-readiness.md).
+The intended game is a lasting reference save, not merely a disposable test.
+Fresh read-only Inspect confirms exact installed F unchanged. Client/start/save-
+reopen observation and explicit baseline/update handover remain distinct from
+the real unused vein-version pin that must be addressed before a conflicting
+update. Do not invent a client pass or require the owner to complete T0 first.
+The T1 executor returned its PC lease; no worker may reuse it while this priority
+is active. No launcher/world/deployment action was performed by the investigation.
+
+The separately authorized queue remains: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)
 under ADR-0168/0169 while the owner tests the T0 dev build. This later instruction
 opens development, not a retroactive T0/client acceptance or a T1 release. Use
 isolated branches based on the current T0 experience source, document reusable
@@ -39,6 +48,9 @@ the single core-owner lease. Independent static QA closes the verifier ENERGY/
 physical-component correction on74ccb36 without dropping report energy.
 Keep actual qualification pending until source-bound receipts are verified;
 the private observer failure does not justify replaying successful Gradle work.
+Its later sourceef9 and local evidence handoff20c88ff are preserved. Normal-path
+T1/Guidance/Economy outputs and their canonical rechecks are still open; the
+read-only longitudinal investigation does not complete or deploy that branch.
 
 The independent T0 task remains: close the required controlled **graphical** smoke of the
 [installed experience candidate F](testing/t0-experience-prism-deployment.md).
