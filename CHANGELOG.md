@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Align the next Wire Mill increment with its actual baseline capability.**
+  The source trace confirms an unchanged F1/MKI product, so authorize its T1
+  F1 construction operand and optional post-Assembler forming route, preserving
+  stock/time/FU and the initial F2 path. Keep real chassis/controller upgrades
+  separate; no recipe cost alone is a capability implementation.
 - **Load a separately admitted copy of the actual F save.** Canonical
   startup/natural shutdown pass atdd0; parent verifies22 custody artifacts and
   unchanged backup/prior diagnostic. Preserve the initial daemon-admission

@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 31,
+  "plan_revision": 32,
   "updated": "2026-10-21",
   "phase": "native_FTB_package_qualified_new_owned_target_deployed_original_backup_verified_final_delivery_in_progress",
   "product_gate": "NATIVE_FTB_QUALIFIED_PROTECTED_SAVE_DELIVERY_PENDING",
@@ -139,6 +139,7 @@
     "T2_branch": "ezequiel24123z-fabricacion-industrial-t2",
     "T2_source_checkpoint": "e265eb284269146f06b3ef6a0d3e32148b5636ab",
     "T2_scope": "preserved_source_only_5ff_plus_b38_F2_operand_does_NOT_change_defaultF1_MKI_output_not_final_family_placement_or_real_upgrade_under_ADR0174",
+    "family_followup_code": "ec7c_authorized_baselineT1_WireMill_F1_fourth_operand_same400_32_stock_no_extra_firstF2_prerequisite_no_MKII_or_matcher_storage_change_local_checkpoint_pending",
     "family_seam_source_findings": "configuredTier_final_defaultF1_kind_final_narrow_equals_full_runtime_regulation_static_energy_limits_final_legacy_MK_Upgrades_saved_but_no_playable_installation_callers_no_upgrade_claim",
     "T3_T15_owner": "8210a8bd-9f5a-428a-81c5-604594fe235b",
     "T3_T15_scope": "read_only13tier_dossier_recovered_from_task_complete_summary_channel_tool_absent_not_execution_acceptance",

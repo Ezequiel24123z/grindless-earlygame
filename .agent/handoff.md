@@ -23,6 +23,10 @@ equal narrow/full process envelopes, static regulation, immutable buffer limits
 and no playable chassis/module installation callers. Existing saved MK/modules
 and relocation are useful seams, not a working upgrade. Preserve this source;
 do not deploy or call it the final first-family placement under ADR-0174.
+After that trace, ec7c now implements a bounded F1 baseline Wire Mill (fourth
+physical F1 operand, same400/32/bill/output, optional wire forming after assembly).
+No new first-F2 prerequisite, matcher/storage change or fictitious MK II is
+authorized; source checkpoint and actual execution remain pending.
 
 The8210 researcher lacked `send_session_message`/artifact output; its real
 13-tier dossier is recovered from `session.task_complete.data.summary`, not its

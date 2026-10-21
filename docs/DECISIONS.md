@@ -8147,6 +8147,15 @@ must carry and use a real changed capability. Select baseline-F1 versus upgrade
 construction only after tracing existing shared chassis/persistence seams.
 Do not silently change every ingredient rating, recipe bill or saved machine.
 
+The subsequent source trace confirms the emitted item and placed kind remain
+F1/MK I; no upgraded capability follows from the F2 ingredient. The next bounded
+implementation therefore makes the **baseline T1 Wire Mill** consume one F1
+Matrix as its fourth grouped operand, keeping its casing/coil/plate bill,
+400ticks/32FU, normal output and acid-free entry. Connect optional wire forming
+after the first Assembler without adding a prerequisite to the initial F2 batch.
+Do not change matching/storage or advertise MK II. Actual higher-capability
+upgrades remain a separate shared-mechanism implementation, not this recipe.
+
 Use the already accepted two-dial chassis-mark/modules design in MACHINES and
 ADR-0027/0028/0030. Upgrade in place with stable block/save identity and preserve
 stored items/fluids, configuration, links and ownership; specify treatment of an
