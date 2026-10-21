@@ -5,6 +5,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.entity.player.Inventory;
@@ -76,6 +78,27 @@ public final class VerifyQuestClaims {
                         task -> false, VerifyQuestClaims::resolve, capture(new ArrayList<>())));
         equal("pre-native saved data does not invent an authority", false,
                 QuestProgress.load(new CompoundTag()).usesNativeClaims(first));
+        QuestProgress empty = new QuestProgress();
+        empty.useNativeClaims(first);
+        QuestProgress restored = QuestProgress.load(empty.save(new CompoundTag()));
+        equal("a native-first player retains authority without old receipts", true, restored.usesNativeClaims(first));
+        equal("native-first authority does not fabricate old claims", Set.of(), restored.claimed(first));
+        ListTag numericPlayers = new ListTag();
+        numericPlayers.add(IntTag.valueOf(1));
+        ListTag invalidPlayers = new ListTag();
+        invalidPlayers.add(StringTag.valueOf("not-a-player"));
+        for (net.minecraft.nbt.Tag malformed : List.of(StringTag.valueOf(first.toString()),
+                numericPlayers, invalidPlayers)) {
+            CompoundTag corrupted = new CompoundTag();
+            corrupted.put("NativeClaims", malformed);
+            boolean rejected = false;
+            try {
+                QuestProgress.load(corrupted);
+            } catch (IllegalArgumentException expected) {
+                rejected = true;
+            }
+            equal("corrupt authority never silently reopens legacy grants", true, rejected);
+        }
     }
 
     private static void claims() {

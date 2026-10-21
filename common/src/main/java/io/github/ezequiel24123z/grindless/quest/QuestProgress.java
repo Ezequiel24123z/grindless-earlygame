@@ -117,12 +117,17 @@ public final class QuestProgress extends SavedData {
                 progress.claimed.put(player, tasks);
             }
         }
-        ListTag nativePlayers = tag.getList(TAG_NATIVE_CLAIMS, Tag.TAG_STRING);
-        for (int i = 0; i < nativePlayers.size(); i++) {
-            try {
-                progress.nativeClaims.add(UUID.fromString(nativePlayers.getString(i)));
-            } catch (IllegalArgumentException exception) {
-                throw new IllegalArgumentException("Invalid native quest claim authority in saved progress", exception);
+        if (tag.contains(TAG_NATIVE_CLAIMS)) {
+            if (!(tag.get(TAG_NATIVE_CLAIMS) instanceof ListTag nativePlayers)
+                    || !nativePlayers.isEmpty() && nativePlayers.getElementType() != Tag.TAG_STRING) {
+                throw new IllegalArgumentException("Invalid native quest claim authority list in saved progress");
+            }
+            for (int i = 0; i < nativePlayers.size(); i++) {
+                try {
+                    progress.nativeClaims.add(UUID.fromString(nativePlayers.getString(i)));
+                } catch (IllegalArgumentException exception) {
+                    throw new IllegalArgumentException("Invalid native quest claim authority in saved progress", exception);
+                }
             }
         }
         return progress;
