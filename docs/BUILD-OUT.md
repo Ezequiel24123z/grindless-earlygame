@@ -44,6 +44,15 @@ Do not recreate existing Motor/Wire Mill implementations or invent recipe bills.
 Record the exact-rating versus stronger-control substitution gap and future
 managed native46-to50 definition migration separately from source completion.
 
+**Latest design clarification (ADR-0174):** T1 must introduce the basic families,
+not just its first five-machine increment. Later tiers grow exponentially in
+meaningful lines/content/interdependence and upgrade actual family capabilities,
+with specialized multiblocks. Preserve e265's bounded F2 source as evidence, not
+the final first-Wire-Mill placement or a real MK upgrade. Before the next recipe
+increment, select baseline/upgrade seams using existing chassis, store ownership,
+conditions and persistence plus compatible external implementation precedent.
+Do not invent another executor, mutate the player's save or multiply timers.
+
 Final FTB package dd0/JAR29bc/ZIP79ce is qualified and the new owned target is
 deployed; the original36-file world/options backup is verified. The coordinator
 temporarily grants only runtime worker980e99a3 the `ftb-owner-clone-20261021`

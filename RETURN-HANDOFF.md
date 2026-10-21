@@ -1,5 +1,19 @@
 # Return handoff
 
+**Latest:** ADR-0174 fixes basic families fromT1 and exponential meaningful
+lines/content, real capability upgrades and compatible external reuse. Public
+b38 preserves nativeFTB+firstfactory/two components/18 concise T1 bodies; it is
+not allT1. Publice265 preserves the F2 operand but still produces baselineF1/MKI,
+not a functioning upgrade. Recovered8210 source research leads to isolated
+blueprint-preflight51366 and optional-pressureb823 code, with no PC grant.
+
+The real backup-derived owner clone now boots/saves/stops0; parent verifies all22
+custody files and unchanged backup/prior diagnostic. Forge's three retired
+Heracles registry errors and seven native-profile datapack warnings remain
+explicit. Runtime980 alone has the new read-only retired-ID audit lease, not a
+second server grant. Final pristine copy is pending that disposition; real
+login/GUI/rewards/campaign remain unobserved. Original and backup are intact.
+
 The owner now explicitly opens remaining-tier development alongside T1
 (ADR-0173), without acceptance/release or later-tier deployment. Separate source
 lanes cover T1 native integration, first T2 physical manufacturing and actual

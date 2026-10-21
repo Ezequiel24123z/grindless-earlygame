@@ -15,6 +15,25 @@ entries below reference those records by id.
 
 ### Added
 
+- **Load a separately admitted copy of the actual F save.** Canonical
+  startup/natural shutdown pass atdd0; parent verifies22 custody artifacts and
+  unchanged backup/prior diagnostic. Preserve the initial daemon-admission
+  failure and the three retired Heracles registry errors. Inspect actual
+  references read-only before disposition/final pristine copy; do not equate
+  a technically loaded clone with lossless player migration or acceptance.
+- **Preserve composed first-factory source and its actual CI boundary.**
+  Publicb38 integrates nativeFTB/50 source quests, two component routes and18
+  concise T1 bodies; automatic CI fails only the three pending canonical
+  projections after successful compilation. Publice265 adds an F2 cost but no
+  upgraded machine capability. Keep both under the clarified partial-T1/family
+  contract, with normal writers and actual upgrade work still outstanding.
+- **Clarify the tier-content and machine-family contract (ADR-0174).** T1
+  introduces baseline basic families; later tiers grow exponentially in meaningful
+  processing lines/content and upgrade actual capabilities, with specialized
+  multiblocks. Keep the first factory a partial increment, preserve existing
+  checkpoints, and distinguish an F2 ingredient from an implemented chassis
+  upgrade. Reuse established shared state/conditions and compatible external
+  implementations with provenance/notices, not another engine or timer inflation.
 - **Extend pinned mature-mod precedent for later tiers.** Record exact configured
   ingredients separately from physical capacity, parameterized machine families
   and composed processing hooks. Keep GT's unclosed first-Assembler acquisition

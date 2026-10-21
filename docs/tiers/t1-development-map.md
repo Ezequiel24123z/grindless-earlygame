@@ -9,7 +9,15 @@ is the extension guide.
 
 ## Product boundary
 
-T1 Voltaic is the first electrically organized factory: establish useful F1
+**Latest owner clarification (ADR-0174):** this first-factory map is an
+implementation increment, not all T1. Baseline ordinary machine families belong
+at T1; later tiers expand capabilities/recipes through shared chassis/modules
+and add increasingly complex lines and specialized multiblocks. Older first-
+introduction labels below describe the previous source inventory where noted,
+not a veto of that direct instruction. Do not infer implementation/acceptance
+of the broader family set or upgrade mechanism from this update.
+
+T1 Voltaic begins with an electrically organized factory: establish useful F1
 generation/distribution, transform inherited renewable materials, reproduce the
 F1 control supply and manufacture the physical F2 exit. Existing machine families,
 recipe conditions, inventories, native transactions, grid, teaching renderers and
@@ -65,7 +73,7 @@ test. Paths below are relative to the common Grindless Java package unless named
 | Belts/junctions/storage | Existing belt/arm, passive links, buffer and transformer | Some construction remains manual; a Sorter's hopper dependency is outside the four primitive automatic basics |
 | Kiln/R2 | Existing roast/oxide/Arc alternatives | Optional; do not copy an unimplemented design-table yield multiplier into a claim of runtime behavior |
 | Extraction/Factory World | Surveyed virtual deposits and existing portal/return data | Optional supply/space; do not make finite mining or the portal a hidden F2 requirement |
-| Motor/Wire Mill/chemistry | Registered later content/prototypes | Motor and Wire Mill are T2; F1 FU demand or membership in `T1Recipes` is not a tier classification |
+| Motor/Wire Mill/chemistry | Registered content with older later-tier placement | ADR-0174 puts baseline basic families at T1; later duties/variants still require real capabilities. Inventory labels/FU demand/`T1Recipes` membership do not themselves implement the revised family or upgrade contract |
 | Sifter/wire design prose | Older T1 design inventory | Sifter is not an executable family in the reviewed graph; wire's real machine is later. These are design gaps, not accepted missing prerequisites |
 
 ### Independent component increment

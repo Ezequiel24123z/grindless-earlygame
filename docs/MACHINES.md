@@ -282,6 +282,13 @@ ordinary machines never ask a world-scoped permission whether their recipe exist
 
 ## Chassis marks and upgrades
 
+ADR-0174 reiterates the owner contract: T1 introduces baseline ordinary machine
+families; later tiers broaden their real recipe/condition capabilities and add
+specialized multiblocks. The first five-machine factory is not the complete T1
+catalogue. First-introduction labels in older prototype slices do not supersede
+this rule. The design below is the intended shared mechanism, not a claim that
+all marks, kits, persistence and family variants already exist in runtime.
+
 Two independent dials. The **chassis mark** is the machine's capability ceiling; **upgrades** tune
 behaviour within that ceiling. Separating them is what stops the catalogue from exploding into nine
 copies of every machine.
@@ -291,6 +298,11 @@ copies of every machine.
 Every machine exists at marks **MK I** through **MK VIII**. A mark is not a different block — you
 apply a **Chassis Upgrade Kit** to the machine in place, keeping its position, its contents, its
 configuration and its connections. Nothing is ever rebuilt or re-piped.
+
+An implementation must also explicitly preserve or safely handle the active
+process and store ownership; applying a costlier Matrix while producing the same
+unchanged baseline item is not an upgrade. Trace/save/reload these boundaries
+before qualifying a later-tier machine variant.
 
 | Mark | Upgrade slots | Max Flux tier | Envelope width | First technology |
 | --- | --- | --- | --- | --- |

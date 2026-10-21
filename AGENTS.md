@@ -130,6 +130,27 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner design clarification (2026-10-21, ADR-0174):** tiers must grow
+exponentially in meaningful complexity, processing lines and content, not merely
+stack sizes or timers. T1 introduces the basic machine families, in the spirit
+of GregTech; later tiers upgrade their actual capabilities/recipes and add
+specialized multiblocks and increasingly interdependent production networks.
+The first five-machine factory is a T1 increment, not the whole T1 contract.
+Older later-tier labels must not withhold every basic variant until T2+.
+
+Reuse the established chassis/MK, modules and condition-envelope design before
+inventing another machine engine or one block per tier. Preserve world position,
+inventories, fluids, configuration, connections and save identity through real
+upgrades. A higher-rating ingredient that produces the same unmodified baseline
+machine is not an implemented tier upgrade. Preserve earlier source checkpoints,
+but qualify them against this latest direction before integration/deployment.
+
+Research and actually reuse/adapt external implementations when they fit and
+their licences permit it; source/version/licence/scope/notices precede copying.
+Public APIs and official dependencies are valid reuse; visible source alone is
+not permission to copy. Do not force an import when the existing project
+mechanism already solves the problem. No paid/generation budget is implied.
+
 **Current owner direction — parallel development across the remaining tiers
 (2026-10-21, ADR-0173):** while the native questbook is finished and prepared in
 Prism, continue the agreed T1 work and start the other tiers. This explicitly

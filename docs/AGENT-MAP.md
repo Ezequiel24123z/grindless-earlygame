@@ -77,6 +77,21 @@ The later-frontier owner8210 derives source-backed T3-T15 work without promoting
 prototype inventories or proposed documents to accepted routes. Root architecture,
 ADR/map/plan integration remain coordinator-owned.
 
+**Later owner clarification (ADR-0174):** baseline basic families start at T1,
+not only the first five machines; later tiers grow lines/content and upgrade real
+capabilities through the established chassis/MK/modules/condition design.
+Preserve e265 source evidence but do not declare its F2 operand an upgraded
+Wire Mill or definitive first-family placement. Source owner ec7c traces actual
+shared tier/envelope/placement/save support before another application change.
+The broad8210 dossier could not use `send_session_message` or write an artifact.
+Parent subsequently recovers its13-tier dossier and bounded slice proposals from
+the actual `session.task_complete` summary, not empty assistant messages or idle
+notifications. This is read-only evidence, not an executable tier acceptance.
+Source implementations now own51366 blueprint preflight and b823 optional recipe
+pressure; neither is another execution engine or a permission to run PC builds.
+Compatible external reuse is allowed after exact provenance/licence/notices;
+neither visible source nor a pattern report authorizes a code import.
+
 Native `FtbQuestFiles.ensure/preflight` rejects existing chapters missing new
 quest/task IDs. Preserve that fail-closed rule: integrating50 source quests is
 not proof that an installed46-definition configuration can update. A later

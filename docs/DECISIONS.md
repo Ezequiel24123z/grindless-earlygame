@@ -185,6 +185,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0171](#adr-0171--replace-the-player-blocking-book-with-native-ftb-quests-and-concise-jei-first-content) | Replace the player-blocking book with native FTB Quests and concise JEI-first content | Accepted |
 | [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
 | [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
+| [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
 
 ---
 
@@ -8114,3 +8115,66 @@ service, credentials, release, main merge or acceptance is implied.
 later source work contradicts the direct request. Activating every registered
 prototype, inventing fifteen independent engines, balancing unreviewed routes
 or treating a proposal/fixture as accepted content does not satisfy it either.
+
+---
+
+## ADR-0174 — Grow tier complexity around basic machine families from T1
+
+**Status.** Accepted direct owner design clarification, 2026-10-21.
+
+**Context.** The owner reiterates that tiers must become exponentially more
+complex, with more processing lines and content; T1 is where the basic machines
+are made, in GregTech's family-based spirit. Later upgrades enable further
+recipes, alongside specialized multiblocks. The owner also explicitly expects
+research to lead to actual external reuse/adaptation when permitted.
+
+**Decision.** T1 introduces the baseline ordinary machine families. The initial
+five-machine factory remains a coherent implementation increment, not the whole
+T1 tier. Do not distribute every first basic machine over later tiers merely to
+fill a roadmap. Later tiers broaden the production network, introduce genuinely
+new domains and specialized multiblocks, and improve existing families through
+real chassis, control, condition, tooling, efficiency and logistics capabilities.
+Ordinary baseline availability does not make every advanced process available
+at T1; the later duty still needs its actual material/condition/control/energy
+requirements.
+
+This supersedes old first-introduction placement where it contradicts the owner
+clarification, including a Wire Mill available only as a first T2 basic machine.
+It preserves the acid-free first coil/mill intent and the functioning early Press
+route. Source e265/5ff is retained as an actual bounded checkpoint, not discarded,
+but a fourth F2 ingredient alone does not prove an upgraded Wire Mill: its output
+must carry and use a real changed capability. Select baseline-F1 versus upgrade
+construction only after tracing existing shared chassis/persistence seams.
+Do not silently change every ingredient rating, recipe bill or saved machine.
+
+Use the already accepted two-dial chassis-mark/modules design in MACHINES and
+ADR-0027/0028/0030. Upgrade in place with stable block/save identity and preserve
+stored items/fluids, configuration, links and ownership; specify treatment of an
+active process rather than resetting it. Widen only a family's genuine physical
+capabilities. Do not turn an ordinary furnace into a fusion chamber, create
+fifteen executors or implement upgrades as an unexplained power-cost multiplier.
+Whether each target seam already implements these requirements remains a source/
+execution question, not a declaration of completion.
+
+**Content growth.** Every tier proposal must show its increased set of useful
+lines, alternative routes, interacting material/chemistry/control/energy domains,
+conditions, byproduct/recovery decisions, logistics and signature projects against
+the previous tier. The owner requires exponential growth in meaningful complexity
+and content. No arbitrary numeric multiplier, recipe-count quota or timer/cost
+inflation is selected by this clarification. Better automation and compression
+of earlier work must keep manual burden from growing with the network.
+
+**External work.** Prefer established implementations/public APIs over recreating
+mature infrastructure. Reuse or adapt compatible work when it actually meets the
+requirements, with exact source/version/licence/scope, required notices and
+distribution consequences recorded before import. Pattern-only references are
+not a promise of implementation; code availability is not a licence grant.
+FTB's public binary/API integration remains valid reuse, not permission to copy
+its visible-source implementation. No new paid service or generation allowance
+follows, and no foreign balance calendar is authoritative.
+
+**Boundaries.** Keep T0 native questbook delivery and original-save preservation
+first. Broad later-tier development is still authorized by ADR-0173, not
+acceptance/release/deployment. The source-only first-factory/F2 checkpoints,
+unexecuted canonical writers, exact-versus-capacity matching gap and managed
+native46-to50 migration stay explicit; none proves complete T1 or T2.

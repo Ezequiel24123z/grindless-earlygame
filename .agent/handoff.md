@@ -2,6 +2,58 @@
 
 Updated: 2026-10-21. Product gate: **NATIVE FTB/PACKAGE QUALIFIED; PROTECTED SAVE DELIVERY IN PROGRESS**.
 
+## Latest design and actual source progression
+
+ADR-0174 records the owner's clarification: basic families start at T1; later
+tiers grow exponentially in meaningful lines/content and improve real family
+capabilities, with specialized multiblocks. Reuse compatible external work with
+exact provenance/notices when it fits; neither endless paper research nor
+unnecessary framework/code imports satisfy the direction.
+
+T1 b38bc5a is a clean public normal merge of2f anddd0: native50/old46 IDs and
+receipts, two automatic component routes and18 concise JEI-first T1 bodies.
+It is the first-factory increment, not complete T1. Automatic CI39664910629
+has environment/build0 and behavior1 solely at the three existing canonical
+economy/guidance/T1 equality checks. Actual source-bound CI passes are distinct
+from still-unexecuted normal writers; no manual JSON or rerun repairs them.
+
+T2 e265eb2 normally merges its bounded5ff data withb38. The new F2 ingredient
+still emits the same default F1/MK I Wire Mill: ec7c traces no transported tier,
+equal narrow/full process envelopes, static regulation, immutable buffer limits
+and no playable chassis/module installation callers. Existing saved MK/modules
+and relocation are useful seams, not a working upgrade. Preserve this source;
+do not deploy or call it the final first-family placement under ADR-0174.
+
+The8210 researcher lacked `send_session_message`/artifact output; its real
+13-tier dossier is recovered from `session.task_complete.data.summary`, not its
+empty assistant message. It separates later models/prototypes from missing
+runtime and identifies bounded blueprint preflight, optional pressure, explicit
+Matrix roles and managed FTB updates. No audit is relaunched or tier accepted.
+New isolated code owners51366 andb823 implement the first two shared increments
+onb38, source-only/local commits; publication/integration remain serialized.
+
+## Actual owner-save clone result and remaining disposition
+
+The admitted backup-derived clone starts/saves/stops naturally atdd0:
+harness/server0, all22 copied custody artifacts hash-verified by parent.
+Original backup36files/10,885,681bytes and prior synthetic world remain identical.
+Initial13/1 is preserved: a same-invocation cache-bound Gradle daemon was still
+settling before server start; bounded observed-zero admission fixes only that
+guard, not startup/assertions/shutdown. No successful server run is replayed.
+
+Forge logs three unidentified **registry errors** for Heracles barrier block/
+item and quest-book item, then explicitly processes the world. Seven missing
+mod-datapack warnings include performance mods absent only from this seven-jar
+diagnostic, not the complete final Prism profile. This is technical load/save
+evidence, not an accepted lossless migration or real player login.
+
+After explicit clone-lease return,980e99a3 now exclusively owns
+`ftb-retired-id-audit-20261021`: read-only backup NBT/region inspection to
+distinguish actual item/block/player references from old registry metadata.
+No new server, original/Prism access or modification is authorized. Parent/all
+other workers make no PC action until return. Decide from that evidence, then
+use the untouched backup for final copy; never adopt the tested clone.
+
 ## Latest owner scope — T1 and the remaining tiers
 
 ADR-0173 records explicit permission to continue T1 and begin the other tiers

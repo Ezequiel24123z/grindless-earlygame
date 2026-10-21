@@ -57,6 +57,31 @@ only genuinely new conditions to the established graph/executor and invalidate
 only affected mechanism proofs. Do not infer closure from registered prototypes
 or add a condition/parallelism framework before an implemented need exists.
 
+## Family and mark follow-up for ADR-0174
+
+The same newer pin reports GT version8.0.0; do not interchange it with the
+v7.5.3 pin or assume its exact loader/mappings match Grindless1.20.1.
+
+- [GTMachineUtils96-101,184-198,820-875](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/common/data/machines/GTMachineUtils.java#L96-L101)
+  defines an electric-family default tier range and shared tiered registration/
+  simple-machine builders. The fetched [family sample](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/common/data/GTMachines.java#L295-L336)
+  includes wire mill, mixer, washer, lathe and other ordinary families. It is not
+  an exhaustive LV roster or proof no individual registration overrides its tiers.
+- [SimpleTieredMachine20-35](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/api/machine/SimpleTieredMachine.java#L20-L35)
+  composes common persistent behavior on a shared machine class. Grindless should
+  first reuse its existing chassis, UpgradeSet, stores and conditions rather
+  than import another trait/registration framework.
+- [MachineDefinition134-164](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/api/machine/MachineDefinition.java#L134-L164)
+  and tiered registration bind distinct block/item definitions per tier. That
+  differs from Grindless's accepted in-place identity/store-preserving MK target.
+  A fixed-tier hatch I/O swap is not evidence of a lossless tier-upgrade tool.
+
+The GT builders depend on GT/Registrate types and version-specific APIs; direct
+import is not selected. Reusing the family/parameterization principles within
+existing Grindless mechanisms avoids that coupling. No code or assets are copied;
+any later material adaptation still needs exact licence/provenance/notices before
+import. The source sample does not choose Grindless's complete T1 family roster.
+
 ## Longitudinal virtual-deposit continuity
 
 | Immutable reference | Observed storage/resolution pattern | Limit |

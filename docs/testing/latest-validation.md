@@ -1,5 +1,35 @@
 # Current T0/T1 validation
 
+## Actual existing-save clone load, not yet accepted lossless migration
+
+On exactdd0 the admitted backup-derived F clone reaches Done and naturally
+saves/stops; harness/server0. Parent hash-verifies all22 transferred artifacts.
+Backup36files/10,885,681bytes and the archived prior diagnostic stay identical.
+Initial controller13/harness1 is preserved: owned Gradle settlement prevented
+server admission. Its bounded cache/source/PID-bound observed-zero guard does
+not skip canonical server startup/assertions/shutdown.
+
+Actual Forge output includes three unidentified registry errors for
+`heracles:barrier` block/item and `heracles:quest_book`, then attempts processing
+and loads. Seven missing mod-datapack warnings include performance mods omitted
+from this native seven-jar set but present in the final Prism profile.
+Technical load is not proof no real item/block/player reference is affected.
+The current exclusive worker only audits the untouched backup with existing NBT/
+region APIs; final copy awaits the coordinator's evidence-backed disposition.
+No additional boot, raw quest-data rewrite, final reference adoption or player login
+is supplied by this result.
+
+## Native T1 source and authored T2 data
+
+Publicb38 normally merges2f/dd0, retaining50 source quests/old46 IDs and paid
+state, two component routes and18 short native-compatible T1 bodies. Existing
+automatic CI39664910629 has build/environment0 and behavior1 at exactly the
+three stale canonical economy, guidance and first-factory projections; its raw
+artifacts are retained. It is still FAILURE, not a new local proof or writer run.
+Publice265 mergesb38 with a bounded fourth F2 Wire Mill input. Source trace shows
+the output remains F1/MKI; ADR-0174 preserves it as source evidence, not the
+owner's final first-family placement or an implemented upgrade.
+
 ## Native FTB final package and protected-delivery checkpoint
 
 Source dd0b4bc merges root c353 and exact Persistence repair ef00402.
