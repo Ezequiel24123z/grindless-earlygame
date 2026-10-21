@@ -15,6 +15,50 @@ entries below reference those records by id.
 
 ### Added
 
+- **Align the next Wire Mill increment with its actual baseline capability.**
+  The source trace confirms an unchanged F1/MKI product, so authorize its T1
+  F1 construction operand and optional post-Assembler forming route, preserving
+  stock/time/FU and the initial F2 path. Keep real chassis/controller upgrades
+  separate; no recipe cost alone is a capability implementation.
+- **Load a separately admitted copy of the actual F save.** Canonical
+  startup/natural shutdown pass atdd0; parent verifies22 custody artifacts and
+  unchanged backup/prior diagnostic. Preserve the initial daemon-admission
+  failure and the three retired Heracles registry errors. Inspect actual
+  references read-only before disposition/final pristine copy; do not equate
+  a technically loaded clone with lossless player migration or acceptance.
+- **Preserve composed first-factory source and its actual CI boundary.**
+  Publicb38 integrates nativeFTB/50 source quests, two component routes and18
+  concise T1 bodies; automatic CI fails only the three pending canonical
+  projections after successful compilation. Publice265 adds an F2 cost but no
+  upgraded machine capability. Keep both under the clarified partial-T1/family
+  contract, with normal writers and actual upgrade work still outstanding.
+- **Clarify the tier-content and machine-family contract (ADR-0174).** T1
+  introduces baseline basic families; later tiers grow exponentially in meaningful
+  processing lines/content and upgrade actual capabilities, with specialized
+  multiblocks. Keep the first factory a partial increment, preserve existing
+  checkpoints, and distinguish an F2 ingredient from an implemented chassis
+  upgrade. Reuse established shared state/conditions and compatible external
+  implementations with provenance/notices, not another engine or timer inflation.
+- **Extend pinned mature-mod precedent for later tiers.** Record exact configured
+  ingredients separately from physical capacity, parameterized machine families
+  and composed processing hooks. Keep GT's unclosed first-Assembler acquisition
+  link and different voltage model explicit; no complete bootstrap, LGPL code
+  import or acceptance of Grindless's prototype inventory is inferred.
+- **Open isolated later-tier development by direct owner instruction (ADR-0173).**
+  Continue native-baseline T1 integration, begin physical T2 Wire Mill
+  manufacturing through the existing Assembler and ground T3-T15 work in actual
+  source/dependencies with mature-mod research. Preserve the T0 delivery/world
+  priority, sequential acceptance/releases and single guarded PC owner. Record
+  exact ingredient versus stronger-controller substitution and native46-to50
+  managed-definition migration as explicit unfinished mechanisms, not data-only
+  success or permission to overwrite paid world state.
+- **Qualify and begin protected delivery of the native FTB fix.** Exact-schema
+  Persistence passes; final dd0b4bc package79ce5da2 embeds the byte-identical
+  native-tested JAR29bcce43. Parent verifies all25 closed custody artifacts,
+  receives the exclusive lease, deploys only a new owned FTB instance and
+  verifies the stopped original world's36-file backup plus options. Keep the
+  original intact; separate diagnostic clone load and final pristine copy remain
+  open. No client/JEI/login/reward delivery or human acceptance is inferred.
 - **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
   loads46 logical quests/36 native item rewards and passes1099 graph/filter/
   import assertions, then seed56 and a new process reopens persisted native

@@ -45,6 +45,12 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > T0 play, T1 development/research continues, reported blockers are fixed first,
 > and final T0 conclusions drive polish. Actual observations/acceptance are not
 > inferred from that start instruction; the installed game is not updated live.
+> ADR-0173 now explicitly opens isolated development/research of the remaining
+> tiers alongside T1 while the native questbook is delivered. This is not
+> acceptance, release or permission to add later-tier code to the player's T0 game.
+> ADR-0174 clarifies the content contract: basic machine families start at T1;
+> later tiers upgrade real capabilities and add exponentially broader production
+> networks/content and specialized multiblocks. The first factory is not all T1.
 > Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
 > **Execution is SSH-first (ADR-0151):** this conversation stays local; heavy work runs
@@ -1434,8 +1440,8 @@ but is rarely economical.
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
 | **T0 — Bootstrap** | Escape velocity | A connected workshop and mod-owned geological/biological source base culminate in physical calibration and the manual five-F1-Matrix exit. |
-| **T1 — Voltaic** | First factory | Milling, reduction, renewable glass/silica, ceramic insulation, coils and thermal power culminate in the Assembler and T2 Relay Matrix. |
-| **T2 — Industrial** | Closed loops | Steel and wet beneficiation feed sulfur, electrolysis and resin loops; motors, discrete control, steam and solar turn them into a multi-line factory. |
+| **T1 — Voltaic** | Basic machine families | The first milling/reduction/forms/power/Assembler factory expands into baseline ordinary processing families. Early F2 manufacture is an increment, not proof that all T1 lines are complete. |
+| **T2 — Industrial** | Expanded closed loops | Upgraded family capabilities braid steel/wet beneficiation, sulfur, electrolysis/resin, control and power into a broader integrated factory rather than withholding every first basic machine. |
 | **T3 — Arc** | Powered construction | Refractories, hot metal, Arc Cells and industrial control feed the Arc Reactor and Construction Drones. |
 | **T4 — Precision** | Purity and control | Pressure chemistry, ultrapure water, electronic silicon, lithography and the Research Station produce Integrated Matrices and reusable advanced patterns. |
 | **T5 — Nuclear** | Designed cores | Fuel chemistry, isotope cascades, reactor alloys and radiation-hard control converge in parametric fission. |
@@ -1450,9 +1456,10 @@ but is rarely economical.
 | **T14 — Galactic** | Self-expanding industry | Antimatter, singularity power, distributed computation and abstract replication reach Type III. |
 | **T15 — Event Horizon** | The galactic centre | Relativistic shielding, final navigation and galactic power reach Sagittarius. Arrival is victory; black-hole exploitation is postgame. |
 
-Later tiers are approximately longer and contain more meaningful content than earlier ones.
-The growth is in interacting routes, conditions, logistics and projects — never merely larger
-stacks or longer timers. Automation grows with the burden: Assembler, Process Cards,
+Later tiers must grow exponentially in meaningful complexity, processing lines
+and content (ADR-0174). The growth is in branching/interacting routes, conditions,
+logistics and projects — never merely larger stacks or longer timers. This is
+not an arbitrary recipe-count multiplier. Automation grows with the burden: Assembler, Process Cards,
 construction drones, Assembly Fields, abstract colonies and self-replicating infrastructure.
 
 The old **Research Terminal** is not discarded. At T4 it becomes the **Research Station**:
@@ -1483,7 +1490,9 @@ survival or sustainability gate. See the [T0 contract](docs/tiers/t0.md) and
 
 ### Mechanical tier gate
 
-Development closes one tier completely before opening the next (ADR-0108). A tier is complete only
+Tier acceptance and release remain sequential (ADR-0108/0144); the owner's later
+ADR-0173 explicitly opens isolated development of later tiers before earlier
+human acceptance. A tier is complete only
 when a survival player can enter from the previous frontier, run every required material, chemical,
 control and energy line, automate the machines and logistics, handle byproducts and normal failure
 states, and manufacture the next Control Matrix or terminal objective without commands or hidden
@@ -1561,6 +1570,16 @@ fusion reactor in a 3×3 grid from a full inventory.
 The single most important structural rule in Grindless:
 
 > **Past the bootstrap, machines are not crafted. They are manufactured.**
+
+T1 introduces the ordinary basic machine families, not only the five machines
+of its initial factory increment (ADR-0174). Later tiers improve those families'
+real capabilities and add specialized multiblocks. Existing prototype-era labels
+must not be mistaken for a rule withholding every basic machine until T2+.
+Chassis marks widen condition envelopes and enable new recipes while modules tune
+trade-offs; use the in-place identity/store-preserving design in
+[MACHINES](docs/MACHINES.md#chassis-marks-and-upgrades), not identical machines
+with a higher ingredient price. The mapping is a design contract, not a claim
+that every family or upgrade is already implemented.
 
 | Tier | How you obtain the machine |
 | --- | --- |
@@ -1715,10 +1734,10 @@ needed to manufacture it.
 | --- | --- | --- |
 | Arc Furnace | T1 | Smelting. |
 | Pulverizer | T1 | Ore → dust. |
-| Chemical Washer | T2 | Purification and byproducts. |
+| Chemical Washer | T1 basic; expanded T2 duty | Baseline family, then wider purification and byproduct lines. |
 | Assembler | T1 | Multi-ingredient crafting. |
 | Lithography Unit | T4 | Wafers, masks and Integrated Matrix batches. |
-| Centrifuge | T5 | Isotopes, enrichment, deuterium. |
+| Centrifuge | T1 basic; specialized T5 duty | Baseline separation is distinct from isotope/enrichment cascades and deuterium production. |
 | Cryogenic Plant | T6 | Deep liquefaction and superconductors. |
 | Fusion Reactor support plant | T7 | Fuel cleanup and blanket processing. |
 | Particle Accelerator (multiblock) | T8 | Transmutation, exotics and sample irradiation. |
@@ -2341,8 +2360,10 @@ is preserved and integration/release gates still control acceptance.
 | 60 | **Parallel T1 first-factory development** | sourceef9d670 preserved, resumed under the new ADR-0170 owner-play loop — [plan](plan/feature-t1-first-factory-1.md), [line map](docs/tiers/t1-development-map.md), [reusable-system handbook](docs/architecture/reusable-systems.md). Common/Forge/backend1058, affected checks and ignored-output writer/twins have bounded evidence; normal canonical outputs/rechecks remain active work. Not deployed |
 | 61 | **Longitudinal-start readiness** | [source-bound investigation](docs/testing/t0-longitudinal-readiness.md): fresh read-only Inspect confirms installed F/95bf/3e5a; no client log/options/world observed. Separate missing client save/reopen proof and baseline/update delivery from a real unused vein-version pin. Do not demand a completed T0 campaign before its first reference world or claim an unobserved client pass |
 | 62 | **Longitudinal play / development feedback loop** | ADR-0170 — owner-authorized intended T0 game, parallel T1 route/machine/component/line research and development, priority fixes for reported play blockers, then T0 polish from final feedback. Preserve the reference save and stopped-game update boundary; no invented pass, automatic T1 deployment or T2 activation |
-| 63 | **Native quest framework and concise content** | current owner play blocker, ADR-0171 — native FTB Quests graph/tasks/reward interaction replaces the custom/Heracles guide experience. Copy190a024 reduces quest prose while preserving all46 logical IDs/data. Backend/API/pin/paid-claim migration, affected qualification and safe world-preserving delivery are in progress; installed F is not changed by the source work |
+| 63 | **Native quest framework and concise content** | ADR-0171 — genuine native FTB graph/tasks/reward UI and concise JEI-first goals, preserving46 logical IDs/paid history. Real two-process native proof, standalone/persistence and exact dd0 package qualify the byte-identical runtime. New owned FTB target deployed and stopped actual world/options backup verified; separate clone load/final pristine copy remain. Original F stays intact; client/human acceptance is not inferred |
 | 64 | **Recurrent T1 component automation** | ADR-0172 — independent source2f4eee1 adds ordinary Assembler casings/Flux Cells, manual-equivalent material batches and existing timing/FU. Manual bootstrap, four slots, F1/F2 ratings and executor/NBT stay intact; [inventory/references](docs/tiers/t1-development-map.md) separate real runtime, model gaps and prototypes. Source checkpoint published; new generation/JVM qualification pending after the T0 execution priority |
+| 65 | **Parallel later-tier development** | ADR-0173 — owner opens T2-T15 development/research alongside T1. Native-baseline T1 integration, first physical F2 Wire Mill manufacturing and source-backed T3-T15 frontier work run on isolated branches; [pinned mechanism research](docs/design/t1-external-references.md) is recorded. Current exact ingredient matching versus intended stronger-Matrix substitution and native46-to50 managed-definition updates remain explicit shared boundaries. No later-tier deployment, acceptance or release is inferred |
+| 66 | **Basic families and growing tier complexity** | ADR-0174 — T1 introduces baseline basic families; later tiers upgrade actual capability, add specialized multiblocks and exponentially broader lines/content. Preserve b38/e265 without calling the first factory complete T1 or an F2 cost an upgrade. Source trace now authorizes a true F1 baseline Wire Mill/optional forming increment; shared chassis/store/persistence and compatible external implementation work remain separate |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

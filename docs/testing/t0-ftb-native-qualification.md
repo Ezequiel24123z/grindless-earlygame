@@ -16,6 +16,8 @@ manual play or T0 acceptance passed.
 | Parse-only performance repair | The prior owned check is CANCELLED after14minutes with captured classpath-canonicalization stack; empty parse paths retain all authorities/mutations/equivalence and complete in about23seconds. No cancelled run becomes a pass |
 | Native standalone data contracts | Later tool-onlyd73175f:864 production-definition assertions plus a vanilla surrogate mechanism total2352 pass. Surrogates are not production mod-item registration or client evidence |
 | Pack data contracts |152 assertions pass; final artifact/package delivery remains separate |
+| Final exact persistence | ef00402 on dd0b4bc: actual three old/three native binary reloads, UUID/fence and four malformed cases pass |
+| Final packaged source | `dd0b4bc93187fe172fd336bfa330987220bd7be4`; BuiltVerified, not an RC or human pass |
 
 The original transcript did not retain every native compiler stdout. Its actual
 SDK result and the failed post-build daemon-settlement guard remain distinct.
@@ -56,8 +58,10 @@ disk/lifecycle observations, not human login/team UI or physical reward delivery
 The core retains closed raw files under its ignored relative run directory
 `build/ftb-validation/20261021T204938314-Native/`.
 The parent reads the complete local transport and observes the actual seed/reopen
-markers plus the structured PASSED result. Direct copied server-file custody
-verification remains part of the final handoff, not inferred from the summary.
+markers plus the structured PASSED result. It subsequently hash-verifies all25
+transferred artifacts, reads the actual first/reopen logs and natural stops,
+and verifies the extracted package runtime. The first origin and the current
+phase2 disk files remain separately named; neither is an owner-clone origin.
 
 | Artifact | SHA-256 |
 | --- | --- |
@@ -90,14 +94,29 @@ recorded. The completed ff610 Linux run also finds the obsolete exact
 extension. Update the exact expected schema and retain the original claim/reload
 invariants; do not disable the assertion or call that CI green.
 
-Before player delivery: close that targeted persistence oracle, package the exact
-qualified runtime and public data, inspect hashes, return the exclusive build
-lease, and use the stopped-world backup/copy/update boundary. Load a separately
-admitted verified F-world clone if needed to establish changed-mod registry/
-compatibility behavior. The synthetic diagnostic origin is not an owner-clone
-origin and must never be loosened/relabelled to pretend it is one.
+The exact oracle is now corrected, not disabled: ef00402 passes the retained old
+claims/reload invariants and the precise native-owner key/type/invalid-data cases.
+The original hosted red remains historical, not a newly green CI run.
 
-The actual DevF world, old preparation world and launcher settings have not been
-modified by these tests. Real GUI/JEI clicks, player inventory submission/delivery,
+Final archive `Grindless-T0-0.1.0-t0.1-playable-dd0b4bc.zip` is1,913,205 bytes,
+SHA-256 `79ce5da243dedfded968dafacf392a1d6df6f3328957f5dd8d6b4ae6cf61f41a`.
+Its extracted JAR is exactly29bcce43 above; common/Forge/probe/pins are unchanged
+since ff610. Only two verifier sources and documentation differ. Package/runtime
+revision metadata dd0 does not relabel the actual native execution source.
+
+The backend returns its lease at19:16:27Z with exact source/Java0/helpers0/locks0.
+The coordinator deploys to a new owned FTB instance without updating old F.
+The reviewed helper verifies an original-world/options backup:36 world files,
+10,885,681 bytes, all hashes and protected source metadata unchanged.
+Private paths/identities/receipts are not committed.
+
+Before final handover: load a separately admitted verified F-world clone to
+establish the changed-mod registry/load boundary, then copy the untouched backup
+to the fresh target. The synthetic diagnostic origin is not an owner-clone
+origin and must never be loosened/relabelled. The tested clone is not the final
+reference save.
+
+The actual DevF world, old preparation world and global launcher settings remain
+unmodified; the new owned target is separate. Real GUI/JEI clicks, player inventory submission/delivery,
 login/party interactions and final subjective readability remain owner/client
 observations. No normal campaign, release, merge or T0 acceptance is supplied here.

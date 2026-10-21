@@ -1,6 +1,60 @@
 # Current T0/T1 validation
 
+## Actual existing-save clone load, not yet accepted lossless migration
+
+On exactdd0 the admitted backup-derived F clone reaches Done and naturally
+saves/stops; harness/server0. Parent hash-verifies all22 transferred artifacts.
+Backup36files/10,885,681bytes and the archived prior diagnostic stay identical.
+Initial controller13/harness1 is preserved: owned Gradle settlement prevented
+server admission. Its bounded cache/source/PID-bound observed-zero guard does
+not skip canonical server startup/assertions/shutdown.
+
+Actual Forge output includes three unidentified registry errors for
+`heracles:barrier` block/item and `heracles:quest_book`, then attempts processing
+and loads. Seven missing mod-datapack warnings include performance mods omitted
+from this native seven-jar set but present in the final Prism profile.
+Technical load is not proof no real item/block/player reference is affected.
+The current exclusive worker only audits the untouched backup with existing NBT/
+region APIs; final copy awaits the coordinator's evidence-backed disposition.
+No additional boot, raw quest-data rewrite, final reference adoption or player login
+is supplied by this result.
+
+## Native T1 source and authored T2 data
+
+Publicb38 normally merges2f/dd0, retaining50 source quests/old46 IDs and paid
+state, two component routes and18 short native-compatible T1 bodies. Existing
+automatic CI39664910629 has build/environment0 and behavior1 at exactly the
+three stale canonical economy, guidance and first-factory projections; its raw
+artifacts are retained. It is still FAILURE, not a new local proof or writer run.
+Publice265 mergesb38 with a bounded fourth F2 Wire Mill input. Source trace shows
+the output remains F1/MKI; ADR-0174 preserves it as source evidence, not the
+owner's final first-family placement or an implemented upgrade.
+
+## Native FTB final package and protected-delivery checkpoint
+
+Source dd0b4bc merges root c353 and exact Persistence repair ef00402.
+Actual targeted Persistence passes three old/three native binary reloads,
+UUID/fence and four malformed cases. The original ff610 CI red remains red;
+no manual rerun or whole-CI success is invented. Final package is BuiltVerified:
+ZIP79ce5da2/1,913,205 bytes, embedded JAR29bcce43 exactly matches the ff610 native
+proof. Only two test files/documentation differ; no successful JVM is replayed.
+
+Parent independently verifies all25 transferred files/hashes, actual first/reopen
+server markers/natural stops and the embedded runtime. First-phase origin and
+phase2 disk snapshot are not interchangeable. Backend returns the lease with
+source dd0/Java0/helpers0/locks0 at19:16:27Z; coordinator now owns delivery.
+
+Production Deploy prepares the new isolated owned FTB instance with exact dd0,
+JAR29bc and ZIP79ce. Fresh inspection keeps old F95bf unchanged and identifies
+its one actual world/options; no Java is active. The reviewed custody helper
+backs up36 files/10,885,681 world bytes plus options, verifies all hashes and
+rechecks original bytes/protected metadata. Actual clone load and final pristine
+copy remain pending; this is neither a player login nor human/GUI acceptance.
+
 ## Native FTB — actual registered graph and retained-world restart
+
+The following earlier checkpoints preserve the sequence; final package/custody
+and targeted Persistence are superseded by the completed results above.
 
 [The source-bound native qualification](t0-ftb-native-qualification.md) records
 ff610 real Forge graph/filter/import1099, seed56 and actual second-process disk

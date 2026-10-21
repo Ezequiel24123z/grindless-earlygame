@@ -33,6 +33,33 @@ Backend/API/pin/migration, copy and verification run in parallel. A source patch
 or native server is not a client observation. Qualify the new binding/package and
 use the stopped-world backup/copy/update boundary before delivery.
 
+**Latest owner scope (ADR-0173):** continue T1 and start the remaining tiers while
+finishing the Prism questbook handover. Isolated source/research work is open
+through T15; prior one-tier-at-a-time/T1-only development holds are superseded.
+Keep acceptance/release sequential and do not deploy later tiers into T0.
+Current source lanes integrate native FTB into T1, add the first physical F2
+Wire Mill construction requirement through the existing four-slot Assembler,
+and derive practical T3-T15 increments from actual accepted design/source.
+Do not recreate existing Motor/Wire Mill implementations or invent recipe bills.
+Record the exact-rating versus stronger-control substitution gap and future
+managed native46-to50 definition migration separately from source completion.
+
+**Latest design clarification (ADR-0174):** T1 must introduce the basic families,
+not just its first five-machine increment. Later tiers grow exponentially in
+meaningful lines/content/interdependence and upgrade actual family capabilities,
+with specialized multiblocks. Preserve e265's bounded F2 source as evidence, not
+the final first-Wire-Mill placement or a real MK upgrade. Before the next recipe
+increment, select baseline/upgrade seams using existing chassis, store ownership,
+conditions and persistence plus compatible external implementation precedent.
+Do not invent another executor, mutate the player's save or multiply timers.
+
+Final FTB package dd0/JAR29bc/ZIP79ce is qualified and the new owned target is
+deployed; the original36-file world/options backup is verified. The coordinator
+temporarily grants only runtime worker980e99a3 the `ftb-owner-clone-20261021`
+PC/cache lease for the admitted backup-derived diagnostic load. No other worker
+or parent PC action runs until explicit return; the final player copy comes from
+the untouched backup. Read the active handoff, not old lease snapshots below.
+
 T1 source/research remains independent under the owner's explicit longitudinal-play / feedback loop
 (ADR-0170). The owner chooses to start T0 while routes, machines, components,
 processing lines and reusable-system work proceed independently. Close the normal

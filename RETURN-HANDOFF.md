@@ -1,5 +1,52 @@
 # Return handoff
 
+**Latest:** ADR-0174 fixes basic families fromT1 and exponential meaningful
+lines/content, real capability upgrades and compatible external reuse. Public
+b38 preserves nativeFTB+firstfactory/two components/18 concise T1 bodies; it is
+not allT1. Publice265 preserves the F2 operand but still produces baselineF1/MKI,
+not a functioning upgrade. Recovered8210 source research leads to isolated
+blueprint-preflight51366 and optional-pressureb823 code, with no PC grant.
+
+The real backup-derived owner clone now boots/saves/stops0; parent verifies all22
+custody files and unchanged backup/prior diagnostic. Forge's three retired
+Heracles registry errors and seven native-profile datapack warnings remain
+explicit. Runtime980 alone has the new read-only retired-ID audit lease, not a
+second server grant. Final pristine copy is pending that disposition; real
+login/GUI/rewards/campaign remain unobserved. Original and backup are intact.
+
+The owner now explicitly opens remaining-tier development alongside T1
+(ADR-0173), without acceptance/release or later-tier deployment. Separate source
+lanes cover T1 native integration, first T2 physical manufacturing and actual
+T3-T15 dependencies; questbook delivery retains priority. Runtime980e99a3 alone
+temporarily owns the diagnostic clone PC/cache lease; all other execution waits
+for its explicit return. Exact ingredient/stronger-control semantics and managed
+native46-to50 updates remain uncovered boundaries, not implicitly waived gates.
+
+## Current protected native-questbook delivery
+
+Native implementation and exact-schema Persistence now pass. Final source dd0b4bc
+produces ZIP79ce5da2; its embedded JAR29bcce43 is the exact ff610 native-tested
+runtime. Parent verifies all25 raw/receipt/harness/disk/package artifacts. The
+backend lease is explicitly returned; only the coordinator may use PC/cache.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Genuine native FTB, concise goals, legacy receipt fence, actual two-process proof, standalone/persistence and package qualified; new owned FTB instance deployed; stopped actual F world/options backed up with36 files/10,885,681 world bytes and unchanged original |
+| BLOCKED | None external; final protected handover remains in progress |
+| NOT EXECUTED | Separate owner-save clone technical load, final pristine copy and actual client; no main merge/release |
+| NEEDS HUMAN VALIDATION | Native GUI/JEI, actual login/rewards and campaign |
+| NEEDS MY DECISION | None |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | dd0/JAR29bc/ZIP79ce in new isolated Grindless-T0-FTB-Dev; no player world copied yet; original F and verified backup intact |
+
+Load only an explicitly admitted diagnostic copy, never the original or backup.
+The final player copy must come from the untouched backup, not the tested clone.
+Private paths/identity/receipts remain out of Git. Read
+[the current qualification](docs/testing/t0-ftb-native-qualification.md) and
+[active handoff](.agent/handoff.md); prior pending-test/lease snapshots below are
+historical and do not authorize another worker.
+
 ## Current blocker — native FTB Quests, not a custom guide
 
 The owner cannot continue with the delivered questbook. ADR-0171 supersedes the

@@ -130,6 +130,44 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner design clarification (2026-10-21, ADR-0174):** tiers must grow
+exponentially in meaningful complexity, processing lines and content, not merely
+stack sizes or timers. T1 introduces the basic machine families, in the spirit
+of GregTech; later tiers upgrade their actual capabilities/recipes and add
+specialized multiblocks and increasingly interdependent production networks.
+The first five-machine factory is a T1 increment, not the whole T1 contract.
+Older later-tier labels must not withhold every basic variant until T2+.
+
+Reuse the established chassis/MK, modules and condition-envelope design before
+inventing another machine engine or one block per tier. Preserve world position,
+inventories, fluids, configuration, connections and save identity through real
+upgrades. A higher-rating ingredient that produces the same unmodified baseline
+machine is not an implemented tier upgrade. Preserve earlier source checkpoints,
+but qualify them against this latest direction before integration/deployment.
+
+Research and actually reuse/adapt external implementations when they fit and
+their licences permit it; source/version/licence/scope/notices precede copying.
+Public APIs and official dependencies are valid reuse; visible source alone is
+not permission to copy. Do not force an import when the existing project
+mechanism already solves the problem. No paid/generation budget is implied.
+
+**Current owner direction — parallel development across the remaining tiers
+(2026-10-21, ADR-0173):** while the native questbook is finished and prepared in
+Prism, continue the agreed T1 work and start the other tiers. This explicitly
+opens isolated development/research beyond T1; older one-tier-at-a-time or
+T1-only development holds do not veto it. Acceptance, release and deployments
+remain separately gated. The actual T0 play blocker and protected save delivery
+retain priority; do not put new-tier code into the player's instance.
+
+Keep T1 on the native FTB baseline, start bounded source-backed T2 manufacturing,
+and use actual T3-T15 dependencies to select further implementation, not an
+agent's invented recipe calendar. Existing accepted design/catalogues remain
+authorities; registered prototypes and proposed documents are not accepted
+survival routes. The coordinator retains architecture/product/integration and
+assigns noncompeting workers. Heavy PC/cache work remains single-owner with a
+new explicit lease; parallel source work is not permission to run concurrent
+builds or touch the game. No new generation/provider spending is authorized.
+
 **Current player blocker — native FTB Quests and concise content (ADR-0171):**
 the owner cannot continue with the custom/native-Heracles questbook experience
 and explicitly requests the established BetterQuesting/FTB framework. Replace the

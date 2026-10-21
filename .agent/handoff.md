@@ -1,6 +1,131 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **OWNER BLOCKED BY QUESTBOOK; NATIVE FTB REPLACEMENT IN PROGRESS**.
+Updated: 2026-10-21. Product gate: **NATIVE FTB/PACKAGE QUALIFIED; PROTECTED SAVE DELIVERY IN PROGRESS**.
+
+## Latest design and actual source progression
+
+ADR-0174 records the owner's clarification: basic families start at T1; later
+tiers grow exponentially in meaningful lines/content and improve real family
+capabilities, with specialized multiblocks. Reuse compatible external work with
+exact provenance/notices when it fits; neither endless paper research nor
+unnecessary framework/code imports satisfy the direction.
+
+T1 b38bc5a is a clean public normal merge of2f anddd0: native50/old46 IDs and
+receipts, two automatic component routes and18 concise JEI-first T1 bodies.
+It is the first-factory increment, not complete T1. Automatic CI39664910629
+has environment/build0 and behavior1 solely at the three existing canonical
+economy/guidance/T1 equality checks. Actual source-bound CI passes are distinct
+from still-unexecuted normal writers; no manual JSON or rerun repairs them.
+
+T2 e265eb2 normally merges its bounded5ff data withb38. The new F2 ingredient
+still emits the same default F1/MK I Wire Mill: ec7c traces no transported tier,
+equal narrow/full process envelopes, static regulation, immutable buffer limits
+and no playable chassis/module installation callers. Existing saved MK/modules
+and relocation are useful seams, not a working upgrade. Preserve this source;
+do not deploy or call it the final first-family placement under ADR-0174.
+After that trace, ec7c now implements a bounded F1 baseline Wire Mill (fourth
+physical F1 operand, same400/32/bill/output, optional wire forming after assembly).
+No new first-F2 prerequisite, matcher/storage change or fictitious MK II is
+authorized; source checkpoint and actual execution remain pending.
+
+The8210 researcher lacked `send_session_message`/artifact output; its real
+13-tier dossier is recovered from `session.task_complete.data.summary`, not its
+empty assistant message. It separates later models/prototypes from missing
+runtime and identifies bounded blueprint preflight, optional pressure, explicit
+Matrix roles and managed FTB updates. No audit is relaunched or tier accepted.
+New isolated code owners51366 andb823 implement the first two shared increments
+onb38, source-only/local commits; publication/integration remain serialized.
+
+## Actual owner-save clone result and remaining disposition
+
+The admitted backup-derived clone starts/saves/stops naturally atdd0:
+harness/server0, all22 copied custody artifacts hash-verified by parent.
+Original backup36files/10,885,681bytes and prior synthetic world remain identical.
+Initial13/1 is preserved: a same-invocation cache-bound Gradle daemon was still
+settling before server start; bounded observed-zero admission fixes only that
+guard, not startup/assertions/shutdown. No successful server run is replayed.
+
+Forge logs three unidentified **registry errors** for Heracles barrier block/
+item and quest-book item, then explicitly processes the world. Seven missing
+mod-datapack warnings include performance mods absent only from this seven-jar
+diagnostic, not the complete final Prism profile. This is technical load/save
+evidence, not an accepted lossless migration or real player login.
+
+After explicit clone-lease return,980e99a3 now exclusively owns
+`ftb-retired-id-audit-20261021`: read-only backup NBT/region inspection to
+distinguish actual item/block/player references from old registry metadata.
+No new server, original/Prism access or modification is authorized. Parent/all
+other workers make no PC action until return. Decide from that evidence, then
+use the untouched backup for final copy; never adopt the tested clone.
+
+## Latest owner scope — T1 and the remaining tiers
+
+ADR-0173 records explicit permission to continue T1 and begin the other tiers
+while completing the questbook/Prism handover. Development/research through T15
+is open; no tier acceptance/release or later-tier deployment follows. Active
+isolated lanes:2a93 T1 native-baseline integration, ec7c first physical F2
+Wire Mill manufacturing,8210 source-backed T3-T15 frontiers;82bed9 external
+mature-source research. Root architecture/integration remain coordinator-owned.
+
+Keep two uncovered boundaries visible: current ingredient matching is exact
+despite intended stronger-Matrix substitution; installed native46 definitions
+cannot acquire source50 through the current strict preflight. Neither authorizes
+a global matcher change under one data recipe or raw quest-world replacement.
+The T1 owner preserves fail-closed config handling; explicit managed-definition
+backup/hash migration precedes a future T1 update.
+
+The coordinator temporarily assigns runtime980e99a3 the exclusive
+`ftb-owner-clone-20261021` PC/cache lease for only the backup-derived diagnostic
+load. Parent/all other workers make no PC action until explicit return.
+Original/backup are not opened as a running world; final Prism copy remains
+parent-owned and comes from the untouched verified backup.
+
+## Current delivery checkpoint
+
+Backend source `dd0b4bc93187fe172fd336bfa330987220bd7be4` normally merges
+coordinator c353e14 and exact persistence-oracle correction ef00402. Real
+Persistence passes all three old and three native binary reloads, UUID/fence
+and four malformed cases. Final ZIP79ce5da2 (1,913,205 bytes) is BuiltVerified,
+still `restricted-playable-profile-not-rc`. Its extracted JAR29bcce43 is
+byte-identical to the actual ff610 native-tested runtime: only two test files
+and documentation changed. Do not rebuild/reboot for evidence-only updates.
+
+The parent verifies all25 transferred raw/receipt/harness/disk/package files,
+their complete hashes, actual first/reopen/natural-stop markers and the embedded
+runtime hash. The first origin and current phase2 save are distinct evidence.
+The backend explicitly returns its exclusive lease at19:16:27Z with Java0,
+owned helpers0/locks0; it will make no further PC actions. The coordinator now
+exclusively owns guarded delivery, not another backend worker.
+
+Production Deploy installs exact dd0 into new owned `Grindless-T0-FTB-Dev`
+without modifying the old F instance or global launcher settings. Fresh19:21:50Z
+inspection finds Java0, old F/JAR95bf unchanged with one world/options, and the
+new target JAR29bc with no world/options. The digest-bound custody helper then
+snapshots and backs up all36 files/10,885,681 world bytes plus options, preserving
+original metadata/source bytes. Full paths, ownership IDs, world identity and
+receipts remain private. This is backup verification, not a migrated-player pass.
+
+Next: admit a separate backup-derived diagnostic clone for actual changed-mod
+load, then use the untouched verified backup for the final new-instance copy.
+Never run the normal resetting harness against a player save, loosen the
+synthetic native origin or adopt the command-tested clone as the reference.
+No other PC/cache worker may resume before the delivery lease is returned.
+
+| Category | Current protected delivery |
+| --- | --- |
+| COMPLETED | Native backend/common/standalone/persistence/package qualified; all25 custody files and exact runtime checked; new owned target deployed; stopped original world/options backed up and source unchanged |
+| BLOCKED | None external; diagnostic clone-load and final pristine copy still need execution |
+| NOT EXECUTED | Owner-save clone technical load, final target world copy, actual client/login/JEI/rewards, main merge or release |
+| NEEDS HUMAN VALIDATION | Native presentation, actual login/individual rewards/JEI and resumed campaign |
+| NEEDS MY DECISION | None within the directed fix |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new; no generation or paid service |
+| DEPLOYED STATE | Exact dd0/JAR29bc/ZIP79ce in new isolated FTB instance, still no copied player world; original F and verified backup preserved |
+
+## Preserved implementation and qualification progression
+
+The following snapshots retain the actual sequence; the current delivery
+checkpoint above supersedes their former pending tests and resource ownership.
 
 ## Current player blocker — genuine framework and concise quests
 
