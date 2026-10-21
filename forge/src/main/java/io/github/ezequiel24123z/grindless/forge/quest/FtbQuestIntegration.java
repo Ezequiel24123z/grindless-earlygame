@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.forge.quest;
 
+import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.ftb.mods.ftbquests.api.FTBQuestsAPI;
 import dev.ftb.mods.ftbquests.events.ObjectCompletedEvent;
@@ -49,6 +50,7 @@ public final class FtbQuestIntegration {
                     FtbQuestNative.refresh(legacy, player.getUUID(), event.getData());
                 }
             }
+            return EventResult.pass();
         });
         MinecraftForge.EVENT_BUS.addListener(FtbQuestIntegration::tick);
         MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);

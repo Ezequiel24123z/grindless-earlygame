@@ -80,6 +80,7 @@ public final class VerifySustainabilityRegistry {
                     FORGE_JAVA.resolve(Path.of("forge", "quest", "FtbQuestDefinitions.java"))),
             Map.entry("FtbMatrixFilter",
                     FORGE_JAVA.resolve(Path.of("forge", "quest", "FtbMatrixFilter.java"))),
+            // Historical profiles remain checked, but active entrypoints must never select them.
             Map.entry("HeraclesQuestNetwork",
                     FORGE_JAVA.resolve(Path.of("forge", "quest", "HeraclesQuestNetwork.java"))),
             Map.entry("HeraclesQuestIntegration",
@@ -1108,9 +1109,11 @@ public final class VerifySustainabilityRegistry {
                 public static boolean open(ServerPlayer player) {
                     if (ModList.get().isLoaded("ftbquests")) {
                         FtbQuestIntegration.open(player);
-                        return true;
+                    } else {
+                        Grindless.LOG.error("Cannot open native Grindless quests: FTB Quests is not installed");
+                        player.displayClientMessage(Component.translatable("chat.grindless.quest.backend_unavailable"), false);
                     }
-                    return ModList.get().isLoaded("heracles") && HeraclesQuestIntegration.open(player);
+                    return true;
                 }
                 """)
                 && questMethod(sources, "GrindlessForge", """
@@ -1121,8 +1124,6 @@ public final class VerifySustainabilityRegistry {
                     MachineInspectionOverlay.init(bus);
                     if (ModList.get().isLoaded("ftbquests")) {
                         FtbQuestIntegration.init(bus);
-                    } else if (ModList.get().isLoaded("heracles")) {
-                        HeraclesQuestIntegration.init(bus);
                     }
                     MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) ->
                             MaterialRegistry.rebuild(RegistryTagView.ofItems()));
@@ -1136,9 +1137,6 @@ public final class VerifySustainabilityRegistry {
                 @SubscribeEvent
                 public static void onClientSetup(FMLClientSetupEvent event) {
                     GrindlessClient.init();
-                    if (!ModList.get().isLoaded("ftbquests") && ModList.get().isLoaded("heracles")) {
-                        event.enqueueWork(HeraclesQuestClient::init);
-                    }
                 }
                 """)
                 && questMethod(sources, "FtbQuestIntegration", """
@@ -1167,6 +1165,7 @@ public final class VerifySustainabilityRegistry {
                                 FtbQuestNative.refresh(legacy, player.getUUID(), event.getData());
                             }
                         }
+                        return EventResult.pass();
                     });
                     MinecraftForge.EVENT_BUS.addListener(FtbQuestIntegration::tick);
                     MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);
@@ -1390,12 +1389,14 @@ public final class VerifySustainabilityRegistry {
                     QuestCatalogue.Task declared = QuestCatalogue.byId(filterStack.getTag().getString(BINDING));
                     if (declared == null || declared.evidence() != QuestCatalogue.Evidence.MATRIX
                             || !sameSubject(filterStack, declared)
-                            || ControlMatrixItem.spec(filterStack)
+                            || !(filterStack.getItem() instanceof ControlMatrixItem filterItem)
+                            || filterItem.spec(filterStack)
                             .filter(spec -> spec.rating() == declared.matrixRating()).isEmpty()) {
                         return NO_MATCH;
                     }
                     return candidate -> sameSubject(candidate, declared)
-                            && ControlMatrixItem.spec(candidate)
+                            && candidate.getItem() instanceof ControlMatrixItem candidateItem
+                            && candidateItem.spec(candidate)
                             .filter(spec -> spec.rating() == declared.matrixRating()).isPresent();
                 }
                 """)
@@ -2053,7 +2054,7 @@ public final class VerifySustainabilityRegistry {
 
     private static void questAccessCounterexamples(Path root) throws IOException {
         Map<String, ClassTree> sources = questSources(root, new TreeMap<>());
-        eq("legacy claim/access guards and native FTB migration, definitions and entrypoints are recognized", true,
+        eq("historical claim guards and native-only FTB migration, definitions and entrypoints are recognized", true,
                 questBookAccess(sources));
         rejectQuest(root, sources, "the service cannot replace the physical book with permission",
                 "QuestClaimService", "return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "return true");
@@ -2061,9 +2062,9 @@ public final class VerifySustainabilityRegistry {
                 "QuestClaimService", "ModItems.QUEST_BOOK.get()", "Items.STICK");
         rejectQuest(root, sources, "an unheld legacy menu cannot certify access",
                 "QuestBookMenu", "return QuestClaimService.holdingBook(player)", "return true");
-        rejectQuest(root, sources, "a different menu opener cannot certify this claim interface",
+        rejectQuest(root, sources, "a different historical menu initializer is outside the checked source profile",
                 "QuestBookItem", "new QuestBookMenu(id, inventory)", "new DifferentMenu(id, inventory)");
-        rejectQuest(root, sources, "the optional backend cannot suppress the legacy fallback",
+        rejectQuest(root, sources, "quest book use must invoke native platform admission",
                 "QuestBookItem", "if (!QuestBackendPlatform.open(server))", "if (false)");
         rejectQuest(root, sources, "a live service call cannot pass a fabricated book fact",
                 "QuestClaimService", "taskId, holdingBook(player),", "taskId, true,");
@@ -2435,26 +2436,48 @@ public final class VerifySustainabilityRegistry {
                         + ".getPlayerList().getPlayers().get(0).getMainHandItem().shrink(1);");
         rejectQuest(root, sources, "native completion must observe the same player's common ledger",
                 "GrindlessClaimTask", "claimed(player.getUUID())", "claimed(null)");
-        rejectQuest(root, sources, "native FTB must be selected before the optional legacy renderer",
+        rejectQuest(root, sources, "the installed native framework cannot be bypassed at platform admission",
                 "QuestBackendPlatformImpl", "if (ModList.get().isLoaded(\"ftbquests\"))", "if (false)");
         rejectQuest(root, sources, "a selected native backend must actually open its framework UI",
                 "QuestBackendPlatformImpl", "FtbQuestIntegration.open(player);", "");
-        rejectQuest(root, sources, "a selected native backend cannot fall through to the custom menu",
+        rejectQuest(root, sources, "native opening and missing-backend diagnostics must both remain handled",
                 "QuestBackendPlatformImpl", "return true;", "return false;");
+        rejectQuest(root, sources, "a missing native backend must produce a visible player diagnostic",
+                "QuestBackendPlatformImpl",
+                "player.displayClientMessage(Component.translatable(\"chat.grindless.quest.backend_unavailable\"), false);",
+                "");
+        rejectQuest(root, sources, "a missing native backend must retain its explicit server diagnostic",
+                "QuestBackendPlatformImpl",
+                "Grindless.LOG.error(\"Cannot open native Grindless quests: FTB Quests is not installed\");", "");
+        rejectQuest(root, sources, "a missing native backend cannot open the historical Heracles renderer",
+                "QuestBackendPlatformImpl",
+                "player.displayClientMessage(Component.translatable(\"chat.grindless.quest.backend_unavailable\"), false);",
+                "player.displayClientMessage(Component.translatable(\"chat.grindless.quest.backend_unavailable\"), false); "
+                        + "io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestIntegration.open(player);");
         rejectQuest(root, sources, "the native platform binding cannot substitute a same-named helper",
                 "QuestBackendPlatformImpl",
                 "import io.github.ezequiel24123z.grindless.forge.quest.FtbQuestIntegration;",
                 "import fixture.FtbQuestIntegration;");
-        rejectQuest(root, sources, "Forge cannot initialize rival quest reward authorities together",
-                "GrindlessForge", "} else if (ModList.get().isLoaded(\"heracles\"))",
-                "} if (ModList.get().isLoaded(\"heracles\"))");
-        rejectQuest(root, sources, "the Heracles client must remain disabled when native FTB is present",
-                "GrindlessForgeClient", "!ModList.get().isLoaded(\"ftbquests\") && ", "");
+        rejectQuest(root, sources, "Forge cannot initialize the historical Heracles authority even without FTB",
+                "GrindlessForge", "Grindless.init();",
+                "Grindless.init(); io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestIntegration.init(bus);");
+        rejectQuest(root, sources, "Forge cannot initialize the native integration when FTB is absent",
+                "GrindlessForge", "if (ModList.get().isLoaded(\"ftbquests\"))", "if (true)");
+        rejectQuest(root, sources, "the historical Heracles widget cannot become an active client backend",
+                "GrindlessForgeClient", "GrindlessClient.init();",
+                "GrindlessClient.init(); "
+                        + "event.enqueueWork(io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestClient::init);");
         rejectQuest(root, sources, "native Matrix evidence requires registration of the supported filter adapter",
                 "FtbQuestIntegration", "FTBQuestsAPI.api().registerFilterAdapter(new FtbMatrixFilter());", "");
         rejectQuest(root, sources, "native adapter registration must use the actual framework API",
                 "FtbQuestIntegration", "import dev.ftb.mods.ftbquests.api.FTBQuestsAPI;",
                 "import fixture.FTBQuestsAPI;");
+        rejectQuest(root, sources, "native quest-completion actors must return the framework EventResult",
+                "FtbQuestIntegration", "return EventResult.pass();", "");
+        rejectQuest(root, sources, "native quest-completion actors must pass rather than return a null event result",
+                "FtbQuestIntegration", "return EventResult.pass();", "return null;");
+        rejectQuest(root, sources, "native quest-completion actors must bind the actual Architectury event result",
+                "FtbQuestIntegration", "import dev.architectury.event.EventResult;", "import fixture.EventResult;");
         rejectQuest(root, sources, "the native probe must retain its actual command registration hook",
                 "FtbQuestIntegration", "MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);", "");
         rejectQuest(root, sources, "native readiness cannot skip the loaded definition verification",
@@ -2574,10 +2597,14 @@ public final class VerifySustainabilityRegistry {
         rejectQuest(root, sources, "native Matrix filter definitions must validate their own physical rating",
                 "FtbMatrixFilter", ".filter(spec -> spec.rating() == declared.matrixRating()).isEmpty()",
                 ".filter(spec -> true).isEmpty()");
+        rejectQuest(root, sources, "native Matrix filter specifications require the guarded item instance",
+                "FtbMatrixFilter", "filterItem.spec(filterStack)", "ControlMatrixItem.spec(filterStack)");
         rejectQuest(root, sources, "native Matrix candidates must match the declared physical item",
                 "FtbMatrixFilter", "sameSubject(candidate, declared)", "true");
         rejectQuest(root, sources, "native Matrix candidate validation cannot reuse the filter stack's specification",
-                "FtbMatrixFilter", "ControlMatrixItem.spec(candidate)", "ControlMatrixItem.spec(filterStack)");
+                "FtbMatrixFilter", "candidateItem.spec(candidate)", "candidateItem.spec(filterStack)");
+        rejectQuest(root, sources, "native Matrix candidate specifications require the guarded item instance",
+                "FtbMatrixFilter", "candidateItem.spec(candidate)", "ControlMatrixItem.spec(candidate)");
         rejectQuest(root, sources, "native Matrix candidates must retain the exact requested valid rating",
                 "FtbMatrixFilter", ".filter(spec -> spec.rating() == declared.matrixRating()).isPresent()",
                 ".filter(spec -> true).isPresent()");
@@ -3059,6 +3086,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("NumericTag", "net.minecraft.nbt.NumericTag"),
                 Map.entry("MenuRegistry", "dev.architectury.registry.menu.MenuRegistry"),
                 Map.entry("ExpectPlatform", "dev.architectury.injectables.annotations.ExpectPlatform"),
+                Map.entry("EventResult", "dev.architectury.event.EventResult"),
                 Map.entry("LifecycleEvent", "dev.architectury.event.events.common.LifecycleEvent"),
                 Map.entry("EventBuses", "dev.architectury.platform.forge.EventBuses"),
                 Map.entry("ModList", "net.minecraftforge.fml.ModList"),
@@ -3183,16 +3211,16 @@ public final class VerifySustainabilityRegistry {
                     "IllegalStateException", "LevelResource", "Path", "Files", "BasicFileAttributes", "LinkOption",
                     "NoSuchFileException", "IOException", "SecurityException");
             case "QuestBackendPlatform" -> Set.of("ServerPlayer", "ExpectPlatform", "AssertionError");
-            case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "FtbQuestIntegration", "HeraclesQuestIntegration");
+            case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "FtbQuestIntegration", "Grindless", "Component");
             case "GrindlessForge" -> Set.of("Grindless", "IEventBus", "FMLJavaModLoadingContext", "EventBuses",
-                    "MachineInspectionOverlay", "ModList", "Mod", "FtbQuestIntegration", "HeraclesQuestIntegration",
+                    "MachineInspectionOverlay", "ModList", "Mod", "FtbQuestIntegration",
                     "MinecraftForge", "TagsUpdatedEvent", "MaterialRegistry", "RegistryTagView");
-            case "GrindlessForgeClient" -> Set.of("Grindless", "GrindlessClient", "Mod", "ModList", "Dist",
-                    "SubscribeEvent", "FMLClientSetupEvent", "HeraclesQuestClient");
+            case "GrindlessForgeClient" -> Set.of("Grindless", "GrindlessClient", "Mod", "Dist",
+                    "SubscribeEvent", "FMLClientSetupEvent");
             case "FtbQuestIntegration" -> Set.of("Grindless", "QuestProgress", "FtbQuestNative", "FtbQuestDefinitions",
                     "FTBQuestsAPI", "FtbMatrixFilter", "FtbQuestFiles", "FtbQuestChecks",
                     "IEventBus", "FMLCommonSetupEvent", "FMLPaths", "IOException",
-                    "LifecycleEvent", "TeamEvent", "ObjectCompletedEvent", "MinecraftForge", "TickEvent",
+                    "LifecycleEvent", "EventResult", "TeamEvent", "ObjectCompletedEvent", "MinecraftForge", "TickEvent",
                     "MinecraftServer", "ServerPlayer", "ServerQuestFile", "TeamData", "OpenQuestBookMessage", "Component",
                     "IllegalStateException", "IllegalArgumentException");
             case "FtbQuestNative" -> Set.of("BaseQuestFile", "Chapter", "Quest", "QuestObjectBase", "TeamData",

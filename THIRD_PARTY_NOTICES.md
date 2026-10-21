@@ -312,8 +312,8 @@ MIT licence does not relicense Jade.
 ## Quest-backend dependency selection
 
 The following historical optional integration was implemented under ADR-0142.
-ADR-0171 replaces it in all official pack profiles; standalone compatibility code
-does not select or redistribute those jars. It is not present
+ADR-0171 replaces it in all official pack profiles; retained historical adapter
+code is not activated as a fallback and does not select or redistribute those jars. It is not present
 in the previously delivered740ec84 preparation package. No upstream source, asset or jar
 is copied into Grindless's distribution by this selection; current pack references remain
 launcher-managed.

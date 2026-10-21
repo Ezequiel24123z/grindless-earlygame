@@ -37,12 +37,14 @@ public final class FtbMatrixFilter implements ItemFilterAdapter {
         QuestCatalogue.Task declared = QuestCatalogue.byId(filterStack.getTag().getString(BINDING));
         if (declared == null || declared.evidence() != QuestCatalogue.Evidence.MATRIX
                 || !sameSubject(filterStack, declared)
-                || ControlMatrixItem.spec(filterStack)
+                || !(filterStack.getItem() instanceof ControlMatrixItem filterItem)
+                || filterItem.spec(filterStack)
                 .filter(spec -> spec.rating() == declared.matrixRating()).isEmpty()) {
             return NO_MATCH;
         }
         return candidate -> sameSubject(candidate, declared)
-                && ControlMatrixItem.spec(candidate)
+                && candidate.getItem() instanceof ControlMatrixItem candidateItem
+                && candidateItem.spec(candidate)
                 .filter(spec -> spec.rating() == declared.matrixRating()).isPresent();
     }
 
