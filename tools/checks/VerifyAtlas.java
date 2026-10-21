@@ -76,8 +76,8 @@ public final class VerifyAtlas {
         eq("the physical power-coupling craft is visible in the same Atlas", "CRAFTING_TABLE", fluxCell.station());
         eq("the Flux Cell row matches its existing shaped ingredient grouping",
                 "8x ingots/copper + ingots/iron", AtlasLogic.describe(fluxCell.inputs()));
-        eq("the Flux Cell row produces its actual existing item", List.of("item:grindless:flux_cell"),
-                fluxCell.outputs());
+        yes("the Flux Cell row produces its actual existing item",
+                fluxCell.outputs().equals(List.of("item:grindless:flux_cell")));
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())
                         .equals(AtlasLogic.describe(industrialRelay.outputs())));
