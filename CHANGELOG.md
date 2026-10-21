@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Qualify and begin protected delivery of the native FTB fix.** Exact-schema
+  Persistence passes; final dd0b4bc package79ce5da2 embeds the byte-identical
+  native-tested JAR29bcce43. Parent verifies all25 closed custody artifacts,
+  receives the exclusive lease, deploys only a new owned FTB instance and
+  verifies the stopped original world's36-file backup plus options. Keep the
+  original intact; separate diagnostic clone load and final pristine copy remain
+  open. No client/JEI/login/reward delivery or human acceptance is inferred.
 - **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
   loads46 logical quests/36 native item rewards and passes1099 graph/filter/
   import assertions, then seed56 and a new process reopens persisted native

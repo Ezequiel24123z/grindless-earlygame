@@ -1,6 +1,53 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **OWNER BLOCKED BY QUESTBOOK; NATIVE FTB REPLACEMENT IN PROGRESS**.
+Updated: 2026-10-21. Product gate: **NATIVE FTB/PACKAGE QUALIFIED; PROTECTED SAVE DELIVERY IN PROGRESS**.
+
+## Current delivery checkpoint
+
+Backend source `dd0b4bc93187fe172fd336bfa330987220bd7be4` normally merges
+coordinator c353e14 and exact persistence-oracle correction ef00402. Real
+Persistence passes all three old and three native binary reloads, UUID/fence
+and four malformed cases. Final ZIP79ce5da2 (1,913,205 bytes) is BuiltVerified,
+still `restricted-playable-profile-not-rc`. Its extracted JAR29bcce43 is
+byte-identical to the actual ff610 native-tested runtime: only two test files
+and documentation changed. Do not rebuild/reboot for evidence-only updates.
+
+The parent verifies all25 transferred raw/receipt/harness/disk/package files,
+their complete hashes, actual first/reopen/natural-stop markers and the embedded
+runtime hash. The first origin and current phase2 save are distinct evidence.
+The backend explicitly returns its exclusive lease at19:16:27Z with Java0,
+owned helpers0/locks0; it will make no further PC actions. The coordinator now
+exclusively owns guarded delivery, not another backend worker.
+
+Production Deploy installs exact dd0 into new owned `Grindless-T0-FTB-Dev`
+without modifying the old F instance or global launcher settings. Fresh19:21:50Z
+inspection finds Java0, old F/JAR95bf unchanged with one world/options, and the
+new target JAR29bc with no world/options. The digest-bound custody helper then
+snapshots and backs up all36 files/10,885,681 world bytes plus options, preserving
+original metadata/source bytes. Full paths, ownership IDs, world identity and
+receipts remain private. This is backup verification, not a migrated-player pass.
+
+Next: admit a separate backup-derived diagnostic clone for actual changed-mod
+load, then use the untouched verified backup for the final new-instance copy.
+Never run the normal resetting harness against a player save, loosen the
+synthetic native origin or adopt the command-tested clone as the reference.
+No other PC/cache worker may resume before the delivery lease is returned.
+
+| Category | Current protected delivery |
+| --- | --- |
+| COMPLETED | Native backend/common/standalone/persistence/package qualified; all25 custody files and exact runtime checked; new owned target deployed; stopped original world/options backed up and source unchanged |
+| BLOCKED | None external; diagnostic clone-load and final pristine copy still need execution |
+| NOT EXECUTED | Owner-save clone technical load, final target world copy, actual client/login/JEI/rewards, main merge or release |
+| NEEDS HUMAN VALIDATION | Native presentation, actual login/individual rewards/JEI and resumed campaign |
+| NEEDS MY DECISION | None within the directed fix |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new; no generation or paid service |
+| DEPLOYED STATE | Exact dd0/JAR29bc/ZIP79ce in new isolated FTB instance, still no copied player world; original F and verified backup preserved |
+
+## Preserved implementation and qualification progression
+
+The following snapshots retain the actual sequence; the current delivery
+checkpoint above supersedes their former pending tests and resource ownership.
 
 ## Current player blocker — genuine framework and concise quests
 

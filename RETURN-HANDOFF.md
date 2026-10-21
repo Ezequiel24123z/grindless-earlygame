@@ -1,5 +1,30 @@
 # Return handoff
 
+## Current protected native-questbook delivery
+
+Native implementation and exact-schema Persistence now pass. Final source dd0b4bc
+produces ZIP79ce5da2; its embedded JAR29bcce43 is the exact ff610 native-tested
+runtime. Parent verifies all25 raw/receipt/harness/disk/package artifacts. The
+backend lease is explicitly returned; only the coordinator may use PC/cache.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Genuine native FTB, concise goals, legacy receipt fence, actual two-process proof, standalone/persistence and package qualified; new owned FTB instance deployed; stopped actual F world/options backed up with36 files/10,885,681 world bytes and unchanged original |
+| BLOCKED | None external; final protected handover remains in progress |
+| NOT EXECUTED | Separate owner-save clone technical load, final pristine copy and actual client; no main merge/release |
+| NEEDS HUMAN VALIDATION | Native GUI/JEI, actual login/rewards and campaign |
+| NEEDS MY DECISION | None |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | dd0/JAR29bc/ZIP79ce in new isolated Grindless-T0-FTB-Dev; no player world copied yet; original F and verified backup intact |
+
+Load only an explicitly admitted diagnostic copy, never the original or backup.
+The final player copy must come from the untouched backup, not the tested clone.
+Private paths/identity/receipts remain out of Git. Read
+[the current qualification](docs/testing/t0-ftb-native-qualification.md) and
+[active handoff](.agent/handoff.md); prior pending-test/lease snapshots below are
+historical and do not authorize another worker.
+
 ## Current blocker — native FTB Quests, not a custom guide
 
 The owner cannot continue with the delivered questbook. ADR-0171 supersedes the
