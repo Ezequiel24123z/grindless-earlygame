@@ -3,9 +3,7 @@ package io.github.ezequiel24123z.grindless.forge.quest;
 import dev.architectury.utils.Env;
 import dev.ftb.mods.ftblibrary.snbt.SNBT;
 import dev.ftb.mods.ftblibrary.snbt.SNBTCompoundTag;
-import dev.ftb.mods.ftbquests.item.MissingItem;
 import dev.ftb.mods.ftbquests.quest.BaseQuestFile;
-import dev.ftb.mods.ftbquests.quest.Chapter;
 import dev.ftb.mods.ftbquests.quest.ProgressionMode;
 import dev.ftb.mods.ftbquests.quest.Quest;
 import dev.ftb.mods.ftbquests.quest.QuestObjectBase;
@@ -31,6 +29,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,15 +45,17 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * Real FTB SNBT loader and TeamData contracts, using the public 2001.4.22 API observed at
- * FTB-Quests a74ee04bf80e7fba2c8475112a07ace4a4abd0a6.
+ * Production SNBT/data and physical Matrix parser contracts, plus explicitly SYNTHETIC
+ * vanilla-stock native loader/TeamData mechanisms; not a Forge lifecycle.
  *
  * <p>No framework/API initialization substitute, registry mutation, reflection, fake item holder,
  * player, inventory or reward-delivery implementation belongs here. The full native loader needs
  * real item registration, including FTB's MissingItem if a referenced mod item is unavailable.
- * A vanilla-only classpath failing at that boundary is not a successful native-loader test.
- * Positive registered Matrix filtering, real adapter registration, server lifecycle, inventory
- * delivery and retained-world/client acceptance still require the existing real Forge probe.
+ * Production loader/reload, registered native task/reward items and canonical TeamData binding
+ * therefore require FtbQuestChecks under real Forge. The synthetic fixture preserves production
+ * IDs, quantities, dependencies and stock classes, but substitutes vanilla stone item subjects
+ * only in deep-copied test chapters. It proves mechanism/codec contracts, never production item
+ * matching, a canonical loaded graph or a Frame UI. No caught platform error becomes a pass.
  */
 public final class VerifyFtbQuests {
 
@@ -138,24 +139,34 @@ public final class VerifyFtbQuests {
             Map<String, CompoundTag> documents = FtbQuestDefinitions.chapters();
             definitions(documents);
             matrixParser();
+            System.out.println("FTB PRODUCTION SNBT/PARSER DATA ASSERTIONS: " + assertions);
             Files.createDirectories(Path.of("build"));
             Path fixture = Files.createTempDirectory(Path.of("build"), "ftbquests-native-checks-");
-            System.out.println("Native FTB fixture (retained for diagnosis): " + fixture.toAbsolutePath());
-            Path folder = writeLoaderFixture(fixture);
+            System.out.println("FTB standalone fixture (production documents + SYNTHETIC vanilla graph; retained): " + fixture.toAbsolutePath());
+            documentCodec(fixture, documents);
+            System.out.println("SYNTHETIC_NATIVE_MECHANISM_ONLY: vanilla stone subjects, canonical IDs/counts/stock classes; "
+                    + "NOT a production item graph, registered Matrix match or Frame UI.");
+            Path folder = writeSyntheticFixture(fixture, documents);
             NativeQuestFile file = load(folder);
-            nativeDefinitions(file, documents);
+            syntheticDefinitions(file);
             NativeQuestFile reloaded = load(folder);
-            equal("real chapter reload preserves every native object", snapshot(file), snapshot(reloaded));
-            nativeDefinitions(reloaded, documents);
+            equal("synthetic native chapter reload preserves every object", snapshot(file), snapshot(reloaded));
+            equal("synthetic reload creates distinct quest instances", false,
+                    quest(file, "multitool") == quest(reloaded, "multitool"));
             migration(file, folder, fixture);
             receiptsBeforeCompletion(folder);
             blockedReceiptRetry(folder);
             retainedT1(folder);
-            System.out.println("ALL EXECUTED FTB NATIVE DATA CONTRACT CHECKS PASSED");
+            equal("synthetic item substitution never changes production documents", documents, FtbQuestDefinitions.chapters());
+            System.out.println("FTB STANDALONE DATA/SYNTHETIC NATIVE MECHANISM CHECKS PASSED");
         } finally {
             System.out.println("FTB NATIVE DATA ASSERTIONS: " + assertions);
-            System.out.println("REQUIRED, NOT PROVED HERE: real Forge Matrix adapter registration/matching, "
-                    + "server task submission, physical reward delivery, login/team events and retained worlds/client.");
+            System.out.println("REQUIRED_NOT_PROVED: production native loader/reload, registered task/reward subjects, "
+                    + "production-bound TeamData migration/individual receipts/Relay gates and registered Matrix matching "
+                    + "require grindless_native_quest_checks under real Forge; retained-world persistence requires "
+                    + "seed then reopen in another JVM.");
+            System.out.println("REQUIRED_NOT_PROVED: actual player inventory submission, physical reward delivery, "
+                    + "login/team events and client/JEI UI are not simulated by data or console fixtures.");
         }
     }
 
@@ -234,102 +245,123 @@ public final class VerifyFtbQuests {
                         .map(reward -> reward.itemId() + "/" + reward.count()).toList());
     }
 
-    /**
-     * A private build fixture, not another installer or an append-only ownership test. Install the
-     * real documents; never substitute books for unregistered items.
-     * With no data.snbt, BaseQuestFile deliberately retains its real constructor defaults.
-     */
-    private static Path writeLoaderFixture(Path fixture) throws Exception {
+    /** Real authored SNBT documents only: do not instantiate their platform-dependent item tasks. */
+    private static void documentCodec(Path fixture, Map<String, CompoundTag> documents) throws Exception {
         Path config = fixture.resolve("config");
         FtbQuestFiles.ensure(config);
-        return config.resolve("ftbquests/quests");
+        for (Map.Entry<String, CompoundTag> entry : documents.entrySet()) {
+            CompoundTag read = SNBT.read(config.resolve("ftbquests/quests/chapters").resolve(entry.getKey()));
+            equal("FTB SNBT reader returns a native document tag " + entry.getKey(), true, read instanceof SNBTCompoundTag);
+            equal("authored chapter SNBT document codec, not a loaded quest graph " + entry.getKey(), entry.getValue(), read);
+        }
     }
 
-    private static void nativeDefinitions(BaseQuestFile file, Map<String, CompoundTag> documents) {
-        assertions++;
-        FtbQuestNative.verify(file);
-        equal("two actual native chapters", 2, file.getAllChapters().size());
-        equal("46 actual native quests", 46, file.getAllChapters().stream().mapToInt(chapter -> chapter.getQuests().size()).sum());
-        equal("46 actual native tasks", 46, file.getAllTasks().size());
-        equal("36 actual native item rewards", 36L, file.getAllObjects().stream().filter(Reward.class::isInstance).count());
+    /** No fallback: a predetermined, private synthetic codec fixture, never production config. */
+    private static Path writeSyntheticFixture(Path fixture, Map<String, CompoundTag> documents) throws Exception {
+        Path folder = fixture.resolve("synthetic-vanilla-codec");
+        Files.createDirectories(folder.resolve("chapters"));
+        for (Map.Entry<String, CompoundTag> entry : documents.entrySet()) {
+            CompoundTag copy = entry.getValue().copy();
+            ListTag quests = copy.getList("quests", Tag.TAG_COMPOUND);
+            for (int index = 0; index < quests.size(); index++) {
+                CompoundTag quest = quests.getCompound(index);
+                ListTag tasks = quest.getList("tasks", Tag.TAG_COMPOUND);
+                for (int taskIndex = 0; taskIndex < tasks.size(); taskIndex++) {
+                    CompoundTag task = tasks.getCompound(taskIndex);
+                    if (task.getString("type").equals("ftbquests:item")) {
+                        if (task.get("item") instanceof CompoundTag stack) {
+                            stack.putString("id", "minecraft:stone");
+                        } else {
+                            task.putString("item", "minecraft:stone");
+                        }
+                    }
+                }
+                ListTag rewards = quest.getList("rewards", Tag.TAG_COMPOUND);
+                for (int rewardIndex = 0; rewardIndex < rewards.size(); rewardIndex++) {
+                    rewards.getCompound(rewardIndex).putString("item", "minecraft:stone");
+                }
+            }
+            Files.writeString(folder.resolve("chapters").resolve(entry.getKey()), copy.toString());
+        }
+        return folder;
+    }
+
+    /** These loaded stock classes have synthetic item subjects, not production item registration. */
+    private static void syntheticDefinitions(BaseQuestFile file) {
+        equal("synthetic native chapter count", 2, file.getAllChapters().size());
+        equal("synthetic native quest count", 46, file.getAllChapters().stream().mapToInt(chapter -> chapter.getQuests().size()).sum());
+        equal("synthetic native task count", 46, file.getAllTasks().size());
+        equal("synthetic native receipt count", 36L, file.getAllObjects().stream().filter(Reward.class::isInstance).count());
         TeamData empty = new TeamData(TEAM, file);
         for (QuestCatalogue.Task declared : QuestCatalogue.tasks()) {
             Quest quest = quest(file, declared.id());
             Task task = task(file, declared.id());
-            Chapter chapter = file.getChapter(FtbQuestDefinitions.id("chapter", QuestCatalogue.chapter(declared).name()));
-            equal("native chapter object membership " + declared.id(), true, quest.getChapter() == chapter);
-            equal("native task object membership " + declared.id(), true, task.getQuest() == quest
-                    && quest.getTasks().size() == 1 && quest.getTasks().iterator().next() == task);
-            equal("actual native task class, never a custom widget " + declared.id(), taskClass(declared), task.getClass());
-            equal("actual native task type " + declared.id(), taskType(declared), task.getType().getTypeId().toString());
-            equal("actual task quantity " + declared.id(), (long) declared.count(), task.getMaxProgress());
-            equal("native quest is not repeatable " + declared.id(), false, quest.canBeRepeated());
-            equal("native progression is dependency-gated " + declared.id(), ProgressionMode.LINEAR, quest.getProgressionMode());
-            equal("native bound dependencies, not unbound SNBT strings " + declared.id(),
+            equal("synthetic native chapter membership " + declared.id(), true,
+                    quest.getChapter() == file.getChapter(FtbQuestDefinitions.id("chapter", QuestCatalogue.chapter(declared).name())));
+            equal("synthetic native task membership " + declared.id(), true,
+                    task.getQuest() == quest && quest.getTasks().size() == 1 && quest.getTasks().iterator().next() == task);
+            equal("synthetic stock task class " + declared.id(), switch (declared.evidence()) {
+                case ITEM, MATRIX -> ItemTask.class;
+                case FREE -> CheckmarkTask.class;
+                case DIMENSION -> DimensionTask.class;
+            }, task.getClass());
+            equal("synthetic native task type " + declared.id(), taskType(declared), task.getType().getTypeId().toString());
+            equal("synthetic preserves production task count " + declared.id(), (long) declared.count(), task.getMaxProgress());
+            equal("synthetic native quest is not repeatable " + declared.id(), false, quest.canBeRepeated());
+            equal("synthetic native linear progression " + declared.id(), ProgressionMode.LINEAR, quest.getProgressionMode());
+            equal("synthetic native dependency bindings " + declared.id(),
                     QuestCatalogue.requirements(declared).stream().map(FtbQuestDefinitions::questId).toList(),
                     quest.streamDependencies().map(dependency -> dependency.id).toList());
             for (String dependency : QuestCatalogue.requirements(declared)) {
-                equal("dependency binds the loaded object " + declared.id() + "/" + dependency, true,
+                equal("synthetic native dependency object " + declared.id() + "/" + dependency, true,
                         quest.hasDependency(quest(file, dependency)));
             }
             boolean t1 = QuestCatalogue.chapter(declared) == QuestCatalogue.Chapter.T1;
-            equal("native detail gate " + declared.id(), t1, quest.hideDetailsUntilStartable());
-            equal("native initial visibility " + declared.id(), !t1, quest.isVisible(empty));
+            equal("synthetic native detail gate " + declared.id(), t1, quest.hideDetailsUntilStartable());
+            equal("synthetic native initial visibility " + declared.id(), !t1, quest.isVisible(empty));
             if (t1) {
-                equal("native T1 cannot start before Relay " + declared.id(), false, empty.canStartTasks(quest));
+                equal("synthetic native T1 cannot start without Relay " + declared.id(), false, empty.canStartTasks(quest));
             }
             if (task instanceof ItemTask item) {
-                equal("native item observation never consumes the objective " + declared.id(), false, item.consumesResources());
-                equal("native inventory observation remains enabled " + declared.id(), true, item.submitItemsOnInventoryChange());
-                equal("existing inventory, not crafting-only " + declared.id(), false, item.isOnlyFromCrafting());
-                equal("no custom task-screen-only objective " + declared.id(), false, item.isTaskScreenOnly());
-                CompoundTag physical = MissingItem.writeItem(item.getItemStack());
-                equal("native reader retains the exact item ID " + declared.id(), declared.subject(), physical.getString("id"));
-                if (declared.evidence() == QuestCatalogue.Evidence.MATRIX) {
-                    matrixFilterData("native " + declared.id(), physical, declared);
-                }
+                equal("synthetic task uses only registered vanilla stone " + declared.id(), Items.STONE, item.getItemStack().getItem());
+                equal("synthetic native task does not consume items " + declared.id(), false, item.consumesResources());
+                equal("synthetic native inventory observation enabled " + declared.id(), true, item.submitItemsOnInventoryChange());
+                equal("synthetic native task is not crafting-only " + declared.id(), false, item.isOnlyFromCrafting());
+                equal("synthetic native task is not task-screen-only " + declared.id(), false, item.isTaskScreenOnly());
             }
-            equal("actual native reward count " + declared.id(), declared.rewards().size(), quest.getRewards().size());
             List<Reward> rewards = List.copyOf(quest.getRewards());
+            equal("synthetic preserves production reward cardinality " + declared.id(), declared.rewards().size(), rewards.size());
             for (int index = 0; index < rewards.size(); index++) {
                 Reward reward = rewards.get(index);
-                equal("actual native ItemReward " + declared.id(), ItemReward.class, reward.getClass());
-                equal("native reward lookup and parent " + declared.id(), true,
-                        file.getReward(FtbQuestDefinitions.rewardIds(declared).get(index)) == reward && reward.getQuest() == quest);
-                equal("native reward receipts are per UUID " + declared.id(), false, reward.isTeamReward());
-                equal("actual native autoclaim is disabled " + declared.id(), RewardAutoClaim.DISABLED, reward.getAutoClaimType());
-                ItemReward item = (ItemReward) reward;
-                equal("native reward item " + declared.id(), declared.rewards().get(index).itemId(),
-                        MissingItem.writeItem(item.getItem()).getString("id"));
-                equal("native reward quantity " + declared.id(), declared.rewards().get(index).count(), item.getCount());
-                CompoundTag data = new CompoundTag();
-                item.writeData(data);
-                equal("native reward has no random bonus " + declared.id(), 0, data.getInt("random_bonus"));
-                equal("native reward does not suppress already-owned items " + declared.id(), false, data.getBoolean("only_one"));
+                equal("synthetic stock ItemReward " + declared.id(), ItemReward.class, reward.getClass());
+                equal("synthetic preserves production reward ID " + declared.id(), FtbQuestDefinitions.rewardIds(declared).get(index), reward.id);
+                equal("synthetic native reward lookup/parent " + declared.id(), true,
+                        file.getReward(reward.id) == reward && reward.getQuest() == quest);
+                equal("synthetic native reward is individual " + declared.id(), false, reward.isTeamReward());
+                equal("synthetic native autoclaim disabled " + declared.id(), RewardAutoClaim.DISABLED, reward.getAutoClaimType());
+                equal("synthetic reward uses only registered vanilla stone " + declared.id(), Items.STONE, ((ItemReward) reward).getItem().getItem());
+                equal("synthetic preserves production reward quantity " + declared.id(), declared.rewards().get(index).count(), ((ItemReward) reward).getCount());
+                CompoundTag rewardData = new CompoundTag();
+                reward.writeData(rewardData);
+                equal("synthetic native reward has no random bonus " + declared.id(), 0, rewardData.getInt("random_bonus"));
+                equal("synthetic native reward is not only-one " + declared.id(), false, rewardData.getBoolean("only_one"));
             }
         }
-        Quest starter = quest(file, QuestCatalogue.STARTER_SUPPLIES);
-        equal("the starter is the first real T0 node", starter.id,
+        equal("synthetic native starter is still first in T0", FtbQuestDefinitions.questId(QuestCatalogue.STARTER_SUPPLIES),
                 file.getChapter(FtbQuestDefinitions.id("chapter", "T0")).getQuests().iterator().next().id);
-        equal("the exact eleven native starter stacks retain order and quantities", STARTER_STACKS,
-                starter.getRewards().stream().map(reward -> {
-                    ItemReward item = (ItemReward) reward;
-                    return MissingItem.writeItem(item.getItem()).getString("id") + "/" + item.getCount();
-                }).toList());
-        // There is no DIMENSION objective in the current catalogue. Exercise the actual native
-        // reader against an existing quest without adding/replacing any canonical quest or task.
+        // No DIMENSION objective exists in this catalogue; this is only the stock reader's codec.
         DimensionTask dimension = new DimensionTask(FtbQuestDefinitions.taskId("factory_world"), quest(file, "factory_world"));
         CompoundTag dimensionData = new CompoundTag();
         dimensionData.putString("dimension", "minecraft:overworld");
         dimension.readData(dimensionData);
         CompoundTag dimensionRoundTrip = new CompoundTag();
         dimension.writeData(dimensionRoundTrip);
-        equal("native dimension reader retains its real resource key", "minecraft:overworld", dimensionRoundTrip.getString("dimension"));
-        equal("native dimension reader uses the stock type", "ftbquests:dimension", dimension.getType().getTypeId().toString());
-        equal("native dimension task is boolean", 1L, dimension.getMaxProgress());
-        equal("reading/checking native definitions does not rewrite authored documents", documents, FtbQuestDefinitions.chapters());
+        equal("synthetic stock dimension resource-key codec", "minecraft:overworld", dimensionRoundTrip.getString("dimension"));
+        equal("stock dimension reader type", "ftbquests:dimension", dimension.getType().getTypeId().toString());
+        equal("stock dimension task is boolean", 1L, dimension.getMaxProgress());
     }
 
+    /** Real native migration API on the explicitly synthetic vanilla-stock graph. */
     private static void migration(BaseQuestFile file, Path folder, Path fixture) {
         QuestProgress legacy = paid(FIRST, PAID_START);
         TeamData data = new TeamData(TEAM, file);
@@ -380,14 +412,13 @@ public final class VerifyFtbQuests {
         equal("teammate import does not auto-claim the other ten starter stacks", 13,
                 data.serializeNBT().getCompound("claimed_rewards").size());
         assertReceipts(data, FIRST, QuestCatalogue.STARTER_SUPPLIES, true);
-        CompoundTag savedLegacy = legacy.save(new CompoundTag());
-        QuestProgress rejoinedLegacy = QuestProgress.load(savedLegacy);
+        QuestProgress rejoinedLegacy = QuestProgress.load(legacy.save(new CompoundTag()));
         equal("the persisted migration fence survives legacy reload", true,
                 rejoinedLegacy.usesNativeClaims(FIRST) && rejoinedLegacy.usesNativeClaims(SECOND));
         equal("native completed observation is not persisted as an old receipt", PAID_START, rejoinedLegacy.claimed(FIRST));
         equal("the teammate's derived completion is also non-persistent", Set.of(), rejoinedLegacy.claimed(SECOND));
 
-        Path progressFile = fixture.resolve("team.snbt");
+        Path progressFile = fixture.resolve("synthetic-team-codec.snbt");
         SNBTCompoundTag beforeReload = data.serializeNBT();
         SNBT.write(progressFile, beforeReload);
         CompoundTag read = SNBT.read(progressFile);
@@ -395,7 +426,7 @@ public final class VerifyFtbQuests {
         BaseQuestFile reloadedFile = load(folder);
         TeamData rejoined = new TeamData(TEAM, reloadedFile);
         rejoined.deserializeNBT((SNBTCompoundTag) read);
-        equal("native SNBT persistence round-trip", beforeReload, rejoined.serializeNBT());
+        equal("synthetic native TeamData SNBT codec, not a world restart", beforeReload, rejoined.serializeNBT());
         equal("reload binds genuinely new quest objects", false,
                 quest(file, "multitool") == quest(reloadedFile, "multitool"));
         FtbQuestNative.migrate(rejoinedLegacy, FIRST, rejoined);
@@ -429,7 +460,7 @@ public final class VerifyFtbQuests {
         QuestProgress legacy = paid(FIRST, PAID_START);
         TeamData data = new TeamData(TEAM, file);
         Reward missing = reward(file, "multitool", 0);
-        // Corrupt only this freshly loaded framework graph, not the documents or production files.
+        // Corrupt only a freshly loaded synthetic graph, never production files or the server graph.
         missing.getQuest().removeReward(missing);
         file.refreshIDMap();
         fails("a missing later receipt stops migration", IllegalStateException.class,
@@ -489,7 +520,6 @@ public final class VerifyFtbQuests {
                 QuestLogic.consider(QuestCatalogue.byId("pylon"), legacy.claimed(FIRST), true));
         equal("new T1 native reward is not claimable", RewardClaimType.CANT_CLAIM, data.getClaimType(FIRST, reward(file, "pylon", 0)));
 
-        // Fulfil every other dependency in actual TeamData to prove Relay itself is still required.
         TeamData gate = new TeamData(new UUID(0, 17), file);
         for (String id : T1_IDS) {
             for (String dependency : QuestCatalogue.requirements(QuestCatalogue.byId(id))) {
@@ -590,7 +620,7 @@ public final class VerifyFtbQuests {
         return legacy;
     }
 
-    /** Seed real native history, not a simulation of server task submission or item delivery. */
+    /** Native bookkeeping in the synthetic graph, never player submission or item delivery. */
     private static void seedCompletion(TeamData data, String id, Date when) {
         Task task = task(data.getFile(), id);
         data.setProgress(task, task.getMaxProgress());
@@ -632,25 +662,17 @@ public final class VerifyFtbQuests {
         };
     }
 
-    private static Class<? extends Task> taskClass(QuestCatalogue.Task task) {
-        return switch (task.evidence()) {
-            case ITEM, MATRIX -> ItemTask.class;
-            case FREE -> CheckmarkTask.class;
-            case DIMENSION -> DimensionTask.class;
-        };
-    }
-
     private static Quest quest(BaseQuestFile file, String id) {
-        return Objects.requireNonNull(file.getQuest(FtbQuestDefinitions.questId(id)), "Missing real native quest " + id);
+        return Objects.requireNonNull(file.getQuest(FtbQuestDefinitions.questId(id)), "Missing synthetic native quest " + id);
     }
 
     private static Task task(BaseQuestFile file, String id) {
-        return Objects.requireNonNull(file.getTask(FtbQuestDefinitions.taskId(id)), "Missing real native task " + id);
+        return Objects.requireNonNull(file.getTask(FtbQuestDefinitions.taskId(id)), "Missing synthetic native task " + id);
     }
 
     private static Reward reward(BaseQuestFile file, String id, int index) {
         return Objects.requireNonNull(file.getReward(FtbQuestDefinitions.rewardIds(QuestCatalogue.byId(id)).get(index)),
-                "Missing real native reward " + id + "/" + index);
+                "Missing synthetic native reward " + id + "/" + index);
     }
 
     private static NativeQuestFile load(Path folder) {
@@ -698,7 +720,7 @@ public final class VerifyFtbQuests {
         }
     }
 
-    /** Only the required abstract hooks; all loading, dependencies, rewards and progress stay native. */
+    /** Only required abstract hooks; the native framework loads the synthetic stock data. */
     private static final class NativeQuestFile extends BaseQuestFile {
         private final Path folder;
 
@@ -708,7 +730,7 @@ public final class VerifyFtbQuests {
 
         @Override
         public Env getSide() {
-            // Logical client-side data suppresses server packets. This is not a server lifecycle proof.
+            // Data only: no server packets, online membership or server lifecycle proof.
             return Env.CLIENT;
         }
 
@@ -719,7 +741,7 @@ public final class VerifyFtbQuests {
 
         @Override
         public void deleteObject(long id) {
-            throw new UnsupportedOperationException("The loader fixture does not delete quest objects");
+            throw new UnsupportedOperationException("The synthetic loader fixture does not delete quest objects");
         }
 
         @Override
