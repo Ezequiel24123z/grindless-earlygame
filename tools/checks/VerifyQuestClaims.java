@@ -40,8 +40,42 @@ public final class VerifyQuestClaims {
         lessons();
         invalidRewards();
         projectionAndReload();
+        nativeClaimAuthority();
         System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions
                 + "; positive registered F1 evidence/server claims remain required in workshop-ports native probe.");
+    }
+
+    private static void nativeClaimAuthority() {
+        QuestProgress ledger = new QuestProgress();
+        UUID first = UUID.randomUUID();
+        UUID second = UUID.randomUUID();
+        ledger.claim(first, QuestCatalogue.STARTER_SUPPLIES);
+        ledger.claim(first, "multitool");
+        Set<String> receipts = ledger.claimed(first);
+        ledger.useNativeClaims(first);
+        ledger.useNativeClaims(first);
+        equal("native authority preserves all legacy import receipts", receipts, ledger.claimed(first));
+        equal("native authority is player scoped", false, ledger.usesNativeClaims(second));
+        equal("native authority also fences direct legacy ledger mutation", false, ledger.claim(first, "quern"));
+        AtomicInteger effects = new AtomicInteger();
+        for (int restart = 0; restart < 3; restart++) {
+            ledger = QuestProgress.load(ledger.save(new CompoundTag()));
+            equal("native authority survives restart", true, ledger.usesNativeClaims(first));
+            equal("legacy import receipts survive restart", receipts, ledger.claimed(first));
+            for (String id : List.of(QuestCatalogue.STARTER_SUPPLIES, "multitool", "quern")) {
+                equal("a retired legacy engine cannot grant " + id, QuestClaimService.Result.NATIVE_BACKEND,
+                        QuestClaimService.claim(ledger, first, id, true,
+                                task -> { effects.incrementAndGet(); return true; },
+                                reward -> { effects.incrementAndGet(); return resolve(reward); },
+                                rewards -> { effects.incrementAndGet(); return Optional.of(effects::incrementAndGet); }));
+            }
+        }
+        equal("retired claims never inspect, stage or deliver rewards", 0, effects.get());
+        equal("an unmigrated second player keeps the legacy fallback", QuestClaimService.Result.CLAIMED,
+                QuestClaimService.claim(ledger, second, QuestCatalogue.STARTER_SUPPLIES, true,
+                        task -> false, VerifyQuestClaims::resolve, capture(new ArrayList<>())));
+        equal("pre-native saved data does not invent an authority", false,
+                QuestProgress.load(new CompoundTag()).usesNativeClaims(first));
     }
 
     private static void claims() {

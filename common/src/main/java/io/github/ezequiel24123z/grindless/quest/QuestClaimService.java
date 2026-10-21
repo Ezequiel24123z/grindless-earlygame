@@ -30,7 +30,8 @@ public final class QuestClaimService {
         BOOK_REQUIRED,
         UNKNOWN_TASK,
         INVALID_REWARD,
-        INVENTORY_FULL
+        INVENTORY_FULL,
+        NATIVE_BACKEND
     }
 
     private QuestClaimService() {
@@ -71,6 +72,9 @@ public final class QuestClaimService {
         QuestCatalogue.Task task = QuestCatalogue.byId(taskId);
         if (task == null || player == null) {
             return Result.UNKNOWN_TASK;
+        }
+        if (progress.usesNativeClaims(player)) {
+            return Result.NATIVE_BACKEND;
         }
         Set<String> claimed = progress.claimed(player);
         if (claimed.contains(taskId)) {

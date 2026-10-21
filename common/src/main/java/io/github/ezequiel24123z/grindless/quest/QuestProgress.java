@@ -27,8 +27,10 @@ public final class QuestProgress extends SavedData {
     private static final String TAG_PLAYERS = "Players";
     private static final String TAG_PLAYER = "Player";
     private static final String TAG_TASKS = "Tasks";
+    private static final String TAG_NATIVE_CLAIMS = "NativeClaims";
 
     private final Map<UUID, Set<String>> claimed = new HashMap<>();
+    private final Set<UUID> nativeClaims = new HashSet<>();
 
     public static QuestProgress get(ServerPlayer player) {
         return player.server.overworld().getDataStorage()
@@ -40,12 +42,26 @@ public final class QuestProgress extends SavedData {
         return Set.copyOf(claimed.getOrDefault(player, Set.of()));
     }
 
+    public boolean usesNativeClaims(UUID player) {
+        return nativeClaims.contains(player);
+    }
+
+    /** Retains legacy receipts for retryable import, but permanently retires their reward mint. */
+    public void useNativeClaims(UUID player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Native claim authority requires a player");
+        }
+        if (nativeClaims.add(player)) {
+            setDirty();
+        }
+    }
+
     /**
      * Records one claim. Returns whether this call was the one that recorded it.
      * Unknown ids are refused so a stale button cannot invent a task.
      */
     public boolean claim(UUID player, String task) {
-        if (player == null || QuestCatalogue.byId(task) == null) {
+        if (player == null || usesNativeClaims(player) || QuestCatalogue.byId(task) == null) {
             return false;
         }
         Set<String> tasks = claimed.computeIfAbsent(player, id -> new HashSet<>());
@@ -70,6 +86,11 @@ public final class QuestProgress extends SavedData {
             players.add(one);
         }
         tag.put(TAG_PLAYERS, players);
+        ListTag nativePlayers = new ListTag();
+        for (UUID player : nativeClaims) {
+            nativePlayers.add(StringTag.valueOf(player.toString()));
+        }
+        tag.put(TAG_NATIVE_CLAIMS, nativePlayers);
         return tag;
     }
 
@@ -94,6 +115,14 @@ public final class QuestProgress extends SavedData {
             }
             if (!tasks.isEmpty()) {
                 progress.claimed.put(player, tasks);
+            }
+        }
+        ListTag nativePlayers = tag.getList(TAG_NATIVE_CLAIMS, Tag.TAG_STRING);
+        for (int i = 0; i < nativePlayers.size(); i++) {
+            try {
+                progress.nativeClaims.add(UUID.fromString(nativePlayers.getString(i)));
+            } catch (IllegalArgumentException exception) {
+                throw new IllegalArgumentException("Invalid native quest claim authority in saved progress", exception);
             }
         }
         return progress;
