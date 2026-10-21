@@ -18,18 +18,17 @@ public final class VerifyAtlas {
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
         List<AtlasLogic.Entry> rows = AtlasLogic.entries(recipes);
 
-        // Six port crafts add twelve construction projections; retiring the Guide removes two.
-        eq("atlas lists every generated recipe", 199, rows.size());
+        eq("atlas lists every generated recipe", 201, rows.size());
         eq("rows are sorted by family then id", "ARC_FURNACE", rows.get(0).family().name());
         eq("the first assembler row is the intake", "assemble/atmospheric_intake",
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).get(0).id());
-        // The 33 assemble/bootstrap/* projections supplement the 41 existing Assembler routes.
-        eq("seventy-four reachable assembler crafts in this set", 74,
+        // The 33 assemble/bootstrap/* projections supplement the 43 other Assembler routes.
+        eq("seventy-six reachable assembler crafts in this set", 76,
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
         // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 256, allRows.size());
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 258, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
@@ -78,6 +77,23 @@ public final class VerifyAtlas {
                 "8x ingots/copper + ingots/iron", AtlasLogic.describe(fluxCell.inputs()));
         yes("the Flux Cell row produces its actual existing item",
                 fluxCell.outputs().equals(List.of("item:grindless:flux_cell")));
+        for (String component : List.of("machine_casing", "flux_cell")) {
+            AtlasLogic.Entry manual = route(allRows, "craft/" + component);
+            AtlasLogic.Entry automatic = route(allRows, "assemble/" + component);
+            eq(component + " keeps its manual bootstrap/compatibility recipe", "CRAFTING_TABLE", manual.station());
+            eq(component + " exposes its automatic Assembler route", "ASSEMBLER", automatic.station());
+            yes(component + " projects the exact crafting input multiset",
+                    manual.inputs().stream().sorted().toList().equals(automatic.inputs().stream().sorted().toList()));
+            yes(component + " projects the exact ordinary output batch", manual.outputs().equals(automatic.outputs()));
+            yes(component + " has no invented die or catalyst", automatic.catalysts().isEmpty());
+            eq(component + " exposes the actual shared Assembler duration",
+                    FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
+            eq(component + " exposes the actual shared Assembler draw",
+                    FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
+            yes(component + " is discoverable through ordinary output lookup",
+                    ids(AtlasLogic.producing(recipes, "grindless:" + component))
+                            .equals(List.of("assemble/" + component)));
+        }
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())
                         .equals(AtlasLogic.describe(industrialRelay.outputs())));

@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
@@ -11,6 +12,7 @@ import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,7 @@ public final class VerifyRecipes {
         System.exit(failures == 0 ? 0 : 1);
     }
 
-    private static void graph() {
+    private static void graph() throws IOException {
         List<ProcessGraph.MaterialView> materials = List.of(
                 new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
                 new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true, false),
@@ -62,11 +64,11 @@ public final class VerifyRecipes {
                 new ProcessGraph.MaterialView("mythril", false, true, true, true, true, false, false, false, true));
 
         List<ProcessRecipe> recipes = ProcessGraph.generate(materials);
-        // Six port crafts add twelve construction projections; retiring the Guide removes two.
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                199, recipes.size());
+                201, recipes.size());
         c3Routes(recipes);
         legacyGuideWork(recipes);
+        componentCrafts(recipes);
 
         ProcessRecipe ironB0 = recipe(recipes, "b0_r1/iron");
         ProcessRecipe ironB1 = recipe(recipes, "b1/iron");
@@ -96,6 +98,11 @@ public final class VerifyRecipes {
                 relayMatrix.itemOutputs().get(0).count());
         eq("the Relay Matrix batch is twenty seconds", FabricationLogic.ASSEMBLE_TICKS,
                 relayMatrix.durationTicks());
+        yes("the Relay Matrix batch keeps its complete physical bill", relayMatrix.inputs().equals(List.of(
+                IngredientSpec.item("minecraft:glass", 2),
+                IngredientSpec.tag("forge:ingots/copper", 2),
+                IngredientSpec.item("minecraft:redstone", 2),
+                IngredientSpec.item(FabricationLogic.CALIBRATED_DATA_CORE, 1))));
         eq("the Industrial Matrix is assembled", MachineFamily.ASSEMBLER, industrialRelayMatrix.family());
         eq("the Industrial Matrix consumes an F1 physical Matrix", 1,
                 industrialRelayMatrix.itemInputs().get(0).matrixRating());
@@ -108,6 +115,16 @@ public final class VerifyRecipes {
         eq("the Industrial Matrix produces F2", 2, industrialRelayMatrix.itemOutputs().get(0).matrixRating());
         eq("the Industrial Matrix takes forty seconds", FabricationLogic.ASSEMBLE_TICKS * 2,
                 industrialRelayMatrix.durationTicks());
+        yes("the Industrial Matrix keeps its complete physical bill", industrialRelayMatrix.inputs().equals(List.of(
+                IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1),
+                IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                IngredientSpec.item("minecraft:glass", 4),
+                IngredientSpec.item(FabricationLogic.FLUX_CELL, 1))));
+        yes("the Industrial Matrix keeps its exact rated output batch", industrialRelayMatrix.outputs().equals(
+                List.of(OutputSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1))));
+        eq("the Industrial Matrix keeps its F1 draw", FabricationLogic.FU_PER_TICK,
+                industrialRelayMatrix.fuPerTick());
+        yes("the Industrial Matrix has no new catalyst", industrialRelayMatrix.catalysts().isEmpty());
 
         eq("renewable sand uses the pulverizer", MachineFamily.PULVERIZER, renewableSand.family());
         eq("renewable sand consumes cobblestone", "item:minecraft:cobblestone",
@@ -860,6 +877,60 @@ public final class VerifyRecipes {
                         || recipe.id().contains("stellar_forge")));
     }
 
+    private static void componentCrafts(List<ProcessRecipe> recipes) throws IOException {
+        for (String name : List.of("machine_casing", "flux_cell")) {
+            T1Recipes.Shaped craft = T1Recipes.shaped().stream().filter(row -> row.name().equals(name))
+                    .findFirst().orElseThrow();
+            String id = "assemble/" + name;
+            Map<String, Integer> inputs = shapedInputs(craft.pattern(), craft.key());
+            projection(recipes, MachineFamily.ASSEMBLER, id, inputs, craft.result(), craft.resultCount(),
+                    FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
+            ProcessRecipe automatic = recipe(recipes, id);
+            eq(id + " uses exactly two grouped item inputs", 2, automatic.itemInputs().size());
+            yes(id + " has no fluid input, output or hidden material", automatic.fluidInputs().isEmpty()
+                    && automatic.fluidOutputs().isEmpty());
+            no(id + " adds no physical condition or permission", automatic.namesTemperature()
+                    || automatic.namesAtmosphere() || automatic.namesAgitation() || automatic.milestone() != null);
+            yes(id + " requires no charged or rated component",
+                    automatic.inputs().stream().allMatch(input -> input.matrixRating() == 0));
+            no(id + " is not an earlier Bench route", recipes.stream()
+                    .filter(row -> row.family() == MachineFamily.ASSEMBLY_BENCH)
+                    .flatMap(row -> row.itemOutputs().stream()).anyMatch(output -> output.id().equals(craft.result())));
+
+            JsonObject json = read(name);
+            List<String> pattern = new ArrayList<>();
+            json.getAsJsonArray("pattern").forEach(row -> pattern.add(row.getAsString()));
+            Map<String, String> key = new LinkedHashMap<>();
+            for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("key").entrySet()) {
+                JsonObject ingredient = entry.getValue().getAsJsonObject();
+                yes(name + " JSON keeps an ordinary item or tag ingredient " + entry.getKey(),
+                        ingredient.size() == 1 && (ingredient.has("tag") || ingredient.has("item")));
+                String kind = ingredient.has("tag") ? "tag" : "item";
+                key.put(entry.getKey(), kind + ":" + ingredient.get(kind).getAsString());
+            }
+            yes(name + " keeps the full shipped crafting pattern", pattern.equals(craft.pattern()));
+            yes(name + " keeps the full shipped crafting key", key.equals(craft.key()));
+            yes(id + " also matches the exact shipped JSON input multiset",
+                    shapedInputs(pattern, key).equals(inputs));
+            JsonObject result = json.getAsJsonObject("result");
+            int count = result.has("count") ? result.get("count").getAsInt() : 1;
+            yes(id + " also matches the exact shipped JSON output multiset", automatic.outputs().equals(
+                    List.of(OutputSpec.item(result.get("item").getAsString(), count))));
+        }
+    }
+
+    private static Map<String, Integer> shapedInputs(List<String> pattern, Map<String, String> key) {
+        Map<String, Integer> inputs = new LinkedHashMap<>();
+        for (String row : pattern) {
+            for (char symbol : row.toCharArray()) {
+                if (symbol != ' ') {
+                    inputs.merge(key.get(String.valueOf(symbol)), 1, Integer::sum);
+                }
+            }
+        }
+        return inputs;
+    }
+
     private static void c3Routes(List<ProcessRecipe> recipes) {
         no("the Assembly Bench never fabricates a Relay Matrix (ADR-0137)",
                 recipes.stream().filter(recipe -> recipe.family() == MachineFamily.ASSEMBLY_BENCH)
@@ -898,15 +969,8 @@ public final class VerifyRecipes {
                     .filter(recipe -> recipe.family() == family).flatMap(recipe -> recipe.itemOutputs().stream())
                     .anyMatch(output -> output.id().equals("grindless:field_guide")));
             for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
-                Map<String, Integer> inputs = new LinkedHashMap<>();
-                for (String line : craft.pattern()) {
-                    for (char symbol : line.toCharArray()) {
-                        if (symbol != ' ') {
-                            inputs.merge(craft.key().get(String.valueOf(symbol)), 1, Integer::sum);
-                        }
-                    }
-                }
-                projection(recipes, family, prefix + craft.name(), inputs, craft.result(), craft.resultCount());
+                projection(recipes, family, prefix + craft.name(), shapedInputs(craft.pattern(), craft.key()),
+                        craft.result(), craft.resultCount());
             }
             for (BootstrapRecipes.Shapeless craft : BootstrapRecipes.shapeless()) {
                 Map<String, Integer> inputs = new LinkedHashMap<>();
@@ -926,6 +990,14 @@ public final class VerifyRecipes {
 
     private static void projection(List<ProcessRecipe> recipes, MachineFamily family, String id,
                                    Map<String, Integer> inputs, String output, int count) {
+        boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
+        projection(recipes, family, id, inputs, output, count,
+                bench ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
+                bench ? FluxTier.F0.nominal() : FluxTier.F1.nominal());
+    }
+
+    private static void projection(List<ProcessRecipe> recipes, MachineFamily family, String id,
+                                   Map<String, Integer> inputs, String output, int count, int ticks, long power) {
         ProcessRecipe row = recipe(recipes, id);
         Map<String, Integer> actualInputs = new LinkedHashMap<>();
         row.inputs().forEach(input -> actualInputs.merge(input.qualified(), input.count(), Integer::sum));
@@ -935,11 +1007,8 @@ public final class VerifyRecipes {
         yes(id + " fits four input slots without a catalyst",
                 row.itemInputs().size() <= 4 && row.catalysts().isEmpty());
         eq(id + " runs on its declared station", family, row.family());
-        boolean bench = family == MachineFamily.ASSEMBLY_BENCH;
-        eq(id + " keeps its station's cycle", bench ? SourceLogic.BENCH_TICKS : SourceLogic.INDUSTRIAL_ASSEMBLY_TICKS,
-                row.durationTicks());
-        eq(id + " keeps its station's power", bench ? FluxTier.F0.nominal() : FluxTier.F1.nominal(),
-                row.fuPerTick());
+        eq(id + " keeps its station's cycle", ticks, row.durationTicks());
+        eq(id + " keeps its station's power", power, row.fuPerTick());
     }
 
     private static void legacyGuideWork(List<ProcessRecipe> recipes) {

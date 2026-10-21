@@ -128,6 +128,7 @@ public final class VerifyT1Progression {
         equal("the Assembler removes repetition through the existing executor", true, reproduction.automatable());
         equal("the Bench still cannot manufacture the frontier Matrix", false,
                 snapshot.routes().containsKey("bench/relay_matrix"));
+        componentRoutes(snapshot);
 
         Route exit = snapshot.routes().get(T1Progression.EXIT_ROUTE);
         Resource ratedF1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
@@ -180,6 +181,22 @@ public final class VerifyT1Progression {
                         snapshot.routes().containsKey(producer));
             }
         }
+        var casingSeed = inputs.stream().filter(input -> input.route().equals("craft/assembler")
+                && input.resource().equals(item(FabricationLogic.MACHINE_CASING))).findFirst().orElseThrow();
+        equal("the first Assembler retains finite manual casing construction",
+                "MANUAL_FINITE_FIRST_ASSEMBLER_SEED", casingSeed.status());
+        equal("the first Assembler never depends on its own automatic casing output",
+                List.of("craft/machine_casing"), casingSeed.producers());
+        for (Map.Entry<String, String> component : Map.of(
+                FabricationLogic.MACHINE_CASING, T1Progression.CASING_ROUTE,
+                FabricationLogic.FLUX_CELL, T1Progression.FLUX_CELL_ROUTE).entrySet()) {
+            var recurring = inputs.stream().filter(input -> input.route().equals(T1Progression.EXIT_ROUTE)
+                    && input.resource().equals(item(component.getKey()))).findFirst().orElseThrow();
+            equal("the F2 component has an implemented automatic recurrent route: " + component.getKey(),
+                    "IMPLEMENTED_AUTOMATIC_RECURRENT_INPUT_NOT_RENEWABILITY_PROOF", recurring.status());
+            equal("the recurrent component does not substitute a manual craft: " + component.getKey(),
+                    List.of(component.getValue()), recurring.producers());
+        }
         var flint = t0.annotations().resources().get(item("minecraft:flint"));
         equal("T1 first-use teaching leaves the canonical T0 flint annotation unchanged",
                 SustainabilityAnnotations.SideStreamClass.BYPRODUCT_OPTIONAL, flint.sideStreamClass());
@@ -190,12 +207,15 @@ public final class VerifyT1Progression {
         rejects("duplicate declaration route identities cannot masquerade as separate production",
                 () -> new T1Progression.Line("duplicate", T1Progression.Requirement.MANDATORY,
                         List.of("craft/press", "craft/press"), Set.of()));
-        Map<String, Route> missing = new TreeMap<>(snapshot.routes());
-        missing.remove("craft/flux_cell");
-        Snapshot incomplete = new Snapshot(snapshot.resources(), missing, snapshot.terminals(), snapshot.tags(),
-                snapshot.objectives(), snapshot.inputHashes(), snapshot.findings());
-        rejects("a missing mandatory JSON craft is not replaced by a successful empty projection",
-                () -> T1Sustainability.selectedRoutes(incomplete));
+        for (String id : List.of("craft/machine_casing", "craft/flux_cell",
+                T1Progression.CASING_ROUTE, T1Progression.FLUX_CELL_ROUTE)) {
+            Map<String, Route> missing = new TreeMap<>(snapshot.routes());
+            missing.remove(id);
+            Snapshot incomplete = new Snapshot(snapshot.resources(), missing, snapshot.terminals(), snapshot.tags(),
+                    snapshot.objectives(), snapshot.inputHashes(), snapshot.findings());
+            rejects("a missing manual or automatic component authority fails visibly: " + id,
+                    () -> T1Sustainability.selectedRoutes(incomplete));
+        }
         String json = T1Sustainability.json(t0);
         equal("repeated projection of the same actual proof is byte-deterministic", json, T1Sustainability.json(t0));
         equal("normal output uses canonical LF", false, json.contains("\r"));
@@ -222,6 +242,46 @@ public final class VerifyT1Progression {
         return assertions - before;
     }
 
+    private static void componentRoutes(Snapshot snapshot) {
+        for (String component : List.of("machine_casing", "flux_cell")) {
+            Route manual = snapshot.routes().get("craft/" + component);
+            Route automatic = snapshot.routes().get("assemble/" + component);
+            equal("the manual component craft remains a non-automatic alternative: " + component,
+                    false, manual.automatable());
+            equal("the automatic component uses the existing live graph: " + component,
+                    Authority.PROCESS_GRAPH, automatic.authority());
+            equal("the component uses the existing Assembler: " + component, "ASSEMBLER", automatic.family());
+            equal("the component is an implemented automatic route: " + component, true, automatic.automatable());
+            equal("the component keeps the actual shipped manual input multiset: " + component,
+                    physicalInputs(manual), physicalInputs(automatic));
+            equal("the component keeps the actual shipped ordinary output multiset: " + component,
+                    manual.outputs(), automatic.outputs());
+            equal("the component uses the existing shared cycle: " + component,
+                    (long) FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
+            equal("the component uses the existing shared draw: " + component,
+                    FabricationLogic.FU_PER_TICK, automatic.fuPerTick());
+            equal("the component accounts for its complete process energy: " + component,
+                    Math.multiplyExact(automatic.durationTicks(), automatic.fuPerTick()), automatic.inputs().get(ENERGY));
+            equal("the component adds no die or other catalyst: " + component, Map.of(), automatic.catalysts());
+            equal("the component adds no permission or future-tier prerequisite: " + component,
+                    Set.of(), automatic.prerequisites());
+        }
+        equal("forming keeps manual casing construction before the first Assembler", true,
+                T1Progression.byId("forming").routeIds().contains("craft/machine_casing"));
+        equal("automatic casing cannot become a prerequisite for constructing its machine", false,
+                T1Progression.byId("forming").routeIds().contains(T1Progression.CASING_ROUTE));
+        equal("automatic casing belongs to the already-established assembly line", true,
+                T1Progression.byId("assembly").routeIds().contains(T1Progression.CASING_ROUTE));
+        equal("automatic Flux Cells belong to the post-assembly exit line", true,
+                T1Progression.byId("relay_f2").routeIds().contains(T1Progression.FLUX_CELL_ROUTE));
+        equal("the Flux Cell exit line still follows assembly", Set.of("assembly"),
+                T1Progression.byId("relay_f2").requires());
+        equal("the Assembler lesson exposes recurrent casings after construction",
+                List.of("craft/assembler", T1Progression.CASING_ROUTE), T1Progression.questRouteIds("assembler"));
+        equal("the Flux Cell lesson retains the manual alternative alongside automatic production",
+                List.of("craft/flux_cell", T1Progression.FLUX_CELL_ROUTE), T1Progression.questRouteIds("flux_cell"));
+    }
+
     private static void atlas() {
         var rows = AtlasLogic.allEntries(ProcessGraph.generate(AuthorityAdapters.materialViews()));
         for (String task : List.of("thermal", "pylon", "scanner", "terrestrial", "pulverizer",
@@ -235,13 +295,20 @@ public final class VerifyT1Progression {
             equal("only real generator fuel is explicitly outside the Atlas: " + task, true,
                     selected.nonAtlasRouteIds().stream().allMatch(T1Progression.POWER_ROUTE::equals));
         }
-        rejects("a missing actual Flux Cell Atlas row fails explicitly",
-                () -> T1Progression.atlasForQuest("flux_cell",
-                        rows.stream().filter(row -> !row.id().equals("craft/flux_cell")).toList()));
-        var duplicate = new ArrayList<>(rows);
-        duplicate.add(rows.stream().filter(row -> row.id().equals("craft/flux_cell")).findFirst().orElseThrow());
-        rejects("a duplicate live Atlas row cannot duplicate a recipe explanation",
-                () -> T1Progression.atlasForQuest("flux_cell", duplicate));
+        for (Map.Entry<String, String> selection : Map.of(
+                "craft/flux_cell", "flux_cell",
+                T1Progression.FLUX_CELL_ROUTE, "flux_cell",
+                T1Progression.CASING_ROUTE, "assembler").entrySet()) {
+            String id = selection.getKey();
+            String task = selection.getValue();
+            rejects("a missing actual component Atlas row fails explicitly: " + id,
+                    () -> T1Progression.atlasForQuest(task,
+                            rows.stream().filter(row -> !row.id().equals(id)).toList()));
+            var duplicate = new ArrayList<>(rows);
+            duplicate.add(rows.stream().filter(row -> row.id().equals(id)).findFirst().orElseThrow());
+            rejects("a duplicate live component row cannot duplicate an explanation: " + id,
+                    () -> T1Progression.atlasForQuest(task, duplicate));
+        }
         equal("the glass lesson explains mod-owned renewable feed, not a vanilla farm", true,
                 T1Progression.questRouteIds("glass").containsAll(List.of("source/geological_aggregate",
                         "source/biomass", "bootstrap/dry_aggregate", "bootstrap/biocarbon")));

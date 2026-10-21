@@ -15,6 +15,8 @@ import java.util.TreeSet;
 public final class T1Progression {
     public static final String ENTRY_ROUTE = "craft/relay_matrix";
     public static final String REPRODUCTION_ROUTE = "assemble/relay_matrix";
+    public static final String CASING_ROUTE = "assemble/machine_casing";
+    public static final String FLUX_CELL_ROUTE = "assemble/flux_cell";
     public static final String EXIT_ROUTE = "assemble/relay_matrix_f2";
     public static final String POWER_ROUTE = "fuel/thermal_generator/biomass";
 
@@ -60,9 +62,9 @@ public final class T1Progression {
                             "craft/coil_die", "press/plate/iron", "press/rod/iron", "press/gear/iron",
                             "press/coil/copper", "craft/machine_casing"), Set.of("reduction")),
             new Line("assembly", Requirement.MANDATORY,
-                    List.of("craft/assembler", REPRODUCTION_ROUTE), Set.of("forming", "glass")),
+                    List.of("craft/assembler", CASING_ROUTE, REPRODUCTION_ROUTE), Set.of("forming", "glass")),
             new Line("relay_f2", Requirement.EXIT,
-                    List.of("craft/flux_cell", EXIT_ROUTE), Set.of("assembly")),
+                    List.of("craft/flux_cell", FLUX_CELL_ROUTE, EXIT_ROUTE), Set.of("assembly")),
             new Line("extraction", Requirement.OPTIONAL,
                     List.of("craft/terrestrial_extractor", "craft/prospectors_scanner"), Set.of("power")),
             new Line("logistics", Requirement.OPTIONAL,
@@ -118,9 +120,9 @@ public final class T1Progression {
             case "forming_dies" -> List.of("craft/plate_die", "craft/rod_die", "craft/gear_die",
                     "press/plate/iron", "press/rod/iron", "press/gear/iron", "craft/machine_casing");
             case "copper_coil" -> List.of("craft/coil_die", "press/coil/copper");
-            case "assembler" -> List.of("craft/assembler");
+            case "assembler" -> List.of("craft/assembler", CASING_ROUTE);
             case "matrix_line" -> List.of("bench/data_core", "calibrate/data_core", REPRODUCTION_ROUTE);
-            case "flux_cell" -> List.of("craft/flux_cell");
+            case "flux_cell" -> List.of("craft/flux_cell", FLUX_CELL_ROUTE);
             case "glass" -> List.of("source/geological_aggregate", "bootstrap/dry_aggregate",
                     "bootstrap/wet_aggregate", "source/biomass", "bootstrap/biocarbon",
                     "bootstrap/reduce_iron", "bootstrap/reduce_copper", "craft/hand_pump",

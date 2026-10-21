@@ -170,7 +170,7 @@ public final class T1Sustainability {
                 "unproved", List.of(
                         "The existing auditor does not normalize untagged default-F1 outputs into the explicit F1 input identity.",
                         "Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
-                        "Manual casing and Flux Cell crafts are not automatic recurring production routes.",
+                        "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime recovery, routing throughput and captured-gas handling need separate evidence.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."));
         return Collections.unmodifiableMap(document);
@@ -225,8 +225,12 @@ public final class T1Sustainability {
                 .append("The F2 recipe consumes explicitly F1 and produces explicitly F2. ")
                 .append("The runtime NBT mechanism reads an untagged Relay as F1, but the existing ")
                 .append("audit resource identities are not silently normalized. No complete T1 ")
-                .append("custody/construction replay is claimed. Casing and Flux Cell crafts remain ")
-                .append("manual, not automatic recurring routes.\n\n")
+                .append("custody/construction replay is claimed. The first Assembler uses a finite ")
+                .append("manual casing seed from the forming line; automatic casing production only ")
+                .append("starts after that Assembler exists. Existing manual casing and Flux Cell ")
+                .append("crafts remain bootstrap/compatibility alternatives. Their Assembler routes ")
+                .append("provide implemented automatic recurring components with the same material ")
+                .append("bills, not a net-renewability or complete factory-autonomy proof.\n\n")
                 .append("Thermal power uses the mod-owned T0 biomass route. Per-route rated draw ")
                 .append("does not prove continuous factory capacity, night/restart behavior or routing. ")
                 .append("Under-volting remains the existing throughput rule, not a permission.\n\n")
@@ -264,11 +268,22 @@ public final class T1Sustainability {
                     "PHYSICAL_DEFAULT_F1_BINDING_NOT_NORMALIZED_BY_AUDITOR",
                     List.of(T1Progression.REPRODUCTION_ROUTE));
         }
+        boolean casingSeed = route.id().equals("craft/assembler")
+                && resource.equals(item(FabricationLogic.MACHINE_CASING));
+        boolean recurringComponent = resource.equals(item(FabricationLogic.MACHINE_CASING))
+                || resource.equals(item(FabricationLogic.FLUX_CELL));
         List<String> producers = selected.stream().filter(candidate -> candidate.retainedOutputs().keySet().stream()
                         .anyMatch(output -> sameSupply(t0.authorities(), output, resource)))
+                .filter(candidate -> casingSeed ? candidate.id().equals("craft/machine_casing")
+                        : !recurringComponent || candidate.automatable())
                 .map(Route::id).sorted().toList();
+        String status = producers.isEmpty() ? "UNRESOLVED"
+                : recurringComponent
+                        ? (casingSeed ? "MANUAL_FINITE_FIRST_ASSEMBLER_SEED"
+                                : "IMPLEMENTED_AUTOMATIC_RECURRENT_INPUT_NOT_RENEWABILITY_PROOF")
+                        : "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF";
         return new InputEvidence(route.id(), resource, amount, catalyst,
-                producers.isEmpty() ? "UNRESOLVED" : "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF", producers);
+                status, producers);
     }
 
     private static boolean sameSupply(Snapshot snapshot, Resource output, Resource wanted) {

@@ -128,6 +128,8 @@ public final class ProcessGraph {
         }
         recipes.add(coilPress());
         recipes.add(coilMill());
+        recipes.add(machineCasing());
+        recipes.add(fluxCell());
         recipes.add(relayMatrix());
         recipes.add(industrialRelayMatrix());
         recipes.add(pylonMk2());
@@ -387,6 +389,34 @@ public final class ProcessGraph {
                 Double.NaN,
                 null,
                 FabricationLogic.WIRE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    private static ProcessRecipe machineCasing() {
+        return new ProcessRecipe(
+                "assemble/machine_casing",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.tag("forge:rods/iron", 2)),
+                List.of(OutputSpec.item(FabricationLogic.MACHINE_CASING, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
+                FabricationLogic.FU_PER_TICK);
+    }
+
+    private static ProcessRecipe fluxCell() {
+        return new ProcessRecipe(
+                "assemble/flux_cell",
+                MachineFamily.ASSEMBLER,
+                List.of(
+                        IngredientSpec.tag("forge:ingots/copper", 8),
+                        IngredientSpec.tag("forge:ingots/iron", 1)),
+                List.of(OutputSpec.item(FabricationLogic.FLUX_CELL, 1)),
+                Double.NaN,
+                null,
+                FabricationLogic.ASSEMBLE_TICKS,
                 FabricationLogic.FU_PER_TICK);
     }
 
