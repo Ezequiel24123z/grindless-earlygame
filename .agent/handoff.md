@@ -1,6 +1,46 @@
 # Active orchestration handoff
 
-Updated: 2026-10-20. Product gate: **EXPERIENCE CANDIDATE DEPLOYED; REQUIRED GRAPHICAL GATE BLOCKED**.
+Updated: 2026-10-21. Product gate: **T0 TESTING UNAFFECTED; PARALLEL T1 DEVELOPMENT AUTHORIZED**.
+
+## Current owner direction — parallel T1
+
+The owner explicitly requests T1 development and documentation of reusable
+systems/production lines while testing the T0 dev build (ADR-0168/0169).
+Use [the first-factory plan](../plan/feature-t1-first-factory-1.md).
+This later instruction supersedes development holds only, not missing T0 graphical/
+human acceptance or release criteria. Do not reinterpret prior blocked records as
+new passes or claim the normal longitudinal campaign completed/began from intent.
+
+Baseline source is a64d44f/PR56, with unchanged installed F298988d/95bf/3e5a.
+The isolated code lanes own T1 contract/line/export development (a94c3085) and
+T1 shared quest teaching (ac4962d5). Documentation worker0ad28462 confirmed
+read-only rg/glob with no editor/view/shell/Git: no docs, checks or SHA were
+produced. That writing assignment is withdrawn without relaunching it; the
+coordinator owns the handbook/map, not application implementation.
+No old worker is silently repurposed. Existing processors/native stores/grid/
+quest ledgers remain authoritative; no new quantity catalogue or execution kernel.
+
+The first-factory contract selects mandatory power/milling/reduction/glass/forming/
+assembly and the physical F2 exit, with extraction/logistics/storage/Kiln/Factory
+World explicitly optional. Preserve all T0 tasks/recipes/claim formats and all old
+T1 IDs/rewards. The industrial-matrix exit must not depend on optional Factory World.
+Code/data classification does not claim complete T1 renewable establishment.
+
+**The owner's Prism game/worlds must not change.** No deployment, launcher action,
+restart, player-process termination or private configuration change. Build-only
+work may use an explicit isolated execution root under fresh headroom/ownership
+guards and must yield to gameplay. There is no current T1 JVM/GPU lease.
+
+| Category | Current T1 authorization checkpoint |
+| --- | --- |
+| COMPLETED | Owner authorization, ADR-0168/0169, first-factory plan/ownership and source baseline preserved; core API checkpoint49b is source evidence only. |
+| BLOCKED | Documentation worker lacks editing/Git; assignment withdrawn and coordinator owns documentation. This does not block the two implementation lanes. |
+| NOT EXECUTED | New T1 Java/export/runtime checks, packaging, deployment, native/client campaign, T0 acceptance or T1 release. |
+| NEEDS HUMAN VALIDATION | Owner's separate T0 play feedback; future T1 clarity/pacing/appearance/audio acceptance. |
+| NEEDS MY DECISION | None within the approved first-factory scope. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Existing guarded build capacity has not yet been leased. |
+| COST / BILLING RISK | No generation or paid-service requests. |
+| DEPLOYED STATE | F298988d/95bf/3e5a retained in Dev unchanged; no new live-PC observation or T1 deployment claimed. |
 
 ## Active owner-directed follow-up
 

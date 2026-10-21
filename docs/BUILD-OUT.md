@@ -26,7 +26,15 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: close the required controlled **graphical** smoke of the
+Next: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)
+under ADR-0168/0169 while the owner tests the T0 dev build. This later instruction
+opens development, not a retroactive T0/client acceptance or a T1 release. Use
+isolated branches based on the current T0 experience source, document reusable
+mechanisms/line authorities and preserve the installed F/Prism/worlds unchanged.
+Production contracts, differentiated T1 guidance and source-derived graphs proceed
+in parallel; no replacement execution engine or arbitrary balance inflation.
+
+The independent T0 task remains: close the required controlled **graphical** smoke of the
 [installed experience candidate F](testing/t0-experience-prism-deployment.md).
 The implementation, normal generation,52 suites/Heracles776,2088 affected port/
 teaching checks, package88 and actual26 native predicates pass. Exact-F
@@ -34,7 +42,8 @@ DevDeploy/Inspect/Unchanged and old-save/config preservation are observed.
 Do not re-run those unchanged mechanisms or rebuild to retarget a documentation
 commit. Read live PR56/hosted F status; leave it draft while the explicit graphical
 gate is blocked. No longitudinal start, release/tag, T0 acceptance/freeze or
-unrestricted T1 follows from this engineering installation.
+unrestricted T1 follows from that engineering installation alone; concurrent
+development is now separately authorized by ADR-0168.
 
 The completed safe technical slice was: execute the owner's [T0 experience plan](../plan/feature-t0-experience-1.md)
 under ADR-0161–0163. Mainb8bd5e8 and installed747/c08 remain the source/runtime

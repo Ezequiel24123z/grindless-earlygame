@@ -179,6 +179,8 @@ history — the reasoning that was wrong is itself useful information.
 | [0165](#adr-0165--provide-original-optional-inspection-without-a-new-pack-dependency) | Provide original optional inspection without a new pack dependency | Accepted |
 | [0166](#adr-0166--retire-synthesized-distribution-with-physical-families-and-intentional-silence) | Retire synthesized distribution with physical families and intentional silence | Accepted |
 | [0167](#adr-0167--make-state-and-port-art-readable-without-color-or-normal-build-generation-services) | Make state and port art readable without color or normal-build generation services | Accepted |
+| [0168](#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game) | Develop T1 in parallel with owner T0 testing without changing the dev game | Accepted |
+| [0169](#adr-0169--make-the-first-t1-factory-a-live-source-contract-not-another-execution-engine) | Make the first T1 factory a live source contract, not another execution engine | Accepted |
 
 ---
 
@@ -7787,3 +7789,73 @@ and process candidates, not the normal mod build. Contact sheets explicitly show
 actual source pixels/native1x/nearest8x/light-dark, not Minecraft screenshots.
 Refresh the manifest only after composed models exist; do not relabel an old
 19-block projection as the new25-block/port model result.
+
+---
+
+## ADR-0168 — Develop T1 in parallel with owner T0 testing without changing the dev game
+
+**Status.** Accepted direct owner instruction, 2026-10-21.
+
+**Decision.** The owner explicitly requests T1 development and documentation of
+reusable systems/production lines while testing the current T0 dev build. Open
+that development now through [the first-factory plan](../plan/feature-t1-first-factory-1.md).
+This later instruction supersedes the old T1-development hold in ADR-0144 and
+the T0 experience programme only for concurrent development; do not infer a
+completed graphical smoke, longitudinal start, T0 acceptance/freeze or RC release.
+
+Use isolated branches depending on the actual current T0 experience source
+a64d44f/PR56, not older main. Preserve the pending T0 review and all source-bound
+proofs. Leave the installed F298988d/95bf47c4/3e5ad1fb candidate, launcher,
+player worlds/options and running game untouched. No T1 deployment, Prism restart,
+release/tag or main merge is authorized by "begin development".
+
+Build-only SSH work may proceed on a separate explicit execution root if fresh
+headroom and shared-cache ownership permit, with gameplay taking priority.
+A legitimate player-client JVM is not permission to kill it or a reason to
+pretend an unknown build is safe. No competing agent Gradle process or source
+switch under a running build is allowed. If capacity is insufficient, continue
+independent source/docs and use applicable hosted proof rather than lowering guards.
+
+Keep the T0 graphical/human feedback lane distinct from T1 code progress.
+T0 fixes remain integration dependencies when owner feedback changes a shared
+assumption; do not re-label a T1 test as a retroactive T0 player pass.
+
+---
+
+## ADR-0169 — Make the first T1 factory a live source contract, not another execution engine
+
+**Status.** Accepted first-increment direction under ADR-0168.
+
+**Decision.** T1 Voltaic is the existing first-factory chain made explicit and
+usable: F1 thermal power/distribution; milling/reduction and renewable glass;
+Press/dies/coils/casings; Assembler reproduction of the five-F1 batch; and the
+physical rated F2 Relay Matrix. Select actual craft/process/fuel authorities by
+stable identity and dependency, supplying no duplicate quantities or new global
+machine permission.
+
+Implement one loader-neutral line contract consumed by both runtime quest
+teaching and a source-derived exporter/checks. Separate mandatory lines, optional
+branches and the exit. Finite extraction, optional logistics/storage, Kiln and
+Factory World cannot become an unmentioned renewable supply guarantee or an
+unrelated required F2 gate. Preserve their existing IDs/claims and useful optional
+roles. New first-factory teaching replaces generic preview text only for the
+implemented selected routes, not every registered later-tier prototype.
+
+The physical F2 recipe remains `assemble/relay_matrix_f2` in the real Assembler;
+its current F1 Matrix/casing/glass/Flux Cell inputs are read from live definitions.
+The final `industrial_matrix` claim still requires valid physical F2 evidence,
+but no longer requires optional Factory World access. Preserve old claim/reward
+records and the exact T0/F1 chapter boundary.
+
+Recurring inputs inherit the mod-owned T0 base or retain explicit honest
+dependency findings. Do not author a T1 renewable label solely because a recipe
+is repeatable or a finite vein exists. Reuse `SustainabilityAudit`,
+`AuthorityAdapters`, construction reserves and source projections where applicable;
+an early source contract is not a claim of complete T1 closure or optimal pacing.
+
+Document the shared machine/process/condition/power, transaction/persistence,
+capability/interface, quest/guidance, inspection, telemetry and asset/proof
+mechanisms with actual authority/invariant/extension seams. The project's
+already-proven infrastructure is the solved-problem-first choice; there is no
+new need for a generic processor, transfer rollback engine, multiblock kernel,
+quest ledger, currency or content-copying dependency in this first increment.

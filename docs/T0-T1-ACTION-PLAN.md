@@ -6,7 +6,23 @@ Its baseline is0d79860; later connected-workshop, sustainability and playable-re
 decisions take precedence. This bridge preserves the requested entry point without
 copying obsolete quantities or presenting the completed audit as a new review.
 
-## Current unattended execution
+## Current owner-directed T1 development
+
+On2026-10-21 the owner explicitly requests T1 development and documentation of
+reusable systems/lines while testing the installed T0 candidate. Follow
+[ADR-0168/0169](DECISIONS.md#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game)
+and [the first-factory implementation plan](../plan/feature-t1-first-factory-1.md).
+This supersedes the old development hold below, not T0 acceptance, client proof
+or release requirements.
+
+The first increment binds existing F1 power, milling/reduction/glass, forms/coils/
+casings, Assembler reproduction and physical F2 exit to a live line contract and
+specific T1 quest teaching. Reuse the canonical processing/storage/grid/claim/
+inspection/proof mechanisms; document their extension seams and limitations.
+Keep Factory World/finite extraction optional and preserve old IDs/claims.
+Do not touch Prism, the player's game/worlds or deploy a T1 artifact during testing.
+
+## Preserved unattended execution
 
 [ADR-0152](DECISIONS.md#adr-0152--run-bounded-autonomous-t0-and-creative-work-without-human-acceptance)
 permits bounded technical closure and independent GREEN work while the owner is absent.
@@ -23,8 +39,8 @@ the A03 transition/cache boundaries must be reconciled against current code/evid
 not assumed unfixed. A concrete remaining bug may be repaired without balance changes.
 Prepare YELLOW work only when unresolved behavior/product choices remain uncommitted.
 
-RED progression, final ratios/rewards, new mandatory intermediates and broad T1 content
-remain held. The owner has not accepted/frozen T0. The official Superflat bootstrap,
+At that historical checkpoint, RED progression, final ratios/rewards, new mandatory
+intermediates and broad T1 content remained held. The owner has not accepted/frozen T0. The official Superflat bootstrap,
 generator/shop economy, human feel and longitudinal acceptance are not silently selected
 by this engineering programme.
 
