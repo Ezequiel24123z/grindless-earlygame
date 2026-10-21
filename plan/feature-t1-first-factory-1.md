@@ -53,10 +53,10 @@ the entire tier finished or introduce a replacement processing engine.
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-003 | Core ownera94c3085 implements `progression/T1Progression`: `Requirement`, immutable `Line(id, requirement, routeIds, requires)`, `lines()` and `byId()`. Resolve mandatory/optional/exit routes against existing authorities, including real Flux Cell crafting; add source-derived export and `VerifyT1*` contracts. No recipe quantities are redeclared. Depends on TASK-001. | No | |
-| TASK-004 | Quest ownerac4962d5 maps actual T1 task IDs to the shared line contract, replaces generic previews for implemented first-factory tasks, preserves T0/claims/rewards and makes Factory World optional for `industrial_matrix`. Extend native/Heracles teaching and focused regression checks. Depends on TASK-001 and the stable API from TASK-003. | No | |
+| TASK-003 | Core ownera94c3085 implements `progression/T1Progression`: `Requirement`, immutable `Line(id, requirement, routeIds, requires)`, `lines()` and `byId()`. Resolve mandatory/optional/exit routes against existing authorities, including real Flux Cell crafting; add source-derived export and `VerifyT1*` contracts. No recipe quantities are redeclared. Depends on TASK-001. | Yes | 2026-10-21 |
+| TASK-004 | Quest ownerac4962d5 maps actual T1 task IDs to the shared line contract, replaces generic previews for implemented first-factory tasks, preserves T0/claims/rewards and makes Factory World optional for `industrial_matrix`. Extend native/Heracles teaching and focused regression checks. Depends on TASK-001 and the stable API from TASK-003. | Yes | 2026-10-21 |
 | TASK-005 | The coordinator writes `docs/architecture/reusable-systems.md` and `docs/tiers/t1-development-map.md`: verified authority/symbol, invariant, extension seam, actual proof/limits and T1 use. The attempted documentation worker0ad28462 has read-only rg/glob, no editor/Git, and produced no persisted output; withdraw that assignment without relaunching or inventing a SHA. Application code remains delegated. Depends on TASK-001. | Yes | 2026-10-21 |
-| TASK-006 | Integrate preserved quest/documentation checkpoints in the isolated first-factory branch; serialize localization, source guards and generated output changes. Record actual source versus unexecuted claims. Depends on TASK-003, TASK-004 and TASK-005. | No | |
+| TASK-006 | Integrate preserved quest/documentation checkpoints in the isolated first-factory branch; serialize localization, source guards and generated output changes. Record actual source versus unexecuted claims. Depends on TASK-003, TASK-004 and TASK-005. | Yes | 2026-10-21 |
 
 ### Implementation Phase 3
 
@@ -67,6 +67,14 @@ the entire tier finished or introduce a replacement processing engine.
 | TASK-007 | Use the existing explicit SSH build-only workflow in an isolated execution root with fresh memory/cache ownership guards. Compile common/Forge/backend and run the new T1 graph/export plus affected recipe/quest/guidance/compatibility checks; generate through normal writers and retain red/green receipts. No Prism action. Depends on TASK-006. | No | |
 | TASK-008 | Review source-bound route coverage, recurring input provenance, T0 byte/behavior preservation and physical F2/optional-branch evidence. Reuse unchanged native proof; add a representative native check only if a changed runtime boundary warrants it and gameplay resources allow. Depends on TASK-007. | No | |
 | TASK-009 | Commit/publish the coherent code/docs/proof checkpoint and a separate in-development draft PR against its actual T0 parent when appropriate. Report first-factory progress, reusable systems, unresolved gaps and next T1 increment; leave T0 installed untouched and do not merge either release branch. Depends on TASK-008. | No | |
+
+Source integration is published as `c7278940d4b42999f1f128e560095fe3fb1329dc`.
+TASK-007 is in progress under one guarded build-only lease to the core owner,
+not a new Prism/package/server/native permission. Independent static QA found
+one verifier defect: physical-component comparisons include the ENERGY input.
+The core owner repairs those comparisons while retaining separate authoritative
+FU assertions and all route/report energy. No executable pass is inferred before
+the exact receipt; model normalization/raw sidecar separation is statically reviewed.
 
 ## 3. Alternatives
 

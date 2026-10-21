@@ -33,6 +33,11 @@ isolated branches based on the current T0 experience source, document reusable
 mechanisms/line authorities and preserve the installed F/Prism/worlds unchanged.
 Production contracts, differentiated T1 guidance and source-derived graphs proceed
 in parallel; no replacement execution engine or arbitrary balance inflation.
+The source is integrated atc727894 on the separate first-factory branch; next
+qualify common/Forge/backend, affected selectors and normal export/CheckOnly under
+the single core-owner lease. Repair the independent static verifier ENERGY/
+physical-component comparison finding without dropping energy from the model.
+Keep results pending until the source-bound receipt exists.
 
 The independent T0 task remains: close the required controlled **graphical** smoke of the
 [installed experience candidate F](testing/t0-experience-prism-deployment.md).

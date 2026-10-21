@@ -44,6 +44,16 @@ IDs/dependencies/roles; runtime teaching and export consume that shared selectio
 not copied bills. Flux Cell's Atlas catalogue projection must match its existing
 runtime JSON. Keep fuel routes explicitly distinct from Atlas entries and fail
 missing mandatory selections.
+The integrated T1 source checkpointc727894 contains50 tasks (32 unchanged T0,
+14 retained T1 and four reward-free lessons), with shared body/path/recipe
+selection in `QuestTeaching`/`QuestTeachingClient`. The native chapter label and
+Heracles subtitle mark development; ledger, rewards, old IDs and ordinals stay
+unchanged. `VerifyT1Teaching` covers live selector mutations/missing rows and
+retained46-to50 claim codecs; these fixtures are not real-world migration.
+Its data delta is27 T1 catalogue crafts/256 Atlas entries, not a changed Flux Cell
+JSON or new recipe executor. `sustainability/T1Sustainability` reuses existing
+adapters/audit/reserves for a bounded report; normalized snapshot identity belongs
+in committed models and raw source/class identity in ignored provenance.
 Do not alter the installed T0 candidate or treat an existing F1-rated prototype
 as accepted T1 merely because it is registered. Existing catalogues, native
 transactions, power and per-player claims remain the authorities.

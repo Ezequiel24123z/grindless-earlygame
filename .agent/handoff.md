@@ -33,18 +33,37 @@ Code/data classification does not claim complete T1 renewable establishment.
 **The owner's Prism game/worlds must not change.** No deployment, launcher action,
 restart, player-process termination or private configuration change. Build-only
 work may use an explicit isolated execution root under fresh headroom/ownership
-guards and must yield to gameplay. There is no current T1 JVM/GPU lease.
+guards and must yield to gameplay.
+
+**Current source/lease:** isolated T1 branch
+`ezequiel24123z-t1-primera-fabrica` is published/clean at
+`c7278940d4b42999f1f128e560095fe3fb1329dc`. The core ownera94c3085 alone now
+holds Sync/JVM/cache execution for compile common/Forge/classpath/backend,
+affected checks and normal export/CheckOnly/twins. Use its dedicated private
+T1 inventory/surface, not the default PC inventory or any T0 source/instance.
+The coordinator and other workers must not perform concurrent SSH/cache/JVM work
+until that lease returns. Owned corrective descendants use coherent checkpoints,
+normal publication and forward Sync only after active stages/locks finish.
+No package, server/native smoke, Prism action, client/world or generation is allowed.
+
+Static QA70185190 reviewed the final source: normalized committed `snapshotHash`
+and raw ignored provenance are correctly separated. One P1 remains for the core
+to repair: `VerifyT1Progression` physical input comparisons include ENERGY, so
+the verifier/export cannot pass as written. Exclude only that pseudo-input from
+physical comparisons and assert authoritative FU separately; do not remove energy
+from routes/reports. This is a source finding, not an observed JVM failure/pass.
+Execution receipts have not returned; no new executable claim is accepted yet.
 
 | Category | Current T1 authorization checkpoint |
 | --- | --- |
-| COMPLETED | Owner authorization, ADR-0168/0169, first-factory plan/ownership, reusable-system handbook/line map and source baseline preserved; core API checkpoint49b is source evidence only. |
-| BLOCKED | Documentation worker lacks editing/Git; assignment withdrawn and coordinator owns documentation. This does not block the two implementation lanes. |
-| NOT EXECUTED | New T1 Java/export/runtime checks, packaging, deployment, native/client campaign, T0 acceptance or T1 release. |
+| COMPLETED | ADR-0168/0169, handbook/line map and integrated sourcec727894: live line/export/model API,50 tasks/18 specific T1 teachings/four reward-free lessons with T0/old IDs/rewards preserved; independent static review complete. |
+| BLOCKED | One source-only P1 in verifier physical/ENERGY comparisons; the core execution owner repairs it. No owner decision needed. Read-only documentation worker limitation was recovered by coordinator documentation. |
+| NOT EXECUTED | No accepted new Java/export pass until exact receipt returns. Package, deployment, server/native/client campaign, real saved-world migration, T0 acceptance and T1 release are outside this lease. |
 | NEEDS HUMAN VALIDATION | Owner's separate T0 play feedback; future T1 clarity/pacing/appearance/audio acceptance. |
 | NEEDS MY DECISION | None within the approved first-factory scope. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Existing guarded build capacity has not yet been leased. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. The single existing guarded build surface/cache is leased exclusively to corea94. |
 | COST / BILLING RISK | No generation or paid-service requests. |
-| DEPLOYED STATE | F298988d/95bf/3e5a retained in Dev unchanged; no new live-PC observation or T1 deployment claimed. |
+| DEPLOYED STATE | F298988d/95bf/3e5a retained in Dev unchanged by T1 work; only the isolated source/build surface is leased. No current stopped/client/save state or T1 deployment is inferred. |
 
 ## Active owner-directed follow-up
 

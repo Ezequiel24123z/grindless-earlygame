@@ -30,6 +30,16 @@ entries below reference those records by id.
   scheduling/completion, native fluids, inventories/persistence, controller ports,
   Flux, quests/projections, recovery/telemetry, assets and builds. Keep inherited
   T0 proof, missing T1 execution and human/client/save acceptance separate.
+- **Integrate the in-development T1 first-factory source.** Shared immutable
+  line/quest selectors project live authorities, make fuel-only/non-Atlas routes
+  explicit and expose the existing unchanged Flux Cell craft in Atlas. Add a
+  bounded sustainability/first-five-control allocation report with normalized
+  committed model identity and separate raw source/class provenance. Replace
+  generic T1 preview teaching with18 specific bodies and four reward-free
+  lessons, preserve32 T0 tasks/all46 old IDs/26 rewards/claims and remove only
+  optional Factory World from the physical F2 prerequisite. Common/Forge,
+  backend, affected checks and normal export require the separate exact receipt;
+  source review is not an executable, player or renewable-establishment pass.
 - **Deploy the exact native-qualified experience candidate F to Prism Dev.**
   Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
   Deploy/Inspect/repeat pass with zero downloads. Verify six original files,

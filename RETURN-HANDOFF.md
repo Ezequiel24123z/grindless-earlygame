@@ -10,12 +10,12 @@ actual observed bounds; intent to test is not a completed pass.
 
 | Category | Current T1 increment |
 | --- | --- |
-| COMPLETED | Actual a64 experience baseline/T1 recipe/graph/quest seams inspected; isolated implementation ownership established and coordinator-written reusable-system handbook/line map delivered. The read-only writer produced no files/commit and was not relaunched. |
-| BLOCKED | None for T1 source work. Fresh execution capacity and the unchanged T0 human/client gate remain distinct. |
-| NOT EXECUTED | New T1 compilation/contracts/export/normal generation or native/client proof; no T1 package/deploy/release or T0 acceptance. |
+| COMPLETED | Handbook/line map plus sourcec727894 integrated: live line/export/model selectors and50 tasks/18 specific T1 teachings/four reward-free lessons, preserving T0/all old IDs/rewards. Static QA is complete; the read-only writer limitation was recovered without relaunch. |
+| BLOCKED | One source-only verifier ENERGY/physical-input comparison defect; core owns its repair. The independent T0 client/human gate remains unchanged. |
+| NOT EXECUTED | No new compilation/export pass accepted before exact receipts. Package/deploy/server/native/client/real saved-world migration, release and T0 acceptance are outside the T1 build-only lease. |
 | NEEDS HUMAN VALIDATION | Owner's T0 feedback and later T1 factory/pacing/clarity review; no pass inferred. |
 | NEEDS MY DECISION | None for the assigned first-factory development. Material recipe/architecture/dependency changes still escalate. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Reuse existing build/Git without changing identity or exposing credentials. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Corea94 exclusively holds guarded Sync/JVM/cache for sourcec727/corrective descendants; no other PC executor and no identity/configuration change. |
 | COST / BILLING RISK | No generation requests, paid images, new models or billable service activation selected. |
 | DEPLOYED STATE | Leave F298988d/JAR95bf47c4/ZIP3e5ad1fb in Grindless-T0-Dev intact while the owner tests; new T1 source remains isolated and undeployed. |
 
