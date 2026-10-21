@@ -15,7 +15,7 @@ $javac = Join-Path $env:JAVA_HOME 'bin\javac.exe'
 $version = & $javac -version 2>&1
 if ($LASTEXITCODE -ne 0 -or $version -notmatch '^javac 17(\.|$)') { throw 'T1 export requires JDK 17.' }
 if (-not $env:GRADLE_USER_HOME) { $env:GRADLE_USER_HOME = Join-Path $Root '.gradle\user-home' }
-$gradleArgs = @('--no-daemon', '--quiet', '--console=plain', '--max-workers=2',
+$gradleArgs = @('--no-daemon', '--no-parallel', '--quiet', '--console=plain', '--max-workers=1',
     '-Dorg.gradle.jvmargs=-Xmx768m -XX:ActiveProcessorCount=2')
 if ($Offline) { $gradleArgs += '--offline' }
 $gradleArgs += ':common:writeCheckClasspath'

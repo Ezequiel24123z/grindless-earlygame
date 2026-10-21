@@ -20,7 +20,7 @@ version="$("$javac" -version 2>&1)"
 case "$version" in "javac 17"|"javac 17."*) ;; *) echo "T1 export requires JDK 17." >&2; exit 1 ;; esac
 export GRADLE_USER_HOME="${GRADLE_USER_HOME:-$root/.gradle/user-home}"
 cd "$root"
-"$root/gradlew" --no-daemon --quiet --console=plain --max-workers=2 \
+"$root/gradlew" --no-daemon --no-parallel --quiet --console=plain --max-workers=1 \
   '-Dorg.gradle.jvmargs=-Xmx768m -XX:ActiveProcessorCount=2' "${offline[@]}" :common:writeCheckClasspath
 classpath="$(<"$root/common/build/checks/runtime-classpath.txt")"
 if [ -z "$classpath" ]; then echo "Gradle exported an empty classpath." >&2; exit 1; fi
