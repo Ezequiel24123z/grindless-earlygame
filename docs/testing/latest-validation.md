@@ -42,11 +42,30 @@ integrity are static evidence, not compilation or Java test results.
 The old b38 CI39664910629 remains FAILURE at three canonical projections after
 its actual environment/build0; it is neither rerun nor inherited as a pass.
 
+Exact integrated CI39674226306 subsequently has environment/build0 and behavior1
+**only** at Economy equality, SustainabilityT0-to-Guidance equality and the
+first-factory projection. Retained artifact12382355052 identifies source426;
+behavior SHA-256 is `bd53f227b2ebec555c4e746bdb342c598ce1fa9fff0bf5e0ed0124c31a525583`.
+Actual affected passes include Blueprint1592, Band1201, Machine3108, inspection450/
+UI1135, Persistence3476, Planner3535, Recipes5806, Atlas1163 and Quest/Claims379.
+These successful pure contracts are reused, not rerun on the PC for appearance.
+The workflow remains FAILURE until normal canonical outputs close; it is not a
+native/client proof.
+
+Fresh actual Sync to the new isolated root returns VerifiedDetached426 with
+owned JVM/locks0 and sufficient resource admission. The executor explicitly
+reports no PC JVM stage yet at that checkpoint: reading APIs/guards, CI triage
+and local invoker preparation are not a compiler running. Two local pre-SSH
+policy/quoting failures are retained. Only writer-required classpath/compilation,
+normal writers and independent canonical rechecks proceed there. New Blueprint
+stateful-stock/protection fixes and its registered interaction probe remain
+authoring work and invalidate only their affected proof after integration.
+
 | Changed boundary | Required next proof on the fixed integrated source | Current result |
 | --- | --- | --- |
-| Optional absolute pressure and inspection schema2/strict schema1 | Common/Forge; `VerifyRecipes`, `VerifyBand`, `VerifyMachine`, `VerifyAtlas`, `VerifyMachineInspection`, `VerifyMachineUi`, `VerifySustainabilityAdapters`, `VerifySustainability` | Source-bound results pending from sole2a93; no composed pass recorded; proposed ADR-0175 |
-| Blueprint preflight, legacy codec and native material settlement | `VerifyBlueprint`, affected `VerifyPlanner`, then representative actual capture/stamp/load including refusal/failure/refund boundaries | Contract results pending; representative Forge probe is not ready/integrated; old `first-blueprint` observes an item only |
-| Baseline F1 Wire Mill and optional four-route branch | `VerifyRecipes`, `VerifyAtlas`, `VerifyPersistence`, `VerifyT1Progression`, `VerifyT1Teaching`; normal T1/guidance/economy writers and CheckOnly | Source-bound results pending from sole2a93; no first-F2 prerequisite or MK2 capability claim |
+| Optional absolute pressure and inspection schema2/strict schema1 | Common/Forge; recipes/band/machine/Atlas/inspection/UI/sustainability contracts; normal model boundary | Exact426 compilation/contracts pass; writer/model gates remain; engineering ADR-0175 accepted, no production recipe or client pass |
+| Blueprint preflight, legacy codec and native material settlement | Blueprint/Planner, stateful-stock/protection regression, then representative actual capture/stamp/load | Exact426 pure contracts pass; newly identified BE-stock/protection fixes and native probe are not integrated/proven; old `first-blueprint` observes an item only |
+| Baseline F1 Wire Mill and optional four-route branch | Recipes/Atlas/Persistence/T1 teaching/progression and normal T1/guidance/economy writers/CheckOnly | Exact426 noncanonical contracts pass; the first-factory equality remains stale until normal writer; no first-F2 prerequisite or MK2 claim |
 
 Deduplicate overlapping selectors in that one authorized build-only window; preserve
 existing runner deadlines and all failures/receipts. Reuse unchanged recipe

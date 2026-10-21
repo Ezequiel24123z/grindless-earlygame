@@ -186,7 +186,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
 | [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
 | [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
-| [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Proposed; source unqualified |
+| [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Accepted engineering contract; model/native gates separate |
 
 ---
 
@@ -8205,9 +8205,12 @@ native46-to50 migration stay explicit; none proves complete T1 or T2.
 
 ## ADR-0175 — Carry optional absolute process pressure through existing contracts
 
-**Status.** Proposed engineering record for authored source541cf6c9, 2026-10-21.
-Coordinator review and executable qualification are pending. This is not accepted
-gameplay, a production pressure recipe, a tier upgrade or a PC execution grant.
+**Status.** Accepted coordinator engineering contract for source541cf6c9,
+2026-10-21. Direct review confirms the optional pair/legacy constructors and
+strict schema boundary; actual integrated426 CI compiles and passes the affected
+noncanonical contracts. Normal model generation and the changed Blueprint native
+boundary remain separate. This is not accepted gameplay, a production pressure
+recipe, a tier upgrade or another PC execution grant.
 
 **Context.** `ProcessRecipe` previously carried temperature, atmosphere and
 agitation while the existing `ProcessConditions` / `ConditionBand` mechanism
@@ -8221,7 +8224,7 @@ Substituting ambient pressure or an epsilon would invent a physical requirement
 or conceal that distinction. The inspection transport also needs to distinguish
 a new required-pressure band from schema1's existing observed/tank pressure.
 
-**Authored approach proposed for review.**
+**Decision.**
 
 1. Carry optional `pressureMPa` and `pressureHalfWidthMPa` in `ProcessRecipe`.
    Both are `NaN` when unnamed; all four old constructor signatures retain that
@@ -8249,11 +8252,12 @@ schema1 reading needlessly loses old pressure-absent observations. None requires
 foreign code, a dependency import or another persisted machine schema.
 
 **Qualification boundary.** Source541cf6c9 is normally integrated in42654eb and
-the later root mergeab4d7bc. This documentation worker does not compile or
-execute it. Only2a93 now owns the new fixed426 qualification window; affected
-recipe, band, machine, Atlas, inspection/UI and sustainability contracts,
-common/Forge and normal canonical writers/CheckOnly await source-bound results,
-not a composed pass. The [validation ledger](testing/latest-validation.md#integrated-development-source)
+the later root mergeab4d7bc. Exact CI39674226306 compiles and runs the affected
+contracts, failing only the three stale canonical projections. Only2a93 owns
+the fixed426 PC window for required writer classpath and NORMAL generation/
+independent CheckOnly, not a duplicate of those green suites. New Blueprint
+eligibility/probe source invalidates its affected evidence, not unchanged pressure
+contracts. The [validation ledger](testing/latest-validation.md#integrated-development-source)
 separates those obligations from static composition and old T0 native evidence.
 Native/client presentation, actual save compatibility and human acceptance are
 not inferred from this record or its authored regression cases.

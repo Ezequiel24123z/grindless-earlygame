@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the implemented family/process increments without confusing CI gates.**
+  Normal source426 and root492 compose F1 Wire Mill/optional forming, pressure
+  and Blueprint preflight. Exact CI compiles and passes affected contracts,
+  failing only the three stale canonical projections; reuse those passes while
+  the sole PC owner executes normal writers. Accept ADR-0175's optional-pressure
+  engineering contract, not a new recipe or tier. Keep the direct-review
+  stateful Blueprint-stock/protection repairs and real registered interaction
+  probe explicitly pending rather than declaring the feature qualified.
 - **Integrate the three development seams without qualifying or deploying them.**
   Source42654eb normally composes optional pressure541cf6c, Blueprint4550b97 and
   corrected baseline-F1 Wire Mill3a79a1f; ab4d7bc then merges the parent's final
