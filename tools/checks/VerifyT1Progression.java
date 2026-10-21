@@ -193,7 +193,20 @@ public final class VerifyT1Progression {
         String json = T1Sustainability.json(t0);
         equal("repeated projection of the same actual proof is byte-deterministic", json, T1Sustainability.json(t0));
         equal("normal output uses canonical LF", false, json.contains("\r"));
+        Map<String, String> rawHashes = new TreeMap<>(snapshot.inputHashes());
+        rawHashes.put("test:raw_checkout_hash_only", "0".repeat(64));
+        Snapshot differentRawBytes = new Snapshot(snapshot.resources(), snapshot.routes(), snapshot.terminals(),
+                snapshot.tags(), snapshot.objectives(), rawHashes, snapshot.findings());
+        var rawFingerprintFixture = new SustainabilityAudit.Result(differentRawBytes, t0.annotations(), t0.tiers(),
+                t0.debt(), t0.findings());
+        equal("raw checkout identity remains distinguishable in separate provenance", false,
+                AuditReports.authorityHash(snapshot).equals(AuditReports.authorityHash(differentRawBytes)));
+        equal("raw source fingerprint changes do not rewrite canonical recipe/conditional-model facts",
+                json, T1Sustainability.json(rawFingerprintFixture));
+        equal("human batch costs are likewise independent of checkout-only provenance",
+                T1Sustainability.markdown(t0), T1Sustainability.markdown(rawFingerprintFixture));
         var document = JsonParser.parseString(json).getAsJsonObject();
+        equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven",
                 "t1_finite_establishment_replayed", "global_optimum_claimed")) {
             equal("bounded source evidence cannot invent " + flag, false, document.get(flag).getAsBoolean());
