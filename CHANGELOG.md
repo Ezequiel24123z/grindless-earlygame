@@ -15,6 +15,61 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prioritize the owner's native quest-framework and content blocker (ADR-0171).**
+  Replace the rejected custom/native-Heracles book experience with supported
+  FTB Quests native graph/tasks/reward UI and concise JEI-first goals. Separate
+  backend/pack/migration, actual copy editing and verification lanes; preserve
+  paid legacy claims and the owner's real world. The previous empty-native-reward
+  projection is not permission to pay old rewards again. Native/API/pack
+  qualification and safe stopped-world delivery remain required, not completed
+  by this decision.
+- **Establish the longitudinal-play / next-tier development loop (ADR-0170).**
+  The owner explicitly begins the intended T0 longitudinal game while T1
+  research, brainstorming, route/component/machine development and documentation
+  continue independently. Resume the bounded first-factory canonical-output work,
+  preserve the installed game/world, prioritize reported play-blocking fixes and
+  incorporate the owner's final T0 conclusions into polish. No unobserved client
+  pass, T0 acceptance, T1 deployment, release or generation budget is inferred.
+- **Investigate the intended longitudinal start instead of treating the game as disposable.**
+  Reverify exact installed F through read-only Inspect and inventory: stopped
+  candidate, no observed client log/options/reference world, unchanged launcher
+  metadata and no instance/world mutation. Document the missing bounded client/
+  save-reopen proof and baseline/update handover separately from a real future
+  vein-derivation defect: saved `DerivationVersion` is not consumed by scanner/
+  extractors. Preserve existing persistence safeguards and distinguish that
+  update risk from new-world corruption. Pause T1 execution with its lease returned;
+  human campaign acceptance must not be required before the campaign begins.
+- **Open owner-directed T1 development alongside unchanged T0 testing (ADR-0168/0169).**
+  Create isolated first-factory, quest and reusable-system documentation lanes from
+  the actual a64 experience baseline. Bind live F1 power/material/forms/assembly/
+  F2-exit authorities without a second engine or copied recipe bills. Factory
+  World is an optional branch, not the physical F2 gate. Preserve installed
+  F/Prism/worlds and all T0 claims; no client acceptance, release or deployment
+  follows from this explicit development authorization.
+- **Document reusable systems and the first-factory line map.** Add the
+  [handbook](docs/architecture/reusable-systems.md) and
+  [T1 development map](docs/tiers/t1-development-map.md): source authorities,
+  protected contracts, safe extension seams, production/optional boundaries and
+  affected-proof selection for materials/recipes, conditions/physical matrices,
+  scheduling/completion, native fluids, inventories/persistence, controller ports,
+  Flux, quests/projections, recovery/telemetry, assets and builds. Keep inherited
+  T0 proof, missing T1 execution and human/client/save acceptance separate.
+- **Integrate the in-development T1 first-factory source.** Shared immutable
+  line/quest selectors project live authorities, make fuel-only/non-Atlas routes
+  explicit and expose the existing unchanged Flux Cell craft in Atlas. Add a
+  bounded sustainability/first-five-control allocation report with normalized
+  committed model identity and separate raw source/class provenance. Replace
+  generic T1 preview teaching with18 specific bodies and four reward-free
+  lessons, preserve32 T0 tasks/all46 old IDs/26 rewards/claims and remove only
+  optional Factory World from the physical F2 prerequisite. Common/Forge,
+  backend, affected checks and normal export require the separate exact receipt;
+  source review is not an executable, player or renewable-establishment pass.
+- **Keep T1 execution and gate boundaries honest.** Clarify the later development
+  authorization in the gate/validation strategy while retaining T0 client/release
+  requirements and the bounded existing port proof. Record the statically repaired
+  ENERGY verifier defect separately from the private helper observation failure
+  after reported Gradle/backend success; preserve closed raws and continue only
+  unexecuted stages rather than replaying successful work.
 - **Deploy the exact native-qualified experience candidate F to Prism Dev.**
   Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
   Deploy/Inspect/repeat pass with zero downloads. Verify six original files,

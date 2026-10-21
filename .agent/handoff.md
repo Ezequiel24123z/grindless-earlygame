@@ -1,6 +1,218 @@
 # Active orchestration handoff
 
-Updated: 2026-10-20. Product gate: **EXPERIENCE CANDIDATE DEPLOYED; REQUIRED GRAPHICAL GATE BLOCKED**.
+Updated: 2026-10-21. Product gate: **OWNER BLOCKED BY QUESTBOOK; NATIVE FTB REPLACEMENT IN PROGRESS**.
+
+## Current player blocker — genuine framework and concise quests
+
+The owner reports being unable to continue: they asked for BetterQuesting/FTB
+Quests, reject the custom/Heracles book experience and reject exhaustive,
+impersonal guide prose. ADR-0171 selects supported Forge1.20.1 FTB Quests native
+graph/screens/tasks/rewards, JEI-first ordinary recipes and brief human goals.
+Do not solve this with the same custom widget in another window.
+
+Parallel owners: backend/pack/migration ac50334e, copy4766813a, source/API
+research17ef3 and independent migration oracles7971553c. The two app sessions
+recovered their original startup timeout on the existing worktrees; the lost
+kickoffs were resent completely. Do not create duplicate replacement sessions.
+Root decisions/handoffs remain coordinator-owned.
+
+Copy190a024 reduces46 titles/34 bodies from2821 to1113 words with placeholders,
+other locale values, logical IDs and gameplay data preserved. Incremental
+2bd1326/00ef421 align visible tooltips and native separate reward semantics.
+Source/native-claim ownership fences are authored in the backend lane; Java,
+actual native data loading/migration and the new package still need execution.
+
+Old `QuestProgress` is paid history: import native individual receipts before
+admitting claims, do not treat objective completion as reward payment, and fence
+delayed legacy minting. Use the actual supported API, not raw framework save
+rewrites or guessed signatures. Native granular claims/overflow must be described
+and tested honestly; no claim of the old atomic no-drop behavior.
+
+Fresh read-only pre-migration inventory at17:12:20Z identifies the relevant Dev
+instance: exact F/95bf, one world with one legacy quest ledger, client log updated
+16:53:50Z and0Java. The separate old preparation instance still has its old
+79b5 JAR/world and18October log. Do not adopt that old exploratory world.
+This proves actual F play started, not save/reconnect or campaign completion.
+No source, instance, world, launcher or configuration was changed by inventory.
+
+The T1 executor returned its lease and preserves local523b3ab with its four
+normal outputs and bounded qualification, not a native-FTB or human acceptance
+pass. Only ac50334e now owns the new `ftb-native-blocker-20261021` isolated PC/cache
+qualification outcome. Parent/other workers must not execute concurrently there.
+No worker may deploy, access owner worlds or restart the player's game.
+
+| Category | Current blocker wave |
+| --- | --- |
+| COMPLETED | Actual feedback/source identified; concise copy and legacy ownership fence authored; independent migration oracles and native API research available; exact played F instance distinguished from old preparation |
+| BLOCKED | Native-framework replacement/package/migration qualification is not complete; exact binary pins still require confirmation |
+| NOT EXECUTED | Final native loader/claim/migration proof, new package/deployment, world backup/copy/update or FTB client acceptance |
+| NEEDS HUMAN VALIDATION | Native questbook presentation and ability to resume play after the qualified fix |
+| NEEDS MY DECISION | None for assigned outcomes; native default-team/individual-receipt and overflow behavior must be explicit, not hidden |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new; existing official binary metadata/downloads are being verified |
+| COST / BILLING RISK | No new generation/provider budget or paid activation; owner authorizes purposeful parallel agents |
+| DEPLOYED STATE | Installed F remains unchanged; the owner has one actual Dev world and paid-history file to preserve; no FTB candidate is declared deployed |
+
+## Continuing owner loop — play T0 while developing T1
+
+The loop remains active; the reported blocker above is its current priority.
+
+The owner explicitly chooses to start the installed T0 game as the intended
+longitudinal run and directs ongoing T1 research, brainstorming and development
+of routes, machines, components and processing lines (ADR-0170). This is the
+continuing project loop, not a request for another permission queue or disposable
+campaign. Record actual play observations when supplied, not invented passes.
+
+Reported bugs that stop play preempt new T1 work. Implement and qualify the
+bounded fix, preserve the world/previous artifact and use the stopped-instance/
+backup/update contract; never stop/restart the player's game. When the owner
+reports reaching the T0 end, incorporate final conclusions and finish T0 polish.
+The earlier readiness diagnosis remains visible debt, not a continuing start veto.
+
+Corea94 resumes the preserved20c88ff/ef9 first-factory outcome under the **new**
+exclusive `t1-owner-play-loop-20261021` assignment, not the returned old lease.
+Finish normal T1/Guidance/Economy generation, protected-fact comparison and
+canonical rechecks, reusing unchanged successful compilation/backend/affected
+proof. Use fresh resource/ownership locks and yield to gameplay. Parent/other
+workers must not run concurrent PC/cache/JVM operations. No Prism/Deploy/world/
+launcher/server/package/native/generation/config/auth action belongs to this lane.
+
+Read-only parallel research owns actual T1 route/component gaps (b0973eb7),
+mature factory patterns (d85f88fe) and longitudinal deposit patterns (f6e8e015).
+Reports are evidence/proposals, not new gameplay authority or licence to import.
+Root decisions/docs/handoff stay coordinated and shared edits/publication serialize.
+
+| Category | Current resumed wave |
+| --- | --- |
+| COMPLETED | Owner's durable play/development/feedback loop recorded; existing T1 source and bounded proof preserved; new scoped execution/research ownership assigned |
+| BLOCKED | None for T1 source/research; each new heavy stage still needs actual fresh headroom/ownership |
+| NOT EXECUTED | Final normal canonical output gate at this checkpoint, new client/save observations, T1 deployment/release or T0 acceptance |
+| NEEDS HUMAN VALIDATION | Owner's real T0 play feedback, blocking-bug reports and final conclusions; no completed run inferred |
+| NEEDS MY DECISION | None within the assigned outcomes; architecture/product proposals remain coordinator decisions |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No new generation/provider/model allowance or paid activation |
+| DEPLOYED STATE | F298988d/95bf/3e5a remains the last verified installed artifact; owner may now be playing, so old stopped/0Java observations are historical, not live assertions |
+
+## Preserved readiness investigation — completed before the owner start instruction
+
+The following investigation/pause snapshots precede ADR-0170. Their actual
+observations survive; their temporary execution/start restrictions do not override
+the new owner instruction above.
+
+The owner clarifies that the intended game is longitudinal and asks whether the
+installed build is prepared, why not if it is not, and how the gaps will be fixed.
+Read [the investigation](../docs/testing/t0-longitudinal-readiness.md).
+Campaign human acceptance follows the game; it is not a prerequisite to begin it.
+Do not confuse a missing observation with a demonstrated corrupting bug.
+
+The T1 core owner explicitly returned its exclusive PC lease at16:28:20Z:
+sourceef9d670 clean,0Java/owned/unknown/focused helpers and no worktree/cache locks.
+T1 stays suspended; do not reuse that lease. Its evidence handoff20c88ff is a
+local preserved object, not a published/qualified/deployed T1 completion.
+Normal canonical T1/Guidance/Economy outputs and their rechecks remain open.
+
+The coordinator then performs read-only Inspect of F and bounded state observation
+at16:30:22Z: exact298988d/95bf47c4/3e5ad1fb, `VerifiedStopped`, no Prism/Java,
+0worlds with `level.dat`, no client log/options and unchanged launcher metadata.
+No launch, deployment, world/configuration change or new credential/access occurs.
+The current local UI tools do not expose the personal-PC Prism desktop.
+
+Independent read-only pack QA99cb8106 confirms the actual Survival login/book/
+free eleven-stack starter route and consistent seven selected pins. No initial
+functional blocker is demonstrated. The delivered guide still describes old
+Overworld preparation, the official world-selection contract is not closed,
+and client-prep/starter-recovery prose contains stale statements. Correct the
+delivery/instructions without inventing missing trees/villages or another kit.
+
+Save/registry/claim contracts provide useful evidence, but no actual client
+save/reopen is supplied by those tests. A real forward-update gap is identified:
+`VeinData` saves `DerivationVersion`, while scanner/extractors regenerate from
+the current version and live materials, ignoring that saved pin. This is not a
+demonstrated new-F-world corruption; it must be addressed before a conflicting
+generation/catalogue update and verified on a preserved reference-save copy.
+
+| Category | Current investigation |
+| --- | --- |
+| COMPLETED | Fresh exact-F installation/state, independent pack/entry/pin review and source-bound save safeguards checked; real vein-version gap and stale distributed instructions identified; no new-world corruption demonstrated |
+| BLOCKED | Objective client start/save-reopen remains unobserved; no exposed approved personal-PC GUI target |
+| NOT EXECUTED | Client/world creation/reload, real copy-upgrade, compatibility-code repair, RC publication, T1 normal-output completion or deployment |
+| NEEDS HUMAN VALIDATION | Controlled client observations, then actual longitudinal campaign quality/acceptance |
+| NEEDS MY DECISION | None for the investigation; no gate waiver or automatic world adoption |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Approved graphical execution route or owner's controlled observations; no credential value requested |
+| COST / BILLING RISK | No generation, paid services, model installation or new access |
+| DEPLOYED STATE | Exact F/95bf/3e5a unchanged and stopped,0worlds observed; T1 remains separate and undeployed |
+
+## Preserved owner direction — parallel T1
+
+The following source/lease snapshots precede the priority/lease return above.
+They preserve what was assigned then and do not reauthorize a resumed PC worker.
+
+The owner explicitly requests T1 development and documentation of reusable
+systems/production lines while testing the T0 dev build (ADR-0168/0169).
+Use [the first-factory plan](../plan/feature-t1-first-factory-1.md).
+This later instruction supersedes development holds only, not missing T0 graphical/
+human acceptance or release criteria. Do not reinterpret prior blocked records as
+new passes or claim the normal longitudinal campaign completed/began from intent.
+
+Baseline source is a64d44f/PR56, with unchanged installed F298988d/95bf/3e5a.
+The isolated code lanes own T1 contract/line/export development (a94c3085) and
+T1 shared quest teaching (ac4962d5). Documentation worker0ad28462 confirmed
+read-only rg/glob with no editor/view/shell/Git: no docs, checks or SHA were
+produced. That writing assignment is withdrawn without relaunching it; the
+coordinator owns the handbook/map, not application implementation.
+The [handbook](../docs/architecture/reusable-systems.md) and
+[line map](../docs/tiers/t1-development-map.md) now document the existing authorities,
+extension invariants, production boundaries and affected proofs. They are
+source-based documentation, not new Java/runtime or player acceptance evidence.
+No old worker is silently repurposed. Existing processors/native stores/grid/
+quest ledgers remain authoritative; no new quantity catalogue or execution kernel.
+
+The first-factory contract selects mandatory power/milling/reduction/glass/forming/
+assembly and the physical F2 exit, with extraction/logistics/storage/Kiln/Factory
+World explicitly optional. Preserve all T0 tasks/recipes/claim formats and all old
+T1 IDs/rewards. The industrial-matrix exit must not depend on optional Factory World.
+Code/data classification does not claim complete T1 renewable establishment.
+
+**The owner's Prism game/worlds must not change.** No deployment, launcher action,
+restart, player-process termination or private configuration change. Build-only
+work may use an explicit isolated execution root under fresh headroom/ownership
+guards and must yield to gameplay.
+
+**Current source/lease:** isolated T1 branch
+`ezequiel24123z-t1-primera-fabrica` is published/clean at
+`c7278940d4b42999f1f128e560095fe3fb1329dc`. The core ownera94c3085 alone now
+holds Sync/JVM/cache execution for compile common/Forge/classpath/backend,
+affected checks and normal export/CheckOnly/twins. Use its dedicated private
+T1 inventory/surface, not the default PC inventory or any T0 source/instance.
+The coordinator and other workers must not perform concurrent SSH/cache/JVM work
+until that lease returns. Owned corrective descendants use coherent checkpoints,
+normal publication and forward Sync only after active stages/locks finish.
+No package, server/native smoke, Prism action, client/world or generation is allowed.
+
+Static QA70185190 reviewed the final source: normalized committed `snapshotHash`
+and raw ignored provenance are correctly separated. Its one physical/ENERGY
+verifier P1 is now **CLOSED by static recheck** on74ccb36: exclude only that
+pseudo-input from physical comparisons, assert authoritative FU separately and
+retain route/report energy without mutation. It was repaired before the owner's
+PC JVM stages; no test red/green is invented for the source-only finding.
+
+Current execution source is `74ccb36be90d12717a862f1a3d09fc201dd60f0e`.
+The core reports common/Forge/classpath/backend Gradle exit0, followed by a private
+helper observation failure (incidental output mixed with its integer return)
+before javac/selectors. Closed raws/receipt are retained; independent bytes are
+pending. Repair the observer and continue remaining stages only, no successful
+Gradle/backend replay. Read [the ledger](../docs/testing/latest-validation.md).
+No final executable qualification is accepted before exact receipts return.
+
+| Category | Current T1 authorization checkpoint |
+| --- | --- |
+| COMPLETED | ADR-0168/0169, handbook/line map and integrated sourcec727/repair74: live line/export/model API,50 tasks/18 T1 teachings/four reward-free lessons with T0/old IDs/rewards preserved; independent static QA finding closed. |
+| BLOCKED | Private helper observation failed after reported Gradle/backend0, before selectors. Core repairs only the observer/remaining stages; closed bytes await verification. No owner decision needed. |
+| NOT EXECUTED | No accepted new Java/export pass until exact receipt returns. Package, deployment, server/native/client campaign, real saved-world migration, T0 acceptance and T1 release are outside this lease. |
+| NEEDS HUMAN VALIDATION | Owner's separate T0 play feedback; future T1 clarity/pacing/appearance/audio acceptance. |
+| NEEDS MY DECISION | None within the approved first-factory scope. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. The single existing guarded build surface/cache is leased exclusively to corea94. |
+| COST / BILLING RISK | No generation or paid-service requests. |
+| DEPLOYED STATE | F298988d/95bf/3e5a retained in Dev unchanged by T1 work; only the isolated source/build surface is leased. No current stopped/client/save state or T1 deployment is inferred. |
 
 ## Active owner-directed follow-up
 

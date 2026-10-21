@@ -26,7 +26,46 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: close the required controlled **graphical** smoke of the
+Next: fix the reported player-blocking questbook under ADR-0171: integrate the
+actual supported native FTB Quests framework, concise human goals and JEI-first
+recipe interaction; preserve paid claims, starter and the real reference world.
+Backend/API/pin/migration, copy and verification run in parallel. A source patch
+or native server is not a client observation. Qualify the new binding/package and
+use the stopped-world backup/copy/update boundary before delivery.
+
+T1 source/research remains independent under the owner's explicit longitudinal-play / feedback loop
+(ADR-0170). The owner chooses to start T0 while routes, machines, components,
+processing lines and reusable-system work proceed independently. Close the normal
+T1/Guidance/Economy outputs and affected canonical checks in the existing
+first-factory lane, then select the next implementation slice from source-backed
+inventory and mature-mod research. Reported T0 play blockers preempt new work;
+final T0 conclusions drive remaining polish.
+
+The [readiness investigation](testing/t0-longitudinal-readiness.md) is complete.
+Its actual client/save/update gaps remain visible, not a disposable-only stop
+instruction or an invented pass. The T1 owner-play lease has now returned for the reported blocker. Only the
+explicit FTB blocker lease may execute on its isolated build surface/cache;
+there is no concurrent PC publisher or implicit reuse of an old grant.
+No launcher/world/deployment action was performed by the investigation.
+
+The separately authorized queue remains: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)
+under ADR-0168/0169 while the owner tests the T0 dev build. This later instruction
+opens development, not a retroactive T0/client acceptance or a T1 release. Use
+isolated branches based on the current T0 experience source, document reusable
+mechanisms/line authorities and preserve the installed F/Prism/worlds unchanged.
+Production contracts, differentiated T1 guidance and source-derived graphs proceed
+in parallel; no replacement execution engine or arbitrary balance inflation.
+The source is integrated atc727894 on the separate first-factory branch; next
+qualify common/Forge/backend, affected selectors and normal export/CheckOnly under
+the single core-owner lease. Independent static QA closes the verifier ENERGY/
+physical-component correction on74ccb36 without dropping report energy.
+Keep actual qualification pending until source-bound receipts are verified;
+the private observer failure does not justify replaying successful Gradle work.
+Its later sourceef9 and local evidence handoff20c88ff are preserved. Normal-path
+T1/Guidance/Economy outputs and their canonical rechecks are still open; the
+read-only longitudinal investigation does not complete or deploy that branch.
+
+The independent T0 task remains: close the required controlled **graphical** smoke of the
 [installed experience candidate F](testing/t0-experience-prism-deployment.md).
 The implementation, normal generation,52 suites/Heracles776,2088 affected port/
 teaching checks, package88 and actual26 native predicates pass. Exact-F
@@ -34,7 +73,8 @@ DevDeploy/Inspect/Unchanged and old-save/config preservation are observed.
 Do not re-run those unchanged mechanisms or rebuild to retarget a documentation
 commit. Read live PR56/hosted F status; leave it draft while the explicit graphical
 gate is blocked. No longitudinal start, release/tag, T0 acceptance/freeze or
-unrestricted T1 follows from this engineering installation.
+unrestricted T1 follows from that engineering installation alone; concurrent
+development is now separately authorized by ADR-0168.
 
 The completed safe technical slice was: execute the owner's [T0 experience plan](../plan/feature-t0-experience-1.md)
 under ADR-0161–0163. Mainb8bd5e8 and installed747/c08 remain the source/runtime

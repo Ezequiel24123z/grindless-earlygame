@@ -1,4 +1,73 @@
-# Current T0 rework validation
+# Current T0/T1 validation
+
+## Owner-reported questbook blocker — native FTB replacement pending
+
+Actual owner feedback rejects the custom/native-Heracles quest experience and
+long impersonal guide prose. ADR-0171 directs the genuine native FTB framework,
+concise content and explicit old-paid-claim import/fencing. Copy190a024 and
+follow-ups are source/cheap-text-check evidence only; native/API/loader/migration/
+package qualification is not supplied by those commits.
+
+Read-only17:12:20Z inspection finds the actual DevF95bf instance now has one world,
+one legacy quest ledger and client log timestamp16:53:50Z;0Java remains then.
+The old preparation world/JAR/log remain distinct. This records actual play/start
+and a reported blocker, not a save/reconnect or new backend pass. Original worlds
+and the installed artifact are unchanged by the investigation.
+
+T1 normal output qualification is retained in local523b3ab: the core reports
+six normal writers/checks, T1502/Economy417/T02834 and protected facts488, with
+13closed receipts/29stage outcomes/58raw logs. It is not published or deployed
+as the questbook repair. Its PC lease returned before the new FTB qualification
+owner was assigned; no successful JVM stage is replayed for that handoff.
+
+## Current owner loop — permission and observation remain distinct
+
+ADR-0170 records the owner's explicit intended longitudinal T0 start, active T1
+research/development, priority fixes for reported blockers and final T0 feedback/
+polish. The old T1 lease was returned; a new explicit guarded owner-play outcome
+assignment resumes normal canonical outputs and checks. The records below retain
+their exact observed results. No client launch/save-reopen/campaign pass, new
+deployment or release is inferred from the owner's instruction.
+
+## Owner-requested longitudinal readiness — fresh read-only installed F
+
+The [investigation](t0-longitudinal-readiness.md) records production Inspect of
+exact F/95bf47c4/3e5ad1fb and bounded state at2026-10-21T16:30:22Z:
+`VerifiedStopped`, expected Minecraft/Forge components,0Java/Prism,0 worlds with
+`level.dat`, no options or client log, unchanged launcher metadata. No world,
+configuration, artifact or process was changed/launched.
+
+This confirms installation, not graphical play or save/reopen. Source review
+identifies an actual forward-update gap: the persisted vein derivation version
+is unused by scanner/extractor generation. It does not demonstrate corruption
+of a new F world with unchanged version/materials. Existing codec/native proof
+is retained; no full audit, native run or application check is replayed.
+Campaign human acceptance follows the playable handover, not before first play.
+
+T1 sourceef9 is paused and undeployed, its PC lease returned. Bounded compile/
+backend/affected/export-twin evidence is preserved separately; normal canonical
+T1/Guidance/Economy outputs and their rechecks remain open. Its hosted failures
+must not be attributed to installed F or described as full qualification.
+
+## T1 first-factory — source74, execution in progress
+
+ADR-0168/0169 open development while preserving installed T0 F. Integrated
+sourcec727894 is followed by `74ccb36be90d12717a862f1a3d09fc201dd60f0e`:
+independent static QA closes the verifier's physical-input/ENERGY comparison
+defect, retaining separate authoritative FU assertions and all report energy.
+No JVM red/green is claimed for that source-only finding.
+
+The sole guarded execution owner reports common/Forge/classpath/Heracles-backend
+Gradle process exit0 on74. This is not a server boot. The private helper then
+fails its observation step because incidental PowerShell output is mixed into
+an integer return, before javac/selectors. Closed receipt/stdout/stderr survive
+as run `t1-74ccb36-compile-20261021T045400607`; independent byte/receipt verification
+is pending. Continue only the remaining stages after repairing that observer;
+do not replay the successful Gradle/backend process to improve its wrapper.
+
+Affected checks, normal T1 generation/CheckOnly and final source/artifact/hash
+aggregation still require their actual receipt. No new completed T1 qualification,
+Prism deployment, native/client/save migration or human acceptance is inferred.
 
 ## Exact-F engineering delivery and actual hosted completion
 
