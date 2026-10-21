@@ -118,7 +118,11 @@ public final class VerifyT1Progression {
                 seed.batchOutput(), seed.constructionDraw());
         Route reproduction = snapshot.routes().get(T1Progression.REPRODUCTION_ROUTE);
         Route manual = snapshot.routes().get(T1Progression.ENTRY_ROUTE);
-        equal("the automatic F1 route keeps the manual input bill", manual.inputs(), reproduction.inputs());
+        equal("the automatic F1 route keeps the manual physical input bill",
+                physicalInputs(manual), physicalInputs(reproduction));
+        equal("automatic F1 reproduction accounts for its complete rated FU demand separately",
+                Math.multiplyExact(reproduction.durationTicks(), reproduction.fuPerTick()),
+                reproduction.inputs().get(ENERGY));
         equal("the automatic F1 route keeps the complete manual batch", manual.outputs(), reproduction.outputs());
         equal("the manual exit is still manual", false, manual.automatable());
         equal("the Assembler removes repetition through the existing executor", true, reproduction.automatable());
@@ -132,7 +136,9 @@ public final class VerifyT1Progression {
         equal("the terminal product is physically F2, not an untagged item", Set.of(ratedF2), exit.outputs().keySet());
         equal("the exit keeps exactly the prior controller, structure, dielectric and power coupling",
                 Set.of(ratedF1, item(FabricationLogic.MACHINE_CASING), item("minecraft:glass"),
-                        item(FabricationLogic.FLUX_CELL)), exit.inputs().keySet());
+                        item(FabricationLogic.FLUX_CELL)), physicalInputs(exit).keySet());
+        equal("physical F2 manufacturing accounts for its complete rated FU demand separately",
+                Math.multiplyExact(exit.durationTicks(), exit.fuPerTick()), exit.inputs().get(ENERGY));
         equal("F2 manufacturing does not acquire a world permission", false,
                 exit.conditions().containsKey("informational_milestone") || !exit.prerequisites().isEmpty());
         equal("a legacy untagged Relay is physically F1 under the existing NBT mechanism",
@@ -255,6 +261,12 @@ public final class VerifyT1Progression {
 
     private static Resource item(String id) {
         return new Resource(Kind.ITEM, id);
+    }
+
+    private static Map<Resource, Long> physicalInputs(Route route) {
+        Map<Resource, Long> inputs = new TreeMap<>(route.inputs());
+        inputs.keySet().removeIf(resource -> resource.kind() == Kind.ENERGY);
+        return inputs;
     }
 
     private static void rejects(String name, Runnable action) {
