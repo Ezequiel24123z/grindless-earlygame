@@ -563,7 +563,7 @@ public final class VerifySustainabilityRegistry {
                     return switch (task.id()) {
                         case "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
                                 "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
-                                "industrial_matrix" -> Chapter.T1;
+                                "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell" -> Chapter.T1;
                         default -> Chapter.T0;
                     };
                 }

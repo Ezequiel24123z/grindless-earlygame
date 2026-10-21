@@ -97,8 +97,11 @@ public final class HeraclesDefinitions {
                                     new Vector2i(depth * 96, lineTop + row * 56)));
                     display.setIcon(new ItemQuestIcon(icons.apply(task)));
                     display.setTitle(Component.translatable("gui.grindless.quest.task." + task.id()));
-                    display.setSubtitle(Component.translatable("gui.grindless.quest.line." + task.line()));
-                    display.setDescription(List.of());
+                    Component lineTitle = Component.translatable("gui.grindless.quest.line." + task.line());
+                    display.setSubtitle(chapter == QuestCatalogue.Chapter.T0 ? lineTitle
+                            : Component.translatable("gui.grindless.quest.t1_line", lineTitle));
+                    display.setDescription(chapter == QuestCatalogue.Chapter.T0 ? List.of()
+                            : List.of(Component.translatable("gui.grindless.quest.t1_development")));
                     if (task.id().equals(QuestCatalogue.T0_COMPLETION)) {
                         // Heracles visibility assumes absent cross-group dependencies are complete.
                         display.groups().put(T1_GROUP, new GroupDisplay(T1_GROUP, new Vector2i(-96, 0)));

@@ -64,7 +64,9 @@ public final class VerifyQuest {
         List<QuestCatalogue.Task> tasks = QuestCatalogue.tasks();
         List<String> problems = QuestLogic.problems(tasks);
         yes("the catalogue is a book" + (problems.isEmpty() ? "" : " " + problems), problems.isEmpty());
-        eq("thirty-two T0 tasks and fourteen preserved T1 objectives", 46, tasks.size());
+        eq("thirty-two unchanged T0 tasks and eighteen in-development T1 tasks", 50, tasks.size());
+        eq("the complete T0 chapter still has thirty-two tasks", 32L, tasks.stream()
+                .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0).count());
         eq("all source-defined lines remain explicit", LINES, QuestCatalogue.lines());
         eq("the T0 chapter has its own seven lines", LINES.subList(0, 7),
                 QuestCatalogue.lines(QuestCatalogue.Chapter.T0));
@@ -79,7 +81,7 @@ public final class VerifyQuest {
         eq("all 26 original rewarded IDs remain; new teaching never mints a material reward", old,
                 tasks.stream().filter(task -> task.type() == QuestCatalogue.Type.REWARD)
                         .map(QuestCatalogue.Task::id).collect(java.util.stream.Collectors.toSet()));
-        eq("every added task has an explicit rewardless lesson type", 20L, tasks.stream()
+        eq("all twenty old T0 lessons and four new T1 lessons are rewardless", 24L, tasks.stream()
                 .filter(task -> task.type() == QuestCatalogue.Type.LESSON && task.rewards().isEmpty()).count());
         try {
             task("quest_book_help").reward();
@@ -92,7 +94,7 @@ public final class VerifyQuest {
                 QuestCatalogue.Evidence.MATRIX.ordinal()));
         eq("status wire meanings do not move", List.of(0, 1, 2, 3),
                 java.util.Arrays.stream(QuestLogic.Status.values()).map(Enum::ordinal).toList());
-        eq("all old prerequisites and rewards retain their exact values", List.of(
+        eq("old rewards and prerequisites remain exact except the explicitly optional Factory Portal edge", List.of(
                 "multitool||minecraft:clay_ball/4",
                 "crank|multitool|minecraft:coal/4",
                 "extractor|crank|minecraft:gravel/8",
@@ -117,7 +119,7 @@ public final class VerifyQuest {
                 "logistics|assembler|minecraft:hopper/1",
                 "kiln|matrix_line|minecraft:brick/8",
                 "factory_world|matrix_line,glass|minecraft:grass_block/16",
-                "industrial_matrix|matrix_line,glass,factory_world|minecraft:iron_ingot/8"),
+                "industrial_matrix|matrix_line,glass|minecraft:iron_ingot/8"),
                 LEGACY_IDS.stream().map(QuestCatalogue::byId).map(task -> task.id() + "|"
                         + String.join(",", task.requires()) + "|" + task.rewards().stream()
                         .map(reward -> reward.itemId() + "/" + reward.count())
@@ -188,11 +190,21 @@ public final class VerifyQuest {
         eq("the Press precedes the Assembler", List.of("press", "furnace"), task("assembler").requires());
         eq("the Assembler unlocks the repeated Matrix line", List.of("assembler"), task("matrix_line").requires());
         eq("renewable glass has a physical stock objective", "minecraft:glass", subject("glass"));
-        eq("the Factory Portal finishes the current route", "grindless:factory_portal", subject("factory_world"));
+        eq("the optional Factory Portal keeps its original physical objective",
+                "grindless:factory_portal", subject("factory_world"));
         eq("the F2 Matrix is the T1 exit", "grindless:relay_matrix", subject("industrial_matrix"));
         eq("the F2 Matrix requires F2", io.github.ezequiel24123z.grindless.energy.FluxTier.F2,
                 task("industrial_matrix").matrixRating());
         yes("a walk from the multitool reaches the F2 Matrix", reaches("multitool", "industrial_matrix"));
+        eq("only the repeated Matrix line and glass remain terminal claim prerequisites",
+                List.of("matrix_line", "glass"), task("industrial_matrix").requires());
+        for (String optional : List.of("scanner", "terrestrial", "logistics", "kiln", "factory_world")) {
+            no(optional + " is not a mandatory edge to F2", reaches(optional, "industrial_matrix"));
+            yes(optional + " is visibly optional", QuestTeaching.optional(task(optional)));
+        }
+        for (String reading : List.of("first_grid", "forming_dies", "copper_coil", "flux_cell")) {
+            no(reading + " does not introduce a new claim tax before the F2 exit", reaches(reading, "industrial_matrix"));
+        }
         no("the survival route has no dimension objectives",
                 tasks.stream().anyMatch(task -> task.evidence() == QuestCatalogue.Evidence.DIMENSION));
         eq("relay is the final T0 task", "relay", tasks.stream()

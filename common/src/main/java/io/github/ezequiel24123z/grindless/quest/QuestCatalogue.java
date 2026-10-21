@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * The original quest book (ADR-0100).
  *
- * <p>T0 teaching and preserved T1 objectives share one per-player claim ledger. A chapter
+ * <p>T0 teaching and in-development T1 objectives share one per-player claim ledger. A chapter
  * unlock is navigation, never a machine permission or evidence of successful operation.
  */
 public final class QuestCatalogue {
@@ -160,6 +160,7 @@ public final class QuestCatalogue {
                     List.of("relay"), reward("minecraft:coal", 16)),
             task("pylon", "power", Evidence.ITEM, "grindless:flux_pylon_mk1", 1,
                     List.of("thermal"), reward("minecraft:redstone", 4)),
+            lesson("first_grid", "power", Evidence.FREE, "", 1, List.of("pylon")),
             task("scanner", "extraction", Evidence.ITEM, "grindless:prospectors_scanner", 1,
                     List.of("pylon"), reward("minecraft:charcoal", 4)),
             task("terrestrial", "extraction", Evidence.ITEM, "grindless:terrestrial_extractor", 1,
@@ -170,6 +171,9 @@ public final class QuestCatalogue {
                     List.of("thermal", "pulverizer"), reward("minecraft:coal", 8)),
             task("press", "factory", Evidence.ITEM, "grindless:press", 1,
                     List.of("furnace"), reward("minecraft:iron_ingot", 4)),
+            lesson("forming_dies", "factory", Evidence.FREE, "", 1, List.of("press")),
+            lesson("copper_coil", "factory", Evidence.ITEM, "grindless:copper_coil", 1,
+                    List.of("forming_dies")),
             task("assembler", "factory", Evidence.ITEM, "grindless:assembler", 1,
                     List.of("press", "furnace"), reward("grindless:data_core", 1)),
             task("matrix_line", "factory", Evidence.ITEM, "grindless:relay_matrix", 5,
@@ -182,8 +186,10 @@ public final class QuestCatalogue {
                     List.of("matrix_line"), reward("minecraft:brick", 8)),
             task("factory_world", "factory_world", Evidence.ITEM, "grindless:factory_portal", 1,
                     List.of("matrix_line", "glass"), reward("minecraft:grass_block", 16)),
+            lesson("flux_cell", "industrial", Evidence.ITEM, "grindless:flux_cell", 1,
+                    List.of("matrix_line")),
             matrixTask("industrial_matrix", "industrial", "grindless:relay_matrix", FluxTier.F2, 1,
-                    List.of("matrix_line", "glass", "factory_world"), reward("minecraft:iron_ingot", 8)));
+                    List.of("matrix_line", "glass"), reward("minecraft:iron_ingot", 8)));
 
     private QuestCatalogue() {
     }
@@ -205,7 +211,7 @@ public final class QuestCatalogue {
         return switch (task.id()) {
             case "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
                     "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
-                    "industrial_matrix" -> Chapter.T1;
+                    "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell" -> Chapter.T1;
             default -> Chapter.T0;
         };
     }

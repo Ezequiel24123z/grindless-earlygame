@@ -38,6 +38,7 @@ public final class VerifyQuestClaims {
         stacking();
         bookAccess();
         lessons();
+        t1Claims();
         invalidRewards();
         projectionAndReload();
         System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions
@@ -318,6 +319,68 @@ public final class VerifyQuestClaims {
                             batch -> Optional.of(paid::incrementAndGet)));
             equal("invalid reward leaves the ledger untouched", Set.of(), ledger.claimed(player));
             equal("invalid reward is never delivered", 0, paid.get());
+        }
+
+        private static void t1Claims() {
+            QuestProgress ledger = new QuestProgress();
+            UUID player = UUID.randomUUID();
+            Function<QuestCatalogue.Reward, ItemStack> noReward = reward -> {
+                throw new AssertionError("A T1 lesson cannot resolve a material reward");
+            };
+            Function<List<ItemStack>, Optional<Runnable>> noDelivery = rewards -> {
+                throw new AssertionError("A T1 lesson cannot enter inventory delivery");
+            };
+            for (String id : List.of("first_grid", "forming_dies", "copper_coil", "flux_cell")) {
+                QuestCatalogue.Task task = QuestCatalogue.byId(id);
+                equal("new teaching remains in the actual T1 chapter " + id, QuestCatalogue.Chapter.T1,
+                        QuestCatalogue.chapter(task));
+                equal("new teaching remains rewardless " + id, QuestCatalogue.Type.LESSON, task.type());
+                equal("T1 teaching cannot record before the individual final T0 claim " + id,
+                        QuestClaimService.Result.LOCKED,
+                        QuestClaimService.claim(ledger, player, id, true, value -> true, noReward, noDelivery));
+            }
+            ledger.claim(player, "relay");
+            ledger.claim(player, "pylon");
+            equal("the grid reading needs no invented operation or inventory evidence", QuestClaimService.Result.CLAIMED,
+                    QuestClaimService.claim(ledger, player, "first_grid", true, task -> false, noReward, noDelivery));
+            ledger.claim(player, "press");
+            equal("forming reading has no separate die-possession tax", QuestClaimService.Result.CLAIMED,
+                    QuestClaimService.claim(ledger, player, "forming_dies", true, task -> false, noReward, noDelivery));
+            for (String id : List.of("copper_coil", "flux_cell")) {
+                QuestCatalogue.byId(id).requires().forEach(parent -> ledger.claim(player, parent));
+                equal("physical teaching still requires the real book " + id, QuestClaimService.Result.BOOK_REQUIRED,
+                        QuestClaimService.claim(ledger, player, id, false, task -> true, noReward, noDelivery));
+                equal("physical teaching rejects absent current evidence " + id, QuestClaimService.Result.UNMET,
+                        QuestClaimService.claim(ledger, player, id, true, task -> false, noReward, noDelivery));
+                equal("physical teaching records only the existing individual checklist " + id,
+                        QuestClaimService.Result.CLAIMED,
+                        QuestClaimService.claim(ledger, player, id, true, task -> true, noReward, noDelivery));
+            }
+            ledger.claim(player, "glass");
+            List<ItemStack> rewards = new ArrayList<>();
+            equal("the terminal service still rejects absent rated evidence without a portal requirement",
+                    QuestClaimService.Result.UNMET,
+                    QuestClaimService.claim(ledger, player, "industrial_matrix", true, task -> false,
+                            VerifyQuestClaims::resolve, capture(rewards)));
+            equal("a rejected frontier cannot mint its reward", 0, rewards.size());
+            equal("the old F2 reward is claimable without optional portal progress when its evidence provider passes",
+                    QuestClaimService.Result.CLAIMED,
+                    QuestClaimService.claim(ledger, player, "industrial_matrix", true, task -> true,
+                            VerifyQuestClaims::resolve, capture(rewards)));
+            equal("the F2 reward remains eight iron ingots", Map.of("minecraft:iron_ingot", 8), quantities(rewards));
+            equal("the F2 claim cannot silently complete the optional branch", false,
+                    ledger.claimed(player).contains("factory_world"));
+            CompoundTag saved = ledger.save(new CompoundTag());
+            QuestProgress restored = QuestProgress.load(saved.copy());
+            equal("new lessons and the terminal claim survive the original save schema", saved,
+                    restored.save(new CompoundTag()));
+            equal("reopening the old F2 id cannot repay it", QuestClaimService.Result.ALREADY_CLAIMED,
+                    QuestClaimService.claim(restored, player, "industrial_matrix", true, task -> true,
+                            VerifyQuestClaims::resolve, capture(rewards)));
+            equal("reconstruction preserves only the one original reward", 1, rewards.size());
+            equal("a second player cannot inherit the T1 chapter", QuestClaimService.Result.LOCKED,
+                    QuestClaimService.claim(restored, UUID.randomUUID(), "first_grid", true, task -> true,
+                            noReward, noDelivery));
         }
         QuestProgress ledger = new QuestProgress();
         UUID player = UUID.randomUUID();

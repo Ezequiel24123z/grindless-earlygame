@@ -5,7 +5,10 @@ import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestTeaching;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
+import io.github.ezequiel24123z.grindless.recipe.ThermalLogic;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.network.PylonTier;
+import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
@@ -32,12 +35,24 @@ public final class QuestTeachingClient {
         List<Component> text = new ArrayList<>();
         text.add(Component.translatable("gui.grindless.quest.path."
                 + QuestTeaching.path(task).name().toLowerCase(Locale.ROOT)));
+        boolean t1 = QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1;
+        if (t1) {
+            text.add(Component.translatable("gui.grindless.quest.t1_development"));
+        }
         text.add(task.id().equals("biomass_dynamo")
                 ? Component.translatable(QuestTeaching.bodyKey(task), FluxTier.F0.nominal(), SourceLogic.BIOMASS_BURN_TICKS)
                 : task.id().equals("manual_work")
                 ? Component.translatable(QuestTeaching.bodyKey(task), SourceLogic.MANUAL_CHARGE, SourceLogic.MANUAL_COOLDOWN)
+                : task.id().equals("thermal")
+                ? Component.translatable(QuestTeaching.bodyKey(task), ThermalLogic.FU_PER_TICK)
+                : task.id().equals("first_grid")
+                ? Component.translatable(QuestTeaching.bodyKey(task), FluxTier.F0.nominal(), FluxTier.F1.nominal())
                 : Component.translatable(QuestTeaching.bodyKey(task)));
         text.add(Component.translatable("gui.grindless.quest.inventory_not_operation"));
+        if (task.id().equals("pylon")) {
+            text.add(Component.translatable("gui.grindless.quest.t1_pylon_limits",
+                    PylonTier.MK1.supplyArea(), PylonTier.MK1.linkRange(), PylonTier.MK1.throughput()));
+        }
         if (task.id().equals("fluid_logistics")) {
             text.add(Component.translatable("gui.grindless.quest.tank_containers", FluidLogic.TANK_CAPACITY));
         }
@@ -52,7 +67,13 @@ public final class QuestTeachingClient {
             }
             appendPorts(text, structure);
         }
-        List<AtlasLogic.Entry> recipes = QuestTeaching.recipes(task, AtlasLogic.allEntries(ProcessLookup.recipes()));
+        List<AtlasLogic.Entry> entries = AtlasLogic.allEntries(ProcessLookup.recipes());
+        List<AtlasLogic.Entry> recipes = QuestTeaching.recipes(task, entries);
+        if (t1) {
+            for (String route : T1Progression.atlasForQuest(task.id(), entries).nonAtlasRouteIds().stream().sorted().toList()) {
+                text.add(Component.translatable("gui.grindless.quest.t1_non_atlas_route", route));
+            }
+        }
         if (!recipes.isEmpty()) {
             text.add(Component.translatable("gui.grindless.quest.live_recipes"));
             Set<Resource> outputs = new LinkedHashSet<>();

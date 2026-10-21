@@ -2,6 +2,7 @@ package io.github.ezequiel24123z.grindless.quest;
 
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 
@@ -13,16 +14,17 @@ import java.util.HashSet;
 public final class QuestTeaching {
 
     public enum Path {
-        STARTER, RECOVERY, CORE, RENEWABLE, OPTIONAL, PREVIEW
+        STARTER, RECOVERY, CORE, RENEWABLE, OPTIONAL, PREVIEW, T1_CORE, T1_OPTIONAL, T1_EXIT
     }
 
     private QuestTeaching() {
     }
 
     public static String bodyKey(QuestCatalogue.Task task) {
-        return "gui.grindless.quest.lesson."
-                + (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1 ? "t1_preview"
-                : task.id().equals("settling") ? "settling_ports" : task.id());
+        if (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1) {
+            return "gui.grindless.quest.lesson.t1." + T1Progression.byQuest(task.id()).id() + "." + task.id();
+        }
+        return "gui.grindless.quest.lesson." + (task.id().equals("settling") ? "settling_ports" : task.id());
     }
 
     public static WorkshopStructure structure(QuestCatalogue.Task task) {
@@ -35,7 +37,11 @@ public final class QuestTeaching {
 
     public static Path path(QuestCatalogue.Task task) {
         if (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1) {
-            return Path.PREVIEW;
+            return switch (T1Progression.byQuest(task.id()).requirement()) {
+                case MANDATORY -> Path.T1_CORE;
+                case OPTIONAL -> Path.T1_OPTIONAL;
+                case EXIT -> Path.T1_EXIT;
+            };
         }
         return switch (task.id()) {
             case "starter_supplies" -> Path.STARTER;
@@ -47,7 +53,15 @@ public final class QuestTeaching {
         };
     }
 
+    public static boolean optional(QuestCatalogue.Task task) {
+        Path path = path(task);
+        return path == Path.OPTIONAL || path == Path.T1_OPTIONAL;
+    }
+
     public static List<AtlasLogic.Entry> recipes(QuestCatalogue.Task task, List<AtlasLogic.Entry> entries) {
+        if (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1) {
+            return T1Progression.atlasForQuest(task.id(), entries).entries();
+        }
         Set<String> ids = switch (task.id()) {
             case "quest_book_help" -> Set.of("craft/quest_book", "bootstrap/paper", "bootstrap/sticks");
             case "construction" -> Set.of("bench/crafting_table", "bench/furnace",

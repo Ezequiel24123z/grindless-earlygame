@@ -74,7 +74,7 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
         addRenderableWidget(Button.builder(Component.translatable("gui.grindless.quest.chapter.t0"),
                 button -> selectChapter(QuestCatalogue.Chapter.T0))
                 .bounds(leftPos + 8, topPos + 18, 140, 16).build());
-        t1 = addRenderableWidget(Button.builder(Component.translatable("gui.grindless.quest.chapter.t1"),
+        t1 = addRenderableWidget(Button.builder(Component.translatable("gui.grindless.quest.chapter.t1_development"),
                 button -> selectChapter(QuestCatalogue.Chapter.T1))
                 .bounds(leftPos + 152, topPos + 18, 140, 16).build());
         t1.active = menu.chapterUnlocked(QuestCatalogue.Chapter.T1);
@@ -239,7 +239,7 @@ public final class QuestBookScreen extends AbstractContainerScreen<QuestBookMenu
                 int color = task == selected ? SELECTED : color(status);
                 String mark = status == QuestLogic.Status.CLAIMED ? "+ "
                         : status == QuestLogic.Status.CLAIMABLE ? "> " : "- ";
-                String optional = QuestTeaching.path(entry) == QuestTeaching.Path.OPTIONAL
+                String optional = QuestTeaching.optional(entry)
                         ? Component.translatable("gui.grindless.quest.optional").getString() : "";
                 String text = font.plainSubstrByWidth(mark + Component.translatable(
                         "gui.grindless.quest.task." + entry.id()).getString() + optional, imageWidth - 24);

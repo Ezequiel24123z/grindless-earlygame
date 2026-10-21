@@ -50,6 +50,8 @@ public final class VerifyHeracles {
             "geological_collector", "aggregate", "water_recovery", "mineral_feed", "biocultivator",
             "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors", "assembly_bench",
             "research_terminal", "data_core", "calibrated_core");
+    private static final List<String> T1_LESSON_IDS = List.of(
+            "first_grid", "forming_dies", "copper_coil", "flux_cell");
     private static int assertions;
 
     public static void main(String[] args) throws Exception {
@@ -68,12 +70,13 @@ public final class VerifyHeracles {
 
     private static void definitions(Map<String, Quest> definitions) {
         equal("one native quest per catalogue task", QuestCatalogue.tasks().size(), definitions.size());
-        equal("the complete book has 32 T0 nodes and 14 retained T1 objectives", 46, definitions.size());
+        equal("the complete book has 32 unchanged T0 nodes and 18 in-development T1 nodes", 50, definitions.size());
         Set<String> expectedIds = new LinkedHashSet<>();
         ORIGINAL_TASK_IDS.forEach(id -> expectedIds.add("grindless_" + id));
         expectedIds.add(STARTER_ID);
         LESSON_IDS.forEach(id -> expectedIds.add("grindless_" + id));
-        equal("all 26 original generated ids and exactly 20 typed lessons are retained", expectedIds, definitions.keySet());
+        T1_LESSON_IDS.forEach(id -> expectedIds.add("grindless_" + id));
+        equal("all 46 old generated ids remain with exactly four new T1 lessons", expectedIds, definitions.keySet());
         equal("the starter is the first generated entry", STARTER_ID, definitions.keySet().iterator().next());
         var starter = QuestCatalogue.tasks().get(0);
         equal("the first catalogue task is the starter", QuestCatalogue.STARTER_SUPPLIES, starter.id());
@@ -113,8 +116,22 @@ public final class VerifyHeracles {
             if (QuestCatalogue.chapter(entry.task()) == QuestCatalogue.Chapter.T1) {
                 equal("every T1 node has the actual individual T0 gate " + entry.id(), true,
                         decoded.dependencies().contains("grindless_relay"));
+                equal("T1 is explicitly in development in its real native subtitle " + entry.id(),
+                        net.minecraft.network.chat.Component.translatable("gui.grindless.quest.t1_line",
+                                net.minecraft.network.chat.Component.translatable(
+                                        "gui.grindless.quest.line." + entry.task().line())),
+                        decoded.display().subtitle());
+                equal("the native definition retains the same explicit development disclaimer " + entry.id(),
+                        List.of(net.minecraft.network.chat.Component.translatable("gui.grindless.quest.t1_development")),
+                        decoded.display().description());
+            } else {
+                equal("T0 retains its original unmodified native description " + entry.id(), List.of(),
+                        decoded.display().description());
             }
         }
+        equal("the actual F2 definition has no mandatory optional-portal edge",
+                Set.of("grindless_matrix_line", "grindless_glass", "grindless_relay"),
+                definitions.get("grindless_industrial_matrix").dependencies());
         var bad = com.google.gson.JsonParser.parseString("{\"type\":\"grindless:claim\",\"quest\":\"invented\"}");
         equal("task codec refuses unknown catalogue ids", true,
                 GrindlessClaimTask.TYPE.codec("claim").parse(JsonOps.INSTANCE, bad).error().isPresent());
@@ -389,7 +406,7 @@ public final class VerifyHeracles {
         HeraclesDefinitions.synchronize(config, encoded);
         HeraclesDefinitions.verifyFiles(config, encoded);
         loadNative(config);
-        equal("the real loader accepts the expanded 46-task owned bundle", 46, QuestHandler.quests().size());
+        equal("the real loader accepts the expanded 50-task owned bundle", 50, QuestHandler.quests().size());
         for (String id : oldCatalogue.keySet()) {
             equal("bundle upgrade retains the original native id and claim contract " + id, true,
                     HeraclesDefinitions.matches(definitions.get(id), QuestHandler.get(id)));
@@ -401,7 +418,7 @@ public final class VerifyHeracles {
         equal("the upgraded starter has no native dependencies", Set.of(), QuestHandler.get(STARTER_ID).dependencies());
         byte[] upgraded = Files.readAllBytes(HeraclesDefinitions.bundle(config));
         HeraclesDefinitions.synchronize(config, encoded);
-        equal("reopening the expanded 46-task bundle is byte-idempotent", true,
+        equal("reopening the expanded 50-task bundle is byte-idempotent", true,
                 java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
     }
 
