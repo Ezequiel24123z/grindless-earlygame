@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Extend pinned mature-mod precedent for later tiers.** Record exact configured
+  ingredients separately from physical capacity, parameterized machine families
+  and composed processing hooks. Keep GT's unclosed first-Assembler acquisition
+  link and different voltage model explicit; no complete bootstrap, LGPL code
+  import or acceptance of Grindless's prototype inventory is inferred.
 - **Open isolated later-tier development by direct owner instruction (ADR-0173).**
   Continue native-baseline T1 integration, begin physical T2 Wire Mill
   manufacturing through the existing Assembler and ground T3-T15 work in actual

@@ -1,6 +1,6 @@
 # T1 external implementation references
 
-Read-only source research for ADR-0169/0170/0172. Patterns are conceptual evidence;
+Read-only source research for ADR-0169/0170/0172/0173. Patterns are conceptual evidence;
 no code, assets, recipes, prose or dependency is imported. The implemented
 Grindless catalogues remain authoritative.
 
@@ -22,6 +22,40 @@ not a verified1.20.1 pin, and is only a structural contrast: bespoke mold state
 versus the already-shared Grindless catalyst mechanism. It is not used as target-
 version implementation evidence. The separately pinned1.20.1 study below is
 about deposits, not that press comparison.
+
+## Industrial and later-tier extensions
+
+The new citations below use only GT Modernaae6d4e, not an assumed byte-equivalent
+v7.5.3 implementation. They support bounded design comparisons; none establishes
+Grindless tier completion or authorizes another executor or copied recipe bill.
+
+| Pinned source | Actual property | Grindless fit / limit |
+| --- | --- | --- |
+| [IntCircuitIngredient, lines29-53](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/api/recipe/ingredient/IntCircuitIngredient.java#L29-L53) | The programmed-circuit ingredient checks the actual item and its exact stored configuration | Compound identity matters; exact recipe selection is not the same requirement as sufficient machine/control capacity |
+| [TieredWorkableElectricMultiblockMachine, lines48-67](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/api/machine/multiblock/TieredWorkableElectricMultiblockMachine.java#L48-L67) | Effective overclock tier is bounded by physical hull and configured limits | A separate capacity boundary, not evidence that a higher configuration should match an exact ingredient. Grindless's deliberate soft under-volting remains its own policy |
+| [MetaTileEntityLoader, lines38-43](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/data/recipe/misc/MetaTileEntityLoader.java#L38-L43) and [steam recipes, lines435-535](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/data/recipe/misc/MetaTileEntityLoader.java#L435-L535) | Casings and several bronze/steel steam machines have shaped acquisition paths | Useful non-self-hosting construction evidence, not a complete Assembler/bootstrap or sustainability proof; do not add a mandatory Steam Age to Grindless |
+| [GTMultiMachines, lines145-201](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/common/data/machines/GTMultiMachines.java#L145-L201) | Blast-furnace and chemical-reactor registrations compose different recipe-modifier sets | New conditions can use shared mechanisms rather than one execution engine per tier; begin with Grindless's existing conditions and completion contracts |
+| [MultiblockPartMachine, lines109-241](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/api/machine/multiblock/part/MultiblockPartMachine.java#L109-L241) and [registerLargeBoiler, lines622-632](https://github.com/GregTechCEu/GregTech-Modern/blob/aae6d4e5195f69fd55dd1f298887f0852eeb7710/src/main/java/com/gregtechceu/gtceu/common/data/machines/GTMachineUtils.java#L622-L632) | Reusable working hooks and parameterized family registration | Compare against existing Grindless machine/store ownership first; these are not generic rollback or save-compatibility guarantees |
+
+The reference search did **not** close the first Assembler block's own acquisition
+path. Do not turn casing/steam examples into a claim that the entire external
+industrial cycle is proven acyclic. Nor is GT's tier convention an exact analogue
+of Grindless's orthogonal Relay/Integrated/Superconducting/Photonic/Causal
+architecture and rating model.
+
+The actual Grindless source trace is stronger than an absence-of-symbol search:
+`IngredientSpec` explicitly defines exact `matrixRating` and
+`ProcessLookup.sameItem` compares that rating; `ControlMatrixSpec.canControl`
+separately accepts sufficient ratings. The initial T2 Wire Mill source increment
+uses the existing exact operand, while ADR-0173 retains the intended stronger-
+substitution/ingredient-role boundary as unfinished shared work. No global matcher
+relaxation, F1 alias or quest-receipt change follows from the external example.
+
+For each future industrial input, trace construction seed, producer, recurrent
+consumables and recovery margin through actual routes. For later machinery, add
+only genuinely new conditions to the established graph/executor and invalidate
+only affected mechanism proofs. Do not infer closure from registered prototypes
+or add a condition/parallelism framework before an implemented need exists.
 
 ## Longitudinal virtual-deposit continuity
 

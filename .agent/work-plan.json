@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 29,
+  "plan_revision": 30,
   "updated": "2026-10-21",
   "phase": "native_FTB_package_qualified_new_owned_target_deployed_original_backup_verified_final_delivery_in_progress",
   "product_gate": "NATIVE_FTB_QUALIFIED_PROTECTED_SAVE_DELIVERY_PENDING",
@@ -124,7 +124,7 @@
     "T2_scope": "first_source_only_WireMill_physicalF2_fourth_operand_existing_Assembler_Motor_and_T1_unchanged_no_engine_rewrite",
     "T3_T15_owner": "8210a8bd-9f5a-428a-81c5-604594fe235b",
     "T3_T15_scope": "actual_accepted_source_dependency_dossier_and_next_T3_T4_cross_tier_code_slices_not_prototype_acceptance",
-    "external_research": "82bed9f4_pinned_mature_industrial_bootstrap_rated_identity_later_mechanism_patterns_read_only_no_foreign_import",
+    "external_research": "82bed9f4_complete_pinned_aae6d4e_exact_component_identity_vs_capacity_shared_modifiers_hooks_family_factories_report_in_docs_design_t1_external_references_first_Assembler_acquisition_not_closed_no_foreign_import",
     "explicit_shared_boundaries": [
       "exact_ProcessLookup_ingredient_ratings_versus_intended_higher_substitution_resolve_before_completedT2_acceptance_no_global_matcher_change_inside_data_recipe",
       "managed_native46_to50_definition_upgrade_requires_hash_bound_backup_migration_unchanged_paid_world_data_keep_current_preflight_failclosed"
