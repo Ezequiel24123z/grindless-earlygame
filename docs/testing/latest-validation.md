@@ -1,4 +1,116 @@
-# Current T0 rework validation
+# Current T0/T1 validation
+
+## Native FTB — actual registered graph and retained-world restart
+
+[The source-bound native qualification](t0-ftb-native-qualification.md) records
+ff610 real Forge graph/filter/import1099, seed56 and actual second-process disk
+reopen58, both natural stops/harness0. Parent reads full transport and verifies
+that reopen checks persisted state before any import can repair it. Direct raw
+server custody and the final package remain separate. Tool-onlyd731 standalone
+data/vanilla-surrogate2352 and pack152 pass; not a claimed real-client inventory
+or GUI test.
+
+The ff610 Linux workflow's remaining failed suite is three old exact
+`Players`-only root assertions, not the repaired prose or the native restart.
+Update the precise new serialized native-owner schema while retaining old
+player/task/once-only invariants. No new boot is needed for that test-only repair.
+Actual owner-save backup/copy/load and client feedback remain pending; no original
+world, instance or launcher setting has changed.
+
+## Owner-reported questbook blocker — native FTB replacement pending
+
+Actual owner feedback rejects the custom/native-Heracles quest experience and
+long impersonal guide prose. ADR-0171 directs the genuine native FTB framework,
+concise content and explicit old-paid-claim import/fencing. Copy190a024 and
+follow-ups are source/cheap-text-check evidence only; native/API/loader/migration/
+package qualification is not supplied by those commits.
+
+Exact FTB binary identities and native JEI wiring are now recorded in
+[the integration reference](../design/ftb-questbook-integration.md). Initial
+source1736736 has a real Forge compile red (two instance/static Matrix calls and
+an EventActor return); common/four publisher outputs alone pass. Correctivea181
+closes the two migration/entry QA findings by static recheck and the core reports
+actual main Forge compilation0. A native test-file abstract-method fixture and
+eleven superseded prose assertions have their own real reds; neither is hidden
+by the compiler result.
+
+Independent tooling QA identifies stale smoke mod composition and an unsupported
+shared-batch backend case. Correctived6d7869 uses complete inventory synchronization
+and proper isolated dispatch; its worker reports57cases/1507assertions and
+native PowerShell/Bash comparisons0, with the earlier5/7red preserved. Narrow
+independent recheck and actual native start/restart/package remain separate.
+The private stopped-world custody helper has only local fixture/source evidence,
+not a real backup/copy/upgrade pass.
+
+The d6d7869 tooling findings are closed by narrow independent static recheck;
+that does not turn modelled inventory fixtures into a Gradle/Forge execution.
+One owned parse-only registry-check JVM is explicitly cancelled after14minutes:
+its captured stack identifies repeated full-classpath/JAR-manifest
+canonicalization, not a hung game. Preserve CANCELLED and the stack/raw logs.
+An empty parse-only classpath is a bounded performance repair only if there is
+no type attribution and all authorities, mutations and canonical results remain;
+actual compilation still uses the real classpath. No failure/deadline is relabeled.
+
+Read-only17:12:20Z inspection finds the actual DevF95bf instance now has one world,
+one legacy quest ledger and client log timestamp16:53:50Z;0Java remains then.
+The old preparation world/JAR/log remain distinct. This records actual play/start
+and a reported blocker, not a save/reconnect or new backend pass. Original worlds
+and the installed artifact are unchanged by the investigation.
+
+T1 normal output qualification is retained in local523b3ab: the core reports
+six normal writers/checks, T1502/Economy417/T02834 and protected facts488, with
+13closed receipts/29stage outcomes/58raw logs. It is not published or deployed
+as the questbook repair. Its PC lease returned before the new FTB qualification
+owner was assigned; no successful JVM stage is replayed for that handoff.
+
+## Current owner loop — permission and observation remain distinct
+
+ADR-0170 records the owner's explicit intended longitudinal T0 start, active T1
+research/development, priority fixes for reported blockers and final T0 feedback/
+polish. The old T1 lease was returned; a new explicit guarded owner-play outcome
+assignment resumes normal canonical outputs and checks. The records below retain
+their exact observed results. No client launch/save-reopen/campaign pass, new
+deployment or release is inferred from the owner's instruction.
+
+## Owner-requested longitudinal readiness — fresh read-only installed F
+
+The [investigation](t0-longitudinal-readiness.md) records production Inspect of
+exact F/95bf47c4/3e5ad1fb and bounded state at2026-10-21T16:30:22Z:
+`VerifiedStopped`, expected Minecraft/Forge components,0Java/Prism,0 worlds with
+`level.dat`, no options or client log, unchanged launcher metadata. No world,
+configuration, artifact or process was changed/launched.
+
+This confirms installation, not graphical play or save/reopen. Source review
+identifies an actual forward-update gap: the persisted vein derivation version
+is unused by scanner/extractor generation. It does not demonstrate corruption
+of a new F world with unchanged version/materials. Existing codec/native proof
+is retained; no full audit, native run or application check is replayed.
+Campaign human acceptance follows the playable handover, not before first play.
+
+T1 sourceef9 is paused and undeployed, its PC lease returned. Bounded compile/
+backend/affected/export-twin evidence is preserved separately; normal canonical
+T1/Guidance/Economy outputs and their rechecks remain open. Its hosted failures
+must not be attributed to installed F or described as full qualification.
+
+## T1 first-factory — source74, execution in progress
+
+ADR-0168/0169 open development while preserving installed T0 F. Integrated
+sourcec727894 is followed by `74ccb36be90d12717a862f1a3d09fc201dd60f0e`:
+independent static QA closes the verifier's physical-input/ENERGY comparison
+defect, retaining separate authoritative FU assertions and all report energy.
+No JVM red/green is claimed for that source-only finding.
+
+The sole guarded execution owner reports common/Forge/classpath/Heracles-backend
+Gradle process exit0 on74. This is not a server boot. The private helper then
+fails its observation step because incidental PowerShell output is mixed into
+an integer return, before javac/selectors. Closed receipt/stdout/stderr survive
+as run `t1-74ccb36-compile-20261021T045400607`; independent byte/receipt verification
+is pending. Continue only the remaining stages after repairing that observer;
+do not replay the successful Gradle/backend process to improve its wrapper.
+
+Affected checks, normal T1 generation/CheckOnly and final source/artifact/hash
+aggregation still require their actual receipt. No new completed T1 qualification,
+Prism deployment, native/client/save migration or human acceptance is inferred.
 
 ## Exact-F engineering delivery and actual hosted completion
 

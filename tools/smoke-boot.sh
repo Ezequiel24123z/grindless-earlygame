@@ -29,6 +29,7 @@
 #                     must not yield to block entities should be a datapack function.
 #     SMOKE_EXPECT    extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
+#     SMOKE_QUEST_BACKEND absent, or ftb to include the pinned native quest dependencies
 set -u
 
 validate_smoke_keep_world() {
@@ -142,7 +143,12 @@ if [ "${GRINDLESS_ACCEPT_EULA:-}" != "true" ] && [ "${CI:-}" != "true" ]; then
 fi
 
 cd "$ROOT" || exit 1
-./gradlew --no-daemon --console=plain :forge:prepareSmokeServer ||
+case "${SMOKE_QUEST_BACKEND:-}" in
+  "") PREPARE_TASK=:forge:prepareSmokeServer ;;
+  ftb) PREPARE_TASK=:forge:prepareQuestSmokeServer ;;
+  *) echo "Invalid SMOKE_QUEST_BACKEND: expected ftb or an absent value." >&2; exit 1 ;;
+esac
+./gradlew --no-daemon --console=plain "$PREPARE_TASK" ||
   { echo "SMOKE BOOT FAILED: could not prepare the production Forge server."; exit 1; }
 FORGE_VERSION="$(sed -n 's/^forge_version=//p' "$ROOT/gradle.properties" | tail -1 | tr -d '\r')"
 case "$FORGE_VERSION" in

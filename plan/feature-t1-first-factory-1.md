@@ -1,6 +1,6 @@
 ---
 goal: Begin T1 with canonical first-factory lines, live teaching and a reusable-system handbook
-version: 1
+version: 2
 date_created: 2026-10-21
 last_updated: 2026-10-21
 owner: Sol coordinator
@@ -12,7 +12,9 @@ tags: [feature, t1, progression, documentation, reuse, compatibility]
 
 ![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
 
-The owner explicitly requests T1 development while testing the T0 dev build.
+The owner explicitly requests T1 development while playing the T0 dev build
+as the intended longitudinal game (ADR-0170). Resume after the bounded readiness
+investigation; preserve its actual gaps rather than treating intent as a pass.
 Start from `a64d44f9ee6da1fe00ed9215eb05b4aad4132f64`, the preserved T0 experience
 branch, not older main. Keep installed runtime F298988d/JAR95bf47c4 unchanged.
 This first development increment integrates the already implemented first-factory
@@ -28,8 +30,9 @@ the entire tier finished or introduce a replacement processing engine.
 - **REQ-005**: Differentiate T1 teaching from the old generic preview using live Atlas recipes and the shared line contract, without duplicating bills or claiming successful operation from possession.
 - **REQ-006**: Document reusable authorities, invariants, safe extension seams, proof boundaries and concrete T1 uses with verified source references.
 - **REQ-007**: Trace recurring required inputs to the existing mod-owned T0 base or declare an explicit unresolved dependency; repeatable finite extraction is not renewable.
+- **REQ-008**: Follow ADR-0170: research/brainstorm/develop T1 during owner play, prioritize reported T0 blockers and integrate final T0 feedback/polish without discarding the reference world.
 - **SEC-001**: No credential/provider/account changes, private paths in Git, new generation charges or third-party implementation imports.
-- **CON-001**: Do not modify, redeploy or restart the owner's installed Prism T0 instance or touch player worlds/configuration.
+- **CON-001**: T1 work must not modify, redeploy or restart the owner's installed Prism T0 instance/worlds/configuration. A separately coordinated reported T0 fix uses the existing stopped-instance/backup/update contract, never an agent-initiated game interruption.
 - **CON-002**: T1 development authorization is not T0 acceptance, a graphical pass, a T1 release or permission to start T2 production.
 - **CON-003**: All versions stay in `gradle.properties`; common remains loader-neutral; existing processing, transaction, storage, grid and quest engines remain the authorities.
 - **CON-004**: Use isolated dependent branches and one integrated build/cache owner. Player gameplay has resource priority; no user process is stopped.
@@ -53,10 +56,10 @@ the entire tier finished or introduce a replacement processing engine.
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-003 | Core ownera94c3085 implements `progression/T1Progression`: `Requirement`, immutable `Line(id, requirement, routeIds, requires)`, `lines()` and `byId()`. Resolve mandatory/optional/exit routes against existing authorities, including real Flux Cell crafting; add source-derived export and `VerifyT1*` contracts. No recipe quantities are redeclared. Depends on TASK-001. | No | |
-| TASK-004 | Quest ownerac4962d5 maps actual T1 task IDs to the shared line contract, replaces generic previews for implemented first-factory tasks, preserves T0/claims/rewards and makes Factory World optional for `industrial_matrix`. Extend native/Heracles teaching and focused regression checks. Depends on TASK-001 and the stable API from TASK-003. | No | |
+| TASK-003 | Core ownera94c3085 implements `progression/T1Progression`: `Requirement`, immutable `Line(id, requirement, routeIds, requires)`, `lines()` and `byId()`. Resolve mandatory/optional/exit routes against existing authorities, including real Flux Cell crafting; add source-derived export and `VerifyT1*` contracts. No recipe quantities are redeclared. Depends on TASK-001. | Yes | 2026-10-21 |
+| TASK-004 | Quest ownerac4962d5 maps actual T1 task IDs to the shared line contract, replaces generic previews for implemented first-factory tasks, preserves T0/claims/rewards and makes Factory World optional for `industrial_matrix`. Extend native/Heracles teaching and focused regression checks. Depends on TASK-001 and the stable API from TASK-003. | Yes | 2026-10-21 |
 | TASK-005 | The coordinator writes `docs/architecture/reusable-systems.md` and `docs/tiers/t1-development-map.md`: verified authority/symbol, invariant, extension seam, actual proof/limits and T1 use. The attempted documentation worker0ad28462 has read-only rg/glob, no editor/Git, and produced no persisted output; withdraw that assignment without relaunching or inventing a SHA. Application code remains delegated. Depends on TASK-001. | Yes | 2026-10-21 |
-| TASK-006 | Integrate preserved quest/documentation checkpoints in the isolated first-factory branch; serialize localization, source guards and generated output changes. Record actual source versus unexecuted claims. Depends on TASK-003, TASK-004 and TASK-005. | No | |
+| TASK-006 | Integrate preserved quest/documentation checkpoints in the isolated first-factory branch; serialize localization, source guards and generated output changes. Record actual source versus unexecuted claims. Depends on TASK-003, TASK-004 and TASK-005. | Yes | 2026-10-21 |
 
 ### Implementation Phase 3
 
@@ -64,9 +67,42 @@ the entire tier finished or introduce a replacement processing engine.
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-007 | Use the existing explicit SSH build-only workflow in an isolated execution root with fresh memory/cache ownership guards. Compile common/Forge/backend and run the new T1 graph/export plus affected recipe/quest/guidance/compatibility checks; generate through normal writers and retain red/green receipts. No Prism action. Depends on TASK-006. | No | |
-| TASK-008 | Review source-bound route coverage, recurring input provenance, T0 byte/behavior preservation and physical F2/optional-branch evidence. Reuse unchanged native proof; add a representative native check only if a changed runtime boundary warrants it and gameplay resources allow. Depends on TASK-007. | No | |
+| TASK-007 | Use the existing explicit SSH build-only workflow in an isolated execution root with fresh memory/cache ownership guards. Compile common/Forge/backend and run the new T1 graph/export plus affected recipe/quest/guidance/compatibility checks; generate through normal writers and retain red/green receipts. No Prism action. Depends on TASK-006. | Yes; bounded base523b, not later component source | 2026-10-21 |
+| TASK-008 | Review source-bound route coverage, recurring input provenance, T0 byte/behavior preservation and physical F2/optional-branch evidence. Reuse unchanged native proof; add a representative native check only if a changed runtime boundary warrants it and gameplay resources allow. Depends on TASK-007. | Yes; honest unresolved establishment preserved | 2026-10-21 |
 | TASK-009 | Commit/publish the coherent code/docs/proof checkpoint and a separate in-development draft PR against its actual T0 parent when appropriate. Report first-factory progress, reusable systems, unresolved gaps and next T1 increment; leave T0 installed untouched and do not merge either release branch. Depends on TASK-008. | No | |
+
+Source integration is published as `c7278940d4b42999f1f128e560095fe3fb1329dc`.
+The later sourceef9d670 and evidence checkpoint523b3ab preserve bounded
+common/Forge/backend/affected checks and ignored-output writer/twin results.
+Normal canonical T1/Guidance/Economy outputs, protected-fact comparison488 and
+canonical rechecks502/417/2834 completed for that base. Parent independently
+verifies13receipts/29native outcomes/58raw hashes/five outputs without replay.
+The T1 PC lease returned when the actual ADR-0171 book blocker preempted execution.
+No new Prism/package/server/native permission follows. Independent static QA found
+one verifier defect: physical-component comparisons include the ENERGY input.
+The correction74ccb36 is closed by narrow static recheck, with separate authoritative
+FU assertions and all route/report energy retained. The early private observer,
+javac/oracle/canonical/twin reds and interrupted run remain historical; their
+successful repairs do not erase them. This base proof is not qualification of
+the later two component routes, native FTB replacement, human play or full T1.
+
+### Implementation Phase 4
+
+- **GOAL-004**: Extend the first-factory increment into a source-checked T1 development map while preserving the feedback loop.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-010 | Read-only inventory of immutable sourceef9d670: `T1Recipes`, `ProcessGraph`, `FabricationLogic`, `ProcessMachineKind`, live crafting JSON and `T1Progression`/`T1Sustainability`. Update `docs/tiers/t1-development-map.md` with implemented/optional/proposed machine/route/component boundaries, automation gaps and authority references, not copied bills. Depends on TASK-006. | Yes | 2026-10-21 |
+| TASK-011 | Verify mature external first-factory/component and persistent-vein patterns from immutable source/licence references; record conceptual fit and rejected approaches in `docs/design/t1-external-references.md`. No code/assets/dependency imports. This task is independent of the mutable writer/check execution. | Yes | 2026-10-21 |
+| TASK-012 | Integrate TASK-010/TASK-011 findings into the same tier map: rank at most three next coherent implementation slices, name exact authority files, reusable engine/proof and real unresolved decisions. Preserve runtime/recipe/model/renewable-establishment distinctions. Depends on TASK-010 and TASK-011. | Yes | 2026-10-21 |
+
+ADR-0172 selects the first follow-up. Source-only checkpoint2f4eee1 adds the two
+ordinary Assembler component routes on qualified base523b3ab, with exact material
+equivalence and shared timing/FU contracts. It is published to its isolated branch
+but has no new Java/writer/runtime pass; its next execution window follows the
+urgent native-FTB T0 blocker. Parent verifies the retained first-factory base's
+13closed receipts/29native outcomes/58raw hashes/five normal output identities
+without replaying those JVM stages. Preserve the real reds/interruption.
 
 ## 3. Alternatives
 
@@ -90,6 +126,7 @@ the entire tier finished or introduce a replacement processing engine.
 - **FILE-003**: New paired T1 exporter entrypoints under `tools/t1/`, the source-bound T1 line graph and `docs/tiers/t1.md`.
 - **FILE-004**: `docs/architecture/reusable-systems.md`, `docs/tiers/t1-development-map.md` and `docs/tiers/t1-quests.md`.
 - **FILE-005**: AGENTS/README/changelog/build-out/ADRs/route-map and active handoffs, serialized by the coordinator.
+- **FILE-006**: `docs/design/t1-external-references.md` stores source/licence-pinned conceptual precedent, not accepted recipe quantities or imported implementation.
 
 ## 6. Testing
 
@@ -108,6 +145,7 @@ the entire tier finished or introduce a replacement processing engine.
 - **RISK-004**: The T0 parent remains under review; preserve isolated ancestry and source identity rather than silently basing on old main or overwriting the parent.
 - **ASSUMPTION-001**: The latest instruction authorizes T1 development now, not a completed T0 campaign, accepted graphical gate or public release.
 - **ASSUMPTION-002**: Existing recipe quantities and the installed T0 candidate remain stable unless a concrete tightly coupled defect requires a documented decision.
+- **ASSUMPTION-003**: The owner-authorized longitudinal start is an intent/permission record until actual observations arrive; no client, save-copy or completed-campaign result is invented.
 
 ## 8. Related Specifications / Further Reading
 

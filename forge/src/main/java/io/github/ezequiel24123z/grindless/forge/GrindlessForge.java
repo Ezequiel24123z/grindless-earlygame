@@ -4,7 +4,7 @@ import dev.architectury.platform.forge.EventBuses;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.material.RegistryTagView;
-import io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestIntegration;
+import io.github.ezequiel24123z.grindless.forge.quest.FtbQuestIntegration;
 import io.github.ezequiel24123z.grindless.forge.overlay.MachineInspectionOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -28,8 +28,8 @@ public final class GrindlessForge {
         EventBuses.registerModEventBus(Grindless.MOD_ID, bus);
         Grindless.init();
         MachineInspectionOverlay.init(bus);
-        if (ModList.get().isLoaded("heracles")) {
-            HeraclesQuestIntegration.init(bus);
+        if (ModList.get().isLoaded("ftbquests")) {
+            FtbQuestIntegration.init(bus);
         }
         MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) ->
                 MaterialRegistry.rebuild(RegistryTagView.ofItems()));

@@ -2,7 +2,8 @@
 
 Status: **active development, not a release or completed T1 acceptance**.
 The owner explicitly opens this work while testing the unchanged T0 dev build
-(ADR-0168/0169). [The implementation plan](../../plan/feature-t1-first-factory-1.md)
+(ADR-0168/0169/0170). The reported T0 book blocker now has PC/deployment priority
+under ADR-0171, while independent T1 source work continues. [The implementation plan](../../plan/feature-t1-first-factory-1.md)
 is the execution graph; [the reusable-systems handbook](../architecture/reusable-systems.md)
 is the extension guide.
 
@@ -47,6 +48,60 @@ Atlas recipe IDs are selected explicitly. `fuel/thermal_generator/biomass` is a
 fuel route, not an Atlas entry; explain it rather than silently deleting a missing
 recipe. The existing Flux Cell craft must appear through a projection that matches
 its unchanged runtime JSON, not an invented battery-charge recipe.
+
+## Source-checked expansion inventory
+
+The independent inventory is pinned to applicationef9d670. It is not a played
+factory, a new acceptance of later prototypes or the same as a successful native
+test. Paths below are relative to the common Grindless Java package unless named.
+
+| Area | Actual existing mechanism | Boundary / next work |
+| --- | --- | --- |
+| F1 power/distribution | `recipe/ThermalLogic`, `network/PylonTier` and pooled Flux network | One Thermal's nominal generation does not prove simultaneous full-speed operation of every processor |
+| Milling/reduction/glass | `recipe/ProcessGraph` B1/R1 and `RenewableProcesses` sand/glass | Inherited carbon/water/aggregate supply still has real upstream/site/daylight assumptions |
+| Forms/coils | Press recipes and four retained dies | Already implemented; no Wire Mill, new wear engine or die duplication requirement is needed for the copper coil |
+| Core/calibration/F1 reproduction | `BootstrapAssembly`, `ResearchTerminalBlockEntity`, `assemble/relay_matrix` | Data Core is not an inevitable manual-only intermediate; default-F1 audit identity remains an explicit model limit |
+| Casing and Flux Cell | Manual `T1Recipes` plus unchanged runtime JSON at the inventory source | Two actual recurring F2 automation gaps, not a block on obtaining the first manually assisted F2 |
+| Belts/junctions/storage | Existing belt/arm, passive links, buffer and transformer | Some construction remains manual; a Sorter's hopper dependency is outside the four primitive automatic basics |
+| Kiln/R2 | Existing roast/oxide/Arc alternatives | Optional; do not copy an unimplemented design-table yield multiplier into a claim of runtime behavior |
+| Extraction/Factory World | Surveyed virtual deposits and existing portal/return data | Optional supply/space; do not make finite mining or the portal a hidden F2 requirement |
+| Motor/Wire Mill/chemistry | Registered later content/prototypes | Motor and Wire Mill are T2; F1 FU demand or membership in `T1Recipes` is not a tier classification |
+| Sifter/wire design prose | Older T1 design inventory | Sifter is not an executable family in the reviewed graph; wire's real machine is later. These are design gaps, not accepted missing prerequisites |
+
+### Independent component increment
+
+ADR-0172 selects ordinary `assemble/machine_casing` and `assemble/flux_cell`
+routes. Source checkpoint `2f4eee1751582819065f6a7f326757bf1f68825b` is authored
+on the qualified first-factory base523b3ab, with checks written but **not executed**.
+It is not published/deployed or a replacement for the owner-facing T0 repair.
+
+Both routes preserve the live manual material/output batches and use existing
+`FabricationLogic.ASSEMBLE_TICKS` / `FU_PER_TICK`. No new station, slots, save
+format, charged Cell, catalyst or T2 ingredient is added. Manual casing remains
+the finite seed for the first Assembler; automatic casings are selected only after
+assembly exists. The F2 recurrent component evidence names the automatic route
+without asserting complete renewable/power/routing establishment.
+
+The authored fixture expectations become201 processes/76 Assembler/258 full
+Atlas entries; these are expected data shapes, **not executed pass counts**.
+Next qualification uses affected recipe/Atlas/T1 teaching/progression checks and
+normal canonical writers/CheckOnly. Unchanged executor/NBT/native contracts are
+reused; no native run per new item recipe.
+
+### Next bounded choices
+
+1. Qualify the two component routes and their canonical projections after the
+   urgent T0 execution window. Do not hand-author inherited generated reports.
+2. Consider selected automatic machine/die replacement through the same Assembler,
+   with an explicit output whitelist and real construction/energy checks.
+   Thermal has five distinct inputs, so a blanket shaped-craft projection cannot
+   fit four slots; retain its manual route until that separate decision is made.
+3. Reconcile the untagged-F1 model identity and finite custody using existing
+   audit/adapters before any global establishment claim. Sifter/wire expansion
+   requires an actual content decision, not reinterpretation of a fixture.
+
+The [external reference record](../design/t1-external-references.md) supplies
+proven patterns and their limits, not another catalogue or automatic gameplay approval.
 
 ## Progression and construction boundaries
 

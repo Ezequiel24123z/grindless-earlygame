@@ -23,6 +23,11 @@ configurations {
         canBeConsumed = false
         transitive = false
     }
+    ftbPublisherArtifacts {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
     common {
         canBeResolved = true
         canBeConsumed = false
@@ -53,10 +58,24 @@ dependencies {
     modCompileOnly("curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}") { transitive = false }
     modRuntimeOnly("curse.maven:heracles-845831:${rootProject.heracles_curse_file}") { transitive = false }
     modRuntimeOnly("curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}") { transitive = false }
+    modCompileOnly("curse.maven:ftb-quests-289412:${rootProject.ftbquests_curse_file}") { transitive = false }
+    modCompileOnly("curse.maven:ftb-library-404465:${rootProject.ftblibrary_curse_file}") { transitive = false }
+    modCompileOnly("curse.maven:ftb-teams-404468:${rootProject.ftbteams_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:ftb-quests-289412:${rootProject.ftbquests_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:ftb-library-404465:${rootProject.ftblibrary_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:ftb-teams-404468:${rootProject.ftbteams_curse_file}") { transitive = false }
+    modRuntimeOnly("curse.maven:ftb-xmod-compat-889915:${rootProject.ftbxmodcompat_curse_file}") { transitive = false }
     smokeInstaller "net.minecraftforge:forge:${rootProject.forge_version}:installer"
     smokeMods "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
-    questSmokeMods "curse.maven:heracles-845831:${rootProject.heracles_curse_file}"
-    questSmokeMods "curse.maven:resourceful-lib-570073:${rootProject.resourcefullib_curse_file}"
+    questSmokeMods "curse.maven:ftb-quests-289412:${rootProject.ftbquests_curse_file}"
+    questSmokeMods "curse.maven:ftb-library-404465:${rootProject.ftblibrary_curse_file}"
+    questSmokeMods "curse.maven:ftb-teams-404468:${rootProject.ftbteams_curse_file}"
+    questSmokeMods "curse.maven:ftb-xmod-compat-889915:${rootProject.ftbxmodcompat_curse_file}"
+    questSmokeMods "mezz.jei:jei-1.20.1-forge:${rootProject.jei_version}"
+    ftbPublisherArtifacts "curse.maven:ftb-quests-289412:${rootProject.ftbquests_curse_file}"
+    ftbPublisherArtifacts "curse.maven:ftb-library-404465:${rootProject.ftblibrary_curse_file}"
+    ftbPublisherArtifacts "curse.maven:ftb-teams-404468:${rootProject.ftbteams_curse_file}"
+    ftbPublisherArtifacts "curse.maven:ftb-xmod-compat-889915:${rootProject.ftbxmodcompat_curse_file}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive = false }
     shadowBundle project(path: ":common", configuration: "transformProductionForge")
@@ -67,13 +86,15 @@ processResources {
     inputs.property "minecraft_version", rootProject.minecraft_version
     inputs.property "neoforge_loader_range", rootProject.neoforge_loader_range
     inputs.property "heracles_version", rootProject.heracles_version
+    inputs.property "ftbquests_version", rootProject.ftbquests_version
 
     filesMatching("META-INF/mods.toml") {
         expand([
                 "version"              : project.version,
                 "minecraft_version"    : rootProject.minecraft_version,
                 "neoforge_loader_range": rootProject.neoforge_loader_range,
-                "heracles_version"     : rootProject.heracles_version
+                "heracles_version"     : rootProject.heracles_version,
+                "ftbquests_version"    : rootProject.ftbquests_version
         ])
     }
 }
@@ -153,8 +174,10 @@ tasks.register("installSmokeServer", JavaExec) {
 }
 
 // Test the distributable jars without the development transformer's persistent worker pools.
-tasks.register("prepareSmokeServer", Copy) {
+// One Sync owns the complete mods inventory, including transitions back from the native backend.
+def prepareSmokeServer = tasks.register("prepareSmokeServer", Sync) {
     dependsOn tasks.named("installSmokeServer"), tasks.named("remapJar")
+    mustRunAfter "verifyFtbPublisherArtifacts"
     from(tasks.named("remapJar").flatMap { it.archiveFile }) {
         rename { "grindless.jar" }
     }
@@ -164,10 +187,20 @@ tasks.register("prepareSmokeServer", Copy) {
     into smokeServer.dir("mods")
 }
 
-tasks.register("prepareQuestSmokeServer", Copy) {
-    dependsOn tasks.named("prepareSmokeServer")
-    from(configurations.questSmokeMods)
-    into smokeServer.dir("mods")
+tasks.register("prepareQuestSmokeServer") {
+    dependsOn prepareSmokeServer, tasks.named("verifyFtbPublisherArtifacts")
+}
+
+// The existing harness selects the alias for SMOKE_QUEST_BACKEND=ftb. Wait for the
+// complete graph (including indirect alias requests) before choosing these external jars.
+gradle.taskGraph.whenReady { graph ->
+    def nativeQuests = graph.hasTask("${project.path}:prepareQuestSmokeServer")
+    prepareSmokeServer.configure {
+        inputs.property("questBackend", nativeQuests ? "ftb" : "none")
+        if (nativeQuests) {
+            from(configurations.questSmokeMods)
+        }
+    }
 }
 
 sourceSets {
@@ -199,4 +232,45 @@ tasks.register("verifyQuestBackend", JavaExec) {
     workingDir rootProject.projectDir
     maxHeapSize = "512m"
     jvmArgs "-XX:ActiveProcessorCount=2"
+}
+
+tasks.register("verifyFtbQuestBackend", JavaExec) {
+    group = "verification"
+    description = "Checks the pinned native FTB loader, stable graph and receipt-only migration."
+    dependsOn tasks.named("questBackendChecksClasses"), tasks.named("extractQuestCheckLibraries"),
+            tasks.named("verifyFtbPublisherArtifacts")
+    classpath = files(project(":common").sourceSets.main.runtimeClasspath, sourceSets.questBackendChecks.runtimeClasspath)
+    mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.VerifyFtbQuests")
+    workingDir rootProject.projectDir
+    maxHeapSize = "512m"
+    jvmArgs "-XX:ActiveProcessorCount=2"
+}
+
+tasks.register("verifyFtbPublisherArtifacts") {
+    group = "verification"
+    description = "Matches the four resolved FTB publisher jars to the independently verified release bytes."
+    inputs.files(configurations.ftbPublisherArtifacts)
+    inputs.file(rootProject.file("pack/dependency-metadata.json"))
+    doLast {
+        def projects = ["ftb-quests-289412": 289412, "ftb-library-404465": 404465,
+                        "ftb-teams-404468": 404468, "ftb-xmod-compat-889915": 889915]
+        def records = new groovy.json.JsonSlurper()
+                .parse(rootProject.file("pack/dependency-metadata.json")).files
+        def artifacts = configurations.ftbPublisherArtifacts.resolvedConfiguration.resolvedArtifacts
+        if (artifacts.size() != projects.size()) {
+            throw new GradleException("Unexpected FTB publisher artifact closure")
+        }
+        artifacts.each { artifact ->
+            def module = artifact.moduleVersion.id
+            def record = records.find { it.projectID == projects[module.name] }
+            def digest = { algorithm -> java.security.MessageDigest.getInstance(algorithm)
+                    .digest(artifact.file.bytes).encodeHex().toString() }
+            if (module.group != "curse.maven" || record == null ||
+                    module.version != record.fileID.toString() || artifact.file.length() != record.bytes ||
+                    digest("SHA-1") != record.sha1 || digest("SHA-256") != record.sha256) {
+                throw new GradleException("Resolved FTB publisher bytes differ from verified metadata: ${module}")
+            }
+        }
+        logger.lifecycle("Verified all four FTB publisher artifacts against release SHA-1/SHA-256 and sizes")
+    }
 }

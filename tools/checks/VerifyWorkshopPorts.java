@@ -652,11 +652,21 @@ public final class VerifyWorkshopPorts {
         check("the live lesson explicitly rejects possession as formation/operation proof",
                 calls(Path.of(client + "QuestTeachingClient.java"), "Component.translatable").contains(
                         "content:\"gui.grindless.quest.inventory_not_operation\""));
-        check("the localized notes retain plain/controller compatibility and closed unsided access",
-                language.get("gui.grindless.quest.ports_notes").getAsString().contains(
-                        "original plain structure and direct controller interfaces remain valid")
-                        && language.get("gui.grindless.quest.ports_notes").getAsString().contains(
-                        "vertical and unsided port access is closed"));
+        String notes = language.get("gui.grindless.quest.ports_notes").getAsString();
+        check("localized notes retain optional rotated ports sharing controller stock without copying",
+                notes.contains("optional") && notes.contains("rotate") && notes.contains("controller")
+                        && notes.contains("without copying") && notes.contains("power still enters through the controller"));
+        check("localized notes still explicitly close vertical and unsided access",
+                notes.contains("vertical and unsided access is closed"));
+        for (String id : List.of("firing", "settling")) {
+            WorkshopStructure structure = QuestTeaching.structure(QuestCatalogue.byId(id));
+            WorkshopStructure.Inspection plain = structure.inspect(0, legacy(structure, 0)::get);
+            check("the native lesson retains a valid original structure without optional ports: " + id,
+                    structure != WorkshopStructure.NONE && plain.formed() && plain.ports().isEmpty());
+            List<WorkshopPortContract.Slot> slots = WorkshopPortContract.slots(structure);
+            check("the lesson's canonical capability contract closes unsided/vertical faces: " + id,
+                    !slots.isEmpty() && slots.stream().allMatch(slot -> !slot.permitsFace(0, -1)));
+        }
     }
 
     private static String roleKey(WorkshopPortRole role) {

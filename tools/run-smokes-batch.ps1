@@ -38,13 +38,17 @@ if ($selected.Count -eq 0) { throw 'No named smoke scenarios were found.' }
 # These scenarios require a fresh world. Creation-time packs must not leak across cases;
 # extractor-backpressure's post-stop VeinData oracle requires exactly two worked chunks/total two.
 # workshop-ports needs an empty probe/drop region, not earlier scheduled fixture effects.
+# native-quests additionally requires the isolated FTB dependency composition.
 $isolated = @('foreign-providers', 'states', 'recipe-cache-reload', 'extractor-backpressure',
-    'first-fluids', 'first-harness', 'workshop-ports')
+    'first-fluids', 'first-harness', 'workshop-ports', 'native-quests')
 $skipped = @($selected | Where-Object {
     $isolated -contains $_ -or (Test-Path -LiteralPath (Join-Path $smokeDir "$_-optional"))
 })
 $batch = @($selected | Where-Object { $skipped -notcontains $_ })
 if ($batch.Count -eq 0) {
+    if ($selected -contains 'native-quests') {
+        throw 'native-quests requires the isolated FTB backend; use tools\run-smokes.ps1 -Root <project-root> -Only native-quests.'
+    }
     throw 'The requested scenario(s) require a fresh datapack world; use tools\run-smokes.ps1.'
 }
 
@@ -76,8 +80,12 @@ $expectPath = Join-Path $runDir 'smoke-batch.expect'
 [System.IO.File]::WriteAllLines($expectPath, $expect, $utf8)
 
 Write-Output "Running $($batch.Count) shared-world smoke scenario(s) in one Forge boot."
-if ($skipped.Count -gt 0) {
-    Write-Output "Skipped fresh-world datapack scenario(s): $($skipped -join ', ')."
+$skippedWorld = @($skipped | Where-Object { $_ -ne 'native-quests' })
+if ($skippedWorld.Count -gt 0) {
+    Write-Output "Skipped fresh-world datapack scenario(s): $($skippedWorld -join ', ')."
+}
+if ($skipped -contains 'native-quests') {
+    Write-Output 'Skipped native-quests: requires the isolated FTB backend (tools/run-smokes).'
 }
 
 $env:SMOKE_COMMANDS = $commandPath
@@ -85,11 +93,14 @@ $env:SMOKE_EXPECT_FILE = $expectPath
 $env:SMOKE_LOG = Join-Path $runDir 'smoke-batch.log'
 $env:SMOKE_DATAPACK = $null
 $originalOptionalDatapack = $env:SMOKE_OPTIONAL_DATAPACK
+$originalQuestBackend = $env:SMOKE_QUEST_BACKEND
 try {
     $env:SMOKE_OPTIONAL_DATAPACK = $null
+    $env:SMOKE_QUEST_BACKEND = $null
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root 'tools\smoke-boot.ps1') -Root $Root
     $bootExitCode = $LASTEXITCODE
 } finally {
     $env:SMOKE_OPTIONAL_DATAPACK = $originalOptionalDatapack
+    $env:SMOKE_QUEST_BACKEND = $originalQuestBackend
 }
 exit $bootExitCode

@@ -181,6 +181,9 @@ history — the reasoning that was wrong is itself useful information.
 | [0167](#adr-0167--make-state-and-port-art-readable-without-color-or-normal-build-generation-services) | Make state and port art readable without color or normal-build generation services | Accepted |
 | [0168](#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game) | Develop T1 in parallel with owner T0 testing without changing the dev game | Accepted |
 | [0169](#adr-0169--make-the-first-t1-factory-a-live-source-contract-not-another-execution-engine) | Make the first T1 factory a live source contract, not another execution engine | Accepted |
+| [0170](#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers) | Develop the next tier alongside longitudinal play and prioritize player blockers | Accepted |
+| [0171](#adr-0171--replace-the-player-blocking-book-with-native-ftb-quests-and-concise-jei-first-content) | Replace the player-blocking book with native FTB Quests and concise JEI-first content | Accepted |
+| [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
 
 ---
 
@@ -7859,3 +7862,190 @@ mechanisms with actual authority/invariant/extension seams. The project's
 already-proven infrastructure is the solved-problem-first choice; there is no
 new need for a generic processor, transfer rollback engine, multiblock kernel,
 quest ledger, currency or content-copying dependency in this first increment.
+
+---
+
+## ADR-0170 — Develop the next tier alongside longitudinal play and prioritize player blockers
+
+**Status.** Accepted direct owner instruction, 2026-10-21.
+
+**Context.** The owner clarifies that the installed T0 game is intended to be
+longitudinal, not an indefinitely disposable test. After the source-bound
+[readiness investigation](testing/t0-longitudinal-readiness.md), the owner
+explicitly chooses to begin that game and asks the agent to continue T1 research,
+brainstorming and development while play proceeds.
+
+**Decision.** Adopt this continuing project loop:
+
+1. The owner plays the current T0 candidate as the intended reference game.
+   Record actual observations/feedback when supplied; the statement of intent
+   is not a completed launch, save/reopen, campaign or human-acceptance pass.
+2. Develop the next authorized tier, currently T1, on isolated dependent branches.
+   Cover actual routes, machines, components, processing lines, renewable inputs,
+   automation and reusable systems. Inspect mature implementations before new
+   infrastructure design. Research and brainstorm proposals are not automatically
+   accepted gameplay, quantities or additional tiers.
+3. A reported issue that interrupts play has priority over new T1 work. Reproduce
+   the actual defect, make a coherent fix and run its affected proof set. Preserve
+   the original save and previous artifact. Use the existing stopped-instance
+   deployment/update contract; no agent may stop or restart the player's game.
+4. When the owner reaches the end of T0, incorporate the reported conclusions to
+   fix and finish T0 polish. Do not equate development progress or an agent's
+   judgement with the owner's acceptance. Continue the same feedback/development
+   pattern for later tiers when their development is authorized.
+
+This instruction supersedes the temporary T1 investigation pause and earlier
+disposable-only start restriction for the owner's manual play. It does not
+relabel unobserved client/retained-world checks as passed, publish an RC, merge
+main, deploy T1, open T2 or guarantee an untested future migration.
+
+T0's installed F artifact and the owner's running instance/worlds remain stable
+during T1 work. Build-only execution has one explicit owner, fresh headroom and
+worktree/cache locks, and yields to gameplay. A legitimate client JVM is not a
+reason to terminate it or falsify a global-zero-Java requirement. Source, docs
+and useful research continue if heavy execution must wait.
+
+Before an update, compare changed IDs, persisted meanings, world derivation,
+recipes/configuration and dependencies; test applicable compatibility on a
+verified copy while preserving the reference original. The identified unused
+vein-version pin remains explicit work before a conflicting resource-generation
+update, not a claimed repair or reason to remap old surveys silently.
+
+**Alternatives rejected.** Waiting for the owner to finish T0 before useful T1
+work contradicts the instruction. Repeatedly demanding a disposable playthrough
+or invented prior human acceptance defeats longitudinal play. Updating the live
+instance continuously, skipping copy-based compatibility, inventing completed
+passes, or spending an unlimited generation allowance is not authorized.
+
+---
+
+## ADR-0171 — Replace the player-blocking book with native FTB Quests and concise JEI-first content
+
+**Status.** Accepted direct owner feedback; implementation/qualification pending,
+2026-10-21.
+
+**Context.** The owner cannot continue playing with the delivered questbook.
+They explicitly requested an established BetterQuesting or FTB Quests integration,
+not an original book or a large custom teaching widget. The owner also rejects
+the exhaustive, impersonal guide prose and asks for brief explanations when JEI
+already shows the recipe. This is a real play blocker under ADR-0170.
+
+**Framework decision.** Use the supported Forge1.20.1 FTB Quests native experience:
+chapter/quest graph, normal task/reward presentation, navigation, completion and
+claim interaction. Verify exact published artifacts, required dependency closure,
+licences and actual APIs before pinning them. Dependency use is not permission
+to copy third-party source, assets or another pack's quest writing.
+
+This supersedes the native-book/Heracles-only presentation and permanently empty
+native-reward choices in ADR-0088/0100/0142/0149/0162 for this replacement. Do not
+port the same custom guide, buttons, giant recipe panel or alternate navigation
+into an FTB container and call that framework adoption.
+
+Keep the registered Grindless Quest Book and legacy Guide identities safe for
+existing saves, but route normal use to the genuine framework. Standalone or
+missing-backend failures must be explicit; the official pack must not silently
+fall back to the rejected screen.
+
+**Content decision.** Ordinary quests have a useful title and one or two short,
+natural English sentences: the immediate goal and, where useful, why it matters.
+Use native task/reward item displays and JEI rather than duplicating ingredients,
+energy, timing or every operating rule in prose. Preserve indispensable unusual
+facts such as source-site placement, a non-obvious structure/side, renewable versus
+finite supply and physical Matrix rating. A little in-world personality is welcome;
+forced jokes, generic motivational prose and developer audit disclaimers are not.
+
+The initial copy lane preserves all46 logical task IDs, rewards, prerequisites,
+evidence and other locale values. It changes presentation, not recipes, starter
+quantities or resource balance. Native definitions still derive from canonical
+catalogue data instead of becoming a second handwritten recipe/quest authority.
+
+**Progress and reward ownership.** The old Overworld per-player claim set is paid
+history, not a list of newly claimable rewards. Import native individual reward
+receipts before admitting native claims; opening the new book must not pay the
+starter or any old reward again. Preserve partial/historical claim sets, including
+claims whose current prerequisites are absent. Reconstruction grants no items.
+
+Use one live grant authority. Once native ownership is established, delayed legacy
+packets cannot continue minting through the old engine. Keep legacy paid-history
+separate from derived native completion: completing an objective is not proof that
+its reward has already been collected. Login/retry must not overwrite newer native
+progress with a frozen legacy snapshot or reset another pack's quests.
+
+Prefer supported native progress/reward APIs and ordinary tasks. A narrow native
+task or compatibility adapter is justified for exact Matrix NBT or once-only import,
+not another quest engine or UI. Do not preserve incidental requirements such as
+holding the custom book at reward time merely because the old handler did so.
+
+Native individual reward claims may replace the former single batch button.
+Define and test exact delivered/claimed/pending outcomes, including full inventory
+and the two non-stackable buckets. Do not advertise atomic no-drop refusal if the
+chosen native operation actually uses overflow delivery. Team progress and
+individual paid receipts are different: preserve individual reward history, do
+not create parties automatically, and document/test actual native team behavior
+rather than silently asserting the old projection has identical semantics.
+
+**Migration and delivery.** Preserve the actual reference world and previous
+artifact. Do not adopt the separate old exploratory save or rewrite raw framework
+progress files to simulate a migration. Use an exact stopped-world backup/copy,
+supported loading/import APIs and idempotent retry/failure tests. New dependency
+pins/configuration must pass the existing package/ownership protections; if the
+pin change requires a new isolated instance, retain the original and migrate a
+verified copy rather than weakening the deployment guard.
+
+Backend/API/pack work, content editing and independent verification run in
+parallel on owned surfaces. Shared build/cache, source changes during execution
+and final deployment remain serialized. Qualify the actual native definitions,
+old-claim import, individual reward receipts, Matrix evidence, affected tooling
+and one representative changed loader/binding. No recipe-per-instance smoke or
+new custom validation framework is justified. Client presentation and the owner's
+ability to resume remain distinct from a headless/server pass.
+
+**Alternatives rejected.** Another original questbook, a re-skinned custom
+Heracles widget, unchanged guide prose inside FTB, a second reward-paying ledger,
+discarded progress, manual pin guesses, or an untested in-place dependency
+replacement do not address the feedback.
+
+---
+
+## ADR-0172 — Automate recurrent T1 casings and Flux Cells through the existing Assembler
+
+**Status.** Accepted coordinator implementation decision within the owner's
+authorized T1 scope; source2f4eee1 authored, execution qualification pending,
+2026-10-21.
+
+**Evidence.** The sourceef9d670 route inventory identifies two actual recurrent
+F2 component gaps: Machine Casing and Flux Cell have manual crafts but no
+automatic process producer. This does not prevent the first manually assisted
+F2. Their materials already have declared inherited supply boundaries, and both
+batches fit the existing four-input Assembler.
+
+**Decision.** Add ordinary `assemble/machine_casing` and `assemble/flux_cell`
+data routes using the existing Assembler executor, conditions, output reservation
+and save format. Match the actual manual catalogue/JSON material batches and
+outputs; preserve both manual crafts for first construction and compatibility.
+Do not add charged-Cell requirements, new catalysts, motors, Wire Mill, machines,
+ports, slots, inventory formats or a crafting engine.
+
+Use the existing `FabricationLogic.ASSEMBLE_TICKS` and `FU_PER_TICK` conventions
+for both processes rather than another timing/configuration authority. At the
+reviewed source these are400ticks and F1 nominal32FU/t. The old eight-second
+casing design prose did not describe an implemented automatic route; reconcile
+it with this explicit ordinary-Assembler decision rather than silently borrowing
+an unproved prototype value.
+
+Keep manual casing construction before the first Assembler and place automatic
+reproduction after assembly exists. Do not create a forming/assembly bootstrap
+cycle or change physical F1/F2 quest evidence. Select/explain the new recurrent
+routes through the existing T1 contract/report; implemented repeatability is not
+by itself a global renewable-establishment, power/autonomy or minimum-stock proof.
+
+Validate the two exact batches against live catalogues/JSON, unique IDs, family,
+arity, existing timing/FU constants and Atlas projection. Keep manual F1 five-unit
+bootstrap and the existing F2 recipe/rating unchanged. Reuse unchanged executor/
+NBT/native binding proof; ordinary item recipes need no native run per recipe.
+Canonical generation and affected checks still precede a qualified delivery.
+
+This independent source lane does not compete with the urgent ADR-0171 PC/cache
+owner and must not deploy T1 into the owner's T0 game. Thermal's five distinct
+construction ingredients exceed the current four-input Assembler and are not
+an excuse to expand the engine or auto-project every `T1Recipes` entry here.

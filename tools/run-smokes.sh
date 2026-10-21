@@ -207,6 +207,8 @@ for name in "${SELECTED[@]}"; do
   export SMOKE_LOG="$ROOT/forge/run/smoke-$name.log"
 
   if (
+    unset SMOKE_QUEST_BACKEND
+    [ "$name" = native-quests ] && export SMOKE_QUEST_BACKEND=ftb
     unset SMOKE_OPTIONAL_DATAPACK
     if [ -e "$SMOKE_DIR/$name-optional" ]; then
       export SMOKE_OPTIONAL_DATAPACK="$SMOKE_DIR/$name-optional"

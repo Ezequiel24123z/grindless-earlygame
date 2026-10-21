@@ -39,9 +39,9 @@ public final class VerifyT1Teaching {
             "kiln", "factory_world", "flux_cell", "industrial_matrix");
     private static final Set<String> NEW_LESSONS = Set.of(
             "first_grid", "forming_dies", "copper_coil", "flux_cell");
-    // a64d44f: sorted key + NUL + decoded body + LF for the 33 retained T0 lesson keys.
+    // dd0b4bc: sorted key + NUL + decoded body + LF for the 33 native FTB T0 lesson keys.
     private static final String T0_BODY_DIGEST =
-            "932c4c00e03bca58174247f90f9b41c08eda1a4caf5d4cb719de8c14c3e67941";
+            "bf93a3d61465ed953cb33eea9de7b061e4f8f35dc36a68eb5393df3214424391";
     private static int assertions;
 
     public static void main(String[] args) throws Exception {
@@ -98,8 +98,16 @@ public final class VerifyT1Teaching {
             String body = QuestTeaching.bodyKey(task);
             equal("the actual canonical line selects the lesson body " + id,
                     "gui.grindless.quest.lesson.t1." + line.id() + "." + id, body);
-            check("T1 has a distinct concise lesson " + id, bodies.add(body) && lang.has(body)
-                    && !lang.get(body).getAsString().isBlank() && lang.get(body).getAsString().length() <= 1400);
+            check("T1 has a distinct lesson " + id, bodies.add(body) && lang.has(body));
+            String text = lang.get(body).getAsString();
+            check("native T1 copy stays within 42 words " + id,
+                    !text.isBlank() && text.strip().split("\\s+").length <= 42);
+            String lower = text.toLowerCase(Locale.ROOT);
+            check("native T1 copy never promises embedded recipe rows " + id,
+                    !lower.contains("atlas") && !lower.contains("live rows") && !lower.contains("rows below"));
+            if (!id.equals("first_grid")) {
+                check("ordinary T1 recipes belong to JEI " + id, text.contains("JEI"));
+            }
             var path = switch (line.requirement()) {
                 case MANDATORY -> QuestTeaching.Path.T1_CORE;
                 case OPTIONAL -> QuestTeaching.Path.T1_OPTIONAL;
@@ -115,7 +123,7 @@ public final class VerifyT1Teaching {
                 lang.get("gui.grindless.quest.chapter.t1_development").getAsString().contains("In development"));
         check("the shared disclaimer explicitly identifies the development state",
                 lang.get("gui.grindless.quest.t1_development").getAsString().contains("T1 IN DEVELOPMENT"));
-        check("Heracles uses an explicit development subtitle",
+        check("the retained development subtitle remains explicit",
                 lang.get("gui.grindless.quest.t1_line").getAsString().contains("T1 IN DEVELOPMENT"));
         equal("the Thermal Generator nominal rate is a live substitution", 1,
                 substitutions(lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("thermal"))).getAsString()));
@@ -126,6 +134,9 @@ public final class VerifyT1Teaching {
         check("the Flux Cell lesson does not invent a charging gate",
                 lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("flux_cell"))).getAsString()
                         .contains("does not require stored charge"));
+        String cell = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("flux_cell"))).getAsString();
+        check("the Flux Cell lesson teaches automatic production without removing manual bootstrap",
+                cell.contains("automatically in the Assembler") && cell.contains("manual bootstrap"));
     }
 
     private static void selectors(List<AtlasLogic.Entry> entries) {
@@ -220,7 +231,7 @@ public final class VerifyT1Teaching {
         for (String key : keys) {
             snapshot.append(key).append('\0').append(lang.get(key).getAsString()).append('\n');
         }
-        equal("T0 lesson values remain byte-exact against a64d44f after JSON decoding", T0_BODY_DIGEST,
+        equal("T0 lesson values remain byte-exact against dd0b4bc after JSON decoding", T0_BODY_DIGEST,
                 HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                         .digest(snapshot.toString().getBytes(StandardCharsets.UTF_8))));
     }
