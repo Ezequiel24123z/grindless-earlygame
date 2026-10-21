@@ -30,6 +30,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.world.entity.player.Player;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -719,6 +720,11 @@ public final class VerifyFtbQuests {
         @Override
         public void deleteObject(long id) {
             throw new UnsupportedOperationException("The loader fixture does not delete quest objects");
+        }
+
+        @Override
+        public boolean isPlayerOnTeam(Player player, TeamData data) {
+            throw new UnsupportedOperationException("The data-only loader fixture does not admit players");
         }
     }
 }

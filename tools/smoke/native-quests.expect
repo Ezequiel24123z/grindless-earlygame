@@ -1,1 +1,2 @@
 GRINDLESS_FTB_NATIVE_PASS quests=46 rewards=36 legacy=46 assertions=[1-9][0-9]*
+GRINDLESS_FTB_NATIVE_SEED_PASS legacy=2 receipts=14 advance=3 awaiting_stop=1 assertions=[1-9][0-9]*

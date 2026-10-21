@@ -29,8 +29,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -42,12 +46,20 @@ import java.util.stream.Collectors;
 
 /**
  * Opt-in, console-only native-quests smoke for a disposable Forge diagnostic world.
- * All progress is unattached in-memory TeamData/QuestProgress; no real player, saved team,
- * inventory, block, world file or framework registration is created or changed.
+ * The default command uses unattached in-memory progress. Explicit seed/reopen commands
+ * additionally exercise native disk persistence for one reserved diagnostic UUID and one
+ * separate SavedData key. No real player, inventory, block or FTB Teams registration is used.
  */
 public final class FtbQuestChecks {
 
     private static final Date HISTORY = new Date(1_700_000_000_000L);
+    private static final UUID DISK_TEAM = UUID.fromString("00000000-0000-0000-0000-465442510001");
+    private static final UUID DISK_FIRST = UUID.fromString("00000000-0000-0000-0000-465442510002");
+    private static final UUID DISK_SECOND = UUID.fromString("00000000-0000-0000-0000-465442510003");
+    private static final String DISK_NAME = "Grindless native quest disk probe";
+    private static final String DISK_LEGACY_KEY = "grindless_native_quest_probe";
+    private static final Set<String> DISK_PAID = Set.of("starter_supplies", "multitool");
+    private static boolean diskSeededHere;
     private final ServerQuestFile file;
     private final List<UUID> transientTeams = new ArrayList<>();
     private int assertions;
@@ -60,15 +72,22 @@ public final class FtbQuestChecks {
     public static void registerCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("grindless_native_quest_checks")
                 .requires(source -> source.getEntity() == null && source.hasPermission(4))
-                .executes(context -> run(context.getSource())));
+                .executes(context -> run(context.getSource()))
+                .then(Commands.literal("seed").executes(context -> disk(context.getSource(), false)))
+                .then(Commands.literal("reopen").executes(context -> disk(context.getSource(), true))));
     }
 
-    private static int run(CommandSourceStack source) {
+    private static ServerQuestFile liveFile(CommandSourceStack source) {
         require(source.getEntity() == null && source.hasPermission(4), "Console permission 4 required");
         require(source.getServer().isSameThread(), "Native checks must execute on the server thread");
         require(source.getServer().getPlayerList().getPlayers().isEmpty(), "Use a disposable diagnostic server with no connected players");
         ServerQuestFile file = ServerQuestFile.INSTANCE;
         require(file != null && file.server == source.getServer(), "Actual native ServerQuestFile is not ready");
+        return file;
+    }
+
+    private static int run(CommandSourceStack source) {
+        ServerQuestFile file = liveFile(source);
         FtbQuestChecks checks = new FtbQuestChecks(file);
         try {
             int savedTeams = file.getAllTeamData().size();
@@ -86,6 +105,126 @@ public final class FtbQuestChecks {
             Grindless.LOG.error("GRINDLESS_FTB_NATIVE_FAIL assertions={}", checks.assertions, failure);
             throw failure;
         }
+    }
+
+    private static int disk(CommandSourceStack source, boolean reopen) {
+        FtbQuestChecks checks = new FtbQuestChecks(liveFile(source));
+        try {
+            checks.assertions++;
+            FtbQuestNative.verify(checks.file);
+            if (reopen) {
+                checks.reopenDisk();
+                Grindless.LOG.info("GRINDLESS_FTB_NATIVE_REOPEN_PASS legacy=2 receipts=14 advance=3 assertions={}", checks.assertions);
+            } else {
+                checks.seedDisk();
+                Grindless.LOG.info("GRINDLESS_FTB_NATIVE_SEED_PASS legacy=2 receipts=14 advance=3 awaiting_stop=1 assertions={}", checks.assertions);
+            }
+            return 1;
+        } catch (RuntimeException failure) {
+            Grindless.LOG.error("GRINDLESS_FTB_NATIVE_DISK_FAIL phase={} assertions={}",
+                    reopen ? "reopen" : "seed", checks.assertions, failure);
+            throw failure;
+        }
+    }
+
+    private void seedDisk() {
+        check("seed runs only once per process", !diskSeededHere);
+        check("seed refuses any already-loaded diagnostic progress", file.getNullableTeamData(DISK_TEAM) == null);
+        check("seed refuses an existing native disk file", !Files.exists(nativeDiskFile(), LinkOption.NOFOLLOW_LINKS));
+        Path legacyFile = file.server.getWorldPath(LevelResource.ROOT).resolve("data").resolve(DISK_LEGACY_KEY + ".dat");
+        check("seed refuses an existing diagnostic legacy file", !Files.exists(legacyFile, LinkOption.NOFOLLOW_LINKS));
+        check("diagnostic UUID is not a real FTB team", FTBTeamsAPI.api().getManager().getTeamByID(DISK_TEAM).isEmpty());
+        var storage = file.server.overworld().getDataStorage();
+        check("seed refuses cached diagnostic legacy data", storage.get(QuestProgress::load, DISK_LEGACY_KEY) == null);
+        diskSeededHere = true; // Never reset: reopening the same JVM is not second-process proof.
+
+        QuestProgress legacy = new QuestProgress();
+        for (String id : DISK_PAID) {
+            check("seed original paid history " + id, legacy.claim(DISK_FIRST, id));
+        }
+        TeamData data = new TeamData(DISK_TEAM, file);
+        data.setName(DISK_NAME);
+        check("diagnostic progress has no online members", data.getOnlineMembers().isEmpty());
+        // Public native API, also used by ServerQuestFile.load(); no synthetic FTB Teams object.
+        file.addData(data, false);
+        check("native save lifecycle owns only the diagnostic fixture", file.getNullableTeamData(DISK_TEAM) == data);
+        FtbQuestNative.migrate(legacy, DISK_FIRST, data);
+        FtbQuestNative.migrate(legacy, DISK_SECOND, data);
+
+        // Actual server-side native completion: one unpaid reward and one individually paid reward.
+        data.setProgress(task("crank"), task("crank").getMaxProgress());
+        data.setProgress(task("quern"), task("quern").getMaxProgress());
+        check("record an individual native reward receipt", data.markRewardAsClaimed(DISK_FIRST, reward("quern", 0), HISTORY.getTime()));
+        check("record only one second-player starter receipt", data.markRewardAsClaimed(DISK_SECOND, reward("starter_supplies", 0), HISTORY.getTime()));
+        data.saveIfChanged();
+        check("native saveIfChanged wrote the real diagnostic file", Files.isRegularFile(nativeDiskFile(), LinkOption.NOFOLLOW_LINKS));
+
+        // Deliberately advance AFTER the explicit native save. Native saveNow() on natural
+        // server stop must save this dirty, attached TeamData, not merely the initial receipt file.
+        data.setProgress(task("conveyors"), 3L);
+        FtbQuestNative.migrate(legacy, DISK_FIRST, data);
+        FtbQuestNative.migrate(legacy, DISK_SECOND, data);
+        storage.set(DISK_LEGACY_KEY, legacy); // Original QuestProgress/SavedData serializer, normal world save.
+        diskState(data);
+        equal("seed retains only the original first-player paid history", DISK_PAID, legacy.legacyClaims(DISK_FIRST));
+        equal("seed invents no second-player paid history", Set.of(), legacy.legacyClaims(DISK_SECOND));
+        // Do not save again here, stop the server, delete files or clean up failed evidence.
+    }
+
+    private void reopenDisk() {
+        check("reopen requires another JVM process", !diskSeededHere);
+        check("reopen requires the original native disk file", Files.isRegularFile(nativeDiskFile(), LinkOption.NOFOLLOW_LINKS));
+        // ServerQuestFile.load() scans world/ftbquests/*.snbt, creates TeamData, calls
+        // addData(data, true) and deserializeNBT(). Never create/default/reload it in this command.
+        TeamData data = file.getNullableTeamData(DISK_TEAM);
+        check("actual server startup loaded the diagnostic TeamData", data != null);
+        check("disk progress belongs to the actual native server file", data.getFile() == file);
+        equal("native disk fixture identity", DISK_NAME, data.getName());
+        check("disk fixture is not a real FTB team", FTBTeamsAPI.api().getManager().getTeamByID(DISK_TEAM).isEmpty());
+        QuestProgress legacy = file.server.overworld().getDataStorage().get(QuestProgress::load, DISK_LEGACY_KEY);
+        check("natural world save retained the original legacy ledger", legacy != null);
+        equal("original paid receipts survive the process boundary", DISK_PAID, legacy.legacyClaims(DISK_FIRST));
+        equal("second player still has no historical paid receipts", Set.of(), legacy.legacyClaims(DISK_SECOND));
+        check("both persisted legacy authority fences survive", legacy.usesNativeClaims(DISK_FIRST) && legacy.usesNativeClaims(DISK_SECOND));
+        equal("native completion was not serialized as first-player paid history", DISK_PAID, legacy.claimed(DISK_FIRST));
+        equal("native completion was not serialized as second-player paid history", Set.of(), legacy.claimed(DISK_SECOND));
+        diskState(data); // Assert disk-loaded state BEFORE any import/refresh can repair it.
+        SNBTCompoundTag beforeImport = data.serializeNBT();
+        FtbQuestNative.migrate(legacy, DISK_FIRST, data);
+        FtbQuestNative.migrate(legacy, DISK_SECOND, data);
+        equal("reopen import cannot reset native progress, dates, pending rewards or individual receipts",
+                beforeImport, data.serializeNBT());
+        equal("reopen still has exactly the original paid history", DISK_PAID, legacy.legacyClaims(DISK_FIRST));
+        equal("reopen does not turn shared completion into second-player paid history", Set.of(), legacy.legacyClaims(DISK_SECOND));
+        equal("reopen rebuilds common completion from native progress",
+                Set.of("starter_supplies", "multitool", "crank", "quern"), legacy.claimed(DISK_FIRST));
+        check("persisted fence still refuses the retired reward mint", !legacy.claim(DISK_FIRST, "thermal"));
+    }
+
+    private void diskState(TeamData data) {
+        for (String id : Set.of("starter_supplies", "multitool", "crank", "quern")) {
+            check("disk fixture native quest remains complete " + id, data.isCompleted(quest(id)));
+            check("disk fixture native task remains complete " + id, data.isCompleted(task(id)));
+        }
+        for (int index = 0; index < 11; index++) {
+            Reward reward = reward("starter_supplies", index);
+            check("old first-player starter receipt survives " + index, data.isRewardClaimed(DISK_FIRST, reward));
+            equal("second-player individual starter receipt " + index, index == 0, data.isRewardClaimed(DISK_SECOND, reward));
+        }
+        equal("old multitool payment stays claimed", RewardClaimType.CLAIMED, data.getClaimType(DISK_FIRST, reward("multitool", 0)));
+        equal("same-team player does not inherit old multitool payment", RewardClaimType.CAN_CLAIM, data.getClaimType(DISK_SECOND, reward("multitool", 0)));
+        equal("native completion with no receipt stays pending", RewardClaimType.CAN_CLAIM, data.getClaimType(DISK_FIRST, reward("crank", 0)));
+        equal("native paid reward stays claimed", RewardClaimType.CLAIMED, data.getClaimType(DISK_FIRST, reward("quern", 0)));
+        equal("another player does not inherit the native paid reward", RewardClaimType.CAN_CLAIM, data.getClaimType(DISK_SECOND, reward("quern", 0)));
+        equal("native individual reward date survives", HISTORY, data.getRewardClaimTime(DISK_FIRST, reward("quern", 0)).orElseThrow());
+        equal("second-player individual reward date survives", HISTORY, data.getRewardClaimTime(DISK_SECOND, reward("starter_supplies", 0)).orElseThrow());
+        equal("post-save native forward progress survives", 3L, data.getProgress(task("conveyors")));
+        check("partial native forward progress is not completed", !data.isCompleted(task("conveyors")) && !data.isCompleted(quest("conveyors")));
+        equal("exact persisted individual receipt count", 14, data.serializeNBT().getCompound("claimed_rewards").size());
+    }
+
+    private Path nativeDiskFile() {
+        return file.server.getWorldPath(ServerQuestFile.FTBQUESTS_DATA).resolve(DISK_TEAM + ".snbt");
     }
 
     private void graph() {
@@ -352,6 +491,11 @@ public final class FtbQuestChecks {
 
     private Task task(String id) {
         return Objects.requireNonNull(file.getTask(FtbQuestDefinitions.taskId(id)), "Missing native task " + id);
+    }
+
+    private Reward reward(String id, int index) {
+        return Objects.requireNonNull(file.getReward(FtbQuestDefinitions.rewardIds(QuestCatalogue.byId(id)).get(index)),
+                "Missing native reward " + id + "/" + index);
     }
 
     private void equal(String label, Object expected, Object actual) {
