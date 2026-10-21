@@ -121,13 +121,9 @@ public final class VerifyHeracles {
                                 net.minecraft.network.chat.Component.translatable(
                                         "gui.grindless.quest.line." + entry.task().line())),
                         decoded.display().subtitle());
-                equal("the native definition retains the same explicit development disclaimer " + entry.id(),
-                        List.of(net.minecraft.network.chat.Component.translatable("gui.grindless.quest.t1_development")),
-                        decoded.display().description());
-            } else {
-                equal("T0 retains its original unmodified native description " + entry.id(), List.of(),
-                        decoded.display().description());
             }
+            equal("native descriptions remain empty; the shared widget owns rich teaching " + entry.id(), List.of(),
+                    decoded.display().description());
         }
         equal("the actual F2 definition has no mandatory optional-portal edge",
                 Set.of("grindless_matrix_line", "grindless_glass", "grindless_relay"),
@@ -287,6 +283,7 @@ public final class VerifyHeracles {
             equal("the real loader leaves the FREE root unlocked", Set.of(),
                     QuestHandler.get(STARTER_ID).dependencies());
             catalogueUpgrade(root.resolve("catalogue-upgrade"), definitions, encoded);
+            previousCatalogueUpgrade(root.resolve("previous-46-upgrade"), definitions, encoded);
             try (var zip = FileSystems.newFileSystem(bundle, Map.of())) {
                 Files.writeString(zip.getPath("grindless_multitool.json"), encoded.get("grindless_multitool") + " ");
             }
@@ -422,6 +419,86 @@ public final class VerifyHeracles {
                 java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
     }
 
+    private static void previousCatalogueUpgrade(Path config, Map<String, Quest> definitions,
+                                                 Map<String, String> encoded) throws Exception {
+        Map<String, Quest> previous = new LinkedHashMap<>();
+        for (QuestProjection.Entry entry : QuestProjection.entries()) {
+            if (T1_LESSON_IDS.contains(entry.task().id())) {
+                continue;
+            }
+            Quest old = Quest.CODEC.parse(JsonOps.INSTANCE,
+                    com.google.gson.JsonParser.parseString(encoded.get(entry.id()))).getOrThrow(false,
+                    message -> { throw new AssertionError(message); });
+            old.display().setSubtitle(net.minecraft.network.chat.Component.translatable(
+                    "gui.grindless.quest.line." + entry.task().line()));
+            old.display().setDescription(List.of());
+            Set<String> dependencies = new LinkedHashSet<>(old.dependencies());
+            if (entry.task().id().equals("industrial_matrix")) {
+                dependencies.add("grindless_factory_world");
+            }
+            previous.put(entry.id(), new Quest(old.display(), old.settings(), dependencies, old.tasks(), old.rewards()));
+        }
+        equal("the prior-source fixture contains all 46 old native IDs", 46, previous.size());
+        HeraclesDefinitions.synchronize(config, HeraclesDefinitions.encode(previous));
+        loadNative(config);
+        equal("the actual loader accepts the prior-source 46-ID bundle", previous.keySet(),
+                QuestHandler.quests().keySet());
+        equal("the prior-source fixture retains the old optional-portal edge", true,
+                QuestHandler.get("grindless_industrial_matrix").dependencies().contains("grindless_factory_world"));
+
+        var legacy = new io.github.ezequiel24123z.grindless.quest.QuestProgress();
+        var player = java.util.UUID.randomUUID();
+        Map<String, QuestProgress> oldNative = new LinkedHashMap<>();
+        for (QuestProjection.Entry entry : QuestProjection.entries()) {
+            Quest old = previous.get(entry.id());
+            if (old == null) {
+                continue;
+            }
+            legacy.claim(player, entry.task().id());
+            QuestProgress progress = new QuestProgress();
+            var task = (GrindlessClaimTask) old.tasks().get(QuestProjection.CLAIM_TASK);
+            var taskProgress = progress.getTask(task);
+            taskProgress.setProgress(net.minecraft.nbt.ByteTag.valueOf(true));
+            taskProgress.setComplete(true);
+            progress.setComplete(true);
+            oldNative.put(entry.id(), new QuestProgress(old, progress.save()));
+        }
+        Set<String> originalClaims = legacy.claimed(player);
+        CompoundTag saved = legacy.save(new CompoundTag());
+        legacy = io.github.ezequiel24123z.grindless.quest.QuestProgress.load(saved.copy());
+        equal("the original save schema reloads all 46 individual claims", originalClaims, legacy.claimed(player));
+        CompoundTag beforeProjection = legacy.save(new CompoundTag());
+        QuestsProgress nativeProgress = new QuestsProgress(new HashMap<>(oldNative));
+        HeraclesDefinitions.synchronize(config, encoded);
+        HeraclesDefinitions.verifyFiles(config, encoded);
+        loadNative(config);
+        equal("the actual loader accepts the complete 46-to-50 definition upgrade", definitions.keySet(),
+                QuestHandler.quests().keySet());
+        equal("only new lessons need native progress construction", T1_LESSON_IDS.stream()
+                        .map(QuestProjection::id).collect(java.util.stream.Collectors.toSet()),
+                Set.copyOf(HeraclesClaimProjection.reconcile(nativeProgress, legacy.claimed(player), definitions)));
+        for (var entry : oldNative.entrySet()) {
+            equal("all 46 original native progress objects are retained " + entry.getKey(), true,
+                    nativeProgress.progress().get(entry.getKey()) == entry.getValue());
+            equal("all original authoritative claims remain complete " + entry.getKey(), true,
+                    nativeProgress.isComplete(entry.getKey()));
+            equal("restoring old progress cannot reconstruct native reward grants " + entry.getKey(), true,
+                    nativeProgress.getProgress(entry.getKey()).claimedRewards().isEmpty());
+        }
+        for (String id : T1_LESSON_IDS) {
+            equal("upgrade never auto-completes new teaching " + id, false,
+                    nativeProgress.isComplete(QuestProjection.id(id)));
+        }
+        equal("changing optional edges and subtitles never rewrites the old individual ledger", beforeProjection,
+                legacy.save(new CompoundTag()));
+        equal("the upgraded native projection is idempotent", List.of(),
+                HeraclesClaimProjection.reconcile(nativeProgress, legacy.claimed(player), definitions));
+        byte[] upgraded = Files.readAllBytes(HeraclesDefinitions.bundle(config));
+        HeraclesDefinitions.synchronize(config, encoded);
+        equal("the 46-to-50 native bundle upgrade is byte-idempotent", true,
+                java.util.Arrays.equals(upgraded, Files.readAllBytes(HeraclesDefinitions.bundle(config))));
+    }
+
     private static void interruptedPublication(Path config, Map<String, String> encoded,
                                                Map<String, Quest> definitions) throws Exception {
         Path bundle = HeraclesDefinitions.bundle(config);
@@ -449,6 +526,7 @@ public final class VerifyHeracles {
                     java.nio.charset.StandardCharsets.UTF_8);
             equal("retry publishes the complete new definition bytes", updated.get("grindless_multitool"), contents);
         }
+
         loadNative(config);
         equal("the real ZIP loader accepts the complete new catalogue", false, QuestHandler.failedToLoad);
         for (var entry : definitions.entrySet()) {

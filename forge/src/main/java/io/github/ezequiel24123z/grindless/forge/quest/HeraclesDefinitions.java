@@ -100,8 +100,7 @@ public final class HeraclesDefinitions {
                     Component lineTitle = Component.translatable("gui.grindless.quest.line." + task.line());
                     display.setSubtitle(chapter == QuestCatalogue.Chapter.T0 ? lineTitle
                             : Component.translatable("gui.grindless.quest.t1_line", lineTitle));
-                    display.setDescription(chapter == QuestCatalogue.Chapter.T0 ? List.of()
-                            : List.of(Component.translatable("gui.grindless.quest.t1_development")));
+                    display.setDescription(List.of());
                     if (task.id().equals(QuestCatalogue.T0_COMPLETION)) {
                         // Heracles visibility assumes absent cross-group dependencies are complete.
                         display.groups().put(T1_GROUP, new GroupDisplay(T1_GROUP, new Vector2i(-96, 0)));

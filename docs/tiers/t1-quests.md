@@ -18,12 +18,16 @@ The Thermal Generator's native fuel authority is explicitly identified as
 non-Atlas data; no synthetic recipe row or copied fuel duration is invented.
 
 Both the native Quest Book and Heracles retain their shared
-`QuestTeachingClient.content` entry point. Native navigation and every T1
-Heracles subtitle/description explicitly say **in development**. The Heracles
+`QuestTeachingClient.content` entry point. Native navigation, every T1
+Heracles subtitle and the shared lesson explicitly say **in development**. The Heracles
 group names, stable generated IDs, individual progress, empty native rewards
 and authoritative common claim service are unchanged. Resource handling and
 next-use details still come from the shared live guidance, not a new tooltip,
 JEI or quest-only material catalogue.
+Framework descriptions remain empty: the
+[pinned Heracles source API](https://github.com/terrarium-earth/Heracles/blob/9c62ea01b6dd689645b4deac045d7ddbc80f40d8/common/src/main/java/earth/terrarium/heracles/api/quests/QuestDisplay.java)
+takes string descriptions, while localized rich instruction belongs to the
+existing shared widget. The selected publisher-binary runner remains a separate gate.
 
 ## Implemented lesson selection
 
@@ -68,11 +72,22 @@ book/sender/evidence/ledger/reward guards and T0 chapter anchor are not relaxed.
 
 ## Qualification and integration handoff
 
-This checkpoint is authored source, not an executable pass. The existing
+This completed source unit is not an executable pass. The existing
 `VerifyQuest`, `VerifyQuestClaims` and publisher-binary `VerifyHeracles` checks
 are updated for the new nodes and the optional portal edge.
-Dedicated selector/data-mutation and prior-46-node upgrade regressions are
-still being completed before the final source freeze.
+`VerifyT1Teaching` is discovered by the existing common runner and checks the
+actual line/path/body mapping, exact selected live row objects, missing-row
+rejection, changed output/work/condition data, die catalysts, F1/F2 ratings,
+real Flux Cell craft, upstream supply and the 33-key T0 body snapshot.
+
+The Heracles upgrade regression authors a representative prior-source 46-ID
+bundle with its old portal edge and subtitle shape. It exercises the actual
+publisher codecs/ZIP loader, reconstructs all old native task records, restores
+the common individual claim set through the unchanged NBT format, and requires
+only the four new lessons to gain pending native records. It checks retained
+native object identities, empty native rewards and projection/publication
+idempotency. This fixture is not an existing-world or graphical migration pass.
+Its claim-set comparison does not impose a new ordering on the old HashSet save.
 
 Read-only source validation compares the entire T0 task declaration and all
 pre-existing language key values against the stated baseline. The T0 declaration
@@ -81,6 +96,23 @@ and every new lesson body fits the existing 1400-character contract.
 This is not Java compilation, a successful recipe run or a client/save pass.
 The initial core API's nested `AtlasSelection` scope defect was found by source
 review and repaired by its owner before executable qualification.
+The first quest checkpoint's attempted component-valued Heracles description
+was also caught against the pinned upstream API before Java execution.
+The final source restores the original empty description call rather than
+inventing another string-format/localization authority; the old checkpoint
+remains in history and is not a qualified candidate.
+Source review also moved an inadvertently nested claim-test helper to class
+scope before this final freeze. Neither correction is presented as an executed
+compiler red/green.
+
+The parent's bounded qualification must include common/Forge compilation,
+`VerifyQuest`, `VerifyQuestClaims`, `VerifyT1Teaching`, the exact
+`VerifySustainabilityRegistry --quest-binding-only` profile, the affected
+recipe/Atlas/core-export checks and `:forge:verifyQuestBackend`. Existing
+physical Matrix/executor proofs may be reused only within their unchanged
+mechanism assumptions. New UI/save observations are not supplied by these
+source contracts. No registration, process engine, storage format or
+production-server harness changes are part of this quest unit.
 
 The parent owns root changelog/README/ADRs/route-map/handoff, canonical export,
 the composed source freeze, compute leases and publication. The quest-owned
@@ -90,9 +122,9 @@ focused quest checks and the exact shared chapter-profile expectation.
 
 | Category | Current handoff |
 | --- | --- |
-| COMPLETED | T1-specific source teaching, canonical line/Atlas bindings, four rewardless lessons, development labels, preserved T0 and intentional optional-portal edge. |
+| COMPLETED | T1-specific source teaching, canonical line/Atlas bindings, four rewardless lessons, development labels, preserved T0, intentional optional-portal edge, focused selector/claim/46-to-50 regression authoring and source/API self-review. |
 | BLOCKED | Executable qualification has no PC/JVM lease. The parent must freeze the composed source before granting its bounded build/check lane. |
-| NOT EXECUTED | Common/Forge compilation; focused quest/claim/teaching checks; actual Heracles codec/visibility/upgrade runner; affected canonical export; new native/client/save checks. Dedicated selector and prior-46-node regression authoring is still in progress at this checkpoint. |
+| NOT EXECUTED | Common/Forge compilation; focused quest/claim/teaching checks; actual Heracles codec/visibility/upgrade runner; affected canonical export; new native/client/save checks. Authored checks are not claimed passed. |
 | NEEDS HUMAN VALIDATION | Real native/Heracles presentation, readability, interaction, no-command progression and backed-up saved-world compatibility. No player or campaign pass is inferred. |
 | NEEDS MY DECISION | None. The optional-portal boundary is the parent's explicit decision. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for source delivery. No new credential, dependency, generator or provider is requested. |
