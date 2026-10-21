@@ -353,6 +353,10 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
         if (recipe.namesTemperature()) {
             details.add(Component.translatable("jei.grindless.temperature", Math.round(recipe.temperatureC())));
         }
+        if (recipe.namesPressure()) {
+            details.add(Component.translatable("jei.grindless.pressure", Double.toString(recipe.pressureMPa()),
+                    Double.toString(recipe.pressureHalfWidthMPa())));
+        }
         if (recipe.namesAtmosphere()) {
             details.add(Component.translatable("jei.grindless.atmosphere", recipe.atmosphere()));
         }

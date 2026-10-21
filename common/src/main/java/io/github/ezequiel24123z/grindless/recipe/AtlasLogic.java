@@ -31,6 +31,8 @@ public final class AtlasLogic {
      * @param outputs        qualified outputs, including vented fluids and explicit Matrix ratings
      * @param catalysts      qualified unconsumed extras, with explicit Matrix rating labels
      * @param temperatureC   required temperature, or {@code NaN} when unnamed
+     * @param pressureMPa    required absolute pressure in MPa, or {@code NaN} when unnamed
+     * @param pressureHalfWidthMPa optimal pressure half-width in MPa, or {@code NaN} when unnamed
      * @param atmosphere     required atmosphere name, or {@code null} when unnamed
      * @param agitation      required agitation name, or {@code null} when unnamed
      * @param durationTicks  cycle length at full power
@@ -44,10 +46,18 @@ public final class AtlasLogic {
             List<String> outputs,
             List<String> catalysts,
             double temperatureC,
+            double pressureMPa,
+            double pressureHalfWidthMPa,
             String atmosphere,
             String agitation,
             int durationTicks,
             long fuPerTick) {
+        public Entry(String id, String station, MachineFamily family, List<String> inputs,
+                     List<String> outputs, List<String> catalysts, double temperatureC,
+                     String atmosphere, String agitation, int durationTicks, long fuPerTick) {
+            this(id, station, family, inputs, outputs, catalysts, temperatureC, Double.NaN,
+                    Double.NaN, atmosphere, agitation, durationTicks, fuPerTick);
+        }
     }
 
     /** Generated process recipes as sorted viewer rows: station, then id. */
@@ -109,6 +119,8 @@ public final class AtlasLogic {
                 List.copyOf(outputs),
                 List.copyOf(catalysts),
                 recipe.temperatureC(),
+                recipe.pressureMPa(),
+                recipe.pressureHalfWidthMPa(),
                 recipe.atmosphere(),
                 recipe.agitation(),
                 recipe.durationTicks(),
@@ -224,6 +236,10 @@ public final class AtlasLogic {
         text.append("  ").append(row.fuPerTick()).append(" FU/t");
         if (!Double.isNaN(row.temperatureC())) {
             text.append("  ").append((int) row.temperatureC()).append(" C");
+        }
+        if (!Double.isNaN(row.pressureMPa())) {
+            text.append("  ").append(row.pressureMPa()).append(" MPa absolute (optimal +/- ")
+                    .append(row.pressureHalfWidthMPa()).append(" MPa)");
         }
         if (row.atmosphere() != null && !row.atmosphere().isBlank()) {
             text.append("  ").append(row.atmosphere());

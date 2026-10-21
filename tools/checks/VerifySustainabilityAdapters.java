@@ -3,6 +3,10 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,6 +49,7 @@ public final class VerifySustainabilityAdapters {
             canonicalInventory();
             canonicalVanillaCrafts();
             reportRelationships();
+            processPressure();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
             failed++;
@@ -98,6 +103,30 @@ public final class VerifySustainabilityAdapters {
                 sources.containsKey(prefix + "item/QuestBookItem.java"));
         eq("source provenance includes the actual held-book validity and claim handler", true,
                 sources.containsKey(prefix + "menu/QuestBookMenu.java"));
+    }
+
+    private static void processPressure() {
+        List<IngredientSpec> inputs = List.of(IngredientSpec.item("fixture:feed", 2));
+        List<OutputSpec> outputs = List.of(OutputSpec.item("fixture:product", 3));
+        ProcessRecipe legacy = new ProcessRecipe("fixture/pressure", MachineFamily.PULVERIZER, inputs, outputs,
+                Double.NaN, null, 80, 4);
+        Route absent = AuthorityAdapters.process(legacy);
+        eq("the auditor invents no pressure or ambient band for an old recipe", Map.of(), absent.conditions());
+        for (double optimum : new double[] {0.0, 1.25, 0.000001}) {
+            ProcessRecipe named = new ProcessRecipe(legacy.id(), legacy.family(), inputs, outputs,
+                    Double.NaN, optimum, 0.0000001, null, null, 80, 4, List.of(), null);
+            Route adapted = AuthorityAdapters.process(named);
+            eq("the auditor retains exact absolute pressure MPa " + optimum, Double.toString(optimum),
+                    adapted.conditions().get("pressure_mpa"));
+            eq("the auditor retains the exact optimal half-width MPa " + optimum, "1.0E-7",
+                    adapted.conditions().get("pressure_optimal_half_width_mpa"));
+            eq("pressure adds only its two physical facts " + optimum,
+                    Set.of("pressure_mpa", "pressure_optimal_half_width_mpa"), adapted.conditions().keySet());
+            eq("pressure does not rewrite consumed quantities " + optimum, absent.inputs(), adapted.inputs());
+            eq("pressure does not rewrite output quantities " + optimum, absent.outputs(), adapted.outputs());
+            eq("pressure does not introduce a tier permission " + optimum, absent.prerequisites(),
+                    adapted.prerequisites());
+        }
     }
 
     private static void debtCannotWaiveGeneratedDebt() {

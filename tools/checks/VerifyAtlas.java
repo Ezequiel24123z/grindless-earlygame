@@ -27,6 +27,10 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
+        yes("old process and supplemental routes acquire no pressure or implicit ambient band",
+                allRows.stream().allMatch(row -> Double.isNaN(row.pressureMPa())
+                        && Double.isNaN(row.pressureHalfWidthMPa())));
+        pressure();
         // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
         eq("atlas includes every machine, Bootstrap craft and calibration route", 258, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
@@ -355,6 +359,30 @@ public final class VerifyAtlas {
 
     private static List<String> ids(List<AtlasLogic.Entry> rows) {
         return rows.stream().map(AtlasLogic.Entry::id).toList();
+    }
+
+    private static void pressure() {
+        AtlasLogic.Entry legacy = new AtlasLogic.Entry("fixture/legacy", "PRESS", MachineFamily.PRESS,
+                List.of(), List.of(), List.of(), Double.NaN, null, null, 80, 4);
+        yes("the old Atlas row constructor leaves pressure unnamed", Double.isNaN(legacy.pressureMPa())
+                && Double.isNaN(legacy.pressureHalfWidthMPa()));
+        no("an unnamed pressure is not printed as ambient", AtlasLogic.line(legacy).contains("MPa"));
+        for (double optimum : new double[] {0.0, 1.25, 0.000001}) {
+            ProcessRecipe recipe = new ProcessRecipe("fixture/pressure", MachineFamily.PRESS,
+                    List.of(IngredientSpec.item("fixture:feed", 2)),
+                    List.of(OutputSpec.item("fixture:product", 3)), Double.NaN, optimum, 0.0000001,
+                    null, null, 80, 4, List.of(), null);
+            AtlasLogic.Entry row = AtlasLogic.entry(recipe);
+            yes("Atlas retains the exact pressure optimum " + optimum, row.pressureMPa() == optimum);
+            yes("Atlas retains the exact pressure band " + optimum, row.pressureHalfWidthMPa() == 0.0000001);
+            yes("Atlas labels absolute MPa and the optimal, not hard-cutoff, band " + optimum,
+                    AtlasLogic.line(row).contains(Double.toString(optimum) + " MPa absolute (optimal +/- "
+                            + Double.toString(recipe.pressureHalfWidthMPa()) + " MPa)"));
+            yes("output lookup preserves the same pressure projection " + optimum,
+                    AtlasLogic.producing(List.of(recipe), "fixture:product").equals(List.of(row)));
+            yes("input lookup preserves the same pressure projection " + optimum,
+                    AtlasLogic.consuming(List.of(recipe), "fixture:feed").equals(List.of(row)));
+        }
     }
 
     private static AtlasLogic.Entry route(List<AtlasLogic.Entry> rows, String id) {

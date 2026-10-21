@@ -36,7 +36,7 @@ import java.util.function.Function;
 public final class MachineInspectionCodec {
 
     public static final String KEY = "grindless:inspection";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     private MachineInspectionCodec() {
     }
@@ -128,12 +128,13 @@ public final class MachineInspectionCodec {
         return tag;
     }
 
-    /** Invalid or newer data is rejected explicitly rather than becoming an idle, empty machine. */
+    /** Strict v1 observations have no pressure requirement; invalid or newer schemas are rejected explicitly. */
     public static MachineInspectionSnapshot decode(CompoundTag tag) {
         fields(tag, Set.of("schema", "target", "block", "state", "reason", "held", "truncated", "items", "tanks",
                         "requirements"),
                 Set.of("process", "energy", "manual", "structure", "port"));
-        if (integer(tag, "schema") != VERSION) {
+        int version = integer(tag, "schema");
+        if (version != 1 && version != VERSION) {
             throw new IllegalArgumentException("unsupported machine inspection schema");
         }
         CompoundTag target = compound(tag, "target");
@@ -142,7 +143,7 @@ public final class MachineInspectionCodec {
                 new Target(string(target, "dimension"), readPosition(target), number(target, "time")),
                 string(tag, "block"), enumeration(tag, "state", State.class), string(tag, "reason"),
                 bool(tag, "held"),
-                optional(tag, "process", MachineInspectionCodec::readProcess),
+                optional(tag, "process", value -> readProcess(value, version)),
                 readList(tag, "items", MachineInspectionSnapshot.MAX_ITEMS, value -> {
                     fields(value, Set.of("slot", "role", "id", "count", "rating"), Set.of());
                     return new StoredItem(integer(value, "slot"), enumeration(value, "role", ItemRole.class),
@@ -190,7 +191,7 @@ public final class MachineInspectionCodec {
                 }), bool(tag, "truncated"));
     }
 
-    private static Process readProcess(CompoundTag value) {
+    private static Process readProcess(CompoundTag value, int version) {
         fields(value, Set.of("id", "duration", "draw", "inputs", "outputs", "catalysts"), Set.of("work", "conditions"));
         int duration = integer(value, "duration");
         return new Process(string(value, "id"),
@@ -201,11 +202,18 @@ public final class MachineInspectionCodec {
                 value.contains("work") ? Optional.of(new Progress(decimal(value, "work"), duration)) : Optional.empty(),
                 optional(value, "conditions", conditions -> {
                     fields(conditions, Set.of("temperature", "pressure", "atmosphere", "agitation"),
-                            Set.of("required_temperature", "required_atmosphere", "required_agitation"));
+                            version == 1
+                                    ? Set.of("required_temperature", "required_atmosphere", "required_agitation")
+                                    : Set.of("required_temperature", "required_pressure", "required_pressure_half_width",
+                                    "required_atmosphere", "required_agitation"));
                     return new Conditions(decimal(conditions, "temperature"), decimal(conditions, "pressure"),
                             string(conditions, "atmosphere"), string(conditions, "agitation"),
                             conditions.contains("required_temperature")
                                     ? Optional.of(decimal(conditions, "required_temperature")) : Optional.empty(),
+                            conditions.contains("required_pressure")
+                                    ? Optional.of(decimal(conditions, "required_pressure")) : Optional.empty(),
+                            conditions.contains("required_pressure_half_width")
+                                    ? Optional.of(decimal(conditions, "required_pressure_half_width")) : Optional.empty(),
                             conditions.contains("required_atmosphere")
                                     ? Optional.of(string(conditions, "required_atmosphere")) : Optional.empty(),
                             conditions.contains("required_agitation")
@@ -220,6 +228,8 @@ public final class MachineInspectionCodec {
         value.putString("atmosphere", conditions.atmosphere());
         value.putString("agitation", conditions.agitation());
         conditions.requiredTemperatureC().ifPresent(temperature -> value.putDouble("required_temperature", temperature));
+        conditions.requiredPressureMPa().ifPresent(pressure -> value.putDouble("required_pressure", pressure));
+        conditions.requiredPressureHalfWidthMPa().ifPresent(width -> value.putDouble("required_pressure_half_width", width));
         conditions.requiredAtmosphere().ifPresent(atmosphere -> value.putString("required_atmosphere", atmosphere));
         conditions.requiredAgitation().ifPresent(agitation -> value.putString("required_agitation", agitation));
         return value;

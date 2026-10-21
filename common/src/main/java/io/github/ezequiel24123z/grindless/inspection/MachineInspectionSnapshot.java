@@ -1,5 +1,7 @@
 package io.github.ezequiel24123z.grindless.inspection;
 
+import io.github.ezequiel24123z.grindless.process.ConditionBand;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -190,9 +192,18 @@ public record MachineInspectionSnapshot(
         }
     }
 
+    /** Absolute MPa throughout; an absent required optimum and half-width impose no pressure requirement. */
     public record Conditions(double temperatureC, double pressureMPa, String atmosphere, String agitation,
-                             Optional<Double> requiredTemperatureC, Optional<String> requiredAtmosphere,
+                             Optional<Double> requiredTemperatureC, Optional<Double> requiredPressureMPa,
+                             Optional<Double> requiredPressureHalfWidthMPa, Optional<String> requiredAtmosphere,
                              Optional<String> requiredAgitation) {
+        public Conditions(double temperatureC, double pressureMPa, String atmosphere, String agitation,
+                          Optional<Double> requiredTemperatureC, Optional<String> requiredAtmosphere,
+                          Optional<String> requiredAgitation) {
+            this(temperatureC, pressureMPa, atmosphere, agitation, requiredTemperatureC, Optional.empty(),
+                    Optional.empty(), requiredAtmosphere, requiredAgitation);
+        }
+
         public Conditions {
             if (!Double.isFinite(temperatureC) || !Double.isFinite(pressureMPa) || pressureMPa < 0) {
                 throw new IllegalArgumentException("invalid inspected conditions");
@@ -202,6 +213,23 @@ public record MachineInspectionSnapshot(
             requiredTemperatureC = Objects.requireNonNull(requiredTemperatureC, "requiredTemperatureC");
             if (requiredTemperatureC.isPresent() && !Double.isFinite(requiredTemperatureC.get())) {
                 throw new IllegalArgumentException("invalid required inspection temperature");
+            }
+            requiredPressureMPa = Objects.requireNonNull(requiredPressureMPa, "requiredPressureMPa");
+            requiredPressureHalfWidthMPa = Objects.requireNonNull(requiredPressureHalfWidthMPa,
+                    "requiredPressureHalfWidthMPa");
+            if (requiredPressureMPa.isPresent() != requiredPressureHalfWidthMPa.isPresent()) {
+                throw new IllegalArgumentException("an inspected pressure requirement needs its complete band");
+            }
+            if (requiredPressureMPa.isPresent()) {
+                double optimum = requiredPressureMPa.get();
+                double halfWidth = requiredPressureHalfWidthMPa.orElseThrow();
+                if (!Double.isFinite(optimum) || optimum < 0 || !Double.isFinite(halfWidth) || halfWidth <= 0) {
+                    throw new IllegalArgumentException("invalid required inspection pressure");
+                }
+                ConditionBand band = ConditionBand.absolute(optimum, halfWidth);
+                if (!Double.isFinite(band.toleranceMin()) || !Double.isFinite(band.toleranceMax())) {
+                    throw new IllegalArgumentException("invalid required inspection pressure band");
+                }
             }
             requiredAtmosphere = Objects.requireNonNull(requiredAtmosphere, "requiredAtmosphere").map(
                     MachineInspectionSnapshot::text);

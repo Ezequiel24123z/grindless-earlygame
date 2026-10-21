@@ -129,8 +129,15 @@ public final class VerifyMachineUi {
                         && jei.contains("font.split(detail, WIDTH - 8)")
                         && !jei.contains("subList(")
                         && jei.contains("recipe.namesTemperature()")
+                        && jei.contains("recipe.namesPressure()")
                         && jei.contains("recipe.namesAtmosphere()")
                         && jei.contains("recipe.namesAgitation()"));
+        check("JEI exposes exact pressure and optimal width without integer or two-decimal rounding",
+                jei.contains("Component.translatable(\"jei.grindless.pressure\", Double.toString(recipe.pressureMPa()),")
+                        && jei.contains("Double.toString(recipe.pressureHalfWidthMPa())"));
+        check("JEI labels absolute pressure, exact units and the optimal rather than hard-cutoff band",
+                lang.get("jei.grindless.pressure").getAsString()
+                        .equals("Pressure: %s MPa absolute (optimal +/- %s MPa)"));
         check("source and formation conditions are not mislabeled as catalysts",
                 jei.contains("SourceSite.Fault.NEEDS_ROCK_BED")
                         && jei.contains("SourceSite.Fault.NEEDS_OPEN_SKY")

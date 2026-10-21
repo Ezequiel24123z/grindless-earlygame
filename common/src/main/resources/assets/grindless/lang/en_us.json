@@ -860,5 +860,7 @@
   "gui.grindless.quest.lesson.t1.kiln.kiln": "Try the optional Kiln branch in JEI: roast feed into oxide, then reduce it in the Arc Furnace. Handle its listed emissions separately. Roasting and later acid processing are not required for F2.",
   "gui.grindless.quest.lesson.t1.factory_space.factory_world": "Reserve core production supplies before building a Factory Portal with JEI. The Factory World offers optional building space, not renewable resources. Your F2 exit does not require a portal or a visit.",
   "gui.grindless.quest.lesson.t1.relay_f2.flux_cell": "Make a Flux Cell automatically in the Assembler, or use its manual bootstrap craft. JEI shows both routes. The F2 recipe uses it as a physical component and does not require stored charge.",
-  "gui.grindless.quest.lesson.t1.relay_f2.industrial_matrix": "Use JEI for the Assembler's F1-to-F2 Relay conversion. Supply a valid F1 Matrix, casing, glass and Flux Cell. Hold the resulting F2 Matrix to complete this objective; no Factory Portal or T2 machine is required."
+  "gui.grindless.quest.lesson.t1.relay_f2.industrial_matrix": "Use JEI for the Assembler's F1-to-F2 Relay conversion. Supply a valid F1 Matrix, casing, glass and Flux Cell. Hold the resulting F2 Matrix to complete this objective; no Factory Portal or T2 machine is required.",
+  "jei.grindless.pressure": "Pressure: %s MPa absolute (optimal +/- %s MPa)",
+  "inspection.grindless.required_pressure": "Process pressure: %s MPa absolute (optimal +/- %s MPa)"
 }

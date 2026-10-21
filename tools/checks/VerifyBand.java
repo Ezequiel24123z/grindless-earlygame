@@ -45,6 +45,16 @@ public final class VerifyBand {
             pass("relative(0) refused");
         }
 
+        ConditionBand vacuum = ConditionBand.absolute(0.0, 0.001);
+        eq("zero absolute pressure has a real optimal band", 0.001, vacuum.optimalMax());
+        eq("zero pressure reuses the existing doubled tolerance", 0.002, vacuum.toleranceMax());
+        eq("exact vacuum is optimal", 1.0, vacuum.efficiencyAt(0.0));
+        eq("vacuum tolerance still costs only speed", 0.625, vacuum.efficiencyAt(0.0015));
+        eq("the vacuum tolerance edge retains the existing speed floor", 0.25, vacuum.efficiencyAt(0.002));
+        no("ambient absolute pressure is not a vacuum substitute", vacuum.admits(0.1));
+        yes("a real zero-pressure envelope reaches vacuum", vacuum.reachableWithin(0.0, 0.0));
+        no("an ambient-only envelope cannot reach vacuum", vacuum.reachableWithin(0.1, 0.1));
+
         // Best reachable efficiency is the optimum clamped into the machine's range.
         eq("arc furnace reaches optimum", 1.0, t.bestEfficiencyWithin(1200.0, 3500.0));
         eq("kiln cannot reach at all", 0.0, t.bestEfficiencyWithin(100.0, 900.0));
