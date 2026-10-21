@@ -8,6 +8,10 @@ import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestInventoryEvidence;
 import io.github.ezequiel24123z.grindless.quest.QuestProgress;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
+import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +31,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -115,10 +121,45 @@ public final class VerifyPersistence {
         CompoundTag saved = ControlMatrixNbt.save(f2);
         check("Matrix serialization keeps the original integer Rating key",
                 saved.contains("Rating", 3) && saved.getInt("Rating") == 2 && saved.getAllKeys().size() == 1);
-        check("binary NBT save/load reconstructs the exact F2 specification",
-                ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(saved)).orElseThrow().equals(f2));
+        ControlMatrixSpec decoded = ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(saved)).orElseThrow();
+        check("binary NBT save/load reconstructs the exact F2 specification", decoded.equals(f2));
         check("untagged Relay remains F1",
                 ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow().rating() == FluxTier.F1);
+        // NBT/data evidence, not a registered-Matrix positive matching or Forge qualification.
+        IngredientSpec millMatrix = ProcessGraph.generate(List.of()).stream()
+                .filter(recipe -> recipe.id().equals("assemble/wire_mill")).findFirst().orElseThrow()
+                .itemInputs().get(3);
+        check("the live base mill's fourth group declares one F1 Relay Matrix",
+                millMatrix.equals(IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)));
+        check("valid decoded F2 remains distinct from the exact base F1 ingredient (NBT/data contract)",
+                decoded.rating().ordinal() != millMatrix.matrixRating());
+        check("untagged legacy F1 agrees with the base mill's declared rating (NBT/data contract)",
+                ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow().rating().ordinal()
+                        == millMatrix.matrixRating());
+        CompoundTag explicitF1 = ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F1));
+        check("explicit F1 agrees with the base mill's declared rating (NBT/data contract)",
+                ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(explicitF1))
+                        .orElseThrow().rating().ordinal() == millMatrix.matrixRating());
+        CompoundTag explicitF3 = ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F3));
+        ControlMatrixSpec decodedF3 = ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(explicitF3))
+                .orElseThrow();
+        check("valid decoded F3 remains distinct from the exact base F1 ingredient (NBT/data contract)",
+                decodedF3.rating() == FluxTier.F3 && decodedF3.rating().ordinal() != millMatrix.matrixRating());
+        check("a missing Matrix stack fails the real ingredient matcher",
+                !ProcessLookup.matches(millMatrix, ItemStack.EMPTY));
+        ItemStack wrongKind = new ItemStack(Items.PAPER);
+        wrongKind.setTag(explicitF1.copy());
+        check("an F1 tag on a non-Matrix item fails the real ingredient matcher",
+                !ProcessLookup.matches(millMatrix, wrongKind));
+        Path common = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
+        String matrixItem = Files.readString(common.resolve("item/ControlMatrixItem.java"));
+        String lookup = Files.readString(common.resolve("recipe/ProcessLookup.java"));
+        check("registered Matrix reads reuse this NBT decoder (source contract)",
+                matrixItem.contains("return ControlMatrixNbt.load(architecture, stack.getTag());"));
+        check("the current typed matcher is exact (source contract; higher-rating substitution remains debt)",
+                lookup.contains("stack.getItem() instanceof ControlMatrixItem matrix")
+                        && lookup.contains("BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id())")
+                        && lookup.contains("matrix.spec(stack).map(value -> value.rating().ordinal() == spec.matrixRating())"));
         check("missing Rating on a nonempty tag remains the architecture's first frontier",
                 ControlMatrixNbt.load(MatrixArchitecture.INTEGRATED, new CompoundTag())
                         .orElseThrow().rating() == FluxTier.F4);
