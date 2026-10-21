@@ -70,6 +70,16 @@ public final class VerifySustainabilityRegistry {
             Map.entry("QuestBackendPlatform", JAVA.resolve(Path.of("quest", "QuestBackendPlatform.java"))),
             Map.entry("QuestBackendPlatformImpl",
                     FORGE_JAVA.resolve(Path.of("quest", "forge", "QuestBackendPlatformImpl.java"))),
+            Map.entry("GrindlessForge", FORGE_JAVA.resolve(Path.of("forge", "GrindlessForge.java"))),
+            Map.entry("GrindlessForgeClient", FORGE_JAVA.resolve(Path.of("forge", "GrindlessForgeClient.java"))),
+            Map.entry("FtbQuestIntegration",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "FtbQuestIntegration.java"))),
+            Map.entry("FtbQuestNative",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "FtbQuestNative.java"))),
+            Map.entry("FtbQuestDefinitions",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "FtbQuestDefinitions.java"))),
+            Map.entry("FtbMatrixFilter",
+                    FORGE_JAVA.resolve(Path.of("forge", "quest", "FtbMatrixFilter.java"))),
             Map.entry("HeraclesQuestNetwork",
                     FORGE_JAVA.resolve(Path.of("forge", "quest", "HeraclesQuestNetwork.java"))),
             Map.entry("HeraclesQuestIntegration",
@@ -231,11 +241,11 @@ public final class VerifySustainabilityRegistry {
             constructions.put(binding[0], new Machine(binding[0], controller, 0));
         }
         Resource questBook = registeredItem(items, "QUEST_BOOK", "QuestBookItem", null, declared);
-        eq("the physical quest interface requires the held registered book and does not consume it", true,
+        eq("legacy held-book guards and native framework claim authority match their exact source profiles", true,
                 questBookAccess(quest));
         for (Route route : inventory.routes().values()) {
             if (route.authority() == Authority.QUEST_REWARD) {
-                eq("each real claim retains the actual held-book requirement: " + route.id(), 1L,
+                eq("the audited legacy-book claim route retains its held-book catalyst: " + route.id(), 1L,
                         route.catalysts().get(questBook));
                 eq("the interface book is not consumed by a claim: " + route.id(), false,
                         route.inputs().containsKey(questBook));
@@ -959,8 +969,22 @@ public final class VerifySustainabilityRegistry {
                 """)
                 && questMethod(sources, "QuestProgress", """
                 public static QuestProgress get(ServerPlayer player) {
+                    Path file = player.server.getWorldPath(LevelResource.ROOT).resolve("data").resolve(KEY + ".dat");
                     return player.server.overworld().getDataStorage()
-                            .computeIfAbsent(QuestProgress::load, QuestProgress::new, KEY);
+                            .computeIfAbsent(QuestProgress::load, () -> createIfMissing(file), KEY);
+                }
+                """)
+                && questMethod(sources, "QuestProgress", """
+                static QuestProgress createIfMissing(Path file) {
+                    try {
+                        Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+                    } catch (NoSuchFileException missing) {
+                        return new QuestProgress();
+                    } catch (IOException | SecurityException exception) {
+                        throw new IllegalStateException("Cannot inspect quest progress; refusing to recreate its reward ledger",
+                                exception);
+                    }
+                    throw new IllegalStateException("Existing quest progress could not be loaded; refusing to recreate its reward ledger");
                 }
                 """)
                 && questMethod(sources, "QuestProgress", """
@@ -1082,7 +1106,501 @@ public final class VerifySustainabilityRegistry {
                 """)
                 && questMethod(sources, "QuestBackendPlatformImpl", """
                 public static boolean open(ServerPlayer player) {
+                    if (ModList.get().isLoaded("ftbquests")) {
+                        FtbQuestIntegration.open(player);
+                        return true;
+                    }
                     return ModList.get().isLoaded("heracles") && HeraclesQuestIntegration.open(player);
+                }
+                """)
+                && questMethod(sources, "GrindlessForge", """
+                public GrindlessForge() {
+                    IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+                    EventBuses.registerModEventBus(Grindless.MOD_ID, bus);
+                    Grindless.init();
+                    MachineInspectionOverlay.init(bus);
+                    if (ModList.get().isLoaded("ftbquests")) {
+                        FtbQuestIntegration.init(bus);
+                    } else if (ModList.get().isLoaded("heracles")) {
+                        HeraclesQuestIntegration.init(bus);
+                    }
+                    MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) ->
+                            MaterialRegistry.rebuild(RegistryTagView.ofItems()));
+                }
+                """)
+                && questMethod(sources, "GrindlessForgeClient", """
+                private GrindlessForgeClient() {
+                }
+                """)
+                && questMethod(sources, "GrindlessForgeClient", """
+                @SubscribeEvent
+                public static void onClientSetup(FMLClientSetupEvent event) {
+                    GrindlessClient.init();
+                    if (!ModList.get().isLoaded("ftbquests") && ModList.get().isLoaded("heracles")) {
+                        event.enqueueWork(HeraclesQuestClient::init);
+                    }
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                private FtbQuestIntegration() {
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                public static void init(IEventBus modBus) {
+                    modBus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(() -> {
+                        FTBQuestsAPI.api().registerFilterAdapter(new FtbMatrixFilter());
+                        try {
+                            FtbQuestFiles.ensure(FMLPaths.CONFIGDIR.get());
+                        } catch (IOException exception) {
+                            throw new IllegalStateException("Cannot install native Grindless FTB chapters; existing files were preserved",
+                                    exception);
+                        }
+                    }));
+                    LifecycleEvent.SERVER_STARTED.register(FtbQuestIntegration::started);
+                    LifecycleEvent.SERVER_STOPPING.register(server -> ready = false);
+                    TeamEvent.PLAYER_LOGGED_IN.register(event -> importPlayer(event.getPlayer()));
+                    TeamEvent.PLAYER_CHANGED.register(event -> importPlayer(event.getPlayer()));
+                    ObjectCompletedEvent.QUEST.register(event -> {
+                        for (ServerPlayer player : event.getOnlineMembers()) {
+                            QuestProgress legacy = QuestProgress.get(player);
+                            if (legacy.usesNativeClaims(player.getUUID())) {
+                                FtbQuestNative.refresh(legacy, player.getUUID(), event.getData());
+                            }
+                        }
+                    });
+                    MinecraftForge.EVENT_BUS.addListener(FtbQuestIntegration::tick);
+                    MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                private static void started(MinecraftServer server) {
+                    ServerQuestFile file = ServerQuestFile.INSTANCE;
+                    if (file == null || file.server != server) {
+                        throw new IllegalStateException("FTB Quests did not initialize its native server quest file");
+                    }
+                    FtbQuestNative.verify(file);
+                    ready = true;
+                    Grindless.LOG.info("Native FTB Quests ready: 46 stable Grindless quests; legacy reward claims are import-only");
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                public static void open(ServerPlayer player) {
+                    if (!importPlayer(player)) {
+                        return;
+                    }
+                    player.closeContainer();
+                    new OpenQuestBookMessage(FtbQuestDefinitions.id("chapter", "T0")).sendTo(player);
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                private static boolean importPlayer(ServerPlayer player) {
+                    if (!player.server.isSameThread()) {
+                        throw new IllegalStateException("Native quest import must execute on the server thread");
+                    }
+                    try {
+                        if (!ready) {
+                            throw new IllegalStateException("Native Grindless FTB definitions have not been verified");
+                        }
+                        TeamData data = ServerQuestFile.INSTANCE.getOrCreateTeamData(player);
+                        FtbQuestNative.migrate(QuestProgress.get(player), player.getUUID(), data);
+                        data.saveIfChanged();
+                        return true;
+                    } catch (IllegalArgumentException | IllegalStateException exception) {
+                        Grindless.LOG.error("Refused native quest admission before legacy reward import completed", exception);
+                        player.connection.disconnect(Component.translatable("chat.grindless.quest.backend_unavailable"));
+                        return false;
+                    }
+                }
+                """)
+                && questMethod(sources, "FtbQuestIntegration", """
+                private static void tick(TickEvent.PlayerTickEvent event) {
+                    if (event.phase == TickEvent.Phase.END && event.player.tickCount % 20 == 0
+                            && event.player instanceof ServerPlayer player) {
+                        QuestProgress legacy = QuestProgress.get(player);
+                        if (ready && legacy.usesNativeClaims(player.getUUID())) {
+                            TeamData data = ServerQuestFile.INSTANCE.getOrCreateTeamData(player);
+                            if (data == null) {
+                                throw new IllegalStateException("Native quest player has no framework team progress");
+                            }
+                            FtbQuestNative.refresh(legacy, player.getUUID(), data);
+                        }
+                    }
+                }
+                """)
+                && questMethod(sources, "FtbQuestNative", """
+                private FtbQuestNative() {
+                }
+                """)
+                && questMethod(sources, "FtbQuestNative", """
+                public static void verify(BaseQuestFile file) {
+                    for (CompoundTag document : FtbQuestDefinitions.chapters().values()) {
+                        Chapter chapter = file.getChapter(parseId(document));
+                        if (chapter == null) {
+                            throw new IllegalStateException("FTB Quests did not load the Grindless chapter " + document.getString("id"));
+                        }
+                        Chapter expectedChapter = new Chapter(chapter.id, file, chapter.getGroup());
+                        expectedChapter.readData(document);
+                        sameData(expectedChapter, chapter);
+                        ListTag quests = document.getList("quests", Tag.TAG_COMPOUND);
+                        if (chapter.getQuests().size() != quests.size()) {
+                            throw new IllegalStateException("Unexpected native Grindless chapter contents: " + chapter.id);
+                        }
+                        for (int index = 0; index < quests.size(); index++) {
+                            CompoundTag definition = quests.getCompound(index);
+                            Quest quest = file.getQuest(parseId(definition));
+                            if (quest == null || quest.getChapter() != chapter) {
+                                throw new IllegalStateException("Missing or displaced native Grindless quest: " + definition.getString("id"));
+                            }
+                            Quest expected = new Quest(quest.id, chapter);
+                            expected.readData(definition);
+                            sameData(expected, quest);
+                            ListTag tasks = definition.getList("tasks", Tag.TAG_COMPOUND);
+                            if (quest.getTasks().size() != 1 || tasks.size() != 1) {
+                                throw new IllegalStateException("Unexpected native Grindless task count: " + quest.id);
+                            }
+                            CompoundTag taskDefinition = tasks.getCompound(0);
+                            Task task = file.getTask(parseId(taskDefinition));
+                            Task expectedTask = switch (taskDefinition.getString("type")) {
+                                case "ftbquests:item" -> new ItemTask(parseId(taskDefinition), expected);
+                                case "ftbquests:checkmark" -> new CheckmarkTask(parseId(taskDefinition), expected);
+                                case "ftbquests:dimension" -> new DimensionTask(parseId(taskDefinition), expected);
+                                default -> throw new IllegalStateException("Unsupported generated native task");
+                            };
+                            expectedTask.readData(taskDefinition);
+                            if (task == null || task.getQuest() != quest || task.getClass() != expectedTask.getClass()) {
+                                throw new IllegalStateException("Missing or replaced native Grindless task: " + taskDefinition.getString("id"));
+                            }
+                            sameData(expectedTask, task);
+                            ListTag rewards = definition.getList("rewards", Tag.TAG_COMPOUND);
+                            if (quest.getRewards().size() != rewards.size()) {
+                                throw new IllegalStateException("Unexpected native Grindless reward count: " + quest.id);
+                            }
+                            for (int rewardIndex = 0; rewardIndex < rewards.size(); rewardIndex++) {
+                                CompoundTag rewardDefinition = rewards.getCompound(rewardIndex);
+                                Reward reward = file.getReward(parseId(rewardDefinition));
+                                ItemReward expectedReward = new ItemReward(parseId(rewardDefinition), expected);
+                                expectedReward.readData(rewardDefinition);
+                                if (reward == null || reward.getQuest() != quest || reward.getClass() != ItemReward.class) {
+                                    throw new IllegalStateException("Missing or replaced native Grindless item reward");
+                                }
+                                sameData(expectedReward, reward);
+                            }
+                        }
+                    }
+                }
+                """)
+                && questMethod(sources, "FtbQuestNative", """
+                public static void migrate(QuestProgress legacy, UUID player, TeamData nativeProgress) {
+                    if (player == null || nativeProgress == null) {
+                        throw new IllegalArgumentException("Native quest import requires a player and team progress");
+                    }
+                    Set<String> paid = legacy.legacyClaims(player);
+                    legacy.useNativeClaims(player);
+                    long now = System.currentTimeMillis();
+                    for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+                        if (!paid.contains(task.id())) {
+                            continue;
+                        }
+                        for (long rewardId : FtbQuestDefinitions.rewardIds(task)) {
+                            Reward reward = nativeProgress.getFile().getReward(rewardId);
+                            if (reward == null || reward.isTeamReward()
+                                    || !nativeProgress.isRewardClaimed(player, reward)
+                                    && !nativeProgress.markRewardAsClaimed(player, reward, now)) {
+                                throw new IllegalStateException("Cannot import paid native reward receipt: " + rewardId);
+                            }
+                        }
+                    }
+                    for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+                        if (!paid.contains(task.id()) || !QuestCatalogue.unlocked(QuestCatalogue.chapter(task), paid)) {
+                            continue;
+                        }
+                        Task nativeTask = nativeProgress.getFile().getTask(FtbQuestDefinitions.taskId(task.id()));
+                        Quest nativeQuest = nativeProgress.getFile().getQuest(FtbQuestDefinitions.questId(task.id()));
+                        if (nativeTask == null || nativeQuest == null || nativeProgress.isLocked()) {
+                            throw new IllegalStateException("Cannot import native quest completion: " + task.id());
+                        }
+                        if (nativeProgress.getProgress(nativeTask) < nativeTask.getMaxProgress()) {
+                            nativeProgress.setProgress(nativeTask, nativeTask.getMaxProgress());
+                        }
+                        if (!nativeProgress.isCompleted(nativeTask)) {
+                            nativeProgress.setCompleted(nativeTask.id, new Date(now));
+                        }
+                        if (!nativeProgress.isCompleted(nativeQuest)) {
+                            nativeProgress.setCompleted(nativeQuest.id, new Date(now));
+                        }
+                    }
+                    refresh(legacy, player, nativeProgress);
+                }
+                """)
+                && questMethod(sources, "FtbQuestNative", """
+                public static void refresh(QuestProgress legacy, UUID player, TeamData nativeProgress) {
+                    Set<String> completed = new LinkedHashSet<>();
+                    for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+                        Quest quest = nativeProgress.getFile().getQuest(FtbQuestDefinitions.questId(task.id()));
+                        if (quest == null) {
+                            throw new IllegalStateException("Missing native quest during compatibility observation: " + task.id());
+                        }
+                        if (nativeProgress.isCompleted(quest)) {
+                            completed.add(task.id());
+                        }
+                    }
+                    legacy.updateNativeCompleted(player, completed);
+                }
+                """)
+                && questMethod(sources, "FtbQuestNative", """
+                private static void sameData(QuestObjectBase expected, QuestObjectBase actual) {
+                    CompoundTag expectedData = new CompoundTag();
+                    CompoundTag actualData = new CompoundTag();
+                    expected.writeData(expectedData);
+                    actual.writeData(actualData);
+                    if (!expectedData.equals(actualData)) {
+                        throw new IllegalStateException("Modified or colliding native Grindless definition: " + expected.getCodeString());
+                    }
+                }
+                """)
+                && questMethod(sources, "FtbQuestNative", """
+                private static long parseId(CompoundTag tag) {
+                    return Long.parseLong(tag.getString("id"), 16);
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                @Override
+                public String getName() {
+                    return "Grindless";
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                @Override
+                public boolean isFilterStack(ItemStack stack) {
+                    return stack.hasTag() && stack.getTag().contains(BINDING);
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                @Override
+                public boolean doesItemMatch(ItemStack filterStack, ItemStack toCheck) {
+                    return getMatcher(filterStack).test(toCheck);
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                @Override
+                public Matcher getMatcher(ItemStack filterStack) {
+                    if (!isFilterStack(filterStack) || !filterStack.getTag().contains(BINDING, Tag.TAG_STRING)) {
+                        return NO_MATCH;
+                    }
+                    QuestCatalogue.Task declared = QuestCatalogue.byId(filterStack.getTag().getString(BINDING));
+                    if (declared == null || declared.evidence() != QuestCatalogue.Evidence.MATRIX
+                            || !sameSubject(filterStack, declared)
+                            || ControlMatrixItem.spec(filterStack)
+                            .filter(spec -> spec.rating() == declared.matrixRating()).isEmpty()) {
+                        return NO_MATCH;
+                    }
+                    return candidate -> sameSubject(candidate, declared)
+                            && ControlMatrixItem.spec(candidate)
+                            .filter(spec -> spec.rating() == declared.matrixRating()).isPresent();
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                @Override
+                public boolean hasItemTagFilter() {
+                    return false;
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                @Override
+                public ItemStack makeTagFilterStack(TagKey<Item> tag) {
+                    throw new UnsupportedOperationException("Matrix quest filters cannot be converted to item tags");
+                }
+                """)
+                && questMethod(sources, "FtbMatrixFilter", """
+                private static boolean sameSubject(ItemStack stack, QuestCatalogue.Task task) {
+                    return !stack.isEmpty() && BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(task.subject());
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                private FtbQuestDefinitions() {
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                public static long id(String kind, String key) {
+                    try {
+                        byte[] hash = MessageDigest.getInstance("SHA-256")
+                                .digest(("grindless/ftb/" + kind + "/" + key).getBytes(StandardCharsets.UTF_8));
+                        long result = ByteBuffer.wrap(hash).getLong() & Long.MAX_VALUE;
+                        if (result <= 1) {
+                            throw new IllegalStateException("Reserved native quest id for " + kind + "/" + key);
+                        }
+                        return result;
+                    } catch (NoSuchAlgorithmException exception) {
+                        throw new IllegalStateException("Java must provide SHA-256", exception);
+                    }
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                public static long questId(String catalogueId) {
+                    if (QuestCatalogue.byId(catalogueId) == null) {
+                        throw new IllegalArgumentException("Unknown quest catalogue id: " + catalogueId);
+                    }
+                    return id("quest", catalogueId);
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                public static long taskId(String catalogueId) {
+                    questId(catalogueId);
+                    return id("task", catalogueId);
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                public static List<Long> rewardIds(QuestCatalogue.Task task) {
+                    return java.util.stream.IntStream.range(0, task.rewards().size())
+                            .mapToObj(index -> id("reward", task.id() + "/" + index)).toList();
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                public static String code(long id) {
+                    return String.format(Locale.ROOT, "%016X", id);
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                public static Map<String, CompoundTag> chapters() {
+                    Map<String, CompoundTag> chapters = new LinkedHashMap<>();
+                    Set<Long> ids = new HashSet<>();
+                    Map<String, Integer> depths = new LinkedHashMap<>();
+                    for (QuestProjection.Entry entry : QuestProjection.entries()) {
+                        depths.put(entry.task().id(), entry.task().requires().stream()
+                                .filter(parent -> QuestCatalogue.chapter(QuestCatalogue.byId(parent))
+                                        == QuestCatalogue.chapter(entry.task()))
+                                .mapToInt(parent -> depths.get(parent) + 1).max().orElse(0));
+                    }
+                    for (QuestCatalogue.Chapter chapter : QuestCatalogue.Chapter.values()) {
+                        String name = "grindless_" + chapter.name().toLowerCase(Locale.ROOT);
+                        CompoundTag document = new CompoundTag();
+                        document.putString("id", unique(ids, id("chapter", chapter.name())));
+                        document.putString("filename", name);
+                        document.putString("title", json(Component.literal("Grindless " + chapter.name())));
+                        document.putInt("order_index", chapter.ordinal());
+                        document.putString("progression_mode", "linear");
+                        document.putBoolean("consume_items", false);
+                        document.putBoolean("default_repeatable_quest", false);
+                        ListTag quests = new ListTag();
+                        int lineTop = 0;
+                        for (String line : QuestCatalogue.lines(chapter)) {
+                            Map<Integer, Integer> rows = new LinkedHashMap<>();
+                            for (QuestProjection.Entry entry : QuestProjection.entries()) {
+                                QuestCatalogue.Task task = entry.task();
+                                if (QuestCatalogue.chapter(task) != chapter || !task.line().equals(line)) {
+                                    continue;
+                                }
+                                int depth = depths.get(task.id());
+                                int row = rows.getOrDefault(depth, 0);
+                                rows.put(depth, row + 1);
+                                quests.add(quest(entry, depth * 2.5, lineTop + row * 1.5, ids));
+                            }
+                            lineTop += rows.values().stream().mapToInt(Integer::intValue).max().orElse(1) * 2 + 1;
+                        }
+                        document.put("quests", quests);
+                        chapters.put(name + ".snbt", document);
+                    }
+                    return Collections.unmodifiableMap(chapters);
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                private static CompoundTag quest(QuestProjection.Entry entry, double x, double y, Set<Long> ids) {
+                    QuestCatalogue.Task task = entry.task();
+                    CompoundTag quest = new CompoundTag();
+                    quest.putString("id", unique(ids, questId(task.id())));
+                    quest.putString("title", json(Component.translatable("gui.grindless.quest.task." + task.id())));
+                    quest.putDouble("x", x);
+                    quest.putDouble("y", y);
+                    quest.put("tags", strings(List.of(entry.id())));
+                    quest.put("dependencies", strings(QuestCatalogue.requirements(task).stream()
+                            .map(parent -> code(questId(parent))).toList()));
+                    quest.putBoolean("can_repeat", false);
+                    quest.putString("progression_mode", "linear");
+                    quest.putBoolean("hide_until_deps_complete", QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1);
+                    quest.putBoolean("hide_details_until_startable", QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1);
+                    ListTag description = new ListTag();
+                    description.add(StringTag.valueOf(json(body(task))));
+                    if (task.id().equals("fluid_logistics")) {
+                        description.add(StringTag.valueOf(json(Component.translatable("gui.grindless.quest.tank_containers",
+                                FluidLogic.TANK_CAPACITY))));
+                    }
+                    quest.put("description", description);
+                    ListTag tasks = new ListTag();
+                    CompoundTag evidence = new CompoundTag();
+                    evidence.putString("id", unique(ids, taskId(task.id())));
+                    evidence.putString("type", switch (task.evidence()) {
+                        case ITEM, MATRIX -> "ftbquests:item";
+                        case FREE -> "ftbquests:checkmark";
+                        case DIMENSION -> "ftbquests:dimension";
+                    });
+                    if (task.evidence() == QuestCatalogue.Evidence.ITEM || task.evidence() == QuestCatalogue.Evidence.MATRIX) {
+                        if (task.evidence() == QuestCatalogue.Evidence.MATRIX) {
+                            CompoundTag item = new CompoundTag();
+                            item.putString("id", task.subject());
+                            item.putByte("Count", (byte) 1);
+                            CompoundTag physical = new CompoundTag();
+                            physical.putInt(ControlMatrixNbt.RATING, task.matrixRating().ordinal());
+                            physical.putString(FtbMatrixFilter.BINDING, task.id());
+                            item.put("tag", physical);
+                            evidence.put("item", item);
+                        } else {
+                            evidence.putString("item", task.subject());
+                        }
+                        evidence.putLong("count", task.count());
+                        evidence.putBoolean("consume_items", false);
+                        evidence.putBoolean("only_from_crafting", false);
+                        evidence.putBoolean("match_nbt", false);
+                    } else if (task.evidence() == QuestCatalogue.Evidence.DIMENSION) {
+                        evidence.putString("dimension", task.subject());
+                    }
+                    tasks.add(evidence);
+                    quest.put("tasks", tasks);
+                    ListTag rewards = new ListTag();
+                    List<Long> rewardIds = rewardIds(task);
+                    for (int index = 0; index < task.rewards().size(); index++) {
+                        QuestCatalogue.Reward declared = task.rewards().get(index);
+                        CompoundTag reward = new CompoundTag();
+                        reward.putString("id", unique(ids, rewardIds.get(index)));
+                        reward.putString("type", "ftbquests:item");
+                        reward.putString("item", declared.itemId());
+                        reward.putInt("count", declared.count());
+                        reward.putBoolean("team_reward", false);
+                        reward.putString("auto", "disabled");
+                        rewards.add(reward);
+                    }
+                    quest.put("rewards", rewards);
+                    return quest;
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                private static Component body(QuestCatalogue.Task task) {
+                    return switch (task.id()) {
+                        case "manual_work" -> Component.translatable(QuestTeaching.bodyKey(task),
+                                SourceLogic.MANUAL_CHARGE, SourceLogic.MANUAL_COOLDOWN);
+                        case "biomass_dynamo" -> Component.translatable(QuestTeaching.bodyKey(task),
+                                FluxTier.F0.nominal(), SourceLogic.BIOMASS_BURN_TICKS);
+                        default -> Component.translatable(QuestTeaching.bodyKey(task));
+                    };
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                private static String json(Component component) {
+                    return Component.Serializer.toJson(component);
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                private static ListTag strings(List<String> values) {
+                    ListTag result = new ListTag();
+                    values.forEach(value -> result.add(StringTag.valueOf(value)));
+                    return result;
+                }
+                """)
+                && questMethod(sources, "FtbQuestDefinitions", """
+                private static String unique(Set<Long> ids, long id) {
+                    if (!ids.add(id)) {
+                        throw new IllegalStateException("Duplicate native quest object id: " + code(id));
+                    }
+                    return code(id);
                 }
                 """)
                 && questMethod(sources, "HeraclesQuestIntegration", """
@@ -1310,9 +1828,17 @@ public final class VerifySustainabilityRegistry {
             case "QuestLogic" -> Set.of("<init>#0", "consider#3", "byCode#1", "problems#1", "indexOf#2");
             case "QuestEvidence" -> Set.of("<init>#0", "met#3");
             case "QuestInventoryEvidence" -> Set.of("<init>#0", "count#2", "matches#2");
-            case "QuestProgress" -> Set.of("get#1", "claimed#1", "legacyClaims#1", "updateNativeCompleted#2",
+            case "QuestProgress" -> Set.of("get#1", "createIfMissing#1", "claimed#1", "legacyClaims#1", "updateNativeCompleted#2",
                     "usesNativeClaims#1", "useNativeClaims#1", "claim#2", "save#1", "load#1");
             case "QuestBackendPlatform", "QuestBackendPlatformImpl" -> Set.of("<init>#0", "open#1");
+            case "GrindlessForge" -> Set.of("<init>#0");
+            case "GrindlessForgeClient" -> Set.of("<init>#0", "onClientSetup#1");
+            case "FtbQuestIntegration" -> Set.of("<init>#0", "init#1", "started#1", "open#1", "importPlayer#1", "tick#1");
+            case "FtbQuestNative" -> Set.of("<init>#0", "verify#1", "migrate#3", "refresh#3", "sameData#2", "parseId#1");
+            case "FtbQuestDefinitions" -> Set.of("<init>#0", "id#2", "questId#1", "taskId#1", "rewardIds#1",
+                    "code#1", "chapters#0", "quest#4", "body#1", "json#1", "strings#1", "unique#2");
+            case "FtbMatrixFilter" -> Set.of("getName#0", "isFilterStack#1", "doesItemMatch#2", "getMatcher#1",
+                    "hasItemTagFilter#0", "makeTagFilterStack#1", "sameSubject#2");
             case "HeraclesQuestNetwork" -> Set.of("<init>#0", "init#0", "claim#1", "send#2", "encode#2", "decode#1");
             case "HeraclesQuestIntegration" -> Set.of("<init>#0", "init#1", "started#1", "reloaded#1", "verify#0",
                     "unavailable#1", "open#1", "claim#2", "login#1", "logout#1", "tick#1", "refresh#2", "diagnostic#1");
@@ -1325,6 +1851,8 @@ public final class VerifySustainabilityRegistry {
             case "QuestBookAccessEvents" -> Set.of("WAITING_FOR_SPACE");
             case "QuestProgress" -> Set.of("KEY", "TAG_PLAYERS", "TAG_PLAYER", "TAG_TASKS", "TAG_NATIVE_CLAIMS",
                     "claimed", "nativeClaims", "nativeCompleted");
+            case "FtbQuestIntegration" -> Set.of("ready");
+            case "FtbMatrixFilter" -> Set.of("BINDING");
             case "HeraclesQuestNetwork" -> Set.of("PROTOCOL");
             case "HeraclesQuestIntegration" -> Set.of("definitions", "encoded", "LAST_SENT", "available", "failure");
             case "GrindlessClaimTask" -> Set.of("id", "catalogueId", "TYPE");
@@ -1351,13 +1879,32 @@ public final class VerifySustainabilityRegistry {
                         .equals(List.of("QuestTask<ServerPlayer,NumericTag,GrindlessClaimTask>"))
                 : type.getKind() != Tree.Kind.CLASS
                         || !type.getModifiers().getFlags().containsAll(Set.of(Modifier.PUBLIC, Modifier.FINAL))
-                        || !type.getImplementsClause().isEmpty())) {
+                        || (name.equals("FtbMatrixFilter")
+                        ? !type.getImplementsClause().stream()
+                                .map(VerifySustainabilityRegistry::normalized).toList().equals(List.of("ItemFilterAdapter"))
+                        : !type.getImplementsClause().isEmpty()))) {
             return false;
         }
         if (name.equals("QuestBookAccessEvents")) {
             ClassTree contract = parse("QuestEventsContract", """
                     @Mod.EventBusSubscriber(modid = Grindless.MOD_ID)
                     public final class QuestEventsContract {}
+                    """);
+            if (!questText(type.getModifiers()).equals(questText(contract.getModifiers()))) {
+                return false;
+            }
+        } else if (name.equals("GrindlessForge")) {
+            ClassTree contract = parse("QuestForgeContract", """
+                    @Mod(Grindless.MOD_ID)
+                    public final class QuestForgeContract {}
+                    """);
+            if (!questText(type.getModifiers()).equals(questText(contract.getModifiers()))) {
+                return false;
+            }
+        } else if (name.equals("GrindlessForgeClient")) {
+            ClassTree contract = parse("QuestClientContract", """
+                    @Mod.EventBusSubscriber(modid = Grindless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                    public final class QuestClientContract {}
                     """);
             if (!questText(type.getModifiers()).equals(questText(contract.getModifiers()))) {
                 return false;
@@ -1471,6 +2018,8 @@ public final class VerifySustainabilityRegistry {
                     "private final Map<UUID, Set<String>> claimed = new HashMap<>();",
                     "private final Set<UUID> nativeClaims = new HashSet<>();",
                     "private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();");
+            case "FtbQuestIntegration" -> List.of("private static boolean ready;");
+            case "FtbMatrixFilter" -> List.of("public static final String BINDING = \"grindless:quest_matrix\";");
             case "HeraclesQuestNetwork" -> List.of("private static final String PROTOCOL = \"1\";");
             case "HeraclesQuestIntegration" -> List.of("private static Map<String, Quest> definitions = Map.of();",
                     "private static Map<String, String> encoded = Map.of();",
@@ -1504,7 +2053,7 @@ public final class VerifySustainabilityRegistry {
 
     private static void questAccessCounterexamples(Path root) throws IOException {
         Map<String, ClassTree> sources = questSources(root, new TreeMap<>());
-        eq("the free starter, batch claim, book recovery, native claim fences and both real entrypoints are recognized", true,
+        eq("legacy claim/access guards and native FTB migration, definitions and entrypoints are recognized", true,
                 questBookAccess(sources));
         rejectQuest(root, sources, "the service cannot replace the physical book with permission",
                 "QuestClaimService", "return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "return true");
@@ -1628,6 +2177,25 @@ public final class VerifySustainabilityRegistry {
                 "QuestClaimService", "if (claimed.contains(taskId))", "if (false)");
         rejectQuest(root, sources, "the persistent claim must reject an existing task",
                 "QuestProgress", "if (!tasks.add(task))", "if (false)");
+        rejectQuest(root, sources, "a swallowed SavedData load failure cannot use an unguarded empty-ledger supplier",
+                "QuestProgress", "() -> createIfMissing(file)", "QuestProgress::new");
+        rejectQuest(root, sources, "the creation guard must inspect the actual world data directory",
+                "QuestProgress", ".resolve(\"data\")", ".resolve(\"unrelated_data\")");
+        rejectQuest(root, sources, "the creation guard must inspect the current ledger, not a backup filename",
+                "QuestProgress", "KEY + \".dat\"", "KEY + \".dat_old\"");
+        rejectQuest(root, sources, "a dangling ledger symlink cannot bypass existing-data protection",
+                "QuestProgress", "BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS", "BasicFileAttributes.class");
+        rejectQuest(root, sources, "an inspection failure cannot recreate a fresh reward ledger",
+                "QuestProgress",
+                "throw new IllegalStateException(\"Cannot inspect quest progress; refusing to recreate its reward ledger\",\n"
+                        + "                    exception);",
+                "return new QuestProgress();");
+        rejectQuest(root, sources, "an existing failed ledger cannot be replaced by empty progress",
+                "QuestProgress",
+                "throw new IllegalStateException(\"Existing quest progress could not be loaded; refusing to recreate its reward ledger\");",
+                "return new QuestProgress();");
+        rejectQuest(root, sources, "guarded ledger creation must use the actual filesystem API",
+                "QuestProgress", "import java.nio.file.Files;", "import fixture.Files;");
         rejectQuest(root, sources, "the gate view must retain historical paid claims",
                 "QuestProgress", "new HashSet<>(legacyClaims(player))", "new HashSet<>()");
         rejectQuest(root, sources, "native completion cannot be omitted from compatibility gates",
@@ -1867,6 +2435,161 @@ public final class VerifySustainabilityRegistry {
                         + ".getPlayerList().getPlayers().get(0).getMainHandItem().shrink(1);");
         rejectQuest(root, sources, "native completion must observe the same player's common ledger",
                 "GrindlessClaimTask", "claimed(player.getUUID())", "claimed(null)");
+        rejectQuest(root, sources, "native FTB must be selected before the optional legacy renderer",
+                "QuestBackendPlatformImpl", "if (ModList.get().isLoaded(\"ftbquests\"))", "if (false)");
+        rejectQuest(root, sources, "a selected native backend must actually open its framework UI",
+                "QuestBackendPlatformImpl", "FtbQuestIntegration.open(player);", "");
+        rejectQuest(root, sources, "a selected native backend cannot fall through to the custom menu",
+                "QuestBackendPlatformImpl", "return true;", "return false;");
+        rejectQuest(root, sources, "the native platform binding cannot substitute a same-named helper",
+                "QuestBackendPlatformImpl",
+                "import io.github.ezequiel24123z.grindless.forge.quest.FtbQuestIntegration;",
+                "import fixture.FtbQuestIntegration;");
+        rejectQuest(root, sources, "Forge cannot initialize rival quest reward authorities together",
+                "GrindlessForge", "} else if (ModList.get().isLoaded(\"heracles\"))",
+                "} if (ModList.get().isLoaded(\"heracles\"))");
+        rejectQuest(root, sources, "the Heracles client must remain disabled when native FTB is present",
+                "GrindlessForgeClient", "!ModList.get().isLoaded(\"ftbquests\") && ", "");
+        rejectQuest(root, sources, "native Matrix evidence requires registration of the supported filter adapter",
+                "FtbQuestIntegration", "FTBQuestsAPI.api().registerFilterAdapter(new FtbMatrixFilter());", "");
+        rejectQuest(root, sources, "native adapter registration must use the actual framework API",
+                "FtbQuestIntegration", "import dev.ftb.mods.ftbquests.api.FTBQuestsAPI;",
+                "import fixture.FTBQuestsAPI;");
+        rejectQuest(root, sources, "the native probe must retain its actual command registration hook",
+                "FtbQuestIntegration", "MinecraftForge.EVENT_BUS.addListener(FtbQuestChecks::registerCommands);", "");
+        rejectQuest(root, sources, "native readiness cannot skip the loaded definition verification",
+                "FtbQuestIntegration", "FtbQuestNative.verify(file);", "");
+        rejectQuest(root, sources, "native opening cannot bypass admission and historical receipt import",
+                "FtbQuestIntegration", "if (!importPlayer(player))", "if (false)");
+        rejectQuest(root, sources, "native migration must execute on the server thread",
+                "FtbQuestIntegration", "if (!player.server.isSameThread())", "if (false)");
+        rejectQuest(root, sources, "unverified native definitions cannot admit players",
+                "FtbQuestIntegration", "if (!ready)", "if (false)");
+        rejectQuest(root, sources, "native receipt import must use the admitted player's UUID",
+                "FtbQuestIntegration", "player.getUUID(), data", "new java.util.UUID(0, 0), data");
+        rejectQuest(root, sources, "native imported receipts must be saved before successful admission",
+                "FtbQuestIntegration", "data.saveIfChanged();", "");
+        rejectQuest(root, sources, "failed native import cannot report successful admission",
+                "FtbQuestIntegration", "return false;", "return true;");
+        rejectQuest(root, sources, "only historical paid legacy receipts may be imported",
+                "FtbQuestNative", "legacy.legacyClaims(player)", "legacy.claimed(player)");
+        rejectQuest(root, sources, "native migration requires both a player and framework progress",
+                "FtbQuestNative", "if (player == null || nativeProgress == null)", "if (false)");
+        rejectQuest(root, sources, "native migration cannot omit permanent retirement of the common reward mint",
+                "FtbQuestNative", "legacy.useNativeClaims(player);", "");
+        rejectQuest(root, sources, "native migration cannot manufacture a historical starter receipt",
+                "FtbQuestNative", "legacy.useNativeClaims(player);",
+                "legacy.claim(player, QuestCatalogue.STARTER_SUPPLIES); legacy.useNativeClaims(player);");
+        rejectQuest(root, sources, "native migration cannot mark unpaid catalogue rewards as already claimed",
+                "FtbQuestNative", "if (!paid.contains(task.id()))", "if (false)");
+        rejectQuest(root, sources, "native reward import cannot deliver an actual reward",
+                "FtbQuestNative", "Reward reward = nativeProgress.getFile().getReward(rewardId);",
+                "Reward reward = nativeProgress.getFile().getReward(rewardId); reward.claim(null, false);");
+        rejectQuest(root, sources, "native paid receipts must belong to the actual player",
+                "FtbQuestNative", "nativeProgress.markRewardAsClaimed(player, reward, now)",
+                "nativeProgress.markRewardAsClaimed(new UUID(0, 0), reward, now)");
+        rejectQuest(root, sources, "native receipt import cannot accept team-wide reward ownership",
+                "FtbQuestNative", "reward.isTeamReward()", "false");
+        rejectQuest(root, sources, "a failed native receipt mark cannot be treated as successful import",
+                "FtbQuestNative", "!nativeProgress.markRewardAsClaimed(player, reward, now)", "false");
+        rejectQuest(root, sources, "all paid reward receipts must precede any imported quest completion",
+                "FtbQuestNative", "for (long rewardId : FtbQuestDefinitions.rewardIds(task)) {",
+                "nativeProgress.setCompleted(FtbQuestDefinitions.questId(task.id()), new Date(now)); "
+                        + "for (long rewardId : FtbQuestDefinitions.rewardIds(task)) {");
+        rejectQuest(root, sources, "retained T1 completion import cannot bypass the original chapter gate",
+                "FtbQuestNative", "!QuestCatalogue.unlocked(QuestCatalogue.chapter(task), paid)", "false");
+        rejectQuest(root, sources, "locked framework data cannot accept imported completion",
+                "FtbQuestNative", "nativeProgress.isLocked()", "false");
+        rejectQuest(root, sources, "native task verification must bind the actual implementation class",
+                "FtbQuestNative", "task.getClass() != expectedTask.getClass()", "false");
+        rejectQuest(root, sources, "native reward verification must bind the stock item reward implementation",
+                "FtbQuestNative", "reward.getClass() != ItemReward.class", "false");
+        rejectQuest(root, sources, "modified native definition data cannot establish authority",
+                "FtbQuestNative", "if (!expectedData.equals(actualData))", "if (false)");
+        rejectQuest(root, sources, "native completion refresh cannot mint paid historical receipts",
+                "FtbQuestNative", "legacy.updateNativeCompleted(player, completed);",
+                "completed.forEach(id -> legacy.claim(player, id));");
+        rejectQuest(root, sources, "native Quest imports cannot resolve to the Heracles type",
+                "FtbQuestNative", "import dev.ftb.mods.ftbquests.quest.Quest;",
+                "import earth.terrarium.heracles.api.quests.Quest;");
+        rejectQuest(root, sources, "the retained Heracles Quest binding cannot resolve to native FTB",
+                "HeraclesQuestIntegration", "import earth.terrarium.heracles.api.quests.Quest;",
+                "import dev.ftb.mods.ftbquests.quest.Quest;");
+        rejectQuest(root, sources, "unexamined native migration overloads cannot certify receipt import",
+                "FtbQuestNative", "private FtbQuestNative() {",
+                "public static void migrate(QuestProgress legacy, UUID player) { legacy.useNativeClaims(player); } "
+                        + "private FtbQuestNative() {");
+        rejectQuest(root, sources, "native object identities cannot silently change their stable namespace",
+                "FtbQuestDefinitions", "\"grindless/ftb/\"", "\"grindless/ftb-replacement/\"");
+        rejectQuest(root, sources, "native reward identities must cover the complete declared batch",
+                "FtbQuestDefinitions", "IntStream.range(0, task.rewards().size())", "IntStream.range(0, 1)");
+        rejectQuest(root, sources, "native quests cannot become repeatable reward mints",
+                "FtbQuestDefinitions", "quest.putBoolean(\"can_repeat\", false);",
+                "quest.putBoolean(\"can_repeat\", true);");
+        rejectQuest(root, sources, "native chapter defaults cannot enable repeatable rewards",
+                "FtbQuestDefinitions", "document.putBoolean(\"default_repeatable_quest\", false);",
+                "document.putBoolean(\"default_repeatable_quest\", true);");
+        rejectQuest(root, sources, "native quest dependencies must retain canonical chapter prerequisites",
+                "FtbQuestDefinitions", "QuestCatalogue.requirements(task)", "task.requires()");
+        rejectQuest(root, sources, "native free tasks must use the stock explicit checkmark",
+                "FtbQuestDefinitions", "case FREE -> \"ftbquests:checkmark\";", "case FREE -> \"ftbquests:item\";");
+        rejectQuest(root, sources, "native Matrix evidence must retain the stock ItemTask",
+                "FtbQuestDefinitions", "case ITEM, MATRIX -> \"ftbquests:item\";",
+                "case ITEM -> \"ftbquests:item\"; case MATRIX -> \"grindless:matrix\";");
+        rejectQuest(root, sources, "native Matrix filter stacks must retain the canonical requested rating",
+                "FtbQuestDefinitions", "physical.putInt(ControlMatrixNbt.RATING, task.matrixRating().ordinal());",
+                "physical.putInt(ControlMatrixNbt.RATING, FluxTier.F0.ordinal());");
+        rejectQuest(root, sources, "native Matrix filters must identify their logical catalogue task",
+                "FtbQuestDefinitions", "physical.putString(FtbMatrixFilter.BINDING, task.id());", "");
+        rejectQuest(root, sources, "native Matrix filters must actually attach the physical item tag",
+                "FtbQuestDefinitions", "item.put(\"tag\", physical);", "");
+        rejectQuest(root, sources, "stock native item tasks must require the actual physical quantity",
+                "FtbQuestDefinitions", "evidence.putLong(\"count\", task.count());", "evidence.putLong(\"count\", 1);");
+        rejectQuest(root, sources, "stock native evidence tasks cannot consume their physical proof",
+                "FtbQuestDefinitions", "evidence.putBoolean(\"consume_items\", false);",
+                "evidence.putBoolean(\"consume_items\", true);");
+        rejectQuest(root, sources, "native rewards must retain their declared quantity",
+                "FtbQuestDefinitions", "reward.putInt(\"count\", declared.count());", "reward.putInt(\"count\", 1);");
+        rejectQuest(root, sources, "native reward claims must remain individual, never team-wide",
+                "FtbQuestDefinitions", "reward.putBoolean(\"team_reward\", false);",
+                "reward.putBoolean(\"team_reward\", true);");
+        rejectQuest(root, sources, "native item rewards cannot acquire automatic delivery",
+                "FtbQuestDefinitions", "reward.putString(\"auto\", \"disabled\");",
+                "reward.putString(\"auto\", \"enabled\");");
+        rejectQuest(root, sources, "duplicate native object identities cannot be accepted",
+                "FtbQuestDefinitions", "if (!ids.add(id))", "if (false)");
+        rejectQuest(root, sources, "native Matrix filters must retain the stable private binding key",
+                "FtbMatrixFilter", "\"grindless:quest_matrix\"", "\"grindless:quest_matrix_other\"");
+        rejectQuest(root, sources, "malformed Matrix markers must be intercepted rather than falling back to item-only matching",
+                "FtbMatrixFilter", "stack.getTag().contains(BINDING)", "stack.getTag().contains(BINDING, Tag.TAG_STRING)");
+        rejectQuest(root, sources, "invalid native Matrix filter definitions cannot produce a permissive matcher",
+                "FtbMatrixFilter", "return NO_MATCH;", "return candidate -> true;");
+        rejectQuest(root, sources, "the native Matrix adapter must test the real candidate, not its trusted filter stack",
+                "FtbMatrixFilter", "getMatcher(filterStack).test(toCheck)", "getMatcher(filterStack).test(filterStack)");
+        rejectQuest(root, sources, "native Matrix filter lookup must bind the declared logical task",
+                "FtbMatrixFilter", "QuestCatalogue.byId(filterStack.getTag().getString(BINDING))",
+                "QuestCatalogue.byId(\"relay\")");
+        rejectQuest(root, sources, "native Matrix filter definitions must match their declared physical item",
+                "FtbMatrixFilter", "!sameSubject(filterStack, declared)", "false");
+        rejectQuest(root, sources, "native Matrix filter definitions must validate their own physical rating",
+                "FtbMatrixFilter", ".filter(spec -> spec.rating() == declared.matrixRating()).isEmpty()",
+                ".filter(spec -> true).isEmpty()");
+        rejectQuest(root, sources, "native Matrix candidates must match the declared physical item",
+                "FtbMatrixFilter", "sameSubject(candidate, declared)", "true");
+        rejectQuest(root, sources, "native Matrix candidate validation cannot reuse the filter stack's specification",
+                "FtbMatrixFilter", "ControlMatrixItem.spec(candidate)", "ControlMatrixItem.spec(filterStack)");
+        rejectQuest(root, sources, "native Matrix candidates must retain the exact requested valid rating",
+                "FtbMatrixFilter", ".filter(spec -> spec.rating() == declared.matrixRating()).isPresent()",
+                ".filter(spec -> true).isPresent()");
+        rejectQuest(root, sources, "native Matrix predicates must implement the supported framework adapter",
+                "FtbMatrixFilter", "import dev.ftb.mods.ftbquests.api.ItemFilterAdapter;",
+                "import fixture.ItemFilterAdapter;");
+        rejectQuest(root, sources, "native Matrix predicates cannot shadow the inherited framework matcher type",
+                "FtbMatrixFilter", "import net.minecraft.nbt.Tag;",
+                "import fixture.Matcher; import net.minecraft.nbt.Tag;");
+        rejectQuest(root, sources, "native Matrix predicates must use the actual physical Matrix parser",
+                "FtbMatrixFilter", "import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;",
+                "import fixture.ControlMatrixItem;");
     }
 
     private static void rejectQuest(Path root, Map<String, ClassTree> sources, String message,
@@ -2287,18 +3010,32 @@ public final class VerifySustainabilityRegistry {
         Map<String, String> bindings = new TreeMap<>(Map.ofEntries(
                 Map.entry("Grindless", "io.github.ezequiel24123z.grindless.Grindless"),
                 Map.entry("QuestCatalogue", "io.github.ezequiel24123z.grindless.quest.QuestCatalogue"),
+                Map.entry("QuestProjection", "io.github.ezequiel24123z.grindless.quest.QuestProjection"),
+                Map.entry("QuestTeaching", "io.github.ezequiel24123z.grindless.quest.QuestTeaching"),
                 Map.entry("FluxTier", "io.github.ezequiel24123z.grindless.energy.FluxTier"),
+                Map.entry("FluidLogic", "io.github.ezequiel24123z.grindless.fluid.FluidLogic"),
+                Map.entry("SourceLogic", "io.github.ezequiel24123z.grindless.source.SourceLogic"),
+                Map.entry("FtbQuestFiles", "io.github.ezequiel24123z.grindless.forge.quest.FtbQuestFiles"),
+                Map.entry("GrindlessClient", "io.github.ezequiel24123z.grindless.client.GrindlessClient"),
+                Map.entry("MachineInspectionOverlay",
+                        "io.github.ezequiel24123z.grindless.forge.overlay.MachineInspectionOverlay"),
+                Map.entry("MaterialRegistry", "io.github.ezequiel24123z.grindless.material.MaterialRegistry"),
+                Map.entry("RegistryTagView", "io.github.ezequiel24123z.grindless.material.RegistryTagView"),
                 Map.entry("ModItems", "io.github.ezequiel24123z.grindless.registry.ModItems"),
                 Map.entry("ModMenus", "io.github.ezequiel24123z.grindless.registry.ModMenus"),
                 Map.entry("DevTelemetry", "io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry"),
                 Map.entry("ControlMatrixItem", "io.github.ezequiel24123z.grindless.item.ControlMatrixItem"),
+                Map.entry("ControlMatrixNbt", "io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt"),
+                Map.entry("FtbQuestChecks", "io.github.ezequiel24123z.grindless.forge.quest.FtbQuestChecks"),
                 Map.entry("HeraclesDefinitions", "io.github.ezequiel24123z.grindless.forge.quest.HeraclesDefinitions"),
                 Map.entry("HeraclesClaimProjection",
                         "io.github.ezequiel24123z.grindless.forge.quest.HeraclesClaimProjection"),
                 Map.entry("HeraclesQuestClient", "io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestClient"),
                 Map.entry("Player", "net.minecraft.world.entity.player.Player"),
+                Map.entry("MinecraftServer", "net.minecraft.server.MinecraftServer"),
                 Map.entry("ServerPlayer", "net.minecraft.server.level.ServerPlayer"),
                 Map.entry("Item", "net.minecraft.world.item.Item"),
+                Map.entry("TagKey", "net.minecraft.tags.TagKey"),
                 Map.entry("ItemStack", "net.minecraft.world.item.ItemStack"),
                 Map.entry("Items", "net.minecraft.world.item.Items"),
                 Map.entry("Level", "net.minecraft.world.level.Level"),
@@ -2314,6 +3051,7 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("ResourceLocation", "net.minecraft.resources.ResourceLocation"),
                 Map.entry("Container", "net.minecraft.world.Container"),
                 Map.entry("SavedData", "net.minecraft.world.level.saveddata.SavedData"),
+                Map.entry("LevelResource", "net.minecraft.world.level.storage.LevelResource"),
                 Map.entry("CompoundTag", "net.minecraft.nbt.CompoundTag"),
                 Map.entry("ListTag", "net.minecraft.nbt.ListTag"),
                 Map.entry("StringTag", "net.minecraft.nbt.StringTag"),
@@ -2321,8 +3059,17 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("NumericTag", "net.minecraft.nbt.NumericTag"),
                 Map.entry("MenuRegistry", "dev.architectury.registry.menu.MenuRegistry"),
                 Map.entry("ExpectPlatform", "dev.architectury.injectables.annotations.ExpectPlatform"),
+                Map.entry("LifecycleEvent", "dev.architectury.event.events.common.LifecycleEvent"),
+                Map.entry("EventBuses", "dev.architectury.platform.forge.EventBuses"),
                 Map.entry("ModList", "net.minecraftforge.fml.ModList"),
                 Map.entry("Mod", "net.minecraftforge.fml.common.Mod"),
+                Map.entry("MinecraftForge", "net.minecraftforge.common.MinecraftForge"),
+                Map.entry("IEventBus", "net.minecraftforge.eventbus.api.IEventBus"),
+                Map.entry("FMLCommonSetupEvent", "net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent"),
+                Map.entry("FMLClientSetupEvent", "net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent"),
+                Map.entry("FMLJavaModLoadingContext", "net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext"),
+                Map.entry("FMLPaths", "net.minecraftforge.fml.loading.FMLPaths"),
+                Map.entry("TagsUpdatedEvent", "net.minecraftforge.event.TagsUpdatedEvent"),
                 Map.entry("SubscribeEvent", "net.minecraftforge.eventbus.api.SubscribeEvent"),
                 Map.entry("TickEvent", "net.minecraftforge.event.TickEvent"),
                 Map.entry("PlayerEvent", "net.minecraftforge.event.entity.player.PlayerEvent"),
@@ -2333,6 +3080,22 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("PacketDistributor", "net.minecraftforge.network.PacketDistributor"),
                 Map.entry("DistExecutor", "net.minecraftforge.fml.DistExecutor"),
                 Map.entry("Dist", "net.minecraftforge.api.distmarker.Dist"),
+                Map.entry("FTBQuestsAPI", "dev.ftb.mods.ftbquests.api.FTBQuestsAPI"),
+                Map.entry("ItemFilterAdapter", "dev.ftb.mods.ftbquests.api.ItemFilterAdapter"),
+                Map.entry("BaseQuestFile", "dev.ftb.mods.ftbquests.quest.BaseQuestFile"),
+                Map.entry("Chapter", "dev.ftb.mods.ftbquests.quest.Chapter"),
+                Map.entry("QuestObjectBase", "dev.ftb.mods.ftbquests.quest.QuestObjectBase"),
+                Map.entry("TeamData", "dev.ftb.mods.ftbquests.quest.TeamData"),
+                Map.entry("ServerQuestFile", "dev.ftb.mods.ftbquests.quest.ServerQuestFile"),
+                Map.entry("Reward", "dev.ftb.mods.ftbquests.quest.reward.Reward"),
+                Map.entry("ItemReward", "dev.ftb.mods.ftbquests.quest.reward.ItemReward"),
+                Map.entry("Task", "dev.ftb.mods.ftbquests.quest.task.Task"),
+                Map.entry("ItemTask", "dev.ftb.mods.ftbquests.quest.task.ItemTask"),
+                Map.entry("CheckmarkTask", "dev.ftb.mods.ftbquests.quest.task.CheckmarkTask"),
+                Map.entry("DimensionTask", "dev.ftb.mods.ftbquests.quest.task.DimensionTask"),
+                Map.entry("ObjectCompletedEvent", "dev.ftb.mods.ftbquests.events.ObjectCompletedEvent"),
+                Map.entry("OpenQuestBookMessage", "dev.ftb.mods.ftbquests.net.OpenQuestBookMessage"),
+                Map.entry("TeamEvent", "dev.ftb.mods.ftbteams.api.event.TeamEvent"),
                 Map.entry("QuestTask", "earth.terrarium.heracles.api.tasks.QuestTask"),
                 Map.entry("QuestTaskType", "earth.terrarium.heracles.api.tasks.QuestTaskType"),
                 Map.entry("BooleanTaskStorage", "earth.terrarium.heracles.api.tasks.storage.defaults.BooleanTaskStorage"),
@@ -2345,10 +3108,25 @@ public final class VerifySustainabilityRegistry {
                 Map.entry("ArrayList", "java.util.ArrayList"), Map.entry("Optional", "java.util.Optional"),
                 Map.entry("Map", "java.util.Map"), Map.entry("HashMap", "java.util.HashMap"),
                 Map.entry("HashSet", "java.util.HashSet"), Map.entry("UUID", "java.util.UUID"),
+                Map.entry("Date", "java.util.Date"), Map.entry("LinkedHashSet", "java.util.LinkedHashSet"),
+                Map.entry("Collections", "java.util.Collections"), Map.entry("LinkedHashMap", "java.util.LinkedHashMap"),
+                Map.entry("Locale", "java.util.Locale"),
+                Map.entry("ByteBuffer", "java.nio.ByteBuffer"),
+                Map.entry("StandardCharsets", "java.nio.charset.StandardCharsets"),
+                Map.entry("MessageDigest", "java.security.MessageDigest"),
+                Map.entry("NoSuchAlgorithmException", "java.security.NoSuchAlgorithmException"),
+                Map.entry("IOException", "java.io.IOException"),
+                Map.entry("Path", "java.nio.file.Path"), Map.entry("Files", "java.nio.file.Files"),
+                Map.entry("LinkOption", "java.nio.file.LinkOption"),
+                Map.entry("NoSuchFileException", "java.nio.file.NoSuchFileException"),
+                Map.entry("BasicFileAttributes", "java.nio.file.attribute.BasicFileAttributes"),
                 Map.entry("Function", "java.util.function.Function"),
                 Map.entry("Predicate", "java.util.function.Predicate"),
                 Map.entry("Runnable", "java.lang.Runnable"),
                 Map.entry("String", "java.lang.String"),
+                Map.entry("Long", "java.lang.Long"), Map.entry("Integer", "java.lang.Integer"),
+                Map.entry("System", "java.lang.System"), Map.entry("SecurityException", "java.lang.SecurityException"),
+                Map.entry("UnsupportedOperationException", "java.lang.UnsupportedOperationException"),
                 Map.entry("IllegalArgumentException", "java.lang.IllegalArgumentException"),
                 Map.entry("IllegalStateException", "java.lang.IllegalStateException"),
                 Map.entry("AssertionError", "java.lang.AssertionError")));
@@ -2357,6 +3135,12 @@ public final class VerifySustainabilityRegistry {
             bindings.put(type, relative.substring(relative.indexOf("/java/") + 6, relative.length() - 5)
                     .replace('/', '.'));
         });
+        if (name.equals("FtbQuestNative")) {
+            bindings.put("Quest", "dev.ftb.mods.ftbquests.quest.Quest");
+        }
+        if (name.equals("FtbMatrixFilter")) {
+            bindings.put("Matcher", "dev.ftb.mods.ftbquests.api.ItemFilterAdapter.Matcher");
+        }
         String owner = bindings.get(name);
         String packageName = owner.substring(0, owner.lastIndexOf('.'));
         if (!normalized(parsed.getPackageName()).equals(packageName) || parsed.getTypeDecls().size() != 1) {
@@ -2395,9 +3179,34 @@ public final class VerifySustainabilityRegistry {
             case "QuestInventoryEvidence" -> Set.of("QuestCatalogue", "Container", "ItemStack",
                     "ControlMatrixItem", "BuiltInRegistries");
             case "QuestProgress" -> Set.of("ServerPlayer", "SavedData", "Map", "HashMap", "Set", "HashSet",
-                    "UUID", "QuestCatalogue", "CompoundTag", "ListTag", "StringTag", "Tag", "IllegalArgumentException");
+                    "UUID", "QuestCatalogue", "CompoundTag", "ListTag", "StringTag", "Tag", "IllegalArgumentException",
+                    "IllegalStateException", "LevelResource", "Path", "Files", "BasicFileAttributes", "LinkOption",
+                    "NoSuchFileException", "IOException", "SecurityException");
             case "QuestBackendPlatform" -> Set.of("ServerPlayer", "ExpectPlatform", "AssertionError");
-            case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "HeraclesQuestIntegration");
+            case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "FtbQuestIntegration", "HeraclesQuestIntegration");
+            case "GrindlessForge" -> Set.of("Grindless", "IEventBus", "FMLJavaModLoadingContext", "EventBuses",
+                    "MachineInspectionOverlay", "ModList", "Mod", "FtbQuestIntegration", "HeraclesQuestIntegration",
+                    "MinecraftForge", "TagsUpdatedEvent", "MaterialRegistry", "RegistryTagView");
+            case "GrindlessForgeClient" -> Set.of("Grindless", "GrindlessClient", "Mod", "ModList", "Dist",
+                    "SubscribeEvent", "FMLClientSetupEvent", "HeraclesQuestClient");
+            case "FtbQuestIntegration" -> Set.of("Grindless", "QuestProgress", "FtbQuestNative", "FtbQuestDefinitions",
+                    "FTBQuestsAPI", "FtbMatrixFilter", "FtbQuestFiles", "FtbQuestChecks",
+                    "IEventBus", "FMLCommonSetupEvent", "FMLPaths", "IOException",
+                    "LifecycleEvent", "TeamEvent", "ObjectCompletedEvent", "MinecraftForge", "TickEvent",
+                    "MinecraftServer", "ServerPlayer", "ServerQuestFile", "TeamData", "OpenQuestBookMessage", "Component",
+                    "IllegalStateException", "IllegalArgumentException");
+            case "FtbQuestNative" -> Set.of("BaseQuestFile", "Chapter", "Quest", "QuestObjectBase", "TeamData",
+                    "ItemReward", "Reward", "CheckmarkTask", "DimensionTask", "ItemTask", "Task",
+                    "FtbQuestDefinitions", "QuestCatalogue", "QuestProgress", "CompoundTag", "ListTag", "Tag", "Date",
+                    "LinkedHashSet", "Set", "UUID", "System", "Long", "IllegalArgumentException", "IllegalStateException");
+            case "FtbQuestDefinitions" -> Set.of("QuestCatalogue", "QuestProjection", "QuestTeaching", "FluxTier",
+                    "FluidLogic", "SourceLogic", "ControlMatrixNbt", "FtbMatrixFilter",
+                    "CompoundTag", "ListTag", "StringTag", "Component", "ByteBuffer",
+                    "StandardCharsets", "MessageDigest", "NoSuchAlgorithmException", "Collections", "HashSet",
+                    "LinkedHashMap", "List", "Locale", "Map", "Set", "Long", "Integer", "String",
+                    "IllegalStateException", "IllegalArgumentException");
+            case "FtbMatrixFilter" -> Set.of("ItemFilterAdapter", "ControlMatrixItem", "QuestCatalogue",
+                    "BuiltInRegistries", "Tag", "TagKey", "Item", "ItemStack", "UnsupportedOperationException");
             case "HeraclesQuestNetwork" -> Set.of("SimpleChannel", "NetworkRegistry", "NetworkDirection", "ServerPlayer",
                     "Grindless", "DistExecutor", "Dist", "HeraclesQuestIntegration", "HeraclesQuestClient",
                     "PacketDistributor", "List", "QuestLogic");

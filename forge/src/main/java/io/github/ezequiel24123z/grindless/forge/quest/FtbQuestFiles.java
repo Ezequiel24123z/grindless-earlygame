@@ -17,7 +17,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -60,7 +59,7 @@ public final class FtbQuestFiles {
             }
             CompoundTag document = source.copy();
             requireObjects(document, document, filename);
-            Map<String, Integer> ids = countIds(document);
+            Map<String, Integer> ids = countObjectIds(document);
             for (Map.Entry<String, Integer> entry : ids.entrySet()) {
                 if (entry.getValue() != 1 || owners.putIfAbsent(entry.getKey(), filename) != null) {
                     throw new IOException("Duplicate generated native quest object id: " + entry.getKey());
@@ -104,7 +103,7 @@ public final class FtbQuestFiles {
                     continue;
                 }
                 CompoundTag document = readChapter(file);
-                Map<String, Integer> ids = countIds(document);
+                Map<String, Integer> ids = countObjectIds(document);
                 for (Map.Entry<String, Integer> entry : ids.entrySet()) {
                     String owner = owners.get(entry.getKey());
                     if (owner == null) {
@@ -190,28 +189,35 @@ public final class FtbQuestFiles {
         }
     }
 
-    /** Visits every nested compound, including item/custom data, not just the known object lists. */
-    private static Map<String, Integer> countIds(CompoundTag document) {
+    /** Counts only native object positions, never ItemStack ids or arbitrary item/custom NBT. */
+    private static Map<String, Integer> countObjectIds(CompoundTag document) {
         Map<String, Integer> ids = new LinkedHashMap<>();
-        ArrayDeque<Tag> pending = new ArrayDeque<>();
-        pending.add(document);
-        while (!pending.isEmpty()) {
-            Tag tag = pending.removeLast();
-            if (tag instanceof CompoundTag compound) {
-                String id = nativeId(compound.get("id"));
-                if (id != null) {
-                    ids.merge(id, 1, Integer::sum);
+        countObjectId(document, ids);
+        if (document.get("quests") instanceof ListTag quests) {
+            for (Tag entry : quests) {
+                if (!(entry instanceof CompoundTag quest)) {
+                    continue;
                 }
-                for (String key : compound.getAllKeys()) {
-                    pending.add(compound.get(key));
-                }
-            } else if (tag instanceof ListTag list) {
-                for (Tag child : list) {
-                    pending.add(child);
+                countObjectId(quest, ids);
+                for (String key : List.of("tasks", "rewards")) {
+                    if (quest.get(key) instanceof ListTag objects) {
+                        for (Tag child : objects) {
+                            if (child instanceof CompoundTag object) {
+                                countObjectId(object, ids);
+                            }
+                        }
+                    }
                 }
             }
         }
         return ids;
+    }
+
+    private static void countObjectId(CompoundTag object, Map<String, Integer> ids) {
+        String id = nativeId(object.get("id"));
+        if (id != null) {
+            ids.merge(id, 1, Integer::sum);
+        }
     }
 
     private static String nativeId(Tag tag) {

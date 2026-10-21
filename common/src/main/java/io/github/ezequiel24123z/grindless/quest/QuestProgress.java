@@ -6,7 +6,14 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.LevelResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -34,8 +41,22 @@ public final class QuestProgress extends SavedData {
     private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();
 
     public static QuestProgress get(ServerPlayer player) {
+        Path file = player.server.getWorldPath(LevelResource.ROOT).resolve("data").resolve(KEY + ".dat");
         return player.server.overworld().getDataStorage()
-                .computeIfAbsent(QuestProgress::load, QuestProgress::new, KEY);
+                .computeIfAbsent(QuestProgress::load, () -> createIfMissing(file), KEY);
+    }
+
+    /** SavedData can swallow load failures; only a genuinely absent file permits a fresh reward ledger. */
+    static QuestProgress createIfMissing(Path file) {
+        try {
+            Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+        } catch (NoSuchFileException missing) {
+            return new QuestProgress();
+        } catch (IOException | SecurityException exception) {
+            throw new IllegalStateException("Cannot inspect quest progress; refusing to recreate its reward ledger",
+                    exception);
+        }
+        throw new IllegalStateException("Existing quest progress could not be loaded; refusing to recreate its reward ledger");
     }
 
     /** A copy. Callers cannot mark a task claimed by editing the returned set. */

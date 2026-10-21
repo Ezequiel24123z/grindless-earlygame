@@ -13,7 +13,15 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +38,7 @@ public final class VerifyQuestClaims {
 
     private static int assertions;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         claims();
@@ -43,8 +51,10 @@ public final class VerifyQuestClaims {
         invalidRewards();
         projectionAndReload();
         nativeClaimAuthority();
+        guardedLedgerCreation();
         System.out.println("ALL QUEST CLAIM CHECKS PASSED: " + assertions
-                + "; positive registered F1 evidence/server claims remain required in workshop-ports native probe.");
+                + "; positive registered F1 evidence/server claims remain required in workshop-ports native probe"
+                + "; actual SavedData load-failure/recreation remains required in a native probe.");
     }
 
     private static void nativeClaimAuthority() {
@@ -102,7 +112,86 @@ public final class VerifyQuestClaims {
             } catch (IllegalArgumentException expected) {
                 rejected = true;
             }
-            equal("corrupt authority never silently reopens legacy grants", true, rejected);
+            equal("corrupt native authority must reject its parsed saved data", true, rejected);
+        }
+    }
+
+    private static void guardedLedgerCreation() throws IOException {
+        Path root = Files.createTempDirectory("grindless-quest-ledger-");
+        try {
+            Path data = Files.createDirectory(root.resolve("data"));
+            Path file = data.resolve(QuestProgress.KEY + ".dat");
+            QuestProgress fresh = QuestProgress.createIfMissing(file);
+            equal("only an absent ledger permits fresh in-memory progress", Set.of(),
+                    fresh.claimed(UUID.randomUUID()));
+            equal("guarded creation does not write a replacement file", false, Files.exists(file));
+            byte[] original = {0x1f, (byte) 0x8b, 0};
+            Files.write(file, original);
+            equal("an existing corrupt ledger cannot be recreated after a swallowed load failure", true,
+                    refusesLedgerCreation(file));
+            equal("refusal preserves the exact existing ledger bytes", true,
+                    java.util.Arrays.equals(original, Files.readAllBytes(file)));
+            Files.write(file, new byte[0]);
+            equal("an empty corrupt ledger is existing data, not a new world", true, refusesLedgerCreation(file));
+            equal("an empty corrupt ledger is not overwritten", 0L, Files.size(file));
+            Files.delete(file);
+            Files.createDirectory(file);
+            equal("a directory at the ledger path cannot be replaced by empty progress", true,
+                    refusesLedgerCreation(file));
+            equal("the existing directory is preserved", true, Files.isDirectory(file));
+            Files.delete(file);
+            try {
+                Files.createSymbolicLink(file, Path.of("missing-ledger-target"));
+            } catch (IOException | UnsupportedOperationException | SecurityException unavailable) {
+                System.out.println("SKIPPED dangling-ledger symlink fixture: symbolic-link creation unavailable ("
+                        + unavailable.getClass().getSimpleName() + ").");
+            }
+            if (Files.isSymbolicLink(file)) {
+                equal("a dangling ledger symlink cannot masquerade as an absent ledger", true,
+                        refusesLedgerCreation(file));
+                equal("refusal preserves the ledger symlink", true, Files.isSymbolicLink(file));
+                Files.delete(file);
+            }
+            Files.write(file, original);
+            if (Files.getFileAttributeView(data, PosixFileAttributeView.class) != null) {
+                Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(data);
+                try {
+                    Files.setPosixFilePermissions(data, Set.of());
+                    boolean inspectable = true;
+                    try {
+                        Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+                    } catch (IOException | SecurityException denied) {
+                        inspectable = false;
+                    }
+                    if (inspectable) {
+                        System.out.println("SKIPPED inaccessible-ledger fixture: this process can still inspect attributes.");
+                    } else {
+                        equal("an uninspectable ledger cannot fall back to empty progress", true,
+                                refusesLedgerCreation(file));
+                    }
+                } finally {
+                    Files.setPosixFilePermissions(data, permissions);
+                }
+                equal("permission-fixture refusal preserves the existing ledger bytes", true,
+                        java.util.Arrays.equals(original, Files.readAllBytes(file)));
+            } else {
+                System.out.println("SKIPPED inaccessible-ledger fixture: POSIX permission control is unavailable.");
+            }
+        } finally {
+            try (var paths = Files.walk(root)) {
+                for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
+                    Files.deleteIfExists(path);
+                }
+            }
+        }
+    }
+
+    private static boolean refusesLedgerCreation(Path file) {
+        try {
+            QuestProgress.createIfMissing(file);
+            return false;
+        } catch (IllegalStateException expected) {
+            return true;
         }
     }
 

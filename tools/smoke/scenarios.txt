@@ -65,3 +65,4 @@ first-drift          Slice BJ: the Drift loads, its floor is one deck, and the S
 first-centre         Slice BN: the galactic centre loads as shell, and the arrival mark is a block.
 first-atlas          Process Atlas: the handheld exists so a pack without JEI can still see the graph.
 first-book           Slice BC: the quest book and the field guide items exist; opening their client screens is interactive acceptance.
+native-quests        Actual FTB chapter graph, registered stock Matrix filtering and transient native TeamData migration/individual receipts/Relay gate; no player or world mutation.
