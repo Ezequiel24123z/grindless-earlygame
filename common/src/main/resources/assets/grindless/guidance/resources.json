@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "content_sha256": "d6949e94ec1592739f9e3ce250433d9bf7cf9a76306cc7429a0f1844f4d13619",
+  "content_sha256": "014115a116674b65ffd6d19656fcfa1e70cd7d1c586b73b84de6816b842cdf25",
   "resources": [
     {
       "resource": {
@@ -12085,7 +12085,7 @@
         },
         {
           "route": "craft/flux_cell",
-          "source": "common/src/main/resources/data/grindless/recipes/flux_cell.json",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_cell.json",
           "via": "tag:forge:ingots/copper",
           "kind": "consumed_input",
           "certainty": "complete_tag_member",
@@ -13057,7 +13057,7 @@
         },
         {
           "route": "craft/flux_cell",
-          "source": "common/src/main/resources/data/grindless/recipes/flux_cell.json",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_cell.json",
           "via": "tag:forge:ingots/iron",
           "kind": "consumed_input",
           "certainty": "complete_tag_member",
@@ -15204,7 +15204,7 @@
         },
         {
           "route": "craft/flux_cell",
-          "source": "common/src/main/resources/data/grindless/recipes/flux_cell.json",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_cell.json",
           "via": "tag:forge:ingots/copper",
           "kind": "consumed_input",
           "certainty": "exact_resource",
@@ -15515,7 +15515,7 @@
         },
         {
           "route": "craft/flux_cell",
-          "source": "common/src/main/resources/data/grindless/recipes/flux_cell.json",
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_cell.json",
           "via": "tag:forge:ingots/iron",
           "kind": "consumed_input",
           "certainty": "exact_resource",

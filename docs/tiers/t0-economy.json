@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "d1d41824c8db18b4c332b42b2405870f6b38f82aecfe9b634183ed8e1decec95",
+  "authority_snapshot_sha256": "c00e5995b92d531f440433916e444e132fe9f69b5d26506a2f81b24b11955bd7",
   "balance_ledger": [
     {
       "new": "Explicit paid recovery",
@@ -2256,6 +2256,12 @@
         "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
         "inputPotential": null,
         "outputPotential": null,
+        "route": "quest/first_grid"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
         "route": "quest/scanner"
       },
       {
@@ -2281,6 +2287,18 @@
         "inputPotential": null,
         "outputPotential": null,
         "route": "quest/press"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/forming_dies"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/copper_coil"
       },
       {
         "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
@@ -2317,6 +2335,12 @@
         "inputPotential": null,
         "outputPotential": null,
         "route": "quest/factory_world"
+      },
+      {
+        "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
+        "inputPotential": null,
+        "outputPotential": null,
+        "route": "quest/flux_cell"
       },
       {
         "disposition": "FINITE_ONE_CLAIM_NOT_REPEATABLE",
@@ -4880,6 +4904,22 @@
       "duration_ticks": 0,
       "family": "ONE_CLAIM_PER_PLAYER_WORLD",
       "fu_per_tick": 0,
+      "id": "quest/first_grid",
+      "inputs": {
+        "finite_claim:first_grid": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "pylon"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
       "id": "quest/scanner",
       "inputs": {
         "finite_claim:scanner": 1
@@ -4964,6 +5004,38 @@
       },
       "prerequisites": [
         "furnace"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/forming_dies",
+      "inputs": {
+        "finite_claim:forming_dies": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "press"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
+      "id": "quest/copper_coil",
+      "inputs": {
+        "finite_claim:copper_coil": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "forming_dies"
       ],
       "source": "QuestCatalogue.rewards"
     },
@@ -5083,6 +5155,22 @@
       "duration_ticks": 0,
       "family": "ONE_CLAIM_PER_PLAYER_WORLD",
       "fu_per_tick": 0,
+      "id": "quest/flux_cell",
+      "inputs": {
+        "finite_claim:flux_cell": 1
+      },
+      "max_executions_per_player_world": 1,
+      "outputs": {},
+      "prerequisites": [
+        "matrix_line"
+      ],
+      "source": "QuestCatalogue.rewards"
+    },
+    {
+      "boundary": "FINITE_QUEST",
+      "duration_ticks": 0,
+      "family": "ONE_CLAIM_PER_PLAYER_WORLD",
+      "fu_per_tick": 0,
       "id": "quest/industrial_matrix",
       "inputs": {
         "finite_claim:industrial_matrix": 1
@@ -5092,7 +5180,6 @@
         "item:minecraft:iron_ingot": 8
       },
       "prerequisites": [
-        "factory_world",
         "glass",
         "matrix_line"
       ],
@@ -5956,7 +6043,7 @@
   "source_comparison": {
     "common/src/main/java/io/github/ezequiel24123z/grindless/quest/QuestCatalogue.java": {
       "baseline_blob": "7f2ca7be3141021ac24edb8dc56002f1399ad5d5",
-      "evaluated_blob": "f3fdbfdc8d3e238be5df083de463db32e33e3bcc",
+      "evaluated_blob": "db73589200bb9cb89456515dd3e63ea495e5cc1a",
       "source_equal": false
     },
     "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/BootstrapProcesses.java": {
@@ -5976,8 +6063,8 @@
     },
     "common/src/main/java/io/github/ezequiel24123z/grindless/recipe/T1Recipes.java": {
       "baseline_blob": "7d447b4d0187e85689ddd215293519c094572d98",
-      "evaluated_blob": "7d447b4d0187e85689ddd215293519c094572d98",
-      "source_equal": true
+      "evaluated_blob": "0e01f883a79644aa17dda5064ade806b6237b8be",
+      "source_equal": false
     },
     "common/src/main/java/io/github/ezequiel24123z/grindless/research/ResearchLogic.java": {
       "baseline_blob": "656b4336fda4b1dac8b07b117c0028f82a241882",

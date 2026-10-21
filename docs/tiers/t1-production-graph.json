@@ -1,0 +1,2097 @@
+{
+  "authority_snapshot_sha256": "c00e5995b92d531f440433916e444e132fe9f69b5d26506a2f81b24b11955bd7",
+  "entry_route": "craft/relay_matrix",
+  "exit_route": "assemble/relay_matrix_f2",
+  "global_optimum_claimed": false,
+  "lines": [
+    {
+      "id": "power",
+      "requirement": "MANDATORY",
+      "requires_lines": [],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/thermal_generator",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "item:minecraft:furnace": 1,
+            "tag:forge:ingots/iron": 1,
+            "tag:grindless:carbon": 1,
+            "tag:minecraft:stone_crafting_materials": 5
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:thermal_generator": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/thermal_generator.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/flux_pylon_mk1",
+          "inputs": {
+            "item:minecraft:glass": 1,
+            "item:minecraft:redstone": 1,
+            "tag:forge:ingots/iron": 6,
+            "tag:minecraft:stone_crafting_materials": 1
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:flux_pylon_mk1": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_pylon_mk1.json"
+        },
+        {
+          "authority": "GENERATOR_FUEL",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "generation_fu_per_tick": "32"
+          },
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 0,
+          "id": "fuel/thermal_generator/biomass",
+          "inputs": {
+            "item:grindless:biomass": 1
+          },
+          "machine_family": "THERMAL_GENERATOR",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "energy:FU": 6400
+          },
+          "source": "SourceLogic.BIOMASS_BURN_TICKS + THERMAL_GENERATOR"
+        }
+      ]
+    },
+    {
+      "id": "milling",
+      "requirement": "MANDATORY",
+      "requires_lines": [
+        "power"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/pulverizer",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "item:minecraft:flint": 1,
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:pulverizer": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/pulverizer.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 120,
+          "fu_per_tick": 32,
+          "id": "b1/iron",
+          "inputs": {
+            "energy:FU": 3840,
+            "tag:forge:raw_materials/iron": 1
+          },
+          "machine_family": "PULVERIZER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 3840,
+          "one_shot": false,
+          "outputs": {
+            "tag:grindless:crushed_materials/iron": 2
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 120,
+          "fu_per_tick": 32,
+          "id": "b1/copper",
+          "inputs": {
+            "energy:FU": 3840,
+            "tag:forge:raw_materials/copper": 1
+          },
+          "machine_family": "PULVERIZER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 3840,
+          "one_shot": false,
+          "outputs": {
+            "tag:grindless:crushed_materials/copper": 2
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "reduction",
+      "requirement": "MANDATORY",
+      "requires_lines": [
+        "milling"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/arc_furnace",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "item:minecraft:redstone": 1,
+            "tag:forge:ingots/iron": 4,
+            "tag:minecraft:stone_crafting_materials": 3
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:arc_furnace": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/arc_furnace.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "REDUCING",
+            "temperature_c": "1500.0"
+          },
+          "discharged": [
+            "fluid:grindless:carbon_monoxide"
+          ],
+          "duration_ticks": 240,
+          "fu_per_tick": 32,
+          "id": "b1_r1/iron",
+          "inputs": {
+            "energy:FU": 7680,
+            "tag:grindless:carbon": 1,
+            "tag:grindless:crushed_materials/iron": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 7680,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:carbon_monoxide": 1000,
+            "item:grindless:slag": 1,
+            "tag:forge:ingots/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "REDUCING",
+            "temperature_c": "1500.0"
+          },
+          "discharged": [
+            "fluid:grindless:carbon_monoxide"
+          ],
+          "duration_ticks": 240,
+          "fu_per_tick": 32,
+          "id": "b1_r1/copper",
+          "inputs": {
+            "energy:FU": 7680,
+            "tag:grindless:carbon": 1,
+            "tag:grindless:crushed_materials/copper": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 7680,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:carbon_monoxide": 1000,
+            "item:grindless:slag": 1,
+            "tag:forge:ingots/copper": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "glass",
+      "requirement": "MANDATORY",
+      "requires_lines": [
+        "reduction"
+      ],
+      "routes": [
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 120,
+          "fu_per_tick": 32,
+          "id": "renew/sand",
+          "inputs": {
+            "energy:FU": 3840,
+            "item:minecraft:cobblestone": 1
+          },
+          "machine_family": "PULVERIZER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 3840,
+          "one_shot": false,
+          "outputs": {
+            "item:minecraft:sand": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "temperature_c": "1500.0"
+          },
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "renew/glass",
+          "inputs": {
+            "energy:FU": 6400,
+            "item:minecraft:sand": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "item:minecraft:glass": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "forming",
+      "requirement": "MANDATORY",
+      "requires_lines": [
+        "reduction"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/press",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "tag:forge:ingots/iron": 2,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:press": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/press.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/plate_die",
+          "inputs": {
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 8
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:plate_die": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/plate_die.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/rod_die",
+          "inputs": {
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:rod_die": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/rod_die.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/gear_die",
+          "inputs": {
+            "tag:forge:ingots/iron": 4,
+            "tag:minecraft:stone_crafting_materials": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:gear_die": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/gear_die.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/coil_die",
+          "inputs": {
+            "item:minecraft:redstone": 2,
+            "tag:forge:ingots/iron": 1,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:coil_die": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/coil_die.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {
+            "item:grindless:plate_die": 1
+          },
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 80,
+          "fu_per_tick": 32,
+          "id": "press/plate/iron",
+          "inputs": {
+            "energy:FU": 2560,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "PRESS",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 2560,
+          "one_shot": false,
+          "outputs": {
+            "tag:forge:plates/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {
+            "item:grindless:rod_die": 1
+          },
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 80,
+          "fu_per_tick": 32,
+          "id": "press/rod/iron",
+          "inputs": {
+            "energy:FU": 2560,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "PRESS",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 2560,
+          "one_shot": false,
+          "outputs": {
+            "tag:forge:rods/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {
+            "item:grindless:gear_die": 1
+          },
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 80,
+          "fu_per_tick": 32,
+          "id": "press/gear/iron",
+          "inputs": {
+            "energy:FU": 2560,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "PRESS",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 2560,
+          "one_shot": false,
+          "outputs": {
+            "tag:forge:gears/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {
+            "item:grindless:coil_die": 1
+          },
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 80,
+          "fu_per_tick": 32,
+          "id": "press/coil/copper",
+          "inputs": {
+            "energy:FU": 2560,
+            "tag:forge:ingots/copper": 1
+          },
+          "machine_family": "PRESS",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 2560,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:copper_coil": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/machine_casing",
+          "inputs": {
+            "tag:forge:plates/iron": 4,
+            "tag:forge:rods/iron": 2
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:machine_casing": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/machine_casing.json"
+        }
+      ]
+    },
+    {
+      "id": "assembly",
+      "requirement": "MANDATORY",
+      "requires_lines": [
+        "forming",
+        "glass"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/assembler",
+          "inputs": {
+            "item:grindless:copper_coil": 1,
+            "item:grindless:machine_casing": 2,
+            "item:grindless:relay_matrix": 1,
+            "tag:forge:gears/iron": 2
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:assembler": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/assembler.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 400,
+          "fu_per_tick": 32,
+          "id": "assemble/relay_matrix",
+          "inputs": {
+            "energy:FU": 12800,
+            "item:grindless:calibrated_data_core": 1,
+            "item:minecraft:glass": 2,
+            "item:minecraft:redstone": 2,
+            "tag:forge:ingots/copper": 2
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 12800,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:relay_matrix": 5
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "relay_f2",
+      "requirement": "EXIT",
+      "requires_lines": [
+        "assembly"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/flux_cell",
+          "inputs": {
+            "tag:forge:ingots/copper": 8,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:flux_cell": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_cell.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {},
+          "discharged": [],
+          "duration_ticks": 800,
+          "fu_per_tick": 32,
+          "id": "assemble/relay_matrix_f2",
+          "inputs": {
+            "energy:FU": 25600,
+            "item:grindless:flux_cell": 1,
+            "item:grindless:machine_casing": 1,
+            "item:grindless:relay_matrix [F1]": 1,
+            "item:minecraft:glass": 4
+          },
+          "machine_family": "ASSEMBLER",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 25600,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:relay_matrix [F2]": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "extraction",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "power"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/terrestrial_extractor",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "item:minecraft:redstone": 1,
+            "tag:forge:ingots/iron": 4,
+            "tag:minecraft:stone_crafting_materials": 3
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:terrestrial_extractor": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/terrestrial_extractor.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/prospectors_scanner",
+          "inputs": {
+            "item:minecraft:glass": 2,
+            "item:minecraft:redstone": 1,
+            "tag:forge:ingots/iron": 3,
+            "tag:minecraft:stone_crafting_materials": 1
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:prospectors_scanner": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/prospectors_scanner.json"
+        }
+      ]
+    },
+    {
+      "id": "logistics",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "forming"
+      ],
+      "routes": [
+        {
+          "authority": "BOOTSTRAP_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/conveyor_belt",
+          "inputs": {
+            "item:grindless:ceramic_insulator": 2,
+            "tag:forge:ingots/copper": 1,
+            "tag:grindless:boards": 3
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:conveyor_belt": 8
+          },
+          "source": "BOOTSTRAP_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/conveyor_belt.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/splitter",
+          "inputs": {
+            "item:grindless:conveyor_belt": 4,
+            "tag:forge:ingots/iron": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:splitter": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/splitter.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/merger",
+          "inputs": {
+            "item:grindless:conveyor_belt": 5,
+            "tag:forge:ingots/iron": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:merger": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/merger.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/tunnel_belt",
+          "inputs": {
+            "item:grindless:conveyor_belt": 4,
+            "tag:minecraft:stone_crafting_materials": 1
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:tunnel_belt": 2
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/tunnel_belt.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/overflow_gate",
+          "inputs": {
+            "item:grindless:conveyor_belt": 4,
+            "tag:forge:ingots/iron": 1
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:overflow_gate": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/overflow_gate.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/sorter",
+          "inputs": {
+            "item:grindless:conveyor_belt": 4,
+            "item:minecraft:hopper": 1,
+            "tag:forge:ingots/iron": 4
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:sorter": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/sorter.json"
+        }
+      ]
+    },
+    {
+      "id": "storage",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "power"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/flux_conduit",
+          "inputs": {
+            "item:minecraft:glass": 1,
+            "item:minecraft:redstone": 1,
+            "tag:forge:ingots/iron": 3
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:flux_conduit": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_conduit.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/capacitor_bank",
+          "inputs": {
+            "item:minecraft:redstone": 2,
+            "tag:forge:ingots/iron": 6
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:capacitor_bank": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/capacitor_bank.json"
+        },
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/flux_transformer",
+          "inputs": {
+            "item:minecraft:redstone": 2,
+            "tag:forge:ingots/iron": 5,
+            "tag:minecraft:stone_crafting_materials": 2
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:flux_transformer": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/flux_transformer.json"
+        }
+      ]
+    },
+    {
+      "id": "kiln",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "power"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/kiln",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "tag:forge:ingots/iron": 1,
+            "tag:grindless:carbon": 1,
+            "tag:minecraft:stone_crafting_materials": 6
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:kiln": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/kiln.json"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "OXIDISING",
+            "temperature_c": "700.0"
+          },
+          "discharged": [
+            "fluid:grindless:sulfur_dioxide"
+          ],
+          "duration_ticks": 160,
+          "fu_per_tick": 32,
+          "id": "roast/iron",
+          "inputs": {
+            "energy:FU": 5120,
+            "tag:forge:raw_materials/iron": 1
+          },
+          "machine_family": "KILN",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 5120,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:sulfur_dioxide": 1000,
+            "tag:grindless:oxides/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "OXIDISING",
+            "temperature_c": "700.0"
+          },
+          "discharged": [
+            "fluid:grindless:sulfur_dioxide"
+          ],
+          "duration_ticks": 160,
+          "fu_per_tick": 32,
+          "id": "roast/copper",
+          "inputs": {
+            "energy:FU": 5120,
+            "tag:forge:raw_materials/copper": 1
+          },
+          "machine_family": "KILN",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 5120,
+          "one_shot": false,
+          "outputs": {
+            "fluid:grindless:sulfur_dioxide": 1000,
+            "tag:grindless:oxides/copper": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "REDUCING",
+            "temperature_c": "1500.0"
+          },
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "r2/iron",
+          "inputs": {
+            "energy:FU": 6400,
+            "tag:grindless:carbon": 1,
+            "tag:grindless:oxides/iron": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:slag": 1,
+            "tag:forge:ingots/iron": 1
+          },
+          "source": "ProcessGraph.generate"
+        },
+        {
+          "authority": "PROCESS_GRAPH",
+          "automatable": true,
+          "catalysts": {},
+          "conditions": {
+            "atmosphere": "REDUCING",
+            "temperature_c": "1500.0"
+          },
+          "discharged": [],
+          "duration_ticks": 200,
+          "fu_per_tick": 32,
+          "id": "r2/copper",
+          "inputs": {
+            "energy:FU": 6400,
+            "tag:grindless:carbon": 1,
+            "tag:grindless:oxides/copper": 1
+          },
+          "machine_family": "ARC_FURNACE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 6400,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:slag": 1,
+            "tag:forge:ingots/copper": 1
+          },
+          "source": "ProcessGraph.generate"
+        }
+      ]
+    },
+    {
+      "id": "factory_space",
+      "requirement": "OPTIONAL",
+      "requires_lines": [
+        "assembly"
+      ],
+      "routes": [
+        {
+          "authority": "T1_RECIPES",
+          "automatable": false,
+          "catalysts": {},
+          "conditions": {
+            "crafting_type": "minecraft:crafting_shaped"
+          },
+          "discharged": [],
+          "duration_ticks": 0,
+          "fu_per_tick": 0,
+          "id": "craft/factory_portal",
+          "inputs": {
+            "item:grindless:relay_matrix": 1,
+            "item:minecraft:glass": 4,
+            "item:minecraft:redstone": 2,
+            "tag:forge:ingots/copper": 2
+          },
+          "machine_family": "CRAFTING_TABLE",
+          "mod_owned": true,
+          "nominal_fu_per_batch": 0,
+          "one_shot": false,
+          "outputs": {
+            "item:grindless:factory_portal": 1
+          },
+          "source": "T1_RECIPES.shaped + common/src/main/resources/data/grindless/recipes/factory_portal.json"
+        }
+      ]
+    }
+  ],
+  "mandatory_input_evidence": [
+    {
+      "amount": 12800,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "assemble/relay_matrix",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "calibrate/data_core"
+      ],
+      "resource": "item:grindless:calibrated_data_core",
+      "route": "assemble/relay_matrix",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/glass"
+      ],
+      "resource": "item:minecraft:glass",
+      "route": "assemble/relay_matrix",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/wet_aggregate"
+      ],
+      "resource": "item:minecraft:redstone",
+      "route": "assemble/relay_matrix",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_copper"
+      ],
+      "resource": "tag:forge:ingots/copper",
+      "route": "assemble/relay_matrix",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 25600,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "assemble/relay_matrix_f2",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/flux_cell"
+      ],
+      "resource": "item:grindless:flux_cell",
+      "route": "assemble/relay_matrix_f2",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/machine_casing"
+      ],
+      "resource": "item:grindless:machine_casing",
+      "route": "assemble/relay_matrix_f2",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "assemble/relay_matrix"
+      ],
+      "resource": "item:grindless:relay_matrix [F1]",
+      "route": "assemble/relay_matrix_f2",
+      "status": "PHYSICAL_DEFAULT_F1_BINDING_NOT_NORMALIZED_BY_AUDITOR"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/glass"
+      ],
+      "resource": "item:minecraft:glass",
+      "route": "assemble/relay_matrix_f2",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 3840,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "b1/copper",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/wet_aggregate"
+      ],
+      "resource": "tag:forge:raw_materials/copper",
+      "route": "b1/copper",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 3840,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "b1/iron",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/wet_aggregate"
+      ],
+      "resource": "tag:forge:raw_materials/iron",
+      "route": "b1/iron",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 7680,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "b1_r1/copper",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/biocarbon"
+      ],
+      "resource": "tag:grindless:carbon",
+      "route": "b1_r1/copper",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "b1/copper"
+      ],
+      "resource": "tag:grindless:crushed_materials/copper",
+      "route": "b1_r1/copper",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 7680,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "b1_r1/iron",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/biocarbon"
+      ],
+      "resource": "tag:grindless:carbon",
+      "route": "b1_r1/iron",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "b1/iron"
+      ],
+      "resource": "tag:grindless:crushed_materials/iron",
+      "route": "b1_r1/iron",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/relay_matrix",
+        "assemble/relay_matrix"
+      ],
+      "resource": "item:grindless:relay_matrix",
+      "route": "craft/arc_furnace",
+      "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/wet_aggregate"
+      ],
+      "resource": "item:minecraft:redstone",
+      "route": "craft/arc_furnace",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/arc_furnace",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 3,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/arc_furnace",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "press/coil/copper"
+      ],
+      "resource": "item:grindless:copper_coil",
+      "route": "craft/assembler",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/machine_casing"
+      ],
+      "resource": "item:grindless:machine_casing",
+      "route": "craft/assembler",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/relay_matrix",
+        "assemble/relay_matrix"
+      ],
+      "resource": "item:grindless:relay_matrix",
+      "route": "craft/assembler",
+      "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "press/gear/iron"
+      ],
+      "resource": "tag:forge:gears/iron",
+      "route": "craft/assembler",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/wet_aggregate"
+      ],
+      "resource": "item:minecraft:redstone",
+      "route": "craft/coil_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/coil_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 6,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/coil_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 8,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_copper"
+      ],
+      "resource": "tag:forge:ingots/copper",
+      "route": "craft/flux_cell",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/flux_cell",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/glass"
+      ],
+      "resource": "item:minecraft:glass",
+      "route": "craft/flux_pylon_mk1",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/wet_aggregate"
+      ],
+      "resource": "item:minecraft:redstone",
+      "route": "craft/flux_pylon_mk1",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 6,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/flux_pylon_mk1",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/flux_pylon_mk1",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/gear_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/gear_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "press/plate/iron"
+      ],
+      "resource": "tag:forge:plates/iron",
+      "route": "craft/machine_casing",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "press/rod/iron"
+      ],
+      "resource": "tag:forge:rods/iron",
+      "route": "craft/machine_casing",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/plate_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 8,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/plate_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/relay_matrix",
+        "assemble/relay_matrix"
+      ],
+      "resource": "item:grindless:relay_matrix",
+      "route": "craft/press",
+      "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
+    },
+    {
+      "amount": 2,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/press",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 6,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/press",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/relay_matrix",
+        "assemble/relay_matrix"
+      ],
+      "resource": "item:grindless:relay_matrix",
+      "route": "craft/pulverizer",
+      "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/flint_separation"
+      ],
+      "resource": "item:minecraft:flint",
+      "route": "craft/pulverizer",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/pulverizer",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 6,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/pulverizer",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/rod_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 4,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/rod_die",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "craft/relay_matrix",
+        "assemble/relay_matrix"
+      ],
+      "resource": "item:grindless:relay_matrix",
+      "route": "craft/thermal_generator",
+      "status": "PHYSICAL_T0_SEED_OR_T1_REPRODUCTION_NOT_T0_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bench/furnace"
+      ],
+      "resource": "item:minecraft:furnace",
+      "route": "craft/thermal_generator",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "craft/thermal_generator",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/biocarbon"
+      ],
+      "resource": "tag:grindless:carbon",
+      "route": "craft/thermal_generator",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 5,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "tag:minecraft:stone_crafting_materials",
+      "route": "craft/thermal_generator",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "source/biomass"
+      ],
+      "resource": "item:grindless:biomass",
+      "route": "fuel/thermal_generator/biomass",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 2560,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "press/coil/copper",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_copper"
+      ],
+      "resource": "tag:forge:ingots/copper",
+      "route": "press/coil/copper",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": true,
+      "producers": [
+        "craft/coil_die"
+      ],
+      "resource": "item:grindless:coil_die",
+      "route": "press/coil/copper",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2560,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "press/gear/iron",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "press/gear/iron",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": true,
+      "producers": [
+        "craft/gear_die"
+      ],
+      "resource": "item:grindless:gear_die",
+      "route": "press/gear/iron",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2560,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "press/plate/iron",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "press/plate/iron",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": true,
+      "producers": [
+        "craft/plate_die"
+      ],
+      "resource": "item:grindless:plate_die",
+      "route": "press/plate/iron",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 2560,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "press/rod/iron",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/reduce_iron"
+      ],
+      "resource": "tag:forge:ingots/iron",
+      "route": "press/rod/iron",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": true,
+      "producers": [
+        "craft/rod_die"
+      ],
+      "resource": "item:grindless:rod_die",
+      "route": "press/rod/iron",
+      "status": "LIVE_T1_INTERMEDIATE_NOT_RENEWABILITY_PROOF"
+    },
+    {
+      "amount": 6400,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "renew/glass",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/sand"
+      ],
+      "resource": "item:minecraft:sand",
+      "route": "renew/glass",
+      "status": "T0_AUDITED_RENEWABLE"
+    },
+    {
+      "amount": 3840,
+      "catalyst_retained": false,
+      "producers": [
+        "fuel/thermal_generator/biomass"
+      ],
+      "resource": "energy:FU",
+      "route": "renew/sand",
+      "status": "T1_THERMAL_FROM_T0_RENEWABLE_BIOMASS"
+    },
+    {
+      "amount": 1,
+      "catalyst_retained": false,
+      "producers": [
+        "bootstrap/dry_aggregate"
+      ],
+      "resource": "item:minecraft:cobblestone",
+      "route": "renew/sand",
+      "status": "T0_AUDITED_RENEWABLE"
+    }
+  ],
+  "power": {
+    "F1_nominal_fu_per_tick": 32,
+    "burn_ticks": 200,
+    "canonical_route": "fuel/thermal_generator/biomass",
+    "concurrency": "Per-route draws are not a simultaneous factory load or a continuous autonomy proof",
+    "fuel_inputs": {
+      "item:grindless:biomass": 1
+    },
+    "fuel_is_T0_renewable": true,
+    "generated_fu_per_batch": 6400,
+    "generation_fu_per_tick": 32,
+    "under_volting": "FluxTier throughput degrades; it is not a global recipe permission"
+  },
+  "provenance_scope": "Normalized evaluated authority facts here; raw sources/classes/revision in build/t1/provenance.json",
+  "quantity_authority": "Live ProcessGraph/catalogues and shipped JSON, never this generated document",
+  "reproduction_route": "assemble/relay_matrix",
+  "reused_T0_proof": {
+    "conditional_gate_pass": true,
+    "conditions": [
+      "The Hand Pump has an adjacent or below WATER-tagged source; geological and bioculture sites satisfy their actual terrestrial/rock/open-sky/light predicates while used.",
+      "The player normally acquired the finite starter materials in the derived bill; none are guaranteed gifts.",
+      "The real Crank Handle is constructed and only server-side eligible F0 ProcessMachines receive local work.",
+      "The witness is conditional material/work establishment, not observed survival, client crafting, night/restart behavior or saved-world compatibility."
+    ],
+    "entry_profile": "t0_native_sources_conditional_entry_v1",
+    "exit_production": {
+      "resource": {
+        "kind": "ITEM",
+        "id": "grindless:relay_matrix",
+        "rating": 0,
+        "registry": "items"
+      },
+      "route": "craft/relay_matrix",
+      "requiredCount": 5,
+      "batchOutput": 5,
+      "executedBatches": 1,
+      "produced": 5,
+      "status": "conditional_established"
+    },
+    "finite_reserves": [
+      {
+        "resource": {
+          "kind": "ITEM",
+          "id": "minecraft:brick",
+          "rating": 0,
+          "registry": "items"
+        },
+        "guaranteed": 0,
+        "playerProvided": 33,
+        "claimedRewards": 4,
+        "required": 37,
+        "margin": 0,
+        "status": "conditional_established"
+      },
+      {
+        "resource": {
+          "kind": "ITEM",
+          "id": "minecraft:charcoal",
+          "rating": 0,
+          "registry": "items"
+        },
+        "guaranteed": 0,
+        "playerProvided": 0,
+        "claimedRewards": 4,
+        "required": 4,
+        "margin": 0,
+        "status": "conditional_established"
+      },
+      {
+        "resource": {
+          "kind": "ITEM",
+          "id": "minecraft:clay_ball",
+          "rating": 0,
+          "registry": "items"
+        },
+        "guaranteed": 0,
+        "playerProvided": 0,
+        "claimedRewards": 12,
+        "required": 0,
+        "margin": 12,
+        "status": "conditional_established"
+      },
+      {
+        "resource": {
+          "kind": "ITEM",
+          "id": "minecraft:cobblestone",
+          "rating": 0,
+          "registry": "items"
+        },
+        "guaranteed": 0,
+        "playerProvided": 41,
+        "claimedRewards": 0,
+        "required": 41,
+        "margin": 0,
+        "status": "conditional_established"
+      },
+      {
+        "resource": {
+          "kind": "ITEM",
+          "id": "minecraft:oak_planks",
+          "rating": 0,
+          "registry": "items"
+        },
+        "guaranteed": 0,
+        "playerProvided": 21,
+        "claimedRewards": 0,
+        "required": 21,
+        "margin": 0,
+        "status": "conditional_established"
+      },
+      {
+        "resource": {
+          "kind": "ITEM",
+          "id": "minecraft:stick",
+          "rating": 0,
+          "registry": "items"
+        },
+        "guaranteed": 0,
+        "playerProvided": 20,
+        "claimedRewards": 12,
+        "required": 31,
+        "margin": 1,
+        "status": "conditional_established"
+      }
+    ],
+    "retained_construction_and_catalysts": {
+      "item:grindless:biomass": 1,
+      "item:grindless:crank_handle": 1
+    },
+    "scope": "Existing SustainabilityAudit/ConstructionReserve finite replay, not a T1 replay"
+  },
+  "schema_version": 1,
+  "scope": "bounded_first_factory_authority_and_T0_boundary_projection",
+  "seed_allocation": {
+    "batch_output": 5,
+    "construction_draw": 5,
+    "machine_draws": {
+      "craft/arc_furnace": 1,
+      "craft/assembler": 1,
+      "craft/press": 1,
+      "craft/pulverizer": 1,
+      "craft/thermal_generator": 1
+    },
+    "remaining": 0,
+    "scope": "Source-derived first-machine allocation, not observed world custody"
+  },
+  "side_streams": [
+    {
+      "T0_classification": "BYPRODUCT_OPTIONAL",
+      "T1_classification": "BYPRODUCT_CURRENT",
+      "canonical_source": "bootstrap/flint_separation",
+      "first_mandatory_use_tier": 1,
+      "implemented_consumer": "craft/pulverizer",
+      "resource": "item:minecraft:flint",
+      "scope": "Additive first T1 use; the canonical T0 annotation remains unchanged"
+    },
+    {
+      "classification": "POTENTIAL_FUTURE_USE",
+      "discard_allowed": true,
+      "mandatory_T1_feedstock": false,
+      "resource": "item:grindless:slag",
+      "uncertainty": "The implemented ceramic/refractory_brick ARC_FURNACE consumer is a prototype with no accepted future use tier. Ordinary Item discard is allowed; no automatic disposal, recycling or numbered future plan is claimed."
+    },
+    {
+      "actual_discharge": "ProcessRecipe vented output",
+      "classification": "EMISSION",
+      "handling": "Do not count vented CO as stored fuel. Optional capture and Thermal burning require actual storage/routing; no containment or gas-handling capacity is certified.",
+      "mandatory_retained_feedstock": false,
+      "resource": "fluid:grindless:carbon_monoxide"
+    }
+  ],
+  "t1_accepted": false,
+  "t1_finite_establishment_replayed": false,
+  "t1_renewable_closure_proven": false,
+  "unproved": [
+    "The existing auditor does not normalize untagged default-F1 outputs into the explicit F1 input identity.",
+    "Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
+    "Manual casing and Flux Cell crafts are not automatic recurring production routes.",
+    "Continuous factory power, nighttime recovery, routing throughput and captured-gas handling need separate evidence.",
+    "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."
+  ]
+}
