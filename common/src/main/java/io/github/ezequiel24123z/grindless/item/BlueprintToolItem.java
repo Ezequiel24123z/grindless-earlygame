@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /** Marks two corners and writes a Blueprint (ADR-0085). */
 public final class BlueprintToolItem extends Item {
@@ -86,37 +87,39 @@ public final class BlueprintToolItem extends Item {
         int maxX = Math.max(first.getX(), clicked.getX());
         int maxY = Math.max(first.getY(), clicked.getY());
         int maxZ = Math.max(first.getZ(), clicked.getZ());
+        BlueprintLogic.Plan plan = capture(BlueprintItem.view(context), minX, minY, minZ, maxX, maxY, maxZ);
         clear(stack);
-        if (!BlueprintLogic.edgeOk(minX, maxX) || !BlueprintLogic.edgeOk(minY, maxY)
-                || !BlueprintLogic.edgeOk(minZ, maxZ)) {
-            player.displayClientMessage(Component.translatable("chat.grindless.blueprint.too_big"), true);
-            return InteractionResult.FAIL;
-        }
-        List<BlueprintLogic.Piece> pieces = capture(level, minX, minY, minZ, maxX, maxY, maxZ);
-        if (!BlueprintLogic.countOk(pieces.size())) {
-            player.displayClientMessage(Component.translatable(pieces.isEmpty()
-                    ? "chat.grindless.blueprint.empty"
-                    : "chat.grindless.blueprint.too_big"), true);
+        if (!plan.ready()) {
+            BlueprintItem.report(player, plan, new BlockPos(minX, minY, minZ), true);
             return InteractionResult.FAIL;
         }
         ItemStack blueprint = new ItemStack(ModItems.BLUEPRINT.get());
-        BlueprintItem.write(blueprint, pieces);
+        BlueprintItem.write(blueprint, plan.pieces());
         if (!player.getInventory().add(blueprint)) {
             player.drop(blueprint, false);
         }
         player.displayClientMessage(Component.translatable("chat.grindless.blueprint.captured",
-                pieces.size()), true);
+                plan.pieces().size()), true);
         return InteractionResult.CONSUME;
     }
 
-    private static List<BlueprintLogic.Piece> capture(Level level, int minX, int minY, int minZ,
-                                                      int maxX, int maxY, int maxZ) {
+    static BlueprintLogic.Plan capture(BlueprintItem.WorldView view, int minX, int minY, int minZ,
+                                        int maxX, int maxY, int maxZ) {
+        if (!BlueprintLogic.edgeOk(minX, maxX) || !BlueprintLogic.edgeOk(minY, maxY)
+                || !BlueprintLogic.edgeOk(minZ, maxZ)) {
+            return BlueprintLogic.rejected(BlueprintLogic.Failure.TOO_LARGE, null);
+        }
         List<BlueprintLogic.Piece> pieces = new ArrayList<>();
-        for (int y = minY; y <= maxY; y++) {
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    BlockPos pos = new BlockPos(x, y, z);
-                    BlockState state = level.getBlockState(pos);
+        for (int y = 0; y <= maxY - minY; y++) {
+            for (int x = 0; x <= maxX - minX; x++) {
+                for (int z = 0; z <= maxZ - minZ; z++) {
+                    BlockPos pos = new BlockPos(minX + x, minY + y, minZ + z);
+                    BlueprintLogic.Failure failure = BlueprintItem.readable(view, pos);
+                    if (failure != BlueprintLogic.Failure.NONE) {
+                        return BlueprintLogic.rejected(failure,
+                                new BlueprintLogic.Piece(x, y, z, "", "", ""));
+                    }
+                    BlockState state = view.state(pos);
                     if (state.isAir()) {
                         continue;
                     }
@@ -127,14 +130,14 @@ public final class BlueprintToolItem extends Item {
                     String blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
                     String itemId = BuiltInRegistries.ITEM.getKey(item).toString();
                     pieces.add(new BlueprintLogic.Piece(
-                            x - minX, y - minY, z - minZ, blockId, itemId, facingOf(state)));
+                            x, y, z, blockId, itemId, facingOf(state)));
                     if (pieces.size() > BlueprintLogic.MAX_PIECES) {
-                        return pieces;
+                        return BlueprintLogic.rejected(BlueprintLogic.Failure.TOO_LARGE, null);
                     }
                 }
             }
         }
-        return pieces;
+        return BlueprintLogic.preflight(pieces, Map.of(), true, BlueprintItem::pieceProblem);
     }
 
     private static String facingOf(BlockState state) {
@@ -160,7 +163,7 @@ public final class BlueprintToolItem extends Item {
     }
 
     private static BlockPos anchor(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = stack.getTag();
         return new BlockPos(tag.getInt(KEY_X), tag.getInt(KEY_Y), tag.getInt(KEY_Z));
     }
 
