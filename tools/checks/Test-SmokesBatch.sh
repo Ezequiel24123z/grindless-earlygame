@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# One shared no-server implementation; the batch runner itself is native Bash.
+# One shared no-server implementation, including native-backend dispatch and mocked Sync.
+# Both real runner twins are tested only against temporary fake launch boundaries.
 set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT="$SCRIPT_DIR/Test-SmokesBatch.ps1"

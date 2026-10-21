@@ -174,8 +174,10 @@ tasks.register("installSmokeServer", JavaExec) {
 }
 
 // Test the distributable jars without the development transformer's persistent worker pools.
-tasks.register("prepareSmokeServer", Copy) {
+// One Sync owns the complete mods inventory, including transitions back from the native backend.
+def prepareSmokeServer = tasks.register("prepareSmokeServer", Sync) {
     dependsOn tasks.named("installSmokeServer"), tasks.named("remapJar")
+    mustRunAfter "verifyFtbPublisherArtifacts"
     from(tasks.named("remapJar").flatMap { it.archiveFile }) {
         rename { "grindless.jar" }
     }
@@ -185,10 +187,20 @@ tasks.register("prepareSmokeServer", Copy) {
     into smokeServer.dir("mods")
 }
 
-tasks.register("prepareQuestSmokeServer", Copy) {
-    dependsOn tasks.named("prepareSmokeServer"), tasks.named("verifyFtbPublisherArtifacts")
-    from(configurations.questSmokeMods)
-    into smokeServer.dir("mods")
+tasks.register("prepareQuestSmokeServer") {
+    dependsOn prepareSmokeServer, tasks.named("verifyFtbPublisherArtifacts")
+}
+
+// The existing harness selects the alias for SMOKE_QUEST_BACKEND=ftb. Wait for the
+// complete graph (including indirect alias requests) before choosing these external jars.
+gradle.taskGraph.whenReady { graph ->
+    def nativeQuests = graph.hasTask("${project.path}:prepareQuestSmokeServer")
+    prepareSmokeServer.configure {
+        inputs.property("questBackend", nativeQuests ? "ftb" : "none")
+        if (nativeQuests) {
+            from(configurations.questSmokeMods)
+        }
+    }
 }
 
 sourceSets {
