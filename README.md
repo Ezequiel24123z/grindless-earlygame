@@ -45,6 +45,9 @@ particle accelerator, out past orbit, and on to that black hole. Arriving is the
 > T0 play, T1 development/research continues, reported blockers are fixed first,
 > and final T0 conclusions drive polish. Actual observations/acceptance are not
 > inferred from that start instruction; the installed game is not updated live.
+> ADR-0173 now explicitly opens isolated development/research of the remaining
+> tiers alongside T1 while the native questbook is delivered. This is not
+> acceptance, release or permission to add later-tier code to the player's T0 game.
 > Sol 6.1 has received checkpoint17ae8b0 in its clean isolated coordinator (ADR-0147);
 > decisions and integration follow the [active handoff](.agent/handoff.md).
 > **Execution is SSH-first (ADR-0151):** this conversation stays local; heavy work runs
@@ -1483,7 +1486,9 @@ survival or sustainability gate. See the [T0 contract](docs/tiers/t0.md) and
 
 ### Mechanical tier gate
 
-Development closes one tier completely before opening the next (ADR-0108). A tier is complete only
+Tier acceptance and release remain sequential (ADR-0108/0144); the owner's later
+ADR-0173 explicitly opens isolated development of later tiers before earlier
+human acceptance. A tier is complete only
 when a survival player can enter from the previous frontier, run every required material, chemical,
 control and energy line, automate the machines and logistics, handle byproducts and normal failure
 states, and manufacture the next Control Matrix or terminal objective without commands or hidden
@@ -2343,6 +2348,7 @@ is preserved and integration/release gates still control acceptance.
 | 62 | **Longitudinal play / development feedback loop** | ADR-0170 — owner-authorized intended T0 game, parallel T1 route/machine/component/line research and development, priority fixes for reported play blockers, then T0 polish from final feedback. Preserve the reference save and stopped-game update boundary; no invented pass, automatic T1 deployment or T2 activation |
 | 63 | **Native quest framework and concise content** | ADR-0171 — genuine native FTB graph/tasks/reward UI and concise JEI-first goals, preserving46 logical IDs/paid history. Real two-process native proof, standalone/persistence and exact dd0 package qualify the byte-identical runtime. New owned FTB target deployed and stopped actual world/options backup verified; separate clone load/final pristine copy remain. Original F stays intact; client/human acceptance is not inferred |
 | 64 | **Recurrent T1 component automation** | ADR-0172 — independent source2f4eee1 adds ordinary Assembler casings/Flux Cells, manual-equivalent material batches and existing timing/FU. Manual bootstrap, four slots, F1/F2 ratings and executor/NBT stay intact; [inventory/references](docs/tiers/t1-development-map.md) separate real runtime, model gaps and prototypes. Source checkpoint published; new generation/JVM qualification pending after the T0 execution priority |
+| 65 | **Parallel later-tier development** | ADR-0173 — owner opens T2-T15 development/research alongside T1. Native-baseline T1 integration, first physical F2 Wire Mill manufacturing and source-backed T3-T15 frontier work run on isolated branches. Current exact ingredient matching versus intended stronger-Matrix substitution and native46-to50 managed-definition updates remain explicit shared boundaries. No later-tier deployment, acceptance or release is inferred |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

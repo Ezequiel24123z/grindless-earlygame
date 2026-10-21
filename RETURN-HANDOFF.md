@@ -1,5 +1,13 @@
 # Return handoff
 
+The owner now explicitly opens remaining-tier development alongside T1
+(ADR-0173), without acceptance/release or later-tier deployment. Separate source
+lanes cover T1 native integration, first T2 physical manufacturing and actual
+T3-T15 dependencies; questbook delivery retains priority. Runtime980e99a3 alone
+temporarily owns the diagnostic clone PC/cache lease; all other execution waits
+for its explicit return. Exact ingredient/stronger-control semantics and managed
+native46-to50 updates remain uncovered boundaries, not implicitly waived gates.
+
 ## Current protected native-questbook delivery
 
 Native implementation and exact-schema Persistence now pass. Final source dd0b4bc

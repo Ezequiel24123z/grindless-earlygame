@@ -16,7 +16,7 @@
     "copy_proof": "cheap_JSON_placeholder_scope_brevity_checks_only_not_Java_client",
     "API_research": "17ef3e9b-0099-4461-b48c-606f43168339",
     "migration_oracles": "7971553c_source_only_ready",
-    "current_single_PC_owner": "coordinator_ftb_protected_delivery_20261021_backend_lease_returned19_16_27Z",
+    "current_single_PC_owner": "runtime980e99a3_ftb_owner_clone_20261021_exclusive_under_coordinator_no_other_PC_until_return",
     "reference": "docs/design/ftb-questbook-integration.md",
     "exact_binary_pins_and_JEI_hook": "verified_and_forwarded_XModCompat_required_no_more_external_lookup_blocker",
     "initial_qualification_source": "173673690d5df3720d77d0e4295c48587fa2b1e9",
@@ -34,6 +34,14 @@
     "protected_delivery": "exact_dd0_new_target_Deployed_original_F_world_backup_verified36files10885681bytes_no_original_write_final_target_world_copy_pending",
     "package_sha256": "79ce5da243dedfded968dafacf392a1d6df6f3328957f5dd8d6b4ae6cf61f41a",
     "same_native_tested_runtime_sha256": "29bcce43372016719fe1202b8859a18c93147562c04a2ef1daf163fddf7cc54f"
+  },
+  "later_tier_development": {
+    "policy": "ADR-0173",
+    "scope": "owner_authorized_T1_T15_development_research_not_acceptance_release_or_T0_deployment",
+    "source_owners": ["2a93_T1_native_integration", "ec7c_T2_physical_WireMill_entry", "8210_T3_T15_frontier_source"],
+    "PC_authority": "none_for_source_lanes_until_new_explicit_window",
+    "shared_pending": ["stronger_Matrix_manufacturing_substitution_vs_exact_ingredient_roles", "managed_FTB46_to50_config_migration_no_raw_paid_world_rewrite"],
+    "new_paid_or_generation_allowance": false
   },
   "longitudinal_readiness": {
     "report": "docs/testing/t0-longitudinal-readiness.md",

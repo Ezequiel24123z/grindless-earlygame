@@ -130,6 +130,23 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner direction — parallel development across the remaining tiers
+(2026-10-21, ADR-0173):** while the native questbook is finished and prepared in
+Prism, continue the agreed T1 work and start the other tiers. This explicitly
+opens isolated development/research beyond T1; older one-tier-at-a-time or
+T1-only development holds do not veto it. Acceptance, release and deployments
+remain separately gated. The actual T0 play blocker and protected save delivery
+retain priority; do not put new-tier code into the player's instance.
+
+Keep T1 on the native FTB baseline, start bounded source-backed T2 manufacturing,
+and use actual T3-T15 dependencies to select further implementation, not an
+agent's invented recipe calendar. Existing accepted design/catalogues remain
+authorities; registered prototypes and proposed documents are not accepted
+survival routes. The coordinator retains architecture/product/integration and
+assigns noncompeting workers. Heavy PC/cache work remains single-owner with a
+new explicit lease; parallel source work is not permission to run concurrent
+builds or touch the game. No new generation/provider spending is authorized.
+
 **Current player blocker — native FTB Quests and concise content (ADR-0171):**
 the owner cannot continue with the custom/native-Heracles questbook experience
 and explicitly requests the established BetterQuesting/FTB framework. Replace the

@@ -184,6 +184,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0170](#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers) | Develop the next tier alongside longitudinal play and prioritize player blockers | Accepted |
 | [0171](#adr-0171--replace-the-player-blocking-book-with-native-ftb-quests-and-concise-jei-first-content) | Replace the player-blocking book with native FTB Quests and concise JEI-first content | Accepted |
 | [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
+| [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
 
 ---
 
@@ -8049,3 +8050,67 @@ This independent source lane does not compete with the urgent ADR-0171 PC/cache
 owner and must not deploy T1 into the owner's T0 game. Thermal's five distinct
 construction ingredients exceed the current four-input Assembler and are not
 an excuse to expand the engine or auto-project every `T1Recipes` entry here.
+
+---
+
+## ADR-0173 — Develop later tiers in parallel with protected T0 play
+
+**Status.** Accepted direct owner development instruction, 2026-10-21.
+
+**Context.** While the native questbook is finished and prepared in Prism, the
+owner explicitly asks to continue all agreed T1 work and start work on the other
+tiers. The accepted aligned T0/F0-T15/F15 campaign already defines their themes
+and terminal frontiers; it does not make the registered later prototypes
+survival-ready. The questbook remains the current play blocker.
+
+**Decision.** Open isolated source development, research and dependency-backed
+implementation for T2-T15 alongside T1. This supersedes ADR-0108's sequential
+development hold and the T1-only limits of ADR-0168/0170, not sequential tier
+acceptance, real-play feedback, release or protected deployment requirements.
+Do not wait for T0 campaign acceptance to investigate or implement later content.
+Do not infer that every tier is implemented, accepted or deployable from this grant.
+
+Keep the coordinator responsible for architecture, product, route/sustainability
+graphs, migrations and final integration. Assign coherent implementation and
+research outcomes on isolated dependent branches. Current bounded work is:
+
+- Integrate the qualified native FTB baseline into the existing T1 factory/
+  component branch, retaining both automatic routes,50 quests, old IDs/rewards
+  and the normal canonical writers.
+- Begin physical T2 manufacturing with the existing Wire Mill/Assembler seam:
+  one F2 Matrix is the fourth grouped construction operand, not a new machine,
+  executor, slot expansion or acid requirement. Motor's existing component
+  recipe and the T1 Press-coil/bootstrap routes remain unchanged.
+- Ground T3-T15 work in actual source authorities/dependencies and choose useful
+  T3/T4 and cross-tier mechanism increments; use pinned mature-mod source as
+  precedent, not a copied balance calendar or licence to import foreign code.
+
+The source trace finds no implicit F2 injection: the existing Wire Mill bill has
+three groups. It also exposes a separate compatibility gap: `IngredientSpec`
+and `ProcessLookup.sameItem` currently match matrix ratings exactly, although
+`ControlMatrixSpec.canControl` and intended README policy allow stronger control.
+The bounded source-only F2 operand preserves the current matcher; it does not
+claim stronger-rating ingredient substitution works. Resolve that shared
+mechanism/role distinction explicitly before accepting the completed T2 frontier,
+without relaxing exact quest/upgrade receipt predicates or changing global
+matching under cover of one recipe.
+
+The native46-to50 configuration transition is also a distinct future boundary.
+Current `FtbQuestFiles.ensure/preflight` deliberately rejects a managed existing
+chapter missing the new quest/task IDs. Preserve that fail-closed behavior.
+A later stopped, hash-bound managed-definition update must preserve all old IDs,
+paid receipts/progress and edited-file refusals; the four reward-free lessons
+start incomplete. Never implement it as raw native world-data replacement.
+
+**Operational limits.** Finish the protected T0 questbook delivery first; report
+and fix further play blockers before taking its execution capacity. PC/cache/
+build/source synchronization remains single-owner with fresh guards and a new
+explicit lease. Source parallelism is not concurrent JVM or deployment authority.
+Preserve the original game and backup; never deploy T1+ into the owner's T0
+instance as an incidental integration step. No new generation allowance, paid
+service, credentials, release, main merge or acceptance is implied.
+
+**Rejected alternatives.** Waiting for every earlier human campaign before any
+later source work contradicts the direct request. Activating every registered
+prototype, inventing fifteen independent engines, balancing unreviewed routes
+or treating a proposal/fixture as accepted content does not satisfy it either.

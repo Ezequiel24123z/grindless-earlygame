@@ -64,6 +64,25 @@ Manual casing seeds the first Assembler; automatic output follows it, not a
 forming-cycle dependency. No new engine/NBT/slots/T2 part is authorized.
 Its baseline523b proof is distinct from the new unexecuted two-route data.
 
+ADR-0173 now opens isolated development through T15, not survival acceptance or
+deployment. T1 owner2a93 integrates native baseline dd0 into the existing factory/
+component branch. T2 ownerec7c starts only the existing `assemble/wire_mill`
+physical F2 operand and affected data contracts: four grouped slots, unchanged
+stock/time/FU, no Motor charge or acid/bootstrap cycle. `ProcessRecipe.milestone`
+is informational, never a hidden permission. `IngredientSpec.matrixRating` /
+`ProcessLookup.sameItem` are currently exact, whereas `ControlMatrixSpec.canControl`
+supports stronger control; do not silently conflate quest/upgrade evidence with
+future manufacturing substitution or claim the latter passed.
+The later-frontier owner8210 derives source-backed T3-T15 work without promoting
+prototype inventories or proposed documents to accepted routes. Root architecture,
+ADR/map/plan integration remain coordinator-owned.
+
+Native `FtbQuestFiles.ensure/preflight` rejects existing chapters missing new
+quest/task IDs. Preserve that fail-closed rule: integrating50 source quests is
+not proof that an installed46-definition configuration can update. A later
+managed-file hash/backup migration must retain old IDs/native paid state and
+refuse unknown edits; no raw world rewrite or relaxed preflight.
+
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
 selection/data contracts, shared T1 teaching and reusable-system documentation.

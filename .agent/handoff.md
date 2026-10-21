@@ -2,6 +2,28 @@
 
 Updated: 2026-10-21. Product gate: **NATIVE FTB/PACKAGE QUALIFIED; PROTECTED SAVE DELIVERY IN PROGRESS**.
 
+## Latest owner scope — T1 and the remaining tiers
+
+ADR-0173 records explicit permission to continue T1 and begin the other tiers
+while completing the questbook/Prism handover. Development/research through T15
+is open; no tier acceptance/release or later-tier deployment follows. Active
+isolated lanes:2a93 T1 native-baseline integration, ec7c first physical F2
+Wire Mill manufacturing,8210 source-backed T3-T15 frontiers;82bed9 external
+mature-source research. Root architecture/integration remain coordinator-owned.
+
+Keep two uncovered boundaries visible: current ingredient matching is exact
+despite intended stronger-Matrix substitution; installed native46 definitions
+cannot acquire source50 through the current strict preflight. Neither authorizes
+a global matcher change under one data recipe or raw quest-world replacement.
+The T1 owner preserves fail-closed config handling; explicit managed-definition
+backup/hash migration precedes a future T1 update.
+
+The coordinator temporarily assigns runtime980e99a3 the exclusive
+`ftb-owner-clone-20261021` PC/cache lease for only the backup-derived diagnostic
+load. Parent/all other workers make no PC action until explicit return.
+Original/backup are not opened as a running world; final Prism copy remains
+parent-owned and comes from the untouched verified backup.
+
 ## Current delivery checkpoint
 
 Backend source `dd0b4bc93187fe172fd336bfa330987220bd7be4` normally merges

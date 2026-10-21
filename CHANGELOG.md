@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Open isolated later-tier development by direct owner instruction (ADR-0173).**
+  Continue native-baseline T1 integration, begin physical T2 Wire Mill
+  manufacturing through the existing Assembler and ground T3-T15 work in actual
+  source/dependencies with mature-mod research. Preserve the T0 delivery/world
+  priority, sequential acceptance/releases and single guarded PC owner. Record
+  exact ingredient versus stronger-controller substitution and native46-to50
+  managed-definition migration as explicit unfinished mechanisms, not data-only
+  success or permission to overwrite paid world state.
 - **Qualify and begin protected delivery of the native FTB fix.** Exact-schema
   Persistence passes; final dd0b4bc package79ce5da2 embeds the byte-identical
   native-tested JAR29bcce43. Parent verifies all25 closed custody artifacts,
