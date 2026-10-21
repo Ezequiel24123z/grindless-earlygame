@@ -337,11 +337,20 @@ the sole2a93 execution owner; machine work/item/fluid save ownership is unchange
   material multiset/shortfall and duplicate/bounds diagnosis.
 - `item/BlueprintItem.java` — strict legacy `Blocks/X/Y/Z/Id/Item/Facing` decode,
   loaded-world/permission adapter, target recheck and bounded main/offhand payment.
+  One `eligibleMaterial` predicate excludes `BlockEntityTag` stock from both
+  counts and reservation: stamping default state must not burn a relocated
+  machine's stores/upgrades. Check `Level.mayInteract` as well as player/item
+  permissions at every destination, not only the original clicked anchor.
 - `item/BlueprintToolItem.java` — capture uses the same diagnosis; retain the
   32-block edge/512-piece bounds and never clone block-entity contents.
 - `tools/checks/VerifyBlueprint.java` / `VerifyPlanner.java` — affected contract
   results are pending, not supplied by their source or the old native
   `first-blueprint` item-existence observation.
+- Forge-only `item/BlueprintInteractionChecks.java` and the isolated
+  `blueprint-interaction` manifest/commands/expect — actual ServerLevel item-use
+  probe with a private non-OP FakePlayer, real inventory/world/refund behavior.
+  Both shared-batch twins exclude its fresh fixture. Authoring/mock dispatch is
+  not an observed native marker; run once through the canonical harness.
 
 Source4550b97 preserves ordinary missing/blocked preflight refusal before
 spending. An explicit false placement restores that attempted payment;

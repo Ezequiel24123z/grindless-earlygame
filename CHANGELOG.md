@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Protect Blueprint construction stock and add a real interaction proof.**
+  Exclude any BlockEntityTag material in both inventory counting and reservation;
+  default-state stamping must not burn relocated machine contents/upgrades.
+  Apply platform plus player/item permissions per target. Add an isolated
+  Forge-only capture/stamp/refusal/real-false-placement refund fixture with the
+  existing harness and shared-batch exclusions. Its authoring/mock checks are
+  not native execution; keep the current426 writer stage immutable until closed.
 - **Integrate the implemented family/process increments without confusing CI gates.**
   Normal source426 and root492 compose F1 Wire Mill/optional forming, pressure
   and Blueprint preflight. Exact CI compiles and passes affected contracts,

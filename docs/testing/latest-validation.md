@@ -82,6 +82,23 @@ Matrix manufacturing substitution remain separate unfinished mechanisms.
 Client presentation, actual saved-world compatibility, publication and tier
 acceptance are not supplied by a static or surrogate check. The owner may play;
 the active execution must satisfy fresh ownership/resource guards and yield.
+
+Follow-upd073 repairs the direct-review issue: any `BlockEntityTag` stock is
+excluded by the same count/reservation predicate, so relocated stores/MK/upgrades
+cannot be silently consumed into a default blueprint block. Each destination
+intersects platform Level protection with player/item permissions. New unit
+regressions and an isolated actual Forge item-use probe are authored; six
+mock dispatch cases/135 assertions and four Bash/PowerShell CLI comparisons
+are tooling evidence only. This new common/Forge delta invalidates Blueprint's
+affected proof, not the unchanged pressure/F1/catalogue contracts.
+
+The native `blueprint-interaction` fixture uses registered Blueprint items, real
+ServerLevel blocks and a private non-OP FakePlayer. Its explicit false-placement
+case uses real replaceable grass already matching the requested state, not a
+fake placement callback. No marker/harness/server0 is recorded yet. Keep the
+running426 writer stage fixed, collect generated outputs, then qualify only the
+changed classes/fixture on an explicitly admitted descendant. It must not load
+the owner world or replace the qualified dd0 installation.
 Keep426 frozen while its stages/locks are active. Owner51366's representative
 Forge probe is not yet integrated; a later probe-only change can reuse successful
 unchanged common compilation, not fabricate a native interaction pass.

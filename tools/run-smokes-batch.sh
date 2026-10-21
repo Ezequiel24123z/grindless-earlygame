@@ -110,9 +110,10 @@ for name in "${SELECTED[@]}"; do
   isolated="no"
   # A01's post-stop VeinData oracle requires exactly two worked chunks/total two in a fresh world.
   # workshop-ports needs an empty probe/drop region, not earlier scheduled fixture effects.
+  # blueprint-interaction owns a fresh, empty native capture/stamp fixture.
   # native-quests additionally needs the isolated FTB dependency composition.
   case "$normalized" in
-    foreign-providers|states|recipe-cache-reload|extractor-backpressure|first-fluids|first-harness|workshop-ports|native-quests) isolated="yes" ;;
+    foreign-providers|states|recipe-cache-reload|extractor-backpressure|first-fluids|first-harness|workshop-ports|blueprint-interaction|native-quests) isolated="yes" ;;
   esac
   # Even an invalid optional-pack path must never be treated as an ordinary shared-world case.
   if [ "$isolated" = "yes" ] || [ -e "$SMOKE_DIR/$name-optional" ] ||

@@ -41,20 +41,32 @@ documentation worker, other source workers, the parent or any T0 access.
 
 ## Integrated development source
 
+**Latest follow-up:** source d073 is normally merged after coordinator535.
+It fixes relocated BlockEntityTag stock consumption and adds per-target platform
+protection plus one real isolated Blueprint interaction probe. Its new classes/
+unit/native evidence are pending; old426 Blueprint passes do not close that delta.
+Only2a93 retains the PC/cache lease and frozen426 stage. Actual writer-classpath
+and writer-tool compilation exit0; guidance invocation then fails before main
+because its arguments were joined into the class name, and an empty-process
+observer fails. Preserve both; repair only splitting/observation, do not repeat
+successful Gradle/javac. Collect normal outputs before a descendant Sync.
+
 The isolated integration branch now preserves source42654eb53985bd50ecbd37a48a4a25e727e51fb7:
 normal docs190, pressure541cf6c9, Blueprint4550b975 and corrected Wire Mill3a79a1f3,
 including e265/5ff history. Final parent root104de7bb is normally merged at
 ab4d7bc6225f8a8d00f502518a0fe62ea41d670a, with parents42654eb +104de7bb.
 The parent published42654eb to this integration branch with an ordinary push
 and verified the exact remote head; existing automatic CI starts without manual dispatch.
-The root104 merge and this documentation delta remain LOCAL/unpublished.
+The root104/492 documentation is now normally published; coordinator535 accepts
+ADR-0175's engineering contract and binds the exact426 noncanonical CI evidence.
+No production-input change is made by those documentation commits.
 The parent explicitly delegates bounded root-document synchronization,
 not application coding, product decisions,
 publication or any PC/JVM/cache action by this worker.
 
 | Source | Integrated seam | Qualification boundary |
 | --- | --- | --- |
-| 541cf6c9 | Optional absolute process-pressure optimum/half-width, shared conditions and Atlas/audit/inspection/JEI; inspection schema2 with strict schema1 reading | Proposed ADR-0175; no production pressure recipe, new machine or executable proof |
+| 541cf6c9 | Optional absolute process-pressure optimum/half-width, shared conditions and Atlas/audit/inspection/JEI; inspection schema2 with strict schema1 reading | Accepted engineering ADR-0175; exact426 compilation/noncanonical contracts pass, models/client gates remain, no new production recipe |
 | 4550b975 | Strict legacy Blueprint payload, immutable preflight, loaded/permission checks and bounded main/offhand payment | Ordinary missing/blocked refusal spends nothing; later callback throw is ambiguous, not global rollback or universal zero loss |
 | 3a79a1f3 | Baseline F1 Wire Mill fourth operand and optional four-route `wire_forming` after assembly | Same ordinary F1 product, stock/time/FU; no initial-F2 dependency, MK2, matcher/storage change or complete T1 |
 
