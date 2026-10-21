@@ -31,6 +31,7 @@ public final class QuestProgress extends SavedData {
 
     private final Map<UUID, Set<String>> claimed = new HashMap<>();
     private final Set<UUID> nativeClaims = new HashSet<>();
+    private final Map<UUID, Set<String>> nativeCompleted = new HashMap<>();
 
     public static QuestProgress get(ServerPlayer player) {
         return player.server.overworld().getDataStorage()
@@ -39,7 +40,22 @@ public final class QuestProgress extends SavedData {
 
     /** A copy. Callers cannot mark a task claimed by editing the returned set. */
     public Set<String> claimed(UUID player) {
+        Set<String> result = new HashSet<>(legacyClaims(player));
+        result.addAll(nativeCompleted.getOrDefault(player, Set.of()));
+        return Set.copyOf(result);
+    }
+
+    /** Historical paid receipts only; native completion must never become an import receipt. */
+    public Set<String> legacyClaims(UUID player) {
         return Set.copyOf(claimed.getOrDefault(player, Set.of()));
+    }
+
+    /** A replaceable observation for compatibility gates, never a persisted reward receipt. */
+    public void updateNativeCompleted(UUID player, Set<String> completed) {
+        if (!usesNativeClaims(player) || completed.stream().anyMatch(id -> QuestCatalogue.byId(id) == null)) {
+            throw new IllegalArgumentException("Native completion requires migrated authority and known quest ids");
+        }
+        nativeCompleted.put(player, Set.copyOf(completed));
     }
 
     public boolean usesNativeClaims(UUID player) {

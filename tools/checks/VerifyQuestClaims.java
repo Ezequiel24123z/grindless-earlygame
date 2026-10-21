@@ -56,6 +56,11 @@ public final class VerifyQuestClaims {
         Set<String> receipts = ledger.claimed(first);
         ledger.useNativeClaims(first);
         ledger.useNativeClaims(first);
+        ledger.updateNativeCompleted(first, Set.of("quern"));
+        equal("compatibility gates can observe native completion", true, ledger.claimed(first).contains("quern"));
+        equal("native completion is not an old paid reward receipt", receipts, ledger.legacyClaims(first));
+        ledger.updateNativeCompleted(first, Set.of());
+        equal("native observations are replaceable, not sticky invented receipts", receipts, ledger.claimed(first));
         equal("native authority preserves all legacy import receipts", receipts, ledger.claimed(first));
         equal("native authority is player scoped", false, ledger.usesNativeClaims(second));
         equal("native authority also fences direct legacy ledger mutation", false, ledger.claim(first, "quern"));
