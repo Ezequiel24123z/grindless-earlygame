@@ -26,12 +26,12 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: fix the reported player-blocking questbook under ADR-0171: integrate the
-actual supported native FTB Quests framework, concise human goals and JEI-first
-recipe interaction; preserve paid claims, starter and the real reference world.
-Backend/API/pin/migration, copy and verification run in parallel. A source patch
-or native server is not a client observation. Qualify the new binding/package and
-use the stopped-world backup/copy/update boundary before delivery.
+Next: the protected native FTB handover under ADR-0171 is technically complete:
+Grindless-T0-FTB-Dev has exactdd0/29bc/79ce and the pristine existing-world/options
+copy. Actual save-clone load/save and metadata-only retired-ID inspection pass;
+the original/backup remain intact. Let the owner continue play, collect blocking
+feedback and qualify the isolated family/pressure/Blueprint source under a new
+guarded build-only window. No actual GUI/login/rewards/campaign pass is inferred.
 
 **Latest owner scope (ADR-0173):** continue T1 and start the remaining tiers while
 finishing the Prism questbook handover. Isolated source/research work is open
@@ -53,12 +53,11 @@ increment, select baseline/upgrade seams using existing chassis, store ownership
 conditions and persistence plus compatible external implementation precedent.
 Do not invent another executor, mutate the player's save or multiply timers.
 
-Final FTB package dd0/JAR29bc/ZIP79ce is qualified and the new owned target is
-deployed; the original36-file world/options backup is verified. The coordinator
-temporarily grants only runtime worker980e99a3 the `ftb-owner-clone-20261021`
-PC/cache lease for the admitted backup-derived diagnostic load. No other worker
-or parent PC action runs until explicit return; the final player copy comes from
-the untouched backup. Read the active handoff, not old lease snapshots below.
+Final FTB package dd0/JAR29bc/ZIP79ce and the pristine36-file world/options copy
+are installed and VerifyStopped. The temporary clone/audit leases have returned;
+the parser finds no actual/unknown retired Heracles reference or read error.
+No source worker has an automatic next PC grant. Read the active handoff, not
+old ownership/pending-delivery snapshots below.
 
 T1 source/research remains independent under the owner's explicit longitudinal-play / feedback loop
 (ADR-0170). The owner chooses to start T0 while routes, machines, components,

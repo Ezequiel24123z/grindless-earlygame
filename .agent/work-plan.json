@@ -1,10 +1,10 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 32,
+  "plan_revision": 33,
   "updated": "2026-10-21",
-  "phase": "native_FTB_package_qualified_new_owned_target_deployed_original_backup_verified_final_delivery_in_progress",
-  "product_gate": "NATIVE_FTB_QUALIFIED_PROTECTED_SAVE_DELIVERY_PENDING",
+  "phase": "native_FTB_T0_pristine_world_delivered_owner_play_and_isolated_basic_family_development",
+  "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
   "tier_accepted": false,
   "merge_ready": false,
   "merge_ready_scope": "current_PR56_draft_no_auto_merge_required_graphical_gate_not_waived_no_new_main_or_release",
@@ -18,7 +18,7 @@
     "parallel_scope": "T1_and_remaining_T2_T15_source_research_routes_machines_components_processing_lines_reusable_systems_implementation_ADR0173",
     "priority": "reported_play_blocking_T0_fix_before_new_T1_work",
     "final_T0_feedback": "incorporate_owner_conclusions_and_finish_T0_polish_after_reported_T0_end",
-    "installed_runtime_during_T1_work": "298988d500dccf0823fb2eab52fbe57bff8fe831",
+    "installed_runtime_during_T1_work": "dd0b4bc93187fe172fd336bfa330987220bd7be4_new_owned_FTB_instance_original_F_preserved",
     "T0_fix_deployment_boundary": "only_after_owner_stops_owned_instance_applicable_backup_and_copy_compatibility_guards_no_agent_game_interruption",
     "human_acceptance_or_new_client_pass": "not_inferred",
     "T1_deploy_release_main_merge_T2_activation": false,
@@ -27,6 +27,8 @@
   "ftb_questbook_blocker": {
     "policy": "ADR-0171",
     "owner_reports_unable_to_continue": true,
+    "technical_fix_ready_for_owner": true,
+    "owner_resumed_play_observed_after_fix": false,
     "required_backend": "supported_Forge1_20_1_native_FTB_Quests_not_custom_guide_widget",
     "required_copy": "brief_human_goals_JEI_for_ordinary_recipes_extra_detail_only_unusual_mechanics",
     "T0_source_baseline": "a64d44f9ee6da1fe00ed9215eb05b4aad4132f64",
@@ -70,13 +72,14 @@
       "parent_concurrent_PC_execution": false
     },
     "current_PC_lease": {
-      "assignment": "ftb-retired-id-audit-20261021",
-      "owner": "runtime_worker_980e99a3_under_coordinator",
-      "scope": "only_readonly_backup_NBT_use_of_retired_Heracles_IDs_no_new_server_no_original_or_Prism_access",
-      "other_agent_PC_execution": false
+      "assignment": null,
+      "owner": null,
+      "scope": "all_FTB_leases_returned_parent_direct_audit_copy_Inspect_closed_no_new_source_PC_grant",
+      "other_agent_PC_execution": false,
+      "new_explicit_guarded_window_required": true
     },
     "fresh_pre_migration_state": "2026_10_21_17_12_20Z_DevF_world1_legacyLedger1_Java0_original_preparation_world_separate_unchanged",
-    "world_backup_migration_deployment": "new_FTB_target_deployed_dd0_original_backup36files10885681bytes_technical_clone_load_save_PASS_with_retired_mapping_errors_readonly_actual_use_audit_and_final_pristine_copy_pending",
+    "world_backup_migration_deployment": "FINAL_pristine_backup_copy36files10885681bytes_plus_options_verified_in_Grindless_T0_FTB_Dev_original_F_and_backup_unchanged_Inspect_VerifiedStopped_dd0_29bc_79ce_no_player_login_claim",
     "owner_clone_qualification": {
       "source": "dd0b4bc93187fe172fd336bfa330987220bd7be4",
       "classification": "TECHNICAL_LOAD_ONLY_NOT_LOSSLESS_OR_PLAYER_LOGIN",
@@ -88,8 +91,37 @@
       "backup_and_prior_diagnostic_unchanged": true,
       "removed_registry_entries": ["minecraft:block_heracles:barrier", "minecraft:item_heracles:barrier", "minecraft:item_heracles:quest_book"],
       "native_missing_pack_warnings": "7_reported_in_seven_mod_diagnostic_includes_performance_mods_present_in_final_Prism_profile_not_all_are_removed_from_player_pack",
-      "remaining": "readonly_actual_reference_use_of_retired_IDs_before_coordinator_disposition_and_final_backup_copy",
+      "remaining": "actual_owner_login_GUI_JEI_rewards_and_campaign_only_no_new_automated_boot",
       "clone_may_become_final_reference": false
+    },
+    "retired_identifier_disposition": {
+      "actual_result": "METADATA_ONLY",
+      "parser": "existing_Minecraft_NbtIo_RegionFile_on_disposable_verified_copy_no_Forge_bootstrap",
+      "files": 36,
+      "chunk_slots_checked": 8192,
+      "chunk_roots_parsed": 2608,
+      "string_tags_visited": 141859,
+      "actual_item_block_entity_blockentity_references": 0,
+      "unknown_references": 0,
+      "read_errors": 0,
+      "historical_metadata_hits": "registry6_datapack2_modlist2_including_level_dat_old",
+      "compile_scan_exit": "0_0",
+      "backup_receipt_and_world_unchanged": true,
+      "coordinator_decision": "accept_removal_of_unused_Heracles_registry_metadata_no_global_ignore_or_raw_save_rewrite",
+      "failed_attempts_preserved": "worker_PowerShell_positional_binding_before_javac_parent_File_Open_overload_before_JVM_then_direct_FileStream_invocation_success_no_success_replay"
+    },
+    "final_player_handover": {
+      "instance": "Grindless-T0-FTB-Dev",
+      "source": "dd0b4bc93187fe172fd336bfa330987220bd7be4",
+      "Inspect": "VerifiedStopped",
+      "world_source": "untouched_verified_original_F_backup_not_the_booted_diagnostic",
+      "world_files": 36,
+      "world_bytes": 10885681,
+      "options_copied_exactly": true,
+      "old_instance_backup_and_global_launcher_settings_preserved": true,
+      "continuation": "use_new_FTB_instance_copy_do_not_advance_both_independent_copies",
+      "actual_player_login_and_native_import_GUI_JEI_physical_delivery": "NEEDS_HUMAN_VALIDATION",
+      "release_or_T0_acceptance": false
     },
     "corrective_main_Forge_compile": "a181b9e_reported_PASS_not_backend_fixture_or_native_clearance",
     "native_qualification": {
@@ -120,7 +152,7 @@
       "native_reuse": "identical_tested_JAR_only_two_test_files_and_docs_changed_since_ff610"
     },
     "parse_only_AST_performance": "owned_PID23896_cancelled_after14min_jcmd_shows_repeated_javac_classpath_manifest_canonicalization_not_hang_cancelled_not_pass_parse_only_empty_classpath_repair_preserves_authorities_mutations_no_attribution",
-    "private_custody_helper": "source_reviewed_288e6a5b14bd2670ced5d003ab6497dafcb0ce199b07fb2fb7de8832653ea1d9_10localfixtures_no_PC_or_world_run",
+    "private_custody_helper": "288e6a5b_reviewed_localfixtures_and_REAL_Snapshot_Backup_Copy_all0_full_hash_preservation_fresh_stopped_target_no_original_write",
     "native_modpack_examples": "Monifactory6db1be9_and_ATM9_255ca23_actual_native_SNBT_samples_and_licence_limits_recorded_no_content_import",
     "native_API_pins_client_or_migration_pass": "not_inferred",
     "new_paid_generation_allowance": false
@@ -147,6 +179,11 @@
     "T3_code_scope": "side_effect_free_shared_blueprint_preflight_existing_capture_stamp_old_payload_limits_no_drones_or_generic_world_engine",
     "pressure_code_owner": "b823aa4b-7124-41bf-8a13-1eef4cfc4ef5",
     "pressure_code_scope": "optional_absolute_MPa_optimum_halfWidth_reuse_existing_evaluator_convert_project_inspect_JEI_old_constructors_no_new_recipes_or_machine",
+    "pressure_source_checkpoint": "541cf6c9a72620ab97d521f92dce53625f659e41_local_uncompiled",
+    "blueprint_source_checkpoint": "4550b975602cf819ee35c0da269aca1798c3c59c_local_uncompiled",
+    "baseline_WireMill_source_checkpoint": "3a79a1f300804808ba513adc9d9cdd63f85300d2_local_F1_optional_wire_forming_uncompiled",
+    "development_integration_owner": "a89aee18-f2a0-49fb-8f5a-1cd124a43bb1",
+    "development_integration_checkpoint": "9f3ea9bc674b286a26488d3e48bfa429af575449_local_docs190_pressure541_blueprint4550_F1merge_next_no_JVM",
     "latest_owner_content_contract": "basic_families_from_T1_exponential_meaningful_complexity_lines_content_later_actual_capability_upgrades_special_multiblocks_licensed_external_reuse_when_fit",
     "no_source_lane_PC_grant": true,
     "external_research": "82bed9f4_complete_pinned_aae6d4e_exact_component_identity_vs_capacity_shared_modifiers_hooks_family_factories_report_in_docs_design_t1_external_references_first_Assembler_acquisition_not_closed_no_foreign_import",

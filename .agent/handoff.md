@@ -1,6 +1,48 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **NATIVE FTB/PACKAGE QUALIFIED; PROTECTED SAVE DELIVERY IN PROGRESS**.
+Updated: 2026-10-21. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0 ACCEPTANCE OPEN**.
+
+## Final player handover — current authoritative state
+
+The owner can continue the existing game in **Grindless-T0-FTB-Dev**.
+Source dd0b4bc/JAR29bcce43/ZIP79ce5da2 is installed and production Inspect returns
+VerifiedStopped after final copy. All36 original-world files/10,885,681bytes and
+options are copied from the untouched verified backup, NOT from the command-
+tested clone. Original F instance, backup, protected metadata and launcher
+settings remain unchanged. Do not advance both independent world copies.
+
+The retired-ID uncertainty is now resolved, not waived. A small visitor uses the
+existing Minecraft NbtIo/RegionFile APIs on a disposable backup copy, without
+Forge bootstrap:36files,2,608 parsed chunk roots,141,859 strings, actual references0,
+unknown0/read errors0. Heracles appears only in old registry/datapack/mod-list
+metadata, including level.dat_old. Accept removing those unused registrations;
+no compatibility remap, blanket ignore or raw native/owner save rewrite is needed.
+The final unbooted player copy retains all original bytes.
+
+The worker's positional PowerShell binding and the parent's initial File.Open
+overload fail before any compiler starts; preserve both. Direct native invocation
+with FileStream locks then has actual javac0/scanner0. A silent compiler/Tee
+produces no stdout file; its successful exit and real scanner result are retained,
+not replayed to manufacture a log. Final copy0 and Inspect are separately closed.
+All FTB leases/owned JVMs/locks are released; new code lanes have NO PC grant.
+
+| Category | Final bounded T0 handover |
+| --- | --- |
+| COMPLETED | Genuine native FTB/concise goals and paid-history fence qualified; exact package installed; real save-clone load/save and retired-ID audit; final pristine world/options copy and VerifyStopped |
+| BLOCKED | None for this technical handover; no whole-T0 or later-source acceptance |
+| NOT EXECUTED | Actual owner login/native import, GUI/JEI/physical rewards, campaign; new pressure/Blueprint/F1-source JVM/canonical qualification, main/release |
+| NEEDS HUMAN VALIDATION | Native UI, real player/team/reward interactions, JEI and resumed longitudinal play |
+| NEEDS MY DECISION | None from the owner for this delivery |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new; no generation/provider activation |
+| DEPLOYED STATE | Grindless-T0-FTB-Dev dd0/JAR29bc/ZIP79ce contains the pristine original-game copy; old instance/backup intact, no T1+ code deployed |
+
+Source progress continues independently:3a79a1f is the local F1 basic Wire Mill/
+optional wire-forming checkpoint,541cf6c optional pressure,4550b97 Blueprint
+preflight. Integratora89 preserves local9f3ea9b (docs190+pressure+Blueprint) and
+normally merges3a next. No new source is called compiled/writer/native passed.
+The following older progression records preserve their actual intermediate
+states; their former pending delivery and PC grants are superseded here.
 
 ## Latest design and actual source progression
 

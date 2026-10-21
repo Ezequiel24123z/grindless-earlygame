@@ -1,5 +1,28 @@
 # Return handoff
 
+## Current player handover — native FTB ready in Prism
+
+Use **Grindless-T0-FTB-Dev** to continue the existing game. Exactdd0/JAR29bc/ZIP79ce
+passes post-copy production Inspect. Its36-file world and options are the pristine
+verified backup copy, not the booted clone; original instance/backup remain intact.
+Do not advance the old and new copies in parallel.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Native FTB qualified/installed; actual clone load/save, metadata-only retired-ID audit and final pristine world/options copy verified |
+| BLOCKED | None for bounded player handover |
+| NOT EXECUTED | Actual player login/GUI/JEI/rewards/campaign; new tier-source compilation/writers/native, release/main |
+| NEEDS HUMAN VALIDATION | Resumed play and native player interactions; T0 is not accepted/frozen |
+| NEEDS MY DECISION | None from owner |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | New FTB instance dd0/29bc/79ce with same-world copy; original/backup preserved, later-tier source not deployed |
+
+All PC leases are returned. Existing source checkpoints3a79/541/4550 and local
+integration9f are unqualified development, not updates to this instance.
+Read [the active handoff](.agent/handoff.md) for evidence and next ownership.
+The historical snapshots below retain their original results, not current holds.
+
 **Latest:** ADR-0174 fixes basic families fromT1 and exponential meaningful
 lines/content, real capability upgrades and compatible external reuse. Public
 b38 preserves nativeFTB+firstfactory/two components/18 concise T1 bodies; it is
