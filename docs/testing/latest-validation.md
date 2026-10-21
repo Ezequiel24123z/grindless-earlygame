@@ -1,5 +1,22 @@
 # Current T0/T1 validation
 
+## Native FTB — actual registered graph and retained-world restart
+
+[The source-bound native qualification](t0-ftb-native-qualification.md) records
+ff610 real Forge graph/filter/import1099, seed56 and actual second-process disk
+reopen58, both natural stops/harness0. Parent reads full transport and verifies
+that reopen checks persisted state before any import can repair it. Direct raw
+server custody and the final package remain separate. Tool-onlyd731 standalone
+data/vanilla-surrogate2352 and pack152 pass; not a claimed real-client inventory
+or GUI test.
+
+The ff610 Linux workflow's remaining failed suite is three old exact
+`Players`-only root assertions, not the repaired prose or the native restart.
+Update the precise new serialized native-owner schema while retaining old
+player/task/once-only invariants. No new boot is needed for that test-only repair.
+Actual owner-save backup/copy/load and client feedback remain pending; no original
+world, instance or launcher setting has changed.
+
 ## Owner-reported questbook blocker — native FTB replacement pending
 
 Actual owner feedback rejects the custom/native-Heracles quest experience and
@@ -7,6 +24,32 @@ long impersonal guide prose. ADR-0171 directs the genuine native FTB framework,
 concise content and explicit old-paid-claim import/fencing. Copy190a024 and
 follow-ups are source/cheap-text-check evidence only; native/API/loader/migration/
 package qualification is not supplied by those commits.
+
+Exact FTB binary identities and native JEI wiring are now recorded in
+[the integration reference](../design/ftb-questbook-integration.md). Initial
+source1736736 has a real Forge compile red (two instance/static Matrix calls and
+an EventActor return); common/four publisher outputs alone pass. Correctivea181
+closes the two migration/entry QA findings by static recheck and the core reports
+actual main Forge compilation0. A native test-file abstract-method fixture and
+eleven superseded prose assertions have their own real reds; neither is hidden
+by the compiler result.
+
+Independent tooling QA identifies stale smoke mod composition and an unsupported
+shared-batch backend case. Correctived6d7869 uses complete inventory synchronization
+and proper isolated dispatch; its worker reports57cases/1507assertions and
+native PowerShell/Bash comparisons0, with the earlier5/7red preserved. Narrow
+independent recheck and actual native start/restart/package remain separate.
+The private stopped-world custody helper has only local fixture/source evidence,
+not a real backup/copy/upgrade pass.
+
+The d6d7869 tooling findings are closed by narrow independent static recheck;
+that does not turn modelled inventory fixtures into a Gradle/Forge execution.
+One owned parse-only registry-check JVM is explicitly cancelled after14minutes:
+its captured stack identifies repeated full-classpath/JAR-manifest
+canonicalization, not a hung game. Preserve CANCELLED and the stack/raw logs.
+An empty parse-only classpath is a bounded performance repair only if there is
+no type attribution and all authorities, mutations and canonical results remain;
+actual compilation still uses the real classpath. No failure/deadline is relabeled.
 
 Read-only17:12:20Z inspection finds the actual DevF95bf instance now has one world,
 one legacy quest ledger and client log timestamp16:53:50Z;0Java remains then.

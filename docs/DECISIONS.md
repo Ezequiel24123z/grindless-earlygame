@@ -183,6 +183,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0169](#adr-0169--make-the-first-t1-factory-a-live-source-contract-not-another-execution-engine) | Make the first T1 factory a live source contract, not another execution engine | Accepted |
 | [0170](#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers) | Develop the next tier alongside longitudinal play and prioritize player blockers | Accepted |
 | [0171](#adr-0171--replace-the-player-blocking-book-with-native-ftb-quests-and-concise-jei-first-content) | Replace the player-blocking book with native FTB Quests and concise JEI-first content | Accepted |
+| [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
 
 ---
 
@@ -8003,3 +8004,48 @@ ability to resume remain distinct from a headless/server pass.
 Heracles widget, unchanged guide prose inside FTB, a second reward-paying ledger,
 discarded progress, manual pin guesses, or an untested in-place dependency
 replacement do not address the feedback.
+
+---
+
+## ADR-0172 — Automate recurrent T1 casings and Flux Cells through the existing Assembler
+
+**Status.** Accepted coordinator implementation decision within the owner's
+authorized T1 scope; source2f4eee1 authored, execution qualification pending,
+2026-10-21.
+
+**Evidence.** The sourceef9d670 route inventory identifies two actual recurrent
+F2 component gaps: Machine Casing and Flux Cell have manual crafts but no
+automatic process producer. This does not prevent the first manually assisted
+F2. Their materials already have declared inherited supply boundaries, and both
+batches fit the existing four-input Assembler.
+
+**Decision.** Add ordinary `assemble/machine_casing` and `assemble/flux_cell`
+data routes using the existing Assembler executor, conditions, output reservation
+and save format. Match the actual manual catalogue/JSON material batches and
+outputs; preserve both manual crafts for first construction and compatibility.
+Do not add charged-Cell requirements, new catalysts, motors, Wire Mill, machines,
+ports, slots, inventory formats or a crafting engine.
+
+Use the existing `FabricationLogic.ASSEMBLE_TICKS` and `FU_PER_TICK` conventions
+for both processes rather than another timing/configuration authority. At the
+reviewed source these are400ticks and F1 nominal32FU/t. The old eight-second
+casing design prose did not describe an implemented automatic route; reconcile
+it with this explicit ordinary-Assembler decision rather than silently borrowing
+an unproved prototype value.
+
+Keep manual casing construction before the first Assembler and place automatic
+reproduction after assembly exists. Do not create a forming/assembly bootstrap
+cycle or change physical F1/F2 quest evidence. Select/explain the new recurrent
+routes through the existing T1 contract/report; implemented repeatability is not
+by itself a global renewable-establishment, power/autonomy or minimum-stock proof.
+
+Validate the two exact batches against live catalogues/JSON, unique IDs, family,
+arity, existing timing/FU constants and Atlas projection. Keep manual F1 five-unit
+bootstrap and the existing F2 recipe/rating unchanged. Reuse unchanged executor/
+NBT/native binding proof; ordinary item recipes need no native run per recipe.
+Canonical generation and affected checks still precede a qualified delivery.
+
+This independent source lane does not compete with the urgent ADR-0171 PC/cache
+owner and must not deploy T1 into the owner's T0 game. Thermal's five distinct
+construction ingredients exceed the current four-input Assembler and are not
+an excuse to expand the engine or auto-project every `T1Recipes` entry here.

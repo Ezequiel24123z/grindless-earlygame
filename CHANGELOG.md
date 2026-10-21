@@ -15,6 +15,26 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
+  loads46 logical quests/36 native item rewards and passes1099 graph/filter/
+  import assertions, then seed56 and a new process reopens persisted native
+  progress/individual receipts with58 assertions and two natural stops.
+  Tool-only standalone2352 and pack152 are distinct evidence. Keep the remaining
+  exact persistence-root oracle correction, artifact custody and real protected
+  world delivery open; no GUI/JEI click, human or original-save pass is invented.
+- **Authorize the next independent T1 component increment (ADR-0172).** Source
+  work adds ordinary Assembler casing/Flux Cell reproduction with existing
+  timing/FU conventions and manual-craft-equivalent batches. Preserve manual
+  bootstrap and all machine/save/claim mechanisms; no T2 intermediate or
+  Assembler slot expansion. T0's native-questbook blocker keeps execution priority.
+  The decision/source lane is not a completed recipe or deployment pass.
+- **Preserve source-verified native-framework and T1 research.** Record exact
+  official FTB binary identities, native receipt/overflow/matching APIs and the
+  XMod Compat provider required for JEI clicks. Expand the T1 map with actual
+  machine/component boundaries, recurring gaps, manual seed custody and mature
+  reference limits. Independent component source2f4eee1 is published without a
+  runtime claim; parent hash-verifies the earlier523b closed receipts/raws and
+  normal outputs without replay. No foreign code/assets or numeric balance is copied.
 - **Prioritize the owner's native quest-framework and content blocker (ADR-0171).**
   Replace the rejected custom/native-Heracles book experience with supported
   FTB Quests native graph/tasks/reward UI and concise JEI-first goals. Separate
@@ -23,6 +43,12 @@ entries below reference those records by id.
   projection is not permission to pay old rewards again. Native/API/pack
   qualification and safe stopped-world delivery remain required, not completed
   by this decision.
+- **Record actual native-modpack precedent and qualification boundaries.**
+  Inspect pinned Monifactory/ATM-9 native SNBT samples without importing writing,
+  stages or currency; retain the sampled-prose and licence limits. Preserve the
+  real compiler/fixture/prose reds and owned parse-only AST cancellation, while
+  independent source QA closes the corrected entry/filter/smoke contracts.
+  These records are not native/client or world-upgrade passes.
 - **Establish the longitudinal-play / next-tier development loop (ADR-0170).**
   The owner explicitly begins the intended T0 longitudinal game while T1
   research, brainstorming, route/component/machine development and documentation

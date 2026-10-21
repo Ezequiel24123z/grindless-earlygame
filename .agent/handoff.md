@@ -19,8 +19,33 @@ Root decisions/handoffs remain coordinator-owned.
 Copy190a024 reduces46 titles/34 bodies from2821 to1113 words with placeholders,
 other locale values, logical IDs and gameplay data preserved. Incremental
 2bd1326/00ef421 align visible tooltips and native separate reward semantics.
-Source/native-claim ownership fences are authored in the backend lane; Java,
-actual native data loading/migration and the new package still need execution.
+Source/native-claim ownership fences are authored in the backend lane.
+Exact official FTB binaries and the required native JEI provider are now
+[verified](../docs/design/ftb-questbook-integration.md). Actual native data
+loading/migration and the new package still need execution.
+
+Initial integrated source1736736 has a real Forge compile red (two static
+Matrix-spec calls and EventActor return); common compilation/four definition
+publisher bytes alone pass. Corrective a181b9e is under actual recompilation.
+Independent source reviews also require explicit missing-backend handling, exact
+smoke composition and exclusion of the new backend-only case from shared batch.
+No native/client or upgrade pass is inferred until the actual receipts return.
+
+**Later actual qualification:** [the native record](../docs/testing/t0-ftb-native-qualification.md)
+now binds ff610 to real registered Forge graph/filter/import1099, actual persistent
+seed56 and a second process reopening the same retained diagnostic world58,
+with both natural stops/harness0. Parent reads the complete transport and source
+reopen method (no reseed); direct server-log/receipt transfer verification is next.
+This is not real player login/inventory delivery, GUI/JEI or owner-world upgrade.
+Tool-onlyd731 completes2352 standalone data/surrogate assertions and152 pack
+contracts; no production recompile/native replay is required for that test delta.
+
+The completed ff610 Linux workflow has one old `Players`-only persistence-root
+oracle failure after the intentional native-owner field extension. Preserve that
+red and assert the new exact schema; no arbitrary root-key acceptance. Final
+package, stopped source backup, separately admitted owner-save clone and delivery
+remain outstanding. The private custody helper is source-reviewed/digest-bound
+with local fixtures only; original DevF world remains untouched.
 
 Old `QuestProgress` is paid history: import native individual receipts before
 admitting claims, do not treat objective completion as reward payment, and fence
@@ -44,13 +69,20 @@ No worker may deploy, access owner worlds or restart the player's game.
 | Category | Current blocker wave |
 | --- | --- |
 | COMPLETED | Actual feedback/source identified; concise copy and legacy ownership fence authored; independent migration oracles and native API research available; exact played F instance distinguished from old preparation |
-| BLOCKED | Native-framework replacement/package/migration qualification is not complete; exact binary pins still require confirmation |
-| NOT EXECUTED | Final native loader/claim/migration proof, new package/deployment, world backup/copy/update or FTB client acceptance |
+| BLOCKED | Final exact persistence schema oracle/package and safe world delivery remain; old red/cancelled attempts are retained rather than relabeled |
+| NOT EXECUTED | New package/deployment, real owner backup/copy/upgrade or FTB client acceptance; actual diagnostic native load/restart is now recorded separately |
 | NEEDS HUMAN VALIDATION | Native questbook presentation and ability to resume play after the qualified fix |
 | NEEDS MY DECISION | None for assigned outcomes; native default-team/individual-receipt and overflow behavior must be explicit, not hidden |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new; existing official binary metadata/downloads are being verified |
 | COST / BILLING RISK | No new generation/provider budget or paid activation; owner authorizes purposeful parallel agents |
 | DEPLOYED STATE | Installed F remains unchanged; the owner has one actual Dev world and paid-history file to preserve; no FTB candidate is declared deployed |
+
+Independent T1 work is also preserved: public2f4eee1 adds the two ordinary
+Assembler component recipes under ADR-0172, with tests authored but no new JVM/
+writer pass. It inherits normal-output base523b3ab; the parent verifies all
+13closed receipts/58raw hashes and preserves the four real native reds/two
+interrupted zero-byte raws. Source inventory/references are in the
+[T1 map](../docs/tiers/t1-development-map.md). This does not share the FTB cache.
 
 ## Continuing owner loop — play T0 while developing T1
 
