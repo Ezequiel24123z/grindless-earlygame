@@ -1,5 +1,24 @@
 # Return handoff
 
+## Current owner-directed T1 development
+
+On2026-10-21 the owner explicitly opens T1 development while testing T0.
+[ADR-0168/0169](docs/DECISIONS.md#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game)
+and the [first-factory plan](plan/feature-t1-first-factory-1.md) supersede the old
+development hold only. The T0 acceptance/client/release records below retain their
+actual observed bounds; intent to test is not a completed pass.
+
+| Category | Current T1 increment |
+| --- | --- |
+| COMPLETED | Actual a64 experience baseline/T1 recipe/graph/quest seams inspected; isolated contract/line, quest and reusable-documentation ownership established. |
+| BLOCKED | None for T1 source work. Fresh execution capacity and the unchanged T0 human/client gate remain distinct. |
+| NOT EXECUTED | New T1 compilation/contracts/export/normal generation or native/client proof; no T1 package/deploy/release or T0 acceptance. |
+| NEEDS HUMAN VALIDATION | Owner's T0 feedback and later T1 factory/pacing/clarity review; no pass inferred. |
+| NEEDS MY DECISION | None for the assigned first-factory development. Material recipe/architecture/dependency changes still escalate. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Reuse existing build/Git without changing identity or exposing credentials. |
+| COST / BILLING RISK | No generation requests, paid images, new models or billable service activation selected. |
+| DEPLOYED STATE | Leave F298988d/JAR95bf47c4/ZIP3e5ad1fb in Grindless-T0-Dev intact while the owner tests; new T1 source remains isolated and undeployed. |
+
 ## New T0 experience programme
 
 **Implemented, automatically/native qualified and installed; graphical gate

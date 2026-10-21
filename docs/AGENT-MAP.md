@@ -34,6 +34,13 @@ physical sound/visual work. It does not authorize a generic engine rewrite or
 unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
 
+The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
+Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
+selection/data contracts, shared T1 teaching and reusable-system documentation.
+Do not alter the installed T0 candidate or treat an existing F1-rated prototype
+as accepted T1 merely because it is registered. Existing catalogues, native
+transactions, power and per-player claims remain the authorities.
+
 Current experience seams (ADR-0162–0165):
 
 - `quest/` owns typed teaching/reward claims and the existing per-player F1 exit;

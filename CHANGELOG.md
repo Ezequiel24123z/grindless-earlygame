@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Open owner-directed T1 development alongside unchanged T0 testing (ADR-0168/0169).**
+  Create isolated first-factory, quest and reusable-system documentation lanes from
+  the actual a64 experience baseline. Bind live F1 power/material/forms/assembly/
+  F2-exit authorities without a second engine or copied recipe bills. Factory
+  World is an optional branch, not the physical F2 gate. Preserve installed
+  F/Prism/worlds and all T0 claims; no client acceptance, release or deployment
+  follows from this explicit development authorization.
 - **Deploy the exact native-qualified experience candidate F to Prism Dev.**
   Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
   Deploy/Inspect/repeat pass with zero downloads. Verify six original files,

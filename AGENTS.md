@@ -130,6 +130,17 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner direction — parallel T1 development (2026-10-21, ADR-0168):**
+the owner explicitly opens T1 development and reusable-system/production-line
+documentation while personally testing the installed T0 candidate. This overrides
+older "T1 held" development instructions only. It does not accept/freeze T0,
+certify the graphical/longitudinal gate or authorize a release. Read
+[`plan/feature-t1-first-factory-1.md`](plan/feature-t1-first-factory-1.md).
+Keep the T0 experience branch, PR56, deployed F artifact and owner worlds intact.
+Develop on isolated dependent T1 branches; do not deploy, restart Prism or stop
+the player's game. Heavy build-only execution must yield to gameplay and satisfy
+fresh resource/ownership guards; reuse unchanged mechanism proofs.
+
 **Preferred local visual backend (ADR-0157):** the owner identifies an existing
 ComfyUI installation on the personal PC and authorizes necessary reversible
 configuration/extensions/licensed models for a supervised Grindless pipeline.
@@ -185,9 +196,11 @@ bounded QoL and explicit forward-save compatibility.
 `1389ebb` is engineering evidence, not the first longitudinal-play release. Keep
 implementation, technical verification, integration, packaging, visual review,
 human acceptance and release readiness distinct. Human acceptance starts with the
-playable release. T1 may start only after the T0 RC is ready and published and the
-owner has begun its longitudinal save; finishing the player's entire T0 route is
-not an additional universal prerequisite. T1 and functional ports are not open now.
+playable release. ADR-0144's normal T1 start rule is qualified by the owner's later explicit
+ADR-0168 authorization for parallel T1 development. Release/publication and
+longitudinal acceptance remain separate; no completed T0 route or client pass is
+inferred from that development instruction. The older functional-port hold was
+superseded for the bounded T0 structures by ADR-0164.
 Preserve all previous source-bound evidence and never invent a manual pass.
 
 Follow [the playable-release plan](plan/process-t0-playable-release-1.md) and the
