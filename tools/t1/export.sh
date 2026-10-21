@@ -14,6 +14,22 @@ while [ "$#" -gt 0 ]; do
     *) echo "Unknown T1 export argument." >&2; exit 1 ;;
   esac
 done
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*)
+    script="$(cygpath -w "$root/tools/t1/export.ps1")"
+    windows_root="$(cygpath -w "$root")"
+    if [[ "$output" == /* ]]; then
+      windows_output="$(cygpath -w "$output")"
+    else
+      windows_output="${output//\//\\}"
+    fi
+    arguments=(-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$script"
+      -Root "$windows_root" -Output "$windows_output")
+    if [ "$action" = check ]; then arguments+=(-CheckOnly); fi
+    if [ "${#offline[@]}" -ne 0 ]; then arguments+=(-Offline); fi
+    exec powershell.exe "${arguments[@]}"
+    ;;
+esac
 java="${JAVA_HOME:+${JAVA_HOME}/bin/}java"
 javac="${JAVA_HOME:+${JAVA_HOME}/bin/}javac"
 version="$("$javac" -version 2>&1)"

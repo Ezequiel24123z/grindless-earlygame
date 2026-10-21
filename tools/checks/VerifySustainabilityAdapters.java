@@ -58,7 +58,8 @@ public final class VerifySustainabilityAdapters {
 
     private static void questAccessPrerequisites() throws IOException {
         Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
-        eq("all physical and teaching objectives remain inventoried", 46, snapshot.objectives().size());
+        eq("all 46 retained objectives and four rewardless T1 lessons remain inventoried",
+                50, snapshot.objectives().size());
         eq("only the original material-reward quests create reward routes", 26L,
                 snapshot.routes().values().stream().filter(route -> route.authority() == Authority.QUEST_REWARD).count());
         for (var task : io.github.ezequiel24123z.grindless.quest.QuestCatalogue.tasks()) {
