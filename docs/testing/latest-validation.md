@@ -1,5 +1,22 @@
 # Current T0/T1 validation
 
+## Native FTB — actual registered graph and retained-world restart
+
+[The source-bound native qualification](t0-ftb-native-qualification.md) records
+ff610 real Forge graph/filter/import1099, seed56 and actual second-process disk
+reopen58, both natural stops/harness0. Parent reads full transport and verifies
+that reopen checks persisted state before any import can repair it. Direct raw
+server custody and the final package remain separate. Tool-onlyd731 standalone
+data/vanilla-surrogate2352 and pack152 pass; not a claimed real-client inventory
+or GUI test.
+
+The ff610 Linux workflow's remaining failed suite is three old exact
+`Players`-only root assertions, not the repaired prose or the native restart.
+Update the precise new serialized native-owner schema while retaining old
+player/task/once-only invariants. No new boot is needed for that test-only repair.
+Actual owner-save backup/copy/load and client feedback remain pending; no original
+world, instance or launcher setting has changed.
+
 ## Owner-reported questbook blocker — native FTB replacement pending
 
 Actual owner feedback rejects the custom/native-Heracles quest experience and

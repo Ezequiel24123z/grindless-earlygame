@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
+  loads46 logical quests/36 native item rewards and passes1099 graph/filter/
+  import assertions, then seed56 and a new process reopens persisted native
+  progress/individual receipts with58 assertions and two natural stops.
+  Tool-only standalone2352 and pack152 are distinct evidence. Keep the remaining
+  exact persistence-root oracle correction, artifact custody and real protected
+  world delivery open; no GUI/JEI click, human or original-save pass is invented.
 - **Authorize the next independent T1 component increment (ADR-0172).** Source
   work adds ordinary Assembler casing/Flux Cell reproduction with existing
   timing/FU conventions and manual-craft-equivalent batches. Preserve manual

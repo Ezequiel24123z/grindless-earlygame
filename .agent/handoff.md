@@ -31,6 +31,22 @@ Independent source reviews also require explicit missing-backend handling, exact
 smoke composition and exclusion of the new backend-only case from shared batch.
 No native/client or upgrade pass is inferred until the actual receipts return.
 
+**Later actual qualification:** [the native record](../docs/testing/t0-ftb-native-qualification.md)
+now binds ff610 to real registered Forge graph/filter/import1099, actual persistent
+seed56 and a second process reopening the same retained diagnostic world58,
+with both natural stops/harness0. Parent reads the complete transport and source
+reopen method (no reseed); direct server-log/receipt transfer verification is next.
+This is not real player login/inventory delivery, GUI/JEI or owner-world upgrade.
+Tool-onlyd731 completes2352 standalone data/surrogate assertions and152 pack
+contracts; no production recompile/native replay is required for that test delta.
+
+The completed ff610 Linux workflow has one old `Players`-only persistence-root
+oracle failure after the intentional native-owner field extension. Preserve that
+red and assert the new exact schema; no arbitrary root-key acceptance. Final
+package, stopped source backup, separately admitted owner-save clone and delivery
+remain outstanding. The private custody helper is source-reviewed/digest-bound
+with local fixtures only; original DevF world remains untouched.
+
 Old `QuestProgress` is paid history: import native individual receipts before
 admitting claims, do not treat objective completion as reward payment, and fence
 delayed legacy minting. Use the actual supported API, not raw framework save
@@ -53,8 +69,8 @@ No worker may deploy, access owner worlds or restart the player's game.
 | Category | Current blocker wave |
 | --- | --- |
 | COMPLETED | Actual feedback/source identified; concise copy and legacy ownership fence authored; independent migration oracles and native API research available; exact played F instance distinguished from old preparation |
-| BLOCKED | Native-framework replacement/package/migration qualification is not complete; the real compile red and source QA repairs are being validated, not hidden |
-| NOT EXECUTED | Final native loader/claim/migration proof, new package/deployment, world backup/copy/update or FTB client acceptance |
+| BLOCKED | Final exact persistence schema oracle/package and safe world delivery remain; old red/cancelled attempts are retained rather than relabeled |
+| NOT EXECUTED | New package/deployment, real owner backup/copy/upgrade or FTB client acceptance; actual diagnostic native load/restart is now recorded separately |
 | NEEDS HUMAN VALIDATION | Native questbook presentation and ability to resume play after the qualified fix |
 | NEEDS MY DECISION | None for assigned outcomes; native default-team/individual-receipt and overflow behavior must be explicit, not hidden |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new; existing official binary metadata/downloads are being verified |

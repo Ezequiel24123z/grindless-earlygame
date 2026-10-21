@@ -10,13 +10,19 @@ Backend, content and verification run in parallel; build/cache/deploy serialize.
 | Category | Current outcome |
 | --- | --- |
 | COMPLETED | Copy190a024 plus native-wording follow-ups authored; native ownership fence/source work and migration oracles prepared; played DevF world/ledger identified read-only |
-| BLOCKED | Exact binaries/native APIs are researched; actual corrective compilation, loader/restart/migration/package qualification remain incomplete |
+| BLOCKED | Actual diagnostic native graph/import/restart now passes; exact persistence-root test correction, final package and protected owner delivery remain |
 | NOT EXECUTED | Qualified FTB deployment, real world copy-upgrade, graphical FTB or acceptance pass |
 | NEEDS HUMAN VALIDATION | New native questbook and resumed play after delivery |
 | NEEDS MY DECISION | None for current assignments |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
 | COST / BILLING RISK | No paid generation or new service activation |
 | DEPLOYED STATE | DevF95bf unchanged; one current world/legacy ledger observed17:12:20Z; old preparation separate; only backendac503 owns the new qualification lease, not deployment/world writes |
+
+Read [the native qualification](docs/testing/t0-ftb-native-qualification.md):
+real registered Forge1099/seed56/second-process disk reopen58 with natural stops;
+standalone2352 and pack152 are distinct. No actual GUI/JEI, real player inventory
+delivery or reference-world migration pass is inferred. The diagnostic world
+must never become the player's reference save.
 
 Parallel T1 source2f4eee1 is public on its isolated component branch and includes
 qualified base523b3ab as ancestor; the new two-route data is not execution-qualified.
