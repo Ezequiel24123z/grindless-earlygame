@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -43,6 +42,9 @@ public final class T1Export {
         }
         String name = output.getFileName().toString();
         Path markdown = output.resolveSibling(name.substring(0, name.length() - 5) + ".md");
+        if (Files.isSymbolicLink(markdown)) {
+            throw new IOException("The generated T1 Markdown cannot overwrite a symbolic link");
+        }
         SustainabilityAudit.Result t0 = VerifyT1Progression.canonicalResult(root);
         int checks = VerifyT1Progression.verify(t0);
         String json = T1Sustainability.json(t0);
@@ -60,7 +62,7 @@ public final class T1Export {
             sourceHashes.put(source, AuthorityAdapters.sha256(Files.readAllBytes(root.resolve(source))));
         }
         Map<String, String> classes = new TreeMap<>();
-        for (Class<?> type : List.of(T1Progression.class, T1Progression.Line.class,
+        for (Class<?> type : List.of(T1Progression.class, T1Progression.Requirement.class, T1Progression.Line.class,
                 T1Progression.AtlasSelection.class, T1Sustainability.class,
                 T1Sustainability.InputEvidence.class, T1Sustainability.SeedAllocation.class,
                 VerifyT1Progression.class, T1Export.class)) {
@@ -84,6 +86,7 @@ public final class T1Export {
         provenance.put("model_sha256", AuthorityAdapters.sha256(json.getBytes(StandardCharsets.UTF_8)));
         provenance.put("report_sha256", AuthorityAdapters.sha256(report.getBytes(StandardCharsets.UTF_8)));
         provenance.put("raw_file_sha256", AuthorityAdapters.sha256(Files.readAllBytes(output)));
+        provenance.put("hash_scope", "Model/report hashes use canonical LF; raw_file_sha256 preserves checkout bytes");
         provenance.put("native_client_campaign", "NOT_EXECUTED_BY_THIS_EXPORT");
         Path evidence = root.resolve(Path.of("build", "t1"));
         Files.createDirectories(evidence);
@@ -104,8 +107,8 @@ public final class T1Export {
     }
 
     private static String revision(Path root) throws IOException, InterruptedException {
-        List<String> command = new ArrayList<>(List.of("git", "--no-pager", "rev-parse", "HEAD"));
-        Process process = new ProcessBuilder(command).directory(root.toFile()).redirectErrorStream(true).start();
+        Process process = new ProcessBuilder("git", "--no-pager", "rev-parse", "HEAD")
+                .directory(root.toFile()).redirectErrorStream(true).start();
         String result = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8).trim();
         if (process.waitFor() != 0 || !result.matches("[a-f0-9]{40}")) {
             throw new IOException("Cannot bind the T1 export to its actual invoking revision");

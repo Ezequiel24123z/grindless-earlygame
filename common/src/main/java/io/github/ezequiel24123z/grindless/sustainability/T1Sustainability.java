@@ -6,7 +6,6 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
-import io.github.ezequiel24123z.grindless.source.SourceLogic;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -126,8 +125,12 @@ public final class T1Sustainability {
                     "catalyst_retained", input.catalyst(), "status", input.status(), "producers", input.producers()));
         }
         Route power = require(snapshot, T1Progression.POWER_ROUTE);
-        long generated = power.retainedOutputs().getOrDefault(ENERGY, 0L);
-        long rate = power.durationTicks() > 0 ? generated / power.durationTicks() : 0;
+        Long generated = power.retainedOutputs().get(ENERGY);
+        if (generated == null || generated <= 0 || power.durationTicks() <= 0
+                || generated % power.durationTicks() != 0) {
+            throw new IllegalArgumentException("The selected Thermal fuel authority has no exact positive FU rate");
+        }
+        long rate = generated / power.durationTicks();
         var witness = t0.tiers().get(0);
         var plan = t0.annotations().ledger().get(0);
         Map<String, Object> document = row(
@@ -149,8 +152,9 @@ public final class T1Sustainability {
                         "construction_draw", allocation.constructionDraw(), "remaining", allocation.remaining(),
                         "machine_draws", allocation.machineDraws(),
                         "scope", "Source-derived first-machine allocation, not observed world custody"),
-                "power", row("canonical_route", power.id(), "fuel", item(SourceLogic.BIOMASS).key(),
-                        "fuel_is_T0_renewable", witness.renewable().contains(item(SourceLogic.BIOMASS)),
+                "power", row("canonical_route", power.id(), "fuel_inputs", quantities(power.inputs()),
+                        "fuel_is_T0_renewable", !power.inputs().isEmpty()
+                                && witness.renewable().containsAll(power.netInputs().keySet()),
                         "generation_fu_per_tick", rate, "F1_nominal_fu_per_tick", FluxTier.F1.nominal(),
                         "generated_fu_per_batch", generated, "burn_ticks", power.durationTicks(),
                         "concurrency", "Per-route draws are not a simultaneous factory load or a continuous autonomy proof",
