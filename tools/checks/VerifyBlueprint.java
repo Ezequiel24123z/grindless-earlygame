@@ -9,6 +9,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -43,6 +44,7 @@ public final class VerifyBlueprint {
         destinations();
         capture();
         payment();
+        relocatedMaterials();
         sourceBoundary();
         System.out.println(failures == 0
                 ? "ALL BLUEPRINT CHECKS PASSED"
@@ -516,13 +518,82 @@ public final class VerifyBlueprint {
                 item.contains("level.isInWorldBounds(position)")
                         && item.contains("level.getWorldBorder().isWithinBounds(position)"));
         yes("the adapter checks native player interaction and item permissions",
-                item.contains("player.mayInteract(level, position)")
+                item.contains("player != null && level.mayInteract(player, position)")
+                        && item.contains("&& player.mayInteract(level, position)")
                         && item.contains("player.mayUseItemAt(position, context.getClickedFace(), context.getItemInHand())"));
         yes("capture has no raw level reads", !tool.contains("level.getBlockState("));
         yes("capture and stamp never inspect block entity payloads",
                 !item.contains("getBlockEntity(") && !tool.contains("getBlockEntity("));
         yes("no loader-specific API enters these common paths",
                 !item.contains("net.minecraftforge") && !tool.contains("net.minecraftforge"));
+    }
+
+    private static void relocatedMaterials() {
+        Inventory inventory = stock(0);
+        ItemStack furnace = relocated(new ItemStack(Items.FURNACE));
+        ItemStack stone = relocated(new ItemStack(Items.STONE));
+        inventory.items.set(2, furnace);
+        inventory.offhand.set(0, stone);
+        ItemStack originalFurnace = furnace.copy();
+        ItemStack originalStone = stone.copy();
+        yes("relocated machine stock is not eligible", !BlueprintItem.eligibleMaterial(furnace));
+        eq("main and offhand BE payloads are not counted", Map.of(), BlueprintItem.contents(inventory));
+        List<BlueprintLogic.Piece> pieces = List.of(new BlueprintLogic.Piece(0, 0, 0,
+                "minecraft:furnace", "minecraft:furnace", "east"), stoneLine(2).get(1));
+        Site site = new Site();
+        BlueprintItem.StampPlan missing = plan(pieces, site, BlueprintItem.contents(inventory), false);
+        eq("protected stock produces an honest complete shortfall",
+                Map.of("minecraft:furnace", 1, STONE, 1), missing.diagnosis().missing());
+        BlueprintItem.StampResult refused = BlueprintItem.stamp(missing, site, inventory, false,
+                (position, state) -> { throw new AssertionError("relocated stock placed"); },
+                stack -> { throw new AssertionError("relocated stock reserved"); });
+        eq("protected-only stock cannot place anything", 0, refused.placed());
+        yes("missing-material refusal preserves stored machine state",
+                ItemStack.matches(originalFurnace, inventory.items.get(2)));
+        yes("missing-material refusal preserves offhand machine state",
+                ItemStack.matches(originalStone, inventory.offhand.get(0)));
+
+        inventory.items.set(10, new ItemStack(Items.FURNACE));
+        inventory.items.set(12, new ItemStack(Items.STONE));
+        eq("mixed stock counts only clean replacements",
+                Map.of("minecraft:furnace", 1, STONE, 1), BlueprintItem.contents(inventory));
+        BlueprintItem.StampResult built = BlueprintItem.stamp(
+                plan(pieces, site, BlueprintItem.contents(inventory), false), site, inventory, false,
+                (position, state) -> {
+                    site.blocks.put(position, state);
+                    return true;
+                }, stack -> { throw new AssertionError("complete clean replacement refunded"); });
+        eq("clean replacements satisfy the actual stamp", 2, built.placed());
+        yes("successful construction leaves the stored machine and its exact NBT intact",
+                inventory.items.get(2) == furnace && ItemStack.matches(originalFurnace, furnace));
+        yes("successful construction leaves the offhand stored machine intact",
+                inventory.offhand.get(0) == stone && ItemStack.matches(originalStone, stone));
+        eq("no clean replacement stock remains", Map.of(), BlueprintItem.contents(inventory));
+        ItemStack malformed = new ItemStack(Items.FURNACE);
+        malformed.getOrCreateTag().putString(BlockItem.BLOCK_ENTITY_TAG, "not a compound");
+        yes("malformed BE data is protected rather than discarded", !BlueprintItem.eligibleMaterial(malformed));
+        ItemStack named = new ItemStack(Items.STONE);
+        named.getOrCreateTag().putString("Marker", "safe refund metadata");
+        yes("ordinary non-container refund metadata remains eligible", BlueprintItem.eligibleMaterial(named));
+    }
+
+    private static ItemStack relocated(ItemStack stack) {
+        // Synthetic saved payload: eligibility protects the whole tag without interpreting these fields.
+        CompoundTag machine = new CompoundTag();
+        ListTag contents = new ListTag();
+        CompoundTag owned = new ItemStack(Items.DIAMOND, 7).save(new CompoundTag());
+        owned.putByte("Slot", (byte) 0);
+        contents.add(owned);
+        machine.put("Items", contents);
+        CompoundTag energy = new CompoundTag();
+        energy.putLong("Stored", 6400L);
+        machine.put("Energy", energy);
+        machine.putInt("ChassisMark", 1);
+        CompoundTag upgrades = new CompoundTag();
+        upgrades.putInt("speed", 1);
+        machine.put("Upgrades", upgrades);
+        stack.getOrCreateTag().put(BlockItem.BLOCK_ENTITY_TAG, machine);
+        return stack;
     }
 
     private static void malformed(String label, ItemStack carrier) {

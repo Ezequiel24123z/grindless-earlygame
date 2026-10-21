@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -273,7 +274,8 @@ public final class BlueprintItem extends Item {
 
             @Override
             public boolean mayBuild(BlockPos position) {
-                return player != null && player.mayInteract(level, position)
+                return player != null && level.mayInteract(player, position)
+                        && player.mayInteract(level, position)
                         && player.mayUseItemAt(position, context.getClickedFace(), context.getItemInHand());
             }
 
@@ -358,13 +360,19 @@ public final class BlueprintItem extends Item {
     static Map<String, Integer> contents(Inventory inventory) {
         Map<String, Integer> have = new LinkedHashMap<>();
         for (ItemStack stack : pockets(inventory)) {
-            if (!stack.isEmpty()) {
+            if (eligibleMaterial(stack)) {
                 String itemId = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
                 have.merge(itemId, Math.min(BlueprintLogic.MAX_PIECES, stack.getCount()),
                         (first, second) -> Math.min(BlueprintLogic.MAX_PIECES, first + second));
             }
         }
         return have;
+    }
+
+    /** Relocated machines retain their stores and upgrades; a stamp only applies id/facing. */
+    static boolean eligibleMaterial(ItemStack stack) {
+        return !stack.isEmpty()
+                && (stack.getTag() == null || !stack.getTag().contains(BlockItem.BLOCK_ENTITY_TAG));
     }
 
     private static final class Payment {
@@ -386,7 +394,7 @@ public final class BlueprintItem extends Item {
                     if (left == 0) {
                         break;
                     }
-                    if (!stack.isEmpty()
+                    if (eligibleMaterial(stack)
                             && entry.getKey().equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString())) {
                         int take = Math.min(left, stack.getCount());
                         payment.reserved.add(stack.split(take));

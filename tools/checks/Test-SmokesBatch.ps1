@@ -683,7 +683,7 @@ done
             Invoke-OrdinaryReference $f $only $result
         }
     }
-    foreach ($freshName in @('first-fluids', 'first-harness', 'workshop-ports')) {
+    foreach ($freshName in @('first-fluids', 'first-harness', 'workshop-ports', 'blueprint-interaction')) {
         Invoke-Case "$freshName only selection refuses both current twins without an optional sibling" {
             $f = New-Fixture ("alpha`n" + $freshName + "`nbeta`n") 'selected observation only root & spaces'
             Assert-Test (-not (Test-Path -LiteralPath (Join-Path $f.Root "tools/smoke/$freshName-optional"))) 'observation isolation is fixed, not dependent on an optional sibling'
@@ -709,6 +709,43 @@ done
                 Assert-Test ($result.Out.Contains('Running 2 shared-world')) 'only ordinary selected scenarios contribute to the boot count'
                 Assert-Aggregate $f "say BATCH-BEGIN alpha`nsay alpha`nsay BATCH-END alpha`nsay BATCH-BEGIN beta`nsay beta`nsay BATCH-END beta`n" "BATCH-END alpha`nPASS alpha`nBATCH-END beta`nPASS beta`n"
                 Invoke-OrdinaryReference $f $only $result
+            }
+        }
+    }
+    Invoke-Case 'blueprint-interaction source carrier names one real console probe, never an echoed pass' {
+        $commands = (Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/blueprint-interaction.commands')).Replace("`r`n", "`n").Trim()
+        Assert-Test ($commands -ceq "forceload add 1600 1600`ngrindless_blueprint_checks") 'one owned chunk and one actual console probe, no synthetic pass emitter'
+        $expected = (Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/blueprint-interaction.expect')).Trim()
+        Assert-Test ($expected -ceq 'GRINDLESS_BLUEPRINT_NATIVE_PASS blocks=2 capture=1 stamp=1 known_false=1 blocked=1 unloaded=1 permissions=1 codec=1 limits=1 assertions=[1-9][0-9]*') 'one complete native marker is required'
+        $source = Read-FixtureText (Join-Path $RepositoryRoot 'forge/src/main/java/io/github/ezequiel24123z/grindless/item/BlueprintInteractionChecks.java')
+        Assert-Test ($source.Contains('Commands.literal("grindless_blueprint_checks")') -and
+            $source.Contains('source.getEntity() == null && source.hasPermission(4)')) 'the real carrier is console-only with permission four'
+        Assert-Test ($source.Contains('FakePlayerFactory.get(level, PROFILE)') -and
+            $source.Contains('getItem().useOn(context(clicked))') -and
+            $source.Contains('BlueprintItem.preflight(')) 'the probe uses native profile creation and the existing item/preflight paths'
+        Assert-Test ([regex]::Matches($source, 'LOG\.info\("GRINDLESS_BLUEPRINT_NATIVE_PASS').Count -eq 1) 'there is only one source success emitter'
+        Assert-Test (-not [IO.File]::Exists((Join-Path $RepositoryRoot 'tools/smoke/blueprint-interaction.timeout'))) 'the native case retains the existing assertion budget'
+    }
+    foreach ($twin in @('Bash', 'PowerShell')) {
+        Invoke-Case "blueprint-interaction remains registered and dispatches in the isolated $twin runner (fake boot only)" {
+            $manifest = Read-FixtureText (Join-Path $RepositoryRoot 'tools/smoke/scenarios.txt')
+            Assert-Test ($manifest -match '(?m)^blueprint-interaction\s') 'the real isolated/CI manifest includes the native blueprint interaction'
+            $f = New-Fixture "alpha`nblueprint-interaction`nbeta`n" 'selected isolated blueprint root & spaces'
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/blueprint-interaction.commands') "say synthetic blueprint dispatch`n"
+            Write-FixtureText (Join-Path $f.Root 'tools/smoke/blueprint-interaction.expect') "synthetic blueprint result`n"
+            if ($twin -eq 'Bash') {
+                $f.Entry = $f.Entry.Replace('run-smokes-batch.sh', 'run-smokes.sh')
+                $result = Invoke-Batch $f -Arguments @($f.NativeRoot, '--only', 'blueprint-interaction')
+                Assert-Test ($result.ExitCode -eq 0) ("isolated Bash dispatch succeeds with the fake: " + $result.Err)
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'boot.calls')) -ceq "call`n") 'isolated Bash dispatches exactly one fake boot'
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'at-launch.commands')).Contains('synthetic blueprint dispatch')) 'isolated Bash forwards the selected command file'
+                Assert-Test (-not (Read-CapturedEnvironment $f).SMOKE_QUEST_BACKEND.Present) 'isolated blueprint dispatch uses the ordinary backend'
+                Assert-CallerPreserved $f
+            } else {
+                $result = Invoke-PowerShellReference $f 'blueprint-interaction' -Isolated
+                Assert-Test ($result.ExitCode -eq 0) ("isolated PS dispatch succeeds with the fake: " + $result.Err)
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'reference.calls')) -ceq 'one safe intercepted launch') 'isolated PS dispatches exactly one fake boot'
+                Assert-Test ((Read-FixtureText (Join-Path $f.Capture 'reference.backend')) -ceq '') 'isolated blueprint dispatch clears an inherited backend'
             }
         }
     }
