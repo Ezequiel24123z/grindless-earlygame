@@ -4,8 +4,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
+import io.github.ezequiel24123z.grindless.recipe.BootstrapProcesses;
+import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPortRole;
+import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,6 +29,7 @@ public final class VerifyQuest {
     private static final Path LANG = Path.of("common/src/main/resources/assets/grindless/lang/en_us.json");
     private static final Path RECIPES = Path.of("common/src/main/resources/data/grindless/recipes");
     private static final Path SOURCES = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
+    private static final Path FORGE_SOURCES = Path.of("forge/src/main/java/io/github/ezequiel24123z/grindless");
 
     private static final List<String> LINES = List.of(
             "bootstrap", "workshop", "renewable_supply", "settling", "bioculture", "workshop_logistics",
@@ -323,44 +327,124 @@ public final class VerifyQuest {
             yes("a zero-line page is rejected explicitly", true);
         }
         JsonObject lang = JsonParser.parseString(Files.readString(LANG)).getAsJsonObject();
+        List<AtlasLogic.Entry> recipes = AtlasLogic.allEntries(java.util.stream.Stream.concat(
+                BootstrapProcesses.recipes().stream(), RenewableProcesses.recipes().stream()).toList());
         StringBuilder all = new StringBuilder();
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             String body = QuestTeaching.bodyKey(task);
+            String expectedBody = "gui.grindless.quest.lesson."
+                    + (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1 ? "t1_preview"
+                    : task.id().equals("settling") ? "settling_ports" : task.id());
+            eq(task.id() + " selects the native description key", expectedBody, body);
+            String title = "gui.grindless.quest.task." + task.id();
+            yes(task.id() + " has a nonblank native quest title",
+                    lang.has(title) && !lang.get(title).getAsString().isBlank());
             yes(task.id() + " has concise in-quest teaching", lang.has(body)
                     && !lang.get(body).getAsString().isBlank() && lang.get(body).getAsString().length() <= 1400);
             yes(task.id() + " has a localized route classification",
                     lang.has("gui.grindless.quest.path." + QuestTeaching.path(task).name().toLowerCase(java.util.Locale.ROOT)));
             if (QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0) {
-                all.append(lang.get(body).getAsString()).append('\n');
+                all.append(lang.get(title).getAsString()).append('\n')
+                        .append(lang.get(body).getAsString()).append('\n');
             }
         }
         String text = all.toString();
+        // Ordinary item names and bills belong to native objectives and live recipes, not prose quotas.
         for (String mark : List.of(
-                "starter", "Quest Book", "Superflat", "construction", "Multitool", "Crank Handle",
-                "Hand Pump", "Quern", "Clay Mixer", "grog", "Firing Chamber", "insulators", "Crude Extractor",
-                "Geological Collector", "aggregate", "Settling", "Settling Channel", "Settling Screen",
+                "Superflat", "construction", "Multitool", "Crank Handle",
+                "Hand Pump", "Quern", "grog", "Firing Chamber", "insulators", "Crude Extractor",
+                "Geological Collector", "aggregate",
                 "water", "iron", "copper", "redstone", "Slag", "Biocultivator", "daylight", "biomass",
-                "fibreboard", "paper", "sticks", "charcoal", "Biomass Dynamo", "Basic Tank", "Clay Conduit",
-                "Conveyor Belts", "Crude Manipulator", "Assembly Bench", "Research Terminal", "Data Core",
+                "sticks", "Biomass Dynamo", "Basic Tank", "Clay Conduit",
+                "Crude Manipulator", "Assembly Bench", "Research Terminal", "Data Core",
                 "Calibrated Data Core", "F1", "T1")) {
             yes("the T0 quests teach " + mark, text.contains(mark));
         }
+        eq("native starter teaching retains the finite-kit classification", QuestTeaching.Path.STARTER,
+                QuestTeaching.path(task(QuestCatalogue.STARTER_SUPPLIES)));
+        String starterBody = lang.get(QuestTeaching.bodyKey(task(QuestCatalogue.STARTER_SUPPLIES))).getAsString();
+        yes("native starter teaching warns about separate rewards and overflow drops",
+                starterBody.contains("separately") && starterBody.contains("drop"));
+        eq("native quest help remains a rewardless lesson", QuestCatalogue.Type.LESSON, task("quest_book_help").type());
+        eq("native quest help does not require a held book objective", QuestCatalogue.Evidence.FREE,
+                task("quest_book_help").evidence());
+        String help = lang.get(QuestTeaching.bodyKey(task("quest_book_help"))).getAsString();
+        yes("native help identifies FTB Quests and individual rewards despite shared team progress",
+                help.contains("FTB Quests") && help.contains("team") && help.contains("individually"));
+        for (Map.Entry<String, String> topic : Map.of(
+                "clay_mixer", "grindless:clay_mixer", "settling", "grindless:settling_trough",
+                "fibreboard", "grindless:fibreboard", "conveyors", "grindless:conveyor_belt").entrySet()) {
+            QuestCatalogue.Task objective = task(topic.getKey());
+            eq(topic.getKey() + " remains a physical native item objective", QuestCatalogue.Evidence.ITEM,
+                    objective.evidence());
+            eq(topic.getKey() + " names the actual workshop item", topic.getValue(), objective.subject());
+            yes(topic.getKey() + " selects a live recipe producing its objective",
+                    QuestTeaching.recipes(objective, recipes).stream()
+                            .anyMatch(entry -> entry.outputs().contains("item:" + topic.getValue())));
+        }
+        eq("fibreboard follows actual biomass production and mixing", List.of("biomass", "clay_mixer"),
+                task("fibreboard").requires());
+        eq("conveyors follow ceramics without becoming a mandatory exit", List.of("ceramics"),
+                task("conveyors").requires());
+        eq("conveyors remain optional", QuestTeaching.Path.OPTIONAL, QuestTeaching.path(task("conveyors")));
+        eq("native conveyor evidence retains the eight-belt batch", 8, task("conveyors").count());
+        for (Map.Entry<String, String> route : Map.of(
+                "bootstrap/fibreboard", "grindless:fibreboard", "bootstrap/paper", "minecraft:paper",
+                "bootstrap/biocarbon", "minecraft:charcoal").entrySet()) {
+            AtlasLogic.Entry actual = recipes.stream().filter(entry -> entry.id().equals(route.getKey()))
+                    .findFirst().orElseThrow();
+            yes(route.getKey() + " remains an actual biomass-to-product route",
+                    actual.inputs().contains("item:grindless:biomass")
+                            && actual.outputs().contains("item:" + route.getValue()));
+            yes(route.getKey() + " remains selected by the renewable workshop lesson",
+                    QuestTeaching.recipes(task("fibreboard"), recipes).contains(actual));
+        }
         no("T0 does not present the Thermal Generator as its next required machine", text.contains("Thermal Generator"));
         yes("optional extraction is classified explicitly", QuestTeaching.path(task("extractor")) == QuestTeaching.Path.OPTIONAL);
-        yes("the first core is replaceable through production, not reset claims",
-                lang.get(QuestTeaching.bodyKey(task("calibrated_core"))).getAsString().contains("not a reward reset"));
-        eq("Firing help uses runtime formation cells", io.github.ezequiel24123z.grindless.structure.WorkshopStructure.FIRING_CHAMBER,
+        AtlasLogic.Entry rawCore = recipes.stream().filter(entry -> entry.id().equals("craft/data_core"))
+                .findFirst().orElseThrow();
+        AtlasLogic.Entry calibration = recipes.stream().filter(entry -> entry.id().equals("calibrate/data_core"))
+                .findFirst().orElseThrow();
+        eq("replacement raw cores use ordinary ceramic and redstone production",
+                List.of("item:grindless:ceramic_insulator", "item:minecraft:redstone"), rawCore.inputs());
+        eq("the replacement craft really produces a raw core", List.of("item:grindless:data_core"), rawCore.outputs());
+        eq("replacement calibration consumes a raw core", rawCore.outputs(), calibration.inputs());
+        eq("replacement calibration really produces a calibrated core",
+                List.of("item:grindless:calibrated_data_core"), calibration.outputs());
+        yes("replacement calibration requires powered operation", calibration.fuPerTick() > 0 && calibration.durationTicks() > 0);
+        yes("core recovery selects actual manufacture and calibration",
+                QuestTeaching.recipes(task("calibrated_core"), recipes).containsAll(List.of(rawCore, calibration)));
+        eq("the recovery note follows calibration", List.of("calibrate"), task("calibrated_core").requires());
+        eq("the recovery note never pays a replacement core", List.of(), task("calibrated_core").rewards());
+        yes("core recovery teaches manufacture and calibration rather than repeating a claim",
+                Pattern.compile("\\b(?:make|craft)\\b.*\\bcalibrat\\w*\\b.*\\b(?:claim|reward)\\w*\\b.*\\b(?:not|never)\\b",
+                        Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+                        .matcher(lang.get(QuestTeaching.bodyKey(task("calibrated_core"))).getAsString()).find());
+        eq("Firing help uses runtime formation cells", WorkshopStructure.FIRING_CHAMBER,
                 QuestTeaching.structure(task("firing")));
-        eq("Settling help uses runtime formation cells", io.github.ezequiel24123z.grindless.structure.WorkshopStructure.SETTLING_TROUGH,
+        eq("Settling help uses runtime formation cells", WorkshopStructure.SETTLING_TROUGH,
                 QuestTeaching.structure(task("settling")));
-        List<AtlasLogic.Entry> crafts = AtlasLogic.allEntries(List.of());
+        eq("the Settling lesson retains the ordered, oriented Channel and Screen",
+                List.of("grindless:settling_channel", "grindless:settling_screen"),
+                QuestTeaching.structure(task("settling")).cells().stream()
+                        .filter(WorkshopStructure.Cell::oriented).map(WorkshopStructure.Cell::block).toList());
+        for (String part : List.of("settling_channel", "settling_screen")) {
+            yes(part + " remains an actual selected craft, not a prose-only part",
+                    QuestTeaching.recipes(task("settling"), recipes).stream().anyMatch(entry ->
+                            entry.id().equals("craft/" + part) && entry.outputs().contains("item:grindless:" + part)));
+        }
+        String settling = lang.get(QuestTeaching.bodyKey(task("settling"))).getAsString();
+        yes("selected Settling teaching preserves facing and overhead clearance",
+                (settling.contains("same way") || settling.contains("same facing")) && settling.contains("air above"));
+        yes("selected Settling teaching preserves controller-owned storage and paid repair",
+                settling.contains("controller's storage") && settling.contains("not their own") && settling.contains("paid"));
         for (WorkshopPortContract.Kind kind : WorkshopPortContract.Kind.values()) {
             String topic = kind.structure() == io.github.ezequiel24123z.grindless.structure.WorkshopStructure.FIRING_CHAMBER
                     ? "firing" : "settling";
-            AtlasLogic.Entry actualCraft = crafts.stream().filter(entry ->
+            AtlasLogic.Entry actualCraft = recipes.stream().filter(entry ->
                     entry.id().equals("craft/" + kind.blockName())).findFirst().orElseThrow();
             yes("optional port recipe is projected from its actual craft " + kind.id(),
-                    QuestTeaching.recipes(task(topic), crafts).contains(actualCraft));
+                    QuestTeaching.recipes(task(topic), recipes).contains(actualCraft));
         }
         for (WorkshopPortRole role : WorkshopPortRole.values()) {
             yes("actual port role is localized " + role,
@@ -397,28 +481,40 @@ public final class VerifyQuest {
         String items = Files.readString(SOURCES.resolve("registry/ModItems.java"));
         String tabs = Files.readString(SOURCES.resolve("registry/ModCreativeTabs.java"));
         String menus = Files.readString(SOURCES.resolve("registry/ModMenus.java"));
-        String client = Files.readString(SOURCES.resolve("client/GrindlessClient.java"));
         yes("both handhelds are registered",
                 items.contains("register(\"quest_book\"") && items.contains("register(\"field_guide\""));
         yes("the Quest Book remains on the normal creative tab", tabs.contains("QUEST_BOOK"));
         no("the retired Guide is no longer offered on the creative tab", tabs.contains("FIELD_GUIDE"));
-        yes("both menus are registered",
+        yes("retained historical menu identities remain registered",
                 menus.contains("register(\"quest_book\"") && menus.contains("register(\"field_guide\""));
-        yes("both screens are bound",
-                client.contains("QuestBookScreen") && client.contains("FieldGuideScreen"));
-        String questMenu = Files.readString(SOURCES.resolve("menu/QuestBookMenu.java"));
-        String questScreen = Files.readString(SOURCES.resolve("client/QuestBookScreen.java"));
-        yes("the book synchronizes held-item progress", questMenu.contains("public int held(int index)")
-                && questMenu.contains("tasks.size() + i"));
-        yes("the screen shows the synchronized objective", questScreen.contains("menu.held(selected)")
-                && lang.has("gui.grindless.quest.objective.item"));
-        yes("native help pages all lesson lines without truncating them", questScreen.contains("QuestTeaching.paginate(")
-                && questScreen.contains("QuestTeachingClient.content("));
-        yes("native T1 navigation is server-gated", questScreen.contains("menu.chapterUnlocked(")
-                && questMenu.contains("QuestCatalogue.unlocked(QuestCatalogue.Chapter.T1, claimed)"));
+        // Historical custom screen bindings are not the active quest presentation contract.
+        String definitions = Files.readString(FORGE_SOURCES.resolve("forge/quest/FtbQuestDefinitions.java"));
+        String integration = Files.readString(FORGE_SOURCES.resolve("forge/quest/FtbQuestIntegration.java"));
+        String platform = Files.readString(FORGE_SOURCES.resolve("quest/forge/QuestBackendPlatformImpl.java"));
+        yes("native quest titles use the localized task identity",
+                definitions.contains("Component.translatable(\"gui.grindless.quest.task.\" + task.id())"));
+        yes("native descriptions use the selected lesson rather than a custom help widget",
+                definitions.contains("json(body(task))") && definitions.contains("QuestTeaching.bodyKey(task)"));
+        yes("native item objectives own counts and do not consume evidence",
+                definitions.contains("case ITEM, MATRIX -> \"ftbquests:item\"")
+                        && definitions.contains("evidence.putLong(\"count\", task.count())")
+                        && definitions.contains("evidence.putBoolean(\"consume_items\", false)"));
+        yes("the native T1 graph retains catalogue prerequisite gates",
+                definitions.contains("\"dependencies\", strings(QuestCatalogue.requirements(task).stream()")
+                        && definitions.contains("\"hide_until_deps_complete\", QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1"));
+        yes("opening quests sends the framework's native book message",
+                integration.contains("new OpenQuestBookMessage(") && integration.contains(".sendTo(player)"));
+        yes("missing FTB is handled visibly without enabling a historical renderer",
+                platform.contains("FtbQuestIntegration.open(player)") && platform.contains("return true;")
+                        && platform.contains("displayClientMessage(") && platform.contains("backend_unavailable")
+                        && !platform.contains("return false;") && !platform.contains("Heracles")
+                        && !platform.contains("MenuRegistry") && !platform.contains("QuestBookMenu"));
+        String book = Files.readString(SOURCES.resolve("item/QuestBookItem.java"));
+        yes("the retained Quest Book routes through native platform admission",
+                book.contains("QuestBackendPlatform.open(server)"));
         String legacy = Files.readString(SOURCES.resolve("item/FieldGuideItem.java"));
-        yes("old Guide use routes to quests without rewriting item NBT", legacy.contains("new QuestBookMenu(")
-                && legacy.contains("QuestBackendPlatform.open(server)") && !legacy.contains("setItemInHand"));
+        yes("old Guide use routes to native admission without rewriting item NBT",
+                legacy.contains("QuestBackendPlatform.open(server)") && !legacy.contains("setItemInHand"));
         for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
             yes(task.id() + " has a row label", lang.has("gui.grindless.quest.task." + task.id()));
         }

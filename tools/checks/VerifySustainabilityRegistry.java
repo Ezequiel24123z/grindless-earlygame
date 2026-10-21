@@ -29,6 +29,7 @@ import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
+import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import java.io.IOException;
 import java.net.URI;
@@ -2056,6 +2057,7 @@ public final class VerifySustainabilityRegistry {
         Map<String, ClassTree> sources = questSources(root, new TreeMap<>());
         eq("historical claim guards and native-only FTB migration, definitions and entrypoints are recognized", true,
                 questBookAccess(sources));
+        parserIsolationCounterexamples(root, sources);
         rejectQuest(root, sources, "the service cannot replace the physical book with permission",
                 "QuestClaimService", "return player.getMainHandItem().is(ModItems.QUEST_BOOK.get())", "return true");
         rejectQuest(root, sources, "another held item cannot establish the registered book prerequisite",
@@ -2619,6 +2621,69 @@ public final class VerifySustainabilityRegistry {
                 "import fixture.ControlMatrixItem;");
     }
 
+    private static void parserIsolationCounterexamples(Path root, Map<String, ClassTree> isolated) throws IOException {
+        Path directory = Files.createTempDirectory("grindless-ast-classpath-");
+        try {
+            List<Path> controlledClasspath = List.of(directory);
+            Map<String, ClassTree> controlled = new TreeMap<>();
+            for (var entry : QUEST_SOURCES.entrySet()) {
+                String text = Files.readString(root.resolve(entry.getValue()));
+                ClassTree type = parse(entry.getKey(), text, controlledClasspath);
+                controlled.put(entry.getKey(), type);
+                eq("empty classpath preserves the canonical authority AST: " + entry.getKey(),
+                        questText(type), questText(isolated.get(entry.getKey())));
+            }
+            eq("controlled parser retains the complete authority set", QUEST_SOURCES.keySet(), controlled.keySet());
+            eq("controlled classpath also accepts the full closed authority contract", true, questBookAccess(controlled));
+            String owner = "FtbMatrixFilter";
+            String original = Files.readString(root.resolve(QUEST_SOURCES.get(owner))).replace("\r\n", "\n");
+            for (String[] mutation : List.of(
+                    new String[]{"qualified receiver", "getMatcher(filterStack).test(toCheck)",
+                            "fixture.Adapter.getMatcher(filterStack).test(toCheck)"},
+                    new String[]{"pattern-method subject guard", "sameSubject(candidate, declared)", "true"})) {
+                eq("parser isolation mutation targets actual source: " + mutation[0], true, original.contains(mutation[1]));
+                String changed = original.replace(mutation[1], mutation[2]);
+                ClassTree emptyType = parse(owner, changed);
+                ClassTree controlledType = parse(owner, changed, controlledClasspath);
+                eq("classpath isolation preserves the mutant canonical AST: " + mutation[0],
+                        questText(controlledType), questText(emptyType));
+                Map<String, ClassTree> emptyAltered = new TreeMap<>(isolated);
+                Map<String, ClassTree> controlledAltered = new TreeMap<>(controlled);
+                emptyAltered.put(owner, emptyType);
+                controlledAltered.put(owner, controlledType);
+                eq("empty classpath rejects the full closed-contract mutant: " + mutation[0],
+                        false, questBookAccess(emptyAltered));
+                eq("controlled classpath rejects the same full closed-contract mutant: " + mutation[0],
+                        false, questBookAccess(controlledAltered));
+            }
+            for (String[] mutation : List.of(
+                    new String[]{"syntax", "return \"Grindless\";", "return \"Grindless\"", "syntactically invalid"},
+                    new String[]{"import binding", "import dev.ftb.mods.ftbquests.api.ItemFilterAdapter;",
+                            "import fixture.ItemFilterAdapter;", "claim binding not evaluated"})) {
+                eq("parser rejection fixture targets actual source: " + mutation[0], true, original.contains(mutation[1]));
+                String changed = original.replace(mutation[1], mutation[2]);
+                String firstRejection = null;
+                for (List<Path> classpath : List.of(List.<Path>of(), controlledClasspath)) {
+                    try {
+                        parse(owner, changed, classpath);
+                        throw new AssertionError("Parser isolation failed to reject " + mutation[0]);
+                    } catch (IOException rejection) {
+                        eq("parser isolation retains the explicit rejection: " + mutation[0],
+                                true, rejection.getMessage().contains(mutation[3]));
+                        if (firstRejection == null) {
+                            firstRejection = rejection.getMessage();
+                        } else {
+                            eq("empty and controlled classpaths reject for the same reason: " + mutation[0],
+                                    firstRejection, rejection.getMessage());
+                        }
+                    }
+                }
+            }
+        } finally {
+            Files.delete(directory);
+        }
+    }
+
     private static void rejectQuest(Path root, Map<String, ClassTree> sources, String message,
                                     String owner, String before, String after) throws IOException {
         String original = Files.readString(root.resolve(QUEST_SOURCES.get(owner))).replace("\r\n", "\n");
@@ -2969,6 +3034,10 @@ public final class VerifySustainabilityRegistry {
     }
 
     private static ClassTree parse(String name, String text) throws IOException {
+        return parse(name, text, List.of());
+    }
+
+    private static ClassTree parse(String name, String text, List<Path> classpath) throws IOException {
         var compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
             throw new IOException("A JDK compiler is required to inspect the actual registration source profile.");
@@ -2982,6 +3051,11 @@ public final class VerifySustainabilityRegistry {
         };
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         try (var files = compiler.getStandardFileManager(diagnostics, null, StandardCharsets.UTF_8)) {
+            // Contracts inspect syntax/import text only; even the controlled baseline never inherits runtime paths.
+            // No source lookup or annotation processing is needed in either mode.
+            files.setLocationFromPaths(StandardLocation.CLASS_PATH, classpath);
+            files.setLocationFromPaths(StandardLocation.SOURCE_PATH, List.of());
+            files.setLocationFromPaths(StandardLocation.ANNOTATION_PROCESSOR_PATH, List.of());
             JavacTask task = (JavacTask) compiler.getTask(null, files, diagnostics, List.of("-proc:none"),
                     null, List.of(input));
             var parsed = task.parse().iterator().next();
