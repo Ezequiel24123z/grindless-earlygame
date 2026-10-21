@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
 import io.github.ezequiel24123z.grindless.process.MachineEnvelopes;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
@@ -92,10 +93,8 @@ public final class VerifyRecipes {
         eq("the Relay Matrix batch consumes the calibrated core", "item:grindless:calibrated_data_core",
                 relayMatrix.itemInputs().get(3).qualified());
         eq("the Relay Matrix batch has four inputs", 4, relayMatrix.itemInputs().size());
-        eq("the Relay Matrix batch makes physical matrices", "item:grindless:relay_matrix",
-                relayMatrix.itemOutputs().get(0).qualified());
-        eq("the Relay Matrix batch makes five", FabricationLogic.RELAY_MATRIX_BATCH,
-                relayMatrix.itemOutputs().get(0).count());
+        yes("the Relay Matrix batch keeps five ordinary outputs for the legacy F1 rating",
+                relayMatrix.outputs().equals(List.of(OutputSpec.item(FabricationLogic.RELAY_MATRIX, 5))));
         eq("the Relay Matrix batch is twenty seconds", FabricationLogic.ASSEMBLE_TICKS,
                 relayMatrix.durationTicks());
         yes("the Relay Matrix batch keeps its complete physical bill", relayMatrix.inputs().equals(List.of(
@@ -261,9 +260,15 @@ public final class VerifyRecipes {
         eq("gear uses the gear die", "item:grindless:gear_die", ironGear.catalysts().get(0).qualified());
 
         eq("coil is the press", MachineFamily.PRESS, coil.family());
-        eq("coil takes copper", "tag:forge:ingots/copper", coil.itemInputs().get(0).qualified());
-        eq("coil uses the coil die", "item:grindless:coil_die", coil.catalysts().get(0).qualified());
-        eq("coil is a reagent", "item:grindless:copper_coil", coil.itemOutputs().get(0).qualified());
+        yes("the T1 coil keeps one copper ingot without a Matrix or fluid",
+                coil.inputs().equals(List.of(IngredientSpec.tag("forge:ingots/copper", 1))));
+        yes("the T1 coil keeps its one unconsumed coil die",
+                coil.catalysts().equals(List.of(IngredientSpec.item(FabricationLogic.COIL_DIE, 1))));
+        yes("the T1 coil keeps its one-coil output",
+                coil.outputs().equals(List.of(OutputSpec.item(FabricationLogic.COPPER_COIL, 1))));
+        eq("the T1 coil keeps its four-second cycle", 80, coil.durationTicks());
+        eq("the T1 coil keeps its F1 draw", 32L, coil.fuPerTick());
+        yes("the T1 coil keeps its unlabelled route", coil.milestone() == null);
 
         eq("MK2 is the assembler", MachineFamily.ASSEMBLER, mk2.family());
         eq("MK2 takes a casing", "item:grindless:machine_casing", mk2.itemInputs().get(0).qualified());
@@ -301,21 +306,41 @@ public final class VerifyRecipes {
         yes("mill coil has no die", millCoil.catalysts().isEmpty());
 
         eq("the mill is the assembler", MachineFamily.ASSEMBLER, mill.family());
-        eq("the mill takes a casing", "item:grindless:machine_casing", mill.itemInputs().get(0).qualified());
-        eq("the mill takes two coils", 2, mill.itemInputs().get(1).count());
-        eq("the mill coils are the reagent", "item:grindless:copper_coil", mill.itemInputs().get(1).qualified());
-        eq("the mill takes four plates", 4, mill.itemInputs().get(2).count());
+        yes("the mill retains its complete bill with one F2 Relay Matrix as the fourth group",
+                mill.inputs().equals(List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1))));
+        eq("the mill has exactly four grouped item inputs", 4, mill.itemInputs().size());
+        eq("the mill consumes eight total input units", 8,
+                mill.itemInputs().stream().mapToInt(IngredientSpec::count).sum());
+        eq("the mill fits the existing four-slot Assembler", MachineMenuKind.ASSEMBLER.inputs(),
+                mill.itemInputs().size());
         eq("the mill is twenty seconds", 20 * 20, mill.durationTicks());
+        eq("the mill still draws F1", 32L, mill.fuPerTick());
         eq("the mill carries the Industrial milestone", "industrial", mill.milestone());
-        eq("the mill makes the block", "item:grindless:wire_mill", mill.itemOutputs().get(0).qualified());
+        yes("the mill keeps its single ordinary block output",
+                mill.outputs().equals(List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1))));
+        yes("the mill remains acid-free", mill.fluidInputs().isEmpty() && mill.fluidOutputs().isEmpty());
+        yes("the mill consumes every group rather than retaining a catalyst", mill.catalysts().isEmpty());
+        no("the mill adds no operating condition",
+                mill.namesTemperature() || mill.namesAtmosphere() || mill.namesAgitation());
 
         eq("motor is the assembler", MachineFamily.ASSEMBLER, motor.family());
-        eq("motor takes a casing", "item:grindless:machine_casing", motor.itemInputs().get(0).qualified());
-        eq("motor takes two coils", 2, motor.itemInputs().get(1).count());
-        eq("motor takes a rod", "tag:forge:rods/iron", motor.itemInputs().get(2).qualified());
+        yes("motor remains a component with its complete three-group bill and no Matrix",
+                motor.inputs().equals(List.of(
+                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                        IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
+                        IngredientSpec.tag("forge:rods/iron", 1))));
         eq("motor is ten seconds", 20 * 10, motor.durationTicks());
+        eq("motor still draws F1", 32L, motor.fuPerTick());
         eq("motor carries the Industrial milestone", "industrial", motor.milestone());
-        eq("motor makes the reagent", "item:grindless:motor", motor.itemOutputs().get(0).qualified());
+        yes("motor keeps its single ordinary component output",
+                motor.outputs().equals(List.of(OutputSpec.item(FabricationLogic.MOTOR, 1))));
+        yes("motor still has no catalyst", motor.catalysts().isEmpty());
+        no("motor adds no operating condition",
+                motor.namesTemperature() || motor.namesAtmosphere() || motor.namesAgitation());
 
         ProcessRecipe so3 = recipe(recipes, "contact/so3");
         ProcessRecipe acid = recipe(recipes, "contact/acid");
@@ -1094,9 +1119,14 @@ public final class VerifyRecipes {
         }
         eq("T1 exposes twenty-seven physical crafts including the existing Flux Cell", 27,
                 T1Recipes.shaped().size());
-        yes("the first Relay Matrix is a five-unit hand batch",
-                T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
-                        && recipe.resultCount() == 5));
+        T1Recipes.Shaped firstRelay = T1Recipes.shaped().stream()
+                .filter(recipe -> recipe.name().equals("relay_matrix")).findFirst().orElseThrow();
+        eq("the first Relay Matrix is still hand-crafted", FabricationLogic.RELAY_MATRIX, firstRelay.result());
+        eq("the first Relay Matrix is a five-unit hand batch", 5, firstRelay.resultCount());
+        yes("the first Relay Matrix keeps its complete manual bill",
+                shapedInputs(firstRelay.pattern(), firstRelay.key()).equals(Map.of(
+                        T1Recipes.GLASS, 2, T1Recipes.COPPER, 2, T1Recipes.REDSTONE, 2,
+                        T1Recipes.CALIBRATED_DATA_CORE, 1)));
         for (String machine : List.of("thermal_generator", "pulverizer", "arc_furnace", "assembler",
                 "press", "kiln", "terrestrial_extractor")) {
             yes(machine + " consumes one physical Relay Matrix",

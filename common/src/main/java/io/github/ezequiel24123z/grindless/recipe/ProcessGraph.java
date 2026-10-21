@@ -484,8 +484,8 @@ public final class ProcessGraph {
     }
 
     /**
-     * The first T2 process machine (ADR-0074). Casing, two coils, four plates. Circuit
-     * board waits on acid.
+     * The first T2 process machine (ADR-0074). One F2 Relay Matrix joins the casing,
+     * two coils and four plates. No circuit board or acid is required.
      */
     private static ProcessRecipe wireMill() {
         return new ProcessRecipe(
@@ -494,7 +494,8 @@ public final class ProcessGraph {
                 List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1)),
                 List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
                 Double.NaN,
                 null,

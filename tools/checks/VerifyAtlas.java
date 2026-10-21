@@ -1,5 +1,8 @@
 package io.github.ezequiel24123z.grindless.recipe;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -9,7 +12,7 @@ public final class VerifyAtlas {
 
     private static int failures = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         List<ProcessGraph.MaterialView> materials = List.of(
                 new ProcessGraph.MaterialView("iron", true, true, true, true, true, true, true, true, true),
                 new ProcessGraph.MaterialView("gold", true, false, false, true, true, true, true, true, false),
@@ -107,6 +110,14 @@ public final class VerifyAtlas {
         yes("bare Matrix consumption still finds the upgrade",
                 ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix"))
                         .contains("assemble/relay_matrix_f2"));
+        yes("bare Matrix consumption discovers the mill's physical operand",
+                ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix")).contains("assemble/wire_mill"));
+        yes("rated F2 consumption discovers the mill",
+                ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix [F2]"))
+                        .contains("assemble/wire_mill"));
+        no("the mill is not advertised as an F1 Matrix consumer",
+                ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix [F1]"))
+                        .contains("assemble/wire_mill"));
         no("an F1 query never matches an F2 output",
                 AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:relay_matrix [F1]"));
         no("rating display does not turn another item into a Matrix",
@@ -143,8 +154,28 @@ public final class VerifyAtlas {
                 AtlasLogic.producing(recipes, "grindless:flux_pylon_mk2").size());
         eq("the mill is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:wire_mill").size());
+        AtlasLogic.Entry assembledMill = route(allRows, "assemble/wire_mill");
+        eq("the mill names the Assembler", "ASSEMBLER", assembledMill.station());
+        eq("the mill exposes all eight consumed units", 8, assembledMill.inputs().size());
+        eq("the mill displays its complete live bill and F2 rating",
+                "machine_casing + 2x copper_coil + 4x plates/iron + relay_matrix [F2]",
+                AtlasLogic.describe(assembledMill.inputs()));
+        yes("the mill displays one ordinary block output",
+                assembledMill.outputs().equals(List.of("item:grindless:wire_mill")));
+        eq("the mill displays its unchanged twenty-second cycle", 400, assembledMill.durationTicks());
+        eq("the mill displays its unchanged F1 draw", 32L, assembledMill.fuPerTick());
+        yes("the mill displays no unconsumed catalyst", assembledMill.catalysts().isEmpty());
+        yes("the mill's compact line retains its physical Matrix rating",
+                AtlasLogic.line(assembledMill).contains("relay_matrix [F2]"));
         eq("the motor is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:motor").size());
+        eq("the component motor retains its Matrix-free displayed bill",
+                "machine_casing + 2x copper_coil + rods/iron",
+                AtlasLogic.describe(route(allRows, "assemble/motor").inputs()));
+        for (String item : List.of("wire_mill", "motor")) {
+            no(item + " has no handcraft route in either catalogue", allRows.stream().anyMatch(row ->
+                    row.station().equals("CRAFTING_TABLE") && row.outputs().contains("item:grindless:" + item)));
+        }
         eq("the reactor is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:chemical_reactor").size());
         eq("the washer is an assembler output", 1,
@@ -347,10 +378,27 @@ public final class VerifyAtlas {
         yes("the roast line names oxidising", line.contains("OXIDISING"));
         no("the stub line does not quote a target rate", line.contains("/min") || line.contains("machines"));
 
+        jeiProjection();
         System.out.println(failures == 0
                 ? "ALL ATLAS CHECKS PASSED"
                 : failures + " ATLAS CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
+    }
+
+    private static void jeiProjection() throws IOException {
+        Path jei = Path.of("forge/src/main/java/io/github/ezequiel24123z/grindless/forge/jei");
+        String plugin = Files.readString(jei.resolve("GrindlessJeiPlugin.java"));
+        String category = Files.readString(jei.resolve("GrindlessProcessCategory.java"));
+        yes("JEI projects the live recipe graph (source contract)",
+                plugin.contains("ProcessLookup.recipes().stream()"));
+        yes("JEI projects grouped inputs into the existing physical slots (source contract)",
+                category.contains("new ArrayList<>(recipe.itemInputs())")
+                        && category.contains("MachineMenuLayout.itemSlots(menuKind)")
+                        && category.contains("addInput(slot, inputs.get(index))"));
+        yes("JEI forwards each input's identity, count and Matrix rating (source contract, not rendering)",
+                category.replaceAll("\\s+", " ").contains(
+                        "ProcessLookup.resolve(new OutputSpec(spec.kind(), spec.id(), spec.count(), false, "
+                                + "spec.matrixRating()))"));
     }
 
     private static List<String> ids(List<AtlasLogic.Entry> rows) {
