@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 /**
  * The first Voltaic factory, expressed as references to existing authorities.
@@ -63,6 +64,9 @@ public final class T1Progression {
                             "press/coil/copper", "craft/machine_casing"), Set.of("reduction")),
             new Line("assembly", Requirement.MANDATORY,
                     List.of("craft/assembler", CASING_ROUTE, REPRODUCTION_ROUTE), Set.of("forming", "glass")),
+            new Line("wire_forming", Requirement.OPTIONAL,
+                    List.of("assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                    Set.of("assembly")),
             new Line("relay_f2", Requirement.EXIT,
                     List.of("craft/flux_cell", FLUX_CELL_ROUTE, EXIT_ROUTE), Set.of("assembly")),
             new Line("extraction", Requirement.OPTIONAL,
@@ -120,7 +124,8 @@ public final class T1Progression {
             case "forming_dies" -> List.of("craft/plate_die", "craft/rod_die", "craft/gear_die",
                     "press/plate/iron", "press/rod/iron", "press/gear/iron", "craft/machine_casing");
             case "copper_coil" -> List.of("craft/coil_die", "press/coil/copper");
-            case "assembler" -> List.of("craft/assembler", CASING_ROUTE);
+            case "assembler" -> Stream.concat(byQuest(taskId).routeIds().stream(),
+                    byId("wire_forming").routeIds().stream()).toList();
             case "matrix_line" -> List.of("bench/data_core", "calibrate/data_core", REPRODUCTION_ROUTE);
             case "flux_cell" -> List.of("craft/flux_cell", FLUX_CELL_ROUTE);
             case "glass" -> List.of("source/geological_aggregate", "bootstrap/dry_aggregate",

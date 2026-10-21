@@ -306,12 +306,12 @@ public final class VerifyRecipes {
         yes("mill coil has no die", millCoil.catalysts().isEmpty());
 
         eq("the mill is the assembler", MachineFamily.ASSEMBLER, mill.family());
-        yes("the mill retains its complete bill with one F2 Relay Matrix as the fourth group",
+        yes("the base mill retains its complete bill with one F1 Relay Matrix as the fourth group",
                 mill.inputs().equals(List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1))));
+                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
         eq("the mill has exactly four grouped item inputs", 4, mill.itemInputs().size());
         eq("the mill consumes eight total input units", 8,
                 mill.itemInputs().stream().mapToInt(IngredientSpec::count).sum());

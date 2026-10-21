@@ -129,26 +129,27 @@ public final class VerifyPersistence {
         IngredientSpec millMatrix = ProcessGraph.generate(List.of()).stream()
                 .filter(recipe -> recipe.id().equals("assemble/wire_mill")).findFirst().orElseThrow()
                 .itemInputs().get(3);
-        check("the live mill's fourth group declares one F2 Relay Matrix",
-                millMatrix.equals(IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1)));
-        check("decoded F2 agrees with the mill's declared rating (NBT/data contract)",
-                decoded.rating().ordinal() == millMatrix.matrixRating());
-        check("untagged legacy F1 stays below the mill's declared F2 rating (NBT/data contract)",
+        check("the live base mill's fourth group declares one F1 Relay Matrix",
+                millMatrix.equals(IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)));
+        check("valid decoded F2 remains distinct from the exact base F1 ingredient (NBT/data contract)",
+                decoded.rating().ordinal() != millMatrix.matrixRating());
+        check("untagged legacy F1 agrees with the base mill's declared rating (NBT/data contract)",
                 ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow().rating().ordinal()
-                        < millMatrix.matrixRating());
+                        == millMatrix.matrixRating());
         CompoundTag explicitF1 = ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F1));
-        check("explicit F1 stays below the mill's declared F2 rating (NBT/data contract)",
+        check("explicit F1 agrees with the base mill's declared rating (NBT/data contract)",
                 ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(explicitF1))
-                        .orElseThrow().rating().ordinal() < millMatrix.matrixRating());
+                        .orElseThrow().rating().ordinal() == millMatrix.matrixRating());
         CompoundTag explicitF3 = ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F3));
-        check("F3 remains valid Relay NBT without asserting manufacturing substitution",
-                ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(explicitF3))
-                        .orElseThrow().rating() == FluxTier.F3);
+        ControlMatrixSpec decodedF3 = ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(explicitF3))
+                .orElseThrow();
+        check("valid decoded F3 remains distinct from the exact base F1 ingredient (NBT/data contract)",
+                decodedF3.rating() == FluxTier.F3 && decodedF3.rating().ordinal() != millMatrix.matrixRating());
         check("a missing Matrix stack fails the real ingredient matcher",
                 !ProcessLookup.matches(millMatrix, ItemStack.EMPTY));
         ItemStack wrongKind = new ItemStack(Items.PAPER);
-        wrongKind.setTag(saved.copy());
-        check("an F2 tag on a non-Matrix item fails the real ingredient matcher",
+        wrongKind.setTag(explicitF1.copy());
+        check("an F1 tag on a non-Matrix item fails the real ingredient matcher",
                 !ProcessLookup.matches(millMatrix, wrongKind));
         Path common = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
         String matrixItem = Files.readString(common.resolve("item/ControlMatrixItem.java"));

@@ -112,11 +112,11 @@ public final class VerifyAtlas {
                         .contains("assemble/relay_matrix_f2"));
         yes("bare Matrix consumption discovers the mill's physical operand",
                 ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix")).contains("assemble/wire_mill"));
-        yes("rated F2 consumption discovers the mill",
-                ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix [F2]"))
+        yes("rated F1 consumption discovers the base mill",
+                ids(AtlasLogic.consuming(recipes, "item:grindless:relay_matrix [F1]"))
                         .contains("assemble/wire_mill"));
-        no("the mill is not advertised as an F1 Matrix consumer",
-                ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix [F1]"))
+        no("the base mill is not advertised as an F2 Matrix consumer",
+                ids(AtlasLogic.consuming(recipes, "grindless:relay_matrix [F2]"))
                         .contains("assemble/wire_mill"));
         no("an F1 query never matches an F2 output",
                 AtlasLogic.names("item:grindless:relay_matrix [F2]", "grindless:relay_matrix [F1]"));
@@ -157,8 +157,8 @@ public final class VerifyAtlas {
         AtlasLogic.Entry assembledMill = route(allRows, "assemble/wire_mill");
         eq("the mill names the Assembler", "ASSEMBLER", assembledMill.station());
         eq("the mill exposes all eight consumed units", 8, assembledMill.inputs().size());
-        eq("the mill displays its complete live bill and F2 rating",
-                "machine_casing + 2x copper_coil + 4x plates/iron + relay_matrix [F2]",
+        eq("the base mill displays its complete live bill and F1 rating",
+                "machine_casing + 2x copper_coil + 4x plates/iron + relay_matrix [F1]",
                 AtlasLogic.describe(assembledMill.inputs()));
         yes("the mill displays one ordinary block output",
                 assembledMill.outputs().equals(List.of("item:grindless:wire_mill")));
@@ -166,7 +166,7 @@ public final class VerifyAtlas {
         eq("the mill displays its unchanged F1 draw", 32L, assembledMill.fuPerTick());
         yes("the mill displays no unconsumed catalyst", assembledMill.catalysts().isEmpty());
         yes("the mill's compact line retains its physical Matrix rating",
-                AtlasLogic.line(assembledMill).contains("relay_matrix [F2]"));
+                AtlasLogic.line(assembledMill).contains("relay_matrix [F1]"));
         eq("the motor is an assembler output", 1,
                 AtlasLogic.producing(recipes, "grindless:motor").size());
         eq("the component motor retains its Matrix-free displayed bill",

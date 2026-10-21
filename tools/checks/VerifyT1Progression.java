@@ -83,7 +83,7 @@ public final class VerifyT1Progression {
                 List.of("relay_f2"), T1Progression.lines().stream()
                         .filter(line -> line.requirement() == T1Progression.Requirement.EXIT)
                         .map(T1Progression.Line::id).toList());
-        for (String optional : List.of("extraction", "logistics", "storage", "kiln", "factory_space")) {
+        for (String optional : List.of("wire_forming", "extraction", "logistics", "storage", "kiln", "factory_space")) {
             equal("the optional branch is not a first-factory mandate: " + optional, false,
                     T1Progression.byId(optional).mandatory());
         }
@@ -129,6 +129,7 @@ public final class VerifyT1Progression {
         equal("the Bench still cannot manufacture the frontier Matrix", false,
                 snapshot.routes().containsKey("bench/relay_matrix"));
         componentRoutes(snapshot);
+        wireForming(snapshot);
 
         Route exit = snapshot.routes().get(T1Progression.EXIT_ROUTE);
         Resource ratedF1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
@@ -208,12 +209,13 @@ public final class VerifyT1Progression {
                 () -> new T1Progression.Line("duplicate", T1Progression.Requirement.MANDATORY,
                         List.of("craft/press", "craft/press"), Set.of()));
         for (String id : List.of("craft/machine_casing", "craft/flux_cell",
-                T1Progression.CASING_ROUTE, T1Progression.FLUX_CELL_ROUTE)) {
+                T1Progression.CASING_ROUTE, T1Progression.FLUX_CELL_ROUTE,
+                "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper")) {
             Map<String, Route> missing = new TreeMap<>(snapshot.routes());
             missing.remove(id);
             Snapshot incomplete = new Snapshot(snapshot.resources(), missing, snapshot.terminals(), snapshot.tags(),
                     snapshot.objectives(), snapshot.inputHashes(), snapshot.findings());
-            rejects("a missing manual or automatic component authority fails visibly: " + id,
+            rejects("a missing selected component or optional wire authority fails visibly: " + id,
                     () -> T1Sustainability.selectedRoutes(incomplete));
         }
         String json = T1Sustainability.json(t0);
@@ -232,6 +234,14 @@ public final class VerifyT1Progression {
         equal("human batch costs are likewise independent of checkout-only provenance",
                 T1Sustainability.markdown(t0), T1Sustainability.markdown(rawFingerprintFixture));
         var document = JsonParser.parseString(json).getAsJsonObject();
+        var wireDocument = document.getAsJsonArray("lines")
+                .get(T1Progression.lines().indexOf(T1Progression.byId("wire_forming"))).getAsJsonObject();
+        equal("the existing exporter projects the new line identity", "wire_forming",
+                wireDocument.get("id").getAsString());
+        equal("the existing exporter keeps wire forming optional", "OPTIONAL",
+                wireDocument.get("requirement").getAsString());
+        equal("the existing exporter includes all four live base routes", 4,
+                wireDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven",
                 "t1_finite_establishment_replayed", "global_optimum_claimed")) {
@@ -240,6 +250,45 @@ public final class VerifyT1Progression {
         equal("every direct consumption/catalyst edge is exported", inputs.size(),
                 document.getAsJsonArray("mandatory_input_evidence").size());
         return assertions - before;
+    }
+
+    private static void wireForming(Snapshot snapshot) {
+        T1Progression.Line line = T1Progression.byId("wire_forming");
+        equal("optional wire forming selects only the existing base manufacturing and mill routes",
+                List.of("assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                line.routeIds());
+        equal("optional wire forming follows only established assembly", Set.of("assembly"), line.requires());
+        equal("optional wire forming is taught immediately after assembly",
+                T1Progression.lines().indexOf(T1Progression.byId("assembly")) + 1,
+                T1Progression.lines().indexOf(line));
+        equal("optional wire routes never enter the first-F2 mandatory path", false,
+                T1Sustainability.mandatoryRoutes(snapshot).stream()
+                        .anyMatch(route -> line.routeIds().contains(route.id())));
+        equal("the optional branch never draws from the five first-machine controllers",
+                new T1Sustainability.SeedAllocation(5, 5, 0, Map.of(
+                        "craft/thermal_generator", 1L, "craft/pulverizer", 1L, "craft/arc_furnace", 1L,
+                        "craft/press", 1L, "craft/assembler", 1L)),
+                T1Sustainability.seedAllocation(snapshot));
+        Route manufacture = snapshot.routes().get("assemble/wire_mill");
+        equal("the ordinary Wire Mill's actual base kind stays F1", FluxTier.F1, ProcessMachineKind.WIRE_MILL.tier());
+        equal("the base mill is manufactured by the Assembler", "ASSEMBLER", manufacture.family());
+        equal("the base mill consumes one controller at its actual F1 kind rating", 1L,
+                manufacture.inputs().get(new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX,
+                        ProcessMachineKind.WIRE_MILL.tier().ordinal(), "items")));
+        equal("the base mill output is one ordinary item, not an upgraded chassis",
+                Map.of(item(FabricationLogic.WIRE_MILL), 1L), manufacture.outputs());
+        for (String id : line.routeIds()) {
+            Route route = snapshot.routes().get(id);
+            equal("the optional route reuses its existing process authority: " + id,
+                    Authority.PROCESS_GRAPH, route.authority());
+            equal("the optional route retains its F1 draw: " + id, 32L, route.fuPerTick());
+            if (!id.equals("assemble/wire_mill")) {
+                equal("the optional milling route uses the real base Wire Mill: " + id,
+                        "WIRE_MILL", route.family());
+            }
+        }
+        equal("the Assembler task itself remains on mandatory assembly",
+                T1Progression.byId("assembly"), T1Progression.byQuest("assembler"));
     }
 
     private static void componentRoutes(Snapshot snapshot) {
@@ -276,8 +325,10 @@ public final class VerifyT1Progression {
                 T1Progression.byId("relay_f2").routeIds().contains(T1Progression.FLUX_CELL_ROUTE));
         equal("the Flux Cell exit line still follows assembly", Set.of("assembly"),
                 T1Progression.byId("relay_f2").requires());
-        equal("the Assembler lesson exposes recurrent casings after construction",
-                List.of("craft/assembler", T1Progression.CASING_ROUTE), T1Progression.questRouteIds("assembler"));
+        equal("the Assembler lesson follows construction and reproduction with only optional base wire forming",
+                List.of("craft/assembler", T1Progression.CASING_ROUTE, T1Progression.REPRODUCTION_ROUTE,
+                        "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                T1Progression.questRouteIds("assembler"));
         equal("the Flux Cell lesson retains the manual alternative alongside automatic production",
                 List.of("craft/flux_cell", T1Progression.FLUX_CELL_ROUTE), T1Progression.questRouteIds("flux_cell"));
     }
@@ -298,7 +349,12 @@ public final class VerifyT1Progression {
         for (Map.Entry<String, String> selection : Map.of(
                 "craft/flux_cell", "flux_cell",
                 T1Progression.FLUX_CELL_ROUTE, "flux_cell",
-                T1Progression.CASING_ROUTE, "assembler").entrySet()) {
+                T1Progression.CASING_ROUTE, "assembler",
+                T1Progression.REPRODUCTION_ROUTE, "assembler",
+                "assemble/wire_mill", "assembler",
+                "mill/wire/iron", "assembler",
+                "mill/wire/copper", "assembler",
+                "mill/coil/copper", "assembler").entrySet()) {
             String id = selection.getKey();
             String task = selection.getValue();
             rejects("a missing actual component Atlas row fails explicitly: " + id,

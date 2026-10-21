@@ -39,6 +39,8 @@ public final class VerifyT1Teaching {
             "kiln", "factory_world", "flux_cell", "industrial_matrix");
     private static final Set<String> NEW_LESSONS = Set.of(
             "first_grid", "forming_dies", "copper_coil", "flux_cell");
+    private static final Set<String> WIRE_FORMING_ROUTES = Set.of(
+            "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper");
     // dd0b4bc: sorted key + NUL + decoded body + LF for the 33 native FTB T0 lesson keys.
     private static final String T0_BODY_DIGEST =
             "bf93a3d61465ed953cb33eea9de7b061e4f8f35dc36a68eb5393df3214424391";
@@ -61,6 +63,8 @@ public final class VerifyT1Teaching {
     }
 
     private static void chapters() {
+        equal("the native identity set remains 46 historical tasks plus four rewardless lessons",
+                50, QuestCatalogue.tasks().size());
         equal("all T0 task identities remain exactly the deployed set", T0_IDS,
                 QuestCatalogue.tasks().stream()
                         .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0)
@@ -137,6 +141,13 @@ public final class VerifyT1Teaching {
         String cell = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("flux_cell"))).getAsString();
         check("the Flux Cell lesson teaches automatic production without removing manual bootstrap",
                 cell.contains("automatically in the Assembler") && cell.contains("manual bootstrap"));
+        String assembler = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("assembler"))).getAsString();
+        check("the Assembler lesson places optional wire expansion after controller reproduction",
+                assembler.contains("reproduce F1 Relay batches")
+                        && assembler.contains("Optional Wire Mill expansion follows reproduction")
+                        && assembler.contains("not required for the first F2 Matrix"));
+        equal("the Assembler objective remains mandatory despite its optional expansion",
+                QuestTeaching.Path.T1_CORE, QuestTeaching.path(QuestCatalogue.byId("assembler")));
     }
 
     private static void selectors(List<AtlasLogic.Entry> entries) {
@@ -159,24 +170,37 @@ public final class VerifyT1Teaching {
                         .filter(row -> !row.id().equals(entry.id())).toList();
                 rejects("missing representable rows cannot silently disappear " + id + "/" + entry.id(),
                         () -> QuestTeaching.recipes(QuestCatalogue.byId(id), missing), entry.id());
+                List<AtlasLogic.Entry> duplicate = new ArrayList<>(entries);
+                duplicate.add(entry);
+                rejects("duplicate live rows cannot duplicate teaching " + id + "/" + entry.id(),
+                        () -> QuestTeaching.recipes(QuestCatalogue.byId(id), duplicate), entry.id());
                 for (String deferred : List.of("mill/", "contact/", "pickle/", "wash/", "electrolysis/",
                         "assemble/wire_mill", "assemble/flux_exosuit", "assemble/flux_drill")) {
-                    check("no deferred production class is activated by teaching " + id + "/" + deferred,
-                            !entry.id().startsWith(deferred));
+                    check("only the bounded optional base wire routes bypass deferred exclusions "
+                                    + id + "/" + deferred,
+                            !entry.id().startsWith(deferred)
+                                    || (id.equals("assembler") && WIRE_FORMING_ROUTES.contains(entry.id())));
                 }
             }
         }
     }
 
     private static void changedLiveData(List<AtlasLogic.Entry> entries) {
-        AtlasLogic.Entry original = route(entries, "press/coil/copper");
+        changedLiveData(entries, "press/coil/copper", "copper_coil");
+        for (String id : WIRE_FORMING_ROUTES) {
+            changedLiveData(entries, id, "assembler");
+        }
+    }
+
+    private static void changedLiveData(List<AtlasLogic.Entry> entries, String routeId, String taskId) {
+        AtlasLogic.Entry original = route(entries, routeId);
         AtlasLogic.Entry changed = new AtlasLogic.Entry(original.id(), original.station(), original.family(),
                 original.inputs(), List.of(original.outputs().get(0), original.outputs().get(0), original.outputs().get(0)),
                 original.catalysts(), 321.0, "INERT", "STIRRED",
                 original.durationTicks() + 1, original.fuPerTick() + 1);
         List<AtlasLogic.Entry> mutated = new ArrayList<>(entries);
         mutated.set(mutated.indexOf(original), changed);
-        AtlasLogic.Entry projected = route(QuestTeaching.recipes(QuestCatalogue.byId("copper_coil"), mutated),
+        AtlasLogic.Entry projected = route(QuestTeaching.recipes(QuestCatalogue.byId(taskId), mutated),
                 original.id());
         check("a data mutation is observed without regenerating a quest bill", projected == changed);
         equal("the changed output batch stays live", changed.outputs(), projected.outputs());
@@ -186,7 +210,7 @@ public final class VerifyT1Teaching {
                 ? (changed.durationTicks() / 20) + "s"
                 : String.format(Locale.ROOT, "%.1fs", changed.durationTicks() / 20.0);
         String text = AtlasLogic.line(projected);
-        for (String value : List.of("3x copper_coil", durationText,
+        for (String value : List.of(AtlasLogic.describe(changed.outputs()), durationText,
                 (original.fuPerTick() + 1) + " FU/t", "321 C", "INERT", "STIRRED")) {
             check("the rendered row exposes the changed live data " + value, text.contains(value));
         }
@@ -202,6 +226,23 @@ public final class VerifyT1Teaching {
                 conversion.inputs().contains("item:grindless:relay_matrix [F1]"));
         equal("the output carries the actual F2 rating", List.of("item:grindless:relay_matrix [F2]"),
                 conversion.outputs());
+        check("the first F2 lesson never requires the optional wire-forming branch",
+                exit.stream().noneMatch(row -> WIRE_FORMING_ROUTES.contains(row.id())));
+        List<AtlasLogic.Entry> assembler = QuestTeaching.recipes(QuestCatalogue.byId("assembler"), entries);
+        AtlasLogic.Entry mill = route(assembler, "assemble/wire_mill");
+        equal("the optional base Wire Mill is manufactured by the Assembler", MachineFamily.ASSEMBLER, mill.family());
+        check("the optional base Wire Mill consumes an actual F1 controller",
+                mill.inputs().contains("item:grindless:relay_matrix [F1]"));
+        equal("the optional base Wire Mill remains an ordinary output, not MK2",
+                List.of("item:grindless:wire_mill"), mill.outputs());
+        for (String id : List.of("mill/wire/iron", "mill/wire/copper", "mill/coil/copper")) {
+            equal("the optional forming row retains its actual Wire Mill identity " + id,
+                    MachineFamily.WIRE_MILL, route(assembler, id).family());
+        }
+        equal("the first Assembler coil path still uses only the Press and its die",
+                Set.of("craft/coil_die", "press/coil/copper"),
+                QuestTeaching.recipes(QuestCatalogue.byId("copper_coil"), entries).stream()
+                        .map(AtlasLogic.Entry::id).collect(Collectors.toSet()));
         equal("the cell lesson uses the actual shaped Flux Cell route", "CRAFTING_TABLE",
                 route(QuestTeaching.recipes(QuestCatalogue.byId("flux_cell"), entries), "craft/flux_cell").station());
         check("the frontier contains the same real Flux Cell craft, not a Drill Cell",

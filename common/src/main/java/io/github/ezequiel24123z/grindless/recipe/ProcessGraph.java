@@ -13,8 +13,8 @@ import java.util.Optional;
  * ADR-0065, ADR-0074, ADR-0075).
  *
  * <p>Ore line: B0×R1, dry B1×R1, wet B1, roast, R2 reduce. Forming: Press recipes keyed by die.
- * Fabrication: Assembler recipes that manufacture Pylon MK2, the Wire Mill, the motor, the
- * Chemical Reactor and the Chemical Washer in the Industrial-era route, with no
+ * Fabrication: Assembler recipes that manufacture the base T1 Wire Mill alongside the
+ * Industrial-era Pylon MK2, motor, Chemical Reactor and Chemical Washer, with no
  * crafting-table JSON (ADR-0073, ADR-0074, ADR-0075, ADR-0076). Contact: SO₂ → SO₃ →
  * sulfuric acid, plus pickle. Wash: eight crushed and water become washed crushed plus the
  * next metal. Gases: water splits to hydrogen and oxygen; free air yields oxygen; hydrogen
@@ -352,7 +352,7 @@ public final class ProcessGraph {
                 List.of(IngredientSpec.item(die, 1)));
     }
 
-    /** T1 coil: copper ingot and a coil die. The Wire Mill is the T2 dedicated route. */
+    /** Bootstrap coil: copper ingot and a coil die, before optional Wire Mill expansion. */
     private static ProcessRecipe coilPress() {
         return new ProcessRecipe(
                 "press/coil/copper",
@@ -379,7 +379,7 @@ public final class ProcessGraph {
                 FabricationLogic.FU_PER_TICK);
     }
 
-    /** T2 coil: two copper wire, no die. The Press route stays for T1 (ADR-0063). */
+    /** Wire Mill coil: two copper wire, no die. The Press remains the first-Assembler route. */
     private static ProcessRecipe coilMill() {
         return new ProcessRecipe(
                 "mill/coil/copper",
@@ -484,8 +484,8 @@ public final class ProcessGraph {
     }
 
     /**
-     * The first T2 process machine (ADR-0074). One F2 Relay Matrix joins the casing,
-     * two coils and four plates. No circuit board or acid is required.
+     * The base T1 Wire Mill (ADR-0174). One F1 Relay Matrix joins the casing,
+     * two coils and four plates. No circuit board, acid or upgraded chassis is required.
      */
     private static ProcessRecipe wireMill() {
         return new ProcessRecipe(
@@ -495,7 +495,7 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 1)),
+                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
                 List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
                 Double.NaN,
                 null,
