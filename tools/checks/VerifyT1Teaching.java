@@ -170,8 +170,12 @@ public final class VerifyT1Teaching {
         check("a data mutation is observed without regenerating a quest bill", projected == changed);
         equal("the changed output batch stays live", changed.outputs(), projected.outputs());
         equal("the live unconsumed catalyst list is preserved", changed.catalysts(), projected.catalysts());
+        equal("the exact mutated tick duration stays live", changed.durationTicks(), projected.durationTicks());
+        String durationText = changed.durationTicks() % 20 == 0
+                ? (changed.durationTicks() / 20) + "s"
+                : String.format(Locale.ROOT, "%.1fs", changed.durationTicks() / 20.0);
         String text = AtlasLogic.line(projected);
-        for (String value : List.of("3x copper_coil", (original.durationTicks() + 1) + "t",
+        for (String value : List.of("3x copper_coil", durationText,
                 (original.fuPerTick() + 1) + " FU/t", "321 C", "INERT", "STIRRED")) {
             check("the rendered row exposes the changed live data " + value, text.contains(value));
         }

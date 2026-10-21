@@ -120,11 +120,28 @@ map seams are `QuestCatalogue`, `QuestTeaching`, `QuestTeachingClient`,
 the native T1 label/optional marker, the T1-only Heracles display fields,
 focused quest checks and the exact shared chapter-profile expectation.
 
+### Integrated execution and duration-oracle repair
+
+On integrated source `8ac04f01`, the execution owner reports actual
+common/Forge compilation, backend1058 and Recipes/Atlas/Quest/Claims/
+ResourceGuidance passes. `VerifyT1Teaching.changedLiveData` then fails its
+invented `81t` text expectation. The production Atlas formatter already
+renders seconds: integer seconds for whole-second durations, otherwise one
+decimal place with `Locale.ROOT`.
+
+The bounded repair changes only that test oracle to the existing seconds
+format and separately asserts the exact mutated tick count. Mutation identity,
+batch/catalyst/condition/FU assertions, the recipe and production formatter
+remain unchanged. The execution owner retains the original red; this lane
+does not rerun Java or access the PC. The corrected check is not yet a pass.
+The other integrated batch results remain pending with that owner, not
+implicitly successful.
+
 | Category | Current handoff |
 | --- | --- |
-| COMPLETED | T1-specific source teaching, canonical line/Atlas bindings, four rewardless lessons, development labels, preserved T0, intentional optional-portal edge, focused selector/claim/46-to-50 regression authoring and source/API self-review. |
-| BLOCKED | Executable qualification has no PC/JVM lease. The parent must freeze the composed source before granting its bounded build/check lane. |
-| NOT EXECUTED | Common/Forge compilation; focused quest/claim/teaching checks; actual Heracles codec/visibility/upgrade runner; affected canonical export; new native/client/save checks. Authored checks are not claimed passed. |
+| COMPLETED | T1-specific source teaching, canonical line/Atlas bindings, four rewardless lessons, development labels, preserved T0, intentional optional-portal edge, focused selector/claim/46-to-50 regressions, source/API self-review and the bounded duration-oracle repair. Source-bound executed results above are reported by their execution owner. |
+| BLOCKED | None for source repair. Retesting belongs to the active core execution lease; this quest lane has no PC/JVM execution grant. |
+| NOT EXECUTED | Corrected teaching-check rerun in this lane; new native/client/save checks. Remaining integrated batch outcomes are pending with their owner, not claimed passed here. |
 | NEEDS HUMAN VALIDATION | Real native/Heracles presentation, readability, interaction, no-command progression and backed-up saved-world compatibility. No player or campaign pass is inferred. |
 | NEEDS MY DECISION | None. The optional-portal boundary is the parent's explicit decision. |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None for source delivery. No new credential, dependency, generator or provider is requested. |
