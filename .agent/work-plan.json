@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 25,
+  "plan_revision": 26,
   "updated": "2026-10-21",
   "phase": "reported_T0_questbook_blocker_native_FTB_replacement_parallel_content_and_verification",
   "product_gate": "PLAYER_BLOCKED_ON_QUEST_FRAMEWORK_NATIVE_FTB_FIX_IN_PROGRESS",
@@ -50,6 +50,7 @@
       "migration_797_resolution": "CLOSED_static_a181b9e_instance_spec_guards_and_explicit_unavailable_no_old_backend_activation",
       "pack_403": "P2_Copy_leaves_stale_smoke_mods_P2_native_quests_allowed_in_base_only_shared_batch_fix_pending_recheck",
       "pack_corrective": "d6d7869_complete_inventory_Sync_and_batch_dispatch_fix_actual_worker1507asserts57cases_pass_narrow_recheck_pending",
+      "pack_403_resolution": "CLOSED_static_d6d7869_complete_Sync_and_correct_isolated_shared_batch_dispatch_no_runtime_pass",
       "no_runtime_or_client_pass": true
     },
     "migration_oracle_agent": "7971553c-85a3-4c7b-ac62-316c7bd7e038",
@@ -70,7 +71,9 @@
     "world_backup_migration_deployment": "NOT_EXECUTED",
     "corrective_main_Forge_compile": "a181b9e_reported_PASS_not_backend_fixture_or_native_clearance",
     "current_qualification_reds": "VerifyFtbQuests_abstract_fixture_method_and11_superseded_VerifyQuest_text_assertions_repaired_in_owned_source_pending_actual_recheck",
+    "parse_only_AST_performance": "owned_PID23896_cancelled_after14min_jcmd_shows_repeated_javac_classpath_manifest_canonicalization_not_hang_cancelled_not_pass_parse_only_empty_classpath_repair_preserves_authorities_mutations_no_attribution",
     "private_custody_helper": "source_reviewed_288e6a5b14bd2670ced5d003ab6497dafcb0ce199b07fb2fb7de8832653ea1d9_10localfixtures_no_PC_or_world_run",
+    "native_modpack_examples": "Monifactory6db1be9_and_ATM9_255ca23_actual_native_SNBT_samples_and_licence_limits_recorded_no_content_import",
     "native_API_pins_client_or_migration_pass": "not_inferred",
     "new_paid_generation_allowance": false
   },

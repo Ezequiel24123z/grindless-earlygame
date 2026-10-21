@@ -25,6 +25,15 @@ independent recheck and actual native start/restart/package remain separate.
 The private stopped-world custody helper has only local fixture/source evidence,
 not a real backup/copy/upgrade pass.
 
+The d6d7869 tooling findings are closed by narrow independent static recheck;
+that does not turn modelled inventory fixtures into a Gradle/Forge execution.
+One owned parse-only registry-check JVM is explicitly cancelled after14minutes:
+its captured stack identifies repeated full-classpath/JAR-manifest
+canonicalization, not a hung game. Preserve CANCELLED and the stack/raw logs.
+An empty parse-only classpath is a bounded performance repair only if there is
+no type attribution and all authorities, mutations and canonical results remain;
+actual compilation still uses the real classpath. No failure/deadline is relabeled.
+
 Read-only17:12:20Z inspection finds the actual DevF95bf instance now has one world,
 one legacy quest ledger and client log timestamp16:53:50Z;0Java remains then.
 The old preparation world/JAR/log remain distinct. This records actual play/start

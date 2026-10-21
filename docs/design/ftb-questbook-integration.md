@@ -89,6 +89,24 @@ and the native JEI plugin call the actual recipe GUI. Include this verified
 provider for the requested JEI-first experience; do not ship a NoOp and claim
 that the user's recipe-click requirement is satisfied.
 
+## Actual native modpack examples
+
+The bounded example study inspects native files, not only documentation. It
+does not import quest text, rewards, graphics, scripts or progression.
+
+| Pack / immutable revision | Actual sampled files and pattern | Evidence limit |
+| --- | --- | --- |
+| [Monifactory6db1be9](https://github.com/Omicron-Industries/Monifactory/tree/6db1be95d680ce75c1aa251fdcc9dc38d75ae8f6), Forge1.20.1, LGPL-3.0 | [dependency_chain.snbt](https://github.com/Omicron-Industries/Monifactory/blob/6db1be95d680ce75c1aa251fdcc9dc38d75ae8f6/config/ftbquests/quests/chapters/dependency_chain.snbt) and [simulating_resources.snbt](https://github.com/Omicron-Industries/Monifactory/blob/6db1be95d680ce75c1aa251fdcc9dc38d75ae8f6/config/ftbquests/quests/chapters/simulating_resources.snbt) use native dependencies, item tasks, rewards and cross-chapter links; some plumbing is deliberately invisible | Small selected samples, not a whole-pack voice/length audit. No custom currency or command-stage plumbing is adopted |
+| [ATM-9255ca23](https://github.com/AllTheMods/ATM-9/tree/255ca23b91cebbb57130074e0bf7b86c266ac2a6), Forge1.20.1, All Rights Reserved | [welcome.snbt](https://github.com/AllTheMods/ATM-9/blob/255ca23b91cebbb57130074e0bf7b86c266ac2a6/config/ftbquests/quests/chapters/welcome.snbt) and [pylons.snbt](https://github.com/AllTheMods/ATM-9/blob/255ca23b91cebbb57130074e0bf7b86c266ac2a6/config/ftbquests/quests/chapters/pylons.snbt) use native checkmark/item tasks, dependencies, rewards and externalized language keys | Its referenced prose was not read, so no claim about its voice or brevity. The pack explicitly restricts redistribution of quest content |
+
+These examples support using the framework's own graph/task/reward mechanisms,
+not another custom screen. The short human voice is the Grindless owner's brief,
+not a supposed universal rule that every mature pack uses tiny descriptions.
+Neither sampled chapter implements a special recipe-viewer task; Grindless's
+actual native JEI provider is established separately above. Retain existing
+logical IDs/dependencies for the current fix, rather than importing another
+pack's hidden stages, currency or a new required reading checklist.
+
 ## Proof still required
 
 Actual compilation, native SNBT loading/ownership, logical-ID mapping, old paid

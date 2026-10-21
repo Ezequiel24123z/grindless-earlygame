@@ -36,6 +36,12 @@ entries below reference those records by id.
   projection is not permission to pay old rewards again. Native/API/pack
   qualification and safe stopped-world delivery remain required, not completed
   by this decision.
+- **Record actual native-modpack precedent and qualification boundaries.**
+  Inspect pinned Monifactory/ATM-9 native SNBT samples without importing writing,
+  stages or currency; retain the sampled-prose and licence limits. Preserve the
+  real compiler/fixture/prose reds and owned parse-only AST cancellation, while
+  independent source QA closes the corrected entry/filter/smoke contracts.
+  These records are not native/client or world-upgrade passes.
 - **Establish the longitudinal-play / next-tier development loop (ADR-0170).**
   The owner explicitly begins the intended T0 longitudinal game while T1
   research, brainstorming, route/component/machine development and documentation
