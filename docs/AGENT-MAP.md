@@ -54,6 +54,15 @@ Legacy late packets cannot keep minting once native ownership is established.
 Do not satisfy old widget assertions by recreating that widget inside FTB.
 Replace superseded presentation/pin contracts with precise native equivalents;
 do not disable the closed authority/loader or deployment checks.
+The [native integration reference](design/ftb-questbook-integration.md) records
+exact official binary hashes, receipt APIs, Matrix adapter semantics and the
+required XMod Compat JEI provider. Source research is not a loader/client pass.
+
+ADR-0172's independent T1 source2f4eee1 owns only ordinary Assembler component
+data, T1 selection/provenance and affected recipe/Atlas/progression contracts.
+Manual casing seeds the first Assembler; automatic output follows it, not a
+forming-cycle dependency. No new engine/NBT/slots/T2 part is authorized.
+Its baseline523b proof is distinct from the new unexecuted two-route data.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

@@ -8,6 +8,23 @@ concise content and explicit old-paid-claim import/fencing. Copy190a024 and
 follow-ups are source/cheap-text-check evidence only; native/API/loader/migration/
 package qualification is not supplied by those commits.
 
+Exact FTB binary identities and native JEI wiring are now recorded in
+[the integration reference](../design/ftb-questbook-integration.md). Initial
+source1736736 has a real Forge compile red (two instance/static Matrix calls and
+an EventActor return); common/four publisher outputs alone pass. Correctivea181
+closes the two migration/entry QA findings by static recheck and the core reports
+actual main Forge compilation0. A native test-file abstract-method fixture and
+eleven superseded prose assertions have their own real reds; neither is hidden
+by the compiler result.
+
+Independent tooling QA identifies stale smoke mod composition and an unsupported
+shared-batch backend case. Correctived6d7869 uses complete inventory synchronization
+and proper isolated dispatch; its worker reports57cases/1507assertions and
+native PowerShell/Bash comparisons0, with the earlier5/7red preserved. Narrow
+independent recheck and actual native start/restart/package remain separate.
+The private stopped-world custody helper has only local fixture/source evidence,
+not a real backup/copy/upgrade pass.
+
 Read-only17:12:20Z inspection finds the actual DevF95bf instance now has one world,
 one legacy quest ledger and client log timestamp16:53:50Z;0Java remains then.
 The old preparation world/JAR/log remain distinct. This records actual play/start

@@ -15,6 +15,19 @@ entries below reference those records by id.
 
 ### Added
 
+- **Authorize the next independent T1 component increment (ADR-0172).** Source
+  work adds ordinary Assembler casing/Flux Cell reproduction with existing
+  timing/FU conventions and manual-craft-equivalent batches. Preserve manual
+  bootstrap and all machine/save/claim mechanisms; no T2 intermediate or
+  Assembler slot expansion. T0's native-questbook blocker keeps execution priority.
+  The decision/source lane is not a completed recipe or deployment pass.
+- **Preserve source-verified native-framework and T1 research.** Record exact
+  official FTB binary identities, native receipt/overflow/matching APIs and the
+  XMod Compat provider required for JEI clicks. Expand the T1 map with actual
+  machine/component boundaries, recurring gaps, manual seed custody and mature
+  reference limits. Independent component source2f4eee1 is published without a
+  runtime claim; parent hash-verifies the earlier523b closed receipts/raws and
+  normal outputs without replay. No foreign code/assets or numeric balance is copied.
 - **Prioritize the owner's native quest-framework and content blocker (ADR-0171).**
   Replace the rejected custom/native-Heracles book experience with supported
   FTB Quests native graph/tasks/reward UI and concise JEI-first goals. Separate
