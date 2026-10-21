@@ -738,15 +738,16 @@ public final class VerifyResourceGuidance {
         equal("the advertised starter kit has actual rewards", false, starter.rewards().isEmpty());
         equal("starter rewards remain basic supplies, not machines, cores, insulators or Matrices", true,
                 starter.rewards().stream().allMatch(reward -> basicSupplies.contains(reward.itemId())));
-        equal("the starter lesson names the actual free task and explicit claim action", true,
-                bootstrap.contains(lang.get("gui.grindless.quest.task." + starter.id()).getAsString())
-                        && bootstrap.contains(lang.get("gui.grindless.quest.claim_free").getAsString()));
-        equal("the lesson describes one finite, explicitly claimed kit per player", true,
-                bootstrap.toLowerCase(Locale.ROOT).contains("each player can explicitly claim one finite kit")
+        equal("the starter note offers a free explicit claim without repeating the native title", true,
+                bootstrap.contains("claim your free, one-time kit"));
+        equal("the starter note retains the full-batch recovery boundary", true,
+                bootstrap.contains("all eleven stacks")
+                        && starter.rewards().size() == 11
+                        && bootstrap.contains("nothing is claimed or dropped")
                         && lang.get("gui.grindless.quest.starter_policy").getAsString()
-                        .contains("One finite starter kit per player, claimed explicitly"));
-        equal("the finite kit does not replace construction or the renewable machine loop", true,
-                bootstrap.contains("establish geological collection, bioculture and biomass power")
+                        .contains("You can claim it once"));
+        equal("the finite kit leads to a lasting workshop supply", true,
+                lang.get("gui.grindless.quest.lesson.superflat").getAsString().contains("lasting supply")
                         && lang.has("gui.grindless.quest.lesson.manual_work")
                         && lang.has("gui.grindless.quest.lesson.firing"));
         equal("teaching does not prescribe an initial glass/copper/redstone kit", false, bootstrap.startsWith("Bring"));
@@ -754,9 +755,19 @@ public final class VerifyResourceGuidance {
                 && renewables.contains("Biocultivator") && renewables.contains("Biomass Dynamo")
                 && renewables.contains("Hand Pump")
                 && lang.get("gui.grindless.quest.lesson.superflat").getAsString()
-                .contains("permanent critical route"));
-        equal("natural instructions retain night and restart limits", true,
-                renewables.contains("Do not assume overnight or restart autonomy"));
+                .contains("lasting supply through your workshop"));
+        equal("natural instructions retain daylight and restart cautions", true,
+                renewables.contains("It needs daylight")
+                        && renewables.contains("check it after a restart")
+                        && renewables.contains("reserve for the night"));
+        for (QuestCatalogue.Task task : QuestCatalogue.tasks()) {
+            String title = lang.get("gui.grindless.quest.task." + task.id()).getAsString();
+            String body = lang.get(QuestTeaching.bodyKey(task)).getAsString();
+            equal("native quest titles remain short: " + task.id(), true,
+                    !title.isBlank() && title.length() <= 40);
+            equal("native quest notes remain short single paragraphs: " + task.id(), true,
+                    !body.isBlank() && !body.contains("\n") && body.split("\\s+").length <= 45);
+        }
         for (String page : List.of("starter_supplies", "clay_mixer", "settling", "relay", "biomass")) {
             String body = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId(page))).getAsString();
             equal("T0 prose does not duplicate recipe numbers or witness bill: " + page, false,
@@ -766,8 +777,13 @@ public final class VerifyResourceGuidance {
             }
         }
         equal("manual five-Matrix/calibrated exit is explicit without a Bench shortcut", true,
-                lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("manual five-Relay-Matrix")
-                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Assembly Bench does not fabricate a Matrix"));
+                lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Craft five Relay Matrices by hand")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("Calibrated Data Core")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("five valid F1 Matrices")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("claim this quest")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString().contains("does not consume them")
+                        && lang.get("gui.grindless.quest.lesson.relay").getAsString()
+                        .contains("Assembly Bench cannot make this batch"));
         String exporter = Files.readString(root.resolve(Path.of("tools", "dashboard", "DashboardExport.java")));
         for (String source : List.of("VerifySustainability", "VerifySustainabilityAdapters",
                 "VerifySustainabilityRegistry", "VerifySustainabilityT0", "VerifyResourceGuidance")) {
