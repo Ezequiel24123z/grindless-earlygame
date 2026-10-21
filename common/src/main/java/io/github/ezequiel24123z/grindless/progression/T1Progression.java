@@ -33,16 +33,16 @@ public final class T1Progression {
             }
         }
 
-        /** Fuel authorities are not handheld Atlas rows. */
-        public record AtlasSelection(List<AtlasLogic.Entry> entries, Set<String> nonAtlasRouteIds) {
-            public AtlasSelection {
-                entries = List.copyOf(entries);
-                nonAtlasRouteIds = Set.copyOf(nonAtlasRouteIds);
-            }
-        }
-
         public boolean mandatory() {
             return requirement != Requirement.OPTIONAL;
+        }
+    }
+
+    /** Fuel authorities are not handheld Atlas rows. */
+    public record AtlasSelection(List<AtlasLogic.Entry> entries, Set<String> nonAtlasRouteIds) {
+        public AtlasSelection {
+            entries = List.copyOf(entries);
+            nonAtlasRouteIds = Set.copyOf(nonAtlasRouteIds);
         }
     }
 
@@ -121,6 +121,10 @@ public final class T1Progression {
             case "assembler" -> List.of("craft/assembler");
             case "matrix_line" -> List.of("bench/data_core", "calibrate/data_core", REPRODUCTION_ROUTE);
             case "flux_cell" -> List.of("craft/flux_cell");
+            case "glass" -> List.of("source/geological_aggregate", "bootstrap/dry_aggregate",
+                    "bootstrap/wet_aggregate", "source/biomass", "bootstrap/biocarbon",
+                    "bootstrap/reduce_iron", "bootstrap/reduce_copper", "craft/hand_pump",
+                    "renew/sand", "renew/glass");
             default -> byQuest(taskId).routeIds();
         };
     }
