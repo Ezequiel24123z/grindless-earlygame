@@ -2366,7 +2366,9 @@ is preserved and integration/release gates still control acceptance.
 | 63 | **Native quest framework and concise content** | ADR-0171 — genuine native FTB and short JEI-first goals preserve46 IDs/paid history. Exact dd0/JAR29bc/ZIP79ce installed; actual save clone loads/stops, retired Heracles IDs are metadata-only, and pristine36-file world/options copy passes Inspect in Grindless-T0-FTB-Dev. Original F/backup stay intact; owner login/GUI/JEI/rewards and T0 acceptance remain human observations |
 | 64 | **Recurrent T1 component automation** | ADR-0172 — independent source2f4eee1 adds ordinary Assembler casings/Flux Cells, manual-equivalent material batches and existing timing/FU. Manual bootstrap, four slots, F1/F2 ratings and executor/NBT stay intact; [inventory/references](docs/tiers/t1-development-map.md) separate real runtime, model gaps and prototypes. Source checkpoint published; new generation/JVM qualification pending after the T0 execution priority |
 | 65 | **Parallel later-tier development** | ADR-0173/0174 — owner opens development throughT15 alongside T1; basic families start atT1. Native-baseline factory source, shared pressure and Blueprint preflight integrate on isolated branches with [pinned mechanism research](docs/design/t1-external-references.md). Exact ingredient versus capacity semantics and native46-to50 managed definitions remain explicit boundaries. No later-tier deployment, acceptance or release is inferred |
-| 66 | **Basic families and growing tier complexity** | ADR-0174 — T1 introduces baseline basic families; later tiers upgrade actual capability, add specialized multiblocks and exponentially broader lines/content. Preserve b38/e265 without calling the first factory complete T1 or an F2 cost an upgrade. Source trace now authorizes a true F1 baseline Wire Mill/optional forming increment; shared chassis/store/persistence and compatible external implementation work remain separate |
+| 66 | **Basic families and growing tier complexity** | ADR-0174 — source3a79a1f, locally integrated42654eb, makes the baseline Wire Mill consume an F1 fourth construction operand and adds optional `wire_forming` after assembly. Its four live routes do not gate the first F2. Preserve b38/e265 history; no MK2, complete T1, matcher/storage change or executable qualification is inferred |
+| 67 | **Optional process-pressure contract** | Source541cf6c, locally integrated42654eb — optional absolute MPa optimum/explicit half-width, shared evaluator and Atlas/audit/inspection/JEI projection; old constructors remain pressure-absent. [Proposed ADR-0175](docs/DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) records meaningful zero and strict inspection schema2/schema1 compatibility. No production pressure recipe or Java/runtime pass |
+| 68 | **Bounded Blueprint preflight** | Source4550b97, locally integrated42654eb — strict legacy payload, immutable read-only diagnosis, loaded/permission checks and bounded material settlement. Ordinary missing/blocked refusal spends nothing; later callback failure is not globally rolled back. [Qualification remains pending](docs/testing/latest-validation.md#integrated-development-source); no drones, capture/stamp gameplay proof or installed update |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than
@@ -2450,7 +2452,13 @@ mark a box of at most 32 on an edge. The mark stays on the item. The tool
 does not break blocks. The Multitool relocate is still the pickup. The Blueprint Tool is in
 (ADR-0085): Assembler-manufactured from visible components. Two corners
 capture a box of at most 32 on an edge and 512 blocks. The blueprint keeps
-facing and drops status. Stamping spends the inventory, all or nothing.
+facing and drops status. Stamping uses the player's inventory, not the network.
+Source4550b97 adds read-only loaded-cell, permission and full-material preflight:
+ordinary missing-material or blocked-cell refusal spends nothing. If later
+placement fails, already placed cells remain; unused materials are returned.
+A throwing callback is ambiguous and its attempted cell may remain paid.
+This is not global rollback or universal zero loss. The new capture/stamp path
+is unqualified source; the old item-existence smoke is not interaction proof.
 Drones still wait. The Flux Drill and the Drill Cell
 are in (ADR-0084): Assembler-manufactured from visible components. The
 drill spends 32 FU a block and holds two cells of 3,200 FU. Sneak-use cycles

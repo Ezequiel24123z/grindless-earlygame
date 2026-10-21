@@ -30,16 +30,19 @@ Next: the protected native FTB handover under ADR-0171 is technically complete:
 Grindless-T0-FTB-Dev has exactdd0/29bc/79ce and the pristine existing-world/options
 copy. Actual save-clone load/save and metadata-only retired-ID inspection pass;
 the original/backup remain intact. Let the owner continue play, collect blocking
-feedback and qualify the isolated family/pressure/Blueprint source under a new
-guarded build-only window. No actual GUI/login/rewards/campaign pass is inferred.
+feedback while sole2a93 qualifies fixed published42654eb under the NEW explicit
+integrated-family build-only lease. No actual GUI/login/rewards/campaign or new
+source pass is inferred without its receipts.
 
 **Latest owner scope (ADR-0173):** continue T1 and start the remaining tiers while
 finishing the Prism questbook handover. Isolated source/research work is open
 through T15; prior one-tier-at-a-time/T1-only development holds are superseded.
 Keep acceptance/release sequential and do not deploy later tiers into T0.
-Current source lanes integrate native FTB into T1, add the first physical F2
-Wire Mill construction requirement through the existing four-slot Assembler,
-and derive practical T3-T15 increments from actual accepted design/source.
+Current local source42654eb composes native-baseline T1 with the corrected F1
+Wire Mill/optional forming, optional process pressure and Blueprint preflight;
+ab4d7bc adds the final104de7b delivery record. The superseded F2 construction
+cost remains in e265/5ff history, not the current baseline recipe or a real upgrade.
+Further T3-T15 increments derive from actual accepted design/source.
 Do not recreate existing Motor/Wire Mill implementations or invent recipe bills.
 Record the exact-rating versus stronger-control substitution gap and future
 managed native46-to50 definition migration separately from source completion.
@@ -48,16 +51,34 @@ managed native46-to50 definition migration separately from source completion.
 not just its first five-machine increment. Later tiers grow exponentially in
 meaningful lines/content/interdependence and upgrade actual family capabilities,
 with specialized multiblocks. Preserve e265's bounded F2 source as evidence, not
-the final first-Wire-Mill placement or a real MK upgrade. Before the next recipe
-increment, select baseline/upgrade seams using existing chassis, store ownership,
-conditions and persistence plus compatible external implementation precedent.
+the final first-Wire-Mill placement or a real MK upgrade. Source3a79a1f now
+implements the baseline F1 fourth operand and optional four-route forming branch
+after assembly, without changing the initial F2 dependency. Real upgrade work
+still needs existing chassis, store ownership, conditions and persistence plus
+compatible external implementation precedent.
 Do not invent another executor, mutate the player's save or multiply timers.
 
 Final FTB package dd0/JAR29bc/ZIP79ce and the pristine36-file world/options copy
 are installed and VerifyStopped. The temporary clone/audit leases have returned;
 the parser finds no actual/unknown retired Heracles reference or read error.
-No source worker has an automatic next PC grant. Read the active handoff, not
-old ownership/pending-delivery snapshots below.
+Only2a93 now has the explicitly new source426 build/cache grant; parent/other
+workers have no PC action. Read the active handoff, not old ownership/pending-
+delivery snapshots below. No grant includes T0/Prism/Deploy.
+
+The three new source units are published only through parent-owned42654eb;
+qualification results are pending. Root104 mergeab4d7bc and seam documentation
+stay local without Syncing the frozen source. Synchronize the
+bounded seams through [the route map](AGENT-MAP.md#optional-process-pressure),
+[first-factory plan](../plan/feature-t1-first-factory-1.md) and
+[source validation ledger](testing/latest-validation.md#integrated-development-source).
+Proposed ADR-0175 documents pressure optimum/half-width and strict observation
+schema compatibility without selecting new gameplay. Blueprint preflight retains
+ordinary none-spent refusal; later throwing placement callbacks remain ambiguous,
+not globally rolled back. Only the active2a93 fixed-source window owns affected
+contracts and NORMAL canonical writers/CheckOnly. Blueprint's real capture/stamp/
+load proof needs the ready owner-authored Forge probe, not its old item-existence
+observation. Do not consume partial probe source or rerun unchanged common solely
+for a later Forge-only probe.
 
 T1 source/research remains independent under the owner's explicit longitudinal-play / feedback loop
 (ADR-0170). The owner chooses to start T0 while routes, machines, components,

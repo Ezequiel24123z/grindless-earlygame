@@ -2,8 +2,10 @@
 
 Status: **active development, not a release or completed T1 acceptance**.
 The owner explicitly opens this work while testing the unchanged T0 dev build
-(ADR-0168/0169/0170). The reported T0 book blocker now has PC/deployment priority
-under ADR-0171, while independent T1 source work continues. [The implementation plan](../../plan/feature-t1-first-factory-1.md)
+(ADR-0168/0169/0170). The protected native-FTB fix is delivered atdd0/29bc/79ce;
+the owner can continue while only2a93 qualifies fixed source426 under the new
+exclusive build/cache lease. Results are pending; no other worker has PC access.
+[The implementation plan](../../plan/feature-t1-first-factory-1.md)
 is the execution graph; [the reusable-systems handbook](../architecture/reusable-systems.md)
 is the extension guide.
 
@@ -23,8 +25,11 @@ F1 control supply and manufacture the physical F2 exit. Existing machine familie
 recipe conditions, inventories, native transactions, grid, teaching renderers and
 claim ledger remain in use. Do not rebuild them for a tier label.
 
-The baseline is the actual a64 experience source, not old main or a test fixture.
-The player's installed executable remains F298988d/JAR95bf47c4/ZIP3e5ad1fb.
+The original inventory baseline is a64/ef9, not old main or a test fixture.
+Current426 source normally integrates native b38 and the three increments;
+root104 is merged separately atab4d7bc. The installed player build is
+dd0/JAR29bc/ZIP79ce with the pristine existing-game/options copy; original F and
+backup remain intact.
 Development authorization is not T0 acceptance, a graphical pass, a restart,
 deployment, T1 release or permission to skip physical progression.
 
@@ -43,6 +48,7 @@ execution engine, global unlock or list of invented bills.
 | `glass` | Mandatory | Existing sand/glass routes supporting assembly; source quantities from live recipes. |
 | `forming` | Mandatory | Press, non-consumed dies, plates/rods/gears/copper coils and machine casings; Wire Mill is not a hidden first-F2 prerequisite. |
 | `assembly` | Mandatory | Assembler and existing F1 Matrix reproduction; physical construction stock and power must be accounted for. |
+| `wire_forming` | Optional | Source3a79a1f selects the existing Wire Mill manufacture, iron/copper wire and copper coil routes after assembly; not a first-F2 dependency or an upgraded machine. |
 | `relay_f2` | Exit | Only `assemble/relay_matrix_f2`; actual physical F1/casing/glass/Flux Cell operands remain canonical. |
 | `extraction` | Optional | Scanner/finite terrestrial extraction as a compatible supplement, not the unlimited canonical source of mandatory inputs. |
 | `logistics` | Optional | Existing hoppers/belts/arms/interfaces within their implemented sides/owner semantics; no new transaction framework. |
@@ -59,7 +65,9 @@ its unchanged runtime JSON, not an invented battery-charge recipe.
 
 ## Source-checked expansion inventory
 
-The independent inventory is pinned to applicationef9d670. It is not a played
+The following independent inventory is pinned to applicationef9d670; the
+source increments below explicitly supersede its earlier Wire Mill placement.
+It is not a played
 factory, a new acceptance of later prototypes or the same as a successful native
 test. Paths below are relative to the common Grindless Java package unless named.
 
@@ -74,14 +82,30 @@ test. Paths below are relative to the common Grindless Java package unless named
 | Kiln/R2 | Existing roast/oxide/Arc alternatives | Optional; do not copy an unimplemented design-table yield multiplier into a claim of runtime behavior |
 | Extraction/Factory World | Surveyed virtual deposits and existing portal/return data | Optional supply/space; do not make finite mining or the portal a hidden F2 requirement |
 | Motor/Wire Mill/chemistry | Registered content with older later-tier placement | ADR-0174 puts baseline basic families at T1; later duties/variants still require real capabilities. Inventory labels/FU demand/`T1Recipes` membership do not themselves implement the revised family or upgrade contract |
-| Sifter/wire design prose | Older T1 design inventory | Sifter is not an executable family in the reviewed graph; wire's real machine is later. These are design gaps, not accepted missing prerequisites |
+| Sifter/wire design prose | Older T1 design inventory | Sifter is not an executable family in that graph. Source3a now selects baseline T1 wire forming; neither invents Sifter content nor a new first-F2 prerequisite |
+
+### Integrated source increments
+
+| Source | Actual source change | Proof boundary |
+| --- | --- | --- |
+| 3a79a1f3 | Baseline F1 Wire Mill fourth operand and optional four-route `wire_forming`; Assembler teaching selects live assembly/optional routes and one38-word body changes | No MK2, matcher/storage change or first-F2 dependency; source426 qualification results pending |
+| 541cf6c9 | Optional absolute process-pressure optimum/explicit half-width, shared evaluator and Atlas/audit/inspection/JEI; strict schema2/schema1 observation compatibility | [Proposed ADR-0175](../DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts); no production pressure recipe or upgrade capability |
+| 4550b975 | Strict legacy Blueprint payload, shared read-only preflight and bounded native material settlement | Ordinary missing/blocked refusal spends nothing; later throwing callbacks remain ambiguous, not globally rolled back; representative real capture/stamp/load still required |
+
+Normal source426 preserves all three and native b38; the parent publishes it
+and assigns only2a93 its fixed-source qualification. Local documentation never
+Syncs underneath active stages/locks. Canonical outputs stay pending their NORMAL
+writers/CheckOnly; the old `first-blueprint` item-existence smoke is not the new
+interaction proof. The author-owned representative Forge probe is not ready or
+integrated. See [the current ledger](../testing/latest-validation.md#integrated-development-source).
 
 ### Independent component increment
 
 ADR-0172 selects ordinary `assemble/machine_casing` and `assemble/flux_cell`
 routes. Source checkpoint `2f4eee1751582819065f6a7f326757bf1f68825b` is authored
 on the qualified first-factory base523b3ab, with checks written but **not executed**.
-It is not published/deployed or a replacement for the owner-facing T0 repair.
+It is published as independent source and included through native b38/426,
+not deployed or a replacement for the owner-facing T0 repair.
 
 Both routes preserve the live manual material/output batches and use existing
 `FabricationLogic.ASSEMBLE_TICKS` / `FU_PER_TICK`. No new station, slots, save
@@ -99,14 +123,15 @@ reused; no native run per new item recipe.
 ### Next bounded choices
 
 1. Qualify the two component routes and their canonical projections after the
-   urgent T0 execution window. Do not hand-author inherited generated reports.
+   active sole2a93 execution window. Do not hand-author inherited generated reports.
 2. Consider selected automatic machine/die replacement through the same Assembler,
    with an explicit output whitelist and real construction/energy checks.
    Thermal has five distinct inputs, so a blanket shaped-craft projection cannot
    fit four slots; retain its manual route until that separate decision is made.
 3. Reconcile the untagged-F1 model identity and finite custody using existing
    audit/adapters before any global establishment claim. Sifter/wire expansion
-   requires an actual content decision, not reinterpretation of a fixture.
+   beyond the now-authored baseline Wire Mill requires an actual content
+   decision, not reinterpretation of a fixture.
 
 The [external reference record](../design/t1-external-references.md) supplies
 proven patterns and their limits, not another catalogue or automatic gameplay approval.

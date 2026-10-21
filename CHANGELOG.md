@@ -15,6 +15,29 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate the three development seams without qualifying or deploying them.**
+  Source42654eb normally composes optional pressure541cf6c, Blueprint4550b97 and
+  corrected baseline-F1 Wire Mill3a79a1f; ab4d7bc then merges the parent's final
+  T0 delivery record104de7b. Preserve all source ancestry and the installed
+  dd0/JAR29bc/ZIP79ce game. Static composition retains pressure/Blueprint tests
+  and861 locale keys:844 old values, one intentional38-word T1 lesson and16
+  exact additions.   The parent publishes426 and grants only2a93 the new integrated-family
+  build/cache window; source-bound results are pending, not passes. Documentation
+  stays local and does not Sync the frozen execution source. Representative
+  Blueprint interaction still needs its ready author-owned probe and real proof;
+  source integration is not full-T1 acceptance.
+- **Document optional absolute process pressure as an unqualified engineering proposal.**
+  Proposed ADR-0175 records the authored optimum/explicit half-width contract,
+  meaningful zero, pressure-absent legacy constructors and inspection schema2
+  with strict schema1 reading. Reuse the existing condition evaluator and shared
+  projections; no production pressure recipe, machine, matcher or save-format
+  change is selected. Coordinator review and executable qualification remain open.
+- **Clarify Blueprint preflight and settlement limits.** The authored4550 source
+  preserves the legacy32-edge/512-piece payload and refuses ordinary missing/
+  blocked plans before spending. Actual placement failures retain already placed
+  cells; a throwing callback is ambiguous and its attempted cell stays paid.
+  Do not advertise global rollback, universal zero loss, drones or a gameplay
+  pass from the old item-existence smoke.
 - **Deliver the native FTB correction with the existing game preserved.**
   Minecraft's NBT/region APIs inspect the verified copy:36 files/2,608 chunk roots,
   no actual or unknown Heracles reference/read error; retired IDs occur only in

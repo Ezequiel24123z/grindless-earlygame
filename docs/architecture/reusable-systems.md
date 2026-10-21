@@ -2,8 +2,12 @@
 
 This is the implementation/extension map for parallel T1 development under
 ADR-0168/0169, not a new engine specification or a tier-acceptance certificate.
-The reviewed baseline is the a64 T0 experience source, whose installed executable
-is still F298988d. New T1 source and its validation are recorded separately.
+The original reviewed baseline is a64/F298988d. The current installed player
+build is dd0/JAR29bc/ZIP79ce with the pristine existing-game copy; original F and
+backup remain intact. Separate development426 integrates native b38, pressure,
+Blueprint and corrected F1 Wire Mill source. Only2a93 owns its new fixed-source
+qualification window; results are pending, not passes, and documentation never
+Syncs underneath active stages/locks.
 
 Java paths below are relative to
 `common/src/main/java/io/github/ezequiel24123z/grindless/` unless stated otherwise.
@@ -45,6 +49,14 @@ atmospheres, fields, agitation and catalyst capacity. `ConditionState` and proce
 conditions describe the actual state/request; `machine/ProcessMachineKind.java`
 and `MachineBlockEntity.envelope()` connect family, chassis and machine behavior.
 An envelope does not override family, site, structure or physical control checks.
+
+Source541cf6c adds optional absolute `ProcessRecipe.pressureMPa` and explicit
+`pressureHalfWidthMPa`. Old constructors leave pressure absent; zero is a
+meaningful optimum, not ambient/absence. `ProcessLookup.conditionsOf` converts
+through the existing builder/absolute band, shared by Atlas/audit/inspection/JEI.
+No existing production pressure recipe or machine capability changes.
+[Proposed ADR-0175](../DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)
+records the unqualified engineering rationale; its affected results remain pending.
 
 `matrix/ControlMatrixSpec.java`, `MatrixArchitecture.java` and
 `ControlMatrixNbt.load()` are the physical control authority. Architecture and rating
@@ -114,6 +126,25 @@ inventory/quota/unit contracts use `VerifyContainer`, `VerifyPersistence`,
 `VerifyBasicTank` and affected fluid checks. Real retained-world upgrade behavior
 remains a copy-based compatibility observation, not a claim supplied by a codec test.
 
+## Bounded Blueprint preflight and settlement
+
+Source4550b975 reuses the existing Blueprint item/tool, not a drone or network
+construction framework. `item/BlueprintLogic.Plan` / `preflight` produce an
+immutable read-only diagnosis and material multiset/shortfall.
+`BlueprintItem` strictly decodes the legacy payload, checks loaded destinations
+and permissions, rechecks before placement and settles bounded main/offhand
+payment; `BlueprintToolItem` shares the capture diagnosis. Preserve the32-edge/
+512-piece bounds, facing and absence of copied block-entity contents.
+
+Ordinary missing/blocked preflight refuses without spending. An explicit false
+placement restores that attempted payment; already placed cells remain and
+unattempted materials are refunded. A throwing callback is ambiguous and its
+attempt stays paid while unattempted resources return and the error propagates.
+This is not global rollback, crash atomicity or universal zero loss.
+`VerifyBlueprint` / affected `VerifyPlanner` results and representative actual
+capture/stamp/load evidence remain pending. The old native item-existence smoke
+does not prove interaction; the author-owned representative Forge probe is unready.
+
 ## Structures and controller-backed interfaces
 
 `structure/WorkshopStructure.java`, `WorkshopPortBlockEntity.java` and
@@ -146,15 +177,17 @@ proof assumptions; a new teaching paragraph does not.
 
 ## Quests, claims and renderer adapters
 
-`quest/QuestCatalogue.java`, `QuestLogic.java`, `QuestProgress.java` and
-`QuestClaimService.claim()` own IDs, requirements, evidence, per-player SavedData
-and delivery. LESSON claims have no rewards; REWARD claims stage complete physical
-delivery and use the same server-side ledger. A quest is guidance/evidence, not
-permission for a machine to operate or a second resource-generation system.
+`quest/QuestCatalogue.java`, `QuestLogic.java` and teaching retain stable logical
+IDs, requirements and evidence. `QuestProgress` / `QuestClaimService` preserve
+legacy paid history; the current Forge FTB adapter imports individual native
+receipts and fences late legacy minting before native claims. Native completion
+is not proof a reward was paid. LESSON additions are reward-free. A quest is
+guidance/evidence, not machine permission or a second resource-generation engine.
 
-`QuestTeaching.java` and `client/QuestTeachingClient.java` share teaching across
-the native screen and optional renderer. `QuestBackendPlatform` and its Forge
-implementation preserve one claim path. Add T1 guidance/lessons without changing
+`QuestTeaching.java` and `client/QuestTeachingClient.java` retain shared teaching
+selectors; the player-facing framework is genuine native FTB under ADR-0171,
+not the old custom widget in another window. `QuestBackendPlatform` and its Forge
+implementation must not admit two reward authorities. Add T1 guidance without changing
 old reward identities, ledger format, enum ordinals or the physical T0/F1 entry.
 Factory World may remain an optional branch; it must not be a hidden F2 prerequisite.
 
@@ -180,7 +213,10 @@ projection contracts; a new widget/API still needs representative client review.
 `inspection/MachineInspectionProtocol.java` and its snapshot/client adapters expose
 bounded server-authoritative state for the optional F8 overlay. Keep packet/target/
 rate/loaded-state validation and avoid world scans or client-invented machine truth.
-Reuse `VerifyMachineInspection` for unchanged DTO contracts. Optional inspection
+Source541 writes inspection schema2 and reads strict schema1 without required
+process pressure; reject unknown versions/partial bands through `MALFORMED`.
+Existing observed/tank pressure is unchanged. Its new DTO/codec contracts need
+their affected proof, not reuse of the old schema's result. Optional inspection
 must remain usable without installing a new overlay dependency.
 
 ## Recovery exchange and telemetry

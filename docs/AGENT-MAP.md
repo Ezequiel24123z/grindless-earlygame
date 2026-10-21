@@ -24,10 +24,11 @@ Coordination follows [AGENTS](../AGENTS.md) and
 own bounded implementation/check execution with explicit files and input revisions.
 ADR-0147 selects Sol 6.1 for the next isolated session; previous Astra reviews remain
 historical evidence, not a requirement to restore that leader.
-The current installed qualified experience runtime is298988d/95bf47c4;
-747/c08 and1389/559 are historical. Read the
-[exact Prism handoff](testing/t0-experience-prism-deployment.md); it is still not
-a graphical/client or human longitudinal pass.
+The current installed native-FTB runtime isdd0/JAR29bc/ZIP79ce in
+Grindless-T0-FTB-Dev with the pristine existing-game/options copy. Read the
+[native delivery record](testing/t0-ftb-native-qualification.md); actual owner
+login/GUI/JEI/rewards and human longitudinal acceptance remain open.
+298988d/95bf47c4 is the preserved original F instance, not the current FTB build.
 The owner explicitly starts intended longitudinal T0 play under ADR-0170 while
 T1 research/development proceeds. The [readiness investigation](testing/t0-longitudinal-readiness.md)
 is preserved evidence, not a continuing disposable-only restriction. Read actual F evidence
@@ -35,8 +36,10 @@ before inferring playability from a gate label. Preserve indexed inventories,
 per-player quest IDs, Matrix rating meaning and stopped-game copy-based updates.
 `VeinData.DerivationVersion` is currently not consumed by scanner/extractor
 generation; do not claim forward surveyed-vein stability if algorithm/material
-inputs change. The old T1 lease was returned; the new explicit
-`t1-owner-play-loop-20261021` assignment has one owner and fresh resource guards.
+inputs change. Old T1 owner-play and temporary FTB leases are returned.
+The NEW `integrated-family-qualification-20261021` grant belongs only to2a93
+on fixed published42654eb with fresh guards; all other workers/parent have no PC
+access. Documentation stays local and never Syncs during active stages/locks.
 Gameplay blockers take priority; never stop/restart the player's game or deploy
 T1 as part of independent development.
 The new [experience plan](../plan/feature-t0-experience-1.md) under ADR-0161
@@ -45,7 +48,7 @@ physical sound/visual work. It does not authorize a generic engine rewrite or
 unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
 
-**Current player blocker (ADR-0171):** native FTB Quests replaces the rejected
+**Owner-reported questbook fix (ADR-0171):** native FTB Quests replaces the rejected
 custom/Heracles presentation. Backend/build/pin/native-definition/migration
 implementation is owned by ac50334e; copy190a024 is separate and preserves data.
 Preserve `QuestProgress` paid history, stable logical IDs and individual reward
@@ -62,8 +65,8 @@ The bounded fix is now installed atdd0/29bc/79ce in Grindless-T0-FTB-Dev with
 the pristine36-file original-game/options copy, not the tested clone. Actual
 clone load/save and a Minecraft NBT/region audit resolve retired Heracles IDs as
 metadata-only; original/backup remain unchanged. Native player login, GUI/JEI/
-physical reward delivery are not inferred. All temporary PC leases are returned;
-new source owners need a new guarded window and may not update this T0 instance.
+physical reward delivery are not inferred. All temporary FTB leases are returned;
+the separate2a93 build-only grant cannot update or access this T0 instance.
 
 ADR-0172's independent T1 source2f4eee1 owns only ordinary Assembler component
 data, T1 selection/provenance and affected recipe/Atlas/progression contracts.
@@ -72,10 +75,11 @@ forming-cycle dependency. No new engine/NBT/slots/T2 part is authorized.
 Its baseline523b proof is distinct from the new unexecuted two-route data.
 
 ADR-0173 now opens isolated development through T15, not survival acceptance or
-deployment. T1 owner2a93 integrates native baseline dd0 into the existing factory/
-component branch. T2 ownerec7c starts only the existing `assemble/wire_mill`
-physical F2 operand and affected data contracts: four grouped slots, unchanged
-stock/time/FU, no Motor charge or acid/bootstrap cycle. `ProcessRecipe.milestone`
+deployment. Native-baseline b38 retains the factory/component source. The
+corrected3a79a1f adds one physical F1 fourth operand to `assemble/wire_mill`
+and optional `wire_forming` after assembly, not an extra first-F2 prerequisite.
+Four grouped slots, stock/time/FU and the ordinary F1 output remain; no Motor
+charge, acid/bootstrap cycle or MK2 capability is introduced. `ProcessRecipe.milestone`
 is informational, never a hidden permission. `IngredientSpec.matrixRating` /
 `ProcessLookup.sameItem` are currently exact, whereas `ControlMatrixSpec.canControl`
 supports stronger control; do not silently conflate quest/upgrade evidence with
@@ -87,15 +91,19 @@ ADR/map/plan integration remain coordinator-owned.
 **Later owner clarification (ADR-0174):** baseline basic families start at T1,
 not only the first five machines; later tiers grow lines/content and upgrade real
 capabilities through the established chassis/MK/modules/condition design.
-Preserve e265 source evidence but do not declare its F2 operand an upgraded
-Wire Mill or definitive first-family placement. Source owner ec7c traces actual
-shared tier/envelope/placement/save support before another application change.
+Preserve e265 source evidence but do not declare its former F2 operand an
+upgraded Wire Mill. The source trace selects the baseline-F1 correction;
+actual higher chassis/control/storage capabilities remain separate work.
 The broad8210 dossier could not use `send_session_message` or write an artifact.
 Parent subsequently recovers its13-tier dossier and bounded slice proposals from
 the actual `session.task_complete` summary, not empty assistant messages or idle
 notifications. This is read-only evidence, not an executable tier acceptance.
-Source implementations now own51366 blueprint preflight and b823 optional recipe
-pressure; neither is another execution engine or a permission to run PC builds.
+Source4550b97 owns Blueprint preflight and541cf6c optional recipe pressure;
+42654eb normally integrates both plus3a79a1f, and ab4d7bc adds final root104de7b.
+The parent publishes42654eb and grants only2a93 its qualification; results remain
+pending, not passes. Final-root mergeab4d7bc and this documentation stay local,
+not another execution engine or a PC grant to other workers. The parent explicitly delegates this bounded
+root-document synchronization; product/final review and publication stay there.
 Compatible external reuse is allowed after exact provenance/licence/notices;
 neither visible source nor a pattern report authorizes a code import.
 
@@ -258,6 +266,10 @@ T2 and above are manufactured, never a crafting table
 
 - `recipe/ProcessGraph.java` — the generated graph (ore line, press, mill, contact,
   assembler).
+  `wireMill()` now authors the baseline F1 fourth construction operand under
+  ADR-0174. `progression/T1Progression.java` selects optional `wire_forming`
+  after assembly: manufacture, iron wire, copper wire and copper coil. Keep the
+  initial F2 dependencies and five-controller seed allocation unchanged.
 - `recipe/ProcessLogic.java` and `recipe/FabricationLogic.java` — durations, FU/t,
   fluid ids.
 - `recipe/ProcessLookup.java` — indexed lookup, rebuilt from that graph.
@@ -295,6 +307,52 @@ Ratios are in [`PROCESSES.md`](PROCESSES.md#the-recipe-graph).
 `recipe/AtlasLogic.java` decorates explicit physical ratings for display and rated lookup only.
 Keep `IngredientSpec.qualified()` and `OutputSpec.qualified()` as unmodified graph identities;
 unrated item lookup must still find the F2 route (ADR-0124).
+
+## Optional process pressure
+
+- `recipe/ProcessRecipe.java` — optional `pressureMPa` and
+  `pressureHalfWidthMPa`; all old constructors leave both absent. Zero is a
+  meaningful absolute optimum, not an absence/ambient sentinel.
+- `recipe/ProcessLookup.conditionsOf` — shared builder conversion; use the
+  existing `process/ConditionBand.absolute` and `ProcessConditions` evaluator,
+  not a second eligibility, efficiency or fault implementation.
+- `recipe/AtlasLogic.java`, `sustainability/AuthorityAdapters.java`,
+  `inspection/MachineInspection.java` / `MachineInspectionSnapshot.java`,
+  `client/inspection/MachineInspectionTooltip.java` and
+  `forge/.../jei/GrindlessProcessCategory.java` — project the same declared
+  optimum and half-width; do not invent a production pressure requirement.
+- `inspection/MachineInspectionCodec.java` / `MachineInspectionProtocol.java` —
+  write schema2 and read strict schema1 with no required process-pressure band.
+  Unknown versions, partial bands and required-pressure fields under schema1
+  fail through `MALFORMED`; existing observed/tank pressure is not removed.
+
+Source541cf6c is integrated but unqualified. [Proposed ADR-0175](DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)
+records the rationale, not accepted gameplay. Recipe/Band/Machine/Atlas/
+MachineInspection/MachineUi/SustainabilityAdapters/Sustainability results await
+the sole2a93 execution owner; machine work/item/fluid save ownership is unchanged.
+
+## Blueprint construction preflight
+
+- `item/BlueprintLogic.java` — immutable `Plan` / read-only `preflight`, full
+  material multiset/shortfall and duplicate/bounds diagnosis.
+- `item/BlueprintItem.java` — strict legacy `Blocks/X/Y/Z/Id/Item/Facing` decode,
+  loaded-world/permission adapter, target recheck and bounded main/offhand payment.
+- `item/BlueprintToolItem.java` — capture uses the same diagnosis; retain the
+  32-block edge/512-piece bounds and never clone block-entity contents.
+- `tools/checks/VerifyBlueprint.java` / `VerifyPlanner.java` — affected contract
+  results are pending, not supplied by their source or the old native
+  `first-blueprint` item-existence observation.
+
+Source4550b97 preserves ordinary missing/blocked preflight refusal before
+spending. An explicit false placement restores that attempted payment;
+unattempted resources are refunded and already placed cells remain. A throwing
+callback is ambiguous: keep that attempt paid, refund unattempted resources and
+propagate the error. This is not global world rollback or universal zero loss.
+Require a representative real capture/stamp/load proof for the changed world/
+inventory boundary; no drone/network-builder framework or new payload is added.
+Owner51366 is authoring the representative Forge probe/manifest/paired harness;
+it is not ready or integrated. Do not ingest partial source or repeat unchanged
+common compilation merely for a later probe-only Forge change.
 
 ## C3 sources, primitive assembly and generation
 

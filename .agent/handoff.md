@@ -24,23 +24,80 @@ overload fail before any compiler starts; preserve both. Direct native invocatio
 with FileStream locks then has actual javac0/scanner0. A silent compiler/Tee
 produces no stdout file; its successful exit and real scanner result are retained,
 not replayed to manufacture a log. Final copy0 and Inspect are separately closed.
-All FTB leases/owned JVMs/locks are released; new code lanes have NO PC grant.
+All FTB leases/owned JVMs/locks are released for this delivery. The later
+integrated-source grant below belongs only to2a93; it does not authorize this
+documentation worker, other source workers, the parent or any T0 access.
 
 | Category | Final bounded T0 handover |
 | --- | --- |
 | COMPLETED | Genuine native FTB/concise goals and paid-history fence qualified; exact package installed; real save-clone load/save and retired-ID audit; final pristine world/options copy and VerifyStopped |
 | BLOCKED | None for this technical handover; no whole-T0 or later-source acceptance |
-| NOT EXECUTED | Actual owner login/native import, GUI/JEI/physical rewards, campaign; new pressure/Blueprint/F1-source JVM/canonical qualification, main/release |
+| NOT EXECUTED | Actual owner login/native import, GUI/JEI/physical rewards, campaign, main/release; no new-source pass is supplied here |
 | NEEDS HUMAN VALIDATION | Native UI, real player/team/reward interactions, JEI and resumed longitudinal play |
 | NEEDS MY DECISION | None from the owner for this delivery |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
 | COST / BILLING RISK | None new; no generation/provider activation |
 | DEPLOYED STATE | Grindless-T0-FTB-Dev dd0/JAR29bc/ZIP79ce contains the pristine original-game copy; old instance/backup intact, no T1+ code deployed |
 
-Source progress continues independently:3a79a1f is the local F1 basic Wire Mill/
-optional wire-forming checkpoint,541cf6c optional pressure,4550b97 Blueprint
-preflight. Integratora89 preserves local9f3ea9b (docs190+pressure+Blueprint) and
-normally merges3a next. No new source is called compiled/writer/native passed.
+## Integrated development source
+
+The isolated integration branch now preserves source42654eb53985bd50ecbd37a48a4a25e727e51fb7:
+normal docs190, pressure541cf6c9, Blueprint4550b975 and corrected Wire Mill3a79a1f3,
+including e265/5ff history. Final parent root104de7bb is normally merged at
+ab4d7bc6225f8a8d00f502518a0fe62ea41d670a, with parents42654eb +104de7bb.
+The parent published42654eb to this integration branch with an ordinary push
+and verified the exact remote head; existing automatic CI starts without manual dispatch.
+The root104 merge and this documentation delta remain LOCAL/unpublished.
+The parent explicitly delegates bounded root-document synchronization,
+not application coding, product decisions,
+publication or any PC/JVM/cache action by this worker.
+
+| Source | Integrated seam | Qualification boundary |
+| --- | --- | --- |
+| 541cf6c9 | Optional absolute process-pressure optimum/half-width, shared conditions and Atlas/audit/inspection/JEI; inspection schema2 with strict schema1 reading | Proposed ADR-0175; no production pressure recipe, new machine or executable proof |
+| 4550b975 | Strict legacy Blueprint payload, immutable preflight, loaded/permission checks and bounded main/offhand payment | Ordinary missing/blocked refusal spends nothing; later callback throw is ambiguous, not global rollback or universal zero loss |
+| 3a79a1f3 | Baseline F1 Wire Mill fourth operand and optional four-route `wire_forming` after assembly | Same ordinary F1 product, stock/time/FU; no initial-F2 dependency, MK2, matcher/storage change or complete T1 |
+
+Observed integration checks on42654eb retain all pressure/Blueprint source and
+exactly the authored Wire Mill delta in the two shared tests. All861 locale keys
+are unique:844 base values unchanged, one intentional38-word T1 Assembler lesson,
+two pressure keys and14 Blueprint keys. Other T0 values and17 T1 bodies remain
+unchanged. Canonical economy/guidance/T1 outputs have not been regenerated;
+b38 automatic CI39664910629 remains FAILURE at those three equality projections,
+not a manual rerun or a pass of the composed sources.
+
+The new `integrated-family-qualification-20261021` lease is ACTIVE exclusively
+for2a93b168-b53c-4b4e-8bf3-48f4c715af22 on fixed source42654eb and its private
+isolated build surface/cache. Only that owner runs common/Forge, affected
+contracts and NORMAL Guidance/Economy/T1 writers/CheckOnly. Source stays frozen
+while stages/locks are active; parent/other workers make no PC action, and
+coherent fixes publish/Sync only after the execution boundary closes. Gameplay
+has resource priority; no T0/Prism/Deploy access is granted.
+
+Source-bound execution results are pending, not passes. Blueprint owner51366 is
+authoring a representative Forge probe/manifest/paired harness; it is not ready
+or integrated here. The old `first-blueprint` item-existence observation cannot
+prove capture/stamp/load. A probe-only Forge change does not invalidate successful
+unchanged common compilation. Preserve failures/receipts and keep managed native
+46-to50 definitions and stronger-Matrix manufacturing substitution as separate
+unfinished boundaries. Do not update the delivered T0 instance.
+
+| Category | Current development integration |
+| --- | --- |
+| COMPLETED | Normal source integration42654eb, parent-only exact publication and local final-root mergeab4d7bc; exact-source/static locale preservation; bounded documentation and proposed ADR-0175 |
+| BLOCKED | None for documentation; executable results await the active sole2a93 owner, and the representative Blueprint probe is not ready |
+| NOT EXECUTED | Any PC/Java/Sync/publication action by this documentation worker; real new Blueprint capture/stamp/load and client/save/package/main/release/deploy are not proved here |
+| NEEDS HUMAN VALIDATION | Native UI/rewards/JEI and resumed T0 campaign; future Blueprint feedback and pressure presentation after qualification |
+| NEEDS MY DECISION | None within integration; parent owns final architecture/product/proposal review and serial publication; only2a93 owns current execution |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
+| COST / BILLING RISK | None; no generation/provider/dependency/service activation |
+| DEPLOYED STATE | Unchanged dd0/JAR29bc/ZIP79ce pristine-game delivery above; none of these development units is installed |
+
+Use [the route map](../docs/AGENT-MAP.md#optional-process-pressure),
+[validation ledger](../docs/testing/latest-validation.md#integrated-development-source)
+and [first-factory plan](../plan/feature-t1-first-factory-1.md) for exact seams
+and pending proof. No new source is called compiled/writer/native passed without
+the actual execution owner's source-bound receipts.
 The following older progression records preserve their actual intermediate
 states; their former pending delivery and PC grants are superseded here.
 

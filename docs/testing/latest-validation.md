@@ -18,10 +18,54 @@ The first final-custody SCP request fails on that absent stdout file; retrieving
 the real audit/closure artifacts completes custody without a JVM or deployment
 replay. That observer failure does not relabel the successful boundaries.
 
-All temporary PC leases/owned JVMs/locks are released. The owner can continue the
+All temporary FTB leases/owned JVMs/locks are released. The owner can continue the
 new instance's existing-world copy. Actual native login/import/rewards, GUI/JEI
 and longitudinal acceptance remain unobserved human results. Prior pending
 clone/audit/copy snapshots below are historical, not current blockers.
+
+## Integrated development source
+
+Local42654eb53985bd50ecbd37a48a4a25e727e51fb7 normally integrates source541cf6c9
+(pressure),4550b975 (Blueprint) and3a79a1f3 (baseline F1 Wire Mill); ab4d7bc
+normally merges final T0 root104de7bb afterward. No application source changes
+are made by the subsequent documentation synchronization. These revisions are
+not the installed dd0/JAR29bc/ZIP79ce artifact. The parent publishes426 and grants
+only2a93 the NEW `integrated-family-qualification-20261021` isolated build/cache
+lease on that fixed source. Parent/other workers have no PC/T0 access; the local
+documentation merge does not Sync or change active execution inputs.
+
+Actual static integration checks preserve the exact non-overlapping source
+files and both authored deltas in `VerifyAtlas` / `VerifyRecipes`. Locale861
+retains844 original values, one intentional38-word T1 Assembler lesson and all
+two pressure/14 Blueprint additions. JSON parsing, source ancestry and diff
+integrity are static evidence, not compilation or Java test results.
+The old b38 CI39664910629 remains FAILURE at three canonical projections after
+its actual environment/build0; it is neither rerun nor inherited as a pass.
+
+| Changed boundary | Required next proof on the fixed integrated source | Current result |
+| --- | --- | --- |
+| Optional absolute pressure and inspection schema2/strict schema1 | Common/Forge; `VerifyRecipes`, `VerifyBand`, `VerifyMachine`, `VerifyAtlas`, `VerifyMachineInspection`, `VerifyMachineUi`, `VerifySustainabilityAdapters`, `VerifySustainability` | Source-bound results pending from sole2a93; no composed pass recorded; proposed ADR-0175 |
+| Blueprint preflight, legacy codec and native material settlement | `VerifyBlueprint`, affected `VerifyPlanner`, then representative actual capture/stamp/load including refusal/failure/refund boundaries | Contract results pending; representative Forge probe is not ready/integrated; old `first-blueprint` observes an item only |
+| Baseline F1 Wire Mill and optional four-route branch | `VerifyRecipes`, `VerifyAtlas`, `VerifyPersistence`, `VerifyT1Progression`, `VerifyT1Teaching`; normal T1/guidance/economy writers and CheckOnly | Source-bound results pending from sole2a93; no first-F2 prerequisite or MK2 capability claim |
+
+Deduplicate overlapping selectors in that one authorized build-only window; preserve
+existing runner deadlines and all failures/receipts. Reuse unchanged recipe
+executor, registration and storage proofs for the ordinary Wire Mill data change,
+not one new native run per recipe. The Blueprint world/inventory boundary is
+different and needs real interaction evidence; a throwing placement callback may
+already have changed the world, so no global rollback or universal zero-loss proof
+is claimed. No production pressure recipe is added by541.
+
+Canonical outputs remain unchanged and stale. Only the named execution owner's NORMAL writers and
+CheckOnly can close the model boundary; never edit generated JSON to imitate a
+pass. Installed native46-to-source50 managed-definition migration and stronger
+Matrix manufacturing substitution remain separate unfinished mechanisms.
+Client presentation, actual saved-world compatibility, publication and tier
+acceptance are not supplied by a static or surrogate check. The owner may play;
+the active execution must satisfy fresh ownership/resource guards and yield.
+Keep426 frozen while its stages/locks are active. Owner51366's representative
+Forge probe is not yet integrated; a later probe-only change can reuse successful
+unchanged common compilation, not fabricate a native interaction pass.
 
 ## Actual existing-save clone load, not yet accepted lossless migration
 

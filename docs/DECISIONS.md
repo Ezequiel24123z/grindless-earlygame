@@ -186,6 +186,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0172](#adr-0172--automate-recurrent-t1-casings-and-flux-cells-through-the-existing-assembler) | Automate recurrent T1 casings and Flux Cells through the existing Assembler | Accepted |
 | [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
 | [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
+| [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Proposed; source unqualified |
 
 ---
 
@@ -3453,6 +3454,18 @@ slice; pulling items out of the flux network before the drone bay exists.
 blueprint is duplicating items. A successor that pulls from the network
 here is starting slice AC. A successor that writes blueprints to disk is
 inventing a share format the item already is.
+
+**Source-only qualification note, 2026-10-21.** Checkpoint4550b975 retains this
+record's ordinary missing-item/blocked-cell none-spent preflight boundary and
+legacy payload/bounds. It also rechecks targets and settles bounded inventory
+payment around actual placements. If a later callback fails, already placed
+cells are not rolled back. An explicit false result restores the attempted
+payment; a throwing callback may already have changed the world, so that attempt
+stays paid while unattempted resources are refunded and the error propagates.
+This uncompiled source does not establish global rollback, crash atomicity or
+universal zero loss. Coordinator review, affected contracts and representative
+capture/stamp/load evidence remain pending; the old `first-blueprint` smoke only
+observes an item and cannot supply that proof. No drone/network framework is added.
 
 ---
 
@@ -8187,3 +8200,60 @@ first. Broad later-tier development is still authorized by ADR-0173, not
 acceptance/release/deployment. The source-only first-factory/F2 checkpoints,
 unexecuted canonical writers, exact-versus-capacity matching gap and managed
 native46-to50 migration stay explicit; none proves complete T1 or T2.
+
+---
+
+## ADR-0175 — Carry optional absolute process pressure through existing contracts
+
+**Status.** Proposed engineering record for authored source541cf6c9, 2026-10-21.
+Coordinator review and executable qualification are pending. This is not accepted
+gameplay, a production pressure recipe, a tier upgrade or a PC execution grant.
+
+**Context.** `ProcessRecipe` previously carried temperature, atmosphere and
+agitation while the existing `ProcessConditions` / `ConditionBand` mechanism
+already evaluates pressure. The source increment needs to carry a declared
+process-pressure requirement through that same mechanism and its read-only
+projections without changing existing recipes.
+
+`ConditionBand.relative(0)` explicitly rejects a zero-width band. Zero absolute
+MPa is nevertheless a meaningful optimum, distinct from no requirement.
+Substituting ambient pressure or an epsilon would invent a physical requirement
+or conceal that distinction. The inspection transport also needs to distinguish
+a new required-pressure band from schema1's existing observed/tank pressure.
+
+**Authored approach proposed for review.**
+
+1. Carry optional `pressureMPa` and `pressureHalfWidthMPa` in `ProcessRecipe`.
+   Both are `NaN` when unnamed; all four old constructor signatures retain that
+   absence. A named optimum is finite/nonnegative, its explicit half-width is
+   finite/positive, and the resulting tolerance bounds must remain finite.
+   Zero is never an absence sentinel.
+2. Convert once through `ProcessLookup.conditionsOf` and the existing
+   `ProcessConditions.Builder.pressure(optimum, halfWidth)` /
+   `ConditionBand.absolute`. Reuse existing eligibility, speed and named faults;
+   do not add another evaluator or change machine envelopes/executors.
+3. Project the same values through Atlas, `AuthorityAdapters`, machine inspection
+   and JEI. No existing production recipe starts requiring pressure, and no
+   machine capability, Matrix matcher, work owner or item/fluid save format changes.
+4. Write inspection schema2. Read strict schema1 with no required process-pressure
+   band while preserving its existing observed/tank pressure fields. Reject
+   unknown versions, orphan optimum/half-width and required-pressure fields
+   mislabeled as schema1. Keep the existing protocol's explicit `MALFORMED`
+   outcome instead of retaining an old successful observation.
+
+**Alternatives not used by the source.** A relative band around zero cannot
+represent the intended boundary. Ambient/epsilon defaults alter old recipes.
+Another condition engine duplicates the existing mechanism. Silently discarding
+new required fields under schema1 hides malformed data; schema2 without strict
+schema1 reading needlessly loses old pressure-absent observations. None requires
+foreign code, a dependency import or another persisted machine schema.
+
+**Qualification boundary.** Source541cf6c9 is normally integrated in42654eb and
+the later root mergeab4d7bc. This documentation worker does not compile or
+execute it. Only2a93 now owns the new fixed426 qualification window; affected
+recipe, band, machine, Atlas, inspection/UI and sustainability contracts,
+common/Forge and normal canonical writers/CheckOnly await source-bound results,
+not a composed pass. The [validation ledger](testing/latest-validation.md#integrated-development-source)
+separates those obligations from static composition and old T0 native evidence.
+Native/client presentation, actual save compatibility and human acceptance are
+not inferred from this record or its authored regression cases.

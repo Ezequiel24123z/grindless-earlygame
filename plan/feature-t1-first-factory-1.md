@@ -1,6 +1,6 @@
 ---
 goal: Begin T1 with canonical first-factory lines, live teaching and a reusable-system handbook
-version: 2
+version: 3
 date_created: 2026-10-21
 last_updated: 2026-10-21
 owner: Sol coordinator
@@ -12,14 +12,21 @@ tags: [feature, t1, progression, documentation, reuse, compatibility]
 
 ![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
 
-The owner explicitly requests T1 development while playing the T0 dev build
-as the intended longitudinal game (ADR-0170). Resume after the bounded readiness
-investigation; preserve its actual gaps rather than treating intent as a pass.
-Start from `a64d44f9ee6da1fe00ed9215eb05b4aad4132f64`, the preserved T0 experience
-branch, not older main. Keep installed runtime F298988d/JAR95bf47c4 unchanged.
+The owner explicitly requests T1 development while playing the intended
+longitudinal game (ADR-0170), later opening isolated development through T15 and
+baseline basic families from T1 (ADR-0173/0174). The original intakea64d44f remains
+history; current source42654eb normally integrates native-baseline b38 and the
+three bounded increments below. Root104de7bb is normally merged atab4d7bc.
+The installed player build is now dd0/JAR29bc/ZIP79ce with the pristine existing-
+world/options copy; preserve it and the original F/backup.
 This first development increment integrates the already implemented first-factory
 mechanisms into an explicit T1 contract and usable guidance; it does not declare
 the entire tier finished or introduce a replacement processing engine.
+
+The parent publishes426 and grants only2a93 the NEW
+`integrated-family-qualification-20261021` build/cache window on that fixed source.
+Results are pending, not passes. Parent/other workers have no PC/T0 access.
+Documentation remains local; never Sync it under active stages/locks.
 
 ## 1. Requirements & Constraints
 
@@ -31,11 +38,16 @@ the entire tier finished or introduce a replacement processing engine.
 - **REQ-006**: Document reusable authorities, invariants, safe extension seams, proof boundaries and concrete T1 uses with verified source references.
 - **REQ-007**: Trace recurring required inputs to the existing mod-owned T0 base or declare an explicit unresolved dependency; repeatable finite extraction is not renewable.
 - **REQ-008**: Follow ADR-0170: research/brainstorm/develop T1 during owner play, prioritize reported T0 blockers and integrate final T0 feedback/polish without discarding the reference world.
-- **SEC-001**: No credential/provider/account changes, private paths in Git, new generation charges or third-party implementation imports.
+- **REQ-009**: Preserve source3a79a1f's baseline F1 Wire Mill and optional four-route `wire_forming` after assembly; no initial-F2 prerequisite, MK2, global ingredient matcher or storage change.
+- **REQ-010**: Preserve source541cf6c's pressure-absent old constructors, meaningful zero absolute optimum, explicit positive half-width and shared conversion/projections; record ADR-0175 as proposed/unqualified, not a production pressure recipe.
+- **REQ-011**: Preserve source4550b97's strict legacy Blueprint payload and read-only preflight. Ordinary missing/blocked refusal spends nothing; later throwing callbacks are ambiguous and do not have a global rollback/zero-loss guarantee.
+- **REQ-012**: Preserve native46 old IDs/paid history within source50; an installed46-to50 managed-definition update remains a separate fail-closed backup/hash migration, not a raw world rewrite.
+- **SEC-001**: These increments add no credential/provider/account changes, private paths in Git, generation charges or third-party implementation imports. Future permitted reuse follows ADR-0174 provenance/licence/notices before copying.
 - **CON-001**: T1 work must not modify, redeploy or restart the owner's installed Prism T0 instance/worlds/configuration. A separately coordinated reported T0 fix uses the existing stopped-instance/backup/update contract, never an agent-initiated game interruption.
-- **CON-002**: T1 development authorization is not T0 acceptance, a graphical pass, a T1 release or permission to start T2 production.
+- **CON-002**: Development through T15 is separately authorized by ADR-0173; it is not T0 acceptance, a graphical pass, a T1 release or permission to deploy later-tier production.
 - **CON-003**: All versions stay in `gradle.properties`; common remains loader-neutral; existing processing, transaction, storage, grid and quest engines remain the authorities.
 - **CON-004**: Use isolated dependent branches and one integrated build/cache owner. Player gameplay has resource priority; no user process is stopped.
+- **CON-005**: Only2a93 owns the current426 execution window. Publish/Sync coherent corrective source only after active stages/locks close and parent serialization permits it; documentation work has no execution or publication grant.
 - **GUD-001**: Run focused changed-contract/data/quest proofs and reuse unchanged native mechanisms; add runtime work only for a concrete changed assumption.
 - **PAT-001**: A line lists stable source IDs and dependencies; quantities, conditions, ticks, energy, catalysts and side streams are projected from the live catalogues.
 
@@ -99,10 +111,27 @@ the later two component routes, native FTB replacement, human play or full T1.
 ADR-0172 selects the first follow-up. Source-only checkpoint2f4eee1 adds the two
 ordinary Assembler component routes on qualified base523b3ab, with exact material
 equivalence and shared timing/FU contracts. It is published to its isolated branch
-but has no new Java/writer/runtime pass; its next execution window follows the
-urgent native-FTB T0 blocker. Parent verifies the retained first-factory base's
+but has no new Java/writer/runtime pass recorded here. Its integrated426
+qualification is now assigned only to2a93 under the new explicit lease.
+Parent verifies the retained first-factory base's
 13closed receipts/29native outcomes/58raw hashes/five normal output identities
 without replaying those JVM stages. Preserve the real reds/interruption.
+
+### Implementation Phase 5
+
+- **GOAL-005**: Compose the three authored seams, preserve the delivered T0 game and obtain actual fixed-source qualification without changing execution inputs underneath the owner.
+
+| Task | Description | Completed | Date |
+|------|-------------|-----------|------|
+| TASK-013 | Normally integrate pressure541cf6c9, Blueprint4550b975 and corrected baseline Wire Mill3a79a1f3 on native b38; preserve all ancestors, source ownership and both deltas in shared `VerifyAtlas`/`VerifyRecipes`. Record source42654eb and exact861-key locale union, with only the authorized38-word T1 Assembler lesson changed. Depends on TASK-006 and TASK-012. | Yes; source/static only, parent-published426 | 2026-10-21 |
+| TASK-014 | Normally merge final T0 delivery root104de7bb after426 atab4d7bc and synchronize map/changelog/README/handoff/plan under the parent's explicit bounded delegation. Preserve dd0/JAR29bc/ZIP79ce, false acceptance flags and active sole2a93 ownership; keep ADR-0175 proposed and application bytes unchanged. Depends on TASK-013. | Yes; documentation only, local review pending | 2026-10-21 |
+| TASK-015 | Only2a93 executes fixed426 under `integrated-family-qualification-20261021`: common/Forge and the deduplicated affected Recipe/Atlas/Persistence/T1/Blueprint/Planner/Band/Machine/Inspection/UI/Sustainability contracts; NORMAL Guidance/Economy/T1 writers and CheckOnly. Retain source-bound raw receipts and reds. Admit the author-owned representative Blueprint Forge probe only when ready and parent-serialized after active stages/locks close; use real capture/stamp/load/failure evidence, not old item existence. Reuse successful unchanged common compilation for a probe-only Forge delta. Depends on TASK-013 and the explicitly granted exclusive window. | No; active ownership, results pending | |
+
+No completed source/documentation task marks TASK-015 passed. The integration
+worker does not run Java, touch the PC or publish competing changes. The parent
+reviews local documentation and serializes publication; actual execution failures
+return to their owning author as coherent source corrections, never manual
+canonical JSON or speculative integrator code.
 
 ## 3. Alternatives
 
@@ -114,9 +143,9 @@ without replaying those JVM stages. Preserve the real reds/interruption.
 
 ## 4. Dependencies
 
-- **DEP-001**: Exact a64d44f T0 experience source and its preserved F runtime remain the compatibility baseline; PR56 is still a separate draft at task intake.
+- **DEP-001**: Preserve original a64/F intake evidence and the current dd0/JAR29bc/ZIP79ce existing-game delivery. Source426 is a separate development composition, not its installed update.
 - **DEP-002**: Existing `ProcessGraph`, `T1Recipes`, Bootstrap/Renewable catalogues, rated Matrix items, `FluxTier`, `AuthorityAdapters` and sustainability/reserve mechanisms supply source data.
-- **DEP-003**: Existing Quest Book/Heracles shared teaching and player/Overworld claim authority remain the runtime presentation/state mechanism.
+- **DEP-003**: Native FTB is the current player framework under ADR-0171. Stable catalogue/teaching and legacy `QuestProgress` paid history remain inputs to native progress/individual receipts and the legacy minting fence, not a second reward authority.
 - **DEP-004**: Existing SSH/personal Git/JDK/Gradle setup is reused; heavy execution requires fresh headroom and must not interrupt the player's game.
 
 ## 5. Files
@@ -127,6 +156,9 @@ without replaying those JVM stages. Preserve the real reds/interruption.
 - **FILE-004**: `docs/architecture/reusable-systems.md`, `docs/tiers/t1-development-map.md` and `docs/tiers/t1-quests.md`.
 - **FILE-005**: AGENTS/README/changelog/build-out/ADRs/route-map and active handoffs, serialized by the coordinator.
 - **FILE-006**: `docs/design/t1-external-references.md` stores source/licence-pinned conceptual precedent, not accepted recipe quantities or imported implementation.
+- **FILE-007**: Pressure541 spans `recipe/ProcessRecipe`, `ProcessLookup`, `AtlasLogic`, `sustainability/AuthorityAdapters`, inspection snapshot/codec/projector, client tooltip, Forge JEI and affected contracts; reuse the existing evaluator.
+- **FILE-008**: Blueprint4550 spans `item/BlueprintLogic`, `BlueprintItem`, `BlueprintToolItem`, `VerifyBlueprint` and14 feedback keys; the pending representative Forge probe remains author-owned/unready.
+- **FILE-009**: Wire Mill3a spans `ProcessGraph`, `T1Progression`, one existing locale value and `VerifyRecipes`/`VerifyAtlas`/`VerifyPersistence`/`VerifyT1Progression`/`VerifyT1Teaching`.
 
 ## 6. Testing
 
@@ -136,6 +168,10 @@ without replaying those JVM stages. Preserve the real reds/interruption.
 - **TEST-004**: Shared native/Heracles teaching, complete live recipe selection and quantities, source/localization validity and no second authority.
 - **TEST-005**: Normal independent writer/CheckOnly determinism, source/hash provenance, proof reuse and no private/generated scratch artifacts committed.
 - **TEST-006**: Supported common/Forge compilation, affected focused suites, documentation links and existing platform/backend boundary; no new native/client pass inferred.
+- **TEST-007**: Pressure absence versus zero, finite optimum/positive half-width, shared conditions/projections, schema2 and strict schema1 compatibility, malformed/partial/unknown-version rejection.
+- **TEST-008**: Strict Blueprint bounds/identities/facings/duplicates, loaded/permission refusal, full material shortfall, exact main/offhand settlement and explicit false/throwing placement boundaries; no global rollback assertion.
+- **TEST-009**: Baseline F1 fourth operand, ordinary F1 output and unchanged bill/timing/FU; optional `wire_forming` selects four live routes after assembly without entering first-F2 dependencies.
+- **TEST-010**: Locale861 unique keys:844 unchanged original values, one authorized38-word T1 lesson and unchanged two pressure/14 Blueprint additions; preserve old quest IDs/rewards/paid state.
 
 ## 7. Risks & Assumptions
 
@@ -143,6 +179,7 @@ without replaying those JVM stages. Preserve the real reds/interruption.
 - **RISK-002**: The current sustainability ledger is T0-scoped; do not silently declare all T1 closure from a repeatable recipe or sufficient construction witness.
 - **RISK-003**: The owner may be actively playing; memory/CPU contention or instance mutation must not disturb the test. Defer heavy execution or use hosted checks when fresh headroom is insufficient.
 - **RISK-004**: The T0 parent remains under review; preserve isolated ancestry and source identity rather than silently basing on old main or overwriting the parent.
+- **RISK-005**: Blueprint placement callbacks can mutate before throwing; source4550 does not establish global world rollback, crash atomicity or universal zero loss. The old native item-existence smoke cannot close this boundary.
 - **ASSUMPTION-001**: The latest instruction authorizes T1 development now, not a completed T0 campaign, accepted graphical gate or public release.
 - **ASSUMPTION-002**: Existing recipe quantities and the installed T0 candidate remain stable unless a concrete tightly coupled defect requires a documented decision.
 - **ASSUMPTION-003**: The owner-authorized longitudinal start is an intent/permission record until actual observations arrive; no client, save-copy or completed-campaign result is invented.
@@ -157,3 +194,6 @@ without replaying those JVM stages. Preserve the real reds/interruption.
 - [Validation strategy](../docs/testing/test-strategy.md)
 - [SSH/Prism workflow](../docs/operations/ssh-prism-workflow.md)
 - [Installed T0 identity](../docs/testing/t0-experience-prism-deployment.md)
+- [Current native FTB existing-game delivery](../docs/testing/t0-ftb-native-qualification.md)
+- [Integrated development-source qualification](../docs/testing/latest-validation.md#integrated-development-source)
+- [Proposed pressure engineering record](../docs/DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)

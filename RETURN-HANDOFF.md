@@ -11,16 +11,27 @@ Do not advance the old and new copies in parallel.
 | --- | --- |
 | COMPLETED | Native FTB qualified/installed; actual clone load/save, metadata-only retired-ID audit and final pristine world/options copy verified |
 | BLOCKED | None for bounded player handover |
-| NOT EXECUTED | Actual player login/GUI/JEI/rewards/campaign; new tier-source compilation/writers/native, release/main |
+| NOT EXECUTED | Actual player login/GUI/JEI/rewards/campaign, release/main; no new-source qualification pass supplied here |
 | NEEDS HUMAN VALIDATION | Resumed play and native player interactions; T0 is not accepted/frozen |
 | NEEDS MY DECISION | None from owner |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
 | COST / BILLING RISK | None new |
 | DEPLOYED STATE | New FTB instance dd0/29bc/79ce with same-world copy; original/backup preserved, later-tier source not deployed |
 
-All PC leases are returned. Existing source checkpoints3a79/541/4550 and local
-integration9f are unqualified development, not updates to this instance.
-Read [the active handoff](.agent/handoff.md) for evidence and next ownership.
+All FTB leases are returned. The parent publishes source42654eb, which normally
+merges pressure541, Blueprint4550 and corrected F1 Wire Mill3a79. The NEW active
+`integrated-family-qualification-20261021` PC/cache lease belongs only to2a93 on
+fixed426; parent/other workers have no PC access and execution results are pending.
+Localab4d7bc merges final root104de7b; its documentation stays unpublished and
+does not Sync or mutate the frozen execution surface. These sources are not
+updates to the T0 instance or full-T1 acceptance. The parent
+delegates only the bounded documentation synchronization; proposed ADR-0175 is
+an unqualified engineering record, not a new product decision.
+Read [the active handoff](.agent/handoff.md#integrated-development-source) and
+[pending source qualification](docs/testing/latest-validation.md#integrated-development-source)
+for evidence and next ownership. Blueprint missing/blocked preflight spends
+nothing, but later throwing placement callbacks do not have a global rollback
+guarantee. The old item-existence smoke is not capture/stamp interaction proof.
 The historical snapshots below retain their original results, not current holds.
 
 **Latest:** ADR-0174 fixes basic families fromT1 and exponential meaningful
