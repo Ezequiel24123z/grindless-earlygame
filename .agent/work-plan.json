@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 21,
+  "plan_revision": 22,
   "updated": "2026-10-21",
   "phase": "owner_authorized_parallel_T1_first_factory_development_T0_testing_untouched",
   "product_gate": "T1_DEVELOPMENT_OPEN_NOT_T0_ACCEPTANCE_OR_RELEASE",
@@ -12,7 +12,8 @@
     "policy": ["ADR-0168", "ADR-0169"],
     "plan": "plan/feature-t1-first-factory-1.md",
     "owner_explicitly_authorized_utc_date": "2026-10-21",
-    "status": "source_integrated_guarded_validation_and_QA_repair_in_progress",
+    "development_authorized": true,
+    "status": "source_integrated_static_QA_closed_guarded_validation_continuing",
     "baseline": "a64d44f9ee6da1fe00ed9215eb05b4aad4132f64",
     "baseline_branch": "ezequiel24123z-integracion-experiencia-t0",
     "preserved_parent_PR": "https://github.com/Ezequiel24123z/grindless-earlygame/pull/56",
@@ -29,6 +30,7 @@
     "first_core_scope": "line_API_and_existing_FluxCell_Atlas_catalogue_projection_JSON_gameplay_unchanged",
     "first_core_validation": "source_links_and_diff_only_Java_export_NOT_EXECUTED",
     "integrated_source": "c7278940d4b42999f1f128e560095fe3fb1329dc",
+    "current_execution_source": "74ccb36be90d12717a862f1a3d09fc201dd60f0e",
     "integration_branch": "ezequiel24123z-t1-primera-fabrica",
     "quest_source_commits": ["7186e128c749586ec5ebd10730e3c330cfc07831", "9f47c94b37bb8f9b6404c79afad44f91981808da"],
     "source_scope": "live_lines_and_T1_profile_export_50_tasks_32_T0_identical_14_old_T1_plus4_rewardless_lessons_old46_IDs_26_rewards_ledger_ordinals_preserved",
@@ -41,8 +43,18 @@
       "finding": "P1_VerifyT1Progression121_133_135_physical_comparisons_include_ENERGY_breaking_verifier_and_writer",
       "repair_owner": "a94c3085-8e68-4d29-b090-5625497d0fa9",
       "required_repair": "exclude_only_ENERGY_from_physical_comparisons_assert_authoritative_FU_separately_keep_energy_in_routes_reports",
+      "resolution": "CLOSED_static74ccb36_physicalInputs_filters_only_ENERGY_separate_authority_FU_assertions_no_Report_or_Route_mutation",
       "hash_fix": "61424ee_snapshot_model_raw_sidecar_regression_confirmed_static_not_execution",
       "execution_result": "awaiting_exact_receipt_not_a_pass"
+    },
+    "execution_progress": {
+      "source": "74ccb36be90d12717a862f1a3d09fc201dd60f0e",
+      "run": "t1-74ccb36-compile-20261021T045400607",
+      "reported_Gradle_common_Forge_classpath_backend_exit": 0,
+      "helper_observer": "RED_incidental_PS_output_mixed_with_integer_after_native_success_before_javac_selectors",
+      "closed_receipt_stdout_stderr": "preserved_by_execution_owner_independent_bytes_pending",
+      "next": "repair_private_observer_continue_only_remaining_javac_selectors_export_no_success_replay",
+      "final_qualification": "not_yet_accepted"
     },
     "T0_recipe_claim_save_or_kit_change": false,
     "installed_runtime_unchanged": "298988d500dccf0823fb2eab52fbe57bff8fe831",
@@ -135,6 +147,7 @@
     "longitudinal_save_started": false,
     "human_accepted": false,
     "t1_allowed": false,
+    "t1_allowed_scope": "release_activation_only_development_separately_authorized_by_ADR0168",
     "reference_save": null,
     "next_tier_rule": "Ready and published T0 RC plus actual owner longitudinal-save start; no whole-playthrough requirement unless a concrete technical dependency prevents progress"
   },

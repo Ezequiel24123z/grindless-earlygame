@@ -1,4 +1,24 @@
-# Current T0 rework validation
+# Current T0/T1 validation
+
+## T1 first-factory — source74, execution in progress
+
+ADR-0168/0169 open development while preserving installed T0 F. Integrated
+sourcec727894 is followed by `74ccb36be90d12717a862f1a3d09fc201dd60f0e`:
+independent static QA closes the verifier's physical-input/ENERGY comparison
+defect, retaining separate authoritative FU assertions and all report energy.
+No JVM red/green is claimed for that source-only finding.
+
+The sole guarded execution owner reports common/Forge/classpath/Heracles-backend
+Gradle process exit0 on74. This is not a server boot. The private helper then
+fails its observation step because incidental PowerShell output is mixed into
+an integer return, before javac/selectors. Closed receipt/stdout/stderr survive
+as run `t1-74ccb36-compile-20261021T045400607`; independent byte/receipt verification
+is pending. Continue only the remaining stages after repairing that observer;
+do not replay the successful Gradle/backend process to improve its wrapper.
+
+Affected checks, normal T1 generation/CheckOnly and final source/artifact/hash
+aggregation still require their actual receipt. No new completed T1 qualification,
+Prism deployment, native/client/save migration or human acceptance is inferred.
 
 ## Exact-F engineering delivery and actual hosted completion
 

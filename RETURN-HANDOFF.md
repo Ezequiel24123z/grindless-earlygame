@@ -10,8 +10,8 @@ actual observed bounds; intent to test is not a completed pass.
 
 | Category | Current T1 increment |
 | --- | --- |
-| COMPLETED | Handbook/line map plus sourcec727894 integrated: live line/export/model selectors and50 tasks/18 specific T1 teachings/four reward-free lessons, preserving T0/all old IDs/rewards. Static QA is complete; the read-only writer limitation was recovered without relaunch. |
-| BLOCKED | One source-only verifier ENERGY/physical-input comparison defect; core owns its repair. The independent T0 client/human gate remains unchanged. |
+| COMPLETED | Handbook/line map plus sourcec727/repair74: live line/export/model selectors and50 tasks/18 T1 teachings/four reward-free lessons, preserving T0/all old IDs/rewards. Static QA P1 closed on74; the read-only writer limitation was recovered. |
+| BLOCKED | Private helper observer fails after reported compile/backend exit0, before selectors. Core preserves raw proof and continues remaining stages without replay; final receipts not yet accepted. T0 client/human gate unchanged. |
 | NOT EXECUTED | No new compilation/export pass accepted before exact receipts. Package/deploy/server/native/client/real saved-world migration, release and T0 acceptance are outside the T1 build-only lease. |
 | NEEDS HUMAN VALIDATION | Owner's T0 feedback and later T1 factory/pacing/clarity review; no pass inferred. |
 | NEEDS MY DECISION | None for the assigned first-factory development. Material recipe/architecture/dependency changes still escalate. |

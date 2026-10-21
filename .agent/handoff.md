@@ -47,17 +47,24 @@ normal publication and forward Sync only after active stages/locks finish.
 No package, server/native smoke, Prism action, client/world or generation is allowed.
 
 Static QA70185190 reviewed the final source: normalized committed `snapshotHash`
-and raw ignored provenance are correctly separated. One P1 remains for the core
-to repair: `VerifyT1Progression` physical input comparisons include ENERGY, so
-the verifier/export cannot pass as written. Exclude only that pseudo-input from
-physical comparisons and assert authoritative FU separately; do not remove energy
-from routes/reports. This is a source finding, not an observed JVM failure/pass.
-Execution receipts have not returned; no new executable claim is accepted yet.
+and raw ignored provenance are correctly separated. Its one physical/ENERGY
+verifier P1 is now **CLOSED by static recheck** on74ccb36: exclude only that
+pseudo-input from physical comparisons, assert authoritative FU separately and
+retain route/report energy without mutation. It was repaired before the owner's
+PC JVM stages; no test red/green is invented for the source-only finding.
+
+Current execution source is `74ccb36be90d12717a862f1a3d09fc201dd60f0e`.
+The core reports common/Forge/classpath/backend Gradle exit0, followed by a private
+helper observation failure (incidental output mixed with its integer return)
+before javac/selectors. Closed raws/receipt are retained; independent bytes are
+pending. Repair the observer and continue remaining stages only, no successful
+Gradle/backend replay. Read [the ledger](../docs/testing/latest-validation.md).
+No final executable qualification is accepted before exact receipts return.
 
 | Category | Current T1 authorization checkpoint |
 | --- | --- |
-| COMPLETED | ADR-0168/0169, handbook/line map and integrated sourcec727894: live line/export/model API,50 tasks/18 specific T1 teachings/four reward-free lessons with T0/old IDs/rewards preserved; independent static review complete. |
-| BLOCKED | One source-only P1 in verifier physical/ENERGY comparisons; the core execution owner repairs it. No owner decision needed. Read-only documentation worker limitation was recovered by coordinator documentation. |
+| COMPLETED | ADR-0168/0169, handbook/line map and integrated sourcec727/repair74: live line/export/model API,50 tasks/18 T1 teachings/four reward-free lessons with T0/old IDs/rewards preserved; independent static QA finding closed. |
+| BLOCKED | Private helper observation failed after reported Gradle/backend0, before selectors. Core repairs only the observer/remaining stages; closed bytes await verification. No owner decision needed. |
 | NOT EXECUTED | No accepted new Java/export pass until exact receipt returns. Package, deployment, server/native/client campaign, real saved-world migration, T0 acceptance and T1 release are outside this lease. |
 | NEEDS HUMAN VALIDATION | Owner's separate T0 play feedback; future T1 clarity/pacing/appearance/audio acceptance. |
 | NEEDS MY DECISION | None within the approved first-factory scope. |

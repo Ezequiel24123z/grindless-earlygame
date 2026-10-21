@@ -35,9 +35,10 @@ Production contracts, differentiated T1 guidance and source-derived graphs proce
 in parallel; no replacement execution engine or arbitrary balance inflation.
 The source is integrated atc727894 on the separate first-factory branch; next
 qualify common/Forge/backend, affected selectors and normal export/CheckOnly under
-the single core-owner lease. Repair the independent static verifier ENERGY/
-physical-component comparison finding without dropping energy from the model.
-Keep results pending until the source-bound receipt exists.
+the single core-owner lease. Independent static QA closes the verifier ENERGY/
+physical-component correction on74ccb36 without dropping report energy.
+Keep actual qualification pending until source-bound receipts are verified;
+the private observer failure does not justify replaying successful Gradle work.
 
 The independent T0 task remains: close the required controlled **graphical** smoke of the
 [installed experience candidate F](testing/t0-experience-prism-deployment.md).

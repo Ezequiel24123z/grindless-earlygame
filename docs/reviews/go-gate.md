@@ -6,6 +6,13 @@ and PA-0007 are the current owner-directed delivery policy. `1389ebb` is not yet
 longitudinal-play release. Reviewed technical units may be committed and integrated,
 but the current draft is not release-ready or merge-ready merely because its CI passes.
 
+**Later owner direction — parallel T1 development (ADR-0168/0169):** on2026-10-21
+the owner explicitly requests T1 code and reusable-system/line documentation while
+testing the T0 dev build. [The first-factory plan](../../plan/feature-t1-first-factory-1.md)
+is authorized now on isolated source/build branches. This supersedes the older
+development hold below, not T0 acceptance, missing client/save proof, release or
+merge gates. Keep the installed T0 game/worlds unchanged; no T1 deployment follows.
+
 **Playable-release conditions remain open:** implemented and qualified Superflat entry,
 Overworld compatibility, curated locked/configured pack, coherent questbook, real art and
 sound passes with redistribution provenance, applicable installation/startup/client QA,
@@ -29,8 +36,9 @@ publication, T0 acceptance/freeze and T1 activation remain separate decisions.
 physical five-Matrix craft and longitudinal observations are not fictional pre-release
 passes and are no longer prerequisites for the owner to receive that first playable RC.
 After the RC is ready/published and the owner has begun its reference save, T1 may proceed
-alongside feedback unless a concrete technical dependency blocks it. Neither event has
-happened. Later updates must prove applicable compatibility/migrations before publication.
+alongside feedback unless a concrete technical dependency blocks it. Those engineering
+receipts do not establish either event; the later ADR-0168 authorization independently
+opens development only. Later updates must prove applicable compatibility/migrations before publication.
 Do not infer `human_accepted` from `technically_verified`, `packaged` or `release_ready`.
 
 The foundation decision below remains historical; its old ordering does not override
@@ -66,7 +74,7 @@ the ledger identifies their exact revisions and preserves a later intermittent P
 The post-Planner-fix PR CI at `e2dfc2c` is also fully green (verify and six smoke shards).
 CI state never replaces Windows or human acceptance.
 
-**Exact next task:** perform and record
+**Historical foundation next task:** perform and record
 [the no-command survival and client checklist](../testing/t0-survival-acceptance.md)
 using the validated jar. Back up any existing world used for migration checks. The historical
 compact format never recorded empty slots; the new format prevents future loss but cannot

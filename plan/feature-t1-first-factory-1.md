@@ -72,9 +72,11 @@ Source integration is published as `c7278940d4b42999f1f128e560095fe3fb1329dc`.
 TASK-007 is in progress under one guarded build-only lease to the core owner,
 not a new Prism/package/server/native permission. Independent static QA found
 one verifier defect: physical-component comparisons include the ENERGY input.
-The core owner repairs those comparisons while retaining separate authoritative
-FU assertions and all route/report energy. No executable pass is inferred before
-the exact receipt; model normalization/raw sidecar separation is statically reviewed.
+The correction74ccb36 is closed by narrow static recheck, with separate authoritative
+FU assertions and all route/report energy retained. Gradle/backend exit0 is reported,
+then a private observer fails before selectors; preserve raws and continue remaining
+stages without replay. No final executable qualification is inferred before exact
+receipts; model normalization/raw sidecar separation is statically reviewed.
 
 ## 3. Alternatives
 

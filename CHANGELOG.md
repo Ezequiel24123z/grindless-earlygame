@@ -40,6 +40,12 @@ entries below reference those records by id.
   optional Factory World from the physical F2 prerequisite. Common/Forge,
   backend, affected checks and normal export require the separate exact receipt;
   source review is not an executable, player or renewable-establishment pass.
+- **Keep T1 execution and gate boundaries honest.** Clarify the later development
+  authorization in the gate/validation strategy while retaining T0 client/release
+  requirements and the bounded existing port proof. Record the statically repaired
+  ENERGY verifier defect separately from the private helper observation failure
+  after reported Gradle/backend success; preserve closed raws and continue only
+  unexecuted stages rather than replaying successful work.
 - **Deploy the exact native-qualified experience candidate F to Prism Dev.**
   Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
   Deploy/Inspect/repeat pass with zero downloads. Verify six original files,
