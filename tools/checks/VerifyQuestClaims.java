@@ -496,11 +496,25 @@ public final class VerifyQuestClaims {
         QuestProgress ledger = new QuestProgress();
         UUID first = UUID.randomUUID();
         UUID second = UUID.randomUUID();
+        Set<String> paid = Set.of("multitool", "quern");
         ledger.claim(first, "multitool");
         ledger.claim(first, "quern");
         CompoundTag original = ledger.save(new CompoundTag());
         equal("original save key is unchanged", "grindless_quest_progress", QuestProgress.KEY);
-        equal("original save has only the Players root", Set.of("Players"), original.getAllKeys());
+        equal("saved progress has only paid receipts and native authority roots",
+                Set.of("Players", "NativeClaims"), original.getAllKeys());
+        equal("unmigrated players have an explicit empty native authority list", new ListTag(),
+                original.get("NativeClaims"));
+        CompoundTag legacyOnly = original.copy();
+        legacyOnly.remove("NativeClaims");
+        equal("legacy load fixture retains the historical Players-only shape", Set.of("Players"),
+                legacyOnly.getAllKeys());
+        QuestProgress legacy = QuestProgress.load(legacyOnly.copy());
+        equal("Players-only saves retain every historical paid receipt", paid, legacy.legacyClaims(first));
+        equal("Players-only saves do not invent native reward authority", false, legacy.usesNativeClaims(first));
+        equal("Players-only reload cannot reopen an already-paid claim", false, legacy.claim(first, "multitool"));
+        equal("Players-only saves upgrade only by adding an empty native authority list",
+                original, legacy.save(new CompoundTag()));
         QuestProgress restored = QuestProgress.load(original.copy());
         for (int reopen = 0; reopen < 3; reopen++) {
             var projected = QuestProjection.claimed(restored.claimed(first));
@@ -513,6 +527,33 @@ public final class VerifyQuestClaims {
             equal("projection never mutates legacy save", original, restored.save(new CompoundTag()));
             restored = QuestProgress.load(restored.save(new CompoundTag()));
         }
+        restored.useNativeClaims(first);
+        CompoundTag nativeOriginal = restored.save(new CompoundTag());
+        ListTag nativePlayers = new ListTag();
+        nativePlayers.add(StringTag.valueOf(first.toString()));
+        equal("migrated saves retain only paid receipts and native authority roots",
+                Set.of("Players", "NativeClaims"), nativeOriginal.getAllKeys());
+        equal("native authority persists exactly the migrated player's UUID", nativePlayers,
+                nativeOriginal.get("NativeClaims"));
+        equal("migration leaves the complete historical receipt NBT unchanged",
+                original.get("Players"), nativeOriginal.get("Players"));
+        restored.updateNativeCompleted(first, Set.of("crank"));
+        equal("compatibility gates can observe native-only completion", Set.of("multitool", "quern", "crank"),
+                restored.claimed(first));
+        equal("native-only completion never enters the paid-receipt projection", false,
+                QuestProjection.claimed(restored.legacyClaims(first)).get("grindless_crank"));
+        equal("native observation and receipt projection never mutate the complete save",
+                nativeOriginal, restored.save(new CompoundTag()));
+        equal("projection and saving retain the live native observation", Set.of("multitool", "quern", "crank"),
+                restored.claimed(first));
+        restored = QuestProgress.load(restored.save(new CompoundTag()));
+        equal("native authority survives after transient observations are discarded", true,
+                restored.usesNativeClaims(first));
+        equal("reloaded native authority remains player scoped", false, restored.usesNativeClaims(second));
+        equal("native reload retains only historical paid receipts", paid, restored.legacyClaims(first));
+        equal("native completion observations are not restored from saved data", paid, restored.claimed(first));
+        equal("native reload preserves the complete receipt and authority save",
+                nativeOriginal, restored.save(new CompoundTag()));
     }
 
     private static Function<List<ItemStack>, Optional<Runnable>> capture(List<ItemStack> target) {
