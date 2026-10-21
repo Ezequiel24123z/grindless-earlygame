@@ -1,6 +1,73 @@
 # Return handoff
 
-## Current owner-directed T1 development
+## Current blocker — native FTB Quests, not a custom guide
+
+The owner cannot continue with the delivered questbook. ADR-0171 supersedes the
+old custom/native-Heracles presentation: use supported native FTB Quests and short
+human goals, JEI for ordinary recipes, preserving actual progress/paid rewards.
+Backend, content and verification run in parallel; build/cache/deploy serialize.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Copy190a024 plus native-wording follow-ups authored; native ownership fence/source work and migration oracles prepared; played DevF world/ledger identified read-only |
+| BLOCKED | Actual diagnostic native graph/import/restart now passes; exact persistence-root test correction, final package and protected owner delivery remain |
+| NOT EXECUTED | Qualified FTB deployment, real world copy-upgrade, graphical FTB or acceptance pass |
+| NEEDS HUMAN VALIDATION | New native questbook and resumed play after delivery |
+| NEEDS MY DECISION | None for current assignments |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No paid generation or new service activation |
+| DEPLOYED STATE | DevF95bf unchanged; one current world/legacy ledger observed17:12:20Z; old preparation separate; only backendac503 owns the new qualification lease, not deployment/world writes |
+
+Read [the native qualification](docs/testing/t0-ftb-native-qualification.md):
+real registered Forge1099/seed56/second-process disk reopen58 with natural stops;
+standalone2352 and pack152 are distinct. No actual GUI/JEI, real player inventory
+delivery or reference-world migration pass is inferred. The diagnostic world
+must never become the player's reference save.
+
+Parallel T1 source2f4eee1 is public on its isolated component branch and includes
+qualified base523b3ab as ancestor; the new two-route data is not execution-qualified.
+The parent verifies the base's13closed receipts/58raw hashes/five outputs without
+replay. Research/map/ADR-0172 are durable; no T1 world/deployment action occurred.
+
+## Current owner loop — longitudinal T0 play and ongoing T1 development
+
+ADR-0170 records the direct owner instruction: begin the intended T0 game,
+develop/research/brainstorm T1 routes/machines/components/lines in parallel,
+fix reported play blockers first and polish T0 from the final conclusions.
+Intent is not a completed client/save/campaign or human-acceptance pass.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Durable loop/ownership established; preserved T1 source/bounded proof resumed under a new outcome assignment; source/reference research dispatched |
+| BLOCKED | None for source/research; actual heavy execution remains guarded and yields to gameplay |
+| NOT EXECUTED | Final normal canonical output qualification at this checkpoint, new observed owner play/save results, T1 deployment/release or T0 acceptance |
+| NEEDS HUMAN VALIDATION | Owner's T0 feedback and final conclusions; real player observations are not inferred from intent |
+| NEEDS MY DECISION | None for assigned outcomes |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No new generation or paid-service allowance |
+| DEPLOYED STATE | Last verified installed F unchanged; no live stopped-state claim once the owner may be playing; no T1 deployment or world mutation |
+
+## Preserved readiness investigation — before ADR-0170
+
+The owner asks for [an evidence-based readiness diagnosis and corrective path](docs/testing/t0-longitudinal-readiness.md).
+The intended world is not merely disposable testing. Human acceptance is produced
+by the campaign, not demanded before it begins.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Fresh read-only installed F/95bf/3e5a confirmed; independent entry/pin QA finds real free-kit route/no initial functional blocker; save review finds unused vein-version pin and delivery review finds stale instructions |
+| BLOCKED | Actual client/start/save-reopen unobserved; no personal-PC Prism GUI exposed to the current local tools |
+| NOT EXECUTED | Client/world actions, copy-upgrade, code repair, RC publication or new deployment; T1 normal canonical output gates remain open |
+| NEEDS HUMAN VALIDATION | Controlled graphical observation, then real longitudinal feedback/acceptance |
+| NEEDS MY DECISION | None for the investigation; no required gate is silently waived |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | Approved graphical route or owner's controlled result; no credential value |
+| COST / BILLING RISK | No new generation, paid service or installation |
+| DEPLOYED STATE | F unchanged and stopped at16:30:22Z,0worlds/no client log/options observed; no instance/save mutation; T1 executor returned lease and is suspended |
+
+## Preserved owner-directed T1 development
+
+This earlier checkpoint is superseded operationally by the priority/lease return
+above, not relabeled as a completed T1 qualification.
 
 On2026-10-21 the owner explicitly opens T1 development while testing T0.
 [ADR-0168/0169](docs/DECISIONS.md#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game)
@@ -10,12 +77,12 @@ actual observed bounds; intent to test is not a completed pass.
 
 | Category | Current T1 increment |
 | --- | --- |
-| COMPLETED | Actual a64 experience baseline/T1 recipe/graph/quest seams inspected; isolated implementation ownership established and coordinator-written reusable-system handbook/line map delivered. The read-only writer produced no files/commit and was not relaunched. |
-| BLOCKED | None for T1 source work. Fresh execution capacity and the unchanged T0 human/client gate remain distinct. |
-| NOT EXECUTED | New T1 compilation/contracts/export/normal generation or native/client proof; no T1 package/deploy/release or T0 acceptance. |
+| COMPLETED | Handbook/line map plus sourcec727/repair74: live line/export/model selectors and50 tasks/18 T1 teachings/four reward-free lessons, preserving T0/all old IDs/rewards. Static QA P1 closed on74; the read-only writer limitation was recovered. |
+| BLOCKED | Private helper observer fails after reported compile/backend exit0, before selectors. Core preserves raw proof and continues remaining stages without replay; final receipts not yet accepted. T0 client/human gate unchanged. |
+| NOT EXECUTED | No new compilation/export pass accepted before exact receipts. Package/deploy/server/native/client/real saved-world migration, release and T0 acceptance are outside the T1 build-only lease. |
 | NEEDS HUMAN VALIDATION | Owner's T0 feedback and later T1 factory/pacing/clarity review; no pass inferred. |
 | NEEDS MY DECISION | None for the assigned first-factory development. Material recipe/architecture/dependency changes still escalate. |
-| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Reuse existing build/Git without changing identity or exposing credentials. |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new. Corea94 exclusively holds guarded Sync/JVM/cache for sourcec727/corrective descendants; no other PC executor and no identity/configuration change. |
 | COST / BILLING RISK | No generation requests, paid images, new models or billable service activation selected. |
 | DEPLOYED STATE | Leave F298988d/JAR95bf47c4/ZIP3e5ad1fb in Grindless-T0-Dev intact while the owner tests; new T1 source remains isolated and undeployed. |
 

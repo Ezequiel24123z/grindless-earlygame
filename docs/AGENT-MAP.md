@@ -28,11 +28,41 @@ The current installed qualified experience runtime is298988d/95bf47c4;
 747/c08 and1389/559 are historical. Read the
 [exact Prism handoff](testing/t0-experience-prism-deployment.md); it is still not
 a graphical/client or human longitudinal pass.
+The owner explicitly starts intended longitudinal T0 play under ADR-0170 while
+T1 research/development proceeds. The [readiness investigation](testing/t0-longitudinal-readiness.md)
+is preserved evidence, not a continuing disposable-only restriction. Read actual F evidence
+before inferring playability from a gate label. Preserve indexed inventories,
+per-player quest IDs, Matrix rating meaning and stopped-game copy-based updates.
+`VeinData.DerivationVersion` is currently not consumed by scanner/extractor
+generation; do not claim forward surveyed-vein stability if algorithm/material
+inputs change. The old T1 lease was returned; the new explicit
+`t1-owner-play-loop-20261021` assignment has one owner and fresh resource guards.
+Gameplay blockers take priority; never stop/restart the player's game or deploy
+T1 as part of independent development.
 The new [experience plan](../plan/feature-t0-experience-1.md) under ADR-0161
 explicitly opens bounded T0 quest/Guide/recovery economy/tank/interface/inspection/
 physical sound/visual work. It does not authorize a generic engine rewrite or
 unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
+
+**Current player blocker (ADR-0171):** native FTB Quests replaces the rejected
+custom/Heracles presentation. Backend/build/pin/native-definition/migration
+implementation is owned by ac50334e; copy190a024 is separate and preserves data.
+Preserve `QuestProgress` paid history, stable logical IDs and individual reward
+receipts; native completion must not masquerade as an already-paid reward.
+Legacy late packets cannot keep minting once native ownership is established.
+Do not satisfy old widget assertions by recreating that widget inside FTB.
+Replace superseded presentation/pin contracts with precise native equivalents;
+do not disable the closed authority/loader or deployment checks.
+The [native integration reference](design/ftb-questbook-integration.md) records
+exact official binary hashes, receipt APIs, Matrix adapter semantics and the
+required XMod Compat JEI provider. Source research is not a loader/client pass.
+
+ADR-0172's independent T1 source2f4eee1 owns only ordinary Assembler component
+data, T1 selection/provenance and affected recipe/Atlas/progression contracts.
+Manual casing seeds the first Assembler; automatic output follows it, not a
+forming-cycle dependency. No new engine/NBT/slots/T2 part is authorized.
+Its baseline523b proof is distinct from the new unexecuted two-route data.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
@@ -44,6 +74,16 @@ IDs/dependencies/roles; runtime teaching and export consume that shared selectio
 not copied bills. Flux Cell's Atlas catalogue projection must match its existing
 runtime JSON. Keep fuel routes explicitly distinct from Atlas entries and fail
 missing mandatory selections.
+The integrated T1 source checkpointc727894 contains50 tasks (32 unchanged T0,
+14 retained T1 and four reward-free lessons), with shared body/path/recipe
+selection in `QuestTeaching`/`QuestTeachingClient`. The native chapter label and
+Heracles subtitle mark development; ledger, rewards, old IDs and ordinals stay
+unchanged. `VerifyT1Teaching` covers live selector mutations/missing rows and
+retained46-to50 claim codecs; these fixtures are not real-world migration.
+Its data delta is27 T1 catalogue crafts/256 Atlas entries, not a changed Flux Cell
+JSON or new recipe executor. `sustainability/T1Sustainability` reuses existing
+adapters/audit/reserves for a bounded report; normalized snapshot identity belongs
+in committed models and raw source/class identity in ignored provenance.
 Do not alter the installed T0 candidate or treat an existing F1-rated prototype
 as accepted T1 merely because it is registered. Existing catalogues, native
 transactions, power and per-player claims remain the authorities.

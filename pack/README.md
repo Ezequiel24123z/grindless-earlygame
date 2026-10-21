@@ -20,21 +20,25 @@ ZIP import below remains available; development deployment is not an RC or save 
 
 ## Three profiles, one set of dependency pins
 
-The default **expanded** pack below keeps its existing convenience/performance role,
-pins and archive filename. Selecting nothing still means expanded.
+The default **expanded** pack keeps its convenience/performance role and archive
+filename. Selecting nothing still means expanded. ADR-0171 replaces the quest
+backend in every profile; old archives retain their original pins and provenance.
 The **preparation** profile contains Grindless, its required Architectury API, JEI for
-recipe-viewer observations, and the selected Heracles/ResourcefulLib quest interface.
+recipe-viewer observations, and native FTB Quests with FTB Library, FTB Teams and
+FTB XMod Compat. XMod Compat supplies the actual FTB-to-JEI recipe helper; the
+quest core alone has a no-op helper.
 It deliberately excludes the expanded convenience extras: these are not Grindless
 requirements or prerequisites for the standalone S2 evidence. The quest integration is
 optional for Grindless itself; all three pack profiles include the selected backend.
 
 The opt-in **playable** profile implements
 [ADR-0149](../docs/DECISIONS.md#adr-0149--add-a-restricted-playable-profile-with-explicit-public-overrides):
-exactly the four preparation dependencies plus ModernFix, FerriteCore and Embeddium.
-It omits Jade, Backpacks/Core and FTB Essentials/Chunks/Teams/Library only from this
-new selection. Those omissions are intentional scope/licence/progression choices,
+the preparation dependencies plus ModernFix, FerriteCore and Embeddium.
+It omits Jade, Backpacks/Core and FTB Essentials/Chunks. Library and Teams now
+support the native quest backend in every profile, rather than only the expanded
+map integration. Those omissions are intentional scope/licence/progression choices,
 not failed interoperability findings or permission to remove mods from an existing save.
-The historical expanded and preparation profiles remain available unchanged.
+No existing instance is silently updated to this different dependency set.
 
 All profiles select pins from `curseforge/manifest.json`; `profiles.json` selects project
 IDs, not alternative versions. `dependency-metadata.json` records independently checked
@@ -47,14 +51,14 @@ Minecraft/Forge/Architectury/JEI/quest-backend mismatch against `gradle.properti
 | --- | --- | --- |
 | Architectury API | Required Grindless platform runtime. | Required in all profiles. |
 | JEI | Shows vanilla data recipes plus Grindless's generated machine graph and the Research Terminal calibration. | Available immediately; it reveals recipes, not permissions. |
-| Heracles + ResourcefulLib | Existing quest UI with a catalogue-backed Grindless task/widget adapter. | Claims still require the physical Grindless book and server-validated evidence/prerequisites. Native rewards/autoclaim are disabled for generated Grindless quests. |
+| FTB Quests + Library + Teams + XMod Compat | Native quest graph, screens, tasks, item rewards, team progress and the actual JEI recipe helper. | Rewards have individual UUID receipts and no autoclaim. No held Grindless book, custom quest widget or custom recipe panel is required. |
 | Jade | In-world machine and block information. | Available immediately. |
 | Sophisticated Backpacks | Portable, upgradable inventory. | Available immediately. |
 | FTB Essentials | `/home`, `/sethome`, `/back`, and practical single-player/server utilities. | Available immediately. |
 | FTB Chunks + Teams + Library | Claims, map and team ownership. | Available immediately. |
 | ModernFix, FerriteCore, Embeddium | Memory and client-performance baseline. | Available immediately; Embeddium is client-side. |
 
-Jade, Backpacks/Core and the FTB integrations in this table belong only to expanded.
+Jade, Backpacks/Core, FTB Essentials and FTB Chunks belong only to expanded.
 The three performance dependencies belong to expanded and playable, not preparation.
 The first three rows belong to every profile. No file ID, version or hash is duplicated
 in the new selector.
@@ -136,46 +140,65 @@ only after the integrated audio/world source and package checkpoint are committe
    Forge versions and the supplied mod set. No custom gameplay configuration is needed:
    this package uses mod defaults, not personal settings or diagnostic overrides.
 3. Launch to the title screen. Confirm Minecraft/Forge versions and that Mods lists
-   Grindless, Architectury, JEI, Heracles and ResourcefulLib, plus the selected profile's
+   Grindless, Architectury, JEI, FTB Quests, FTB Library, FTB Teams and FTB XMod Compat, plus the selected profile's
    performance/convenience dependencies. Report any startup error, or recipe-viewer text that is
    missing/truncated, with the GUI scale. This is client preparation, not progression evidence.
-4. The following historical preparation route is not an official Superflat release
-   instruction. Only once the coordinator authorizes the candidate/route, create a **new ordinary
-   Overworld Survival** world, cheats **OFF**, bonus chest **OFF**, default generation and
-   structures enabled. Record its agreed creation settings. No save is bundled: no world
-   has been generated or played as part of this package, and no smoke/diagnostic save is reused.
+4. Do not replace an existing world to apply this fix. The coordinator owns backup,
+   stopped-instance migration and deployment of the retained campaign. A new campaign uses
+   the authorized Superflat-first settings in the root design/release documents, not an
+   invented diagnostic route. No save is bundled, and no smoke world is a campaign save.
 
 The previously delivered26c8/740 archives remain pre-S2 preparation; their provenance is
 not relabeled. Newly built preparation archives use their recorded source and remain
 **integration previews, not T0 acceptance**. S2 inventory/model engineering is established
-on debd, but changed-source reconciliation, final guidance and physical acceptance remain.
-Do not treat the optional two-iron Dynamo/Extractor as a guaranteed entry allocation.
-The eventual unique run uses only actual world supplies, no commands/creative/injection,
+on debd, but that historical proof does not qualify the changed native quest backend.
+The campaign uses only actual world supplies and its authorized finite starter rewards,
+no commands/creative/injection,
 and observes one physical craft of the first **five F1 Relay Matrices** plus the intended
-T1 handoff, stopping before T1 machinery. No final route is invented here.
+T1 handoff, stopping before T1 machinery.
 Authentic retained-world compatibility is a separate, provenance-known copy plus a full
 save/exit/process-restart/reopen; a fresh world or serializer test cannot substitute for it.
 
 ## Quest definitions and existing data
 
-The Grindless book opens its Heracles group when the compatible backend is present and
-ready; otherwise the registered legacy menu remains the fallback. The catalogue and
-per-player `grindless_quest_progress` ledger remain authoritative. Reconstructing the
-native projection never pays rewards again or shares individual progress through parties.
+Both the existing Grindless Quest Book and the retired Guide open the actual FTB
+Quests screen. FTB owns navigation, task detection, progress and reward collection.
+Ordinary notes are short translated descriptions; native item tasks retain the
+framework's recipe-viewer affordances. Matrix objectives use the supported item-filter
+adapter with the existing physical rating parser, not a custom task screen.
 
-Generated definitions and their ownership hashes are published together in the owned
-`config/heracles/quests/grindless.zip`. Existing foreign/modified definitions and colliding
-IDs are preserved and refused visibly, not overwritten. The unpublished development
-layout of loose JSON files is not automatically converted or deleted. Keep diagnostics
-and existing configuration intact; use a fresh isolated preview instance rather than
-attempting to repair a personal configuration by deleting files.
+The catalogue supplies 46 stable logical identities, their dependencies and unchanged
+reward quantities. Its two native chapters are installed append-only in
+`config/ftbquests/quests/chapters/`. Existing files are never replaced. Colliding IDs,
+incomplete owned chapters or altered loaded definitions stop admission visibly; keep
+the files and diagnostics for the operator instead of deleting or regenerating them.
+An FTB failure does not open a custom fallback in this pack.
+
+Before native claims are admitted, historical paid receipts from
+`grindless_quest_progress` are marked claimed through FTB's supported API, separately
+for each player UUID. Import delivers no items. Native completion is never treated as
+a paid receipt, and a login or retry never lowers newer native progress. Previously
+paid T1 receipts survive even without an old Relay claim, but do not themselves open
+the gated T1 chapter. The legacy grant engine is permanently fenced for migrated
+players; there is one active reward authority.
+
+FTB progress belongs to the player's current team; personal teams are the default,
+and party members share progress. Rewards remain individual (`team_reward=false`),
+so joining another player never inherits that player's paid receipts. The starter's
+eleven stacks are separate native item rewards, not one atomic inventory transaction.
+Make room before collecting them: FTB records a claim before giving its stack, and
+items that do not fit can drop on the ground. This is not the retired book's
+full-inventory refusal/retry guarantee. Book recovery never grants starter supplies.
+
+Native loader/adapter checks and migration fixtures are engineering evidence, not a
+client/render pass, a two-player campaign or retained-world compatibility acceptance.
 
 ## Dependency provenance
 
 The manifest makes the launcher download each upstream file; it does not vendor their jars in this
 repository. Exact CurseForge project/file identifiers are pinned in `curseforge/manifest.json`.
 Their licences remain theirs: Architectury API (LGPL-3.0-only), JEI (MIT),
-Heracles and ResourcefulLib (MIT), Jade (CC-BY-NC-SA-4.0), Sophisticated Backpacks and Core (ARR),
+FTB Quests/XMod Compat (ARR), Jade (CC-BY-NC-SA-4.0), Sophisticated Backpacks and Core (ARR),
 FTB Essentials/Chunks/Teams/Library (ARR), ModernFix (LGPL-3.0), FerriteCore (MIT), and Embeddium
 (LGPL-3.0). See the upstream project pages before redistributing a modified dependency.
 

@@ -25,6 +25,7 @@
 #     SMOKE_EXPECT       extended regexes, one per line, that must each appear in the log
 #     SMOKE_EXPECT_FILE  the same, read from a file
 #     SMOKE_LOG          where to write the server log
+#     SMOKE_QUEST_BACKEND absent, or ftb to include the pinned native quest dependencies
 
 param([Parameter(Mandatory = $true)][string]$Root)
 
@@ -212,9 +213,14 @@ function Get-SmokePackPlan([string]$primary, [string]$optional, [string]$worldPa
 
 $packPlan = Get-SmokePackPlan $datapack $optionalDatapack $world
 
+$prepareTask = ':forge:prepareSmokeServer'
+if ($env:SMOKE_QUEST_BACKEND) {
+    if ($env:SMOKE_QUEST_BACKEND -cne 'ftb') { throw 'Invalid SMOKE_QUEST_BACKEND: expected ftb or an absent value.' }
+    $prepareTask = ':forge:prepareQuestSmokeServer'
+}
 Push-Location $Root
 try {
-    & (Join-Path $Root 'gradlew.bat') --no-daemon --console=plain :forge:prepareSmokeServer
+    & (Join-Path $Root 'gradlew.bat') --no-daemon --console=plain $prepareTask
     if ($LASTEXITCODE -ne 0) {
         Write-Output 'SMOKE BOOT FAILED: could not prepare the production Forge server.'
         exit 1

@@ -15,9 +15,11 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.SimpleContainer;
@@ -31,6 +33,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -234,6 +237,7 @@ public final class VerifyPersistence {
 
     private static void questProgress() throws Exception {
         UUID player = UUID.randomUUID();
+        UUID otherPlayer = UUID.randomUUID();
         CompoundTag oldPlayer = new CompoundTag();
         oldPlayer.putString("Player", player.toString());
         ListTag oldTasks = new ListTag();
@@ -249,16 +253,27 @@ public final class VerifyPersistence {
         Set<String> previous = Set.of("multitool", "quern", "ceramics", "calibrate", "industrial_matrix");
         check("binary loading of a pre-starter save preserves every old stable quest id",
                 restored.claimed(player).equals(previous));
+        check("Players-only binary saves remain compatible without inventing native authority",
+                legacy.getAllKeys().equals(Set.of("Players"))
+                        && !restored.usesNativeClaims(player) && !restored.usesNativeClaims(otherPlayer));
         check("upgrading an old save does not automatically claim the new starter",
                 !restored.claimed(player).contains(QuestCatalogue.STARTER_SUPPLIES));
         check("the new explicit starter claim fits the existing ledger",
                 restored.claim(player, QuestCatalogue.STARTER_SUPPLIES));
+        Set<String> paid = new HashSet<>(previous);
+        paid.add(QuestCatalogue.STARTER_SUPPLIES);
         for (int reload = 0; reload < 3; reload++) {
             CompoundTag saved = restored.save(new CompoundTag());
-            check("quest progress keeps the original root and player/task schema",
-                    saved.getAllKeys().equals(Set.of("Players"))
-                            && saved.getList("Players", 10).getCompound(0).getAllKeys()
-                            .equals(Set.of("Player", "Tasks")));
+            check("quest progress adds only NativeClaims and keeps the original player/task schema",
+                    saved.getAllKeys().equals(Set.of("Players", "NativeClaims"))
+                            && saved.get("Players") instanceof ListTag savedPlayers
+                            && savedPlayers.getElementType() == Tag.TAG_COMPOUND && savedPlayers.size() == 1
+                            && savedPlayers.getCompound(0).getAllKeys().equals(Set.of("Player", "Tasks"))
+                            && savedPlayers.getCompound(0).getString("Player").equals(player.toString())
+                            && savedPlayers.getCompound(0).get("Tasks") instanceof ListTag savedTasks
+                            && savedTasks.getElementType() == Tag.TAG_STRING && savedTasks.size() == paid.size());
+            check("legacy saves persist an exactly empty native authority list",
+                    new ListTag().equals(saved.get("NativeClaims")));
             restored = QuestProgress.load(roundTrip(saved));
             check("binary save/reload retains old claims alongside starter supplies",
                     restored.claimed(player).containsAll(previous)
@@ -267,6 +282,59 @@ public final class VerifyPersistence {
                     !restored.claim(player, QuestCatalogue.STARTER_SUPPLIES));
             check("binary reconstruction never gives another player the starter claim",
                     restored.claimed(UUID.randomUUID()).isEmpty());
+            check("binary legacy reload retains exactly the paid receipts without native authority",
+                    restored.legacyClaims(player).equals(paid)
+                            && !restored.usesNativeClaims(player) && !restored.usesNativeClaims(otherPlayer));
+        }
+        CompoundTag paidSave = restored.save(new CompoundTag());
+        restored.useNativeClaims(player);
+        restored.useNativeClaims(player);
+        ListTag nativePlayers = new ListTag();
+        nativePlayers.add(StringTag.valueOf(player.toString()));
+        CompoundTag nativeSave = restored.save(new CompoundTag());
+        for (int reload = 0; reload < 3; reload++) {
+            check("native authority refuses a conflicting unpaid known legacy claim",
+                    QuestCatalogue.byId("crank") != null && !restored.legacyClaims(player).contains("crank")
+                            && !restored.claim(player, "crank"));
+            restored.updateNativeCompleted(player, Set.of("crank"));
+            check("native completion opens compatibility gates without becoming a paid receipt",
+                    restored.claimed(player).contains("crank") && restored.legacyClaims(player).equals(paid));
+            CompoundTag saved = restored.save(new CompoundTag());
+            CompoundTag persisted = roundTrip(saved);
+            check("binary native saves keep exactly the two ledger roots and the migrated UUID marker",
+                    persisted.getAllKeys().equals(Set.of("Players", "NativeClaims"))
+                            && nativePlayers.equals(persisted.get("NativeClaims")));
+            check("migration retains the original paid player/task NBT unchanged",
+                    paidSave.get("Players").equals(persisted.get("Players")));
+            check("native observations never change the full persisted reward ledger",
+                    saved.equals(nativeSave) && persisted.equals(saved));
+            restored = QuestProgress.load(persisted);
+            check("binary reload preserves native authority for only the migrated UUID",
+                    restored.usesNativeClaims(player) && !restored.usesNativeClaims(otherPlayer));
+            check("binary reload retains old receipts and starter but discards native observations",
+                    restored.legacyClaims(player).equals(paid) && restored.claimed(player).equals(paid)
+                            && !restored.claim(player, QuestCatalogue.STARTER_SUPPLIES));
+            check("binary native reconstruction never gives another UUID receipts or completion",
+                    restored.legacyClaims(otherPlayer).isEmpty() && restored.claimed(otherPlayer).isEmpty());
+        }
+        ListTag wrongElement = new ListTag();
+        wrongElement.add(IntTag.valueOf(1));
+        ListTag wrongPlayer = nativePlayers.copy();
+        wrongPlayer.add(StringTag.valueOf("not-a-player"));
+        List<Tag> malformedMarkers = List.of(StringTag.valueOf(player.toString()), new CompoundTag(),
+                wrongElement, wrongPlayer);
+        for (int corruption = 0; corruption < malformedMarkers.size(); corruption++) {
+            CompoundTag corrupt = nativeSave.copy();
+            corrupt.put("NativeClaims", malformedMarkers.get(corruption).copy());
+            CompoundTag persisted = roundTrip(corrupt);
+            boolean rejected = false;
+            try {
+                QuestProgress.load(persisted);
+            } catch (IllegalArgumentException expected) {
+                rejected = true;
+            }
+            check("malformed NativeClaims case " + corruption + " fails closed on binary reload",
+                    rejected && persisted.equals(corrupt));
         }
         check("the quest SavedData key has not migrated", QuestProgress.KEY.equals("grindless_quest_progress"));
     }

@@ -84,6 +84,9 @@ function New-Fixture {
         [IO.File]::WriteAllBytes($destination, $bytes)
         $pin.bytes = $bytes.Length
         $pin.sha1 = (Get-FileHash -LiteralPath $destination -Algorithm SHA1).Hash.ToLowerInvariant()
+        if ($null -ne $pin.PSObject.Properties['sha256']) {
+            $pin.sha256 = Get-PrismHash $destination
+        }
     }
     Write-FixtureJson (Join-Path $repo 'pack/dependency-metadata.json') $metadata
     $properties = Get-PrismProperties $repo
@@ -345,6 +348,28 @@ try {
     Assert-Test (@($nativeAst.EndBlock.Statements | Where-Object { $_ -is [Management.Automation.Language.IfStatementAst] }).Count -eq 1) 'Sole native entrypoint is top-level'
 
     $f = New-Fixture
+    $contract = Get-PrismContract $f.Root
+    Assert-Test ($contract.Dependencies.Count -eq 9 -and $contract.Manifest.files.Count -eq 9) `
+        'Playable has nine authoritative dependency pins'
+    Assert-Test ((@($contract.Dependencies.projectID | Sort-Object) -join ',') -ceq
+        (@(419699, 238222, 289412, 404465, 404468, 889915, 790626, 429235, 908741 | Sort-Object) -join ',')) 'Exact native FTB playable allowlist'
+    $nativePins = @{
+        289412 = @('ftb-quests', 'ftbquests')
+        404465 = @('ftb-library', 'ftblibrary')
+        404468 = @('ftb-teams', 'ftbteams')
+        889915 = @('ftb-xmod-compat', 'ftbxmodcompat')
+    }
+    foreach ($id in $nativePins.Keys) {
+        $pin = @($contract.Dependencies | Where-Object { $_.projectID -eq $id })[0]
+        $coordinate = $nativePins[$id]
+        Assert-Test ($pin.fileName -ceq ($coordinate[0] + '-forge-' +
+            $contract.Properties[$coordinate[1] + '_version'] + '.jar')) "Native FTB $id exact versioned filename"
+        Assert-Test ($pin.fileID.ToString() -ceq $contract.Properties[$coordinate[1] + '_curse_file']) `
+            "Native FTB $id exact file ID"
+        foreach ($required in $pin.requiredProjectIDs) {
+            Assert-Test ($required -in $contract.Dependencies.projectID) "Native FTB $id dependency closure"
+        }
+    }
     $templateBefore = Get-FixtureSnapshot $f.Template
     $before = Get-FixtureSnapshot $f.Instances
     $result = Invoke-Fixture $f 'Prepare'
@@ -356,7 +381,7 @@ try {
     Assert-Test ($result.MissingLocalDependencies.Count -eq 0 -and $result.DownloadedDependencies.Count -eq 0) 'Cached create reports neither missing nor downloaded dependencies'
     Assert-Test ($script:StagesInsideScan -eq 0) 'No instance.cfg is ever staged inside the live Prism instances scan'
     Assert-Test ([IO.File]::Exists((Join-Path $f.Target 'minecraft/mods/grindless-0.1.0-forge.jar'))) 'New instance uses supported minecraft root'
-    Assert-Test ((Get-ChildItem -LiteralPath (Join-Path $f.Target 'minecraft/mods') -Force).Count -eq 8) 'Exactly seven pins plus Grindless'
+    Assert-Test ((Get-ChildItem -LiteralPath (Join-Path $f.Target 'minecraft/mods') -Force).Count -eq 10) 'Exactly nine pins plus Grindless'
     Assert-Test (-not [IO.Directory]::Exists((Join-Path $f.Target '.minecraft'))) 'No legacy game-root duplicate'
     Assert-Test (-not [IO.Directory]::Exists((Join-Path $f.Target '.index'))) 'No template index copied'
     Assert-Test (-not [IO.File]::Exists((Join-Path $f.Target 'accounts.json'))) 'No account data copied'
@@ -416,6 +441,50 @@ try {
     Assert-Test ((Get-PrismHash (Join-Path $f.Target ('minecraft/mods/' + $newReceipt.grindless.fileName))) -ceq $stableJar) 'Failed update restores previous runtime'
     Assert-Test (-not [IO.File]::Exists((Join-Path $f.Target $script:PrismDevPendingFile))) 'Verified rollback clears only its own journal'
     $null = Invoke-Fixture $f 'Inspect'
+
+    foreach ($declared in @($true, $false)) {
+        $f = New-Fixture
+        $path = Join-Path $f.Root 'pack/dependency-metadata.json'
+        $metadata = Read-PrismJson $path
+        foreach ($id in $nativePins.Keys) {
+            $pin = @($metadata.files | Where-Object { $_.projectID -eq $id })[0]
+            if ($declared) {
+                # Synthetic authority describes the fixture bytes, never real upstream binaries.
+                $pin | Add-Member -NotePropertyName sha256 -NotePropertyValue `
+                    (Get-PrismHash (Join-Path $f.Template ('.minecraft/mods/' + $pin.fileName))) -Force
+            } else { $pin.PSObject.Properties.Remove('sha256') }
+        }
+        Write-FixtureJson $path $metadata
+        $authorityBefore = Get-PrismHash $path
+        New-FixtureZip $f ([Text.Encoding]::UTF8.GetBytes('synthetic digest-aware runtime'))
+        Assert-Test ((Invoke-Fixture $f).Outcome -ceq 'Deployed') "Declared SHA256=$declared creates an owned instance"
+        $receipt = Read-PrismJson (Join-Path $f.Target $script:PrismDevReceiptFile)
+        foreach ($id in $nativePins.Keys) {
+            $pin = @($receipt.dependencies | Where-Object { $_.projectID -eq $id })[0]
+            Assert-Test ($pin.sha256 -ceq (Get-PrismHash (Join-Path $f.Target ('minecraft/mods/' + $pin.fileName)))) `
+                "Native FTB $id receipt retains the measured and, when declared, published SHA256"
+        }
+        Assert-Test ((Invoke-Fixture $f).Outcome -ceq 'Unchanged') "Declared SHA256=$declared remains idempotent"
+        $f.Source = '5' * 40
+        New-FixtureZip $f ([Text.Encoding]::UTF8.GetBytes('synthetic digest-aware runtime update'))
+        Assert-Test ((Invoke-Fixture $f).Outcome -ceq 'Deployed') "Declared SHA256=$declared permits a same-pin Grindless update"
+        Assert-Test ((Get-PrismHash $path) -ceq $authorityBefore) 'Receipt creation never mutates published metadata'
+        if ($declared) {
+            $pin = @($metadata.files | Where-Object { $_.projectID -eq 889915 })[0]
+            $pin.sha256 = '0' * 64
+            Write-FixtureJson $path $metadata
+            New-FixtureZip $f ([Text.Encoding]::UTF8.GetBytes('synthetic coherent metadata digest mismatch'))
+            $before = Get-FixtureSnapshot $f.Target
+            $downloadsBefore = $script:DownloadCalls
+            foreach ($action in @('Prepare', 'Deploy', 'BuildAndDeploy')) {
+                Assert-Refused { Invoke-Fixture $f $action @{ PackZip = '' } } 'pin migrations require a new instance' `
+                    "Changed published SHA256 refuses $action without ignoring the declared digest"
+            }
+            Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $before) 'Published digest mismatch preserves the entire installed instance'
+            Assert-Test ($script:DownloadCalls -eq $downloadsBefore -and $f.BuildLaunches -eq 0) `
+                'Published digest mismatch never downloads or builds'
+        }
+    }
 
     $f = New-Fixture
     Write-FixtureText (Join-Path $f.Target 'minecraft/saves/leave/level.dat') 'unowned player save'
@@ -489,11 +558,171 @@ try {
     $manifest = Read-PrismJson (Join-Path $f.Root 'pack/curseforge/manifest.json')
     $manifest.files = @($manifest.files | Where-Object { $_.projectID -ne 908741 })
     Write-FixtureJson (Join-Path $f.Root 'pack/curseforge/manifest.json') $manifest
-    Assert-Refused { Invoke-Fixture $f } 'Missing playable' 'Missing authoritative pin'
+    Assert-Refused { Invoke-Fixture $f } 'Expanded dependency selection' 'Missing authoritative pin'
     $f = New-Fixture
     $path = Join-Path $f.Root 'gradle.properties'
-    Write-FixtureText $path ([IO.File]::ReadAllText($path).Replace('jei_version=15.20.0.132', 'jei_version=99.0.0'))
+    Write-FixtureText $path ([regex]::Replace([IO.File]::ReadAllText($path), '(?m)^jei_version=.*$', 'jei_version=invalid'))
     Assert-Refused { Invoke-Fixture $f } 'version mismatch' 'Gradle/dependency version mismatch'
+
+    foreach ($change in @('invalid', 'mismatch')) {
+        $f = New-Fixture
+        $path = Join-Path $f.Root 'pack/dependency-metadata.json'
+        $metadata = Read-PrismJson $path
+        $pin = @($metadata.files | Where-Object { $_.projectID -eq 889915 })[0]
+        $digest = 'invalid'
+        $message = 'Invalid dependency SHA256 metadata'
+        if ($change -ceq 'mismatch') { $digest = '0' * 64; $message = 'dependency SHA256 mismatch' }
+        $pin | Add-Member -NotePropertyName sha256 -NotePropertyValue $digest -Force
+        Write-FixtureJson $path $metadata
+        if ($change -ceq 'mismatch') {
+            New-FixtureZip $f ([Text.Encoding]::UTF8.GetBytes('synthetic package with wrong declared dependency digest'))
+        }
+        $before = Get-FixtureSnapshot $f.Template
+        Assert-Refused { Invoke-Fixture $f } $message "Published dependency SHA256 $change refuses installation"
+        Assert-Test (-not [IO.Directory]::Exists($f.Target)) 'Bad published SHA256 creates no target'
+        Assert-Test ((Get-FixtureSnapshot $f.Template) -ceq $before) 'Bad published SHA256 never mutates the template'
+    }
+
+    foreach ($profileName in @('preparation', 'playable')) {
+        foreach ($id in @(289412, 404465, 404468, 889915, 324717, 845831, 570073)) {
+            $f = New-Fixture
+            $path = Join-Path $f.Root 'pack/profiles.json'
+            $profiles = Read-PrismJson $path
+            if ($id -in @(289412, 404465, 404468, 889915)) {
+                $profiles.$profileName.projectIDs = @($profiles.$profileName.projectIDs | Where-Object { $_ -ne $id })
+            } else { $profiles.$profileName.projectIDs += $id }
+            Write-FixtureJson $path $profiles
+            Assert-Refused { Invoke-Fixture $f } ("$profileName selection") `
+                "Exact $profileName selection rejects missing native/foreign project $id"
+            Assert-Test (-not [IO.Directory]::Exists($f.Target)) 'Invalid selection never creates a target'
+        }
+    }
+    foreach ($id in @(1, 845831, 570073)) {
+        $f = New-Fixture
+        $manifestPath = Join-Path $f.Root 'pack/curseforge/manifest.json'
+        $metadataPath = Join-Path $f.Root 'pack/dependency-metadata.json'
+        $manifest = Read-PrismJson $manifestPath
+        $metadata = Read-PrismJson $metadataPath
+        $pin = (ConvertTo-Json $manifest.files[0] -Depth 20) | ConvertFrom-Json
+        $record = (ConvertTo-Json $metadata.files[0] -Depth 20) | ConvertFrom-Json
+        $pin.projectID = $id; $record.projectID = $id
+        $manifest.files += $pin; $metadata.files += $record
+        Write-FixtureJson $manifestPath $manifest
+        Write-FixtureJson $metadataPath $metadata
+        Assert-Refused { Invoke-Fixture $f } 'Expanded dependency selection' `
+            "Foreign/legacy project $id is not authorized by matching metadata"
+    }
+    foreach ($change in @('missing', 'duplicate', 'foreign', 'file-pin')) {
+        $f = New-Fixture
+        $path = Join-Path $f.Root 'pack/dependency-metadata.json'
+        $metadata = Read-PrismJson $path
+        switch ($change) {
+            'missing' { $metadata.files = @($metadata.files | Where-Object { $_.projectID -ne 324717 }) }
+            'duplicate' { $metadata.files += $metadata.files[0] }
+            'foreign' {
+                $record = (ConvertTo-Json $metadata.files[0] -Depth 20) | ConvertFrom-Json
+                $record.projectID = 1
+                $metadata.files += $record
+            }
+            'file-pin' { @($metadata.files | Where-Object { $_.projectID -eq 324717 })[0].fileID++ }
+        }
+        Write-FixtureJson $path $metadata
+        Assert-Refused { Invoke-Fixture $f } 'metadata pin parity' `
+            "Complete manifest/metadata parity rejects $change unselected metadata"
+    }
+    foreach ($id in $nativePins.Keys) {
+        foreach ($change in @('filename', 'paired-pin', 'closure', 'missing-version', 'missing-file')) {
+            $f = New-Fixture
+            $manifestPath = Join-Path $f.Root 'pack/curseforge/manifest.json'
+            $metadataPath = Join-Path $f.Root 'pack/dependency-metadata.json'
+            $manifest = Read-PrismJson $manifestPath
+            $metadata = Read-PrismJson $metadataPath
+            $pin = @($manifest.files | Where-Object { $_.projectID -eq $id })[0]
+            $record = @($metadata.files | Where-Object { $_.projectID -eq $id })[0]
+            $message = 'version mismatch'
+            switch ($change) {
+                'filename' { $record.fileName = 'wrong-version.jar' }
+                'paired-pin' { $pin.fileID++; $record.fileID = $pin.fileID; $message = 'FTB quest file pin mismatch' }
+                'closure' { $record.requiredProjectIDs = @(1); $message = 'Missing required dependency project' }
+                { $_ -in @('missing-version', 'missing-file') } {
+                    $suffix = '_version'
+                    if ($change -ceq 'missing-file') { $suffix = '_curse_file' }
+                    $key = $nativePins[$id][1] + $suffix
+                    $path = Join-Path $f.Root 'gradle.properties'
+                    Write-FixtureText $path ([regex]::Replace([IO.File]::ReadAllText($path),
+                        ('(?m)^' + $key + '=.*$'), ''))
+                    $message = 'Missing required Gradle version property'
+                }
+            }
+            Write-FixtureJson $manifestPath $manifest
+            Write-FixtureJson $metadataPath $metadata
+            Assert-Refused { Invoke-Fixture $f } $message "Native FTB $id refuses $change"
+            Assert-Test (-not [IO.Directory]::Exists($f.Target)) "Native FTB $id invalid contract installs nothing"
+        }
+    }
+    $f = New-Fixture
+    $path = Join-Path $f.Root 'pack/dependency-metadata.json'
+    $metadata = Read-PrismJson $path
+    @($metadata.files | Where-Object { $_.projectID -eq 289412 })[0].requiredProjectIDs += 324717
+    Write-FixtureJson $path $metadata
+    Assert-Refused { Invoke-Fixture $f } 'Missing required dependency project' 'Playable dependency closure cannot borrow an expanded-only project'
+
+    # Coherent new source pins still cannot migrate any dependency in an existing instance.
+    foreach ($id in $nativePins.Keys) {
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $before = Get-FixtureSnapshot $f.Target
+        $downloadsBefore = $script:DownloadCalls
+        $manifestPath = Join-Path $f.Root 'pack/curseforge/manifest.json'
+        $metadataPath = Join-Path $f.Root 'pack/dependency-metadata.json'
+        $manifest = Read-PrismJson $manifestPath
+        $metadata = Read-PrismJson $metadataPath
+        $pin = @($manifest.files | Where-Object { $_.projectID -eq $id })[0]
+        $pin.fileID++
+        @($metadata.files | Where-Object { $_.projectID -eq $id })[0].fileID = $pin.fileID
+        Write-FixtureJson $manifestPath $manifest
+        Write-FixtureJson $metadataPath $metadata
+        $key = $nativePins[$id][1] + '_curse_file'
+        $path = Join-Path $f.Root 'gradle.properties'
+        Write-FixtureText $path ([regex]::Replace([IO.File]::ReadAllText($path),
+            ('(?m)^' + $key + '=.*$'), ($key + '=' + $pin.fileID)))
+        $f.Source = '4' * 40
+        New-FixtureZip $f ([Text.Encoding]::UTF8.GetBytes('synthetic runtime with changed native pin'))
+        foreach ($action in @('Prepare', 'Deploy', 'BuildAndDeploy')) {
+            Assert-Refused { Invoke-Fixture $f $action @{ PackZip = '' } } 'pin migrations require a new instance' `
+                "Native FTB $id $action cannot update installed pins"
+        }
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $before) "Native FTB $id migration refusal preserves the entire old instance"
+        Assert-Test ($script:DownloadCalls -eq $downloadsBefore -and $f.BuildLaunches -eq 0) `
+            'Pin migration refusal precedes all downloads and builds'
+    }
+    foreach ($legacySelection in @('heracles-seven', 'ftb-eight')) {
+        $f = New-Fixture
+        $null = Invoke-Fixture $f
+        $path = Join-Path $f.Target $script:PrismDevReceiptFile
+        $receipt = Read-PrismJson $path
+        # Synthesize only the old selection; no legacy binaries are adopted or required.
+        if ($legacySelection -ceq 'heracles-seven') {
+            $legacyQuest = @($receipt.dependencies | Where-Object { $_.projectID -eq 289412 })[0]
+            $legacyLibrary = @($receipt.dependencies | Where-Object { $_.projectID -eq 404465 })[0]
+            $legacyQuest = (ConvertTo-Json $legacyQuest -Depth 20) | ConvertFrom-Json
+            $legacyLibrary = (ConvertTo-Json $legacyLibrary -Depth 20) | ConvertFrom-Json
+            $legacyQuest.projectID = 845831; $legacyLibrary.projectID = 570073
+            $receipt.dependencies = @($receipt.dependencies | Where-Object {
+                $_.projectID -notin @(289412, 404465, 404468, 889915)
+            }) + @($legacyQuest, $legacyLibrary)
+        } else {
+            $receipt.dependencies = @($receipt.dependencies | Where-Object { $_.projectID -ne 889915 })
+        }
+        Write-FixtureJson $path $receipt
+        $before = Get-FixtureSnapshot $f.Target
+        foreach ($action in @('Inspect', 'Prepare', 'Deploy', 'BuildAndDeploy')) {
+            Assert-Refused { Invoke-Fixture $f $action @{ PackZip = '' } } 'Installed nine-project selection' `
+                "Legacy $legacySelection instance refuses $action"
+        }
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $before) "Old $legacySelection selection is never migrated in place"
+    }
+
     $f = New-Fixture
     Write-FixtureJson (Join-Path $f.Root 'pack/public-overrides.json') @{
         schemaVersion = 1; files = @(@{ source = 'public.cfg'; destination = 'config/public.cfg' })

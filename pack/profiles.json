@@ -5,11 +5,11 @@
   "preparation": {
     "name": "Grindless T0 Preparation - integration preview",
     "status": "preparation-only-not-acceptance",
-    "projectIDs": [419699, 238222, 845831, 570073]
+    "projectIDs": [419699, 238222, 289412, 404465, 404468, 889915]
   },
   "playable": {
     "name": "Grindless T0 Playable - restricted composition preview",
     "status": "restricted-playable-profile-not-rc",
-    "projectIDs": [419699, 238222, 845831, 570073, 790626, 429235, 908741]
+    "projectIDs": [419699, 238222, 289412, 404465, 404468, 889915, 790626, 429235, 908741]
   }
 }

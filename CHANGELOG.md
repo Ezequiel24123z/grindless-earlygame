@@ -15,6 +15,56 @@ entries below reference those records by id.
 
 ### Added
 
+- **Record the actual registered FTB and disk-lifecycle proof.** Real Forge
+  loads46 logical quests/36 native item rewards and passes1099 graph/filter/
+  import assertions, then seed56 and a new process reopens persisted native
+  progress/individual receipts with58 assertions and two natural stops.
+  Tool-only standalone2352 and pack152 are distinct evidence. Keep the remaining
+  exact persistence-root oracle correction, artifact custody and real protected
+  world delivery open; no GUI/JEI click, human or original-save pass is invented.
+- **Authorize the next independent T1 component increment (ADR-0172).** Source
+  work adds ordinary Assembler casing/Flux Cell reproduction with existing
+  timing/FU conventions and manual-craft-equivalent batches. Preserve manual
+  bootstrap and all machine/save/claim mechanisms; no T2 intermediate or
+  Assembler slot expansion. T0's native-questbook blocker keeps execution priority.
+  The decision/source lane is not a completed recipe or deployment pass.
+- **Preserve source-verified native-framework and T1 research.** Record exact
+  official FTB binary identities, native receipt/overflow/matching APIs and the
+  XMod Compat provider required for JEI clicks. Expand the T1 map with actual
+  machine/component boundaries, recurring gaps, manual seed custody and mature
+  reference limits. Independent component source2f4eee1 is published without a
+  runtime claim; parent hash-verifies the earlier523b closed receipts/raws and
+  normal outputs without replay. No foreign code/assets or numeric balance is copied.
+- **Prioritize the owner's native quest-framework and content blocker (ADR-0171).**
+  Replace the rejected custom/native-Heracles book experience with supported
+  FTB Quests native graph/tasks/reward UI and concise JEI-first goals. Separate
+  backend/pack/migration, actual copy editing and verification lanes; preserve
+  paid legacy claims and the owner's real world. The previous empty-native-reward
+  projection is not permission to pay old rewards again. Native/API/pack
+  qualification and safe stopped-world delivery remain required, not completed
+  by this decision.
+- **Record actual native-modpack precedent and qualification boundaries.**
+  Inspect pinned Monifactory/ATM-9 native SNBT samples without importing writing,
+  stages or currency; retain the sampled-prose and licence limits. Preserve the
+  real compiler/fixture/prose reds and owned parse-only AST cancellation, while
+  independent source QA closes the corrected entry/filter/smoke contracts.
+  These records are not native/client or world-upgrade passes.
+- **Establish the longitudinal-play / next-tier development loop (ADR-0170).**
+  The owner explicitly begins the intended T0 longitudinal game while T1
+  research, brainstorming, route/component/machine development and documentation
+  continue independently. Resume the bounded first-factory canonical-output work,
+  preserve the installed game/world, prioritize reported play-blocking fixes and
+  incorporate the owner's final T0 conclusions into polish. No unobserved client
+  pass, T0 acceptance, T1 deployment, release or generation budget is inferred.
+- **Investigate the intended longitudinal start instead of treating the game as disposable.**
+  Reverify exact installed F through read-only Inspect and inventory: stopped
+  candidate, no observed client log/options/reference world, unchanged launcher
+  metadata and no instance/world mutation. Document the missing bounded client/
+  save-reopen proof and baseline/update handover separately from a real future
+  vein-derivation defect: saved `DerivationVersion` is not consumed by scanner/
+  extractors. Preserve existing persistence safeguards and distinguish that
+  update risk from new-world corruption. Pause T1 execution with its lease returned;
+  human campaign acceptance must not be required before the campaign begins.
 - **Open owner-directed T1 development alongside unchanged T0 testing (ADR-0168/0169).**
   Create isolated first-factory, quest and reusable-system documentation lanes from
   the actual a64 experience baseline. Bind live F1 power/material/forms/assembly/
@@ -30,6 +80,22 @@ entries below reference those records by id.
   scheduling/completion, native fluids, inventories/persistence, controller ports,
   Flux, quests/projections, recovery/telemetry, assets and builds. Keep inherited
   T0 proof, missing T1 execution and human/client/save acceptance separate.
+- **Integrate the in-development T1 first-factory source.** Shared immutable
+  line/quest selectors project live authorities, make fuel-only/non-Atlas routes
+  explicit and expose the existing unchanged Flux Cell craft in Atlas. Add a
+  bounded sustainability/first-five-control allocation report with normalized
+  committed model identity and separate raw source/class provenance. Replace
+  generic T1 preview teaching with18 specific bodies and four reward-free
+  lessons, preserve32 T0 tasks/all46 old IDs/26 rewards/claims and remove only
+  optional Factory World from the physical F2 prerequisite. Common/Forge,
+  backend, affected checks and normal export require the separate exact receipt;
+  source review is not an executable, player or renewable-establishment pass.
+- **Keep T1 execution and gate boundaries honest.** Clarify the later development
+  authorization in the gate/validation strategy while retaining T0 client/release
+  requirements and the bounded existing port proof. Record the statically repaired
+  ENERGY verifier defect separately from the private helper observation failure
+  after reported Gradle/backend success; preserve closed raws and continue only
+  unexecuted stages rather than replaying successful work.
 - **Deploy the exact native-qualified experience candidate F to Prism Dev.**
   Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
   Deploy/Inspect/repeat pass with zero downloads. Verify six original files,

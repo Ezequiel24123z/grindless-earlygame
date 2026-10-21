@@ -42,6 +42,18 @@ and a separately owned Prism engineering instance implement the execution lane w
 changing this product graph or inventing RC, Superflat or human acceptance.
 See [the executable operating runbook](../docs/operations/ssh-prism-workflow.md).
 
+Later owner instruction2026-10-21 ([ADR-0170](../docs/DECISIONS.md#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers))
+explicitly authorizes intended longitudinal T0 dev play and parallel T1
+research/development. It supersedes the old development/start holds in the
+preserved requirements/checkpoints below, not their unobserved evidence or
+release/acceptance criteria. Reported play blockers are fixed first; final T0
+conclusions drive polish. Existing worlds and active gameplay are protected.
+
+Actual play then reports a questbook blocker. ADR-0171 now selects supported
+native FTB Quests and concise JEI-first content, superseding the old Heracles/
+native-guide presentation choice. TASK-010 must preserve paid-history migration
+and one grant authority, not the rejected screen or every old claim-button quirk.
+
 ## 1. Requirements & Constraints
 
 | ID | Requirement | Owner directive sections |
@@ -51,7 +63,7 @@ See [the executable operating runbook](../docs/operations/ssh-prism-workflow.md)
 | REQ-003 | Treat1389 as engineering-only and finish T0 product readiness before T1 | 4, 15, 16 |
 | REQ-004 | Perform a real industrial/futuristic sprite, texture and visual pass, preserving good assets | 5 |
 | REQ-005 | Perform a real natural industrial sound pass with controlled repetition/volume and complete rights provenance | 6 |
-| REQ-006 | Review BetterQB against current Heracles/API evidence; retain one claim authority and unique rewards | 7 |
+| REQ-006 | Implement the owner-selected native FTB Quests experience under ADR-0171 using verified Forge1.20.1 APIs/pins; preserve paid-history migration, unique rewards and the actual world | 7; later owner feedback |
 | REQ-007 | Version an official Superflat preset and prove deliberate mandatory access; preserve normal Overworld play | 8 |
 | REQ-008 | Curate QoL/performance/information/accessibility without unintended progression or automation bypasses | 9 |
 | REQ-009 | Build/install the actual distributable with pinned public configuration and required content | 2, 10, 11 |
@@ -109,7 +121,7 @@ They do not receive permission to move data, alter gameplay or import assets.
 | TASK-007 | Select safe storage using TASK-002, preserve originals, migrate only chosen roots and verify path/content/worker behavior before retiring any copy | Yes; new process-local Gradle writes verified with compile/classpath task, old roots deliberately untouched | 2026-10-18 |
 | TASK-008 | Select the versioned flat preset/bootstrap contract from TASK-003; implement only missing accessibility/profile bindings and paired validation, preserving Overworld behavior | No | |
 | TASK-009 | Pin the curated pack and public configurations from TASK-004 in existing metadata/build surfaces; document exclusions and bypass controls | No | |
-| TASK-010 | Retain/polish or replace the quest interface only after the actual version/API/save comparison; preserve QuestClaimService and current-evidence/unique-reward semantics | No | |
+| TASK-010 | Replace the rejected custom/Heracles book with native FTB graph/tasks/reward UI, short human content and supported paid-history import; verify exact pins/API/loader/claim semantics and preserve IDs/world/no duplicate starter (ADR-0171) | No | |
 | TASK-011 | Give items readable physical volume/materiality, prioritize the Core/Relay family and preserve placed machines; reuse verified native block-model hierarchy for machine items (ADR-0146) | Partial; nine sprites/261 parent-only JSONs installed,814 checks and source-pixel review pass; native client/product art closure pending | |
 | TASK-012 | Complete minimal sound manifest/pipeline, generate at most3 Quern calibration candidates and wait for owner selection; then record rights/provenance and integrate a small shared palette (ADR-0145) | Partial;3 real previews delivered and owner-approved; style guide, runtime palette/mix and release-use qualification remain | |
 | TASK-013 | Define release/save identity and compatibility manifest/checks; no automatic adoption of a personal or preparation world | No | |
