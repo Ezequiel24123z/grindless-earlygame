@@ -28,8 +28,8 @@ public final class VerifyAtlas {
                 AtlasLogic.family(recipes, MachineFamily.ASSEMBLER).size());
 
         List<AtlasLogic.Entry> allRows = AtlasLogic.allEntries(recipes);
-        // Six crafts plus twelve projections, less the Guide's three retired routes.
-        eq("atlas includes every machine, Bootstrap craft and calibration route", 255, allRows.size());
+        // The existing Flux Cell JSON now has the same catalogue/Atlas projection as other T1 crafts.
+        eq("atlas includes every machine, Bootstrap craft and calibration route", 256, allRows.size());
         yes("the retired Guide has no craft or machine route", allRows.stream().noneMatch(row ->
                 row.outputs().contains("item:grindless:field_guide")));
         for (BootstrapRecipes.Shaped craft : BootstrapRecipes.shaped()) {
@@ -72,6 +72,12 @@ public final class VerifyAtlas {
         yes("the compact line retains both physical ratings",
                 AtlasLogic.line(industrialRelay).contains("relay_matrix [F1]")
                         && AtlasLogic.line(industrialRelay).contains("relay_matrix [F2]"));
+        AtlasLogic.Entry fluxCell = route(allRows, "craft/flux_cell");
+        eq("the physical power-coupling craft is visible in the same Atlas", "CRAFTING_TABLE", fluxCell.station());
+        eq("the Flux Cell row matches its existing shaped ingredient grouping",
+                "8x ingots/copper + ingots/iron", AtlasLogic.describe(fluxCell.inputs()));
+        eq("the Flux Cell row produces its actual existing item", List.of("item:grindless:flux_cell"),
+                fluxCell.outputs());
         yes("the detail pane distinguishes the bootstrap and Industrial outputs",
                 !AtlasLogic.describe(assembledRelay.outputs())
                         .equals(AtlasLogic.describe(industrialRelay.outputs())));

@@ -1023,7 +1023,7 @@ public final class VerifyRecipes {
             }
             no(recipe.name() + " names no iron item id", namesMaterialItem(json));
         }
-        eq("T1 retains twenty-six physical crafts after primitive transport moves to T0", 26,
+        eq("T1 exposes twenty-seven physical crafts including the existing Flux Cell", 27,
                 T1Recipes.shaped().size());
         yes("the first Relay Matrix is a five-unit hand batch",
                 T1Recipes.shaped().stream().anyMatch(recipe -> recipe.name().equals("relay_matrix")
