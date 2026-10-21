@@ -20,6 +20,8 @@
     "old_T1_hold_superseded_for_development_only": true,
     "T0_acceptance_client_or_longitudinal_pass": "not_inferred",
     "documentation_worker": "read_only_tools_no_persisted_output_coordinator_takes_documentation_not_application_code",
+    "documentation_outputs": ["docs/architecture/reusable-systems.md", "docs/tiers/t1-development-map.md"],
+    "documentation_evidence": "source_based_handbook_and_line_map_no_new_Java_or_playability_claim",
     "generation_or_dependency_spend": 0
   },
   "experience_programme": {

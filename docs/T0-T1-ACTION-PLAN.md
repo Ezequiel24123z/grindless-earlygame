@@ -12,6 +12,9 @@ On2026-10-21 the owner explicitly requests T1 development and documentation of
 reusable systems/lines while testing the installed T0 candidate. Follow
 [ADR-0168/0169](DECISIONS.md#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game)
 and [the first-factory implementation plan](../plan/feature-t1-first-factory-1.md).
+The [line map](tiers/t1-development-map.md) and
+[reusable-system handbook](architecture/reusable-systems.md) locate actual
+authorities, protected seams and evidence boundaries.
 This supersedes the old development hold below, not T0 acceptance, client proof
 or release requirements.
 

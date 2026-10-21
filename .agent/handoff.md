@@ -17,6 +17,10 @@ T1 shared quest teaching (ac4962d5). Documentation worker0ad28462 confirmed
 read-only rg/glob with no editor/view/shell/Git: no docs, checks or SHA were
 produced. That writing assignment is withdrawn without relaunching it; the
 coordinator owns the handbook/map, not application implementation.
+The [handbook](../docs/architecture/reusable-systems.md) and
+[line map](../docs/tiers/t1-development-map.md) now document the existing authorities,
+extension invariants, production boundaries and affected proofs. They are
+source-based documentation, not new Java/runtime or player acceptance evidence.
 No old worker is silently repurposed. Existing processors/native stores/grid/
 quest ledgers remain authoritative; no new quantity catalogue or execution kernel.
 
@@ -33,7 +37,7 @@ guards and must yield to gameplay. There is no current T1 JVM/GPU lease.
 
 | Category | Current T1 authorization checkpoint |
 | --- | --- |
-| COMPLETED | Owner authorization, ADR-0168/0169, first-factory plan/ownership and source baseline preserved; core API checkpoint49b is source evidence only. |
+| COMPLETED | Owner authorization, ADR-0168/0169, first-factory plan/ownership, reusable-system handbook/line map and source baseline preserved; core API checkpoint49b is source evidence only. |
 | BLOCKED | Documentation worker lacks editing/Git; assignment withdrawn and coordinator owns documentation. This does not block the two implementation lanes. |
 | NOT EXECUTED | New T1 Java/export/runtime checks, packaging, deployment, native/client campaign, T0 acceptance or T1 release. |
 | NEEDS HUMAN VALIDATION | Owner's separate T0 play feedback; future T1 clarity/pacing/appearance/audio acceptance. |

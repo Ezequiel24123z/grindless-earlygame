@@ -10,7 +10,7 @@ actual observed bounds; intent to test is not a completed pass.
 
 | Category | Current T1 increment |
 | --- | --- |
-| COMPLETED | Actual a64 experience baseline/T1 recipe/graph/quest seams inspected; isolated contract/line, quest and reusable-documentation ownership established. |
+| COMPLETED | Actual a64 experience baseline/T1 recipe/graph/quest seams inspected; isolated implementation ownership established and coordinator-written reusable-system handbook/line map delivered. The read-only writer produced no files/commit and was not relaunched. |
 | BLOCKED | None for T1 source work. Fresh execution capacity and the unchanged T0 human/client gate remain distinct. |
 | NOT EXECUTED | New T1 compilation/contracts/export/normal generation or native/client proof; no T1 package/deploy/release or T0 acceptance. |
 | NEEDS HUMAN VALIDATION | Owner's T0 feedback and later T1 factory/pacing/clarity review; no pass inferred. |

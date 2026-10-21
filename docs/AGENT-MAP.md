@@ -37,6 +37,13 @@ Every handback uses the eight AGENTS reporting categories in chat and durable st
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
 selection/data contracts, shared T1 teaching and reusable-system documentation.
+Start with [the reusable-system handbook](architecture/reusable-systems.md) and
+[T1 line/development map](tiers/t1-development-map.md) for authorities, extension
+invariants and proof boundaries. `progression/T1Progression` selects real route
+IDs/dependencies/roles; runtime teaching and export consume that shared selection,
+not copied bills. Flux Cell's Atlas catalogue projection must match its existing
+runtime JSON. Keep fuel routes explicitly distinct from Atlas entries and fail
+missing mandatory selections.
 Do not alter the installed T0 candidate or treat an existing F1-rated prototype
 as accepted T1 merely because it is registered. Existing catalogues, native
 transactions, power and per-player claims remain the authorities.

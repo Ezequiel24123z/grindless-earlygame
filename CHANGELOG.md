@@ -22,6 +22,14 @@ entries below reference those records by id.
   World is an optional branch, not the physical F2 gate. Preserve installed
   F/Prism/worlds and all T0 claims; no client acceptance, release or deployment
   follows from this explicit development authorization.
+- **Document reusable systems and the first-factory line map.** Add the
+  [handbook](docs/architecture/reusable-systems.md) and
+  [T1 development map](docs/tiers/t1-development-map.md): source authorities,
+  protected contracts, safe extension seams, production/optional boundaries and
+  affected-proof selection for materials/recipes, conditions/physical matrices,
+  scheduling/completion, native fluids, inventories/persistence, controller ports,
+  Flux, quests/projections, recovery/telemetry, assets and builds. Keep inherited
+  T0 proof, missing T1 execution and human/client/save acceptance separate.
 - **Deploy the exact native-qualified experience candidate F to Prism Dev.**
   Install298988d/95bf47c4 JAR/3e5ad1fb ZIP through the committed workflow;
   Deploy/Inspect/repeat pass with zero downloads. Verify six original files,
