@@ -142,6 +142,12 @@ public final class T1Progression {
             }
         }
         List<AtlasLogic.Entry> found = entries.stream().filter(entry -> selected.contains(entry.id())).toList();
+        Set<String> foundIds = new TreeSet<>();
+        for (AtlasLogic.Entry entry : found) {
+            if (!foundIds.add(entry.id())) {
+                throw new IllegalArgumentException("Duplicate live T1 Atlas route for " + taskId + ": " + entry.id());
+            }
+        }
         Set<String> missing = new TreeSet<>(selected);
         nonAtlas.forEach(missing::remove);
         found.forEach(entry -> missing.remove(entry.id()));
