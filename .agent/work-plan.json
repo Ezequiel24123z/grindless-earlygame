@@ -1,10 +1,10 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 24,
+  "plan_revision": 25,
   "updated": "2026-10-21",
-  "phase": "owner_longitudinal_T0_play_parallel_T1_development_and_feedback_loop",
-  "product_gate": "OWNER_AUTHORIZED_T0_PLAY_T1_DEVELOPMENT_ACTIVE_NOT_ACCEPTANCE_OR_RELEASE",
+  "phase": "reported_T0_questbook_blocker_native_FTB_replacement_parallel_content_and_verification",
+  "product_gate": "PLAYER_BLOCKED_ON_QUEST_FRAMEWORK_NATIVE_FTB_FIX_IN_PROGRESS",
   "tier_accepted": false,
   "merge_ready": false,
   "merge_ready_scope": "current_PR56_draft_no_auto_merge_required_graphical_gate_not_waived_no_new_main_or_release",
@@ -12,7 +12,8 @@
     "policy": "ADR-0170",
     "instruction_utc": "2026-10-21T16:44:38.642Z",
     "owner_authorized_intended_longitudinal_T0_start": true,
-    "actual_world_start_observed": false,
+    "actual_world_start_observed": true,
+    "actual_start_evidence": "owner_feedback_and_readonly_DevF_world1_legacyQuestLedger1_latestClientLog2026_10_21_16_53_50Z",
     "reference_world_identity": null,
     "parallel_scope": "T1_research_brainstorm_routes_machines_components_processing_lines_reusable_systems_implementation",
     "priority": "reported_play_blocking_T0_fix_before_new_T1_work",
@@ -23,12 +24,44 @@
     "T1_deploy_release_main_merge_T2_activation": false,
     "new_generation_allowance": false
   },
+  "ftb_questbook_blocker": {
+    "policy": "ADR-0171",
+    "owner_reports_unable_to_continue": true,
+    "required_backend": "supported_Forge1_20_1_native_FTB_Quests_not_custom_guide_widget",
+    "required_copy": "brief_human_goals_JEI_for_ordinary_recipes_extra_detail_only_unusual_mechanics",
+    "T0_source_baseline": "a64d44f9ee6da1fe00ed9215eb05b4aad4132f64",
+    "installed_runtime": "298988d500dccf0823fb2eab52fbe57bff8fe831",
+    "backend_session": "ac50334e-0ce4-4f67-bebf-581ac3318185",
+    "backend_branch": "ezequiel24123z-ftb-quests-nativo-t0",
+    "copy_session": "4766813a-613c-4f50-98f9-6ebd1258324a",
+    "copy_checkpoint": "190a02446d346128ce6ce9f616538c0fb7b0543a",
+    "copy_result": "46_titles_34_bodies_max42words_2821_to1113words_oldIDs_rewards_data_placeholders_nonquestvalues_preserved",
+    "API_research_agent": "17ef3e9b-0099-4461-b48c-606f43168339",
+    "migration_oracle_agent": "7971553c-85a3-4c7b-ac62-316c7bd7e038",
+    "migration_oracles": "source_review_complete_no_execution",
+    "claim_invariants": "old_paid_history_imported_before_native_claims_one_grant_authority_no_second_starter_completion_not_paid_receipt_no_raw_save_overwrite",
+    "legacy_owner_fence": "source_f0caef3_authored_native_import_marker_perUUID_JVM_NOT_EXECUTED",
+    "PC_lease": {
+      "assignment": "ftb-native-blocker-20261021",
+      "owner": "ac50334e-0ce4-4f67-bebf-581ac3318185",
+      "surface": "new_private_FTB_inventory_isolated_worktree_existing_cache_not_oldF_T1_or_default_inventory",
+      "scope": "compile_exact_API_affected_claim_migration_native_definitions_tooling_representative_changed_loader_binding_and_package",
+      "forbidden": ["Prism", "Deploy", "owner_worlds", "client_launch", "auth_or_host_configuration", "generation"],
+      "fresh_guards_single_owner_required": true,
+      "returned": false,
+      "parent_concurrent_PC_execution": false
+    },
+    "fresh_pre_migration_state": "2026_10_21_17_12_20Z_DevF_world1_legacyLedger1_Java0_original_preparation_world_separate_unchanged",
+    "world_backup_migration_deployment": "NOT_EXECUTED",
+    "native_API_pins_client_or_migration_pass": "not_inferred",
+    "new_paid_generation_allowance": false
+  },
   "t1_development": {
     "policy": ["ADR-0168", "ADR-0169", "ADR-0170"],
     "plan": "plan/feature-t1-first-factory-1.md",
     "owner_explicitly_authorized_utc_date": "2026-10-21",
     "development_authorized": true,
-    "status": "resumed_new_owner_play_lease_canonical_outputs_and_route_research_in_progress",
+    "status": "canonical_qualified_local_checkpoint_preserved_PC_returned_for_T0_blocker_parallel_source_research_allowed",
     "baseline": "a64d44f9ee6da1fe00ed9215eb05b4aad4132f64",
     "baseline_branch": "ezequiel24123z-integracion-experiencia-t0",
     "preserved_parent_PR": "https://github.com/Ezequiel24123z/grindless-earlygame/pull/56",
@@ -47,6 +80,8 @@
     "integrated_source": "c7278940d4b42999f1f128e560095fe3fb1329dc",
     "current_execution_source": "ef9d670bcc7f9a48caa19f046b1c51919e3fdb3d",
     "local_evidence_handoff": "20c88ff6f41f58df64c595784d7ca8bebb72a2d1",
+    "qualified_local_checkpoint": "523b3abbef389de8e666dc38c0032e350d95115c",
+    "qualified_local_scope": "6normalwriters_checks0_T1502_Economy417_T02834_protectedfacts488_13closedreceipts29nativeoutcomes58raws_noJavaChanges_noFreshCI_orPR",
     "integration_branch": "ezequiel24123z-t1-primera-fabrica",
     "quest_source_commits": ["7186e128c749586ec5ebd10730e3c330cfc07831", "9f47c94b37bb8f9b6404c79afad44f91981808da"],
     "source_scope": "live_lines_and_T1_profile_export_50_tasks_32_T0_identical_14_old_T1_plus4_rewardless_lessons_old46_IDs_26_rewards_ledger_ordinals_preserved",
@@ -117,7 +152,8 @@
       "guard_rules": "existing_fresh_resource_and_ownership_locks_gameplay_priority_no_kill_no_lowered_limits_single_worker_bounded_CPU",
       "proof_reuse": "unchanged_common_Forge_backend_affected_green_suites_reused_under_exact_input_equality",
       "forbidden": ["Prism", "Deploy", "launcher", "player_worlds", "package", "server", "native_smokes", "generation", "auth_or_host_configuration"],
-      "returned": false,
+      "returned": true,
+      "returned_for": "reported_owner_T0_native_questbook_blocker_no_inflight_zeroJava_and_locks",
       "parent_or_other_execution_owner": false
     },
     "active_research": {
@@ -1635,10 +1671,10 @@
       "acceptance": "Useful non-overlapping compatible maintained selection, exact versions/dependencies/rights/configs documented, no unintentional resource/logistics/quest shortcuts and an installable locked package contract"
     },
     {
-      "id": "questbook-product", "title": "Finishing the playable questbook experience", "status": "pending", "depends_on": ["playable-release-policy"], "completion_requires": ["playable-pack"],
-      "owner": "Astra backend/product choice; bounded Sol implementation",
-      "next_action": "Use pack/quest research to retain/polish Heracles or select a genuinely better supported backend; do not force BetterQB by name",
-      "acceptance": "One Grindless claim authority, current evidence and unique rewards preserved, save/config handling safe, usable interface and guide coherence technically/visually checked on the chosen pack"
+      "id": "questbook-product", "title": "Finishing the playable questbook experience", "status": "in_progress", "depends_on": ["playable-release-policy"], "completion_requires": ["playable-pack"],
+      "owner": "Current coordinator; ac503 native FTB backend and separate copy/QA lanes",
+      "next_action": "ADR0171 explicit player-blocker feedback selects native FTB graph/tasks/reward UI and concise JEI-first quests. Verify exact Forge1.20.1 APIs/pins, import legacy paid receipts before claims, fence old minting and qualify native loader/package/world-copy delivery; no rejected widget inside a new frame.",
+      "acceptance": "One live grant authority, old paid claims and logical IDs preserved, no second starter, explicit native granular reward/team behavior, correct physical Matrix evidence, safe original-world preservation and actual native presentation feedback"
     },
     {
       "id": "t0-art-pass", "title": "Polishing actual T0 sprites and visuals", "status": "in_progress", "depends_on": ["playable-release-policy"], "completion_requires": ["superflat-t0"],
@@ -1665,16 +1701,18 @@
       "acceptance": "All ADR0144 RC criteria met with actual artifacts, no known ordinary-T0-play blocker, exact version/provenance/licences and install/update notes, no private data and no human acceptance invented"
     },
     {
-      "id": "t0-longitudinal-feedback", "title": "Playing and maintaining longitudinal T0", "status": "held", "depends_on": ["t0-playable-release"],
-      "owner": "Owner actual play; Astra triage and bounded compatible fixes",
-      "next_action": "After actual owner start, record non-sensitive reference identity and classify critical bugs, UX, balance and polish while preserving the same world",
+      "id": "t0-longitudinal-feedback", "title": "Playing and maintaining longitudinal T0", "status": "in_progress", "depends_on": ["playable-release-policy"],
+      "dependency_override": "ADR0170 explicit owner start supersedes previous wait for t0-playable-release; publication/acceptance are not fabricated",
+      "owner": "Owner actual play; current coordinator triage and bounded compatible fixes",
+      "next_action": "Actual owner play and DevF world/ledger observed; ADR0171 questbook blocker preempts new work. Preserve that same world, fix native framework/copy, qualify stopped-copy update and let owner resume; final T0 conclusions drive polish.",
       "acceptance": "Actual no-command/physical exit and longitudinal observations recorded honestly; compatible updates or explicit tested migrations, original save preserved; completion does not gate all T1 work"
     },
     {
-      "id": "t1-start-gate", "title": "Opening T1 only after playable T0 begins", "status": "held", "depends_on": ["t0-playable-release"],
-      "owner": "Astra",
-      "required_signals": ["release.published", "release.longitudinal_save_started"],
-      "next_action": "Remain held until both signals are observed and no concrete blocking technical dependency exists; then plan T1 alongside T0 feedback",
+      "id": "t1-start-gate", "title": "Opening T1 alongside owner-authorized T0 play", "status": "done", "depends_on": ["playable-release-policy"],
+      "dependency_override": "ADR0168/0170 explicit T1 development and intended longitudinal play supersede the previous published-release prerequisite only for development",
+      "owner": "Current coordinator",
+      "required_signals": ["t1_development.development_authorized", "owner_play_loop.owner_authorized_intended_longitudinal_T0_start"],
+      "next_action": "T1 development is open, not accepted/released. Preserve independent source/research while reported T0 blockers have PC/deployment priority; never infer a played exit or deploy T1 automatically.",
       "acceptance": "T0 RC ready and actually published, owner longitudinal play begun, save continuity retained; no requirement that owner already finished all T0"
     },
     {

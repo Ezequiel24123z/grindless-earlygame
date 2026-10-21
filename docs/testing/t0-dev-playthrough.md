@@ -1,5 +1,11 @@
 # T0 development playthrough protocol
 
+**Current reported blocker (ADR-0171):** the owner played exact F and rejects the
+custom/native-Heracles questbook and exhaustive prose. Native FTB Quests replacement
+and concise content are in progress. The observed Dev world/legacy quest ledger
+must be preserved; none of the missing save-copy or replacement-backend properties
+below is automatically passed by that feedback.
+
 **Technical/native candidate installed; owner-authorized longitudinal play
 (ADR-0170), actual client/save observations pending.**
 The owner explicitly chooses to begin the lasting T0 game while T1 develops.

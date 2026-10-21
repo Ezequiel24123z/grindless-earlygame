@@ -1,8 +1,60 @@
 # Active orchestration handoff
 
-Updated: 2026-10-21. Product gate: **OWNER LONGITUDINAL T0 PLAY; ACTIVE T1 DEVELOPMENT; PLAYER BLOCKERS FIRST**.
+Updated: 2026-10-21. Product gate: **OWNER BLOCKED BY QUESTBOOK; NATIVE FTB REPLACEMENT IN PROGRESS**.
 
-## Current owner loop — play T0 while developing T1
+## Current player blocker — genuine framework and concise quests
+
+The owner reports being unable to continue: they asked for BetterQuesting/FTB
+Quests, reject the custom/Heracles book experience and reject exhaustive,
+impersonal guide prose. ADR-0171 selects supported Forge1.20.1 FTB Quests native
+graph/screens/tasks/rewards, JEI-first ordinary recipes and brief human goals.
+Do not solve this with the same custom widget in another window.
+
+Parallel owners: backend/pack/migration ac50334e, copy4766813a, source/API
+research17ef3 and independent migration oracles7971553c. The two app sessions
+recovered their original startup timeout on the existing worktrees; the lost
+kickoffs were resent completely. Do not create duplicate replacement sessions.
+Root decisions/handoffs remain coordinator-owned.
+
+Copy190a024 reduces46 titles/34 bodies from2821 to1113 words with placeholders,
+other locale values, logical IDs and gameplay data preserved. Incremental
+2bd1326/00ef421 align visible tooltips and native separate reward semantics.
+Source/native-claim ownership fences are authored in the backend lane; Java,
+actual native data loading/migration and the new package still need execution.
+
+Old `QuestProgress` is paid history: import native individual receipts before
+admitting claims, do not treat objective completion as reward payment, and fence
+delayed legacy minting. Use the actual supported API, not raw framework save
+rewrites or guessed signatures. Native granular claims/overflow must be described
+and tested honestly; no claim of the old atomic no-drop behavior.
+
+Fresh read-only pre-migration inventory at17:12:20Z identifies the relevant Dev
+instance: exact F/95bf, one world with one legacy quest ledger, client log updated
+16:53:50Z and0Java. The separate old preparation instance still has its old
+79b5 JAR/world and18October log. Do not adopt that old exploratory world.
+This proves actual F play started, not save/reconnect or campaign completion.
+No source, instance, world, launcher or configuration was changed by inventory.
+
+The T1 executor returned its lease and preserves local523b3ab with its four
+normal outputs and bounded qualification, not a native-FTB or human acceptance
+pass. Only ac50334e now owns the new `ftb-native-blocker-20261021` isolated PC/cache
+qualification outcome. Parent/other workers must not execute concurrently there.
+No worker may deploy, access owner worlds or restart the player's game.
+
+| Category | Current blocker wave |
+| --- | --- |
+| COMPLETED | Actual feedback/source identified; concise copy and legacy ownership fence authored; independent migration oracles and native API research available; exact played F instance distinguished from old preparation |
+| BLOCKED | Native-framework replacement/package/migration qualification is not complete; exact binary pins still require confirmation |
+| NOT EXECUTED | Final native loader/claim/migration proof, new package/deployment, world backup/copy/update or FTB client acceptance |
+| NEEDS HUMAN VALIDATION | Native questbook presentation and ability to resume play after the qualified fix |
+| NEEDS MY DECISION | None for assigned outcomes; native default-team/individual-receipt and overflow behavior must be explicit, not hidden |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new; existing official binary metadata/downloads are being verified |
+| COST / BILLING RISK | No new generation/provider budget or paid activation; owner authorizes purposeful parallel agents |
+| DEPLOYED STATE | Installed F remains unchanged; the owner has one actual Dev world and paid-history file to preserve; no FTB candidate is declared deployed |
+
+## Continuing owner loop — play T0 while developing T1
+
+The loop remains active; the reported blocker above is its current priority.
 
 The owner explicitly chooses to start the installed T0 game as the intended
 longitudinal run and directs ongoing T1 research, brainstorming and development

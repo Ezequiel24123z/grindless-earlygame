@@ -1,5 +1,23 @@
 # Return handoff
 
+## Current blocker — native FTB Quests, not a custom guide
+
+The owner cannot continue with the delivered questbook. ADR-0171 supersedes the
+old custom/native-Heracles presentation: use supported native FTB Quests and short
+human goals, JEI for ordinary recipes, preserving actual progress/paid rewards.
+Backend, content and verification run in parallel; build/cache/deploy serialize.
+
+| Category | Current outcome |
+| --- | --- |
+| COMPLETED | Copy190a024 plus native-wording follow-ups authored; native ownership fence/source work and migration oracles prepared; played DevF world/ledger identified read-only |
+| BLOCKED | Exact binary/native API and integrated loader/migration/package qualification remain incomplete |
+| NOT EXECUTED | Qualified FTB deployment, real world copy-upgrade, graphical FTB or acceptance pass |
+| NEEDS HUMAN VALIDATION | New native questbook and resumed play after delivery |
+| NEEDS MY DECISION | None for current assignments |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | No paid generation or new service activation |
+| DEPLOYED STATE | DevF95bf unchanged; one current world/legacy ledger observed17:12:20Z; old preparation separate; only backendac503 owns the new qualification lease, not deployment/world writes |
+
 ## Current owner loop — longitudinal T0 play and ongoing T1 development
 
 ADR-0170 records the direct owner instruction: begin the intended T0 game,

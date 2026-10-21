@@ -26,7 +26,14 @@ Overworld-compatible.** `1389ebb` remains engineering evidence, not the longitud
 release. The [playable-release plan](../plan/process-t0-playable-release-1.md) and
 revision8/PA-0007 task graph now control the queue.
 
-Next: continue T1 under the owner's explicit longitudinal-play / feedback loop
+Next: fix the reported player-blocking questbook under ADR-0171: integrate the
+actual supported native FTB Quests framework, concise human goals and JEI-first
+recipe interaction; preserve paid claims, starter and the real reference world.
+Backend/API/pin/migration, copy and verification run in parallel. A source patch
+or native server is not a client observation. Qualify the new binding/package and
+use the stopped-world backup/copy/update boundary before delivery.
+
+T1 source/research remains independent under the owner's explicit longitudinal-play / feedback loop
 (ADR-0170). The owner chooses to start T0 while routes, machines, components,
 processing lines and reusable-system work proceed independently. Close the normal
 T1/Guidance/Economy outputs and affected canonical checks in the existing
@@ -36,8 +43,9 @@ final T0 conclusions drive remaining polish.
 
 The [readiness investigation](testing/t0-longitudinal-readiness.md) is complete.
 Its actual client/save/update gaps remain visible, not a disposable-only stop
-instruction or an invented pass. The old PC lease was returned; only the new
-explicit owner-play lease may execute with fresh guards and gameplay priority.
+instruction or an invented pass. The T1 owner-play lease has now returned for the reported blocker. Only the
+explicit FTB blocker lease may execute on its isolated build surface/cache;
+there is no concurrent PC publisher or implicit reuse of an old grant.
 No launcher/world/deployment action was performed by the investigation.
 
 The separately authorized queue remains: execute the owner's explicit [parallel T1 first-factory development](../plan/feature-t1-first-factory-1.md)

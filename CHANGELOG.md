@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Prioritize the owner's native quest-framework and content blocker (ADR-0171).**
+  Replace the rejected custom/native-Heracles book experience with supported
+  FTB Quests native graph/tasks/reward UI and concise JEI-first goals. Separate
+  backend/pack/migration, actual copy editing and verification lanes; preserve
+  paid legacy claims and the owner's real world. The previous empty-native-reward
+  projection is not permission to pay old rewards again. Native/API/pack
+  qualification and safe stopped-world delivery remain required, not completed
+  by this decision.
 - **Establish the longitudinal-play / next-tier development loop (ADR-0170).**
   The owner explicitly begins the intended T0 longitudinal game while T1
   research, brainstorming, route/component/machine development and documentation

@@ -1,5 +1,25 @@
 # Current T0/T1 validation
 
+## Owner-reported questbook blocker — native FTB replacement pending
+
+Actual owner feedback rejects the custom/native-Heracles quest experience and
+long impersonal guide prose. ADR-0171 directs the genuine native FTB framework,
+concise content and explicit old-paid-claim import/fencing. Copy190a024 and
+follow-ups are source/cheap-text-check evidence only; native/API/loader/migration/
+package qualification is not supplied by those commits.
+
+Read-only17:12:20Z inspection finds the actual DevF95bf instance now has one world,
+one legacy quest ledger and client log timestamp16:53:50Z;0Java remains then.
+The old preparation world/JAR/log remain distinct. This records actual play/start
+and a reported blocker, not a save/reconnect or new backend pass. Original worlds
+and the installed artifact are unchanged by the investigation.
+
+T1 normal output qualification is retained in local523b3ab: the core reports
+six normal writers/checks, T1502/Economy417/T02834 and protected facts488, with
+13closed receipts/29stage outcomes/58raw logs. It is not published or deployed
+as the questbook repair. Its PC lease returned before the new FTB qualification
+owner was assigned; no successful JVM stage is replayed for that handoff.
+
 ## Current owner loop — permission and observation remain distinct
 
 ADR-0170 records the owner's explicit intended longitudinal T0 start, active T1

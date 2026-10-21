@@ -182,6 +182,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0168](#adr-0168--develop-t1-in-parallel-with-owner-t0-testing-without-changing-the-dev-game) | Develop T1 in parallel with owner T0 testing without changing the dev game | Accepted |
 | [0169](#adr-0169--make-the-first-t1-factory-a-live-source-contract-not-another-execution-engine) | Make the first T1 factory a live source contract, not another execution engine | Accepted |
 | [0170](#adr-0170--develop-the-next-tier-alongside-longitudinal-play-and-prioritize-player-blockers) | Develop the next tier alongside longitudinal play and prioritize player blockers | Accepted |
+| [0171](#adr-0171--replace-the-player-blocking-book-with-native-ftb-quests-and-concise-jei-first-content) | Replace the player-blocking book with native FTB Quests and concise JEI-first content | Accepted |
 
 ---
 
@@ -7914,3 +7915,91 @@ work contradicts the instruction. Repeatedly demanding a disposable playthrough
 or invented prior human acceptance defeats longitudinal play. Updating the live
 instance continuously, skipping copy-based compatibility, inventing completed
 passes, or spending an unlimited generation allowance is not authorized.
+
+---
+
+## ADR-0171 — Replace the player-blocking book with native FTB Quests and concise JEI-first content
+
+**Status.** Accepted direct owner feedback; implementation/qualification pending,
+2026-10-21.
+
+**Context.** The owner cannot continue playing with the delivered questbook.
+They explicitly requested an established BetterQuesting or FTB Quests integration,
+not an original book or a large custom teaching widget. The owner also rejects
+the exhaustive, impersonal guide prose and asks for brief explanations when JEI
+already shows the recipe. This is a real play blocker under ADR-0170.
+
+**Framework decision.** Use the supported Forge1.20.1 FTB Quests native experience:
+chapter/quest graph, normal task/reward presentation, navigation, completion and
+claim interaction. Verify exact published artifacts, required dependency closure,
+licences and actual APIs before pinning them. Dependency use is not permission
+to copy third-party source, assets or another pack's quest writing.
+
+This supersedes the native-book/Heracles-only presentation and permanently empty
+native-reward choices in ADR-0088/0100/0142/0149/0162 for this replacement. Do not
+port the same custom guide, buttons, giant recipe panel or alternate navigation
+into an FTB container and call that framework adoption.
+
+Keep the registered Grindless Quest Book and legacy Guide identities safe for
+existing saves, but route normal use to the genuine framework. Standalone or
+missing-backend failures must be explicit; the official pack must not silently
+fall back to the rejected screen.
+
+**Content decision.** Ordinary quests have a useful title and one or two short,
+natural English sentences: the immediate goal and, where useful, why it matters.
+Use native task/reward item displays and JEI rather than duplicating ingredients,
+energy, timing or every operating rule in prose. Preserve indispensable unusual
+facts such as source-site placement, a non-obvious structure/side, renewable versus
+finite supply and physical Matrix rating. A little in-world personality is welcome;
+forced jokes, generic motivational prose and developer audit disclaimers are not.
+
+The initial copy lane preserves all46 logical task IDs, rewards, prerequisites,
+evidence and other locale values. It changes presentation, not recipes, starter
+quantities or resource balance. Native definitions still derive from canonical
+catalogue data instead of becoming a second handwritten recipe/quest authority.
+
+**Progress and reward ownership.** The old Overworld per-player claim set is paid
+history, not a list of newly claimable rewards. Import native individual reward
+receipts before admitting native claims; opening the new book must not pay the
+starter or any old reward again. Preserve partial/historical claim sets, including
+claims whose current prerequisites are absent. Reconstruction grants no items.
+
+Use one live grant authority. Once native ownership is established, delayed legacy
+packets cannot continue minting through the old engine. Keep legacy paid-history
+separate from derived native completion: completing an objective is not proof that
+its reward has already been collected. Login/retry must not overwrite newer native
+progress with a frozen legacy snapshot or reset another pack's quests.
+
+Prefer supported native progress/reward APIs and ordinary tasks. A narrow native
+task or compatibility adapter is justified for exact Matrix NBT or once-only import,
+not another quest engine or UI. Do not preserve incidental requirements such as
+holding the custom book at reward time merely because the old handler did so.
+
+Native individual reward claims may replace the former single batch button.
+Define and test exact delivered/claimed/pending outcomes, including full inventory
+and the two non-stackable buckets. Do not advertise atomic no-drop refusal if the
+chosen native operation actually uses overflow delivery. Team progress and
+individual paid receipts are different: preserve individual reward history, do
+not create parties automatically, and document/test actual native team behavior
+rather than silently asserting the old projection has identical semantics.
+
+**Migration and delivery.** Preserve the actual reference world and previous
+artifact. Do not adopt the separate old exploratory save or rewrite raw framework
+progress files to simulate a migration. Use an exact stopped-world backup/copy,
+supported loading/import APIs and idempotent retry/failure tests. New dependency
+pins/configuration must pass the existing package/ownership protections; if the
+pin change requires a new isolated instance, retain the original and migrate a
+verified copy rather than weakening the deployment guard.
+
+Backend/API/pack work, content editing and independent verification run in
+parallel on owned surfaces. Shared build/cache, source changes during execution
+and final deployment remain serialized. Qualify the actual native definitions,
+old-claim import, individual reward receipts, Matrix evidence, affected tooling
+and one representative changed loader/binding. No recipe-per-instance smoke or
+new custom validation framework is justified. Client presentation and the owner's
+ability to resume remain distinct from a headless/server pass.
+
+**Alternatives rejected.** Another original questbook, a re-skinned custom
+Heracles widget, unchanged guide prose inside FTB, a second reward-paying ledger,
+discarded progress, manual pin guesses, or an untested in-place dependency
+replacement do not address the feedback.

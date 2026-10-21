@@ -45,6 +45,16 @@ physical sound/visual work. It does not authorize a generic engine rewrite or
 unrestricted T1. Old no-port/shop proposal holds are historical for this new scope.
 Every handback uses the eight AGENTS reporting categories in chat and durable state.
 
+**Current player blocker (ADR-0171):** native FTB Quests replaces the rejected
+custom/Heracles presentation. Backend/build/pin/native-definition/migration
+implementation is owned by ac50334e; copy190a024 is separate and preserves data.
+Preserve `QuestProgress` paid history, stable logical IDs and individual reward
+receipts; native completion must not masquerade as an already-paid reward.
+Legacy late packets cannot keep minting once native ownership is established.
+Do not satisfy old widget assertions by recreating that widget inside FTB.
+Replace superseded presentation/pin contracts with precise native equivalents;
+do not disable the closed authority/loader or deployment checks.
+
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route
 selection/data contracts, shared T1 teaching and reusable-system documentation.

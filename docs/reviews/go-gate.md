@@ -6,6 +6,11 @@ and PA-0007 are the current owner-directed delivery policy. `1389ebb` is not yet
 longitudinal-play release. Reviewed technical units may be committed and integrated,
 but the current draft is not release-ready or merge-ready merely because its CI passes.
 
+**Current owner blocker (ADR-0171):** actual play feedback rejects the custom/
+Heracles questbook and exhaustive copy. A native FTB Quests replacement with
+safe paid-history migration is required before the owner can resume. The old
+technical proof does not override that reported failure or certify the new backend.
+
 **Current owner play/development loop (ADR-0170):** the owner explicitly chooses
 to start the installed T0 dev candidate as the intended longitudinal game while
 T1 development/research proceeds. That supersedes the old disposable-only
