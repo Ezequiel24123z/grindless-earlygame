@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the real finite-T1 failure and partial G12 outputs.**
+  Guidance/Economy writers pass the repaired T0 gate, but T1 pureverify
+  stops before output on unexecuted manual Press/F2, unfunded stone-tag
+  draw, unproved inherited crank work and unknown construction reserves.
+  Route the exact closed originals to the existing source author without
+  replay, injected stock or waived assertions. Preserve both actual partial
+  outputs in the root: explicit DIRTY-PARTIAL closure replaces clean, with
+  no restoration, A10, further JVM or owner-world action.
 - **Record the first actual G12 repaired-contract boundary.**
   Executor604 reports fresh absent-root Sync on exactcb1e, common/tool
   compilation and repaired Factory/Guidance/audit-regressions exits0.

@@ -1145,6 +1145,32 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G12 real finite-continuation failure oncb1e, not stale equality.**
+Following repaired contracts and normal Guidance/Economy writes0,
+10-t1-write exits1/wrapper1 at VerifyT1Progression.finiteContinuation392,
+equal1071, verify207, T1Export89, before T1 output or provenance.
+The complete reported findings include unexecuted craft/press and physical
+assemble/relay_matrix_f2, stone_crafting_materials guarantees0/conditional0/
+claimed0 against draw2 (margin-2), inherited manual/crank_handle cumulative
+work unproved, and unknown mineral_aggregate/biomass/energyFU reserves.
+No additional concrete stock/step/batch/work balances were emitted.
+
+Original stdout2916 bytes/SHA8524a44d3f3dffd70a66705d1452c1b108a424a89a8d9f71e5b32733fc71fac2
+and stderrSHAc667fed6461a34d97fc5644e665d3dba0c94b140724db91076274694302b36ca
+are preserved with receipts and before-output hashes. Guidance/Economy
+success supports the corrected actual T0 gate, not full T1 or canonical
+acceptance. C1c9 owns a source-only repair fromcb1e, preserving strict
+material/alias/work accounting; no guessed stock or budget waiver.
+
+An explicit coordinator amendment preserves the two real generated partial
+outputs in the root. NO restore/reconstruction/checkout: DIRTY-PARTIAL
+exactHEADcb1e/onlyGuidanceEconomy is the honest failure closure instead of
+clean. T1JSON/MD and all other inputs remain unchanged. No CheckOnly,
+resource refresh/postcanonicals, actual43/98 or A10 executes.
+Only custody/fresh guard/Java/locks/explicit return remains authorized;
+the PC lease is still held until that final return. No further producer or
+source change is authorized, and the owner instance remains untouched.
+
 **G12 first actual PC boundary reported, full custody pending.** Fresh
 absent-root guards/VerifiedDetached Synccb1e precede common/classes/classpath
 and affected tooljavac0. Executor604 reports repaired Factory0, Guidance

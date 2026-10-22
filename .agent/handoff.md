@@ -4,6 +4,42 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G12 real finite-T1 failure; source repair active, PC closing only.**
+Guidance/Economy normal writers exit0 after the repaired T0 gate. T1's
+10-t1-write exits1/wrapper1 in pureverify BEFORE output/provenance:
+craft/press is unexecuted, physical assemble/relay_matrix_f2 is unexecuted,
+stone_crafting_materials has guaranteed/conditional/claimed0 against draw2
+(margin-2), inherited cumulative manual/crank_handle work is unproved,
+and mineral_aggregate/biomass/energyFU construction reserves are unknown.
+No further stock/batch/step/work balances were emitted; do not invent them.
+This is NOT a canonical-stale error or an accepted finite witness.
+
+Original stdout2916 bytes/SHA8524a44d3f3dffd70a66705d1452c1b108a424a89a8d9f71e5b32733fc71fac2
+and stderrSHAc667fed6461a34d97fc5644e665d3dba0c94b140724db91076274694302b36ca
+plus actual receipts/before-output hashes are preserved by604.
+C1c9 receives the exact cause and closed originals for SOURCE-ONLY repair
+fromcb1e on its own worktree. No source hotfix/Sync/PC/JVM permission follows.
+Preserve real funding/work/aliases and strict failures, not budget defaults.
+
+**Explicit G12 failed-run closure amendment:** retain the actual partial
+Guidance/Economy outputs in place. NO restore/reconstruction/checkout of
+those two files; final DIRTY-PARTIAL at exact HEADcb1e replaces clean.
+All other tracked inputs and T1JSON/MD stay unchanged. Preserve both produced
+and original hashes/mtimes and raw failure custody; no CheckOnly/canonical
+refresh/A10 or further JVM/producers. Only fresh settled-custody/guard removal/
+absence/Java0/locksfalse/explicit return remain. The lease is NOT returned yet.
+
+| Disclosure | Current G12 failed-model boundary |
+| --- | --- |
+| COMPLETED | Repaired common/contracts and two normal writers report success; exact failed T1 originals are preserved and assigned for source repair |
+| BLOCKED | Finite T1 continuation lacks a proved Press/F2 execution, stone-tag funding and inherited work/reserve accounting |
+| NOT EXECUTED | T1 output/provenance, CheckOnly, postcanonicals, A10, any further native or player update |
+| NEEDS HUMAN VALIDATION | Client interaction, real-save continuity and the manual campaign remain open |
+| NEEDS MY DECISION | None from the owner; source diagnosis and repair belong to the coordinator and assigned worker |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new |
+| DEPLOYED STATE | Player instance/world unchanged; isolated G12 root intentionally retains two partial model outputs |
+
 **G12 first execution boundary reported; models still pending.** Sole604 reports
 fresh absent-root admission/VerifiedDetached Synccb1e, common/classes/classpath
 and affected tooljavac0, repaired Factory0, Guidance fixture/main0 and
