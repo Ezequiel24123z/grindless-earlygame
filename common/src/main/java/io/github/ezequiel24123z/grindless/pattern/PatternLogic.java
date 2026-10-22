@@ -1,10 +1,12 @@
 package io.github.ezequiel24123z.grindless.pattern;
 
+import io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy;
+
 /**
  * What may be scanned, and what a smash yields (ADR-0101).
  *
  * <p>No Minecraft types. The blacklist tag is applied by the scanner block; this class only
- * refuses a blank id and Matter itself, so Matter cannot be a pattern. Deconstruction is a
+ * refuses a blank id, Matter and final normal machines. Deconstruction is a
  * flat yield, not the inverse of {@link io.github.ezequiel24123z.grindless.recipe.ReplicationCost}.
  */
 public final class PatternLogic {
@@ -23,6 +25,7 @@ public final class PatternLogic {
 
     /** {@code true} when the scanner must refuse this id before the tag is consulted. */
     public static boolean refused(String id) {
-        return id == null || id.isBlank() || MATTER.equals(id);
+        return id == null || id.isBlank() || MATTER.equals(id)
+                || ManufacturingPolicy.isManualFinalMachine(id);
     }
 }

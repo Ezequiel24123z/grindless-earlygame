@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["PMP", "OCO", "PP "],
+  "key": {
+    "C": { "item": "grindless:machine_casing" },
+    "O": { "item": "grindless:motor" },
+    "P": { "tag": "forge:plates/iron" },
+    "M": { "type": "grindless:minimum_control", "tier": "F1" }
+  },
+  "result": { "item": "grindless:electrolysis_cell" }
+}

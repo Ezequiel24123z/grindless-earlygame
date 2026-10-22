@@ -57,6 +57,7 @@ public final class VerifySustainabilityAdapters {
             reportRelationships();
             processPressure();
             minimumControlProjection();
+            manualControlProjection();
             physicalMatrixProjection();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
@@ -250,6 +251,68 @@ public final class VerifySustainabilityAdapters {
         eq("normalization invents no route, permission or minimum-control substitution", Map.of(), projected.conditions());
         eq("normalization preserves the complete physical duration", 400L, projected.durationTicks());
         eq("normalization preserves the actual rated draw", 32L, projected.fuPerTick());
+    }
+
+    private static void manualControlProjection() throws Exception {
+        Snapshot snapshot = AuthorityAdapters.live(Path.of(""));
+        Resource f1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
+        for (var craft : io.github.ezequiel24123z.grindless.recipe.T1Recipes.shaped()) {
+            Route route = snapshot.routes().get("craft/" + craft.name());
+            Map<Resource, Long> expected = new TreeMap<>();
+            for (IngredientSpec input : craft.ingredients()) {
+                Resource resource = new Resource(IngredientSpec.TAG.equals(input.kind()) ? Kind.TAG : Kind.ITEM,
+                        input.id(), input.matrixRating(), "items");
+                expected.merge(AuthorityAdapters.physical(resource), 1L, Long::sum);
+            }
+            eq(craft.name() + " projects the actual complete manual material/control multiset", expected, route.inputs());
+            eq(craft.name() + " remains a manual action, never automatic recurring supply", false, route.automatable());
+            eq(craft.name() + " invents no process draw", 0L, route.fuPerTick());
+            eq(craft.name() + " invents no process duration", 0L, (long) route.durationTicks());
+            boolean control = craft.ingredients().stream().anyMatch(IngredientSpec::isMinimumControl);
+            eq(craft.name() + " retains its exact actual minimum-control key semantics", control,
+                    route.conditions().containsKey("minimum_control_key_M"));
+            if (control) {
+                eq(craft.name() + " uses one actual canonical sufficient F1 supply", 1L, route.inputs().get(f1));
+                eq(craft.name() + " exports capacity rather than a fabricated resource identity",
+                        f1.key(), route.conditions().get("minimum_control_key_M"));
+                eq(craft.name() + " does not claim an exhaustive alternate manufacture set",
+                        "canonical_option_not_exhaustive_alternatives", route.conditions().get("control_supply_projection"));
+                eq(craft.name() + " has exactly its known type/control/projection conditions",
+                        Set.of("crafting_type", "minimum_control_key_M", "control_supply_projection"),
+                        route.conditions().keySet());
+            }
+        }
+        eq("all shipped manual recipes agree with catalogue quantities and control role", false,
+                snapshot.findings().stream().anyMatch(finding -> finding.rule().equals("craft_authority_mismatch")
+                        || finding.rule().equals("craft_authority_missing")));
+        for (Route route : snapshot.routes().values()) {
+            if (route.automatable()) {
+                eq("every automatic adapter output excludes final normal machinery: " + route.id(), false,
+                        route.outputs().keySet().stream().anyMatch(resource ->
+                                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine(resource.id())));
+            }
+        }
+        var parser = AuthorityAdapters.class.getDeclaredMethod("crafting", String.class, JsonObject.class,
+                String.class, Authority.class, Builder.class);
+        parser.setAccessible(true);
+        for (String ingredient : List.of(
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F0\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F4\"}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":1}",
+                "{\"type\":\"grindless:minimum_control\",\"tier\":\"F1\",\"nbt\":{\"Rating\":0}}",
+                "{\"type\":\"other:control\",\"tier\":\"F1\"}",
+                "{\"item\":\"grindless:relay_matrix\",\"nbt\":{\"Rating\":0}}")) {
+            JsonObject json = JsonParser.parseString("{\"type\":\"minecraft:crafting_shaped\","
+                    + "\"pattern\":[\"M\"],\"key\":{\"M\":" + ingredient
+                    + "},\"result\":{\"item\":\"fixture:product\"}}").getAsJsonObject();
+            try {
+                parser.invoke(null, "craft/fixture", json, "fixture:manual", Authority.CRAFTING_JSON, new Builder());
+                throw new AssertionError("A malformed/unsupported control ingredient was projected as supply: " + ingredient);
+            } catch (java.lang.reflect.InvocationTargetException rejected) {
+                eq("manual adapter does not ignore malformed/unsupported physical constraints: " + ingredient,
+                        true, rejected.getCause() instanceof IllegalArgumentException);
+            }
+        }
     }
 
     private static void debtCannotWaiveGeneratedDebt() {
@@ -659,6 +722,23 @@ public final class VerifySustainabilityAdapters {
     private static void canonicalInventory() throws IOException, InterruptedException {
         Path root = Path.of("").toAbsolutePath().normalize();
         CanonicalPack pack = CanonicalPack.resolved(root);
+        Builder furnaceAuthority = new Builder();
+        Route furnace = AuthorityAdapters.canonicalVanillaTransformation(
+                "minecraft:furnace", root, pack, furnaceAuthority);
+        if (furnace == null) {
+            throw new AssertionError("The actual canonical vanilla Furnace manual recipe is missing or ambiguous");
+        }
+        eq("the real Furnace retains vanilla/minecraft:furnace, not an invented Grindless craft",
+                "vanilla/minecraft:furnace", furnace.id());
+        eq("the existing vanilla Furnace authority remains manual", false, furnace.automatable());
+        eq("the real Furnace manual recipe retains exactly eight existing stone materials and no Matrix tax",
+                Map.of(new Resource(Kind.TAG, "minecraft:stone_crafting_materials"), 8L), furnace.inputs());
+        eq("the real vanilla manual craft still produces exactly one unchanged Furnace",
+                Map.of(new Resource(Kind.ITEM, "minecraft:furnace"), 1L), furnace.outputs());
+        eq("vanilla Furnace manual capital uses the same classification policy", true,
+                io.github.ezequiel24123z.grindless.recipe.ManufacturingPolicy.isManualFinalMachine("minecraft:furnace"));
+        eq("the scoped decision does not replace actual vanilla crafting provenance",
+                Authority.VANILLA_TRANSFORMATION, furnace.authority());
         Resource iron = new Resource(Kind.TAG, "forge:ingots/iron");
         Resource copper = new Resource(Kind.TAG, "forge:ingots/copper");
         Resource planks = new Resource(Kind.TAG, "minecraft:planks");

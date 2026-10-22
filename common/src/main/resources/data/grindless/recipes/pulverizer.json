@@ -9,7 +9,7 @@
     "C": { "tag": "minecraft:stone_crafting_materials" },
     "F": { "item": "minecraft:flint" },
     "I": { "tag": "forge:ingots/iron" },
-    "M": { "item": "grindless:relay_matrix" }
+    "M": { "type": "grindless:minimum_control", "tier": "F1" }
   },
   "result": { "item": "grindless:pulverizer" }
 }

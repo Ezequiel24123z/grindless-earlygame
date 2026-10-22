@@ -586,7 +586,10 @@ public final class AuthorityAdapters {
                 }
                 Route expected = catalogues.get(name);
                 if (expected != null) {
-                    if (!route.inputs().equals(expected.inputs()) || !route.outputs().equals(expected.outputs())) {
+                    Map<String, String> manualConditions = new TreeMap<>(route.conditions());
+                    manualConditions.remove("crafting_type");
+                    if (!route.inputs().equals(expected.inputs()) || !route.outputs().equals(expected.outputs())
+                            || !manualConditions.equals(expected.conditions())) {
                         builder.finding(new AuditFinding("craft_authority_mismatch", route.id(), "",
                                 AuditFinding.Severity.ERROR, "Shipped crafting JSON differs from its live Java catalogue.",
                                 List.of(source, expected.source())));
@@ -615,14 +618,19 @@ public final class AuthorityAdapters {
     private static Route shaped(String name, List<String> pattern, Map<String, String> key,
                                 String result, long count, Authority authority) {
         Map<Resource, Long> inputs = new TreeMap<>();
+        Map<String, String> conditions = new TreeMap<>();
         for (String row : pattern) {
             for (char symbol : row.toCharArray()) {
                 if (symbol != ' ') {
-                    add(inputs, qualified(key.get(String.valueOf(symbol))), 1);
+                    IngredientSpec input = IngredientSpec.crafting(key.get(String.valueOf(symbol)));
+                    add(inputs, manualIngredient(input, "key_" + symbol, conditions), 1);
                 }
             }
         }
-        return craft(name, inputs, result, count, authority, authority.name() + ".shaped");
+        Route route = craft(name, inputs, result, count, authority, authority.name() + ".shaped");
+        return new Route(route.id(), route.authority(), route.source(), route.family(), route.inputs(),
+                route.catalysts(), route.outputs(), route.discharged(), route.durationTicks(), route.fuPerTick(),
+                conditions, route.prerequisites(), route.oneShot(), route.modOwned(), route.automatable());
     }
 
     private static Route craft(String name, Map<Resource, Long> inputs, String output, long count,
@@ -634,6 +642,7 @@ public final class AuthorityAdapters {
     private static Route crafting(String id, JsonObject json, String source, Authority authority, Builder builder) {
         String type = json.has("type") ? json.get("type").getAsString() : "";
         Map<Resource, Long> inputs = new TreeMap<>();
+        Map<String, String> conditions = new TreeMap<>(Map.of("crafting_type", type));
         String family = null;
         if (type.equals("minecraft:crafting_shaped")) {
             JsonObject keys = json.getAsJsonObject("key");
@@ -646,7 +655,8 @@ public final class AuthorityAdapters {
                 }
                 for (char symbol : row.getAsString().toCharArray()) {
                     if (symbol != ' ') {
-                        add(inputs, ingredient(keys.get(String.valueOf(symbol)), id + "/" + symbol, builder), 1);
+                        add(inputs, ingredient(keys.get(String.valueOf(symbol)), id + "/" + symbol, builder,
+                                "key_" + symbol, conditions), 1);
                     }
                 }
             }
@@ -656,7 +666,8 @@ public final class AuthorityAdapters {
             }
             int index = 0;
             for (JsonElement element : json.getAsJsonArray("ingredients")) {
-                add(inputs, ingredient(element, id + "/" + index++, builder), 1);
+                add(inputs, ingredient(element, id + "/" + index, builder, "input_" + index, conditions), 1);
+                index++;
             }
         } else {
             builder.finding(unknown("recipe_type_unknown", id, "Unsupported authored recipe type: " + type));
@@ -666,15 +677,20 @@ public final class AuthorityAdapters {
         long count = result.has("count") ? result.get("count").getAsLong() : 1;
         return new Route(id, authority, source, family, inputs, Map.of(),
                 Map.of(item(result.get("item").getAsString()), count), Set.of(), 0, 0,
-                Map.of("crafting_type", type), Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
+                conditions, Set.of(), false, authority != Authority.VANILLA_TRANSFORMATION, false);
     }
 
-    private static Resource ingredient(JsonElement json, String id, Builder builder) {
+    private static Resource ingredient(JsonElement json, String id, Builder builder,
+                                       String role, Map<String, String> conditions) {
         if (json.isJsonArray()) {
             Set<Resource> alternatives = new TreeSet<>();
             int index = 0;
             for (JsonElement element : json.getAsJsonArray()) {
-                alternatives.add(ingredient(element, id + "/" + index++, builder));
+                Map<String, String> alternativeConditions = new TreeMap<>();
+                alternatives.add(ingredient(element, id + "/" + index++, builder, role, alternativeConditions));
+                if (!alternativeConditions.isEmpty()) {
+                    throw new IllegalArgumentException("Minimum control inside alternatives is not authored at " + id);
+                }
             }
             Resource choice = new Resource(Kind.TAG, "choices:" + id);
             builder.tag(choice, new TagResolution(alternatives,
@@ -684,13 +700,25 @@ public final class AuthorityAdapters {
             return choice;
         }
         JsonObject object = json.getAsJsonObject();
-        if (object.has("item")) {
+        if (object.has("type")) {
+            return manualIngredient(IngredientSpec.manualControl(object), role, conditions);
+        }
+        if (object.keySet().equals(Set.of("item"))) {
             return item(object.get("item").getAsString());
         }
-        if (object.has("tag")) {
+        if (object.keySet().equals(Set.of("tag"))) {
             return new Resource(Kind.TAG, object.get("tag").getAsString());
         }
         throw new IllegalArgumentException("Unsupported ingredient at " + id);
+    }
+
+    private static Resource manualIngredient(IngredientSpec input, String role, Map<String, String> conditions) {
+        Resource supply = resource(input.kind(), input.id(), input.matrixRating());
+        if (input.isMinimumControl()) {
+            conditions.put("minimum_control_" + role, supply.key());
+            conditions.put("control_supply_projection", "canonical_option_not_exhaustive_alternatives");
+        }
+        return supply;
     }
 
     private static void readQuests(Builder builder) {

@@ -1126,6 +1126,7 @@ public final class VerifySustainabilityRegistry {
                 public GrindlessForge() {
                     IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
                     EventBuses.registerModEventBus(Grindless.MOD_ID, bus);
+                    bus.addListener(MinimumControlIngredient::register);
                     Grindless.init();
                     MachineInspectionOverlay.init(bus);
                     if (ModList.get().isLoaded("ftbquests")) {
@@ -2480,6 +2481,15 @@ public final class VerifySustainabilityRegistry {
                 "Grindless.init(); io.github.ezequiel24123z.grindless.forge.quest.HeraclesQuestIntegration.init(bus);");
         rejectQuest(root, sources, "Forge cannot initialize the native integration when FTB is absent",
                 "GrindlessForge", "if (ModList.get().isLoaded(\"ftbquests\"))", "if (true)");
+        rejectQuest(root, sources, "the manual ingredient cannot lose its explicit MOD-bus binding",
+                "GrindlessForge", "bus.addListener(MinimumControlIngredient::register);", "");
+        rejectQuest(root, sources, "the manual ingredient must not register on the gameplay/command bus",
+                "GrindlessForge", "bus.addListener(MinimumControlIngredient::register);",
+                "MinecraftForge.EVENT_BUS.addListener(MinimumControlIngredient::register);");
+        rejectQuest(root, sources, "the ingredient binding cannot substitute a same-named foreign helper",
+                "GrindlessForge",
+                "import io.github.ezequiel24123z.grindless.forge.recipe.MinimumControlIngredient;",
+                "import fixture.MinimumControlIngredient;");
         rejectQuest(root, sources, "the historical Heracles widget cannot become an active client backend",
                 "GrindlessForgeClient", "GrindlessClient.init();",
                 "GrindlessClient.init(); "
@@ -2911,11 +2921,30 @@ public final class VerifySustainabilityRegistry {
                 "GrindlessConfig.load();ModBlocks.register();ModItems.register();",
                 method(common, "init", 0).getBody().getStatements().stream().limit(3)
                         .map(VerifySustainabilityRegistry::normalized).reduce("", String::concat));
-        eq("the actual Forge entrypoint calls common init after registering its mod event bus",
+        eq("the actual Forge entrypoint binds the ingredient on its MOD bus before common init",
                 List.of("IEventBusbus=FMLJavaModLoadingContext.get().getModEventBus()",
-                        "EventBuses.registerModEventBus(Grindless.MOD_ID,bus);", "Grindless.init();"),
-                method(forge, "<init>", 0).getBody().getStatements().stream().limit(3)
+                        "EventBuses.registerModEventBus(Grindless.MOD_ID,bus);",
+                        "bus.addListener(MinimumControlIngredient::register);", "Grindless.init();"),
+                method(forge, "<init>", 0).getBody().getStatements().stream().limit(4)
                         .map(VerifySustainabilityRegistry::normalized).toList());
+        ClassTree ingredient = source(root, FORGE_JAVA.resolve(
+                Path.of("forge", "recipe", "MinimumControlIngredient.java")), hashes);
+        eq("the registered ingredient key is exactly the shared strict JSON type (source profile)",
+                "newResourceLocation(IngredientSpec.MINIMUM_CONTROL_TYPE)",
+                normalized(field(ingredient, "ID").getInitializer()));
+        eq("ingredient registration is restricted to the actual recipe-serializer event (source profile)",
+                "{if(event.getRegistryKey().equals(Registries.RECIPE_SERIALIZER)){CraftingHelper.register(ID,SERIALIZER);}}",
+                normalized(method(ingredient, "register", 1).getBody()));
+        eq("the custom physical ingredient never advertises simple item-only admission (source profile)",
+                "{returnfalse;}", normalized(method(ingredient, "isSimple", 0).getBody()));
+        eq("recipe-book/display emptiness follows real registered candidates (source profile)",
+                "{returngetItems().length==0;}", normalized(method(ingredient, "isEmpty", 0).getBody()));
+        eq("manual physical admission delegates the whole existing registry/decoder/matcher guard (source profile)",
+                "{returnstack!=null&&ProcessLookup.matches(requirement,stack);}",
+                normalized(method(ingredient, "test", 1).getBody()));
+        eq("manual displays cannot invent unregistered Matrix architectures or hand-guessed ratings (source profile)",
+                "{returnProcessLookup.matrixInputs(requirement).toArray(ItemStack[]::new);}",
+                normalized(method(ingredient, "getItems", 0).getBody()));
         eq("the actual Forge mod annotation selects this registration entrypoint", true,
                 forge.getModifiers().getAnnotations().stream().map(VerifySustainabilityRegistry::normalized)
                         .anyMatch(annotation -> annotation.equals("@Mod(Grindless.MOD_ID)")));
@@ -3196,6 +3225,33 @@ public final class VerifySustainabilityRegistry {
                     }
                 }
             }
+            if (name.equals("MinimumControlIngredient")) {
+                if (!normalized(parsed.getPackageName()).equals(
+                        "io.github.ezequiel24123z.grindless.forge.recipe")) {
+                    throw new IOException("Unexamined manual ingredient namespace; membership not evaluated.");
+                }
+                Map<String, String> bindings = Map.ofEntries(
+                        Map.entry("IngredientSpec", "io.github.ezequiel24123z.grindless.recipe.IngredientSpec"),
+                        Map.entry("ProcessLookup", "io.github.ezequiel24123z.grindless.recipe.ProcessLookup"),
+                        Map.entry("FluxTier", "io.github.ezequiel24123z.grindless.energy.FluxTier"),
+                        Map.entry("AbstractIngredient", "net.minecraftforge.common.crafting.AbstractIngredient"),
+                        Map.entry("CraftingHelper", "net.minecraftforge.common.crafting.CraftingHelper"),
+                        Map.entry("IIngredientSerializer", "net.minecraftforge.common.crafting.IIngredientSerializer"),
+                        Map.entry("RegisterEvent", "net.minecraftforge.registries.RegisterEvent"),
+                        Map.entry("Registries", "net.minecraft.core.registries.Registries"),
+                        Map.entry("ItemStack", "net.minecraft.world.item.ItemStack"),
+                        Map.entry("ResourceLocation", "net.minecraft.resources.ResourceLocation"));
+                for (var binding : bindings.entrySet()) {
+                    List<String> imports = parsed.getImports().stream().filter(statement ->
+                                    !statement.isStatic() && statement.getQualifiedIdentifier().toString()
+                                            .endsWith("." + binding.getKey()))
+                            .map(statement -> statement.getQualifiedIdentifier().toString()).toList();
+                    if (!imports.equals(List.of(binding.getValue()))) {
+                        throw new IOException("Unexamined manual ingredient API import " + binding.getKey()
+                                + "; membership not evaluated.");
+                    }
+                }
+            }
             ClassTree type = parsed.getTypeDecls().stream().filter(ClassTree.class::isInstance).map(ClassTree.class::cast)
                     .filter(candidate -> candidate.getSimpleName().contentEquals(name)).findFirst()
                     .orElseThrow(() -> new IOException("Missing registration authority class: " + name));
@@ -3223,6 +3279,8 @@ public final class VerifySustainabilityRegistry {
                         "io.github.ezequiel24123z.grindless.forge.overlay.MachineInspectionOverlay"),
                 Map.entry("MaterialRegistry", "io.github.ezequiel24123z.grindless.material.MaterialRegistry"),
                 Map.entry("RegistryTagView", "io.github.ezequiel24123z.grindless.material.RegistryTagView"),
+                Map.entry("MinimumControlIngredient",
+                        "io.github.ezequiel24123z.grindless.forge.recipe.MinimumControlIngredient"),
                 Map.entry("ModItems", "io.github.ezequiel24123z.grindless.registry.ModItems"),
                 Map.entry("ModMenus", "io.github.ezequiel24123z.grindless.registry.ModMenus"),
                 Map.entry("DevTelemetry", "io.github.ezequiel24123z.grindless.telemetry.dev.DevTelemetry"),
@@ -3389,7 +3447,7 @@ public final class VerifySustainabilityRegistry {
             case "QuestBackendPlatformImpl" -> Set.of("ServerPlayer", "ModList", "FtbQuestIntegration", "Grindless", "Component");
             case "GrindlessForge" -> Set.of("Grindless", "IEventBus", "FMLJavaModLoadingContext", "EventBuses",
                     "MachineInspectionOverlay", "ModList", "Mod", "FtbQuestIntegration",
-                    "MinecraftForge", "TagsUpdatedEvent", "MaterialRegistry", "RegistryTagView");
+                    "MinecraftForge", "TagsUpdatedEvent", "MaterialRegistry", "RegistryTagView", "MinimumControlIngredient");
             case "GrindlessForgeClient" -> Set.of("Grindless", "GrindlessClient", "Mod", "Dist",
                     "SubscribeEvent", "FMLClientSetupEvent");
             case "FtbQuestIntegration" -> Set.of("Grindless", "QuestProgress", "FtbQuestNative", "FtbQuestDefinitions",
