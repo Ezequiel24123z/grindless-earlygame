@@ -34,6 +34,7 @@ public final class VerifyFtbQuestFiles {
         Files.createDirectories(Path.of("build"));
         Path fixture = Files.createTempDirectory(Path.of("build"), "ftb-managed-files-");
         Map<String, CompoundTag> current = FtbQuestDefinitions.chapters();
+        Map<String, FtbQuestFiles.Chapter> encodedCurrent = FtbQuestFiles.generated(current);
         // Synthetic old-ID input: never publish this as an authentic historical source/hash receipt.
         Map<String, CompoundTag> previous = new LinkedHashMap<>();
         current.forEach((name, document) -> {
@@ -86,8 +87,8 @@ public final class VerifyFtbQuestFiles {
             String name = replacement.get("fileName").getAsString();
             equal(hash(Files.readAllBytes(chapters.resolve(name))), replacement.get("beforeSha256").getAsString(),
                     "before hashes bind actual old bytes " + name);
-            equal(hash((current.get(name) + "\n").getBytes(StandardCharsets.UTF_8)),
-                    replacement.get("afterSha256").getAsString(), "after hashes bind actual generator bytes " + name);
+            equal(hash(encodedCurrent.get(name).contents()), replacement.get("afterSha256").getAsString(),
+                    "after hashes bind the append-only publisher's actual bytes " + name);
         }
         equal(hash(encode(reference)), plan.get("previousDefinitionsSha256").getAsString(), "plan binds the selected reference artifact");
 

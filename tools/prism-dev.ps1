@@ -1458,6 +1458,16 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
             if ($env:OS -ne 'Windows_NT') { throw 'The host-side Prism deployment tool targets Windows with CIM process inspection.' }
             if (-not $Root) { $Root = $script:PrismDevRepositoryRoot }
             $Root = Get-PrismPath ([IO.Path]::GetFullPath($Root)) 'Directory'
+            $questAction = $Action -in @('UpdateQuestDefinitions', 'RecoverQuestDefinitions')
+            if (($QuestUpdatePlan -or $QuestUpdateSha256) -and -not $questAction) {
+                throw 'Native definition plans require an explicit definition update/recovery action.'
+            }
+            if ($questAction -and -not $PSBoundParameters.ContainsKey('InstanceId')) {
+                throw 'Native definition update/recovery requires an explicitly selected InstanceId; no default player target is inferred.'
+            }
+            if ($questAction -and $RuntimeRevision) {
+                throw 'RuntimeRevision is only a Build/BuildAndDeploy input; definition updates use the verified publisher/pack runtime.'
+            }
             if ($Action -eq 'Build') {
                 if ($PackZip) { throw 'Build selects its exact source-bound output; PackZip is a Deploy input.' }
                 Assert-PrismRevision $ExpectedRevision
@@ -1489,7 +1499,7 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
             }
             if ($ExpectedRevision) { Assert-PrismRevision $ExpectedRevision }
             $source = Assert-PrismSource $Root $ExpectedRevision
-            if ($Action -in @('UpdateQuestDefinitions', 'RecoverQuestDefinitions')) {
+            if ($questAction) {
                 if ($null -eq $state) { throw 'Native definition updates require an already owned engineering instance.' }
                 Assert-PrismRevision $ExpectedRevision
                 $plan = Read-PrismQuestPlan $QuestUpdatePlan $QuestUpdateSha256 $target $state
@@ -1514,7 +1524,6 @@ function Invoke-PrismBuild([string]$Root, [string]$Expected, [string]$Runtime) {
                     GrindlessSha256 = $plan.grindlessSha256; PlanSha256 = $QuestUpdateSha256
                     Backup = $result.Backup; PackStatus = $script:PrismDevStatus }
             }
-            if ($QuestUpdatePlan -or $QuestUpdateSha256) { throw 'Native definition plans require an explicit definition update/recovery action.' }
             $contract = Get-PrismContract $Root
             $forge = $contract.Properties.forge_version.Substring($contract.Properties.minecraft_version.Length + 1)
             $components = $null

@@ -347,6 +347,21 @@ function Test-PrismQuestDefinitionTransactions {
         $stable = Get-FixtureSnapshot $f.Target
         Assert-Test ((Invoke-FixtureQuestUpdate $f $plan).Outcome -ceq 'Unchanged') 'Managed repeated update is an explicit no-op'
         Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'Managed no-op changes no file, backup, receipt or timestamp'
+        Assert-Refused {
+            Invoke-PrismDev -Action UpdateQuestDefinitions -Root $f.Root -InstancesRoot $f.Instances `
+                -ExpectedRevision $f.Source -PackZip $f.Zip -QuestUpdatePlan $plan.Path -QuestUpdateSha256 $plan.Sha256
+        } 'explicitly selected InstanceId' 'No implicit/default player target may receive definition updates'
+        Assert-Refused {
+            Invoke-Fixture $f 'Inspect' @{ QuestUpdatePlan = $plan.Path; QuestUpdateSha256 = $plan.Sha256 }
+        } 'explicit definition update/recovery action' 'Inspect cannot silently ignore a selected update plan'
+        Assert-Refused {
+            Invoke-Fixture $f 'Build' @{ QuestUpdatePlan = $plan.Path; QuestUpdateSha256 = $plan.Sha256 }
+        } 'explicit definition update/recovery action' 'A definition plan cannot accidentally dispatch a build'
+        Assert-Refused {
+            Invoke-Fixture $f 'UpdateQuestDefinitions' @{ QuestUpdatePlan = $plan.Path; QuestUpdateSha256 = $plan.Sha256
+                RuntimeRevision = $f.Source }
+        } 'RuntimeRevision is only a Build/BuildAndDeploy input' 'Definition actions never ignore a conflicting runtime selector'
+        Assert-Test ((Get-FixtureSnapshot $f.Target) -ceq $stable) 'CLI ambiguity refusals preserve every target byte/timestamp'
 
         foreach ($name in @('grindless_t0.snbt', 'grindless_t1.snbt', 'foreign.snbt')) {
             $f = New-Fixture

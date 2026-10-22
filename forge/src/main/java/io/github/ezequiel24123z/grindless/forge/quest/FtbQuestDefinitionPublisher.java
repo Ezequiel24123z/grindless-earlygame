@@ -87,7 +87,8 @@ public final class FtbQuestDefinitionPublisher {
         result.addProperty("questCount", quests);
         JsonArray files = new JsonArray();
         for (String name : FILENAMES) {
-            byte[] contents = (documents.get(name) + "\n").getBytes(StandardCharsets.UTF_8);
+            CompoundTag document = documents.get(name).copy();
+            byte[] contents = (document + "\n").getBytes(StandardCharsets.UTF_8);
             if (contents.length == 0 || contents.length > 1024 * 1024) {
                 throw new IOException("Generated native chapter exceeds its bound");
             }
