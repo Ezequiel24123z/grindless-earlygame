@@ -189,7 +189,9 @@ public final class QuestCatalogue {
             lesson("flux_cell", "industrial", Evidence.ITEM, "grindless:flux_cell", 1,
                     List.of("matrix_line")),
             matrixTask("industrial_matrix", "industrial", "grindless:relay_matrix", FluxTier.F2, 1,
-                    List.of("matrix_line", "glass"), reward("minecraft:iron_ingot", 8)));
+                    List.of("matrix_line", "glass"), reward("minecraft:iron_ingot", 8)),
+            lesson("wet_beneficiation", "wet_beneficiation", Evidence.ITEM, "grindless:chemical_washer", 1,
+                    List.of("assembler")));
 
     private QuestCatalogue() {
     }
@@ -211,7 +213,8 @@ public final class QuestCatalogue {
         return switch (task.id()) {
             case "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
                     "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world",
-                    "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell" -> Chapter.T1;
+                    "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell",
+                    "wet_beneficiation" -> Chapter.T1;
             default -> Chapter.T0;
         };
     }

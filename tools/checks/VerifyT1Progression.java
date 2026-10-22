@@ -2,13 +2,19 @@ package io.github.ezequiel24123z.grindless.sustainability;
 
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
+import io.github.ezequiel24123z.grindless.process.Agitation;
+import io.github.ezequiel24123z.grindless.process.ConditionReport;
+import io.github.ezequiel24123z.grindless.process.ConditionState;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
 import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLogic;
+import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.T1Recipes;
 import io.github.ezequiel24123z.grindless.source.SourceLogic;
 
@@ -90,8 +96,8 @@ public final class VerifyT1Progression {
                 List.of("relay_f2"), T1Progression.lines().stream()
                         .filter(line -> line.requirement() == T1Progression.Requirement.EXIT)
                         .map(T1Progression.Line::id).toList());
-        for (String optional : List.of("factory_reproduction", "wire_forming", "tool_reproduction", "extraction", "logistics",
-                "storage", "kiln", "factory_space")) {
+        for (String optional : List.of("factory_reproduction", "wire_forming", "tool_reproduction",
+                "wet_beneficiation", "extraction", "logistics", "storage", "kiln", "factory_space")) {
             equal("the optional branch is not a first-factory mandate: " + optional, false,
                     T1Progression.byId(optional).mandatory());
         }
@@ -141,6 +147,7 @@ public final class VerifyT1Progression {
         thermalGeneratorAssembly(t0);
         wireForming(snapshot);
         toolReproduction(snapshot);
+        wetBeneficiation(t0);
 
         Route exit = snapshot.routes().get(T1Progression.EXIT_ROUTE);
         Resource ratedF1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
@@ -223,7 +230,9 @@ public final class VerifyT1Progression {
                 T1Progression.CASING_ROUTE, T1Progression.FLUX_CELL_ROUTE,
                 "assemble/plate_die", "assemble/rod_die", "assemble/gear_die", "assemble/coil_die",
                 "assemble/thermal_generator_core", "assemble/thermal_generator",
-                "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper")) {
+                "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper",
+                "assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+                "b2_r1/iron", "b2_r1/copper")) {
             Map<String, Route> missing = new TreeMap<>(snapshot.routes());
             missing.remove(id);
             Snapshot incomplete = new Snapshot(snapshot.resources(), missing, snapshot.terminals(), snapshot.tags(),
@@ -271,6 +280,14 @@ public final class VerifyT1Progression {
                 factoryDocument.get("requirement").getAsString());
         equal("the existing exporter includes five machine routes and the explicit Thermal core operation", 6,
                 factoryDocument.getAsJsonArray("routes").size());
+        var wetDocument = document.getAsJsonArray("lines")
+                .get(T1Progression.lines().indexOf(T1Progression.byId("wet_beneficiation"))).getAsJsonObject();
+        equal("the existing exporter projects the optional wet line", "wet_beneficiation",
+                wetDocument.get("id").getAsString());
+        equal("the existing exporter keeps wet beneficiation optional", "OPTIONAL",
+                wetDocument.get("requirement").getAsString());
+        equal("the existing exporter includes all six live wet authorities", 6,
+                wetDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven",
                 "t1_finite_establishment_replayed", "global_optimum_claimed")) {
@@ -361,6 +378,129 @@ public final class VerifyT1Progression {
         equal("no automatic die route enters the mandatory first-F2 path", false,
                 T1Sustainability.mandatoryRoutes(snapshot).stream()
                         .anyMatch(route -> line.routeIds().contains(route.id())));
+    }
+
+    private static void wetBeneficiation(SustainabilityAudit.Result t0) {
+        Snapshot snapshot = t0.authorities();
+        T1Progression.Line line = T1Progression.byId("wet_beneficiation");
+        equal("wet beneficiation selects only the six accepted existing authorities",
+                List.of("assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+                        "b2_r1/iron", "b2_r1/copper"), line.routeIds());
+        equal("wet beneficiation follows only established assembly", Set.of("assembly"), line.requires());
+        equal("wet beneficiation remains optional", T1Progression.Requirement.OPTIONAL, line.requirement());
+        equal("wet teaching follows assembly without reordering the first factory", true,
+                T1Progression.lines().indexOf(line)
+                        > T1Progression.lines().indexOf(T1Progression.byId("assembly")));
+        equal("the new lesson selects its actual optional line", line, T1Progression.byQuest("wet_beneficiation"));
+        equal("the new lesson selects all six authorities without a copied bill",
+                line.routeIds(), T1Progression.questRouteIds("wet_beneficiation"));
+        equal("wet routes never enter the mandatory first-F2 path", false,
+                T1Sustainability.mandatoryRoutes(snapshot).stream()
+                        .anyMatch(route -> line.routeIds().contains(route.id())));
+        equal("first F2 still depends only on assembly", Set.of("assembly"),
+                T1Progression.byId("relay_f2").requires());
+        equal("first F2 retains its complete route selection",
+                List.of("craft/flux_cell", T1Progression.FLUX_CELL_ROUTE, T1Progression.EXIT_ROUTE),
+                T1Progression.byId("relay_f2").routeIds());
+        equal("wet construction does not consume the finite first-five controller allocation",
+                new T1Sustainability.SeedAllocation(5, 5, 0, Map.of(
+                        "craft/thermal_generator", 1L, "craft/pulverizer", 1L, "craft/arc_furnace", 1L,
+                        "craft/press", 1L, "craft/assembler", 1L)),
+                T1Sustainability.seedAllocation(snapshot));
+        ProcessMachineKind washer = ProcessMachineKind.CHEMICAL_WASHER;
+        equal("the existing Washer really is default F1", FluxTier.F1, washer.tier());
+        equal("the existing Washer really holds ambient STIRRED conditions",
+                ConditionState.AMBIENT.withAgitation(Agitation.STIRRED), washer.heldConditions());
+        equal("the existing fluid buffer fits the complete live wash batch", true,
+                ProcessLogic.WASH_WATER_MB <= FluidLogic.MACHINE_CAPACITY);
+        List<ProcessGraph.MaterialView> materials = AuthorityAdapters.materialViews();
+        var processes = ProcessGraph.generate(materials);
+        var atlas = T1Progression.atlasForQuest("wet_beneficiation", AtlasLogic.allEntries(processes));
+        equal("every wet route is actually representable in the Atlas", Set.of(), atlas.nonAtlasRouteIds());
+        for (String id : line.routeIds()) {
+            var process = processes.stream().filter(recipe -> recipe.id().equals(id)).findFirst().orElseThrow();
+            Route route = snapshot.routes().get(id);
+            equal("wet projection preserves all live inputs, outputs, conditions and costs: " + id,
+                    AuthorityAdapters.process(process), route);
+            equal("wet Atlas preserves the complete live recipe: " + id, AtlasLogic.entry(process),
+                    atlas.entries().stream().filter(entry -> entry.id().equals(id)).findFirst().orElseThrow());
+            equal("wet routes reuse ordinary process authority: " + id, Authority.PROCESS_GRAPH, route.authority());
+            equal("wet routes retain an actual F1 power demand: " + id, FluxTier.F1.nominal(), route.fuPerTick());
+            equal("wet routes account for every paid tick: " + id,
+                    Math.multiplyExact(route.durationTicks(), route.fuPerTick()), route.inputs().get(ENERGY));
+            equal("wet routes add no permission gate: " + id, Set.of(), route.prerequisites());
+            ProcessMachineKind kind = java.util.Arrays.stream(ProcessMachineKind.values())
+                    .filter(candidate -> candidate.family() == process.family()).findFirst().orElseThrow();
+            equal("the real machine is rated for the selected wet process: " + id, true,
+                    process.fuPerTick() <= kind.tier().nominal());
+            equal("the existing input slots fit the actual grouped wet inputs: " + id, true,
+                    process.itemInputs().size() <= kind.menuKind().inputs());
+            equal("the existing output slots fit both actual wet output streams: " + id, true,
+                    process.itemOutputs().size() <= kind.menuKind().outputs());
+            var conditions = ProcessLookup.conditionsOf(process);
+            equal("the real machine envelope admits the selected wet process: " + id, true,
+                    conditions.checkEnvelope(kind.envelope()).canRun());
+            equal("held conditions support the actual full-speed wet cadence: " + id,
+                    ConditionReport.OPTIMAL, conditions.evaluate(kind.heldConditions()));
+        }
+        for (String id : List.of("assemble/motor", "assemble/chemical_washer")) {
+            Route manufacture = snapshot.routes().get(id);
+            equal("existing wet construction stays in the Assembler: " + id, "ASSEMBLER", manufacture.family());
+            equal("existing wet construction gains no Matrix operand: " + id, false,
+                    manufacture.inputs().keySet().stream()
+                            .anyMatch(resource -> resource.id().equals(FabricationLogic.RELAY_MATRIX)));
+            equal("existing wet construction gains no minimum-control role: " + id, false,
+                    manufacture.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_")));
+        }
+        for (String material : List.of("iron", "copper")) {
+            Resource crushed = new Resource(Kind.TAG, "grindless:crushed_materials/" + material);
+            Resource washed = new Resource(Kind.TAG, "grindless:washed_crushed_materials/" + material);
+            Resource water = new Resource(Kind.FLUID, ProcessLogic.WATER);
+            Resource secondary = new Resource(Kind.TAG, "forge:ingots/"
+                    + ProcessGraph.secondaryOf(materials, material).orElseThrow());
+            Route wash = snapshot.routes().get("b2/" + material);
+            equal("B2 consumes actual crushed feed, water and energy: " + material,
+                    Set.of(crushed, water, ENERGY), wash.inputs().keySet());
+            equal("B2 preserves the authority's crushed batch: " + material,
+                    (long) ProcessLogic.WASH_CRUSHED, wash.inputs().get(crushed));
+            equal("B2 preserves the authority's water quantity: " + material,
+                    (long) ProcessLogic.WASH_WATER_MB, wash.inputs().get(water));
+            equal("B2 preserves both real output streams: " + material,
+                    Set.of(washed, secondary), wash.outputs().keySet());
+            equal("B2 retains its washed primary batch: " + material,
+                    (long) ProcessLogic.WASH_CRUSHED, wash.outputs().get(washed));
+            equal("B2 retains the pack-derived secondary ingot: " + material, 1L, wash.outputs().get(secondary));
+            equal("neither B2 stream is silently discharged: " + material, wash.outputs(), wash.retainedOutputs());
+            equal("B2 cadence is taken from ProcessLogic: " + material,
+                    (long) ProcessLogic.WASH_TICKS, wash.durationTicks());
+            Route dryReduction = snapshot.routes().get("b1_r1/" + material);
+            Route wetReduction = snapshot.routes().get("b2_r1/" + material);
+            Map<Resource, Long> reducedInputs = new TreeMap<>(dryReduction.inputs());
+            Long feed = reducedInputs.remove(crushed);
+            equal("the existing dry reduction really consumes crushed feed: " + material, true, feed != null);
+            reducedInputs.put(washed, feed);
+            equal("B2-R1 changes only the actual feed to washed material: " + material,
+                    reducedInputs, wetReduction.inputs());
+            equal("B2-R1 retains reduction products, slag and CO: " + material,
+                    dryReduction.outputs(), wetReduction.outputs());
+            equal("B2-R1 retains actual emissions: " + material,
+                    dryReduction.discharged(), wetReduction.discharged());
+            equal("B2-R1 retains actual reduction cadence: " + material,
+                    dryReduction.durationTicks(), wetReduction.durationTicks());
+            equal("water supply comes from the existing conditional T0 source proof: " + material, true,
+                    t0.tiers().get(0).renewable().contains(water));
+            equal("optional wet selection does not fabricate a T0 washed-feed certificate: " + material, false,
+                    t0.tiers().get(0).renewable().contains(washed));
+            var incomplete = materials.stream().map(view -> view.name().equals(material)
+                    ? new ProcessGraph.MaterialView(view.name(), view.raw(), view.ore(), view.crushed(), view.oxide(),
+                    view.ingot(), view.plate(), view.rod(), view.gear(), false) : view).toList();
+            rejects("missing washed-form metadata cannot silently retain a wet lesson: " + material,
+                    () -> T1Progression.atlasForQuest("wet_beneficiation",
+                            AtlasLogic.allEntries(ProcessGraph.generate(incomplete))));
+        }
+        rejects("missing secondary-material metadata cannot manufacture a trace output",
+                () -> T1Progression.atlasForQuest("wet_beneficiation", AtlasLogic.allEntries(ProcessGraph.generate(
+                        materials.stream().filter(view -> view.name().equals("iron")).toList()))));
     }
 
     private static void factoryReproduction(Snapshot snapshot) {
@@ -527,7 +667,8 @@ public final class VerifyT1Progression {
         var rows = AtlasLogic.allEntries(ProcessGraph.generate(AuthorityAdapters.materialViews()));
         for (String task : List.of("thermal", "pylon", "scanner", "terrestrial", "pulverizer",
                 "furnace", "press", "assembler", "matrix_line", "glass", "logistics", "kiln",
-                "factory_world", "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell")) {
+                "factory_world", "industrial_matrix", "first_grid", "forming_dies", "copper_coil", "flux_cell",
+                "wet_beneficiation")) {
             var selected = T1Progression.atlasForQuest(task, rows);
             Set<String> resolved = new TreeSet<>(selected.nonAtlasRouteIds());
             selected.entries().forEach(entry -> resolved.add(entry.id()));

@@ -36,11 +36,14 @@ public final class VerifyT1Teaching {
     private static final Set<String> T1_IDS = Set.of(
             "thermal", "pylon", "first_grid", "scanner", "terrestrial", "pulverizer", "furnace",
             "press", "forming_dies", "copper_coil", "assembler", "matrix_line", "glass", "logistics",
-            "kiln", "factory_world", "flux_cell", "industrial_matrix");
+            "kiln", "factory_world", "flux_cell", "industrial_matrix", "wet_beneficiation");
     private static final Set<String> NEW_LESSONS = Set.of(
-            "first_grid", "forming_dies", "copper_coil", "flux_cell");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
     private static final Set<String> WIRE_FORMING_ROUTES = Set.of(
             "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper");
+    private static final Set<String> WET_ROUTES = Set.of(
+            "assemble/motor", "assemble/chemical_washer", "b2/iron", "b2/copper",
+            "b2_r1/iron", "b2_r1/copper");
     // dd0b4bc: sorted key + NUL + decoded body + LF for the 33 native FTB T0 lesson keys.
     private static final String T0_BODY_DIGEST =
             "bf93a3d61465ed953cb33eea9de7b061e4f8f35dc36a68eb5393df3214424391";
@@ -63,13 +66,13 @@ public final class VerifyT1Teaching {
     }
 
     private static void chapters() {
-        equal("the native identity set remains 46 historical tasks plus four rewardless lessons",
-                50, QuestCatalogue.tasks().size());
+        equal("the native identity set retains all 50 tasks and adds one rewardless wet lesson",
+                51, QuestCatalogue.tasks().size());
         equal("all T0 task identities remain exactly the deployed set", T0_IDS,
                 QuestCatalogue.tasks().stream()
                         .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T0)
                         .map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
-        equal("T1 adds only the four explicit teaching gaps", T1_IDS,
+        equal("T1 adds only the accepted optional wet lesson to its prior 18 objectives", T1_IDS,
                 QuestCatalogue.tasks().stream()
                         .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1)
                         .map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
@@ -92,6 +95,14 @@ public final class VerifyT1Teaching {
             equal("a physical checklist is not a free acknowledgment " + id, QuestCatalogue.Evidence.ITEM,
                     QuestCatalogue.byId(id).evidence());
         }
+        var wet = QuestCatalogue.byId("wet_beneficiation");
+        equal("the wet lesson appends without moving any old catalogue ordinal", wet,
+                QuestCatalogue.tasks().get(50));
+        equal("the wet lesson follows only the Assembler", List.of("assembler"), wet.requires());
+        equal("the wet lesson observes actual Washer possession", QuestCatalogue.Evidence.ITEM, wet.evidence());
+        equal("the wet lesson names the existing machine item", "grindless:chemical_washer", wet.subject());
+        equal("the wet lesson asks for one machine, not a copied construction bill", 1, wet.count());
+        equal("the wet lesson stays on its optional path", QuestTeaching.Path.T1_OPTIONAL, QuestTeaching.path(wet));
     }
 
     private static void lessons(JsonObject lang) {
@@ -148,6 +159,16 @@ public final class VerifyT1Teaching {
                         && assembler.contains("not required for the first F2 Matrix"));
         equal("the Assembler objective remains mandatory despite its optional expansion",
                 QuestTeaching.Path.T1_CORE, QuestTeaching.path(QuestCatalogue.byId("assembler")));
+        String wet = lang.get(QuestTeaching.bodyKey(QuestCatalogue.byId("wet_beneficiation"))).getAsString();
+        check("wet native teaching has at most 40 words", wet.strip().split("\\s+").length <= 40);
+        equal("the wet title matches acquisition evidence", "Acquire a Chemical Washer",
+                lang.get("gui.grindless.quest.task.wet_beneficiation").getAsString());
+        check("the wet lesson starts with possession, not a claimed successful operation",
+                wet.startsWith("Acquire a Chemical Washer."));
+        for (String concept : List.of("water", "crushed feed", "washed feed", "secondary ingot",
+                "Reduce", "Arc Furnace", "JEI", "optional")) {
+            check("short wet teaching explains " + concept, wet.contains(concept));
+        }
     }
 
     private static void selectors(List<AtlasLogic.Entry> entries) {
@@ -190,6 +211,9 @@ public final class VerifyT1Teaching {
         for (String id : WIRE_FORMING_ROUTES) {
             changedLiveData(entries, id, "assembler");
         }
+        for (String id : WET_ROUTES) {
+            changedLiveData(entries, id, "wet_beneficiation");
+        }
     }
 
     private static void changedLiveData(List<AtlasLogic.Entry> entries, String routeId, String taskId) {
@@ -228,6 +252,27 @@ public final class VerifyT1Teaching {
                 conversion.outputs());
         check("the first F2 lesson never requires the optional wire-forming branch",
                 exit.stream().noneMatch(row -> WIRE_FORMING_ROUTES.contains(row.id())));
+        check("the first F2 lesson never requires the optional wet branch",
+                exit.stream().noneMatch(row -> WET_ROUTES.contains(row.id())));
+        List<AtlasLogic.Entry> wet = QuestTeaching.recipes(QuestCatalogue.byId("wet_beneficiation"), entries);
+        equal("wet teaching selects exactly the six real Motor/Washer/B2/B2-R1 authorities", WET_ROUTES,
+                wet.stream().map(AtlasLogic.Entry::id).collect(Collectors.toSet()));
+        equal("the wet acquisition route produces the actual Washer item",
+                List.of("item:grindless:chemical_washer"), route(wet, "assemble/chemical_washer").outputs());
+        for (String material : List.of("iron", "copper")) {
+            AtlasLogic.Entry wash = route(wet, "b2/" + material);
+            equal("wet teaching uses the actual Washer family " + material,
+                    MachineFamily.CHEMICAL_WASHER, wash.family());
+            check("wet teaching retains the actual fluid input " + material,
+                    wash.inputs().contains("fluid:minecraft:water"));
+            check("wet teaching retains the washed primary output " + material,
+                    wash.outputs().contains("tag:grindless:washed_crushed_materials/" + material));
+            equal("wet teaching retains both distinct output streams " + material, 2L,
+                    wash.outputs().stream().distinct().count());
+            check("wet reduction consumes washed feed, not the old crushed input " + material,
+                    route(wet, "b2_r1/" + material).inputs()
+                            .contains("tag:grindless:washed_crushed_materials/" + material));
+        }
         List<AtlasLogic.Entry> assembler = QuestTeaching.recipes(QuestCatalogue.byId("assembler"), entries);
         AtlasLogic.Entry mill = route(assembler, "assemble/wire_mill");
         equal("the optional base Wire Mill is manufactured by the Assembler", MachineFamily.ASSEMBLER, mill.family());

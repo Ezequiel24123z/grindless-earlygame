@@ -34,12 +34,17 @@ import net.minecraft.server.Bootstrap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -69,17 +74,18 @@ public final class VerifyFtbQuests {
     private static final UUID TEAM = new UUID(0, 16);
     private static final Date NATIVE_DATE = new Date(1_700_000_000_000L);
     private static final Set<String> PAID_START = Set.of(QuestCatalogue.STARTER_SUPPLIES, "multitool");
-    private static final Set<String> ADDED_T1_LESSONS = Set.of("first_grid", "forming_dies", "copper_coil", "flux_cell");
+    private static final Set<String> ADDED_T1_LESSONS = Set.of(
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
     private static final Set<String> T1_IDS = Set.of(
             "thermal", "pylon", "scanner", "terrestrial", "pulverizer", "furnace", "press",
             "assembler", "matrix_line", "glass", "logistics", "kiln", "factory_world", "industrial_matrix",
-            "first_grid", "forming_dies", "copper_coil", "flux_cell");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
     private static final Set<String> LESSON_IDS = Set.of(
             "quest_book_help", "superflat", "construction", "manual_work", "grog", "firing",
             "geological_collector", "aggregate", "water_recovery", "mineral_feed", "biocultivator",
             "biomass", "fibreboard", "biomass_dynamo", "fluid_logistics", "conveyors", "assembly_bench",
             "research_terminal", "data_core", "calibrated_core",
-            "first_grid", "forming_dies", "copper_coil", "flux_cell");
+            "first_grid", "forming_dies", "copper_coil", "flux_cell", "wet_beneficiation");
     // Fixed reference literals catch ID-algorithm drift, not just consistency with the current helper.
     private static final Map<String, String> QUEST_CODES = Map.ofEntries(
             Map.entry("starter_supplies", "13ED15B1E32DD8BC"),
@@ -131,7 +137,8 @@ public final class VerifyFtbQuests {
             Map.entry("kiln", "7397B3E4A5579B1D"),
             Map.entry("factory_world", "57835299D482EB9F"),
             Map.entry("flux_cell", "1DF5F96E1A895AF9"),
-            Map.entry("industrial_matrix", "7D275307FFE56605"));
+            Map.entry("industrial_matrix", "7D275307FFE56605"),
+            Map.entry("wet_beneficiation", "321B876BD5C53950"));
     private static final List<String> STARTER_STACKS = List.of(
             "minecraft:cobblestone/64", "minecraft:cobblestone/64", "minecraft:oak_log/64",
             "minecraft:bread/64", "minecraft:brick/64", "minecraft:clay_ball/64", "minecraft:sand/64",
@@ -156,6 +163,8 @@ public final class VerifyFtbQuests {
             VerifyFtbQuestFiles.main(new String[0]);
             Map<String, CompoundTag> documents = FtbQuestDefinitions.chapters();
             definitions(documents);
+            wetDefinition(documents);
+            old50Invariants(documents);
             matrixParser();
             System.out.println("FTB PRODUCTION SNBT/PARSER DATA ASSERTIONS: " + assertions);
             Files.createDirectories(Path.of("build"));
@@ -193,13 +202,13 @@ public final class VerifyFtbQuests {
         equal("exactly the two native chapter filenames", Set.of("grindless_t0.snbt", "grindless_t1.snbt"),
                 documents.keySet());
         equal("chapter generation is deterministic", documents, FtbQuestDefinitions.chapters());
-        equal("all 46 historical logical IDs and four new reward-free T1 lessons", QUEST_CODES.keySet(),
+        equal("all 50 previous logical IDs and the one reward-free wet lesson", QUEST_CODES.keySet(),
                 QuestCatalogue.tasks().stream().map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
-        equal("50 catalogue entries, without duplicate logical IDs", 50, QuestCatalogue.tasks().size());
-        equal("exact 18 in-development T1 objectives", T1_IDS, QuestCatalogue.tasks().stream()
+        equal("51 catalogue entries, without duplicate logical IDs", 51, QuestCatalogue.tasks().size());
+        equal("exact 19 in-development T1 objectives", T1_IDS, QuestCatalogue.tasks().stream()
                 .filter(task -> QuestCatalogue.chapter(task) == QuestCatalogue.Chapter.T1)
                 .map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
-        equal("exact 24 explicitly reward-free lessons", LESSON_IDS, QuestCatalogue.tasks().stream()
+        equal("exact 25 explicitly reward-free lessons", LESSON_IDS, QuestCatalogue.tasks().stream()
                 .filter(task -> task.type() == QuestCatalogue.Type.LESSON)
                 .map(QuestCatalogue.Task::id).collect(Collectors.toSet()));
         equal("26 material-reward quests", 26L, QuestCatalogue.tasks().stream()
@@ -212,6 +221,8 @@ public final class VerifyFtbQuests {
         equal("pinned starter task ID", "79DA10B2C2D84144", FtbQuestDefinitions.code(FtbQuestDefinitions.taskId("starter_supplies")));
         equal("pinned F1 task ID", "3F50FF4E69F07A79", FtbQuestDefinitions.code(FtbQuestDefinitions.taskId("relay")));
         equal("pinned F2 task ID", "55B3145C00EA45F6", FtbQuestDefinitions.code(FtbQuestDefinitions.taskId("industrial_matrix")));
+        equal("pinned wet acquisition task ID", "5A532E5A96A81625",
+                FtbQuestDefinitions.code(FtbQuestDefinitions.taskId("wet_beneficiation")));
         equal("pinned first starter receipt ID", "246F5A62BDCF22A4",
                 FtbQuestDefinitions.code(FtbQuestDefinitions.rewardIds(QuestCatalogue.byId("starter_supplies")).get(0)));
         equal("pinned last starter receipt ID", "408264CC5294961D",
@@ -225,7 +236,7 @@ public final class VerifyFtbQuests {
                     ? "grindless_t0.snbt" : "grindless_t1.snbt");
             unique(ids, parseId(document), "chapter " + chapter);
             ListTag quests = document.getList("quests", Tag.TAG_COMPOUND);
-            equal("chapter size " + chapter, chapter == QuestCatalogue.Chapter.T0 ? 32 : 18, quests.size());
+            equal("chapter size " + chapter, chapter == QuestCatalogue.Chapter.T0 ? 32 : 19, quests.size());
             for (int index = 0; index < quests.size(); index++) {
                 equal("no duplicate generated quest", true, questCodes.add(quests.getCompound(index).getString("id")));
             }
@@ -276,10 +287,71 @@ public final class VerifyFtbQuests {
                 equal("canonical reward quantity " + declared.id(), declared.rewards().get(index).count(), reward.getInt("count"));
             }
         }
-        equal("two chapters, 50 quests, 50 tasks and 36 distinct item receipts", 138, ids.size());
+        equal("two chapters, 51 quests, 51 tasks and the unchanged 36 item receipts", 140, ids.size());
         equal("the exact ordered eleven starter stacks, including both duplicate pairs", STARTER_STACKS,
                 QuestCatalogue.byId(QuestCatalogue.STARTER_SUPPLIES).rewards().stream()
                         .map(reward -> reward.itemId() + "/" + reward.count()).toList());
+    }
+
+    private static void wetDefinition(Map<String, CompoundTag> documents) {
+        QuestCatalogue.Task declared = QuestCatalogue.byId("wet_beneficiation");
+        CompoundTag quest = questDocument(documents, declared);
+        CompoundTag task = quest.getList("tasks", Tag.TAG_COMPOUND).getCompound(0);
+        equal("wet acquisition uses only the stock native item task", "ftbquests:item", task.getString("type"));
+        equal("wet acquisition names the actual machine, not a custom guide or carrier",
+                "grindless:chemical_washer", task.getString("item"));
+        equal("wet acquisition observes one machine", 1L, task.getLong("count"));
+        equal("wet acquisition never consumes its machine", false, task.getBoolean("consume_items"));
+        equal("wet acquisition allows ordinary possession, not only a new craft", false,
+                task.getBoolean("only_from_crafting"));
+        equal("wet acquisition is an explicitly optional native lesson", true, QuestTeaching.optional(declared));
+        equal("wet acquisition adds no material receipt", List.of(), FtbQuestDefinitions.rewardIds(declared));
+        equal("wet acquisition has no native reward", 0, quest.getList("rewards", Tag.TAG_COMPOUND).size());
+        equal("wet acquisition follows only the Assembler plus the existing Relay chapter gate",
+                List.of("assembler", "relay"), QuestCatalogue.requirements(declared));
+        ListTag dependencies = quest.getList("dependencies", Tag.TAG_STRING);
+        equal("wet acquisition has exactly its two native dependencies", 2, dependencies.size());
+        equal("the native Assembler dependency retains its fixed identity", QUEST_CODES.get("assembler"),
+                dependencies.getString(0));
+        equal("the native Relay chapter gate retains its fixed identity", QUEST_CODES.get("relay"),
+                dependencies.getString(1));
+        CompoundTag assembler = questDocument(documents, QuestCatalogue.byId("assembler"));
+        equal("wet acquisition uses the existing next-depth native spacing",
+                assembler.getDouble("x") + 2.5, quest.getDouble("x"));
+        for (QuestCatalogue.Task previous : QuestCatalogue.tasks().subList(0, 50)) {
+            if (QuestCatalogue.chapter(previous) == QuestCatalogue.Chapter.T1) {
+                equal("the appended wet line cannot overlap an old T1 node " + previous.id(), true,
+                        questDocument(documents, previous).getDouble("y") < quest.getDouble("y"));
+            }
+            equal("no previous objective gains the optional wet prerequisite " + previous.id(), false,
+                    QuestCatalogue.requirements(previous).contains("wet_beneficiation"));
+        }
+    }
+
+    private static void old50Invariants(Map<String, CompoundTag> documents) throws Exception {
+        StringBuilder identities = new StringBuilder();
+        StringBuilder positions = new StringBuilder();
+        for (QuestCatalogue.Task previous : QuestCatalogue.tasks().subList(0, 50).stream()
+                .sorted(Comparator.comparing(QuestCatalogue.Task::id)).toList()) {
+            identities.append(previous.id()).append('\0')
+                    .append(FtbQuestDefinitions.code(FtbQuestDefinitions.questId(previous.id()))).append('\0')
+                    .append(FtbQuestDefinitions.code(FtbQuestDefinitions.taskId(previous.id()))).append('\0')
+                    .append(FtbQuestDefinitions.rewardIds(previous).stream().map(FtbQuestDefinitions::code)
+                            .collect(Collectors.joining(","))).append('\n');
+            CompoundTag quest = questDocument(documents, previous);
+            positions.append(previous.id()).append('\0')
+                    .append(String.format(Locale.ROOT, "%.1f", quest.getDouble("x"))).append('\0')
+                    .append(String.format(Locale.ROOT, "%.1f", quest.getDouble("y"))).append('\n');
+        }
+        // e4cc108: sorted old50 IDs; UTF-8 rows use NUL fields and final LF.
+        equal("all old50 quest/task and ordered reward identities remain fixed",
+                "7eba2fe0961882cecdff00710abaefe0786990b1af94723fa9262212b3253afd",
+                HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                        .digest(identities.toString().getBytes(StandardCharsets.UTF_8))));
+        equal("all old50 native positions remain fixed",
+                "92b18d1aa0acb1697d52bfb8df0810b558dfcda3ea1bf10a98d616d3c5dbe0b3",
+                HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                        .digest(positions.toString().getBytes(StandardCharsets.UTF_8))));
     }
 
     /** Real authored SNBT documents only: do not instantiate their platform-dependent item tasks. */
@@ -326,8 +398,8 @@ public final class VerifyFtbQuests {
     /** These loaded stock classes have synthetic item subjects, not production item registration. */
     private static void syntheticDefinitions(BaseQuestFile file) {
         equal("synthetic native chapter count", 2, file.getAllChapters().size());
-        equal("synthetic native quest count", 50, file.getAllChapters().stream().mapToInt(chapter -> chapter.getQuests().size()).sum());
-        equal("synthetic native task count", 50, file.getAllTasks().size());
+        equal("synthetic native quest count", 51, file.getAllChapters().stream().mapToInt(chapter -> chapter.getQuests().size()).sum());
+        equal("synthetic native task count", 51, file.getAllTasks().size());
         equal("synthetic native receipt count", 36L, file.getAllObjects().stream().filter(Reward.class::isInstance).count());
         TeamData empty = new TeamData(TEAM, file);
         for (QuestCatalogue.Task declared : QuestCatalogue.tasks()) {
@@ -408,7 +480,7 @@ public final class VerifyFtbQuests {
         FtbQuestNative.migrate(legacy, FIRST, data);
         equal("adding lessons preserves every old paid receipt", historical, legacy.legacyClaims(FIRST));
         equal("adding lessons preserves the native authority fence", true, legacy.usesNativeClaims(FIRST));
-        equal("the four new lessons add no individual material receipts", 36,
+        equal("the five added lessons add no individual material receipts", 36,
                 data.serializeNBT().getCompound("claimed_rewards").size());
         for (String id : ADDED_T1_LESSONS) {
             equal("the added T1 node is a reward-free lesson " + id, QuestCatalogue.Type.LESSON,
@@ -422,6 +494,23 @@ public final class VerifyFtbQuests {
         SNBTCompoundTag imported = data.serializeNBT();
         FtbQuestNative.migrate(legacy, FIRST, data);
         equal("repeat import cannot advance the added lessons", imported, data.serializeNBT());
+        Set<String> previous50 = QUEST_CODES.keySet().stream().filter(id -> !id.equals("wet_beneficiation"))
+                .collect(Collectors.toSet());
+        equal("the immediately preceding source catalogue has exactly 50 IDs", 50, previous50.size());
+        QuestProgress old50 = paid(SECOND, previous50);
+        TeamData upgrade50 = new TeamData(TEAM, file);
+        FtbQuestNative.migrate(old50, SECOND, upgrade50);
+        equal("all 50 previous completions remain exact", previous50, old50.claimed(SECOND));
+        equal("the old50 import retains the native paid-history fence", true, old50.usesNativeClaims(SECOND));
+        equal("the old50 import retains exactly the same material receipts", 36,
+                upgrade50.serializeNBT().getCompound("claimed_rewards").size());
+        equal("all old50 history cannot invent new Washer acquisition", false,
+                upgrade50.isCompleted(quest(file, "wet_beneficiation")));
+        equal("all old50 history cannot invent new acquisition progress", 0L,
+                upgrade50.getProgress(task(file, "wet_beneficiation")));
+        SNBTCompoundTag imported50 = upgrade50.serializeNBT();
+        FtbQuestNative.migrate(old50, SECOND, upgrade50);
+        equal("reimporting old50 cannot advance or repay the new lesson", imported50, upgrade50.serializeNBT());
     }
 
     /** Real native migration API on the explicitly synthetic vanilla-stock graph. */
