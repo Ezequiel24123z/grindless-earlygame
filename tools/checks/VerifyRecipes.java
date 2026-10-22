@@ -69,7 +69,7 @@ public final class VerifyRecipes {
         yes("no existing production recipe acquires a pressure requirement",
                 recipes.stream().noneMatch(ProcessRecipe::namesPressure));
         eq("the reachable ore, chemistry, fabrication, logistics, tools, armour, renewable sources, primitive assembly, glass, redstone, steel, silicon and Relay Matrix graph",
-                205, recipes.size());
+                209, recipes.size());
         c3Routes(recipes);
         legacyGuideWork(recipes);
         assemblerCrafts(recipes);
@@ -317,9 +317,15 @@ public final class VerifyRecipes {
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
                         IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
-        eq("only one production operand opts into minimum control", 1L, recipes.stream()
+        eq("only the four selected machine operands and the existing Wire Mill opt into minimum control", 5L,
+                recipes.stream()
                 .flatMap(row -> java.util.stream.Stream.concat(row.inputs().stream(), row.catalysts().stream()))
                 .filter(IngredientSpec::isMinimumControl).count());
+        eq("minimum control stays limited to the five named recipe identities",
+                List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler",
+                        "assemble/wire_mill"),
+                recipes.stream().filter(row -> row.inputs().stream().anyMatch(IngredientSpec::isMinimumControl))
+                        .map(ProcessRecipe::id).toList());
         eq("the minimum role preserves the canonical baseline Matrix ID", "item:grindless:relay_matrix",
                 mill.itemInputs().get(3).qualified());
         JsonObject serialized = new com.google.gson.Gson().toJsonTree(mill.itemInputs().get(3)).getAsJsonObject();
@@ -919,6 +925,7 @@ public final class VerifyRecipes {
 
     private static void assemblerCrafts(List<ProcessRecipe> recipes) throws IOException {
         List<String> dieNames = List.of("plate_die", "rod_die", "gear_die", "coil_die");
+        List<String> machineNames = List.of("pulverizer", "arc_furnace", "press", "assembler");
         eq("the four existing manual Press dies are the only authored die crafts",
                 dieNames, T1Recipes.shaped().stream().filter(craft -> craft.name().endsWith("_die"))
                         .map(T1Recipes.Shaped::name).toList());
@@ -927,11 +934,17 @@ public final class VerifyRecipes {
                         && row.itemOutputs().stream().anyMatch(output -> output.id().endsWith("_die")))
                 .map(row -> row.id().substring("assemble/".length())).toList();
         eq("only the explicitly selected Press dies have automatic routes", dieNames, automaticDies);
+        eq("only the four explicitly selected first-factory machines have automatic routes", machineNames,
+                recipes.stream().filter(row -> machineNames.stream()
+                                .anyMatch(name -> row.id().equals("assemble/" + name)))
+                        .map(row -> row.id().substring("assemble/".length())).toList());
 
-        for (String name : List.of("machine_casing", "flux_cell", "plate_die", "rod_die", "gear_die", "coil_die")) {
+        for (String name : List.of("machine_casing", "flux_cell", "plate_die", "rod_die", "gear_die", "coil_die",
+                "pulverizer", "arc_furnace", "press", "assembler")) {
             T1Recipes.Shaped craft = T1Recipes.shaped().stream().filter(row -> row.name().equals(name))
                     .findFirst().orElseThrow();
             String id = "assemble/" + name;
+            boolean requiresMinimumControl = machineNames.contains(name);
             Map<String, Integer> inputs = shapedInputs(craft.pattern(), craft.key());
             projection(recipes, MachineFamily.ASSEMBLER, id, inputs, craft.result(), craft.resultCount(),
                     FabricationLogic.ASSEMBLE_TICKS, FabricationLogic.FU_PER_TICK);
@@ -943,8 +956,16 @@ public final class VerifyRecipes {
                     && automatic.fluidOutputs().isEmpty());
             no(id + " adds no physical condition or permission", automatic.namesTemperature() || automatic.namesPressure()
                     || automatic.namesAtmosphere() || automatic.namesAgitation() || automatic.milestone() != null);
-            yes(id + " requires no charged or rated component",
-                    automatic.inputs().stream().allMatch(input -> input.matrixRating() == 0));
+            List<IngredientSpec> minimumControlInputs = automatic.itemInputs().stream()
+                    .filter(IngredientSpec::isMinimumControl).toList();
+            eq(id + " selects only its explicit minimum-control Relay operand",
+                    requiresMinimumControl
+                            ? List.of(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))
+                            : List.of(),
+                    minimumControlInputs);
+            yes(id + " keeps all other material operands exact",
+                    automatic.itemInputs().stream().filter(input -> !input.isMinimumControl())
+                            .allMatch(input -> input.matrixRole() == IngredientSpec.MatrixRole.EXACT));
             yes(id + " adds no unconsumed catalyst", automatic.catalysts().isEmpty());
             no(id + " is not an earlier Bench route", recipes.stream()
                     .filter(row -> row.family() == MachineFamily.ASSEMBLY_BENCH)

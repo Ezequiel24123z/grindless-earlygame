@@ -83,7 +83,7 @@ public final class VerifyT1Progression {
                 List.of("relay_f2"), T1Progression.lines().stream()
                         .filter(line -> line.requirement() == T1Progression.Requirement.EXIT)
                         .map(T1Progression.Line::id).toList());
-        for (String optional : List.of("wire_forming", "tool_reproduction", "extraction", "logistics",
+        for (String optional : List.of("factory_reproduction", "wire_forming", "tool_reproduction", "extraction", "logistics",
                 "storage", "kiln", "factory_space")) {
             equal("the optional branch is not a first-factory mandate: " + optional, false,
                     T1Progression.byId(optional).mandatory());
@@ -130,6 +130,7 @@ public final class VerifyT1Progression {
         equal("the Bench still cannot manufacture the frontier Matrix", false,
                 snapshot.routes().containsKey("bench/relay_matrix"));
         componentRoutes(snapshot);
+        factoryReproduction(snapshot);
         wireForming(snapshot);
         toolReproduction(snapshot);
 
@@ -253,6 +254,14 @@ public final class VerifyT1Progression {
                 toolDocument.get("requirement").getAsString());
         equal("the existing exporter includes all four live die routes", 4,
                 toolDocument.getAsJsonArray("routes").size());
+        var factoryDocument = document.getAsJsonArray("lines")
+                .get(T1Progression.lines().indexOf(T1Progression.byId("factory_reproduction"))).getAsJsonObject();
+        equal("the existing exporter projects the optional factory reproduction line", "factory_reproduction",
+                factoryDocument.get("id").getAsString());
+        equal("the existing exporter keeps factory reproduction optional", "OPTIONAL",
+                factoryDocument.get("requirement").getAsString());
+        equal("the existing exporter includes all four live machine routes", 4,
+                factoryDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
         for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven",
                 "t1_finite_establishment_replayed", "global_optimum_claimed")) {
@@ -343,6 +352,45 @@ public final class VerifyT1Progression {
         equal("no automatic die route enters the mandatory first-F2 path", false,
                 T1Sustainability.mandatoryRoutes(snapshot).stream()
                         .anyMatch(route -> line.routeIds().contains(route.id())));
+    }
+
+    private static void factoryReproduction(Snapshot snapshot) {
+        T1Progression.Line line = T1Progression.byId("factory_reproduction");
+        equal("optional factory reproduction selects only the four existing machine routes",
+                List.of("assemble/pulverizer", "assemble/arc_furnace", "assemble/press", "assemble/assembler"),
+                line.routeIds());
+        equal("optional factory reproduction follows the manually seeded Assembler line",
+                Set.of("assembly"), line.requires());
+        equal("factory reproduction stays optional", T1Progression.Requirement.OPTIONAL, line.requirement());
+        equal("factory reproduction is taught after assembly",
+                T1Progression.lines().indexOf(T1Progression.byId("assembly")) + 1,
+                T1Progression.lines().indexOf(line));
+        List<Route> mandatory = T1Sustainability.mandatoryRoutes(snapshot);
+        for (String machine : List.of("pulverizer", "arc_furnace", "press", "assembler")) {
+            Route route = snapshot.routes().get("assemble/" + machine);
+            equal("machine reproduction uses the existing Assembler: " + machine, "ASSEMBLER", route.family());
+            equal("machine reproduction stays ordinary live process authority: " + machine,
+                    Authority.PROCESS_GRAPH, route.authority());
+            equal("machine reproduction preserves the ordinary baseline output: " + machine,
+                    Map.of(item("grindless:" + machine), 1L), route.outputs());
+            equal("machine reproduction uses the existing automatic process: " + machine, true,
+                    route.automatable());
+            equal("machine reproduction adds no catalyst: " + machine, Map.of(), route.catalysts());
+            equal("machine reproduction adds no route prerequisite: " + machine, Set.of(),
+                    route.prerequisites());
+            equal("machine reproduction is not a new mandatory route: " + machine, false,
+                    mandatory.stream().anyMatch(candidate -> candidate.id().equals(route.id())));
+        }
+        equal("the Assembler quest remains bound to the existing assembly line",
+                T1Progression.byId("assembly"), T1Progression.byQuest("assembler"));
+        equal("the Assembler lesson keeps its established route selection",
+                List.of("craft/assembler", T1Progression.CASING_ROUTE, T1Progression.REPRODUCTION_ROUTE,
+                        "assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
+                T1Progression.questRouteIds("assembler"));
+        equal("the optional factory line does not become a first-F2 prerequisite",
+                Set.of("assembly"), T1Progression.byId("relay_f2").requires());
+        equal("the first F2 route keeps its exact identity", "assemble/relay_matrix_f2",
+                T1Progression.EXIT_ROUTE);
     }
 
     private static void componentRoutes(Snapshot snapshot) {
