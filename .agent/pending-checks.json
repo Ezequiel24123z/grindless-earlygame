@@ -20,7 +20,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "G11native_verified_G12_repairedcontracts_T0writers_pass_T1finite_FAIL_closed_DIRTY114custodyQA_pending_sourceC_repair_NO_PClease_orA10",
+    "status": "G11native_verified_G12_repairedcontracts_T0writers_pass_T1finite_FAIL_closed_DIRTY114custody_VERIFIED_sourceC_repair_NO_PClease_orA10",
     "normal_final_manual_only_operating_processes_automatable": true,
     "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
     "infrastructure_manual_and_machine_methods_per_product": true,
@@ -149,8 +149,9 @@
     "allowed_data_derivation": "NORMALA10subset4_exactparentcb1e_actualpasses_frozenotherinputs_Java0locksfalse_contiguoustrailers_clean_localbundle_NOPUSH_RUNTIMEafterdata",
     "native": "NOT_AUTHORIZED_reuse_closedG11_f1b9_1273_19_46custody_unchanged_runtimebindings",
     "prohibition": "NO_FTB_Forge_native_oldCLI_compiler_ABI_JDKfixture_Blueprint_assets_package_Prism_target_ownerworld_deps_provider_sourcehotfix_or_waivedgate",
-    "result": "G12_CLOSED_T1finite_FAIL_DIRTY_PARTIAL2_exactcb1e114custody_returned_QA_PENDING_sourceC_repair_active_NO_PCgrant_orA10",
-    "custody_QA_status": "PENDING251d081a_114files",
+    "result": "G12_CLOSED_T1finite_FAIL_DIRTY_PARTIAL2_exactcb1e114custody_returned_QA_VERIFIED_sourceC_repair_active_NO_PCgrant_orA10",
+    "custody_QA_status": "VERIFIED114_251d081a_including_existing_postcustody_raws",
+    "custody_QA_limits": "no_independent_freshfinal_exitreceipt_3progress_records_not_exit0_observer_notes_not_raw_consoles_no43_98_T1provenance",
     "custody_manifest_sha256": "24d84ed7c49245ff7c1d32b692a30f0ab2f05abacbcc807b3715af77fe9f4487",
     "final_readonly_sha256": "b70f88cdf464fe2b1ac6356621219431caa4191cab0b53a9013bd4cf38f66cb7",
     "failure_stdout_sha256": "8524a44d3f3dffd70a66705d1452c1b108a424a89a8d9f71e5b32733fc71fac2",
@@ -246,7 +247,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G11native_CLOSEDverified_G12_repairedcontracts_T0writers_pass_finiteFAIL_returned_DIRTYpartial2_QA_pending_Csource_repair_NOactivePC",
+    "status": "G11native_CLOSEDverified_G12_repairedcontracts_T0writers_pass_finiteFAIL_returned_DIRTYpartial2_QA_verified_Csource_repair_NOactivePC",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",

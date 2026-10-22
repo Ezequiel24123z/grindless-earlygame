@@ -1145,7 +1145,7 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
-**G12 failed-model closure reported; independent QA251d pending.** Capsule
+**G12 failed-model custody independently verified by251d.** Capsule
 114/manifest24d84ed7c49245ff7c1d32b692a30f0ab2f05abacbcc807b3715af77fe9f4487
 preserves PC/SCP/local length+SHA parity,2595 unchanged non-output inputs
 and four actual-final payloads. Only Guidance547812 bytes/
@@ -1172,6 +1172,21 @@ inherited originals5 footer errors are retained and repaired only locally/
 read-only, with actual CI originals0 and no producer replay.
 Source-only repair and separate LOCAL G13 preparation can proceed; no new
 execution lease, source binding, root admission or player update is granted.
+
+QA verifies114/114 contained unique entries, all four original/final payload
+relationships, seven immediate-failure duplicates,2595 unchanged inputs,
+12 source bindings and26 captured images, eight stages/seven exit0/one
+exit1, counts/failure/CI0 and guard closure. This is not full43/98 provenance.
+An initially missing local-file pointer is resolved using the EXISTING
+postcustody stdout546 bytes/b70f88cd and stderr858 bytes/
+ad84dd75a60e7363678c0a9414c7ba8a8f4c4040823318ada256ab36e7eddf7a.
+The latter contains three Completed progress records, no contradictory
+error; it is neither empty nor independent exit0 evidence. No separate
+freshfinal exit receipt or original observer-correction consoles were saved.
+The history-only exit0 and explanatory observer note retain those limits.
+The separate pointer addendum is not a replacement raw. No producer,
+remote observation,114-file replay or evidence rewrite was performed.
+No significant custody gap remains; the model failure remains unchanged.
 
 **G12 real finite-continuation failure oncb1e, not stale equality.**
 Following repaired contracts and normal Guidance/Economy writes0,

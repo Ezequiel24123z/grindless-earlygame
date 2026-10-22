@@ -12,8 +12,14 @@ reconstruction, checkout or later producer occurred. T1JSON/MD bytes/mtimes
 and2595 other inputs stay unchanged. Owned-allJava0, work/cachelocksfalse
 and exact ownGuardf9ca2acb removal/absence close the exclusive lease.
 FinalrawSHAb70f88cd and manifest24d84ed7 bind the reported closure.
-Independent QA251d is checking these LOCAL settled artifacts; no new PC
-inspection or full-model pass follows from that review.
+Independent QA251d verifies114/114, originals/partials/inputs,12 source
+bindings/26 captured images, actual exits/failure and guard closure. A
+narrow follow-up verifies the existing postcustody stdout546 bytes/
+b70f88cd and stderr858 bytes/ad84dd75. The stderr has three Completed
+progress records, not errors or independent exit0 proof. No separate final
+exit receipt or observer-correction consoles exist; their history/notes are
+not promoted to raw receipts. Custody is accepted, the finite model is not.
+No new PC inspection or producer replay occurred.
 
 Reported actual checks: FactoryALLPASS; Guidance29253/0; regressions670/0,
 R34=25/0 and priorR29-R33 green. Guidance74/4973 and Economy396/17 normal

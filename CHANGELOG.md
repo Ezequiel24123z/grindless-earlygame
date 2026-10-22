@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Verify G12 failed-run custody without repeating execution.**
+  Independent QA accepts114/114, originals/partials/inputs and recorded
+  source/classes/exits/failure/guard closure. Recover existing local final
+  raw pointers to verify the postcustody snapshot; preserve the lack of a
+  separate final exit receipt and observer-console originals. Progress
+  records are not exit0 evidence, and accepted custody does not make the
+  finite model pass. No PC observation or producer was repeated.
 - **Close G12 honestly with its two failed-run partial outputs intact.**
   Preserve reported114-file custody,2595 unchanged non-output inputs and
   unchanged T1 bytes/mtimes. Fresh21:34:03Z returns the lease on exactcb1e
