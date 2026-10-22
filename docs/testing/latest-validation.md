@@ -1054,6 +1054,56 @@ autonomy or chassis-upgrade acceptance. No package, Prism/player/fictitious
 target update, paid-quest/ABI replay, main or release action occurred.
 ADR-0187 source continues independently and has no new PC execution grant.
 
+### ADR-0187 source intake before actual finite qualification
+
+Normal source commits6c53b321/exactf5c2dde then
+`6b1917672f48eda7b5320ee4bc3733a2b474300a`, parent
+`6c53b3216144a6bfdb0bfb13633796f365a5406b`, tree
+`baa360a691f2f470f1224db884329b4294dd735c`, contain exactly nine owned paths/
+1112 insertions49 deletions. Parent verifies the private source handoff SHA256
+`25e77bcb27b02e467614cdb2a7cc84f195ae001cb48a9e53b53656adc196d9e5`,
+two normal commits/both trailers and the bounded immutable scope.
+
+The coordinator normally composes the seven application/check/exporter Java
+blobs exactly alongside A9. Only changelog conflicts and both histories are
+retained; the task map combines the independent seams. The four canonical
+payloads remain the verified G10/A9 bytes. They are not hand-edited to make
+the new finite source look executed. Independent code review8ef12f19 assesses
+the immutable f5c2-to6b range; its result is pending. Publishing coherent WIP
+for required CI does not assert a passing review, compiler or model.
+
+The source outcome has written typed conservation/admission/partial-state/
+work/claims/tag/F1/F2 cases in the existing audit/T0/T1 suites. Authored
+42-source/96-image expressions are not observed class hashes or evidence
+that a finite replay succeeds. No Java/JVM/javac/Gradle/writer/native/PC or
+gameplay action occurred in the source worktree. Missing Python and the direct
+PowerShell script-policy failure are retained; documented process-local
+PowerShell/source/link checks recover without installation or global changes.
+
+The established executor prepares a new affected common-model path LOCALLY
+ONLY: compile changed contracts, execute the existing finite mechanism,
+normal writers/three independent checks/canonical refresh and actual42/96
+provenance. No PC/SSH/Sync/JVM or CI query is granted before a single reviewed
+published exact-source GO. A coordinator_instructions delivery is rejected
+before delivery because the legacy persistent relationship is inactive; an
+ordinary legacy-session message is accepted for this local-only preparation.
+That control-plane rejection is not a source or PC test failure.
+
+Local preparation then supplies proposed inventorySHA256
+`1b8c82facdec8b67e3cfa3002716beeb0a6e6f478e1c39fa9749250cc73e9738`
+and command-selectionSHA256
+`472d3e539b958adcd8a302c44caa8ee4917fd229b9f955f3058c3e9a56f2d4ed`.
+Only worktreePath differs from the working392f inventory; source/grant/lease
+remain NULL. The proposed new root is NOT observed, admitted or materialized.
+T0's existing main checks guidance parity first, so its checkpoint regressions
+follow normal writers/resource refresh rather than a predictable stale-file
+failure. No additional READY round, CI lookup or PC action is performed.
+
+Only the shared audit mechanism changed. G10 BE/menu/network/runtime and FTB
+proofs remain reusable at their original sources; no new native scenario,
+package/Prism/player/save update or whole-T1 acceptance follows. Actual
+compiler/replay findings, not this source handoff, determine the next outcome.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

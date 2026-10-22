@@ -37,12 +37,91 @@ public final class SustainabilityAudit {
                               long executedBatches, long produced, String status) {
     }
 
+    /** One completed authority batch: physical withdrawals exclude non-portable local work. */
+    public record ExecutedBatch(String route, Map<Resource, Long> consumed,
+                                Map<Resource, Long> produced, long manualActions) {
+        public ExecutedBatch {
+            consumed = sortedMap(consumed);
+            produced = sortedMap(produced);
+        }
+    }
+
+    /**
+     * Immutable in-process custody, issued only by this auditor, never caller-supplied inventory.
+     * Delivery totals are accounting facts; only freeStock can fund another withdrawal.
+     */
+    public static final class WitnessState {
+        private final Snapshot source;
+        private final SustainabilityAnnotations assumptions;
+        private final TierResult evidence;
+        private final DebtManifest debt;
+        private final DebtManifest.Applied findings;
+        private final int tier;
+        private final ConstructionReserve.Custody custody;
+
+        private WitnessState(Result result, TierResult evidence, int tier, ConstructionReserve.Custody custody) {
+            this(result, result.annotations(), evidence, tier, custody);
+        }
+
+        private WitnessState(Result result, SustainabilityAnnotations assumptions, TierResult evidence,
+                             int tier, ConstructionReserve.Custody custody) {
+            source = result.authorities();
+            this.assumptions = assumptions;
+            this.evidence = evidence;
+            debt = result.debt();
+            DebtManifest.Applied applied = result.findings();
+            findings = new DebtManifest.Applied(List.copyOf(applied.findings()), applied.ratchetPass(),
+                    applied.activeErrors(), applied.waivedDebt(), applied.warnings(), applied.unknowns());
+            this.tier = tier;
+            this.custody = custody;
+        }
+
+        private boolean matches(Result result) {
+            TierResult actual = result.tiers().get(0);
+            return tier == 0 && source.equals(result.authorities()) && assumptions.equals(result.annotations())
+                    && debt.equals(result.debt()) && findings.equals(result.findings())
+                    && actual != null && evidence.equals(actual.withoutWitness());
+        }
+
+        public int tier() { return tier; }
+        public Map<Resource, Long> freeStock() { return custody.stock(); }
+        public Map<Resource, Long> retainedCatalysts() { return custody.locked(); }
+        public Set<Resource> installedMachines() { return custody.installed(); }
+        public Map<String, Map<Resource, Long>> installationParts() { return custody.installationRequirements(); }
+        public Set<String> claimedRoutes() { return custody.claimed(); }
+        public Map<String, Long> bootstrapSources() { return custody.bootstrapSources(); }
+        public Map<Resource, Long> guaranteedDeliveries() { return custody.guaranteed(); }
+        public Map<Resource, Long> playerDeliveries() { return custody.playerDelivered(); }
+        public Map<Resource, Long> rewardDeliveries() { return custody.claimedRewards(); }
+        public Map<Resource, Long> cumulativeDeliveries() { return custody.delivered(); }
+        public Map<Resource, Long> peakDraw() { return custody.peak(); }
+        public long consumedManualActions() { return custody.manualActions(); }
+        public long requiredManualActions() { return custody.requiredManualActions(); }
+        public int operations() { return custody.steps(); }
+        public Map<String, Long> establishmentBatches() { return custody.executions(); }
+        public List<ExecutedBatch> history() { return custody.history(); }
+        ConstructionReserve.Custody custody() { return custody; }
+    }
+
+    /** A finite continuation is not recursive renewable closure, continuous operation or world evidence. */
+    public record FiniteResult(boolean admitted, boolean completed, String status,
+                               WitnessState predecessor, WitnessState state,
+                               List<ExecutedBatch> batches, List<Reserve> reserves, WorkReserve manualWork,
+                               GoalWitness exitProduction, List<AuditFinding> findings) {
+        public FiniteResult {
+            batches = List.copyOf(batches);
+            reserves = List.copyOf(reserves);
+            findings = List.copyOf(findings);
+        }
+    }
+
     /** Tier facts; renewable excludes finite circulating stock, and an unknown ledger is not a pass. */
     public record TierResult(int tier, Set<Resource> mandatory, Set<Resource> recurring,
                              Set<Resource> available, Set<Resource> renewable,
                              Set<String> availableRoutes, Set<String> renewableRoutes,
                              List<Reserve> reserves, Map<Resource, Long> retainedInventory, WorkReserve manualWork,
-                             GoalWitness exitProduction, Map<String, Long> establishmentBatches, String unknown) {
+                             GoalWitness exitProduction, Map<String, Long> establishmentBatches, String unknown,
+                             WitnessState witnessState) {
         public TierResult {
             mandatory = sortedSet(mandatory);
             recurring = sortedSet(recurring);
@@ -53,6 +132,26 @@ public final class SustainabilityAudit {
             reserves = List.copyOf(reserves);
             retainedInventory = sortedMap(retainedInventory);
             establishmentBatches = sortedMap(establishmentBatches);
+        }
+
+        /** Preserves all pre-continuation callers; report fields alone cannot manufacture custody. */
+        public TierResult(int tier, Set<Resource> mandatory, Set<Resource> recurring,
+                          Set<Resource> available, Set<Resource> renewable,
+                          Set<String> availableRoutes, Set<String> renewableRoutes,
+                          List<Reserve> reserves, Map<Resource, Long> retainedInventory, WorkReserve manualWork,
+                          GoalWitness exitProduction, Map<String, Long> establishmentBatches, String unknown) {
+            this(tier, mandatory, recurring, available, renewable, availableRoutes, renewableRoutes, reserves,
+                    retainedInventory, manualWork, exitProduction, establishmentBatches, unknown, null);
+        }
+
+        private TierResult withoutWitness() {
+            return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes, renewableRoutes,
+                    reserves, retainedInventory, manualWork, exitProduction, establishmentBatches, unknown);
+        }
+
+        private TierResult withWitness(WitnessState state) {
+            return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes, renewableRoutes,
+                    reserves, retainedInventory, manualWork, exitProduction, establishmentBatches, unknown, state);
         }
 
         /** Preserves the result constructor used before completed-batch provenance was exported. */
@@ -91,6 +190,7 @@ public final class SustainabilityAudit {
     private final Snapshot snapshot;
     private final SustainabilityAnnotations annotations;
     private final Map<String, AuditFinding> findings = new TreeMap<>();
+    private final Map<Integer, ConstructionReserve.Custody> finiteStates = new TreeMap<>();
     private int derivingTier = -1;
     private EntryProfile derivedEntry;
 
@@ -110,8 +210,116 @@ public final class SustainabilityAudit {
         }
         audit.recycling();
         audit.positiveCycles();
-        return new Result(snapshot, annotations, tiers, debt,
+        Result result = new Result(snapshot, annotations, tiers, debt,
                 debt.apply(new ArrayList<>(audit.findings.values())));
+        TierResult t0 = tiers.get(0);
+        TierPlan plan = annotations.ledger().get(0);
+        if (plan != null && plan.entryProfile() != null && t0.unknown() == null
+                && audit.finiteStates.containsKey(0) && T0ConditionalGate.evaluate(result).pass()) {
+            tiers.put(0, t0.withWitness(new WitnessState(result, t0, 0, audit.finiteStates.get(0))));
+            result = new Result(snapshot, annotations, tiers, debt, result.findings());
+        }
+        return result;
+    }
+
+    /**
+     * Continues the completed conditional T0 witness on the same authorities and entry assumptions.
+     * The successor may select real routes/machine bindings, but cannot add stock, profiles or gifts.
+     */
+    public static FiniteResult continueFinite(Result predecessor, SustainabilityAnnotations successor,
+                                              List<String> selectedRoutes, String exitRoute) {
+        FiniteResult refusal = predecessorRefusal(predecessor);
+        if (refusal != null) {
+            return refusal;
+        }
+        TierResult t0 = predecessor.tiers().get(0);
+        WitnessState state = t0.witnessState();
+        if (successor == null || selectedRoutes == null || selectedRoutes.isEmpty()
+                || selectedRoutes.stream().anyMatch(id -> id == null || id.isBlank())
+                || new HashSet<>(selectedRoutes).size() != selectedRoutes.size()
+                || exitRoute == null || !selectedRoutes.contains(exitRoute)
+                || !preservesEntry(predecessor.annotations(), successor, selectedRoutes)) {
+            return refused("continuation_incompatible", "Keep the predecessor's entry, classifications, loops and plans; "
+                    + "select distinct live batches and a real manufacturing exit.");
+        }
+        SustainabilityAudit audit = new SustainabilityAudit(predecessor.authorities(), successor);
+        for (String id : selectedRoutes) {
+            Route route = predecessor.authorities().routes().get(id);
+            if (route == null || !audit.unlocked(route, 1) || route.oneShot()
+                    || !exitProductionRoute(route)) {
+                return refused("continuation_route_unavailable", "No applicable repeatable selected authority: " + id);
+            }
+        }
+        ConstructionReserve reserve = new ConstructionReserve(predecessor.authorities(), successor, audit,
+                t0.available(), t0.renewable(), state.custody, state.assumptions.ledger().get(0).entryProfile(),
+                selectedRoutes, t0.exitProduction().route());
+        boolean completed = reserve.continueFinite(selectedRoutes, exitRoute);
+        List<Reserve> reserves = reserve.reserves();
+        List<AuditFinding> findings = new ArrayList<>(reserve.findings());
+        WorkReserve work = reserve.manualWorkReserve();
+        if (work != null && (work.marginActions() < 0 || !work.status().equals("conditional_established"))) {
+            findings.add(new AuditFinding("finite_work_unproven", work.terminal(), "T1", ERROR,
+                    "The inherited cumulative local-work reserve is not established; no budget reset is allowed.",
+                    List.of(state.assumptions.ledger().get(0).entryProfile().manualWork().source())));
+        }
+        completed &= findings.isEmpty() && reserves.stream().allMatch(value ->
+                value.margin() >= 0 && value.status().equals("conditional_established"));
+        WitnessState after = new WitnessState(predecessor, successor, null, 1, reserve.custody());
+        return new FiniteResult(true, completed, completed ? "conditional_established" : "blocked",
+                state, after, after.history().subList(state.history().size(), after.history().size()),
+                reserves, work, reserve.exitProduction(), findings);
+    }
+
+    /** Shared admission precedes even the T1-specific selection/binding projection. */
+    static FiniteResult predecessorRefusal(Result predecessor) {
+        if (predecessor == null) {
+            return refused("predecessor_missing", "A completed conditional T0 audit is required.");
+        }
+        TierResult t0 = predecessor.tiers().get(0);
+        if (t0 == null || t0.unknown() != null) {
+            return refused("predecessor_unknown", "An unknown or absent T0 ledger is not a finite predecessor.");
+        }
+        if (!T0ConditionalGate.evaluate(predecessor).pass()) {
+            return refused("predecessor_failed", "The actual conditional T0 gate must pass without suppressed findings.");
+        }
+        WitnessState state = t0.witnessState();
+        if (state == null) {
+            return refused("predecessor_state_missing", "Report totals and retainedInventory are not complete custody.");
+        }
+        if (!state.matches(predecessor)) {
+            return refused("predecessor_incompatible", "Authority, source, assumptions or evaluated T0 evidence changed.");
+        }
+        if (state.freeStock().entrySet().stream().anyMatch(entry -> entry.getKey().kind() == Kind.TAG && entry.getValue() > 0)
+                || state.retainedCatalysts().entrySet().stream().anyMatch(entry ->
+                entry.getKey().kind() == Kind.TAG && entry.getValue() > 0)
+                || state.installedMachines().stream().anyMatch(resource -> resource.kind() == Kind.TAG)
+                || state.installationParts().values().stream().anyMatch(parts ->
+                parts.entrySet().stream().anyMatch(entry -> entry.getKey().kind() == Kind.TAG && entry.getValue() > 0))) {
+            return refused("predecessor_stock_unknown", "A symbolic tag balance is not exact physical carry custody.");
+        }
+        return null;
+    }
+
+    private static boolean preservesEntry(SustainabilityAnnotations before, SustainabilityAnnotations after,
+                                          List<String> selected) {
+        return before.resources().equals(after.resources()) && before.loops().equals(after.loops())
+                && before.plans().equals(after.plans()) && before.ledger().equals(after.ledger())
+                && before.machines().entrySet().stream().allMatch(entry ->
+                entry.getValue().equals(after.machines().get(entry.getKey())))
+                && before.routes().entrySet().stream().allMatch(entry -> {
+                    RoutePolicy next = after.routes().get(entry.getKey());
+                    return entry.getValue().equals(next) || selected.contains(entry.getKey())
+                            && entry.getValue().unlockTier() == null && next != null
+                            && Integer.valueOf(1).equals(next.unlockTier())
+                            && entry.getValue().environmentalSources().equals(next.environmentalSources())
+                            && entry.getValue().outputRoles().equals(next.outputRoles());
+                }) && after.routes().keySet().stream().allMatch(id ->
+                before.routes().containsKey(id) || selected.contains(id));
+    }
+
+    private static FiniteResult refused(String rule, String message) {
+        return new FiniteResult(false, false, "refused", null, null, List.of(), List.of(), null, null,
+                List.of(new AuditFinding(rule, "finite_continuation", "T1", ERROR, message, List.of())));
     }
 
     /** A candidate is useful only together with the fresh, finite replay, not the derivation run. */
@@ -174,7 +382,10 @@ public final class SustainabilityAudit {
     }
 
     boolean manualWorkReady(Route route, int tier, Set<Resource> available) {
-        EntryProfile profile = entryProfile(tier);
+        return manualWorkReady(route, tier, available, entryProfile(tier));
+    }
+
+    boolean manualWorkReady(Route route, int tier, Set<Resource> available, EntryProfile profile) {
         ManualWork work = profile == null ? null : profile.manualWork();
         if (work == null || !work.applies(route) || !deriving(tier) && profile.manualWorkActions() == 0) {
             return false;
@@ -509,6 +720,7 @@ public final class SustainabilityAudit {
         }
         ConstructionReserve reserve = new ConstructionReserve(snapshot, annotations, this, tier, available, renewable);
         List<Reserve> reserves = reserve.analyse(establishmentConstruction, establishmentRoutes, productionObligations);
+        finiteStates.put(tier, reserve.custody());
         includeEntryWitness(reserve, tier);
         reserve.findings().forEach(this::finding);
         return new TierResult(tier, mandatory, recurring, available, renewable, availableRoutes,

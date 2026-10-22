@@ -58,7 +58,15 @@ public final class VerifyT1Progression {
                         "MachineEnvelopes.class", "ConditionState.class", "Agitation.class",
                         "ProcessConditions.class", "ProcessConditions.Builder.class",
                         "ConditionEnvelope.class", "ConditionEnvelope.Builder.class", "ConditionBand.class",
-                        "ConditionReport.class", "ConditionFault.class").stream()
+                        "ConditionReport.class", "ConditionFault.class",
+                        "GeneratorKind.class", "SustainabilityAudit.class", "SustainabilityAudit.ExecutedBatch.class",
+                        "SustainabilityAudit.WitnessState.class", "SustainabilityAudit.FiniteResult.class",
+                        "SustainabilityAudit.TierResult.class", "SustainabilityAudit.Result.class",
+                        "ConstructionReserve.class", "ConstructionReserve.Custody.class",
+                        "SustainabilityAnnotations.class", "SustainabilityAnnotations.EntryProfile.class",
+                        "SustainabilityModel.class", "SustainabilityModel.Snapshot.class",
+                        "T0ConditionalGate.class", "T0Sustainability.class", "DebtManifest.class",
+                        "AuditFinding.class", "AuditReports.class", "VerifyEconomy.class").stream()
                         .allMatch(imageExpressions::contains));
         var sources = java.util.regex.Pattern.compile(
                 "SOURCES = List\\.of\\(([\\s\\S]*?)\\);").matcher(exporter);
@@ -74,7 +82,13 @@ public final class VerifyT1Progression {
                         "JAVA + \"process/MachineEnvelopes.java\"", "JAVA + \"process/ConditionState.java\"",
                         "JAVA + \"process/Agitation.java\"", "JAVA + \"process/ProcessConditions.java\"",
                         "JAVA + \"process/ConditionEnvelope.java\"", "JAVA + \"process/ConditionBand.java\"",
-                        "JAVA + \"process/ConditionReport.java\"", "JAVA + \"process/ConditionFault.java\"")
+                        "JAVA + \"process/ConditionReport.java\"", "JAVA + \"process/ConditionFault.java\"",
+                        "JAVA + \"machine/GeneratorKind.java\"", "JAVA + \"sustainability/SustainabilityAudit.java\"",
+                        "JAVA + \"sustainability/ConstructionReserve.java\"",
+                        "JAVA + \"sustainability/SustainabilityAnnotations.java\"", "JAVA + \"sustainability/SustainabilityModel.java\"",
+                        "JAVA + \"sustainability/T0ConditionalGate.java\"", "JAVA + \"sustainability/T0Sustainability.java\"",
+                        "JAVA + \"sustainability/DebtManifest.java\"", "JAVA + \"sustainability/AuditFinding.java\"",
+                        "JAVA + \"sustainability/AuditReports.java\"", "\"tools/checks/VerifyEconomy.java\"")
                         .stream().allMatch(sourceExpressions::contains));
         SustainabilityAudit.Result t0 = canonicalResult(root);
         int checks = verify(t0);
@@ -171,6 +185,7 @@ public final class VerifyT1Progression {
         equal("the Bench still cannot manufacture the frontier Matrix", false,
                 snapshot.routes().containsKey("bench/relay_matrix"));
         physicalControllerSupply(t0);
+        finiteContinuation(t0);
         componentRoutes(snapshot);
         factoryReproduction(snapshot);
         thermalGeneratorAssembly(t0);
@@ -278,12 +293,15 @@ public final class VerifyT1Progression {
                 snapshot.tags(), snapshot.objectives(), rawHashes, snapshot.findings());
         var rawFingerprintFixture = new SustainabilityAudit.Result(differentRawBytes, t0.annotations(), t0.tiers(),
                 t0.debt(), t0.findings());
+        equal("an existing checkpoint cannot be relabelled onto changed raw authority sources",
+                "predecessor_incompatible", T1Sustainability.finiteWitness(rawFingerprintFixture).findings().get(0).rule());
+        var freshlyBound = SustainabilityAudit.run(differentRawBytes, t0.annotations(), t0.debt());
         equal("raw checkout identity remains distinguishable in separate provenance", false,
                 AuditReports.authorityHash(snapshot).equals(AuditReports.authorityHash(differentRawBytes)));
         equal("raw source fingerprint changes do not rewrite canonical recipe/conditional-model facts",
-                json, T1Sustainability.json(rawFingerprintFixture));
+                json, T1Sustainability.json(freshlyBound));
         equal("human batch costs are likewise independent of checkout-only provenance",
-                T1Sustainability.markdown(t0), T1Sustainability.markdown(rawFingerprintFixture));
+                T1Sustainability.markdown(t0), T1Sustainability.markdown(freshlyBound));
         var document = JsonParser.parseString(json).getAsJsonObject();
         var wireDocument = document.getAsJsonArray("lines")
                 .get(T1Progression.lines().indexOf(T1Progression.byId("wire_forming"))).getAsJsonObject();
@@ -318,12 +336,18 @@ public final class VerifyT1Progression {
         equal("the existing exporter includes all six live wet authorities", 6,
                 wetDocument.getAsJsonArray("routes").size());
         equal("raw source hashes are not embedded in committed model data", false, document.has("authority_sha256"));
-        for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven",
-                "t1_finite_establishment_replayed", "global_optimum_claimed")) {
+        for (String flag : List.of("t1_accepted", "t1_renewable_closure_proven", "global_optimum_claimed")) {
             equal("bounded source evidence cannot invent " + flag, false, document.get(flag).getAsBoolean());
         }
-        equal("only the resolved identity limitation is removed; all real proof limits remain",
-                List.of("Prior-tier finite custody has not been carried through a complete T1 ConstructionReserve replay.",
+        var finite = T1Sustainability.finiteWitness(t0);
+        equal("the finite flag comes from the actual executor verdict, not an authored true",
+                finite.completed(), document.get("t1_finite_establishment_replayed").getAsBoolean());
+        equal("actual completed finite batches are exported", finite.batches().size(),
+                document.getAsJsonObject("finite_execution").getAsJsonArray("batches").size());
+        equal("every finite blocking finding is exported", finite.findings().size(),
+                document.getAsJsonObject("finite_execution").getAsJsonArray("findings").size());
+        equal("finite establishment removes only its own proof limitation",
+                List.of("The finite conditional continuation does not certify recursive T1 renewable closure or the broader T1 family contract.",
                         "Automatic casing and Flux Cell recipes require the established Assembler; complete recurrent input, power and routing closure is not proved.",
                         "Continuous factory power, nighttime/restart recovery, routing throughput and captured-gas handling need separate evidence.",
                         "Native client, Survival play, actual crafting and longitudinal save compatibility are not proved by this export."),
@@ -331,6 +355,157 @@ public final class VerifyT1Progression {
         equal("every direct consumption/catalyst edge is exported", inputs.size(),
                 document.getAsJsonArray("mandatory_input_evidence").size());
         return assertions - before;
+    }
+
+    private static void finiteContinuation(SustainabilityAudit.Result t0) {
+        var finite = T1Sustainability.finiteWitness(t0);
+        equal("the actual immutable conditional T0 predecessor is admitted", true, finite.admitted());
+        equal("the actual mandatory first-factory batches and physical F2 execute; findings=" + finite.findings(),
+                true, finite.completed());
+        equal("no conservative execution finding is hidden", List.of(), finite.findings());
+        var before = t0.tiers().get(0).witnessState();
+        var after = finite.state();
+        equal("live continuation needs complete predecessor and resulting custody", true, before != null && after != null);
+        if (before == null || after == null) {
+            return;
+        }
+        equal("the checkpoint is the actual issued predecessor", before, finite.predecessor());
+        equal("no bootstrap source is loaded a second time", before.bootstrapSources(), after.bootstrapSources());
+        equal("guaranteed delivery accounting remains unchanged", before.guaranteedDeliveries(), after.guaranteedDeliveries());
+        equal("no initial terminal stock is mistaken for a fresh budget", true,
+                after.operations() > before.operations() && after.operations() <= 4096);
+        equal("no work budget is reset at T1", t0.tiers().get(0).manualWork().budgetActions(),
+                finite.manualWork().budgetActions());
+        equal("the spent T0 startup work is never refunded", true,
+                after.consumedManualActions() >= before.consumedManualActions());
+        equal("conditional material deliveries stay inside the original finite bill", true,
+                after.playerDeliveries().entrySet().stream().allMatch(entry -> entry.getValue()
+                        <= t0.annotations().ledger().get(0).entryProfile().playerProvided().getOrDefault(entry.getKey(), 0L)));
+        equal("already installed T0 controllers are preserved", true,
+                after.installedMachines().containsAll(before.installedMachines()));
+        before.installationParts().forEach((family, parts) ->
+                equal("T0 formed parts stay dedicated: " + family, parts, after.installationParts().get(family)));
+        equal("already paid one-shot routes remain claimed", true, after.claimedRoutes().containsAll(before.claimedRoutes()));
+        for (String id : before.claimedRoutes()) {
+            equal("a prior one-shot cannot complete again: " + id, false,
+                    finite.batches().stream().anyMatch(batch -> batch.route().equals(id)));
+        }
+        for (String id : after.claimedRoutes()) {
+            equal("all one-shots execute at most once across both tiers: " + id, 1L,
+                    after.establishmentBatches().get(id));
+        }
+        Map<String, Long> completed = new TreeMap<>();
+        finite.batches().forEach(batch -> completed.merge(batch.route(), 1L, Math::addExact));
+        for (Route route : T1Sustainability.mandatoryRoutes(t0.authorities())) {
+            equal("every actual mandatory selection has a completed batch: " + route.id(), true,
+                    completed.getOrDefault(route.id(), 0L) > 0);
+        }
+        for (T1Progression.Line line : T1Progression.lines()) {
+            if (!line.mandatory()) {
+                equal("optional selections never become finite construction obligations: " + line.id(),
+                        false, line.routeIds().stream().anyMatch(completed::containsKey));
+            }
+        }
+        Resource f1 = AuthorityAdapters.physical(item(FabricationLogic.RELAY_MATRIX));
+        Resource f2 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F2.ordinal(), "items");
+        var allocation = T1Sustainability.seedAllocation(t0.authorities());
+        equal("the completed T0 exit supplies exactly the existing five physical F1", 5L, before.freeStock().get(f1));
+        long draw = 0;
+        for (var machine : allocation.machineDraws().entrySet()) {
+            equal("each first controller is fabricated once: " + machine.getKey(), 1L, completed.get(machine.getKey()));
+            Route route = t0.authorities().routes().get(machine.getKey());
+            Resource block = route.retainedOutputs().keySet().iterator().next();
+            equal("each fabricated first controller is installed: " + block.key(), true, after.installedMachines().contains(block));
+            equal("an installed controller is not also spendable stock: " + block.key(), 0L,
+                    after.freeStock().getOrDefault(block, 0L));
+            long spent = finite.batches().stream().filter(batch -> batch.route().equals(machine.getKey()))
+                    .mapToLong(batch -> batch.consumed().getOrDefault(f1, 0L)).sum();
+            equal("each live machine really consumes its one physical F1: " + machine.getKey(), machine.getValue(), spent);
+            draw = Math.addExact(draw, spent);
+        }
+        equal("only the inherited five controllers fund the first factory", allocation.constructionDraw(), draw);
+        equal("the manual T0 terminal craft is never replayed in T1", false,
+                finite.batches().stream().anyMatch(batch -> batch.route().equals(T1Progression.ENTRY_ROUTE)));
+        int reproduction = -1;
+        for (int index = 0; index < finite.batches().size(); index++) {
+            var batch = finite.batches().get(index);
+            if (batch.route().equals(T1Progression.REPRODUCTION_ROUTE)) {
+                reproduction = index;
+                break;
+            }
+            if (batch.consumed().getOrDefault(f1, 0L) > 0) {
+                equal("before reproduction only the five real machine crafts withdraw seed F1",
+                        true, allocation.machineDraws().containsKey(batch.route()));
+            }
+        }
+        equal("the Assembler actually reproduces physical F1 before further control withdrawals", true, reproduction >= 0);
+        if (reproduction >= 0) {
+            equal("actual reproduction yields the unchanged exact physical batch", Map.of(f1, allocation.batchOutput()),
+                    finite.batches().get(reproduction).produced());
+            for (String machine : allocation.machineDraws().keySet()) {
+                final int at = reproduction;
+                equal("all five seed-funded machines precede reproduction: " + machine, true,
+                        finite.batches().subList(0, at).stream().anyMatch(batch -> batch.route().equals(machine)));
+            }
+        }
+        var exit = finite.exitProduction();
+        equal("the exit uses the actual exact-rated F2 authority", T1Progression.EXIT_ROUTE, exit.route());
+        equal("the manufactured exit identity is exactly F2", f2, exit.resource());
+        equal("the actual F2 batch executes once rather than accepting a final stock count", 1L, exit.executedBatches());
+        equal("actual F2 stock equals newly produced physical output", exit.produced(), after.freeStock().get(f2));
+        long producedF1 = finite.batches().stream().mapToLong(batch -> batch.produced().getOrDefault(f1, 0L)).sum();
+        long consumedF1 = finite.batches().stream().mapToLong(batch -> batch.consumed().getOrDefault(f1, 0L)).sum();
+        equal("the entire F1 balance is physical, not an exit-delivery credit",
+                before.freeStock().get(f1) + producedF1 - consumedF1, after.freeStock().get(f1));
+        for (String die : List.of(FabricationLogic.PLATE_DIE, FabricationLogic.ROD_DIE,
+                FabricationLogic.GEAR_DIE, FabricationLogic.COIL_DIE)) {
+            equal("each actual Press die remains locked: " + die, 1L, after.retainedCatalysts().get(item(die)));
+            equal("a retained die is not also free material: " + die, 0L, after.freeStock().getOrDefault(item(die), 0L));
+            equal("a retained die is not an installed surrounding part: " + die, false,
+                    after.installationParts().values().stream().anyMatch(parts -> parts.containsKey(item(die))));
+        }
+        Map<Resource, Long> expected = physicalCustody(before);
+        finite.batches().forEach(batch -> {
+            batch.consumed().forEach((resource, count) -> expected.merge(resource, -count, Math::addExact));
+            batch.produced().forEach((resource, count) -> expected.merge(resource, count, Math::addExact));
+        });
+        after.playerDeliveries().forEach((resource, count) ->
+                expected.merge(resource, count - before.playerDeliveries().getOrDefault(resource, 0L), Math::addExact));
+        Map<Resource, Long> actual = physicalCustody(after);
+        expected.entrySet().removeIf(entry -> entry.getValue() == 0 || entry.getKey().kind() == Kind.ENVIRONMENT);
+        actual.entrySet().removeIf(entry -> entry.getValue() == 0 || entry.getKey().kind() == Kind.ENVIRONMENT);
+        equal("all physical stock, catalyst and installation axes balance actual completed authority batches", expected, actual);
+        equal("no physical balance is negative", true, actual.values().stream().allMatch(count -> count >= 0));
+        equal("a missing predecessor is explicitly refused at the T1 boundary", "predecessor_missing",
+                T1Sustainability.finiteWitness(null).findings().get(0).rule());
+
+        // Model-contract mutation only: an incorrect reproduction output cannot supply the exact
+        // predecessor. Even the resulting physical F2 stock cannot replace execution of the exit.
+        Snapshot snapshot = t0.authorities();
+        Route original = snapshot.routes().get(T1Progression.REPRODUCTION_ROUTE);
+        Map<String, Route> routes = new TreeMap<>(snapshot.routes());
+        routes.put(original.id(), new Route(original.id(), original.authority(), original.source(), original.family(),
+                original.inputs(), original.catalysts(), Map.of(f2, allocation.batchOutput()), original.discharged(),
+                original.durationTicks(), original.fuPerTick(), original.conditions(), original.prerequisites(),
+                original.oneShot(), original.modOwned(), original.automatable()));
+        Snapshot wrongRating = new Snapshot(snapshot.resources(), routes, snapshot.terminals(), snapshot.tags(),
+                snapshot.objectives(), snapshot.inputHashes(), snapshot.findings());
+        var mutatedT0 = SustainabilityAudit.run(wrongRating, t0.annotations(), t0.debt());
+        var wrong = T1Sustainability.finiteWitness(mutatedT0);
+        equal("a physically incompatible reproduction output cannot complete finite T1", false, wrong.completed());
+        equal("a different-rating reproduction does not secretly replay the manual seed", false,
+                wrong.batches().stream().anyMatch(batch -> batch.route().equals(T1Progression.ENTRY_ROUTE)));
+        equal("stock of the goal's identity still cannot replace its real manufacturing batch", true,
+                wrong.exitProduction() != null && wrong.exitProduction().executedBatches() == 0);
+    }
+
+    private static Map<Resource, Long> physicalCustody(SustainabilityAudit.WitnessState state) {
+        Map<Resource, Long> result = new TreeMap<>(state.freeStock());
+        state.retainedCatalysts().forEach((resource, count) -> result.merge(resource, count, Math::addExact));
+        state.installedMachines().forEach(resource -> result.merge(resource, 1L, Math::addExact));
+        state.installationParts().values().forEach(parts ->
+                parts.forEach((resource, count) -> result.merge(resource, count, Math::addExact)));
+        return result;
     }
 
     private static void physicalControllerSupply(SustainabilityAudit.Result t0) {

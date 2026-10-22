@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Compose the finite-custody source without calling it a replay result.**
+  Preserve normal6c53/6b19 and all seven application/check/exporter blobs
+  exactly alongside qualified A9. Only changelog conflicts and both histories
+  remain; the map combines both seams. Immutable source review8ef12f19 and
+  required CI may proceed on the published WIP while the established executor
+  prepares the next model-only window locally. No PC grant/Sync/compiler/
+  model pass or42/96 observed-image claim exists yet; all four canonical
+  payloads remain the actual G10/A9 result, not hand-repaired finite evidence.
 - **Close G10 and normally integrate its exact four writer payloads.**
   Actuala54 compile/UI1297/Persistence/one native1028/19/PASS1/FAIL0 and normal
   Guidance/Economy/T1 write/independent/canonical stages pass. QA verifies278
@@ -31,6 +39,19 @@ entries below reference those records by id.
   same isolated worktree/ADR-0187 outcome instead; the coordinator does not
   become coder. Record actual G10 native/model stage reports separately from
   pending A9/custody/leaseback and all unexecuted client/world work.
+- **Carry conserved T0 custody through the existing finite first-factory executor (ADR-0187).**
+  Source-only implementation issues immutable, authority/assumption-bound in-process
+  checkpoints after the actual conditional T0 gate, preserving free stock, locked
+  catalysts, installed controllers/parts, one-shot deliveries and spent local work.
+  Mandatory T1 selections now use that executor for the five controllers, physical
+  F1 reproduction and exact F2 production, not a manufactured entry kit or replayed
+  bootstrap. Export before/after custody, actual completed batches and blocking
+  findings separately from recursive closure, continuous operation and whole-T1.
+  Existing typed audit/T0/T1 contracts cover conservation, refusal, exhausted custody
+  and fabricated goals; the explicit exporter lists author42 sources/96 image
+  expressions. Diff/lexical/source guards and962 documentation links pass after
+  preserved missing-Python/direct-script-policy failures. Java/model replay,
+  class-image hashes, writers, native, gameplay and world acceptance remain unexecuted.
 - **Continue the finite first-factory boundary without replaying G10.**
   The executor reports one actual clean-a54 native aggregate PASS with all19
   expectations, natural save-stop and frozen JAR/inventory before subsequent

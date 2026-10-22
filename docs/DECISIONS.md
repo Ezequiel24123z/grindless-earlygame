@@ -198,7 +198,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
 | [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | G10 actuala54 Java/native1028/models/A9/278 custody verified; no rendered/client-wire/owner-world pass |
 | [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | G10 combined representative mechanism/normal A9/custody verified; no per-family runtime or whole-tier acceptance |
-| [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Accepted source scope; implementation and finite continuation proof pending |
+| [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Source6c53/6b19 composed; independent review and actual Java/finite continuation proof pending |
 
 ---
 
@@ -8972,8 +8972,11 @@ runtime acquisition, whole-tier or human acceptance is inferred from data.
 **Status.** Accepted bounded source scope under ADR-0131/0140/0174/0178,
 2026-10-22. At authorization, G10 reported repaired Java/native/model stages;
 it later closes sourcea54/normal A9/278-file custody and fresh lease return
-separately. This decision authorizes an isolated source outcome, not another
-PC window, new gameplay, a completed finite replay or whole-T1 readiness.
+separately. Normal source6c53/6b19 is subsequently composed with A9, preserving
+seven Java blobs and the source-only42/96 provenance declarations. Independent
+review and actual Java/model qualification remain pending. This decision
+authorizes the source outcome, not another PC window, new gameplay, a completed
+finite replay or whole-T1 readiness.
 
 **Context and existing solution.** T1Sustainability honestly leaves finite
 establishment unproved. Its five-controller allocation and direct producer

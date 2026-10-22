@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.sustainability;
 import com.google.gson.GsonBuilder;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
+import io.github.ezequiel24123z.grindless.machine.GeneratorKind;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuKind;
 import io.github.ezequiel24123z.grindless.process.Agitation;
@@ -49,6 +50,12 @@ public final class T1Export {
             JAVA + "process/Agitation.java", JAVA + "process/ProcessConditions.java",
             JAVA + "process/ConditionEnvelope.java", JAVA + "process/ConditionBand.java",
             JAVA + "process/ConditionReport.java", JAVA + "process/ConditionFault.java",
+            JAVA + "machine/GeneratorKind.java",
+            JAVA + "sustainability/SustainabilityAudit.java", JAVA + "sustainability/ConstructionReserve.java",
+            JAVA + "sustainability/SustainabilityAnnotations.java", JAVA + "sustainability/SustainabilityModel.java",
+            JAVA + "sustainability/T0ConditionalGate.java", JAVA + "sustainability/T0Sustainability.java",
+            JAVA + "sustainability/DebtManifest.java", JAVA + "sustainability/AuditFinding.java",
+            JAVA + "sustainability/AuditReports.java", "tools/checks/VerifyEconomy.java",
             "common/src/main/resources/data/grindless/recipes/flux_cell.json",
             "tools/checks/VerifySustainabilityRegistry.java",
             "tools/checks/VerifyT1Progression.java", "tools/t1/T1Export.java",
@@ -107,6 +114,32 @@ public final class T1Export {
                 ProcessConditions.class, ProcessConditions.Builder.class,
                 ConditionEnvelope.class, ConditionEnvelope.Builder.class, ConditionBand.class,
                 ConditionReport.class, ConditionFault.class,
+                GeneratorKind.class, SustainabilityAudit.class, SustainabilityAudit.Reserve.class,
+                SustainabilityAudit.WorkReserve.class, SustainabilityAudit.GoalWitness.class,
+                SustainabilityAudit.ExecutedBatch.class, SustainabilityAudit.WitnessState.class,
+                SustainabilityAudit.FiniteResult.class, SustainabilityAudit.TierResult.class,
+                SustainabilityAudit.Result.class, SustainabilityAudit.EntryDerivation.class,
+                SustainabilityAudit.CycleComponent.class,
+                Class.forName("io.github.ezequiel24123z.grindless.sustainability.SustainabilityAudit$LoopProof"),
+                Class.forName("io.github.ezequiel24123z.grindless.sustainability.SustainabilityAudit$1"),
+                ConstructionReserve.class, ConstructionReserve.Custody.class,
+                Class.forName("io.github.ezequiel24123z.grindless.sustainability.ConstructionReserve$1"),
+                SustainabilityAnnotations.class, SustainabilityAnnotations.ResourceMetadata.class,
+                SustainabilityAnnotations.ResourceClass.class, SustainabilityAnnotations.SideStreamClass.class,
+                SustainabilityAnnotations.RoutePolicy.class, SustainabilityAnnotations.Machine.class,
+                SustainabilityAnnotations.ClosedLoop.class, SustainabilityAnnotations.TierPlan.class,
+                SustainabilityAnnotations.EntryProfile.class, SustainabilityAnnotations.Handling.class,
+                SustainabilityAnnotations.Action.class, SustainabilityModel.class, SustainabilityModel.Resource.class,
+                SustainabilityModel.Kind.class, SustainabilityModel.Authority.class, SustainabilityModel.Route.class,
+                SustainabilityModel.Terminal.class, SustainabilityModel.TerminalKind.class, SustainabilityModel.SourceSite.class,
+                SustainabilityModel.ManualWork.class, SustainabilityModel.TagResolution.class,
+                SustainabilityModel.Objective.class, SustainabilityModel.Snapshot.class, SustainabilityModel.Builder.class,
+                T0ConditionalGate.class, T0ConditionalGate.Gate.class, T0ConditionalGate.Scope.class,
+                T0ConditionalGate.Decision.class,
+                Class.forName("io.github.ezequiel24123z.grindless.sustainability.T0ConditionalGate$ScopeBuilder"),
+                T0Sustainability.class, DebtManifest.class, DebtManifest.Entry.class, DebtManifest.Applied.class,
+                AuditFinding.class, AuditFinding.Severity.class, AuditFinding.Disposition.class, AuditReports.class,
+                VerifyEconomy.class,
                 VerifySustainabilityRegistry.class, VerifyT1Progression.class, T1Export.class)) {
             String resource = "/" + type.getName().replace('.', '/') + ".class";
             try (InputStream stream = type.getResourceAsStream(resource)) {
@@ -135,7 +168,7 @@ public final class T1Export {
         Files.writeString(evidence.resolve("provenance.json"),
                 new GsonBuilder().setPrettyPrinting().create().toJson(provenance) + "\n", StandardCharsets.UTF_8);
         System.out.println("T1 FIRST-FACTORY " + args[2] + ": " + checks
-                + " contracts; catalogue/T0-boundary scope, not a T1 renewable-closure or native-play pass");
+                + " contracts; conserved finite conditional model, not T1 renewable closure or native play");
         System.out.println("MODEL SHA-256 " + provenance.get("model_sha256"));
         System.out.println("REPORT SHA-256 " + provenance.get("report_sha256"));
     }

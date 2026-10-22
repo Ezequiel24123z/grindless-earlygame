@@ -4,6 +4,23 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**ADR-0187 SOURCE is complete and normally composed, not yet qualified.**
+Normal6c53b321/exactf5c2dde then6b191767 supplies nine owned paths/
+1112 insertions49 deletions, clean source treebaa360a6 and both trailers.
+Parent verifies private handoffSHA25e77bcb, preserves all seven Java blobs
+exactly and retains qualified A9's four canonical outputs without hand edits.
+Only changelog conflicts; both histories stay. Independent immutable source
+review8ef12f19 is running; published WIP/required CI is not a passing review,
+compiler, finite replay, class-image or normal-output result. Authored
+42-source/96-image expressions are not observed execution hashes.
+
+Executor604 prepares the next affected common-model path LOCALLY ONLY in a
+new isolated root. It must wait for one reviewed published exact-source GO
+and new explicit lease before PC/SSH/Sync/JVM/CI-query access. The attempted
+coordinator_instructions delivery was rejected for the inactive persistent
+relationship; an ordinary legacy-session message is accepted, without PC
+authorization. G10 native/FTB/runtime proofs stay at their old sources.
+
 **G10 is technically closed, independently audited and normally integrated.**
 Actual invocation sourcea54 supplies compiler0, UI1297/0, Persistence0, one
 canonical native1028/19 exact-once markers/PASS1/FAIL0 and normal model stages.
@@ -35,7 +52,7 @@ canonical checks exit0, with four payload byte/mtime invariance and actual
 Normal A9 command157 and final raw/hash custody are still in progress; do not
 guess its SHA, assertion counts or leaseback. No replay is needed.
 
-**ADR-0187 source is running independently in the created isolated worktree.**
+**Historical ADR-0187 source dispatch, now completed by the runtime worker.**
 Published decisionf5c2dde fixes conservation of actual T0 witness state through
 the existing auditor/reserve, not another starter kit/planner or a world
 inventory claim. App sessionb430ff47 is created, but its CLI startup and the
@@ -268,9 +285,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Verified G7/A7/G8/A8 and unused G9 custody; G10 actual compile/UI1297/Persistence/native1028/19/normal models31-41,278-file QA/fresh lease return and exact four-payload A9 normal integration; ADR-0187 source continues separately |
+| COMPLETED | Verified G7/A7/G8/A8 and unused G9 custody; G10 actual compile/UI1297/Persistence/native1028/19/normal models31-41,278-file QA/fresh lease return and exact A9 integration; ADR-0187 source6b normally composed with seven exact Java blobs, independent review pending |
 | BLOCKED | None within G10. Whole-T1 delivery still lacks finite establishment/autonomy/genuine upgrade/client/world evidence; no urgent owner decision |
-| NOT EXECUTED | ADR-0187 Java/finite replay/writers; rendered/client-wire/owner-world/campaign qualification, package/player deployment/main/release/whole-tier acceptance or runtime after A9. Unused G9 remains unexecuted |
+| NOT EXECUTED | ADR-0187 compiler/typed tests/finite replay/actual42-96 images/writers or new PC window; rendered/client-wire/owner-world/campaign qualification, package/player deployment/main/release/whole-tier acceptance or runtime after A9. Unused G9 remains unexecuted |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

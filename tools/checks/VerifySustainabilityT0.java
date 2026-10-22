@@ -176,6 +176,31 @@ public final class VerifySustainabilityT0 {
                         && tier.exitProduction().status().equals("conditional_established"));
         eq("the real quest requires at least the existing five-Matrix batch", true,
                 tier.exitProduction() != null && tier.exitProduction().requiredCount() >= 5);
+        var custody = tier.witnessState();
+        eq("the applicable passing conditional T0 replay issues complete immutable custody", true, custody != null);
+        if (custody != null) {
+            eq("the existing report still exposes locked catalysts, not the complete stock",
+                    tier.retainedInventory(), custody.retainedCatalysts());
+            eq("actual exit production is present once as free physical F1", tier.exitProduction().produced(),
+                    custody.freeStock().get(exit));
+            eq("manufactured exit stock is not duplicated as a delivery", 0L,
+                    custody.cumulativeDeliveries().getOrDefault(exit, 0L));
+            eq("the complete checkpoint preserves actual completed-batch counts",
+                    tier.establishmentBatches(), custody.establishmentBatches());
+            eq("every completed batch has a concrete physical history entry",
+                    tier.establishmentBatches().values().stream().mapToLong(Long::longValue).sum(),
+                    (long) custody.history().size());
+            eq("the required startup-work bound is preserved exactly",
+                    tier.manualWork().requiredActions(), custody.requiredManualActions());
+            eq("actual spent startup labour is distinct from the required-work high-water mark", true,
+                    custody.consumedManualActions() >= 0
+                            && custody.consumedManualActions() <= custody.requiredManualActions());
+            eq("installed construction is not also free stock", true, custody.installedMachines().stream()
+                    .allMatch(block -> custody.freeStock().getOrDefault(block, 0L) == 0));
+            eq("formed surrounding parts remain physically reserved", true, !custody.installationParts().isEmpty());
+            eq("every inherited one-shot has exactly one completed batch", true, custody.claimedRoutes().stream()
+                    .allMatch(id -> custody.establishmentBatches().getOrDefault(id, 0L) == 1));
+        }
         eq("all concrete T0 findings remain hard failures", 0L, result.findings().findings().stream()
                 .filter(finding -> finding.detail().equals("T0")).count());
         System.out.println(passed + " passed, " + failed + " failed; conditional model only, no Tier acceptance.");

@@ -52,9 +52,11 @@ G10 on exacta54 closes actual compiler/UI1297/Persistence/one canonical native
 QA verifies278-file custody and fresh17:04:48Z leaseback; parent verifies all
 four exact writer Git blobs and normally integrates A9bb3. Do not repeat
 successful stages or retarget the a54 native binary to its data-only child.
-ADR-0187 opens one isolated source outcome for conserved finite T0-to-first-
-factory custody through the existing auditor/reserve. Preserve G10 inputs
-and player state; source is not a new PC/JVM grant or a proved finite replay.
+ADR-0187's conserved finite T0-to-first-factory source6c53/6b19 is now normally
+composed with A9; seven Java blobs remain exact and only changelog conflicts.
+Independent source review and actual compiler/typed model/replay/normal
+writers42/96 are pending. The executor prepares locally only; preserve G10
+inputs/player state and wait for the reviewed exact-source model-only grant.
 It must preserve paid/fractional work and saved stores.
 Use the bounded mature-mod reference and existing menu/transaction, not a
 circuit tax, repricing or a new engine. A source-only selected wet route and
