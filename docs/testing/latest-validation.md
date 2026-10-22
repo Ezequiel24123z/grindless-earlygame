@@ -884,6 +884,33 @@ is preserved in the original five-file artifact. No PC/SSH/JVM/Sync/native/
 writer or dependent replay starts. Source UI repair must retain pre-boot
 contracts and native-dependent coverage, not fabricate an ItemStack carrier.
 
+**G9 originals and unused closure verified locally, not a runtime pass.**
+Parent checks all10 relative unique custody paths/sizes/hashes against
+manifestSHA c15e6f77e0c0ea1eacd294a8c7a47ae586270998f61f355c26198c507339e7da.
+Read-only closure14:50:21.7730000Z/stdoutSHA8a7433ff2b612dcbc347ffcf2bf88b87b34ecc8df1382816b54fe2dc24558575
+has absent G9root, allJava0/ownedlaunches0/locksfalse/no guard created or
+source/cache/instance/world writes. No clean-source claim for a missing root.
+Optional independent GitHub metadata read hangs and is stopped; this is not
+an API pass or CI rerun, and original source/status/artifact evidence remains.
+
+| Original bb5 CI file | Bytes | SHA-256 |
+| --- | ---: | --- |
+| source.txt | 80 | `1fb9e451e52f2699d1fc1594507d221b0302727fb800128993d6f3ee81cd7388` |
+| environment.log | 443 | `0f6bc3201f9139e629c60adcf771ac6292d50a5215917eb24dddd3205ccbc094` |
+| build.log | 271750 | `c3a795a46eb52c9af945f3ae0416bcab97a21b9fe4ec4b0cf85b56dcfbd5bd1b` |
+| behavior.log | 1890745 | `b4d7f48fd58b08ef3a19748fd568d1986fe40e996389b2ae59d70d625190a8b9` |
+| status.tsv | 243 | `6a3bd890993fe35403a1980669fcde82298db0794c2511dfaec78dc71c987791` |
+
+Raw3852-3866 authenticates UI initialization; raw4308 is malformed paid
+state1/Double.NaN's CompoundTag.equals binary-reopen oracle. It does not
+automatically prove changed bytes or lost paid data: adjacent assertions
+show explicit/unavailable state and refused selection. Raw4638 combines
+legacy AUTO resolve==reactor with progress0, so no actual ID or transfer is
+invented; raw4639 still retains the legacy partial balance. Source0752 must
+diagnose these exact oracles/production boundaries and retain coverage, not
+alter the invoker or count three old canonical equality reds as all failures.
+All G9 production/normal model/native/A9 remains NOT EXECUTED; grant is ended.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

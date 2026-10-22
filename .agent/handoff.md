@@ -4,6 +4,25 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G9 unused lease returned14:50:21.7730000Z and ten-file custody verified.**
+No canonical Sync, PC JVM/compiler/native/writer or A9 exists. The only PC
+action is read-only WMI/path closure without CommandLine or writes: new root
+is ABSENT, all-observed Java0/owned launches0, work/cache locksfalse, no guard
+created and expected owned guard path absent. Do not claim clean source for
+an absent checkout. Parent verifies manifestc15e6f77 and all10 originals/
+metadata/helper/closure/handoff hashes; closure stdout8a7433ff is real.
+
+Persistence's two precise bb5 failures are now known: raw4308 malformed
+state1/Double.NaN compared by CompoundTag.equals after binary reopen, not
+automatically evidence of lost bytes; raw4638 legacy AUTO's combined
+resolve==reactor ANDprogress0 predicate, without a raw actual-ID/progress
+split. Parent reads originals: malformed NaN stays explicit/unavailable and
+selection refuses; legacy balance remains reachable. Owner0752 must diagnose
+the oracles/production boundary without dropping cases, weakening zero credit,
+inventing observations or forcing a guessed output. UI and these two
+assertions are separate from three old canonical equalities. OriginalCI stays
+red. Repair is source-only; another exact published grant is required.
+
 **G9 decision-bound CI finds real source regressions before any PC stage.**
 Exactbb5/run39796002710/artifact12433053598 has environment/build0 AND
 tool-javac0: the0ab buffer-writes repair is compiler-confirmed. Suites now
@@ -15,7 +34,7 @@ Owner0752 receives the UI harness correction with no fake carrier, skipped
 cases or bootstrap bypass of pre-boot index contracts. No PC/SSH/JVM/Sync/
 native/writer has started; unused lease closure is pending, aliasbb5 frozen.
 
-**NEW G9 GO, no result inferred:** sole604/exact
+**Historical G9 GO, unused and now returned:** sole604/exact
 bb5f137b945277c04fd4042b43d121ad3552c2ff/new inventoried full root.
 All selector438/controllerccfe/fixture0ab sources are reviewed and normally
 composed, old CI red preserved. First confirm actual tool-javac and changed
@@ -158,9 +177,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Verified G7/A7; source57d/4ee plus G8 actual31/41/model/display-fixture/239-file closure and normal A8 integration; selector438 and controller PhaseA source preserved |
-| BLOCKED | Actual selector tool-javac fixture failure needs source repair; combined selection/controller runtime, finite establishment and genuine upgrades remain |
-| NOT EXECUTED | Selector suites/native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
+| COMPLETED | Verified G7/A7/G8/A8; selector/controller/fix source integrated; bb5 actual tool-javac confirms0ab; G9 ten-file original/unused-closure custody verified |
+| BLOCKED | UI native-preview bootstrap and NaN/AUTO Persistence oracles need source diagnosis/repair; combined runtime, finite establishment and genuine upgrades remain |
+| NOT EXECUTED | G9 Sync/PC suites/native/writers/A9, final selector/UI/controller proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

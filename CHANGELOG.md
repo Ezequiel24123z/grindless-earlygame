@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the unused G9 lease and retain exact assertion/oracle distinctions.**
+  Parent verifies ten-file custodyc15e6f77 and the14:50:21Z read-only WMI/path
+  closure: root absent, no Sync/JVM/guard creation/writes, Java0/locksfalse.
+  NaN binary-reopen equality and AUTO's unsplit ID/progress predicate are
+  precise Persistence failures, not guessed data loss/transfer or stale JSON.
+  Source owner diagnoses those plus UI preview bootstrap; no A9 or source-
+  clean/native pass is fabricated. Optional parent GitHub metadata read hangs
+  and is stopped; original source/status/SHA evidence stays intact.
 - **Confirm the buffer compile repair and preserve the next exact-source reds.**
   G9 reads originalbb5 CI39796002710/artifact12433053598 before any PC stage:
   environment/build/tool-javac0 confirms0ab, but UI ItemStack preview setup
