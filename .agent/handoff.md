@@ -4,6 +4,17 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G9 decision-bound CI finds real source regressions before any PC stage.**
+Exactbb5/run39796002710/artifact12433053598 has environment/build0 AND
+tool-javac0: the0ab buffer-writes repair is compiler-confirmed. Suites now
+run; MachineUi assemblerWire286/main78 fails ItemStack initialization through
+unbootstrapped BuiltInRegistries. Persistence has another real red whose
+primary cause is being extracted, not assumed identical. Three other old
+canonical equalities remain separate. BehaviorSHAb4d7f48f is preserved.
+Owner0752 receives the UI harness correction with no fake carrier, skipped
+cases or bootstrap bypass of pre-boot index contracts. No PC/SSH/JVM/Sync/
+native/writer has started; unused lease closure is pending, aliasbb5 frozen.
+
 **NEW G9 GO, no result inferred:** sole604/exact
 bb5f137b945277c04fd4042b43d121ad3552c2ff/new inventoried full root.
 All selector438/controllerccfe/fixture0ab sources are reviewed and normally

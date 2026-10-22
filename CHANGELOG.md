@@ -15,6 +15,13 @@ entries below reference those records by id.
 
 ### Added
 
+- **Confirm the buffer compile repair and preserve the next exact-source reds.**
+  G9 reads originalbb5 CI39796002710/artifact12433053598 before any PC stage:
+  environment/build/tool-javac0 confirms0ab, but UI ItemStack preview setup
+  fails unbootstrapped registration and Persistence has a separate red still
+  under exact triage. Do not call these stale equalities or bypass pure
+  contracts with a fake carrier; owner0752 repairs its authored source.
+  No native/writer or Personal-PC work is started to replay those failures.
 - **Bound the next gas-line candidate by its actual source energy ledger.**
   Electrolysis's6400FU batch yields2000mB hydrogen; the existing400ticks per
   1000mB/F1 burn projects25600FU before routing overhead. Preserve this

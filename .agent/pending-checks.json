@@ -86,7 +86,7 @@
     "qualification_package_fictitious_target_plan_authorized": false,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "onlyNORMAL_A9subset4outputs_exact_parentbb5_actualpasses_nonoutputinvariance_JVM0locks0_bothtrailers_normal_localcommit_bundle_no_push_or_runtime_stage_afterdata",
-    "result": "NEW_G9_exactbb5_actualcompiler_contract_native_and_models_PENDING",
+    "result": "bb5actualCI_toolsJavac0_confirms0ab_UI_ItemStack_NotBootstrapped_andPersistence_reds_NOTcanonicalOnly_NO_PC_started_unusedreturn_pending",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_G9_window",

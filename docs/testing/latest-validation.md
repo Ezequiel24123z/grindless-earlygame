@@ -873,6 +873,17 @@ payloads and a bounded local dataA9 exactparentbb5 after passes/frozen inputs.
 No FTB/backend/ABI/paid/package/target/client/ownerworld or acceptance
 permission/result follows; all new observations remain pending.
 
+**G9 exact-source CI decision, before PC execution:** original run39796002710/
+artifact12433053598 is sourcebb5, environment/build0 and tool-javac0;
+0ab is actually compiler-confirmed. MachineUi assemblerWire286/main78
+throws ItemStack initialization via unbootstrapped BuiltInRegistries.
+Persistence is a separate real red awaiting primary-cause extraction.
+The three old Economy/T0Guidance/T1 equalities remain separate; not all five
+failures are stale. Raw behaviorSHAb4d7f48fd58b08ef3a19748fd568d1986fe40e996389b2ae59d70d625190a8b9
+is preserved in the original five-file artifact. No PC/SSH/JVM/Sync/native/
+writer or dependent replay starts. Source UI repair must retain pre-boot
+contracts and native-dependent coverage, not fabricate an ItemStack carrier.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before
