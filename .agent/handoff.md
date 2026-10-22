@@ -218,6 +218,57 @@ sole604 continues independent managed/legacy and normal generation on7c55,
 preserves red world/JAR/receipts, then closes/bundles before the next exact
 native qualification. This is a fixture failure, not evidence F3 matching failed.
 
+**New actual G3 FTB boundary:** the executor reports managed-files-only44 plus
+SYNTHETIC_STALE_CLASS_REGRESSION, Gradle/native0. The malformed-SNBT EOF message
+is an intentional negative, not a suite failure. Authentic legacy publication
+runs07:57:21.5061864Z to07:58:09.8371578Z and fails1/wrapper1 at
+verifyCompilation302, after BOTH fresh dd0 JavaCompile tasks and remap execute.
+Receipt5f911a77 is real; no reference-v2/final publication marker exists.
+Parent verifies all nine delivered custody hashes, including original stdout/
+stderr/receipt, selected29bc and fresh8a7af1e8 JARs. Each JAR has2273 entries;
+2272 common payloads match, but one309-byte generated Architectury
+PlatformMethods class has a different hash-bearing name AND payload. This is
+not just ZIP metadata. No class is ignored or equivalence assumed.
+
+Source ownercb273782 inspects the actual class bytes and repairs only that
+comparison, with independent pinned Architectury stamp research3339e4ff.
+Preserve strict source/loaded-image/payload binding and reject altered code;
+do not turn prefix exclusion into a pass. Keep the successful original compiler
+receipt/output for reuse if their inputs remain unchanged. Do not replay both
+successful compilers merely to test a comparator. This is not yet a corrected
+publisher pass or real-plan consumption.
+
+Native tested-JAR custody is frozen by the executor before later Gradle:
+staged=remapped=testedfd1b455d,2,468,180bytes; inventory only Architectury and
+Grindless, diagnostic world retained. Parent final bundle verification remains
+pending. The07:58:10Z Java0/locks0 observation closes the legacy phase, NOT
+the G3 lease. Sole604 continues normal assets/three model writers on7c55,
+restricted to the five outputs. Parent/other workers still have no PC access,
+Sync, package, fixture-instance or player action.
+
+**Asset stage, not yet accepted:** generator12c actually exits0; the subsequent
+SourceGuard fails on four extra states outputs. The executor reports no content
+numstat difference, only LF/CRLF rewrites, and closes08:09:22Z/Java0/locksfalse
+before model writers. Produced bytes, raw red and the initial warning-observer
+failure are preserved. Conditional GO permits restoring ONLY those four own
+outputs to their initial input-manifest SHA values, keeping GENERATED.md.
+Require exact hashes/content-only diagnosis; no global Git/attributes change,
+whitelist expansion or source switch. Resume post-generator checks from the
+original real exit0 without rerun or rewriting the red receipt. Restoration/
+postchecks/A3 remain unobserved. Source owner143a5650 fixes the normal twin
+writers' unchanged-content byte preservation separately, without touching G3.
+
+| Category | Current G3 checkpoint, not a completed wave |
+| --- | --- |
+| COMPLETED | Actual compile/javac and managed44/stale-class contract; original legacy compilation receipt and failed-publication/JAR custody preserved; native carrier source repair integrated |
+| BLOCKED | Corrected native/legacy properties remain unproved; asset postchecks wait for exact own-output EOL restoration. Source owners repair normal mechanisms without retargeting G3 |
+| NOT EXECUTED | Corrected native/publisher, final normal-output checkpoint/custody, real managed-plan consumption, new package/client/player update, whole-tier acceptance |
+| NEEDS HUMAN VALIDATION | Existing GUI/JEI/reward/appearance and longitudinal-campaign gates remain open |
+| NEEDS MY DECISION | None from the owner; bounded technical repair is delegated |
+| NEEDS CREDENTIAL / EXTERNAL RESOURCE | None new |
+| COST / BILLING RISK | None new; no generation/provider/dependency installation authorized |
+| DEPLOYED STATE | Unchanged dd0/JAR29bc/ZIP79ce player delivery; no T1 source, old backup or diagnostic is deployed over the actual game |
+
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
 source. Preserve all previous failures and successful source-bound evidence.

@@ -15,6 +15,23 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the real legacy-publication mismatch while independent writers continue.**
+  G3 managed-files-only reports44 plus its stale-class regression, Gradle/native0.
+  Both authentic dd0 JavaCompile tasks and remap actually run, producing receipt
+  5f911a77; publication then fails1/1 at selected-JAR payload equality. Parent
+  verifies the delivered original receipt/log/JAR hashes:2272 common payloads
+  match, but the309-byte Architectury PlatformMethods name/payload differs.
+  No reference is published and no generated class is silently omitted. Assign
+  a bounded source repair and pinned upstream investigation while sole604
+  continues only the five normal outputs on frozen7c55; no compiler replay,
+  package, live Sync or player action is inferred.
+- **Keep the normal asset writer's line-ending spill outside the accepted outputs.**
+  Actual generator exit0 is followed by a real SourceGuard red on four states
+  files, reported content-identical/EOL-only. Preserve their produced bytes and
+  raw failure; authorize only restoring those own outputs to the exact initial
+  manifest hashes before resuming post-generator checks without replay.
+  A separate bounded writer repair must preserve unchanged bytes and real
+  content updates on both script platforms; no whitelist/config relaxation.
 - **Fix the observed native carrier without rewriting the resolver.**
   G3 actual common/Forge/classpath native0 and selected javac0 are preserved
   after a shared-log hash observer failure, without replay. The one native

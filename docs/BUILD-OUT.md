@@ -80,6 +80,16 @@ Sync, repaired/new contracts, the one real mechanism/registration probe,
 normal assets and models, new-only FTB Java and authentic old publication.
 All results are pending; preserve old proofs/source boundaries and leave
 package/target/real-plan application for a later explicit clean-source window.
+G3 now has actual compile/javac0 and new managed-files44/stale-regression0.
+Its one native is a preserved carrier red, repaired only in future source957.
+Authentic old compilers/remap really execute, but publication fails on one
+309-byte generated Architectury class name/payload while2272 common entries
+match. Preserve the original successful compilation and both failed scenarios.
+The FTB source owner and pinned upstream research resolve that comparison;
+no prefix exclusion or assumed equivalence is authorized. Sole604 continues
+only the five normal outputs on frozen7c55 before checkpoint/custody/leaseback.
+Corrected native/publication and real managed-plan consumption follow later,
+not by live Sync or redundant successful compiler execution.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine

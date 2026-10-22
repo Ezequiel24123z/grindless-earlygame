@@ -8338,9 +8338,11 @@ projection and registered-item proofs, not an unrelated Blueprint/pressure repla
 **Status.** Accepted coordinator engineering scope under ADR-0171/0173 and the
 owner's continued development instruction, 2026-10-22. Source93ce975 is normally
 integrated; unchanged-input Windows786/103 is actual file/tool evidence.
-Independent provenance P2 closes in source only. Real compiler/old export/
-parser/plan-consumption qualification is pending; no player instance update
-is authorized.
+Independent provenance P2 closes in source only. Subsequent G3 managed44/
+stale-class contract passes and actual fresh compiler/remap receipt are real;
+old publication fails on a generated Architectury payload difference.
+Corrected publication/plan-consumption qualification remains pending; no
+player instance update is authorized.
 
 **Context.** The installed native baseline has46 logical quests; current source
 has50 with four reward-free lessons. `FtbQuestFiles.ensure/preflight` deliberately
@@ -8376,9 +8378,16 @@ refusal while pending. Reference publication schema2 requires a fresh normal
 Gradle JavaCompile/remap receipt, source/input hashes, actual loaded class images
 and all selected-JAR payloads. A clean checkout, correct selected JAR and
 historical classes merely located below the root are not sufficient. Source-only
-independent review closes that concrete P2; actual compiler/export/plan execution
-remains a separate unproved property. The prior real786/103 filesystem evidence
-is reused only because its inputs are exactly unchanged.
+independent review closes that concrete P2. G3 subsequently executes both fresh
+compilers/remap and emits the authentic receipt, but selected-JAR equality
+rejects one309-byte generated Architectury class's changed name/payload.
+The2272 other common payloads match; this does not authorize ignoring a class
+or assuming semantic equivalence. Investigate the exact pinned generator and
+actual bytes before selecting a narrow fail-closed repair. Corrected export
+and real-plan execution remain separate unproved properties. Preserve the
+successful compilation for input-bound reuse rather than repeating it merely
+for a comparator change. The prior real786/103 filesystem evidence is reused
+only because its inputs are exactly unchanged.
 
 **Rejected alternatives and proof.** Startup overwrite, accepting a filename as
 ownership, raw progress replacement and ignoring user edits all violate the

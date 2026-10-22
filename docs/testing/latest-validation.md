@@ -273,6 +273,59 @@ markers and budget do not change. Parent directly reviews the one-file delta;
 only the corrected fixture/previously unreachable property needs new native
 evidence, not another writer/paid-FTB replay. No live7c55 source switch occurs.
 
+**Actual G3 managed/legacy split:** the executor reports new
+`--managed-files-only`44 plus SYNTHETIC_STALE_CLASS_REGRESSION, Gradle/native0.
+The malformed-SNBT EOF error belongs to the intended negative contract.
+This closes the new managed-files Java property, not publication or plan apply.
+
+Authentic legacy publication runs07:57:21.5061864Z to07:58:09.8371578Z,
+exit1/wrapper1. Original logs show both dd0 JavaCompile tasks and remapJar
+executed and FTB_COMPILATION_RECEIPT emitted; verifyCompilation302 then rejects
+the selected runtime payload. There is no published schema2 reference or final
+marker. Phase closure07:58:10Z reports Java0/locks0/clean7c55; sole604 retains
+the G3 lease for independent normal writers.
+
+Parent verifies delivered original custody SHA-256, without PC access:
+compilation `5f911a77394bed6f0e5f7b84543d2023456f6f82abf7a96c101f2a7c1d45dec6`,
+compiler init `6d5330aca2b5dbb4af830e6e21e76bcecdbabc7ac314cf63bb3cea42c352c8d2`,
+stdout `9c71c9b9af94374d17e9e8421a9aa50d6a1ebd72d36263dc5736c00546e5cf56`,
+stderr `6d03f3372aa718572287cc1e980e2ad530693d594744fcb717cb07d85d85520e`,
+receipt `4f3bcb4ec5633bbe401a449b573143a9ec4747ae4c4a4793ab0468ef885c67f7`.
+Selected `29bcce43372016719fe1202b8859a18c93147562c04a2ef1daf163fddf7cc54f`
+and fresh `8a7af1e885b9ff11cab142ce2ed1e0e8558393ab7b65f2e3716f7cb831a1193f`
+are both2,347,765bytes. Difference report
+`fd44dfefe1cebd7ac48e41e2636bfb02f532d76f845bdae1bfec890fbb920c70`
+records2273 entries per JAR and2272 common byte-identical payloads. Only the
+309-byte Architectury PlatformMethods class changes its generated name and
+payload. This is a genuine payload mismatch, not just ZIP timestamps; no
+omission/normalization or semantic equivalence has been accepted.
+
+The source owner investigates the actual class plus pinned upstream generation
+in parallel. A narrowly justified comparator fix needs new positive/altered-body
+negative evidence. Reconsume the original successful compilation if its source,
+recipe and image bindings remain valid; do not rerun its compilers merely for
+changed comparison code. Corrected publication and real-plan consumption remain
+unexecuted. Native staged/remapped/tested identityfd1b455d,2,468,180bytes and
+the retained red world are executor-preserved; final parent bundle custody
+remains pending. No live source switch, package or player action occurs.
+
+**Actual asset generator0 followed by guard red:** stage12c runs the normal
+generator successfully, but SourceGuard detects four unapproved states files:
+`tools/smoke/states-pack/data/grindless/functions/states.mcfunction`,
+`tools/smoke/states-pack/pack.mcmeta`, `tools/smoke/states.commands`,
+`tools/smoke/states.expect`. Executor reports normal/ignore-space-at-eol
+numstats without content differences and LF/CRLF warnings. Preserve all four
+produced versions, raw guard failure and the first warning-observer failure.
+Closure08:09:22Z/Java0/locksfalse precedes model writers.
+
+Coordinator authorizes only exact initial-manifest byte restoration of those
+own outputs, conditional on that EOL-only diagnosis. Keep GENERATED.md and all
+other inputs intact; no whitelist/Git-config/attributes/source change. Resume
+downstream checks using the original actual generator0, not a repeated run.
+Restoration and completed asset postchecks remain unobserved. Separate bounded
+source repair targets existing twin writers' no-op byte preservation and genuine
+content updates; it supplies no retroactive G3 pass.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the
