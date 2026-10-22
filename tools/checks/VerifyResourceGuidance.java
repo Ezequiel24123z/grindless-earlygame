@@ -4,17 +4,21 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.client.ResourceGuidanceClient;
+import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidance;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceJson;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceProjection;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceRuntime;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.quest.QuestLogic;
 import io.github.ezequiel24123z.grindless.quest.QuestTeaching;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
+import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.RenewableProcesses;
@@ -73,6 +77,7 @@ public final class VerifyResourceGuidance {
         lineEndings();
         loader();
         contexts();
+        authoredMatrixContexts();
         matrixDeclarations();
         surfaces(Path.of("").toAbsolutePath().normalize());
         System.out.println("RESOURCE GUIDANCE: " + assertions
@@ -529,12 +534,103 @@ public final class VerifyResourceGuidance {
                 relay.matrixRating());
         equal("physical F1 quest context keeps that exact rating", 1,
                 ResourceGuidanceContext.questSubject(relay).orElseThrow().rating());
-        equal("the retained ordinary factory-stock objective still keeps unspecified rating0", 0,
-                ResourceGuidanceContext.questSubject(QuestCatalogue.byId("matrix_line")).orElseThrow().rating());
+        var stock = QuestCatalogue.byId("matrix_line");
+        equal("ordinary factory-stock display uses the physical default supply option", 1,
+                ResourceGuidanceContext.questSubject(stock).orElseThrow().rating());
+        equal("the display option does not replace generic stock evidence with exact Matrix evidence",
+                QuestCatalogue.Evidence.ITEM, stock.evidence());
+        equal("generic stock evidence still specifies no required Matrix rating", null, stock.matrixRating());
         var industrial = QuestCatalogue.byId("industrial_matrix");
         equal("industrial evidence really requires a physical Matrix", QuestCatalogue.Evidence.MATRIX, industrial.evidence());
         equal("industrial Matrix evidence keeps exact F2", 2,
                 ResourceGuidanceContext.questSubject(industrial).orElseThrow().rating());
+    }
+
+    private static void authoredMatrixContexts() {
+        Resource f1 = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
+        var entry = new ResourceGuidance.Entry(new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
+                "craft/relay_matrix", List.of(), null, null, null, null), List.of(), List.of(), Map.of());
+        var loaded = new ResourceGuidanceRuntime.Loaded(ResourceGuidanceJson.prepare(Map.of(f1, entry)), null);
+        String original = ResourceGuidanceJson.write(loaded.document());
+        Function<String, Optional<MatrixArchitecture>> architectures = id -> id.equals(FabricationLogic.RELAY_MATRIX)
+                ? Optional.of(MatrixArchitecture.RELAY) : Optional.empty();
+        List<AtlasLogic.Entry> entries = AtlasLogic.allEntries(ProcessGraph.generate(List.of()));
+        for (var selection : Map.of(
+                "craft/relay_matrix", ResourceGuidanceContext.Role.OUTPUT,
+                "assemble/relay_matrix", ResourceGuidanceContext.Role.OUTPUT,
+                "craft/thermal_generator", ResourceGuidanceContext.Role.INPUT,
+                "assemble/thermal_generator", ResourceGuidanceContext.Role.INPUT,
+                "assemble/wire_mill", ResourceGuidanceContext.Role.INPUT).entrySet()) {
+            var authored = entries.stream().filter(row -> row.id().equals(selection.getKey())).findFirst().orElseThrow();
+            var matrices = ResourceGuidanceContext.operands(authored).stream()
+                    .filter(operand -> operand.resource().id().equals(FabricationLogic.RELAY_MATRIX)).toList();
+            equal("real Atlas row retains one logical Matrix operand: " + authored.id(), 1, matrices.size());
+            var operand = matrices.get(0);
+            equal("authored Atlas identity agrees with physical F1-only metadata: " + authored.id(), f1, operand.resource());
+            equal("authored Atlas retains the actual input/output role: " + authored.id(), selection.getValue(), operand.role());
+            equal("authored Atlas retains the complete native quantity: " + authored.id(),
+                    operand.role() == ResourceGuidanceContext.Role.OUTPUT ? FabricationLogic.RELAY_MATRIX_BATCH : 1,
+                    operand.amount());
+            equal("the physical declaration is found without a generic raw DTO key: " + authored.id(), f1,
+                    ResourceGuidanceClient.declaration(loaded, operand.resource(), architectures).orElseThrow().declaration());
+            equal("actual Atlas context cannot become unknown after physical metadata projection: " + authored.id(), false,
+                    hasTranslation(ResourceGuidanceClient.lines(loaded, operand.resource(), true, true), PREFIX + "unknown"));
+            equal("actual Atlas context retains declared supply rather than an empty success: " + authored.id(), true,
+                    hasTranslation(ResourceGuidanceClient.lines(loaded, operand.resource(), true, true), PREFIX + "supply"));
+        }
+        for (String task : List.of("relay", "matrix_line")) {
+            Resource subject = ResourceGuidanceContext.questSubject(QuestCatalogue.byId(task)).orElseThrow();
+            equal("actual quest context uses the physical F1 declaration: " + task, f1, subject);
+            equal("actual quest reading does not regress to unknown with an F1-only DTO: " + task, false,
+                    hasTranslation(ResourceGuidanceClient.playerContext(loaded, subject), PREFIX + "player_unknown"));
+            equal("actual quest reading retains declared supply: " + task, true,
+                    hasTranslation(ResourceGuidanceClient.playerContext(loaded, subject), PREFIX + "supply"));
+        }
+        var f2Route = entries.stream().filter(row -> row.id().equals("assemble/relay_matrix_f2")).findFirst().orElseThrow();
+        var predecessor = ResourceGuidanceContext.operands(f2Route).stream()
+                .filter(operand -> operand.role() == ResourceGuidanceContext.Role.INPUT
+                        && operand.resource().id().equals(FabricationLogic.RELAY_MATRIX)).findFirst().orElseThrow();
+        equal("the exact F2 predecessor stays physical F1", f1, predecessor.resource());
+        equal("the exact F2 predecessor never becomes minimum control", IngredientSpec.MatrixRole.EXACT, predecessor.matrixRole());
+        for (FluxTier tier : List.of(FluxTier.F2, FluxTier.F3)) {
+            Resource rated = new Resource(Kind.ITEM, f1.id(), tier.ordinal(), "items");
+            equal("explicit higher descriptors keep their exact identity: " + tier, rated,
+                    ResourceGuidanceContext.resource("item:" + f1.id() + " [" + tier.name() + "]").orElseThrow());
+            equal("F1-only metadata cannot leak into a higher physical declaration: " + tier, true,
+                    ResourceGuidanceClient.declaration(loaded, rated, architectures).isEmpty());
+        }
+        Resource f2 = new Resource(Kind.ITEM, f1.id(), FluxTier.F2.ordinal(), "items");
+        equal("industrial quest display stays physically F2", f2,
+                ResourceGuidanceContext.questSubject(QuestCatalogue.byId("industrial_matrix")).orElseThrow());
+        equal("the actual F2 Atlas output stays physically F2", f2, ResourceGuidanceContext.operands(f2Route).stream()
+                .filter(operand -> operand.role() == ResourceGuidanceContext.Role.OUTPUT).findFirst().orElseThrow().resource());
+        for (Resource unrelated : List.of(new Resource(Kind.ITEM, "minecraft:paper"),
+                new Resource(Kind.ITEM, "grindless:unknown_matrix"), new Resource(Kind.ITEM, "grindless:integrated_matrix"),
+                new Resource(Kind.ITEM, "other_mod:relay_matrix"), new Resource(Kind.TAG, f1.id()),
+                new Resource(Kind.FLUID, f1.id()), new Resource(Kind.ITEM, f1.id(), 0, "blocks"),
+                new Resource(Kind.ITEM, f1.id(), 0, "fluids"))) {
+            equal("other IDs/axes/registries cannot inherit the canonical Relay default: " + unrelated.key(), true,
+                    unrelated == ResourceGuidanceContext.canonicalSupply(unrelated));
+            equal("other IDs/axes/registries cannot borrow F1-only metadata: " + unrelated.key(), true,
+                    ResourceGuidanceClient.declaration(loaded, unrelated, architectures).isEmpty());
+        }
+        for (String descriptor : List.of("item:minecraft:paper", "item:grindless:unknown_matrix",
+                "item:grindless:integrated_matrix", "tag:" + f1.id(), "fluid:" + f1.id())) {
+            equal("non-Matrix and wrong-axis descriptors remain unrated: " + descriptor, 0,
+                    ResourceGuidanceContext.resource(descriptor).orElseThrow().rating());
+        }
+        equal("ordinary non-Matrix quest display remains unrated", 0,
+                ResourceGuidanceContext.questSubject(QuestCatalogue.byId("data_core")).orElseThrow().rating());
+        equal("generic authored ingredients retain unspecified admission rating0", 0,
+                IngredientSpec.item(f1.id(), 1).matrixRating());
+        var f3 = new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F3);
+        equal("explicit minimum-control admission still accepts a stronger valid Matrix", true,
+                IngredientSpec.minimumControl(f1.id(), FluxTier.F1, 1).acceptsMatrix(f1.id(), f3));
+        equal("exact F1 admission still refuses a stronger physical Matrix", false,
+                IngredientSpec.matrix(f1.id(), FluxTier.F1, 1).acceptsMatrix(f1.id(), f3));
+        equal("authored display never manufactures a generic DTO declaration", Set.of(f1), loaded.document().resources().keySet());
+        equal("authored display lookup does not mutate the DTO or its digest", original,
+                ResourceGuidanceJson.write(loaded.document()));
     }
 
     private static void matrixDeclarations() {
@@ -692,9 +788,11 @@ public final class VerifyResourceGuidance {
         }
         String runtime = Files.readString(root.resolve(COMMON.resolve(Path.of("guidance", "ResourceGuidanceRuntime.java"))));
         String presenter = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "ResourceGuidanceClient.java"))));
+        String context = Files.readString(root.resolve(COMMON.resolve(Path.of("guidance", "ResourceGuidanceContext.java"))));
         for (String forbidden : List.of("AuthorityAdapters", "ToolProvider", "java.nio.file", "T0Sustainability",
                 "SustainabilityAudit", "ConstructionReserve", "EntryProfile")) {
-            equal("runtime does not invoke source/model audit " + forbidden, false, runtime.contains(forbidden) || presenter.contains(forbidden));
+            equal("runtime does not invoke source/model audit " + forbidden, false,
+                    runtime.contains(forbidden) || presenter.contains(forbidden) || context.contains(forbidden));
         }
         equal("runtime only reads prepared classpath bytes", true, runtime.contains("getResourceAsStream(ResourceGuidance.ASSET)"));
         String init = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "GrindlessClient.java"))));

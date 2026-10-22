@@ -260,8 +260,11 @@ Require actual updated provenance later; old G3/G6 counts are not retargeted.
 ### Authored default Matrix identity
 
 ADR-0184 projects authored default stacks through `AuthorityAdapters.physical`,
-shared by its item/resource craft, process and quest paths. The only default
-binding is the actual Relay supplier/import profile checked by
+delegating to the pure `ResourceGuidanceContext.canonicalSupply` rule also used
+by its authored `resource`/`operands` and `questSubject` display paths. These are
+canonical sufficient supply options, not new exact admission predicates for
+generic ITEM evidence/ingredients. The sole default binding is the actual Relay
+supplier/import profile checked by
 `VerifySustainabilityRegistry.addDeclarations`; `ControlMatrixNbt.load` owns the
 rating. Generic checked declarations stay raw; common reads no client/Forge
 registry and Resource equality/keys are unchanged. `T0Sustainability.annotations`
@@ -273,9 +276,11 @@ five-controller custody, bills and rewards; unsupported axes/IDs cannot default.
 synthetic routes or fictitious items. Finite T1 custody/renewability/autonomy
 remain unproved. Source is implemented, not Java/writer-qualified; a later exact
 model window remains pending. Frozen G7/code41df605 and PC/player surfaces stay
-outside this lane; canonical payloads await normal writers. Unrated Atlas/quest
-display contexts still require their separately owned client declaration-lookup
-follow-up; this common correction does not claim integrated display parity.
+outside this lane; canonical payloads await normal writers. The authorized
+authored-display follow-up uses no auditor, builders, I/O or live registry and
+keeps `ResourceGuidanceClient` presentation/physical validation unchanged.
+Existing F1-only DTO/real-operand regressions and direct helper source/image
+guards are authored, not an executed Java or integrated-display pass.
 
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This

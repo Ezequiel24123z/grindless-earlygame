@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.fluid.FluidLogic;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.material.MaterialForm;
 import io.github.ezequiel24123z.grindless.material.SupplyCatalogue;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
@@ -12,7 +13,6 @@ import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
 import io.github.ezequiel24123z.grindless.quest.QuestCatalogue;
 import io.github.ezequiel24123z.grindless.recipe.BootstrapRecipes;
-import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
@@ -367,7 +367,7 @@ public final class AuthorityAdapters {
                 T1Recipes.class, QuestCatalogue.class, FluidLogic.class, ThermalLogic.class, SolarLogic.class,
                 SourceLogic.class, MaterialForm.class, FluxTier.class, IngredientSpec.class,
                 OutputSpec.class, ProcessRecipe.class, WorkshopStructure.class,
-                ControlMatrixNbt.class, MatrixArchitecture.class)) {
+                ControlMatrixNbt.class, MatrixArchitecture.class, ResourceGuidanceContext.class)) {
             pending.add(entry.getName());
         }
         // Read the physical claim-access authority as source without loading game classes.
@@ -440,7 +440,8 @@ public final class AuthorityAdapters {
         for (Class<?> type : List.of(AuditFinding.class, AuditReports.class, AuthorityAdapters.class,
                 ConstructionReserve.class, DebtManifest.class, SustainabilityAnnotations.class,
                 SustainabilityAudit.class, SustainabilityModel.class, TagResolver.class,
-                ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class, FluxTier.class)) {
+                ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class, FluxTier.class,
+                ResourceGuidanceContext.class)) {
             pending.add(type.getName().replace('.', '/') + ".class");
         }
         for (String check : List.of("VerifySustainability", "VerifySustainabilityAdapters",
@@ -784,17 +785,11 @@ public final class AuthorityAdapters {
     }
 
     /**
-     * Projects an authored untagged stack, not a registration declaration or invalid explicit NBT.
-     * VerifySustainabilityRegistry checks the actual Relay item/architecture supplier for this binding.
+     * Shares the pure authored supply rule with display; registry declarations bypass this seam.
+     * Invalid explicit NBT is not an authored default and must be rejected by the actual stack decoder.
      */
     static Resource physical(Resource resource) {
-        if (resource.kind() != Kind.ITEM || !resource.registry().equals("items") || resource.rating() != 0
-                || !resource.id().equals(FabricationLogic.RELAY_MATRIX)) {
-            return resource;
-        }
-        var matrix = ControlMatrixNbt.load(MatrixArchitecture.RELAY, null)
-                .orElseThrow(() -> new IllegalStateException("The registered Relay has no valid default Matrix rating"));
-        return new Resource(resource.kind(), resource.id(), matrix.rating().ordinal(), resource.registry());
+        return ResourceGuidanceContext.canonicalSupply(resource);
     }
 
     private static Resource qualified(String value) {

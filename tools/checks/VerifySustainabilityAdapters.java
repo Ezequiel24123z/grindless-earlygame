@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixNbt;
 import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.matrix.MatrixArchitecture;
@@ -758,7 +759,8 @@ public final class VerifySustainabilityAdapters {
         String javaRoot = "common/src/main/java/io/github/ezequiel24123z/grindless/";
         for (String dependency : List.of("energy/FluxTier.java", "recipe/FabricationLogic.java",
                 "recipe/ProcessLogic.java", "recipe/ProcessRecipe.java", "recipe/MachineFamily.java",
-                "matrix/ControlMatrixNbt.java", "matrix/MatrixArchitecture.java")) {
+                "matrix/ControlMatrixNbt.java", "matrix/MatrixArchitecture.java",
+                "guidance/ResourceGuidanceContext.java")) {
             eq("transitive authority source is fingerprinted: " + dependency, true, sources.containsKey(javaRoot + dependency));
         }
         eq("authority source identities never contain an absolute path", false,
@@ -770,7 +772,7 @@ public final class VerifySustainabilityAdapters {
                 executed.classHashes().containsKey(reportClass));
         eq("all S1 implementation bytes were available", Set.of(), executed.unresolved());
         for (Class<?> type : List.of(ControlMatrixNbt.class, ControlMatrixSpec.class, MatrixArchitecture.class,
-                FluxTier.class)) {
+                FluxTier.class, ResourceGuidanceContext.class)) {
             String path = type.getName().replace('.', '/') + ".class";
             try (InputStream bytes = type.getResourceAsStream("/" + path)) {
                 eq("physical rating provenance hashes the actual resolved class image: " + type.getName(),
