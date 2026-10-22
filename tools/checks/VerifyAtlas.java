@@ -104,12 +104,15 @@ public final class VerifyAtlas {
         for (String die : List.of("plate_die", "rod_die", "gear_die", "coil_die")) {
             AtlasLogic.Entry manual = route(allRows, "craft/" + die);
             AtlasLogic.Entry automatic = route(allRows, "assemble/" + die);
+            ProcessRecipe automaticProcess = recipes.stream()
+                    .filter(recipe -> recipe.id().equals(automatic.id())).findFirst().orElseThrow();
             eq(die + " remains available from its crafting-table bootstrap", "CRAFTING_TABLE", manual.station());
             eq(die + " is reproduced by the existing Assembler", "ASSEMBLER", automatic.station());
             yes(die + " preserves the exact authored ingredient multiset",
                     manual.inputs().stream().sorted().toList().equals(automatic.inputs().stream().sorted().toList()));
             yes(die + " preserves the authored output batch", manual.outputs().equals(automatic.outputs()));
-            yes(die + " fits the existing four Assembler input slots", automatic.inputs().size() <= 4);
+            yes(die + " fits the existing four Assembler input slots",
+                    automaticProcess.itemInputs().size() <= 4);
             yes(die + " adds no consumed-recipe catalyst", automatic.catalysts().isEmpty());
             eq(die + " uses the existing Assembler duration",
                     FabricationLogic.ASSEMBLE_TICKS, automatic.durationTicks());
