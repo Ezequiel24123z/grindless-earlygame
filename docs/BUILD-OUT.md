@@ -33,6 +33,16 @@ Keep stopped/owned-target, backup, copy-compatibility and recoverable update
 guards; never stop the player's game. Partial increments are not whole-tier
 readiness, and no public release/main merge or automatic acceptance follows.
 
+**Latest product correction (ADR-0188):** normal final machines are manually
+assembled; their processes remain automatable. Other products, including
+infrastructure, follow authored manual-only/machine-only/dual methods, not
+universal self-replication or mandatory Assembler use. Retire obsolete live
+automatic normal-machine constructors, supply valid manual authorities and
+retarget teaching/fixtures/finite proof before a new exact-source GO.
+The old common-model-only preparation is frozen without execution.
+Generic custody review8ef is clear, but no Java/finite result is inferred.
+Preserve historical proofs, actual worlds and all unavailable paid work.
+
 **Current next (2026-10-22):** G7 is technically closed with verified339
 artifacts plus separately recovered original CI5, actual writer41df/normal
 A726e/29-source38-image provenance and real managed50-to51 idempotence in

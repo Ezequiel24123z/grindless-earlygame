@@ -18,18 +18,30 @@
     "escalation": "serious_blocker_or_urgent_owner_decision",
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
+  "normal_machine_manufacturing": {
+    "policy": "ADR-0188",
+    "status": "owner_correction_and_infrastructure_clarification_ACCEPTED_implementation_pending",
+    "normal_final_manual_only_operating_processes_automatable": true,
+    "other_product_modes": ["MANUAL_ONLY", "MACHINE_ONLY", "BOTH"],
+    "infrastructure_manual_and_machine_methods_per_product": true,
+    "universal_automation_or_dual_recipes": false,
+    "old_model_only_execution_scope": "FROZEN_before_any_GO_NO_PC_or_CIquery_Sync_JVM",
+    "research_agent": "86151eb2-babe-4a6b-a6f0-2d409885d5fa",
+    "canonical_data": "A9_still_old_actual_G10_payloads_NO_manual_repair_or_new_policy_qualification",
+    "world_or_paid_progress_changes_authorized": false
+  },
   "finite_T1_custody_continuation": {
     "policy": "ADR-0187",
-    "status": "source6b_complete_normalcomposition_thischeckpoint_independent_source_review_and_actual_Java_model_qualification_pending",
+    "status": "source6b_composed3a29_generic_custody_review_clear_T1_authorities_must_follow_ADR0188_actualJava_and_replay_pending",
     "source_base": "f5c2dde688c7c5b7e53cac3d9fe108ad8d3119cf",
     "source_checkpoint": "6b1917672f48eda7b5320ee4bc3733a2b474300a",
     "source_parent": "6c53b3216144a6bfdb0bfb13633796f365a5406b",
     "source_tree": "baa360a691f2f470f1224db884329b4294dd735c",
     "handoff_sha256": "25e77bcb27b02e467614cdb2a7cc84f195ae001cb48a9e53b53656adc196d9e5",
     "source_review_owner": "8ef12f19-a7c0-43e5-96a1-33a60aca58c6",
-    "source_review_result": "PENDING_not_a_compiler_or_actual_finite_model_result",
+    "source_review_result": "NO_significant_generic_custody_issue_NOT_approval_of_auto_normal_machine_product_routes_or_actual_Java_replay",
     "authored_provenance_shape": "42sources_96imageExpressions_not_observed",
-    "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_LOCALONLY_no_PC_or_CIquery_without_exactGO",
+    "qualification_preparer": "604195bd-6826-4299-89af-1dcf39545263_old_unissued_scope_FROZEN_by_ADR0188_NO_PC_or_CIquery",
     "prepared_inventory_sha256": "1b8c82facdec8b67e3cfa3002716beeb0a6e6f478e1c39fa9749250cc73e9738",
     "prepared_local_plan_sha256": "472d3e539b958adcd8a302c44caa8ee4917fd229b9f955f3058c3e9a56f2d4ed",
     "preparation_scope": "local_inventory_onlyworktreePath_change_newroot_NOTobserved_source_grant_lease_NULL_existing_commands_selected_NO_execution_or_extra_READY_round",
@@ -123,7 +135,7 @@
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",
-    "status": "G7_G8_G10_technical_outcomes_closed_A7_A8_A9_normally_integrated_finite_ADR0187_source_running_no_activePCgrant",
+    "status": "historicalG7_G8_G10_preserved_ADR0187generic_review_clear_ownerADR0188_manual_normal_and_perproduct_modes_rework_pending_NO_activePCgrant",
     "earlier_source_fields": "historical_initial_wave_snapshots_not_current_failures_or_execution_grants_current_PC_execution_and_finite_T1_custody_continuation_govern",
     "owners": {
       "managed_FTB_definitions": "cb273782-4065-44e2-90a3-9c0c036367ce",

@@ -130,6 +130,27 @@ do not rewrite old evidence or spent sound grants to rename their author.
 
 ## Session checklist
 
+**Current owner manufacturing correction (2026-10-22, ADR-0188):** normal
+machines have manual final assembly. Do not manufacture complete normal
+machines automatically in an Assembler, another processor or a replication
+shortcut. Their operating processes remain automatable. Materials, components,
+passive infrastructure and real multiblock controllers use authored per-product
+routes: manual-only, machine-only or both. Automation capability is not a player
+obligation, and not every product needs both methods.
+Complexity belongs in interdependent materials, components, conditions and
+advanced multiblocks, not mass-producing ordinary Assembler blocks.
+
+This supersedes the old factory-builds-everything rule and automatic ordinary-
+machine reproduction, not the reusable executor, physical-control semantics,
+component automation or save protection. Renewable mandatory materials and
+consumables still need mod-owned automatic supply; that does not require
+automatic final manufacture of capital machines. Distinguish actual formed
+multiblock controllers from ordinary machines merely called controllers.
+Belts, pipes, tanks and storage may have manual and/or machine routes; do not
+impose universal Assembler-only manufacture or mass-add duplicate manual recipes.
+Withdraw the obsolete qualification scope before another exact-source GO;
+placed machines, inventories, paid work and the longitudinal save stay intact.
+
 **Current owner operating mandate (2026-10-22, ADR-0178):** work independently
 and keep the development/integration/qualification loop moving. Do not stop at
 a routine checkpoint or turn ordinary technical choices into owner approvals.
@@ -386,6 +407,11 @@ forge/               Forge entrypoint and bridges only (this jar also loads on N
 
 **Resource sustainability.** Every basic material or consumable required by mandatory
 progression must ultimately have an unlimited, automatable, mod-owned renewable route.
+ADR-0188 deliberately excludes final normal-machine assembly from that automation
+obligation: capital machinery is constructed manually from those industrial inputs.
+Do not turn ordinary machines into recurrent feed merely to bypass this distinction.
+Do not confuse an available automatic route with mandatory player automation, or
+override deliberately authored manual-only/machine-only/dual manufacturing methods.
 Trace every consumable dependency to its terminal source. Vanilla inputs are allowed as
 optional compatibility routes, finite bootstrap supplies or emergency alternatives, never as
 the permanent canonical farm, exploit, loot or manual-mining solution.

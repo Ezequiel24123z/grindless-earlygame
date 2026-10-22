@@ -28,7 +28,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0014](#adr-0014--consolidate-the-orphaned-session-branches-into-one-history) | Consolidate the orphaned session branches | Accepted |
 | [0015](#adr-0015--fluids-are-modelled-as-state-not-as-items) | Fluids are modelled as state, not as items | Accepted |
 | [0016](#adr-0016--pipes-early-the-phase-network-late) | Pipes early, the Phase Network late | Accepted |
-| [0017](#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted) | Machines above T1 are manufactured, never hand-crafted | Accepted |
+| [0017](#adr-0017--machines-above-t1-are-manufactured-never-hand-crafted) | Machines above T1 are manufactured, never hand-crafted | Normal-machine rule superseded by ADR-0188; industrial component chains retained |
 | [0018](#adr-0018--one-container-contract-with-auto-void-off-by-default) | One container contract, auto-void off by default | Accepted |
 | [0019](#adr-0019--design-machines-before-recipes) | Design machines before recipes | Accepted |
 | [0020](#adr-0020--recipes-are-parameterised-by-process-conditions) | Recipes are parameterised by process conditions | Accepted |
@@ -74,7 +74,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0060](#adr-0060--first-factory-is-lane-data-a-survey-and-an-unpowered-belt) | First factory is lane data, a survey and an unpowered belt | Accepted |
 | [0061](#adr-0061--the-machine-state-smoke-runs-as-one-function) | The machine-state smoke runs as one function | Accepted |
 | [0062](#adr-0062--first-fluids-are-millibuckets-gravity-clay-and-a-named-co-sink) | First fluids are millibuckets, gravity clay and a named CO sink | Accepted |
-| [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Accepted |
+| [0063](#adr-0063--the-factory-builds-the-factory-at-t1) | The factory builds the factory at T1 | Final-machine automation superseded by ADR-0188; shared processing retained |
 | [0064](#adr-0064--energy-spanning-is-distance-and-storage-not-coverage) | Energy spanning is distance and storage, not coverage | Accepted |
 | [0065](#adr-0065--t1-kiln-is-roast-and-so-not-the-acid-line) | T1 Kiln is roast and SO₂, not the acid line | Accepted |
 | [0066](#adr-0066--the-t1-atlas-is-a-live-lookup-not-the-solver) | The T1 Atlas is a live lookup, not the solver | Superseded in part by ADR-0115 |
@@ -190,15 +190,16 @@ history — the reasoning that was wrong is itself useful information.
 | [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; source integrated, qualification pending |
 | [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; source/P2 repair integrated, JVM proof pending |
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
-| [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
-| [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
+| [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Historical engineering retained; automatic final machines withdrawn by ADR-0188 |
+| [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Component may remain; automatic final generator withdrawn by ADR-0188 |
 | [0181](#adr-0181--compare-one-generated-platform-shim-by-exact-self-name-equivalence) | Compare one generated platform shim by exact self-name equivalence | Source555dbe9 integrated; G4 managed201/authentic publication0 custody verified |
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | G7 actual models29/38/A7 verified; acquisition shadowing remains under ADR-0185 |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | G7 actual ABI/backend/ready51/package/managed51/custody and original CI evidence verified |
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | G8 actual31/41/changed contracts/normal A8/239 custody verified; not rendered or finite-T1 proof |
 | [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | G10 actuala54 Java/native1028/models/A9/278 custody verified; no rendered/client-wire/owner-world pass |
 | [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | G10 combined representative mechanism/normal A9/custody verified; no per-family runtime or whole-tier acceptance |
-| [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Source6c53/6b19 composed; independent review and actual Java/finite continuation proof pending |
+| [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Generic source review clear; T1 authority revision under ADR-0188 and actual Java/replay pending |
+| [0188](#adr-0188--assemble-normal-machines-manually-and-author-manufacturing-modes-per-product) | Assemble normal machines manually and author manufacturing modes per product | Owner correction accepted; obsolete automatic-machine scope frozen, implementation pending |
 
 ---
 
@@ -555,6 +556,10 @@ builds.
 ## ADR-0017 — Machines above T1 are manufactured, never hand-crafted
 
 *2026-09-30 · Accepted*
+
+**Current qualification (2026-10-22):** ADR-0188 supersedes the prohibition on
+manual final normal-machine assembly. The original rationale below is
+historical; advanced component processing remains part of the design.
 
 **Context.** In Factorio the factory builds the factory: you hand-craft the first burner drill and
 essentially nothing else. Minecraft tech mods usually discard that loop by letting a player with a
@@ -2456,6 +2461,10 @@ in this slice.
 ## ADR-0063 — The factory builds the factory at T1
 
 *2026-10-03 · Accepted*
+
+**Current qualification (2026-10-22):** ADR-0188 supersedes automatic final
+normal-machine manufacture and the last-crafting-table-machine rule. Keep the
+shared Press/Assembler/component mechanisms and their actual proof history.
 
 **Context.** ADR-0017 forbids crafting-table recipes past the bootstrap. ADR-0058 scheduled
 slice D as Press, Machine Casing, Assembler, and the T2 fabrication gate. Two documents
@@ -8456,6 +8465,10 @@ receipts and earlier authority labels; apply this mandate prospectively.
 
 ## ADR-0179 — Reproduce four-slot-fit first-factory machines without repricing bootstrap
 
+**Superseded product scope (2026-10-22):** ADR-0188 withdraws automatic final
+normal-machine reproduction. Preserve the source/proof history below; it is
+not the current manufacturing goal or permission to deploy those recipes.
+
 **Status.** Accepted bounded acquisition scope under ADR-0174/0178, 2026-10-22.
 Implementation and qualification are pending; not all first-factory machinery
 or the whole T1 tier is declared automated or ready.
@@ -8494,6 +8507,10 @@ affected normal projections, not one native smoke per machine.
 ---
 
 ## ADR-0180 — Reproduce the Thermal Generator through an honest two-stage subassembly
+
+**Superseded product scope (2026-10-22):** ADR-0188 withdraws automatic final
+generator manufacture. The ordinary core remains an eligible component if it
+has a real manual final consumer; the original raw manual seed is preserved.
 
 **Status.** Accepted separate bounded acquisition scope under ADR-0178/0179,
 2026-10-22. Implementation and qualification are pending; no whole-tier readiness
@@ -8974,7 +8991,9 @@ runtime acquisition, whole-tier or human acceptance is inferred from data.
 it later closes sourcea54/normal A9/278-file custody and fresh lease return
 separately. Normal source6c53/6b19 is subsequently composed with A9, preserving
 seven Java blobs and the source-only42/96 provenance declarations. Independent
-review and actual Java/model qualification remain pending. This decision
+generic review8ef subsequently finds no significant custody/admission/
+conservation/execution/export issue; actual Java/model qualification remains
+pending and the T1 projection must follow ADR-0188. This decision
 authorizes the source outcome, not another PC window, new gameplay, a completed
 finite replay or whole-T1 readiness.
 
@@ -9039,3 +9058,106 @@ Re-running an independent T0 establishment inside T1 can replenish finite
 supplies and claims. A new planner duplicates the existing executor while
 still failing to preserve its actual state. A fixture or proposed report
 cannot supply accepted survival inventory or a saved-world compatibility pass.
+
+---
+
+## ADR-0188 — Assemble normal machines manually and author manufacturing modes per product
+
+**Status.** Accepted direct owner correction and subsequent infrastructure
+clarification, 2026-10-22. Implementation and exact-source qualification are
+pending. The former model-only execution plan is frozen before any GO; no
+new PC action, source binding, owner update or acceptance is inferred.
+
+**Context.** The owner rejects the assumption that every product, including
+ordinary Assembler blocks, should be manufactured automatically. The intended
+game is GregTech-inspired with greater meaningful complexity/content and
+futuristic industrial systems, not a second Factorio. This is the owner's
+product direction, not a factual claim about GregTech's own recipe rules.
+The earlier self-replicating-factory interpretation overextended automation.
+
+The owner further confirms that infrastructure can have manual and machine
+methods, while other products may deliberately have only one. An available
+automatic route does not oblige a player to automate it or require a duplicate
+manual route for every item.
+
+**Decision.** Normal machines have manual FINAL manufacture. Keep their
+operating processes, input/output logistics and appropriate component/material
+production automatable. Actual multiblock controllers may be manufactured in
+Assemblers or other suitable multiblocks. Use real runtime structure/control
+contracts for that exception, not the word controller, a proposed later-tier
+diagram or an ordinary machine renamed as a component.
+
+Other products use their authored per-product methods: MANUAL_ONLY,
+MACHINE_ONLY or BOTH. These describe actual recipe authorities, not a new
+global manufacturing engine. Belts, pipes, tanks and storage may support
+manual and machine manufacture. Preserve valid existing methods unless an
+individual design calls for change; do not impose universal Assembler-only
+production, universal dual recipes or universal automatic conversion.
+
+Complexity belongs in increasingly interdependent materials, circuits,
+mechanical parts, chemical/thermal/energy conditions and specialized
+multiblocks. Manual final assembly must still require the actual industrial
+components. Higher tiers do not bypass their production chains with raw
+ingots, nor simply print more complete normal machines per minute. Existing
+in-place chassis/module upgrade and save-identity obligations remain.
+
+**Source correction.** Withdraw live automatic normal-machine outputs from
+ProcessGraph, BootstrapAssembly and any other manufacturing/replication path;
+hiding them from JEI is insufficient. Keep components, retained tools and
+eligible controller/infrastructure routes according to their actual methods.
+Do not reinterpret stock-consuming Blueprint/drone placement as manufacture.
+Retire automatic final Thermal assembly while preserving its useful core
+and a genuine manual consumer, without repricing the first manual generator.
+
+Use existing manual catalogues and shaped JSON for accepted ordinary-machine
+counterparts. Preserve actual material multiplicities, seed quantities,
+ratings and tier/component gates; do not promote unaccepted prototypes or
+invent cheaper bills simply because final assembly becomes manual.
+Identical quantity bills need distinct actual crafting patterns: mirrored/
+offset-equivalent recipes must not hide another output. Do not add a new
+manual recipe engine, workstation or global research permission.
+
+Preserve valid physical minimum-control semantics in manual ingredients,
+including untagged real default F1 and legitimate higher stock, while refusing
+malformed/unsupported data. Reuse the existing Matrix decoder/matcher and
+appropriate official Forge ingredient APIs; do not substitute an unvalidated
+bare item or duplicate the matching policy. Common stays loader-neutral.
+
+**Resource proof.** Mandatory basic feed/consumable supply still needs honest
+mod-owned renewable routes, not a permanent manual-mining dependency.
+Manual final capital-machine construction is not an automatic-renewability
+claim and does not require a machine that manufactures itself. Distinguish
+quantity-sufficient manual construction from recurring automatic supply in
+the existing audit/reserve. Do not label a manually assembled machine as an
+automatic net resource, waive a real consumable deficit or turn machines into
+recurrent feed to evade this distinction. The generic conserved-custody source
+remains useful; its T1 authority projection must follow the corrected routes.
+
+**Compatibility.** Keep block/item identities, placed machines, stores,
+fluids, connections, configuration, quest IDs/rewards/starter and paid work.
+Do not delete, transfer, silently refund or invent completion for work attached
+to a retired recipe. Retained unavailable work is not proof of a completed
+owner-save migration. Applicable copy-based inspection/handling remains a
+pre-deployment gate if the actual world contains affected jobs.
+
+**Proof and delivery.** Add exhaustive source/data coverage for every live
+automatic producer and accepted manual counterpart, per-product mode fidelity,
+control admission and nonambiguous shapes. Retarget selector fixtures to real
+allowed component/controller recipes; removed normal recipes can be explicit
+legacy/unavailable negatives, never live fabrication witnesses. Preserve
+generic matching/paid-work guards and all old G10 evidence at its true source.
+
+A new ingredient/loader binding needs one representative real native proof
+through an existing carrier, alongside common/Forge compilation and affected
+contracts. Normal writers, independent checks and observed source/images
+follow on one reviewed exact source; never hand-edit canonical reports or
+run a smoke per machine. No old common-model grant, whole-tier/player
+deployment, main/release, new dependency or paid-generation budget follows.
+
+**Supersedes and retains.** Supersede ADR-0017/0063's universal final-machine
+manufacturing rule and ADR-0179/0180's automatic ordinary-machine outputs.
+ADR-0186's automatic constructor instances must move to the proper manual
+authority without weakening physical control. Retain the reusable processing,
+selection, exact/minimum-control, settlement and custody mechanisms; their
+historical tests remain historical evidence, not approval of the retired
+product objective.

@@ -257,6 +257,39 @@ same exporter/guards:29 sources/38 image expressions authored. The subject-only
 metadata mistake in30 is preserved and attributed by append, never rewritten.
 Require actual updated provenance later; old G3/G6 counts are not retargeted.
 
+### Manual normal-machine manufacture and per-product methods
+
+ADR-0188 supersedes automatic final normal-machine construction in historical
+recipe paragraphs below. Operating automation remains. Other products derive
+their manual-only, machine-only or dual methods from actual recipe authorities;
+components/infrastructure/real multiblock controllers are not universally
+Assembler-only or required to have both routes.
+
+Use `ProcessGraph`, `BootstrapAssembly`, `T1Recipes`, shipped crafting JSON and
+actual machine/structure declarations for exhaustive output policy/manual
+counterparts, including indirect manufacture. Reuse `IngredientSpec`/the Matrix
+decoder and appropriate Forge ingredient APIs for valid manual control;
+ordinary shaped recipes need real mirror/offset-disambiguated patterns.
+Common imports no Forge types. Do not create a second recipe catalogue,
+manual-workstation engine, synthetic supply or unvalidated bare-Matrix bypass.
+
+Wire `AuthorityAdapters`/Atlas/JEI, `T1Progression`, `T1Sustainability`, affected
+T0 capital annotations, quest teaching/locales and explicit exporter pins to
+the same corrected sources. Preserve actual materials/seed/control, quest
+IDs/paid history and placed-machine identities. A manual capital machine is
+constructible, not automatically a renewable recurring feed. Retarget existing
+selector/persistence/UI/native fixtures to allowed component/controller rows;
+retired normal IDs are legacy/unavailable negatives, not live manufacturing
+witnesses. Existing tests must cover all producers, per-product mode fidelity,
+valid/malformed control and nonambiguous manual patterns.
+
+The generic conserved-state source review is clear, not Java proof. The old
+common-model-only preparation is frozen. New loader/ingredient code needs one
+representative existing-carrier native plus affected compile/model contracts,
+normal writers/independent checks and observed images after one exact-source
+GO. Do not repeat unchanged G10/FTB proofs or touch player worlds to implement
+the policy; all four canonical files remain old A9 until actual normal writers.
+
 ### Authored default Matrix identity
 
 ADR-0184 projects authored default stacks through `AuthorityAdapters.physical`,

@@ -1,6 +1,12 @@
 # T1 development map
 
 Status: **active development, not a release or completed T1 acceptance**.
+ADR-0188 now governs manufacturing: manual final normal machines, automatable
+operations and per-product manual-only/machine-only/dual methods for other
+products. Old automatic machine-reproduction rows below are implementation
+history, not the active queue. Rebind source/manual controls/fixtures/teaching
+and finite proof; the former common-model-only preparation is frozen.
+Do not force automation or duplicate every infrastructure recipe.
 Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
 The fictitious26e/51 target stays stopped. G10 subsequently closes the

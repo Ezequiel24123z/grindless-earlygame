@@ -4,6 +4,29 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**OWNER CORRECTION ADR-0188 is the current product authority.** Normal final
+machines are manual; their operating processes remain automatable. Components,
+materials, passive infrastructure and real multiblock controllers use authored
+manual-only, machine-only or dual methods. The owner explicitly confirms that
+automatic capability is not an obligation and not every product needs both
+recipes. The intended game is more complex/content-rich/futuristic
+GregTech-inspired industry, not a second Factorio or universal self-replication.
+
+The first clarification prompt initially returned owner unavailable; the owner
+then directly resolves infrastructure as above. There is no remaining owner
+decision on that boundary. Old automatic-machine construction objectives and
+the unissued common-model-only qualification scope are frozen. Current source
+still contains obsolete constructors until the bounded recipe migration is
+implemented; do not deploy or call the policy implemented from documentation.
+No PC/CI-query/Sync/JVM GO is issued and no actual world/paid work is touched.
+
+Generic custody review8ef12f19 finds no significant issue in source6b within
+admission/conservation/execution/export. This does not approve automatic final
+normal-machine manufacture or execute Java/replay. Retain that reusable state
+mechanism and rebind its T1 projection to corrected manual authorities.
+Research86151eb2 checks the smallest appropriate official Forge ingredient/
+shaped-matching API, not another engine or copied implementation.
+
 **ADR-0187 SOURCE is complete and normally composed, not yet qualified.**
 Normal6c53b321/exactf5c2dde then6b191767 supplies nine owned paths/
 1112 insertions49 deletions, clean source treebaa360a6 and both trailers.
@@ -285,9 +308,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Verified G7/A7/G8/A8 and unused G9 custody; G10 actual compile/UI1297/Persistence/native1028/19/normal models31-41,278-file QA/fresh lease return and exact A9 integration; ADR-0187 source6b normally composed with seven exact Java blobs, independent review pending |
-| BLOCKED | None within G10. Whole-T1 delivery still lacks finite establishment/autonomy/genuine upgrade/client/world evidence; no urgent owner decision |
-| NOT EXECUTED | ADR-0187 compiler/typed tests/finite replay/actual42-96 images/writers or new PC window; rendered/client-wire/owner-world/campaign qualification, package/player deployment/main/release/whole-tier acceptance or runtime after A9. Unused G9 remains unexecuted |
+| COMPLETED | Historical G7/G8/G10/A7/A8/A9 proof/integration preserved; generic ADR-0187 custody source reviewed without significant issue; owner ADR-0188 manufacturing correction and per-product infrastructure methods recorded; obsolete execution scope frozen |
+| BLOCKED | None urgent; revised source/manual-control/fixture/progression implementation and qualification are prerequisites, not a new owner decision |
+| NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

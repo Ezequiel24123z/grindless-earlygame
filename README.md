@@ -121,7 +121,7 @@ and the [current gaps and execution plan](plan/process-t0-playable-release-1.md)
 - [Energy: Flux Units](#energy-flux-units)
 - [Processing chain](#processing-chain)
 - [Progression: Control Matrices and research](#progression-control-matrices-and-research)
-- [Fabrication: the factory builds the factory](#fabrication-the-factory-builds-the-factory)
+- [Fabrication: industrial supply and manual machine assembly](#fabrication-industrial-supply-and-manual-machine-assembly)
 - [Containers: buffers, filters and voiding](#containers-buffers-filters-and-voiding)
 - [Block and item catalogue](#block-and-item-catalogue)
 - [Compatibility strategy](#compatibility-strategy)
@@ -814,7 +814,7 @@ points on that curve is a different resource with a different job:
 | **Supercritical water** | >374 °C, >22 MPa | reactor primary loop | carries several times the heat per unit volume |
 | **Ore slurry** | ambient, dense | Pulverizer fed with water | the wet processing line |
 | **Leachate** | corrosive | Chemical Washer | strips byproducts; destroys the wrong pipe |
-| **Etching acid** | corrosive | Chemical Washer | circuit boards — see [Fabrication](#fabrication-the-factory-builds-the-factory) |
+| **Etching acid** | corrosive | Chemical Washer | circuit boards — see [Fabrication](#fabrication-industrial-supply-and-manual-machine-assembly) |
 | **Ultrapure water** | ambient, filtered | Cryogenic Plant, Vacuum Furnace | integrated circuits, crystal growth |
 | **Coolant** | cryogenic | Cryogenic Plant | reactor loops, superconductors |
 | **Liquid oxygen / nitrogen** | cryogenic | air separation | rocket fuel, cryo lines, life support |
@@ -902,7 +902,7 @@ Two hooks make fluids load-bearing rather than decorative, and both are delibera
    materially better yields and recover byproducts that the dry line simply loses.
 2. **Each frontier consumes fluid-made components.** T2 pumps need polymer seals, T4 controllers
    need etchant and ultrapure water, and later matrices need cryogens, plasma media and life-support
-   loops. That is the [fabrication](#fabrication-the-factory-builds-the-factory) rule.
+   loops. That is the [fabrication](#fabrication-industrial-supply-and-manual-machine-assembly) rule.
 
 Neither hook is a wall. The dry chain keeps working forever, so a player who hates plumbing is
 slowed, never stopped.
@@ -1570,16 +1570,31 @@ stage with its conditions, times and ratios, and the twenty routes they compose 
 
 ---
 
-## Fabrication: the factory builds the factory
+## Fabrication: industrial supply and manual machine assembly
 
-In Factorio you never hand-craft a factory. You hand-craft the first burner drill, and from then
-on the factory produces everything else, including itself. That loop is the entire reason the game
-is compelling, and almost every Minecraft tech mod throws it away by letting the player assemble a
-fusion reactor in a 3×3 grid from a full inventory.
+Grindless aims for increasingly complex, futuristic industrial networks, not
+universal factory self-replication. The owner's current rule (ADR-0188) is:
 
-The single most important structural rule in Grindless:
+> **Automate materials and components. Assemble normal machines manually.**
 
-> **Past the bootstrap, machines are not crafted. They are manufactured.**
+Normal machines still automate their operating processes. The final
+construction of an ordinary Assembler, Press, generator or similar standalone
+machine is a deliberate player action using its real industrial components.
+An inventory of raw ingots must not bypass the processing lines that produce
+those components. Higher tiers deepen those lines, conditions and dependencies,
+not the rate at which a factory prints complete normal machines.
+
+Actual multiblock controllers may be manufactured in Assemblers or later
+multiblocks. Other products follow their actual recipe modes: manual-only,
+machine-only or both. Infrastructure such as belts, pipes, tanks and storage
+may support manual and machine manufacture, but no universal dual-recipe rule
+is implied. An available automated route is an option, not an obligation for
+the player to automate it.
+
+A structural casing, circuit, Motor, Matrix or upgrade module is a
+component; a complete functional normal machine is not made a component merely
+by changing its name. Blueprint/drone placement may consume already-owned
+machines without manufacturing them.
 
 T1 introduces the ordinary basic machine families, not only the five machines
 of its initial factory increment (ADR-0174). Later tiers improve those families'
@@ -1593,23 +1608,29 @@ that every family or upgrade is already implemented.
 
 | Tier | How you obtain the machine |
 | --- | --- |
-| **T0** | Crafting table and a limited Assembly Bench for Bootstrap/four vanilla basics. The Bench does not make a Relay Matrix. |
-| **T1** | Crafting table or Press. Every active processing, generation or extraction machine consumes a T1 Relay Matrix; passive grid, storage and transport infrastructure does not. The first five-Matrix batch builds the Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler, which then automates the same batch. |
-| **T2–T8** | **Assembler** and specialised fabricators — physical Control Matrix, components, FU and time. |
-| **T9** | **Quantum Assembler** — long component chains and programmable matter resolved in one plant. |
-| **T10–T12** | **Orbital Assembly Bay** and **Assembly Field** — vacuum, zero gravity and blueprint-scale construction. |
-| **T13–T15** | Distributed Assembly Fields — systems manufacture and deliver megastructure sections rather than individual blocks. |
+| **T0** | Manual first machines; the bounded Bench may produce allowed components/basic crafts or genuine multiblock controllers, never ordinary-machine copies. The first Relay Matrix remains manual. |
+| **T1** | Manual final machines from real components/control. The five-Matrix batch funds the first Thermal Generator, Pulverizer, Arc Furnace, Press and Assembler; the Assembler reproduces Matrices/components, not those five machines. |
+| **T2–T8** | Manual final normal machines from increasingly specialized industrial components; Assemblers/fabricators may produce those components and actual multiblock controllers. |
+| **T9** | Quantum manufacturing supplies advanced components and eligible controllers; ordinary final-machine assembly remains manual. |
+| **T10–T12** | Orbital/field processing supplies specialized components, controllers and structural sections under real environmental constraints. |
+| **T13–T15** | Distributed production and construction of enormous systems; no automatic normal-machine output is implied. |
 
-A machine above T1 has **no crafting-table recipe at all**. Not a hidden one, not a deliberately
-expensive one — none exists. The only way to obtain it is to run the process, which means owning
-and feeding a production line.
+These are product boundaries, not claims that every later-tier line exists.
+The older no-hand-crafting-above-T1 rule is superseded. Existing valid passive
+infrastructure recipes remain unless their individual design requires a change;
+neither universal Assembler-only production nor a manual duplicate of every
+automatic recipe follows from this policy.
+Installed machines and paid progress are not removed by a manufacturing-policy
+change. Runtime recipe retirement and save compatibility must be qualified
+before any owner update.
 
 ### Assembler target selection
 
 **Development source, not the installed T0 build:** the Assembler's
 **Assembly target** panel lets you search output names or IDs and select a
-named recipe before loading its JEI ingredients. This matters when several
-machines share a construction bill. **AUTO (from inputs)** deliberately keeps
+named recipe before loading its JEI ingredients. This remains useful for
+component and eligible-controller recipes sharing inputs; ordinary machine
+targets are being withdrawn under ADR-0188. **AUTO (from inputs)** deliberately keeps
 the legacy input-based choice; it does not guarantee the output you intended.
 
 The selected recipe still needs its actual inputs, fluids, power, conditions
@@ -2056,7 +2077,7 @@ Summarised here; each one is recorded in full — with the alternatives that wer
 | Mojmap + Parchment mappings | Readable names, permissively licensed, standard on 1.20.1. |
 | Fluids carry temperature and pressure | The same substance in different states is a different resource; closing a heat loop becomes a layout puzzle instead of bookkeeping. |
 | Pipes early, Phase Network late | Same trade as belts versus drones: pay in layout or pay in power, never forced to switch. |
-| Machines above T1 cannot be hand-crafted | The factory builds the factory. Closes the full-inventory bypass that makes tech mods trivial in big packs. |
+| Normal machines have manual final assembly | Complex industrial components gate construction; factories process materials/components and eligible multiblock controllers, not ordinary machines in bulk (ADR-0188). |
 | One container contract, auto-void off by default | Learn the interface once; the release valve a tag-driven system needs must never silently delete things. |
 | Conduits cost power, belts do not | Keeps belts correct for bulk forever, so the universal network never deletes the best part of the mod. |
 | Named conduit networks, not coloured channels | Sixteen colours stop being readable long before a base stops growing. |
@@ -2286,6 +2307,12 @@ verified backup/applicable copy-compatibility and managed-file guards; never
 interrupt play. Partial increments remain partial, and human acceptance/public
 release are separate. Escalate only serious blockers or urgent owner decisions.
 
+ADR-0188 supersedes automatic final-normal-machine reproduction in historical
+rows below. Its source/proof history remains valid for what was actually tested,
+not an accepted gameplay goal or permission to deploy the obsolete recipes.
+Other products keep deliberate manual-only, machine-only or dual methods;
+automation capability does not require the player to automate everything.
+
 Historical completions below are source-scoped, not current-WIP acceptance. The active
 [work plan](.agent/work-plan.json) permits renewable implementation and production auditing
 to proceed together under the received Sol coordinator; historical Astra attribution
@@ -2410,7 +2437,8 @@ is preserved and integration/release gates still control acceptance.
 | 76 | **Physical default-F1 model identity** | ADR-0184 — source57/4ee and actual G831/41, changed authority/display fixtures, normal writers/independent checks/canonical proof and239 custody verified; normal A8dee preserves all four payload bytes. No runtime predicate/bill/seed/reward change, renderedGUI or finite-T1 acceptance |
 | 77 | **Reachable Assembler outputs** | ADR-0185 — actual G10/a54 compile/UI1297/Persistence/one native1028/19/normal models31-41 and278-file custody independently verified; normal A9bb3/four exact writer payloads integrated. Original source reds stay red; native menu carriers are not actual client-wire/rendered/owner-world or whole-tier acceptance |
 | 78 | **Baseline process-family controllers** | ADR-0186 — nine explicit minimum-F1 fourth groups/exactfifteen-role contract preserve old bills/FU/time/output/passive/Motor/seed/F2 and selector guards. G10 verifies combined representative native/normal models/A9/custody; no per-family runtime, real chassis upgrade or whole-tier claim |
-| 79 | **Finite first-factory continuation** | ADR-0187 — normal source6c53/6b19 preserves actual prior-tier physical/accounting custody through the existing executor, with typed audit/T0/T1 tests and authored42/96 provenance. Source is composed with A9; independent review/compiler/finite replay/normal writers remain pending. No autonomy/whole-tier/world pass |
+| 79 | **Finite first-factory continuation** | ADR-0187 — source6c53/6b19 composed with A9; generic custody/admission/conservation review8ef finds no significant issue, not Java/replay proof. Rebind T1 authorities to ADR-0188 before qualification; authored42/96 is not observed provenance. No autonomy/whole-tier/world pass |
+| 80 | **Manual normal-machine manufacture** | ADR-0188 — owner correction accepted: manual final machines, automated inputs/operations and eligible multiblock controllers. Retire obsolete automatic constructors and rebind manual catalogues, teaching, fixtures and finite proof; no new PC grant or implementation pass yet |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

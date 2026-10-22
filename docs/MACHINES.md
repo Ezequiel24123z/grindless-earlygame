@@ -113,8 +113,14 @@ Grindless takes the depth and refuses the repetition.
 
 The operating rule:
 
-> **If the player has already solved a problem, never ask them to solve it again by hand.**
+> **Do not make the player repeatedly gather or process industrial feed by hand.**
 > Asking them to solve it *at a different scale* is fair — that is a new problem.
+
+ADR-0188 deliberately keeps final normal-machine construction manual. Automatic
+materials/components and machine operation remove industrial repetition; they do
+not imply automatic production of every complete machine. Real multiblock
+controllers are eligible for automated manufacture. Already-owned machinery
+may still be placed by stock-consuming construction tools.
 
 Everything below follows from that. Depth comes from the recipe graph, from condition tuning, from
 route selection and from ratio balancing. None of those are repetitive, and all of them get *more*
@@ -123,8 +129,8 @@ interesting the larger your factory gets.
 The tier ladder therefore grows approximately monotonically in meaningful content. A later tier
 has more interacting process families, deeper routes, a larger logistics problem and a larger
 signature project than an earlier one. It also supplies the leverage needed to handle that scale:
-Assembler automation, Process Cards, construction drones, Assembly Fields, abstract colonies and
-self-replicating infrastructure. Larger stack counts, longer timers and more manual placement do
+component/controller fabrication, Process Cards, construction drones, Assembly Fields and abstract
+colonies. Ordinary final machines are not a self-replicating product. Larger stack counts, longer timers and more manual placement do
 not count as content (ADR-0107).
 
 ---
@@ -256,7 +262,7 @@ always better telemetry rather than less complexity.
 The ADR-0185 development source extends the existing Assembler screen with
 **Assembly target**, a searchable output/ID list and an explicit
 **AUTO (from inputs)** option. Choose a named target for equal-input
-construction recipes; JEI remains the authority for ordinary ingredient
+component/eligible-controller recipes; JEI remains the authority for ordinary ingredient
 quantities. AUTO preserves legacy lookup rather than guessing the player's
 intended output. This source feature is not yet the installed player build.
 
@@ -531,7 +537,7 @@ craft and re-pipe.
 
 | Machine | First tier | Role |
 | --- | --- | --- |
-| **Assembler** | T1 | Multi-ingredient fabrication. The machine that makes machines. |
+| **Assembler** | T1 | Multi-ingredient component and eligible multiblock-controller fabrication; normal machines have manual final assembly (ADR-0188). |
 | **Press** | T1 | Plates, rods, gears, casings, with a die in the catalyst slot. |
 | **Caster** | T2 | Molten metal to solid shapes, skipping the ingot stage. |
 | **Wire Mill** | T2 | Wire and coil, which everything electrical needs. |

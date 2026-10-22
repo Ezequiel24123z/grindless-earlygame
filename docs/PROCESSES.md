@@ -950,7 +950,7 @@ question, matching the [Fusion Reactor](MACHINES.md#fusion-reactor) brief.
 ## Components and machine fabrication
 
 The README's
-[component table](../README.md#fabrication-the-factory-builds-the-factory) gates each component on
+[component table](../README.md#fabrication-industrial-supply-and-manual-machine-assembly) gates each component on
 a fluid. Those gates, with the processes behind them:
 
 | Component | Tier | Process | Fluid gate |

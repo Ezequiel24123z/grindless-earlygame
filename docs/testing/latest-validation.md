@@ -1054,6 +1054,37 @@ autonomy or chassis-upgrade acceptance. No package, Prism/player/fictitious
 target update, paid-quest/ABI replay, main or release action occurred.
 ADR-0187 source continues independently and has no new PC execution grant.
 
+### Owner manufacturing correction before any new qualification
+
+ADR-0188 supersedes the universal self-replicating-factory interpretation.
+Normal final-machine manufacture is manual, not their operating processes.
+The owner explicitly resolves infrastructure/other products as per-product
+manual-only, machine-only or dual routes: automatic capability is optional,
+not mandatory, and neither universal machine routes nor universal duplicates
+are authorized. The intended game is more complex/content-rich/futuristic
+GregTech-inspired industry, not a second Factorio.
+
+The first clarification prompt initially returned owner unavailable, then the
+owner directly supplied the clarification above. No decision remains pending
+on that boundary. The old unissued common-model-only qualification is frozen
+without PC/CI/Sync/JVM execution; its proposed root was never observed/admitted.
+Source still requires retirement/manual counterparts/control/data/teaching/
+fixture changes. Documentation does not make the policy implemented.
+
+Review8ef12f19 finishes the immutable f5c2-to6b generic state scope with no
+significant custody/admission/conservation/execution/export issue. It does
+not approve automatic final normal machines, execute typed tests or qualify
+T1. Preserve that reusable mechanism and all real G10 observations at their
+old sources; their recipe instances are historical, not accepted future goals.
+Research86151eb2 checks existing pinned Forge ingredient/shaped-matching APIs
+before a minimal loader bridge; no code/assets/dependencies are copied.
+
+No world, placed machine, normal operating process, inventory, quest/paid
+history or deployed artifact is changed by this policy checkpoint. A later
+new ingredient binding warrants one existing-carrier native and affected
+contracts on the corrected exact source, not a smoke per machine or a replay
+of unchanged FTB/ABI/Blueprint work.
+
 ### ADR-0187 source intake before actual finite qualification
 
 Normal source commits6c53b321/exactf5c2dde then

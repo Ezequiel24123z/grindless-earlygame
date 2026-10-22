@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Correct the manufacturing objective to manual final normal machines.**
+  The owner explicitly rejects universal factory self-replication. ADR-0188
+  supersedes automatic complete-normal-machine fabrication, not automated
+  materials/components, operating processes or eligible real multiblock
+  controllers. The owner further confirms per-product manual-only,
+  machine-only or dual methods, including infrastructure; automation capability
+  is optional, not universal or mandatory. Do not mass-add duplicate recipes.
+  Freeze the obsolete model-only GO, retain generic custody review and all
+  historical proofs, and rework live routes/manual controls/teaching/fixtures
+  before new qualification. No machine/save/paid-work deletion or player
+  update occurs. Recipe retirement is not yet implemented by this policy commit.
 - **Compose the finite-custody source without calling it a replay result.**
   Preserve normal6c53/6b19 and all seven application/check/exporter blobs
   exactly alongside qualified A9. Only changelog conflicts and both histories
