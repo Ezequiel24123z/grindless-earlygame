@@ -741,8 +741,8 @@ public final class ProcessGraph {
     }
 
     /**
-     * The second T2 process machine (ADR-0075). Casing, two motors, four plates. Circuit
-     * board waits on etching.
+     * The baseline process reactor (ADR-0075/0186). Its original casing, motor and plate
+     * bill adds one minimum-F1 physical controller.
      */
     private static ProcessRecipe chemicalReactor() {
         return new ProcessRecipe(
@@ -751,7 +751,8 @@ public final class ProcessGraph {
                 List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
                 List.of(OutputSpec.item(FabricationLogic.CHEMICAL_REACTOR, 1)),
                 Double.NaN,
                 null,
@@ -809,8 +810,8 @@ public final class ProcessGraph {
     }
 
     /**
-     * The wet line's machine (ADR-0076). Casing, two motors, four plates. Circuit board waits
-     * on etching.
+     * The wet line's baseline machine (ADR-0076/0186). Minimum-F1 control supplements
+     * the unchanged casing, two motors and four plates.
      */
     private static ProcessRecipe chemicalWasher() {
         return new ProcessRecipe(
@@ -819,7 +820,8 @@ public final class ProcessGraph {
                 List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
                 List.of(OutputSpec.item(FabricationLogic.CHEMICAL_WASHER, 1)),
                 Double.NaN,
                 null,
@@ -874,7 +876,7 @@ public final class ProcessGraph {
                 ProcessLogic.FU_PER_TICK);
     }
 
-    /** The gas line's cell (ADR-0077). Casing, two motors, four plates. */
+    /** The gas line's cell (ADR-0077/0186). The original three groups plus minimum-F1 control. */
     private static ProcessRecipe electrolysisCell() {
         return new ProcessRecipe(
                 "assemble/electrolysis_cell",
@@ -882,7 +884,8 @@ public final class ProcessGraph {
                 List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
                 List.of(OutputSpec.item(FabricationLogic.ELECTROLYSIS_CELL, 1)),
                 Double.NaN,
                 null,
@@ -892,7 +895,7 @@ public final class ProcessGraph {
                 "industrial");
     }
 
-    /** The gas line's intake (ADR-0077). Same craft as the cell. */
+    /** The gas line's intake (ADR-0077/0186). Same controlled bill as the cell. */
     private static ProcessRecipe atmosphericIntake() {
         return new ProcessRecipe(
                 "assemble/atmospheric_intake",
@@ -900,7 +903,8 @@ public final class ProcessGraph {
                 List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
+                        IngredientSpec.tag("forge:plates/iron", 4),
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
                 List.of(OutputSpec.item(FabricationLogic.ATMOSPHERIC_INTAKE, 1)),
                 Double.NaN,
                 null,
@@ -961,7 +965,7 @@ public final class ProcessGraph {
     }
 
     private static ProcessRecipe flotationCell() {
-        return machineCraft("assemble/flotation_cell", FabricationLogic.FLOTATION_CELL);
+        return machineCraft("assemble/flotation_cell", FabricationLogic.FLOTATION_CELL, true);
     }
 
     private static ProcessRecipe magneticSeparator() {
@@ -973,11 +977,11 @@ public final class ProcessGraph {
     }
 
     private static ProcessRecipe boiler() {
-        return machineCraft("assemble/boiler", FabricationLogic.BOILER);
+        return machineCraft("assemble/boiler", FabricationLogic.BOILER, true);
     }
 
     private static ProcessRecipe condenser() {
-        return machineCraft("assemble/condenser", FabricationLogic.CONDENSER);
+        return machineCraft("assemble/condenser", FabricationLogic.CONDENSER, true);
     }
 
     private static ProcessRecipe pressurePipe() {
@@ -1095,21 +1099,29 @@ public final class ProcessGraph {
     }
 
     private static ProcessRecipe inductionFurnace() {
-        return machineCraft("assemble/induction_furnace", FabricationLogic.INDUCTION_FURNACE);
+        return machineCraft("assemble/induction_furnace", FabricationLogic.INDUCTION_FURNACE, true);
     }
 
     private static ProcessRecipe caster() {
-        return machineCraft("assemble/caster", FabricationLogic.CASTER);
+        return machineCraft("assemble/caster", FabricationLogic.CASTER, true);
     }
 
     private static ProcessRecipe machineCraft(String id, String result) {
+        return machineCraft(id, result, false);
+    }
+
+    private static ProcessRecipe machineCraft(String id, String result, boolean minimumControl) {
+        List<IngredientSpec> inputs = new ArrayList<>(List.of(
+                IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
+                IngredientSpec.item(FabricationLogic.MOTOR, 2),
+                IngredientSpec.tag("forge:plates/iron", 4)));
+        if (minimumControl) {
+            inputs.add(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1));
+        }
         return new ProcessRecipe(
                 id,
                 MachineFamily.ASSEMBLER,
-                List.of(
-                        IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
-                        IngredientSpec.item(FabricationLogic.MOTOR, 2),
-                        IngredientSpec.tag("forge:plates/iron", 4)),
+                inputs,
                 List.of(OutputSpec.item(result, 1)),
                 Double.NaN,
                 null,

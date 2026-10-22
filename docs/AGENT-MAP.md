@@ -306,7 +306,13 @@ F2 evidence. Do not blanket-change generic machineCraft. Existing Atlas/T1
 contracts and the exact minimum-role set must name all nine additions without
 turning data into a new matching engine or tier acceptance. Serialize
 VerifyRecipes after the active selector owner releases it; G8 remains frozen.
-Normal outputs and representative combined mechanism proof remain pending.
+ProcessGraph now explicitly opts in the nine constructors; generic machineCraft
+defaults still preserve unrelated bills. Atlas checks each real F1+ fourth role,
+old prefix/output/time/FU and four-slot fit; T1 separates the controller-free
+Motor from the controlled Washer without changing the six wet routes or seed.
+Phase A leaves VerifyRecipes unchanged under its lease; the exact six-to-fifteen
+identity/order guard awaits release. These are source/static changes, not Java,
+normal-output, acquisition or representative combined mechanism passes.
 
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This

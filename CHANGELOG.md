@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Implement the nine bounded baseline-controller construction bills.**
+  ADR-0186 adds exactly one real minimum-F1 fourth operand to the nine explicit
+  process constructors, retaining their casing1/motor2/plates4 prefix,
+  ordinary outputs,400ticks/32FU, milestones and all unrelated recipes.
+  Atlas covers each live role/bill and T1 keeps Motor controller-free while
+  checking Washer's actual fourth-role supply. Phase A deliberately leaves
+  the shared VerifyRecipes six-role guard unchanged until selector release.
+  Java, normal writers, combined acquisition proof and deployment are not run;
+  neither stronger substitution nor this data correction is a chassis upgrade.
 - **Select the bounded physical-controller follow-up for existing F1 families.**
   ADR-0186 appends one existing minimum-F1 Matrix fourth group to nine explicit
   active process constructors, preserving their old material groups, IDs,

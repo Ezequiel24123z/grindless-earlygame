@@ -533,12 +533,29 @@ public final class VerifyT1Progression {
         for (String id : List.of("assemble/motor", "assemble/chemical_washer")) {
             Route manufacture = snapshot.routes().get(id);
             equal("existing wet construction stays in the Assembler: " + id, "ASSEMBLER", manufacture.family());
-            equal("existing wet construction gains no Matrix operand: " + id, false,
-                    manufacture.inputs().keySet().stream()
-                            .anyMatch(resource -> resource.id().equals(FabricationLogic.RELAY_MATRIX)));
-            equal("existing wet construction gains no minimum-control role: " + id, false,
-                    manufacture.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_")));
         }
+        Route motor = snapshot.routes().get("assemble/motor");
+        equal("the component Motor retains its complete controller-free bill",
+                Map.of(item(FabricationLogic.MACHINE_CASING), 1L, item(FabricationLogic.COPPER_COIL), 2L,
+                        new Resource(Kind.TAG, "forge:rods/iron"), 1L), physicalInputs(motor));
+        equal("the component Motor still has no minimum-control role", false,
+                motor.conditions().keySet().stream().anyMatch(key -> key.startsWith("minimum_control_")));
+        Route manufacture = snapshot.routes().get("assemble/chemical_washer");
+        Resource controller = new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX, FluxTier.F1.ordinal(), "items");
+        equal("the baseline Washer retains its material quantities and consumes exactly one F1 control option",
+                Map.of(item(FabricationLogic.MACHINE_CASING), 1L, item(FabricationLogic.MOTOR), 2L,
+                        new Resource(Kind.TAG, "forge:plates/iron"), 4L, controller, 1L), physicalInputs(manufacture));
+        equal("the Washer exposes only its explicit fourth minimum-control role", List.of("minimum_control_input_3"),
+                manufacture.conditions().keySet().stream().filter(key -> key.startsWith("minimum_control_")).toList());
+        equal("the Washer names real F1 supply rather than an invented rated item",
+                "item:grindless:relay_matrix [F1]", manufacture.conditions().get("minimum_control_input_3"));
+        equal("the Washer's minimum role remains one canonical supply option, not exhaustive alternatives",
+                "canonical_option_not_exhaustive_alternatives",
+                manufacture.conditions().get("control_supply_projection"));
+        equal("the Washer still produces the ordinary baseline machine",
+                Map.of(item(FabricationLogic.CHEMICAL_WASHER), 1L), manufacture.outputs());
+        equal("the Washer retains its twenty-second construction cycle", 400L, manufacture.durationTicks());
+        equal("the Washer retains its F1 construction draw", 32L, manufacture.fuPerTick());
         for (String material : List.of("iron", "copper")) {
             Resource crushed = new Resource(Kind.TAG, "grindless:crushed_materials/" + material);
             Resource washed = new Resource(Kind.TAG, "grindless:washed_crushed_materials/" + material);
