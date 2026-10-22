@@ -161,6 +161,12 @@ with its REAL plan remain unexecuted and need a future exact leased source.
 Thermal subassembly source proceeds separately under ADR-0180, without PC or
 generation authority. No tier/player update follows from these partial sources.
 
+Normal follow-upf1097b7 closes the wire-order source cause by asserting the
+accepted `wire_index > assembly_index`. Its exact dependency, four routes,
+OPTIONAL role and F2 guards remain. Parent reviews the one-function delta;
+actual T1.verify/writer confirmation is still pending the independent pure-index
+repair and a newly pinned execution source.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -70,6 +70,11 @@ and closure8363ad93; private pre-JVM invoker/observer failures remain preserved.
 No orphan is killed. All PC leases are returned. Owners347/a18 repair the
 pure index and relative line-order contracts; no fake bootstrap or suite
 exclusion may make the failures disappear. Reuse actual unaffected CI passes.
+The precise relative-order fixf1097b7 is now normally integrated: wire remains
+after assembly, with its dependency/four routes/OPTIONAL/F2 guards unchanged.
+It neither reorders gameplay nor supplies a writer/JVM pass; the pure-index
+repair remains independent. Thermal source must not reinstate another rigid
+adjacency contract.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs

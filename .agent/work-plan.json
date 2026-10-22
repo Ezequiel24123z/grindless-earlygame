@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 50,
+  "plan_revision": 51,
   "updated": "2026-10-22",
   "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -57,7 +57,7 @@
     "factory_reproduction_scope": "ADR0179_four_existing_four_group_fit_pulverizer_arc_furnace_press_assembler_manual_material_parity_explicit_F1_minimum_control_optional_after_assembly_no_new_item_or_reprice",
     "factory_reproduction_source": "4f3aae3b8e1770c97627ee260975b15079db0c48_normally_integrated_source_not_Java_qualified",
     "pure_control_index_repair_owner": "347a1c5b_no_registry_in_Graph_index_pure_minimum_primary_candidate_union_not_only_empty_fallback",
-    "wire_order_repair_owner": "a18f81ea_preserve_after_assembly_dependencies_routes_optional_F2_not_obsolete_immediate_adjacency",
+    "wire_order_repair_owner": "a18f81ea_f1097b7801df51deb42f32c563786ed5ffaa900b_normally_integrated_wire_after_assembly_dependencies_routes_optional_F2_unchanged_source_only_JVM_pending",
     "thermal_reproduction_owner": "143a5650-7910-4d1f-997e-25dc6e362552",
     "thermal_reproduction_scope": "ADR0180_separate_honest_two_stage_core_plus_final_exact_composed_manual_material_bill_no_slot_widening_or_hidden_ingredient_new_ordinary_item_source_only",
     "factory_reproduction_fixture_shape": "209graph_84Assembler_266allAtlas_and5named_minimum_control_rows_authored_not_executed",

@@ -15,6 +15,11 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close the obsolete wire-line adjacency oracle in source.**
+  Normalf1097b7 requires wire_forming after assembly rather than immediately
+  adjacent, preserving its exact dependency/routes/optional role and first-F2
+  guards. Factory reproduction legitimately occupies the earlier position.
+  No gameplay reorder, registry workaround or new JVM/writer pass is inferred.
 - **Integrate managed definitions with source-bound compilation, not a migration pass.**
   Normal93ce975 preserves all updater ancestry, real a7 filesystem786/103 and
   schema2 reference publication with fresh normal compiler/remap receipt,

@@ -285,9 +285,9 @@ public final class VerifyT1Progression {
                 List.of("assemble/wire_mill", "mill/wire/iron", "mill/wire/copper", "mill/coil/copper"),
                 line.routeIds());
         equal("optional wire forming follows only established assembly", Set.of("assembly"), line.requires());
-        equal("optional wire forming is taught immediately after assembly",
-                T1Progression.lines().indexOf(T1Progression.byId("assembly")) + 1,
-                T1Progression.lines().indexOf(line));
+        equal("optional wire forming remains after assembly", true,
+                T1Progression.lines().indexOf(line)
+                        > T1Progression.lines().indexOf(T1Progression.byId("assembly")));
         equal("optional wire routes never enter the first-F2 mandatory path", false,
                 T1Sustainability.mandatoryRoutes(snapshot).stream()
                         .anyMatch(route -> line.routeIds().contains(route.id())));
