@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Align current tier instructions with manual source and retained-work limits.**
+  Replace the obsolete active factory-reproduction table row with component
+  fabrication/manual final construction, clarify manual Wire Mill/Washer
+  acquisition and authored alternatives versus a chosen finite witness.
+  Explain manual capital and held unavailable paid work without promising
+  automatic refunds, retired-recipe resumption or a world migration pass.
+  Historical source/proof records remain; executable G11 stays frozenf1b9
+  and these documentation changes supply no compiler/native/model result.
 - **Assign one exact-source G11 manual-fabrication qualification.**
   Sole604 receives reviewed completef1b9 on a new private root/inventoryac48:
   fresh admission/Sync, necessary common/Forge/changed contracts and one

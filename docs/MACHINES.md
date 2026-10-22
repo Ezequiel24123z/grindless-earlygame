@@ -270,9 +270,18 @@ Target configuration and paid work are separate. The server admits only a
 current Assembler recipe through the live authorized menu; missing inputs or
 an unavailable target wait visibly without a different automatic output.
 Switching stores work by its exact recipe ID, including fractional carry;
-return to that ID to resume it. Completed blocked work waits for output room
+return to a still-valid ID with its requirements met to resume it. Work whose
+recipe was retired stays retained and unavailable, without transfer/refund.
+Completed blocked work waits for output room
 without another work tick. A stale-menu refusal asks for the refreshed menu,
 not an inventory reset or manual save edit.
+
+ADR-0189 applies a narrower guard to the Assembly Bench: positive orphaned
+work holds the machine before another recipe can replace its owner or balance,
+including through inspection/cache refresh. The existing fault presentation
+names the unavailable recipe and retained base ticks. Known live work,
+unpaid lookup and the specific valid legacy Guide exception stay separate.
+Do not interpret this hold as a completed recovery of a real saved-world job.
 
 These are implemented source contracts, not a claim of graphical/transport/
 longitudinal acceptance. The [current validation record](testing/latest-validation.md)

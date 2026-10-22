@@ -1630,16 +1630,25 @@ before any owner update.
 **Assembly target** panel lets you search output names or IDs and select a
 named recipe before loading its JEI ingredients. This remains useful for
 component and eligible-controller recipes sharing inputs; ordinary machine
-targets are being withdrawn under ADR-0188. **AUTO (from inputs)** deliberately keeps
+targets are absent from the corrected development source under ADR-0188.
+**AUTO (from inputs)** deliberately keeps
 the legacy input-based choice; it does not guarantee the output you intended.
 
 The selected recipe still needs its actual inputs, fluids, power, conditions
 and output space. An unavailable target waits rather than substituting another
-output. Switching retains paid work under its original recipe ID; select that
-same target to resume it. This is not the full Process Card or chassis-upgrade
+output. Switching retains paid work under its original recipe ID; a still-valid
+target can resume that work when its requirements are met. A retired target's
+credit stays retained and unavailable, not transferred or automatically refunded.
+This is not the full Process Card or chassis-upgrade
 system. See the current source-bound qualification limits in the
 [validation ledger](docs/testing/latest-validation.md); native completion and
 rendered usability must not be inferred from these instructions.
+
+The Assembly Bench likewise holds positive paid work when its owner recipe is
+unavailable and displays that retained owner/balance. Supplying another valid
+recipe must not clear the old credit. This development safeguard is not an
+instruction to modify a save or a claim that the actual player's old jobs
+have been migrated; copy-based pre-deployment inspection remains required.
 
 ### Components — the intermediate economy
 

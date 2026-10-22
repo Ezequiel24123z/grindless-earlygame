@@ -4,8 +4,9 @@ Status: **active development, not a release or completed T1 acceptance**.
 ADR-0188 now governs manufacturing: manual final normal machines, automatable
 operations and per-product manual-only/machine-only/dual methods for other
 products. Old automatic machine-reproduction rows below are implementation
-history, not the active queue. Rebind source/manual controls/fixtures/teaching
-and finite proof; the former common-model-only preparation is frozen.
+history, not the active queue. Reviewed sourcef1b9 now binds manual controls,
+fixtures, teaching and finite-capital semantics; G11 qualifies that exact
+composition. The former common-model-only preparation remains historical.
 Do not force automation or duplicate every infrastructure recipe.
 Current G7 engineering is closed with339 custody plus recovered original CI5,
 actual writer41df/data26e/29-38 provenance and managed51 file idempotence.
@@ -73,9 +74,10 @@ execution engine, global unlock or list of invented bills.
 | `glass` | Mandatory | Existing sand/glass routes supporting assembly; source quantities from live recipes. |
 | `forming` | Mandatory | Press, non-consumed dies, plates/rods/gears/copper coils and machine casings; Wire Mill is not a hidden first-F2 prerequisite. |
 | `assembly` | Mandatory | Assembler and existing F1 Matrix reproduction; physical construction stock and power must be accounted for. |
-| `factory_reproduction` | Optional | Exact-manual-material reproduction of the first five machines after seeding, including two real Thermal operations and one ordinary core; no slot widening or cheaper bill. |
-| `wire_forming` | Optional | Source3a79a1f selects the existing Wire Mill manufacture, iron/copper wire and copper coil routes after assembly; not a first-F2 dependency or an upgraded machine. |
+| `component_fabrication` | Optional | Machine-fabricate the existing Thermal core and use its manual final-generator craft; preserve the original raw manual seed and actual materials without claiming automatic net supply from a manual Furnace. |
+| `wire_forming` | Optional | Manually construct the existing F1 Wire Mill, then automate its iron/copper wire and copper coil routes after assembly; not a first-F2 dependency or an upgraded machine. |
 | `tool_reproduction` | Optional | Reproduce four retained Press dies after manual seeding without a forming/assembly cycle or first-F2 prerequisite. |
+| `wet_beneficiation` | Optional | Fabricate Motors, manually construct the Washer, then use its real washing/reduction routes and both output streams. |
 | `relay_f2` | Exit | Only `assemble/relay_matrix_f2`; actual physical F1/casing/glass/Flux Cell operands remain canonical. |
 | `extraction` | Optional | Scanner/finite terrestrial extraction as a compatible supplement, not the unlimited canonical source of mandatory inputs. |
 | `logistics` | Optional | Existing hoppers/belts/arms/interfaces within their implemented sides/owner semantics; no new transaction framework. |
@@ -89,6 +91,10 @@ Atlas recipe IDs are selected explicitly. `fuel/thermal_generator/biomass` is a
 fuel route, not an Atlas entry; explain it rather than silently deleting a missing
 recipe. The existing Flux Cell craft must appear through a projection that matches
 its unchanged runtime JSON, not an invented battery-charge recipe.
+The live line includes manual and automatic alternatives where authored;
+the finite witness chooses a specific sufficient route without forcing that
+choice on the player. It does not craft both alternatives merely because both
+are visible in the catalogue.
 
 ## Source-checked expansion inventory
 
@@ -175,10 +181,10 @@ was explicitly released and serialized through the integrated selector base.
 G10 supplies actual combined compilation/representative native and normal
 projections/A9, not a replay per family, owner acquisition or G8 retarget.
 
-1. Complete ADR-0187's conserved finite T0-to-first-factory witness using the
-   existing audit/reserve. Source work is isolated; actual Java/model
-   qualification needs a later exact-source window. G4/G5/G7/G8/G10 are closed
-   within scope, not reasons for replay. Preserve player state.
+1. Complete G11 on the reviewed manual-sourcef1b9, including the new
+   manual-control/retained-Bench boundary and the existing finite witness.
+   No result is inferred from the grant. G4/G5/G7/G8/G10 are closed within
+   scope, not reasons for replay. Preserve player state.
 2. Broaden real baseline families and interdependent processing beyond the first
    factory. Existing Motor/Wire Mill/chemistry code is prior art, not work to
    duplicate or proof of accepted revised-tier gameplay. Reuse the shared

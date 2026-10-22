@@ -11,6 +11,12 @@ blobs; all scoped source verdicts are clear, not runtime proof. Fresh private
 admission/headroom/ownership and canonical Sync must precede producers.
 No other worker/parent may access PC/cache while this lease is active.
 The source alias stays exactf1b9; grant documentation is a different coordinate.
+Current human-readable line tables now match that manual source:
+component_fabrication replaces factory_reproduction, manual Wire Mill/Washer
+construction precedes their automatic operations, and finite witness choices
+do not force every player recipe alternative. Retired-work guidance says
+unavailable credit is retained, not automatically resumed/refunded. This is
+documentation only and does not retarget G11 or supply an execution result.
 
 Compile needed common+Forge/classes/classpath/tools and execute changed
 contracts or honest exact-source CI reuse. Do not mislabel mechanism/material/
