@@ -1,5 +1,5 @@
 {
-  "authority_snapshot_sha256": "3255a2d8d07e2b948bc6ebda7087b4ee0915e9c06ba1e9357a7a51ef4dc2b069",
+  "authority_snapshot_sha256": "3ba9df241ac968030c690a342068698dc3939e9049057d0aee2740274837d7cc",
   "entry_route": "craft/relay_matrix",
   "exit_route": "assemble/relay_matrix_f2",
   "global_optimum_claimed": false,
@@ -1066,7 +1066,9 @@
           "automatable": true,
           "catalysts": {},
           "conditions": {
-            "informational_milestone": "industrial"
+            "control_supply_projection": "canonical_option_not_exhaustive_alternatives",
+            "informational_milestone": "industrial",
+            "minimum_control_input_3": "item:grindless:relay_matrix [F1]"
           },
           "discharged": [],
           "duration_ticks": 400,
@@ -1076,6 +1078,7 @@
             "energy:FU": 12800,
             "item:grindless:machine_casing": 1,
             "item:grindless:motor": 2,
+            "item:grindless:relay_matrix [F1]": 1,
             "tag:forge:plates/iron": 4
           },
           "machine_family": "ASSEMBLER",
