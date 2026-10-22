@@ -24,12 +24,13 @@
     "policy": "ADR-0186",
     "owner_session": "58fac55d-8eed-4b47-96ab-e96561f3c961",
     "source_base": "045112282fa2370c8784170c87a2e37dae7cce56",
-    "VerifyRecipes_edit_authorized": false,
+    "VerifyRecipes_edit_authorized": true,
+    "PhaseB_baseline_rule": "exact_parent_published_selector_F1_A8_merge_SHA_to_be_sent_after_this_commit_no_guess_or_WIP_absorption",
     "not_authorized": "silent_bill_change_G8hotfix_passive_tax_or_gameplay_acceptance",
     "next": "noncompeting_data_source_now_shared_VerifyRecipes_only_after_selector_explicitrelease_no_G8retarget"
   },
   "assembler_recipe_choice": {
-    "status": "source438_final19files_review91de_clear_integration_JVM_native_pending",
+    "status": "source438_normalintegration_with_F1_A8_thischeckpoint_JVM_native_pending",
     "policy": "ADR-0185",
     "owner_session": "0752df7b-209e-4fd5-afe5-b3cf7c376471",
     "source_base": "3c00af09e26718671308fa4537a5ac483279c967",

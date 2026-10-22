@@ -294,9 +294,27 @@ menu/host/access checks. Preserve legacy AUTO, actual selected output, stores,
 recipe-owned work including fractional carry, completion rollback and old NBT.
 Never fall back from an explicit invalid target to another output or erase
 paid work to make the selector convenient. Reuse existing UI/persistence/lookup
-and the smallest native fixture; implementation/proof are still pending.
+and the smallest native fixture; source is implemented and qualification is pending.
+The source implementation adds `machine/AssemblerWork` for optional
+`SelectedRecipe`/`SuspendedWork`, leaving active `Progress`/`WorkRecipe` and
+store identities intact. `menu/AssemblerSelectionNetwork` carries exact IDs,
+opening tokens and catalogue revisions; vanilla per-menu short data binds
+authoritative snapshots to their opening. Register C2S in ModMenus and S2C
+only in GrindlessClient. The Assembler-only searchable side panel preserves
+the 176x204 body and physical slots. Malformed work is retained fail-closed;
+packet count admission is bounded by the actual payload, not a paid-job cap
+that could strand fractional work alongside unavailable old recipe IDs.
+Existing logic/lookup/persistence/UI checks and the existing Matrix fixture
+own the changed proof. Same-bill fixtures derive group counts/quantities from
+the actual equal ProcessRecipe bills instead of assuming three groups forever;
+they do not change production data or certify a newly proposed operand.
+The coupled Registry work-entry contract checks the
+entire AST-normalized reentry/finally wrapper and physical-diagnosis prefix;
+its negative mutations must still reject bypassed guards and premature work.
+Java/native/rendered/world qualification is not a source or non-JVM-static result.
 The upstream comparison is a pattern reference, not imported code or proof.
-Recipe data, FTB/quests, default-F1 source ownership and G7 are outside this lane.
+Recipe data, FTB/quests, default-F1 semantics and G7 are outside this lane;
+only the parent-authorized work-entry Registry contract is coupled here.
 
 ### Baseline process-family physical control
 

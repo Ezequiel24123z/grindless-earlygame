@@ -805,6 +805,16 @@ rollback unverified.
 The shared recipe verifier is released to a later parent-integrated data phase,
 not permission for competing writers or G8 retarget.
 
+**Normal selector composition, not execution:** parent combines immutable438
+with normally integrated F1/A8 after source review91de reports no significant
+issue. All sixteen non-registry application/check/locale blobs remain exactly
+the reviewed438 bytes; the registry automatically retains F1 declarations
+and adds only the reviewed strict wrapper/cycle profile delta. Parent reviews
+that mechanical union; changelog keeps both histories and the map keeps both
+seams. Java/AST/server/packet/native/rendered/real-save proof still needs a
+new exact-source window. Data58 receives this actual published baseline for
+the now-released shared check; no code or receipt is live-retargeted.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

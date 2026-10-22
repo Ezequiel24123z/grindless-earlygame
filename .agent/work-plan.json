@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 93,
+  "plan_revision": 94,
   "updated": "2026-10-22",
   "phase": "FTB51_engineering_and_T1_recipe_reachability_with_default_identity_correction",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -93,7 +93,7 @@
     "G8_retarget_or_source_hotfix_authorized": false
   },
   "assembler_recipe_choice": {
-    "status": "source438_19files_immutable_review91de_no_significant_issues_integration_runtime_pending",
+    "status": "source438_normally_integrated_with_F1_A8_in_this_checkpoint_review91de_clear_Java_native_pending",
     "policy": "ADR-0185",
     "owner_session": "0752df7b-209e-4fd5-afe5-b3cf7c376471",
     "source_base": "3c00af09e26718671308fa4537a5ac483279c967",
@@ -102,6 +102,7 @@
     "source_tree": "f3c5fb190710bc53057f8d586264bd5867fc3cd3",
     "source_review_agent": "91de0be2-7b3c-4750-bf9e-d652622169d2",
     "source_review_result": "no_significant_issue_SourceOnly_compile_AST_serverclassloading_packets_renderedFocus_realSaveRollback_NOT_executed",
+    "source_integration": "16nonregistry_code_test_locale_blobs_exact438_registry_only_selector_work_profile_delta_over_F1_auto_union_map_union_changelog_both_histories",
     "source_input_manifest_sha256": "bb1bc0cfa98cafb2022525d1ed69c3175c528ae0a259f36e3198e6c7ed191223",
     "VerifyRecipes_file_release": "owner0752_explicit_final438_no_more_edits_DATA58_must_wait_parent_integrated_baseline_before_PhaseB",
     "owned_scope": "existing_lookup_processBE_menu_host_layout_screen_minimal_common_helper_locales_existing_logic_ui_persistence_and_nativefixture_authoring_only_no_recipe_defaultF1_FTB_or_canonical_change",

@@ -12,8 +12,19 @@ import io.github.ezequiel24123z.grindless.recipe.FabricationLogic;
 import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 import io.github.ezequiel24123z.grindless.recipe.ProcessGraph;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
+import io.github.ezequiel24123z.grindless.recipe.MachineFamily;
+import io.github.ezequiel24123z.grindless.recipe.OutputSpec;
+import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionIssue;
+import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionResult;
+import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.fluid.FluidNbt;
+import io.github.ezequiel24123z.grindless.fluid.FluidState;
+import io.github.ezequiel24123z.grindless.container.FluidInsert;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
@@ -26,6 +37,9 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,6 +47,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,6 +73,8 @@ public final class VerifyPersistence {
         itemPacket();
         questInventory();
         questProgress();
+        assemblerWorkNbt();
+        assemblerMachineWork();
         System.out.println(failures == 0 ? "ALL PERSISTENCE CHECKS PASSED"
                 : failures + " PERSISTENCE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
@@ -114,6 +135,380 @@ public final class VerifyPersistence {
         check("migration does not mutate the caller's saved tag", saved.equals(before));
         restored.fromTag(new ListTag());
         check("missing inventory data restores an empty container", restored.isEmpty());
+    }
+
+    private static void assemblerWorkNbt() throws Exception {
+        String washer = "assemble/chemical_washer";
+        String reactor = "assemble/chemical_reactor";
+        AssemblerWork work = new AssemblerWork();
+        work.activate("removed/paid", 3.375, washer);
+        work.activate(washer, 12.03125, reactor);
+        work.select("removed/selected");
+        CompoundTag saved = new CompoundTag();
+        saved.putString("Recipe", reactor);
+        saved.putString("WorkRecipe", reactor);
+        saved.putDouble("Progress", 400.1);
+        work.save(saved);
+        CompoundTag original = saved.copy();
+        for (int reopen = 0; reopen < 24; reopen++) {
+            saved = roundTrip(saved);
+            AssemblerWork restored = AssemblerWork.load(saved, saved.getString("WorkRecipe"), saved.getDouble("Progress"));
+            check("binary reopen " + reopen + " preserves unknown selected identity without AUTO",
+                    restored.valid() && restored.selected().equals("removed/selected"));
+            check("binary reopen " + reopen + " preserves exact known and unavailable paid balances",
+                    restored.suspended().equals(java.util.Map.of("removed/paid", 3.375, washer, 12.03125)));
+            restored.save(saved);
+            check("binary reopen " + reopen + " cannot duplicate, normalize or erase work", saved.equals(original));
+        }
+        CompoundTag legacy = new CompoundTag();
+        legacy.putString("Recipe", washer);
+        legacy.putDouble("Progress", 0.34375);
+        AssemblerWork automatic = AssemblerWork.load(legacy, legacy.getString("Recipe"), legacy.getDouble("Progress"));
+        automatic.save(legacy);
+        check("a legacy AUTO save gains no optional selector or work keys",
+                !legacy.contains(AssemblerWork.TARGET) && !legacy.contains(AssemblerWork.SUSPENDED)
+                        && legacy.getDouble("Progress") == 0.34375 && !legacy.contains("WorkRecipe"));
+        List<Consumer<CompoundTag>> invalid = List.of(
+                tag -> tag.putString("Progress", "0.5"),
+                tag -> tag.putDouble("Progress", Double.NaN),
+                tag -> tag.putDouble("Progress", Double.POSITIVE_INFINITY),
+                tag -> tag.putDouble("Progress", -0.5),
+                tag -> tag.putInt("WorkRecipe", 1),
+                tag -> tag.putInt(AssemblerWork.TARGET, 1),
+                tag -> tag.putString(AssemblerWork.TARGET, " ".repeat(2)),
+                tag -> tag.putString(AssemblerWork.TARGET, "x".repeat(257)),
+                tag -> tag.put(AssemblerWork.SUSPENDED, new CompoundTag()),
+                tag -> {
+                    ListTag rows = new ListTag();
+                    rows.add(StringTag.valueOf("not paid work"));
+                    tag.put(AssemblerWork.SUSPENDED, rows);
+                },
+                tag -> {
+                    ListTag rows = tag.getList(AssemblerWork.SUSPENDED, Tag.TAG_COMPOUND);
+                    rows.add(rows.getCompound(0).copy());
+                },
+                tag -> tag.getList(AssemblerWork.SUSPENDED, Tag.TAG_COMPOUND).getCompound(0)
+                        .putString("Recipe", reactor),
+                tag -> tag.getList(AssemblerWork.SUSPENDED, Tag.TAG_COMPOUND).getCompound(0)
+                        .putDouble("Progress", 0.0),
+                tag -> tag.getList(AssemblerWork.SUSPENDED, Tag.TAG_COMPOUND).getCompound(0)
+                        .putDouble("Progress", Double.NEGATIVE_INFINITY),
+                tag -> tag.getList(AssemblerWork.SUSPENDED, Tag.TAG_COMPOUND).getCompound(0)
+                        .putString("Progress", "3.375"),
+                tag -> tag.getList(AssemblerWork.SUSPENDED, Tag.TAG_COMPOUND).getCompound(0)
+                        .putString("Unexpected", "retain rather than ignore"));
+        for (int index = 0; index < invalid.size(); index++) {
+            CompoundTag damaged = original.copy();
+            invalid.get(index).accept(damaged);
+            damaged = roundTrip(damaged);
+            CompoundTag before = damaged.copy();
+            AssemblerWork refused = AssemblerWork.load(damaged, damaged.getString("WorkRecipe"),
+                    damaged.getDouble("Progress"));
+            check("malformed paid state " + index + " is explicit and unavailable",
+                    !refused.valid() && !refused.problem().isEmpty());
+            try {
+                refused.select(washer);
+                check("malformed paid state cannot change configuration", false);
+            } catch (IllegalStateException expected) {
+                check("malformed paid state refuses selection " + index, true);
+            }
+            refused.save(damaged);
+            check("malformed paid state " + index + " is retained exactly through binary reopen",
+                    roundTrip(damaged).equals(before));
+        }
+    }
+
+    /** Runs the actual BE without Forge registration, using explicitly labelled vanilla carrier rows. */
+    private static void assemblerMachineWork() throws Exception {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        ProcessRecipe declaredWasher = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_washer").orElseThrow();
+        ProcessRecipe declaredReactor = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_reactor").orElseThrow();
+        check("the BE fixture derives both colliders from the actual identical declared bills",
+                declaredWasher.inputs().equals(declaredReactor.inputs()));
+        List<String> carrierIds = List.of("minecraft:quartz", "minecraft:copper_ingot",
+                "minecraft:iron_ingot", "minecraft:redstone");
+        List<IngredientSpec> bill = new ArrayList<>();
+        for (int slot = 0; slot < declaredWasher.itemInputs().size(); slot++) {
+            bill.add(IngredientSpec.item(carrierIds.get(slot), declaredWasher.itemInputs().get(slot).count()));
+        }
+        ProcessRecipe washer = new ProcessRecipe(declaredWasher.id(), MachineFamily.ASSEMBLER, bill,
+                List.of(OutputSpec.item("minecraft:clay_ball", 1)), Double.NaN, null, 160, 32);
+        ProcessRecipe reactor = new ProcessRecipe(declaredReactor.id(), MachineFamily.ASSEMBLER, bill,
+                List.of(OutputSpec.item("minecraft:brick", 1)), Double.NaN, null, 160, 32);
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object originalGraph = graph.get(null);
+        Method index = originalGraph.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        try {
+            graph.set(null, index.invoke(null, List.of(washer, reactor)));
+            ProcessMachineBlockEntity machine = assembler();
+            supplyAssembler(machine);
+            check("legacy unselected AUTO retains the actual last-dry resolver (carriers)",
+                    resolve(machine).id().equals(reactor.id()));
+            check("the real selection transition chooses the exact Washer independently (carriers)",
+                    change(machine, washer.id()) == SelectionResult.SELECTED && resolve(machine) == washer);
+            Object inventory = machine.menuContainer();
+            Object energy = machine.energy();
+            Object fluids = machine.nativeStore();
+            Object config = machine.containerConfig();
+            machine.energy().setStored(512);
+            machine.containerConfig().setSideMode(Direction.NORTH,
+                    io.github.ezequiel24123z.grindless.container.SideMode.EXTRACT);
+            CompoundTag state = machine.saveWithoutMetadata();
+            state.putDouble("Progress", 158.25);
+            CompoundTag upgrades = new CompoundTag();
+            upgrades.putInt("SPEED", 1);
+            state.put("Upgrades", upgrades);
+            state.put("Fluid", FluidNbt.save(FluidState.of("minecraft:water", 325, 37.0, 0.2)));
+            machine.load(roundTrip(state));
+            tick(machine, 1);
+            exact("actual upgraded completion preserves fractional carry instead of resetting it", 0.25,
+                    machine.inspectionProgress());
+            check("the real transaction writes the selected output, not the last dry output (carriers)",
+                    machine.getItem(4).is(Items.CLAY_BALL) && machine.getItem(4).getCount() == 1);
+            check("actual completion debits one paid tick once", machine.energy().getStored() == 480);
+            check("actual completion consumes the existing exact grouped bill once",
+                    java.util.stream.IntStream.range(0, bill.size()).allMatch(slot -> machine.getItem(slot).isEmpty()));
+            change(machine, reactor.id());
+            state = machine.saveWithoutMetadata();
+            state.putDouble("Progress", 12.875);
+            machine.load(roundTrip(state));
+            CompoundTag stores = assemblerStores(machine);
+            for (int reopen = 0; reopen < 40; reopen++) {
+                check("switching back to a fractional owner remains available " + reopen,
+                        change(machine, washer.id()) == SelectionResult.SELECTED);
+                exact("the real BE restores Washer carry exactly " + reopen, 0.25, machine.inspectionProgress());
+                check("fractional carry never becomes another recipe's work " + reopen,
+                        change(machine, reactor.id()) == SelectionResult.SELECTED);
+                exact("the real BE restores Reactor partial work exactly " + reopen, 12.875, machine.inspectionProgress());
+                machine.load(roundTrip(machine.saveWithoutMetadata()));
+                check("switch/reopen keeps inventory, fluids, energy, configuration and layout " + reopen,
+                        assemblerStores(machine).equals(stores));
+                check("switch/reopen preserves the actual exposed store objects " + reopen,
+                        machine.menuContainer() == inventory && machine.energy() == energy
+                                && machine.nativeStore() == fluids && machine.containerConfig() == config);
+            }
+            change(machine, washer.id());
+            supplyAssembler(machine);
+            machine.setItem(4, new ItemStack(Items.STONE, 64));
+            state = machine.saveWithoutMetadata();
+            state.putDouble("Progress", 160.375);
+            machine.load(roundTrip(state));
+            long fuel = machine.energy().getStored();
+            for (long tick = 2; tick <= 5; tick++) {
+                tick(machine, tick);
+            }
+            exact("completed blocked work is never redrawn or discarded", 160.375, machine.inspectionProgress());
+            check("completed blocked work never spends another FU", machine.energy().getStored() == fuel);
+            check("the server-owned selected diagnosis names blocked completion",
+                    machine.recipeSelection().orElseThrow().issue() == SelectionIssue.OUTPUT_BLOCKED);
+            change(machine, reactor.id());
+            change(machine, washer.id());
+            exact("blocked completion also survives switching", 160.375, machine.inspectionProgress());
+            machine.setItem(4, ItemStack.EMPTY);
+            tick(machine, 6);
+            exact("unblocking settles exactly once and retains the fractional remainder", 0.375,
+                    machine.inspectionProgress());
+            check("unblocking does not redraw completed power or create the dry-last output",
+                    machine.energy().getStored() == fuel && machine.getItem(4).is(Items.CLAY_BALL)
+                            && machine.getItem(4).getCount() == 1);
+            tick(machine, 7);
+            check("a settled batch cannot repeat without new physical supplies",
+                    machine.energy().getStored() == fuel && machine.getItem(4).getCount() == 1);
+
+            supplyAssembler(machine);
+            for (String lock : List.of("loadingInventory", "processing", "settling")) {
+                Field field = ProcessMachineBlockEntity.class.getDeclaredField(lock);
+                field.setAccessible(true);
+                CompoundTag before = machine.saveWithoutMetadata();
+                field.setBoolean(machine, true);
+                try {
+                    check(lock + " refuses a reentrant selector", change(machine, reactor.id()) == SelectionResult.BUSY);
+                    check(lock + " refusal preserves the full saved machine", machine.saveWithoutMetadata().equals(before));
+                } finally {
+                    field.setBoolean(machine, false);
+                }
+            }
+            CompoundTag before = machine.saveWithoutMetadata();
+            check("an unknown requested ID refuses without clearing the real configuration",
+                    change(machine, "missing/request") == SelectionResult.INVALID_RECIPE
+                            && machine.saveWithoutMetadata().equals(before));
+            check("a foreign-family requested ID refuses without mutation",
+                    change(machine, "press/plate/iron") == SelectionResult.INVALID_RECIPE
+                            && machine.saveWithoutMetadata().equals(before));
+            ProcessLookup.Generation generation = ProcessLookup.generation();
+            graph.set(null, index.invoke(null, List.of(reactor)));
+            check("reload actually changes the indexed publication", generation != ProcessLookup.generation());
+            check("removed explicit IDs wait rather than executing the remaining matching bill",
+                    resolve(machine) == null && machine.recipeSelection().orElseThrow().issue() == SelectionIssue.UNAVAILABLE);
+            tick(machine, 8);
+            check("an unavailable explicit ID survives actual binary save/reopen", machine.saveWithoutMetadata()
+                    .getString(AssemblerWork.TARGET).equals(washer.id()));
+            exact("an unavailable explicit ID retains its exact owned work", 0.375, machine.inspectionProgress());
+            check("unavailable targeting never spends power", machine.energy().getStored() == fuel);
+            graph.set(null, index.invoke(null, List.of(washer, reactor)));
+            check("returning IDs re-resolve to the current recipe, not the missing-generation cache",
+                    resolve(machine) == washer);
+            check("AUTO can be restored without discarding fractional work", change(machine, "") == SelectionResult.SELECTED);
+            check("AUTO keeps last-dry behavior when only partial old work exists", resolve(machine) == reactor);
+            change(machine, washer.id());
+            exact("AUTO did not transfer or reset the suspended fractional balance", 0.375, machine.inspectionProgress());
+
+            state = machine.saveWithoutMetadata();
+            state.putString("WorkRecipe", "removed/paid_owner");
+            state.putDouble("Progress", 5.125);
+            state.remove(AssemblerWork.SUSPENDED);
+            machine.load(roundTrip(state));
+            check("unknown paid work cannot pay the selected known target", resolve(machine) == washer);
+            exact("a known target starts with no borrowed unknown work", 0.0, machine.inspectionProgress());
+            check("unknown paid work remains unavailable but recoverably stored",
+                    machine.recipeSelection().orElseThrow().suspended().get("removed/paid_owner") == 5.125);
+
+            List<IngredientSpec> wetBill = new ArrayList<>(bill);
+            wetBill.add(IngredientSpec.fluid("minecraft:water", 250));
+            ProcessRecipe wet = new ProcessRecipe("check/selected/wet", MachineFamily.ASSEMBLER, wetBill,
+                    washer.outputs(), Double.NaN, null, 20, 32);
+            ProcessRecipe hot = new ProcessRecipe("check/selected/hot", MachineFamily.ASSEMBLER, bill,
+                    reactor.outputs(), 1500, null, 20, 32);
+            graph.set(null, index.invoke(null, List.of(washer, reactor, wet, hot)));
+            change(machine, wet.id());
+            state = machine.saveWithoutMetadata();
+            state.put("Fluid", FluidNbt.save(FluidState.of("minecraft:water", 249)));
+            machine.load(roundTrip(state));
+            check("the actual selected BE rejects insufficient fluid without a dry fallback", resolve(machine) == null
+                    && machine.recipeSelection().orElseThrow().issue() == SelectionIssue.MISSING_FLUID);
+            tick(machine, 9);
+            check("short selected fluid cannot draw another FU", machine.energy().getStored() == fuel);
+            check("selected intake reserves only its own remaining batch, not a family's other recipe",
+                    machine.acceptedAmount(null, FluidState.of("minecraft:water", 2000)) == 1
+                            && machine.acceptedAmount(null, FluidState.of("minecraft:lava", 250)) == 0);
+            machine.insert(null, FluidState.of("minecraft:water", 1));
+            check("the current selected wet row resolves after the exact real store is replenished", resolve(machine) == wet);
+            machine.extract(null, 1);
+            check("an already cached explicit row revalidates actual fluid before paying more work", resolve(machine) == null);
+            change(machine, hot.id());
+            tick(machine, 10);
+            check("the selected row still obeys actual machine conditions before drawing power",
+                    machine.energy().getStored() == fuel
+                            && machine.recipeSelection().orElseThrow().issue() == SelectionIssue.CONDITIONS);
+
+            change(machine, washer.id());
+            supplyAssembler(machine);
+            machine.setItem(4, ItemStack.EMPTY);
+            state = machine.saveWithoutMetadata();
+            state.putDouble("Progress", 160.625);
+            machine.load(roundTrip(state));
+            resolve(machine);
+            CompoundTag settlementBefore = machine.saveWithoutMetadata();
+            boolean[] thrown = {false};
+            ((SimpleContainer) machine.menuContainer()).addListener(container -> {
+                if (!thrown[0] && machine.getItem(0).isEmpty()) {
+                    thrown[0] = true;
+                    throw new IllegalStateException("authored Assembler settlement observer");
+                }
+            });
+            Method complete = ProcessMachineBlockEntity.class.getDeclaredMethod("complete", ProcessRecipe.class, List.class);
+            complete.setAccessible(true);
+            try {
+                complete.invoke(machine, washer, List.of());
+                check("the authored observer must abort actual settlement", false);
+            } catch (InvocationTargetException expected) {
+                check("actual completion exposes its original settlement failure",
+                        expected.getCause() instanceof IllegalStateException
+                                && expected.getCause().getMessage().equals("authored Assembler settlement observer"));
+            }
+            check("rollback preserves exact active/suspended paid work, target and every saved store",
+                    machine.saveWithoutMetadata().equals(settlementBefore));
+            check("a refused/throwing settlement releases its selector guard",
+                    change(machine, reactor.id()) == SelectionResult.SELECTED);
+            assemblerLegacyInventory(washer, reactor);
+        } finally {
+            graph.set(null, originalGraph);
+        }
+    }
+
+    private static void assemblerLegacyInventory(ProcessRecipe washer, ProcessRecipe reactor) throws Exception {
+        ProcessMachineBlockEntity legacy = assembler();
+        supplyAssembler(legacy);
+        legacy.setItem(3, ItemStack.EMPTY);
+        CompoundTag tag = legacy.saveWithoutMetadata();
+        tag.putString("Recipe", washer.id());
+        tag.remove("WorkRecipe");
+        tag.putDouble("Progress", 11.34375);
+        tag.putInt("ItemLayout", 1);
+        ListTag items = tag.getList("Items", Tag.TAG_COMPOUND);
+        CompoundTag output = new ItemStack(Items.BRICK, 2).save(new CompoundTag());
+        output.putByte("Slot", (byte) 3);
+        items.add(output);
+        legacy.load(roundTrip(tag));
+        check("legacy Assembler output migration keeps slot four and clears the old fourth input",
+                legacy.getItem(3).isEmpty() && legacy.getItem(4).is(Items.BRICK) && legacy.getItem(4).getCount() == 2);
+        check("legacy Recipe fallback retains the exact old paid owner",
+                legacy.saveWithoutMetadata().getString("WorkRecipe").equals(washer.id())
+                        && legacy.inspectionProgress() == 11.34375);
+        if (washer.itemInputs().size() > 3) {
+            check("old inventory layout cannot invent a newly required fourth ingredient", resolve(legacy) == null);
+            IngredientSpec required = washer.itemInputs().get(3);
+            legacy.setItem(3, ProcessLookup.resolve(
+                    new OutputSpec(required.kind(), required.id(), required.count(), false)).orElseThrow());
+        }
+        check("legacy AUTO preserves last-dry selection without giving it someone else's work",
+                resolve(legacy) == reactor && legacy.inspectionProgress() == 0.0);
+        change(legacy, washer.id());
+        exact("the legacy partial balance remains reachable after AUTO chooses another row", 11.34375,
+                legacy.inspectionProgress());
+        check("migration and selection never mutate the old output's count or slot",
+                (washer.itemInputs().size() > 3
+                        ? ProcessLookup.matches(washer.itemInputs().get(3), legacy.getItem(3))
+                        : legacy.getItem(3).isEmpty())
+                        && legacy.getItem(4).is(Items.BRICK) && legacy.getItem(4).getCount() == 2);
+    }
+
+    private static CompoundTag assemblerStores(ProcessMachineBlockEntity machine) {
+        CompoundTag stores = machine.saveWithoutMetadata();
+        for (String key : List.of("Progress", "Recipe", "WorkRecipe", AssemblerWork.TARGET, AssemblerWork.SUSPENDED)) {
+            stores.remove(key);
+        }
+        return stores;
+    }
+
+    private static ProcessMachineBlockEntity assembler() throws Exception {
+        Constructor<ProcessMachineBlockEntity> constructor = ProcessMachineBlockEntity.class.getDeclaredConstructor(
+                BlockEntityType.class, ProcessMachineKind.class, BlockPos.class, BlockState.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance(null, ProcessMachineKind.ASSEMBLER, BlockPos.ZERO, Blocks.STONE.defaultBlockState());
+    }
+
+    private static void supplyAssembler(ProcessMachineBlockEntity machine) {
+        ProcessRecipe recipe = ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/chemical_washer").orElseThrow();
+        for (int slot = 0; slot < recipe.itemInputs().size(); slot++) {
+            IngredientSpec input = recipe.itemInputs().get(slot);
+            machine.setItem(slot, ProcessLookup.resolve(
+                    new OutputSpec(input.kind(), input.id(), input.count(), false)).orElseThrow());
+        }
+    }
+
+    private static SelectionResult change(ProcessMachineBlockEntity machine, String id) throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("changeRecipeSelection", String.class);
+        method.setAccessible(true);
+        return (SelectionResult) method.invoke(machine, id);
+    }
+
+    private static ProcessRecipe resolve(ProcessMachineBlockEntity machine) throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
+        method.setAccessible(true);
+        return (ProcessRecipe) method.invoke(machine, List.<FluidInsert.Source>of());
+    }
+
+    private static void tick(ProcessMachineBlockEntity machine, long tick) throws Exception {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
+        method.setAccessible(true);
+        method.invoke(machine, tick, List.<FluidInsert.Source>of());
+    }
+
+    private static void exact(String label, double expected, double actual) {
+        check(label, Double.doubleToRawLongBits(expected) == Double.doubleToRawLongBits(actual));
     }
 
     private static void matrixCodec() throws Exception {

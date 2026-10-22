@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Normally compose the reviewed Assembler selector with F1 and A8.**
+  Preserve the three source commits and all sixteen non-registry code/test/
+  locale blobs exactly. The registry auto-merge retains both the F1 declaration
+  work and the strict selector wrapper/cycle profile; changelog conflict keeps
+  both histories and the route map keeps both seams. Source-only review has
+  no significant issue, not a Java/AST/server/packet/GUI/save pass. Publish the
+  exact combined baseline so data58 can complete its released recipe check;
+  no PC grant, recipe repricing or runtime readiness follows.
 - **Close actual G8 model evidence and normally integrate its four payloads.**
   Independent QA verifies239 safe files, complete original CI5, actual31/41
   source/images, normal write/independent CheckOnly/resource refresh/canonical
@@ -97,6 +105,16 @@ entries below reference those records by id.
   display source with authored31/41 pins; review/Java/writers are pending.
   Selector owner0752 continues separately; neither source nor ready51 closes
   Washer acquisition or whole-tier/human readiness.
+- **Implement lossless explicit Assembler targets on the existing executor.**
+  ADR-0185 adds current-graph stable-ID matching, recipe-keyed suspended
+  double base-work, fail-closed retained malformed state and server-owned
+  menu/opening/catalogue validation. A native searchable output picker
+  extends only the Assembler; AUTO, other layouts, stores and rollback stay
+  intact. Existing contract/native-fixture cases are authored, including the
+  strictly coupled work-entry AST profile and refusal mutations. Collider
+  fixtures derive the actual equal bills rather than fixing their group count; local
+  non-JVM evidence cannot qualify Java, native behavior, appearance, the
+  player's world or whole T1. No recipes, bills, dependencies or outputs change.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation

@@ -13,16 +13,19 @@ not Java. VerifyRecipes is unchanged and still expects six roles on this
 partial branch; PhaseB must preserve438's selector checks on the exact
 parent-published combined baseline. No all-suite/native/acquisition claim.
 
-**Selector source complete, no runtime pass:** owner0752 delivers the normal
+**Selector source normally integrated, no runtime pass:** owner0752 delivers the normal
 a89baba/30e2822/43838b8 chain, nineteen files and clean treef3c5fb19. Work/
 menu/network/persistence/visible picker and the strict workCycle profile are
 authored; static1013/independent-model804/lexical34 are not Java/AST/native/
 transport/graphical evidence. Immutable review91de0be2 finds no significant
 issue in the full source, not a compile/AST/server/packet/GUI/save proof.
-VerifyRecipes is explicitly released at438, but data58 still needs the
-parent's exact published combined baseline before PhaseB. The native fixtures
+The normal parent merge combines F1/A8 and438, preserving sixteen non-registry
+code/test/locale blobs exactly and reviewing only the automatic strict
+registry-profile union. Changelog conflict retains both histories. Data58
+receives the actual published merge SHA after this checkpoint, with explicit
+VerifyRecipes write permission, not a guessed/WIP source. The native fixtures
 derive real equal Washer/Reactor inputs, not a permanent three-group count.
-No changed recipe, F1/generation proof or tier acceptance is inferred.
+No changed recipe, runtime proof or tier acceptance is inferred.
 
 **G8 bounded model outcome closed; explicit return13:25:45.6175163Z verified.**
 Source4ee common/tool compilation, changed exact-source CI reuse, actual

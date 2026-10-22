@@ -42,8 +42,11 @@ coupled display context. G8 now closes actual31/41, changed contracts and
 normal A8dee through239-file custody; no rendered or finite-T1 proof follows.
 Preserve all older failures and the player instance.
 Read the active handoff for actual results/lease ownership.
-The next functional correction is ADR-0185: explicit Assembler recipe choice
-for colliding existing bills, preserving paid/fractional work and saved stores.
+ADR-0185 explicit Assembler recipe-choice source is now normally composed
+with F1/A8 after independent review. Complete ADR-0186's serialized shared
+recipe check on that exact published baseline, then qualify the combined
+changed selection/work/persistence mechanism on a new exact source.
+It must preserve paid/fractional work and saved stores.
 Use the bounded mature-mod reference and existing menu/transaction, not a
 circuit tax, repricing or a new engine. A source-only selected wet route and
 G7's ready51 loader proof do not establish that acquisition path.
