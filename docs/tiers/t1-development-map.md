@@ -150,7 +150,7 @@ recipe is needed.
 
 ### Next bounded choices
 
-**Additional source-checked construction gap, not a new bill selection:** the
+**Source-checked construction follow-up, not an executed result:** the
 nine functional F1 ProcessMachineKind families Chemical Reactor, Chemical
 Washer, Electrolysis Cell, Atmospheric Intake, Induction Furnace, Caster,
 Flotation, Boiler and Condenser have existing Assembler constructors with only

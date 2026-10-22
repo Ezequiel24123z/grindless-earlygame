@@ -15,6 +15,12 @@ entries below reference those records by id.
 
 ### Added
 
+- **Preserve the nine-controller PhaseA source while its shared check waits.**
+  Normalab3bd4d has exact0451122 parent/five owned files/both trailers.
+  Parent reviews nine precise fourth operands and unchanged old groups,
+  outputs/FU/time plus Atlas/T1 contracts; static28/18 mutations are not Java.
+  The still-old six-role verifier is intentionally untouched until the exact
+  integrated selector baseline; this is not a full-suite or acquisition pass.
 - **Receive the complete selector source and serialize its shared-check release.**
   Normal a89/30e/438 supplies nineteen clean files, persisted recipe-owned work,
   authoritative target/menu and strict wrapper/workCycle profile. Independent

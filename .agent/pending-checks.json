@@ -19,7 +19,8 @@
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
   "baseline_family_control_gap": {
-    "status": "sourcePhaseA_active_sharedCheckPhaseB_pending_selector_release",
+    "status": "PhaseA_ab3bd4d_source_complete_sharedPhaseB_blocked_until_parent_integrated_selector_base",
+    "phaseA_checkpoint": "ab3bd4da7c3eb0b765969d65f555b4faf6b00b10",
     "policy": "ADR-0186",
     "owner_session": "58fac55d-8eed-4b47-96ab-e96561f3c961",
     "source_base": "045112282fa2370c8784170c87a2e37dae7cce56",

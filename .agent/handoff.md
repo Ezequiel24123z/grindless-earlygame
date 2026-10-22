@@ -4,6 +4,15 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Nine-controller data PhaseA is source-complete, not qualified:** normal
+ab3bd4d/exact0451122 parent/tree4ce1efad changes only ProcessGraph, Atlas/T1
+checks and the two owned documentation entries. Parent reviews the bounded
+diff: nine explicit fourth groups, old three groups/time/FU/output retained,
+generic/passive/Motor unaffected. Reported28 static/18 rejected mutations are
+not Java. VerifyRecipes is unchanged and still expects six roles on this
+partial branch; PhaseB must preserve438's selector checks on the exact
+parent-published combined baseline. No all-suite/native/acquisition claim.
+
 **Selector source complete, no runtime pass:** owner0752 delivers the normal
 a89baba/30e2822/43838b8 chain, nineteen files and clean treef3c5fb19. Work/
 menu/network/persistence/visible picker and the strict workCycle profile are
