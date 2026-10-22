@@ -4,7 +4,7 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**G11 native-only is reported complete and explicitly returned; QA pending.**
+**G11 native-only is complete, independently verified and returned.**
 Fresh20:49:11Z absent-root admission/VerifiedDetached Syncf1b9 precedes one
 canonical matrix-lifecycle. Actual1273 assertions,19 markers exactly once,
 PASS1/FAIL0 and harness/native-sidecar/wrapper0 are reported; launcher0 is
@@ -14,12 +14,16 @@ binds tested/staged/remapped JARea327c67/2576414 bytes, only Architectury
 and Grindless. No writer/check/canonical refresh/actual43-98/A10 exists.
 
 Custody46/manifesta7e8b510 and2599 unchanged source/old-output inputs plus
-four payload byte/mtime invariance are reported. Review4390aa5b checks the
-local raw/native/JAR/input/CI5/guard chain, not another producer. Fresh final
+four payload byte/mtime invariance are independently verified by4390aa5b,
+including actual raw/native/JAR/CI5/guard relations and no material gap.
+Fresh final
 read-only20:59:08.9449678Z reports cleanf1b9/owned-allJava0/locksfalse/own
 guard99725563 removed/absent; rawfinalc5bc4b7f remains outside the capsule.
 The amended ruling was admitted before return. No PC task remains or new
 grant is implied. All five original CI reds remain genuine model/fixture debt.
+The1273 is an actual aggregate counter, not1273 individual log lines;
+Architectury is bound by runtime inventory, not a new copied-JAR hash check.
+Final safety is the recorded fresh snapshot, not another current PC inspection.
 
 **Factory oracle source repairf863 is normally integrated, not executed.**
 Exact parentf1b9/treefce2064a changes only VerifyFactory and its own bullet
@@ -28,7 +32,26 @@ actual shipped JSON decoder, one minimumF1/control/output and four precise
 negative variants, with all other world conditions intact. Private separate
 handoff11666 bytes/SHAb0020864 is parent verified. Normal merge preserves
 its exact test blob and source/runtime/canonical files; no new compile/native
-pass or CI retarget follows. C still diagnoses actual-gate/guidance failures.
+pass or CI retarget follows.
+
+**C model repair82ac is now normally composed after direct bounded review.**
+Exactparentf1b9/tree21eaa09b,7 files157 insertions8 deletions, handoffSHA4cebe79d
+verified. Actual bench/firing_chamber consumes a manual Furnace; its inherited
+R0 controller-item declaration is false. Ten metadata lines declare that
+allowed formed controller finite BOOTSTRAP capital, retaining constructor,
+costs, operating ceramics and recurring-withdrawal failure. The hard gate,
+auditor, reserve, adapters and runtime are unchanged. Guidance's positive
+fixture uses its real producer and keeps absent craft/capital as a precise
+negative. R34 checks actual finite funding/false-R0/recurrent deficits; gate
+failures now expose their fingerprints without skipping canonical parity.
+This repairs a necessary source blocker, not an observed complete model pass.
+
+Executor604 prepares G12 LOCALLY ONLY on the never-admitted model root/
+inventory1b8, preserving old preparation files. Needed common/tool images,
+repaired Factory/Guidance/auditR34, normal writers/independent checks/canonical
+refresh and actual43/98 follow one future exact-source GO. The reviewed
+repair does not change G11's native/loader/BE inputs, so do not repeat that
+native or FTB/ABI/Blueprint work. No model source/lease is bound yet.
 
 **Owner decision fallback:** if the owner is unavailable for a question,
 use relevant verified GregTech/comparable technical-modpack precedent,
@@ -570,9 +593,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Exactf1b9 CI compiler/named contracts and native-only1273/19/clean return reported; originalCI5 parent hashes verified; Factoryf863 source repair normally integrated; local46-file QA in progress |
-| BLOCKED | Actual conditional T0 gate and missing guidance fixture remain; repaired Factory test still needs actual execution. Native does not close those model errors |
-| NOT EXECUTED | Revised-source compiler/model/normal writers/actual43-98/A10 and final independent G11 custody acceptance; no rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
+| COMPLETED | G11 native-only1273/19/JAR/46 custody/2599 inputs/fresh return independently verified; Factoryf863 and C82ac source fixes normally composed with exact test/code blobs and old CI preserved |
+| BLOCKED | New compiler/actual model execution must confirm the source corrections and expose any remaining gate/finite deficit; native success does not close original model failures |
+| NOT EXECUTED | Revised-source compiler/model/normal writers/actual43-98/A10; no rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

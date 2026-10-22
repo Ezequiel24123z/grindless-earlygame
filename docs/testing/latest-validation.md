@@ -1145,6 +1145,48 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**G11 custody independently closed, models still separate.** QA4390aa5b verifies
+46/46 safe contained unique files and manifest a7e8b510,2599 unchanged inputs,
+all four output hashes/mtimes, actual1273 aggregate/19 exact-once markers,
+JAR/primary/CI5/exits/guard and recorded fresh20:59:08.9449678Z return.
+No significant custody issue remains and no producer/PC inspection is repeated.
+The1273 count is not1273 separate assertion traces; Architectury is bound by
+the captured runtime inventory rather than an independently copied JAR.
+Launcher0 is derived, and final safety is its recorded snapshot, not a new
+live observation. Original model/fixture CI reds remain red.
+
+**Normal C source correction after direct bounded review:**
+82ac97ae9c5c84c602476072f245f5cdd71e594a/exactf1b9,
+tree21eaa09bf16dc60b299f2f4e1e9eea53c3f85c35, contains7 files157
+insertions8 deletions. Parent verifies private handoffSHA256
+4cebe79dfe8eb4632e38185c87bd7446051049324820373b3a14b3b2d24b4b2f
+and directly reads the complete bounded application/test diff. Only the
+changelog conflicts on normal composition; retain both histories and all
+six non-changelog source blobs plus Factoryf863's exact test blob.
+
+Actual source metadata still claimed R0 renewable Firing Chamber item supply,
+but its live automatic bench/firing_chamber consumes one manual Furnace.
+The strict auditor/gate correctly reject that false net-renewal claim.
+The10-line declaration correction makes the allowed formed controller finite
+BOOTSTRAP capital without changing constructor/output/FU/materials, operating
+ceramic/metal supply, gate/auditor/reserve/adapters or an entry budget.
+An automatic local manufacturing method is not unbounded automatic supply.
+
+R34 explicitly tests finite funding, absence of free duplicate capital,
+the original false-R0 hard finding and real recurrent controller withdrawal.
+The guidance fixture references its already present fixture/source while absent
+craft/capital remains an exact negative, not a new runtime recipe.
+Economy/T1 retain their expected-true hard gate with unmet fingerprints;
+T0 emits diagnostics before the still-required independent canonical equality.
+The source fixes a necessary blocker, not an actually observed whole-gate pass.
+
+G12 preparation is LOCAL ONLY, using the never-admitted model-root inventory
+1b8 and a separate new plan. Future common/tool/repaired contracts, normal
+writers/three independent checks/canonical refresh and actual43/98 evidence
+require one exact published GO. Unchanged G11 native/Forge/BE and other FTB/
+ABI proofs are reused under their original source assumptions; no new native
+or owner-world operation is justified by this metadata/test-only correction.
+
 **G11 amended native-only final report, independent custody pending.**
 Exactf1b9 is actually admitted from absent new root at20:49:11Z and canonically
 Synced VerifiedDetached. One existing native reports1273 actual assertions,

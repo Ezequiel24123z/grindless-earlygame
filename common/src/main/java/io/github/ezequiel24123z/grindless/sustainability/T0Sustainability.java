@@ -182,6 +182,16 @@ public final class T0Sustainability {
                         canonical, List.of(), new Handling(Action.STORE, true, false, null, null), null, null, null));
             }
         }
+        Machine firing = machines.get(MachineFamily.FIRING_CHAMBER.name());
+        if (firing != null) {
+            // The allowed automatic controller recipe consumes a manually supplied Furnace.
+            // It establishes finite installed capital, not unlimited controller-item supply.
+            // Its operating ceramic/metal routes can still be renewable after construction.
+            Resource controller = firing.construction();
+            metadata.put(controller, new ResourceMetadata(ResourceClass.BOOTSTRAP, null, 0, null,
+                    renewable.get(controller), List.of(), new Handling(Action.STORE, true, false, null, null),
+                    null, null, null));
+        }
         Resource grog = item(BootstrapProcesses.GROG);
         metadata.put(grog, new ResourceMetadata(ResourceClass.RENEWABLE, SideStreamClass.BYPRODUCT_CURRENT,
                 0, 0, renewable.get(grog), List.of(), new Handling(Action.REUSE, true, false, null, null),

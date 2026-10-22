@@ -200,7 +200,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0186](#adr-0186--supply-physical-baseline-control-to-nine-existing-process-families) | Supply physical baseline control to nine existing process families | G10 combined representative mechanism/normal A9/custody verified; no per-family runtime or whole-tier acceptance |
 | [0187](#adr-0187--continue-the-finite-first-factory-witness-with-conserved-t0-custody) | Continue the finite first-factory witness with conserved T0 custody | Generic source review clear; T1 authority revision under ADR-0188 and actual Java/replay pending |
 | [0188](#adr-0188--assemble-normal-machines-manually-and-author-manufacturing-modes-per-product) | Assemble normal machines manually and author manufacturing modes per product | Complete A/B/C source normally composed; actual integrated qualification pending |
-| [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Guard sourcedc048 composed/narrow source review clear; actual execution pending |
+| [0189](#adr-0189--hold-orphaned-paid-bench-work-before-ordinary-recipe-fallback) | Hold orphaned paid Bench work before ordinary recipe fallback | Guard f1b9 CI/Persistence/native1273 and46-file custody verified; owner-world compatibility unproved |
 
 ---
 
@@ -9193,9 +9193,12 @@ product objective.
 **Status.** Accepted narrow correctness repair coupled to ADR-0188 retirement,
 2026-10-22. Source inspection plus a written expected-red contract identify the
 path; source repairdc048 and its contracts are subsequently normally composed.
-Narrow source review582f finds no significant issue; actual execution remains
-pending. No Java/native failure or
-repaired runtime pass has been executed.
+Narrow source review582f finds no significant issue. Integratedf1b9 then passes
+actual CI UI/Persistence and one representative native aggregate1273/19 with
+independently verified46-file custody and clean return. The initial defect
+was identified by source inspection, not an executed pre-fix red. This does
+not establish actual client/owner-world compatibility or resolve separate
+model failures.
 This is not permission to restore automatic normal-machine recipes or change
 an actual owner's world.
 

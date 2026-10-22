@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Close G11 native custody and normally integrate the finite-controller correction.**
+  Independent QA verifies46/46 files,2599 frozen inputs, actual1273/19 native
+  and JAR/exit/CI/guard relations through the fresh20:59:08Z return, without
+  replay. Normal82ac corrects the false automatic-R0 Firing Chamber item
+  declaration and the guidance fixture, retaining real construction costs,
+  recurring-feed failure and the unchanged hard gate. Parent directly reviews
+  the bounded delta and preserves all six code/check blobs alongside Factoryf863.
+  Old CI remains red; repaired-source compiler/models/normal writers and
+  observed provenance are still pending. Native runtime inputs are unchanged.
 - **Receive the independent native result and integrate the precise Factory oracle repair.**
   G11 reports actualf1b9 native1273/19/PASS1/FAIL0/JAR custody and fresh
   20:59:08Z clean/Java0/locksfalse/guard-absent return; independent46-file QA
@@ -57,6 +66,20 @@ entries below reference those records by id.
   parent after passes/closure; no worker publication/runtime after data.
   Preserve old proofs and actual worlds; no result/admission/43-98 hashes,
   package/Prism/owner update or acceptance follows merely from a GO.
+- **Repair the first integrated conditional-model regressions without replaying CI.**
+  Original exactf1b9 CI confirms environment/build/tool compilation and the
+  2195 sustainability checks, but Economy/T1 really fail their conditional gate.
+  The live automatic Firing Chamber constructor consumes one manual Furnace;
+  its inherited R0 controller-item label was false. Declare finite bootstrap
+  capital without changing that allowed recipe or its renewable operating feeds.
+  Keep the hard gate, finite budgets and recurring-consumption failures intact.
+  Fix the guidance DTO fixture's absent `craft/capital` reference using its actual
+  fixture producer and retain the missing route as an exact negative. Add narrow
+  controller/funding/false-R0 regressions and failure diagnostics. Old A9 guidance
+  equality and A's separate Factory literal failure remain distinct original reds;
+  no canonical output, protected gate/adapter, bill, world or paid state is edited.
+  This corrective source is unexecuted; only proportional source/static checks
+  are permitted before a later reviewed exact-source qualification.
 - **Normally compose the complete manual-manufacturing source.**
   Preserve A652's40, C ab1e's14 and B dc048's10 non-changelog blobs exactly
   through ordinary merges; only changelog conflicts, retaining every history.

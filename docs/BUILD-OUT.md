@@ -47,6 +47,15 @@ native/model window is next, not another proposal or repeated source review.
 Generic custody review8ef is clear, but no Java/finite result is inferred.
 Preserve historical proofs, actual worlds and all unavailable paid work.
 
+**Latest actual boundary:** G11 native-only on f1b9 is closed through1273
+assertions/19 markers and independent46-file custody, with the fresh lease
+returned. Original CI compile/named contract successes coexist with five
+model/fixture reds. Normal Factoryf863 and C82ac source corrections preserve
+the hard gate and exact runtime: finite Firing Chamber construction is not
+automatic R0 controller-item renewal. Next is the newly bound model-only
+qualification after source composition, not another native or player update.
+G12 preparation remains local until its exact-source GO.
+
 **Current next (2026-10-22):** G7 is technically closed with verified339
 artifacts plus separately recovered original CI5, actual writer41df/normal
 A726e/29-source38-image provenance and real managed50-to51 idempotence in
