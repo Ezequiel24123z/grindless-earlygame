@@ -7,6 +7,8 @@ import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import io.github.ezequiel24123z.grindless.machine.ProcessMachineBlockEntity;
 import io.github.ezequiel24123z.grindless.machine.AssemblerWork;
+import io.github.ezequiel24123z.grindless.machine.MachineStatus;
+import io.github.ezequiel24123z.grindless.machine.ProcessMachineKind;
 import io.github.ezequiel24123z.grindless.menu.ProcessMachineMenu;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionResult;
 import io.github.ezequiel24123z.grindless.menu.MachineMenuHost.SelectionIssue;
@@ -24,6 +26,7 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
+import io.github.ezequiel24123z.grindless.source.SourceLogic;
 import io.netty.buffer.Unpooled;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -34,6 +37,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -105,7 +109,8 @@ public final class ControlMatrixInputChecks {
             checks.registered();
             checks.manualCrafting(source.getLevel());
             checks.capability(source.getLevel());
-            Grindless.LOG.info("GRINDLESS_MATRIX_INPUT_NATIVE_PASS assertions={} scope=registered_manual_ingredient_and_permitted_tool_menu_carriers",
+            checks.benchHeldWork(source.getLevel());
+            Grindless.LOG.info("GRINDLESS_MATRIX_INPUT_NATIVE_PASS assertions={} scope=registered_manual_ingredient_permitted_tool_menu_and_held_bench_work",
                     checks.assertions);
             return 1;
         } catch (RuntimeException failure) {
@@ -453,6 +458,93 @@ public final class ControlMatrixInputChecks {
                 "A removed actual host cannot receive an old menu selection");
         check(machine.saveWithoutMetadata().equals(removed), "A stale removed-host request preserves all retained state");
         probe.player().containerMenu = probe.player().inventoryMenu;
+    }
+
+    /** One actual Bench/retired owner/current competitor in the same command-gated aggregate and diagnostic cell. */
+    private void benchHeldWork(ServerLevel level) throws ReflectiveOperationException, IOException {
+        String retired = "bench/furnace";
+        double paid = SourceLogic.BENCH_TICKS + 0.375;
+        check(level.hasChunkAt(POSITION) && level.isInWorldBounds(POSITION)
+                        && level.getWorldBorder().isWithinBounds(POSITION)
+                        && level.getBlockState(POSITION).isAir() && level.getBlockEntity(POSITION) == null,
+                "Reuse only the successful previous probe's empty loaded diagnostic cell");
+        check(ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, retired).isEmpty(),
+                "The real native catalogue must have retired the normal Furnace constructor");
+        ProcessRecipe permitted = ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, "bench/brick_block").orElseThrow();
+        check(level.setBlock(POSITION, ModBlocks.ASSEMBLY_BENCH.get().defaultBlockState(), 3),
+                "Place the actual registered Bench, not a fake process registration");
+        check(level.getBlockEntity(POSITION) instanceof ProcessMachineBlockEntity,
+                "The actual Bench block-entity registration must bind");
+        ProcessMachineBlockEntity bench = (ProcessMachineBlockEntity) level.getBlockEntity(POSITION);
+        check(bench.kind() == ProcessMachineKind.ASSEMBLY_BENCH && bench.menuKind().inputs() == 4,
+                "The representative carrier uses the unchanged real Bench inventory");
+        ItemStack[] physical = actualInputs(permitted);
+        supply(bench, physical);
+        bench.energy().setStored(bench.energy().getCapacity());
+        long fuel = bench.energy().getStored();
+        CompoundTag legacy = bench.saveWithoutMetadata();
+        legacy.putString("Recipe", retired);
+        legacy.remove("WorkRecipe");
+        legacy.putDouble("Progress", paid);
+        bench.load(binary(legacy));
+        nativeHeldBenchState(bench, retired, paid, fuel);
+        bench.serverTick();
+        nativeHeldBenchState(bench, retired, paid, fuel);
+        CompoundTag conserved = bench.saveWithoutMetadata();
+        Object inventory = bench.menuContainer();
+        Object energy = bench.energy();
+        Object fluids = bench.nativeStore();
+        Object config = bench.containerConfig();
+        Method matching = ProcessMachineBlockEntity.class.getDeclaredMethod("matchingRecipe", List.class);
+        matching.setAccessible(true);
+        Method work = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
+        work.setAccessible(true);
+        long tick = level.getGameTime() + 1;
+        for (int reopen = 0; reopen < 3; reopen++) {
+            check(ProcessLookup.find(MachineFamily.ASSEMBLY_BENCH, physical).orElseThrow().id().equals(permitted.id()),
+                    "A genuine current competitor still matches the actual physical bill");
+            CompoundTag beforeReads = bench.saveWithoutMetadata();
+            check(bench.inspectionRecipe().isEmpty()
+                            && ((Optional<?>) matching.invoke(bench, List.<FluidInsert.Source>of())).isEmpty(),
+                    "Actual Bench inspection/shared matching cannot expose or adopt that competitor");
+            check(bench.saveWithoutMetadata().equals(beforeReads),
+                    "Actual native read-only matching/inspection cannot change raw ownership or stores");
+            work.invoke(bench, tick++, List.<FluidInsert.Source>of());
+            bench.serverTick();
+            nativeHeldBenchState(bench, retired, paid, fuel);
+            check(bench.saveWithoutMetadata().equals(conserved),
+                    "Native paid Bench ticks preserve the complete saved state, not just Progress");
+            if (reopen == 0) {
+                ProcessLookup.Generation previous = ProcessLookup.generation();
+                ProcessLookup.rebuild(MaterialRegistry.snapshot());
+                check(previous != ProcessLookup.generation(), "Actual native material reindex replaces the generation");
+                check(bench.inspectionRecipe().isEmpty(), "Generation changes cannot expose a stale Bench recipe");
+            }
+            bench.load(binary(bench.saveWithoutMetadata()));
+            nativeHeldBenchState(bench, retired, paid, fuel);
+            check(bench.saveWithoutMetadata().equals(conserved)
+                            && bench.menuContainer() == inventory && bench.energy() == energy
+                            && bench.nativeStore() == fluids && bench.containerConfig() == config,
+                    "Native binary reopen conserves paid work, stores and exposed store identities");
+        }
+        // Keep this held diagnostic Bench and its real inputs/paid NBT in the disposable world for save-stop evidence.
+        // This is not a disk/chunk restart, actual client transport/rendering, Survival or owner-world migration pass.
+    }
+
+    private void nativeHeldBenchState(ProcessMachineBlockEntity bench, String retired, double paid, long fuel) {
+        CompoundTag raw = bench.saveWithoutMetadata();
+        check(raw.getString("WorkRecipe").equals(retired)
+                        && Double.doubleToRawLongBits(raw.getDouble("Progress")) == Double.doubleToRawLongBits(paid),
+                "Actual legacy Bench owner and exact positive paid amount remain retained");
+        check(bench.energy().getStored() == fuel && bench.getItem(bench.menuKind().inputs()).isEmpty(),
+                "Unavailable native Bench work cannot draw Flux or invent a completed output");
+        check(bench.menuStatus() == MachineStatus.OUT_OF_BAND
+                        && bench.menuData().get(ProcessMachineMenu.DATA_STATUS) == MachineStatus.OUT_OF_BAND.ordinal()
+                        && bench.menuFault().equals(Component.translatable("gui.grindless.bench.retained_work",
+                        retired, Double.toString(paid))),
+                "The actual menu data/fault path reports retained unavailable work, never success-shaped idle");
+        check(!raw.contains(AssemblerWork.TARGET) && !raw.contains(AssemblerWork.SUSPENDED),
+                "Native Bench preservation adds no Assembler selection, job ledger or save schema");
     }
 
     private record MenuProbe(ServerPlayer player, ProcessMachineMenu menu) {

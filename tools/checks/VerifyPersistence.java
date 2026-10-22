@@ -33,6 +33,7 @@ import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -55,6 +56,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -81,6 +83,8 @@ public final class VerifyPersistence {
         assemblerWorkNbt();
         assemblerMachineWork();
         benchRetiredWork();
+        benchWorkNonRegression();
+        benchCacheAndGeneration();
         System.out.println(failures == 0 ? "ALL PERSISTENCE CHECKS PASSED"
                 : failures + " PERSISTENCE CHECK(S) FAILED");
         System.exit(failures == 0 ? 0 : 1);
@@ -560,8 +564,7 @@ public final class VerifyPersistence {
 
     /**
      * Actual Bench BE/NBT plus the real retained brick-block row, not a fabricated production fixture.
-     * Expected RED by inspection until the non-Assembler orphaned-paid-work fallback is repaired:
-     * recipe() currently zeroes Progress and replaces WorkRecipe when another row matches.
+     * Positive orphaned work must remain held across matching, inspection, cache adoption and ticks.
      */
     private static void benchRetiredWork() throws Exception {
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
@@ -571,8 +574,9 @@ public final class VerifyPersistence {
                         && permitted.fluidInputs().isEmpty() && permitted.catalysts().isEmpty());
         check("the existing retired Field Guide identity remains a separate compatibility exception",
                 LegacyGuideAssembly.retired(MachineFamily.ASSEMBLY_BENCH, "bench/field_guide"));
-        for (String retired : List.of("bench/furnace", "bench/quern")) {
-            check("the real current Bench catalogue retires normal processor " + retired,
+        // Real retired processors plus unknown/unattributed ownership counterexamples, not extra live recipes.
+        for (String retired : List.of("bench/furnace", "bench/quern", "removed/bench/paid", "")) {
+            check("the paid Bench owner is unavailable in the actual current catalogue: " + retired,
                     ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, retired).isEmpty());
             for (boolean legacyRecipeOnly : List.of(false, true)) {
                 for (double paid : List.of(0.34375, SourceLogic.BENCH_TICKS + 0.375)) {
@@ -596,6 +600,8 @@ public final class VerifyPersistence {
                         check(context + " has no executable batch with missing materials", resolve(bench) == null);
                         tick(bench, 10 + reopen);
                         retainedBenchWork(bench, retired, paid, context + " empty/reopen=" + reopen);
+                        check(context + " held work is an explicit fault even with no remaining inputs",
+                                bench.menuStatus() == MachineStatus.OUT_OF_BAND);
                         check(context + " cannot draw, refund or alter stores while unavailable",
                                 processStores(bench).equals(stores));
                         bench.load(roundTrip(bench.saveWithoutMetadata()));
@@ -603,14 +609,7 @@ public final class VerifyPersistence {
 
                     // Supply exactly one genuine CURRENT basic bill, derived from the actual row.
                     // The input-only lookup must match; the paid Bench must nevertheless refuse it.
-                    for (int slot = 0; slot < permitted.itemInputs().size(); slot++) {
-                        IngredientSpec input = permitted.itemInputs().get(slot);
-                        ItemStack physical = ProcessLookup.resolve(
-                                new OutputSpec(input.kind(), input.id(), input.count(), false)).orElseThrow();
-                        check(context + " uses the actual current material group " + slot,
-                                ProcessLookup.matches(input, physical));
-                        bench.setItem(slot, physical);
-                    }
+                    supplyBench(bench, permitted);
                     ProcessRecipe wouldMatch = automaticTarget(bench);
                     check(context + " really offers a permitted competing batch, not an empty-lookup false positive",
                             wouldMatch.id().equals(permitted.id()));
@@ -621,6 +620,8 @@ public final class VerifyPersistence {
                         retainedBenchWork(bench, retired, paid, context + " after competing lookup=" + reopen);
                         tick(bench, 100 + reopen);
                         retainedBenchWork(bench, retired, paid, context + " after competing tick=" + reopen);
+                        check(context + " a competing bill cannot clear the held-work fault",
+                                bench.menuStatus() == MachineStatus.OUT_OF_BAND);
                         check(context + " keeps inputs/output, Flux, fluids and configuration unchanged",
                                 processStores(bench).equals(stores));
                         bench.load(roundTrip(bench.saveWithoutMetadata()));
@@ -631,7 +632,8 @@ public final class VerifyPersistence {
         }
     }
 
-    private static void retainedBenchWork(ProcessMachineBlockEntity bench, String retired, double paid, String context) {
+    private static void retainedBenchWork(ProcessMachineBlockEntity bench, String retired, double paid, String context)
+            throws ReflectiveOperationException {
         CompoundTag saved = bench.saveWithoutMetadata();
         exact(context + " retains the exact paid balance", paid, bench.inspectionProgress());
         exact(context + " retains the raw Progress double", paid, saved.getDouble("Progress"));
@@ -639,6 +641,165 @@ public final class VerifyPersistence {
         check(context + " is actual Bench state, not an invented Assembler selection/work queue",
                 bench.kind() == ProcessMachineKind.ASSEMBLY_BENCH && bench.recipeSelection().isEmpty()
                         && !saved.contains(AssemblerWork.TARGET) && !saved.contains(AssemblerWork.SUSPENDED));
+        check(context + " read-only inspection cannot expose a cached competitor", bench.inspectionRecipe().isEmpty());
+        check(context + " read-only matching cannot select another row", matching(bench).isEmpty());
+        check(context + " the existing fault presentation names retained paid work",
+                bench.menuFault().equals(Component.translatable("gui.grindless.bench.retained_work",
+                        retired, Double.toString(paid))));
+        check(context + " inspection/matching/fault reads cannot change saved ownership or stores",
+                bench.saveWithoutMetadata().equals(saved));
+    }
+
+    private static void benchWorkNonRegression() throws Exception {
+        ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        ProcessRecipe permitted = ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, "bench/brick_block").orElseThrow();
+        for (String unpaidOwner : List.of("", "removed/bench/unpaid")) {
+            ProcessMachineBlockEntity bench = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+            supplyBench(bench, permitted);
+            bench.energy().setStored(bench.energy().getCapacity());
+            CompoundTag saved = bench.saveWithoutMetadata();
+            saved.putString("Recipe", unpaidOwner);
+            saved.putString("WorkRecipe", unpaidOwner);
+            saved.putDouble("Progress", 0.0);
+            bench.load(roundTrip(saved));
+            CompoundTag before = bench.saveWithoutMetadata();
+            check("zero/unpaid ordinary Bench matching remains functional: " + unpaidOwner,
+                    matching(bench).orElseThrow() == permitted && bench.saveWithoutMetadata().equals(before));
+            check("zero/unpaid Bench has no orphaned-paid-work fault", bench.menuFault().getString().isEmpty());
+            check("zero/unpaid Bench can adopt the actual current row", resolve(bench) == permitted);
+            exact("ordinary adoption cannot invent credit", 0.0, bench.inspectionProgress());
+            long fuel = bench.energy().getStored();
+            tick(bench, 1);
+            exact("ordinary Bench work still buys one base tick", 1.0, bench.inspectionProgress());
+            check("ordinary Bench work pays only its real declared Flux",
+                    bench.energy().getStored() == fuel - permitted.fuPerTick()
+                            && bench.saveWithoutMetadata().getString("WorkRecipe").equals(permitted.id()));
+        }
+
+        ProcessMachineBlockEntity known = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+        supplyBench(known, permitted);
+        known.energy().setStored(known.energy().getCapacity());
+        CompoundTag saved = known.saveWithoutMetadata();
+        saved.putString("Recipe", permitted.id());
+        saved.putString("WorkRecipe", permitted.id());
+        saved.putDouble("Progress", permitted.durationTicks() - 0.625);
+        known.load(roundTrip(saved));
+        check("a live known paid Bench recipe still resolves and is inspectable",
+                resolve(known) == permitted && known.inspectionRecipe().orElseThrow() == permitted);
+        long fuel = known.energy().getStored();
+        tick(known, 1);
+        exact("a live known Bench settles once with fractional carry", 0.375, known.inspectionProgress());
+        check("the actual current basic still consumes its bill and outputs once",
+                known.getItem(0).isEmpty() && known.getItem(known.menuKind().inputs()).is(Items.BRICKS)
+                        && known.getItem(known.menuKind().inputs()).getCount() == permitted.itemOutputs().get(0).count()
+                        && known.energy().getStored() == fuel - permitted.fuPerTick());
+
+        for (double paid : List.of(0.34375, SourceLogic.BENCH_TICKS + 0.375)) {
+            ProcessRecipe guide = LegacyGuideAssembly.resume(
+                    MachineFamily.ASSEMBLY_BENCH, "bench/field_guide", paid).orElseThrow();
+            ProcessMachineBlockEntity bench = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+            supplyBench(bench, guide);
+            bench.energy().setStored(bench.energy().getCapacity());
+            saved = bench.saveWithoutMetadata();
+            saved.putString("Recipe", guide.id());
+            saved.remove("WorkRecipe");
+            saved.putDouble("Progress", paid);
+            bench.load(roundTrip(saved));
+            CompoundTag before = bench.saveWithoutMetadata();
+            check("valid paid legacy Guide remains an authorized read-only compatibility row",
+                    matching(bench).orElseThrow().id().equals(guide.id())
+                            && bench.saveWithoutMetadata().equals(before));
+            check("legacy Guide cache adoption and inspection preserve its actual paid owner",
+                    resolve(bench).id().equals(guide.id())
+                            && bench.inspectionRecipe().orElseThrow().id().equals(guide.id())
+                            && bench.menuFault().getString().isEmpty());
+            exact("legacy Guide exact paid credit survives resolution", paid, bench.inspectionProgress());
+            if (paid < guide.durationTicks()) {
+                fuel = bench.energy().getStored();
+                tick(bench, 1);
+                exact("the actual partial Guide path can still buy its next tick", paid + 1.0, bench.inspectionProgress());
+                check("the partial legacy Guide tick draws its own Flux once",
+                        bench.energy().getStored() == fuel - guide.fuPerTick());
+            }
+            // Completed Guide resolution is checked, not completion with an unregistered vanilla output carrier.
+            bench.load(roundTrip(bench.saveWithoutMetadata()));
+            check("legacy Recipe-only Guide ownership remains recoverable after binary reopen",
+                    bench.saveWithoutMetadata().getString("WorkRecipe").equals(guide.id()));
+        }
+
+        ProcessMachineBlockEntity invalidGuide = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+        supplyBench(invalidGuide, permitted);
+        saved = invalidGuide.saveWithoutMetadata();
+        saved.putString("Recipe", "bench/field_guide");
+        saved.putString("WorkRecipe", "bench/field_guide");
+        saved.putDouble("Progress", Double.POSITIVE_INFINITY);
+        invalidGuide.load(roundTrip(saved));
+        retainedBenchWork(invalidGuide, "bench/field_guide", Double.POSITIVE_INFINITY,
+                "nonfinite Guide credit cannot borrow the valid paid-Guide exception");
+    }
+
+    private static void benchCacheAndGeneration() throws Exception {
+        ProcessRecipe permitted = ProcessLookup.byId(MachineFamily.ASSEMBLY_BENCH, "bench/brick_block").orElseThrow();
+        ProcessMachineBlockEntity stale = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+        supplyBench(stale, permitted);
+        CompoundTag saved = stale.saveWithoutMetadata();
+        saved.putString("Recipe", "removed/bench/cached_owner");
+        saved.putString("WorkRecipe", "removed/bench/cached_owner");
+        saved.putDouble("Progress", 0.34375);
+        stale.load(roundTrip(saved));
+        // Hostile/stale private cache counterexample over a real current row, not a fake production registration.
+        Field cache = ProcessMachineBlockEntity.class.getDeclaredField("cached");
+        cache.setAccessible(true);
+        cache.set(stale, permitted);
+        retainedBenchWork(stale, "removed/bench/cached_owner", 0.34375, "same-generation stale cache");
+        check("the actual cache fast path cannot adopt a competitor for orphaned paid Bench work",
+                resolve(stale) == null && cache.get(stale) == null);
+        retainedBenchWork(stale, "removed/bench/cached_owner", 0.34375, "refused cache adoption");
+
+        ProcessMachineBlockEntity bench = processMachine(ProcessMachineKind.ASSEMBLY_BENCH);
+        supplyBench(bench, permitted);
+        saved = bench.saveWithoutMetadata();
+        saved.putString("Recipe", permitted.id());
+        saved.putString("WorkRecipe", permitted.id());
+        saved.putDouble("Progress", 0.34375);
+        bench.load(roundTrip(saved));
+        check("the generation fixture begins with an actual live cached paid row", resolve(bench) == permitted);
+        Field graph = ProcessLookup.class.getDeclaredField("GRAPH");
+        graph.setAccessible(true);
+        Object original = graph.get(null);
+        Method index = original.getClass().getDeclaredMethod("index", List.class);
+        index.setAccessible(true);
+        ProcessLookup.Generation generation = ProcessLookup.generation();
+        try {
+            // Unit-only catalogue withdrawal of one real basic; never register or return a retired normal recipe.
+            graph.set(null, index.invoke(null, ProcessLookup.recipes().stream()
+                    .filter(row -> !row.id().equals(permitted.id())).toList()));
+            check("the actual indexed publication changes generation", generation != ProcessLookup.generation());
+            retainedBenchWork(bench, permitted.id(), 0.34375, "generation withdraws a cached paid owner");
+            check("generation invalidation cannot resurrect the old cached row", resolve(bench) == null);
+            tick(bench, 1);
+            retainedBenchWork(bench, permitted.id(), 0.34375, "withdrawn owner after ordinary work");
+            bench.load(roundTrip(bench.saveWithoutMetadata()));
+            retainedBenchWork(bench, permitted.id(), 0.34375, "withdrawn owner binary reopen");
+        } finally {
+            graph.set(null, original);
+        }
+        check("returning the actual permitted basic resumes its own exact paid credit",
+                resolve(bench) == permitted && bench.inspectionProgress() == 0.34375);
+    }
+
+    private static void supplyBench(ProcessMachineBlockEntity bench, ProcessRecipe recipe) {
+        for (int slot = 0; slot < bench.menuKind().inputs(); slot++) {
+            bench.setItem(slot, ItemStack.EMPTY);
+        }
+        for (int slot = 0; slot < recipe.itemInputs().size(); slot++) {
+            IngredientSpec input = recipe.itemInputs().get(slot);
+            ItemStack physical = ProcessLookup.resolve(
+                    new OutputSpec(input.kind(), input.id(), input.count(), false)).orElseThrow();
+            check("actual Bench fixture material group matches " + recipe.id() + "/" + slot,
+                    ProcessLookup.matches(input, physical));
+            bench.setItem(slot, physical);
+        }
     }
 
     private static CompoundTag processStores(ProcessMachineBlockEntity machine) {
@@ -691,6 +852,13 @@ public final class VerifyPersistence {
         Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
         method.setAccessible(true);
         return (ProcessRecipe) method.invoke(machine, List.<FluidInsert.Source>of());
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Optional<ProcessRecipe> matching(ProcessMachineBlockEntity machine) throws ReflectiveOperationException {
+        Method method = ProcessMachineBlockEntity.class.getDeclaredMethod("matchingRecipe", List.class);
+        method.setAccessible(true);
+        return (Optional<ProcessRecipe>) method.invoke(machine, List.<FluidInsert.Source>of());
     }
 
     private static void tick(ProcessMachineBlockEntity machine, long tick) throws Exception {

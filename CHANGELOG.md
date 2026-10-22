@@ -15,6 +15,30 @@ entries below reference those records by id.
 
 ### Added
 
+- **Hold orphaned paid Bench work before recipe resolution (ADR-0188).**
+  Guard read-only matching/inspection and cached recipe adoption when positive
+  Bench work has no current owner, including unattributed work and legacy
+  Recipe-only loading. Preserve the raw owner/credit without another row,
+  draw, transfer, refund, completion, ledger or schema change. Reuse the
+  existing strict paid-Guide compatibility authority; live known Bench and
+  zero/unpaid lookup remain functional. The executor, work/workCycle gates
+  and diagnostic prefix, settlement, other families and physical profiles
+  remain unchanged. Use the existing OUT_OF_BAND/menuFault presentation rather
+  than silent idle; C's separate locale commit supplies
+  `gui.grindless.bench.retained_work` with owner/paid-tick arguments.
+  Extend actual typed Bench contracts for read-only state, stale cache,
+  generation withdrawal/return, ordinary current output, zero/unpaid work and
+  valid partial/completed Guide resolution, without minting a fake Guide output.
+  Add one real Bench/old Furnace owner/current brick-block competitor to the
+  same command-gated native aggregate, conserving stores through ticks/reindex/
+  binary reopen and retaining the diagnostic Bench in its disposable cell.
+  All nineteen expectations, original markers, scenario/timing budgets and
+  prior raw capsules stay exact; the aggregate's authored scope now includes
+  held Bench work, not a replayed native result. Parent must compose/review
+  this source with A's retirements and C's key before an exact-source GO.
+  Scoped lexical/source guards, exact protected-method comparisons and 963
+  documentation links pass; no Java/VSR/native execution is inferred.
+  Java/native/model/writer/PC/publication and owner-world recovery remain unrun.
 - **Expose the coupled retired-Furnace/Bench paid-work boundary (ADR-0188).**
   Follow the coordinator's provisional manual-final vanilla Furnace decision,
   not an owner-confirmed answer. Extend existing Assembler refusal/retention
