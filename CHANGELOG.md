@@ -15,6 +15,20 @@ entries below reference those records by id.
 
 ### Added
 
+- **Receive the complete selector source and serialize its shared-check release.**
+  Normal a89/30e/438 supplies nineteen clean files, persisted recipe-owned work,
+  authoritative target/menu and strict wrapper/workCycle profile. Independent
+  source review91de is active; reported static/model/lexical checks are not
+  Java/native/GUI evidence. VerifyRecipes is released at438, while data58
+  still waits for the exact integrated parent baseline before editing it.
+- **Receive the actual default-F1 model outcome and safe G8 return.**
+  Executor reports real31/41 write/check images, changed exact4ee CI passes,
+  normal Guidance/Economy/T1/independent checks and postwrite canonical passes.
+  Normal A8dee1 has exact parent4ee and four payloads; parent verifies its
+  bundle/ancestry/trailers/bounded diff while independent QA checks239 custody
+  files including all original CI5. Fresh13:25:45Z cleanA8/Java0/locksfalse/
+  own-guard-absent return is reported, not yet parent-audited. No native,
+  renderer, instance, nine-controller or whole-tier result is inferred.
 - **Select the bounded physical-controller follow-up for existing F1 families.**
   ADR-0186 appends one existing minimum-F1 Matrix fourth group to nine explicit
   active process constructors, preserving their old material groups, IDs,

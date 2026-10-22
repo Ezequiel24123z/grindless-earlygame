@@ -28,10 +28,13 @@
     "next": "noncompeting_data_source_now_shared_VerifyRecipes_only_after_selector_explicitrelease_no_G8retarget"
   },
   "assembler_recipe_choice": {
-    "status": "isolated_source_implementation_active_runtime_proof_pending",
+    "status": "source438_final19files_review91de_pending_no_JVM_native",
     "policy": "ADR-0185",
     "owner_session": "0752df7b-209e-4fd5-afe5-b3cf7c376471",
     "source_base": "3c00af09e26718671308fa4537a5ac483279c967",
+    "source_checkpoint": "43838b8fdc17db468a45f80f91b766009f98e089",
+    "VerifyRecipes_released_by_selector": true,
+    "data_owner_requires_parent_integrated_baseline": true,
     "coupled_registry_scope": "only_work_wrapper_workCycle_fullnormalized_profile_plus_negatives_after_F1source_finished_no_defaultF1_profile_or_G8source_change",
     "impact": "sameingredient_Assembler_drylast_selection_does_not_prove_Washer_acquisition",
     "research_agent": "952d39a9-312f-4afa-9f54-16e79930142c",
@@ -52,8 +55,8 @@
   },
   "current_PC_execution": {
     "assignment": "default-f1-model-qualification-20261022",
-    "active": true,
-    "owner_session": "604195bd-6826-4299-89af-1dcf39545263",
+    "active": false,
+    "owner_session": null,
     "last_owner_session": "604195bd-6826-4299-89af-1dcf39545263",
     "source": "4ee24057642d2e4b2bc2cbcd28e8eb250283194b",
     "writer_invocation_source": "4ee24057642d2e4b2bc2cbcd28e8eb250283194b",
@@ -76,14 +79,15 @@
     "qualification_package_fictitious_target_plan_authorized": false,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "onlyNORMAL_A8subset4outputs_exact_parent4ee_actualpasses_nonoutputinvariance_JVM0locks0_bothtrailers_normal_localcommit_bundle_no_push_or_runtime_stage",
-    "result": "NEW_G8_exact4ee_model_display_identity_31_41_actual_proof_pending_NO_FTB_native_or_target_replay",
-    "returned": false,
-    "returned_utc": null,
-    "return_state": "NOT_OBSERVED_for_new_G8_window",
+    "result": "EXECUTOR_CLOSED_G8_31_41_A8dee_239custody_normal_and_canonical0_parentQAandGitmerge_pending",
+    "returned": true,
+    "returned_utc": "2026-10-22T13:25:45.6175163Z",
+    "return_state": "executor_cleanA8dee_Java0locksfalse_guard22e26bcd_removed_absent_parentQA_pending",
+    "normal_data_checkpoint": "dee1a2ae4f90a95b4c941570358571e4597e3c37",
     "previous_85e_attempt": "CI39733641733_main_toolcompile0_actual_regressions_Sync_only_noPCJVM_safe_return06_35_57Z_closure8363ad93",
     "previous_423a_attempt": "Sync0_real_CI_compile_red_no_PC_JVM_safe_return05_53_20Z_closure8d96179a_raw00348af1_preserved",
     "previous_returned_lease": "integrated_blueprint_native_20261021_cleanM_Java0_locks0_2026_10_21_21_56_31Z_evidence_preserved",
-    "new_explicit_guarded_window_required": false
+    "new_explicit_guarded_window_required": true
   },
   "active_development_wave": {
     "base": "ad5b50dd509b0261818101ff08e786750826161a",

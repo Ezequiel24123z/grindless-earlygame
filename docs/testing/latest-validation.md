@@ -725,6 +725,44 @@ Java0/locksfalse, with exact parent4ee; no runtime stage or worker push.
 Unchanged G7 FTB/ABI/native/managed-file proof is reused. No new boot, backend,
 package, target, player or actual validation result follows from the grant.
 
+**G8 actual outcome reported, independent custody pending:** source4ee needed
+common/classpath and eleven-tool javac0, no Forge/native stage. Exact
+CI39783257275/artifact12427398452 supplies Registry1357/Adapters368/
+Sustainability2083/ResourceGuidance25728 reuse. Parent API confirms
+foundation-validation/expiredfalse/head4ee; original5 files are in239 custody,
+behaviorSHAe7b1c6c6fabb8eadb1563fa28cf727181e8ab57d0c8e1146784b561c9a8b40f2.
+Its original behavior1/three old canonical equalities remain red, not
+reclassified as green. New normal Guidance74/5341, Economy416/17, T1970
+and three independent CheckOnly JVMs report0 with four payload bytes/mtimes
+unchanged. Necessary Guidance resource refresh then canonical417/2926/974
+report0. Actual31 sources/41 copied images include decoder/architecture/
+context and the real enum getClass implementations.
+
+A8dee1a2ae4f90a95b4c941570358571e4597e3c37 is a normal four-payload child of
+exact4ee with both trailers. Parent verifies2583-byte bundle
+SHA9543ae63755f7d93e833080662fbf7f6f520d908e396ef7142f98e961a603668,
+imports it and reviews the bounded normalized-F1 data diff without edits.
+QAa3e7323c verifies239 custody against
+manifestSHAcd884fb3f6dc673af224046333516e8005ae7dcee5be514d417aaeab5670991f.
+Fresh closure13:25:45.6175163Z reports cleanA8/owned-nonclient-allJava0/
+locksfalse and own guardSHA22e26bcdc8eeb5f0dc17f5ccca8ffba6c853f96d82b4aae961348dbbaf582929
+hash-removed/absent. Final parent proof/import closure is pending; no
+renderedGUI, selector/Washer operation, nine-controller data, native/target
+or finite-T1 acceptance is inferred.
+
+**Completed selector source438 is awaiting independent review/execution.**
+Normal commits a89baba40f2b62f224d6a9d3ba8197ef34d1e83e,
+30e28227fc0acfeded93e868f3cd7cbc934fe2a1 and
+43838b8fdc17db468a45f80f91b766009f98e089 preserve the full nineteen-file
+outcome from3c00af0. Private handoffSHA7406bfaedf4d5aa59a699a5a6bacfa05a9d4395e14f669b9052acd9cfba40995
+and inventorySHAe0ab9c3ede372f679812c8ac0867822de226e443c372582f2208a3c231cbe6af
+record exact treef3c5fb19/input manifestbb1bc0cf, preserved Git identity128
+failure and source/observer corrections. Reported1013 structural,
+804 independent model and34 lexical checks do not execute AssemblerWork Java
+or prove real transport/GUI/save-world behavior. Review91de0be2 is read-only.
+The shared recipe verifier is released to a later parent-integrated data phase,
+not permission for competing writers or G8 retarget.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

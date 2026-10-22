@@ -4,7 +4,27 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**NEW G8 GO, results pending:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
+**Selector source complete, no runtime pass:** owner0752 delivers the normal
+a89baba/30e2822/43838b8 chain, nineteen files and clean treef3c5fb19. Work/
+menu/network/persistence/visible picker and the strict workCycle profile are
+authored; static1013/independent-model804/lexical34 are not Java/AST/native/
+transport/graphical evidence. Immutable review91de0be2 checks the full source.
+VerifyRecipes is explicitly released at438, but data58 still needs the
+parent's exact published combined baseline before PhaseB. The native fixtures
+derive real equal Washer/Reactor inputs, not a permanent three-group count.
+No changed recipe, F1/generation proof or tier acceptance is inferred.
+
+**G8 explicitly returned13:25:45.6175163Z; parent custody review pending.**
+Source4ee common/tool compilation, changed exact-source CI reuse, actual
+31/41 write/check image receipts and all normal/canonical stages report0.
+Normal A8 is REALdee1a2ae4f90a95b4c941570358571e4597e3c37, exact parent4ee,
+only four normal payloads. Parent verifies/imports bundle9543ae63/2583bytes,
+ancestry/trailers and the bounded data diff, but has not merged it. New
+read-only QAa3e7323c checks239 custody files including all original CI5,
+source/class hashes, independent CheckOnly invariance and guard/Java/lock
+closure. All PC grants are now returned; no target/runtime action occurred.
+
+**Historical G8 GO:** sole604/exact4ee24057642d2e4b2bc2cbcd28e8eb250283194b
 on a new common-only root/inventory, after the verified G7 return. The
 default-F1 source57 and coupled display are reviewed and normally integrated.
 Compile needed common/tool classes; execute actual changed authority/registry/
@@ -56,9 +76,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Independent339-file plus original-CI5 G7 closure; A7 normal integration with exact ancestry/trailers/four payload bytes; source57d review finds no significant issue |
+| COMPLETED | Verified G7/A7 integration; reviewed57d/4ee source integration; G8 actual31/41/A8 report and exact Git bundle received, independent239-file review pending |
 | BLOCKED | Whole-T1 Assembler acquisition shadowing, finite establishment and genuine upgrades remain; selector source is active |
-| NOT EXECUTED | F1 Java/emitted31-41/normal writers; new selector native/UI proof; player deployment, target launch, main/release and whole-tier acceptance |
+| NOT EXECUTED | Parent A8 integration; selector native/UI and nine-controller final-source proof; player deployment, target launch, main/release and whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |
