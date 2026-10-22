@@ -245,6 +245,14 @@ final class GrindlessProcessCategory implements IRecipeCategory<ProcessRecipe> {
     }
 
     private static void addInput(IRecipeSlotBuilder slot, IngredientSpec spec) {
+        if (spec.matrixRating() > 0) {
+            slot.addItemStacks(ProcessLookup.matrixInputs(spec));
+            if (spec.isMinimumControl()) {
+                slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                        Component.translatable("recipe.grindless.minimum_control", spec.matrixRating())));
+            }
+            return;
+        }
         if (IngredientSpec.ITEM.equals(spec.kind())) {
             ProcessLookup.resolve(new OutputSpec(spec.kind(), spec.id(), spec.count(), false,
                     spec.matrixRating())).ifPresent(slot::addItemStack);

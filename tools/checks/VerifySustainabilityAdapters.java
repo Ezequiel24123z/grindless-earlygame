@@ -50,6 +50,7 @@ public final class VerifySustainabilityAdapters {
             canonicalVanillaCrafts();
             reportRelationships();
             processPressure();
+            minimumControlProjection();
             contentAndImplementationIdentity();
         } catch (Exception failure) {
             failed++;
@@ -127,6 +128,34 @@ public final class VerifySustainabilityAdapters {
             eq("pressure does not introduce a tier permission " + optimum, absent.prerequisites(),
                     adapted.prerequisites());
         }
+    }
+
+    private static void minimumControlProjection() {
+        String matrix = "grindless:relay_matrix";
+        IngredientSpec exact = IngredientSpec.matrix(matrix,
+                io.github.ezequiel24123z.grindless.energy.FluxTier.F1, 2);
+        IngredientSpec minimum = IngredientSpec.minimumControl(matrix,
+                io.github.ezequiel24123z.grindless.energy.FluxTier.F1, 2);
+        ProcessRecipe old = new ProcessRecipe("fixture/control", MachineFamily.ASSEMBLER, List.of(exact),
+                List.of(OutputSpec.item("fixture:product", 1)), Double.NaN, null, 400, 32);
+        ProcessRecipe selected = new ProcessRecipe(old.id(), old.family(), List.of(minimum), old.outputs(),
+                Double.NaN, null, 400, 32);
+        Route before = AuthorityAdapters.process(old);
+        Route after = AuthorityAdapters.process(selected);
+        eq("minimum control retains the same valid canonical supply and count", before.inputs(), after.inputs());
+        eq("minimum control cannot change output or energy accounting", before.outputs(), after.outputs());
+        eq("minimum control role is not lost in audit/export conditions",
+                "item:grindless:relay_matrix [F1]", after.conditions().get("minimum_control_input_0"));
+        eq("the canonical supply does not claim exhaustive alternate manufacture",
+                "canonical_option_not_exhaustive_alternatives", after.conditions().get("control_supply_projection"));
+        eq("the old exact recipe invents no capacity role", Map.of(), before.conditions());
+        eq("audit resource IDs never acquire a minimum marker", false,
+                after.inputs().keySet().stream().anyMatch(resource -> resource.id().contains("+")));
+        JsonObject route = document(new Builder().route(after).build()).getAsJsonArray("routes")
+                .get(0).getAsJsonObject();
+        eq("normal audit serialization preserves minimum control",
+                "item:grindless:relay_matrix [F1]",
+                route.getAsJsonObject("conditions").get("minimum_control_input_0").getAsString());
     }
 
     private static void debtCannotWaiveGeneratedDebt() {

@@ -460,7 +460,28 @@ public final class VerifyResourceGuidance {
                 ResourceGuidanceContext.resource("Two buckets of water").isEmpty());
         equal("non-item Matrix rating is not fabricated", true,
                 ResourceGuidanceContext.resource("fluid:minecraft:water [F2]").isEmpty());
+        equal("a minimum-control label selects its canonical declaration without inventing an ID",
+                new Resource(Kind.ITEM, "grindless:relay_matrix", 1, "items"),
+                ResourceGuidanceContext.resource("item:grindless:relay_matrix [F1+]").orElseThrow());
+        for (String invalid : List.of("item:grindless:relay_matrix [F0+]",
+                "item:grindless:relay_matrix [F16+]", "fluid:minecraft:water [F2+]",
+                "tag:forge:ingots/iron [F1+]", "item:grindless:relay_matrix [F1++]",
+                "item:grindless:relay_matrix [F1+] trailing")) {
+            equal("strict minimum-control labels reject " + invalid, true,
+                    ResourceGuidanceContext.resource(invalid).isEmpty());
+        }
         List<AtlasLogic.Entry> entries = AtlasLogic.allEntries(ProcessGraph.generate(List.of()));
+        var mill = entries.stream().filter(entry -> entry.id().equals("assemble/wire_mill")).findFirst().orElseThrow();
+        var control = ResourceGuidanceContext.operands(mill).stream()
+                .filter(operand -> operand.resource().id().equals("grindless:relay_matrix")).findFirst().orElseThrow();
+        equal("teaching does not silently drop the minimum input", 1, control.amount());
+        equal("teaching preserves the input's typed minimum role",
+                io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole.MINIMUM_CONTROL,
+                control.matrixRole());
+        equal("teaching preserves exact output identities", false, ResourceGuidanceContext.operands(mill).stream()
+                .filter(operand -> operand.role() == ResourceGuidanceContext.Role.OUTPUT)
+                .anyMatch(operand -> operand.matrixRole()
+                        != io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole.EXACT));
         for (String page : List.of("bootstrap", "workshop", "settling", "relay", "renewables")) {
             equal("native guide data is present for " + page, false, ResourceGuidanceContext.guideRecipes(page, entries).isEmpty());
         }
@@ -682,6 +703,9 @@ public final class VerifyResourceGuidance {
         String atlas = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "ProcessAtlasScreen.java"))));
         equal("Atlas context uses current recipe operands and shared guidance", true,
                 atlas.contains("ResourceGuidanceContext.operands(rows.get(selected))") && atlas.contains("ResourceGuidanceClient.append("));
+        equal("Atlas context retains the minimum role instead of naming only exact F1", true,
+                atlas.contains("operand.matrixRole() == MatrixRole.MINIMUM_CONTROL")
+                        && atlas.contains("\"recipe.grindless.minimum_control\""));
         String guide = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "FieldGuideScreen.java"))));
         String teaching = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestTeachingClient.java"))));
         String legacy = Files.readString(root.resolve(COMMON.resolve(Path.of("client", "QuestBookScreen.java"))));

@@ -223,8 +223,11 @@ bounded server-authoritative state for the optional F8 overlay. Keep packet/targ
 rate/loaded-state validation and avoid world scans or client-invented machine truth.
 Source541 writes inspection schema2 and reads strict schema1 without required
 process pressure; reject unknown versions/partial bands through `MALFORMED`.
-Existing observed/tank pressure is unchanged. Its new DTO/codec contracts need
-their affected proof, not reuse of the old schema's result. Optional inspection
+Source1ee's explicit Matrix role evolves writing to schema3 with strict1/2
+EXACT-by-absence compatibility, preserving schema2 pressure. Reject role fields
+under old schemas and minimum outputs; do not silently drop unknown roles.
+Existing observed/tank pressure is unchanged. These changed DTO/codec contracts
+need their affected proof, not reuse of the old schema's result. Optional inspection
 must remain usable without installing a new overlay dependency.
 
 ## Recovery exchange and telemetry

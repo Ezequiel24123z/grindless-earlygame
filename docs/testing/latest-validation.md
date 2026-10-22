@@ -28,6 +28,25 @@ Qualifier604195bd prepares locally only. No PC/SSH/SCP/cache/JVM grant,
 Prism/world/client change or new runtime pass exists for this continuation.
 The older source-bound results below remain exact to their original inputs.
 
+Control-role checkpoint1ee2e73 is now normally composed with5b without source
+conflicts. It adds explicit EXACT/MINIMUM_CONTROL, only Wire Mill opt-in,
+registered alternatives, F1+ view propagation, strict inspection schema3/1/2
+and canonical-option audit metadata. Export provenance explicitly grows to
+IngredientSpec/MatrixRole, ControlMatrixSpec and AuthorityAdapters sources/classes.
+All four canonical files remain untouched and require actual NORMAL writers
+on the final integrated source, not handwritten repair or reused old equality.
+
+The existing matrix-lifecycle keeps16 old markers and adds three authored
+registered-control/blocked/full-cycle markers. Only RelayF1-F3 is registered;
+cross-architecture cases are pure contracts. Neither new Java contracts nor
+these native markers have executed in the source lane. Three initially red
+source-only checks then zero and65 static guards are not behavioral red/green.
+Python9009 and absent-identity128 are preserved before the successful PowerShell/
+command-local identity alternatives, without installing or changing auth/config.
+Independent exact-source mechanism reviewaa9e9e9a is pending.
+Preparation604195bd is READY with a local plan/no PC or inventory access;
+the FTB update binding and exact published final GO still precede execution.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

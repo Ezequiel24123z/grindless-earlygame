@@ -32,6 +32,8 @@ No source worker has a PC/cache/JVM grant and no new execution has passed.
 Qualification preparer604195bd reads existing local tools/private evidence only;
 it has no SSH/SCP/PC/cache/JVM grant until the exact integrated GO. Do not treat
 preparation as execution or rerun per-die native content already using the executor.
+It now reports READY on clean199c with no PC/private-inventory access; final
+FTB bindings and exact integrated source still precede GO.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
@@ -42,6 +44,19 @@ registered: native coverage is RelayF1-F3; cross-architecture contracts are pure
 not a reason to register fake items. Current kinds already expose their full
 baseline envelopes; silently narrowing them to manufacture a mark ladder would
 risk existing machines and is not authorized by this wave.
+Checkpoint1ee2e73 normally integrates the typed `MatrixRole`/
+`minimumControl` contract with5b's dies. Old constructors/factories, F2
+predecessor/output and FTB exact predicates stay intact. Registered JEI
+alternatives and F1+ Atlas/inspection/teaching share the role without changing
+qualified resource IDs. Inspection writes schema3 and reads strict1/2 as EXACT,
+preserving pressure compatibility. Authority metadata explicitly treats canonical
+F1 supply as one option, not exhaustive alternate supply.
+T1 exporter source/class provenance grows accordingly; all four canonical files
+remain unchanged pending NORMAL generation on final integrated inputs.
+The existing matrix-lifecycle retains its16 original markers and adds three
+authored real-control markers, including an F3 blocked-output/complete cycle.
+No Java/native run has observed them. Independent exact-source reviewaa9e9e9a
+is pending; source-only static probes are not behavior red/green.
 The focused external follow-up is complete in
 `docs/design/t1-external-references.md`: actual Forge1.20.1 Mekanism snapshots
 and copies values into replacement block entities, with no rollback in the

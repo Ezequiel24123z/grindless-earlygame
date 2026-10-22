@@ -46,9 +46,11 @@ new wave. Integrate, then qualify only
 the newly changed boundaries. Real chassis kits/envelope balance stay separate;
 do not narrow legacy machines or call control substitution a chassis upgrade.
 The four-die checkpoint63142dd plus Atlas slot-oracle correction5b359a5 is now
-normally integrated as source. Keep affected Java/writers pending; qualifier
-604195bd performs local preparation only, without a PC grant. Await the other
-two coherent source lanes before the single fixed-source execution window.
+normally integrated with control-role1ee2e73. Independent mechanism review and
+affected Java/writers/native remain pending. Qualifier604195bd reports local
+READY only, without a PC grant. Await the managed-FTB source/binding and finish
+review before the single fixed-source execution window; do not replay old
+Blueprint/pressure or per-die native tests.
 
 The protected native FTB handover under ADR-0171 is technically complete:
 Grindless-T0-FTB-Dev has exactdd0/29bc/79ce and the pristine existing-world/options

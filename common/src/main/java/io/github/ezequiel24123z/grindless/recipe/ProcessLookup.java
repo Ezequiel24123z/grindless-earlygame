@@ -9,6 +9,7 @@ import io.github.ezequiel24123z.grindless.material.MaterialRegistry;
 import io.github.ezequiel24123z.grindless.item.ControlMatrixItem;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
 import io.github.ezequiel24123z.grindless.material.MaterialSnapshot;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
 import io.github.ezequiel24123z.grindless.process.Agitation;
 import io.github.ezequiel24123z.grindless.process.Atmosphere;
 import io.github.ezequiel24123z.grindless.process.ProcessConditions;
@@ -269,11 +270,14 @@ public final class ProcessLookup {
             return false;
         }
         if (spec.matrixRating() > 0) {
-            if (!(stack.getItem() instanceof ControlMatrixItem matrix)
-                    || !BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id())) {
+            if (!(stack.getItem() instanceof ControlMatrixItem matrix)) {
                 return false;
             }
-            return matrix.spec(stack).map(value -> value.rating().ordinal() == spec.matrixRating())
+            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(matrix);
+            if (itemId == null || BuiltInRegistries.ITEM.get(itemId) != matrix) {
+                return false;
+            }
+            return matrix.spec(stack).map(value -> spec.acceptsMatrix(itemId.toString(), value))
                     .orElse(false);
         }
         if (IngredientSpec.ITEM.equals(spec.kind())) {
@@ -283,6 +287,27 @@ public final class ProcessLookup {
             return stack.is(TagKey.create(Registries.ITEM, new ResourceLocation(spec.id())));
         }
         return false;
+    }
+
+    /** Viewer alternatives from actual registered Matrix items, using the same input matcher. */
+    public static List<ItemStack> matrixInputs(IngredientSpec input) {
+        if (input.matrixRating() == 0) {
+            throw new IllegalArgumentException("Matrix alternatives require a rated input");
+        }
+        List<ItemStack> alternatives = new ArrayList<>();
+        for (Item item : BuiltInRegistries.ITEM) {
+            if (item instanceof ControlMatrixItem matrix) {
+                for (FluxTier rating : FluxTier.values()) {
+                    if (matrix.architecture().supports(rating)) {
+                        ItemStack candidate = matrix.stackFor(rating, input.count());
+                        if (matches(input, candidate)) {
+                            alternatives.add(candidate);
+                        }
+                    }
+                }
+            }
+        }
+        return List.copyOf(alternatives);
     }
 
     /** Resolves an item output to a stack, honouring the pack's preferred provider. */
@@ -374,6 +399,18 @@ public final class ProcessLookup {
 
         private static void index(Map<String, List<ProcessRecipe>> byTag, ProcessRecipe recipe,
                                   IngredientSpec primary) {
+            if (primary.isMinimumControl()) {
+                for (Item item : BuiltInRegistries.ITEM) {
+                    if (item instanceof ControlMatrixItem matrix
+                            && primary.acceptsMatrix(BuiltInRegistries.ITEM.getKey(item).toString(),
+                            new ControlMatrixSpec(
+                                    matrix.architecture(), matrix.architecture().lastFrontier()))) {
+                        byTag.computeIfAbsent(key(recipe.family(), "item:" + BuiltInRegistries.ITEM.getKey(item)),
+                                ignored -> new ArrayList<>()).add(recipe);
+                    }
+                }
+                return;
+            }
             String id = IngredientSpec.ITEM.equals(primary.kind())
                     ? "item:" + primary.id()
                     : primary.id();

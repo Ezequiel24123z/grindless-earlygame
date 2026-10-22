@@ -134,6 +134,17 @@ invent a new family envelope, recipe bill or paid-world migration.
 Only Relay `ControlMatrixItem` is registered at this checkpoint; native
 minimum/exact coverage is limited to actual RelayF1-F3, with other architectures
 covered by pure spec contracts. Do not register fictitious items for a test.
+Source1ee2e73 is normally integrated with the die increment, not yet Java/native
+qualified. `IngredientSpec.MatrixRole` names EXACT/MINIMUM_CONTROL;
+`minimumControl` opts in and `acceptsMatrix` follows validated real item/NBT.
+`ProcessLookup.matrixInputs` supplies only registered viewer alternatives.
+Atlas/Operand/inspection carry the role with F1+ labels; canonical qualified IDs
+stay unchanged. `AuthorityAdapters` names `minimum_control_input_3` and the
+canonical-option supply limit. T1 exporter source/class hashes include the new
+role/spec/adapter dependencies; never retarget old model provenance.
+Forge `recipe/ControlMatrixInputChecks` and existing matrix-lifecycle additions
+author real matching/handler/count/blocked/full-cycle assertions without new
+registrations or budgets. Authored markers are not an observed native pass.
 
 The independent automatic-tooling lane owns only four existing die outputs in
 `ProcessGraph` and optional `T1Progression` selection. Derive exact material/
@@ -328,11 +339,11 @@ T2 and above are manufactured, never a crafting table
 - `research/ResearchLogic.java` and `machine/ResearchTerminalBlockEntity.java` — one physical
   Data Core calibration cycle. It must never write or read a global permission.
 
-`tools/checks/VerifyRecipes.java` pins 121 generated rows for its four-material fixture and
-26 T1 crafts; `VerifyBootstrap` covers 18 T0 shaped crafts and the ceramic Data Core.
-`VerifyAtlas` pins 121 generated rows, 41 Assembler rows and 167 total handheld routes,
+`tools/checks/VerifyRecipes.java` now expects205 generated rows for its material fixture
+and27 T1 shaped crafts; `VerifyBootstrap` retains its own source/catalogue guards.
+`VerifyAtlas` expects205 generated rows,80 Assembler rows and262 total handheld routes,
 including both crafting catalogues, the shapeless core and physical calibration.
-Actual runtime counts depend on installed material tags; nine workshop rows are unconditional.
+These are fixture shapes, not native pass counts; runtime counts depend on installed material tags.
 Change every one of those numbers in the same commit as the graph. Recipe ids stay
 unique. Every T2-and-above machine is an Assembler row in `ProcessGraph` and must not
 gain a file under `data/grindless/recipes/`. The eight spatial prototype outputs have
@@ -357,9 +368,11 @@ unrated item lookup must still find the F2 route (ADR-0124).
   `forge/.../jei/GrindlessProcessCategory.java` — project the same declared
   optimum and half-width; do not invent a production pressure requirement.
 - `inspection/MachineInspectionCodec.java` / `MachineInspectionProtocol.java` —
-  write schema2 and read strict schema1 with no required process-pressure band.
-  Unknown versions, partial bands and required-pressure fields under schema1
-  fail through `MALFORMED`; existing observed/tank pressure is not removed.
+  source541 introduces schema2 pressure; source1ee now writes schema3 for the
+  explicit Matrix input role. Read strict schema1 with no required pressure
+  and schema2 with pressure, both EXACT by absence of role. Old-version role
+  fields, partial/unknown roles, minimum outputs and invalid pressure bands fail
+  through `MALFORMED`; existing observed/tank pressure is not removed.
 
 Source541cf6c is integrated and technically qualified in M through exact426
 contracts and normal model generation. [Accepted engineering ADR-0175](DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts)

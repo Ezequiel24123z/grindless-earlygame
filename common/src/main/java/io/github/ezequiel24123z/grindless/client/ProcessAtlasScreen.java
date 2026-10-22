@@ -3,6 +3,7 @@ package io.github.ezequiel24123z.grindless.client;
 import io.github.ezequiel24123z.grindless.menu.ProcessAtlasMenu;
 import io.github.ezequiel24123z.grindless.guidance.ResourceGuidanceContext;
 import io.github.ezequiel24123z.grindless.recipe.AtlasLogic;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole;
 import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.ChatFormatting;
@@ -104,7 +105,9 @@ public final class ProcessAtlasScreen extends AbstractContainerScreen<ProcessAtl
                         resourceSelection + 1, operands.size()));
                 tooltip.add(Component.translatable("gui.grindless.resource.operand",
                         Component.translatable("gui.grindless.resource.role." + operand.role().name().toLowerCase(java.util.Locale.ROOT)),
-                        operand.amount(), ResourceGuidanceClient.name(operand.resource())));
+                        operand.amount(), operand.matrixRole() == MatrixRole.MINIMUM_CONTROL
+                                ? Component.translatable("recipe.grindless.minimum_control", operand.resource().rating())
+                                : ResourceGuidanceClient.name(operand.resource())));
                 tooltip.add(Component.literal(operand.resource().key()).withStyle(ChatFormatting.DARK_GRAY));
                 if (operand.role() == ResourceGuidanceContext.Role.CATALYST) {
                     tooltip.add(Component.translatable("jei.grindless.not_consumed").withStyle(ChatFormatting.RED));

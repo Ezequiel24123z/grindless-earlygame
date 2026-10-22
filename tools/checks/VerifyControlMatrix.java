@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.matrix;
 
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 
 /** Behaviour checks for Control Matrix ratings and architectures. Not part of the mod. */
 public final class VerifyControlMatrix {
@@ -10,6 +11,7 @@ public final class VerifyControlMatrix {
     public static void main(String[] args) {
         architectures();
         substitution();
+        ingredientRoles();
         invalidSpecs();
 
         System.out.println(failures == 0
@@ -54,6 +56,68 @@ public final class VerifyControlMatrix {
                 () -> new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F4));
         rejects("architecture is required",
                 () -> new ControlMatrixSpec(null, FluxTier.F1));
+    }
+
+    private static void ingredientRoles() {
+        String relay = "grindless:relay_matrix";
+        IngredientSpec exact = IngredientSpec.matrix(relay, FluxTier.F1, 2);
+        IngredientSpec minimum = IngredientSpec.minimumControl(relay, FluxTier.F1, 2);
+        IngredientSpec f2 = IngredientSpec.minimumControl(relay, FluxTier.F2, 2);
+        eq("the old four-argument constructor remains exactly rated", exact,
+                new IngredientSpec(IngredientSpec.ITEM, relay, 2, 1));
+        eq("the old ordinary constructor retains its contract", IngredientSpec.item(relay, 2),
+                new IngredientSpec(IngredientSpec.ITEM, relay, 2, 0));
+        eq("the new role does not alter canonical input identity", exact.qualified(), minimum.qualified());
+        no("exact and minimum inputs are distinct data", exact.equals(minimum));
+        eq("exact input role is explicit", IngredientSpec.MatrixRole.EXACT, exact.matrixRole());
+        eq("minimum input role is explicit", IngredientSpec.MatrixRole.MINIMUM_CONTROL, minimum.matrixRole());
+        for (MatrixArchitecture architecture : MatrixArchitecture.values()) {
+            String id = "grindless:" + architecture.id() + "_matrix";
+            for (FluxTier rating : FluxTier.values()) {
+                if (!architecture.supports(rating)) {
+                    continue;
+                }
+                ControlMatrixSpec physical = new ControlMatrixSpec(architecture, rating);
+                String label = architecture + "/" + rating;
+                eq("exact manufacturing preserves item identity and rating " + label,
+                        architecture == MatrixArchitecture.RELAY && rating == FluxTier.F1,
+                        exact.acceptsMatrix(id, physical));
+                yes("minimum F1 accepts validated sufficient capacity " + label,
+                        minimum.acceptsMatrix(id, physical));
+                eq("minimum F2 checks capacity rather than architecture " + label,
+                        physical.canControl(FluxTier.F2), f2.acceptsMatrix(id, physical));
+            }
+        }
+        no("an absent physical specification is never admission", minimum.acceptsMatrix(relay, null));
+        no("an absent validated item identity is never admission",
+                minimum.acceptsMatrix(null, new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F1)));
+        rejects("minimum control cannot require F0",
+                () -> IngredientSpec.minimumControl(relay, FluxTier.F0, 1));
+        rejects("minimum control requires a rating",
+                () -> IngredientSpec.minimumControl(relay, null, 1));
+        rejects("minimum control cannot use an empty batch",
+                () -> IngredientSpec.minimumControl(relay, FluxTier.F1, 0));
+        rejects("minimum control cannot use a negative batch",
+                () -> IngredientSpec.minimumControl(relay, FluxTier.F1, -1));
+        rejects("a minimum role cannot hide an unspecified rating",
+                () -> new IngredientSpec(IngredientSpec.ITEM, relay, 1, 0,
+                        IngredientSpec.MatrixRole.MINIMUM_CONTROL));
+        rejects("a minimum role cannot turn a tag into a Matrix",
+                () -> new IngredientSpec(IngredientSpec.TAG, relay, 1, 1,
+                        IngredientSpec.MatrixRole.MINIMUM_CONTROL));
+        rejects("a minimum role cannot turn a fluid into a Matrix",
+                () -> new IngredientSpec(IngredientSpec.FLUID, relay, 1, 1,
+                        IngredientSpec.MatrixRole.MINIMUM_CONTROL));
+        rejects("the typed role is required",
+                () -> new IngredientSpec(IngredientSpec.ITEM, relay, 1, 1, null));
+    }
+
+    private static void eq(String what, boolean expected, boolean actual) {
+        if (expected == actual) {
+            pass(what);
+        } else {
+            fail(what + ": expected " + expected + " but got " + actual);
+        }
     }
 
     private static void rejects(String what, Runnable action) {

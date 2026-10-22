@@ -187,7 +187,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0173](#adr-0173--develop-later-tiers-in-parallel-with-protected-t0-play) | Develop later tiers in parallel with protected T0 play | Accepted |
 | [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
 | [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Accepted engineering contract; model/native gates separate |
-| [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; implementation/proof pending |
+| [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; source integrated, qualification pending |
 | [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; implementation/proof pending |
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 
@@ -8272,8 +8272,9 @@ actual save compatibility or human acceptance is inferred from this contract.
 ## ADR-0176 — Distinguish exact Matrix evidence from minimum controller capacity
 
 **Status.** Accepted coordinator engineering scope under the owner's continued
-development instruction and ADR-0173/0174, 2026-10-22. Implementation and changed
-proofs are pending; no recipe balance, playable chassis upgrade or deployment
+development instruction and ADR-0173/0174, 2026-10-22. Source1ee2e73 is normally
+integrated; independent review and changed executable proofs remain pending.
+No recipe balance, playable chassis upgrade or deployment
 is accepted by this record.
 
 **Context.** README permits a higher physical Matrix to replace lower controller
@@ -8300,6 +8301,18 @@ claim that every alternate architecture has the same production route.
 Only Relay Matrix items are currently registered. Exercise RelayF1-F3 in real
 registered-item proofs and other architectures in pure spec contracts; do not
 introduce fake registrations or advertise those contracts as native coverage.
+
+**Source realization, not executed acceptance.** `IngredientSpec.MatrixRole`
+keeps old factories/constructors EXACT; `minimumControl` selects the new role.
+Registered viewer alternatives share the actual matcher. Atlas/teaching and
+inspection distinguish F1+ without inventing resource IDs. Inspection writes
+schema3, reads strict schema1/2 with EXACT by absence, preserves schema2 pressure
+and rejects old-version role fields/invalid roles/minimum outputs.
+The audit records canonical F1 as one accepted supply option, not every
+alternate architecture's supply. T1 exporter provenance binds role/spec/adapter
+sources and classes. Normal writers are still required; old426 outputs/proofs
+are not relabeled. The extended existing matrix-lifecycle fixture retains its
+old cases/budgets and has no observed new marker until actual execution.
 
 **Reuse and alternatives.** Reuse the project's existing physical spec,
 ingredient selection and executor. The pinned GT exact-circuit versus capacity

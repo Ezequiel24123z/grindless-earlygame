@@ -6,6 +6,7 @@ import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.ItemRole;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Resource;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.StoredItem;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole;
 import io.github.ezequiel24123z.grindless.sustainability.SustainabilityModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -196,10 +197,13 @@ public final class MachineInspectionTooltip {
             case TAG -> SustainabilityModel.Kind.TAG;
             case FLUID -> SustainabilityModel.Kind.FLUID;
         };
-        Component name = ResourceGuidanceClient.name(new SustainabilityModel.Resource(kind, resource.id()));
+        Component name = resource.matrixRole() == MatrixRole.MINIMUM_CONTROL
+                ? Component.translatable("recipe.grindless.minimum_control", resource.matrixRating())
+                : rated(ResourceGuidanceClient.name(new SustainabilityModel.Resource(kind, resource.id())),
+                        resource.matrixRating());
         Component result = Component.translatable(resource.kind() == MachineInspectionSnapshot.ResourceKind.FLUID
                 ? "inspection.grindless.fluid_amount" : "inspection.grindless.amount",
-                resource.count(), rated(name, resource.matrixRating()));
+                resource.count(), name);
         return resource.vented() ? Component.translatable("inspection.grindless.vented", result) : result;
     }
 

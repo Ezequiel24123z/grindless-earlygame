@@ -1440,12 +1440,12 @@ Old routes remain valid. New architectures trade greater infrastructure for lowe
 larger batches or higher throughput. A higher-rated matrix can substitute for a lower one,
 but is rarely economical.
 
-The next implementation separates minimum **controller capacity** from exact
+The source implementation separates minimum **controller capacity** from exact
 **manufacturing evidence** (ADR-0176). Only an explicitly declared minimum input
 may use a stronger legitimate Matrix; existing exact predecessor/output and
 quest/reward predicates do not become inequalities. Using costlier control
-stock in a baseline machine does not upgrade that machine. This new role is
-under development, not supplied by the completed M Blueprint proof.
+stock in a baseline machine does not upgrade that machine. This new1ee2e73 role
+is integrated for qualification, not proved by the completed M Blueprint run.
 
 | Tier | Theme | Braided progression and signature scale |
 | --- | --- | --- |
@@ -2384,7 +2384,7 @@ is preserved and integration/release gates still control acceptance.
 | 66 | **Basic families and growing tier complexity** | ADR-0174 — F1 Wire Mill and optional four-route forming do not gate firstF2. Exact CI contracts and actual426 normal Guidance/Economy/T1 writers, independent CheckOnly and three former red suites pass; four exact outputs merge asA85069 ancestry. [Concrete Forge upgrade comparison](docs/design/t1-external-references.md#concrete-upgrade-transfer-comparison) rejects replacement-BE imports for the same-object contract. No MK2, whole-T1 or installed update |
 | 67 | **Optional process-pressure contract** | [ADR-0175](docs/DECISIONS.md#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) — optional absolute optimum/half-width, existing evaluator, consistent Atlas/audit/inspection/JEI and strict schema1/2. Actual compilation/contracts and normal model gates pass; no new production pressure recipe, client observation or tier acceptance |
 | 68 | **Bounded Blueprint preflight** | Source4550+d073 qualified on exact M0a676fe: new Blueprint/Planner contracts and one real Forge capture/stamp/refusal/refund interaction pass1,182 assertions, harness/server0 and natural save/stop. Relocated BE stock is protected and permissions are checked per target. [Source-bound evidence and both CI outcomes](docs/testing/latest-validation.md#integrated-development-source); no drones/global rollback/client acceptance or installed update |
-| 69 | **Explicit controller capacity** | ADR-0176 — in development fromad5b50d: named minimum-control input for the existing Wire Mill, strict exact predecessor/output/quest evidence preserved. Reuse physical Matrix validation and shared process/view/audit authorities; no chassis kit, envelope rebalance, new pass or T0 deployment |
+| 69 | **Explicit controller capacity** | ADR-0176 — source1ee2e73 normally integrated with5b dies: typed minimum-control input for Wire Mill, exact predecessor/output/quest evidence preserved, registered JEI alternatives/F1+ views and strict inspection schema3/legacy1/2. Source/class writer inputs explicit; independent review and Java/writer/native qualification pending. No chassis kit, envelope rebalance or T0 deployment |
 | 70 | **Managed native quest-definition updates** | ADR-0177 — in development: explicit stopped/hash-bound46-to50 file update, known ownership, full preflight/backups and visible failure recovery. Preserve startup refusal, user edits, old IDs and paid world data; no update or migration pass has been executed |
 | 71 | **Automatic retained-tool reproduction** | Source63142dd+5b359a5 normally integrated: four existing Press dies reproduced in the ordinary Assembler from exact manual material/output multisets. Manual dies seed forming; optional `tool_reproduction` follows assembly without a first-F2 dependency. Atlas slot oracle corrected; no new items, wear, bill or native engine. Java/normal writers pending, not whole-T1 readiness |
 

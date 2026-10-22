@@ -2,6 +2,8 @@ package io.github.ezequiel24123z.grindless.sustainability;
 
 import com.google.gson.GsonBuilder;
 import io.github.ezequiel24123z.grindless.progression.T1Progression;
+import io.github.ezequiel24123z.grindless.matrix.ControlMatrixSpec;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +20,8 @@ public final class T1Export {
     private static final List<String> SOURCES = List.of(
             JAVA + "progression/T1Progression.java", JAVA + "sustainability/T1Sustainability.java",
             JAVA + "recipe/ProcessGraph.java", JAVA + "recipe/T1Recipes.java",
+            JAVA + "recipe/IngredientSpec.java", JAVA + "matrix/ControlMatrixSpec.java",
+            JAVA + "sustainability/AuthorityAdapters.java",
             JAVA + "recipe/FabricationLogic.java", JAVA + "matrix/ControlMatrixNbt.java",
             "common/src/main/resources/data/grindless/recipes/flux_cell.json",
             "tools/checks/VerifyT1Progression.java", "tools/t1/T1Export.java",
@@ -65,6 +69,7 @@ public final class T1Export {
         for (Class<?> type : List.of(T1Progression.class, T1Progression.Requirement.class, T1Progression.Line.class,
                 T1Progression.AtlasSelection.class, T1Sustainability.class,
                 T1Sustainability.InputEvidence.class, T1Sustainability.SeedAllocation.class,
+                IngredientSpec.class, IngredientSpec.MatrixRole.class, ControlMatrixSpec.class,
                 VerifyT1Progression.class, T1Export.class)) {
             String resource = "/" + type.getName().replace('.', '/') + ".class";
             try (InputStream stream = type.getResourceAsStream(resource)) {

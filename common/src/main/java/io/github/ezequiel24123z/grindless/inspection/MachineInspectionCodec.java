@@ -22,6 +22,7 @@ import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.S
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Tank;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Target;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Validity;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -36,7 +37,7 @@ import java.util.function.Function;
 public final class MachineInspectionCodec {
 
     public static final String KEY = "grindless:inspection";
-    public static final int VERSION = 2;
+    public static final int VERSION = 3;
 
     private MachineInspectionCodec() {
     }
@@ -128,13 +129,13 @@ public final class MachineInspectionCodec {
         return tag;
     }
 
-    /** Strict v1 observations have no pressure requirement; invalid or newer schemas are rejected explicitly. */
+    /** V1/V2 resources remain exact; only V2+ carry required pressure and V3 carries control roles. */
     public static MachineInspectionSnapshot decode(CompoundTag tag) {
         fields(tag, Set.of("schema", "target", "block", "state", "reason", "held", "truncated", "items", "tanks",
                         "requirements"),
                 Set.of("process", "energy", "manual", "structure", "port"));
         int version = integer(tag, "schema");
-        if (version != 1 && version != VERSION) {
+        if (version != 1 && version != 2 && version != VERSION) {
             throw new IllegalArgumentException("unsupported machine inspection schema");
         }
         CompoundTag target = compound(tag, "target");
@@ -195,9 +196,9 @@ public final class MachineInspectionCodec {
         fields(value, Set.of("id", "duration", "draw", "inputs", "outputs", "catalysts"), Set.of("work", "conditions"));
         int duration = integer(value, "duration");
         return new Process(string(value, "id"),
-                readList(value, "inputs", MachineInspectionSnapshot.MAX_RESOURCES, MachineInspectionCodec::readResource),
-                readList(value, "outputs", MachineInspectionSnapshot.MAX_RESOURCES, MachineInspectionCodec::readResource),
-                readList(value, "catalysts", MachineInspectionSnapshot.MAX_RESOURCES, MachineInspectionCodec::readResource),
+                readList(value, "inputs", MachineInspectionSnapshot.MAX_RESOURCES, entry -> readResource(entry, version)),
+                readList(value, "outputs", MachineInspectionSnapshot.MAX_RESOURCES, entry -> readResource(entry, version)),
+                readList(value, "catalysts", MachineInspectionSnapshot.MAX_RESOURCES, entry -> readResource(entry, version)),
                 duration, number(value, "draw"),
                 value.contains("work") ? Optional.of(new Progress(decimal(value, "work"), duration)) : Optional.empty(),
                 optional(value, "conditions", conditions -> {
@@ -235,10 +236,12 @@ public final class MachineInspectionCodec {
         return value;
     }
 
-    private static Resource readResource(CompoundTag value) {
-        fields(value, Set.of("kind", "id", "count", "rating", "vented"), Set.of());
+    private static Resource readResource(CompoundTag value, int version) {
+        fields(value, Set.of("kind", "id", "count", "rating", "vented"),
+                version >= 3 ? Set.of("matrix_role") : Set.of());
         return new Resource(enumeration(value, "kind", ResourceKind.class), string(value, "id"),
-                integer(value, "count"), integer(value, "rating"), bool(value, "vented"));
+                integer(value, "count"), integer(value, "rating"), bool(value, "vented"),
+                value.contains("matrix_role") ? enumeration(value, "matrix_role", MatrixRole.class) : MatrixRole.EXACT);
     }
 
     private static CompoundTag resource(Resource resource) {
@@ -248,6 +251,9 @@ public final class MachineInspectionCodec {
         tag.putInt("count", resource.count());
         tag.putInt("rating", resource.matrixRating());
         tag.putBoolean("vented", resource.vented());
+        if (resource.matrixRole() != MatrixRole.EXACT) {
+            tag.putString("matrix_role", resource.matrixRole().name());
+        }
         return tag;
     }
 

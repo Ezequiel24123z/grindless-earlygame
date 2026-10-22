@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import io.github.ezequiel24123z.grindless.research.ResearchLogic;
 
@@ -18,6 +19,8 @@ import io.github.ezequiel24123z.grindless.research.ResearchLogic;
  */
 public final class AtlasLogic {
 
+    private static final Pattern RATED = Pattern.compile("(.+) \\[F([1-9]|1[0-5])(\\+)?]");
+
     private AtlasLogic() {
     }
 
@@ -27,9 +30,9 @@ public final class AtlasLogic {
      * @param id             recipe id, such as {@code roast/iron}
      * @param station        which workstation performs the route
      * @param family         generated-process family, or {@code null} for a physical supplemental route
-     * @param inputs         qualified item and fluid inputs, with explicit Matrix rating labels
+     * @param inputs         qualified inputs, with exact Matrix ratings or explicit {@code F<n>+} control labels
      * @param outputs        qualified outputs, including vented fluids and explicit Matrix ratings
-     * @param catalysts      qualified unconsumed extras, with explicit Matrix rating labels
+     * @param catalysts      qualified unconsumed extras, with exact ratings or minimum control labels
      * @param temperatureC   required temperature, or {@code NaN} when unnamed
      * @param pressureMPa    required absolute pressure in MPa, or {@code NaN} when unnamed
      * @param pressureHalfWidthMPa optimal pressure half-width in MPa, or {@code NaN} when unnamed
@@ -95,7 +98,7 @@ public final class AtlasLogic {
     public static Entry entry(ProcessRecipe recipe) {
         List<String> inputs = new ArrayList<>();
         for (IngredientSpec spec : recipe.itemInputs()) {
-            addUnits(inputs, rated(spec.qualified(), spec.matrixRating()), spec.count());
+            addUnits(inputs, rated(spec), spec.count());
         }
         for (IngredientSpec spec : recipe.fluidInputs()) {
             addUnits(inputs, spec.qualified(), spec.count());
@@ -109,7 +112,7 @@ public final class AtlasLogic {
         }
         List<String> catalysts = new ArrayList<>();
         for (IngredientSpec spec : recipe.catalysts()) {
-            addUnits(catalysts, rated(spec.qualified(), spec.matrixRating()), spec.count());
+            addUnits(catalysts, rated(spec), spec.count());
         }
         return new Entry(
                 recipe.id(),
@@ -129,6 +132,11 @@ public final class AtlasLogic {
 
     private static String rated(String qualified, int rating) {
         return rating == 0 ? qualified : qualified + " [F" + rating + "]";
+    }
+
+    private static String rated(IngredientSpec input) {
+        return input.isMinimumControl() ? input.qualified() + " [F" + input.matrixRating() + "+]"
+                : rated(input.qualified(), input.matrixRating());
     }
 
     /** Preserve recipe quantities in a viewer row so a batched Matrix craft never looks singular. */
@@ -262,8 +270,17 @@ public final class AtlasLogic {
         if (id.equals(query)) {
             return true;
         }
-        int rating = qualified.indexOf(" [F");
-        return rating >= 0 && names(qualified.substring(0, rating), query);
+        var rating = RATED.matcher(qualified);
+        if (!rating.matches()) {
+            return false;
+        }
+        if (names(rating.group(1), query)) {
+            return true;
+        }
+        var requested = RATED.matcher(query);
+        return rating.group(3) != null && requested.matches() && requested.group(3) == null
+                && names(rating.group(1), requested.group(1))
+                && Integer.parseInt(requested.group(2)) >= Integer.parseInt(rating.group(2));
     }
 
     private static boolean namesAny(List<String> qualified, String query) {

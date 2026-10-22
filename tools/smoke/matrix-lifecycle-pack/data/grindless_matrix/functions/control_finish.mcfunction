@@ -1,0 +1,1 @@
+execute if data block 8 76 8 {Items:[{Slot:0b,id:"grindless:machine_casing",Count:1b},{Slot:1b,id:"grindless:copper_coil",Count:2b},{Slot:2b,id:"grindless:iron_plate",Count:4b},{Slot:3b,id:"grindless:relay_matrix",Count:1b,tag:{Rating:3}},{Slot:4b,id:"grindless:wire_mill",Count:1b}]} unless data block 8 76 8 Items[{Slot:4b}].tag run say MATRIX-CONTROL-CONSUMED-ONCE

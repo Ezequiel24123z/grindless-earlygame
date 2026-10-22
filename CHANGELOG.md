@@ -15,6 +15,17 @@ entries below reference those records by id.
 
 ### Added
 
+- **Compose explicit minimum controller capacity with the die increment.**
+  Normal1ee2e73 ancestry adds typed exact/minimum input roles, registered-only
+  JEI alternatives, F1+ views, honest canonical-option audit metadata and
+  inspection schema3 with strict1/2/pressure compatibility. Only Wire Mill
+  opts in; old exact constructors, F2/quest evidence, bills and save/executor
+  identity stay intact. Preserve new writer source/class inputs and all four
+  old canonical bytes until NORMAL generation. The existing matrix-lifecycle
+  gains three authored markers without changing its16 originals/budgets.
+  Independent mechanism review and actual Java/writer/native qualification are
+  pending, not supplied by the source-only static checks. Update the T1 guide
+  for optional wire/tool reproduction and separate historical pause records.
 - **Integrate automatic die reproduction as source, not a passing build.**
   Normal63142dd/5b359a5 ancestry adds only the four source-derived ordinary
   Assembler die recipes and optional post-assembly line. Keep manual JSON,

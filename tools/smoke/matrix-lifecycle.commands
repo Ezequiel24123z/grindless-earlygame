@@ -1,2 +1,4 @@
 forceload add 0 0
 function grindless_matrix:begin
+grindless_matrix_input_checks
+function grindless_matrix:control_begin
