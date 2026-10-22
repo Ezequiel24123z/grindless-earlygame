@@ -42,6 +42,11 @@ player delivery follows from the grant. In parallel, implement ADR-0184's
 default-F1 physical-authority correction on a separate isolated source lane,
 without PC/cache/JVM access, recipe/quest additions or a claimed finite T1
 replay. Read the active handoff for actual results/lease ownership.
+The next functional correction is ADR-0185: explicit Assembler recipe choice
+for colliding existing bills, preserving paid/fractional work and saved stores.
+Use the bounded mature-mod reference and existing menu/transaction, not a
+circuit tax, repricing or a new engine. A source-only selected wet route and
+G7's ready51 loader proof do not establish that acquisition path.
 
 The following next-slice snapshots are historical, not live execution grants.
 Earlier next: execute the owner's continued-development instruction on isolated

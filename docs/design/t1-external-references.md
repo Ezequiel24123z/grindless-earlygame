@@ -153,6 +153,49 @@ envelope number, overclock formula or native pass.
 [gt-paid-state]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L116-L165
 [gt-paid-cycle]: https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L452-L634
 
+## Explicit manufacturing choice
+
+The bounded source study uses the same Forge-era GT pin248e1f8
+(LGPL-3.0; version8.0.0) and Mekanism96c7362 (MIT; Minecraft1.20.1,
+Forge47.1.76/version10.4.16) already recorded above. No code, assets, UI library
+or new dependency is imported. The study is source evidence, not runtime or
+race-condition proof; untraced invalidation hooks remain an explicit limit.
+
+- [GT circuit ingredient](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/recipe/ingredient/IntCircuitIngredient.java#L20-L53)
+  matches a programmed circuit value. That is an ingredient disambiguator, not
+  a recipe-ID chooser. The
+  [builder circuitMeta path](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/data/recipe/builder/GTRecipeBuilder.java#L657-L731)
+  explicitly uses notConsumable/chance0; the initial research description of
+  ordinary consumption was wrong. The extraction handler was not re-traced,
+  so matching, builder policy and observed execution remain distinct.
+- [GT programmable circuit trait](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/common/machine/trait/ProgrammableCircuitSlotTrait.java#L33-L107)
+  persists configuration and connects it to matching through its existing
+  framework. Importing its ghost-slot/ModularUI path would not fix Grindless's
+  identical existing bills without new recipe/framework coupling.
+- [GT RecipeLogic](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeLogic.java#L383-L488)
+  separates cached recipe validation from a later search/setup. This is useful
+  prior art for intent versus execution, not proof that every external selector
+  mutation preserves paid work or that our fractional carry is covered.
+  Its progress/duration are integers with zero resets, not fractional carry.
+  The core active branch is distinct from search; the traced generic
+  [change notification](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/machine/trait/recipe/RecipeHandlerList.java#L203-L234)
+  does not establish every machine-specific interrupt/invalidation hook.
+  [searchRecipe166-190](https://github.com/GregTechCEu/GregTech-Modern/blob/248e1f83829d585632015ceb2686acf6f9f23db3/src/main/java/com/gregtechceu/gtceu/api/recipe/GTRecipeType.java#L166-L190)
+  was verified at the pin, not inferred from the indexed default branch.
+- [Mekanism RecipeFormula](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/content/assemblicator/RecipeFormula.java#L18-L64)
+  snapshots a crafting grid, resolves its recipe and revalidates actual inputs.
+  Grindless already has stable ProcessRecipe IDs; it need not add a formula
+  item, duplicate grid or another recipe resolver.
+- [Mekanism formula loading](https://github.com/mekanism/Mekanism/blob/96c736241e308a9cf1c73f7dcfa9aa221ea559d3/src/main/java/mekanism/common/tile/machine/TileEntityFormulaicAssemblicator.java#L268-L330)
+  differentiates a changed formula and resets operating ticks on an actual
+  different recipe. Do not copy that progress-loss policy or treat unresolved
+  formula fallback as permission to substitute another selected output.
+
+ADR-0185 adopts only the compatible persisted-choice/revalidation patterns
+through the existing Assembler/menu/transaction and recipe-owned work. The new
+native boundary must establish real target reachability and retained work;
+catalogue presence and ready51 do not establish them.
+
 ## Longitudinal virtual-deposit continuity
 
 | Immutable reference | Observed storage/resolution pattern | Limit |

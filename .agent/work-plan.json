@@ -1,9 +1,9 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 79,
+  "plan_revision": 80,
   "updated": "2026-10-22",
-  "phase": "managed_FTB_update_and_explicit_control_capacity_development_after_closed_M_wave",
+  "phase": "FTB51_engineering_and_T1_recipe_reachability_with_default_identity_correction",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
   "tier_accepted": false,
   "merge_ready": false,
@@ -38,7 +38,7 @@
     "template_read_scope": "None_G5_reuses_existing_owned_fictitious_components_Java_and_pinned_JARs_no_real_Prism_template_or_world_options_progress_settings_access",
     "package_dependency_scope": "offline_existing_declared_pins_cached_existing_owned_fictitious_components_and_mods_Prepare0missing_no_new_download_dependency_or_provider",
     "process_privacy": "no_client_commandline_read_or_output_never_stop_player_defer_only_canonical_package_target_action_if_live_process_safety_cannot_be_established_privately_continue_other_admitted_work",
-    "result": "IN_PROGRESS_executor_reports_histABI46_50_backend_and_normalmodels0_A7actual26e_loader_boot_and_package_realmanaged51_transition_and_finalcustody_pending",
+    "result": "IN_PROGRESS_report12_21_13Z_A7clean_JVM0locksfalse_minimalFTB51boot0_naturalstop_verifiedpackage_prepare0missing_deploy0downloads_actualmanaged50to51_plan0_applyUpdated_sameplanUnchanged_protectedstate_noPending_InspectStopped_finalcustody_cleanup_leaseback_PENDING",
     "awaiting_exact_published_GO": false,
     "returned": false,
     "returned_utc": null,
@@ -56,13 +56,15 @@
     "closure_required": "all_actualsourcecoordinates_code41df_models41df_derivedA7_ifany_native_package_plan_actualApplicableSource_raw_exits_actual29_38images_data_and_packageJARhashes_realmanaged50to51_sameplan_files_mtimes_backups_protectedstate_A7bundle_onlyoutputs_ifany_ownhookremoved_Java0locks0_explicitreturn_no_player"
   },
   "assembler_recipe_choice": {
-    "status": "source_shadowing_identified_no_runtime_reproduction_or_fix_yet",
+    "status": "ADR0185_accepted_source_implementation_and_runtime_proof_pending",
+    "policy": "ADR-0185",
     "source": "41df6052c2416f431f2e7dc579681602211b0042",
     "evidence": "ProcessGraph_chemicalReactor_Washer_Cell_Intake_machineCraft_same3ingredients_ProcessLookup_find_returns_lastdry_ProcessMachineBlockEntity_matchingRecipe_and_menu_no_explicit_target",
     "impact": "T1_catalogue_route_selection_and_ready51_log_do_NOT_prove_player_can_manufacture_Washer_or_other_shadowed_outputs",
     "research_agent": "952d39a9-312f-4afa-9f54-16e79930142c",
     "research_scope": "pinned_GT_Forge1201_recipe_selection_circuits_locking_source_fit_and_paidwork_limits_readonly",
-    "next": "bounded_existing_Assembler_stable_recipe_choice_server_authority_persistence_paidwork_preservation_no_new_bills_or_executor_after_precedent",
+    "research_result": "sourcepins_GT248e_Mek96c_same_as_existing_refs_persistedconfig_revalidation_patterns_only_NOcodecopy_GT_circuitMeta_notConsumable_builder_initialconsumptionclaim_corrected_GTintegerprogress_no_fractionalcarry_genericnotifications_not_allmachine_preservation_MekdiffFormula_reset_and_invalidpinAutoFallback_REJECTED",
+    "next": "bounded_existing_Assembler_stableID_choice_currentcatalogue_menu_serverauth_no_explicitfallback_legacyAUTO_paid_and_fractional_recipe_owned_work_preserved_no_newbill_or_engine",
     "G7_scope_change_authorized": false,
     "PC_JVM_or_player_access": false
   },
@@ -72,6 +74,7 @@
     "source_base": "1e642dc83a1a824cd627ada8250c5b48afd9cbd4",
     "owner_session": "77889597-58d8-46f1-8c68-d5ccb4e5a0a9",
     "scope": "existing_authority_adapters_real_registered_defaultRelay_NBT_F1_consistent_physical_routes_quests_T0T1_model_consumers_existingtests_and_directprovenance_only",
+    "coupled_display_scope": "EXPLICIT_same_outcome_ResourceGuidanceContext_authored_operands_and_questSubject_canonical_default_existing_VerifyResourceGuidance_one_pure_rule_no_ClientDeclaration_broadfallback_or_sourcebuilder_hoverIO_no_evidence_predicate_change",
     "forbidden": "PC_cache_JVM_SSH_G7retarget_runtime_recipe_NBT_claim_quantity_changes_canonical_handedit_synthetic_alias_route_genericResource_identity_change_fictitious_architecture_finiteT1_acceptance",
     "finite_T1_replay": "NOT_IMPLEMENTED_or_proven_by_identity_correction",
     "qualification": "later_exact_source_changed_model_contracts_normal_writers_after_G7return_reuse_unchanged_nativeFTB_machine_proofs"

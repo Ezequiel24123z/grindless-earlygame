@@ -15,6 +15,22 @@ entries below reference those records by id.
 
 ### Added
 
+- **Choose explicit Assembler targets instead of repricing colliding recipes.**
+  ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
+  executor and transaction. Reuse bounded GT/Mekanism configuration/validation
+  patterns, not a new circuit/formula requirement, UI framework or progress reset.
+  Preserve legacy AUTO, exact recipe validation, blocked work and fractional
+  recipe-owned carry without loss or transfer. Source/runtime/UI proof remains
+  pending in a separate lane; G7 never becomes a Washer acquisition pass.
+  Research follow-up corrects circuitMeta to the non-consuming builder path;
+  GT's integer progress/reset model does not prove our fractional-work case,
+  and generic notification is not a blanket selector-preservation guarantee.
+- **Include the coupled authored-guidance display in the F1 correction.**
+  The source owner identifies raw0 operand/quest-context lookup against the new
+  F1-only metadata. ADR-0184 explicitly includes ResourceGuidanceContext and
+  existing guidance checks in the same outcome, sharing the pure default rule
+  without broad tooltip fallback, changed evidence predicates or hover-time I/O.
+  Implementation/static103/23-mutant evidence is not Java or graphical proof.
 - **Preserve actual G7 progress and expose a separate acquisition blocker.**
   Executor reports new-publisher authentic46/50 ABI, repaired Registry1344/
   Adapters323 CI reuse, full FTB backend and normal writers/checks0. Actual

@@ -271,6 +271,20 @@ direct source/class provenance. Finite T1 custody/renewability remain unproved.
 Implementation and a later source-bound model window are pending; frozen
 G7/code41df605 and all PC/player surfaces are outside this source lane.
 
+### Explicit Assembler recipe choice
+
+ADR-0185 corrects same-bill last-dry shadowing through existing
+`recipe/ProcessLookup`, `machine/ProcessMachineBlockEntity`,
+`menu/ProcessMachineMenu`/`MachineMenuHost` and `client/ProcessMachineScreen`.
+Use stable recipe IDs, current-family/input/fluid revalidation and authoritative
+menu/host/access checks. Preserve legacy AUTO, actual selected output, stores,
+recipe-owned work including fractional carry, completion rollback and old NBT.
+Never fall back from an explicit invalid target to another output or erase
+paid work to make the selector convenient. Reuse existing UI/persistence/lookup
+and the smallest native fixture; implementation/proof are still pending.
+The upstream comparison is a pattern reference, not imported code or proof.
+Recipe data, FTB/quests, default-F1 source ownership and G7 are outside this lane.
+
 The same existing ControlMatrixInputChecks.registered probe now checks the new
 core's actual Item class/registry ID, without another case or marker. This
 observation is pending execution, not supplied by synthetic lookup carriers.

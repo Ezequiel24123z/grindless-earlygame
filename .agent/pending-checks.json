@@ -19,7 +19,8 @@
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
   "assembler_recipe_choice": {
-    "status": "SOURCE_SHADOWING_no_runtime_repro_or_fix",
+    "status": "ADR0185_accepted_source_and_runtime_proof_pending",
+    "policy": "ADR-0185",
     "impact": "sameingredient_Assembler_drylast_selection_does_not_prove_Washer_acquisition",
     "research_agent": "952d39a9-312f-4afa-9f54-16e79930142c",
     "new_source_and_changed_mechanism_qualification_required": true,
@@ -30,6 +31,7 @@
     "status": "isolated_source_implementation_active",
     "owner_session": "77889597-58d8-46f1-8c68-d5ccb4e5a0a9",
     "source_base": "1e642dc83a1a824cd627ada8250c5b48afd9cbd4",
+    "coupled_display_scope": "same_owner_explicit_ResourceGuidanceContext_and_existingguidancecontracts_purecanonicaldefault_only_no_predicate_or_ClientDeclarationfallback_change",
     "scope": "registered_authored_defaultRelay_physicalF1_adapter_consistency_existing_T0T1_consumers_contracts_provenance",
     "source_worker_PC_JVM_authorized": false,
     "not_proved": "finiteT1_establishment_renewability_autonomy_gameplay_client_or_acceptance"
@@ -58,7 +60,7 @@
     "qualification_package_fictitious_target_plan_authorized": true,
     "real_PrismRoot_player_world_writes_authorized": false,
     "allowed_data_derivation": "only_normal_A7_exact_parent41df_allowed4_subset_after_actualwriters_CheckOnlycanonical_nonoutputinvariance_JVM0locks0_clean_commit_ActualDerivedSHA_for_followingpackage_boot_plan_no_othercode_source_or_alias_change",
-    "result": "IN_PROGRESS_hist_newAPI46_50_and_backend_normalmodels_reported0_actualA7_26e_native_linkage_package_plan_managed51_transition_finalcustody_pending",
+    "result": "IN_PROGRESS_report12_21_13Z_actualA7_FTB51plainboot0_pkg_verified_plan0_managed50to51Updated_sameplanUnchanged_protection_noPending_InspectStopped_FINAL_custody_cleanup_leaseback_PENDING",
     "returned": false,
     "returned_utc": null,
     "return_state": "NOT_OBSERVED_for_new_G7_window",

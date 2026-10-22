@@ -661,6 +661,19 @@ source finding is not a native reproduction. The G7 ready51 boot cannot prove
 Washer manufacture/operation; keep that uncertainty and its later targeted
 mechanism proof separate from catalogue/file lineage and human acceptance.
 
+**G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
+ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
+ready51/Done and natural save/stop, with tested JAR/inventory captured before
+later Gradle. Real A7 package verifies; initial24 fictitious files match,
+canonical Prepare/Deploy report0missing/0downloads and preserve50 definitions/
+managed988 receipt bytes/mtime. One fresh current compilation/plan reports
+publication with target_writes0/native_progress0 and no planning mutation.
+Managed50-to51 DefinitionsUpdated then the SAME plan/hash Unchanged preserve
+protected runtime/backups/mtimes; no pending/Recovery and InspectVerifiedStopped.
+Fictitious target is reported A7/51 coherent and not launched. Counts/hashes
+and final cleanup/closure are not invented before custody. This is not the
+separate ADR-0185 Assembler acquisition/paid-work proof or a player update.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

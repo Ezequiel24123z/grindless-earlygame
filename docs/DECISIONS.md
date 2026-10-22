@@ -196,6 +196,7 @@ history — the reasoning that was wrong is itself useful information.
 | [0182](#adr-0182--expose-existing-wet-beneficiation-as-an-optional-t1-baseline-line) | Expose existing wet beneficiation as an optional T1 baseline line | Source738/338 integrated; Java/outputs/catalogue51 compatibility pending |
 | [0183](#adr-0183--version-known-native-catalogue-lineage-without-weakening-provenance) | Version known native catalogue lineage without weakening provenance | Source99/07 integrated, focused host228 verified; Java/native/model proof pending |
 | [0184](#adr-0184--project-authored-default-matrices-through-their-real-physical-rating) | Project authored default Matrices through their real physical rating | Accepted bounded model correction; implementation and qualification pending |
+| [0185](#adr-0185--choose-assembler-recipes-explicitly-without-repricing-or-losing-work) | Choose Assembler recipes explicitly without repricing or losing work | Accepted bounded existing-engine correction; source/runtime proof pending |
 
 ---
 
@@ -8788,3 +8789,91 @@ Normalizing every Matrix-shaped name invents registrations. Merely deleting
 the limitation conceals the defect. A complete T1 reserve replay cannot be
 claimed by fixing one identity link; carrying prior-tier finite custody remains
 a separate unproved property of the existing establishment machinery.
+
+**Coupled display scope.** Source implementation identifies a concrete consumer
+regression: ResourceGuidanceContext still projects unrated authored operands
+and matrix_line subjects as raw0, while the corrected declaration is F1-only.
+The coordinator explicitly includes that existing context and its existing
+VerifyResourceGuidance contracts in this same outcome. Reuse one pure default
+rule; do not run source builders/I/O from a hover or add a broad fallback in
+ResourceGuidanceClient.declaration. This is a canonical display/supply option,
+not a change to ITEM evidence, generic ingredient admission, exact/minimum
+predicates or validated physical-stack decoding. No client appearance pass is
+inferred from the source correction.
+
+---
+
+## ADR-0185 — Choose Assembler recipes explicitly without repricing or losing work
+
+**Status.** Accepted bounded correction under ADR-0020/0043/0174/0178,
+2026-10-22. Source tracing establishes the ambiguity; native reproduction,
+implementation, interface review and saved-state proof remain pending.
+G7 stays frozen and does not qualify this separate behavior.
+
+**Context.** Chemical Reactor, Washer, Electrolysis Cell, Atmospheric Intake
+and numerous machineCraft rows share casing1/motor2/plates4. ProcessLookup.find
+keeps the last matching dry recipe. ProcessMachineBlockEntity and its existing
+menu expose no explicit recipe target, so naming a live Washer route in a
+progression catalogue is not proof that a player can manufacture it. Reordering
+recipes merely changes the inaccessible output; adding more content magnifies
+the defect. Recipe selection is already part of the Process Card design, but
+a new card item or complete card system is not required to correct this path.
+
+**Prior art and fit.** The pinned Forge GT and Mekanism references in
+the external-reference record supply persisted configuration, server-side
+revalidation and recipe-cache patterns. GT's circuit ingredient/configurator
+does not directly choose among this existing set of identical bills; importing
+its recipe/UI framework or adding a circuit operand would change the problem.
+Mekanism's formula stores an ingredient grid rather than our existing recipe ID,
+and its different-formula progress reset is incompatible with preserving paid
+work. Reuse those limited patterns through Grindless's existing lookup/menu/
+WorkRecipe machinery and vanilla/Architectury APIs; copy no third-party code.
+
+**Decision.** Add an explicit persistent stable-ID target to the existing
+Assembler, not another executor, new recipe, manufacturing bill, slot, global
+permission or controller tax. Resolve the selected ID against the CURRENT
+catalogue, require the correct family and all actual inputs/fluids/conditions,
+and use the same completion transaction. A selected unavailable/mismatching
+recipe waits with a visible reason; it never silently manufactures another
+output. Only legacy/unselected AUTO mode retains its existing selection rules.
+No index, recipe object or guessed version becomes a saved identity.
+
+Set the choice through the existing menu surface with server authority:
+validate the current menu/host, live block, player access, family and exact
+recipe identity before mutation. Reuse existing menu/network primitives rather
+than build a protocol framework. Stale/unknown/foreign requests must refuse
+visibly without consuming, clearing or publishing success. Keep client display
+and authoritative selection coherent across reload and menu reopening.
+
+**Paid work and persistence.** Keep selected configuration distinct from
+recipe-owned paid work. Preserve existing position, BE/store objects, contents,
+fluids, configuration, connections, energy, progress and completion rollback.
+Do not transfer one recipe's work to another, discard it on a click, or redraw
+power for a completed blocked batch. Fractional carry can remain after a
+successful batch; an idle-only test that permanently strands that carry is not
+a complete switching solution. When needed, retain suspended work by stable
+recipe ID inside the existing machine's work state, with exactly one active
+executor, exact nonduplicating save/reload and no invented inputs/outputs/FU.
+Unknown saved work is retained but cannot be spent on another recipe. Legacy
+saves without the optional selection/work extension retain existing meanings.
+Validate malformed state explicitly; no destructive or success-shaped fallback.
+
+**Interface.** Extend the incumbent Minecraft machine screen in Operate mode:
+native font, familiar controls, output names/icons, explicit AUTO/selected/
+unavailable state, keyboard/focus support and a usable bounded picker rather
+than dozens of blind cycling clicks. Preserve slots, status readability,
+tooltips, generator/F0 layouts and inventory geometry. Show authoritative
+selection and failure, not a client guess. No generated art or visual-system
+replacement is authorized; graphical quality remains a human judgment.
+
+**Proof and limits.** Extend existing lookup/logic/UI/persistence contracts and
+the smallest fitting native fixture. Prove at least two real identical-bill
+outputs independently, targeted matching/refusal, cache generation, legacy/
+unknown state, partial and fractional paid work, completed-blocked no-redraw,
+save/reopen and authorized/unauthorized menu requests. Reuse unchanged exact/
+minimum Matrix, FTB/paid-reward and settlement mechanisms where assumptions
+remain valid. A later exact-source window must execute the new mechanism;
+authoring or G7 ready51 is not that proof. Do not change recipes or accept
+later-tier prototypes merely because a target can now be selected. Physical
+controller completeness, whole-T1 supply/autonomy and human acceptance remain
+separate work.

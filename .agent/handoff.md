@@ -13,8 +13,16 @@ report0, with actual29-source/38-image receipts. A7 is REAL
 26e22945a308a8635e8d3701ff3a3dec40a6175f, exact parent41df, only Economy
 JSON and T1 JSON/Markdown changed; Guidance stayed unchanged. Writer invocation
 is41df; clean runtime ApplicableSource is26e. Bundle325f5e33 is reported, not
-yet imported. One plain ready51 boot and subsequent package/plan/apply remain
-the admitted continuation, not completed results.
+yet imported. One plain ready51 boot and subsequent package/plan/apply were
+still pending at that earlier boundary. The12:21:13Z report now closes the
+plain ready51/Done/natural-save-stop boot, real A7 package and canonical
+fictitious Prepare/Deploy0missing/0downloads. Fresh current plan reports0
+with no planning writes; managed50-to51 apply reports DefinitionsUpdated
+and the SAME plan/hash reports Unchanged, with protected files/backups/mtimes
+intact, no pending and InspectVerifiedStopped. Only the fictitious target is
+now reported A7/51 and not launched. Final custody/own-guard cleanup and
+explicit leaseback remain pending; no parent verification or whole-T1 result
+is inferred yet.
 
 **New source-detected whole-T1 blocker:** multiple Assembler constructors use
 the same casing1/motor2/plates4 inputs. ProcessLookup.find retains the last dry
@@ -25,7 +33,11 @@ recipe-selection research952d39a9 is active while the coordinator traces the
 existing menu/WorkRecipe/transaction contracts. Remedy in a separate source
 lane; do not alter G7, add an unrelated smoke or call its file outcome a factory
 pass. Physical controller completeness and genuine chassis work also remain
-outside that bounded file/definition outcome.
+outside that bounded file/definition outcome. ADR-0185 now selects the bounded
+existing-engine stable-ID target/menu correction, preserving recipe-owned paid
+work including fractional carry, with no new bills, slots or circuit tax.
+The pinned external pattern/limits are recorded; implementation/native/UI
+qualification remains separate and pending.
 
 **Current source/qualification split:** G7 sole604 owns the exact41df605
 qualification/new PC root; all fresh results remain pending. A separate
@@ -36,6 +48,10 @@ no PC/cache/JVM/SSH or G7 retarget. Preserve generic declarations, exact higher
 ratings, all source quantities/seed draws and paid state. No synthetic
 conversion, global Resource rewrite, canonical hand edit or finite-T1 claim.
 The model correction needs its own later exact-source proof after G7 returns.
+The coordinator explicitly expands the same owner to ResourceGuidanceContext
+and existing guidance checks: raw authored display descriptors must agree with
+F1-only metadata through one pure default rule, without a broad declaration
+fallback, hover-time source I/O or changed ITEM/exact/minimum evidence.
 
 **Latest owner mandate (ADR-0178):** continue independently, without stopping
 at routine completed increments or requesting ordinary technical approval.
