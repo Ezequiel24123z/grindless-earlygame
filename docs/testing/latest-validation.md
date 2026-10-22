@@ -911,6 +911,16 @@ diagnose these exact oracles/production boundaries and retain coverage, not
 alter the invoker or count three old canonical equality reds as all failures.
 All G9 production/normal model/native/A9 remains NOT EXECUTED; grant is ended.
 
+**Native-only discriminator assignment, no result:** after the verified unused
+G9 return, unchanged sourcebb5/new root/sole604 may execute exactly one
+existing canonical matrix-lifecycle with normal Jar materialization. This
+resolves the unproved real-FML/BE selection/paid-work/NBT/menu boundary,
+independently of Java UI bootstrap and NaN/AUTO oracles. Exact main/Forge
+build0 is real; native has not run for this source. Failed Java suites are
+not replayed or treated as stale, and neither pass nor acceptance is assumed.
+No tools check/model/writer/canonical/tracked output/A9 or target action.
+Source repairs continue isolated; source/alias staybb5 through this lease.
+
 **G7 report12:21:13Z, still awaiting final custody/leaseback:** clean
 ApplicableSource26e/Java0/locksfalse; one direct plain FTB boot reports0,
 ready51/Done and natural save/stop, with tested JAR/inventory captured before

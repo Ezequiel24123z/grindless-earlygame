@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Use one independent native discriminator while source harness repairs continue.**
+  After G9's verified unused return, sole604 gets a new native-only lease on
+  unchangedbb5/new root. Actual main/Forge build0 already exists; standalone
+  UI registration setup and NaN/AUTO oracle failures do not yet establish a
+  production defect. One existing real-FML matrix-lifecycle can distinguish
+  BE selection/paid-work/menu/NBT behavior without replaying those failed
+  suites or assuming their success. No tools check, model, tracked output,
+  A9, target or whole-tier claim is permitted; source failures remain blocked.
+  Initial JSON validation catches a missing metadata comma before grant
+  publication; it is repaired before execution, not hidden as a runtime pass.
 - **Close the unused G9 lease and retain exact assertion/oracle distinctions.**
   Parent verifies ten-file custodyc15e6f77 and the14:50:21Z read-only WMI/path
   closure: root absent, no Sync/JVM/guard creation/writes, Java0/locksfalse.

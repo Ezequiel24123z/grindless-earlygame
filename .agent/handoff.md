@@ -4,6 +4,19 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**NEW independent native-only discriminator, not resumed G9/model acceptance.**
+Sole604/exactbb5/new inventory root previously proved absent receives one
+canonical existing matrix-lifecycle. The exact main/Forge build already
+passes; Java UI preview bootstrap and NaN/AUTO oracles remain real failed
+source suites, not proven production failures. Native has never run for
+this selector. The new FML/BE selection/recipe-owned paid-work/menu/NBT probe
+can discriminate the production boundary while source0752 fixes its harness.
+Do not rerun failed Java suites, tool-javac, models/writers/CheckOnly/canonical,
+create A9 or write tracked files. Keep source/aliasbb5 frozen and retain the
+fresh world/JAR/inventory/raw exact outcomes, then return guard/locks/Java
+custody and the lease. A native pass would not close the separate source reds
+or prove client wire delivery/rendering/Survival/whole-tier acceptance.
+
 **G9 unused lease returned14:50:21.7730000Z and ten-file custody verified.**
 No canonical Sync, PC JVM/compiler/native/writer or A9 exists. The only PC
 action is read-only WMI/path closure without CommandLine or writes: new root
