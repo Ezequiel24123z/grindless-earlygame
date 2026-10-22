@@ -29,6 +29,9 @@ import java.util.function.Consumer;
 public final class VerifyMachineUi {
 
     private static final Path COMMON = Path.of("common/src/main/java/io/github/ezequiel24123z/grindless");
+    private static final String BLUEPRINT = "assemble/blueprint_tool";
+    private static final String PLANNER = "assemble/deconstruction_planner";
+    private static final String RETIRED = "assemble/chemical_washer";
     private static int assertions;
     private static int failures;
 
@@ -235,7 +238,7 @@ public final class VerifyMachineUi {
 
     private static void assemblerWire() {
         AssemblerSelectionNetwork.Request request = new AssemblerSelectionNetwork.Request(
-                19, 0xFEDCBA9876543210L, 7, "assemble/chemical_washer");
+                19, 0xFEDCBA9876543210L, 7, BLUEPRINT);
         FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
         try {
             AssemblerSelectionNetwork.writeRequest(data, request);
@@ -248,7 +251,7 @@ public final class VerifyMachineUi {
         for (int index = 0; index < 4100; index++) {
             history.put("removed/history/" + index, 0.125);
         }
-        var many = new MachineMenuHost.RecipeSelection("", "assemble/chemical_washer", 0.25, history,
+        var many = new MachineMenuHost.RecipeSelection("", BLUEPRINT, 0.25, history,
                 MachineMenuHost.SelectionIssue.AUTO);
         data = new FriendlyByteBuf(Unpooled.buffer());
         try {
@@ -259,7 +262,7 @@ public final class VerifyMachineUi {
         } finally {
             data.release();
         }
-        for (String id : List.of("", "removed/unknown", "press/plate/iron", "x".repeat(256))) {
+        for (String id : List.of("", RETIRED, "removed/unknown", "press/plate/iron", "x".repeat(256))) {
             data = new FriendlyByteBuf(Unpooled.buffer());
             try {
                 var value = new AssemblerSelectionNetwork.Request(19, 5L, 8, id);
@@ -285,22 +288,22 @@ public final class VerifyMachineUi {
         // Keep pure/index contracts pre-bootstrap; only item-bearing snapshots need vanilla registries.
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        var state = new MachineMenuHost.RecipeSelection("removed/selected", "assemble/chemical_washer", 160.34375,
-                Map.of("assemble/chemical_reactor", 0.15625, "removed/paid", 5.375),
+        var state = new MachineMenuHost.RecipeSelection(RETIRED, BLUEPRINT, 160.34375,
+                Map.of(PLANNER, 0.15625, "assemble/press", 5.375),
                 MachineMenuHost.SelectionIssue.UNAVAILABLE);
         var update = new AssemblerSelectionNetwork.Update(19, request.token(), 9, state,
-                Optional.of(List.of(new ProcessMachineMenu.RecipeChoice("assemble/chemical_washer", ItemStack.EMPTY),
-                        new ProcessMachineMenu.RecipeChoice("assemble/chemical_reactor", ItemStack.EMPTY))), true);
+                Optional.of(List.of(new ProcessMachineMenu.RecipeChoice(BLUEPRINT, ItemStack.EMPTY),
+                        new ProcessMachineMenu.RecipeChoice(PLANNER, ItemStack.EMPTY))), true);
         data = new FriendlyByteBuf(Unpooled.buffer());
         try {
             AssemblerSelectionNetwork.writeUpdate(data, update);
             var restored = AssemblerSelectionNetwork.readUpdate(data);
-            check("authoritative synchronization retains unknown configuration and exact partial/fractional work",
+            check("authoritative synchronization retains a retired normal target and exact live/retired paid work",
                     restored.container() == update.container() && restored.token() == update.token()
                             && restored.revision() == 9 && restored.state().equals(state) && restored.acknowledgement());
             check("the synchronized catalogue carries full stable IDs rather than local graph ordinals",
                     restored.catalogue().orElseThrow().stream().map(ProcessMachineMenu.RecipeChoice::id).toList()
-                            .equals(List.of("assemble/chemical_washer", "assemble/chemical_reactor")));
+                            .equals(List.of(BLUEPRINT, PLANNER)));
             check("an unresolved output icon remains empty rather than a fabricated item",
                     restored.catalogue().orElseThrow().stream().allMatch(choice -> choice.output().isEmpty()));
         } finally {
@@ -513,6 +516,14 @@ public final class VerifyMachineUi {
 
     private static void recipeShapes() throws IOException {
         ProcessLookup.rebuild(MaterialSnapshot.EMPTY);
+        var blueprint = ProcessLookup.byId(MachineFamily.ASSEMBLER, BLUEPRINT).orElseThrow();
+        var planner = ProcessLookup.byId(MachineFamily.ASSEMBLER, PLANNER).orElseThrow();
+        check("the selector fixtures are current colliding handheld-tool recipes, not normal machines",
+                blueprint.inputs().equals(planner.inputs())
+                        && !blueprint.itemOutputs().equals(planner.itemOutputs()));
+        check("the current server catalogue cannot advertise the retired normal-machine target",
+                ProcessLookup.byId(MachineFamily.ASSEMBLER, RETIRED).isEmpty()
+                        && ProcessLookup.byId(MachineFamily.ASSEMBLER, "assemble/press").isEmpty());
         for (MachineFamily family : MachineFamily.values()) {
             MachineMenuKind kind = MachineMenuKind.valueOf(family.name());
             check(family + " has a real physical menu schema", MachineMenuLayout.itemSlots(kind).size() == kind.size());

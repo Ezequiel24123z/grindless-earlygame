@@ -39,27 +39,28 @@ public final class VerifyLogic {
     }
 
     private static void assemblerWork() {
-        String washer = "assemble/chemical_washer";
-        String reactor = "assemble/chemical_reactor";
-        String cell = "assemble/electrolysis_cell";
+        // Pure ledger identities, not registered recipes or accepted Survival manufacture.
+        String partial = "unit/work/partial";
+        String blocked = "unit/work/blocked";
+        String fractional = "unit/work/fractional";
         AssemblerWork work = new AssemblerWork();
         yes("a fresh machine is unselected AUTO", work.selected().isEmpty() && work.suspended().isEmpty());
-        work.select(washer);
+        work.select(partial);
         double paid = 17.0 + ProcessLogic.work(13L, 32L, 0.75, 1.3);
         double fraction = ProcessLogic.work(1L, 32L, 0.5, 0.8);
         Map<String, Double> expected = new LinkedHashMap<>();
-        expected.put(washer, paid);
-        expected.put(reactor, 160.0);
-        expected.put(cell, fraction);
-        String active = washer;
-        for (String id : List.of(reactor, cell)) {
+        expected.put(partial, paid);
+        expected.put(blocked, 160.0);
+        expected.put(fractional, fraction);
+        String active = partial;
+        for (String id : List.of(blocked, fractional)) {
             double resumed = work.activate(active, paid, id);
             exact("a fresh target never inherits another target's paid work: " + id, 0.0, resumed);
             active = id;
             paid = expected.get(id);
         }
         for (int pass = 0; pass < 120; pass++) {
-            String next = List.of(washer, reactor, cell).get(pass % 3);
+            String next = List.of(partial, blocked, fractional).get(pass % 3);
             paid = work.activate(active, paid, next);
             active = next;
             work.select(next);
@@ -78,28 +79,28 @@ public final class VerifyLogic {
         work.select("");
         exact("selecting AUTO does not debit active work", expected.get(active), paid);
         String previous = active;
-        String next = previous.equals(washer) ? reactor : washer;
+        String next = previous.equals(partial) ? blocked : partial;
         paid = work.activate(previous, paid, next);
         exact("AUTO's chosen ID also resumes only its own paid balance", expected.get(next), paid);
 
         AssemblerWork legacy = new AssemblerWork();
-        exact("unattributed legacy work cannot pay a new recipe", 0.0, legacy.activate("", 0.125, washer));
+        exact("unattributed legacy work cannot pay a new recipe", 0.0, legacy.activate("", 0.125, partial));
         exact("unattributed legacy work is retained under its empty owner", 0.125, legacy.suspended().get(""));
         exact("a zero idle owner does not consume retained unattributed work", 0.0,
-                legacy.activate(washer, 0.0, reactor));
+                legacy.activate(partial, 0.0, blocked));
         AssemblerWork unknown = new AssemblerWork();
-        exact("unknown paid work cannot pay a known ID", 0.0, unknown.activate("removed/recipe", 25.375, washer));
+        exact("unknown paid work cannot pay a known ID", 0.0, unknown.activate("removed/recipe", 25.375, partial));
         exact("the exact unknown ID can recover its own work when it returns", 25.375,
-                unknown.activate(washer, 0.0, "removed/recipe"));
+                unknown.activate(partial, 0.0, "removed/recipe"));
 
         AssemblerWork completed = new AssemblerWork();
         double carry = 160.0 + fraction - 160.0;
         exact("a successful fractional carry can be suspended without an idle-only dead end", 0.0,
-                completed.activate(washer, carry, reactor));
+                completed.activate(partial, carry, blocked));
         exact("fractional post-completion work returns bit-exactly", carry,
-                completed.activate(reactor, 0.0, washer));
+                completed.activate(blocked, 0.0, partial));
         exact("selecting the current recipe cannot duplicate fractional carry", carry,
-                completed.activate(washer, carry, washer));
+                completed.activate(partial, carry, partial));
 
         AssemblerWork history = new AssemblerWork();
         String historical = "removed/history/0";
@@ -109,11 +110,11 @@ public final class VerifyLogic {
             historical = nextHistory;
         }
         exact("unavailable history cannot impose a paid-job cap on a new selected target", 0.0,
-                history.activate(historical, 0.125, washer));
+                history.activate(historical, 0.125, partial));
         exact("fractional work remains switchable even beside thousands of unavailable old IDs", 0.0,
-                history.activate(washer, 0.25, reactor));
+                history.activate(partial, 0.25, blocked));
         exact("that fractional work remains exactly recoverable without deleting unavailable history", 0.25,
-                history.activate(reactor, 0.0, washer));
+                history.activate(blocked, 0.0, partial));
         yes("all unavailable history remains retained", history.suspended().size() == 4101);
     }
 

@@ -1,5 +1,6 @@
 package io.github.ezequiel24123z.grindless.forge.recipe;
 
+import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import io.github.ezequiel24123z.grindless.Grindless;
 import io.github.ezequiel24123z.grindless.energy.FluxTier;
@@ -23,6 +24,7 @@ import io.github.ezequiel24123z.grindless.recipe.ProcessLookup;
 import io.github.ezequiel24123z.grindless.recipe.ProcessRecipe;
 import io.github.ezequiel24123z.grindless.registry.ModBlocks;
 import io.github.ezequiel24123z.grindless.registry.ModItems;
+import io.netty.buffer.Unpooled;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -31,14 +33,24 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,10 +71,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
-/** Existing-harness probe over real registrations and capability admission, never a registry bootstrap. */
+/** Existing-harness manual-ingredient and permitted-tool/menu probe, never a registry bootstrap or client proof. */
 @Mod.EventBusSubscriber(modid = Grindless.MOD_ID)
 public final class ControlMatrixInputChecks {
     private static final BlockPos POSITION = new BlockPos(8, 300, 8);
+    private static final String BLUEPRINT = "assemble/blueprint_tool";
+    private static final String PLANNER = "assemble/deconstruction_planner";
+    private static final String RETIRED = "assemble/chemical_washer";
     private static boolean started;
     private int assertions;
 
@@ -88,9 +103,9 @@ public final class ControlMatrixInputChecks {
         try {
             checks.check(source.getLevel() == source.getServer().overworld(), "Use the actual Overworld");
             checks.registered();
-            checks.primaryControl();
+            checks.manualCrafting(source.getLevel());
             checks.capability(source.getLevel());
-            Grindless.LOG.info("GRINDLESS_MATRIX_INPUT_NATIVE_PASS assertions={} scope=actual_registered_items_only",
+            Grindless.LOG.info("GRINDLESS_MATRIX_INPUT_NATIVE_PASS assertions={} scope=registered_manual_ingredient_and_permitted_tool_menu_carriers",
                     checks.assertions);
             return 1;
         } catch (RuntimeException failure) {
@@ -102,48 +117,202 @@ public final class ControlMatrixInputChecks {
         }
     }
 
-    private void primaryControl() {
-        ProcessRecipe press = recipe("assemble/press");
-        check(press.itemInputs().get(0).isMinimumControl(), "The real Press reproduction has minimum control first");
-        ProcessRecipe predecessor = recipe("assemble/relay_matrix_f2");
-        check(!predecessor.itemInputs().get(0).isMinimumControl()
-                        && predecessor.itemInputs().get(0).id().equals(FabricationLogic.RELAY_MATRIX),
-                "A nonempty ordinary Relay item index competes with the minimum-primary role");
-        ControlMatrixItem relay = (ControlMatrixItem) ModItems.RELAY_MATRIX.get();
-        ItemStack[] inputs = new ItemStack[press.itemInputs().size()];
-        ItemStack high = relay.stackFor(FluxTier.F3, press.itemInputs().get(0).count());
-        inputs[0] = high;
-        for (int slot = 1; slot < inputs.length; slot++) {
-            IngredientSpec input = press.itemInputs().get(slot);
-            inputs[slot] = IngredientSpec.TAG.equals(input.kind())
-                    && input.id().equals("minecraft:stone_crafting_materials")
-                    ? new ItemStack(Items.COBBLESTONE, input.count())
-                    : ProcessLookup.resolve(new OutputSpec(input.kind(), input.id(), input.count(), false))
-                            .orElseThrow();
-            check(ProcessLookup.matches(input, inputs[slot]),
-                    "Actual Press fixture input " + input.qualified() + " count=" + input.count());
+    /** One real loaded shaped recipe, not a fake process row or an exhaustive per-machine runtime matrix. */
+    private void manualCrafting(ServerLevel level) {
+        ResourceLocation id = new ResourceLocation(Grindless.MOD_ID, "pulverizer");
+        var loaded = level.getRecipeManager().byKey(id).orElseThrow();
+        check(loaded instanceof ShapedRecipe, "RecipeManager must load the real grindless:pulverizer shaped recipe");
+        ShapedRecipe shaped = (ShapedRecipe) loaded;
+        check(shaped.getWidth() > 0 && shaped.getWidth() <= 3 && shaped.getHeight() > 0 && shaped.getHeight() <= 3,
+                "The representative manual recipe fits the native crafting table");
+        List<Ingredient> controls = shaped.getIngredients().stream()
+                .filter(ControlMatrixInputChecks::minimumControlJson).toList();
+        check(controls.size() == 1, "The loaded manual bill has exactly one serialized minimum-control cell");
+        Ingredient control = controls.get(0);
+        check(control.toJson().getAsJsonObject().get("tier").getAsString().equals(FluxTier.F1.name()),
+                "The real manual constructor requires baseline F1 control");
+        manualIngredient(control);
+        ItemStack baseline = new ItemStack(ModBlocks.PULVERIZER.get());
+        check(ItemStack.matches(shaped.getResultItem(level.registryAccess()), baseline),
+                "Higher control must still produce the unchanged baseline Pulverizer, not a tier upgrade");
+
+        check(level.hasChunkAt(POSITION) && level.isInWorldBounds(POSITION)
+                        && level.getWorldBorder().isWithinBounds(POSITION),
+                "The manual carrier reuses the already loaded legal diagnostic cell");
+        check(level.getBlockState(POSITION).isAir() && level.getBlockEntity(POSITION) == null,
+                "Never replace an existing block for the manual carrier");
+        check(level.setBlock(POSITION, Blocks.CRAFTING_TABLE.defaultBlockState(), 3),
+                "Place one actual vanilla crafting table in the existing disposable carrier");
+        // Forge's public FakePlayer supplies a no-delivery connection for vanilla result updates.
+        // It is not a connected client, packet-delivery, rendered-GUI or Survival proof.
+        FakePlayer player = new FakePlayer(level,
+                new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000018801"), "ManualCraftProbe"));
+        player.setPos(POSITION.getX() + 0.5, POSITION.getY() + 0.5, POSITION.getZ() + 0.5);
+        check(player.getInventory().isEmpty(), "The manual carrier begins with no invented finished output");
+        CraftingMenu menu = new CraftingMenu(88, player.getInventory(), ContainerLevelAccess.create(level, POSITION));
+        player.containerMenu = menu;
+        check(menu.stillValid(player), "The actual native crafting menu is bound to the nearby real table");
+        CraftingContainer grid = (CraftingContainer) menu.getSlot(1).container;
+        int controlCell = -1;
+        for (int row = 0; row < shaped.getHeight(); row++) {
+            for (int col = 0; col < shaped.getWidth(); col++) {
+                Ingredient ingredient = shaped.getIngredients().get(row * shaped.getWidth() + col);
+                if (ingredient.isEmpty()) {
+                    continue;
+                }
+                ItemStack[] candidates = ingredient.getItems();
+                check(candidates.length > 0, "Each real shaped material cell has a loaded physical candidate");
+                int cell = row * grid.getWidth() + col;
+                ItemStack physical = candidates[0].copyWithCount(2);
+                if (minimumControlJson(ingredient)) {
+                    controlCell = cell;
+                    physical = ((ControlMatrixItem) ModItems.RELAY_MATRIX.get()).stackFor(FluxTier.F3, 2);
+                }
+                check(ingredient.test(physical), "The representative bill derives each input from its loaded Ingredient");
+                grid.setItem(cell, physical);
+            }
         }
-        check(!ProcessLookup.matches(predecessor.itemInputs().get(0), high),
-                "The existing exact F2 predecessor still rejects F3");
-        check(ProcessLookup.accepts(MachineFamily.ASSEMBLER, 0, high.copyWithCount(1)),
-                "Minimum-primary hopper admission accepts the first real F3 controller");
-        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id().equals(press.id()),
-                "A populated ordinary item index cannot hide the real F3 minimum-primary recipe");
-        inputs[0] = ItemStack.EMPTY;
-        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
-                "Missing primary control cannot match through the pure role index");
-        inputs[0] = new ItemStack(Items.PAPER, high.getCount());
-        inputs[0].setTag(high.getTag().copy());
-        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
-                "An ordinary item with copied F3 NBT cannot match the indexed minimum role");
-        inputs[0] = new ItemStack(relay, high.getCount());
-        inputs[0].getOrCreateTag().putString(ControlMatrixNbt.RATING, "3");
-        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
-                "Malformed primary Matrix NBT cannot match through the pure role index");
-        inputs[0] = high;
-        inputs[1] = inputs[1].copyWithCount(inputs[1].getCount() - 1);
-        check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).filter(row -> row.id().equals(press.id())).isEmpty(),
-                "A minimum-primary index still requires the entire actual material batch");
+        check(controlCell >= 0, "The actual manual grid contains its declared minimum-control cell");
+        ControlMatrixItem relay = (ControlMatrixItem) ModItems.RELAY_MATRIX.get();
+        grid.setItem(controlCell, new ItemStack(relay, 2));
+        manualResult(level, shaped, grid, menu, baseline, true, "untagged registered default F1");
+        for (Consumer<CompoundTag> mutation : malformedRatings()) {
+            ItemStack invalid = new ItemStack(relay, 2);
+            CompoundTag tag = new CompoundTag();
+            mutation.accept(tag);
+            invalid.setTag(tag);
+            grid.setItem(controlCell, invalid);
+            manualResult(level, shaped, grid, menu, baseline, false, "malformed/unsupported physical control");
+        }
+        ItemStack unrelated = new ItemStack(Items.PAPER, 2);
+        unrelated.setTag(relay.stackFor(FluxTier.F3, 2).getTag().copy());
+        grid.setItem(controlCell, unrelated);
+        manualResult(level, shaped, grid, menu, baseline, false, "unrelated item with copied F3 NBT");
+        grid.setItem(controlCell, unknownMatrix(relay));
+        manualResult(level, shaped, grid, menu, baseline, false, "unregistered encoded item identity");
+        grid.setItem(controlCell, ItemStack.EMPTY);
+        manualResult(level, shaped, grid, menu, baseline, false, "missing control");
+        grid.setItem(controlCell, relay.stackFor(FluxTier.F3, 2));
+        manualResult(level, shaped, grid, menu, baseline, true, "registered higher F3");
+        List<ItemStack> before = java.util.stream.IntStream.range(0, grid.getContainerSize())
+                .mapToObj(cell -> grid.getItem(cell).copy()).toList();
+        check(ItemStack.matches(menu.quickMoveStack(player, 0), baseline),
+                "One native result-slot transfer settles exactly one baseline output into inventory");
+        check(player.getInventory().countItem(baseline.getItem()) == 1,
+                "The real result transfer owns one output, not the next preview or a repeated craft");
+        for (int cell = 0; cell < grid.getContainerSize(); cell++) {
+            ItemStack prior = before.get(cell);
+            ItemStack remaining = grid.getItem(cell);
+            check(prior.isEmpty() ? remaining.isEmpty()
+                            : ItemStack.isSameItemSameTags(prior, remaining) && remaining.getCount() == prior.getCount() - 1,
+                    "Native settlement consumes each actual shaped cell exactly once: " + cell);
+        }
+        check(ItemStack.matches(grid.getItem(controlCell), relay.stackFor(FluxTier.F3, 1)),
+                "Native settlement consumes one real higher Matrix without altering its remaining rating");
+        menu.slotsChanged(grid);
+        check(player.getInventory().countItem(baseline.getItem()) == 1,
+                "Recomputing the next result cannot grant or settle a second output");
+        // This no-delivery FakePlayer is offline. Move real leftovers through the native input slots
+        // before close, rather than assuming vanilla's disconnected-player close returns them to inventory.
+        for (int cell = 0; cell < grid.getContainerSize(); cell++) {
+            ItemStack leftover = grid.getItem(cell).copy();
+            if (!leftover.isEmpty()) {
+                check(ItemStack.matches(menu.quickMoveStack(player, cell + 1), leftover) && grid.getItem(cell).isEmpty(),
+                        "Native input-slot transfer returns only the exact unconsumed stock: " + cell);
+            }
+        }
+        menu.removed(player);
+        player.containerMenu = player.inventoryMenu;
+        check(player.getInventory().countItem(baseline.getItem()) == 1
+                        && player.getInventory().countItem(relay) == 1 && grid.isEmpty(),
+                "Native transfers/close retain one unconsumed controller and one crafted output, with no extra grant");
+        check(level.removeBlock(POSITION, false), "Remove only the successful empty manual diagnostic table");
+    }
+
+    private static boolean minimumControlJson(Ingredient ingredient) {
+        var json = ingredient.toJson();
+        return json.isJsonObject() && json.getAsJsonObject().has("type")
+                && json.getAsJsonObject().get("type").getAsString().equals("grindless:minimum_control");
+    }
+
+    private void manualResult(ServerLevel level, ShapedRecipe shaped, CraftingContainer grid, CraftingMenu menu,
+                              ItemStack baseline, boolean accepted, String label) {
+        check(shaped.matches(grid, level) == accepted, "Loaded shaped matching: " + label);
+        var current = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, grid, level);
+        check(accepted ? current.isPresent() && current.get().getId().equals(shaped.getId()) : current.isEmpty(),
+                "Actual RecipeManager authority, with no fallback: " + label);
+        check(accepted ? ItemStack.matches(menu.getSlot(0).getItem(), baseline) : menu.getSlot(0).getItem().isEmpty(),
+                "Actual native result-slot admission: " + label);
+    }
+
+    private void manualIngredient(Ingredient loaded) {
+        JsonObject contract = new JsonObject();
+        contract.addProperty("type", "grindless:minimum_control");
+        contract.addProperty("tier", FluxTier.F1.name());
+        check(loaded.toJson().equals(contract), "The loaded manual Ingredient retains the agreed serializer JSON");
+        Ingredient json = Ingredient.fromJson(loaded.toJson());
+        FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
+        Ingredient network;
+        try {
+            loaded.toNetwork(data);
+            network = Ingredient.fromNetwork(data);
+            check(!data.isReadable(), "The actual custom Ingredient network roundtrip consumes its exact payload");
+        } finally {
+            data.release();
+        }
+        ControlMatrixItem relay = (ControlMatrixItem) ModItems.RELAY_MATRIX.get();
+        ItemStack high = relay.stackFor(FluxTier.F3, 1);
+        ItemStack unrelated = new ItemStack(Items.PAPER);
+        unrelated.setTag(high.getTag().copy());
+        ItemStack unknown = unknownMatrix(relay);
+        int rating = FluxTier.F3.ordinal();
+        List<Consumer<CompoundTag>> wholeNumbers = List.of(
+                tag -> tag.putByte(ControlMatrixNbt.RATING, (byte) rating),
+                tag -> tag.putShort(ControlMatrixNbt.RATING, (short) rating),
+                tag -> tag.putInt(ControlMatrixNbt.RATING, rating),
+                tag -> tag.putLong(ControlMatrixNbt.RATING, rating),
+                tag -> tag.putFloat(ControlMatrixNbt.RATING, rating),
+                tag -> tag.putDouble(ControlMatrixNbt.RATING, rating));
+        for (Ingredient ingredient : List.of(loaded, json, network)) {
+            check(ingredient.toJson().equals(contract) && !ingredient.isSimple(),
+                    "Loaded/JSON/network variants retain NBT-sensitive semantics, never simple item expansion");
+            check(ingredient.test(new ItemStack(relay)) && ingredient.test(high),
+                    "Loaded/JSON/network matching accepts real untagged F1 and factory-built higher F3");
+            check(!ingredient.test(ItemStack.EMPTY) && !ingredient.test(unrelated) && !ingredient.test(unknown),
+                    "Loaded/JSON/network matching refuses absent, unrelated and unregistered encoded inputs");
+            List<ItemStack> display = List.of(ingredient.getItems());
+            check(display.size() == 3 && display.stream().allMatch(ingredient::test)
+                            && display.stream().allMatch(stack -> stack.getItem() == relay)
+                            && display.stream().map(stack -> relay.spec(stack).orElseThrow().rating())
+                            .collect(java.util.stream.Collectors.toSet()).equals(Set.of(FluxTier.F1, FluxTier.F2, FluxTier.F3)),
+                    "Display candidates are the three real registered Relay capacities, not fictitious architectures");
+            for (Consumer<CompoundTag> write : wholeNumbers) {
+                ItemStack valid = new ItemStack(relay);
+                CompoundTag tag = new CompoundTag();
+                write.accept(tag);
+                valid.setTag(tag.copy());
+                check(ingredient.test(valid) && valid.getTag().equals(tag),
+                        "Whole-number legacy NBT types remain valid without rewriting the physical stack");
+            }
+            for (Consumer<CompoundTag> write : malformedRatings()) {
+                ItemStack invalid = new ItemStack(relay);
+                CompoundTag tag = new CompoundTag();
+                write.accept(tag);
+                invalid.setTag(tag);
+                check(!ingredient.test(invalid), "Loaded/JSON/network matching refuses malformed physical NBT");
+            }
+        }
+    }
+
+    /** Decode an unknown saved ID; never construct/register an intrusive native Item after registry freeze. */
+    private ItemStack unknownMatrix(ControlMatrixItem relay) {
+        ResourceLocation unknown = new ResourceLocation(Grindless.MOD_ID, "unregistered_matrix_fixture");
+        check(!BuiltInRegistries.ITEM.containsKey(unknown), "The unknown encoded identity must actually be unregistered");
+        CompoundTag encoded = relay.stackFor(FluxTier.F3, 1).save(new CompoundTag());
+        encoded.putString("id", unknown.toString());
+        ItemStack decoded = ItemStack.of(encoded);
+        check(decoded.isEmpty(), "Vanilla decoding cannot invent physical stock for an unregistered item ID");
+        return decoded;
     }
 
     private void registered() {
@@ -154,8 +323,7 @@ public final class ControlMatrixInputChecks {
                 "The ordinary Thermal core is bound to its declared real item registration");
         IngredientSpec minimum = IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 2);
         IngredientSpec f2 = IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F2, 2);
-        IngredientSpec exact = new IngredientSpec(IngredientSpec.ITEM, FabricationLogic.RELAY_MATRIX, 2, 1);
-        IngredientSpec live = wireMill().itemInputs().get(3);
+        IngredientSpec exact = IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 2);
         IngredientSpec predecessor = recipe("assemble/relay_matrix_f2").itemInputs().get(0);
         Set<MatrixArchitecture> architectures = EnumSet.noneOf(MatrixArchitecture.class);
         int variants = 0;
@@ -179,24 +347,14 @@ public final class ControlMatrixInputChecks {
                 ItemStack stack = matrix.stackFor(rating, 2);
                 ItemStack before = stack.copy();
                 check(ProcessLookup.matches(minimum, stack), "Real supported capacity satisfies the minimum");
-                check(ProcessLookup.matches(f2, stack) == (rating.ordinal() >= 2),
+                check(ProcessLookup.matches(f2, stack) == (rating.ordinal() >= FluxTier.F2.ordinal()),
                         "Lower capacity is rejected independently of architecture");
                 boolean relayF1 = item == ModItems.RELAY_MATRIX.get() && rating == FluxTier.F1;
                 check(ProcessLookup.matches(exact, stack) == relayF1, "Old constructor stays exact");
                 check(ProcessLookup.matches(predecessor, stack) == relayF1, "No substitution in the F2 predecessor");
-                check(ProcessLookup.accepts(MachineFamily.ASSEMBLER, 3, stack.copyWithCount(1)),
-                        "Count-ignoring live admission accepts the first controller");
                 check(!ProcessLookup.matches(minimum, stack.copyWithCount(1)), "Full batch count is still required");
                 check(!ProcessLookup.matches(minimum, stack.copyWithCount(0)), "Zero count is not physical input");
                 check(!ProcessLookup.matches(minimum, stack.copyWithCount(-1)), "Negative count is not physical input");
-                ItemStack[] inputs = wireInputs(stack);
-                check(ProcessLookup.matches(wireMill(), inputs), "The real selected Wire Mill recipe matches");
-                check(ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow().id().equals("assemble/wire_mill"),
-                        "The real graph selects the Wire Mill with stronger stock");
-                inputs[1].setCount(1);
-                check(!ProcessLookup.matches(wireMill(), inputs), "A partial coil batch cannot start");
-                check(ProcessLookup.accepts(MachineFamily.ASSEMBLER, 1, inputs[1]),
-                        "A hopper may preload the first of two coils");
                 SimpleContainer inventory = new SimpleContainer(1);
                 inventory.setItem(0, stack.copy());
                 check(QuestInventoryEvidence.count(inventory, QuestCatalogue.byId("relay")) == (relayF1 ? 2 : 0),
@@ -204,7 +362,8 @@ public final class ControlMatrixInputChecks {
                 check(ItemStack.matches(before, stack), "Selection and evidence cannot mutate a Matrix");
             }
         }
-        check(architectures.contains(MatrixArchitecture.RELAY), "The actual Relay registration must be present");
+        check(architectures.equals(EnumSet.of(MatrixArchitecture.RELAY)),
+                "Only Relay is really registered; absent architectures remain pure contracts, not native fixtures");
         List<ItemStack> alternatives = ProcessLookup.matrixInputs(minimum);
         check(alternatives.size() == variants, "Viewer alternatives enumerate only actual registered capacities");
         check(alternatives.stream().allMatch(stack -> stack.getCount() == 2 && ProcessLookup.matches(minimum, stack)),
@@ -215,28 +374,33 @@ public final class ControlMatrixInputChecks {
                 relay.stackFor(FluxTier.F1, 1)), "A false declared item identity cannot borrow a real Matrix");
         ItemStack ordinary = new ItemStack(Items.PAPER, 2);
         ordinary.setTag(relay.stackFor(FluxTier.F3, 2).getTag().copy());
-        check(!ProcessLookup.matches(live, ordinary), "An ordinary item cannot spoof physical Matrix capacity");
-        List<Consumer<CompoundTag>> malformed = List.of(
-                tag -> tag.putInt(ControlMatrixNbt.RATING, 0),
-                tag -> tag.putInt(ControlMatrixNbt.RATING, -1),
-                tag -> tag.putInt(ControlMatrixNbt.RATING, 4),
-                tag -> tag.putInt(ControlMatrixNbt.RATING, 16),
-                tag -> tag.putString(ControlMatrixNbt.RATING, "3"),
-                tag -> tag.putDouble(ControlMatrixNbt.RATING, 1.5),
-                tag -> tag.putLong(ControlMatrixNbt.RATING, 4_294_967_297L),
-                tag -> tag.putDouble(ControlMatrixNbt.RATING, Double.NaN),
-                tag -> tag.putDouble(ControlMatrixNbt.RATING, Double.POSITIVE_INFINITY),
-                tag -> tag.put(ControlMatrixNbt.RATING, new CompoundTag()),
-                tag -> tag.put(ControlMatrixNbt.RATING, new ListTag()));
-        for (Consumer<CompoundTag> mutation : malformed) {
+        check(!ProcessLookup.matches(minimum, ordinary), "An ordinary item cannot spoof physical Matrix capacity");
+        for (Consumer<CompoundTag> mutation : malformedRatings()) {
             ItemStack invalid = new ItemStack(relay, 2);
             CompoundTag tag = new CompoundTag();
             mutation.accept(tag);
             invalid.setTag(tag);
-            check(!ProcessLookup.matches(live, invalid), "Malformed or partial physical NBT is not admission");
+            check(!ProcessLookup.matches(minimum, invalid), "Malformed or partial physical NBT is not admission");
         }
         Grindless.LOG.info("Matrix probe actual architectures={} rated_variants={}; absent architectures not tested natively",
                 architectures, variants);
+    }
+
+    private static List<Consumer<CompoundTag>> malformedRatings() {
+        return List.of(
+                tag -> tag.putInt(ControlMatrixNbt.RATING, 0),
+                tag -> tag.putInt(ControlMatrixNbt.RATING, -1),
+                tag -> tag.putInt(ControlMatrixNbt.RATING, FluxTier.F4.ordinal()),
+                tag -> tag.putInt(ControlMatrixNbt.RATING, FluxTier.values().length),
+                tag -> tag.putString(ControlMatrixNbt.RATING, Integer.toString(FluxTier.F3.ordinal())),
+                tag -> tag.putDouble(ControlMatrixNbt.RATING, FluxTier.F1.ordinal() + 0.5),
+                tag -> tag.putFloat(ControlMatrixNbt.RATING, FluxTier.F1.ordinal() + 0.5f),
+                tag -> tag.putLong(ControlMatrixNbt.RATING, 4_294_967_297L),
+                tag -> tag.putDouble(ControlMatrixNbt.RATING, Double.NaN),
+                tag -> tag.putDouble(ControlMatrixNbt.RATING, Double.POSITIVE_INFINITY),
+                tag -> tag.putDouble(ControlMatrixNbt.RATING, Double.NEGATIVE_INFINITY),
+                tag -> tag.put(ControlMatrixNbt.RATING, new CompoundTag()),
+                tag -> tag.put(ControlMatrixNbt.RATING, new ListTag()));
     }
 
     private void capability(ServerLevel level) throws ReflectiveOperationException, IOException {
@@ -251,28 +415,41 @@ public final class ControlMatrixInputChecks {
         ProcessMachineBlockEntity machine = (ProcessMachineBlockEntity) level.getBlockEntity(POSITION);
         IItemHandler handler = machine.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP).resolve().orElseThrow();
         check(handler.getSlots() == 4, "The real sided handler exposes the four unchanged input slots");
-        ControlMatrixItem relay = (ControlMatrixItem) ModItems.RELAY_MATRIX.get();
-        ItemStack high = relay.stackFor(FluxTier.F3, 2);
-        check(machine.canPlaceItemThroughFace(3, high.copyWithCount(1), Direction.UP),
-                "Vanilla sided admission accepts the first higher controller");
-        check(handler.insertItem(3, high.copyWithCount(1), true).isEmpty() && machine.getItem(3).isEmpty(),
+        ProcessRecipe tool = recipe(BLUEPRINT);
+        ItemStack[] inputs = actualInputs(tool);
+        int grouped = tool.itemInputs().size();
+        check(grouped > 0 && grouped <= handler.getSlots(), "Use the actual permitted tool's grouped bill");
+        int accumulated = java.util.stream.IntStream.range(0, grouped)
+                .filter(slot -> inputs[slot].getCount() > 1).findFirst().orElseThrow();
+        ItemStack first = inputs[accumulated].copyWithCount(1);
+        check(machine.canPlaceItemThroughFace(accumulated, first, Direction.UP),
+                "Vanilla sided admission accepts the first unit of a real grouped tool input");
+        check(handler.insertItem(accumulated, first.copy(), true).isEmpty() && machine.getItem(accumulated).isEmpty(),
                 "Forge hopper simulation admits without spending");
-        check(handler.insertItem(3, high.copyWithCount(1), false).isEmpty() && machine.getItem(3).getCount() == 1,
-                "Actual Forge hopper admission inserts the first higher controller");
-        check(handler.insertItem(3, high.copyWithCount(1), false).isEmpty() && machine.getItem(3).getCount() == 2,
+        check(handler.insertItem(accumulated, first.copy(), false).isEmpty()
+                        && machine.getItem(accumulated).getCount() == 1,
+                "Actual Forge hopper admission inserts the first grouped material");
+        check(machine.saveWithoutMetadata().getString("Recipe").isEmpty(),
+                "One preloaded unit cannot start a partial grouped bill");
+        check(handler.insertItem(accumulated, first.copy(), false).isEmpty()
+                        && machine.getItem(accumulated).getCount() == 2,
                 "Actual Forge hopper admission accumulates rather than requiring a full batch");
-        ItemStack[] inputs = wireInputs(high);
-        for (int slot = 0; slot < 3; slot++) {
-            check(handler.insertItem(slot, inputs[slot], false).isEmpty(), "Actual material admission for input " + slot);
+        for (int slot = 0; slot < grouped; slot++) {
+            int remaining = inputs[slot].getCount() - (slot == accumulated ? 2 : 0);
+            if (remaining > 0) {
+                check(handler.insertItem(slot, inputs[slot].copyWithCount(remaining), false).isEmpty(),
+                        "Actual material admission for input " + slot);
+            }
         }
-        check(machine.saveWithoutMetadata().getString("Recipe").equals("assemble/wire_mill"),
-                "Actual capability insertion selects the named machine route");
+        ProcessRecipe expectedAuto = ProcessLookup.find(MachineFamily.ASSEMBLER, inputs).orElseThrow();
+        check(machine.saveWithoutMetadata().getString("Recipe").equals(expectedAuto.id()),
+                "Actual capability insertion keeps the live lookup-derived AUTO choice: " + expectedAuto.id());
         MenuProbe probe = explicitSelection(level, machine);
         machine.clearContent();
         check(level.removeBlock(POSITION, false), "Remove only the successful empty diagnostic fixture");
         CompoundTag removed = machine.saveWithoutMetadata();
         check(probe.menu().selectRecipe(probe.player(), probe.menu().containerId,
-                        probe.menu().synchronizedOpeningToken(), 0, "assemble/chemical_washer") == SelectionResult.CLOSED,
+                        probe.menu().synchronizedOpeningToken(), 0, BLUEPRINT) == SelectionResult.CLOSED,
                 "A removed actual host cannot receive an old menu selection");
         check(machine.saveWithoutMetadata().equals(removed), "A stale removed-host request preserves all retained state");
         probe.player().containerMenu = probe.player().inventoryMenu;
@@ -286,9 +463,12 @@ public final class ControlMatrixInputChecks {
             throws ReflectiveOperationException, IOException {
         machine.clearContent();
         check(machine.network() == null, "This isolated high fixture must not draw another diagnostic network");
-        ProcessRecipe washer = recipe("assemble/chemical_washer");
-        ProcessRecipe reactor = recipe("assemble/chemical_reactor");
-        check(washer.inputs().equals(reactor.inputs()), "Use two real unchanged same-bill construction rows");
+        ProcessRecipe blueprint = recipe(BLUEPRINT);
+        ProcessRecipe planner = recipe(PLANNER);
+        check(blueprint.inputs().equals(planner.inputs()), "Use two real unchanged same-bill permitted handheld tools");
+        check(blueprint.itemOutputs().get(0).id().equals(FabricationLogic.BLUEPRINT_TOOL)
+                        && planner.itemOutputs().get(0).id().equals(FabricationLogic.DECONSTRUCTION_PLANNER),
+                "The colliding rows produce genuine stock-consuming tools, never complete normal machine blocks");
         ServerPlayer player = new ServerPlayer(level.getServer(), level,
                 new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000018501"), "AssemblerProbe"));
         player.setPos(POSITION.getX() + 0.5, POSITION.getY() + 0.5, POSITION.getZ() + 0.5);
@@ -298,19 +478,25 @@ public final class ControlMatrixInputChecks {
         check(token != 0L, "An actual server menu has its own nonzero opening token");
         int revision = selectionRevision(menu);
         CompoundTag unchanged = machine.saveWithoutMetadata();
-        check(menu.selectRecipe(player, menu.containerId + 1, token, revision, washer.id()) == SelectionResult.CLOSED,
+        check(menu.selectRecipe(player, menu.containerId + 1, token, revision, blueprint.id()) == SelectionResult.CLOSED,
                 "A wrong actual container ID refuses");
-        check(menu.selectRecipe(player, menu.containerId, token + 1, revision, washer.id()) == SelectionResult.STALE,
+        check(menu.selectRecipe(player, menu.containerId, token + 1, revision, blueprint.id()) == SelectionResult.STALE,
                 "A foreign actual opening refuses");
-        check(menu.selectRecipe(player, menu.containerId, token, revision - 1, washer.id()) == SelectionResult.STALE,
+        check(menu.selectRecipe(player, menu.containerId, token, revision - 1, blueprint.id()) == SelectionResult.STALE,
                 "A stale actual catalogue revision refuses");
         check(menu.selectRecipe(player, menu.containerId, token, revision, "removed/request") == SelectionResult.INVALID_RECIPE,
                 "An unknown current ID cannot become a new selected configuration");
         check(menu.selectRecipe(player, menu.containerId, token, revision, "electrolysis/water")
                         == SelectionResult.INVALID_RECIPE,
                 "A real recipe of another family cannot become an Assembler target");
+        for (String retired : List.of(RETIRED, "assemble/press")) {
+            check(ProcessLookup.byId(MachineFamily.ASSEMBLER, retired).isEmpty(),
+                    "The actual native current catalogue has retired normal-machine target " + retired);
+            check(menu.selectRecipe(player, menu.containerId, token, revision, retired) == SelectionResult.INVALID_RECIPE,
+                    "An explicitly requested retired normal target refuses rather than falling back");
+        }
         player.getAbilities().mayBuild = false;
-        check(menu.selectRecipe(player, menu.containerId, token, revision, washer.id()) == SelectionResult.DENIED,
+        check(menu.selectRecipe(player, menu.containerId, token, revision, blueprint.id()) == SelectionResult.DENIED,
                 "Actual player build permission is enforced before changing the machine");
         player.getAbilities().mayBuild = true;
         check(machine.saveWithoutMetadata().equals(unchanged), "All invalid/unauthorized requests preserve exact state");
@@ -319,7 +505,7 @@ public final class ControlMatrixInputChecks {
                 new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000018502"), "OtherAssembler"));
         other.setPos(player.getX(), player.getY(), player.getZ());
         other.containerMenu = menu;
-        check(menu.selectRecipe(other, menu.containerId, token, revision, washer.id()) == SelectionResult.CLOSED,
+        check(menu.selectRecipe(other, menu.containerId, token, revision, blueprint.id()) == SelectionResult.CLOSED,
                 "Another physical player cannot reuse the current menu");
         other.containerMenu = other.inventoryMenu;
 
@@ -330,11 +516,20 @@ public final class ControlMatrixInputChecks {
         long tick = level.getGameTime() + 1;
         Method work = ProcessMachineBlockEntity.class.getDeclaredMethod("work", long.class, List.class);
         work.setAccessible(true);
-        for (ProcessRecipe selected : List.of(washer, reactor)) {
+        tick = retiredWork(machine, player, menu, blueprint, planner, work, tick);
+        ItemStack[] collision = actualInputs(blueprint);
+        ProcessRecipe expectedAuto = ProcessLookup.find(MachineFamily.ASSEMBLER, collision).orElseThrow();
+        check(ProcessLookup.matches(planner, collision)
+                        && List.of(blueprint, planner).stream().anyMatch(row -> !row.id().equals(expectedAuto.id())),
+                "A real permitted collision discriminates exact selection from actual AUTO=" + expectedAuto.id());
+        for (ProcessRecipe selected : List.of(blueprint, planner)) {
             choose(player, menu, selected.id(), SelectionResult.SELECTED);
             ItemStack[] physical = actualInputs(selected);
             ProcessRecipe auto = ProcessLookup.find(MachineFamily.ASSEMBLER, physical).orElseThrow();
-            check(!auto.id().equals(selected.id()), "The actual dry-last ambiguity exists independently of selection");
+            check(auto.id().equals(expectedAuto.id())
+                            && ProcessLookup.findSelected(MachineFamily.ASSEMBLER, selected.id(), physical,
+                            io.github.ezequiel24123z.grindless.fluid.FluidState.EMPTY, List.of()).orElseThrow() == selected,
+                    "Exact stable-ID matching is independent of the lookup-derived AUTO choice");
             supply(machine, physical);
             for (int paid = 0; paid < selected.durationTicks(); paid++) {
                 machine.energy().setStored(selected.fuPerTick());
@@ -351,29 +546,29 @@ public final class ControlMatrixInputChecks {
             check(machine.inspectionProgress() == 0.0, "An exact full cycle has no duplicated work");
             machine.setItem(4, ItemStack.EMPTY);
         }
-        choose(player, menu, washer.id(), SelectionResult.SELECTED);
-        supply(machine, actualInputs(washer));
+        choose(player, menu, blueprint.id(), SelectionResult.SELECTED);
+        supply(machine, actualInputs(blueprint));
         CompoundTag saved = machine.saveWithoutMetadata();
-        saved.putDouble("Progress", washer.durationTicks() - 0.75);
+        saved.putDouble("Progress", blueprint.durationTicks() - 0.75);
         CompoundTag speed = new CompoundTag();
         speed.putInt("SPEED", 1);
         saved.put("Upgrades", speed);
         machine.load(binary(saved));
-        machine.energy().setStored(washer.fuPerTick());
+        machine.energy().setStored(blueprint.fuPerTick());
         work.invoke(machine, tick++, List.<FluidInsert.Source>of());
         check(machine.getItem(4).is(BuiltInRegistries.ITEM.get(new net.minecraft.resources.ResourceLocation(
-                        washer.itemOutputs().get(0).id()))) && machine.inspectionProgress() == 1.25,
+                        blueprint.itemOutputs().get(0).id()))) && machine.inspectionProgress() == 1.25,
                 "An actual upgraded registered cycle retains fractional carry after successful settlement");
         machine.setItem(4, ItemStack.EMPTY);
-        choose(player, menu, reactor.id(), SelectionResult.SELECTED);
+        choose(player, menu, planner.id(), SelectionResult.SELECTED);
         saved = machine.saveWithoutMetadata();
         saved.putDouble("Progress", 23.375);
         machine.load(binary(saved));
         for (int reopen = 0; reopen < 8; reopen++) {
-            choose(player, menu, washer.id(), SelectionResult.SELECTED);
-            check(machine.inspectionProgress() == 1.25, "Actual switching restores the exact fractional Washer carry");
-            choose(player, menu, reactor.id(), SelectionResult.SELECTED);
-            check(machine.inspectionProgress() == 23.375, "Actual switching restores the exact partial Reactor work");
+            choose(player, menu, blueprint.id(), SelectionResult.SELECTED);
+            check(machine.inspectionProgress() == 1.25, "Actual switching restores the exact fractional Blueprint carry");
+            choose(player, menu, planner.id(), SelectionResult.SELECTED);
+            check(machine.inspectionProgress() == 23.375, "Actual switching restores the exact partial Planner work");
             machine.load(binary(machine.saveWithoutMetadata()));
             check(machine.inspectionProgress() == 23.375, "Actual binary reopen preserves the active paid balance");
             check(machine.menuContainer() == items && machine.energy() == energy
@@ -381,23 +576,23 @@ public final class ControlMatrixInputChecks {
                     "Actual reopening preserves exposed inventory/Flux/fluid/config object identities");
         }
 
-        choose(player, menu, washer.id(), SelectionResult.SELECTED);
-        supply(machine, actualInputs(washer));
+        choose(player, menu, blueprint.id(), SelectionResult.SELECTED);
+        supply(machine, actualInputs(blueprint));
         machine.setItem(4, new ItemStack(Items.STONE, 64));
         saved = machine.saveWithoutMetadata();
-        saved.putDouble("Progress", washer.durationTicks() + 0.25);
+        saved.putDouble("Progress", blueprint.durationTicks() + 0.25);
         machine.load(binary(saved));
         machine.energy().setStored(64L);
         for (int blocked = 0; blocked < 3; blocked++) {
             work.invoke(machine, tick++, List.<FluidInsert.Source>of());
         }
-        check(machine.inspectionProgress() == washer.durationTicks() + 0.25 && machine.energy().getStored() == 64L,
+        check(machine.inspectionProgress() == blueprint.durationTicks() + 0.25 && machine.energy().getStored() == 64L,
                 "Completed native blocked work neither redraws Flux nor loses its fractional overrun");
         check(machine.recipeSelection().orElseThrow().issue() == SelectionIssue.OUTPUT_BLOCKED,
                 "The native selected-target diagnosis reports blocked output");
-        choose(player, menu, reactor.id(), SelectionResult.SELECTED);
-        choose(player, menu, washer.id(), SelectionResult.SELECTED);
-        check(machine.inspectionProgress() == washer.durationTicks() + 0.25,
+        choose(player, menu, planner.id(), SelectionResult.SELECTED);
+        choose(player, menu, blueprint.id(), SelectionResult.SELECTED);
+        check(machine.inspectionProgress() == blueprint.durationTicks() + 0.25,
                 "Completed blocked native work remains reachable after switching");
         machine.setItem(4, ItemStack.EMPTY);
         work.invoke(machine, tick++, List.<FluidInsert.Source>of());
@@ -406,9 +601,9 @@ public final class ControlMatrixInputChecks {
                 "Native unblocking settles once without charging completed work again");
         machine.setItem(4, ItemStack.EMPTY);
 
-        supply(machine, actualInputs(washer));
+        supply(machine, actualInputs(blueprint));
         saved = machine.saveWithoutMetadata();
-        saved.putDouble("Progress", washer.durationTicks() + 0.375);
+        saved.putDouble("Progress", blueprint.durationTicks() + 0.375);
         machine.load(binary(saved));
         CompoundTag beforeSettlement = machine.saveWithoutMetadata();
         boolean[] aborted = {false};
@@ -416,7 +611,7 @@ public final class ControlMatrixInputChecks {
             if (!aborted[0] && machine.getItem(0).isEmpty()) {
                 aborted[0] = true;
                 CompoundTag tentative = machine.saveWithoutMetadata();
-                check(menu.selectRecipe(player, menu.containerId, token, currentRevision(menu), reactor.id())
+                check(menu.selectRecipe(player, menu.containerId, token, currentRevision(menu), planner.id())
                                 == SelectionResult.BUSY,
                         "The actual server menu refuses reentrant choice during tentative settlement");
                 check(machine.saveWithoutMetadata().equals(tentative),
@@ -440,10 +635,10 @@ public final class ControlMatrixInputChecks {
         ProcessLookup.rebuild(MaterialRegistry.snapshot());
         check(oldGeneration != ProcessLookup.generation(), "Native reindex replaces the complete current graph");
         CompoundTag beforeReloadRequest = machine.saveWithoutMetadata();
-        check(menu.selectRecipe(player, menu.containerId, token, oldRevision, reactor.id()) == SelectionResult.STALE,
+        check(menu.selectRecipe(player, menu.containerId, token, oldRevision, planner.id()) == SelectionResult.STALE,
                 "A native catalogue reload refuses the old menu revision without guessing a new output");
         check(machine.saveWithoutMetadata().equals(beforeReloadRequest), "Reload refusal preserves all paid state");
-        choose(player, menu, reactor.id(), SelectionResult.SELECTED);
+        choose(player, menu, planner.id(), SelectionResult.SELECTED);
         saved = machine.saveWithoutMetadata();
         saved.putString(AssemblerWork.TARGET, "removed/native_saved_target");
         saved.putString("WorkRecipe", "removed/native_paid_owner");
@@ -452,24 +647,73 @@ public final class ControlMatrixInputChecks {
         check(machine.recipeSelection().orElseThrow().issue() == SelectionIssue.UNAVAILABLE
                         && machine.saveWithoutMetadata().getString(AssemblerWork.TARGET).equals("removed/native_saved_target"),
                 "A saved unknown native target stays explicitly unavailable rather than resetting to AUTO");
-        choose(player, menu, washer.id(), SelectionResult.SELECTED);
+        choose(player, menu, blueprint.id(), SelectionResult.SELECTED);
         check(machine.recipeSelection().orElseThrow().suspended().get("removed/native_paid_owner") == 0.125,
                 "Unknown native paid work remains preserved and cannot be spent by a known target");
         choose(player, menu, "", SelectionResult.SELECTED);
         check(machine.saveWithoutMetadata().getString(AssemblerWork.TARGET).isEmpty(),
                 "The actual server menu can deliberately return to legacy AUTO");
+        check(ProcessLookup.findSelected(MachineFamily.ASSEMBLER, RETIRED, actualInputs(recipe(BLUEPRINT)),
+                        machine.contents(), List.of()).isEmpty()
+                        && machine.recipeSelection().orElseThrow().suspended().get(RETIRED) == 1600.375,
+                "Later current catalogue and menu transitions cannot spend or erase the retired balance");
 
         player.containerMenu = player.inventoryMenu;
-        check(menu.selectRecipe(player, menu.containerId, token, currentRevision(menu), washer.id()) == SelectionResult.CLOSED,
+        check(menu.selectRecipe(player, menu.containerId, token, currentRevision(menu), blueprint.id()) == SelectionResult.CLOSED,
                 "A closed actual menu cannot change the machine");
         ProcessMachineMenu reopened = new ProcessMachineMenu(86, player.getInventory(), machine);
         player.containerMenu = reopened;
         check(reopened.synchronizedOpeningToken() != token, "Reopening binds a new actual menu identity");
-        check(reopened.selectRecipe(player, reopened.containerId, token, selectionRevision(reopened), washer.id())
+        check(reopened.selectRecipe(player, reopened.containerId, token, selectionRevision(reopened), blueprint.id())
                         == SelectionResult.STALE,
                 "A prior opening's token cannot select through a reopened menu");
-        choose(player, reopened, washer.id(), SelectionResult.SELECTED);
+        choose(player, reopened, blueprint.id(), SelectionResult.SELECTED);
         return new MenuProbe(player, reopened);
+    }
+
+    private long retiredWork(ProcessMachineBlockEntity machine, ServerPlayer player, ProcessMachineMenu menu,
+                             ProcessRecipe blueprint, ProcessRecipe planner, Method work, long tick)
+            throws ReflectiveOperationException, IOException {
+        supply(machine, actualInputs(blueprint));
+        machine.energy().setStored(64L);
+        CompoundTag saved = machine.saveWithoutMetadata();
+        saved.putString("Recipe", RETIRED);
+        saved.putString("WorkRecipe", RETIRED);
+        saved.putString(AssemblerWork.TARGET, RETIRED);
+        saved.putDouble("Progress", 1600.375);
+        machine.load(binary(saved));
+        var physical = saved.getList("Items", net.minecraft.nbt.Tag.TAG_COMPOUND).copy();
+        Method resolve = ProcessMachineBlockEntity.class.getDeclaredMethod("recipe", List.class);
+        resolve.setAccessible(true);
+        for (int reopen = 0; reopen < 3; reopen++) {
+            check(resolve.invoke(machine, List.<FluidInsert.Source>of()) == null
+                            && machine.recipeSelection().orElseThrow().issue() == SelectionIssue.UNAVAILABLE,
+                    "A saved retired normal target is unavailable with no permitted same-bill fallback");
+            work.invoke(machine, tick++, List.<FluidInsert.Source>of());
+            CompoundTag raw = machine.saveWithoutMetadata();
+            check(raw.getString(AssemblerWork.TARGET).equals(RETIRED)
+                            && raw.getString("WorkRecipe").equals(RETIRED)
+                            && Double.doubleToRawLongBits(raw.getDouble("Progress"))
+                            == Double.doubleToRawLongBits(1600.375),
+                    "Native load/work retains the exact raw retired owner, target and fractional paid balance");
+            check(machine.energy().getStored() == 64L && machine.getItem(4).isEmpty()
+                            && raw.getList("Items", net.minecraft.nbt.Tag.TAG_COMPOUND).equals(physical),
+                    "Retired paid work cannot draw, complete, refund or mutate physical supplies");
+            machine.load(binary(raw));
+        }
+        for (ProcessRecipe permitted : List.of(blueprint, planner)) {
+            choose(player, menu, permitted.id(), SelectionResult.SELECTED);
+            check(machine.inspectionProgress() == 0.0
+                            && machine.recipeSelection().orElseThrow().suspended().get(RETIRED) == 1600.375,
+                    "Each permitted native target starts with its own zero credit, retaining the unspendable old job");
+        }
+        choose(player, menu, "", SelectionResult.SELECTED);
+        ProcessRecipe expectedAuto = ProcessLookup.find(MachineFamily.ASSEMBLER, actualInputs(blueprint)).orElseThrow();
+        ProcessRecipe actualAuto = (ProcessRecipe) resolve.invoke(machine, List.<FluidInsert.Source>of());
+        check(actualAuto != null && actualAuto.id().equals(expectedAuto.id()) && machine.inspectionProgress() == 0.0
+                        && machine.recipeSelection().orElseThrow().suspended().get(RETIRED) == 1600.375,
+                "Legacy AUTO derives its actual live choice without borrowing retired credit: " + expectedAuto.id());
+        return tick;
     }
 
     /** Actual menu state methods over a vanilla Player carrier, not a graphical or wire-delivery pass. */
@@ -494,6 +738,11 @@ public final class ControlMatrixInputChecks {
         List<ProcessMachineMenu.RecipeChoice> catalogue = ProcessLookup.recipes(MachineFamily.ASSEMBLER).stream()
                 .map(row -> new ProcessMachineMenu.RecipeChoice(row.id(),
                         ProcessLookup.resolve(row.itemOutputs().get(0)).orElseThrow())).toList();
+        Set<String> currentIds = catalogue.stream().map(ProcessMachineMenu.RecipeChoice::id)
+                .collect(java.util.stream.Collectors.toSet());
+        check(currentIds.containsAll(Set.of(BLUEPRINT, PLANNER))
+                        && !currentIds.contains(RETIRED) && !currentIds.contains("assemble/press"),
+                "The actual server catalogue advertises both permitted tools and neither retired normal target");
         client.receiveSelection(token, revision, state, Optional.of(catalogue), false);
         check(client.selection().isEmpty(), "State before native opening data is not an authoritative usable picker");
         for (int part = 0; part < 3; part++) {
@@ -587,21 +836,6 @@ public final class ControlMatrixInputChecks {
         try (DataInputStream input = new DataInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
             return NbtIo.read(input);
         }
-    }
-
-    private static ItemStack[] wireInputs(ItemStack matrix) {
-        ItemStack[] inputs = new ItemStack[4];
-        for (int index = 0; index < 3; index++) {
-            IngredientSpec input = wireMill().itemInputs().get(index);
-            inputs[index] = ProcessLookup.resolve(new OutputSpec(input.kind(), input.id(), input.count(), false))
-                    .orElseThrow();
-        }
-        inputs[3] = matrix.copy();
-        return inputs;
-    }
-
-    private static ProcessRecipe wireMill() {
-        return recipe("assemble/wire_mill");
     }
 
     private static ProcessRecipe recipe(String id) {

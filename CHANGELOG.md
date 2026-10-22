@@ -15,6 +15,28 @@ entries below reference those records by id.
 
 ### Added
 
+- **Retarget lane-B selection/work and native crafting contracts (ADR-0188).**
+  Use the real colliding Blueprint Tool/Deconstruction Planner routes, deriving
+  grouped quantities and timing instead of keeping normal-machine fabrication
+  live. Pure ledger fixtures are explicitly unit-only. Retain stable-ID/current-
+  catalogue/menu authority, exact partial/fractional/blocked work, rollback,
+  reentry, typed-SNBT preservation and lookup-derived legacy AUTO oracles.
+  Concrete retired Washer/Press targets refuse without fallback or Flux draw;
+  raw paid ownership survives reopening and cannot pay either permitted tool.
+  The same matrix-lifecycle carrier now authors one loaded
+  `grindless:pulverizer` shaped Ingredient/JSON/network/result-slot/inventory
+  probe with actual Relay F1-F3, malformed/unrelated/unknown-encoded refusal
+  and one baseline output/control debit. The no-delivery Forge FakePlayer
+  proves no actual client transport/rendering or Survival supply.
+  Preserve the original sixteen markers and nineteen-expectation budget;
+  replace only current `MATRIX-CONTROL-BLOCKED`/`MATRIX-CONTROL-CONSUMED-ONCE`
+  expectations with explicitly permitted `MATRIX-ASSEMBLER-TOOL-*` semantics,
+  retaining the existing helper paths/timing. Old G10 evidence is unchanged.
+  Integration depends on lane A's retired catalogue, manual JSON and MOD-bus
+  `minimum_control` serializer; no A/C refs, runtime/model/canonical writes,
+  owner-save migration, player update or publication is included. Scoped
+  whitespace/lexical/source/carrier guards and 963 documentation links pass;
+  Java compilation, contract execution and native qualification are not run.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated
