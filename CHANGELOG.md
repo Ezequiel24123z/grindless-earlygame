@@ -15,6 +15,23 @@ entries below reference those records by id.
 
 ### Added
 
+- **Use relevant mature-mod precedent when the owner is unavailable.**
+  Record the owner's GregTech/comparable-modpack default for unresolved
+  design questions, with actual source/recipe evidence and bounded decisions
+  instead of routine approval queues. Explicit project choices and safety/
+  licence/spending/save gates remain authoritative; no past coordinator
+  choice is retroactively called owner-confirmed and no failed check is waived.
+- **Preserve actual G11 compile/contract successes and non-stale source failures.**
+  Exactf1b9 CI39849913599 compiles and passes the new audit2195/Adapters1044/
+  Registry1375/UI1128/Persistence and other named contracts. Five suites
+  remain red: Economy/T1 reject the actual conditional T0 gate, Factory
+  rejects its portal-control oracle, Guidance references absent craft/capital,
+  and old T0 canonical parity is stale. Verify original CI5 hashes locally;
+  route bounded A/C repairs rather than treating every red as regenerated data.
+  After initial unused-close instructions, explicitly permit only the
+  independent native on frozenf1b9; no writer/check/canonical/A10 or owner
+  action. No native result is inferred. Preserve inspected partial scope-edit
+  recovery and all original reds without successful-producer replay.
 - **Align current tier instructions with manual source and retained-work limits.**
   Replace the obsolete active factory-reproduction table row with component
   fabrication/manual final construction, clarify manual Wire Mill/Washer

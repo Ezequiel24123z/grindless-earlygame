@@ -151,6 +151,17 @@ impose universal Assembler-only manufacture or mass-add duplicate manual recipes
 Withdraw the obsolete qualification scope before another exact-source GO;
 placed machines, inventories, paid work and the longitudinal save stay intact.
 
+**Owner-unavailable decision rule (2026-10-22):** when a question arises and
+the owner is unavailable, use how GregTech or comparable mature technical
+modpacks solve that concrete problem as the default design precedent, then
+make and record the bounded project decision rather than waiting on routine
+approval. Inspect actual source/recipes where the answer matters; do not
+invent a precedent or copy a system merely because it is familiar. Existing
+Grindless authorities and explicit owner choices, including manual normal
+final machines and per-product methods, take precedence over an external
+example. This rule does not grant new spending, credentials, unsafe save
+changes, gameplay interruption, unqualified deployment or human acceptance.
+
 **Current owner operating mandate (2026-10-22, ADR-0178):** work independently
 and keep the development/integration/qualification loop moving. Do not stop at
 a routine checkpoint or turn ordinary technical choices into owner approvals.

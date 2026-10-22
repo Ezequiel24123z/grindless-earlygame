@@ -4,7 +4,55 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
-**NEW G11 GO, no observed result yet:** sole604/exact
+**Owner decision fallback:** if the owner is unavailable for a question,
+use relevant verified GregTech/comparable technical-modpack precedent,
+adapt it to existing Grindless authorities and record a bounded decision.
+Explicit owner product choices take precedence; this is not new spending/
+credential/save-interruption/deployment/acceptance permission. Earlier
+coordinator Furnace attribution is not retroactively changed into owner
+confirmation. Current source failures still need root-cause repair, not
+a precedent-based test waiver.
+
+**G11 models are SOURCE-blocked; one independent native is authorized.** Original exactf1b9
+CI39849913599/artifact12455889777 has environment/build/tooljavac0 and real
+positive changed contracts: Sustainability2195/0 including R29-R33,
+Adapters1044/0, Registry1375/0, UI1128/0, PersistenceALLPASS,
+Recipes/Atlas/Logic/Assets and Teaching1150. These are CI source results,
+not a PC/native/whole-model pass.
+
+Five suites are red. Economy.verify77 and T1.verify120 reject the actual
+conditional T0 gate, not merely old JSON. Factory's portal-Matrix assertion
+fails at raw2776; A owns the precise typed-control oracle follow-up.
+ResourceGuidance.nullsAndHandling279 references absent craft/capital; C owns
+that fixture and actual-gate diagnosis. T0's old generated-guidance parity
+fails before its later checks, so no live T0 gate or finite-T1 pass is supplied.
+Parent verifies all five original lengths/SHA locally, behavior6c1ae6a5.
+Do not repeat the successful CI/compiler or run dependent writers as if all
+reds were canonical-stale. Necessary local classes for the separate canonical
+native are distinct from replaying failed/passed standalone suites.
+
+A/C may normally FF only to exactf1b9 for their bounded source repairs.
+Previously protected T0ConditionalGate/other-owner seams require a concrete
+coupled diagnosis before editing; no waiver, fake craft, stock/profile injection
+or weaker recurring-supply claim is authorized.
+
+The coordinator initially requests unused-window closure. After all five
+primaries and actual runtime CI greens are known, an explicit revised ruling
+supersedes that request: sole604 may fresh-admit/Sync unchangedf1b9 and execute
+ONE existing native for the independent ingredient/RecipeManager/Bench guard
+uncertainty while model repairs proceed. This is explicit coordinator scope,
+not permission inferred by the invoker. If already returned, the old lease
+cannot be resumed; no admitted command is interrupted/killed.
+No native start/root state/pass is inferred before an actual observation.
+
+G11 is now NATIVE-ONLY: no model writers, independent checks, canonical refresh,
+tracked file changes or A10. Capture original exits/JAR/inventory/save-stop/
+retained-world/native+CI5 custody, then fresh cleanf1b9/owned-allJava0/locksfalse/
+own-guard removal+absence and explicit return. Old source failures remain red;
+later repaired-model qualification can reuse an unchanged native proof if its
+assumptions actually match. Source/aliasf1b9 stays frozen until return.
+
+**Historical full G11 GO, narrowed above after original source failures:** sole604/exact
 f1b9cb3fd09efa663b2a62faa2219f0df4f4dd96 on the NEW manual-machine root,
 private inventorySHAac48df06. Source includes exact reviewed A652/Cab1e/Bdc
 blobs; all scoped source verdicts are clear, not runtime proof. Fresh private
@@ -496,9 +544,9 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical proofs preserved; full manual sourcef1b9 normally composed with exact40/14/10 blobs/A9; all scoped source reviews clear; one exact G11 assignment prepared/published |
-| BLOCKED | None known before actual admission; no urgent owner/credential decision |
-| NOT EXECUTED | G11 admission/Sync/compiler/suites/native/finite/model/writers/observed43-98/A10/final custody; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
+| COMPLETED | Historical proofs/source integration preserved; exactf1b9 CI compiler and listed changed contracts pass; original5 CI logs parent-hash verified; A/C source repair ownership assigned |
+| BLOCKED | Actual conditional T0 gate false, Factory typed-control oracle and missing craft/capital guidance fixture; not all five red suites are stale. No urgent owner/credential decision |
+| NOT EXECUTED | New native result and fresh lease return; actual finite/model/writers/observed43-98/A10 remain blocked. No rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |
 | NEEDS MY DECISION | None |
 | NEEDS CREDENTIAL / EXTERNAL RESOURCE | None |

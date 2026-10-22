@@ -1145,6 +1145,59 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
+**Actual G11 source CI blocks before personal-PC production:** exact
+f1b9/run39849913599/artifact12455889777 originals record environment/build0
+and successful tooljavac. Actual Sustainability2195/0 includes R29=46,
+R30=14,R31=53,R32=38,R33=30; Adapters1044/0, Registry1375/0, UI1128/0,
+PersistenceALLPASS, Recipes/Atlas/Logic/Assets and Teaching1150 also pass.
+These authenticate actual source execution, not a full conditional T0/T1
+model, manual native crafting, class-image writer receipt or owner save.
+
+| Failed suite | Actual primary | Consequence |
+| --- | --- | --- |
+| Economy | Raw2467, VerifyEconomy.verify77: actual conditional gate expectedtrue/gotfalse | Real upstream model boundary, not committed equality |
+| Factory | Raw2776: portal consumes Relay Matrix expectedtrue | Typed manual-control oracle requires source-owner diagnosis; other Factory checks pass |
+| ResourceGuidance | Raw13150, nullsAndHandling279: missing declared craft/capital | Authored fixture/reference exception, not old canonical JSON |
+| T0 guidance | Raw15603, verifyCanonical before other T0-main work | Known generated parity is stale; no later live-gate result inferred |
+| T1 progression | Raw16176, verify120: actual conditional T0 gate expectedtrue/gotfalse | Real upstream model boundary, not committed equality |
+
+Parent verifies original five files locally without another API/PC call:
+
+| Original | Bytes | SHA256 |
+| --- | ---: | --- |
+| source.txt | 80 | `0b35967b56e5da8a34735a6f608fca1cc3458f57518d1243b97b6e9b18e335fc` |
+| environment.log | 443 | `0f6bc3201f9139e629c60adcf771ac6292d50a5215917eb24dddd3205ccbc094` |
+| build.log | 272981 | `51fc8b1f8501b560413e56ff2b92a13609670ac1e8957e5923d7eec6f5f2f9c2` |
+| behavior.log | 2217147 | `6c1ae6a547a50aff958e95cf132429ddc828829351c5afb9400ff0a9639af98d` |
+| status.tsv | 243 | `e0c143d55809eb4b2920737335f9852e03f971f7f8fb8792adb35baa311f3993` |
+
+At the initial report no PC Sync/JVM/native/writer/A10 had started. A owns only
+the Factory oracle, C owns gate diagnosis/guidance fixture, on explicitly
+permitted normal FFf1b9. No waived gate, fake runtime craft/stock/profile,
+changed recipe to satisfy an oracle or unrelated protected seam is authorized.
+Original CI remains red; successful producers are not replayed for observers.
+
+After initially requesting unused-window closure, the coordinator explicitly
+narrows the still-unreturned G11 lease to ONE independent native. Exact CI
+already proves compilation and relevant recipe/registry/UI/Persistence
+contracts; the audit/fixture/Factory-oracle failures do not establish a
+native ingredient/Bench defect. Fresh admission/Syncf1b9/necessary local
+classes and the existing canonical matrix-lifecycle may resolve that separate
+uncertainty concurrently with A/C source repairs. This is a new explicit
+scope ruling, not a pass or authorization inferred by the invoker.
+If the lease is already returned it cannot be resumed; no admitted producer
+is killed/restarted for this correction.
+
+NO G11 writer/CheckOnly/canonical refresh/tracked output/A10 is now authorized.
+Actual native/JAR/inventory/original-exit/save-stop/newworld/frozen-input/CI5
+custody and fresh cleanf1b9/Java0/locksfalse/own-guard removal/absence/explicit
+return remain required. No root admission/native execution result is claimed
+before its observation. Later repaired model source requires a new grant and
+may reuse the unchanged actual native only after comparing assumptions.
+Sourcealias remains frozen. A stale context in the two-file scope patch is
+recovered by inspecting actual applied JSON and editing only the remaining
+field; no application file/producer is changed or replayed.
+
 **G11 assignment, NOT a result:** full reviewed normal composition
 f1b9cb3fd09efa663b2a62faa2219f0df4f4dd96 (parents eaa21be9/Bdc048,
 tree511dc375f5e80537e68683fa6b6b6cafd9032d6d) is the ONE actual compiler/

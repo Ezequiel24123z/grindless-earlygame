@@ -1591,6 +1591,12 @@ may support manual and machine manufacture, but no universal dual-recipe rule
 is implied. An available automated route is an option, not an obligation for
 the player to automate it.
 
+When the owner is unavailable, unresolved design questions default to relevant,
+verified GregTech or comparable technical-modpack precedent. Adapt it to
+Grindless's actual authorities and record the decision; explicit owner choices
+such as manual normal-machine assembly still take precedence. Inspiration is
+not an instruction to copy every external recipe or automate every product.
+
 A structural casing, circuit, Motor, Matrix or upgrade module is a
 component; a complete functional normal machine is not made a component merely
 by changing its name. Blueprint/drone placement may consume already-owned
@@ -2447,8 +2453,8 @@ is preserved and integration/release gates still control acceptance.
 | 77 | **Reachable Assembler outputs** | ADR-0185 — actual G10/a54 compile/UI1297/Persistence/one native1028/19/normal models31-41 and278-file custody independently verified; normal A9bb3/four exact writer payloads integrated. Original source reds stay red; native menu carriers are not actual client-wire/rendered/owner-world or whole-tier acceptance |
 | 78 | **Baseline process-family controllers** | ADR-0186 — nine explicit minimum-F1 fourth groups/exactfifteen-role contract preserve old bills/FU/time/output/passive/Motor/seed/F2 and selector guards. G10 verifies combined representative native/normal models/A9/custody; no per-family runtime, real chassis upgrade or whole-tier claim |
 | 79 | **Finite first-factory continuation** | ADR-0187 — source6c53/6b19 composed with A9; generic custody/admission/conservation review8ef finds no significant issue, not Java/replay proof. Rebind T1 authorities to ADR-0188 before qualification; authored42/96 is not observed provenance. No autonomy/whole-tier/world pass |
-| 80 | **Manual normal-machine manufacture** | ADR-0188 — complete A652/Cab1e/Bdc source normally composed: manual normal finals, per-product methods, valid manual controls/unique shapes, component fixtures and finite capital. Exact40/14/10 source blobs/A9 preserved; all scoped source reviews clear, actual compiler/native/model qualification pending |
-| 81 | **Retired paid Bench ownership** | ADR-0189 — Bdc048 writes precise matching/cache/adoption hold and explicit retained-work status with live/zero/Guide contracts in existing carrier. No ledger/schema/refund or protected-loop change; narrow source review clear, actual integrated qualification pending |
+| 80 | **Manual normal-machine manufacture** | ADR-0188 — fullf1b9 source composed/reviewed; exact CI compile and Recipe/Atlas/Adapters1044/Registry1375 pass, but actual T0 gate, Factory oracle and guidance fixture errors block models. Original five red suites preserved; one separate native is authorized without model writers/A10 or owner update |
+| 81 | **Retired paid Bench ownership** | ADR-0189 — precise resolution/cache hold and visible retained-work status integrated; exactf1b9 CI UI1128/Persistence pass, no ledger/schema/refund. Representative real native and owner-save qualification remain unexecuted while model/source blockers are repaired |
 
 Step 7 was the first real milestone and it is cleared: a skeleton that actually compiles and
 packages, which means every later step is validated the moment it is written rather than

@@ -9096,6 +9096,15 @@ manual and machine manufacture. Preserve valid existing methods unless an
 individual design calls for change; do not impose universal Assembler-only
 production, universal dual recipes or universal automatic conversion.
 
+**Owner-unavailable decision rule.** The owner subsequently directs that,
+when unavailable to answer a question, the coordinator should reason from
+how GregTech or comparable technical modpacks solve it. Use a relevant
+verified precedent as the default, adapt it to the project's established
+mechanisms and record the bounded decision instead of waiting for ordinary
+approval. This does not override an explicit Grindless product choice,
+retroactively confirm earlier coordinator decisions or authorize copying
+without licence checks, new spending or unsafe save/deployment actions.
+
 **Coordinator Furnace boundary decision.** A reports that the old
 bench/furnace and assemble/bootstrap/furnace routes still automatically output
 the vanilla furnace. The coordinator asks that exact scope once; the owner is
