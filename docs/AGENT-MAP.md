@@ -374,6 +374,18 @@ bounded. `VerifyT1Progression` still requires real Press/F1/F2 execution.
 Source f30a5f79 repairs the preserved G12 failure; its qualification remains
 separate from source review and the unchanged native/loader proof.
 
+The post-T0 installed-capital check must conserve quantities, not ban every
+free copy of an installed type. `VerifySustainability.physicalCustody` sums
+free/locked/installed/dedicated parts; `constructionSupply` independently
+sums guaranteed/player deliveries and net completed batches. Reward outputs
+already appear in history and are not credited again. `VerifySustainabilityT0`
+compares each installed type and rejects negative individual axes, with
+resource-specific diagnostics. R36 covers separately paid spares and strict
+unfunded/duplicate/exhausted withdrawals without changing the executor.
+These two test files change wider S1 source/class identity, not normalized
+public models or T1's43/98 producer pins. Preserve original writer provenance
+when reusing byte-identical outputs; never label it a new writer invocation.
+
 ### Explicit Assembler recipe choice
 
 ADR-0185 corrects same-bill last-dry shadowing through existing

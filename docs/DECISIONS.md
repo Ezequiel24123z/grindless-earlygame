@@ -9069,6 +9069,24 @@ diagnostics cover this correction without inventing another planner or
 turning synthetic regression rows into gameplay. Revised execution is still
 required; source review is not an accepted finite witness.
 
+**Installed units versus spare copies.** G13 then executes the actual finite
+Press/F1/F2 route and all normal writers/independent checks, but a later test
+wrongly requires zero free stock for every installed resource identity.
+Installation reserves one unit, not every same-type unit. The strict oracle
+must compare independently funded net physical units with free, retained,
+installed and dedicated-part quantities and reject negative axes. A second
+paid copy is allowed; releasing or counting the installed unit twice is not.
+The checker-only483d25d7 correction reuses the existing aggregation and adds
+R36, with no producer or budget change.
+
+Under ADR-0140, preserve the verified G13 normal outputs and writer/check/
+43-98 provenance at their original489 source instead of repeating producers
+for that test-only delta. Normalized model facts/custody are unchanged.
+Wider S1 implementation hashes include the changed checks and must be new,
+not suppressed or relabelled. Recompile/run the changed checks and both
+outstanding canonical boundaries before any byte-exact data integration
+into the new source; the next guarded grant must name both source roles.
+
 **Rejected.** A new EntryProfile containing finished T0 machines/controllers
 would invent manual acquisition authorities and hide the transition cost.
 Adding synthetic terminals or a free conversion route duplicates custody.

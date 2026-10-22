@@ -59,8 +59,12 @@ Press/F2 continuation; its two partial outputs and114-file returned custody
 are independently verified. Reviewed sourcef30 fixes existing continuation
 funding/refill/independence without a new budget or planner. Next is actual
 fixed-source model qualification, including R35 and the live physical exit.
-G13 preparation remains local until one new exact-source GO; do not replay
-G11 native or modify the player's instance.
+G13 then qualifies the real finite route and all writers/checks/43-98, with
+343-file custody verified, but a later type-wide installed/free-zero test
+fails. Reviewed checker-only483d replaces that false predicate with strict
+paid-unit conservation/R36. Next is the changed-check/postT0/postT1 delta
+and byte-exact integration of the original489 writer outputs, not another
+producer/native run. G14 needs one new guarded GO; do not modify the player.
 
 **Current next (2026-10-22):** G7 is technically closed with verified339
 artifacts plus separately recovered original CI5, actual writer41df/normal

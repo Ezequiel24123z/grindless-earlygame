@@ -257,8 +257,22 @@ public final class VerifySustainabilityT0 {
             eq("actual spent startup labour is distinct from the required-work high-water mark", true,
                     custody.consumedManualActions() >= 0
                             && custody.consumedManualActions() <= custody.requiredManualActions());
-            eq("installed construction is not also free stock", true, custody.installedMachines().stream()
-                    .allMatch(block -> custody.freeStock().getOrDefault(block, 0L) == 0));
+            // Installation reserves one paid unit, not every unit with the same resource identity.
+            // Compare independent executed/delivered funding with all physical custody axes.
+            var physical = VerifySustainability.physicalCustody(custody);
+            for (Resource block : custody.installedMachines()) {
+                long free = custody.freeStock().getOrDefault(block, 0L);
+                long locked = custody.retainedCatalysts().getOrDefault(block, 0L);
+                long parts = custody.installationParts().values().stream()
+                        .mapToLong(requirements -> requirements.getOrDefault(block, 0L)).reduce(0L, Math::addExact);
+                String context = block.key() + " [installed=1, free=" + free
+                        + ", locked=" + locked + ", installation_parts=" + parts + "]";
+                eq("installed construction and separately funded stock conserve physical units: " + context,
+                        VerifySustainability.constructionSupply(custody, block), physical.get(block));
+                eq("no construction custody axis borrows an installed unit: " + context, true,
+                        free >= 0 && locked >= 0 && custody.installationParts().values().stream()
+                                .allMatch(requirements -> requirements.getOrDefault(block, 0L) >= 0));
+            }
             eq("formed surrounding parts remain physically reserved", true, !custody.installationParts().isEmpty());
             eq("every inherited one-shot has exactly one completed batch", true, custody.claimedRoutes().stream()
                     .allMatch(id -> custody.establishmentBatches().getOrDefault(id, 0L) == 1));

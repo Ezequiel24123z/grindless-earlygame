@@ -4,11 +4,38 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**Strict oracle repair483d25d7 is complete/reviewed and normally composed;
+changed-check execution remains pending.** Exactparent489/tree0a160517,
+three files154 insertions/four deletions, both checker blobs preserved.
+Report15 has two completed manual Clay Mixer/Hand Pump/Quern batches each;
+the separate writer10 state accounts for installed1/free1 and all11
+installed construction types. No missing process15 partition is invented.
+
+The test now compares actual net delivered/produced/consumed units against
+free/locked/installed/dedicated-part units and rejects negative axes.
+It reuses existing physical aggregation, does not count reward credits twice,
+and changes no product, recipe, budget or generated payload. R36's funded
+spare/unfunded reuse/exhaustion cases are authored, not run.
+
+**Next proof selection:** preserve G13 writer/check/provenance at ORIGINAL489.
+Only two check files changed; all production/runtime code, actual authorities,
+writer code and T1's43 source pins/98 declarations are identical. Canonical
+Guidance/Economy/T1 use normalized authority facts and physical custody,
+not raw S1 implementation identities. The wider S1 source/class identity DOES
+include both changed checkers and must be freshly captured, not called equal.
+Recompile the needed common/check closure, run R36 and corrected postT0 plus
+the never-executed postT1; reuse exact four G13 writer bytes rather than
+repeating writers/CheckOnly. No transfer or execution is authorized until
+the next exact-source GO; G14 inventory89b67ceb/preparation4d825999 is local.
+
 **G13 lease is explicitly returned; all four completed writer outputs remain
 DIRTY and unaccepted because postT0 failed.** Fresh postcustody readonly
 22:45:59.6833885Z records exact489/only4 allowed mutations/Java0/locksfalse/
 ownGuardb76afae3 removed and absent. Capsule343/manifesta97bbbda and2595
-unchanged non-output inputs are reported; independent QA546 is running.
+unchanged non-output inputs are independently verified by QA546, together
+with43 source pins/98 images per action,196 image copies, four output/
+mtime relationships, eleven stage receipts and final closure. Actual order
+is02,03,19,08,09,10,11,12,13,14,15;19 was before writers. No new custody gap.
 Final stdout0458acb4 and nonempty progress-stderrad84dd75 have explicit local
 pointers. Final exit0 is tool199 history, not a separate invented receipt.
 

@@ -113,7 +113,8 @@ public final class VerifySustainability {
                 VerifySustainability::outputOnlyFirstUseException, VerifySustainability::continuedCustody,
                 VerifySustainability::continuationRefusals, VerifySustainability::exhaustedContinuation,
                 VerifySustainability::manualCapital, VerifySustainability::finiteFurnaceSubassembly,
-                VerifySustainability::formedCapitalWithManualUpstream, VerifySustainability::continuedNativeFunding)) {
+                VerifySustainability::formedCapitalWithManualUpstream, VerifySustainability::continuedNativeFunding,
+                VerifySustainability::installedCapitalSurplus)) {
             try {
                 fixture.run();
             } catch (Exception failure) {
@@ -873,13 +874,133 @@ public final class VerifySustainability {
         yes("no physical axis has a negative balance", actual.values().stream().allMatch(count -> count >= 0));
     }
 
-    private static Map<Resource, Long> physicalCustody(SustainabilityAudit.WitnessState state) {
+    static Map<Resource, Long> physicalCustody(SustainabilityAudit.WitnessState state) {
         Map<Resource, Long> amounts = new TreeMap<>(state.freeStock());
         state.retainedCatalysts().forEach((resource, count) -> amounts.merge(resource, count, Math::addExact));
         state.installedMachines().forEach(resource -> amounts.merge(resource, 1L, Math::addExact));
         state.installationParts().values().forEach(parts ->
                 parts.forEach((resource, count) -> amounts.merge(resource, count, Math::addExact)));
         return amounts;
+    }
+
+    /** Paid net units, not a type-wide ban on spare stock or cumulative reward credits. */
+    static long constructionSupply(SustainabilityAudit.WitnessState state, Resource resource) {
+        long amount = Math.addExact(state.guaranteedDeliveries().getOrDefault(resource, 0L),
+                state.playerDeliveries().getOrDefault(resource, 0L));
+        for (var batch : state.history()) {
+            amount = Math.addExact(amount, batch.produced().getOrDefault(resource, 0L));
+            amount = Math.subtractExact(amount, batch.consumed().getOrDefault(resource, 0L));
+        }
+        // Claimed rewards already appear once in completed physical batch outputs.
+        return amount;
+    }
+
+    private static void installedCapitalSurplus() {
+        group("R36 installed construction and separately funded copies conserve exact physical units");
+        Resource capital = new Resource(Kind.ITEM, "grindless:quern");
+        Resource goal = item("capital_use_exit");
+        Resource spareGoal = item("capital_spare_exit");
+        for (long raw : List.of(2L, 4L)) {
+            // Reuse the existing finite manual-capital fixture, not a live Quern recipe or entry kit.
+            Fixture fixture = manualCapitalFixture(raw);
+            fixture.add(new Route("next/use_capital", Authority.CRAFTING_JSON, "fixture:finite_capital_use", null,
+                    Map.of(capital, 1L), Map.of(), Map.of(goal, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                    false, true, false)).policy("next/use_capital", 1, false);
+            fixture.add(new Route("next/use_two_capital", Authority.CRAFTING_JSON, "fixture:finite_two_capital_use", null,
+                    Map.of(capital, 2L), Map.of(), Map.of(goal, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                    false, true, false)).policy("next/use_two_capital", 1, false);
+            fixture.add(new Route("next/keep_spare", Authority.CRAFTING_JSON, "fixture:finite_spare_witness", null,
+                    Map.of(SAFE, 1L), Map.of(), Map.of(spareGoal, 1L), Set.of(), 0, 0, Map.of(), Set.of(),
+                    false, true, false)).policy("next/keep_spare", 1, false);
+            var predecessor = fixture.audit();
+            yes("the actual manual-capital predecessor passes; raw=" + raw,
+                    T0ConditionalGate.evaluate(predecessor).pass());
+            var before = predecessor.tiers().get(0).witnessState();
+            if (before == null) {
+                fail("the construction separation contract needs completed custody; raw=" + raw);
+                continue;
+            }
+            eq("one paid capital unit starts installed, not freely spendable; raw=" + raw, 0L,
+                    before.freeStock().getOrDefault(capital, 0L));
+            yes("the paid capital is really installed; raw=" + raw, before.installedMachines().contains(capital));
+            eq("the sole installed unit has exact paid backing; raw=" + raw, 1L, constructionSupply(before, capital));
+            // Inflate only this untrusted report comparison, never the private executor checkpoint.
+            Map<Resource, Long> duplicated = physicalCustody(before);
+            duplicated.merge(capital, 1L, Math::addExact);
+            no("reporting the only installed unit again as free stock fails conservation; raw=" + raw,
+                    constructionSupply(before, capital) == duplicated.get(capital));
+            eq("only the first manual construction bill is initially delivered; raw=" + raw, 2L,
+                    before.playerDeliveries().get(RAW));
+            var used = SustainabilityAudit.continueFinite(predecessor, fixture.annotations(),
+                    List.of("next/use_capital"), "next/use_capital");
+            yes("the genuine predecessor remains admitted; raw=" + raw, used.admitted());
+            eq("consumption needs a separately paid copy, never the installed unit; raw=" + raw, raw == 4,
+                    used.completed());
+            var after = used.state();
+            if (after == null) {
+                fail("the finite attempt retains complete physical custody; raw=" + raw);
+                continue;
+            }
+            eq("the installed unit is never released or consumed; raw=" + raw,
+                    before.installedMachines(), after.installedMachines());
+            eq("no copy remains free after its single funded use or refused construction; raw=" + raw, 0L,
+                    after.freeStock().getOrDefault(capital, 0L));
+            eq("one installed unit remains physically and financially accounted; raw=" + raw, 1L,
+                    physicalCustody(after).get(capital));
+            eq("consumed copies are deducted from paid construction; raw=" + raw, 1L, constructionSupply(after, capital));
+            eq("only completed paid manual construction batches are counted; raw=" + raw, raw == 4 ? 2L : 1L,
+                    after.establishmentBatches().get("craft/manual_capital"));
+            eq("the original material allowance is not replenished; raw=" + raw, raw,
+                    after.playerDeliveries().get(RAW));
+            eq("installation parts stay dedicated; raw=" + raw, before.installationParts(), after.installationParts());
+            eq("locked catalysts stay dedicated; raw=" + raw, before.retainedCatalysts(), after.retainedCatalysts());
+            eq("one-shot claims cannot finance a second copy; raw=" + raw, before.claimedRoutes(), after.claimedRoutes());
+            eq("manual work custody is not reset; raw=" + raw, before.consumedManualActions(), after.consumedManualActions());
+            conservation(before, after, used.batches());
+            if (raw == 2) {
+                yes("the only installed unit cannot satisfy an unfunded withdrawal",
+                        used.findings().stream().anyMatch(finding -> finding.rule().equals("entry_profile_insufficient")));
+                eq("an installed unit cannot stand in for the requested executed exit", 0L,
+                        used.exitProduction().executedBatches());
+                continue;
+            }
+            var spare = SustainabilityAudit.continueFinite(predecessor, fixture.annotations(),
+                    List.of("craft/manual_capital", "next/keep_spare"), "next/keep_spare");
+            yes("a second paid manual copy may remain free alongside the installation", spare.completed());
+            var kept = spare.state();
+            if (kept == null) {
+                fail("the paid spare needs actual completed custody");
+                continue;
+            }
+            eq("the separately funded spare remains exact physical stock", 1L, kept.freeStock().get(capital));
+            eq("installed and free copies total two, not one copy counted twice", 2L,
+                    physicalCustody(kept).get(capital));
+            eq("both copies have actual paid batch backing", 2L, constructionSupply(kept, capital));
+            eq("the second copy pays the entire remaining material bill", 4L, kept.playerDeliveries().get(RAW));
+            eq("extra stock does not release the installed original", before.installedMachines(), kept.installedMachines());
+            conservation(before, kept, spare.batches());
+
+            var exhausted = SustainabilityAudit.continueFinite(predecessor, fixture.annotations(),
+                    List.of("next/use_two_capital"), "next/use_two_capital");
+            no("one paid spare and one installed unit cannot fund a two-unit withdrawal", exhausted.completed());
+            var retained = exhausted.state();
+            if (retained == null) {
+                fail("the exhausted construction attempt needs complete retained custody");
+                continue;
+            }
+            eq("failure keeps the real completed spare rather than zeroing or duplicating it", 1L,
+                    retained.freeStock().get(capital));
+            eq("the initial installed unit remains unavailable to the failed withdrawal",
+                    before.installedMachines(), retained.installedMachines());
+            eq("two paid units still balance across installed and free axes", constructionSupply(retained, capital),
+                    physicalCustody(retained).get(capital));
+            eq("the exhausted allowance is not enlarged", 4L, retained.playerDeliveries().get(RAW));
+            eq("partial construction never becomes an executed two-unit exit", 0L,
+                    exhausted.exitProduction().executedBatches());
+            yes("the exhausted construction retains its actual finite-material finding",
+                    exhausted.findings().stream().anyMatch(finding -> finding.rule().equals("entry_profile_insufficient")));
+            conservation(before, retained, exhausted.batches());
+        }
     }
 
     private static void immutable(String message, Runnable mutation) {

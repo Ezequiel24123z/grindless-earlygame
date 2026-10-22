@@ -1145,7 +1145,34 @@ owner-save evidence; A/C composition and exact-source qualification remain.
 
 ### ADR-0187 source intake before actual finite qualification
 
-**G13 returned with343-file custody; independent QA546 pending.** Manifest
+**Oracle-only repair and proportional next proof, source reviewed.**
+483d25d7d032127b2e0494072d306b52f8f5c21d/exactparent489/tree
+0a1605179b00dce641d3cea6091182aea252dfa0 changes only two checks and its
+changelog (154 insertions/four deletions). Parent directly reviews the full
+delta and existing fixture/physical aggregation, with handoffSHA
+6bfe51f401a231ca9bd77c2febe8b80834514211792a62624c4dd8ece8466382.
+Both test blobs are normally preserved; no application code changes.
+
+Report15 records two real manual Clay Mixer/Hand Pump/Quern output batches
+apiece. The separate writer10 predecessor has a conserved installed1/free1
+partition; all11 installed construction resources balance. That corroborates
+a type-wide zero-stock oracle error, not a report15 custody dump.
+The repaired test compares net actual deliveries/physical history against
+free, locked, installed and dedicated-part quantities, rejects negative axes
+and avoids counting reward credits twice. R36 covers an unbacked duplicate,
+funded spare, single use and exhausted withdrawal; no revised pass yet.
+
+The entire production/runtime tree, producer wrappers/helpers and all43
+explicit T1 source contents are unchanged from489. T1's98 image declarations
+are unchanged. Raw S1 implementation identity also contains both changed
+checks, so its next hashes must differ honestly; canonical normalized
+authority facts and custody exclude those raw identities. Preserve the
+original G13 writer/check/provenance source489 and reuse its exact four
+bytes after binding the new source. Required new evidence is changed-check
+compilation/R36, the corrected postT0 main and unexecuted postT1 main, not
+another writer/CheckOnly run. No G14 transfer or JVM is granted here.
+
+**G13 returned with343-file custody independently verified by QA546.** Manifest
 a97bbbda8233b27a6ca4e1384847cec55f2954d107aa16ff268fd1d2e87726e3
 binds reported PC/SCP/local parity,2595 unchanged other inputs, actual
 43 sources/98 images per write/check with196 copied images and three
@@ -1169,6 +1196,15 @@ The saved T0 report has gate.pass=true but no serialized witness. Preserve
 this distinction while C diagnoses the all-installed/free-zero predicate.
 G13's single CI decision is in-progress plus cancelled, zero success/reuse.
 No postT1/A10 or source-independent global pass follows.
+
+QA verifies343 safe entries/11,671,015 bytes,2595 unchanged inputs, seven
+failure duplicates and all output/recorded-PC mtime relationships. Actual
+stage order is02,03,19,08,09,10,11,12,13,14,15;19 is not a later producer.
+All43 sources match frozen inputs/Git (one direct,42 exact LF-to-CRLF);
+all196 image copies, internal names/SourceFile and actual getClass2/4/8
+bindings match98 declarations per write/check. Final closure is verified,
+with the separate-exit-receipt limitation preserved and no current-PC claim.
+No new custody discrepancy remains; the original stage15 stays failed.
 
 **G13 new postcanonical boundary, not a repeat of the G12 failure.**
 Exact489 reports common/tool/audit-R35 runner0, all three normal writers and

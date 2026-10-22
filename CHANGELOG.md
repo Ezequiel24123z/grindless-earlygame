@@ -15,6 +15,15 @@ entries below reference those records by id.
 
 ### Added
 
+- **Verify G13 custody and integrate the strict quantity-based oracle repair.**
+  Independent QA verifies343 files, actual43/98 write/check provenance,
+  four normal payloads and final closure. Normally preserve both checker
+  blobs from483d25d7/exact489 after direct review; only the shared changelog
+  conflicts. R36 is authored, not executed. Production/runtime sources and
+  normalized model inputs are unchanged, so the next delta window can reuse
+  G13's normal outputs and original proofs without rerunning writers.
+  Recompile changed checks, preserve new wider-S1 identities, run R36 and
+  both outstanding canonical boundaries before accepting any data checkpoint.
 - **Close G13 with four complete writer outputs and one unresolved invariant.**
   Preserve reported343-file/source/image/check custody and the actual finite
   result without equating it to full qualification. Fresh22:45:59Z returns
@@ -36,6 +45,21 @@ entries below reference those records by id.
   checks and actual source/images. Reuse unchanged native and fixture
   proofs. Retain exact partial outputs on failure; A10 requires full passes
   and exact489 parent. No result, new native or player update is implied.
+- **Check installed capital against paid physical units, not a type-wide stock ban.**
+  Preserved G13 report15 has one failing zero-free-stock oracle, not a stale
+  canonical or failed T0 gate. Its completed authorities record two manual
+  Clay Mixer, Hand Pump and Quern batches apiece; the separately emitted
+  writer10 predecessor conserves one installed plus one free unit of each.
+  Report15 has no custody dump, so those free balances are not attributed to it.
+  Compare actual guaranteed/player deliveries and completed physical net
+  batches with free, locked, installed and dedicated-part quantities; claimed
+  rewards are not counted twice as delivery credits. Reuse the existing
+  conservation helper and add R36 for an unfunded installed-unit withdrawal,
+  a separately paid spare, its single use and an exhausted two-unit request
+  retaining the real completed spare. Product sources, all43/98 T1 pins,
+  budgets, recipes, manual policy and the four normal payloads stay intact.
+  Changed checks are authored/source-reviewed only; original G13 successes
+  remain exact489 evidence, not revised-source execution, A10 or acceptance.
 - **Normally integrate the reviewed continuation-funding correction.**
   Preserve all four source/check blobs from f30a5f79/exactcb1e, with direct
   review of funding, active-route guards, selected producer refill, retained
