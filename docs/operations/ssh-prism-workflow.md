@@ -178,6 +178,50 @@ stdin collector. The helper calls the existing checks/harness; it is not another
 server runner. Keep credentials and private host settings out of its source.
 This complements, not replaces, the qualified single-line deployment RPC.
 
+### Managed native FTB definition updates
+
+ADR-0177 adds source93ce975 host-side UpdateQuestDefinitions and
+RecoverQuestDefinitions. They are not exposed as a new pc-workflow action,
+an automatic startup overwrite, or permission to update the player instance.
+Their Java/compiler/real-plan qualification is still pending. Explicit InstanceId,
+plan path/hash, owned stopped target and the already installed verified current
+PackZip/runtime are required. A pending journal blocks startup/Inspect/Deploy;
+recovery restores definitions, not a secretly swapped runtime or paid world data.
+
+The existing Gradle publishFtbQuestDefinitions and prepareFtbQuestUpdate tasks
+produce a fresh normal offline/serial compilation/remap in isolated operation
+outputs/cache before emitting a compilation receipt. Preserve
+FTB_COMPILATION_RECEIPT, compilation.json, copied compiler.init.gradle and their
+actual hashes alongside schema2 reference/plan. The legacy dd0 source-file
+export must bind real old definitions to the selected preserved JAR and actual
+loaded class images. Never manually adopt historical build/classes or invent
+a46 reference by deleting four lessons from50. Old source-only schema1 reference
+publications without compilationSha256 are rejected.
+
+On the separately authorized qualification surface, the new-only Java selector
+is `:forge:verifyFtbQuestBackend --args="--managed-files-only"` with the existing
+bounded/offline/no-configuration-cache settings. Real filesystem mocks/plans
+are not an authenticated old publisher receipt. The production host APIs are:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\prism-dev.ps1 `
+  -Action UpdateQuestDefinitions -Root $Root -ExpectedRevision $Source `
+  -InstancesRoot $InstancesRoot -InstanceId $InstanceId -PackZip $PackZip `
+  -QuestUpdatePlan $Plan -QuestUpdateSha256 $PlanSha256
+
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\prism-dev.ps1 `
+  -Action RecoverQuestDefinitions -Root $Root -ExpectedRevision $Source `
+  -InstancesRoot $InstancesRoot -InstanceId $InstanceId `
+  -QuestUpdatePlan $OriginalPlan -QuestUpdateSha256 $OriginalPlanSha256
+```
+
+These use the existing locks/verified backups/journal and never raw-rewrite
+TeamData/legacy receipts/progress/SavedData. Unknown edits, unsafe paths, failed
+backups or interrupted recovery remain visible refusals. Do not start an
+incomplete46 configuration under the new50 runtime; recover/retry explicitly.
+The Bash twin forwards the same host contract. Keep all actual private paths
+and operator receipts outside Git.
+
 Preserve per-stage exit codes, raw logs, exact source/JAR and a separate receipt.
 An SSH255 or collector failure does not establish whether the remote stage ran.
 Inspect receipts, worktree HEAD/cleanliness and positively identified owned

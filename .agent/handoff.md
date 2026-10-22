@@ -44,7 +44,7 @@ with full ordered/value `.equals`, without weakening them. Actual compiler
 confirmation and a new exact published GO are still required; do not resume
 the released grant or relabel the old423a failure.
 
-**Latest NEW grant:** only604195bd receives
+**Historical85e grant, now returned:** only604195bd receives
 `control-factory-qualification-20261022` on exact published
 85e9078e1c03d05f32ca76fe46dad5ad13e16647. It includes4f factory content and
 the9b compiler-oracle repair; all actual new results are pending. Use the same
@@ -55,6 +55,21 @@ clean source before NORMAL writers, then independent CheckOnly/canonical gates.
 Expected209/84/266 and five minimum-control rows are data, not extra native
 runs. Verify the real adapter bytecode hash. All input/source changes wait for
 zero owned JVMs/locks and another exact GO; FTB provenance repair stays separate.
+
+**Current boundary:**85e admission/Sync succeeds, then exact CI39733641733
+supplies environment/build/javac0 and Recipe/Atlas/ControlMatrix/Persistence,
+inspection476/0, adapters314/0 and teaching957 passes. Three formerly pure
+rebuild contracts (MachineUi/Material/Workshop) fail because minimum-primary
+Graph.index now touches BuiltInRegistries before bootstrap. T1.verify also
+fails the obsolete wire-immediately-after-assembly oracle; this blocks its
+writer before writing, not merely a stale JSON equality. Economy/Guidance
+stale equalities remain separate. Native smoke is SKIPPED.
+At06:35:57.7150106Z604 returns clean85e/owned-all-observedJava0/locksfalse,
+startedPCJVM0, no native/writer/A2. Parent verifies original build/behavior
+and closure8363ad93; private pre-JVM invoker/observer failures remain preserved.
+No orphan is killed. All PC leases are returned. Owners347/a18 repair the
+pure index and relative line-order contracts; no fake bootstrap or suite
+exclusion may make the failures disappear. Reuse actual unaffected CI passes.
 
 ADR-0176 selects only the existing Wire Mill's F1 control operand as a minimum
 capacity requirement. Existing exact factories, F2 Matrix predecessor, outputs
@@ -111,7 +126,21 @@ assertions are source-fixed in9b9c619 before Java. This lane has no PC grant.
 Managed-FTBa7b820b adds explicit-instance/argument refusal and reports786/103
 real Windows tool assertions, but not Java/authentic old export. Independent
 review1ce4d3be identifies stale compiled classes passing origin-below-root;
-the source/runtime/binary linkage repair remains with its author.
+follow-up93ce975 is now normally integrated and closes that P2 **in source**:
+normal isolated offline single-worker GradleBuild/JavaCompile/remap, compilation
+receipt, exact loaded-class images and all selected-JAR payloads. Reference
+schema2 requires compilationSha256; never adopt historical build/classes.
+The same reviewer closes only this static P2. Actual build/receipt/source-file
+dd0 export/parser/real-plan consumption remain unexecuted. Parent verifies
+raw892a2f0b and unchanged a7->93 filesystem inputs to reuse786/103 honestly.
+Use the updated runbook/API, not the obsolete manual-classpath instructions.
+
+Source owner143a5650 now implements ADR-0180's separate thermal subassembly:
+one new ordinary core from the existing furnace/carbon/iron groups, then core
+plus remaining cobblestone/F1+ controller. Exact composed material parity,
+two ordinary operations, no fifth slot or hidden free ingredient. The original
+four-machine selection remains history, not a permanent automation prohibition.
+No source actor has PC/Java/generation/deployment authority.
 
 Next integrate coherent local checkpoints and select only their changed proofs.
 Any heavy qualification needs a new sole-owner lease on an exact published
@@ -143,9 +172,8 @@ overload fail before any compiler starts; preserve both. Direct native invocatio
 with FileStream locks then has actual javac0/scanner0. A silent compiler/Tee
 produces no stdout file; its successful exit and real scanner result are retained,
 not replayed to manufacture a log. Final copy0 and Inspect are separately closed.
-Prior FTB/M and423a grants are returned; the NEW fixed85e grant above is build/
-diagnostic only. Neither the failed source gate nor the new grant includes this
-T0 delivery. The closure below makes no new T0 observation.
+Prior FTB/M/423a/85e grants are returned. Neither new attempt starts a PC JVM
+or accesses this T0 delivery. The closure below makes no new T0 observation.
 
 | Category | Final bounded T0 handover |
 | --- | --- |

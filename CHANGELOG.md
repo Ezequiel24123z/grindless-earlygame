@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Integrate managed definitions with source-bound compilation, not a migration pass.**
+  Normal93ce975 preserves all updater ancestry, real a7 filesystem786/103 and
+  schema2 reference publication with fresh normal compiler/remap receipt,
+  loaded-image and selected-JAR payload checks. The independent P2 closes in
+  source; actual Gradle/source-file dd0 export/parser/recovery is still pending.
+  Exact85e CI supplies main/tool compilation and affected green contracts but
+  exposes three early-registry indexing failures and an obsolete wire adjacency
+  oracle.604 returns safely without any PC JVM/native/writer; do not relabel
+  them as stale equality or add bootstrap to pure tests. Continue separate
+  thermal two-stage reproduction under ADR-0180 while source fixes proceed.
 - **Resume qualification on a new exact source after the real compile repair.**
   Only604195bd receives `control-factory-qualification-20261022` on85e9078,
   including four-machine reproduction and9b's exact-list fixes. Preserve the

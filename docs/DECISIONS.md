@@ -188,9 +188,10 @@ history — the reasoning that was wrong is itself useful information.
 | [0174](#adr-0174--grow-tier-complexity-around-basic-machine-families-from-t1) | Grow tier complexity around basic machine families from T1 | Accepted |
 | [0175](#adr-0175--carry-optional-absolute-process-pressure-through-existing-contracts) | Carry optional absolute process pressure through existing contracts | Accepted engineering contract; model/native gates separate |
 | [0176](#adr-0176--distinguish-exact-matrix-evidence-from-minimum-controller-capacity) | Distinguish exact Matrix evidence from minimum controller capacity | Accepted engineering scope; source integrated, qualification pending |
-| [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; implementation/proof pending |
+| [0177](#adr-0177--update-managed-native-quest-definitions-only-through-an-explicit-guarded-transition) | Update managed native quest definitions only through an explicit guarded transition | Accepted engineering scope; source/P2 repair integrated, JVM proof pending |
 | [0178](#adr-0178--continue-autonomously-and-deliver-ready-tiers-to-the-longitudinal-game) | Continue autonomously and deliver ready tiers to the longitudinal game | Accepted direct owner operating mandate |
 | [0179](#adr-0179--reproduce-four-slot-fit-first-factory-machines-without-repricing-bootstrap) | Reproduce four-slot-fit first-factory machines without repricing bootstrap | Accepted bounded acquisition scope; implementation/proof pending |
+| [0180](#adr-0180--reproduce-the-thermal-generator-through-an-honest-two-stage-subassembly) | Reproduce the Thermal Generator through an honest two-stage subassembly | Accepted bounded acquisition scope; implementation/proof pending |
 
 ---
 
@@ -8335,8 +8336,10 @@ projection and registered-item proofs, not an unrelated Blueprint/pressure repla
 ## ADR-0177 — Update managed native quest definitions only through an explicit guarded transition
 
 **Status.** Accepted coordinator engineering scope under ADR-0171/0173 and the
-owner's continued development instruction, 2026-10-22. Implementation and real
-file-transition/recovery qualification are pending; no player instance update
+owner's continued development instruction, 2026-10-22. Source93ce975 is normally
+integrated; unchanged-input Windows786/103 is actual file/tool evidence.
+Independent provenance P2 closes in source only. Real compiler/old export/
+parser/plan-consumption qualification is pending; no player instance update
 is authorized.
 
 **Context.** The installed native baseline has46 logical quests; current source
@@ -8365,6 +8368,17 @@ may add the four reward-free lessons, not infer their completion or mint a new
 starter. Native team/progress/claim SavedData, owner worlds and the legacy-paid
 minting fence are never rewritten by this file transition. Reuse supported FTB
 and ordinary safe-file/package primitives, with existing Windows/shell twins.
+
+**Source realization and provenance correction.** Normal93ce975 preserves the
+explicit UpdateQuestDefinitions/RecoverQuestDefinitions host actions, current
+package-before-definition ordering, full preflight, backups/journal and startup
+refusal while pending. Reference publication schema2 requires a fresh normal
+Gradle JavaCompile/remap receipt, source/input hashes, actual loaded class images
+and all selected-JAR payloads. A clean checkout, correct selected JAR and
+historical classes merely located below the root are not sufficient. Source-only
+independent review closes that concrete P2; actual compiler/export/plan execution
+remains a separate unproved property. The prior real786/103 filesystem evidence
+is reused only because its inputs are exactly unchanged.
 
 **Rejected alternatives and proof.** Startup overwrite, accepting a filename as
 ownership, raw progress replacement and ignoring user edits all violate the
@@ -8460,3 +8474,47 @@ discount a bill or claim all five machines automatically reproduced. Broader
 families, genuine capability upgrades and complete tier readiness remain work.
 Ordinary new rows reuse the proven executor/role mechanism: exhaustive data and
 affected normal projections, not one native smoke per machine.
+
+---
+
+## ADR-0180 — Reproduce the Thermal Generator through an honest two-stage subassembly
+
+**Status.** Accepted separate bounded acquisition scope under ADR-0178/0179,
+2026-10-22. Implementation and qualification are pending; no whole-tier readiness
+or player update is implied.
+
+**Context.** ADR-0179 deliberately selects only four manual machines whose
+material groups fit the Assembler. Thermal has five groups, so simply adding
+it to that whitelist would either exceed slots or conceal/drop an input.
+The owner's ongoing programme calls for completing useful factory automation,
+not making that initial exclusion permanent.
+
+**Decision.** Add one ordinary Thermal Generator Core component and two real
+Assembler operations. The core consumes the furnace, carbon and iron groups
+from the existing manual recipe. Final assembly consumes exactly one core,
+the remaining cobblestone and one explicitly minimum-F1 controller. Derive
+multiplicities from the live manual catalogue/JSON and prove composed parity:
+the current five cobblestone, furnace, carbon, iron and Relay Matrix are neither
+discounted nor duplicated. Each stage fits three groups within the existing four.
+
+Both stages pay the existing ordinary fabrication cycle/FU. Their combined
+cost is two operations, not a claim of one operation's energy/time. Preserve
+the manual first generator as the factory seed. Extend optional reproduction
+after assembly; no new mandatory first-F2 edge, world gate or bootstrap cycle.
+The final output remains the ordinary unchanged F1 generator, not a chassis
+upgrade, new fuel rule or modified saved inventory.
+
+Register the one ordinary item with proper existing asset/discovery and
+resource metadata. Prefer existing owned/vanilla resource references or the
+project's deterministic asset mechanism; no third-party asset copying or paid
+generation is authorized. Source-backed component production/consumption is
+not automatic proof of global renewable establishment or artistic acceptance.
+
+**Rejected shortcuts and proof.** Do not widen slots, hide an ingredient in a
+matcher exception, price the machine differently or automatically project every
+future manual craft. This is an explicit productive subassembly, not a general
+recipe engine. Verify exact cancellation of the intermediate, counts, roles,
+bulk-input selection against generic Assembler recipes, optional acyclicity,
+registry/model validity and unchanged manual/claim/F2 contracts. Reuse the shared
+execution/Matrix mechanism proof; add only genuinely uncovered registration
+or adapter observations, not repeated native cycles for ordinary content.

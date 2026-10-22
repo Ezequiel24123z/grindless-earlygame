@@ -118,6 +118,16 @@ refuse unknown edits; no raw world rewrite or relaxed preflight.
 ADR-0177 now assigns that explicit production update to source ownercb273782
 fromad5b50d. Reuse `FtbQuestFiles`, the native definition publisher and existing
 Prism guarded-file/update patterns; no PC access or pass follows from authorship.
+Source93ce975 normally integrates `FtbQuestDefinitionPublisher`,
+`FtbQuestUpdatePlanner`, `forge/ftb-definition-compile.init.gradle` and the
+existing host actions UpdateQuestDefinitions/RecoverQuestDefinitions.
+Publishing/planning require source/runtime/JAR binding through a fresh normal
+offline/serial compile-remap receipt and actual loaded images; reference schema2
+requires compilationSha256. Do not reuse old build/classes as proof.
+Use explicit InstanceId/plan/hash/current stopped installed pack; pending
+journal blocks startup/Inspect/Deploy. Native/legacy paid world data stay untouched.
+The shell twins forward the same API. Source/compiler/planner/real-plan JVM
+qualification is pending; the unchanged-input Windows786/103 file proof is not it.
 
 ### Exact Matrix identity versus control capacity
 
@@ -166,6 +176,18 @@ remain out. Current fixture shapes are209/84/266, not observed pass counts.
 Exact423a CI exposes missing List overloads in recipe assertions; the author
 repairs them in9b9c619 with ordered/full `.equals` and the existing boolean
 helper. Actual compiler confirmation remains pending; do not weaken the guards.
+Exact85e CI subsequently compiles and passes Recipe/Atlas/ControlMatrix but
+exposes registry access in Graph.index for minimum-primary input. Restore pure
+descriptor indexing and runtime candidate composition without fake bootstrap;
+min-primary candidates must not vanish merely because another keyed list exists.
+Keep optional wire ordering relative to assembly, not obsolete adjacency once
+factory reproduction is inserted.
+
+ADR-0180's thermal lane is separate from the original eight-craft whitelist:
+an actual ordinary core plus final three-group assembly must cancel to the
+exact manual Thermal multiset. No direct five-group projection, fifth slot,
+free ingredient or reduced bill. Reuse the same item/asset/catalogue/role
+mechanisms and preserve the manual first generator and mandatory F2 path.
 
 The owner's2026-10-21 instruction separately opens T1 development (ADR-0168/0169).
 Use [the first-factory plan](../plan/feature-t1-first-factory-1.md): live route

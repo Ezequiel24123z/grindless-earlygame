@@ -246,6 +246,157 @@ tasks.register("verifyFtbQuestBackend", JavaExec) {
     jvmArgs "-XX:ActiveProcessorCount=2"
 }
 
+def ftbCompilation = [:]
+def ftbCompilationInit = file("ftb-definition-compile.init.gradle")
+def ftbCompilationTask = tasks.register("compileFtbQuestDefinitionSource", GradleBuild) {
+    group = "build"
+    description = "Compiles/remaps the exact source in fresh isolated outputs and emits its verified binary receipt."
+    if (!providers.gradleProperty("ftbDefinitionRoot").isPresent()) {
+        dependsOn tasks.named("remapJar"), tasks.named("verifyFtbPublisherArtifacts")
+    }
+    doFirst {
+        def source = providers.gradleProperty("ftbDefinitionSourceRevision").get()
+        def legacy = providers.gradleProperty("ftbDefinitionRoot")
+        def sourceRoot = (legacy.isPresent() ? rootProject.file(legacy.get()) : rootProject.projectDir)
+                .toPath().toAbsolutePath().normalize().toFile()
+        if (!(source ==~ /[0-9a-f]{40}/) || sourceRoot.toPath().root.toString().startsWith("\\\\")) {
+            throw new GradleException("FTB compilation requires a pinned local source checkout.")
+        }
+        def readGit = { File directory, List<String> arguments ->
+            def stdout = new ByteArrayOutputStream()
+            def result = exec {
+                commandLine(["git", "--no-pager", "-C", directory.absolutePath] + arguments)
+                standardOutput = stdout
+                errorOutput = new ByteArrayOutputStream()
+                ignoreExitValue = true
+            }
+            if (result.exitValue != 0) { throw new GradleException("Read-only FTB source verification failed.") }
+            stdout.toString("UTF-8").trim()
+        }
+        if (new File(readGit(sourceRoot, ["rev-parse", "--show-toplevel"])).toPath().toAbsolutePath().normalize() != sourceRoot.toPath() ||
+                readGit(sourceRoot, ["rev-parse", "HEAD"]) != source ||
+                !readGit(sourceRoot, ["status", "--porcelain", "--untracked-files=normal"]).isEmpty() ||
+                !readGit(rootProject.projectDir, ["status", "--porcelain", "--untracked-files=normal"]).isEmpty()) {
+            throw new GradleException("FTB compilation requires clean committed tool/source checkouts.")
+        }
+        def operation = UUID.randomUUID().toString().replace("-", "")
+        def output = new File(sourceRoot, "build/ftb-compilation-${operation}").absoluteFile
+        for (def path = output.toPath(); path != null; path = path.parent) {
+            if (java.nio.file.Files.isSymbolicLink(path) ||
+                    (java.nio.file.Files.exists(path, java.nio.file.LinkOption.NOFOLLOW_LINKS) &&
+                            java.nio.file.Files.readAttributes(path, java.nio.file.attribute.BasicFileAttributes,
+                                    java.nio.file.LinkOption.NOFOLLOW_LINKS).isOther())) {
+                throw new GradleException("FTB compilation output cannot traverse links or special files.")
+            }
+        }
+        java.nio.file.Files.createDirectories(output.parentFile.toPath())
+        java.nio.file.Files.createDirectory(output.toPath())
+        byte[] scriptBytes = ftbCompilationInit.bytes
+        def scriptHash = java.security.MessageDigest.getInstance("SHA-256").digest(scriptBytes).encodeHex().toString()
+        def initCopy = new File(output, "compiler.init.gradle")
+        java.nio.file.Files.write(initCopy.toPath(), scriptBytes,
+                java.nio.file.StandardOpenOption.CREATE_NEW, java.nio.file.StandardOpenOption.WRITE)
+        java.nio.channels.FileChannel.open(initCopy.toPath(), java.nio.file.StandardOpenOption.WRITE)
+                .withCloseable { it.force(true) }
+        ftbCompilation.putAll([root: sourceRoot, output: output, receipt: new File(output, "compilation.json"),
+                               toolSha256: scriptHash])
+        def parameters = gradle.startParameter.newBuild()
+        parameters.setCurrentDir(sourceRoot)
+        parameters.setProjectDir(sourceRoot)
+        parameters.setTaskNames([":forge:writeFtbDefinitionCompilerReceipt"])
+        parameters.setInitScripts([initCopy])
+        parameters.setProjectProperties([ftbCompilationSource: source, ftbCompilationOutput: output.absolutePath,
+                                         ftbCompilationToolSha256: scriptHash])
+        parameters.setProjectCacheDir(new File(output, "project-cache"))
+        parameters.setOffline(true)
+        parameters.setBuildCacheEnabled(false)
+        parameters.setParallelProjectExecutionEnabled(false)
+        parameters.setMaxWorkerCount(1)
+        setStartParameter(parameters)
+        setBuildName("ftb-compilation-${operation}")
+    }
+}
+
+def ftbCompilationRuntime = {
+    def receipt = ftbCompilation.receipt
+    if (!(receipt instanceof File) || !receipt.isFile()) {
+        throw new GradleException("A successful fresh FTB compilation receipt is required; old classes are not adopted.")
+    }
+    def manifest = new groovy.json.JsonSlurper().parse(receipt)
+    if (manifest.schemaVersion != 1 || manifest.tool != "grindless-ftb-compilation" ||
+            manifest.sourceRoot != ftbCompilation.root.absolutePath ||
+            manifest.outputRoot != ftbCompilation.output.absolutePath ||
+            manifest.toolSha256 != ftbCompilation.toolSha256) {
+        throw new GradleException("Unexpected FTB compilation receipt.")
+    }
+    [manifest: manifest, receipt: receipt, sha256: java.security.MessageDigest.getInstance("SHA-256")
+            .digest(receipt.bytes).encodeHex().toString()]
+}
+
+// Historical publication uses the new source-file publisher with ONLY the freshly
+// compiled pinned runtime; normal build/classes directories are never classpath inputs.
+tasks.register("publishFtbQuestDefinitions", JavaExec) {
+    group = "build"
+    description = "Publishes source/runtime/hash-bound native chapters, including an authentic pinned legacy checkout."
+    dependsOn ftbCompilationTask
+    def legacyRoot = providers.gradleProperty("ftbDefinitionRoot")
+    def producer = file("src/main/java/io/github/ezequiel24123z/grindless/forge/quest/FtbQuestDefinitionPublisher.java")
+    if (legacyRoot.isPresent()) {
+        mainClass.set(producer.absolutePath)
+    } else {
+        mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.FtbQuestDefinitionPublisher")
+    }
+    workingDir rootProject.projectDir
+    maxHeapSize = "512m"
+    jvmArgs "-XX:ActiveProcessorCount=2"
+    doFirst {
+        def source = providers.gradleProperty("ftbDefinitionSourceRevision").get()
+        def runtime = legacyRoot.isPresent() ? providers.gradleProperty("ftbDefinitionRuntimeRevision").get() :
+                providers.gradleProperty("ftbDefinitionRuntimeRevision").getOrElse(source)
+        def sourceRoot = legacyRoot.isPresent() ? rootProject.file(legacyRoot.get()) : rootProject.projectDir
+        def jar = legacyRoot.isPresent() ? rootProject.file(providers.gradleProperty("ftbDefinitionJar").get()) :
+                tasks.named("remapJar").get().archiveFile.get().asFile
+        def digest = legacyRoot.isPresent() ? providers.gradleProperty("ftbDefinitionJarSha256").get() :
+                java.security.MessageDigest.getInstance("SHA-256").digest(jar.bytes).encodeHex().toString()
+        def proof = ftbCompilationRuntime()
+        classpath = files(proof.manifest.runtimeClasspath.collect { rootProject.file(it.path) })
+        def output = providers.gradleProperty("ftbDefinitionOutput").isPresent() ?
+                rootProject.file(providers.gradleProperty("ftbDefinitionOutput").get()) :
+                new File(sourceRoot, "forge/build/ftb-definitions/definitions-${source}.json")
+        setArgs([sourceRoot.absolutePath, source, runtime, jar.absolutePath, digest,
+                 proof.receipt.absolutePath, proof.sha256, output.absolutePath])
+    }
+}
+
+tasks.register("prepareFtbQuestUpdate", JavaExec) {
+    group = "build"
+    description = "Native-SNBT preflight for an explicit stopped-target definition update; never writes the instance."
+    dependsOn ftbCompilationTask
+    mainClass.set("io.github.ezequiel24123z.grindless.forge.quest.FtbQuestUpdatePlanner")
+    workingDir rootProject.projectDir
+    maxHeapSize = "512m"
+    jvmArgs "-XX:ActiveProcessorCount=2"
+    doFirst {
+        if (providers.gradleProperty("ftbDefinitionRoot").isPresent()) {
+            throw new GradleException("The update planner requires the current tool/source checkout, not ftbDefinitionRoot.")
+        }
+        def source = providers.gradleProperty("ftbDefinitionSourceRevision").get()
+        def runtime = providers.gradleProperty("ftbDefinitionRuntimeRevision").getOrElse(source)
+        def jar = tasks.named("remapJar").get().archiveFile.get().asFile
+        def digest = java.security.MessageDigest.getInstance("SHA-256").digest(jar.bytes).encodeHex().toString()
+        def proof = ftbCompilationRuntime()
+        classpath = files(proof.manifest.runtimeClasspath.collect { rootProject.file(it.path) })
+        def previous = rootProject.file(providers.gradleProperty("ftbPreviousDefinitions").get())
+        def instance = rootProject.file(providers.gradleProperty("ftbDefinitionInstance").get())
+        def output = providers.gradleProperty("ftbDefinitionOutput").isPresent() ?
+                rootProject.file(providers.gradleProperty("ftbDefinitionOutput").get()) :
+                layout.buildDirectory.file("ftb-definitions/update-${source}.json").get().asFile
+        setArgs([rootProject.projectDir.absolutePath, source, runtime, jar.absolutePath, digest,
+                 proof.receipt.absolutePath, proof.sha256, instance.absolutePath,
+                 previous.absolutePath, providers.gradleProperty("ftbPreviousDefinitionsSha256").get(), output.absolutePath])
+    }
+}
+
 tasks.register("verifyFtbPublisherArtifacts") {
     group = "verification"
     description = "Matches the four resolved FTB publisher jars to the independently verified release bytes."

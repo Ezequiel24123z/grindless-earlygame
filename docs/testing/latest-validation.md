@@ -123,6 +123,44 @@ Data shapes209/84/266 and five named minimum roles need content contracts,
 not a native smoke per machine. FTB/class-binding work remains outside this
 lease; parent/other workers have no concurrent PC access.
 
+**Actual85e boundary and safe return:** source85e CI39733641733/artifact12406193575
+has environment0/build0/behavior1. Common/Forge compile and standalone javac
+really pass, confirming9b's list-call repair. Recipe/Atlas/ControlMatrix/
+Persistence, inspection476/0, adapters314/0 and teaching957 pass; reuse these
+unchanged proofs, not a new PC replay. Three suites fail because Graph.index403
+enumerates the item registry for minimum-primary data before bootstrap
+(MachineUi270, Material139, Workshop32). T1.verify288 also fails its obsolete
+wire-immediately-after-assembly assertion after factory insertion. These are
+four real regressions beyond the two expected Economy/Guidance stale gates;
+T1Export invokes verify before writing, so generation cannot repair that oracle.
+Smoke is SKIPPED, not new registered Matrix evidence.
+
+Fresh06:35:57.7150106Z closure reports clean85e, observed/owned Java0, locksfalse,
+startedPCJVM0 and no attributable orphan killed. Parent verifies closure
+`8363ad932c6deb726cbe4b3cde56b60dff068c079ba0cfad5871311f1da86d0c`,
+behavior `c8e4a3ad7c168fae825aef4e077735c2d0db28b0f691f5fb33ed3fd10235a00a`
+and build `3bbd0140be36e28c87ab41dc37450327c4acf535f3efab5ed6faefcefd790ba0`.
+Two private pre-JVM invoker/observer failures are retained, corrected without
+replay or process-name killing. No native, normal writer/CheckOnly, executed
+writer adapter receipt, A2, package or player-world observation exists.
+
+**Managed definition source, not an executed migration:** normal93ce975
+preserves ee4/d85/a7/93 ancestry and source-only closes reviewer1ce4d3be's
+stale-class P2. Existing normal JavaCompile/remap tasks in fresh operation roots
+produce the required source/input/image/JAR receipt; schema2 reference and
+actual loaded images are checked. The two same-count46 compiled-image
+counterexamples are written, not run. The follow-up static review finds no
+remaining concrete flaw in that narrow binding/isolation scope.
+
+Parent verifies actual Windows filesystem786/103 raw SHA-256
+`892a2f0b17208c95923c78b3cb68c3e3a421a68604cad26074739555c9b11144`
+and exact a7->93 equality of those filesystem/tool inputs. Reuse that evidence
+without relabeling it Java/publisher success. Fresh nested build, authentic
+dd0 source-file export, SNBT parser/stale regression and consumption/recovery
+with its REAL plan remain unexecuted and need a future exact leased source.
+Thermal subassembly source proceeds separately under ADR-0180, without PC or
+generation authority. No tier/player update follows from these partial sources.
+
 ## Final native FTB Prism and existing-game delivery
 
 Exactdd0/JAR29bc/ZIP79ce is VerifiedStopped in Grindless-T0-FTB-Dev after the

@@ -61,6 +61,14 @@ The new exact85e9078 GO now assigns only604195bd the
 `control-factory-qualification-20261022` window. Re-admit/Sync the isolated root
 fresh, prove the changed mechanism once and generate actual normal outputs.
 No source switch or parent/other-worker PC access occurs under that lease.
+That85e window has now returned before any PC JVM: exact CI main/tool compilation
+and affected greens are real, but three pure rebuilds hit the newly introduced
+registry index and T1.verify hits the obsolete immediate wire-order assertion.
+Owners repair them without fake bootstrap/suite exclusions; all PC grants are closed.
+Managed-FTB93ce975 is normally integrated with its P2 source-bound compiler
+repair and static review closure, not actual old export or Java qualification.
+Continue thermal reproduction source under ADR-0180; select the next fixed
+qualification only after the genuine source regressions close.
 The control review's one P2 is source-repaired inf046923: include executed
 AuthorityAdapters bytecode as well as source. Real writer receipt verification
 remains required. Parallel source work now selects four ordinary machine
