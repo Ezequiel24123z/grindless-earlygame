@@ -15,6 +15,14 @@ entries below reference those records by id.
 
 ### Added
 
+- **Receive the complete G7 return and next F1 source without inventing acceptance.**
+  G7 reports339 custody files and fresh12:24:42Z clean26e/Java0/locksfalse/
+  own-guard-absent return. Parent verifies/imports A7's exact data-only Git
+  ancestry/trailers/diff while separate read-only QA checks the evidence chain.
+  No PC grant remains. Normal57d38d6 supplies the coupled default-F1 model/
+  display source with authored31/41 pins; review/Java/writers are pending.
+  Selector owner0752 continues separately; neither source nor ready51 closes
+  Washer acquisition or whole-tier/human readiness.
 - **Choose explicit Assembler targets instead of repricing colliding recipes.**
   ADR-0185 selects a stable-ID, server-authoritative menu choice on the existing
   executor and transaction. Reuse bounded GT/Mekanism configuration/validation
@@ -25,6 +33,8 @@ entries below reference those records by id.
   Research follow-up corrects circuitMeta to the non-consuming builder path;
   GT's integer progress/reset model does not prove our fractional-work case,
   and generic notification is not a blanket selector-preservation guarantee.
+  Isolated Sol6.1Max owner0752df7b starts from3c00af0, with no PC/JVM or
+  overlapping default-F1/recipe/FTB ownership; actual mechanism proof follows.
 - **Include the coupled authored-guidance display in the F1 correction.**
   The source owner identifies raw0 operand/quest-context lookup against the new
   F1-only metadata. ADR-0184 explicitly includes ResourceGuidanceContext and

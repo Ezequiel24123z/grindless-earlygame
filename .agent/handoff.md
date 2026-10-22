@@ -4,6 +4,22 @@ Updated: 2026-10-22. Product gate: **NATIVE FTB PRISM/WORLD COPY READY; HUMAN T0
 
 ## Active continuation — managed definitions and physical control
 
+**G7 explicitly returned at12:24:42.0730525Z.** The executor reports clean
+ApplicableSource26e/Java0/work-cache locksfalse and exact own offline-guard
+removal/absence. Parent has verified/imported the A7 Git bundle, exact41df
+parent/three normal paths/both trailers and reviewed its data diff; it has not
+merged/published A7 or closed the evidence review. Independent read-only
+QA4d5c2db9 verifies the339-file custody/native/package/plan/target/closure chain
+against manifest83edec28, without any PC/JVM/replay. All execution grants are
+closed; a later exact-source window is required.
+
+**ADR-0184 source delivered, not yet integrated/Java-qualified:** normal
+a51c9d3 then57d38d6, base1e642dc, thirteen owned files, including the authorized
+display context. One pure ResourceGuidanceContext.canonicalSupply rule is
+shared by physical authority and authored display. Reported static103/111 and
+31-source/41-image list shape are not emitted provenance or rendered-client
+evidence. Source review/integration and actual changed-model proof are pending.
+
 **Latest G7 report, final custody not yet verified by the coordinator:** new
 publisher0cb passes both authentic historical CLI8 classpaths before Gradle.
 Exact41df CI39773265433/artifact12423716934 supplies Registry1344/0 and
@@ -38,6 +54,11 @@ existing-engine stable-ID target/menu correction, preserving recipe-owned paid
 work including fractional carry, with no new bills, slots or circuit tax.
 The pinned external pattern/limits are recorded; implementation/native/UI
 qualification remains separate and pending.
+Source owner0752df7b-209e-4fd5-afe5-b3cf7c376471 now implements ADR-0185 on
+isolated3c00af0 with Sol6.1Max, no PC/cache/JVM/SSH. It owns the existing
+lookup/process-BE/menu/screen and corresponding fixture seams, not recipes,
+FTB or the concurrent default-F1 adapter/guidance sources. Normal integration
+and an actual changed-mechanism window remain coordinator-owned.
 
 **Current source/qualification split:** G7 sole604 owns the exact41df605
 qualification/new PC root; all fresh results remain pending. A separate
