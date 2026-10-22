@@ -19,8 +19,11 @@
     "no_implicit_public_release_main_merge_or_paid_generation": true
   },
   "baseline_family_control_gap": {
-    "status": "ADR0186_followup_selected_implementation_pending",
+    "status": "sourcePhaseA_active_sharedCheckPhaseB_pending_selector_release",
     "policy": "ADR-0186",
+    "owner_session": "58fac55d-8eed-4b47-96ab-e96561f3c961",
+    "source_base": "045112282fa2370c8784170c87a2e37dae7cce56",
+    "VerifyRecipes_edit_authorized": false,
     "not_authorized": "silent_bill_change_G8hotfix_passive_tax_or_gameplay_acceptance",
     "next": "noncompeting_data_source_now_shared_VerifyRecipes_only_after_selector_explicitrelease_no_G8retarget"
   },

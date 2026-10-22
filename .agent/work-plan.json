@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 88,
+  "plan_revision": 89,
   "updated": "2026-10-22",
   "phase": "FTB51_engineering_and_T1_recipe_reachability_with_default_identity_correction",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -69,8 +69,12 @@
     "closure_required": "actual_newbinding_selected_suites_exits_or_exactCI_proof_NEW31_41observed_sourceclassimages_actual_normal4payloads_CheckOnly_byte_mtimeinvariance_canonicalchecks_nonoutput_frozeninputs_A8normal_bundle_ifchanged_source_metadata_honest_guardhash_removed_absent_Java0locksfalse_explicitreturn_no_target"
   },
   "baseline_family_control_gap": {
-    "status": "ADR0186_selected_source_implementation_and_qualification_pending",
+    "status": "isolated_noncompeting_sourcePhaseA_active_shared_recipeCheck_pending_selector_release",
     "policy": "ADR-0186",
+    "owner_session": "58fac55d-8eed-4b47-96ab-e96561f3c961",
+    "source_base": "045112282fa2370c8784170c87a2e37dae7cce56",
+    "phaseA_owned": "ProcessGraph_VerifyAtlas_VerifyT1Progression_only_needed_releasedAdapters_assertions_NO_VerifyRecipes",
+    "phaseB_prerequisite": "selector0752_exact_VerifyRecipes_commit_release_and_parent_published_integrated_baseline_THEN_normal_compose_and_shared_contract_update_no_concurrentwriter",
     "families": ["CHEMICAL_REACTOR", "CHEMICAL_WASHER", "ELECTROLYSIS_CELL", "ATMOSPHERIC_INTAKE", "INDUCTION_FURNACE", "CASTER", "FLOTATION", "BOILER", "CONDENSER"],
     "evidence": "real_F1_kind_tiers_and_ProcessGraph_three_group_constructors_casing_motor_plate_no_transitiveMatrix_in_components",
     "limit": "ADR0182_no_bill_change_was_bounded_not_permanent_control_exemption",

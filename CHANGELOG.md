@@ -22,6 +22,8 @@ entries below reference those records by id.
   Source/normal-output qualification is pending, not a silent price update or
   chassis upgrade. A separate data owner can work on noncompeting files while
   VerifyRecipes stays leased to the selector until explicit release.
+  Isolated Sol6.1Max owner58fac55d begins PhaseA from0451122; the shared-check
+  phase waits for the parent's exact integrated selector baseline/file release.
 - **Keep the remaining basic-family control gap visible during implementation.**
   Source tracing confirms nine existing functional F1 process constructors
   share casing/motor/plate bills without a physical Matrix, including the

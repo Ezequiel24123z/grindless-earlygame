@@ -32,7 +32,11 @@ existing minimum-F1 fourth operand to nine explicit active process
 constructors, preserve all old material groups/IDs/time/FU/output, passive/
 Motor/first-five seed and exact F2. A separate isolated data owner may start
 only noncompeting ProcessGraph/Atlas/T1 files; VerifyRecipes stays leased to
-selector0752 until explicit release. No source changes under G8, new item,
+selector0752 until explicit release. Isolated Sol6.1Max source owner
+58fac55d-8eed-4b47-96ab-e96561f3c961 now starts at0451122 on those disjoint
+files. It must checkpoint PhaseA honestly, then normally compose only the
+exact parent-supplied integrated selector baseline before shared PhaseB;
+no blind overwrite or competing VerifyRecipes edit. No source changes under G8, new item,
 generic controller tax, hand-edited canonical data or ready-tier claim.
 
 **G7 bounded engineering closed:** independent QA verifies339/339 hashes and all actual
