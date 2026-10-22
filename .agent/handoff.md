@@ -20,6 +20,27 @@ still contains obsolete constructors until the bounded recipe migration is
 implemented; do not deploy or call the policy implemented from documentation.
 No PC/CI-query/Sync/JVM GO is issued and no actual world/paid work is touched.
 
+**Three noncompeting SOURCE lanes now execute on exact published7f9c3ba5.**
+A0b715812 uses idle-created app46fad521/shiny-parakeet for recipe retirement/
+manual bills/pure ManufacturingPolicy/Forge ingredient/adapters/recipe-Atlas-
+registry checks. B6921ada5 uses idle-created appcbce0410/fantastic-bassoon for
+selector/retired-paid-work/manual-native fixtures. C1c9a6363 continues its same
+finite-state task in b430/symmetrical-umbrella after explicitly authorized
+normal FF7f9, owning progression/manual-capital/teaching/T1Export.
+Idle app creation launches no competing CLI. Runtime tasks are sole writers;
+shared files/ownership and exact APIs are explicitly split, parent publishes.
+Normal local source commits and static checks are not Java/qualification.
+
+The shared pure API is recipe.ManufacturingPolicy.isManualFinalMachine(String).
+Manual shaped control uses type grindless:minimum_control/tier F1, actual
+registered stacks and the existing decoder/matcher. Official Forge API research
+is qualified in the external-reference record: MOD-bus registration, NBT-aware
+isSimplefalse, no invented architectures/ordinal literals or binary attestation.
+No copied foreign implementation, new dependency or manual recipe engine.
+The first parent metadata observer misreads PowerShell's property-collection
+Count and fails before link/Git staging; explicit array capture repairs that
+read-only check without changing lane data or replaying a producer.
+
 Generic custody review8ef12f19 finds no significant issue in source6b within
 admission/conservation/execution/export. This does not approve automatic final
 normal-machine manufacture or execute Java/replay. Retain that reusable state
@@ -308,7 +329,7 @@ identity repairs invocation without altering Git configuration.
 
 | Category | Current integration boundary |
 | --- | --- |
-| COMPLETED | Historical G7/G8/G10/A7/A8/A9 proof/integration preserved; generic ADR-0187 custody source reviewed without significant issue; owner ADR-0188 manufacturing correction and per-product infrastructure methods recorded; obsolete execution scope frozen |
+| COMPLETED | Historical G7/G8/G10/A7/A8/A9 preserved; generic custody source reviewed; owner ADR-0188/per-product methods published7f9; bounded official-API research qualified and three isolated noncompeting source lanes dispatched |
 | BLOCKED | None urgent; revised source/manual-control/fixture/progression implementation and qualification are prerequisites, not a new owner decision |
 | NOT EXECUTED | ADR-0188 recipe retirement/manual ingredient/integrated contracts and new native/model qualification; ADR-0187 Java/replay/writers; rendered/client-wire/owner-world/campaign/package/player deployment/main/release/whole-tier acceptance |
 | NEEDS HUMAN VALIDATION | GUI/JEI/rewards/art/audio/pacing and actual longitudinal campaign |

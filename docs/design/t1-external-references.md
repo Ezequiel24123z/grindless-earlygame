@@ -224,6 +224,43 @@ framework or a global freeze that prevents later-tier resources is not justified
 Fields intentionally live versus frozen, and deliberately added future sources,
 remain coordinator product/compatibility decisions.
 
+## Manual normal-machine construction and Forge ingredients
+
+ADR-0188 is the owner's product rule, not a claim about GregTech's actual
+machine recipes. Existing Grindless shaped JSON, Matrix decoder/minimum matcher
+and Forge's public ingredient API solve this boundary; importing a GT recipe/UI
+framework or adding a new manual workstation is unnecessary.
+
+The configured Forge coordinate is1.20.1-47.4.23. Its published changelog/merge
+correlates the examined source with
+[3c3f496015632ab84560be77a57cc57ac42c49e1](https://github.com/MinecraftForge/MinecraftForge/tree/3c3f496015632ab84560be77a57cc57ac42c49e1);
+this is NOT an artifact-bytecode/build attestation. The existing Forge
+dependency supplies LGPL-2.1-only APIs; no implementation/assets are copied.
+
+| Verified API / reference | Reuse and constraint |
+| --- | --- |
+| [`AbstractIngredient`](https://github.com/MinecraftForge/MinecraftForge/blob/3c3f496015632ab84560be77a57cc57ac42c49e1/src/main/java/net/minecraftforge/common/crafting/AbstractIngredient.java) and [`IIngredientSerializer`](https://github.com/MinecraftForge/MinecraftForge/blob/3c3f496015632ab84560be77a57cc57ac42c49e1/src/main/java/net/minecraftforge/common/crafting/IIngredientSerializer.java) | One small Forge-only adapter, own code; JSON/network delegate to existing common physical validation/minimum semantics. NBT-sensitive matching requires isSimplefalse and honest real display candidates. |
+| [`CraftingHelper`](https://github.com/MinecraftForge/MinecraftForge/blob/3c3f496015632ab84560be77a57cc57ac42c49e1/src/main/java/net/minecraftforge/common/crafting/CraftingHelper.java), [`RegisterEvent`](https://github.com/MinecraftForge/MinecraftForge/blob/3c3f496015632ab84560be77a57cc57ac42c49e1/src/main/java/net/minecraftforge/registries/RegisterEvent.java) and [official ingredient documentation](https://docs.minecraftforge.net/en/1.20.x/resources/server/recipes/ingredients/) | Register before recipe load/network use on the MOD bus or appropriately enqueued setup. The existing Forge-bus native command subscriber is not a registration hook; CraftingHelper registration is not thread-safe. |
+| Forge strict/partial NBT ingredients and official composition contracts | Static item/NBT templates do not faithfully delegate valid untagged defaults, higher capacity and malformed-state refusal to Grindless's live decoder. A bare-item OR partial-NBT workaround remains invalid. |
+| [Vanilla crafting mechanics](https://minecraft.wiki/w/Crafting) | Shape equivalence includes trimming/placement and horizontal mirroring, not arbitrary rotations. Exhaustive source tests compare actual ingredient identities/overlap, not pattern letters; one actual RecipeManager/native proof validates the new binding. |
+
+Only RelayF1-F3 is currently registered. A model architecture enum is not a
+registered item; native/display cases must never invent Integrated or other
+items. Use real item/spec/save factories and FluxTier constants, not hand-guessed
+numeric ordinals from a report. Item-instance decoding plus minimum comparison
+does not itself prove registry membership; validate the actual registered
+identity before acceptance. Preserve all currently valid whole-number numeric
+NBT types rather than replacing the shared decoder with an IntTag-only rule.
+
+Research scope is deliberately qualified: several API/built-in files were read
+directly, but Intersection/Difference behavior came from official docs; only
+two recipe JSONs were spot-checked, not the entire catalogue. The initial
+headline's broader read claim, incomplete event-bus suggestion and raw numeric
+fixture example are corrected, not promoted to implementation authority.
+JEI visibility is an API-contract expectation, not an actual rendered-client
+pass. Implementers still validate every affected actual recipe and exact-source
+compiler/loader behavior; no new per-recipe native matrix follows.
+
 ## Licence and evidence boundaries
 
 GT Modern's LGPL-3.0 source and Immersive Engineering's custom visible-source

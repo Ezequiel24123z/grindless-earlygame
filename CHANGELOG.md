@@ -15,6 +15,16 @@ entries below reference those records by id.
 
 ### Added
 
+- **Dispatch isolated source lanes for per-product manufacture.**
+  Exact policy7f9 supplies recipe/ingredient A, selector/native-fixture B and
+  same-task finite/teaching C with noncompeting files/shared interfaces.
+  Idle-created worktrees plus one runtime writer each avoid the old CLI-startup
+  problem. Record official Forge API reuse/licence and corrected research
+  limits before integration; no copied source/new dependency or assumed
+  binary/client proof. All old qualification grants remain frozen/returned;
+  no PC/Java/writer or player action follows from source dispatch.
+  Preserve the first parent property-Count metadata-observer failure; explicit
+  PowerShell array capture fixes that check only, without producer replay.
 - **Correct the manufacturing objective to manual final normal machines.**
   The owner explicitly rejects universal factory self-replication. ADR-0188
   supersedes automatic complete-normal-machine fabrication, not automated

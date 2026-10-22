@@ -1,7 +1,7 @@
 {
   "schema": "grindless.work-plan",
   "schema_version": 1,
-  "plan_revision": 109,
+  "plan_revision": 110,
   "updated": "2026-10-22",
   "phase": "manual_final_normal_machines_and_authored_per_product_manufacturing_modes",
   "product_gate": "OWNER_NATIVE_FTB_PRISM_READY_NOT_T0_HUMAN_ACCEPTANCE",
@@ -108,7 +108,7 @@
   },
   "normal_machine_manufacturing": {
     "policy": "ADR-0188",
-    "status": "OWNER_CONFIRMED_product_correction_implementation_pending_old_qualification_scope_frozen",
+    "status": "OWNER_CONFIRMED_policy7f9_published_three_noncompeting_SOURCE_lanes_running_old_qualification_scope_frozen",
     "vision": "GregTech_inspired_greater_complexity_content_futurism_NOT_universal_Factorio_selfreplication",
     "normal_final_manufacture_manual_only": true,
     "normal_operating_processes_automatable": true,
@@ -121,7 +121,31 @@
     "old_common_model_GO": "NOT_ISSUED_FROZEN_NO_PC_CIquery_Sync_or_JVM_before_revised_integrated_exactsourcegrant",
     "research_agent": "86151eb2-babe-4a6b-a6f0-2d409885d5fa",
     "research_scope": "existing_pinned_Forge_public_ingredient_APIs_valid_default_higher_matrix_NBT_and_shaped_disambiguation_NOcopy_install_PC_or_paidservice",
-    "source_lanes": "planned_noncompeting_recipe_policy_manualIngredient_data_selector_legacy_nativefixtures_and_progression_finiteproof_teaching",
+    "source_base": "7f9c3ba5bbc06db4a5112eab8c0e65190abaeb02",
+    "source_policy_api": "pure_common_recipe_ManufacturingPolicy_isManualFinalMachine_String_no_recipe_quantity_catalogue",
+    "manual_ingredient_contract": {"type": "grindless:minimum_control", "tier": "F1"},
+    "source_lanes": {
+      "recipes_policy_ingredient": {
+        "runtime_worker": "0b715812-bcaf-4277-b6f2-c82c4792f716",
+        "app_session": "46fad521-200c-417c-ad23-4528f9ed1b51",
+        "branch": "ezequiel24123z-shiny-parakeet",
+        "scope": "normal_output_policy_ProcessGraph_BootstrapAssembly_T1Recipes_JSON_purepolicy_Forgeingredient_MODregistration_adapters_recipe_Atlas_registry_checks"
+      },
+      "selector_legacy_native_fixtures": {
+        "runtime_worker": "6921ada5-8c40-4102-abe3-2ddd38a6aba9",
+        "app_session": "cbce0410-a39b-4a0a-8f22-048d0a656e64",
+        "branch": "ezequiel24123z-fantastic-bassoon",
+        "scope": "VerifyLogic_Persistence_MachineUi_ControlMatrixInputChecks_existing_matrixcarrier_live_components_retired_work_negatives_manualingredient_probe"
+      },
+      "progression_finite_teaching": {
+        "runtime_worker": "1c9a6363-a0ee-49cd-ba2b-ff5ea30661b7",
+        "app_session": "b430ff47-f463-4b31-9598-042070fe829a",
+        "branch": "ezequiel24123z-symmetrical-umbrella",
+        "scope": "same_task_followup_exactFF7f9_T1Progression_T0T1Sustainability_precise_manualcapital_existingaudit_tests_T1Export_questteaching_locales"
+      }
+    },
+    "research_result": "official_Forge_existing_APIs_only_source_correlation3c3f_NOT_binaryattestation_MODbus_NBT_sensitive_isSimplefalse_real_registered_items_only_existingdecoder_not_rawordinal_guesses_no_copy_or_dependency",
+    "source_execution_limit": "all_three_SOURCEONLY_no_PC_JVM_writers_publishedWIP_absorption_or_push_parent_only_integration_then_one_reviewed_exactsourceGO",
     "implemented_or_qualified": false,
     "player_update_authorized_by_this_correction": false
   },

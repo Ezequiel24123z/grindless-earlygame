@@ -1085,6 +1085,28 @@ new ingredient binding warrants one existing-carrier native and affected
 contracts on the corrected exact source, not a smoke per machine or a replay
 of unchanged FTB/ABI/Blueprint work.
 
+**Source execution, not new qualification:** after policy7f9 is published,
+runtime A0b715812/B6921ada5/C1c9a6363 own the explicitly split recipe/ingredient,
+selector/native-fixture and progression/finite/teaching surfaces in three
+isolated worktrees. A/B app sessions are created idle without a second CLI;
+C is the same-task continuation with one explicitly permitted exact FF7f9.
+No source code or expected data may be absorbed from another changing lane;
+the coordinator normally composes completed checkpoints before actual tests.
+
+Official Forge API research is recorded with licence, exact source correlation
+and limitations in the external-reference record. Initial overclaims about
+every built-in/JSON, registration-bus reuse and numeric fixture examples are
+qualified/corrected. Only actual registered Relay stacks and real enum/spec
+factories may enter native proof; no binary attestation or actual client/JEI
+visibility is inferred. Public API reuse is not copied implementation.
+
+The parent local policy-metadata check first fails at
+`Expected three noncompeting source lanes`: Windows PowerShell member
+enumeration on PSObject.Properties.Count is not a scalar collection count.
+The JSON/three owned lanes are unchanged; explicit array capture corrects
+only that read-only observer before link checking/Git staging. No source,
+compiler, native, writer or PC producer is replayed.
+
 ### ADR-0187 source intake before actual finite qualification
 
 Normal source commits6c53b321/exactf5c2dde then
