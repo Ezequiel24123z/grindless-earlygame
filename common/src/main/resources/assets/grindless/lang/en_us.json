@@ -780,6 +780,7 @@
   "inspection.grindless.fluid_amount": "%s mB %s",
   "inspection.grindless.vented": "%s (captured nearby or discharged, not stored output)",
   "inspection.grindless.rated": "%s [F%s]",
+  "recipe.grindless.minimum_control": "Control Matrix F%s or higher (any architecture)",
   "inspection.grindless.invalid_rating": "%s [invalid Matrix rating]",
   "inspection.grindless.additional": ", +%s more",
   "inspection.grindless.unavailable": "[?] Machine inspection unavailable; no client-side state is assumed.",

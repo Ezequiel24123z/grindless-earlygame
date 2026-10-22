@@ -231,8 +231,8 @@ public final class VerifyT1Teaching {
         List<AtlasLogic.Entry> assembler = QuestTeaching.recipes(QuestCatalogue.byId("assembler"), entries);
         AtlasLogic.Entry mill = route(assembler, "assemble/wire_mill");
         equal("the optional base Wire Mill is manufactured by the Assembler", MachineFamily.ASSEMBLER, mill.family());
-        check("the optional base Wire Mill consumes an actual F1 controller",
-                mill.inputs().contains("item:grindless:relay_matrix [F1]"));
+        check("the optional base Wire Mill teaches minimum control, not an exact predecessor",
+                mill.inputs().contains("item:grindless:relay_matrix [F1+]"));
         equal("the optional base Wire Mill remains an ordinary output, not MK2",
                 List.of("item:grindless:wire_mill"), mill.outputs());
         for (String id : List.of("mill/wire/iron", "mill/wire/copper", "mill/coil/copper")) {

@@ -377,7 +377,7 @@ public final class MachineInspection {
 
     private static Resource resource(IngredientSpec ingredient) {
         return new Resource(kind(ingredient.kind()), ingredient.id(), ingredient.count(),
-                ingredient.matrixRating(), false);
+                ingredient.matrixRating(), false, ingredient.matrixRole());
     }
 
     private static Resource resource(OutputSpec output) {

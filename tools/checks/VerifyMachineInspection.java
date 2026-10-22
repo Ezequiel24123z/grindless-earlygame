@@ -25,6 +25,7 @@ import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.T
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionSnapshot.Validity;
 import io.github.ezequiel24123z.grindless.machine.MachineStatus;
 import io.github.ezequiel24123z.grindless.process.ConditionFault;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole;
 import io.github.ezequiel24123z.grindless.structure.WorkshopPortContract;
 import io.github.ezequiel24123z.grindless.structure.WorkshopStructure;
 import io.github.ezequiel24123z.grindless.inspection.MachineInspectionProtocol.ClientState;
@@ -64,6 +65,7 @@ public final class VerifyMachineInspection {
         progress();
         codec();
         pressure();
+        minimumControl();
         malformed();
         targetIdentity();
         packets();
@@ -292,7 +294,7 @@ public final class VerifyMachineInspection {
         check("the old conditions constructor invents no ambient requirement",
                 legacy.requiredPressureMPa().isEmpty() && legacy.requiredPressureHalfWidthMPa().isEmpty());
         CompoundTag old = MachineInspectionCodec.encode(fullSnapshot());
-        check("new writers explicitly identify schema v2", old.getInt("schema") == 2);
+        check("new writers explicitly identify schema v3", old.getInt("schema") == 3);
         check("an unnamed requirement has no pressure wire fields",
                 !old.getCompound("process").getCompound("conditions").contains("required_pressure")
                         && !old.getCompound("process").getCompound("conditions").contains("required_pressure_half_width"));
@@ -366,6 +368,71 @@ public final class VerifyMachineInspection {
             }
         } finally {
             buffer.release();
+        }
+    }
+
+    private static void minimumControl() {
+        Resource exact = new Resource(ResourceKind.ITEM, "grindless:relay_matrix", 2, 1, false);
+        Resource minimum = new Resource(exact.kind(), exact.id(), exact.count(), exact.matrixRating(),
+                false, MatrixRole.MINIMUM_CONTROL);
+        Process process = new Process("synthetic/control", List.of(minimum),
+                List.of(new Resource(ResourceKind.ITEM, "grindless:wire_mill", 1, 0, false)),
+                List.of(), 400, 32, Optional.empty());
+        MachineInspectionSnapshot observed = snapshot(List.of(), Optional.of(process), List.of(), Optional.empty());
+        CompoundTag encoded = MachineInspectionCodec.encode(observed);
+        check("minimum control survives the strict observation codec",
+                MachineInspectionCodec.decode(encoded).equals(observed));
+        CompoundTag input = encoded.getCompound("process").getList("inputs", 10).getCompound(0);
+        check("the codec labels a role without changing its canonical registry ID",
+                "MINIMUM_CONTROL".equals(input.getString("matrix_role"))
+                        && "grindless:relay_matrix".equals(input.getString("id")));
+        check("old resource constructors retain exact semantics", exact.matrixRole() == MatrixRole.EXACT);
+        for (int version : new int[] {1, 2}) {
+            CompoundTag legacy = MachineInspectionCodec.encode(fullSnapshot());
+            legacy.putInt("schema", version);
+            check("legacy resources default to exact under schema " + version,
+                    MachineInspectionCodec.decode(legacy).equals(fullSnapshot()));
+            CompoundTag forbidden = encoded.copy();
+            forbidden.putInt("schema", version);
+            rejects("schema " + version + " cannot strip a minimum-control field",
+                    () -> MachineInspectionCodec.decode(forbidden));
+            malformedReply("legacy schema " + version + " minimum control fails through MALFORMED", forbidden);
+        }
+        for (Consumer<CompoundTag> mutation : List.<Consumer<CompoundTag>>of(
+                value -> value.putString("matrix_role", "UNKNOWN"),
+                value -> value.putInt("matrix_role", 1),
+                value -> value.putInt("rating", 0),
+                value -> value.remove("rating"),
+                value -> value.putString("kind", "TAG"),
+                value -> value.putInt("count", 0))) {
+            CompoundTag invalid = encoded.copy();
+            mutation.accept(invalid.getCompound("process").getList("inputs", 10).getCompound(0));
+            rejects("partial or invalid minimum-control data is not exact fallback",
+                    () -> MachineInspectionCodec.decode(invalid));
+            malformedReply("invalid minimum control fails through MALFORMED", invalid);
+        }
+        CompoundTag badOutput = encoded.copy();
+        CompoundTag output = badOutput.getCompound("process").getList("outputs", 10).getCompound(0);
+        output.putInt("rating", 1);
+        output.putString("matrix_role", "MINIMUM_CONTROL");
+        rejects("a minimum role can never describe an output", () -> MachineInspectionCodec.decode(badOutput));
+        malformedReply("minimum outputs fail through MALFORMED", badOutput);
+        CompoundTag pressure = MachineInspectionCodec.encode(pressureSnapshot(0.0, 0.001));
+        pressure.putInt("schema", 2);
+        check("schema2 keeps its explicit pressure band and exact resources",
+                MachineInspectionCodec.decode(pressure).equals(pressureSnapshot(0.0, 0.001)));
+    }
+
+    private static void malformedReply(String label, CompoundTag tag) {
+        FriendlyByteBuf packet = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            packet.writeVarInt(7);
+            packet.writeByte(0);
+            packet.writeNbt(tag);
+            Reply reply = MachineInspectionProtocol.decodeReply(packet);
+            check(label, reply.kind() == ReplyKind.MALFORMED && reply.snapshot().isEmpty());
+        } finally {
+            packet.release();
         }
     }
 
@@ -605,6 +672,11 @@ public final class VerifyMachineInspection {
                 query.contains("recipe.namesPressure() ? Optional.of(recipe.pressureMPa()) : Optional.empty()")
                         && query.contains("recipe.namesPressure() ? Optional.of(recipe.pressureHalfWidthMPa())"
                         + " : Optional.empty()"));
+        check("inspection transports the actual typed input role without changing IDs",
+                query.contains("ingredient.matrixRating(), false, ingredient.matrixRole()"));
+        check("the tooltip names minimum control rather than an exact F1 Relay",
+                tooltip.contains("\"recipe.grindless.minimum_control\"")
+                        && tooltip.contains("MatrixRole.MINIMUM_CONTROL"));
         check("the tooltip preserves precise required and held pressure rather than rounding to ambient or zero",
                 tooltip.contains("conditions.requiredPressureMPa().ifPresent(pressure")
                         && tooltip.contains("\"inspection.grindless.required_pressure\", Double.toString(pressure)")

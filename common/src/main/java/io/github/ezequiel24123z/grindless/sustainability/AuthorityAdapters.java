@@ -184,7 +184,7 @@ public final class AuthorityAdapters {
         return List.copyOf(result);
     }
 
-    /** Adapts one process with its actual quantities, Matrix ratings, sinks, conditions and rates. */
+    /** Minimum control retains a canonical supply option plus its explicit role, not fabricated resources. */
     public static Route process(ProcessRecipe recipe) {
         Map<Resource, Long> inputs = new TreeMap<>();
         Map<Resource, Long> catalysts = new TreeMap<>();
@@ -221,6 +221,8 @@ public final class AuthorityAdapters {
         if (recipe.milestone() != null) {
             conditions.put("informational_milestone", recipe.milestone());
         }
+        minimumControl(conditions, recipe.inputs(), "input");
+        minimumControl(conditions, recipe.catalysts(), "catalyst");
         WorkshopStructure structure = WorkshopStructure.forFamily(recipe.family());
         if (structure != WorkshopStructure.NONE) {
             conditions.put("workshop_structure", structure.name());
@@ -233,6 +235,17 @@ public final class AuthorityAdapters {
         return new Route(recipe.id(), Authority.PROCESS_GRAPH, "ProcessGraph.generate",
                 recipe.family().name(), inputs, catalysts, outputs, discharged,
                 recipe.durationTicks(), recipe.fuPerTick(), conditions, Set.of(), false, true, true);
+    }
+
+    private static void minimumControl(Map<String, String> conditions, List<IngredientSpec> inputs, String role) {
+        for (int index = 0; index < inputs.size(); index++) {
+            IngredientSpec input = inputs.get(index);
+            if (input.isMinimumControl()) {
+                conditions.put("minimum_control_" + role + "_" + index,
+                        resource(input.kind(), input.id(), input.matrixRating()).key());
+                conditions.put("control_supply_projection", "canonical_option_not_exhaustive_alternatives");
+            }
+        }
     }
 
     /**

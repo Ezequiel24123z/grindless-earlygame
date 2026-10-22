@@ -129,10 +129,10 @@ public final class VerifyPersistence {
         IngredientSpec millMatrix = ProcessGraph.generate(List.of()).stream()
                 .filter(recipe -> recipe.id().equals("assemble/wire_mill")).findFirst().orElseThrow()
                 .itemInputs().get(3);
-        check("the live base mill's fourth group declares one F1 Relay Matrix",
-                millMatrix.equals(IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)));
-        check("valid decoded F2 remains distinct from the exact base F1 ingredient (NBT/data contract)",
-                decoded.rating().ordinal() != millMatrix.matrixRating());
+        check("the live base mill's fourth group declares minimum-F1 control",
+                millMatrix.equals(IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)));
+        check("valid decoded F2 supplies the minimum control contract (NBT/data, not registered item proof)",
+                millMatrix.acceptsMatrix(FabricationLogic.RELAY_MATRIX, decoded));
         check("untagged legacy F1 agrees with the base mill's declared rating (NBT/data contract)",
                 ControlMatrixNbt.load(MatrixArchitecture.RELAY, null).orElseThrow().rating().ordinal()
                         == millMatrix.matrixRating());
@@ -143,8 +143,12 @@ public final class VerifyPersistence {
         CompoundTag explicitF3 = ControlMatrixNbt.save(new ControlMatrixSpec(MatrixArchitecture.RELAY, FluxTier.F3));
         ControlMatrixSpec decodedF3 = ControlMatrixNbt.load(MatrixArchitecture.RELAY, roundTrip(explicitF3))
                 .orElseThrow();
-        check("valid decoded F3 remains distinct from the exact base F1 ingredient (NBT/data contract)",
-                decodedF3.rating() == FluxTier.F3 && decodedF3.rating().ordinal() != millMatrix.matrixRating());
+        check("valid decoded F3 supplies the minimum control contract (NBT/data, not registered item proof)",
+                decodedF3.rating() == FluxTier.F3
+                        && millMatrix.acceptsMatrix(FabricationLogic.RELAY_MATRIX, decodedF3));
+        IngredientSpec predecessor = IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1);
+        check("the same valid F2 cannot serve as its own exact predecessor",
+                !predecessor.acceptsMatrix(FabricationLogic.RELAY_MATRIX, decoded));
         check("a missing Matrix stack fails the real ingredient matcher",
                 !ProcessLookup.matches(millMatrix, ItemStack.EMPTY));
         ItemStack wrongKind = new ItemStack(Items.PAPER);
@@ -156,10 +160,10 @@ public final class VerifyPersistence {
         String lookup = Files.readString(common.resolve("recipe/ProcessLookup.java"));
         check("registered Matrix reads reuse this NBT decoder (source contract)",
                 matrixItem.contains("return ControlMatrixNbt.load(architecture, stack.getTag());"));
-        check("the current typed matcher is exact (source contract; higher-rating substitution remains debt)",
+        check("native input matching validates the actual Matrix before dispatching its typed role (source contract)",
                 lookup.contains("stack.getItem() instanceof ControlMatrixItem matrix")
-                        && lookup.contains("BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(spec.id())")
-                        && lookup.contains("matrix.spec(stack).map(value -> value.rating().ordinal() == spec.matrixRating())"));
+                        && lookup.contains("matrix.spec(stack)")
+                        && lookup.contains("spec.acceptsMatrix("));
         check("missing Rating on a nonempty tag remains the architecture's first frontier",
                 ControlMatrixNbt.load(MatrixArchitecture.INTEGRATED, new CompoundTag())
                         .orElseThrow().rating() == FluxTier.F4);

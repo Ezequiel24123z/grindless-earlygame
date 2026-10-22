@@ -108,6 +108,8 @@ public final class VerifyRecipes {
         eq("the Industrial Matrix is assembled", MachineFamily.ASSEMBLER, industrialRelayMatrix.family());
         eq("the Industrial Matrix consumes an F1 physical Matrix", 1,
                 industrialRelayMatrix.itemInputs().get(0).matrixRating());
+        yes("the Industrial Matrix still needs an exact predecessor",
+                industrialRelayMatrix.itemInputs().get(0).matrixRole() == IngredientSpec.MatrixRole.EXACT);
         eq("the Industrial Matrix consumes a casing", "item:grindless:machine_casing",
                 industrialRelayMatrix.itemInputs().get(1).qualified());
         eq("the Industrial Matrix consumes renewable dielectric glass", "item:minecraft:glass",
@@ -309,12 +311,22 @@ public final class VerifyRecipes {
         yes("mill coil has no die", millCoil.catalysts().isEmpty());
 
         eq("the mill is the assembler", MachineFamily.ASSEMBLER, mill.family());
-        yes("the base mill retains its complete bill with one F1 Relay Matrix as the fourth group",
+        yes("the base mill retains its bill with one minimum-F1 control operand as the fourth group",
                 mill.inputs().equals(List.of(
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1))));
+        eq("only one production operand opts into minimum control", 1L, recipes.stream()
+                .flatMap(row -> java.util.stream.Stream.concat(row.inputs().stream(), row.catalysts().stream()))
+                .filter(IngredientSpec::isMinimumControl).count());
+        eq("the minimum role preserves the canonical baseline Matrix ID", "item:grindless:relay_matrix",
+                mill.itemInputs().get(3).qualified());
+        JsonObject serialized = new com.google.gson.Gson().toJsonTree(mill.itemInputs().get(3)).getAsJsonObject();
+        eq("ingredient serialization carries the role, not a fabricated resource ID", "MINIMUM_CONTROL",
+                serialized.get("matrixRole").getAsString());
+        eq("ingredient serialization keeps the actual registry ID", FabricationLogic.RELAY_MATRIX,
+                serialized.get("id").getAsString());
         eq("the mill has exactly four grouped item inputs", 4, mill.itemInputs().size());
         eq("the mill consumes eight total input units", 8,
                 mill.itemInputs().stream().mapToInt(IngredientSpec::count).sum());

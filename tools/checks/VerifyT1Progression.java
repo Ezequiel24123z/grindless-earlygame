@@ -275,6 +275,14 @@ public final class VerifyT1Progression {
         equal("the base mill consumes one controller at its actual F1 kind rating", 1L,
                 manufacture.inputs().get(new Resource(Kind.ITEM, FabricationLogic.RELAY_MATRIX,
                         ProcessMachineKind.WIRE_MILL.tier().ordinal(), "items")));
+        equal("the audit labels that F1 supply as one valid minimum-control option",
+                "item:grindless:relay_matrix [F1]", manufacture.conditions().get("minimum_control_input_3"));
+        equal("the audit does not promise exhaustive alternate-controller supply",
+                "canonical_option_not_exhaustive_alternatives",
+                manufacture.conditions().get("control_supply_projection"));
+        equal("the F2 frontier still has no minimum-control predecessor",
+                false, snapshot.routes().get(T1Progression.EXIT_ROUTE).conditions().keySet().stream()
+                        .anyMatch(key -> key.startsWith("minimum_control_")));
         equal("the base mill output is one ordinary item, not an upgraded chassis",
                 Map.of(item(FabricationLogic.WIRE_MILL), 1L), manufacture.outputs());
         for (String id : line.routeIds()) {

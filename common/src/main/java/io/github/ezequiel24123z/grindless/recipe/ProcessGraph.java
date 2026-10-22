@@ -484,8 +484,8 @@ public final class ProcessGraph {
     }
 
     /**
-     * The base T1 Wire Mill (ADR-0174). One F1 Relay Matrix joins the casing,
-     * two coils and four plates. No circuit board, acid or upgraded chassis is required.
+     * The base T1 Wire Mill (ADR-0174/0176). Minimum-F1 physical control joins the
+     * casing, two coils and four plates. Stronger stock does not upgrade the output chassis.
      */
     private static ProcessRecipe wireMill() {
         return new ProcessRecipe(
@@ -495,7 +495,7 @@ public final class ProcessGraph {
                         IngredientSpec.item(FabricationLogic.MACHINE_CASING, 1),
                         IngredientSpec.item(FabricationLogic.COPPER_COIL, 2),
                         IngredientSpec.tag("forge:plates/iron", 4),
-                        IngredientSpec.matrix(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
+                        IngredientSpec.minimumControl(FabricationLogic.RELAY_MATRIX, FluxTier.F1, 1)),
                 List.of(OutputSpec.item(FabricationLogic.WIRE_MILL, 1)),
                 Double.NaN,
                 null,

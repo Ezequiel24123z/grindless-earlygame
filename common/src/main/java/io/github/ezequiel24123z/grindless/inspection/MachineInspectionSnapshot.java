@@ -1,6 +1,7 @@
 package io.github.ezequiel24123z.grindless.inspection;
 
 import io.github.ezequiel24123z.grindless.process.ConditionBand;
+import io.github.ezequiel24123z.grindless.recipe.IngredientSpec.MatrixRole;
 
 import java.util.List;
 import java.util.Locale;
@@ -132,7 +133,12 @@ public record MachineInspectionSnapshot(
         }
     }
 
-    public record Resource(ResourceKind kind, String id, int count, int matrixRating, boolean vented) {
+    public record Resource(ResourceKind kind, String id, int count, int matrixRating, boolean vented,
+                           MatrixRole matrixRole) {
+        public Resource(ResourceKind kind, String id, int count, int matrixRating, boolean vented) {
+            this(kind, id, count, matrixRating, vented, MatrixRole.EXACT);
+        }
+
         public Resource {
             Objects.requireNonNull(kind, "kind");
             id = MachineInspectionSnapshot.id(id);
@@ -140,6 +146,9 @@ public record MachineInspectionSnapshot(
                     || matrixRating != 0 && kind != ResourceKind.ITEM
                     || vented && kind != ResourceKind.FLUID) {
                 throw new IllegalArgumentException("invalid inspected resource");
+            }
+            if (matrixRole == null || matrixRole == MatrixRole.MINIMUM_CONTROL && matrixRating == 0) {
+                throw new IllegalArgumentException("minimum control requires a rated inspected item");
             }
         }
     }
@@ -183,6 +192,9 @@ public record MachineInspectionSnapshot(
             }
             if (inputs.stream().anyMatch(Resource::vented) || catalysts.stream().anyMatch(Resource::vented)) {
                 throw new IllegalArgumentException("an inspected input cannot be discharged output");
+            }
+            if (outputs.stream().anyMatch(output -> output.matrixRole() != MatrixRole.EXACT)) {
+                throw new IllegalArgumentException("an inspected output must retain exact physical identity");
             }
             progress = Objects.requireNonNull(progress, "progress");
             conditions = Objects.requireNonNull(conditions, "conditions");
